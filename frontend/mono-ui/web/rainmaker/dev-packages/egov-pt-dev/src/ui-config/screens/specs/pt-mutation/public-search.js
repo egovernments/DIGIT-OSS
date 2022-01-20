@@ -23,12 +23,20 @@ const getMDMSData = async dispatch => {
       tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
-          moduleName: "tenant",
-          masterDetails: [
+          "moduleName": "PropertyTax",
+          "masterDetails": [
+
             {
-              name: "tenants"
+              "name": "UpdateNumber"
+            }
+          ]
+        }, {
+          "moduleName": "tenant",
+          "masterDetails": [
+            {
+              "name": "tenants"
             },
-            { name: "citymodule" }
+            { "name": "citymodule" }
           ]
         }
       ]
@@ -84,6 +92,11 @@ const screenConfig = {
         //     msevaLogo: msevaLogo
         //   }
         // },
+          linkComponent: {
+            uiFramework: "custom-atoms-local",
+            componentPath: "LinkComponent",
+            moduleName: "egov-pt",
+          },
         searchPropertyDetails,
         breakAfterSearch3: getBreak(),
         searchPropertyTable,

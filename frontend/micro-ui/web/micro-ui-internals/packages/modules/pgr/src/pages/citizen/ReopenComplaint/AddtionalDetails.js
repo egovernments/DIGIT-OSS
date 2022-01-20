@@ -15,9 +15,8 @@ const AddtionalDetails = (props) => {
   const dispatch = useDispatch();
   const appState = useSelector((state) => state)["common"];
   let { t } = useTranslation();
-  let tenantId = Digit.ULBService.getCurrentTenantId();
-
-  const complaintDetails = Digit.Hooks.pgr.useComplaintDetails({ tenantId: tenantId, id: id }).complaintDetails;
+  
+  const {complaintDetails} = props
   useEffect(() => {
     if (appState.complaints) {
       const { response } = appState.complaints;
@@ -51,11 +50,6 @@ const AddtionalDetails = (props) => {
 
   function reopenComplaint() {
     let reopenDetails = Digit.SessionStorage.get(`reopen.${id}`);
-    // let complaintDetails = Digit.SessionStorage.get(`complaint.${id}`);
-    // console.log("reopen complaint1", reopenDetails, complaintDetails);
-
-    // console.log("reopen complaint2", reopenDetails, complaintDetails)
-
     if (complaintDetails) {
       complaintDetails.workflow = getUpdatedWorkflow(
         reopenDetails,

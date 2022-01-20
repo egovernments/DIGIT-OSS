@@ -52,7 +52,7 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
   const isEdit = window.location.href.includes("renew-trade");
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { isLoading, data: fydata = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "egf-master", "FinancialYear");
   let isDirectRenewal = sessionStorage.getItem("isDirectRenewal") ? stringToBoolean(sessionStorage.getItem("isDirectRenewal")) : null;
 
@@ -74,7 +74,7 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
           onSuccess,
         }) : mutation1.mutate(formdata, {
           onSuccess,
-        })) : console.log("skipped");
+        })) : console.debug("skipped");
       } else {
         let tenantId = data?.address?.city ? data.address?.city?.code : tenantId;
         data.tenantId = tenantId;
@@ -86,7 +86,7 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
 
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }, [fydata]);
 

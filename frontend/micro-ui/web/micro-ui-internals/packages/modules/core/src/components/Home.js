@@ -10,14 +10,15 @@ const CitizenHome = ({ modules }) => {
   const showQuickPay = moduleArr.some((module) => module.code === "QuickPayLinks");
   return (
     <React.Fragment>
+      <div className="citizenAllServiceGrid">
       {moduleArray.map(({ code }, index) => {
-        //console.log("in module map", code);
         let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
         if (code === "Payment" && !showQuickPay) {
           Links = () => <React.Fragment />;
         }
         return <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />;
       })}
+      </div>
     </React.Fragment>
   );
 };
@@ -25,7 +26,7 @@ const CitizenHome = ({ modules }) => {
 const EmployeeHome = ({ modules }) => {
   return (
     <div className="employee-app-container">
-      <div className="ground-container moduleCardWrapper">
+      <div className="ground-container moduleCardWrapper gridModuleWrapper">
         {modules.map(({ code }, index) => {
           const Card = Digit.ComponentRegistryService.getComponent(`${code}Card`) || (() => <React.Fragment />);
           return <Card key={index} />;

@@ -9,6 +9,7 @@ const RadioOrSelect = ({
   selectedOption,
   isMandatory,
   t,
+  labelKey,
   dropdownStyle = {},
   isDependent = false,
   disabled = false,
@@ -24,6 +25,7 @@ const RadioOrSelect = ({
           isDependent={isDependent}
           disabled={disabled}
           onSelect={onSelect}
+          labelKey={labelKey}
           t={t}
         />
       ) : (

@@ -298,17 +298,17 @@ const ReNewApplication = (props) => {
           if (result?.Licenses?.length > 0) {
             let licenses = result?.Licenses?.[0];
             licenses.action = "APPLY";
-            Digit.TLService.update({ Licenses: [licenses] }, tenantId).then((response) => {
-              if (response?.Licenses?.length > 0) {
-                history.replace(
-                  `/digit-ui/employee/tl/response`,
-                  { data: response?.Licenses }
-                );
-              }
-            }).catch((e) => {
-              setShowToast({ key: "error" });
-              setError(e?.response?.data?.Errors[0]?.message || null);
-            });
+            Digit.TLService.update({ Licenses: [licenses] }, tenantId)
+              .then((response) => {
+                Digit.SessionStorage.set("EditRenewalApplastModifiedTime", response?.Licenses[0]?.auditDetails?.lastModifiedTime);
+                if (response?.Licenses?.length > 0) {
+                  history.replace(`/digit-ui/employee/tl/response`, { data: response?.Licenses });
+                }
+              })
+              .catch((e) => {
+                setShowToast({ key: "error" });
+                setError(e?.response?.data?.Errors[0]?.message || null);
+              });
           }
         })
         .catch((e) => {

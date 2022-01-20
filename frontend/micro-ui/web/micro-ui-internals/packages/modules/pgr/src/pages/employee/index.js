@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Switch, Route, useRouteMatch, useLocation } from "react-router-dom";
 import { ActionBar, Menu, SubmitBar, BreadCrumb } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { ComplaintDetails } from "./ComplaintDetails";
-import { CreateComplaint } from "./CreateComplaint";
-import Inbox from "./Inbox";
+// import { ComplaintDetails } from "./ComplaintDetails";
+// import { CreateComplaint } from "./CreateComplaint";
+// import Inbox from "./Inbox";
 import { Employee } from "../../constants/Routes";
-import Response from "./Response";
+// import Response from "./Response";
 
 const Complaint = () => {
   const [displayMenu, setDisplayMenu] = useState(false);
@@ -37,12 +37,16 @@ const Complaint = () => {
     },
   };
   function popupCall(option) {
-    console.log("option", option);
     setDisplayMenu(false);
     setPopup(true);
   }
 
   let location = useLocation().pathname;
+
+  const CreateComplaint = Digit?.ComponentRegistryService?.getComponent('PGRCreateComplaintEmp');
+  const ComplaintDetails = Digit?.ComponentRegistryService?.getComponent('PGRComplaintDetails');
+  const Inbox = Digit?.ComponentRegistryService?.getComponent('PGRInbox');
+  const Response = Digit?.ComponentRegistryService?.getComponent('PGRResponseEmp');
 
   return (
     <React.Fragment>

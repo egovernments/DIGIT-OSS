@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 const MobileInbox = ({
   data,
+  defaultSearchParams={},
   isLoading,
   isSearch,
   searchFields,
@@ -147,6 +148,7 @@ const MobileInbox = ({
           <ApplicationCard
             t={t}
             data={getData()}
+            defaultSearchParams={defaultSearchParams}
             onFilterChange={onFilterChange}
             isLoading={isLoading}
             isSearch={isSearch}

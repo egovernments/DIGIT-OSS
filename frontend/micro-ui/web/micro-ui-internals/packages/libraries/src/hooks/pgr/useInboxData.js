@@ -6,7 +6,6 @@ const useInboxData = (searchParams) => {
   // const user = Digit.UserService.getUser();
   // const tenantId = user?.info?.tenantId;
 
-  // console.log("find search params here", searchParams);
 
   const fetchInboxData = async () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -53,7 +52,7 @@ const combineResponses = (complaintDetailsResponse, workflowInstances) => {
     complaintSubType: complaint.service.serviceCode,
     locality: complaint.service.address.locality.code,
     status: complaint.service.applicationStatus,
-    taskOwner: wfMap[complaint.service.serviceRequestId]?.assigner?.name,
+    taskOwner: wfMap[complaint.service.serviceRequestId]?.assignes?.[0]?.name || "-",
     sla: wfMap[complaint.service.serviceRequestId]?.businesssServiceSla,
     tenantId: complaint.service.tenantId,
   }));

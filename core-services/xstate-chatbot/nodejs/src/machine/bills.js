@@ -173,7 +173,7 @@ const bills = {
           onEntry: assign((context, event) => {
             let messageText = event.message.input;
             messageText = messageText.toLowerCase();
-            let isValid = ((messageText === 'main menu' || messageText === 'pay other bill') && dialog.validateInputType(event, 'button'));
+            let isValid = ((messageText === dialog.get_message(messages.quickReplyButtonText.mainMenu, context.user.locale) || messageText === dialog.get_message(messages.quickReplyButtonText.payOtherBill, context.user.locale)) && dialog.validateInputType(event, 'button'));
             context.message = {
               isValid: isValid,
               messageContent: messageText
@@ -366,7 +366,7 @@ const bills = {
         openSearch:{
           onEntry: assign((context, event) => {
             (async() => {
-              context.slots.bills.openSearchLink = await billService.getOpenSearchLink(context.service);
+              context.slots.bills.openSearchLink = await billService.getOpenSearchLink(context.service,context.user.name,context.user.mobileNumber,context.user.locale);
               let { services, messageBundle } = billService.getSupportedServicesAndMessageBundle();
               let billServiceName = dialog.get_message(messageBundle[context.service],context.user.locale);
               let message = dialog.get_message(messages.openSearch, context.user.locale);
@@ -618,7 +618,7 @@ const bills = {
           onEntry: assign((context, event) => {
             let messageText = event.message.input;
             messageText = messageText.toLowerCase();
-            let isValid = ((messageText === 'main menu' || messageText === 'pay other bill') && dialog.validateInputType(event, 'button'));
+            let isValid = ((messageText === dialog.get_message(messages.quickReplyButtonText.mainMenu, context.user.locale) || messageText === dialog.get_message(messages.quickReplyButtonText.payOtherBill, context.user.locale)) && dialog.validateInputType(event, 'button'));
             //let textValid = (messageText === '1' || messageText === '2');
             context.message = {
               isValid: (isValid || textValid),
@@ -734,7 +734,7 @@ let messages = {
   personalBills: {
     singleRecord: {
       en_IN: 'Following are the unpaid bills linked to this mobile number 👇',
-      hi_IN: 'निम्नलिखित बिल मिले:',
+      hi_IN: 'इस मोबाइल नंबर से जुड़े अवैतनिक बिल निम्नलिखित हैं  👇:',
       billTemplate: {
         en_IN: '👉  *{{service}} Bill*\n\n*Connection No*\n{{id}}\n\n*Owner Name*\n{{payerName}}\n\n*Amount Due*\nRs {{dueAmount}}\n\n*Due Date*\n{{dueDate}}\n\n*Payment Link :*\n{{paymentLink}}',
         hi_IN: '👉  *{{service}} बिल*\n\n*कनेक्शन नंबर*\n{{id}}\n\n*स्वामी का नाम*\n{{payerName}}\n\n*देय राशि*\nरु {{dueAmount}}\n\n*देय तिथि *\n{{dueDate}}\n\n*भुगतान लिंक :*\n{{PaymentLink}}'
@@ -742,7 +742,7 @@ let messages = {
     },
     multipleRecords: {
       en_IN: 'Following are the unpaid bills linked to this mobile number 👇',
-      hi_IN: 'आपके मोबाइल नंबर के खिलाफ पाए गए बिल: ',
+      hi_IN: 'इस मोबाइल नंबर से जुड़े अवैतनिक बिल निम्नलिखित हैं  👇:',
       billTemplate: {
         en_IN: '👉  *{{service}} Bill*\n\n*Connection No*\n{{id}}\n\n*Owner Name*\n{{payerName}}\n\n*Amount Due*\nRs {{dueAmount}}\n\n*Due Date*\n{{dueDate}}\n\n*Payment Link :*\n{{paymentLink}}',
         hi_IN: '👉  *{{service}} बिल*\n\n*कनेक्शन नंबर*\n{{id}}\n\n*स्वामी का नाम*\n{{payerName}}\n\n*देय राशि*\nरु {{dueAmount}}\n\n*देय तिथि *\n{{dueDate}}\n\n*भुगतान लिंक :*\n{{PaymentLink}}'
@@ -750,7 +750,7 @@ let messages = {
     },
     multipleRecordsSameService: {
       en_IN: 'Following are the unpaid bills linked to this mobile number 👇',
-      hi_IN: 'आपके मोबाइल नंबर के खिलाफ पाए गए बिल: ',
+      hi_IN: 'इस मोबाइल नंबर से जुड़े अवैतनिक बिल निम्नलिखित हैं  👇:',
       billTemplate: {
         en_IN: '👉  *{{service}} Bill*\n\n*Connection No*\n{{id}}\n\n*Owner Name*\n{{payerName}}\n\n*Amount Due*\nRs {{dueAmount}}\n\n*Due Date*\n{{dueDate}}\n\n*Payment Link :*\n{{paymentLink}}',
         hi_IN: '👉  *{{service}} बिल*\n\n*कनेक्शन नंबर*\n{{id}}\n\n*स्वामी का नाम*\n{{payerName}}\n\n*देय राशि*\nरु {{dueAmount}}\n\n*देय तिथि *\n{{dueDate}}\n\n*भुगतान लिंक :*\n{{PaymentLink}}'
@@ -759,8 +759,8 @@ let messages = {
   },
   noBills: {
     notLinked: {
-      en_IN: 'Sorry 😥 !  Your mobile number is not linked to the selected service.\n\nWe can still proceed with the payment using the *{{searchOption}}* mentioned in your {{service}} bill/receipt.',
-      hi_IN: 'क्षमा करें, आपका मोबाइल नंबर किसी सेवा से लिंक नहीं है। इसे लिंक करने के लिए अपने शहरी स्थानीय निकाय से संपर्क करें। आप नीचे दी गई जानकारी के अनुसार अपनी खाता जानकारी खोज कर सेवा प्राप्त कर सकते हैं:'
+      en_IN: 'Sorry 😥 !  Your mobile number is not linked to the selected service.\n\nWe can still proceed with the payment using the *{{searchOption}}* mentioned in your *{{service}}* bill/receipt.',
+      hi_IN: 'क्षमा करें 😥! आपका मोबाइल नंबर चयनित सेवा से लिंक नहीं है।\n\nहम आपके *{{searchOption}}* या रसीद में उल्लिखित *{{service}}* का उपयोग करके भुगतान जारी रख सकते हैं।'
     },
     noPending: {
       en_IN: 'There are no pending bills against your account. You can still search the bills as given below',
@@ -770,18 +770,18 @@ let messages = {
   searchBillInitiate: {
     question: {
       en_IN: '\nWant to pay any other {{billserviceName}} Bill ?\n\n👉 Type and Send *1* to Search & Pay for other bills.\n\n👉 To go back to the main menu, type and send *mseva*.',
-      hi_IN: '\nकृपया अन्य बिल या शुल्क के लिए खोज और भुगतान करें जो आपके मोबाइल नंबर से लिंक नहीं हैं, टाइप करें ‘1’ और भेजें। मुख्य मेनू पर वापस जाने के लिए ‘mseva’ टाइप करें और भेजें ।'
+      hi_IN: '\nकृपया अन्य बिल या शुल्क के लिए खोज और भुगतान करें जो आपके मोबाइल नंबर से लिंक नहीं हैं, टाइप करें *1* और भेजें।\n\n👉 मुख्य मेनू पर वापस जाने के लिए *mseva* टाइप करें और भेजें ।'
     },
     error:{
-      en_IN: "Option you have selected seems to be invalid  😐\nKindly click on the above button to proceed further.",
-      hi_IN: "क्षमा करें, मुझे समझ में नहीं आया"
+      en_IN: "Option you have selected seems to be invalid  😐\nPlease select the valid option to proceed further.",
+      hi_IN: "चयनित विकल्प अमान्य प्रतीत होता है 😐\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।"
     }
   },
   billServices: {
     question: {
       preamble: {
         en_IN: 'Type and send the option number to indicate if you know the *{{searchOption}}* 👇\n\n*1.* Yes\n*2.* No',
-        hi_IN: 'कृपया टाइप करें और अपने विकल्प के लिए नंबर भेजें👇\n\n1.हां\n2.नहीं'
+        hi_IN: 'यदि आप *{{searchOption}}* जानते हैं तो इंगित करने के लिए विकल्प संख्या टाइप करें और भेजें 👇\n\n*1.* हाँ\n*2.* नहीं'
       },
       confirmation:{
         en_IN: 'Do you have the *{{searchOption}}* to proceed for payment ?\n',
@@ -790,39 +790,39 @@ let messages = {
     },
     error:{
       en_IN: 'Option you have selected seems to be invalid  😐\nKindly select the valid option to proceed further.',
-      hi_IN: 'क्षमा करें, मुझे समझ में नहीं आया। कृपया दिए गए विकल्पों के लिए फिर से एक नंबर दर्ज करे।'
+      hi_IN: 'चयनित विकल्प अमान्य प्रतीत होता है  😐\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।'
     }
   },
   searchParamOptions: {
     question: {
       preamble: {
         en_IN: 'Please type and send the number for your option👇',
-        hi_IN: 'कृपया नीचे दिए गए सूची से अपना विकल्प टाइप करें और भेजें:'
+        hi_IN: 'सेवा का चयन करने के लिए प्रासंगिक विकल्प संख्या टाइप करें और भेजें 👇'
       }
     },
     error:{
       en_IN: 'Option you have selected seems to be invalid  😐\nKindly select the valid option to proceed further.',
-      hi_IN: 'क्षमा करें, मुझे समझ में नहीं आया। कृपया दिए गए विकल्पों के लिए फिर से एक नंबर दर्ज करे।'
+      hi_IN: 'चयनित विकल्प अमान्य प्रतीत होता है  😐\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।'
     }
   },
   paramInput: {
     question: {
       en_IN: 'Please enter the *{{option}}*\n\n{{example}}',
-      hi_IN: 'बिल देखने के लिए कृपया *{{option}}* डालें\n\n{{example}}'
+      hi_IN: 'कृपया *{{option}}* दर्ज करें\n\n{{example}}'
     },
     re_enter: {
       en_IN: 'The entered {{option}} is not found in our records.\n\nPlease check the entered details and try again.\n\n👉 To go back to the main menu, type and send mseva.',
-      hi_IN: 'क्षमा करें, आपके द्वारा प्रदान किया गया मूल्य गलत है। बिलों को प्राप्त करने के लिए \n कृपया फिर से {{option}} दर्ज करें।\n\nमुख्य मेनू पर वापस जाने के लिए ‘mseva’ टाइप करें और भेजें ।'
+      hi_IN: 'दर्ज किया गया {{option}} हमारे रिकॉर्ड में नहीं मिला है।\n\nकृपया दर्ज किए गए विवरणों की जांच करें और पुनः प्रयास करें\n\n👉 मुख्य मेनू पर वापस जाने के लिए mseva टाइप करें और भेजें।'
     }
   },
   billSearchResults: {
     noRecords: {
       en_IN: 'The {{searchParamOption}} : {{paramInput}} is not found in our records.\n\nPlease check the entered details and try again.',
-      hi_IN: 'आपके द्वारा प्रदान किए गए विवरण {{searchParamOption}} :   {{paramInput}} हमारे रिकॉर्ड में नहीं पाया जाता है। कृपया आपके द्वारा प्रदान किए गए विवरण को एक बार फिर से देखें।'
+      hi_IN: 'दर्ज किया गया {{searchParamOption}} :   {{paramInput}} हमारे रिकॉर्ड में नहीं मिला है।\n\nकृपया दर्ज किए गए विवरणों की जांच करें और पुनः प्रयास करें।'
     },
     singleRecord: {
       en_IN: 'Following unpaid bills are found 👇',
-      hi_IN: 'निम्नलिखित बिल मिले:',
+      hi_IN: 'निम्नलिखित बिल अवैतनिक पाए गए हैं  👇',
       billTemplate: {
         en_IN: '👉  *{{service}} Bill*\n\n*Connection No*\n{{id}}\n\n*Owner Name*\n{{payerName}}\n\n*Amount Due*\nRs {{dueAmount}}\n\n*Due Date*\n{{dueDate}}\n\n*Payment Link :*\n{{paymentLink}}',
         hi_IN: '👉  *{{service}} बिल*\n\n*कनेक्शन नंबर*\n{{id}}\n\n*स्वामी का नाम*\n{{payerName}}\n\n*देय राशि*\nरु {{dueAmount}}\n\n*देय तिथि *\n{{dueDate}}\n\n*भुगतान लिंक :*\n{{PaymentLink}}'
@@ -830,7 +830,7 @@ let messages = {
     },
     multipleRecords: {
       en_IN: 'Following unpaid bills are found 👇',
-      hi_IN: 'निम्नलिखित बिल मिले:',
+      hi_IN: 'निम्नलिखित बिल अवैतनिक पाए गए हैं  👇',
       billTemplate: {
         en_IN: '👉  *{{service}} Bill*\n\n*Connection No*\n{{id}}\n\n*Owner Name*\n{{payerName}}\n\n*Amount Due*\nRs {{dueAmount}}\n\n*Due Date*\n{{dueDate}}\n\n*Payment Link :*\n{{paymentLink}}',
         hi_IN: '👉  *{{service}} बिल*\n\n*कनेक्शन नंबर*\n{{id}}\n\n*स्वामी का नाम*\n{{payerName}}\n\n*देय राशि*\nरु {{dueAmount}}\n\n*देय तिथि *\n{{dueDate}}\n\n*भुगतान लिंक :*\n{{PaymentLink}}'
@@ -838,7 +838,7 @@ let messages = {
     },
     multipleRecordsSameService: {
       en_IN: 'Following unpaid bills are found 👇',
-      hi_IN: 'निम्नलिखित बिल मिले:',
+      hi_IN: 'निम्नलिखित बिल अवैतनिक पाए गए हैं  👇',
       billTemplate: {
         en_IN: '👉  *{{service}} Bill*\n\n*Connection No*\n{{id}}\n\n*Owner Name*\n{{payerName}}\n\n*Amount Due*\nRs {{dueAmount}}\n\n*Due Date*\n{{dueDate}}\n\n*Payment Link :*\n{{paymentLink}}',
         hi_IN: '👉  *{{service}} बिल*\n\n*कनेक्शन नंबर*\n{{id}}\n\n*स्वामी का नाम*\n{{payerName}}\n\n*देय राशि*\nरु {{dueAmount}}\n\n*देय तिथि *\n{{dueDate}}\n\n*भुगतान लिंक :*\n{{PaymentLink}}'
@@ -848,16 +848,16 @@ let messages = {
   paramInputInitiate: {
     question: {
       en_IN: 'Please type and send ‘1’ to Enter {{searchParamOption}} again. \nOr \'mseva\' to Go ⬅️ Back to the main menu.',
-      hi_IN: 'कृपया {{searchParamOption}} फिर से टाइप करने के लिए ’1’ टाइप करें और भेजें।\n\nमुख्य मेनू पर वापस जाने के लिए ‘mseva’ टाइप करें और भेजें ।'
+      hi_IN: 'कृपया {{searchParamOption}} फिर से टाइप करने के लिए ’1’ टाइप करें और भेजें।\nअथवा मुख्य मेनू पर वापस जाने के लिए ‘mseva’ टाइप करें और भेजें।'
     },
     error:{
       en_IN: "Option you have selected seems to be invalid  😐\nKindly select the valid option to proceed further.",
-      hi_IN: "क्षमा करें, मुझे समझ में नहीं आया"
+      hi_IN: "चयनित विकल्प अमान्य प्रतीत होता है  😐\nकृपया आगे बढ़ने के लिए वैध विकल्प का चयन करें।"
     }
   },
   openSearch: {
-    en_IN: "Click on the link below to search and pay your {{billserviceName}} bill -\n{{link}}\n\nThe image below shows you how to search and pay {{billserviceName}} bill using this link. 👇.",
-    hi_IN: "आप नीचे दिए गए लिंक पर क्लिक करके {{billserviceName}} खोज और भुगतान कर सकते हैं👇\n\n{{link}}\n\nइस लिंक से {{billserviceName}} खोजने और भुगतान करने के चरणों को समझने के लिए कृपया नीचे दी गई छवि देखें।"
+    en_IN: "Click on the link below to search and pay your {{billserviceName}} bill 👇\n{{link}}\n\nThe image below shows you how to search and pay {{billserviceName}} bill using this link. 👇.",
+    hi_IN: "अपना {{billserviceName}} खोजने और भुगतान करने के लिए नीचे दिए गए लिंक पर क्लिक करें  👇\n{{link}}\n\nनीचे दी गई छवि आपको दिखाती है कि इस लिंक का उपयोग करके संपत्ति कर की खोज और भुगतान कैसे करें। 👇"
   },
   newNumberregistration:{
     confirm:{
@@ -866,12 +866,22 @@ let messages = {
     },
     decline:{
       en_IN: 'Thank you for the response 🙏\n\n👉 To go back to the main menu, type and send *mseva*',
-      hi_IN: 'प्रतिक्रिया के लिए धन्यवाद 🙏\n\n👉 मुख्य मेनू पर वापस जाने के लिए, टाइप करें और भेजें *mseva*'
+      hi_IN: 'प्रतिक्रिया के लिए धन्यवाद 🙏\n\n👉 मुख्य मेनू पर वापस जाने के लिए *mseva* टाइप करें और भेजें।'
     }
   },
   endStatement: {
     en_IN: "👉 To go back to the main menu, type and send *mseva*",
-    hi_IN: "👉 मुख्य मेनू पर वापस जाने के लिए, टाइप करें और भेजें *mseva*"
+    hi_IN: "👉 मुख्य मेनू पर वापस जाने के लिए *mseva* टाइप करें और भेजें।"
+  },
+  quickReplyButtonText:{
+    mainMenu:{
+      en_IN: 'main menu',
+      hi_IN: 'मुख्य मेनू'
+    },
+    payOtherBill:{
+      en_IN: 'pay other bill',
+      hi_IN: 'अन्य बिल भुगतान'
+    }
   }
 }
 let grammer = {

@@ -96,6 +96,18 @@ export const transferorDetails = getCommonCard(
           //   return value.split(".")[1];
           // }
         }
+      ),  transferorAlterMobile: getLabelWithValue(
+        {
+          labelName: "Mobile No.",
+          labelKey: "PT_FORM3_ALT_MOBILE_NO"
+        },
+        {
+          jsonPath: "Property.owners[0].alternatemobilenumber",
+          callBack: checkValueForNA
+          // callBack: value => {
+          //   return value.split(".")[1];
+          // }
+        }
       ),
       transferorEmail: getLabelWithValue(
         {

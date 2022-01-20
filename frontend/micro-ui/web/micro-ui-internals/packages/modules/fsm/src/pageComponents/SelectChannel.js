@@ -13,7 +13,6 @@ const SelectChannel = ({ t, config, onSelect, formData = {}, userType }) => {
   const [channel, setChannel] = useState(formData?.channel);
 
   function selectChannel(value) {
-    //   console.log(value)
     setChannel(value);
     onSelect(config.key, value);
   }

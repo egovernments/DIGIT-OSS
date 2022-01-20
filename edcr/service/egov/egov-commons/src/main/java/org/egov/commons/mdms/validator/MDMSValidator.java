@@ -36,9 +36,9 @@ public class MDMSValidator {
         return errors;
     }
 
-    public Map<String, List<Object>> getAttributeValues(Object mdmsData) {
+    public Map<String, List<Object>> getAttributeValues(Object mdmsData, String moduleName) {
 
-        List<String> modulepaths = Arrays.asList("$.MdmsRes.BPA");
+        List<String> modulepaths = Arrays.asList("$.MdmsRes." + moduleName);
         final Map<String, List<Object>> mdmsResMap = new HashMap<>();
         modulepaths.forEach(modulepath -> {
             try {

@@ -1,5 +1,6 @@
 package org.egov.demand.model;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -19,5 +20,6 @@ public class UpdateBillRequest {
 	private RequestInfo RequestInfo;
 	
 	@NotNull
+	@Valid
 	private UpdateBillCriteria UpdateBillCriteria;
 }

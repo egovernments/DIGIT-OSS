@@ -41,6 +41,11 @@ $ npm run dev:employee
 
 ```
 
+if windows os  
+
+Then set this dev:employee command with "yarn run build-css-employee && cd packages/employee &&  set PORT=3006 && yarn start",
+
+
 ### Steps for production
 
 - Step 1 - lerna bootstrap will link dependencies in the repo together
@@ -100,6 +105,7 @@ Murali M
 
 ### Updated by  
 Gyan,  
-Sudhanshu Deshmukh
+Sudhanshu Deshmukh,  
+Jagan,
 
 ---

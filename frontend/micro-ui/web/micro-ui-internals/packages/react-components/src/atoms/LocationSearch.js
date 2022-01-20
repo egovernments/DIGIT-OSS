@@ -214,7 +214,7 @@ const mapStyles = [
   },
 ];
 
-const setLocationText = (location, onChange) => {
+const setLocationText = (location, onChange, isPlaceRequired=false) => {
   const geocoder = new google.maps.Geocoder();
   geocoder.geocode(
     {
@@ -227,19 +227,22 @@ const setLocationText = (location, onChange) => {
           const infoWindowContent = document.getElementById("pac-input");
           infoWindowContent.value = getName(results[0]);
           if (onChange) {
+            if(isPlaceRequired)
+            onChange(pincode, { longitude: location.lng, latitude: location.lat }, infoWindowContent.value);
+            else
             onChange(pincode, { longitude: location.lng, latitude: location.lat });
           }
         } else {
-          console.log("No results found");
+          console.debug("No results found");
         }
       } else {
-        console.log("Geocoder failed due to: " + status);
+        console.error("Geocoder failed due to: " + status);
       }
     }
   );
 };
 
-const onMarkerDragged = (marker, onChange) => {
+const onMarkerDragged = (marker, onChange, isPlaceRequired = false) => {
   if (!marker) return;
   const { latLng } = marker;
   const currLat = latLng.lat();
@@ -248,10 +251,13 @@ const onMarkerDragged = (marker, onChange) => {
     lat: currLat,
     lng: currLang,
   };
+  if(isPlaceRequired)
+  setLocationText(location, onChange, true);
+  else
   setLocationText(location, onChange);
 };
 
-const initAutocomplete = (onChange, position) => {
+const initAutocomplete = (onChange, position, isPlaceRequired=false) => {
   const map = new window.google.maps.Map(document.getElementById("map"), {
     center: position,
     zoom: 15,
@@ -286,11 +292,14 @@ const initAutocomplete = (onChange, position) => {
     }),
   ];
 
+  if(isPlaceRequired)
+  setLocationText(position, onChange,true);
+  else
   setLocationText(position, onChange);
 
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.
-  markers[0].addListener("dragend", (marker) => onMarkerDragged(marker, onChange));
+  markers[0].addListener("dragend", (marker) => onMarkerDragged(marker, onChange, isPlaceRequired));
   searchBox.addListener("place_changed", () => {
     const place = searchBox.getPlace();
 
@@ -304,6 +313,9 @@ const initAutocomplete = (onChange, position) => {
         latitude: geometry.location.lat(),
         longitude: geometry.location.lng(),
       };
+      if(isPlaceRequired)
+      onChange(pincode, geoLocation, place.name);
+      else
       onChange(pincode, geoLocation);
     }
     markers.forEach((marker) => {
@@ -313,7 +325,6 @@ const initAutocomplete = (onChange, position) => {
 
     const bounds = new window.google.maps.LatLngBounds();
     if (!place.geometry) {
-      console.log("Returned place contains no geometry");
       return;
     }
 
@@ -326,7 +337,7 @@ const initAutocomplete = (onChange, position) => {
         clickable: true,
       })
     );
-    markers[0].addListener("dragend", (marker) => onMarkerDragged(marker, onChange));
+    markers[0].addListener("dragend", (marker) => onMarkerDragged(marker, onChange, isPlaceRequired));
     if (place.geometry.viewport) {
       // Only geocodes have viewport.
       bounds.union(place.geometry.viewport);
@@ -342,10 +353,10 @@ const LocationSearch = (props) => {
   useEffect(() => {
     async function mapScriptCall() {
       const getLatLng = (position) => {
-        initAutocomplete(props.onChange, { lat: position.coords.latitude, lng: position.coords.longitude });
+        initAutocomplete(props.onChange, { lat: position.coords.latitude, lng: position.coords.longitude }, props.isPlaceRequired);
       };
       const getLatLngError = (error) => {
-        console.log("geo location error", error);
+        console.error("geo location error", error);
         let defaultLatLong = {};
         if (props?.isPTDefault) {
           defaultLatLong = props?.PTdefaultcoord?.defaultConfig || { lat: 31.6160638, lng: 74.8978579 };
@@ -355,7 +366,7 @@ const LocationSearch = (props) => {
             lng: 74.8978579,
           };
         }
-        initAutocomplete(props.onChange, defaultLatLong);
+        initAutocomplete(props.onChange, defaultLatLong, props.isPlaceRequired);
       };
 
       const initMaps = () => {

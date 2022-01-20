@@ -8,7 +8,7 @@ const MutationForm = ({ applicationData, tenantId }) => {
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
 
-  const { data: mutationDocs, isLoading } = Digit.Hooks.pt.useMDMS(tenantId.split(".")[0], "PropertyTax", "MutationDocuments");
+  const { data: mutationDocs, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "MutationDocuments");
   const defaultValues = {
     originalData: applicationData,
   };

@@ -4,7 +4,7 @@ import { FormStep, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-re
 
 const SelectVehicleType = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const [VehicleType, setVehicleType] = useState(formData?.TradeDetails?.VehicleType);
   const isEdit = window.location.href.includes("/edit-application/")||window.location.href.includes("renew-trade");
   const { isLoading, data: Menu = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "StructureType");
@@ -16,22 +16,15 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData }) => {
         menu.push({ i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${ob.code.replaceAll(".", "_")}`, code: `${ob.code}` });
       }
     });
-  /* const menu = [
-    { i18nKey: "MOTOR_DRIVEN", code: "motor" },
-    { i18nKey: "HAND_PULLED", code: "hand" },
-  ]; */
 
   const onSkip = () => onSelect();
 
-  // const propertyOwnerShipCategory = Digit.Hooks.pt.useMDMS("pb", "PropertyTax", "OwnerShipCategory", {});
   function selectVehicleType(value) {
     setVehicleType(value);
   }
 
   function goNext() {
-    //sessionStorage.setItem("VehicleType", VehicleType.i18nKey);
     onSelect(config.key, { VehicleType });
-    //onSelect("usageCategoryMajor", { i18nKey: "PROPERTYTAX_BILLING_SLAB_RESIDENTIAL" });
   }
   return (
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!VehicleType}>

@@ -1,5 +1,5 @@
-import React from "react";
 import { Dropdown, UploadFile } from "@egovernments/digit-ui-react-components";
+import React from "react";
 
 export const configPTApproverApplication = ({
   t,
@@ -48,6 +48,7 @@ export const configPTApproverApplication = ({
             label: `${t("ES_PT_ATTACH_FILE")}${action.docUploadRequired ? " *" : ""}`,
             populators: (
               <UploadFile
+                id={"workflow-doc"}
                 onUpload={selectFile}
                 onDelete={() => {
                   setUploadedFile(null);

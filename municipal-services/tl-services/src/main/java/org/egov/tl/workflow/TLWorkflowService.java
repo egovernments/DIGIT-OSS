@@ -7,6 +7,7 @@ import org.egov.tl.web.models.TradeLicenseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import static org.egov.tl.util.TLConstants.*;
@@ -34,7 +35,8 @@ public class TLWorkflowService {
      * @param request The update tradeLicense Request
      */
     public void updateStatus(TradeLicenseRequest request){
-        actionValidator.validateUpdateRequest(request,null);
+    	List<TradeLicense> licenses = new ArrayList<TradeLicense>();
+        actionValidator.validateUpdateRequest(request,null,licenses);
         changeStatus(request);
     }
 

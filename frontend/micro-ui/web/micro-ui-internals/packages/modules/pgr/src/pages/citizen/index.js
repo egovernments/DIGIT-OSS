@@ -15,6 +15,14 @@ const App = () => {
   const { t } = useTranslation();
   const { path, url, ...match } = useRouteMatch();
   const location = useLocation();
+
+  const CreateComplaint = Digit?.ComponentRegistryService?.getComponent('PGRCreateComplaintCitizen');
+  const ComplaintsList = Digit?.ComponentRegistryService?.getComponent('PGRComplaintsList');
+  const ComplaintDetailsPage = Digit?.ComponentRegistryService?.getComponent('PGRComplaintDetailsPage');
+  const SelectRating = Digit?.ComponentRegistryService?.getComponent('PGRSelectRating');
+  const Response = Digit?.ComponentRegistryService?.getComponent('PGRResponseCitzen');
+
+
   return (
     <React.Fragment>
       {!location.pathname.includes("/response") && <BackButton>{t("CS_COMMON_BACK")}</BackButton>}

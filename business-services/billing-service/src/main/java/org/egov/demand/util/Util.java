@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.demand.amendment.model.ProcessInstance;
 import org.egov.demand.amendment.model.ProcessInstanceRequest;
 import org.egov.demand.amendment.model.ProcessInstanceResponse;
@@ -249,12 +251,20 @@ public class Util {
 	/**
 	 * validates state level tenant-id for citizens and employees
 	 * 
+	 * state level search is allowed for employee if they contian state level roles 
 	 */
 	public void validateTenantIdForUserType(String tenantId, RequestInfo requestInfo) {
 
 		String userType = requestInfo.getUserInfo().getType();
-		if(Constants.EMPLOYEE_TYPE_CODE.equalsIgnoreCase(userType) && tenantId.split("\\.").length == 1) {
-			throw new CustomException("EG_BS_INVALID_TENANTID","Employees cannot search based on state level tenantid");
+		String[] tenantSplitArray = tenantId.split("\\.");
+		Set<String> rolesTenantList = new HashSet<>();
+		for (Role role : requestInfo.getUserInfo().getRoles()) {
+			rolesTenantList.add(role.getTenantId());
+		}
+		
+		if (Constants.EMPLOYEE_TYPE_CODE.equalsIgnoreCase(userType) && rolesTenantList.contains(tenantSplitArray[0])
+				&& tenantSplitArray.length == 1) {
+			throw new CustomException("EG_BS_INVALID_TENANTID", "Employees cannot search based on state level tenantid");
 		}
 	}
 	

@@ -27,7 +27,6 @@ export const ComplaintsList = (props) => {
     );
   }
 
-  console.log("complaints list", path, url);
 
   let complaints = data?.ServiceWrappers;
   let complaintsList;

@@ -404,4 +404,5 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 		return propertyAdditionalDetails;
 
 	}
+
 }

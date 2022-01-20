@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
@@ -10,11 +10,19 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
   const { t } = useTranslation();
   const history = useHistory();
   const [canSubmit, setSubmitValve] = useState(false);
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { data: commonFields, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "CommonFieldsConfig");
   const { data: preFields, isLoading: isApplicantConfigLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PreFieldsConfig");
   const { data: postFields, isLoading: isTripConfigLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PostFieldsConfig");
+  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
+  useEffect(() => {
+    setMutationHappened(false);
+    clearSuccessData();
+    clearError();
+  }, []);
   const defaultValues = {
     channel: channelMenu.filter((channel) => channel.code === applicationData.source)[0],
     applicationData: {
@@ -47,32 +55,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
   };
 
   const onFormValueChange = (setValue, formData) => {
-    // // setNoOfTrips(formData?.noOfTrips || 1);
-
-    // (async () => {
-    //   // console.log("abcd1",vehicle, formData?.propertyType , formData?.subtype)
-
-    //   if (formData?.propertyType && formData?.subtype && formData?.address && vehicle?.code && !kill) {
-    //     const { capacity } = vehicle;
-    //     // console.log("find bill slab form data", formData)
-    //     const { slum: slumDetails } = formData.address;
-    //     const slum = slumDetails ? "YES" : "NO";
-    //     const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
-    //       propertyType: formData?.subtype,
-    //       capacity,
-    //       slum,
-    //     });
-
-    //     const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
-    //     if (billSlab?.price) {
-    //       setKill(true);
-    //       console.log("find bill slab here", billSlab.price);
-    //       setValue("amountPerTrip", billSlab.price);
-    //       setValue("amount", billSlab.price * formData.noOfTrips);
-    //     }
-    //   }
-    // })();
-    // // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
+   
     if (
       formData?.propertyType &&
       formData?.subtype &&
@@ -170,7 +153,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     Digit.SessionStorage.set("city_property", null);
     Digit.SessionStorage.set("selected_localities", null);
     Digit.SessionStorage.set("locality_property", null);
-    // console.log("find form data here", formData);
     history.replace("/digit-ui/employee/fsm/response", {
       applicationData: formData,
       key: "update",

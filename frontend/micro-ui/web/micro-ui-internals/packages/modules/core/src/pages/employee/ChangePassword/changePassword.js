@@ -1,22 +1,34 @@
-import React, { useState, useEffect } from "react";
-import { FormComposer, Dropdown, CardSubHeader, CardLabel, TextInput, CardLabelDesc } from "@egovernments/digit-ui-react-components";
+import {
+  BackButton, CardSubHeader, CardText, FormComposer, Toast
+} from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import Background from "../../../components/Background";
+import Header from "../../../components/Header";
+import SelectOtp from "../../citizen/Login/SelectOtp";
 
 const ChangePasswordComponent = ({ config: propsConfig, t }) => {
   const [user, setUser] = useState(null);
   const { mobile_number: mobileNumber, tenantId } = Digit.Hooks.useQueryParams();
   const history = useHistory();
+  const [otp, setOtp] = useState("");
+  const [isOtpValid, setIsOtpValid] = useState(true);
+  const [showToast, setShowToast] = useState(null);
   const getUserType = () => Digit.UserService.getType();
-  let otpReference = "";
   useEffect(() => {
     if (!user) {
+      Digit.UserService.setType("employee");
       return;
     }
     Digit.UserService.setUser(user);
     const redirectPath = location.state?.from || "/digit-ui/employee";
     history.replace(redirectPath);
   }, [user]);
+
+  const closeToast = () => {
+    setShowToast(null);
+  };
 
   const onResendOTP = async () => {
     const requestData = {
@@ -27,41 +39,38 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
         tenantId,
       },
     };
+
     try {
       await Digit.UserService.sendOtp(requestData, tenantId);
-      alert("OTP resend successfull");
+      setShowToast(t("ES_OTP_RESEND"));
     } catch (err) {
-      console.log({ err });
-      alert(err?.response?.data?.error_description || "Invalid login credentials!");
+      setShowToast(err?.response?.data?.error_description || t("ES_INVALID_LOGIN_CREDENTIALS"));
     }
+    setTimeout(closeToast, 5000);
   };
 
   const onChangePassword = async (data) => {
     try {
       if (data.newPassword !== data.confirmPassword) {
-        return alert(t("ERR_PASSWORD_DO_NOT_MATCH"));
+        return setShowToast(t("ERR_PASSWORD_DO_NOT_MATCH"));
       }
-
       const requestData = {
         ...data,
-        otpReference,
+        otpReference: otp,
         tenantId,
         type: getUserType().toUpperCase(),
       };
+
       const response = await Digit.UserService.changePassword(requestData, tenantId);
-      console.log({ response });
       navigateToLogin();
     } catch (err) {
-      alert(err?.response?.data?.Errors[0]?.message || "Something went wrong!");
+      setShowToast(err?.response?.data?.error?.fields?.[0]?.message || t("ES_SOMETHING_WRONG"));
+      setTimeout(closeToast, 5000);
     }
   };
 
-  const updateOtp = (data) => {
-    otpReference = data.target.value || "";
-  };
-
   const navigateToLogin = () => {
-    history.replace("/digit-ui/employee/login");
+    history.replace("/digit-ui/employee/user/login");
   };
 
   const [username, password, confirmPassword] = propsConfig.inputs;
@@ -97,29 +106,55 @@ const ChangePasswordComponent = ({ config: propsConfig, t }) => {
   ];
 
   return (
-    <FormComposer
-      onSubmit={onChangePassword}
-      noBoxShadow
-      inline
-      submitInForm
-      config={config}
-      label={propsConfig.texts.submitButtonLabel}
-      cardStyle={{ maxWidth: "400px", margin: "auto" }}
-    >
-      <CardSubHeader style={{ textAlign: "center" }}> {propsConfig.texts.header} </CardSubHeader>
-      <div>
-        <CardLabel style={{ marginBottom: "8px" }}>{t("CORE_OTP_SENT_MESSAGE")}</CardLabel>
-        <CardLabelDesc style={{ marginBottom: "0px" }}> {mobileNumber} </CardLabelDesc>
-        <CardLabelDesc style={{ marginBottom: "8px" }}> {t("CORE_EMPLOYEE_OTP_CHECK_MESSAGE")}</CardLabelDesc>
+    <Background>
+      <div className="employeeBackbuttonAlign">
+        <BackButton variant="white" style={{ borderBottom: "none" }} />
       </div>
-      <CardLabel style={{ marginBottom: "8px" }}>{t("CORE_OTP_OTP")} *</CardLabel>
-      <TextInput className="field" name={otpReference} isRequired={true} onChange={updateOtp} type={"text"} style={{ marginBottom: "10px" }} />
-      <div className="flex-right">
-        <div className="primary-label-btn" onClick={onResendOTP}>
-          {t("CORE_OTP_RESEND")}
+      <FormComposer
+        onSubmit={onChangePassword}
+        noBoxShadow
+        inline
+        submitInForm
+        config={config}
+        label={propsConfig.texts.submitButtonLabel}
+        cardStyle={{ maxWidth: "408px", margin: "auto" }}
+        className="employeeChangePassword"
+      >
+        <Header />
+        <CardSubHeader style={{ textAlign: "center" }}> {propsConfig.texts.header} </CardSubHeader>
+        <CardText>
+          {`${t(`CS_LOGIN_OTP_TEXT`)} `}
+          <b>
+            {" "}
+            {`${t(`+ 91 - `)}`} {mobileNumber}
+          </b>
+        </CardText>
+        <SelectOtp t={t} userType="employee" otp={otp} onOtpChange={setOtp} error={isOtpValid} onResend={onResendOTP} />
+        {/* <div>
+          <CardLabel style={{ marginBottom: "8px" }}>{t("CORE_OTP_SENT_MESSAGE")}</CardLabel>
+          <CardLabelDesc style={{ marginBottom: "0px" }}> {mobileNumber} </CardLabelDesc>
+          <CardLabelDesc style={{ marginBottom: "8px" }}> {t("CORE_EMPLOYEE_OTP_CHECK_MESSAGE")}</CardLabelDesc>
         </div>
+        <CardLabel style={{ marginBottom: "8px" }}>{t("CORE_OTP_OTP")} *</CardLabel>
+        <TextInput className="field" name={otpReference} isRequired={true} onChange={updateOtp} type={"text"} style={{ marginBottom: "10px" }} />
+        <div className="flex-right">
+          <div className="primary-label-btn" onClick={onResendOTP}>
+            {t("CORE_OTP_RESEND")}
+          </div>
+        </div> */}
+      </FormComposer>
+      {showToast && <Toast error={true} label={t(showToast)} onClose={closeToast} />}
+      <div className="EmployeeLoginFooter">
+        <img
+          alt="Powered by DIGIT"
+          src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER_BW")}
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            window.open(window?.globalConfigs?.getConfig?.("DIGIT_HOME_URL"), "_blank").focus();
+          }}
+        />{" "}
       </div>
-    </FormComposer>
+    </Background>
   );
 };
 

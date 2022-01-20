@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.repository.ServiceRequestRepository;
@@ -132,6 +133,10 @@ public class PaymentUpdateService {
 							.build();
 
 					Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
+					// Enrich tenantId in userInfo for workflow call
+					RequestInfo requestInfo = sewerageConnectionRequest.getRequestInfo();
+					Role role = Role.builder().code("SYSTEM_PAYMENT").tenantId(property.getTenantId()).build();
+					requestInfo.getUserInfo().getRoles().add(role);
 					wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
 					enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
 					repo.updateSewerageConnection(sewerageConnectionRequest, false);
@@ -346,10 +351,10 @@ public class PaymentUpdateService {
 		Map<String, String> messageToReturn = new HashMap<>();
 		for (Map.Entry<String, String> mobAndMesg : mobileAndMessage.entrySet()) {
 			String message = mobAndMesg.getValue();
-			if (message.contains("<Amount paid>")) {
-				message = message.replace("<Amount paid>", paymentDetail.getTotalAmountPaid().toString());
+			if (message.contains("{Amount paid}")) {
+				message = message.replace("{Amount paid}", paymentDetail.getTotalAmountPaid().toString());
 			}
-			if (message.contains("<Billing Period>")) {
+			if (message.contains("{Billing Period}")) {
 				int fromDateLength = (int) (Math.log10(paymentDetail.getBill().getBillDetails().get(0).getFromPeriod()) + 1);
 				LocalDate fromDate = Instant
 						.ofEpochMilli(fromDateLength > 10 ? paymentDetail.getBill().getBillDetails().get(0).getFromPeriod() :
@@ -363,9 +368,9 @@ public class PaymentUpdateService {
 				StringBuilder builder = new StringBuilder();
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				String billingPeriod = builder.append(fromDate.format(formatter)).append(" - ").append(toDate.format(formatter)).toString();
-				message = message.replace("<Billing Period>", billingPeriod);
+				message = message.replace("{Billing Period}", billingPeriod);
 			}
-			if (message.contains("<receipt download link>")){
+			if (message.contains("{receipt download link}")){
 				String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
 				link = link.replace("$consumerCode", paymentDetail.getBill().getConsumerCode());
 				link = link.replace("$tenantId", paymentDetail.getTenantId());
@@ -373,7 +378,7 @@ public class PaymentUpdateService {
 				link = link.replace("$receiptNumber",paymentDetail.getReceiptNumber());
 				link = link.replace("$mobile", mobAndMesg.getKey());
 				link = sewerageServicesUtil.getShortenedURL(link);
-				message = message.replace("<receipt download link>",link);
+				message = message.replace("{receipt download link}",link);
 			}
 			messageToReturn.put(mobAndMesg.getKey(), message);
 		}

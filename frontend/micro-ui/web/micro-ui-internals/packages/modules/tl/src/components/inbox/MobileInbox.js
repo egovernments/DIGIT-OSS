@@ -40,7 +40,7 @@ const MobileInbox = ({
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-        <ApplicationLinks linkPrefix={parentRoute} 
+        <ApplicationLinks classNameForMobileView="linksWrapperForMobileInbox" linkPrefix={parentRoute} 
                     allLinks={[
                       {
                         text: "TL_NEW_APPLICATION",

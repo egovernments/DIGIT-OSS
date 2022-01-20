@@ -83,6 +83,7 @@ public class User {
     private Long loggedInUserId;
     private boolean otpValidationMandatory;
     private boolean mobileValidationMandatory = true;
+    private String alternateMobileNumber;
 
     public User addAddressItem(Address addressItem) {
         if (this.addresses == null) {

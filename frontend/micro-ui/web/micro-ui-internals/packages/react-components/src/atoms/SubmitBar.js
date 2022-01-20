@@ -9,6 +9,7 @@ const SubmitBar = (props) => {
       type={props.submit ? "submit" : "button"}
       style={{ ...props.style }}
       onClick={props.onSubmit}
+      {... props.form ? {form: props.form} : {}}
     >
       <header>{props.label}</header>
     </button>

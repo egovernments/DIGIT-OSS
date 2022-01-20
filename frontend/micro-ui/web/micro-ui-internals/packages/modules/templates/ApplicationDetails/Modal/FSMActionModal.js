@@ -43,9 +43,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       },
     }
   );
-  // console.log("find application details here", applicationData)
   const client = useQueryClient();
-  const stateCode = tenantId.split(".")[0];
+  const stateCode = Digit.ULBService.getStateId();
   const { data: vehicleList, isLoading: isVehicleData, isSuccess: isVehicleDataLoaded } = Digit.Hooks.fsm.useMDMS(
     stateCode,
     "Vehicle",
@@ -70,8 +69,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     "DeclineReason",
     "CancelReason",
   ]);
-
-  // console.log("find mdms data here", Reason);
 
   const [reassignReason, selectReassignReason] = useState(null);
   const [rejectionReason, setRejectionReason] = useState(null);
@@ -124,9 +121,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }, [cancelReason]);
 
   function selectDSO(dsoDetails) {
-    // console.log("find dso details here", dsoDetails);
     setDSO(dsoDetails);
-    // setVehicleMenu(dsoDetails.vehicles);
   }
 
   function selectVehicleNo(vehicleNo) {
@@ -134,7 +129,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }
 
   function selectVehicle(value) {
-    // console.log("find vehicle details here", value)
     setVehicle(value);
     setDefautValue({
       capacity: value?.capacity,
@@ -142,16 +136,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     });
   }
 
-  // function setTostError(errorMsg) {
-  //   setToastError({ label: errorMsg, error: true });
-  // }
-
   function addCommentToWorkflow(state, workflow, data) {
     workflow.comments = data.comments ? state.code + "~" + data.comments : state.code;
   }
 
   function submit(data) {
-    // console.log("find submit here",data);
     const workflow = { action: action };
 
     if (dso) applicationData.dsoId = dso.id;
@@ -166,14 +155,12 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (declineReason) addCommentToWorkflow(declineReason, workflow, data);
     if (cancelReason) addCommentToWorkflow(cancelReason, workflow, data);
 
-    // console.log("find fsm update object here",{ fsm: applicationData, workflow });
     submitAction({ fsm: applicationData, workflow });
   }
   useEffect(() => {
     switch (action) {
       case "DSO_ACCEPT":
       case "ACCEPT":
-        //TODO: add accept UI
         setFormValve(vehicleNo ? true : false);
         return setConfig(
           configAcceptDso({
@@ -191,7 +178,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "ASSIGN":
       case "GENERATE_DEMAND":
       case "FSM_GENERATE_DEMAND":
-        // console.log("find vehicle menu here", vehicleMenu)
         setFormValve(dso && vehicle ? true : false);
         return setConfig(
           configAssignDso({
@@ -211,7 +197,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         dso && vehicle && (reassignReason || (actionData && actionData[0] && actionData[0].comment?.length > 0))
           ? setFormValve(true)
           : setFormValve(false);
-        // console.log("find reasiign reason data here",Reason?.ReassignReason)
         return setConfig(
           configReassignDSO({
             t,
@@ -231,7 +216,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
-        // console.log("find vehicle cpacity", vehicle?.capacity)
         return setConfig(configCompleteApplication({ t, vehicle, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
       case "SUBMIT":
       case "FSM_SUBMIT":
@@ -239,7 +223,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "DECLINE":
       case "DSO_REJECT":
         //declinereason
-        // console.log("find action", action, declineReason)
         setFormValve(declineReason ? true : false);
         return setConfig(
           configRejectApplication({
@@ -281,7 +264,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "FSM_PAY":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
-        console.log("default case");
+        console.debug("default case");
         break;
     }
   }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList, Reason]);

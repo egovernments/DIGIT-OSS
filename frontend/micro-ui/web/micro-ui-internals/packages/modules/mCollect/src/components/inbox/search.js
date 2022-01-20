@@ -11,8 +11,6 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   });
   const mobileView = innerWidth <= 640;
 
-  // console.log(_.isEqual(defaultSearchParams, searchParams), { defaultSearchParams, searchParams }, "params are defaulted");
-
   const onSubmitInput = (data) => {
     if (!data.mobileNumber) {
       delete data.mobileNumber;

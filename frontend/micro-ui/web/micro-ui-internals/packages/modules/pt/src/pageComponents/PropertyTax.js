@@ -5,7 +5,7 @@ import { cardBodyStyle, stringReplaceAll } from "../utils";
 
 const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
   const docType = config?.isMutation ? ["MutationDocuments"] : "Documents";
 
@@ -56,7 +56,7 @@ const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
                       ))}
                     </div>
                   ))
-              : console.log("error")}
+              : console.error("error")}
           </div>
         </div>
         <span>

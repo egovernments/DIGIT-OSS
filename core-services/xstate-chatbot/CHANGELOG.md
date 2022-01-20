@@ -3,6 +3,14 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.1 - 2022-01-13
+- Updated to log4j2 version 2.17.1
+
+## 1.1.0 - 2021-12-15
+- Telemetry Enhancements.
+- Receipt Access Control (For Property Tax and W&S).
+- Hindi localization messages.
+
 ## 1.0.2 - 2021-07-26
 - Messaging Experience Changes
 - Locality Selection - NLP integration

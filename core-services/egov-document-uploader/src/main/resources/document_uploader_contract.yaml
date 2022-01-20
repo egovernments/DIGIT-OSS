@@ -1,0 +1,240 @@
+---
+openapi: 3.0.3
+info:
+  title: Api Documentation
+  description: Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+  version: '1.0'
+servers:
+  - url: http://localhost:8080
+    description: Inferred Url
+tags:
+  - name: document-controller
+    description: Document Controller
+paths:
+  "/egov-document-uploader/egov-du/document/_create":
+    post:
+      tags:
+        - document-controller
+      summary: create
+      operationId: createUsingPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/DocumentRequest"
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/DocumentResponse"
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  "/egov-document-uploader/egov-du/document/_delete":
+    post:
+      tags:
+        - document-controller
+      summary: delete
+      operationId: deleteUsingPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/DocumentRequest"
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: >-
+                  https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  "/egov-document-uploader/egov-du/document/_search":
+    post:
+      tags:
+        - document-controller
+      summary: search
+      operationId: searchUsingPOST
+      parameters:
+        - name: category
+          in: query
+          required: false
+          style: form
+          schema:
+            type: string
+        - name: name
+          in: query
+          required: false
+          style: form
+          schema:
+            type: string
+        - name: postedBy
+          in: query
+          required: false
+          style: form
+          schema:
+            type: string
+        - name: tenantIds
+          in: query
+          required: false
+          style: pipeDelimited
+          schema:
+            type: array
+            items:
+              type: string
+        - name: uuid
+          in: query
+          required: false
+          style: form
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RequestInfoWrapper"
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/DocumentResponse"
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  "/egov-document-uploader/egov-du/document/_update":
+    post:
+      tags:
+        - document-controller
+      summary: update
+      operationId: updateUsingPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/DocumentRequest"
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/DocumentResponse"
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+components:
+  schemas:
+    AuditDetails:
+      title: AuditDetails
+      type: object
+      properties:
+        createdBy:
+          type: string
+        createdTime:
+          type: integer
+          format: int64
+        lastModifiedBy:
+          type: string
+        lastModifiedTime:
+          type: integer
+          format: int64
+    DocumentEntity:
+      title: DocumentEntity
+      required:
+        - tenantIds
+      type: object
+      properties:
+        active:
+          type: boolean
+        auditDetails:
+          "$ref": "#/components/schemas/AuditDetails"
+        category:
+          type: string
+        description:
+          maxLength: 140
+          minLength: 0
+          type: string
+        documentLink:
+          type: string
+        filestoreId:
+          type: string
+        name:
+          type: string
+        postedBy:
+          type: string
+        tenantId:
+          type: string
+        tenantIds:
+          type: array
+          items:
+            type: string
+        uuid:
+          type: string
+    DocumentRequest:
+      title: DocumentRequest
+      type: object
+      properties:
+        DocumentEntity:
+          "$ref": "#/components/schemas/DocumentEntity"
+        RequestInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo
+    DocumentResponse:
+      title: DocumentResponse
+      type: object
+      properties:
+        Documents:
+          type: array
+          items:
+            "$ref": "#/components/schemas/DocumentEntity"
+        ResponseInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo
+    Link:
+      title: Link
+      type: string
+    RequestInfoWrapper:
+      title: RequestInfoWrapper
+      type: object
+      properties:
+        RequestInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo
+    Role:
+      $ref: >-
+        https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/Role
+    User:
+      $ref: >-
+        https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/UserInfo

@@ -40,8 +40,11 @@ export const loginSteps = [
         label: "CORE_COMMON_NAME",
         type: "text",
         name: "name",
+        error: "CORE_COMMON_NAME_VALIDMSG",
         validation: {
           required: true,
+          minLength: 1,
+          pattern: /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i
         },
       },
     ],

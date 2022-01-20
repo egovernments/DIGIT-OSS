@@ -1,18 +1,15 @@
+import commonConfig from "config/common.js";
 import {
-  getCommonHeader,
-  getBreak,
+  getBreak, getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { nocApplication, resetFields } from "./noc-searchResource/nocApplication";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { searchResults } from "./noc-searchResource/searchResults";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
-  prepareFinalObject,
-  handleScreenConfigurationFieldChange as handleField
+  prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils/api";
-import get from "lodash/get";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import { httpRequest } from "../../../../ui-utils/api";
+import { nocApplication, resetFields } from "./noc-searchResource/nocApplication";
+import { searchResults } from "./noc-searchResource/searchResults";
 
 const header = getCommonHeader({
   labelName: "NOC Application",
@@ -37,7 +34,7 @@ export const getNOCMdmsData = async (action, state, dispatch, mdmsBody) => {
 const getMdmsData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId().split('.')[0],
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "NOC",
@@ -53,17 +50,17 @@ const getMdmsData = async (action, state, dispatch) => {
 
   let payload = await getNOCMdmsData(action, state, dispatch, mdmsBody);
   dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-  setNocTypeResponse(action, state, dispatch)  
+  setNocTypeResponse(action, state, dispatch)
 };
 
 const setNocTypeResponse = (action, state, dispatch) => {
   let userInfo = JSON.parse(getUserInfo());
-  let nocData = get( state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.NOC.NocType", []);  
-  userInfo.roles && userInfo.roles.map(role =>{
+  let nocData = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.NOC.NocType", []);
+  userInfo.roles && userInfo.roles.map(role => {
     nocData.map(nocType => {
-      if(role.code === nocType.NocUserRole){
+      if (role.code === nocType.NocUserRole) {
         // let NocType = nocType.code.split("_").join(" ");
-        dispatch(prepareFinalObject("nocType", nocType.code));        
+        dispatch(prepareFinalObject("nocType", nocType.code));
       }
     })
   })

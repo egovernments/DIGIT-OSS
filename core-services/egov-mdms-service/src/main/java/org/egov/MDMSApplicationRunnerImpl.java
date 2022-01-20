@@ -160,7 +160,7 @@ public class MDMSApplicationRunnerImpl {
         }
     }
 
-    public void readMdmsConfigFiles(String masterConfigUrl) {
+    public void readMdmsConfigFiles(String masterConfigUrl) throws Exception {
         log.info("Loading master configs from: " + masterConfigUrl);
         Resource resource = resourceLoader.getResource(masterConfigUrl);
         InputStream inputStream = null;
@@ -170,6 +170,7 @@ public class MDMSApplicationRunnerImpl {
             });
         } catch (IOException e) {
             log.error("Exception while fetching service map for: ", e);
+            log.error("Incorrect format of the file: " + masterConfigUrl);
         } finally {
             IOUtils.closeQuietly(inputStream);
         }

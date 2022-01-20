@@ -58,6 +58,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     DSO ? true : false
   );
 
+  const inboxTotalCount = DSO ? applications?.statuses.filter(e => e.applicationstatus === "DSO_INPROGRESS")[0]?.count + applications?.statuses.filter(e => e.applicationstatus === "PENDING_DSO_APPROVAL")[0]?.count : applications?.totalCount
   const {
     isLoading: isSearchLoading,
     isIdle: isSearchIdle,
@@ -209,7 +210,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
           {!isSearch && (
             <Header>
               {t("ES_COMMON_INBOX")}
-              {Number(applications?.totalCount) ? <p className="inbox-count">{Number(applications?.totalCount)}</p> : null}
+              {Number(inboxTotalCount) ? <p className="inbox-count">{Number(inboxTotalCount)}</p> : null}
             </Header>
           )}
           <DesktopInbox
@@ -231,7 +232,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
             parentRoute={parentRoute}
             paginationParms={paginationParms}
             sortParams={sortParams}
-            totalRecords={isInbox ? Number(applications?.totalCount) : totalCount}
+            totalRecords={isInbox ? Number(inboxTotalCount) : totalCount}
           />
         </div>
       );

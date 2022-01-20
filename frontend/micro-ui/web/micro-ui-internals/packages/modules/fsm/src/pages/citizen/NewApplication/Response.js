@@ -27,14 +27,28 @@ const Response = ({ data, onSuccess }) => {
   const mutation = Digit.Hooks.fsm.useDesludging(data?.address?.city ? data.address?.city?.code : tenantId);
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
-  const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
-  const slumCode = mutation?.data?.fsm[0].address?.slumName;
-  const slum = Digit.Hooks.fsm.useSlum(mutation?.data?.fsm[0].address?.tenantId, slumCode, localityCode, {
+  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
+
+  const Data = mutation?.data || successData;
+  const localityCode = Data?.fsm?.[0].address?.locality?.code;
+  const slumCode = Data?.fsm?.[0].address?.slumName;
+  const slum = Digit.Hooks.fsm.useSlum(Data?.fsm?.[0].address?.tenantId, slumCode, localityCode, {
     enabled: slumCode ? true : false,
     retry: slumCode ? true : false,
   });
 
+  const onError = (error, variables) => {
+    setErrorInfo(error?.response?.data?.Errors[0]?.code || 'ERROR');
+    setMutationHappened(true);
+  };
   useEffect(() => {
+    if (mutation.data) setsuccessData(mutation.data);
+  }, [mutation.data]);
+
+  useEffect(() => {
+    if (!mutationHappened && !errorInfo) {
     try {
       const { subtype, pitDetail, address, pitType, source } = data;
       const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
@@ -69,29 +83,35 @@ const Response = ({ data, onSuccess }) => {
         workflow: null,
       };
       mutation.mutate(formdata, {
-        onSuccess,
+        onError,
+        onSuccess:()=>{
+          setMutationHappened(true);
+          onSuccess();
+        },
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
+  }
   }, []);
 
   const handleDownloadPdf = () => {
-    const { fsm } = mutation.data;
+    const { fsm } = Data;
     const [applicationDetails, ...rest] = fsm;
     const tenantInfo = tenants.find((tenant) => tenant.code === applicationDetails.tenantId);
 
     const data = getPDFData({ ...applicationDetails, slum }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
   };
+  const isSuccess = !successData ? mutation?.isSuccess : true;
 
-  return mutation.isLoading || mutation.isIdle ? (
+  return (mutation.isLoading || (mutation.isIdle && !mutationHappened)) ? (
     <Loader />
   ) : (
     <Card>
-      <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
+      <BannerPicker t={t} data={Data} isSuccess={isSuccess}         isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading} />
       <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
-      {mutation.isSuccess && (
+      {isSuccess&& (
         <LinkButton
           label={
             <div className="response-download-button">

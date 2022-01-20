@@ -42,6 +42,9 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class UserRepositoryTest {
+	
+	@Autowired
+    private AuditRepository auditRepository;
 
     @Autowired
     private AddressRepository addressRepository;
@@ -83,7 +86,7 @@ public class UserRepositoryTest {
 
         userRepository = new UserRepository(roleRepository, userTypeQueryBuilder, addressRepository,
                 userResultSetExtractor,
-                jdbcTemplate, namedParameterJdbcTemplate);
+                jdbcTemplate, namedParameterJdbcTemplate,auditRepository);
     }
 
     @Test
@@ -349,7 +352,7 @@ public class UserRepositoryTest {
                 .emailId("Test@gmail.com").aadhaarNumber("AadharNumber").mobileNumber("1234567890").active(true)
                 .gender(Gender.FEMALE).bloodGroup(BloodGroup.A_NEGATIVE).accountLocked(true).loggedInUserId(10L)
                 .createdBy(10L).tenantId("ap.public").build();
-        userRepository.update(domainUser, domainUser);
+        userRepository.update(domainUser, domainUser,domainUser.getId(), domainUser.getUuid() );
         User actualUser = userRepository.findAll(UserSearchCriteria.builder().userName("TestUserName").tenantId("ap" +
                 ".public").type(UserType.CITIZEN)
                 .build()).get(0);
@@ -374,7 +377,7 @@ public class UserRepositoryTest {
                 .build();
         User domainUser = User.builder()
                 .roles(Collections.singleton(domainRole)).id(1L).tenantId("ap.public").build();
-        userRepository.update(domainUser, domainUser);
+        userRepository.update(domainUser, domainUser,domainUser.getId(), domainUser.getUuid() );
     }
 
     @Test

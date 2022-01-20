@@ -164,6 +164,21 @@ public class PGRConfiguration {
     @Value("${egov.url.shortner.endpoint}")
     private String urlShortnerEndpoint;
 
+    @Value("${egov.ui.app.host}")
+    private String uiAppHost;
+
+    @Value("${egov.pgr.events.rate.link}")
+    private String rateLink;
+
+    @Value("${egov.pgr.events.reopen.link}")
+    private String reopenLink;
+
+    @Value("${egov.usr.events.rate.code}")
+    private String rateCode;
+
+    @Value("${egov.usr.events.reopen.code}")
+    private String reopenCode;
+
 
 
     //Allowed Search Parameters

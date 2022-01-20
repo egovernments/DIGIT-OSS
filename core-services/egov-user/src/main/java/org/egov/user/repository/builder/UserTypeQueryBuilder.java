@@ -59,16 +59,16 @@ public class UserTypeQueryBuilder {
     @Autowired
     private RoleRepository roleRepository;
 
-    private static final String SELECT_USER_QUERY = "SELECT u.title, u.salutation, u.dob, u.locale, u.username, u" +
-            ".password, u.pwdexpirydate,  u.mobilenumber, u.altcontactnumber, u.emailid, u.createddate, u" +
-            ".lastmodifieddate,  u.createdby, u.lastmodifiedby, u.active, u.name, u.gender, u.pan, u.aadhaarnumber, u" +
-            ".type,  u.version, u.guardian, u.guardianrelation, u.signature, u.accountlocked, u.accountlockeddate, u" +
-            ".bloodgroup, u.photo, u.identificationmark,  u.tenantid, u.id, u.uuid, addr.id as addr_id, addr.type as " +
+    private static final String SELECT_USER_QUERY = "SELECT userdata.title, userdata.salutation, userdata.dob, userdata.locale, userdata.username, userdata" +
+            ".password, userdata.pwdexpirydate,  userdata.mobilenumber, userdata.altcontactnumber, userdata.emailid, userdata.createddate, userdata" +
+            ".lastmodifieddate,  userdata.createdby, userdata.lastmodifiedby, userdata.active, userdata.name, userdata.gender, userdata.pan, userdata.aadhaarnumber, userdata" +
+            ".type,  userdata.version, userdata.guardian, userdata.guardianrelation, userdata.signature, userdata.accountlocked, userdata.accountlockeddate, userdata" +
+            ".bloodgroup, userdata.photo, userdata.identificationmark,  userdata.tenantid, userdata.id, userdata.uuid, userdata.alternatemobilenumber, addr.id as addr_id, addr.type as " +
             "addr_type, addr .address as addr_address,  addr.city as addr_city, addr.pincode as addr_pincode, addr" +
             ".tenantid as " +
             "addr_tenantid, addr.userid as addr_userid, ur.role_code as role_code, ur.role_tenantid as role_tenantid \n" +
-            "\tFROM eg_user u LEFT OUTER JOIN eg_user_address addr ON u.id = addr.userid AND u.tenantid = addr" +
-            ".tenantid LEFT OUTER JOIN eg_userrole_v1 ur ON u.id = ur.user_id AND u.tenantid = ur.user_tenantid  ";
+            "\tFROM eg_user userdata LEFT OUTER JOIN eg_user_address addr ON userdata.id = addr.userid AND userdata.tenantid = addr" +
+            ".tenantid LEFT OUTER JOIN eg_userrole_v1 ur ON userdata.id = ur.user_id AND userdata.tenantid = ur.user_tenantid  ";
 
     private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY id) offset_ FROM " +
@@ -126,72 +126,80 @@ public class UserTypeQueryBuilder {
 
         if (userSearchCriteria.getId() != null && !userSearchCriteria.getId().isEmpty()) {
             isAppendAndClause = addAndClauseIfRequired(false, selectQuery);
-            selectQuery.append(" u.id IN ( ").append(getQueryForCollection(userSearchCriteria.getId(),
+            selectQuery.append(" userdata.id IN ( ").append(getQueryForCollection(userSearchCriteria.getId(),
                     preparedStatementValues)).append(" )");
         }
 
         if (userSearchCriteria.getTenantId() != null) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" u.tenantid = ?");
+            selectQuery.append(" userdata.tenantid = ?");
             preparedStatementValues.add(userSearchCriteria.getTenantId().trim());
         }
 
         if (userSearchCriteria.getUserName() != null) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" u.username = ?");
+            selectQuery.append(" userdata.username = ?");
             preparedStatementValues.add(userSearchCriteria.getUserName().trim());
         }
 
         if (!userSearchCriteria.isFuzzyLogic() && userSearchCriteria.getName() != null) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" u.name = ?");
+            selectQuery.append(" userdata.name = ?");
             preparedStatementValues.add(userSearchCriteria.getName().trim());
         }
 
         if (userSearchCriteria.getActive() != null) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" u.active = ?");
+            selectQuery.append(" userdata.active = ?");
             preparedStatementValues.add(userSearchCriteria.getActive());
         }
 
         if (userSearchCriteria.getEmailId() != null) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" u.emailid = ?");
+            selectQuery.append(" userdata.emailid = ?");
             preparedStatementValues.add(userSearchCriteria.getEmailId().trim());
         }
 //
 //        if (userSearchCriteria.getAadhaarNumber() != null) {
 //            isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-//            selectQuery.append(" u.aadhaarnumber = ?");
+//            selectQuery.append(" user.aadhaarnumber = ?");
 //            preparedStatementValues.add(userSearchCriteria.getAadhaarNumber().trim());
 //        }
 
-        if (userSearchCriteria.getMobileNumber() != null) {
+        if (userSearchCriteria.getMobileNumber() != null && userSearchCriteria.getAlternatemobilenumber()!=null) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" u.mobilenumber = ?");
+            selectQuery.append(" ( userdata.mobilenumber = ? OR ");
+            preparedStatementValues.add(userSearchCriteria.getMobileNumber().trim());
+            selectQuery.append(" userdata.alternatemobilenumber = ? )");
+            preparedStatementValues.add(userSearchCriteria.getAlternatemobilenumber().trim());
+        }
+        
+        else if(userSearchCriteria.getMobileNumber() != null) {
+        	isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
+            selectQuery.append(" userdata.mobilenumber = ? ");
             preparedStatementValues.add(userSearchCriteria.getMobileNumber().trim());
         }
 
 //        if (userSearchCriteria.getPan() != null) {
 //            isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-//            selectQuery.append(" u.pan = ?");
+//            selectQuery.append(" user.pan = ?");
 //            preparedStatementValues.add(userSearchCriteria.getPan().trim());
 //        }
 
         if (userSearchCriteria.getType() != null) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" u.type = ?");
+            selectQuery.append(" userdata.type = ?");
             preparedStatementValues.add(userSearchCriteria.getType().toString());
         }
 
         if (userSearchCriteria.isFuzzyLogic() && userSearchCriteria.getName() != null) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" u.name like " + "'%").append(userSearchCriteria.getName().trim()).append("%'");
+            selectQuery.append(" userdata.name like " + "'%").append(userSearchCriteria.getName().trim()).append("%'");
         }
 
         if (!isEmpty(userSearchCriteria.getUuid())) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" u.uuid IN (").append(getQueryForCollection(userSearchCriteria.getUuid(),
+            selectQuery.append(" userdata.uuid IN (").append(getQueryForCollection(userSearchCriteria.getUuid(),
                     preparedStatementValues)).append(" )");
         }
 
@@ -204,7 +212,7 @@ public class UserTypeQueryBuilder {
 
     private void addOrderByClause(final StringBuilder selectQuery, final UserSearchCriteria userSearchCriteria) {
         final String sortBy = userSearchCriteria.getSort() != null && !userSearchCriteria.getSort().isEmpty()
-                ? " u." + userSearchCriteria.getSort().get(0) : "u.name";
+                ? " userdata." + userSearchCriteria.getSort().get(0) : "userdata.name";
         selectQuery.append(" ORDER BY ").append(sortBy);
     }
 
@@ -278,9 +286,9 @@ public class UserTypeQueryBuilder {
 
     public String getInsertUserQuery() {
         return "insert into eg_user (id,uuid,tenantid,salutation,dob,locale,username,password,pwdexpirydate,mobilenumber,altcontactnumber,emailid,active,name,gender,pan,aadhaarnumber,"
-                + "type,guardian,guardianrelation,signature,accountlocked,bloodgroup,photo,identificationmark,createddate,lastmodifieddate,createdby,lastmodifiedby) values (:id,:uuid,:tenantid,:salutation,"
+                + "type,guardian,guardianrelation,signature,accountlocked,bloodgroup,photo,identificationmark,createddate,lastmodifieddate,createdby,lastmodifiedby,alternatemobilenumber) values (:id,:uuid,:tenantid,:salutation,"
                 + ":dob,:locale,:username,:password,:pwdexpirydate,:mobilenumber,:altcontactnumber,:emailid,:active,:name,:gender,:pan,:aadhaarnumber,:type,:guardian,:guardianrelation,:signature,"
-                + ":accountlocked,:bloodgroup,:photo,:identificationmark,:createddate,:lastmodifieddate,:createdby,:lastmodifiedby) ";
+                + ":accountlocked,:bloodgroup,:photo,:identificationmark,:createddate,:lastmodifieddate,:createdby,:lastmodifiedby,:alternatemobilenumber) ";
     }
 
     public String getUpdateUserQuery() {
@@ -288,7 +296,7 @@ public class UserTypeQueryBuilder {
                 + "type=:Type,guardian=:Guardian,guardianrelation=:GuardianRelation,signature=:Signature," +
                 "accountlocked=:AccountLocked, accountlockeddate=:AccountLockedDate, bloodgroup=:BloodGroup," +
                 "photo=:Photo, identificationmark=:IdentificationMark,lastmodifieddate=:LastModifiedDate," +
-                "lastmodifiedby=:LastModifiedBy where username=:username and tenantid=:tenantid and type=:type";
+                "lastmodifiedby=:LastModifiedBy, alternatemobilenumber=:alternatemobilenumber where username=:username and tenantid=:tenantid and type=:type";
     }
 
 

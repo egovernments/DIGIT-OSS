@@ -32,7 +32,7 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
     form: [
       {
         body: [
-          {
+          vehicle ? {
             label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
             isMandatory: true,
             type: "dropdown",
@@ -48,14 +48,13 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
                 t={t}
               />
             ),
-          },
+          }: {},
           {
             label: t("ES_FSM_ACTION_DSO_NAME"),
             isMandatory: true,
             type: "dropdown",
             populators: (
               <React.Fragment>
-                {/* {console.log("find get dso here",getFilteredDsoData(), getFilteredDsoData() && !getFilteredDsoData().length )} */}
                 {getFilteredDsoData(dsoData, vehicle) && !getFilteredDsoData(dsoData, vehicle).length ? (
                   <CardLabelError>{t("ES_COMMON_NO_DSO_AVAILABLE_WITH_SUCH_VEHICLE")}</CardLabelError>
                 ) : null}

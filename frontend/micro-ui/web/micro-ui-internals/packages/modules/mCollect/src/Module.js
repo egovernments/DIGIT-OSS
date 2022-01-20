@@ -1,11 +1,21 @@
-import { Header, HomeLink, Loader, CitizenHomeCard, PTIcon } from "@egovernments/digit-ui-react-components";
+import { CitizenHomeCard, Loader, PTIcon } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
-import EmployeeApp from "./pages/employee";
-import MCollectCard from "./components/MCollectCard";
 import InboxFilter from "./components/inbox/NewInboxFilter";
+import MCollectCard from "./components/MCollectCard";
+import EmployeeChallan from "./EmployeeChallan";
+import AddressDetails from "./pageComponents/AddressDetails";
+import ConsumerDetails from "./pageComponents/ConsumerDetails";
+import ServiceDetails from "./pageComponents/ServiceDetails";
 import CitizenApp from "./pages/citizen";
+import MyChallanResultsComponent from "./pages/citizen/MyChallan";
+import SearchChallanComponent from "./pages/citizen/SearchChallan";
+import SearchResultsComponent from "./pages/citizen/SearchResults";
+import EmployeeApp from "./pages/employee";
+import EditChallan from "./pages/employee/EditChallan";
+import MCollectAcknowledgement from "./pages/employee/EmployeeChallanAcknowledgement";
+import NewChallan from "./pages/employee/NewChallan";
 
 export const MCollectModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "UC";
@@ -45,9 +55,20 @@ export const MCollectLinks = ({ matchPath, userType }) => {
 };
 
 const componentsToRegister = {
+  ConsumerDetails,
+  ServiceDetails,
+  AddressDetails,
   MCollectCard,
   MCollectModule,
   MCollectLinks,
+  MCollectEmployeeChallan: EmployeeChallan,
+  MCollectAcknowledgement: MCollectAcknowledgement,
+  MCollectEditChallan: EditChallan,
+  MCollectNewChallan: NewChallan,
+  MCollectSearchChallanComponent: SearchChallanComponent,
+  MCollectSearchResultsComponent: SearchResultsComponent,
+  MCollectMyChallanResultsComponent: MyChallanResultsComponent,
+
   MCOLLECT_INBOX_FILTER: (props) => <InboxFilter {...props} />,
 };
 

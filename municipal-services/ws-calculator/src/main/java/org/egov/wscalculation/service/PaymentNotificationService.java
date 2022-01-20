@@ -231,13 +231,13 @@ public class PaymentNotificationService {
 				message);
 		List<SMSRequest> smsRequest = new ArrayList<>();
 		mobileNumberAndMessage.forEach((mobileNumber, msg) -> {
-			if (msg.contains("<Link to Bill>")) {
+			if (msg.contains("{Link to Bill}")) {
 				String actionLink = config.getSmsNotificationLink()
 						.replace("$consumerCode", waterConnectionRequest.getWaterConnection().getConnectionNo())
 						.replace("$tenantId", property.getTenantId());
 				actionLink = config.getNotificationUrl() + actionLink;
 				actionLink = notificationUtil.getShortnerURL(actionLink);
-				msg = msg.replace("<Link to Bill>", actionLink);
+				msg = msg.replace("{Link to Bill}", actionLink);
 			}
 			SMSRequest req = SMSRequest.builder().mobileNumber(mobileNumber).message(msg).category(Category.TRANSACTION).build();
 			smsRequest.add(req);
@@ -250,14 +250,14 @@ public class PaymentNotificationService {
 		Map<String, String> messageToReturn = new HashMap<>();
 		for (Entry<String, String> mobileAndName : mobileNumbersAndNames.entrySet()) {
 			String messageToReplace = message;
-			if (messageToReplace.contains("<Owner Name>"))
-				messageToReplace = messageToReplace.replace("<Owner Name>", mobileAndName.getValue());
-			if (messageToReplace.contains("<Service>"))
-				messageToReplace = messageToReplace.replace("<Service>", WSCalculationConstant.SERVICE_FIELD_VALUE_WS);
-			if (messageToReplace.contains("<bill amount>"))
-				messageToReplace = messageToReplace.replace("<bill amount>", mapRecords.get(totalBillAmount));
-			if (messageToReplace.contains("<Due Date>"))
-				messageToReplace = messageToReplace.replace("<Due Date>", mapRecords.get(dueDate));
+			if (messageToReplace.contains("{Owner Name}"))
+				messageToReplace = messageToReplace.replace("{Owner Name}", mobileAndName.getValue());
+			if (messageToReplace.contains("{Service}"))
+				messageToReplace = messageToReplace.replace("{Service}", WSCalculationConstant.SERVICE_FIELD_VALUE_WS);
+			if (messageToReplace.contains("{bill amount}"))
+				messageToReplace = messageToReplace.replace("{bill amount}", mapRecords.get(totalBillAmount));
+			if (messageToReplace.contains("{Due Date}"))
+				messageToReplace = messageToReplace.replace("{Due Date}", mapRecords.get(dueDate));
 			messageToReturn.put(mobileAndName.getKey(), messageToReplace);
 		}
 		return messageToReturn;

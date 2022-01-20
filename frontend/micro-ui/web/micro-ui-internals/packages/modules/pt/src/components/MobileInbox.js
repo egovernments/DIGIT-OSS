@@ -34,7 +34,7 @@ const MobileInbox = ({
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-          {!isSearch && <ApplicationLinks linkPrefix={parentRoute} isMobile={true} />}
+          {!isSearch && <ApplicationLinks classNameForMobileView="linksWrapperForMobileInbox" linkPrefix={parentRoute} isMobile={true} />}
           <ApplicationCard
             t={t}
             data={getData()}

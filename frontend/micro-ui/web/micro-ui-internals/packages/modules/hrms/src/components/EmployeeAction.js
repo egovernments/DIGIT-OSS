@@ -92,7 +92,7 @@ const EmployeeAction = ({ t, action, tenantId, closeModal, submitAction, applica
         } else {
           try {
             setUploadedFile(null);
-            const response = await Digit.UploadServices.Filestorage("HRMS", file, tenantId?.split(".")[0]);
+            const response = await Digit.UploadServices.Filestorage("HRMS", file, Digit.ULBService.getStateId());
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {

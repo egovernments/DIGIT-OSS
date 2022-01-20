@@ -122,7 +122,7 @@ const getPTAcknowledgementData = async (application, tenantInfo, t) => {
   const filesArray = application?.tradeLicenseDetail?.applicationDocuments?.map((value) => value?.fileStoreId);
   let res;
   if (filesArray) {
-    res = await Digit.UploadServices.Filefetch(filesArray, application?.tenantId.split(".")[0]);
+    res = await Digit.UploadServices.Filefetch(filesArray, Digit.ULBService.getStateId());
   }
   return {
     t: t,

@@ -16,8 +16,11 @@ public class UserEventsConstants {
 	
 	public static final String MEN_MDMS_EVENTSONGROUND_CODE = "EVENTSONGROUND";	
 	public static final String MEN_MDMS_BROADCAST_CODE = "BROADCAST";
-	public static final String MEN_MDMS_SYSTEMGENERATED_CODE = "SYSTEMGENERATED";	
-	
+	public static final String MEN_MDMS_SYSTEMGENERATED_CODE = "SYSTEMGENERATED"; 
+ 
+	public static  final String SURVEY_EVENT_NAME = "New Survey";
+	public static  final String DOCUMENT_EVENT_NAME = "New Document";
+
 	public static final String[] VALID_ROLES_FOR_SEARCH = {"EMPLOYEE"};
 
 	public static final String REGEX_FOR_SPCHARS_EXCEPT_DOT = "[$&+,:;=\\\\\\\\?@#|/'<>^()%!-]";	

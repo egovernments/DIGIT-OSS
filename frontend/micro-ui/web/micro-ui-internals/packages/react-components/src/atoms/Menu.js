@@ -5,7 +5,7 @@ const Menu = (props) => {
   const keyPrefix = props.localeKeyPrefix || "CS_ACTION";
 
   return (
-    <div className="menu-wrap">
+    <div className="menu-wrap" style={props.style}>
       {props.options.map((option, index) => {
         return (
           <div key={index} onClick={() => props.onSelect(option)}>
