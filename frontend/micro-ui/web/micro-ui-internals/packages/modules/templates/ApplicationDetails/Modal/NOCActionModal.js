@@ -200,7 +200,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     // }
     submitAction({
       Noc: applicationData,
-    });
+    }, false, {isNoc: true});
   }
 
   useEffect(() => {

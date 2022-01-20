@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 // import BpaApplicationDetail from "./BpaApplicationDetails";
 import Search from "./Search";
 import OBPSResponse from "./OBPSResponse";
-// import StakeholderResponse from "./StakeholderResponse";
+import StakeholderResponse from "./StakeholderResponse";
 
 const OBPSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
@@ -65,7 +65,7 @@ const EmployeeApp = ({ path }) => {
   const BpaApplicationDetail = Digit.ComponentRegistryService.getComponent("ObpsEmployeeBpaApplicationDetail");
   const isLocation = window.location.href.includes("bpa") || window.location.href.includes("stakeholder-inbox/stakeholder") || window.location.href.includes("application");
   const isFromNoc = window.location.href.includes("digit-ui/employee/obps/bpa/");
-  const isRes = window.location.href.includes("obps/response");
+  const isRes = window.location.href.includes("obps/response") || window.location.href.includes("obps/stakeholder-response");
   return (
     <Fragment>
       {!isFromNoc && !isRes ? <div style={isLocation ? {marginLeft: "10px"} : {}}><OBPSBreadCrumbs location={location} /></div> : null}
@@ -80,7 +80,7 @@ const EmployeeApp = ({ path }) => {
         <PrivateRoute path={`${path}/stakeholder-inbox`} component={(props) => <StakeholderInbox {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
-        {/* <PrivateRoute path={`${path}/stakeholder-response`} component={StakeholderResponse} /> */}
+        <PrivateRoute path={`${path}/stakeholder-response`} component={StakeholderResponse} />
       </Switch>
     </Fragment>
   )

@@ -42,7 +42,7 @@ const App = ({ path }) => {
 
   return (
     <React.Fragment>
-       {!location.pathname.includes("response") && !location.pathname.includes("openlink/stakeholder") && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
+       {!location.pathname.includes("response") && !location.pathname.includes("openlink/stakeholder") && !location.pathname.includes("/acknowledgement") && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
       <Switch>
         <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
         <PrivateRoute path={`${path}/search/application`} component={(props) => <Search {...props} parentRoute={path} />} />

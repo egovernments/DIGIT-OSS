@@ -111,10 +111,13 @@ const ApplicationDetails = (props) => {
             data.selectedAction = selectedAction;
             history.replace(`/digit-ui/employee/obps/response`, { data: data });
           }
-          // if (isOBPS?.isStakeholder) {
-          //   data.selectedAction = selectedAction;
-          //   history.replace(`/digit-ui/employee/obps/stakeholder-response`, { data: data });
-          // }
+          if (isOBPS?.isStakeholder) {
+            data.selectedAction = selectedAction;
+            history.push(`/digit-ui/employee/obps/stakeholder-response`, { data: data });
+          }
+          if (isOBPS?.isNoc) {
+            history.push(`/digit-ui/employee/noc/response`, { data: data });
+          }
           setShowToast({ key: "success", action: selectedAction });
           setTimeout(closeToast, 5000);
           queryClient.clear();
