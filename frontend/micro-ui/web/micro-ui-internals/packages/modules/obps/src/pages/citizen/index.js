@@ -5,25 +5,40 @@ import Search from "../employee/Search";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation, Route } from "react-router-dom";
 import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-components";
-import NewBuildingPermit from "./NewBuildingPermit";
-import CreateEDCR from "./EDCR";
-import CreateOCEDCR from "./OCEDCR";
-import BPACitizenHomeScreen from "./home";
-import StakeholderRegistration from "./StakeholderRegistration";
+// import NewBuildingPermit from "./NewBuildingPermit";
+// import CreateEDCR from "./EDCR";
+// import CreateOCEDCR from "./OCEDCR";
+// import BPACitizenHomeScreen from "./home";
+// import StakeholderRegistration from "./StakeholderRegistration";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
-import OCBuildingPermit from "./OCBuildingPermit";
-import BpaApplicationDetail from "./BpaApplicationDetail";
-import BPASendToArchitect from "./BPASendToArchitect";
-import OCSendToArchitect from "./OCSendToArchitect";
-import BPASendBackToCitizen from "./BPASendBackToCitizen";
-import OCSendBackToCitizen from "./OCSendBackToCitizen";
+// import OCBuildingPermit from "./OCBuildingPermit";
+// import BpaApplicationDetail from "./BpaApplicationDetail";
+// import BPASendToArchitect from "./BPASendToArchitect";
+// import OCSendToArchitect from "./OCSendToArchitect";
+// import BPASendBackToCitizen from "./BPASendBackToCitizen";
+// import OCSendBackToCitizen from "./OCSendBackToCitizen";
 import Inbox from "./ArchitectInbox";
-import EdcrInbox from "./EdcrInbox";
+//import EdcrInbox from "./EdcrInbox";
 
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
+
+  const BPACitizenHomeScreen = Digit?.ComponentRegistryService?.getComponent('BPACitizenHomeScreen');
+  const CreateEDCR = Digit?.ComponentRegistryService?.getComponent('ObpsCreateEDCR');
+  const CreateOCEDCR = Digit?.ComponentRegistryService?.getComponent('ObpsCreateOCEDCR');
+  const NewBuildingPermit = Digit?.ComponentRegistryService?.getComponent('ObpsNewBuildingPermit');
+  const OCBuildingPermit = Digit?.ComponentRegistryService?.getComponent('ObpsOCBuildingPermit');
+  const StakeholderRegistration = Digit?.ComponentRegistryService?.getComponent('ObpsStakeholderRegistration');
+  const EdcrInbox = Digit?.ComponentRegistryService?.getComponent('ObpsEdcrInbox');
+  const BpaApplicationDetail = Digit?.ComponentRegistryService?.getComponent('ObpsCitizenBpaApplicationDetail');
+  const BPASendToArchitect = Digit?.ComponentRegistryService?.getComponent('ObpsBPASendToArchitect');
+  const OCSendToArchitect = Digit?.ComponentRegistryService?.getComponent('ObpsOCSendToArchitect');
+  const BPASendBackToCitizen = Digit?.ComponentRegistryService?.getComponent('ObpsBPASendBackToCitizen');
+  const OCSendBackToCitizen = Digit?.ComponentRegistryService?.getComponent('ObpsOCSendBackToCitizen');
+
+
   return (
     <React.Fragment>
        {!location.pathname.includes("response") && !location.pathname.includes("openlink/stakeholder") && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
