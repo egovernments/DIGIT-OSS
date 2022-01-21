@@ -128,7 +128,7 @@ public class IngestValidator {
 
     // The verification logic will always use module name + date to determine the uniqueness of a set of records.
     public void verifyIfDataAlreadyIngested(Data ingestData) {
-        StringBuilder uri = new StringBuilder(applicationProperties.getElasticSearchHost());
+        StringBuilder uri = new StringBuilder(applicationProperties.getElasticSearchHost() + "/");
         uri.append(applicationProperties.getModuleIndexMapping().get(ingestData.getModule()));
         uri.append("/_doc").append("/_search");
         uri.append("?q=date").append(":").append(ingestData.getDate()).append(" AND ").append("module").append(":").append(ingestData.getModule());
@@ -137,7 +137,7 @@ public class IngestValidator {
     }
     // The verification logic will always use module name + financialYear to determine the uniqueness of a set of records.
     public void verifyIfMasterDataAlreadyIngested(MasterData masterData) {
-        StringBuilder uri = new StringBuilder(applicationProperties.getElasticSearchHost());
+        StringBuilder uri = new StringBuilder(applicationProperties.getElasticSearchHost() + "/");
         uri.append(applicationProperties.getMasterDataIndex());
         uri.append("/_doc").append("/_search");
         uri.append("?q=financialYear").append(":").append(masterData.getFinancialYear()).append(" AND ").append("module").append(":").append(masterData.getModule());
