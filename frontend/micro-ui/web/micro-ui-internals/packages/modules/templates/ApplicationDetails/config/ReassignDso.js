@@ -47,23 +47,6 @@ export const configReassignDSO = ({
             ]
           : []),
         {
-          label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
-          isMandatory: vehicle ? false : true,
-          type: "dropdown",
-          populators: (
-            <Dropdown
-              option={vehicleMenu}
-              autoComplete="off"
-              optionKey="i18nKey"
-              id="vehicle"
-              selected={vehicle}
-              select={selectVehicle}
-              disable={vehicle ? true : false}
-              t={t}
-            />
-          ),
-        },
-        {
           label: t("ES_FSM_ACTION_DSO_NAME"),
           isMandatory: true,
           type: "dropdown",

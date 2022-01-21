@@ -97,6 +97,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
         propertyUsage: data?.subtype,
         vehicleType: data?.tripData?.vehicleType?.code,
+        vehicleCapacity: data?.tripData?.vehicleType?.capacity,
         pitDetail: {
           ...pitDimension,
           distanceFromRoad: data?.distanceFromRoad,

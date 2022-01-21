@@ -113,7 +113,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       setVehicleMenu([vehicle]);
       setVehicle(vehicle);
       setDefautValue({
-        capacity: vehicle?.capacity,
+        capacity: applicationData?.vehicleCapacity,
         wasteCollected: vehicle?.capacity,
       });
     }
