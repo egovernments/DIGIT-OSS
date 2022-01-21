@@ -257,10 +257,8 @@ public class EnrichmentService {
 	 */
 	public void enrichFileStoreIds(SewerageConnectionRequest sewerageConnectionRequest) {
 		try {
-			log.info("ACTION "+sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction());
-			log.info("ApplicationStatus "+sewerageConnectionRequest.getSewerageConnection().getApplicationStatus());
-			if (sewerageConnectionRequest.getSewerageConnection().getApplicationStatus()
-					.equalsIgnoreCase(SWConstants.PENDING_APPROVAL_FOR_CONNECTION_CODE)
+			if (sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction()
+					.equalsIgnoreCase(SWConstants.APPROVE_CONNECTION_CONST)
 					|| sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction()
 							.equalsIgnoreCase(SWConstants.ACTION_PAY)) {
 				sewerageDao.enrichFileStoreIds(sewerageConnectionRequest);
@@ -402,13 +400,13 @@ public class EnrichmentService {
 			if (!StringUtils.isEmpty(criteria.getTenantId())) {
 				propertyCriteria.setTenantId(criteria.getTenantId());
 			}
-			propertyCriteria.setPropertyIds(propertyIds);
+			propertyCriteria.setUuids(propertyIds);
 			List<Property> propertyList = sewerageServicesUtil.getPropertyDetails(serviceRequestRepository.fetchResult(sewerageServicesUtil.getPropertyURL(propertyCriteria),
 					RequestInfoWrapper.builder().requestInfo(requestInfo).build()));
 
 			if(!CollectionUtils.isEmpty(propertyList)){
 				for(Property property: propertyList){
-					propertyToOwner.put(property.getPropertyId(),property.getOwners());
+					propertyToOwner.put(property.getId(),property.getOwners());
 				}
 			}
 

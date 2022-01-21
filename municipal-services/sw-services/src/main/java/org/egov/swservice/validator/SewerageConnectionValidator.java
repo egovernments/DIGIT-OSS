@@ -45,9 +45,6 @@ public class SewerageConnectionValidator {
 		if (!isSewerageFieldValidated.isStatus()) {
 			errorMap.putAll(isSewerageFieldValidated.getErrorMessage());
 		}
-		if(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction().equalsIgnoreCase("PAY"))
-			errorMap.put("INVALID_ACTION","Pay action cannot perform directly");
-		
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 	}
