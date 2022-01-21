@@ -687,15 +687,16 @@ public class DemandService {
 			log.info("Connection Count: "+count);
 			if(count>0) {
 				while (batchOffset < count) {
-					List<String> connectionNos = waterCalculatorDao.getConnectionsNoList(tenantId,
+					List<WaterConnection> connectionNos = waterCalculatorDao.getConnectionsNoList(tenantId,
 							WSCalculationConstant.nonMeterdConnection, batchOffset, batchsize, fromDate, toDate);
 					String assessmentYear = estimationService.getAssessmentYear();
 
 					if (connectionNos.size() > 0) {
 						List<CalculationCriteria> calculationCriteriaList = new ArrayList<>();
-						for (String connectionNo : connectionNos) {
+						for (WaterConnection connectionNo : connectionNos) {
 							CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
-									.assessmentYear(assessmentYear).connectionNo(connectionNo).build();
+									.assessmentYear(assessmentYear).connectionNo(connectionNo.getConnectionNo())
+									.waterConnection(connectionNo).build();
 							calculationCriteriaList.add(calculationCriteria);
 						}
 						MigrationCount migrationCount = MigrationCount.builder().id(UUID.randomUUID().toString()).offset(Long.valueOf(batchOffset)).limit(Long.valueOf(batchsize)).recordCount(Long.valueOf(connectionNos.size()))

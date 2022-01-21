@@ -33,7 +33,7 @@ public class WSCalculatorQueryBuilder {
 
 	private static final String distinctTenantIdsCriteria = "SELECT distinct(tenantid) FROM eg_ws_connection ws";
 
-	private  static final String countQuery = "select count(distinct(conn.connectionno)) from eg_ws_connection conn inner join eg_ws_service wc ON wc.connection_id = conn.id where conn.tenantid = '{}' and wc.connectiontype ='Non Metered' and conn.connectionno is not null";
+	private  static final String countQuery = "select count(distinct(conn.connectionno)) from eg_ws_connection conn inner join eg_ws_service wc ON wc.connection_id = conn.id where conn.tenantid = ? and wc.connectiontype ='Non Metered' and conn.connectionno is not null and conn.connectionno in (select distinct(consumercode) from egbs_demand_v1 dmd where NOT (dmd.taxperiodfrom >= ? and dmd.taxperiodto <= ?) and businessservice = 'WS')";
 
 	private static String holderSelectValues = "connectionholder.tenantid as holdertenantid, connectionholder.connectionid as holderapplicationId, userid, connectionholder.status as holderstatus, isprimaryholder, connectionholdertype, holdershippercentage, connectionholder.relationship as holderrelationship, connectionholder.createdby as holdercreatedby, connectionholder.createdtime as holdercreatedtime, connectionholder.lastmodifiedby as holderlastmodifiedby, connectionholder.lastmodifiedtime as holderlastmodifiedtime";
 
@@ -62,10 +62,9 @@ public class WSCalculatorQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id ";
-
-	/*		+ INNER_JOIN_STRING
-			+ " egbs_demand_v1 as dmd on dmd.consumercode = conn.connectionno";*/
+			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id "
+	        + INNER_JOIN_STRING
+			+ " egbs_demand_v1 as dmd on dmd.consumercode = conn.connectionno";
 
 
 
@@ -196,9 +195,9 @@ public class WSCalculatorQueryBuilder {
 	
 	
 	public String getConnectionNumberList(String tenantId, String connectionType, List<Object> preparedStatement, Integer batchOffset, Integer batchsize, Long fromDate, Long toDate) {
-		StringBuilder query = new StringBuilder(connectionNoListQuery);
+		//StringBuilder query = new StringBuilder(connectionNoListQuery);
 
-		//StringBuilder query = new StringBuilder(WATER_SEARCH_QUERY);
+		StringBuilder query = new StringBuilder(WATER_SEARCH_QUERY);
 		// Add connection type
 		addClauseIfRequired(preparedStatement, query);
 		query.append(" ws.connectiontype = ? ");
@@ -210,10 +209,10 @@ public class WSCalculatorQueryBuilder {
 		addClauseIfRequired(preparedStatement, query);
 		query.append(" conn.connectionno is not null");
 
-		/*addClauseIfRequired(preparedStatement, query);
+		addClauseIfRequired(preparedStatement, query);
 		query.append(" NOT (dmd.taxperiodfrom >= ? and dmd.taxperiodto <= ?)");
 		preparedStatement.add(fromDate);
-		preparedStatement.add(toDate);*/
+		preparedStatement.add(toDate);
 
 		String orderbyClause = " ORDER BY conn.connectionno OFFSET ? LIMIT ?";
 		preparedStatement.add(batchOffset);

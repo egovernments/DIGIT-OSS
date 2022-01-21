@@ -15,6 +15,7 @@ import org.egov.wscalculation.producer.WSCalculationProducer;
 import org.egov.wscalculation.repository.rowmapper.DemandSchedulerRowMapper;
 import org.egov.wscalculation.repository.rowmapper.MeterReadingCurrentReadingRowMapper;
 import org.egov.wscalculation.repository.rowmapper.MeterReadingRowMapper;
+import org.egov.wscalculation.web.models.WaterConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -129,11 +130,11 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 	}
 	
 	@Override
-	public List<String> getConnectionsNoList(String tenantId, String connectionType, Integer batchOffset, Integer batchsize, Long fromDate, Long toDate) {
+	public List<WaterConnection> getConnectionsNoList(String tenantId, String connectionType, Integer batchOffset, Integer batchsize, Long fromDate, Long toDate) {
 		List<Object> preparedStatement = new ArrayList<>();
 		String query = queryBuilder.getConnectionNumberList(tenantId, connectionType, preparedStatement, batchOffset, batchsize, fromDate, toDate);
 		log.info("water " + connectionType + " connection list : " + query);
-		return jdbcTemplate.query(query, preparedStatement.toArray(), demandSchedulerRowMapper);
+		return jdbcTemplate.query(query, preparedStatement.toArray(), waterRowMapper);
 	}
 
 	@Override
@@ -153,8 +154,12 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 
 	@Override
 	public long getConnectionCount(String tenantid, Long fromDate, Long toDate){
+		List<Object> preparedStatement = new ArrayList<>();
 		String query = queryBuilder.getCountQuery();
-		query =	query.replace("{}",tenantid);
+		preparedStatement.add(tenantid);
+		preparedStatement.add(fromDate);
+		preparedStatement.add(toDate);
+
 		long count = jdbcTemplate.queryForObject(query, Integer.class);
 		return count;
 	}
