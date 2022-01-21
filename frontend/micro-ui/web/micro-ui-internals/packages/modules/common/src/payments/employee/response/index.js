@@ -22,7 +22,7 @@ export const SuccessfulPayment = (props) => {
 
   const getMessage = () => t("ES_PAYMENT_COLLECTED");
   const getCardText = () => {
-    if (businessService == "BPA" || businessService == "BPA_LOW" || businessService == "BPA_OC") {
+    if (businessService?.includes("BPA")) {
       let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
       let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
       return `ES_PAYMENT_${businessService}_${parsedArchitectName}_SUCCESSFUL_DESCRIPTION`;

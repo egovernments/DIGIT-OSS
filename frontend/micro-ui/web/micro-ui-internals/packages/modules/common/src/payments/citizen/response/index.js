@@ -249,7 +249,7 @@ export const SuccessfulPayment = (props) => {
   if (workflw) {
     bannerText = `CITIZEN_SUCCESS_UC_PAYMENT_MESSAGE`;
   } else {
-    if(paymentData?.paymentDetails[0].businessService == "BPA_LOW" || paymentData?.paymentDetails[0].businessService == "BPA" || paymentData?.paymentDetails[0].businessService == "BPA_OC") {
+    if(paymentData?.paymentDetails?.[0]?.businessService?.includes("BPA")) {
       let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
       let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
       bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_${parsedArchitectName}_PAYMENT_MESSAGE`;
