@@ -23,7 +23,6 @@ const ApplicationDetails = () => {
     }
 
     const getTimelineCaptions = (checkpoint) => {
-        console.log(checkpoint);
         const __comment = checkpoint?.comment?.split("~");
         const reason = __comment ? __comment[0] : null;
         const reason_comment = __comment ? __comment[1] : null;
@@ -42,16 +41,13 @@ const ApplicationDetails = () => {
     if (Waterresult?.isLoading || Waterresult == undefined) {
         return <Loader />;
     }
-    console.log(Waterresult[0]?.ProcessInstances);
 
     if (Waterresult[0]?.ProcessInstances?.length > 0) {
         let filteredActions = [];
         filteredActions = get(Waterresult[0]?.ProcessInstances[0], "nextActions", [])?.filter(
           item => item.action != "ADHOC"
         );
-        console.log(filteredActions);
         actions= orderBy(filteredActions, ["action"], ["desc"]);
-        console.log(actions);
     }
     return (
         <React.Fragment>
