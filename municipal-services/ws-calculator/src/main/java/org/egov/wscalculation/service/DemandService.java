@@ -722,7 +722,7 @@ public class DemandService {
 	 */
 	private boolean isCurrentDateIsMatching(String billingFrequency, long dayOfMonth) {
 		if (billingFrequency.equalsIgnoreCase(WSCalculationConstant.Monthly_Billing_Period)
-				&& (dayOfMonth == LocalDateTime.now().getDayOfMonth())) {
+				&& (dayOfMonth <= LocalDateTime.now().getDayOfMonth())) {
 			return true;
 		} else if (billingFrequency.equalsIgnoreCase(WSCalculationConstant.Quaterly_Billing_Period)) {
 			return false;
