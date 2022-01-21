@@ -44,5 +44,8 @@ public class User {
 
     @Size(max = 36)
     private String uuid;
+    
+    @Size(max = 36)
+    private String gender;
 }
 
