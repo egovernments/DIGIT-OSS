@@ -1,6 +1,7 @@
 import { Loader, Modal, FormComposer, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
+import { UploadPitPhoto } from "@egovernments/digit-ui-react-components";
 
 import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication } from "../config";
 
@@ -51,6 +52,29 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     "VehicleType",
     { staleTime: Infinity }
   );
+
+  const { data: propertyList, isLoading: isPropertyData, isSuccess: isPropertyDataLoaded } = Digit.Hooks.fsm.useMDMS(
+    stateCode,
+    "FSM",
+    "PropertyType",
+    { staleTime: Infinity }
+  );
+
+  const { data: propertySubList, isLoading: isPropertySubData, isSuccess: isPropertySubDataLoaded } = Digit.Hooks.fsm.useMDMS(
+    stateCode,
+    "FSM",
+    "PropertySubtype",
+    { staleTime: Infinity }
+  );
+
+  const { data: pitList, isLoading: isPitData, isSuccess: isPitDataLoaded } = Digit.Hooks.fsm.useMDMS(
+    stateCode,
+    "FSM",
+    "PitType",
+    { staleTime: Infinity }
+  );
+
+
   const [dsoList, setDsoList] = useState([]);
   const [vehicleNoList, setVehicleNoList] = useState([]);
   const [config, setConfig] = useState({});
@@ -76,6 +100,13 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   const [formValve, setFormValve] = useState(false);
 
+  const [property, setProperty] = useState(null);
+  const [propertyMenu, setPropertyMenu] = useState([]);
+  const [propertySubType, setPropertySubType] = useState(null);
+  const [pitType, setPitType] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [uploadedImagesIds, setUploadedImagesIds] = useState();
+
   useEffect(() => {
     if (isSuccess && isVehicleDataLoaded) {
       const [vehicle] = vehicleList.filter((item) => item.code === applicationData.vehicleType);
@@ -87,6 +118,28 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       });
     }
   }, [isVehicleDataLoaded, isSuccess]);
+
+  useEffect(() => {
+    if (isSuccess && isPropertyDataLoaded) {
+      const [property] = propertyList.filter((item) => item.code === applicationData.propertyUsage.split('.')[0]);
+      setPropertyMenu([property])
+      setProperty(property);
+    }
+  }, [isPropertyDataLoaded, isSuccess]);
+
+  useEffect(() => {
+    if (isSuccess && isPropertySubDataLoaded) {
+      const [propertySub] = propertySubList.filter((item) => item.code === applicationData.propertyUsage);
+      setPropertySubType(propertySub);
+    }
+  }, [isPropertySubDataLoaded, isSuccess]);
+
+  useEffect(() => {
+    if (isSuccess && isPitDataLoaded) {
+      const [pitType] = pitList.filter((item) => item.code === applicationData.sanitationtype);
+      setPitType(pitType);
+    }
+  }, [isPitDataLoaded, isSuccess]);
 
   useEffect(() => {
     if (vehicle && isDsoSuccess) {
@@ -138,13 +191,25 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     });
   }
 
+  function getImage(e) {
+    setImageFile(e.target.files);
+  }
+
 
   function addCommentToWorkflow(state, workflow, data) {
     workflow.comments = data.comments ? state.code + "~" + data.comments : state.code;
   }
 
+  const handleUpload = (ids) => {
+    setUploadedImagesIds(ids);
+    console.log("idu", uploadedImagesIds)
+    console.log("id", ids)
+    // Digit.SessionStorage.set("PGR_CREATE_IMAGES", ids);
+  };
+
   function submit(data) {
     const workflow = { action: action };
+    console.log("data", data)
 
     if (dso) applicationData.dsoId = dso.id;
     if (vehicleNo && action === "ACCEPT") applicationData.vehicleId = vehicleNo.id;
@@ -153,12 +218,26 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.date) applicationData.possibleServiceDate = new Date(`${data.date}`).getTime();
     if (data.desluged) applicationData.completedOn = new Date(data.desluged).getTime();
     if (data.wasteCollected) applicationData.wasteCollected = data.wasteCollected;
+
+    if (data.pitDetail) applicationData.pitDetail.height = Number(data.pitDetail.height);
+    if (data.pitDetail) applicationData.pitDetail.width = Number(data.pitDetail.width);
+    if (data.pitDetail) applicationData.pitDetail.diameter = Number(data.pitDetail.diameter);
+    if (data.pitDetail) applicationData.pitDetail.length = Number(data.pitDetail.length);
+    if (data.pitType) applicationData.sanitationtype = data.pitType.code;
+    if (data.subtype) applicationData.propertyUsage = data.subtype.code;
+    if (uploadedImagesIds) {
+      let temp = {}
+      uploadedImagesIds.map((i) => (temp[uploadedImagesIds.indexOf(i) + 1] = i))
+      applicationData.pitDetail.additionalDetails = { fileStoreId: temp };
+    }
+
     if (reassignReason) addCommentToWorkflow(reassignReason, workflow, data);
     if (rejectionReason) addCommentToWorkflow(rejectionReason, workflow, data);
     if (declineReason) addCommentToWorkflow(declineReason, workflow, data);
     if (cancelReason) addCommentToWorkflow(cancelReason, workflow, data);
 
     submitAction({ fsm: applicationData, workflow });
+    console.log("submitAction", applicationData, workflow)
   }
   useEffect(() => {
     switch (action) {
@@ -276,6 +355,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     }
   }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList, Reason]);
 
+  const hiddenFileInput = React.useRef(null);
+
   return action && config.form && !isDsoLoading && !isReasonLoading && isVehicleDataLoaded ? (
     <Modal
       headerBarMain={<Heading label={t(config.label.heading)} />}
@@ -293,9 +374,21 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         inline
         childrenAtTheBottom
         onSubmit={submit}
-        defaultValues={defaultValues}
         formId="modal-action"
-      />
+        defaultValues={{
+          ...defaultValues,
+          pitType: pitType,
+          propertyType: property,
+          subtype: propertySubType,
+        }}
+      >
+      </FormComposer>
+      <UploadPitPhoto
+        header=""
+        tenantId={tenantId}
+        cardText=""
+        onPhotoChange={handleUpload}
+        uploadedImages={null} />
       {/* {toastError && <Toast {...toastError} />} */}
     </Modal>
   ) : (
