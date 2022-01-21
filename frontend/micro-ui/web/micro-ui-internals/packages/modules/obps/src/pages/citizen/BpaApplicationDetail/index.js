@@ -29,7 +29,7 @@ const BpaApplicationDetail = () => {
   const [sanctionFee, setSanctionFee] = useState([]);
   const [checkBoxVisible, setCheckBoxVisible] = useState(false);
   const [isEnableLoader, setIsEnableLoader] = useState(false);
-
+  sessionStorage.removeItem("BPA_SUBMIT_APP");
 
   const history = useHistory();
   sessionStorage.setItem("bpaApplicationDetails", false);

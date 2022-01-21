@@ -19,11 +19,13 @@ const Response = (props) => {
       <Card>
         <Banner
           message={t(`NOC_${stringReplaceAll(nocData?.nocType, ".", "_")}_${stringReplaceAll(nocData?.applicationStatus, ".", "_")}_HEADER`)}
-          applicationNumber={nocData?.applicationNo}
-          info={t("NOC_APP_NO_LABEL")}
-          successful={true}
+          applicationNumber={nocData?.nocNo}
+          info={nocData?.applicationStatus == "REJECTED" ? "" : t(`NOC_${stringReplaceAll(nocData?.nocType, ".", "_")}_APPROVAL_NUMBER`)}
+          successful={nocData?.applicationStatus == "REJECTED" ? false : true}
+          style={{ padding: "10px" }}
+          headerStyles={{fontSize: "32px"}}
         />
-        <CardText>{t(`NOC_${stringReplaceAll(nocData?.nocType, ".", "_")}_${stringReplaceAll(nocData?.applicationStatus, ".", "_")}_SUB_HEADER`)}</CardText>
+        { nocData?.applicationStatus !== "REJECTED" ? <CardText>{t(`NOC_${stringReplaceAll(nocData?.nocType, ".", "_")}_${stringReplaceAll(nocData?.applicationStatus, ".", "_")}_SUB_HEADER`)}</CardText> : null}
         <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
           <SubmitBar
             label={t("CORE_COMMON_GO_TO_HOME")}

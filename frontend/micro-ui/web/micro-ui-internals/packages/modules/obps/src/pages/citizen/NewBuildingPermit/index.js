@@ -22,6 +22,7 @@ const NewBuildingPermit = () => {
   const match = useRouteMatch();
   const history = useHistory();
   const location = useLocation();
+  sessionStorage.removeItem("BPA_SUBMIT_APP");
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BUILDING_PERMIT", state?.edcrNumber ? { data: { scrutinyNumber: { edcrNumber: state?.edcrNumber }}} : {});

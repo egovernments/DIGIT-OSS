@@ -9,8 +9,10 @@ const GetActionMessage = (props) => {
   let bpaBusinessService = props?.data?.BPA?.[0]?.businessService ? props?.data?.BPA?.[0]?.businessService : "BPA";
   let bpaStatus = bpaData?.status;
   if (bpaBusinessService == "BPA_LOW") bpaBusinessService = "BPA";
+  let getAppAction = sessionStorage.getItem("BPA_SUBMIT_APP") ? JSON.parse(sessionStorage.getItem("BPA_SUBMIT_APP")) : null;
 
   if (props.isSuccess) {
+    if (getAppAction == "BPA_SUBMIT_APP") return !window.location.href.includes("editApplication") ? props?.t(`BPA_SUBMIT_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`) : props?.t(`BPA_SUBMIT_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`);
     return !window.location.href.includes("editApplication") ? props?.t(`BPA_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`) : props?.t(`BPA_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`);
   } else if (props.isLoading) {
     return !window.location.href.includes("editApplication") ? props?.t("CS_BPA_APPLICATION_PENDING") : props?.t("CS_BPA_APPLICATION_PENDING");
@@ -24,6 +26,8 @@ const getCardText = (t, props) => {
   let bpaBusinessService = props?.BPA?.[0]?.businessService ? props?.BPA?.[0]?.businessService : "BPA";
   let bpaStatus = bpaData?.status;
   if (bpaBusinessService == "BPA_LOW") bpaBusinessService = "BPA";
+  let getAppAction = sessionStorage.getItem("BPA_SUBMIT_APP") ? JSON.parse(sessionStorage.getItem("BPA_SUBMIT_APP")) : null;
+  if (getAppAction == "BPA_SUBMIT_APP") t(`BPA_SUBMIT_SUB_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${bpaData?.additionalDetails?.typeOfArchitect ? bpaData?.additionalDetails?.typeOfArchitect : "ARCHITECT"}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`)
   return t(`BPA_SUB_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${bpaData?.additionalDetails?.typeOfArchitect ? bpaData?.additionalDetails?.typeOfArchitect : "ARCHITECT"}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`)
 }
 
@@ -32,12 +36,18 @@ const rowContainerStyle = {
   justifyContent: "space-between",
 };
 
+const getApplicationNoLabel = (props) => {
+  let bpaBusinessService = props?.BPA?.[0]?.businessService ? props?.BPA?.[0]?.businessService : "BPA";
+  if (bpaBusinessService == "BPA_LOW") bpaBusinessService = "BPA";
+  return bpaBusinessService == "BPA" ? props?.t("BPA_PERMIT_APPLICATION_NUMBER_LABEL") : props?.t("BPA_OCCUPANCY_CERTIFICATE_APPLICATION_NUMBER_LABEL")
+}
+
 const BannerPicker = (props) => {
   return (
     <Banner
       message={GetActionMessage(props)}
       applicationNumber={props.data?.BPA[0].applicationNo}
-      info={props.isSuccess ? props.t("BPA_OC_PERMIT_NO") : ""}
+      info={props.isSuccess ? getApplicationNoLabel() : ""}
       successful={props.isSuccess}
       headerStyles={{fontSize: "32px"}}
     />
