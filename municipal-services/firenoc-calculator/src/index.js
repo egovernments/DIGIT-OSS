@@ -16,10 +16,7 @@ const pool = new Pool({
   database: envVariables.DB_NAME,
   password: envVariables.DB_PASSWORD,
   port: envVariables.DB_PORT,
-  ssl: envVariables.DB_SSL,
-  max: envVariables.DB_MAX_POOL_SIZE,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000
+  ssl: true
 });
 
 const options = {
