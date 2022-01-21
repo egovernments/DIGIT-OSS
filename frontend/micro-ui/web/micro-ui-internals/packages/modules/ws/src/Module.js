@@ -16,7 +16,6 @@ import WSCheckPage from "./pages/citizen/WSCreate/CheckPage";
 
 
 const WSModule = ({ stateCode, userType, tenants }) => {
-  console.log("here is the code ");
   const moduleCode = "ws";
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
