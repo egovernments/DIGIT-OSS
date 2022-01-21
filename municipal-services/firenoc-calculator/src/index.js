@@ -15,8 +15,7 @@ const pool = new Pool({
   host: envVariables.DB_HOST,
   database: envVariables.DB_NAME,
   password: envVariables.DB_PASSWORD,
-  port: envVariables.DB_PORT,
-  ssl: envVariables.DB_SSL
+  port: envVariables.DB_PORT
 });
 
 const options = {
