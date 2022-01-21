@@ -1,1 +1,0 @@
-INSERT INTO id_generator(idname, tenantid, format, sequencenumber) VALUES ('swm.staff.schedule.transaction.number', 'default', 'MH-SWM-STF-TRN-[SEQ_SWM_STF_TRN_NUM]', 1);

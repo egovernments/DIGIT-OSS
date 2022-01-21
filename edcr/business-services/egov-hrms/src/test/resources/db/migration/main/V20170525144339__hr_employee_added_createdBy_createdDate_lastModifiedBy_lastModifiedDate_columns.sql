@@ -1,7 +1,0 @@
-ALTER TABLE egeis_employee DROP COLUMN IF EXISTS createdBy;
-ALTER TABLE egeis_employee DROP COLUMN IF EXISTS createdDate;
-ALTER TABLE egeis_employee DROP COLUMN IF EXISTS lastModifiedBy;
-
-ALTER TABLE egeis_employee ADD COLUMN createdBy BIGINT NOT NULL DEFAULT 1;
-ALTER TABLE egeis_employee ADD COLUMN createdDate TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now();
-ALTER TABLE egeis_employee ADD COLUMN lastModifiedBy BIGINT;

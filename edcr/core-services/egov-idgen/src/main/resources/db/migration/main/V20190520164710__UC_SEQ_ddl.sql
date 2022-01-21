@@ -1,1 +1,0 @@
-CREATE SEQUENCE seq_uc_demand_consumer_code;

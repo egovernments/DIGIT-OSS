@@ -1,1 +1,0 @@
-ALTER TABLE eg_wf_action_v2 ADD COLUMN active BOOLEAN DEFAULT TRUE;

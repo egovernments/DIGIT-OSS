@@ -1,1 +1,0 @@
-update id_generator set format='MH-SWM-SHIFT-ID-[SEQ_SWM_SHIFT_CODE_NUM]' where format ='MH-SWM-SHIFT-CODE-[SEQ_SWM_SHIFT_CODE_NUM]';

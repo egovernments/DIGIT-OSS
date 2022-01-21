@@ -1,4 +1,0 @@
-# eGov Telemetry Service
-
-
-

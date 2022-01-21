@@ -1,1 +1,0 @@
-ALTER TABLE egbs_demand add CONSTRAINT uk_egbs_demand_consumercode_businessservice UNIQUE (consumercode,businessservice);

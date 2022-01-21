@@ -1,1 +1,0 @@
-update city set shapefilelocation='shapeFileLocation', captcha ='captcha', lastmodifiedby=1, lastmodifieddate='1990-07-23 00:00:00.0'  where tenantcode='AP.KURNOOL'; 

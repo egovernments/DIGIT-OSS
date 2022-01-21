@@ -1,1 +1,0 @@
-ALTER TABLE egf_fund DROP COLUMN isparent;

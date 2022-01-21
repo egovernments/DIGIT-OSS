@@ -1,1 +1,0 @@
-update eg_user set mobilenumber= '0123456789' , emailid=null where username='narasappa' and tenantid='default';

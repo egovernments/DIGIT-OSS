@@ -1,1 +1,0 @@
-alter table eg_token add column createddatenew bigint;

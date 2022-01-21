@@ -1,1 +1,0 @@
-alter table egov_pdf_gen add column key text,add column documentType text,add column moduleName character varying(50) ;

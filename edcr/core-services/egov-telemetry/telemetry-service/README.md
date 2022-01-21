@@ -1,4 +1,0 @@
-## Egov telemetry Seravice
-
-
-

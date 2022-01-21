@@ -1,1 +1,0 @@
-ALTER TABLE eg_businessdetails ALTER COLUMN businesstype SET NOT NULL;

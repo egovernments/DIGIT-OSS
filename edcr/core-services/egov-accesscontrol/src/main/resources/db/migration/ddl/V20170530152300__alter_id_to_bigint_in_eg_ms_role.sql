@@ -1,1 +1,0 @@
-ALTER TABLE eg_ms_role ALTER COLUMN id SET DATA TYPE bigint;

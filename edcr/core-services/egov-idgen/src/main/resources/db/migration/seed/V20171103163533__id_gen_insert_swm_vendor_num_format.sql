@@ -1,1 +1,0 @@
-INSERT INTO id_generator(idname, tenantid, format, sequencenumber) VALUES ('swm.vendor.number', 'default', 'MH-SWM-VNDR-[SEQ_SWM_VNDR_NUM]', 1);
