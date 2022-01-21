@@ -6,7 +6,6 @@ import ApplicationDetails  from "./ApplicationDetails";
 
 
 const EmployeeApp = ({ path }) => {
-    console.log(path);
   const location = useLocation()
   const { t } = useTranslation();
   return (
