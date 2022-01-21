@@ -160,7 +160,7 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 		preparedStatement.add(fromDate);
 		preparedStatement.add(toDate);
 
-		long count = jdbcTemplate.queryForObject(query, Integer.class);
+		long count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
 		return count;
 	}
 }
