@@ -198,7 +198,7 @@ public class WSCalculatorQueryBuilder {
 		StringBuilder query = new StringBuilder(WATER_SEARCH_QUERY);
 		// Add connection type
 		addClauseIfRequired(preparedStatement, query);
-		query.append(" conn.connectiontype = ? ");
+		query.append(" wc.connectiontype = ? ");
 		preparedStatement.add(connectionType);
 		// add tenantid
 		addClauseIfRequired(preparedStatement, query);
