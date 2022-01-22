@@ -18,6 +18,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -56,14 +57,15 @@ public class BulkBillGenerationConsumer {
 		try {
 			demandService.create(request);
 		} catch (Exception e) {
-			logError("demand creation", e.getMessage());
+			logError(" Demand creation ", e.getMessage());
 		}
 		
 		request.setDemands(billGenerator.getUpdateDemands());
 		try {
-			demandService.updateAsync(request, null);
+			if (!CollectionUtils.isEmpty(billGenerator.getUpdateDemands()))
+				demandService.updateAsync(request, null);
 		} catch (Exception e) {
-			logError("demand update", e.getMessage());
+			logError(" Demand update ", e.getMessage());
 		}
 
 		Set<String> consumerCodes = billGenerator.getCreateDemands()
@@ -82,7 +84,7 @@ public class BulkBillGenerationConsumer {
 		try {
 			billService.generateBill(genBillCriteria, billGenerator.getRequestInfo());
 		} catch (Exception e) {
-			logError("", e.getMessage());
+			logError(" Bill Gen ", e.getMessage());
 		}
 		
 		kafkaTemplate.send(bulkBillGenAuditTopic, billGenerator.getMigrationCount());
