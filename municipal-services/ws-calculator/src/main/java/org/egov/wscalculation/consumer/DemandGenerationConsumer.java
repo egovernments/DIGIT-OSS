@@ -64,6 +64,8 @@ public class DemandGenerationConsumer {
 			bulkDemandAndBillGenService.bulkDemandGeneration(request);
 		} catch (Exception ex) {
 			log.error("Demand generation error: ", ex);
+			log.info(" Bulk bill Errorbatch records log for batch :  " + request.getMigrationCount().getOffset()
+					+ "Count is : " + request.getMigrationCount().getLimit());
 			producer.push(config.getDeadLetterTopicBatch(), request.getMigrationCount());
 		}
 	}
