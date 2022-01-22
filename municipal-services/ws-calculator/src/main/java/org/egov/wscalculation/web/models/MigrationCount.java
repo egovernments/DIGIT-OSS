@@ -8,19 +8,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * Address
  */
 @Validated
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
 public class MigrationCount   {
 
     @Size(max=64)
