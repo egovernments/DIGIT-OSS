@@ -214,7 +214,7 @@ public class WSCalculatorQueryBuilder {
 		preparedStatement.add(tenantId);
 
 		addClauseIfRequired(preparedStatement, query);
-		String orderbyClause = " conn.connectionno IN (select connectionno from FROM eg_ws_connection where tenantid=? and connectionno is not null ORDER BY connectionno OFFSET ? LIMIT ?)";
+		String orderbyClause = " conn.connectionno IN (select connectionno FROM eg_ws_connection where tenantid=? and connectionno is not null ORDER BY connectionno OFFSET ? LIMIT ?)";
 		preparedStatement.add(tenantId);
 		preparedStatement.add(batchOffset);
 		preparedStatement.add(batchsize);
