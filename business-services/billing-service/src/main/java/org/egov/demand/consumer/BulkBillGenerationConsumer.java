@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.egov.demand.model.BulkBillGenerator;
 import org.egov.demand.model.Demand;
 import org.egov.demand.model.GenerateBillCriteria;
+import org.egov.demand.model.MigrationCount;
 import org.egov.demand.service.BillServicev2;
 import org.egov.demand.service.DemandService;
 import org.egov.demand.web.contract.DemandRequest;
@@ -54,10 +55,13 @@ public class BulkBillGenerationConsumer {
 				.demands(billGenerator.getCreateDemands())
 				.build();
 		
+		log.info(" Billing-bulkbill-consumer-batch log for batch : " + billGenerator.getMigrationCount().getOffset()
+				+ " with no of records " + billGenerator.getCreateDemands().size());
+		
 		try {
 			demandService.create(request);
 		} catch (Exception e) {
-			logError(" Demand creation ", e.getMessage());
+			logError(" Demand creation ", e.getMessage(), billGenerator.getMigrationCount());
 		}
 		
 		request.setDemands(billGenerator.getUpdateDemands());
@@ -65,7 +69,7 @@ public class BulkBillGenerationConsumer {
 			if (!CollectionUtils.isEmpty(billGenerator.getUpdateDemands()))
 				demandService.updateAsync(request, null);
 		} catch (Exception e) {
-			logError(" Demand update ", e.getMessage());
+			logError(" Demand update ", e.getMessage(), billGenerator.getMigrationCount());
 		}
 
 		Set<String> consumerCodes = billGenerator.getCreateDemands()
@@ -84,7 +88,7 @@ public class BulkBillGenerationConsumer {
 		try {
 			billService.generateBill(genBillCriteria, billGenerator.getRequestInfo());
 		} catch (Exception e) {
-			logError(" Bill Gen ", e.getMessage());
+			logError(" Bill Gen ", e.getMessage(), billGenerator.getMigrationCount());
 		}
 		
 		kafkaTemplate.send(bulkBillGenAuditTopic, billGenerator.getMigrationCount());
@@ -92,8 +96,10 @@ public class BulkBillGenerationConsumer {
 		log.info("Bill generation ran suc");
 	}
 	
-	private void logError(String process, String message) {
+	private void logError(String process, String message, MigrationCount bulkBillCount) {
 		
+		log.info(" Billing-bulkbill-consumer-batch log for batch : " + bulkBillCount.getOffset()
+				+ " with size " + bulkBillCount.getRecordCount());
 		throw new CustomException("EG_BS_BULKBILL_ERROR","Bulk Bill generation failed during "+ process + " with error : " + message);
 	}
 
