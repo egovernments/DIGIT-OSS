@@ -98,7 +98,7 @@ public class BulkBillGenerationConsumer {
 	
 	private void logError(String process, String message, MigrationCount bulkBillCount) {
 		
-		log.info(" Billing-bulkbill-consumer-batch log for batch : " + bulkBillCount.getOffset()
+		log.info(" Billing-bulkbill-consumer-failure log for batch : " + bulkBillCount.getOffset()
 				+ " with size " + bulkBillCount.getRecordCount());
 		throw new CustomException("EG_BS_BULKBILL_ERROR","Bulk Bill generation failed during "+ process + " with error : " + message);
 	}
