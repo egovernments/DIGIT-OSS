@@ -6,15 +6,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.egov.wscalculation.producer.WSCalculationProducer;
 import org.egov.wscalculation.repository.builder.WSCalculatorQueryBuilder;
+import org.egov.wscalculation.repository.rowmapper.DemandSchedulerRowMapper;
+import org.egov.wscalculation.repository.rowmapper.MeterReadingCurrentReadingRowMapper;
+import org.egov.wscalculation.repository.rowmapper.MeterReadingRowMapper;
 import org.egov.wscalculation.repository.rowmapper.WaterRowMapper;
 import org.egov.wscalculation.web.models.MeterConnectionRequest;
 import org.egov.wscalculation.web.models.MeterReading;
 import org.egov.wscalculation.web.models.MeterReadingSearchCriteria;
-import org.egov.wscalculation.producer.WSCalculationProducer;
-import org.egov.wscalculation.repository.rowmapper.DemandSchedulerRowMapper;
-import org.egov.wscalculation.repository.rowmapper.MeterReadingCurrentReadingRowMapper;
-import org.egov.wscalculation.repository.rowmapper.MeterReadingRowMapper;
 import org.egov.wscalculation.web.models.WaterConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -159,6 +159,7 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 		preparedStatement.add(tenantid);
 		preparedStatement.add(fromDate);
 		preparedStatement.add(toDate);
+		preparedStatement.add(tenantid);
 
 		long count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
 		return count;
