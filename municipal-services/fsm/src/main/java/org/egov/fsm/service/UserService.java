@@ -125,6 +125,23 @@ public class UserService {
 		return userDetailResponse;
 	}
 
+	
+	/**
+	 * update user gender for applicant
+	 * @param applicant
+	 * @param requestInfo
+	 * @return
+	 */
+	public UserDetailResponse updateApplicantsGender(User applicant, RequestInfo requestInfo) {
+		Role role = getCitizenRole();
+		addUserDefaultFields(applicant.getTenantId(), role, applicant);
+		StringBuilder uri = new StringBuilder(config.getUserHost()).append("/user")
+				.append(config.getUserUpdateProfileEndpoint());
+		UserDetailResponse userDetailResponse = userCall(new CreateUserRequest(requestInfo, applicant), uri);
+		log.debug("owner created --> " + userDetailResponse.getUser().get(0).getUuid());
+		return userDetailResponse;
+	}
+	
 	/**
 	 * Creates citizen role
 	 * 
@@ -204,7 +221,7 @@ public class UserService {
 	 */
 	@SuppressWarnings("rawtypes")
 	public UserDetailResponse userCall(Object userRequest, StringBuilder uri) {
-		String dobFormat = null;
+		String dobFormat = "yyyy-MM-dd";
 		if (uri.toString().contains(config.getUserSearchEndpoint())
 				|| uri.toString().contains(config.getUserUpdateEndpoint()))
 			dobFormat = "yyyy-MM-dd";

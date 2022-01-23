@@ -174,6 +174,10 @@ public class User {
     @SafeHtml
     @JsonProperty("otpReference")
     private String otpReference;
+    
+    @SafeHtml
+    @JsonProperty("gender")
+    private String gender;
 
 
     public User addRolesItem(Role rolesItem) {

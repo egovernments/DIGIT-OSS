@@ -73,6 +73,8 @@ public class FSMValidator {
 			if(fsm.getCitizen() == null || StringUtils.isEmpty(fsm.getCitizen().getName()) || StringUtils.isEmpty(fsm.getCitizen().getMobileNumber() )) {
 				User citzen = new User();
 				BeanUtils.copyProperties(fsmRequest.getRequestInfo().getUserInfo(), citzen);
+				if(fsmRequest.getFsm().getCitizen() != null) 
+					citzen.setGender(fsmRequest.getFsm().getCitizen().getGender());
 				fsm.setCitizen( citzen);
 			}
 			

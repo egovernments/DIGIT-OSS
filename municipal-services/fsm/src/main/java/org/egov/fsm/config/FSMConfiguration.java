@@ -45,6 +45,9 @@ public class FSMConfiguration {
 
 		@Value("${egov.user.update.path}")
 		private String userUpdateEndpoint;
+		
+		@Value("${egov.user.update.profile.path}")
+		private String userUpdateProfileEndpoint;
 
 		@Value("${egov.user.username.prefix}")
 		private String usernamePrefix;
