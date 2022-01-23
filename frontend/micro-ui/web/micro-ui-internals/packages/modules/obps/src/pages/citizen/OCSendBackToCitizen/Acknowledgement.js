@@ -22,15 +22,13 @@ const Acknowledgement = (props) => {
 
   return (
     <div>
-      <Card style={{ padding: "0px" }}>
+      <Card>
         <Banner
           message={getAppAction == "BPA_SUBMIT_APP" ?  t(`BPA_SUBMIT_HEADER_${bpaBusinessService}_${bpaAction}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`): t(`BPA_HEADER_${bpaBusinessService}_${bpaAction}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`)}
           applicationNumber={BPAData?.applicationNo}
           info={bpaBusinessService == "BPA" ? t("BPA_PERMIT_APPLICATION_NUMBER_LABEL") : t("BPA_OCCUPANCY_CERTIFICATE_APPLICATION_NUMBER_LABEL")}
           successful={true}
-          infoStyles = {{fontSize: "18px", lineHeight: "21px", fontWeight: "bold", textAlign: "center", padding: "0px 15px"}}
-          applicationNumberStyles = {{fontSize: "24px", lineHeight: "28px", fontWeight: "bold", marginTop: "10px"}}
-          style={{width: "100%", padding: "10px"}}
+          style={{ padding: "10px" }}
           headerStyles={{fontSize: "32px"}}
         />
         <CardText>{getAppAction == "BPA_SUBMIT_APP" ? t(`BPA_SUBMIT_SUB_HEADER_${bpaBusinessService}_${bpaAction}_${typeOfArchitect ? typeOfArchitect : "ARCHITECT"}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`) : t(`BPA_SUB_HEADER_${bpaBusinessService}_${bpaAction}_${typeOfArchitect ? typeOfArchitect : "ARCHITECT"}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`)}</CardText>

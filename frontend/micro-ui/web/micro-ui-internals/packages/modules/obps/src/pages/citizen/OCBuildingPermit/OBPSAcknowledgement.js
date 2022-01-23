@@ -39,7 +39,11 @@ const rowContainerStyle = {
 const getApplicationNoLabel = (props) => {
   let bpaBusinessService = props?.BPA?.[0]?.businessService ? props?.BPA?.[0]?.businessService : "BPA";
   if (bpaBusinessService == "BPA_LOW") bpaBusinessService = "BPA";
-  return bpaBusinessService == "BPA" ? props?.t("BPA_PERMIT_APPLICATION_NUMBER_LABEL") : props?.t("BPA_OCCUPANCY_CERTIFICATE_APPLICATION_NUMBER_LABEL")
+  if (bpaBusinessService == "BPA") {
+    return props?.t("BPA_PERMIT_APPLICATION_NUMBER_LABEL")
+  } else {
+    return props?.t("BPA_OCCUPANCY_CERTIFICATE_APPLICATION_NUMBER_LABEL")
+  }
 }
 
 const BannerPicker = (props) => {
@@ -47,7 +51,7 @@ const BannerPicker = (props) => {
     <Banner
       message={GetActionMessage(props)}
       applicationNumber={props.data?.BPA[0].applicationNo}
-      info={props.isSuccess ? getApplicationNoLabel() : ""}
+      info={props.isSuccess ? getApplicationNoLabel(props) : ""}
       successful={props.isSuccess}
       headerStyles={{fontSize: "32px"}}
     />

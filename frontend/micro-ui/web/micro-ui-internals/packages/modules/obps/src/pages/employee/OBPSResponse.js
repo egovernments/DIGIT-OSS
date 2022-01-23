@@ -43,6 +43,10 @@ const OBPSResponse = (props) => {
       history.push(`/digit-ui/employee`);
     }
 
+    const getApplicationNoLabel = () => {
+      return bpaBusinessService == "BPA" ? t("BPA_PERMIT_APPLICATION_NUMBER_LABEL") : t("BPA_OCCUPANCY_CERTIFICATE_APPLICATION_NUMBER_LABEL")
+    }
+
   return (
     <div>
       {isLoader ? <Loader /> :
@@ -50,7 +54,7 @@ const OBPSResponse = (props) => {
           <Banner
             message={getHeaderMessage()}
             applicationNumber={applicationData?.applicationNo}
-            info={t("BPA_APPLICATION_NUMBER_LABEL")}
+            info={getApplicationNoLabel()}
             successful={applicationData?.status == "PERMIT REVOCATION" || applicationData?.status == "REJECTED" ? false : true}
             style={{ padding: "10px" }}
             headerStyles={{fontSize: "32px"}}
