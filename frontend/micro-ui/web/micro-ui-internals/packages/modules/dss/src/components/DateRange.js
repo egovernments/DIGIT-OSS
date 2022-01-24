@@ -78,17 +78,36 @@ const DateRange = ({ values, onFilterChange, t }) => {
       },
       {
         label: t('DSS_PREVIOUS_YEAR'),
-        range: () => ({
-          startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
-          endDate: subYears(addMonths(endOfYear(new Date()), 3), 1)
-        })
+        range: () => {
+          if (new Date().getMonth() < 3){
+            return {
+              startDate: subYears(addMonths(startOfYear(new Date()), 3), 2),
+              endDate: subYears(addMonths(endOfYear(new Date()), 3), 2)
+            }
+          } else{
+            return {
+              startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
+              endDate: subYears(addMonths(endOfYear(new Date()), 3), 1)
+            }
+          }
+        }
       },
       {
         label: t('DSS_THIS_YEAR'),
-        range: () => ({
-          startDate: addMonths(startOfYear(new Date()), 3),
-          endDate: addMonths(endOfYear(new Date()), 3)
-        })
+        range: () => {
+          const currDate = new Date().getMonth()
+          if ( currDate < 3){
+            return {
+              startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
+              endDate: subYears(addMonths(endOfYear(new Date()), 3), 1)
+            }
+          } else{
+            return {
+              startDate: addMonths(startOfYear(new Date()), 3),
+              endDate: addMonths(endOfYear(new Date()), 3)
+            }
+          }
+        }
       }
     ])
   }, [])
