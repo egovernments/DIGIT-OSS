@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { ArrowDown, CheckSvg } from "./svgindex";
 import { useTranslation } from "react-i18next";
 
@@ -8,12 +8,42 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
   const [optionIndex, setOptionIndex] = useState(-1);
   const dropdownRef = useRef();
   const { t } = useTranslation();
-  Digit.Hooks.useClickOutside(dropdownRef, () => setActive(false), active);
+
+  function reducer(state, action){
+    switch(action.type){
+      case "ADD_TO_SELECTED_EVENT_QUEUE":
+        return [...state, {[optionsKey]: action.payload?.[1]?.[optionsKey], propsData: action.payload} ] 
+      case "REMOVE_FROM_SELECTED_EVENT_QUEUE":
+        return state.filter( e => e?.[optionsKey] !== action.payload?.[1]?.[optionsKey]) 
+      default:
+        return state
+    }
+  }
+
+  const [alreadyQueuedSelectedState, dispatch] = useReducer(reducer, selected)
+
+  useEffect(()=> {
+    if(!active){
+      onSelect(alreadyQueuedSelectedState.map( e => e.propsData), props)
+    }
+  },[active])
+
+
+  function handleOutsideClickAndSubmitSimultaneously(){
+    setActive(false)
+  }
+
+  Digit.Hooks.useClickOutside(dropdownRef, handleOutsideClickAndSubmitSimultaneously , active);
   const filtOptns =
       searchQuery?.length > 0 ? options.filter((option) => t(option[optionsKey]&&typeof option[optionsKey]=="string" && option[optionsKey].toUpperCase()).toLowerCase().indexOf(searchQuery.toLowerCase()) >= 0) : options;
     
   function onSearch(e) {
     setSearchQuery(e.target.value);
+  }
+
+  function onSelectToAddToQueue(...props){
+    const isChecked = arguments[0].target.checked
+    isChecked ? dispatch({type: "ADD_TO_SELECTED_EVENT_QUEUE", payload: arguments }) : dispatch({type: "REMOVE_FROM_SELECTED_EVENT_QUEUE", payload: arguments })
   }
 
 /* Custom function to scroll and select in the dropdowns while using key up and down */
@@ -35,7 +65,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
      }
       e.preventDefault();
     }else if(e.key=="Enter"){
-      onSelect(e,filtOptns[optionIndex]);
+      onSelectToAddToQueue(e,filtOptns[optionIndex]);
     } 
   }
 
@@ -44,8 +74,8 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
       <input
         type="checkbox"
         value={option[optionsKey]}
-        checked={selected.find((selectedOption) => selectedOption[optionsKey] === option[optionsKey]) ? true : false}
-        onChange={(e) => isPropsNeeded?onSelect(e, option,props):isOBPSMultiple?onSelect(e, option,BlockNumber):onSelect(e, option)}
+        checked={alreadyQueuedSelectedState.find((selectedOption) => selectedOption[optionsKey] === option[optionsKey]) ? true : false}
+        onChange={(e) => isPropsNeeded?onSelectToAddToQueue(e, option,props):isOBPSMultiple?onSelectToAddToQueue(e, option,BlockNumber):onSelectToAddToQueue(e, option)}
         style={{minWidth: "24px"}}
       />
       <div className="custom-checkbox">
@@ -69,7 +99,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
       <div className={`master${active ? `-active` : ``}`}>
         <input className="cursorPointer" type="text" onKeyDown={keyChange} onFocus={() => setActive(true)} value={searchQuery} onChange={onSearch} />
         <div className="label">
-          <p>{selected.length > 0 ? `${selected.length} ${defaultUnit}` : defaultLabel}</p>
+          <p>{alreadyQueuedSelectedState.length > 0 ? `${alreadyQueuedSelectedState.length} ${defaultUnit}` : defaultLabel}</p>
           <ArrowDown />
         </div>
       </div>

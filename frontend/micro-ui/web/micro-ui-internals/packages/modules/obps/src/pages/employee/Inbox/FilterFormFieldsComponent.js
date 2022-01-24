@@ -17,15 +17,11 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
   const availableBusinessServicesOptions = Digit.Hooks.obps.useBusinessServiceBasedOnServiceType({applicationType: selectedApplicationType})
   const selectedBusinessService = useWatch({control: controlFilterForm, name: "businessService", defaultValue: filterFormState?.businessService || null});
   
-  const selectrole = (e, data, props) => {
-    const index = props?.value.filter((ele) => ele.code == data.code);
-    let res = null;
-    if (index.length) {
-      props?.value.splice(props?.value.indexOf(index[0]), 1);
-      res = [...props?.value];
-    } else {
-      res = [...props?.value, {...data}];
-    }
+  const selectrole = (listOfSelections, props) => {
+    const res = listOfSelections.map( (propsData) => {
+      const data = propsData[1]
+        return data
+     })
     return props.onChange(res);
   };
 
