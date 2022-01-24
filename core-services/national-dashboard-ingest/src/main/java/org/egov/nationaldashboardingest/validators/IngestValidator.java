@@ -140,6 +140,8 @@ public class IngestValidator {
     }
 
     private void validateDateFormat(String date) {
+        if (!isValidSystemDefinedDateFormat(date))
+            throw new CustomException("EG_DS_ERR", "Date should be strictly in dd-MM-yyyy format.");
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         formatter.setLenient(false);
         Date currDate = new Date();
@@ -150,6 +152,19 @@ public class IngestValidator {
         } catch (ParseException e) {
             throw new CustomException("EG_DS_ERR", "Date should be strictly in dd-MM-yyyy format.");
         }
+    }
+
+    private boolean isValidSystemDefinedDateFormat(String date) {
+        if(!date.contains("-"))
+            return false;
+
+        String []dateArr = date.split("-");
+        if(dateArr.length != 3){
+            return false;
+        }
+        if(dateArr[0].length() == 2 && dateArr[1].length() == 2 && dateArr[2].length() == 4)
+            return true;
+        return false;
     }
 
     public void verifyMasterDataStructure(MasterData masterData) {
