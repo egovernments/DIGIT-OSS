@@ -142,8 +142,11 @@ public class IngestValidator {
     private void validateDateFormat(String date) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         formatter.setLenient(false);
+        Date currDate = new Date();
         try {
-            formatter.parse(date);
+            Date inpDate = formatter.parse(date);
+            if(inpDate.after(currDate))
+                throw new CustomException("EG_DS_ERR", "Future date values are now allowed.");
         } catch (ParseException e) {
             throw new CustomException("EG_DS_ERR", "Date should be strictly in dd-MM-yyyy format.");
         }
