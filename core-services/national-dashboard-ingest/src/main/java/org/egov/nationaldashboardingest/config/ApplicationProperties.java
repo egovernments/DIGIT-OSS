@@ -25,7 +25,7 @@ public class ApplicationProperties {
     private Map<String, String> moduleIndexMapping;
 
     @Value("#{${module.fields.mapping}}")
-    private Map<String, HashSet<String>> moduleFieldsMapping;
+    private Map<String, Map<String, String>> moduleFieldsMapping;
 
     @Value("#{${master.module.fields.mapping}}")
     private Map<String, HashSet<String>> masterModuleFieldsMapping;

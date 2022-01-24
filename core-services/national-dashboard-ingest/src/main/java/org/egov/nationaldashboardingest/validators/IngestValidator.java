@@ -3,7 +3,10 @@ package org.egov.nationaldashboardingest.validators;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.egov.nationaldashboardingest.config.ApplicationProperties;
 import org.egov.nationaldashboardingest.repository.ElasticSearchRepository;
 import org.egov.nationaldashboardingest.utils.JsonProcessorUtil;
@@ -16,10 +19,9 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -62,13 +64,21 @@ public class IngestValidator {
     }
 
     public void verifyDataStructure(Data ingestData){
+
+        validateDateFormat(ingestData.getDate());
+        validateStringNotNumeric(ingestData.getWard());
+        validateStringNotNumeric(ingestData.getUlb());
+        validateStringNotNumeric(ingestData.getRegion());
+        validateStringNotNumeric(ingestData.getState());
+
         Set<String> configuredFieldsForModule = new HashSet<>();
 
         if(applicationProperties.getModuleFieldsMapping().containsKey(ingestData.getModule()))
-            configuredFieldsForModule = applicationProperties.getModuleFieldsMapping().get(ingestData.getModule());
+            configuredFieldsForModule = applicationProperties.getModuleFieldsMapping().get(ingestData.getModule()).keySet();
         else
             throw new CustomException("EG_DS_VALIDATE_ERR", "Field mapping has not been configured for module code: " + ingestData.getModule());
         try {
+            Map<String, JsonNodeType> keyVsTypeMap = new HashMap<>();
             String seedData = objectMapper.writeValueAsString(ingestData);
             JsonNode incomingData = objectMapper.readValue(seedData, JsonNode.class);
             List<String> keyNames = new ArrayList<>();
@@ -76,6 +86,7 @@ public class IngestValidator {
             jsonProcessorUtil.enrichKeyNamesInList(metricsData, keyNames);
 
             for(String inputKeyName : keyNames){
+                keyVsTypeMap.put(inputKeyName, metricsData.get(inputKeyName).getNodeType());
                 if(!configuredFieldsForModule.contains(inputKeyName))
                     throw new CustomException("EG_DS_VALIDATE_ERR", "The metric: " + inputKeyName + " was not configured in field mapping for module: " + ingestData.getModule());
             }
@@ -88,10 +99,47 @@ public class IngestValidator {
                 });
                 throw new CustomException("EG_DS_VALIDATE_ERR", "Received less number of fields than the number of fields configured in field mapping for module: " + ingestData.getModule() + ". List of absent fields: " + absentFields.toString());
             }
+
+            keyVsTypeMap.keySet().forEach(key ->{
+                JsonNodeType type = keyVsTypeMap.get(key);
+                if(applicationProperties.getModuleFieldsMapping().get(ingestData.getModule()).get(key).contains("::")){
+                    String valueType = applicationProperties.getModuleFieldsMapping().get(ingestData.getModule()).get(key).split("::")[1];
+                    if(!(metricsData.get(key) instanceof ArrayNode)){
+                        throw new CustomException("EG_DS_VALIDATE_ERR", "Key: " + key + " is configured as type array but received value of type: " + type.toString());
+                    }else{
+                        for(JsonNode childNode : metricsData.get(key)){
+                            for(JsonNode bucketNode : childNode.get("buckets")) {
+                                if (!(bucketNode.get("value").getNodeType().toString().equalsIgnoreCase(valueType)))
+                                    throw new CustomException("EG_DS_VALIDATE_ERR", "Children values of the array: " + key + " should only contain values of type: " + valueType);
+                            }
+                        }
+                    }
+                } else {
+                    if (!type.toString().equalsIgnoreCase(applicationProperties.getModuleFieldsMapping().get(ingestData.getModule()).get(key)))
+                        throw new CustomException("EG_DS_VALIDATE_ERR", "The type of data input does not match with the type of data provided in configuration for key: " + key);
+                }
+            });
+
         }catch (JsonProcessingException e){
             throw new CustomException("EG_PAYLOAD_READ_ERR", "Error occured while processing ingest data");
         }
 
+    }
+
+    private void validateStringNotNumeric(String s) {
+        if (NumberUtils.isParsable(s)) {
+            throw new CustomException("EG_DS_ERR", "Received numeric value: " + s + ". Please provide String value strictly.");
+        }
+    }
+
+    private void validateDateFormat(String date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        formatter.setLenient(false);
+        try {
+            formatter.parse(date);
+        } catch (ParseException e) {
+            throw new CustomException("EG_DS_ERR", "Date should be strictly in dd-MM-yyyy format.");
+        }
     }
 
     public void verifyMasterDataStructure(MasterData masterData) {

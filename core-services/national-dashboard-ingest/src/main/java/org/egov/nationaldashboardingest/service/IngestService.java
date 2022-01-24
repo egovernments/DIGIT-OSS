@@ -29,11 +29,11 @@ public class IngestService {
 
     public void ingestData(IngestRequest ingestRequest) {
 
-        // Validates that no cross state data is being ingested, i.e. employee of state X cannot insert data for state Y
-        ingestValidator.verifyCrossStateRequest(ingestRequest);
-
         // Validates whether the fields configured for a given module are present in payload
         ingestValidator.verifyDataStructure(ingestRequest.getIngestData());
+
+        // Validates that no cross state data is being ingested, i.e. employee of state X cannot insert data for state Y
+        ingestValidator.verifyCrossStateRequest(ingestRequest);
 
         // Validate if record for the day is already present
         ingestValidator.verifyIfDataAlreadyIngested(ingestRequest.getIngestData());
