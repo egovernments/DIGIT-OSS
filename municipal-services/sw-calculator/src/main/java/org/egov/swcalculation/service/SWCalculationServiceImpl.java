@@ -11,25 +11,14 @@ import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.swcalculation.constants.SWCalculationConstant;
-import org.egov.swcalculation.web.models.AdhocTaxReq;
-import org.egov.swcalculation.web.models.Calculation;
-import org.egov.swcalculation.web.models.CalculationCriteria;
-import org.egov.swcalculation.web.models.CalculationReq;
-import org.egov.swcalculation.web.models.TaxHeadCategory;
-import org.egov.swcalculation.web.models.Property;
-import org.egov.swcalculation.web.models.SewerageConnection;
-import org.egov.swcalculation.web.models.SewerageConnectionRequest;
-import org.egov.swcalculation.web.models.TaxHeadEstimate;
-import org.egov.swcalculation.web.models.TaxHeadMaster;
+import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.repository.SewerageCalculatorDao;
 import org.egov.swcalculation.util.SWCalculationUtil;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
-
-import static org.egov.swcalculation.constants.SWCalculationConstant.*;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @Slf4j
@@ -99,12 +88,7 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 		@SuppressWarnings("unchecked")
 		List<String> billingSlabIds = estimatesAndBillingSlabs.get("billingSlabIds");
 		SewerageConnection sewerageConnection = criteria.getSewerageConnection();
-		
-		Property property = sWCalculationUtil.getProperty(SewerageConnectionRequest.builder()
-				.sewerageConnection(sewerageConnection).requestInfo(requestInfo).build());
-
-		String tenantId = null != property.getTenantId() ? property.getTenantId() : criteria.getTenantId();
-
+  
 		@SuppressWarnings("unchecked")
 		Map<String, TaxHeadCategory> taxHeadCategoryMap = ((List<TaxHeadMaster>) masterMap
 				.get(SWCalculationConstant.TAXHEADMASTER_MASTER_KEY)).stream()
@@ -165,22 +149,29 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 		BigDecimal totalAmount = taxAmt.add(penalty).add(rebate).add(exemption).add(sewerageCharge).add(fee);
 		return Calculation.builder().totalAmount(totalAmount).taxAmount(taxAmt).penalty(penalty).exemption(exemption)
 				.charge(sewerageCharge).fee(fee).sewerageConnection(sewerageConnection).rebate(rebate)
-				.tenantId(tenantId).taxHeadEstimates(estimates).billingSlabIds(billingSlabIds)
+				.tenantId(criteria.getTenantId()).taxHeadEstimates(estimates).billingSlabIds(billingSlabIds)
 				.connectionNo(criteria.getConnectionNo()).applicationNO(criteria.getApplicationNo()).build();
 	}
 
 	/**
 	 * Generate Demand Based on Time (Monthly, Quarterly, Yearly)
 	 */
-	public void generateDemandBasedOnTimePeriod(RequestInfo requestInfo) {
+	public void generateDemandBasedOnTimePeriod(RequestInfo requestInfo, BulkBillCriteria bulkBillCriteria) {
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime date = LocalDateTime.now();
 		log.info("Time schedule start for sewerage demand generation on : " + date.format(dateTimeFormatter));
-		List<String> tenantIds = sewerageCalculatorDao.getTenantId();
+
+		List<String> tenantIds = new ArrayList<>();
+		if(!CollectionUtils.isEmpty(bulkBillCriteria.getTenantIds())){
+			tenantIds = bulkBillCriteria.getTenantIds();
+		}
+		else
+			tenantIds = sewerageCalculatorDao.getTenantId();
+
 		if (tenantIds.isEmpty())
 			return;
-		log.info("Tenant Ids : " + tenantIds.toString());
-		tenantIds.forEach(tenantId -> demandService.generateDemandForTenantId(tenantId, requestInfo));
+		log.info("Tenant Ids : " + tenantIds);
+		tenantIds.forEach(tenantId -> demandService.generateDemandForTenantId(tenantId, requestInfo, bulkBillCriteria));
 	}
 
 	/**
@@ -191,14 +182,14 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 	 *            master data
 	 * @return all calculations including sewerage charge and taxhead on that
 	 */
-	List<Calculation> getCalculations(CalculationReq request, Map<String, Object> masterMap) {
+	public List<Calculation> getCalculations(CalculationReq request, Map<String, Object> masterMap) {
 		List<Calculation> calculations = new ArrayList<>(request.getCalculationCriteria().size());
 		for (CalculationCriteria criteria : request.getCalculationCriteria()) {
 			Map<String, List> estimationMap = estimationService.getEstimationMap(criteria, request.getRequestInfo(),
 					masterMap);
 			ArrayList<?> billingFrequencyMap = (ArrayList<?>) masterMap
 					.get(SWCalculationConstant.Billing_Period_Master);
-			mDataService.enrichBillingPeriod(criteria, billingFrequencyMap, masterMap);
+			mDataService.enrichBillingPeriod(criteria, billingFrequencyMap, masterMap, criteria.getSewerageConnection().getConnectionType());
 			Calculation calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap,
 					true);
 			calculations.add(calculation);
@@ -206,17 +197,6 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 		return calculations;
 	}
 
-	/**
-	 * 
-	 * 
-	 * @param request - Calculation Request
-	 * @return List of calculation.
-	 */
-	public List<Calculation> bulkDemandGeneration(CalculationReq request, Map<String, Object> masterMap) {
-		List<Calculation> calculations = getCalculations(request, masterMap);
-		demandService.generateDemand(request.getRequestInfo(), calculations, masterMap, true);
-		return calculations;
-	}
 
 	/**
 	 * 
@@ -261,26 +241,17 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 	 */
 	public List<Calculation> applyAdhocTax(AdhocTaxReq adhocTaxReq) {
 		List<TaxHeadEstimate> estimates = new ArrayList<>();
-		String businessService = adhocTaxReq.getBusinessService();
-		if(!businessService.equalsIgnoreCase(SERVICE_FIELD_VALUE_SW) && !businessService.equalsIgnoreCase(ONE_TIME_FEE_SERVICE_FIELD))
-			throw new CustomException("INVALID_BUSINESSSERVICE", "Provide businessService is invalid");
-
-		if (!(adhocTaxReq.getAdhocpenalty().compareTo(BigDecimal.ZERO) == 0)){
-			String penaltyTaxhead = businessService.equals(SERVICE_FIELD_VALUE_SW) ? SW_TIME_ADHOC_PENALTY : SW_ADHOC_PENALTY;
-			estimates.add(TaxHeadEstimate.builder().taxHeadCode(penaltyTaxhead)
+		if (!(adhocTaxReq.getAdhocpenalty().compareTo(BigDecimal.ZERO) == 0))
+			estimates.add(TaxHeadEstimate.builder().taxHeadCode(SWCalculationConstant.SW_ADHOC_PENALTY)
 					.estimateAmount(adhocTaxReq.getAdhocpenalty().setScale(2, 2)).build());
-		}
-		if (!(adhocTaxReq.getAdhocrebate().compareTo(BigDecimal.ZERO) == 0)){
-			String rebateTaxhead = businessService.equals(SERVICE_FIELD_VALUE_SW) ? SW_TIME_ADHOC_REBATE : SW_ADHOC_REBATE;
-			estimates.add(TaxHeadEstimate.builder().taxHeadCode(rebateTaxhead)
+		if (!(adhocTaxReq.getAdhocrebate().compareTo(BigDecimal.ZERO) == 0))
+			estimates.add(TaxHeadEstimate.builder().taxHeadCode(SWCalculationConstant.SW_ADHOC_REBATE)
 					.estimateAmount(adhocTaxReq.getAdhocrebate().setScale(2, 2).negate()).build());
-		}
-
 		Calculation calculation = Calculation.builder()
 				.tenantId(adhocTaxReq.getRequestInfo().getUserInfo().getTenantId())
-				.connectionNo(adhocTaxReq.getConsumerCode()).taxHeadEstimates(estimates).build();
+				.applicationNO(adhocTaxReq.getDemandId()).taxHeadEstimates(estimates).build();
 		List<Calculation> calculations = Collections.singletonList(calculation);
-		return demandService.updateDemandForAdhocTax(adhocTaxReq.getRequestInfo(), calculations, businessService);
+		return demandService.updateDemandForAdhocTax(adhocTaxReq.getRequestInfo(), calculations);
 	}
 
 }

@@ -21,6 +21,4 @@ public class NotificationReceiver {
 
 	private String mobileNumber;
 
-	private String emailId;
-
 }

@@ -44,6 +44,11 @@ public class CalculationReq   {
 		@NotNull
 		 private Boolean isconnectionCalculation;
 
+        /*
+        * Used by the bulk bill generator to send batch information through kafka
+        */
+        private MigrationCount migrationCount;
+
 
         public CalculationReq addCalulationCriteriaItem(CalculationCriteria calulationCriteriaItem) {
         this.calculationCriteria.add(calulationCriteriaItem);

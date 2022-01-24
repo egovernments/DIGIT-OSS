@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.swcalculation.config.SWCalculationConfiguration;
-import org.egov.swcalculation.producer.SWCalculationProducer;
 import org.egov.swcalculation.web.models.Demand;
-import org.egov.swcalculation.web.models.DemandNotificationObj;
 import org.egov.swcalculation.web.models.DemandRequest;
 import org.egov.swcalculation.web.models.DemandResponse;
 import org.egov.tracer.model.CustomException;
@@ -26,18 +24,15 @@ public class DemandRepository {
 	
 	    @Autowired
 	    private ObjectMapper mapper;
-
-		@Autowired
-		private SWCalculationProducer swCalculationProducer;
-
-
-	/**
+	
+	
+	    /**
 	     * Creates demand
 	     * @param requestInfo The RequestInfo of the calculation Request
 	     * @param demands The demands to be created
 	     * @return The list of demand created
 	     */
-	    public List<Demand> saveDemand(RequestInfo requestInfo, List<Demand> demands, DemandNotificationObj notificationObj){
+	    public List<Demand> saveDemand(RequestInfo requestInfo, List<Demand> demands){
 	        StringBuilder url = new StringBuilder(config.getBillingServiceHost());
 	        url.append(config.getDemandCreateEndPoint());
 	        DemandRequest request = new DemandRequest(requestInfo,demands);
@@ -47,8 +42,7 @@ public class DemandRepository {
 	            response = mapper.convertValue(result,DemandResponse.class);
 	        }
 	        catch(IllegalArgumentException e){
-				swCalculationProducer.push(config.getOnDemandFailed(), notificationObj);
-				throw new CustomException("EG_SW_PARSING_ERROR","Failed to parse response of create demand");
+	            throw new CustomException("PARSING_ERROR","Failed to parse response of create demand");
 	        }
 	        return response.getDemands();
 	    }
@@ -69,7 +63,7 @@ public class DemandRepository {
 	            response = mapper.convertValue(result,DemandResponse.class);
 	        }
 	        catch(IllegalArgumentException e){
-	            throw new CustomException("EG_SW_PARSING_ERROR","Failed to parse response of update demand");
+	            throw new CustomException("PARSING_ERROR","Failed to parse response of update demand");
 	        }
 	        return response.getDemands();
 

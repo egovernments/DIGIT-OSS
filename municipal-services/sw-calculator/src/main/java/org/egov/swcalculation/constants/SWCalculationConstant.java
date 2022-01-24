@@ -163,14 +163,6 @@ public class SWCalculationConstant {
 
 	public static final String DEMAND_FAILURE_MESSAGE_EMAIL = "SEWERAGE_CONNECTION_DEMAND_FAILURE_EMAIL_MESSAGE";
 
-	public static final String BILL_SUCCESS_MESSAGE_SMS = "SEWERAGE_CONNECTION_BILL_SUCCESSFUL_SMS_MESSAGE";
-
-	public static final String BILL_FAILURE_MESSAGE_SMS = "SEWERAGE_CONNECTION_BILL_FAILURE_SMS_MESSAGE";
-
-	public static final String BILL_SUCCESS_MESSAGE_EMAIL = "SEWERAGE_CONNECTION_BILL_SUCCESSFUL_EMAIL_MESSAGE";
-
-	public static final String BILL_FAILURE_MESSAGE_EMAIL = "SEWERAGE_CONNECTION_BILL_FAILURE_EMAIL_MESSAGE";
-
 	public static final String BILL_SUCCESS_MESSAGE = "SEWERAGE_CONNECTION_BILL_FAILURE_MESSAGE";;
 
 	public static final String NOTIFICATION_INITIATED = "tl.en.counter.initiate";
@@ -296,25 +288,30 @@ public class SWCalculationConstant {
 
 	public static final String PROPERTY_MASTER_MODULE = "PropertyTax";
 
-	//Notification
-	public static final String CHANNEL_NAME_SMS = "SMS";
+	public static final String ADHOC_PENALTY_REASON = "adhocPenaltyReason";
 
-	public static final String CHANNEL_NAME_EVENT = "EVENT";
+	public static final String ADHOC_PENALTY_COMMENT = "adhocPenaltyComment";
 
-	public static final String CHANNEL_NAME_EMAIL = "EMAIL";
+	public static final String ADHOC_REBATE_REASON = "adhocRebateReason";
 
-	public static final String MODULECONSTANT = "module";
+	public static final String ADHOC_REBATE_COMMENT = "adhocRebateComment";
 
-	public static final String ACTION = "action";
+	public static final String DETAILS_PROVIDED_BY = "detailsProvidedBy";
 
-	public static final String CHANNEL_LIST = "channelList";
+	public static final String APP_CREATED_DATE = "appCreatedDate";
 
-	public static final String CHANNEL = "Channel";
+	public static final String ESTIMATION_FILESTORE_ID = "estimationFileStoreId";
 
-	// actions
-	public static final String ACTION_FOR_DEMAND = "DEMAND";
+	public static final String SANCTION_LETTER_FILESTORE_ID = "sanctionFileStoreId";
 
-	public static final String ACTION_FOR_BILL = "BILL";
+	public static final String ESTIMATION_DATE_CONST = "estimationLetterDate";
 
-	public static String Billing_Cycle_String = "billingCycle";
+	public static final String LOCALITY = "locality";
+
+	public static final String PAYMENT_COMPLETED_SEARCH_FIELD_NAME = "isPaymentCompleted=";
+
+	public static final String MDMS_CACHE_KEY = "WSMasterData";
+
+	public static final String Billing_Cycle_String = "billingCycle";
+
 }
