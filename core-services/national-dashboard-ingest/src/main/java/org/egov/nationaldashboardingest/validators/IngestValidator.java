@@ -22,6 +22,8 @@ import org.springframework.stereotype.Component;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -127,6 +129,11 @@ public class IngestValidator {
     }
 
     private void validateStringNotNumeric(String s) {
+        Pattern p = Pattern.compile("[^a-z0-9. ]", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(s);
+        if (m.find())
+            throw new CustomException("EG_DS_ERR", "Special characters are not allowed in input.");
+
         if (NumberUtils.isParsable(s)) {
             throw new CustomException("EG_DS_ERR", "Received numeric value: " + s + ". Please provide String value strictly.");
         }
