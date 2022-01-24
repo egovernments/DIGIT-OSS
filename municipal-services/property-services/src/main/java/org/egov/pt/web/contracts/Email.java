@@ -1,5 +1,6 @@
 package org.egov.pt.web.contracts;
 
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,6 +23,8 @@ public class Email {
 	private Set<String> emailTo;
 	private String subject;
 	private String body;
+	private String tenantId;
+	private Set<String> fileStoreId;
 	@JsonProperty("isHTML")
 	private boolean isHTML;
 
