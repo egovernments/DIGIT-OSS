@@ -35,6 +35,7 @@ const BpaApplicationDetail = () => {
   sessionStorage.setItem("bpaApplicationDetails", false);
   let isFromSendBack = false;
   const { data: stakeHolderDetails, isLoading: stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
+  const { isLoading: bpaDocsLoading, data: bpaDocs } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["DocTypeMapping"]);
   const { data, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(tenantId.split(".")[0], "BPA", ["RiskTypeComputation"]);
   const mutation = Digit.Hooks.obps.useObpsAPI(data?.applicationData?.tenantId, false);
@@ -61,6 +62,30 @@ const BpaApplicationDetail = () => {
   {
     businessService = ["BPA.NC_OC_APP_FEE","BPA.NC_OC_SAN_FEE"];
   }
+
+  useEffect(() => {
+    if(!bpaDocsLoading && !isLoading){
+      let filtredBpaDocs = [];
+      if (bpaDocs?.BPA?.DocTypeMapping) {
+        filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(ob => (ob.WFState == "INPROGRESS" && ob.RiskType == data?.applicationData?.riskType && ob.ServiceType == data?.applicationData?.additionalDetails?.serviceType && ob.applicationType == data?.applicationData?.additionalDetails?.applicationType))
+        let documents = data?.applicationDetails?.filter((ob) => ob.title === "BPA_DOCUMENT_DETAILS_LABEL")[0]?.additionalDetails?.obpsDocuments?.[0]?.values;
+        let RealignedDocument = [];
+        filtredBpaDocs && filtredBpaDocs?.[0]?.docTypes && filtredBpaDocs?.[0]?.docTypes.map((ob) => {
+            documents && documents.filter(x => ob.code === x.documentType.slice(0,x.documentType.lastIndexOf("."))).map((doc) => {
+                RealignedDocument.push(doc);
+            })
+        })
+        const newApplicationDetails = data.applicationDetails.map((obj) => {
+          if(obj.title === "BPA_DOCUMENT_DETAILS_LABEL")
+          {
+            return {...obj, additionalDetails:{obpsDocuments:[{title:"",values:RealignedDocument}]}}
+          }
+          return obj;
+        })
+        data.applicationDetails = [...newApplicationDetails];
+    }
+    }
+  },[bpaDocs,data])
 
 
   useEffect(async() => {
