@@ -15,31 +15,21 @@ const Filters = ({ t, ulbTenants, isOpen, closeFilters, showDateRange = true, sh
     setSelected(ulbTenants?.ulb.filter((tenant) => value.filters.tenantId.find((selectedTenant) => selectedTenant === tenant.code)));
   }, [value.filters.tenantId]);
 
-  const selectULB = (data) => {
-    const _data = Array.isArray(data) ? data : [data];
-    setValue({ ...value, filters: { tenantId: [...value?.filters?.tenantId, ..._data] } });
-  };
-  const removeULB = (data) => {
-    const _data = Array.isArray(data) ? data : [data];
-    setValue({
-      ...value,
-      filters: { ...value?.filters, tenantId: [...value?.filters?.tenantId].filter((tenant) => !_data.find((e) => e === tenant)) },
-    });
-  };
   const handleFilterChange = (data) => {
     setValue({ ...value, ...data });
   };
 
   const selectFilters = (e, data) => {
-    const { checked } = e?.target;
-    if (checked) selectULB(data.code);
-    else removeULB(data.code);
+    setValue({ ...value, filters: { tenantId: e.map( (allPropsData) =>  allPropsData?.[1]?.code) } });
   };
 
   const selectDDR = (e, data) => {
-    const { checked } = e?.target;
-    if (checked) selectULB(ulbTenants.ulb.filter((ulb) => ulb.ddrKey === data.ddrKey).map((ulb) => ulb.code));
-    else removeULB(ulbTenants.ulb.filter((ulb) => ulb.ddrKey === data.ddrKey).map((ulb) => ulb.code));
+    const DDRsSelectedByUser = ulbTenants.ulb.filter((ulb) => {
+      return !!e.find( tenant => {
+        return ulb.ddrKey === tenant?.[1].ddrKey
+      })
+    })
+    setValue({ ...value, filters: { tenantId: DDRsSelectedByUser.map( (allPropsData) =>  allPropsData?.code) } });
   };
 
   const selectedDDRs = useMemo(

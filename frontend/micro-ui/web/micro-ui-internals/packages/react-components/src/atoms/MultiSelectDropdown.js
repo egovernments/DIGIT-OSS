@@ -15,13 +15,23 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
         return [...state, {[optionsKey]: action.payload?.[1]?.[optionsKey], propsData: action.payload} ] 
       case "REMOVE_FROM_SELECTED_EVENT_QUEUE":
         return state.filter( e => e?.[optionsKey] !== action.payload?.[1]?.[optionsKey]) 
+      case "REPLACE_COMPLETE_STATE":
+        return action.payload
       default:
         return state
     }
   }
 
-  const [alreadyQueuedSelectedState, dispatch] = useReducer(reducer, selected)
+  useEffect(() => {
+    dispatch({type: "REPLACE_COMPLETE_STATE", payload: fnToSelectOptionThroughProvidedSelection(selected) })
+  },[selected])
 
+  function fnToSelectOptionThroughProvidedSelection(selected){
+    return selected.map( e => ({[optionsKey]: e?.[optionsKey], propsData: [null, e]}))
+  }
+
+  const [alreadyQueuedSelectedState, dispatch] = useReducer(reducer, selected, fnToSelectOptionThroughProvidedSelection)
+  
   useEffect(()=> {
     if(!active){
       onSelect(alreadyQueuedSelectedState.map( e => e.propsData), props)
