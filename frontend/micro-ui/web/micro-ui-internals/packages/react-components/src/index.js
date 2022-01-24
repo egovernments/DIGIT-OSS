@@ -177,7 +177,7 @@ import OnGroundEventCard from "./molecules/OnGroundEventCard";
 import MultiUploadWrapper from "./molecules/MultiUploadWrapper";
 import { FilterForm, FilterFormField } from "./molecules/FilterForm";
 import OpenLinkContainer from "./atoms/OpenLinkContainer";
-
+import UploadPitPhoto from "./molecules/UploadPitPhoto";
 export {
   Body,
   Loader,
@@ -363,6 +363,7 @@ export {
   EditIcon,
   SearchIcon,
   DeleteIcon,
-  WSICon
+  WSICon,
+  UploadPitPhoto
 };
 
