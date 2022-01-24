@@ -45,7 +45,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
             disableSortBy: true,
         },
         {
-            Header: t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"),
+            Header: t("BPA_SEARCH_APPLICATION_TYPE_LABEL"),
             accessor: (row) => t(row?.applicationType),
             disableSortBy: true,
         },

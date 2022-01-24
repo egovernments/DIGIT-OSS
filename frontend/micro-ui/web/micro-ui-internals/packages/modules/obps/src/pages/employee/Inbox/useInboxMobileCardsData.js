@@ -10,7 +10,7 @@ const useInboxMobileCardsData = ({parentRoute, table, getRedirectionLink}) => {
     const dataForMobileInboxCards = table?.map(({ applicationId, date, applicationType,businessService, locality, status, owner, sla, state}) => ({
             [t("BPA_APPLICATION_NUMBER_LABEL")]: applicationId,
             [t("CS_APPLICATION_DETAILS_APPLICATION_DATE")]: format(new Date(date), 'dd/MM/yyyy'),
-            [t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")]: t(applicationType),
+            [t("BPA_SEARCH_APPLICATION_TYPE_LABEL")]: t(applicationType),
             [t("ES_INBOX_LOCALITY")]: t(locality),
             [t("EVENTS_STATUS_LABEL")]: state ? t(`WF_${businessService}_${state}`): t(`WF_${businessService}_${status}`),
             [t("WF_INBOX_HEADER_CURRENT_OWNER")]: owner,
