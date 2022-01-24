@@ -28,6 +28,6 @@ public class ApplicationProperties {
     private Map<String, Map<String, String>> moduleFieldsMapping;
 
     @Value("#{${master.module.fields.mapping}}")
-    private Map<String, HashSet<String>> masterModuleFieldsMapping;
+    private Map<String, Map<String, String>> masterModuleFieldsMapping;
 
 }

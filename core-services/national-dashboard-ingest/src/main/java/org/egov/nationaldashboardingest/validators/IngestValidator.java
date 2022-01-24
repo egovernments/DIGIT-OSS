@@ -143,13 +143,19 @@ public class IngestValidator {
     }
 
     public void verifyMasterDataStructure(MasterData masterData) {
+        validateStringNotNumeric(masterData.getModule());
+        validateStringNotNumeric(masterData.getRegion());
+        validateStringNotNumeric(masterData.getState());
+        validateStringNotNumeric(masterData.getUlb());
+        validateFinancialYear(masterData.getFinancialYear());
         Set<String> configuredFieldsForModule = new HashSet<>();
 
         if(applicationProperties.getModuleFieldsMapping().containsKey(masterData.getModule()))
-            configuredFieldsForModule = applicationProperties.getMasterModuleFieldsMapping().get(masterData.getModule());
+            configuredFieldsForModule = applicationProperties.getMasterModuleFieldsMapping().get(masterData.getModule()).keySet();
         else
             throw new CustomException("EG_DS_VALIDATE_ERR", "Master field mapping has not been configured for module code: " + masterData.getModule());
         try {
+            Map<String, JsonNodeType> keyVsTypeMap = new HashMap<>();
             String seedData = objectMapper.writeValueAsString(masterData);
             JsonNode incomingData = objectMapper.readValue(seedData, JsonNode.class);
             List<String> keyNames = new ArrayList<>();
@@ -157,6 +163,7 @@ public class IngestValidator {
             jsonProcessorUtil.enrichKeyNamesInList(metricsData, keyNames);
 
             for(String inputKeyName : keyNames){
+                keyVsTypeMap.put(inputKeyName, metricsData.get(inputKeyName).getNodeType());
                 if(!configuredFieldsForModule.contains(inputKeyName))
                     throw new CustomException("EG_DS_VALIDATE_ERR", "The metric: " + inputKeyName + " was not configured in master field mapping for module: " + masterData.getModule());
             }
@@ -169,8 +176,41 @@ public class IngestValidator {
                 });
                 throw new CustomException("EG_DS_VALIDATE_ERR", "Received less number of fields than the number of fields configured in master field mapping for module: " + masterData.getModule() + ". List of absent fields: " + absentFields.toString());
             }
+
+            keyVsTypeMap.keySet().forEach(key ->{
+                JsonNodeType type = keyVsTypeMap.get(key);
+                if(applicationProperties.getMasterModuleFieldsMapping().get(masterData.getModule()).get(key).contains("::")){
+                    String valueType = applicationProperties.getMasterModuleFieldsMapping().get(masterData.getModule()).get(key).split("::")[1];
+                    if(!(metricsData.get(key) instanceof ArrayNode)){
+                        throw new CustomException("EG_DS_VALIDATE_ERR", "Key: " + key + " is configured as type array but received value of type: " + type.toString());
+                    }else{
+                        for(JsonNode childNode : metricsData.get(key)){
+                            for(JsonNode bucketNode : childNode.get("buckets")) {
+                                if (!(bucketNode.get("value").getNodeType().toString().equalsIgnoreCase(valueType)))
+                                    throw new CustomException("EG_DS_VALIDATE_ERR", "Children values of the array: " + key + " should only contain values of type: " + valueType);
+                            }
+                        }
+                    }
+                } else {
+                    if (!type.toString().equalsIgnoreCase(applicationProperties.getMasterModuleFieldsMapping().get(masterData.getModule()).get(key)))
+                        throw new CustomException("EG_DS_VALIDATE_ERR", "The type of data input does not match with the type of data provided in configuration for key: " + key);
+                }
+            });
+
+
         }catch (JsonProcessingException e){
             throw new CustomException("EG_PAYLOAD_READ_ERR", "Error occured while processing ingest data");
+        }
+    }
+
+    private void validateFinancialYear(String financialYear) {
+        if(!financialYear.contains("-"))
+            throw new CustomException("EG_MASTER_DATA_VALIDATE_ERR", "Financial year is not given in correct format. Correct format is YYYY-YY");
+
+        String fromYear = financialYear.split("-")[0];
+        String toYear = financialYear.split("-")[1];
+        if((!NumberUtils.isParsable(fromYear) || !NumberUtils.isParsable(toYear))){
+            throw new CustomException("EG_MASTER_DATA_VALIDATE_ERR", "Financial year is not given in proper format.");
         }
     }
 
