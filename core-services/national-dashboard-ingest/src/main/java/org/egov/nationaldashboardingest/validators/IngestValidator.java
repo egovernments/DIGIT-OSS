@@ -129,7 +129,7 @@ public class IngestValidator {
     }
 
     private void validateStringNotNumeric(String s) {
-        Pattern p = Pattern.compile("[^a-z0-9. ]", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("[^a-z0-9.\\- ]", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(s);
         if (m.find())
             throw new CustomException("EG_DS_ERR", "Special characters are not allowed in input.");
