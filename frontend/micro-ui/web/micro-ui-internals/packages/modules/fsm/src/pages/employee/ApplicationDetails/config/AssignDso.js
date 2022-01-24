@@ -32,23 +32,23 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
     form: [
       {
         body: [
-          vehicle ? {
-            label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
-            isMandatory: true,
-            type: "dropdown",
-            populators: (
-              <Dropdown
-                option={vehicleMenu}
-                autoComplete="off"
-                optionKey="i18nKey"
-                id="vehicle"
-                selected={vehicle}
-                select={selectVehicle}
-                disable={vehicle ? true : false}
-                t={t}
-              />
-            ),
-          }: {},
+          // vehicle ? {
+          //   label: t("ES_FSM_ACTION_VEHICLE_TYPE"),
+          //   isMandatory: true,
+          //   type: "dropdown",
+          //   populators: (
+          //     <Dropdown
+          //       option={vehicleMenu}
+          //       autoComplete="off"
+          //       optionKey="i18nKey"
+          //       id="vehicle"
+          //       selected={vehicle}
+          //       select={selectVehicle}
+          //       disable={vehicle ? true : false}
+          //       t={t}
+          //     />
+          //   ),
+          // }: {},
           {
             label: t("ES_FSM_ACTION_DSO_NAME"),
             isMandatory: true,

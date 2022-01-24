@@ -36,6 +36,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       vehicleType: vehicleMenu
         .filter((vehicle) => vehicle?.code === applicationData?.vehicleType)
         .map((vehicle) => ({ ...vehicle, label: getVehicleType(vehicle, t) }))[0],
+      vehicleCapacity: applicationData?.vehicleCapacity,
     },
     propertyType: applicationData.propertyUsage.split(".")[0],
     subtype: applicationData.propertyUsage,
@@ -115,7 +116,8 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         tripAmount: amount,
       },
       propertyUsage,
-      vehicleType: data.tripData.vehicleType.code,
+      vehicleType: data.tripData.vehicleType.type,
+      vehicleCapacity: data?.tripData?.vehicleType?.capacity,
       noOfTrips,
       pitDetail: {
         ...applicationData.pitDetail,

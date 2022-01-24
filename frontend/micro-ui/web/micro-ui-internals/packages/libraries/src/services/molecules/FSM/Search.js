@@ -174,9 +174,9 @@ export const Search = {
         title: "ES_APPLICATION_DETAILS_DSO_DETAILS",
         values: [
           { title: "ES_APPLICATION_DETAILS_ASSIGNED_DSO", value: dsoDetails?.displayName || "N/A" },
-          { title: "ES_APPLICATION_DETAILS_VEHICLE_MAKE", value: vehicleMake || "N/A" },
+          // { title: "ES_APPLICATION_DETAILS_VEHICLE_MAKE", value: vehicleMake || "N/A" },
           { title: "ES_APPLICATION_DETAILS_VEHICLE_NO", value: vehicle?.registrationNumber || "N/A" },
-          { title: "ES_APPLICATION_DETAILS_VEHICLE_CAPACITY", value: vehicleCapacity || "N/A" },
+          { title: "ES_APPLICATION_DETAILS_VEHICLE_CAPACITY", value: response?.vehicleCapacity || "N/A" },
           { title: "ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE", value: displayServiceDate(response?.possibleServiceDate) || "N/A" },
         ],
       },

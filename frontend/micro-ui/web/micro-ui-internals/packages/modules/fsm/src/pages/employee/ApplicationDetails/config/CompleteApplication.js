@@ -1,7 +1,7 @@
 import React from "react";
 import { DatePicker } from "@egovernments/digit-ui-react-components";
 
-export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime = 0, action }) => ({
+export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, applicationCreatedTime = 0, action }) => ({
   label: {
     heading: `ES_FSM_ACTION_TITLE_${action}`,
     submit: `CS_COMMON_${action}`,
@@ -35,9 +35,9 @@ export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime =
             name: "wasteCollected",
             validation: {
               required: true,
-              validate: (value) => parseInt(value) <= parseInt(vehicle.capacity),
+              validate: (value) => parseInt(value) <= parseInt(vehicleCapacity),
             },
-            error: `${t("ES_FSM_ACTION_INVALID_WASTE_VOLUME")} ${vehicle?.capacity} ${t("CS_COMMON_LITRES")}`,
+            error: `${t("ES_FSM_ACTION_INVALID_WASTE_VOLUME")} ${vehicleCapacity} ${t("CS_COMMON_LITRES")}`,
           },
         },
         {

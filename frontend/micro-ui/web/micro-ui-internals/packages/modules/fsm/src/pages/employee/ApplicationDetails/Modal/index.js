@@ -113,8 +113,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       setVehicleMenu([vehicle]);
       setVehicle(vehicle);
       setDefautValue({
-        capacity: vehicle?.capacity,
-        wasteCollected: vehicle?.capacity,
+        capacity: applicationData?.vehicleCapacity,
+        wasteCollected: applicationData?.vehicleCapacity,
       });
     }
   }, [isVehicleDataLoaded, isSuccess]);
@@ -303,7 +303,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
-        return setConfig(configCompleteApplication({ t, vehicle, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
+        return setConfig(configCompleteApplication({ t, vehicle, vehicleCapacity: applicationData?.vehicleCapacity, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
