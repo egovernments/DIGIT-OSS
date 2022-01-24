@@ -42,7 +42,7 @@ const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
-  const token = window.sessionStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
+  const token ="b30ab36d-428e-4005-b6f8-1ff99d9d1fef" || process.env[`REACT_APP_${userType}_TOKEN`];
 
   // console.log(token);
  
@@ -50,7 +50,56 @@ const initTokens = (stateCode) => {
  
   const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stateCode;
 
-  const employeeInfo = window.localStorage.getItem("Employee.user-info")
+  const employeeInfo = {
+    "id": 12074,
+    "uuid": "d0710c4c-728a-446d-bc7e-d4614efe1463",
+    "userName": "QAADMIN",
+    "name": "FSM Admin",
+    "mobileNumber": "9966999999",
+    "emailId": null,
+    "locale": null,
+    "type": "EMPLOYEE",
+    "roles": [
+        {
+            "name": "FSM Employee Application Viewer",
+            "code": "FSM_VIEW_EMP",
+            "tenantId": "pb.amritsar"
+        },
+        {
+            "name": "FSM Administrator",
+            "code": "FSM_ADMIN",
+            "tenantId": "pb.amritsar"
+        },
+        {
+            "name": "Employee",
+            "code": "EMPLOYEE",
+            "tenantId": "pb.amritsar"
+        },
+        {
+            "name": "FSM Employee Report Viewer",
+            "code": "FSM_REPORT_VIEWER",
+            "tenantId": "pb.amritsar"
+        },
+        {
+            "name": "State Administrator",
+            "code": "STADMIN",
+            "tenantId": "pb.amritsar"
+        },
+        {
+            "name": null,
+            "code": "EMPLOYEE ADMIN",
+            "tenantId": "pb.amritsar"
+        },
+        {
+            "name": "FSM Employee Dashboard Viewer",
+            "code": "FSM_DASHBOARD_VIEWER",
+            "tenantId": "pb.amritsar"
+        }
+    ],
+    "active": true,
+    "tenantId": "pb.amritsar",
+    "permanentCity": null
+}
   const employeeTenantId = window.localStorage.getItem("Employee.tenant-id");
 
   const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";

@@ -34,7 +34,7 @@ const Layout = ({ rowData }) => {
             layout="vertical"
             yDataKey="name"
             xDataKey=""
-            showDrillDown={true}
+            showDrillDown={false}
             title={title}
           />
         );
