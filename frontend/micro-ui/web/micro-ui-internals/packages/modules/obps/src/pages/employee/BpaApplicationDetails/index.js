@@ -370,6 +370,9 @@ const BpaApplicationDetail = () => {
     });
   }
 
+  if (workflowDetails?.data?.nextActions?.length > 0) {
+    workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "SKIP_PAYMENT");
+  };
 
   return (
     <Fragment>

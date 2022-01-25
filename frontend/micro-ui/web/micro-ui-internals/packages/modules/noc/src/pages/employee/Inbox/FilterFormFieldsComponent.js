@@ -2,6 +2,7 @@ import React, { Fragment, useMemo } from "react"
 import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown, CheckBox } from "@egovernments/digit-ui-react-components";
 import { Controller, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { businessServiceList } from "../../../utils";
 
 const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue, applicationTypesOfBPA, loadingApplicationTypesOfBPA,  localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}) => {
   const { t } = useTranslation()
@@ -10,28 +11,6 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     { code: "ASSIGNED_TO_ME", name: `${t("ES_INBOX_ASSIGNED_TO_ME")}` },
     { code: "ASSIGNED_TO_ALL", name: `${t("ES_INBOX_ASSIGNED_TO_ALL")}` },
   ];
-
-  const availableBusinessServices = [{
-    code: "FIRE_NOC_SRV",
-    active: true,
-    roles: ["FIRE_NOC_APPROVER"],
-    i18nKey: "WF_FIRE_NOC_FIRE_NOC_SRV",
-  }, {
-    code: "AIRPORT_NOC_SRV",
-    active: true,
-    roles: ["AIRPORT_AUTHORITY_APPROVER"],
-    i18nKey: "WF_FIRE_NOC_AIRPORT_NOC_SRV"
-  }];
- 
-  const newAvailableBusinessServices = []; //passing this as options in filterformfield
-  const loggedInUserRoles = Digit.UserService.getUser().info.roles;
-  availableBusinessServices.map(({roles},index) => {
-    roles.map((role) => {
-      loggedInUserRoles.map((el) => {
-        if(el.code === role) newAvailableBusinessServices.push(availableBusinessServices[index])
-      })
-    })
-  })
 
   applicationTypesOfBPA?.forEach(type => {
     type.name = t(`WF_BPA_${type.code}`);
@@ -70,7 +49,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
                 }}
                   selectedOption={props.value}
                   optionsKey="i18nKey"
-                  options={newAvailableBusinessServices}
+                  options={businessServiceList() || []}
                 />  
               </>
           }}

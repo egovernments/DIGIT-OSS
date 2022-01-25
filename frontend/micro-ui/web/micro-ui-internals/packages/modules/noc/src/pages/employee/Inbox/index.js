@@ -5,6 +5,7 @@ import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
 import useInboxTableConfig from "./useInboxTableConfig";
 import useInboxMobileCardsData from "./useInboxMobileCardsData";
+import { businessServiceList } from "../../../utils";
 
 const Inbox = ({parentRoute}) => {
     
@@ -17,34 +18,13 @@ const Inbox = ({parentRoute}) => {
       // applicationNumber
     }
 
-    const availableBusinessServices = [{
-    code: "FIRE_NOC_SRV",
-    active: true,
-    roles: ["FIRE_NOC_APPROVER"],
-    i18nKey: "WF_FIRE_NOC_FIRE_NOC_SRV",
-  }, {
-    code: "AIRPORT_NOC_SRV",
-    active: true,
-    roles: ["AIRPORT_AUTHORITY_APPROVER"],
-    i18nKey: "WF_FIRE_NOC_AIRPORT_NOC_SRV"
-  }];
-    const loggedInUserRoles = Digit.UserService.getUser().info.roles;
-    const filterArray = [];
-    availableBusinessServices.map(({roles},index) => {
-      roles.map((role) =>{
-         loggedInUserRoles.map((el) => {
-        if(el.code === role) filterArray.push(availableBusinessServices[index].code)
-      })
-      })
-    });
-
     const filterFormDefaultValues = {
       moduleName: "noc-services",
       applicationStatus: [],
       businessService: null,
       locality: [],
       assignee: "ASSIGNED_TO_ALL",
-      businessServiceArray: filterArray
+      businessServiceArray: businessServiceList(true) || []
     }
     const tableOrderFormDefaultValues = {
       sortBy: "",

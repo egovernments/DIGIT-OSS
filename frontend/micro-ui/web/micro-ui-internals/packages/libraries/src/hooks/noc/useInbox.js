@@ -10,7 +10,7 @@ const useNOCInbox = ({ tenantId, filters, config={} }) => {
         tenantId,
         processSearchCriteria: {
           moduleName: "noc-services", 
-          businessService: businessService ? [businessService.code] : businessServiceArray ,
+          businessService: businessService?.code ? [businessService?.code] : businessServiceArray ,
           ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
         moduleSearchCriteria: {
