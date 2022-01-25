@@ -1,5 +1,4 @@
 import React from "react";
-
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -23,9 +22,16 @@ class ErrorBoundary extends React.Component {
       console.error("UI-errorInfo", this.state?.errorStack);
       console.error("UI-component-details", this.props);
       // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>;
+      return (
+        <div className="error-boundary">
+          <summary>Something went wrong</summary>
+          <details style={{ whiteSpace: "pre-wrap" }}>
+            {this.state?.errorStack && this.state.errorStack.toString().substring(0, 600)}
+            {this.state?.error}
+          </details>
+        </div>
+      );
     }
-
     return this.props.children;
   }
 }
