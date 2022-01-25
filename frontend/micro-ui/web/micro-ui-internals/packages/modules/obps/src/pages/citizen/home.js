@@ -53,11 +53,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
       },
       filterForm: {
         moduleName: "bpa-services",
-        businessService: [
-          { code: "BPA_LOW", name: t("BPA_LOW") },
-          { code: "BPA", name: t("BPA") },
-          { code: "BPA_OC", name: t("BPA_OC") },
-        ],
+        businessService: [],
         applicationStatus: searchParams?.applicationStatus,
         locality: [],
         assignee: "ASSIGNED_TO_ALL",
