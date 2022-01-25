@@ -544,7 +544,7 @@ const BpaApplicationDetail = () => {
                       onChange={() => { setIsTocAccepted(!isTocAccepted); isTocAccepted ? setDisplayMenu(!isTocAccepted) : "" }}
                     />
                   )}
-                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
+                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 1 && (
                     <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}>
                       <div style={{ width: "100%" }}>
                         {displayMenu && workflowDetails?.data?.nextActions ? (
@@ -557,6 +557,21 @@ const BpaApplicationDetail = () => {
                           />
                         ) : null}
                         <SubmitBar style={{ width: "100%" }} disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+                      </div>
+                    </ActionBar>
+                  )}
+                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length == 1 && (
+                    <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}>
+                      <div style={{ width: "100%" }}>
+                        <button 
+                        style={{ width: "100%", color: "#FFFFFF", fontSize: "19px" }}
+                        className={`${checkForSubmitDisable(isFromSendBack, isTocAccepted) ? "submit-bar-disabled" : "submit-bar"}`}
+                        disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} 
+                        name={workflowDetails?.data?.nextActions?.[0]?.action} 
+                        value={workflowDetails?.data?.nextActions?.[0]?.action}
+                        onClick={(e) => {onActionSelect(e.target.value)}}>
+                        {t(`WF_BPA_${workflowDetails?.data?.nextActions?.[0]?.action}`)}
+                        </button>
                       </div>
                     </ActionBar>
                   )}
