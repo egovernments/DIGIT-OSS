@@ -94,19 +94,22 @@ const tableHeader = [
     }
 ]
 const selectOccupancy = (e, data,num) => {
-  let blocks = subOccupancyObject;
-  const index = subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`].filter((ele) => ele.code == data.code):[];
-  let subOccupancy1=subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`]:[];
-    let res = null;
-    if (index.length) {
-      subOccupancy1.splice(subOccupancy1.indexOf(index[0]), 1);
-      res = [...subOccupancy1];
-    } else {
-      res = [{ ...data }, ...subOccupancy1];
-    }
-    blocks[`Block_${num}`]=res;
-    setsubOccupancy(res);
-    setsubOccupancyObject(blocks);
+  debugger
+  Array.isArray(data) && data?.map( __data => {
+    let blocks = subOccupancyObject;
+    const index = subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`].filter((ele) => ele.code == __data?.code):[];
+    let subOccupancy1=subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`]:[];
+      let res = null;
+      if (index.length) {
+        subOccupancy1.splice(subOccupancy1.indexOf(index[0]), 1);
+        res = [...subOccupancy1];
+      } else {
+        res = [{ ...__data }, ...subOccupancy1];
+      }
+      blocks[`Block_${num}`]=res;
+      setsubOccupancy(res);
+      setsubOccupancyObject(blocks);
+  })
 };
 
 const onRemove = (index, key,num) => {

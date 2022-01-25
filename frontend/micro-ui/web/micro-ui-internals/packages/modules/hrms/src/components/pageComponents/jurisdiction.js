@@ -184,17 +184,19 @@ function Jurisdiction({
   };
 
   const selectrole = (e, data) => {
-    const index = jurisdiction?.roles.filter((ele) => ele.code == data.code);
-    let res = null;
-    if (index.length) {
-      jurisdiction?.roles.splice(jurisdiction?.roles.indexOf(index[0]), 1);
-      res = jurisdiction.roles;
-    } else {
-      res = [{ ...data }, ...jurisdiction?.roles];
-    }
+    data?.map( __data => {
+      const index = jurisdiction?.roles.filter((ele) => ele.code == __data?.code);
+      let res = null;
+      if (index.length) {
+        jurisdiction?.roles.splice(jurisdiction?.roles.indexOf(index[0]), 1);
+        res = jurisdiction.roles;
+      } else {
+        res = [{ ...__data }, ...jurisdiction?.roles];
+      }
 
-    // if (checked) selectULB(data.code);
-    setjurisdictions((pre) => pre.map((item) => (item.key === jurisdiction.key ? { ...item, roles: res } : item)));
+      // if (checked) selectULB(data.code);
+      setjurisdictions((pre) => pre.map((item) => (item.key === jurisdiction.key ? { ...item, roles: res } : item)));
+    })
   };
 
 
