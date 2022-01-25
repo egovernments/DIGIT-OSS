@@ -51,7 +51,11 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
     filters:
       id === chartKey ? value?.filters : { [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
   });
-
+useEffect(()=>{
+  const { id } = data;
+  setChartKey(id);
+   setFilterStack([{ id: id }]);
+},[data])
   const tableData = useMemo(() => {
     if (!response || !lastYearResponse) return;
     return response?.responseData?.data?.map((rows, id) => {

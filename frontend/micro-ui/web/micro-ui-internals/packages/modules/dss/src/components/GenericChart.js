@@ -6,13 +6,11 @@ const SearchImg = () => {
   return <SearchIconSvg className="signature-img" />;
 };
 
-const GenericChart = ({ header, subHeader, className, caption, children, showHeader = true, showSearch = false, showDownload = false, onChange }) => {
+const GenericChart = ({ header, subHeader, className, caption, children, showHeader = true, showSearch = false, showDownload = false, onChange ,chip=[],updateChip}) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [chartData, setChartData] = useState(null);
-
   const chart = useRef();
-
   const menuItems = [
     {
       code: "image",
@@ -44,6 +42,8 @@ const GenericChart = ({ header, subHeader, className, caption, children, showHea
           return Digit.ShareFiles.PDF(tenantId, chart, t(header), data.target);
         case "shareImage":
           return Digit.ShareFiles.Image(tenantId, chart, t(header), data.target);
+        default:
+          return null;
       }
     }, 500);
   }
@@ -60,6 +60,7 @@ const GenericChart = ({ header, subHeader, className, caption, children, showHea
           {subHeader && <p style={{ color: "#505A5F", fontWeight: 700 }}>{subHeader}</p>}
         </div>
         <div className="sideContent">
+          {chip&&chip.length>1&&<Chip items={chip} onClick={updateChip} t={t} />}
           {showSearch && <TextInput className="searchInput" placeholder="Search" signature={true} signatureImg={<SearchImg />} onChange={onChange} />}
           {showDownload && <DownloadIcon className="mrlg cursorPointer" onClick={handleExcelDownload} />}
           <EllipsisMenu menuItems={menuItems} displayKey="i18nKey" onSelect={(data) => download(data)} />
@@ -72,3 +73,14 @@ const GenericChart = ({ header, subHeader, className, caption, children, showHea
 };
 
 export default GenericChart;
+
+const Chip = (props)=>{
+  const [state,setState]=useState(1);
+  return(<div className="table-switch-card-chip">
+    {props.items.map((item,index)=> {
+    return <div className={item.active&&state?"table-switch-card-active":"table-switch-card-inactive"} onClick={()=>{
+      props.onClick&&props.onClick(item.index);
+      setState(prev=>prev+1);
+    }}>{props.t(`DSS_TAB_${item?.tabName?.toUpperCase()}`)}</div>} )}
+  </div>)
+}
