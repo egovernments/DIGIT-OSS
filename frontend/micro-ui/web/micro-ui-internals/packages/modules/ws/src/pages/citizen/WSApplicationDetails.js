@@ -9,24 +9,20 @@ const WSApplicationDetails = () => {
   const { applicationNumber } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const user = Digit.UserService.getUser();
-  //const { acknowledgementIds } = useParams();
+
   let filters = func.getQueryStringParams(location.search);
-const { isLoading, isError, error, data } = Digit.Hooks.ws.useWnsMyApplication({ filters: filters }, { filters: filters });
-if (isLoading) {
-  return <Loader />;
-}
+  const { isLoading, isError, error, data } = Digit.Hooks.ws.useWnsMyApplication({ filters: filters }, { filters: filters });
+  if (isLoading) {
+    return <Loader />;
+  }
 
-
-//console.log("Dataaaaaaaaaaaaaa", data)
-const { WaterConnection: applicationsList } = data || {};
-console.log("ApplicationListttttttt",applicationsList);
-
+  const { WaterConnection: applicationsList } = data || {};
   const application = applicationsList[0];
-  console.log("Applicationnnnnnn", application)
+
   return (
     <React.Fragment>
       <Header>{t("Application Details")}</Header>
-      <div className='hide-seperator'>
+      <div className="hide-seperator">
         <Card>
           <StatusTable>
             <Row label={t("WS_MYCONNECTIONS_APPLICATION_NO")} text={application?.applicationNo} textStyle={{ whiteSpace: "pre" }} />
@@ -40,9 +36,9 @@ console.log("ApplicationListttttttt",applicationsList);
             {/* <Row label={t("One time Fee")} text={"₹ 16500.00"} textStyle={{textAlign: "right" }} />
             <Row label={t("Security Charge")} text={"₹ 500.00"} textStyle={{textAlign: "right" }} />
             <Row label={t("Meter Charge")} text={"₹ 2000.00"} textStyle={{textAlign: "right" }} /> */}
-            <Row label={t("Tax")} text={" ₹ 200.00"} textStyle={{textAlign: "right" }} />
-            <Row label={t("WS_COMMON_TOTAL_AMT")} text={"₹ 15000.00"} textStyle={{textAlign: "right" }} />
-            <Row label={t("Status")} text={application?.status} textStyle={{textAlign: "right" }} />
+            <Row label={t("Tax")} text={" ₹ 200.00"} textStyle={{ textAlign: "right" }} />
+            <Row label={t("WS_COMMON_TOTAL_AMT")} text={"₹ 15000.00"} textStyle={{ textAlign: "right" }} />
+            <Row label={t("Status")} text={application?.status} textStyle={{ textAlign: "right" }} />
           </StatusTable>
         </Card>
         <Card>
@@ -50,7 +46,7 @@ console.log("ApplicationListttttttt",applicationsList);
           <StatusTable>
             <Row label={t("WS_PROPERTY_ID_LABEL")} text={application?.propertyId} textStyle={{ whiteSpace: "pre" }} />
             <Row label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={application?.connectionHolders[0].name} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("WS_OWN_DETAIL_CROSADD")} text={application?.connectionHolders[0].correspondenceAddress} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={"Property Address"} text={application?.connectionHolders[0].permanentAddress} textStyle={{ whiteSpace: "pre" }} />
             {/* <Row label={t("Tax")} text={" ₹ 200.00"} textStyle={{ whiteSpace: "pre" }} />
             <Row label={t("WS_COMMON_TOTAL_AMT")} text={" ₹ 15000.00"} textStyle={{ whiteSpace: "pre" }} />
             <Row label={t("Status")} text={application?.status} textStyle={{ whiteSpace: "pre" }} /> */}
@@ -62,9 +58,17 @@ console.log("ApplicationListttttttt",applicationsList);
             <Row label={t("WS_OWN_DETAIL_MOBILE_NO_LABEL")} text={application?.connectionHolders[0].mobileNumber} textStyle={{ whiteSpace: "pre" }} />
             <Row label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={application?.connectionHolders[0].name} textStyle={{ whiteSpace: "pre" }} />
             <Row label={t("WS_OWN_DETAIL_GENDER_LABEL")} text={application?.connectionHolders[0].gender} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME")} text={application?.connectionHolders[0].fatherOrHusbandName} textStyle={{ whiteSpace: "pre" }} />
+            <Row
+              label={t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME")}
+              text={application?.connectionHolders[0].fatherOrHusbandName}
+              textStyle={{ whiteSpace: "pre" }}
+            />
             <Row label={t("WS_OWN_DETAIL_RELATION_LABEL")} text={application?.connectionHolders[0].relationship} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("WS_OWN_DETAIL_CROSADD")} text={application?.connectionHolders[0].correspondenceAddress} textStyle={{ whiteSpace: "pre" }} />
+            <Row
+              label={t("WS_OWN_DETAIL_CROSADD")}
+              text={application?.connectionHolders[0].correspondenceAddress}
+              textStyle={{ whiteSpace: "pre" }}
+            />
             <Row label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={application?.documents} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
         </Card>
@@ -75,12 +79,10 @@ console.log("ApplicationListttttttt",applicationsList);
             <Row label={t("Number of Toilets")} text={"2"} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
         </Card>
+        <Card>{/* <PropertyDocument property={application}></PropertyDocument> */}</Card>
         <Card>
-        {/* <PropertyDocument property={application}></PropertyDocument> */}
-        </Card>
-        <Card>
-        {/* <PTWFApplicationTimeline application={application} id={acknowledgementIds} /> */}
-        {/* <WSWFApplicationTimeline />
+          {/* <PTWFApplicationTimeline application={application} id={acknowledgementIds} /> */}
+          {/* <WSWFApplicationTimeline />
         <h1>Hello</h1> */}
         </Card>
       </div>
