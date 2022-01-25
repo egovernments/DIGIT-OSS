@@ -182,6 +182,14 @@ export const Search = {
       },
     ];
 
+    if (userType !== "CITIZEN" && userType !== "DSO") {
+      employeeResponse.map((data) => {
+        if (data.title === "ES_TITLE_APPLICANT_DETAILS" || data.title === "Applicant Details") {
+          data.values.push({ title: "COMMON_APPLICANT_GENDER", value: response?.citizen?.gender })
+        }
+      })
+    }
+
     if (userType !== "CITIZEN")
       return {
         tenantId: response.tenantId,

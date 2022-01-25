@@ -43,7 +43,7 @@ const ApplicationDetails = (props) => {
   const [showToast, setShowToast] = useState(null);
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
 
-  const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber);
+  const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber, {}, props.userType);
   const { isLoading: isDataLoading, isSuccess, data: applicationData } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: applicationNumber },

@@ -6,6 +6,7 @@ import FSMCard from "./components/FsmCard";
 import CheckSlum from "./pageComponents/CheckSlum";
 import SelectAddress from "./pageComponents/SelectAddress";
 import SelectChannel from "./pageComponents/SelectChannel";
+import SelectGender from "./pageComponents/SelectGender";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectLandmark from "./pageComponents/SelectLandmark";
 import SelectName from "./pageComponents/SelectName";
@@ -148,6 +149,7 @@ const componentsToRegister = {
   SelectChannel,
   SelectName,
   SelectTripData,
+  SelectGender,
   FSMEmpInbox: Inbox,
   FSMFstpInbox: FstpInbox,
   FSMNewApplicationEmp: NewApplication,
