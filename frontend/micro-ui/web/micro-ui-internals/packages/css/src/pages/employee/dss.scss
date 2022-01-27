@@ -1,0 +1,46 @@
+.dss-switch-tabs{/* Card / Primary */
+
+
+/* Light Theme / Paper */
+
+background: #FFFFFF;
+/* Card-Shadow */
+
+box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.16);
+border-radius: 4px;
+margin-bottom:3%;
+margin-right:3%;
+}
+.dss-switch-tab-wrapper{
+    cursor:pointer;
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    align-items: center;
+}
+.dss-switch-tab-selected{
+  /* Revenue */
+  padding: 10px;
+  border-bottom:3px solid #F47738;
+
+font-family: Roboto;
+font-style: normal;
+font-weight: bold;
+font-size: 24px;
+
+color: #F47738;
+
+}
+.dss-switch-tab-unselected{
+
+    padding: 10px;
+
+/* Desktop / Caption M */
+
+font-family: Roboto;
+font-style: normal;
+font-weight: normal;
+font-size: 19px;
+
+color: #505A5F;
+}

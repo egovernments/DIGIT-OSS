@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef } from "react";
+import React, { useMemo, useState, useRef ,useEffect} from "react";
 import { useTranslation } from "react-i18next";
 import {
   Header,
@@ -59,6 +59,7 @@ const DashBoard = ({ stateCode }) => {
     }
   });
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
   const { moduleCode } = useParams();
 
   const language = Digit.StoreData.getCurrentLanguage();
@@ -69,6 +70,7 @@ const DashBoard = ({ stateCode }) => {
   const { data: ulbTenants, isLoading: isUlbLoading } = Digit.Hooks.useModuleTenants("FSM");
   const { isLoading: isMdmsLoading, data: mdmsData } = Digit.Hooks.useCommonMDMS(stateCode, "FSM", "FSTPPlantInfo");
   const [showOptions, setShowOptions] = useState(false);
+  const [tabState,setTabState]=useState("");
 
   const handleFilters = (data) => {
     Digit.SessionStorage.set(key, data);
@@ -95,6 +97,18 @@ const DashBoard = ({ stateCode }) => {
   };
 
   const dashboardConfig = response?.responseData;
+   let tabArrayObj= dashboardConfig?.[0]?.visualizations?.reduce((curr,acc)=>{
+    curr[acc.name]=0;
+    return {...curr}
+    },{})|| {};
+    let tabArray=Object.keys(tabArrayObj).map(key=>key);
+
+  useEffect(()=>{
+
+    if(tabArray.length>0&&tabState==""){
+      setTabState(tabArray[0]);
+    }
+  },[tabArray])
 
   const shareOptions = navigator.share
     ? [
@@ -164,6 +178,8 @@ const DashBoard = ({ stateCode }) => {
     return <Loader />;
   }
 
+
+
   return (
     <FilterContext.Provider value={provided}>
       <div ref={fullPageRef}>
@@ -218,7 +234,16 @@ const DashBoard = ({ stateCode }) => {
             {t(`ES_DSS_DOWNLOAD`)}
           </div>
         </div>
-        {dashboardConfig?.[0]?.visualizations.map((row, key) => {
+        <div>
+        <div className="dss-switch-tabs chart-row" >
+            <div className="dss-switch-tab-wrapper">
+              {tabArray?.map(key=>( 
+                <div className={tabState==key?"dss-switch-tab-selected":"dss-switch-tab-unselected"}onClick={()=>setTabState(key)}>{t(key)}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+        {dashboardConfig?.[0]?.visualizations.filter(row=>row.name==tabState).map((row, key) => {
           return <Layout rowData={row} key={key} />;
         })}
       </div>

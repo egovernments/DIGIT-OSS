@@ -134,7 +134,7 @@ const DateRange = ({ values, onFilterChange, t }) => {
     if (isEndDateFocused(focusedRange[1])) {
       setSelectionRange({ title, duration, startDate, endDate: addSeconds(addMinutes(addHours(endDate, 23), 59), 59) });
       setIsModalOpen(false);
-    }
+    }/* fix for 5207 */
   };
 
   const handleFocusChange = (focusedRange) => {
