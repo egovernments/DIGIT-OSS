@@ -105,11 +105,14 @@ const fontStyle = {
   fontWeight: "500",
   color: "rgba(0, 0, 0, 0.87)",
   fontFamily: "Roboto",
-  width:150,
-  overflow: "hidden", 
-  whiteSpace: "nowrap",
-  textOverflow: "ellipsis",
+  // width:150,
+  // overflow: "hidden", 
+  // whiteSpace: "nowrap",
+  // textOverflow: "ellipsis",
   marginLeft:"7px",
+  wordBreak: "break-word",
+  width: "90%",
+  marginRight: "7px"
 };
 
 const titleStyle = {
