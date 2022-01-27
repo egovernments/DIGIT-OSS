@@ -183,7 +183,7 @@ const Table = ({
               {"-"}
               {manualPagination ?
                 (currentPage + 1) * pageSizeLimit > totalRecords ? totalRecords : (currentPage + 1) * pageSizeLimit :
-                (pageIndex + 1) * pageSizeLimit > rows.length ? rows.length : (pageIndex + 1) * pageSizeLimit
+                (pageIndex + 1) * pageSize > rows.length ? rows.length : (pageIndex + 1) * pageSizeLimit
               }{" "}
               {/* {(pageIndex + 1) * pageSizeLimit > rows.length ? rows.length : (pageIndex + 1) * pageSizeLimit}{" "} */}
               {totalRecords ? `of ${manualPagination ? totalRecords : rows.length}` : ""}
