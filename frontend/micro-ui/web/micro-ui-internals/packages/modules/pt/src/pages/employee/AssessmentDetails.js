@@ -63,16 +63,8 @@ const AssessmentDetails = () => {
         value: propertyId,  
       },
       {
-        title: "Property Address",
-        value: "Amristar",
-      },
-      {
         title: "ES_PT_TITLE_BILLING_PERIOD",
         value: location?.state?.Assessment?.financialYear,
-      },
-      {
-        title:"Billing Due Date",
-        value:date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear(),
       },
     ],
     additionalDetails: {
@@ -147,8 +139,6 @@ const CloseBtn = (props) => {
 };
 
 function change(){
-  var existing_penality=0;
-  var existing_rebate=0;
   var total_amount=ptCalculationEstimateData?.Calculation[0]?.totalAmount
   const [first,second]=[parseInt(first_temp.current.value),parseInt(second_temp.current.value)];
     if((selectedPenalityReason && first>0)&&(!selectedRebateReason)){
@@ -268,7 +258,7 @@ const Penality_menu=[
   const selectRebateReason=(reason)=>{
     setSelectedRebateReason(reason);
   }
-const Add_Rebate_Penality=()=>{
+const RebatePenalityPoPup=()=>{
   return (
     <Modal
           headerBarMain={<Heading label="Add Rebate/Penality"/>}
@@ -350,7 +340,6 @@ const Add_Rebate_Penality=()=>{
                   title: "PT_PROPERTY_PTUID",
                   value: propertyId,  
                 },
-                // changed from here
                 {
                   title: "PT_Address",
                   value: address_to_display,
@@ -377,9 +366,8 @@ const Add_Rebate_Penality=()=>{
                 return (
                   <div style={{marginTop:"19px"}}>
                   <CardSubHeader style={{marginBottom:"8px",color:"rgb(80,90,95)",fontSize:"24px"}}>
-                  {t("Calculation Details")}
-                    <CardSectionHeader style={{marginBottom:"16px",color:"rgb(80,90,95)",fontSize:"16px",marginTop:"revert"}}>{t("Calculation_Logic")}
-                    <br/>
+                  {t("Calc_Details")}
+                    <CardSectionHeader style={{marginBottom:"16px",color:"rgb(80,90,95)",fontSize:"16px",marginTop:"revert"}}>{t("Calc_Logic_Header")}
                     {t("Calc_logic")}
                     </CardSectionHeader>
                   </CardSubHeader>
@@ -416,7 +404,7 @@ const Add_Rebate_Penality=()=>{
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
         showTimeline={false}
       />
-      {popup && (<Add_Rebate_Penality/>)}
+      {popup && (<RebatePenalityPoPup/>)}
       {!queryClient.getQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear]) ? (
         <ActionBar>
           <SubmitBar label={t("PT_ASSESS_PROPERTY_BUTTON")} onSubmit={handleAssessment} />
