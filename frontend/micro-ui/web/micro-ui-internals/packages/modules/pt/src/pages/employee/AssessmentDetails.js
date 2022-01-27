@@ -27,7 +27,8 @@ const AssessmentDetails = () => {
 
   const first_temp=useRef();
   const second_temp=useRef();
-  
+  const third_temp=useRef();
+  const fourth_temp=useRef();
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, propertyId);
   const { isLoading: assessmentLoading, mutate: assessmentMutate } = Digit.Hooks.pt.usePropertyAssessment(tenantId);
@@ -142,74 +143,82 @@ function change(){
   var total_amount=ptCalculationEstimateData?.Calculation[0]?.totalAmount
   const [first,second]=[parseInt(first_temp.current.value),parseInt(second_temp.current.value)];
     if((selectedPenalityReason && first>0)&&(!selectedRebateReason)){
-      if(first<total_amount){
-        var additionalPenality=first;
-        ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]={
-          "taxHeadCode": "PT_TIME_PENALTY",
-          "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]?.estimateAmount+first,
-          "category": "TAX"
+      if(selectPenalityReason.value!=='Others'){
+        if(first<total_amount){
+          var additionalPenality=first;
+          ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]={
+            "taxHeadCode": "PT_TIME_PENALTY",
+            "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]?.estimateAmount+first,
+            "category": "TAX"
+        }
+        AssessmentData.additionalDetails={
+          "adhocPenalty":additionalPenality,
+          "adhocPenaltyReason":selectedPenalityReason.value,
+        }
+        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+first;
+           }
+           else{
+             alert("Penality cannot exceed total amount");
+           }
       }
-      AssessmentData.additionalDetails={
-        "adhocPenalty":additionalPenality,
-        "adhocPenaltyReason":selectedPenalityReason.value,
+      else{
+        if(first<total_amount){
+          var additionalPenality=first;
+          ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]={
+            "taxHeadCode": "PT_TIME_PENALTY",
+            "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]?.estimateAmount+first,
+            "category": "TAX"
+        }
+        AssessmentData.additionalDetails={
+          "adhocPenalty":additionalPenality,
+          "adhocPenaltyReason":fourth_temp.current.value,
+        }
+        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+first;
+           }
+           else{
+             alert("Penality cannot exceed total amount");
+           }
       }
-      ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+first;
-         }
-         else{
-           alert("Penality cannot exceed total amount");
-         }
     } 
 
   else if((selectedRebateReason && second) && (!selectedPenalityReason)){
-    if(second>0){
-      if(second<total_amount){
-        ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
-          "taxHeadCode": "PT_TIME_REBATE",
-          "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount+second,
-          "category": "TAX"
+    if(selectedRebateReason.value!=="Others"){
+      if(second>0){
+        if(second<total_amount){
+          ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
+            "taxHeadCode": "PT_TIME_REBATE",
+            "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount+second,
+            "category": "TAX"
+        }
+        AssessmentData.additionalDetails={
+          "adhocExemption":second,
+          "adhocExemptionReason":selectedRebateReason.value,
+        }
+        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+second;
+           }
+           else{
+             alert( "Adhoc Exemption cannot be greater than the estimated tax for the given property");
+           }
       }
-      AssessmentData.additionalDetails={
-        "adhocExemption":second,
-        "adhocExemptionReason":selectedRebateReason.value,
-      }
-      ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+second;
-         }
-         else{
-           alert( "Adhoc Exemption cannot be greater than the estimated tax for the given property");
-         }
     }
-
-
-  }
-  else if((selectedPenalityReason && first>0)&&(selectedRebateReason && second>0)){
-      if(first<total_amount){
-        ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]={
-          "taxHeadCode": "PT_TIME_PENALTY",
-          "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]?.estimateAmount+first,
-          "category": "TAX"
+    else{
+      if(second>0){
+        if(second<total_amount){
+          ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
+            "taxHeadCode": "PT_TIME_REBATE",
+            "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount+second,
+            "category": "TAX"
+        }
+        AssessmentData.additionalDetails={
+          "adhocExemption":second,
+          "adhocExemptionReason":third_temp.current.value,
+        }
+        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+second;
+           }
+           else{
+             alert( "Adhoc Exemption cannot be greater than the estimated tax for the given property");
+           }
       }
-      ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+first;
-
-         }
-         else{
-           alert("Penality cannot exceed total amount");
-         }
-      if(second<total_amount){
-        ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
-          "taxHeadCode": "PT_TIME_REBATE",
-          "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount+second,
-          "category": "TAX"
-      }
-      ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+first;
-         }
-         else{
-           alert("Adhoc Exemption cannot be greater than the estimated tax for the given property");
-         }
-    AssessmentData.additionalDetails={
-      "adhocPenalty":first,
-      "adhocPenaltyReason":selectedPenalityReason.value,
-      "adhocExemption":second,
-      "adhocExemptionReason":selectedRebateReason.value,
     }
   }
   setSelectedPenalityReason(null);
@@ -288,7 +297,15 @@ const RebatePenalityPoPup=()=>{
                  />
                 </div>
               </div>
-            </div>      
+            </div>  
+            {selectedPenalityReason && selectedPenalityReason.value==="Others" && <div className="field">
+            <CardLabel>{t("Enter_Reason")}</CardLabel>
+              <div className="field-container">
+                <div className="text-input field">
+                <input type="type" className="employee-card-input false focus-visible undefined" ref={fourth_temp}/>
+                </div>
+              </div>
+            </div>}        
             <CardLabel>{t("Head_Amount")}</CardLabel>
             <div className="field">
               <div className="field-container">
@@ -313,7 +330,15 @@ const RebatePenalityPoPup=()=>{
                  />
                 </div>
               </div>
-            </div>    
+            </div>
+            {selectedRebateReason && selectedRebateReason.value==="Others" && <div className="field">
+            <CardLabel>{t("Enter_Reason")}</CardLabel>
+              <div className="field-container">
+                <div className="text-input field">
+                <input type="type" className="employee-card-input false focus-visible undefined" ref={third_temp}/>
+                </div>
+              </div>
+            </div>}    
             <CardLabel>{t("Head_Amount")}</CardLabel>
             <div className="field">
               <div className="field-container">
