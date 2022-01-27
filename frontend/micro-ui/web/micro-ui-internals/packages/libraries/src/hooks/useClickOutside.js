@@ -3,12 +3,12 @@ import { useEffect } from "react";
 const useOnClickOutside = (ref, handler, isActive) => {
   useEffect(() => {
     if (isActive) {
-      document.addEventListener("click", handleClickOutSide, false);
+      document.addEventListener("click", handleClickOutSide, { capture: true });
     } else {
-      document.removeEventListener("click", handleClickOutSide, false);
+      document.removeEventListener("click", handleClickOutSide,  { capture: true });
     }
     return () => {
-      document.removeEventListener("click", handleClickOutSide, false);
+      document.removeEventListener("click", handleClickOutSide,  { capture: true });
     };
   }, [isActive]);
 

@@ -41,7 +41,9 @@ const CitizenOtp = (props) => {
         const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
         
         if (location.state?.redirectBackTo) {
-          history.replace(location.state?.redirectBackTo);
+          history.replace(location.state?.redirectBackTo, {
+            data: location.state?.redirectData
+          });
         } else {
           history.replace('digit-ui/citizen/');
         }

@@ -30,7 +30,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  const { address, propertyType, subtype, pitType, pitDetail } = value;
+  const { address, propertyType, subtype, pitType, pitDetail, selectGender } = value;
 
   const pitDetailValues = pitDetail ? Object.values(pitDetail).filter((value) => !!value) : null;
 
@@ -48,6 +48,11 @@ const CheckPage = ({ onSubmit, value }) => {
       <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
       <CardSubHeader>{t("CS_CHECK_PROPERTY_DETAILS")}</CardSubHeader>
       <StatusTable>
+        {selectGender && <Row
+          label={t("Gender Type")}
+          text={t(selectGender.i18nKey)}
+          actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-gender" />}
+        />}
         <Row
           label={t("CS_CHECK_PROPERTY_TYPE")}
           text={t(propertyType.i18nKey)}

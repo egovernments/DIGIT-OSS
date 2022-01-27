@@ -73,7 +73,13 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     "PitType",
     { staleTime: Infinity }
   );
-
+  
+  const { data: Reason, isLoading: isReasonLoading } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "Reason", { staleTime: Infinity }, [
+    "ReassignReason",
+    "RejectionReason",
+    "DeclineReason",
+    "CancelReason",
+  ]);
 
   const [dsoList, setDsoList] = useState([]);
   const [vehicleNoList, setVehicleNoList] = useState([]);
@@ -86,13 +92,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     capacity: vehicle?.capacity,
     wasteCollected: vehicle?.capacity,
   });
-  const { data: Reason, isLoading: isReasonLoading } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "Reason", { staleTime: Infinity }, [
-    "ReassignReason",
-    "RejectionReason",
-    "DeclineReason",
-    "CancelReason",
-  ]);
-
   const [reassignReason, selectReassignReason] = useState(null);
   const [rejectionReason, setRejectionReason] = useState(null);
   const [declineReason, setDeclineReason] = useState(null);
@@ -105,7 +104,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [propertySubType, setPropertySubType] = useState(null);
   const [pitType, setPitType] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  const [uploadedImagesIds, setUploadedImagesIds] = useState();
+  const [fileStoreId, setFileStoreId] = useState();
+  const [pitDetail, setPitDetail] = useState();
 
   useEffect(() => {
     if (isSuccess && isVehicleDataLoaded) {
@@ -114,7 +114,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       setVehicle(vehicle);
       setDefautValue({
         capacity: applicationData?.vehicleCapacity,
-        wasteCollected: vehicle?.capacity,
+        wasteCollected: applicationData?.vehicleCapacity,
       });
     }
   }, [isVehicleDataLoaded, isSuccess]);
@@ -138,6 +138,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (isSuccess && isPitDataLoaded) {
       const [pitType] = pitList.filter((item) => item.code === applicationData.sanitationtype);
       setPitType(pitType);
+      setPitDetail(applicationData.pitDetail)
     }
   }, [isPitDataLoaded, isSuccess]);
 
@@ -201,9 +202,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }
 
   const handleUpload = (ids) => {
-    setUploadedImagesIds(ids);
-    console.log("idu", uploadedImagesIds)
-    console.log("id", ids)
+    if (!fileStoreId || fileStoreId.length < 4) {
+      setFileStoreId(ids);
+    } else {
+      console.log("disabled")
+    }
     // Digit.SessionStorage.set("PGR_CREATE_IMAGES", ids);
   };
 
@@ -225,9 +228,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.pitDetail) applicationData.pitDetail.length = Number(data.pitDetail.length);
     if (data.pitType) applicationData.sanitationtype = data.pitType.code;
     if (data.subtype) applicationData.propertyUsage = data.subtype.code;
-    if (uploadedImagesIds) {
+    if (fileStoreId) {
       let temp = {}
-      uploadedImagesIds.map((i) => (temp[uploadedImagesIds.indexOf(i) + 1] = i))
+      fileStoreId.map((i) => (temp[fileStoreId.indexOf(i) + 1] = i))
       applicationData.pitDetail.additionalDetails = { fileStoreId: temp };
     }
 
@@ -278,8 +281,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "REASSING":
       case "FSM_REASSING":
         dso &&
-        vehicle &&
-        (reassignReason || (actionData && actionData[0] && actionData[0].comment?.length > 0 && actionData[0]?.status === "DSO_REJECTED"))
+          vehicle &&
+          (reassignReason || (actionData && actionData[0] && actionData[0].comment?.length > 0 && actionData[0]?.status === "DSO_REJECTED"))
           ? setFormValve(true)
           : setFormValve(false);
         return setConfig(
@@ -302,7 +305,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
-        return setConfig(configCompleteApplication({ t, vehicle, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
+        return setConfig(configCompleteApplication({ t, vehicle, vehicleCapacity: applicationData?.vehicleCapacity, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
@@ -359,12 +362,13 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   return action && config.form && !isDsoLoading && !isReasonLoading && isVehicleDataLoaded ? (
     <Modal
+      popupStyles={{ height: "fit-content" }}
       headerBarMain={<Heading label={t(config.label.heading)} />}
       headerBarEnd={<CloseBtn onClick={closeModal} />}
       actionCancelLabel={t(config.label.cancel)}
       actionCancelOnSubmit={closeModal}
       actionSaveLabel={t(config.label.submit)}
-      actionSaveOnSubmit={() => {}}
+      actionSaveOnSubmit={() => { }}
       formId="modal-action"
       isDisabled={!formValve}
     >
@@ -380,15 +384,18 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           pitType: pitType,
           propertyType: property,
           subtype: propertySubType,
+          pitDetail: pitDetail,
         }}
       >
       </FormComposer>
-      <UploadPitPhoto
+      {action === "COMPLETED" ? <UploadPitPhoto
         header=""
         tenantId={tenantId}
         cardText=""
         onPhotoChange={handleUpload}
-        uploadedImages={null} />
+        uploadedImages={null} /> : null
+      }
+
       {/* {toastError && <Toast {...toastError} />} */}
     </Modal>
   ) : (

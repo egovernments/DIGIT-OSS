@@ -83,7 +83,7 @@ const Home = () => {
             {
                 name: t("CS_COMMON_SURVEYS"),
                 Icon: <DocumentIcon/>,
-                onClick: () => history.push("/digit-ui/citizen/engagement/SurveyList")
+                onClick: () => history.push("/digit-ui/citizen/engagement/surveys/list")
             },
             // {
             //     name: t("CS_COMMON_HELP"),

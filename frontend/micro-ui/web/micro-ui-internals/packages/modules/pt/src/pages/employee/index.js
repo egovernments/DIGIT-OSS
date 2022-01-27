@@ -1,20 +1,13 @@
+import { PrivateRoute } from "@egovernments/digit-ui-react-components";
 import React from "react";
+import { useTranslation } from "react-i18next";
+import { Link, Switch, useLocation } from "react-router-dom";
 import { PTLinks } from "../../Module";
 import Inbox from "./Inbox";
-import { Switch, useLocation, Link } from "react-router-dom";
-import { PrivateRoute } from "@egovernments/digit-ui-react-components";
-import { useTranslation } from "react-i18next";
-import NewApplication from "./NewApplication";
-import EditApplication from "./EditApplication";
-import ApplicationDetails from "./ApplicationDetails";
-import PropertyDetails from "./PropertyDetails";
-import AssessmentDetails from "./AssessmentDetails";
-import Response from "../Response";
-import TransferOwnership from "./PropertyMutation";
-import DocsRequired from "./PropertyMutation/docsRequired";
+import PaymentDetails from "./PaymentDetails";
 import Search from "./Search";
 import SearchApp from "./SearchApp";
-import PaymentDetails from "./PaymentDetails";
+
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -70,6 +63,15 @@ const EmployeeApp = ({ path, url, userType }) => {
     else if (location.pathname.includes("/digit-ui/employee/pt/property-mutate/")) return t("ES_TITLE_MUTATE_PROPERTY");
     else if (location.pathname.includes("/digit-ui/employee/pt/modify-application/")) return t("PT_UPDATE_PROPERTY");
   };
+
+  const NewApplication = Digit?.ComponentRegistryService?.getComponent("PTNewApplication");
+  const ApplicationDetails = Digit?.ComponentRegistryService?.getComponent("ApplicationDetails");
+  const PropertyDetails = Digit?.ComponentRegistryService?.getComponent("PTPropertyDetails");
+  const AssessmentDetails = Digit?.ComponentRegistryService?.getComponent("PTAssessmentDetails");
+  const EditApplication = Digit?.ComponentRegistryService?.getComponent("PTEditApplication");
+  const Response = Digit?.ComponentRegistryService?.getComponent("PTResponse");
+  const TransferOwnership = Digit?.ComponentRegistryService?.getComponent("PTTransferOwnership");
+  const DocsRequired = Digit?.ComponentRegistryService?.getComponent("PTDocsRequired");
 
   return (
     <Switch>

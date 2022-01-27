@@ -2,6 +2,7 @@ import React, { useMemo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
+import { businessServiceList } from "../../utils";
 
 const NOCEmployeeHomeCard = () => {
     const { t } = useTranslation();
@@ -14,7 +15,8 @@ const NOCEmployeeHomeCard = () => {
         moduleName: "noc-services",
         applicationStatus: "",
         locality: [],
-        assignee: "ASSIGNED_TO_ALL"
+        assignee: "ASSIGNED_TO_ALL",
+        businessServiceArray: businessServiceList(true) || []
     }
 
     const tableOrderFormDefaultValues = {

@@ -16,13 +16,13 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
         tenantId,
 		processSearchCriteria: {
             moduleName: moduleName ? moduleName : "bpa-services",
-			businessService: businessService?.length > 0 ? businessService.map( o => o.code) : ["BPA_LOW", "BPA", "BPA_OC"],
+			businessService: businessService?.length > 0 ? [businessService] : ["BPA_LOW", "BPA", "BPA_OC"],
             ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
 		moduleSearchCriteria: {
             assignee,
             ...(mobileNumber ? {mobileNumber}: {}),
-            ...(applicationType ? { applicationType } : {}),
+            ...(applicationType && applicationType.length > 0 ? { applicationType } : {}),
             ...(serviceType ? { serviceType } : {}),
             ...(applicationNo ? {applicationNo} : {}),
             ...(sortOrder ? {sortOrder} : {}),

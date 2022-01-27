@@ -484,12 +484,13 @@ public class FSMValidator {
 	 * @param mdmsData
 	 */
 	public void validateCheckList(FSMRequest fsmRequest, Object mdmsData) {
+		Map<String, String> errorMap = new HashMap<>();
 		FSM fsm = fsmRequest.getFsm();
 		Map additonalDetails = (Map)fsm.getAdditionalDetails();
 		List<Map<String,String>> requestCheckList = (List<Map<String, String>>) additonalDetails.get(FSMConstants.MDMS_CHECKLIST);
 		List<Map<String,Object>> mdmsCheckList = JsonPath.read(mdmsData, FSMConstants.REQ_CHECKLIST_PATH);
 		if(mdmsCheckList.size() > 0 && (requestCheckList == null || requestCheckList.size() ==0)) {
-			throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, " Mandatory checlist is not provided!");
+			errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, " Mandatory checlist is not provided!");
 		}
 		mdmsCheckList.forEach(mdmsClItem->{
 			Map<String,String> reqClItem = null;
@@ -503,14 +504,14 @@ public class FSMValidator {
 				List<String> mdmsClOptions =(List<String>) mdmsClItem.get("options");
 				if(((String) mdmsClItem.get("type")).equalsIgnoreCase(FSMConstants.CHECK_LIST_SINGLE_SELECT) ) {
 					if(reqOptions.length > 1) {
-						 throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+ mdmsClItem.get("code")+" is SINGLE SELECT, cannot select multiple options.");
+						errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+ mdmsClItem.get("code")+" is SINGLE SELECT, cannot select multiple options.");
 					}else if(!mdmsClOptions.contains(reqOptions[0])){
-						 throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, " Value provided is not checklist options.");
+						errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, " Value provided is not checklist options.");
 					}
 				}else if(((String) mdmsClItem.get("type")).equalsIgnoreCase(FSMConstants.CHECK_LIST_MULTI_SELECT)) {
 					for( int h=0;h<reqOptions.length;h++) {
 						if(!mdmsClOptions.contains(reqOptions[h])) {
-							 throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+mdmsClItem.get("code")+" does not allow option "+reqOptions[h]);
+							errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+mdmsClItem.get("code")+" does not allow option "+reqOptions[h]);
 						}
 					}
 					
@@ -519,18 +520,21 @@ public class FSMValidator {
 					for( int h=0;h<reqOptions.length;h++) {
 						log.info("reqOptions :: "+reqOptions[h]);
 						if(!mdmsClOptions.contains(reqOptions[h])) {
-							 throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+mdmsClItem.get("code")+" does not allow option "+reqOptions[h]);
+							errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+mdmsClItem.get("code")+" does not allow option "+reqOptions[h]);
 						}
 					}
 					
 				}
 				else {
-					throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, " Value provided is not checklist options.");
+					errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, " Value provided is not checklist options.");
 				}
 			}else{
-				throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, " Required CheckList "+mdmsClItem.get("code")+ " is not answered ");
+				errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, " Required CheckList "+mdmsClItem.get("code")+ " is not answered ");
 			}
 		});
+		
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
 	}
 	
 

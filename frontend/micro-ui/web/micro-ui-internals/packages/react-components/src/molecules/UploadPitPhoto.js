@@ -3,8 +3,7 @@ import { useTranslation } from "react-i18next";
 import UploadImages from "../atoms/UploadImages";
 
 const UploadPitPhoto = (props) => {
-    // const __initImageIds = Digit.SessionStorage.get("PGR_CREATE_IMAGES");
-    // const __initThumbnails = Digit.SessionStorage.get("PGR_CREATE_THUMBNAILS");
+    const { t } = useTranslation();
     const [image, setImage] = useState(null);
     const [uploadedImagesThumbs, setUploadedImagesThumbs] = useState(null);
     const [uploadedImagesIds, setUploadedImagesIds] = useState(props.uploadedImages);
@@ -21,17 +20,15 @@ const UploadPitPhoto = (props) => {
     }, [image]);
 
     useEffect(() => {
-        if (!isDeleting) {
-            (async () => {
-                if (uploadedImagesIds !== null) {
-                    await submit();
-                    setRerender(rerender + 1);
-                    props.onPhotoChange(uploadedImagesIds);
-                }
-            })();
-        } else {
-            setIsDeleting(false);
-        }
+
+        (async () => {
+            if (uploadedImagesIds !== null) {
+                await submit();
+                setRerender(rerender + 1);
+                props.onPhotoChange(uploadedImagesIds);
+            }
+        })();
+
     }, [uploadedImagesIds]);
 
     useEffect(() => {
@@ -60,8 +57,12 @@ const UploadPitPhoto = (props) => {
     }
 
     const uploadImage = useCallback(async () => {
-        const response = await Digit.UploadServices.Filestorage("FSM", image, props.tenantId);
-        setUploadedImagesIds(addUploadedImageIds(response));
+        if (uploadedImagesIds === null || uploadedImagesIds.length < 3) {
+            const response = await Digit.UploadServices.Filestorage("FSM", image, props.tenantId);
+            setUploadedImagesIds(addUploadedImageIds(response));
+        } else {
+            console.log("disabled")
+        }
     }, [addUploadedImageIds, image]);
 
     function addImageThumbnails(thumbnailsData) {
@@ -103,7 +104,11 @@ const UploadPitPhoto = (props) => {
     }
 
     const handleUpload = (event) => {
-        hiddenFileInput.current.click();
+        if (uploadedImagesIds === null || uploadedImagesIds.length < 3) {
+            hiddenFileInput.current.click();
+        } else {
+            console.log("disabled button")
+        }
     }
     const hiddenFileInput = React.useRef(null);
 
@@ -111,13 +116,13 @@ const UploadPitPhoto = (props) => {
     // and can view preview in pop down
     return (
         <div>
-            <div className="imageUploadWrapper" style={{display: !imageFile ? "none" : "block", marginTop: "8px" }}>
+            <div className="imageUploadWrapper" style={{ display: !imageFile ? "none" : "block", marginTop: "8px" }}>
                 <UploadImages onUpload={getImage} onDelete={deleteImage} thumbnails={uploadedImagesThumbs ? uploadedImagesThumbs.map((o) => o.image) : []} />
             </div>
             <button onClick={handleUpload} style={{
-                width:"100%",
-                backgroundColor:"#d6d5d4",
-                borderStyle:"solid",
+                width: "100%",
+                backgroundColor: "#d6d5d4",
+                borderStyle: "solid",
                 borderBottom: "1px solid #464646",
                 padding: "4px 40px",
                 margin: "8px 0px",
@@ -127,12 +132,13 @@ const UploadPitPhoto = (props) => {
                 justifyContent: "center",
             }}>
                 <input
-                    style={{display:"none"}}
+                    style={{ display: "none" }}
                     type="file"
                     ref={hiddenFileInput}
                     onChange={getImage}
                 />
-                <p>Upload Pit Photo</p>
+
+                <p>{t("UPLOAD_PIT_PHOTO")}</p>
 
             </button>
 

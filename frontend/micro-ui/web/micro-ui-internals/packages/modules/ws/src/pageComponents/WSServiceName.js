@@ -4,6 +4,7 @@ import {
     RadioOrSelect,
     CardLabel
 } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/Timeline";
 
 const WSServiceName = ({ t, config, onSelect, formData }) => {
     const [serviceName, setServiceName] = useState(formData?.serviceName || "");
@@ -50,7 +51,7 @@ const WSServiceName = ({ t, config, onSelect, formData }) => {
 
     return (
         <div>
-            {/* <Timeline currentStep={2} /> */}
+            <Timeline currentStep={2} />
             <FormStep
                 t={t}
                 config={config}

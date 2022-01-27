@@ -43,11 +43,20 @@ import PropertySearchForm from './components/search/PropertySearchForm';
 import PropertySearchResults from './components/search/PropertySearchResults';
 import { PTMyPayments } from "./pages/citizen/MyPayments";
 import SelectPTUnits from './pageComponents/SelectPTUnits';
+import CreateProperty from "./pages/citizen/Create";
+import { PTMyApplications } from "./pages/citizen/PTMyApplications";
+import { MyProperties } from "./pages/citizen/MyProperties";
+import PTApplicationDetails from "./pages/citizen/PTApplicationDetails";
+import SearchPropertyComponent from "./pages/citizen/SearchProperty";
+import SearchResultsComponent from "./pages/citizen/SearchResults";
+import EditProperty from "./pages/citizen/EditProperty";
+import MutateProperty from "./pages/citizen/Mutate";
+
 import PropertyInformation from "./pages/citizen/MyProperties/propertyInformation";
 import PTWFCaption from "./pageComponents/PTWFCaption";
 import PTWFReason from "./pageComponents/PTWFReason";
 import ProvideFloorNo from "./pageComponents/ProvideFloorNo";
-import propertyOwnerHistory from "./pages/citizen/MyProperties/propertyOwnerHistory";
+import PropertyOwnerHistory from "./pages/citizen/MyProperties/propertyOwnerHistory";
 import TransferDetails from "./pages/citizen/MyProperties/propertyOwnerHistory";
 import TransfererDetails from "./pageComponents/Mutate/TransfererDetails";
 import OwnerMutate from "./pageComponents/Mutate/Owner";
@@ -66,6 +75,14 @@ import PTCard from "./components/PTCard";
 import InboxFilter from "./components/inbox/NewInboxFilter";
 import EmptyResultInbox from "./components/empty-result";
 import { TableConfig } from "./config/inbox-table-config";
+import NewApplication from "./pages/employee/NewApplication";
+import ApplicationDetails from "./pages/employee/ApplicationDetails";
+import PropertyDetails from "./pages/employee/PropertyDetails";
+import AssessmentDetails from "./pages/employee/AssessmentDetails";
+import EditApplication from "./pages/employee/EditApplication";
+import Response from "./pages/Response";
+import TransferOwnership from "./pages/employee/PropertyMutation";
+import DocsRequired from "./pages/employee/PropertyMutation/docsRequired";
 
 const componentsToRegister = {
   PTLandArea,
@@ -102,7 +119,7 @@ const componentsToRegister = {
   PropertyBasementDetails,
   PropertyInformation,
   ProvideFloorNo,
-  propertyOwnerHistory,
+  PropertyOwnerHistory,
   TransferDetails,
   Units,
   SelectAltContactNumber,
@@ -124,7 +141,23 @@ const componentsToRegister = {
   PropertySearchForm,
   PropertySearchResults,
   PTMyPayments,
-  SelectPTUnits
+  SelectPTUnits,
+  PTNewApplication : NewApplication,
+  ApplicationDetails : ApplicationDetails,
+  PTPropertyDetails : PropertyDetails,
+  PTAssessmentDetails : AssessmentDetails,
+  PTEditApplication : EditApplication,
+  PTResponse : Response,
+  PTTransferOwnership : TransferOwnership,
+  PTDocsRequired : DocsRequired,
+  PTCreateProperty : CreateProperty,
+  PTMyApplications : PTMyApplications,
+  PTMyProperties : MyProperties,
+  PTApplicationDetails : PTApplicationDetails,
+  PTSearchPropertyComponent : SearchPropertyComponent,
+  PTSearchResultsComponent : SearchResultsComponent,
+  PTEditProperty : EditProperty,
+  PTMutateProperty : MutateProperty
 };
 
 const addComponentsToRegistry = () => {
