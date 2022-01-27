@@ -11,14 +11,13 @@ const INDIA_TOPO_JSON = require('./india.topo.json');
 
 const PROJECTION_CONFIG = { scale: 350, center: [78.9629, 22.5937] };
 
-
 // Red Variants
 const COLOR_RANGE = [
-    '#ff5533',
-    '#e2492d',
+    '#54D140',
+    '#298CFF',
     '#be3d26',
-    '#9a311f',
-    '#782618'
+    '#F47738',
+    '#ff5533'
 ];
 
 const DEFAULT_COLOR = '#EEE';
@@ -54,7 +53,7 @@ class MapChart extends React.Component {
     }
 
     onMouseEnter(geo, current = { value: 'NA' }, event) {
-        this.setState({ tooltipContent: `${geo.properties.name}: ${current.value}` })
+        this.setState({ tooltipContent: `${geo.properties.name}: ${current.value} ULBs` })
     };
 
     onMouseLeave(geo, current = { value: 'NA' }, event) {
@@ -117,9 +116,8 @@ class MapChart extends React.Component {
 
         return (
             <div className="full-width-height container">
-                <h1 className="no-margin center">States and UTs</h1>
                 <ReactTooltip>{this.state.tooltipContent}</ReactTooltip>
-                <div style={{ height: "80%", width: "80%" }}>
+                <div style={{ height: "90%", width: "100%" }}>
                     <ComposableMap
                         projectionConfig={PROJECTION_CONFIG}
                         projection="geoMercator"
