@@ -2922,10 +2922,8 @@ public class CommonAction extends BaseFormAction {
         final StringBuilder qry = new StringBuilder(" select * from (SELECT pc.code || '`-`'|| pc.description|| '`~`' || pc.id FROM egw_projectcode pc LEFT OUTER JOIN")
                 .append(" egf_subscheme_project sp ON pc.id = sp.projectcodeid WHERE sp.projectcodeid IS NULL and pc.code like :startsWith")
                 .append(" ORDER BY pc.code) where rownum <= 20");
-        if (null == subSchemeId) {
-
-        } else {
-        	Query query = persistenceService.getSession().createSQLQuery(qry.toString())
+        if (subSchemeId != null) {
+            Query query = persistenceService.getSession().createSQLQuery(qry.toString())
                     .setParameter("startsWith", startsWith, StringType.INSTANCE);
             projectCodeStringList = query.list();
         }

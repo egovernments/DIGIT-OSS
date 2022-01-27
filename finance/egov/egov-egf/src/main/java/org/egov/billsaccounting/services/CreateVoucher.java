@@ -2783,8 +2783,6 @@ public class CreateVoucher {
 		} catch (final ParseException ex) {
 			LOGGER.error("error in finding unique VoucherNumber");
 			throw new ApplicationRuntimeException("error in finding unique VoucherNumber");
-		} finally {
-
 		}
 		return isUnique;
 	}
