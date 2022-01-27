@@ -7,7 +7,6 @@ import { ActionBar, Header, Loader, SubmitBar,Card,CardSubHeader,CardSectionHead
 import { useQueryClient } from "react-query";
 import _, { first, update } from "lodash";
 import { Modal,Dropdown } from "@egovernments/digit-ui-react-components";
-import { First } from "react-bootstrap/esm/PageItem";
 
 
 const AssessmentDetails = () => {
