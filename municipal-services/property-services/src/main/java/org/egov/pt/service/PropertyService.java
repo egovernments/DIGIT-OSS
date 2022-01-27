@@ -187,7 +187,7 @@ public class PropertyService {
 		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
 		if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {
 			userService.createUser(request);
-		} else if (request.getProperty().getSource().equals("WS")
+		} else if (request.getProperty().getSource().toString().equals("WS")
 				&& CreationReason.UPDATE.equals(request.getProperty().getCreationReason())) {
 			userService.updateUser(request);
 		} else {

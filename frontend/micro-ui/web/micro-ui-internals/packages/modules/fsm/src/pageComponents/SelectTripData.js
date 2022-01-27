@@ -6,28 +6,25 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
 
-  const [vehicle, setVehicle] = useState(formData?.tripData?.vehicleType);
+  const [vehicle, setVehicle] = useState(formData?.tripData?.vehicleCapacity);
   const [billError, setError] = useState(false);
 
   const { isLoading: isVehicleMenuLoading, data: vehicleData } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
 
-  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId);
+  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: -1 });
 
   const [vehicleMenu, setVehicleMenu] = useState([]);
 
   useEffect(() => {
     if (dsoData && vehicleData) {
       const allVehicles = dsoData.reduce((acc, curr) => {
-        return curr.vehicles ? [...acc, ...curr.vehicles.map((dsoVehicle) => dsoVehicle.type)] : acc;
+        return curr.vehicles ? curr.vehicles : acc;
       }, []);
 
-      const __vehicleMenu = allVehicles
-        .map((vehicle) => vehicleData.filter((data) => data.code === vehicle)[0])
-        .filter((item, pos, self) => self.indexOf(item) == pos)
-        .filter((i) => i);
+      const cpacityMenu = Array.from(new Set(allVehicles.map(a => a.capacity)))
+        .map(capacity => allVehicles.find(a => a.capacity === capacity))
 
-
-      setVehicleMenu(__vehicleMenu);
+      setVehicleMenu(cpacityMenu);
     }
   }, [dsoData, vehicleData]);
 
@@ -88,7 +85,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         setVehicle(formData?.tripData?.vehicleType);
       }
 
-      if (formData?.propertyType && formData?.subtype && formData?.address && formData?.tripData?.vehicleType?.code) {
+      if (formData?.propertyType && formData?.subtype && formData?.address && formData?.tripData?.vehicleType?.capacity) {
         const { capacity } = formData?.tripData?.vehicleType;
         const { slum: slumDetails } = formData.address;
         const slum = slumDetails ? "YES" : "NO";
@@ -114,7 +111,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         }
       }
     })();
-  }, [formData?.propertyType, formData?.subtype, formData?.address, formData?.tripData?.vehicleType?.code]);
+  }, [formData?.propertyType, formData?.subtype, formData?.address, formData?.tripData?.vehicleType?.capacity]);
 
   return isVehicleMenuLoading && isDsoLoading ? (
     <Loader />
@@ -125,7 +122,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         <Dropdown
           className="form-field"
           isMandatory
-          option={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: getVehicleType(vehicle, t) }))}
+          option={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: vehicle.capacity }))}
           optionKey="label"
           id="vehicle"
           selected={vehicle}

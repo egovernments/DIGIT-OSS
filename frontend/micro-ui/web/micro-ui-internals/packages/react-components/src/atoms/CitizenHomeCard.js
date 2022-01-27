@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const CitizenHomeCard = ({ header, links, state, Icon, Info, isInfo = false }) => {
+const CitizenHomeCard = ({ header, links, state, Icon, Info, isInfo = false, styles }) => {
   return (
-    <div className="CitizenHomeCard">
+    <div className="CitizenHomeCard" style={styles ? styles : {}}>
       <div className="header">
         <h2>{header}</h2>
         <Icon />

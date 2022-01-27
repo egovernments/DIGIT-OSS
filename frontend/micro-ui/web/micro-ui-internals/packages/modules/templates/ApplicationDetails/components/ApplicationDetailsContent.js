@@ -29,6 +29,10 @@ function ApplicationDetailsContent({
 }) {
   const { t } = useTranslation();
 
+  function OpenImage(imageSource, index,thumbnailsToShow){
+    window.open(thumbnailsToShow?.fullImage?.[0],"_blank");
+  }
+
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED" && !(window.location.href.includes("/obps/"))) {
       const caption = {
@@ -44,8 +48,10 @@ function ApplicationDetailsContent({
         name: checkpoint?.assignes?.[0]?.name,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
+        wfComment : checkpoint.wfComment,
+        thumbnailsToShow : checkpoint?.thumbnailsToShow,
       };
-      return <TLCaption data={caption} />;
+      return <TLCaption data={caption} OpenImage={OpenImage} />;
     }
     else {
       const caption = {

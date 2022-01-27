@@ -17,6 +17,8 @@ const usePropertySearchWithDue = ({ tenantId, filters, auth = true, configs }) =
         status: property?.status,
         due: false,
         locality: `${property?.tenantId?.replace(".", "_")?.toUpperCase()}_REVENUE_${property?.address?.locality?.code}`,
+        owners: property?.owners,
+        documents: property?.documents,
       };
     });
     data["ConsumerCodes"] = consumerCodes;

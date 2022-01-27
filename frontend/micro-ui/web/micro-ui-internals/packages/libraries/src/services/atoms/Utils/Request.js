@@ -55,9 +55,6 @@ export const Request = async ({
     data.RequestInfo = {
       apiId: "Rainmaker",
     };
-    if (noRequestInfo) {
-      delete data.RequestInfo;
-    }
     if (auth) {
       data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
     }
@@ -66,6 +63,9 @@ export const Request = async ({
     }
     if (locale) {
       data.RequestInfo = { ...data.RequestInfo, msgId: `${ts}|${Digit.StoreData.getCurrentLanguage()}` };
+    }
+    if (noRequestInfo) {
+      delete data.RequestInfo;
     }
   }
 

@@ -14,7 +14,9 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", "DocumentTypes");
   const { isLoading: commonDocsLoading, data: commonDocs } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["DocumentType"]);
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["RiskTypeComputation"]);
-
+  const userInfo = Digit.UserService.getUser();
+  const queryObject = { 0: { tenantId: stateCode }, 1: { id: userInfo?.info?.id } };
+  const { data: LicenseData, isLoading:LicenseDataLoading } = Digit.Hooks.obps.useBPAREGSearch(tenantId, queryObject);
   const checkingUrl = window.location.href.includes("ocbpa");
 
   const { data:homePageUrlLinks , isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["homePageUrlLinks"]);
@@ -30,6 +32,17 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
     else
     onSelect("uiFlow", uiFlow);
   }
+
+  useEffect(() => {
+    let architectName = "", isDone = true;
+    for (let i = 0; i < LicenseData?.Licenses?.length; i++) {
+      if (LicenseData?.Licenses?.[i]?.status === "APPROVED" && isDone) {
+        isDone = false;
+        architectName = LicenseData?.Licenses?.[i]?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split('.')[0] || "ARCHITECT";
+        sessionStorage.setItem("BPA_ARCHITECT_NAME", JSON.stringify(architectName));
+      }
+    }
+  }, [LicenseData])
 
   useEffect(() => {
     if (!homePageUrlLinksLoading) {

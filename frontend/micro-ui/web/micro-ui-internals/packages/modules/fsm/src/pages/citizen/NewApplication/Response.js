@@ -50,10 +50,13 @@ const Response = ({ data, onSuccess }) => {
   useEffect(() => {
     if (!mutationHappened && !errorInfo) {
     try {
-      const { subtype, pitDetail, address, pitType, source } = data;
+      const { subtype, pitDetail, address, pitType, source, selectGender } = data;
       const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
       const formdata = {
         fsm: {
+          citizen: {
+            gender: selectGender?.code
+          },
           tenantId: city.code,
           additionalDetails: {},
           propertyUsage: subtype.code,

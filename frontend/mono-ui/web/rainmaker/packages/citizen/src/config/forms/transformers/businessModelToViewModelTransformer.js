@@ -2,14 +2,15 @@ const transformer = (formKey, form, state, recordData) => {
   const transformers = {
     profile: () => {
       const { userInfo } = state.auth;
-      const { name, emailId, permanentCity, tenantId, photo: imageUri } = userInfo;
+      const { name="", emailId, permanentCity, tenantId, photo: imageUri } = userInfo;
       const transformedForm = {
         ...form,
         fields: {
           ...form.fields,
           email: { ...form.fields.email, value: emailId || "" },
           city: { ...form.fields.city, value: permanentCity || tenantId },
-          name: { ...form.fields.name, value: name },
+          name: { ...form.fields.name, value: name&&name.trim()
+        },
         },
         files: {
           ["photo"]: [
