@@ -6,6 +6,7 @@ import java.util.List;
 import org.egov.noc.config.NOCConfiguration;
 import org.egov.noc.web.model.NocSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -16,6 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 public class NocQueryBuilder {
 	@Autowired
 	private NOCConfiguration nocConfig;
+	
+	@Value("${egov.noc.fuzzysearch.isFuzzyEnabled}")
+	private boolean isFuzzyEnabled;
 
 	private static final String QUERY = "SELECT noc.*,nocdoc.*,noc.id as noc_id,noc.tenantid as noc_tenantId,noc.lastModifiedTime as "
 			+ "noc_lastModifiedTime,noc.createdBy as noc_createdBy,noc.lastModifiedBy as noc_lastModifiedBy,noc.createdTime as "
@@ -58,19 +62,30 @@ public class NocQueryBuilder {
 		}		
 
 		String applicationNo = criteria.getApplicationNo();
-		if (applicationNo!=null) {
-		        List<String> applicationNos = Arrays.asList(applicationNo.split(","));
-			addClauseIfRequired(builder);
-			builder.append(" noc.applicationNo IN (").append(createQuery(applicationNos)).append(")");
-			addToPreparedStatement(preparedStmtList, applicationNos);
-		}
+                if (applicationNo != null) {
+                    List<String> applicationNos = Arrays.asList(applicationNo.split(","));
+                    addClauseIfRequired(builder);
+                    if (isFuzzyEnabled) {
+                        builder.append(" noc.applicationNo LIKE ANY(ARRAY[ ").append(createQuery(applicationNos)).append("])");
+                        addToPreparedStatementForFuzzySearch(preparedStmtList, applicationNos);
+                    } else {
+                        builder.append(" noc.applicationNo IN (").append(createQuery(applicationNos)).append(")");
+                        addToPreparedStatement(preparedStmtList, applicationNos);
+                    }
+                }
 		
 		String approvalNo = criteria.getNocNo();
-		if (approvalNo!=null) {
-			addClauseIfRequired(builder);
-			builder.append(" noc.nocNo = ?");
-			preparedStmtList.add(criteria.getNocNo());
-		}
+                if (approvalNo != null) {
+                    List<String> approvalNos = Arrays.asList(approvalNo.split(","));
+                    addClauseIfRequired(builder);
+                    if (isFuzzyEnabled) {
+                        builder.append(" noc.nocNo LIKE ANY(ARRAY[ ").append(createQuery(approvalNos)).append("])");
+                        addToPreparedStatementForFuzzySearch(preparedStmtList, approvalNos);
+                    } else {
+                        builder.append(" noc.nocNo IN (").append(createQuery(approvalNos)).append(")");
+                        addToPreparedStatement(preparedStmtList, approvalNos);
+                    }
+                }
 		
 		String source = criteria.getSource();
 		if (source!=null) {
@@ -81,12 +96,17 @@ public class NocQueryBuilder {
 		}
 		
 		String sourceRefId = criteria.getSourceRefId();
-		if (sourceRefId!=null) {
-		        List<String> sourceRefIds = Arrays.asList(sourceRefId.split(","));
-			addClauseIfRequired(builder);
-			builder.append(" noc.sourceRefId IN (").append(createQuery(sourceRefIds)).append(")");
+                if (sourceRefId != null) {
+                    List<String> sourceRefIds = Arrays.asList(sourceRefId.split(","));
+                    addClauseIfRequired(builder);
+                    if (isFuzzyEnabled) {
+                        builder.append(" noc.sourceRefId LIKE ANY(ARRAY[ ").append(createQuery(sourceRefIds)).append("])");
+                        addToPreparedStatementForFuzzySearch(preparedStmtList, sourceRefIds);
+                    } else {
+                        builder.append(" noc.sourceRefId IN (").append(createQuery(sourceRefIds)).append(")");
                         addToPreparedStatement(preparedStmtList, sourceRefIds);
-		}
+                    }
+                }
 		
 		String nocType = criteria.getNocType();
 		if (nocType!=null) {
@@ -157,10 +177,12 @@ public class NocQueryBuilder {
 	}
 
 	private void addToPreparedStatement(List<Object> preparedStmtList, List<String> ids) {
-		ids.forEach(id -> {
-			preparedStmtList.add(id);
-		});
+		ids.forEach(preparedStmtList::add);
 
+	}
+	
+	private void addToPreparedStatementForFuzzySearch(List<Object> preparedStmtList, List<String> ids) {
+	    ids.forEach(id -> preparedStmtList.add("%"+id+"%"));
 	}
 
 	private Object createQuery(List<String> ids) {
