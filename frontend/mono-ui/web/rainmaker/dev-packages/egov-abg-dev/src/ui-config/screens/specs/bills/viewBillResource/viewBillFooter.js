@@ -8,6 +8,7 @@ import { set } from "lodash";
 import get from "lodash/get";
 import { ifUserRoleExists, validateFields } from "../../utils";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
+import "../viewBillResource/index.scss"
 
 
 export const getRedirectionURL = () => {
@@ -20,7 +21,7 @@ const getCommonApplyFooter = children => {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: window.location.href.includes("viewBill?connectionNumber") ? "footer-styles-bill-cancellation" : "footer-style-bill-cancellation"
     },
     children
   };
@@ -32,11 +33,11 @@ export const cancelBillFooter = getCommonApplyFooter({
     props: {
       variant: "outlined",
       color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
+      // style: {
+      //   minWidth: "200px",
+      //   height: "48px",
+      //   marginRight: "16px"
+      // }
     },
     children: {
       previousButtonIcon: {
@@ -64,11 +65,11 @@ export const cancelBillFooter = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
+      // style: {
+      //   minWidth: "200px",
+      //   height: "48px",
+      //   marginRight: "16px"
+      // }
     },
     children: {
       downloadReceiptButtonLabel: getLabel({
@@ -97,11 +98,11 @@ export const viewBillFooter = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
+      // style: {
+      //   minWidth: "200px",
+      //   height: "48px",
+      //   marginRight: "16px"
+      // }
     },
     children: {
       downloadReceiptButtonLabel: getLabel({

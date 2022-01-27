@@ -26,3 +26,54 @@
 .tl-trade-type div {
   color: rgba(0, 0, 0, 0.87);
 }
+
+.footer-styles-bill-cancellation, 
+.footer-style-bill-cancellation {
+  background-color: #ffffff;
+  box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+  padding: 8px 15px;
+  position: fixed !important;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  text-align: right;
+}
+
+
+@media only screen and (max-width: 768px) {
+  #custom-atoms-viewBillFooter {
+    padding: 16px !important;
+    #material-ui-nextButton {
+      width: 100% !important;
+      min-height: 48px !important;
+    }
+  }
+
+  #custom-atoms-cancelBillFooter {
+    padding: 6px 16px !important;
+    #material-ui-previousButton,
+    #material-ui-nextButton {
+      width: 100% !important;
+      min-height: 48px !important;
+      margin-bottom: 5px !important;
+    }
+  }
+
+  .footer-styles-bill-cancellation {
+    padding: 16px !important;
+  }
+
+  .footer-styles-bill-cancellation button {
+    width: 100% !important;
+    min-height: 48px !important;
+    margin-bottom: 5px !important;
+  }
+  .footer-style-bill-cancellation {
+    padding: 6px 16px !important;
+  }
+  .footer-style-bill-cancellation button {
+    width: 100% !important;
+    min-height: 48px !important;
+    margin-bottom: 5px !important;
+  }
+}
