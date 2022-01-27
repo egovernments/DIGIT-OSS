@@ -3,12 +3,11 @@ import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
 
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import { ActionBar, Header, Loader, SubmitBar,Card,CardSubHeader,CardSectionHeader,LinkLabel, CardLabel} from "@egovernments/digit-ui-react-components";
+import { ActionBar, Header, Loader, SubmitBar,Card,CardSubHeader,CardSectionHeader,LinkLabel, CardLabel, CardHeader} from "@egovernments/digit-ui-react-components";
 import { useQueryClient } from "react-query";
-import _, { update } from "lodash";
-import { Modal } from "@egovernments/digit-ui-react-components";
-
-
+import _, { first, update } from "lodash";
+import { Modal,Dropdown } from "@egovernments/digit-ui-react-components";
+import { First } from "react-bootstrap/esm/PageItem";
 
 const AssessmentDetails = () => {
   const { t } = useTranslation();
@@ -20,15 +19,15 @@ const AssessmentDetails = () => {
   const queryClient = useQueryClient();
   const history = useHistory();
   const [appDetailsToShow, setAppDetailsToShow] = useState({});
-  const [rebatepenality,setRebateOrPenality]=useState('');
-  
   
   const [popup,showPopUp]=useState(false);
+  const [selectedPenalityReason,setSelectedPenalityReason]=useState(null);
+  const [selectedRebateReason,setSelectedRebateReason]=useState(null);
+
 
   const first_temp=useRef();
   const second_temp=useRef();
-  const third_temp=useRef();
-  const fourth_temp=useRef();
+  
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, propertyId);
   const { isLoading: assessmentLoading, mutate: assessmentMutate } = Digit.Hooks.pt.usePropertyAssessment(tenantId);
@@ -42,7 +41,6 @@ const AssessmentDetails = () => {
     // estimate calculation
     ptCalculationEstimateMutate({ Assessment: AssessmentData });
     }, []);
-
   useEffect(() => {
     if (applicationDetails) setAppDetailsToShow(_.cloneDeep(applicationDetails));
   }, [applicationDetails]);
@@ -93,7 +91,7 @@ const AssessmentDetails = () => {
   const handleAssessment = () => {
     if (!queryClient.getQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear])) {
       assessmentMutate(
-        { Assessment: AssessmentData },
+        { Assessment:AssessmentData},
         {
           onError: (error, variables) => {
             setShowToast({ key: "error", action: error?.response?.data?.Errors[0]?.message || error.message });
@@ -147,80 +145,182 @@ const CloseBtn = (props) => {
     </div>
   );
 };
+
 function change(){
-  var first_value=document.getElementById("first").value;
-  var second_value=document.getElementById("second").value;
-  var third_value=document.getElementById("third").value;
-  var fourth_value=document.getElementById("fourth").value;
-  var existing_rebate=0;
   var existing_penality=0;
-  if(first_value){
-    if(second_value){
-      existing_penality=ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[6]?.estimateAmount;
-      ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]={
-        "taxHeadCode": "PT_TIME_PENALTY",
-        "estimateAmount": ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[6]?.estimateAmount+(first_value)*(second_value),
-        "category": "TAX"
+  var existing_rebate=0;
+  var total_amount=ptCalculationEstimateData?.Calculation[0]?.totalAmount
+  const [first,second]=[parseInt(first_temp.current.value),parseInt(second_temp.current.value)];
+    if((selectedPenalityReason && first>0)&&(!selectedRebateReason)){
+      if(first<total_amount){
+        var additionalPenality=first;
+        ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]={
+          "taxHeadCode": "PT_TIME_PENALTY",
+          "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]?.estimateAmount+first,
+          "category": "TAX"
+      }
+      AssessmentData.additionalDetails={
+        "adhocPenalty":additionalPenality,
+        "adhocPenaltyReason":selectedPenalityReason.value,
+      }
+      ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+first;
+         }
+         else{
+           alert("Penality cannot exceed total amount");
+         }
+    } 
+
+  else if((selectedRebateReason && second) && (!selectedPenalityReason)){
+    if(second>0){
+      if(second<total_amount){
+        ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
+          "taxHeadCode": "PT_TIME_REBATE",
+          "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount+second,
+          "category": "TAX"
+      }
+      AssessmentData.additionalDetails={
+        "adhocExemption":second,
+        "adhocExemptionReason":selectedRebateReason.value,
+      }
+      ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+second;
+         }
+         else{
+           alert( "Adhoc Exemption cannot be greater than the estimated tax for the given property");
+         }
     }
-       }
+
+
   }
-  if(third_value){
-    if(fourth_value){
-      existing_rebate=ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[5]?.estimateAmount;
-      ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
-        "taxHeadCode": "PT_TIME_REBATE",
-        "estimateAmount": ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[5]?.estimateAmount+(third_value)*(fourth_value),
-        "category": "TAX"
+  else if((selectedPenalityReason && first>0)&&(selectedRebateReason && second>0)){
+      if(first<total_amount){
+        ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]={
+          "taxHeadCode": "PT_TIME_PENALTY",
+          "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]?.estimateAmount+first,
+          "category": "TAX"
+      }
+      ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+first;
+
+         }
+         else{
+           alert("Penality cannot exceed total amount");
+         }
+      if(second<total_amount){
+        ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
+          "taxHeadCode": "PT_TIME_REBATE",
+          "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount+second,
+          "category": "TAX"
+      }
+      ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+first;
+         }
+         else{
+           alert("Adhoc Exemption cannot be greater than the estimated tax for the given property");
+         }
+    AssessmentData.additionalDetails={
+      "adhocPenalty":first,
+      "adhocPenaltyReason":selectedPenalityReason.value,
+      "adhocExemption":second,
+      "adhocExemptionReason":selectedRebateReason.value,
     }
-       }
   }
-  ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[5]?.estimateAmount+ptCalculationEstimateData?.Calculation[0]?.taxHeadEstimates[6]?.estimateAmount-existing_rebate-existing_penality;
+  setSelectedPenalityReason(null);
+  setSelectedRebateReason(null);
   showPopUp(false);
 }
+const Penality_menu=[
+  {
+    title:"Pending_dues_from_earlier",
+    value:"Pending dues from earlier",
+  },
+  {
+    title:"Miscalculation_of_earlier_Assessment",
+    value:"Miscalculation of earlier Assessment",
+  },
+  {
+    title:"One_time_penality",
+    value:"One time penality",
+  },
+  {
+    title:"Others",
+    value:"Others",
+  },
+  ]
+  const Rebate_menu=[
+    {
+      title:"Advanced_Paid_By_Citizen_Earlier",
+      value:"Advanced Paid By Citizen Earlier",
+    },
+    {
+      title:"Rebate_provided_by_commissioner/EO",
+      value:"Rebate provided by commissioner/EO",
+    },
+    {
+      title:"Additional_amount_charged_from_the_citizen",
+      value:"Additional amount charged from the citizen",
+    },
+    {
+      title:"Others",
+      value:"Others",
+    },
+    ]
+  const selectPenalityReason=(reason)=>{
+    setSelectedPenalityReason(reason);
+  }
+  const selectRebateReason=(reason)=>{
+    setSelectedRebateReason(reason);
+  }
 const Add_Rebate_Penality=()=>{
   return (
     <Modal
-          headerBarMain={<Heading label={t("Add_rebate_or_penality")}/>}
+          headerBarMain={<Heading label="Add Rebate/Penality"/>}
           headerBarEnd={<CloseBtn onClick={()=>showPopUp(false)}/>}
           actionCancelLabel="Cancel"
           actionCancelOnSubmit={()=>showPopUp(false)}
           actionSaveLabel="Add"
           actionSaveOnSubmit={()=>(change())}
           hideSubmit={false}
-          isDisabled={false}
           >
   {
       <div>
         <Card>
-          <CardSectionHeader>{t("Adhoc_Penality")}</CardSectionHeader>
+        <CardSectionHeader>{t("Adhoc_Penality")}</CardSectionHeader>
             <CardLabel>
-              {t("Tax_Heads")}
+            {t("Tax_Heads")}
             </CardLabel>
             <div className="field">
               <div className="field-container">
                 <div className="text-input field">
-                <input type="number" className="employee-card-input focus-visible" ref={first_temp} id="first"/>
+                <Dropdown
+                 isMandatory
+                 option={Penality_menu}
+                 optionKey="title"
+                 select={selectPenalityReason}
+                 selected={selectedPenalityReason}
+                 />
                 </div>
               </div>
             </div>      
-            <CardLabel>
-              {t("Head_Amount")}
-            </CardLabel>
+            <CardLabel>{t("Head_Amount")}</CardLabel>
             <div className="field">
               <div className="field-container">
                 <div className="text-input field">
-                <input type="number" className="employee-card-input false focus-visible undefined" ref={second_temp} id="second"/>
+                <input type="number" className="employee-card-input false focus-visible undefined" ref={first_temp}/>
                 </div>
               </div>
             </div>                    
         </Card>
         <Card>
-          <CardSectionHeader>{t("Adhoc_Rebate")}</CardSectionHeader>
+        <CardSectionHeader>{t("Adhoc_Rebate")}</CardSectionHeader>
             <CardLabel>{t("Tax_Heads")}</CardLabel>
             <div className="field">
               <div className="field-container">
                 <div className="text-input field">
-                <input type="number" className="employee-card-input false focus-visible undefined" ref={third_temp} id="third"/>
+                <Dropdown
+                 isMandatory
+                 option={Rebate_menu}
+                 optionKey="title"
+                 select={selectRebateReason}
+                 selected={selectedRebateReason}
+                 />
                 </div>
               </div>
             </div>    
@@ -228,10 +328,10 @@ const Add_Rebate_Penality=()=>{
             <div className="field">
               <div className="field-container">
                 <div className="text-input field">
-                <input type="number" className="employee-card-input false focus-visible undefined" ref={fourth_temp} id="fourth"/>
+                <input type="number" className="employee-card-input false focus-visible undefined" ref={second_temp}/>
                 </div>
               </div>
-            </div>                  
+            </div> 
         </Card>
       </div>
     }
@@ -250,6 +350,7 @@ const Add_Rebate_Penality=()=>{
                   title: "PT_PROPERTY_PTUID",
                   value: propertyId,  
                 },
+                // changed from here
                 {
                   title: "PT_Address",
                   value: address_to_display,
@@ -270,13 +371,13 @@ const Add_Rebate_Penality=()=>{
               {
                 belowComponent:()=><LinkLabel onClick={()=>{showPopUp(true)}} style={{color:"red"}}>{t("Add_rebate_or_penality")}</LinkLabel>
               },
-                
-                requiredDetails,
+                  requiredDetails,
             {
               belowComponent:()=>{
                 return (
                   <div style={{marginTop:"19px"}}>
-                  <CardSubHeader style={{marginBottom:"8px",color:"rgb(80,90,95)",fontSize:"24px"}}>{t("Calculation_Details")}
+                  <CardSubHeader style={{marginBottom:"8px",color:"rgb(80,90,95)",fontSize:"24px"}}>
+                  {t("Calculation Details")}
                     <CardSectionHeader style={{marginBottom:"16px",color:"rgb(80,90,95)",fontSize:"16px",marginTop:"revert"}}>{t("Calculation_Logic")}
                     <br/>
                     {t("Calc_logic")}
@@ -296,7 +397,6 @@ const Add_Rebate_Penality=()=>{
             }
           ]}
         }
-        
         isLoading={isLoading}
         isDataLoading={isLoading}
         applicationData={appDetailsToShow?.applicationData}
