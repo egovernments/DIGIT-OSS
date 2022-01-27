@@ -68,7 +68,7 @@ public final class WebUtils {
     private static final char QUESTION_MARK = '?';
     private static final char FORWARD_SLASH = '/';
     private static final String SCHEME_DOMAIN_SEPARATOR = "://";
-    private static final String EDCR_SERVICE_INTERNAL_URL = "egov-edcr.egov";
+    private static final String EDCR_SERVICE_INTERNAL_URL = "egov-edcr.";
 
     private static final Logger LOG = LoggerFactory.getLogger(WebUtils.class);
 
@@ -86,8 +86,8 @@ public final class WebUtils {
         if (domainName.contains(EDCR_SERVICE_INTERNAL_URL)) {
             String host = httpRequest.getHeader("x-forwarded-host");
             if (StringUtils.isNotBlank(host)) {
-                domainName = host.toString().split(",")[0];
-                LOG.info("*****Domain Name*****" + domainName);
+                domainName = host.split(",")[0];
+                LOG.info("*****Domain Name***** {}", domainName);
             }
         }
         return domainName;
@@ -98,8 +98,7 @@ public final class WebUtils {
      * eg: http://www.domain.com/cxt/xyz will return www.domain.com http://somehost:8090/cxt/xyz will return somehost
      **/
     public static String extractRequestedDomainName(String requestURL) {
-        String domainName = getDomainName(requestURL);
-        return domainName;
+        return getDomainName(requestURL);
     }
 
     private static String getDomainName(String requestURL) {
@@ -124,10 +123,10 @@ public final class WebUtils {
         String host = httpRequest.getHeader("x-forwarded-host");
         if (getDomainName(url.toString()).contains(EDCR_SERVICE_INTERNAL_URL)) {
             if (StringUtils.isNotBlank(protocol) && StringUtils.isNotBlank(host)) {
-                String proto = protocol.toString().split(",")[0];
-                String hostName = host.toString().split(",")[0];
+                String proto = protocol.split(",")[0];
+                String hostName = host.split(",")[0];
                 domainURL = new StringBuilder().append(proto).append(SCHEME_DOMAIN_SEPARATOR).append(hostName).toString();
-                LOG.info("Domain URL*******" + domainURL);
+                LOG.info("Domain URL******* {}", domainURL);
             }
         } else {
             String uri = httpRequest.getRequestURI();
