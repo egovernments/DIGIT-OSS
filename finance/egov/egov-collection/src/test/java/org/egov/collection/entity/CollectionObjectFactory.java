@@ -102,6 +102,8 @@ public class CollectionObjectFactory {
 	private final Session session;
 	private PersistenceService service;
 
+	private Random ran = SecureRandom.getInstanceStrong();
+
 	public static final String MODULE_NAME_TESTRECEIPTHEADER = "TestReceiptHeader";
 	public static final String MODULE_NAME_TESTINSTRUMENTSTATUS = "TestInstrumentStatus";
 	public static final String MODULE_NAME_TESTCHALLANHEADER = "TestChallanHeader";
@@ -120,13 +122,11 @@ public class CollectionObjectFactory {
 	}
 
 	public int getRandomNumber() {
-		Random ran = new Random();
-		return ran.nextInt();
+		return this.ran.nextInt();
 	}
 
 	public int getRandomNumber(int max) {
-		Random ran = new Random();
-		return ran.nextInt(max);
+		return this.ran.nextInt(max);
 	}
 
 	public ServiceDetails createUnsavedServiceDetails() {
@@ -1279,8 +1279,7 @@ public class CollectionObjectFactory {
 	public PersonalInformation createPersonalInformation(User user, Department dept) {
 		PersonalInformation personalInformation = new PersonalInformation();
 		personalInformation.setEmployeeFirstName(user.getName());
-		Random ran = new Random();
-		personalInformation.setEmployeeCode(ran.nextInt());
+		personalInformation.setEmployeeCode(this.ran.nextInt());
 		personalInformation.setUserMaster(user);
 		// personalInformation.setEgdeptMstr(dept);
 		session.saveOrUpdate(personalInformation);
