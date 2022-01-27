@@ -67,6 +67,10 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
     return useQuery("POST_FIELDS", () => MdmsService.getPostFieldsConfig(tenantId, moduleCode, type, payload));
   };
 
+  const useGenderDetails = () => {
+    return useQuery("FSM_GENDER_DETAILS", () => MdmsService.getFSMGenderType(tenantId, moduleCode ,type), config);
+  };
+
   switch (type) {
     case "SanitationType":
       return useSanitationType();
@@ -107,6 +111,8 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
       return usePreFieldsConfig();
     case "PostFieldsConfig":
       return usePostFieldsConfig();
+    case "FSMGenderType":
+      return useGenderDetails();
   }
 };
 

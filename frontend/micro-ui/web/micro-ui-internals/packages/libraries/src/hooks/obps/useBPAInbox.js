@@ -12,6 +12,9 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
       applicationNumber = applicationNo;
       tenantId = Digit.ULBService.getStateId();
     }
+    if(applicationType === "BUILDING_OC_PLAN_SCRUTINY" && window.location.href.includes("obps/inbox") && businessService) {
+      businessService = "BPA_OC"
+    }
 
     const _filters = {
         tenantId,
@@ -27,7 +30,8 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
           ...(applicationNumber ? {applicationNumber} : {}),
           ...(sortOrder ? {sortOrder} : {}),
           ...(sortBy ? {sortBy} : {}),
-          ...(applicationType?.length > 0 ? {applicationType: applicationType.map((item) => item.code).join(",")} : {}),
+          // ...(applicationType?.length > 0 ? {applicationType: applicationType.map((item) => item.code).join(",")} : {}),
+          ...(applicationType && applicationType?.length > 0 ? {applicationType} : {}),
           ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
         },
         limit,

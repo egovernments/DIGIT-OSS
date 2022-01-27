@@ -16,6 +16,7 @@ const BPASendBackToCitizen = ({ parentRoute }) => {
   const history = useHistory();
   const stateCode = Digit.ULBService.getStateId();
   const { applicationNo: applicationNo, tenantId } = useParams();
+  sessionStorage.setItem("BPA_SUBMIT_APP", JSON.stringify("BPA_SUBMIT_APP"));
 
   let config = [], application = {};
 

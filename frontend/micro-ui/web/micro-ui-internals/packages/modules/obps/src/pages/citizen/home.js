@@ -53,11 +53,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
       },
       filterForm: {
         moduleName: "bpa-services",
-        businessService: [
-          { code: "BPA_LOW", name: t("BPA_LOW") },
-          { code: "BPA", name: t("BPA") },
-          { code: "BPA_OC", name: t("BPA_OC") },
-        ],
+        businessService: [],
         applicationStatus: searchParams?.applicationStatus,
         locality: [],
         assignee: "ASSIGNED_TO_ALL",
@@ -152,6 +148,8 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
           link: `/digit-ui/citizen/obps/edcr/inbox`,
         },
       ],
+      className: "CitizenHomeCard",
+      styles: {padding: "0px", minWidth: "90%", minHeight: "90%"}
     },
     {
       title: t("ACTION_TEST_EDCR_SCRUTINY"),
@@ -166,21 +164,28 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
           i18nKey: t("BPA_OC_PLAN_SCRUTINY_FOR_NEW_CONSTRUCTION_LABEL"),
         },
       ],
+      styles: {minWidth: "90%", minHeight: "90%"}
     },
     {
       title: t("ACTION_TEST_BPA_STAKE_HOLDER_HOME"),
       Icon: <BPAIcon className="fill-path-primary-main" />,
       links: bpaLinks,
+      styles: {minWidth: "90%", minHeight: "90%"}
     },
   ];
 
-  const homeScreen = homeDetails.map((data) => {
-    if (data.name === "employeeCard") {
-      return <EmployeeModuleCard {...data} />;
-    } else {
-      return <CitizenHomeCard header={data.title} links={data.links} Icon={() => data.Icon} />;
-    }
-  });
+  const homeScreen = (
+    <div className="mainContent citizenAllServiceGrid">
+      {homeDetails.map((data) => {
+        return (
+          <div>
+            {data.name === "employeeCard" ? <EmployeeModuleCard {...data} /> :
+              <CitizenHomeCard header={data.title} links={data.links} Icon={() => data.Icon} styles={data?.styles} />}
+          </div>
+        )
+      })}
+    </div>
+  )
   sessionStorage.setItem("isPermitApplication", true);
   sessionStorage.setItem("isEDCRDisable", JSON.stringify(false));
   return homeScreen;

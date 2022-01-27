@@ -496,3 +496,23 @@ input[type="number"] {
 .hide-seperator .data-table .row{
   border-bottom-width: 0px !important;
 }
+.error-boundary {
+  width: 100vw;
+  height: 100vh;
+  font-size: 16px;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.error-boundary summary,
+.error-boundary details {
+  width: 300px;
+  background-color: rgb(218, 100, 100);
+  margin: 5px;
+  border: 2px solid #222;
+  border-radius: 3px;
+  padding: 3px;
+}

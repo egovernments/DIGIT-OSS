@@ -19,6 +19,9 @@ export const formatter = (value, symbol, unit, commaSeparated = false) => {
   switch (symbol) {
     case "amount":
       return amountFormatter(value, unit);
+    //this case needs to be removed as backend should handle case sensitiviy from their end
+    case "Amount":
+      return amountFormatter(value, unit);
     case "number":
       if (!commaSeparated) {
         return parseInt(value);

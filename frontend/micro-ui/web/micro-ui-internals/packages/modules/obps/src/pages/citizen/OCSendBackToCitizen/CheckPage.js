@@ -348,7 +348,7 @@ const CheckPage = ({ onSubmit, value }) => {
           </div>
         ))}
         </Card>
-      <Card>
+      <Card style={{paddingRight:"16px"}}>
         <CardSubHeader>{t("BPA_SUMMARY_FEE_EST")}</CardSubHeader>
         <StatusTable>
           {reciept_data?.Payments?.[0]?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill, index) => (

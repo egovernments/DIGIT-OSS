@@ -28,10 +28,9 @@ export const WSMyApplications = () => {
   }
 
   const { WaterConnection: applicationsList } = data || {};
-  console.log(applicationsList);
   return (
     <React.Fragment>
-      <Header>{`${t("My Applications")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
+      <Header>{`${t("CS_TITLE_MY_APPLICATIONS")}  ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
       <div>
         {applicationsList?.length > 0 &&
           applicationsList.map((application, index) => (

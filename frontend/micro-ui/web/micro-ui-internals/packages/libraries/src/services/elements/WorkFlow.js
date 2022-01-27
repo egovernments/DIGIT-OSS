@@ -3,6 +3,7 @@ import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
 const getThumbnails = async (ids, tenantId) => {
+  tenantId = window.location.href.includes("/obps/")? tenantId.split(".")[0] : tenantId;
   const res = await Digit.UploadServices.Filefetch(ids, tenantId);
   if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
     return { thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]), images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };

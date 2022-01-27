@@ -2,7 +2,6 @@ import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable } fro
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-//import PropertyDocument from "../../pageComponents/PropertyDocument";
 import * as func from "./Utils/getQueryParams";
 const WSApplicationDetails = () => {
   const { t } = useTranslation();
@@ -52,9 +51,6 @@ const WSApplicationDetails = () => {
         <Card>
           <CardSubHeader>{t("Fee Details")}</CardSubHeader>
           <StatusTable>
-            {/* <Row label={t("One time Fee")} text={"₹ 16500.00"} textStyle={{textAlign: "right" }} />
-            <Row label={t("Security Charge")} text={"₹ 500.00"} textStyle={{textAlign: "right" }} />
-            <Row label={t("Meter Charge")} text={"₹ 2000.00"} textStyle={{textAlign: "right" }} /> */}
             <Row label={t("Tax")} text={" ₹ 200.00"} textStyle={{ textAlign: "right" }} />
             <Row label={t("WS_COMMON_TOTAL_AMT")} text={"₹ 15000.00"} textStyle={{ textAlign: "right" }} />
             <Row label={t("Status")} text={application?.status} textStyle={{ textAlign: "right" }} />
@@ -140,12 +136,6 @@ const WSApplicationDetails = () => {
               <Row label={t("Number of Toilets")} text={"72"} textStyle={{ whiteSpace: "pre" }} />
             </StatusTable>
           )}
-        </Card>
-        <Card>{/* <PropertyDocument property={application}></PropertyDocument> */}</Card>
-        <Card>
-          {/* <PTWFApplicationTimeline application={application} id={acknowledgementIds} /> */}
-          {/* <WSWFApplicationTimeline />
-        <h1>Hello</h1> */}
         </Card>
       </div>
     </React.Fragment>

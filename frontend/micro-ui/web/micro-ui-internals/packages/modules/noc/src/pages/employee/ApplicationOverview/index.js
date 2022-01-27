@@ -5,15 +5,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
-import { convertEpochToDate } from "../../../utils";
-
-const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
-  if (searcher == "") return str;
-  while (str.includes(searcher)) {
-    str = str.replace(searcher, replaceWith);
-  }
-  return str;
-};
+import { convertEpochToDate, stringReplaceAll } from "../../../utils";
 
 const ApplicationOverview = () => {
   const { id } = useParams();

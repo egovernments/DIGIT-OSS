@@ -4,6 +4,7 @@ import { Switch, useLocation, Route } from "react-router-dom";
 import { BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import DocumentCategories from "./Documents/DocumentCategories";
 import ViewDocument from "./Documents/ViewDocument";
+import Response from './CitizenSurvey/Response';
 
 const CitizenApp = ({ path, url, userType, tenants}) => {
     const location = useLocation();
@@ -13,6 +14,7 @@ const CitizenApp = ({ path, url, userType, tenants}) => {
     const EventDetails = Digit.ComponentRegistryService.getComponent("EventDetails")
     const Documents = Digit.ComponentRegistryService.getComponent("DocumentList")
     const SurveyList = Digit.ComponentRegistryService.getComponent("SurveyList")
+    const FillSurvey = Digit.ComponentRegistryService.getComponent('FillSurvey')
 
     return (
       <React.Fragment>
@@ -38,7 +40,9 @@ const CitizenApp = ({ path, url, userType, tenants}) => {
           <PrivateRoute path={`${path}/docs`} component={() => <DocumentCategories t={t} {...{ path }} />} />
           <PrivateRoute path={`${path}/documents/viewDocument`} component={() => <ViewDocument t={t} {...{ path }} />} />
           <PrivateRoute path={`${path}/documents/list/:category/:count`} component={(props) => <Documents {...props} />} />
-          <PrivateRoute path={`${path}/SurveyList`} component={(props) => <SurveyList {...props} />} />
+          <PrivateRoute path={`${path}/surveys/list`} component={(props) => <SurveyList {...props} />} />
+          <PrivateRoute path={`${path}/surveys/fill-survey`} component={(props) => <FillSurvey {...props} />} />
+          <PrivateRoute path={`${path}/surveys/submit-response`} component={(props) => <Response {...props} />} />
         </Switch>
       </React.Fragment>
     );

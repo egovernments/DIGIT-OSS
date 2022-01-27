@@ -1000,6 +1000,15 @@ const GetMCollectApplicationStatus = (MdmsRes) =>
     };
   });
 
+const getFSMGenderType = (MdmsRes) => {
+  return MdmsRes["common-masters"].GenderType.map((genderDetails) => {
+    return{
+      ...genderDetails,
+      i18nKey: `COMMON_GENDER_${genderDetails.code}`,
+    };
+  });
+};
+
 const getDssDashboard = () => MdmsRes["dss-dashboard"]["dashboard-config"];
 
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
@@ -1095,6 +1104,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetDocumentsTypes(MdmsRes);
     case "CheckList":
       return GetChecklist(MdmsRes);
+    case "FSMGenderType":
+      return getFSMGenderType(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -1366,5 +1377,9 @@ export const MdmsService = {
   
   getTradeTypeRoleTypes: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getTradeTypeRoleCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+
+  getFSMGenderType: (tenantId,moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId,moduleCode, type), moduleCode);
   }
 };

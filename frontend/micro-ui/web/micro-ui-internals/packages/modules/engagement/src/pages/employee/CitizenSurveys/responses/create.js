@@ -43,6 +43,7 @@ const Acknowledgement = (props) => {
 
 
   const survey = mutation.data?.Surveys?.[0];
+ 
   return (
     <Card>
       <BannerPicker

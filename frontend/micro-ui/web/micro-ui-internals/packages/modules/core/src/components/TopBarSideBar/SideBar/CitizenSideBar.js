@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
+import { Phone } from "@egovernments/digit-ui-react-components";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -69,6 +70,7 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
     Digit.clikOusideFired = true;
     toggleSidebar(false);
   };
+  const tenantId = Digit.ULBService.getCurrentTenantId();
 
   const redirectToLoginPage = () => {
     history.push("/digit-ui/citizen/login");
@@ -84,21 +86,45 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
       ...menuItems,
       {
         text: t("CORE_COMMON_LOGOUT"),
-        element:"LOGOUT",
+        element: "LOGOUT",
         icon: <LogoutIcon className="icon" />,
         populators: {
           onClick: onLogout,
         },
       },
+      {
+        text: <React.Fragment>
+          {t("HELPLINE")}
+          <div className="telephone" style={{ marginTop: "-10%" }}>
+            {
+              storeData?.tenants.map((i) => {
+                i.code === tenantId ?
+                  <div className="link">
+                    <a href={`tel:${storeData?.tenants[i].contactNumber}`}>{storeData?.tenants[i].contactNumber}</a>
+                  </div> :
+                  <div className="link">
+                    <a href={`tel:${storeData?.tenants[0].contactNumber}`}>{storeData?.tenants[0].contactNumber}</a>
+                  </div>
+              })
+            }
+            <div className="link">
+              <a href={`tel:${storeData?.tenants[0].contactNumber}`}>{storeData?.tenants[0].contactNumber}</a>
+            </div>
+          </div>
+        </React.Fragment>,
+        element: "Helpline",
+        icon: <Phone className="icon" />,
+      },
+
     ];
   }
-  
-    /*  URL with openlink wont have sidebar and actions    */
-  if(history.location.pathname.includes("/openlink")){
-    profileItem=(<span></span>);
-    menuItems=menuItems.filter(ele=>ele.element==="LANGUAGE");
+
+  /*  URL with openlink wont have sidebar and actions    */
+  if (history.location.pathname.includes("/openlink")) {
+    profileItem = (<span></span>);
+    menuItems = menuItems.filter(ele => ele.element === "LANGUAGE");
   }
-  
+
   return (
     <div>
       <NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={closeSidebar} Footer={<PoweredBy />} />

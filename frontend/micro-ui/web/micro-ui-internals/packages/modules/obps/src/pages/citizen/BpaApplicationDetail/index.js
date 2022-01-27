@@ -28,10 +28,14 @@ const BpaApplicationDetail = () => {
   const [payments, setpayments] = useState([]);
   const [sanctionFee, setSanctionFee] = useState([]);
   const [checkBoxVisible, setCheckBoxVisible] = useState(false);
+  const [isEnableLoader, setIsEnableLoader] = useState(false);
+  sessionStorage.removeItem("BPA_SUBMIT_APP");
+
   const history = useHistory();
   sessionStorage.setItem("bpaApplicationDetails", false);
   let isFromSendBack = false;
   const { data: stakeHolderDetails, isLoading: stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
+  const { isLoading: bpaDocsLoading, data: bpaDocs } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["DocTypeMapping"]);
   const { data, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(tenantId.split(".")[0], "BPA", ["RiskTypeComputation"]);
   const mutation = Digit.Hooks.obps.useObpsAPI(data?.applicationData?.tenantId, false);
@@ -58,6 +62,30 @@ const BpaApplicationDetail = () => {
   {
     businessService = ["BPA.NC_OC_APP_FEE","BPA.NC_OC_SAN_FEE"];
   }
+
+  useEffect(() => {
+    if(!bpaDocsLoading && !isLoading){
+      let filtredBpaDocs = [];
+      if (bpaDocs?.BPA?.DocTypeMapping) {
+        filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(ob => (ob.WFState == "INPROGRESS" && ob.RiskType == data?.applicationData?.riskType && ob.ServiceType == data?.applicationData?.additionalDetails?.serviceType && ob.applicationType == data?.applicationData?.additionalDetails?.applicationType))
+        let documents = data?.applicationDetails?.filter((ob) => ob.title === "BPA_DOCUMENT_DETAILS_LABEL")[0]?.additionalDetails?.obpsDocuments?.[0]?.values;
+        let RealignedDocument = [];
+        filtredBpaDocs && filtredBpaDocs?.[0]?.docTypes && filtredBpaDocs?.[0]?.docTypes.map((ob) => {
+            documents && documents.filter(x => ob.code === x.documentType.slice(0,x.documentType.lastIndexOf("."))).map((doc) => {
+                RealignedDocument.push(doc);
+            })
+        })
+        const newApplicationDetails = data.applicationDetails.map((obj) => {
+          if(obj.title === "BPA_DOCUMENT_DETAILS_LABEL")
+          {
+            return {...obj, additionalDetails:{obpsDocuments:[{title:"",values:RealignedDocument}]}}
+          }
+          return obj;
+        })
+        data.applicationDetails = [...newApplicationDetails];
+    }
+    }
+  },[bpaDocs,data])
 
 
   useEffect(async() => {
@@ -224,15 +252,19 @@ const BpaApplicationDetail = () => {
   }
 
   const submitAction = (workflow) => {
+    setIsEnableLoader(true);
     mutation.mutate(
       { BPA: { ...data?.applicationData, workflow } },
       {
         onError: (error, variables) => {
+          setIsEnableLoader(false);
           setShowModal(false);
           setShowToast({ key: "error", action: error?.response?.data?.Errors[0]?.message ? error?.response?.data?.Errors[0]?.message : error });
           setTimeout(closeToast, 5000);
         },
         onSuccess: (data, variables) => {
+          setIsEnableLoader(false);
+          history.replace(`/digit-ui/citizen/obps/response`, { data: data });
           setShowModal(false);
           setShowToast({ key: "success", action: selectedAction });
           setTimeout(closeToast, 5000);
@@ -296,7 +328,7 @@ const BpaApplicationDetail = () => {
       }
   }
 
-  if (isLoading) {
+  if (isLoading || isEnableLoader) {
     return <Loader />
   }
 
@@ -512,7 +544,7 @@ const BpaApplicationDetail = () => {
                       onChange={() => { setIsTocAccepted(!isTocAccepted); isTocAccepted ? setDisplayMenu(!isTocAccepted) : "" }}
                     />
                   )}
-                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
+                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 1 && (
                     <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}>
                       <div style={{ width: "100%" }}>
                         {displayMenu && workflowDetails?.data?.nextActions ? (
@@ -525,6 +557,21 @@ const BpaApplicationDetail = () => {
                           />
                         ) : null}
                         <SubmitBar style={{ width: "100%" }} disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+                      </div>
+                    </ActionBar>
+                  )}
+                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length == 1 && (
+                    <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}>
+                      <div style={{ width: "100%" }}>
+                        <button 
+                        style={{ width: "100%", color: "#FFFFFF", fontSize: "19px" }}
+                        className={`${checkForSubmitDisable(isFromSendBack, isTocAccepted) ? "submit-bar-disabled" : "submit-bar"}`}
+                        disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} 
+                        name={workflowDetails?.data?.nextActions?.[0]?.action} 
+                        value={workflowDetails?.data?.nextActions?.[0]?.action}
+                        onClick={(e) => {onActionSelect(e.target.value)}}>
+                        {t(`WF_BPA_${workflowDetails?.data?.nextActions?.[0]?.action}`)}
+                        </button>
                       </div>
                     </ActionBar>
                   )}
