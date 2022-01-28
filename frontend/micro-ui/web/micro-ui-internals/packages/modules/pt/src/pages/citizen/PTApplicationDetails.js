@@ -60,10 +60,9 @@ const PTApplicationDetails = () => {
     const acknowldgementDataAPI = await getPTAcknowledgementData({ ...applications }, tenantInfo, t);
     setAcknowldgementData(acknowldgementDataAPI);
   }
-
-  useEffect(() => {
+  // useEffect(() => {
     getAcknowledgementData();
-  }, [])
+  // }, [])
 
   const handleDownloadPdf = () => {
     Digit.Utils.pdf.generate(acknowldgementData);
@@ -84,7 +83,7 @@ const PTApplicationDetails = () => {
             {
               isPropertyTransfer &&
               <React.Fragment>
-                  <Row label={t("Fee Amount")} text={acknowldgementData?.name} textStyle={{ whiteSpace: "pre" }} />
+                  <Row label={t("Fee Amount")} text={application?.name} textStyle={{ whiteSpace: "pre" }} />
                   <Row label={t("Payment Status")} text={application?.status} textStyle={{ whiteSpace: "pre" }} />
                 </React.Fragment>
             }
@@ -99,18 +98,18 @@ const PTApplicationDetails = () => {
           </StatusTable>
           { isPropertyTransfer ? (
             <React.Fragment>
-
+              
             </React.Fragment>
-          ) : (
-            <>
+           ) : ( 
+           <React.Fragment>
               <CardSubHeader>{t("PT_PROPERTY_ASSESSMENT_DETAILS_HEADER")}</CardSubHeader>
               <StatusTable>
                 <Row
                   label={t("PT_ASSESMENT_INFO_USAGE_TYPE")}
                   text={
                     `${t(
-                      (application.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                      (application?.usageCategory?.split(".")[1] ? application?.usageCategory?.split(".")[1] : application.usageCategory)
+                      (application?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
+                      (application?.usageCategory?.split(".")[1] ? application?.usageCategory?.split(".")[1] : application?.usageCategory)
                     )}` || t("CS_NA")
                   }
                 />
@@ -136,9 +135,9 @@ const PTApplicationDetails = () => {
                               label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")}
                               text={
                                 `${t(
-                                  (application.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                                  (application?.usageCategory?.split(".")[1] ? application?.usageCategory?.split(".")[1] : application.usageCategory) +
-                                  (application.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
+                                  (application?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
+                                  (application?.usageCategory?.split(".")[1] ? application?.usageCategory?.split(".")[1] : application?.usageCategory) +
+                                  (application?.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
                                 )}` || t("CS_NA")
                               }
                             />
@@ -181,8 +180,8 @@ const PTApplicationDetails = () => {
                     </div>
                   ))}
               </div>
-            </>
-          )
+            </React.Fragment>
+           )
           }
           
           <CardSubHeader>{t("PT_COMMON_DOCS")}</CardSubHeader>
