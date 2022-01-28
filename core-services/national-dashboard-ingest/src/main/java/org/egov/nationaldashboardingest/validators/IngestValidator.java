@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.nationaldashboardingest.config.ApplicationProperties;
 import org.egov.nationaldashboardingest.repository.ElasticSearchRepository;
 import org.egov.nationaldashboardingest.utils.JsonProcessorUtil;
@@ -41,9 +42,9 @@ public class IngestValidator {
     @Autowired
     private ElasticSearchRepository repository;
 
-    public void verifyCrossStateRequest(IngestRequest ingestRequest){
-        String employeeUlb = ingestRequest.getRequestInfo().getUserInfo().getTenantId();
-        String ulbPresentInRequest = ingestRequest.getIngestData().getUlb();
+    public void verifyCrossStateRequest(Data data, RequestInfo requestInfo){
+        String employeeUlb = requestInfo.getUserInfo().getTenantId();
+        String ulbPresentInRequest = data.getUlb();
         if(ulbPresentInRequest.contains(".")){
             if(!employeeUlb.equals(ulbPresentInRequest))
                 throw new CustomException("EG_INGEST_ERR", "Employee of ulb: " + employeeUlb + " cannot insert data for ulb: " + ulbPresentInRequest);
@@ -129,6 +130,10 @@ public class IngestValidator {
     }
 
     private void validateStringNotNumeric(String s) {
+        if(s.length() == 1)
+            if(s.equals("-") || s.equals("."))
+                throw new CustomException("EG_DS_ERR", "Cannot have a string of length 1 containing separator( . OR - ) as ingest input.");
+
         Pattern p = Pattern.compile("[^a-z0-9.\\- ]", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(s);
         if (m.find())
@@ -148,7 +153,7 @@ public class IngestValidator {
         try {
             Date inpDate = formatter.parse(date);
             if(inpDate.after(currDate))
-                throw new CustomException("EG_DS_ERR", "Future date values are now allowed.");
+                throw new CustomException("EG_DS_ERR", "Future date values are not allowed.");
         } catch (ParseException e) {
             throw new CustomException("EG_DS_ERR", "Date should be strictly in dd-MM-yyyy format.");
         }
@@ -243,18 +248,29 @@ public class IngestValidator {
     public void verifyIfDataAlreadyIngested(Data ingestData) {
         StringBuilder uri = new StringBuilder(applicationProperties.getElasticSearchHost() + "/");
         uri.append(applicationProperties.getModuleIndexMapping().get(ingestData.getModule()));
-        uri.append("/_doc").append("/_search");
-        uri.append("?q=date").append(":").append(ingestData.getDate()).append(" AND ").append("module").append(":").append(ingestData.getModule());
+        uri.append("/_search");
+        uri.append("?q=date").append(":").append(ingestData.getDate()).append(" AND ").append("module").append(":").append(ingestData.getModule()).append(" AND ").append("state").append(":").append(ingestData.getState()).append(" AND ").append("region").append(":").append(ingestData.getRegion()).append(" AND ").append("ulb").append(":").append(ingestData.getUlb()).append(" AND ").append("ward").append(":").append(ingestData.getWard());
         log.info(uri.toString());
-        repository.findIfRecordAlreadyExists(uri);
+        Integer numOfRecordsFound = repository.findIfRecordAlreadyExists(uri);
+        if (numOfRecordsFound > 0){
+            throw new CustomException("EG_IDX_ERR", "Records for the given date and module for the given state and area details have already been ingested, input data will not be ingested.");
+        }
     }
     // The verification logic will always use module name + financialYear to determine the uniqueness of a set of records.
     public void verifyIfMasterDataAlreadyIngested(MasterData masterData) {
         StringBuilder uri = new StringBuilder(applicationProperties.getElasticSearchHost() + "/");
         uri.append(applicationProperties.getMasterDataIndex());
-        uri.append("/_doc").append("/_search");
-        uri.append("?q=financialYear").append(":").append(masterData.getFinancialYear()).append(" AND ").append("module").append(":").append(masterData.getModule());
+        uri.append("/nss").append("/_search");
+        uri.append("?q=financialYear").append(":").append(masterData.getFinancialYear()).append(" AND ").append("module").append(":").append(masterData.getModule()).append(" AND ").append("region").append(":").append(masterData.getRegion()).append(" AND ").append("state").append(":").append(masterData.getState());
         log.info(uri.toString());
-        repository.findIfRecordAlreadyExists(uri);
+        Integer numOfRecordsFound = repository.findIfRecordAlreadyExists(uri);
+        if (numOfRecordsFound > 0){
+            throw new CustomException("EG_IDX_ERR", "Records for the given financial year and module for the given state and area details have already been ingested, input data will not be ingested.");
+        }
+    }
+
+    public void validateMaxDataListSize(IngestRequest ingestRequest) {
+        if(ingestRequest.getIngestData().size() > applicationProperties.getMaxDataListSize())
+            throw new CustomException("EG_DS_INGEST_ERR", "Ingest service supports bulk data ingest requests of max size: " + applicationProperties.getMaxDataListSize());
     }
 }

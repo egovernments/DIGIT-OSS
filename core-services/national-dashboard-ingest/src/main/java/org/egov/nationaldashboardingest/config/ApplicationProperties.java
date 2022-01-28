@@ -21,6 +21,9 @@ public class ApplicationProperties {
     @Value("${master.data.index}")
     private String masterDataIndex;
 
+    @Value("${ingest.error.queue}")
+    private String ingestErrorQueue;
+
     @Value("#{${module.index.mapping}}")
     private Map<String, String> moduleIndexMapping;
 
@@ -29,5 +32,8 @@ public class ApplicationProperties {
 
     @Value("#{${master.module.fields.mapping}}")
     private Map<String, Map<String, String>> masterModuleFieldsMapping;
+
+    @Value("${max.data.list.size}")
+    private Long maxDataListSize;
 
 }

@@ -5,6 +5,8 @@ import lombok.*;
 import org.egov.common.contract.request.RequestInfo;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,8 +17,9 @@ import javax.validation.Valid;
 public class IngestRequest {
 
     @Valid
+    @NotNull
     @JsonProperty("Data")
-    private Data ingestData;
+    private List<Data> ingestData;
 
     @JsonProperty("RequestInfo")
     private RequestInfo requestInfo;

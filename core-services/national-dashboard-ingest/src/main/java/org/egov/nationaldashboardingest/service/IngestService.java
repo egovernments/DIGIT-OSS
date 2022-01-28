@@ -1,5 +1,7 @@
 package org.egov.nationaldashboardingest.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.nationaldashboardingest.config.ApplicationProperties;
 import org.egov.nationaldashboardingest.repository.ElasticSearchRepository;
@@ -9,7 +11,10 @@ import org.egov.nationaldashboardingest.web.models.MasterDataRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -27,24 +32,41 @@ public class IngestService {
     @Autowired
     IngestValidator ingestValidator;
 
-    public void ingestData(IngestRequest ingestRequest) {
+    public List<Integer> ingestData(IngestRequest ingestRequest) {
 
-        // Validates whether the fields configured for a given module are present in payload
-        ingestValidator.verifyDataStructure(ingestRequest.getIngestData());
+        ingestValidator.validateMaxDataListSize(ingestRequest);
 
-        // Validates that no cross state data is being ingested, i.e. employee of state X cannot insert data for state Y
-        ingestValidator.verifyCrossStateRequest(ingestRequest);
+        List<Integer> responseHash = new ArrayList<>();
 
-        // Validate if record for the day is already present
-        ingestValidator.verifyIfDataAlreadyIngested(ingestRequest.getIngestData());
+        Map<String, List<ObjectNode>> indexNameVsDocumentsToBeIndexed = new HashMap<>();
 
-        String moduleCode = ingestRequest.getIngestData().getModule();
+        ingestRequest.getIngestData().forEach(data -> {
+            // Validates whether the fields configured for a given module are present in payload
+            ingestValidator.verifyDataStructure(data);
 
-        // Flattens incoming ingest payload
-        List<String> flattenedIndexPayload = customIndexRequestDecorator.createFlattenedIndexRequest(ingestRequest.getIngestData());
+            // Validates that no cross state data is being ingested, i.e. employee of state X cannot insert data for state Y
+            ingestValidator.verifyCrossStateRequest(data, ingestRequest.getRequestInfo());
 
-        // Repository layer call for performing bulk indexing
-        repository.indexFlattenedDataToES(applicationProperties.getModuleIndexMapping().get(moduleCode), flattenedIndexPayload);
+            // Validate if record for the day is already present
+            ingestValidator.verifyIfDataAlreadyIngested(data);
+
+            String moduleCode = data.getModule();
+
+            // Flattens incoming ingest payload
+            List<ObjectNode> flattenedIndexPayload = customIndexRequestDecorator.createFlattenedIndexRequest(data);
+
+            // Repository layer call for performing bulk indexing
+            if(indexNameVsDocumentsToBeIndexed.containsKey(applicationProperties.getModuleIndexMapping().get(moduleCode)))
+                indexNameVsDocumentsToBeIndexed.get(applicationProperties.getModuleIndexMapping().get(moduleCode)).addAll(flattenedIndexPayload);
+            else
+                indexNameVsDocumentsToBeIndexed.put(applicationProperties.getModuleIndexMapping().get(moduleCode), flattenedIndexPayload);
+
+            responseHash.add(data.hashCode());
+
+        });
+        //repository.indexFlattenedDataToES(indexNameVsDocumentsToBeIndexed);
+        repository.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);
+        return responseHash;
 
     }
 
@@ -57,11 +79,14 @@ public class IngestService {
 
         ingestValidator.verifyIfMasterDataAlreadyIngested(masterDataRequest.getMasterData());
 
+        Map<String, List<String>> indexNameVsDocumentsToBeIndexed = new HashMap<>();
+
         // Flattens incoming ingest payload
         List<String> flattenedIndexPayload = customIndexRequestDecorator.createFlattenedMasterDataRequest(masterDataRequest.getMasterData());
 
         // Repository layer call for performing bulk indexing
-        repository.indexFlattenedDataToES(applicationProperties.getMasterDataIndex(), flattenedIndexPayload);
+        indexNameVsDocumentsToBeIndexed.put(applicationProperties.getMasterDataIndex(), flattenedIndexPayload);
+        repository.indexFlattenedDataToES(indexNameVsDocumentsToBeIndexed);
 
     }
 

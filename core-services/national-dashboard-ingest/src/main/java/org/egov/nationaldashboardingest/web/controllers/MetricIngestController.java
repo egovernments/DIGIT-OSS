@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -34,9 +35,9 @@ public class MetricIngestController {
     @RequestMapping(value="/_ingest", method = RequestMethod.POST)
     public ResponseEntity<IngestResponse> create(@RequestBody @Valid IngestRequest ingestRequest) {
         log.info(ingestRequest.getIngestData().toString());
-        ingestService.ingestData(ingestRequest);
+        List<Integer> responseHash = ingestService.ingestData(ingestRequest);
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(ingestRequest.getRequestInfo(), true);
-        IngestResponse response = IngestResponse.builder().responseInfo(responseInfo).build();
+        IngestResponse response = IngestResponse.builder().responseInfo(responseInfo).responseHash(responseHash).build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.egov.common.contract.response.ResponseInfo;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,5 +16,8 @@ public class IngestResponse {
 
     @JsonProperty("ResponseInfo")
     private ResponseInfo responseInfo = null;
+
+    @JsonProperty("responseHash")
+    private List<Integer> responseHash = null;
 
 }

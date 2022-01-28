@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.nationaldashboardingest.config.ApplicationProperties;
+import org.egov.nationaldashboardingest.producer.Producer;
 import org.egov.nationaldashboardingest.repository.ServiceRequestRepository;
 import org.egov.nationaldashboardingest.utils.IngestUtil;
 import org.egov.nationaldashboardingest.utils.JsonProcessorUtil;
@@ -41,10 +42,13 @@ public class CustomIndexRequestDecoratorImpl implements CustomIndexRequestDecora
     @Autowired
     private ApplicationProperties applicationProperties;
 
+    @Autowired
+    private Producer producer;
+
     @Override
-    public List<String> createFlattenedIndexRequest(Data ingestData) {
+    public List<ObjectNode> createFlattenedIndexRequest(Data ingestData) {
         Long startTime = System.currentTimeMillis();
-        List<String> finalDocumentsToBeIndexed = new ArrayList<>();
+        List<ObjectNode> finalDocumentsToBeIndexed = new ArrayList<>();
         try {
             String seedData = objectMapper.writeValueAsString(ingestData);
             JsonNode incomingData = objectMapper.readValue(seedData, JsonNode.class);
@@ -99,7 +103,8 @@ public class CustomIndexRequestDecoratorImpl implements CustomIndexRequestDecora
                         Object value = flattenedValuesToBeInserted.get(groupByCategory).get(bucketName).get(flattenedFieldName);
                         jsonProcessorUtil.addAppropriateBoxedTypeValueToBaseDocument(currentStructure, flattenedFieldName, value);
                     });
-                    finalDocumentsToBeIndexed.add(new String(currentStructure.toString()));
+                    producer.push("pt-national-dashboard", currentStructure);
+                    finalDocumentsToBeIndexed.add(currentStructure);
 
                     // Separate it out to a clean method - cleanBaseStructureForNextGroupByCategory
                     flattenedValuesToBeInserted.get(groupByCategory).get(bucketName).keySet().forEach(flattenedFieldName ->{
@@ -110,7 +115,7 @@ public class CustomIndexRequestDecoratorImpl implements CustomIndexRequestDecora
             });
             // If metrics data does not have any group by clauses, flattening is not required and base document can be indexed directly.
             if(CollectionUtils.isEmpty(finalDocumentsToBeIndexed)){
-                finalDocumentsToBeIndexed.add(baseDocumentStructure.toString());
+                finalDocumentsToBeIndexed.add(baseDocumentStructure);
             }
             log.info(finalDocumentsToBeIndexed.toString());
         }catch(JsonProcessingException e){

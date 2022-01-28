@@ -2,8 +2,10 @@ package org.egov.nationaldashboardingest.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.nationaldashboardingest.config.ApplicationProperties;
+import org.egov.nationaldashboardingest.producer.Producer;
 import org.egov.nationaldashboardingest.utils.IngestConstants;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,15 +33,24 @@ public class ElasticSearchRepository {
     @Autowired
     private ApplicationProperties applicationProperties;
 
-    public void indexFlattenedDataToES(String index, List<String> finalDocumentsToBeIndexed) {
-        try {
-            String actionMetaData = String.format("{ \"index\" : { \"_index\" : \"%s\", \"_type\" : \"_doc\" } }%n", index);
-            StringBuilder bulkRequestBody = new StringBuilder();
-            for (String document : finalDocumentsToBeIndexed) {
+    @Autowired
+    private Producer producer;
+
+    public void indexFlattenedDataToES(Map<String, List<String>> indexNameVsDocumentsToBeIndexed) {
+        StringBuilder bulkRequestBody = new StringBuilder();
+
+        // Conversion of multi-index request to a single request to avoid repetitive REST calls to ES.
+        indexNameVsDocumentsToBeIndexed.keySet().forEach(indexName -> {
+            String actionMetaData = String.format("{ \"index\" : { \"_index\" : \"%s\", \"_type\" : \"_doc\" } }%n", indexName);
+            for (String document : indexNameVsDocumentsToBeIndexed.get(indexName)) {
                 bulkRequestBody.append(actionMetaData);
                 bulkRequestBody.append(document);
                 bulkRequestBody.append("\n");
             }
+        });
+
+        // Persisting flattened data to ES.
+        try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> httpEntity = new HttpEntity<>(bulkRequestBody.toString(), headers);
@@ -46,7 +58,7 @@ public class ElasticSearchRepository {
             Object response = restTemplate.postForEntity(uri.toString(), httpEntity, Map.class);
             String res = objectMapper.writeValueAsString(response);
             JsonNode responseNode = objectMapper.readValue(res, JsonNode.class);
-            log.info(responseNode.toString());
+            log.info("RESPONSE FROM ES: " + responseNode.toString());
             Boolean errorWhileIndexingData = responseNode.get(IngestConstants.BODY).get(IngestConstants.ERRORS).asBoolean();
             if(errorWhileIndexingData)
                 throw new CustomException("EG_ES_IDX_ERR", "Error occurred while indexing data onto ES. Please ensure input data fields are in accordance with index mapping.");
@@ -59,16 +71,14 @@ public class ElasticSearchRepository {
         }
     }
 
-    public void findIfRecordAlreadyExists(StringBuilder uri) {
+    public Integer findIfRecordAlreadyExists(StringBuilder uri) {
+        Integer recordsFound = 0;
         try {
             Object response = restTemplate.getForEntity(uri.toString(), Map.class);
             String res = objectMapper.writeValueAsString(response);
             JsonNode responseNode = objectMapper.readValue(res, JsonNode.class);
             log.info(responseNode.get(IngestConstants.BODY).toString());
-            Integer recordsFound = responseNode.get(IngestConstants.BODY).get(IngestConstants.HITS).get(IngestConstants.TOTAL).asInt();
-            if (recordsFound > 0){
-                throw new CustomException("EG_IDX_ERR", "Records for the given date and module have already been ingested, input data will not be ingested.");
-            }
+            recordsFound = responseNode.get(IngestConstants.BODY).get(IngestConstants.HITS).get(IngestConstants.TOTAL).asInt();
         }catch (ResourceAccessException e){
             log.error("ES is down");
             throw new CustomException("EG_ES_ERR", "Elastic search is down");
@@ -76,5 +86,14 @@ public class ElasticSearchRepository {
             log.error("Exception while fetching data from ES.");
             throw new CustomException("EG_ES_IDX_ERR", e.getMessage());
         }
+        return recordsFound;
+    }
+
+    public void pushDataToKafkaConnector(Map<String, List<ObjectNode>> indexNameVsDocumentsToBeIndexed) {
+        indexNameVsDocumentsToBeIndexed.keySet().forEach(indexName -> {
+            for(ObjectNode record : indexNameVsDocumentsToBeIndexed.get(indexName)) {
+                producer.push(indexName, record);
+            }
+        });
     }
 }
