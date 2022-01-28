@@ -94,7 +94,7 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
       },
       {
         text: <React.Fragment>
-          {t("HELPLINE")}
+          {t("CS_COMMON_HELPLINE")}
           <div className="telephone" style={{ marginTop: "-10%" }}>
             {
               storeData?.tenants.map((i) => {
