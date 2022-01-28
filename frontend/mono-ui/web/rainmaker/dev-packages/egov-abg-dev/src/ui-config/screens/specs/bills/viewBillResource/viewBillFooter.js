@@ -8,8 +8,6 @@ import { set } from "lodash";
 import get from "lodash/get";
 import { ifUserRoleExists, validateFields } from "../../utils";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
-import "../viewBillResource/index.scss"
-
 
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/inbox" : "/inbox";
@@ -21,7 +19,10 @@ const getCommonApplyFooter = children => {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: window.location.href.includes("viewBill?connectionNumber") ? "footer-styles-bill-cancellation" : "footer-style-bill-cancellation"
+      className: "apply-wizard-footer", //window.location.href.includes("viewBill?connectionNumber") ? "footer-styles-bill-cancellation" : "footer-style-bill-cancellation"
+      style: {
+        padding: "14px"
+      }
     },
     children
   };
@@ -33,11 +34,13 @@ export const cancelBillFooter = getCommonApplyFooter({
     props: {
       variant: "outlined",
       color: "primary",
-      // style: {
-      //   minWidth: "200px",
-      //   height: "48px",
-      //   marginRight: "16px"
-      // }
+      style: {
+        minWidth: "270px",
+        maxWidth: "360px",
+        width: "100%",
+        margin: "0px 5px 5px 0px",
+        minHeight: "50px"
+      }
     },
     children: {
       previousButtonIcon: {
@@ -65,11 +68,13 @@ export const cancelBillFooter = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      // style: {
-      //   minWidth: "200px",
-      //   height: "48px",
-      //   marginRight: "16px"
-      // }
+      style: {
+        minWidth: "300px",
+        maxWidth: "400px",
+        width: "100%",
+        margin: "0px 5px 5px 0px",
+        minHeight: "50px"
+      }
     },
     children: {
       downloadReceiptButtonLabel: getLabel({
@@ -98,11 +103,13 @@ export const viewBillFooter = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      // style: {
-      //   minWidth: "200px",
-      //   height: "48px",
-      //   marginRight: "16px"
-      // }
+      style: {
+        minWidth: "270px",
+        maxWidth: "360px",
+        width: "100%",
+        marginRight: "10px",
+        minHeight: "50px"
+      }
     },
     children: {
       downloadReceiptButtonLabel: getLabel({
