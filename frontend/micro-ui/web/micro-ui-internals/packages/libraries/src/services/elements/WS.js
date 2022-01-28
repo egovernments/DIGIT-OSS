@@ -12,13 +12,13 @@ export const WSService = {
       setTimeParam: false,
       params: { tenantId, ...filters },
     }),
-  fetchPaymentDetails: ({ tenantId, consumerCodes, auth = true }) =>
+  fetchPaymentDetails: ({ tenantId, consumerCode, auth = true }) =>
     Request({
-      url: Urls.ws.fetch_payment_details,
+      url: Urls.pt.fetch_payment_details,
       useCache: false,
       method: "POST",
       auth: auth === false ? auth : true,
       userService: auth === false ? auth : true,
-      params: { tenantId, consumerCode: consumerCodes, businessService: "PT" },
+      params: { tenantId, consumerCode, businessService: "WS" },
     }),
 };

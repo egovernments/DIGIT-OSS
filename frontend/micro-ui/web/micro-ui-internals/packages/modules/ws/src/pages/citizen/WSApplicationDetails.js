@@ -14,25 +14,15 @@ const WSApplicationDetails = () => {
   console.log("Digit.Hooks.ws-> ", Digit.Hooks.ws);
 
   const { isLoading, isError, error, data } = Digit.Hooks.ws.useWnsMyApplication({ filters: filters }, { filters: filters });
+  const { isLoading1, isError1, error1, data1 } = Digit.Hooks.ws.useWnsSearchWithDue({ filters: filters }, { filters: filters });
+
   if (isLoading) {
     return <Loader />;
   }
 
   const { WaterConnection: applicationsList } = data || {};
-  console.log("assssspplicationsList-> ", applicationsList);
   const application = applicationsList[0];
 
-  console.log("sapplicationsList-> ", application);
-  // const data = Digit.Hooks.ws.useWnsSearchWithDue();
-  // console.log("HEre-> ", data);
-
-  // const { data, isLoading, error, isSuccess, billData } = Digit.Hooks.ws.useWnsSearchWithDue({
-  //   tenantId,
-  //   filters: filters,
-  //   configs: { enabled: true, retry: false, retryOnMount: false, staleTime: Infinity },
-  // });
-
-  // console.log("data-> ", data);
   return (
     <React.Fragment>
       <Header>{t("Application Details")}</Header>
