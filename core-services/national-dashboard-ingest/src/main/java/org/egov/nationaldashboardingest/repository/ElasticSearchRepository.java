@@ -89,9 +89,9 @@ public class ElasticSearchRepository {
         return recordsFound;
     }
 
-    public void pushDataToKafkaConnector(Map<String, List<ObjectNode>> indexNameVsDocumentsToBeIndexed) {
+    public void pushDataToKafkaConnector(Map<String, List<JsonNode>> indexNameVsDocumentsToBeIndexed) {
         indexNameVsDocumentsToBeIndexed.keySet().forEach(indexName -> {
-            for(ObjectNode record : indexNameVsDocumentsToBeIndexed.get(indexName)) {
+            for(JsonNode record : indexNameVsDocumentsToBeIndexed.get(indexName)) {
                 producer.push(indexName, record);
             }
         });

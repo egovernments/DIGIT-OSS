@@ -38,7 +38,7 @@ public class IngestService {
 
         List<Integer> responseHash = new ArrayList<>();
 
-        Map<String, List<ObjectNode>> indexNameVsDocumentsToBeIndexed = new HashMap<>();
+        Map<String, List<JsonNode>> indexNameVsDocumentsToBeIndexed = new HashMap<>();
 
         ingestRequest.getIngestData().forEach(data -> {
             // Validates whether the fields configured for a given module are present in payload
@@ -53,7 +53,7 @@ public class IngestService {
             String moduleCode = data.getModule();
 
             // Flattens incoming ingest payload
-            List<ObjectNode> flattenedIndexPayload = customIndexRequestDecorator.createFlattenedIndexRequest(data);
+            List<JsonNode> flattenedIndexPayload = customIndexRequestDecorator.createFlattenedIndexRequest(data);
 
             // Repository layer call for performing bulk indexing
             if(indexNameVsDocumentsToBeIndexed.containsKey(applicationProperties.getModuleIndexMapping().get(moduleCode)))

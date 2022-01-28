@@ -46,9 +46,9 @@ public class CustomIndexRequestDecoratorImpl implements CustomIndexRequestDecora
     private Producer producer;
 
     @Override
-    public List<ObjectNode> createFlattenedIndexRequest(Data ingestData) {
+    public List<JsonNode> createFlattenedIndexRequest(Data ingestData) {
         Long startTime = System.currentTimeMillis();
-        List<ObjectNode> finalDocumentsToBeIndexed = new ArrayList<>();
+        List<JsonNode> finalDocumentsToBeIndexed = new ArrayList<>();
         try {
             String seedData = objectMapper.writeValueAsString(ingestData);
             JsonNode incomingData = objectMapper.readValue(seedData, JsonNode.class);
@@ -103,7 +103,13 @@ public class CustomIndexRequestDecoratorImpl implements CustomIndexRequestDecora
                         Object value = flattenedValuesToBeInserted.get(groupByCategory).get(bucketName).get(flattenedFieldName);
                         jsonProcessorUtil.addAppropriateBoxedTypeValueToBaseDocument(currentStructure, flattenedFieldName, value);
                     });
-                    finalDocumentsToBeIndexed.add(currentStructure);
+                    log.info(currentStructure.toString());
+                    ObjectNode newNode = objectMapper.createObjectNode();
+                    try {
+                        finalDocumentsToBeIndexed.add(objectMapper.readTree(currentStructure.toString()));
+                    } catch (JsonProcessingException e) {
+                        throw new CustomException("EG_DS_FLATTEN_ERR", "Error while reading flattened data");
+                    }
 
                     // Separate it out to a clean method - cleanBaseStructureForNextGroupByCategory
                     flattenedValuesToBeInserted.get(groupByCategory).get(bucketName).keySet().forEach(flattenedFieldName ->{

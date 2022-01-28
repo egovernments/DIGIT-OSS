@@ -248,7 +248,7 @@ public class IngestValidator {
     public void verifyIfDataAlreadyIngested(Data ingestData) {
         StringBuilder uri = new StringBuilder(applicationProperties.getElasticSearchHost() + "/");
         uri.append(applicationProperties.getModuleIndexMapping().get(ingestData.getModule()));
-        uri.append("/_search");
+        uri.append("/nss").append("/_search");
         uri.append("?q=date").append(":").append(ingestData.getDate()).append(" AND ").append("module").append(":").append(ingestData.getModule()).append(" AND ").append("state").append(":").append(ingestData.getState()).append(" AND ").append("region").append(":").append(ingestData.getRegion()).append(" AND ").append("ulb").append(":").append(ingestData.getUlb()).append(" AND ").append("ward").append(":").append(ingestData.getWard());
         log.info(uri.toString());
         Integer numOfRecordsFound = repository.findIfRecordAlreadyExists(uri);
