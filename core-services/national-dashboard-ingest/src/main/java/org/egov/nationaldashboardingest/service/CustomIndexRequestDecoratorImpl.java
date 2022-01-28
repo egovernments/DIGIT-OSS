@@ -103,7 +103,6 @@ public class CustomIndexRequestDecoratorImpl implements CustomIndexRequestDecora
                         Object value = flattenedValuesToBeInserted.get(groupByCategory).get(bucketName).get(flattenedFieldName);
                         jsonProcessorUtil.addAppropriateBoxedTypeValueToBaseDocument(currentStructure, flattenedFieldName, value);
                     });
-                    producer.push("pt-national-dashboard", currentStructure);
                     finalDocumentsToBeIndexed.add(currentStructure);
 
                     // Separate it out to a clean method - cleanBaseStructureForNextGroupByCategory
