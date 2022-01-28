@@ -67,6 +67,10 @@ const NOCEmployeeHomeCard = () => {
           count: totalCount ,
           label: t("ES_COMMON_INBOX"),
           link: `/digit-ui/employee/noc/inbox`
+        },
+        {
+          label: t("ES_COMMON_SEARCH"),
+          link: `/digit-ui/employee/noc/search`
         }
       ]
     }),[isInboxLoading, totalCount]);

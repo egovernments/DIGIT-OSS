@@ -170,6 +170,7 @@ import useSurveyInbox from "./surveys/useSurveyInbox";
 
 import useNOCDetails from "./noc/useNOCDetails";
 import useNOCInbox from "./noc/useInbox";
+import useNOCSearchApplication from "./noc/useSearchApplications";
 
 import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
 import usewsTenants from "./ws/useTenants";
@@ -347,7 +348,8 @@ const survey = {
 const noc = {
   useNOCDetails,
   useNOCApplicationActions,
-  useInbox: useNOCInbox
+  useInbox: useNOCInbox,
+  useNOCSearchApplication
 }
 
 const ws = {
