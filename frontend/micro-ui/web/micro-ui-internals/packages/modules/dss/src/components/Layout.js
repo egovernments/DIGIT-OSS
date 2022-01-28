@@ -86,10 +86,10 @@ const Layout = ({ rowData }) => {
           <GenericChart header={visualizer.name} subHeader={`(${t(`DSS_SLA_ACHIEVED`)})`} key={key}  chip={chip}
           updateChip={onChipChange}>
             <CustomBarChart
-              data={visualizer?.charts?.[0]}
+              data={visualizer?.charts?.[chip?chip.filter(ele=>ele.active)?.[0]?.index:0]}
               fillColor={index++ % 2 ? "#00703C" : "#D4351C"}
               title={visualizer.name}
-              showDrillDown={true}
+              showDrillDown={false}
             />
           </GenericChart>
         );
