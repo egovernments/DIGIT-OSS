@@ -279,6 +279,7 @@ to download all bulk pdf directly egov-pdf
           "success"
         )
       );
+      window.location.href.includes("abg/billDownload")&&window.location.reload();
     }
   } catch (error) {
     console.log(error);
