@@ -33,8 +33,14 @@ export const searchResults = {
         labelKey: "BUSINESS_SERVICE",
         options: {
           filter: false,
-          customBodyRender: (value) => {
-            return <span>{getLocaleLabels(value, value)}</span>;
+          customBodyRender: (value,tableMeta) => {
+            let replaceKey=tableMeta.rowData[8].bussinessService=="WS"?"_WS":"_SW";
+            let replaceWith=tableMeta.rowData[8].bussinessService=="WS"?"_SW":"_WS";
+            let newKey=value.replace(replaceKey,replaceWith);
+            return <span>{
+              tableMeta.rowData[8].isConsolidated?
+              `${getLocaleLabels(value, value)} , ${getLocaleLabels(newKey, newKey)}`:
+              getLocaleLabels(value, value)}</span>;
           },
         },
       },
@@ -83,7 +89,7 @@ export const searchResults = {
                   <span style={{ position: "unset" }}>
                     {value
                       ? tableMeta.rowData[7]
-                        ? getLocaleLabels("GRP_BILL_FAILED", "GRP_BILL_FAILED")
+                        ? getLocaleLabels(value==100?"GRP_BILL_EXPIRED":"GRP_BILL_FAILED", value==100?"GRP_BILL_EXPIRED":"GRP_BILL_FAILED")
                         : `${Number(value).toFixed()}%`
                       : getLocaleLabels(
                           "GRP_BILL_INITIATED",
@@ -103,7 +109,7 @@ export const searchResults = {
           filter: false,
           customBodyRender: (value, tableMeta) => {
             return (
-              <span>
+              <span class="jk-tooltip">
                 {value || tableMeta.rowData[7] ? (
                   <div
                     style={{ color: "#FE7A51", cursor: "pointer" }}
@@ -143,6 +149,7 @@ export const searchResults = {
                       }
                     }}
                   >
+                    {!tableMeta.rowData[7]&&<span class="jk-tooltiptext">{getLocaleLabels("ABG_DOWNLOAD_EXPIREDIN","ABG_DOWNLOAD_EXPIREDIN")}</span>}
                     {getLocaleLabels(
                       tableMeta.rowData[7]
                         ? "GRP_BILL_ACT_RETRY"
