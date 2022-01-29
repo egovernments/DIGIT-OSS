@@ -46,7 +46,6 @@ const Filters = ({ t, ulbTenants, isOpen, closeFilters, showDateRange = true, sh
       range: Digit.Utils.dss.getInitialRange(),
     });
   };
-
   return (
     <div className={`filters-wrapper ${isOpen ? "filters-modal" : ""}`}>
       <span className="filter-close" onClick={() => closeFilters()}>
@@ -70,7 +69,7 @@ const Filters = ({ t, ulbTenants, isOpen, closeFilters, showDateRange = true, sh
         <div className="filters-input">
           <div className="mbsm">{t("ES_DSS_DDR")}</div>
           <MultiSelectDropdown
-            options={ulbTenants?.ddr}
+            options={ulbTenants?.ddr&&ulbTenants.ddr?.sort((x,y)=>x?.ddrKey?.localeCompare(y?.ddrKey))}
             optionsKey="ddrKey"
             onSelect={selectDDR}
             selected={selectedDDRs}
@@ -83,7 +82,7 @@ const Filters = ({ t, ulbTenants, isOpen, closeFilters, showDateRange = true, sh
         <div className="filters-input">
           <div className="mbsm">{t("ES_DSS_ULB")}</div>
           <MultiSelectDropdown
-            options={ulbTenants?.ulb}
+            options={ulbTenants?.ulb&&ulbTenants.ulb?.sort((x,y)=>x?.ulbKey?.localeCompare(y?.ulbKey))}
             optionsKey="ulbKey"
             onSelect={selectFilters}
             selected={selected}
