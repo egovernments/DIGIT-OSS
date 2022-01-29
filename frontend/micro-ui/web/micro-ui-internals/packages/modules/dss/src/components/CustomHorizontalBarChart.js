@@ -39,7 +39,7 @@ const CustomHorizontalBarChart = ({
       const row = data[i];
       for (let j = 0; j < row.plots.length; j++) {
         const plot = row.plots[j];
-        result[plot.name] = { ...result[plot.name], [row.headerName]: plot.value };
+        result[plot.name] = { ...result[plot.name], [t(row.headerName)]: plot.value,name:t(plot.name) };
       }
     }
     return Object.keys(result).map((key) => {
@@ -81,16 +81,15 @@ const CustomHorizontalBarChart = ({
   // }
 
   const bars = response?.responseData?.data?.map((bar) => bar?.headerName);
-
   return (
     <Fragment>
-      <ResponsiveContainer width="99%" height={300}>
+      <ResponsiveContainer width="89%" height={300} >
         {chartData?.length === 0 ? (
           <div className="no-data">
             <p>{t("DSS_NO_DATA")}</p>
           </div>
         ) : (
-          <BarChart width="100%" height="100%" layout={layout} data={chartData} barGap={14} barSize={15}>
+          <BarChart width="100%" height="100%" layout={layout} data={chartData} barGap={12} barSize={12}>
             <CartesianGrid />
             <YAxis
               dataKey={yDataKey}
@@ -109,7 +108,7 @@ const CustomHorizontalBarChart = ({
             />
             <XAxis dataKey={xDataKey} type={xAxisType} tick={{ fontSize: "14px", fill: "#505A5F" }} tickFormatter={tickFormatter} />
             {bars?.map((bar, id) => (
-              <Bar key={id} dataKey={bar} fill={barColors[id]} stackId={id > 1 ? 1 : id} />
+              <Bar key={id} dataKey={t(bar)} fill={barColors[id]} stackId={id > 1 ? 1 : id} />
             ))}
             <Legend formatter={renderLegend} iconType="circle" />
             <Tooltip cursor={false} formatter={tooltipFormatter} />

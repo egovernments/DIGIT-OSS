@@ -31,7 +31,7 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
     }, []);
   }, [response]);
 
-  const renderLegend = (value) => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`PROPERTYTYPE_MASTERS_${value}`)}</span>;
+  const renderLegend = (value) => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`PROPERTYTYPE_MASTERS_${value&&Digit.Utils.locale.getTransformedLocale(value)}`)}</span>;
 
   const renderCustomLabel = (args) => {
     const { value, endAngle, startAngle, x, cx, y, cy, percent, name } = args;
