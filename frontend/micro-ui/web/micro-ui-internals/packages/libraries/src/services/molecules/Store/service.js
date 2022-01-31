@@ -65,6 +65,7 @@ export const StoreService = {
         code: stateInfo.code,
         name: stateInfo.name,
         logoUrl: stateInfo.logoUrl,
+        statelogo: stateInfo.statelogo,
         logoUrlWhite: stateInfo.logoUrlWhite,
         bannerUrl: stateInfo.bannerUrl,
       },
@@ -90,11 +91,11 @@ export const StoreService = {
       tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
     });
 
-    initData.modules.push({
-      module: "MCollect",
-      code: "MCollect",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
+    // initData.modules.push({
+    //   module: "MCollect",
+    //   code: "MCollect",
+    //   tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
+    // });
 
     initData.modules.push({
       module: "HRMS",
@@ -102,11 +103,11 @@ export const StoreService = {
       tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
     });
 
-    initData.modules.push({
-      module: "TL",
-      code: "TL",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
+    // initData.modules.push({
+    //   module: "TL",
+    //   code: "TL",
+    //   tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
+    // });
 
     initData.modules.push({
       module: "Receipts",
@@ -140,9 +141,11 @@ export const StoreService = {
     return initData;
   },
   defaultData: async (stateCode, moduleCode, language) => {
+    let moduleCodes = [];
+    if(typeof moduleCode !== "string") moduleCode.forEach(code => { moduleCodes.push(`rainmaker-${code.toLowerCase()}`) });
     // console.log(moduleCode, stateCode);
     const LocalePromise = LocalizationService.getLocale({
-      modules: [`rainmaker-${moduleCode.toLowerCase()}`],
+      modules:  typeof moduleCode == "string" ? [`rainmaker-${moduleCode.toLowerCase()}`] : moduleCodes,
       locale: language,
       tenantId: stateCode,
     });
