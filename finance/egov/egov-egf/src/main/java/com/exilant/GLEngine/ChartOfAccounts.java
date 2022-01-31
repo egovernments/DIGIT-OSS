@@ -1058,10 +1058,10 @@ public class ChartOfAccounts {
 
 	public String getGLCode(final String detailName, final String detailKey, final Connection con) {
 		String code = "";
-		try {
+		try(final PreparedStatement pst = con.prepareStatement(str.toString());) {
 			final StringBuilder str = new StringBuilder("select glcode as \"code\" from chartofaccounts,bankaccount")
 					.append(" where bankaccount.glcodeid=chartofaccounts.id and bankaccount.id= ?");
-			final PreparedStatement pst = con.prepareStatement(str.toString());
+
 			pst.setString(0, detailKey);
 			final ResultSet resultset = pst.executeQuery();
 
@@ -1077,8 +1077,8 @@ public class ChartOfAccounts {
 		String fiscalyearid = "";
 		final StringBuilder sql = new StringBuilder("select ID as \"fiscalperiodID\" from fiscalperiod where ")
 				.append("to_date(?,'dd-mon-yyyy') between startingdate and endingdate");
-		try {
-			final PreparedStatement pst = con.prepareStatement(sql.toString());
+		try(final PreparedStatement pst = con.prepareStatement(sql.toString());) {
+
 			pst.setString(0, voucherDate);
 			final ResultSet rs = pst.executeQuery();
 			if (rs.next())
