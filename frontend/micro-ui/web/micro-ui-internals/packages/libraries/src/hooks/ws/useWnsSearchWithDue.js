@@ -7,13 +7,7 @@ const useWnsSearchWithDue = ({ tenantId, filters = {}, BusinessService = "WS", t
   console.log("tenantId-> ", tenantId);
   const { isLoading, error, data, isSuccess } = useQuery(
     ["WS_FETCH_BILL", tenantId, filters, BusinessService],
-    async () =>
-      await WSService.fetchPaymentDetails({
-        tenantId: filters.tenantId,
-        filters: { ...filters },
-        consumerCode: filters.applicationNumber,
-        businessService: BusinessService,
-      }),
+    async () => await WSService.fetchPaymentDetails({ data: filters }),
     config
   );
   return { isLoading, error, data, isSuccess };

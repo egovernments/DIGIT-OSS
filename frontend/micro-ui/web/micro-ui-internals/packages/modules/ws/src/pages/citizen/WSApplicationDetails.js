@@ -14,7 +14,8 @@ const WSApplicationDetails = () => {
   console.log("Digit.Hooks.ws-> ", Digit.Hooks.ws);
 
   const { isLoading, isError, error, data } = Digit.Hooks.ws.useWnsMyApplication({ filters: filters }, { filters: filters });
-  const { isLoading1, isError1, error1, data1 } = Digit.Hooks.ws.useWnsSearchWithDue({ filters: filters }, { filters: filters });
+
+  const { isLoading1, isError1, error1, data1 } = Digit.Hooks.ws.useWnsSearchWithDue({filters:data},{filters:data});
 
   if (isLoading) {
     return <Loader />;
@@ -64,9 +65,6 @@ const WSApplicationDetails = () => {
               text={application?.connectionHolders[0]?.permanentAddress ? application?.connectionHolders[0]?.permanentAddress : "N/A"}
               textStyle={{ whiteSpace: "pre" }}
             />
-            {/* <Row label={t("Tax")} text={" ₹ 200.00"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("WS_COMMON_TOTAL_AMT")} text={" ₹ 15000.00"} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("Status")} text={application?.status} textStyle={{ whiteSpace: "pre" }} /> */}
           </StatusTable>
         </Card>
         <Card>
