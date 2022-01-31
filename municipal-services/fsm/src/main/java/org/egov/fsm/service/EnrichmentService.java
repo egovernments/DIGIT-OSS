@@ -72,14 +72,6 @@ public class EnrichmentService {
 			if(fsmRequest.getFsm().getCitizen() != null && fsmRequest.getFsm().getCitizen().getGender() != null) {
 				UserDetailResponse userDetailResponse = userService.updateApplicantsGender(fsmRequest.getFsm().getCitizen(), fsmRequest.getRequestInfo());
 				citzen = userDetailResponse.getUser().get(0);
-			}else {
-				List<String> accountIds = new ArrayList<String>();
-				accountIds.add(fsmRequest.getRequestInfo().getUserInfo().getUuid());
-				FSMSearchCriteria fsmsearch = new FSMSearchCriteria();
-				fsmsearch.setTenantId(fsmRequest.getFsm().getTenantId());
-				fsmsearch.setOwnerIds(accountIds);
-				UserDetailResponse userDetailResponse = userService.getUser(fsmsearch, requestInfo);
-				citzen = userDetailResponse.getUser().get(0);
 			}
 			fsmRequest.getFsm().setCitizen(citzen);
 		}else {
