@@ -126,7 +126,7 @@ const variables = {
     pdf: '#ff0000',
     email: '#ff0000',
 
-    colors: [{'dark': '#9C27B0','light': 'rgba(156, 39, 176, 0.24)'},{'dark':'#F44336','light': 'rgba(244, 67, 54, 0.24)'},{'dark':'#4CAF50','light': 'rgba(76, 175, 80, 0.24)'},{'dark':'#FFC107','light': 'rgba(255, 193, 7, 0.24)'},{'dark':'#009688','light': 'rgba(0, 150, 136, 0.24)'},{'dark': '#2196F3','light': 'rgba(33, 150, 243, 0.24)'}]
+    colors: [{'dark': '#9C27B0','light': 'rgba(156, 39, 176, 0.24)'},{'dark':'#F44336','light': 'rgba(244, 67, 54, 0.24)'},{'dark':'#4CAF50','light': 'rgba(76, 175, 80, 0.24)'},{'dark':'#FFC107','light': 'rgba(255, 193, 7, 0.24)'},{'dark':'#009688','light': 'rgba(0, 150, 136, 0.24)'},{'dark': '#2196F3','light': 'rgba(33, 150, 243, 0.24)',},{'dark': '#6E8459','light': 'rgba(82, 105, 55,0.35)'}]
     
 }
 
