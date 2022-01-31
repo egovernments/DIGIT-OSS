@@ -366,10 +366,12 @@ public class BudgetReportAction extends BaseFormAction {
         Map<String, Object> paramMap;
         for (final BudgetDetail detail : budgetDetails) {
             paramMap = budgetDetailHelper.constructParamMap(getValueStack(), detail);
-            final BigDecimal amount = budgetDetailHelper.getTotalPreviousActualData(paramMap, financialYear.getEndingDate());
-            for (final BudgetReportView row : budgetDetailsList)
-                if (row.getId().equals(detail.getId()))
-                    row.setActualsLastYear(amount == null ? BigDecimal.ZERO : amount);
+            if (financialYear != null) {
+                final BigDecimal amount = budgetDetailHelper.getTotalPreviousActualData(paramMap, financialYear.getEndingDate());
+                for (final BudgetReportView row : budgetDetailsList)
+                    if (row.getId().equals(detail.getId()))
+                        row.setActualsLastYear(amount == null ? BigDecimal.ZERO : amount);
+            }
         }
     }
 

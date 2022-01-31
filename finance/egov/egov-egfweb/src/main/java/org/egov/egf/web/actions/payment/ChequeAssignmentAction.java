@@ -1232,7 +1232,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
 
                         RtgsNumberGenerator r = (RtgsNumberGenerator) beanResolver
                                 .getAutoNumberServiceFor(RtgsNumberGenerator.class);
-                        if (null == autoNoCutOffDate || rtgsdate.after(autoNoCutOffDate)) {
+                        if (null == autoNoCutOffDate || (rtgsdate != null && rtgsdate.after(autoNoCutOffDate))) {
                             rtgsNo = r.getNextNumber("RTGS_RefNumber_" + finYearRange.replace('-', '_'));
 
                             rtgsNo = rtgsNo + "/" + finYearRange;
@@ -2158,21 +2158,21 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             LOGGER.debug("Completed validateDataForManual.");
     }
 
-    @SkipValidation
-    public boolean validateUser(final String purpose) throws ParseException {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Starting validateUser...");
-        getPersistenceService().findAllByNamedQuery(Script.BY_NAME,
-                "Paymentheader.show.bankbalance").get(0);
-        final List<String> list = null;// (List<String>)
-        // validScript.eval(Script.createContext("persistenceService",paymentService,"purpose",purpose));
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Completed validateUser.");
-        if (list.get(0).equals("true"))
-            return true;
-        else
-            return false;
-    }
+//    @SkipValidation
+//    public boolean validateUser(final String purpose) throws ParseException {
+//        if (LOGGER.isDebugEnabled())
+//            LOGGER.debug("Starting validateUser...");
+//        getPersistenceService().findAllByNamedQuery(Script.BY_NAME,
+//                "Paymentheader.show.bankbalance").get(0);
+//        final List<String> list = null;// (List<String>)
+//        // validScript.eval(Script.createContext("persistenceService",paymentService,"purpose",purpose));
+//        if (LOGGER.isDebugEnabled())
+//            LOGGER.debug("Completed validateUser.");
+//        if (list.get(0).equals("true"))
+//            return true;
+//        else
+//            return false;
+//    }
 
     @Override
     public void validate() {

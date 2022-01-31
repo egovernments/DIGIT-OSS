@@ -91,7 +91,9 @@ public class PrimaryKeyGenerator
         {
             final Query pst = null;
                     //persistenceService.getSession().createSQLQuery(sql);
-            final List<BigInteger> rs = pst.list();
+
+                final List<BigInteger> rs = pst.list();
+
             key = rs != null ? rs.get(0).longValue() : 0l;
             if (rs == null || rs.size() == 0)
                 throw new NullPointerException();

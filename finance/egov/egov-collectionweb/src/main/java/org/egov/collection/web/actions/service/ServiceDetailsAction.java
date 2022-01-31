@@ -259,10 +259,10 @@ public class ServiceDetailsAction extends BaseFormAction {
     @Action(value = "/service/serviceDetails-beforeModify")
     public String beforeModify() {
 
-        if (null == accountDetails || accountDetails.isEmpty())
+        if (accountDetails.isEmpty())
             accountDetails.add(new ServiceAccountDetails());
 
-        if (null == subledgerDetails || subledgerDetails.isEmpty())
+        if (subledgerDetails.isEmpty())
             subledgerDetails.add(new ServiceSubledgerInfo());
         serviceTypeMap.putAll(CollectionConstants.SERVICE_TYPE_CLASSIFICATION);
         if (serviceDetails.getServiceType().equals(CollectionConstants.SERVICE_TYPE_CHALLAN_COLLECTION)

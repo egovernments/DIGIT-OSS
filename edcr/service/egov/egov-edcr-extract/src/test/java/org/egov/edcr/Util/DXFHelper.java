@@ -29,7 +29,7 @@ public class DXFHelper {
 	    	end.add(s);
 	    }
 		try (InputStream is = new FileInputStream(filePath);
-				BufferedReader buf = new BufferedReader(new InputStreamReader(is));) {
+				BufferedReader buf = new BufferedReader(new InputStreamReader(is));FileWriter rt = new FileWriter(fout);) {
 			int i = 0;
 			File f = new File(filePath);
 			String fileAsString = null;
@@ -40,7 +40,7 @@ public class DXFHelper {
 					"/home/mani/Workspaces/bpa/eGov-Kozhikode-Implementation/egov/egov-edcr/src/test/resources/o.txt");
 			if (fout.exists())
 				fout.delete();
-			FileWriter rt = new FileWriter(fout);
+
 			while (line != null) {
 				/*
 				 * if(line.contains(having)) { LOG.info(line); }
@@ -78,7 +78,6 @@ public class DXFHelper {
 				rt.write(s);
 			rt.flush();
 
-			rt.close();
 
 		} catch (IOException e) {
 			LOG.error(e.getMessage());
