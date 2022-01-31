@@ -11,6 +11,8 @@ public class PTConstants {
 
     public static final String PT_TYPE_VACANT = "VACANT";
     
+    public static String SCHEMA_REPLACE_STRING = "{schema}";
+    
     public static final String PT_TYPE_SHAREDPROPERTY = "SHAREDPROPERTY";
     
     public static final String PT_TYPE_BUILTUP = "BUILTUP";
@@ -320,6 +322,7 @@ public class PTConstants {
 
     public static final String ES_DATA_PROPERTYID_PATH = "$.propertyId";
 
+    public static final String TENANTID_MDC_STRING = "TENANTID";
 
 }
 

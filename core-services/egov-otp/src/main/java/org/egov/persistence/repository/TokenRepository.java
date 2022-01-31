@@ -11,7 +11,7 @@ import org.egov.domain.model.TokenSearchCriteria;
 import org.egov.domain.model.Tokens;
 import org.egov.domain.model.ValidateRequest;
 import org.egov.persistence.repository.rowmapper.TokenRowMapper;
-import org.egov.web.util.*;
+import org.egov.web.util.OtpConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -74,9 +74,16 @@ public class TokenRepository {
 
     public Tokens findByIdentityAndTenantId(ValidateRequest request) {
 
+    	String tenantId = request.getTenantId();
+        /*
+         * using only IN in central instance since OTP is for only citizen
+         */
+        if(tenantId.contains("."))
+        	tenantId = tenantId.split("\\.")[0];
+        
         final Map<String, Object> tokenInputs = new HashMap<String, Object>();
         tokenInputs.put("tokenIdentity", request.getIdentity());
-        tokenInputs.put("tenantId", request.getTenantId());
+        tokenInputs.put("tenantId", tenantId);
         List<Token> domainTokens = namedParameterJdbcTemplate.query(GETTOKENS_BY_NUMBER_IDENTITY_TENANT, tokenInputs,
                 new TokenRowMapper());
         return new Tokens(domainTokens);

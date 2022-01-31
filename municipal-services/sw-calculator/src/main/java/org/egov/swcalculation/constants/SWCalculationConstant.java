@@ -288,4 +288,6 @@ public class SWCalculationConstant {
 
 	public static final String PROPERTY_MASTER_MODULE = "PropertyTax";
 
+	public static final String TENANTID_MDC_STRING = "TENANTID";
+
 }

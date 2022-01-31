@@ -30,7 +30,8 @@ export const externalAPIMapping = async function (
   dataconfig,
   variableTovalueMap,
   requestInfo,
-  unregisteredLocalisationCodes
+  unregisteredLocalisationCodes,
+  header
 ) {
   var jp = require("jsonpath");
   var objectOfExternalAPI = getValue(
@@ -161,19 +162,19 @@ export const externalAPIMapping = async function (
       /,/g,
       "&"
     );
-    let headers = {
+    /*let headers = {
       "content-type": "application/json;charset=UTF-8",
-      accept: "application/json, text/plain, */*"
-    };
+      accept: "application/json, text/plain"
+    };*/
+
+    let headers = { header };
 
     var resPromise;
     if (externalAPIArray[i].requesttype == "POST") {
       resPromise = axios.post(
         externalAPIArray[i].uri + "?" + externalAPIArray[i].queryParams, {
           RequestInfo: requestInfo
-        }, {
-          headers: headers
-        }
+        }, headers
       );
     } else {
       resPromise = axios.get(
@@ -369,7 +370,8 @@ export const externalAPIMapping = async function (
     let resposnseMap = await findLocalisation(
       requestInfo,
       localisationModules,
-      localisationCodes
+      localisationCodes,
+      header
     );
   
     resposnseMap.messages.map((item) => {

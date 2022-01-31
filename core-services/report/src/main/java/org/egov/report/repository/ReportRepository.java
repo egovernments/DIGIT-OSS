@@ -1,26 +1,42 @@
 package org.egov.report.repository;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.report.repository.builder.ReportQueryBuilder;
-import org.egov.swagger.model.*;
+import org.egov.swagger.model.ReportDefinition;
+import org.egov.swagger.model.ReportRequest;
+import org.egov.swagger.model.SearchColumn;
+import org.egov.swagger.model.SearchParam;
+import org.egov.swagger.model.SourceColumn;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.*;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.*;
-import java.util.*;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Repository
 public class ReportRepository {
 
+	@Autowired
+	private MultiStateInstanceUtil centralInsUtil;
+	
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -84,8 +100,15 @@ public class ReportRepository {
         List<Map<String, Object>> maps = null;
 
         String query = getQuery(reportRequest, reportDefinition, authToken);
-        Map<String, Object> parameters = getQueryParameters(reportRequest);
+        
+		try {
+			query = centralInsUtil.replaceSchemaPlaceholder(query, reportRequest.getTenantId());
+		} catch (InvalidTenantIdException e1) {
+			throw new CustomException("EG_REPORT_TENANT_EXCEPTION",
+					"Tenantid too short or does not contain enough data to replace schema in query");
+		}
 
+        Map<String, Object> parameters = getQueryParameters(reportRequest);
         MapSqlParameterSource params =  new MapSqlParameterSource(parameters);
         log.info("final query:" + query);
         try {

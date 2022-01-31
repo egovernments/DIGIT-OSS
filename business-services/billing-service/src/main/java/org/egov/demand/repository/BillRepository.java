@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.demand.model.AuditDetails;
 import org.egov.demand.model.Bill;
 import org.egov.demand.model.BillAccountDetail;
@@ -24,6 +26,7 @@ import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.BillRequest;
 import org.egov.demand.web.contract.BillResponse;
 import org.egov.demand.web.contract.BusinessServiceDetailCriteria;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -51,6 +54,9 @@ public class BillRepository {
 	private Util util;
 	
 	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+	
+	@Autowired
 	private BillRowMapper searchBillRowMapper;
 	
 	@Autowired
@@ -60,6 +66,12 @@ public class BillRepository {
 		
 		List<Object> preparedStatementValues = new ArrayList<>();
 		String queryStr = billQueryBuilder.getBillQuery(billCriteria, preparedStatementValues);
+		try {
+			queryStr = centralInstanceUtil.replaceSchemaPlaceholder(queryStr, billCriteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		log.debug("query:::"+queryStr+"  preparedStatementValues::"+preparedStatementValues);
 		
 		return jdbcTemplate.query(queryStr, preparedStatementValues.toArray(), searchBillRowMapper);

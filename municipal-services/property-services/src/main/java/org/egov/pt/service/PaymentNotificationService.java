@@ -1,16 +1,5 @@
 package org.egov.pt.service;
 
-import static org.egov.pt.util.PTConstants.MUTATION_BUSINESSSERVICE;
-import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_OLDPROPERTYID_ABSENT;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_FAIL;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_OFFLINE;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_ONLINE;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_PARTIAL_OFFLINE;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_PARTIAL_ONLINE;
-import static org.egov.pt.util.PTConstants.ONLINE_PAYMENT_MODE;
-import static org.egov.pt.util.PTConstants.PT_BUSINESSSERVICE;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +31,7 @@ import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.SMSRequest;
 import org.egov.tracer.model.CustomException;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -50,6 +40,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.pt.util.PTConstants.*;
 
 @Slf4j
 @Service
@@ -99,6 +91,9 @@ public class PaymentNotificationService {
         Transaction transaction = transactionRequest.getTransaction();
         String tenantId = transaction.getTenantId();
 
+        // Adding in MDC so that tracer can add it in header
+        MDC.put(TENANTID_MDC_STRING, tenantId);
+
         if(transaction.getTxnStatus().equals(Transaction.TxnStatusEnum.FAILURE)){
 
             String localizationMessages = util.getLocalizationMessages(tenantId,requestInfo);
@@ -140,7 +135,7 @@ public class PaymentNotificationService {
 			}
             
 
-            util.sendSMS(smsRequests);
+            util.sendSMS(smsRequests, tenantId);
 
             List<Event> events = new LinkedList<>();
             if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
@@ -175,6 +170,9 @@ public class PaymentNotificationService {
         String tenantId = paymentRequest.getPayment().getTenantId();
         String paymentMode = paymentRequest.getPayment().getPaymentMode();
         String transactionNumber = paymentRequest.getPayment().getTransactionNumber();
+
+        // Adding in MDC so that tracer can add it in header
+        MDC.put(TENANTID_MDC_STRING, tenantId);
 
         List<PaymentDetail> ptPaymentDetails = new LinkedList<>();
 
@@ -241,7 +239,7 @@ public class PaymentNotificationService {
             }
         }
 
-        util.sendSMS(smsRequests);
+        util.sendSMS(smsRequests, tenantId);
 
         if(!CollectionUtils.isEmpty(events))
             util.sendEventNotification(new EventRequest(requestInfo,events));
@@ -402,7 +400,7 @@ public class PaymentNotificationService {
     }
 
     private String getReceiptLink(Map<String,String> valMap,String mobileNumber){
-        StringBuilder builder = new StringBuilder(propertyConfiguration.getUiAppHost());
+        StringBuilder builder = new StringBuilder(util.getHost(valMap.get("tenantId")));
         builder.append(propertyConfiguration.getReceiptDownloadLink());
         String link = builder.toString();
         link = link.replace("$consumerCode", valMap.get("propertyId"));
@@ -420,10 +418,10 @@ public class PaymentNotificationService {
      * @return Customized message depending on values in valMap
      */
     private String getCustomizedOnlinePaymentMessage(String message,Map<String,String> valMap){
-        message = message.replace("< insert amount paid>",valMap.get("amountPaid"));
-        message = message.replace("< insert payment transaction id from PG>",valMap.get("transactionId"));
-        message = message.replace("<insert Property Tax Assessment ID>",valMap.get("propertyId"));
-        message = message.replace("<pt due>.",valMap.get("amountDue"));
+        message = message.replace("{ insert amount paid}",valMap.get("amountPaid"));
+        message = message.replace("{ insert payment transaction id from PG}",valMap.get("transactionId"));
+        message = message.replace("{insert Property Tax Assessment ID}",valMap.get("propertyId"));
+        message = message.replace("{pt due}.",valMap.get("amountDue"));
     //    message = message.replace("<FY>",valMap.get("financialYear"));
         return message;
     }
@@ -435,10 +433,10 @@ public class PaymentNotificationService {
      * @return Customized message depending on values in valMap
      */
     private String getCustomizedOfflinePaymentMessage(String message,Map<String,String> valMap){
-        message = message.replace("<amount>",valMap.get("amountPaid"));
-        message = message.replace("<insert mode of payment>",valMap.get("paymentMode"));
-        message = message.replace("<Enter pending amount>",valMap.get("amountDue"));
-        message = message.replace("<insert inactive citizen application web URL>.",propertyConfiguration.getNotificationURL());
+        message = message.replace("{amount}",valMap.get("amountPaid"));
+        message = message.replace("{insert mode of payment}",valMap.get("paymentMode"));
+        message = message.replace("{Enter pending amount}",valMap.get("amountDue"));
+        message = message.replace("{insert inactive citizen application web URL}.",propertyConfiguration.getNotificationURL());
 //        message = message.replace("<Insert FY>",valMap.get("financialYear"));
         return message;
     }
@@ -450,8 +448,8 @@ public class PaymentNotificationService {
      * @return Customized message depending on values in valMap
      */
     private String getCustomizedPaymentFailMessage(String message,Map<String,String> valMap){
-        message = message.replace("<insert amount to pay>",valMap.get("txnAmount"));
-        message = message.replace("<insert ID>",valMap.get("propertyId"));
+        message = message.replace("{insert amount to pay}",valMap.get("txnAmount"));
+        message = message.replace("{insert ID}",valMap.get("propertyId"));
 //        message = message.replace("<FY>",valMap.get("financialYear"));
         return message;
     }
@@ -463,8 +461,8 @@ public class PaymentNotificationService {
      * @return Customized message depending on values in valMap
      */
     private String getCustomizedOldPropertyIdAbsentMessage(String message,Map<String,String> valMap){
-        message = message.replace("<insert Property Tax Assessment ID>",valMap.get("propertyId"));
-        message = message.replace("<FY>",valMap.get("financialYear"));
+        message = message.replace("{insert Property Tax Assessment ID}",valMap.get("propertyId"));
+        message = message.replace("{FY}",valMap.get("financialYear"));
         return  message;
     }
 
@@ -480,12 +478,12 @@ public class PaymentNotificationService {
         for(String mobileNumber : mobileNumbers){
             if(mobileNumber!=null)
             {   String finalMessage = customizedMessage.replace("$mobile", mobileNumber);
-                if(customizedMessage.contains("<payLink>")){
-                    finalMessage = finalMessage.replace("<payLink>", getPaymentLink(valMap));
+                if(customizedMessage.contains("{payLink}")){
+                    finalMessage = finalMessage.replace("{payLink}", getPaymentLink(valMap));
                 }
-                if(customizedMessage.contains("<receipt download link>")){
+                if(customizedMessage.contains("{receipt download link}")){
                     String receiptDownloadLink = getReceiptLink(valMap, mobileNumber);
-                    finalMessage = finalMessage.replace("<receipt download link>", receiptDownloadLink);
+                    finalMessage = finalMessage.replace("{receipt download link}", receiptDownloadLink);
                 }                
                 SMSRequest smsRequest = new SMSRequest(mobileNumber,finalMessage);
                 smsRequests.add(smsRequest);
@@ -503,11 +501,11 @@ public class PaymentNotificationService {
 	private SMSRequest getSMSRequestsWithoutReceipt(String mobileNumber, String customizedMessage, Map<String, String> valMap) {
 
 		String finalMessage = customizedMessage.replace("$mobile", mobileNumber);
-		if (customizedMessage.contains("<receipt download link>")) {
+		if (customizedMessage.contains("{receipt download link}")) {
 			finalMessage = finalMessage.replace("Click on the link to download payment receipt <receipt download link>", "");
 		}
-		if (customizedMessage.contains("<payLink>")) {
-			finalMessage = finalMessage.replace("<payLink>", getPaymentLink(valMap));
+		if (customizedMessage.contains("{payLink}")) {
+			finalMessage = finalMessage.replace("{payLink}", getPaymentLink(valMap));
 		}
 		return new SMSRequest(mobileNumber, finalMessage);
 	}
@@ -550,7 +548,7 @@ public class PaymentNotificationService {
                         .replace("$tenantId", property.getTenantId())
                         .replace("$businessService" , businessService);
 
-                actionLink = propertyConfiguration.getUiAppHost() + actionLink;
+                actionLink = util.getHost(property.getTenantId()) + actionLink;
 
                 ActionItem item = ActionItem.builder().actionUrl(actionLink).code(propertyConfiguration.getPayCode()).build();
                 items.add(item);
@@ -572,7 +570,7 @@ public class PaymentNotificationService {
 
 
     private String getPaymentLink(Map<String,String> valMap){
-        StringBuilder builder = new StringBuilder(propertyConfiguration.getUiAppHost());
+        StringBuilder builder = new StringBuilder(util.getHost(valMap.get("tenantId")));
         builder.append(propertyConfiguration.getPayLink());
         String url = builder.toString();
         url = url.replace("$consumerCode", valMap.get("propertyId"));

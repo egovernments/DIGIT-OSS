@@ -1,18 +1,32 @@
 package org.egov.swservice.producer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.egov.common.utils.MultiStateInstanceUtil;
+
+import static org.egov.swservice.util.SWConstants.TOPICS_TO_AVOID;
 
 
 @Service
+@Slf4j
 public class SewarageConnectionProducer {
 
 	@Autowired
 	private CustomKafkaTemplate<String, Object> kafkaTemplate;
 
-	public void push(String topic, Object value) {
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+
+	/*public void push(String topic, Object value) {
 		kafkaTemplate.send(topic, value);
+	}*/
+
+	public void push(String tenantId, String topic, Object value) {
+		String updatedTopic = centralInstanceUtil.getStateSpecificTopicName(tenantId, topic);
+		log.info("The Kafka topic for the tenantId : " + tenantId + " is : " + updatedTopic);
+		kafkaTemplate.send(updatedTopic, value);
 	}
 
 }

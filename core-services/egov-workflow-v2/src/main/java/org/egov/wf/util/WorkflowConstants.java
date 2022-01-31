@@ -44,4 +44,6 @@ public class WorkflowConstants {
 
     public static final String AUTO_ESC_EMPLOYEE_ROLE_CODE = "AUTO_ESCALATE";
 
+    public static String SCHEMA_REPLACE_STRING = "{SCHEMA}";
+
 }

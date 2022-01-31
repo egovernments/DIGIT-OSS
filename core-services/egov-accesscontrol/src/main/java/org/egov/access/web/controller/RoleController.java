@@ -64,9 +64,8 @@ public class RoleController {
 		System.out.println("Tenant id from the controller: "+tenantId);
 
 		if (code != null && !code.isEmpty()) {
-
-			roleSearchCriteria = RoleSearchCriteria.builder()
-					.codes(Arrays.stream(code.split(",")).map(String::trim).collect(Collectors.toList())).tenantId(tenantId).build();
+			roleSearchCriteria.getCodes()
+					.addAll(Arrays.stream(code.split(",")).map(String::trim).collect(Collectors.toList()));
 		}
 
 		

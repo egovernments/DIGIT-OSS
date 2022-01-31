@@ -1,7 +1,23 @@
 package org.egov.tl.util;
 
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.tl.util.TLConstants.ACCESSORIES_CATEGORY;
+import static org.egov.tl.util.TLConstants.COMMON_MASTERS_MODULE;
+import static org.egov.tl.util.TLConstants.OWNERSHIP_CATEGORY;
+import static org.egov.tl.util.TLConstants.STATUS_INITIATED;
+import static org.egov.tl.util.TLConstants.STRUCTURE_TYPE;
+import static org.egov.tl.util.TLConstants.TRADE_LICENSE_MODULE;
+import static org.egov.tl.util.TLConstants.TRADE_TYPE;
+import static org.egov.tl.util.TLConstants.businessService_BPA;
+import static org.egov.tl.util.TLConstants.businessService_TL;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
@@ -19,10 +35,9 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import com.jayway.jsonpath.JsonPath;
 
-import static org.egov.tl.util.TLConstants.*;
-import static org.egov.tl.util.TLConstants.COMMON_MASTERS_MODULE;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -334,4 +349,23 @@ public class TradeUtil {
         });
         return idToIsStateUpdatableMap;
     }
+    
+	/**
+	 * Method to fetch the state name from the tenantId
+	 * 
+	 * @param query
+	 * @param tenantId
+	 * @return
+	 */
+	public String replaceSchemaPlaceholder(String query, String tenantId) {
+
+		String finalQuery = null;
+		if (tenantId.contains(".")) {
+			String schemaName = tenantId.split("\\.")[1];
+			finalQuery = query.replace(TLConstants.SCHEMA_REPLACE_STRING, schemaName);
+		} else {
+			finalQuery = query.replace(TLConstants.SCHEMA_REPLACE_STRING.concat("."), "");
+		}
+		return finalQuery;
+	}
 }

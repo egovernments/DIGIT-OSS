@@ -1,0 +1,12 @@
+    {
+      "/egov-mdms-service/.*": {
+        "in.tenanta" : "http://egov-mdms-service-tenant-a:8080",
+        "in.tenantb" : "http://egov-mdms-service-tenant-b:8080",
+        "in"         : "http://egov-mdms-service:8080"
+      },
+       "/pt-calculator/.*": {
+        "in.tenanta" : "http://pt-calculator.statea:8080",
+        "in.tenantb" : "http://pt-calculator.stateb:8080",
+        "in"         : "http://pt-calculator.digit:8080"
+      }
+    }

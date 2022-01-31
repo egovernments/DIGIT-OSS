@@ -1,21 +1,18 @@
 package org.egov.access.web.controller;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.egov.access.Resources;
 import org.egov.access.TestConfiguration;
-import org.egov.access.domain.criteria.RoleSearchCriteria;
 import org.egov.access.domain.model.Role;
 import org.egov.access.domain.service.RoleService;
-import org.egov.access.web.contract.action.ActionRequest;
 import org.egov.access.web.contract.factory.ResponseInfoFactory;
 import org.egov.access.web.contract.role.RoleRequest;
 import org.egov.common.contract.request.RequestInfo;
@@ -177,7 +174,7 @@ public class RoleControllerTest {
 		responseInfo.setApiId("org.egov.accesscontrol");
 		responseInfo.setMsgId("20170310130900");
 		responseInfo.setResMsgId("uief87324");
-		responseInfo.setTs("Thu Mar 09 18:30:00 UTC 2017");
+		responseInfo.setTs(1491762629619l);
 		responseInfo.setVer("1.0");
 
 		when(responseInfoFactory.createResponseInfoFromRequestInfo(any(RequestInfo.class), any(Boolean.class)))

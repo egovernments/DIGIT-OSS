@@ -1,10 +1,18 @@
 package org.egov.filters.pre;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.netflix.zuul.context.RequestContext;
-import com.netflix.zuul.monitoring.MonitoringHelper;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.egov.Utils.UserUtils;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.contract.User;
 import org.egov.exceptions.CustomException;
 import org.junit.Before;
@@ -14,32 +22,33 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import java.io.IOException;
-import java.util.HashSet;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.netflix.zuul.context.RequestContext;
+import com.netflix.zuul.monitoring.MonitoringHelper;
 
 public class AuthPreCheckFilterTest {
     private MockHttpServletRequest request = new MockHttpServletRequest();
 
     private AuthPreCheckFilter authPreCheckFilter;
 
-    private HashSet<String> openEndpointsWhitelist = new HashSet<>();
-    private HashSet<String> anonymousEndpointsWhitelist = new HashSet<>();
+    private List<String> openEndpointsWhitelist = new ArrayList<>();
+    private List<String> anonymousEndpointsWhitelist = new ArrayList<>();
 
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
 
     @Before
     public void init() {
-        openEndpointsWhitelist.add("open-endpoint1");
+        
+    	openEndpointsWhitelist.add("open-endpoint1");
         openEndpointsWhitelist.add("open-endpoint2");
         anonymousEndpointsWhitelist.add("anonymous-endpoint1");
         anonymousEndpointsWhitelist.add("anonymous-endpoint2");
+        
         UserUtils userUtils = Mockito.mock(UserUtils.class);
-        Mockito.when(userUtils.fetchSystemUser()).thenReturn(new User());
-        authPreCheckFilter = new AuthPreCheckFilter(openEndpointsWhitelist, anonymousEndpointsWhitelist, userUtils);
+        MultiStateInstanceUtil multiStateInstanceUtil = Mockito.mock(MultiStateInstanceUtil.class);
+        Mockito.when(userUtils.fetchSystemUser("tenantId")).thenReturn(new User());
+        authPreCheckFilter = new AuthPreCheckFilter(openEndpointsWhitelist, anonymousEndpointsWhitelist, userUtils , multiStateInstanceUtil);
         RequestContext ctx = RequestContext.getCurrentContext();
         ctx.clear();
         ctx.setRequest(request);

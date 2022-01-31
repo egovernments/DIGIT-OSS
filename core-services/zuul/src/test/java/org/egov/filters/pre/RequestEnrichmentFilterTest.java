@@ -1,22 +1,26 @@
 package org.egov.filters.pre;
 
-import com.netflix.zuul.context.RequestContext;
-import org.apache.commons.io.IOUtils;
-import org.egov.Resources;
-import org.egov.contract.Role;
-import org.egov.contract.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.apache.commons.io.IOUtils;
+import org.egov.Resources;
+import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.contract.Role;
+import org.egov.contract.User;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.zuul.context.RequestContext;
 
 public class RequestEnrichmentFilterTest {
 
@@ -25,7 +29,8 @@ public class RequestEnrichmentFilterTest {
 
     @Before
     public void before() {
-        filter = new RequestEnrichmentFilter();
+    	MultiStateInstanceUtil multiStateInstanceUtil = Mockito.mock(MultiStateInstanceUtil.class);
+        filter = new RequestEnrichmentFilter(multiStateInstanceUtil, new ObjectMapper());
         RequestContext.getCurrentContext().clear();
     }
 
@@ -37,22 +42,6 @@ public class RequestEnrichmentFilterTest {
     @Test
     public void test_should_always_execute_filter() {
         assertTrue(filter.shouldFilter());
-    }
-
-    @Test
-    public void test_should_add_correlation_id_request_header() {
-        final RequestContext currentContext = RequestContext.getCurrentContext();
-        final MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setMethod("GET");
-        currentContext.setRequest(request);
-        final String expectedCorrelationId = "someCorrelationId";
-        currentContext.set("CORRELATION_ID", expectedCorrelationId);
-
-        filter.run();
-
-        final Map<String, String> zuulRequestHeaders = currentContext.getZuulRequestHeaders();
-        assertEquals(2, zuulRequestHeaders.size());
-        assertEquals(expectedCorrelationId, zuulRequestHeaders.get("x-correlation-id"));
     }
 
     @Test

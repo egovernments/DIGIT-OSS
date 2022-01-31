@@ -126,17 +126,17 @@ public class SWConstants {
 
 	public static final String SW_EDIT_IN_APP = "SW_EDIT_IN_APP_MESSAGE";
 
-	public static final String DEFAULT_OBJECT_EDIT_SMS_MSG = "Dear <Owner Name>, Your Application <Application number>  for a New <Service> Connection has been edited. For more details, please log in to <mseva URL> or download <mseva app link>.";
+	public static final String DEFAULT_OBJECT_EDIT_SMS_MSG = "Dear {Owner Name}, Your Application {Application number}  for a New {Service} Connection has been edited. For more details, please log in to {mseva URL} or download {mseva app link}.";
 
-	public static final String DEFAULT_OBJECT_EDIT_APP_MSG = "Dear <Owner Name>, Your Application <Application number>  for a New <Service> Connection has been edited. Click here for more details <View History Link>.";
+	public static final String DEFAULT_OBJECT_EDIT_APP_MSG = "Dear {Owner Name}, Your Application {Application number}  for a New {Service} Connection has been edited. Click here for more details {View History Link}.";
 
 	public static final String SW_MODIFY_SMS = "SW_MODIFY_SMS_MESSAGE";
 
 	public static final String SW_MODIFY_IN_APP = "SW_MODIFY_IN_APP_MESSAGE";
 
-	public static final String DEFAULT_OBJECT_MODIFY_SMS_MSG = "Dear <Owner Name>, Your Application <Application number>  for a New <Service> Connection has been edited. For more details, please log in to <mseva URL> or download <mseva app link>.";
+	public static final String DEFAULT_OBJECT_MODIFY_SMS_MSG = "Dear {Owner Name}, Your Application {Application number}  for a New {Service} Connection has been edited. For more details, please log in to {mseva URL} or download {mseva app link}.";
 
-	public static final String DEFAULT_OBJECT_MODIFY_APP_MSG = "Dear <Owner Name>, Your Application <Application number>  for a New <Service> Connection has been edited. Click here for more details <View History Link>.";
+	public static final String DEFAULT_OBJECT_MODIFY_APP_MSG = "Dear {Owner Name}, Your Application {Application number}  for a New {Service} Connection has been edited. Click here for more details {View History Link}.";
 	
 	public static final String ADHOC_PENALTY = "adhocPenalty";
 
@@ -222,5 +222,12 @@ public class SWConstants {
 	public static final long INVALID_CONEECTION_EXECUTION_DATE = 0L;
 
 	public static final String PENDING_APPROVAL_FOR_CONNECTION_CODE ="PENDING_APPROVAL_FOR_CONNECTION";
+
+	public static String SCHEMA_REPLACE_STRING = "{schema}";
+
+	public static final String TENANTID_MDC_STRING = "TENANTID";
+
+	public static final List<String> TOPICS_TO_AVOID = Collections.unmodifiableList(Arrays.asList("editnotificationsewerage", "sw-filestoreids-process"));
+
 
 }

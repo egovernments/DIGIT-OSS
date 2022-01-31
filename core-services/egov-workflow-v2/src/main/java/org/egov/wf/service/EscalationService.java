@@ -99,7 +99,7 @@ public class EscalationService {
 
                 List<ProcessInstance> processInstances = escalationUtil.getProcessInstances(tenantId, businessIds.subList(start,end), escalation);
                 processInstances = workflowService.transition(new ProcessInstanceRequest(requestInfo, processInstances));
-                producer.push(escalation.getTopic(),new ProcessInstanceRequest(requestInfo, processInstances));
+                producer.push(processInstances.get(0).getTenantId(), escalation.getTopic(),new ProcessInstanceRequest(requestInfo, processInstances));
 
             }
 

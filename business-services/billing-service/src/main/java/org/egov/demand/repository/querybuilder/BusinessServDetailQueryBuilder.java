@@ -53,7 +53,7 @@ import java.util.Set;
 @Slf4j
 public class BusinessServDetailQueryBuilder {
 
-    private static final String BASE_QUERY = "SELECT * FROM EGBS_BUSINESS_SERVICE_DETAILS businessservice ";
+    private static final String BASE_QUERY = "SELECT * FROM {schema}.EGBS_BUSINESS_SERVICE_DETAILS businessservice ";
 
     public String prepareSearchQuery(final BusinessServiceDetailCriteria businessServiceDetailCriteria, final List<Object> preparedStatementValues) {
         final StringBuilder selectQuery = new StringBuilder(BASE_QUERY);
@@ -83,7 +83,7 @@ public class BusinessServDetailQueryBuilder {
     }
 
     public String prepareQueryForValidation(List<BusinessServiceDetail> businessServiceDetailList, String mode) {
-        String baseQuery = "select exists (SELECT * FROM EGBS_BUSINESS_SERVICE_DETAILS businessservice where ";
+        String baseQuery = "select exists (SELECT * FROM {schema}.EGBS_BUSINESS_SERVICE_DETAILS businessservice where ";
         StringBuilder whereClause = new StringBuilder();
         int count = 0;
         for (BusinessServiceDetail businessServiceDetail : businessServiceDetailList) {
@@ -103,13 +103,13 @@ public class BusinessServDetailQueryBuilder {
     }
 
     public String getInsertQuery() {
-        return "INSERT INTO EGBS_BUSINESS_SERVICE_DETAILS(id,businessservice,collectionModesNotAllowed,partPaymentAllowed,callBackForApportioning," +
+        return "INSERT INTO {schema}.EGBS_BUSINESS_SERVICE_DETAILS(id,businessservice,collectionModesNotAllowed,partPaymentAllowed,callBackForApportioning," +
                 "callBackApportionURL,createddate,lastmodifieddate,createdby,lastmodifiedby,tenantid) " +
                 "values (?,?,?,?,?,?,?,?,?,?,?);";
     }
 
     public String getUpdateQuery() {
-        return "UPDATE EGBS_BUSINESS_SERVICE_DETAILS SET businessservice = ?, collectionModesNotAllowed = ?, partPaymentAllowed = ?, " +
+        return "UPDATE {schema}.EGBS_BUSINESS_SERVICE_DETAILS SET businessservice = ?, collectionModesNotAllowed = ?, partPaymentAllowed = ?, " +
                 "callBackForApportioning = ?, callBackApportionURL = ?, lastmodifieddate = ?, lastmodifiedby = ? " +
                 "WHERE tenantid = ? and id = ?;";
     }

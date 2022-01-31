@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.egov.common.utils.MultiStateInstanceUtil;
+
 
 import static org.egov.waterconnection.constants.WCConstants.SEARCH_TYPE_CONNECTION;
 
@@ -28,6 +30,10 @@ public class WsQueryBuilder {
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+
 
 	private static final String INNER_JOIN_STRING = "INNER JOIN";
     private static final String LEFT_OUTER_JOIN_STRING = " LEFT OUTER JOIN ";
@@ -47,17 +53,17 @@ public class WsQueryBuilder {
 			+ " plumber.name as plumber_name, plumber.licenseno, roadcuttingInfo.id as roadcutting_id, roadcuttingInfo.roadtype as roadcutting_roadtype, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea,"
 			+ " roadcuttingInfo.active as roadcutting_active, plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress,"
 			+ " plumber.relationship, " + holderSelectValues
-			+ " FROM eg_ws_connection conn "
+			+ " FROM {schema}.eg_ws_connection conn "
 			+  INNER_JOIN_STRING 
-			+" eg_ws_service wc ON wc.connection_id = conn.id"
+			+" {schema}.eg_ws_service wc ON wc.connection_id = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_applicationdocument document ON document.wsid = conn.id" 
+			+ "{schema}.eg_ws_applicationdocument document ON document.wsid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_plumberinfo plumber ON plumber.wsid = conn.id"
+			+ "{schema}.eg_ws_plumberinfo plumber ON plumber.wsid = conn.id"
 		    +  LEFT_OUTER_JOIN_STRING
-		    + "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
+		    + "{schema}.eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" ;
+			+ "{schema}.eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" ;
 
 	private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
@@ -127,8 +133,9 @@ public class WsQueryBuilder {
 		}
 
 		if (!StringUtils.isEmpty(criteria.getTenantId())) {
+			String tenantId = criteria.getTenantId();
 			addClauseIfRequired(preparedStatement, query);
-			if(criteria.getTenantId().equalsIgnoreCase(config.getStateLevelTenantId())){
+			if (centralInstanceUtil.isTenantIdStateLevel(tenantId)) {
 				query.append(" conn.tenantid LIKE ? ");
 				preparedStatement.add(criteria.getTenantId() + '%');
 			}
@@ -137,6 +144,7 @@ public class WsQueryBuilder {
 				preparedStatement.add(criteria.getTenantId());
 			}
 		}
+
 		if (!StringUtils.isEmpty(criteria.getPropertyId()) && StringUtils.isEmpty(criteria.getMobileNumber())) {
 			if(propertyIdsPresent)
 				query.append(")");

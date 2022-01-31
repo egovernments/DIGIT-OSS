@@ -1,12 +1,26 @@
 package org.egov.tl.repository;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.tl.util.TLConstants.ACTION_ADHOC;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.builder.TLQueryBuilder;
 import org.egov.tl.repository.rowmapper.TLRowMapper;
-import org.egov.tl.web.models.*;
+import org.egov.tl.util.TradeUtil;
+import org.egov.tl.web.models.Accessory;
+import org.egov.tl.web.models.Document;
+import org.egov.tl.web.models.TradeLicense;
+import org.egov.tl.web.models.TradeLicenseRequest;
+import org.egov.tl.web.models.TradeLicenseSearchCriteria;
+import org.egov.tl.web.models.TradeUnit;
+import org.egov.tl.web.models.User;
 import org.egov.tl.workflow.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,9 +28,7 @@ import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
-
-import static org.egov.tl.util.TLConstants.ACTION_ADHOC;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -34,17 +46,20 @@ public class TLRepository {
     private TLConfiguration config;
 
     private WorkflowService workflowService;
+    
+    private TradeUtil utils;
 
 
     @Autowired
     public TLRepository(JdbcTemplate jdbcTemplate, TLQueryBuilder queryBuilder, TLRowMapper rowMapper,
-                        Producer producer, TLConfiguration config, WorkflowService workflowService) {
+                        Producer producer, TLConfiguration config, WorkflowService workflowService, TradeUtil utils) {
         this.jdbcTemplate = jdbcTemplate;
         this.queryBuilder = queryBuilder;
         this.rowMapper = rowMapper;
         this.producer = producer;
         this.config = config;
         this.workflowService = workflowService;
+        this.utils = utils;
     }
 
 
@@ -57,6 +72,22 @@ public class TLRepository {
     public List<TradeLicense> getLicenses(TradeLicenseSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList);
+        query = utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
+        List<TradeLicense> licenses =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+        sortChildObjectsById(licenses);
+        return licenses;
+    }
+
+    /**
+     * Searhces license in databse
+     *
+     * @param criteria The tradeLicense Search criteria
+     * @return List of TradeLicense from seach
+     */
+    public List<TradeLicense> getLicenses(TradeLicenseSearchCriteria criteria,String tenantId) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList);
+        query = utils.replaceSchemaPlaceholder(query, tenantId);
         List<TradeLicense> licenses =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         sortChildObjectsById(licenses);
         return licenses;
@@ -68,7 +99,7 @@ public class TLRepository {
      * @param tradeLicenseRequest The tradeLciense create request
      */
     public void save(TradeLicenseRequest tradeLicenseRequest) {
-        producer.push(config.getSaveTopic(), tradeLicenseRequest);
+        producer.push(tradeLicenseRequest.getLicenses().get(0).getTenantId(), config.getSaveTopic(), tradeLicenseRequest);
     }
     /**
      * Pushes the update request to update topic or on workflow topic depending on the status
@@ -96,13 +127,13 @@ public class TLRepository {
         }
 
         if (!CollectionUtils.isEmpty(licensesForUpdate))
-            producer.push(config.getUpdateTopic(), new TradeLicenseRequest(requestInfo, licensesForUpdate));
+            producer.push(licensesForUpdate.get(0).getTenantId(), config.getUpdateTopic(), new TradeLicenseRequest(requestInfo, licensesForUpdate));
 
         if (!CollectionUtils.isEmpty(licesnsesForStatusUpdate))
-            producer.push(config.getUpdateWorkflowTopic(), new TradeLicenseRequest(requestInfo, licesnsesForStatusUpdate));
+            producer.push(licesnsesForStatusUpdate.get(0).getTenantId(), config.getUpdateWorkflowTopic(), new TradeLicenseRequest(requestInfo, licesnsesForStatusUpdate));
 
         if(!licensesForAdhocChargeUpdate.isEmpty())
-            producer.push(config.getUpdateAdhocTopic(),new TradeLicenseRequest(requestInfo,licensesForAdhocChargeUpdate));
+            producer.push(licensesForAdhocChargeUpdate.get(0).getTenantId(), config.getUpdateAdhocTopic(),new TradeLicenseRequest(requestInfo,licensesForAdhocChargeUpdate));
 
     }
 
@@ -131,6 +162,7 @@ public class TLRepository {
     public List<TradeLicense> getPlainLicenseSearch(TradeLicenseSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getTLPlainSearchQuery(criteria, preparedStmtList);
+        query= utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
         log.info("Query: " + query);
         List<TradeLicense> licenses =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         sortChildObjectsById(licenses);

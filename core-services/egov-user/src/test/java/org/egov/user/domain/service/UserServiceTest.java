@@ -1,13 +1,40 @@
 package org.egov.user.domain.service;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.user.domain.exception.*;
-import org.egov.user.domain.model.*;
+import org.egov.user.domain.exception.AtleastOneRoleCodeException;
+import org.egov.user.domain.exception.DuplicateUserNameException;
+import org.egov.user.domain.exception.InvalidNonLoggedInUserUpdatePasswordRequestException;
+import org.egov.user.domain.exception.InvalidUpdatePasswordRequestException;
+import org.egov.user.domain.exception.InvalidUserCreateException;
+import org.egov.user.domain.exception.OtpValidationPendingException;
+import org.egov.user.domain.exception.PasswordMismatchException;
+import org.egov.user.domain.exception.UserNameNotValidException;
+import org.egov.user.domain.exception.UserNotFoundException;
+import org.egov.user.domain.exception.UserProfileUpdateDeniedException;
+import org.egov.user.domain.model.LoggedInUserUpdatePasswordRequest;
+import org.egov.user.domain.model.NonLoggedInUserUpdatePasswordRequest;
+import org.egov.user.domain.model.OtpValidationRequest;
+import org.egov.user.domain.model.Role;
+import org.egov.user.domain.model.User;
+import org.egov.user.domain.model.UserSearchCriteria;
 import org.egov.user.domain.model.enums.Gender;
 import org.egov.user.domain.model.enums.UserType;
 import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
+import org.egov.user.domain.service.utils.UserUtils;
 import org.egov.user.persistence.repository.FileStoreRepository;
 import org.egov.user.persistence.repository.OtpRepository;
 import org.egov.user.persistence.repository.UserRepository;
@@ -20,20 +47,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-
-import javax.annotation.PostConstruct;
-import java.util.*;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.spy;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
@@ -56,6 +71,9 @@ public class UserServiceTest {
     private TokenStore tokenStore;
 
     private UserService userService;
+    
+    @Mock
+    private UserUtils userUtils;
 
     private final List<Long> ID = Arrays.asList(1L, 2L);
     private final String EMAIL = "email@gmail.com";
@@ -70,7 +88,7 @@ public class UserServiceTest {
 
     @Before
     public void before() {
-        userService = new UserService(userRepository, otpRepository, fileRepository, passwordEncoder, encryptionDecryptionUtil,
+        userService = new UserService(userRepository, otpRepository, fileRepository, userUtils, passwordEncoder, encryptionDecryptionUtil,
                 tokenStore, DEFAULT_PASSWORD_EXPIRY_IN_DAYS,
                 isCitizenLoginOtpBased, isEmployeeLoginOtpBased, pwdRegex, pwdMaxLength, pwdMinLength);
     }
@@ -143,7 +161,7 @@ public class UserServiceTest {
 
     @Test(expected = UserNameNotValidException.class)
     public void test_should_not_create_citizenWithWrongUserName() {
-        userService = new UserService(userRepository, otpRepository, fileRepository, passwordEncoder,
+        userService = new UserService(userRepository, otpRepository, fileRepository, userUtils, passwordEncoder,
                 encryptionDecryptionUtil, tokenStore, DEFAULT_PASSWORD_EXPIRY_IN_DAYS,
                 true, false, pwdRegex, pwdMaxLength, pwdMinLength);
         org.egov.user.domain.model.User domainUser = User.builder().username("TestUser").name("Test").active(true)
@@ -169,7 +187,7 @@ public class UserServiceTest {
 
     private org.egov.user.web.contract.OtpValidateRequest buildOtpValidationRequest() {
         // TODO Auto-generated method stub
-        RequestInfo requestInfo = RequestInfo.builder().action("validate").ts(new Date()).build();
+        RequestInfo requestInfo = RequestInfo.builder().action("validate").ts(System.currentTimeMillis()).build();
         Otp otp = Otp.builder().build();
         org.egov.user.web.contract.OtpValidateRequest otpValidationRequest = org.egov.user.web.contract.OtpValidateRequest
                 .builder().requestInfo(requestInfo).otp(otp).build();
@@ -213,6 +231,7 @@ public class UserServiceTest {
         org.egov.user.domain.model.User domainUser = validDomainUser(false);
         when(otpRepository.isOtpValidationComplete(getExpectedRequest())).thenReturn(true);
         when(userRepository.isUserPresent("supandi_rocks", "tenantId", UserType.CITIZEN)).thenReturn(true);
+        when(userUtils.getStateLevelTenantForCitizen("tenantId", UserType.CITIZEN)).thenReturn("tenantId");
         when(encryptionDecryptionUtil.encryptObject(domainUser, "User", User.class)).thenReturn(domainUser);
         userService.createUser(domainUser, getValidRequestInfo());
     }
@@ -352,7 +371,7 @@ public class UserServiceTest {
 
     @Test(expected = InvalidUpdatePasswordRequestException.class)
     public void test_should_throwexception_incaseofloginotpenabledastrue_forcitizen_update_password_request() {
-        userService = new UserService(userRepository, otpRepository, fileRepository, passwordEncoder,
+        userService = new UserService(userRepository, otpRepository, fileRepository, userUtils, passwordEncoder,
                 encryptionDecryptionUtil, tokenStore, DEFAULT_PASSWORD_EXPIRY_IN_DAYS,
                 true, isEmployeeLoginOtpBased, pwdRegex, pwdMaxLength, pwdMinLength);
         User user = User.builder().username("xyz").tenantId("default").type(UserType.CITIZEN).build();
@@ -370,7 +389,7 @@ public class UserServiceTest {
 
     @Test(expected = InvalidUpdatePasswordRequestException.class)
     public void test_should_throwexception_incaseofloginotpenabledastrue_foremployee_update_password_request() {
-        userService = new UserService(userRepository, otpRepository, fileRepository, passwordEncoder,
+        userService = new UserService(userRepository, otpRepository, fileRepository, userUtils, passwordEncoder,
                 encryptionDecryptionUtil, tokenStore, DEFAULT_PASSWORD_EXPIRY_IN_DAYS,
                 false, true, pwdRegex, pwdMaxLength, pwdMinLength);
         User user = User.builder().username("xyz").tenantId("default").type(UserType.EMPLOYEE).build();
@@ -500,7 +519,7 @@ public class UserServiceTest {
     @SuppressWarnings("unchecked")
     @Test(expected = InvalidUpdatePasswordRequestException.class)
     public void test_notshould_update_password_whenCitizenotpconfigured_istrue() throws Exception {
-        userService = new UserService(userRepository, otpRepository, fileRepository, passwordEncoder,
+        userService = new UserService(userRepository, otpRepository, fileRepository, userUtils, passwordEncoder,
                 encryptionDecryptionUtil, tokenStore, DEFAULT_PASSWORD_EXPIRY_IN_DAYS,
                 true, false, pwdRegex, pwdMaxLength, pwdMinLength);
         final NonLoggedInUserUpdatePasswordRequest request = NonLoggedInUserUpdatePasswordRequest.builder()
@@ -520,7 +539,7 @@ public class UserServiceTest {
     @SuppressWarnings("unchecked")
     @Test(expected = InvalidNonLoggedInUserUpdatePasswordRequestException.class)
     public void test_notshould_update_password_whenEmployeeotpconfigured_istrue() throws Exception {
-        userService = new UserService(userRepository, otpRepository, fileRepository, passwordEncoder,
+        userService = new UserService(userRepository, otpRepository, fileRepository, userUtils, passwordEncoder,
                 encryptionDecryptionUtil, tokenStore, DEFAULT_PASSWORD_EXPIRY_IN_DAYS,
                 false, true, pwdRegex, pwdMaxLength, pwdMinLength);
         final NonLoggedInUserUpdatePasswordRequest request = NonLoggedInUserUpdatePasswordRequest.builder()

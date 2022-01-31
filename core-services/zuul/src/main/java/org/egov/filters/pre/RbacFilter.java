@@ -1,29 +1,37 @@
 package org.egov.filters.pre;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.node.*;
-import com.netflix.zuul.ZuulFilter;
-import com.netflix.zuul.context.RequestContext;
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.constants.RequestContextConstants.CORRELATION_ID_HEADER_NAME;
+import static org.egov.constants.RequestContextConstants.CORRELATION_ID_KEY;
+import static org.egov.constants.RequestContextConstants.CURRENT_REQUEST_TENANTID;
+import static org.egov.constants.RequestContextConstants.RBAC_BOOLEAN_FLAG_NAME;
+import static org.egov.constants.RequestContextConstants.REQUEST_TENANT_ID_KEY;
+import static org.egov.constants.RequestContextConstants.TENANTID_MDC;
+import static org.egov.constants.RequestContextConstants.USER_INFO_KEY;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.egov.Utils.ExceptionUtils;
 import org.egov.Utils.Utils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.contract.User;
-import org.egov.exceptions.CustomException;
 import org.egov.model.AuthorizationRequest;
 import org.egov.model.AuthorizationRequestWrapper;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.*;
+import com.netflix.zuul.ZuulFilter;
+import com.netflix.zuul.context.RequestContext;
 
-import static java.util.Objects.isNull;
-import static org.egov.constants.RequestContextConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 5th pre filter to get executed.
@@ -34,18 +42,20 @@ public class RbacFilter extends ZuulFilter {
 
     private static final String FORBIDDEN_MESSAGE = "Not authorized to access this resource";
 
+    @Autowired
+    private Utils utils;
+    
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
+    
     private RestTemplate restTemplate;
 
     private String authorizationUrl;
 
-    private ObjectMapper objectMapper;
-
-
     @Autowired
-    public RbacFilter(RestTemplate restTemplate, String authorizationUrl, ObjectMapper objectMapper) {
+    public RbacFilter(RestTemplate restTemplate, String authorizationUrl) {
         this.restTemplate = restTemplate;
         this.authorizationUrl = authorizationUrl;
-        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -83,96 +93,43 @@ public class RbacFilter extends ZuulFilter {
             ExceptionUtils.raiseCustomException(HttpStatus.UNAUTHORIZED, "User information not found. Can't execute RBAC filter");
         }
 
-        Set<String> tenantId = validateRequestAndSetRequestTenantId();
+        Set<String> tenantIds = utils.validateRequestAndSetRequestTenantId();
+        
+        /*
+         * Adding tenantId to header for tracer logging with correlation-id
+         */
+		if (centralInstanceUtil.getIsEnvironmentCentralInstance() && StringUtils.isEmpty(ctx.get(TENANTID_MDC))) {
+			String singleTenantId = utils.getLowLevelTenatFromSet(tenantIds);
+			MDC.put(TENANTID_MDC, singleTenantId);
+			ctx.set(TENANTID_MDC, singleTenantId);
+		}
 
-        ctx.set(CURRENT_REQUEST_TENANTID, String.join(",", tenantId));
+        ctx.set(CURRENT_REQUEST_TENANTID, String.join(",", tenantIds));
 
         AuthorizationRequest request = AuthorizationRequest.builder()
             .roles(new HashSet<>(user.getRoles()))
             .uri(requestUri)
-            .tenantIds(tenantId)
+            .tenantIds(tenantIds)
             .build();
 
         return isUriAuthorized(request);
 
     }
 
-    private Set<String> validateRequestAndSetRequestTenantId() {
-
-        RequestContext ctx = RequestContext.getCurrentContext();
-
-        return getTenantIdForRequest(ctx);
-    }
-
-    private Set<String> getTenantIdForRequest(RequestContext ctx) {
-        HttpServletRequest request = ctx.getRequest();
-        Map<String, List<String>> queryParams = ctx.getRequestQueryParams();
-
-        Set<String> tenantIds = new HashSet<>();
-
-
-        if (Utils.isRequestBodyCompatible(request)) {
-
-            try {
-                ObjectNode requestBody = (ObjectNode) objectMapper.readTree(request.getInputStream());
-
-                stripRequestInfo(requestBody);
-
-                List<String> tenants = new LinkedList<>();
-
-                for (JsonNode node : requestBody.findValues(REQUEST_TENANT_ID_KEY)) {
-                    if (node.getNodeType() == JsonNodeType.ARRAY)
-                    {
-                        node.elements().forEachRemaining(n -> tenants.add(n.asText()));
-                    } else if (node.getNodeType() == JsonNodeType.STRING) {
-                        tenants.add(node.asText());
-                    }
-                }
-                if( ! tenants.isEmpty())
-                // Filtering null tenantids will be removed once fix is done in TL service.
-                    tenants.forEach(tenant -> {
-                        if (tenant != null && !tenant.equalsIgnoreCase("null"))
-                            tenantIds.add(tenant);
-                    });
-                else{
-                    if (!isNull(queryParams) && queryParams.containsKey(REQUEST_TENANT_ID_KEY) && !queryParams.get(REQUEST_TENANT_ID_KEY).isEmpty()) {
-                        String tenantId = queryParams.get(REQUEST_TENANT_ID_KEY).get(0);
-                        if(tenantId.contains(",")){
-                            tenantIds.addAll(Arrays.asList(tenantId.split(",")));
-                        } else
-                            tenantIds.add(tenantId);
-
-                    }
-                }
-
-            } catch (IOException e) {
-                throw new RuntimeException( new CustomException("REQUEST_PARSE_FAILED", HttpStatus.UNAUTHORIZED.value() ,"Failed to parse request at" +
-                    " API gateway"));
-            }
-        }
-
-        if (tenantIds.isEmpty()) {
-            tenantIds.add(((User) ctx.get(USER_INFO_KEY)).getTenantId());
-        }
-
-        return tenantIds;
-    }
-
-    private void stripRequestInfo(ObjectNode requestBody) {
-        if (requestBody.has(REQUEST_INFO_FIELD_NAME_PASCAL_CASE))
-            requestBody.remove(REQUEST_INFO_FIELD_NAME_PASCAL_CASE);
-
-        else if (requestBody.has(REQUEST_INFO_FIELD_NAME_CAMEL_CASE))
-            requestBody.remove(REQUEST_INFO_FIELD_NAME_CAMEL_CASE);
-
-    }
-
     private boolean isUriAuthorized(AuthorizationRequest authorizationRequest) {
+    	
         AuthorizationRequestWrapper authorizationRequestWrapper = new AuthorizationRequestWrapper(new RequestInfo(),
             authorizationRequest);
+        RequestContext ctx = RequestContext.getCurrentContext();
+        
+        final HttpHeaders headers = new HttpHeaders();
+        headers.add(CORRELATION_ID_HEADER_NAME, (String) ctx.get(CORRELATION_ID_KEY));
+		if (centralInstanceUtil.getIsEnvironmentCentralInstance())
+			headers.add(REQUEST_TENANT_ID_KEY, (String) ctx.get(TENANTID_MDC));
+        final HttpEntity<Object> httpEntity = new HttpEntity<>(authorizationRequestWrapper, headers);
 
         try {
-            ResponseEntity<Void> responseEntity = restTemplate.postForEntity(authorizationUrl, authorizationRequestWrapper, Void
+            ResponseEntity<Void> responseEntity = restTemplate.postForEntity(authorizationUrl, httpEntity, Void
                 .class);
 
             return responseEntity.getStatusCode().equals(HttpStatus.OK);

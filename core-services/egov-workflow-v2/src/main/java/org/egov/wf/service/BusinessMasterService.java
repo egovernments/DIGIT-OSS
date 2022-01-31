@@ -59,7 +59,7 @@ public class BusinessMasterService {
         evictAllCacheValues("businessService");
         evictAllCacheValues("roleTenantAndStatusesMapping");
         enrichmentService.enrichCreateBusinessService(request);
-        producer.push(config.getSaveBusinessServiceTopic(),request);
+        producer.push(request.getBusinessServices().get(0).getTenantId(), config.getSaveBusinessServiceTopic(),request);
         return request.getBusinessServices();
     }
 
@@ -83,7 +83,7 @@ public class BusinessMasterService {
         evictAllCacheValues("businessService");
         evictAllCacheValues("roleTenantAndStatusesMapping");
         enrichmentService.enrichUpdateBusinessService(request);
-        producer.push(config.getUpdateBusinessServiceTopic(),request);
+        producer.push(request.getBusinessServices().get(0).getTenantId(), config.getUpdateBusinessServiceTopic(),request);
         return request.getBusinessServices();
     }
 
