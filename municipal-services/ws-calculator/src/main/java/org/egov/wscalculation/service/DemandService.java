@@ -724,11 +724,21 @@ public class DemandService {
 									.waterConnection(connectionNo).build();
 							calculationCriteriaList.add(calculationCriteria);
 						}
-						MigrationCount migrationCount = MigrationCount.builder().id(UUID.randomUUID().toString()).offset(Long.valueOf(batchOffset)).limit(Long.valueOf(batchsize)).recordCount(Long.valueOf(connections.size()))
-								.tenantid(tenantId).createdTime(System.currentTimeMillis()).businessService("WS").build();
+						MigrationCount migrationCount = MigrationCount.builder()
+								.tenantid(tenantId)
+								.businessService("WS")
+								.limit(Long.valueOf(batchsize))
+								.id(UUID.randomUUID().toString())
+								.offset(Long.valueOf(batchOffset))
+								.createdTime(System.currentTimeMillis())								
+								.recordCount(Long.valueOf(connections.size()))
+								.build();
 
-						CalculationReq calculationReq = CalculationReq.builder().calculationCriteria(calculationCriteriaList)
-								.requestInfo(requestInfo).isconnectionCalculation(true).migrationCount(migrationCount).build();
+						CalculationReq calculationReq = CalculationReq.builder()
+								.calculationCriteria(calculationCriteriaList)
+								.requestInfo(requestInfo)
+								.isconnectionCalculation(true)
+								.migrationCount(migrationCount).build();
 
 						wsCalculationProducer.push(configs.getCreateDemand(), calculationReq);
 						log.info("Bulk bill Gen batch info : " + migrationCount);

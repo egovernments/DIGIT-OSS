@@ -2,11 +2,11 @@ package org.egov.wscalculation.consumer;
 
 import java.util.Map;
 
-import org.egov.wscalculation.config.WSCalculationConfiguration;
 import org.egov.wscalculation.producer.WSCalculationProducer;
 import org.egov.wscalculation.service.BulkDemandAndBillGenService;
 import org.egov.wscalculation.web.models.CalculationReq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -24,13 +24,13 @@ public class DemandGenerationConsumer {
 	private ObjectMapper mapper;
 
 	@Autowired
-	private WSCalculationConfiguration config;
-
-	@Autowired
 	private BulkDemandAndBillGenService bulkDemandAndBillGenService;
 
 	@Autowired
 	private WSCalculationProducer producer;
+
+	@Value("${kafka.topics.bulk.bill.generation.audit}")
+	private String bulkBillGenAuditTopic;
 
 	/**
 	 * Listen the topic for processing the batch records.
@@ -59,14 +59,18 @@ public class DemandGenerationConsumer {
 	 *
 	 */
 	private void generateDemandInBatch(CalculationReq request) {
-		
+		/*
+		 * this topic will be used by billing service to post message
+		 */
+		request.getMigrationCount().setAuditTopic(bulkBillGenAuditTopic);
 		try {
 			bulkDemandAndBillGenService.bulkDemandGeneration(request);
 		} catch (Exception ex) {
-			log.error("Demand generation error: ", ex);
-			log.info(" Bulk bill Errorbatch records log for batch :  " + request.getMigrationCount().getOffset()
-					+ "Count is : " + request.getMigrationCount().getLimit());
-			producer.push(config.getDeadLetterTopicBatch(), request.getMigrationCount());
+			/*
+			 * Error with message goes to audit topic
+			 */
+			request.getMigrationCount().setMessage("Failed in DemandGenerationConsumer with error : " + ex.getMessage());
+			producer.push(bulkBillGenAuditTopic, request.getMigrationCount());
 		}
 	}
 }
