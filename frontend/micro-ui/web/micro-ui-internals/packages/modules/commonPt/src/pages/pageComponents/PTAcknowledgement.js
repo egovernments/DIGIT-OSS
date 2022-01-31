@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation} from "react-router-dom";
 // import getPTAcknowledgementData from "../../../getPTAcknowledgementData";
-import { convertToPropertyLightWeight } from "../../utils";
+import { convertToPropertyLightWeight, convertToUpdateProperty } from "../utils";
 
 const GetActionMessage = (props) => {
   const { t } = useTranslation();
@@ -32,17 +32,29 @@ const BannerPicker = (props) => {
   );
 };
 
-const PTAcknowledgement = ({ onSuccess }) => {
+const PTAcknowledgement = ({ onSuccess, redirectUrl, userType }) => {
   const { t } = useTranslation();
   
   const location = useLocation();
   let data = location?.state?.data;
 
+  let createNUpdate = false;
+  const stateId = Digit.ULBService.getStateId();
+  let { data: mdmsConfig, isLoading } = Digit.Hooks.pt.useMDMS(stateId, "PropertyTax", "PTWorkflow");
+  (mdmsConfig?.PropertyTax?.PTWorkfow || []).forEach(data => {
+    if(data.enable) {
+      if((data.businessService).includes("WNS")){
+        createNUpdate = true;
+      }
+    }
+  })
+
   const isPropertyMutation = window.location.href.includes("property-mutation");
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const mutation = Digit.Hooks.pt.usePropertyAPI(
-    data?.address?.city ? data.address?.city?.code : tenantId,
-    !window.location.href.includes("edit-application") && !isPropertyMutation
+  const mutation = Digit.Hooks.pt.usePropertyCreateNUpdateAPI(
+    data?.locationDet?.city ? data.locationDet?.city?.code : tenantId,
+    !window.location.href.includes("edit-application") && !isPropertyMutation,
+    createNUpdate,
   );
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
@@ -51,16 +63,27 @@ const PTAcknowledgement = ({ onSuccess }) => {
   useEffect(() => {
     try {
       // let tenantId = isPropertyMutation ? data.Property?.address.tenantId : data?.address?.city ? data.address?.city?.code : tenantId;
-      data.tenantId = tenantId;
+      let tenant = userType === 'employee' ? tenantId : data?.locationDet?.city?.code;
+      data.tenantId = tenant;
       let formdata = !window.location.href.includes("edit-application")
         ? isPropertyMutation
           ? data
           : convertToPropertyLightWeight(data)
         : null;
-      formdata.Property.tenantId = formdata?.Property?.tenantId || tenantId;
+      formdata.Property.tenantId = formdata?.Property?.tenantId || tenant;
       mutation.mutate(formdata, {
         onSuccess,
       });
+
+      if(mutation.isSuccess) {
+        setTimeout(() => {
+          if(redirectUrl) {
+            history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${formdata.Property.tenantId}`);
+            return;
+          } 
+        }, 3000);
+      }
+     
     } catch (err) {
       console.error(err, "inside ack");
     }
@@ -85,7 +108,6 @@ const PTAcknowledgement = ({ onSuccess }) => {
           />
         )}
       </StatusTable>
-      {mutation.isSuccess && <SubmitBar label={t("PT_DOWNLOAD_ACK_FORM")} onSubmit={handleDownloadPdf} />}
 
       <Link to={`/digit-ui/citizen`}>
         <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />

@@ -1,17 +1,18 @@
 import { FormComposer, Loader, Dropdown, Localities } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
-import { newConfig } from "../../../config/Create/config";
+import { useHistory, useRouteMatch } from "react-router-dom";
+import { newConfig } from "../../config/Create/config";
 import _, { create, unset } from "lodash";
 
-const CreatePropertyForm = () => {
+const CreatePropertyForm = ({ userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const tenants = Digit.Hooks.pt.useTenants();
   const { t } = useTranslation();
   const [canSubmit, setCanSubmit] = useState(false);
   const defaultValues = { };
   const history = useHistory();
+  const match = useRouteMatch();
 
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   
@@ -33,14 +34,23 @@ const CreatePropertyForm = () => {
   }
 
   const onSubmit = async () => {
-    history.replace(`/digit-ui/citizen/commonPt/property/citizen-otp`,
-      {
-        // from: getFromLocation(location.state, searchParams),
-        mobileNumber: formValue?.owners?.mobileNumber,
-        redirectBackTo: '/digit-ui/citizen/commonPt/property/new-application/save-property',
-        redirectData: formValue,
-      }
-    );
+    // const createParams = { ...formValue };
+    // createParams.owners = [createParams.owners];
+
+    if(userType === 'employee') {
+      history.push(`${match.path}/save-property`, {
+        data: formValue,
+      });
+    } else {
+      history.replace(`/digit-ui/citizen/commonPt/property/citizen-otp`,
+        {
+          // from: getFromLocation(location.state, searchParams),
+          mobileNumber: formValue?.owners?.mobileNumber,
+          redirectBackTo: '/digit-ui/citizen/commonPt/property/new-application/save-property',
+          redirectData: formValue,
+        }
+      );
+    }
   };
 
   const onFormValueChange = (setValue, data, formState) => {
@@ -56,7 +66,7 @@ const CreatePropertyForm = () => {
       setFormValue(data);
     }
 
-    if (!locality || !city) {
+    if (!locality) {
       setCanSubmit(false);
       return;
     }

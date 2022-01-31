@@ -4,9 +4,10 @@ import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
-import PropertyAssemblyDetails from "./pages/pageComponents/PropertyAssemblyDetails";
-import PropertyLocationDetails from "./pages/pageComponents/PropertyLocationDetails";
-import PropertyOwnerDetails from "./pages/pageComponents/PropertyOwnerDetails";
+
+import PropertyAssemblyDetails from './pages/components/PropertyAssemblyDetails';
+import PropertyLocationDetails from "./pages/components/PropertyLocationDetails";
+import PropertyOwnerDetails from "./pages/components/PropertyOwnerDetails";
 
 import CPTPropertySearchForm from './components/search/CPTPropertySearchForm';
 import CPTPropertySearchResults from './components/search/CPTPropertySearchResults';

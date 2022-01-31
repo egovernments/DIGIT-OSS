@@ -102,7 +102,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
         street: locationDet?.buildingColonyName,
         landmark: locationDet?.landmark,
         locality: locationDet?.locality?.i18nkey,
-        city: locationDet?.city?.code,
+        city: locationDet?.cityCode?.name,
         // pincode: locationDet?.locality?.pincode[0],
       };
       let addressDetails = "";
