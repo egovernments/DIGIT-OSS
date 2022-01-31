@@ -80,6 +80,10 @@ public class AppProperties {
 
     private final String egovPgReconciliationSystemUserUuid;
 
+    private final Integer stateLevelTenantLength;
+
+    private final Boolean isEnvironmentCentralInstance;
+
     @Autowired
     public AppProperties(Environment environment){
         this.earlyReconcileJobRunInterval = Integer.valueOf(environment.getRequiredProperty("pg.earlyReconcileJobRunInterval.mins"));
@@ -115,6 +119,8 @@ public class AppProperties {
         this.billingServiceSearchEndpoint = environment.getRequiredProperty("egov.bill.searchendpoint");
         this.notificationHost = environment.getRequiredProperty("notification.url");
         this.egovPgReconciliationSystemUserUuid = environment.getRequiredProperty("egov.pg.reconciliation.system.user.uuid");
+        this.stateLevelTenantLength = Integer.parseInt(environment.getRequiredProperty("state.level.tenantid.length"));
+        this.isEnvironmentCentralInstance = Boolean.parseBoolean(environment.getRequiredProperty("is.environment.central.instance"));
     }
 
 }

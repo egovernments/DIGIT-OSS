@@ -19,6 +19,9 @@ var router = express.Router();
      var consumerCode = req.query.consumerCode;
      var bussinessService = req.query.bussinessService;
      var requestinfo = req.body;
+     var headers = JSON.parse(JSON.stringify(req.headers));
+     headers['tenantId']=headers.tenantid;
+
      if (requestinfo == undefined) {
        return renderError(res, "requestinfo can not be null");
      }
@@ -31,7 +34,7 @@ var router = express.Router();
      try {
        var resBill;
        try {
-         resBill = await search_billV2(tenantId, consumerCode, bussinessService, requestinfo);
+         resBill = await search_billV2(tenantId, consumerCode, bussinessService, requestinfo, headers);
        } catch (ex) {
          
          if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -41,7 +44,6 @@ var router = express.Router();
        var pdfkey = config.pdf.consolidated_bill_template;
 
        if (bills && bills.Bill && bills.Bill.length > 0) {
-           console.log("Hi");
          var pdfResponse;
          try {
            var billArray = { Bill: bills.Bill };
@@ -49,7 +51,8 @@ var router = express.Router();
              tenantId,
              pdfkey,
              billArray,
-             requestinfo
+             requestinfo,
+             headers
            );
          } catch (ex) {
            
@@ -79,6 +82,9 @@ var router = express.Router();
       var amendmentId = req.query.amendmentId;
       var bussinessService = req.query.bussinessService;
       var requestinfo = req.body;
+      var headers = JSON.parse(JSON.stringify(req.headers));
+      headers['tenantId']=headers.tenantid;
+
 
       if (requestinfo == undefined) {
         return renderError(res, "requestinfo can not be null");
@@ -92,7 +98,7 @@ var router = express.Router();
       try {
         var billAmendment;
         try {
-          billAmendment = await search_amendment(tenantId, amendmentId, bussinessService, requestinfo);
+          billAmendment = await search_amendment(tenantId, amendmentId, bussinessService, requestinfo, headers);
         } catch (ex) {
           
           if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -109,7 +115,8 @@ var router = express.Router();
               tenantId,
               pdfkey,
               Amendments,
-              requestinfo
+              requestinfo,
+              headers
             );
           } catch (ex) {
             

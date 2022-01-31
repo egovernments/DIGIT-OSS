@@ -260,6 +260,14 @@ public class ApplicationProperties {
     
     @Value("${egov.razorpay.url}")
     private String razorPayUrl;
+    
+    // central-instance configs
+    
+    @Value("${state.level.tenantid.length}")
+    private Integer stateLevelTenantIdLength;
+    
+    @Value("${is.environment.central.instance}")
+    private Boolean isEnvironmentCentralInstance;
 
 
 }

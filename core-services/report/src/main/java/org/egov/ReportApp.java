@@ -1,13 +1,19 @@
 package org.egov;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import lombok.extern.slf4j.Slf4j;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.domain.model.ReportDefinitions;
 import org.egov.swagger.model.ReportDefinition;
+import org.egov.tracer.config.TracerConfiguration;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,21 +22,25 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
 @PropertySource("classpath:application.properties")
 @SpringBootApplication
+@Import({ TracerConfiguration.class, MultiStateInstanceUtil.class })
 public class ReportApp implements EnvironmentAware {
 
     @Autowired

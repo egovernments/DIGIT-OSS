@@ -41,7 +41,7 @@ public class EnrichmentConsumer implements KafkaConsumer {
 	@Autowired
 	private IESService elasticService;
 
-	@KafkaListener(id = INTENT, groupId = INTENT, topics = { Constants.KafkaTopics.TRANSFORMED_DATA}, containerFactory = Constants.BeanContainerFactory.INCOMING_KAFKA_LISTENER)
+	@KafkaListener(id = INTENT, groupId = INTENT, topics = "${kafka.transaction.transformation.topic}", containerFactory = Constants.BeanContainerFactory.INCOMING_KAFKA_LISTENER)
 	public void processMessage(final Map incomingData,
 			@Header(KafkaHeaders.RECEIVED_TOPIC) final String topic) {
 
@@ -73,7 +73,8 @@ public class EnrichmentConsumer implements KafkaConsumer {
 				ingestProducer.pushToPipeline(incomingData, ERROR_INTENT, null);
 			}
 		} catch (final Exception e) {
-			LOGGER.error("Exception Encountered while processing the received message : " + e.getMessage());
+			e.printStackTrace();
+			LOGGER.error("Exception Encountered while processing the received message in enrichment consumer : " + e.getMessage());
 		}
 
 	}

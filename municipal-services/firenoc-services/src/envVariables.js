@@ -28,6 +28,13 @@ const envVariables = {
   KAFKA_TOPICS_EVENT_NOTIFICATION:
     process.env.KAFKA_TOPICS_EVENT_NOTIFICATION || "persist-events-async",
 
+  KAFKA_TOPICS_FIRENOC_CREATE_SMS:
+    process.env.KAFKA_TOPICS_FIRENOC_CREATE_SMS || "save-fn-firenoc-sms",
+  KAFKA_TOPICS_FIRENOC_UPDATE_SMS:
+    process.env.KAFKA_TOPICS_FIRENOC_UPDATE_SMS || "update-fn-firenoc-sms",
+  KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS:
+    process.env.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS || "update-fn-workflow-sms",
+
   //tracer configurations
   TRACER_ENABLE_REQUEST_LOGGING:
     process.env.TRACER_ENABLE_REQUEST_LOGGING || false,
@@ -129,6 +136,8 @@ const envVariables = {
 
   // default state // IDEA:
   EGOV_DEFAULT_STATE_ID: process.env.EGOV_DEFAULT_STATE_ID || "pb",
+  STATE_LEVEL_TENANTID_LENGTH: process.env.STATE_LEVEL_TENANTID_LENGTH || 2,
+  IS_ENVIRONMENT_CENTRAL_INSTANCE: process.env.IS_ENVIRONMENT_CENTRAL_INSTANCE || true,
 
   //pagination configurations
   EGOV_FN_DEFAULT_OFFSET: process.env.EGOV_FN_DEFAULT_OFFSET || 0,

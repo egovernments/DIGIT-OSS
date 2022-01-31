@@ -1,16 +1,17 @@
 package org.egov.tl.util;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class TLConstants {
 
 
+	public static String SCHEMA_REPLACE_STRING = "{schema}";
+	
     public static  final String businessService_TL = "TL";
 
     public static  final String businessService_DIRECT_RENEWAL = "DIRECTRENEWAL";
@@ -353,6 +354,7 @@ public class TLConstants {
 
     public static final String PAYMENT_LINK_PLACEHOLDER="{PAYMENT_LINK}";
 
+<<<<<<< HEAD
     public static final String CHANNEL_NAME_SMS = "SMS";
 
     public static final String CHANNEL_NAME_EVENT = "EVENT";
@@ -370,6 +372,10 @@ public class TLConstants {
     public static final String CHANNEL = "Channel";
 
     public static final String TL_BUSINESSSERVICE = "TL";
+=======
+    public static final String TENANTID_MDC_STRING = "TENANTID";
+
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
     public TLConstants() {}
 

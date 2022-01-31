@@ -32,6 +32,9 @@ router.post(
       var applicationNumber = req.query.applicationNumber;
       var bussinessService = req.query.bussinessService;
       var requestinfo = req.body;
+      var headers = JSON.parse(JSON.stringify(req.headers));
+      headers['tenantId']=headers.tenantid;
+
       var restWns;
       if (requestinfo == undefined) {
         return renderError(res, "requestinfo can not be null");
@@ -50,7 +53,8 @@ router.post(
                     applicationNumber,
                     tenantId,
                     requestinfo,
-                    true
+                    true,
+                    headers
                   );
             }
             else{
@@ -58,7 +62,8 @@ router.post(
                     applicationNumber,
                     tenantId,
                     requestinfo,
-                    true
+                    true,
+                    headers
                   );
             }
           
@@ -86,7 +91,8 @@ router.post(
               tenantId,
               consumerCode,
               bussinessService,
-              requestinfo
+              requestinfo,
+              headers
             );
           } catch (ex) {
             if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -108,7 +114,8 @@ router.post(
                 tenantId,
                 pdfkey,
                 billArray,
-                requestinfo
+                requestinfo,
+                headers
               );
             } catch (ex) {
               let errorMessage;
@@ -150,7 +157,8 @@ router.post(
               tenantId,
               consumerCode,
               bussinessService,
-              requestinfo
+              requestinfo,
+              headers
             );
           } catch (ex) {
             if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -172,7 +180,8 @@ router.post(
                 tenantId,
                 pdfkey,
                 billArray,
-                requestinfo
+                requestinfo,
+                headers
               );
             } catch (ex) {
               let errorMessage;
@@ -216,6 +225,9 @@ router.post(
       var applicationNumber = req.query.applicationNumber;
       var bussinessService = req.query.bussinessService;
       var requestinfo = req.body;
+      var headers = JSON.parse(JSON.stringify(req.headers));
+      headers['tenantId']=headers.tenantid;
+
       var restWns;
       if (requestinfo == undefined) {
         return renderError(res, "requestinfo can not be null");
@@ -234,7 +246,8 @@ router.post(
                     applicationNumber,
                     tenantId,
                     requestinfo,
-                    false
+                    false,
+                    headers
                   );
             }
             else{
@@ -242,7 +255,8 @@ router.post(
                     applicationNumber,
                     tenantId,
                     requestinfo,
-                    false
+                    false,
+                    headers
                   );
             }
           
@@ -264,7 +278,8 @@ router.post(
                 consumerCode,
                 tenantId,
                 requestinfo,
-                bussinessService
+                bussinessService,
+                headers
               );
           } catch (ex) {
             if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -280,7 +295,8 @@ router.post(
                 tenantId,
                 pdfkey,
                 payments,
-                requestinfo
+                requestinfo,
+                headers
               );
             } catch (ex) {
               let errorMessage;
@@ -317,7 +333,8 @@ router.post(
                 consumerCode,
                 tenantId,
                 requestinfo,
-                bussinessService
+                bussinessService,
+                headers
               );
           } catch (ex) {
             if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -333,7 +350,8 @@ router.post(
                 tenantId,
                 pdfkey,
                 payments,
-                requestinfo
+                requestinfo,
+                headers
               );
             } catch (ex) {
               let errorMessage;
@@ -385,7 +403,13 @@ router.post(
       var waterBills, sewerageBills;
       var consolidatedResult = {Bill:[]};
       var propertyIdSet = [];
+<<<<<<< HEAD
       var connectionnoToPropertyMap = {};
+=======
+      var headers = JSON.parse(JSON.stringify(req.headers));
+      headers['tenantId']=headers.tenantid;
+
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
       if (requestinfo == undefined) {
         return renderError(res, "requestinfo can not be null");
       }
@@ -405,7 +429,8 @@ router.post(
 
             restWater = await search_waterOpenSearch(
               searchCriteria,
-              requestinfo
+              requestinfo,
+              headers
             );
   
             restWater = restWater.data.WaterConnection;
@@ -426,7 +451,8 @@ router.post(
   
             restSewerage = await search_sewerageOpenSearch(
               searchCriteria,
-              requestinfo
+              requestinfo,
+              headers
             );
   
             restSewerage = restSewerage.data.SewerageConnections;
@@ -455,13 +481,15 @@ router.post(
 
             waterBills = await search_bill_genie_water_bills(
               inputData,
-              requestinfo
+              requestinfo,
+              headers
             );
             waterBills = waterBills.data.Bills;
   
             sewerageBills = await search_bill_genie_sewerage_bills(
               inputData,
-              requestinfo
+              requestinfo,
+              headers
             );
             sewerageBills = sewerageBills.data.Bills;
   
@@ -470,7 +498,7 @@ router.post(
                 if(waterBill.status ==='EXPIRED'){
                   var billresponse = await fetch_bill(
                   tenantId, waterBill.consumerCode,
-                  waterBill.businessService, requestinfo);
+                  waterBill.businessService, requestinfo, headers);
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
                 else{
@@ -485,7 +513,7 @@ router.post(
                 if(sewerageBill.status ==='EXPIRED'){
                   var billresponse = await fetch_bill(
                   tenantId, sewerageBill.consumerCode,
-                  sewerageBill.businessService, requestinfo);
+                  sewerageBill.businessService, requestinfo, headers);
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
                 else{
@@ -512,7 +540,8 @@ router.post(
 
             restWater = await search_waterOpenSearch(
               searchCriteria,
-              requestinfo
+              requestinfo,
+              headers
             );
 
             restWater = restWater.data.WaterConnection;
@@ -542,7 +571,8 @@ router.post(
             var inputData = {searchCriteria :{locality: locality, tenantId: tenantId, propertyId: propertyIdSet}};
             waterBills = await search_bill_genie_water_bills(
               inputData,
-              requestinfo
+              requestinfo,
+              headers
             );
   
             waterBills = waterBills.data.Bills;
@@ -551,7 +581,7 @@ router.post(
                 if(waterBill.status ==='EXPIRED'){
                   var billresponse = await fetch_bill(
                   tenantId, waterBill.consumerCode,
-                  waterBill.businessService, requestinfo);
+                  waterBill.businessService, requestinfo, headers);
                 
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
@@ -576,7 +606,8 @@ router.post(
   
             restSewerage = await search_sewerageOpenSearch(
               searchCriteria,
-              requestinfo
+              requestinfo,
+              headers
             );
   
             restSewerage = restSewerage.data.SewerageConnections;
@@ -605,7 +636,8 @@ router.post(
   
             sewerageBills = await search_bill_genie_sewerage_bills(
               inputData,
-              requestinfo
+              requestinfo,
+              headers
             );
             sewerageBills = sewerageBills.data.Bills;
   
@@ -614,7 +646,7 @@ router.post(
                 if(sewerageBill.status ==='EXPIRED'){
                   var billresponse = await fetch_bill(
                   tenantId, sewerageBill.consumerCode,
-                  sewerageBill.businessService, requestinfo);
+                  sewerageBill.businessService, requestinfo, headers);
                 
                   consolidatedResult.Bill.push(billresponse.data.Bill[0]);
                 }
@@ -655,7 +687,8 @@ router.post(
               tenantId,
               pdfkey,
               billArray,
-              requestinfo
+              requestinfo,
+              headers
             );
           } catch (ex) {
             let errorMessage= "Failed to generate PDF"; 

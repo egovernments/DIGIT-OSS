@@ -16,6 +16,7 @@ import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.web.models.users.User;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -28,8 +29,12 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 
+<<<<<<< HEAD
 import static org.egov.swcalculation.constants.SWCalculationConstant.*;
 import static org.springframework.util.StringUtils.capitalize;
+=======
+import static org.egov.swcalculation.constants.SWCalculationConstant.TENANTID_MDC_STRING;
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
 @Slf4j
 @Component
@@ -75,8 +80,17 @@ public class PaymentNotificationService {
 			List<SewerageConnection> sewerageConnectionList = calculatorUtils.getSewerageConnection(requestInfo,
 					mappedRecord.get(consumerCode), mappedRecord.get(tenantId));
 			int size = sewerageConnectionList.size();
+<<<<<<< HEAD
 			SewerageConnection sewerageConnection = sewerageConnectionList.get(size - 1);
 
+=======
+			SewerageConnection sewerageConnection = sewerageConnectionList.get(size-1);
+			String tenantId = sewerageConnection.getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
+			
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 			SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
 					.sewerageConnection(sewerageConnection).requestInfo(requestInfo).build();
 			Property property = sWCalculationUtil.getProperty(sewerageConnectionRequest);

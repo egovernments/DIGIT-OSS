@@ -308,7 +308,12 @@ public class TradeLicenseService {
     }
 
     public List<TradeLicense> getLicensesFromMobileNumber(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
+<<<<<<< HEAD
     	
+=======
+
+        String tenantId = criteria.getTenantId();
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
         List<TradeLicense> licenses = new LinkedList<>();
         
         boolean isEmpty = enrichWithUserDetails(criteria,requestInfo);
@@ -318,7 +323,7 @@ public class TradeLicenseService {
         }
         
         //Get all tradeLicenses with ownerInfo enriched from user service
-        licenses = getLicensesWithOwnerInfo(criteria,requestInfo);
+        licenses = getLicensesWithOwnerInfo(tenantId,criteria,requestInfo);
         return licenses;
     }
 
@@ -331,6 +336,20 @@ public class TradeLicenseService {
      */
     public List<TradeLicense> getLicensesWithOwnerInfo(TradeLicenseSearchCriteria criteria,RequestInfo requestInfo){
         List<TradeLicense> licenses = repository.getLicenses(criteria);
+        if(licenses.isEmpty())
+            return Collections.emptyList();
+        licenses = enrichmentService.enrichTradeLicenseSearch(licenses,criteria,requestInfo);
+        return licenses;
+    }
+
+    /**
+     * Returns the tradeLicense with enrivhed owners from user servise
+     * @param criteria The object containing the paramters on which to search
+     * @param requestInfo The search request's requestInfo
+     * @return List of tradeLicense for the given criteria
+     */
+    public List<TradeLicense> getLicensesWithOwnerInfo(String stateTenantId,TradeLicenseSearchCriteria criteria,RequestInfo requestInfo){
+        List<TradeLicense> licenses = repository.getLicenses(criteria, stateTenantId);
         if(licenses.isEmpty())
             return Collections.emptyList();
         licenses = enrichmentService.enrichTradeLicenseSearch(licenses,criteria,requestInfo);

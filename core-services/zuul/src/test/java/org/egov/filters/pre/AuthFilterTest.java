@@ -1,27 +1,32 @@
 package org.egov.filters.pre;
 
-import com.netflix.zuul.context.RequestContext;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+
 import org.egov.Resources;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.contract.User;
+import org.egov.exceptions.CustomException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.cloud.netflix.zuul.filters.ProxyRequestHelper;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.netflix.zuul.context.RequestContext;
 
 public class AuthFilterTest {
     private MockHttpServletRequest request = new MockHttpServletRequest();
@@ -32,6 +37,9 @@ public class AuthFilterTest {
 
     @Mock
     private ProxyRequestHelper proxyRequestHelper;
+    
+    @Mock
+    private MultiStateInstanceUtil multiStateInstanceUtil;
 
     private AuthFilter authFilter;
 
@@ -42,7 +50,7 @@ public class AuthFilterTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        authFilter = new AuthFilter(proxyRequestHelper, restTemplate, authServiceHost, authUri);
+        authFilter = new AuthFilter(proxyRequestHelper, restTemplate, authServiceHost, authUri, multiStateInstanceUtil);
         RequestContext ctx = RequestContext.getCurrentContext();
         ctx.clear();
         ctx.setRequest(request);
@@ -65,7 +73,7 @@ public class AuthFilterTest {
     }
 
     @Test
-    public void testThatFilterShouldAbortIfValidatingAuthTokenFails() throws IOException {
+    public void testThatFilterShouldAbortIfValidatingAuthTokenFails() throws IOException, CustomException {
         RequestContext ctx = RequestContext.getCurrentContext();
         String authToken = "dummy-auth-token";
         ctx.set("authToken", authToken);
@@ -73,7 +81,7 @@ public class AuthFilterTest {
         ctx.setRequest(request);
         ctx.setResponse(new MockHttpServletResponse());
         String authUrl = String.format("%s%s%s", authServiceHost, authUri, authToken);
-        when(restTemplate.postForObject(eq(authUrl), any(), eq(User.class)))
+        when(restTemplate.postForObject(eq(authUrl), any(HttpEntity.class), eq(User.class)))
             .thenThrow(new HttpClientErrorException(HttpStatus.UNAUTHORIZED));
 
         try {

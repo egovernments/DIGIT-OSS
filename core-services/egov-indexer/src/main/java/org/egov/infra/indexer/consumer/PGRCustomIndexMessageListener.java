@@ -9,6 +9,7 @@ import org.egov.infra.indexer.service.IndexerService;
 import org.egov.infra.indexer.util.IndexerConstants;
 import org.egov.infra.indexer.util.IndexerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.listener.MessageListener;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,12 @@ public class PGRCustomIndexMessageListener implements MessageListener<String, St
 	@Autowired
 	private PGRCustomDecorator pgrCustomDecorator;
 
+	@Value("${pgr.create.topic.name}")
+	private String pgrCreateTopic;
+
+	@Value("${pgr.batch.create.topic.name}")
+	private String pgrBatchCreateTopic;
+
 	@Override
 	/**
 	 * Messages listener which acts as consumer. This message listener is injected
@@ -42,7 +49,7 @@ public class PGRCustomIndexMessageListener implements MessageListener<String, St
 	public void onMessage(ConsumerRecord<String, String> data) {
 		log.info("Topic: " + data.topic());
 
-		if(data.topic().equals(IndexerConstants.SAVE_PGR_TOPIC) || data.topic().equals(IndexerConstants.SAVE_PGR_REQUEST_BATCH_TOPIC)){
+		if(data.topic().equals(pgrCreateTopic) || data.topic().equals(pgrBatchCreateTopic)){
 			String kafkaJson = pgrCustomDecorator.enrichDepartmentPlaceholderInPgrRequest(data.value());
 			String deptCode = pgrCustomDecorator.getDepartmentCodeForPgrRequest(kafkaJson);
 			kafkaJson = kafkaJson.replace(IndexerConstants.DEPT_CODE, deptCode);

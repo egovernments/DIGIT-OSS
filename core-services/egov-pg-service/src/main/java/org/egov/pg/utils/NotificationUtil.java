@@ -85,14 +85,14 @@ public class NotificationUtil {
      * Send the SMSRequest on the SMSNotification kafka topic
      * @param smsRequestList The list of SMSRequest to be sent
      */
-    public void sendSMS(List<SMSRequest> smsRequestList) {
+    public void sendSMS(List<SMSRequest> smsRequestList,String tenantId) {
         if (appProperties.getIsSMSEnable()) {
             if (CollectionUtils.isEmpty(smsRequestList)) {
                 log.info("Messages from localization couldn't be fetched!");
                 return;
             }
             for (SMSRequest smsRequest : smsRequestList) {
-                producer.push(appProperties.getSmsNotifTopic(), smsRequest);
+                producer.push(tenantId, appProperties.getSmsNotifTopic(), smsRequest);
                 log.info("Messages: " + smsRequest.getMessage());
             }
         }

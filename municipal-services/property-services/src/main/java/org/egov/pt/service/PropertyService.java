@@ -86,6 +86,7 @@ public class PropertyService {
 
 		propertyValidator.validateCreateRequest(request);
 		enrichmentService.enrichCreateRequest(request);
+		String tenantId = request.getProperty().getTenantId();
 		userService.createUser(request);
 		if (config.getIsWorkflowEnabled()
 				&& !request.getProperty().getCreationReason().equals(CreationReason.DATA_UPLOAD)) {
@@ -96,7 +97,7 @@ public class PropertyService {
 			request.getProperty().setStatus(Status.ACTIVE);
 		}
 
-		producer.push(config.getSavePropertyTopic(), request);
+		producer.push(tenantId, config.getSavePropertyTopic(), request);
 		request.getProperty().setWorkflow(null);
 		return request.getProperty();
 	}
@@ -184,6 +185,7 @@ public class PropertyService {
 	 */
 	private void processPropertyUpdate(PropertyRequest request, Property propertyFromSearch) {
 
+		String tenantId = request.getProperty().getTenantId();
 		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
 		if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {
 			userService.createUser(request);
@@ -214,9 +216,9 @@ public class PropertyService {
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
-				producer.push(config.getUpdatePropertyTopic(), OldPropertyRequest);
+				producer.push(tenantId, config.getUpdatePropertyTopic(), OldPropertyRequest);
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
-				producer.push(config.getSavePropertyTopic(), request);
+				producer.push(tenantId, config.getSavePropertyTopic(), request);
 
 			} else if (state.getIsTerminateState()
 					&& !state.getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString())) {
@@ -226,7 +228,7 @@ public class PropertyService {
 				/*
 				 * If property is In Workflow then continue
 				 */
-				producer.push(config.getUpdatePropertyTopic(), request);
+				producer.push(tenantId, config.getUpdatePropertyTopic(), request);
 			}
 
 		} else {
@@ -234,7 +236,7 @@ public class PropertyService {
 			/*
 			 * If no workflow then update property directly with mutation information
 			 */
-			producer.push(config.getUpdatePropertyTopic(), request);
+			producer.push(tenantId, config.getUpdatePropertyTopic(), request);
 		}
 	}
 	
@@ -264,6 +266,7 @@ public class PropertyService {
 	 */
 	private void processOwnerMutation(PropertyRequest request, Property propertyFromSearch) {
 
+		String tenantId = request.getProperty().getTenantId();
 		propertyValidator.validateMutation(request, propertyFromSearch);
 		userService.createUserForMutation(request, !propertyFromSearch.getStatus().equals(Status.INWORKFLOW));
 		enrichmentService.enrichAssignes(request.getProperty());
@@ -291,11 +294,11 @@ public class PropertyService {
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
-				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
+				producer.push(tenantId, config.getUpdatePropertyTopic(), oldPropertyRequest);
 
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
 				/* save new record */
-				producer.push(config.getSavePropertyTopic(), request);
+				producer.push(tenantId, config.getSavePropertyTopic(), request);
 
 			} else if (state.getIsTerminateState()
 					&& !state.getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString())) {
@@ -305,7 +308,7 @@ public class PropertyService {
 				/*
 				 * If property is In Workflow then continue
 				 */
-				producer.push(config.getUpdatePropertyTopic(), request);
+				producer.push(tenantId, config.getUpdatePropertyTopic(), request);
 			}
 
 		} else {
@@ -313,14 +316,15 @@ public class PropertyService {
 			/*
 			 * If no workflow then update property directly with mutation information
 			 */
-			producer.push(config.getUpdatePropertyTopic(), request);
+			producer.push(tenantId, config.getUpdatePropertyTopic(), request);
 		}
 	}
 
 	private void terminateWorkflowAndReInstatePreviousRecord(PropertyRequest request, Property propertyFromSearch) {
 
+		String tenantId = request.getProperty().getTenantId();
 		/* current record being rejected */
-		producer.push(config.getUpdatePropertyTopic(), request);
+		producer.push(tenantId, config.getUpdatePropertyTopic(), request);
 
 		/* Previous record set to ACTIVE */
 		@SuppressWarnings("unchecked")
@@ -339,7 +343,7 @@ public class PropertyService {
 		previousPropertyToBeReInstated.setStatus(Status.ACTIVE);
 		request.setProperty(previousPropertyToBeReInstated);
 
-		producer.push(config.getUpdatePropertyTopic(), request);
+		producer.push(tenantId, config.getUpdatePropertyTopic(), request);
 	}
 
 	/**

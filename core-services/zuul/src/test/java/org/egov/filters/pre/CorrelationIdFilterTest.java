@@ -1,44 +1,37 @@
 package org.egov.filters.pre;
 
-import com.netflix.zuul.context.RequestContext;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.MDC;
-import org.springframework.mock.web.MockHttpServletRequest;
 
-import java.util.Map;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CorrelationIdFilterTest {
 
 	private CorrelationIdFilter correlationIdFilter;
 
+	private List<String> encrytpedUlList = new ArrayList<>();
+	private List<String> openEndpointsWhitelist = new ArrayList<>();
+	private List<String> mixModeEndpointslist = new ArrayList<>();
+	private ObjectMapper objectMapper;
+	
 	@Before
 	public void before() {
-		correlationIdFilter = new CorrelationIdFilter();
+    
+		encrytpedUlList.add("anonymous-endpoint2");
+        encrytpedUlList.add("anonymous-endpoint2");
+		openEndpointsWhitelist.add("/user/_details");
+        openEndpointsWhitelist.add("open-endpoint2");
+        mixModeEndpointslist.add("anonymous-endpoint1");
+        mixModeEndpointslist.add("anonymous-endpoint2");
+        
+		correlationIdFilter = new CorrelationIdFilter(openEndpointsWhitelist, mixModeEndpointslist, objectMapper);
 	}
-
-	@Test
-	public void test_should_set_context_with_correlation_id() {
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		RequestContext.getCurrentContext().setRequest(request);
-
-		correlationIdFilter.run();
-
-		assertNotNull(RequestContext.getCurrentContext().get("CORRELATION_ID"));
-	}
-
-    @Test
-    public void test_should_set_mdc_with_correlation_id() {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        RequestContext.getCurrentContext().setRequest(request);
-
-        correlationIdFilter.run();
-
-        assertNotNull(MDC.get("CORRELATION_ID"));
-    }
 
 	@Test
 	public void test_should_set_filter_order_to_beginning() {

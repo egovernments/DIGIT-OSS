@@ -1,6 +1,17 @@
 package org.egov.tl.service;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.tl.util.TLConstants.ACTION_EXPIRE;
+import static org.egov.tl.util.TLConstants.DEFAULT_WORKFLOW;
+import static org.egov.tl.util.TLConstants.JOB_EXPIRY;
+import static org.egov.tl.util.TLConstants.JOB_SMS_REMINDER;
+import static org.egov.tl.util.TLConstants.STATUS_APPROVED;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
@@ -15,9 +26,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import com.jayway.jsonpath.JsonPath;
 
-import java.util.*;
-
-import static org.egov.tl.util.TLConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -177,11 +186,11 @@ public class TLBatchService {
                 smsRequests.addAll(util.createSMSRequest(message,mobileNumberToOwner));
             }
             catch (Exception e){
-                producer.push(config.getReminderErrorTopic(), license);
+                producer.push(licenses.get(0).getTenantId(), config.getReminderErrorTopic(), license);
             }
         }
 
-        util.sendSMS(smsRequests, config.getIsReminderEnabled());
+        util.sendSMS(smsRequests, config.getIsReminderEnabled(), tenantId);
 
     }
 
@@ -235,10 +244,10 @@ public class TLBatchService {
 
             workflowIntegrator.callWorkFlow(new TradeLicenseRequest(requestInfo, licenses));
 
-            producer.push(config.getUpdateWorkflowTopic(), new TradeLicenseRequest(requestInfo, licenses));
+            producer.push(licenses.get(0).getTenantId(), config.getUpdateWorkflowTopic(), new TradeLicenseRequest(requestInfo, licenses));
         }
         catch (Exception e){
-            producer.push(config.getExpiryErrorTopic(), licenses);
+            producer.push(licenses.get(0).getTenantId(), config.getExpiryErrorTopic(), licenses);
         }
 
 

@@ -2,7 +2,7 @@ import { httpRequest } from "../utils/api";
 import envVariables from "../envVariables";
 import { constants } from "../config/constants";
 
-export const mdmsData = async (requestInfo = {}, tenantId) => {
+export const mdmsData = async (requestInfo = {}, tenantId, header) => {
   var requestBody = {
     RequestInfo: requestInfo,
     MdmsCriteria: {
@@ -33,15 +33,20 @@ export const mdmsData = async (requestInfo = {}, tenantId) => {
       ]
     }
   };
+
+  header['tenantId']=header.tenantid;
+  let headers = header;
+
   var mdmsResponse = await httpRequest({
-    hostURL: envVariables.EGOV_MDMS_HOST,
+    hostURL: "http://internal-gateway.digit:8080/",
     endPoint: `${envVariables.EGOV_MDMS_SEARCH_ENDPOINT}`,
-    requestBody
+    requestBody,
+    headers
   });
   return mdmsResponse;
 };
 
-export const mdmsFiananceYear = async (requestInfo = {}, tenantId) => {
+export const mdmsFiananceYear = async (requestInfo = {}, tenantId, header) => {
   var requestBody = {
     RequestInfo: requestInfo,
     MdmsCriteria: {
@@ -59,10 +64,15 @@ export const mdmsFiananceYear = async (requestInfo = {}, tenantId) => {
       ]
     }
   };
+
+  header['tenantId']=header.tenantid;
+  let headers = header;
+
   var mdmsResponse = await httpRequest({
-    hostURL: envVariables.EGOV_MDMS_HOST,
+    hostURL: "http://internal-gateway.digit:8080/",
     endPoint: `${envVariables.EGOV_MDMS_SEARCH_ENDPOINT}`,
-    requestBody
+    requestBody,
+    headers
   });
   return mdmsResponse;
 };

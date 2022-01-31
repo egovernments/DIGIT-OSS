@@ -46,4 +46,6 @@ public class WorkflowConstants {
     
     public static final String  FSM_MODULE="FSM";
 
+    public static String SCHEMA_REPLACE_STRING = "{SCHEMA}";
+
 }

@@ -17,6 +17,7 @@ import org.egov.wscalculation.web.models.*;
 import org.egov.wscalculation.web.models.users.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -28,9 +29,13 @@ import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 
+<<<<<<< HEAD
 import static org.egov.wscalculation.constants.WSCalculationConstant.*;
 import static org.egov.wscalculation.constants.WSCalculationConstant.ACTION_FOR_DEMAND;
 import static org.springframework.util.StringUtils.capitalize;
+=======
+import static org.egov.wscalculation.constants.WSCalculationConstant.TENANTID_MDC_STRING;
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
 @Component
 @Slf4j
@@ -77,7 +82,15 @@ public class PaymentNotificationService {
 			List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo,
 					mappedRecord.get(consumerCode), mappedRecord.get(tenantId));
 			int size = waterConnectionList.size();
+<<<<<<< HEAD
 			WaterConnection waterConnection = waterConnectionList.get(size - 1);
+=======
+			WaterConnection waterConnection = waterConnectionList.get(size-1);
+			String tenantId = waterConnection.getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 			WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
 					.waterConnection(waterConnection).requestInfo(requestInfo).build();
 			Property property = wSCalculationUtil.getProperty(waterConnectionRequest);

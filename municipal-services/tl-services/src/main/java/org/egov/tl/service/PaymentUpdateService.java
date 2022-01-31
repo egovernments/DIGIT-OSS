@@ -2,7 +2,6 @@ package org.egov.tl.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +19,7 @@ import org.egov.tl.web.models.workflow.BusinessService;
 import org.egov.tl.workflow.WorkflowIntegrator;
 import org.egov.tl.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
-import org.json.JSONObject;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -90,8 +89,13 @@ public class PaymentUpdateService {
 		try {
 			PaymentRequest paymentRequest = mapper.convertValue(record,PaymentRequest.class);
 			RequestInfo requestInfo = paymentRequest.getRequestInfo();
-			List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
 			String tenantId = paymentRequest.getPayment().getTenantId();
+			List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
+
+
 			for(PaymentDetail paymentDetail : paymentDetails){
 				if (paymentDetail.getBusinessService().equalsIgnoreCase(businessService_TL) || paymentDetail.getBusinessService().equalsIgnoreCase(businessService_BPA)) {
 					TradeLicenseSearchCriteria searchCriteria = new TradeLicenseSearchCriteria();

@@ -2,7 +2,7 @@
   "RequestInfo": {
     "apiId": "emp",
     "ver": "1.0",
-    "ts": "10-03-2017 00:00:00",
+    "ts": 1489084200000,
     "action": "create",
     "did": "1",
     "key": "abcdkey",

@@ -1,6 +1,10 @@
 {
   "name": "rainmaker",
+<<<<<<< HEAD
   "version": "1.7.0",
+=======
+  "version": "1.6.1",
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
   "main": "",
   "repository": "",
   "license": "egov",

@@ -58,6 +58,7 @@ public class EditNotificationService {
 	public void sendEditNotification(SewerageConnectionRequest request) {
 		try {
 			Property property = validateProperty.getOrValidateProperty(request);
+<<<<<<< HEAD
 			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getSewerageConnection().getTenantId(), SEWERAGE_SERVICE_BUSINESS_ID, request.getSewerageConnection().getProcessInstance().getAction());
 
 			if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
@@ -76,6 +77,19 @@ public class EditNotificationService {
 					if (!CollectionUtils.isEmpty(smsRequests)) {
 						notificationUtil.sendSMS(smsRequests);
 					}
+=======
+			
+			if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
+				EventRequest eventRequest = getEventRequest(request, property);
+				if (eventRequest != null) {
+					notificationUtil.sendEventNotification(eventRequest, property.getTenantId());
+				}
+			}
+			if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
+				List<SMSRequest> smsRequests = getSmsRequest(request, property);
+				if (!CollectionUtils.isEmpty(smsRequests)) {
+					notificationUtil.sendSMS(smsRequests, property.getTenantId());
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 				}
 			}
 		} catch (Exception ex) {

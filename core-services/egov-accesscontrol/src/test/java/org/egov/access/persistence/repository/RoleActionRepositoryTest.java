@@ -224,7 +224,7 @@ public class RoleActionRepositoryTest {
 
 		User user = new User();
 
-		user.setId(1);
+		user.setId(1l);
 		request.setUserInfo(user);
 
 		return request;

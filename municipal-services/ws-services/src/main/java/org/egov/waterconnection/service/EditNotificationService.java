@@ -47,6 +47,7 @@ public class EditNotificationService {
 			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getWaterConnection().getTenantId(), WATER_SERVICE_BUSINESS_ID, request.getWaterConnection().getProcessInstance().getAction());
 
 			Property property = validateProperty.getOrValidateProperty(request);
+<<<<<<< HEAD
 
 			if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
 				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
@@ -54,13 +55,20 @@ public class EditNotificationService {
 					if (eventRequest != null) {
 						notificationUtil.sendEventNotification(eventRequest);
 					}
+=======
+			
+			if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
+				EventRequest eventRequest = getEventRequest(request, property);
+				if (eventRequest != null) {
+					notificationUtil.sendEventNotification(eventRequest, property.getTenantId());
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 				}
 			}
 			if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
 				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 				List<SMSRequest> smsRequests = getSmsRequest(request, property);
 				if (!CollectionUtils.isEmpty(smsRequests)) {
-					notificationUtil.sendSMS(smsRequests);
+					notificationUtil.sendSMS(smsRequests, property.getTenantId());
 				}
 			}}
 		} catch (Exception ex) {

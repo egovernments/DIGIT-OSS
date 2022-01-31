@@ -20,6 +20,7 @@ import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.web.models.collection.PaymentDetail;
 import org.egov.waterconnection.web.models.collection.PaymentRequest;
 import org.egov.waterconnection.workflow.WorkflowIntegrator;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -33,6 +34,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.egov.waterconnection.constants.WCConstants.*;
+
+import static org.egov.waterconnection.constants.WCConstants.TENANTID_MDC_STRING;
 
 @Slf4j
 @Service
@@ -79,6 +82,11 @@ public class PaymentUpdateService {
 	public void process(HashMap<String, Object> record) {
 		try {
 			PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
+			String tenantId = paymentRequest.getPayment().getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
+
 			boolean isServiceMatched = false;
 			for (PaymentDetail paymentDetail : paymentRequest.getPayment().getPaymentDetails()) {
 				if (WCConstants.WATER_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService()) ||
@@ -219,6 +227,7 @@ public class PaymentUpdateService {
 	 */
 	public void sendPaymentNotification(WaterConnectionRequest waterConnectionRequest, PaymentDetail paymentDetail) {
 		Property property = validateProperty.getOrValidateProperty(waterConnectionRequest);
+<<<<<<< HEAD
 		List<String> configuredChannelNames =  notificationUtil.fetchChannelList(waterConnectionRequest.getRequestInfo(), waterConnectionRequest.getWaterConnection().getTenantId(), WATER_SERVICE_BUSINESS_ID, waterConnectionRequest.getWaterConnection().getProcessInstance().getAction());
 
 		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
@@ -235,6 +244,18 @@ public class PaymentUpdateService {
 				if (!CollectionUtils.isEmpty(smsRequests)) {
 					notificationUtil.sendSMS(smsRequests);
 				}
+=======
+		if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
+			EventRequest eventRequest = getEventRequest(waterConnectionRequest, property, paymentDetail);
+			if (eventRequest != null) {
+				notificationUtil.sendEventNotification(eventRequest, property.getTenantId());
+			}
+		}
+		if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
+			List<SMSRequest> smsRequests = getSmsRequest(waterConnectionRequest, property, paymentDetail);
+			if (!CollectionUtils.isEmpty(smsRequests)) {
+				notificationUtil.sendSMS(smsRequests, property.getTenantId());
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 			}
 		}
 	}
@@ -376,7 +397,11 @@ public class PaymentUpdateService {
 			}
 
 			if (message.contains("{receipt download link}")){
+<<<<<<< HEAD
 				String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
+=======
+				String link = notificationUtil.getHost(paymentDetail.getTenantId()) + config.getReceiptDownloadLink();
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 				link = link.replace("$consumerCode", paymentDetail.getBill().getConsumerCode());
 				link = link.replace("$tenantId", paymentDetail.getTenantId());
 				link = link.replace("$businessService",paymentDetail.getBusinessService());

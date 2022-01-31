@@ -80,45 +80,65 @@ public class MessageService {
 
 	public List<Message> getFilteredMessages(MessageSearchCriteria searchCriteria) {
 		List<Message> messages = getMessages(searchCriteria);
-		if (searchCriteria.isModuleAbsent() && !CollectionUtils.isEmpty(searchCriteria.getCodes())) {
 
-		    /*if(!CollectionUtils.isEmpty(searchCriteria.getCodes()))
-		        throw new CustomException("INVALID_SEARCH_CRITERIA","ModuleName should be provided when searching on codes");*/
+		Tenant tenant = searchCriteria.getTenantId();
+
+		List<Tenant> tenants = tenant.getTenantHierarchy();
+
+		List<Message> filteredMessages = new LinkedList<>();
+
+		for (Tenant t : tenants){
+		    filteredMessages = filterForGivenTenantId(t.getTenantId(), messages, searchCriteria);
+
+		    if(!CollectionUtils.isEmpty(filteredMessages))
+		        break;
+        }
+
+		return filteredMessages;
+	}
+
+
+	private List<Message> filterForGivenTenantId(String tenantId, List<Message> messages, MessageSearchCriteria searchCriteria){
+
+        if (searchCriteria.isModuleAbsent() && !CollectionUtils.isEmpty(searchCriteria.getCodes())) {
 
             Set<String> codes = searchCriteria.getCodes();
 
-			return messages.stream()
-					.filter(e -> e.getLocale().equals(searchCriteria.getLocale())
-							&& e.getTenant().equals(searchCriteria.getTenantId().getTenantId())
-                            && codes.contains(e.getCode()))
-					.collect(Collectors.toList());
-		} else if(searchCriteria.isModuleAbsent() && CollectionUtils.isEmpty(searchCriteria.getCodes())){
+            return messages.stream()
+                .filter(e -> e.getLocale().equals(searchCriteria.getLocale())
+                    && e.getTenant().equals(tenantId)
+                    && codes.contains(e.getCode()))
+                .collect(Collectors.toList());
+        } else if(searchCriteria.isModuleAbsent() && CollectionUtils.isEmpty(searchCriteria.getCodes())){
             return messages.parallelStream()
                 .filter(e -> e.getLocale().equals(searchCriteria.getLocale())
-                    && e.getTenant().equals(searchCriteria.getTenantId().getTenantId()))
+                    && e.getTenant().equals(tenantId))
                 .collect(Collectors.toList());
         } else {
-			List<String> modules = Arrays.asList(searchCriteria.getModule().split("[,]"));
+            List<String> modules = Arrays.asList(searchCriteria.getModule().split("[,]"));
 
-			if(CollectionUtils.isEmpty(searchCriteria.getCodes()))
+            if(CollectionUtils.isEmpty(searchCriteria.getCodes()))
                 messages = messages.stream()
                     .filter(message -> modules.contains(message.getModule())
                         && message.getLocale().equals(searchCriteria.getLocale())
-                        && message.getTenant().equals(searchCriteria.getTenantId().getTenantId()))
+                        && message.getTenant().equals(tenantId))
                     .collect(Collectors.toList());
-			else {
-			    Set<String> codes = searchCriteria.getCodes();
+            else {
+                Set<String> codes = searchCriteria.getCodes();
                 messages = messages.stream()
                     .filter(message -> modules.contains(message.getModule())
                         && codes.contains(message.getCode())
                         && message.getLocale().equals(searchCriteria.getLocale())
-                        && message.getTenant().equals(searchCriteria.getTenantId().getTenantId()))
+                        && message.getTenant().equals(tenantId))
                     .collect(Collectors.toList());
             }
 
-		}
-		return messages;
-	}
+        }
+        return messages;
+
+    }
+
+
 
 	public void delete(List<MessageIdentity> messageIdentities) {
 		final Map<Tenant, List<MessageIdentity>> tenantToMessageIdentitiesMap = messageIdentities.stream()

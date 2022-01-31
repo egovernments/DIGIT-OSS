@@ -8,6 +8,8 @@ import static org.egov.demand.repository.querybuilder.AmendmentQueryBuilder.DOCU
 import java.util.ArrayList;
 import java.util.List;
 
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.demand.amendment.model.Amendment;
 import org.egov.demand.amendment.model.AmendmentCriteria;
 import org.egov.demand.amendment.model.AmendmentRequest;
@@ -18,6 +20,7 @@ import org.egov.demand.model.DemandDetail;
 import org.egov.demand.repository.querybuilder.AmendmentQueryBuilder;
 import org.egov.demand.repository.rowmapper.AmendmentRowMapper;
 import org.egov.demand.util.Util;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -30,6 +33,9 @@ public class AmendmentRepository {
 
 	@Autowired
 	private Util util;
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 	
 	@Autowired
 	private NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -66,6 +72,12 @@ public class AmendmentRepository {
 
 		MapSqlParameterSource searchParamMap = new MapSqlParameterSource();
 		String searchQuery = amendmentQueryBuilder.getSearchQuery(amendmentCriteria, searchParamMap);
+		try {
+			searchQuery = centralInstanceUtil.replaceSchemaPlaceholder(searchQuery, amendmentCriteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		return namedJdbcTemplate.query(searchQuery, searchParamMap, amendmentRowMapper);
 	}
 

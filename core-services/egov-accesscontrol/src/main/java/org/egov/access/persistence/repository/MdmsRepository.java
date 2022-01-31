@@ -1,7 +1,15 @@
 package org.egov.access.persistence.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Objects.isNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.egov.access.domain.model.Action;
 import org.egov.access.domain.model.ActionContainer;
 import org.egov.access.domain.model.RoleAction;
@@ -15,13 +23,14 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static java.util.Objects.isNull;
+import lombok.extern.slf4j.Slf4j;
 
 @Repository
 @Slf4j
@@ -34,7 +43,7 @@ public class MdmsRepository {
     private RestTemplate restTemplate;
 
     @Value("${egov.mdms.host}${egov.mdms.path}")
-    private String url;
+    private String mdmsUrl;
 
     @Value("${mdms.roleactionmodule.name}")
     private String roleActionModule;
@@ -88,8 +97,13 @@ public class MdmsRepository {
         mcq.setRequestInfo(requestInfo);
         mcq.setMdmsCriteria(mc);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("tenantId", tenantId);
+
+        HttpEntity<MdmsCriteriaReq> request = new HttpEntity<>(mcq, headers);
+
         @SuppressWarnings("unchecked")
-        Map<String, Map<String, List>> response = (Map<String, Map<String, List>>) restTemplate.postForObject(url, mcq,
+        Map<String, Map<String, List>> response = (Map<String, Map<String, List>>) restTemplate.postForObject(mdmsUrl, request,
                 Map.class).get("MdmsRes");
 
         if(isNull(response.get(roleActionModule)) || isNull(response.get(roleActionModule).get(roleActionMaster))

@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.demand.amendment.model.ProcessInstance;
 import org.egov.demand.amendment.model.ProcessInstanceRequest;
 import org.egov.demand.amendment.model.ProcessInstanceResponse;
@@ -55,6 +56,9 @@ public class Util {
 
 	@Autowired
 	private ApplicationProperties appProps;
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 	
 	@Autowired
 	private ObjectMapper mapper;
@@ -208,8 +212,6 @@ public class Util {
 	
 	/**
 	 * Setting the receiptnumber from payment to bill
-	 * @param request
-	 * @param uuid
 	 * @return
 	 */
 	public ObjectNode setValuesAndGetAdditionalDetails(JsonNode additionalDetails, String key, String value) {
@@ -256,15 +258,10 @@ public class Util {
 	public void validateTenantIdForUserType(String tenantId, RequestInfo requestInfo) {
 
 		String userType = requestInfo.getUserInfo().getType();
-		String[] tenantSplitArray = tenantId.split("\\.");
-		Set<String> rolesTenantList = new HashSet<>();
-		for (Role role : requestInfo.getUserInfo().getRoles()) {
-			rolesTenantList.add(role.getTenantId());
-		}
-		
-		if (Constants.EMPLOYEE_TYPE_CODE.equalsIgnoreCase(userType) && rolesTenantList.contains(tenantSplitArray[0])
-				&& tenantSplitArray.length == 1) {
-			throw new CustomException("EG_BS_INVALID_TENANTID", "Employees cannot search based on state level tenantid");
+
+		if (Constants.EMPLOYEE_TYPE_CODE.equalsIgnoreCase(userType) && centralInstanceUtil.isTenantIdStateLevel(tenantId)) {
+			throw new CustomException("EG_BS_INVALID_TENANTID",
+					"Employees cannot search based on state level tenantid");
 		}
 	}
 	
@@ -356,7 +353,7 @@ public class Util {
 		
 		return query.toString();
 	}
-
+	
 	private String createPlaceHolderForList(Set<String> ids) {
 		
 		StringBuilder builder = new StringBuilder();

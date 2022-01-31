@@ -34,7 +34,11 @@ module.exports = {
     wns_one_time_receipt:
     process.env.WNS_ONE_TIME_RECEIPT || "ws-onetime-receipt",
     wns_bill:
-    process.env.WNS_BILL || "ws-bill"
+    process.env.WNS_BILL || "ws-bill",
+    STATE_LEVEL_TENANTID_LENGTH: 
+    process.env.STATE_LEVEL_TENANTID_LENGTH || 2,
+    IS_ENVVIRONMENT_CENTRAL_INSTANCE: 
+    process.env.IS_ENVVIRONMENT_CENTRAL_INSTANCE || true,
   },
   app: {
     port: parseInt(process.env.APP_PORT) || 8080,
@@ -53,7 +57,9 @@ module.exports = {
     workflow: process.env.EGOV_WORKFLOW_HOST || HOST,
     challan: process.env.EGOV_ECHALLAN_HOST || 'http://echallan-services.egov:8080/',
     mcollectBilling: process.env.EGOV_BILLING_HOST || 'http://billing-service.egov:8080/',
-    wns: process.env.EGOV_WNS_HOST || HOST
+    waterHost: process.env.EGOV_WATER_HOST || HOST,
+    sewerageHost: process.env.EGOV_SEWERAGE_HOST || HOST
+
   },
   paths: {
     pdf_create: "/pdf-service/v1/_createnosave",

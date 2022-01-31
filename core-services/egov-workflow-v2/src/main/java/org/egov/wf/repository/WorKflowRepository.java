@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.wf.repository.querybuilder.WorkflowQueryBuilder;
 import org.egov.wf.repository.rowmapper.WorkflowRowMapper;
+import org.egov.wf.util.WorkflowUtil;
 import org.egov.wf.web.models.ProcessInstance;
 import org.egov.wf.web.models.ProcessInstanceSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,15 @@ public class WorKflowRepository {
 
     private WorkflowRowMapper rowMapper;
 
+    private WorkflowUtil util;
+
 
     @Autowired
-    public WorKflowRepository(WorkflowQueryBuilder queryBuilder, JdbcTemplate jdbcTemplate, WorkflowRowMapper rowMapper) {
+    public WorKflowRepository(WorkflowQueryBuilder queryBuilder, JdbcTemplate jdbcTemplate, WorkflowRowMapper rowMapper, WorkflowUtil util) {
         this.queryBuilder = queryBuilder;
         this.jdbcTemplate = jdbcTemplate;
         this.rowMapper = rowMapper;
+        this.util = util;
     }
 
 
@@ -51,6 +55,7 @@ public class WorKflowRepository {
             return new LinkedList<>();
 
         String query = queryBuilder.getProcessInstanceSearchQueryById(ids, preparedStmtList);
+        query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
         log.debug("query for status search: "+query+" params: "+preparedStmtList);
 
         return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
@@ -75,6 +80,7 @@ public class WorKflowRepository {
             return new LinkedList<>();
 
         String query = queryBuilder.getProcessInstanceSearchQueryById(ids, preparedStmtList);
+        query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
         log.debug("query for status search: "+query+" params: "+preparedStmtList);
         return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
     }
@@ -95,6 +101,7 @@ public class WorKflowRepository {
     public Integer getInboxCount(ProcessInstanceSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getInboxCount(criteria, preparedStmtList,Boolean.FALSE);
+        query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
         Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
     }
@@ -102,6 +109,7 @@ public class WorKflowRepository {
     public Integer getProcessInstancesCount(ProcessInstanceSearchCriteria criteria){
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getProcessInstanceCount(criteria, preparedStmtList,Boolean.FALSE);
+        query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
         return jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
     }
 
@@ -113,6 +121,7 @@ public class WorKflowRepository {
     public List getInboxStatusCount(ProcessInstanceSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getInboxCount(criteria, preparedStmtList,Boolean.TRUE);
+        query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
         log.info(query);
         return jdbcTemplate.queryForList(query, preparedStmtList.toArray());
     }
@@ -120,6 +129,7 @@ public class WorKflowRepository {
     public List getProcessInstancesStatusCount(ProcessInstanceSearchCriteria criteria){
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getProcessInstanceCount(criteria, preparedStmtList,Boolean.TRUE);
+        query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
         return  jdbcTemplate.queryForList(query, preparedStmtList.toArray());
     }
 
@@ -129,12 +139,14 @@ public class WorKflowRepository {
         List<Object> preparedStmtList = new ArrayList<>();
         criteria.setIsAssignedToMeCount(false);
         String query = queryBuilder.getInboxIdQuery(criteria,preparedStmtList,true);
+        query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
         return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
     }
 
     private List<String> getProcessInstanceIds(ProcessInstanceSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getProcessInstanceIds(criteria,preparedStmtList);
+        query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
         log.info(query);
         log.info(preparedStmtList.toString());
         return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
@@ -158,8 +170,9 @@ public class WorKflowRepository {
 
         criteria.setBusinessIds(inboxApplicationsBusinessIds);
          */
-        String query = queryBuilder.getAutoEscalatedApplicationsFinalQuery(requestInfo,criteria, preparedStmtList);
-        log.info(query);
+
+        String query = queryBuilder.getAutoEscalatedApplicationsBusinessIdsQuery(criteria, preparedStmtList);
+        query = util.replaceSchemaPlaceholder(query, criteria.getTenantId());
         List<String> escalatedApplicationsBusinessIds = jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
         preparedStmtList.clear();
         log.info(escalatedApplicationsBusinessIds.toString());

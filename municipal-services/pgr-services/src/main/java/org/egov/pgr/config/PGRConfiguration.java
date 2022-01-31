@@ -170,7 +170,11 @@ public class PGRConfiguration {
     @Value("${egov.pgr.events.rate.link}")
     private String rateLink;
 
+<<<<<<< HEAD
     @Value("${egov.pgr.events.reopen.link}")
+=======
+    @Value("${egov.pgr.events.rate.link}")
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
     private String reopenLink;
 
     @Value("${egov.usr.events.rate.code}")
@@ -197,14 +201,20 @@ public class PGRConfiguration {
     @Value("${persister.save.transition.wf.topic}")
     private String workflowSaveTopic;
 
-    @Value("${pgr.statelevel.tenantid}")
-    private String tenantId;
-
     @Value("${persister.save.transition.wf.migration.topic}")
     private String batchWorkflowSaveTopic;
 
     @Value("${pgr.business.level.sla}")
     private Long businessLevelSla;
+
+
+    // central-instance configs
+
+    @Value("${state.level.tenantid.length}")
+    private Integer stateLevelTenantIdLength;
+
+    @Value("${is.environment.central.instance}")
+    private Boolean isEnvironmentCentralInstance;
 
 
 }

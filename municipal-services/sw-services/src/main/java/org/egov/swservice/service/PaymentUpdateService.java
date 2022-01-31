@@ -39,6 +39,7 @@ import org.egov.swservice.web.models.collection.PaymentDetail;
 import org.egov.swservice.web.models.collection.PaymentRequest;
 import org.egov.swservice.workflow.WorkflowIntegrator;
 import org.egov.tracer.model.CustomException;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -50,6 +51,8 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.swservice.util.SWConstants.TENANTID_MDC_STRING;
 
 @Slf4j
 @Service
@@ -97,6 +100,10 @@ public class PaymentUpdateService {
 	public void process(HashMap<String, Object> record) {
 		try {
 			PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
+			String tenantId = paymentRequest.getPayment().getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
 			boolean isServiceMatched = false;
 			for (PaymentDetail paymentDetail : paymentRequest.getPayment().getPaymentDetails()) {
 				if (paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptBusinessservice()) ||
@@ -234,13 +241,13 @@ public class PaymentUpdateService {
 		if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 			EventRequest eventRequest = getEventRequest(sewerageConnectionRequest, property, paymentDetail);
 			if (eventRequest != null) {
-				notificationUtil.sendEventNotification(eventRequest);
+				notificationUtil.sendEventNotification(eventRequest, property.getTenantId());
 			}
 		}
 		if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 			List<SMSRequest> smsRequests = getSmsRequest(sewerageConnectionRequest, property, paymentDetail);
 			if (!CollectionUtils.isEmpty(smsRequests)) {
-				notificationUtil.sendSMS(smsRequests);
+				notificationUtil.sendSMS(smsRequests, property.getTenantId());
 			}
 		}
 	}
@@ -371,7 +378,11 @@ public class PaymentUpdateService {
 				message = message.replace("{Billing Period}", billingPeriod);
 			}
 			if (message.contains("{receipt download link}")){
+<<<<<<< HEAD
 				String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
+=======
+				String link = notificationUtil.getHost(paymentDetail.getTenantId()) + config.getReceiptDownloadLink();
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 				link = link.replace("$consumerCode", paymentDetail.getBill().getConsumerCode());
 				link = link.replace("$tenantId", paymentDetail.getTenantId());
 				link = link.replace("$businessService",paymentDetail.getBusinessService());

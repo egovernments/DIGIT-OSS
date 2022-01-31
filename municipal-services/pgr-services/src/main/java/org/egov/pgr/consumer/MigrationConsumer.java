@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.pgr.service.MigrationService;
 import org.egov.pgr.web.models.pgrV1.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -12,6 +13,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
+@ConditionalOnProperty(
+        value="migration.enabled",
+        havingValue = "true",
+        matchIfMissing = false)
 @Slf4j
 @Component
 public class MigrationConsumer {

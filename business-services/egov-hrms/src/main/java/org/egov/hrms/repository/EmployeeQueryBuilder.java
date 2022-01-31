@@ -1,5 +1,8 @@
 package org.egov.hrms.repository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.hrms.config.PropertiesManager;
 import org.egov.hrms.web.contract.EmployeeSearchCriteria;
@@ -7,11 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeQueryBuilder {
@@ -59,6 +57,7 @@ public class EmployeeQueryBuilder {
 	 * @param preparedStmtList
 	 */
 	public void addWhereClause(EmployeeSearchCriteria criteria, StringBuilder builder, List<Object> preparedStmtList) {
+		
 		if(!StringUtils.isEmpty(criteria.getTenantId())) {
 			builder.append(" employee.tenantid = ?");
 			preparedStmtList.add(criteria.getTenantId());

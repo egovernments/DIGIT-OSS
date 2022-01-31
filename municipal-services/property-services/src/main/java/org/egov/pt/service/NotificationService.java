@@ -161,7 +161,7 @@ public class NotificationService {
 	private String getMsgForUpdate(Property property, String msgCode, String completeMsgs, String createUpdateReplaceString) {
 
 		String url = notifUtil.getShortenedUrl(
-					   configs.getUiAppHost().concat(configs.getViewPropertyLink()
+					   notifUtil.getHost(property.getTenantId()).concat(configs.getViewPropertyLink()
 					  .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
 					  .replace(NOTIFICATION_TENANTID, property.getTenantId())));
 		
@@ -196,7 +196,7 @@ public class NotificationService {
 	private String getMutationUrl(Property property) {
 		
 		return notifUtil.getShortenedUrl(
-				 configs.getUiAppHost().concat(configs.getViewMutationLink()
+				 notifUtil.getHost(property.getTenantId()).concat(configs.getViewMutationLink()
 				.replace(NOTIFICATION_APPID, property.getAcknowldgementNumber())
 				.replace(NOTIFICATION_TENANTID, property.getTenantId())));
 	}
@@ -209,9 +209,15 @@ public class NotificationService {
 	 */
 	private String getPayUrl(Property property) {
 		return notifUtil.getShortenedUrl( 
+<<<<<<< HEAD
 				 configs.getUiAppHost().concat(configs.getPayLink().replace(EVENT_PAY_BUSINESSSERVICE,MUTATION_BUSINESSSERVICE)
 				.replace(EVENT_PAY_PROPERTYID, property.getAcknowldgementNumber())
 				.replace(EVENT_PAY_TENANTID, property.getTenantId())));
+=======
+				 notifUtil.getHost(property.getTenantId()).concat(configs.getPayLink()
+				.replace(NOTIFICATION_CONSUMERCODE, property.getAcknowldgementNumber())
+				.replace(NOTIFICATION_TENANTID, property.getTenantId())));
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 	}
 
 
@@ -324,6 +330,10 @@ public class NotificationService {
 //			messageTemplate = messageTemplate.replace(NOTIFICATION_OWNERNAME,NOTIFICATION_EMAIL);
 
 		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
+<<<<<<< HEAD
+=======
+		notifUtil.sendSMS(smsRequests, property.getTenantId());
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
 		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
 			notifUtil.sendSMS(smsRequests);

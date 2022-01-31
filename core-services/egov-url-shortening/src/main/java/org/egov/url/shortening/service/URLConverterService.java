@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+
 import javax.annotation.PostConstruct;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +42,8 @@ public class URLConverterService {
     @Value("${db.persistance.enabled}")
     private Boolean isDbPersitanceEnabled;
     
-    @Value("${host.name}")
-    private String hostName;
+    @Value("#{${egov.ui.app.host.map}}")
+    private Map<String, String> hostName;
     
     @Value("${server.contextPath}")
     private String serverContextPath;
@@ -83,7 +84,7 @@ public class URLConverterService {
     }
     
 
-    public String shortenURL(ShortenRequest shortenRequest) {
+    public String shortenURL(ShortenRequest shortenRequest, String tenantId) {
         LOGGER.info("Shortening {}", shortenRequest.getUrl());
         Long id = urlRepository.incrementID();
         String uniqueID = IDConvertor.createUniqueID(id);
@@ -93,13 +94,19 @@ public class URLConverterService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        StringBuilder shortenedUrl = new StringBuilder();  
+        StringBuilder shortenedUrl = new StringBuilder();
+
+        if(!hostName.containsKey(tenantId)){
+            throw new CustomException("EG_TENANT_HOST_NOT_FOUND_ERR", "Hostname for provided state level tenant has not been configured for tenantId: " + tenantId);
+        }
+
+        String stateSpecificHostName = hostName.get(tenantId);
         
-        if(hostName.endsWith("/"))
-        	hostName = hostName.substring(0, hostName.length() - 1);
+        if(stateSpecificHostName.endsWith("/"))
+            stateSpecificHostName = stateSpecificHostName.substring(0, stateSpecificHostName.length() - 1);
         if(serverContextPath.startsWith("/"))
         	serverContextPath = serverContextPath.substring(1);
-        shortenedUrl.append(hostName).append("/").append(serverContextPath);
+        shortenedUrl.append(stateSpecificHostName).append("/").append(serverContextPath);
         if(!serverContextPath.endsWith("/")) {
         	shortenedUrl.append("/");
         }
@@ -114,81 +121,9 @@ public class URLConverterService {
         LOGGER.info("Converting shortened URL back to {}", longUrl);
         if(longUrl.isEmpty())
         	throw new CustomException("INVALID_REQUEST","Invalid Key");
-        else{
-            String[] queryString = longUrl.split("\\?");
-            if(queryString.length > 1)
-                indexData(longUrl,uniqueID);
-        }
         return longUrl;
     }
 
-    public void indexData(String longUrl, String uniqueID){
-        String query = longUrl.split("\\?")[1];
-        HashMap <String,String> params = new HashMap<String, String>();
-        String[] strParams = query.split("&");
-        for (String param : strParams)
-        {
-            String name = param.split("=")[0];
-            String value = param.split("=")[1];
-            params.put(name, value);
-        }
-        String channel = params.get("channel");
-        if(channel !=null && (channel.equalsIgnoreCase("whatsapp") || channel.equalsIgnoreCase("sms"))){
-            HashMap <String,Object> data = new HashMap<String, Object>();
-            StringBuilder shortenedUrl = new StringBuilder();
-
-            if(hostName.endsWith("/"))
-                hostName = hostName.substring(0, hostName.length() - 1);
-            if(serverContextPath.startsWith("/"))
-                serverContextPath = serverContextPath.substring(1);
-            shortenedUrl.append(hostName).append("/").append(serverContextPath);
-            if(!serverContextPath.endsWith("/")) {
-                shortenedUrl.append("/");
-            }
-            shortenedUrl.append(uniqueID);
-            data.put("id", UUID.randomUUID());
-            data.put("timestamp",System.currentTimeMillis());
-            data.put("shortenUrl",shortenedUrl.toString());
-            data.put("actualUrl", longUrl);
-
-            String mobileNumber = params.get("mobileNumber");
-            if(mobileNumber == null)
-                mobileNumber = params.get("mobileNo");
-            
-            if(mobileNumber != null){
-                String uuid = getUserUUID(mobileNumber);
-                if(uuid != null)
-                    data.put("user",uuid);
-            }
-            String  tag = params.get("tag");
-            if(tag.equalsIgnoreCase("billPayment")){
-                String businessService = params.get("businessService");
-                if(businessService.equalsIgnoreCase("PT"))
-                    data.put("tag", "Property Bill Payment");
-                if(businessService.equalsIgnoreCase("WS"))
-                    data.put("tag", "Water and Sewerage Bill Payment");
-            }
-            else if(tag.equalsIgnoreCase("complaintTrack")){
-                data.put("tag", "Compliant tracking");
-            }
-            else if(tag.equalsIgnoreCase("propertyOpenSearch")){
-                data.put("tag", "Property Open Search");
-            }
-            else if(tag.equalsIgnoreCase("wnsOpenSearch")){
-                data.put("tag", "Water and Sewerage Open Search");
-            }
-            else if(tag.equalsIgnoreCase("smsOnboarding")){
-                data.put("tag", "SMS Onboarding");
-            }
-            else{
-                data.put("tag", "Unidentified link");
-            }
-
-            producer.push(kafkaTopic,data);
-
-        }
-
-    }
 
     public String getUserUUID(String mobileNumber){
         String uuid = null;

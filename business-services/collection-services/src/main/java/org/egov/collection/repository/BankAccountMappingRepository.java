@@ -48,6 +48,9 @@ import java.util.Map;
 import org.egov.collection.model.BankAccountServiceMapping;
 import org.egov.collection.model.BankAccountServiceMappingSearchCriteria;
 import org.egov.collection.repository.querybuilder.BankAccountServiceQueryBuilder;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -60,6 +63,9 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 @Slf4j
 public class BankAccountMappingRepository {
+	
+	@Autowired
+	private MultiStateInstanceUtil centralUtil;
 
     @Autowired
     private BankAccountServiceQueryBuilder bankAccountServiceQueryBuilder;
@@ -101,6 +107,13 @@ public class BankAccountMappingRepository {
 
         Map<String, Object> paramValues = new HashMap<>();
         String searchQuery = bankAccountServiceQueryBuilder.BankAccountServiceMappingSearchQuery(searchCriteria, paramValues);
+		try {
+			searchQuery = centralUtil.replaceSchemaPlaceholder(searchQuery, searchCriteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+
+			throw new CustomException("EG_CL_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
         List<BankAccountServiceMapping> bankAccountServiceMappings = new ArrayList<BankAccountServiceMapping>();
         BeanPropertyRowMapper rowMapper = new BeanPropertyRowMapper(BankAccountServiceMapping.class);
 

@@ -5,6 +5,7 @@ import { validateBillReq } from "../utils/modelValidation";
 const getbill = async (req, res, next) => {
   console.log("getbill");
   const queryObj = JSON.parse(JSON.stringify(req.query));
+  var header = JSON.parse(JSON.stringify(req.headers));
 
   let errors = validateBillReq(queryObj);
   if (errors.length > 0) {
@@ -21,7 +22,7 @@ const getbill = async (req, res, next) => {
   let getbillResponse = {};
   let requestInfo = req.body.RequestInfo;
   let billCriteria = req.query;
-  getbillResponse = await generateBill(requestInfo, billCriteria);
+  getbillResponse = await generateBill(requestInfo, billCriteria, header);
   getbillResponse.ResponseInfo = requestInfoToResponseInfo(requestInfo, true);
   res.send(getbillResponse);
 };

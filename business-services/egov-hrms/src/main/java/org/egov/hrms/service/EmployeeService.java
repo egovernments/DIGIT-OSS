@@ -40,12 +40,19 @@
 
 package org.egov.hrms.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.hrms.config.PropertiesManager;
 import org.egov.hrms.model.AuditDetails;
 import org.egov.hrms.model.Employee;
@@ -56,16 +63,22 @@ import org.egov.hrms.utils.ErrorConstants;
 import org.egov.hrms.utils.HRMSConstants;
 import org.egov.hrms.utils.HRMSUtils;
 import org.egov.hrms.utils.ResponseInfoFactory;
-import org.egov.hrms.web.contract.*;
+import org.egov.hrms.web.contract.EmployeeRequest;
+import org.egov.hrms.web.contract.EmployeeResponse;
+import org.egov.hrms.web.contract.EmployeeSearchCriteria;
+import org.egov.hrms.web.contract.User;
+import org.egov.hrms.web.contract.UserRequest;
+import org.egov.hrms.web.contract.UserResponse;
 import org.egov.tracer.kafka.LogAwareKafkaTemplate;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Slf4j
@@ -102,6 +115,9 @@ public class EmployeeService {
 	
 	@Autowired
 	private ObjectMapper objectMapper;
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	/**
 	 * Service method for create employee. Does following:
@@ -114,7 +130,10 @@ public class EmployeeService {
 	 * @return
 	 */
 	public EmployeeResponse create(EmployeeRequest employeeRequest) {
+		
 		RequestInfo requestInfo = employeeRequest.getRequestInfo();
+		String tenantId = employeeRequest.getEmployees().get(0).getTenantId();
+		
 		Map<String, String> pwdMap = new HashMap<>();
 		idGenService.setIds(employeeRequest);
 		employeeRequest.getEmployees().stream().forEach(employee -> {
@@ -123,11 +142,13 @@ public class EmployeeService {
 			pwdMap.put(employee.getUuid(), employee.getUser().getPassword());
 			employee.getUser().setPassword(null);
 		});
-		hrmsProducer.push(propertiesManager.getSaveEmployeeTopic(), employeeRequest);
+		String hrmsCreateTopic = propertiesManager.getSaveEmployeeTopic();
+		hrmsProducer.push(tenantId, hrmsCreateTopic, employeeRequest);
 		notificationService.sendNotification(employeeRequest, pwdMap);
 		return generateResponse(employeeRequest);
 	}
-	
+
+
 	/**
 	 * Searches employees on a given criteria.
 	 * 
@@ -135,7 +156,7 @@ public class EmployeeService {
 	 * @param requestInfo
 	 * @return
 	 */
-	public EmployeeResponse search(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
+	public EmployeeResponse search(EmployeeSearchCriteria criteria, RequestInfo requestInfo, String headerTenantId) {
 		boolean  userChecked = false;
 		/*if(null == criteria.getIsActive() || criteria.getIsActive())
 			criteria.setIsActive(true);
@@ -185,11 +206,13 @@ public class EmployeeService {
 					criteria.setUuids(userUUIDs);
 			}
 		}
+
 		if(userChecked)
 			criteria.setTenantId(null);
-        List <Employee> employees = new ArrayList<>();
+
+		List <Employee> employees = new ArrayList<>();
         if(!((!CollectionUtils.isEmpty(criteria.getRoles()) || !CollectionUtils.isEmpty(criteria.getNames()) || !StringUtils.isEmpty(criteria.getPhone())) && CollectionUtils.isEmpty(criteria.getUuids())))
-            employees = repository.fetchEmployees(criteria, requestInfo);
+            employees = repository.fetchEmployees(criteria, requestInfo, headerTenantId);
         List<String> uuids = employees.stream().map(Employee :: getUuid).collect(Collectors.toList());
 		if(!CollectionUtils.isEmpty(uuids)){
             Map<String, Object> UserSearchCriteria = new HashMap<>();
@@ -326,18 +349,22 @@ public class EmployeeService {
 	 * @return
 	 */
 	public EmployeeResponse update(EmployeeRequest employeeRequest) {
+		
 		RequestInfo requestInfo = employeeRequest.getRequestInfo();
+		String tenantId = employeeRequest.getEmployees().get(0).getTenantId();
+		
 		List <String> uuidList= new ArrayList<>();
 		for(Employee employee: employeeRequest.getEmployees()) {
 			uuidList.add(employee.getUuid());
 		}
-		EmployeeResponse existingEmployeeResponse = search(EmployeeSearchCriteria.builder().uuids(uuidList).build(),requestInfo);
+		EmployeeResponse existingEmployeeResponse = search(EmployeeSearchCriteria.builder().uuids(uuidList).tenantId(tenantId).build(),requestInfo, tenantId);
 		List <Employee> existingEmployees = existingEmployeeResponse.getEmployees();
 		employeeRequest.getEmployees().stream().forEach(employee -> {
 			enrichUpdateRequest(employee, requestInfo, existingEmployees);
 			updateUser(employee, requestInfo);
 		});
-		hrmsProducer.push(propertiesManager.getUpdateTopic(), employeeRequest);
+		String hrmsUpdateTopic = propertiesManager.getUpdateEmployeeTopic();
+		hrmsProducer.push(tenantId, hrmsUpdateTopic, employeeRequest);
 		//notificationService.sendReactivationNotification(employeeRequest);
 		return generateResponse(employeeRequest);
 	}

@@ -296,6 +296,7 @@ public class SWCalculationConstant {
 
 	public static final String PROPERTY_MASTER_MODULE = "PropertyTax";
 
+<<<<<<< HEAD
 	//Notification
 	public static final String CHANNEL_NAME_SMS = "SMS";
 
@@ -317,4 +318,8 @@ public class SWCalculationConstant {
 	public static final String ACTION_FOR_BILL = "BILL";
 
 	public static String Billing_Cycle_String = "billingCycle";
+=======
+	public static final String TENANTID_MDC_STRING = "TENANTID";
+
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 }

@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.jayway.jsonpath.JsonPath;
@@ -147,7 +148,7 @@ public class NotificationUtil {
     public StringBuilder getUri(String tenantId, RequestInfo requestInfo, String locale) {
 
         if (config.getIsLocalizationStateLevel())
-            tenantId = tenantId.split("\\.")[0];
+            tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 
         StringBuilder uri = new StringBuilder();
         uri.append(config.getLocalizationHost()).append(config.getLocalizationContextPath())
@@ -184,14 +185,18 @@ public class NotificationUtil {
      * @param smsRequestList
      *            The list of SMSRequest to be sent
      */
-    public void sendSMS(List<SMSRequest> smsRequestList) {
+    public void sendSMS(List<SMSRequest> smsRequestList, String tenantId) {
     	
         if (config.getIsSMSNotificationEnabled()) {
             if (CollectionUtils.isEmpty(smsRequestList))
                 log.info("Messages from localization couldn't be fetched!");
             for (SMSRequest smsRequest : smsRequestList) {
+<<<<<<< HEAD
                 producer.push(config.getSmsNotifTopic(), smsRequest);
                 log.info("Sending SMS notification: ");
+=======
+                producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
                 log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
             }
         }
@@ -240,8 +245,12 @@ public class NotificationUtil {
      * @param request
      */
     public void sendEventNotification(EventRequest request) {
+<<<<<<< HEAD
         log.info("EVENT notification sent!");
         producer.push(config.getSaveUserEventsTopic(), request);
+=======
+        producer.push("", config.getSaveUserEventsTopic(), request);
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
     }
 
 
@@ -421,7 +430,7 @@ public class NotificationUtil {
                            .replace("$propertyId" , property.getPropertyId())
                            .replace("$applicationNumber" , property.getAcknowldgementNumber());
 
-                   actionLink = config.getUiAppHost() + actionLink;
+                   actionLink = getHost(tenantId) + actionLink;
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_APPLICATION_CODE).build();
                    items.add(item);
                }
@@ -432,7 +441,7 @@ public class NotificationUtil {
                            .replace("$tenantId", property.getTenantId())
                            .replace("$businessService" , PT_BUSINESSSERVICE);
 
-                   actionLink = config.getUiAppHost() + actionLink;
+                   actionLink = getHost(tenantId) + actionLink;
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
                    items.add(item);
                }
@@ -468,6 +477,7 @@ public class NotificationUtil {
 		return events;
 	}
 
+<<<<<<< HEAD
     /**
      * Method to remove certain lines from SMS templates
      * so that we can reuse the templates for in app notifications
@@ -540,6 +550,22 @@ public class NotificationUtil {
         mdmsCriteriaReq.setRequestInfo(requestInfo);
 
         return mdmsCriteriaReq;
+=======
+	public String getHost(String tenantId){
+       log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
+       Integer tenantLength = tenantId.split("\\.").length;
+       String topLevelTenant = tenantId;
+       if(tenantLength == 3){
+           topLevelTenant = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
+       }
+       log.info(config.getUiAppHostMap().toString());
+       log.info(topLevelTenant);
+       String host = config.getUiAppHostMap().get(topLevelTenant);
+       if(ObjectUtils.isEmpty(host)){
+           throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + topLevelTenant);
+       }
+       return host;
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
     }
 
 }

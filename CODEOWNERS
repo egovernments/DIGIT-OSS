@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 *  @gajendran-egov @sathishp-eGov
 *.yaml  @gajendran-egov @sathishp-eGov
 
+=======
+* @sathishp-eGov @talele08 @kavi-egov
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 * business-services/ @sathishp-eGov @talele08 @kavi-egov
 * core-services/ @sathishp-eGov @talele08 @kavi-egov
 * municipal-services/ @sathishp-eGov @talele08 @kavi-egov

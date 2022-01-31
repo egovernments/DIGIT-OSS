@@ -14,16 +14,16 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 public class RemittanceQueryBuilder {
 
-    public static final String INSERT_REMITTANCE_SQL = "INSERT INTO egcl_remittance(id, referencenumber, referencedate, voucherheader, fund, function, remarks, reasonfordelay, status, createdby, createddate, lastmodifiedby, lastmodifieddate, bankaccount, tenantid) "
+    public static final String INSERT_REMITTANCE_SQL = "INSERT INTO {schema}.egcl_remittance(id, referencenumber, referencedate, voucherheader, fund, function, remarks, reasonfordelay, status, createdby, createddate, lastmodifiedby, lastmodifieddate, bankaccount, tenantid) "
             + "VALUES (:id, :referencenumber, :referencedate, :voucherheader, :fund, :function, :remarks, :reasonfordelay, :status, :createdby, :createddate, :lastmodifiedby, :lastmodifieddate, :bankaccount, :tenantid)";
 
-    public static final String INSERT_REMITTANCE_DETAILS_SQL = "INSERT INTO egcl_remittancedetails(id, remittance, chartofaccount, creditamount, debitamount, tenantid) "
+    public static final String INSERT_REMITTANCE_DETAILS_SQL = "INSERT INTO {schema}.egcl_remittancedetails(id, remittance, chartofaccount, creditamount, debitamount, tenantid) "
             + "VALUES (:id, :remittance, :chartofaccount, :creditamount, :debitamount, :tenantid)";
 
-    public static final String INSERT_REMITTANCE_INSTRUMENT_SQL = "INSERT INTO egcl_remittanceinstrument(id, remittance, instrument, reconciled, tenantid)  "
+    public static final String INSERT_REMITTANCE_INSTRUMENT_SQL = "INSERT INTO {schema}.egcl_remittanceinstrument(id, remittance, instrument, reconciled, tenantid)  "
             + "VALUES (:id, :remittance, :instrument, :reconciled, :tenantid)";
     
-    public static final String INSERT_REMITTANCE_RECEIPT_SQL = "INSERT INTO egcl_remittancereceipt(id, remittance, receipt, tenantid)  "
+    public static final String INSERT_REMITTANCE_RECEIPT_SQL = "INSERT INTO {schema}.egcl_remittancereceipt(id, remittance, receipt, tenantid)  "
             + "VALUES (:id, :remittance, :receipt, :tenantid)";
 
     private static final String SELECT_REMITTANCES_SQL = "Select rem.bankaccount as rem_bankaccount,rem.function as rem_function,"
@@ -43,9 +43,9 @@ public class RemittanceQueryBuilder {
             + "remRec.remittance as remRec_remittance, remRec.receipt as remRec_receipt,"
             + "remRec.tenantId as remRec_tenantId, remRec.id as remRec_id"
 
-            + " from egcl_remittance rem LEFT OUTER JOIN egcl_remittancedetails remDet ON rem.id=remDet.remittance " +
-            "LEFT OUTER JOIN egcl_remittanceinstrument remIsm ON rem.id=remIsm.remittance " +
-            "LEFT OUTER JOIN egcl_remittancereceipt remRec ON rem.id=remRec.remittance ";
+            + " from {schema}.egcl_remittance rem LEFT OUTER JOIN {schema}.egcl_remittancedetails remDet ON rem.id=remDet.remittance " +
+            "LEFT OUTER JOIN {schema}.egcl_remittanceinstrument remIsm ON rem.id=remIsm.remittance " +
+            "LEFT OUTER JOIN {schema}.egcl_remittancereceipt remRec ON rem.id=remRec.remittance ";
 
     private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY rem_id) offset_ FROM " +

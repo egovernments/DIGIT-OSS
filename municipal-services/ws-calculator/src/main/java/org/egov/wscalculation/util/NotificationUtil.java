@@ -159,6 +159,7 @@ public class NotificationUtil {
 	 * @return - Returns the proper message
 	 */
 	public String getAppliedMsg(NotificationReceiver receiver, String message, DemandNotificationObj obj) {
+<<<<<<< HEAD
 		log.info("receive - "+receiver.toString());
 		message = message.replace("{First Name}", receiver.getFirstName() == null ? "" : receiver.getFirstName());
 		message = message.replace("{Last Name}", receiver.getLastName() == null ? "" : receiver.getLastName());
@@ -166,6 +167,13 @@ public class NotificationUtil {
 		message = message.replace("{ULB}", receiver.getUlbName() == null ? "" : receiver.getUlbName());
 		message = message.replace("{billing cycle}", obj.getBillingCycle() == null ? "" : obj.getBillingCycle());
 		log.info("message -------- "+ message);
+=======
+		message = message.replace("{First Name}", receiver.getFirstName() == null ? "" : receiver.getFirstName());
+		message = message.replace("{Last Name}", receiver.getLastName() == null ? "" : receiver.getLastName());
+		message = message.replace("{service name}", receiver.getServiceName() == null ? "" : receiver.getServiceName());
+		message = message.replace("{ULB Name}", receiver.getUlbName() == null ? "" : receiver.getUlbName());
+		message = message.replace("{billing cycle}", obj.getBillingCycle() == null ? "" : obj.getBillingCycle());
+>>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 		return message;
 	}
 	

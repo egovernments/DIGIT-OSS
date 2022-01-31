@@ -37,10 +37,10 @@ public class TransformConsumer implements KafkaConsumer {
 	private ApplicationProperties applicationProperties; 
 
 	@Override
-	@KafkaListener(id = INTENT, groupId = INTENT, topics = { Constants.KafkaTopics.VALID_DATA }, containerFactory = Constants.BeanContainerFactory.INCOMING_KAFKA_LISTENER)
+	@KafkaListener(id = INTENT, groupId = INTENT, topics = "${kafka.transaction.validation.topic}", containerFactory = Constants.BeanContainerFactory.INCOMING_KAFKA_LISTENER)
 	public void processMessage(Map incomingData,
 							   @Header(KafkaHeaders.RECEIVED_TOPIC) final String topic) {
-		LOGGER.info("##KafkaMessageAlert## : key:" + topic + ":" + "value:" + incomingData.size());
+		LOGGER.info("##KafkaMessageAlert Transform Consumer## : key:" + topic + ":" + "value:" + incomingData.size());
 		try {
 			boolean isTransformed = false;
 			String dataContext = incomingData.get(Constants.DATA_CONTEXT).toString();
@@ -55,7 +55,8 @@ public class TransformConsumer implements KafkaConsumer {
 				ingestProducer.pushToPipeline(incomingData, applicationProperties.getTransactionTransformationTopic(), null);
 			}
 		} catch (final Exception e) {
-			LOGGER.error("Exception Encountered while processing the received message : " + e.getMessage());
+			e.printStackTrace();
+			LOGGER.error("Exception Encountered while processing the received message in transform consumer : " + e.getMessage());
 		}
 	}
 }
