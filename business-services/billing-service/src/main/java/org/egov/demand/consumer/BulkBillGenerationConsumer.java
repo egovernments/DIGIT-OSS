@@ -12,9 +12,7 @@ import org.egov.demand.service.BillServicev2;
 import org.egov.demand.service.DemandService;
 import org.egov.demand.web.contract.DemandRequest;
 import org.egov.tracer.kafka.CustomKafkaTemplate;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -41,9 +39,6 @@ public class BulkBillGenerationConsumer {
 	@Autowired
 	private CustomKafkaTemplate<String, Object> kafkaTemplate;
 	
-	@Value("${kafka.topics.bulk.bill.generation.audit}")
-	private String bulkBillGenAuditTopic;
-
 	@KafkaListener(topics = { "${kafka.topics.bulk.bill.generation}" })
 	public void processMessage(Map<String, Object> consumerRecord, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 
@@ -91,16 +86,16 @@ public class BulkBillGenerationConsumer {
 			logError(" Bill Gen ", e.getMessage(), billGenerator.getMigrationCount());
 		}
 		
-		kafkaTemplate.send(bulkBillGenAuditTopic, billGenerator.getMigrationCount());
-		
-		log.info("Bill generation ran suc");
+		MigrationCount migrationCount = billGenerator.getMigrationCount();
+		migrationCount.setAuditTime(System.currentTimeMillis());
+		migrationCount.setMessage("prcoess succeded in billing service");
+		kafkaTemplate.send(migrationCount.getAuditTopic(), billGenerator.getMigrationCount());
 	}
 	
 	private void logError(String process, String message, MigrationCount bulkBillCount) {
 		
-		log.info(" Billing-bulkbill-consumer-failure log for batch : " + bulkBillCount.getOffset()
-				+ " with size " + bulkBillCount.getRecordCount());
-		throw new CustomException("EG_BS_BULKBILL_ERROR","Bulk Bill generation failed during "+ process + " with error : " + message);
+		bulkBillCount.setMessage("prcoess failed in billing service during "+ process + " with error message : " + message);
+		kafkaTemplate.send(bulkBillCount.getAuditTopic(), bulkBillCount);
 	}
 
 }
