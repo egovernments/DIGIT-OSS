@@ -2,13 +2,10 @@ package org.egov.tl.repository;
 
 import static org.egov.tl.util.TLConstants.ACTION_ADHOC;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.builder.TLQueryBuilder;
@@ -22,6 +19,7 @@ import org.egov.tl.web.models.TradeLicenseSearchCriteria;
 import org.egov.tl.web.models.TradeUnit;
 import org.egov.tl.web.models.User;
 import org.egov.tl.workflow.WorkflowService;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -49,10 +47,12 @@ public class TLRepository {
     
     private TradeUtil utils;
 
+    private MultiStateInstanceUtil multiStateInstanceUtil;
 
     @Autowired
-    public TLRepository(JdbcTemplate jdbcTemplate, TLQueryBuilder queryBuilder, TLRowMapper rowMapper,
-                        Producer producer, TLConfiguration config, WorkflowService workflowService, TradeUtil utils) {
+    public TLRepository(JdbcTemplate jdbcTemplate, TLQueryBuilder queryBuilder, TLRowMapper rowMapper, Producer producer,
+                        TLConfiguration config, WorkflowService workflowService, TradeUtil utils,
+                        MultiStateInstanceUtil multiStateInstanceUtil) {
         this.jdbcTemplate = jdbcTemplate;
         this.queryBuilder = queryBuilder;
         this.rowMapper = rowMapper;
@@ -60,26 +60,13 @@ public class TLRepository {
         this.config = config;
         this.workflowService = workflowService;
         this.utils = utils;
+        this.multiStateInstanceUtil = multiStateInstanceUtil;
     }
 
 
-    /**
-     * Searhces license in databse
-     *
-     * @param criteria The tradeLicense Search criteria
-     * @return List of TradeLicense from seach
-     */
-    public List<TradeLicense> getLicenses(TradeLicenseSearchCriteria criteria) {
-        List<Object> preparedStmtList = new ArrayList<>();
-<<<<<<< HEAD
-        String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList,false);
-=======
-        String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList);
-        query = utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
-        List<TradeLicense> licenses =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-        sortChildObjectsById(licenses);
-        return licenses;
-    }
+
+
+
 
     /**
      * Searhces license in databse
@@ -89,9 +76,13 @@ public class TLRepository {
      */
     public List<TradeLicense> getLicenses(TradeLicenseSearchCriteria criteria,String tenantId) {
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList);
-        query = utils.replaceSchemaPlaceholder(query, tenantId);
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
+        String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList, false);
+        try {
+            query = multiStateInstanceUtil.replaceSchemaPlaceholder(query, tenantId);
+        }
+        catch (Exception e){
+            throw new CustomException("INVALID_TENANTID","Invalid tenantId: "+tenantId);
+        }
         List<TradeLicense> licenses =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         sortChildObjectsById(licenses);
         return licenses;
@@ -176,7 +167,12 @@ public class TLRepository {
     public List<TradeLicense> getPlainLicenseSearch(TradeLicenseSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getTLPlainSearchQuery(criteria, preparedStmtList);
-        query= utils.replaceSchemaPlaceholder(query, criteria.getTenantId());
+        try {
+            query= multiStateInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+        }
+        catch (Exception e){
+            throw new CustomException("INVALID_TENANTID","Invalid tenantId: "+criteria.getTenantId());
+        }
         log.info("Query: " + query);
         List<TradeLicense> licenses =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         sortChildObjectsById(licenses);

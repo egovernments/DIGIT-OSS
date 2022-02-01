@@ -1,17 +1,15 @@
 package org.egov.tl.repository.builder;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import org.egov.tl.config.TLConfiguration;
-<<<<<<< HEAD
 import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
-=======
 import org.egov.tl.web.models.TradeLicenseSearchCriteria;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -268,7 +266,7 @@ public class TLQueryBuilder {
         
         preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL); 
         preparedStmtList.add(TLConstants.APPLICATION_TYPE_RENEWAL);
-        preparedStmtList.add(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));        
+        preparedStmtList.add(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
         preparedStmtList.add(TLConstants.STATUS_MANUALLYEXPIRED);
         preparedStmtList.add(TLConstants.STATUS_REJECTED);
         preparedStmtList.add(criteria.getFinancialYear());

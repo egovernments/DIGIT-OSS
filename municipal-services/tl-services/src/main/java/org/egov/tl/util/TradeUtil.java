@@ -1,15 +1,5 @@
 package org.egov.tl.util;
 
-import static org.egov.tl.util.TLConstants.ACCESSORIES_CATEGORY;
-import static org.egov.tl.util.TLConstants.COMMON_MASTERS_MODULE;
-import static org.egov.tl.util.TLConstants.OWNERSHIP_CATEGORY;
-import static org.egov.tl.util.TLConstants.STATUS_INITIATED;
-import static org.egov.tl.util.TLConstants.STRUCTURE_TYPE;
-import static org.egov.tl.util.TLConstants.TRADE_LICENSE_MODULE;
-import static org.egov.tl.util.TLConstants.TRADE_TYPE;
-import static org.egov.tl.util.TLConstants.businessService_BPA;
-import static org.egov.tl.util.TLConstants.businessService_TL;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,6 +28,8 @@ import org.springframework.stereotype.Component;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.tl.util.TLConstants.*;
 
 @Component
 @Slf4j
@@ -348,7 +340,6 @@ public class TradeUtil {
         });
         return idToIsStateUpdatableMap;
     }
-<<<<<<< HEAD
 
 
 
@@ -364,25 +355,6 @@ public class TradeUtil {
 		
 		return tenantIdToReminderPeriod;
 		
-=======
-    
-	/**
-	 * Method to fetch the state name from the tenantId
-	 * 
-	 * @param query
-	 * @param tenantId
-	 * @return
-	 */
-	public String replaceSchemaPlaceholder(String query, String tenantId) {
 
-		String finalQuery = null;
-		if (tenantId.contains(".")) {
-			String schemaName = tenantId.split("\\.")[1];
-			finalQuery = query.replace(TLConstants.SCHEMA_REPLACE_STRING, schemaName);
-		} else {
-			finalQuery = query.replace(TLConstants.SCHEMA_REPLACE_STRING.concat("."), "");
-		}
-		return finalQuery;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 	}
 }

@@ -6,11 +6,7 @@ import static org.egov.tl.util.TLConstants.JOB_EXPIRY;
 import static org.egov.tl.util.TLConstants.JOB_SMS_REMINDER;
 import static org.egov.tl.util.TLConstants.STATUS_APPROVED;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
@@ -115,7 +111,7 @@ public class TLBatchService {
 
         				log.info("current Offset: "+offSet);
 
-        				List<TradeLicense> licensesFromRepository = repository.getLicenses(criteria);
+        				List<TradeLicense> licensesFromRepository = repository.getLicenses(criteria, tenantIdFromRepository);
         				if(CollectionUtils.isEmpty(licensesFromRepository)) 
         					break;
 
@@ -220,11 +216,11 @@ public class TLBatchService {
 
             }
             catch (Exception e){
-                producer.push(config.getReminderErrorTopic(), license);
+                producer.push(tenantId, config.getReminderErrorTopic(), license);
             }
         }
 
-        util.sendEmail(emailRequests, config.getIsReminderEnabled());
+        util.sendEmail(emailRequests, config.getIsReminderEnabled(), tenantId);
 
     }
 

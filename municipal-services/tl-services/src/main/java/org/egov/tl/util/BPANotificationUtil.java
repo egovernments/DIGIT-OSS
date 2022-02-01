@@ -385,8 +385,9 @@ public class BPANotificationUtil {
                 String actionLink = config.getPayLink().replace("$mobile", mobile)
                         .replace("$applicationNo", license.getApplicationNumber())
                         .replace("$tenantId", license.getTenantId())
-                        .replace("$businessService", license.getBusinessService());;
-                actionLink = config.getUiAppHost() + actionLink;
+                        .replace("$businessService", license.getBusinessService());
+                String UIHost = notificationUtil.getHost(license.getTenantId());
+                actionLink = UIHost + actionLink;
                 ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
                 items.add(item);
                 action = Action.builder().actionUrls(items).build();

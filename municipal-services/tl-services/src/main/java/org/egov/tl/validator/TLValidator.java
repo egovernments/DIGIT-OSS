@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-<<<<<<< HEAD
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,8 +38,7 @@ import static org.egov.tl.util.TLConstants.businessService_BPA;
 import static org.egov.tl.util.TLConstants.businessService_TL;
 import static org.egov.tl.util.TLConstants.APPLICATION_TYPE_RENEWAL;
 
-=======
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
+
 @Component
 public class TLValidator {
 
@@ -278,7 +276,7 @@ public class TLValidator {
         criteria.setStatus(statuses);
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
         criteria.setLicenseNumbers(licenseNumbers);
-        List<TradeLicense> searchResult = tlRepository.getLicenses(criteria);
+        List<TradeLicense> searchResult = tlRepository.getLicenses(criteria, request.getLicenses().get(0).getTenantId());
 
         Map<String , TradeLicense> licenseMap = new HashMap<>();
         searchResult.forEach(license -> {
@@ -594,21 +592,9 @@ public class TLValidator {
         if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search based only on tenantId is not allowed");
 
-<<<<<<< HEAD
         if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");
-=======
-        if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& !criteria.tenantIdOnly()
-                && criteria.getTenantId()==null)
-            throw new CustomException("INVALID SEARCH","TenantId is mandatory in search");
 
-        if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" ) && !criteria.isEmpty()
-                && !criteria.tenantIdOnly() && criteria.getTenantId()==null)
-            throw new CustomException("INVALID SEARCH","TenantId is mandatory in search");
-
-        /*if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
-            throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");*/
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
         String allowedParamStr = null;
 

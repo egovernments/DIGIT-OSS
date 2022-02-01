@@ -24,23 +24,14 @@ import static org.egov.tl.util.TLConstants.businessService_TL;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.ServiceRequestRepository;
-import org.egov.tl.web.models.Difference;
-import org.egov.tl.web.models.EventRequest;
-import org.egov.tl.web.models.RequestInfoWrapper;
-import org.egov.tl.web.models.SMSRequest;
-import org.egov.tl.web.models.TradeLicense;
+import org.egov.tl.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,12 +42,9 @@ import org.springframework.web.client.RestTemplate;
 
 import com.jayway.jsonpath.JsonPath;
 
-<<<<<<< HEAD
 import static org.egov.tl.util.TLConstants.*;
 import static org.springframework.util.StringUtils.capitalize;
-=======
 import lombok.extern.slf4j.Slf4j;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
 @Component
 @Slf4j
@@ -219,6 +207,7 @@ public class NotificationUtil {
 	 * @return customized message with replaced placeholders
 	 * */
 	private String getReplacedMessage(TradeLicense license, String messageTemplate) {
+		String UIHost = getHost(license.getTenantId());
 		String message = messageTemplate.replace("YYYY", license.getBusinessService());
 		message = message.replace("ZZZZ", license.getApplicationNumber());
 
@@ -226,7 +215,8 @@ public class NotificationUtil {
 			message = message.replace("RRRR", license.getLicenseNumber());
 		}
 		message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
-		message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
+
+		message = message.replace("{PORTAL_LINK}",UIHost);
 		//CCC - Designaion configurable according to ULB
 		// message = message.replace("CCC","");
 		return message;
@@ -513,8 +503,7 @@ public class NotificationUtil {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
-<<<<<<< HEAD
-				producer.push(config.getSmsNotifTopic(), smsRequest);
+				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
 				log.info("SMS SENT!");
 			}
 		}
@@ -553,17 +542,13 @@ public class NotificationUtil {
 	 * @param emailRequestList
 	 *            The list of EmailRequest to be sent
 	 */
-	public void sendEmail(List<EmailRequest> emailRequestList, boolean isEmailEnabled) {
+	public void sendEmail(List<EmailRequest> emailRequestList, boolean isEmailEnabled, String tenantId) {
 		if (isEmailEnabled) {
 			if (CollectionUtils.isEmpty(emailRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (EmailRequest emailRequest : emailRequestList) {
-				producer.push(config.getEmailNotifTopic(), emailRequest);
+				producer.push(tenantId ,config.getEmailNotifTopic(), emailRequest);
 				log.info("EMAIL notification sent!");
-=======
-				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
-				log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 			}
 		}
 	}
@@ -727,7 +712,6 @@ public class NotificationUtil {
 		else return res;
 	}
 
-<<<<<<< HEAD
 	/**
 	 * Fetches Email Ids of CITIZENs based on the phone number.
 	 *
@@ -764,7 +748,7 @@ public class NotificationUtil {
 		}
 		return mapOfPhnoAndEmailIds;
 	}
-=======
+
 	public String getHost(String tenantId){
 		log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
 		Integer tenantLength = tenantId.split("\\.").length;
@@ -781,5 +765,4 @@ public class NotificationUtil {
 		return host;
 	}
 
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 }

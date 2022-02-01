@@ -308,12 +308,8 @@ public class TradeLicenseService {
     }
 
     public List<TradeLicense> getLicensesFromMobileNumber(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
-<<<<<<< HEAD
-    	
-=======
 
         String tenantId = criteria.getTenantId();
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
         List<TradeLicense> licenses = new LinkedList<>();
         
         boolean isEmpty = enrichWithUserDetails(criteria,requestInfo);
@@ -335,7 +331,7 @@ public class TradeLicenseService {
      * @return List of tradeLicense for the given criteria
      */
     public List<TradeLicense> getLicensesWithOwnerInfo(TradeLicenseSearchCriteria criteria,RequestInfo requestInfo){
-        List<TradeLicense> licenses = repository.getLicenses(criteria);
+        List<TradeLicense> licenses = repository.getLicenses(criteria, criteria.getTenantId());
         if(licenses.isEmpty())
             return Collections.emptyList();
         licenses = enrichmentService.enrichTradeLicenseSearch(licenses,criteria,requestInfo);
@@ -388,7 +384,7 @@ public class TradeLicenseService {
         criteria.setIds(ids);
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
 
-        List<TradeLicense> licenses = repository.getLicenses(criteria);
+        List<TradeLicense> licenses = repository.getLicenses(criteria, request.getLicenses().get(0).getTenantId());
 
         if(licenses.isEmpty())
             return Collections.emptyList();
@@ -550,7 +546,7 @@ public class TradeLicenseService {
         	criteria.setTenantId(null);
         }
         
-        licenses = repository.getLicenses(criteria);
+        licenses = repository.getLicenses(criteria, criteria.getTenantId());
 
         if(licenses.size()==0){
         	return true;

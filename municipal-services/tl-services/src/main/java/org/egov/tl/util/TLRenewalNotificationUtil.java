@@ -43,12 +43,9 @@ import org.springframework.util.CollectionUtils;
 
 import com.jayway.jsonpath.JsonPath;
 
-<<<<<<< HEAD
 import static org.egov.tl.util.TLConstants.*;
 import static org.springframework.util.StringUtils.capitalize;
-=======
 import lombok.extern.slf4j.Slf4j;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
 @Component
 @Slf4j
@@ -226,6 +223,8 @@ public class TLRenewalNotificationUtil {
     }
 
     private String getReplacedMessage(TradeLicense license, String messageTemplate) {
+        String UIHost = notificationUtil.getHost(license.getTenantId());
+
         String message = messageTemplate.replace("YYYY", license.getBusinessService());
         message = message.replace("ZZZZ", license.getApplicationNumber());
 
@@ -233,7 +232,7 @@ public class TLRenewalNotificationUtil {
             message = message.replace("RRRR", license.getLicenseNumber());
         }
         message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
-        message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
+        message = message.replace("{PORTAL_LINK}",UIHost);
         //CCC - Designaion configurable according to ULB
         // message = message.replace("CCC","");
         return message;
@@ -524,27 +523,7 @@ public class TLRenewalNotificationUtil {
         return messageTemplate;
     }
 
-    /**
-     * Send the SMSRequest on the SMSNotification kafka topic
-     *
-     * @param smsRequestList
-     *            The list of SMSRequest to be sent
-     */
-    public void sendSMS(List<SMSRequest> smsRequestList, boolean isSMSEnabled) {
-        if (isSMSEnabled) {
-            if (CollectionUtils.isEmpty(smsRequestList))
-                log.info("Messages from localization couldn't be fetched!");
-            for (SMSRequest smsRequest : smsRequestList) {
-<<<<<<< HEAD
-                producer.push(config.getSmsNotifTopic(), smsRequest);
-                log.info("SMS Sent! MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
-=======
-                producer.push("", config.getSmsNotifTopic(), smsRequest);
-                log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
-            }
-        }
-    }
+
 
     /**
      * Fetches the amount to be paid from getBill API

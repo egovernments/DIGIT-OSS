@@ -89,20 +89,12 @@ public class TLNotificationService {
 		switch (businessService) {
 			case businessService_TL:
 				List<SMSRequest> smsRequestsTL = new LinkedList<>();
-<<<<<<< HEAD
 					if (null != config.getIsTLSMSEnabled()) {
 						if (config.getIsTLSMSEnabled()) {
 							enrichSMSRequest(request, smsRequestsTL,configuredChannelList);
 							if (!CollectionUtils.isEmpty(smsRequestsTL))
-								util.sendSMS(smsRequestsTL, true);
+								util.sendSMS(smsRequestsTL, true,request.getLicenses().get(0).getTenantId());
 						}
-=======
-				if(null != config.getIsTLSMSEnabled()) {
-					if(config.getIsTLSMSEnabled()) {
-						enrichSMSRequest(request,smsRequestsTL);
-						if(!CollectionUtils.isEmpty(smsRequestsTL))
-							util.sendSMS(smsRequestsTL,true, request.getLicenses().get(0).getTenantId());
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 					}
 
 					if (null != config.getIsUserEventsNotificationEnabledForTL()) {
@@ -119,7 +111,7 @@ public class TLNotificationService {
 						enrichEmailRequest(request, emailRequests, mapOfPhnoAndEmail, configuredChannelList);
 
 						if (!CollectionUtils.isEmpty(emailRequests))
-							util.sendEmail(emailRequests, config.getIsEmailNotificationEnabled());
+							util.sendEmail(emailRequests, config.getIsEmailNotificationEnabled(), tenantId);
 					}
 				}
 				break;
@@ -147,7 +139,7 @@ public class TLNotificationService {
 						Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
 						enrichEmailRequest(request, emailRequestsForBPA, mapOfPhnoAndEmail, configuredChannelList);
 					if (!CollectionUtils.isEmpty(emailRequestsForBPA))
-						util.sendEmail(emailRequestsForBPA, config.getIsEmailNotificationEnabledForBPA());
+						util.sendEmail(emailRequestsForBPA, config.getIsEmailNotificationEnabledForBPA(), tenantId);
 					}
 				}
 			break;
