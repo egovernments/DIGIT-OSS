@@ -354,7 +354,6 @@ public class PTConstants {
 
     public static final String ES_DATA_PROPERTYID_PATH = "$.propertyId";
 
-<<<<<<< HEAD
     //Notification Enhancement
     public static final String CHANNEL_NAME_SMS = "SMS";
 
@@ -388,9 +387,8 @@ public class PTConstants {
     public static final String VIEW_PROPERTY_STRING = "You can view your property on the link given below - {PTURL} Thank you";
 
     public static final String PAY_ONLINE_STRING = "Click on the URL to view the details and pay online {PAYMENT_LINK}";
-=======
+
     public static final String TENANTID_MDC_STRING = "TENANTID";
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
     public static final String PT_ONLINE_STRING = "You can pay your Property Tax online here - {PAYMENT_LINK}";
 }

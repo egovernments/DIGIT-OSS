@@ -1,9 +1,6 @@
 package org.egov.pt.repository.builder;
-<<<<<<< HEAD
-=======
 
 import java.time.Instant;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,16 +8,12 @@ import java.util.Set;
 import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.enums.Status;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-<<<<<<< HEAD
-import org.springframework.util.ObjectUtils;
-import org.egov.pt.models.enums.Status.*;
-=======
 import org.springframework.util.StringUtils;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
 @Component
 public class PropertyQueryBuilder {
@@ -78,13 +71,8 @@ public class PropertyQueryBuilder {
 			+   ownerDocSelectValues  
 			
 			+   UnitSelectValues
-<<<<<<< HEAD
-
-			+   " FROM EG_PT_PROPERTY property " 
-=======
 			
 			+   " FROM {schema}.eg_pt_PROPERTY property " 
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 			
 			+   INNER_JOIN +  " {schema}.eg_pt_ADDRESS address         ON property.id = address.propertyid " 
 			
@@ -96,12 +84,7 @@ public class PropertyQueryBuilder {
 			
 			+   LEFT_JOIN  +  " {schema}.eg_pt_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
-<<<<<<< HEAD
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
-	
-=======
 			+	LEFT_JOIN  +  " {schema}.eg_pt_UNIT unit		          ON property.id =  unit.propertyid ";
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
 	private static final String ID_QUERY = SELECT
 
@@ -167,27 +150,17 @@ public class PropertyQueryBuilder {
 		
 		if(isEmpty)
 			throw new CustomException("EG_PT_SEARCH_ERROR"," No criteria given for the property search");
-<<<<<<< HEAD
-		
-=======
 
 		String tenantId = criteria.getTenantId();
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 		StringBuilder builder;
 
 		if(onlyIds)
 			builder = new StringBuilder(ID_QUERY);
 		else
 			builder = new StringBuilder(QUERY);
-<<<<<<< HEAD
-		Boolean appendAndQuery = false;
-		if(isPlainSearch)
-		{
-=======
 
 		if (isPlainSearch) {
 
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 			Set<String> tenantIds = criteria.getTenantIds();
 			if (!CollectionUtils.isEmpty(tenantIds)) {
 				addClauseIfRequired(preparedStmtList, builder);

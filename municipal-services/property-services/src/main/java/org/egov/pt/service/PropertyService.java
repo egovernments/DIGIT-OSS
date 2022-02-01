@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-import org.apache.kafka.clients.admin.ConfigEntry.ConfigSource;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.OwnerInfo;
@@ -174,7 +172,7 @@ public class PropertyService {
 				
 				enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 				util.mergeAdditionalDetails(request, propertyFromSearch);
-				producer.push(config.getUpdatePropertyTopic(), request);		
+				producer.push(request.getProperty().getTenantId(), config.getUpdatePropertyTopic(), request);		
 	}
 
 	/**
@@ -457,7 +455,7 @@ public class PropertyService {
 		//enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		
-		producer.push(config.getUpdatePropertyTopic(), request);
+		producer.push(request.getProperty().getTenantId() , config.getUpdatePropertyTopic(), request);
 		
 		request.getProperty().setWorkflow(null);
 		

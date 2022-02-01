@@ -1,12 +1,46 @@
 package org.egov.pt.util;
 
 
-import java.util.*;
+import static com.jayway.jsonpath.Criteria.where;
+import static com.jayway.jsonpath.Filter.filter;
+import static org.egov.pt.util.PTConstants.ACTION;
+import static org.egov.pt.util.PTConstants.ASMT_USER_EVENT_PAY;
+import static org.egov.pt.util.PTConstants.MODULE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_EMAIL;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_MODULENAME;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTYID;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_TENANTID;
+import static org.egov.pt.util.PTConstants.PAY_ONLINE_STRING;
+import static org.egov.pt.util.PTConstants.PT_ALTERNATE_NUMBER;
+import static org.egov.pt.util.PTConstants.PT_BUSINESSSERVICE;
+import static org.egov.pt.util.PTConstants.PT_CORRECTION_PENDING;
+import static org.egov.pt.util.PTConstants.PT_OLD_MOBILENUMBER;
+import static org.egov.pt.util.PTConstants.PT_ONLINE_STRING;
+import static org.egov.pt.util.PTConstants.TRACK_APPLICATION;
+import static org.egov.pt.util.PTConstants.TRACK_APPLICATION_STRING;
+import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_NAME;
+import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_POSTEDBY;
+import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_TYPE;
+import static org.egov.pt.util.PTConstants.VIEW_APPLICATION_CODE;
+import static org.egov.pt.util.PTConstants.VIEW_PROPERTY;
+import static org.egov.pt.util.PTConstants.VIEW_PROPERTY_CODE;
+import static org.egov.pt.util.PTConstants.VIEW_PROPERTY_STRING;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.jayway.jsonpath.Filter;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -24,8 +58,6 @@ import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.Email;
 import org.egov.pt.web.contracts.EmailRequest;
-import org.egov.pt.web.contracts.EmailRequest;
-
 import org.egov.pt.web.contracts.SMSRequest;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
@@ -33,16 +65,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
+import com.jayway.jsonpath.Filter;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
-
-import static com.jayway.jsonpath.Criteria.where;
-import static com.jayway.jsonpath.Filter.filter;
-import static org.egov.pt.util.PTConstants.*;
 
 
 @Slf4j
@@ -54,6 +82,8 @@ public class NotificationUtil {
     private ServiceRequestRepository serviceRequestRepository;
 
     private PropertyConfiguration config;
+    
+    private MultiStateInstanceUtil centralInstanceUtil;
 
     private Producer producer;
 
@@ -191,12 +221,7 @@ public class NotificationUtil {
             if (CollectionUtils.isEmpty(smsRequestList))
                 log.info("Messages from localization couldn't be fetched!");
             for (SMSRequest smsRequest : smsRequestList) {
-<<<<<<< HEAD
-                producer.push(config.getSmsNotifTopic(), smsRequest);
-                log.info("Sending SMS notification: ");
-=======
                 producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
                 log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
             }
         }
@@ -244,13 +269,9 @@ public class NotificationUtil {
      *
      * @param request
      */
-    public void sendEventNotification(EventRequest request) {
-<<<<<<< HEAD
-        log.info("EVENT notification sent!");
-        producer.push(config.getSaveUserEventsTopic(), request);
-=======
-        producer.push("", config.getSaveUserEventsTopic(), request);
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
+    public void sendEventNotification(EventRequest request, String tenantId) {
+    	
+        producer.push(tenantId, config.getSaveUserEventsTopic(), request);
     }
 
 
@@ -264,22 +285,24 @@ public class NotificationUtil {
      * @return List of EmailRequest
      */
 
-    public List<EmailRequest> createEmailRequest(RequestInfo requestInfo,String message, Map<String, String> mobileNumberToEmailId) {
+	public List<EmailRequest> createEmailRequest(RequestInfo requestInfo, String message,
+			Map<String, String> mobileNumberToEmailId) {
 
-        List<EmailRequest> emailRequest = new LinkedList<>();
-        for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-            String customizedMsg = "";
-            if(message.contains(NOTIFICATION_EMAIL))
-                customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
+		List<EmailRequest> emailRequest = new LinkedList<>();
+		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
+			String customizedMsg = "";
+			if (message.contains(NOTIFICATION_EMAIL))
+				customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
 
-            String subject = "";
-            String body = customizedMsg;
-            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).build();
-            EmailRequest email = new EmailRequest(requestInfo,emailobj);
-            emailRequest.add(email);
-        }
-        return emailRequest;
-    }
+			String subject = "";
+			String body = customizedMsg;
+			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false)
+					.body(body).subject(subject).build();
+			EmailRequest email = new EmailRequest(requestInfo, emailobj);
+			emailRequest.add(email);
+		}
+		return emailRequest;
+	}
 
     /**
      * Creates email request for the each owners from SMS requests
@@ -291,29 +314,33 @@ public class NotificationUtil {
      * @return List of EmailRequests
      */
 
-    public List<EmailRequest> createEmailRequestFromSMSRequests(RequestInfo requestInfo,List<SMSRequest> smsRequests,String tenantId) {
-        Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
-        Map<String, String> mobileNumberToEmailId = fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
-        if (CollectionUtils.isEmpty(mobileNumberToEmailId.keySet())) {
-            log.error("Email Ids Not found for Mobilenumbers");
-        }
+	public List<EmailRequest> createEmailRequestFromSMSRequests(RequestInfo requestInfo, List<SMSRequest> smsRequests,
+			String tenantId) {
+		
+		Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest::getMobileNumber).collect(Collectors.toSet());
+		Map<String, String> mobileNumberToEmailId = fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
+		if (CollectionUtils.isEmpty(mobileNumberToEmailId.keySet())) {
+			log.error("Email Ids Not found for Mobilenumbers");
+		}
 
-        Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
-        List<EmailRequest> emailRequest = new LinkedList<>();
-        for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-            String customizedMsg = "";
-            String message = mobileNumberToMsg.get(entryset.getKey());
-            if(message.contains(NOTIFICATION_EMAIL))
-                customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
+		Map<String, String> mobileNumberToMsg = smsRequests.stream()
+				.collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
+		List<EmailRequest> emailRequest = new LinkedList<>();
+		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
+			String customizedMsg = "";
+			String message = mobileNumberToMsg.get(entryset.getKey());
+			if (message.contains(NOTIFICATION_EMAIL))
+				customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
 
-            String subject = "";
-            String body = customizedMsg;
-            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).build();
-            EmailRequest email = new EmailRequest(requestInfo,emailobj);
-            emailRequest.add(email);
-        }
-        return emailRequest;
-    }
+			String subject = "";
+			String body = customizedMsg;
+			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false)
+					.body(body).subject(subject).build();
+			EmailRequest email = new EmailRequest(requestInfo, emailobj);
+			emailRequest.add(email);
+		}
+		return emailRequest;
+	}
 
     /**
      * Send the EmailRequest on the EmailNotification kafka topic
@@ -321,13 +348,13 @@ public class NotificationUtil {
      * @param emailRequestList
      *            The list of EmailRequest to be sent
      */
-    public void sendEmail(List<EmailRequest> emailRequestList) {
+    public void sendEmail(List<EmailRequest> emailRequestList, String tenantId) {
 
         if (config.getIsEmailNotificationEnabled()) {
             if (CollectionUtils.isEmpty(emailRequestList))
                 log.info("Messages from localization couldn't be fetched!");
             for (EmailRequest emailRequest : emailRequestList) {
-                producer.push(config.getEmailNotifTopic(), emailRequest);
+                producer.push(tenantId, config.getEmailNotifTopic(), emailRequest);
                 log.info("Sending EMAIL notification! ");
                 log.info("Email Id: " + emailRequest.getEmail().toString());
             }
@@ -343,53 +370,55 @@ public class NotificationUtil {
      * @return
      */
 
-    public Map<String, String> fetchUserEmailIds(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
-        Map<String, String> mapOfPhnoAndEmailIds = new HashMap<>();
-        StringBuilder uri = new StringBuilder();
-        uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
-        Map<String, Object> userSearchRequest = new HashMap<>();
-        userSearchRequest.put("RequestInfo", requestInfo);
-        userSearchRequest.put("tenantId", tenantId);
-        userSearchRequest.put("userType", "CITIZEN");
-        for(String mobileNo: mobileNumbers) {
-            userSearchRequest.put("userName", mobileNo);
-            try {
-                Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest).get();
-                if(null != user) {
-                    if(JsonPath.read(user, "$.user[0].emailId")!=null) {
-                        String email = JsonPath.read(user, "$.user[0].emailId");
-                    mapOfPhnoAndEmailIds.put(mobileNo, email);
-                    }
-                }else {
-                    log.error("Service returned null while fetching user for username - "+mobileNo);
-                }
-            }catch(Exception e) {
-                log.error("Exception while fetching user for username - "+mobileNo);
-                log.error("Exception trace: ",e);
-                continue;
-            }
-        }
-        return mapOfPhnoAndEmailIds;
+	public Map<String, String> fetchUserEmailIds(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+
+		Map<String, String> mapOfPhnoAndEmailIds = new HashMap<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("userType", "CITIZEN");
+		for (String mobileNo : mobileNumbers) {
+			userSearchRequest.put("userName", mobileNo);
+			try {
+				Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest).get();
+				if (null != user) {
+					if (JsonPath.read(user, "$.user[0].emailId") != null) {
+						String email = JsonPath.read(user, "$.user[0].emailId");
+						mapOfPhnoAndEmailIds.put(mobileNo, email);
+					}
+				} else {
+					log.error("Service returned null while fetching user for username - " + mobileNo);
+				}
+			} catch (Exception e) {
+				log.error("Exception while fetching user for username - " + mobileNo);
+				log.error("Exception trace: ", e);
+				continue;
+			}
+		}
+		  return mapOfPhnoAndEmailIds;
     }
     /**
      * Method to shortent the url
      * returns the same url if shortening fails 
      * @param url
      */
-    public String getShortenedUrl(String url){
-    	
-        HashMap<String,String> body = new HashMap<>();
-        body.put("url",url);
-        StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
-        builder.append(config.getUrlShortnerEndpoint());
-        String res = restTemplate.postForObject(builder.toString(), body, String.class);
+	public String getShortenedUrl(String url) {
 
-        if(StringUtils.isEmpty(res)){
-            log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url); ;
-            return url;
-        }
-        else return res;
-    }
+		HashMap<String, String> body = new HashMap<>();
+		body.put("url", url);
+		StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
+		builder.append(config.getUrlShortnerEndpoint());
+		String res = restTemplate.postForObject(builder.toString(), body, String.class);
+
+		if (StringUtils.isEmpty(res)) {
+			log.error("URL_SHORTENING_ERROR", "Unable to shorten url: " + url);
+			;
+			return url;
+		} else
+			return res;
+	}
     
     /**
     *
@@ -397,43 +426,45 @@ public class NotificationUtil {
     * @param smsRequests
     * @param events
     */
-   public List<Event> enrichEvent(List<SMSRequest> smsRequests, RequestInfo requestInfo, String tenantId, Property property, Boolean isActionReq){
+	public List<Event> enrichEvent(List<SMSRequest> smsRequests, RequestInfo requestInfo, String tenantId,
+			Property property, Boolean isActionReq) {
 
+		String stateLevelTenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
 		List<Event> events = new ArrayList<>();
-       Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
-       Map<String, String> mapOfPhnoAndUUIDs = fetchUserUUIDs(mobileNumbers, requestInfo, tenantId);
-       if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
-           log.error("UUIDs Not found for Mobilenumbers");
-       }
-       
-       Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
-       mobileNumbers.forEach(mobileNumber -> {
-       	
-           List<String> toUsers = new ArrayList<>();
-           toUsers.add(mapOfPhnoAndUUIDs.get(mobileNumber));
-           Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
+		Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest::getMobileNumber).collect(Collectors.toSet());
+		Map<String, String> mapOfPhnoAndUUIDs = fetchUserUUIDs(mobileNumbers, requestInfo, tenantId);
+		if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
+			log.error("UUIDs Not found for Mobilenumbers");
+		}
 
-           Action action = null;
-           if(isActionReq){
-               List<ActionItem> items = new ArrayList<>();
-               String msg = smsRequests.get(0).getMessage();
-               String actionLink = "";
-               if(msg.contains(PT_CORRECTION_PENDING)){
-            	   
+		Map<String, String> mobileNumberToMsg = smsRequests.stream()
+				.collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
+		mobileNumbers.forEach(mobileNumber -> {
+
+			List<String> toUsers = new ArrayList<>();
+			toUsers.add(mapOfPhnoAndUUIDs.get(mobileNumber));
+			Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
+
+			Action action = null;
+			if (isActionReq) {
+				List<ActionItem> items = new ArrayList<>();
+				String msg = smsRequests.get(0).getMessage();
+				String actionLink = "";
+				if (msg.contains(PT_CORRECTION_PENDING)) {
+
 					String url = config.getUserEventViewPropertyLink();
 					if (property.getCreationReason().equals(CreationReason.MUTATION)) {
 						url = config.getUserEventViewMutationLink();
 					}
-					
-                   actionLink = url.replace("$mobileNo", mobileNumber)
-                           .replace("$tenantId", tenantId)
-                           .replace("$propertyId" , property.getPropertyId())
-                           .replace("$applicationNumber" , property.getAcknowldgementNumber());
 
-                   actionLink = getHost(tenantId) + actionLink;
-                   ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_APPLICATION_CODE).build();
-                   items.add(item);
-               }
+					actionLink = url.replace("$mobileNo", mobileNumber).replace("$tenantId", tenantId)
+							.replace("$propertyId", property.getPropertyId())
+							.replace("$applicationNumber", property.getAcknowldgementNumber());
+
+					actionLink = config.getUiAppHostMap().get(stateLevelTenantId) + actionLink;
+					ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_APPLICATION_CODE).build();
+					items.add(item);
+				}
 
                if(msg.contains(ASMT_USER_EVENT_PAY)){
                    actionLink = config.getPayLink().replace("$mobile", mobileNumber)
@@ -441,7 +472,7 @@ public class NotificationUtil {
                            .replace("$tenantId", property.getTenantId())
                            .replace("$businessService" , PT_BUSINESSSERVICE);
 
-                   actionLink = getHost(tenantId) + actionLink;
+                   actionLink = config.getUiAppHostMap().get(tenantId) + actionLink;
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
                    items.add(item);
                }
@@ -450,7 +481,7 @@ public class NotificationUtil {
                            .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
                            .replace(NOTIFICATION_TENANTID, property.getTenantId());
 
-                   actionLink = config.getUiAppHost() + actionLink;
+                   actionLink = config.getUiAppHostMap().get(stateLevelTenantId) + actionLink;
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_PROPERTY_CODE).build();
                    items.add(item);
                }
@@ -460,7 +491,7 @@ public class NotificationUtil {
                            .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
                            .replace(NOTIFICATION_TENANTID, property.getTenantId());
 
-                   actionLink = config.getUiAppHost() + actionLink;
+                   actionLink = config.getUiAppHostMap().get(stateLevelTenantId) + actionLink;
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_PROPERTY_CODE).build();
                    items.add(item);
                }
@@ -477,7 +508,6 @@ public class NotificationUtil {
 		return events;
 	}
 
-<<<<<<< HEAD
     /**
      * Method to remove certain lines from SMS templates
      * so that we can reuse the templates for in app notifications
@@ -530,14 +560,15 @@ public class NotificationUtil {
     }
 
     private MdmsCriteriaReq getMdmsRequestForChannelList(RequestInfo requestInfo, String tenantId){
+    	
         MasterDetail masterDetail = new MasterDetail();
-        masterDetail.setName(CHANNEL_LIST);
+        masterDetail.setName(PTConstants.CHANNEL_LIST);
         List<MasterDetail> masterDetailList = new ArrayList<>();
         masterDetailList.add(masterDetail);
 
         ModuleDetail moduleDetail = new ModuleDetail();
         moduleDetail.setMasterDetails(masterDetailList);
-        moduleDetail.setModuleName(CHANNEL);
+        moduleDetail.setModuleName(PTConstants.CHANNEL);
         List<ModuleDetail> moduleDetailList = new ArrayList<>();
         moduleDetailList.add(moduleDetail);
 
@@ -550,22 +581,10 @@ public class NotificationUtil {
         mdmsCriteriaReq.setRequestInfo(requestInfo);
 
         return mdmsCriteriaReq;
-=======
-	public String getHost(String tenantId){
-       log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
-       Integer tenantLength = tenantId.split("\\.").length;
-       String topLevelTenant = tenantId;
-       if(tenantLength == 3){
-           topLevelTenant = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
-       }
-       log.info(config.getUiAppHostMap().toString());
-       log.info(topLevelTenant);
-       String host = config.getUiAppHostMap().get(topLevelTenant);
-       if(ObjectUtils.isEmpty(host)){
-           throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + topLevelTenant);
-       }
-       return host;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
     }
-
+    
+	public String getHost(String tenantId) {
+		String stateLevelTenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
+		return config.getUiAppHostMap().get(stateLevelTenantId);
+	}
 }

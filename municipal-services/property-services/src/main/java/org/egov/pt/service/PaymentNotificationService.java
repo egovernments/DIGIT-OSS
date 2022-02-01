@@ -1,5 +1,17 @@
 package org.egov.pt.service;
 
+import static org.egov.pt.util.PTConstants.MUTATION_BUSINESSSERVICE;
+import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_OLDPROPERTYID_ABSENT;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_FAIL;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_OFFLINE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_ONLINE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_PARTIAL_OFFLINE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_PARTIAL_ONLINE;
+import static org.egov.pt.util.PTConstants.ONLINE_PAYMENT_MODE;
+import static org.egov.pt.util.PTConstants.PT_BUSINESSSERVICE;
+import static org.egov.pt.util.PTConstants.TENANTID_MDC_STRING;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,8 +52,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
-
-import static org.egov.pt.util.PTConstants.*;
 
 @Slf4j
 @Service
@@ -143,7 +153,7 @@ public class PaymentNotificationService {
             List<Event> events = new LinkedList<>();
             if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
                 events.addAll(getEvents(smsRequests,requestInfo,property,false));
-                util.sendEventNotification(new EventRequest(requestInfo, events));
+                util.sendEventNotification(new EventRequest(requestInfo, events), tenantId);
             }
 
         }
@@ -248,7 +258,7 @@ public class PaymentNotificationService {
         util.sendSMS(smsRequests, tenantId);
 
         if(!CollectionUtils.isEmpty(events))
-            util.sendEventNotification(new EventRequest(requestInfo,events));
+            util.sendEventNotification(new EventRequest(requestInfo,events), tenantId);
 
     }
 
@@ -428,11 +438,8 @@ public class PaymentNotificationService {
         message = message.replace("{ insert payment transaction id from PG}",valMap.get("transactionId"));
         message = message.replace("{insert Property Tax Assessment ID}",valMap.get("propertyId"));
         message = message.replace("{pt due}.",valMap.get("amountDue"));
-<<<<<<< HEAD
     //    message = message.replace("{FY}",valMap.get("financialYear"));
-=======
     //    message = message.replace("<FY>",valMap.get("financialYear"));
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
         return message;
     }
 
@@ -447,11 +454,8 @@ public class PaymentNotificationService {
         message = message.replace("{insert mode of payment}",valMap.get("paymentMode"));
         message = message.replace("{Enter pending amount}",valMap.get("amountDue"));
         message = message.replace("{insert inactive citizen application web URL}.",propertyConfiguration.getNotificationURL());
-<<<<<<< HEAD
 //        message = message.replace("{Insert FY}",valMap.get("financialYear"));
-=======
 //        message = message.replace("<Insert FY>",valMap.get("financialYear"));
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
         return message;
     }
 
@@ -464,11 +468,8 @@ public class PaymentNotificationService {
     private String getCustomizedPaymentFailMessage(String message,Map<String,String> valMap){
         message = message.replace("{insert amount to pay}",valMap.get("txnAmount"));
         message = message.replace("{insert ID}",valMap.get("propertyId"));
-<<<<<<< HEAD
 //        message = message.replace("{FY}",valMap.get("financialYear"));
-=======
 //        message = message.replace("<FY>",valMap.get("financialYear"));
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
         return message;
     }
 
@@ -520,11 +521,7 @@ public class PaymentNotificationService {
 
 		String finalMessage = customizedMessage.replace("$mobile", mobileNumber);
 		if (customizedMessage.contains("{receipt download link}")) {
-<<<<<<< HEAD
-			finalMessage = finalMessage.replace("Click on the link to download payment receipt <receipt download link}", "");
-=======
-			finalMessage = finalMessage.replace("Click on the link to download payment receipt <receipt download link>", "");
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
+			finalMessage = finalMessage.replace("Click on the link to download payment receipt {receipt download link}", "");
 		}
 		if (customizedMessage.contains("{payLink}")) {
 			finalMessage = finalMessage.replace("{payLink}", getPaymentLink(valMap));

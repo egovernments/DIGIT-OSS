@@ -569,8 +569,6 @@ public class PropertyValidator {
     	
 		List<String> allowedParams = null;
 		
-<<<<<<< HEAD
-=======
 		if (centralInstanceUtil.getIsEnvironmentCentralInstance() && criteria.getTenantId() == null) {
 			
 			throw new CustomException("EG_PT_INVALID_SEARCH", " TenantId is mandatory for search ");
@@ -581,7 +579,6 @@ public class PropertyValidator {
 					" TenantId should be mandatorily " + centralInstanceUtil.getStateLevelTenantIdLength() + " levels for search");
 		}
 
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 		User user = requestInfo.getUserInfo();
 		String userType = user.getType();
 		Boolean isUserCitizen = "CITIZEN".equalsIgnoreCase(userType);

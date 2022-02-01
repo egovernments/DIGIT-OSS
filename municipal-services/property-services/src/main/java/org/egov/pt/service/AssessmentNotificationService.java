@@ -1,12 +1,31 @@
 package org.egov.pt.service;
 
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
+import static org.egov.pt.util.PTConstants.ACTION_FOR_DUES;
+import static org.egov.pt.util.PTConstants.CHANNEL_NAME_EMAIL;
+import static org.egov.pt.util.PTConstants.CHANNEL_NAME_EVENT;
+import static org.egov.pt.util.PTConstants.CHANNEL_NAME_SMS;
+import static org.egov.pt.util.PTConstants.DUES_NOTIFICATION;
+import static org.egov.pt.util.PTConstants.LOCALIZATION_ASMT_PREFIX;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_ASMT_PREFIX;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_ASSESSMENTNUMBER;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_ASSESSMENT_CREATE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_ASSESSMENT_UPDATE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_FINANCIALYEAR;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PAYMENT_LINK;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTYID;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_STATUS;
+import static org.egov.pt.util.PTConstants.PT_BUSINESSSERVICE;
 
-import org.apache.http.client.utils.URIBuilder;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
@@ -25,8 +44,6 @@ import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static org.egov.pt.util.PTConstants.*;
-
 @Slf4j
 @Component
 public class AssessmentNotificationService {
@@ -40,6 +57,8 @@ public class AssessmentNotificationService {
     private PropertyConfiguration config;
     
     private BillingService billingService;
+    
+    private MultiStateInstanceUtil centralInstanceUtil;
 
     @Autowired
     public AssessmentNotificationService(NotificationUtil util, PropertyService propertyService, PropertyConfiguration config,BillingService billingService ) {
@@ -76,7 +95,7 @@ public class AssessmentNotificationService {
             isActionReq=true;
 
         List<Event> events = util.enrichEvent(smsRequests, requestInfo, tenantId, property, isActionReq);
-        util.sendEventNotification(new EventRequest(requestInfo, events));
+        util.sendEventNotification(new EventRequest(requestInfo, events), tenantId);
 
         if (dueAmount!=null && dueAmount.compareTo(BigDecimal.ZERO)>0) {
 
@@ -85,18 +104,18 @@ public class AssessmentNotificationService {
             enrichSMSRequestForDues(smsRequestsList, assessmentRequest, property);
 
             if(configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
-                util.sendSMS(smsRequestsList);
+                util.sendSMS(smsRequestsList, tenantId);
             }
 
             if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
                 Boolean isActionRequired = true;
                 List<Event> eventsList = util.enrichEvent(smsRequestsList, requestInfo, tenantId, property, isActionRequired);
-                util.sendEventNotification(new EventRequest(requestInfo, eventsList));
+                util.sendEventNotification(new EventRequest(requestInfo, eventsList), tenantId);
             }
 
             if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL) ){
                 List<EmailRequest> emailRequests = util.createEmailRequestFromSMSRequests(requestInfo,smsRequests,tenantId);
-                util.sendEmail(emailRequests);
+                util.sendEmail(emailRequests, tenantId);
             }
             }
     }
@@ -107,6 +126,7 @@ public class AssessmentNotificationService {
 			Property property) {
 		
     	String tenantId = assessmentRequest.getAssessment().getTenantId();
+    	String stateLevelTenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
     	String localizationMessages = util.getLocalizationMessages(tenantId,assessmentRequest.getRequestInfo());
     	
     	String messageTemplate = util.getMessageTemplate(DUES_NOTIFICATION, localizationMessages);
@@ -119,7 +139,7 @@ public class AssessmentNotificationService {
         
         if(messageTemplate.contains(NOTIFICATION_PAYMENT_LINK)){
 
-            String UIHost = config.getUiAppHost();
+            String UIHost = config.getUiAppHostMap().get(stateLevelTenantId);
             String paymentPath = config.getPayLinkSMS();
             paymentPath = paymentPath.replace("$consumercode",property.getPropertyId());
             paymentPath = paymentPath.replace("$tenantId",property.getTenantId());
@@ -216,6 +236,7 @@ public class AssessmentNotificationService {
     private String customize(Assessment assessment, Property property, String msgCode, String localizationMessages){
 
         String messageTemplate = util.getMessageTemplate(msgCode, localizationMessages);
+        String stateLevelTenantId = centralInstanceUtil.getStateLevelTenant(property.getTenantId());
 
         if(messageTemplate.contains(NOTIFICATION_ASSESSMENTNUMBER))
             messageTemplate = messageTemplate.replace(NOTIFICATION_ASSESSMENTNUMBER, assessment.getAssessmentNumber());
@@ -234,7 +255,7 @@ public class AssessmentNotificationService {
 
         if(messageTemplate.contains(NOTIFICATION_PAYMENT_LINK)){
 
-            String UIHost = util.getHost(property.getTenantId());
+            String UIHost = config.getUiAppHostMap().get(stateLevelTenantId);
             String paymentPath = config.getPayLinkSMS();
             paymentPath = paymentPath.replace("$consumercode",property.getPropertyId());
             paymentPath = paymentPath.replace("$tenantId",property.getTenantId());
