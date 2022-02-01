@@ -170,11 +170,7 @@ public class PGRConfiguration {
     @Value("${egov.pgr.events.rate.link}")
     private String rateLink;
 
-<<<<<<< HEAD
     @Value("${egov.pgr.events.reopen.link}")
-=======
-    @Value("${egov.pgr.events.rate.link}")
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
     private String reopenLink;
 
     @Value("${egov.usr.events.rate.code}")
