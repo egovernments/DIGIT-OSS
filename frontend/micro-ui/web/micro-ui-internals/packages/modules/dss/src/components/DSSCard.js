@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 const DSSCard = () => {
   const STADMIN = Digit.UserService.hasAccess("STADMIN");
-  const NATADMIN = Digit.UserService.hasAccess("NATADMIN") || true;
+  const NATADMIN = Digit.UserService.hasAccess("NATADMIN");
   const { t } = useTranslation();
 
   if (!STADMIN && !NATADMIN) {

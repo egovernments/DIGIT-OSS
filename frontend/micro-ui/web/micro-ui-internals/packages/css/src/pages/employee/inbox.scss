@@ -85,7 +85,8 @@
     padding: 10px;
 
     .heading {
-      @apply flex justify-between;
+      justify-content: unset ;
+      @apply flex ;
 
       .clearAll {
         display: none;

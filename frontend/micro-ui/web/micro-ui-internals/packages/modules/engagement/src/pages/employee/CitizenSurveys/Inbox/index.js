@@ -12,6 +12,12 @@ const Inbox = ({ parentRoute }) => {
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
+  const statuses = [
+    { code: "ALL", name: `${t("ES_COMMON_ALL")}` },
+    { code: "ACTIVE", name: `${t("ES_COMMON_ACTIVE")}` },
+    { code: "INACTIVE", name: `${t("ES_COMMON_INACTIVE")}` }
+  ]
+
   const searchFormDefaultValues = {
     tenantIds: tenantId,
     postedBy: "",
@@ -19,7 +25,7 @@ const Inbox = ({ parentRoute }) => {
   }
 
   const filterFormDefaultValues = {
-    status: ""
+    status: statuses[0]
   }
   const tableOrderFormDefaultValues = {
     sortBy: "",
@@ -27,12 +33,6 @@ const Inbox = ({ parentRoute }) => {
     offset: 0,
     sortOrder: "DESC"
   }
-
-  const statuses = [
-    { code: "ALL", name: `${t("ES_COMMON_ALL")}` },
-    { code: "ACTIVE", name: `${t("ES_COMMON_ACTIVE")}` },
-    { code: "INACTIVE", name: `${t("ES_COMMON_INACTIVE")}` }
-  ]
 
   function formReducer(state, payload) {
     switch (payload.action) {
@@ -55,11 +55,12 @@ const Inbox = ({ parentRoute }) => {
     setSearchFormValue("postedBy", "")
     setSearchFormValue("title", "")
     setSearchFormValue("tenantIds", tenantId)
+    dispatch({ action: "mutateSearchForm", data: searchFormDefaultValues })
   }
 
   const onFilterFormReset = (setFilterFormValue) => {
-    setFilterFormValue("status", "")
-
+    setFilterFormValue("status", statuses[0])
+    dispatch({ action: "mutateFilterForm", data: filterFormDefaultValues })
   }
 
   const formInitValue = useMemo(() => {
