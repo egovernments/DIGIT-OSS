@@ -95,17 +95,24 @@ const tableHeader = [
 ]
 const selectOccupancy = (e, data,num) => {
   let blocks = subOccupancyObject;
-  const index = subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`].filter((ele) => ele.code == data.code):[];
-  let subOccupancy1=subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`]:[];
-    let res = null;
-    if (index.length) {
-      subOccupancy1.splice(subOccupancy1.indexOf(index[0]), 1);
-      res = [...subOccupancy1];
-    } else {
-      res = [{ ...data }, ...subOccupancy1];
-    }
-    blocks[`Block_${num}`]=res;
-    setsubOccupancy(res);
+  // const index = subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`].filter((ele) => ele.code == data.code):[];
+  // let subOccupancy1=subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`]:[];
+  //   let res = null;
+  //   if (index.length) {
+  //     subOccupancy1.splice(subOccupancy1.indexOf(index[0]), 1);
+  //     res = [...subOccupancy1];
+  //   } else {
+  //     res = [{ ...data }, ...subOccupancy1];
+  //   }
+  //   blocks[`Block_${num}`]=res;
+  //   setsubOccupancy(res);
+
+  let newSubOccupancy = [];
+  e && e?.map((ob) => {
+    newSubOccupancy.push(ob?.[1]);
+  })
+    blocks[`Block_${num}`]=newSubOccupancy;
+    setsubOccupancy(newSubOccupancy);
     setsubOccupancyObject(blocks);
 };
 
@@ -256,7 +263,7 @@ const clearall = (num) => {
               selected={subOccupancyObject[`Block_${block.number}`]}
               //selected={subOccupancy}
               options={getsuboptions()}
-              onSelect={selectOccupancy}
+              onSelect={e => selectOccupancy(e,data,block.number)}
               isOBPSMultiple={true}
               optionsKey="i18nKey"
               t={t}
