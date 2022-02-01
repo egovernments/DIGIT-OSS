@@ -2,6 +2,7 @@ import { BreadCrumb, PrivateRoute } from "@egovernments/digit-ui-react-component
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation } from "react-router-dom";
+import Response from "./Response";
 
 const NOCBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
@@ -31,14 +32,17 @@ const EmployeeApp = ({ path }) => {
   const ApplicationOverview = Digit?.ComponentRegistryService?.getComponent("NOCApplicationOverview");
   const Inbox = Digit?.ComponentRegistryService?.getComponent("NOCInbox");
 
+  const isResponse = window.location.href.includes("/response");
+
   return (
     <Fragment>
-      <div style={window.location.href.includes("application-overview") ? { marginLeft: "10px" } : {}}>
+      {!isResponse ? <div style={window.location.href.includes("application-overview") ? { marginLeft: "10px" } : {}}>
         <NOCBreadCrumbs location={location} />
-      </div>
+      </div> : null} 
       <Switch>
         <PrivateRoute path={`${path}/inbox/application-overview/:id`} component={ApplicationOverview} />
         <PrivateRoute path={`${path}/inbox`} component={(props) => <Inbox {...props} parentRoute={path} />} />
+        <PrivateRoute path={`${path}/response`} component={Response} />
       </Switch>
     </Fragment>
   );

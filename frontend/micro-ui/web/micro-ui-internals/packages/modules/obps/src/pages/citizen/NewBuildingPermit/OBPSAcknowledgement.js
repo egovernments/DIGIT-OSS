@@ -2,31 +2,54 @@ import { Banner, Card, CardText, LinkButton, Loader, Row, StatusTable, SubmitBar
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import {convertToNocObject,convertToBPAObject} from "../../../utils/index";
+import {convertToNocObject, convertToBPAObject, stringReplaceAll} from "../../../utils/index";
 
 const GetActionMessage = (props) => {
-  const { t } = useTranslation();
+  const bpaData = props?.data?.BPA?.[0];
+  let bpaBusinessService = props?.data?.BPA?.[0]?.businessService ? props?.data?.BPA?.[0]?.businessService : "BPA";
+  let bpaStatus = bpaData?.status;
+  if (bpaBusinessService == "BPA_LOW") bpaBusinessService = "BPA";
+  let getAppAction = sessionStorage.getItem("BPA_SUBMIT_APP") ? JSON.parse(sessionStorage.getItem("BPA_SUBMIT_APP")) : null;
+
   if (props.isSuccess) {
-    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_SUCCESS") : t("CS_BPA_APPLICATION_SUCCESS");
+    if (getAppAction == "BPA_SUBMIT_APP") return !window.location.href.includes("editApplication") ? props?.t(`BPA_SUBMIT_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`) : props?.t(`BPA_SUBMIT_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`);
+    return !window.location.href.includes("editApplication") ? props?.t(`BPA_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`) : props?.t(`BPA_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`);
   } else if (props.isLoading) {
-    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_PENDING") : t("CS_BPA_APPLICATION_PENDING");
+    return !window.location.href.includes("editApplication") ? props?.t("CS_BPA_APPLICATION_PENDING") : props?.t("CS_BPA_APPLICATION_PENDING");
   } else if (!props.isSuccess) {
-    return !window.location.href.includes("editApplication") ? t("CS_BPA_APPLICATION_FAILED") : t("CS_BPA_APPLICATION_FAILED");
+    return !window.location.href.includes("editApplication") ? props?.t("CS_BPA_APPLICATION_FAILED") : props?.t("CS_BPA_APPLICATION_FAILED");
   }
 };
+
+const getCardText = (t, props) => {
+  const bpaData = props?.BPA?.[0];
+  let bpaBusinessService = props?.BPA?.[0]?.businessService ? props?.BPA?.[0]?.businessService : "BPA";
+  let bpaStatus = bpaData?.status;
+  if (bpaBusinessService == "BPA_LOW") bpaBusinessService = "BPA";
+  let getAppAction = sessionStorage.getItem("BPA_SUBMIT_APP") ? JSON.parse(sessionStorage.getItem("BPA_SUBMIT_APP")) : null;
+  if (getAppAction == "BPA_SUBMIT_APP") return t(`BPA_SUBMIT_SUB_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${bpaData?.additionalDetails?.typeOfArchitect ? bpaData?.additionalDetails?.typeOfArchitect : "ARCHITECT"}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`)
+  return t(`BPA_SUB_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${bpaData?.additionalDetails?.typeOfArchitect ? bpaData?.additionalDetails?.typeOfArchitect : "ARCHITECT"}_${stringReplaceAll(bpaStatus," ","_").toUpperCase()}`)
+}
 
 const rowContainerStyle = {
   padding: "4px 0px",
   justifyContent: "space-between",
 };
 
+const getApplicationNoLabel = (props) => {
+  let bpaBusinessService = props?.BPA?.[0]?.businessService ? props?.BPA?.[0]?.businessService : "BPA";
+  if (bpaBusinessService == "BPA_LOW") bpaBusinessService = "BPA";
+  return bpaBusinessService == "BPA" ? props?.t("BPA_PERMIT_APPLICATION_NUMBER_LABEL") : props?.t("BPA_OCCUPANCY_CERTIFICATE_APPLICATION_NUMBER_LABEL")
+}
+
 const BannerPicker = (props) => {
   return (
     <Banner
       message={GetActionMessage(props)}
       applicationNumber={props.data?.BPA[0].applicationNo}
-      info={props.isSuccess ? props.t("BPA_STAKEHOLDER_NO") : ""}
+      info={props.isSuccess ? getApplicationNoLabel(props) : ""}
       successful={props.isSuccess}
+      headerStyles={{fontSize: "32px"}}
     />
   );
 };
@@ -67,52 +90,13 @@ const OBPSAcknowledgement = ({ data, onSuccess }) => {
     }
   }, []);
 
-  const handleDownloadPdf = async () => {
-    // const { Properties = [] } = mutation.data;
-    // const Property = (Properties && Properties[0]) || {};
-    // const tenantInfo = tenants.find((tenant) => tenant.code === Property.tenantId);
-    // const data = await getPTAcknowledgementData({ ...Property }, tenantInfo, t);
-    // Digit.Utils.pdf.generate(data);
-  };
-
   return mutation1.isLoading || mutation1.isIdle ? (
     <Loader />
   ) : (
     <Card>
       <BannerPicker t={t} data={mutation1.data} isSuccess={mutation1.isSuccess} isLoading={mutation1.isIdle || mutation1.isLoading} />
-      {mutation1.isSuccess && <CardText>{t("CS_FILE_OBPS_RESPONSE")}</CardText>}
+      {mutation1.isSuccess && <CardText>{getCardText(t,mutation1.data)}</CardText>}
       {!mutation1.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
-      {/* {mutation.isSuccess && (
-        <LinkButton
-          label={
-            <div className="response-download-button">
-              <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f47738">
-                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-                </svg>
-              </span>
-              <span className="download-button">{t("CS_COMMON_DOWNLOAD")}</span> 
-            </div>
-          }
-          onClick={handleDownloadPdf}
-          className="w-full"
-        />)}*/}
-     {/*  <StatusTable>
-        {mutation1.isSuccess && (
-          <Row
-            rowContainerStyle={rowContainerStyle}
-            last
-            label={t("PT_COMMON_TABLE_COL_PT_ID")}
-            text={mutation?.data?.Properties[0]?.propertyId}
-            textStyle={{ whiteSpace: "pre", width: "60%" }}
-          />
-        )}
-      </StatusTable> */}
-      {/* {mutation1.isSuccess && <SubmitBar label={t("PT_DOWNLOAD_ACK_FORM")} onSubmit={handleDownloadPdf} />} */}
-      {/* {mutation1.isSuccess && <SubmitBar label={t("MAKE PAYMENT")} />} */}
-      {/* <Link to={`/digit-ui/citizen`}>
-        <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
-      </Link> */}
       <Link to={{
         pathname: `/digit-ui/citizen`,
       }}>

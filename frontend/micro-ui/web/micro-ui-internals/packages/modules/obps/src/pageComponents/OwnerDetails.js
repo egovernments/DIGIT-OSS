@@ -291,6 +291,9 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 //for units
                 payload.landInfo.unit = getUnitsForAPI(formData?.subOccupancy);
 
+                let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
+                let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
+                payload.additionalDetails.typeOfArchitect = parsedArchitectName;
                 // create BPA call
                 Digit.OBPSService.create({ BPA: payload }, tenantId)
                     .then((result, err) => {
