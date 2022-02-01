@@ -625,11 +625,7 @@ config:
     build:
       - work-dir: "utilities/demo-utility"
         image-name: "demo-utility"
-<<<<<<< HEAD
-        dockerfile: "build/maven/Dockerfile"
-=======
         dockerfile: "build/maven/Dockerfile"      
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
   # Frontend
 
