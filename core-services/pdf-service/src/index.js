@@ -722,10 +722,7 @@ export const createAndSave = async (
   var requestInfo = get(req.body || req, "RequestInfo");
   var documentType = get(dataconfig, "documentType", "");
   var moduleName = get(dataconfig, "DataConfigs.moduleName", "");
-<<<<<<< HEAD
   var formatconfig =JSON.parse(JSON.stringify(formatconfigNew))
-  console.log(formatconfig.defaultStyle);
-=======
 
   var headers;
   if(req.headers){
@@ -739,7 +736,6 @@ export const createAndSave = async (
   }
 
 
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
   var valid = validateRequest(req, res, key, tenantId, requestInfo);
   if (valid) {
     let [formatConfigByFile, totalobjectcount, entityIds] = await prepareBegin(

@@ -64,15 +64,9 @@ export const createApiResponse = async (request, res, next) => {
   }
 
   // console.log(JSON.stringify(mdms));
-<<<<<<< HEAD
-  body = await addUUIDAndAuditDetails(body, "_create");
-  //console.log("Created Body:  "+JSON.stringify(body));
-  let workflowResponse = await createWorkFlow(body);
-=======
   body = await addUUIDAndAuditDetails(body, "_create", header);
-  console.log("Created Body:  "+JSON.stringify(body));
+  //console.log("Created Body:  "+JSON.stringify(body));
   let workflowResponse = await createWorkFlow(body, header);
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
   // console.log(JSON.stringify(workflowResponse));
 
   //need to implement notification

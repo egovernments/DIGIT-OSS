@@ -28,15 +28,10 @@ export const searchApiResponse = async (request, next = {}) => {
     FireNOCs: []
   };
   const queryObj = JSON.parse(JSON.stringify(request.query));
-<<<<<<< HEAD
-  //console.log("request", request.query);
-  //console.log("Query object:"+JSON.stringify(queryObj));
-=======
   var header = JSON.parse(JSON.stringify(request.headers));
 
-  console.log("request", request.query);
-  console.log("Query object:"+JSON.stringify(queryObj));
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
+  //console.log("request", request.query);
+  //console.log("Query object:"+JSON.stringify(queryObj));
   let errors = validateFireNOCSearchModel(queryObj);
 
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE && queryObj.tenantId == null){
@@ -80,37 +75,23 @@ export const searchApiResponse = async (request, next = {}) => {
     //console.log("mobileNumber", mobileNumber);
     //console.log("tenedrIDD", tenantId);
 
-<<<<<<< HEAD
-    if(queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID)
-      text = `${text} where FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
-    else
-      text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
-=======
     if(queryObj.tenantId.split('.').length <= envVariables.STATE_LEVEL_TENANTID_LENGTH){
       text = `${text} where FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
     }
     else{
       text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
     }
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
   } else {
     if (!isEmpty(queryObj)) {
       text = text + " where ";
     }
     if (queryObj.tenantId) {
-<<<<<<< HEAD
-      if(queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID)
-        text = `${text} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
-      else
-        text = `${text} FN.tenantid = '${queryObj.tenantId}' AND`;
-=======
       if(queryObj.tenantId.split('.').length <= envVariables.STATE_LEVEL_TENANTID_LENGTH){
         text = `${text} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
       }
       else{
         text = `${text} FN.tenantid = '${queryObj.tenantId}' AND`;
       }
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
     }
   }
   // if (queryObj.status) {
@@ -212,13 +193,9 @@ export const searchApiResponse = async (request, next = {}) => {
   } else if (!isEmpty(queryObj)) {
     sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ORDER BY FN.uuid`;
   }
-<<<<<<< HEAD
-  //console.log("SQL QUery:" +sqlQuery);
-=======
 
   sqlQuery = replaceSchemaPlaceholder(sqlQuery, queryObj.tenantId);
-  console.log("SQL QUery:" +sqlQuery);
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
+  //console.log("SQL QUery:" +sqlQuery);
   const dbResponse = await db.query(sqlQuery);
   //console.log("dbResponse"+JSON.stringify(dbResponse));
   if (dbResponse.err) {
