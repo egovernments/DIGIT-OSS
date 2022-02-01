@@ -61,7 +61,6 @@ async function search_property(
   });
 }
 
-<<<<<<< HEAD
 async function search_property_by_id(
   propertyId,
   tenantId,
@@ -88,10 +87,7 @@ async function search_property_by_id(
   });
 }
 
-async function search_workflow(applicationNumber, tenantId, requestinfo) {
-=======
-async function search_workflow(applicationNumber, tenantId, requestinfo, headers) {
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
+async function search_workflow(applicationNumber, tenantId, requestinfo,headers) {
   var params = {
     tenantId: tenantId,
     businessIds: applicationNumber,
@@ -105,17 +101,14 @@ async function search_workflow(applicationNumber, tenantId, requestinfo, headers
   });
 }
 
-<<<<<<< HEAD
 async function search_payment(
   consumerCodes,
   tenantId,
   requestinfo,
   bussinessService,
-  receiptNumbers
+  receiptNumbers,
+  headers
 ) {
-=======
-async function search_payment(consumerCodes, tenantId, requestinfo, bussinessService, headers) {
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
   var params = {
     tenantId: tenantId,
     consumerCodes: consumerCodes,

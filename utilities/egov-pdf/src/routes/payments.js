@@ -43,17 +43,14 @@ router.post(
     }
     try {
       try {
-<<<<<<< HEAD
         resProperty = await search_payment(
           consumerCode,
           tenantId,
           requestinfo,
           bussinessService,
-          receiptNumbers
+          receiptNumbers,
+          headers
         );
-=======
-        resProperty = await search_payment(consumerCode, tenantId, requestinfo, bussinessService, headers);
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
       } catch (ex) {
         if (ex.response && ex.response.data) console.log(ex.response.data);
         return renderError(res, "Failed to query details of the payment", 500);
