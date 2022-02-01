@@ -53,9 +53,11 @@ public class EnrichmentService {
 		Vendor vendor = vendorRequest.getVendor();
 		RequestInfo requestInfo = vendorRequest.getRequestInfo();
 		vendor.setStatus(Vendor.StatusEnum.ACTIVE);
-		AuditDetails auditDetails = vendorUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
-		vendorRequest.getVendor().setAuditDetails(auditDetails);
-
+		AuditDetails auditDetails = null;
+		if (requestInfo.getUserInfo() != null && requestInfo.getUserInfo().getUuid() != null) {
+			auditDetails = vendorUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+			vendorRequest.getVendor().setAuditDetails(auditDetails);
+		}
 		vendor.setId(UUID.randomUUID().toString());
 
 		if (vendorRequest.getVendor().getAddress() != null) {
@@ -72,11 +74,12 @@ public class EnrichmentService {
 		
 		
 		if(vendorRequest.getVendor().getVehicles() != null && vendorRequest.getVendor().getVehicles().size() >0) {
+			AuditDetails finalAuditDetails = auditDetails;
 			vendorRequest.getVendor().getVehicles().forEach(vehicle->{
 				if(StringUtils.isEmpty(vehicle.getId())) {
 					vehicle.setId(UUID.randomUUID().toString());
 					vehicle.setTenantId(vendorRequest.getVendor().getTenantId());
-					vehicle.setAuditDetails(auditDetails);
+					vehicle.setAuditDetails(finalAuditDetails);
 				}
 			});
 		}
