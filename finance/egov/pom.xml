@@ -156,7 +156,7 @@
         <db.password/>
         <disable.drop.db>true</disable.drop.db>
         <!-- Application server provided dependency versions -->
-        <hibernate-version>5.1.10.Final</hibernate-version>
+        <hibernate-version>5.3.0.Final</hibernate-version>
         <hibernate-search-version>5.5.8.Final</hibernate-search-version>
         <hibernate-validator-version>5.3.5.Final</hibernate-validator-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
@@ -166,7 +166,7 @@
         <javax-jms-version>1.0.1.Final</javax-jms-version>
         <javax-mail-version>1.5.6</javax-mail-version>
         <javax-el-version>3.0.1-b08</javax-el-version>
-        <xerces-version>2.11.0.SP5</xerces-version>
+        <xerces-version>2.12.2</xerces-version>
         <postgres-version>42.1.4</postgres-version>
 
         <!-- Other application dependency versions -->
