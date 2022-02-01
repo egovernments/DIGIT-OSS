@@ -103,8 +103,9 @@ public class CustomIndexRequestDecoratorImpl implements CustomIndexRequestDecora
                         Object value = flattenedValuesToBeInserted.get(groupByCategory).get(bucketName).get(flattenedFieldName);
                         jsonProcessorUtil.addAppropriateBoxedTypeValueToBaseDocument(currentStructure, flattenedFieldName, value);
                     });
-                    log.info(currentStructure.toString());
-                    ObjectNode newNode = objectMapper.createObjectNode();
+
+                    //log.info(currentStructure.toString());
+
                     try {
                         finalDocumentsToBeIndexed.add(objectMapper.readTree(currentStructure.toString()));
                     } catch (JsonProcessingException e) {

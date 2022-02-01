@@ -111,6 +111,14 @@ public class IngestValidator {
                         throw new CustomException("EG_DS_VALIDATE_ERR", "Key: " + key + " is configured as type array but received value of type: " + type.toString());
                     }else{
                         for(JsonNode childNode : metricsData.get(key)){
+                            // Validate groupBy field names for consistency
+                            String inputGroupByField = childNode.get("groupBy").asText();
+                            if(!applicationProperties.getModuleAllowedGroupByFieldsMapping().containsKey(ingestData.getModule()))
+                                throw new CustomException("EG_DS_VALIDATE_ERR", "Allowed groupBy fields mapping are mandatory for array type fields. It has not been configured for module: " + ingestData.getModule());
+                            else
+                                if(!applicationProperties.getModuleAllowedGroupByFieldsMapping().get(ingestData.getModule()).contains(inputGroupByField))
+                                    throw new CustomException("EG_DS_VALIDATE_ERR", "Group by field provided in input: " + inputGroupByField + " is not configured for module: " + ingestData.getModule() + ". Please note that the field name provided against groupBy metric in ingest payload should exactly match the field name provided in allowed fields configuration.");
+                            // Validate data type of values passed in ingest API
                             for(JsonNode bucketNode : childNode.get("buckets")) {
                                 if (!(bucketNode.get("value").getNodeType().toString().equalsIgnoreCase(valueType)))
                                     throw new CustomException("EG_DS_VALIDATE_ERR", "Children values of the array: " + key + " should only contain values of type: " + valueType);

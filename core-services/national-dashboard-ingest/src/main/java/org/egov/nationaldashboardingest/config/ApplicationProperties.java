@@ -30,6 +30,9 @@ public class ApplicationProperties {
     @Value("#{${module.fields.mapping}}")
     private Map<String, Map<String, String>> moduleFieldsMapping;
 
+    @Value("#{${module.allowed.groupby.fields.mapping}}")
+    private Map<String, List<String>> moduleAllowedGroupByFieldsMapping;
+
     @Value("#{${master.module.fields.mapping}}")
     private Map<String, Map<String, String>> masterModuleFieldsMapping;
 
