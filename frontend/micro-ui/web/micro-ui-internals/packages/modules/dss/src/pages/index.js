@@ -235,15 +235,15 @@ const DashBoard = ({ stateCode }) => {
           </div>
         </div>
         <div>
-        <div className="dss-switch-tabs chart-row" >
+       {tabArray&&tabArray?.length>1&& <div className="dss-switch-tabs chart-row" >
             <div className="dss-switch-tab-wrapper">
               {tabArray?.map(key=>( 
-                <div className={tabState==key?"dss-switch-tab-selected":"dss-switch-tab-unselected"}onClick={()=>setTabState(key)}>{t(key)}</div>
+                <div className={tabState===key?"dss-switch-tab-selected":"dss-switch-tab-unselected"}onClick={()=>setTabState(key)}>{t(key)}</div>
               ))}
             </div>
-          </div>
+          </div>}
         </div>
-        {dashboardConfig?.[0]?.visualizations.filter(row=>row.name==tabState).map((row, key) => {
+        {dashboardConfig?.[0]?.visualizations.filter(row=>row.name===tabState).map((row, key) => {
           return <Layout rowData={row} key={key} />;
         })}
       </div>

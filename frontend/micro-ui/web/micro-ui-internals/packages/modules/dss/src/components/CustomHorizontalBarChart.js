@@ -32,14 +32,13 @@ const CustomHorizontalBarChart = ({
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
   });
-
   const constructChartData = (data) => {
     let result = {};
     for (let i = 0; i < data?.length; i++) {
       const row = data[i];
       for (let j = 0; j < row.plots.length; j++) {
         const plot = row.plots[j];
-        result[plot.name] = { ...result[plot.name], [t(row.headerName)]: plot.value,name:t(plot.name) };
+        result[plot.name] = { ...result[plot.name], [t(row.headerName)]: plot.value, name: t(plot.name) };
       }
     }
     return Object.keys(result).map((key) => {
@@ -75,7 +74,12 @@ const CustomHorizontalBarChart = ({
   if (isLoading) {
     return <Loader />;
   }
-
+  const formatXAxis = (tickFormat) => {
+    if (tickFormat && typeof tickFormat == "string") {
+      return `${tickFormat.slice(0, 16)}${tickFormat.length > 17 && ".."}`;
+    }
+    return `${tickFormat}`;
+  };
   // if (chartData?.length === 0) {
   //   return null;
   // }
@@ -83,30 +87,53 @@ const CustomHorizontalBarChart = ({
   const bars = response?.responseData?.data?.map((bar) => bar?.headerName);
   return (
     <Fragment>
-      <ResponsiveContainer width="89%" height={300} >
+      <ResponsiveContainer
+        width="89%"
+        height={300}
+        margin={{
+          top: 5,
+          right: 10,
+          left: 10,
+          bottom: 5,
+        }}
+      >
         {chartData?.length === 0 ? (
           <div className="no-data">
             <p>{t("DSS_NO_DATA")}</p>
           </div>
         ) : (
-          <BarChart width="100%" height="100%" layout={layout} data={chartData} barGap={12} barSize={12}>
+          <BarChart
+            width="100%"
+            height="100%"
+            margin={{
+              top: 5,
+              right: 10,
+              left: 10,
+              bottom: 5,
+            }}
+            layout={layout}
+            data={chartData}
+            barGap={12}
+            barSize={12}
+          >
             <CartesianGrid />
             <YAxis
               dataKey={yDataKey}
               type={yAxisType}
-              tick={{ fontSize: "14px", fill: "#505A5F" }}
+              tick={{ fontSize: "12px", fill: "#505A5F" }}
               label={{
                 value: yAxisLabel,
                 angle: -90,
                 position: "insideLeft",
                 dy: 50,
-                fontSize: "14px",
+                fontSize: "12px",
                 fill: "#505A5F",
               }}
+              tickCount={10}
+              tickFormatter={(value) => formatXAxis(value)}
               unit={id === "fsmCapacityUtilization" ? "%" : ""}
-              // tick={{ fontSize: "14px", fill: "#505A5F" }}
             />
-            <XAxis dataKey={xDataKey} type={xAxisType} tick={{ fontSize: "14px", fill: "#505A5F" }} tickFormatter={tickFormatter} />
+            <XAxis dataKey={xDataKey} type={xAxisType} tick={{ fontSize: "14px", fill: "#505A5F" }} tickCount={10} tickFormatter={tickFormatter} />
             {bars?.map((bar, id) => (
               <Bar key={id} dataKey={t(bar)} fill={barColors[id]} stackId={id > 1 ? 1 : id} />
             ))}

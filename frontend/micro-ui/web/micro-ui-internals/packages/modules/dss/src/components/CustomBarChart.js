@@ -45,13 +45,13 @@ const CustomBarChart = ({
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
   });
-
   const chartData = useMemo(() => {
     if (!response) return null;
     return response?.responseData?.data?.map((bar) => {
+      let plotValue=bar?.plots?.[0].value||0;
       return {
         name: t(bar?.plots?.[0].name),
-        value: bar?.plots?.[0].value,
+        value: Number(plotValue).toPrecision(plotValue>101?5:4),
       };
     });
   }, [response]);

@@ -117,7 +117,7 @@ useEffect(()=>{
             return String(row.values[key][id]).toLowerCase().startsWith(filterValue?.toLowerCase());
           })
         }
-        return String(row.values[key]).toLowerCase().split(' ').some(str => str.startsWith(filterValue?.toLowerCase()));
+        return String(row.values[key]).toLowerCase().split(' ').some(str => str.startsWith(filterValue?.toLowerCase())) ||  String(t(row.values[key])).toLowerCase().split(' ').some(str => str.startsWith(filterValue?.toLowerCase())) ;
       })
       return res;
     })
