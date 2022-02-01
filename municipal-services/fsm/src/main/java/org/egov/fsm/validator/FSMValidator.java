@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -35,8 +34,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.cedarsoftware.util.GraphComparator;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
@@ -73,6 +70,8 @@ public class FSMValidator {
 			if(fsm.getCitizen() == null || StringUtils.isEmpty(fsm.getCitizen().getName()) || StringUtils.isEmpty(fsm.getCitizen().getMobileNumber() )) {
 				User citzen = new User();
 				BeanUtils.copyProperties(fsmRequest.getRequestInfo().getUserInfo(), citzen);
+				if(fsmRequest.getFsm().getCitizen() != null) 
+					citzen.setGender(fsmRequest.getFsm().getCitizen().getGender());
 				fsm.setCitizen( citzen);
 			}
 			
