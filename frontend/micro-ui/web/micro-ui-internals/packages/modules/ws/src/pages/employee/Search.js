@@ -1,3 +1,4 @@
+
 import React, { useState } from "react"
 import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
@@ -5,13 +6,14 @@ import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next";
 
 const Search = ({path}) => {
+    console.log("pathSearch",path);
     debugger;
     const { variant } = useParams();
     const { t } = useTranslation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const [payload, setPayload] = useState({})
- 
-    const Search = Digit.ComponentRegistryService.getComponent( variant === "license" ? "SearchLicense" : "SearchApplication" )
+
+    const Search = Digit.ComponentRegistryService.getComponent( "WSSearchApplication")
 
     function onSubmit (_data) {
         var fromDate = new Date(_data?.fromDate)
@@ -32,7 +34,9 @@ const Search = ({path}) => {
     }
 
     const {data: {Licenses: searchReult, Count: count} = {}, isLoading , isSuccess } = Digit.Hooks.tl.useSearch({tenantId, filters: payload, config})
-    return <Search t={t} tenantId={tenantId} onSubmit={onSubmit} data={ !isLoading && isSuccess ? searchReult : { display: "ES_COMMON_NO_DATA" } } count={count} /> 
+    return (
+    
+    <Search t={t} tenantId={tenantId} onSubmit={onSubmit} data={ !isLoading && isSuccess ? searchReult : { display: "ES_COMMON_NO_DATA" } } count={count} /> )
 
 }
 
