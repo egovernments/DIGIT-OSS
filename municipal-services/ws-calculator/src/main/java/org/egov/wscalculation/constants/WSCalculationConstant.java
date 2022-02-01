@@ -257,7 +257,6 @@ public class WSCalculationConstant {
 	
 	public static final String WS_TIME_ADHOC_REBATE = "WS_TIME_ADHOC_REBATE";
 
-<<<<<<< HEAD
 	//Notification
 	public static final String CHANNEL_NAME_SMS = "SMS";
 
@@ -276,9 +275,7 @@ public class WSCalculationConstant {
 	public static final String ACTION_FOR_DEMAND = "DEMAND";
 
 	public static final String ACTION_FOR_BILL = "BILL";
-=======
-	public static final String TENANTID_MDC_STRING = "TENANTID";
 
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
+	public static final String TENANTID_MDC_STRING = "TENANTID";
 
 }

@@ -1,22 +1,42 @@
 package org.egov.waterconnection.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.waterconnection.constants.WCConstants.CHANNEL_NAME_EVENT;
+import static org.egov.waterconnection.constants.WCConstants.CHANNEL_NAME_SMS;
+import static org.egov.waterconnection.constants.WCConstants.DEFAULT_OBJECT_EDIT_APP_MSG;
+import static org.egov.waterconnection.constants.WCConstants.DEFAULT_OBJECT_EDIT_SMS_MSG;
+import static org.egov.waterconnection.constants.WCConstants.DEFAULT_OBJECT_MODIFY_APP_MSG;
+import static org.egov.waterconnection.constants.WCConstants.DEFAULT_OBJECT_MODIFY_SMS_MSG;
+import static org.egov.waterconnection.constants.WCConstants.WATER_SERVICE_BUSINESS_ID;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.util.NotificationUtil;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.validator.ValidateProperty;
-import org.egov.waterconnection.web.models.*;
+import org.egov.waterconnection.web.models.Action;
+import org.egov.waterconnection.web.models.Category;
+import org.egov.waterconnection.web.models.Event;
+import org.egov.waterconnection.web.models.EventRequest;
+import org.egov.waterconnection.web.models.Property;
+import org.egov.waterconnection.web.models.Recepient;
+import org.egov.waterconnection.web.models.SMSRequest;
+import org.egov.waterconnection.web.models.Source;
+import org.egov.waterconnection.web.models.WaterConnectionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.egov.waterconnection.constants.WCConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -42,28 +62,20 @@ public class EditNotificationService {
 	
 
 	public void sendEditNotification(WaterConnectionRequest request) {
+		
 		try {
-			String applicationStatus = request.getWaterConnection().getApplicationStatus();
+			
 			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getWaterConnection().getTenantId(), WATER_SERVICE_BUSINESS_ID, request.getWaterConnection().getProcessInstance().getAction());
-
 			Property property = validateProperty.getOrValidateProperty(request);
-<<<<<<< HEAD
-
 			if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
 				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 					EventRequest eventRequest = getEventRequest(request, property);
 					if (eventRequest != null) {
-						notificationUtil.sendEventNotification(eventRequest);
+						notificationUtil.sendEventNotification(eventRequest, property.getTenantId());
 					}
-=======
-			
-			if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
-				EventRequest eventRequest = getEventRequest(request, property);
-				if (eventRequest != null) {
-					notificationUtil.sendEventNotification(eventRequest, property.getTenantId());
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 				}
 			}
+			
 			if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
 				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 				List<SMSRequest> smsRequests = getSmsRequest(request, property);

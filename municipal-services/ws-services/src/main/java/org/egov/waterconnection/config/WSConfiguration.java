@@ -1,5 +1,7 @@
 package org.egov.waterconnection.config;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -8,8 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Map;
 
 @Getter
 @Setter
@@ -206,7 +206,6 @@ public class WSConfiguration {
 	@Value("${egov.collection.host}")
 	private String collectionHost;
 
-<<<<<<< HEAD
 	@Value("${state.level.tenant.id}")
 	private String stateLevelTenantId;
 
@@ -216,7 +215,6 @@ public class WSConfiguration {
 
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsUrl;
-=======
 	// central-instance configs
 
 	@Value("#{${egov.ui.app.host.map}}")
@@ -224,5 +222,4 @@ public class WSConfiguration {
 
 	@Value("${egov.url.shortner.host}")
 	private String urlShortnerHost;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 }

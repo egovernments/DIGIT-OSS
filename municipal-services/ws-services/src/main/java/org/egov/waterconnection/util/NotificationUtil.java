@@ -6,14 +6,11 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
-<<<<<<< HEAD
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
-=======
 import org.egov.tracer.model.CustomException;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.producer.WaterConnectionProducer;
@@ -28,14 +25,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
-<<<<<<< HEAD
 import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
 import static org.egov.waterconnection.constants.WCConstants.*;
-=======
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
 @Component
 @Slf4j
@@ -131,13 +125,8 @@ public class NotificationUtil {
 				return;
 			}
 			for (SMSRequest smsRequest : smsRequestList) {
-<<<<<<< HEAD
-				producer.push(config.getSmsNotifTopic(), smsRequest);
-				log.info("SMS Sent! Messages: " + smsRequest.getMessage());
-=======
 				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
 				log.info("Messages: " + smsRequest.getMessage());
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 			}
 		}
 	}
@@ -255,13 +244,13 @@ public class NotificationUtil {
 	 * @param emailRequestList
 	 *            The list of EmailRequest to be sent
 	 */
-	public void sendEmail(List<EmailRequest> emailRequestList) {
+	public void sendEmail(List<EmailRequest> emailRequestList, String tenantId) {
 
 		if (config.getIsEmailNotificationEnabled()) {
 			if (CollectionUtils.isEmpty(emailRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (EmailRequest emailRequest : emailRequestList) {
-				producer.push(config.getEmailNotifTopic(), emailRequest);
+				producer.push(tenantId, config.getEmailNotifTopic(), emailRequest);
 				log.info("Email Request -> "+emailRequest.toString());
 				log.info("EMAIL notification sent!");
 			}

@@ -1,5 +1,12 @@
 package org.egov.wscalculation.service;
 
+import static org.egov.wscalculation.constants.WSCalculationConstant.ONE_TIME_FEE_SERVICE_FIELD;
+import static org.egov.wscalculation.constants.WSCalculationConstant.SERVICE_FIELD_VALUE_WS;
+import static org.egov.wscalculation.constants.WSCalculationConstant.WS_ADHOC_PENALTY;
+import static org.egov.wscalculation.constants.WSCalculationConstant.WS_ADHOC_REBATE;
+import static org.egov.wscalculation.constants.WSCalculationConstant.WS_TIME_ADHOC_PENALTY;
+import static org.egov.wscalculation.constants.WSCalculationConstant.WS_TIME_ADHOC_REBATE;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,28 +21,26 @@ import org.egov.common.contract.request.User;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.tracer.model.CustomException;
 import org.egov.wscalculation.constants.WSCalculationConstant;
-import org.egov.wscalculation.web.models.AdhocTaxReq;
-import org.egov.wscalculation.web.models.Calculation;
-import org.egov.wscalculation.web.models.CalculationCriteria;
-import org.egov.wscalculation.web.models.CalculationReq;
-import org.egov.wscalculation.web.models.TaxHeadCategory;
-import org.egov.wscalculation.web.models.Property;
-import org.egov.wscalculation.web.models.TaxHeadEstimate;
-import org.egov.wscalculation.web.models.TaxHeadMaster;
-import org.egov.wscalculation.web.models.WaterConnection;
-import org.egov.wscalculation.web.models.WaterConnectionRequest;
 import org.egov.wscalculation.repository.ServiceRequestRepository;
 import org.egov.wscalculation.repository.WSCalculationDao;
 import org.egov.wscalculation.util.CalculatorUtil;
 import org.egov.wscalculation.util.WSCalculationUtil;
+import org.egov.wscalculation.web.models.AdhocTaxReq;
+import org.egov.wscalculation.web.models.Calculation;
+import org.egov.wscalculation.web.models.CalculationCriteria;
+import org.egov.wscalculation.web.models.CalculationReq;
+import org.egov.wscalculation.web.models.Property;
+import org.egov.wscalculation.web.models.TaxHeadCategory;
+import org.egov.wscalculation.web.models.TaxHeadEstimate;
+import org.egov.wscalculation.web.models.TaxHeadMaster;
+import org.egov.wscalculation.web.models.WaterConnection;
+import org.egov.wscalculation.web.models.WaterConnectionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
-
-import static org.egov.wscalculation.constants.WSCalculationConstant.*;
 
 @Service
 @Slf4j
@@ -242,6 +247,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 
 	@SuppressWarnings("unchecked")
 	public void getBillingPeriod(ArrayList<?> mdmsResponse, RequestInfo requestInfo, String tenantId) {
+		
 		log.info("Billing Frequency Map" + mdmsResponse.toString());
 		Map<String, Object> master = (Map<String, Object>) mdmsResponse.get(0);
 		LocalDateTime demandStartingDate = LocalDateTime.now();
@@ -275,6 +281,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 	 * Generate Demand Based on Time (Monthly, Quarterly, Yearly)
 	 */
 	public void generateDemandBasedOnTimePeriod(RequestInfo requestInfo) {
+		
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime date = LocalDateTime.now();
 		log.info("Time schedule start for water demand generation on : " + date.format(dateTimeFormatter));
@@ -315,33 +322,23 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 	 * @return List of Calculation
 	 */
 	public List<Calculation> applyAdhocTax(AdhocTaxReq adhocTaxReq) {
+		
 		List<TaxHeadEstimate> estimates = new ArrayList<>();
 		String businessService = adhocTaxReq.getBusinessService();
 		if(!businessService.equalsIgnoreCase(SERVICE_FIELD_VALUE_WS) && !businessService.equalsIgnoreCase(ONE_TIME_FEE_SERVICE_FIELD))
 			throw new CustomException("INVALID_BUSINESSSERVICE", "Provide businessService is invalid");
 
 		if (!(adhocTaxReq.getAdhocpenalty().compareTo(BigDecimal.ZERO) == 0)){
-<<<<<<< HEAD
 			String penaltyTaxhead = businessService.equals(SERVICE_FIELD_VALUE_WS) ? WS_TIME_ADHOC_PENALTY : WS_ADHOC_PENALTY;
-=======
-			String penaltyTaxhead = businessService == SERVICE_FIELD_VALUE_WS ? WS_TIME_ADHOC_PENALTY : WS_ADHOC_PENALTY;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 			estimates.add(TaxHeadEstimate.builder().taxHeadCode(penaltyTaxhead)
 					.estimateAmount(adhocTaxReq.getAdhocpenalty().setScale(2, 2)).build());
 		}
 		if (!(adhocTaxReq.getAdhocrebate().compareTo(BigDecimal.ZERO) == 0)){
-<<<<<<< HEAD
 			String rebateTaxhead = businessService.equals(SERVICE_FIELD_VALUE_WS) ? WS_TIME_ADHOC_REBATE : WS_ADHOC_REBATE;
 			estimates.add(TaxHeadEstimate.builder().taxHeadCode(rebateTaxhead)
 					.estimateAmount(adhocTaxReq.getAdhocrebate().setScale(2, 2).negate()).build());
 		}
-		
-=======
-			String rebateTaxhead = businessService == SERVICE_FIELD_VALUE_WS ? WS_TIME_ADHOC_REBATE : WS_ADHOC_REBATE;
-			estimates.add(TaxHeadEstimate.builder().taxHeadCode(rebateTaxhead)
-					.estimateAmount(adhocTaxReq.getAdhocrebate().setScale(2, 2).negate()).build());
-		}
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
+
 		Calculation calculation = Calculation.builder()
 				.tenantId(adhocTaxReq.getRequestInfo().getUserInfo().getTenantId())
 				.connectionNo(adhocTaxReq.getConsumerCode()).taxHeadEstimates(estimates).build();
