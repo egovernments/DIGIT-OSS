@@ -36,11 +36,9 @@ const Home = ({
   const appRoutes = modules.map(({ code, tenants }, index) => {
     const Module = Digit.ComponentRegistryService.getComponent(`${code}Module`);
     return (
-      <ErrorBoundary>
       <Route key={index} path={`${path}/${code.toLowerCase()}`}>
         <Module stateCode={stateCode} moduleCode={code} userType="citizen" tenants={getTenants(tenants, appTenants)} />
       </Route>
-      </ErrorBoundary>
     );
   });
 
@@ -49,7 +47,7 @@ const Home = ({
     return (
       <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
         <div className="moduleLinkHomePage">
-          <img src={bannerImage || stateInfo?.bannerUrl} />
+          <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound"/>
           <BackButton className="moduleLinkHomePageBackButton" />
           <h1>{t("MODULE_" + code.toUpperCase())}</h1>
         </div>
@@ -98,10 +96,10 @@ const Home = ({
           <Route path={`${path}/register`}>
             <Login stateCode={stateCode} isUserRegistered={false} />
           </Route>
-
-          {appRoutes}
-
-          {ModuleLevelLinkHomePages}
+          <ErrorBoundary>
+            {appRoutes}
+            {ModuleLevelLinkHomePages}
+          </ErrorBoundary>
         </Switch>
       </div>
       <div className="citizen-home-footer" style={window.location.href.includes("citizen/obps") ? { zIndex: "-1" } : {}}>
