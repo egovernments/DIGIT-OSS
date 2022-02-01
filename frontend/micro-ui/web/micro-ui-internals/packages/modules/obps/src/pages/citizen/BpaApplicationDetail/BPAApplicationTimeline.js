@@ -12,6 +12,9 @@ const BPAApplicationTimeline = (props) => {
     moduleCode: businessService,
   });
 
+  function OpenImage(imageSource, index,thumbnailsToShow){
+    window.open(thumbnailsToShow?.fullImage?.[0],"_blank");
+  }
   const getTimelineCaptions = (checkpoint) => {
     // if (checkpoint.state === "INITIATE") {
     //   const caption = {
@@ -26,8 +29,10 @@ const BPAApplicationTimeline = (props) => {
         name: checkpoint?.assignes?.[0]?.name,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
+        wfComment : checkpoint.wfComment,
+        thumbnailsToShow : checkpoint?.thumbnailsToShow,
       };
-      return <BPACaption data={caption} />;
+      return <BPACaption data={caption} OpenImage={OpenImage} />;
     //}
   };
 

@@ -14,7 +14,7 @@ export const configAcceptApplication = ({ t, action, selectFile, uploadedFile, e
           {
             label: t("ES_OBPS_ACTION_COMMENTS"),
             isMandatory: isCommentRequired,
-            type: "text",
+            type: "textarea",
             populators: {
               name: "comments",
               validation: {

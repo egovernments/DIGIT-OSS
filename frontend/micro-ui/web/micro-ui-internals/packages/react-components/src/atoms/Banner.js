@@ -10,7 +10,7 @@ const Successful = (props) => {
 
   return (
     <div className={user_type === "citizen" ? "success-wrap" : "emp-success-wrap"} style={props?.props?.style ? props?.props?.style : {}}>
-      <header>{props.props.message}</header>
+      <header style={props?.props?.headerStyles ? props?.props?.headerStyles : {}}>{props.props.message}</header>
       <div>
         {/* <img src={success} alt="successfull submition"/> */}
         {props?.props?.svg || <SuccessSvg />}
@@ -27,7 +27,7 @@ const Error = (props) => {
 
   return (
     <div className={user_type === "citizen" ? "error-wrap" : "emp-error-wrap"} style={props?.props?.style ? props?.props?.style : {}}>
-      <header>{props.props.message}</header>
+      <header style={props?.props?.headerStyles ? props?.props?.headerStyles : {}}>{props.props.message}</header>
       <ErrorSvg />
       {/* <img src={error} alt="error while submition"/> */}
       <h2 style={props?.props?.infoStyles ? props?.props?.infoStyles : {}}>{props?.props?.complaintNumber ? t("CS_PGR_COMPLAINT_NUMBER") : props.props.info}</h2>

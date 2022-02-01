@@ -10,6 +10,9 @@
 .heading-m {
   @apply font-bold text-text-primary text-heading-m ml-md pt-sm;
 }
+.BPAheading-m{
+  margin-left:22px;
+}
 
 .break-line {
   @apply border-border my-lg;
@@ -45,6 +48,9 @@
   }
   .heading-m {
     @apply text-heading-m-dt;
+  }
+  .BPAheading-m{
+    margin-left:22px;
   }
   .break-line {
     margin-top: 40px;

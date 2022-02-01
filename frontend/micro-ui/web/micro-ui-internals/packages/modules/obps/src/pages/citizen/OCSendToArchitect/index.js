@@ -93,6 +93,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t,OCData) =
 }
 
 const OCSendToArchitect = ({ parentRoute }) => {
+  sessionStorage.setItem("BPA_SUBMIT_APP", JSON.stringify("BPA_SUBMIT_APP"));
   const queryClient = useQueryClient();
   const match = useRouteMatch();
   const { t } = useTranslation();
