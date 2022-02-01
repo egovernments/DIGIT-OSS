@@ -266,20 +266,14 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 			throw new CustomException("INVALID_BUSINESSSERVICE", "Provide businessService is invalid");
 
 		if (!(adhocTaxReq.getAdhocpenalty().compareTo(BigDecimal.ZERO) == 0)){
-<<<<<<< HEAD
+
 			String penaltyTaxhead = businessService.equals(SERVICE_FIELD_VALUE_SW) ? SW_TIME_ADHOC_PENALTY : SW_ADHOC_PENALTY;
-=======
-			String penaltyTaxhead = businessService == SERVICE_FIELD_VALUE_SW ? SW_TIME_ADHOC_PENALTY : SW_ADHOC_PENALTY;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 			estimates.add(TaxHeadEstimate.builder().taxHeadCode(penaltyTaxhead)
 					.estimateAmount(adhocTaxReq.getAdhocpenalty().setScale(2, 2)).build());
 		}
 		if (!(adhocTaxReq.getAdhocrebate().compareTo(BigDecimal.ZERO) == 0)){
-<<<<<<< HEAD
 			String rebateTaxhead = businessService.equals(SERVICE_FIELD_VALUE_SW) ? SW_TIME_ADHOC_REBATE : SW_ADHOC_REBATE;
-=======
-			String rebateTaxhead = businessService == SERVICE_FIELD_VALUE_SW ? SW_TIME_ADHOC_REBATE : SW_ADHOC_REBATE;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
+
 			estimates.add(TaxHeadEstimate.builder().taxHeadCode(rebateTaxhead)
 					.estimateAmount(adhocTaxReq.getAdhocrebate().setScale(2, 2).negate()).build());
 		}

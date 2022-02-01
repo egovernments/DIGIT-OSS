@@ -97,7 +97,6 @@ public class SWConfiguration {
 	
 	@Value("${egov.user.event.notification.enabled}")
 	private Boolean isUserEventsNotificationEnabled;
-<<<<<<< HEAD
 
 	// Email
 	@Value("${kafka.topics.notification.email}")
@@ -106,15 +105,9 @@ public class SWConfiguration {
 	@Value("${notification.email.enabled}")
 	private Boolean isEmailNotificationEnabled;
 
-    	//User Configuration
-    	@Value("${egov.user.host}")
-    	private String userHost;
-=======
-	
 	//User Configuration
 	@Value("${egov.user.host}")
 	private String userHost;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
 	@Value("${egov.user.context.path}")
 	private String userContextPath;
@@ -200,7 +193,6 @@ public class SWConfiguration {
 	@Value("${egov.usr.events.pay.link}")
 	private String userEventApplicationPayLink;
 
-<<<<<<< HEAD
 	@Value("${state.level.tenant.id}")
 	private String stateLevelTenantId;
 
@@ -210,7 +202,6 @@ public class SWConfiguration {
 
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsUrl;
-=======
 	// central-instance configs
 
 	@Value("#{${egov.ui.app.host.map}}")
@@ -218,5 +209,4 @@ public class SWConfiguration {
 
 	@Value("${egov.url.shortner.host}")
 	private String urlShortnerHost;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 }

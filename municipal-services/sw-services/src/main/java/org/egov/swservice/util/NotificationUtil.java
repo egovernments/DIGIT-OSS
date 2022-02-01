@@ -24,15 +24,12 @@ import org.springframework.util.CollectionUtils;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
-<<<<<<< HEAD
 import org.springframework.web.client.RestTemplate;
 
 import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
 import static org.egov.swservice.util.SWConstants.*;
-=======
 import org.springframework.util.ObjectUtils;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 
 @Component
 @Slf4j
@@ -199,20 +196,19 @@ public class NotificationUtil {
 		return getMessageTemplate(code, localizationMessage);
 	}
 
-<<<<<<< HEAD
 	/**
 	 * Send the EmailRequest on the EmailNotification kafka topic
 	 *
 	 * @param emailRequestList
 	 *            The list of EmailRequest to be sent
 	 */
-	public void sendEmail(List<EmailRequest> emailRequestList) {
+	public void sendEmail(List<EmailRequest> emailRequestList, String tenantId) {
 
 		if (config.getIsEmailNotificationEnabled()) {
 			if (CollectionUtils.isEmpty(emailRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (EmailRequest emailRequest : emailRequestList) {
-				producer.push(config.getEmailNotifTopic(), emailRequest);
+				producer.push(tenantId, config.getEmailNotifTopic(), emailRequest);
 				log.info("Email Request -> "+emailRequest.toString());
 				log.info("EMAIL notification sent!");
 			}
@@ -269,7 +265,7 @@ public class NotificationUtil {
 		return masterData;
 	}
 
-	private MdmsCriteriaReq getMdmsRequestForChannelList(RequestInfo requestInfo, String tenantId){
+	private MdmsCriteriaReq getMdmsRequestForChannelList(RequestInfo requestInfo, String tenantId) {
 		MasterDetail masterDetail = new MasterDetail();
 		masterDetail.setName(CHANNEL_LIST);
 		List<MasterDetail> masterDetailList = new ArrayList<>();
@@ -290,7 +286,8 @@ public class NotificationUtil {
 		mdmsCriteriaReq.setRequestInfo(requestInfo);
 
 		return mdmsCriteriaReq;
-=======
+	}
+
 	public String getHost(String tenantId){
 		log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
 		Integer tenantLength = tenantId.split("\\.").length;
@@ -305,7 +302,6 @@ public class NotificationUtil {
 			throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + topLevelTenant);
 		}
 		return host;
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 	}
 
 

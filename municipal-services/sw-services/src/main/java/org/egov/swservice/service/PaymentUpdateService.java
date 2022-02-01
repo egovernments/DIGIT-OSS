@@ -378,11 +378,8 @@ public class PaymentUpdateService {
 				message = message.replace("{Billing Period}", billingPeriod);
 			}
 			if (message.contains("{receipt download link}")){
-<<<<<<< HEAD
-				String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
-=======
+
 				String link = notificationUtil.getHost(paymentDetail.getTenantId()) + config.getReceiptDownloadLink();
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 				link = link.replace("$consumerCode", paymentDetail.getBill().getConsumerCode());
 				link = link.replace("$tenantId", paymentDetail.getTenantId());
 				link = link.replace("$businessService",paymentDetail.getBusinessService());

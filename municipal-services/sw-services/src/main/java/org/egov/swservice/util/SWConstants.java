@@ -223,7 +223,6 @@ public class SWConstants {
 
 	public static final String PENDING_APPROVAL_FOR_CONNECTION_CODE ="PENDING_APPROVAL_FOR_CONNECTION";
 
-<<<<<<< HEAD
 	//
 	public static final String CHANNEL_NAME_SMS = "SMS";
 
@@ -238,7 +237,7 @@ public class SWConstants {
 	public static final String CHANNEL_LIST = "channelList";
 
 	public static final String CHANNEL = "Channel";
-=======
+
 	public static String SCHEMA_REPLACE_STRING = "{schema}";
 
 	public static final String TENANTID_MDC_STRING = "TENANTID";
@@ -246,5 +245,4 @@ public class SWConstants {
 	public static final List<String> TOPICS_TO_AVOID = Collections.unmodifiableList(Arrays.asList("editnotificationsewerage", "sw-filestoreids-process"));
 
 
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
 }
