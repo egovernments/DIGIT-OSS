@@ -15,6 +15,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.land.config.LandConfiguration;
 import org.egov.land.repository.ServiceRequestRepository;
 import org.egov.land.util.LandConstants;
@@ -39,7 +40,15 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class LandUserService {
 
-	@Autowired
+	private static final String CREATED_DATE = "createdDate";
+
+    private static final String DOB = "dob";
+
+    private static final String PWD_EXPIRY_DATE = "pwdExpiryDate";
+
+    private static final String LAST_MODIFIED_DATE = "lastModifiedDate";
+
+    @Autowired
 	private LandConfiguration config;
 
 	@Autowired
@@ -47,6 +56,9 @@ public class LandUserService {
 
 	@Autowired
 	private ObjectMapper mapper;
+	
+	@Autowired
+        private MultiStateInstanceUtil centralInstanceUtil;
 
 	public void manageUser(LandInfoRequest landRequest) {
 		LandInfo landInfo = landRequest.getLandInfo();
@@ -56,7 +68,7 @@ public class LandUserService {
 			UserDetailResponse userDetailResponse = null;
 			if (owner.getMobileNumber() != null) {
 				if (owner.getTenantId() == null) {
-					owner.setTenantId(landInfo.getTenantId().split("\\.")[0]);
+					owner.setTenantId(centralInstanceUtil.getStateLevelTenant(landInfo.getTenantId()));
 				}
 
 				userDetailResponse = userExists(owner, requestInfo);
@@ -107,10 +119,10 @@ public class LandUserService {
 	private UserDetailResponse userExists(OwnerInfo owner, @Valid RequestInfo requestInfo) {
 
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
-		userSearchRequest.setTenantId(owner.getTenantId().split("\\.")[0]);
+		userSearchRequest.setTenantId(centralInstanceUtil.getStateLevelTenant(owner.getTenantId()));
 		userSearchRequest.setMobileNumber(owner.getMobileNumber());
 		if(!StringUtils.isEmpty(owner.getUuid())) {
-			List<String> uuids = new ArrayList<String>();
+			List<String> uuids = new ArrayList<>();
 			uuids.add(owner.getUuid());
 			userSearchRequest.setUuid(uuids);
 		}
@@ -165,12 +177,12 @@ public class LandUserService {
 
 	public UserDetailResponse getUsersForLandInfos(List<LandInfo> landInfos) {
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
-		List<String> ids = new ArrayList<String>();
-		Set<String> uuids = new HashSet<String>();
+		List<String> ids = new ArrayList<>();
+		Set<String> uuids = new HashSet<>();
 		landInfos.forEach(landInfo -> {
 			landInfo.getOwners().forEach(owner -> {
 				if (owner.getUuid() != null)
-					uuids.add(owner.getUuid().toString());
+					uuids.add(owner.getUuid());
 			});
 		});
 
@@ -203,8 +215,7 @@ public class LandUserService {
 		try {
 			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, userRequest);
 			parseResponse(responseMap, dobFormat);
-			UserDetailResponse userDetailResponse = mapper.convertValue(responseMap, UserDetailResponse.class);
-			return userDetailResponse;
+			return mapper.convertValue(responseMap, UserDetailResponse.class);
 		} catch (IllegalArgumentException e) {
 			throw new CustomException(LandConstants.ILLEGAL_ARGUMENT_EXCEPTION, "ObjectMapper not able to convertValue in userCall");
 		}
@@ -222,13 +233,13 @@ public class LandUserService {
 		String format1 = "dd-MM-yyyy HH:mm:ss";
 		if (users != null) {
 			users.forEach(map -> {
-				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get("lastModifiedDate") != null)
-					map.put("lastModifiedDate", dateTolong((String) map.get("lastModifiedDate"), format1));
-				if ((String) map.get("dob") != null)
-					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-				if ((String) map.get("pwdExpiryDate") != null)
-					map.put("pwdExpiryDate", dateTolong((String) map.get("pwdExpiryDate"), format1));
+				map.put(CREATED_DATE, dateTolong((String) map.get(CREATED_DATE), format1));
+				if ((String) map.get(LAST_MODIFIED_DATE) != null)
+					map.put(LAST_MODIFIED_DATE, dateTolong((String) map.get(LAST_MODIFIED_DATE), format1));
+				if ((String) map.get(DOB) != null)
+					map.put(DOB, dateTolong((String) map.get(DOB), dobFormat));
+				if ((String) map.get(PWD_EXPIRY_DATE) != null)
+					map.put(PWD_EXPIRY_DATE, dateTolong((String) map.get(PWD_EXPIRY_DATE), format1));
 			});
 		}
 	}
@@ -265,8 +276,7 @@ public class LandUserService {
 	public UserDetailResponse getUser(LandSearchCriteria criteria, RequestInfo requestInfo) {
 		UserSearchRequest userSearchRequest = getUserSearchRequest(criteria, requestInfo);
 		StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
-		UserDetailResponse userDetailResponse = userCall(userSearchRequest, uri);
-		return userDetailResponse;
+		return userCall(userSearchRequest, uri);
 	}
 
 	/**
@@ -281,7 +291,7 @@ public class LandUserService {
 	private UserSearchRequest getUserSearchRequest(LandSearchCriteria criteria, RequestInfo requestInfo) {
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
 		userSearchRequest.setRequestInfo(requestInfo);
-		userSearchRequest.setTenantId(criteria.getTenantId().split("\\.")[0]);
+		userSearchRequest.setTenantId(centralInstanceUtil.getStateLevelTenant(criteria.getTenantId()));
 		userSearchRequest.setMobileNumber(criteria.getMobileNumber());
 		userSearchRequest.setActive(true);
 		userSearchRequest.setUserType(LandConstants.CITIZEN);

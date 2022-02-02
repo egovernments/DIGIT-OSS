@@ -8,6 +8,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.land.repository.LandRepository;
 import org.egov.land.util.LandConstants;
 import org.egov.land.util.LandUtil;
@@ -41,11 +42,14 @@ public class LandService {
 
 	@Autowired
 	private LandUtil util;
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	public LandInfo create(@Valid LandInfoRequest landRequest) {
 				
 		Object mdmsData = util.mDMSCall(landRequest.getRequestInfo(), landRequest.getLandInfo().getTenantId());
-		if (landRequest.getLandInfo().getTenantId().split("\\.").length == 1) {
+		if (Boolean.TRUE.equals(centralInstanceUtil.isTenantIdStateLevel(landRequest.getLandInfo().getTenantId()))) {
 			throw new CustomException(LandConstants.INVALID_TENANT, " Application cannot be create at StateLevel");
 		}
 		
@@ -104,10 +108,10 @@ public class LandService {
 		List<LandInfo> landInfo = new LinkedList<>();
 		UserDetailResponse userDetailResponse = userService.getUser(criteria, requestInfo);
 		// If user not found with given user fields return empty list
-		if (userDetailResponse.getUser().size() == 0) {
+		if (userDetailResponse.getUser().isEmpty()) {
 			return Collections.emptyList();
 		}else{
-			List<String> ids = new ArrayList<String>();
+			List<String> ids = new ArrayList<>();
 			for(int i=0; i<userDetailResponse.getUser().size();i++){
 				ids.add(userDetailResponse.getUser().get(i).getUuid());
 			}
@@ -117,7 +121,7 @@ public class LandService {
 
 		landInfo = repository.getLandInfoData(criteria);
 
-		if (landInfo.size() == 0) {
+		if (landInfo.isEmpty()) {
 			return Collections.emptyList();
 		}
 		enrichmentService.enrichLandInfoSearch(landInfo, criteria, requestInfo);
