@@ -1,10 +1,18 @@
+import { Loader } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { startOfMonth, endOfMonth, getTime } from "date-fns";
-import { Loader } from "@egovernments/digit-ui-react-components";
-import { ResponsiveContainer, Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
+
+const formatValue = (value, symbol) => {
+  if (symbol?.toLowerCase() === "percentage") {
+    const Pformatter = new Intl.NumberFormat("en-IN", { maximumSignificantDigits: 3 });
+    return `${parseFloat(Pformatter.format(Number(value)) || "0").toFixed(2)}`;
+  } else {
+    return value;
+  }
+};
 
 const CustomLabel = ({ x, y, name, stroke, value }) => {
   const { t } = useTranslation();
@@ -48,10 +56,10 @@ const CustomBarChart = ({
   const chartData = useMemo(() => {
     if (!response) return null;
     return response?.responseData?.data?.map((bar) => {
-      let plotValue=bar?.plots?.[0].value||0;
+      let plotValue = bar?.plots?.[0].value || 0;
       return {
         name: t(bar?.plots?.[0].name),
-        value: Number(plotValue).toPrecision(plotValue>101?5:4),
+        value: formatValue(plotValue, bar?.plots?.[0].symbol),
       };
     });
   }, [response]);

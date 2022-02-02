@@ -131,6 +131,8 @@ useEffect(()=>{
         return "(Lac)"
       case "Cr":
         return "(Cr)";
+      default:
+        return "";
     }
   }
 
@@ -223,6 +225,8 @@ useEffect(()=>{
         return Number((val / 100000).toFixed(2));
       case "Cr":
         return Number((val / 10000000).toFixed(2));
+      default:
+        return val;
     }
   };
 
