@@ -4,6 +4,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import BPADocuments from "./BPADocuments";
 import InspectionReport from "./InspectionReport";
 import NOCDocuments from "./NOCDocuments";
@@ -136,6 +137,20 @@ function ApplicationDetailsContent({
                 detail?.values?.map((value, index) => {
                   if (value.map === true && value.value !== "N/A") {
                     return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
+                  }
+                  if (value?.isLink == true)
+                  {
+                    return (
+                      <Row
+                        key={t(value.title)}
+                        label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
+                        text={<div><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{value?.value}</span></Link></div>}
+                        last={index === detail?.values?.length - 1}
+                        caption={value.caption}
+                        className="border-none"
+                        rowContainerStyle={getRowStyles()}
+                      />
+                    );
                   }
                   return (
                     <Row

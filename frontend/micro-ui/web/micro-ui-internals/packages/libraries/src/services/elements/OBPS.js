@@ -375,6 +375,11 @@ export const OBPSService = {
       ]
     };
 
+    if(BPA?.businessService.includes("BPA_OC"))
+    {
+      applicationDetailsInfo["values"] = [...applicationDetailsInfo?.values,{ title: "BPA_PERMIT_APP_NUMBER", to:`/digit-ui/employee/obps/bpa/${bpaResponse?.BPA?.[0]?.applicationNo}`, value:bpaResponse?.BPA?.[0]?.applicationNo, isLink:true },];
+    }
+
     let permitcondn = [];
     BPA?.additionalDetails?.pendingapproval && BPA?.additionalDetails?.pendingapproval.length>0 && BPA?.additionalDetails?.pendingapproval.map((ob,index) => {
       permitcondn.push({title:`${index+1}. ${ob}`, value:""})
