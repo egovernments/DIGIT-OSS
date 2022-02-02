@@ -1,28 +1,40 @@
 package org.egov.user.persistence.repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Objects.isNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.tracer.model.CustomException;
+import org.egov.user.config.UserServiceConstants;
 import org.egov.user.domain.model.Role;
 import org.egov.user.repository.builder.RoleQueryBuilder;
 import org.egov.user.repository.rowmapper.RoleRowMapper;
 import org.egov.user.repository.rowmapper.UserRoleRowMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static java.util.Objects.*;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 @Repository
 @Slf4j
@@ -132,8 +144,13 @@ public class RoleRepository {
         MdmsCriteriaReq mcq = new MdmsCriteriaReq();
         mcq.setRequestInfo(requestInfo);
         mcq.setMdmsCriteria(mc);
+        
+		HttpHeaders headers = new HttpHeaders();
+		if (roles.contains(UserServiceConstants.CITIZEN_ROLE_CODE))
+			headers.set("tenantId", tenantId);
+		HttpEntity<MdmsCriteriaReq> request = new HttpEntity<>(mcq, headers);
 
-        JsonNode response = restTemplate.postForObject(url, mcq, JsonNode.class).findValue(roleMasterName);
+        JsonNode response = restTemplate.postForObject(url, request, JsonNode.class).findValue(roleMasterName);
 
         Set<Role> validatedRoles = new HashSet<>();
 

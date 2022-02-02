@@ -63,5 +63,8 @@ public class UserServiceConstants {
     public static final String PATTERN_PINCODE = "^[1-9][0-9]{5}$";
     
     public static final String TENANTID_MDC_STRING = "TENANTID";
+    
+    public static final String CITIZEN_ROLE_CODE = "CITIZEN";
+    
 }
 
