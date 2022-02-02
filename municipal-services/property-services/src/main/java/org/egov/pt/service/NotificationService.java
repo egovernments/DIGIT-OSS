@@ -278,9 +278,10 @@ public class NotificationService {
 		String tenantId = request.getProperty().getTenantId();
 		String moduleName = request.getProperty().getWorkflow().getModuleName();
 		for(Document document : request.getProperty().getDocuments()) {
-			if(document.getDocumentType()=="ApplicationType"){
-				fileStoreIds.add(document.getFileStoreId());
-			}
+			fileStoreIds.add(document.getFileStoreId());
+//			if(document.getDocumentType()=="ApplicationType"){
+//				fileStoreIds.add(document.getFileStoreId());
+//			}
 		}
 
 		String action;
