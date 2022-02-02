@@ -87,23 +87,24 @@ public class PrimaryKeyGenerator
     {
         long key = 0;
         final String sql = "select nextval('seq_" + tableName + "')";
-        try
-        {
-            final Query pst = null;
-                    //persistenceService.getSession().createSQLQuery(sql);
+//        try
+//        {
+//            final Query pst = null;
+//                    //persistenceService.getSession().createSQLQuery(sql);
+//
+//                final List<BigInteger> rs = pst.list();
+//
+//            key = rs != null ? rs.get(0).longValue() : 0l;
+//            if (rs == null || rs.size() == 0)
+//                throw new NullPointerException();
+//        } catch (final HibernateException e)
+//        {
+//            if (LOGGER.isDebugEnabled())
+//                LOGGER.debug("Exp=" + e.getMessage());
+//            if (LOGGER.isDebugEnabled())
+//                LOGGER.debug("Error getting value from sequence " + e.toString());
+//        }
 
-                final List<BigInteger> rs = pst.list();
-
-            key = rs != null ? rs.get(0).longValue() : 0l;
-            if (rs == null || rs.size() == 0)
-                throw new NullPointerException();
-        } catch (final HibernateException e)
-        {
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("Exp=" + e.getMessage());
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("Error getting value from sequence " + e.toString());
-        }
 
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("PK for " + tableName + " is " + key);

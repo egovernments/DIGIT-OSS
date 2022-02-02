@@ -198,18 +198,18 @@ public class ChartOfAccountsHibernateDAO implements ChartOfAccountsDAO {
 		return detailTypeId;
     }
 
-    @Deprecated
-    public int getDetailTypeIdByName(final String glCode, final Connection connection, final String name) {
-        final SQLQuery query = persistenceService
-                .getSession()
-                .createSQLQuery(
-                        "SELECT a.ID FROM accountdetailtype a,chartofaccountdetail coad  WHERE coad.DETAILTYPEID =a.ID  AND coad.glcodeid=(SELECT ID FROM chartofaccounts WHERE glcode=:glCode) AND a.NAME=:name");
-        query.setString("glCode", glCode);
-        query.setString("name", name);
-        List accountDtlTypeList = query.list();
-        return (accountDtlTypeList != null) && (accountDtlTypeList.size() != 0) ? Integer.valueOf(accountDtlTypeList
-                .get(0).toString()) : 0;
-    }
+    //    @Deprecated
+    //    public int getDetailTypeIdByName(final String glCode, final Connection connection, final String name) {
+    //        final SQLQuery query = persistenceService
+    //                .getSession()
+    //                .createSQLQuery(
+    //                        "SELECT a.ID FROM accountdetailtype a,chartofaccountdetail coad  WHERE coad.DETAILTYPEID =a.ID  AND coad.glcodeid=(SELECT ID FROM chartofaccounts WHERE glcode=:glCode) AND a.NAME=:name");
+    //        query.setString("glCode", glCode);
+    //        query.setString("name", name);
+    //        List accountDtlTypeList = query.list();
+    //        return (accountDtlTypeList != null) && (accountDtlTypeList.size() != 0) ? Integer.valueOf(accountDtlTypeList
+    //                .get(0).toString()) : 0;
+    //    }
 
     /**
      * This API will return the accountdetailtype for an account code when the accountcode and the respective accountdetailtype
