@@ -96,10 +96,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [vehicleNo, setVehicleNo] = useState(null);
   const [vehicleMenu, setVehicleMenu] = useState([]);
   const [vehicle, setVehicle] = useState(null);
-  const [defaultValues, setDefautValue] = useState({
-    capacity: vehicle?.capacity,
-    wasteCollected: vehicle?.capacity,
-  });
+
   const [reassignReason, selectReassignReason] = useState(null);
   const [rejectionReason, setRejectionReason] = useState(null);
   const [declineReason, setDeclineReason] = useState(null);
@@ -116,38 +113,59 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [pitDetail, setPitDetail] = useState();
   const [fstpoRejectionReason, setFstpoRejectionReason] = useState();
 
+  const [defaultValues, setDefautValue] = useState({
+    capacity: vehicle?.capacity,
+    wasteCollected: vehicle?.capacity,
+    propertyType: applicationData?.propertyUsage.split('.')[0],
+    subtype: applicationData?.propertyUsage,
+    pitType: applicationData?.sanitationtype,
+    pitDetail: applicationData?.pitDetail,
+  });
+
   useEffect(() => {
     if (isSuccess && isVehicleDataLoaded && applicationData) {
       const [vehicle] = vehicleList.filter((item) => item.code === applicationData.vehicleType);
+      let arrayList = defaultValues
+      arrayList.capacity = applicationData?.vehicleCapacity;
+      arrayList.wasteCollected = applicationData?.vehicleCapacity
       setVehicleMenu([vehicle]);
       setVehicle(vehicle);
-      setDefautValue({
-        capacity: applicationData?.vehicleCapacity,
-        wasteCollected: applicationData?.vehicleCapacity,
-      });
+      setDefautValue(arrayList);
     }
   }, [isVehicleDataLoaded, isSuccess]);
 
   useEffect(() => {
     if (isSuccess && isPropertyDataLoaded && applicationData) {
       const [property] = propertyList.filter((item) => item.code === applicationData.propertyUsage.split('.')[0]);
-      setPropertyMenu([property])
+      let arrayList = defaultValues;
+      arrayList.propertyType = property;
+      setPropertyMenu([property]);
       setProperty(property);
+      setDefautValue(arrayList);
     }
   }, [isPropertyDataLoaded, isSuccess]);
 
   useEffect(() => {
     if (isSuccess && isPropertySubDataLoaded && applicationData) {
       const [propertySub] = propertySubList.filter((item) => item.code === applicationData.propertyUsage);
+      let arrayList = defaultValues;
+      arrayList.subtype = propertySub;
       setPropertySubType(propertySub);
+      setDefautValue(arrayList);
     }
   }, [isPropertySubDataLoaded, isSuccess]);
 
   useEffect(() => {
     if (isSuccess && isPitDataLoaded && applicationData) {
       const [pitType] = pitList.filter((item) => item.code === applicationData.sanitationtype);
+      const pitDetail = applicationData.pitDetail;
+      let arrayList = defaultValues;
+      arrayList.pitType = pitType;
+      arrayList.pitDetail = pitDetail;
       setPitType(pitType);
       setPitDetail(applicationData.pitDetail)
+      setDefautValue(arrayList)
+
     }
   }, [isPitDataLoaded, isSuccess]);
 
@@ -238,7 +256,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.pitDetail) applicationData.pitDetail.diameter = Number(data.pitDetail.diameter);
     if (data.pitDetail) applicationData.pitDetail.length = Number(data.pitDetail.length);
     if (data.pitType) applicationData.sanitationtype = data.pitType.code;
-    if (data.subtype) applicationData.propertyUsage = data.subtype.code;
+    if (data.subtype && typeof (data.subtype) === "object") applicationData.propertyUsage = data.subtype.code;
+    if (data.subtype && typeof (data.subtype) === "string") applicationData.propertyUsage = data.subtype;
     if (fileStoreId) {
       let temp = {}
       fileStoreId.map((i) => (temp[fileStoreId.indexOf(i) + 1] = i))
@@ -404,13 +423,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         childrenAtTheBottom
         onSubmit={submit}
         formId="modal-action"
-        defaultValues={{
-          ...defaultValues,
-          pitType: pitType,
-          propertyType: property,
-          subtype: propertySubType,
-          pitDetail: pitDetail,
-        }}
+        defaultValues={defaultValues}
       >
       </FormComposer>
       {action === "COMPLETED" ? <UploadPitPhoto
