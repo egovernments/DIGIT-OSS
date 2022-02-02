@@ -7,10 +7,14 @@ import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.producer.Producer;
 import org.egov.bpa.repository.querybuilder.BPAQueryBuilder;
 import org.egov.bpa.repository.rowmapper.BPARowMapper;
+import org.egov.bpa.util.BPAErrorConstants;
 import org.egov.bpa.web.model.BPA;
 import org.egov.bpa.web.model.BPARequest;
 import org.egov.bpa.web.model.BPASearchCriteria;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -32,6 +36,9 @@ public class BPARepository {
 
 	@Autowired
 	private BPARowMapper rowMapper;
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	/**
 	 * Pushes the request on save topic through kafka
@@ -40,7 +47,7 @@ public class BPARepository {
 	 *            The bpa create request
 	 */
 	public void save(BPARequest bpaRequest) {
-		producer.push(config.getSaveTopic(), bpaRequest);
+		producer.push(bpaRequest.getBPA().getTenantId(), config.getSaveTopic(), bpaRequest);
 	}
 
 	/**
@@ -61,11 +68,12 @@ public class BPARepository {
 		} else {
 			bpaForStatusUpdate = bpa;
 		}
+		String tenantId = bpa.getTenantId();
 		if (bpaForUpdate != null)
-			producer.push(config.getUpdateTopic(), new BPARequest(requestInfo, bpaForUpdate));
+			producer.push(tenantId, config.getUpdateTopic(), new BPARequest(requestInfo, bpaForUpdate));
 
 		if (bpaForStatusUpdate != null)
-			producer.push(config.getUpdateWorkflowTopic(), new BPARequest(requestInfo, bpaForStatusUpdate));
+			producer.push(tenantId, config.getUpdateWorkflowTopic(), new BPARequest(requestInfo, bpaForStatusUpdate));
 
 	}
 
@@ -79,6 +87,12 @@ public class BPARepository {
 	public List<BPA> getBPAData(BPASearchCriteria criteria, List<String> edcrNos) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos);
+		try {
+                    query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+                } catch (InvalidTenantIdException e) {
+                    throw new CustomException(BPAErrorConstants.EG_BPA_AS_TENANTID_ERROR,
+                            "TenantId length is not sufficient to replace query schema in a multi state instance");
+                }
 		List<BPA> BPAData = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 		return BPAData;
 	}

@@ -20,6 +20,7 @@ import org.egov.bpa.web.model.EventRequest;
 import org.egov.bpa.web.model.RequestInfoWrapper;
 import org.egov.bpa.web.model.SMSRequest;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,15 +45,18 @@ public class NotificationUtil {
 	private EDCRService edcrService;
 	
 	private BPAUtil bpaUtil;
+	
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	@Autowired
 	public NotificationUtil(BPAConfiguration config, ServiceRequestRepository serviceRequestRepository,
-			Producer producer, EDCRService edcrService, BPAUtil bpaUtil) {
+			Producer producer, EDCRService edcrService, BPAUtil bpaUtil, MultiStateInstanceUtil centralInstanceUtil) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.producer = producer;
 		this.edcrService = edcrService;
 		this.bpaUtil = bpaUtil;
+		this.centralInstanceUtil = centralInstanceUtil;
 	}
 
 	final String receiptNumberKey = "receiptNumber";
@@ -205,7 +209,7 @@ public class NotificationUtil {
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0];
+			tenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
 
 		String locale = "en_IN";
 		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -259,12 +263,12 @@ public class NotificationUtil {
 	 * @param smsRequestList
 	 *            The list of SMSRequest to be sent
 	 */
-	public void sendSMS(List<org.egov.bpa.web.model.SMSRequest> smsRequestList, boolean isSMSEnabled) {
+	public void sendSMS(String tenantId, List<org.egov.bpa.web.model.SMSRequest> smsRequestList, boolean isSMSEnabled) {
 		if (isSMSEnabled) {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.debug("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push(config.getSmsNotifTopic(), smsRequest);
+				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
 				log.debug("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
 			}
 		}
@@ -295,8 +299,8 @@ public class NotificationUtil {
 	 * 
 	 * @param request
 	 */
-	public void sendEventNotification(EventRequest request) {
-		producer.push(config.getSaveUserEventsTopic(), request);
+	public void sendEventNotification(String tenantId, EventRequest request) {
+		producer.push(tenantId, config.getSaveUserEventsTopic(), request);
 
 		log.debug("STAKEHOLDER:: " + request.getEvents().get(0).getDescription());
 	}

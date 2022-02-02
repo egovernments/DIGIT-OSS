@@ -73,18 +73,19 @@ public class BPANotificationService {
 	 */
 	public void process(BPARequest bpaRequest) {
 		List<SMSRequest> smsRequests = new LinkedList<>();
+		String tenantId = bpaRequest.getBPA().getTenantId();
 		if (null != config.getIsSMSEnabled()) {
 			if (config.getIsSMSEnabled()) {
 				enrichSMSRequest(bpaRequest, smsRequests);
 				if (!CollectionUtils.isEmpty(smsRequests))
-					util.sendSMS(smsRequests, config.getIsSMSEnabled());
+					util.sendSMS(tenantId, smsRequests, config.getIsSMSEnabled());
 			}
 		}
 		if (null != config.getIsUserEventsNotificationEnabled()) {
 			if (config.getIsUserEventsNotificationEnabled()) {
 				EventRequest eventRequest = getEvents(bpaRequest);
 				if (null != eventRequest)
-					util.sendEventNotification(eventRequest);
+					util.sendEventNotification(tenantId, eventRequest);
 			}
 		}
 	}

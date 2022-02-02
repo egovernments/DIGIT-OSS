@@ -26,6 +26,7 @@ import org.egov.bpa.web.model.workflow.BusinessService;
 import org.egov.bpa.workflow.WorkflowIntegrator;
 import org.egov.bpa.workflow.WorkflowService;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,6 +67,9 @@ public class EnrichmentService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	/**
 	 * encrich create BPA Reqeust by adding audidetails and uuids
@@ -189,7 +193,7 @@ public class EnrichmentService {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void postStatusEnrichment(BPARequest bpaRequest) {
 		BPA bpa = bpaRequest.getBPA();
-		String tenantId = bpaRequest.getBPA().getTenantId().split("\\.")[0];
+		String tenantId = centralInstanceUtil.getStateLevelTenant(bpaRequest.getBPA().getTenantId());
 		Object mdmsData = util.mDMSCall(bpaRequest.getRequestInfo(), tenantId);
 
 		BusinessService businessService = workflowService.getBusinessService(bpa, bpaRequest.getRequestInfo(),
