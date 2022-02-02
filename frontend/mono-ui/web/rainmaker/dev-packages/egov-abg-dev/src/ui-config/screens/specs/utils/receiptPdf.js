@@ -279,10 +279,53 @@ to download all bulk pdf directly egov-pdf
           "success"
         )
       );
-      window.location.href.includes("abg/billDownload")&&window.location.reload();
+      // window.location.href.includes("abg/billDownload")&&window.location.reload();
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    dispatch(toggleSnackbar(true, error.message, "error"));
+  }
+};
+
+export const cancelGeneratedJob = async (
+  dispatch,
+  jobid
+) => {
+  try {
+    const CANCEL = {
+      GET: {
+        URL: "/pdf-service/v1/_cancelProcess",
+        ACTION: "_cancel",
+      },
+    };
+    const queryStr = [
+      { key: "jobId", value: jobid },
+    ];
+  
+    const resp = await httpRequest(
+      "post",
+      CANCEL.GET.URL,
+      "create",
+      queryStr
+    );
+    if (resp) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "JOB_CANCELLED_STATUS",
+            labelKey: `${getLocaleLabels(
+              "GRP_JOB_CANCELLED_STATUS",
+              "GRP_JOB_CANCELLED_STATUS"
+            )} ${jobid}`,
+          },
+          "success"
+        )
+      );
+      // window.location.href.includes("abg/billDownload")&&window.location.reload();
+    }
+  } catch (error) {
+    console.error(error);
     dispatch(toggleSnackbar(true, error.message, "error"));
   }
 };
