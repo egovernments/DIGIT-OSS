@@ -7,9 +7,13 @@ import PropertyDocument from "../../pageComponents/PropertyDocument";
 import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
 import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle,getMohallaLocale } from "../../utils";
 
+import get from "lodash/get";
+
 const PTApplicationDetails = () => {
   const { t } = useTranslation();
   const { acknowledgementIds } = useParams();
+  const [acknowldgementData, setAcknowldgementData] = useState([]);
+
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
@@ -18,10 +22,41 @@ const PTApplicationDetails = () => {
     { filters: { acknowledgementIds } }
   );
 
-  const [acknowldgementData, setAcknowldgementData] = useState([]);
-
-  const application = data?.Properties[0];
+  const properties = get(data, "Properties", []);
+  const propertyId = get(data, "Properties[0].propertyId", []);
+  let property = (properties && properties.length > 0 && properties[0]) || {};
+  const application = propertyId;
   sessionStorage.setItem("pt-property", JSON.stringify(application));
+  
+  const { isLoading: auditDataLoading, isError: isAuditError, data: auditResponse } = Digit.Hooks.pt.usePropertySearch(
+    {
+      tenantId,
+      filters: { propertyIds: propertyId, audit: true },
+    },
+    {
+      enabled: true,
+      // select: (d) =>
+        // d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
+    }
+  );
+  
+  if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
+    const propertiesAudit = get(auditResponse, "Properties", []);
+
+    const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
+
+
+    property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
+    property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
+
+    if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
+      property.institutionInit = previousActiveProperty.institution;
+    }
+  }
+
+  // console.log('property-', property);
+  
   let units = [];
   units = application?.units;
   units &&
