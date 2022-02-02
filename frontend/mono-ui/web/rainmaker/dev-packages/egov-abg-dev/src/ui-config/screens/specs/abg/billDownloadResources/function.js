@@ -25,7 +25,7 @@ export const searchApiCall = async (state, dispatch) => {
       createdtime: get(item, "createdtime"),
       locality: get(item, "locality"),
       tenantId: get(item, "tenantId"),
-
+      jobid: get(item, "jobid"),
       consumercode: get(item, "consumercode"),
       bussinessService: get(item, "bussinessService"),
       isConsolidated: get(item, "isConsolidated"),
@@ -53,7 +53,9 @@ export const searchApiCall = async (state, dispatch) => {
       ["ABG_COMMON_TABLE_COL_ACTION"]: item.filestoreid || "",
       ["ABG_COMMON_TABLE_TENANT"]: item.tenantId || "NA",
       ["ABG_IS_FAILED"]:
-        item.recordscompleted === item.totalrecords && !item.filestoreid,
+        item.recordscompleted === item.totalrecords &&
+        !item.filestoreid &&
+        item.totalrecords != 0,
       ["ABG_RETRY_OBJ"]: {
         locality: item.locality,
         consumercode: item.consumercode,
@@ -63,6 +65,7 @@ export const searchApiCall = async (state, dispatch) => {
       ["ABG_PROGRESS_OBJ"]: {
         recordscompleted: item.recordscompleted,
         totalrecords: item.totalrecords,
+        jobid: item.jobid,
         failed:
           item.recordscompleted === item.totalrecords && !item.filestoreid,
       },
