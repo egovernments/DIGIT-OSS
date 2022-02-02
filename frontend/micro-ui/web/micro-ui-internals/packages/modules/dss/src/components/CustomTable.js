@@ -198,7 +198,7 @@ useEffect(()=>{
               <InsightView insight={cellValue?.insight} rowValue={cellValue?.value} />
             );
           }
-          const filter = response?.responseData?.filter.find((elem) => elem.column === column.id);
+          const filter = response?.responseData?.filter?.find((elem) => elem.column === column.id);
           if (response?.responseData?.drillDownChartId !== "none" && filter !== undefined) {
             return (
               <span style={{ color: "#F47738", cursor: "pointer" }} onClick={() => getDrilldownCharts(cellValue, filter?.key, t(`DSS_HEADER_${plot?.name.toUpperCase()}`))}>
