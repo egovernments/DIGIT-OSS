@@ -4,6 +4,7 @@ import { useQueryClient } from "react-query";
 import { UploadPitPhoto } from "@egovernments/digit-ui-react-components";
 
 import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication } from "../config";
+import { configRejectFstpo } from "../config/RejectFstpo";
 
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
@@ -78,8 +79,15 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     "ReassignReason",
     "RejectionReason",
     "DeclineReason",
-    "CancelReason",
+    "CancelReason"
   ]);
+
+  const { data: FSTPORejectionReasons, isLoading: isFSTPORejectionReasonData } = Digit.Hooks.fsm.useMDMS(
+    stateCode,
+    "Vehicle",
+    "FSTPORejectionReason",
+    { staleTime: Infinity }
+  );
 
   const [dsoList, setDsoList] = useState([]);
   const [vehicleNoList, setVehicleNoList] = useState([]);
@@ -106,9 +114,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [imageFile, setImageFile] = useState(null);
   const [fileStoreId, setFileStoreId] = useState();
   const [pitDetail, setPitDetail] = useState();
+  const [fstpoRejectionReason, setFstpoRejectionReason] = useState();
 
   useEffect(() => {
-    if (isSuccess && isVehicleDataLoaded) {
+    if (isSuccess && isVehicleDataLoaded && applicationData) {
       const [vehicle] = vehicleList.filter((item) => item.code === applicationData.vehicleType);
       setVehicleMenu([vehicle]);
       setVehicle(vehicle);
@@ -120,7 +129,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }, [isVehicleDataLoaded, isSuccess]);
 
   useEffect(() => {
-    if (isSuccess && isPropertyDataLoaded) {
+    if (isSuccess && isPropertyDataLoaded && applicationData) {
       const [property] = propertyList.filter((item) => item.code === applicationData.propertyUsage.split('.')[0]);
       setPropertyMenu([property])
       setProperty(property);
@@ -128,14 +137,14 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }, [isPropertyDataLoaded, isSuccess]);
 
   useEffect(() => {
-    if (isSuccess && isPropertySubDataLoaded) {
+    if (isSuccess && isPropertySubDataLoaded && applicationData) {
       const [propertySub] = propertySubList.filter((item) => item.code === applicationData.propertyUsage);
       setPropertySubType(propertySub);
     }
   }, [isPropertySubDataLoaded, isSuccess]);
 
   useEffect(() => {
-    if (isSuccess && isPitDataLoaded) {
+    if (isSuccess && isPitDataLoaded && applicationData) {
       const [pitType] = pitList.filter((item) => item.code === applicationData.sanitationtype);
       setPitType(pitType);
       setPitDetail(applicationData.pitDetail)
@@ -150,9 +159,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }, [vehicle, isDsoSuccess]);
 
   useEffect(() => {
-    if (isSuccess && isDsoSuccess && applicationData.dsoId) {
+    if (isSuccess && isDsoSuccess && applicationData && applicationData.dsoId) {
       const [dso] = dsoData.filter((dso) => dso.id === applicationData.dsoId);
-      const vehicleNoList = dso?.vehicles?.filter((vehicle) => vehicle.type === applicationData.vehicleType);
+      const vehicleNoList = dso?.vehicles?.filter((vehicle) => vehicle.capacity == applicationData?.vehicleCapacity);
       setVehicleNoList(vehicleNoList);
     }
   }, [isSuccess, isDsoSuccess]);
@@ -192,6 +201,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     });
   }
 
+  function selectReason(reason) {
+    setFstpoRejectionReason(reason);
+  }
+
   function getImage(e) {
     setImageFile(e.target.files);
   }
@@ -205,7 +218,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (!fileStoreId || fileStoreId.length < 4) {
       setFileStoreId(ids);
     } else {
-      console.log("disabled")
     }
     // Digit.SessionStorage.set("PGR_CREATE_IMAGES", ids);
   };
@@ -237,6 +249,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (rejectionReason) addCommentToWorkflow(rejectionReason, workflow, data);
     if (declineReason) addCommentToWorkflow(declineReason, workflow, data);
     if (cancelReason) addCommentToWorkflow(cancelReason, workflow, data);
+    if (fstpoRejectionReason && data.comments) workflow.comments = data.comments;
+    if (fstpoRejectionReason) workflow.fstpoRejectionReason = fstpoRejectionReason?.code;
 
     submitAction({ fsm: applicationData, workflow });
   }
@@ -252,6 +266,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             dsoData,
             dso,
             vehicle,
+            vehicleCapacity: applicationData?.vehicleCapacity,
             vehicleNo,
             vehicleNoList,
             selectVehicleNo,
@@ -262,7 +277,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "ASSIGN":
       case "GENERATE_DEMAND":
       case "FSM_GENERATE_DEMAND":
-        setFormValve(dso && vehicle ? true : false);
+        setFormValve(dso ? true : false);
         return setConfig(
           configAssignDso({
             t,
@@ -271,6 +286,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             selectDSO,
             vehicleMenu,
             vehicle,
+            vehicleCapacity: applicationData?.vehicleCapacity,
             selectVehicle,
             action,
           })
@@ -279,7 +295,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "REASSING":
       case "FSM_REASSING":
         dso &&
-          vehicle &&
           (reassignReason || (actionData && actionData[0] && actionData[0].comment?.length > 0 && actionData[0]?.status === "DSO_REJECTED"))
           ? setFormValve(true)
           : setFormValve(false);
@@ -291,6 +306,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             selectDSO,
             vehicleMenu,
             vehicle,
+            vehicleCapacity: applicationData?.vehicleCapacity,
             selectVehicle,
             reassignReasonMenu: Reason?.ReassignReason,
             reassignReason,
@@ -350,11 +366,22 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "ADDITIONAL_PAY_REQUEST":
       case "FSM_PAY":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
+      case "DECLINEVEHICLE":
+        setFormValve(fstpoRejectionReason ? true : false);
+        return setConfig(
+          configRejectFstpo({
+            t,
+            rejectMenu: FSTPORejectionReasons,
+            selectReason,
+            reason :fstpoRejectionReason,
+            action,
+          })
+        );
       default:
         console.debug("default case");
         break;
     }
-  }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList, Reason]);
+  }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList, Reason, fstpoRejectionReason]);
 
   const hiddenFileInput = React.useRef(null);
 

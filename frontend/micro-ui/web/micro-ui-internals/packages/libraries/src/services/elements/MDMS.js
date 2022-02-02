@@ -749,6 +749,24 @@ const getTradeTypeRoleCriteria = (tenantId, moduleCode, type) => ({
   }
 })
 
+const getFSTPORejectionReasonCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "FSTPORejectionReason",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -1009,6 +1027,16 @@ const getFSMGenderType = (MdmsRes) => {
   });
 };
 
+const GetFSTPORejectionReason = (MdmsRes) => {
+  return MdmsRes["Vehicle"].FSTPORejectionReason.filter((reason) => reason.active)
+  .map((reasonDetails) => {
+      return {
+        ...reasonDetails,
+        i18nKey: `ES_ACTION_REASON_${reasonDetails.code}`,
+      };
+    });
+}
+
 const getDssDashboard = () => MdmsRes["dss-dashboard"]["dashboard-config"];
 
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
@@ -1106,6 +1134,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetChecklist(MdmsRes);
     case "FSMGenderType":
       return getFSMGenderType(MdmsRes);
+    case "FSTPORejectionReason":
+      return GetFSTPORejectionReason(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -1381,5 +1411,9 @@ export const MdmsService = {
 
   getFSMGenderType: (tenantId,moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId,moduleCode, type), moduleCode);
-  }
+  },
+
+  getFSTPORejectionReason: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getFSTPORejectionReasonCriteria(tenantId, moduleCode, type), moduleCode);
+  },
 };

@@ -71,6 +71,10 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
     return useQuery("FSM_GENDER_DETAILS", () => MdmsService.getFSMGenderType(tenantId, moduleCode ,type), config);
   };
 
+  const useFSTPORejectionReason = () => {
+    return useQuery("FSM_FSTPO_REJECTION", () => MdmsService.getFSTPORejectionReason(tenantId, moduleCode, type), queryConfig);
+  };
+
   switch (type) {
     case "SanitationType":
       return useSanitationType();
@@ -113,6 +117,8 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
       return usePostFieldsConfig();
     case "FSMGenderType":
       return useGenderDetails();
+    case "FSTPORejectionReason":
+      return useFSTPORejectionReason();
   }
 };
 
