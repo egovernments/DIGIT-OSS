@@ -403,13 +403,10 @@ router.post(
       var waterBills, sewerageBills;
       var consolidatedResult = {Bill:[]};
       var propertyIdSet = [];
-<<<<<<< HEAD
       var connectionnoToPropertyMap = {};
-=======
       var headers = JSON.parse(JSON.stringify(req.headers));
       headers['tenantId']=headers.tenantid;
 
->>>>>>> 3e02148383... Central instance changes copy merge (#1410)
       if (requestinfo == undefined) {
         return renderError(res, "requestinfo can not be null");
       }
