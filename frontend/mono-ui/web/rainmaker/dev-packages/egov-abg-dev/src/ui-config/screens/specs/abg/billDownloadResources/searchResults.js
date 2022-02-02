@@ -2,10 +2,12 @@ import { downloadMultipleFileFromFilestoreIds } from "egov-common/ui-utils/commo
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import React from "react";
-import store from "../../../../../ui-redux/store";
+import store from "ui-redux/store";
 import { sortByEpoch } from "../../utils";
-import { downloadMultipleBills } from "../../utils/receiptPdf";
-
+import {
+  downloadMultipleBills,
+  cancelGeneratedJob,
+} from "../../utils/receiptPdf";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -33,14 +35,22 @@ export const searchResults = {
         labelKey: "BUSINESS_SERVICE",
         options: {
           filter: false,
-          customBodyRender: (value,tableMeta) => {
-            let replaceKey=tableMeta.rowData[8].bussinessService=="WS"?"_WS":"_SW";
-            let replaceWith=tableMeta.rowData[8].bussinessService=="WS"?"_SW":"_WS";
-            let newKey=value.replace(replaceKey,replaceWith);
-            return <span>{
-              tableMeta.rowData[8].isConsolidated?
-              `${getLocaleLabels(value, value)} , ${getLocaleLabels(newKey, newKey)}`:
-              getLocaleLabels(value, value)}</span>;
+          customBodyRender: (value, tableMeta) => {
+            let replaceKey =
+              tableMeta.rowData[8].bussinessService == "WS" ? "_WS" : "_SW";
+            let replaceWith =
+              tableMeta.rowData[8].bussinessService == "WS" ? "_SW" : "_WS";
+            let newKey = value.replace(replaceKey, replaceWith);
+            return (
+              <span>
+                {tableMeta.rowData[8].isConsolidated
+                  ? `${getLocaleLabels(value, value)} , ${getLocaleLabels(
+                      newKey,
+                      newKey
+                    )}`
+                  : getLocaleLabels(value, value)}
+              </span>
+            );
           },
         },
       },
@@ -89,7 +99,14 @@ export const searchResults = {
                   <span style={{ position: "unset" }}>
                     {value
                       ? tableMeta.rowData[7]
-                        ? getLocaleLabels(value==100?"GRP_BILL_EXPIRED":"GRP_BILL_FAILED", value==100?"GRP_BILL_EXPIRED":"GRP_BILL_FAILED")
+                        ? getLocaleLabels(
+                            value == 100
+                              ? "GRP_BILL_EXPIRED"
+                              : "GRP_BILL_FAILED",
+                            value == 100
+                              ? "GRP_BILL_EXPIRED"
+                              : "GRP_BILL_FAILED"
+                          )
                         : `${Number(value).toFixed()}%`
                       : getLocaleLabels(
                           "GRP_BILL_INITIATED",
@@ -149,7 +166,14 @@ export const searchResults = {
                       }
                     }}
                   >
-                    {!tableMeta.rowData[7]&&<span class="jk-tooltiptext">{getLocaleLabels("ABG_DOWNLOAD_EXPIREDIN","ABG_DOWNLOAD_EXPIREDIN")}</span>}
+                    {!tableMeta.rowData[7] && (
+                      <span class="jk-tooltiptext">
+                        {getLocaleLabels(
+                          "ABG_DOWNLOAD_EXPIREDIN",
+                          "ABG_DOWNLOAD_EXPIREDIN"
+                        )}
+                      </span>
+                    )}
                     {getLocaleLabels(
                       tableMeta.rowData[7]
                         ? "GRP_BILL_ACT_RETRY"
@@ -157,6 +181,22 @@ export const searchResults = {
                       tableMeta.rowData[7]
                         ? "GRP_BILL_ACT_RETRY"
                         : "GRP_BILL_ACT_DOWNLOAD"
+                    )}
+                  </div>
+                ) : tableMeta.rowData[9] &&
+                  tableMeta.rowData[9].recordscompleted > 0 ? (
+                  <div
+                    style={{ color: "#FE7A51", cursor: "pointer" }}
+                    onClick={() => {
+                      cancelGeneratedJob(
+                        store.dispatch,
+                        tableMeta.rowData[9].jobid
+                      );
+                    }}
+                  >
+                    {getLocaleLabels(
+                      "GRP_BILL_ACT_CANCEL",
+                      "GRP_BILL_ACT_CANCEL"
                     )}
                   </div>
                 ) : (
