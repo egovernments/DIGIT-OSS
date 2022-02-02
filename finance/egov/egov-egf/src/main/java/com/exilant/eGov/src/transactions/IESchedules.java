@@ -108,9 +108,8 @@ public class IESchedules extends AbstractTask {
 		final String eDate = dc.getValue("eDate") == null ? "today" : dc.getValue("eDate");
 		dc.addValue("pageTitle", "Income & Expenditure Schedules For the period of " + sDate + " to " + eDate);
 
-		try(PreparedStatement pst = conn.prepareStatement(report.toString());){
+		try(PreparedStatement pst = conn.prepareStatement(report.toString());rs = pst.executeQuery();){
 
-			rs = pst.executeQuery();
 
             while (rs.next()) {
                 curAmt = rs.getDouble("curyearamount");

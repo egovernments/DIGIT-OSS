@@ -117,14 +117,14 @@ public class DataExtractor {
         String[][] dataValues = null;
 
 		try (final PreparedStatement pststement = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
-				ResultSet.CONCUR_READ_ONLY);) {
+				ResultSet.CONCUR_READ_ONLY);ResultSet rs = null;) {
  
-            ResultSet rs = null;
+
             String[] columnNames = null;
-            try {
+            try(columnCount = metaData.getColumnCount();) {
                 rs = pststement.executeQuery();
                 metaData = rs.getMetaData();
-                columnCount = metaData.getColumnCount();// Gets the Column Count in the ResultSet
+                // Gets the Column Count in the ResultSet
                 columnNames = new String[columnCount];
             } catch (final HibernateException e) {
                 LOGGER.error("Exception while analysing Result set in extract", e);
@@ -245,10 +245,10 @@ public class DataExtractor {
         ResultSetMetaData metaData = null;
 
 		try (final PreparedStatement pststement = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
-				ResultSet.CONCUR_READ_ONLY);) {
+				ResultSet.CONCUR_READ_ONLY);metaData = rs.getMetaData();int keyIndex = rs.findColumn(keyName);) {
 
             final ResultSet rs = pststement.executeQuery();
-            metaData = rs.getMetaData();
+
             columnCount = metaData.getColumnCount();// Gets the Column Count in the ResultSet
             // int keyIndex = rs.findColumn(keyName);
             String val = null;

@@ -70,11 +70,11 @@ public interface ChartOfAccountsDAO {
     @Deprecated
     public List getChartOfAccountsForTds();
 
-    @Deprecated
-    public int getDetailTypeId(String glCode, Connection connection) throws SQLException;
+//    @Deprecated
+//    public int getDetailTypeId(String glCode, Connection connection) throws SQLException;
 
-    @Deprecated
-    public int getDetailTypeIdByName(String glCode, Connection connection, String name);
+//    @Deprecated
+//    public int getDetailTypeIdByName(String glCode, Connection connection, String name);
 
     public List getGlcode(String minGlcode, String maxGlcode, String majGlcode);
 

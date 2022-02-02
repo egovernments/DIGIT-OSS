@@ -72,9 +72,9 @@ public class ChartOfAccounts {
         this.id = id;
     }
 
-    public String getGlcode() {
-        return glcode;
-    }
+//    public String getGlcode() {
+//        return glcode;
+//    }
 
     public void setGlcode(String glcode) {
         this.glcode = glcode;
