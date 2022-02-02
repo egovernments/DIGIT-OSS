@@ -205,7 +205,7 @@ public class NotificationService {
 	}
 	
 	private String getLocalisedState(ProcessInstance workflow, String completeMsgs) {
-		
+
 		String state ="";
 		if(configs.getIsWorkflowEnabled()) {
 			state = workflow.getState().getState();
@@ -280,6 +280,12 @@ public class NotificationService {
 		Map<String, String> mobileNumberToOwner = new HashMap<>();
 		String tenantId = request.getProperty().getTenantId();
 		String moduleName = request.getProperty().getWorkflow().getModuleName();
+		for(Document document : request.getProperty().getDocuments()) {
+			fileStoreIds.add(document.getFileStoreId());
+//			if(document.getDocumentType()=="ApplicationType"){
+//				fileStoreIds.add(document.getFileStoreId());
+//			}
+		}
 
 		String action;
 		if(request.getProperty().getWorkflow()!=null)
