@@ -19,6 +19,7 @@ import org.egov.vendor.web.model.VendorSearchCriteria;
 import org.egov.vendor.web.model.user.User;
 import org.egov.vendor.web.model.user.UserDetailResponse;
 import org.egov.vendor.web.model.vehicle.Vehicle;
+import org.egov.vendor.web.model.vehicle.VehicleSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -87,8 +88,25 @@ public class VendorService {
 			}
 		}
 		
-		if(!CollectionUtils.isEmpty(criteria.getVehicleRegistrationNumber()) || StringUtils.hasLength(criteria.getVehicleType())) {
-			List<Vehicle> vehicles = vehicleService.getVehicles(null, criteria.getVehicleRegistrationNumber(), criteria.getVehicleType(), requestInfo, criteria.getTenantId());
+		if (!CollectionUtils.isEmpty(criteria.getVehicleRegistrationNumber())
+				|| StringUtils.hasLength(criteria.getVehicleType())
+				|| StringUtils.hasLength(criteria.getVehicleCapacity())) {
+			
+			VehicleSearchCriteria vehicleSearchCriteria=new VehicleSearchCriteria();
+			vehicleSearchCriteria = VehicleSearchCriteria.builder()
+					.registrationNumber(criteria.getVehicleRegistrationNumber())
+					.vehicleType(criteria.getVehicleType())
+					.vehicleCapacity(criteria.getVehicleCapacity())
+					.tenantId(criteria.getTenantId()).build();
+			
+			List<Vehicle> vehicles = vehicleService.getVehicles(vehicleSearchCriteria,requestInfo);
+			
+			/*
+			 * List<Vehicle> vehicles = vehicleService.getVehicles(null,
+			 * criteria.getVehicleRegistrationNumber(), criteria.getVehicleType(),
+			 * criteria.getVehicleCapacity(), requestInfo, criteria.getTenantId());
+			 */	
+			
 			if(CollectionUtils.isEmpty(vehicles)) {
 				return new ArrayList<Vendor>();
 			}
@@ -97,7 +115,6 @@ public class VendorService {
 			}else {
 				criteria.getVehicleIds().addAll(vehicles.stream().map(Vehicle::getId).collect(Collectors.toList()));
 			}
-			
 			
 		}
 		

@@ -81,9 +81,13 @@ public class FSM   {
   @SafeHtml
   @JsonProperty("vehicleType")
   private String vehicleType ;
-
+ 
   @JsonProperty("noOfTrips")
   private Integer noOfTrips ;
+  
+  @SafeHtml
+  @JsonProperty("vehicleCapacity")
+  private String vehicleCapacity ;
 
   /**
    * Gets or Sets status

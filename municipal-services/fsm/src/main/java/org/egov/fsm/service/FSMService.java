@@ -1,9 +1,8 @@
 package org.egov.fsm.service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,6 +33,7 @@ import org.egov.fsm.web.model.FSMSearchCriteria;
 import org.egov.fsm.web.model.PeriodicApplicationRequest;
 import org.egov.fsm.web.model.Workflow;
 import org.egov.fsm.web.model.dso.Vendor;
+import org.egov.fsm.web.model.dso.VendorSearchCriteria;
 import org.egov.fsm.web.model.user.User;
 import org.egov.fsm.web.model.user.UserDetailResponse;
 import org.egov.fsm.web.model.vehicle.Vehicle;
@@ -42,9 +42,7 @@ import org.egov.fsm.workflow.ActionValidator;
 import org.egov.fsm.workflow.WorkflowIntegrator;
 import org.egov.fsm.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
-import org.javers.common.collections.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -256,7 +254,16 @@ public class FSMService {
 			throw new CustomException(FSMErrorConstants.INVALID_VEHICLE_ASSIGN_ACTION," only Employee with FSM_EDITOR role and/or  assigned DSO can take this action. ");
 		}
 
-		Vendor vendor = dsoService.getVendor(oldFSM.getDsoId(),fsm.getTenantId(), dsoOwnerId,null,null, fsmRequest.getRequestInfo());
+		VendorSearchCriteria vendorSearchCriteria=new VendorSearchCriteria();
+		vendorSearchCriteria = VendorSearchCriteria.builder().ids(Arrays.asList(oldFSM.getDsoId()))
+				.ownerIds(Arrays.asList(dsoOwnerId))
+				.tenantId(fsm.getTenantId()).build();
+				
+		Vendor vendor = dsoService.getVendor(vendorSearchCriteria,fsmRequest.getRequestInfo());
+		
+		//Vendor vendor = dsoService.getVendor(oldFSM.getDsoId(), fsm.getTenantId(), dsoOwnerId, null, null, null,
+		//		fsmRequest.getRequestInfo());
+		
 		if (vendor == null) {
 			throw new CustomException(FSMErrorConstants.INVALID_DSO,
 					" DSO is invalid, cannot take an action, Application is not assigned to current logged in user !");
@@ -415,8 +422,19 @@ public class FSMService {
 		if (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN)) {
 			List<Role> roles = requestInfo.getUserInfo().getRoles();
 			if (roles.stream().anyMatch(role -> Objects.equals(role.getCode(), FSMConstants.ROLE_FSM_DSO))) {
-				Vendor dso = dsoService.getVendor(null, criteria.getTenantId(), null,
-						requestInfo.getUserInfo().getMobileNumber(), null, requestInfo);
+				
+				VendorSearchCriteria vendorSearchCriteria=new VendorSearchCriteria();
+				vendorSearchCriteria = VendorSearchCriteria.builder()
+						.mobileNumber(requestInfo.getUserInfo().getMobileNumber())
+						.tenantId(criteria.getTenantId()).build();
+						
+				Vendor dso = dsoService.getVendor(vendorSearchCriteria,requestInfo);
+				
+				/*
+				 * Vendor dso = dsoService.getVendor(null, criteria.getTenantId(), null,
+				 * requestInfo.getUserInfo().getMobileNumber(), null,null, requestInfo);
+				 */
+				
 				if (dso != null && org.apache.commons.lang3.StringUtils.isNotEmpty(dso.getId())) {
 					dsoId = dso.getId();
 				}
