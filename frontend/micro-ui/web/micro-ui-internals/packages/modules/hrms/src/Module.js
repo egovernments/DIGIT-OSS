@@ -1,87 +1,45 @@
 import React from "react";
-import { Switch, useRouteMatch, useLocation, Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { PrivateRoute } from "@egovernments/digit-ui-react-components";
-import Inbox from "./pages/Inbox";
+import { useRouteMatch } from "react-router-dom";
 import HRMSCard from "./components/hrmscard";
-import CreateEmployee from "./pages/createEmployee";
-import EditEmpolyee from "./pages/EditEmployee/index";
 import InboxFilter from "./components/InboxFilter";
-import Jurisdictions from "./components/pageComponents/jurisdiction";
+import ActionModal from "./components/Modal";
 import Assignments from "./components/pageComponents/assignment";
-import SelectEmployeeId from "./components/pageComponents/SelectEmployeeId";
-import SelectDateofEmployment from "./components/pageComponents/SelectDateofEmployment";
-import SelectEmployeeType from "./components/pageComponents/SelectEmployeeType";
+import HRBanner from "./components/pageComponents/Banner";
+import SelectDateofBirthEmployment from "./components/pageComponents/EmployeeDOB";
 import SelectEmployeePhoneNumber from "./components/pageComponents/EmployeePhoneNumber";
-import SelectEmployeeName from "./components/pageComponents/SelectEmployeeName";
+import Jurisdictions from "./components/pageComponents/jurisdiction";
+import SelectDateofEmployment from "./components/pageComponents/SelectDateofEmployment";
 import SelectEmployeeEmailId from "./components/pageComponents/SelectEmailId";
 import SelectEmployeeCorrespondenceAddress from "./components/pageComponents/SelectEmployeeCorrespondenceAddress";
 import SelectEmployeeGender from "./components/pageComponents/SelectEmployeeGender";
-import SelectDateofBirthEmployment from "./components/pageComponents/EmployeeDOB";
-import Response from "./pages/Response";
-import HRBanner from "./components/pageComponents/Banner";
+import SelectEmployeeId from "./components/pageComponents/SelectEmployeeId";
+import SelectEmployeeName from "./components/pageComponents/SelectEmployeeName";
+import SelectEmployeeType from "./components/pageComponents/SelectEmployeeType";
+import EmployeeApp from "./pages";
+import CreateEmployee from "./pages/createEmployee";
+import EditEmployee from "./pages/EditEmployee/index";
 import Details from "./pages/EmployeeDetails";
-import ActionModal from "./components/Modal";
+import Inbox from "./pages/Inbox";
+import Response from "./pages/Response";
 
 export const HRMSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "HR";
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
-  const mobileView = innerWidth <= 640;
-  const location = useLocation();
-  const { t } = useTranslation();
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const inboxInitialState = {
-    searchParams: {
-      tenantId: tenantId,
-    },
-  };
+
   Digit.SessionStorage.set("HRMS_TENANTS", tenants);
-
   const { path, url } = useRouteMatch();
-
   if (!Digit.Utils.hrmsAccess()) {
     return null;
   }
   if (userType === "employee") {
-    const HRMSResponse= Digit?.ComponentRegistryService?.getComponent('HRMSResponse') ;
-    const HRMSDetails= Digit?.ComponentRegistryService?.getComponent('HRMSDetails') ;
-    return (
-      <Switch>
-        <React.Fragment>
-          <div className="ground-container">
-            <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
-              <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
-                {t("HR_COMMON_BUTTON_HOME")}
-              </Link>{" "}
-              / <span>{location.pathname === "/digit-ui/employee/hrms/inbox" ? t("HR_COMMON_HEADER") : t("HR_COMMON_HEADER")}</span>
-            </p>
-            <PrivateRoute
-              path={`${path}/inbox`}
-              component={() => (
-                <Inbox
-                  parentRoute={path}
-                  businessService="hrms"
-                  filterComponent="HRMS_INBOX_FILTER"
-                  initialStates={inboxInitialState}
-                  isInbox={true}
-                />
-              )}
-            />
-            <PrivateRoute path={`${path}/create`} component={() => <CreateEmployee />} />
-            <PrivateRoute path={`${path}/response`} component={(props) => <HRMSResponse {...props} parentRoute={path} />} />
-            <PrivateRoute path={`${path}/details/:tenantId/:id`} component={() => <HRMSDetails />} />
-            <PrivateRoute path={`${path}/edit/:tenantId/:id`} component={() => <EditEmpolyee />} />
-          </div>
-        </React.Fragment>
-      </Switch>
-    );
+    return <EmployeeApp path={path} url={url} />;
   } else return null;
 };
 
 const componentsToRegister = {
   HRMSCard,
-  HRMSDetails:Details,
+  HRMSDetails: Details,
   SelectEmployeeEmailId,
   SelectEmployeeName,
   SelectEmployeeId,
@@ -96,7 +54,10 @@ const componentsToRegister = {
   SelectEmployeeGender,
   SelectDateofBirthEmployment,
   HRMSModule,
-  HRMSResponse:Response,
+  HRMSResponse: Response,
+  HREditEmpolyee: EditEmployee,
+  HRCreateEmployee: CreateEmployee,
+  HRInbox: Inbox,
   HRMS_INBOX_FILTER: (props) => <InboxFilter {...props} />,
 };
 

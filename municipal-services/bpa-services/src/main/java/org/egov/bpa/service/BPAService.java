@@ -2,6 +2,7 @@ package org.egov.bpa.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
@@ -25,6 +26,7 @@ import org.egov.bpa.validator.BPAValidator;
 import org.egov.bpa.web.model.BPA;
 import org.egov.bpa.web.model.BPARequest;
 import org.egov.bpa.web.model.BPASearchCriteria;
+import org.egov.bpa.web.model.Workflow;
 import org.egov.bpa.web.model.landInfo.LandInfo;
 import org.egov.bpa.web.model.landInfo.LandSearchCriteria;
 import org.egov.bpa.web.model.user.UserDetailResponse;
@@ -416,22 +418,46 @@ public class BPAService {
                 enrichmentService.enrichBPAUpdateRequest(bpaRequest, businessService);
                 
                 this.handleRejectSendBackActions(applicationType, bpaRequest, businessService, searchResult, mdmsData, edcrResponse);
-
+                String state = workflowService.getCurrentState(bpa.getStatus(), businessService);
+                String businessSrvc = businessService.getBusinessService();
+                
+                /*
+                 * Before approving the application we need to check sanction fee is applicable
+                 * or not for that purpose on PENDING_APPROVAL_STATE the demand is generating.
+                 */
+                // Generate the sanction Demand
+                if ((businessSrvc.equalsIgnoreCase(BPAConstants.BPA_OC_MODULE_CODE)
+                        || businessSrvc.equalsIgnoreCase(BPAConstants.BPA_BUSINESSSERVICE))
+                        && state.equalsIgnoreCase(BPAConstants.PENDING_APPROVAL_STATE)) {
+                    calculationService.addCalculation(bpaRequest, BPAConstants.SANCTION_FEE_KEY);
+                }
+                
+                
+                /*
+                 * For Permit medium/high and OC on approval stage, we need to check whether for a 
+                 * application sanction fee is applicable or not. If sanction fee is not applicable
+                 * then we need to skip the payment on APPROVE and need to make it APPROVED instead
+                 * of SANCTION FEE PAYMENT PEDNING.
+                 */
+                if ((businessSrvc.equalsIgnoreCase(BPAConstants.BPA_OC_MODULE_CODE)
+                        || businessSrvc.equalsIgnoreCase(BPAConstants.BPA_BUSINESSSERVICE))
+                        && state.equalsIgnoreCase(BPAConstants.PENDING_APPROVAL_STATE) &&
+                        bpa.getWorkflow() != null && bpa.getWorkflow().getAction().equalsIgnoreCase(BPAConstants.ACTION_APPROVE)
+                        && util.getDemandAmount(bpaRequest).compareTo(BigDecimal.ZERO) <= 0) {
+                    Workflow workflow = Workflow.builder().action(BPAConstants.ACTION_SKIP_PAY).build();
+                    bpa.setWorkflow(workflow);
+                }
                 wfIntegrator.callWorkFlow(bpaRequest);
                 log.debug("===> workflow done =>" +bpaRequest.getBPA().getStatus()  );
                 enrichmentService.postStatusEnrichment(bpaRequest);
                 
                 log.debug("Bpa status is : " + bpa.getStatus());
 
-                // Generate the sanction Demand
-                if (bpa.getStatus().equalsIgnoreCase(BPAConstants.SANC_FEE_STATE)) {
-                        calculationService.addCalculation(bpaRequest, BPAConstants.SANCTION_FEE_KEY);
-                }
 
-                if (Arrays.asList(config.getSkipPaymentStatuses().split(",")).contains(bpa.getStatus())) {
-                        enrichmentService.skipPayment(bpaRequest);
-                        enrichmentService.postStatusEnrichment(bpaRequest);
-                }
+                /*
+                 * if (Arrays.asList(config.getSkipPaymentStatuses().split(",")).contains(bpa.getStatus())) {
+                 * enrichmentService.skipPayment(bpaRequest); enrichmentService.postStatusEnrichment(bpaRequest); }
+                 */
                 
                 repository.update(bpaRequest, workflowService.isStateUpdatable(bpa.getStatus(), businessService));
                 return bpaRequest.getBPA();

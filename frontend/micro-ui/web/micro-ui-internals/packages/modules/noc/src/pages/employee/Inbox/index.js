@@ -5,6 +5,7 @@ import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
 import useInboxTableConfig from "./useInboxTableConfig";
 import useInboxMobileCardsData from "./useInboxMobileCardsData";
+import { businessServiceList } from "../../../utils";
 
 const Inbox = ({parentRoute}) => {
     
@@ -22,7 +23,8 @@ const Inbox = ({parentRoute}) => {
       applicationStatus: [],
       businessService: null,
       locality: [],
-      assignee: "ASSIGNED_TO_ALL"
+      assignee: "ASSIGNED_TO_ALL",
+      businessServiceArray: businessServiceList(true) || []
     }
     const tableOrderFormDefaultValues = {
       sortBy: "",
