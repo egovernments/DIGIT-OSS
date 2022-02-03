@@ -239,7 +239,7 @@ const PropertyDetails = () => {
         isDataLoading={isLoading}
         applicationData={appDetailsToShow?.applicationData}
         mutate={null}
-        workflowDetails={{}}
+        workflowDetails={appDetailsToShow?.applicationData?.status === "ACTIVE" ? workflowDetails : {}}
         businessService="PT"
         showToast={showToast}
         setShowToast={setShowToast}
