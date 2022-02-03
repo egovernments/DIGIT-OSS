@@ -24,9 +24,9 @@ const ReceiptsService = {
             useCache: true,
             method: "POST",
             params: { ...newParam},
-            auth: true,
+            auth: window.location.href.includes("pt/property/my-payments")? false : true,
             locale: true,
-            userService: true,
+            userService: window.location.href.includes("pt/property/my-payments")? false : true,
             userDownload: true,
             })
         },
