@@ -39,13 +39,58 @@ const PTApplicationDetails = () => {
         // d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
-  
+
+  if (!property.workflow) {
+    let workflow = {
+      id: null,
+      tenantId: tenantId,
+      businessService: "PT.MUTATION",
+      businessId: application?.acknowldgementNumber,
+      action: "",
+      moduleName: "PT",
+      state: null,
+      comment: null,
+      documents: null,
+      assignes: null
+    };
+    property.workflow = workflow;
+
+  }
+
+  if (property && property.owners && property.owners.length > 0) {
+    let ownersTemp = [];
+    let owners = [];
+    property.owners.map(owner => {
+      owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
+      owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
+      if (owner.status == "ACTIVE") {
+        ownersTemp.push(owner);
+      } else {
+        owners.push(owner);
+      }
+    });
+
+    property.ownersInit = owners;
+    property.ownersTemp = ownersTemp;
+  }
+  property.ownershipCategoryTemp = property.ownershipCategory;
+  property.ownershipCategoryInit = 'NA';
+  // Set Institution/Applicant info card visibility
+  if (
+    get(
+      application,
+      "Properties[0].ownershipCategory",
+      ""
+    ).startsWith("INSTITUTION")
+  ) {
+    property.institutionTemp = property.institution;
+  }
+
   if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
     const propertiesAudit = get(auditResponse, "Properties", []);
 
     const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
     const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
-
 
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
     property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
@@ -55,8 +100,19 @@ const PTApplicationDetails = () => {
     }
   }
 
-  // console.log('property-', property);
-  
+  let transfereeOwners = get(
+    property,
+    "ownersTemp", []
+  );
+  let transferorOwners = get(
+    property,
+    "ownersInit", []
+  );
+ 
+
+  console.log('transfereeOwners-', transfereeOwners);
+  console.log('transferorOwners-', transferorOwners);
+
   let units = [];
   units = application?.units;
   units &&
