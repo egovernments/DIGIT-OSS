@@ -47,6 +47,10 @@ const PTCard = () => {
         label: t("SEARCH_PROPERTY"),
         link: `/digit-ui/employee/pt/search`,
       },
+      {
+        label: t("ES_COMMON_APPLICATION_SEARCH"),
+        link: `/digit-ui/employee/pt/application-search`,
+      }
     ],
   };
 
@@ -55,10 +59,6 @@ const PTCard = () => {
     propsForModuleCard.links.push({
       label: t("ES_TITLE_NEW_REGISTRATION"),
       link: `/digit-ui/employee/pt/new-application`,
-    });
-    propsForModuleCard.links.push({
-      label: t("ES_COMMON_APPLICATION_SEARCH"),
-      link: `/digit-ui/employee/pt/application-search`,
     });
   }
 
