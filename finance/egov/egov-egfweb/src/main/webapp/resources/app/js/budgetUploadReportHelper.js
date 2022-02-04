@@ -59,8 +59,6 @@ function getFormData($form) {
 
 function callAjaxSearch() {
 	drillDowntableContainer = jQuery("#resultTable");
-	console.log($("#reBudget option:selected").text());
-	console.log($("#referenceBudget").html());
 	$('#REBudgetName1').html($("#reBudget option:selected").text());
 	$('#REBudgetName2').html($("#reBudget option:selected").text());
 	$('#BEBudgetName1').html($("#referenceBudget").html());
@@ -120,7 +118,6 @@ function callAjaxSearch() {
 
 $('#reBudget').change(function() {
 	$('#referenceBudget').html('');
-	console.log($('#reBudget').val());
 	if($('#reBudget').val()!=''){
 		$.ajax({
 			url : '/services/EGF/budgetuploadreport/ajax/getReferenceBudget',

@@ -86,18 +86,15 @@ $(document).ready(function()
 	$('#j_username').blur(function(){
 		$('#locationId').empty();
 		if(!$.trim($(this).val())){
-			//console.log('Trimmed - value is not there');
 		}else{
 			$.ajax({
 			      url: "requiredlocations?username="+this.value,
 			      dataType: "json",
 			      success: function(data) { 
 			    	  checklocation = true;
-			    	  //console.log(JSON.stringify(data));
 			    	  if(data.length > 0){
 			    		  $('#locationId').append('<option value="">select location</option>');
 			    		  $.each(data, function (key,value) {
-							  console.log(value.id+"<-->"+value.name);
 							  var opt = "<option value=" + value.id + ">" + value.name + "</option>";
 							  $('#locationId').append(opt);
 							  $("#locationId").attr('required', true);
@@ -111,7 +108,6 @@ $(document).ready(function()
 			    	  }
 		    	  },
 		    	  error: function() {
-	    	         console.log('Error method');
 		          }
 			});
 		}
@@ -120,8 +116,7 @@ $(document).ready(function()
 	});
 	
 	function loaddpdown_value(){
-		$("#locationId").each(function() { 
-			console.log($(this).children('option').length);
+		$("#locationId").each(function() {
 			if($(this).children('option').length == 2)
 			{
 			  $(this).find('option').eq(1).prop('selected', true);
@@ -131,13 +126,11 @@ $(document).ready(function()
 	
 	$("#signin-action").click(function(e){
 		if($('#signform').valid()){
-			//console.log('Form valid');
 			if(!checklocation){
 				$('#j_username').trigger('blur');
 				e.preventDefault();
 			}
 		}else{
-			//console.log('Form not valid');
 			e.preventDefault();
 		}
 	});

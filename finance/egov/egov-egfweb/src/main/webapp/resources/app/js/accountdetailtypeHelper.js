@@ -76,7 +76,6 @@ function callAjaxSearch() {
 		"fnRowCallback" : function(row, data, index) {
 		
 			$(row).on('click', function() {
-				console.log(data.id);
 				window.open('/services/EGF/accountdetailtype/'+ $('#mode').val() +'/'+data.id,'','width=800, height=600');
 			});
 			

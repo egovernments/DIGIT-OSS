@@ -129,11 +129,9 @@ function populateAvailableBalance(accnumObj) {
 
 var callback = {
 	success : function(o) {
-		console.log("success");
 		document.getElementById('availableBalance').value = o.responseText;
 	},
 	failure : function(o) {
-		console.log("failed");
 	}
 }
 
@@ -180,7 +178,6 @@ function disableControls(frmIndex, isDisable) {
 function balanceCheck() {
 
 	if (document.getElementById('balanceAvl')) {
-		console.log("ins did");
 		if (parseFloat(document.getElementById('amount').value) > parseFloat(document
 				.getElementById('availableBalance').value)) {
 			return false;

@@ -659,7 +659,6 @@ function onFocusDetailCode(obj) {
 	var subledger = document.getElementById('transactionSummaryList['
 			+ $currRow + '].accountdetailtype.id');
 	var subledgerlength = $(subledger).children('option').length;
-	console.log("subledgerlength" + subledgerlength);
 	if (subledgerlength > 1
 			&& (subledger.value == null || subledger.value == "")) {
 		bootbox.alert("Please select subledger type")
@@ -859,7 +858,6 @@ function validateOnAdd() {
 		var subledger = document.getElementById('transactionSummaryList['
 				+ index + '].accountdetailtype.id');
 		var subledgerlength = $(subledger).children('option').length;
-		console.log(glcode);
 		var entity = document.getElementById('transactionSummaryList[' + index
 				+ '].accountdetailkeyValue').value;
 		var debit = document.getElementById('transactionSummaryList[' + index
@@ -912,7 +910,6 @@ function validateOnCreate() {
 		var subledger = document.getElementById('transactionSummaryList['
 				+ index + '].accountdetailtype.id');
 		var subledgerlength = $(subledger).children('option').length;
-		console.log(glcode);
 		var entity = document.getElementById('transactionSummaryList[' + index
 				+ '].accountdetailkeyValue').value;
 		var debit = document.getElementById('transactionSummaryList[' + index
@@ -962,7 +959,6 @@ function validateOnCreate() {
 				.getElementById('transactionSummaryList[' + lastrow
 						+ '].accountdetailtype.id');
 		var lastrowsubledgerlength = $(lastrowsubledger).children('option').length;
-		console.log(glcode);
 		var lastrowentity = document.getElementById('transactionSummaryList['
 				+ lastrow + '].accountdetailkeyValue').value;
 		var lastrowdebit = document.getElementById('transactionSummaryList['

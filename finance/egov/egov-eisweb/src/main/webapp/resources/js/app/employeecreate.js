@@ -318,7 +318,6 @@ $(document).ready(function(){
 				resetAssignmentValues();
 
 			},error: function (response) {
-				console.log("failed");
 			}
 		});
 	}

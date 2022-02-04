@@ -148,7 +148,6 @@ function loadMappedService(){
 		}).done(function(response) {
 			$('#serviceId').empty();
 			var output = '<option value>Select</option>';
-			console.log("response : ",response);
 			$.each(response, function(idx,data) {
 				output += '<option value=' + data.businessDetails + '>' + data.businessDetails + '</option>';
 			});

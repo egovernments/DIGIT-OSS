@@ -46,8 +46,7 @@
  *
  */
 $(document).ready(function()
-{	
-	console.log("workflow file got updated................");
+{
 /*	$('#approvalDepartment').change(function(){
 		$.ajax({
 			url: "/eis/ajaxWorkFlow-getDesignationsForActiveAssignmentsByObjectType",     
@@ -63,7 +62,6 @@ $(document).ready(function()
 			},
 			dataType: "json",
 			success: function (response) {
-				console.log("success"+response);
 				$('#approvalDesignation').empty();
 				$('#approvalDesignation').append($("<option value=''>Select from below</option>"));
 				$.each(response, function(index, value) {
@@ -74,7 +72,6 @@ $(document).ready(function()
 			}, 
 			error: function (response) {
 				bootbox.alert('json fail');
-				console.log("failed");
 			}
 		});
 	});*/
@@ -95,7 +92,6 @@ $(document).ready(function()
 			contentType:'application/json',
 			//data:JSON.stringify(jsonData),
 			success: function (response) {
-				console.log("success"+response);
 				$('#approvalDesignation').empty();
 				$('#approvalDesignation').append($("<option value=''>Select from below</option>"));
 				$.each(response, function(index, value) {
@@ -106,7 +102,6 @@ $(document).ready(function()
 			}, 
 			error: function (response) {
 				bootbox.alert('json fail');
-				console.log("failed");
 			}
 		});
 	});
@@ -127,7 +122,6 @@ $(document).ready(function()
 			contentType:'application/json',
 //			data: JSON.stringify(jsonData),
 			success: function (response) {
-				console.log("success"+response);
 				$('#approvalPosition').empty();
 				$('#approvalPosition').append($("<option value=''>Select from below</option>"));
 				$.each(response, function(index, value) {
@@ -137,7 +131,6 @@ $(document).ready(function()
 				$('#approvalPosition').val($('#approvalPositionValue').val());
 			}, 
 			error: function (response) {
-				console.log("failed");
 			}
 		});
 	});

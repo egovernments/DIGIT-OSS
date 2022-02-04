@@ -145,7 +145,6 @@ $(document).ready(function(){
 		reportdatatable.on( 'order.dt search.dt', function () {
 			reportdatatable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 		            cell.innerHTML = i+1;
-		            console.log(i+1)
 		            reportdatatable.cell(cell).invalidate('dom'); 
 		        } );
 		    } ).draw();
@@ -170,7 +169,6 @@ function getPosition() {
 			type: "GET",
 			dataType: "json",
 			success: function (response) {
-				console.log("success"+response);
 				$('#position').empty();
 				$('#position').append(
 						$("<option value=''>Select from below</option>"));
@@ -179,7 +177,6 @@ function getPosition() {
 				});
 			}, 
 			error: function (response) {
-				console.log("failed");
 			}
 		});	
 }

@@ -99,7 +99,6 @@ function callAjaxSearch() {
 					$(row).on(
 							'click',
 							function() {
-								console.log(data.id);
 								window.open('/services/EGF/contractor/' + $('#mode').val()
 										+ '/' + data.id, '',
 										'width=800, height=600');
