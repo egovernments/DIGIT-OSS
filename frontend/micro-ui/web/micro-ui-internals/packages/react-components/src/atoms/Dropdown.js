@@ -217,7 +217,8 @@ const Dropdown = (props) => {
                     onClick={() => onSelect(option)}
                   >
                     {option.icon && <span className="icon"> {option.icon} </span>}
-                    {<span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>}
+                    {props.isPropertyAssess? <div>{props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</div>:
+                    <span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>} 
                   </div>
                 );
               })}

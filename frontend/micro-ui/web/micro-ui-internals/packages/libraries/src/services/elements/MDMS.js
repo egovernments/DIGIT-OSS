@@ -571,6 +571,22 @@ const getRentalDetailsCategoryCriteria = (tenantId, moduleCode) => ({
   },
 });
 
+const getChargeSlabsCategoryCriteria = (tenantId, moduleCode) => ({
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "ChargeSlabs",
+          },
+        ],
+      },
+    ],
+  },
+});
+
 
 const getGenderTypeList = (tenantId, moduleCode, type) => ({
   type,
@@ -965,6 +981,14 @@ const getRentalDetailsCategory = (MdmsRes) => {
   });
 };
 
+const getChargeSlabsCategory = (MdmsRes) => {
+  MdmsRes["PropertyTax"].ChargeSlabs.filter((category) => category.active).map((ChargeSlabsInfo) => {
+    return {
+      ...ChargeSlabsInfo,
+    };
+  });
+};
+
 const getGenderType = (MdmsRes) => {
   return MdmsRes["common-masters"].GenderType.filter((GenderType) => GenderType.active).map((genderDetails) => {
     return{
@@ -1112,6 +1136,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetPostFields(MdmsRes);
     case "RentalDeatils":
       return getRentalDetailsCategory(MdmsRes);
+    case "ChargeSlabs":
+      return getChargeSlabsCategory(MdmsRes);
     case "DssDashboard":
       return getDssDashboard(MdmsRes);
     case "BusinessService":
@@ -1340,6 +1366,9 @@ export const MdmsService = {
   },
   getRentalDetails: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getRentalDetailsCategoryCriteria(tenantId, moduleCode), moduleCode);
+  },
+  getChargeSlabs: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getChargeSlabsCategoryCriteria(tenantId, moduleCode), moduleCode);
   },
   getDssDashboard: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getDssDashboardCriteria(tenantId, moduleCode), moduleCode);
