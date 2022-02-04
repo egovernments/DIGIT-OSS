@@ -310,7 +310,13 @@ public class NotificationUtil {
 
             String subject = "";
             String body = customizedMsg;
-            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).fileStoreId(fileStoreIds).build();
+            Email emailobj = new Email();
+            if(fileStoreIds==null) {
+                emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).fileStoreId(null).tenantId(tenantId).build();
+            } else {
+
+                emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).fileStoreId(fileStoreIds).tenantId(tenantId).build();
+            }
             EmailRequest email = new EmailRequest(requestInfo,emailobj);
             emailRequest.add(email);
         }
