@@ -53,7 +53,6 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
 
-import groovy.util.logging.Log;
 
 import java.util.Iterator;
 import java.util.Map;
