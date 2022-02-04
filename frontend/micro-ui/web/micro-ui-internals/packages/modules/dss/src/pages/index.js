@@ -101,6 +101,9 @@ const DashBoard = ({ stateCode }) => {
     }),
     [filters, isUlbLoading, isMdmsLoading]
   );
+
+  const mobileView = innerWidth <= 640;
+
   const handlePrint = () => Digit.Download.PDF(fullPageRef, t(dashboardConfig?.[0]?.name));
 
   const removeULB = (id) => {
@@ -135,8 +138,8 @@ const DashBoard = ({ stateCode }) => {
           onClick: () => {
             setShowOptions(!showOptions);
             setTimeout(() => {
-              Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
-            }, 500);
+              return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
+            }, 500)
           },
         },
         {
@@ -144,8 +147,8 @@ const DashBoard = ({ stateCode }) => {
           onClick: () => {
             setShowOptions(!showOptions);
             setTimeout(() => {
-              Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
-            }, 500);
+              return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
+            }, 500)
           },
         },
       ]
@@ -156,8 +159,8 @@ const DashBoard = ({ stateCode }) => {
           onClick: () => {
             setShowOptions(!showOptions);
             setTimeout(() => {
-              Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "mail");
-            }, 500);
+              return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "mail");
+            }, 500)
           },
         },
         {
@@ -166,8 +169,8 @@ const DashBoard = ({ stateCode }) => {
           onClick: () => {
             setShowOptions(!showOptions);
             setTimeout(() => {
-              Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "whatsapp");
-            }, 500);
+              return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "whatsapp");
+            }, 500)
           },
         },
         {
@@ -176,8 +179,8 @@ const DashBoard = ({ stateCode }) => {
           onClick: () => {
             setShowOptions(!showOptions);
             setTimeout(() => {
-              Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "mail");
-            }, 500);
+              return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "mail");
+            }, 500)
           },
         },
         {
@@ -186,8 +189,8 @@ const DashBoard = ({ stateCode }) => {
           onClick: () => {
             setShowOptions(!showOptions);
             setTimeout(() => {
-              Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "whatsapp");
-            }, 500);
+              return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "whatsapp");
+            }, 500)
           },
         },
       ];
@@ -201,7 +204,7 @@ const DashBoard = ({ stateCode }) => {
       <div ref={fullPageRef}>
         <div className="options">
           <Header styles={{ marginBottom: "0px" }}>{t(dashboardConfig?.[0]?.name)}</Header>
-          <div>
+          {mobileView ? null : (<div>
             <div className="mrlg">
               <MultiLink
                 className="multilink-block-wrapper"
@@ -217,14 +220,9 @@ const DashBoard = ({ stateCode }) => {
               <DownloadIcon className="mrsm" />
               {t(`ES_DSS_DOWNLOAD`)}
             </div>
-          </div>
+          </div>)}
         </div>
-        <Filters
-          t={t}
-          ulbTenants={isNational ? nationalInfo : ulbTenants}
-          isOpen={isFilterModalOpen}
-          closeFilters={() => setIsFilterModalOpen(false)}
-        />
+        <Filters t={t}           ulbTenants={isNational ? nationalInfo : ulbTenants} isOpen={isFilterModalOpen} closeFilters={() => setIsFilterModalOpen(false)} />
         {filters?.filters?.tenantId.length > 0 && (
           <div className="tag-container">
             {filters?.filters?.tenantId?.map((filter, id) => (
@@ -235,7 +233,7 @@ const DashBoard = ({ stateCode }) => {
             </p>
           </div>
         )}
-        <div className="options-m">
+        {mobileView ? (<div className="options-m">
           <div>
             <FilterIcon onClick={() => setIsFilterModalOpen(!isFilterModalOpen)} style />
           </div>
@@ -254,7 +252,7 @@ const DashBoard = ({ stateCode }) => {
             <DownloadIcon />
             {t(`ES_DSS_DOWNLOAD`)}
           </div>
-        </div>
+        </div>) : null}
         <div>
           {tabArray && tabArray?.length > 1 && (
             <div className="dss-switch-tabs chart-row">
