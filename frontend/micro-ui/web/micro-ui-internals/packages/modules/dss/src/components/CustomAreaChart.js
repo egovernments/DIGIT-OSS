@@ -25,6 +25,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
   const { value } = useContext(FilterContext);
   const [totalCapacity, setTotalCapacity] = useState(0);
   const [totalWaste, setTotalWaste] = useState(0);
+  const [manageChart,setmanageChart]=useState("Area");
   const stateTenant = Digit.ULBService.getStateId();
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.useCommonMDMS(stateTenant, "FSM", "FSTPPlantInfo", {
     enabled: id === "fsmCapacityUtilization",
@@ -56,15 +57,34 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
   }, [response]);
 
   const chartData = useMemo(() => {
-    if (id !== "fsmCapacityUtilization") {
-      return response?.responseData?.data?.[0]?.plots;
+    
+    if(response?.responseData?.data?.length==1){
+      setmanageChart("Area");
+      if (id !== "fsmCapacityUtilization") {
+        return response?.responseData?.data?.[0]?.plots;
+      }
+      return response?.responseData?.data?.[0]?.plots.map((plot) => {
+        const [month, year] = plot?.name.split("-");
+        const totalDays = getDaysInMonth(Date.parse(`${month} 1, ${year}`));
+        const value = Math.round((plot?.value / (totalCapacity * totalDays)) * 100);
+        return { ...plot, value };
+      });
+    }else if(response?.responseData?.data?.length>1){
+      setmanageChart("Line");
+      const mergeObj = response?.responseData?.data?.[0]?.plots.map((x, index) => {
+        return {
+          label: null,
+          name: response?.responseData?.data?.[0]?.plots[index].name,
+          strValue: null,
+          symbol: response?.responseData?.data?.[0]?.plots[index].symbol,
+          [response?.responseData?.data?.[0]?.headerName]  : response?.responseData?.data?.[0]?.plots[index].value,
+          [response?.responseData?.data?.[1]?.headerName]: response?.responseData?.data?.[1]?.plots[index].value
+        };
+      });
+      return mergeObj;
     }
-    return response?.responseData?.data?.[0]?.plots.map((plot) => {
-      const [month, year] = plot?.name.split("-");
-      const totalDays = getDaysInMonth(Date.parse(`${month} 1, ${year}`));
-      const value = Math.round((plot?.value / (totalCapacity * totalDays)) * 100);
-      return { ...plot, value };
-    });
+     
+
   }, [response, totalCapacity]);
 
   const renderPlot = (plot) => {
@@ -112,7 +132,6 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
   if (isLoading) {
     return <Loader />;
   }
-
   return (
     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "85%" }}>
       {id === "fsmCapacityUtilization" && (
@@ -126,7 +145,8 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
             <p>{t("DSS_NO_DATA")}</p>
           </div>
         ) : (
-          <AreaChart width="100%" height="100%" data={chartData} margin={{ left: 30, top: 10 }}>
+
+          manageChart =="Area" ?( <AreaChart width="100%" height="100%" data={chartData} margin={{ left: 30, top: 10 }}>
             <defs>
               <linearGradient id="colorUv" x1=".5" x2=".5" y2="1">
                 <stop stopColor="#048BD0" stopOpacity={0.5} />
@@ -152,7 +172,37 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
             />
             <Area type="monotone" dataKey={renderPlot} stroke="#048BD0" fill="url(#colorUv)" dot={true} />
           </AreaChart>
-        )}
+          ):(
+            <LineChart
+            width={500}
+            height={300}
+            data={chartData}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line
+              type="monotone"
+              dataKey={response?.responseData?.data?.[0]?.headerName}
+              stroke="#8884d8"
+              activeDot={{ r: 8 }}
+            />
+            <Line type="monotone" dataKey={response?.responseData?.data?.[1]?.headerName} stroke="#82ca9d" />
+          </LineChart>
+          ) 
+        )
+       
+        
+        
+        }
       </ResponsiveContainer>
     </div>
   );
