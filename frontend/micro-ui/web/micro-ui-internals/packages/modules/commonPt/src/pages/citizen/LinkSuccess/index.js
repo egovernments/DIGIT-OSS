@@ -40,7 +40,7 @@ const PropertyLinkSuccess = () => {
           <SubmitBar
             submit={false}
             label={t("PT_PROPERTY_CREATE")}
-            onSubmit={() => history.push('/digit-ui/citizen/commonPt/property/create')}
+            onSubmit={() => history.push('/digit-ui/citizen/commonPt/property/new-application')}
           />
         </Card>
       </div>

@@ -116,7 +116,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
 
   const sendOtpToUser = async (record) => {
     const data = {
-      mobileNumber,
+      mobileNumber : record?.owner_mobile,
       tenantId: stateCode,
       userType: getUserType(),
     };
