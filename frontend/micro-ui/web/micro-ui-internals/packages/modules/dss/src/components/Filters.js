@@ -14,7 +14,7 @@ const checkSelected = (e, selectedDDRs) => {
   }
 };
 
-const Filters = ({ t, ulbTenants, isOpen, closeFilters, showDateRange = true, showDDR = true, showUlb = true, showDenomination = true }) => {
+const Filters = ({ t, ulbTenants, isOpen, closeFilters, showDateRange = true, showDDR = true, showUlb = true, showDenomination = true ,isNational=false}) => {
   const { value, setValue } = useContext(FilterContext);
 
   const [selected, setSelected] = useState(() =>
@@ -77,14 +77,14 @@ const Filters = ({ t, ulbTenants, isOpen, closeFilters, showDateRange = true, sh
       )}
       {showDDR && (
         <div className="filters-input">
-          <div className="mbsm">{t("ES_DSS_DDR")}</div>
+          <div className="mbsm">{t(isNational?"ES_DSS_STATE":"ES_DSS_DDR")}</div>
           <MultiSelectDropdown
             options={ulbTenants?.ddr && ulbTenants.ddr?.sort((x, y) => x?.ddrKey?.localeCompare(y?.ddrKey))}
             optionsKey="ddrKey"
             onSelect={selectDDR}
             selected={selectedDDRs}
-            defaultLabel={t("ES_DSS_ALL_DDR_SELECTED")}
-            defaultUnit={t("ES_DSS_DDR_SELECTED")}
+            defaultLabel={t(isNational?"ES_DSS_ALL_STATE_SELECTED":"ES_DSS_ALL_DDR_SELECTED")}
+            defaultUnit={t(isNational?"ES_DSS_STATE_SELECTED":"ES_DSS_DDR_SELECTED")}
           />
         </div>
       )}

@@ -31,7 +31,8 @@ export const getTenantId = () => {
     return `${localStorage.getItem('tenant-id')}`;
 }
 export const stateTenant= () => {
-    return window&&window.globalConfigs&&window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")?window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID"):getTenantId();
+    let globalConfigs=window&&window.globalConfigs?window.globalConfigs : window.parent&&window.parent.globalConfigs;
+    return globalConfigs&&globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")?globalConfigs.getConfig("STATE_LEVEL_TENANT_ID"):getTenantId().split('.')[0];
 }
 
 export const fetchLocalisationRequest = (language) => {

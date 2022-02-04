@@ -222,7 +222,13 @@ const DashBoard = ({ stateCode }) => {
             </div>
           </div>)}
         </div>
-        <Filters t={t}           ulbTenants={isNational ? nationalInfo : ulbTenants} isOpen={isFilterModalOpen} closeFilters={() => setIsFilterModalOpen(false)} />
+        <Filters
+          t={t}
+          ulbTenants={isNational ? nationalInfo : ulbTenants}
+          isOpen={isFilterModalOpen}
+          closeFilters={() => setIsFilterModalOpen(false)}
+          isNational={isNational}
+        />
         {filters?.filters?.tenantId.length > 0 && (
           <div className="tag-container">
             {filters?.filters?.tenantId?.map((filter, id) => (
