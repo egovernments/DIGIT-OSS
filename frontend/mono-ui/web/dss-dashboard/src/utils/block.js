@@ -10,6 +10,7 @@ import {
 } from "react-device-detect";
 import logoNotFound from '../components/Dashboard/download/logoNotFound.png';
 import logo from '../images/Digit.png';
+import { stateTenant } from './commons';
 
 
 const filterFunc = function (node) {
@@ -19,7 +20,8 @@ const filterFunc = function (node) {
 export const downloadAsImage = (name) => {
     // props.APITrans(true)
     return new Promise((resolve, reject) => {
-        if (isMobile) {
+        /** commented previous mode of download */
+        // if (isMobile) {
             return html2canvas(document.getElementById('divToPrint'), {
                 allowTaint: true,
                 useCORS: true,
@@ -42,22 +44,8 @@ export const downloadAsImage = (name) => {
             }).catch(function () {
                 reject(false);
             })
-            // let node = document.getElementById('divToPrint');
-            // node.style.background = 'white'
-            // // node.style.width = '130mm';
-            // // node.style.height = '300mm';
-            // node.style.margin = '0mm';
-            // node.style.marginColor = 'white';
-            // domtoimage.toPng(node, { quality: 0.100, bgcolor: '#F4F7FB', filter: filterFunc })
-            //     .then(function (dataUrl) {
-            //         var link = document.createElement('a');
-            //         link.download = name || 'image.jpeg';
-            //         link.href = dataUrl;
-            //         link.click();
-            //         resolve({});
-            //     }.bind(this)).catch(function (er) {
-            //         reject(er)
-            //     })
+             /** commented for webview code */
+             /*
         } else if (isBrowser) {
             let div = document.getElementById('divToPrint');
             domtoimage.toJpeg(div, { quality: 0.95, bgcolor: '#F4F7FB', filter: filterFunc })
@@ -72,6 +60,7 @@ export const downloadAsImage = (name) => {
                     reject(er)
                 })
         }
+        */
     });
 
 }
@@ -111,7 +100,9 @@ const getImageData = (dataUrl) => {
 
 const addPages = (elem, cityLogo, pdfHeader) => {
     return new Promise((resolve, reject) => {
+
         if (isMobile) {
+       
             html2canvas(document.getElementById('divToPrint'), {
                 allowTaint: true,
                 useCORS: true,
@@ -184,9 +175,24 @@ const addPages = (elem, cityLogo, pdfHeader) => {
                 reject(false);
             })
 
+           
         } else {
+
+             html2canvas(document.getElementById('divToPrint'), {
+                allowTaint: true,
+                useCORS: true,
+                backgroundColor: "#F4F7FB",
+                removeContainer: true,
+                x: 0,
+                y: 0,
+                width: window.innerWidth,
+            }).then(function (canvas) {
+                var dataUrl = canvas.toDataURL("image/jpeg")
+                 /** commented for webview code */
+             /*
             domtoimage.toJpeg(elem, { quality: 0.95, bgcolor: '#F4F7FB', filter: filterFunc })
                 .then(function (dataUrl) {
+                */
                     return getImageData(dataUrl).then(function (hw) {
                         if (cityLogo) {
                             base64Img.requestBase64(cityLogo, function (err, res, body) {
@@ -310,7 +316,6 @@ const addPages = (elem, cityLogo, pdfHeader) => {
                     return reject(null)
                 })
         }
-
     })
 }
 
@@ -362,7 +367,7 @@ export const loadUlbLogo = tenantid => {
             localStorage.setItem("UlbLogoForPdf", canvas.toDataURL());
             canvas = null;
         };
-        var tenant = tenantid ? tenantid.split('.')[0] : tenantid;
+        var tenant = stateTenant() || "";
         img.src = `/${tenant}-egov-assets/${tenantid}/logo.png`;
     } catch (e) {
         localStorage.setItem("IsUlbLogoLoading", 'FAILED');
