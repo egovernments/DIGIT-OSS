@@ -1999,7 +1999,6 @@ if(!YAHOO.widget.Logger) {
                 output += oEntry.msg;
             }
 
-            console.log(output, oEntry.msg);
         }
     };
 

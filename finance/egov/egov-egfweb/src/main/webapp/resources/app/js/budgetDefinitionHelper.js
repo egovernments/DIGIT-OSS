@@ -78,7 +78,6 @@ function callAjaxSearch() {
 							.on(
 									'click',
 									function() {
-										console.log(data.id);
 										window
 												.open('/services/EGF/budgetdefinition/'
 														+ $('#mode').val()
@@ -147,7 +146,6 @@ function getParentByFinancialYear(financialYearId) {
 					dataType : "json"
 				}).done(
 				function(value) {
-					console.log(value);
 					$('#parent').empty();
 					$('#parent').append(
 							$("<option value=''>Select from below</option>"));
@@ -180,7 +178,6 @@ function getReferenceBudgets(financialYearId) {
 						})
 				.done(
 						function(value) {
-							console.log(value);
 							$('#referenceBudget').empty();
 							$('#referenceBudget')
 									.append(
@@ -223,7 +220,6 @@ function getDropDownsForModify(budgetId) {
 							dataType : "json"
 						}).done(
 						function(value) {
-							console.log(value);
 							value = $.parseJSON(value);
 							$.each(value, function(index, val) {
 								var selected = "";

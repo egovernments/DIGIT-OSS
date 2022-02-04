@@ -62,7 +62,6 @@ $(document).ready(function()
 			},
 			dataType: "json",
 			success: function (response) {
-				console.log("success"+response);
 				$('#approvalDesignation').empty();
 				$('#approvalDesignation').append($("<option value=''>Select from below</option>"));
 				$.each(response, function(index, value) {
@@ -73,7 +72,6 @@ $(document).ready(function()
 			}, 
 			error: function (response) {
 				bootbox.alert('json fail');
-				console.log("failed");
 			}
 		});
 	});*/
@@ -95,7 +93,6 @@ $('#approvalDepartment').change(function(){
 			contentType:'application/json',
 			//data:JSON.stringify(jsonData),
 			success: function (response) {
-				console.log("success"+response);
 				$('#approvalDesignation').empty();
 				$('#approvalDesignation').append($("<option value=''>Select from below</option>"));
 				$.each(response, function(index, value) {
@@ -106,7 +103,7 @@ $('#approvalDepartment').change(function(){
 			}, 
 			error: function (response) {
 				bootbox.alert('json fail');
-				console.log("failed");
+
 			}
 		});
 	});
@@ -133,7 +130,6 @@ success: function (response) {
 	$('#approvalPosition').val($('#approvalPositionValue').val());
 }, 
 error: function (response) {
-	console.log("failed");
 		}
 	});
 });

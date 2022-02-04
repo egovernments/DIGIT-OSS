@@ -76,7 +76,6 @@ function callAjaxSearch() {
 					$(row).on(
 							'click',
 							function() {
-								console.log(data.id);
 								window.open('/services/EGF/recovery/' + $('#mode').val()
 										+ '/' + data.id, '',
 										'width=800, height=600');
@@ -129,7 +128,6 @@ function callAjaxSearch() {
 }
 
 $('#bankLoan').change(function() {
-	console.log("with in function");
 	if ($("#bankDiv").hasClass("display-hide"))
 		$('#bankDiv').removeClass('display-hide');
 	else
@@ -140,9 +138,7 @@ $('#bankLoan').change(function() {
 $('#egPartytype').change(
 
 		function() {
-			console.log("inside function");
-			var selectedType = $('#egPartytype').find('option:selected').text().trim();
-			console.log("selected party type : ",selectedType);
+			var selectedType = $('#egPartytype').find('option:selected').text().trim();\
 			$.ajax({
 				method : "GET",
 				url : "ajax/getAccountCodes",

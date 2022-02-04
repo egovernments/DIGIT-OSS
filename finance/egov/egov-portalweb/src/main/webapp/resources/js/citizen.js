@@ -96,7 +96,6 @@ $(document).ready(function(){
     }
     $(".services-item .services:visible").each(function(){
       var testStr = $(this).find('.content').html().toLowerCase();
-      console.log(testStr, rule, matchRuleShort(testStr, rule))
       if(matchRuleShort(testStr, rule))
         $(this).show();
       else
@@ -215,7 +214,6 @@ function onlinePayTaxForm(url){
 }
 
 function leftmenuheight(){
-  //console.log($( window ).height(), $('.modules-ul').height());
   $('.left-menu,.modules-ul').css({
     height:$( window ).height(),
     overflow : 'auto'
@@ -223,7 +221,6 @@ function leftmenuheight(){
 }
 
 function rightcontentheight(){
-  //console.log($( window ).height(), $('.right-content').height());
   $('.right-content').css({
     height:$( window ).height(),
     overflow : 'auto'

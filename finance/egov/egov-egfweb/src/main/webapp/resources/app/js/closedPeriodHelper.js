@@ -50,7 +50,6 @@
 
 
 $(document).ready(function(){
-	console.log("Browser Language ",navigator.language);
 	$.i18n.properties({ 
 		name: 'message', 
 		path: '/services/EGF/resources/app/messages/', 
@@ -59,7 +58,6 @@ $(document).ready(function(){
 	    cache: true,
 		language: getLocale("locale"),
 		callback: function() {
-			console.log('File loaded successfully');
 		}
 	});
 	
@@ -107,7 +105,6 @@ function callAjaxSearch() {
 					$(row).on(
 							'click',
 							function() {
-								console.log(data.id);
 								window.open('/services/EGF/closedperiod/'
 										+ $('#mode').val() + '/' + data.id, '',
 										'width=800, height=600');

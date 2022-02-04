@@ -46,7 +46,6 @@
  *
  */
 jQuery('#searchservice').click(function(e) {
-	console.log($('#moduleName').val());
 	if($('#moduleName').val()=='' ||  $('#assessmentNo').val()==''){
 		bootbox.alert("please enter both service name and Identifier Number");
 	e.preventDefault();
@@ -64,8 +63,6 @@ function callAjaxViewSearch(){
 	.done(function (response) {
 		var data= []; 
 		data.push(JSON.parse(response).data);
-		console.log(JSON.parse(response).data)
-		console.log(data);
 		tableContainer=$('#SearchResults');
 		reportdatatable = tableContainer.dataTable({
 			destroy:true,

@@ -47,7 +47,6 @@
  */
 
 jQuery(document).ready(function(){
-	console.log("Browser Language ",navigator.language);
 	jQuery.i18n.properties({ 
 		name: 'message', 
 		path: '/services/EGF/resources/app/messages/', 
@@ -56,7 +55,6 @@ jQuery(document).ready(function(){
 	    cache: true,
 		language: getLocale("locale"),
 		callback: function() {
-			console.log('File loaded successfully');
 		}
 	});	
 })
@@ -103,7 +101,6 @@ function callAjaxSearch() {
 //			undoLoadingMask();
 		},
 		error : function(response) {
-			console.log("failed");
 
 			bootbox.alert(jQuery.i18n.prop('msg.failed.to.search.details'));
 //			undoLoadingMask();
@@ -151,14 +148,12 @@ function validateReconcile() {
 		data : fd,
 		// dataType: "text",
 		success : function(response) {
-			// console.log("success"+response );
 			undoLoadingMask();
 			jQuery('#resultDiv').html(response);
 			// bootbox.alert("Passed to Reconcile Details");
 
 		},
 		error : function(response) {
-			console.log("failed");
 			undoLoadingMask();
 			bootbox.alert(jQuery.i18n.prop('msg.failed.to.reconcile.details'));
 
@@ -181,14 +176,12 @@ function showBalance() {
 		data : fd,
 		// dataType: "text",
 		success : function(response) {
-			// console.log("success"+response );
 			undoLoadingMask();
 			jQuery('#balanceDiv').html(response);
 			// bootbox.alert("Passed to Reconcile Details");
 
 		},
 		error : function(response) {
-			console.log("failed");
 			undoLoadingMask();
 			bootbox.alert(jQuery.i18n.prop('msg.failed.to.show.balance.details'));
 

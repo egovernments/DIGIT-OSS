@@ -1985,7 +1985,6 @@ if(!YAHOO.widget.Logger) {
                 elapsedTime + "ms): " +
                 oEntry.source + ": ";
 
-            console.log(output, oEntry.msg);
         }
     };
 

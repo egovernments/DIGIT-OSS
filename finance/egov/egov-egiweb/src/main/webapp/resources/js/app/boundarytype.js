@@ -79,7 +79,6 @@ function checkForChild() {
                 }
             },
             error: function (response) {
-                console.log("failed");
             }
         });
     }

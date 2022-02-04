@@ -135,7 +135,6 @@ function deleteRow(obj,tableName) {
 		var idx=0;
 		//regenerate index existing inputs in table row
 		$("#"+tableName+" tbody tr").each(function() {
-			console.log('Index:'+idx)
 			$(this).find("input,select,errors,span").each(function() {
 				   $(this).attr({
 				      'name': function(_, name) {

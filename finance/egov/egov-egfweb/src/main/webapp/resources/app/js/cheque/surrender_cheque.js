@@ -168,8 +168,6 @@ function loadBankBranch() {
 		$('#bankAccountId').empty();
 		var output = '<option value="">Select</option>';
 		$.each(response, function(index, value) {
-			console.log("index: ", index);
-			console.log("value: ", value);
 			output += '<option value=' + index + '>' + value + '</option>';
 		});
 		$('#bankBranch').append(output);
@@ -179,7 +177,6 @@ function loadBankBranch() {
 function loadBankAccount() {
 	var branchId = $("#bankBranch").val().split("-")[1];
 	var fundId = $("#fund").val();
-	console.log();
 	fundId = fundId == 0 || fundId == "" || fundId == undefined ? 0 : fundId;
 	$.ajax({
 		method : "GET",
@@ -193,8 +190,6 @@ function loadBankAccount() {
 		$('#bankAccountId').empty();
 		var output = '<option value="0">Select</option>';
 		$.each(response, function(index, value) {
-			console.log("index: ", index);
-			console.log("value: ", value);
 			output += '<option value=' + index + '>' + value + '</option>';
 		});
 		$('#bankAccountId').append(output);

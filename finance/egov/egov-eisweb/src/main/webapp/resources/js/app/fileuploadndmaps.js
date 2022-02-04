@@ -56,15 +56,12 @@ $(document).ready(function(){
 	var fileid;
 	
 	$('#triggerFile').click(function(){
-		console.log(removedarray.length);
 		if(removedarray.length == 0 || removedarray.length == 3)
 		{
 			var keys=Object.keys(filefilled);
 			fileid = fileinputid[keys.length];
-			console.log("File ID normal:"+fileid);
 			}else{
 			fileid = removedarray[0];
-			console.log("File ID removal:"+fileid);
 		}
 	    
 		
@@ -72,7 +69,6 @@ $(document).ready(function(){
 	});
 	
 	$('.remove-img').click(function(){
-		console.log("Removal");
 		delete filefilled[$(this).attr('data-file-id')];
 		if ($.inArray($(this).attr('data-file-id'), removedarray) !== -1)//check removed file id already exists, if exists leave as such or push it
 		{
@@ -80,10 +76,8 @@ $(document).ready(function(){
 			}else{
 			removedarray.push($(this).attr('data-file-id'));
 			removedarray.sort();
-			console.log("sorted removed array"+removedarray);
 		}
-		
-		console.log("File filled array:"+JSON.stringify(filefilled));
+
 		$('#'+$(this).attr('data-file-id')).val('');
 		$('#triggerFile').removeAttr('disabled');
 		if($(this).attr('data-file-id') == 'file1')
@@ -112,7 +106,6 @@ $(document).ready(function(){
 		if(e.target.files.length>0)
 		{
 			//filefilled[$(this).attr('id')]=this.files[0].name;
-			//console.log("File filled array:"+JSON.stringify(filefilled));
 			readURL(this, this.files[0].name);
 			$('#triggerFile').attr('disabled','disabled');
 			//var index = removedarray.indexOf(fileid);
@@ -120,8 +113,6 @@ $(document).ready(function(){
 	});
 	
 	function readURL(input, filename) {
-		//console.log("Key:"+fileid);
-		//console.log("Key value is:"+filefilled[fileid]);
 		filename = ((filename.length > 15) ? filename.substring(0,13)+".." : filename);
 		if (input.files && input.files[0]) {
 			var reader = new FileReader();

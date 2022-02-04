@@ -58,7 +58,6 @@
  */
 
 jQuery(document).ready(function(){
-	console.log("Browser Language ",navigator.language);
 	jQuery.i18n.properties({ 
 		name: 'message', 
 		path: '/services/EGF/resources/app/messages/', 
@@ -67,7 +66,6 @@ jQuery(document).ready(function(){
 	    cache: true,
 		language: getLocale("locale"),
 		callback: function() {
-			console.log('File loaded successfully');
 		}
 	});
 })

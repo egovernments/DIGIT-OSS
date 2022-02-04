@@ -382,7 +382,6 @@
         } else if (window.FileReader && (img instanceof window.Blob || img instanceof window.File)) {
             var fileReader = new FileReader();
             fileReader.onload = function(e) {
-                if (debug) console.log("Got file of length " + e.target.result.byteLength);
                 handleBinaryFile(e.target.result);
             };
 
@@ -393,9 +392,7 @@
     function findEXIFinJPEG(file) {
         var dataView = new DataView(file);
 
-        if (debug) console.log("Got file of length " + file.byteLength);
         if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
-            if (debug) console.log("Not a valid JPEG");
             return false; // not a valid jpeg
         }
 
@@ -405,18 +402,15 @@
 
         while (offset < length) {
             if (dataView.getUint8(offset) != 0xFF) {
-                if (debug) console.log("Not a valid marker at offset " + offset + ", found: " + dataView.getUint8(offset));
                 return false; // not a valid marker, something is wrong
             }
 
             marker = dataView.getUint8(offset + 1);
-            if (debug) console.log(marker);
 
             // we could implement handling for other markers here,
             // but we're only looking for 0xFFE1 for EXIF data
 
             if (marker == 225) {
-                if (debug) console.log("Found 0xFFE1 marker");
 
                 return readEXIFData(dataView, offset + 4, dataView.getUint16(offset + 2) - 2);
 
@@ -433,9 +427,7 @@
     function findIPTCinJPEG(file) {
         var dataView = new DataView(file);
 
-        if (debug) console.log("Got file of length " + file.byteLength);
         if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
-            if (debug) console.log("Not a valid JPEG");
             return false; // not a valid jpeg
         }
 
@@ -540,7 +532,6 @@
         for (i=0;i<entries;i++) {
             entryOffset = dirStart + i*12 + 2;
             tag = strings[file.getUint16(entryOffset, !bigEnd)];
-            if (!tag && debug) console.log("Unknown tag: " + file.getUint16(entryOffset, !bigEnd));
             tags[tag] = readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd);
         }
         return tags;
@@ -650,7 +641,6 @@
 
     function readEXIFData(file, start) {
         if (getStringFromDB(file, start, 4) != "Exif") {
-            if (debug) console.log("Not valid EXIF data! " + getStringFromDB(file, start, 4));
             return false;
         }
 
@@ -665,19 +655,16 @@
         } else if (file.getUint16(tiffOffset) == 0x4D4D) {
             bigEnd = true;
         } else {
-            if (debug) console.log("Not valid TIFF data! (no 0x4949 or 0x4D4D)");
             return false;
         }
 
         if (file.getUint16(tiffOffset+2, !bigEnd) != 0x002A) {
-            if (debug) console.log("Not valid TIFF data! (no 0x002A)");
             return false;
         }
 
         var firstIFDOffset = file.getUint32(tiffOffset+4, !bigEnd);
 
         if (firstIFDOffset < 0x00000008) {
-            if (debug) console.log("Not valid TIFF data! (First offset less than 8)", file.getUint32(tiffOffset+4, !bigEnd));
             return false;
         }
 
