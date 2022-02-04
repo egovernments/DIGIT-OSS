@@ -7,6 +7,7 @@ const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
 const DEFAULT_REDIRECT_URL = "/digit-ui/citizen";
+import { CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 
 const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation, onSelect, config, clearParams = () => {}, stateCode, redirectToUrl }) => {
   const { t } = useTranslation();
@@ -157,6 +158,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
         <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel} 
         onSubmit={sendOtpToUser} />
       </div>
+      
 
       {modalData ? (
         <Modal
@@ -191,6 +193,12 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
           </div>
         </Modal>
       ) : null}
+  <div>
+  
+  <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} 
+   text={t("On select , the property owner will get an OTP to his/her registered mobile number. You have to enter the OTP to link the selected property to the current application.")} />
+</div>
+
     </div>
   );
 };

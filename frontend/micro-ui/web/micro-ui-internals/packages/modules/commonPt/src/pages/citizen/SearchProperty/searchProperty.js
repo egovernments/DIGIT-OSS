@@ -140,7 +140,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
               {"  "}
               <InfoBannerIcon fill="#0b0c0c" />
               <span className="tooltiptext" style={{ whiteSpace: "nowrap" }}>
-                {t(property.description) + "<br />" + ptSearchConfig?.propertyIdFormat}
+                {t(property.description)  + ptSearchConfig?.propertyIdFormat}
               </span>
             </div>
           ),
