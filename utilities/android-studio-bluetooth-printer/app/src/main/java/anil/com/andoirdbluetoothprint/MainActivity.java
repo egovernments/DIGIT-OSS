@@ -85,11 +85,15 @@ public class MainActivity extends Activity {
             mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (mBluetoothAdapter == null)
                 Toast.makeText(MainActivity.this, "No Bluetooth Found", Toast.LENGTH_SHORT).show();
-            if(mBluetoothAdapter.isEnabled()) {
+            if(mBluetoothAdapter!= null && mBluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent,0);
             }
-            Set<BluetoothDevice>  pairedDevices = mBluetoothAdapter.getBondedDevices();
+            Set<BluetoothDevice>  pairedDevices = new ArrayList();
+
+            if(mBluetoothAdapter != null)
+                pairedDevices = mBluetoothAdapter.getBondedDevices();
+
             if(pairedDevices.size()>0){
                 for(BluetoothDevice  bluetoothDevice : pairedDevices) {
                     Log.v(TAG, "Coming bluetooth address " + bluetoothDevice.getName());
