@@ -4,6 +4,8 @@ import CONFIGS from '../../config/configs';
 import getMDMSData from '../getMDMSData'
 import { get } from 'lodash';
 
+
+
 export default class MdmsAPI extends API {
 
     constructor(timeout = 2000, path, codeKey, reqBody, queryParams = null) {
@@ -36,6 +38,8 @@ export default class MdmsAPI extends API {
 
     getBody() {
         let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
+
+        // let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
         return {
            "RequestInfo": {
                "authToken": ""

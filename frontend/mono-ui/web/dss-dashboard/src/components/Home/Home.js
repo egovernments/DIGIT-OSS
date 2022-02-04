@@ -14,7 +14,7 @@ import getFinancialYearObj from "../../actions/getFinancialYearObj";
 import mdmsAPI from "../../actions/mdms/mdms";
 import Variables from "../../styles/variables";
 import history from "../../utils/web.history";
-import MapChart from "../Charts/MapChart";
+import MapChart from "../common/Card/Card";
 import Card from "../common/Card/Card";
 import CardBody from "../common/Card/CardBody.js";
 import CardHeader from "../common/Card/CardHeader.js";
