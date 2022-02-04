@@ -76,13 +76,10 @@ const CustomHorizontalBarChart = ({
   }
   const formatXAxis = (tickFormat) => {
     if (tickFormat && typeof tickFormat == "string") {
-      return `${tickFormat.slice(0, 16)}${tickFormat.length > 17 && ".."}`;
+      return `${tickFormat.slice(0, 16)}${tickFormat.length > 17? "..":""}`;
     }
     return `${tickFormat}`;
   };
-  // if (chartData?.length === 0) {
-  //   return null;
-  // }
 
   const bars = response?.responseData?.data?.map((bar) => bar?.headerName);
   return (
