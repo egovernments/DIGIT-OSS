@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Header, ResponseComposer, Loader, Modal, Card, KeyNote, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Header, ResponseComposer, Loader, Modal, Card, KeyNote, SubmitBar, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import { useHistory, Link, useLocation, useRouteMatch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -7,7 +7,6 @@ const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
 const DEFAULT_REDIRECT_URL = "/digit-ui/citizen";
-import { CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 
 const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation, onSelect, config, clearParams = () => {}, stateCode, redirectToUrl }) => {
   const { t } = useTranslation();
@@ -158,8 +157,10 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
         <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel} 
         onSubmit={sendOtpToUser} />
       </div>
-      
-
+      <CitizenInfoLabel
+        info={t("CS_FILE_APPLICATION_INFO_LABEL")} 
+        text={t("CPT_SEARCH_PROPERTY_INFO")} 
+      />
       {modalData ? (
         <Modal
           hideSubmit={true}
@@ -193,12 +194,6 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
           </div>
         </Modal>
       ) : null}
-  <div>
-  
-  <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} 
-   text={t("On select , the property owner will get an OTP to his/her registered mobile number. You have to enter the OTP to link the selected property to the current application.")} />
-</div>
-
     </div>
   );
 };
