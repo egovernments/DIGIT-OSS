@@ -87,7 +87,7 @@ public class PrimaryKeyGenerator
     {
         long key = 0;
         final String sql = "select nextval('seq_" + tableName + "')";
-        try
+        /*try
         {
             final Query pst = null;
                     //persistenceService.getSession().createSQLQuery(sql);
@@ -101,7 +101,7 @@ public class PrimaryKeyGenerator
                 LOGGER.debug("Exp=" + e.getMessage());
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("Error getting value from sequence " + e.toString());
-        }
+        }*/
 
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("PK for " + tableName + " is " + key);

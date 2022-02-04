@@ -1820,7 +1820,8 @@ public class BudgetReportAction extends BaseFormAction {
         query = new StringBuffer("select function.name,executingDepartment.deptCode,sum(originalAmount),sum(approvedAmount) ")
                 .append("from BudgetDetail bd  where bd.budget.financialYear.id=?")
                 .append(" and bd.budget.isbere='BE' ");
-        params.add(getFinYear("next").getId());
+        if (getFinYear("next") != null)
+            params.add(getFinYear("next").getId());
         if (budgetReport.getFunction() != null && budgetReport.getFunction().getId() != null
                 && budgetReport.getFunction().getId() != 0) {
             query.append("  and bd.function.id=?");
@@ -1876,7 +1877,8 @@ public class BudgetReportAction extends BaseFormAction {
         params = new ArrayList();
         query = new StringBuffer("from BudgetDetail bd  where bd.budget.financialYear.id=?")
                 .append(" and bd.budget.isbere='BE' ");
-        params.add(getFinYear("next").getId());
+        if (getFinYear("next") != null)
+            params.add(getFinYear("next").getId());
         if (budgetReport.getFunction() != null && budgetReport.getFunction().getId() != null
                 && budgetReport.getFunction().getId() != 0) {
             query.append("  and bd.function.id=?");
@@ -1904,8 +1906,10 @@ public class BudgetReportAction extends BaseFormAction {
                     bv.setDeptCode(beDetail.getExecutingDepartment());
                     bv.setGlCode(glcode);
                     bv.setFunctionCode(reDetail==null?"":reDetail.getFunction().getCode());
-                    bv.setReProposalAmount(reDetail.getOriginalAmount());
-                    bv.setReRecomAmount(reDetail.getApprovedAmount());
+                    if (reDetail != null){
+                        bv.setReProposalAmount(reDetail.getOriginalAmount());
+                        bv.setReRecomAmount(reDetail.getApprovedAmount());
+                    }
                     bv.setRowStyle("typerow");
                     bv.setBeProposalAmount(beDetail.getOriginalAmount());
                     bv.setBeRecomAmount(beDetail.getApprovedAmount());
@@ -2000,7 +2004,8 @@ public class BudgetReportAction extends BaseFormAction {
         query = new StringBuffer("select function.name,sum(originalAmount),sum(approvedAmount)")
                 .append(" from BudgetDetail bd  where bd.budget.financialYear.id=?")
                 .append(" and bd.budget.isbere='BE' ");
-        params.add(getFinYear("next").getId());
+        if (getFinYear("next") != null)
+            params.add(getFinYear("next").getId());
         if (budgetReport.getFunction() != null && budgetReport.getFunction().getId() != null
                 && budgetReport.getFunction().getId() != 0) {
             query.append("  and bd.function.id=?");
