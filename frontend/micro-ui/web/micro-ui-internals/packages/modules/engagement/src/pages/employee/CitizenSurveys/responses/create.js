@@ -1,9 +1,8 @@
-import { Banner, Card, Loader, CardText, ActionBar, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, Loader, CardText, ActionBar, SubmitBar,Menu } from "@egovernments/digit-ui-react-components";
 import { useQueryClient } from "react-query";
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-
+import { Link,useHistory } from "react-router-dom";
 const getMessage = (mutation) => {
   if (mutation.isSuccess) return mutation.data?.Surveys?.[0]?.uuid;
   return "";
@@ -27,7 +26,8 @@ const Acknowledgement = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const mutation = Digit.Hooks.survey.useCreate();
   const { state } = props.location;
-
+  const history = useHistory();
+  const [isActionClicked,setIsActionClicked] = useState(false) 
   useEffect(() => {
     const onSuccess = () => {
       queryClient.clear();
@@ -44,6 +44,20 @@ const Acknowledgement = (props) => {
 
   const survey = mutation.data?.Surveys?.[0];
  
+  const handleActionClick = () => {
+    setIsActionClicked((prevState => {
+      return !prevState
+    }))
+  }
+  // const actionClickHandler = (option) => {
+  //   if(option === "Go Back to home") history.push("/digit-ui/employee")
+  //   else if(option === "Create another survey") history.push("/digit-ui/employee/engagement/surveys/create")
+  // }
+
+   const actionClickHandler = (option) => {
+    if(option === t("GO_BACK_TO_HOME")) history.push("/digit-ui/employee")
+    else if(option === t("CREATE_ANOTHER_SURVEY")) history.push("/digit-ui/employee/engagement/surveys/create")
+  }
   return (
     <Card>
       <BannerPicker
@@ -59,11 +73,22 @@ const Acknowledgement = (props) => {
             })
           : null}
       </CardText>
-      <ActionBar>
+      
+       {/* <ActionBar>
         <Link to={"/digit-ui/employee"}>
-          <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+          <SubmitBar label="Action" />
         </Link>
+      </ActionBar> */}
+
+      <ActionBar>
+        <button onClick={handleActionClick}>
+          <SubmitBar label="Action" />
+          {/* {isActionClicked && <Menu options={["Go Back to home","Create another survey"]} onSelect={actionClickHandler}></Menu>} */}
+          {isActionClicked && <Menu options={[t("GO_BACK_TO_HOME"),t("CREATE_ANOTHER_SURVEY")]} onSelect={actionClickHandler}></Menu>}
+        </button>
       </ActionBar>
+      
+
     </Card>
   );
 };
