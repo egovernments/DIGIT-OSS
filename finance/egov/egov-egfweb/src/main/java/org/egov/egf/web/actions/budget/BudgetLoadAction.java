@@ -595,10 +595,12 @@ public class BudgetLoadAction extends BaseFormAction {
                         : getStrValue(row.getCell(REAMOUNT_CELL_INDEX)))));
                 budget.setBeAmount(BigDecimal.valueOf(Long.valueOf(getStrValue(row.getCell(BEAMOUNT_CELL_INDEX)) == null ? "0"
                         : getStrValue(row.getCell(BEAMOUNT_CELL_INDEX)))));
+                BigDecimal numericValue = getNumericValue(row.getCell(PLANNINGPERCENTAGE_CELL_INDEX));
                 Long planningPercentage = 0l;
-                if (getNumericValue(row.getCell(PLANNINGPERCENTAGE_CELL_INDEX)) != null)
-                    planningPercentage = getNumericValue(row.getCell(PLANNINGPERCENTAGE_CELL_INDEX)).longValue();
+                if (numericValue != null)
+                    planningPercentage = numericValue.longValue();
                 budget.setPlanningPercentage(planningPercentage);
+
             }
         } catch (final ValidationException e)
         {

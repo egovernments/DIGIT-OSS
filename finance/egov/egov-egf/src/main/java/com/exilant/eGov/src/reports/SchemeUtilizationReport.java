@@ -94,32 +94,32 @@ public class SchemeUtilizationReport
     {
 
         Connection con = null;
-        if(con != null) {
-            try {
-                con = null;// This fix is for Phoenix Migration.EgovDatabaseManager.openConnection();
+        try
+        {
+            con = null;// This fix is for Phoenix Migration.EgovDatabaseManager.openConnection();
 
-                LinkedHashMap data = null;
+            LinkedHashMap data = null;
 
-                final int majorCodeLength = Integer.parseInt(EGovConfig.getProperty("egf_config.xml", "majorcodevalue", "",
-                        "AccountCode"));
+            final int majorCodeLength = Integer.parseInt(EGovConfig.getProperty("egf_config.xml", "majorcodevalue", "",
+                    "AccountCode"));
 
-                filterGlcode = EGovConfig.getProperty("egf_config.xml", "filterGlcodeForScheme", "", "SchemeUtilization");
-                if (LOGGER.isInfoEnabled())
-                    LOGGER.info("SchemeUtilizationReport filterGlcode--->" + filterGlcode);
-                if (LOGGER.isInfoEnabled())
-                    LOGGER.info("pschemeid=" + pschemeid + ",startDate=" + formatter.format(sdf.parse(startDate)) + ",endDate="
-                            + formatter.format(sdf.parse(endDate)) + ",majorcodelength=" + majorCodeLength);
+            filterGlcode = EGovConfig.getProperty("egf_config.xml", "filterGlcodeForScheme", "", "SchemeUtilization");
+            if (LOGGER.isInfoEnabled())
+                LOGGER.info("SchemeUtilizationReport filterGlcode--->" + filterGlcode);
+            if (LOGGER.isInfoEnabled())
+                LOGGER.info("pschemeid=" + pschemeid + ",startDate=" + formatter.format(sdf.parse(startDate)) + ",endDate="
+                        + formatter.format(sdf.parse(endDate)) + ",majorcodelength=" + majorCodeLength);
 
-                /* For Opening balance Scheme and Sub scheme wise procedure start */
+            /* For Opening balance Scheme and Sub scheme wise procedure start */
 
-                if (LOGGER.isInfoEnabled())
-                    LOGGER.info("For Opening balance Scheme and Sub scheme wise procedure  start");
+            if (LOGGER.isInfoEnabled())
+                LOGGER.info("For Opening balance Scheme and Sub scheme wise procedure  start");
 
+            if(con != null) {
                 final CallableStatement cstmt = con.prepareCall("{? = call EGF_REPORT.OPBALSCHEMEREPORT(?,?,?,?)}");
                 cstmt.setFetchSize(1000);
                 // This fix is for Phoenix Migration.
                 // cstmt.registerOutParameter(1,OracleTypes.CURSOR);
-
 
                 cstmt.setInt(1, pschemeid);
                 cstmt.setString(2, formatter.format(sdf.parse(startDate)));
@@ -718,14 +718,16 @@ public class SchemeUtilizationReport
                     partTotalClosingBal.add(data);
                     totalReceiptsSubHead = "ClosingBalance";
                 }
-
-                // cumulative for Total Closing Balance end
-
-            } catch (final SQLException e) {
-                LOGGER.error("Exp in Scheme Report==" + e.getMessage());
-                throw taskExc;
             }
+
+            // cumulative for Total Closing Balance end
+
+        } catch (final SQLException e)
+        {
+            LOGGER.error("Exp in Scheme Report==" + e.getMessage());
+            throw taskExc;
         }
+
         // ArrayList finalReportList=(ArrayList)part1;
 
         final ArrayList finalReportList = new ArrayList();

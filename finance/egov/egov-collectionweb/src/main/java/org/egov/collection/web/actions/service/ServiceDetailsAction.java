@@ -49,14 +49,7 @@
 package org.egov.collection.web.actions.service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -261,9 +254,18 @@ public class ServiceDetailsAction extends BaseFormAction {
 
         if (accountDetails.isEmpty())
             accountDetails.add(new ServiceAccountDetails());
+        if(null == accountDetails){
+            accountDetails = new LinkedList<>();
+            accountDetails.add(new ServiceAccountDetails());
+        }
 
         if (subledgerDetails.isEmpty())
             subledgerDetails.add(new ServiceSubledgerInfo());
+        if(null == subledgerDetails){
+            subledgerDetails = new LinkedList<>();
+            subledgerDetails.add(new ServiceSubledgerInfo());
+        }
+
         serviceTypeMap.putAll(CollectionConstants.SERVICE_TYPE_CLASSIFICATION);
         if (serviceDetails.getServiceType().equals(CollectionConstants.SERVICE_TYPE_CHALLAN_COLLECTION)
                 || serviceDetails.getServiceType().equals(CollectionConstants.SERVICE_TYPE_MISC_COLLECTION)) {

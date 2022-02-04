@@ -48,6 +48,7 @@
 package org.egov.collection.entity;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -94,7 +95,6 @@ import org.egov.pims.commons.Position;
 import org.egov.pims.model.PersonalInformation;
 import org.elasticsearch.repositories.RepositoryException;
 import org.hibernate.Session;
-import java.security.SecureRandom;
 
 /**
  * 
@@ -102,8 +102,6 @@ import java.security.SecureRandom;
 public class CollectionObjectFactory {
 	private final Session session;
 	private PersistenceService service;
-
-	private Random ran = SecureRandom.getInstanceStrong();
 
 	public static final String MODULE_NAME_TESTRECEIPTHEADER = "TestReceiptHeader";
 	public static final String MODULE_NAME_TESTINSTRUMENTSTATUS = "TestInstrumentStatus";
@@ -122,12 +120,14 @@ public class CollectionObjectFactory {
 		this.service = service;
 	}
 
+	private static final SecureRandom secureRandom = new SecureRandom();
+
 	public int getRandomNumber() {
-		return this.ran.nextInt();
+		return secureRandom.nextInt();
 	}
 
 	public int getRandomNumber(int max) {
-		return this.ran.nextInt(max);
+		return secureRandom.nextInt(max);
 	}
 
 	public ServiceDetails createUnsavedServiceDetails() {
@@ -1280,7 +1280,8 @@ public class CollectionObjectFactory {
 	public PersonalInformation createPersonalInformation(User user, Department dept) {
 		PersonalInformation personalInformation = new PersonalInformation();
 		personalInformation.setEmployeeFirstName(user.getName());
-		personalInformation.setEmployeeCode(this.ran.nextInt());
+		Random ran = new Random();
+		personalInformation.setEmployeeCode(ran.nextInt());
 		personalInformation.setUserMaster(user);
 		// personalInformation.setEgdeptMstr(dept);
 		session.saveOrUpdate(personalInformation);

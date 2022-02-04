@@ -835,37 +835,35 @@ public class EgovCommon {
 
 				final String bndQry = "SELECT glcode AS chequeinhand,id FROM CHARTOFACCOUNTS where id = "
 						+ "(SELECT chequeinhand FROM CODEMAPPING WHERE EG_BOUNDARYID=?)";
-                if(connection != null) {
+				if(connection != null) {
                     final PreparedStatement pstmt = connection.prepareStatement(bndQry);
-                }
-                pstmt.setLong(0, boundaryId);
-                if (LOGGER.isDebugEnabled())
-                    LOGGER.debug("Cheque In hand account code query =" + bndQry);
-                ResultSet resultSet = pstmt.executeQuery();
-                if (resultSet.next()) {
-                    chequeInHand = resultSet.getString("chequeinhand");
-                    chequeInHandId = resultSet.getLong("id");
-                }
-                if (LOGGER.isDebugEnabled())
-                    LOGGER.debug("chequeInHand is " + chequeInHand
-                            + " chequeInHandId is " + chequeInHandId);
-                final String sqlQuery2 = "SELECT glcode AS cashinhand,id FROM CHARTOFACCOUNTS where id = "
-                		+ "(SELECT cashinhand FROM CODEMAPPING WHERE EG_BOUNDARYID=?)";
-                if(connection != null) {
+                    pstmt.setLong(0, boundaryId);
+                    if (LOGGER.isDebugEnabled())
+                        LOGGER.debug("Cheque In hand account code query =" + bndQry);
+                    ResultSet resultSet = pstmt.executeQuery();
+                    if (resultSet.next()) {
+                        chequeInHand = resultSet.getString("chequeinhand");
+                        chequeInHandId = resultSet.getLong("id");
+                    }
+                    if (LOGGER.isDebugEnabled())
+                        LOGGER.debug("chequeInHand is " + chequeInHand
+                                + " chequeInHandId is " + chequeInHandId);
+                    final String sqlQuery2 = "SELECT glcode AS cashinhand,id FROM CHARTOFACCOUNTS where id = "
+                            + "(SELECT cashinhand FROM CODEMAPPING WHERE EG_BOUNDARYID=?)";
                     final PreparedStatement pstmt1 = connection
                             .prepareStatement(sqlQuery2);
+                    pstmt1.setLong(0, boundaryId);
+                    if (LOGGER.isDebugEnabled())
+                        LOGGER.debug("Cheque In hand account code query =" + sqlQuery2);
+                    resultSet = pstmt1.executeQuery();
+                    if (resultSet.next()) {
+                        cashInHand = resultSet.getString("cashinhand");
+                        cashInHandId = resultSet.getLong("id");
+                    }
+                    if (LOGGER.isDebugEnabled())
+                        LOGGER.debug("cashInHand is " + cashInHand
+                                + " cashInHandId is " + cashInHandId);
                 }
-                pstmt1.setLong(0, boundaryId);
-                if (LOGGER.isDebugEnabled())
-                    LOGGER.debug("Cheque In hand account code query =" + sqlQuery2);
-                resultSet = pstmt1.executeQuery();
-                if (resultSet.next()) {
-                    cashInHand = resultSet.getString("cashinhand");
-                    cashInHandId = resultSet.getLong("id");
-                }
-                if (LOGGER.isDebugEnabled())
-                    LOGGER.debug("cashInHand is " + cashInHand
-                            + " cashInHandId is " + cashInHandId);
             } catch (final ApplicationRuntimeException | ValidationException| SQLException e) {
                 LOGGER.error("Exception occuerd while getting  "
                         + e.getMessage(), e);
@@ -1015,10 +1013,9 @@ public class EgovCommon {
             final Session session = persistenceService.getSession();
 			final Query qry = session.createQuery(
 					"from Accountdetailkey adk where adk.accountdetailtype=:detailtypeid and adk.detailkey=:detailkey");
-            if(accountdetailType != null) {
+			if(accountdetailType != null)
                 qry.setString(VoucherConstant.DETAILTYPEID, accountdetailType
-                        .toString());
-            }
+                    .toString());
             qry.setString("detailkey", accountdetailkey.toString());
 
             if (null == qry.list() || qry.list().size() == 0)
@@ -1958,7 +1955,7 @@ public class EgovCommon {
 			final Session session = persistenceService.getSession();
 			final Query qry = session.createQuery(
 					"from Accountdetailkey adk where adk.accountdetailtype=:detailtypeid and adk.detailkey=:detailkey");
-            if(accountdetailType != null)
+			if(accountdetailType != null)
 			    qry.setString(VoucherConstant.DETAILTYPEID, accountdetailType.toString());
 			qry.setString("detailkey", accountdetailkey.toString());
 

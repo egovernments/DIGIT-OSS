@@ -614,8 +614,9 @@ public class CreateVoucher {
 			LOGGER.error("Error in createVoucherFromBillForPJV " + e.getMessage());
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
-		if(vh != null)
+		if (vh.getId() != null)
 			return vh.getId().longValue();
+		else return 0l;
 	}
 
 	/**
@@ -870,10 +871,9 @@ public class CreateVoucher {
 				.find("from Functionary where upper(name)=upper(?)", functionaryName);
 
 		try {
-			if(boundaryForUser != null) {
+			if(boundaryForUser!=null)
 				personalInformationDAO.getEmployeeByFunctionary(department.getId(), next_desig.getId(),
-						boundaryForUser.getId(), functionary.getId());
-			}
+					boundaryForUser.getId(), functionary.getId());
 		} catch (final TooManyValuesException e) {
 			LOGGER.error(e.getMessage(), e);
 			final List<ValidationError> errors = new ArrayList<ValidationError>();
@@ -1493,7 +1493,7 @@ public class CreateVoucher {
 			subScheme = subSchemeDAO.getSubSchemeByCode(subSchemeCode);
 			if (null == subScheme)
 				throw new ApplicationRuntimeException("not a valid subscheme");
-			if (scheme != null && !subScheme.getScheme().getId().equals(scheme.getId()))
+			if (scheme!=null && !subScheme.getScheme().getId().equals(scheme.getId()))
 				throw new ApplicationRuntimeException("This subscheme does not belong to this scheme");
 		}
 		// validate fundsource
@@ -2787,6 +2787,8 @@ public class CreateVoucher {
 		} catch (final ParseException ex) {
 			LOGGER.error("error in finding unique VoucherNumber");
 			throw new ApplicationRuntimeException("error in finding unique VoucherNumber");
+		} finally {
+
 		}
 		return isUnique;
 	}

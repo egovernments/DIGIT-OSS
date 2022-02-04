@@ -115,16 +115,16 @@ public class DataExtractor {
         int columnCount = 0;
         ResultSetMetaData metaData = null;
         String[][] dataValues = null;
+        ResultSet rs = null;
 
 		try (final PreparedStatement pststement = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
-				ResultSet.CONCUR_READ_ONLY);ResultSet rs = null;) {
- 
+				ResultSet.CONCUR_READ_ONLY);) {
 
             String[] columnNames = null;
-            try(columnCount = metaData.getColumnCount();) {
+            try {
                 rs = pststement.executeQuery();
                 metaData = rs.getMetaData();
-                // Gets the Column Count in the ResultSet
+                columnCount = metaData.getColumnCount();// Gets the Column Count in the ResultSet
                 columnNames = new String[columnCount];
             } catch (final HibernateException e) {
                 LOGGER.error("Exception while analysing Result set in extract", e);
@@ -220,6 +220,17 @@ public class DataExtractor {
             LOGGER.error(e.getMessage(), e);
             throw new TaskFailedException();
         }
+        finally {
+		    try {
+                if(rs != null){
+                    rs.close();
+                }
+            }
+            catch (SQLException e){
+                LOGGER.error(e.getMessage(), e);
+            }
+
+        }
         return;
     }
 
@@ -243,12 +254,9 @@ public class DataExtractor {
         final HashMap map = new HashMap();
         int columnCount = 0;
         ResultSetMetaData metaData = null;
-
 		try (final PreparedStatement pststement = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
-				ResultSet.CONCUR_READ_ONLY);metaData = rs.getMetaData();int keyIndex = rs.findColumn(keyName);) {
-
-            final ResultSet rs = pststement.executeQuery();
-
+				ResultSet.CONCUR_READ_ONLY);final ResultSet rs = pststement.executeQuery();) {
+            metaData = rs.getMetaData();
             columnCount = metaData.getColumnCount();// Gets the Column Count in the ResultSet
             // int keyIndex = rs.findColumn(keyName);
             String val = null;
