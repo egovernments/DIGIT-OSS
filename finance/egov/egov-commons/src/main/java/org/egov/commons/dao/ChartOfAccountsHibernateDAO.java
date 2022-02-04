@@ -183,16 +183,16 @@ public class ChartOfAccountsHibernateDAO implements ChartOfAccountsDAO {
     @Deprecated
     public int getDetailTypeId(final String glCode, final Connection connection) throws SQLException {
         int detailTypeId = 0;
-        ResultSet rs;
         String qryDetailType = "Select detailtypeid from chartofaccountdetail where glcodeid=(select id from chartofaccounts where glcode=?)";
         
 		try (PreparedStatement st = connection.prepareStatement(qryDetailType);) {
 			st.setString(1, glCode);
-			rs = st.executeQuery();
-			if (rs.next()) {
-				detailTypeId = rs.getInt(1);
-			}
-			rs.close();
+			try(ResultSet rs = st.executeQuery();) {
+                if (rs.next()) {
+                    detailTypeId = rs.getInt(1);
+                }
+            }
+
 		}
 
 		return detailTypeId;

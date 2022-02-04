@@ -272,12 +272,12 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
             
             CloseableHttpResponse response = httpclient.execute(httpPost);
             HttpEntity responseAtom = response.getEntity();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(responseAtom.getContent()));
             final StringBuilder data = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null)
-                data.append(line);
-            reader.close();
+            try(BufferedReader reader = new BufferedReader(new InputStreamReader(responseAtom.getContent()));){
+                String line;
+                while ((line = reader.readLine()) != null)
+                    data.append(line);
+            }
             LOGGER.info("ATOM Reconcile Response : " + data.toString());
             JAXBContext jaxbContext = JAXBContext.newInstance(ResponseAtomReconcilation.class);
             Unmarshaller unMarshaller = jaxbContext.createUnmarshaller();
