@@ -144,8 +144,7 @@ public class MDMSService {
             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
             
            String financialYear = currentYear + "-" + (currentYear + 1);
-           System.out.println(financialYear);
-            
+
             calculationType = (HashMap<String, Object>) obj;
         }
         catch (Exception e){
