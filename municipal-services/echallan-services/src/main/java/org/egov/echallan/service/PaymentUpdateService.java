@@ -68,11 +68,9 @@ public class PaymentUpdateService {
 					for(Challan challan: challans){
 						challan.setApplicationStatus(StatusEnum.PAID);
 						challan.setReceiptNumber(paymentDetail.getReceiptNumber());
-						log.info("recept no-->"+paymentDetail.getReceiptNumber());
 					}
 					challans.get(0).setAuditDetails(auditDetails);
 					ChallanRequest request = ChallanRequest.builder().requestInfo(requestInfo).challan(challans.get(0)).build();
-					log.info("Challan request-->"+request.toString());
 					producer.push(config.getUpdateChallanTopic(), request);
 				}
 			}
