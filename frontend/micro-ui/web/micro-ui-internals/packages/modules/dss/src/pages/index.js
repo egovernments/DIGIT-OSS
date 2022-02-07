@@ -1,8 +1,15 @@
 import {
-  DownloadIcon, EmailIcon, FilterIcon, Header,
-  Loader, MultiLink, RemoveableTag, ShareIcon, WhatsappIcon
+  DownloadIcon,
+  EmailIcon,
+  FilterIcon,
+  Header,
+  Loader,
+  MultiLink,
+  RemoveableTag,
+  ShareIcon,
+  WhatsappIcon
 } from "@egovernments/digit-ui-react-components";
-import { addMonths, endOfToday, format, getMonth, startOfYear, subYears } from "date-fns";
+import { format } from "date-fns";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -13,22 +20,13 @@ import Layout from "../components/Layout";
 
 const key = "DSS_FILTERS";
 
-function addFinancialYearAccordingToCurrentDate() {
-  const currentDate = new Date();
-  if (getMonth(currentDate) > 3) {
-    return addMonths(startOfYear(currentDate), 3);
-  } else {
-    return addMonths(subYears(startOfYear(currentDate), 1), 3);
-  }
-}
-
 const getInitialRange = () => {
   const data = Digit.SessionStorage.get(key);
-  const startDate = data?.range?.startDate ? new Date(data?.range?.startDate) : addFinancialYearAccordingToCurrentDate();
-  const endDate = data?.range?.endDate ? new Date(data?.range?.endDate) : endOfToday();
+  const startDate = data?.range?.startDate ? new Date(data?.range?.startDate) : Digit.Utils.dss.getDefaultFinacialYear().startDate;
+  const endDate = data?.range?.endDate ? new Date(data?.range?.endDate) : Digit.Utils.dss.getDefaultFinacialYear().endDate;
   const title = `${format(startDate, "MMM d, yyyy")} - ${format(endDate, "MMM d, yyyy")}`;
   const duration = Digit.Utils.dss.getDuration(startDate, endDate);
-  const denomination = data?.denomination || "Unit";
+  const denomination = data?.denomination || "Lac";
   const tenantId = data?.filters?.tenantId || [];
   return { startDate, endDate, title, duration, denomination, tenantId };
 };
@@ -139,7 +137,7 @@ const DashBoard = ({ stateCode }) => {
             setShowOptions(!showOptions);
             setTimeout(() => {
               return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
-            }, 500)
+            }, 500);
           },
         },
         {
@@ -148,7 +146,7 @@ const DashBoard = ({ stateCode }) => {
             setShowOptions(!showOptions);
             setTimeout(() => {
               return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
-            }, 500)
+            }, 500);
           },
         },
       ]
@@ -160,7 +158,7 @@ const DashBoard = ({ stateCode }) => {
             setShowOptions(!showOptions);
             setTimeout(() => {
               return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "mail");
-            }, 500)
+            }, 500);
           },
         },
         {
@@ -170,7 +168,7 @@ const DashBoard = ({ stateCode }) => {
             setShowOptions(!showOptions);
             setTimeout(() => {
               return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "whatsapp");
-            }, 500)
+            }, 500);
           },
         },
         {
@@ -180,7 +178,7 @@ const DashBoard = ({ stateCode }) => {
             setShowOptions(!showOptions);
             setTimeout(() => {
               return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "mail");
-            }, 500)
+            }, 500);
           },
         },
         {
@@ -190,7 +188,7 @@ const DashBoard = ({ stateCode }) => {
             setShowOptions(!showOptions);
             setTimeout(() => {
               return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "whatsapp");
-            }, 500)
+            }, 500);
           },
         },
       ];
@@ -204,23 +202,25 @@ const DashBoard = ({ stateCode }) => {
       <div ref={fullPageRef}>
         <div className="options">
           <Header styles={{ marginBottom: "0px" }}>{t(dashboardConfig?.[0]?.name)}</Header>
-          {mobileView ? null : (<div>
-            <div className="mrlg">
-              <MultiLink
-                className="multilink-block-wrapper"
-                label={t(`ES_DSS_SHARE`)}
-                icon={<ShareIcon className="mrsm" />}
-                showOptions={(e) => setShowOptions(e)}
-                onHeadClick={(e) => setShowOptions(e !== undefined ? e : !showOptions)}
-                displayOptions={showOptions}
-                options={shareOptions}
-              />
+          {mobileView ? null : (
+            <div>
+              <div className="mrlg">
+                <MultiLink
+                  className="multilink-block-wrapper"
+                  label={t(`ES_DSS_SHARE`)}
+                  icon={<ShareIcon className="mrsm" />}
+                  showOptions={(e) => setShowOptions(e)}
+                  onHeadClick={(e) => setShowOptions(e !== undefined ? e : !showOptions)}
+                  displayOptions={showOptions}
+                  options={shareOptions}
+                />
+              </div>
+              <div className="mrsm" onClick={handlePrint}>
+                <DownloadIcon className="mrsm" />
+                {t(`ES_DSS_DOWNLOAD`)}
+              </div>
             </div>
-            <div className="mrsm" onClick={handlePrint}>
-              <DownloadIcon className="mrsm" />
-              {t(`ES_DSS_DOWNLOAD`)}
-            </div>
-          </div>)}
+          )}
         </div>
         <Filters
           t={t}
@@ -239,26 +239,28 @@ const DashBoard = ({ stateCode }) => {
             </p>
           </div>
         )}
-        {mobileView ? (<div className="options-m">
-          <div>
-            <FilterIcon onClick={() => setIsFilterModalOpen(!isFilterModalOpen)} style />
+        {mobileView ? (
+          <div className="options-m">
+            <div>
+              <FilterIcon onClick={() => setIsFilterModalOpen(!isFilterModalOpen)} style />
+            </div>
+            <div>
+              <MultiLink
+                className="multilink-block-wrapper"
+                label={t(`ES_DSS_SHARE`)}
+                icon={<ShareIcon className="mrsm" />}
+                showOptions={(e) => setShowOptions(e)}
+                onHeadClick={(e) => setShowOptions(e !== undefined ? e : !showOptions)}
+                displayOptions={showOptions}
+                options={shareOptions}
+              />
+            </div>
+            <div onClick={handlePrint}>
+              <DownloadIcon />
+              {t(`ES_DSS_DOWNLOAD`)}
+            </div>
           </div>
-          <div>
-            <MultiLink
-              className="multilink-block-wrapper"
-              label={t(`ES_DSS_SHARE`)}
-              icon={<ShareIcon className="mrsm" />}
-              showOptions={(e) => setShowOptions(e)}
-              onHeadClick={(e) => setShowOptions(e !== undefined ? e : !showOptions)}
-              displayOptions={showOptions}
-              options={shareOptions}
-            />
-          </div>
-          <div onClick={handlePrint}>
-            <DownloadIcon />
-            {t(`ES_DSS_DOWNLOAD`)}
-          </div>
-        </div>) : null}
+        ) : null}
         <div>
           {tabArray && tabArray?.length > 1 && (
             <div className="dss-switch-tabs chart-row">
