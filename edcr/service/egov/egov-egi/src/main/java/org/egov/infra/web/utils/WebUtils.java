@@ -88,6 +88,7 @@ public final class WebUtils {
     public static String extractRequestedDomainName(HttpServletRequest httpRequest) {
         String requestURL = httpRequest.getRequestURL().toString();
         String domainName = getDomainName(requestURL);
+        LOG.info("####isEnvironmentCentralInstance--> {}", isEnvironmentCentralInstance);
         if (domainName.contains(EDCR_SERVICE_INTERNAL_URL)) {
             if(Boolean.TRUE.equals(Boolean.valueOf(isEnvironmentCentralInstance))) {
                 domainName = commonDomainName;
