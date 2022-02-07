@@ -60,6 +60,7 @@ import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -69,6 +70,10 @@ public final class WebUtils {
     private static final char FORWARD_SLASH = '/';
     private static final String SCHEME_DOMAIN_SEPARATOR = "://";
     private static final String EDCR_SERVICE_INTERNAL_URL = "egov-edcr.";
+    @Value("${is.environment.central.instance}")
+    private static String isEnvironmentCentralInstance;
+    @Value("${common.domain.name}")
+    private static String commonDomainName;
 
     private static final Logger LOG = LoggerFactory.getLogger(WebUtils.class);
 
@@ -84,11 +89,15 @@ public final class WebUtils {
         String requestURL = httpRequest.getRequestURL().toString();
         String domainName = getDomainName(requestURL);
         if (domainName.contains(EDCR_SERVICE_INTERNAL_URL)) {
-            String host = httpRequest.getHeader("x-forwarded-host");
-            if (StringUtils.isNotBlank(host)) {
-                domainName = host.split(",")[0];
-                LOG.info("*****Domain Name***** {}", domainName);
+            if(Boolean.TRUE.equals(Boolean.valueOf(isEnvironmentCentralInstance))) {
+                domainName = commonDomainName;
+            } else {
+                String host = httpRequest.getHeader("x-forwarded-host");
+                if (StringUtils.isNotBlank(host)) {
+                    domainName = host.split(",")[0];
+                }
             }
+            LOG.info("*****Domain Name***** {}", domainName);
         }
         return domainName;
     }
@@ -122,12 +131,13 @@ public final class WebUtils {
         String protocol = httpRequest.getHeader("x-forwarded-proto");
         String host = httpRequest.getHeader("x-forwarded-host");
         if (getDomainName(url.toString()).contains(EDCR_SERVICE_INTERNAL_URL)) {
-            if (StringUtils.isNotBlank(protocol) && StringUtils.isNotBlank(host)) {
-                String proto = protocol.split(",")[0];
-                String hostName = host.split(",")[0];
-                domainURL = new StringBuilder().append(proto).append(SCHEME_DOMAIN_SEPARATOR).append(hostName).toString();
-                LOG.info("Domain URL******* {}", domainURL);
+            String proto = protocol.split(",")[0];
+            String hostName = host.split(",")[0];
+            if(Boolean.TRUE.equals(Boolean.valueOf(isEnvironmentCentralInstance))) {
+                hostName = commonDomainName;
             }
+            domainURL = new StringBuilder().append(proto).append(SCHEME_DOMAIN_SEPARATOR).append(hostName).toString();
+            LOG.info("Domain URL******* {}", domainURL);
         } else {
             String uri = httpRequest.getRequestURI();
             domainURL = withContext
