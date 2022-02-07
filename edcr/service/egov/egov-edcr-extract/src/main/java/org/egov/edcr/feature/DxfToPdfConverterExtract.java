@@ -156,10 +156,10 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
                         } catch (IOException e) {
                             LOG.error("Error occured while reading mdms data", e);
                         }
-
                     }
+                } else {
+                    return planDetail;
                 }
-
             }
         } else {
             List<AppConfigValues> dxfToPdfAppConfigEnabled = appConfigValueService
