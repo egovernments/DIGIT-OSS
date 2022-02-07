@@ -70,6 +70,10 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
     toggleSidebar(false);
   };
 
+  const showProfilePage = () => {
+    console.log('Show user profile page');
+  }
+
   const redirectToLoginPage = () => {
     history.push("/digit-ui/citizen/login");
     closeSidebar();
@@ -82,6 +86,14 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
     menuItems = menuItems.filter((item) => (item?.id !== 'login-btn'))
     menuItems = [
       ...menuItems,
+      {
+        text: t("CORE_COMMON_PROFILE"),
+        element:"PROFILE",
+        icon: <LogoutIcon className="icon" />,
+        populators: {
+          onClick: showProfilePage,
+        },
+      },
       {
         text: t("CORE_COMMON_LOGOUT"),
         element:"LOGOUT",
