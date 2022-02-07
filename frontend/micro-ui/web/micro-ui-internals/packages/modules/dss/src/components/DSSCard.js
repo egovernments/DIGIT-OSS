@@ -29,7 +29,7 @@ const DSSCard = () => {
     label: t(nationalScreenURLs?.[key]?.label),
     link: `/digit-ui/employee/dss/dashboard/${NATADMIN ? nationalScreenURLs[key].key : key}`,
   }));
-  
+
   const propsForModuleCard = {
     Icon: <EventsIconSolid />,
     moduleName: NATADMIN ? t("ACTION_TEST_NATDASHBOARD") : t("ES_TITLE_DSS"),

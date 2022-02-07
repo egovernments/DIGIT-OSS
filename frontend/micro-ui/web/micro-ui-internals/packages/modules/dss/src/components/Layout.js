@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CustomAreaChart from "./CustomAreaChart";
 import CustomBarChart from "./CustomBarChart";
@@ -16,8 +16,7 @@ const Layout = ({ rowData }) => {
   const { t } = useTranslation();
   const { value } = useContext(FilterContext);
   const [searchQuery, onSearch] = useState("");
-  const [chip,updateChip]=useState({});
-
+  const [chip, updateChip] = useState({});
 
   const renderChart = (chart, title) => {
     switch (chart.chartType) {
@@ -47,11 +46,11 @@ const Layout = ({ rowData }) => {
     }
   };
 
-  const renderVisualizer = (visualizer, key,chip,onChipChange) => {
+  const renderVisualizer = (visualizer, key, chip, onChipChange) => {
     switch (visualizer.vizType) {
       case "metric-collection":
         return (
-          <GenericChart header={visualizer.name} className="metricsTable" key={key}      >
+          <GenericChart header={visualizer.name} className="metricsTable" key={key}>
             <MetricChart data={visualizer} />
           </GenericChart>
         );
@@ -65,15 +64,15 @@ const Layout = ({ rowData }) => {
           <GenericChart
             key={key}
             header={visualizer.name}
-           chip={chip}
-           updateChip={onChipChange}
+            chip={chip}
+            updateChip={onChipChange}
             showDownload={visualizer?.charts?.[0].chartType === "table"}
             showSearch={visualizer?.charts?.[0].chartType === "table"}
             className={visualizer?.charts?.[0].chartType === "table" && "fullWidth"}
             onChange={(e) => onSearch(e.target.value)}
           >
             {/* {visualizer.charts.map((chart, key) => renderChart(chart, key))} */}
-            {renderChart(visualizer?.charts?.[chip?chip.filter(ele=>ele.active)?.[0]?.index:0], visualizer.name)}
+            {renderChart(visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0], visualizer.name)}
           </GenericChart>
         );
       case "performing-metric":
@@ -83,10 +82,9 @@ const Layout = ({ rowData }) => {
         )
           return null;
         return (
-          <GenericChart header={visualizer.name} subHeader={`(${t(`DSS_SLA_ACHIEVED`)})`} key={key}  chip={chip}
-          updateChip={onChipChange}>
+          <GenericChart header={visualizer.name} subHeader={`(${t(`DSS_SLA_ACHIEVED`)})`} key={key} chip={chip} updateChip={onChipChange}>
             <CustomBarChart
-              data={visualizer?.charts?.[chip?chip.filter(ele=>ele.active)?.[0]?.index:0]}
+              data={visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0]}
               fillColor={index++ % 2 ? "#00703C" : "#D4351C"}
               title={visualizer.name}
               showDrillDown={false}
@@ -100,26 +98,34 @@ const Layout = ({ rowData }) => {
         return null;
     }
   };
-  useEffect(()=>{
-    let chipData={};
-    rowData.vizArray.map(chart=>{
-      if(chart?.charts?.length>1){
-        chipData[chart.name]=chart.charts.map((ele,ind)=>({tabName:ele.tabName,active:ind===0,index:ind}));
+  useEffect(() => {
+    let chipData = {};
+    rowData.vizArray.map((chart) => {
+      if (chart?.charts?.length > 1) {
+        chipData[chart.name] = chart.charts.map((ele, ind) => ({ tabName: ele.tabName, active: ind === 0, index: ind }));
       }
-    })
-    updateChip({...chipData});
-  },[])
-  return <div className="chart-row">{rowData.vizArray.map(useCallback((chart, key) => 
-    {
-      let chipData=chip?.[chart.name];
-      let onChipChange=(index)=>updateChip(oldState=>{
-       let prevChip=oldState[chart.name]
-        oldState[chart.name]=prevChip.map(ele=>({...ele,active:ele.index===index})
+    });
+    updateChip({ ...chipData });
+  }, []);
+  return (
+    <div className="chart-row">
+      {rowData.vizArray.map(
+        useCallback(
+          (chart, key) => {
+            let chipData = chip?.[chart.name];
+            let onChipChange = (index) =>
+              updateChip((oldState) => {
+                let prevChip = oldState[chart.name];
+                oldState[chart.name] = prevChip.map((ele) => ({ ...ele, active: ele.index === index }));
+                return { ...oldState };
+              });
+            return renderVisualizer(chart, key, chipData, onChipChange);
+          },
+          [renderVisualizer, chip]
         )
-        return {...oldState};
-      });
-    return  renderVisualizer(chart, key,chipData,onChipChange)
-  },[renderVisualizer,chip]))}</div>;
+      )}
+    </div>
+  );
 };
 
 export default Layout;

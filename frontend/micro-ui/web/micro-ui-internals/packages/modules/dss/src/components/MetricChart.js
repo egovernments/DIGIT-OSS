@@ -1,7 +1,6 @@
+import { DownwardArrow, Rating, UpwardArrow } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { Card, CardSubHeader, Rating, UpwardArrow, DownwardArrow } from "@egovernments/digit-ui-react-components";
-import { startOfMonth, endOfMonth, getTime } from "date-fns";
 import FilterContext from "./FilterContext";
 
 const MetricData = ({ t, data, code }) => {
@@ -44,6 +43,14 @@ const MetricChartRow = ({ data }) => {
     return false;
   }
 
+  if (!response) {
+    return (
+      <div style={{ display: "flex", justifyContent: "space-between", margin: "10px" }}>
+        <span>{t(data.name)}</span>
+        <span>{t("DSS_NO_DATA")}</span>
+      </div>
+    );
+  }
   return (
     <div className="row">
       <div>{t(data.name)}</div>

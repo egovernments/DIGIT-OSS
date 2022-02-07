@@ -1,7 +1,9 @@
-import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowDown, Modal, ButtonSelector, Calender } from "@egovernments/digit-ui-react-components";
-import { DateRangePicker, defaultStaticRanges, createStaticRanges } from "react-date-range";
-import { format, addMonths, addHours, startOfToday, endOfToday, endOfYesterday, addMinutes, addSeconds, isEqual, subYears, startOfYesterday, startOfWeek, endOfWeek, startOfYear, endOfYear, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter } from "date-fns";
+import { Calender } from "@egovernments/digit-ui-react-components";
+import {
+  addHours, addMinutes, addMonths, addSeconds, endOfMonth, endOfQuarter, endOfToday, endOfWeek, endOfYear, endOfYesterday, format, startOfMonth, startOfQuarter, startOfToday, startOfWeek, startOfYear, startOfYesterday, subYears
+} from "date-fns";
+import React, { useEffect, Fragment, useMemo, useRef, useState } from "react";
+import { createStaticRanges, DateRangePicker } from "react-date-range";
 
 function isEndDateFocused(focusNumber) {
   return focusNumber === 1;
@@ -32,7 +34,7 @@ const DateRange = ({ values, onFilterChange, t }) => {
   useEffect(() => {
     if (!isModalOpen) {
       const startDate = selectionRange?.startDate;
-      const endDate =  selectionRange?.endDate;
+      const endDate = selectionRange?.endDate;
       const duration = getDuration(selectionRange?.startDate, selectionRange?.endDate);
       const title = `${format(selectionRange?.startDate, "MMM d, yyyy")} - ${format(selectionRange?.endDate, "MMM d, yyyy")}`;
       onFilterChange({ range: { startDate, endDate, duration, title }, requestDate: { startDate, endDate, duration, title } });
@@ -46,71 +48,71 @@ const DateRange = ({ values, onFilterChange, t }) => {
         range: () => ({
           startDate: startOfToday(new Date()),
           endDate: endOfToday(new Date()),
-        })
+        }),
       },
       {
         label: t("DSS_YESTERDAY"),
         range: () => ({
           startDate: startOfYesterday(new Date()),
           endDate: endOfYesterday(new Date()),
-        })
+        }),
       },
       {
         label: t("DSS_THIS_WEEK"),
         range: () => ({
           startDate: startOfWeek(new Date()),
           endDate: endOfWeek(new Date()),
-        })
+        }),
       },
       {
-        label: t('DSS_THIS_MONTH'),
+        label: t("DSS_THIS_MONTH"),
         range: () => ({
           startDate: startOfMonth(new Date()),
           endDate: endOfMonth(new Date()),
-        })
+        }),
       },
       {
-        label: t('DSS_THIS_QUARTER'),
+        label: t("DSS_THIS_QUARTER"),
         range: () => ({
           startDate: startOfQuarter(new Date()),
           endDate: endOfQuarter(new Date()),
-        })
+        }),
       },
       {
-        label: t('DSS_PREVIOUS_YEAR'),
+        label: t("DSS_PREVIOUS_YEAR"),
         range: () => {
-          if (new Date().getMonth() < 3){
+          if (new Date().getMonth() < 3) {
             return {
               startDate: subYears(addMonths(startOfYear(new Date()), 3), 2),
-              endDate: subYears(addMonths(endOfYear(new Date()), 3), 2)
-            }
-          } else{
+              endDate: subYears(addMonths(endOfYear(new Date()), 3), 2),
+            };
+          } else {
             return {
               startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
-              endDate: subYears(addMonths(endOfYear(new Date()), 3), 1)
-            }
+              endDate: subYears(addMonths(endOfYear(new Date()), 3), 1),
+            };
           }
-        }
+        },
       },
       {
-        label: t('DSS_THIS_YEAR'),
+        label: t("DSS_THIS_YEAR"),
         range: () => {
-          const currDate = new Date().getMonth()
-          if ( currDate < 3){
+          const currDate = new Date().getMonth();
+          if (currDate < 3) {
             return {
               startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
-              endDate: subYears(addMonths(endOfYear(new Date()), 3), 1)
-            }
-          } else{
+              endDate: subYears(addMonths(endOfYear(new Date()), 3), 1),
+            };
+          } else {
             return {
               startDate: addMonths(startOfYear(new Date()), 3),
-              endDate: addMonths(endOfYear(new Date()), 3)
-            }
+              endDate: addMonths(endOfYear(new Date()), 3),
+            };
           }
-        }
-      }
-    ])
-  }, [])
+        },
+      },
+    ]);
+  }, []);
 
   const getDuration = (startDate, endDate) => {
     let noOfDays = (new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 3600 * 24);
@@ -134,7 +136,7 @@ const DateRange = ({ values, onFilterChange, t }) => {
     if (isEndDateFocused(focusedRange[1])) {
       setSelectionRange({ title, duration, startDate, endDate: addSeconds(addMinutes(addHours(endDate, 23), 59), 59) });
       setIsModalOpen(false);
-    }else  if(startDate!=endDate){
+    } else if (startDate != endDate) {
       setSelectionRange({ title, duration, startDate, endDate: addSeconds(addMinutes(addHours(endDate, 23), 59), 59) });
       setIsModalOpen(false);
     }

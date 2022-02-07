@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
+import NoData from "./NoData";
 
 const formatValue = (value, symbol) => {
   if (symbol?.toLowerCase() === "percentage") {
@@ -70,12 +71,8 @@ const CustomBarChart = ({
   if (isLoading) {
     return <Loader />;
   }
-  if (chartData?.length === 0) {
-    return (
-      <div className="no-data">
-        <p>{t("DSS_NO_DATA")}</p>
-      </div>
-    );
+  if (chartData?.length === 0 || !chartData) {
+    return <NoData t={t} />;
   }
   return (
     <Fragment>

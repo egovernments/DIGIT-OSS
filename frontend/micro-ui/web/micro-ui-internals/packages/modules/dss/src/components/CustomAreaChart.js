@@ -1,9 +1,10 @@
+import { Loader } from "@egovernments/digit-ui-react-components";
+import { getDaysInMonth } from "date-fns";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ResponsiveContainer, AreaChart, Area, CartesianGrid, Line, LineChart, XAxis, YAxis, Tooltip, Legend, Label } from "recharts";
-import { Card, CardHeader, Loader } from "@egovernments/digit-ui-react-components";
-import { startOfMonth, endOfMonth, sub, getTime, format, getDaysInMonth } from "date-fns";
+import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
+import NoData from "./NoData";
 
 const getValue = (plot) => plot.value;
 
@@ -99,6 +100,8 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
         return Number((plot.value / 100000).toFixed(2));
       case "Cr":
         return Number((plot.value / 10000000).toFixed(2));
+      default:
+        return ""
     }
   };
 
@@ -141,9 +144,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
       )}
       <ResponsiveContainer width="99%" height={id === "fsmTotalCumulativeCollection" ? 400 : 300}>
         {!chartData || chartData?.length === 0 ? (
-          <div className="no-data">
-            <p>{t("DSS_NO_DATA")}</p>
-          </div>
+         <NoData t={t} />
         ) : (
 
           manageChart =="Area" ?( <AreaChart width="100%" height="100%" data={chartData} margin={{ left: 30, top: 10 }}>
