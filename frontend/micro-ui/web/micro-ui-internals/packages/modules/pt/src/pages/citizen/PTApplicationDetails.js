@@ -27,7 +27,6 @@ const PTApplicationDetails = () => {
   let property = (properties && properties.length > 0 && properties[0]) || {};
   const application = propertyId;
   sessionStorage.setItem("pt-property", JSON.stringify(application));
-  //console.log("hello",property);
 
   const { isLoading: auditDataLoading, isError: isAuditError, data: auditResponse } = Digit.Hooks.pt.usePropertySearch(
     {
@@ -37,7 +36,7 @@ const PTApplicationDetails = () => {
     {
       enabled: true,
       // select: (d) =>
-        // d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
+      //   d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
 
@@ -89,10 +88,11 @@ const PTApplicationDetails = () => {
 
   if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
     const propertiesAudit = get(auditResponse, "Properties", []);
-
+    
     const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
-    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
-
+    // const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
+    // Removed filter(property => property.status == 'ACTIVE') condition to match result in qa env
+    const previousActiveProperty = propertiesAudit.sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
     property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
 
@@ -109,10 +109,15 @@ const PTApplicationDetails = () => {
     property,
     "ownersInit", []
   );
- 
 
-  console.log('transfereeOwners-', transfereeOwners);
-  console.log('transferorOwners-', transferorOwners);
+  let transfereeInstitution = get(
+    property,
+    "institutionTemp", []
+  );
+  let transferorInstitution = get(
+    property,
+    "institutionInit", []
+  );
 
   let units = [];
   units = application?.units;
@@ -136,7 +141,7 @@ const PTApplicationDetails = () => {
   owners = application?.owners;
   let docs = [];
   docs = application?.documents;
-  if (isLoading) {
+  if (isLoading || auditDataLoading) {
     return <Loader />;
   }
 
@@ -202,51 +207,46 @@ const PTApplicationDetails = () => {
           { isPropertyTransfer ? (
             <React.Fragment>
               <CardSubHeader>{t("Transferor Details")}</CardSubHeader>
-          <div>
-           
-                  <StatusTable>
-                    <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${t(transferorOwners[0]?.name)}` || t("CS_NA")} />
-                    <Row label={t("Guardian Name")} text={`${t(transferorOwners[0]?.fatherOrHusbandName)}` || t("CS_NA")} />   
-                    <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(transferorOwners[0]?.mobileNumber)}`} />
-                    <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t(transferorOwners[0]?.emailId)}`} />
-                    <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t( transferorOwners[0]?.ownerType).toLowerCase()}`} />
-                    <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(transferorOwners[0]?.correspondenceAddress)}` || t("CS_NA")} />
-                  </StatusTable>
-              
-          </div>
-          <CardSubHeader>{t("Transferee Details")}</CardSubHeader>
-         <div>
-          
-         <StatusTable>
-                 <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${t(transfereeOwners[0]?.name)}` || t("CS_NA")} />
-                 <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${t(transfereeOwners[0]?.fatherOrHusbandName)}` || t("CS_NA")} />
-                 <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${t(transfereeOwners[0]?.gender)}` || t("CS_NA")} />
-                 <Row
-                   label={t("PT_FORM3_OWNERSHIP_TYPE")}
-                   text={`${application?.ownershipCategory ? t(`PT_OWNERSHIP_${transfereeOwners[0]?.ownershipCategory}`) : t("CS_NA")}`}
-                 />
-                 <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(transfereeOwners[0]?.mobileNumber)}`} />
-                 <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")}text={`${t(transfereeOwners[0]?.emailId)}`} />
-                 <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t(transfereeOwners[0]?.ownerType).toLowerCase()}`} />
-                 <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(transfereeOwners[0].correspondenceAddress)}` || t("CS_NA")} />
-               </StatusTable>
-             
-             
-         </div>
+              <StatusTable>
+                <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${t(transferorOwners[0]?.name)}` || t("CS_NA")} />
+                <Row label={t("Guardian Name")} text={`${t(transferorOwners[0]?.fatherOrHusbandName)}` || t("CS_NA")} />   
+                <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(transferorOwners[0]?.mobileNumber)}`} />
+                <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t(transferorOwners[0]?.emailId)}`} />
+                <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t( transferorOwners[0]?.ownerType).toLowerCase()}`} />
+                <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(transferorOwners[0]?.correspondenceAddress)}` || t("CS_NA")} />
+              </StatusTable>
 
+              <CardSubHeader>{t("Transferee Details")}</CardSubHeader>
+              {
+                transferorInstitution ? (
+                  <StatusTable>
+                    <p> Add institution related data here</p>
+                  </StatusTable>
+                ) : (
+                  <StatusTable>
+                    <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={`${t(transfereeOwners[0]?.name)}` || t("CS_NA")} />
+                    <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${t(transfereeOwners[0]?.fatherOrHusbandName)}` || t("CS_NA")} />
+                    <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${t(transfereeOwners[0]?.gender)}` || t("CS_NA")} />
+                    <Row
+                      label={t("PT_FORM3_OWNERSHIP_TYPE")}
+                      text={`${application?.ownershipCategory ? t(`PT_OWNERSHIP_${transfereeOwners[0]?.ownershipCategory}`) : t("CS_NA")}`}
+                    />
+                    <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(transfereeOwners[0]?.mobileNumber)}`} />
+                    <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")}text={`${t(transfereeOwners[0]?.emailId)}`} />
+                    <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t(transfereeOwners[0]?.ownerType).toLowerCase()}`} />
+                    <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(transfereeOwners[0].correspondenceAddress)}` || t("CS_NA")} />
+                  </StatusTable>
+                )
+              }
          <CardSubHeader>{t("Mutation Details")}</CardSubHeader>
          <div>
           
-         <StatusTable>
-                 <Row label={t("Is Mutation pending in court?")} text={`${t()}`} />
-                 <Row label={t("Details of Court Case")} text={`${t()}` }  />
-                 <Row label={t("Is property or part of property inder state / central Government Aquisition?")} text={`${t()}`} />
-                 <Row label={t("Details of Government Aquisition")} text={`${t()}`}  />
-
-                 <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t(t("CS_NA"))}`} />
-                 <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={`${t(transferorOwners[0]?.ownerType).toLowerCase()}`} />
-                 <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(transferorOwners[0]?.correspondenceAddress)}` || t("CS_NA")} />
-               </StatusTable>
+        <StatusTable>
+          <Row label={t("Is Mutation pending in court?")} text={`${t()}`} />
+          <Row label={t("Details of Court Case")} text={`${t()}` }  />
+          <Row label={t("Is property or part of property inder state / central Government Aquisition?")} text={`${t()}`} />
+          <Row label={t("Details of Government Aquisition")} text={`${t()}`}  />                
+        </StatusTable>
              
              
          </div>
