@@ -239,13 +239,6 @@ useEffect(()=>{
   if (isLoading || isRequestLoading) {
     return <Loader />;
   }
-  if (!tableColumns || !tableData) {
-    return (
-      <div className="no-data">
-        <p>{t("DSS_NO_DATA")}</p>
-      </div>
-    );
-  }
 
   return (
     <div style={{ width: "100%", overflowX: "auto" }}>
@@ -255,6 +248,10 @@ useEffect(()=>{
           {filterStack.map((filter, id) => (id > 0 ? <RemoveableTag key={id} text={`${filter?.label}: ${t(filter?.name)}`} onClick={() => removeULB(id)} /> : null))}
         </div>
       )}
+
+  {!tableColumns || !tableData ? <div className="no-data">
+        <p>{t("DSS_NO_DATA")}</p>
+      </div> :
       <Table
         className="customTable"
         t={t}
@@ -272,7 +269,7 @@ useEffect(()=>{
             style: {},
           };
         }}
-      />
+      />}
     </div>
   );
 };
