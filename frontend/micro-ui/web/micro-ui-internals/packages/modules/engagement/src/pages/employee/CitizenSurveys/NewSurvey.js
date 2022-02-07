@@ -59,10 +59,17 @@ const NewSurveys = () => {
     tenantIds:[]
   };
 
+  const stylesForForm = {
+    marginLeft:'-20px',
+  }
+  
   return (
     <Fragment>
-      <Header>{t("CS_COMMON_SURVEYS")}</Header>
-      <CreateNewSurvey t={t} onSubmit={onSubmit} initialFormValues={defaultValues} />
+      {/* <Header>{t("CS_COMMON_SURVEYS")}</Header> */}
+      <Header>{t("CREATE_NEW_SURVEY")}</Header>
+      <div style={stylesForForm}>
+        <CreateNewSurvey t={t} onSubmit={onSubmit} initialFormValues={defaultValues} />
+      </div>
     </Fragment>
   );
 };
