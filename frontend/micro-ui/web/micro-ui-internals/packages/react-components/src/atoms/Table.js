@@ -156,9 +156,11 @@ const Table = ({
             </span>{" "}
           </span>
           {/* to go to first and last page we need to do a manual pagination , it can be updated later*/}
+          {!manualPagination&& pageIndex!=0 &&<ArrowToFirst onClick={() => gotoPage(0)} className={"cp"} />}
           {canPreviousPage && manualPagination && onFirstPage && <ArrowToFirst onClick={() => manualPagination && onFirstPage()} className={"cp"} />}
           {canPreviousPage && <ArrowBack onClick={() => (manualPagination ? onPrevPage() : previousPage())} className={"cp"} />}
           {canNextPage && <ArrowForward onClick={() => (manualPagination ? onNextPage() : nextPage())} className={"cp"} />}
+          {!manualPagination&& pageIndex != pageCount-1 && <ArrowToLast onClick={() => gotoPage(pageCount-1 )} className={"cp"} />}
           {rows.length == pageSizeLimit && canNextPage && manualPagination && onLastPage && (
             <ArrowToLast onClick={() => manualPagination && onLastPage()} className={"cp"} />
           )}
