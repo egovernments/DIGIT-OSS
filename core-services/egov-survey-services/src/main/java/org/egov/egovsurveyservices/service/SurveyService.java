@@ -74,10 +74,20 @@ public class SurveyService {
 
         if(CollectionUtils.isEmpty(surveyEntities))
             return new ArrayList<>();
-
         enrichNumberOfResponsesForEachSurvey(listOfSurveyIds, surveyEntities);
+        postProcessSurveySearchResults(surveyEntities);
 
         return surveyEntities;
+    }
+
+    private void postProcessSurveySearchResults(List<SurveyEntity> surveyEntities) {
+        Long currentTime = System.currentTimeMillis();
+        surveyEntities.forEach(surveyEntity -> {
+            if(surveyEntity.getStatus().equals(ACTIVE)){
+                if(currentTime < surveyEntity.getStartDate() || currentTime > surveyEntity.getEndDate())
+                    surveyEntity.setStatus(INACTIVE);
+            }
+        });
     }
 
     private void enrichNumberOfResponsesForEachSurvey(List<String> listOfSurveyIds, List<SurveyEntity> surveyEntities) {
