@@ -10,6 +10,8 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
+import static org.egov.egovsurveyservices.utils.SurveyServiceConstants.ACTIVE;
+
 @Component
 public class SurveyQueryBuilder {
 
@@ -172,7 +174,8 @@ public class SurveyQueryBuilder {
         }
         if(!ObjectUtils.isEmpty(criteria.getStatus())){
             addClauseIfRequired(query, preparedStmtList);
-            query.append(" survey.status = ? ");
+            query.append(" (survey.status = ? ");
+            appendStatusFilterToQuery(query, criteria.getStatus());
             preparedStmtList.add(criteria.getStatus());
         }
         if(!ObjectUtils.isEmpty(criteria.getUuid())){
@@ -193,6 +196,13 @@ public class SurveyQueryBuilder {
             addPagination(query, preparedStmtList, criteria);
 
         return SURVEY_UUIDS_QUERY_WRAPPER.replace("{HELPER_TABLE}", query.toString());
+    }
+
+    private void appendStatusFilterToQuery(StringBuilder query, String status) {
+        if(status.equals(ACTIVE))
+            query.append(" AND (select extract(epoch from current_timestamp)) BETWEEN survey.startdate AND survey.enddate) ");
+        else
+            query.append(" OR (select extract(epoch from current_timestamp)) NOT BETWEEN survey.startdate AND survey.enddate) ");
     }
 
     public String getSurveyUuidsToCountMapQuery(List<String> listOfSurveyIds, List<Object> preparedStmtList) {
