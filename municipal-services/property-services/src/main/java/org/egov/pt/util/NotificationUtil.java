@@ -368,10 +368,13 @@ public class NotificationUtil {
             userSearchRequest.put("userName", mobileNo);
             try {
                 Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest).get();
+                log.info(JSONObject.valueToString(user));
                 if(null != user) {
                     if(JsonPath.read(user, "$.user[0].emailId")!=null) {
                         String email = JsonPath.read(user, "$.user[0].emailId");
                     mapOfPhnoAndEmailIds.put(mobileNo, email);
+                    log.info("The mobile number is " + mobileNo);
+                    log.info("The email is " + JSONObject.valueToString(email));
                     }
                 }else {
                     log.error("Service returned null while fetching user for username - "+mobileNo);
