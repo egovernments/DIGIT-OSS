@@ -3,7 +3,7 @@ import { Modal, Card, CardText, TextInput, CardLabelError } from "@egovernments/
 import { Controller, useForm } from "react-hook-form";
 
 const Heading = (props) => {
-  return <h1 className="heading-m">{props.label}</h1>;
+  return <h1 className="heading-m">{props.heading}</h1>;
 };
 
 const Close = () => (
@@ -58,6 +58,7 @@ const MarkActiveModal = ({
       actionSaveOnSubmit={handleSurveySettingSubmit(actionSaveOnSubmit)}
       formId="modal-action"
     >
+      <p>{t("CONFIRM_ACTIVE_SURVEY_MSG")} <br/> {surveyTitle} {t("CONFIRM_ACTIVE_SURVEY_MSG_END")}</p>
       <Card style={{ boxShadow: "none" }}>
         <form onSubmit={handleSurveySettingSubmit(onSubmit)}>
           <span className="surveyformfield">

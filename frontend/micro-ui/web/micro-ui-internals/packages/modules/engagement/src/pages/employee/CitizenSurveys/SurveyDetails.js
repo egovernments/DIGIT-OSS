@@ -187,7 +187,7 @@ const SurveyDetails = ({ location, match }) => {
           closeModal={() => setShowModal(false)}
           actionCancelLabel={"CS_COMMON_CANCEL"}
           actionCancelOnSubmit={() => setShowModal(false)}
-          actionSaveLabel={"ES_COMMON_Y_DEL"}
+          actionSaveLabel={"ES_COMMON_DEL"}
           actionSaveOnSubmit={handleDelete}
         />
       )}
@@ -202,8 +202,10 @@ const SurveyDetails = ({ location, match }) => {
           actionSaveLabel={"ES_COMMON_SAVE"}
           actionSaveOnSubmit={handleMarkActive}
           onSubmit={handleMarkActive}
+          surveyTitle={surveyData.title}
         />
       )}
+      {/* CONFIRM_MARKINACTIVE_SURVEY - key for heading in modal */}
       {showModal && userAction === "INACTIVE" && (
         <MarkInActiveModal
           t={t}
