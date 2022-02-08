@@ -1,15 +1,7 @@
 package com.tarento.analytics.handler;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -116,7 +108,17 @@ public class LineChartResponseHandler implements IResponseHandler {
                             }
 
                         } else {
-                            value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
+                            for (Iterator<String> it = bucket.fieldNames(); it.hasNext(); ) {
+                                String fieldName = it.next();
+                                if(bucket.get(fieldName) instanceof JsonNode){
+                                    if(bucket.get(fieldName).findValue("buckets") == null){
+                                        value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
+                                    }
+
+                                }
+                            }
+
+                            //value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
 
                             if(chartNode.get(IS_ROUND_OFF)!=null && chartNode.get(IS_ROUND_OFF).asBoolean()) {
                             	value =  (double) Math.round(value);
