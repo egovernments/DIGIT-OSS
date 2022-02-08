@@ -489,7 +489,7 @@ export const setPropertyDetails = (data) => {
       units: data?.units,
       landArea: data?.landArea?.floorarea,
       propertyType: data?.PropertyType?.code,
-      noOfFloors: data?.units.length,
+      noOfFloors: data?.noOfFloors?.code+1,
       superBuiltUpArea: null,
       usageCategory: data?.units?.[0]?.usageCategory,
     };

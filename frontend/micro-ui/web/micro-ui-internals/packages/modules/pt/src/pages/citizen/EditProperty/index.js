@@ -529,9 +529,10 @@ const EditProperty = ({ parentRoute }) => {
       owners[index] = data;
       setParams({ ...params, ...{ [key]: [...owners] } });
     } else if (key === "units") {
-      let units = params.units || [];
-      units[index] = data;
-      setParams({ ...params, units });
+      // let units = params.units || [];
+      // units[index] = data;
+      // setParams({ ...params, units });
+      setParams({ ...params, ...{ [key]: [...data] } });
     } else {
       setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
     }
@@ -554,11 +555,11 @@ const EditProperty = ({ parentRoute }) => {
   }
 
   /* use newConfig instead of commonFields for local development in case needed */
-  commonFields=commonFields?commonFields:newConfig;
+  commonFields=newConfig;
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = `isResidential`;
+  config.indexRoute = `info`;
   const  CheckPage = Digit?.ComponentRegistryService?.getComponent('PTCheckPage');
   const PTAcknowledgement = Digit?.ComponentRegistryService?.getComponent('PTAcknowledgement');
 
