@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tarento.analytics.helper.ComputedFieldFactory;
 import com.tarento.analytics.helper.IComputedField;
 import com.tarento.analytics.model.ComputedFields;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +111,9 @@ public class LineChartResponseHandler implements IResponseHandler {
                         } else {
                             for (Iterator<String> it = bucket.fieldNames(); it.hasNext(); ) {
                                 String fieldName = it.next();
-                                if(bucket.get(fieldName) instanceof JsonNode){
+                                String jsonStr = bucket.get(fieldName).toString();
+                                JSONObject currObj = new JSONObject(jsonStr);
+                                if(currObj instanceof JSONObject){
                                     if(bucket.get(fieldName).findValue("buckets") == null){
                                         value = previousVal + ((bucket.get(fieldName).findValue(IResponseHandler.VALUE) != null) ? bucket.get(fieldName).findValue(IResponseHandler.VALUE).asDouble():bucket.get(fieldName).findValue(IResponseHandler.DOC_COUNT).asDouble());
                                     }
