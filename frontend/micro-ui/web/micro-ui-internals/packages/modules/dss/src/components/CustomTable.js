@@ -271,6 +271,9 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
 
   return (
     <div style={{ width: "100%", overflowX: "auto" }}>
+      <span className={"dss-table-subheader"}>
+        {t('DSS_CMN_TABLE_INFO')}
+        </span>
       {filterStack.length > 1 && (
         <div className="tag-container">
           <span style={{ marginTop: "20px" }}>{t("DSS_FILTERS_APPLIED")}: </span>
