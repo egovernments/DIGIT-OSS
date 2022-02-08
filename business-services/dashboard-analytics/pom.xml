@@ -143,6 +143,13 @@
 		</dependency>
 
     </dependencies>
+	<repositories>
+		<repository>
+			<id>repo.egovernments.org</id>
+			<name>eGov DIGIT Releases Repository</name>
+			<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
 	<build>
 		<plugins>
 			<plugin><!-- Include if you want to make an executable jar[FAT JAR which 
