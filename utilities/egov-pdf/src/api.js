@@ -93,7 +93,8 @@ async function search_payment(consumerCodes, tenantId, requestinfo, bussinessSer
   if(params.mobileNumber)
     searchEndpoint = searchEndpoint + '&mobileNumber='+params.mobileNumber;
 
-  console.log("\n URL-->"+searchEndpoint);
+  console.log("\n URL-->"+config.host.payments+searchEndpoint);
+  console.log("\n requestinfo-->"+JSON.stringify(requestinfo)+"\n");
 
   return await axios({
     method: "post",
