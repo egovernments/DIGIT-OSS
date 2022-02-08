@@ -1,8 +1,22 @@
 import { Calender } from "@egovernments/digit-ui-react-components";
 import {
-  addHours, addMinutes, addMonths, addSeconds, endOfMonth, endOfQuarter, endOfToday, endOfWeek, endOfYear, endOfYesterday, format, startOfMonth, startOfQuarter, startOfToday, startOfWeek, startOfYear, startOfYesterday, subYears
+  addHours,
+  addMinutes,
+  addMonths, addSeconds, differenceInDays, endOfMonth,
+  endOfQuarter,
+  endOfToday,
+  endOfWeek,
+  endOfYear,
+  endOfYesterday,
+  format,
+  startOfMonth,
+  startOfQuarter,
+  startOfToday,
+  startOfWeek,
+  startOfYear,
+  startOfYesterday, subSeconds, subYears
 } from "date-fns";
-import React, { useEffect, Fragment, useMemo, useRef, useState } from "react";
+import React, { useEffect,Fragment, useMemo, useRef, useState } from "react";
 import { createStaticRanges, DateRangePicker } from "react-date-range";
 
 function isEndDateFocused(focusNumber) {
@@ -47,35 +61,35 @@ const DateRange = ({ values, onFilterChange, t }) => {
         label: t("DSS_TODAY"),
         range: () => ({
           startDate: startOfToday(new Date()),
-          endDate: endOfToday(new Date()),
+          endDate: subSeconds(endOfToday(new Date()), 1),
         }),
       },
       {
         label: t("DSS_YESTERDAY"),
         range: () => ({
           startDate: startOfYesterday(new Date()),
-          endDate: endOfYesterday(new Date()),
+          endDate: subSeconds(endOfYesterday(new Date()), 1),
         }),
       },
       {
         label: t("DSS_THIS_WEEK"),
         range: () => ({
           startDate: startOfWeek(new Date()),
-          endDate: endOfWeek(new Date()),
+          endDate: subSeconds(endOfWeek(new Date()), 1),
         }),
       },
       {
         label: t("DSS_THIS_MONTH"),
         range: () => ({
           startDate: startOfMonth(new Date()),
-          endDate: endOfMonth(new Date()),
+          endDate: subSeconds(endOfMonth(new Date()), 1),
         }),
       },
       {
         label: t("DSS_THIS_QUARTER"),
         range: () => ({
           startDate: startOfQuarter(new Date()),
-          endDate: endOfQuarter(new Date()),
+          endDate: subSeconds(endOfQuarter(new Date()), 1),
         }),
       },
       {
@@ -84,12 +98,12 @@ const DateRange = ({ values, onFilterChange, t }) => {
           if (new Date().getMonth() < 3) {
             return {
               startDate: subYears(addMonths(startOfYear(new Date()), 3), 2),
-              endDate: subYears(addMonths(endOfYear(new Date()), 3), 2),
+              endDate: subSeconds(subYears(addMonths(endOfYear(new Date()), 3), 2), 1),
             };
           } else {
             return {
               startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
-              endDate: subYears(addMonths(endOfYear(new Date()), 3), 1),
+              endDate: subSeconds(subYears(addMonths(endOfYear(new Date()), 3), 1), 1),
             };
           }
         },
@@ -101,19 +115,18 @@ const DateRange = ({ values, onFilterChange, t }) => {
           if (currDate < 3) {
             return {
               startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
-              endDate: subYears(addMonths(endOfYear(new Date()), 3), 1),
+              endDate: subSeconds(subYears(addMonths(endOfYear(new Date()), 3), 1), 1),
             };
           } else {
             return {
               startDate: addMonths(startOfYear(new Date()), 3),
-              endDate: addMonths(endOfYear(new Date()), 3),
+              endDate: subSeconds(addMonths(endOfYear(new Date()), 3), 1),
             };
           }
         },
       },
     ]);
   }, []);
-
   const getDuration = (startDate, endDate) => {
     let noOfDays = (new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 3600 * 24);
     if (noOfDays > 91) {
@@ -127,16 +140,20 @@ const DateRange = ({ values, onFilterChange, t }) => {
     }
   };
 
-  const handleSelect = (ranges) => {
+  const handleSelect = (ranges, e) => {
     const { range1: selection } = ranges;
     const { startDate, endDate, title, duration } = selection;
-    if (isStartDateFocused(focusedRange[1])) {
+    if (
+      staticRanges.some((range) => {
+        let newRange = range.range();
+        return differenceInDays(newRange.startDate, startDate) === 0 && differenceInDays(newRange.endDate, endDate) === 0;
+      })
+    ) {
       setSelectionRange(selection);
-    }
-    if (isEndDateFocused(focusedRange[1])) {
-      setSelectionRange({ title, duration, startDate, endDate: addSeconds(addMinutes(addHours(endDate, 23), 59), 59) });
       setIsModalOpen(false);
-    } else if (startDate != endDate) {
+    } else if (isStartDateFocused(focusedRange[1])) {
+      setSelectionRange(selection);
+    } else if (isEndDateFocused(focusedRange[1])) {
       setSelectionRange({ title, duration, startDate, endDate: addSeconds(addMinutes(addHours(endDate, 23), 59), 59) });
       setIsModalOpen(false);
     }
