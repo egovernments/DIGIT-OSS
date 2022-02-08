@@ -109,11 +109,11 @@ public class LineChartResponseHandler implements IResponseHandler {
                             }
 
                         } else {
+                            String jsonStr = bucket.toString();
+                            JSONObject currObj = new JSONObject(jsonStr);
                             for (Iterator<String> it = bucket.fieldNames(); it.hasNext(); ) {
                                 String fieldName = it.next();
-                                String jsonStr = bucket.get(fieldName).toString();
-                                JSONObject currObj = new JSONObject(jsonStr);
-                                if(currObj instanceof JSONObject){
+                                if(currObj.get(fieldName) instanceof JSONObject){
                                     if(bucket.get(fieldName).findValue("buckets") == null){
                                         value = previousVal + ((bucket.get(fieldName).findValue(IResponseHandler.VALUE) != null) ? bucket.get(fieldName).findValue(IResponseHandler.VALUE).asDouble():bucket.get(fieldName).findValue(IResponseHandler.DOC_COUNT).asDouble());
                                     }
