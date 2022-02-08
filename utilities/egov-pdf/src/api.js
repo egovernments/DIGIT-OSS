@@ -87,14 +87,19 @@ async function search_payment(consumerCodes, tenantId, requestinfo, bussinessSer
     var userName = requestinfo.RequestInfo.userInfo.userName;
     params["mobileNumber"] = mobileNumber || userName;
   }
-  console.log("\n params-->"+params);
+  console.log("\n params-->"+JSON.stringify(params)+"\n");
+
+  searchEndpoint = searchEndpoint + '?tenantId='+tenantId + '&consumerCodes='+consumerCodes;
+  if(params.mobileNumber)
+    searchEndpoint = searchEndpoint + '&mobileNumber='+params.mobileNumber;
+
+  console.log("\n URL-->"+searchEndpoint);
 
   return await axios({
     method: "post",
     url: url.resolve(config.host.payments, searchEndpoint),
     data: requestinfo,
-    headers: headers,
-    params,
+    headers: headers
   });
 }
 
