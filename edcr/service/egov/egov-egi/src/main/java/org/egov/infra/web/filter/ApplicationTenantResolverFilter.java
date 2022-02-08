@@ -110,15 +110,18 @@ public class ApplicationTenantResolverFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         MultiReadRequestWrapper customRequest = new MultiReadRequestWrapper(req);
         HttpSession session = customRequest.getSession();
-        LOG.info("Request URL-->" + customRequest.getRequestURL());
-        LOG.info("Request URI-->" + customRequest.getRequestURI());
-        String domainURL = extractRequestDomainURL(customRequest, false);
-        String domainName = extractRequestedDomainName(customRequest);
+        LOG.info("Request URL--> {}", customRequest.getRequestURL());
+        LOG.info("Request URI--> {}", customRequest.getRequestURI());
+        boolean isEnvironmentCentralInstance = environmentSettings.getProperty("is.environment.central.instance", Boolean.class);
+        String commonDomainName = environmentSettings.getProperty("common.domain.name");
+        LOG.info("####isEnvironmentCentralInstance--> {} #### domain name-->> {}", isEnvironmentCentralInstance, commonDomainName);
+        String domainURL = extractRequestDomainURL(customRequest, false, isEnvironmentCentralInstance, commonDomainName);
+        String domainName = extractRequestedDomainName(customRequest, isEnvironmentCentralInstance, commonDomainName);
         ApplicationThreadLocals.setTenantID(environmentSettings.schemaName(domainName));
         ApplicationThreadLocals.setDomainName(domainName);
         ApplicationThreadLocals.setDomainURL(domainURL);
         prepareRestService(customRequest, session);
-        LOG.info("***Tenant ID-->" + ApplicationThreadLocals.getTenantID());
+        LOG.info("***Tenant ID--> {}", ApplicationThreadLocals.getTenantID());
         chain.doFilter(customRequest, response);
     }
 

@@ -60,7 +60,6 @@ import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -70,10 +69,6 @@ public final class WebUtils {
     private static final char FORWARD_SLASH = '/';
     private static final String SCHEME_DOMAIN_SEPARATOR = "://";
     private static final String EDCR_SERVICE_INTERNAL_URL = "egov-edcr.";
-    @Value("${is.environment.central.instance}")
-    private static String isEnvironmentCentralInstance;
-    @Value("${common.domain.name}")
-    private static String commonDomainName;
 
     private static final Logger LOG = LoggerFactory.getLogger(WebUtils.class);
 
@@ -85,12 +80,11 @@ public final class WebUtils {
      * This will return only domain name from http request <br/>
      * eg: http://www.domain.com/cxt/xyz will return www.domain.com http://somehost:8090/cxt/xyz will return somehost
      **/
-    public static String extractRequestedDomainName(HttpServletRequest httpRequest) {
+    public static String extractRequestedDomainName(HttpServletRequest httpRequest, boolean isCentralInstance, String commonDomainName) {
         String requestURL = httpRequest.getRequestURL().toString();
         String domainName = getDomainName(requestURL);
-        LOG.info("####isEnvironmentCentralInstance--> {}", isEnvironmentCentralInstance);
         if (domainName.contains(EDCR_SERVICE_INTERNAL_URL)) {
-            if(Boolean.TRUE.equals(Boolean.valueOf(isEnvironmentCentralInstance))) {
+            if(isCentralInstance) {
                 domainName = commonDomainName;
             } else {
                 String host = httpRequest.getHeader("x-forwarded-host");
@@ -126,7 +120,7 @@ public final class WebUtils {
      * http://www.domain.com/cxt/xyz withContext value as true will return http://www.domain.com/cxt/ <br/>
      * http://www.domain.com/cxt/xyz withContext value as false will return http://www.domain.com
      **/
-    public static String extractRequestDomainURL(HttpServletRequest httpRequest, boolean withContext) {
+    public static String extractRequestDomainURL(HttpServletRequest httpRequest, boolean withContext, boolean isCentralInstance, String domainName) {
         StringBuilder url = new StringBuilder(httpRequest.getRequestURL());
         String domainURL = "";
         String protocol = httpRequest.getHeader("x-forwarded-proto");
@@ -134,8 +128,8 @@ public final class WebUtils {
         if (getDomainName(url.toString()).contains(EDCR_SERVICE_INTERNAL_URL)) {
             String proto = protocol.split(",")[0];
             String hostName = host.split(",")[0];
-            if(Boolean.TRUE.equals(Boolean.valueOf(isEnvironmentCentralInstance))) {
-                hostName = commonDomainName;
+            if(isCentralInstance) {
+                hostName = domainName;
             }
             domainURL = new StringBuilder().append(proto).append(SCHEME_DOMAIN_SEPARATOR).append(hostName).toString();
             LOG.info("Domain URL******* {}", domainURL);

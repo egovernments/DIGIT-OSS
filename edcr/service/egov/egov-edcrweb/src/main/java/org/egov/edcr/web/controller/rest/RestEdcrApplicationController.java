@@ -246,7 +246,6 @@ public class RestEdcrApplicationController {
             Boolean mdmsEnabled = mdmsConfiguration.getMdmsEnabled();
             if (mdmsEnabled != null && mdmsEnabled) {
                 Object mdmsData = bpaMdmsUtil.mDMSCall(new RequestInfo(), edcr.getTenantId());
-                LOGGER.info("After calling mdms {}", String.valueOf(mdmsData));
                 HashMap<String, String> data = new HashMap<>();
                 data.put("applicationType", applicationType);
                 data.put("serviceType", serviceType);
