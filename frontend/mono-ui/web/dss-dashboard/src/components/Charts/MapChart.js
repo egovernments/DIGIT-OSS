@@ -9,7 +9,7 @@ import style from './styles';
 
 const INDIA_TOPO_JSON = require('./india.topo.json');
 
-const PROJECTION_CONFIG = { scale: 350, center: [78.9629, 22.5937] };
+const PROJECTION_CONFIG = { scale: 200, center: [88.9629, 20.5937] };
 
 // Red Variants
 const COLOR_RANGE = [
@@ -61,6 +61,7 @@ class MapChart extends React.Component {
     };
 
     render() {
+        console.log("Projection Config: " + PROJECTION_CONFIG);
 
         const data = [
             { id: 'AP', state: 'Andhra Pradesh', value: 1 },
