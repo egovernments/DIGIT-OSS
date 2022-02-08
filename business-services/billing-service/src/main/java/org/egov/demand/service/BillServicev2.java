@@ -190,7 +190,7 @@ public class BillServicev2 {
 			return;
 
 		BillRequestV2 req = BillRequestV2.builder().bills(bills).requestInfo(requestInfo).build();
-		producer.push(billCancelTopic, req);
+		producer.push(cancelBillCriteria.getTenantId(), billCancelTopic, req);
 
 	}
 
