@@ -24,14 +24,14 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
   const fields = PTSearchFields?.[searchBy] || {};
   return (
     <div className="PropertySearchForm">
-      <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
+      <SearchForm onSubmit={onSubmit} className={"pt-property-search"} handleSubmit={handleSubmit}>
         <SwitchComponent keys={Object.keys(PTSearchFields || {})} searchBy={searchBy} onReset={onReset} t={t} onSwitch={setSearchBy} />
         {fields &&
           Object.keys(fields).map((key) => {
             let field = fields[key];
             let validation = field?.validation || {};
             return (
-              <SearchField key={key}>
+              <SearchField key={key} className={"pt-form-field"}>
                 <label>{t(field?.label)}{`${field?.validation?.required?"*":""}`}</label>
                 {field?.type==="custom"? 
                 <Controller
@@ -66,7 +66,7 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
 
        <div className="pt-search-action" >
          <SearchField  className="pt-search-action-reset">
-         <p
+         <p style={{color:"#F47738"}}
             onClick={() => {
               onReset({});
             }}

@@ -103,7 +103,10 @@ const Filters = ({
           <div className="mbsm">{t("ES_DSS_ULB")}</div>
           <MultiSelectDropdown
             options={
+              ulbTenants?.ulb?.sort((x, y) => x?.ulbKey?.localeCompare(y?.ulbKey))
+              /*    Removed filter for selected ddr/state rain-5426
               ulbTenants?.ulb && ulbTenants.ulb.filter((e) => checkSelected(e, selectedDDRs))?.sort((x, y) => x?.ulbKey?.localeCompare(y?.ulbKey))
+             */
             }
             optionsKey="ulbKey"
             onSelect={selectFilters}

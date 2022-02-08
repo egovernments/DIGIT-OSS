@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Card, CardText } from "@egovernments/digit-ui-react-components";
 
 const Heading = (props) => {
-  return <h1 className="heading-m">{props.heading}</h1>;
+  return <h1 className="heading-m">{props.t(props.heading)}</h1>;
 };
 
 const Close = () => (

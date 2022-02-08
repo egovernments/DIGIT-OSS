@@ -26,7 +26,7 @@ const formatUnits = (units = [], currentFloor, isFloor) => {
     ];
   }
   return units.map((unit) => {
-    let usageCategory = unit?.usageCategory?.includes("RESIDENTIAL") ? "RESIDENTIAL" : getUsageCategory(unit?.usageCategory)?.usageCategoryMinor;
+    let usageCategory = !(unit?.usageCategory?.includes("NONRESIDENTIAL")) ? "RESIDENTIAL" : getUsageCategory(unit?.usageCategory)?.usageCategoryMinor;
     return {
       ...unit,
       builtUpArea: unit?.constructionDetail?.builtUpArea,
@@ -40,7 +40,7 @@ const formatUnits = (units = [], currentFloor, isFloor) => {
 const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) => {
   let path = window.location.pathname.split("/");
   let currentFloor = Number(path[path.length - 1]);
-  let isFloor = window.location.pathname.includes("new-application/units");
+  let isFloor = window.location.pathname.includes("new-application/units") || window.location.pathname.includes("/edit-application/units");
   const [fields, setFields] = useState(
     formatUnits(isFloor ? formData?.units?.filter((ee) => ee.floorNo == currentFloor) : formData?.units, currentFloor, isFloor)
   );
@@ -51,6 +51,14 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
       setFields(null);
     };
   }, [currentFloor, formData, isFloor]);
+
+  const getheader = () => {
+    if (formData?.PropertyType?.i18nKey === "COMMON_PROPTYPE_BUILTUP_SHAREDPROPERTY") {
+      return "PT_FLAT_DETAILS_HEADER";
+    } else {
+      return `PROPERTYTAX_FLOOR_${currentFloor}_DETAILS`;
+    }
+  };
 
   const { data: mdmsData, isLoading } = Digit.Hooks.useCommonMDMS(
     Digit.ULBService.getStateId(),
@@ -203,7 +211,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
   }
   return (
     <FormStep
-      config={config}
+    config={((config.texts.header = getheader()), config)}
       onSelect={goNext}
       onSkip={onSkip}
       t={t}
@@ -224,7 +232,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
               }}
             >
               <LinkButton
-                label={<DeleteIcon   style={{ float: "right", position: "relative", bottom: "32px" }}
+                label={<DeleteIcon   style={{ float: "right", position: "relative" }}
                 fill={!(fields.length === 1) ? "#494848" : "#FAFAFA"} />}
                 style={{ width: "100px", display: "inline" }}
                 onClick={(e) => handleRemove(index)}

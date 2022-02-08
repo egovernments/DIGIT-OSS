@@ -4,6 +4,10 @@
         width: calc( 25% - 16px );
         @apply inline-block mr-md align-middle;
     }
+    .pt-form-field{
+        width: 32% !important;
+        margin-bottom: 20px;
+      }
     .SubmitAndClearAllContainer{
         @apply w-full;
         .submit{
@@ -31,6 +35,9 @@
         p{
             @apply cursor-pointer text-link text-focus w-full inline-block ;
         }
+    }
+    .pt-property-search{
+        justify-content: unset;
     }
 
 }
