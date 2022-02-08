@@ -1,9 +1,12 @@
 import React from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber } from "@egovernments/digit-ui-react-components";
-
+// import ImageUpload from './ImageUpload'
 const userProfile = () => {
+  const editScreen =false;
     return (
-        <><LabelFieldPair>
+        <React.Fragment>
+        {/* <ImageUpload/> */}
+        <LabelFieldPair>
          <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("PT_OWNER_NAME")}`}</CardLabel>
           <div className="field">
             <TextInput
@@ -50,7 +53,7 @@ const userProfile = () => {
             />
           </div>
         </LabelFieldPair>
-        </>
+        </React.Fragment>
     )
 }
 

@@ -71,7 +71,9 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
   };
 
   const showProfilePage = () => {
-    console.log('Show user profile page');
+    history.push("/digit-ui/citizen/edit-profile");
+
+    console.log('Show user profile page citizen');
   }
 
   const redirectToLoginPage = () => {
@@ -87,9 +89,9 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
     menuItems = [
       ...menuItems,
       {
-        text: t("CORE_COMMON_PROFILE"),
+        text: t("Edit_PROFILE"),
         element:"PROFILE",
-        icon: <LogoutIcon className="icon" />,
+        icon: <EditIcon className="icon" />,
         populators: {
           onClick: showProfilePage,
         },
