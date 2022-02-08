@@ -43,7 +43,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
     setActive(false)
   }
 
-  Digit.Hooks.useClickOutside(dropdownRef, handleOutsideClickAndSubmitSimultaneously , active);
+  Digit.Hooks.useClickOutside(dropdownRef, handleOutsideClickAndSubmitSimultaneously , active, {capture: true} );
   const filtOptns =
       searchQuery?.length > 0 ? options.filter((option) => t(option[optionsKey]&&typeof option[optionsKey]=="string" && option[optionsKey].toUpperCase()).toLowerCase().indexOf(searchQuery.toLowerCase()) >= 0) : options;
     
