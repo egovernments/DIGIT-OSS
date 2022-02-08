@@ -10,7 +10,7 @@ import {
   WhatsappIcon
 } from "@egovernments/digit-ui-react-components";
 import { format } from "date-fns";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, Fragment,useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { checkCurrentScreen } from "../components/DSSCard";
@@ -83,6 +83,7 @@ const DashBoard = ({ stateCode }) => {
   const { data: ulbTenants, isLoading: isUlbLoading } = Digit.Hooks.useModuleTenants("FSM");
   const { isLoading: isMdmsLoading, data: mdmsData } = Digit.Hooks.useCommonMDMS(stateCode, "FSM", "FSTPPlantInfo");
   const [showOptions, setShowOptions] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [tabState, setTabState] = useState("");
 
   const handleFilters = (data) => {
@@ -231,9 +232,24 @@ const DashBoard = ({ stateCode }) => {
         />
         {filters?.filters?.tenantId.length > 0 && (
           <div className="tag-container">
-            {filters?.filters?.tenantId?.map((filter, id) => (
+            {!showFilters&&filters?.filters?.tenantId&&filters.filters.tenantId.slice(0,5).map((filter, id) => (
               <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeULB(id)} />
             ))}
+            {filters?.filters?.tenantId?.length>6&&<>
+            {showFilters&&filters.filters.tenantId.map((filter, id) => (
+              <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeULB(id)} />
+            ))}
+            {!showFilters&&
+               <p className="clearText cursorPointer" onClick={()=>setShowFilters(true)}>
+               {t(`DSS_FILTER_SHOWALL`)}
+             </p>
+            }
+              {showFilters&&
+               <p className="clearText cursorPointer" onClick={()=>setShowFilters(false)}>
+               {t(`DSS_FILTER_SHOWLESS`)}
+             </p>
+            }
+            </>}
             <p className="clearText cursorPointer" onClick={handleClear}>
               {t(`DSS_FILTER_CLEAR`)}
             </p>
