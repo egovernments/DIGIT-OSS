@@ -112,7 +112,7 @@ public class LineChartResponseHandler implements IResponseHandler {
                                 String fieldName = it.next();
                                 if(bucket.get(fieldName) instanceof JsonNode){
                                     if(bucket.get(fieldName).findValue("buckets") == null){
-                                        value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
+                                        value = previousVal + ((bucket.get(fieldName).findValue(IResponseHandler.VALUE) != null) ? bucket.get(fieldName).findValue(IResponseHandler.VALUE).asDouble():bucket.get(fieldName).findValue(IResponseHandler.DOC_COUNT).asDouble());
                                     }
 
                                 }
