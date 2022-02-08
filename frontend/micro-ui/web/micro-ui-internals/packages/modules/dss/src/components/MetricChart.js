@@ -2,6 +2,9 @@ import { DownwardArrow, Rating, UpwardArrow } from "@egovernments/digit-ui-react
 import React, { Fragment, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import FilterContext from "./FilterContext";
+//import {ReactComponent as Arrow_Downward} from "../images/Arrow_Downward.svg";
+import { ArrowDownwardElement } from "./ArrowDownward";
+import { ArrowUpwardElement } from "./ArrowUpward";
 
 const MetricData = ({ t, data, code }) => {
   const { value } = useContext(FilterContext);
@@ -18,7 +21,7 @@ const MetricData = ({ t, data, code }) => {
       </p>
       {data?.insight && (
         <div>
-          {data?.insight?.indicator === "upper_green" ? <UpwardArrow marginRight={9} /> : <DownwardArrow marginRight={9} />}
+          {data?.insight?.indicator === "upper_green" ? ArrowUpwardElement("10px") : ArrowDownwardElement("10px")}
           <p className={`${data?.insight.colorCode}`}>{data?.insight.value.replace(/[+-]/g, "")}</p>
         </div>
       )}
