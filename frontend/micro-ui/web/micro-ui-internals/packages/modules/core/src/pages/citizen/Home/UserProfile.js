@@ -1,8 +1,12 @@
 import React from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 // import ImageUpload from './ImageUpload'
+
 const userProfile = () => {
-  const editScreen =false;
+    const { t } = useTranslation()
+    const editScreen = false;
+
     return (
         <React.Fragment>
         {/* <ImageUpload/> */}
@@ -15,13 +19,13 @@ const userProfile = () => {
               isMandatory={false}
               name="name"
               value={name}
-              onChange={setOwnerName}
-              {...(validation = {
-                isRequired: true,
-                pattern: "^[a-zA-Z-.`' ]*$",
-                type: "tel",
-                title: t("PT_NAME_ERROR_MESSAGE"),
-              })}
+              onChange={() => null}
+            //   {...(validation = {
+            //     isRequired: true,
+            //     pattern: "^[a-zA-Z-.`' ]*$",
+            //     type: "tel",
+            //     title: t("PT_NAME_ERROR_MESSAGE"),
+            //   })}
               disable={editScreen}
             /></div>
             </LabelFieldPair>
