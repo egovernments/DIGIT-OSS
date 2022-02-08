@@ -61,8 +61,6 @@ class MapChart extends React.Component {
     };
 
     render() {
-        console.log("Projection Config: " + PROJECTION_CONFIG);
-
         const data = [
             { id: 'AP', state: 'Andhra Pradesh', value: 1 },
             { id: 'AR', state: 'Arunachal Pradesh', value: 2 },
@@ -129,6 +127,7 @@ class MapChart extends React.Component {
                         <Geographies geography={INDIA_TOPO_JSON}>
                             {({ geographies }) =>
                                 geographies.map(geo => {
+                                    console.log("Project Confir: " + PROJECTION_CONFIG);
                                     const current = data.find(s => s.id === geo.id);
                                     return (
                                         <Geography
