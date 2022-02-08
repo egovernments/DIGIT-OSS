@@ -94,7 +94,7 @@ async function search_payment(consumerCodes, tenantId, requestinfo, bussinessSer
     searchEndpoint = searchEndpoint + '&mobileNumber='+params.mobileNumber;
 
   console.log("\n URL-->"+config.host.payments+searchEndpoint);
-  console.log("\n requestinfo-->"+JSON.stringify(requestinfo)+"\n");
+  console.log("\n headers-->"+JSON.stringify(headers)+"\n");
 
   return await axios({
     method: "post",
