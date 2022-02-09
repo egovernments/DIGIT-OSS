@@ -6,9 +6,9 @@ import { useRouteMatch } from "react-router-dom";
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
 
-import CPTPropertyAssemblyDetails from "./pages/pageComponents/PropertyAssemblyDetails";
-import CPTPropertyLocationDetails from "./pages/pageComponents/PropertyLocationDetails";
-import CPTPropertyOwnerDetails from "./pages/pageComponents/PropertyOwnerDetails";
+import CPTPropertyAssemblyDetails from "./pages/components/PropertyAssemblyDetails";
+import CPTPropertyLocationDetails from "./pages/components/PropertyLocationDetails";
+import CPTPropertyOwnerDetails from "./pages/components/PropertyOwnerDetails";
 import CPTSearchProperty from './pages/citizen/Create';
 import CPTPropertySearchForm from './components/search/CPTPropertySearchForm';
 import CPTPropertySearchResults from './components/search/CPTPropertySearchResults';
