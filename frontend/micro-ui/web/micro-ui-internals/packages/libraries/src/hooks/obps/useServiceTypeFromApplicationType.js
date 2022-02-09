@@ -2,9 +2,9 @@ import React, { useEffect, useMemo } from "react";
 import SearchMdmsTypes from "./SearchMdmsTypes"
 
 const useServiceTypeFromApplicationType = ({Applicationtype, tenantId}) => {
+    const {data: applicationTypes } = SearchMdmsTypes.useApplicationTypes(tenantId);
+    const {data: serviceTypes, isLoading: isLoadingServiceTypes } = SearchMdmsTypes.useBPAServiceTypes(tenantId);
 
-    const {data: applicationTypes } = SearchMdmsTypes.useApplicationTypes(tenantId)
-    const {data: serviceTypes, isLoading: isLoadingServiceTypes } = SearchMdmsTypes.useBPAServiceTypes(tenantId)
     const ServiceTypes = useMemo(() => {
         const serviceTypesWithStakeholer = [...serviceTypes ? serviceTypes : []/* , {
             applicationType:["BPA_STAKEHOLDER_REGISTRATION"],

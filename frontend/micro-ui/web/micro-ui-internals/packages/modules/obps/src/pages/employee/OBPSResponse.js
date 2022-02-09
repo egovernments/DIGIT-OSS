@@ -13,6 +13,7 @@ const OBPSResponse = (props) => {
   const [applicationData, setApplicationData] = useState({});
   const [isLoader, setIsLoader] = useState(true);
   const history = useHistory();
+  const [isSanctionFee, setSanctionFee] = useState("");
 
   let bpaBusinessService = applicationData?.businessService;
   let bpaStatus = applicationData?.status;
@@ -21,16 +22,21 @@ const OBPSResponse = (props) => {
   useEffect(async () => {
     setIsLoader(true);
     const bpaResponse = await Digit.OBPSService.BPASearch(tenantId, { applicationNo: bpaData?.applicationNo });
+    let businessService = "BPA.LOW_RISK_PERMIT_FEE";
+    if (bpaResponse?.BPA?.[0]?.businessService === "BPA") businessService = "BPA.NC_SAN_FEE";
+    else if (bpaResponse?.BPA?.[0]?.businessService === "BPA_OC") businessService = "BPA.NC_OC_SAN_FEE";
+    const fetchBill = await Digit.PaymentService.fetchBill( tenantId, { consumerCode: bpaResponse?.BPA?.[0]?.applicationNo, businessService: bpaResponse?.BPA?.[0]?.businessService });
+    if ( bpaResponse?.BPA?.[0]?.status == "APPROVED" && fetchBill?.Bill[0]) setSanctionFee("_SAN_FEE");
     setIsLoader(false);
     setApplicationData(bpaResponse?.BPA?.[0]);
   }, [])
 
   const getHeaderMessage = () => {
-    return t(`BPA_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${stringReplaceAll(bpaStatus, " ", "_").toUpperCase()}`)
+    return t(`BPA_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${stringReplaceAll(bpaStatus, " ", "_").toUpperCase()}${isSanctionFee ? isSanctionFee : ""}`)
   }
 
   const getSubHeaderMessage = () => {
-    return t(`BPA_SUB_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${bpaData?.additionalDetails?.typeOfArchitect ? bpaData?.additionalDetails?.typeOfArchitect : "ARCHITECT"}_${stringReplaceAll(bpaStatus, " ", "_").toUpperCase()}`)
+    return t(`BPA_SUB_HEADER_${bpaBusinessService}_${bpaData?.workflow?.action}_${bpaData?.additionalDetails?.typeOfArchitect ? bpaData?.additionalDetails?.typeOfArchitect : "ARCHITECT"}_${stringReplaceAll(bpaStatus, " ", "_").toUpperCase()}${isSanctionFee ? isSanctionFee : ""}`)
   }
 
   const printReciept = async () => {

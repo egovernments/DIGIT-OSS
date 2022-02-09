@@ -1,27 +1,36 @@
 import React, { Fragment } from "react";
-import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, CardLabelError, MobileNumber } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, CardLabelError, MobileNumber, CardHeader } from "@egovernments/digit-ui-react-components";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { businessServiceList } from "../../../utils";
 
-const SearchFormFieldsComponent = () => {
-  const { register, control, handleSubmit, setValue, getValues, reset, formState  } = useFormContext()
+
+const SearchFormFieldsComponent = (props) => {
+  const { register, control, setValue, getValues, reset, formState, trigger  } = useFormContext()
   const { t } = useTranslation();
+  const nocTypeList = businessServiceList();
 
   function previousPage() {
     setValue("offset", getValues("offset") - getValues("limit"));
-    handleSubmit(onSubmit)();
+    props?.onSubmit({
+      nocType: nocTypeList?.[0]?.code,
+      offset: 0,
+      limit: 10,
+      sortBy: "commencementDate",
+      sortOrder: "DESC",
+    }, true);
+    props?.isMobileView ? props.closeMobilePopupModal() : null;
   }
-
-  const applicationTypes = [{code: "AIRPORT_AUTHORITY", i18nKey: "NOC_APPLICATION_TYPE_AIRPORT_AUTHORITY"}]
+  
   
   return (
     <>
       <SearchField>
-        <label>{t("NOC_FIRE_NOC_APPLICATION_LABEL")}</label>
+        <label>{t("NOC_APP_NO_LABEL")}</label>
         <TextInput name="applicationNo" inputRef={register({})} />
       </SearchField>
       <SearchField>
-        <label>{t("NOC_FIRE_NOC_SOURCE_MODULE_APPLICATION_LABEL")}</label>
+        <label>{t("NOC_SOURCE_MODULE_NUMBER")}</label>
         <TextInput name="sourceRefId" inputRef={register({})} />
       </SearchField>
       <SearchField>
@@ -50,47 +59,47 @@ const SearchFormFieldsComponent = () => {
         <CardLabelError>{formState?.errors?.["mobileNumber"]?.message}</CardLabelError>
       </SearchField>
       <SearchField>
-        <label>{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</label>
+        <label>{t("NOC_TYPE_LABEL")}</label>
         <Controller
           control={control}
           name="nocType"
           render={(props) => (
-            <Dropdown selected={props.value} select={props.onChange} onBlur={props.onBlur} option={applicationTypes} optionKey="i18nKey" t={t} />
+            <Dropdown selected={nocTypeList?.length == 1 ? nocTypeList[0] : props.value} select={props.onChange} onBlur={props.onBlur} option={nocTypeList ? nocTypeList : []} optionKey="i18nKey" t={t} disable={nocTypeList?.length == 1 ? true : false}/>
           )}
         />
       </SearchField>
       <SearchField>
-        <label>{t("NOC_FIRE_NOC_SOURCE_MODULE_APPLICATION_LABEL")}</label>
-        <TextInput name="sourceRefId" inputRef={register({})} />
+        <label>{t("NOC_NUMBER_LABEL")}</label>
+        <TextInput name="nocNo" inputRef={register({})} />
       </SearchField>
+      {/* <SearchField></SearchField> */}
       <SearchField className="submit">
         <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
         <p
           style={{ marginTop: "24px" }}
           onClick={() => {
+            setValue("applicationNo", null);
+            setValue("sourceRefId", null);
+            setValue("mobileNumber", null);
+            setValue("nocType", nocTypeList?.[0]?.code);
+            setValue("offset", 0);
+            setValue("limit", 10);
+            setValue("sortBy","commencementDate");
+            setValue("sortOrder","DESC");
+            setValue("isSubmitSuccessful","false");
             reset({
               applicationNo: "",
+              sourceRefId: "",
+              nocType: "",
+              nocNo: "",
               mobileNumber: "",
-              fromDate: "",
-              toDate: "",
-              status: "",
               offset: 0,
               limit: 10,
               sortBy: "commencementDate",
               sortOrder: "DESC",
-              applicationType: {
-                code: "BUILDING_PLAN_SCRUTINY",
-                i18nKey: "WF_BPA_BUILDING_PLAN_SCRUTINY",
-              },
-              serviceType: {
-                applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
-                code: "NEW_CONSTRUCTION",
-                i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",
-              },
               "isSubmitSuccessful":false,
             });
             previousPage();
-            // closeMobilePopupModal()
           }}
         >
           {t(`ES_COMMON_CLEAR_ALL`)}
