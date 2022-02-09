@@ -9,12 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.nationaldashboardingest.config.ApplicationProperties;
+import org.egov.nationaldashboardingest.producer.Producer;
 import org.egov.nationaldashboardingest.repository.ElasticSearchRepository;
+import org.egov.nationaldashboardingest.repository.IngestDataRepository;
 import org.egov.nationaldashboardingest.utils.JsonProcessorUtil;
-import org.egov.nationaldashboardingest.web.models.Data;
-import org.egov.nationaldashboardingest.web.models.IngestRequest;
-import org.egov.nationaldashboardingest.web.models.MasterData;
-import org.egov.nationaldashboardingest.web.models.MasterDataRequest;
+import org.egov.nationaldashboardingest.web.models.*;
 import org.egov.nationaldashboardingest.utils.IngestConstants;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +40,12 @@ public class IngestValidator {
 
     @Autowired
     private ElasticSearchRepository repository;
+
+    @Autowired
+    private IngestDataRepository dataRepository;
+
+    @Autowired
+    private Producer producer;
 
     public void verifyCrossStateRequest(Data data, RequestInfo requestInfo){
         String employeeUlb = requestInfo.getUserInfo().getTenantId();
@@ -254,65 +259,27 @@ public class IngestValidator {
 
     // The verification logic will always use module name + date to determine the uniqueness of a set of records.
     public void verifyIfDataAlreadyIngested(List<Data> ingestData) {
-        List<StringBuilder> listOfUrisToHit = new ArrayList<>();
-        Map<String, List<Data> > moduleVsIngestDataMap = new HashMap<>();
+        List<String> keyDataToSearch = new ArrayList<>();
+        Set<String> uniquenessHash = new HashSet<>();
+        IngestAckData hashedData = new IngestAckData();
+        List<AckEntity> ackEntityList = new ArrayList<>();
         ingestData.forEach(data -> {
-            if(moduleVsIngestDataMap.containsKey(data.getModule()))
-                moduleVsIngestDataMap.get(data.getModule()).add(data);
-            else{
-                moduleVsIngestDataMap.put(data.getModule(), new ArrayList<>());
-                moduleVsIngestDataMap.get(data.getModule()).add(data);
-            }
-        });
+            StringBuilder currKeyData = new StringBuilder();
+            currKeyData.append(data.getDate()).append(":").append(data.getModule()).append(":").append(data.getWard()).append(":").append(data.getUlb()).append(":").append(data.getRegion()).append(":").append(data.getState());
+            log.info("Current key data: " + currKeyData);
+            if(uniquenessHash.contains(currKeyData.toString()))
+                throw new CustomException("EG_DS_SAME_RECORD_ERR", "Duplicate data found in the payload");
 
-        log.info("Module vs data map: " + moduleVsIngestDataMap.toString());
-
-        moduleVsIngestDataMap.keySet().forEach(moduleCode ->{
-            StringBuilder uri = new StringBuilder(applicationProperties.getElasticSearchHost() + "/");
-            uri.append(applicationProperties.getModuleIndexMapping().get(moduleCode));
-            uri.append("/nss").append("/_search");
-            StringBuilder dateClause = new StringBuilder("?q=date:");
-            StringBuilder moduleClause = new StringBuilder("module:");
-            StringBuilder stateClause = new StringBuilder("state:");
-            StringBuilder regionClause = new StringBuilder("region:");
-            StringBuilder ulbClause = new StringBuilder("ulb:");
-            StringBuilder wardClause = new StringBuilder("ward:");
-            for(int i = 0; i < moduleVsIngestDataMap.get(moduleCode).size(); i++) {
-                Data data = moduleVsIngestDataMap.get(moduleCode).get(i);
-                Boolean isFinal = (i != moduleVsIngestDataMap.get(moduleCode).size() - 1) ? false : true;
-                addParameterToClause(dateClause, data.getDate(), isFinal);
-                addParameterToClause(moduleClause, data.getModule(), isFinal);
-                addParameterToClause(stateClause, data.getState(), isFinal);
-                addParameterToClause(regionClause, data.getRegion(), isFinal);
-                addParameterToClause(ulbClause, data.getUlb(), isFinal);
-                addParameterToClause(wardClause, data.getWard(), isFinal);
-            }
-            uri.append(dateClause);
-            uri.append(" AND ");
-            uri.append(moduleClause);
-            uri.append(" AND ");
-            uri.append(stateClause);
-            uri.append(" AND ");
-            uri.append(regionClause);
-            uri.append(" AND ");
-            uri.append(ulbClause);
-            uri.append(" AND ");
-            uri.append(wardClause);
-            listOfUrisToHit.add(uri);
+            uniquenessHash.add(currKeyData.toString());
+            keyDataToSearch.add(currKeyData.toString());
+            ackEntityList.add(AckEntity.builder().datakey(currKeyData.toString()).uuid(UUID.randomUUID().toString()).build());
         });
-        log.info("List of URIs getting hit for validation: " + listOfUrisToHit.toString());
-        listOfUrisToHit.forEach(uri ->{
-            Integer numOfRecordsFound = repository.findIfRecordAlreadyExists(uri);
-            if (numOfRecordsFound > 0){
-                throw new CustomException("EG_IDX_ERR", "Records for the given date and module for the given state and area details have already been ingested, input data will not be ingested.");
-            }
-        });
-    }
+        Boolean isRecordPresent = dataRepository.findIfRecordExists(keyDataToSearch);
+        if(isRecordPresent)
+            throw new CustomException("EG_DS_RECORD_ALREADY_INGESTED_ERR", "Records for the given date and area details have already been ingested. No new data will be ingested.");
+        hashedData.setAckEntities(ackEntityList);
+        producer.push("nss-ingest-keydata", hashedData);
 
-    private void addParameterToClause(StringBuilder clause, String param, Boolean isFinal) {
-        clause.append(param);
-        if(!isFinal)
-            clause.append(" OR ");
     }
 
     // The verification logic will always use module name + financialYear to determine the uniqueness of a set of records.
