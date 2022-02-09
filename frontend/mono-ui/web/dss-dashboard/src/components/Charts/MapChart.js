@@ -9,7 +9,7 @@ import style from './styles';
 
 const INDIA_TOPO_JSON = require('./india.topo.json');
 
-const PROJECTION_CONFIG = { scale: 200, center: [88.9629, 20.5937] };
+const PROJECTION_CONFIG = { scale: 200, center: [95.9629, 15.5937] };
 
 // Red Variants
 const COLOR_RANGE = [
@@ -116,7 +116,7 @@ class MapChart extends React.Component {
         return (
             <div className="full-width-height container">
                 <ReactTooltip>{this.state.tooltipContent}</ReactTooltip>
-                <div style={{ height: "90%", width: "100%" }}>
+                <div style={{ height: "100%", width: "100%" }}>
                     <ComposableMap
                         projectionConfig={PROJECTION_CONFIG}
                         projection="geoMercator"
@@ -127,7 +127,7 @@ class MapChart extends React.Component {
                         <Geographies geography={INDIA_TOPO_JSON}>
                             {({ geographies }) =>
                                 geographies.map(geo => {
-                                    console.log("Project Confir: " + PROJECTION_CONFIG);
+                                    console.log("Project Config: " + PROJECTION_CONFIG.scale);
                                     const current = data.find(s => s.id === geo.id);
                                     return (
                                         <Geography
