@@ -278,7 +278,7 @@ public class IngestValidator {
         if(isRecordPresent)
             throw new CustomException("EG_DS_RECORD_ALREADY_INGESTED_ERR", "Records for the given date and area details have already been ingested. No new data will be ingested.");
         hashedData.setAckEntities(ackEntityList);
-        producer.push("nss-ingest-keydata", hashedData);
+        producer.push(applicationProperties.getKeyDataTopic(), hashedData);
 
     }
 

@@ -21,6 +21,9 @@ public class ApplicationProperties {
     @Value("${master.data.index}")
     private String masterDataIndex;
 
+    @Value("${ingest.data.key.persist.topic}")
+    private String keyDataTopic;
+
     @Value("${ingest.error.queue}")
     private String ingestErrorQueue;
 

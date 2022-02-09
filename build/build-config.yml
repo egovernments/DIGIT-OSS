@@ -236,6 +236,8 @@ config:
       - work-dir: "core-services/national-dashboard-ingest"
         image-name: "national-dashboard-ingest"
         dockerfile: "build/maven/Dockerfile"
+      - work-dir: "core-services/national-dashboard-ingest/src/main/resources/db"
+        image-name: "national-dashboard-ingest-db"
 
   - name: "builds/digit-dev/core-services/egov-survey-services"
     build:
