@@ -1,4 +1,4 @@
-import { LogoutIcon, NavBar } from "@egovernments/digit-ui-react-components";
+import { EditIcon,LogoutIcon, NavBar } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -71,7 +71,8 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
   };
 
   const showProfilePage = () => {
-    history.push("/digit-ui/citizen/edit-profile");
+    history.push("/digit-ui/citizen/user/profile");
+    closeSidebar();
 
     console.log('Show user profile page citizen');
   }
