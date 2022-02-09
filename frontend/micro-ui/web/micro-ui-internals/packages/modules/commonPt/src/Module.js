@@ -16,8 +16,8 @@ import CPTKnowYourProperty from './pages/pageComponents/KnowYourProperty';
 import CPTPropertyDetails from './pages/pageComponents/PropertyDetails';
 import CPTPropertySearchNSummary from './pages/pageComponents/PropertySearchNSummary'; 
 import CPTSearchResults from './pages/citizen/SearchResults';
-import CPTCreateProperty from './pages/citizen/Create/createForm';
-import CPTAcknowledgement from './pages/citizen/Create/PTAcknowledgement'
+import CPTCreateProperty from './pages/pageComponents/createForm';
+import CPTAcknowledgement from './pages/pageComponents/PTAcknowledgement';
 
 const componentsToRegister = {
   CPTPropertySearchForm,
