@@ -49,6 +49,9 @@ public class Validator {
 		}
 		validateVehicle(vehicleRequest);
 		mdmsValidator.validateMdmsData(vehicleRequest, mdmsData);
+		if(!StringUtils.isEmpty(vehicle.getVehicleOwner())) {
+			mdmsValidator.validateVehicleOwner(vehicleRequest.getVehicle().getVehicleOwner());	
+		}
 		mdmsValidator.validateVehicleType(vehicleRequest);
 		mdmsValidator.validateSuctionType(vehicle.getSuctionType());
 		userService.manageOwner(vehicleRequest);

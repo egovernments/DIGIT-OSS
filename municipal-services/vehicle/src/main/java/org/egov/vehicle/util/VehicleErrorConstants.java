@@ -11,4 +11,5 @@ public class VehicleErrorConstants {
 	public static final String INVALID_VEHICLE_SUCTION_TYPE = "INVALID_VEHICLE_SUCTION_TYPE";
 	public static final String INVALID_VEHICLE_DECLINE_REASON = "INVALID_VEHICLE_DECLINE_REASON";
 	public static String INVALID_OWNER_ERROR ="INVALID_OWNER_ERROR";
+	public static String INVALID_VEHICLE_OWNER ="INVALID_VEHICLE_OWNER";
 }
