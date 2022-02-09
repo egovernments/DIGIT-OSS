@@ -253,17 +253,68 @@ public class IngestValidator {
     }
 
     // The verification logic will always use module name + date to determine the uniqueness of a set of records.
-    public void verifyIfDataAlreadyIngested(Data ingestData) {
-        StringBuilder uri = new StringBuilder(applicationProperties.getElasticSearchHost() + "/");
-        uri.append(applicationProperties.getModuleIndexMapping().get(ingestData.getModule()));
-        uri.append("/nss").append("/_search");
-        uri.append("?q=date").append(":").append(ingestData.getDate()).append(" AND ").append("module").append(":").append(ingestData.getModule()).append(" AND ").append("state").append(":").append(ingestData.getState()).append(" AND ").append("region").append(":").append(ingestData.getRegion()).append(" AND ").append("ulb").append(":").append(ingestData.getUlb()).append(" AND ").append("ward").append(":").append(ingestData.getWard());
-        log.info(uri.toString());
-        Integer numOfRecordsFound = repository.findIfRecordAlreadyExists(uri);
-        if (numOfRecordsFound > 0){
-            throw new CustomException("EG_IDX_ERR", "Records for the given date and module for the given state and area details have already been ingested, input data will not be ingested.");
-        }
+    public void verifyIfDataAlreadyIngested(List<Data> ingestData) {
+        List<StringBuilder> listOfUrisToHit = new ArrayList<>();
+        Map<String, List<Data> > moduleVsIngestDataMap = new HashMap<>();
+        ingestData.forEach(data -> {
+            if(moduleVsIngestDataMap.containsKey(data.getModule()))
+                moduleVsIngestDataMap.get(data.getModule()).add(data);
+            else{
+                moduleVsIngestDataMap.put(data.getModule(), new ArrayList<>());
+                moduleVsIngestDataMap.get(data.getModule()).add(data);
+            }
+        });
+
+        log.info("Module vs data map: " + moduleVsIngestDataMap.toString());
+
+        moduleVsIngestDataMap.keySet().forEach(moduleCode ->{
+            StringBuilder uri = new StringBuilder(applicationProperties.getElasticSearchHost() + "/");
+            uri.append(applicationProperties.getModuleIndexMapping().get(moduleCode));
+            uri.append("/nss").append("/_search");
+            StringBuilder dateClause = new StringBuilder("?q=date:");
+            StringBuilder moduleClause = new StringBuilder("module:");
+            StringBuilder stateClause = new StringBuilder("state:");
+            StringBuilder regionClause = new StringBuilder("region:");
+            StringBuilder ulbClause = new StringBuilder("ulb:");
+            StringBuilder wardClause = new StringBuilder("ward:");
+            for(int i = 0; i < moduleVsIngestDataMap.get(moduleCode).size(); i++) {
+                Data data = moduleVsIngestDataMap.get(moduleCode).get(i);
+                Boolean isFinal = (i != moduleVsIngestDataMap.get(moduleCode).size() - 1) ? false : true;
+                addParameterToClause(dateClause, data.getDate(), isFinal);
+                addParameterToClause(moduleClause, data.getModule(), isFinal);
+                addParameterToClause(stateClause, data.getState(), isFinal);
+                addParameterToClause(regionClause, data.getRegion(), isFinal);
+                addParameterToClause(ulbClause, data.getUlb(), isFinal);
+                addParameterToClause(wardClause, data.getWard(), isFinal);
+            }
+            uri.append(dateClause);
+            uri.append(" AND ");
+            uri.append(moduleClause);
+            uri.append(" AND ");
+            uri.append(stateClause);
+            uri.append(" AND ");
+            uri.append(regionClause);
+            uri.append(" AND ");
+            uri.append(ulbClause);
+            uri.append(" AND ");
+            uri.append(wardClause);
+            listOfUrisToHit.add(uri);
+        });
+        log.info("List of URIs getting hit for validation: " + listOfUrisToHit.toString());
+        listOfUrisToHit.forEach(uri ->{
+            Integer numOfRecordsFound = repository.findIfRecordAlreadyExists(uri);
+            if (numOfRecordsFound > 0){
+                throw new CustomException("EG_IDX_ERR", "Records for the given date and module for the given state and area details have already been ingested, input data will not be ingested.");
+            }
+        });
     }
+
+    private void addParameterToClause(StringBuilder clause, String param, Boolean isFinal) {
+        clause.append(param);
+        if(!isFinal)
+            clause.append(" OR ");
+    }
+
     // The verification logic will always use module name + financialYear to determine the uniqueness of a set of records.
     public void verifyIfMasterDataAlreadyIngested(MasterData masterData) {
         StringBuilder uri = new StringBuilder(applicationProperties.getElasticSearchHost() + "/");
