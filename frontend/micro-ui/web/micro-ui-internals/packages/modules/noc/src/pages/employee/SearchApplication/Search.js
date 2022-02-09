@@ -44,26 +44,27 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, error, isLoading, Coun
 
   // const searchFormFieldsComponentProps = { t, previousPage };
 
-  const getRedirectionLink = (bService) => {
-    let redirectBS = bService === "BPAREG" ? "search/application/stakeholder" : "search/application/bpa";
+  const getRedirectionLink = () => {
+    let redirectBS = "noc/inbox/application-overview";
     return redirectBS;
   };
   const propsMobileInboxCards = useMemo(
     () =>
       data?.map((data) => ({
-        [t("NOC_APPLICATION_NUMBER_LABEL")]: data.applicationNo,
-        [t("NOC_COMMON_TABLE_COL_APP_DATE_LABEL")]: Digit.DateUtils.ConvertEpochToDate(data.auditDetails?.createdTime) || "",
-        [t("NOC_COMMON_TABLE_COL_APP_SOURCE_MODULE")]: data.additionalDetails?.serviceType ? t(`MODULE_data?.source`) : "-",
-        [t("NOC_SOURCE_APPLICATION_NUMBER_LABEL")]: data?.sourceRefId || "-",
-        [t("NOC_CURRENT_OWNER_HEAD")]: data.owners?.[0] || "-",
-        [t("NOC_STATUS_LABEL")]: data.applicationStatus ? t(`WF_BPA_${data.applicationStatus}`) : "NA",
+        [t("NOC_APP_NO_LABEL")]: data.applicationNo,
+        [t("NOC_COMMON_TABLE_COL_APP_DATE_LABEL")]: Digit.DateUtils.ConvertEpochToDate(data.auditDetails?.createdTime) || "-",
+        [t("NOC_APPLICANTS_NAME_LABEL")]: data?.additionalDetails?.name || "-",
+        [t("NOC_SOURCE_MODULE_LABEL")]: data.source ? t(`MODULE_${data.source}`) : "-",
+        [t("NOC_SOURCE_MODULE_NUMBER")]: data?.sourceRefId || "-",
+        [t("WF_INBOX_HEADER_CURRENT_OWNER")]: data?.additionalDetails?.currentOwner || "-",
+        [t("NOC_STATUS_LABEL")]: data.applicationStatus ? t(`${data.applicationStatus}`) : "-",
       })),
     [data]
   );
 
-  if (isMobile) return <FormProvider {...methods}><SearchApplicationMobileView {...{SearchFormFieldsComponent, propsMobileInboxCards}} /></FormProvider>
+  if (isMobile) return <FormProvider {...methods}><SearchApplicationMobileView {...{SearchFormFieldsComponent, propsMobileInboxCards, isLoading, data, getRedirectionLink, onSubmit}} /></FormProvider>
 
-  return <FormProvider {...methods}><SearchApplicationDesktopView {...{onSubmit, columns, SearchFormFieldsComponent, data, error, isLoading, Count}} /></FormProvider>
+  return <FormProvider {...methods}><SearchApplicationDesktopView {...{columns, SearchFormFieldsComponent, onSubmit, data, error, isLoading, Count}} /></FormProvider>
 };
 
 export default SearchApplication;

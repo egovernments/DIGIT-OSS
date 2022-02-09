@@ -139,8 +139,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             <div className="tooltip">
               {"  "}
               <InfoBannerIcon fill="#0b0c0c" />
-              <span className="tooltiptext" style={{ whiteSpace: "nowrap" }}>
-                {t(property.description) + "<br />" + ptSearchConfig?.propertyIdFormat}
+              <span className="tooltiptext" style={{ whiteSpace: "nowrap" , marginLeft: "-500%" , fontSize:"medium" }}>
+                {t(property.description)  + ptSearchConfig?.propertyIdFormat}
               </span>
             </div>
           ),
@@ -277,6 +277,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
       setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
       return;
     }
+   
     if (action == 0) {
       if (!(data?.mobileNumber || data?.propertyIds || data?.oldPropertyId)) {
         setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
@@ -327,11 +328,23 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
 
     return;
   };
-  const onFormValueChange = (setValue, data, formState) => {
+ const onFormValueChange = (setValue, data, formState) => {
     const mobileNumberLength = data?.[mobileNumber.name]?.length;
     const oldPropId = data?.[oldProperty.name];
     const propId = data?.[property.name];
     const city = data?.city;
+
+    // if ((city!=null && Object.keys(city).length !=0) && !(mobileNumberLength > 0 || oldPropId!="" || propId!="")){
+    //   setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+    // }
+
+    if (mobileNumberLength > 0 || oldPropId!="" || propId!="") {
+    setShowToast(null);
+
+    }
+    if (city!=null && Object.keys(city).length !=0){
+      setShowToast(null)
+    }
     const locality = data?.locality;
     if (city?.code !== cityCode) {
       setCityCode(city?.code);

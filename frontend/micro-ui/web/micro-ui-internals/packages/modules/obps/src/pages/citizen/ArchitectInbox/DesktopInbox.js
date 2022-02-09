@@ -106,7 +106,7 @@ const DesktopInbox = (props) => {
                 link: "/digit-ui/citizen/obps/home",   
               },
               {
-                text: "SEARCH_APPLICATION",
+                text: "ES_COMMON_SEARCH_APPLICATION",
                 link: "/digit-ui/citizen/obps/search/application",
               },
             ]}

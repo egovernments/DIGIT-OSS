@@ -74,7 +74,7 @@ const BpaApplicationDetail = () => {
   },[bpaDocs,data])
 
   useEffect(async() => {
-    if(data && data?.applicationData?.businessService === "BPA" /* && data?.applicationData?.status === "PENDING_SANC_FEE_PAYMENT" */){
+    if(data && data?.applicationData?.businessService  && businessService[1]/* && data?.applicationData?.status === "PENDING_SANC_FEE_PAYMENT" */){
     let res = Digit.PaymentService.fetchBill( tenantId, { consumerCode: id, businessService: businessService[1] }).then((result) => {
       result?.Bill[0] && !(sanctionFee.filter((val) => val?.id ===result?.Bill[0].id).length>0) && setSanctionFee([...result?.Bill]);
     })
@@ -90,7 +90,7 @@ const BpaApplicationDetail = () => {
   },[data, businessService]);
 
   useEffect(() => {
-    if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.status === "PENDING_SANC_FEE_PAYMENT" && sanctionFee == {})
+    if(data && data?.applicationData?.businessService && sanctionFee == {})
     {
       return <Loader />
     } 
@@ -121,7 +121,7 @@ const BpaApplicationDetail = () => {
         values:[...payval]
       }
     })
-    if(data && data?.applicationData?.businessService === "BPA" && data?.applicationData?.status === "APPROVED" && (data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL")?.[0]?.additionalDetails?.values.length < payval.length ))
+    if(data && data?.applicationData?.businessService && (data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL")?.[0]?.additionalDetails?.values.length < payval.length ))
     {
       var foundIndex = data?.applicationDetails.findIndex(x => x.title === "BPA_FEE_DETAILS_LABEL");
       data?.applicationDetails.splice(foundIndex,1);
@@ -374,6 +374,14 @@ const BpaApplicationDetail = () => {
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "SKIP_PAYMENT");
   };
 
+  const results = data?.applicationDetails?.filter(element => {
+    if (Object.keys(element).length !== 0) {
+      return true;
+    }
+    return false;
+  });
+
+  data.applicationDetails = results;
   return (
     <Fragment>
       <div className={"employee-main-application-details"}>
