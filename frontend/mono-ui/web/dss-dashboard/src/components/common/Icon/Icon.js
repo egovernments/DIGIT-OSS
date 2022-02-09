@@ -5,6 +5,13 @@ import ComplaintsIcon from '../../../images/complaints.svg'
 import TradeIcon from '../../../images/trade-license.svg'
 import WaterSewerage from '../../../images/water_sewerage.svg'
 import FSM from '../../../images/fsm.svg'
+import FireNoc from '../../../images/firenocdashboard.svg'
+import Mcollect from '../../../images/mcollect.svg'
+import OBPS from '../../../images/obps.svg'
+import Propertytax from '../../../images/propertytax_nurt.svg'
+import Tradelic from '../../../images/tradeLic_nurt.svg'
+import WandS from '../../../images/w&s_nurt.svg'
+import BuildingPermission from '../../../images/building_permission.svg'
 import Style from './Styles'
 import { withStyles } from '@material-ui/core/styles';
 
@@ -18,7 +25,6 @@ class Icon extends React.Component {
 
     renderIcons(type) {
         let { classes } = this.props;
-
         switch (type.toLowerCase()) {
             case 'overview':
             case 'dss_overview':
@@ -38,6 +44,35 @@ class Icon extends React.Component {
             case 'fsm':
             case 'dss_fsm':
                 return <SVG src={FSM} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
+            case 'mCollect':
+            case 'dss_mcollect':
+                return <SVG src={Mcollect} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
+            case 'fire noc dashboard':
+            case 'fire noc dashboard':
+                return <SVG src={FireNoc} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
+            case 'obps dashboard':
+            case 'obps dashboard':
+                return <SVG src={OBPS} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
+            case 'nurt_overview':
+                return <SVG src={DashBoardIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+            case 'nurt_project_staus':
+                return <SVG src={DashBoardIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+            case 'nurt_property_tax':
+                return <SVG src={Propertytax} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+            case 'nurt_trade_licence':
+                return <SVG src={Tradelic} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+            case 'nurt_complains':
+                return <SVG src={ComplaintsIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+            case 'nurt_water_sewerage':
+                return <SVG src={WandS} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+            case 'dss_building_permission':
+                return <SVG src={BuildingPermission} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+            case 'nurt_firenoc':
+                return <SVG src={FireNoc} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+            case 'nurt_mcollect':
+                return <SVG src={Mcollect} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+                case 'nurt_live_active_ulbs':
+                return <SVG src={PropertyTaxIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
             default:
                 return <div></div>
 
