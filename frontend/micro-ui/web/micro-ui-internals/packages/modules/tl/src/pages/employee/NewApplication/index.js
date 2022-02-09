@@ -7,7 +7,8 @@ import { convertDateToEpoch } from "../../../utils";
 import cloneDeep from "lodash/cloneDeep";
 
 const NewApplication = () => {
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  let tenantId = Digit.ULBService.getCurrentTenantId();
+  tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
   const defaultValues = {};
@@ -64,12 +65,12 @@ const NewApplication = () => {
     }
 
     let address = {};
-    if (data?.address) {
-      address.city = data?.address?.city?.code || null;
-      address.locality = { code: data?.address?.locality?.code || null };
-      if (data?.address?.doorNo) address.doorNo = data?.address?.doorNo || null;
-      if (data?.address?.street) address.street = data?.address?.street || null;
-      if (data?.address?.pincode) address.pincode = data?.address?.pincode;
+    if (data?.cpt?.details?.address) {
+      address.city = data?.cpt?.details?.address?.city || null;
+      address.locality = { code: data?.cpt?.details?.address?.locality?.code || null };
+      if (data?.cpt?.details?.address?.doorNo) address.doorNo = data?.cpt?.details?.address?.doorNo || null;
+      if (data?.cpt?.details?.address?.street) address.street = data?.cpt?.details?.address?.street || null;
+      if (data?.cpt?.details?.address?.pincode) address.pincode = data?.cpt?.details?.address?.pincode;
     }
 
     let owners = [];
@@ -126,6 +127,7 @@ const NewApplication = () => {
     if (address) formData.tradeLicenseDetail.address = address;
     if (structureType) formData.tradeLicenseDetail.structureType = structureType;
     if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
+    if (data?.cpt) formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId;
 
     // setFormData(formData)
     /* use customiseCreateFormData hook to make some chnages to the licence object */

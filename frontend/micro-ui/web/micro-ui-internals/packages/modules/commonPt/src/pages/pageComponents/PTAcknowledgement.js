@@ -32,11 +32,14 @@ const BannerPicker = (props) => {
   );
 };
 
-const PTAcknowledgement = ({ onSuccess, redirectUrl, userType }) => {
+const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userType }) => {
   const { t } = useTranslation();
-  
+
   const location = useLocation();
   let data = location?.state?.data;
+  if(onSelect) {
+    data = formData?.cptNewProperty?.property;
+  }
 
   let createNUpdate = false;
   const stateId = Digit.ULBService.getStateId();
@@ -58,7 +61,6 @@ const PTAcknowledgement = ({ onSuccess, redirectUrl, userType }) => {
   );
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
-  
   
   useEffect(() => {
     try {
@@ -89,6 +91,14 @@ const PTAcknowledgement = ({ onSuccess, redirectUrl, userType }) => {
     }
   }, []);
 
+  const onNext = () => {
+    if(onSelect) {
+      if(mutation.isSuccess) {
+        onSelect('cpt', {details: mutation?.data?.Properties[0]} );
+      }
+    }
+  }
+
   return mutation.isLoading || mutation.isIdle ? (
     <Loader />
   ) : (
@@ -108,7 +118,8 @@ const PTAcknowledgement = ({ onSuccess, redirectUrl, userType }) => {
           />
         )}
       </StatusTable>
-
+      {mutation.isSuccess && !onSelect && <SubmitBar label={t("PT_DOWNLOAD_ACK_FORM")} onSubmit={handleDownloadPdf} />}
+      {mutation.isSuccess && onSelect && <SubmitBar label={t("CS_COMMON_NEXT")} onSubmit={onNext} />}
       <Link to={`/digit-ui/citizen`}>
         <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

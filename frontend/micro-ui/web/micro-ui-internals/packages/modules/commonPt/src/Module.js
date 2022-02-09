@@ -2,22 +2,36 @@ import { CitizenHomeCard, PTIcon } from "@egovernments/digit-ui-react-components
 import  React,{ useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
+
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
 
-import PropertyAssemblyDetails from './pages/components/PropertyAssemblyDetails';
-import PropertyLocationDetails from "./pages/components/PropertyLocationDetails";
-import PropertyOwnerDetails from "./pages/components/PropertyOwnerDetails";
-
+import CPTPropertyAssemblyDetails from "./pages/pageComponents/PropertyAssemblyDetails";
+import CPTPropertyLocationDetails from "./pages/pageComponents/PropertyLocationDetails";
+import CPTPropertyOwnerDetails from "./pages/pageComponents/PropertyOwnerDetails";
+import CPTSearchProperty from './pages/citizen/Create';
 import CPTPropertySearchForm from './components/search/CPTPropertySearchForm';
 import CPTPropertySearchResults from './components/search/CPTPropertySearchResults';
+import CPTKnowYourProperty from './pages/pageComponents/KnowYourProperty';
+import CPTPropertyDetails from './pages/pageComponents/PropertyDetails';
+import CPTPropertySearchNSummary from './pages/pageComponents/PropertySearchNSummary'; 
+import CPTSearchResults from './pages/citizen/SearchResults';
+import CPTCreateProperty from './pages/citizen/Create/createForm';
+import CPTAcknowledgement from './pages/citizen/Create/PTAcknowledgement'
 
 const componentsToRegister = {
   CPTPropertySearchForm,
   CPTPropertySearchResults,
-  PropertyAssemblyDetails,
-  PropertyLocationDetails,
-  PropertyOwnerDetails,
+  CPTSearchProperty,
+  CPTPropertyAssemblyDetails,
+  CPTPropertyLocationDetails,
+  CPTPropertyOwnerDetails,
+  CPTKnowYourProperty,
+  CPTPropertyDetails,
+  CPTPropertySearchNSummary,
+  CPTSearchResults,
+  CPTCreateProperty,
+  CPTAcknowledgement,
 }
 
 const addComponentsToRegistry = () => {
