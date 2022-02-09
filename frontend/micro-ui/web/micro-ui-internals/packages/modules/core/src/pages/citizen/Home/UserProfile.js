@@ -3,9 +3,20 @@ import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown,
 import { useTranslation } from "react-i18next";
 // import ImageUpload from './ImageUpload'
 
-const userProfile = () => {
+const userProfile = ({ stateCode }) => {
     const { t } = useTranslation()
     const editScreen = false;
+
+    const updateProfile = () => {
+      const requestData = {
+        name: 'Test user'
+      }
+      const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.updateUser(requestData, stateCode);
+    }
+
+    // useEffect( () => {
+    //   updateProfile
+    // }, []);
 
     return (
         <React.Fragment>

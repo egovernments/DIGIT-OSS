@@ -98,7 +98,7 @@ const Home = ({
           </Route>
 
           <Route path={`${path}/user/profile`}>
-            <UserProfile />
+            <UserProfile stateCode={stateCode} />
           </Route>
 
           {appRoutes}
