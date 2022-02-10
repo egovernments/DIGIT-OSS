@@ -27,6 +27,7 @@ const FillSurvey = ({ location }) => {
       AnswerEntity: {
         surveyId: surveyData.uuid,
         answers: transformSurveyResponseData(data),
+        surveyTitle:surveyData.title,
       },
     };
    // console.log("<<<<<onSubmit>>>>>>", details);

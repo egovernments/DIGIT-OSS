@@ -25,8 +25,8 @@ const OBPSResponse = (props) => {
     let businessService = "BPA.LOW_RISK_PERMIT_FEE";
     if (bpaResponse?.BPA?.[0]?.businessService === "BPA") businessService = "BPA.NC_SAN_FEE";
     else if (bpaResponse?.BPA?.[0]?.businessService === "BPA_OC") businessService = "BPA.NC_OC_SAN_FEE";
-    const fetchBill = await Digit.PaymentService.fetchBill( tenantId, { consumerCode: bpaResponse?.BPA?.[0]?.applicationNo, businessService: bpaResponse?.BPA?.[0]?.businessService });
-    if ( bpaResponse?.BPA?.[0]?.status == "APPROVED" && fetchBill?.Bill[0]) setSanctionFee("_SAN_FEE");
+    const fetchBill = await Digit.PaymentService.fetchBill( tenantId, { consumerCode: bpaResponse?.BPA?.[0]?.applicationNo, businessService: businessService });
+    if ( bpaResponse?.BPA?.[0]?.status == "APPROVED" && fetchBill?.Bill[0] && fetchBill?.Bill[0]?.totalAmount != 0) setSanctionFee("_SAN_FEE");
     setIsLoader(false);
     setApplicationData(bpaResponse?.BPA?.[0]);
   }, [])

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FormStep, UploadFile, CardLabelDesc, Dropdown, CardLabel } from "@egovernments/digit-ui-react-components";
 import { stringReplaceAll } from "../utils";
+import Timeline from "../components/TLTimeline";
 
 const Proof = ({ t, config, onSelect, userType, formData }) => {
   //let index = window.location.href.charAt(window.location.href.length - 1);
@@ -73,6 +74,8 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
   }, [file]);
 
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={3}/> : null}
     <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={!uploadedFile || error}>
       <CardLabelDesc style={{ fontWeight: "unset" }}>{t(`TL_UPLOAD_PHOTO_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc style={{ fontWeight: "unset" }}>{t(`TL_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
@@ -100,6 +103,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
       {error ? <div style={{ height: "20px", width: "100%", fontSize: "20px", color: "red", marginTop: "5px" }}>{error}</div> : ""}
       <div style={{ disabled: "true", height: "20px", width: "100%" }}></div>
     </FormStep>
+    </React.Fragment>
   );
 };
 

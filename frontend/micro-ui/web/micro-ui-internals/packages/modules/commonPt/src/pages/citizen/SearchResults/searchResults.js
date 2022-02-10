@@ -8,7 +8,7 @@ const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
 const DEFAULT_REDIRECT_URL = "/digit-ui/citizen";
 
-const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation, onSelect, config, clearParams = () => {}, stateCode, redirectToUrl }) => {
+const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation, onSelect, config, clearParams = () => {}, stateCode, redirectToUrl, searchQuery }) => {
   const { t } = useTranslation();
   const modalRef = useRef();
   const { mobileNumber, propertyIds, oldPropertyIds, locality, city,doorNo,name } = Digit.Hooks.useQueryParams();
@@ -20,13 +20,13 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   };
   Digit.Hooks.useClickOutside(modalRef, closeModal, modalData);
 
-  if (mobileNumber) filters.mobileNumber = mobileNumber;
-  if (propertyIds) filters.propertyIds = propertyIds;
-  if (oldPropertyIds) filters.oldPropertyIds = oldPropertyIds;
-  if (locality) filters.locality = locality;
-  if (doorNo) filters.doorNo = doorNo;
-  if (name) filters.name = name;
-
+  if (mobileNumber || ( searchQuery && searchQuery.mobileNumber ) ) filters.mobileNumber = mobileNumber ? mobileNumber : searchQuery?.mobileNumber;
+  if (propertyIds || ( searchQuery && searchQuery.propertyIds ) ) filters.propertyIds = propertyIds ? propertyIds : searchQuery?.propertyIds;
+  if (oldPropertyIds || ( searchQuery && searchQuery.oldPropertyIds ) ) filters.oldPropertyIds = oldPropertyIds ? oldPropertyIds : searchQuery?.oldPropertyIds;
+  if (locality || ( searchQuery && searchQuery.locality ) ) filters.locality = locality ? locality : searchQuery?.locality;
+  if (doorNo || ( searchQuery && searchQuery.doorNo ) ) filters.doorNo = doorNo ? doorNo : searchQuery?.doorNo;
+  if (name || ( searchQuery && searchQuery.name ) ) filters.name = name ? name : searchQuery?.name;
+  
   const [owners, setOwners, clearOwners] = Digit.Hooks.useSessionStorage("PT_MUTATE_MULTIPLE_OWNERS", null);
   // const [params, setParams, ] = Digit.Hooks.useSessionStorage("PT_MUTATE_PROPERTY");
   const [lastPath, setLastPath, clearLastPath] = Digit.Hooks.useSessionStorage("PT_MUTATE_MULTIPLE_OWNERS_LAST_PATH", null);
@@ -42,14 +42,15 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   // const auth = !!isMutation;    /*  to enable open search set false  */
   const auth =true;
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const searchArgs = city ? { tenantId: city, filters, auth } : { filters, auth };
+  const scity = city ? city : searchQuery?.city;
+  const searchArgs = scity ? { tenantId: scity, filters, auth } : { filters, auth };
   const result = Digit.Hooks.pt.usePropertySearch(searchArgs);
   const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
 
   const fetchBillParams = mobileNumber ? { mobileNumber, consumerCode } : { consumerCode };
 
   const paymentDetails = Digit.Hooks.useFetchBillsForBuissnessService(
-    { businessService: "PT", ...fetchBillParams, tenantId: city },
+    { businessService: "PT", ...fetchBillParams, tenantId: scity },
     {
       enabled: consumerCode ? true : false,
       retry: false,
@@ -115,24 +116,46 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   };
 
   const sendOtpToUser = async (record) => {
-    const data = {
-      mobileNumber : record?.owner_mobile,
-      tenantId: stateCode,
-      userType: getUserType(),
-    };
-    const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN} });
-    
-    if (!err) {
-      // Redirect to props redirect url if exists else to link success page
-      let redirectUrl = '/digit-ui/citizen/commonPt/property/link-success/'+record.property_id;
-      if(redirectToUrl) {
-        redirectUrl = redirectToUrl+'?propertyId='+record.property_id+'&tenantId='+tenantId;
-      } 
-
-      history.replace(`/digit-ui/citizen/commonPt/property/citizen-otp`, { from: getFromLocation(location.state, searchParams), mobileNumber: record.owner_mobile, redirectBackTo: redirectUrl });
-      return;
+    if(onSelect) {
+      onSelect('cptId', { id: record.property_id }); 
     } else {
-      history.push(`/digit-ui/citizen/`, { from: getFromLocation(location.state, searchParams), data:data });
+      const data = {
+        mobileNumber : record?.owner_mobile,
+        tenantId: stateCode,
+        userType: getUserType(),
+      };
+      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN} });
+      
+      if (!err) {
+        // Redirect to props redirect url if exists else to link success page
+        let redirectUrl = '/digit-ui/citizen/commonPt/property/link-success/'+record.property_id;
+        if(redirectToUrl) {
+          redirectUrl = redirectToUrl+'?propertyId='+record.property_id+'&tenantId='+tenantId;
+        } 
+
+        history.replace(`/digit-ui/citizen/commonPt/property/citizen-otp`, { from: getFromLocation(location.state, searchParams), mobileNumber: record.owner_mobile, redirectBackTo: redirectUrl });
+        return;
+      } else {
+        const data = {
+          mobileNumber: filters?.mobileNumber,
+          tenantId: stateCode,
+          userType: getUserType(),
+        };
+        const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN} });
+        
+        if (!err) {
+          // Redirect to props redirect url if exists else to link success page
+          let redirectUrl = '/digit-ui/citizen/commonPt/property/link-success/'+record.property_id;
+          if(redirectToUrl) {
+            redirectUrl = redirectToUrl+'?propertyId='+record.property_id+'&tenantId='+tenantId;
+          }
+
+          history.replace(`/digit-ui/citizen/commonPt/property/citizen-otp`, { from: getFromLocation(location.state, searchParams), mobileNumber: record.owner_mobile, redirectBackTo: redirectUrl });
+          return;
+        } else {
+          history.push(`/digit-ui/citizen/`, { from: getFromLocation(location.state, searchParams), data:data });
+        }
+      }
     }
   };
 
@@ -161,39 +184,6 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
         info={t("CS_FILE_APPLICATION_INFO_LABEL")} 
         text={t("CPT_SEARCH_PROPERTY_INFO")} 
       />
-      {modalData ? (
-        <Modal
-          hideSubmit={true}
-          isDisabled={false}
-          popupStyles={{ width: "319px", height: "250px", margin: "auto" }}
-          formId="modal-action"
-        >
-          <div ref={modalRef}>
-            <KeyNote
-              keyValue={t("PT_AMOUNT_DUE")}
-              note={`₹ ${modalData?.total_due?.toLocaleString("en-IN")}`}
-              noteStyle={{ fontSize: "24px", fontWeight: "bold" }}
-            />
-            <p>
-              {t("PT_YOU_HAVE") +
-                " " +
-                "₹" +
-                " " +
-                modalData?.total_due.toLocaleString("en-IN") +
-                " " +
-                t("PT_PENDING_AMOUNT") +
-                " " +
-                t("PT_INORDER_TO_TRANSFER")}
-            </p>
-            <SubmitBar
-              submit={false}
-              onSubmit={() => proceedToPay(modalData)}
-              style={{ marginTop: "14px", width: "100%" }}
-              label={t("PT_PROCEED_PAYMENT")}
-            />
-          </div>
-        </Modal>
-      ) : null}
     </div>
   );
 };

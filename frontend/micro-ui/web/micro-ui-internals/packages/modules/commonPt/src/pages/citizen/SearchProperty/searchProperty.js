@@ -21,7 +21,9 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   const { action = 0 } = Digit.Hooks.useQueryParams();
   const [searchData, setSearchData] = useState({});
   const [showToast, setShowToast] = useState(null);
-  const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
+  let allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
+  // if called from tl module get tenants from tl usetenants
+  allCities = allCities ? allCities : Digit.Hooks.tl.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));  
   const [cityCode, setCityCode] = useState();
   const [formValue, setFormValue] = useState();
   const { data: propertyData, isLoading: propertyDataLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
@@ -380,11 +382,17 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         queryParams: { ...qs },
       });
     } else {
-      history.push(
-        `/digit-ui/citizen/commonPt/property/search-results?${Object.keys(qs)
-          .map((key) => `${key}=${qs[key]}`)
-          .join("&")}${redirectToUrl ? `&redirectToUrl=${redirectToUrl}` : ''}`
-      );
+      if(redirectToUrl) {
+        history.push(
+          `/digit-ui/citizen/commonPt/property/search-results?${Object.keys(qs)
+            .map((key) => `${key}=${qs[key]}`)
+            .join("&")}${redirectToUrl ? `&redirectToUrl=${redirectToUrl}` : ''}`
+        );
+      } else {
+        onSelect('cptSearchQuery', qs, null, null, null, {
+          queryParams: { ...qs },
+        });
+      }
     }
   }
 

@@ -38,15 +38,15 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
   const resubmit = window.location.href.includes("edit-application");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const mutation = Digit.Hooks.tl.useTradeLicenseAPI(
-    data?.address?.city ? data.address?.city?.code : tenantId,
+    data?.cpt?.details?.address?.tenantId ? data?.cpt?.details?.address?.tenantId : tenantId,
     !window.location.href.includes("renew-trade")
   );
   const mutation1 = Digit.Hooks.tl.useTradeLicenseAPI(
-    data?.address?.city ? data.address?.city?.code : tenantId,
+    data?.cpt?.details?.address?.tenantId ? data?.cpt?.details?.address?.tenantId : tenantId,
     false
   );
   const mutation2 = Digit.Hooks.tl.useTradeLicenseAPI(
-    data?.address?.city ? data.address?.city?.code : tenantId,
+    data?.cpt?.details?.address?.tenantId ? data?.cpt?.details?.address?.tenantId : tenantId,
     false
   );
   const isEdit = window.location.href.includes("renew-trade");
@@ -62,11 +62,11 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
       setMutationHappened(true);
     };
     try {
+      let tenantId1 = data?.cpt?.details?.address?.tenantId ? data?.cpt?.details?.address?.tenantId : tenantId;
+      data.tenantId = tenantId1;
       if (!resubmit) {
-        let tenantId = data?.address?.city ? data.address?.city?.code : tenantId;
-        data.tenantId = tenantId;
         let formdata = !isEdit ? convertToTrade(data) : convertToEditTrade(data, fydata["egf-master"] ? fydata["egf-master"].FinancialYear.filter(y => y.module === "TL") : []);
-        formdata.Licenses[0].tenantId = formdata?.Licenses[0]?.tenantId || tenantId;
+        formdata.Licenses[0].tenantId = formdata?.Licenses[0]?.tenantId || tenantId1;
 
         !isEdit ? mutation.mutate(formdata, {
           onSuccess,
@@ -76,10 +76,8 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
           onSuccess,
         })) : console.debug("skipped");
       } else {
-        let tenantId = data?.address?.city ? data.address?.city?.code : tenantId;
-        data.tenantId = tenantId;
         let formdata = convertToResubmitTrade(data);
-        formdata.Licenses[0].tenantId = formdata?.Licenses[0]?.tenantId || tenantId;
+        formdata.Licenses[0].tenantId = formdata?.Licenses[0]?.tenantId || tenantId1;
         !mutation2.isLoading && !mutation2.isSuccess &&!mutationHappened && mutation2.mutate(formdata, {
           onSuccessedit,
         })
@@ -93,7 +91,6 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
   useEffect(() => {
     if (mutation.isSuccess || (mutation1.isSuccess && isEdit && !isDirectRenewal)) {
       try {
-        let tenantId = data?.address?.city ? data.address?.city?.code : Digit.ULBService.getCurrentTenantId();
         let Licenses = !isEdit ? convertToUpdateTrade(mutation.data, data) : convertToUpdateTrade(mutation1.data, data);
         mutation2.mutate(Licenses, {
           onSuccess,
