@@ -241,7 +241,7 @@ public class SearchUtils {
 	 */
 	public List<String> convertPGOBjects(List<PGobject> maps){
 		List<String> result = new ArrayList<>();
-		if(null != maps || !maps.isEmpty()) {
+		if(null != maps && !maps.isEmpty()) {
 			for(PGobject obj: maps){
 				if(null == obj.getValue())
 					break;

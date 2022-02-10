@@ -57,20 +57,21 @@ public class PropertyFileReader {
 		try {
 			excelFile = new FileInputStream(new File(location));
 			workbook = new XSSFWorkbook(excelFile);
+			workbook.forEach(sheet -> {
+				log.info("=> " + sheet.getSheetName());
+				sheetMap.put(sheet.getSheetName(), sheet);
+			});
+			// Retrieving the number of sheets in the Workbook
+			log.info("Workbook has " + workbook.getNumberOfSheets() + " Sheets : ");
+
 		}catch(Exception e){
 			log.error("Error while creating workbook.");
 		}finally {
-			excelFile.close();
+			if (excelFile != null)
+				excelFile.close();
+			if(workbook != null)
+				workbook.close();
 		}
-		// Retrieving the number of sheets in the Workbook
-		log.info("Workbook has " + workbook.getNumberOfSheets() + " Sheets : ");
-
-		workbook.forEach(sheet -> {
-			log.info("=> " + sheet.getSheetName());
-			sheetMap.put(sheet.getSheetName(), sheet);
-		});
-		workbook.close();
-
 		return sheetMap;
 	}
 

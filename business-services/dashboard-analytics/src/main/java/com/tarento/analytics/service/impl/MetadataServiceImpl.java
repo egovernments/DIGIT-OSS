@@ -177,50 +177,53 @@ public class MetadataServiceImpl implements MetadataService {
 				System.getProperty("user.dir") + System.getProperty("file.separator") + "data/tenants.json");
 		BufferedReader br = null;
 		Tenants sample = null;
+		JSONArray jsonArray = new JSONArray();
 		try{
 			br = new BufferedReader(new FileReader(getFile));
 			sample = new Gson().fromJson(br, Tenants.class);
-		}catch (Exception e){
-			logger.info("Error occured while reading tenants file.");
-		}finally{
-			br.close();
-		}
-		JSONArray jsonArray = new JSONArray();
-		Map<String, List<Object>> mapDistrictUlb = new HashMap();
-		Map<String, Object> DistrictMap = new HashMap();
-		for (int i = 0; i < sample.getTenants().size(); i++) {
-			String ulbCode = sample.getTenants().get(i).getCode();
-			String ulbName = sample.getTenants().get(i).getName();
-			String districtName = sample.getTenants().get(i).getCity().getDistrictName();
-			String districtCode = sample.getTenants().get(i).getCity().getDistrictCode();
-			Map<String, Object> mapUlb = new HashMap();
-			Map<String, Object> mapDist = new LinkedHashMap();
-			Map<String, Object> mapDistAll = new LinkedHashMap();
-			mapDist.put("District Name", districtName);
-			mapDist.put("District Code", districtCode);
-			mapUlb.put("Ulb Name", ulbName);
-			mapUlb.put("tenantId", ulbCode);
-			mapDistAll.put(districtCode, new JSONObject(mapDist));
-			DistrictMap.put(districtCode.toString(), mapDist);
-			if (mapDistrictUlb.containsKey(districtCode.toString())) {
-				mapDistrictUlb.get(districtCode.toString()).add(mapUlb);
-			} else {
-				List<Object> lst = new ArrayList();
-				lst.add(mapUlb);
-				mapDistrictUlb.put(districtCode.toString(), lst);
-			}
-		}
-		for (Map.Entry<String, Object> entry1 : DistrictMap.entrySet()) {
-			JSONObject getdistrictJson = new JSONObject();
-			for (Map.Entry<String, List<Object>> entry2 : mapDistrictUlb.entrySet()) {
-				if (entry1.getKey().equals(entry2.getKey())) {
-					JSONObject getUlbtoDistrict = new JSONObject();
-					getdistrictJson.put(entry1.getKey(), entry1.getValue());
-					String json = new Gson().toJson(entry1.getValue(), LinkedHashMap.class);
-					getUlbtoDistrict.put(entry1.getKey(), new JSONObject(json).accumulate("Ulb", entry2.getValue()));
-					jsonArray.put(getUlbtoDistrict);
+
+			Map<String, List<Object>> mapDistrictUlb = new HashMap();
+			Map<String, Object> DistrictMap = new HashMap();
+			for (int i = 0; i < sample.getTenants().size(); i++) {
+				String ulbCode = sample.getTenants().get(i).getCode();
+				String ulbName = sample.getTenants().get(i).getName();
+				String districtName = sample.getTenants().get(i).getCity().getDistrictName();
+				String districtCode = sample.getTenants().get(i).getCity().getDistrictCode();
+				Map<String, Object> mapUlb = new HashMap();
+				Map<String, Object> mapDist = new LinkedHashMap();
+				Map<String, Object> mapDistAll = new LinkedHashMap();
+				mapDist.put("District Name", districtName);
+				mapDist.put("District Code", districtCode);
+				mapUlb.put("Ulb Name", ulbName);
+				mapUlb.put("tenantId", ulbCode);
+				mapDistAll.put(districtCode, new JSONObject(mapDist));
+				DistrictMap.put(districtCode.toString(), mapDist);
+				if (mapDistrictUlb.containsKey(districtCode.toString())) {
+					mapDistrictUlb.get(districtCode.toString()).add(mapUlb);
+				} else {
+					List<Object> lst = new ArrayList();
+					lst.add(mapUlb);
+					mapDistrictUlb.put(districtCode.toString(), lst);
 				}
 			}
+			for (Map.Entry<String, Object> entry1 : DistrictMap.entrySet()) {
+				JSONObject getdistrictJson = new JSONObject();
+				for (Map.Entry<String, List<Object>> entry2 : mapDistrictUlb.entrySet()) {
+					if (entry1.getKey().equals(entry2.getKey())) {
+						JSONObject getUlbtoDistrict = new JSONObject();
+						getdistrictJson.put(entry1.getKey(), entry1.getValue());
+						String json = new Gson().toJson(entry1.getValue(), LinkedHashMap.class);
+						getUlbtoDistrict.put(entry1.getKey(), new JSONObject(json).accumulate("Ulb", entry2.getValue()));
+						jsonArray.put(getUlbtoDistrict);
+					}
+				}
+			}
+		}catch (Exception e){
+			logger.info("Error occured while reading tenants file.");
+		}
+		finally{
+			if (br != null)
+				br.close();
 		}
 		return jsonArray;
 	}

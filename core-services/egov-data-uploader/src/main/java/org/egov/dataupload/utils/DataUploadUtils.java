@@ -444,8 +444,7 @@ public class DataUploadUtils {
 	
 	public Map<String, Object> eliminateEmptyList(Map<String, Object> objectMap) {
 		for(String key: objectMap.keySet()) {
-			if(key.equals("RequestInfo") || key.equals("requestInfo")) {
-			}else {
+			if(!(key.equals("RequestInfo") || key.equals("requestInfo"))) {
 				if(!(objectMap.get(key) instanceof Map)) {
 					continue;
 				}

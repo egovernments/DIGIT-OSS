@@ -573,7 +573,8 @@ public class DataUploadService {
                         Error error = objectMapper.readValue(response, Error.class);
                         failureMessage.append(error.toString());
                         failureMessage.append(", ");
-                    }catch(PathNotFoundException | IOException ignored){}  {
+                    }catch(PathNotFoundException | IOException ignored){
+                        logger.error(ignored.getMessage());
                     }
                 }
                 if(!Objects.isNull(errors)) {
@@ -736,7 +737,9 @@ public class DataUploadService {
         } catch (Exception e) {
             logger.error("Exception while parsing requestMap to String", e);
         }
-        return requestContentBody.toString();
+        if (requestContentBody != null)
+            return requestContentBody.toString();
+        else return null;
     }
 
     @SuppressWarnings("rawtypes")

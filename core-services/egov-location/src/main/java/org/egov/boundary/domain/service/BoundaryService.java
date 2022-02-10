@@ -199,7 +199,7 @@ public class BoundaryService {
 			childSize = boundaryRepository.findActiveImmediateChildrenWithOutParent(parent.getId()).size();
 		if (mpath.isEmpty())
 			if (null != child) {
-				if (child.getMaterializedPath() == null) {
+				if (child.getMaterializedPath() == null && parent != null) {
 					mpath = parent.getMaterializedPath() + "." + childSize;
 				} else if (parent != null && !child.getMaterializedPath()
 						.equalsIgnoreCase(parent.getMaterializedPath() + "." + childSize)) {

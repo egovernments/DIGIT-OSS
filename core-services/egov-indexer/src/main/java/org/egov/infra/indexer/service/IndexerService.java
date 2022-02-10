@@ -93,7 +93,8 @@ public class IndexerService {
 
 		try {
 			version = JsonPath.read(document, "$.RequestInfo.ver");
-		}catch (PathNotFoundException ignore){
+		}catch (PathNotFoundException ex){
+			log.error(ex.getMessage());
 		}
 
 		Version semVer = utils.getSemVer(version);

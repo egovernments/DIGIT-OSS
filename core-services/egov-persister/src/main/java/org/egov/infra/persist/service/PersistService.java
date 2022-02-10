@@ -86,6 +86,7 @@ public class PersistService {
 		try {
 			version = JsonPath.read(json, "$.RequestInfo.ver");
 		}catch (PathNotFoundException ignore){
+			log.error(ignore.getMessage());
 		}
 		Version semVer = utils.getSemVer(version);
 		for (Mapping map: mappings) {

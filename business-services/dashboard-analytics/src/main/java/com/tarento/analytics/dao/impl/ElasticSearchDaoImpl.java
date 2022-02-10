@@ -632,7 +632,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 				Map<String, Object> nestedMap = null;
 				if (value instanceof HashMap) {
 					nestedMap = (HashMap<String, Object>) value;
-				} else if (value instanceof LinkedHashMap) {
+				} else  {
 					nestedMap = (LinkedHashMap<String, Object>) value;
 				}
 				String aggregationName = aggregationType + "of"
@@ -644,7 +644,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 				Map<String, Object> sumMap = null;
 				if (value instanceof HashMap) {
 					sumMap = (HashMap<String, Object>) value;
-				} else if (value instanceof LinkedHashMap) {
+				} else {
 					sumMap = (LinkedHashMap<String, Object>) value;
 				}
 				String aggregationName = aggregationType + "of"
@@ -656,7 +656,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 				Map<String, Object> termMap = null;
 				if (value instanceof HashMap) {
 					termMap = (HashMap<String, Object>) value;
-				} else if (value instanceof LinkedHashMap) {
+				} else {
 					termMap = (LinkedHashMap<String, Object>) value;
 
 				}
@@ -670,7 +670,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 
 				if (value instanceof HashMap) {
 					histogramMap = (HashMap<String, Object>) value;
-				} else if (value instanceof LinkedHashMap) {
+				} else {
 					histogramMap = (LinkedHashMap<String, Object>) value;
 
 				}
@@ -687,7 +687,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 
 				if (value instanceof HashMap) {
 					countAggMap = (HashMap<String, Object>) value;
-				} else if (value instanceof LinkedHashMap) {
+				} else {
 					countAggMap = (LinkedHashMap<String, Object>) value;
 
 				}
