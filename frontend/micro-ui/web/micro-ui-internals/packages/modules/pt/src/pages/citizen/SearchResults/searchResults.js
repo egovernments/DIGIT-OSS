@@ -164,11 +164,11 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
         </Modal>
       ) : null}
       {!searchResults?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("PT_NO_PROP_FOUND_MSG")}</p>}
-      {searchResults?.length !== 0 && (
+      {searchResults?.length !== 0 && (searchResults?.length == 5 || searchResults?.length == 50) && (
           <div>
             <p style={{ marginLeft: "16px", marginTop: "16px" }}>
               {t("PT_LOAD_MORE_MSG")}{" "}
-              <span className="link">{<Link to={`/digit-ui/citizen/pt/property/search-results?mobileNumber=${mobileNumber}&city=${city}&PToffset=${t1}`}>{t("PT_COMMON_CLICK_HERE")}</Link>}</span>
+              <span className="link">{<Link to={`/digit-ui/citizen/pt/property/search-results?mobileNumber=${mobileNumber?mobileNumber:""}&propertyIds=${propertyIds?propertyIds:""}&oldPropertyIds=${oldPropertyIds?oldPropertyIds:""}&doorNo=${doorNo?doorNo:""}&name=${name?name:""}&city=${city?city:""}&PToffset=${t1}`}>{t("PT_COMMON_CLICK_HERE")}</Link>}</span>
             </p>
           </div>
         )}

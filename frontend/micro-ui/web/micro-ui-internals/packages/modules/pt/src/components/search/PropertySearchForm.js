@@ -1,4 +1,4 @@
-import { CardLabelError, SearchField, SearchForm, SubmitBar, TextInput,Localities } from "@egovernments/digit-ui-react-components";
+import { CardLabelError, SearchField, SearchForm, SubmitBar, TextInput,Localities,MobileNumber } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -50,7 +50,22 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
                   />
                 )}
                 />
-            :<TextInput
+            :field?.type === "number"?
+            <div>
+            <MobileNumber
+              name="mobileNumber"
+              inputRef={register({
+                value: getValues(key),
+                shouldUnregister: true,
+                ...validation,
+              })}
+              type="number"
+              componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>}
+              //maxlength={10}
+        />
+        </div>
+        :
+            <TextInput
                   name={key}
                   type={field?.type}
                   inputRef={register({

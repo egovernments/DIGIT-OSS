@@ -1,4 +1,4 @@
-import { PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { PrivateRoute,BreadCrumb } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Switch, useLocation } from "react-router-dom";
@@ -49,7 +49,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const breadcrumbObj = {
     ["/digit-ui/employee/pt/inbox"]: "ES_TITLE_INBOX",
     ["/digit-ui/employee/pt/new-application"]: "ES_TITLE_NEW_PROPERTY_APPLICATION",
-    ["/digit-ui/employee/pt/search"]: "ES_COMMON_SEARCH",
+    ["/digit-ui/employee/pt/search"]: "PT_COMMON_SEARCH_PROPERTY_SUB_HEADER",
     ["/digit-ui/employee/pt/application-search"]: "ES_COMMON_APPLICATION_SEARCH",
   };
 
@@ -64,6 +64,69 @@ const EmployeeApp = ({ path, url, userType }) => {
     else if (location.pathname.includes("/digit-ui/employee/pt/modify-application/")) return t("PT_UPDATE_PROPERTY");
   };
 
+  const PTBreadCrumbs = ({ location }) => {
+    const { t } = useTranslation();
+    const crumbs = [
+      {
+        path: "/digit-ui/employee",
+        content: t("ES_COMMON_HOME"),
+        show: true,
+      },
+      {
+        path: "/digit-ui/employee/pt/inbox",
+        content: t("ES_TITLE_INBOX"),
+        show: location.pathname.includes("pt/inbox") ? true : false,
+      },
+      {
+        path: "/digit-ui/employee/pt/search",
+        content: t("PT_COMMON_SEARCH_PROPERTY_SUB_HEADER"),
+        show: location.pathname.includes("/pt/search") ? true : false,
+      },
+      {
+        path: "/digit-ui/employee/pt/payment-details/",
+        content: t("PT_PAYMENT_HISTORY"),
+        show: location.pathname.includes("/pt/payment-details") ? true : false,
+      },
+      {
+        path: "/digit-ui/employee/pt/assessment-details/",
+        content: t("PT_ASSESS_PROPERTY"),
+        show: location.pathname.includes("pt/assessment-details") ? true : false,
+      },
+      {
+        path: "digit-ui/employee/pt/property-mutate-docs-required",
+        content: t("PT_REQIURED_DOC_TRANSFER_OWNERSHIP"),
+        show: location.pathname.includes("pt/property-mutate-docs-required") ? true : false,
+      },
+      {
+        path: "/digit-ui/employee/pt/property-mutate/",
+        content: t("ES_TITLE_MUTATE_PROPERTY"),
+        show: location.pathname.includes("pt/property-mutate/") ? true : false,
+      },
+      {
+        path: "/digit-ui/employee/pt/modify-application/",
+        content: t("PT_UPDATE_PROPERTY"),
+        show: location.pathname.includes("pt/modify-application") ? true : false,
+      },
+      {
+        path: "/digit-ui/employee/pt/application-search",
+        content: t("ES_COMMON_APPLICATION_SEARCH"),
+        show: location.pathname.includes("/pt/application-search") ? true : false,
+      },
+      {
+        path: "/digit-ui/employee/pt/property-details/:id",
+        content: t("PT_PROPERTY_INFORMATION"),
+        show: location.pathname.includes("/pt/property-details/") || location.pathname.includes("/pt/search/property-details/") ? true : false,
+      },
+      {
+        path: "/digit-ui/employee/pt/application-details/:id",
+        content: t("PT_APPLICATION_TITLE"),
+        show: location.pathname.includes("/pt/application-details/") || location.pathname.includes("/pt/application-search/application-details/") ? true : false,
+      },
+    ];
+  
+    return <BreadCrumb crumbs={crumbs} />;
+  }
+
   const NewApplication = Digit?.ComponentRegistryService?.getComponent("PTNewApplication");
   const ApplicationDetails = Digit?.ComponentRegistryService?.getComponent("ApplicationDetails");
   const PropertyDetails = Digit?.ComponentRegistryService?.getComponent("PTPropertyDetails");
@@ -72,17 +135,19 @@ const EmployeeApp = ({ path, url, userType }) => {
   const Response = Digit?.ComponentRegistryService?.getComponent("PTResponse");
   const TransferOwnership = Digit?.ComponentRegistryService?.getComponent("PTTransferOwnership");
   const DocsRequired = Digit?.ComponentRegistryService?.getComponent("PTDocsRequired");
-
+  const isRes = window.location.href.includes("pt/response");
+  const isLocation = window.location.href.includes("pt") || window.location.href.includes("application");
   return (
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-          <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
+          {/* <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
             <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
               {t("ES_COMMON_HOME")}
             </Link>{" "}
             / <span>{getBreadCrumb()}</span>
-          </p>
+          </p>} */}
+          {!isRes ? <div style={isLocation ? {marginLeft: "10px"} : {}}><PTBreadCrumbs location={location} /></div> : null}
           <PrivateRoute exact path={`${path}/`} component={() => <PTLinks matchPath={path} userType={userType} />} />
           <PrivateRoute
             path={`${path}/inbox`}
@@ -100,6 +165,8 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
           <PrivateRoute path={`${path}/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/property-details/:id`} component={() => <PropertyDetails parentRoute={path} />} />
+          <PrivateRoute path={`${path}/application-search/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
+          <PrivateRoute path={`${path}/search/property-details/:id`} component={() => <PropertyDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/payment-details/:id`} component={() => <PaymentDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/assessment-details/:id`} component={() => <AssessmentDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />

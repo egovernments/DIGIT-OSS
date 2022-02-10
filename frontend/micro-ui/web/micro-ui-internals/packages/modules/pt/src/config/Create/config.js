@@ -228,8 +228,8 @@ export const newConfig =[
                     "component": "Area",
                     "texts": {
                         "headerCaption": "",
-                        "header": "PT_FLAT_DETAILS",
-                        "cardText": "PT_FLAT_DETAILS_DESC",
+                        "header": "PT_PLOT_SIZE_HEADER",
+                        "cardText": "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
                         "submitBarLabel": "PT_COMMON_NEXT"
                     },
                     "key": "units",

@@ -132,11 +132,13 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
           ...description,
           isMandatory: false,
+          isInsideBox : true,
+          placementinbox : 0,
         },
         {
           label: property.label,
           labelChildren: (
-            <div className="tooltip">
+            <div className="tooltip" style={{paddingLeft:"10px",marginBottom:"-3px"}}>
               {"  "}
               <InfoBannerIcon fill="#0b0c0c" />
               <span className="tooltiptext" style={{ whiteSpace: "nowrap" }}>
@@ -152,6 +154,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
           ...description,
           isMandatory: false,
+          isInsideBox : true,
+          placementinbox : 1,
         },
         {
           label: oldProperty.label,
@@ -162,6 +166,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             validation: oldProperty?.validation,
           },
           isMandatory: false,
+          isInsideBox : true,
+          placementinbox : 2,
         },
       ],
       body1: [
@@ -257,6 +263,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             validation: doorNo?.validation,
           },
           isMandatory: false,
+          isInsideBox : true,
+          placementinbox : 0,
         },
         {
           label: name.label,
@@ -267,6 +275,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             validation: name?.validation,
           },
           isMandatory: false,
+          isInsideBox : true,
+          placementinbox : 2,
         },
       ],
     },
@@ -315,6 +325,10 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     }
 
     setShowToast(null);
+    if(data?.doorNo && data?.doorNo !== "" && data?.propertyIds !== "")
+    {
+      data["propertyIds"] = "";
+    }
 
     let tempObject = Object.keys(data)
       .filter((k) => data[k])
@@ -328,6 +342,10 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     return;
   };
   const onFormValueChange = (setValue, data, formState) => {
+    if(data?.doorNo && data?.doorNo !== "" && data?.propertyIds !== "")
+    {
+      data["propertyIds"] = "";
+    }
     const mobileNumberLength = data?.[mobileNumber.name]?.length;
     const oldPropId = data?.[oldProperty.name];
     const propId = data?.[property.name];
