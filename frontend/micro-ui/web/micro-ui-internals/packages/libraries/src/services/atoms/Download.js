@@ -2,6 +2,7 @@ import ReactDOM from "react-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import XLSX from "xlsx";
+import domtoimage from "dom-to-image";
 
 const Download = {
   Image: (node, fileName, share, resolve = null) => {
@@ -81,6 +82,42 @@ const Download = {
       // }
       return share ? new File([pdf.output("blob")], `${fileName}.pdf`, { type: "application/pdf" }) : pdf.save(`${fileName}.pdf`);
     });
+  },
+
+  IndividualChartImage: (node, fileName, share, resolve = null) => {
+    const saveAs = (uri, filename) => {
+      const link = document.createElement("a");
+
+      if (typeof link.download === "string") {
+        link.href = uri;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        window.open(uri);
+      }
+    };
+    const dataURItoBlob = (dataURI) => {
+      var binary = atob(dataURI.split(',')[1]);
+      var array = [];
+      for (var i = 0; i < binary.length; i++) {
+          array.push(binary.charCodeAt(i));
+      }
+      return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
+    };
+
+    const element = ReactDOM.findDOMNode(node.current);
+    return domtoimage.toJpeg(element, {
+      quality: 1.0,
+      bgcolor: 'white'
+     }).then(function (dataUrl) {
+       var blobData = dataURItoBlob(dataUrl);
+       return share
+       ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
+       : saveAs(dataUrl, `${fileName}.jpeg`)
+        });
+    
   },
 };
 export default Download;
