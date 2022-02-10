@@ -489,7 +489,7 @@ public class BudgetReAppropriationModifyAction extends BaseFormAction {
                     addActionMessage(getText("budget.reapp.saved"));
                 }
             }
-            if ("END".equalsIgnoreCase(misc!=null ? misc.getCurrentState().getValue() : ""))
+            if ("END".equalsIgnoreCase(misc!=null ? misc.getCurrentState().getValue() : "") && misc != null)
                 for (final BudgetReAppropriation entry : misc.getBudgetReAppropriations())
                     budgetReAppropriationService.updatePlanningBudget(entry);
         }

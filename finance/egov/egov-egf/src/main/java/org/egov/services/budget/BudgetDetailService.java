@@ -2572,6 +2572,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         .withComments(workflowBean.getApproverComments()).withDateInfo(new Date());
             else {
                 final String stateValue = FinancialConstants.WORKFLOW_STATE_REJECTED;
+                if(wfInitiator != null)
                 budgetDetail.transition().progressWithStateCopy().withSenderName(user.getName())
                         .withComments(workflowBean.getApproverComments()).withStateValue(stateValue)
                         .withDateInfo(new Date()).withOwner(wfInitiator.getPosition())

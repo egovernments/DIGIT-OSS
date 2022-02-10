@@ -614,7 +614,7 @@ public class CreateVoucher {
 			LOGGER.error("Error in createVoucherFromBillForPJV " + e.getMessage());
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
-		if (vh.getId() != null)
+		if (vh != null && vh.getId() != null)
 			return vh.getId().longValue();
 		else return 0l;
 	}
@@ -2787,8 +2787,6 @@ public class CreateVoucher {
 		} catch (final ParseException ex) {
 			LOGGER.error("error in finding unique VoucherNumber");
 			throw new ApplicationRuntimeException("error in finding unique VoucherNumber");
-		} finally {
-
 		}
 		return isUnique;
 	}

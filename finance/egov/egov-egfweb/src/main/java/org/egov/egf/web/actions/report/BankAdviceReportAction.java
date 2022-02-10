@@ -354,12 +354,13 @@ public class BankAdviceReportAction extends BaseFormAction {
                 LOGGER.error("Exception to get EntityType=" + e.getMessage());
             }
             final BankAdviceReportInfo bankAdviceReportInfo = new BankAdviceReportInfo();
-            if(subDetail!=null)
-            bankAdviceReportInfo.setPartyName(subDetail.getName().toUpperCase());
-            bankAdviceReportInfo.setAccountNumber(subDetail.getBankaccount());
-            bankAdviceReportInfo.setBank(subDetail.getBankname());
-            // bankAdviceReportInfo.setBankBranch(subDetail.getBankaccount());
-            bankAdviceReportInfo.setIfscCode(subDetail.getIfsccode());
+            if(subDetail!=null){
+                bankAdviceReportInfo.setPartyName(subDetail.getName().toUpperCase());
+                bankAdviceReportInfo.setAccountNumber(subDetail.getBankaccount());
+                bankAdviceReportInfo.setBank(subDetail.getBankname());
+                // bankAdviceReportInfo.setBankBranch(subDetail.getBankaccount());
+                bankAdviceReportInfo.setIfscCode(subDetail.getIfsccode());
+            }
             bankAdviceReportInfo.setAmount(((BigDecimal) obj[2]).setScale(2, BigDecimal.ROUND_HALF_EVEN));
             totalAmount = totalAmount.add(bankAdviceReportInfo.getAmount());
             subLedgerList.add(bankAdviceReportInfo);
