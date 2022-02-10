@@ -2,48 +2,29 @@ import React,{useState} from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
+import UploadDrawer from "./ImageUpload/UploadDrawer";
 
-// import UploadDrawer from "./ImageUpload/UploadDrawer";
-// import ImgUp from './ImageUpload/ImgUp'
 
-const userProfile = () => {
+const [openUploadSlide,SetOpenUploadSide]=useState("false")
+const UserProfile = () => {
   const history = useHistory();
 
-    const { t } = useTranslation()
-    const editScreen = false;
-    function setOwnerName(e) {
-      setName(e.target.value);
-    }
-    function setOwnerEmail(e) {
-      setEmail(e.target.value);
-    }
-    function setGenderName(value) {
-      setGender(value);
-    }
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [gender, setGender] = useState("");
-    const stateId = Digit.ULBService.getStateId();
+  onClickAddPic = (isOpen) => {
+    SetOpenUploadSide(
+       "true"
+    );
+  };
 
-    const { data: Menu } = Digit.Hooks.pt.useGenderMDMS(stateId, "common-masters", "GenderType");
-
-  let menu = [];
-  Menu &&
-    Menu.map((genderDetails) => {
-      menu.push({ i18nKey: `PT_COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
-    });
-    // const showDwawerPage = () => {
-    //   history.push("/digit-ui/citizen/user/drawer");
-      
-  
-    //   console.log('Show user profile Drawer page citizen');
-    // }
-    const showDrawer = () => {
-      history.push("/digit-ui/citizen/user/drawer");
-      
-  
-      console.log('Show user drawer page citizen');
+    const updateProfile = () => {
+      const requestData = {
+        name: 'Test user'
+      }
+      const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.updateUser(requestData, stateCode);
     }
+
+    // useEffect( () => {
+    //   updateProfile
+    // }, []);
    
     return (
         <React.Fragment>
@@ -52,9 +33,10 @@ const userProfile = () => {
           <h1>Edit Profile</h1>
           
         <div style={{width:"96%",height:"20%",backgroundColor:"gray",margin:"2%",justifyContent:'center'}}>
-        
+     
           
-        <button onClick={showDrawer} >+</button>
+        <button onClick={onClickAddPic()} >++++</button>
+        {openUploadSlide?<UploadDrawer1/>:""}
           </div>
          
          <LabelFieldPair>
@@ -112,4 +94,4 @@ const userProfile = () => {
     )
 }
 
-export default userProfile
+export default UserProfile

@@ -1,16 +1,23 @@
 import React ,{useState,useEffect}from 'react'
 import{UploadFile} from '@egovernments/digit-ui-react-components';
+const scss={
+  height:"150px",
+  width:'100%'
+}
+
 function UploadDrawer() {
   const [uploadedFile, setUploadedFile] = useState("a");
     const [file,setFile] = useState("")
     function selectfile(e) {
-        setFile(e.target.files[0]);
+      console.log( setFile(e.target.files[0]))
         
 
       }
       console.log("demo",uploadedFile)
       const [error, setError] = useState(null);
-
+      const removeimg=()=>{
+        setUploadedFile("null")
+      }
       useEffect(() => {
         (async () => {
           setError(null);
@@ -29,18 +36,23 @@ function UploadDrawer() {
                 console.error("Modal -> err ", err);
                 // setError(t("PT_FILE_UPLOAD_ERROR"));
               }
+              console.log("demo1",uploadedFile)
             }
           }
         })();
       }, [file]);
   return (
-    <div>
+    <div style={{bottom:'0',height:'150px',justifyContent:"space-around",backgroundColor:"white"}}>
+      <div>
       <UploadFile
       extraStyleName={"propertyCreate"}
       accept=".jpg,.png,.pdf"
       onUpload={selectfile}
-      onDelete={() => {
-        setUploadedFile(null);}} />
+      // onDelete={() => {
+      //   setUploadedFile(null);}} />UploadDrawer
+      />
+      </div>
+      <div onClick={removeimg}>remove</div>
     </div>
   )
 }

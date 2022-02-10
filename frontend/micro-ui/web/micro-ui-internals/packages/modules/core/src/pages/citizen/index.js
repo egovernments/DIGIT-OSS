@@ -9,7 +9,7 @@ import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
 import UserProfile from './Home/UserProfile';
-import UploadDrawer from "./Home/ImageUpload/UploadDrawer";
+
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -99,11 +99,9 @@ const Home = ({
           </Route>
 
           <Route path={`${path}/user/profile`}>
-            <UserProfile />
+            <UserProfile stateCode={stateCode} />
           </Route>
-          <Route path={`${path}/user/drawer`}>
-            <UploadDrawer/>
-          </Route>
+          
           
 
           {appRoutes}
