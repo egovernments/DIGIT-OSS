@@ -43,15 +43,17 @@ public class IngestService {
 
         Map<String, List<JsonNode>> indexNameVsDocumentsToBeIndexed = new HashMap<>();
 
+        ingestRequest.getIngestData().forEach(data -> {
+            // Validates that no cross state data is being ingested, i.e. employee of state X cannot insert data for state Y
+            ingestValidator.verifyCrossStateRequest(data, ingestRequest.getRequestInfo());
+        });
+
         // Validate if record for the day is already present
         ingestValidator.verifyIfDataAlreadyIngested(ingestRequest.getIngestData());
 
         ingestRequest.getIngestData().forEach(data -> {
             // Validates whether the fields configured for a given module are present in payload
             ingestValidator.verifyDataStructure(data);
-
-            // Validates that no cross state data is being ingested, i.e. employee of state X cannot insert data for state Y
-            ingestValidator.verifyCrossStateRequest(data, ingestRequest.getRequestInfo());
 
             String moduleCode = data.getModule();
 
