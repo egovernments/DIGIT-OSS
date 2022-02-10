@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.nationaldashboardingest.config.ApplicationProperties;
+import org.egov.nationaldashboardingest.producer.Producer;
 import org.egov.nationaldashboardingest.repository.ElasticSearchRepository;
 import org.egov.nationaldashboardingest.validators.IngestValidator;
+import org.egov.nationaldashboardingest.web.models.IngestAckData;
 import org.egov.nationaldashboardingest.web.models.IngestRequest;
 import org.egov.nationaldashboardingest.web.models.MasterDataRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class IngestService {
     @Autowired
     AsyncHandler asyncHandler;
 
+    @Autowired
+    private Producer producer;
+
     public List<Integer> ingestData(IngestRequest ingestRequest) {
 
         ingestValidator.validateMaxDataListSize(ingestRequest);
@@ -43,15 +48,15 @@ public class IngestService {
 
         Map<String, List<JsonNode>> indexNameVsDocumentsToBeIndexed = new HashMap<>();
 
-        ingestRequest.getIngestData().forEach(data -> {
-            // Validates that no cross state data is being ingested, i.e. employee of state X cannot insert data for state Y
-            ingestValidator.verifyCrossStateRequest(data, ingestRequest.getRequestInfo());
-        });
 
         // Validate if record for the day is already present
-        ingestValidator.verifyIfDataAlreadyIngested(ingestRequest.getIngestData());
+        IngestAckData dataToDb = ingestValidator.verifyIfDataAlreadyIngested(ingestRequest.getIngestData());
 
         ingestRequest.getIngestData().forEach(data -> {
+
+            // Validates that no cross state data is being ingested, i.e. employee of state X cannot insert data for state Y
+            ingestValidator.verifyCrossStateRequest(data, ingestRequest.getRequestInfo());
+
             // Validates whether the fields configured for a given module are present in payload
             ingestValidator.verifyDataStructure(data);
 
@@ -71,6 +76,8 @@ public class IngestService {
         });
         //repository.indexFlattenedDataToES(indexNameVsDocumentsToBeIndexed);
         //repository.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);
+
+        producer.push(applicationProperties.getKeyDataTopic(), dataToDb);
 
         // Added async handler to push data to kafka connectors asynchronously.
         asyncHandler.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);

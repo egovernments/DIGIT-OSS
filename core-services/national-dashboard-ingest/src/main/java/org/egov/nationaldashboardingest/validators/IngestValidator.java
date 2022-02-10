@@ -258,7 +258,7 @@ public class IngestValidator {
     }
 
     // The verification logic will always use module name + date to determine the uniqueness of a set of records.
-    public void verifyIfDataAlreadyIngested(List<Data> ingestData) {
+    public IngestAckData verifyIfDataAlreadyIngested(List<Data> ingestData) {
         List<String> keyDataToSearch = new ArrayList<>();
         Set<String> uniquenessHash = new HashSet<>();
         IngestAckData hashedData = new IngestAckData();
@@ -278,8 +278,8 @@ public class IngestValidator {
         if(isRecordPresent)
             throw new CustomException("EG_DS_RECORD_ALREADY_INGESTED_ERR", "Records for the given date and area details have already been ingested. No new data will be ingested.");
         hashedData.setAckEntities(ackEntityList);
-        producer.push(applicationProperties.getKeyDataTopic(), hashedData);
 
+        return hashedData;
     }
 
     // The verification logic will always use module name + financialYear to determine the uniqueness of a set of records.
