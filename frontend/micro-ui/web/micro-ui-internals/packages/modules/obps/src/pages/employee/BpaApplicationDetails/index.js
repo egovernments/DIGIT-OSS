@@ -22,7 +22,8 @@ const BpaApplicationDetail = () => {
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
   const [error, setError] = useState(null);
   const [payments, setpayments] = useState([]);
-   const [sanctionFee, setSanctionFee] = useState([]);
+  const [sanctionFee, setSanctionFee] = useState([]);
+  const [paymentsList, setPaymentsList] = useState([]);
   const stateId = Digit.ULBService.getStateId();
   const isMobile = window.Digit.Utils.browser.isMobile();
   const { isLoading: bpaDocsLoading, data: bpaDocs } = Digit.Hooks.obps.useMDMS(stateId, "BPA", ["DocTypeMapping"]);
@@ -76,7 +77,7 @@ const BpaApplicationDetail = () => {
   useEffect(async() => {
     if(data && data?.applicationData?.businessService  && businessService[1]/* && data?.applicationData?.status === "PENDING_SANC_FEE_PAYMENT" */){
     let res = Digit.PaymentService.fetchBill( tenantId, { consumerCode: id, businessService: businessService[1] }).then((result) => {
-      result?.Bill[0] && !(sanctionFee.filter((val) => val?.id ===result?.Bill[0].id).length>0) && setSanctionFee([...result?.Bill]);
+      result?.Bill[0] && result?.Bill[0]?.totalAmount != 0 && !(sanctionFee.filter((val) => val?.id ===result?.Bill[0].id).length>0) && setSanctionFee([...result?.Bill]);
     })
   
     }
@@ -133,7 +134,8 @@ const BpaApplicationDetail = () => {
         }
       })
     }
-    
+    const feeData = data?.applicationDetails?.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL");
+    setPaymentsList(feeData);
   },[payments,sanctionFee]);
 
 
@@ -432,6 +434,7 @@ const BpaApplicationDetail = () => {
         closeToast={closeToast}
         statusAttribute={"state"}
         timelineStatusPrefix={`WF_${workflowDetails?.data?.applicationBusinessService ? workflowDetails?.data?.applicationBusinessService : data?.applicationData?.businessService}_`}
+        paymentsList={paymentsList}
       />
       </div>
     </Fragment>
