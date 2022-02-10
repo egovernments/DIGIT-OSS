@@ -17,9 +17,11 @@ const UserProfile = ({stateCode}) => {
     // SetOpenUploadSide(true);
   };
  
+  const userInfo = Digit.UserService.getUser()?.info || {};
 
   const updateProfile = async () => {
     const requestData = {
+      ...userInfo,
       name,
       gender:gender?.value,
       emailId:email,
