@@ -941,7 +941,7 @@
 			<dependency>
 				<groupId>org.postgresql</groupId>
 				<artifactId>postgresql</artifactId>
-				<version>${postgres-version}</version>
+				<version>42.2.25</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
