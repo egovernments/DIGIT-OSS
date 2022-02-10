@@ -15,7 +15,7 @@ const UserProfile = () => {
     );
   };
 
-    const updateProfile = () => {
+    const updateProfile = async () => {
       const requestData = {
         name: 'Test user'
       }
