@@ -34,9 +34,9 @@ public class MetricIngestController {
 
     @RequestMapping(value="/_ingest", method = RequestMethod.POST)
     public ResponseEntity<IngestResponse> create(@RequestBody @Valid IngestRequest ingestRequest) {
-        log.info(ingestRequest.getIngestData().toString());
+        log.info("Received request: " + ingestRequest.getIngestData().toString());
         List<Integer> responseHash = ingestService.ingestData(ingestRequest);
-        log.info("############ Completed before pushing data");
+        //log.info("############ Completed before pushing data");
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(ingestRequest.getRequestInfo(), true);
         IngestResponse response = IngestResponse.builder().responseInfo(responseInfo).responseHash(responseHash).build();
         return new ResponseEntity<>(response, HttpStatus.OK);
