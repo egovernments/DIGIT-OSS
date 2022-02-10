@@ -45,11 +45,11 @@ function UploadDrawer() {
     <div style={{bottom:'0',height:'150px',justifyContent:"space-around",backgroundColor:"white"}}>
       <div>
       <UploadFile
-      extraStyleName={"propertyCreate"}
-      accept=".jpg,.png,.pdf"
-      onUpload={selectfile}
-      // onDelete={() => {
-      //   setUploadedFile(null);}} />UploadDrawer
+        extraStyleName={"propertyCreate"}
+        accept=".jpg,.png,.pdf"
+        onUpload={selectfile}
+        // onDelete={() => {
+        //   setUploadedFile(null);}} />UploadDrawer
       />
       </div>
       <div onClick={removeimg}>remove</div>
