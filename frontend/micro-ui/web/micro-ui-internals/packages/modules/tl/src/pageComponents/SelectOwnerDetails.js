@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, CheckBox, LinkButton, CardHeader } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 import { getPattern } from "../utils";
+import Timeline from "../components/TLTimeline";
 
 const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   const {ownershipCategory:{code: keyToSearchOwnershipSubtype}={}} = formData
@@ -210,6 +211,8 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
 
   if(isInstitutional === true && ismultiple === false){
     return (
+      <React.Fragment>
+      {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
       <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext} forcedError={t(error)}>
         {fields.map((field, index) => {
           return (
@@ -346,10 +349,13 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
           );
         })}
       </FormStep>
+      </React.Fragment>
     )
   }
 
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext} forcedError={t(error)}>
       {fields.map((field, index) => {
         return (
@@ -447,6 +453,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         </div>
       )}
     </FormStep>
+    </React.Fragment>
   );
 };
 

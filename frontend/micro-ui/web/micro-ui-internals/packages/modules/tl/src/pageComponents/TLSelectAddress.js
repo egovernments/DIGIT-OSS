@@ -2,6 +2,7 @@ import { CardLabel, Dropdown, FormStep, LabelFieldPair, RadioOrSelect, RadioButt
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import _ from "lodash";
+import Timeline from "../components/TLTimeline";
 
 const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, formState, clearErrors }) => {
   const allCities = Digit.Hooks.tl.useTenants();
@@ -206,6 +207,8 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
     );
   }
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
       <CardLabel>{`${t("MYCITY_CODE_LABEL")}*`}</CardLabel>
       <span className={"form-pt-dropdown-only"}>
@@ -238,6 +241,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
         </span>
       )}
     </FormStep>
+    </React.Fragment>
   );
 };
 

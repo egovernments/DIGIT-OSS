@@ -6,6 +6,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import TLDocument from "../../../pageComponents/TLDocumets";
+import Timeline from "../../../components/TLTimeline";
 
 const ActionButton = ({ jumpTo }) => {
   const { t } = useTranslation();
@@ -43,6 +44,7 @@ const CheckPage = ({ onSubmit, value }) => {
   }
   return (
     <Card>
+      {window.location.href.includes("/citizen") ? <Timeline currentStep={4}/> : null}
       <CardHeader>{t("CS_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
       <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
       {isEdit && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("TL_RENEWAL_INFO_TEXT")} />}
