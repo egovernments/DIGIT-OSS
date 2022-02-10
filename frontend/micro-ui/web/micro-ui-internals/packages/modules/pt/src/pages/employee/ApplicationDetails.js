@@ -78,7 +78,7 @@ const ApplicationDetails = () => {
   }, [auditData, applicationDetails, appDetailsToShow]);
 
   useEffect(() => {
-    if (workflowDetails?.data?.applicationBusinessService) {
+    if (workflowDetails?.data?.applicationBusinessService&& businessService!=workflowDetails?.data?.applicationBusinessService) {
       setBusinessService(workflowDetails?.data?.applicationBusinessService);
     }
   }, [workflowDetails.data]);
