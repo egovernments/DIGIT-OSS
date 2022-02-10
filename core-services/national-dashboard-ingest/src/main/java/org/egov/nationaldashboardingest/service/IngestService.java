@@ -32,6 +32,9 @@ public class IngestService {
     @Autowired
     IngestValidator ingestValidator;
 
+    @Autowired
+    AsyncHandler asyncHandler;
+
     public List<Integer> ingestData(IngestRequest ingestRequest) {
 
         ingestValidator.validateMaxDataListSize(ingestRequest);
@@ -65,7 +68,11 @@ public class IngestService {
 
         });
         //repository.indexFlattenedDataToES(indexNameVsDocumentsToBeIndexed);
-        repository.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);
+        //repository.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);
+
+        // Added async handler to push data to kafka connectors asynchronously.
+        asyncHandler.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);
+
         return responseHash;
 
     }
