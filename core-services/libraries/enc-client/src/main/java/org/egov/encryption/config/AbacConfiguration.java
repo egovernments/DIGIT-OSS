@@ -2,6 +2,7 @@ package org.egov.encryption.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.models.KeyRoleAttributeAccess;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class AbacConfiguration {
 
@@ -63,7 +65,9 @@ public class AbacConfiguration {
             ObjectReader reader = objectMapper.readerFor(objectMapper.getTypeFactory().constructCollectionType(List.class,
                     KeyRoleAttributeAccess.class));
             keyRoleAttributeAccessList = reader.readValue(keyRoleAttributeAccessListJSON.toString());
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
 
         initializeKeyRoleAttributeAccessMap(keyRoleAttributeAccessList);
     }
