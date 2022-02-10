@@ -439,7 +439,7 @@ export const downloadPdfFile = async (
     responseType: "arraybuffer",
     headers: {
       "Content-Type": "application/json",
-      Accept: "application/pdf",
+      Accept: window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")?"application/pdf,application/json":"application/pdf",
     },
   });
 
