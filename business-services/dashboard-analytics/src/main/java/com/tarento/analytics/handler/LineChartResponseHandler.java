@@ -5,11 +5,13 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tarento.analytics.helper.ComputedFieldFactory;
 import com.tarento.analytics.helper.IComputedField;
 import com.tarento.analytics.model.ComputedFields;
+import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +72,11 @@ public class LineChartResponseHandler implements IResponseHandler {
 
             Map<String, Double> plotMap = new LinkedHashMap<>();
             List<Double> totalValues = new ArrayList<>();
+            if(aggrNodes.size() > 1) {
+                Set<String> allPlotKeys = new HashSet<>();
+                enrichAllPlotKeys(aggrNodes, allPlotKeys);
+                enrichMissingPlotBuckets(aggrNodes, allPlotKeys, interval);
+            }
             for(JsonNode aggrNode : aggrNodes) {
                 if (aggrNode.findValues(IResponseHandler.BUCKETS).size() > 0) {
                     ArrayNode buckets = (ArrayNode) aggrNode.findValues(IResponseHandler.BUCKETS).get(0);
@@ -155,6 +162,55 @@ public class LineChartResponseHandler implements IResponseHandler {
             appendMissingPlot(plotKeys, data, symbol, isCumulative);
         });
         return getAggregatedDto(chartNode, dataList, requestDto.getVisualizationCode());
+    }
+
+    private void enrichMissingPlotBuckets(List<JsonNode> aggrNodes, Set<String> allPlotKeys, String interval) {
+        List<JsonNode> enrichedNodes = new ArrayList<>();
+        for(JsonNode aggrNode : aggrNodes) {
+            Set<String> keysPresent = new LinkedHashSet<>();
+            if (aggrNode.findValues(IResponseHandler.BUCKETS).size() > 0) {
+                ArrayNode buckets = (ArrayNode) aggrNode.findValues(IResponseHandler.BUCKETS).get(0);
+                ObjectNode tempNode = mapper.createObjectNode();
+                for(JsonNode bucket : buckets){
+                    tempNode = bucket.deepCopy();
+                    String bkey = bucket.findValue(IResponseHandler.KEY).asText();
+                    keysPresent.add(bkey);
+                }
+                for (String bkey : allPlotKeys) {
+                    if (!keysPresent.contains(bkey)) {
+                        String jsonStr = tempNode.toString();
+                        JSONObject currObj = new JSONObject(jsonStr);
+                        currObj.put(IResponseHandler.KEY, bkey);
+                        for (Iterator<String> it = tempNode.fieldNames(); it.hasNext(); ) {
+                            String fieldName = it.next();
+                            if (currObj.get(fieldName) instanceof JSONObject) {
+                                ((JSONObject) currObj.get(fieldName)).put("value", 0.0);
+                            }
+                        }
+                        try {
+                            buckets.add(mapper.readTree(currObj.toString()));
+                        } catch (JsonProcessingException e) {
+                            throw new CustomException("EG_DSS_MISSING_BUCKETS_ERR", "Error while adding missing buckets data");
+                        }
+
+                    }
+                }
+            }
+            logger.info("Current aggr node after enriching: " + aggrNode.toString());
+
+        }
+    }
+
+    private void enrichAllPlotKeys(List<JsonNode> aggrNodes, Set<String> allPlotKeys) {
+        for(JsonNode aggrNode : aggrNodes) {
+            if (aggrNode.findValues(IResponseHandler.BUCKETS).size() > 0) {
+                ArrayNode buckets = (ArrayNode) aggrNode.findValues(IResponseHandler.BUCKETS).get(0);
+                for(JsonNode bucket : buckets){
+                    String bkey = bucket.findValue(IResponseHandler.KEY).asText();
+                    allPlotKeys.add(bkey);
+                }
+            }
+        }
     }
 
     private String getIntervalKey(String epocString, Constants.Interval interval) {
