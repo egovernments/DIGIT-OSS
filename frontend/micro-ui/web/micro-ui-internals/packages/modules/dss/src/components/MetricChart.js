@@ -54,9 +54,17 @@ const MetricChartRow = ({ data }) => {
       </div>
     );
   }
+
   return (
     <div className="row">
-      <div>{t(data.name)}</div>
+       <div className="tooltip">
+            {t(data.name)}
+              <span className="tooltiptext" style={{ whiteSpace: "nowrap" , 
+              // marginLeft: "-500%" ,
+               fontSize:"medium" }}>
+               {t(`TIP_${data.name}`)}
+              </span>
+            </div>
       <MetricData t={t} data={response?.responseData?.data?.[0]} code={response?.responseData?.visualizationCode} />
       {/* <div>{`${displaySymbol(response.headerSymbol)} ${response.headerValue}`}</div> */}
     </div>

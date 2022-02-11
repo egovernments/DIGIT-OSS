@@ -5,6 +5,12 @@ import { useTranslation } from "react-i18next";
 import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
 import NoData from "./NoData";
+const COLORS=["#EA8A3B",  "#048BD0",   "#8E29BF" ,"#FBC02D"]
+const getColors =(index=0)=>{
+
+index=COLORS.length>index?index:0;
+return COLORS[index];
+};
 
 const getValue = (plot) => plot.value;
 
@@ -26,6 +32,8 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
   const { value } = useContext(FilterContext);
   const [totalCapacity, setTotalCapacity] = useState(0);
   const [totalWaste, setTotalWaste] = useState(0);
+  const [keysArr, setKeysArr] = useState([]);
+
   const [manageChart,setmanageChart]=useState("Area");
   const stateTenant = Digit.ULBService.getStateId();
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.useCommonMDMS(stateTenant, "FSM", "FSTPPlantInfo", {
@@ -72,16 +80,22 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
       });
     }else if(response?.responseData?.data?.length>1){
       setmanageChart("Line");
+      let keys={};
       const mergeObj = response?.responseData?.data?.[0]?.plots.map((x, index) => {
+        let newObj={};
+     response?.responseData?.data.map(ob=>{
+       keys[t(Digit.Utils.locale.getTransformedLocale(ob.headerName))]=t(Digit.Utils.locale.getTransformedLocale(ob.headerName));
+      newObj[t(Digit.Utils.locale.getTransformedLocale(ob.headerName))]=ob?.plots[index].value
+     })
         return {
           label: null,
           name: response?.responseData?.data?.[0]?.plots[index].name,
           strValue: null,
           symbol: response?.responseData?.data?.[0]?.plots[index].symbol,
-          [response?.responseData?.data?.[0]?.headerName]  : response?.responseData?.data?.[0]?.plots[index].value,
-          [response?.responseData?.data?.[1]?.headerName]: response?.responseData?.data?.[1]?.plots[index].value
+           ...newObj,
         };
       });
+      setKeysArr(Object.values(keys));
       return mergeObj;
     }
      
@@ -190,13 +204,21 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line
+            {keysArr?.map((key,i)=>{
+              return (<Line
+              type="monotone"
+              dataKey={key}
+              stroke={getColors(i)}
+              activeDot={{ r: 8 }}
+            />)
+            })}
+            {/* <Line
               type="monotone"
               dataKey={response?.responseData?.data?.[0]?.headerName}
               stroke="#8884d8"
               activeDot={{ r: 8 }}
             />
-            <Line type="monotone" dataKey={response?.responseData?.data?.[1]?.headerName} stroke="#82ca9d" />
+            <Line type="monotone" dataKey={response?.responseData?.data?.[1]?.headerName} stroke="#82ca9d" /> */}
           </LineChart>
           ) 
         )
