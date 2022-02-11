@@ -1,17 +1,24 @@
 import React, { useState } from "react"
-import { LogoutIcon } from "@egovernments/digit-ui-react-components";
+import {EditIcon, LogoutIcon } from "@egovernments/digit-ui-react-components";
 import TopBar from "./TopBar";
+import { useHistory } from "react-router-dom";
+
 import SideBar from "./SideBar";
 
 const TopBarSideBar = ({ t, stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleUserDropdownSelection, logoUrl, showSidebar = true ,showLanguageChange}) => {
     const [isSidebarOpen, toggleSidebar] = useState(false);
-  
+    const history = useHistory();
+
     const handleLogout = () => {
       toggleSidebar(false);
       Digit.UserService.logout();
     };
+    const userProfile=()=>{
+      history.push("/digit-ui/employee/user/profile");
+
+    }
   
-    const userOptions = [{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout }];
+    const userOptions = [{ name: t("Edit_PROFILE"), icon: <EditIcon className="icon" />, func: userProfile },{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout }];
   
     return (
       <React.Fragment>

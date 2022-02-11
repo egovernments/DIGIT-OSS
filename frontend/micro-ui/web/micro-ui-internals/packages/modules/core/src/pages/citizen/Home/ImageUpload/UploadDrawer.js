@@ -16,7 +16,9 @@ function UploadDrawer({ setProfilePic }) {
     
   // console.log("demo",uploadedFile)
   const removeimg=()=>{
-    // setUploadedFile(null)
+    setUploadedFile(null)
+  
+    
   }
 
   useEffect(() => {
