@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
 import { newConfigMutate } from "../../config/Mutate/config";
 import TransfererDetails from "../../pageComponents/Mutate/TransfererDetails";
+import MutationApplicationDetails from "./MutationApplicatinDetails";
 
 
 const ApplicationDetails = () => {
@@ -164,6 +165,14 @@ const ApplicationDetails = () => {
       },
     ];
   }
+ if (applicationDetails?.applicationData?.creationReason === "MUTATION"){
+   return(
+   <MutationApplicationDetails 
+   acknowledgementIds={appDetailsToShow?.applicationData?.acknowldgementNumber}
+   workflowDetails={workflowDetails}
+   />
+   )
+ } 
 
   return (
     <div>
@@ -184,6 +193,7 @@ const ApplicationDetails = () => {
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
         statusAttribute={"state"}
       />
+    
     </div>
   );
 };
