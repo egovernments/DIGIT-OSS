@@ -12,6 +12,15 @@ import Summary from "./Summary";
 
 let index = 1;
 
+const showCustomLabel = (title,t)=>{
+  switch(title){
+    case "DSS_FSM_MONTHLY_WASTE_CAL":
+     return `${t("DSS_WASTE_RECIEVED")} ${t(`DSS_WASTE_UNIT`)}`;
+    default:
+     return "";
+  }
+}
+
 const Layout = ({ rowData }) => {
   const { t } = useTranslation();
   const { value } = useContext(FilterContext);
@@ -40,7 +49,7 @@ const Layout = ({ rowData }) => {
           />
         );
       case "bar":
-        return <CustomHorizontalBarChart data={chart} title={title} yAxisLabel={`${t("DSS_WASTE_RECIEVED")} ${t(`DSS_WASTE_UNIT`)}`} />;
+        return <CustomHorizontalBarChart data={chart} title={title} yAxisLabel={showCustomLabel(title,t)} />;
       default:
         return null;
     }

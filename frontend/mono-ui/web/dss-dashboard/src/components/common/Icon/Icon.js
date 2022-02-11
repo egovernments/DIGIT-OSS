@@ -58,13 +58,13 @@ class Icon extends React.Component {
             case 'nurt_project_staus':
                 return <SVG src={DashBoardIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
             case 'nurt_property_tax':
-                return <SVG src={Propertytax} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+                return <SVG src={PropertyTaxIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
             case 'nurt_trade_licence':
                 return <SVG src={Tradelic} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
             case 'nurt_complains':
                 return <SVG src={ComplaintsIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
             case 'nurt_water_sewerage':
-                return <SVG src={WandS} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+                return <SVG src={WaterSewerage} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
             case 'dss_building_permission':
                 return <SVG src={BuildingPermission} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
             case 'nurt_firenoc':
@@ -72,7 +72,7 @@ class Icon extends React.Component {
             case 'nurt_mcollect':
                 return <SVG src={Mcollect} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
                 case 'nurt_live_active_ulbs':
-                return <SVG src={PropertyTaxIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
+                return <SVG src={Propertytax} fill="white" className={classes.icon} style={{ width: '40px', height: '40px', color: 'white' }}></SVG>
             default:
                 return <div></div>
 

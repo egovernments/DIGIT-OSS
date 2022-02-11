@@ -19,7 +19,7 @@ const Breadcrumb = props => {
        let displayname=getDisplayName(name); 
        let routeTo = `/${pathnames.slice(0, index + 1).join("/")}`; 
        if(window.location.pathname.toLowerCase().includes("national")==true){
-          routeTo = '/NURT_DASHBOARD';
+          routeTo = 'NURT_DASHBOARD';
        }      
         const isLast = index === pathnames.length - 1;
         return isLast ? (

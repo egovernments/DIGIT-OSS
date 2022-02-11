@@ -111,7 +111,7 @@ const CustomHorizontalBarChart = ({
             barGap={12}
             barSize={12}
           >
-            <CartesianGrid />
+            <CartesianGrid strokeDasharray="2 2"/>
             <YAxis
               dataKey={yDataKey}
               type={yAxisType}
