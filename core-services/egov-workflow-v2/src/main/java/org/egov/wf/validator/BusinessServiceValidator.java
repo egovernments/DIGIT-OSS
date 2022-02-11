@@ -157,6 +157,8 @@ public class BusinessServiceValidator {
                 if(!CollectionUtils.isEmpty(state.getActions())){
                     state.getActions().forEach(action -> {
                         ids.add(action.getUuid());
+                        ids.add(action.getCurrentState());
+                        ids.add(action.getNextState());
                     });
                 }
             });
