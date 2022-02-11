@@ -77,9 +77,10 @@ public class ExternalEmailService implements EmailService {
 			helper.setTo(email.getEmailTo().toArray(new String[0]));
 			helper.setSubject(email.getSubject());
 			helper.setText(email.getBody(), true);
+			log.info(email.toString());
 
 			for(int i=0; i<email.getFileStoreId().size(); i++) {
-				String uri = String.format("%s/filestore/v1/files/id?tenantId=%s&fileStoreId=%s", FILESTORE_HOST, email.getTenantId(), email.getFileStoreId().toArray()[i]);
+				String uri = String.format("%s/id?tenantId=%s&fileStoreId=%s", FILESTORE_HOST, email.getTenantId(), email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);
 				URLConnection con = url.openConnection();
 				String fieldValue = con.getHeaderField("Content-Disposition");
