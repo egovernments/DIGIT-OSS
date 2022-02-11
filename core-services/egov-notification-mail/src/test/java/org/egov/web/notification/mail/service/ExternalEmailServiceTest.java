@@ -26,8 +26,8 @@ public class ExternalEmailServiceTest {
     void sendEmail() {
         Set<String> email_list = new HashSet<String>();
         Set<String> fileStoreId = new HashSet<>();
-//        fileStoreId.add("f44b709d-1256-41d8-aaf4-63fcbfc34e74");
-        fileStoreId.add("5dc1f48a-42e8-491a-afab-53259b23e134");
+        fileStoreId.add("f44b709d-1256-41d8-aaf4-63fcbfc34e74");
+//        fileStoreId.add("5dc1f48a-42e8-491a-afab-53259b23e134");
         email_list.add("pranithgoud619@gmail.com");
         Email email = new Email();
         email.setEmailTo(email_list);
