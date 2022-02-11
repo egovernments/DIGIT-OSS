@@ -28,6 +28,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     applicationData: {
       applicantName: applicationData.citizen.name,
       mobileNumber: applicationData.citizen.mobileNumber,
+      applicantGender: applicationData.citizen.gender
     },
     tripData: {
       noOfTrips: applicationData.noOfTrips,
