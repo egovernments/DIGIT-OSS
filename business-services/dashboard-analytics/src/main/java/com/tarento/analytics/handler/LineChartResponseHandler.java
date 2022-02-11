@@ -133,10 +133,14 @@ public class LineChartResponseHandler implements IResponseHandler {
                             totalValues.add(value);
                         }
                 }
+                logger.info("PLOT MAP FOR CURRENT ITERATION: " + plotMap.toString());
+                logger.info("TOTAL VALUES FOR CURRENT ITERATION: " + totalValues.toString());
                 totalValues.clear();
             }
 
             totalValues = new ArrayList<>(plotMap.values());
+            logger.info("FINAL TOTAL VALUES: " + totalValues.toString());
+            logger.info("FINAL PLOT MAP VALUES: " + plotMap.toString());
             List<Plot> plots = plotMap.entrySet().stream().map(e -> new Plot(e.getKey(), e.getValue(), symbol)).collect(Collectors.toList());
             try{
                 Data data = new Data(headerPath.asText(), (totalValues==null || totalValues.isEmpty()) ? 0.0 : totalValues.stream().reduce(0.0, Double::sum), symbol);
