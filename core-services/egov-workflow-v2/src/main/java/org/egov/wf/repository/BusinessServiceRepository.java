@@ -55,13 +55,10 @@ public class BusinessServiceRepository {
 
 
     public List<BusinessService> getBusinessServices(BusinessServiceSearchCriteria criteria){
-        String query;
         String tenantId = criteria.getTenantId();
         criteria.setTenantId(null);
-        List<Object> preparedStmtList = new ArrayList<>();
-        query = queryBuilder.getBusinessServices(criteria, preparedStmtList);
-        query = util.replaceSchemaPlaceholder(query, tenantId);
-        List<BusinessService> searchResults = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+
+        List<BusinessService> searchResults = querybusinessService(criteria, tenantId);
 
         if(CollectionUtils.isEmpty(searchResults))
             return new LinkedList<>();
@@ -84,6 +81,14 @@ public class BusinessServiceRepository {
         }
 
         return businessServices;
+    }
+
+    public List<BusinessService> querybusinessService(BusinessServiceSearchCriteria criteria, String tenantId){
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getBusinessServices(criteria, preparedStmtList);
+        query = util.replaceSchemaPlaceholder(query, tenantId);
+        List<BusinessService> searchResults = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+        return searchResults;
     }
 
 

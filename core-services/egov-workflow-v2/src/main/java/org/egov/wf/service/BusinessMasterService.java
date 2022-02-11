@@ -4,6 +4,7 @@ import com.jayway.jsonpath.JsonPath;
 import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.producer.Producer;
 import org.egov.wf.repository.BusinessServiceRepository;
+import org.egov.wf.validator.BusinessServiceValidator;
 import org.egov.wf.web.models.BusinessService;
 import org.egov.wf.web.models.BusinessServiceRequest;
 import org.egov.wf.web.models.BusinessServiceSearchCriteria;
@@ -36,16 +37,23 @@ public class BusinessMasterService {
 
     private CacheManager cacheManager;
 
+    private BusinessServiceValidator businessServiceValidator;
+
+
     @Autowired
     public BusinessMasterService(Producer producer, WorkflowConfig config, EnrichmentService enrichmentService,
-                                 BusinessServiceRepository repository, MDMSService mdmsService, CacheManager cacheManager) {
+                                 BusinessServiceRepository repository, MDMSService mdmsService, CacheManager cacheManager,
+                                 BusinessServiceValidator businessServiceValidator) {
         this.producer = producer;
         this.config = config;
         this.enrichmentService = enrichmentService;
         this.repository = repository;
         this.mdmsService = mdmsService;
         this.cacheManager = cacheManager;
+        this.businessServiceValidator = businessServiceValidator;
     }
+
+
 
 
 
@@ -58,6 +66,7 @@ public class BusinessMasterService {
     public List<BusinessService> create(BusinessServiceRequest request){
         evictAllCacheValues("businessService");
         evictAllCacheValues("roleTenantAndStatusesMapping");
+        businessServiceValidator.validateCreateRequest(request);
         enrichmentService.enrichCreateBusinessService(request);
         producer.push(request.getBusinessServices().get(0).getTenantId(), config.getSaveBusinessServiceTopic(),request);
         return request.getBusinessServices();
@@ -82,6 +91,7 @@ public class BusinessMasterService {
     public List<BusinessService> update(BusinessServiceRequest request){
         evictAllCacheValues("businessService");
         evictAllCacheValues("roleTenantAndStatusesMapping");
+        businessServiceValidator.validateUpdate(request);
         enrichmentService.enrichUpdateBusinessService(request);
         producer.push(request.getBusinessServices().get(0).getTenantId(), config.getUpdateBusinessServiceTopic(),request);
         return request.getBusinessServices();
