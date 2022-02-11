@@ -109,6 +109,10 @@ public class BusinessServiceValidator {
         String tenantId = request.getBusinessServices().get(0).getTenantId();
         List<String> businessServiceCodes = new LinkedList<>();
 
+        request.getBusinessServices().forEach(businessService -> {
+            businessServiceCodes.add(businessService.getBusinessService());
+        });
+
         BusinessServiceSearchCriteria criteria = new BusinessServiceSearchCriteria();
         criteria.setTenantId(tenantId);
         criteria.setBusinessServices(businessServiceCodes);
