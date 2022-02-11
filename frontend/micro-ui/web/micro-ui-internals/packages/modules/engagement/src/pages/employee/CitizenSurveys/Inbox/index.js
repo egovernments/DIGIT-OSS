@@ -11,7 +11,11 @@ const Inbox = ({ parentRoute }) => {
   const { t } = useTranslation()
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
+  const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
+  const userInfo = Digit.UserService.getUser().info;
+  const userUlbs = ulbs
+    .filter((ulb) => userInfo?.roles?.some((role) => role?.tenantId === ulb?.code))
+    
   const statuses = [
     { code: "ALL", name: `${t("ES_COMMON_ALL")}` },
     { code: "ACTIVE", name: `${t("ES_COMMON_ACTIVE")}` },
@@ -19,7 +23,8 @@ const Inbox = ({ parentRoute }) => {
   ]
 
   const searchFormDefaultValues = {
-    tenantIds: tenantId,
+    // tenantIds: tenantId,
+    tenantIds:userUlbs[0],
     postedBy: "",
     title: ""
   }
@@ -102,6 +107,7 @@ const Inbox = ({ parentRoute }) => {
       }} />
     , [statuses])
 
+    
   const onSearchFormSubmit = (data) => {
     data.hasOwnProperty("") ? delete data?.[""] : null
     dispatch({ action: "mutateSearchForm", data })
