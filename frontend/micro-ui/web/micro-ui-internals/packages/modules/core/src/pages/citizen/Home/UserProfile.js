@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import UploadDrawer from "./ImageUpload/UploadDrawer";
 import { useQuery } from "react-query";
+
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
   "/" +
@@ -26,6 +27,7 @@ const defaultImage =
   "Ue6ilunu8jF8pFwgv1FXp3mUt35OtRbr7eM4u4Gs6vUBXgeuHc5kfE/cbvWZtkROLm1DMtLCy80tzsu2PRj0hTI8fvrQuvsjlJkyutszq+m423wHaLTyniy/XuiGZ84LuT+m5ZfNfRxyGs7L" +
   "XZOvia7VujatUwVTrIt+Q/Csc7Tuhe+BOakT10b4TuoiiJjvgU9emTO42PwEfBa+cuodKkuf42DXr1D3JpXz73Hnn0j10evHKe+nufgfUm+7B84sX9FfdEzXux2DBpWuKokkCqN/5pa/8pmvn" +
   "L+RGKCddCGmatiPyPB/+ekO/M/q/7uvbt22kTt3zEnXPzCV13T3Gel4/6NduDu66xRvlPNkM1RjjxUdv+4WhGx6TftD19Q/dfzpwcHO+rE3fAAAAAElFTkSuQmCC";
+
 const UserProfile = ({stateCode,userType}) => {
   const history = useHistory();
   const { t } = useTranslation();
@@ -65,9 +67,20 @@ const UserProfile = ({stateCode,userType}) => {
       gender:gender?.value,
       emailId:email,
       photo: profilePic,
-      
     }
+
     const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.updateUser(requestData, stateCode);
+
+    if(currentPassword && newPassword && confirmPassword) { 
+      const requestData = {
+        existingPassword: currentPassword,
+        newPassword: newPassword,
+        tenantId: tenant,
+        type: "EMPLOYEE",
+        username: userInfo?.userName
+      }
+      const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.changePassword(requestData, tenant);
+    }
   }
  
   const setOwnerName = (e) => {
@@ -207,7 +220,7 @@ const UserProfile = ({stateCode,userType}) => {
           isMandatory={true}
           name="name"
           
-          onChange={setCurrentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
           // {...(validation = {
           //   isRequired: true,
           //   pattern: "^[a-zA-Z-.`' ]*$",
@@ -228,7 +241,7 @@ const UserProfile = ({stateCode,userType}) => {
           isMandatory={true}
           name="name"
           
-          onChange={setNewPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
           // {...(validation = {
           //   isRequired: true,
           //   pattern: "^[a-zA-Z-.`' ]*$",
@@ -249,7 +262,7 @@ const UserProfile = ({stateCode,userType}) => {
           isMandatory={true}
           name="name"
           
-          onChange={setConfirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           // {...(validation = {
           //   isRequired: true,
           //   pattern: "^[a-zA-Z-.`' ]*$",
