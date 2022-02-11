@@ -91,6 +91,12 @@ public class TLRepository {
     public int getLicenseCount(TradeLicenseSearchCriteria criteria) {
     	List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList,true);
+        try {
+            query = multiStateInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+        }
+        catch (Exception e){
+            throw new CustomException("INVALID_TENANTID","Invalid tenantId: "+criteria.getTenantId());
+        }
         int licenseCount = jdbcTemplate.queryForObject(query,preparedStmtList.toArray(),Integer.class);
         return licenseCount;
     }
