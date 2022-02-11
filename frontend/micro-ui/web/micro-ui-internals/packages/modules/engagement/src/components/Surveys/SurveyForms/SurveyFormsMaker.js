@@ -50,8 +50,9 @@ const SurveyFormsMaker = ({ t, formsConfig, setSurveyConfig, disableInputs }) =>
       <div className="heading">{t("CS_SURVEYS_QUESTIONS")}</div>
       {renderPreviewForms()}
       <div className="pointer">
-        <button
-          className={`unstyled-button link ${disableInputs ? "disabled-btn" : ""} `}
+        <button 
+          // disabled={surveyState.length >= 30 ? "true":""}
+          className={`unstyled-button link ${disableInputs ? "disabled-btn" : ""} ${surveyState.length >= 2 ? "disabled-btn":""} `}
           type="button"
           onClick={() => passingSurveyConfigInDispatch({ type: "addNewForm" })}
         >
