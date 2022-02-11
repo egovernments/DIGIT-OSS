@@ -45,17 +45,17 @@ function UploadDrawer({ setProfilePic }) {
   }, [file]);
   
   return (
-    <div style={{bottom:'0',height:'150px',justifyContent:"space-around",backgroundColor:"white"}}>
-      <div>
+    <div style={{width:"100%",bottom:'0',height:'150px',justifyContent:"space-around",backgroundColor:"white"}}>
+      <div style={{width:"50%",float:"left"}}>
       <UploadFile
         extraStyleName={"propertyCreate"}
-        accept=".jpg,.png,.pdf"
+        accept=".jpg,.png"
         onUpload={selectfile}
         // onDelete={() => {
         //   setUploadedFile(null);}} />UploadDrawer
       />
       </div>
-      <div onClick={removeimg}>remove</div>
+      <div style={{width:"50%",float:"left",textAlign:"center",justifyContent:"center"}} ><button onClick={removeimg}>Remove</button></div>
     </div>
   )
 }

@@ -97,9 +97,11 @@ const UserProfile = ({stateCode}) => {
     <div style={{backgroundColor:"white",borderRadius:'5px',margin:"10px",padding:"10px"}}>
       <h1>Edit Profile</h1>
       
-      <div style={{display:"flex",width:"96%",height:"20%",backgroundColor:"gray",margin:"2%",justifyContent:'center'}}>
-        <img style={{justifyContent:'center'}} src={profileImg} />
-        <button onClick={onClickAddPic} >++++</button>
+      <div style={{justifyContent:"center",alignItems:"center",borderRadius:"5px",display:"",width:"96%",height:"20%",backgroundColor:"gray",margin:"2%"}}>
+        <img style={{margin:"auto",borderRadius:"50%",justifyContent:'center'}} src={profileImg} />
+        <button style={{position: 'absolute',
+  top: '50%',
+  left: '50%'}} onClick={onClickAddPic} >++++</button>
       </div>
       
       <LabelFieldPair>
