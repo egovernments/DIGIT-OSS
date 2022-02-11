@@ -5,42 +5,45 @@ const scss={
   width:'100%'
 }
 
-function UploadDrawer() {
-  const [uploadedFile, setUploadedFile] = useState("a");
-    const [file,setFile] = useState("")
-    function selectfile(e) {
-      console.log( setFile(e.target.files[0]))
-        
+function UploadDrawer({ setProfilePic }) {
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [file,setFile] = useState("")
+  const [error, setError] = useState(null);
 
-      }
-      console.log("demo",uploadedFile)
-      const [error, setError] = useState(null);
-      const removeimg=()=>{
-        setUploadedFile("null")
-      }
-      useEffect(() => {
-        (async () => {
-          setError(null);
-          if (file) {
-            if (file.size >= 2000000) {
-              setError(t("PT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+  const selectfile = (e) => { 
+    setFile(e.target.files[0]);
+  }
+    
+  // console.log("demo",uploadedFile)
+  const removeimg=()=>{
+    // setUploadedFile(null)
+  }
+
+  useEffect(() => {
+    (async () => {
+      setError(null);
+      if (file) {
+        if (file.size >= 2000000) {
+          setError(t("PT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else {
+          try {
+            const response = await Digit.UploadServices.Filestorage("citizen-profile", file, Digit.ULBService.getStateId());                
+            if (response?.data?.files?.length > 0) {
+              const fileStoreId = response?.data?.files[0]?.fileStoreId; 
+              setUploadedFile(fileStoreId);
+              setProfilePic(fileStoreId);
             } else {
-              try {
-                // TODO: change module in file storage
-                const response = await Digit.UploadServices.Filestorage("citizen-profile", file, Digit.ULBService.getStateId());                if (response?.data?.files?.length > 0) {
-                  setUploadedFile(response?.data?.files[0]?.fileStoreId);
-                } else {
-                  setError(t("FILE_UPLOAD_ERROR"));
-                }
-              } catch (err) {
-                console.error("Modal -> err ", err);
-                // setError(t("PT_FILE_UPLOAD_ERROR"));
-              }
-              console.log("demo1",uploadedFile)
+              setError(t("FILE_UPLOAD_ERROR"));
             }
+          } catch (err) {
+            console.error("Modal -> err ", err);
+            // setError(t("PT_FILE_UPLOAD_ERROR"));
           }
-        })();
-      }, [file]);
+        }
+      }
+    })();
+  }, [file]);
+  
   return (
     <div style={{bottom:'0',height:'150px',justifyContent:"space-around",backgroundColor:"white"}}>
       <div>
