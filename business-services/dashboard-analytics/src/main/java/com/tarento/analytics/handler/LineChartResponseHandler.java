@@ -70,70 +70,73 @@ public class LineChartResponseHandler implements IResponseHandler {
 
             Map<String, Double> plotMap = new LinkedHashMap<>();
             List<Double> totalValues = new ArrayList<>();
-            aggrNodes.stream().forEach(aggrNode -> {
+            for(JsonNode aggrNode : aggrNodes) {
                 if (aggrNode.findValues(IResponseHandler.BUCKETS).size() > 0) {
-
                     ArrayNode buckets = (ArrayNode) aggrNode.findValues(IResponseHandler.BUCKETS).get(0);
-                    buckets.forEach(bucket -> {
-                        String bkey = bucket.findValue(IResponseHandler.KEY).asText();
-                        String key = getIntervalKey(bkey, Constants.Interval.valueOf(interval));
+                    for(JsonNode bucket : buckets){
+                            String bkey = bucket.findValue(IResponseHandler.KEY).asText();
+                            String key = getIntervalKey(bkey, Constants.Interval.valueOf(interval));
 
-                        plotKeys.add(key);
-                        double previousVal = !isCumulative ? 0.0 : (totalValues.size()>0 ? totalValues.get(totalValues.size()-1):0.0);
+                            plotKeys.add(key);
+                            double previousVal = !isCumulative ? 0.0 : (totalValues.size() > 0 ? totalValues.get(totalValues.size() - 1) : 0.0);
 
-                        double value = 0.0;
-                        if(executeComputedFields){
-                            try {
+                            double value = 0.0;
+                            if (executeComputedFields) {
+                                try {
 
-                                List<ComputedFields> computedFieldsList = mapper.readValue(computedFields.toString(), new TypeReference<List<ComputedFields>>(){});
+                                    List<ComputedFields> computedFieldsList = mapper.readValue(computedFields.toString(), new TypeReference<List<ComputedFields>>() {
+                                    });
 
-                                for(ComputedFields cfs :computedFieldsList){
-                                    IComputedField computedFieldObject = computedFieldFactory.getInstance(cfs.getActionName());
-                                    computedFieldObject.set(requestDto, cfs.getPostAggregationTheory());
-                                    computedFieldObject.add(bucket, cfs.getFields(), cfs.getNewField(),chartNode);
+                                    for (ComputedFields cfs : computedFieldsList) {
+                                        IComputedField computedFieldObject = computedFieldFactory.getInstance(cfs.getActionName());
+                                        computedFieldObject.set(requestDto, cfs.getPostAggregationTheory());
+                                        computedFieldObject.add(bucket, cfs.getFields(), cfs.getNewField(), chartNode);
 
-                                    if(symbol.equals(DAYS)){
+                                        if (symbol.equals(DAYS)) {
 
-                                        long milidiff = bucket.findValue(cfs.getNewField()).get(IResponseHandler.VALUE).asLong();
-                                        long days = TimeUnit.MILLISECONDS.toDays(milidiff);
-                                        value = previousVal + (days);
+                                            long milidiff = bucket.findValue(cfs.getNewField()).get(IResponseHandler.VALUE).asLong();
+                                            long days = TimeUnit.MILLISECONDS.toDays(milidiff);
+                                            value = previousVal + (days);
 
-                                    } else {
-                                        value = previousVal + (bucket.findValue(cfs.getNewField()).get(IResponseHandler.VALUE).asLong());
+                                        } else {
+                                            value = previousVal + (bucket.findValue(cfs.getNewField()).get(IResponseHandler.VALUE).asLong());
+
+                                        }
+                                    }
+
+                                } catch (Exception e) {
+                                    logger.error("execution of computed field :" + e.getMessage());
+                                }
+
+                            } else {
+                                String jsonStr = bucket.toString();
+                                JSONObject currObj = new JSONObject(jsonStr);
+                                for (Iterator<String> it = bucket.fieldNames(); it.hasNext(); ) {
+                                    String fieldName = it.next();
+                                    if (currObj.get(fieldName) instanceof JSONObject) {
+                                        if (bucket.get(fieldName).findValue("buckets") == null) {
+                                            value = previousVal + ((bucket.get(fieldName).findValue(IResponseHandler.VALUE) != null) ? bucket.get(fieldName).findValue(IResponseHandler.VALUE).asDouble() : bucket.get(fieldName).findValue(IResponseHandler.DOC_COUNT).asDouble());
+                                        }
 
                                     }
                                 }
 
-                            } catch (Exception e){
-                                logger.error("execution of computed field :"+e.getMessage());
-                            }
+                                //value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
 
-                        } else {
-                            String jsonStr = bucket.toString();
-                            JSONObject currObj = new JSONObject(jsonStr);
-                            for (Iterator<String> it = bucket.fieldNames(); it.hasNext(); ) {
-                                String fieldName = it.next();
-                                if(currObj.get(fieldName) instanceof JSONObject){
-                                    if(bucket.get(fieldName).findValue("buckets") == null){
-                                        value = previousVal + ((bucket.get(fieldName).findValue(IResponseHandler.VALUE) != null) ? bucket.get(fieldName).findValue(IResponseHandler.VALUE).asDouble():bucket.get(fieldName).findValue(IResponseHandler.DOC_COUNT).asDouble());
-                                    }
-
+                                if (chartNode.get(IS_ROUND_OFF) != null && chartNode.get(IS_ROUND_OFF).asBoolean()) {
+                                    value = (double) Math.round(value);
                                 }
                             }
+                            //double value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
 
-                            //value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
-
-                            if(chartNode.get(IS_ROUND_OFF)!=null && chartNode.get(IS_ROUND_OFF).asBoolean()) {
-                            	value =  (double) Math.round(value);
-                            }
+                            plotMap.put(key, plotMap.get(key) == null ? new Double("0") + value : plotMap.get(key) + value);
+                            totalValues.add(value);
                         }
-                        //double value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
-
-                        plotMap.put(key, plotMap.get(key) == null ? new Double("0") + value : plotMap.get(key) + value);
-                        totalValues.add(value);
-                    });
                 }
-            });
+                totalValues.clear();
+            }
+
+            totalValues = new ArrayList<>(plotMap.values());
             List<Plot> plots = plotMap.entrySet().stream().map(e -> new Plot(e.getKey(), e.getValue(), symbol)).collect(Collectors.toList());
             try{
                 Data data = new Data(headerPath.asText(), (totalValues==null || totalValues.isEmpty()) ? 0.0 : totalValues.stream().reduce(0.0, Double::sum), symbol);
