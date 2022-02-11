@@ -183,37 +183,9 @@ public class NotificationService {
 	 */
 	private String getMsgForMutation (Property property, String CompleteMsgs, String statusCode, String urlCode) {
 
-		String url = statusCode.equalsIgnoreCase(WF_STATUS_PAYMENT_PENDING) ? getPayUrl(property) : getMutationUrl(property);
+		String url = statusCode.equalsIgnoreCase(WF_STATUS_PAYMENT_PENDING) ? notifUtil.getPayUrl(property) : notifUtil.getMutationUrl(property);
 		return notifUtil.getMessageTemplate(statusCode, CompleteMsgs).replace(urlCode, url);
 	}
-
-	/**
-	 * Prepares and return url for mutation view screen
-	 * 
-	 * @param property
-	 * @return
-	 */
-	private String getMutationUrl(Property property) {
-		
-		return notifUtil.getShortenedUrl(
-				 configs.getUiAppHost().concat(configs.getViewMutationLink()
-				.replace(NOTIFICATION_APPID, property.getAcknowldgementNumber())
-				.replace(NOTIFICATION_TENANTID, property.getTenantId())));
-	}
-	
-	/**
-	 * Prepares and return url for property view screen
-	 * 
-	 * @param property
-	 * @return
-	 */
-	private String getPayUrl(Property property) {
-		return notifUtil.getShortenedUrl( 
-				 configs.getUiAppHost().concat(configs.getPayLink().replace(EVENT_PAY_BUSINESSSERVICE,MUTATION_BUSINESSSERVICE)
-				.replace(EVENT_PAY_PROPERTYID, property.getAcknowldgementNumber())
-				.replace(EVENT_PAY_TENANTID, property.getTenantId())));
-	}
-
 
 	/**
 	 * replaces common variable for all messages
@@ -317,11 +289,7 @@ public class NotificationService {
 			if (owner.getMobileNumber() != null)
 				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
 			    mobileNumbers.add(owner.getMobileNumber());
-		});		//EMAIL block TBD
-//			Map<String, String> mapOfPhnoAndEmail = notifUtil.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
-//			String messageTemplate = fetchContentFromLocalization(request.getRequestInfo(), tenantId, "rainmaker-pt", "PT_NOTIFICATION_EMAIL");
-//			messageTemplate = messageTemplate.replace("{MESSAGE}",msg);
-//			messageTemplate = messageTemplate.replace(NOTIFICATION_OWNERNAME,NOTIFICATION_EMAIL);
+		});
 
 		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 
