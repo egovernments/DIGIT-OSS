@@ -84,9 +84,9 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
         })
 
       }
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    } catch (err) {
+      console.error(err);
+    }
   }, [fydata]);
 
   useEffect(() => {

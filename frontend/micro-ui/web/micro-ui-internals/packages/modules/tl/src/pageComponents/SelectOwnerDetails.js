@@ -60,6 +60,56 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     }
   }
 
+  const initFn = (formData) => {
+    // debugger
+    switch(typeOfOwner){
+      case "SINGLEOWNER":
+        return [{
+          name: initData?.[0]?.name || "",
+          gender: initData?.[0]?.gender,
+          mobilenumber: initData?.[0]?.mobilenumber,
+          isprimaryowner: true,
+          fatherOrHusbandName: initData?.[0]?.fatherOrHusbandName || "",
+          // subOwnerShipCategory: formData?.subOwnerShipCategory || "",
+          // designation: formData?.institution?.designation || "",
+          // altContactNumber: initData?.[0]?.altContactNumber || "",
+          emailId: initData?.[0]?.emailId || "",
+          relationship: initData?.[0]?.relationship || "",
+        }]
+      case "MULTIOWNER":
+        initData?.length > 1 ? initData?.map((owner) => ({
+          name: owner?.name || "",
+          gender: owner?.gender,
+          mobilenumber: owner?.mobilenumber,
+          isprimaryowner: owner?.isprimaryowner,
+          fatherOrHusbandName: owner?.fatherOrHusbandName || "",
+          emailId: initData?.emailId || "",
+          relationship: initData?.relationship || "",
+        })) : [{
+          name: null,
+          gender: null,
+          mobilenumber: null,
+          isprimaryowner: true,
+          fatherOrHusbandName: null,
+          emailId: null,
+          relationship: null,
+        }]
+      case "INSTITUTIONAL":
+        return [{
+          name: initData?.[0]?.name || "",
+          // gender: initData?.gender,
+          mobilenumber: initData?.[0]?.mobilenumber,
+          // isprimaryowner: true,
+          fatherOrHusbandName: initData?.[0]?.fatherOrHusbandName || "",
+          subOwnerShipCategory: initData?.[0]?.subOwnerShipCategory || "",
+          designation: initData?.[0]?.designation || "",
+          altContactNumber: initData?.[0]?.altContactNumber || "",
+          emailId: initData?.[0]?.emailId || "",
+          // relationship: initData?.[0]?.relationship || "",
+        }]
+    }
+  }
+
   const reducer = (state, action) => {
     switch(action.type){
       case "ADD_NEW_OWNER":
@@ -166,7 +216,6 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
 
   if(typeOfOwner === "INSTITUTIONAL"){
     return (
-        
       <React.Fragment>
       {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
       <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={false} forcedError={t(error)}>
