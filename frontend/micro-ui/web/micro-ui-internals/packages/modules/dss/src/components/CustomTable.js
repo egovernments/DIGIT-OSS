@@ -64,7 +64,7 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
     return response?.responseData?.data?.map((rows, id) => {
       const lyData = lastYearResponse?.responseData?.data?.find((lyRow) => lyRow?.headerName === rows?.headerName);
       return rows?.plots?.reduce((acc, row, currentIndex) => {
-        let cellValue = row?.value !== null ? row?.value : row?.label || "";
+        let cellValue = row?.value !== null ? row?.value : t(row?.label) || "";
         let prevData = lyData?.plots?.[currentIndex]?.value;
         let insight = null;
         if (row?.name === "CapacityUtilization" && chartKey !== "fsmVehicleLogReportByVehicleNo") {
