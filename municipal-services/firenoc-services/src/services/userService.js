@@ -7,7 +7,7 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   let headers = header;
 
   var userSearchResponse = await httpRequest({
-    hostURL: envVariables.EGOV_HOST_BASE_URL,
+    hostURL: envVariables.EGOV_USER_HOST,
     endPoint: `${envVariables.EGOV_USER_CONTEXT_PATH}${
       envVariables.EGOV_USER_SEARCH_ENDPOINT
     }`,
