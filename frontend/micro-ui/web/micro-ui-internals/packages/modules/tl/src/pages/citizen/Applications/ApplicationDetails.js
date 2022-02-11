@@ -121,8 +121,41 @@ const ApplicationDetails = () => {
               <Row label={t("TL_APPLICATION_CATEGORY")} text={t("ACTION_TEST_TRADE_LICENSE")} textStyle={{ whiteSpace: "pre" }} />
               <CardSectionHeader>{t("TL_OWNERSHIP_DETAILS_HEADER")}</CardSectionHeader>
               {application?.tradeLicenseDetail.owners.map((ele, index) => {
-                return (
-                  <div key = {index} style={multiBoxStyle}>
+               return application?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL") ?                   
+               <div key = {index} style={multiBoxStyle}>
+                <CardSectionHeader style={multiHeaderStyle}>{`${t("TL_PAYMENT_PAID_BY_PLACEHOLDER")} - `+ (index+1)}</CardSectionHeader>
+                <Row
+                  label={`${t("TL_INSTITUTION_NAME_LABEL")}`}
+                  text={t(ele.name)}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+                <Row
+                  label={`${t("TL_INSTITUTION_TYPE_LABEL")}`}
+                  text={t(`TL_${application?.tradeLicenseDetail?.subOwnerShipCategory}`)}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+                <Row
+                  label={`${t("TL_MOBILE_NUMBER_LABEL")}`}
+                  text={t(ele.mobileNumber)}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+                <Row
+                  label={`${t("TL_TELEPHONE_NUMBER_LABEL")}`}
+                  text={t(ele.altContactNumber)}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+                <Row
+                  label={`${t("TL_LOCALIZATION_OWNER_NAME")}`}
+                  text={t(ele.fatherOrHusbandName)}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+                <Row
+                  label={`${t("TL_LOCALIZATION_EMAIL_ID")}`}
+                  text={t(ele.emailId)}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+               </div>
+               : <div key = {index} style={multiBoxStyle}>
                   <CardSectionHeader style={multiHeaderStyle}>{`${t("TL_PAYMENT_PAID_BY_PLACEHOLDER")} - `+ (index+1)}</CardSectionHeader>
                   <Row
                     label={`${t("TL_COMMON_TABLE_COL_OWN_NAME")}`}
@@ -139,8 +172,17 @@ const ApplicationDetails = () => {
                     text={t(ele.mobileNumber)}
                     textStyle={{ whiteSpace: "pre" }}
                   />
+                  <Row
+                    label={`${t("TL_GUARDIAN_S_NAME_LABEL")}`}
+                    text={t(ele.fatherOrHusbandName)}
+                    textStyle={{ whiteSpace: "pre" }}
+                  />
+                  <Row
+                    label={`${t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL")}`}
+                    text={t(ele.relationship)}
+                    textStyle={{ whiteSpace: "pre" }}
+                  />
                   </div>
-                );
               })}
               <Row
                 style={{ border: "none" }}

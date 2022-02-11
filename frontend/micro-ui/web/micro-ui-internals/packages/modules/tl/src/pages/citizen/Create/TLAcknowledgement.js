@@ -37,9 +37,10 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("CITIZEN_TL_MUTATION_HAPPENED", false);
   const resubmit = window.location.href.includes("edit-application");
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const isRenewTrade = !window.location.href.includes("renew-trade")
   const mutation = Digit.Hooks.tl.useTradeLicenseAPI(
     data?.cpt?.details?.address?.tenantId ? data?.cpt?.details?.address?.tenantId : tenantId,
-    !window.location.href.includes("renew-trade")
+    isRenewTrade
   );
   const mutation1 = Digit.Hooks.tl.useTradeLicenseAPI(
     data?.cpt?.details?.address?.tenantId ? data?.cpt?.details?.address?.tenantId : tenantId,
@@ -83,9 +84,9 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
         })
 
       }
-    } catch (err) {
-      console.error(err);
-    }
+    // } catch (err) {
+    //   console.error(err);
+    // }
   }, [fydata]);
 
   useEffect(() => {

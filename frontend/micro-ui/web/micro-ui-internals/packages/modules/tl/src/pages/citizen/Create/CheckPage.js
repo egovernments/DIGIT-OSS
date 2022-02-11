@@ -78,7 +78,7 @@ const CheckPage = ({ onSubmit, value }) => {
           text={t(getdate(TradeDetails?.CommencementDate))}
           actionButton={<ActionButton jumpTo={`${routeLink}/commencement-date`} />}
         />
-        {TradeDetails.units.map((unit, index) => (
+        {TradeDetails?.units.map((unit, index) => (
           <div key={index}>
             <CardSubHeader>
               {t("TL_UNIT_HEADER")}-{index + 1}
@@ -110,8 +110,8 @@ const CheckPage = ({ onSubmit, value }) => {
             />
           </div>
         ))}
-        {TradeDetails.accessories &&
-          TradeDetails.accessories.map((acc, index) => (
+        {TradeDetails?.accessories &&
+          TradeDetails?.accessories.map((acc, index) => (
             <div key={index}>
               <CardSubHeader>
                 {t("TL_ACCESSORY_LABEL")}-{index + 1}

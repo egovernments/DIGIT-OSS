@@ -215,11 +215,11 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
         <RadioOrSelect
           options={cities.sort((a, b) => a.name.localeCompare(b.name))}
           selectedOption={selectedCity}
-          optionKey="code"
+          optionKey="i18nkey"
           onSelect={selectCity}
           t={t}
           isDependent={true}
-          labelKey="TENANT_TENANTS"
+          labelKey=""
           disabled={isEdit}
         />
       </span>
