@@ -20,7 +20,7 @@ function PropertyFloors({ floors }) {
                   <div
                     style={{
                       position: "absolute",
-                      maxWidth: "640px",
+                      maxWidth: "100%",
                       border: "1px solid #D6D5D4",
                       top: 0,
                       left: 0,

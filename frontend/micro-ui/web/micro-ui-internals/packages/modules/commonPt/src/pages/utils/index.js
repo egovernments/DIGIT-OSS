@@ -181,6 +181,58 @@ export const convertToPropertyLightWeight = (data = {}) => {
   };
   return formdata;
 };
+
+export const convertToUpdatePropertyLightWeight = (data = {}) => {
+  let propertyType = data.PropertyType;
+  let noOfFloors = 1;
+
+  data = setOwnerDetailsLW(data);
+  data = setAddressDetailsLW(data);
+  data = setPropertyDetailsLW(data);
+
+  const formdata = {
+    Property: {
+      id: data.id,
+      accountId: data.accountId,
+      acknowldgementNumber: data.acknowldgementNumber,
+      propertyId: data.propertyId,
+      status: data.status || "INWORKFLOW",
+      tenantId: data.tenantId,
+      address: data.address,
+      propertyType: propertyType,
+      ownershipCategory: data?.ownershipCategory,
+      owners: data.owners,
+      noOfFloors: noOfFloors,
+      additionalDetails: {
+        isRainwaterHarvesting: false,
+      },
+      ...data.propertyDetails,
+      creationReason: getCreationReason(data),
+      source: "MUNICIPAL_RECORDS",
+      channel: "CITIZEN",
+      workflow: getWorkflow(data),
+    },
+  };
+
+  let propertyInitialObject = JSON.parse(sessionStorage.getItem("propertyInitialObject"));
+  if (checkArrayLength(propertyInitialObject?.units) && checkIsAnArray(formdata.Property?.units) && data?.isEditProperty) {
+    propertyInitialObject.units = propertyInitialObject.units.filter((unit) => unit.active);
+    let oldUnits = propertyInitialObject.units.map((unit) => {
+      return { ...unit, active: false };
+    });
+    formdata.Property?.units.push(...oldUnits);
+  }
+
+  if (checkArrayLength(propertyInitialObject?.owners) && checkIsAnArray(formdata.Property?.owners)) {
+    formdata.Property.owners = [...propertyInitialObject.owners];
+  }
+  if (propertyInitialObject?.auditDetails) {
+    formdata.Property["auditDetails"] = { ...propertyInitialObject.auditDetails };
+  }
+
+  return formdata;
+};
+
 export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   if (searcher == "") return str;
   while (str.includes(searcher)) {
