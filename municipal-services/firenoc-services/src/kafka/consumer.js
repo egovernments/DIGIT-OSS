@@ -31,7 +31,7 @@ var consumerGroup = new kafka.ConsumerGroup(options, [
   envVariables.KAFKA_TOPICS_FIRENOC_CREATE_SMS,
   envVariables.KAFKA_TOPICS_FIRENOC_UPDATE_SMS,
   envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS,
-  envVariables.KAFKA_TOPICS_RECEIPT_CREATE
+  {topic:envVariables.KAFKA_TOPICS_RECEIPT_CREATE, partition:0}
 ]);
 
 console.log("Consumer ");
@@ -284,6 +284,9 @@ consumerGroup.on("message", function(message) {
       }
       break;
   }
+
+  if(envVariables.KAFKA_TOPICS_RECEIPT_CREATE.test(message.topic))
+    FireNOCPaymentStatus(value);
 
  /* if(message.topic.includes(envVariables.KAFKA_TOPICS_FIRENOC_CREATE)){
     const { FireNOCs } = value;

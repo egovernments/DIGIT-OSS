@@ -22,7 +22,7 @@ const envVariables = {
   KAFKA_TOPICS_FIRENOC_WORKFLOW:
     process.env.KAFKA_TOPICS_FIRENOC_WORKFLOW || "update-fn-workflow",
   KAFKA_TOPICS_RECEIPT_CREATE:
-    process.env.KAFKA_TOPICS_RECEIPT_CREATE || "egov.collection.payment-create",
+    process.env.KAFKA_TOPICS_RECEIPT_CREATE || /^[a-zA-Z]+-egov.collection.payment-create$/i,
   KAFKA_TOPICS_NOTIFICATION:
     process.env.KAFKA_TOPICS_NOTIFICATION || "egov.core.notification.sms",
   KAFKA_TOPICS_EVENT_NOTIFICATION:
