@@ -72,6 +72,7 @@ const UserProfile = ({stateCode,userType}) => {
     const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.updateUser(requestData, stateCode);
 
     if(currentPassword && newPassword && confirmPassword) { 
+      if(newPassword===confirmPassword){
       const requestData = {
         existingPassword: currentPassword,
         newPassword: newPassword,
@@ -80,9 +81,11 @@ const UserProfile = ({stateCode,userType}) => {
         username: userInfo?.userName
       }
       const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.changePassword(requestData, tenant);
-    }
+    }}
+    else{console.log('New and Confirm Password is Not same')}
   }
- 
+  let validation = {};
+
   const setOwnerName = (e) => {
     setName(e.target.value)
   }
@@ -140,13 +143,12 @@ const UserProfile = ({stateCode,userType}) => {
     <div style={{backgroundColor:"white",borderRadius:'5px',margin:"10px",padding:"10px"}}>
       <h1>Edit Profile</h1>
       
-      <div style={{justifyContent:"center",alignItems:"center",borderRadius:"5px",display:"",width:"96%",height:"20%",backgroundColor:"gray",margin:"2%"}}>
-        {profileImg===""?<img style={{margin:"auto",borderRadius:"50%",justifyContent:'center'}} src={defaultImage} />
-:        <img style={{margin:"auto",borderRadius:"50%",justifyContent:'center'}} src={profileImg} />
-}
-        <button style={{position: 'absolute',
-  top: '50%',
-  left: '50%'}} onClick={onClickAddPic} >++++</button>
+      <div style={{position:"relative",justifyContent:"center",alignItems:"center",borderRadius:"5px",display:"",width:"96%",height:"20%",backgroundColor:"gray",margin:"2%"}}>
+            <div> {profileImg===""?<img style={{margin:"auto",borderRadius:"50%",justifyContent:'center'}} src={defaultImage} />:
+                    <img style={{display:"block",marginRight:"auto",marginLeft:"auto",borderRadius:"50%",justifyContent:'center'}} src={profileImg} />
+                  }
+                    <button style={{position: 'absolute',bottom:"3%",right:"50%",left:"48%"}} onClick={onClickAddPic} >++++</button>
+            </div>
       </div>
       
       <LabelFieldPair>
@@ -160,12 +162,12 @@ const UserProfile = ({stateCode,userType}) => {
           name="name"
           value={name}
           onChange={setOwnerName}
-          // {...(validation = {
-          //   isRequired: true,
-          //   pattern: "^[a-zA-Z-.`' ]*$",
-          //   type: "tel",
-          //   title: t("PT_NAME_ERROR_MESSAGE"),
-          // })}
+          {...(validation = {
+            isRequired: true,
+            pattern: "^[a-zA-Z-.`' ]*$",
+            type: "tel",
+            title: t("PT_NAME_ERROR_MESSAGE"),
+          })}
           disable={editScreen}
         />
       </div>
@@ -179,6 +181,7 @@ const UserProfile = ({stateCode,userType}) => {
         disable={gender?.length === 1 || editScreen}
         option={menu}
         select={setGenderName}
+        value={gender}
         optionKey="code"
         t={t}
         name="gender"
@@ -208,25 +211,18 @@ const UserProfile = ({stateCode,userType}) => {
           onChange={setOwnerEmail}
           disable={editScreen}
         />
-            {userType==='employee'?<a style={{color:"orange",    cursor:'default'}} onClick={TogleforPassword}>Change Password</a>:""}
+            {userType==='employee'?<a style={{color:"orange",cursor:'default',marginBottom:"5"}} onClick={TogleforPassword}>Change Password</a>:""}
         {chengepassword?<div>
           <LabelFieldPair>
       <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Current Password*")}`}</CardLabel>
       <div className="field">
         <TextInput
-          
           t={t}
           type={"password"}
           isMandatory={true}
           name="name"
-          
+          pattern="^([a-zA-Z0-9@#$%])+$"
           onChange={(e) => setCurrentPassword(e.target.value)}
-          // {...(validation = {
-          //   isRequired: true,
-          //   pattern: "^[a-zA-Z-.`' ]*$",
-          //   type: "tel",
-          //   title: t("PT_NAME_ERROR_MESSAGE"),
-          // })}
           disable={editScreen}
         />
       </div>
@@ -235,19 +231,13 @@ const UserProfile = ({stateCode,userType}) => {
       <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("New Password*")}`}</CardLabel>
       <div className="field">
         <TextInput
-          
           t={t}
           type={"password"}
           isMandatory={true}
           name="name"
-          
+          pattern="^([a-zA-Z0-9@#$%])+$"
+
           onChange={(e) => setNewPassword(e.target.value)}
-          // {...(validation = {
-          //   isRequired: true,
-          //   pattern: "^[a-zA-Z-.`' ]*$",
-          //   type: "tel",
-          //   title: t("PT_NAME_ERROR_MESSAGE"),
-          // })}
           disable={editScreen}
         />
       </div>
@@ -256,19 +246,12 @@ const UserProfile = ({stateCode,userType}) => {
       <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Confirm Password*")}`}</CardLabel>
       <div className="field">
         <TextInput
-          
           t={t}
           type={"password"}
           isMandatory={true}
           name="name"
-          
+          pattern="^([a-zA-Z0-9@#$%])+$"
           onChange={(e) => setConfirmPassword(e.target.value)}
-          // {...(validation = {
-          //   isRequired: true,
-          //   pattern: "^[a-zA-Z-.`' ]*$",
-          //   type: "tel",
-          //   title: t("PT_NAME_ERROR_MESSAGE"),
-          // })}
           disable={editScreen}
         />
       </div>
@@ -278,7 +261,8 @@ const UserProfile = ({stateCode,userType}) => {
         
         </div>:""}
       </div>
-      <button onClick={updateProfile} style={{backgroundColor:"#C1592F",width:"100%", color:"white" ,borderBottom:"1px solid black"}}>Save</button>
+      
+      <button onClick={updateProfile} style={{marginBottom:"3%",backgroundColor:"#C1592F",width:"100%", color:"white" ,borderBottom:"1px solid black"}}>Save</button>
     </LabelFieldPair>
     </div>
     { openUploadSlide==true
