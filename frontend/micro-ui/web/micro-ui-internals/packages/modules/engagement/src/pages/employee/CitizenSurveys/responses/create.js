@@ -31,10 +31,13 @@ const Acknowledgement = (props) => {
   useEffect(() => {
     const onSuccess = () => {
       queryClient.clear();
+      window.history.replaceState(null, 'CREATE_SURVEY_STATE')
     };
-    mutation.mutate(state, {
-      onSuccess,
-    });
+    if(!!state){
+      mutation.mutate(state, {
+        onSuccess,
+      })
+    };
   }, []);
 
   if (mutation.isLoading && !mutation.isIdle) {

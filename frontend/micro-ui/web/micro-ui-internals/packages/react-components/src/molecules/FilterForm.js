@@ -28,7 +28,7 @@ const FilterForm = ({onMobileExclusiveFilterPopupFormClose = () => null , closeB
 				/>
 				</svg>
 			</span>
-			<span style={{ marginLeft: "8px", fontWeight: "normal" }}>{t("ES_COMMON_FILTER_BY")}:</span>
+			<span style={{ marginLeft: "8px", fontWeight: "normal" }}>{t("FILTERS_FILTER_CARD_CAPTION")}:</span>
 			</div>
 			<div className="clearAll" onClick={onResetFilterForm}>
 			{t("ES_COMMON_CLEAR_ALL")}
