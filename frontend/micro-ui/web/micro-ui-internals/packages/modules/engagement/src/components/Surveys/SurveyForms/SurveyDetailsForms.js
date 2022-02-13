@@ -23,6 +23,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
           name="tenantIds"
           control={controlSurveyForm}
           defaultValue={selectedTenat}
+          rules={{ required: true }}
           render={(props) => {
             const renderRemovableTokens = useMemo(
               () =>
@@ -58,6 +59,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
             );
           }}
         />
+        {surveyFormState?.errors?.tenantIds && <CardLabelError>{t("ES_ERROR_REQUIRED")}</CardLabelError>}
       </span>
 
       <span className="surveyformfield">
@@ -66,10 +68,15 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
           name="title"
           type="text"
           inputRef={registerRef({
+            required: t("ES_ERROR_REQUIRED"),
             maxLength: {
               value: 60,
               message: t("EXCEEDS_60_CHAR_LIMIT"),
             },
+            pattern:{
+              value: /^[A-Za-z_-][A-Za-z0-9_\ -]*$/,
+              message: t("ES_SURVEY_DONT_START_WITH_NUMBER")
+            }
           })}
           disable={disableInputs}
         />
@@ -81,10 +88,15 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
           name="description"
           type="text"
           inputRef={registerRef({
+            required: t("ES_ERROR_REQUIRED"),
             maxLength: {
               value: 250,
               message: t("EXCEEDS_250_CHAR_LIMIT"),
             },
+            pattern:{
+              value: /^[A-Za-z_-][A-Za-z0-9_\ -]*$/,
+              message: t("ES_SURVEY_DONT_START_WITH_NUMBER")
+            }
           })}
           disable={enableDescriptionOnly ?  !enableDescriptionOnly : disableInputs}
         />
