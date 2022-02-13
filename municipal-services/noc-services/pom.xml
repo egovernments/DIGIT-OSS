@@ -87,7 +87,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.2.2.jre7</version>
+			<version>42.2.25.jre6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.egov</groupId>
