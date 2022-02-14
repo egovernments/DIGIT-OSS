@@ -18,6 +18,9 @@ const Login = ({ config: propsConfig, t }) => {
     if (!user) {
       return;
     }
+    Digit.SessionStorage.set("citizen.userRequestObject", user);
+    const filteredRoles = user?.info?.roles?.filter(role => role.tenantId === Digit.SessionStorage.get("Employee.tenantId"));
+    if (user?.info?.roles?.length > 0) user.info.roles = filteredRoles;
     Digit.UserService.setUser(user);
     const redirectPath = location.state?.from || "/digit-ui/employee";
     history.replace(redirectPath);
