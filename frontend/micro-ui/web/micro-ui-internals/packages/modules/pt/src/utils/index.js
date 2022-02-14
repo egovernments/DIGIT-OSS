@@ -567,7 +567,7 @@ export const convertToProperty = (data = {}) => {
         basement2: basement2,
       },
 
-      creationReason: "CREATE",
+      creationReason: "UPDATE",
       source: "MUNICIPAL_RECORDS",
       channel: "CITIZEN",
     },

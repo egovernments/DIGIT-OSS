@@ -69,7 +69,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
               return (
                 <div>
                   <span className="link">
-                    <Link to={`/digit-ui/employee/pt/application-search/application-details/${row.original["propertyId"]}`}>
+                    <Link to={`/digit-ui/employee/pt/applicationsearch/application-details/${row.original["propertyId"]}`}>
                       {row.original["acknowldgementNumber"]}
                     </Link>
                   </span>
@@ -121,6 +121,9 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
     let validation={}
 
     return <React.Fragment>
+                < Card className={"card-search-heading"}>
+                    <span style={{color:"#505A5F"}}>{t("Provide at least one parameter to search for an application")}</span>
+                </Card>
                 <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
                 <SearchField>
                     <label>{t("PT_APPLICATION_NO_LABEL")}</label>

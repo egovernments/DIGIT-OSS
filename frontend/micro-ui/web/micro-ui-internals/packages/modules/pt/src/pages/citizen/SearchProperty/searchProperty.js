@@ -141,8 +141,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             <div className="tooltip" style={{paddingLeft:"10px",marginBottom:"-3px"}}>
               {"  "}
               <InfoBannerIcon fill="#0b0c0c" />
-              <span className="tooltiptext" style={{ whiteSpace: "nowrap" }}>
-                {t(property.description) + "<br />" + ptSearchConfig?.propertyIdFormat}
+              <span className="tooltiptext" style={{ width:"150px",bottom:"-290%",left:"230%" }}>
+                {t(property.description) + " " + ptSearchConfig?.propertyIdFormat}
               </span>
             </div>
           ),

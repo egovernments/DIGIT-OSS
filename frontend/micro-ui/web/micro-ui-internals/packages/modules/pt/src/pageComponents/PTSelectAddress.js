@@ -186,6 +186,7 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
             optionKey="i18nKey"
             onSelect={selectCity}
             t={t}
+            isPTFlow={true}
             //isDependent={true}
             //labelKey="TENANT_TENANTS"
             disabled={isEditProperty}

@@ -126,14 +126,14 @@ const OwnerForm = (_props) => {
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
-  owner["institution"] = { name: institution.name };
+  owner["institution"] = { name: institution?.name };
   owner["institution"].type = {
     active: true,
     code: institution?.type,
     i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`,
     name: t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`),
   };
-  owner.designation = institution.designation;
+  owner.designation = institution?.designation;
   const specialDocsMenu = useMemo(
     () =>
       mdmsData?.PropertyTax?.Documents?.filter((e) => e.code === "OWNER.SPECIALCATEGORYPROOF")?.[0]

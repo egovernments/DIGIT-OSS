@@ -166,6 +166,10 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
       Object.keys(field)
         .filter((key) => field[key])
         .map((key) => {
+          if(typeof field["unitType"] == "object" && field["unitType"].code == undefined)
+          {
+            field["unitType"] = "";
+          }
           if (key === "usageCategory") {
             unit["usageCategory"] = mdmsData?.usageDetails.find(
               (e) =>

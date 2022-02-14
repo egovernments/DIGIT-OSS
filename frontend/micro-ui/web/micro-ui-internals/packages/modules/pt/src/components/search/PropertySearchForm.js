@@ -22,6 +22,7 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
   });
   const formValue = watch();
   const fields = PTSearchFields?.[searchBy] || {};
+  sessionStorage.removeItem("revalidateddone");
   return (
     <div className="PropertySearchForm">
       <SearchForm onSubmit={onSubmit} className={"pt-property-search"} handleSubmit={handleSubmit}>

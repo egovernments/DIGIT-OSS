@@ -12,7 +12,7 @@ export const PTMyPayments = () => {
   const result = Digit.Hooks.pt.usePropertySearch({});
   const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
 
-  const {data, isLoading, error} = Digit.Hooks.pt.useMyPropertyPayments({tenantId : tenantId,filters: {consumerCodes:consumerCode}},{enabled:result?.data?.Properties.length>0?true:false});
+  const {data, isLoading, error} = Digit.Hooks.pt.useMyPropertyPayments({tenantId : tenantId,filters: {consumerCodes:consumerCode}},{enabled:result?.data?.Properties.length>0?true:false, propertyData:result?.data?.Properties});
   
   if (isLoading || result?.isLoading) {
     return <Loader />;

@@ -103,7 +103,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
           return (
             <div>
               <span className="link">
-                <Link to={`/digit-ui/employee/pt/search/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
+                <Link to={`/digit-ui/employee/pt/ptsearch/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
               </span>
             </div>
           );

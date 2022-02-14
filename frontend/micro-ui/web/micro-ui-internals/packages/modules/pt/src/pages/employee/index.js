@@ -13,6 +13,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const mobileView = innerWidth <= 640;
+  sessionStorage.removeItem("revalidateddone");
 
   const inboxInitialState = {
     searchParams: {
@@ -80,17 +81,7 @@ const EmployeeApp = ({ path, url, userType }) => {
       {
         path: "/digit-ui/employee/pt/search",
         content: t("PT_COMMON_SEARCH_PROPERTY_SUB_HEADER"),
-        show: location.pathname.includes("/pt/search") ? true : false,
-      },
-      {
-        path: "/digit-ui/employee/pt/payment-details/",
-        content: t("PT_PAYMENT_HISTORY"),
-        show: location.pathname.includes("/pt/payment-details") ? true : false,
-      },
-      {
-        path: "/digit-ui/employee/pt/assessment-details/",
-        content: t("PT_ASSESS_PROPERTY"),
-        show: location.pathname.includes("pt/assessment-details") ? true : false,
+        show: location.pathname.includes("/pt/search") || location.pathname.includes("/pt/ptsearch") ? true : false,
       },
       {
         path: "digit-ui/employee/pt/property-mutate-docs-required",
@@ -115,12 +106,22 @@ const EmployeeApp = ({ path, url, userType }) => {
       {
         path: "/digit-ui/employee/pt/property-details/:id",
         content: t("PT_PROPERTY_INFORMATION"),
-        show: location.pathname.includes("/pt/property-details/") || location.pathname.includes("/pt/search/property-details/") ? true : false,
+        show: location.pathname.includes("/pt/property-details/") || location.pathname.includes("/pt/ptsearch/property-details/") || location.pathname.includes("/pt/ptsearch/payment-details/") || location.pathname.includes("/pt/ptsearch/assessment-details/")  ? true : false,
       },
       {
         path: "/digit-ui/employee/pt/application-details/:id",
         content: t("PT_APPLICATION_TITLE"),
-        show: location.pathname.includes("/pt/application-details/") || location.pathname.includes("/pt/application-search/application-details/") ? true : false,
+        show: location.pathname.includes("/pt/application-details/") || location.pathname.includes("/pt/applicationsearch/application-details/") ? true : false,
+      },
+      {
+        path: "/digit-ui/employee/pt/payment-details/",
+        content: t("PT_PAYMENT_HISTORY"),
+        show: location.pathname.includes("/pt/ptsearch/payment-details") ? true : false,
+      },
+      {
+        path: "/digit-ui/employee/pt/assessment-details/",
+        content: t("PT_ASSESS_PROPERTY"),
+        show: location.pathname.includes("pt/ptsearch/assessment-details") ? true : false,
       },
     ];
   
@@ -165,10 +166,12 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
           <PrivateRoute path={`${path}/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/property-details/:id`} component={() => <PropertyDetails parentRoute={path} />} />
-          <PrivateRoute path={`${path}/application-search/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
-          <PrivateRoute path={`${path}/search/property-details/:id`} component={() => <PropertyDetails parentRoute={path} />} />
+          <PrivateRoute path={`${path}/applicationsearch/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
+          <PrivateRoute path={`${path}/ptsearch/property-details/:id`} component={() => <PropertyDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/payment-details/:id`} component={() => <PaymentDetails parentRoute={path} />} />
+          <PrivateRoute path={`${path}/ptsearch/payment-details/:id`} component={() => <PaymentDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/assessment-details/:id`} component={() => <AssessmentDetails parentRoute={path} />} />
+          <PrivateRoute path={`${path}/ptsearch/assessment-details/:id`} component={() => <AssessmentDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
           {/**/}
           <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
