@@ -113,6 +113,7 @@ public class BPAService {
 	 */
 	public BPA create(BPARequest bpaRequest) {
 		RequestInfo requestInfo = bpaRequest.getRequestInfo();
+		log.info("BPA request----->>>>>>" + bpaRequest.toString());
 		String tenantId = centralInstanceUtil.getStateLevelTenant(bpaRequest.getBPA().getTenantId());
 		Object mdmsData = util.mDMSCall(requestInfo, tenantId);
 		if (Boolean.TRUE.equals(centralInstanceUtil.isTenantIdStateLevel(bpaRequest.getBPA().getTenantId()))) {
