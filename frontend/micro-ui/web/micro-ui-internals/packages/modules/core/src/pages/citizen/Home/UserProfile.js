@@ -188,10 +188,11 @@ const UserProfile = ({ stateCode, userType }) => {
               justifyContent: "center",
               alignItems: "center",
               display: "",
-              width: "96%",
+              width: "97%",
               height: "20%",
               backgroundColor: "#EEEEEE",
               margin: "2%",
+              padding: "20px"
             }}
           >
             <div>
@@ -203,7 +204,7 @@ const UserProfile = ({ stateCode, userType }) => {
                   src={profileImg}
                 />
               )}
-              <button style={{ position: "absolute", bottom: "3%", right: "50%", left: "48%" }} onClick={onClickAddPic}>
+              <button style={{ position: "absolute", bottom: "3%", right: "50%", left: "45%" }} onClick={onClickAddPic}>
                 ++++
               </button>
             </div>
@@ -261,12 +262,24 @@ const UserProfile = ({ stateCode, userType }) => {
               />
             </div>
           </LabelFieldPair>
-          <button
-            onClick={updateProfile}
-            style={{ marginBottom: "3%", backgroundColor: "#C1592F", width: "100%", color: "white", borderBottom: "1px solid black" }}
-          >
-            Save
-          </button>
+          <div style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end" }}>
+        <button
+          onClick={updateProfile}
+          style={{
+            marginTop: "2px",
+            backgroundColor: "#F47738",
+            width: "328px",
+            height: "40px",
+            float: "right",
+            // marginRight: "31px",
+            color: "white",
+            borderBottom: "1px solid black",
+          }}
+        >
+          Save
+        </button>
+      </div>
+        {openUploadSlide == true ? <UploadDrawer setProfilePic={setFileStoreId} /> : ""}
         </div>
       ) : (
         <div style={{ backgroundColor: "#EEEEEE", borderRadius: "5px", margin: "10px", padding: "10px", display: "flex" }}>
@@ -292,9 +305,7 @@ const UserProfile = ({ stateCode, userType }) => {
                 display: "inline-block",
                 width: "328px",
                 height: "328px",
-
                 backgroundColor: "#EEEEEE",
-
                 paddingTop: "80px",
               }}
             >
@@ -442,6 +453,7 @@ const UserProfile = ({ stateCode, userType }) => {
           </div>
         </div>
       )}
+       {userType === "employee" ?
       <div style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end" }}>
         <button
           onClick={updateProfile}
@@ -459,14 +471,17 @@ const UserProfile = ({ stateCode, userType }) => {
           Save
         </button>
       </div>
-      {toast && (
-        <Toast
-          error={toast.key === "error"}
-          label={t(toast.key === "success" ? `ES_PROFILE_UPDATE_SUCCESS` : toast.action)}
-          onClose={() => setToast(null)}
-          style={{ maxWidth: "670px" }}
-        />
-      )}
+      :
+      ""
+    }
+    { toast && (
+      <Toast
+        error={toast.key === "error"}
+        label={t(toast.key === "success" ? `ES_PROFILE_UPDATE_SUCCESS` : toast.action)}
+        onClose={() => setToast(null)}
+        style={{ maxWidth: "670px" }}
+      />
+    )}
     </div>
   );
 };
