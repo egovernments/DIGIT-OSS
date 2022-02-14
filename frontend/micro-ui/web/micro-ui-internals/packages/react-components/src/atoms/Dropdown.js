@@ -223,7 +223,11 @@ const Dropdown = (props) => {
                 );
               })}
             {filteredOption && filteredOption.length === 0 && (
-              <div className={`cp profile-dropdown--item display: flex `} style={{ cursor: "not-allowed" }} key={"-1"}>
+              <div className={`cp profile-dropdown--item display: flex `} key={"-1"} onClick={() => onSelect({
+                "code": "NOOPTION",
+                "active": true,
+                "i18nKey": "CMN_NOOPTION"
+              })}>
                 {<span> {props.t ? props.t("CMN_NOOPTION") : "CMN_NOOPTION"}</span>}
               </div>
             )}
