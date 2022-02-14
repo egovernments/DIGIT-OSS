@@ -396,7 +396,7 @@ public class UserRepository {
             return;
 
         Map<String, Role> roleCodeMap = fetchRolesFromMdms(users);
-
+        System.out.println("\nroleCodeMap-->"+roleCodeMap.toString());
         for (User user : users) {
             if (!isNull(user.getRoles())) {
                 for (Role role : user.getRoles()) {
@@ -406,6 +406,7 @@ public class UserRepository {
                         if (isNull(role.getTenantId()))
                             role.setTenantId(user.getTenantId());
                     } else {
+                        System.out.println("\nroleCodeMap-->"+role.toString());
                         log.error("Role : {} is invalid", role);
                         throw new CustomException("INVALID_ROLE", "Unable to validate role from MDMS");
                     }
