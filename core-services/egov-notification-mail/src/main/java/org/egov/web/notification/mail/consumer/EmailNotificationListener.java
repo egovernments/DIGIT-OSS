@@ -20,6 +20,7 @@ public class EmailNotificationListener {
     
     private ObjectMapper objectMapper;
 
+
     @Autowired
     public EmailNotificationListener(EmailService emailService, ObjectMapper objectMapper) {
         this.emailService = emailService;
@@ -28,6 +29,7 @@ public class EmailNotificationListener {
 
     @KafkaListener(topics = "${kafka.topics.notification.mail.name}")
     public void listen(final HashMap<String, Object> record) {
+        log.info("Inside the emailListener");
     	EmailRequest emailRequest = objectMapper.convertValue(record, EmailRequest.class);
         log.info("Email is: " + emailRequest.getEmail().toString());
         emailService.sendEmail(emailRequest.getEmail());
