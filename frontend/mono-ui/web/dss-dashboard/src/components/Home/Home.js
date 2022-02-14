@@ -14,6 +14,7 @@ import getFinancialYearObj from "../../actions/getFinancialYearObj";
 import mdmsAPI from "../../actions/mdms/mdms";
 import Variables from "../../styles/variables";
 import history from "../../utils/web.history";
+import HorBarChart from "../Charts/HorBarChart";
 import MapChart from "../Charts/MapChart";
 import Card from "../common/Card/Card";
 import CardBody from "../common/Card/CardBody.js";
@@ -140,14 +141,20 @@ class Home extends React.Component {
                     xl={12}
                     className={classes.customCard}
                   >
-                    <MapChart></MapChart>
+                    <MapChart
+                      moduleLevel={moduleLevel}
+                      page={window.location.pathname || ""}
+                      chartData={data.charts[0]}
+                      chartId={data.charts[0].id}
+                      filters={filters}
+                    ></MapChart>
                   </Grid>
                 </Grid>
               </CardBody>
             </Card>
           </Grid>
         );
-      } else if (data.charts[0].chartType == "barchart") {
+      } else if (data.charts[0].chartType == "bar") {
         return (
           <Grid
             item
@@ -181,14 +188,13 @@ class Home extends React.Component {
                     xl={12}
                     className={classes.customCard}
                   >
-                    <CustomCard
-                      key={"barchart"}
+                    <HorBarChart
                       moduleLevel={moduleLevel}
-                      chartData={data.charts[0]}
-                      filters={filters}
-                      type="barchart"
                       page={window.location.pathname || ""}
-                    ></CustomCard>
+                      chartData={data.charts[0]}
+                      chartId={data.charts[0].id}
+                      filters={filters}
+                    ></HorBarChart>
                   </Grid>
                 </Grid>
               </CardBody>
