@@ -52,7 +52,7 @@ const surveyFormReducer = (state, { type, payload }) => {
       <div className="pointer">
         <button 
           // disabled={surveyState.length >= 30 ? "true":""}
-          className={`unstyled-button link ${disableInputs ? "disabled-btn" : ""} ${surveyState.length >= 2 ? "disabled-btn":""} `}
+          className={`unstyled-button link ${disableInputs ? "disabled-btn" : ""} ${surveyState.length >= 30 ? "disabled-btn":""} `}
           type="button"
           onClick={() => passingSurveyConfigInDispatch({ type: "addNewForm" })}
         >
