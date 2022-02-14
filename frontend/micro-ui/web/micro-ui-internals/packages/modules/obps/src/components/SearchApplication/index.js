@@ -145,6 +145,9 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
 
   const getRedirectionLink = (bService) => {
     let redirectBS = bService === "BPAREG" ? "search/application/stakeholder" : "search/application/bpa";
+    if (window.location.href.includes("/citizen")) {
+      redirectBS = bService === "BPAREG"?"stakeholder":"bpa";
+    }
     return redirectBS;
   };
   const propsMobileInboxCards = useMemo(
@@ -156,7 +159,7 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
           ? t(`WF_BPA_${data.additionalDetails?.applicationType}`)
           : "-",
         [t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")]: data.additionalDetails?.serviceType ? t(data.additionalDetails?.serviceType) : "-",
-        [t("BPA_CURRENT_OWNER_HEAD")]: data.landInfo?.owners.map((o) => o.name).join(",") || "",
+        [t("BPA_CURRENT_OWNER_HEAD")]: data.landInfo?.owners.map((o) => o.name).join(",") || "-",
         [t("BPA_STATUS_LABEL")]: data.state ? t(`WF_BPA_${data.state}`) : "NA",
       })),
     [data]
@@ -256,7 +259,7 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
             {...{
               data: propsMobileInboxCards,
               isTwoDynamicPrefix: true,
-              linkPrefix: `/digit-ui/employee/obps/`,
+              linkPrefix: window.location.href.includes("/citizen") ? `/digit-ui/citizen/obps/` : `/digit-ui/employee/obps/`,
               getRedirectionLink: getRedirectionLink,
               serviceRequestIdKey: "applicationNo",
             }}
