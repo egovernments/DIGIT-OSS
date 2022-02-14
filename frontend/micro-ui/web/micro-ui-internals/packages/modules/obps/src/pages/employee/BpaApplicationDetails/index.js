@@ -61,14 +61,14 @@ const BpaApplicationDetail = () => {
                 RealignedDocument.push(doc);
             })
         })
-        const newApplicationDetails = data.applicationDetails.map((obj) => {
+        const newApplicationDetails = data.applicationDetails && data.applicationDetails.map((obj) => {
           if(obj.title === "BPA_DOCUMENT_DETAILS_LABEL")
           {
             return {...obj, additionalDetails:{obpsDocuments:[{title:"",values:RealignedDocument}]}}
           }
           return obj;
         })
-        data.applicationDetails = [...newApplicationDetails];
+        data.applicationDetails = newApplicationDetails && newApplicationDetails.length > 0 ?[...newApplicationDetails]: data?.applicationDetails;
     }
     }
   },[bpaDocs,data])
