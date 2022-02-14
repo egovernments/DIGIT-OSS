@@ -1,5 +1,15 @@
-import React,{useState} from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber, Loader } from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
+import {
+  FormStep,
+  TextInput,
+  CardLabel,
+  RadioButtons,
+  LabelFieldPair,
+  Dropdown,
+  Menu,
+  MobileNumber,
+  Loader,
+} from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import UploadDrawer from "./ImageUpload/UploadDrawer";
@@ -28,67 +38,72 @@ const defaultImage =
   "XZOvia7VujatUwVTrIt+Q/Csc7Tuhe+BOakT10b4TuoiiJjvgU9emTO42PwEfBa+cuodKkuf42DXr1D3JpXz73Hnn0j10evHKe+nufgfUm+7B84sX9FfdEzXux2DBpWuKokkCqN/5pa/8pmvn" +
   "L+RGKCddCGmatiPyPB/+ekO/M/q/7uvbt22kTt3zEnXPzCV13T3Gel4/6NduDu66xRvlPNkM1RjjxUdv+4WhGx6TftD19Q/dfzpwcHO+rE3fAAAAAElFTkSuQmCC";
 
-const UserProfile = ({stateCode,userType}) => {
+const UserProfile = ({ stateCode, userType }) => {
   const history = useHistory();
   const { t } = useTranslation();
   const stateId = Digit.ULBService.getStateId();
   const tenant = Digit.ULBService.getCurrentTenantId();
 
   const userInfo = Digit.UserService.getUser()?.info || {};
-  console.log('userInfo-', userInfo);
+  console.log("userInfo-", userInfo);
 
   const [name, setName] = useState(userInfo?.name);
   const [email, setEmail] = useState(userInfo?.emailId);
   const [gender, setGender] = useState(userInfo?.gender);
-  const [mobileNumber, setMobileNo]=useState(userInfo?.mobileNumber)
+  const [mobileNumber, setMobileNo] = useState(userInfo?.mobileNumber);
   const [profilePic, setProfilePic] = useState(null);
   const [profileImg, setProfileImg] = useState(""); // To-do: pass placeholder image
-  const [openUploadSlide,SetOpenUploadSide]=useState("false")
-  const [chengepassword,setChengepassword]=useState(false)
-  const [currentPassword,setCurrentPassword]=useState('')
-  const [newPassword,setNewPassword]=useState('')
-  const [confirmPassword,setConfirmPassword]=useState('')
-
+  const [openUploadSlide, SetOpenUploadSide] = useState("false");
+  const [chengepassword, setChengepassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const editScreen = false; // To-do: Deubug and make me dynamic or remove if not needed
 
   const onClickAddPic = (isOpen) => {
-    {openUploadSlide==true?SetOpenUploadSide(false):SetOpenUploadSide(true)}
+    {
+      openUploadSlide == true ? SetOpenUploadSide(false) : SetOpenUploadSide(true);
+    }
     // SetOpenUploadSide(true);
   };
-  const TogleforPassword =()=>{
-    {chengepassword==true?setChengepassword(false):setChengepassword(true)}
+  const TogleforPassword = () => {
+    {
+      chengepassword == true ? setChengepassword(false) : setChengepassword(true);
+    }
   };
-  
+
   const updateProfile = async () => {
     const requestData = {
       ...userInfo,
       name,
-      gender:gender?.value,
-      emailId:email,
+      gender: gender?.value,
+      emailId: email,
       photo: profilePic,
-    }
+    };
 
     const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.updateUser(requestData, stateCode);
 
-    if(currentPassword && newPassword && confirmPassword) { 
-      if(newPassword===confirmPassword){
-      const requestData = {
-        existingPassword: currentPassword,
-        newPassword: newPassword,
-        tenantId: tenant,
-        type: "EMPLOYEE",
-        username: userInfo?.userName
+    if (currentPassword && newPassword && confirmPassword) {
+      if (newPassword === confirmPassword) {
+        const requestData = {
+          existingPassword: currentPassword,
+          newPassword: newPassword,
+          tenantId: tenant,
+          type: "EMPLOYEE",
+          username: userInfo?.userName,
+        };
+        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.changePassword(requestData, tenant);
       }
-      const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.changePassword(requestData, tenant);
-    }}
-    else{console.log('New and Confirm Password is Not same')}
-  }
+    } else {
+      console.log("New and Confirm Password is Not same");
+    }
+  };
   let validation = {};
 
   const setOwnerName = (e) => {
-    setName(e.target.value)
-  }
+    setName(e.target.value);
+  };
   function setOwnerEmail(e) {
     setEmail(e.target.value);
   }
@@ -98,18 +113,19 @@ const UserProfile = ({stateCode,userType}) => {
 
   let menu = [];
   const { data: Menu } = Digit.Hooks.pt.useGenderMDMS(stateId, "common-masters", "GenderType");
-  Menu && Menu.map((genderDetails) => {
-    menu.push({ i18nKey: `PT_COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
-  });
+  Menu &&
+    Menu.map((genderDetails) => {
+      menu.push({ i18nKey: `PT_COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
+    });
 
   const setFileStoreId = async (fileStoreId) => {
-    console.log('Id of the uploaded file - ', fileStoreId);
+    console.log("Id of the uploaded file - ", fileStoreId);
     setProfilePic(fileStoreId);
     // getImgUrl(fileStoreId);
     const thumbnails = fileStoreId ? await getThumbnails([fileStoreId], tenant) : null;
-    setProfileImg(thumbnails?.thumbs[0])
-    console.log('thumbnails-', thumbnails);
-  }
+    setProfileImg(thumbnails?.thumbs[0]);
+    console.log("thumbnails-", thumbnails);
+  };
 
   // const getImgUrl = async (url) => {
   //   console.log('here', url);
@@ -121,7 +137,10 @@ const UserProfile = ({stateCode,userType}) => {
   const getThumbnails = async (ids, tenantId) => {
     const res = await Digit.UploadServices.Filefetch(ids, tenantId);
     if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
-      return { thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3]), images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };
+      return {
+        thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3]),
+        images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)),
+      };
     } else {
       return null;
     }
@@ -138,147 +157,289 @@ const UserProfile = ({stateCode,userType}) => {
   //   return <Loader />
 
   return (
-    <React.Fragment>
-    {/* { userType === 'citizen'
-      ? ''
-      : ''
-      } */}
+    <div>
+      {userType === "citizen" ? (
+        <div style={{ backgroundColor: "white", borderRadius: "5px", margin: "10px", padding: "10px" }}>
+          <h1>Edit Profile</h1>
+          <div
+            style={{
+              position: "relative",
+              justifyContent: "center",
+              alignItems: "center",
+              display: "",
+              width: "96%",
+              height: "20%",
+              backgroundColor: "#EEEEEE",
+              margin: "2%",
+            }}
+          >
+            <div>
+              {profileImg === "" ? (
+                <img style={{ margin: "auto", borderRadius: "50%", justifyContent: "center", width: "50%", padding: "3%;" }} src={defaultImage} />
+              ) : (
+                <img
+                  style={{ display: "block", marginRight: "auto", marginLeft: "auto", borderRadius: "50%", justifyContent: "center" }}
+                  src={profileImg}
+                />
+              )}
+              <button style={{ position: "absolute", bottom: "3%", right: "50%", left: "48%" }} onClick={onClickAddPic}>
+                ++++
+              </button>
+            </div>
+          </div>
 
-    <div style={{backgroundColor:"white",borderRadius:'5px',margin:"10px",padding:"10px"}}>
-      <h1>Edit Profile</h1>
-      <div style={{position:"relative",justifyContent:"center",alignItems:"center",display:"",width:"96%",height:"20%",backgroundColor:"#EEEEEE",margin:"2%"}}>
-        <div> 
-          { profileImg === ""
-          ? <img style={{margin:"auto",borderRadius:"50%",justifyContent:'center', width: '50%', padding: '3%;'}} src={defaultImage} />
-          : <img style={{display:"block",marginRight:"auto",marginLeft:"auto",borderRadius:"50%",justifyContent:'center'}} src={profileImg} />
-          }
-          <button style={{position: 'absolute',bottom:"3%",right:"50%",left:"48%"}} onClick={onClickAddPic} >++++</button>
-        </div>
-      </div>
-      
-      <LabelFieldPair>
-      <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Name*")}`}</CardLabel>
-      <div className="field">
-        <TextInput
-          t={t}
-          type={"text"}
-          isMandatory={true}
-          name="name"
-          value={name}
-          onChange={setOwnerName}
-          {...(validation = {
-            isRequired: true,
-            pattern: "^[a-zA-Z-.`' ]*$",
-            type: "tel",
-            title: t("PT_NAME_ERROR_MESSAGE"),
-          })}
-          disable={editScreen}
-        />
-      </div>
-    </LabelFieldPair>
-    {userType==='citizen'?
-    <LabelFieldPair>
-          <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Gender")}`}</CardLabel>
-      <Dropdown style={{width:'100%'}}
-        className="form-field"
-        selected={gender?.length === 1 ? gender[0] : gender}
-        disable={gender?.length === 1 || editScreen}
-        option={menu}
-        select={setGenderName}
-        value={gender}
-        optionKey="code"
-        t={t}
-        name="gender"
-      />
-    </LabelFieldPair>
-: <LabelFieldPair>
-<CardLabel>{`${t("Mobile Number")}*`}</CardLabel>
-            <MobileNumber
-              value={mobileNumber}
-              name="mobileNumber"
-              onChange={(value) => setMobileNo({ target: { value } })}
-              // disable={mobileNumber && !isOpenLinkFlow ? true : false}
-              {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-            />
-</LabelFieldPair>
-}
-    <LabelFieldPair>
-      <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Email")}`}</CardLabel>
-      <div className="field">
-        <TextInput
-          t={t}
-          type={"email"}
-          isMandatory={false}
-          optionKey="i18nKey"
-          name="email"
-          value={email}
-          onChange={setOwnerEmail}
-          disable={editScreen}
-        />
-            {userType==='employee'?<a style={{color:"orange",cursor:'default',marginBottom:"5"}} onClick={TogleforPassword}>Change Password</a>:""}
-        {chengepassword?<div>
           <LabelFieldPair>
-      <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Current Password*")}`}</CardLabel>
-      <div className="field">
-        <TextInput
-          t={t}
-          type={"password"}
-          isMandatory={true}
-          name="name"
-          pattern="^([a-zA-Z0-9@#$%])+$"
-          onChange={(e) => setCurrentPassword(e.target.value)}
-          disable={editScreen}
-        />
-      </div>
-    </LabelFieldPair>
-    <LabelFieldPair>
-      <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("New Password*")}`}</CardLabel>
-      <div className="field">
-        <TextInput
-          t={t}
-          type={"password"}
-          isMandatory={true}
-          name="name"
-          pattern="^([a-zA-Z0-9@#$%])+$"
+            <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Name*")}`}</CardLabel>
+            <div className="field">
+              <TextInput
+                t={t}
+                type={"text"}
+                isMandatory={true}
+                name="name"
+                value={name}
+                onChange={setOwnerName}
+                {...(validation = {
+                  isRequired: true,
+                  pattern: "^[a-zA-Z-.`' ]*$",
+                  type: "tel",
+                  title: t("PT_NAME_ERROR_MESSAGE"),
+                })}
+                disable={editScreen}
+              />
+            </div>
+          </LabelFieldPair>
 
-          onChange={(e) => setNewPassword(e.target.value)}
-          disable={editScreen}
-        />
-      </div>
-    </LabelFieldPair>
-    <LabelFieldPair>
-      <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Confirm Password*")}`}</CardLabel>
-      <div className="field">
-        <TextInput
-          t={t}
-          type={"password"}
-          isMandatory={true}
-          name="name"
-          pattern="^([a-zA-Z0-9@#$%])+$"
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          disable={editScreen}
-        />
-      </div>
-    </LabelFieldPair>
-        
+          <LabelFieldPair>
+            <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Gender")}`}</CardLabel>
+            <Dropdown
+              style={{ width: "100%" }}
+              className="form-field"
+              selected={gender?.length === 1 ? gender[0] : gender}
+              disable={gender?.length === 1 || editScreen}
+              option={menu}
+              select={setGenderName}
+              value={gender}
+              optionKey="code"
+              t={t}
+              name="gender"
+            />
+          </LabelFieldPair>
 
-        
-        </div>:""}
+          <LabelFieldPair>
+            <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Email")}`}</CardLabel>
+            <div className="field">
+              <TextInput
+                t={t}
+                type={"email"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="email"
+                value={email}
+                onChange={setOwnerEmail}
+                disable={editScreen}
+              />
+            </div>
+          </LabelFieldPair>
+          <button
+            onClick={updateProfile}
+            style={{ marginBottom: "3%", backgroundColor: "#C1592F", width: "100%", color: "white", borderBottom: "1px solid black" }}
+          >
+            Save
+          </button>
+        </div>
+      ) : (
+        <div style={{ backgroundColor: "#EEEEEE", borderRadius: "5px", margin: "10px", padding: "10px", display: "flex" }}>
+          <h1>Home</h1>
+          <h1> /Page1</h1>
+          <div
+            style={{
+              height: "376px",
+              width: "376px",
+              padding: "24px",
+              backgroundColor: "#FFFFFF",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+
+              margin: "2%",
+            }}
+          >
+            <div
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                display: "inline-block",
+                width: "328px",
+                height: "328px",
+
+                backgroundColor: "#EEEEEE",
+
+                paddingTop: "80px",
+              }}
+            >
+              <div>
+                {profileImg === "" ? (
+                  <img style={{ margin: "auto", borderRadius: "50%", justifyContent: "center", width: "50%", padding: "10%;" }} src={defaultImage} />
+                ) : (
+                  <img
+                    style={{ display: "block", marginRight: "auto", marginLeft: "auto", borderRadius: "50%", justifyContent: "center" }}
+                    src={profileImg}
+                  />
+                )}
+                <button style={{ position: "relative", left: "147.33px", right: "8.33%", top: "12.5%", bottom: "12.5%" }} onClick={onClickAddPic}>
+                  ++++
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              position: "relative",
+              justifyContent: "center",
+              alignItems: "center",
+              display: "inline-block",
+              width: "928px",
+              height: "496px",
+              backgroundColor: "white",
+              margin: "2%",
+              padding: "20px",
+            }}
+          >
+            <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
+              <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Name*")}`}</CardLabel>
+              <div className="field">
+                <TextInput
+                  t={t}
+                  type={"text"}
+                  isMandatory={true}
+                  name="name"
+                  style={{ width: "640px", height: "40px" }}
+                  value={name}
+                  onChange={setOwnerName}
+                  placeholder="Enter Your Name"
+                  {...(validation = {
+                    isRequired: true,
+                    pattern: "^[a-zA-Z-.`' ]*$",
+                    type: "tel",
+                    title: t("PT_NAME_ERROR_MESSAGE"),
+                  })}
+                  disable={editScreen}
+                />
+              </div>
+            </LabelFieldPair>
+
+            <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
+              <CardLabel>{`${t("Mobile Number")}*`}</CardLabel>
+              <MobileNumber
+                value={mobileNumber}
+                name="mobileNumber"
+                placeholder="Enter a valid Mobile No."
+                style={{ width: "600px", height: "40px" }}
+                onChange={(value) => setMobileNo({ target: { value } })}
+                // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+              />
+            </LabelFieldPair>
+
+            <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
+              <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Email")}`}</CardLabel>
+              <div className="field">
+                <TextInput
+                  t={t}
+                  type={"email"}
+                  isMandatory={false}
+                  placeholder="Enter a valid Email"
+                  optionKey="i18nKey"
+                  style={{ width: "640px", height: "40px" }}
+                  name="email"
+                  value={email}
+                  onChange={setOwnerEmail}
+                  disable={editScreen}
+                />
+              </div>
+            </LabelFieldPair>
+            <LabelFieldPair>
+              <div>
+                <a style={{ color: "orange", cursor: "default", marginBottom: "5" }} onClick={TogleforPassword}>
+                  Change Password
+                </a>
+                {chengepassword ? (
+                  <div>
+                    <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
+                      <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Current Password*")}`}</CardLabel>
+                      <div className="field">
+                        <TextInput
+                          t={t}
+                          type={"password"}
+                          isMandatory={true}
+                          style={{ width: "640px", height: "40px" }}
+                          name="name"
+                          pattern="^([a-zA-Z0-9@#$%])+$"
+                          onChange={(e) => setCurrentPassword(e.target.value)}
+                          disable={editScreen}
+                        />
+                      </div>
+                    </LabelFieldPair>
+                    <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
+                      <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("New Password*")}`}</CardLabel>
+                      <div className="field">
+                        <TextInput
+                          t={t}
+                          type={"password"}
+                          isMandatory={true}
+                          style={{ width: "640px", height: "40px" }}
+                          name="name"
+                          pattern="^([a-zA-Z0-9@#$%])+$"
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          disable={editScreen}
+                        />
+                      </div>
+                    </LabelFieldPair>
+                    <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
+                      <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Confirm Password*")}`}</CardLabel>
+                      <div className="field">
+                        <TextInput
+                          t={t}
+                          type={"password"}
+                          isMandatory={true}
+                          style={{ width: "640px", height: "40px" }}
+                          name="name"
+                          pattern="^([a-zA-Z0-9@#$%])+$"
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          disable={editScreen}
+                        />
+                      </div>
+                    </LabelFieldPair>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            </LabelFieldPair>
+
+            {openUploadSlide == true ? <UploadDrawer setProfilePic={setFileStoreId} /> : ""}
+          </div>
+        </div>
+      )}
+      <div style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end" }}>
+        <button
+          onClick={updateProfile}
+          style={{
+            marginTop: "24px",
+            backgroundColor: "#F47738",
+            width: "248px",
+            height: "40px",
+            float: "right",
+            marginRight: "31px",
+            color: "white",
+            borderBottom: "1px solid black",
+          }}
+        >
+          Save
+        </button>
       </div>
-      
-      <button onClick={updateProfile} style={{marginBottom:"3%",backgroundColor:"#C1592F",width:"100%", color:"white" ,borderBottom:"1px solid black"}}>Save</button>
-    </LabelFieldPair>
     </div>
-    { openUploadSlide==true
-    ?
-    <UploadDrawer
-      setProfilePic={setFileStoreId}
-     />
-     : ""
-     }
-    </React.Fragment>
-    
-  )
-}
+  );
+};
 
-export default UserProfile
+export default UserProfile;
