@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FormStep,
   TextInput,
@@ -45,7 +45,6 @@ const UserProfile = ({ stateCode, userType }) => {
   const tenant = Digit.ULBService.getCurrentTenantId();
 
   const userInfo = Digit.UserService.getUser()?.info || {};
-  console.log("userInfo-", userInfo);
 
   const [name, setName] = useState(userInfo?.name);
   const [email, setEmail] = useState(userInfo?.emailId);
@@ -58,6 +57,8 @@ const UserProfile = ({ stateCode, userType }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [toast, setToast] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
 
   const editScreen = false; // To-do: Deubug and make me dynamic or remove if not needed
 
@@ -73,6 +74,15 @@ const UserProfile = ({ stateCode, userType }) => {
     }
   };
 
+  useEffect(() => {
+    getUserInfo();
+  }, [])
+
+  const getUserInfo = async () => {
+    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [userInfo?.uuid] }, {});
+    usersResponse && usersResponse.user && usersResponse.user.length ? setUserDetails(usersResponse.user[0]) : null;
+  }
+  
   const updateProfile = async () => {
     const requestData = {
       ...userInfo,
@@ -80,30 +90,41 @@ const UserProfile = ({ stateCode, userType }) => {
       gender: gender?.value,
       emailId: email,
       photo: profilePic,
-    };
+    }
 
-    const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.updateUser(requestData, stateCode);
+    const { responseInfo, user } = await Digit.UserService.updateUser(requestData, stateCode);
 
-    if (currentPassword && newPassword && confirmPassword) {
-      if (newPassword === confirmPassword) {
+    if(currentPassword && newPassword && confirmPassword) { 
+      if(newPassword === confirmPassword){
         const requestData = {
           existingPassword: currentPassword,
           newPassword: newPassword,
           tenantId: tenant,
           type: "EMPLOYEE",
-          username: userInfo?.userName,
-        };
-        const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.changePassword(requestData, tenant);
+          username: userInfo?.userName
+        }
+        const { responseInfo1 } = await Digit.UserService.changePassword(requestData, tenant);
+        if(responseInfo1?.status && responseInfo1.status === '200') {
+          setToast({ key: "success", action: `${t("ES_PROFILE_UPDATE_SUCCESS_WITH_PASSWORD")}` });
+          setTimeout(() => setToast(null), 5000);
+        }
+      } else {
+        setToast({ key: "error", action: `${t("ES_ERROR_PASSWORD_NOT_MATCH")}` });
+        setTimeout(() => setToast(null), 5000);
       }
     } else {
-      console.log("New and Confirm Password is Not same");
+      if(responseInfo?.status && responseInfo.status === '200') {
+        setToast({ key: "success", action: `${t("ES_PROFILE_UPDATE_SUCCESS")}` });
+        setTimeout(() => setToast(null), 5000);
+      }
     }
-  };
+  }
+
   let validation = {};
 
   const setOwnerName = (e) => {
     setName(e.target.value);
-  };
+  }
   function setOwnerEmail(e) {
     setEmail(e.target.value);
   }
@@ -438,6 +459,14 @@ const UserProfile = ({ stateCode, userType }) => {
           Save
         </button>
       </div>
+      {toast && (
+        <Toast
+          error={toast.key === "error"}
+          label={t(toast.key === "success" ? `ES_PROFILE_UPDATE_SUCCESS` : toast.action)}
+          onClose={() => setToast(null)}
+          style={{ maxWidth: "670px" }}
+        />
+      )}
     </div>
   );
 };
