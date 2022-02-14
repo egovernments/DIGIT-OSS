@@ -147,7 +147,10 @@ const SurveyDetails = ({ location, match }) => {
 
   const handleMarkInactive = () => {
     const details = {
-      SurveyEntity: { ...surveyData, status: "INACTIVE", collectCitizenInfo: surveyData.collectCitizenInfo.code },
+      SurveyEntity: { ...surveyData,
+        questions: surveyData.questions.map(filterQuestion), 
+        status: "INACTIVE", 
+        collectCitizenInfo: surveyData.collectCitizenInfo.code },
     };
     history.push("/digit-ui/employee/engagement/surveys/update-response", details);
   };
