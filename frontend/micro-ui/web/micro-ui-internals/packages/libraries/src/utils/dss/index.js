@@ -71,3 +71,9 @@ export const getDefaultFinacialYear = () => {
     };
   }
 };
+
+/* Used in DSS to get the current module id */
+export const getCurrentModuleName=()=>{
+ const allPaths= window.location.pathname.split('/');
+ return allPaths[allPaths.length-1];
+}

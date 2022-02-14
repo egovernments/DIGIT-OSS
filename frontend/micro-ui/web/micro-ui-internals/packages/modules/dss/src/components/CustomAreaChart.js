@@ -14,7 +14,13 @@ return COLORS[index];
 
 const getValue = (plot) => plot.value;
 
-const renderUnits = (t, denomination) => {
+const renderUnits = (t, denomination,symbol) => {
+
+  if(symbol== "percentage"){
+    return ' %';
+  }else if(symbol== "number"){
+    return '';
+  }
   switch (denomination) {
     case "Unit":
       return `(${t("DSS_UNIT")})`;
@@ -168,13 +174,14 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
                 <stop offset="1" stopColor="#048BD0" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid />
+            <CartesianGrid strokeDasharray="3 3"/>
             <Tooltip content={renderTooltip} />
             <XAxis dataKey={xDataKey} tick={{ fontSize: "14px", fill: "#505A5F" }} tickFormatter={tickFormatter} />
             <YAxis
+            /*
               label={{
-                value: `${t(`DSS_${response?.responseData?.data?.[0]?.headerName.replaceAll(" ", "_").toUpperCase()}`)} ${
-                  id === "fsmTotalCumulativeCollection" ? renderUnits(t, value.denomination) : `(%)`
+                value: `${t(`DSS_Y_${response?.responseData?.data?.[0]?.headerName.replaceAll(" ", "_").toUpperCase()}`)} ${
+                  renderUnits(t, value.denomination,response?.responseData?.data?.[0]?.headerSymbol) 
                 }`,
                 angle: -90,
                 position: "insideLeft",
@@ -183,6 +190,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
                 fontSize: "14px",
                 fill: "#505A5F",
               }}
+              */
               tick={{ fontSize: "14px", fill: "#505A5F" }}
             />
             <Area type="monotone" dataKey={renderPlot} stroke="#048BD0" fill="url(#colorUv)" dot={true} />
@@ -201,7 +209,22 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis />
+            <YAxis  
+                        /*
+Removed this custom yaxis label for all line charts 
+            label={{
+                value: `${t(`DSS_Y_${response?.responseData?.data?.[0]?.headerName.replaceAll(" ", "_").toUpperCase()}`)} ${
+                  renderUnits(t, value.denomination,response?.responseData?.data?.[0]?.headerSymbol) 
+                }`,
+                angle: -90,
+                position: "insideLeft",
+                dy: 40,
+                offset: -10,
+                fontSize: "14px",
+                fill: "#505A5F",
+              }}
+              */
+              />
             <Tooltip />
             <Legend />
             {keysArr?.map((key,i)=>{

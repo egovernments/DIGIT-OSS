@@ -176,7 +176,9 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
     if (response?.responseData?.drillDownChartId && response?.responseData?.drillDownChartId !== "none") {
       let currentValue = value;
       if (filterKey === "tenantId") {
-        currentValue=[value];
+        // currentValue=[value];
+        currentValue = dssTenants.filter((tenant) => tenant?.city?.ddrName === value || tenant?.code === value || tenant?.description=== value).map((tenant) => tenant?.code);
+
         /*  Removed this mdms active tenants filter logic as per RAIN-5454
         currentValue = dssTenants.filter((tenant) => tenant?.city?.ddrName === value || tenant?.code === value).map((tenant) => tenant?.code);
         */

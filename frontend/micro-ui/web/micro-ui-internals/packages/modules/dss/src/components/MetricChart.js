@@ -20,9 +20,9 @@ const MetricData = ({ t, data, code }) => {
         )}
       </p>
       {data?.insight && (
-        <div>
+        <div style={{float:"right"}}>
           {data?.insight?.indicator === "upper_green" ? ArrowUpwardElement("10px") : ArrowDownwardElement("10px")}
-          <p className={`${data?.insight.colorCode}`}>{data?.insight.value.replace(/[+-]/g, "")}</p>
+          <p className={`${data?.insight.colorCode}`}>{data?.insight.value.replace(/[+-]/g, "").replace("last year",'LY')}</p>
         </div>
       )}
     </div>

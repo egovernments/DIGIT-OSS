@@ -71,7 +71,16 @@ const GenericChart = ({
     <Card className={`chart-item ${className}`} ReactRef={chart}>
       <div className={`chartHeader ${showSearch && "column-direction"}`}>
         <div>
-          {showHeader && <CardLabel style={{ fontWeight: "bold" }}>{`${t(header)}`}</CardLabel>}
+          {showHeader && <CardLabel style={{ fontWeight: "bold" }}>
+          <span className="tooltip">
+            {t(`${t(Digit.Utils.locale.getTransformedLocale(header))}`)}
+              <span className="tooltiptext" style={{ whiteSpace: "nowrap" , 
+               fontSize:"medium" }}>
+                  {t(`TIP_${Digit.Utils.locale.getTransformedLocale(header)}`)}
+              </span>
+            </span>
+            {/* {`${t(header)}`} */}
+            </CardLabel>}
           {subHeader && <p style={{ color: "#505A5F", fontWeight: 700 }}>{subHeader}</p>}
         </div>
         <div className="sideContent">
