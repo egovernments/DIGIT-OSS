@@ -117,6 +117,10 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
       });
       setChartData(result);
     }
+    else{
+      const result = [];
+      setChartData(result);
+    }
   }, [tableData]);
 
   const filterValue = useCallback((rows, id, filterValue = "") => {
