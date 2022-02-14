@@ -32,7 +32,7 @@ const UserProfile = ({stateCode,userType}) => {
   const history = useHistory();
   const { t } = useTranslation();
   const stateId = Digit.ULBService.getStateId();
-  const tenant = Digit.ULBService.getStateId();
+  const tenant = Digit.ULBService.getCurrentTenantId();
 
   const userInfo = Digit.UserService.getUser()?.info || {};
   console.log('userInfo-', userInfo);
@@ -139,23 +139,27 @@ const UserProfile = ({stateCode,userType}) => {
 
   return (
     <React.Fragment>
-    
+    {/* { userType === 'citizen'
+      ? ''
+      : ''
+      } */}
+
     <div style={{backgroundColor:"white",borderRadius:'5px',margin:"10px",padding:"10px"}}>
       <h1>Edit Profile</h1>
-      
-      <div style={{position:"relative",justifyContent:"center",alignItems:"center",borderRadius:"5px",display:"",width:"96%",height:"20%",backgroundColor:"gray",margin:"2%"}}>
-            <div> {profileImg===""?<img style={{margin:"auto",borderRadius:"50%",justifyContent:'center'}} src={defaultImage} />:
-                    <img style={{display:"block",marginRight:"auto",marginLeft:"auto",borderRadius:"50%",justifyContent:'center'}} src={profileImg} />
-                  }
-                    <button style={{position: 'absolute',bottom:"3%",right:"50%",left:"48%"}} onClick={onClickAddPic} >++++</button>
-            </div>
+      <div style={{position:"relative",justifyContent:"center",alignItems:"center",display:"",width:"96%",height:"20%",backgroundColor:"#EEEEEE",margin:"2%"}}>
+        <div> 
+          { profileImg === ""
+          ? <img style={{margin:"auto",borderRadius:"50%",justifyContent:'center', width: '50%', padding: '3%;'}} src={defaultImage} />
+          : <img style={{display:"block",marginRight:"auto",marginLeft:"auto",borderRadius:"50%",justifyContent:'center'}} src={profileImg} />
+          }
+          <button style={{position: 'absolute',bottom:"3%",right:"50%",left:"48%"}} onClick={onClickAddPic} >++++</button>
+        </div>
       </div>
       
       <LabelFieldPair>
       <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Name*")}`}</CardLabel>
       <div className="field">
         <TextInput
-          
           t={t}
           type={"text"}
           isMandatory={true}
