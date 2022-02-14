@@ -1,62 +1,58 @@
-import React, { Fragment } from "react";
-import { useTranslation } from "react-i18next";
 import {
   BreakLine,
-  Card,
-  CardSubHeader,
-  StatusTable,
-  Row,
-  Loader,
-  CardSectionHeader,
-  ConnectingCheckPoints,
-  CheckPoint,
-  Rating,
-  ActionLinks,
+  Card, CardSectionHeader, CardSubHeader, CheckPoint, ConnectingCheckPoints, Loader, Row, StatusTable
 } from "@egovernments/digit-ui-react-components";
-import TLCaption from "./TLCaption";
+import React, { Fragment } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import PropertyDocuments from "./PropertyDocuments";
-import PropertyFloors from "./PropertyFloors";
-import PropertyEstimates from "./PropertyEstimates";
-import PropertyOwners from "./PropertyOwners";
-import TLTradeUnits from "./TLTradeUnits";
-import TLTradeAccessories from "./TLTradeAccessories";
-import ScruntinyDetails from "./ScruntinyDetails";
-import NOCDocuments from "./NOCDocuments";
-import SubOccupancyTable from "./SubOccupancyTable";
-import OBPSDocument from "../../../obps/src/pageComponents/OBPSDocuments";
-import PermissionCheck from "./PermissionCheck";
 import BPADocuments from "./BPADocuments";
 import InspectionReport from "./InspectionReport";
+import NOCDocuments from "./NOCDocuments";
+import PermissionCheck from "./PermissionCheck";
+import PropertyDocuments from "./PropertyDocuments";
+import PropertyEstimates from "./PropertyEstimates";
+import PropertyFloors from "./PropertyFloors";
+import PropertyOwners from "./PropertyOwners";
+import ScruntinyDetails from "./ScruntinyDetails";
+import SubOccupancyTable from "./SubOccupancyTable";
+import TLCaption from "./TLCaption";
+import TLTradeAccessories from "./TLTradeAccessories";
+import TLTradeUnits from "./TLTradeUnits";
 
-function ApplicationDetailsContent({ applicationDetails, workflowDetails, isDataLoading, applicationData, businessService, timelineStatusPrefix,statusAttribute="status" }) {
+function ApplicationDetailsContent({
+  applicationDetails,
+  workflowDetails,
+  isDataLoading,
+  applicationData,
+  businessService,
+  timelineStatusPrefix,
+  statusAttribute = "status",
+  paymentsList
+}) {
   const { t } = useTranslation();
 
-  function OpenImage(imageSource, index,thumbnailsToShow){
-    window.open(thumbnailsToShow?.fullImage?.[0],"_blank");
+  function OpenImage(imageSource, index, thumbnailsToShow) {
+    window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
   }
 
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED" && !(window.location.href.includes("/obps/"))) {
+    if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
         source: applicationData?.channel || "",
       };
       return <TLCaption data={caption} />;
-    } 
-    else if(window.location.href.includes("/obps/"))
-    {
+    } else if (window.location.href.includes("/obps/")) {
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
-        wfComment : checkpoint.wfComment,
-        thumbnailsToShow : checkpoint?.thumbnailsToShow,
+        wfComment: checkpoint.wfComment,
+        thumbnailsToShow: checkpoint?.thumbnailsToShow,
       };
       return <TLCaption data={caption} OpenImage={OpenImage} />;
-    }
-    else {
+    } else {
       const caption = {
         date: Digit.DateUtils?.ConvertTimestampToDate(applicationData?.auditDetails?.lastModifiedTime),
         // name: checkpoint?.assigner?.name,
@@ -69,55 +65,56 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
   };
 
   const getTranslatedValues = (dataValue, isNotTranslated) => {
-    if(dataValue) {
-      return !isNotTranslated ? t(dataValue) : dataValue
+    if (dataValue) {
+      return !isNotTranslated ? t(dataValue) : dataValue;
     } else {
-      return t("NA")
+      return t("NA");
     }
   };
 
-  const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
+  const checkLocation =
+    window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
   const isNocLocation = window.location.href.includes("employee/noc");
   const isBPALocation = window.location.href.includes("employee/obps");
-  
+
   const getRowStyles = () => {
     if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
       return { justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C" };
-    } else if(checkLocation) {
+    } else if (checkLocation) {
       return { justifyContent: "space-between", fontSize: "16px", lineHeight: "19px", color: "#0B0C0C" };
     } else {
-      return {}
+      return {};
     }
-  }
+  };
 
   const getTableStyles = () => {
-    if(window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
-      return { position: "relative", marginTop: "19px" }
+    if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
+      return { position: "relative", marginTop: "19px" };
     } else if (checkLocation) {
-      return { position: "relative", marginTop: "19px" }
+      return { position: "relative", marginTop: "19px" };
     } else {
-      return {}
+      return {};
     }
-  }
+  };
 
   const getMainDivStyles = () => {
     if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
       return { lineHeight: "19px", maxWidth: "950px", minWidth: "280px" };
     } else if (checkLocation) {
-      return  { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" }
+      return { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" };
     } else {
-      return {}
+      return {};
     }
-  }
+  };
 
   const getTextValue = (value) => {
     if (value?.skip) return value.value;
-    else if(value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
+    else if (value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
     else return value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("N/A");
-  }
+  };
 
   return (
-    <Card style={{ position: "relative"}} className={"employeeCard-override"}>
+    <Card style={{ position: "relative" }} className={"employeeCard-override"}>
       {applicationDetails?.applicationDetails?.map((detail, index) => (
         <React.Fragment key={index}>
           <div style={getMainDivStyles()}>
@@ -125,7 +122,13 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
               <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
               <React.Fragment>
-                <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px",fontSize: "24px" } : { marginBottom: "16px", marginTop: "32px", fontSize: "24px" }}>
+                <CardSectionHeader
+                  style={
+                    index == 0 && checkLocation
+                      ? { marginBottom: "16px", fontSize: "24px" }
+                      : { marginBottom: "16px", marginTop: "32px", fontSize: "24px" }
+                  }
+                >
                   {isNocLocation ? `${t(detail.title)}` : t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>
@@ -138,6 +141,27 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                 detail?.values?.map((value, index) => {
                   if (value.map === true && value.value !== "N/A") {
                     return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
+                  }
+                  if (value?.isLink == true) {
+                    return (
+                      <Row
+                        key={t(value.title)}
+                        label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
+                        text={
+                          <div>
+                            <Link to={value?.to}>
+                              <span className="link" style={{ color: "#F47738" }}>
+                                {value?.value}
+                              </span>
+                            </Link>
+                          </div>
+                        }
+                        last={index === detail?.values?.length - 1}
+                        caption={value.caption}
+                        className="border-none"
+                        rowContainerStyle={getRowStyles()}
+                      />
+                    );
                   }
                   return (
                     <Row
@@ -155,8 +179,10 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
             </StatusTable>
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
-          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
-          {applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0 && detail?.additionalDetails?.fiReport && <InspectionReport fiReport={applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending} />}
+          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} paymentsList={paymentsList}/>}
+          {applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0 && detail?.additionalDetails?.fiReport && (
+            <InspectionReport fiReport={applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending} />
+          )}
           {/* {detail?.additionalDetails?.FIdocuments && detail?.additionalDetails?.values?.map((doc,index) => (
             <div key={index}>
             {doc.isNotDuplicate && <div> 
@@ -196,7 +222,9 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
           )}
           {detail?.additionalDetails?.scruntinyDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
           {detail?.additionalDetails?.buildingExtractionDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
-          {detail?.additionalDetails?.subOccupancyTableDetails && <SubOccupancyTable edcrDetails={detail?.additionalDetails} applicationData={applicationDetails?.applicationData} />}
+          {detail?.additionalDetails?.subOccupancyTableDetails && (
+            <SubOccupancyTable edcrDetails={detail?.additionalDetails} applicationData={applicationDetails?.applicationData} />
+          )}
           {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
           {detail?.additionalDetails?.taxHeadEstimatesCalculation && (
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />
@@ -229,7 +257,9 @@ function ApplicationDetailsContent({ applicationDetails, workflowDetails, isData
                             isCompleted={index === 0}
                             info={checkpoint.comment}
                             label={t(
-                              `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint?.[statusAttribute]}`
+                              `${timelineStatusPrefix}${
+                                checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint?.[statusAttribute]
+                              }`
                             )}
                             customChild={getTimelineCaptions(checkpoint)}
                           />
