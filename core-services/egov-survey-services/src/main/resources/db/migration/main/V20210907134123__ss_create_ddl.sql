@@ -1,4 +1,4 @@
-CREATE TABLE eg_ss_survey(
+ CREATE TABLE eg_ss_survey(
     uuid character varying(128),
     tenantid character varying(128),
     title character varying(60),

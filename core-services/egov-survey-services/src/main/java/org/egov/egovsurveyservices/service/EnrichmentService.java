@@ -40,7 +40,9 @@ public class EnrichmentService {
                 .build());
         surveyEntity.setPostedBy(surveyRequest.getRequestInfo().getUserInfo().getName());
 
-        surveyEntity.getQuestions().forEach(question -> {
+        for(int i = 0; i < surveyEntity.getQuestions().size(); i++) {
+            Question question = surveyEntity.getQuestions().get(i);
+            question.setQorder((long)i+1);
             question.setUuid(UUID.randomUUID().toString());
             question.setSurveyId(surveyEntity.getUuid());
             question.setAuditDetails(AuditDetails.builder()
@@ -49,7 +51,7 @@ public class EnrichmentService {
                     .createdTime(System.currentTimeMillis())
                     .lastModifiedTime(System.currentTimeMillis())
                     .build());
-        });
+        }
     }
 
     public void enrichAnswerEntity(AnswerRequest answerRequest, Boolean isAnonymousSurvey) {

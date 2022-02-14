@@ -1,0 +1,1 @@
+ALTER TABLE eg_ss_question ADD COLUMN qorder bigint;

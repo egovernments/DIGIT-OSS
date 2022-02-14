@@ -42,4 +42,7 @@ public class Question {
     @JsonProperty("required")
     private Boolean required;
 
+    @JsonProperty("qorder")
+    private Long qorder;
+
 }

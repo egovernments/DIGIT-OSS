@@ -51,6 +51,8 @@ public class SurveyRowMapper implements ResultSetExtractor<List<SurveyEntity>>{
                         .build();
             }
             addChildrenToProperty(rs, surveyEntity);
+            Collections.sort(surveyEntity.getQuestions(),
+                    Comparator.comparing(Question::getQorder));
             surveyEntityMap.put(uuid, surveyEntity);
         }
         return new ArrayList<>(surveyEntityMap.values());
@@ -91,6 +93,7 @@ public class SurveyRowMapper implements ResultSetExtractor<List<SurveyEntity>>{
                 .required(rs.getBoolean("qrequired"))
                 .options(Arrays.asList(rs.getString("qoptions").split(",")))
                 .type(Type.fromValue(rs.getString("qtype")))
+                .qorder(rs.getLong("qorder"))
                 .auditDetails(auditdetails)
                 .build();
 
