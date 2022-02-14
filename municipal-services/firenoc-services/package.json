@@ -5,9 +5,9 @@
   "description": "Starter project for an ES6 RESTful Express API",
   "main": "dist",
   "engines": {
-    "node": ">=15.0.0",
-    "npm": "<=5.0.0"
-   },
+    "node": ">=10.16.3",
+    "npm": "<=6.9.0"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development DEBUG=swagger-express-validator nodemon -w src --exec \"babel-node src --presets es2015,stage-0\"",
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
