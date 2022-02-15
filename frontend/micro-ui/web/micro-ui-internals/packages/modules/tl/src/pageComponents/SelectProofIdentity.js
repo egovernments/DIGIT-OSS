@@ -6,6 +6,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
   const [file, setFile] = useState(formData?.owners?.documents?.ProofOfIdentity);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
+  const acceptFormat = ".jpg,.png,.pdf,.jpeg"
 
   const [dropdownValue, setDropdownValue] = useState(formData?.owners?.documents?.ProofOfIdentity?.documentType || null);
   //let dropdownData = [];
@@ -50,7 +51,11 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
     (async () => {
       setError(null);
       if (file) {
-        if (file.size >= 2000000) {
+        if(!(acceptFormat.split(",").includes(`.${file.type.split("/").pop()}`)))
+        {
+          setError(t("PT_UPLOAD_FORMAT_NOT_SUPPORTED"));
+        }
+        else if (file.size >= 2000000) {
           setError(t("PT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {
           try {
