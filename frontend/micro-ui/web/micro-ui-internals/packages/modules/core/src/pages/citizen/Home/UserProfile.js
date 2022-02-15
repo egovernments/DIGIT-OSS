@@ -9,6 +9,7 @@ import {
   Menu,
   MobileNumber,
   Loader,
+  CameraIcon,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -46,34 +47,6 @@ const UserProfile = ({ stateCode, userType }) => {
 
   const userInfo = Digit.UserService.getUser()?.info || {};
 
-  const [name, setName] = useState(userInfo?.name);
-  const [email, setEmail] = useState(userInfo?.emailId);
-  const [gender, setGender] = useState(userInfo?.gender);
-  const [mobileNumber, setMobileNo] = useState(userInfo?.mobileNumber);
-  const [profilePic, setProfilePic] = useState(null);
-  const [profileImg, setProfileImg] = useState(""); // To-do: pass placeholder image
-  const [openUploadSlide, SetOpenUploadSide] = useState("false");
-  const [chengepassword, setChengepassword] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [toast, setToast] = useState(null);
-  const [userDetails, setUserDetails] = useState(null);
-
-  const editScreen = false; // To-do: Deubug and make me dynamic or remove if not needed
-
-  const onClickAddPic = (isOpen) => {
-    {
-      openUploadSlide == true ? SetOpenUploadSide(false) : SetOpenUploadSide(true);
-    }
-    // SetOpenUploadSide(true);
-  };
-  const TogleforPassword = () => {
-    {
-      chengepassword == true ? setChengepassword(false) : setChengepassword(true);
-    }
-  };
-
   useEffect(() => {
     getUserInfo();
   }, [])
@@ -82,7 +55,30 @@ const UserProfile = ({ stateCode, userType }) => {
     const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [userInfo?.uuid] }, {});
     usersResponse && usersResponse.user && usersResponse.user.length ? setUserDetails(usersResponse.user[0]) : null;
   }
-  
+
+  const [userDetails, setUserDetails] = useState(null);
+  const [name, setName] = useState(userInfo?.name);
+  const [email, setEmail] = useState(userInfo?.emailId);
+  const [gender, setGender] = useState(userDetails?.gender);
+  const [mobileNumber, setMobileNo] = useState(userInfo?.mobileNumber);
+  const [profilePic, setProfilePic] = useState(null);
+  const [profileImg, setProfileImg] = useState(""); // To-do: pass placeholder image
+  const [openUploadSlide, setOpenUploadSide] = useState(false);
+  const [changepassword, setChangepassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [toast, setToast] = useState(null);
+
+  let validation = {};
+  const editScreen = false; // To-do: Deubug and make me dynamic or remove if not needed
+  const onClickAddPic = () => setOpenUploadSide(!openUploadSlide)
+  const TogleforPassword = () => setChangepassword(!changepassword);
+  const setOwnerName = (e) => setName(e.target.value);
+  const setOwnerEmail = (e) => setEmail(e.target.value);
+  const setGenderName = (value) => setGender(value);
+  const closeFileUploadDrawer = () => setOpenUploadSide(false);
+
   const updateProfile = async () => {
     const requestData = {
       ...userInfo,
@@ -120,40 +116,22 @@ const UserProfile = ({ stateCode, userType }) => {
     }
   }
 
-  let validation = {};
-
-  const setOwnerName = (e) => {
-    setName(e.target.value);
-  }
-  function setOwnerEmail(e) {
-    setEmail(e.target.value);
-  }
-  function setGenderName(value) {
-    setGender(value);
-  }
-
   let menu = [];
   const { data: Menu } = Digit.Hooks.pt.useGenderMDMS(stateId, "common-masters", "GenderType");
-  Menu &&
-    Menu.map((genderDetails) => {
-      menu.push({ i18nKey: `PT_COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
-    });
+  Menu && Menu.map((genderDetails) => {
+    menu.push({ i18nKey: `PT_COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
+  });
 
   const setFileStoreId = async (fileStoreId) => {
-    console.log("Id of the uploaded file - ", fileStoreId);
     setProfilePic(fileStoreId);
-    // getImgUrl(fileStoreId);
-    const thumbnails = fileStoreId ? await getThumbnails([fileStoreId], tenant) : null;
-    setProfileImg(thumbnails?.thumbs[0]);
-    console.log("thumbnails-", thumbnails);
-  };
 
-  // const getImgUrl = async (url) => {
-  //   console.log('here', url);
-  //   const imgUrl = await Digit.Utils.getFileUrl(url)
-  //   console.log('image - ', imgUrl);
-  //   setProfileImg(imgUrl);
-  // }
+    const thumbnails = fileStoreId ? await getThumbnails([fileStoreId], stateId) : null;
+    console.log("thumbnails-", thumbnails);
+
+    setProfileImg(thumbnails?.thumbs[0]);
+
+    closeFileUploadDrawer();
+  };
 
   const getThumbnails = async (ids, tenantId) => {
     const res = await Digit.UploadServices.Filefetch(ids, tenantId);
@@ -166,16 +144,6 @@ const UserProfile = ({ stateCode, userType }) => {
       return null;
     }
   };
-
-  // const { isLoading, error, data: profileImgData } = useQuery([`citizen-profile`, [profilePic]], () => Digit.UploadServices.Filefetch([profilePic], tenant));
-  // if(profileImgData) {
-  //   console.log('profileImgData-', profileImgData)
-  //   // getImgUrl(profileImgData)
-  // }
-  // console.log('img url-', profileImgData);
-
-  // if(isLoading)
-  //   return <Loader />
 
   return (
     <div>
@@ -205,7 +173,7 @@ const UserProfile = ({ stateCode, userType }) => {
                 />
               )}
               <button style={{ position: "absolute", bottom: "3%", right: "50%", left: "45%" }} onClick={onClickAddPic}>
-                ++++
+                <CameraIcon />
               </button>
             </div>
           </div>
@@ -279,12 +247,10 @@ const UserProfile = ({ stateCode, userType }) => {
           Save
         </button>
       </div>
-        {openUploadSlide == true ? <UploadDrawer setProfilePic={setFileStoreId} /> : ""}
+        
         </div>
       ) : (
         <div style={{ backgroundColor: "#EEEEEE", borderRadius: "5px", margin: "10px", padding: "10px", display: "flex" }}>
-          <h1>Home</h1>
-          <h1> /Page1</h1>
           <div
             style={{
               height: "376px",
@@ -319,7 +285,7 @@ const UserProfile = ({ stateCode, userType }) => {
                   />
                 )}
                 <button style={{ position: "relative", left: "147.33px", right: "8.33%", top: "12.5%", bottom: "12.5%" }} onClick={onClickAddPic}>
-                  ++++
+                  <CameraIcon />
                 </button>
               </div>
             </div>
@@ -395,8 +361,8 @@ const UserProfile = ({ stateCode, userType }) => {
                 <a style={{ color: "orange", cursor: "default", marginBottom: "5" }} onClick={TogleforPassword}>
                   Change Password
                 </a>
-                {chengepassword ? (
-                  <div>
+                {changepassword ? (
+                  <div style={{marginTop: '10px'}}>
                     <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
                       <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Current Password*")}`}</CardLabel>
                       <div className="field">
@@ -448,8 +414,6 @@ const UserProfile = ({ stateCode, userType }) => {
                 )}
               </div>
             </LabelFieldPair>
-
-            {openUploadSlide == true ? <UploadDrawer setProfilePic={setFileStoreId} /> : ""}
           </div>
         </div>
       )}
@@ -482,6 +446,7 @@ const UserProfile = ({ stateCode, userType }) => {
         style={{ maxWidth: "670px" }}
       />
     )}
+    {openUploadSlide == true ? <UploadDrawer setProfilePic={setFileStoreId} closeDrawer={closeFileUploadDrawer} userType={userType} /> : ""}
     </div>
   );
 };

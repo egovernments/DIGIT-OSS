@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import {EditIcon, LogoutIcon } from "@egovernments/digit-ui-react-components";
+import { EditPencilIcon, LogoutIcon } from "@egovernments/digit-ui-react-components";
 import TopBar from "./TopBar";
 import { useHistory } from "react-router-dom";
 
@@ -18,7 +18,7 @@ const TopBarSideBar = ({ t, stateInfo, userDetails, CITIZEN, cityDetails, mobile
 
     }
   
-    const userOptions = [{ name: t("Edit_PROFILE"), icon: <EditIcon className="icon" />, func: userProfile },{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout }];
+    const userOptions = [{ name: t("EDIT_PROFILE"), icon: <EditPencilIcon className="icon" />, func: userProfile },{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout }];
   
     return (
       <React.Fragment>

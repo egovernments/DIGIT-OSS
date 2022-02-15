@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { UploadFile } from "@egovernments/digit-ui-react-components";
-const scss = {
-  height: "150px",
-  width: "100%",
-};
+import { GalleryIcon, RemoveIcon, UploadFile } from "@egovernments/digit-ui-react-components";
 
-function UploadDrawer({ setProfilePic }) {
+function UploadDrawer({ setProfilePic, closeDrawer, userType }) {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [file, setFile] = useState("");
   const [error, setError] = useState(null);
 
-  const selectfile = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  // console.log("demo",uploadedFile)
-  const removeimg = () => {
-    setUploadedFile(null);
-  };
+  const selectfile = (e) => setFile(e.target.files[0]);
+  const removeimg = () => setUploadedFile(null);
+  const onOverlayBodyClick = () => closeDrawer(false);
 
   useEffect(() => {
     (async () => {
@@ -27,7 +18,7 @@ function UploadDrawer({ setProfilePic }) {
           setError(t("PT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {
           try {
-            const response = await Digit.UploadServices.Filestorage("citizen-profile", file, Digit.ULBService.getStateId());
+            const response = await Digit.UploadServices.Filestorage(`${userType}-profile`, file, Digit.ULBService.getStateId());
             if (response?.data?.files?.length > 0) {
               const fileStoreId = response?.data?.files[0]?.fileStoreId;
               setUploadedFile(fileStoreId);
@@ -45,37 +36,43 @@ function UploadDrawer({ setProfilePic }) {
   }, [file]);
 
   return (
-    // <div style={{  filter:"blur(100px)",
-    // backgroundColor:"rgba(0, 0, 0, 0.5)",
-    // userSelect:"none",
-    // pointerEvents:"none"}}>
-    <div
-      style={{
-        width: "90%",
-        justifyContent: "center",
-        backgroundColor: "red",
-        alignItems: "center",
-        position: "absolute",
-        top: "450px",
-        left: "15px",
-        height: "10%",
-        zindex: "2",
-      }}
-    >
-      <div style={{ width: "50%", float: "left" }}>
-        <UploadFile
-          extraStyleName={"propertyCreate"}
-          accept=".jpg,.png"
-          onUpload={selectfile}
-          // onDelete={() => {
-          //   setUploadedFile(null);}} />UploadDrawer
-        />
+    <React.Fragment>
+      <div style={{
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100vh',
+          backgroundColor: 'rgba(0,0,0,.5)',
+        }} onClick={onOverlayBodyClick}
+      ></div>
+      <div
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          backgroundColor: 'white',
+          alignItems: 'center',
+          position: 'fixed',
+          height: '10%',
+          bottom: userType === 'citizen' ? '2.5rem' : '0',
+          zindex: "2",
+        }}
+      >
+        <div style={{ width: "50%", float: "left" }}>
+          <UploadFile
+            extraStyleName={"propertyCreate"}
+            accept=".jpg,.png"
+            accept="image/*, .png, .jpeg, .jpg"
+            onUpload={selectfile}
+            inputStyles={{ height: '10px'}}
+          />
+          <GalleryIcon />
+        </div>
+        <div style={{ width: "50%", float: "left", textAlign: "center", justifyContent: "center" }}>
+          <button onClick={removeimg}><RemoveIcon /></button>
+        </div>
       </div>
-      <div style={{ width: "50%", float: "left", textAlign: "center", justifyContent: "center" }}>
-        <button onClick={removeimg}>Remove</button>
-      </div>
-    </div>
-    // </div>
+    </React.Fragment>
   );
 }
 

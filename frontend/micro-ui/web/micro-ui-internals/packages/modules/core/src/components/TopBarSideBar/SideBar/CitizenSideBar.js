@@ -1,4 +1,4 @@
-import { EditIcon,LogoutIcon, NavBar } from "@egovernments/digit-ui-react-components";
+import { LogoutIcon, NavBar, EditPencilIcon } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -90,9 +90,9 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
     menuItems = [
       ...menuItems,
       {
-        text: t("Edit_PROFILE"),
+        text: t("EDIT_PROFILE"),
         element:"PROFILE",
-        icon: <EditIcon className="icon" />,
+        icon: <EditPencilIcon className="icon" />,
         populators: {
           onClick: showProfilePage,
         },
