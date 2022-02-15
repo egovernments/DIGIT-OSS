@@ -47,6 +47,9 @@ public class IngestValidator {
     @Autowired
     private Producer producer;
 
+    private static final Pattern p = Pattern.compile("[^a-z0-9.\\- ]", Pattern.CASE_INSENSITIVE);
+
+
     public void verifyCrossStateRequest(Data data, RequestInfo requestInfo){
         String employeeUlb = requestInfo.getUserInfo().getTenantId();
         String ulbPresentInRequest = data.getUlb();
@@ -147,7 +150,6 @@ public class IngestValidator {
             if(s.equals("-") || s.equals("."))
                 throw new CustomException("EG_DS_ERR", "Cannot have a string of length 1 containing separator( . OR - ) as ingest input.");
 
-        Pattern p = Pattern.compile("[^a-z0-9.\\- ]", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(s);
         if (m.find())
             throw new CustomException("EG_DS_ERR", "Special characters are not allowed in input.");
