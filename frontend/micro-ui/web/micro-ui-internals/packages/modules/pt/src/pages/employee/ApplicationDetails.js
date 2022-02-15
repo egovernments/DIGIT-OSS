@@ -17,6 +17,7 @@ const ApplicationDetails = () => {
   const [appDetailsToShow, setAppDetailsToShow] = useState({});
   const [enableAudit, setEnableAudit] = useState(false);
   const [businessService, setBusinessService] = useState("PT.CREATE");
+  sessionStorage.setItem("applicationNoinAppDetails",propertyId);
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, propertyId);
 
@@ -170,6 +171,7 @@ const ApplicationDetails = () => {
    <MutationApplicationDetails 
    acknowledgementIds={appDetailsToShow?.applicationData?.acknowldgementNumber}
    workflowDetails={workflowDetails}
+   mutate={mutate}
    />
    )
  } 

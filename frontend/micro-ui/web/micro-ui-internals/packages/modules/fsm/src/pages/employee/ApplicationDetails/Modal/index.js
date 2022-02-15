@@ -26,7 +26,7 @@ const CloseBtn = (props) => {
 };
 
 const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData }) => {
-  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId);
+  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: '-1' });
   const { isLoading, isSuccess, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: id },
@@ -392,7 +392,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             t,
             rejectMenu: FSTPORejectionReasons,
             selectReason,
-            reason :fstpoRejectionReason,
+            reason: fstpoRejectionReason,
             action,
           })
         );

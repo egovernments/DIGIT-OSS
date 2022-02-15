@@ -40,7 +40,8 @@ const ApplicationDetails = (props) => {
     statusAttribute,
     ActionBarStyle,
     MenuStyle,
-    paymentsList
+    paymentsList,
+    showTimeLine=true,
   } = props;
   useEffect(() => {
     if (showToast) {
@@ -147,6 +148,7 @@ const ApplicationDetails = (props) => {
             timelineStatusPrefix={timelineStatusPrefix}
             statusAttribute={statusAttribute}
             paymentsList={paymentsList}
+            showTimeLine={showTimeLine}
           />
           {showModal ? (
             <ActionModal

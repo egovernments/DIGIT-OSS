@@ -620,3 +620,28 @@ padding: 0px !important;
         padding: 10px 5px !important
     }
   }
+
+  .map-row{
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+
+  }
+  .map-box{
+      display: inline-block;
+      height:10px;
+      width:10px;
+
+  }
+  .map-status{
+      position:absolute;
+      bottom: 14%;
+    width: 33%;
+    right: 1%;
+}
+.map-text{
+    margin-left: 5px;
+    color:#636363;
+    font-size: 14px;
+
+}

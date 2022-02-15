@@ -198,7 +198,7 @@ function change(){
           "adhocExemption":second,
           "adhocExemptionReason":selectedRebateReason.value,
         }
-        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+second;
+        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount-second;
            }
            else{
              alert( "Adhoc Exemption cannot be greater than the estimated tax for the given property");
@@ -210,14 +210,14 @@ function change(){
         if(second<total_amount){
           ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
             "taxHeadCode": "PT_TIME_REBATE",
-            "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount+second,
+            "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount-second,
             "category": "TAX"
         }
         AssessmentData.additionalDetails={
           "adhocExemption":second,
           "adhocExemptionReason":third_temp.current.value,
         }
-        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+second;
+        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount-second;
            }
            else{
              alert( "Adhoc Exemption cannot be greater than the estimated tax for the given property");
@@ -478,6 +478,7 @@ const RebatePenalityPoPup=()=>{
             }
           ]}
         }
+        showTimeLine={false}
         isLoading={isLoading}
         isDataLoading={isLoading}
         applicationData={appDetailsToShow?.applicationData}

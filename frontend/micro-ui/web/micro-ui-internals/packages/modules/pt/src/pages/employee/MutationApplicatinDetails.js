@@ -12,7 +12,7 @@ import { newConfigMutate } from "../../config/Mutate/config";
 import _ from "lodash";
 import get from "lodash/get";
 
-const MutationApplicationDetails = ({acknowledgementIds, workflowDetails}) => {
+const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate}) => {
   const { t } = useTranslation();
   const [acknowldgementData, setAcknowldgementData] = useState([]);
   const [displayMenu, setDisplayMenu] = useState(false);

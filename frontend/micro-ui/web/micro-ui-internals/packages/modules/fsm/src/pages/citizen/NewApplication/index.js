@@ -25,7 +25,7 @@ const FileComplaint = ({ parentRoute }) => {
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
   useEffect(() => {
-    if(!pathname?.includes('new-application/response')){
+    if (!pathname?.includes('new-application/response')) {
       setMutationHappened(false);
       clearSuccessData();
       clearError();
@@ -54,7 +54,7 @@ const FileComplaint = ({ parentRoute }) => {
     goNext(skipStep);
   }
 
-  const handleSkip = () => {};
+  const handleSkip = () => { };
 
   const handleSUccess = () => {
     clearParams();
@@ -69,7 +69,23 @@ const FileComplaint = ({ parentRoute }) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
 
-  const genderConfig = {
+  const additionalConfig = [{
+    "label": "a",
+    "isMandatory": false,
+    "type": "component",
+    "route": "select-payment-preference",
+    "key": "selectPaymentPreference",
+    "component": "SelectPaymentPreference",
+    "texts": {
+      "headerCaption": "",
+      "header": "ES_FSM_PAYMENT_PREFERENCE_LABEL",
+      "cardText": "ES_FSM_PAYMENT_PREFERENCE_TEXT",
+      "submitBarLabel": "CS_COMMON_NEXT",
+      "skipText": "CORE_COMMON_SKIP_CONTINUE"
+    },
+    "nextStep": "select-gender"
+  },
+  {
     "label": "a",
     "isMandatory": false,
     "type": "component",
@@ -84,10 +100,10 @@ const FileComplaint = ({ parentRoute }) => {
       "skipText": "CORE_COMMON_SKIP_CONTINUE"
     },
     "nextStep": "property-type"
-  }
+  }]
 
-  configs = [ genderConfig,...config]
-  configs.indexRoute = "select-gender";
+  configs = [...additionalConfig, ...config]
+  configs.indexRoute = "select-payment-preference";
 
   return (
     <Switch>
