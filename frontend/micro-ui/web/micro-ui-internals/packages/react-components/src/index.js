@@ -133,7 +133,8 @@ import {
   SurveyIconSolid,
   DustbinIcon,
   InfoBannerIcon,
-  WSICon
+  WSICon,
+  CheckSvg
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -366,6 +367,7 @@ export {
   SearchIcon,
   DeleteIcon,
   WSICon,
-  UploadPitPhoto
+  UploadPitPhoto,
+  CheckSvg
 };
 

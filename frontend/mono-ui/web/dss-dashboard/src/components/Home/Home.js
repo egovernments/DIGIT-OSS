@@ -13,6 +13,7 @@ import getFilterObj from "../../actions/getFilterObj";
 import getFinancialYearObj from "../../actions/getFinancialYearObj";
 import mdmsAPI from "../../actions/mdms/mdms";
 import Variables from "../../styles/variables";
+import { isNurtDashboard } from "../../utils/commons";
 import history from "../../utils/web.history";
 import HorBarChart from "../Charts/HorBarChart";
 import MapChart from "../Charts/MapChart";
@@ -36,9 +37,19 @@ class Home extends React.Component {
       dontShowHeader: true,
       getFYobj: getFinancialYearObj(),
       dashboardConfigData: [],
+      selectedState: "",
+      totalCount: 0,
+      liveCount: 0,
     };
   }
 
+  updateSelectedState = (obj = {}) => {
+    this.setState({
+      selectedState: obj.state,
+      totalCount: obj.totalCount,
+      liveCount: obj.liveCount,
+    });
+  };
   async componentDidMount() {
     await this.workingOnLabelText();
   }
@@ -83,7 +94,7 @@ class Home extends React.Component {
   }
 
   renderChart(data, index) {
-    let { chartLabelName } = this.state;
+    let { chartLabelName, selectedState, liveCount, totalCount } = this.state;
     let { classes, strings } = this.props;
     let filters = getFilterObj(
       this.props.GFilterData,
@@ -111,8 +122,8 @@ class Home extends React.Component {
         return (
           <Grid
             item
-            xs={6}
-            sm={6}
+            xs={12}
+            sm={12}
             md={6}
             lg={6}
             xl={6}
@@ -121,12 +132,22 @@ class Home extends React.Component {
           >
             <Card color="blue" bgColor={"white"} page={pageId}>
               <CardHeader color="rose" icon page={pageId || "overview"}>
-                <CardIcon color="rose" bgColor={"#2196F3"}>
+                <CardIcon color="rose" bgColor={"#F47738"}>
                   <Icons type={data.name}></Icons>
                 </CardIcon>
                 <div style={{ textAlign: "left", color: "black" }}>
                   <Typography className={classes.cardTitle}>
-                    {strings[data.name] || data.name}
+                    {selectedState
+                      ? selectedState
+                      : strings[data.name] || data.name}
+                    {selectedState && (
+                      <span style={{ fontSize: "14px", display: "block" }}>
+                        {strings[`DSS_TOTAL_ULBS`] || "DSS_TOTAL_ULBS"}{" "}
+                        {Number(totalCount).toFixed()} |{" "}
+                        {strings[`DSS_LIVE_ULBS`] || "DSS_LIVE_ULBS"}{" "}
+                        {Number(liveCount).toFixed()}
+                      </span>
+                    )}
                   </Typography>
                 </div>
               </CardHeader>
@@ -147,6 +168,10 @@ class Home extends React.Component {
                       chartData={data.charts[0]}
                       chartId={data.charts[0].id}
                       filters={filters}
+                      selectedState={selectedState}
+                      totalCount={totalCount}
+                      liveCount={liveCount}
+                      updateSelectedState={this.updateSelectedState}
                     ></MapChart>
                   </Grid>
                 </Grid>
@@ -158,8 +183,8 @@ class Home extends React.Component {
         return (
           <Grid
             item
-            xs={6}
-            sm={6}
+            xs={12}
+            sm={12}
             md={6}
             lg={6}
             xl={6}
@@ -168,7 +193,7 @@ class Home extends React.Component {
           >
             <Card color="blue" bgColor={"white"} page={pageId}>
               <CardHeader color="rose" icon page={pageId || "overview"}>
-                <CardIcon color="rose" bgColor={"#2196F3"}>
+                <CardIcon color="rose" bgColor={"#F47738"}>
                   <Icons type={data.name}></Icons>
                 </CardIcon>
                 <div style={{ textAlign: "left", color: "black" }}>
@@ -214,12 +239,17 @@ class Home extends React.Component {
             style={{ paddingBottom: "5px" }}
           >
             <Card
-              color="blue"
-              bgColor={"rgba(33, 150, 243, 0.24)"}
+              color={"blue"}
+              //              bgColor={isNurtDashboard()?"white":"rgba(33, 150, 243, 0.24)"}
+              bgColor={"white"}
               page={pageId}
             >
               <CardHeader color="rose" icon page={pageId || "overview"}>
-                <CardIcon color="rose" bgColor={"#2196F3"}>
+                <CardIcon
+                  color="rose"
+                  bgColor={"#F47738"}
+                  // bgColor={isNurtDashboard()?"#F47738":"#2196F3"}
+                >
                   <Icons type={data.name}></Icons>
                 </CardIcon>
                 <div style={{ textAlign: "left", color: "black" }}>
@@ -338,10 +368,7 @@ class Home extends React.Component {
     let path = "";
     if (window.location.pathname && window.location.pathname.includes("ulb-")) {
       path = "ulb-home";
-    } else if (
-      window.location.pathname &&
-      window.location.pathname.includes("NURT_DASHBOARD")
-    ) {
+    } else if (window.location.pathname && isNurtDashboard()) {
       path = "NURT_DASHBOARD";
     } else {
       path = "home";
@@ -454,7 +481,10 @@ class Home extends React.Component {
           </Grid>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography className={classes.filter}>
+          <Typography
+            className={classes.filter}
+            style={{ color: "#505A5F", fontWeight: "400", fontSize: "14px" }}
+          >
             {this.getTitleText(strings)}
           </Typography>
         </Grid>
