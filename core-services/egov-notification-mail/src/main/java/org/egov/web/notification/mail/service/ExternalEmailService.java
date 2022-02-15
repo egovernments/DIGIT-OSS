@@ -42,6 +42,7 @@ public class ExternalEmailService implements EmailService {
 	}
 
 	private void sendHTMLEmail(Email email) {
+		log.info("inside sendHTMLEmail");
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper;
 		try {
@@ -53,6 +54,7 @@ public class ExternalEmailService implements EmailService {
 			log.error(EXCEPTION_MESSAGE, e);
 			throw new RuntimeException(e);
 		}
+		log.info("Sending message");
 		mailSender.send(message);
 	}
 }
