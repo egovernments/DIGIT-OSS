@@ -70,6 +70,7 @@ public class ExternalEmailService implements EmailService {
 	}
 
 	private void sendHTMLEmail(Email email) {
+		log.info("inside sendHTMLEmail");
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper;
 		try {
@@ -77,8 +78,8 @@ public class ExternalEmailService implements EmailService {
 			helper.setTo(email.getEmailTo().toArray(new String[0]));
 			helper.setSubject(email.getSubject());
 			helper.setText(email.getBody(), true);
+			/*log here*/
 			log.info(email.toString());
-
 			for(int i=0; i<email.getFileStoreId().size(); i++) {
 				String uri = String.format("%s/id?tenantId=%s&fileStoreId=%s", FILESTORE_HOST, email.getTenantId(), email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);
@@ -98,6 +99,7 @@ public class ExternalEmailService implements EmailService {
 				}
 				helper.addAttachment(filename, download);
 			}
+			log.info("added attachments");
 
 		} catch (MessagingException | MalformedURLException e) {
 			log.error(EXCEPTION_MESSAGE, e);
@@ -105,6 +107,7 @@ public class ExternalEmailService implements EmailService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		log.info("Sending message");
 		mailSender.send(message);
 	}
 }

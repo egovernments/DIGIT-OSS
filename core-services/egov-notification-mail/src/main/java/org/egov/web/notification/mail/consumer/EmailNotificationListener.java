@@ -21,6 +21,7 @@ public class EmailNotificationListener {
     private ObjectMapper objectMapper;
 
 
+
     @Autowired
     public EmailNotificationListener(EmailService emailService, ObjectMapper objectMapper) {
         this.emailService = emailService;
@@ -33,6 +34,7 @@ public class EmailNotificationListener {
     	EmailRequest emailRequest = objectMapper.convertValue(record, EmailRequest.class);
         log.info("Email is: " + emailRequest.getEmail().toString());
         emailService.sendEmail(emailRequest.getEmail());
+        log.info("Email sent");
         
     }
     
