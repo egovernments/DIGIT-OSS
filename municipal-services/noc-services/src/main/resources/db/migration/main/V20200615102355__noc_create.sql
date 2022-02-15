@@ -1,4 +1,4 @@
-CREATE TABLE public.eg_noc(
+CREATE TABLE IF NOT EXISTS eg_noc(
     id character varying(256) NOT NULL,
     applicationno character varying(64),
     tenantid character varying(256),
@@ -19,9 +19,9 @@ CREATE TABLE public.eg_noc(
     CONSTRAINT pk_eg_noc PRIMARY KEY (id)
 );
 
-CREATE TABLE public.eg_noc_auditdetails(
+CREATE TABLE IF NOT EXISTS eg_noc_auditdetails(
     id character varying(256)  NOT NULL,
-     applicationno character varying(64),
+    applicationno character varying(64),
     tenantid character varying(256),
     status character varying(64),
     landid character varying(256),
@@ -39,7 +39,7 @@ CREATE TABLE public.eg_noc_auditdetails(
     applicationstatus character varying(64) NOT NULL
 );
 
-CREATE TABLE public.eg_noc_document(
+CREATE TABLE IF NOT EXISTS eg_noc_document(
     id character varying(64)  NOT NULL,
     documenttype character varying(64),
     filestoreid character varying(64),
@@ -52,12 +52,12 @@ CREATE TABLE public.eg_noc_document(
     lastmodifiedtime bigint,
     CONSTRAINT uk_eg_noc_document PRIMARY KEY (id),
     CONSTRAINT fk_eg_noc_document FOREIGN KEY (nocid)
-        REFERENCES public.eg_noc (id) MATCH SIMPLE
+        REFERENCES eg_noc (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
 
-CREATE INDEX noc_index  ON public.eg_noc 
+CREATE INDEX IF NOT EXISTS noc_index  ON eg_noc 
 (
     applicationno,
     nocno,
