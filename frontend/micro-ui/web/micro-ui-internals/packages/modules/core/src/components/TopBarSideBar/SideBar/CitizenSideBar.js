@@ -81,7 +81,7 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
   let profileItem;
   if (isFetched && user && user.access_token) {
     profileItem = <Profile info={user?.info} stateName={stateInfo?.name} />;
-    menuItems = menuItems.filter((item) => (item?.id !== 'login-btn'))
+    menuItems = menuItems.filter((item) => item?.id !== "login-btn");
     menuItems = [
       ...menuItems,
       {
@@ -93,41 +93,38 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
         },
       },
       {
-        text: <React.Fragment>
-          {t("CS_COMMON_HELPLINE")}
-          <div className="telephone" style={{ marginTop: "-10%" }}>
-            {
-              storeData?.tenants.map((i) => {
-                i.code === tenantId ?
+        text: (
+          <React.Fragment>
+            {t("CS_COMMON_HELPLINE")}
+            <div className="telephone" style={{ marginTop: "-10%" }}>
+              {storeData?.tenants.map((i) => {
+                i.code === tenantId ? (
                   <div className="link">
                     <a href={`tel:${storeData?.tenants[i].contactNumber}`}>{storeData?.tenants[i].contactNumber}</a>
-                  </div> :
+                  </div>
+                ) : (
                   <div className="link">
                     <a href={`tel:${storeData?.tenants[0].contactNumber}`}>{storeData?.tenants[0].contactNumber}</a>
                   </div>
-              })
-            }
-            <div className="link">
-              <a href={`tel:${storeData?.tenants[0].contactNumber}`}>{storeData?.tenants[0].contactNumber}</a>
+                );
+              })}
+              <div className="link">
+                <a href={`tel:${storeData?.tenants[0].contactNumber}`}>{storeData?.tenants[0].contactNumber}</a>
+              </div>
             </div>
-          </div>
-        </React.Fragment>,
+          </React.Fragment>
+        ),
         element: "Helpline",
         icon: <Phone className="icon" />,
       },
-
     ];
   }
 
   /*  URL with openlink wont have sidebar and actions    */
   if (history.location.pathname.includes("/openlink")) {
-    profileItem = (<span></span>);
-    menuItems = menuItems.filter(ele => ele.element === "LANGUAGE");
+    profileItem = <span></span>;
+    menuItems = menuItems.filter((ele) => ele.element === "LANGUAGE");
   }
 
-  return (
-    <div>
-      <NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={closeSidebar} Footer={<PoweredBy />} />
-    </div>
-  );
+  return <div>{<NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={closeSidebar} Footer={<PoweredBy />} />}</div>;
 };
