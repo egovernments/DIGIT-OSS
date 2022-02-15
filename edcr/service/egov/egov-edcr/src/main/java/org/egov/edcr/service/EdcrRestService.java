@@ -170,6 +170,9 @@ public class EdcrRestService {
 	@Value("${egov.services.egov-indexer.url}")
 	private String egovIndexerUrl;
 
+	@Value("${indexer.host}")
+	private String indexerHost;
+	
 	public Session getCurrentSession() {
 		return entityManager.unwrap(Session.class);
 	}
@@ -246,7 +249,7 @@ public class EdcrRestService {
 	public void pushDataToIndexer(Object data, String topicName) {
 		try {
 			restTemplate = new RestTemplate();
-			StringBuilder uri = new StringBuilder("${mdms.host:}").append(egovIndexerUrl);
+			StringBuilder uri = new StringBuilder(indexerHost).append(egovIndexerUrl);
 			Object postForObject = restTemplate.postForObject(uri.toString(), data, Object.class, topicName);
 			LOG.info("Data pushed in topic-edcr-kafka-topic.\n Data pushed=> \n"+data);
 		} catch (RestClientException e) {
