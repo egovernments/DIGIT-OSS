@@ -237,7 +237,7 @@ public class EdcrRestService {
 		edcrApplication = edcrApplicationService.createRestEdcr(edcrApplication);
 		// building index response
 		edcrIndexData = setEdcrIndexData(edcrApplication, edcrApplication.getEdcrApplicationDetails().get(0));
-		System.out.println(edcrIndexData.toString());
+		//System.out.println(edcrIndexData.toString());
 		// call kafka topic
 		pushDataToIndexer(edcrIndexData, "edcr-kafka-topic");
 		return setEdcrResponse(edcrApplication.getEdcrApplicationDetails().get(0), edcrRequest);
@@ -246,8 +246,9 @@ public class EdcrRestService {
 	public void pushDataToIndexer(Object data, String topicName) {
 		try {
 			restTemplate = new RestTemplate();
-			StringBuilder uri = new StringBuilder("http://localhost:8095/").append(egovIndexerUrl);
+			StringBuilder uri = new StringBuilder("${mdms.host:}").append(egovIndexerUrl);
 			Object postForObject = restTemplate.postForObject(uri.toString(), data, Object.class, topicName);
+			LOG.info("Data pushed in topic-edcr-kafka-topic.\n Data pushed=> \n"+data);
 		} catch (RestClientException e) {
 			LOG.error("ERROR occurred while trying to push the data to indexer : ", e);
 		}
