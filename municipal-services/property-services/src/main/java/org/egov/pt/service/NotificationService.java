@@ -282,6 +282,7 @@ public class NotificationService {
 		String moduleName = request.getProperty().getWorkflow().getModuleName();
 		for(Document document : request.getProperty().getDocuments()) {
 			fileStoreIds.add(document.getFileStoreId());
+			log.info("documentType: " + document.getDocumentType());
 //			if(document.getDocumentType()=="ApplicationType"){
 //				fileStoreIds.add(document.getFileStoreId());
 //			}
