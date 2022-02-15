@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.exception.InvalidTenantIdException;
 import org.egov.common.utils.MultiStateInstanceUtil;
@@ -281,5 +283,13 @@ public class PropertyRepository {
 
 		return false;
 	}
+	
+	public Integer getCount(@Valid PropertyCriteria propertyCriteria, RequestInfo requestInfo) {
+		Boolean isOpenSearch = false ? false : util.isPropertySearchOpen(requestInfo.getUserInfo());
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getCountQuery(propertyCriteria, preparedStmtList, isOpenSearch);
+        Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+        return count;
+    }	
 
 }

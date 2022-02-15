@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.PropertyCriteria;
@@ -23,6 +25,9 @@ public class PropertyQueryBuilder {
 	
 	@Autowired
 	private PropertyConfiguration config;
+	
+	@Autowired
+	private PropertyQueryBuilder queryBuilder;
 
 	private static final String SELECT = "SELECT ";
 	private static final String INNER_JOIN = "INNER JOIN";
@@ -385,5 +390,13 @@ public class PropertyQueryBuilder {
 	public String getpropertyAuditQuery() {
 		return PROEPRTY_AUDIT_QUERY;
 	}
+	
+	private static final String PT_COUNT = "select count(distinct pid) from ({INTERNAL_QUERY}) as count";
+
+	public String getCountQuery(@Valid PropertyCriteria propertyCriteria, List<Object> preparedStmtList, Boolean isPlainSearch) {
+        String query = queryBuilder.getPropertySearchQuery(propertyCriteria, preparedStmtList, isPlainSearch, false);
+        String countQuery = PT_COUNT.replace("{INTERNAL_QUERY}", query);
+        return countQuery;
+    }
 
 }
