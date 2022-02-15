@@ -131,7 +131,8 @@ import {
   PMBIconSolid,
   EventsIconSolid,
   SurveyIconSolid,
-  DustbinIcon
+  DustbinIcon,
+  CheckSvg
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -359,6 +360,7 @@ export {
   DateRange,
   EditIcon,
   SearchIcon,
-  DeleteIcon
+  DeleteIcon,
+  CheckSvg
 };
 

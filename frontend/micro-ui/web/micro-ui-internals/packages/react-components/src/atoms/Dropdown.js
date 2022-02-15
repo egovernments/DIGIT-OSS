@@ -139,7 +139,7 @@ const Dropdown = (props) => {
   }
 
   let filteredOption =
-    (props.option && props.option.filter((option) => t(option[props.optionKey]).toUpperCase().indexOf(filterVal.toUpperCase()) > -1)) || [];
+    (props.option && props.option?.filter((option) => t(option[props.optionKey])?.toUpperCase()?.indexOf(filterVal?.toUpperCase()) > -1)) || [];
   function selectOption(ind) {
     onSelect(filteredOption[ind]);
   }
@@ -235,7 +235,7 @@ const Dropdown = (props) => {
             ref={optionRef}
           >
             {props.option
-              .filter((option) => option.toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
+              .filter((option) => option?.toUpperCase().indexOf(filterVal?.toUpperCase()) > -1)
               .map((option, index) => {
                 return (
                   <p
