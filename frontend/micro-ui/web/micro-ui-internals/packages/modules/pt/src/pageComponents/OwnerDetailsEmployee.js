@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { stringReplaceAll } from "../utils";
+import { stringReplaceAll,CompareTwoObjects } from "../utils";
 
 const createOwnerDetails = () => ({
   name: "",
@@ -172,8 +172,7 @@ const OwnerForm = (_props) => {
     keys.forEach((key) => (part[key] = owner[key]));
 
     let _ownerType = isIndividualTypeOwner ? {} : { ownerType: { code: "NONE" } };
-
-    if (!_.isEqual(formValue, part)) {
+    if (!(CompareTwoObjects(formValue,part))) {
       setOwners((prev) => prev.map((o) => (o.key && o.key === owner.key ? { ...o, ...formValue, ..._ownerType } : { ...o })));
       trigger();
     }
