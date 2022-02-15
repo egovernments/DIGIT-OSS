@@ -26,4 +26,10 @@ public class AsyncHandler {
         });
     }
 
+    @Async
+    public void pushRecordToKafkaConnector(String index, List<JsonNode> records) {
+        for(JsonNode record : records)
+            producer.push(index, record);
+    }
+
 }
