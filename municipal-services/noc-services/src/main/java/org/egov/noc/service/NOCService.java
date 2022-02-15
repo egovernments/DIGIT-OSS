@@ -123,6 +123,7 @@ public class NOCService {
 		List<String> ids = Arrays.asList(nocRequest.getNoc().getId());
 		NocSearchCriteria criteria = new NocSearchCriteria();
 		criteria.setIds(ids);
+		criteria.setTenantId(nocRequest.getNoc().getTenantId());
 		List<Noc> nocList = search(criteria, nocRequest.getRequestInfo());
 		if (CollectionUtils.isEmpty(nocList) ) {
 			StringBuilder builder = new StringBuilder();
