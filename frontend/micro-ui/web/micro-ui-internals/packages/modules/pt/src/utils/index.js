@@ -567,7 +567,7 @@ export const convertToProperty = (data = {}) => {
         basement2: basement2,
       },
 
-      creationReason: "UPDATE",
+      creationReason: getCreationReason(data),
       source: "MUNICIPAL_RECORDS",
       channel: "CITIZEN",
     },
@@ -575,6 +575,22 @@ export const convertToProperty = (data = {}) => {
   console.info("propertyCreated", formdata);
   return formdata;
 };
+
+export const CompareTwoObjects = (ob1, ob2) => {
+Object.keys(ob1).map((key) =>{
+  if(typeof ob1[key] == "object")
+  {
+    if(ob1[key].code !== ob2[key].code)
+    return false
+  }
+  else
+  {
+    if(ob1[key] !== ob2[key])
+    return false;
+  }
+});
+return true;
+}
 
 export const setUpdateOwnerDetails = (data = []) => {
   const { institution, owners } = data;

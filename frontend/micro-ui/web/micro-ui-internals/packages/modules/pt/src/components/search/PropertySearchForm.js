@@ -4,10 +4,11 @@ import { Controller, useForm } from "react-hook-form";
 
 
 const SwitchComponent = (props) => {
+  let searchBy = props.searchBy;
   return (
     <div className="w-fullwidth PropertySearchFormSwitcher">
       {props.keys.map((key) => (
-        <span key={key} className={props.searchBy === key ? "selected" : "non-selected"} onClick={() => {props.onSwitch(key);props.onReset();}}>
+        <span key={key} className={searchBy === key ? "selected" : "non-selected"} onClick={() => {key === "searchDetail" && !(sessionStorage.getItem("searchDetailValue"))?sessionStorage.setItem("searchDetailValue",1):""; key==="searchId" && sessionStorage.getItem("searchDetailValue") == 1?sessionStorage.setItem("searchDetailValue",2):"";   props.onSwitch(key);props.onReset(); }}>
           {props.t(`PT_SEARCH_BY_${key?.toUpperCase()}`)}
         </span>
       ))}

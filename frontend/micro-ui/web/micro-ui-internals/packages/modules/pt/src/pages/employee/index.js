@@ -104,12 +104,12 @@ const EmployeeApp = ({ path, url, userType }) => {
         show: location.pathname.includes("/pt/application-search") ? true : false,
       },
       {
-        path: "/digit-ui/employee/pt/property-details/:id",
+        path: `/digit-ui/employee/pt/ptsearch/property-details/${sessionStorage.getItem("propertyIdinPropertyDetail")}`,
         content: t("PT_PROPERTY_INFORMATION"),
         show: location.pathname.includes("/pt/property-details/") || location.pathname.includes("/pt/ptsearch/property-details/") || location.pathname.includes("/pt/ptsearch/payment-details/") || location.pathname.includes("/pt/ptsearch/assessment-details/")  ? true : false,
       },
       {
-        path: "/digit-ui/employee/pt/application-details/:id",
+        path: `/digit-ui/employee/pt/applicationsearch/application-details/${sessionStorage.getItem("applicationNoinAppDetails")}`,
         content: t("PT_APPLICATION_TITLE"),
         show: location.pathname.includes("/pt/application-details/") || location.pathname.includes("/pt/applicationsearch/application-details/") ? true : false,
       },
