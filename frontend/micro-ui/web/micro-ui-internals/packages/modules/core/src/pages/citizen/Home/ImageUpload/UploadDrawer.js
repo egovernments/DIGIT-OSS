@@ -53,22 +53,20 @@ function UploadDrawer({ setProfilePic, closeDrawer, userType }) {
           backgroundColor: 'white',
           alignItems: 'center',
           position: 'fixed',
-          height: '10%',
+          height: '20%',
           bottom: userType === 'citizen' ? '2.5rem' : '0',
           zindex: "2",
         }}
       >
-        <div style={{ width: "50%", float: "left" }}>
-          <UploadFile
-            extraStyleName={"propertyCreate"}
-            accept=".jpg,.png"
-            accept="image/*, .png, .jpeg, .jpg"
-            onUpload={selectfile}
-            inputStyles={{ height: '10px'}}
-          />
-          <GalleryIcon />
+        <div style={{ width:  "50%", float: "left",marginLeft:userType === 'citizen' ? "60px":"350px",marginTop:"40px"}}>
+        <label for="file"> <GalleryIcon/></label>
+        <input type="file" id="file" 
+        accept="image/*, .png, .jpeg, .jpg"
+        onChange={selectfile}
+        style={{display: "none"}}/>
         </div>
-        <div style={{ width: "50%", float: "left", textAlign: "center", justifyContent: "center" }}>
+  
+        <div style={{ width: "20%", float: "right",padding:"30px",marginRight:"50px",marginTop:"15px"}}>
           <button onClick={removeimg}><RemoveIcon /></button>
         </div>
       </div>
