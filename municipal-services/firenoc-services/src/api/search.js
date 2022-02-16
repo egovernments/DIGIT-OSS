@@ -30,8 +30,8 @@ export const searchApiResponse = async (request, next = {}) => {
   const queryObj = JSON.parse(JSON.stringify(request.query));
   var header = JSON.parse(JSON.stringify(request.headers));
 
-  //console.log("request", request.query);
-  //console.log("Query object:"+JSON.stringify(queryObj));
+  console.log("request", request.query);
+  console.log("Query object:"+JSON.stringify(queryObj));
   let errors = validateFireNOCSearchModel(queryObj);
 
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE && queryObj.tenantId == null){
@@ -63,7 +63,7 @@ export const searchApiResponse = async (request, next = {}) => {
   const isUser = some(roles, { code: "CITIZEN" }) && userUUID;
   if (isUser) {
     const mobileNumber = get(request.body, "RequestInfo.userInfo.mobileNumber");
-    const tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
+    const tenantId = get(request.body, "RequestInfo.userInfo.permanentCity");
     
     
     //text = `${text} where (FN.createdby = '${userUUID}' OR`;    
@@ -72,8 +72,8 @@ export const searchApiResponse = async (request, next = {}) => {
       ? queryObj.mobileNumber
       : mobileNumber;
     queryObj.tenantId = queryObj.tenantId ? queryObj.tenantId : tenantId;
-    //console.log("mobileNumber", mobileNumber);
-    //console.log("tenedrIDD", tenantId);
+    console.log("mobileNumber", mobileNumber);
+    console.log("tenedrIDD", tenantId);
 
     if(queryObj.tenantId.split('.').length <= envVariables.STATE_LEVEL_TENANTID_LENGTH){
       text = `${text} where FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
@@ -195,7 +195,7 @@ export const searchApiResponse = async (request, next = {}) => {
   }
 
   sqlQuery = replaceSchemaPlaceholder(sqlQuery, queryObj.tenantId);
-  //console.log("SQL QUery:" +sqlQuery);
+  console.log("SQL QUery:" +sqlQuery);
   const dbResponse = await db.query(sqlQuery);
   //console.log("dbResponse"+JSON.stringify(dbResponse));
   if (dbResponse.err) {

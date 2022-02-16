@@ -21,8 +21,8 @@ const envVariables = {
     process.env.KAFKA_TOPICS_FIRENOC_UPDATE || "update-fn-firenoc",
   KAFKA_TOPICS_FIRENOC_WORKFLOW:
     process.env.KAFKA_TOPICS_FIRENOC_WORKFLOW || "update-fn-workflow",
-  KAFKA_TOPICS_RECEIPT_CREATE:
-    process.env.KAFKA_TOPICS_RECEIPT_CREATE || "egov.collection.payment-create",
+  KAFKA_TOPICS_RECEIPT_CREATE_REGEX:
+    process.env.KAFKA_TOPICS_RECEIPT_CREATE_REGEX || /^[a-zA-Z]+-egov.collection.payment-create$/i,
   KAFKA_TOPICS_NOTIFICATION:
     process.env.KAFKA_TOPICS_NOTIFICATION || "egov.core.notification.sms",
   KAFKA_TOPICS_EVENT_NOTIFICATION:
@@ -34,6 +34,13 @@ const envVariables = {
     process.env.KAFKA_TOPICS_FIRENOC_UPDATE_SMS || "update-fn-firenoc-sms",
   KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS:
     process.env.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS || "update-fn-workflow-sms",
+
+  KAFKA_TOPICS_FIRENOC_CREATE_SMS_REGEX:
+    process.env.KAFKA_TOPICS_FIRENOC_CREATE_SMS_REGEX || /^[a-zA-Z]+-save-fn-firenoc-sms$/i,
+  KAFKA_TOPICS_FIRENOC_UPDATE_SMS_REGEX:
+    process.env.KAFKA_TOPICS_FIRENOC_UPDATE_SMS_REGEX || /^[a-zA-Z]+-update-fn-firenoc-sms$/i,
+  KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS_REGEX:
+    process.env.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS_REGEX || /^[a-zA-Z]+-update-fn-workflow-sms$/i,
 
   //tracer configurations
   TRACER_ENABLE_REQUEST_LOGGING:
