@@ -39,7 +39,7 @@
     "express-async-handler": "^1.1.4",
     "kafka-node": "^5.0.0",
     "morgan": "^1.8.0",
-    "pg": "^7.6.1",
+    "pg": "^8.7.1",
     "random-number": "0.0.9",
     "resource-router-middleware": "^0.6.0",
     "swagger-express-validator": "^1.0.0",
