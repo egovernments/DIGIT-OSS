@@ -850,7 +850,7 @@ export const pdfDocumentName = (documentLink = "", index = 0) => {
 };
 
 /* methid to get date from epoch */
-export const convertEpochToDate = (dateEpoch) => {
+export const convertEpochToDate = (dateEpoch,businessService) => {
   // Returning null in else case because new Date(null) returns initial date from calender
   if (dateEpoch) {
     const dateFromApi = new Date(dateEpoch);
@@ -859,6 +859,9 @@ export const convertEpochToDate = (dateEpoch) => {
     let year = dateFromApi.getFullYear();
     month = (month > 9 ? "" : "0") + month;
     day = (day > 9 ? "" : "0") + day;
+    if(businessService == "PT")
+    return `${day}-${month}-${year}`;
+    else
     return `${day}/${month}/${year}`;
   } else {
     return null;
