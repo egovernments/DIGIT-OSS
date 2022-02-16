@@ -69,7 +69,7 @@ public class LandUserService {
 			if (owner.getMobileNumber() != null) {
 			    log.info("*********Tenant ID*****" + owner.getTenantId());
 				if (owner.getTenantId() == null) {
-				    owner.setTenantId(getStateLevelTenantForCitizen(owner.getTenantId()));
+				    owner.setTenantId(getStateLevelTenantForCitizen(landInfo.getTenantId()));
 				}
 
 				userDetailResponse = userExists(owner, requestInfo);
