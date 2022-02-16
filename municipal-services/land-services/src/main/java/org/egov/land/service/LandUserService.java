@@ -63,16 +63,18 @@ public class LandUserService {
 	public void manageUser(LandInfoRequest landRequest) {
 		LandInfo landInfo = landRequest.getLandInfo();
 		 @Valid RequestInfo requestInfo = landRequest.getRequestInfo();
-
+		 log.info("***landRequest****" + landRequest.toString());
 		landInfo.getOwners().forEach(owner -> {
 			UserDetailResponse userDetailResponse = null;
 			if (owner.getMobileNumber() != null) {
+			    log.info("*********Tenant ID*****" + owner.getTenantId());
 				if (owner.getTenantId() == null) {
-					owner.setTenantId(centralInstanceUtil.getStateLevelTenant(landInfo.getTenantId()));
+				    owner.setTenantId(getStateLevelTenantForCitizen(owner.getTenantId()));
 				}
 
 				userDetailResponse = userExists(owner, requestInfo);
-
+				if(userDetailResponse != null)
+				    log.info("*******userDetailResponse***" + userDetailResponse.getUser().toString());
 				if (userDetailResponse == null || CollectionUtils.isEmpty(userDetailResponse.getUser())
 						|| !owner.compareWithExistingUser(userDetailResponse.getUser().get(0))) {
 					// if no user found with mobileNo or details were changed,
@@ -84,7 +86,7 @@ public class LandUserService {
 					setUserName(owner);
 					owner.setOwnerType(LandConstants.CITIZEN);
 					userDetailResponse = userCall(new CreateUserRequest(requestInfo, owner), uri);
-					log.debug("owner created --> " + userDetailResponse.getUser().get(0).getUuid());
+					log.info("owner created --> " + userDetailResponse.getUser().get(0).getUuid());
 				}
 				if (userDetailResponse != null)
 					setOwnerFields(owner, userDetailResponse, requestInfo);
@@ -119,7 +121,7 @@ public class LandUserService {
 	private UserDetailResponse userExists(OwnerInfo owner, @Valid RequestInfo requestInfo) {
 
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
-		userSearchRequest.setTenantId(centralInstanceUtil.getStateLevelTenant(owner.getTenantId()));
+		userSearchRequest.setTenantId(owner.getTenantId());
 		userSearchRequest.setMobileNumber(owner.getMobileNumber());
 		if(!StringUtils.isEmpty(owner.getUuid())) {
 			List<String> uuids = new ArrayList<>();
@@ -291,10 +293,19 @@ public class LandUserService {
 	private UserSearchRequest getUserSearchRequest(LandSearchCriteria criteria, RequestInfo requestInfo) {
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
 		userSearchRequest.setRequestInfo(requestInfo);
-		userSearchRequest.setTenantId(centralInstanceUtil.getStateLevelTenant(criteria.getTenantId()));
+		userSearchRequest.setTenantId(getStateLevelTenantForCitizen(criteria.getTenantId()));
 		userSearchRequest.setMobileNumber(criteria.getMobileNumber());
 		userSearchRequest.setActive(true);
 		userSearchRequest.setUserType(LandConstants.CITIZEN);
 		return userSearchRequest;
 	}
+	
+        public String getStateLevelTenantForCitizen(String tenantId) {
+            String stateTenant = centralInstanceUtil.getStateLevelTenant(tenantId);
+            log.info("*********stateTenant ID*****" + stateTenant);
+            if (!StringUtils.isEmpty(stateTenant) && stateTenant.contains("."))
+                return stateTenant.split("\\.")[0];
+            else
+                return stateTenant;
+        }
 }
