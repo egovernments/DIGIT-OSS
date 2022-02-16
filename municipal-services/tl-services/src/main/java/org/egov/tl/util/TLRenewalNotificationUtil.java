@@ -281,9 +281,9 @@ public class TLRenewalNotificationUtil {
      * @return customized message for initiate
      */
     private String getInitiatedMsg(TradeLicense license, String message) {
-        // message = message.replace("<1>",license.);
-        message = message.replace("<2>", license.getTradeName());
-        message = message.replace("<3>", license.getApplicationNumber());
+        // message = message.replace("{1}",license.);
+        message = message.replace("{2}", license.getTradeName());
+        message = message.replace("{3}", license.getApplicationNumber());
 
         return message;
     }
@@ -298,9 +298,9 @@ public class TLRenewalNotificationUtil {
      * @return customized message for apply
      */
     private String getAppliedMsg(TradeLicense license, String message) {
-        // message = message.replace("<1>",);
-        message = message.replace("<2>", license.getTradeName());
-        message = message.replace("<3>", license.getApplicationNumber());
+        // message = message.replace("{1}",);
+        message = message.replace("{2}", license.getTradeName());
+        message = message.replace("{3}", license.getApplicationNumber());
 
         return message;
     }
@@ -315,8 +315,8 @@ public class TLRenewalNotificationUtil {
      * @return customized message for submitted
      */
     private String getApprovalPendingMsg(TradeLicense license, String message) {
-        // message = message.replace("<1>",);
-        message = message.replace("<2>", license.getTradeName());
+        // message = message.replace("{1}",);
+        message = message.replace("{2}", license.getTradeName());
 
         return message;
     }
@@ -331,10 +331,10 @@ public class TLRenewalNotificationUtil {
      * @return customized message for approved
      */
     private String getApprovedMsg(TradeLicense license, BigDecimal amountToBePaid, String message) {
-        message = message.replace("<2>", license.getTradeName());
-        message = message.replace("<3>", license.getApplicationNumber());
+        message = message.replace("{2}", license.getTradeName());
+        message = message.replace("{3}", license.getApplicationNumber());
         String date = epochToDate(license.getValidTo());
-        message = message.replace("<4>", date);
+        message = message.replace("{4}", date);
 
         String UIHost = config.getUiAppHost();
 
@@ -376,8 +376,8 @@ public class TLRenewalNotificationUtil {
      * @return customized message for rejected
      */
     private String getRejectedMsg(TradeLicense license, String message) {
-        // message = message.replace("<1>",);
-        message = message.replace("<2>", license.getTradeName());
+        // message = message.replace("{1}",);
+        message = message.replace("{2}", license.getTradeName());
 
         return message;
     }
@@ -392,8 +392,8 @@ public class TLRenewalNotificationUtil {
      * @return customized message for rejected
      */
     private String getFieldInspectionMsg(TradeLicense license, String message) {
-        message = message.replace("<2>", license.getApplicationNumber());
-        message = message.replace("<3>", license.getTradeName());
+        message = message.replace("{2}", license.getApplicationNumber());
+        message = message.replace("{3}", license.getTradeName());
         return message;
     }
 
@@ -408,8 +408,8 @@ public class TLRenewalNotificationUtil {
      * @return customized message for rejected
      */
     private String getPendingApprovalMsg(TradeLicense license, String message) {
-        message = message.replace("<2>", license.getApplicationNumber());
-        message = message.replace("<3>", license.getTradeName());
+        message = message.replace("{2}", license.getApplicationNumber());
+        message = message.replace("{3}", license.getTradeName());
         return message;
     }
 
@@ -425,8 +425,8 @@ public class TLRenewalNotificationUtil {
      * @return customized message for cancelled
      */
     private String getCitizenSendBack(TradeLicense license, String message) {
-        message = message.replace("<2>", license.getApplicationNumber());
-        message = message.replace("<3>", license.getTradeName());
+        message = message.replace("{2}", license.getApplicationNumber());
+        message = message.replace("{3}", license.getTradeName());
 
         return message;
     }
@@ -441,8 +441,8 @@ public class TLRenewalNotificationUtil {
      * @return customized message for cancelled
      */
     private String getCitizenForward(TradeLicense license, String message) {
-        message = message.replace("<2>", license.getApplicationNumber());
-        message = message.replace("<3>", license.getTradeName());
+        message = message.replace("{2}", license.getApplicationNumber());
+        message = message.replace("{3}", license.getTradeName());
 
         return message;
     }
@@ -457,8 +457,8 @@ public class TLRenewalNotificationUtil {
      * @return customized message for cancelled
      */
     private String getCancelledMsg(TradeLicense license, String message) {
-        message = message.replace("<2>", license.getTradeName());
-        message = message.replace("<3>", license.getLicenseNumber());
+        message = message.replace("{2}", license.getTradeName());
+        message = message.replace("{3}", license.getLicenseNumber());
 
         return message;
     }
@@ -474,8 +474,8 @@ public class TLRenewalNotificationUtil {
      */
     public String getOwnerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
         String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_OWNER, localizationMessages);
-        messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-        messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
+        messageTemplate = messageTemplate.replace("{2}", valMap.get(amountPaidKey));
+        messageTemplate = messageTemplate.replace("{3}", valMap.get(receiptNumberKey));
         return messageTemplate;
     }
 
@@ -490,8 +490,8 @@ public class TLRenewalNotificationUtil {
      */
     public String getPayerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
         String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_PAYER, localizationMessages);
-        messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-        messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
+        messageTemplate = messageTemplate.replace("{2}", valMap.get(amountPaidKey));
+        messageTemplate = messageTemplate.replace("{3}", valMap.get(receiptNumberKey));
         return messageTemplate;
     }
 
@@ -569,7 +569,7 @@ public class TLRenewalNotificationUtil {
     public List<SMSRequest> createSMSRequest(String message, Map<String, String> mobileNumberToOwnerName) {
         List<SMSRequest> smsRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
-            String customizedMsg = message.replace("<1>", entryset.getValue());
+            String customizedMsg = message.replace("{1}", entryset.getValue());
             smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
         }
         return smsRequest;
@@ -616,13 +616,13 @@ public class TLRenewalNotificationUtil {
      * @return customized message for field change
      */
     private String getEditMsg(TradeLicense license, List<String> list, String message) {
-        message = message.replace("<APPLICATION_NUMBER>", license.getApplicationNumber());
-        message = message.replace("<FIELDS>", StringUtils.join(list, ","));
+        message = message.replace("{APPLICATION_NUMBER}", license.getApplicationNumber());
+        message = message.replace("{FIELDS}", StringUtils.join(list, ","));
         return message;
     }
 
     private String getEditMsg(TradeLicense license, String message) {
-        message = message.replace("<APPLICATION_NUMBER>", license.getApplicationNumber());
+        message = message.replace("{APPLICATION_NUMBER}", license.getApplicationNumber());
         return message;
     }
 
