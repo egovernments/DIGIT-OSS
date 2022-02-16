@@ -114,7 +114,7 @@ const InboxComposer = ({
         {/* <InboxLinks {...PropsForInboxLinks} /> */}
         <div className="searchBox">
             <SearchAction text={t("ES_COMMON_SEARCH")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SearchFormComponent" })} />
-             <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "FilterFormComponent" })} />
+            <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "FilterFormComponent" })} />
             <SortAction text={t("COMMON_TABLE_SORT")} handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SortFormComponent" })} />
         </div>
         {currentlyActiveMobileModal ? <PopUp>
@@ -127,10 +127,12 @@ const InboxComposer = ({
         <InboxLinks {...PropsForInboxLinks} />
         <SearchForm onSubmit={onSearchFormSubmit} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb form-field-flex-one" >
             <SearchFormFields registerRef={registerSearchFormField} searchFormState={searchFormState} {...{controlSearchForm}} />
-            <SearchField className="submit">
-                <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form" />
-                <p style={{marginTop: "24px"}} onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
-            </SearchField>
+            <div className="SubmitAndClearAllContainer">
+                <SearchField className="submit">
+                    <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form" />
+                    <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_SEARCH`)}</p>
+                </SearchField>
+            </div>
         </SearchForm>
         <FilterForm onSubmit={onFilterFormSubmit} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm}>
             <FilterFormFields registerRef={registerFilterFormField} {...{ controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue }} />

@@ -929,7 +929,7 @@ export const downloadChallan = async (queryStr, mode = "download") => {
       DOWNLOADRECEIPT.GET.ACTION,
       queryStr,
       {
-        Accept: commonConfig.singleInstance ? "*/*" : "application/json",
+        Accept: commonConfig.singleInstance ? "application/pdf,application/json" : "application/json",
       },
       { responseType: "arraybuffer" }
     ).then((res) => {

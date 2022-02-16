@@ -87,6 +87,8 @@
 @import "./pages/employee/EmployeeLogin.scss";
 @import "./pages/employee/updateNumber.scss";
 @import "./pages/employee/oldMobileInbox.scss";
+@import "./pages/employee/dss.scss";
+
 
 @import "./pages/citizen/payment/payment-type.scss";
 @import "./pages/citizen/container.scss";
@@ -491,4 +493,25 @@ input[type="number"] {
   min-width:155px; 
 }
 
+}
+
+.error-boundary {
+  width: 100vw;
+  height: 100vh;
+  font-size: 16px;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.error-boundary summary,
+.error-boundary details {
+  width: 300px;
+  background-color: rgb(218, 100, 100);
+  margin: 5px;
+  border: 2px solid #222;
+  border-radius: 3px;
+  padding: 3px;
 }

@@ -6,7 +6,7 @@ serviceMaps:
       fromTopic: save-vehicle-application
       isTransaction: true
       queryMaps:
-        - query : INSERT INTO eg_vehicle( id, tenantId, registrationNumber, model, type, tankCapicity, suctionType, pollutionCertiValidTill, InsuranceCertValidTill, fitnessValidTill, roadTaxPaidTill, gpsEnabled, source, status, additionalDetails, owner_id , createdBy, lastModifiedBy, createdTime, lastModifiedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        - query : INSERT INTO eg_vehicle( id, tenantId, registrationNumber, model, type, tankCapicity, suctionType, vehicleOwner, pollutionCertiValidTill, InsuranceCertValidTill, fitnessValidTill, roadTaxPaidTill, gpsEnabled, source, status, additionalDetails, owner_id , createdBy, lastModifiedBy, createdTime, lastModifiedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
           basePath: vehicle
           jsonMaps:
             - jsonPath: $.vehicle.id
@@ -16,6 +16,7 @@ serviceMaps:
             - jsonPath: $.vehicle.type
             - jsonPath: $.vehicle.tankCapacity
             - jsonPath: $.vehicle.suctionType
+            - jsonPath: $.vehicle.vehicleOwner
             - jsonPath: $.vehicle.pollutionCertiValidTill
             - jsonPath: $.vehicle.InsuranceCertValidTill
             - jsonPath: $.vehicle.fitnessValidTill

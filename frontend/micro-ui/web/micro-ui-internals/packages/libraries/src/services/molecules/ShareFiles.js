@@ -43,6 +43,18 @@ const ShareFiles = {
     const shortUrl = await ShareFiles.getShortener(tenantId, imageData);
     ShareFiles.targetLink(target, shortUrl);
   },
+
+  IndividualChartImage: async (tenantId, node, filename, target) => {
+    const imageData = await new Promise((resolve) => Download.IndividualChartImage(node, filename, true, resolve));
+    if (!target && navigator.share) {
+      return navigator.share({
+        files: [imageData],
+        title: filename,
+      });
+    }
+    const shortUrl = await ShareFiles.getShortener(tenantId, imageData);
+    ShareFiles.targetLink(target, shortUrl);
+  },
 };
 
 export default ShareFiles;

@@ -4,6 +4,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import BPADocuments from "./BPADocuments";
 import InspectionReport from "./InspectionReport";
 import NOCDocuments from "./NOCDocuments";
@@ -25,9 +26,15 @@ function ApplicationDetailsContent({
   applicationData,
   businessService,
   timelineStatusPrefix,
+  showTimeLine=true,
   statusAttribute = "status",
+  paymentsList
 }) {
   const { t } = useTranslation();
+
+  function OpenImage(imageSource, index,thumbnailsToShow){
+    window.open(thumbnailsToShow?.fullImage?.[0],"_blank");
+  }
 
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED" && !(window.location.href.includes("/obps/"))) {
@@ -44,8 +51,10 @@ function ApplicationDetailsContent({
         name: checkpoint?.assignes?.[0]?.name,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
+        wfComment : checkpoint.wfComment,
+        thumbnailsToShow : checkpoint?.thumbnailsToShow,
       };
-      return <TLCaption data={caption} />;
+      return <TLCaption data={caption} OpenImage={OpenImage} />;
     }
     else {
       const caption = {
@@ -131,6 +140,20 @@ function ApplicationDetailsContent({
                   if (value.map === true && value.value !== "N/A") {
                     return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
                   }
+                  if (value?.isLink == true)
+                  {
+                    return (
+                      <Row
+                        key={t(value.title)}
+                        label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
+                        text={<div><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{value?.value}</span></Link></div>}
+                        last={index === detail?.values?.length - 1}
+                        caption={value.caption}
+                        className="border-none"
+                        rowContainerStyle={getRowStyles()}
+                      />
+                    );
+                  }
                   return (
                     <Row
                       key={t(value.title)}
@@ -147,7 +170,7 @@ function ApplicationDetailsContent({
             </StatusTable>
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
-          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} paymentsList={paymentsList}/>}
           {applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0 && detail?.additionalDetails?.fiReport && (
             <InspectionReport fiReport={applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending} />
           )}
@@ -199,7 +222,7 @@ function ApplicationDetailsContent({
           )}
         </React.Fragment>
       ))}
-      {workflowDetails?.data?.timeline?.length > 0 && (
+      {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
         <React.Fragment>
           <BreakLine />
           {(workflowDetails?.isLoading || isDataLoading) && <Loader />}

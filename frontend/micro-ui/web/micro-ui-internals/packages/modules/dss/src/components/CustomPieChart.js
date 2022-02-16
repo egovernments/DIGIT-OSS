@@ -1,9 +1,9 @@
+import { Loader } from "@egovernments/digit-ui-react-components";
 import React, { useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { startOfMonth, endOfMonth, getTime } from "date-fns";
-import { ResponsiveContainer, Cell, Legend, Pie, PieChart, Tooltip } from "recharts";
-import { Card, Loader } from "@egovernments/digit-ui-react-components";
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import FilterContext from "./FilterContext";
+import NoData from "./NoData";
 
 const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE", "#FFBB28", "#FF8042"];
 
@@ -31,7 +31,9 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
     }, []);
   }, [response]);
 
-  const renderLegend = (value) => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`PROPERTYTYPE_MASTERS_${value}`)}</span>;
+  const renderLegend = (value) => (
+    <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`PROPERTYTYPE_MASTERS_${value && Digit.Utils.locale.getTransformedLocale(value)}`)}</span>
+  );
 
   const renderCustomLabel = (args) => {
     const { value, endAngle, startAngle, x, cx, y, cy, percent, name } = args;
@@ -60,27 +62,30 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
 
   const renderTooltip = ({ payload, label }) => {
     return (
-      <div style={{
-        margin: "0px",
-        padding: "10px",
-        backgroundColor: "rgb(255, 255, 255)",
-        border: "1px solid rgb(204, 204, 204)",
-        whiteSpace: "nowrap",
-      }}>
-        <p className="recharts-tooltip-label">{`${t(`PROPERTYTYPE_MASTERS_${payload?.[0]?.name}`)}: ${Digit.Utils.dss.formatter(payload?.[0]?.value, payload?.[0]?.payload?.payload?.symbol, value?.denomination, false)}`}</p>
+      <div
+        style={{
+          margin: "0px",
+          padding: "10px",
+          backgroundColor: "rgb(255, 255, 255)",
+          border: "1px solid rgb(204, 204, 204)",
+          whiteSpace: "nowrap",
+        }}
+      >
+        <p className="recharts-tooltip-label">{`${t(`PROPERTYTYPE_MASTERS_${payload?.[0]?.name}`)}: ${Digit.Utils.dss.formatter(
+          payload?.[0]?.value,
+          payload?.[0]?.payload?.payload?.symbol,
+          value?.denomination,
+          false
+        )}`}</p>
       </div>
     );
-  }
+  };
 
   if (isLoading) {
     return <Loader />;
   }
-  if (chartData?.length === 0) {
-    return (
-      <div className="no-data">
-        <p>{t("DSS_NO_DATA")}</p>
-      </div>
-    );
+  if (chartData?.length === 0 || !chartData) {
+    return <NoData t={t} />;
   }
   return (
     <ResponsiveContainer width="99%" height={340}>

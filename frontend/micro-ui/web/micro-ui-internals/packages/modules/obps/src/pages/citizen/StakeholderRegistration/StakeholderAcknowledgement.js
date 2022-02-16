@@ -25,8 +25,10 @@ const BannerPicker = (props) => {
     <Banner
       message={GetActionMessage(props)}
       applicationNumber={props.data?.Licenses[0].applicationNumber}
-      info={props.isSuccess ? props.t("Stakeholder Registartion Application Number") : ""}
+      info={props.isSuccess ? props.t("BPA_NEW_STAKEHOLDER_REGISTRATION_APP_LABEL") : ""}
       successful={props.isSuccess}
+      style={{ padding: "10px" }}
+      headerStyles={{fontSize: "32px"}}
     />
   );
 };

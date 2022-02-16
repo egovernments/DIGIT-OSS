@@ -41,6 +41,7 @@ public class FSMAuditRowMapper implements ResultSetExtractor<List<FSMAuditUtil>>
 			auditUtil.setDoorNo(rs.getString("doorno"));
 			auditUtil.setDsoId(rs.getString("dso_id"));
 			auditUtil.setVehicleType(rs.getString("vehicletype"));
+			auditUtil.setVehicleCapacity(rs.getString("vehiclecapacity"));
 			auditUtil.setSlumName(rs.getString("slumname"));
 			auditUtil.setPossibleServiceDate(rs.getLong("possible_srv_date"));
 			

@@ -1,13 +1,26 @@
+import { Loader } from "@egovernments/digit-ui-react-components";
+import { getDaysInMonth } from "date-fns";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ResponsiveContainer, AreaChart, Area, CartesianGrid, Line, LineChart, XAxis, YAxis, Tooltip, Legend, Label } from "recharts";
-import { Card, CardHeader, Loader } from "@egovernments/digit-ui-react-components";
-import { startOfMonth, endOfMonth, sub, getTime, format, getDaysInMonth } from "date-fns";
+import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
+import NoData from "./NoData";
+const COLORS=["#EA8A3B",  "#048BD0",   "#8E29BF" ,"#FBC02D"]
+const getColors =(index=0)=>{
+
+index=COLORS.length>index?index:0;
+return COLORS[index];
+};
 
 const getValue = (plot) => plot.value;
 
-const renderUnits = (t, denomination) => {
+const renderUnits = (t, denomination,symbol) => {
+
+  if(symbol== "percentage"){
+    return ' %';
+  }else if(symbol== "number"){
+    return '';
+  }
   switch (denomination) {
     case "Unit":
       return `(${t("DSS_UNIT")})`;
@@ -25,6 +38,9 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
   const { value } = useContext(FilterContext);
   const [totalCapacity, setTotalCapacity] = useState(0);
   const [totalWaste, setTotalWaste] = useState(0);
+  const [keysArr, setKeysArr] = useState([]);
+
+  const [manageChart,setmanageChart]=useState("Area");
   const stateTenant = Digit.ULBService.getStateId();
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.useCommonMDMS(stateTenant, "FSM", "FSTPPlantInfo", {
     enabled: id === "fsmCapacityUtilization",
@@ -56,15 +72,40 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
   }, [response]);
 
   const chartData = useMemo(() => {
-    if (id !== "fsmCapacityUtilization") {
-      return response?.responseData?.data?.[0]?.plots;
+    
+    if(response?.responseData?.data?.length==1){
+      setmanageChart("Area");
+      if (id !== "fsmCapacityUtilization") {
+        return response?.responseData?.data?.[0]?.plots;
+      }
+      return response?.responseData?.data?.[0]?.plots.map((plot) => {
+        const [month, year] = plot?.name.split("-");
+        const totalDays = getDaysInMonth(Date.parse(`${month} 1, ${year}`));
+        const value = Math.round((plot?.value / (totalCapacity * totalDays)) * 100);
+        return { ...plot, value };
+      });
+    }else if(response?.responseData?.data?.length>1){
+      setmanageChart("Line");
+      let keys={};
+      const mergeObj = response?.responseData?.data?.[0]?.plots.map((x, index) => {
+        let newObj={};
+     response?.responseData?.data.map(ob=>{
+       keys[t(Digit.Utils.locale.getTransformedLocale(ob.headerName))]=t(Digit.Utils.locale.getTransformedLocale(ob.headerName));
+      newObj[t(Digit.Utils.locale.getTransformedLocale(ob.headerName))]=ob?.plots[index].value
+     })
+        return {
+          label: null,
+          name: response?.responseData?.data?.[0]?.plots[index].name,
+          strValue: null,
+          symbol: response?.responseData?.data?.[0]?.plots[index].symbol,
+           ...newObj,
+        };
+      });
+      setKeysArr(Object.values(keys));
+      return mergeObj;
     }
-    return response?.responseData?.data?.[0]?.plots.map((plot) => {
-      const [month, year] = plot?.name.split("-");
-      const totalDays = getDaysInMonth(Date.parse(`${month} 1, ${year}`));
-      const value = Math.round((plot?.value / (totalCapacity * totalDays)) * 100);
-      return { ...plot, value };
-    });
+     
+
   }, [response, totalCapacity]);
 
   const renderPlot = (plot) => {
@@ -79,6 +120,8 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
         return Number((plot.value / 100000).toFixed(2));
       case "Cr":
         return Number((plot.value / 10000000).toFixed(2));
+      default:
+        return ""
     }
   };
 
@@ -112,7 +155,6 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
   if (isLoading) {
     return <Loader />;
   }
-
   return (
     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "85%" }}>
       {id === "fsmCapacityUtilization" && (
@@ -122,24 +164,24 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
       )}
       <ResponsiveContainer width="99%" height={id === "fsmTotalCumulativeCollection" ? 400 : 300}>
         {!chartData || chartData?.length === 0 ? (
-          <div className="no-data">
-            <p>{t("DSS_NO_DATA")}</p>
-          </div>
+         <NoData t={t} />
         ) : (
-          <AreaChart width="100%" height="100%" data={chartData} margin={{ left: 30, top: 10 }}>
+
+          manageChart =="Area" ?( <AreaChart width="100%" height="100%" data={chartData} margin={{ left: 30, top: 10 }}>
             <defs>
               <linearGradient id="colorUv" x1=".5" x2=".5" y2="1">
                 <stop stopColor="#048BD0" stopOpacity={0.5} />
                 <stop offset="1" stopColor="#048BD0" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid />
+            <CartesianGrid strokeDasharray="3 3"/>
             <Tooltip content={renderTooltip} />
             <XAxis dataKey={xDataKey} tick={{ fontSize: "14px", fill: "#505A5F" }} tickFormatter={tickFormatter} />
             <YAxis
+            /*
               label={{
-                value: `${t(`DSS_${response?.responseData?.data?.[0]?.headerName.replaceAll(" ", "_").toUpperCase()}`)} ${
-                  id === "fsmTotalCumulativeCollection" ? renderUnits(t, value.denomination) : `(%)`
+                value: `${t(`DSS_Y_${response?.responseData?.data?.[0]?.headerName.replaceAll(" ", "_").toUpperCase()}`)} ${
+                  renderUnits(t, value.denomination,response?.responseData?.data?.[0]?.headerSymbol) 
                 }`,
                 angle: -90,
                 position: "insideLeft",
@@ -148,11 +190,65 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
                 fontSize: "14px",
                 fill: "#505A5F",
               }}
+              */
               tick={{ fontSize: "14px", fill: "#505A5F" }}
             />
             <Area type="monotone" dataKey={renderPlot} stroke="#048BD0" fill="url(#colorUv)" dot={true} />
           </AreaChart>
-        )}
+          ):(
+            <LineChart
+            width={500}
+            height={300}
+            data={chartData}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis  
+                        /*
+Removed this custom yaxis label for all line charts 
+            label={{
+                value: `${t(`DSS_Y_${response?.responseData?.data?.[0]?.headerName.replaceAll(" ", "_").toUpperCase()}`)} ${
+                  renderUnits(t, value.denomination,response?.responseData?.data?.[0]?.headerSymbol) 
+                }`,
+                angle: -90,
+                position: "insideLeft",
+                dy: 40,
+                offset: -10,
+                fontSize: "14px",
+                fill: "#505A5F",
+              }}
+              */
+              />
+            <Tooltip />
+            <Legend />
+            {keysArr?.map((key,i)=>{
+              return (<Line
+              type="monotone"
+              dataKey={key}
+              stroke={getColors(i)}
+              activeDot={{ r: 8 }}
+            />)
+            })}
+            {/* <Line
+              type="monotone"
+              dataKey={response?.responseData?.data?.[0]?.headerName}
+              stroke="#8884d8"
+              activeDot={{ r: 8 }}
+            />
+            <Line type="monotone" dataKey={response?.responseData?.data?.[1]?.headerName} stroke="#82ca9d" /> */}
+          </LineChart>
+          ) 
+        )
+       
+        
+        
+        }
       </ResponsiveContainer>
     </div>
   );

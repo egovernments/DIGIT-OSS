@@ -37,8 +37,17 @@ import TLInfoLabel from "./pageComponents/TLInfoLabel";
 import SearchApplication from "./components/SearchApplication"
 import SearchLicense from "./components/SearchLicense"
 import TL_INBOX_FILTER from "./components/inbox/InboxFilter";
+import NewApplication from "./pages/employee/NewApplication";
+import ReNewApplication from "./pages/employee/ReNewApplication";
+import Search from "./pages/employee/Search";
+import Response from "./pages/Response";
 
 import ApplicationDetails from "./pages/citizen/Applications/ApplicationDetails"
+import CreateTradeLicence from "./pages/citizen/Create";
+import EditTrade from "./pages/citizen/EditTrade";
+import { TLList } from "./pages/citizen/Renewal";
+import RenewTrade from "./pages/citizen/Renewal/renewTrade";
+import SearchTradeComponent from "./pages/citizen/SearchTrade";
 
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
@@ -122,6 +131,15 @@ const componentsToRegister = {
   TLInfoLabel,
   TLWFApplicationTimeline,
   ApplicationDetails,
+  TLCreateTradeLicence : CreateTradeLicence,
+  TLEditTrade : EditTrade,
+  TLList,
+  TLRenewTrade : RenewTrade,
+  TLSearchTradeComponent : SearchTradeComponent,
+  TLNewApplication : NewApplication,
+  TLReNewApplication : ReNewApplication,
+  TLSearch : Search,
+  TLResponse : Response
 };
 
 export const initTLComponents = () => {

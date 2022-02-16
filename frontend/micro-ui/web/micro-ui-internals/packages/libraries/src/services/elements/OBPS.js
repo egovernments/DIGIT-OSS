@@ -250,6 +250,7 @@ export const OBPSService = {
     if (!response?.BPA?.length) {
       return;
     }
+    sessionStorage.setItem("BPA_ARCHITECT_NAME", JSON.stringify(response?.BPA?.[0]?.additionalDetails?.typeOfArchitect ? response?.BPA?.[0]?.additionalDetails?.typeOfArchitect : "ARCHITECT"));
     const [BPA] = response?.BPA;
     const edcrResponse = await OBPSService.scrutinyDetails(BPA?.tenantId, { edcrNumber: BPA?.edcrNumber });
     const [edcr] = edcrResponse?.edcrDetail;
@@ -266,6 +267,19 @@ export const OBPSService = {
       }
     const comparisionReport = await OBPSService.comparisionReport(BPA?.tenantId, { ...comparisionRep });
 
+    function ConvertEpochToValidityDate (dateEpoch){
+      if(dateEpoch == null || dateEpoch == undefined || dateEpoch == ''){
+        return "NA" ;
+      }
+      const dateFromApi = new Date(dateEpoch);
+      let month = dateFromApi.getMonth() + 1;
+      let day = dateFromApi.getDate();
+      let year = dateFromApi.getFullYear()-3;
+      month = (month > 9 ? "" : "0") + month;
+      day = (day > 9 ? "" : "0") + day;
+      return `${day}/${month}/${year}`;
+    };
+    
     const nocDetails = noc
       ?.map((nocDetails, index) => ({
         title: index === 0 ? "BPA_NOC_DETAILS_SUMMARY" : "",
@@ -361,6 +375,11 @@ export const OBPSService = {
       ]
     };
 
+    if(BPA?.businessService.includes("BPA_OC"))
+    {
+      applicationDetailsInfo["values"] = [...applicationDetailsInfo?.values,{ title: "BPA_PERMIT_APP_NUMBER", to:`/digit-ui/employee/obps/bpa/${bpaResponse?.BPA?.[0]?.applicationNo}`, value:bpaResponse?.BPA?.[0]?.applicationNo, isLink:true },];
+    }
+
     let permitcondn = [];
     BPA?.additionalDetails?.pendingapproval && BPA?.additionalDetails?.pendingapproval.length>0 && BPA?.additionalDetails?.pendingapproval.map((ob,index) => {
       permitcondn.push({title:`${index+1}. ${ob}`, value:""})
@@ -383,7 +402,7 @@ export const OBPSService = {
     
     if(BPA?.approvalNo) {
       applicationDetailsInfo?.values?.push({ title: BPA?.businessService !== "BPA_OC" ?  "BPA_PERMIT_NUMBER_LABEL":"BPA_OC_PERMIT_NUMBER_LABEL", value: BPA?.approvalNo || "NA"  });
-      applicationDetailsInfo?.values?.push({ title: BPA?.businessService !== "BPA_OC" ? "BPA_PERMIT_VALIDITY" : "BPA_OC_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${format(new Date(BPA?.applicationDate), 'dd/MM/yyyy')} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  });
+      applicationDetailsInfo?.values?.push({ title: BPA?.businessService !== "BPA_OC" ? "BPA_PERMIT_VALIDITY" : "BPA_OC_PERMIT_VALIDITY", value: BPA?.additionalDetails?.validityDate ? `${ConvertEpochToValidityDate(BPA?.additionalDetails?.validityDate)} - ${format(new Date(BPA?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA"  });
     }
 
 

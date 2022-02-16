@@ -249,10 +249,6 @@ const PropertyInformation = () => {
                     <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${owner?.gender ? owner?.gender.toLowerCase() : t("CS_NA")}`} />
                     {property?.institution && <Row label={t("PT_LANDLINE_NUMBER_FLOATING_LABEL")} text={`${owner?.altContactNumber || t("CS_NA")}`} />}
                     <Row
-                      label={t("PT_FORM3_OWNERSHIP_TYPE")}
-                      text={`${property?.ownershipCategory ? t(`PT_OWNERSHIP_${property?.ownershipCategory}`) : t("CS_NA")}`}
-                    />
-                    <Row
                     label={t("PT_FORM3_MOBILE_NUMBER")}
                     text={`${t(owner?.mobileNumber)}` || t("CS_NA")}
                     actionButton={
@@ -263,11 +259,16 @@ const PropertyInformation = () => {
                     />         
                     {property?.institution && property?.institution?.designation && <Row label={t("Designation")} text={`${property?.institution?.designation || t("CS_NA")}`} />}
                     <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${owner?.fatherOrHusbandName || t("CS_NA")}`} />
+                    <Row
+                      label={t("PT_FORM3_OWNERSHIP_TYPE")}
+                      text={`${property?.ownershipCategory ? t(`PT_OWNERSHIP_${property?.ownershipCategory}`) : t("CS_NA")}`}
+                    />
                     <Row label={t("PT_FORM3_RELATIONSHIP")} text={`${owner?.relationship || t("CS_NA")}`} />
-                    {specialCategoryDoc && specialCategoryDoc.length>0 && <Row label={t("PT_SPL_CAT_DOC_TYPE")} text={`${t(stringReplaceAll(specialCategoryDoc[index].documentType,".","_"))}` || t("CS_NA")} />}
-                    {specialCategoryDoc && specialCategoryDoc.length>0 && <Row label={t("PT_SPL_CAT_DOC_ID")} text={`${t(specialCategoryDoc[index].id)}` || t("CS_NA")} />}
-                    <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t(t("CS_NA"))}`} />
-                    <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(owners?.correspondenceAddress)}` || t("CS_NA")} />
+                    {specialCategoryDoc && specialCategoryDoc.length>0 && <Row label={t("PT_SPL_CAT_DOC_TYPE")} text={`${t(stringReplaceAll(specialCategoryDoc[index]?.documentType,".","_"))}` || t("NA")} />}
+                    {specialCategoryDoc && specialCategoryDoc.length>0 && <Row label={t("PT_SPL_CAT_DOC_ID")} text={`${t(specialCategoryDoc[index]?.id)}` || t("CS_NA")} />}
+                    <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId ? owner?.emailId:`${(t("CS_NA"))}`} />
+                    <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(owner?.correspondenceAddress)}` || t("CS_NA")} />
+                    {specialCategoryDoc?.length == 0 && <Row label={t("PT_SPL_CAT")} text={t("CS_NONE")} /> }
                   </StatusTable>
                 </div>
               ))}

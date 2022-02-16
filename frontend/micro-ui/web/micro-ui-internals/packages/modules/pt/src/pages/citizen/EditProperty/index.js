@@ -66,7 +66,7 @@ const getPropertyEditDetails = (data = { }) => {
     data.address.geoLocation = { };
   }
   data.address.pincode = data?.address?.pincode;
-  data.address.city = { code: data?.tenantId };
+  data.address.city = { code: data?.tenantId, i18nKey: `TENANT_TENANTS_${stringReplaceAll(data?.tenantId.toUpperCase(),".","_")}` };
   data.address.locality.i18nkey = data?.tenantId.replace(".", "_").toUpperCase() + "_" + "REVENUE" + "_" + data?.address?.locality?.code;
   let addressDocs = data?.documents?.filter((doc) => doc?.documentType?.includes("ADDRESSPROOF"));
   if (checkArrayLength(addressDocs)) {
@@ -248,6 +248,7 @@ const getPropertyEditDetails = (data = { }) => {
       let nooffloor = 0,
         noofbasemement = 0;
       let floornumbers = [];
+      data.landArea = {floorarea:data?.landArea}
       data.isResdential =
         data?.usageCategory === "RESIDENTIAL"
           ? { code: "RESIDENTIAL", i18nKey: "PT_COMMON_YES" }
@@ -383,6 +384,7 @@ const getPropertyEditDetails = (data = { }) => {
       data.units[0].selfOccupied = data?.additionalDetails?.unit[0]?.selfOccupied;
       data.units["-1"] = data?.additionalDetails?.basement1;
       data.units["-2"] = data?.additionalDetails?.basement2;
+      data.landArea = { floorarea:data?.landArea}
     }
   }
   return data;
@@ -529,9 +531,10 @@ const EditProperty = ({ parentRoute }) => {
       owners[index] = data;
       setParams({ ...params, ...{ [key]: [...owners] } });
     } else if (key === "units") {
-      let units = params.units || [];
-      units[index] = data;
-      setParams({ ...params, units });
+      // let units = params.units || [];
+      // units[index] = data;
+      // setParams({ ...params, units });
+      setParams({ ...params, ...{ [key]: [...data] } });
     } else {
       setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
     }
@@ -554,11 +557,11 @@ const EditProperty = ({ parentRoute }) => {
   }
 
   /* use newConfig instead of commonFields for local development in case needed */
-  commonFields=commonFields?commonFields:newConfig;
+  commonFields=newConfig;
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = `isResidential`;
+  config.indexRoute = `info`;
   const  CheckPage = Digit?.ComponentRegistryService?.getComponent('PTCheckPage');
   const PTAcknowledgement = Digit?.ComponentRegistryService?.getComponent('PTAcknowledgement');
 

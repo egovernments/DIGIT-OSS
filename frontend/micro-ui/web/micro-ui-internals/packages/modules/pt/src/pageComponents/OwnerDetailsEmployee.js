@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { stringReplaceAll } from "../utils";
+import { stringReplaceAll,CompareTwoObjects } from "../utils";
 
 const createOwnerDetails = () => ({
   name: "",
@@ -126,14 +126,14 @@ const OwnerForm = (_props) => {
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
-  owner["institution"] = { name: institution.name };
+  owner["institution"] = { name: institution?.name };
   owner["institution"].type = {
     active: true,
     code: institution?.type,
     i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`,
     name: t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`),
   };
-  owner.designation = institution.designation;
+  owner.designation = institution?.designation;
   const specialDocsMenu = useMemo(
     () =>
       mdmsData?.PropertyTax?.Documents?.filter((e) => e.code === "OWNER.SPECIALCATEGORYPROOF")?.[0]
@@ -172,8 +172,7 @@ const OwnerForm = (_props) => {
     keys.forEach((key) => (part[key] = owner[key]));
 
     let _ownerType = isIndividualTypeOwner ? {} : { ownerType: { code: "NONE" } };
-
-    if (!_.isEqual(formValue, part)) {
+    if (!(CompareTwoObjects(formValue,part))) {
       setOwners((prev) => prev.map((o) => (o.key && o.key === owner.key ? { ...o, ...formValue, ..._ownerType } : { ...o })));
       trigger();
     }

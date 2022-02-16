@@ -1,7 +1,7 @@
 import React from "react";
 import { DatePicker } from "@egovernments/digit-ui-react-components";
 
-export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime = 0, action }) => ({
+export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, applicationCreatedTime = 0, action }) => ({
   label: {
     heading: `ES_FSM_ACTION_TITLE_${action}`,
     submit: `CS_COMMON_${action}`,
@@ -35,10 +35,70 @@ export const configCompleteApplication = ({ t, vehicle, applicationCreatedTime =
             name: "wasteCollected",
             validation: {
               required: true,
-              validate: (value) => parseInt(value) <= parseInt(vehicle.capacity),
+              validate: (value) => parseInt(value) <= parseInt(vehicleCapacity),
             },
-            error: `${t("ES_FSM_ACTION_INVALID_WASTE_VOLUME")} ${vehicle?.capacity} ${t("CS_COMMON_LITRES")}`,
+            error: `${t("ES_FSM_ACTION_INVALID_WASTE_VOLUME")} ${vehicleCapacity} ${t("CS_COMMON_LITRES")}`,
           },
+        },
+        {
+          label: "ES_NEW_APPLICATION_PROPERTY_TYPE",
+          isMandatory: true,
+          type: "component",
+          route: "property-type",
+          key: "propertyType",
+          component: "SelectPropertyType",
+          texts: {
+            headerCaption: "",
+            header: "CS_FILE_APPLICATION_PROPERTY_LABEL",
+            cardText: "CS_FILE_APPLICATION_PROPERTY_TEXT",
+            submitBarLabel: "CS_COMMON_NEXT",
+          },
+          nextStep: "property-subtype",
+        },
+        {
+          label: "ES_NEW_APPLICATION_PROPERTY_SUB-TYPE",
+          isMandatory: true,
+          type: "component",
+          route: "property-subtype",
+          key: "subtype",
+          component: "SelectPropertySubtype",
+          texts: {
+            headerCaption: "",
+            header: "CS_FILE_APPLICATION_PROPERTY_SUBTYPE_LABEL",
+            cardText: "CS_FILE_APPLICATION_PROPERTY_SUBTYPE_TEXT",
+            submitBarLabel: "CS_COMMON_NEXT",
+          },
+          nextStep: "map",
+        },
+        {
+          label: "ES_NEW_APPLICATION_PIT_TYPE",
+          isMandatory: false,
+          type: "component",
+          route: "pit-type",
+          key: "pitType",
+          component: "SelectPitType",
+          texts: {
+            header: "CS_FILE_PROPERTY_PIT_TYPE",
+            cardText: "CS_FILE_PROPERTY_PIT_TYPE_TEXT",
+            submitBarLabel: "CS_COMMON_NEXT",
+            skipText: "CORE_COMMON_SKIP_CONTINUE",
+          },
+          nextStep: "tank-size",
+        },
+        {
+          label: "ES_NEW_APPLICATION_PIT_DIMENSION",
+          isMandatory: false,
+          type: "component",
+          route: "tank-size",
+          key: "pitDetail",
+          component: "SelectTankSize",
+          texts: {
+            headerCaption: "",
+            header: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TITLE",
+            cardText: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TEXT",
+            submitBarLabel: "CS_COMMON_NEXT",
+          },
+          nextStep: null,
         },
       ],
     },

@@ -1,4 +1,4 @@
-import { startOfYear, endOfYear, getTime, format, addMonths } from "date-fns";
+import { addMonths, endOfYear, format, startOfYear, subYears } from "date-fns";
 
 const amountFormatter = (value, denomination) => {
   const currencyFormatter = new Intl.NumberFormat("en-IN", { currency: "INR" });
@@ -18,6 +18,9 @@ export const formatter = (value, symbol, unit, commaSeparated = false) => {
   if (!value && value !== 0) return "";
   switch (symbol) {
     case "amount":
+      return amountFormatter(value, unit);
+    //this case needs to be removed as backend should handle case sensitiviy from their end
+    case "Amount":
       return amountFormatter(value, unit);
     case "number":
       if (!commaSeparated) {
@@ -53,3 +56,24 @@ export const getInitialRange = () => {
   const duration = Digit.Utils.dss.getDuration(startDate, endDate);
   return { startDate, endDate, title, duration };
 };
+
+export const getDefaultFinacialYear = () => {
+  const currDate = new Date().getMonth();
+  if (currDate < 3) {
+    return {
+      startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
+      endDate: subYears(addMonths(endOfYear(new Date()), 3), 1),
+    };
+  } else {
+    return {
+      startDate: addMonths(startOfYear(new Date()), 3),
+      endDate: addMonths(endOfYear(new Date()), 3),
+    };
+  }
+};
+
+/* Used in DSS to get the current module id */
+export const getCurrentModuleName=()=>{
+ const allPaths= window.location.pathname.split('/');
+ return allPaths[allPaths.length-1];
+}

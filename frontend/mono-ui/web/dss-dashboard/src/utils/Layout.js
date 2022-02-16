@@ -4,6 +4,7 @@ import AppRouter from './AppRouter';
 import Spinner from '../components/common/Spinner';
 // import SideBar from '../components/common/sidebar'
 import { isMobile } from 'react-device-detect';
+import { isNurtDashboard } from './commons';
 
 const styles = (theme) => ({
     root: {
@@ -37,7 +38,10 @@ class Layout extends Component {
                 <div className={classes.appContainer}>
                     {/* <div className="row"> */}
                     <Spinner />
-                    <main role="main" style={{ backgroundColor: '#f4f7fb' }} className={classes.main}>
+                    <main role="main" 
+                    // style={{ backgroundColor:isNurtDashboard()? "#EEEEEE":'#f4f7fb' }} 
+                    style={{ backgroundColor:"#EEEEEE" }} 
+                    className={classes.main}>
                     {/* <SideBar /> */}
                         <AppRouter />
                     </main>

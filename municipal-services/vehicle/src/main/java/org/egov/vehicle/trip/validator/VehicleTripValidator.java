@@ -2,7 +2,9 @@ package org.egov.vehicle.trip.validator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
@@ -19,6 +21,8 @@ import org.egov.vehicle.trip.util.VehicleTripConstants;
 import org.egov.vehicle.trip.web.model.PlantMapping;
 import org.egov.vehicle.trip.web.model.VehicleTripRequest;
 import org.egov.vehicle.trip.web.model.VehicleTripSearchCriteria;
+import org.egov.vehicle.util.VehicleUtil;
+import org.egov.vehicle.validator.MDMSValidator;
 import org.egov.vehicle.web.model.Vehicle;
 import org.egov.vehicle.web.model.VehicleSearchCriteria;
 import org.egov.vehicle.web.model.user.UserDetailResponse;
@@ -61,6 +65,13 @@ public class VehicleTripValidator {
 	@Autowired
 	private VehicleTripFSMService vehicleTripFSMService;
 
+	 @Autowired
+	private VehicleUtil util;
+	 
+	 @Autowired
+	private MDMSValidator mdmsValidator;
+
+	 
 	public void validateCreateOrUpdateRequest(VehicleTripRequest request) {
 		if (StringUtils.isEmpty(request.getVehicleTrip().getTenantId())) {
 			throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "TenantId is mandatory");
@@ -71,9 +82,12 @@ public class VehicleTripValidator {
 		if (request.getVehicleTrip().getVehicle() == null  || StringUtils.isEmpty(request.getVehicleTrip().getVehicle().getId())) {
 			throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "vehicleId is mandatory");
 		}else {
-			List<Vehicle> vehicles = vehicleService.search(VehicleSearchCriteria.builder().ids(Arrays.asList(request.getVehicleTrip().getVehicle().getId())).tenantId(request.getVehicleTrip().getTenantId()).build(), request.getRequestInfo()).getVehicle();
+			List<Vehicle> vehicles = vehicleService.search(VehicleSearchCriteria.builder()
+							.ids(Arrays.asList(request.getVehicleTrip().getVehicle().getId()))
+							.tenantId(request.getVehicleTrip().getTenantId()).build(), request.getRequestInfo()).getVehicle();
 			if(CollectionUtils.isEmpty(vehicles)) {
-				throw new CustomException(VehicleTripConstants.INVALID_VEHICLE, "vehicle does not exists with id "+ request.getVehicleTrip().getVehicle().getId());
+				throw new CustomException(VehicleTripConstants.INVALID_VEHICLE,
+						"vehicle does not exists with id " + request.getVehicleTrip().getVehicle().getId());
 			}else {
 				request.getVehicleTrip().setVehicle(vehicles.get(0));
 			}
@@ -93,10 +107,6 @@ public class VehicleTripValidator {
 		if(request.getVehicleTrip().getTripDetails() ==null || CollectionUtils.isEmpty(request.getVehicleTrip().getTripDetails())) {
 			throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR, "atleast one trip detail is mandatory");
 		}
-		
-	
-		
-		
 		
 	}
 
@@ -158,9 +168,6 @@ public class VehicleTripValidator {
 			}else if(request.getVehicleTrip().getVolumeCarried() > vehicle.getTankCapacity()) {
 				throw new CustomException(VehicleTripConstants.VOLUME_GRT_CAPACITY, "Waster collected is greater than vehicle Capcity");
 			}
-				
-				
-				
 				if(request.getVehicleTrip().getTripEndTime() <= 0) {
 				throw new CustomException(VehicleTripConstants.INVALID_TRIP_ENDTIME, "Invalid Trip end time");
 			}
@@ -186,13 +193,38 @@ public class VehicleTripValidator {
 							"Logged user to FSTP mapping doesn't exists.");
 				}
 			}
+		} else if (request.getWorkflow().getAction().equalsIgnoreCase(VehicleTripConstants.DECLINEVEHICLE)) {
+				// SAN-800: Added new workflow for Vehicle Trip decline
+	
+				Map<String, String> additionalDetails = null;
+					try {
+						additionalDetails = request.getVehicleTrip().getAdditionalDetails() != null
+								? (Map<String, String>) request.getVehicleTrip().getAdditionalDetails()
+								: new HashMap<String, String>();
+					} catch (Exception e) {
+						throw new CustomException(VehicleTripConstants.VEHICLE_COMMENT_NOT_EXIST, e.getMessage());
+					}
+		
+				if (null!=additionalDetails && additionalDetails.get("vehicleDeclineReason") == null)
+					throw new CustomException(VehicleTripConstants.INVALID_VEHICLE_DECLINE_REQUEST,
+							"Vehicle Decline reason is mandatory ");
+	
+				String tenantId = request.getVehicleTrip().getTenantId().split("\\.")[0];
+				Object mdmsData = util.mDMSCall(request.getRequestInfo(), tenantId);
+				String vehicleDeclineReason = (String) additionalDetails.get("VehicleDeclineReason");
+				mdmsValidator.validateMdmsData(null, mdmsData);
+				mdmsValidator.validateVehicleDeclineReason(vehicleDeclineReason);
+	
+				if (VehicleTripConstants.VEHICLE_DECLINE_REASON_OTHERS.equalsIgnoreCase(vehicleDeclineReason)) {
+	
+					if (additionalDetails.get("comments") == null)
+						throw new CustomException(VehicleTripConstants.VEHICLE_COMMENT_NOT_EXIST,
+								"Comments is mandatory for Vehicle Decline reason others");
+				}
+	
 		}
-		
-		
 	}
 
-	
-	
 	public void validateSearch(RequestInfo requestInfo, VehicleTripSearchCriteria criteria) {
 		if(StringUtils.isEmpty(criteria.getTenantId())) {
 			throw new CustomException(VehicleTripConstants.INVALID_SEARCH, "TenantId is mandatory in search");

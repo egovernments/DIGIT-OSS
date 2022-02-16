@@ -14,10 +14,12 @@ import {
   StatusTable,
   Row,
   LabelFieldPair,
+  Menu
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import CustomTimePicker from "../../components/CustomTimePicker";
+import ActionModal from "./ApplicationDetails/Modal/index";
 
 const config = {
   select: (data) => {
@@ -30,6 +32,7 @@ const FstpOperatorDetails = () => {
   const history = useHistory();
   const queryClient = useQueryClient();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const state = Digit.ULBService.getStateId();
   let { id: applicationNos } = useParams();
   const [filters, setFilters] = useState({ applicationNos });
   const [isVehicleSearchCompleted, setIsVehicleSearchCompleted] = useState(false);
@@ -44,10 +47,20 @@ const FstpOperatorDetails = () => {
     const minutes = (today.getMinutes() < 10 ? "0" : "") + today.getMinutes();
     return `${hour}:${minutes}`;
   });
+  const [displayMenu, setDisplayMenu] = useState(false);
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
-  const { isLoading: isSearchLoading, isIdle, data: { data: {table: tripDetails} = {} } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
+  const { isLoading: isSearchLoading, isIdle, data: { data: { table: tripDetails } = {} } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
     enabled: !!isVehicleSearchCompleted,
+  });
+
+  const workflowDetails = Digit.Hooks.useWorkflowDetails({
+    tenantId: tenantId,
+    id: applicationNos,
+    moduleCode: "FSM_VEHICLE_TRIP",
+    role: "FSM_EMP_FSTPO"
   });
 
   const mutation = Digit.Hooks.fsm.useVehicleUpdate(tenantId);
@@ -61,8 +74,19 @@ const FstpOperatorDetails = () => {
     }
   }, [isSuccess]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  useEffect(() => {
+    switch (selectedAction) {
+      case "DECLINEVEHICLE":
+        return setShowModal(true);
+      case "DISPOSE":
+        return handleSubmit()
+      default:
+        console.debug("default case");
+        break;
+    }
+  }, [selectedAction]);
+
+  const handleSubmit = () => {
     const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
     if (!wasteCollected || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
       setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
@@ -105,11 +129,31 @@ const FstpOperatorDetails = () => {
     });
   };
 
+  const handleDecline = (data) => {
+    vehicle.additionalDetails = {
+      comments: data?.workflow?.comments,
+      vehicleDeclineReason: data?.workflow?.fstpoRejectionReason
+    };
+    const details = {
+      vehicleTrip: vehicle,
+      workflow: {
+        action: "DECLINEVEHICLE",
+      },
+    };
+
+    mutation.mutate(details, {
+      onSuccess: handleSuccess,
+    });
+  };
+
   const closeToast = () => {
     setShowToast(null);
   };
 
   const handleSuccess = () => {
+    if (selectedAction === "DECLINEVEHICLE") {
+      setShowModal(false)
+    }
     /* Show Toast on success */
     queryClient.invalidateQueries("FSM_VEHICLE_DATA");
     setShowToast({ key: "success", action: `ES_FSM_DISPOSE_UPDATE_SUCCESS` });
@@ -157,6 +201,16 @@ const FstpOperatorDetails = () => {
     }
   }
 
+  function onActionSelect(action) {
+    setSelectedAction(action);
+    setDisplayMenu(false);
+  }
+
+  const closeModal = () => {
+    setSelectedAction(null);
+    setShowModal(false);
+  };
+
   return (
     <div>
       <Card>
@@ -165,7 +219,7 @@ const FstpOperatorDetails = () => {
             <Row key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
           ))}
           <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
-          <form onSubmit={handleSubmit}>
+          <form>
             <Row
               key={t("ES_VEHICLE_IN_TIME")}
               label={`${t("ES_VEHICLE_IN_TIME")} * `}
@@ -202,10 +256,32 @@ const FstpOperatorDetails = () => {
                 </div>
               }
             />
-            <ActionBar>
-              <SubmitBar label={t("ES_COMMON_SUBMIT")} submit />
-            </ActionBar>
+            {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
+              <ActionBar>
+                {displayMenu && workflowDetails?.data?.nextActions ? (
+                  <Menu
+                    localeKeyPrefix={""}
+                    options={workflowDetails?.data?.nextActions.map((action) => action.action)}
+                    t={t}
+                    onSelect={onActionSelect}
+                  />
+                ) : null}
+                <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+              </ActionBar>
+            )}
           </form>
+          {showModal ? (
+            <ActionModal
+              t={t}
+              action={selectedAction}
+              tenantId={tenantId}
+              state={state}
+              id={applicationNos}
+              closeModal={closeModal}
+              submitAction={handleDecline}
+              actionData={workflowDetails?.data?.timeline}
+            />
+          ) : null}
           {/* <LabelFieldPair>
             <CardLabel>{t("ES_VEHICLE_WASTE_RECIEVED")}</CardLabel>
             <div className="field-container">

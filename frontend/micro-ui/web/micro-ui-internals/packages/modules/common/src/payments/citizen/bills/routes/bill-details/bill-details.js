@@ -101,8 +101,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
         tenantId: billDetails.tenantId,
       });
     }
-     else if (businessService === "PT") {
-      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, {
+    else if (businessService === "PT") {
+      history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}`, {
         paymentAmount,
         tenantId: billDetails.tenantId,
         name: bill.payerName,

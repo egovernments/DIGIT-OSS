@@ -131,6 +131,32 @@ public class VehicleConfiguration {
 
 	    @Value("${egov.fsm.plantmap.search.endpoint}")
 	    private String fsmPlantmapSearchEndpoint;
+	    
+	    // SMS
+	 	@Value("${kafka.topics.notification.sms}")
+	 	private String smsNotifTopic;
 
-	
+ 		@Value("${notification.sms.enabled}")
+ 		private Boolean isSMSEnabled;
+ 		
+ 		@Value("${egov.localization.statelevel}")
+		private Boolean isLocalizationStateLevel;
+ 		
+ 		// Localization
+		@Value("${egov.localization.host}")
+		private String localizationHost;
+
+		@Value("${egov.localization.context.path}")
+		private String localizationContextPath;
+
+		@Value("${egov.localization.search.endpoint}")
+		private String localizationSearchEndpoint;
+		
+		@Value("${user.search.rolecode.params}")
+		private String userRoleCodes;
+		
+		@Value("${egov.localization.search.fsm.module}")
+		private String fsmSearchModule;
+
+			
 }

@@ -2,6 +2,7 @@ import { BackButton } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
+import ErrorBoundary from "../../components/ErrorBoundaries";
 import { AppHome } from "../../components/Home";
 import TopBarSideBar from "../../components/TopBarSideBar";
 import CitizenHome from "./Home";
@@ -9,7 +10,6 @@ import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
 import UserProfile from './Home/UserProfile';
-
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -48,7 +48,7 @@ const Home = ({
     return (
       <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
         <div className="moduleLinkHomePage">
-          <img src={bannerImage || stateInfo?.bannerUrl} />
+          <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound"/>
           <BackButton className="moduleLinkHomePageBackButton" />
           <h1>{t("MODULE_" + code.toUpperCase())}</h1>
         </div>
@@ -101,12 +101,11 @@ const Home = ({
           <Route path={`${path}/user/profile`}>
             <UserProfile stateCode={stateCode} userType={'citizen'} />
           </Route>
-          
-          
 
-          {appRoutes}
-
-          {ModuleLevelLinkHomePages}
+          <ErrorBoundary>
+            {appRoutes}
+            {ModuleLevelLinkHomePages}
+          </ErrorBoundary>
         </Switch>
       </div>
       <div className="citizen-home-footer" style={window.location.href.includes("citizen/obps") ? { zIndex: "-1" } : {}}>

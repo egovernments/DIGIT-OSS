@@ -6,6 +6,8 @@ import CustomTable from "../components/CustomTable";
 import FilterContext from "../components/FilterContext";
 import GenericChart from "../components/GenericChart";
 import Filters from "../components/Filters";
+import CustomHorizontalBarChart from "../components/CustomHorizontalBarChart";
+import CustomBarChart from "../components/CustomBarChart";
 
 const key = 'DSS_FILTERS';
 
@@ -22,7 +24,7 @@ const getInitialRange = () => {
 
 const DrillDown = () => {
   const [searchQuery, onSearch] = useState("");
-  const { ulb, chart, title } = Digit.Hooks.useQueryParams();
+  const { ulb, chart, title ,type='table',fillColor=""} = Digit.Hooks.useQueryParams();
   const { t } = useTranslation();
   const [filters, setFilters] = useState(() => {
     const { startDate, endDate, title, duration, denomination, tenantId } = getInitialRange();
@@ -80,9 +82,18 @@ const DrillDown = () => {
           </p>
         </div>
       )}
-      <GenericChart header={title} showDownload={true} showSearch={true} className={"fullWidth"} onChange={(e) => onSearch(e.target.value)} showHeader={false}>
+      {type==="table"&&<GenericChart header={title} showDownload={true} showSearch={true} className={"fullWidth"} onChange={(e) => onSearch(e.target.value)} showHeader={false}>
         <CustomTable data={{ id: chart }} onSearch={searchQuery} />
-      </GenericChart>
+      </GenericChart>}
+      {type==="performing-metric"&&
+      <GenericChart header={title} subHeader={`(${t(`DSS_SLA_ACHIEVED`)})`} showHeader={false}  className={"fullWidth"} >
+      <CustomBarChart
+            data={{ id: chart }}
+            fillColor={fillColor }
+            title={title}
+        showDrillDown={false}
+      />
+    </GenericChart>}
     </FilterContext.Provider>
   );
 };

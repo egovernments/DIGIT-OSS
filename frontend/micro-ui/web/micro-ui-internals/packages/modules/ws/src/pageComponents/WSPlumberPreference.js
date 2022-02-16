@@ -3,6 +3,7 @@ import {
     FormStep,
     RadioOrSelect
 } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/Timeline";
 
 const WSPlumberPreference = ({ t, config, onSelect, formData }) => {
 
@@ -33,7 +34,7 @@ const WSPlumberPreference = ({ t, config, onSelect, formData }) => {
 
     return (
         <div>
-            {/* <Timeline currentStep={2} /> */}
+            <Timeline currentStep={2} />
             <FormStep
                 t={t}
                 config={config}

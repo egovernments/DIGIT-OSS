@@ -101,7 +101,7 @@ class Footer extends React.Component {
       setRoute(url);
       return;
     }
-    if (item.showEmployeeList) {
+    if (item.showEmployeeList && process.env.REACT_APP_NAME !== "Citizen") {
       const tenantId = getTenantId();
       const queryObj = [
         {

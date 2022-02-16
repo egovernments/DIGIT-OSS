@@ -24,6 +24,8 @@ const WSCreate = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("WS_CREATE", state?.edcrNumber ? { data: { scrutinyNumber: { edcrNumber: state?.edcrNumber } } } : {});
 
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('WSCheckPage') ;
+
   const stateId = Digit.ULBService.getStateId();
   let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
@@ -75,10 +77,10 @@ const WSCreate = () => {
           </Route>
         );
       })}
-      {/* <Route path={`${getPath(match.path, match.params)}/check`}>
+      <Route path={`${getPath(match.path, match.params)}/check`}>
         <CheckPage onSubmit={createApplication} value={params} />
       </Route>
-      <Route path={`${getPath(match.path, match.params)}/acknowledgement`}>
+      {/*<Route path={`${getPath(match.path, match.params)}/acknowledgement`}>
         <OBPSAcknowledgement data={params} onSuccess={onSuccess} />
       </Route> */}
       <Route>

@@ -95,17 +95,24 @@ const tableHeader = [
 ]
 const selectOccupancy = (e, data,num) => {
   let blocks = subOccupancyObject;
-  const index = subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`].filter((ele) => ele.code == data.code):[];
-  let subOccupancy1=subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`]:[];
-    let res = null;
-    if (index.length) {
-      subOccupancy1.splice(subOccupancy1.indexOf(index[0]), 1);
-      res = [...subOccupancy1];
-    } else {
-      res = [{ ...data }, ...subOccupancy1];
-    }
-    blocks[`Block_${num}`]=res;
-    setsubOccupancy(res);
+  // const index = subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`].filter((ele) => ele.code == data.code):[];
+  // let subOccupancy1=subOccupancyObject[`Block_${num}`]?subOccupancyObject[`Block_${num}`]:[];
+  //   let res = null;
+  //   if (index.length) {
+  //     subOccupancy1.splice(subOccupancy1.indexOf(index[0]), 1);
+  //     res = [...subOccupancy1];
+  //   } else {
+  //     res = [{ ...data }, ...subOccupancy1];
+  //   }
+  //   blocks[`Block_${num}`]=res;
+  //   setsubOccupancy(res);
+
+  let newSubOccupancy = [];
+  e && e?.map((ob) => {
+    newSubOccupancy.push(ob?.[1]);
+  })
+    blocks[`Block_${num}`]=newSubOccupancy;
+    setsubOccupancy(newSubOccupancy);
     setsubOccupancyObject(blocks);
 };
 
@@ -174,6 +181,9 @@ const onRemove = (index, key,num) => {
         //For LandInfo
         payload.landInfo = formData?.data?.bpaData?.bpaApprovalResponse?.[0].landInfo || {};
 
+        let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
+        let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
+        payload.additionalDetails.typeOfArchitect = parsedArchitectName;
         // create BPA call
         Digit.OBPSService.create({ BPA: payload }, tenantId)
           .then((result, err) => {
@@ -253,7 +263,7 @@ const clearall = (num) => {
               selected={subOccupancyObject[`Block_${block.number}`]}
               //selected={subOccupancy}
               options={getsuboptions()}
-              onSelect={selectOccupancy}
+              onSelect={e => selectOccupancy(e,data,block.number)}
               isOBPSMultiple={true}
               optionsKey="i18nKey"
               t={t}

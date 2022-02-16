@@ -147,7 +147,10 @@ const SurveyDetails = ({ location, match }) => {
 
   const handleMarkInactive = () => {
     const details = {
-      SurveyEntity: { ...surveyData, status: "INACTIVE", collectCitizenInfo: surveyData.collectCitizenInfo.code },
+      SurveyEntity: { ...surveyData,
+        questions: surveyData.questions.map(filterQuestion), 
+        status: "INACTIVE", 
+        collectCitizenInfo: surveyData.collectCitizenInfo.code },
     };
     history.push("/digit-ui/employee/engagement/surveys/update-response", details);
   };
@@ -187,7 +190,7 @@ const SurveyDetails = ({ location, match }) => {
           closeModal={() => setShowModal(false)}
           actionCancelLabel={"CS_COMMON_CANCEL"}
           actionCancelOnSubmit={() => setShowModal(false)}
-          actionSaveLabel={"ES_COMMON_Y_DEL"}
+          actionSaveLabel={"ES_COMMON_DEL"}
           actionSaveOnSubmit={handleDelete}
         />
       )}
@@ -202,8 +205,10 @@ const SurveyDetails = ({ location, match }) => {
           actionSaveLabel={"ES_COMMON_SAVE"}
           actionSaveOnSubmit={handleMarkActive}
           onSubmit={handleMarkActive}
+          surveyTitle={surveyData.title}
         />
       )}
+      {/* CONFIRM_MARKINACTIVE_SURVEY - key for heading in modal */}
       {showModal && userAction === "INACTIVE" && (
         <MarkInActiveModal
           t={t}

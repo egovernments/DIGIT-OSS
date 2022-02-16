@@ -11,7 +11,7 @@ const CitizenHome = ({ modules }) => {
   return (
     <React.Fragment>
       <div className="citizenAllServiceGrid">
-      {moduleArray.map(({ code }, index) => {
+      {moduleArray.filter(mod=>mod).map(({ code }, index) => {
         let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
         if (code === "Payment" && !showQuickPay) {
           Links = () => <React.Fragment />;

@@ -55,9 +55,6 @@ export const Request = async ({
     data.RequestInfo = {
       apiId: "Rainmaker",
     };
-    if (noRequestInfo) {
-      delete data.RequestInfo;
-    }
     if (auth) {
       data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
     }
@@ -67,11 +64,14 @@ export const Request = async ({
     if (locale) {
       data.RequestInfo = { ...data.RequestInfo, msgId: `${ts}|${Digit.StoreData.getCurrentLanguage()}` };
     }
+    if (noRequestInfo) {
+      delete data.RequestInfo;
+    }
   }
 
   const headers1 = {
     "Content-Type": "application/json",
-    Accept: window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")?"*/*":"application/pdf",
+    Accept: window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")?"application/pdf,application/json":"application/pdf",
   };
 
   if (authHeader) headers = { ...headers, ...authHeaders() };

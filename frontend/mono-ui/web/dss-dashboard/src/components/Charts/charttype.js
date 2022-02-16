@@ -48,7 +48,6 @@ class ChartType extends React.Component {
         let chartKey = _.chain(this.props).get('chartData').first().get('id').value();
         let chartType = _.chain(this.props).get('chartData').first().get('chartType').toUpper().value();
         let data = _.chain(this.props).get('chartsGData').get(chartKey).get('data').value();
-
         if (data) {
             switch (chartType) {
                 case 'PIE':

@@ -6,7 +6,7 @@ import { configBPAApproverApplication } from "../config";
 import * as predefinedConfig from "../config";
 
 const Heading = (props) => {
-  return <h1 className="heading-m">{props.label}</h1>;
+  return <h1 style={{marginLeft:"22px"}} className="heading-m BPAheading-m">{props.label}</h1>;
 };
 
 const Close = () => (
@@ -24,30 +24,18 @@ const CloseBtn = (props) => {
   );
 };
 
-const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationDetails, applicationData, businessService, moduleCode }) => {
-    const mutation1 = Digit.Hooks.obps.useObpsAPI(
+const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationDetails, applicationData, businessService, moduleCode,workflowDetails }) => {
+  const mutation1 = Digit.Hooks.obps.useObpsAPI(
       applicationData?.landInfo?.address?.city ? applicationData?.landInfo?.address?.city : tenantId,
       false
     );
    const { data: approverData, isLoading: PTALoading } = Digit.Hooks.useEmployeeSearch(
     tenantId,
     {
-      roles: action?.roles.split(",").map(role=>({code:role})),
+      roles: workflowDetails?.data?.initialActionState?.nextActions?.filter(ele=>ele?.action==action?.action)?.[0]?.assigneeRoles?.map(role=>({code:role})),
       isActive: true,
     },
     { enabled: !action?.isTerminateState }
-  );
-  const { isLoading: financialYearsLoading, data: financialYearsData } = Digit.Hooks.pt.useMDMS(
-    tenantId,
-    businessService,
-    "FINANCIAL_YEARLS",
-    {},
-    {
-      details: {
-        tenantId: Digit.ULBService.getStateId(),
-        moduleDetails: [{ moduleName: "egf-master", masterDetails: [{ name: "FinancialYear", filter: "[?(@.module == 'TL')]" }] }],
-      },
-    }
   );
 
   const queryClient = useQueryClient();
@@ -58,14 +46,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
-  const [financialYears, setFinancialYears] = useState([]);
   const [selectedFinancialYear, setSelectedFinancialYear] = useState(null);
-
-  useEffect(() => {
-    if (financialYearsData && financialYearsData["egf-master"]) {
-      setFinancialYears(financialYearsData["egf-master"]?.["FinancialYear"]);
-    }
-  }, [financialYearsData]);
+  const mobileView = Digit.Utils.browser.isMobile() ? true : false;
 
   useEffect(() => {
     setApprovers(approverData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })));
@@ -237,7 +219,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     // }
     submitAction({
       BPA:applicationData
-    }, nocDetails);
+    }, nocDetails, {isStakeholder: false, bpa: true});
   }
 
 
@@ -258,7 +240,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         })
       );
     }
-  }, [action, approvers, financialYears, selectedFinancialYear, uploadedFile]);
+  }, [action, approvers, selectedFinancialYear, uploadedFile]);
 
   return action && config.form ? (
     <Modal
@@ -269,13 +251,18 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionSaveLabel={t(config.label.submit)}
       actionSaveOnSubmit={() => { }}
       formId="modal-action"
-      style={{height: "auto", padding: "10px"}}
+      isOBPSFlow={true}
+      popupStyles={mobileView?{width:"720px"}:{}}
+      style={!mobileView?{height: "45px", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{height:"45px",width:"44%"}}
+      popupModuleMianStyles={mobileView?{paddingLeft:"5px"}: {}}
     >
-      {financialYearsLoading ? (
+      {PTALoading ? (
         <Loader />
       ) : (
         <FormComposer
           config={config.form}
+          cardStyle={{marginLeft:"0px",marginRight:"0px", marginTop:"-25px"}}
+          className="BPAemployeeCard"
           noBoxShadow
           inline
           childrenAtTheBottom

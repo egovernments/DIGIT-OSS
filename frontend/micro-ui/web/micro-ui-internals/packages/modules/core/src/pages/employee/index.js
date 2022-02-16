@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Redirect, Route, Switch, useRouteMatch,useLocation } from "react-router-dom";
+import { Redirect, Route, Switch, useLocation, useRouteMatch } from "react-router-dom";
 import { AppModules } from "../../components/AppModules";
+import ErrorBoundary from "../../components/ErrorBoundaries";
 import TopBarSideBar from "../../components/TopBarSideBar";
 import ChangePassword from "./ChangePassword";
 import ForgotPassword from "./ForgotPassword";
@@ -27,11 +28,11 @@ const EmployeeApp = ({
   const { t } = useTranslation();
   const { path } = useRouteMatch();
   const location = useLocation();
-  const showLanguageChange=location?.pathname?.includes("language-selection");
+  const showLanguageChange = location?.pathname?.includes("language-selection");
   useEffect(() => {
     Digit.UserService.setType("employee");
   }, []);
-  
+
   return (
     <div className="employee">
       <Switch>
@@ -87,7 +88,9 @@ const EmployeeApp = ({
           <div className={`main ${DSO ? "m-auto" : ""}`}>
             {/* <div style={{ overflowY: "auto" }}> */}
             <div>
-              <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
+              <ErrorBoundary>
+                <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
+              </ErrorBoundary>
             </div>
             <div className="employee-home-footer">
               <img

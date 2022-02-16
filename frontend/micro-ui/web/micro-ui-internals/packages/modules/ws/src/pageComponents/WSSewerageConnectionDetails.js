@@ -4,6 +4,7 @@ import {
     TextInput,
     CardLabel
 } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/Timeline";
 
 const WSSewerageConnectionDetails = ({ t, config, onSelect, formData }) => {
     const [proposedWaterClosets, setProposedWaterClosets] = useState(formData?.sewerageConnectionDetails?.proposedWaterClosets || "");
@@ -31,7 +32,7 @@ const WSSewerageConnectionDetails = ({ t, config, onSelect, formData }) => {
 
     return (
         <div>
-            {/* <Timeline currentStep={2} /> */}
+            <Timeline currentStep={2} />
             <FormStep
                 t={t}
                 config={config}

@@ -22,11 +22,10 @@ import org.egov.pt.models.event.Recepient;
 import org.egov.pt.models.event.Source;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.ServiceRequestRepository;
-import org.egov.pt.web.contracts.Email;
-import org.egov.pt.web.contracts.EmailRequest;
+import org.egov.pt.service.NotificationService;
+import org.egov.pt.web.contracts.*;
 import org.egov.pt.web.contracts.EmailRequest;
 
-import org.egov.pt.web.contracts.SMSRequest;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +56,7 @@ public class NotificationUtil {
     private Producer producer;
 
     private RestTemplate restTemplate;
+
 
     @Value("${egov.mdms.host}")
     private String mdmsHost;
@@ -297,6 +297,13 @@ public class NotificationUtil {
             if(message.contains(NOTIFICATION_EMAIL))
                 customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
 
+            //removing lines to match Email Templates
+            if(message.contains(PT_TAX_PARTIAL))
+                customizedMsg = customizedMsg.replace(PT_TAX_PARTIAL,"");
+
+            if(message.contains(PT_TAX_FULL))
+                customizedMsg = customizedMsg.replace(PT_TAX_FULL,"");
+
             String subject = "";
             String body = customizedMsg;
             Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).build();
@@ -386,7 +393,6 @@ public class NotificationUtil {
     *
     * @param requestInfo
     * @param smsRequests
-    * @param events
     */
    public List<Event> enrichEvent(List<SMSRequest> smsRequests, RequestInfo requestInfo, String tenantId, Property property, Boolean isActionReq){
 
@@ -455,7 +461,34 @@ public class NotificationUtil {
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_PROPERTY_CODE).build();
                    items.add(item);
                }
-               action = Action.builder().actionUrls(items).build();
+
+               if(msg.contains(TRACK_APPLICATION) && msg.contains("{MTURL}")){
+                   actionLink = getMutationUrl(property);
+                   ActionItem item = ActionItem.builder().actionUrl(actionLink).code(TRACK_APPLICATION_CODE).build();
+                   items.add(item);
+               }
+
+               if(msg.contains(NOTIFICATION_PAY_LINK)){
+                   actionLink = getPayUrl(property);
+                   ActionItem item = ActionItem.builder().actionUrl(actionLink).code(NOTIFICATION_PAY_LINK).build();
+                   items.add(item);
+               }
+
+               if(msg.contains(MT_RECEIPT_STRING))
+               {
+                   actionLink = getMutationUrl(property);
+                   ActionItem item = ActionItem.builder().actionUrl(actionLink).code(DOWNLOAD_MUTATION_RECEIPT_CODE).build();
+                   items.add(item);
+               }
+
+               if(msg.contains(MT_CERTIFICATE_STRING))
+               {
+                   actionLink = getMutationUrl(property);
+                   ActionItem item = ActionItem.builder().actionUrl(actionLink).code(DOWNLOAD_MUTATION_CERTIFICATE_CODE).build();
+                   items.add(item);
+               }
+
+                       action = Action.builder().actionUrls(items).build();
            }
 
            String description = removeForInAppMessage(mobileNumberToMsg.get(mobileNumber));
@@ -484,6 +517,16 @@ public class NotificationUtil {
             message = message.replace(PAY_ONLINE_STRING,"");
         if(message.contains(PT_ONLINE_STRING))
             message = message.replace(PT_ONLINE_STRING,"");
+
+        //mutation notification
+        if(message.contains(MT_TRACK_APPLICATION_STRING))
+            message = message.replace(MT_TRACK_APPLICATION_STRING,"");
+        if(message.contains(MT_PAYLINK_STRING))
+            message = message.replace(MT_PAYLINK_STRING,"");
+        if(message.contains(MT_CERTIFICATE_STRING))
+            message = message.replace(MT_CERTIFICATE_STRING,"");
+        if(message.contains(MT_RECEIPT_STRING))
+            message = message.replace(MT_RECEIPT_STRING,"");
 
         return message;
     }
@@ -540,6 +583,33 @@ public class NotificationUtil {
         mdmsCriteriaReq.setRequestInfo(requestInfo);
 
         return mdmsCriteriaReq;
+    }
+
+    /**
+     * Prepares and return url for mutation view screen
+     *
+     * @param property
+     * @return
+     */
+    public String getMutationUrl(Property property) {
+
+        return getShortenedUrl(
+                config.getUiAppHost().concat(config.getViewMutationLink()
+                        .replace(NOTIFICATION_APPID, property.getAcknowldgementNumber())
+                        .replace(NOTIFICATION_TENANTID, property.getTenantId())));
+    }
+
+    /**
+     * Prepares and return url for property view screen
+     *
+     * @param property
+     * @return
+     */
+    public String getPayUrl(Property property) {
+        return getShortenedUrl(
+                config.getUiAppHost().concat(config.getPayLink().replace(EVENT_PAY_BUSINESSSERVICE,MUTATION_BUSINESSSERVICE)
+                        .replace(EVENT_PAY_PROPERTYID, property.getAcknowldgementNumber())
+                        .replace(EVENT_PAY_TENANTID, property.getTenantId())));
     }
 
 }

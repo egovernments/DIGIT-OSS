@@ -10,6 +10,9 @@ import DrillDown from "./pages/DrillDown";
 
 const DssBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
+  const {fromModule=false}= Digit.Hooks.useQueryParams();
+  const moduleName=Digit.Utils.dss.getCurrentModuleName();
+
   const crumbs = [
     {
       path: "/digit-ui/employee",
@@ -17,8 +20,8 @@ const DssBreadCrumb = ({ location }) => {
       show: true,
     },
     {
-      path: "/digit-ui/employee/dss/dashboard/fsm",
-      content: t("ES_COMMON_DSS"),
+      path: fromModule?`/digit-ui/employee/dss/dashboard/${fromModule}`:"/digit-ui/employee",
+      content: t(`ES_COMMON_DSS_${Digit.Utils.locale.getTransformedLocale(fromModule?fromModule:moduleName)}`),
       show: true,
     },
     {

@@ -7,9 +7,15 @@ import { stringReplaceAll } from "../utils";
 const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBlur}) => {
   let validation = {};
 
-  const allCities = Digit.Hooks.pt.useTenants();
+  let allCities = Digit.Hooks.pt.useTenants();
+  // if called from tl module get tenants from tl usetenants
+  allCities = allCities ? allCities : Digit.Hooks.tl.useTenants();
+  const userInfo = Digit.UserService.getUser()?.info;
+  const cityId = userInfo?.tenantId;
+  const cityName = 'TENANT_TENANTS_' + userInfo?.tenantId.replace('.','_');
+  const cityObj = 'employee' ? {code: cityId, name: cityName} : Digit.SessionStorage.get('CITIZEN.COMMON.HOME.CITY');
 
-  const [cityCode, setCityCode] = useState(formData?.cityCode);
+  const [cityCode, setCityCode] = useState(cityObj);
   const [locality, setLocality] = useState(formData?.locality);
   const [houseDoorNo, setHouseDoorNo] = useState(formData.houseDoorNo);
   const [buildingColonyName, setBuildingColonyName] = useState(formData.buildingColonyName);
@@ -19,8 +25,12 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBl
   let locationDet = formData.locationDet;
   const locationDetStep = { ...locationDet, cityCode, locality, houseDoorNo, buildingColonyName, landmarkName };
   
+  useEffect(() => {
+    setCity(cityObj);
+  }, []);
+
   function setCity(val) {
-    setCityCode(val.code);
+    setCityCode(val);
     onSelect(config.key, { ...formData[config.key], ...locationDetStep, city: val }, false, index);
   }
 
@@ -50,7 +60,7 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBl
       <Dropdown
         className="form-field"
         selected={cityCode}
-        disable={allCities?.length === 1}
+        // disable={true}
         option={allCities}
         select={setCity}
         optionKey="code"
@@ -61,12 +71,12 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBl
       <CardLabel>{t("PT_PROP_LOCALITY")}</CardLabel>
       <Localities
         selectLocality={setLocality1}
-        tenantId={cityCode}
+        tenantId={cityCode?.code}
         boundaryType="revenue"
         keepNull={false}
         optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10" }}
         selected={locality}
-        disable={!cityCode}
+        disable={!cityCode?.code}
         disableLoader={true}
       />
 
