@@ -712,14 +712,12 @@ export const createAndSave = async (
   if(req.headers){
     headers = JSON.parse(JSON.stringify(req.headers));
     headers['tenantId']=headers.tenantid;
-    console.log("\nheaders-->"+headers);
   }
   else{
     headers = {
       tenantId:tenantId
     };
   }
-  console.log("\n 2 headers-->"+headers);
 
 
   var valid = validateRequest(req, res, key, tenantId, requestInfo);

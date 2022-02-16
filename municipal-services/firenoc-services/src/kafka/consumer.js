@@ -22,10 +22,10 @@ console.log("Consumer ");
 
 const run = async () => {
   await consumer.connect()
-  await consumer.subscribe({ topic: envVariables.KAFKA_TOPICS_RECEIPT_CREATE, fromBeginning: true});
-  await consumer.subscribe({ topic: envVariables.KAFKA_TOPICS_FIRENOC_CREATE_SMS, fromBeginning: true});
-  await consumer.subscribe({ topic: envVariables.KAFKA_TOPICS_FIRENOC_UPDATE_SMS, fromBeginning: true});
-  await consumer.subscribe({ topic: envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS, fromBeginning: true});
+  await consumer.subscribe({ topic: envVariables.KAFKA_TOPICS_RECEIPT_CREATE_REGEX, fromBeginning: true});
+  await consumer.subscribe({ topic: envVariables.KAFKA_TOPICS_FIRENOC_CREATE_SMS_REGEX, fromBeginning: true});
+  await consumer.subscribe({ topic: envVariables.KAFKA_TOPICS_FIRENOC_UPDATE_SMS_REGEX, fromBeginning: true});
+  await consumer.subscribe({ topic: envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS_REGEX, fromBeginning: true});
 
   await consumer.run({
       eachMessage: async ({ topic, partition, message }) => {
@@ -244,20 +244,20 @@ const run = async () => {
           }
         };
 
-        if(envVariables.KAFKA_TOPICS_RECEIPT_CREATE.test(topic))
+        if(envVariables.KAFKA_TOPICS_RECEIPT_CREATE_REGEX.test(topic))
           FireNOCPaymentStatus(value);
 
-        if(envVariables.KAFKA_TOPICS_FIRENOC_CREATE_SMS.test(topic)){
+        if(envVariables.KAFKA_TOPICS_FIRENOC_CREATE_SMS_REGEX.test(topic)){
           const { FireNOCs } = value;
           sendFireNOCSMSRequest(FireNOCs);
         }
 
-        if(envVariables.KAFKA_TOPICS_FIRENOC_UPDATE_SMS.test(topic)){
+        if(envVariables.KAFKA_TOPICS_FIRENOC_UPDATE_SMS_REGEX.test(topic)){
           const { FireNOCs } = value;
           sendFireNOCSMSRequest(FireNOCs);
         }
 
-        if(envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS.test(topic)){
+        if(envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW_SMS_REGEX.test(topic)){
           const { FireNOCs } = value;
           sendFireNOCSMSRequest(FireNOCs);
         }
