@@ -1,6 +1,6 @@
 import { Loader } from "@egovernments/digit-ui-react-components";
 import { getDaysInMonth } from "date-fns";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
@@ -70,6 +70,27 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
       setTotalWaste(totalWaste);
     }
   }, [response]);
+  
+  const renderYaxisChangedValues = useCallback( (newObjVal) => {
+    console.log("Value: " + value.denomination);
+    const { denomination } = value;
+    switch (denomination) {
+      case "Unit":
+        return newObjVal;
+      case "Lac":
+        return Number((newObjVal / 100000).toFixed(2));
+      case "Cr":
+        return Number((newObjVal / 10000000).toFixed(2));
+      default:
+        return ""
+    }
+  }, [value.denomination]);
+
+  useEffect(() => {
+    console.log("Denomination Value: " + value.denomination);
+    renderYaxisChangedValues;
+
+  },[renderYaxisChangedValues])
 
   const chartData = useMemo(() => {
     
@@ -90,9 +111,11 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
       const mergeObj = response?.responseData?.data?.[0]?.plots.map((x, index) => {
         let newObj={};
      response?.responseData?.data.map(ob=>{
+       const value = renderYaxisChangedValues(ob?.plots[index].value);
        keys[t(Digit.Utils.locale.getTransformedLocale(ob.headerName))]=t(Digit.Utils.locale.getTransformedLocale(ob.headerName));
-      newObj[t(Digit.Utils.locale.getTransformedLocale(ob.headerName))]=ob?.plots[index].value
-     })
+       newObj[t(Digit.Utils.locale.getTransformedLocale(ob.headerName))]=value
+     });
+     console.log("New Object: " + JSON.stringify(newObj));
         return {
           label: null,
           name: response?.responseData?.data?.[0]?.plots[index].name,
@@ -102,12 +125,14 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
         };
       });
       setKeysArr(Object.values(keys));
+      console.log("JSON Keys: " + Object.values(keys));
+      console.log("Keys: " + JSON.stringify(keys));
+      console.log("Merge Object: " + JSON.stringify(mergeObj));
       return mergeObj;
     }
      
 
   }, [response, totalCapacity]);
-
   const renderPlot = (plot) => {
     if (id === "fsmCapacityUtilization") {
       return Number(plot?.value.toFixed(1));
@@ -228,6 +253,9 @@ Removed this custom yaxis label for all line charts
             <Tooltip />
             <Legend />
             {keysArr?.map((key,i)=>{
+              console.log("Array: " + keysArr);
+              console.log("Line chart Values: " + key);
+              console.log("Line chart index: " + i);
               return (<Line
               type="monotone"
               dataKey={key}
