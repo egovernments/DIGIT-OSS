@@ -35,7 +35,9 @@ const useSearchApplicationTableConfig = () => {
         {
           Header: t("NOC_APPLICANTS_NAME_LABEL"),
           disableSortBy: true,
-          accessor: (row) => GetCell(row?.additionalDetails?.name ? row?.additionalDetails?.name : "-"),
+          accessor: (row) => {
+            return GetCell(row?.additionalDetails?.applicantName ? row?.additionalDetails?.applicantName : "-")
+          },
         },
         {
           Header: t("NOC_SOURCE_MODULE_LABEL"),
