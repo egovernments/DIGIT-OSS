@@ -33,7 +33,7 @@ const Login = ({ config: propsConfig, t ,isDisable}) => {
       alert("Please Select City!");
       return;
     }
-    setDisable(true)
+    setDisable(true )
    
     const requestData = {
       ...data,
