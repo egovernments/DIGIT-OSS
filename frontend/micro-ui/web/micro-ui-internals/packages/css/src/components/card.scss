@@ -237,6 +237,14 @@
       @apply text-left;
     }
 
+    .card-search-heading{
+      margin-right: 0px !important;
+      margin-left: 0px !important;
+      margin-bottom: 0px !important;
+      padding-bottom: 0px;
+      padding-left: 25px;
+    }
+
     .label-field-pair {
       @apply flex items-center;
 
