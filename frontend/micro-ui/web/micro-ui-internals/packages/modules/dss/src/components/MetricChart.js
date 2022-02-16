@@ -1,8 +1,10 @@
+import { DownwardArrow, Rating, UpwardArrow } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { Card, CardSubHeader, Rating, UpwardArrow, DownwardArrow } from "@egovernments/digit-ui-react-components";
-import { startOfMonth, endOfMonth, getTime } from "date-fns";
 import FilterContext from "./FilterContext";
+//import {ReactComponent as Arrow_Downward} from "../images/Arrow_Downward.svg";
+import { ArrowDownwardElement } from "./ArrowDownward";
+import { ArrowUpwardElement } from "./ArrowUpward";
 
 const MetricData = ({ t, data, code }) => {
   const { value } = useContext(FilterContext);
@@ -18,9 +20,9 @@ const MetricData = ({ t, data, code }) => {
         )}
       </p>
       {data?.insight && (
-        <div>
-          {data?.insight?.indicator === "upper_green" ? <UpwardArrow marginRight={9} /> : <DownwardArrow marginRight={9} />}
-          <p className={`${data?.insight.colorCode}`}>{data?.insight.value.replace(/[+-]/g, "")}</p>
+        <div style={{float:"right"}}>
+          {data?.insight?.indicator === "upper_green" ? ArrowUpwardElement("10px") : ArrowDownwardElement("10px")}
+          <p className={`${data?.insight.colorCode}`}>{data?.insight.value.replace(/[+-]/g, "").replace("last year",'LY')}</p>
         </div>
       )}
     </div>
@@ -44,9 +46,25 @@ const MetricChartRow = ({ data }) => {
     return false;
   }
 
+  if (!response) {
+    return (
+      <div style={{ display: "flex", justifyContent: "space-between", margin: "10px" }}>
+        <span>{t(data.name)}</span>
+        <span>{t("DSS_NO_DATA")}</span>
+      </div>
+    );
+  }
+
   return (
     <div className="row">
-      <div>{t(data.name)}</div>
+       <div className="tooltip">
+            {t(data.name)}
+              <span className="tooltiptext" style={{ whiteSpace: "nowrap" , 
+              // marginLeft: "-500%" ,
+               fontSize:"medium" }}>
+               {t(`TIP_${data.name}`)}
+              </span>
+            </div>
       <MetricData t={t} data={response?.responseData?.data?.[0]} code={response?.responseData?.visualizationCode} />
       {/* <div>{`${displaySymbol(response.headerSymbol)} ${response.headerValue}`}</div> */}
     </div>

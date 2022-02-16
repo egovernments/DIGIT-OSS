@@ -44,6 +44,15 @@ font-size: 19px;
 color: #505A5F;
 }
 
+.dss-table-subheader{
+  position: relative;
+    top: -7px;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(80, 90, 95, 1);
+}
+
+
 @media screen and (max-width: 768px) {
   .dss-switch-tabs{/* Card / Primary */
     margin-right:0px;

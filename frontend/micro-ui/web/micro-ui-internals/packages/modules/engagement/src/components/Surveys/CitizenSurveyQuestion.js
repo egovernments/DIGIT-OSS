@@ -14,7 +14,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
             type="text"
             inputRef={register({
               maxLength: {
-                value: 60,
+                value: 200,
                 message: t("EXCEEDS_60_CHAR_LIMIT"),
               },
             })}

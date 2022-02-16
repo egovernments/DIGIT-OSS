@@ -43,7 +43,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
     setActive(false)
   }
 
-  Digit.Hooks.useClickOutside(dropdownRef, handleOutsideClickAndSubmitSimultaneously , active);
+  Digit.Hooks.useClickOutside(dropdownRef, handleOutsideClickAndSubmitSimultaneously , active, {capture: true} );
   const filtOptns =
       searchQuery?.length > 0 ? options.filter((option) => t(option[optionsKey]&&typeof option[optionsKey]=="string" && option[optionsKey].toUpperCase()).toLowerCase().indexOf(searchQuery.toLowerCase()) >= 0) : options;
     
@@ -86,7 +86,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
         value={option[optionsKey]}
         checked={alreadyQueuedSelectedState.find((selectedOption) => selectedOption[optionsKey] === option[optionsKey]) ? true : false}
         onChange={(e) => isPropsNeeded?onSelectToAddToQueue(e, option,props):isOBPSMultiple?onSelectToAddToQueue(e, option,BlockNumber):onSelectToAddToQueue(e, option)}
-        style={{minWidth: "24px"}}
+        style={{minWidth: "24px", width: "100%"}}
       />
       <div className="custom-checkbox">
         <CheckSvg style={{innerWidth: "24px", width: "24px"}}/>

@@ -111,19 +111,17 @@ export const setAddressDetails = (data) => {
 
 
 export const getownerarray = (data) => {
-  let ownerarray = [];
-  data?.owners.owners.map((ob) => {
-    ownerarray.push({
-      mobileNumber: ob.mobilenumber,
-      name: ob.name,
-      fatherOrHusbandName: "",
-      relationship: "",
-      dob: null,
-      gender: ob.gender.code,
-      permanentAddress: data?.owners?.permanentAddress,
-    });
-  });
-  return ownerarray;
+  const ownersData = data?.owners?.owners
+  const res = ownersData?.map((ob) => ({
+    mobileNumber: ob.mobilenumber,
+    name: ob.name,
+    fatherOrHusbandName: ob?.fatherOrHusbandName,
+    relationship: ob?.relationship?.code,
+    dob: null,
+    gender: ob?.gender?.code,
+    permanentAddress: data?.owners?.permanentAddress,
+  }));
+  return res;
 };
 
 export const gettradeownerarray = (data) => {
@@ -292,19 +290,19 @@ export const convertToTrade = (data = {}) => {
         commencementDate: Date.parse(data?.TradeDetails?.CommencementDate),
         financialYear: Financialyear ? Financialyear : "2021-22",
         licenseType: "PERMANENT",
-        tenantId: data?.address?.city?.code,
+        tenantId: data?.tenantId,
         tradeLicenseDetail: {
           channel:"CITIZEN",
           address: {
-            city: data?.address?.city?.code,
+            city: data?.cpt?.details?.address?.city?.code,
             locality: {
-              code: data?.address?.locality?.code,
+              code: data?.cpt?.details?.address?.locality?.code,
             },
             tenantId: data?.tenantId,
-            pincode: data?.address?.pincode,
-            doorNo: data?.address?.doorNo,
-            street: data?.address?.street,
-            landmark: data?.address?.landmark,
+            pincode: data?.cpt?.details?.address?.pincode,
+            doorNo: data?.cpt?.details?.address?.doorNo,
+            street: data?.cpt?.details?.address?.street,
+            landmark: data?.cpt?.details?.address?.landmark,
           },
           applicationDocuments: null,
           accessories: data?.TradeDetails?.accessories ? getaccessories(data) : null,
@@ -312,9 +310,12 @@ export const convertToTrade = (data = {}) => {
           ...data?.owners.owners?.[0]?.designation && data?.owners.owners?.[0]?.designation !== "" ? { institution: {
             designation: data?.owners.owners?.[0]?.designation
           }} : {},
-          structureType: data?.TradeDetails?.StructureType.code !=="IMMOVABLE" ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code,
-          subOwnerShipCategory: data?.owners.owners?.[0]?.institutionType.code ? data?.owners.owners?.[0]?.institutionType.code : data?.ownershipCategory?.code,
+          structureType: data?.TradeDetails?.StructureType?.code !=="IMMOVABLE" ? data?.TradeDetails?.VehicleType?.code : data?.TradeDetails?.BuildingType?.code,
+          subOwnerShipCategory: data?.owners.owners?.[0]?.subOwnerShipCategory?.code ? data?.owners.owners?.[0]?.subOwnerShipCategory?.code : data?.ownershipCategory?.code,
           tradeUnits: gettradeunits(data),
+          additionalDetail: {
+            propertyId: data?.cpt?.details?.propertyId,
+          }
         },
         tradeName: data?.TradeDetails?.TradeName,
         wfDocuments: [],

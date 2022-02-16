@@ -489,7 +489,7 @@ export const setPropertyDetails = (data) => {
       units: data?.units,
       landArea: data?.landArea?.floorarea,
       propertyType: data?.PropertyType?.code,
-      noOfFloors: data?.units.length,
+      noOfFloors: data?.noOfFloors?.code+1,
       superBuiltUpArea: null,
       usageCategory: data?.units?.[0]?.usageCategory,
     };
@@ -567,7 +567,7 @@ export const convertToProperty = (data = {}) => {
         basement2: basement2,
       },
 
-      creationReason: "CREATE",
+      creationReason: getCreationReason(data),
       source: "MUNICIPAL_RECORDS",
       channel: "CITIZEN",
     },
@@ -575,6 +575,22 @@ export const convertToProperty = (data = {}) => {
   console.info("propertyCreated", formdata);
   return formdata;
 };
+
+export const CompareTwoObjects = (ob1, ob2) => {
+Object.keys(ob1).map((key) =>{
+  if(typeof ob1[key] == "object")
+  {
+    if(ob1[key].code !== ob2[key].code)
+    return false
+  }
+  else
+  {
+    if(ob1[key] !== ob2[key])
+    return false;
+  }
+});
+return true;
+}
 
 export const setUpdateOwnerDetails = (data = []) => {
   const { institution, owners } = data;
@@ -834,7 +850,7 @@ export const pdfDocumentName = (documentLink = "", index = 0) => {
 };
 
 /* methid to get date from epoch */
-export const convertEpochToDate = (dateEpoch) => {
+export const convertEpochToDate = (dateEpoch,businessService) => {
   // Returning null in else case because new Date(null) returns initial date from calender
   if (dateEpoch) {
     const dateFromApi = new Date(dateEpoch);
@@ -843,6 +859,9 @@ export const convertEpochToDate = (dateEpoch) => {
     let year = dateFromApi.getFullYear();
     month = (month > 9 ? "" : "0") + month;
     day = (day > 9 ? "" : "0") + day;
+    if(businessService == "PT")
+    return `${day}-${month}-${year}`;
+    else
     return `${day}/${month}/${year}`;
   } else {
     return null;

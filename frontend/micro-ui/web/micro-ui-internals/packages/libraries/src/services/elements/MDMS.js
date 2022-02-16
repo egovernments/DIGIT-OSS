@@ -783,6 +783,24 @@ const getFSTPORejectionReasonCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getFSMPaymentTypeCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "PaymentType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+}); 
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -1061,6 +1079,16 @@ const GetFSTPORejectionReason = (MdmsRes) => {
     });
 }
 
+const GetPaymentType = (MdmsRes) => {
+  return MdmsRes["FSM"].PaymentType.filter((option) => option.active)
+    .map((reasonDetails) => {
+      return {
+        ...reasonDetails,
+        i18nKey: `ES_ACTION_${reasonDetails.code}`,
+      };
+    });
+} 
+
 const getDssDashboard = () => MdmsRes["dss-dashboard"]["dashboard-config"];
 
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
@@ -1162,6 +1190,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return getFSMGenderType(MdmsRes);
     case "FSTPORejectionReason":
       return GetFSTPORejectionReason(MdmsRes);
+    case "PaymentType":
+     return GetPaymentType(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -1445,4 +1475,8 @@ export const MdmsService = {
   getFSTPORejectionReason: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getFSTPORejectionReasonCriteria(tenantId, moduleCode, type), moduleCode);
   },
+
+  getFSMPaymentType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getFSMPaymentTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  } 
 };

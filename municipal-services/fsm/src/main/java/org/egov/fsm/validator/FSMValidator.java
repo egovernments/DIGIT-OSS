@@ -73,9 +73,11 @@ public class FSMValidator {
 			// ui does not pass citizen in fsm but userInfo in the request is citizen
 			if (fsm.getCitizen() == null || StringUtils.isEmpty(fsm.getCitizen().getName())
 					|| StringUtils.isEmpty(fsm.getCitizen().getMobileNumber())) {
-				User citzen = new User();
-				BeanUtils.copyProperties(fsmRequest.getRequestInfo().getUserInfo(), citzen);
-				fsm.setCitizen(citzen);
+				User citizen = new User();
+				BeanUtils.copyProperties(fsmRequest.getRequestInfo().getUserInfo(), citizen);
+				if(fsmRequest.getFsm().getCitizen()!=null)
+					citizen.setGender(fsmRequest.getFsm().getCitizen().getGender());
+					fsm.setCitizen(citizen);
 
 			}
 			

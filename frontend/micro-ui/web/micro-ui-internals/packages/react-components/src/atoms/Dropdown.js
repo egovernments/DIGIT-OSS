@@ -139,7 +139,7 @@ const Dropdown = (props) => {
   }
 
   let filteredOption =
-    (props.option && props.option.filter((option) => t(option[props.optionKey]).toUpperCase().indexOf(filterVal.toUpperCase()) > -1)) || [];
+    (props.option && props.option?.filter((option) => t(option[props.optionKey])?.toUpperCase()?.indexOf(filterVal?.toUpperCase()) > -1)) || [];
   function selectOption(ind) {
     onSelect(filteredOption[ind]);
   }
@@ -223,7 +223,11 @@ const Dropdown = (props) => {
                 );
               })}
             {filteredOption && filteredOption.length === 0 && (
-              <div className={`cp profile-dropdown--item display: flex `} style={{ cursor: "not-allowed" }} key={"-1"}>
+              <div className={`cp profile-dropdown--item display: flex `} key={"-1"} onClick={() => onSelect({
+                "code": "NOOPTION",
+                "active": true,
+                "i18nKey": "CMN_NOOPTION"
+              })}>
                 {<span> {props.t ? props.t("CMN_NOOPTION") : "CMN_NOOPTION"}</span>}
               </div>
             )}
@@ -236,7 +240,7 @@ const Dropdown = (props) => {
             ref={optionRef}
           >
             {props.option
-              .filter((option) => option.toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
+              .filter((option) => option?.toUpperCase().indexOf(filterVal?.toUpperCase()) > -1)
               .map((option, index) => {
                 return (
                   <p

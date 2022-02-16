@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, MobileNumber, Loader } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, MobileNumber, Loader, CardText } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 
 const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) => {
@@ -57,6 +57,11 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
     const GetCell = (value) => <span className="cell-text">{value}</span>;
     const columns = useMemo( () => ([
         {
+            Header: t("PT_SEARCHPROPERTY_TABEL_PID"),
+            disableSortBy: true,
+            accessor: (row) => GetCell(row.propertyId || ""),
+        },
+        {
             Header: t("PT_APPLICATION_NO_LABEL"),
             accessor: "acknowldgementNumber",
             disableSortBy: true,
@@ -64,18 +69,13 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
               return (
                 <div>
                   <span className="link">
-                    <Link to={`/digit-ui/employee/pt/application-details/${row.original["propertyId"]}`}>
+                    <Link to={`/digit-ui/employee/pt/applicationsearch/application-details/${row.original["propertyId"]}`}>
                       {row.original["acknowldgementNumber"]}
                     </Link>
                   </span>
                 </div>
               );
             },
-          },
-          {
-            Header: t("PT_SEARCHPROPERTY_TABEL_PID"),
-            disableSortBy: true,
-            accessor: (row) => GetCell(row.propertyId || ""),
           },
           {
             Header: t("PT_SEARCHPROPERTY_TABEL_APPLICATIONTYPE"),
@@ -88,14 +88,14 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
             disableSortBy: true,
           },
           {
-            Header: t("PT_ADDRESS_LABEL"),
-            disableSortBy: true,
-            accessor: (row) => GetCell(getaddress(row.address) || ""),
-          },
-          {
             Header: t("ES_SEARCH_PROPERTY_STATUS"),
             accessor: (row) =>GetCell(t( row?.status &&`WF_PT_${row.status}`|| "NA") ),
             disableSortBy: true,
+          },
+          {
+            Header: t("PT_ADDRESS_LABEL"),
+            disableSortBy: true,
+            accessor: (row) => GetCell(getaddress(row.address) || ""),
           },
       ]), [] )
 
@@ -121,6 +121,9 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
     let validation={}
 
     return <React.Fragment>
+                < Card className={"card-search-heading"}>
+                    <span style={{color:"#505A5F"}}>{t("Provide at least one parameter to search for an application")}</span>
+                </Card>
                 <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
                 <SearchField>
                     <label>{t("PT_APPLICATION_NO_LABEL")}</label>

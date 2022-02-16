@@ -19,7 +19,15 @@ const SurveyList = () => {
     { tenantIds },
     {
       select: ({ Surveys }) => {
-        const allSurveys = Surveys.map((survey) => ({ hasResponded: false, responseStatus: "CS_SURVEY_YT_TO_RESPOND", ...survey }));
+        // const allSurveys = Surveys.map((survey) => ({ hasResponded: false, responseStatus: "CS_SURVEY_YT_TO_RESPOND", ...survey }));
+
+        const allSurveys = Surveys.map((survey) => {
+          const isSurveyActive = isActive(survey.startDate, survey.endDate);
+          let resStatus="";
+          if(isSurveyActive) resStatus = "CS_SURVEY_YT_TO_RESPOND"
+          else resStatus = "CANNOT_RESPOND_MSG"
+          return ({ hasResponded: false, responseStatus: resStatus, ...survey })});
+
         const activeSurveysList = [];
         const inactiveSurveysList = [];
         for (let survey of allSurveys) {

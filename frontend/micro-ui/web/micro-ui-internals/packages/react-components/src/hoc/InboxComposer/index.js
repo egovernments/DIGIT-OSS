@@ -130,7 +130,7 @@ const InboxComposer = ({
             <div className="SubmitAndClearAllContainer">
                 <SearchField className="submit">
                     <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form" />
-                    <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
+                    <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_SEARCH`)}</p>
                 </SearchField>
             </div>
         </SearchForm>

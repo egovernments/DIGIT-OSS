@@ -49,6 +49,13 @@ const NewSurveys = () => {
     history.push("/digit-ui/employee/engagement/surveys/create-response", details)
   };
 
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
+  const userInfo = Digit.UserService.getUser().info;
+  const userUlbs = ulbs
+    .filter((ulb) => userInfo?.roles?.some((role) => role?.tenantId === ulb?.code))
+    
+ 
   const defaultValues = {
     fromDate: "",
     fromTime: "",
@@ -56,13 +63,21 @@ const NewSurveys = () => {
     toTime: "",
     questions: {},
     collectCitizenInfo: "",
-    tenantIds:[]
+    // tenantIds:[]
+    tenantIds:userUlbs,
   };
 
+  const stylesForForm = {
+    marginLeft:'-20px',
+  }
+  
   return (
     <Fragment>
-      <Header>{t("CS_COMMON_SURVEYS")}</Header>
-      <CreateNewSurvey t={t} onSubmit={onSubmit} initialFormValues={defaultValues} />
+      {/* <Header>{t("CS_COMMON_SURVEYS")}</Header> */}
+      <Header>{t("CREATE_NEW_SURVEY")}</Header>
+      <div style={stylesForForm}>
+        <CreateNewSurvey t={t} onSubmit={onSubmit} initialFormValues={defaultValues} />
+      </div>
     </Fragment>
   );
 };

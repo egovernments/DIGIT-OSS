@@ -80,7 +80,7 @@ const ComplaintDetailsPage = (props) => {
     setImageZoom(imageSource);
   }
   function zoomImageWrapper(imageSource, index){
-    zoomImage(imageShownBelowComplaintDetails?.fullImage[index-1]);
+    zoomImage(imageShownBelowComplaintDetails?.fullImage[index]);
   }
 
   function onCloseImageZoom() {

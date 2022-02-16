@@ -183,11 +183,12 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
           <RadioOrSelect
             options={cities.sort((a, b) => a.name.localeCompare(b.name))}
             selectedOption={selectedCity}
-            optionKey="code"
+            optionKey="i18nKey"
             onSelect={selectCity}
             t={t}
-            isDependent={true}
-            labelKey="TENANT_TENANTS"
+            isPTFlow={true}
+            //isDependent={true}
+            //labelKey="TENANT_TENANTS"
             disabled={isEditProperty}
           />
         </span>

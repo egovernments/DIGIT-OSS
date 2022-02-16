@@ -1,10 +1,10 @@
-import React, { useContext, useMemo, Fragment } from "react";
+import { Loader } from "@egovernments/digit-ui-react-components";
+import React, { Fragment, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { startOfMonth, endOfMonth, getTime } from "date-fns";
-import { Loader, ResponseComposer } from "@egovernments/digit-ui-react-components";
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis, Text } from "recharts";
-import FilterContext from "./FilterContext";
 import { useHistory } from "react-router-dom";
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import FilterContext from "./FilterContext";
+import NoData from "./NoData";
 
 const barColors = ["#048BD0", "#FBC02D", "#8E29BF"];
 
@@ -76,7 +76,7 @@ const CustomHorizontalBarChart = ({
   }
   const formatXAxis = (tickFormat) => {
     if (tickFormat && typeof tickFormat == "string") {
-      return `${tickFormat.slice(0, 16)}${tickFormat.length > 17? "..":""}`;
+      return `${tickFormat.slice(0, 16)}${tickFormat.length > 17 ? ".." : ""}`;
     }
     return `${tickFormat}`;
   };
@@ -94,10 +94,8 @@ const CustomHorizontalBarChart = ({
           bottom: 5,
         }}
       >
-        {chartData?.length === 0 ? (
-          <div className="no-data">
-            <p>{t("DSS_NO_DATA")}</p>
-          </div>
+        {chartData?.length === 0 || !chartData ? (
+          <NoData t={t} />
         ) : (
           <BarChart
             width="100%"
@@ -113,7 +111,7 @@ const CustomHorizontalBarChart = ({
             barGap={12}
             barSize={12}
           >
-            <CartesianGrid />
+            <CartesianGrid strokeDasharray="2 2"/>
             <YAxis
               dataKey={yDataKey}
               type={yAxisType}

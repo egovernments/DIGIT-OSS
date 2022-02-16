@@ -1,13 +1,14 @@
-import { CardLabelError, SearchField, SearchForm, SubmitBar, TextInput,Localities } from "@egovernments/digit-ui-react-components";
+import { CardLabelError, SearchField, SearchForm, SubmitBar, TextInput,Localities,MobileNumber } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 
 const SwitchComponent = (props) => {
+  let searchBy = props.searchBy;
   return (
     <div className="w-fullwidth PropertySearchFormSwitcher">
       {props.keys.map((key) => (
-        <span key={key} className={props.searchBy === key ? "selected" : "non-selected"} onClick={() => {props.onSwitch(key);props.onReset();}}>
+        <span key={key} className={searchBy === key ? "selected" : "non-selected"} onClick={() => {key === "searchDetail" && !(sessionStorage.getItem("searchDetailValue"))?sessionStorage.setItem("searchDetailValue",1):""; key==="searchId" && sessionStorage.getItem("searchDetailValue") == 1?sessionStorage.setItem("searchDetailValue",2):"";   props.onSwitch(key);props.onReset(); }}>
           {props.t(`PT_SEARCH_BY_${key?.toUpperCase()}`)}
         </span>
       ))}
@@ -22,16 +23,17 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
   });
   const formValue = watch();
   const fields = PTSearchFields?.[searchBy] || {};
+  sessionStorage.removeItem("revalidateddone");
   return (
     <div className="PropertySearchForm">
-      <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
+      <SearchForm onSubmit={onSubmit} className={"pt-property-search"} handleSubmit={handleSubmit}>
         <SwitchComponent keys={Object.keys(PTSearchFields || {})} searchBy={searchBy} onReset={onReset} t={t} onSwitch={setSearchBy} />
         {fields &&
           Object.keys(fields).map((key) => {
             let field = fields[key];
             let validation = field?.validation || {};
             return (
-              <SearchField key={key}>
+              <SearchField key={key} className={"pt-form-field"}>
                 <label>{t(field?.label)}{`${field?.validation?.required?"*":""}`}</label>
                 {field?.type==="custom"? 
                 <Controller
@@ -50,7 +52,22 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
                   />
                 )}
                 />
-            :<TextInput
+            :field?.type === "number"?
+            <div>
+            <MobileNumber
+              name="mobileNumber"
+              inputRef={register({
+                value: getValues(key),
+                shouldUnregister: true,
+                ...validation,
+              })}
+              type="number"
+              componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>}
+              //maxlength={10}
+        />
+        </div>
+        :
+            <TextInput
                   name={key}
                   type={field?.type}
                   inputRef={register({
@@ -66,7 +83,7 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
 
        <div className="pt-search-action" >
          <SearchField  className="pt-search-action-reset">
-         <p
+         <p style={{color:"#F47738"}}
             onClick={() => {
               onReset({});
             }}

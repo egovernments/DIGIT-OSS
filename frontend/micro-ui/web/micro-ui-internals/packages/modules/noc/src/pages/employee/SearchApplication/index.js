@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { CardHeader } from "@egovernments/digit-ui-react-components";
+import { businessServiceList } from "../../../utils";
+import cloneDeep from "lodash/cloneDeep";
 
 const Search = ({ path }) => {
   const { t } = useTranslation();
@@ -7,7 +10,12 @@ const Search = ({ path }) => {
 
   const Search = Digit.ComponentRegistryService.getComponent("NOCSearchApplication");
 
-  const availableNocTypes = ["AIRPORT_AUTHORITY"]
+  const nocTypeList = businessServiceList();
+  let availableNocTypes = [];
+  if (nocTypeList?.length == 1) availableNocTypes = [nocTypeList?.[0]?.code];
+  if (nocTypeList?.length > 1) nocTypeList?.forEach(nocDta => {availableNocTypes.push(nocDta.code);})
+
+  // const availableNocTypes = ["AIRPORT_AUTHORITY"]
 
   const [filters, setfilters] = useState({
     offset: 0,
@@ -16,14 +24,15 @@ const Search = ({ path }) => {
     nocType: availableNocTypes[0]
   })
 
-  function onSubmit(__data) {
+  function onSubmit(__data, isFromClear = false) {
+    let details = cloneDeep(__data);
     let __filters = filters
     for (const [key, value] of Object.entries(__data)) {
       if(value != undefined && value != null && value != ""){
         __filters = {...__filters, [key]:value}        
       }
     }
-    setfilters(__filters)
+    setfilters(isFromClear == true ? details : __filters)
     // debugger
     // setSearchData(_data);
     // var fromDate = new Date(_data?.fromDate);
@@ -46,16 +55,18 @@ const Search = ({ path }) => {
 
   const { data, isLoading, isSuccess, error } = Digit.Hooks.noc.useNOCSearchApplication(tenantId,filters,{});
   return (
-    <Search
-      t={t}
-      tenantId={tenantId}
-      onSubmit={onSubmit}
-    //   searchData={searchData}
-      isLoading={isLoading}
-      Count={data?.count}
-      error={error}
-      data={!isLoading && isSuccess && data?.Noc?.length > 0 ? data.Noc : [{ display: "ES_COMMON_NO_DATA" }]}
-    />
+    <div>
+      <CardHeader styles={{fontSize: "32px", fontWeight: "700"}}>{t("ACTION_TEST_SEARCH_NOC_APPLICATION")}</CardHeader>
+      <Search
+        t={t}
+        tenantId={tenantId}
+        onSubmit={onSubmit}
+        isLoading={isLoading}
+        Count={data?.count}
+        error={error}
+        data={!isLoading && isSuccess && data?.Noc?.length > 0 ? data.Noc : [{ display: "ES_COMMON_NO_DATA" }]}
+      />
+    </div>
   );
 };
 

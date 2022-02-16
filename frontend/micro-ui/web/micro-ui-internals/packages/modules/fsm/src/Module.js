@@ -18,6 +18,7 @@ import SelectSlumName from "./pageComponents/SelectSlumName";
 import SelectStreet from "./pageComponents/SelectStreet";
 import SelectTankSize from "./pageComponents/SelectTankSize";
 import SelectTripData from "./pageComponents/SelectTripData";
+import SelectPaymentPreference from "./pageComponents/SelectPaymentPreference";
 import CitizenApp from "./pages/citizen";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import { MyApplications } from "./pages/citizen/MyApplications";
@@ -150,6 +151,7 @@ const componentsToRegister = {
   SelectName,
   SelectTripData,
   SelectGender,
+  SelectPaymentPreference,
   FSMEmpInbox: Inbox,
   FSMFstpInbox: FstpInbox,
   FSMNewApplicationEmp: NewApplication,

@@ -31,7 +31,7 @@
     "dev:mcollect": "cd packages/modules/mCollect && yarn start",
     "dev:receipts": "cd packages/modules/receipts && yarn start",
     "dev:tl": "cd packages/modules/tl && yarn start",
-    "dev:hrms": "cd packages/modules/hrms && yarn build",
+    "dev:hrms": "cd packages/modules/hrms && yarn start",
     "dev:obps": "cd packages/modules/obps && yarn start",
     "dev:engagement": "cd packages/modules/engagement && yarn start",
     "dev:noc": "cd packages/modules/noc && yarn start",

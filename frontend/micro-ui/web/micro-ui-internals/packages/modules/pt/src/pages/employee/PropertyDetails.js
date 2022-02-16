@@ -33,6 +33,7 @@ const PropertyDetails = () => {
   const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
   const [businessService, setBusinessService] = useState("PT.CREATE");
   const history = useHistory();
+  sessionStorage.setItem("propertyIdinPropertyDetail",applicationNumber);
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, applicationNumber);
   const { data: fetchBillData, isLoading: fetchBillLoading, revalidate } = Digit.Hooks.useFetchBillsForBuissnessService({
@@ -149,7 +150,7 @@ const PropertyDetails = () => {
         asSectionHeader: true,
         belowComponent: () => (
           <LinkLabel
-            onClick={() => history.push({ pathname: `/digit-ui/employee/pt/payment-details/${applicationNumber}` })}
+            onClick={() => history.push({ pathname: `/digit-ui/employee/pt/ptsearch/payment-details/${applicationNumber}` })}
             style={{ marginTop: "15px" }}
           >
             {t("PT_VIEW_PAYMENT")}
@@ -168,8 +169,9 @@ const PropertyDetails = () => {
       });
     }
     return () => {
-      if (appDetailsToShow?.applicationDetails?.[0]?.values?.[1].title == "PT_TOTAL_DUES") {
+      if (appDetailsToShow?.applicationDetails?.[0]?.values?.[1].title == "PT_TOTAL_DUES" && !(sessionStorage.getItem("revalidateddone") === "done")) {
         appDetailsToShow?.applicationDetails.shift();
+        sessionStorage.setItem("revalidateddone","done");
         revalidate();
       }
     };
@@ -189,7 +191,7 @@ const PropertyDetails = () => {
                   showFinancialYearsModal: true,
                   customFunctionToExecute: (data) => {
                     delete data.customFunctionToExecute;
-                    history.replace({ pathname: `/digit-ui/employee/pt/assessment-details/${applicationNumber}`, state: { ...data } });
+                    history.replace({ pathname: `/digit-ui/employee/pt/ptsearch/assessment-details/${applicationNumber}`, state: { ...data } });
                   },
                   tenantId: Digit.ULBService.getStateId(),
                 },

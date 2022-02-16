@@ -142,6 +142,17 @@ export const FormComposer = (props) => {
     }
   };
 
+  const getCombinedStyle = (placementinBox) => {
+    switch(placementinBox){
+      case 0:
+        return ({border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA",marginBottom:"20px"})
+      case 1:
+        return ({border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"-30px",borderColor:"#f3f3f3",background:"#FAFAFA",borderTop:"0px",borderBottom:"0px"})
+      case 2:
+        return ({border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"-30px",borderColor:"#f3f3f3",background:"#FAFAFA",marginBottom:"20px",borderTop:"0px"})
+    }
+  }
+
   const formFields = useMemo(
     () =>
       props.config?.map((section, index, array) => {
@@ -152,6 +163,7 @@ export const FormComposer = (props) => {
               if (props.inline)
                 return (
                   <React.Fragment key={index}>
+                    <div style={field.isInsideBox ? getCombinedStyle(field?.placementinbox) : {}} >
                     {!field.withoutLabel && (
                       <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }} className={field?.disable ? "disabled" : ""}>
                         {t(field.label)}
@@ -178,6 +190,7 @@ export const FormComposer = (props) => {
                         </CardLabel>
                       )}
                     </div>
+                  </div>
                   </React.Fragment>
                 );
               return (

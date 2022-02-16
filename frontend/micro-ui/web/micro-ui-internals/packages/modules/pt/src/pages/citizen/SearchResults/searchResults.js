@@ -8,9 +8,22 @@ import { useTranslation } from "react-i18next";
 const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation, onSelect, config, clearParams = () => {} }) => {
   const { t } = useTranslation();
   const modalRef = useRef();
-  const { mobileNumber, propertyIds, oldPropertyIds, locality, city,doorNo,name } = Digit.Hooks.useQueryParams();
-  const filters = {};
+  const { mobileNumber, propertyIds, oldPropertyIds, locality, city,doorNo,name, PToffset } = Digit.Hooks.useQueryParams();
+  let filters = {};
   const [modalData, setShowModal] = useState(false);
+
+  let OfsetForSearch = PToffset;
+  let t1;
+  let off;
+  if (!isNaN(parseInt(OfsetForSearch))) {
+    off = OfsetForSearch;
+    t1 = parseInt(OfsetForSearch) + 50;
+  } else {
+    t1 = 5;
+  }
+  let filter1 = !isNaN(parseInt(OfsetForSearch))
+    ? { limit: "50", sortOrder: "ASC", sortBy: "createdTime", offset: off }
+    : { limit: "5", sortOrder: "ASC", sortBy: "createdTime", offset: "0" };
 
   const closeModal = () => {
     setShowModal(false);
@@ -23,6 +36,11 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   if (locality) filters.locality = locality;
   if (doorNo) filters.doorNo = doorNo;
   if (name) filters.name = name;
+  filters.limit = filter1.limit;
+  filters.sortOrder = filter1.sortOrder;
+  filters.sortBy = filter1.sortBy;
+  filters.offset = filter1.offset;
+
 
   const [owners, setOwners, clearOwners] = Digit.Hooks.useSessionStorage("PT_MUTATE_MULTIPLE_OWNERS", null);
   // const [params, setParams, ] = Digit.Hooks.useSessionStorage("PT_MUTATE_PROPERTY");
@@ -145,6 +163,15 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
           </div>
         </Modal>
       ) : null}
+      {!searchResults?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("PT_NO_PROP_FOUND_MSG")}</p>}
+      {searchResults?.length !== 0 && (searchResults?.length == 5 || searchResults?.length == 50) && (
+          <div>
+            <p style={{ marginLeft: "16px", marginTop: "16px" }}>
+              {t("PT_LOAD_MORE_MSG")}{" "}
+              <span className="link">{<Link to={`/digit-ui/citizen/pt/property/search-results?mobileNumber=${mobileNumber?mobileNumber:""}&propertyIds=${propertyIds?propertyIds:""}&oldPropertyIds=${oldPropertyIds?oldPropertyIds:""}&doorNo=${doorNo?doorNo:""}&name=${name?name:""}&city=${city?city:""}&PToffset=${t1}`}>{t("PT_COMMON_CLICK_HERE")}</Link>}</span>
+            </p>
+          </div>
+        )}
     </div>
   );
 };

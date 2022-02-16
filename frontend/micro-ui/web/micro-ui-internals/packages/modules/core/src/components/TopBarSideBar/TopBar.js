@@ -1,7 +1,8 @@
 import React from "react";
 import { Dropdown, TopBar as TopBarComponent, Hamburger } from "@egovernments/digit-ui-react-components";
 import ChangeLanguage from "../ChangeLanguage";
-import { useHistory, useLocation  } from "react-router-dom"
+import ChangeCity from "../ChangeCity";
+import { useHistory, useLocation  } from "react-router-dom";
 
 const TextToImg = (props) => (
   <span className="user-img-txt" onClick={props.toggleMenu} title={props.name}>
@@ -92,6 +93,9 @@ const TopBar = ({
         {t(`MYCITY_STATECODE_LABEL`)}
       </p>)}
         {!mobileView && <div className={mobileView ? "right" : "flex-right right w-80 column-gap-15"} style={!loggedin?{width:'80%'}:{}}>
+          <div className="left">
+           {!window.location.href.includes("employee/user/login") && !window.location.href.includes("employee/user/language-selection") && <ChangeCity dropdown={true} t={t} />}
+          </div>
           <div className="left">
            {showLanguageChange&& <ChangeLanguage dropdown={true} />}
           </div>
