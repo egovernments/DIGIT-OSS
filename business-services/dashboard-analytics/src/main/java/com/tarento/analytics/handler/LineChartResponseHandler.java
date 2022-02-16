@@ -179,18 +179,23 @@ public class LineChartResponseHandler implements IResponseHandler {
     }
 
     private void enrichBucketKeys(List<JsonNode> aggrNodes, Set<String> finalBucketKeys, String interval) {
+        List<String> bkeyList = new ArrayList<>();
         for(JsonNode aggrNode : aggrNodes) {
             if (aggrNode.findValues(IResponseHandler.BUCKETS).size() > 0) {
                 ArrayNode buckets = (ArrayNode) aggrNode.findValues(IResponseHandler.BUCKETS).get(0);
                 for(JsonNode bucket : buckets){
                     String bkey = bucket.findValue(IResponseHandler.KEY).asText();
-                    String key = getIntervalKey(bkey, Constants.Interval.valueOf(interval));
-                    if(!finalBucketKeys.contains(key))
-                        finalBucketKeys.add(key);
+                    bkeyList.add(bkey);
                 }
-
             }
         }
+        Collections.sort(bkeyList);
+        for(String bkey : bkeyList){
+            String key = getIntervalKey(bkey, Constants.Interval.valueOf(interval));
+            if(!finalBucketKeys.contains(key))
+                finalBucketKeys.add(key);
+        }
+
     }
 
 
