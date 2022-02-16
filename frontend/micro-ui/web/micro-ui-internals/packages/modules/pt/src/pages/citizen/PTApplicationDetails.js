@@ -5,9 +5,10 @@ import { useParams } from "react-router-dom";
 import getPTAcknowledgementData from "../../getPTAcknowledgementData";
 import PropertyDocument from "../../pageComponents/PropertyDocument";
 import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
-import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle,getMohallaLocale } from "../../utils";
+import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle, getMohallaLocale } from "../../utils";
 
 import get from "lodash/get";
+import { size } from "lodash";
 
 const PTApplicationDetails = () => {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ const PTApplicationDetails = () => {
   const properties = get(data, "Properties", []);
   const propertyId = get(data, "Properties[0].propertyId", []);
   let property = (properties && properties.length > 0 && properties[0]) || {};
-  const application = propertyId;
+  const application = property;
   sessionStorage.setItem("pt-property", JSON.stringify(application));
 
   const { isLoading: auditDataLoading, isError: isAuditError, data: auditResponse } = Digit.Hooks.pt.usePropertySearch(
@@ -35,7 +36,7 @@ const PTApplicationDetails = () => {
     },
     {
       enabled: true,
-       // select: (d) =>
+      // select: (d) =>
       //   d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
@@ -51,16 +52,15 @@ const PTApplicationDetails = () => {
       state: null,
       comment: null,
       documents: null,
-      assignes: null
+      assignes: null,
     };
     property.workflow = workflow;
-
   }
 
   if (property && property.owners && property.owners.length > 0) {
     let ownersTemp = [];
     let owners = [];
-    property.owners.map(owner => {
+    property.owners.map((owner) => {
       owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
       owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
       if (owner.status == "ACTIVE") {
@@ -74,53 +74,33 @@ const PTApplicationDetails = () => {
     property.ownersTemp = ownersTemp;
   }
   property.ownershipCategoryTemp = property.ownershipCategory;
-  property.ownershipCategoryInit = 'NA';
+  property.ownershipCategoryInit = "NA";
   // Set Institution/Applicant info card visibility
-  if (
-    get(
-      application,
-      "Properties[0].ownershipCategory",
-      ""
-    ).startsWith("INSTITUTION")
-  ) {
+  if (get(application, "Properties[0].ownershipCategory", "").startsWith("INSTITUTION")) {
     property.institutionTemp = property.institution;
   }
 
   if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
     const propertiesAudit = get(auditResponse, "Properties", []);
-    const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
+    const propertyIndex = property.status == "ACTIVE" ? 1 : 0;
     // const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
     // Removed filter(property => property.status == 'ACTIVE') condition to match result in qa env
     const previousActiveProperty = propertiesAudit.sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
-    property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
+    property.ownersInit = previousActiveProperty.owners.filter((owner) => owner.status == "ACTIVE");
 
     if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
       property.institutionInit = previousActiveProperty.institution;
     }
   }
 
-  let transfereeOwners = get(
-    property,
-    "ownersTemp", []
-  );
-  let transferorOwners = get(
-    property,
-    "ownersInit", []
-  );
+  let transfereeOwners = get(property, "ownersTemp", []);
+  let transferorOwners = get(property, "ownersInit", []);
 
-  let transfereeInstitution = get(
-    property,
-    "institutionTemp", []
-  );
+  let transfereeInstitution = get(property, "institutionTemp", []);
 
-  
-  let transferorInstitution = get(
-    property,
-    "institutionInit", []
-    );
-  
-    
+  let transferorInstitution = get(property, "institutionInit", []);
+
   let units = [];
   units = application?.units;
   units &&
@@ -143,6 +123,7 @@ const PTApplicationDetails = () => {
   owners = application?.owners;
   let docs = [];
   docs = application?.documents;
+
   if (isLoading || auditDataLoading) {
     return <Loader />;
   }
@@ -158,9 +139,9 @@ const PTApplicationDetails = () => {
     const tenantInfo = tenants.find((tenant) => tenant.code === applications.tenantId);
     const acknowldgementDataAPI = await getPTAcknowledgementData({ ...applications }, tenantInfo, t);
     setAcknowldgementData(acknowldgementDataAPI);
-  }
+  };
   // useEffect(() => {
-    getAcknowledgementData();
+  getAcknowledgementData();
   // }, [])
 
   const handleDownloadPdf = () => {
@@ -168,7 +149,7 @@ const PTApplicationDetails = () => {
   };
 
   let documentDate = t("CS_NA");
-  if(property?.additionalDetails?.documentDate) {
+  if (property?.additionalDetails?.documentDate) {
     const date = new Date(property?.additionalDetails?.documentDate);
     const month = Digit.Utils.date.monthNames[date.getMonth()];
     documentDate = `${date.getDate()} ${month} ${date.getFullYear()}`;
@@ -178,38 +159,41 @@ const PTApplicationDetails = () => {
     <React.Fragment>
       <Header>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
       <div>
-            <div>
-               <LinkButton label={t("CS_COMMON_DOWNLOAD")} className="check-page-link-button pt-application-download-btn" onClick={handleDownloadPdf} />
-            </div>
+        <div>
+          <LinkButton label={t("CS_COMMON_DOWNLOAD")} className="check-page-link-button pt-application-download-btn" onClick={handleDownloadPdf} />
+        </div>
         <Card>
-           <StatusTable>
-             <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
-             <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} textStyle={{ whiteSpace: "pre" }} />
-             <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
-            
-        {isPropertyTransfer &&
-            <React.Fragment>
-              <Row label={t("PT_FEE_AMOUNT")} text={application?.name ||t("CS_NA") } textStyle={{ whiteSpace: "pre" }} />
-              <Row label={t("PT_PAYMENT_STATUS")} text={application?.status ||t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
-            </React.Fragment>
-            }
-          </StatusTable>
-                 <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
           <StatusTable>
-              <Row label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={property?.address?.pincode || t("CS_NA")} />
-              <Row label={t("PT_COMMON_CITY")} text={property?.address?.city || t("CS_NA")} />
-              <Row label={t("PT_COMMON_LOCALITY_OR_MOHALLA")} text=/* {`${t(application?.address?.locality?.name)}` || t("CS_NA")} */{t(`${(property?.address?.locality?.area)}`) || t("CS_NA")} />
-              <Row label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={property?.address?.street || t("CS_NA")} />
-        {isPropertyTransfer ? (
-               <Row label={t("PT_DOOR_OR_HOUSE")} text={property?.address?.doorNo || t("CS_NA")} />
-                ) : (
-               <Row label={t("PT_PROPERTY_ADDRESS_COLONY_NAME")} text={property?.address?.buildingName || t("CS_NA")} />
-                          )}
+            <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
+
+            {isPropertyTransfer && (
+              <React.Fragment>
+                <Row label={t("PT_FEE_AMOUNT")} text={application?.name || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+                <Row label={t("PT_PAYMENT_STATUS")} text={application?.status || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+              </React.Fragment>
+            )}
+          </StatusTable>
+          <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
+          <StatusTable>
+            <Row label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={property?.address?.pincode || t("CS_NA")} />
+            <Row label={t("PT_COMMON_CITY")} text={property?.address?.city || t("CS_NA")} />
+            <Row
+              label={t("PT_COMMON_LOCALITY_OR_MOHALLA")}
+              text=/* {`${t(application?.address?.locality?.name)}` || t("CS_NA")} */ {t(`${property?.address?.locality?.area}`) || t("CS_NA")}
+            />
+            <Row label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={property?.address?.street || t("CS_NA")} />
+            {isPropertyTransfer ? (
+              <Row label={t("PT_DOOR_OR_HOUSE")} text={property?.address?.doorNo || t("CS_NA")} />
+            ) : (
+              <Row label={t("PT_PROPERTY_ADDRESS_COLONY_NAME")} text={property?.address?.buildingName || t("CS_NA")} />
+            )}
           </StatusTable>
 
-          { isPropertyTransfer ? (
+          {isPropertyTransfer ? (
             <React.Fragment>
-              <CardSubHeader>{t("PT_MUTATION_TRANSFEROR_DETAILS")}</CardSubHeader>
+              <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_MUTATION_TRANSFEROR_DETAILS")}</CardSubHeader>
               <div>
                 {Array.isArray(transferorOwners) &&
                   transferorOwners.map((owner, index) => (
@@ -223,109 +207,107 @@ const PTApplicationDetails = () => {
                       </CardSubHeader>
                       <StatusTable>
                         <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
-                        <Row label={t("Guardian Name")} text={owner?.fatherOrHusbandName || t("CS_NA")} />   
+                        <Row label={t("Guardian Name")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
                         <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
                         <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
-                        <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={ owner?.ownerType.toLowerCase() || t("CS_NA")} />
+                        <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={owner?.ownerType.toLowerCase() || t("CS_NA")} />
                         <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
                       </StatusTable>
                     </div>
                   ))}
               </div>
 
-              <CardSubHeader>{t("PT_MUTATION_TRANSFEREE_DETAILS")}</CardSubHeader>
-               {
-                transferorInstitution ? (
-                  <div>
-                    {Array.isArray(transfereeOwners) &&
-                      transfereeOwners.map((owner, index) => (
-                        <div key={index}>
-                          <CardSubHeader>
-                            {transfereeOwners.length != 1 && (
-                              <span>
-                                {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
-                              </span>
-                            )}
-                          </CardSubHeader>
-                          <StatusTable>
-                            <Row label={t("PT_INSTITUTION_NAME")} text={transferorInstitution?.name || t("CS_NA")} />
-                            <Row label={t("PT_TYPE_OF_INSTITUTION")} text={`${t(transferorInstitution?.type)}` || t("CS_NA")} />
-                            <Row label={t("PT_NAME_AUTHORIZED_PERSON")} text={transferorInstitution?.nameOfAuthorizedPerson || t("CS_NA")} />
-                            <Row label={t("PT_LANDLINE_NUMBER")} text={owner?.altContactNumber || t("CS_NA")} />
-                            <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
-                            <Row label={t("PT_INSTITUTION_DESIGNATION")} text={transferorInstitution?.designation || t("CS_NA")} />
-                            <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
-                            <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
-                          </StatusTable>
-                        </div>
-                      ))}
-                  </div>
-                ) : (
-                  <div>
-                    {Array.isArray(transferorOwners) &&
-                      transferorOwners.map((owner, index) => (
-                        <div key={index}>
-                          <CardSubHeader>
-                            {transferorOwners.length != 1 && (
-                              <span>
-                                {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
-                              </span>
-                            )}
-                          </CardSubHeader>
-                          <StatusTable>
-                            <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
-                            <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
-                            <Row label={t("PT_COMMON_GENDER_LABEL")} text={owner?.gender || t("CS_NA")} />
-                            <Row
-                              label={t("PT_FORM3_OWNERSHIP_TYPE")}
-                              text={`${application?.ownershipCategory ? t(`PT_OWNERSHIP_${owner?.ownershipCategory}`) : t("CS_NA")}`}
-                            />
-                            <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
-                            <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")}text={owner?.emailId || t("CS_NA")} />
-                            <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={(owner?.ownerType).toLowerCase() || t("CS_NA")} />
-                            <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
-                          </StatusTable>
-                        </div>
+              <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_MUTATION_TRANSFEREE_DETAILS")}</CardSubHeader>
+              {transferorInstitution ? (
+                <div>
+                  {Array.isArray(transfereeOwners) &&
+                    transfereeOwners.map((owner, index) => (
+                      <div key={index}>
+                        <CardSubHeader>
+                          {transfereeOwners.length != 1 && (
+                            <span>
+                              {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
+                            </span>
+                          )}
+                        </CardSubHeader>
+                        <StatusTable>
+                          <Row label={t("PT_INSTITUTION_NAME")} text={transferorInstitution?.name || t("CS_NA")} />
+                          <Row label={t("PT_TYPE_OF_INSTITUTION")} text={`${t(transferorInstitution?.type)}` || t("CS_NA")} />
+                          <Row label={t("PT_NAME_AUTHORIZED_PERSON")} text={transferorInstitution?.nameOfAuthorizedPerson || t("CS_NA")} />
+                          <Row label={t("PT_LANDLINE_NUMBER")} text={owner?.altContactNumber || t("CS_NA")} />
+                          <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
+                          <Row label={t("PT_INSTITUTION_DESIGNATION")} text={transferorInstitution?.designation || t("CS_NA")} />
+                          <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
+                          <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
+                        </StatusTable>
+                      </div>
                     ))}
-                  </div>
-                       )
-                   }
-                   <CardSubHeader>{t("PT_MUTATION_DETAILS")}</CardSubHeader>
-                      <StatusTable>
-                        <Row label={t("PT_MUTATION_PENDING_COURT")} text={property?.additionalDetails?.isMutationInCourt || t("CS_NA")} />
-                        <Row label={t("PT_DETAILS_COURT_CASE")} text={property?.additionalDetails?.caseDetails || t("CS_NA")}  />
-                        <Row label={t("PT_PROP_UNDER_GOV_AQUISITION")} text={property?.additionalDetails?.isPropertyUnderGovtPossession || t("CS_NA")}  />
-                        <Row label={t("PT_DETAILS_GOV_AQUISITION")} text={t("CS_NA")}  />
-                      </StatusTable>
-                  
-                   <CardSubHeader>{t("PT_REGISTRATION_DETAILS")}</CardSubHeader>
-                     <StatusTable>
-                        <Row label={t("PT_REASON_PROP_TRANSFER")} text={`${t(property?.additionalDetails?.reasonForTransfer) }` || t("CS_NA")} />
-                        <Row label={t("PT_PROP_MARKET_VALUE")} text={property?.additionalDetails?.marketValue || t("CS_NA")} />
-                        <Row label={t("PT_REG_NUMBER")} text={property?.additionalDetails?.documentNumber || t("CS_NA")} />
-                        <Row label={t("PT_DOC_ISSUE_DATE")} text={documentDate} />
-                        <Row label={t("PT_REG_DOC_VALUE")} text={property?.additionalDetails?.documentValue || t("CS_NA")} />
-                        <Row label={t("PT_REMARKS")} text={t("CS_NA")} />
-                     </StatusTable>
-
-            </React.Fragment>
-                ) : ( 
-            <React.Fragment>
-                   <CardSubHeader>{t("PT_PROPERTY_ASSESSMENT_DETAILS_HEADER")}</CardSubHeader>
+                </div>
+              ) : (
+                <div>
+                  {Array.isArray(transferorOwners) &&
+                    transferorOwners.map((owner, index) => (
+                      <div key={index}>
+                        <CardSubHeader>
+                          {transferorOwners.length != 1 && (
+                            <span>
+                              {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
+                            </span>
+                          )}
+                        </CardSubHeader>
+                        <StatusTable>
+                          <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
+                          <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
+                          <Row label={t("PT_COMMON_GENDER_LABEL")} text={owner?.gender || t("CS_NA")} />
+                          <Row
+                            label={t("PT_FORM3_OWNERSHIP_TYPE")}
+                            text={`${application?.ownershipCategory ? t(`PT_OWNERSHIP_${owner?.ownershipCategory}`) : t("CS_NA")}`}
+                          />
+                          <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
+                          <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
+                          <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={(owner?.ownerType).toLowerCase() || t("CS_NA")} />
+                          <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
+                        </StatusTable>
+                      </div>
+                    ))}
+                </div>
+              )}
+              <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_MUTATION_DETAILS")}</CardSubHeader>
               <StatusTable>
-                    <Row
-                      label={t("PT_ASSESMENT_INFO_USAGE_TYPE")}
-                      text={
-                        `${t((property?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                          (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory)
-                        )}` || t("CS_NA")
-                      }
-                    />
-                    <Row label={t("PT_COMMON_PROPERTY_TYPE")} text={`${t(getPropertyTypeLocale(property?.propertyType))}` || t("CS_NA")} />
-                    <Row label={t("PT_ASSESMENT1_PLOT_SIZE")} text={(property?.landArea && `${t(`${property?.landArea} sq.ft`)}`) || t("CS_NA")} />
-                    <Row label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${t(property?.noOfFloors)}` || t("CS_NA")} />
+                <Row label={t("PT_MUTATION_PENDING_COURT")} text={property?.additionalDetails?.isMutationInCourt || t("CS_NA")} />
+                <Row label={t("PT_DETAILS_COURT_CASE")} text={property?.additionalDetails?.caseDetails || t("CS_NA")} />
+                <Row label={t("PT_PROP_UNDER_GOV_AQUISITION")} text={property?.additionalDetails?.isPropertyUnderGovtPossession || t("CS_NA")} />
+                <Row label={t("PT_DETAILS_GOV_AQUISITION")} text={t("CS_NA")} />
               </StatusTable>
-          <div>
+
+              <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_REGISTRATION_DETAILS")}</CardSubHeader>
+              <StatusTable>
+                <Row label={t("PT_REASON_PROP_TRANSFER")} text={`${t(property?.additionalDetails?.reasonForTransfer)}` || t("CS_NA")} />
+                <Row label={t("PT_PROP_MARKET_VALUE")} text={property?.additionalDetails?.marketValue || t("CS_NA")} />
+                <Row label={t("PT_REG_NUMBER")} text={property?.additionalDetails?.documentNumber || t("CS_NA")} />
+                <Row label={t("PT_DOC_ISSUE_DATE")} text={documentDate} />
+                <Row label={t("PT_REG_DOC_VALUE")} text={property?.additionalDetails?.documentValue || t("CS_NA")} />
+                <Row label={t("PT_REMARKS")} text={t("CS_NA")} />
+              </StatusTable>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <CardSubHeader style={{ fontSize: "24px" }}> {t("PT_PROPERTY_ASSESSMENT_DETAILS_HEADER")}</CardSubHeader>
+              <StatusTable>
+                <Row
+                  label={t("PT_ASSESMENT_INFO_USAGE_TYPE")}
+                  text={
+                    `${t(
+                      (property?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
+                        (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory)
+                    )}` || t("CS_NA")
+                  }
+                />
+                <Row label={t("PT_COMMON_PROPERTY_TYPE")} text={`${t(getPropertyTypeLocale(property?.propertyType))}` || t("CS_NA")} />
+                <Row label={t("PT_ASSESMENT1_PLOT_SIZE")} text={(property?.landArea && `${t(`${property?.landArea} sq.ft`)}`) || t("CS_NA")} />
+                <Row label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${t(property?.noOfFloors)}` || t("CS_NA")} />
+              </StatusTable>
+              <div>
                 {Array.isArray(units) &&
                   units.length > 0 &&
                   units.map((unit, index) => (
@@ -344,12 +326,15 @@ const PTApplicationDetails = () => {
                               text={
                                 `${t(
                                   (property?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                                  (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory) +
-                                  (property?.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
+                                    (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory) +
+                                    (property?.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
                                 )}` || t("CS_NA")
                               }
                             />
-                            <Row label={t("PT_OCCUPANY_TYPE_LABEL")} text={`${t("PROPERTYTAX_OCCUPANCYTYPE_" + unit?.occupancyType)}` || t("CS_NA")} />
+                            <Row
+                              label={t("PT_OCCUPANY_TYPE_LABEL")}
+                              text={`${t("PROPERTYTAX_OCCUPANCYTYPE_" + unit?.occupancyType)}` || t("CS_NA")}
+                            />
                             <Row label={t("PT_BUILTUP_AREA_LABEL")} text={`${`${unit?.constructionDetail?.builtUpArea} sq.ft` || t("CS_NA")}`} />
                             {unit.occupancyType == "RENTED" && (
                               <Row label={t("PT_FORM2_TOTAL_ANNUAL_RENT")} text={`${(unit?.arv && `₹${unit?.arv}`) || t("CS_NA")}`} />
@@ -359,8 +344,8 @@ const PTApplicationDetails = () => {
                       </div>
                     </div>
                   ))}
-         </div>
-              <CardSubHeader>{t("PT_COMMON_PROPERTY_OWNERSHIP_DETAILS_HEADER")}</CardSubHeader>
+              </div>
+              <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_COMMON_PROPERTY_OWNERSHIP_DETAILS_HEADER")}</CardSubHeader>
               <div>
                 {Array.isArray(owners) &&
                   owners.map((owner, index) => (
@@ -389,10 +374,9 @@ const PTApplicationDetails = () => {
                   ))}
               </div>
             </React.Fragment>
-           )
-          }
-          
-          <CardSubHeader>{t("PT_COMMON_DOCS")}</CardSubHeader>
+          )}
+
+          <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_COMMON_DOCS")}</CardSubHeader>
           <div>
             {Array.isArray(docs) ? (
               docs.length > 0 && <PropertyDocument property={property}></PropertyDocument>
