@@ -11,7 +11,7 @@ import { getUpdatedTopic } from "../utils/index";
 
 const kafka = new Kafka({
   logLevel: logLevel.INFO,
-  brokers: ['localhost:9092'],
+  brokers: [envVariables.KAFKA_BROKER_HOST],
   ssl: false,
   clientId: 'example-consumer',
 });
