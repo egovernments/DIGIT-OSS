@@ -170,6 +170,13 @@ public class LineChartResponseHandler implements IResponseHandler {
             Double currentValue = plotMap.get(key);
             multiAggrPlotMap.put(key, previousValue + currentValue);
         });
+        
+        Double previousValue = 0.0;
+        for(String key : multiAggrPlotMap.keySet()){
+            if(multiAggrPlotMap.get(key) == 0.0)
+                multiAggrPlotMap.put(key, previousValue);
+            previousValue = multiAggrPlotMap.get(key);
+        }
     }
 
     private void initializeMultiAggrPlotMap(Map<String, Double> multiAggrPlotMap, Set<String> finalBucketKeys) {
