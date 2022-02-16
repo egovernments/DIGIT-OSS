@@ -288,6 +288,12 @@ public class PropertyRepository {
 		Boolean isOpenSearch = false ? false : util.isPropertySearchOpen(requestInfo.getUserInfo());
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getCountQuery(propertyCriteria, preparedStmtList, isOpenSearch);
+        try {
+			query = centralUtil.replaceSchemaPlaceholder(query, propertyCriteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_PT_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
         Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
     }	
