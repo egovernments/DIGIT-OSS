@@ -166,6 +166,7 @@ const componentsToRegister = {
   FSMCitizenApplicationDetails: ApplicationDetails,
   FSMSelectRating: SelectRating,
   FSMDsoDashboard: DsoDashboard,
+  SelectPaymentType:SelectPaymentPreference
 };
 
 export const initFSMComponents = () => {
