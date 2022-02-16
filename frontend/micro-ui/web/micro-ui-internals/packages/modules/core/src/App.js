@@ -12,7 +12,7 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const userDetails = Digit.UserService.getUser();
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
-  const CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
+  const CITIZEN = userDetails?.info?.type === "CITIZEN" && !window.location.pathname.split("/").includes("employee") ? true : false;
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
 
   useEffect(() => {
