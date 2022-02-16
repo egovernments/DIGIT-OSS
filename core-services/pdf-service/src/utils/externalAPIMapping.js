@@ -167,14 +167,16 @@ export const externalAPIMapping = async function (
       accept: "application/json, text/plain"
     };*/
 
-    let headers = { header };
+    let headerConfig = {
+      headers: header
+    };
 
     var resPromise;
     if (externalAPIArray[i].requesttype == "POST") {
       resPromise = axios.post(
         externalAPIArray[i].uri + "?" + externalAPIArray[i].queryParams, {
           RequestInfo: requestInfo
-        }, headers
+        }, headerConfig
       );
     } else {
       resPromise = axios.get(
