@@ -3,6 +3,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Roboto" !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(238, 238, 238);
 }
 .tab-header {
   font-weight: bold;
@@ -13,9 +14,11 @@ body {
 }
 .tab-rows {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   height: 30px;
   align-items: center;
+  width: 60%;
+  margin-left: 13%;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

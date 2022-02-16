@@ -262,8 +262,8 @@ class MapChart extends React.Component {
           </div>
           {data2 && data2[0] && (
             <span className={"tab-rows tab-header"}>
-              <span>{data2[0].plots[1].name}</span>
-              <span>{data2[0].plots[2].name}</span>
+              <span>{getLocaleLabels(`DSS_${data2[0].plots[1].name}`)}</span>
+              <span>{getLocaleLabels(`DSS_${data2[0].plots[2].name}`)}</span>
             </span>
           )}
           {data2.map((dat, i) => {
@@ -274,7 +274,7 @@ class MapChart extends React.Component {
                   background: i % 2 == 0 ? "none" : "#EEEEEE",
                 }}
               >
-                <span>{dat.headerName}</span>
+                <span>{getLocaleLabels(`DSS_${dat.headerName}`)}</span>
                 <span>{dat.plots[2].value}</span>
               </span>
             );
