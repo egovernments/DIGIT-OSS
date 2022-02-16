@@ -73,8 +73,6 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
   const showProfilePage = () => {
     history.push("/digit-ui/citizen/user/profile");
     closeSidebar();
-
-    console.log('Show user profile page citizen');
   }
 
   const redirectToLoginPage = () => {

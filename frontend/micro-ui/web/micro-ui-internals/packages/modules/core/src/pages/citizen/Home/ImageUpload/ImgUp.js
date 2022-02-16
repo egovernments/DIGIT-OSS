@@ -45,8 +45,6 @@ const ImgUp=()=>{
                   setUploadedFile(null);}}
                   
              />
-          
-                  {console.log(setUploadedFile)}
         </React.Fragment>
     )
 }
