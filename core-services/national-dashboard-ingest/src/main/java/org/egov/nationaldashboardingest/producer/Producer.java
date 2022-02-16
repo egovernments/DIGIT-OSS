@@ -13,7 +13,10 @@ public class Producer {
     @Autowired
     private CustomKafkaTemplate<String, Object> kafkaTemplate;
 
+    @Autowired
+    private KafkaTemplate<String, Object> plainKafkaTemplate;
+
     public void push(String topic, Object value) {
-        kafkaTemplate.send(topic, value);
+        plainKafkaTemplate.send(topic, value);
     }
 }
