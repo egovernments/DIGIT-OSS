@@ -25,8 +25,8 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
     const compareFn = (a, b) => b.value - a.value;
     return response?.responseData?.data?.[0]?.plots.sort(compareFn).reduce((acc, plot, index) => {
       if (index < 4) acc = acc.concat(plot);
-      else if (index === 4) acc = acc.concat({ label: null, name: "DSS.OTHERS", value: plot?.value, symbol: "amount" });
-      else acc[4].value += plot?.value;
+      //else if (index === 4) acc = acc.concat({ label: null, name: "DSS.OTHERS", value: plot?.value, symbol: "amount" });
+      else acc[3].value += plot?.value;
       return acc;
     }, []);
   }, [response]);
@@ -38,7 +38,26 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
   const renderCustomLabel = (args) => {
     const { value, endAngle, startAngle, x, cx, y, cy, percent, name } = args;
     const diffAngle = endAngle - startAngle;
-    if (diffAngle < 7) {
+    if (diffAngle > 1.5 && diffAngle < 7) {
+      return (
+        <text
+          x={x}
+          cx={cx}
+          y={y}
+          cy={cy}
+          percent={percent}
+          name={name}
+          fill="#505A5F"
+          alignmentBaseline="middle"
+          className="recharts-pie-label-text"
+          fontSize="14px"
+          textAnchor={x > cx ? "start" : "end"}
+        >
+          {`${(percent * 100).toFixed(0)}%`}
+        </text>
+      );
+    }
+    else if(diffAngle < 1.5 ){
       return null;
     }
     return (

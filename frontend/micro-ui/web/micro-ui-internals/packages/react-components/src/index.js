@@ -134,6 +134,10 @@ import {
   DustbinIcon,
   InfoBannerIcon,
   WSICon,
+  CameraIcon,
+  EditPencilIcon,
+  GalleryIcon,
+  RemoveIcon,
   CheckSvg
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
@@ -367,6 +371,10 @@ export {
   SearchIcon,
   DeleteIcon,
   WSICon,
+  CameraIcon,
+  EditPencilIcon,
+  GalleryIcon,
+  RemoveIcon,
   UploadPitPhoto,
   CheckSvg
 };

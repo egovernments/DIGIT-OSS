@@ -482,9 +482,7 @@ class Home extends React.Component {
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography
-            className={classes.filter}
-            style={{ color: "#505A5F", fontWeight: "400", fontSize: "14px" }}
-          >
+            className={classes.filter} style={{ color: "#505A5F", fontSize: "14px", fontWeight: "400" }}>
             {this.getTitleText(strings)}
           </Typography>
         </Grid>

@@ -102,10 +102,11 @@ export const UserService = {
   changePassword: (details, stateCode) =>
     ServiceRequest({
       serviceName: "changePassword",
-      url: Urls.ChangePassword,
+      url: Urls.ChangePassword1,
       data: {
         ...details,
       },
+      auth: true,
       params: { tenantId: stateCode },
     }),
 
