@@ -126,7 +126,7 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
           ))}
         </Pie>
         <Tooltip content={renderTooltip} />
-        <Legend layout="horizontal" align="bottom" iconType="circle" formatter={renderLegend} />
+        <Legend layout="vertical" verticalAlign="middle" align="right" iconType="circle" formatter={renderLegend} />
       </PieChart>
     </ResponsiveContainer>
   );
