@@ -1,7 +1,9 @@
 import React from "react";
 import { DatePicker } from "@egovernments/digit-ui-react-components";
 
-export const configCompleteApplication = ({ t, vehicle, vehicleCapacity,noOfTrips, applicationCreatedTime = 0, action }) => ({
+
+export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTrips, applicationCreatedTime = 0, action }) => ({
+
   label: {
     heading: `ES_FSM_ACTION_TITLE_${action}`,
     submit: `CS_COMMON_${action}`,
