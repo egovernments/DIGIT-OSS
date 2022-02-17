@@ -252,8 +252,14 @@ const DocumentSVG = () => (
   </svg>
 );
 
-const PDFSvg = ({className, width = 80, height = 80, style={ background: "#f6f6f6", padding: "8px", boxShadow: "0px 2px 0px #d6d5d3", borderRadius: "2px" }, viewBox="0 0 80 80" }) => (
-  <svg {...{className, width , height, style, viewBox }} fill="none" xmlns="http://www.w3.org/2000/svg">
+const PDFSvg = ({
+  className,
+  width = 80,
+  height = 80,
+  style = { background: "#f6f6f6", padding: "8px", boxShadow: "0px 2px 0px #d6d5d3", borderRadius: "2px" },
+  viewBox = "0 0 80 80",
+}) => (
+  <svg {...{ className, width, height, style, viewBox }} fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M46.6667 6.6665H20C16.3334 6.6665 13.3667 9.6665 13.3667 13.3332L13.3334 66.6665C13.3334 70.3332 16.3 73.3332 19.9667 73.3332H60C63.6667 73.3332 66.6667 70.3332 66.6667 66.6665V26.6665L46.6667 6.6665ZM53.3334 59.9998H26.6667V53.3332H53.3334V59.9998ZM53.3334 46.6665H26.6667V39.9998H53.3334V46.6665ZM43.3334 29.9998V11.6665L61.6667 29.9998H43.3334Z"
       fill="#505A5F"
@@ -268,7 +274,7 @@ const SearchIconSvg = ({ className, onClick }) => (
   </svg>
 );
 
-const CheckSvg = ({ className, style={} }) => (
+const CheckSvg = ({ className, style = {} }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F47738" className={className} style={style}>
     <path d="M0 0h24v24H0z" fill="none" />
     <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
@@ -290,7 +296,13 @@ const Calender = ({ className, onClick }) => (
 );
 
 const Phone = ({ className, fillcolor, style }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill={fillcolor?fillcolor:"#f47738"} viewBox="0 0 24 24" style={style?style:{}} className={className}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill={fillcolor ? fillcolor : "#f47738"}
+    viewBox="0 0 24 24"
+    style={style ? style : {}}
+    className={className}
+  >
     <path d="M0 0h24v24H0z" fill="none" />
     <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
   </svg>
@@ -321,6 +333,7 @@ const Feedback = ({ className }) => (
 );
 
 // Download Icon
+
 const GetApp = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f47738" className={className}>
     <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
@@ -519,9 +532,9 @@ const RefreshSVG = () => (
     <path
       d="M8 5V8L12 4L8 0V3C3.58 3 0 6.58 0 11C0 12.57 0.46 14.03 1.24 15.26L2.7 13.8C2.25 12.97 2 12.01 2 11C2 7.69 4.69 5 8 5ZM14.76 6.74L13.3 8.2C13.74 9.04 14 9.99 14 11C14 14.31 11.31 17 8 17V14L4 18L8 22V19C12.42 19 16 15.42 16 11C16 9.43 15.54 7.97 14.76 6.74Z"
       fill="#505A5F"
-     />
+    />
   </svg>
-)
+);
 
 const PrintIcon = () => (
   <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -538,19 +551,15 @@ function PropertyHouse(style) {
       width="24"
       height="24"
       viewBox="0 0 40 40"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M13.6167 9.5L1.66667 17.4667V35H10V21.6667H16.6667V35H25V17.0833L13.6167 9.5Z" fill="white" />
-      <path
-        d="M16.6667 5V7.51667L20 9.73333L22.8833 11.6667H25V13.0833L28.3333 15.3167V18.3333H31.6667V21.6667H28.3333V25H31.6667V28.3333H28.3333V35H38.3333V5H16.6667ZM31.6667 15H28.3333V11.6667H31.6667V15Z"
-        fill="white"
-      />
+      <path d="M13.6167 9.5L1.66667 17.4667V35H10V21.6667H16.6667V35H25V17.0833L13.6167 9.5Z" />
+      <path d="M16.6667 5V7.51667L20 9.73333L22.8833 11.6667H25V13.0833L28.3333 15.3167V18.3333H31.6667V21.6667H28.3333V25H31.6667V28.3333H28.3333V35H38.3333V5H16.6667ZM31.6667 15H28.3333V11.6667H31.6667V15Z" />
     </svg>
   );
 }
 
-const InfoBannerIcon = ({fill="#3498DB"}) => {
+const InfoBannerIcon = ({ fill = "#3498DB" }) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
       <path
@@ -575,12 +584,9 @@ const RupeeIcon = ({ className }) => (
   </svg>
 );
 
-const ComplaintIcon = ({ className }) => (
-  <svg width="48" height="48" className={className} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M42.6667 0.666748H5.33335C2.76669 0.666748 0.69002 2.76675 0.69002 5.33342L0.666687 47.3334L10 38.0001H42.6667C45.2334 38.0001 47.3334 35.9001 47.3334 33.3334V5.33342C47.3334 2.76675 45.2334 0.666748 42.6667 0.666748ZM26.3334 21.6667H21.6667V7.66675H26.3334V21.6667ZM26.3334 31.0001H21.6667V26.3334H26.3334V31.0001Z"
-      fill="#F47738"
-    />
+const ComplaintIcon = ({ className, styles }) => (
+  <svg style={{ ...styles }} className={className} viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+    <path d="M42.6667 0.666748H5.33335C2.76669 0.666748 0.69002 2.76675 0.69002 5.33342L0.666687 47.3334L10 38.0001H42.6667C45.2334 38.0001 47.3334 35.9001 47.3334 33.3334V5.33342C47.3334 2.76675 45.2334 0.666748 42.6667 0.666748ZM26.3334 21.6667H21.6667V7.66675H26.3334V21.6667ZM26.3334 31.0001H21.6667V26.3334H26.3334V31.0001Z" />
   </svg>
 );
 
@@ -786,7 +792,7 @@ const Clock = () => (
   </svg>
 );
 
-const TickMark = ({fillColor="white"}) => (
+const TickMark = ({ fillColor = "white" }) => (
   <svg style={{ display: "inline-block", margin: "auto" }} width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M4.75012 8.1275L1.62262 5L0.557617 6.0575L4.75012 10.25L13.7501 1.25L12.6926 0.192505L4.75012 8.1275Z" fill={fillColor} />
   </svg>
@@ -816,9 +822,26 @@ const DeleteIcon = ({ style, fill }) => (
   </svg>
 );
 
-const WSICon = ({ className }) => <svg width="28" height="34" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M23.4332 10.3337L13.9998 0.916992L4.5665 10.3337C1.9665 12.9337 0.666504 16.4003 0.666504 19.7337C0.666504 23.067 1.9665 26.5837 4.5665 29.1837C7.1665 31.7837 10.5832 33.1003 13.9998 33.1003C17.4165 33.1003 20.8332 31.7837 23.4332 29.1837C26.0332 26.5837 27.3332 23.067 27.3332 19.7337C27.3332 16.4003 26.0332 12.9337 23.4332 10.3337ZM3.99984 20.3337C4.0165 17.0003 5.03317 14.8837 6.93317 13.0003L13.9998 5.78366L21.0665 13.0837C22.9665 14.9503 23.9832 17.0003 23.9998 20.3337H3.99984Z" fill="#F47738" />
-</svg>
+const WSICon = ({ className }) => (
+  <svg width="28" height="34" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M23.4332 10.3337L13.9998 0.916992L4.5665 10.3337C1.9665 12.9337 0.666504 16.4003 0.666504 19.7337C0.666504 23.067 1.9665 26.5837 4.5665 29.1837C7.1665 31.7837 10.5832 33.1003 13.9998 33.1003C17.4165 33.1003 20.8332 31.7837 23.4332 29.1837C26.0332 26.5837 27.3332 23.067 27.3332 19.7337C27.3332 16.4003 26.0332 12.9337 23.4332 10.3337ZM3.99984 20.3337C4.0165 17.0003 5.03317 14.8837 6.93317 13.0003L13.9998 5.78366L21.0665 13.0837C22.9665 14.9503 23.9832 17.0003 23.9998 20.3337H3.99984Z"
+      fill="#F47738"
+    />
+  </svg>
+);
+
+const ArrowVectorDown = ({ className, styles }) => (
+  <svg style={{ ...styles }} className={className} viewBox="0 0 16 11" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 2.33331L14.12 0.453308L8 6.55997L1.88 0.453307L-8.21774e-08 2.33331L8 10.3333L16 2.33331Z" fill="#F47738" />
+  </svg>
+);
+
+const ArrowDirection = ({ className, styles }) => (
+  <svg style={{ ...styles }} className={className} viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8.0013 2.66669L7.0613 3.60669L10.7813 7.33335H2.66797V8.66669H10.7813L7.0613 12.3934L8.0013 13.3334L13.3346 8.00002L8.0013 2.66669Z" />
+  </svg>
+);
 
 export {
   AnnouncementIcon,
@@ -907,5 +930,7 @@ export {
   PMBIcon,
   GenericFileIcon,
   ArrowLeftWhite,
-  WSICon
+  WSICon,
+  ArrowVectorDown,
+  ArrowDirection,
 };
