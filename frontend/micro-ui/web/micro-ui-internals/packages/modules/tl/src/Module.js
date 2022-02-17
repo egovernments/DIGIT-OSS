@@ -139,7 +139,7 @@ const componentsToRegister = {
   TLNewApplication : NewApplication,
   TLReNewApplication : ReNewApplication,
   TLSearch : Search,
-  TLResponse : Response
+  TLResponse : Response,
 };
 
 export const initTLComponents = () => {

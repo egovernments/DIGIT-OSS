@@ -72,6 +72,13 @@ const NewApplication = () => {
       if (data?.cpt?.details?.address?.street) address.street = data?.cpt?.details?.address?.street || null;
       if (data?.cpt?.details?.address?.pincode) address.pincode = data?.cpt?.details?.address?.pincode;
     }
+    else if (data?.address) {
+      address.city = data?.address?.city?.code || null;
+      address.locality = { code: data?.address?.locality?.code || null };
+      if (data?.address?.doorNo) address.doorNo = data?.address?.doorNo || null;
+      if (data?.address?.street) address.street = data?.address?.street || null;
+      if (data?.address?.pincode) address.pincode = data?.address?.pincode;
+    }
 
     let owners = [];
     if (data?.owners?.length > 0) {

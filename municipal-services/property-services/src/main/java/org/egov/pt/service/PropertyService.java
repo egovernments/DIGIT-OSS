@@ -461,5 +461,10 @@ public class PropertyService {
 		return request.getProperty();
 	}
 	
+	public Integer count(RequestInfo requestInfo, @Valid PropertyCriteria propertyCriteria) {
+		propertyCriteria.setIsInboxSearch(false);
+        Integer count = repository.getCount(propertyCriteria, requestInfo);
+        return count;
+	}
 	
 }

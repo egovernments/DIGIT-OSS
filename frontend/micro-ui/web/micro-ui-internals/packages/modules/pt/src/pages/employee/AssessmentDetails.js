@@ -284,11 +284,11 @@ const Penality_menu=[
 const RebatePenalityPoPup=()=>{
   return (
     <Modal
-          headerBarMain={<Heading label="PT_ADD_REBATE_PENALITY"/>}
+          headerBarMain={<Heading label={t("PT_ADD_REBATE_PENALITY")}/>}
           headerBarEnd={<CloseBtn onClick={()=>showPopUp(false)}/>}
-          actionCancelLabel="PT_CANCEL"
+          actionCancelLabel={t("PT_CANCEL")}
           actionCancelOnSubmit={()=>showPopUp(false)}
-          actionSaveLabel="PT_ADD"
+          actionSaveLabel={t("PT_ADD")}
           actionSaveOnSubmit={()=>(change())}
           hideSubmit={false}
           >
@@ -483,7 +483,7 @@ const RebatePenalityPoPup=()=>{
                     ?.filter((e) => e.active)
                     ?.sort?.((a, b) => a.floorNo - b.floorNo)
                     ?.map((unit, index) => (
-                    <Row label={`${t("PT_GRND_FLOOR_UNIT-")}${index+1}`} text={ChargeSlabsMenu?.PropertyTax && ChargeSlabsMenu?.PropertyTax?.ChargeSlabs?.filter((ob) => ob.floorNo == unit.floorNo)?.[0]?.name} />
+                    <Row label={`${t(`PROPERTYTAX_FLOOR_${unit?.floorNo}`)} ${t(`PT_UNIT`)} - ${index+1}`} text={ChargeSlabsMenu?.PropertyTax && ChargeSlabsMenu?.PropertyTax?.ChargeSlabs?.filter((ob) => ob.floorNo == unit.floorNo)?.[0]?.name} />
                     ))}
                     </StatusTable>
                    </div>

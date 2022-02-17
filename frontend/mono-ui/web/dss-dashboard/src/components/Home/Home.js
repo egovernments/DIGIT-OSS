@@ -102,7 +102,7 @@ class Home extends React.Component {
       this.state.page
     );
     let bgColor = Variables.colors[index].light;
-    let iconColor = Variables.colors[index].dark;
+    let iconColor = Variables.iconColors[index].dark;
     let pageId = "";
     let moduleLevel = "";
 
@@ -401,11 +401,11 @@ class Home extends React.Component {
     title =
       fromTxt +
       " " +
-      moment.unix(this.state.getFYobj.value.startDate).format("MMM, DD YYYY") +
+      moment.unix(this.state.getFYobj.value.startDate).format("MMM DD, YYYY") +
       " " +
       toTxt +
       " " +
-      moment().format("MMM, DD YYYY");
+      moment().format("MMM DD, YYYY");
 
     return title;
   }
@@ -482,9 +482,7 @@ class Home extends React.Component {
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography
-            className={classes.filter}
-            style={{ color: "#505A5F", fontWeight: "400", fontSize: "14px" }}
-          >
+            className={classes.filter} style={{ color: "#505A5F", fontSize: "14px", fontWeight: "400" }}>
             {this.getTitleText(strings)}
           </Typography>
         </Grid>

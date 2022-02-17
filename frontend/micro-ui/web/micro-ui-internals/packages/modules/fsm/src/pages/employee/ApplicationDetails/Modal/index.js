@@ -258,6 +258,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.pitType) applicationData.sanitationtype = data.pitType.code;
     if (data.subtype && typeof (data.subtype) === "object") applicationData.propertyUsage = data.subtype.code;
     if (data.subtype && typeof (data.subtype) === "string") applicationData.propertyUsage = data.subtype;
+    if (data.noOfTrips) applicationData.noOfTrips = data.noOfTrips
     if (fileStoreId) {
       let temp = {}
       fileStoreId.map((i) => (temp[fileStoreId.indexOf(i) + 1] = i))
@@ -338,7 +339,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
-        return setConfig(configCompleteApplication({ t, vehicle, vehicleCapacity: applicationData?.vehicleCapacity, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
+        return setConfig(configCompleteApplication({ t, vehicle, vehicleCapacity: applicationData?.vehicleCapacity, noOfTrips: applicationData?.noOfTrips, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);

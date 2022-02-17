@@ -90,7 +90,8 @@ public class PropertyController {
             propertyValidator.validatePropertyCriteria(propertyCriteria, requestInfoWrapper.getRequestInfo());
         }
         List<Property> properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
-        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+        Integer count = propertyService.count(requestInfoWrapper.getRequestInfo(), propertyCriteria);
+        PropertyResponse response = PropertyResponse.builder().properties(properties).count(count).responseInfo(
                 responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);

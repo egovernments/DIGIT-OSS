@@ -61,7 +61,7 @@ const ApplicationDetails = (props) => {
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationNumber,
-    moduleCode: "FSM",
+    moduleCode: applicationData?.paymentPreference === "POST_PAY" ? "FSM_POST_PAY_SERVICE" : "FSM",
     role: "FSM_EMPLOYEE",
     serviceData: applicationDetails,
   });
@@ -96,6 +96,7 @@ const ApplicationDetails = (props) => {
         return setShowModal(true);
       case "SUBMIT":
       case "FSM_SUBMIT":
+      case "SCHEDULE":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
       case "PAY":
       case "FSM_PAY":
@@ -259,7 +260,7 @@ const ApplicationDetails = (props) => {
               </Fragment>
             )}
           </Card>
-          
+
           {showModal ? (
             <ActionModal
               t={t}
