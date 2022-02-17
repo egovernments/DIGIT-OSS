@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useRef, useState } from "react";
 import { ArrowDown, CheckSvg } from "./svgindex";
 import { useTranslation } from "react-i18next";
 
-const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, defaultLabel = "", defaultUnit = "",BlockNumber=1,isOBPSMultiple=false,props={},isPropsNeeded=false}) => {
+const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, defaultLabel = "", defaultUnit = "",BlockNumber=1,isOBPSMultiple=false,props={},isPropsNeeded=false,ServerStyle={}}) => {
   const [active, setActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState();
   const [optionIndex, setOptionIndex] = useState(-1);
@@ -114,7 +114,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
         </div>
       </div>
       {active ? (
-        <div className="server" id="jk-dropdown-unique">
+        <div className="server" id="jk-dropdown-unique" style={ServerStyle?ServerStyle:{}}>
           <Menu />
         </div>
       ) : null}
