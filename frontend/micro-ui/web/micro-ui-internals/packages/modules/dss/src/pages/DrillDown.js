@@ -9,6 +9,7 @@ import Filters from "../components/Filters";
 import CustomHorizontalBarChart from "../components/CustomHorizontalBarChart";
 import CustomBarChart from "../components/CustomBarChart";
 
+
 const key = 'DSS_FILTERS';
 
 const getInitialRange = () => {
@@ -22,10 +23,11 @@ const getInitialRange = () => {
   return { startDate, endDate, title, duration, denomination, tenantId };
 };
 
-const DrillDown = () => {
+const DrillDown = ({stateCode}) => {
   const [searchQuery, onSearch] = useState("");
-  const { ulb, chart, title ,type='table',fillColor=""} = Digit.Hooks.useQueryParams();
+  const { ulb, chart, title ,type='table',fillColor="",isNational="NO"} = Digit.Hooks.useQueryParams();
   const { t } = useTranslation();
+const nationalDB=isNational=="YES"?true:false;
   const [filters, setFilters] = useState(() => {
     const { startDate, endDate, title, duration, denomination, tenantId } = getInitialRange();
     return {
@@ -55,7 +57,27 @@ const DrillDown = () => {
     }),
     [filters]
   );
-
+ const { data: nationalInfo } = Digit.Hooks.dss.useMDMS(stateCode, "tenant", ["nationalInfo"], {
+    select: (data) => {
+      let nationalInfo = data?.tenant?.nationalInfo || [];
+      let combinedResult = nationalInfo.reduce((acc, curr) => {
+        if (acc[curr.stateCode]) {
+          acc[curr.stateCode].push(curr);
+        } else {
+          acc[curr.stateCode] = [curr];
+        }
+        return { ...acc };
+      }, {});
+      let formattedResponse = { ddr: [], ulb: [] };
+      Object.keys(combinedResult).map((key) => {
+        let stateName = combinedResult[key]?.[0].stateName;
+        formattedResponse.ddr.push({ code: key, ddrKey: stateName, ulbKey: stateName });
+        formattedResponse.ulb.push(...combinedResult[key].map((e) => ({ code: e.code, ulbKey: e.name, ddrKey: e.stateName })));
+      });
+      return formattedResponse;
+    },
+    enabled: nationalDB,
+  });
   const removeULB = (id) => {
     handleFilters({ ...filters, filters: { ...filters?.filters, tenantId: [...filters?.filters?.tenantId].filter((tenant, index) => index !== id) } });
   };
@@ -71,7 +93,11 @@ const DrillDown = () => {
   return (
     <FilterContext.Provider value={provided}>
       <Header>{t(title)}</Header>
-      <Filters t={t} ulbTenants={ulbTenants} showDenomination={false} showDDR={false} />
+      <Filters t={t}         
+        ulbTenants={isNational ? nationalInfo : ulbTenants}
+        showDenomination={false}       
+     isNational={nationalDB}
+      />
       {filters?.filters?.tenantId.length > 0 && (
         <div className="tag-container">
           {filters?.filters?.tenantId?.map((filter, id) => (
