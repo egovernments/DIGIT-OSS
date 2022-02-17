@@ -41,6 +41,12 @@ public class ExternalEmailService implements EmailService {
 	@Value("${egov.fileStore.host}")
 	private String FILESTORE_HOST;
 
+	@Value("${egov.fileStore.workDir.path}")
+	private String FILESTORE_WORKDIR;
+
+	@Value("${egov.fileStore.string.format}")
+	private String FILESTORE_FORMAT;
+
 	@Autowired
 	private Environment env;
 
@@ -81,7 +87,7 @@ public class ExternalEmailService implements EmailService {
 			/*log here*/
 			log.info(email.toString());
 			for(int i=0; i<email.getFileStoreId().size(); i++) {
-				String uri = String.format("%s/id?tenantId=%s&fileStoreId=%s", FILESTORE_HOST, email.getTenantId(), email.getFileStoreId().toArray()[i]);
+				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, email.getTenantId(), email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);
 				URLConnection con = url.openConnection();
 				String fieldValue = "attachment" + i;
