@@ -70,7 +70,7 @@ public class BillingServiceConsumer {
 
 	@KafkaListener(topics = { "${kafka.topics.receipt.update.collecteReceipt}", "${kafka.topics.save.bill}",
 			"${kafka.topics.save.demand}", "${kafka.topics.update.demand}", "${kafka.topics.receipt.update.demand}",
-			"${kafka.topics.receipt.cancel.name}", "${kafka.topics.payment.cancel}" })
+			"${kafka.topics.receipt.cancel.name}" })
 	public void processMessage(Map<String, Object> consumerRecord, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 
 		log.debug("key:" + topic + ":" + "value:" + consumerRecord);
@@ -130,11 +130,11 @@ public class BillingServiceConsumer {
 		/*
 		 * update demand for receipt cancellation
 		 */
-		else if (applicationProperties.getPaymentCancelTopic().equals(topic)) {
+		/*else if (applicationProperties.getPaymentCancelTopic().equals(topic)) {
 
 			Boolean isReceiptCancellation = true;
 			updateDemandsFromPayment(consumerRecord, isReceiptCancellation);
-		}
+		}*/
 	}
 
 
@@ -149,6 +149,19 @@ public class BillingServiceConsumer {
 
 			Boolean isReceiptCancellation = false;
 			updateDemandsFromPayment(consumerRecord, isReceiptCancellation);
+
+
+	}
+
+	@KafkaListener(topicPattern = "${kafka.topics.receipt.cancel.topic.pattern}")
+	public void processPaymentCancel(Map<String, Object> consumerRecord, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+
+		/*
+		 * update demand from receipt
+		 */
+
+		Boolean isReceiptCancellation = true;
+		updateDemandsFromPayment(consumerRecord, isReceiptCancellation);
 
 
 	}
