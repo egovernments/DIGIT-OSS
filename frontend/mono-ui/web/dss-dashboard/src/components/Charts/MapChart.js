@@ -8,8 +8,8 @@ import { bindActionCreators } from "redux";
 import APITransport from "../../actions/apitransport/apitransport";
 import ChartsAPI from "../../actions/charts/chartsAPI";
 import getChartOptions from "../../actions/getChartOptions";
+import { getLocaleLabels } from "../../utils/commons";
 import style from "./styles";
-
 
 const INDIA_TOPO_JSON = require("./india.topo.json");
 
@@ -39,6 +39,23 @@ const getColor = (current) => {
   }
   return DEFAULT_COLOR;
 };
+
+const Backsvg = ({ onClick }) => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    onClick={onClick}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M16 7H3.83L9.42 1.41L8 0L0 8L8 16L9.41 14.59L3.83 9H16V7Z"
+      fill="#0B0C0C"
+    />
+  </svg>
+);
+
 const geographyStyle = {
   default: {
     outline: "none",
@@ -65,17 +82,23 @@ class MapChart extends React.Component {
     super(props);
     this.state = {
       tooltipContent: "",
+      drillDown: false,
     };
   }
 
   onMouseEnter(geo, current = { value: "NA" }, event) {
     this.setState({
       tooltipContent: `${geo.properties.name}: ${
-        current.value ?Number( current.value).toFixed() + " ULBs" : "NA"
+        current.value ? Number(current.value).toFixed() + " ULBs" : "NA"
       } `,
     });
   }
-
+  back() {
+    this.props.updateSelectedState({ state: "", totalCount: 0, liveCount: 0 });
+  }
+  onMouseClick(geo, current = { value: "NA" }, event) {
+    if (current && current.value > 0) this.props.updateSelectedState(current);
+  }
   onMouseLeave(geo, current = { value: "NA" }, event) {
     this.setState({ tooltipContent: `` });
   }
@@ -98,9 +121,37 @@ class MapChart extends React.Component {
     );
     this.props.APITransport(chartsAPI);
   }
-
+  callAPI2() {
+    let code = this.props.chartData["id"] ? this.props.chartData["id"] : "";
+    let filters = this.props.filters;
+    if (this.props.page.includes("ulb")) {
+      if (!filters["tenantId"]) {
+        let tenentFilter = [];
+        tenentFilter.push(`${localStorage.getItem("tenant-id")}`);
+        filters["tenantId"] = tenentFilter;
+      }
+    }
+    filters["state"] = this.state.selectedState;
+    let drillDownCode = this.props.chartsGData[code]
+      ? this.props.chartsGData[code].drillDownChartId
+      : "";
+    let requestBody = getChartOptions(drillDownCode, filters);
+    let chartsAPI = new ChartsAPI(
+      2000,
+      "dashboard",
+      drillDownCode + this.props.moduleLevel,
+      requestBody.dataoption
+    );
+    this.props.APITransport(chartsAPI);
+  }
   componentDidMount() {
     this.callAPI();
+  }
+  componentDidUpdate() {
+    if (this.props.selectedState !== "" && !this.state.drillDown) {
+      this.callAPI2();
+      this.setState({ drillDown: true });
+    }
   }
   render() {
     const data = [
@@ -167,23 +218,74 @@ class MapChart extends React.Component {
         .get(codekey)
         .get("data")
         .map((dat) => {
+          let totalCount = dat.plots[3].value;
+          let liveCount = dat.plots[4].value;
           let live = dat.plots[4].strValue > 0 ? true : false;
           DataObj[dat.headerName] = {
             ...DataObj[dat.headerName],
             status: dat.plots[2].strValue,
-            value: dat.plots[live ? 4 : 3].value,
+            value: live ? liveCount : totalCount,
             live,
+            totalCount,
+            liveCount,
           };
         })
         .value() || null;
-
+    let drillDownCodes = _.chain(this.props)
+      .get("chartsGData")
+      .get(codekey)
+      .get("drillDownChartId")
+      .value();
     if (!data1) {
       return <div>Loading...</div>;
+    }
+    const { selectedState, liveCount, totalCount } = this.props;
+    if (selectedState !== "") {
+      let data2 =
+        _.chain(this.props)
+          .get("chartsGData")
+          .get(drillDownCodes)
+          .get("data")
+          .map((dat) => ({ ...dat }))
+          .value() || null;
+      if (!data2) {
+        return <div>Loading...</div>;
+      }
+      return (
+        <div style={{ height: "410px" }}>
+          {" "}
+          {/* {selectedState}
+          <span>{totalCount}</span>
+          <span>{liveCount}</span> */}
+          <div style={{ float: "left" }}>
+            <Backsvg onClick={() => this.back()} />
+          </div>
+          {data2 && data2[0] && (
+            <span className={"tab-rows tab-header"}>
+              <span>{getLocaleLabels(`DSS_${data2[0].plots[1].name}`)}</span>
+              <span>{getLocaleLabels(`DSS_${data2[0].plots[2].name}`)}</span>
+            </span>
+          )}
+          {data2.map((dat, i) => {
+            return (
+              <span
+                className={"tab-rows"}
+                style={{
+                  background: i % 2 == 0 ? "none" : "#EEEEEE",
+                }}
+              >
+                <span>{getLocaleLabels(`DSS_${dat.headerName}`)}</span>
+                <span>{dat.plots[2].value}</span>
+              </span>
+            );
+          })}
+        </div>
+      );
     }
     return (
       <div className="full-width-height container">
         <ReactTooltip>{this.state.tooltipContent}</ReactTooltip>
-        <div style={{ height: "90%", width: "450px" }}>
+        <div style={{ height: "90%" }} className={"india-map-comp"}>
           <ComposableMap
             projectionConfig={PROJECTION_CONFIG}
             projection="geoMercator"
@@ -207,6 +309,9 @@ class MapChart extends React.Component {
                       onMouseEnter={(event) =>
                         this.onMouseEnter(geo, current, event)
                       }
+                      onClick={(event) =>
+                        this.onMouseClick(geo, current, event)
+                      }
                       onMouseLeave={(event) =>
                         this.onMouseLeave(geo, current, event)
                       }
@@ -225,7 +330,9 @@ class MapChart extends React.Component {
                   className="map-box"
                   style={{ background: getColor({ status: sta }) }}
                 ></span>
-                <span className="map-text">{sta}</span>
+                <span className="map-text">
+                  {getLocaleLabels(`DSS_${sta}`)}
+                </span>
               </span>
             );
           })}

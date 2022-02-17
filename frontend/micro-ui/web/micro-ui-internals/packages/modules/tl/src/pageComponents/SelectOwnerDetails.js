@@ -27,14 +27,14 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
           relationship: initData?.[0]?.relationship || "",
         }]
       case "MULTIOWNER":
-        initData?.length > 1 ? initData?.map((owner) => ({
+      return(  initData?.length > 1 ? initData?.map((owner) => ({
           name: owner?.name || "",
           gender: owner?.gender,
           mobilenumber: owner?.mobilenumber,
           isprimaryowner: owner?.isprimaryowner,
           fatherOrHusbandName: owner?.fatherOrHusbandName || "",
           emailId: initData?.emailId || "",
-          relationship: initData?.relationship || "",
+          relationship: owner?.relationship || "",
         })) : [{
           name: null,
           gender: null,
@@ -43,7 +43,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
           fatherOrHusbandName: null,
           emailId: null,
           relationship: null,
-        }]
+        }])
       case "INSTITUTIONAL":
         return [{
           name: initData?.[0]?.name || "",

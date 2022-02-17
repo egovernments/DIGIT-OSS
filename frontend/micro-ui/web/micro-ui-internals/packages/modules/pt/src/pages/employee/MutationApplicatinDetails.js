@@ -29,7 +29,7 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
   const properties = get(data, "Properties", []);
   const propertyId = get(data, "Properties[0].propertyId", []);
   let property = (properties && properties.length > 0 && properties[0]) || {};
-  const application = propertyId;
+  const application = property;
   sessionStorage.setItem("pt-property", JSON.stringify(application));
 
   const { isLoading: auditDataLoading, isError: isAuditError, data: auditResponse } = Digit.Hooks.pt.usePropertySearch(
@@ -336,7 +336,7 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
                           </CardSubHeader>
                           <StatusTable>
                             <Row label={t("PT_INSTITUTION_NAME")} text={transferorInstitution?.name || t("CS_NA")} />
-                            <Row label={t("PT_TYPE_OF_INSTITUTION ")} text={`${t(transferorInstitution?.type)}` || t("CS_NA")} />
+                            <Row label={t("PT_TYPE_OF_INSTITUTION")} text={`${t(transferorInstitution?.type)}` || t("CS_NA")} />
                             <Row label={t("PT_NAME_AUTHORIZED_PERSON")} text={transferorInstitution?.nameOfAuthorizedPerson || t("CS_NA")} />
                             <Row label={t("PT_LANDLINE_NUMBER")} text={owner?.altContactNumber || t("CS_NA")} />
                             <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
@@ -402,7 +402,7 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
               docs.length > 0 && <PropertyDocument property={property}></PropertyDocument>
             ) : (
               <StatusTable>
-                <Row text="PT_NO_DOCUMENTS_MSG" />
+                <Row text={t("PT_NO_DOCUMENTS_MSG")} />
               </StatusTable>
             )}
           </div>

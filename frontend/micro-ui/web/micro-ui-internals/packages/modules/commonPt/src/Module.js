@@ -82,6 +82,7 @@ export const CommonPTLinks = ({ matchPath, userType }) => {
 export const CommonPTComponents = {
   CommonPTModule,
   CommonPTLinks,
+  ...componentsToRegister,
 };
 
 export const initCommonPTComponents = () => {

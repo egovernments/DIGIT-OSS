@@ -724,7 +724,7 @@ const getCancelReceiptReasonAndStatus = (tenantId, moduleCode, type) => ({
     moduleDetails: [
       {
         moduleName: moduleCode,
-        masterDetails: [{ name: "ReceiptStatus" },{ name: "uiCommonPay" }],
+        masterDetails: [{ name: "ReceiptStatus" }, { name: "uiCommonPay" }],
       },
     ],
   },
@@ -783,6 +783,7 @@ const getFSTPORejectionReasonCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+
 const getFSMPaymentTypeCriteria = (tenantId, moduleCode, type) => ({
   type,
   details: {
@@ -799,7 +800,8 @@ const getFSMPaymentTypeCriteria = (tenantId, moduleCode, type) => ({
       },
     ],
   },
-}); 
+});
+
 
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
@@ -849,24 +851,24 @@ const GetSlumLocalityMapping = (MdmsRes, tenantId) =>
   MdmsRes["FSM"].Slum.filter((type) => type.active).reduce((prev, curr) => {
     return prev[curr.locality]
       ? {
-          ...prev,
-          [curr.locality]: [
-            ...prev[curr.locality],
-            {
-              ...curr,
-              i18nKey: `${tenantId.toUpperCase().replace(".", "_")}_${curr.locality}_${curr.code}`,
-            },
-          ],
-        }
+        ...prev,
+        [curr.locality]: [
+          ...prev[curr.locality],
+          {
+            ...curr,
+            i18nKey: `${tenantId.toUpperCase().replace(".", "_")}_${curr.locality}_${curr.code}`,
+          },
+        ],
+      }
       : {
-          ...prev,
-          [curr.locality]: [
-            {
-              ...curr,
-              i18nKey: `${tenantId.toUpperCase().replace(".", "_")}_${curr.locality}_${curr.code}`,
-            },
-          ],
-        };
+        ...prev,
+        [curr.locality]: [
+          {
+            ...curr,
+            i18nKey: `${tenantId.toUpperCase().replace(".", "_")}_${curr.locality}_${curr.code}`,
+          },
+        ],
+      };
   }, {});
 
 const GetPropertyOwnerShipCategory = (MdmsRes) =>
@@ -962,13 +964,13 @@ const getTLAccessoriesType = (MdmsRes) =>
     };
   });
 
-  const getTLFinancialYear = (MdmsRes) =>
+const getTLFinancialYear = (MdmsRes) =>
   MdmsRes["egf-master"].FinancialYear.filter((FinancialYear) => FinancialYear.active && FinancialYear.module === "TL").map((FinancialYearList) => {
     return {
       ...FinancialYearList,
       //i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${stringReplaceAll(TLAccessoryTypeList.code, ".", "_")}`,
     };
-  });  
+  });
 const getFloorList = (MdmsRes) =>
   MdmsRes["PropertyTax"].Floor.filter((PTFloor) => PTFloor.active).map((PTFloorlist) => {
     return {
@@ -1009,7 +1011,7 @@ const getChargeSlabsCategory = (MdmsRes) => {
 
 const getGenderType = (MdmsRes) => {
   return MdmsRes["common-masters"].GenderType.filter((GenderType) => GenderType.active).map((genderDetails) => {
-    return{
+    return {
       ...genderDetails,
       i18nKey: `PT_COMMON_GENDER_${genderDetails.code}`,
     };
@@ -1062,7 +1064,7 @@ const GetMCollectApplicationStatus = (MdmsRes) =>
 
 const getFSMGenderType = (MdmsRes) => {
   return MdmsRes["common-masters"].GenderType.map((genderDetails) => {
-    return{
+    return {
       ...genderDetails,
       i18nKey: `COMMON_GENDER_${genderDetails.code}`,
     };
@@ -1071,7 +1073,7 @@ const getFSMGenderType = (MdmsRes) => {
 
 const GetFSTPORejectionReason = (MdmsRes) => {
   return MdmsRes["Vehicle"].FSTPORejectionReason.filter((reason) => reason.active)
-  .map((reasonDetails) => {
+    .map((reasonDetails) => {
       return {
         ...reasonDetails,
         i18nKey: `ES_ACTION_REASON_${reasonDetails.code}`,
@@ -1080,6 +1082,7 @@ const GetFSTPORejectionReason = (MdmsRes) => {
 }
 
 const GetPaymentType = (MdmsRes) => {
+
   return MdmsRes["FSM"].PaymentType.filter((option) => option.active)
     .map((reasonDetails) => {
       return {
@@ -1087,12 +1090,12 @@ const GetPaymentType = (MdmsRes) => {
         i18nKey: `ES_ACTION_${reasonDetails.code}`,
       };
     });
-} 
+}
 
 const getDssDashboard = () => MdmsRes["dss-dashboard"]["dashboard-config"];
 
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
-const GetCommonFields = (MdmsRes,moduleCode) => moduleCode.toUpperCase()==="PROPERTYTAX"?MdmsRes["PropertyTax"].CommonFieldsConfig:MdmsRes["FSM"].CommonFieldsConfig;
+const GetCommonFields = (MdmsRes, moduleCode) => moduleCode.toUpperCase() === "PROPERTYTAX" ? MdmsRes["PropertyTax"].CommonFieldsConfig : MdmsRes["FSM"].CommonFieldsConfig;
 
 const GetPreFields = (MdmsRes) => MdmsRes["FSM"].PreFieldsConfig;
 
@@ -1157,7 +1160,7 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
     case "RoleStatusMapping":
       return GetRoleStatusMapping(MdmsRes);
     case "CommonFieldsConfig":
-      return GetCommonFields(MdmsRes,moduleCode);
+      return GetCommonFields(MdmsRes, moduleCode);
     case "PreFieldsConfig":
       return GetPreFields(MdmsRes);
     case "PostFieldsConfig":
@@ -1191,7 +1194,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
     case "FSTPORejectionReason":
       return GetFSTPORejectionReason(MdmsRes);
     case "PaymentType":
-     return GetPaymentType(MdmsRes);
+      return GetPaymentType(MdmsRes);
+
     default:
       return MdmsRes;
   }
@@ -1433,18 +1437,18 @@ export const MdmsService = {
   getFSTPPlantInfo: (tenantId, moduleCode, types) => {
     return MdmsService.getDataByCriteria(tenantId, getFSTPPlantCriteria(tenantId, moduleCode, types), moduleCode);
   },
-  getCancelReceiptReason: (tenantId,moduleCode) => {
+  getCancelReceiptReason: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getCancelReceiptReason(tenantId, moduleCode), moduleCode);
   },
-  getReceiptStatus: (tenantId,moduleCode) => {
+  getReceiptStatus: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getReceiptStatus(tenantId, moduleCode), moduleCode);
   },
-  getCancelReceiptReasonAndStatus: (tenantId,moduleCode) => {
+  getCancelReceiptReasonAndStatus: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getCancelReceiptReasonAndStatus(tenantId, moduleCode), moduleCode);
   },
 
-  getGenderType: (tenantId,moduleCode, type) => {
-    return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId,moduleCode, type), moduleCode);
+  getGenderType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId, moduleCode, type), moduleCode);
 
   },
 
@@ -1463,13 +1467,13 @@ export const MdmsService = {
   getDocumentTypes: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getDocumentTypesCriteria(tenantId, moduleCode, type), moduleCode);
   },
-  
+
   getTradeTypeRoleTypes: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getTradeTypeRoleCriteria(tenantId, moduleCode, type), moduleCode);
   },
 
-  getFSMGenderType: (tenantId,moduleCode, type) => {
-    return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId,moduleCode, type), moduleCode);
+  getFSMGenderType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId, moduleCode, type), moduleCode);
   },
 
   getFSTPORejectionReason: (tenantId, moduleCode, type) => {
@@ -1479,4 +1483,5 @@ export const MdmsService = {
   getFSMPaymentType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getFSMPaymentTypeCriteria(tenantId, moduleCode, type), moduleCode);
   } 
+
 };

@@ -5,6 +5,8 @@ import { useHistory } from "react-router-dom";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
 import NoData from "./NoData";
+import { checkCurrentScreen } from "./DSSCard";
+
 
 const formatValue = (value, symbol) => {
   if (symbol?.toLowerCase() === "percentage") {
@@ -71,7 +73,7 @@ const CustomBarChart = ({
   }, [response]);
 
   const goToDrillDownCharts = () => {
-    history.push(`/digit-ui/employee/dss/drilldown?chart=${response?.responseData?.visualizationCode}&ulb=${value?.filters?.tenantId}&title=${title}&fromModule=${Digit.Utils.dss.getCurrentModuleName()}&type=performing-metric&fillColor=${fillColor}`);
+    history.push(`/digit-ui/employee/dss/drilldown?chart=${response?.responseData?.visualizationCode}&ulb=${value?.filters?.tenantId}&title=${title}&fromModule=${Digit.Utils.dss.getCurrentModuleName()}&type=performing-metric&fillColor=${fillColor}&isNational=${checkCurrentScreen()?"YES":"NO"}`);
   };
   if (isLoading) {
     return <Loader />;

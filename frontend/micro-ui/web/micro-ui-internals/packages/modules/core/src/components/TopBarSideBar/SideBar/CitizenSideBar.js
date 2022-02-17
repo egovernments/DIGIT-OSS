@@ -1,4 +1,4 @@
-import { LogoutIcon, NavBar } from "@egovernments/digit-ui-react-components";
+import { LogoutIcon, NavBar, EditPencilIcon } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -74,6 +74,11 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
   };
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
+  const showProfilePage = () => {
+    history.push("/digit-ui/citizen/user/profile");
+    closeSidebar();
+  }
+
   const redirectToLoginPage = () => {
     history.push("/digit-ui/citizen/login");
     closeSidebar();
@@ -86,6 +91,14 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
     menuItems = menuItems.filter((item) => (item?.id !== 'login-btn'))
     menuItems = [
       ...menuItems,
+      {
+        text: t("EDIT_PROFILE"),
+        element:"PROFILE",
+        icon: <EditPencilIcon className="icon" />,
+        populators: {
+          onClick: showProfilePage,
+        },
+      },
       {
         text: t("CORE_COMMON_LOGOUT"),
         element: "LOGOUT",
