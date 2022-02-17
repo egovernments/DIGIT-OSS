@@ -167,7 +167,8 @@ import useSurveySubmitResponse from "./surveys/useSubmitResponse";
 import useSurveyInbox from "./surveys/useSurveyInbox";
 
 import useNOCDetails from "./noc/useNOCDetails";
-import useNOCInbox from "./noc/useInbox"
+import useNOCInbox from "./noc/useInbox";
+import useNOCSearchApplication from "./noc/useSearchApplications";
 
 const pgr = {
   useComplaintDetails,
@@ -338,7 +339,8 @@ const survey = {
 const noc = {
   useNOCDetails,
   useNOCApplicationActions,
-  useInbox: useNOCInbox
+  useInbox: useNOCInbox,
+  useNOCSearchApplication
 }
 
 const Hooks = {

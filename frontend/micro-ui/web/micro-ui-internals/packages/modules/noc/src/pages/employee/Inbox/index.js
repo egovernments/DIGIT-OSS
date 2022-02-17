@@ -108,7 +108,10 @@ const Inbox = ({parentRoute}) => {
     const PropsForInboxLinks = {
         logoIcon: <ComplaintIcon />,
         headerText: "ACTION_TEST_NOC",
-        links: []
+        links: [{
+          text: t("ES_COMMON_SEARCH"),
+          link: "/digit-ui/employee/noc/search",
+        }]
     }
 
     const SearchFormFields = useCallback(({registerRef, searchFormState}) => <SearchFormFieldsComponents {...{registerRef, searchFormState}} />,[])
