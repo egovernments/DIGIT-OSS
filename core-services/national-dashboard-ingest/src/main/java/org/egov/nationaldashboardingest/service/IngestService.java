@@ -75,12 +75,12 @@ public class IngestService {
 
         });
         //repository.indexFlattenedDataToES(indexNameVsDocumentsToBeIndexed);
-        //repository.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);
+        repository.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);
 
         producer.push(applicationProperties.getKeyDataTopic(), dataToDb);
 
         // Added async handler to push data to kafka connectors asynchronously.
-        asyncHandler.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);
+        //asyncHandler.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);
 
         return responseHash;
 
