@@ -135,10 +135,7 @@ class MapChart extends React.Component {
     let drillDownCode = this.props.chartsGData[code]
       ? this.props.chartsGData[code].drillDownChartId
       : "";
-      console.log(filters,'sasas');
     let requestBody = getChartOptions(drillDownCode, filters);
-    console.log(requestBody,'sasas');
-
     let chartsAPI = new ChartsAPI(
       2000,
       "dashboard",
