@@ -149,6 +149,7 @@ public class PropertyQueryBuilder {
 					&& null == criteria.getName()
 					&& null == criteria.getDoorNo()
 					&& null == criteria.getOldPropertyId()
+					&& (null == criteria.getFromDate() && null == criteria.getToDate())
 					&& CollectionUtils.isEmpty(criteria.getCreationReason());
 		
 		if(isEmpty)
