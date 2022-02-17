@@ -1,5 +1,8 @@
+
 package org.egov.web.notification.mail.consumer.contract;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,9 +22,12 @@ import lombok.Setter;
 @Builder
 public class Email {
 
+	//added tenantId and list filestoreids for the object
 	private Set<String> emailTo;
 	private String subject;
 	private String body;
+	private Set<String> fileStoreId;
+	private String tenantId;
 	@JsonProperty("isHTML")
 	private boolean isHTML;
 

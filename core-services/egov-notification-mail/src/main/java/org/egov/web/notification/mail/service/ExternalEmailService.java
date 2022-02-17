@@ -3,8 +3,12 @@ package org.egov.web.notification.mail.service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.egov.web.notification.mail.config.ApplicationConfiguration;
 import org.egov.web.notification.mail.consumer.contract.Email;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,10 +16,33 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+
 @Service
 @ConditionalOnProperty(value = "mail.enabled", havingValue = "true")
 @Slf4j
 public class ExternalEmailService implements EmailService {
+
+	ApplicationConfiguration applicationConfiguration;
+
+	@Value("${egov.fileStore.host}")
+	private String FILESTORE_HOST;
+
+	@Value("${egov.fileStore.workDir.path}")
+	private String FILESTORE_WORKDIR;
+
+	@Value("${egov.fileStore.string.format}")
+	private String FILESTORE_FORMAT;
+
+	@Autowired
+	private Environment env;
 
 	public static final String EXCEPTION_MESSAGE = "Exception creating HTML email";
 	private JavaMailSenderImpl mailSender;
@@ -50,9 +77,34 @@ public class ExternalEmailService implements EmailService {
 			helper.setTo(email.getEmailTo().toArray(new String[0]));
 			helper.setSubject(email.getSubject());
 			helper.setText(email.getBody(), true);
-		} catch (MessagingException e) {
+			/*log here*/
+			log.info(email.toString());
+			for(int i=0; i<email.getFileStoreId().size(); i++) {
+				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, email.getTenantId(), email.getFileStoreId().toArray()[i]);
+				URL url = new URL(uri);
+				URLConnection con = url.openConnection();
+				String fieldValue = "attachment" + i;
+//				if (fieldValue == null || ! fieldValue.contains("filename=\"")) {
+//					// no file name there -> throw exception ...
+//				}
+//				String filename = fieldValue.substring(fieldValue.indexOf("filename=\"") + 10, fieldValue.length() - 1);
+				File download = new File(System.getProperty("java.io.tmpdir"), fieldValue);
+				ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
+				FileOutputStream fos = new FileOutputStream(download);
+				try {
+					fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+				} finally {
+					fos.close();
+				}
+				helper.addAttachment(fieldValue, download);
+			}
+			log.info("added attachments");
+
+		} catch (MessagingException | MalformedURLException e) {
 			log.error(EXCEPTION_MESSAGE, e);
 			throw new RuntimeException(e);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		log.info("Sending message");
 		mailSender.send(message);
