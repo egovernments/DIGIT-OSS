@@ -68,7 +68,7 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
   };
 
   const useGenderDetails = () => {
-    return useQuery("FSM_GENDER_DETAILS", () => MdmsService.getFSMGenderType(tenantId, moduleCode ,type), config);
+    return useQuery("FSM_GENDER_DETAILS", () => MdmsService.getFSMGenderType(tenantId, moduleCode, type), config);
   };
 
   const useFSTPORejectionReason = () => {
@@ -77,7 +77,8 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
 
   const usePaymentType = () => {
     return useQuery("FSM_PAYMENT_TYPE", () => MdmsService.getFSMPaymentType(tenantId, moduleCode, type), queryConfig);
-  }; 
+  };
+
 
   switch (type) {
     case "SanitationType":
