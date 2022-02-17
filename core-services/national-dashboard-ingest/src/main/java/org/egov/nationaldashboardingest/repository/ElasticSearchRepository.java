@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.nationaldashboardingest.config.ApplicationProperties;
 import org.egov.nationaldashboardingest.producer.Producer;
 import org.egov.nationaldashboardingest.utils.IngestConstants;
+import org.egov.nationaldashboardingest.web.models.ProducerPOJO;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -96,7 +98,7 @@ public class ElasticSearchRepository {
             }
         });*/
         indexNameVsDocumentsToBeIndexed.keySet().forEach(indexName -> {
-            producer.push("persist-national-records", indexNameVsDocumentsToBeIndexed.get(indexName));
+            producer.push("persist-national-records", ProducerPOJO.builder().requestInfo(new RequestInfo()).records(indexNameVsDocumentsToBeIndexed.get(indexName)).build());
         });
     }
 }

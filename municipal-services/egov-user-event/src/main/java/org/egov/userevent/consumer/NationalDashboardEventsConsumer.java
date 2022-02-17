@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.userevent.config.PropertiesManager;
+import org.egov.userevent.model.ProducerPOJO;
 import org.egov.userevent.producer.UserEventsProducer;
 import org.egov.userevent.service.UserEventsService;
 import org.egov.userevent.web.contract.EventRequest;
@@ -31,11 +32,12 @@ public class NationalDashboardEventsConsumer {
     @Autowired
     private PropertiesManager props;
 
-    @Value("#{${module.index.mapping}}")
-    private Map<String, String> moduleIndexMapping;
-
     @Autowired
     private UserEventsProducer producer;
+
+
+    @Value("#{${module.index.mapping}}")
+    private Map<String, String> moduleIndexMapping;
 
 
     /**
@@ -47,8 +49,8 @@ public class NationalDashboardEventsConsumer {
     @KafkaListener(topics = { "${kafka.topics.national.events}"})
     public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         try {
-            ArrayNode arrayNode = objectMapper.convertValue(record, ArrayNode.class);
-            for(JsonNode jsonNode : arrayNode){
+            ProducerPOJO incomingData = objectMapper.convertValue(record, ProducerPOJO.class);
+            for(JsonNode jsonNode : incomingData.getRecords()){
                 String module = jsonNode.get("module").asText();
                 producer.push(moduleIndexMapping.get(module), jsonNode);
             }
