@@ -70,7 +70,7 @@ public class BillingServiceConsumer {
 
 	@KafkaListener(topics = { "${kafka.topics.receipt.update.collecteReceipt}", "${kafka.topics.save.bill}",
 			"${kafka.topics.save.demand}", "${kafka.topics.update.demand}", "${kafka.topics.receipt.update.demand}",
-			"${kafka.topics.receipt.cancel.name}", "${kafka.topics.payment.create}", "${kafka.topics.payment.cancel}" })
+			"${kafka.topics.receipt.cancel.name}", "${kafka.topics.payment.cancel}" })
 	public void processMessage(Map<String, Object> consumerRecord, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 
 		log.debug("key:" + topic + ":" + "value:" + consumerRecord);
@@ -120,12 +120,12 @@ public class BillingServiceConsumer {
 
 		/*
 		 * update demand from receipt
-		 */
+		 *//*
 		else if (applicationProperties.getPaymentCreateTopic().equals(topic)) {
 
 			Boolean isReceiptCancellation = false;
 			updateDemandsFromPayment(consumerRecord, isReceiptCancellation);
-		}
+		}*/
 
 		/*
 		 * update demand for receipt cancellation
@@ -138,11 +138,28 @@ public class BillingServiceConsumer {
 	}
 
 
+
+
+	@KafkaListener(topicPattern = "${kafka.topics.receipt.topic.pattern}")
+	public void processPayment(Map<String, Object> consumerRecord, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+
+		/*
+		 * update demand from receipt
+		 */
+
+			Boolean isReceiptCancellation = false;
+			updateDemandsFromPayment(consumerRecord, isReceiptCancellation);
+
+
+	}
+
+
+
 	private void updateDemandsFromPayment(Map<String, Object> consumerRecord, Boolean isReceiptCancellation) {
-		
+
 		BillRequestV2 billReq = BillRequestV2.builder().build();
 		String tenantId = "";
-		
+
 		try {
 
 			setBillRequestFromPayment(consumerRecord, billReq, isReceiptCancellation);
@@ -152,7 +169,7 @@ public class BillingServiceConsumer {
 			tenantId = billReq.getBills().get(0).getTenantId();
 			MDC.put(Constants.TENANTID_MDC_STRING, billReq.getBills().get(0).getTenantId());
 			receiptServiceV2.updateDemandFromReceipt(billReq, isReceiptCancellation);
-			
+
 		} catch (JsonProcessingException | IllegalArgumentException e) {
 
 			/*
@@ -160,14 +177,14 @@ public class BillingServiceConsumer {
 			 */
 			updatePaymentBackUpdateForFailure(tenantId, consumerRecord.toString(), UUID.randomUUID().toString() + " : " + e.getClass().getName(), isReceiptCancellation);
 			log.info("EGBS_PAYMENT_SERIALIZE_ERROR",e.getClass().getName() + " : " + e.getMessage());
-			
+
 		} catch (Exception e ) {
 
 			String paymentId = util.getValueFromAdditionalDetailsForKey(
 					billReq.getBills().get(0).getAdditionalDetails(), Constants.PAYMENT_ID_KEY);
 			updatePaymentBackUpdateForFailure(tenantId, e.getMessage(), paymentId, isReceiptCancellation);
 			log.info("EGBS_PAYMENT_BACKUPDATE_ERROR",e.getClass().getName() + " : " + e.getMessage());
-			
+
 		}
 	}
 
