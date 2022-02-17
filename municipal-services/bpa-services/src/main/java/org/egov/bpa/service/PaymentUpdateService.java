@@ -1,5 +1,7 @@
 package org.egov.bpa.service;
 
+import static org.egov.bpa.util.BPAConstants.TENANTID_MDC;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import org.egov.bpa.workflow.WorkflowIntegrator;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.tracer.model.CustomException;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -70,7 +73,9 @@ public class PaymentUpdateService {
 			RequestInfo requestInfo = paymentRequest.getRequestInfo();
 			List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
 			String tenantId = paymentRequest.getPayment().getTenantId();
-
+			// Adding in MDC so that tracer can add it in header
+                        MDC.put(TENANTID_MDC, tenantId);
+                        
 			for (PaymentDetail paymentDetail : paymentDetails) {
 
 				List<String> businessServices = new ArrayList<String>(

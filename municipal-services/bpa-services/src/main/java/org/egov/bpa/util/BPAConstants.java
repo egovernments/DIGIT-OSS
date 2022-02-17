@@ -364,4 +364,6 @@ public class BPAConstants {
 	public static final String NOC_APPLICATIONTYPE = "NEW";
 
 	public static final String NOC_SOURCE = "BPA";
+	
+	public static final String TENANTID_MDC = "TENANTID";
 }
