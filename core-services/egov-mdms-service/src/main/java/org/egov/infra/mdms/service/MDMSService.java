@@ -138,7 +138,7 @@ public class MDMSService {
 
 		int subTenatCount = StringUtils.countOccurrencesOf(tenantId, ".");
 
-		for (int i = subTenatCount-1; i >= 0; i--) {
+		for (int i = subTenatCount; i >= 0; i--) {
 
 			data = tenantIdMap.get(localTenantId);
 			if (data != null && data.get(moduleName) != null && data.get(moduleName).get(masterName) != null) {
@@ -152,7 +152,8 @@ public class MDMSService {
 				/*
 				 * trim the tenantId by "." separator to take the parent tenantId
 				 */
-				localTenantId = localTenantId.substring(0, localTenantId.lastIndexOf("."));
+				if(localTenantId.contains("."))
+					localTenantId = localTenantId.substring(0, localTenantId.lastIndexOf("."));
 			}
 		}
 
