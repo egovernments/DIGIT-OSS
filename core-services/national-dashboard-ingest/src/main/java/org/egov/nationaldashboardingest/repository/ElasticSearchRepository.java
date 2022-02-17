@@ -90,10 +90,13 @@ public class ElasticSearchRepository {
     }
 
     public void pushDataToKafkaConnector(Map<String, List<JsonNode>> indexNameVsDocumentsToBeIndexed) {
-        indexNameVsDocumentsToBeIndexed.keySet().forEach(indexName -> {
+        /*indexNameVsDocumentsToBeIndexed.keySet().forEach(indexName -> {
             for(JsonNode record : indexNameVsDocumentsToBeIndexed.get(indexName)) {
                 producer.push(indexName, record);
             }
+        });*/
+        indexNameVsDocumentsToBeIndexed.keySet().forEach(indexName -> {
+            producer.push("persist-national-records", indexNameVsDocumentsToBeIndexed.get(indexName));
         });
     }
 }
