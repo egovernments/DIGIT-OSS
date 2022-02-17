@@ -98,7 +98,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
     if (element?.consumerCode) {
       payment[element?.consumerCode] = {
         total_due: element?.totalAmount,
-        bil_due__date: new Date(element?.billDate).toDateString(),
+        bil_due__date: new Date(element?.billDetails?.[0]?.expiryDate).toDateString(),
       };
     }
   });
