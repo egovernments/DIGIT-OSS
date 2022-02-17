@@ -131,11 +131,14 @@ class MapChart extends React.Component {
         filters["tenantId"] = tenentFilter;
       }
     }
-    filters["state"] = this.state.selectedState;
+    filters["state"] = this.props.selectedState;
     let drillDownCode = this.props.chartsGData[code]
       ? this.props.chartsGData[code].drillDownChartId
       : "";
+      console.log(filters,'sasas');
     let requestBody = getChartOptions(drillDownCode, filters);
+    console.log(requestBody,'sasas');
+
     let chartsAPI = new ChartsAPI(
       2000,
       "dashboard",
@@ -275,7 +278,7 @@ class MapChart extends React.Component {
                 }}
               >
                 <span>{getLocaleLabels(`DSS_${dat.headerName}`)}</span>
-                <span>{dat.plots[2].value}</span>
+                <span>{dat.headerValue}</span>
               </span>
             );
           })}
