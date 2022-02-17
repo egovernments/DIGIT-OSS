@@ -136,29 +136,10 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
         history.replace(`/digit-ui/citizen/commonPt/property/citizen-otp`, { from: getFromLocation(location.state, searchParams), mobileNumber: record.owner_mobile, redirectBackTo: redirectUrl });
         return;
       } else {
-        const data = {
-          mobileNumber: filters?.mobileNumber,
-          tenantId: stateCode,
-          userType: getUserType(),
-        };
-        const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN} });
-        
-        if (!err) {
-          // Redirect to props redirect url if exists else to link success page
-          let redirectUrl = '/digit-ui/citizen/commonPt/property/link-success/'+record.property_id;
-          if(redirectToUrl) {
-            redirectUrl = redirectToUrl+'?propertyId='+record.property_id+'&tenantId='+tenantId;
-          }
-
-          history.replace(`/digit-ui/citizen/commonPt/property/citizen-otp`, { from: getFromLocation(location.state, searchParams), mobileNumber: record.owner_mobile, redirectBackTo: redirectUrl });
-          return;
-        } else {
-          history.push(`/digit-ui/citizen/`, { from: getFromLocation(location.state, searchParams), data:data });
-        }
+        history.push(`/digit-ui/citizen/`, { from: getFromLocation(location.state, searchParams), data:data });
       }
     }
   };
-
  
   const sendOtp = async (data) => {
     try {
@@ -184,6 +165,39 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
         info={t("CS_FILE_APPLICATION_INFO_LABEL")} 
         text={t("CPT_SEARCH_PROPERTY_INFO")} 
       />
+      {modalData ? (
+        <Modal
+          hideSubmit={true}
+          isDisabled={false}
+          popupStyles={{ width: "319px", height: "250px", margin: "auto" }}
+          formId="modal-action"
+        >
+          <div ref={modalRef}>
+            <KeyNote
+              keyValue={t("PT_AMOUNT_DUE")}
+              note={`₹ ${modalData?.total_due?.toLocaleString("en-IN")}`}
+              noteStyle={{ fontSize: "24px", fontWeight: "bold" }}
+            />
+            <p>
+              {t("PT_YOU_HAVE") +
+                " " +
+                "₹" +
+                " " +
+                modalData?.total_due.toLocaleString("en-IN") +
+                " " +
+                t("PT_PENDING_AMOUNT") +
+                " " +
+                t("PT_INORDER_TO_TRANSFER")}
+            </p>
+            <SubmitBar
+              submit={false}
+              onSubmit={() => proceedToPay(modalData)}
+              style={{ marginTop: "14px", width: "100%" }}
+              label={t("PT_PROCEED_PAYMENT")}
+            />
+          </div>
+        </Modal>
+      ) : null}
     </div>
   );
 };
