@@ -77,6 +77,9 @@ public class CoreIndexConsumerConfig implements ApplicationRunner {
 	@Value("${egov.indexer.bpa.update.workflow.topic.name}")
 	private String bpaUpdateWorkflowTopic;
 	
+	@Value("${egov.indexer.edcr.topic.name}")
+	private String edcrCreateApplicationTopic;
+	
     @Autowired
     private StoppingErrorHandler stoppingErrorHandler;
     
