@@ -170,7 +170,7 @@ public class EdcrRestService {
 	@Value("${egov.services.egov-indexer.url}")
 	private String egovIndexerUrl;
 
-	@Value("${egov.service.host}")
+	@Value("${indexer.host}")
 	private String indexerHost;
 	
     public Session getCurrentSession() {
@@ -249,6 +249,7 @@ public class EdcrRestService {
 		try {
 			restTemplate = new RestTemplate();
 			StringBuilder uri = new StringBuilder(indexerHost).append(egovIndexerUrl);
+			LOG.info("URL created: " + uri.toString());
 			Object postForObject = restTemplate.postForObject(uri.toString(), data, Object.class, topicName);
 			LOG.info("Data pushed in topic->edcr-create-application.\n Data pushed=> \n"+data);
 		} catch (RestClientException e) {
