@@ -125,7 +125,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
     }
   };
 
-  const renderLegend = (value) => <span>{value}</span>;
+  const renderLegend = () => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t("DSS_TOTAL_COLLECTIONS_LEGEND")}</span>;
 
   const tickFormatter = (value) => {
     if (typeof value === "string") {
@@ -193,6 +193,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
               */
               tick={{ fontSize: "14px", fill: "#505A5F" }}
             />
+            <Legend formatter={renderLegend} iconType="circle" />
             <Area type="monotone" dataKey={renderPlot} stroke="#048BD0" fill="url(#colorUv)" dot={true} />
           </AreaChart>
           ):(

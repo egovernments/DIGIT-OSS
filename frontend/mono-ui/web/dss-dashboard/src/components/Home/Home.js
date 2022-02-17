@@ -102,7 +102,7 @@ class Home extends React.Component {
       this.state.page
     );
     let bgColor = Variables.colors[index].light;
-    let iconColor = Variables.colors[index].dark;
+    let iconColor = Variables.iconColors[index].dark;
     let pageId = "";
     let moduleLevel = "";
 
@@ -401,11 +401,11 @@ class Home extends React.Component {
     title =
       fromTxt +
       " " +
-      moment.unix(this.state.getFYobj.value.startDate).format("MMM, DD YYYY") +
+      moment.unix(this.state.getFYobj.value.startDate).format("MMM DD, YYYY") +
       " " +
       toTxt +
       " " +
-      moment().format("MMM, DD YYYY");
+      moment().format("MMM DD, YYYY");
 
     return title;
   }
