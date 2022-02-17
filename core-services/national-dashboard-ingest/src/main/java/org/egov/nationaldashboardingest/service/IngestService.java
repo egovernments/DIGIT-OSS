@@ -65,14 +65,12 @@ public class IngestService {
             // Flattens incoming ingest payload
             List<JsonNode> flattenedIndexPayload = customIndexRequestDecorator.createFlattenedIndexRequest(data);
 
-            // Repository layer call for performing bulk indexing
-            asyncHandler.pushRecordToKafkaConnector(applicationProperties.getModuleIndexMapping().get(moduleCode), flattenedIndexPayload);
-            /*
+
             if(indexNameVsDocumentsToBeIndexed.containsKey(applicationProperties.getModuleIndexMapping().get(moduleCode)))
                 indexNameVsDocumentsToBeIndexed.get(applicationProperties.getModuleIndexMapping().get(moduleCode)).addAll(flattenedIndexPayload);
             else
                 indexNameVsDocumentsToBeIndexed.put(applicationProperties.getModuleIndexMapping().get(moduleCode), flattenedIndexPayload);
-            */
+
             responseHash.add(data.hashCode());
 
         });
@@ -82,7 +80,7 @@ public class IngestService {
         producer.push(applicationProperties.getKeyDataTopic(), dataToDb);
 
         // Added async handler to push data to kafka connectors asynchronously.
-        //asyncHandler.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);
+        asyncHandler.pushDataToKafkaConnector(indexNameVsDocumentsToBeIndexed);
 
         return responseHash;
 
