@@ -33,7 +33,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   });
 
   useEffect(() => {
-    if(propertyData?.Properties.length > 0 && propertyData?.Properties.length > 10 && !errorShown)
+    if(propertyData?.Properties.length > 0 && (ptSearchConfig.maxResultValidation && propertyData?.Properties.length > ptSearchConfig.maxPropertyResult && !errorShown))
     {
       setShowToast({ error:true, warning: true, label: "ERR_PLEASE_REFINED_UR_SEARCH" });
     }
@@ -291,7 +291,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   ];
 
   const onPropertySearch = async (data) => {
-    if(propertyData?.Properties.length > 0 && propertyData?.Properties.length > 10 && errorShown)
+    if(ptSearchConfig.maxResultValidation && propertyData?.Properties.length > 0 && propertyData?.Properties.length > ptSearchConfig.maxPropertyResult && errorShown)
     {
       seterrorShown(true)
       return;
@@ -382,7 +382,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     return <Loader />;
   }
 
-  if (propertyData && !propertyDataLoading && !error && propertyData?.Properties.length<10 && (showToast == null || (showToast !== null && !showToast?.error))) {
+  let validation = ptSearchConfig.maxResultValidation ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
+  if (propertyData && !propertyDataLoading && !error && validation ) {
     let qs = {};
     qs = { ...searchData.filters, city: searchData.city };
 
