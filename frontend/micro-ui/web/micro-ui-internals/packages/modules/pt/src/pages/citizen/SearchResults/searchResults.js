@@ -17,7 +17,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   let off;
   if (!isNaN(parseInt(OfsetForSearch))) {
     off = OfsetForSearch;
-    t1 = parseInt(OfsetForSearch) + 50;
+    t1 = parseInt(OfsetForSearch) + 5;
   } else {
     t1 = 5;
   }
