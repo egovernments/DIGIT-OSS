@@ -32,6 +32,17 @@ public class EdcrIndexData {
 	// Plot-
 	private BigDecimal plotBndryArea;
 
+	// VirtualBuilding-
+	private BigDecimal buildingHeight;
+	private Set<OccupancyTypeHelper> occupancyTypes = new HashSet<>();
+	private BigDecimal totalBuitUpArea;
+	private BigDecimal totalFloorArea;
+	private BigDecimal totalCarpetArea;
+	private BigDecimal floorsAboveGround;
+
+	
+	
+	
 	@Override
 	public String toString() {
 		return "EdcrIndexData [applicationType=" + applicationType + ", applicationNumber=" + applicationNumber
@@ -42,28 +53,8 @@ public class EdcrIndexData {
 				+ ", dcrNumber=" + dcrNumber + ", comparisonDcrNumber=" + comparisonDcrNumber + ", plotBndryArea="
 				+ plotBndryArea + ", buildingHeight=" + buildingHeight + ", occupancyTypes=" + occupancyTypes
 				+ ", totalBuitUpArea=" + totalBuitUpArea + ", totalFloorArea=" + totalFloorArea + ", totalCarpetArea="
-				+ totalCarpetArea + ", floorsAboveGround=" + floorsAboveGround + ", getApplicationType()="
-				+ getApplicationType() + ", getApplicationNumber()=" + getApplicationNumber()
-				+ ", getApplicationDate()=" + getApplicationDate() + ", getStatus()=" + getStatus()
-				+ ", getPlanPermitNumber()=" + getPlanPermitNumber() + ", getPermitApplicationDate()="
-				+ getPermitApplicationDate() + ", getTransactionNumber()=" + getTransactionNumber()
-				+ ", getThirdPartyUserTenant()=" + getThirdPartyUserTenant() + ", getApplicantName()="
-				+ getApplicantName() + ", getServiceType()=" + getServiceType() + ", getArchitectInformation()="
-				+ getArchitectInformation() + ", getDcrNumber()=" + getDcrNumber() + ", getComparisonDcrNumber()="
-				+ getComparisonDcrNumber() + ", getPlotBndryArea()=" + getPlotBndryArea() + ", getBuildingHeight()="
-				+ getBuildingHeight() + ", getOccupancyTypes()=" + getOccupancyTypes() + ", getTotalBuitUpArea()="
-				+ getTotalBuitUpArea() + ", getTotalFloorArea()=" + getTotalFloorArea() + ", getTotalCarpetArea()="
-				+ getTotalCarpetArea() + ", getFloorsAboveGround()=" + getFloorsAboveGround() + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+				+ totalCarpetArea + ", floorsAboveGround=" + floorsAboveGround + "]";
 	}
-
-	// VirtualBuilding-
-	private BigDecimal buildingHeight;
-	private Set<OccupancyTypeHelper> occupancyTypes = new HashSet<>();
-	private BigDecimal totalBuitUpArea;
-	private BigDecimal totalFloorArea;
-	private BigDecimal totalCarpetArea;
-	private BigDecimal floorsAboveGround;
 
 	public EdcrIndexData(ApplicationType applicationType, String applicationNumber, Date applicationDate, String status,
 			String planPermitNumber, Date permitApplicationDate, String transactionNumber, String thirdPartyUserTenant,
