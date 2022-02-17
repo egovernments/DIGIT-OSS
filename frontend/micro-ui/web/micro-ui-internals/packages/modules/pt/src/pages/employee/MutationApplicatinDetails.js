@@ -20,7 +20,8 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
   const state = Digit.ULBService.getStateId();
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
-  const [businessService, setBusinessService] = useState("PT.CREATE");
+  const [businessService, setBusinessService] = useState("PT.MUTATION");
+  const [isEnableLoader, setIsEnableLoader] = useState(false);
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
     { filters: { acknowledgementIds },tenantId },
     { filters: { acknowledgementIds },tenantId }
@@ -78,7 +79,8 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
     }
   };
 
-  const submitAction = async (data, nocData = false) => {
+  const submitAction = async (data, nocData = false, isOBPS = {}) => {
+    setIsEnableLoader(true);
     if (typeof data?.customFunctionToExecute === "function") {
       data?.customFunctionToExecute({ ...data });
     }
@@ -87,23 +89,42 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
         return nocMutation?.mutateAsync(noc)
       })
       try {
+        setIsEnableLoader(true);
         const values = await Promise.all(nocPrmomises);
         values && values.map((ob) => {
           Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
         })
       }
       catch (err) {
+        setIsEnableLoader(false);
+        let errorValue = err?.response?.data?.Errors?.[0]?.code ? t(err?.response?.data?.Errors?.[0]?.code) : err?.response?.data?.Errors?.[0]?.message || err;
         closeModal();
+        setShowToast({ key: "error", error: {message: errorValue}});
+        setTimeout(closeToast, 5000);
         return;
       }
     }
     if (mutate) {
+      setIsEnableLoader(true);
       mutate(data, {
         onError: (error, variables) => {
+          setIsEnableLoader(false);
           setShowToast({ key: "error", error });
           setTimeout(closeToast, 5000);
         },
         onSuccess: (data, variables) => {
+          setIsEnableLoader(false);
+          if (isOBPS?.bpa) {
+            data.selectedAction = selectedAction;
+            history.replace(`/digit-ui/employee/obps/response`, { data: data });
+          }
+          if (isOBPS?.isStakeholder) {
+            data.selectedAction = selectedAction;
+            history.push(`/digit-ui/employee/obps/stakeholder-response`, { data: data });
+          }
+          if (isOBPS?.isNoc) {
+            history.push(`/digit-ui/employee/noc/response`, { data: data });
+          }
           setShowToast({ key: "success", action: selectedAction });
           setTimeout(closeToast, 5000);
           queryClient.clear();
@@ -187,9 +208,9 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
   if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
     const propertiesAudit = get(auditResponse, "Properties", []);
     const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
-    // const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
     // Removed filter(property => property.status == 'ACTIVE') condition to match result in qa env
-    const previousActiveProperty = propertiesAudit.sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
+    // const previousActiveProperty = propertiesAudit.sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
     property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
 
@@ -239,7 +260,8 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
   owners = application?.owners;
   let docs = [];
   docs = application?.documents;
-  if (isLoading || auditDataLoading) {
+
+  if (isLoading || auditDataLoading || isEnableLoader) {
     return <Loader />;
   }
 
@@ -322,7 +344,7 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
 
               <CardSubHeader>{t("PT_MUTATION_TRANSFEREE_DETAILS")}</CardSubHeader>
                {
-                transferorInstitution ? (
+                transferorInstitution.length ? (
                   <div>
                     {Array.isArray(transfereeOwners) &&
                       transfereeOwners.map((owner, index) => (
@@ -349,11 +371,11 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
                   </div>
                 ) : (
                   <div>
-                    {Array.isArray(transferorOwners) &&
-                      transferorOwners.map((owner, index) => (
+                    {Array.isArray(transfereeOwners) &&
+                      transfereeOwners.map((owner, index) => (
                         <div key={index}>
                           <CardSubHeader>
-                            {transferorOwners.length != 1 && (
+                            {transfereeOwners.length != 1 && (
                               <span>
                                 {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
                               </span>
@@ -361,16 +383,16 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
                           </CardSubHeader>
                           <StatusTable>
                             <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
-                            <Row label={t("PT_COMMON_GENDER_LABEL")} text={owner?.gender || t("CS_NA")} />
+                            <Row label={t("PT_COMMON_GENDER_LABEL")} text={t(owner?.gender) || t("CS_NA")} />
                             <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
                             <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
-                            <Row label={t("PT_RELATIONSHIP")} text={owner?.relationship || t("CS_NA")} />
+                            <Row label={t("PT_FORM3_RELATIONSHIP")} text={t(owner?.relationship) || t("CS_NA")} />
                             <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")}text={owner?.emailId || t("CS_NA")} />
                             <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
                             <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={(owner?.ownerType).toLowerCase() || t("CS_NA")} />
                             <Row
                               label={t("PT_FORM3_OWNERSHIP_TYPE")}
-                              text={`${application?.ownershipCategory ? t(`PT_OWNERSHIP_${owner?.ownershipCategory}`) : t("CS_NA")}`}
+                              text={`${property?.ownershipCategoryTemp ? t(`PT_OWNERSHIP_${property?.ownershipCategoryTemp}`) : t("CS_NA")}`}
                             />
                           </StatusTable>
                         </div>
