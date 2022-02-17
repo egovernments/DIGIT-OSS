@@ -170,7 +170,7 @@ public class EdcrRestService {
 	@Value("${egov.services.egov-indexer.url}")
 	private String egovIndexerUrl;
 
-	@Value("${indexer.host}")
+	@Value("${egov.service.host}")
 	private String indexerHost;
 	
     public Session getCurrentSession() {
