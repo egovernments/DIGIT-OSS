@@ -229,7 +229,7 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
         Header:<span className="tooltip">
              {renderHeader(plot)}
               <span className="tooltiptext" style={{ whiteSpace: "nowrap"  , fontSize:"medium" , height:"35px" ,bottom:'0%', top: '125%' }}>
-                {`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`}
+                {t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)}
               </span>
             </span>,
         accessor: accessData(plot),
