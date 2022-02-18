@@ -239,6 +239,12 @@ config:
       - work-dir: "core-services/national-dashboard-ingest/src/main/resources/db"
         image-name: "national-dashboard-ingest-db"
 
+  - name: "builds/digit-dev/core-services/national-dashboard-kafka-pipeline"
+    build:
+      - work-dir: "core-services/national-dashboard-kafka-pipeline"
+        image-name: "national-dashboard-kafka-pipeline"
+        dockerfile: "build/maven/Dockerfile"
+
   - name: "builds/digit-dev/core-services/egov-survey-services"
     build:
       - work-dir: "core-services/egov-survey-services"
