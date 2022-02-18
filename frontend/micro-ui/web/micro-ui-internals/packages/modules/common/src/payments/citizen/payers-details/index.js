@@ -33,9 +33,9 @@ const SelectPaymentType = (props) => {
     name : 'I am making the payment on behalf of the owner/ consumer of the service',
   }
 
-  const userInfo = Digit.UserService.getUser();
-  const payersActiveName=userInfo?.info?.name;
-  const payersActiveMobileNumber=userInfo?.info?.mobileNumber;
+  const userInfo = Digit.UserService.getUser()?.info;
+  const payersActiveName=userInfo?.name;
+  const payersActiveMobileNumber=userInfo?.mobileNumber;
 
   const { t } = useTranslation();
   const history = useHistory();
