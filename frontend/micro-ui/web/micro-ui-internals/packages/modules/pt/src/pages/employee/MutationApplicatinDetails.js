@@ -1,7 +1,7 @@
 import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import getPTAcknowledgementData from "../../getPTAcknowledgementData";
 import PropertyDocument from "../../pageComponents/PropertyDocument";
 import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
@@ -21,6 +21,7 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
   const [businessService, setBusinessService] = useState("PT.MUTATION");
+  const history = useHistory();
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
     { filters: { acknowledgementIds },tenantId },
