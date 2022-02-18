@@ -40,22 +40,6 @@ public class EdcrIndexData {
 	private BigDecimal totalCarpetArea;
 	private BigDecimal floorsAboveGround;
 
-	
-	
-	
-	@Override
-	public String toString() {
-		return "EdcrIndexData [applicationType=" + applicationType + ", applicationNumber=" + applicationNumber
-				+ ", applicationDate=" + applicationDate + ", status=" + status + ", planPermitNumber="
-				+ planPermitNumber + ", permitApplicationDate=" + permitApplicationDate + ", transactionNumber="
-				+ transactionNumber + ", thirdPartyUserTenant=" + thirdPartyUserTenant + ", applicantName="
-				+ applicantName + ", serviceType=" + serviceType + ", architectInformation=" + architectInformation
-				+ ", dcrNumber=" + dcrNumber + ", comparisonDcrNumber=" + comparisonDcrNumber + ", plotBndryArea="
-				+ plotBndryArea + ", buildingHeight=" + buildingHeight + ", occupancyTypes=" + occupancyTypes
-				+ ", totalBuitUpArea=" + totalBuitUpArea + ", totalFloorArea=" + totalFloorArea + ", totalCarpetArea="
-				+ totalCarpetArea + ", floorsAboveGround=" + floorsAboveGround + "]";
-	}
-
 	public EdcrIndexData(ApplicationType applicationType, String applicationNumber, Date applicationDate, String status,
 			String planPermitNumber, Date permitApplicationDate, String transactionNumber, String thirdPartyUserTenant,
 			String applicantName, String serviceType, String architectInformation, String dcrNumber,
@@ -86,7 +70,6 @@ public class EdcrIndexData {
 
 	public EdcrIndexData() {
 	}
-
 
 	public ApplicationType getApplicationType() {
 		return applicationType;
@@ -246,6 +229,19 @@ public class EdcrIndexData {
 
 	public void setFloorsAboveGround(BigDecimal floorsAboveGround) {
 		this.floorsAboveGround = floorsAboveGround;
+	}
+
+	@Override
+	public String toString() {
+		return "EdcrIndexData [applicationType=" + applicationType + ", applicationNumber=" + applicationNumber
+				+ ", applicationDate=" + applicationDate + ", status=" + status + ", planPermitNumber="
+				+ planPermitNumber + ", permitApplicationDate=" + permitApplicationDate + ", transactionNumber="
+				+ transactionNumber + ", thirdPartyUserTenant=" + thirdPartyUserTenant + ", applicantName="
+				+ applicantName + ", serviceType=" + serviceType + ", architectInformation=" + architectInformation
+				+ ", dcrNumber=" + dcrNumber + ", comparisonDcrNumber=" + comparisonDcrNumber + ", plotBndryArea="
+				+ plotBndryArea + ", buildingHeight=" + buildingHeight + ", occupancyTypes=" + occupancyTypes
+				+ ", totalBuitUpArea=" + totalBuitUpArea + ", totalFloorArea=" + totalFloorArea + ", totalCarpetArea="
+				+ totalCarpetArea + ", floorsAboveGround=" + floorsAboveGround + "]";
 	}
 
 }

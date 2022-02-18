@@ -238,12 +238,14 @@ public class EdcrRestService {
         }
 
         edcrApplication = edcrApplicationService.createRestEdcr(edcrApplication);
+        if(environmentSettings.getDataPush()) {
         edcrIndexData = setEdcrIndexData(edcrApplication, edcrApplication.getEdcrApplicationDetails().get(0));
-		//System.out.println(edcrIndexData.toString());
 		// call kafka topic
 		pushDataToIndexer(edcrIndexData, "edcr-create-application");
+        }
 		return setEdcrResponse(edcrApplication.getEdcrApplicationDetails().get(0), edcrRequest);
-	}
+		
+   }
 
 	public void pushDataToIndexer(Object data, String topicName) {
 		try {

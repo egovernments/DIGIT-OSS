@@ -65,7 +65,8 @@ public class EnvironmentSettings {
     private static final String HIBERNATE_JDBC_BATCH_SIZE = "hibernate.jdbc.batch_size";
     private static final String STATE_WIDE_SCHEMA_NAME = "statewide.schema.name";
     private static final String DEFAULT_SCHEMA_NAME = "default.schema.name";
-
+    private static final String DATA_PUSH = "edcr.indexer.data.push.required";
+    
     @Autowired
     private Environment environment;
 
@@ -108,4 +109,8 @@ public class EnvironmentSettings {
     public String schemaName(String domainName) {
         return environment.getProperty("tenant." + domainName, defaultSchemaName());
     }
+    
+    public boolean getDataPush() {
+		return this.environment.getProperty(DATA_PUSH, Boolean.class);
+	}
 }
