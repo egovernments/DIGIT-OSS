@@ -269,9 +269,10 @@ public class IngestValidator {
             StringBuilder currKeyData = new StringBuilder();
             currKeyData.append(data.getDate()).append(":").append(data.getModule()).append(":").append(data.getWard()).append(":").append(data.getUlb()).append(":").append(data.getRegion()).append(":").append(data.getState());
             log.info("Current key data: " + currKeyData);
+            /*
             if(uniquenessHash.contains(currKeyData.toString()))
                 throw new CustomException("EG_DS_SAME_RECORD_ERR", "Duplicate data found in the payload");
-
+            */
             uniquenessHash.add(currKeyData.toString());
             keyDataToSearch.add(currKeyData.toString());
             ackEntityList.add(AckEntity.builder().datakey(currKeyData.toString()).uuid(UUID.randomUUID().toString()).build());
