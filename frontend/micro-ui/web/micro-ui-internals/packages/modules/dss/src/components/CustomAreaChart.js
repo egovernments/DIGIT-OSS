@@ -30,6 +30,9 @@ const renderUnits = (t, denomination, symbol) => {
 };
 
 const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
+  const lineLegend = {
+    margin:"10px"
+  }
   const { t } = useTranslation();
   const { id } = data;
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -221,9 +224,16 @@ Removed this custom yaxis label for all line charts
               */
             />
             <Tooltip />
-            <Legend />
-            {keysArr?.map((key, i) => {
-              return <Line type="monotone" dataKey={key} stroke={getColors(i)} activeDot={{ r: 8 }} />;
+
+            <Legend layout="horizontal" verticalAlign="bottom" align="center" iconType="circle" className={lineLegend}/>
+            {keysArr?.map((key,i)=>{
+              return (<Line
+              type="monotone"
+              dataKey={key}
+              stroke={getColors(i)}
+              activeDot={{ r: 8 }}
+            />)
+
             })}
             {/* <Line
               type="monotone"
