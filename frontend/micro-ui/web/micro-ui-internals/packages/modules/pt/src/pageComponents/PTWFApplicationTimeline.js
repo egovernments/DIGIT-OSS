@@ -20,7 +20,7 @@ const PTWFApplicationTimeline = (props) => {
         source: props.application?.channel || "",
       };
       return <PTWFCaption data={caption} />;
-    } else if (checkpoint.status === "ACTIVE") {
+    } else if (checkpoint.status === "ACTIVE" && props?.userType === 'citizen') {
       return (
         <div>
           <Link to={`/digit-ui/citizen/pt/property/properties/${props?.application?.propertyId}`}>
@@ -59,7 +59,7 @@ const PTWFApplicationTimeline = (props) => {
     switch (nextAction?.action) {
       case "PAY":
         return (
-          props.userType && props.userType === 'citizen'
+          props?.userType === 'citizen'
           ? (
           <div style={{ marginTop: "1em", bottom: "0px", width: "100%", marginBottom: "1.2em" }}>
             <Link
