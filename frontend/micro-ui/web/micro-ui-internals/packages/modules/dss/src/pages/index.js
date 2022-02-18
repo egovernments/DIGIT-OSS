@@ -10,12 +10,13 @@ import {
   WhatsappIcon
 } from "@egovernments/digit-ui-react-components";
 import { format } from "date-fns";
-import React, { useEffect, useMemo, Fragment,useRef, useState } from "react";
+import React, { useEffect, Fragment,useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { checkCurrentScreen } from "../components/DSSCard";
 import FilterContext from "../components/FilterContext";
 import Filters from "../components/Filters";
+import FiltersNational from "../components/FiltersNational";
 import Layout from "../components/Layout";
 
 const key = "DSS_FILTERS";
@@ -58,7 +59,7 @@ const DashBoard = ({ stateCode }) => {
 
   const { isLoading: localizationLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
   const { data: screenConfig } = Digit.Hooks.dss.useMDMS(stateCode, "dss-dashboard", "DssDashboard");
-  const { data: nationalInfo } = Digit.Hooks.dss.useMDMS(stateCode, "tenant", ["nationalInfo"], {
+  const { data: nationalInfo, isLoadingNAT } = Digit.Hooks.dss.useMDMS(stateCode, "tenant", ["nationalInfo"], {
     select: (data) => {
       let nationalInfo = data?.tenant?.nationalInfo || [];
       let combinedResult = nationalInfo.reduce((acc, curr) => {
@@ -111,9 +112,28 @@ const DashBoard = ({ stateCode }) => {
       filters: { ...filters?.filters, tenantId: [...filters?.filters?.tenantId].filter((tenant, index) => index !== id) },
     });
   };
+  const removeST = (id) => {
+    handleFilters({
+      ...filters,
+      filters: { ...filters?.filters, state: [...filters?.filters?.state].filter((tenant, index) => index !== id) },
+    });
+  };
+  const removeTenant = (id) => {
+    handleFilters({
+      ...filters,
+      filters: { ...filters?.filters, ulb: [...filters?.filters?.ulb].filter((tenant, index) => index !== id) },
+    });
+  };
 
   const handleClear = () => {
     handleFilters({ ...filters, filters: { ...filters?.filters, tenantId: [] } });
+  };
+
+  const clearAllTn = () => {
+    handleFilters({ ...filters, filters: { ...filters?.filters, ulb: [] } });
+  };
+  const clearAllSt = () => {
+    handleFilters({ ...filters, filters: { ...filters?.filters, state: [], ulb: [] } });
   };
 
   const dashboardConfig = response?.responseData;
@@ -125,7 +145,7 @@ const DashBoard = ({ stateCode }) => {
   let tabArray = Object.keys(tabArrayObj).map((key) => key);
 
   useEffect(() => {
-    if (tabArray.length > 0 && tabState == "") {
+    if (tabArray?.length > 0 && tabState == "") {
       setTabState(tabArray[0]);
     }
   }, [tabArray]);
@@ -194,7 +214,7 @@ const DashBoard = ({ stateCode }) => {
         },
       ];
 
-  if (isLoading || isUlbLoading || localizationLoading || isMdmsLoading) {
+  if (isLoading || isUlbLoading || localizationLoading || isMdmsLoading || isLoadingNAT) {
     return <Loader />;
   }
 
@@ -223,38 +243,114 @@ const DashBoard = ({ stateCode }) => {
             </div>
           )}
         </div>
-        <Filters
-          t={t}
-          ulbTenants={isNational ? nationalInfo : ulbTenants}
-          isOpen={isFilterModalOpen}
-          closeFilters={() => setIsFilterModalOpen(false)}
-          isNational={isNational}
-        />
-        {filters?.filters?.tenantId.length > 0 && (
+        {isNational ? (
+          <FiltersNational
+            t={t}
+            ulbTenants={nationalInfo}
+            isOpen={isFilterModalOpen}
+            closeFilters={() => setIsFilterModalOpen(false)}
+            isNational={isNational}
+          />
+        ) : (
+          <Filters
+            t={t}
+            ulbTenants={isNational ? nationalInfo : ulbTenants}
+            isOpen={isFilterModalOpen}
+            closeFilters={() => setIsFilterModalOpen(false)}
+            isNational={isNational}
+          />
+        )}
+        {filters?.filters?.tenantId?.length > 0 && (
           <div className="tag-container">
-            {!showFilters&&filters?.filters?.tenantId&&filters.filters.tenantId.slice(0,5).map((filter, id) => (
-              <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeULB(id)} />
-            ))}
-            {filters?.filters?.tenantId?.length>6&&<>
-            {showFilters&&filters.filters.tenantId.map((filter, id) => (
-              <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeULB(id)} />
-            ))}
-            {!showFilters&&
-               <p className="clearText cursorPointer" onClick={()=>setShowFilters(true)}>
-               {t(`DSS_FILTER_SHOWALL`)}
-             </p>
-            }
-              {showFilters&&
-               <p className="clearText cursorPointer" onClick={()=>setShowFilters(false)}>
-               {t(`DSS_FILTER_SHOWLESS`)}
-             </p>
-            }
-            </>}
+            {!showFilters &&
+              filters?.filters?.tenantId &&
+              filters.filters.tenantId
+                .slice(0, 5)
+                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeULB(id)} />)}
+            {filters?.filters?.tenantId?.length > 6 && (
+              <>
+                {showFilters &&
+                  filters.filters.tenantId.map((filter, id) => (
+                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeULB(id)} />
+                  ))}
+                {!showFilters && (
+                  <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>
+                    {t(`DSS_FILTER_SHOWALL`)}
+                  </p>
+                )}
+                {showFilters && (
+                  <p className="clearText cursorPointer" onClick={() => setShowFilters(false)}>
+                    {t(`DSS_FILTER_SHOWLESS`)}
+                  </p>
+                )}
+              </>
+            )}
             <p className="clearText cursorPointer" onClick={handleClear}>
               {t(`DSS_FILTER_CLEAR`)}
             </p>
           </div>
         )}
+        {filters?.filters?.state?.length > 0 && (
+          <div className="tag-container">
+            {!showFilters &&
+              filters?.filters?.state &&
+              filters.filters.state
+                .slice(0, 5)
+                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(filter)}`} onClick={() => removeST(id)} />)}
+            {filters?.filters?.state?.length > 6 && (
+              <>
+                {showFilters &&
+                  filters.filters.state.map((filter, id) => (
+                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(filter)}`} onClick={() => removeST(id)} />
+                  ))}
+                {!showFilters && (
+                  <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>
+                    {t(`DSS_FILTER_SHOWALL`)}
+                  </p>
+                )}
+                {showFilters && (
+                  <p className="clearText cursorPointer" onClick={() => setShowFilters(false)}>
+                    {t(`DSS_FILTER_SHOWLESS`)}
+                  </p>
+                )}
+              </>
+            )}
+            <p className="clearText cursorPointer" onClick={clearAllSt}>
+              {t(`DSS_FILTER_CLEAR_ST`)}
+            </p>
+          </div>
+        )}
+        {filters?.filters?.ulb?.length > 0 && (
+          <div className="tag-container">
+            {!showFilters &&
+              filters?.filters?.ulb &&
+              filters.filters.ulb
+                .slice(0, 5)
+                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeTenant(id)} />)}
+            {filters?.filters?.ulb?.length > 6 && (
+              <>
+                {showFilters &&
+                  filters.filters.ulb.map((filter, id) => (
+                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeTenant(id)} />
+                  ))}
+                {!showFilters && (
+                  <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>
+                    {t(`DSS_FILTER_SHOWALL`)}
+                  </p>
+                )}
+                {showFilters && (
+                  <p className="clearText cursorPointer" onClick={() => setShowFilters(false)}>
+                    {t(`DSS_FILTER_SHOWLESS`)}
+                  </p>
+                )}
+              </>
+            )}
+            <p className="clearText cursorPointer" onClick={clearAllTn}>
+              {t(`DSS_FILTER_CLEAR_TN`)}
+            </p>
+          </div>
+        )}
+
         {mobileView ? (
           <div className="options-m">
             <div>

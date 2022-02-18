@@ -36,7 +36,7 @@ const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) =>
     return <Loader />;
   }
   if (userType === "employee") {
-    return <Dropdown isMandatory={true} option={PaymentTypeData} optionKey="i18nKey" select={selectPaymentType} selected={paymentType} t={t} />;
+    return null;
   }
   return (
     <React.Fragment>

@@ -36,6 +36,9 @@ public class VendorValidator {
 	private UserService ownerService;
 
 	@Autowired
+	private MDMSValidator mdmsValidator;
+
+	@Autowired
 	private BoundaryService boundaryService;
 	
 	@Autowired
@@ -105,11 +108,13 @@ public class VendorValidator {
 	 * 
 	 * @param vendorRequest
 	 */
-	public void validateCreate(VendorRequest vendorRequest) {
+	public void validateCreate(VendorRequest vendorRequest, Object mdmsData) {
 
 		RequestInfo requestInfo = vendorRequest.getRequestInfo();
 		Vendor vendor = vendorRequest.getVendor();
-		
+		mdmsValidator.validateMdmsData(mdmsData);
+		mdmsValidator.validateAgencyType(vendorRequest);
+		mdmsValidator.validatePaymentPreference(vendorRequest);
 		boundaryService.getAreaType(vendorRequest, config.getHierarchyTypeCode());
 		vehicleService.manageVehicle(vendorRequest);
 		ownerService.manageOwner(vendorRequest);

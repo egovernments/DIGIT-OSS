@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Header, ResponseComposer, Loader, Modal, Card, KeyNote, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Header, ResponseComposer, Loader, Modal, Card, KeyNote, SubmitBar, CitizenInfoLabel} from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import { useHistory, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -17,7 +17,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   let off;
   if (!isNaN(parseInt(OfsetForSearch))) {
     off = OfsetForSearch;
-    t1 = parseInt(OfsetForSearch) + 50;
+    t1 = parseInt(OfsetForSearch) + 5;
   } else {
     t1 = 5;
   }
@@ -98,7 +98,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
     if (element?.consumerCode) {
       payment[element?.consumerCode] = {
         total_due: element?.totalAmount,
-        bil_due__date: new Date(element?.billDate).toDateString(),
+        bil_due__date: new Date(element?.billDetails?.[0]?.expiryDate).toDateString(),
       };
     }
   });
@@ -172,6 +172,10 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
             </p>
           </div>
         )}
+      <CitizenInfoLabel
+        info={t("CS_FILE_APPLICATION_INFO_LABEL")} 
+        text={t("PT_CANNOT_TRANSFER_IF_AMOUNT_PENDING")} 
+      />
     </div>
   );
 };

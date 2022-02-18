@@ -24,6 +24,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   const [cityCode, setCityCode] = useState();
   const [formValue, setFormValue] = useState();
+  const [errorShown, seterrorShown] = useState(false);
   const { data: propertyData, isLoading: propertyDataLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId: searchData?.city,
     filters: searchData?.filters,
@@ -32,7 +33,14 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   });
 
   useEffect(() => {
-    showToast && setShowToast(null);
+    if(propertyData?.Properties.length > 0 && (ptSearchConfig.maxResultValidation && propertyData?.Properties.length > ptSearchConfig.maxPropertyResult && !errorShown))
+    {
+      setShowToast({ error:true, warning: true, label: "ERR_PLEASE_REFINED_UR_SEARCH" });
+    }
+  },[propertyData])
+
+  useEffect(() => {
+    showToast && showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH" && setShowToast(null);
   }, [action, propertyDataLoading]);
 
   useLayoutEffect(() => {
@@ -283,6 +291,11 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   ];
 
   const onPropertySearch = async (data) => {
+    if(ptSearchConfig.maxResultValidation && propertyData?.Properties.length > 0 && propertyData?.Properties.length > ptSearchConfig.maxPropertyResult && errorShown)
+    {
+      seterrorShown(true)
+      return;
+    }
     if (!data?.city?.code) {
       setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
       return;
@@ -324,6 +337,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
       }
     }
 
+    if(showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH")
     setShowToast(null);
     if(data?.doorNo && data?.doorNo !== "" && data?.propertyIds !== "")
     {
@@ -368,7 +382,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     return <Loader />;
   }
 
-  if (propertyData && !propertyDataLoading && !error) {
+  let validation = ptSearchConfig.maxResultValidation ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
+  if (propertyData && !propertyDataLoading && !error && validation ) {
     let qs = {};
     qs = { ...searchData.filters, city: searchData.city };
 
@@ -416,10 +431,12 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
       {showToast && (
         <Toast
           error={showToast.error}
+          isDleteBtn={true}
           warning={showToast.warning}
           label={t(showToast.label)}
           onClose={() => {
             setShowToast(null);
+            seterrorShown(false);
           }}
         />
       )}

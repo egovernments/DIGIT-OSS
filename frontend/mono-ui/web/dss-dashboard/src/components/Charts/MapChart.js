@@ -131,7 +131,7 @@ class MapChart extends React.Component {
         filters["tenantId"] = tenentFilter;
       }
     }
-    filters["state"] = this.state.selectedState;
+    filters["state"] = this.props.selectedState;
     let drillDownCode = this.props.chartsGData[code]
       ? this.props.chartsGData[code].drillDownChartId
       : "";
@@ -275,7 +275,7 @@ class MapChart extends React.Component {
                 }}
               >
                 <span>{getLocaleLabels(`DSS_${dat.headerName}`)}</span>
-                <span>{dat.plots[2].value}</span>
+                <span>{dat.headerValue}</span>
               </span>
             );
           })}

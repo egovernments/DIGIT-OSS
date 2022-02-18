@@ -101,7 +101,7 @@ const EmployeeApp = ({ path, url, userType }) => {
       {
         path: "/digit-ui/employee/pt/application-search",
         content: t("ES_COMMON_APPLICATION_SEARCH"),
-        show: location.pathname.includes("/pt/application-search") ? true : false,
+        show: location.pathname.includes("/pt/application-search") || location.pathname.includes("/pt/applicationsearch/application-details/") ? true : false,
       },
       {
         path: `/digit-ui/employee/pt/ptsearch/property-details/${sessionStorage.getItem("propertyIdinPropertyDetail")}`,

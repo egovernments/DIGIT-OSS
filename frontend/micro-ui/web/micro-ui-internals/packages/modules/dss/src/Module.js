@@ -41,7 +41,7 @@ const Routes = ({ path, stateCode }) => {
       <DssBreadCrumb location={location} />
       <Switch>
         <PrivateRoute path={`${path}/dashboard/:moduleCode`} component={() => <DashBoard stateCode={stateCode} />} />
-        <PrivateRoute path={`${path}/drilldown`} component={() => <DrillDown />} />
+        <PrivateRoute path={`${path}/drilldown`} component={() => <DrillDown  stateCode={stateCode}  />} />
       </Switch>
     </div>
   );

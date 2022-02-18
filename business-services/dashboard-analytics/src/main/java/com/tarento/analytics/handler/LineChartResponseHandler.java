@@ -57,7 +57,10 @@ public class LineChartResponseHandler implements IResponseHandler {
         }
 
         String symbol = chartNode.get(IResponseHandler.VALUE_TYPE).asText();
+        String symbolFromPathDataTypeMap = symbol;
         ArrayNode aggrsPaths = (ArrayNode) chartNode.get(IResponseHandler.AGGS_PATH);
+        ArrayNode pathDataTypeMap = (ArrayNode) chartNode.get(TYPE_MAPPING);
+        
         Set<String> plotKeys = new LinkedHashSet<>();
         boolean isCumulative = chartNode.get("isCumulative").asBoolean();
 
@@ -65,8 +68,24 @@ public class LineChartResponseHandler implements IResponseHandler {
         boolean executeComputedFields = computedFields !=null && computedFields.isArray();
 
 
-        aggrsPaths.forEach(headerPath -> {
+        //aggrsPaths.forEach(headerPath -> {
+        for(JsonNode headerPath : aggrsPaths){
             List<JsonNode> aggrNodes = aggregationNode.findValues(headerPath.asText());
+            
+            
+            
+            JsonNode datatype = null;
+            if(pathDataTypeMap!=null) {
+            	datatype = pathDataTypeMap.findValue(headerPath.asText());
+            	
+            }
+            
+            if(datatype!=null) {
+            	symbolFromPathDataTypeMap=datatype.asText();
+            }
+            else {
+            	symbolFromPathDataTypeMap=symbol;
+            }
 
             Map<String, Double> plotMap = new LinkedHashMap<>();
             Map<String, Double> multiAggrPlotMap = new LinkedHashMap<>();
@@ -99,7 +118,7 @@ public class LineChartResponseHandler implements IResponseHandler {
                                         computedFieldObject.set(requestDto, cfs.getPostAggregationTheory());
                                         computedFieldObject.add(bucket, cfs.getFields(), cfs.getNewField(), chartNode);
 
-                                        if (symbol.equals(DAYS)) {
+                                        if (symbolFromPathDataTypeMap.equals(DAYS)) {
 
                                             long milidiff = bucket.findValue(cfs.getNewField()).get(IResponseHandler.VALUE).asLong();
                                             long days = TimeUnit.MILLISECONDS.toDays(milidiff);
@@ -148,15 +167,17 @@ public class LineChartResponseHandler implements IResponseHandler {
             plotMap = multiAggrPlotMap;
 
             totalValues = new ArrayList<>(plotMap.values());
-            List<Plot> plots = plotMap.entrySet().stream().map(e -> new Plot(e.getKey(), e.getValue(), symbol)).collect(Collectors.toList());
+            String finalSymbolForPlots= symbolFromPathDataTypeMap;
+            List<Plot> plots = plotMap.entrySet().stream().map(e -> new Plot(e.getKey(), e.getValue(), finalSymbolForPlots)).collect(Collectors.toList());
             try{
-                Data data = new Data(headerPath.asText(), (totalValues==null || totalValues.isEmpty()) ? 0.0 : totalValues.stream().reduce(0.0, Double::sum), symbol);
+                Data data = new Data(headerPath.asText(), (totalValues==null || totalValues.isEmpty()) ? 0.0 : totalValues.stream().reduce(0.0, Double::sum),finalSymbolForPlots );
                 data.setPlots(plots);
                 dataList.add(data);
             } catch (Exception e) {
                 logger.error(" Legend/Header "+headerPath.asText() +" exception occurred "+e.getMessage());
             }
-        });
+       // });
+    }
 
         dataList.forEach(data -> {
             appendMissingPlot(plotKeys, data, symbol, isCumulative);
@@ -170,6 +191,13 @@ public class LineChartResponseHandler implements IResponseHandler {
             Double currentValue = plotMap.get(key);
             multiAggrPlotMap.put(key, previousValue + currentValue);
         });
+        
+        Double previousValue = 0.0;
+        for(String key : multiAggrPlotMap.keySet()){
+            if(multiAggrPlotMap.get(key) == 0.0)
+                multiAggrPlotMap.put(key, previousValue);
+            previousValue = multiAggrPlotMap.get(key);
+        }
     }
 
     private void initializeMultiAggrPlotMap(Map<String, Double> multiAggrPlotMap, Set<String> finalBucketKeys) {
@@ -179,18 +207,23 @@ public class LineChartResponseHandler implements IResponseHandler {
     }
 
     private void enrichBucketKeys(List<JsonNode> aggrNodes, Set<String> finalBucketKeys, String interval) {
+        List<String> bkeyList = new ArrayList<>();
         for(JsonNode aggrNode : aggrNodes) {
             if (aggrNode.findValues(IResponseHandler.BUCKETS).size() > 0) {
                 ArrayNode buckets = (ArrayNode) aggrNode.findValues(IResponseHandler.BUCKETS).get(0);
                 for(JsonNode bucket : buckets){
                     String bkey = bucket.findValue(IResponseHandler.KEY).asText();
-                    String key = getIntervalKey(bkey, Constants.Interval.valueOf(interval));
-                    if(!finalBucketKeys.contains(key))
-                        finalBucketKeys.add(key);
+                    bkeyList.add(bkey);
                 }
-
             }
         }
+        Collections.sort(bkeyList);
+        for(String bkey : bkeyList){
+            String key = getIntervalKey(bkey, Constants.Interval.valueOf(interval));
+            if(!finalBucketKeys.contains(key))
+                finalBucketKeys.add(key);
+        }
+
     }
 
 

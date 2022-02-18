@@ -75,6 +75,13 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
       mobileCell: (original) => GetMobCell(`BILLINGSERVICE_BUSINESSSERVICE_${original?.["businessService"]}`),
     },
     {
+      Header: t("UC_RECIEPT_NUMBER_LABEL"),
+      Cell: ({ row }) => {
+        return row.original?.["recieptNumber"] ? GetCell(`${row.original?.["recieptNumber"]}`) : "-";
+      },
+      mobileCell: (original) => GetMobCell(original?.["recieptNumber"]) || "-",
+    },
+    {
       Header: t("UC_DUE_DATE"),
       Cell: ({ row }) => {
         const dueDate = row.original?.dueDate === "NA" ? t("CS_NA") : convertEpochToDate(row.original?.dueDate);

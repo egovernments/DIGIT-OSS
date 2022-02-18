@@ -7,6 +7,8 @@ import NoData from "./NoData";
 import { ArrowDownwardElement } from "./ArrowDownward";
 import { ArrowUpwardElement } from "./ArrowUpward";
 
+const rowNamesToBeLocalised = ["Department","", "Usage Type","Ward","Wards"]
+
 const InsightView = ({ rowValue, insight }) => {
   return (
     <span>
@@ -64,7 +66,7 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
     return response?.responseData?.data?.map((rows, id) => {
       const lyData = lastYearResponse?.responseData?.data?.find((lyRow) => lyRow?.headerName === rows?.headerName);
       return rows?.plots?.reduce((acc, row, currentIndex) => {
-        let cellValue = row?.value !== null ? row?.value : t(row?.label) || "";
+        let cellValue = row?.value !== null ? row?.value : row?.label || "";
         let prevData = lyData?.plots?.[currentIndex]?.value;
         let insight = null;
         if (row?.name === "CapacityUtilization" && chartKey !== "fsmVehicleLogReportByVehicleNo") {
@@ -97,6 +99,9 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
         // if (row?.name === "CapacityUtilization") cellValue = cellValue + "%"
         if (typeof cellValue === "number" && !Number.isInteger(cellValue)) {
           cellValue = Math.round((cellValue + Number.EPSILON) * 100) / 100;
+        }
+        if(typeof cellValue === "string" &&rowNamesToBeLocalised.includes(row.name)){
+          cellValue=t(`DSS_TB_`+Digit.Utils.locale.getTransformedLocale(cellValue));
         }
         acc[t(`DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(row?.name)}`)] =
           insight !== null ? { value: cellValue, insight } : row?.name === "S.N." ? id + 1 : cellValue;
@@ -180,9 +185,10 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
     if (response?.responseData?.drillDownChartId && response?.responseData?.drillDownChartId !== "none") {
       let currentValue = value;
       if (filterKey === "tenantId") {
-        // currentValue=[value];
         currentValue = dssTenants.filter((tenant) => tenant?.city?.ddrName === value || tenant?.code === value || tenant?.description=== value).map((tenant) => tenant?.code);
-
+        if(currentValue.length==0&&value){
+          currentValue=[value]
+        }
         /*  Removed this mdms active tenants filter logic as per RAIN-5454
         currentValue = dssTenants.filter((tenant) => tenant?.city?.ddrName === value || tenant?.code === value).map((tenant) => tenant?.code);
         */
@@ -242,7 +248,7 @@ const CustomTable = ({ data, onSearch, setChartData }) => {
                 style={{ color: "#F47738", cursor: "pointer" }}
                 onClick={() => getDrilldownCharts(cellValue, filter?.key, t(`DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`))}
               >
-                {t(cellValue)}
+                {t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(cellValue)}`)}
               </span>
             );
           }

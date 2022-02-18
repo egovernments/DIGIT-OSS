@@ -5,21 +5,19 @@ import { useTranslation } from "react-i18next";
 import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
 import NoData from "./NoData";
-const COLORS=["#EA8A3B",  "#048BD0",   "#8E29BF" ,"#FBC02D"]
-const getColors =(index=0)=>{
-
-index=COLORS.length>index?index:0;
-return COLORS[index];
+const COLORS = ["#EA8A3B", "#048BD0", "#8E29BF", "#FBC02D"];
+const getColors = (index = 0) => {
+  index = COLORS.length > index ? index : 0;
+  return COLORS[index];
 };
 
 const getValue = (plot) => plot.value;
 
-const renderUnits = (t, denomination,symbol) => {
-
-  if(symbol== "percentage"){
-    return ' %';
-  }else if(symbol== "number"){
-    return '';
+const renderUnits = (t, denomination, symbol) => {
+  if (symbol == "percentage") {
+    return " %";
+  } else if (symbol == "number") {
+    return "";
   }
   switch (denomination) {
     case "Unit":
@@ -40,7 +38,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
   const [totalWaste, setTotalWaste] = useState(0);
   const [keysArr, setKeysArr] = useState([]);
 
-  const [manageChart,setmanageChart]=useState("Area");
+  const [manageChart, setmanageChart] = useState("Area");
   const stateTenant = Digit.ULBService.getStateId();
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.useCommonMDMS(stateTenant, "FSM", "FSTPPlantInfo", {
     enabled: id === "fsmCapacityUtilization",
@@ -56,7 +54,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
   useEffect(() => {
     if (mdmsData) {
       let fstpPlants = mdmsData;
-      if (value?.filters?.tenantId.length > 0) {
+      if (value?.filters?.tenantId?.length > 0) {
         fstpPlants = mdmsData.filter((plant) => value?.filters?.tenantId?.some((tenant) => plant?.ULBS.includes(tenant)));
       }
       const totalCapacity = fstpPlants.reduce((acc, plant) => acc + Number(plant?.PlantOperationalCapacityKLD), 0);
@@ -72,8 +70,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
   }, [response]);
 
   const chartData = useMemo(() => {
-    
-    if(response?.responseData?.data?.length==1){
+    if (response?.responseData?.data?.length == 1) {
       setmanageChart("Area");
       if (id !== "fsmCapacityUtilization") {
         return response?.responseData?.data?.[0]?.plots;
@@ -84,28 +81,26 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
         const value = Math.round((plot?.value / (totalCapacity * totalDays)) * 100);
         return { ...plot, value };
       });
-    }else if(response?.responseData?.data?.length>1){
+    } else if (response?.responseData?.data?.length > 1) {
       setmanageChart("Line");
-      let keys={};
+      let keys = {};
       const mergeObj = response?.responseData?.data?.[0]?.plots.map((x, index) => {
-        let newObj={};
-     response?.responseData?.data.map(ob=>{
-       keys[t(Digit.Utils.locale.getTransformedLocale(ob.headerName))]=t(Digit.Utils.locale.getTransformedLocale(ob.headerName));
-      newObj[t(Digit.Utils.locale.getTransformedLocale(ob.headerName))]=ob?.plots[index].value
-     })
+        let newObj = {};
+        response?.responseData?.data.map((ob) => {
+          keys[t(Digit.Utils.locale.getTransformedLocale(ob.headerName))] = t(Digit.Utils.locale.getTransformedLocale(ob.headerName));
+          newObj[t(Digit.Utils.locale.getTransformedLocale(ob.headerName))] = ob?.plots[index].value;
+        });
         return {
           label: null,
           name: response?.responseData?.data?.[0]?.plots[index].name,
           strValue: null,
           symbol: response?.responseData?.data?.[0]?.plots[index].symbol,
-           ...newObj,
+          ...newObj,
         };
       });
       setKeysArr(Object.values(keys));
       return mergeObj;
     }
-     
-
   }, [response, totalCapacity]);
 
   const renderPlot = (plot) => {
@@ -121,11 +116,11 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
       case "Cr":
         return Number((plot.value / 10000000).toFixed(2));
       default:
-        return ""
+        return "";
     }
   };
 
-  const renderLegend = (value) => <span>{value}</span>;
+  const renderLegend = () => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`DSS_${Digit.Utils.locale.getTransformedLocale(id)}`)}</span>;
 
   const tickFormatter = (value) => {
     if (typeof value === "string") {
@@ -164,21 +159,20 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
       )}
       <ResponsiveContainer width="99%" height={id === "fsmTotalCumulativeCollection" ? 400 : 300}>
         {!chartData || chartData?.length === 0 ? (
-         <NoData t={t} />
-        ) : (
-
-          manageChart =="Area" ?( <AreaChart width="100%" height="100%" data={chartData} margin={{ left: 30, top: 10 }}>
+          <NoData t={t} />
+        ) : manageChart == "Area" ? (
+          <AreaChart width="100%" height="100%" data={chartData} margin={{ left: 30, top: 10 }}>
             <defs>
               <linearGradient id="colorUv" x1=".5" x2=".5" y2="1">
                 <stop stopColor="#048BD0" stopOpacity={0.5} />
                 <stop offset="1" stopColor="#048BD0" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3"/>
+            <CartesianGrid strokeDasharray="3 3" />
             <Tooltip content={renderTooltip} />
             <XAxis dataKey={xDataKey} tick={{ fontSize: "14px", fill: "#505A5F" }} tickFormatter={tickFormatter} />
             <YAxis
-            /*
+              /*
               label={{
                 value: `${t(`DSS_Y_${response?.responseData?.data?.[0]?.headerName.replaceAll(" ", "_").toUpperCase()}`)} ${
                   renderUnits(t, value.denomination,response?.responseData?.data?.[0]?.headerSymbol) 
@@ -193,10 +187,11 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
               */
               tick={{ fontSize: "14px", fill: "#505A5F" }}
             />
+            <Legend formatter={renderLegend} iconType="circle" />
             <Area type="monotone" dataKey={renderPlot} stroke="#048BD0" fill="url(#colorUv)" dot={true} />
           </AreaChart>
-          ):(
-            <LineChart
+        ) : (
+          <LineChart
             width={500}
             height={300}
             data={chartData}
@@ -204,13 +199,13 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
               top: 5,
               right: 30,
               left: 20,
-              bottom: 5
+              bottom: 5,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis  
-                        /*
+            <YAxis
+            /*
 Removed this custom yaxis label for all line charts 
             label={{
                 value: `${t(`DSS_Y_${response?.responseData?.data?.[0]?.headerName.replaceAll(" ", "_").toUpperCase()}`)} ${
@@ -224,16 +219,11 @@ Removed this custom yaxis label for all line charts
                 fill: "#505A5F",
               }}
               */
-              />
+            />
             <Tooltip />
             <Legend />
-            {keysArr?.map((key,i)=>{
-              return (<Line
-              type="monotone"
-              dataKey={key}
-              stroke={getColors(i)}
-              activeDot={{ r: 8 }}
-            />)
+            {keysArr?.map((key, i) => {
+              return <Line type="monotone" dataKey={key} stroke={getColors(i)} activeDot={{ r: 8 }} />;
             })}
             {/* <Line
               type="monotone"
@@ -243,12 +233,7 @@ Removed this custom yaxis label for all line charts
             />
             <Line type="monotone" dataKey={response?.responseData?.data?.[1]?.headerName} stroke="#82ca9d" /> */}
           </LineChart>
-          ) 
-        )
-       
-        
-        
-        }
+        )}
       </ResponsiveContainer>
     </div>
   );
