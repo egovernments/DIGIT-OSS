@@ -5,6 +5,7 @@ import EmployeeApp from "./pages/employee";
 import ApplicationOverview from "./pages/employee/ApplicationOverview";
 import NOCCard from "./pages/employee/EmployeeCard";
 import Inbox from "./pages/employee/Inbox";
+import NOCSearchApplication from "./pages/employee/SearchApplication/Search";
 
 const NOCModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "common-noc";
@@ -30,6 +31,7 @@ const componentsToRegister = {
   NOCCard,
   NOCApplicationOverview: ApplicationOverview,
   NOCInbox: Inbox,
+  NOCSearchApplication
 };
 
 export const initNOCComponents = () => {

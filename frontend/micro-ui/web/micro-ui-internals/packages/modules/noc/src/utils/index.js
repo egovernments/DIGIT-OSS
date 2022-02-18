@@ -25,13 +25,14 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   };
 
 export const businessServiceList = (isCode= false) => {
+    let isSearchScreen = window.location.href.includes("/search");
     const availableBusinessServices = [{
-        code: "FIRE_NOC_SRV",
+        code: isSearchScreen ? "FIRE_NOC" : "FIRE_NOC_SRV",
         active: true,
         roles: ["FIRE_NOC_APPROVER"],
         i18nKey: "WF_FIRE_NOC_FIRE_NOC_SRV",
     }, {
-        code: "AIRPORT_NOC_SRV",
+        code: isSearchScreen ? "AIRPORT_AUTHORITY" : "AIRPORT_NOC_SRV",
         active: true,
         roles: ["AIRPORT_AUTHORITY_APPROVER"],
         i18nKey: "WF_FIRE_NOC_AIRPORT_NOC_SRV"

@@ -2,7 +2,7 @@ import { StatusTable, Row, PDFSvg, CardLabel, CardSubHeader } from "@egovernment
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
-const ScruntinyDetails = ({ scrutinyDetails }) => {
+const ScruntinyDetails = ({ scrutinyDetails, paymentsList=[] }) => {
   const { t } = useTranslation();
   let count = 0;
   const getTextValues = (data) => {
