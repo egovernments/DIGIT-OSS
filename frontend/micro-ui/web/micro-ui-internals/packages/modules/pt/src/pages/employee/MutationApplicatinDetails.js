@@ -429,7 +429,7 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
               </StatusTable>
             )}
           </div>
-          <PTWFApplicationTimeline application={application} id={acknowledgementIds} />
+          <PTWFApplicationTimeline application={application} id={acknowledgementIds} userType={'employee'} />
           {showModal ? (
             <ActionModal
               t={t}

@@ -386,7 +386,7 @@ const PTApplicationDetails = () => {
               </StatusTable>
             )}
           </div>
-          <PTWFApplicationTimeline application={application} id={acknowledgementIds} />
+          <PTWFApplicationTimeline application={application} id={acknowledgementIds} userType={'citizen'} />
         </Card>
       </div>
     </React.Fragment>
