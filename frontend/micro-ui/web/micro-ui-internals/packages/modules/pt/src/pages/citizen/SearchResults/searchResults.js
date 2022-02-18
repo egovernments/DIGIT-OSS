@@ -172,10 +172,13 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
             </p>
           </div>
         )}
-      <CitizenInfoLabel
-        info={t("CS_FILE_APPLICATION_INFO_LABEL")} 
-        text={t("PT_CANNOT_TRANSFER_IF_AMOUNT_PENDING")} 
-      />
+        { isMutation && searchResults?.length !== 0
+          ? <CitizenInfoLabel
+              info={t("CS_FILE_APPLICATION_INFO_LABEL")} 
+              text={t("PT_CANNOT_TRANSFER_IF_AMOUNT_PENDING")} 
+            />
+          : null
+        }
     </div>
   );
 };
