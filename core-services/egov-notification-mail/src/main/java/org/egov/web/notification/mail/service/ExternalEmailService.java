@@ -32,13 +32,13 @@ public class ExternalEmailService implements EmailService {
 
 	ApplicationConfiguration applicationConfiguration;
 
-	@Value("${egov.fileStore.host}")
+	@Value("${egov.filestore.host}")
 	private String FILESTORE_HOST;
 
-	@Value("${egov.fileStore.workDir.path}")
+	@Value("${egov.filestore.workdir.path}")
 	private String FILESTORE_WORKDIR;
 
-	@Value("${egov.fileStore.string.format}")
+	@Value("${egov.filestore.string.format}")
 	private String FILESTORE_FORMAT;
 
 	@Autowired
