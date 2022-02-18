@@ -39,6 +39,10 @@
         @apply text-link text-primary-main font-medium;
       }
     }
+    @media (min-width: 780px) {
+      padding: 0 15px;
+      width: calc(88% - 54px);
+    }
   }
 }
 
