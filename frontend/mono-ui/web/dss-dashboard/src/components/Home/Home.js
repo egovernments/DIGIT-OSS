@@ -102,7 +102,7 @@ class Home extends React.Component {
       this.state.page
     );
     let bgColor = Variables.colors[index].light;
-    let iconColor = Variables.iconColors[index].dark;
+    let iconColor = Variables.iconColors[index].light;
     let pageId = "";
     let moduleLevel = "";
 
