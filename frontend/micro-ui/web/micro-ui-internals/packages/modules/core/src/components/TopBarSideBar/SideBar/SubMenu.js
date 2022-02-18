@@ -1,33 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowForward, ArrowVectorDown } from "@egovernments/digit-ui-react-components";
+import { ArrowForward, ArrowVectorDown, ArrowDirection } from "@egovernments/digit-ui-react-components";
 
 const SubMenu = ({ item }) => {
   const [subnav, setSubnav] = useState(false);
   const location = useLocation();
   const { pathname } = location;
   const showSubnav = () => setSubnav(!subnav);
-
+  console.log("ssitem", item);
   return (
     <React.Fragment>
       <div>
-        <Link to={item.href} onClick={item.subNav && showSubnav} className={`sidebar-link ${pathname === item.href ? "active" : ""}`}>
+        <div onClick={item.links && showSubnav} className={`sidebar-link ${subnav === true ? "active" : ""}`}>
           <div className="actions">
-            {item.icon}
-            <span>{item.element}</span>
+            {item.Icon}
+            <span>{item.moduleName}</span>
           </div>
-
-          <div> {item.subNav && subnav ? <ArrowVectorDown /> : item.subNav ? <ArrowForward /> : null} </div>
-        </Link>
+          <div> {item.links && subnav ? <ArrowVectorDown /> : item.links ? <ArrowForward /> : null} </div>
+        </div>
       </div>
 
       {subnav &&
-        item.subNav?.map((item, index) => {
+        item.links?.map((item, index) => {
           return (
-            <Link to={item.href} key={index} className="dropdown-link">
+            <Link to={item.link} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
               <div className="actions">
-                {item.icon}
-                <span>{item.element}</span>
+                <ArrowDirection className="icon" />
+                <span>{item.label}</span>
               </div>
             </Link>
           );

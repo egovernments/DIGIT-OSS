@@ -184,6 +184,14 @@
           fill: #fe7a51 !important;
         }
       }
+      &.active {
+        color: #f47738 !important;
+
+        border-right: 4px solid #f47738;
+        svg {
+          fill: #f47738 !important;
+        }
+      }
     }
     span {
       margin-left: 16px;

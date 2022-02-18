@@ -79,6 +79,7 @@ const EmployeeApp = ({
             mobileView={mobileView}
             handleUserDropdownSelection={handleUserDropdownSelection}
             logoUrl={logoUrl}
+            modules={modules}
           />
           <div className={`main ${DSO ? "m-auto" : ""}`}>
             {/* <div style={{ overflowY: "auto" }}> */}
