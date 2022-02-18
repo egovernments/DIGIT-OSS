@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
@@ -72,6 +73,13 @@ public class TarentoServiceImpl implements ClientService {
 		ObjectNode insightNodes = JsonNodeFactory.instance.objectNode();
 		Boolean continueWithInsight = Boolean.FALSE; 
 
+		//TODO this is temporary code convert ulb to tenantid in fitlers, should removed once testing of National Dashbaord is done.
+		Map<String, Object> filters = request.getFilters();
+		if( filters != null && filters.get("ulb") != null) {
+			filters.put("tenantId", filters.get("ulb"));
+		}
+		
+		
 		// Load Chart API configuration to Object Node for easy retrieval later
 		ObjectNode node = configurationLoader.get(Constants.ConfigurationFiles.CHART_API_CONFIG);
 		ObjectNode chartNode = (ObjectNode) node.get(internalChartId);
