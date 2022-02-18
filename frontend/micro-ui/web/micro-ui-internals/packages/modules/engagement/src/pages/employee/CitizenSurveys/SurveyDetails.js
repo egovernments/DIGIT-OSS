@@ -138,6 +138,7 @@ const SurveyDetails = ({ location, match }) => {
     history.push("/digit-ui/employee/engagement/surveys/delete-response", details);
   };
 
+  //if we don't send tenantId it violates the not null constraint in the backend...
   const handleMarkActive = (data) => {
     const { fromDate, toDate, fromTime, toTime } = data;
     const details = {
@@ -148,6 +149,7 @@ const SurveyDetails = ({ location, match }) => {
         endDate: new Date(`${toDate} ${toTime}`).getTime(),
         collectCitizenInfo: surveyData.collectCitizenInfo.code,
         questions: surveyData.questions.map(filterQuestion),
+        tenantId,
       },
     };
     history.push("/digit-ui/employee/engagement/surveys/update-response", details);
