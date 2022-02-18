@@ -42,4 +42,7 @@ public class SurveySearchCriteria {
     @JsonIgnore
     private Boolean isCountCall = false;
 
+    @JsonIgnore
+    private String citizenId = null;
+
 }

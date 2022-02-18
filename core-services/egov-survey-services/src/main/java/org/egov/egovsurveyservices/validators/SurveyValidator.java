@@ -43,7 +43,7 @@ public class SurveyValidator {
                 .isCountCall(Boolean.FALSE)
                 .build();
 
-        if(!CollectionUtils.isEmpty(surveyService.searchSurveys(criteria)))
+        if(!CollectionUtils.isEmpty(surveyService.searchSurveys(criteria, false)))
             throw new CustomException("EG_SY_DUPLICATE_SURVEY_ERR", "This survey entity already exists.");
     }
 
@@ -56,7 +56,7 @@ public class SurveyValidator {
                 .isCountCall(Boolean.FALSE)
                 .build();
 
-        List<SurveyEntity> surveyEntities = surveyService.searchSurveys(criteria);
+        List<SurveyEntity> surveyEntities = surveyService.searchSurveys(criteria, false);
 
         if(CollectionUtils.isEmpty(surveyEntities))
             throw new CustomException("EG_SURVEY_DOES_NOT_EXIST_ERR", "The survey entity provided in update request does not exist.");

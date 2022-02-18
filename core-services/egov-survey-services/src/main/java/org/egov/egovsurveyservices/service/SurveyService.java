@@ -64,7 +64,7 @@ public class SurveyService {
         return surveyEntity;
     }
 
-    public List<SurveyEntity> searchSurveys(SurveySearchCriteria criteria) {
+    public List<SurveyEntity> searchSurveys(SurveySearchCriteria criteria, Boolean isCitizen) {
         List<String> listOfSurveyIds = surveyRepository.fetchSurveyUuids(criteria);
 
         if(CollectionUtils.isEmpty(listOfSurveyIds))
@@ -75,10 +75,26 @@ public class SurveyService {
 
         if(CollectionUtils.isEmpty(surveyEntities))
             return new ArrayList<>();
+
         enrichNumberOfResponsesForEachSurvey(listOfSurveyIds, surveyEntities);
+
+        if(isCitizen)
+            enrichWhetherCitizenHasResponded(surveyEntities, listOfSurveyIds, criteria.getCitizenId());
+
         postProcessSurveySearchResults(surveyEntities);
 
         return surveyEntities;
+    }
+
+    private void enrichWhetherCitizenHasResponded(List<SurveyEntity> surveyEntities, List<String> listOfSurveyIds, String citizenId) {
+        List<String> surveyIdsForWhichCitizenHasResponded = surveyRepository.fetchSurveyIdsForWhichCitizenResponded(listOfSurveyIds, citizenId);
+        Set<String> surveyIdsHashSet = new HashSet<>(surveyIdsForWhichCitizenHasResponded);
+        surveyEntities.forEach(surveyEntity -> {
+            if(surveyIdsHashSet.contains(surveyEntity.getUuid()))
+                surveyEntity.setHasResponded(Boolean.TRUE);
+            else
+                surveyEntity.setHasResponded(Boolean.FALSE);
+        });
     }
 
     private void postProcessSurveySearchResults(List<SurveyEntity> surveyEntities) {

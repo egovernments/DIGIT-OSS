@@ -129,4 +129,16 @@ public class SurveyRepository {
 
         return jdbcTemplate.queryForList(query, preparedStmtList.toArray());
     }
+
+    public List<String> fetchSurveyIdsForWhichCitizenResponded(List<String> listOfSurveyIds, String citizenId) {
+        List<Object> preparedStmtList = new ArrayList<>();
+
+        if(CollectionUtils.isEmpty(listOfSurveyIds))
+            return new ArrayList();
+
+        String query = surveyQueryBuilder.getWhetherCitizenHasRespondedQuery(listOfSurveyIds, citizenId, preparedStmtList);
+        log.info("query for surveys for which citizen responded " + query + " params: " + preparedStmtList);
+
+        return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+    }
 }

@@ -212,4 +212,14 @@ public class SurveyQueryBuilder {
         query.append(" GROUP  BY surveyid ");
         return query.toString();
     }
+
+    public String getWhetherCitizenHasRespondedQuery(List<String> listOfSurveyIds, String citizenId, List<Object> preparedStmtList) {
+        StringBuilder query = new StringBuilder(" SELECT surveyid FROM eg_ss_answer answer ");
+        query.append(" WHERE answer.surveyid IN ( ").append(createQuery(listOfSurveyIds)).append(" )");
+        addToPreparedStatement(preparedStmtList, listOfSurveyIds);
+        addClauseIfRequired(query, preparedStmtList);
+        query.append(" answer.citizenid = ? ");
+        preparedStmtList.add(citizenId);
+        return query.toString();
+    }
 }

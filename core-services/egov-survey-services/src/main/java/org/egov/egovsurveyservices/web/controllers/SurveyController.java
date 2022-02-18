@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.egov.egovsurveyservices.utils.SurveyServiceConstants.CITIZEN;
+
 @Slf4j
 @RestController
 @RequestMapping("/egov-ss")
@@ -44,7 +46,10 @@ public class SurveyController {
     public ResponseEntity<SurveyResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                    @Valid @ModelAttribute SurveySearchCriteria criteria) {
         //log.info(criteria.toString());
-        List<SurveyEntity> surveys = surveyService.searchSurveys(criteria);
+        Boolean isCitizen = requestInfoWrapper.getRequestInfo().getUserInfo().getType().equals(CITIZEN);
+        if(isCitizen)
+            criteria.setCitizenId(requestInfoWrapper.getRequestInfo().getUserInfo().getUuid());
+        List<SurveyEntity> surveys = surveyService.searchSurveys(criteria, isCitizen);
         Integer totalCount = surveyService.countTotalSurveys(criteria);
         SurveyResponse response  = SurveyResponse.builder().surveyEntities(surveys).totalCount(totalCount).build();
         return new ResponseEntity<>(response,HttpStatus.OK);

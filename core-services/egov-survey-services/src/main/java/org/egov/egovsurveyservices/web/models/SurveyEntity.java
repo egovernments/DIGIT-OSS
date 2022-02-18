@@ -61,6 +61,10 @@ public class SurveyEntity {
     @JsonProperty("answersCount")
     private Long answersCount;
 
+    @JsonProperty("hasResponded")
+    private Boolean hasResponded;
+
+
     public SurveyEntity addQuestionsItem(Question questionItem) {
         if (this.questions == null) {
             this.questions = new ArrayList<>();
