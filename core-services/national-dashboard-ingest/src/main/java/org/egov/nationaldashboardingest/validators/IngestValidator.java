@@ -52,13 +52,26 @@ public class IngestValidator {
 
     public void verifyCrossStateRequest(Data data, RequestInfo requestInfo){
         String employeeUlb = requestInfo.getUserInfo().getTenantId();
-        String ulbPresentInRequest = data.getUlb();
-        if(ulbPresentInRequest.contains(".")){
-            if(!employeeUlb.equals(ulbPresentInRequest))
-                throw new CustomException("EG_INGEST_ERR", "Employee of ulb: " + employeeUlb + " cannot insert data for ulb: " + ulbPresentInRequest);
-        }else{
-            if(!employeeUlb.contains(ulbPresentInRequest.toLowerCase()))
-                throw new CustomException("EG_INGEST_ERR", "Employee of ulb: " + employeeUlb + " cannot insert data for ulb: " + ulbPresentInRequest);
+        Set<String> roles = new HashSet<>();
+        requestInfo.getUserInfo().getRoles().forEach(role -> {
+            roles.add(role.getCode());
+        });
+        if(roles.contains("SUPERUSER")){
+            String ulbPresentInRequest = data.getUlb();
+            log.info(ulbPresentInRequest.split("\\.")[0]);
+            if(!ulbPresentInRequest.split("\\.")[0].equals(employeeUlb.split("\\.")[0])){
+                throw new CustomException("EG_INGEST_ERR", "Superusers of one state cannot insert data for another state");
+            }
+
+        }else {
+            String ulbPresentInRequest = data.getUlb();
+            if (ulbPresentInRequest.contains(".")) {
+                if (!employeeUlb.equals(ulbPresentInRequest))
+                    throw new CustomException("EG_INGEST_ERR", "Employee of ulb: " + employeeUlb + " cannot insert data for ulb: " + ulbPresentInRequest);
+            } else {
+                if (!employeeUlb.contains(ulbPresentInRequest.toLowerCase()))
+                    throw new CustomException("EG_INGEST_ERR", "Employee of ulb: " + employeeUlb + " cannot insert data for ulb: " + ulbPresentInRequest);
+            }
         }
     }
 
