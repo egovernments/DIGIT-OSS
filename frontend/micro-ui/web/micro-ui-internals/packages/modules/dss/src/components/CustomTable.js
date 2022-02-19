@@ -16,7 +16,7 @@ const InsightView = ({ rowValue, insight }) => {
       {` `}
       {insight >= 0 ? ArrowUpwardElement() : ArrowDownwardElement()}
       {` `}
-      {`${Math.abs(insight)}%`}
+      { isNaN(insight) ? `0%` : `${Math.abs(insight)}%`}
     </span>
   );
 };
