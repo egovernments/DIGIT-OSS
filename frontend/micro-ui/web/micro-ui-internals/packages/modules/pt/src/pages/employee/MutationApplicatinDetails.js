@@ -14,7 +14,6 @@ import get from "lodash/get";
 
 const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate}) => {
   const { t } = useTranslation();
-  const [acknowldgementData, setAcknowldgementData] = useState([]);
   const [displayMenu, setDisplayMenu] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
@@ -272,18 +271,11 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
 
  // const isPropertyTransfer = property?.creationReason && property.creationReason === "MUTATION" ? true : false;
 
-  const getAcknowledgementData = async () => {
+  const handleDownloadPdf = async () => {
     const applications = application || {};
     const tenantInfo = tenants.find((tenant) => tenant.code === applications.tenantId);
     const acknowldgementDataAPI = await getPTAcknowledgementData({ ...applications }, tenantInfo, t);
-    setAcknowldgementData(acknowldgementDataAPI);
-  }
-  // useEffect(() => {
-    getAcknowledgementData();
-  // }, [])
-
-  const handleDownloadPdf = () => {
-    Digit.Utils.pdf.generate(acknowldgementData);
+    Digit.Utils.pdf.generate(acknowldgementDataAPI);
   };
 
   let documentDate = t("CS_NA");
