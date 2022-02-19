@@ -143,8 +143,10 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
           whiteSpace: "nowrap",
         }}
       >
-        <p>{`${tickFormatter(label)} :${id === "fsmTotalCumulativeCollection" || id === "nocCumulativeCollection" ? " ₹" : ""}${payload?.[0]?.value}${
-          id === "fsmTotalCumulativeCollection" || id === "nocCumulativeCollection"? (value?.denomination !== "Unit" ? value?.denomination : "") : `%`
+        <p>{`${tickFormatter(label)} :${id === "fsmTotalCumulativeCollection" || id === "nocCumulativeCollection" || id === "tlMonthlyCumulativeCollectionv2"
+        ? " ₹" : ""}${payload?.[0]?.value}${
+          id === "fsmTotalCumulativeCollection" || id === "nocCumulativeCollection" || id === "tlMonthlyCumulativeCollectionv2"
+          ? (value?.denomination !== "Unit" ? value?.denomination : "") : `%`
         }`}</p>
       </div>
     );
