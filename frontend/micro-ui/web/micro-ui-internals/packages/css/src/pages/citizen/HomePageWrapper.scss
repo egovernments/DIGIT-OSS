@@ -1,6 +1,5 @@
 .HomePageWrapper {
   margin-top: -25px;
-
   .BannerWithSearch {
     margin-bottom: 40px;
     @apply relative;
@@ -17,15 +16,6 @@
 
   .ServicesSection {
     @apply flex flex-wrap;
-    padding: 0 15px 0 15px;
-  }
-
-  @screen dt {
-    .ServicesSection {
-      @apply flex flex-wrap;
-      padding: 0 15px 0 15px;
-      width: calc(88% - 54px);
-    }
   }
 
   .WhatsNewSection {
@@ -39,24 +29,6 @@
         @apply text-link text-primary-main font-medium;
       }
     }
-  }
-}
-
-.SideBarStatic {
-  width: 15%;
-  background: #ffffff;
-}
-
-@media (max-width: 780px) {
-  .SideBarStatic {
-    display: none;
-  }
-}
-.HomePageContainer {
-  @media (min-width: 640px) {
-    display: flex;
-    width: 85%;
-    height: calc(100%-30px);
   }
 }
 
@@ -97,11 +69,11 @@
     .BannerWithSearch {
       margin-bottom: 56px;
       min-width: 100vw;
+      margin-left: calc(-15vw - 16px);
       .Search {
-        width: calc(87% - 51px);
-        left: calc(0% + 10px);
+        width: calc(70% - 32px);
+        left: calc(15% + 25px);
         margin: 0;
-        padding: 0 15px 0 15px;
       }
       img {
         height: 20vw;

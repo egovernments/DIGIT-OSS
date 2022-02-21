@@ -175,7 +175,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
   ];
 
   const homeScreen = (
-    <div className="mainContent">
+    <div className="mainContent citizenAllServiceGrid">
       {homeDetails.map((data) => {
         return (
           <div>

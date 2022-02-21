@@ -116,9 +116,6 @@ const Home = () => {
     <Loader />
   ) : (
     <div className="HomePageContainer">
-      {/* <div className="SideBarStatic">
-        <StaticCitizenSideBar />
-      </div> */}
       <div className="HomePageWrapper">
         <div className="BannerWithSearch">
           <img src={stateInfo?.bannerUrl} />

@@ -3,7 +3,7 @@ import { HamburgerIcon } from "./svgindex";
 
 const Hamburger = ({ handleClick, color }) => (
   <span style={{ marginRight: "10px" }} className="cp" onClick={handleClick}>
-    <HamburgerIcon className="hamburger" color={color} />
+    <HamburgerIcon styles={{ display: "inline" }} color={color} />
   </span>
 );
 
