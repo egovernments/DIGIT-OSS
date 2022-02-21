@@ -87,7 +87,7 @@ const Table = ({
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-             {showAutoSerialNo&& <th>
+             {showAutoSerialNo&& <th style={{  verticalAlign: "top"}}>
               {showAutoSerialNo&& typeof showAutoSerialNo =="string"?t(showAutoSerialNo):t("TB_SNO")}
               </th>}
               {headerGroup.headers.map((column) => (

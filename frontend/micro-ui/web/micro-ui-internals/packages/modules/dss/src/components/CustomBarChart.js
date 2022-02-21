@@ -14,7 +14,7 @@ const formatValue = (value, symbol) => {
     const Pformatter = new Intl.NumberFormat("en-IN", { maximumSignificantDigits: 3 });
     return `${Pformatter.format(Number(value).toFixed(2))}`;
     */
-    return `${Number(value).toFixed(2)}`;
+    return `${Number(Math.ceil(Number(value)*10)/10).toFixed(1)}`;
   } else {
     return value;
   }
@@ -24,11 +24,12 @@ const CustomLabel = ({ x, y, name, stroke, value }) => {
   const { t } = useTranslation();
   return (
     <>
-      <text x={x} y={y} dx={-65} dy={10} fill={stroke} width="30">
-        {`${value}%`}
+      <text x={x} y={y} dx={-60} dy={10} fill={stroke} width="35" style={{fontSize: "medium",
+    fontVariantNumeric: "proportional-nums"}}>
+       {`${value}%`}
       </text>
       <text x={x} y={y} dx={-170} dy={10}>
-        {t(name)}
+       {t(name)}
       </text>
     </>
   );
@@ -85,17 +86,18 @@ const CustomBarChart = ({
   return (
     <Fragment>
       <ResponsiveContainer width="99%" height={320}>
-        <BarChart width="100%" height="100%" data={showDrillDown?chartData?.slice(0,3):chartData} layout={layout} maxBarSize={10} margin={{ left: 170 }} barGap={70}>
+        <BarChart width="100%" height="100%" data={showDrillDown?chartData?.slice(0,3):chartData} layout={layout} maxBarSize={8} margin={{ left: 170 }} barGap={50}>
           {showGrid && <CartesianGrid />}
-          <XAxis hide={hideAxis} dataKey={xDataKey} type={xAxisType} domain={[0, 100]} />
+          <XAxis hide={hideAxis} dataKey={xDataKey} type={xAxisType} domain={[0, 90]} />
           <YAxis dataKey={yDataKey} hide={hideAxis} type={yAxisType} padding={{ right: 40 }} />
           <Bar
             dataKey={xDataKey}
             fill={COLORS[fillColor]}
-            background={{ fill: "#D6D5D4", radius: 10 }}
+            background={{ fill: "#D6D5D4", radius: 8 }}
             label={<CustomLabel stroke={COLORS[fillColor]} />}
-            radius={[10, 10, 10, 10]}
+            radius={[8, 8, 8, 8]}
             isAnimationActive={false}
+            maxBarSize={8}
           />
         </BarChart>
       </ResponsiveContainer>

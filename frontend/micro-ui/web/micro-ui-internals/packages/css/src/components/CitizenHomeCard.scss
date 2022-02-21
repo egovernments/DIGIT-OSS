@@ -21,11 +21,7 @@
 
 @screen dt {
   .citizenAllServiceGrid {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-top: 2rem;
-    margin-left: 7rem;
+    @apply grid  gap-4;
   }
 
   .CitizenHomeCard {
@@ -44,7 +40,6 @@
       .linksWrapper {
         border-left: 1px solid #d6d5d4;
         height: 25px;
-        margin-bottom: 0.5em;
       }
       a {
         @apply pb-md;
