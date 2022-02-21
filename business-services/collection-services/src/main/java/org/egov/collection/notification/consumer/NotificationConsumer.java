@@ -6,11 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jayway.jsonpath.Filter;
+import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Instrument;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.producer.CollectionProducer;
+import org.egov.collection.repository.ServiceRequestRepository;
+import org.egov.collection.util.NotificationUtil;
 import org.egov.collection.web.contract.Bill;
 import org.egov.collection.web.contract.BillDetail;
 //import org.egov.collection.web.contract.Receipt;
@@ -36,6 +40,10 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 
+import static com.jayway.jsonpath.Criteria.where;
+import static com.jayway.jsonpath.Filter.filter;
+import static org.egov.collection.config.CollectionServiceConstants.*;
+
 @Service
 @Slf4j
 @Data
@@ -49,6 +57,11 @@ import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
  *
  */
 public class NotificationConsumer {
+
+	@Autowired
+	private NotificationUtil notifUtil;
+
+	private ApplicationProperties config;
 
 	@Value("${coll.notification.ui.host}")
 	private String uiHost;
@@ -78,6 +91,12 @@ public class NotificationConsumer {
 	@Value("${kafka.topics.notification.sms.key}")
 	private String smsTopickey;
 
+	@Value("${egov.usr.events.create.topic}")
+	private String eventTopic;
+
+	@Value("${kafka.topics.notification.email}")
+	private String emailTopic;
+
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -99,7 +118,10 @@ public class NotificationConsumer {
 	public static final String BUSINESSSERVICE_CODES_FILTER = "$.[?(@.type=='Adhoc')].code";
 	public static final String BUSINESSSERVICE_CODES_JSONPATH = "$.MdmsRes.BillingService.BusinessService";
 
-
+	@Autowired
+	public NotificationConsumer(ApplicationProperties config) {
+		this.config = config;
+	}
 
 	/*
 	 * Kafka consumer
@@ -107,12 +129,31 @@ public class NotificationConsumer {
 	 * @param record
 	 * @param topic
 	 */
-	//@KafkaListener(topics = { "${kafka.topics.payment.receiptlink.name}" })
+	@KafkaListener(topics = {"${kafka.topics.payment.create.name}","${kafka.topics.payment.update.name}"})
 	public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			PaymentRequest req = objectMapper.convertValue(record, PaymentRequest.class);
-			sendNotification(req);
-		}catch(Exception e) {
+			Payment receipt = req.getPayment();
+			for (PaymentDetail detail : receipt.getPaymentDetails()) {
+				if (detail.getBusinessService().contains(BUSINESS_SERVICE_TL)) {
+					List<String> configuredChannelNames = notifUtil.fetchChannelList(new RequestInfo(), req.getPayment().getTenantId(), BUSINESS_SERVICE_TL, ACTION_PAY);
+					log.info("-----------------------Total receipts migrated: " + configuredChannelNames.toString());
+					if (configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+						if (config.getIsSMSNotificationEnabled()) {
+							sendSMSNotification(req);
+						}
+					}
+					if (configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+						sendEventNotification(req);
+					}
+					if (configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
+						sendEmailNotification(req);
+					}
+				} else {
+					sendNotification(req);
+				}
+			}
+		} catch (Exception e) {
 			log.error("Exception while reading from the queue: ", e);
 		}
 	}
@@ -123,11 +164,34 @@ public class NotificationConsumer {
 	 * @param receiptReq
 	 * @throws Exception
 	 */
-	private void sendNotification(PaymentRequest receiptReq){
+	private void sendSMSNotification(PaymentRequest receiptReq) {
+		Payment receipt = receiptReq.getPayment();
+		for (PaymentDetail detail : receipt.getPaymentDetails()) {
+			Bill bill = detail.getBill();
+			String phNo = bill.getMobileNumber();
+			String message = buildSmsBody(bill, detail, receiptReq.getRequestInfo());
+			if (!StringUtils.isEmpty(message)) {
+				Map<String, Object> request = new HashMap<>();
+				request.put("mobileNumber", phNo);
+				request.put("message", message);
+
+				producer.producer(smsTopic, request);
+				log.info("Sending SMS notification: ");
+				log.info("MobileNumber: " + phNo + " Messages: " + message);
+			} else {
+				log.error("No message configured! Notification will not be sent.");
+			}
+
+
+		}
+	}
+
+
+	private void sendNotification(PaymentRequest receiptReq) {
 		Payment receipt = receiptReq.getPayment();
 		List<String> businessServiceAllowed = fetchBusinessServiceFromMDMS(receiptReq.getRequestInfo(), receiptReq.getPayment().getTenantId());
-		if(!CollectionUtils.isEmpty(businessServiceAllowed)) {
-			for(PaymentDetail detail: receipt.getPaymentDetails()) {
+		if (!CollectionUtils.isEmpty(businessServiceAllowed)) {
+			for (PaymentDetail detail : receipt.getPaymentDetails()) {
 				Bill bill = detail.getBill();
 				if (businessServiceAllowed.contains(detail.getBusinessService())) {
 					String phNo = bill.getMobileNumber();
@@ -146,10 +210,52 @@ public class NotificationConsumer {
 				}
 			}
 
-		}else {
+		} else {
 			log.info("Business services to which notifs are to be sent, couldn't be retrieved! Notification will not be sent.");
 		}
 	}
+
+	private void sendEventNotification(PaymentRequest receiptReq) {
+		Payment receipt = receiptReq.getPayment();
+		for (PaymentDetail detail : receipt.getPaymentDetails()) {
+			Bill bill = detail.getBill();
+			String phNo = bill.getMobileNumber();
+			String message = buildSmsBody(bill, detail, receiptReq.getRequestInfo());
+			if (!StringUtils.isEmpty(message)) {
+				Map<String, Object> request = new HashMap<>();
+				request.put("mobileNumber", phNo);
+				request.put("message", message);
+
+				producer.producer(eventTopic, request);
+			} else {
+				log.error("No message configured! Notification will not be sent.");
+			}
+
+
+		}
+	}
+
+
+	private void sendEmailNotification(PaymentRequest receiptReq){
+		Payment receipt = receiptReq.getPayment();
+		for (PaymentDetail detail : receipt.getPaymentDetails()) {
+			Bill bill = detail.getBill();
+			String phNo = bill.getMobileNumber();
+			String message = buildSmsBody(bill, detail, receiptReq.getRequestInfo());
+			if (!StringUtils.isEmpty(message)) {
+				Map<String, Object> request = new HashMap<>();
+				request.put("mobileNumber", phNo);
+				request.put("message", message);
+
+				producer.producer(emailTopic, request);
+			} else {
+				log.error("No message configured! Notification will not be sent.");
+			}
+
+
+		}
+	}
+
 
 
 	/*
@@ -297,6 +403,4 @@ public class NotificationConsumer {
 
 		return BUSINESSSERVICELOCALIZATION_CODE_PREFIX + code.toUpperCase();
 	}
-
-
 }

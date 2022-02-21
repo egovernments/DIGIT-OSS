@@ -292,4 +292,24 @@ public class CollectionServiceConstants {
     
     public static final String EMPLOYEE_TYPE = "EMPLOYEE";
 
+    public static final String CHANNEL_LIST = "channelList";
+
+    public static final String CHANNEL = "Channel";
+
+    public static final String MODULE = "module";
+
+    public static final String ACTION = "action";
+
+    public static final String CHANNEL_NAME_SMS = "SMS";
+
+    public static final String CHANNEL_NAME_EVENT = "EVENT";
+
+    public static final String CHANNEL_NAME_EMAIL = "EMAIL";
+
+    public static final String BUSINESS_SERVICE_TL = "TL";
+
+    public static final String ACTION_PAY = "PAY";
+
+    public static final String BUSINESS_SERVICE_TRADE_LICENSE = "TradeLicense";
+
 }
