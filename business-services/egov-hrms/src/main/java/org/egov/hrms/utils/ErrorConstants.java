@@ -194,4 +194,9 @@ public class ErrorConstants {
 	public static final String HRMS_UPDATE_REACT_DETAILS_INCORRECT_EFFECTIVEFROM_CODE = "ERR_HRMS_UPDATE_REACT_DETAILS_INCORRECT_EFFECTIVEFROM";
 	public static final String HRMS_UPDATE_REACT_DETAILS_INCORRECT_EFFECTIVEFROM_MSG = "Employee reactivation effective date should be between deactivation date and current date.";
 
+	public static final String CITIZEN_TYPE_CODE = "CITIZEN";
+
+	public static final String HRMS_INVALID_SEARCH_CITIZEN_CODE = "ERR_HRMS_INVALID_SEARCH_CITIZEN";
+	public static final String HRMS_INVALID_SEARCH_CITIZEN_MSG = "Citizen are not allowed to access employee search with Ids.";
+
 }

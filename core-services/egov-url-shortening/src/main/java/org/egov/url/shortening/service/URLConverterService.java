@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.annotation.PostConstruct;
 
 import lombok.extern.slf4j.Slf4j;
+import org.egov.url.shortening.utils.HashIdConverter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.egov.tracer.model.CustomException;
@@ -60,6 +61,9 @@ public class URLConverterService {
     @Value("${url.shorten.indexer.topic}")
     private String kafkaTopic;
     
+    @Autowired
+    private HashIdConverter hashIdConverter;
+    
     private ObjectMapper objectMapper;
 
     private RestTemplate restTemplate;
@@ -87,7 +91,7 @@ public class URLConverterService {
     public String shortenURL(ShortenRequest shortenRequest, String tenantId) {
         LOGGER.info("Shortening {}", shortenRequest.getUrl());
         Long id = urlRepository.incrementID();
-        String uniqueID = IDConvertor.createUniqueID(id);
+        String uniqueID = hashIdConverter.createHashStringForId(id);
         try {
 			urlRepository.saveUrl("url:"+id, shortenRequest);
 		} catch (JsonProcessingException e) {
@@ -116,7 +120,10 @@ public class URLConverterService {
     }
 
     public String getLongURLFromID(String uniqueID) throws Exception {
-        Long dictionaryKey = IDConvertor.getDictionaryKeyFromUniqueID(uniqueID);
+        Long dictionaryKey = hashIdConverter.getIdForString(uniqueID);
+        // To support previously generated dictionary keys
+        if(dictionaryKey == null)
+            dictionaryKey = IDConvertor.getDictionaryKeyFromUniqueID(uniqueID);
         String longUrl = urlRepository.getUrl(dictionaryKey);
         LOGGER.info("Converting shortened URL back to {}", longUrl);
         if(longUrl.isEmpty())
