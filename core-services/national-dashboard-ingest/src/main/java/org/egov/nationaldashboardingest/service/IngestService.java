@@ -7,6 +7,7 @@ import org.egov.nationaldashboardingest.config.ApplicationProperties;
 import org.egov.nationaldashboardingest.producer.Producer;
 import org.egov.nationaldashboardingest.repository.ElasticSearchRepository;
 import org.egov.nationaldashboardingest.validators.IngestValidator;
+import org.egov.nationaldashboardingest.web.models.AuditDetails;
 import org.egov.nationaldashboardingest.web.models.IngestAckData;
 import org.egov.nationaldashboardingest.web.models.IngestRequest;
 import org.egov.nationaldashboardingest.web.models.MasterDataRequest;
@@ -62,6 +63,9 @@ public class IngestService {
 
             String moduleCode = data.getModule();
 
+            // Enrich audit details
+            enrichAuditDetails(ingestRequest);
+
             // Flattens incoming ingest payload
             List<JsonNode> flattenedIndexPayload = customIndexRequestDecorator.createFlattenedIndexRequest(data);
 
@@ -85,6 +89,17 @@ public class IngestService {
 
         return responseHash;
 
+    }
+
+    private void enrichAuditDetails(IngestRequest ingestRequest) {
+        AuditDetails auditDetails = AuditDetails.builder().createdBy(ingestRequest.getRequestInfo().getUserInfo().getUuid())
+                                                          .lastModifiedBy(ingestRequest.getRequestInfo().getUserInfo().getUuid())
+                                                          .lastModifiedTime(System.currentTimeMillis())
+                                                          .createdTime(System.currentTimeMillis())
+                                                          .build();
+        ingestRequest.getIngestData().forEach(data -> {
+            data.setAuditDetails(auditDetails);
+        });
     }
 
     public void ingestMasterData(MasterDataRequest masterDataRequest) {

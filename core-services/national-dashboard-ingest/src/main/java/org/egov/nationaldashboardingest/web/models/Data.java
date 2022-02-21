@@ -49,4 +49,7 @@ public class Data {
     @JsonProperty("metrics")
     private HashMap<String,Object> metrics;
 
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails;
+
 }

@@ -30,6 +30,12 @@ public class IngestUtil {
         baseDocumentStructure.put(IngestConstants.STATE, ingestData.getState());
         baseDocumentStructure.put(IngestConstants.ULB, ingestData.getUlb());
         baseDocumentStructure.put(IngestConstants.WARD, ingestData.getWard());
+        if(!ObjectUtils.isEmpty(ingestData.getAuditDetails())) {
+            baseDocumentStructure.put(IngestConstants.CREATED_BY, ingestData.getAuditDetails().getCreatedBy());
+            baseDocumentStructure.put(IngestConstants.CREATED_TIME, ingestData.getAuditDetails().getCreatedTime());
+            baseDocumentStructure.put(IngestConstants.LAST_MODIFIED_BY, ingestData.getAuditDetails().getLastModifiedBy());
+            baseDocumentStructure.put(IngestConstants.LAST_MODIFIED_TIME, ingestData.getAuditDetails().getLastModifiedTime());
+        }
     }
 
     public void enrichMetaDataInBaseDocumentStructureForMasterDataIngest(ObjectNode baseDocumentStructure, MasterData masterData) {
