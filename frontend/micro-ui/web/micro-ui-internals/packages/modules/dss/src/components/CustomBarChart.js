@@ -24,7 +24,7 @@ const CustomLabel = ({ x, y, name, stroke, value }) => {
   const { t } = useTranslation();
   return (
     <>
-      <text x={x} y={y} dx={-65} dy={10} fill={stroke} width="30">
+      <text x={x} y={y} dx={-70} dy={10} fill={stroke} width="30">
         {`${value}%`}
       </text>
       <text x={x} y={y} dx={-170} dy={10}>
