@@ -81,6 +81,7 @@ import org.egov.edcr.contract.EdcrRequest;
 import org.egov.edcr.entity.ApplicationType;
 import org.egov.edcr.entity.EdcrApplication;
 import org.egov.edcr.entity.EdcrApplicationDetail;
+import org.egov.edcr.entity.EdcrIndexData;
 import org.egov.edcr.entity.EdcrPdfDetail;
 import org.egov.edcr.utility.DcrConstants;
 import org.egov.infra.admin.master.entity.City;
@@ -104,8 +105,11 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -160,6 +164,15 @@ public class EdcrRestService {
     @Autowired
     private EnvironmentSettings environmentSettings;
 
+    @Autowired
+	private RestTemplate restTemplate;
+
+	@Value("${egov.services.egov-indexer.url}")
+	private String egovIndexerUrl;
+
+	@Value("${indexer.host}")
+	private String indexerHost;
+	
     public Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
     }
@@ -224,9 +237,124 @@ public class EdcrRestService {
         }
 
         edcrApplication = edcrApplicationService.createRestEdcr(edcrApplication);
+        
+        //Code to push the data of edcr application to kafka index
+        EdcrIndexData edcrIndexData = new EdcrIndexData();
+        if(environmentSettings.getDataPush()) {
+        	//Building object to be pushed
+            edcrIndexData = setEdcrIndexData(edcrApplication, edcrApplication.getEdcrApplicationDetails().get(0));
+    		// call kafka topic
+    		pushDataToIndexer(edcrIndexData, "edcr-create-application");
+            }
+        
         return setEdcrResponse(edcrApplication.getEdcrApplicationDetails().get(0), edcrRequest);
     }
 
+    public void pushDataToIndexer(Object data, String topicName) {
+		try {
+			restTemplate = new RestTemplate();
+			StringBuilder uri = new StringBuilder(indexerHost).append(egovIndexerUrl);
+			LOG.info("URL created: " + uri.toString());
+			Object postForObject = restTemplate.postForObject(uri.toString(), data, Object.class, topicName);
+			LOG.info("Data pushed in topic->edcr-create-application.\n Data pushed=> \n"+data);
+		} catch (RestClientException e) {
+			LOG.error("ERROR occurred while trying to push the data to indexer : ", e);
+		}
+	}
+
+	public EdcrIndexData setEdcrIndexData(EdcrApplication edcrApplication, EdcrApplicationDetail edcrApplnDtl) {
+
+		EdcrIndexData edcrIndexData = new EdcrIndexData();
+		if (edcrApplication.getApplicantName() != null) {
+			edcrIndexData.setApplicantName(edcrApplication.getApplicantName());
+		}
+		if (edcrApplication.getApplicationNumber() != null) {
+			edcrIndexData.setApplicationNumber(edcrApplication.getApplicationNumber());
+		}
+		if (edcrApplication.getApplicationType() != null) {
+			edcrIndexData.setApplicationType(edcrApplication.getApplicationType());
+		}
+		if (edcrApplication.getApplicationDate() != null) {
+			edcrIndexData.setApplicationDate(edcrApplication.getApplicationDate());
+		}
+		if (edcrApplication.getStatus() != null) {
+			edcrIndexData.setStatus(edcrApplication.getStatus());
+		}
+		if (edcrApplication.getPlanPermitNumber() != null) {
+			edcrIndexData.setPlanPermitNumber(edcrApplication.getPlanPermitNumber());
+		}
+		if (edcrApplication.getPermitApplicationDate() != null) {
+			edcrIndexData.setPermitApplicationDate(edcrApplication.getPermitApplicationDate());
+		}
+		if (edcrApplication.getTransactionNumber() != null) {
+			edcrIndexData.setTransactionNumber(edcrApplication.getTransactionNumber());
+		}
+		if (edcrApplication.getThirdPartyUserTenant() != null) {
+			edcrIndexData.setThirdPartyUserTenant(edcrApplication.getThirdPartyUserTenant());
+		}
+		if (edcrApplication.getServiceType() != null) {
+			edcrIndexData.setServiceType(edcrApplication.getServiceType());
+		}
+		if (edcrApplication.getArchitectInformation() != null) {
+			edcrIndexData.setArchitectInformation(edcrApplication.getArchitectInformation());
+		}
+		if (edcrApplication.getEdcrApplicationDetails().get(0).getDcrNumber() != null) {
+			edcrIndexData.setDcrNumber(edcrApplication.getEdcrApplicationDetails().get(0).getDcrNumber());
+		}
+		if (edcrApplication.getEdcrApplicationDetails().get(0).getComparisonDcrNumber() != null) {
+			edcrIndexData.setComparisonDcrNumber(
+					edcrApplication.getEdcrApplicationDetails().get(0).getComparisonDcrNumber());
+		}
+		if (edcrApplnDtl.getPlan() != null && edcrApplnDtl.getPlan().getPlot() != null
+				&& edcrApplnDtl.getPlan().getPlot().getPlotBndryArea() != null) {
+			edcrIndexData.setPlotBndryArea(edcrApplnDtl.getPlan().getPlot().getPlotBndryArea());
+		}
+
+		if (edcrApplication.getEdcrApplicationDetails().get(0).getPlan() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding()
+						.getBuildingHeight() != null) {
+			edcrIndexData.setBuildingHeight(edcrApplication.getEdcrApplicationDetails().get(0).getPlan()
+					.getVirtualBuilding().getBuildingHeight());
+		}
+		if (edcrApplication.getEdcrApplicationDetails().get(0).getPlan() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding()
+						.getOccupancyTypes() != null) {
+			edcrIndexData.setOccupancyTypes(edcrApplication.getEdcrApplicationDetails().get(0).getPlan()
+					.getVirtualBuilding().getOccupancyTypes());
+		}
+		if (edcrApplication.getEdcrApplicationDetails().get(0).getPlan() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding()
+						.getTotalBuitUpArea() != null) {
+			edcrIndexData.setTotalBuitUpArea(edcrApplication.getEdcrApplicationDetails().get(0).getPlan()
+					.getVirtualBuilding().getTotalBuitUpArea());
+		}
+		if (edcrApplication.getEdcrApplicationDetails().get(0).getPlan() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding()
+						.getTotalFloorArea() != null) {
+			edcrIndexData.setTotalFloorArea(edcrApplication.getEdcrApplicationDetails().get(0).getPlan()
+					.getVirtualBuilding().getTotalFloorArea());
+		}
+		if (edcrApplication.getEdcrApplicationDetails().get(0).getPlan() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding()
+						.getTotalCarpetArea() != null) {
+			edcrIndexData.setTotalCarpetArea(edcrApplication.getEdcrApplicationDetails().get(0).getPlan()
+					.getVirtualBuilding().getTotalCarpetArea());
+		}
+		if (edcrApplication.getEdcrApplicationDetails().get(0).getPlan() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding() != null
+				&& edcrApplication.getEdcrApplicationDetails().get(0).getPlan().getVirtualBuilding()
+						.getFloorsAboveGround() != null) {
+			edcrIndexData.setFloorsAboveGround(edcrApplication.getEdcrApplicationDetails().get(0).getPlan()
+					.getVirtualBuilding().getFloorsAboveGround());
+		}
+		return edcrIndexData;
+	}
+    
     @Transactional
     public List<EdcrDetail> edcrDetailsResponse(List<EdcrApplicationDetail> edcrApplications, EdcrRequest edcrRequest) {
         List<EdcrDetail> edcrDetails = new ArrayList<>();

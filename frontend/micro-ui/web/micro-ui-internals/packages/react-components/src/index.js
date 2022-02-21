@@ -138,6 +138,11 @@ import {
   ArrowForward,
   ArrowVectorDown,
   ArrowDirection,
+  CameraIcon,
+  EditPencilIcon,
+  GalleryIcon,
+  RemoveIcon,
+  CheckSvg,
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -370,6 +375,10 @@ export {
   SearchIcon,
   DeleteIcon,
   WSICon,
+  CameraIcon,
+  EditPencilIcon,
+  GalleryIcon,
+  RemoveIcon,
   UploadPitPhoto,
   CheckSvg,
   ArrowForward,

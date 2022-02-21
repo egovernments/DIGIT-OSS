@@ -72,7 +72,7 @@ const Layout = ({ rowData }) => {
         return (
           <GenericChart
             key={key}
-            header={visualizer.name}
+            header={visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0].chartType === "line" ? `${visualizer.name}(${value.denomination})` : visualizer.name}
             chip={chip}
             updateChip={onChipChange}
             showDownload={visualizer?.charts?.[0].chartType === "table"}

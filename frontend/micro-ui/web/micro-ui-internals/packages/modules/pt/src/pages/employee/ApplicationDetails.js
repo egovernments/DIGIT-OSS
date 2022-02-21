@@ -170,11 +170,12 @@ const ApplicationDetails = () => {
   }
  if (applicationDetails?.applicationData?.creationReason === "MUTATION"){
    return(
-   <MutationApplicationDetails 
-   acknowledgementIds={appDetailsToShow?.applicationData?.acknowldgementNumber}
-   workflowDetails={workflowDetails}
-   mutate={mutate}
-   />
+    <MutationApplicationDetails 
+      propertyId = {propertyId}
+      acknowledgementIds={appDetailsToShow?.applicationData?.acknowldgementNumber}
+      workflowDetails={workflowDetails}
+      mutate={mutate}
+    />
    )
  } 
 

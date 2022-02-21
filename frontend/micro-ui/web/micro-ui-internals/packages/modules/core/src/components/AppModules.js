@@ -7,6 +7,7 @@ import EmployeeLogin from "../pages/employee/Login/index";
 import ChangePassword from "../pages/employee/ChangePassword/index";
 import ForgotPassword from "../pages/employee/ForgotPassword/index";
 import LanguageSelection from "../pages/employee/LanguageSelection";
+// import UserProfile from "./userProfile";
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes?.map?.((item) => item.code).includes(tenant.code));
@@ -47,6 +48,7 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
         <Route>
           <AppHome userType={userType} modules={modules} />
         </Route>
+        {/* <Route path={`${path}/user-profile`}> <UserProfile /></Route> */}
       </Switch>
     </div>
   );

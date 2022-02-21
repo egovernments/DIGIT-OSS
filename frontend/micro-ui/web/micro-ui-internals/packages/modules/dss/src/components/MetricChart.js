@@ -10,19 +10,21 @@ const MetricData = ({ t, data, code }) => {
   const { value } = useContext(FilterContext);
   return (
     <div>
-      <p className="heading-m" style={{ textAlign: "right", paddingTop: "0px" }}>
+      <p className="heading-m" style={{ textAlign: "right", paddingTop: "0px" ,whiteSpace:"nowrap"}}>
         {code === "citizenAvgRating" ? (
           <Rating currentRating={Math.round(data?.headerValue * 10) / 10} styles={{ width: "unset" }} starStyles={{ width: "25px" }} />
         ) : (
           `${Digit.Utils.dss.formatter(data?.headerValue, data?.headerSymbol, value?.denomination, true)} ${
             code === "totalSludgeTreated" ? t(`DSS_KL`) : ""
           }`
-        )}
+        )}  
       </p>
       {data?.insight && (
-        <div style={{float:"right"}}>
+        <div style={{ width: "100%",
+          display: "flex",
+          justifyContent: "end"}}>
           {data?.insight?.indicator === "upper_green" ? ArrowUpwardElement("10px") : ArrowDownwardElement("10px")}
-          <p className={`${data?.insight.colorCode}`}>{data?.insight.value.replace(/[+-]/g, "").replace("last year",'LY')}</p>
+          <p className={`${data?.insight.colorCode}`} style={{whiteSpace:"pre"}}>{data?.insight.value.replace(/[+-]/g, "").replace("last year",'LY')}</p>
         </div>
       )}
     </div>
@@ -50,7 +52,7 @@ const MetricChartRow = ({ data }) => {
     return (
       <div style={{ display: "flex", justifyContent: "space-between", margin: "10px" }}>
         <span>{t(data.name)}</span>
-        <span>{t("DSS_NO_DATA")}</span>
+        <span  style={{whiteSpace:"pre"}}>{t("DSS_NO_DATA")}</span>
       </div>
     );
   }

@@ -26,6 +26,8 @@ const styles = (theme) => ({
 class Layout extends Component {
     prepareLayout() {
         const { classes } = this.props;
+        let sourceUrl = `${window.location.origin}/citizen`;
+            sourceUrl="https://s3.ap-south-1.amazonaws.com/egov-qa-assets";
         return (
             <div className={`App ${classes.root}`}>
                 {/* <div>
@@ -45,6 +47,16 @@ class Layout extends Component {
                     {/* <SideBar /> */}
                         <AppRouter />
                     </main>
+                </div>
+                <div className="employee-home-footer">
+                    <img
+                        alt="Powered by DIGIT"
+                        src={`${sourceUrl}/digit-footer.png`}
+                        onError={"this.src='./../digit-footer.png'"}
+                        style={{ height: "1.1em", cursor: "pointer" }}
+                        onClick={() => {
+                        window.open('https://www.digit.org/', '_blank').focus();
+                        }}/>
                 </div>
             </div>
         )

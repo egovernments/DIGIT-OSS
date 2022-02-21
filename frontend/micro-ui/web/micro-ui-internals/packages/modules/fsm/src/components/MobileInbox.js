@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ApplicationCard } from "./inbox/ApplicationCard";
 import ApplicationLinks from "./inbox/ApplicationLinks";
+import Filter from "./inbox/Filter";
 
 const GetSlaCell = (value) => {
   if (isNaN(value)) return <span className="sla-cell-success">0</span>;
@@ -64,6 +65,9 @@ const MobileInbox = ({
       <div className="inbox-container">
         <div className="filters-container">
           {!isFstpOperator && !isSearch && <ApplicationLinks linkPrefix={parentRoute} isMobile={true} />}
+          <div>
+            <Filter searchParams={searchParams} applications={data} onFilterChange={onFilterChange} type="mobile" />
+          </div>
           <ApplicationCard
             t={t}
             data={isFstpOperator ? fstpOperatorData : getData()}

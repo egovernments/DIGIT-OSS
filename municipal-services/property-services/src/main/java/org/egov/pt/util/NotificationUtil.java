@@ -319,16 +319,21 @@ public class NotificationUtil {
      * @param emailRequestList
      *            The list of EmailRequest to be sent
      */
-    public void sendEmail(List<EmailRequest> emailRequestList) {
+    public void sendEmail(List < EmailRequest > emailRequestList) {
 
         if (config.getIsEmailNotificationEnabled()) {
             if (CollectionUtils.isEmpty(emailRequestList))
                 log.info("Messages from localization couldn't be fetched!");
-            for (EmailRequest emailRequest : emailRequestList) {
-                producer.push(config.getEmailNotifTopic(), emailRequest);
-                log.info("Sending EMAIL notification! ");
-                log.info("Email Id: " + emailRequest.getEmail().toString());
+            for (EmailRequest emailRequest: emailRequestList) {
+                if (!StringUtils.isEmpty(emailRequest.getEmail().getBody())) {
+                    producer.push(config.getEmailNotifTopic(), emailRequest);
+                    log.info("Sending EMAIL notification! ");
+                    log.info("Email Id: " + emailRequest.getEmail().toString());
+                } else {
+                    log.info("Email body is empty, hence no email notification will be sent.");
+                }
             }
+
         }
     }
 

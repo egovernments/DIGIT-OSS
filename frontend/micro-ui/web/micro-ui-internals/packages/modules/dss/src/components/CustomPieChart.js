@@ -24,9 +24,11 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
     if (!response) return null;
     const compareFn = (a, b) => b.value - a.value;
     return response?.responseData?.data?.[0]?.plots.sort(compareFn).reduce((acc, plot, index) => {
-      if (index < 4) acc = acc.concat(plot);
-      else if (index === 4) acc = acc.concat({ label: null, name: "DSS.OTHERS", value: plot?.value, symbol: "amount" });
-      else acc[4].value += plot?.value;
+      // if (index < 4) acc = acc.concat(plot);
+      //else if (index === 4) acc = acc.concat({ label: null, name: "DSS.OTHERS", value: plot?.value, symbol: "amount" });
+      // else acc[3].value += plot?.value;
+      /* Commnted logic of pie chart which hides more that 4 and show max of 4*/
+      acc = acc.concat(plot);
       return acc;
     }, []);
   }, [response]);
@@ -38,7 +40,26 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
   const renderCustomLabel = (args) => {
     const { value, endAngle, startAngle, x, cx, y, cy, percent, name } = args;
     const diffAngle = endAngle - startAngle;
-    if (diffAngle < 7) {
+    if (diffAngle > 1.5 && diffAngle < 7) {
+      return (
+        <text
+          x={x}
+          cx={cx}
+          y={y}
+          cy={cy}
+          percent={percent}
+          name={name}
+          fill="#505A5F"
+          alignmentBaseline="middle"
+          className="recharts-pie-label-text"
+          fontSize="14px"
+          textAnchor={x > cx ? "start" : "end"}
+        >
+          {`${(percent * 100).toFixed(0)}%`}
+        </text>
+      );
+    }
+    else if(diffAngle < 1.5 ){
       return null;
     }
     return (
@@ -71,12 +92,13 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
           whiteSpace: "nowrap",
         }}
       >
-        <p className="recharts-tooltip-label">{`${t(`PROPERTYTYPE_MASTERS_${payload?.[0]?.name}`)}: ${Digit.Utils.dss.formatter(
+        <p className="recharts-tooltip-label">{`${t(`PROPERTYTYPE_MASTERS_${payload?.[0]?.name && Digit.Utils.locale.getTransformedLocale(payload?.[0]?.name)}`)}: ${Digit.Utils.dss.formatter(
           payload?.[0]?.value,
           payload?.[0]?.payload?.payload?.symbol,
           value?.denomination,
           false
         )}`}</p>
+        <p>{`(${Number(((payload?.[0]?.value) / (response?.responseData?.data?.[0]?.headerValue)) * 100).toFixed(2) }%)`}</p>
       </div>
     );
   };
@@ -98,7 +120,7 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
           outerRadius={90}
           margin={{ top: 5 }}
           fill="#8884d8"
-          label={renderCustomLabel}
+          //label={renderCustomLabel}
           labelLine={false}
           isAnimationActive={false}
         >
@@ -107,7 +129,7 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
           ))}
         </Pie>
         <Tooltip content={renderTooltip} />
-        <Legend layout="horizontal" align="bottom" iconType="circle" formatter={renderLegend} />
+        <Legend layout="vertical" verticalAlign="middle" align="right" iconType="circle" formatter={renderLegend} />
       </PieChart>
     </ResponsiveContainer>
   );

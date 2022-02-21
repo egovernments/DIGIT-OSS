@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { UploadPitPhoto } from "@egovernments/digit-ui-react-components";
 
-import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication } from "../config";
+import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication, configScheduleDso } from "../config";
 import { configRejectFstpo } from "../config/RejectFstpo";
 
 const Heading = (props) => {
@@ -112,6 +112,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [fileStoreId, setFileStoreId] = useState();
   const [pitDetail, setPitDetail] = useState();
   const [fstpoRejectionReason, setFstpoRejectionReason] = useState();
+  const [noOfTrips, setNoOfTrips] = useState(null);
 
   const [defaultValues, setDefautValue] = useState({
     capacity: vehicle?.capacity,
@@ -258,11 +259,13 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.pitType) applicationData.sanitationtype = data.pitType.code;
     if (data.subtype && typeof (data.subtype) === "object") applicationData.propertyUsage = data.subtype.code;
     if (data.subtype && typeof (data.subtype) === "string") applicationData.propertyUsage = data.subtype;
+    if (data.noOfTrips) applicationData.noOfTrips = data.noOfTrips
     if (fileStoreId) {
       let temp = {}
       fileStoreId.map((i) => (temp[fileStoreId.indexOf(i) + 1] = i))
       applicationData.pitDetail.additionalDetails = { fileStoreId: temp };
     }
+    if (data.noOfTrips) applicationData.noOfTrips = Number(data.noOfTrips); 
 
     if (reassignReason) addCommentToWorkflow(reassignReason, workflow, data);
     if (rejectionReason) addCommentToWorkflow(rejectionReason, workflow, data);
@@ -338,7 +341,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
-        return setConfig(configCompleteApplication({ t, vehicle, vehicleCapacity: applicationData?.vehicleCapacity, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
+        return setConfig(configCompleteApplication({ t, vehicle, vehicleCapacity: applicationData?.vehicleCapacity, noOfTrips: applicationData?.noOfTrips, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
@@ -350,8 +353,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           configRejectApplication({
             t,
             rejectMenu: Reason?.DeclineReason,
-            setReason: setDeclineReason,
-            reason: declineReason,
+            setTrips: setNoOfTrips,
+            trips: applicationData?.noOfTrips,
             action,
           })
         );
@@ -378,6 +381,22 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             setReason: selectCancelReason,
             reason: cancelReason,
             action,
+          })
+        );
+      case "SCHEDULE":
+      case "ES_FSM_SCHEDULE":
+        setFormValve(true);
+        return setConfig(
+          configScheduleDso({
+            t,
+            rejectMenu: Reason?.DeclineReason,
+            setReason: setDeclineReason,
+            reason: declineReason,
+            applicationCreatedTime: applicationData?.auditDetails?.createdTime,
+            vehicle,
+            vehicleCapacity: applicationData?.vehicleCapacity,
+            action,
+            noOfTrips: applicationData?.noOfTrips
           })
         );
 

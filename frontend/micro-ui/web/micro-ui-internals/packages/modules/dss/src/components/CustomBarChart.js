@@ -5,6 +5,8 @@ import { useHistory } from "react-router-dom";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
 import NoData from "./NoData";
+import { checkCurrentScreen } from "./DSSCard";
+
 
 const formatValue = (value, symbol) => {
   if (symbol?.toLowerCase() === "percentage") {
@@ -12,7 +14,7 @@ const formatValue = (value, symbol) => {
     const Pformatter = new Intl.NumberFormat("en-IN", { maximumSignificantDigits: 3 });
     return `${Pformatter.format(Number(value).toFixed(2))}`;
     */
-    return `${Number(value).toFixed(2)}`;
+    return `${Number(Math.ceil(Number(value)*10)/10).toFixed(1)}`;
   } else {
     return value;
   }
@@ -22,11 +24,12 @@ const CustomLabel = ({ x, y, name, stroke, value }) => {
   const { t } = useTranslation();
   return (
     <>
-      <text x={x} y={y} dx={-65} dy={10} fill={stroke} width="30">
-        {`${value}%`}
+      <text x={x} y={y} dx={-60} dy={10} fill={stroke} width="35" style={{fontSize: "medium",
+    fontVariantNumeric: "proportional-nums"}}>
+       {`${value}%`}
       </text>
       <text x={x} y={y} dx={-170} dy={10}>
-        {t(name)}
+       {t(name)}
       </text>
     </>
   );
@@ -58,6 +61,7 @@ const CustomBarChart = ({
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
   });
+  
   const chartData = useMemo(() => {
     if (!response) return null;
     return response?.responseData?.data?.map((bar) => {
@@ -71,7 +75,7 @@ const CustomBarChart = ({
   }, [response]);
 
   const goToDrillDownCharts = () => {
-    history.push(`/digit-ui/employee/dss/drilldown?chart=${response?.responseData?.visualizationCode}&ulb=${value?.filters?.tenantId}&title=${title}&fromModule=${Digit.Utils.dss.getCurrentModuleName()}&type=performing-metric&fillColor=${fillColor}`);
+    history.push(`/digit-ui/employee/dss/drilldown?chart=${response?.responseData?.visualizationCode}&ulb=${value?.filters?.tenantId}&title=${title}&fromModule=${Digit.Utils.dss.getCurrentModuleName()}&type=performing-metric&fillColor=${fillColor}&isNational=${checkCurrentScreen()?"YES":"NO"}`);
   };
   if (isLoading) {
     return <Loader />;
@@ -82,16 +86,18 @@ const CustomBarChart = ({
   return (
     <Fragment>
       <ResponsiveContainer width="99%" height={320}>
-        <BarChart width="100%" height="100%" data={showDrillDown?chartData?.slice(0,3):chartData} layout={layout} maxBarSize={10} margin={{ left: 170 }} barGap={70}>
+        <BarChart width="100%" height="100%" data={showDrillDown?chartData?.slice(0,3):chartData} layout={layout} maxBarSize={8} margin={{ left: 170 }} barGap={50}>
           {showGrid && <CartesianGrid />}
-          <XAxis hide={hideAxis} dataKey={xDataKey} type={xAxisType} domain={[0, 100]} />
+          <XAxis hide={hideAxis} dataKey={xDataKey} type={xAxisType} domain={[0, 90]} />
           <YAxis dataKey={yDataKey} hide={hideAxis} type={yAxisType} padding={{ right: 40 }} />
           <Bar
             dataKey={xDataKey}
             fill={COLORS[fillColor]}
-            background={{ fill: "#D6D5D4", radius: 10 }}
+            background={{ fill: "#D6D5D4", radius: 8 }}
             label={<CustomLabel stroke={COLORS[fillColor]} />}
-            radius={[10, 10, 10, 10]}
+            radius={[8, 8, 8, 8]}
+            isAnimationActive={false}
+            maxBarSize={8}
           />
         </BarChart>
       </ResponsiveContainer>

@@ -27,6 +27,8 @@ const Table = ({
   onFirstPage,
   isPaginationRequired = true,
   sortParams = [],
+  showAutoSerialNo=false,
+  customTableWrapperClassName=""
 }) => {
   const {
     getTableProps,
@@ -80,10 +82,14 @@ const Table = ({
   useEffect(() => setGlobalFilter(onSearch), [onSearch, setGlobalFilter]);
   return (
     <React.Fragment>
+    <span className={customTableWrapperClassName}>
       <table className={className} {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
+             {showAutoSerialNo&& <th style={{  verticalAlign: "top"}}>
+              {showAutoSerialNo&& typeof showAutoSerialNo =="string"?t(showAutoSerialNo):t("TB_SNO")}
+              </th>}
               {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps(column.getSortByToggleProps())} style={{ verticalAlign: "top" }}>
                   {column.render("Header")}
@@ -99,6 +105,9 @@ const Table = ({
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
+              {showAutoSerialNo&&  <td >
+              {i+1}
+              </td>}
                 {row.cells.map((cell) => {
                   return (
                     <td
@@ -127,8 +136,9 @@ const Table = ({
           })}
         </tbody>
       </table>
+      </span>
       {isPaginationRequired && (
-        <div className="pagination">
+        <div className="pagination" >
           {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}
           <select
             className="cp"

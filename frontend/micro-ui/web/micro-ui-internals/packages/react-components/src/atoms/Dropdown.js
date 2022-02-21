@@ -226,7 +226,8 @@ const Dropdown = (props) => {
               <div className={`cp profile-dropdown--item display: flex `} key={"-1"} onClick={() => onSelect({
                 "code": "NOOPTION",
                 "active": true,
-                "i18nKey": "CMN_NOOPTION"
+                "i18nKey": "CMN_NOOPTION",
+                "label": "No Options Available",
               })}>
                 {<span> {props.t ? props.t("CMN_NOOPTION") : "CMN_NOOPTION"}</span>}
               </div>

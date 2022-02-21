@@ -8,6 +8,7 @@ import ChangePassword from "./ChangePassword";
 import ForgotPassword from "./ForgotPassword";
 import LanguageSelection from "./LanguageSelection";
 import EmployeeLogin from "./Login";
+import UserProfile from "../citizen/Home/UserProfile";
 
 const EmployeeApp = ({
   stateInfo,
@@ -60,12 +61,16 @@ const EmployeeApp = ({
                 {" "}
                 <ChangePassword />
               </Route>
+              <Route path={`${path}/user/profile`}>
+                <UserProfile stateCode={stateCode} userType={"employee"} />
+             </Route>
               <Route path={`${path}/user/language-selection`}>
                 <LanguageSelection />
               </Route>
               <Route>
                 <Redirect to={`${path}/user/language-selection`} />
               </Route>
+              
             </Switch>
           </div>
         </Route>

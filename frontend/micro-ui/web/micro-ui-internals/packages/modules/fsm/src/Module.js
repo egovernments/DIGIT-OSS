@@ -7,6 +7,7 @@ import CheckSlum from "./pageComponents/CheckSlum";
 import SelectAddress from "./pageComponents/SelectAddress";
 import SelectChannel from "./pageComponents/SelectChannel";
 import SelectGender from "./pageComponents/SelectGender";
+import SelectPaymentType from "./pageComponents/SelectPaymentType";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectLandmark from "./pageComponents/SelectLandmark";
 import SelectName from "./pageComponents/SelectName";
@@ -151,6 +152,7 @@ const componentsToRegister = {
   SelectName,
   SelectTripData,
   SelectGender,
+  SelectPaymentType,
   SelectPaymentPreference,
   FSMEmpInbox: Inbox,
   FSMFstpInbox: FstpInbox,
@@ -166,6 +168,7 @@ const componentsToRegister = {
   FSMCitizenApplicationDetails: ApplicationDetails,
   FSMSelectRating: SelectRating,
   FSMDsoDashboard: DsoDashboard,
+  SelectPaymentPreference,
 };
 
 export const initFSMComponents = () => {

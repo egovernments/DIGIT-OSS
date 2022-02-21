@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useRef, useState } from "react";
 import { ArrowDown, CheckSvg } from "./svgindex";
 import { useTranslation } from "react-i18next";
 
-const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, defaultLabel = "", defaultUnit = "",BlockNumber=1,isOBPSMultiple=false,props={},isPropsNeeded=false}) => {
+const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, defaultLabel = "", defaultUnit = "",BlockNumber=1,isOBPSMultiple=false,props={},isPropsNeeded=false,ServerStyle={}}) => {
   const [active, setActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState();
   const [optionIndex, setOptionIndex] = useState(-1);
@@ -27,14 +27,14 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
   },[selected])
 
   function fnToSelectOptionThroughProvidedSelection(selected){
-    return selected.map( e => ({[optionsKey]: e?.[optionsKey], propsData: [null, e]}))
+    return selected?.map( e => ({[optionsKey]: e?.[optionsKey], propsData: [null, e]}))
   }
 
   const [alreadyQueuedSelectedState, dispatch] = useReducer(reducer, selected, fnToSelectOptionThroughProvidedSelection)
   
   useEffect(()=> {
     if(!active){
-      onSelect(alreadyQueuedSelectedState.map( e => e.propsData), props)
+      onSelect(alreadyQueuedSelectedState?.map( e => e.propsData), props)
     }
   },[active])
 
@@ -101,7 +101,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
   const Menu = () => {
     const filteredOptions =
       searchQuery?.length > 0 ? options.filter((option) => t(option[optionsKey]&&typeof option[optionsKey]=="string" && option[optionsKey].toUpperCase()).toLowerCase().indexOf(searchQuery.toLowerCase()) >= 0) : options;
-    return filteredOptions.map((option, index) => <MenuItem option={option} key={index} index={index} />);
+    return filteredOptions?.map((option, index) => <MenuItem option={option} key={index} index={index} />);
   };
 
   return (
@@ -114,7 +114,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
         </div>
       </div>
       {active ? (
-        <div className="server" id="jk-dropdown-unique">
+        <div className="server" id="jk-dropdown-unique" style={ServerStyle?ServerStyle:{}}>
           <Menu />
         </div>
       ) : null}

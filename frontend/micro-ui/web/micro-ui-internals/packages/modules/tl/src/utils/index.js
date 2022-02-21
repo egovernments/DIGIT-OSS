@@ -290,21 +290,21 @@ export const convertToTrade = (data = {}) => {
         commencementDate: Date.parse(data?.TradeDetails?.CommencementDate),
         financialYear: Financialyear ? Financialyear : "2021-22",
         licenseType: "PERMANENT",
-        tenantId: data?.tenantId,
+        tenantId: data?.address?.city?.code,
         tradeLicenseDetail: {
           channel:"CITIZEN",
           address: {
-            city: data?.cpt?.details?.address?.city?.code,
+            city:  !data?.cpt ? data?.address?.city?.code : data?.cpt?.details?.address?.city?.code,
             locality: {
-              code: data?.cpt?.details?.address?.locality?.code,
+              code: !data?.cpt ? data?.address?.locality?.code : data?.cpt?.details?.address?.locality?.code,
             },
             tenantId: data?.tenantId,
-            pincode: data?.cpt?.details?.address?.pincode,
-            doorNo: data?.cpt?.details?.address?.doorNo,
-            street: data?.cpt?.details?.address?.street,
-            landmark: data?.cpt?.details?.address?.landmark,
+            pincode: !data?.cpt ? data?.address?.pincode :  data?.cpt?.details?.address?.pincode,
+            doorNo: !data?.cpt ? data?.address?.doorNo : data?.cpt?.details?.address?.doorNo,
+            street: !data?.cpt ? data?.address?.street : data?.cpt?.details?.address?.street,
+            landmark: !data?.cpt ? data?.address?.landmark : data?.cpt?.details?.address?.landmark,
           },
-          applicationDocuments: null,
+          applicationDocuments: [],
           accessories: data?.TradeDetails?.accessories ? getaccessories(data) : null,
           owners: getownerarray(data),
           ...data?.owners.owners?.[0]?.designation && data?.owners.owners?.[0]?.designation !== "" ? { institution: {
@@ -314,7 +314,7 @@ export const convertToTrade = (data = {}) => {
           subOwnerShipCategory: data?.owners.owners?.[0]?.subOwnerShipCategory?.code ? data?.owners.owners?.[0]?.subOwnerShipCategory?.code : data?.ownershipCategory?.code,
           tradeUnits: gettradeunits(data),
           additionalDetail: {
-            propertyId: data?.cpt?.details?.propertyId,
+            propertyId: !data?.cpt ? "" :data?.cpt?.details?.propertyId,
           }
         },
         tradeName: data?.TradeDetails?.TradeName,
