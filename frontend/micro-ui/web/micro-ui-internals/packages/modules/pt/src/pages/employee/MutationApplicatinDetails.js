@@ -12,7 +12,7 @@ import { newConfigMutate } from "../../config/Mutate/config";
 import _ from "lodash";
 import get from "lodash/get";
 
-const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate}) => {
+const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDetails, mutate}) => {
   const { t } = useTranslation();
   const [displayMenu, setDisplayMenu] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -28,7 +28,7 @@ const MutationApplicationDetails = ({acknowledgementIds, workflowDetails, mutate
   );
 
   const properties = get(data, "Properties", []);
-  const propertyId = get(data, "Properties[0].propertyId", []);
+  // const propertyId = get(data, "Properties[0].propertyId", []);
   let property = (properties && properties.length > 0 && properties[0]) || {};
   const application = property;
   sessionStorage.setItem("pt-property", JSON.stringify(application));
