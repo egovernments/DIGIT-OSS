@@ -5,7 +5,9 @@ import { useHistory } from "react-router-dom";
 import Background from "../../../components/Background";
 import Header from "../../../components/Header";
 
+
 const Login = ({ config: propsConfig, t ,isDisabled}) => {
+
   const { data: cities, isLoading } = Digit.Hooks.useTenants();
   const { data: storeData, isLoading: isStoreLoading } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};

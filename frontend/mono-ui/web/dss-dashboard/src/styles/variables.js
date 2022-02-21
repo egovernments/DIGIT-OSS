@@ -137,13 +137,13 @@ const variables = {
     
     ],
     iconColors: [
-        {'dark': '#0C9D95','light': 'rgba(12, 157, 149, 1)'},
-        {'dark':'#FBC02D','light': 'rgba(251, 192, 45, 1)'},
-        {'dark':'#4B1FA5','light': 'rgba(75, 31, 165, 1)'},
-        {'dark':'#048BD0','light': 'rgba(4, 139, 208, 1)'},
-        {'dark': '#EF7C5B','light': 'rgba(239, 124, 91, 1)'},
-        {'dark': '#51D2C6','light': 'rgba(81, 210, 198, 1)'},
-        {'dark': '#B7A545','light': 'rgba(183, 165, 69, 1)'},
+        {'dark': '#0C9D95','light': 'rgba(12, 157, 149, 0.85)'},
+        {'dark':'#FBC02D','light': 'rgba(251, 192, 45, 0.85)'},
+        {'dark':'#4B1FA5','light': 'rgba(75, 31, 165, 0.85)'},
+        {'dark':'#048BD0','light': 'rgba(4, 139, 208, 0.85)'},
+        {'dark': '#EF7C5B','light': 'rgba(239, 124, 91, 0.85)'},
+        {'dark': '#51D2C6','light': 'rgba(81, 210, 198, 0.85)'},
+        {'dark': '#B7A545','light': 'rgba(183, 165, 69, 0.85)'},
     
     ]
     

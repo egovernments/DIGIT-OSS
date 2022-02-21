@@ -134,7 +134,7 @@ const OwnerForm = (_props) => {
     i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(formValue?.institution?.type?.code || institution?.type || "")}`,
     name: t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(formValue?.institution?.type?.code || institution?.type || "")}`),
   };
-  owner.designation = institution?.designation;
+  owner.designation = owner?.designation ? formValue?.designation : institution?.designation;
   const specialDocsMenu = useMemo(
     () =>
       mdmsData?.PropertyTax?.Documents?.filter((e) => e.code === "OWNER.SPECIALCATEGORYPROOF")?.[0]
@@ -211,7 +211,7 @@ const OwnerForm = (_props) => {
                   <Controller
                     control={control}
                     name={"institution.name"}
-                    defaultValue={institution?.name ? institution.name : owner?.name}
+                    defaultValue={isEditScreen ? ( institution?.name ? institution.name : owner?.name) : null}
                     rules={{
                       required: t("CORE_COMMON_REQUIRED_ERRMSG"),
                       validate: {
@@ -244,12 +244,12 @@ const OwnerForm = (_props) => {
                 <Controller
                   control={control}
                   name={"institution.type"}
-                  defaultValue={{
+                  defaultValue={isEditScreen ? {
                     active: true,
                     code: institution?.type,
                     i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`,
                     name: t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`),
-                  }}
+                  } : null}
                   rules={{ required: t("CORE_COMMON_REQUIRED_ERRMSG") }}
                   render={(props) => (
                     <Dropdown
@@ -486,7 +486,7 @@ const OwnerForm = (_props) => {
                   <Controller
                     control={control}
                     name={"designation"}
-                    defaultValue={institution?.designation || ""}
+                    defaultValue={isEditScreen ? ( institution?.designation || "") : null}
                     rules={{ required: t("CORE_COMMON_REQUIRED_ERRMSG") }}
                     render={(props) => (
                       <TextInput

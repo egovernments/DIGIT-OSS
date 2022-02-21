@@ -31,8 +31,16 @@ public class VendorConstants {
 
 	public static final String CITIZEN = "CITIZEN";	
 	
+	public static final String AGENCY_TYPE = "AGENCY_TYPE";	
 	
+	public static final String PAYMENT_PREFERENCE = "PAYMENT_PREFERENCE";	
 	
+	public static final String VENDOR_JSONPATH_CODE = "$.MdmsRes.Vendor";
+
+	public static final String VENDOR_AGENCY_TYPE = "AgencyType";
 	
+	public static final String VENDOR_PAYMENT_PREFERENCE = "PaymentPreference";
+	
+	public static final String VENDOR_MODULE = "Vendor";
 	
 }

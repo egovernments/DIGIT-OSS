@@ -281,7 +281,7 @@ const Penality_menu=[
   const selectRebateReason=(reason)=>{
     setSelectedRebateReason(reason);
   }
-const RebatePenalityPoPup=()=>{
+/* const RebatePenalityPoPup=() =>{
   return (
     <Modal
           headerBarMain={<Heading label={t("PT_ADD_REBATE_PENALITY")}/>}
@@ -326,7 +326,7 @@ const RebatePenalityPoPup=()=>{
             <div className="field">
               <div className="field-container">
                 <div className="text-input field">
-                <input type="number" className="employee-card-input false focus-visible undefined" ref={first_temp}/>
+                <input key="firstTemp" type="number" className="employee-card-input false focus-visible undefined" ref={first_temp}/>
                 </div>
               </div>
             </div>                  
@@ -369,7 +369,7 @@ const RebatePenalityPoPup=()=>{
       </div>
     }
     </Modal>)
-}
+} */
   return (
     <div>
       <Header>{t("PT_TX_ASSESSMENT")}</Header>
@@ -513,7 +513,102 @@ const RebatePenalityPoPup=()=>{
         timelineStatusPrefix={"ES_PT_COMMON_STATUS_"}
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
       />
-      {popup && (<RebatePenalityPoPup/>)}
+      {/* {popup && (<RebatePenalityPoPup/>)} */}
+      {  popup && <Modal
+          headerBarMain={<Heading label={t("PT_ADD_REBATE_PENALITY")}/>}
+          headerBarEnd={<CloseBtn onClick={()=>showPopUp(false)}/>}
+          actionCancelLabel={t("PT_CANCEL")}
+          actionCancelOnSubmit={()=>{showPopUp(false)}}
+          actionSaveLabel={t("PT_ADD")}
+          actionSaveOnSubmit={()=>(change())}
+          hideSubmit={false}
+          >
+      {
+      <div>
+        <Card>
+        <CardSectionHeader>{t("PT_AD_PENALTY")}</CardSectionHeader>
+            <CardLabel>
+            {t("PT_TX_HEADS")}
+            </CardLabel>
+            <div className="field">
+              <div className="field-container">
+                <div className="text-input field">
+                <Dropdown
+                 isMandatory
+                 option={Penality_menu}
+                 optionKey="value"
+                 select={selectPenalityReason}
+                 selected={selectedPenalityReason}
+                 isPropertyAssess={true}
+                 t={t}
+                 />
+                </div>
+              </div>
+            </div>  
+            {selectedPenalityReason && selectedPenalityReason.value==="Others" && <div className="field">
+            <CardLabel>{t("PT_REASON")}</CardLabel>
+              <div className="field-container">
+                <div className="text-input field">
+                <input type="type" className="employee-card-input false focus-visible undefined" ref={fourth_temp}/>
+                </div>
+              </div>
+            </div>}      
+            <CardLabel>{t("PT_HEAD_AMT")}</CardLabel>
+            <div className="field">
+              <div className="field-container">
+                <div className="text-input field">
+                <input key="firstTemp" type="number" className="employee-card-input false focus-visible undefined" ref={first_temp}/>
+                </div>
+                {/* <TextInput
+                t={t}
+                type={"text"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="first_temp"
+                value={first_temp}
+                onChange={setFirstTemp}
+                />  */}
+              </div>
+            </div>                  
+        </Card>
+        <Card>
+        <CardSectionHeader>{t("PT_AD_REBATE")}</CardSectionHeader>
+            <CardLabel>{t("PT_TX_HEADS")}</CardLabel>
+            <div className="field">
+              <div className="field-container">
+                <div className="text-input field">
+                <Dropdown
+                 isMandatory
+                 option={Rebate_menu}
+                 optionKey="value"
+                 select={selectRebateReason}
+                 selected={selectedRebateReason}
+                 isPropertyAssess={true}
+                 t={t}
+                 />
+                </div>
+              </div>
+            </div>    
+            {selectedRebateReason && selectedRebateReason.value==="Others" && <div className="field">
+            <CardLabel>{t("PT_REASON")}</CardLabel>
+              <div className="field-container">
+                <div className="text-input field">
+                <input type="type" className="employee-card-input false focus-visible undefined" ref={third_temp}/>
+                </div>
+              </div>
+            </div>}  
+            <CardLabel>{t("PT_HEAD_AMT")}</CardLabel>
+            <div className="field">
+              <div className="field-container">
+                <div className="text-input field">
+                <input type="number" className="employee-card-input false focus-visible undefined" ref={second_temp}/>
+                </div>
+              </div>
+            </div> 
+        </Card>
+      </div>
+    }
+    </Modal>}
       {!queryClient.getQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear]) ? (
         <ActionBar>
           <SubmitBar label={t("PT_ASSESS_PROPERTY_BUTTON")} onSubmit={handleAssessment} />
