@@ -285,7 +285,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime date = LocalDateTime.now();
 		log.info("Time schedule start for water demand generation on : " + date.format(dateTimeFormatter));
-		List<String> tenantIds = wSCalculationDao.getTenantId();
+		List<String> tenantIds = wSCalculationDao.getTenantId(requestInfo.getUserInfo().getTenantId());
 		if (tenantIds.isEmpty())
 			return;
 		log.info("Tenant Ids : " + tenantIds.toString());
