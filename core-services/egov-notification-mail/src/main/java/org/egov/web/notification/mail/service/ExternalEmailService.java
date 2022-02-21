@@ -115,5 +115,6 @@ public class ExternalEmailService implements EmailService {
 		}
 		log.info("Sending message");
 		mailSender.send(message);
+		log.info("message sent");
 	}
 }
