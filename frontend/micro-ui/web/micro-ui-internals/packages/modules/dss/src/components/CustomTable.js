@@ -46,7 +46,7 @@ const CustomTable = ({ data={}, onSearch, setChartData }) => {
     tenantId,
     requestDate: { ...lastYearDate },
     filters:
-      id === chartKey ? value?.filters : { [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
+      id === chartKey ? value?.filters : {...value?.filters, [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
   });
   const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
     key: chartKey,
@@ -54,7 +54,7 @@ const CustomTable = ({ data={}, onSearch, setChartData }) => {
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters:
-      id === chartKey ? value?.filters : { [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
+      id === chartKey ? value?.filters : {...value?.filters, [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
   });
   useEffect(() => {
     const { id } = data;
@@ -308,7 +308,7 @@ const CustomTable = ({ data={}, onSearch, setChartData }) => {
         <NoData t={t} />
       ) : (
         <Table
-          className="customTable table-fixed-first-second-column"
+          className="customTable "
           t={t}
           customTableWrapperClassName={"dss-table-wrapper"}
           disableSort={false}

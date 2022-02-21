@@ -27,14 +27,14 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
   },[selected])
 
   function fnToSelectOptionThroughProvidedSelection(selected){
-    return selected.map( e => ({[optionsKey]: e?.[optionsKey], propsData: [null, e]}))
+    return selected?.map( e => ({[optionsKey]: e?.[optionsKey], propsData: [null, e]}))
   }
 
   const [alreadyQueuedSelectedState, dispatch] = useReducer(reducer, selected, fnToSelectOptionThroughProvidedSelection)
   
   useEffect(()=> {
     if(!active){
-      onSelect(alreadyQueuedSelectedState.map( e => e.propsData), props)
+      onSelect(alreadyQueuedSelectedState?.map( e => e.propsData), props)
     }
   },[active])
 
@@ -101,7 +101,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
   const Menu = () => {
     const filteredOptions =
       searchQuery?.length > 0 ? options.filter((option) => t(option[optionsKey]&&typeof option[optionsKey]=="string" && option[optionsKey].toUpperCase()).toLowerCase().indexOf(searchQuery.toLowerCase()) >= 0) : options;
-    return filteredOptions.map((option, index) => <MenuItem option={option} key={index} index={index} />);
+    return filteredOptions?.map((option, index) => <MenuItem option={option} key={index} index={index} />);
   };
 
   return (
