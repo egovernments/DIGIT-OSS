@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.InputStreamSource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -114,7 +115,11 @@ public class ExternalEmailService implements EmailService {
 			e.printStackTrace();
 		}
 		log.info("Sending message");
-		mailSender.send(message);
+		try{
+			mailSender.send(message);
+		} catch (MailException e){
+			log.error(EXCEPTION_MESSAGE, e);
+		}
 		log.info("message sent");
 	}
 }
