@@ -292,6 +292,7 @@ public class CollectionServiceConstants {
     
     public static final String EMPLOYEE_TYPE = "EMPLOYEE";
 
+    // Notification constants
     public static final String CHANNEL_LIST = "channelList";
 
     public static final String CHANNEL = "Channel";
@@ -309,7 +310,4 @@ public class CollectionServiceConstants {
     public static final String BUSINESS_SERVICE_TL = "TL";
 
     public static final String ACTION_PAY = "PAY";
-
-    public static final String BUSINESS_SERVICE_TRADE_LICENSE = "TradeLicense";
-
 }

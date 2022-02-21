@@ -3,9 +3,15 @@ package org.egov.collection.util;
 import com.jayway.jsonpath.Filter;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
+import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
+import org.egov.collection.model.Payment;
+import org.egov.collection.model.PaymentDetail;
+import org.egov.collection.model.PaymentRequest;
+import org.egov.collection.notification.consumer.NotificationConsumer;
 import org.egov.collection.producer.CollectionProducer;
 import org.egov.collection.repository.ServiceRequestRepository;
+import org.egov.collection.web.contract.Bill;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
@@ -17,6 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,12 +43,23 @@ public class NotificationUtil {
 
     private RestTemplate restTemplate;
 
+    @Autowired
+    private NotificationConsumer notificationConsumer;
 
     @Value("${egov.mdms.host}")
     private String mdmsHost;
 
     @Value("${egov.mdms.search.endpoint}")
     private String mdmsUrl;
+
+    @Value("${kafka.topics.notification.sms}")
+    private String smsTopic;
+
+    @Value("${egov.usr.events.create.topic}")
+    private String eventTopic;
+
+    @Value("${kafka.topics.notification.email}")
+    private String emailTopic;
 
     @Autowired
     public NotificationUtil(ServiceRequestRepository serviceRequestRepository, ApplicationProperties config,
@@ -52,11 +70,11 @@ public class NotificationUtil {
         this.restTemplate = restTemplate;
     }
 
-    public List<String> fetchChannelList(RequestInfo requestInfo, String tenantId, String moduleName, String action){
+    public List<String> fetchChannelList(RequestInfo requestInfo, String tenantId, String moduleName, String action) {
         List<String> masterData = new ArrayList<>();
         StringBuilder uri = new StringBuilder();
         uri.append(mdmsHost).append(mdmsUrl);
-        if(org.apache.commons.lang3.StringUtils.isEmpty(tenantId))
+        if (org.apache.commons.lang3.StringUtils.isEmpty(tenantId))
             return masterData;
         MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
 
@@ -67,15 +85,15 @@ public class NotificationUtil {
         try {
             Object response = restTemplate.postForObject(uri.toString(), mdmsCriteriaReq, Map.class);
             masterData = JsonPath.parse(response).read("$.MdmsRes.Channel.channelList[?].channelNames[*]", masterDataFilter);
-        }catch(Exception e) {
-            log.error("Exception while fetching workflow states to ignore: ",e);
+        } catch (Exception e) {
+            log.error("Exception while fetching workflow states to ignore: ", e);
         }
 
         return masterData;
     }
 
 
-    private MdmsCriteriaReq getMdmsRequestForChannelList(RequestInfo requestInfo, String tenantId){
+    private MdmsCriteriaReq getMdmsRequestForChannelList(RequestInfo requestInfo, String tenantId) {
         MasterDetail masterDetail = new MasterDetail();
         masterDetail.setName(CHANNEL_LIST);
         List<MasterDetail> masterDetailList = new ArrayList<>();
@@ -96,5 +114,67 @@ public class NotificationUtil {
         mdmsCriteriaReq.setRequestInfo(requestInfo);
 
         return mdmsCriteriaReq;
+    }
+
+    public void sendSMSNotification(PaymentRequest receiptReq) {
+        Payment receipt = receiptReq.getPayment();
+        for (PaymentDetail detail : receipt.getPaymentDetails()) {
+            Bill bill = detail.getBill();
+            String phNo = bill.getMobileNumber();
+            String message = notificationConsumer.buildSmsBody(bill, detail, receiptReq.getRequestInfo());
+            if (!StringUtils.isEmpty(message)) {
+                Map<String, Object> request = new HashMap<>();
+                request.put("mobileNumber", phNo);
+                request.put("message", message);
+
+                producer.producer(smsTopic, request);
+                log.info("Sending SMS notification: ");
+                log.info("MobileNumber: " + phNo + " Messages: " + message);
+            } else {
+                log.error("No message configured! Notification will not be sent.");
+            }
+
+
+        }
+    }
+
+    public void sendEventNotification(PaymentRequest receiptReq) {
+        Payment receipt = receiptReq.getPayment();
+        for (PaymentDetail detail : receipt.getPaymentDetails()) {
+            Bill bill = detail.getBill();
+            String phNo = bill.getMobileNumber();
+            String message = notificationConsumer.buildSmsBody(bill, detail, receiptReq.getRequestInfo());
+            if (!StringUtils.isEmpty(message)) {
+                Map<String, Object> request = new HashMap<>();
+                request.put("mobileNumber", phNo);
+                request.put("message", message);
+
+                producer.producer(eventTopic, request);
+            } else {
+                log.error("No message configured! Notification will not be sent.");
+            }
+
+
+        }
+    }
+
+    public void sendEmailNotification(PaymentRequest receiptReq) {
+        Payment receipt = receiptReq.getPayment();
+        for (PaymentDetail detail : receipt.getPaymentDetails()) {
+            Bill bill = detail.getBill();
+            String phNo = bill.getMobileNumber();
+            String message = notificationConsumer.buildSmsBody(bill, detail, receiptReq.getRequestInfo());
+            if (!StringUtils.isEmpty(message)) {
+                Map<String, Object> request = new HashMap<>();
+                request.put("mobileNumber", phNo);
+                request.put("message", message);
+
+                producer.producer(emailTopic, request);
+            } else {
+                log.error("No message configured! Notification will not be sent.");
+            }
+
+
+        }
     }
 }

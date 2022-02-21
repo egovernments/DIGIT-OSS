@@ -131,32 +131,31 @@ public class NotificationConsumer {
 	 */
 	@KafkaListener(topics = {"${kafka.topics.payment.create.name}","${kafka.topics.payment.update.name}"})
 	public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
-		try {
-			PaymentRequest req = objectMapper.convertValue(record, PaymentRequest.class);
-			Payment receipt = req.getPayment();
-			for (PaymentDetail detail : receipt.getPaymentDetails()) {
-				if (detail.getBusinessService().contains(BUSINESS_SERVICE_TL)) {
-					List<String> configuredChannelNames = notifUtil.fetchChannelList(new RequestInfo(), req.getPayment().getTenantId(), BUSINESS_SERVICE_TL, ACTION_PAY);
-					log.info("-----------------------Total receipts migrated: " + configuredChannelNames.toString());
-					if (configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
-						if (config.getIsSMSNotificationEnabled()) {
-							sendSMSNotification(req);
-						}
-					}
-					if (configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
-						sendEventNotification(req);
-					}
-					if (configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
-						sendEmailNotification(req);
-					}
-				} else {
-					sendNotification(req);
-				}
-			}
-		} catch (Exception e) {
-			log.error("Exception while reading from the queue: ", e);
-		}
-	}
+        try {
+            PaymentRequest req = objectMapper.convertValue(record, PaymentRequest.class);
+            Payment receipt = req.getPayment();
+            for (PaymentDetail detail : receipt.getPaymentDetails()) {
+                if (detail.getBusinessService().contains(BUSINESS_SERVICE_TL)) {
+                    List<String> configuredChannelNames = notifUtil.fetchChannelList(new RequestInfo(), req.getPayment().getTenantId(), BUSINESS_SERVICE_TL, ACTION_PAY);
+                    if (configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+                        if (config.getIsSMSNotificationEnabled()) {
+                            notifUtil.sendSMSNotification(req);
+                        }
+                    }
+                    if (configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+                        notifUtil.sendEventNotification(req);
+                    }
+                    if (configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
+                        notifUtil.sendEmailNotification(req);
+                    }
+                } else {
+                    sendNotification(req);
+                }
+            }
+        } catch (Exception e) {
+            log.error("Exception while reading from the queue: ", e);
+        }
+    }
 
 	/*
 	 * Method to send notifications.
@@ -164,30 +163,7 @@ public class NotificationConsumer {
 	 * @param receiptReq
 	 * @throws Exception
 	 */
-	private void sendSMSNotification(PaymentRequest receiptReq) {
-		Payment receipt = receiptReq.getPayment();
-		for (PaymentDetail detail : receipt.getPaymentDetails()) {
-			Bill bill = detail.getBill();
-			String phNo = bill.getMobileNumber();
-			String message = buildSmsBody(bill, detail, receiptReq.getRequestInfo());
-			if (!StringUtils.isEmpty(message)) {
-				Map<String, Object> request = new HashMap<>();
-				request.put("mobileNumber", phNo);
-				request.put("message", message);
-
-				producer.producer(smsTopic, request);
-				log.info("Sending SMS notification: ");
-				log.info("MobileNumber: " + phNo + " Messages: " + message);
-			} else {
-				log.error("No message configured! Notification will not be sent.");
-			}
-
-
-		}
-	}
-
-
-	private void sendNotification(PaymentRequest receiptReq) {
+    private void sendNotification(PaymentRequest receiptReq) {
 		Payment receipt = receiptReq.getPayment();
 		List<String> businessServiceAllowed = fetchBusinessServiceFromMDMS(receiptReq.getRequestInfo(), receiptReq.getPayment().getTenantId());
 		if (!CollectionUtils.isEmpty(businessServiceAllowed)) {
@@ -215,49 +191,6 @@ public class NotificationConsumer {
 		}
 	}
 
-	private void sendEventNotification(PaymentRequest receiptReq) {
-		Payment receipt = receiptReq.getPayment();
-		for (PaymentDetail detail : receipt.getPaymentDetails()) {
-			Bill bill = detail.getBill();
-			String phNo = bill.getMobileNumber();
-			String message = buildSmsBody(bill, detail, receiptReq.getRequestInfo());
-			if (!StringUtils.isEmpty(message)) {
-				Map<String, Object> request = new HashMap<>();
-				request.put("mobileNumber", phNo);
-				request.put("message", message);
-
-				producer.producer(eventTopic, request);
-			} else {
-				log.error("No message configured! Notification will not be sent.");
-			}
-
-
-		}
-	}
-
-
-	private void sendEmailNotification(PaymentRequest receiptReq){
-		Payment receipt = receiptReq.getPayment();
-		for (PaymentDetail detail : receipt.getPaymentDetails()) {
-			Bill bill = detail.getBill();
-			String phNo = bill.getMobileNumber();
-			String message = buildSmsBody(bill, detail, receiptReq.getRequestInfo());
-			if (!StringUtils.isEmpty(message)) {
-				Map<String, Object> request = new HashMap<>();
-				request.put("mobileNumber", phNo);
-				request.put("message", message);
-
-				producer.producer(emailTopic, request);
-			} else {
-				log.error("No message configured! Notification will not be sent.");
-			}
-
-
-		}
-	}
-
-
-
 	/*
 	 * Prepares sms body based on the configuration
 	 *
@@ -267,7 +200,7 @@ public class NotificationConsumer {
 	 * @param requestInfo
 	 * @return
 	 */
-	private String buildSmsBody(Bill bill, PaymentDetail paymentdetail, RequestInfo requestInfo) {
+	public String buildSmsBody(Bill bill, PaymentDetail paymentdetail, RequestInfo requestInfo) {
 		String content = fetchContentFromLocalization(requestInfo, paymentdetail.getTenantId(), COLLECTION_LOCALIZATION_MODULE, PAYMENT_MSG_LOCALIZATION_CODE);
 		String message = null;
 		if(!StringUtils.isEmpty(content)) {
