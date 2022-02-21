@@ -7,10 +7,15 @@ import {
   PTIcon,
   PropertyHouse,
   HomeIcon,
+  PMBIconSolid,
+  DocumentIconSolid,
+  ReceiptIcon,
+  CaseIcon,
+  ComplaintIcon,
 } from "@egovernments/digit-ui-react-components";
 
-const EmployeeSideBarMenu = (t, ADMIN) => [
-  ADMIN && {
+const EmployeeSideBarMenu = (t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC, FSTPOperator, PGR, ...links) => [
+  HRMS && {
     Icon: <PersonIcon />,
     moduleName: t("ACTION_TEST_HRMS"),
     links: [
@@ -24,8 +29,7 @@ const EmployeeSideBarMenu = (t, ADMIN) => [
       },
     ],
   },
-
-  {
+  FSM && {
     Icon: <ShippingTruck />,
     moduleName: t("ES_TITLE_FAECAL_SLUDGE_MGMT"),
     links: [
@@ -33,9 +37,54 @@ const EmployeeSideBarMenu = (t, ADMIN) => [
         label: t("ES_COMMON_INBOX"),
         link: `/digit-ui/employee/fsm/inbox`,
       },
+    ],
+  },
+
+  mCollect && {
+    Icon: <PTIcon />,
+    moduleName: t("UC_COMMON_HEADER_SEARCH"),
+
+    links: [
       {
-        label: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
-        link: `/digit-ui/employee/fsm/new-application`,
+        label: t("UC_SEARCH_CHALLAN_LABEL"),
+        link: `/digit-ui/employee/mcollect/inbox`,
+      },
+      {
+        label: t("UC_GENERATE_NEW_CHALLAN"),
+        link: `/digit-ui/employee/mcollect/new-application`,
+      },
+    ],
+  },
+  PT && {
+    Icon: <PropertyHouse />,
+    moduleName: t("ES_TITLE_PROPERTY_TAX"),
+    links: [
+      {
+        label: t("ES_COMMON_INBOX"),
+        link: `/digit-ui/employee/pt/inbox`,
+      },
+      {
+        label: t("SEARCH_PROPERTY"),
+        link: `/digit-ui/employee/pt/search`,
+      },
+      {
+        label: t("ES_COMMON_APPLICATION_SEARCH"),
+        link: `/digit-ui/employee/pt/application-search`,
+      },
+    ],
+  },
+  DSS && {
+    Icon: <PMBIconSolid />,
+    moduleName: t("ACTION_TEST_PUBLIC_MESSAGE_BROADCAST"),
+
+    links: [
+      {
+        label: t("ES_TITLE_INBOX"),
+        link: `/digit-ui/employee/engagement/messages/inbox`,
+      },
+      {
+        label: t("NEW_PUBLIC_MESSAGE_BUTTON_LABEL"),
+        link: `/digit-ui/employee/engagement/messages/create`,
       },
     ],
   },
@@ -68,35 +117,69 @@ const EmployeeSideBarMenu = (t, ADMIN) => [
     ],
   },
   {
-    Icon: <PTIcon />,
-    moduleName: t("UC_COMMON_HEADER_SEARCH"),
-
+    Icon: <DocumentIconSolid />,
+    moduleName: t("ES_TITLE_DOCS"),
     links: [
       {
-        label: t("UC_SEARCH_CHALLAN_LABEL"),
-        link: `/digit-ui/employee/mcollect/inbox`,
+        label: t("ES_TITLE_INBOX"),
+        link: `/digit-ui/employee/engagement/documents/inbox`,
       },
       {
-        label: t("UC_GENERATE_NEW_CHALLAN"),
-        link: `/digit-ui/employee/mcollect/new-application`,
+        label: t("NEW_DOCUMENT_TEXT"),
+        link: `/digit-ui/employee/engagement/documents/new-doc`,
       },
     ],
   },
-  {
-    Icon: <PropertyHouse />,
-    moduleName: t("ES_TITLE_PROPERTY_TAX"),
+  RECEIPTS && {
+    Icon: <ReceiptIcon />,
+    moduleName: t("ACTION_TEST_RECEIPTS"),
+
+    links: [
+      {
+        label: t("CR_SEARCH_COMMON_HEADER"),
+        link: `/digit-ui/employee/receipts/inbox`,
+      },
+    ],
+  },
+  TL && {
+    Icon: <CaseIcon />,
+    moduleName: t("TL_COMMON_TL"),
+    links: links,
+  },
+  NOC && {
+    Icon: <ComplaintIcon />,
+    moduleName: t("ACTION_TEST_NOC"),
+
     links: [
       {
         label: t("ES_COMMON_INBOX"),
-        link: `/digit-ui/employee/pt/inbox`,
+        link: `/digit-ui/employee/noc/inbox`,
       },
       {
-        label: t("SEARCH_PROPERTY"),
-        link: `/digit-ui/employee/pt/search`,
+        label: t("ES_COMMON_SEARCH"),
+        link: `/digit-ui/employee/noc/search`,
       },
+    ],
+  },
+  FSTPOperator && {
+    Icon: <ShippingTruck />,
+    moduleName: t("ES_TITLE_VEHICLE_LOG"),
+
+    links: [
       {
-        label: t("ES_COMMON_APPLICATION_SEARCH"),
-        link: `/digit-ui/employee/pt/application-search`,
+        label: t("ES_COMMON_INBOX"),
+        link: "/digit-ui/employee/fsm/fstp-inbox",
+      },
+    ],
+  },
+  PGR && {
+    Icon: <ReceiptIcon />,
+    moduleName: t("ES_PGR_HEADER_COMPLAINT"),
+
+    links: [
+      {
+        label: t("ES_PGR_INBOX"),
+        link: `/digit-ui/employee/pgr/inbox`,
       },
     ],
   },

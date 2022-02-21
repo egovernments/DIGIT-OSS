@@ -7,7 +7,6 @@ const SubMenu = ({ item }) => {
   const location = useLocation();
   const { pathname } = location;
   const showSubnav = () => setSubnav(!subnav);
-  console.log("ssitem", item);
   return (
     <React.Fragment>
       <div>
