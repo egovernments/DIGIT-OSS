@@ -80,7 +80,7 @@ public class ExternalEmailService implements EmailService {
 			/*log here*/
 			log.info(email.toString());
 			for(int i=0; i<email.getFileStoreId().size(); i++) {
-				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, email.getTenantId(), email.getFileStoreId().toArray()[i]);
+				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, "pb", email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);
 				URLConnection con = url.openConnection();
 				String fieldValue = "attachment" + i;
