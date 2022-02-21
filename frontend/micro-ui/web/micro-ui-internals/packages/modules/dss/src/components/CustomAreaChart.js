@@ -162,7 +162,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
           {t("DSS_FSM_TOTAL_SLUDGE_TREATED")} - {totalWaste} {t("DSS_KL")}
         </p>
       )}
-      <ResponsiveContainer width="99%" height={id === "fsmTotalCumulativeCollection" ? 400 : 300}>
+      <ResponsiveContainer width="93%" height={id === "fsmTotalCumulativeCollection" ? 400 : 300}>
         {!chartData || chartData?.length === 0 ? (
           <NoData t={t} />
         ) : manageChart == "Area" ? (
