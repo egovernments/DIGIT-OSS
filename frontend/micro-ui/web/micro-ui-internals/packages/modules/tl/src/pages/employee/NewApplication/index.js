@@ -72,18 +72,25 @@ const NewApplication = () => {
       if (data?.cpt?.details?.address?.street) address.street = data?.cpt?.details?.address?.street || null;
       if (data?.cpt?.details?.address?.pincode) address.pincode = data?.cpt?.details?.address?.pincode;
     }
+    else if (data?.address) {
+      address.city = data?.address?.city?.code || null;
+      address.locality = { code: data?.address?.locality?.code || null };
+      if (data?.address?.doorNo) address.doorNo = data?.address?.doorNo || null;
+      if (data?.address?.street) address.street = data?.address?.street || null;
+      if (data?.address?.pincode) address.pincode = data?.address?.pincode;
+    }
 
     let owners = [];
     if (data?.owners?.length > 0) {
       data?.owners.map((data) => {
         let obj = {};
         if (data?.dob) obj.dob = convertDateToEpoch(data?.dob);
-        // if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
+        if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
         if (data?.gender?.code) obj.gender = data?.gender?.code;
         if (data?.mobileNumber) obj.mobileNumber = Number(data?.mobileNumber);
         if (data?.name) obj.name = data?.name;
         if (data?.permanentAddress) obj.permanentAddress = data?.permanentAddress;
-        // if (data?.relationship) obj.relationship = data?.relationship?.code;
+        if (data?.relationship) obj.relationship = data?.relationship?.code;
         if (data?.emailId) obj.emailId = data?.emailId;
         if (data?.ownerType?.code) obj.ownerType = data?.ownerType?.code;
         owners.push(obj);

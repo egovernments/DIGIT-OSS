@@ -191,7 +191,7 @@ const EditForm = ({ tenantId, data }) => {
     requestdata.user.mobileNumber = input?.SelectEmployeePhoneNumber?.mobileNumber;
     requestdata["user"]["name"] = input?.SelectEmployeeName?.employeeName;
     requestdata.user.correspondenceAddress = input?.SelectEmployeeCorrespondenceAddress?.correspondenceAddress;
-    requestdata.user.roles = roles;
+    requestdata.user.roles = roles.filter(role=>role&&role.name);
     let Employees = [requestdata];
 
     /* use customiseUpdateFormData hook to make some chnages to the Employee object */

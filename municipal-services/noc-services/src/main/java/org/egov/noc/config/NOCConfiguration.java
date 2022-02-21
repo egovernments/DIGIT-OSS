@@ -107,4 +107,14 @@ public class NOCConfiguration {
 	@Value("${noc.offline.doc.required}")
 	private Boolean nocOfflineDocRequired;
 
+	//bpa configuration
+    @Value("${egov.bpa.host}")
+    private String bpaHost;
+
+    @Value("${egov.bpa.context.path}")
+    private String bpaContextPath;
+
+    @Value("${egov.bpa.search.endpoint}")
+    private String bpaSearchEndpoint;
+
 }

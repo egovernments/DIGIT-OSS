@@ -52,3 +52,5 @@ export const convertLabelValue=(label='',strings={})=>{
             return getLocaleLabels(`DSS_TB_${label}`,strings);
     }
 }
+
+export const isNurtDashboard=()=>window.location.pathname.toLowerCase().includes("nurt_dashboard")

@@ -3,10 +3,11 @@ import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
 
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import { ActionBar, Header, Loader, SubmitBar,Card,CardSubHeader,CardSectionHeader,LinkLabel, CardLabel, CardHeader} from "@egovernments/digit-ui-react-components";
+import { ActionBar, Header, Loader, SubmitBar,Card,CardSubHeader,CardSectionHeader,LinkLabel, CardLabel, CardHeader, CardText} from "@egovernments/digit-ui-react-components";
 import { useQueryClient } from "react-query";
 import _, { first, update } from "lodash";
-import { Modal,Dropdown } from "@egovernments/digit-ui-react-components";
+import { Modal,Dropdown, Row, StatusTable } from "@egovernments/digit-ui-react-components";
+import {convertEpochToDate} from "../../utils/index";
 
 
 const AssessmentDetails = () => {
@@ -45,6 +46,14 @@ const AssessmentDetails = () => {
     mutate: ptCalculationEstimateMutate,
   } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
   const { data: ChargeSlabsMenu, isLoading: isChargeSlabsLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "ChargeSlabs");
+ const fetchBillParams = { consumerCode : propertyId };
+
+  const paymentDetails = Digit.Hooks.useFetchBillsForBuissnessService(
+    { businessService: "PT", ...fetchBillParams, tenantId: tenantId },
+    {
+      enabled: propertyId ? true : false,
+    }
+  );
 
   useEffect(() => {
     // estimate calculation
@@ -92,7 +101,7 @@ const AssessmentDetails = () => {
         { Assessment:AssessmentData},
         {
           onError: (error, variables) => {
-            setShowToast({ key: "error", action: error?.response?.data?.Errors[0]?.message || error.message });
+            setShowToast({ key: "error", action: error?.response?.data?.Errors[0]?.message || error.message, error : {  message:error?.response?.data?.Errors[0]?.code || error.message } });
             setTimeout(closeToast, 5000);
           },
           onSuccess: (data, variables) => {
@@ -198,7 +207,7 @@ function change(){
           "adhocExemption":second,
           "adhocExemptionReason":selectedRebateReason.value,
         }
-        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+second;
+        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount-second;
            }
            else{
              alert( "Adhoc Exemption cannot be greater than the estimated tax for the given property");
@@ -210,14 +219,14 @@ function change(){
         if(second<total_amount){
           ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
             "taxHeadCode": "PT_TIME_REBATE",
-            "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount+second,
+            "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount-second,
             "category": "TAX"
         }
         AssessmentData.additionalDetails={
           "adhocExemption":second,
           "adhocExemptionReason":third_temp.current.value,
         }
-        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount+second;
+        ptCalculationEstimateData.Calculation[0].totalAmount=ptCalculationEstimateData?.Calculation[0]?.totalAmount-second;
            }
            else{
              alert( "Adhoc Exemption cannot be greater than the estimated tax for the given property");
@@ -272,14 +281,14 @@ const Penality_menu=[
   const selectRebateReason=(reason)=>{
     setSelectedRebateReason(reason);
   }
-const RebatePenalityPoPup=()=>{
+/* const RebatePenalityPoPup=() =>{
   return (
     <Modal
-          headerBarMain={<Heading label="PT_ADD_REBATE_PENALITY"/>}
+          headerBarMain={<Heading label={t("PT_ADD_REBATE_PENALITY")}/>}
           headerBarEnd={<CloseBtn onClick={()=>showPopUp(false)}/>}
-          actionCancelLabel="PT_CANCEL"
+          actionCancelLabel={t("PT_CANCEL")}
           actionCancelOnSubmit={()=>showPopUp(false)}
-          actionSaveLabel="PT_ADD"
+          actionSaveLabel={t("PT_ADD")}
           actionSaveOnSubmit={()=>(change())}
           hideSubmit={false}
           >
@@ -296,10 +305,11 @@ const RebatePenalityPoPup=()=>{
                 <Dropdown
                  isMandatory
                  option={Penality_menu}
-                 optionKey="title"
+                 optionKey="value"
                  select={selectPenalityReason}
                  selected={selectedPenalityReason}
                  isPropertyAssess={true}
+                 t={t}
                  />
                 </div>
               </div>
@@ -316,7 +326,7 @@ const RebatePenalityPoPup=()=>{
             <div className="field">
               <div className="field-container">
                 <div className="text-input field">
-                <input type="number" className="employee-card-input false focus-visible undefined" ref={first_temp}/>
+                <input key="firstTemp" type="number" className="employee-card-input false focus-visible undefined" ref={first_temp}/>
                 </div>
               </div>
             </div>                  
@@ -330,10 +340,11 @@ const RebatePenalityPoPup=()=>{
                 <Dropdown
                  isMandatory
                  option={Rebate_menu}
-                 optionKey="title"
+                 optionKey="value"
                  select={selectRebateReason}
                  selected={selectedRebateReason}
                  isPropertyAssess={true}
+                 t={t}
                  />
                 </div>
               </div>
@@ -358,7 +369,7 @@ const RebatePenalityPoPup=()=>{
       </div>
     }
     </Modal>)
-}
+} */
   return (
     <div>
       <Header>{t("PT_TX_ASSESSMENT")}</Header>
@@ -381,17 +392,21 @@ const RebatePenalityPoPup=()=>{
                   title: "ES_PT_TITLE_BILLING_PERIOD",
                   value: location?.state?.Assessment?.financialYear,
                 },
-                // {
-                //   title:"PT_BILLING_DUE_DATE",
-                //   value:date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear(),
-                // },
+                {
+                  title:"PT_BILLING_DUE_DATE",
+                  //value:date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear(),
+                  value:convertEpochToDate(paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.expiryDate,"PT") || t("CS_NA"),
+                },
               ],
-              additionalDetails: {
-                taxHeadEstimatesCalculation: ptCalculationEstimateData?.Calculation[0],
-              },
               },
               {
-                belowComponent:()=><LinkLabel onClick={()=>{showPopUp(true)}} style={{color:"red"}}>{t("PT_ADD_REBATE_PENALITY")}</LinkLabel>
+                title:"PT_TAX_ESTIMATION_HEADER",
+                additionalDetails: {
+                  taxHeadEstimatesCalculation: ptCalculationEstimateData?.Calculation[0],
+                },
+              },
+              {
+                belowComponent:()=><LinkLabel onClick={()=>{showPopUp(true)}} style={{color:"#F47738"}}>{t("PT_ADD_REBATE_PENALITY")}</LinkLabel>
               },
               {
                 title: "PT_ASSESMENT_INFO_SUB_HEADER",
@@ -451,25 +466,26 @@ const RebatePenalityPoPup=()=>{
               belowComponent:()=>{
                 return (
                   <div style={{marginTop:"19px"}}>
-                  <CardSubHeader style={{marginBottom:"8px",color:"rgb(80,90,95)",fontSize:"24px"}}>
+                  <CardSubHeader style={{marginBottom:"8px",color:"#0B0C0C",fontSize:"24px"}}>
                   {t("PT_CALC_DETAILS")}<br/>
-                    <CardSectionHeader style={{marginBottom:"16px",color:"rgb(80,90,95)",fontSize:"16px",marginTop:"revert"}}>{t("PT_CALC_LOGIC_HEADER")}<br/>{t("PT_CALC_LOGIC")}
-                    </CardSectionHeader>
                   </CardSubHeader>
-                    <div className="employee-data-table" style={{position:"relative",padding:"8px"}}>
-                    <div style={{position:"absolute",maxWidth:"640px",border:"1px solid rgb(214,213,212)",inset:"0px",width:"auto"}}/>
+                  <CardSectionHeader style={{marginBottom:"16px",color:"#0B0C0C",fontSize:"16px",marginTop:"revert"}}>{t("PT_CALC_LOGIC_HEADER")}</CardSectionHeader>
+                  <CardText style={{fontSize:"16px"}}>{t("PT_CALC_LOGIC")}</CardText>
+                    {/* <div className="employee-data-table" style={{position:"relative",padding:"8px"}}>
+                    <div style={{position:"absolute",maxWidth:"640px",border:"1px solid rgb(214,213,212)",inset:"0px",width:"auto"}}/> */}
+                    <div style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", borderRadius: "4px", background: "#FAFAFA" }}>
                     <div className="row border-none"><h2>{t("PT_APPLICABLE_CHARGE_SLABS")}</h2></div>
                     {/* <div className="row border-none"><h2>{t("PT_GRND_FLOOR_UNIT-1")}</h2>
                     <div className="value">{t("PT_RATE")}</div>
                     </div> */}
+                    <StatusTable>
                     {applicationDetails?.applicationData?.units
                     ?.filter((e) => e.active)
                     ?.sort?.((a, b) => a.floorNo - b.floorNo)
                     ?.map((unit, index) => (
-                      <div className="row border-none"><h2>{`${t("PT_GRND_FLOOR_UNIT-")}${index+1}`}</h2>
-                    <div className="value">{ChargeSlabsMenu?.PropertyTax && ChargeSlabsMenu?.PropertyTax?.ChargeSlabs?.filter((ob) => ob.floorNo == unit.floorNo)[0].name}</div>
-                    </div> 
+                    <Row label={`${t(`PROPERTYTAX_FLOOR_${unit?.floorNo}`)} ${t(`PT_UNIT`)} - ${index+1}`} text={ChargeSlabsMenu?.PropertyTax && ChargeSlabsMenu?.PropertyTax?.ChargeSlabs?.filter((ob) => ob.floorNo == unit.floorNo)?.[0]?.name} />
                     ))}
+                    </StatusTable>
                    </div>
                   </div>
                   
@@ -478,6 +494,7 @@ const RebatePenalityPoPup=()=>{
             }
           ]}
         }
+        showTimeLine={false}
         isLoading={isLoading}
         isDataLoading={isLoading}
         applicationData={appDetailsToShow?.applicationData}
@@ -496,7 +513,102 @@ const RebatePenalityPoPup=()=>{
         timelineStatusPrefix={"ES_PT_COMMON_STATUS_"}
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
       />
-      {popup && (<RebatePenalityPoPup/>)}
+      {/* {popup && (<RebatePenalityPoPup/>)} */}
+      {  popup && <Modal
+          headerBarMain={<Heading label={t("PT_ADD_REBATE_PENALITY")}/>}
+          headerBarEnd={<CloseBtn onClick={()=>showPopUp(false)}/>}
+          actionCancelLabel={t("PT_CANCEL")}
+          actionCancelOnSubmit={()=>{showPopUp(false)}}
+          actionSaveLabel={t("PT_ADD")}
+          actionSaveOnSubmit={()=>(change())}
+          hideSubmit={false}
+          >
+      {
+      <div>
+        <Card>
+        <CardSectionHeader>{t("PT_AD_PENALTY")}</CardSectionHeader>
+            <CardLabel>
+            {t("PT_TX_HEADS")}
+            </CardLabel>
+            <div className="field">
+              <div className="field-container">
+                <div className="text-input field">
+                <Dropdown
+                 isMandatory
+                 option={Penality_menu}
+                 optionKey="value"
+                 select={selectPenalityReason}
+                 selected={selectedPenalityReason}
+                 isPropertyAssess={true}
+                 t={t}
+                 />
+                </div>
+              </div>
+            </div>  
+            {selectedPenalityReason && selectedPenalityReason.value==="Others" && <div className="field">
+            <CardLabel>{t("PT_REASON")}</CardLabel>
+              <div className="field-container">
+                <div className="text-input field">
+                <input type="type" className="employee-card-input false focus-visible undefined" ref={fourth_temp}/>
+                </div>
+              </div>
+            </div>}      
+            <CardLabel>{t("PT_HEAD_AMT")}</CardLabel>
+            <div className="field">
+              <div className="field-container">
+                <div className="text-input field">
+                <input key="firstTemp" type="number" className="employee-card-input false focus-visible undefined" ref={first_temp}/>
+                </div>
+                {/* <TextInput
+                t={t}
+                type={"text"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="first_temp"
+                value={first_temp}
+                onChange={setFirstTemp}
+                />  */}
+              </div>
+            </div>                  
+        </Card>
+        <Card>
+        <CardSectionHeader>{t("PT_AD_REBATE")}</CardSectionHeader>
+            <CardLabel>{t("PT_TX_HEADS")}</CardLabel>
+            <div className="field">
+              <div className="field-container">
+                <div className="text-input field">
+                <Dropdown
+                 isMandatory
+                 option={Rebate_menu}
+                 optionKey="value"
+                 select={selectRebateReason}
+                 selected={selectedRebateReason}
+                 isPropertyAssess={true}
+                 t={t}
+                 />
+                </div>
+              </div>
+            </div>    
+            {selectedRebateReason && selectedRebateReason.value==="Others" && <div className="field">
+            <CardLabel>{t("PT_REASON")}</CardLabel>
+              <div className="field-container">
+                <div className="text-input field">
+                <input type="type" className="employee-card-input false focus-visible undefined" ref={third_temp}/>
+                </div>
+              </div>
+            </div>}  
+            <CardLabel>{t("PT_HEAD_AMT")}</CardLabel>
+            <div className="field">
+              <div className="field-container">
+                <div className="text-input field">
+                <input type="number" className="employee-card-input false focus-visible undefined" ref={second_temp}/>
+                </div>
+              </div>
+            </div> 
+        </Card>
+      </div>
+    }
+    </Modal>}
       {!queryClient.getQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear]) ? (
         <ActionBar>
           <SubmitBar label={t("PT_ASSESS_PROPERTY_BUTTON")} onSubmit={handleAssessment} />

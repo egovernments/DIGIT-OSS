@@ -109,7 +109,7 @@ const Download = {
 
     const element = ReactDOM.findDOMNode(node.current);
     return domtoimage.toJpeg(element, {
-      quality: 1.0,
+      quality: 0.95,
       bgcolor: 'white'
      }).then(function (dataUrl) {
        var blobData = dataURItoBlob(dataUrl);

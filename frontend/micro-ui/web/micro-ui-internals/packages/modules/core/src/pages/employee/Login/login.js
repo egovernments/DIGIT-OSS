@@ -5,12 +5,14 @@ import { useHistory } from "react-router-dom";
 import Background from "../../../components/Background";
 import Header from "../../../components/Header";
 
-const Login = ({ config: propsConfig, t }) => {
+const Login = ({ config: propsConfig, t ,isDisable}) => {
   const { data: cities, isLoading } = Digit.Hooks.useTenants();
   const { data: storeData, isLoading: isStoreLoading } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const [user, setUser] = useState(null);
   const [showToast, setShowToast] = useState(null);
+  const [ disable, setDisable] = useState(false);
+  
   const history = useHistory();
   // const getUserType = () => "EMPLOYEE" || Digit.UserService.getType();
 
@@ -18,6 +20,9 @@ const Login = ({ config: propsConfig, t }) => {
     if (!user) {
       return;
     }
+    Digit.SessionStorage.set("citizen.userRequestObject", user);
+    const filteredRoles = user?.info?.roles?.filter(role => role.tenantId === Digit.SessionStorage.get("Employee.tenantId"));
+    if (user?.info?.roles?.length > 0) user.info.roles = filteredRoles;
     Digit.UserService.setUser(user);
     const redirectPath = location.state?.from || "/digit-ui/employee";
     history.replace(redirectPath);
@@ -28,6 +33,8 @@ const Login = ({ config: propsConfig, t }) => {
       alert("Please Select City!");
       return;
     }
+    setDisable(true )
+   
     const requestData = {
       ...data,
       userType: "EMPLOYEE",
@@ -42,6 +49,7 @@ const Login = ({ config: propsConfig, t }) => {
       setShowToast(err?.response?.data?.error_description || "Invalid login credentials!");
       setTimeout(closeToast, 5000);
     }
+    setDisable(false)
   };
 
   const closeToast = () => {
@@ -104,8 +112,11 @@ const Login = ({ config: propsConfig, t }) => {
       <div className="employeeBackbuttonAlign">
         <BackButton variant="white" style={{ borderBottom: "none" }} />
       </div>
+      
       <FormComposer
+      
         onSubmit={onLogin}
+        isDisabled={ disable}
         noBoxShadow
         inline
         submitInForm
@@ -117,6 +128,7 @@ const Login = ({ config: propsConfig, t }) => {
         headingStyle={{ textAlign: "center" }}
         cardStyle={{ margin: "auto", minWidth: "408px" }}
         className="loginFormStyleEmployee"
+        
       >
         <Header />
       </FormComposer>

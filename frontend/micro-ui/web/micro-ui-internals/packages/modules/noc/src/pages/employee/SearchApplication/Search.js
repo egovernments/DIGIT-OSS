@@ -53,7 +53,7 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, error, isLoading, Coun
       data?.map((data) => ({
         [t("NOC_APP_NO_LABEL")]: data.applicationNo,
         [t("NOC_COMMON_TABLE_COL_APP_DATE_LABEL")]: Digit.DateUtils.ConvertEpochToDate(data.auditDetails?.createdTime) || "-",
-        [t("NOC_APPLICANTS_NAME_LABEL")]: data?.additionalDetails?.name || "-",
+        [t("NOC_APPLICANTS_NAME_LABEL")]: data?.additionalDetails?.applicantName || "-",
         [t("NOC_SOURCE_MODULE_LABEL")]: data.source ? t(`MODULE_${data.source}`) : "-",
         [t("NOC_SOURCE_MODULE_NUMBER")]: data?.sourceRefId || "-",
         [t("WF_INBOX_HEADER_CURRENT_OWNER")]: data?.additionalDetails?.currentOwner || "-",

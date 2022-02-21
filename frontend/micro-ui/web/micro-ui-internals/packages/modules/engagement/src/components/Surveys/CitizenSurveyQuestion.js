@@ -9,28 +9,38 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
     switch (answerType) {
       case "SHORT_ANSWER_TYPE":
         return (
-          <TextInput
-            name={question.uuid}
-            type="text"
-            inputRef={register({
-              maxLength: {
-                value: 60,
-                message: t("EXCEEDS_60_CHAR_LIMIT"),
-              },
-            })}
-          />
+          <>
+            <TextInput
+              name={question.uuid}
+              type="text"
+              inputRef={register({
+                maxLength: {
+                  value: 200,
+                  message: t("EXCEEDS_200_CHAR_LIMIT"),
+                },
+              })}
+            />
+            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "maxLength" && (
+              <CardLabelError>{t(`EXCEEDS_200_CHAR_LIMIT`)}</CardLabelError>
+            )} 
+          </>
         );
       case "LONG_ANSWER_TYPE":
         return (
-          <TextArea
-            name={question.uuid}
-            inputRef={register({
-              maxLength: {
-                value: 160,
-                message: t("EXCEEDS_160_CHAR_LIMIT"),
-              },
-            })}
-          />
+          <>
+            <TextArea
+              name={question.uuid}
+              inputRef={register({
+                maxLength: {
+                  value: 500,
+                  message: t("EXCEEDS_500_CHAR_LIMIT"),
+                },
+              })}
+            />
+            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "maxLength" && (
+              <CardLabelError>{t(`EXCEEDS_500_CHAR_LIMIT`)}</CardLabelError>
+            )}
+          </>
         );
       case "MULTIPLE_ANSWER_TYPE":
         return (

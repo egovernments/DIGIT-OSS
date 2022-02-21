@@ -9,7 +9,9 @@ const SurveySettingsForms = ({ t, controlSurveyForm, surveyFormState, disableInp
   const isValidFromDate = (enteredValue) => {
     const enteredTs = new Date(enteredValue).getTime()
     const toDate = getValues("toDate") ? new Date(getValues("toDate")).getTime() : new Date().getTime()
-    return ( toDate > enteredTs && enteredTs >= currentTs ) ? true : false 
+    // return ( toDate > enteredTs && enteredTs >= currentTs ) ? true : false 
+    return ( toDate > enteredTs ) ? true : false 
+    
   };
   const isValidToDate = (enteredValue) => {
     const enteredTs = new Date(enteredValue).getTime()

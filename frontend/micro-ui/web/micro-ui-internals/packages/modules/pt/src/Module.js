@@ -83,6 +83,7 @@ import EditApplication from "./pages/employee/EditApplication";
 import Response from "./pages/Response";
 import TransferOwnership from "./pages/employee/PropertyMutation";
 import DocsRequired from "./pages/employee/PropertyMutation/docsRequired";
+import SelectOtp from "../../core/src/pages/citizen/Login/SelectOtp";
 
 const componentsToRegister = {
   PTLandArea,
@@ -157,7 +158,8 @@ const componentsToRegister = {
   PTSearchPropertyComponent : SearchPropertyComponent,
   PTSearchResultsComponent : SearchResultsComponent,
   PTEditProperty : EditProperty,
-  PTMutateProperty : MutateProperty
+  PTMutateProperty : MutateProperty,
+  SelectOtp, // To-do: Temp fix, Need to check why not working if selectOtp module is already imported from core module
 };
 
 const addComponentsToRegistry = () => {

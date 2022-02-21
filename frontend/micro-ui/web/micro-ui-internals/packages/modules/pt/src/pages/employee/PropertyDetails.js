@@ -33,6 +33,7 @@ const PropertyDetails = () => {
   const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
   const [businessService, setBusinessService] = useState("PT.CREATE");
   const history = useHistory();
+  sessionStorage.setItem("propertyIdinPropertyDetail",applicationNumber);
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, applicationNumber);
   const { data: fetchBillData, isLoading: fetchBillLoading, revalidate } = Digit.Hooks.useFetchBillsForBuissnessService({

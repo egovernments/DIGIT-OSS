@@ -5,10 +5,12 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 import ErrorBoundary from "../../components/ErrorBoundaries";
 import { AppHome } from "../../components/Home";
 import TopBarSideBar from "../../components/TopBarSideBar";
+import StaticCitizenSideBar from "../../components/TopBarSideBar/SideBar/StaticCitizenSideBar";
 import CitizenHome from "./Home";
 import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
+import UserProfile from './Home/UserProfile';
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -47,7 +49,7 @@ const Home = ({
     return (
       <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
         <div className="moduleLinkHomePage">
-          <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound"/>
+          <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
           <BackButton className="moduleLinkHomePageBackButton" />
           <h1>{t("MODULE_" + code.toUpperCase())}</h1>
         </div>
@@ -70,7 +72,11 @@ const Home = ({
         handleUserDropdownSelection={handleUserDropdownSelection}
         logoUrl={logoUrl}
       />
+
       <div className={`main center-container mb-25`}>
+        <div className="SideBarStatic">
+          <StaticCitizenSideBar />
+        </div>
         <Switch>
           <Route exact path={path}>
             <CitizenHome />
@@ -96,6 +102,11 @@ const Home = ({
           <Route path={`${path}/register`}>
             <Login stateCode={stateCode} isUserRegistered={false} />
           </Route>
+
+          <Route path={`${path}/user/profile`}>
+            <UserProfile stateCode={stateCode} userType={'citizen'} />
+          </Route>
+
           <ErrorBoundary>
             {appRoutes}
             {ModuleLevelLinkHomePages}

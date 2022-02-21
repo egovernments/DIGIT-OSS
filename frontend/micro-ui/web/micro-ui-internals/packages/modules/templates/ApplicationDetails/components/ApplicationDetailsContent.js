@@ -26,6 +26,7 @@ function ApplicationDetailsContent({
   applicationData,
   businessService,
   timelineStatusPrefix,
+  showTimeLine=true,
   statusAttribute = "status",
   paymentsList
 }) {
@@ -221,7 +222,7 @@ function ApplicationDetailsContent({
           )}
         </React.Fragment>
       ))}
-      {workflowDetails?.data?.timeline?.length > 0 && (
+      {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
         <React.Fragment>
           <BreakLine />
           {(workflowDetails?.isLoading || isDataLoading) && <Loader />}

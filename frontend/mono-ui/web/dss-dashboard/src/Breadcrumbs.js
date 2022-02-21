@@ -5,6 +5,7 @@ import {
   Typography
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
+import { isNurtDashboard } from "./utils/commons";
 
 
 const Breadcrumb = props => {
@@ -15,7 +16,7 @@ const Breadcrumb = props => {
   const pathnames = pathname.split("/").filter(x => x);
   return (
     <Breadcrumbs style={{ margin: 13 }} aria-label="breadcrumb">
-      {pathnames.map((name, index) => {
+      {isNurtDashboard()? <Typography key={'Home'}>{'Home'}</Typography>:pathnames.map((name, index) => {
        let displayname=getDisplayName(name); 
        let routeTo = `/${pathnames.slice(0, index + 1).join("/")}`; 
        if(window.location.pathname.toLowerCase().includes("national")==true){

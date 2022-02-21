@@ -17,6 +17,7 @@ const ApplicationDetails = () => {
   const [appDetailsToShow, setAppDetailsToShow] = useState({});
   const [enableAudit, setEnableAudit] = useState(false);
   const [businessService, setBusinessService] = useState("PT.CREATE");
+  sessionStorage.setItem("applicationNoinAppDetails",propertyId);
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, propertyId);
 
@@ -76,6 +77,9 @@ const ApplicationDetails = () => {
 
   useEffect(() => {
     showTransfererDetails();
+    if (appDetailsToShow?.applicationData?.status === "ACTIVE" && PT_CEMP&&businessService=="PT.CREATE") {
+       setBusinessService("PT.UPDATE");
+      }
   }, [auditData, applicationDetails, appDetailsToShow]);
 
   useEffect(() => {
@@ -87,7 +91,6 @@ const ApplicationDetails = () => {
   const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
 
   if (appDetailsToShow?.applicationData?.status === "ACTIVE" && PT_CEMP) {
-    if (businessService == "PT.CREATE") setBusinessService("PT.UPDATE");
     workflowDetails = {
       ...workflowDetails,
       data: {
@@ -167,10 +170,11 @@ const ApplicationDetails = () => {
   }
  if (applicationDetails?.applicationData?.creationReason === "MUTATION"){
    return(
-   <MutationApplicationDetails 
-   acknowledgementIds={appDetailsToShow?.applicationData?.acknowldgementNumber}
-   workflowDetails={workflowDetails}
-   />
+    <MutationApplicationDetails 
+      acknowledgementIds={appDetailsToShow?.applicationData?.acknowldgementNumber}
+      workflowDetails={workflowDetails}
+      mutate={mutate}
+    />
    )
  } 
 
