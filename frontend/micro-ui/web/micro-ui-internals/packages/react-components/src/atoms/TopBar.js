@@ -19,7 +19,7 @@ const TopBar = ({
 }) => {
   return (
     <div className="navbar">
-      <div className="center-container">
+      <div className="nav">
         {isMobile && <Hamburger handleClick={toggleSidebar} />}
         <img
           className="city"

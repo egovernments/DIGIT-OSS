@@ -85,12 +85,12 @@ const NewApplication = () => {
       data?.owners.map((data) => {
         let obj = {};
         if (data?.dob) obj.dob = convertDateToEpoch(data?.dob);
-        // if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
+        if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
         if (data?.gender?.code) obj.gender = data?.gender?.code;
         if (data?.mobileNumber) obj.mobileNumber = Number(data?.mobileNumber);
         if (data?.name) obj.name = data?.name;
         if (data?.permanentAddress) obj.permanentAddress = data?.permanentAddress;
-        // if (data?.relationship) obj.relationship = data?.relationship?.code;
+        if (data?.relationship) obj.relationship = data?.relationship?.code;
         if (data?.emailId) obj.emailId = data?.emailId;
         if (data?.ownerType?.code) obj.ownerType = data?.ownerType?.code;
         owners.push(obj);

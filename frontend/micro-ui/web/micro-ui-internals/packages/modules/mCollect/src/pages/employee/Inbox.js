@@ -183,6 +183,10 @@ const Inbox = ({
         title: t("ES_SEARCH_APPLICATION_MOBILE_INVALID"),
         componentInFront: "+91",
       },
+      {
+        label: t("UC_RECIEPT_NUMBER_LABEL"),
+        name: "receiptNumber",
+      },
     ];
   };
 

@@ -6,7 +6,7 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAx
 import FilterContext from "./FilterContext";
 import NoData from "./NoData";
 
-const barColors = ["#048BD0", "#FBC02D", "#8E29BF"];
+const barColors = ["#048BD0", "#FBC02D", "#8E29BF","#EA8A3B","#0BABDE","#6E8459"];
 
 const CustomHorizontalBarChart = ({
   data,

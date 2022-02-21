@@ -105,9 +105,9 @@ const ReNewApplication = (props) => {
   if (applicationData?.tradeLicenseDetail?.owners?.length > 0) {
     applicationData?.tradeLicenseDetail?.owners?.forEach((data, index) => {
       if (typeof data?.gender == "string") data.gender = { code: data?.gender, i18nKey: `TL_GENDER_${data?.gender}` };
-      // if (typeof data?.relationship == "string") data.relationship = { code: data?.relationship, i18nKey: `COMMON_RELATION_${data?.relationship}` };
+      if (typeof data?.relationship == "string") data.relationship = { code: data?.relationship, i18nKey: `COMMON_RELATION_${data?.relationship}` };
       if (typeof data?.ownerType == "string") data.ownerType = { code: data?.ownerType, i18nKey: data?.ownerType };
-      // if (!data?.fatherOrHusbandName) data.fatherOrHusbandName = "";
+      if (!data?.fatherOrHusbandName) data.fatherOrHusbandName = "";
       if (!data?.emailId) data.emailId = "";
       if (!data?.permanentAddress) data.permanentAddress = "";
       data.key = Date.now() + (index + 1) * 20;

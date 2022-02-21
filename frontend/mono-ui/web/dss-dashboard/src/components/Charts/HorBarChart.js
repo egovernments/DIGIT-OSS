@@ -25,10 +25,11 @@ class HorBarChart extends React.Component {
     super(props);
     this.state = {
       tooltipContent: "",
+      drillDown: false,
     };
   }
 
-  callAPI() {
+  callAPI(filterkey="") {
     let code = this.props.chartData["id"] ? this.props.chartData["id"] : "";
     let filters = this.props.filters;
     if (this.props.page.includes("ulb")) {
@@ -37,6 +38,9 @@ class HorBarChart extends React.Component {
         tenentFilter.push(`${localStorage.getItem("tenant-id")}`);
         filters["tenantId"] = tenentFilter;
       }
+    }
+    if(filterkey!=""){
+      filters["state"] = this.props.selectedState;
     }
     let requestBody = getChartOptions(code, filters);
     let chartsAPI = new ChartsAPI(
@@ -51,6 +55,16 @@ class HorBarChart extends React.Component {
   componentDidMount() {
     this.callAPI();
   }
+  componentDidUpdate() {
+    if (this.props.selectedState !== "" && !this.state.drillDown) {
+      this.callAPI(this.props.selectedState);
+      this.setState({ drillDown: true });
+    }else if(this.props.selectedState == "" && this.state.drillDown){
+      this.callAPI();
+      this.setState({ drillDown: false });
+    }
+  }
+  
   render() {
     let { strings } = this.props;
 

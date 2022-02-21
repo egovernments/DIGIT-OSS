@@ -74,6 +74,9 @@ const Home = ({
       />
 
       <div className={`main center-container mb-25`}>
+        <div className="SideBarStatic">
+          <StaticCitizenSideBar />
+        </div>
         <Switch>
           <Route exact path={path}>
             <CitizenHome />
