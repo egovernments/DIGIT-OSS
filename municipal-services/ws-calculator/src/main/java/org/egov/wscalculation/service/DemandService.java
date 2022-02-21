@@ -198,15 +198,18 @@ public class DemandService {
 					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
 		}
 
-		log.info("Demand Object" + demands.toString());
+//		log.info("Demand Object" + demands.toString());
 		String billingcycle = (String) masterMap.get(WSCalculationConstant.Billing_Cycle_String);
 		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
 				.requestInfo(requestInfo)
 				.tenantId(calculations.get(0).getTenantId())
 				.waterConnectionIds(waterConnectionIds)
 				.billingCycle(billingcycle)
-				.isSuccess(false).build();
+				.build();
+
+		log.info("pushing DemandNotificationObj -> "+notificationObj.toString());
 		List<Demand> demandRes = demandRepository.saveDemand(requestInfo, demands,notificationObj);
+		log.info("isForConnectionNO boolean "+isForConnectionNO);
 		if(isForConnectionNO)
 		fetchBill(demandRes, requestInfo,masterMap);
 		return demandRes;
@@ -692,15 +695,7 @@ public class DemandService {
 				// log.info("Prepared Statement" + calculationRes.toString());
 				waterConnectionIds.add(connectionNo);
 			}
-			String billingcycle = (String) master.get(WSCalculationConstant.Billing_Cycle_String);
-			DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo)
-					.tenantId(tenantId)
-					.waterConnectionIds(waterConnectionIds)
-					.billingCycle(billingcycle)
-					.isSuccess(true).build();
 
-			log.info("pushing -> "+notificationObj.toString());
-		wsCalculationProducer.push(configs.getOnDemandsSaved(), notificationObj);
 		}
 	}
 
