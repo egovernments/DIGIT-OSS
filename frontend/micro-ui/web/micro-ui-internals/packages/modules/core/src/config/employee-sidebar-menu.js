@@ -6,7 +6,6 @@ import {
   EventsIconSolid,
   PTIcon,
   PropertyHouse,
-  HomeIcon,
   PMBIconSolid,
   DocumentIconSolid,
   ReceiptIcon,
@@ -58,20 +57,6 @@ const EmployeeSideBarMenu = (t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC,
   PT && {
     Icon: <PropertyHouse />,
     moduleName: t("ES_TITLE_PROPERTY_TAX"),
-    links: [
-      {
-        label: t("ES_COMMON_INBOX"),
-        link: `/digit-ui/employee/pt/inbox`,
-      },
-      {
-        label: t("SEARCH_PROPERTY"),
-        link: `/digit-ui/employee/pt/search`,
-      },
-      {
-        label: t("ES_COMMON_APPLICATION_SEARCH"),
-        link: `/digit-ui/employee/pt/application-search`,
-      },
-    ],
   },
   DSS && {
     Icon: <PMBIconSolid />,
@@ -131,7 +116,7 @@ const EmployeeSideBarMenu = (t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC,
     ],
   },
   RECEIPTS && {
-    Icon: <ReceiptIcon />,
+    Icon: <ComplaintIcon />,
     moduleName: t("ACTION_TEST_RECEIPTS"),
 
     links: [
@@ -173,15 +158,8 @@ const EmployeeSideBarMenu = (t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC,
     ],
   },
   PGR && {
-    Icon: <ReceiptIcon />,
+    Icon: <ComplaintIcon />,
     moduleName: t("ES_PGR_HEADER_COMPLAINT"),
-
-    links: [
-      {
-        label: t("ES_PGR_INBOX"),
-        link: `/digit-ui/employee/pgr/inbox`,
-      },
-    ],
   },
 ];
 export default EmployeeSideBarMenu;

@@ -2,18 +2,22 @@ import React, { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import EmployeeSideBarMenu from "../../../config/employee-sidebar-menu";
 import SubMenu from "./SubMenu";
-import {
-  PersonIcon,
-  ShippingTruck,
-  PTIcon,
-  PMBIconSolid,
-  EventsIconSolid,
-  DocumentIconSolid,
-  HomeIcon,
-  CaseIcon,
-} from "@egovernments/digit-ui-react-components";
+import { EventsIconSolid, HomeIcon, CaseIcon, ReceiptIcon, PropertyHouse } from "@egovernments/digit-ui-react-components";
 import { checkForEmployee } from "../../../../../tl/src/utils";
 import { Link } from "react-router-dom";
+
+const nationalScreenURLs = {
+  propertytax: { key: "national-propertytax", stateKey: "propertytax", label: "ACTION_TEST_PROPERTY_TAX", active: false, nActive: true },
+  tradelicense: { key: "national-tradelicense", stateKey: "tradelicense", label: "ACTION_TEST_TRADELICENSE", active: false, nActive: true },
+  pgr: { key: "national-pgr", stateKey: "pgr", label: "ACTION_TEST_PGR", active: false, nActive: true },
+  fsm: { key: "fsm", stateKey: "fsm", label: "ACTION_TEST_FSM", active: true, nActive: false },
+  mCollect: { key: "national-mcollect", stateKey: "mCollect", label: "ACTION_TEST_MCOLLECT", active: true, nActive: true },
+  ws: { key: "national-ws", stateKey: "ws", label: "ACTION_TEST_WATER_&_SEWERAGE", active: true, nActive: true },
+  obps: { key: "nss-obps", stateKey: "obps", label: "CS_COMMON_OBPS", active: true, nActive: true },
+  noc: { key: "national-firenoc", stateKey: "noc", label: "ACTION_TEST_FIRE_NOC", active: true, nActive: true },
+  overview: { key: "national-overview", stateKey: "overview", label: "ACTION_TEST_OVERVIEW", active: false, nActive: false },
+};
+
 const EmployeeSideBar = () => {
   const sidebarRef = useRef(null);
   const { t } = useTranslation();
@@ -26,11 +30,11 @@ const EmployeeSideBar = () => {
   const RECEIPTS = Digit.Utils.receiptsAccess();
   const TL = Digit.Utils.tlAccess();
   const NOC = Digit.Utils.NOCAccess();
-  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
-  const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
-  const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
   const FSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
   const PGR = Digit.Utils.pgrAccess();
+  const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
+  const STADMIN = Digit.UserService.hasAccess("STADMIN");
+  const NATADMIN = Digit.UserService.hasAccess("NATADMIN");
 
   useEffect(() => {
     sidebarRef.current.style.cursor = "pointer";
@@ -39,12 +43,15 @@ const EmployeeSideBar = () => {
 
   const expandNav = () => {
     sidebarRef.current.style.width = "260px";
+    sidebarRef.current.style.overflow = "auto";
+
     sidebarRef.current.querySelectorAll(".dropdown-link").forEach((element) => {
       element.style.display = "flex";
     });
   };
   const collapseNav = () => {
     sidebarRef.current.style.width = "55px";
+    sidebarRef.current.style.overflow = "hidden";
 
     sidebarRef.current.querySelectorAll(".dropdown-link").forEach((element) => {
       element.style.display = "none";
@@ -83,10 +90,34 @@ const EmployeeSideBar = () => {
     },
   ];
 
-  links = links.filter((link) => (link.role ? checkForEmployee(link.role) : true));
+  let ptProps = [
+    {
+      label: t("ES_COMMON_INBOX"),
+      link: `/digit-ui/employee/pt/inbox`,
+    },
+    {
+      label: t("SEARCH_PROPERTY"),
+      link: `/digit-ui/employee/pt/search`,
+    },
+    {
+      label: t("ES_COMMON_APPLICATION_SEARCH"),
+      link: `/digit-ui/employee/pt/application-search`,
+    },
+  ];
+
   propsForCSR = propsForCSR.filter((link) => link.role && Digit.Utils.didEmployeeHasRole(link.role));
 
-  let menuItems = [...EmployeeSideBarMenu(t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC, FSTPOperator, PGR)];
+  let pgrLinks = [
+    {
+      label: t("ES_PGR_INBOX"),
+      link: `/digit-ui/employee/pgr/inbox`,
+    },
+    ...propsForCSR,
+  ];
+
+  links = links.filter((link) => (link.role ? checkForEmployee(link.role) : true));
+
+  let menuItems = [...EmployeeSideBarMenu(t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC, FSTPOperator, PGR, pgrLinks)];
   let index = menuItems.findIndex((item) => item.moduleName === "Trade License");
 
   if (index !== -1) {
@@ -105,37 +136,44 @@ const EmployeeSideBar = () => {
     link: "/digit-ui/employee/",
   });
 
-  //append the  propsForCSR to the PGR module
-  let pgrIndex = menuItems.findIndex((item) => item.moduleName === "Complaint");
+  let pgrIndex = menuItems.findIndex((item) => item.moduleName === "Complaints");
   if (pgrIndex !== -1) {
-    menuItems[pgrIndex].links = [...menuItems[pgrIndex].links, ...propsForCSR];
+    if (!menuItems[pgrIndex].links) {
+      menuItems[pgrIndex].links = [];
+    }
+    menuItems[pgrIndex].links = [...menuItems[pgrIndex].links, ...pgrLinks];
   } else {
     menuItems.push({
-      Icon: <CaseIcon />,
-      moduleName: "PGR",
-      links: propsForCSR,
+      Icon: <ReceiptIcon />,
+      moduleName: "Complaints",
+      links: pgrLinks,
     });
   }
 
-  // const linksForSomeFSMEmployees =
-  //   !DSO && !COLLECTOR && !FSM_EDITOR
-  //     ? [
-  //         {
-  //           label: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
-  //           link: `/digit-ui/employee/fsm/new-application`,
-  //         },
-  //       ]
-  //     : [];
+  let ptIndex = menuItems.findIndex((item) => item.moduleName === "Property Tax");
+  if (ptIndex !== -1) {
+    if (!menuItems[ptIndex].links) {
+      menuItems[ptIndex].links = [];
+    }
+    menuItems[ptIndex].links = [...menuItems[ptIndex].links, ...ptProps];
+  }
 
-  // let index1 = menuItems.findIndex((item) => item.moduleName === "FAECAL SLUDEG MGMT");
-  // if (index1 !== -1) {
-  //   menuItems[index1].links = [...menuItems[index1].links, ...linksForSomeFSMEmployees];
-  // } else {
-  //   menuItems.push({
-  //     links: linksForSomeFSMEmployees,
-  //   });
-  // }
-  let result = menuItems.filter((e) => e);
+  let nsLinks = Object.values(nationalScreenURLs)
+    .filter((ele) => ele[NATADMIN ? "nActive" : "active"] == true)
+    .map((obj) => ({
+      label: t(obj?.label),
+      link: `/digit-ui/employee/dss/dashboard/${NATADMIN ? obj?.key : obj?.stateKey}`,
+    }));
+
+  if (STADMIN && NATADMIN) {
+    menuItems.push({
+      Icon: <EventsIconSolid />,
+      moduleName: NATADMIN ? t("ACTION_TEST_NATDASHBOARD") : t("ES_TITLE_DSS"),
+      links: [...nsLinks],
+    });
+  }
+
+  let result = menuItems.filter((ele) => ele);
 
   return (
     <div className="sidebar" ref={sidebarRef} onMouseOver={expandNav} onMouseLeave={collapseNav}>
