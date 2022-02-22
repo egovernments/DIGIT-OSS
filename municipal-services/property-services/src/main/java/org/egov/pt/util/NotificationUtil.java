@@ -306,7 +306,7 @@ public class NotificationUtil {
             if(message.contains(PT_TAX_FULL))
                 message = message.replace(PT_TAX_FULL,"");
 
-            String subject = "";
+            String subject = "eGovernments Notifications";
             String body = message;
             log.info(body);
             Email emailobj = new Email();
