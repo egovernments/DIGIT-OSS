@@ -87,6 +87,11 @@ public class ExternalEmailService implements EmailService {
 			helper.setText(email.getBody(), true);
 			/*log here*/
 			log.info(email.toString());
+			log.info(mailSender.getHost());
+			log.info(mailSender.getProtocol());
+			log.info(mailSender.getDefaultEncoding());
+			log.info(mailSender.getUsername());
+			log.info(String.valueOf(mailSender.getPort()));
 			for(int i=0; i<email.getFileStoreId().size(); i++) {
 				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, "pb", email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);

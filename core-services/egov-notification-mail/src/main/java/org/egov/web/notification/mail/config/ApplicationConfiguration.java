@@ -70,13 +70,7 @@ public class ApplicationConfiguration {
         mailProperties.setProperty("mail.smtps.auth", emailProperties.getMailSmtpsAuth());
         mailProperties.setProperty("mail.smtps.starttls.enable", emailProperties.getMailStartTlsEnabled());
         mailProperties.setProperty("mail.smtps.debug", emailProperties.getMailSmtpsDebug());
-        log.info(emailProperties.getMailHost());
-        log.info(emailProperties.getMailProtocol());
-        log.info(emailProperties.getMailSenderUsername());
-        log.info(emailProperties.getMailSmtpsAuth());
-        log.info(emailProperties.getMailSmtpsDebug());
-        log.info(emailProperties.getMailPort().toString());
-        log.info(emailProperties.getMailStartTlsEnabled());
+
         mailSender.setJavaMailProperties(mailProperties);
         return mailSender;
     }
