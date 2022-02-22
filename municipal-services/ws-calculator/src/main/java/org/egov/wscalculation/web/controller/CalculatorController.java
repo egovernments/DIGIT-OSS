@@ -104,7 +104,7 @@ public class CalculatorController {
 	}
 
 	@PostMapping("/_test")
-	public ResponseEntity test( @RequestBody DemandNotificationObj demandNotificationObj){
+	public ResponseEntity test( @Valid @RequestBody DemandNotificationObj demandNotificationObj){
 		log.info("Here controller!");
 		wsCalculationProducer.push("ws-demand-saved",demandNotificationObj);
 		return new ResponseEntity(HttpStatus.OK);

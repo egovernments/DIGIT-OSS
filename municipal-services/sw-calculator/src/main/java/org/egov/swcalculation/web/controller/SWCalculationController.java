@@ -91,7 +91,7 @@ public class SWCalculationController {
 	}
 
 	@PostMapping("/_test")
-	public ResponseEntity test( @RequestBody DemandNotificationObj demandNotificationObj){
+	public ResponseEntity test(@Valid @RequestBody DemandNotificationObj demandNotificationObj){
 		log.info("Here controller!");
 		swCalculationProducer.push("sw-demand-saved",demandNotificationObj);
 		return new ResponseEntity(HttpStatus.OK);
