@@ -296,20 +296,18 @@ public class NotificationUtil {
         List<EmailRequest> emailRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
             String message = mobileNumberToMsg.get(entryset.getKey());
-            String customizedMsg = message;
-
             if(message.contains(NOTIFICATION_EMAIL))
-                customizedMsg = customizedMsg.replace(NOTIFICATION_EMAIL, entryset.getValue());
+                message = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
 
             //removing lines to match Email Templates
             if(message.contains(PT_TAX_PARTIAL))
-                customizedMsg = customizedMsg.replace(PT_TAX_PARTIAL,"");
+                message = message.replace(PT_TAX_PARTIAL,"");
 
             if(message.contains(PT_TAX_FULL))
-                customizedMsg = customizedMsg.replace(PT_TAX_FULL,"");
+                message = message.replace(PT_TAX_FULL,"");
 
             String subject = "";
-            String body = customizedMsg;
+            String body = message;
             log.info(body);
             Email emailobj = new Email();
             if(fileStoreIds==null) {
