@@ -179,6 +179,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 isMandatory={true}
                 name="name"
                 value={field.name}
+                ValidationRequired={true}
                 onChange={(e) => handleTextInputField(index, e, "name")}
                 //disable={isUpdateProperty || isEditProperty}
                 {...{validation : {
@@ -208,6 +209,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 name="fatherOrHusbandName"
                 value={field.fatherOrHusbandName}
                 onChange={(e) => handleTextInputField(index, e, "fatherOrHusbandName")}
+                ValidationRequired={true}
                 {...{validation : {
                   // isRequired: true,
                   pattern: "^[a-zA-Z-.`' ]*$",
@@ -223,6 +225,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 name="designation"
                 value={field.designation}
                 onChange={(e) => handleTextInputField(index, e, "designation")}
+                ValidationRequired={true}
                 //disable={isUpdateProperty || isEditProperty}
                 {...{validation : {
                   // isRequired: true,
@@ -243,6 +246,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                   name="mobilenumber"
                   value={field.mobilenumber}
                   onChange={(e) => handleTextInputField(index, e, "mobilenumber")}
+                  ValidationRequired={true}
                   //disable={isUpdateProperty || isEditProperty}
                   {...{validation : {
                     isRequired: true,
@@ -264,6 +268,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                   name="altContactNumber"
                   value={field.altContactNumber}
                   onChange={(e) => handleTextInputField(index, e, "altContactNumber")}
+                  ValidationRequired={true}
                   //disable={isUpdateProperty || isEditProperty}
                   {...{validation : {
                     // isRequired: true,
@@ -281,6 +286,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 name="emailId"
                 value={field.emailId}
                 onChange={(e) => handleTextInputField(index, e, "emailId")}
+                ValidationRequired={true}
                 //disable={isUpdateProperty || isEditProperty}
                 {...{validation : {
                   // isRequired: true,
@@ -328,6 +334,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
               name="name"
               value={field.name}
               onChange={(e) => handleTextInputField(index, e, "name")}
+              ValidationRequired={true}
               //disable={isUpdateProperty || isEditProperty}
               {...{validation:{
                 isRequired: true,
@@ -361,6 +368,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 name="mobilenumber"
                 value={field.mobilenumber}
                 onChange={(e) => handleTextInputField(index, e, "mobilenumber")}
+                ValidationRequired={true}
                 //disable={isUpdateProperty || isEditProperty}
                 {...{validation : {
                   isRequired: true,
@@ -379,6 +387,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
               name="fatherOrHusbandName"
               value={field.fatherOrHusbandName}
               onChange={(e) => handleTextInputField(index, e, "fatherOrHusbandName")}
+              ValidationRequired={true}
               //disable={isUpdateProperty || isEditProperty}
               {...{validation : {
                 isRequired: true,
