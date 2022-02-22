@@ -153,10 +153,9 @@ public class PaymentNotificationService {
 
             if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
                 List<Event> events = new LinkedList<>();
-                if (null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
-                    events.addAll(getEvents(smsRequests, requestInfo, property, false,valMap));
-                    util.sendEventNotification(new EventRequest(requestInfo, events));
-                }
+                    events.addAll(getEvents(smsRequests, requestInfo, property, true,valMap));
+                log.info("Sending inapp notifications");
+                util.sendEventNotification(new EventRequest(requestInfo, events));
             }
 
             if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
@@ -253,12 +252,10 @@ public class PaymentNotificationService {
                 smsRequests.add(getSMSRequestsWithoutReceipt(payerMobileNo, customMessage, valMap));
             }
 
-            if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
                 if(paymentDetail.getTotalDue().compareTo(paymentDetail.getTotalAmountPaid())==0)
                     events.addAll(getEvents(smsRequests,requestInfo,property,false,valMap));
                 else events.addAll(getEvents(smsRequests,requestInfo,property,true,valMap));
 
-            }
         }
 
         if(configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
@@ -267,7 +264,9 @@ public class PaymentNotificationService {
 
         if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
             if (!CollectionUtils.isEmpty(events))
-                util.sendEventNotification(new EventRequest(requestInfo, events));
+            {
+                log.info("Sending inapp notifications");
+                util.sendEventNotification(new EventRequest(requestInfo, events));}
         }
 
         if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
@@ -616,8 +615,6 @@ public class PaymentNotificationService {
                     .eventDetails(null).actions(action).build());
 
         }
-
-
         return events;
     }
 
