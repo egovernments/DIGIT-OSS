@@ -117,7 +117,7 @@ export const httpRequest = async (
     })
   }
 
-  if (!some(queryObject, ["key", "tenantId"]) && commonConfig.singleInstance && isTenantId) {
+  if (!some(queryObject, ["key", "tenantId"]) && commonConfig.singleInstance && isTenantId && endPoint && !endPoint.includes("tenantId")) {
     queryObject &&
       queryObject.push({
         key: "tenantId",
