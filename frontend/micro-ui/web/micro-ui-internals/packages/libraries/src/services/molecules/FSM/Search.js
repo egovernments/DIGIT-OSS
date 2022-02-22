@@ -218,7 +218,8 @@ export const Search = {
       applicationDetails: citizenResponse,
       pdfData: { ...response, amountPerTrip, totalAmount, vehicleMake, vehicleCapacity, slumName, dsoDetails },
     };
-  },
+  }
+},
 
   allVehicles: (tenantId, filters) => {
     return FSMService.vehicleSearch(tenantId, filters);
