@@ -48,6 +48,8 @@ const AssessmentDetails = () => {
   const { data: ChargeSlabsMenu, isLoading: isChargeSlabsLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "ChargeSlabs");
  const fetchBillParams = { consumerCode : propertyId };
 
+ let ptCalculationEstimateDataCopy = ptCalculationEstimateData;
+
   const paymentDetails = Digit.Hooks.useFetchBillsForBuissnessService(
     { businessService: "PT", ...fetchBillParams, tenantId: tenantId },
     {
@@ -516,9 +518,9 @@ const Penality_menu=[
       {/* {popup && (<RebatePenalityPoPup/>)} */}
       {  popup && <Modal
           headerBarMain={<Heading label={t("PT_ADD_REBATE_PENALITY")}/>}
-          headerBarEnd={<CloseBtn onClick={()=>showPopUp(false)}/>}
+          headerBarEnd={<CloseBtn onClick={()=> {showPopUp(false), ptCalculationEstimateData = ptCalculationEstimateDataCopy}}/>}
           actionCancelLabel={t("PT_CANCEL")}
-          actionCancelOnSubmit={()=>{showPopUp(false)}}
+          actionCancelOnSubmit={()=>{ptCalculationEstimateData = ptCalculationEstimateDataCopy; showPopUp(false)}}
           actionSaveLabel={t("PT_ADD")}
           actionSaveOnSubmit={()=>(change())}
           hideSubmit={false}

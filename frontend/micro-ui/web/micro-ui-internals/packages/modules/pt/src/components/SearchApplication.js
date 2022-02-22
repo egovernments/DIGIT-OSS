@@ -171,7 +171,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                                 option={applicationTypes}
                                 optionKey="i18nKey"
                                 t={t}
-                                disable={true}
+                                disable={false}
                                 />
                             )}
                             />
@@ -189,7 +189,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                                 option={applicationStatuses}
                                 optionKey="i18nKey"
                                 t={t}
-                                disable={true}
+                                disable={false}
                                 />
                             )}
                             />
@@ -197,7 +197,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                 <SearchField>
                     <label>{t("PT_FROM_DATE")}</label>
                     <Controller
-                        render={(props) => <DatePicker date={props.value} disabled={true} onChange={props.onChange} />}
+                        render={(props) => <DatePicker date={props.value} disabled={false} onChange={props.onChange} />}
                         name="fromDate"
                         control={control}
                         />
@@ -205,7 +205,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                 <SearchField>
                     <label>{t("PT_TO_DATE")}</label>
                     <Controller
-                        render={(props) => <DatePicker date={props.value} disabled={true} onChange={props.onChange} />}
+                        render={(props) => <DatePicker date={props.value} disabled={false} onChange={props.onChange} />}
                         name="toDate"
                         control={control}
                         />

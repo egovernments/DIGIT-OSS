@@ -1,4 +1,4 @@
-import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, MultiLink } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -11,10 +11,12 @@ import ActionModal from "../../../../templates/ApplicationDetails/Modal";
 import { newConfigMutate } from "../../config/Mutate/config";
 import _ from "lodash";
 import get from "lodash/get";
+import { pdfDownloadLink } from "../../utils";
 
 const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDetails, mutate}) => {
   const { t } = useTranslation();
   const [displayMenu, setDisplayMenu] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
@@ -44,6 +46,15 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
       //   d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
       // select: (data) => data.Properties?.filter((e) => e.status === "ACTIVE")
     }
+  );
+  const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
+    {
+      tenantId: tenantId,
+      businessService: "PT.MUTATION",
+      consumerCodes: acknowledgementIds,
+      isEmployee: true,
+    },
+    {}
   );
 
   const [appDetailsToShow, setAppDetailsToShow] = useState({});
@@ -136,9 +147,22 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
     closeModal();
   };
 
+  async function getRecieptSearch({tenantId,payments,...params}) {
+    let response = { filestoreIds: [payments?.fileStoreId] };
+      response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{...payments}] }, "consolidatedreceipt");
+    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    window.open(fileStore[response?.filestoreIds[0]], "_blank");
+  }
+
   const closeModal = () => {
     setSelectedAction(null);
     setShowModal(false);
+  };
+
+  const handleDownload = async (document) => {
+    const res = await Digit.UploadServices.Filefetch([document?.fileStoreId], tenantId);
+    let documentLink = pdfDownloadLink(res.data, document?.fileStoreId);
+    window.open(documentLink, "_blank");
   };
 
   function onActionSelect(action) {
@@ -285,13 +309,39 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
     documentDate = `${date.getDate()} ${month} ${date.getFullYear()}`;
   }
 
+  let dowloadOptions = [];
+
+  dowloadOptions.push({
+    label: t("Mutation Application"),
+    onClick: () => getAcknowledgementData()
+  });
+  if(reciept_data && recieptDataLoading == false)
+  dowloadOptions.push({
+    label: t("Mutation Receipt"),
+    onClick: () => getRecieptSearch({tenantId: reciept_data?.Payments[0]?.tenantId,payments: reciept_data?.Payments[0]})
+  });
+  if(data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION").length>0)
+  dowloadOptions.push({
+    label: t("Mutation Certificate"),
+    onClick: () => handleDownload(data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION")[0])
+  });
+
   return (
     <React.Fragment>
-      <Header>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
+      <div className="cardHeaderWithOptions" style={{ marginRight: "auto" }}>
+      <Header styles={{fontSize: "32px"}}>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
       <div>
-            <div>
-               <LinkButton label={t("CS_COMMON_DOWNLOAD")} className="check-page-link-button pt-application-download-btn" onClick={handleDownloadPdf} />
-            </div>
+          <div>
+          {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
+          onHeadClick={() => setShowOptions(!showOptions)}
+          displayOptions={showOptions}
+          options={dowloadOptions}
+          className="multilinkWrapper"
+          style={{top:"90px"}}
+          />}
+          </div>
+        </div>
+      </div>
         <Card>
            <StatusTable>
              <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
@@ -448,8 +498,6 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
             forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
           />
         </Card>
-      </div>
-      
     </React.Fragment>
   );
 };
