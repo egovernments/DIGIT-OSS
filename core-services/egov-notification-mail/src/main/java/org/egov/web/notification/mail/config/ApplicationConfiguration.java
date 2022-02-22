@@ -40,6 +40,7 @@
 
 package org.egov.web.notification.mail.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -51,6 +52,7 @@ import lombok.Getter;
 import java.util.Properties;
 
 @Configuration
+@Slf4j
 public class ApplicationConfiguration {
 
     @Autowired
@@ -68,6 +70,13 @@ public class ApplicationConfiguration {
         mailProperties.setProperty("mail.smtps.auth", emailProperties.getMailSmtpsAuth());
         mailProperties.setProperty("mail.smtps.starttls.enable", emailProperties.getMailStartTlsEnabled());
         mailProperties.setProperty("mail.smtps.debug", emailProperties.getMailSmtpsDebug());
+        log.info(emailProperties.getMailHost());
+        log.info(emailProperties.getMailProtocol());
+        log.info(emailProperties.getMailSenderUsername());
+        log.info(emailProperties.getMailSmtpsAuth());
+        log.info(emailProperties.getMailSmtpsDebug());
+        log.info(emailProperties.getMailPort().toString());
+        log.info(emailProperties.getMailStartTlsEnabled());
         mailSender.setJavaMailProperties(mailProperties);
         return mailSender;
     }
