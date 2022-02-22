@@ -354,7 +354,7 @@ export const getwfdocuments = (data) => {
 export const getEditTradeDocumentUpdate = (data) => {
   let updateddocuments=[];
   let doc = data ? data.owners.documents : [];
-  data.tradeLicenseDetail.applicationDocuments.map((olddoc) => {
+  data?.tradeLicenseDetail?.applicationDocuments?.map((olddoc) => {
     if(olddoc.documentType === "OWNERPHOTO" && olddoc.fileStoreId === data.owners.documents["OwnerPhotoProof"].fileStoreId ||
     olddoc.documentType === "OWNERSHIPPROOF" && olddoc.fileStoreId == data.owners.documents["ProofOfOwnership"].fileStoreId ||
     olddoc.documentType === "OWNERIDPROOF" && olddoc.fileStoreId === data.owners.documents["ProofOfIdentity"].fileStoreId)

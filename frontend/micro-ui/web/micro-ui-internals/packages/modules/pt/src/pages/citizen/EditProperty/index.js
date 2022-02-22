@@ -335,15 +335,15 @@ const getPropertyEditDetails = (data = { }) => {
             ? { i18nKey: "PT_GROUND_PLUS_ONE_OPTION", code: 1 }
             : { i18nKey: "PT_GROUND_FLOOR_OPTION", code: 0 };
       data.noOofBasements = unitedit["-2"]
-        ? { i18nKey: "PT_TWO_BASEMENT_OPTION" }
+        ? { i18nKey: "PT_TWO_BASEMENT_OPTION", code:2 }
         : unitedit["-1"]
-          ? { i18nKey: "PT_ONE_BASEMENT_OPTION" }
-          : { i18nKey: "PT_NO_BASEMENT_OPTION" };
+          ? { i18nKey: "PT_ONE_BASEMENT_OPTION",code:1 }
+          : { i18nKey: "PT_NO_BASEMENT_OPTION",code:0 };
 
-      data.units = unitedit;
-      data.units = data?.units.concat(extraunits);
-      unitedit["-1"] ? (data.units["-1"] = unitedit["-1"]) : "";
-      unitedit["-2"] ? (data.units["-2"] = unitedit["-2"]) : "";
+      data.units = data?.units;
+      //data.units = data?.units.concat(extraunits);
+      //unitedit["-1"] ? (data.units["-1"] = unitedit["-1"]) : "";
+      //unitedit["-2"] ? (data.units["-2"] = unitedit["-2"]) : "";
     }
   } else {
     if (data?.additionalDetails?.propertyType?.code === "VACANT") {
