@@ -87,11 +87,11 @@ public class ExternalEmailService implements EmailService {
 			helper.setText(email.getBody(), true);
 			/*log here*/
 			log.info(email.toString());
-//			for(int i=0; i<email.getFileStoreId().size(); i++) {
-				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, "pb", "f44b709d-1256-41d8-aaf4-63fcbfc34e74");
+			for(int i=0; i<email.getFileStoreId().size(); i++) {
+				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, "pb", email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);
 				URLConnection con = url.openConnection();
-				String fieldValue = "attachment";
+				String fieldValue = "attachment" + i;
 //				if (fieldValue == null || ! fieldValue.contains("filename=\"")) {
 //					// no file name there -> throw exception ...
 //				}
@@ -105,7 +105,7 @@ public class ExternalEmailService implements EmailService {
 					fos.close();
 				}
 				helper.addAttachment(fieldValue, download);
-//			}
+			}
 			log.info("added attachments");
 
 		} catch (MessagingException | MalformedURLException e) {
@@ -120,6 +120,5 @@ public class ExternalEmailService implements EmailService {
 		} catch (MailException e){
 			log.error(EXCEPTION_MESSAGE, e);
 		}
-		log.info("message sent");
 	}
 }

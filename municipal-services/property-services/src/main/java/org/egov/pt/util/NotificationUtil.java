@@ -310,6 +310,7 @@ public class NotificationUtil {
 
             String subject = "";
             String body = customizedMsg;
+            log.info(body);
             Email emailobj = new Email();
             if(fileStoreIds==null) {
                 emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).fileStoreId(null).tenantId(tenantId).build();
