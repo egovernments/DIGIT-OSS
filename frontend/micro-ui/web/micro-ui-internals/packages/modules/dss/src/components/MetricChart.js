@@ -46,8 +46,7 @@ const MetricChartRow = ({ data,setChartDenomination,index }) => {
 
   useEffect(()=>{
     if(response)
-    index==0&&setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
-    console.log(index,'key');
+    index===0&&setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
   },[response])
 
   if (isLoading) {

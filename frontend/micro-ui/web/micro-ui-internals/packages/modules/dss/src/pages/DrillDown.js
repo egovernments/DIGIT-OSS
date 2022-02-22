@@ -84,12 +84,21 @@ const DrillDown = ({ stateCode }) => {
       filters: { ...filters?.filters, tenantId: [...filters?.filters?.tenantId].filter((tenant, index) => index !== id) },
     });
   };
-  const removeST = (id) => {
+   const removeST = (id) => {
+    let newStates=[...filters?.filters?.state].filter((tenant, index) => index !== id) ;
+    let newUlbs=filters?.filters?.ulb||[];
+    if(newStates?.length==0){
+      newUlbs=[];
+    }else{
+      let filteredUlbs=nationalInfo?.ulb?.filter((e) => Digit.Utils.dss.getCitiesAvailable(e, newStates))?.map(ulbs=>ulbs?.code)
+    newUlbs=newUlbs.filter(ulb=>filteredUlbs.includes(ulb))
+    }
     handleFilters({
       ...filters,
-      filters: { ...filters?.filters, state: [...filters?.filters?.state].filter((tenant, index) => index !== id) },
+      filters: { ...filters?.filters, state:newStates ,ulb:newUlbs},
     });
   };
+
   const removeTenant = (id) => {
     handleFilters({
       ...filters,
