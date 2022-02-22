@@ -47,7 +47,7 @@ public class IngestValidator {
     @Autowired
     private Producer producer;
 
-    private static final Pattern p = Pattern.compile("[^a-z0-9._()/&,\\- ]", Pattern.CASE_INSENSITIVE);
+    private static final Pattern p = Pattern.compile("[^a-z0-9._()/&:,\\- ]", Pattern.CASE_INSENSITIVE);
 
 
     public void verifyCrossStateRequest(Data data, RequestInfo requestInfo){
