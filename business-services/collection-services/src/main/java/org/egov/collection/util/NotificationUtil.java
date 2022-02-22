@@ -159,7 +159,7 @@ public class NotificationUtil {
             List<SMSRequest> smsRequests = createSMSRequest(message, name, phNo);
             List<Event> events = enrichEvent(smsRequests, receiptReq.getRequestInfo(), receiptReq.getPayment().getTenantId(), receipt, false);
 
-            producer.producer(eventTopic, new EventRequest(receiptReq.getRequestInfo(), events));
+            producer.producer(eventTopic, events);
 
         }
     }
@@ -344,5 +344,20 @@ public class NotificationUtil {
             throw new CustomException("REST_CALL_EXCEPTION : "+uri.toString(),e.getMessage());
         }
         return Optional.ofNullable(response);
+    }
+
+    public String getShortenedUrl(String url){
+
+        HashMap<String,String> body = new HashMap<>();
+        body.put("url",url);
+        StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
+        builder.append(config.getUrlShortnerEndpoint());
+        String res = restTemplate.postForObject(builder.toString(), body, String.class);
+
+        if(org.apache.commons.lang3.StringUtils.isEmpty(res)){
+            log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url); ;
+            return url;
+        }
+        else return res;
     }
 }

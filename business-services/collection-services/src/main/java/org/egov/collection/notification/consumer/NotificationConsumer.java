@@ -8,10 +8,7 @@ import java.util.Map;
 
 import com.jayway.jsonpath.Filter;
 import org.egov.collection.config.ApplicationProperties;
-import org.egov.collection.model.Instrument;
-import org.egov.collection.model.Payment;
-import org.egov.collection.model.PaymentDetail;
-import org.egov.collection.model.PaymentRequest;
+import org.egov.collection.model.*;
 import org.egov.collection.producer.CollectionProducer;
 import org.egov.collection.repository.ServiceRequestRepository;
 import org.egov.collection.util.NotificationUtil;
@@ -19,6 +16,7 @@ import org.egov.collection.web.contract.Bill;
 import org.egov.collection.web.contract.BillDetail;
 //import org.egov.collection.web.contract.Receipt;
 //import org.egov.collection.web.contract.ReceiptReq;
+import org.egov.collection.web.contract.SMSRequest;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
@@ -132,31 +130,31 @@ public class NotificationConsumer {
 	 */
 	@KafkaListener(topics = {"${kafka.topics.payment.create.name}","${kafka.topics.payment.update.name}"})
 	public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
-        try {
-            PaymentRequest req = objectMapper.convertValue(record, PaymentRequest.class);
-            Payment receipt = req.getPayment();
-            for (PaymentDetail detail : receipt.getPaymentDetails()) {
-                if (detail.getBusinessService().contains(BUSINESS_SERVICE_TL)) {
-                    List<String> configuredChannelNames = notifUtil.fetchChannelList(new RequestInfo(), req.getPayment().getTenantId(), BUSINESS_SERVICE_TL, ACTION_PAY);
-                    if (configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
-                        if (config.getIsSMSNotificationEnabled()) {
-                            notifUtil.sendSMSNotification(req);
-                        }
-                    }
-                    if (configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
-                        notifUtil.sendEventNotification(req);
-                    }
-                    if (configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
-                        notifUtil.sendEmailNotification(req);
-                    }
-                } else {
-                    sendNotification(req);
-                }
-            }
-        } catch (Exception e) {
-            log.error("Exception while reading from the queue: ", e);
-        }
-    }
+		try {
+			PaymentRequest req = objectMapper.convertValue(record, PaymentRequest.class);
+			Payment receipt = req.getPayment();
+			for (PaymentDetail detail : receipt.getPaymentDetails()) {
+				if (detail.getBusinessService().contains(BUSINESS_SERVICE_TL)) {
+					List<String> configuredChannelNames = notifUtil.fetchChannelList(new RequestInfo(), req.getPayment().getTenantId(), BUSINESS_SERVICE_TL, ACTION_PAY);
+					if (configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+						if (config.getIsSMSNotificationEnabled()) {
+							notifUtil.sendSMSNotification(req);
+						}
+					}
+					if (configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+						notifUtil.sendEventNotification(req);
+					}
+					if (configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
+						notifUtil.sendEmailNotification(req);
+					}
+				} else {
+					sendNotification(req);
+				}
+			}
+		} catch (Exception e) {
+			log.error("Exception while reading from the queue: ", e);
+		}
+	}
 
 	/*
 	 * Method to send notifications.
@@ -209,7 +207,8 @@ public class NotificationConsumer {
 			link.append(uiHost + "/citizen").append("/otpLogin?mobileNo=").append(bill.getMobileNumber()).append("&redirectTo=")
 					.append(uiRedirectUrl).append("&params=").append(paymentdetail.getTenantId() + "," + paymentdetail.getReceiptNumber());
 
-			content = content.replace("{rcpt_link}", link.toString());
+
+			content = content.replace("{rcpt_link}", notifUtil.getShortenedUrl(link.toString()));
 			String taxName = fetchContentFromLocalization(requestInfo, paymentdetail.getTenantId(),
 					BUSINESSSERVICE_LOCALIZATION_MODULE, formatCodes(paymentdetail.getBusinessService()));
 			if(StringUtils.isEmpty(taxName))
