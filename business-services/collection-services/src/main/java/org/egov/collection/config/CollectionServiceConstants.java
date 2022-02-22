@@ -310,4 +310,6 @@ public class CollectionServiceConstants {
     public static final String BUSINESS_SERVICE_TL = "TL";
 
     public static final String ACTION_PAY = "PAY";
+
+    public static final String NOTIFICATION_LOCALE = "en_IN";
 }

@@ -108,6 +108,7 @@ public class NotificationConsumer {
 
 	private static final String COLLECTION_LOCALIZATION_MODULE = "collection-services";
 	public static final String PAYMENT_MSG_LOCALIZATION_CODE = "coll.notif.payment.receipt.link";
+	public static final String PAYMENT_EMAIL_LOCALIZATION_CODE = "coll.notif.payment.receipt.link.email";
 	private static final String BUSINESSSERVICE_LOCALIZATION_MODULE = "rainmaker-uc";
 	public static final String BUSINESSSERVICELOCALIZATION_CODE_PREFIX = "BILLINGSERVICE_BUSINESSSERVICE_";
 	public static final String LOCALIZATION_CODES_JSONPATH = "$.messages.*.code";
@@ -208,15 +209,15 @@ public class NotificationConsumer {
 			link.append(uiHost + "/citizen").append("/otpLogin?mobileNo=").append(bill.getMobileNumber()).append("&redirectTo=")
 					.append(uiRedirectUrl).append("&params=").append(paymentdetail.getTenantId() + "," + paymentdetail.getReceiptNumber());
 
-			content = content.replaceAll("{rcpt_link}", link.toString());
+			content = content.replace("{rcpt_link}", link.toString());
 			String taxName = fetchContentFromLocalization(requestInfo, paymentdetail.getTenantId(),
 					BUSINESSSERVICE_LOCALIZATION_MODULE, formatCodes(paymentdetail.getBusinessService()));
 			if(StringUtils.isEmpty(taxName))
 				taxName = "Adhoc Tax";
-			content = content.replaceAll("{tax_name}", taxName);
-			content = content.replaceAll("{fin_year}", fetchFinYear(bill.getBillDetails().get(0).getFromPeriod(), bill.getBillDetails().get(0).getToPeriod()));
-			content = content.replaceAll("{rcpt_no}",  paymentdetail.getReceiptNumber());
-			content = content.replaceAll("{amount_paid}", bill.getAmountPaid().toString());
+			content = content.replace("{tax_name}", taxName);
+			content = content.replace("{fin_year}", fetchFinYear(bill.getBillDetails().get(0).getFromPeriod(), bill.getBillDetails().get(0).getToPeriod()));
+			content = content.replace("{rcpt_no}",  paymentdetail.getReceiptNumber());
+			content = content.replace("{amount_paid}", bill.getAmountPaid().toString());
 
 			message = content;
 		}
@@ -335,5 +336,28 @@ public class NotificationConsumer {
 		code = code.replaceAll(" ", "_");
 
 		return BUSINESSSERVICELOCALIZATION_CODE_PREFIX + code.toUpperCase();
+	}
+
+	public String buildEmailBody(Bill bill, PaymentDetail paymentdetail, RequestInfo requestInfo) {
+		String content = fetchContentFromLocalization(requestInfo, paymentdetail.getTenantId(), COLLECTION_LOCALIZATION_MODULE, PAYMENT_EMAIL_LOCALIZATION_CODE);
+		String message = null;
+		if(!StringUtils.isEmpty(content)) {
+			StringBuilder link = new StringBuilder();
+			link.append(uiHost + "/citizen").append("/otpLogin?mobileNo=").append(bill.getMobileNumber()).append("&redirectTo=")
+					.append(uiRedirectUrl).append("&params=").append(paymentdetail.getTenantId() + "," + paymentdetail.getReceiptNumber());
+
+			content = content.replace("{rcpt_link}", link.toString());
+			String taxName = fetchContentFromLocalization(requestInfo, paymentdetail.getTenantId(),
+					BUSINESSSERVICE_LOCALIZATION_MODULE, formatCodes(paymentdetail.getBusinessService()));
+			if(StringUtils.isEmpty(taxName))
+				taxName = "Adhoc Tax";
+			content = content.replace("{tax_name}", taxName);
+			content = content.replace("{fin_year}", fetchFinYear(bill.getBillDetails().get(0).getFromPeriod(), bill.getBillDetails().get(0).getToPeriod()));
+			content = content.replace("{rcpt_no}",  paymentdetail.getReceiptNumber());
+			content = content.replace("{amount_paid}", bill.getAmountPaid().toString());
+
+			message = content;
+		}
+		return message;
 	}
 }
