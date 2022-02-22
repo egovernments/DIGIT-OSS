@@ -317,5 +317,5 @@ public class CollectionServiceConstants {
 
     public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
     public static final String  USREVENTS_EVENT_NAME = "Trade License";
-    public static final String  USREVENTS_EVENT_POSTEDBY = "SYSTEM-PT";
+    public static final String  USREVENTS_EVENT_POSTEDBY = "SYSTEM-TL";
 }

@@ -157,7 +157,7 @@ public class NotificationUtil {
             String phNo = bill.getMobileNumber();
             String message = notificationConsumer.buildSmsBody(bill, detail, receiptReq.getRequestInfo());
             List<SMSRequest> smsRequests = createSMSRequest(message, name, phNo);
-            List<Event> events = enrichEvent(smsRequests, receiptReq.getRequestInfo(), receiptReq.getPayment().getTenantId(), receipt, true);
+            List<Event> events = enrichEvent(smsRequests, receiptReq.getRequestInfo(), receiptReq.getPayment().getTenantId(), receipt, false);
 
             producer.producer(eventTopic, new EventRequest(receiptReq.getRequestInfo(), events));
 
@@ -179,7 +179,6 @@ public class NotificationUtil {
                 request.put("mobileNumber", phNo);
                 request.put("message", message);
                 mobileNumberToEmails = fetchUserEmailIds(phNo, receiptReq.getRequestInfo(), tenantId);
-                producer.producer(eventTopic, request);
 
                 emailRequests.addAll(createEmailRequest(receiptReq.getRequestInfo(), message, mobileNumberToEmails));
 
@@ -282,12 +281,12 @@ public class NotificationUtil {
                 action = Action.builder().actionUrls(items).build();
             }
 
-            String description = removeForInAppMessage(mobileNumberToMsg.get(mobileNumber));
-            events.add(Event.builder().tenantId(tenantId).description(description)
+            events.add(Event.builder().tenantId(tenantId).description(smsRequests.get(0).getMessage())
                     .eventType(USREVENTS_EVENT_TYPE).name(USREVENTS_EVENT_NAME)
                     .postedBy(USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
                     .eventDetails(null).actions(action).build());
 
+            log.info("Event Message" + smsRequests.get(0).getMessage());
         });
         return events;
     }
