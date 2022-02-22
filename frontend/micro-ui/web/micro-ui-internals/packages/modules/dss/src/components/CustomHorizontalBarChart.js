@@ -62,6 +62,7 @@ const CustomHorizontalBarChart = ({
   };
 
   useEffect(()=>{
+    if(response)
     setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
   },[response])
 

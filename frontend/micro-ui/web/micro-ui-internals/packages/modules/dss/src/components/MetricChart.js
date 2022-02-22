@@ -1,5 +1,5 @@
 import { DownwardArrow, Rating, UpwardArrow } from "@egovernments/digit-ui-react-components";
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext ,useEffect} from "react";
 import { useTranslation } from "react-i18next";
 import FilterContext from "./FilterContext";
 //import {ReactComponent as Arrow_Downward} from "../images/Arrow_Downward.svg";
@@ -31,7 +31,7 @@ const MetricData = ({ t, data, code }) => {
   );
 };
 
-const MetricChartRow = ({ data }) => {
+const MetricChartRow = ({ data,setChartDenomination,index }) => {
   const { id, chartType } = data;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
@@ -43,6 +43,12 @@ const MetricChartRow = ({ data }) => {
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
   });
+
+  useEffect(()=>{
+    if(response)
+    index==0&&setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
+    console.log(index,'key');
+  },[response])
 
   if (isLoading) {
     return false;
@@ -73,12 +79,12 @@ const MetricChartRow = ({ data }) => {
   );
 };
 
-const MetricChart = ({ data }) => {
+const MetricChart = ({ data ,setChartDenomination}) => {
   const { charts } = data;
   return (
     <>
       {charts.map((chart, index) => (
-        <MetricChartRow data={chart} key={index} />
+        <MetricChartRow data={chart} key={index} index={index} setChartDenomination={setChartDenomination}/>
       ))}
     </>
   );
