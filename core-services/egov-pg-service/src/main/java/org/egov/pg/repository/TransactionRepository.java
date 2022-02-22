@@ -1,8 +1,11 @@
 package org.egov.pg.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pg.models.Transaction;
 import org.egov.pg.web.models.TransactionCriteria;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -18,6 +21,9 @@ public class TransactionRepository {
     private static final TransactionRowMapper rowMapper = new TransactionRowMapper();
 
     @Autowired
+    private MultiStateInstanceUtil centralInstanceutil;
+
+    @Autowired
     TransactionRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -25,6 +31,13 @@ public class TransactionRepository {
     public List<Transaction> fetchTransactions(TransactionCriteria transactionCriteria) {
         List<Object> params = new ArrayList<>();
         String query = TransactionQueryBuilder.getPaymentSearchQueryByCreatedTimeRange(transactionCriteria, params);
+
+        try {
+            query = centralInstanceutil.replaceSchemaPlaceholder(query, transactionCriteria.getTenantId());
+        } catch (InvalidTenantIdException e) {
+            throw new CustomException("PG_TENANTID_ERROR",
+                    "TenantId length is not sufficient to replace query schema in a multi state instance");
+        }
         log.debug(query);
         return jdbcTemplate.query(query, params.toArray(), rowMapper);
     }

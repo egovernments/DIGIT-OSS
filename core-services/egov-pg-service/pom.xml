@@ -88,7 +88,7 @@
     <dependency>
       <groupId>org.egov.services</groupId>
       <artifactId>services-common</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
+      <version>1.1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.jsoup</groupId>
@@ -98,10 +98,15 @@
   </dependencies>
   <repositories>
     <repository>
-			<id>repo.egovernments.org</id>
-			<name>eGov DIGIT Releases Repository</name>
-			<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
-		</repository>
+      <id>repo.egovernments.org</id>
+      <name>eGov DIGIT Releases Repository</name>
+      <url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>repo.digit.org</id>
+      <name>eGov DIGIT Releases Repository</name>
+      <url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+    </repository>
     <repository>
       <id>repo.egovernments.org.snapshots</id>
       <name>eGov ERP Releases Repository</name>
