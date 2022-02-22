@@ -29,7 +29,7 @@ const renderUnits = (t, denomination, symbol) => {
   }
 };
 
-const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
+const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data,setChartDenomination }) => {
   const lineLegend = {
     margin:"10px"
   }
@@ -69,6 +69,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
     if (response) {
       const totalWaste = Math.round(response?.responseData?.data?.[0]?.plots[response?.responseData?.data?.[0]?.plots.length - 1]?.value);
       setTotalWaste(totalWaste);
+      setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     }
   }, [response]);
 

@@ -1,5 +1,5 @@
 import { Loader } from "@egovernments/digit-ui-react-components";
-import React, { Fragment, useContext, useMemo } from "react";
+import React, { Fragment, useContext, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -19,6 +19,7 @@ const CustomHorizontalBarChart = ({
   layout = "horizontal",
   title,
   showDrillDown = false,
+  setChartDenomination
 }) => {
   const { id } = data;
   const { t } = useTranslation();
@@ -59,6 +60,10 @@ const CustomHorizontalBarChart = ({
     }
     return [Math.round((value + Number.EPSILON) * 100) / 100, name];
   };
+
+  useEffect(()=>{
+    setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
+  },[response])
 
   const chartData = useMemo(() => constructChartData(response?.responseData?.data), [response]);
 

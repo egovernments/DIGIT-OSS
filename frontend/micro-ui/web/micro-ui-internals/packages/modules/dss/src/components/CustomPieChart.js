@@ -7,7 +7,7 @@ import NoData from "./NoData";
 
 const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE", "#FFBB28", "#FF8042"];
 
-const CustomPieChart = ({ dataKey = "value", data }) => {
+const CustomPieChart = ({ dataKey = "value", data,setChartDenomination }) => {
   const { id } = data;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
@@ -22,6 +22,7 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
 
   const chartData = useMemo(() => {
     if (!response) return null;
+      setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     const compareFn = (a, b) => b.value - a.value;
     return response?.responseData?.data?.[0]?.plots.sort(compareFn).reduce((acc, plot, index) => {
       // if (index < 4) acc = acc.concat(plot);
