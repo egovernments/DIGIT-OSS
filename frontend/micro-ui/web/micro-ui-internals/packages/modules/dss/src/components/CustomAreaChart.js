@@ -235,6 +235,8 @@ Removed this custom yaxis label for all line charts
               dataKey={key}
               stroke={getColors(i)}
               activeDot={{ r: 8 }}
+              strokeWidth={2}
+              dot={{ stroke: getColors(i), strokeWidth: 1, r: 2, fill: getColors(i)}}
             />)
 
             })}
