@@ -10,7 +10,7 @@ import {
   CardSectionHeader,
   InfoBanner,
   Loader,
-  Toast
+  Toast,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
@@ -21,7 +21,7 @@ export const SelectPaymentType = (props) => {
   const { state = {} } = useLocation();
   const userInfo = Digit.UserService.getUser();
   const [showToast, setShowToast] = useState(null);
-  const { tenantId: __tenantId, authorization, workflow : wrkflow } = Digit.Hooks.useQueryParams();
+  const { tenantId: __tenantId, authorization, workflow: wrkflow } = Digit.Hooks.useQueryParams();
   const paymentAmount = state?.paymentAmount;
   const { t } = useTranslation();
   const history = useHistory();
@@ -33,14 +33,17 @@ export const SelectPaymentType = (props) => {
   const stateTenant = Digit.ULBService.getStateId();
   const { control, handleSubmit } = useForm();
   const { data: menu, isLoading } = Digit.Hooks.useCommonMDMS(stateTenant, "DIGIT-UI", "PaymentGateway");
-  const { data: paymentdetails, isLoading: paymentLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode : wrkflow === "WNS"? stringReplaceAll(consumerCode,"+","/") : consumerCode, businessService }, {});
-  useEffect(()=>{
-    if(paymentdetails?.Bill&&paymentdetails.Bill.length==0){
+  const { data: paymentdetails, isLoading: paymentLoading } = Digit.Hooks.useFetchPayment(
+    { tenantId: tenantId, consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode, businessService },
+    {}
+  );
+  useEffect(() => {
+    if (paymentdetails?.Bill && paymentdetails.Bill.length == 0) {
       setShowToast({ key: true, label: "CS_BILL_NOT_FOUND" });
     }
-  },[paymentdetails])
+  }, [paymentdetails]);
   const { name, mobileNumber } = state;
- 
+
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
   const onSubmit = async (d) => {
@@ -50,7 +53,7 @@ export const SelectPaymentType = (props) => {
         txnAmount: paymentAmount || billDetails.totalAmount,
         module: businessService,
         billId: billDetails.id,
-        consumerCode: wrkflow === "WNS"? stringReplaceAll(consumerCode,"+","/") : consumerCode,
+        consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
         productInfo: "Common Payment",
         gateway: d.paymentType,
         taxAndPayments: [
@@ -61,7 +64,7 @@ export const SelectPaymentType = (props) => {
         ],
         user: {
           name: name || userInfo?.info?.name,
-          mobileNumber:  mobileNumber || userInfo?.info?.mobileNumber,
+          mobileNumber: mobileNumber || userInfo?.info?.mobileNumber,
           tenantId: tenantId,
         },
         // success
@@ -93,7 +96,6 @@ export const SelectPaymentType = (props) => {
   };
 
   if (authorization === "true" && !userInfo.access_token) {
-
     return <Redirect to={`/digit-ui/citizen/login?from=${encodeURIComponent(pathname + search)}`} />;
   }
 
@@ -103,7 +105,6 @@ export const SelectPaymentType = (props) => {
 
   return (
     <React.Fragment>
-      <BackButton>{t("CS_COMMON_BACK")}</BackButton>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Header>{t("PAYMENT_CS_HEADER")}</Header>
         <Card>
@@ -120,7 +121,7 @@ export const SelectPaymentType = (props) => {
               render={(props) => <RadioButtons selectedOption={props.value} options={menu} onSelect={props.onChange} />}
             />
           )}
-          {!showToast&&<SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
+          {!showToast && <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
         </Card>
       </form>
       <InfoBanner label={t("CS_COMMON_INFO")} text={t("CS_PAYMENT_REDIRECT_NOTICE")} />

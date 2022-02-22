@@ -131,40 +131,40 @@
     margin-top: -5px;
     padding-left: 20px;
     padding-top: 10px;
-  
+
     .containerStyles {
-      border: 1px solid #505A5F;
+      border: 1px solid #505a5f;
       padding: 16px;
       margin-bottom: 20px;
     }
-  
+
     &.leftBorder {
       border-left: 2px solid rgba(0, 0, 0, 0.12);
     }
   }
-  
+
   .rowContainerStyles {
     @apply flex flex-col;
   }
-  
+
   .tableContainerStyles {
-    border: 1px solid #505A5F;
+    border: 1px solid #505a5f;
     padding: 16px;
     margin-bottom: 20px;
   }
-  
+
   .historyTables {
     display: grid;
     grid-template-rows: 100px 100px;
-    grid-template-columns: repeat(5, minmax(100px, 1fr)); 
+    grid-template-columns: repeat(5, minmax(100px, 1fr));
   }
-  
+
   .historyContent {
     margin: 0 10px;
     position: relative;
     padding-bottom: 5px;
   }
-  
+
   .historyCheckpoint {
     background-color: #fe7a51;
     border-radius: 100%;
@@ -174,12 +174,12 @@
     position: relative;
     left: -9px;
     top: 4px;
-  
+
     &.zIndex {
       z-index: 10;
     }
   }
-  
+
   .historyTableDateLabel {
     color: rgba(0, 0, 0, 0.87);
     font-size: 16px;
@@ -188,13 +188,12 @@
     text-align: left;
     display: inline-block;
     padding-top: 5px;
-  
   }
-  
+
   .bottomMargin {
     margin-bottom: 0px;
   }
-  
+
   .historyTableDate {
     color: rgba(0, 0, 0, 0.87);
     font-size: 19px;
@@ -204,12 +203,12 @@
     display: inline-block;
     padding-top: 10px;
   }
-  
+
   .historyHorizontalBar {
     background-color: rgba(0, 0, 0, 0.12);
     width: auto;
     height: 2px;
-    margin-left: 16px
+    margin-left: 16px;
   }
 
   .smallText {
@@ -231,22 +230,22 @@
 }
 
 .link {
-  @apply text-primary-main cursor-pointer ;
+  @apply text-primary-main cursor-pointer;
 
   :hover {
     @apply text-primary-dark;
   }
 }
 
-.RightMostTopBarOptions{
+.RightMostTopBarOptions {
   @apply inline-block float-right;
-  .EventNotificationWrapper{
+  .EventNotificationWrapper {
     @apply relative cursor-pointer;
-    span{
+    span {
       top: -10px;
       right: -10px;
       @apply absolute bg-error h-5 w-5 rounded-full text-center;
-      p{
+      p {
         line-height: 20px;
       }
     }
@@ -322,16 +321,31 @@
     row-gap: 2px;
     margin-left: -12px;
   }
-
 }
 
 .m-auto {
   margin: auto !important;
 }
 
-.mb-50{
+.mb-50 {
   margin-bottom: 50px;
 }
-.mb-25{
+.mb-25 {
   margin-bottom: 25px;
+}
+
+.back-wrapper {
+  display: flex;
+  justify-content: space-between;
+  .top-back-btn {
+    margin-bottom: 0px;
+    color: #ffffff;
+    margin-right: 1em;
+    & svg {
+      fill: #ffffff;
+    }
+  }
+  .hambuger-back-wrapper {
+    display: flex;
+  }
 }
