@@ -23,7 +23,7 @@ const PTEmployeeOwnershipDetails = ({ config, onSelect, userType, formData, setE
   const { t } = useTranslation();
 
   const { pathname } = useLocation();
-  const isEditScreen = pathname.includes("/modify-application/");
+  const isEditScreen = pathname.includes("/modify-application/" );
   const [owners, setOwners] = useState(formData?.owners || [createOwnerDetails()]);
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
 
@@ -167,14 +167,23 @@ const OwnerForm = (_props) => {
     trigger();
   }, []);
 
+  const [partial, setPartial] = React.useState({});
   useEffect(() => {
     const keys = Object.keys(formValue);
     const part = {};
     keys.forEach((key) => (part[key] = owner[key]));
 
     let _ownerType = isIndividualTypeOwner ? {} : { ownerType: { code: "NONE" } };
-    let comparison = CompareTwoObjects(formValue,part)
+
+    // TODO: check if this condition working properly
+    let comparison = CompareTwoObjects(partial,part)
+    
+    // let comparison = CompareTwoObjects(formValue,part)
+    // below logic should run only initially or on formValue data change
+    // since we are creating part each time it will re renders the form again and again
+
     if (!(comparison)) {
+      setPartial(part);
       setOwners((prev) => prev.map((o) => (o.key && o.key === owner.key ? { ...o, ...formValue, ..._ownerType } : { ...o })));
       trigger();
     }
@@ -211,7 +220,7 @@ const OwnerForm = (_props) => {
                   <Controller
                     control={control}
                     name={"institution.name"}
-                    defaultValue={isEditScreen ? ( institution?.name ? institution.name : owner?.name) : null}
+                    defaultValue={!isEditScreen ? ( institution?.name ? institution.name : owner?.name) : null}
                     rules={{
                       required: t("CORE_COMMON_REQUIRED_ERRMSG"),
                       validate: {
@@ -222,10 +231,11 @@ const OwnerForm = (_props) => {
                       <TextInput
                         value={props.value}
                         disable={isEditScreen}
-                        autoFocus={focusIndex.index === owner?.key && focusIndex.type === "name"}
+                        name={"institution.name"}
+                        autoFocus={focusIndex.index === owner?.key && focusIndex.type === "institution.name"}
                         onChange={(e) => {
                           props.onChange(e.target.value);
-                          setFocusIndex({ index: owner.key, type: "name" });
+                          setFocusIndex({ index: owner.key, type: "institution.name"});
                         }}
                         onBlur={(e) => {
                           setFocusIndex({ index: -1 });
@@ -244,7 +254,7 @@ const OwnerForm = (_props) => {
                 <Controller
                   control={control}
                   name={"institution.type"}
-                  defaultValue={isEditScreen ? {
+                  defaultValue={!isEditScreen ? {
                     active: true,
                     code: institution?.type,
                     i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`,
