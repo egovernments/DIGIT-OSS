@@ -79,9 +79,15 @@ const TLCaption = ({ data, comments }) => {
 };
 
 const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup, selectedAction, onAssign, tenantId, t }) => {
-  const employeeRoles = workflowDetails?.data?.nextActions ? workflowDetails?.data?.nextActions : null;
-  const roles = employeeRoles.filter((role) => role.action === selectedAction);
-  const useEmployeeData = Digit.Hooks.pgr.useEmployeeFilter(tenantId, roles[0]?.roles, complaintDetails);
+  
+  // RAIN-5692 PGR : GRO is assigning complaint, Selecting employee and assign. Its not getting assigned.
+  // Fix for next action  assignee dropdown issue
+  const stateArray = workflowDetails?.data?.initialActionState?.nextActions?.filter( ele => ele?.action == selectedAction );  
+  const useEmployeeData = Digit.Hooks.pgr.useEmployeeFilter(
+    tenantId, 
+    stateArray?.[0]?.assigneeRoles?.length > 0 ? stateArray?.[0]?.assigneeRoles?.join(",") : "",
+    complaintDetails
+    );
   const employeeData = useEmployeeData
     ? useEmployeeData.map((departmentData) => {
       return { heading: departmentData.department, options: departmentData.employees };
@@ -216,6 +222,14 @@ export const ComplaintDetails = (props) => {
   const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
   const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, moduleCode: "PGR", role: "EMPLOYEE" });
   const [imagesToShowBelowComplaintDetails, setImagesToShowBelowComplaintDetails] = useState([])
+  
+  // RAIN-5692 PGR : GRO is assigning complaint, Selecting employee and assign. Its not getting assigned.
+  // Fix for next action  assignee dropdown issue
+  if (workflowDetails && workflowDetails?.data){
+    workflowDetails.data.initialActionState=workflowDetails?.data?.initialActionState || {...workflowDetails?.data?.actionState } || {} ;
+      workflowDetails.data.actionState = { ...workflowDetails.data };
+    }
+
   useEffect(()=>{
     if(workflowDetails){
       const {data:{timeline: complaintTimelineData}={}} = workflowDetails
