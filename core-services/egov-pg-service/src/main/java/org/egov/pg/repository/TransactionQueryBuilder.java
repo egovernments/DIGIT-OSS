@@ -11,7 +11,7 @@ class TransactionQueryBuilder {
             ".mobile_number, pg.email_id, pg.name, pg.user_tenant_id, pg.tenant_id, pg.gateway_txn_id, pg.gateway_payment_mode, " +
             "pg.gateway_status_code, pg.gateway_status_msg, pg.receipt, pg.additional_details,  pg.created_by, pg" +
             ".created_time, pg.last_modified_by, pg.last_modified_time " +
-            "FROM {schema}.eg_pg_transactions pg ";
+            "FROM eg_pg_transactions pg ";
 
     private TransactionQueryBuilder() {
     }

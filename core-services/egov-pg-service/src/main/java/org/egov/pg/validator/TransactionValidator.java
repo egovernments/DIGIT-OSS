@@ -77,14 +77,12 @@ public class TransactionValidator {
     public Transaction validateUpdateTxn(Map<String, String> requestParams) {
 
         Optional<String> optional = gatewayService.getTxnId(requestParams);
-        String tenantId = requestParams.get("tenantId");
 
         if (!optional.isPresent())
             throw new CustomException("MISSING_UPDATE_TXN_ID", "Cannot process request, missing transaction id");
 
         TransactionCriteria criteria = TransactionCriteria.builder()
                 .txnId(optional.get())
-                .tenantId(tenantId)
                 .build();
 
         List<Transaction> statuses = transactionRepository.fetchTransactions(criteria);
@@ -137,7 +135,6 @@ public class TransactionValidator {
         Transaction txn = transactionRequest.getTransaction();
         TransactionCriteria criteria = TransactionCriteria.builder()
                 .billId(txn.getBillId())
-                .tenantId(txn.getTenantId())
                 .build();
 
         List<Transaction> existingTxnsForBill = transactionRepository.fetchTransactions(criteria);

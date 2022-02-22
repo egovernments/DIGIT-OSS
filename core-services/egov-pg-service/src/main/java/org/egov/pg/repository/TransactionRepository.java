@@ -32,12 +32,6 @@ public class TransactionRepository {
         List<Object> params = new ArrayList<>();
         String query = TransactionQueryBuilder.getPaymentSearchQueryByCreatedTimeRange(transactionCriteria, params);
 
-        try {
-            query = centralInstanceutil.replaceSchemaPlaceholder(query, transactionCriteria.getTenantId());
-        } catch (InvalidTenantIdException e) {
-            throw new CustomException("PG_TENANTID_ERROR",
-                    "TenantId length is not sufficient to replace query schema in a multi state instance");
-        }
         log.debug(query);
         return jdbcTemplate.query(query, params.toArray(), rowMapper);
     }
