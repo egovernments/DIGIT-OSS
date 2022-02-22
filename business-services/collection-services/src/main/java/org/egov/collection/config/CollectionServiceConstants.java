@@ -312,4 +312,10 @@ public class CollectionServiceConstants {
     public static final String ACTION_PAY = "PAY";
 
     public static final String NOTIFICATION_LOCALE = "en_IN";
+
+    public static final String NOTIFICATION_OWNERNAME = "{OWNER_NAME}";
+
+    public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
+    public static final String  USREVENTS_EVENT_NAME = "Trade License";
+    public static final String  USREVENTS_EVENT_POSTEDBY = "SYSTEM-PT";
 }
