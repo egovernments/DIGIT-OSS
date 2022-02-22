@@ -26,7 +26,7 @@ const calculateFSTPCapacityUtilization = (value, totalCapacity, numberOfDays = 1
   return Math.round((value / (totalCapacity * numberOfDays)) * 100);
 };
 
-const CustomTable = ({ data={}, onSearch, setChartData }) => {
+const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) => {
   const { id } = data;
   const [chartKey, setChartKey] = useState(id);
   const [filterStack, setFilterStack] = useState([{ id: chartKey }]);
@@ -63,6 +63,7 @@ const CustomTable = ({ data={}, onSearch, setChartData }) => {
   }, [data]);
   const tableData = useMemo(() => {
     if (!response || !lastYearResponse) return;
+    setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     return response?.responseData?.data?.map((rows, id) => {
       const lyData = lastYearResponse?.responseData?.data?.find((lyRow) => lyRow?.headerName === rows?.headerName);
       return rows?.plots?.reduce((acc, row, currentIndex) => {
