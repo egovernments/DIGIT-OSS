@@ -18,6 +18,7 @@ import CPTPropertySearchNSummary from './pages/pageComponents/PropertySearchNSum
 import CPTSearchResults from './pages/citizen/SearchResults';
 import CPTCreateProperty from './pages/pageComponents/createForm';
 import CPTAcknowledgement from './pages/pageComponents/PTAcknowledgement';
+import CommonPTCard from "./components/CommonPTCard";
 
 const componentsToRegister = {
   CPTPropertySearchForm,
@@ -80,6 +81,7 @@ export const CommonPTLinks = ({ matchPath, userType }) => {
 };
 
 export const CommonPTComponents = {
+  CommonPTCard,
   CommonPTModule,
   CommonPTLinks,
   ...componentsToRegister,
