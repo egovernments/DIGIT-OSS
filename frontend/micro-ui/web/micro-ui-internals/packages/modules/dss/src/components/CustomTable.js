@@ -322,6 +322,7 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
           totalRecords={tableData?.length}
           columns={tableColumns?.filter(row=>row)?.slice(1)}
           showAutoSerialNo={"DSS_HEADER_S_N_"}
+          styles={{overflow: "hidden"}}
           getCellProps={(cellInfo) => {
             return {
               style: {},
