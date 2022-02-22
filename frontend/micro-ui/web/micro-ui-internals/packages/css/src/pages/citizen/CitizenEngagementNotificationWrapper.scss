@@ -1,5 +1,8 @@
-.CitizenEngagementNotificationWrapper{
-    .WhatsNewCard{
-        @apply mx-md mb-md;
-    }
+.CitizenEngagementNotificationWrapper {
+  .WhatsNewCard {
+    @apply mx-md mb-md;
+  }
+  @media (min-width: 780px) {
+    width: calc(80% - 54px);
+  }
 }

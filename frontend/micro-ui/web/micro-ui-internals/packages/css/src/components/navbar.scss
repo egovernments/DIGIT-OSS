@@ -14,6 +14,11 @@
   }
   .nav-wrapper {
     display: flex;
+    @media (min-width: 780px) {
+      .hamburger-span {
+        display: none;
+      }
+    }
   }
 
   h3 {

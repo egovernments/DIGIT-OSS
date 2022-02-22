@@ -144,5 +144,17 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     profileItem = <span></span>;
     menuItems = menuItems.filter((ele) => ele.element === "LANGUAGE");
   }
-  return <div>{<NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={closeSidebar} Footer={<PoweredBy />} />}</div>;
+
+  return isMobile ? (
+    <NavBar
+      open={isOpen}
+      toggleSidebar={toggleSidebar}
+      profileItem={profileItem}
+      onClose={closeSidebar}
+      menuItems={menuItems}
+      Footer={<PoweredBy />}
+    />
+  ) : (
+    <StaticCitizenSideBar logout={onLogout} />
+  );
 };
