@@ -168,7 +168,8 @@ const PTApplicationDetails = () => {
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
-  const handleDownload = async (document) => {
+  const handleDownload = async (document,tenantid) => {
+    let tenantId = tenantid ? tenantid : tenantId;
     const res = await Digit.UploadServices.Filefetch([document?.fileStoreId], tenantId);
     let documentLink = pdfDownloadLink(res.data, document?.fileStoreId);
     window.open(documentLink, "_blank");
@@ -178,18 +179,18 @@ const PTApplicationDetails = () => {
   let dowloadOptions = [];
 
   dowloadOptions.push({
-    label: t("Mutation Application"),
+    label: t("MT_APPLICATION"),
     onClick: () => getAcknowledgementData()
   });
   if(reciept_data && recieptDataLoading == false)
   dowloadOptions.push({
-    label: t("Mutation Receipt"),
+    label: t("MT_FEE_RECIEPT"),
     onClick: () => getRecieptSearch({tenantId: reciept_data?.Payments[0]?.tenantId,payments: reciept_data?.Payments[0]})
   });
   if(data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION").length>0)
   dowloadOptions.push({
-    label: t("Mutation Certificate"),
-    onClick: () => handleDownload(data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION")[0])
+    label: t("MT_CERTIFICATE"),
+    onClick: () => handleDownload(data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION")[0],data?.Properties[0]?.tenantId)
   });
 
   return (

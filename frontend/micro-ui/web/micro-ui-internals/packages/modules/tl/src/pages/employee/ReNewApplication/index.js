@@ -93,8 +93,8 @@ const ReNewApplication = (props) => {
   }
 
   applicationData.tradeLicenseDetail.address.locality = {
-    ...applicationData.tradeLicenseDetail.address.locality,
-    ...{ i18nkey: applicationData.tradeLicenseDetail.address.locality?.name },
+    ...applicationData?.tradeLicenseDetail?.address?.locality,
+    ...{ i18nkey: applicationData?.tradeLicenseDetail?.address?.locality?.name },
   };
 
   const ownershipCategory = {
