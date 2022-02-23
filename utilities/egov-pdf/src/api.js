@@ -177,6 +177,8 @@ async function search_water(applicationNumber, tenantId, requestinfo, allowCitiz
     var userName = requestinfo.RequestInfo.userInfo.userName;
     params["mobileNumber"] = mobileNumber || userName;
   }
+  console.log(config.host.waterHost+" "+config.paths.water_search);
+
   return await axios({
     method: "post",
     url: url.resolve(config.host.waterHost, config.paths.water_search),
@@ -280,7 +282,8 @@ async function search_bill_genie_sewerage_bills(data,requestinfo, headers) {
 
 async function search_billV2(tenantId, consumerCode, serviceId, requestinfo, headers) {
   //console.log("search_billV2 consumerCode--",consumerCode,"tenantId",tenantId,"serviceId",serviceId);
-  return await axios({
+  console.log(config.host.mcollectBilling+" "+config.paths.mcollect_bill);
+  let billResponse = await axios({
     method: "post",
     url: url.resolve(config.host.mcollectBilling, config.paths.mcollect_bill),
     data: requestinfo,
@@ -291,6 +294,7 @@ async function search_billV2(tenantId, consumerCode, serviceId, requestinfo, hea
       service:serviceId
     },
   });
+  return billResponse;
 }
 
 async function fetch_bill(tenantId, consumerCode, serviceId, requestinfo, headers) {
@@ -381,6 +385,7 @@ async function getPropertyDeatils(requestinfo,tenantId,propertyIds,connectionnoT
 
 
 async function create_pdf(tenantId, key, data, requestinfo, headers) {
+  console.log(config.host.pdf+" "+config.paths.pdf_create);
   return await axios({
     responseType: "stream",
     method: "post",
