@@ -230,7 +230,7 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
         Header:<span className="tooltip">
              {renderHeader(plot)}
               <span className="tooltiptext" style={{fontSize:"14px" , height:"35px" ,bottom:'0%', top: '100%', background: "none" }}>
-                <div style={{height: "auto", background: "#555", width: "125%", padding: "5px", wordBreak: "break-word", overflowWrap: "break-word", borderRadius: "6px" }}>{t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)}</div>
+                <div style={{height: "auto", background: "#555", width: "100%", padding: "5px", wordBreak: "break-word", overflowWrap: "break-word", borderRadius: "6px" }}>{t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)}</div>
               </span>
             </span>,
         accessor: accessData(plot),
