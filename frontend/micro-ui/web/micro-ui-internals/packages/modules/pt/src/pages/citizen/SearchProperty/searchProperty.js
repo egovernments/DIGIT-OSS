@@ -34,11 +34,15 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
 
 
   useEffect(() => {
-    if(propertyData?.Properties.length > 0 && (ptSearchConfig.maxResultValidation && propertyData?.Properties.length > ptSearchConfig.maxPropertyResult && !errorShown))
-    {
-      setShowToast({ error:true, warning: true, label: "ERR_PLEASE_REFINED_UR_SEARCH" });
+    if (
+      propertyData?.Properties.length > 0 &&
+      ptSearchConfig.maxResultValidation &&
+      propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
+      !errorShown
+    ) {
+      setShowToast({ error: true, warning: true, label: "ERR_PLEASE_REFINED_UR_SEARCH" });
     }
-  },[propertyData])
+  }, [propertyData]);
 
   useEffect(() => {
     showToast && showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH" && setShowToast(null);
@@ -141,16 +145,16 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
           ...description,
           isMandatory: false,
-          isInsideBox : true,
-          placementinbox : 0,
+          isInsideBox: true,
+          placementinbox: 0,
         },
         {
           label: property.label,
           labelChildren: (
-            <div className="tooltip" style={{paddingLeft:"10px",marginBottom:"-3px"}}>
+            <div className="tooltip" style={{ paddingLeft: "10px", marginBottom: "-3px" }}>
               {"  "}
               <InfoBannerIcon fill="#0b0c0c" />
-              <span className="tooltiptext" style={{ width:"150px",bottom:"-290%",left:"230%" }}>
+              <span className="tooltiptext" style={{ width: "150px", bottom: "-290%", left: "230%" }}>
                 {t(property.description) + " " + ptSearchConfig?.propertyIdFormat}
               </span>
             </div>
@@ -163,8 +167,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
           ...description,
           isMandatory: false,
-          isInsideBox : true,
-          placementinbox : 1,
+          isInsideBox: true,
+          placementinbox: 1,
         },
         {
           label: oldProperty.label,
@@ -175,8 +179,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             validation: oldProperty?.validation,
           },
           isMandatory: false,
-          isInsideBox : true,
-          placementinbox : 2,
+          isInsideBox: true,
+          placementinbox: 2,
         },
       ],
       body1: [
@@ -272,8 +276,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             validation: doorNo?.validation,
           },
           isMandatory: false,
-          isInsideBox : true,
-          placementinbox : 0,
+          isInsideBox: true,
+          placementinbox: 0,
         },
         {
           label: name.label,
@@ -284,17 +288,21 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             validation: name?.validation,
           },
           isMandatory: false,
-          isInsideBox : true,
-          placementinbox : 2,
+          isInsideBox: true,
+          placementinbox: 2,
         },
       ],
     },
   ];
 
   const onPropertySearch = async (data) => {
-    if(ptSearchConfig.maxResultValidation && propertyData?.Properties.length > 0 && propertyData?.Properties.length > ptSearchConfig.maxPropertyResult && errorShown)
-    {
-      seterrorShown(true)
+    if (
+      ptSearchConfig.maxResultValidation &&
+      propertyData?.Properties.length > 0 &&
+      propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
+      errorShown
+    ) {
+      seterrorShown(true);
       return;
     }
     if (!data?.city?.code) {
@@ -338,10 +346,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
       }
     }
 
-    if(showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH")
-    setShowToast(null);
-    if(data?.doorNo && data?.doorNo !== "" && data?.propertyIds !== "")
-    {
+    if (showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH") setShowToast(null);
+    if (data?.doorNo && data?.doorNo !== "" && data?.propertyIds !== "") {
       data["propertyIds"] = "";
     }
 
@@ -358,8 +364,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     return;
   };
   const onFormValueChange = (setValue, data, formState) => {
-    if(data?.doorNo && data?.doorNo !== "" && data?.propertyIds !== "")
-    {
+    if (data?.doorNo && data?.doorNo !== "" && data?.propertyIds !== "") {
       data["propertyIds"] = "";
     }
     const mobileNumberLength = data?.[mobileNumber.name]?.length;
@@ -367,6 +372,11 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     const propId = data?.[property.name];
     const city = data?.city;
     const locality = data?.locality;
+
+    if (mobileNumberLength > 0 || propId != "" || oldPropId != "") {
+      setShowToast(null);
+    }
+
     if (city?.code !== cityCode) {
       setCityCode(city?.code);
     }
@@ -384,8 +394,10 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     return <Loader />;
   }
 
-  let validation = ptSearchConfig.maxResultValidation ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
-  if (propertyData && !propertyDataLoading && !error && validation ) {
+  let validation = ptSearchConfig.maxResultValidation
+    ? propertyData?.Properties.length < ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error))
+    : true;
+  if (propertyData && !propertyDataLoading && !error && validation) {
     let qs = {};
     qs = { ...searchData.filters, city: searchData.city };
 
