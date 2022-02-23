@@ -6,6 +6,7 @@ import FilterContext from "./FilterContext";
 import NoData from "./NoData";
 
 const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE", "#FFBB28", "#FF8042"];
+const mobileView = innerWidth <= 640;
 
 const CustomPieChart = ({ dataKey = "value", data,setChartDenomination }) => {
   const { id } = data;
@@ -138,8 +139,8 @@ const CustomPieChart = ({ dataKey = "value", data,setChartDenomination }) => {
           data={chartData}
           dataKey={dataKey}
           cy={150}
-          innerRadius={checkChartID(id) ? 90 : 70}    ///Charts in rows(which contains 2 charts) are little bigger in size than charts in rows(which contains 3 charts) charts
-          outerRadius={checkChartID(id) ? 110 : 90}
+          innerRadius={checkChartID(id) && !mobileView ? 90 : 70}    ///Charts in rows(which contains 2 charts) are little bigger in size than charts in rows(which contains 3 charts) charts
+          outerRadius={checkChartID(id) && !mobileView ? 110 : 90}
           margin={{ top: 5}}
           fill="#8884d8"
           //label={renderCustomLabel}
@@ -152,7 +153,7 @@ const CustomPieChart = ({ dataKey = "value", data,setChartDenomination }) => {
         </Pie>
         <Tooltip content={renderTooltip} />
         <Legend layout="vertical" verticalAlign="middle" align="right" iconType="circle" formatter={renderLegend} iconSize={10} 
-        wrapperStyle={{paddingRight: checkChartID(id) ? 60 : 0}} ///Padding for 2 charts in a row cases
+        wrapperStyle={{paddingRight: checkChartID(id) && !mobileView? 60 : 0}} ///Padding for 2 charts in a row cases
         />
       </PieChart>
     </ResponsiveContainer>
