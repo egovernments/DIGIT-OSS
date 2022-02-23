@@ -98,4 +98,5 @@ public class CalculatorController {
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+
 }

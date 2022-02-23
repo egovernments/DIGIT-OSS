@@ -4,15 +4,6 @@ import DateRange from "./DateRange";
 import FilterContext from "./FilterContext";
 import Switch from "./Switch";
 
-const checkSelected = (e, selectedDDRs) => {
-  if (!selectedDDRs || selectedDDRs.length == 0) {
-    return true;
-  } else if (selectedDDRs.find((ddr) => ddr.ddrKey == e.ddrKey)) {
-    return true;
-  } else {
-    return false;
-  }
-};
 
 const Filters = ({
   t,
@@ -105,7 +96,7 @@ const Filters = ({
             options={
               ulbTenants?.ulb?.sort((x, y) => x?.ulbKey?.localeCompare(y?.ulbKey))
               /*    Removed filter for selected ddr/state rain-5426
-              ulbTenants?.ulb && ulbTenants.ulb.filter((e) => checkSelected(e, selectedDDRs))?.sort((x, y) => x?.ulbKey?.localeCompare(y?.ulbKey))
+              ulbTenants?.ulb && ulbTenants.ulb.filter((e) => Digit.Utils.dss.checkSelected(e, selectedDDRs))?.sort((x, y) => x?.ulbKey?.localeCompare(y?.ulbKey))
              */
             }
             optionsKey="ulbKey"

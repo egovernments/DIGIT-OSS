@@ -26,7 +26,7 @@ const calculateFSTPCapacityUtilization = (value, totalCapacity, numberOfDays = 1
   return Math.round((value / (totalCapacity * numberOfDays)) * 100);
 };
 
-const CustomTable = ({ data={}, onSearch, setChartData }) => {
+const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) => {
   const { id } = data;
   const [chartKey, setChartKey] = useState(id);
   const [filterStack, setFilterStack] = useState([{ id: chartKey }]);
@@ -63,6 +63,7 @@ const CustomTable = ({ data={}, onSearch, setChartData }) => {
   }, [data]);
   const tableData = useMemo(() => {
     if (!response || !lastYearResponse) return;
+    setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     return response?.responseData?.data?.map((rows, id) => {
       const lyData = lastYearResponse?.responseData?.data?.find((lyRow) => lyRow?.headerName === rows?.headerName);
       return rows?.plots?.reduce((acc, row, currentIndex) => {
@@ -159,11 +160,11 @@ const CustomTable = ({ data={}, onSearch, setChartData }) => {
   const renderUnits = (denomination) => {
     switch (denomination) {
       case "Unit":
-        return "(₹)";
+        return `(${t('DSS_'+Digit.Utils.locale.getTransformedLocale(denomination))})`;
       case "Lac":
-        return "(Lac)";
+        return `(${t('DSS_'+Digit.Utils.locale.getTransformedLocale(denomination))})`;
       case "Cr":
-        return "(Cr)";
+        return `(${t('DSS_'+Digit.Utils.locale.getTransformedLocale(denomination))})`;
       default:
         return "";
     }
@@ -228,8 +229,8 @@ const CustomTable = ({ data={}, onSearch, setChartData }) => {
       .map((plot) => ({
         Header:<span className="tooltip">
              {renderHeader(plot)}
-              <span className="tooltiptext" style={{ whiteSpace: "nowrap"  , fontSize:"medium" , height:"35px" ,bottom:'0%', top: '125%' }}>
-                {t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)}
+              <span className="tooltiptext" style={{fontSize:"14px" , height:"35px" ,bottom:'0%', top: '100%', background: "none" }}>
+                <div style={{height: "auto", background: "#555", width: "100%", padding: "5px", wordBreak: "break-word", overflowWrap: "break-word", borderRadius: "6px" }}>{t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)}</div>
               </span>
             </span>,
         accessor: accessData(plot),
@@ -321,6 +322,7 @@ const CustomTable = ({ data={}, onSearch, setChartData }) => {
           totalRecords={tableData?.length}
           columns={tableColumns?.filter(row=>row)?.slice(1)}
           showAutoSerialNo={"DSS_HEADER_S_N_"}
+          styles={{overflow: "hidden"}}
           getCellProps={(cellInfo) => {
             return {
               style: {},

@@ -28,7 +28,8 @@ const Table = ({
   isPaginationRequired = true,
   sortParams = [],
   showAutoSerialNo=false,
-  customTableWrapperClassName=""
+  customTableWrapperClassName="",
+  styles={}
 }) => {
   const {
     getTableProps,
@@ -83,7 +84,7 @@ const Table = ({
   return (
     <React.Fragment>
     <span className={customTableWrapperClassName}>
-      <table className={className} {...getTableProps()}>
+      <table className={className} {...getTableProps()} style={styles}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>

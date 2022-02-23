@@ -144,7 +144,7 @@ public class TLRenewalNotificationUtil {
                 break;
 
             case ACTION_STATUS_PENDINGAPPROVAL:
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_PENDINGAPPROVAL + "." + "email", localizationMessage);
+                messageTemplate = getMessageTemplate(RENEWAL_NOTIFICATION_PENDINGAPPROVAL + "." + "email", localizationMessage);
                 message = getReplacedMessage(license, messageTemplate);
                 break;
 

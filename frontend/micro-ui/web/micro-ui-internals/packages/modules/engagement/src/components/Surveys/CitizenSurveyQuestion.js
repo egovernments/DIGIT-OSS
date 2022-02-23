@@ -16,13 +16,15 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               inputRef={register({
                 maxLength: {
                   value: 200,
-                  message: t("EXCEEDS_200_CHAR_LIMIT"),
+                 message: t("EXCEEDS_200_CHAR_LIMIT"),
                 },
+                required:question.required,
               })}
             />
+            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
+              <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>)}
             {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "maxLength" && (
-              <CardLabelError>{t(`EXCEEDS_200_CHAR_LIMIT`)}</CardLabelError>
-            )} 
+              <CardLabelError>{t(`EXCEEDS_200_CHAR_LIMIT`)}</CardLabelError>)} 
           </>
         );
       case "LONG_ANSWER_TYPE":
@@ -32,14 +34,17 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               name={question.uuid}
               inputRef={register({
                 maxLength: {
+
                   value: 500,
                   message: t("EXCEEDS_500_CHAR_LIMIT"),
                 },
+                required:question.required
               })}
             />
+            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
+              <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>)} 
             {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "maxLength" && (
-              <CardLabelError>{t(`EXCEEDS_500_CHAR_LIMIT`)}</CardLabelError>
-            )}
+              <CardLabelError>{t(`EXCEEDS_500_CHAR_LIMIT`)}</CardLabelError>)}
           </>
         );
       case "MULTIPLE_ANSWER_TYPE":
@@ -49,7 +54,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               control={control}
               name={question.uuid}
               //defaultValue={surveyFormState?.collectCitizenInfo}
-              rules={{ required: true }}
+              rules={{ required: question.required }}
               render={({ onChange, value }) => (
                 <RadioButtons
                   onSelect={onChange}
@@ -72,7 +77,8 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               control={control}
               name={question.uuid}
               //defaultValue={surveyFormState?.collectCitizenInfo}
-              //rules={{ required: true }}
+              //rules={{required:true}}
+              // rules={{ required:question.required }}
               render={({ onChange, value }) => (
                 <div className="align-columns">
                   {question.options.map((option) => {
@@ -80,7 +86,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
                       <CheckBox
                         key={option}
                         onChange={(e) => {
-                          //console.log("onChange", {e, value});
+                          // console.log("onChange", {e, value});
                           if (e.target.checked ) {
                             value && onChange([...value, option]);
                           } else {
@@ -95,8 +101,8 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
                 </div>
               )}
             />
-            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
-              <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_REQUIRED`)}</CardLabelError>
+            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type ==="required" && (
+              <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>
             )}
           </>
         );
@@ -108,10 +114,11 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               name={question.uuid}
               //defaultValue=
               rules={{
-                required: true,
+                required: question.required,
                 // validate: { isValidToDate }
               }}
-              render={({ onChange, value }) => <TextInput type="date" isRequired={true} onChange={onChange} defaultValue={value} />}
+              // render={({ onChange, value }) => <TextInput type="date" isRequired={question.required} onChange={onChange} defaultValue={value} />}
+              render={({ onChange, value }) => <TextInput type="date" onChange={onChange} defaultValue={value} />}
             />
             {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
               <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_REQUIRED`)}</CardLabelError>
@@ -126,10 +133,11 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               name={question.uuid}
               //defaultValue={surveyFormState?.toTime}
               rules={{
-                required: true,
+                required: question.required,
                 // validate: { isValidToTime }
               }}
-              render={({ onChange, value }) => <TextInput type="time" isRequired={true} onChange={onChange} defaultValue={value} />}
+              // render={({ onChange, value }) => <TextInput type="time" isRequired={question.required} onChange={onChange} defaultValue={value} />}
+              render={({ onChange, value }) => <TextInput type="time" onChange={onChange} defaultValue={value} />}
             />
             {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
               <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_REQUIRED`)}</CardLabelError>
@@ -147,6 +155,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
                 value: 60,
                 message: t("EXCEEDS_60_CHAR_LIMIT"),
               },
+              required:question.required
             })}
           />
         );

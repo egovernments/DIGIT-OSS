@@ -19,15 +19,14 @@ const createOwnerDetails = () => ({
   name: "",
   designation: "",
   mobileNumber: "",
-  telNumber: "",
-  guardiansName: "",
+  altContactNumber: "",
+  fatherOrHusbandName: "",
   relationship: "",
-  emailId: "",
+  emailId: "",  
   permanentAddress: "",
   ownerType: "",
-  institutionName:"",
-  institutionType: "",
   gender: "",
+  subOwnerShipCategory:"",
   correspondenceAddress: "",
   key: Date.now(),
 });
@@ -60,6 +59,7 @@ const OwnerForm = (_props) => {
   const formValue = watch();
   const { errors } = localFormState;
   const stateId = Digit.ULBService.getStateId();
+  const [part, setPart] = useState({});
   const { ownershipCategory: { code: keyToSearchOwnershipSubtype } = {} } = formData;
   const { data: institutionOwnershipTypeOptions } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TradeOwnershipSubType", {
     keyToSearchOwnershipSubtype,
@@ -98,13 +98,9 @@ const OwnerForm = (_props) => {
   }, []);
 
   useEffect(() => {
-    const keys = Object.keys(formValue);
-    const part = {};
-    keys.forEach((key) => (part[key] = owner[key]));
-
-    // let _ownerType = isIndividualTypeOwner ? {} : { ownerType: { code: "NONE" } };
-
     if (!_.isEqual(formValue, part)) {
+      setPart({...formValue});
+
       Object.keys(formValue).map((data) => {
         if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
           setIsErrors(true);
@@ -167,8 +163,8 @@ const OwnerForm = (_props) => {
                   <div className="field">
                     <Controller
                       control={control}
-                      name="institutionName"
-                      defaultValue={owner?.institutionName}
+                      name="name"
+                      defaultValue={owner?.name}
                       rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("TL_NAME_ERROR_MESSAGE")) } }}
                       render={(props)=>(
                         <TextInput
@@ -176,12 +172,12 @@ const OwnerForm = (_props) => {
                           type={"text"}
                           isMandatory={true}
                           value={props.value}
-                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "institutionName"}
-                          errorStyle={localFormState.touched.institutionName && errors?.institutionName?.message ? true : false}
+                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "name"}
+                          errorStyle={localFormState.touched.name && errors?.name?.message ? true : false}
                           onChange={(e)=>{
-                            if (e != owner?.institutionName && isRenewal) setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
+                            if (e != owner?.name && isRenewal) setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
                             props.onChange(e);
-                            setFocusIndex({ index: owner.key, type: "institutionName" });
+                            setFocusIndex({ index: owner.key, type: "name" });
                           }}
                           onBlur={props.onBlur} 
                         />
@@ -189,25 +185,25 @@ const OwnerForm = (_props) => {
                     ></Controller>
                   </div>
                 </LabelFieldPair>
-                <CardLabelError style={errorStyle}> {localFormState.touched.institutionName ? errors?.institutionName?.message : ""}</CardLabelError>
+                <CardLabelError style={errorStyle}> {localFormState.touched.name ? errors?.name?.message : ""}</CardLabelError>
                 <LabelFieldPair>
                   <CardLabel>{`${t("TL_INSTITUTION_TYPE_LABEL")}*`}</CardLabel>
                   <div className="field">
                     <Controller
                       control={control}
-                      name={"institutionType"}
+                      name={"subOwnerShipCategory"}
                       render={(props)=>(
                         <Dropdown
                           t={t}
                           option={institutionOwnershipTypeOptions}
-                          errorStyle={localFormState.touched.institutionName && errors?.institutionType?.message ? true : false}
-                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "institutionType"}
+                          errorStyle={localFormState.touched.subOwnerShipCategory && errors?.subOwnerShipCategory?.message ? true : false}
+                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "subOwnerShipCategory"}
                           selected={props.value}
                           select={(e) => {
-                            if (e?.code != owner?.institutionType?.code && isRenewal)
+                            if (e?.code != owner?.subOwnerShipCategory?.code && isRenewal)
                               setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
                             props.onChange(e);
-                            setFocusIndex({ index: owner.key, type: "institutionType" });
+                            setFocusIndex({ index: owner.key, type: "subOwnerShipCategory" });
                           }}
                           onBlur={props.onBlur}
                           optionKey="i18nKey"
@@ -216,29 +212,29 @@ const OwnerForm = (_props) => {
                     ></Controller>
                   </div>
                 </LabelFieldPair>
-                <CardLabelError style={errorStyle}>{localFormState.touched.institutionType ? errors?.institutionType?.message : ""}</CardLabelError>
+                <CardLabelError style={errorStyle}>{localFormState.touched.subOwnerShipCategory ? errors?.subOwnerShipCategory?.message : ""}</CardLabelError>
                 <CardHeader>{t("TL_AUTHORIZED_PERSON_DETAILS")}</CardHeader>
                 <LabelFieldPair>
                   <CardLabel>{`${t("TL_NEW_OWNER_DETAILS_NAME_LABEL")}`}</CardLabel>
                   <div className="field">
                     <Controller
                       control={control}
-                      defaultValue={owner?.guardiansName}
-                      name={"newOwnerName"}
+                      defaultValue={owner?.fatherOrHusbandName}
+                      name={"fatherOrHusbandName"}
                       rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("TL_NAME_ERROR_MESSAGE")) } }}
                       render={(props)=>(
                         <TextInput
                           t={t}
                           type={"text"}
                           isMandatory={false}
-                          name="newOwnerName"
+                          name="fatherOrHusbandName"
                           value={props.value}
-                          errorStyle={localFormState.touched.guardiansName && errors?.guardiansName?.message ? true : false}
-                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "newOwnerName"}
+                          errorStyle={localFormState.touched.fatherOrHusbandName && errors?.fatherOrHusbandName?.message ? true : false}
+                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "fatherOrHusbandName"}
                           onChange={(e)=>{
                             if (e != owner?.name && isRenewal) setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
                             props.onChange(e);
-                            setFocusIndex({ index: owner.key, type: "newOwnerName" });
+                            setFocusIndex({ index: owner.key, type: "fatherOrHusbandName" });
                           }}
                           onBlur={props.onBlur}
                         />
@@ -246,13 +242,13 @@ const OwnerForm = (_props) => {
                     ></Controller>
                   </div>
                 </LabelFieldPair>
-                <CardLabelError style={errorStyle}>{localFormState.touched.newOwnerName ? errors?.newOwnerName?.message : ""}</CardLabelError>
+                <CardLabelError style={errorStyle}>{localFormState.touched.fatherOrHusbandName ? errors?.fatherOrHusbandName?.message : ""}</CardLabelError>
                 <LabelFieldPair>
                   <CardLabel>{`${t("TL_NEW_OWNER_DESIG_LABEL")}`}</CardLabel>
                   <div className="field">
                     <Controller
                       control={control}
-                      name={"ownersDesignation"}
+                      name={"designation"}
                       defaultValue={owner?.designation}
                       rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("TL_NAME_ERROR_MESSAGE")) } }}
                       render={(props)=>(
@@ -260,14 +256,14 @@ const OwnerForm = (_props) => {
                           t={t}
                           type={"text"}
                           isMandatory={false}
-                          name="ownersDesignation"
+                          name="designation"
                           value={props.value}
-                          errorStyle={localFormState.touched.ownersDesignation && errors?.ownersDesignation?.message ? true : false}
-                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "ownersDesignation"}
+                          errorStyle={localFormState.touched.designation && errors?.designation?.message ? true : false}
+                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "designation"}
                           onChange={(e)=>{
                             if (e != owner?.designation && isRenewal) setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
                             props.onChange(e);
-                            setFocusIndex({ index: owner.key, type: "ownersDesignation" });
+                            setFocusIndex({ index: owner.key, type: "designation" });
                           }}
                           onBlur={props.onBlur}
                         />
@@ -275,7 +271,7 @@ const OwnerForm = (_props) => {
                     ></Controller>
                   </div>
                 </LabelFieldPair>
-                <CardLabelError style={errorStyle}>{localFormState.touched.ownersDesignation ? errors?.ownersDesignation?.message : ""}</CardLabelError>
+                <CardLabelError style={errorStyle}>{localFormState.touched.designation ? errors?.designation?.message : ""}</CardLabelError>
                 <LabelFieldPair>
                   <CardLabel>{`${t("TL_MOBILE_NUMBER_LABEL")}*`}</CardLabel>
                   <div className="field">
@@ -310,29 +306,29 @@ const OwnerForm = (_props) => {
                   <div className="field">
                     <Controller
                      control={control}
-                     name={"telNumber"}
-                     defaultValue={owner?.telNumber}
+                     name={"altContactNumber"}
+                     defaultValue={owner?.altContactNumber}
                      rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^([6-9]{1}[0-9]{9})$/.test(val) ? true : t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")) } }}
                      render={(props)=>(
                       <MobileNumber
                         type={"text"}
                         t={t}
                         isMandatory={false}
-                        name="telNumber"
-                        value={owner.telNumber}
-                        errorStyle={localFormState.touched.telNumber && errors?.telNumber?.message ? true : false}
-                        autoFocus={focusIndex.index === owner?.key && focusIndex.type === "telNumber"}
+                        name="altContactNumber"
+                        value={owner.altContactNumber}
+                        errorStyle={localFormState.touched.altContactNumber && errors?.altContactNumber?.message ? true : false}
+                        autoFocus={focusIndex.index === owner?.key && focusIndex.type === "altContactNumber"}
                         onChange={(e)=>{
-                          if (e != owner?.telNumber && isRenewal) setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
+                          if (e != owner?.altContactNumber && isRenewal) setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
                           props.onChange(e);
-                          setFocusIndex({ index: owner.key, type: "telNumber" });
+                          setFocusIndex({ index: owner.key, type: "altContactNumber" });
                         }}
                         onBlur={props.onBlur}
                       />
                      )}></Controller>
                   </div>
                 </LabelFieldPair>
-                <CardLabelError style={errorStyle}>{localFormState.touched.telNumber ? errors?.telNumber?.message : ""}</CardLabelError>
+                <CardLabelError style={errorStyle}>{localFormState.touched.altContactNumber ? errors?.altContactNumber?.message : ""}</CardLabelError>
                 <LabelFieldPair>
                   <CardLabel>{`${t("NOC_APPLICANT_EMAIL_LABEL")}`}</CardLabel>
                   <div className="field">
@@ -517,7 +513,7 @@ const OwnerForm = (_props) => {
                       control={control}
                       name={"emailId"}
                       defaultValue={owner?.emailId}
-                      rules={{ validate: (e) => ((e && getPattern("Email").test(e)) || !e ? true : t("INVALID_EMAIL")) }}
+                      // rules={{ validate: (e) => ((e && getPattern("Email").test(e)) || !e ? true : t("INVALID_EMAIL")) }}
                       render={(props) => (
                         <TextInput
                           value={props.value}

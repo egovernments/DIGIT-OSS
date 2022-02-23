@@ -34,7 +34,7 @@ export const useTLSearchApplication = (params, config = {},t) => {
         TL_COMMON_TABLE_COL_STATUS: `WF_NEWTL_${i?.status}`,
         TL_COMMON_TABLE_COL_SLA_NAME: `${Math.round(i?.SLA / (1000 * 60 * 60 * 24))} ${t("TL_SLA_DAYS")}`,
         TL_COMMON_TABLE_COL_TRD_NAME: i?.tradeName,
-        TL_INSTITUTION_TYPE_LABEL: `TL_${i?.subOwnerShipCategory}`,
+        TL_INSTITUTION_TYPE_LABEL: i?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTION")?`TL_${i?.tradeLicenseDetail?.subOwnerShipCategory}`:null,
         raw: i
       }))
     }

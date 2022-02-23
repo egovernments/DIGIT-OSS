@@ -4,15 +4,6 @@ import DateRange from "./DateRange";
 import FilterContext from "./FilterContext";
 import Switch from "./Switch";
 
-const checkSelected = (e, selectedDDRs) => {
-  if (!selectedDDRs || selectedDDRs?.length == 0) {
-    return true;
-  } else if (selectedDDRs.find((ddr) => ddr.ddrKey == e.ddrKey)) {
-    return true;
-  } else {
-    return false;
-  }
-};
 
 const Filters = ({
   t,
@@ -98,7 +89,7 @@ const Filters = ({
       <div className="filters-input">
         <div className="mbsm">{t("ES_DSS_ULB")}</div>
         <MultiSelectDropdown
-          options={ulbTenants?.ulb?.filter((e) => checkSelected(e, selectedSt)).sort((x, y) => x?.ulbKey?.localeCompare(y?.ulbKey))}
+          options={ulbTenants?.ulb?.filter((e) => Digit.Utils.dss.checkSelected(e, selectedSt)).sort((x, y) => x?.ulbKey?.localeCompare(y?.ulbKey))}
           optionsKey="ulbKey"
           onSelect={selectFilters}
           selected={selected}

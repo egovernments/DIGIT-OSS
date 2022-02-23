@@ -84,12 +84,13 @@ const NewApplication = () => {
     if (data?.owners?.length > 0) {
       data?.owners.map((data) => {
         let obj = {};
-        if (data?.dob) obj.dob = convertDateToEpoch(data?.dob);
+        obj.dob = data?.dob ? convertDateToEpoch(data?.dob): null;
         if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
         if (data?.gender?.code) obj.gender = data?.gender?.code;
         if (data?.mobileNumber) obj.mobileNumber = Number(data?.mobileNumber);
         if (data?.name) obj.name = data?.name;
         if (data?.permanentAddress) obj.permanentAddress = data?.permanentAddress;
+        obj.permanentAddress = obj.permanentAddress ? obj.permanentAddress : null;
         if (data?.relationship) obj.relationship = data?.relationship?.code;
         if (data?.emailId) obj.emailId = data?.emailId;
         if (data?.ownerType?.code) obj.ownerType = data?.ownerType?.code;
@@ -121,6 +122,7 @@ const NewApplication = () => {
       tradeLicenseDetail: {
         channel: "COUNTER",
         additionalDetail: {},
+        // institution: {}
       },
     };
 
@@ -134,6 +136,7 @@ const NewApplication = () => {
     if (address) formData.tradeLicenseDetail.address = address;
     if (structureType) formData.tradeLicenseDetail.structureType = structureType;
     if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution.designation = data?.owners[0]?.designation;
     if (data?.cpt) formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId;
 
     // setFormData(formData)

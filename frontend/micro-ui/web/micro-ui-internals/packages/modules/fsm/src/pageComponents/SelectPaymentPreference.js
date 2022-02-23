@@ -50,8 +50,8 @@ const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) =>
           isMandatory={config.isMandatory}
         />
       </FormStep>
-      {paymentType && paymentType.name === "Pay Now" && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_PAY_NOW", paymentType)} />}
-      {paymentType && paymentType.name === "Pay on Service" && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_PAY_LATER", paymentType)} />}
+      {paymentType && paymentType.code === "PRE_PAY" && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_PAY_NOW", paymentType)} />}
+      {paymentType && paymentType.code === "POST_PAY" && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_PAY_LATER", paymentType)} />}
     </React.Fragment>
   );
 };

@@ -93,8 +93,8 @@ const ReNewApplication = (props) => {
   }
 
   applicationData.tradeLicenseDetail.address.locality = {
-    ...applicationData.tradeLicenseDetail.address.locality,
-    ...{ i18nkey: applicationData.tradeLicenseDetail.address.locality?.name },
+    ...applicationData?.tradeLicenseDetail?.address?.locality,
+    ...{ i18nkey: applicationData?.tradeLicenseDetail?.address?.locality?.name },
   };
 
   const ownershipCategory = {
@@ -154,7 +154,7 @@ const ReNewApplication = (props) => {
     if (data?.owners?.length > 0) {
       data?.owners.forEach((data) => {
         data.gender = data?.gender?.code;
-        // data.relationship = data?.relationship?.code;
+        data.relationship = data?.relationship?.code;
         data.ownerType = data?.ownerType?.code;
       });
     }

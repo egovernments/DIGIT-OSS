@@ -6,8 +6,9 @@ import FilterContext from "./FilterContext";
 import NoData from "./NoData";
 
 const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE", "#FFBB28", "#FF8042"];
+const mobileView = innerWidth <= 640;
 
-const CustomPieChart = ({ dataKey = "value", data }) => {
+const CustomPieChart = ({ dataKey = "value", data,setChartDenomination }) => {
   const { id } = data;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
 
   const chartData = useMemo(() => {
     if (!response) return null;
+      setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     const compareFn = (a, b) => b.value - a.value;
     return response?.responseData?.data?.[0]?.plots.sort(compareFn).reduce((acc, plot, index) => {
       // if (index < 4) acc = acc.concat(plot);
@@ -103,6 +105,27 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
     );
   };
 
+  ///chartIDArray : Array of id's which are placed in a row of 2 charts
+  const chartIDArray = [
+    "mcCollectionByPaymentModev2",
+    "mcRceiptsByPaymentModev2",
+    "nssWsCollectionByChannel",
+    "nssWsCollectionByUsage",
+    "nssOBPSPermitIssuedByOccupancyType",
+    "nssOBPSPermitIssuedByRiskType",
+    "mcCollectionByPaymentType",
+    "mcReceiptsByPaymentMode",
+    "wscollectionByUsage",
+    "wscollectionByChannel",
+    "permitIssuedByOccupancyType",
+    "permitIssuedByRiskType"
+  ];
+
+  ///checkChartID: This function will check if the id is of chartIDArray
+  const checkChartID = (chartID) => {
+    return chartIDArray.includes(chartID);
+  };
+
   if (isLoading) {
     return <Loader />;
   }
@@ -115,10 +138,10 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
         <Pie
           data={chartData}
           dataKey={dataKey}
-          cy={130}
-          innerRadius={70}
-          outerRadius={90}
-          margin={{ top: 5 }}
+          cy={150}
+          innerRadius={checkChartID(id) && !mobileView ? 90 : 70}    ///Charts in rows(which contains 2 charts) are little bigger in size than charts in rows(which contains 3 charts) charts
+          outerRadius={checkChartID(id) && !mobileView ? 110 : 90}
+          margin={{ top: 5}}
           fill="#8884d8"
           //label={renderCustomLabel}
           labelLine={false}
@@ -129,7 +152,9 @@ const CustomPieChart = ({ dataKey = "value", data }) => {
           ))}
         </Pie>
         <Tooltip content={renderTooltip} />
-        <Legend layout="vertical" verticalAlign="middle" align="right" iconType="circle" formatter={renderLegend} />
+        <Legend layout="vertical" verticalAlign="middle" align="right" iconType="circle" formatter={renderLegend} iconSize={10} 
+        wrapperStyle={{paddingRight: checkChartID(id) && !mobileView? 60 : 0}} ///Padding for 2 charts in a row cases
+        />
       </PieChart>
     </ResponsiveContainer>
   );

@@ -20,7 +20,7 @@ const TopBar = ({
   hideNotificationIconOnSomeUrlsWhenNotLoggedIn,
 }) => {
   const location = useLocation();
-
+  
   const showHaburgerorBackButton = () => {
     if (location.pathname === "/digit-ui/citizen/") {
       return <Hamburger handleClick={toggleSidebar} />;
@@ -42,7 +42,6 @@ const TopBar = ({
           />
           <h3>{cityOfCitizenShownBesideLogo}</h3>
         </div>
-
         <div className="RightMostTopBarOptions">
           {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? (
             <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>

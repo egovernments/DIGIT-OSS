@@ -190,8 +190,7 @@ public class PaymentNotificationService {
         String tenantId = paymentRequest.getPayment().getTenantId();
         String paymentMode = paymentRequest.getPayment().getPaymentMode();
         String transactionNumber = paymentRequest.getPayment().getTransactionNumber();
-        String action = requestInfo.getAction();
-        List<String> configuredChannelNames  = util.fetchChannelList(requestInfo, tenantId, PT_BUSINESSSERVICE, action);
+        List<String> configuredChannelNames  = util.fetchChannelList(requestInfo, tenantId, PT_BUSINESSSERVICE, ACTION_PAID);
 
         List<PaymentDetail> ptPaymentDetails = new LinkedList<>();
 

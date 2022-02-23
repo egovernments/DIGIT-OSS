@@ -120,8 +120,8 @@ const CheckPage = ({ onSubmit, value }) => {
         <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
       </Card>
       {propertyType && <CitizenInfoLabel style={{ margin: "8px 0px", padding: "16px" }} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT", propertyType)} />}
-      {selectPaymentPreference && selectPaymentPreference.code === 'PAY_NOW' && <CitizenInfoLabel style={{ margin: "8px 0px", padding: "16px" }} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_PAY_NOW", selectPaymentPreference)} />}
-      {selectPaymentPreference && selectPaymentPreference.code === 'PAY_ON_SERVICE' && <CitizenInfoLabel style={{ margin: "8px 0px", padding: "16px" }} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_PAY_LATER", selectPaymentPreference)} />}
+      {selectPaymentPreference && selectPaymentPreference.code === 'PRE_PAY' && <CitizenInfoLabel style={{ margin: "8px 0px", padding: "16px" }} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_PAY_NOW", selectPaymentPreference)} />}
+      {selectPaymentPreference && selectPaymentPreference.code === 'POST_PAY' && <CitizenInfoLabel style={{ margin: "8px 0px", padding: "16px" }} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_PAY_LATER", selectPaymentPreference)} />}
     </React.Fragment>
   );
 };
