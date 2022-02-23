@@ -509,7 +509,7 @@ export const convertToEditTrade = (data, fy = []) => {
     Licenses: [
       {
         id: data?.id,
-        tenantId: data?.tenantId,
+        tenantId: data?.address?.city?.code,
         businessService: data?.businessService,
         licenseType: data?.licenseType,
         applicationType: "RENEWAL",
@@ -560,7 +560,7 @@ export const convertToResubmitTrade = (data) => {
     Licenses: [
       {
         id: data?.id,
-        tenantId: data?.tenantId,
+        tenantId: data?.address?.city?.code,
         businessService: data?.businessService,
         licenseType: data?.licenseType,
         applicationType: data.applicationType,
