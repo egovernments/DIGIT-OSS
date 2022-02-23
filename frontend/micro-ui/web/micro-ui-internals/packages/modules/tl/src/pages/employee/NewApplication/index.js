@@ -122,7 +122,7 @@ const NewApplication = () => {
       tradeLicenseDetail: {
         channel: "COUNTER",
         additionalDetail: {},
-        institution: {}
+        // institution: {}
       },
     };
 
@@ -136,7 +136,7 @@ const NewApplication = () => {
     if (address) formData.tradeLicenseDetail.address = address;
     if (structureType) formData.tradeLicenseDetail.structureType = structureType;
     if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
-    if (data?.owners?.length) formData.tradeLicenseDetail.institution.designation = data?.owners[0]?.designation;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution.designation = data?.owners[0]?.designation;
     if (data?.cpt) formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId;
 
     // setFormData(formData)
