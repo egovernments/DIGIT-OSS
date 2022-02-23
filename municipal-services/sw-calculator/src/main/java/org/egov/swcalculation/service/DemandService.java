@@ -201,7 +201,6 @@ public class DemandService {
 					.taxPeriodTo(toDate).consumerType("sewerageConnection").businessService(businessService)
 					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
 		}
-//		log.info("Demand Object" + demands.toString());
 		String billingcycle = (String) masterMap.get(SWCalculationConstant.Billing_Cycle_String);
 		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
 				.requestInfo(requestInfo)
@@ -209,7 +208,6 @@ public class DemandService {
 				.sewerageConnetionIds(sewerageConnectionIds)
 				.billingCycle(billingcycle)
 				.build();
-		log.info("DemandNotificationObj" + notificationObj.toString());
 		List<Demand> demandRes = demandRepository.saveDemand(requestInfo, demands,notificationObj);
 		if(isForConnectionNO)
 			fetchBill(demandRes, requestInfo,masterMap);

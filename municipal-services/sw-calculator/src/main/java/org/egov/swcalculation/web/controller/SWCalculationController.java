@@ -8,8 +8,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.egov.common.contract.request.RequestInfo;
-import org.egov.swcalculation.producer.SWCalculationProducer;
 import org.egov.swcalculation.service.PaymentNotificationService;
 import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.service.DemandService;
@@ -24,8 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import static org.apache.kafka.common.requests.DeleteAclsResponse.log;
 
 @Getter
 @Setter
@@ -45,9 +41,6 @@ public class SWCalculationController {
 	
 	@Autowired
 	private SWCalculationServiceImpl sWCalculationServiceImpl;
-
-	@Autowired
-	private SWCalculationProducer swCalculationProducer;
 	
 	@PostMapping("/_calculate")
 	public ResponseEntity<CalculationRes> calculate(@RequestBody @Valid CalculationReq calculationReq) {
@@ -90,10 +83,4 @@ public class SWCalculationController {
 
 	}
 
-	@PostMapping("/_test")
-	public ResponseEntity test(@Valid @RequestBody DemandNotificationObj demandNotificationObj){
-		log.info("Here controller!");
-		swCalculationProducer.push("sw-demand-saved",demandNotificationObj);
-		return new ResponseEntity(HttpStatus.OK);
-	}
 }

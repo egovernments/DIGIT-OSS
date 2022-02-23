@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.wscalculation.config.WSCalculationConfiguration;
 import org.egov.wscalculation.constants.WSCalculationConstant;
-import org.egov.wscalculation.producer.WSCalculationProducer;
 import org.egov.wscalculation.service.*;
 import org.egov.wscalculation.web.models.*;
 import org.egov.wscalculation.util.ResponseInfoFactory;
@@ -49,9 +48,6 @@ public class CalculatorController {
 
 	@Autowired
 	private final PaymentNotificationService paymentNotificationService;
-
-	@Autowired
-	private final WSCalculationProducer wsCalculationProducer;
 
 	@Autowired
 	private WSCalculationConfiguration config;
@@ -103,11 +99,4 @@ public class CalculatorController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PostMapping("/_test")
-	public ResponseEntity test( @Valid @RequestBody DemandNotificationObj demandNotificationObj){
-		log.info("Here controller!");
-		wsCalculationProducer.push("ws-demand-saved",demandNotificationObj);
-		return new ResponseEntity(HttpStatus.OK);
-
-	}
 }

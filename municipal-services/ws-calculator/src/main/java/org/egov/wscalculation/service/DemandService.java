@@ -198,7 +198,6 @@ public class DemandService {
 					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
 		}
 
-//		log.info("Demand Object" + demands.toString());
 		String billingcycle = (String) masterMap.get(WSCalculationConstant.Billing_Cycle_String);
 		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
 				.requestInfo(requestInfo)
@@ -207,9 +206,7 @@ public class DemandService {
 				.billingCycle(billingcycle)
 				.build();
 
-		log.info("pushing DemandNotificationObj -> "+notificationObj.toString());
 		List<Demand> demandRes = demandRepository.saveDemand(requestInfo, demands,notificationObj);
-		log.info("isForConnectionNO boolean "+isForConnectionNO);
 		if(isForConnectionNO)
 		fetchBill(demandRes, requestInfo,masterMap);
 		return demandRes;
