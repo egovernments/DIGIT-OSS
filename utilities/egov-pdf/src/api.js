@@ -180,7 +180,7 @@ async function search_water(applicationNumber, tenantId, requestinfo, allowCitiz
 
   let waterResponse = await axios({
     method: "post",
-    url: url.resolve(config.host.waterHost, config.paths.water_search),
+    url: url.resolve("https://statea.digit.org/", config.paths.water_search),
     data: requestinfo,
     headers: headers,
     params,
