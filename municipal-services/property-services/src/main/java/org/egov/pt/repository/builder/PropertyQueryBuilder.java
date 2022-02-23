@@ -32,7 +32,7 @@ public class PropertyQueryBuilder {
 	
 	private static String PROEPRTY_AUDIT_QUERY = "select property from eg_pt_property_audit where propertyid=?";
 
-	private static String PROEPRTY_ID_QUERY = "select propertyid from eg_pt_property where id in (select propertyid from eg_pt_owner where userid IN {replace} and status='ACTIVE' )";
+	private static String PROEPRTY_ID_QUERY = "select propertyid from eg_pt_property where id in (select propertyid from eg_pt_owner where userid IN {replace} and userid not in (select userid from eg_pt_owner where STATUS='INACTIVE') )";
 
 	private static String REPLACE_STRING = "{replace}";
 	
