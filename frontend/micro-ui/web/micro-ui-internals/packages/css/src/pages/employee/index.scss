@@ -403,3 +403,19 @@
 .mb-25 {
   margin-bottom: 25px;
 }
+
+.back-wrapper {
+  display: flex;
+  justify-content: space-between;
+  .top-back-btn {
+    margin-bottom: 0px;
+    color: #ffffff;
+    margin-right: 1em;
+    & svg {
+      fill: #ffffff;
+    }
+  }
+  .hambuger-back-wrapper {
+    display: flex;
+  }
+}

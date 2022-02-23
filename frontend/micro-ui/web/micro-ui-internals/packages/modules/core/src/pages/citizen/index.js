@@ -10,7 +10,7 @@ import CitizenHome from "./Home";
 import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
-import UserProfile from './Home/UserProfile';
+import UserProfile from "./Home/UserProfile";
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -50,7 +50,6 @@ const Home = ({
       <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
         <div className="moduleLinkHomePage">
           <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
-          <BackButton className="moduleLinkHomePageBackButton" />
           <h1>{t("MODULE_" + code.toUpperCase())}</h1>
         </div>
         <div className="moduleLinkHomePageModuleLinks">
@@ -104,7 +103,7 @@ const Home = ({
           </Route>
 
           <Route path={`${path}/user/profile`}>
-            <UserProfile stateCode={stateCode} userType={'citizen'} />
+            <UserProfile stateCode={stateCode} userType={"citizen"} />
           </Route>
 
           <ErrorBoundary>
