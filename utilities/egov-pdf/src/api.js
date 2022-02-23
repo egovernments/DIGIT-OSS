@@ -177,15 +177,19 @@ async function search_water(applicationNumber, tenantId, requestinfo, allowCitiz
     var userName = requestinfo.RequestInfo.userInfo.userName;
     params["mobileNumber"] = mobileNumber || userName;
   }
-  console.log(config.host.waterHost+" "+config.paths.water_search);
 
-  return await axios({
+  let waterResponse = await axios({
     method: "post",
     url: url.resolve(config.host.waterHost, config.paths.water_search),
     data: requestinfo,
     headers: headers,
     params,
   });
+
+  console.log("\n headers--> "+JSON.stringify(headers));
+
+  console.log("\n waterResponse--> "+JSON.stringify(waterResponse));
+  return waterResponse;
 }
 
 async function search_sewerage(applicationNumber, tenantId, requestinfo, allowCitizenTOSearchOthersRecords, headers) {
