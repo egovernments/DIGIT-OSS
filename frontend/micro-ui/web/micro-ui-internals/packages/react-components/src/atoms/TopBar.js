@@ -29,6 +29,7 @@ const TopBar = ({
           alt="mSeva"
         />
         <h3>{cityOfCitizenShownBesideLogo}</h3>
+
         <div className="RightMostTopBarOptions">
           {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? (
             <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>
