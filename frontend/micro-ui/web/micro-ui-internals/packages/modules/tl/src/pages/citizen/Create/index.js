@@ -25,7 +25,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
     if (typeof nextStep == "object" && nextStep != null) {
       if (
         nextStep[sessionStorage.getItem("isAccessories")] &&
-        (nextStep[sessionStorage.getItem("isAccessories")] === "accessories-details" || nextStep[sessionStorage.getItem("isAccessories")] === "map")
+        (nextStep[sessionStorage.getItem("isAccessories")] === "accessories-details" || nextStep[sessionStorage.getItem("isAccessories")] === "map" || nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details" )
       ) {
         nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
       } else if (

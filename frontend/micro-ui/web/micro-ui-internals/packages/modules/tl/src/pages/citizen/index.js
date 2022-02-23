@@ -15,20 +15,18 @@ const App = () => {
   let isSuccessScreen = window.location.href.includes("acknowledgement");
 
   const ApplicationDetails = Digit.ComponentRegistryService.getComponent("ApplicationDetails");
-  const CreateTradeLicence = Digit?.ComponentRegistryService?.getComponent('TLCreateTradeLicence');
-  const EditTrade = Digit?.ComponentRegistryService?.getComponent('TLEditTrade');
-  const RenewTrade = Digit?.ComponentRegistryService?.getComponent('TLRenewTrade');
-  const TradeLicense = Digit?.ComponentRegistryService?.getComponent('TradeLicense');
-  const TLList = Digit?.ComponentRegistryService?.getComponent('TLList');
-  const SearchTradeComponent = Digit?.ComponentRegistryService?.getComponent('TLSearchTradeComponent');
-  const MyApplications = Digit?.ComponentRegistryService?.getComponent('MyApplications');
+  const CreateTradeLicence = Digit?.ComponentRegistryService?.getComponent("TLCreateTradeLicence");
+  const EditTrade = Digit?.ComponentRegistryService?.getComponent("TLEditTrade");
+  const RenewTrade = Digit?.ComponentRegistryService?.getComponent("TLRenewTrade");
+  const TradeLicense = Digit?.ComponentRegistryService?.getComponent("TradeLicense");
+  const TLList = Digit?.ComponentRegistryService?.getComponent("TLList");
+  const SearchTradeComponent = Digit?.ComponentRegistryService?.getComponent("TLSearchTradeComponent");
+  const MyApplications = Digit?.ComponentRegistryService?.getComponent("MyApplications");
 
-  
   return (
     <span className={"tl-citizen"}>
       <Switch>
         <AppContainer>
-          <BackButton /* style={{ position: "fixed", top: "55px" }} */ isSuccessScreen={isSuccessScreen}  >Back</BackButton>
           <PrivateRoute path={`${path}/tradelicence/new-application`} component={CreateTradeLicence} />
           <PrivateRoute path={`${path}/tradelicence/edit-application/:id/:tenantId`} component={EditTrade} />
           <PrivateRoute path={`${path}/tradelicence/renew-trade/:id/:tenantId`} component={RenewTrade} />

@@ -59,7 +59,7 @@ const Layout = ({ rowData }) => {
     switch (visualizer.vizType) {
       case "metric-collection":
         return (
-          <GenericChart header={visualizer.name} className="metricsTable" key={key}>
+          <GenericChart header={visualizer.name} className="metricsTable" key={key} value={value}>
             <MetricChart data={visualizer} />
           </GenericChart>
         );
@@ -72,7 +72,8 @@ const Layout = ({ rowData }) => {
         return (
           <GenericChart
             key={key}
-            header={visualizer.name}
+            value={value}
+            header={visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0].chartType === "line" ? `${visualizer.name}` : visualizer.name}
             chip={chip}
             updateChip={onChipChange}
             showDownload={visualizer?.charts?.[0].chartType === "table"}
@@ -91,7 +92,7 @@ const Layout = ({ rowData }) => {
         )
           return null;
         return (
-          <GenericChart header={visualizer.name} subHeader={`(${t(`SUB_${visualizer.name}`)})`} key={key} chip={chip} updateChip={onChipChange}>
+          <GenericChart value={value} header={visualizer.name} subHeader={`(${t(`SUB_${visualizer.name}`)})`} key={key} chip={chip} updateChip={onChipChange}>
             <CustomBarChart
               data={visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0]}
               fillColor={index++ % 2 ? "RED" : "GREEN"}

@@ -23,7 +23,7 @@ const PTEmployeeOwnershipDetails = ({ config, onSelect, userType, formData, setE
   const { t } = useTranslation();
 
   const { pathname } = useLocation();
-  const isEditScreen = pathname.includes("/modify-application/");
+  const isEditScreen = pathname.includes("/modify-application/" ) 
   const [owners, setOwners] = useState(formData?.owners || [createOwnerDetails()]);
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
 
@@ -167,14 +167,14 @@ const OwnerForm = (_props) => {
     trigger();
   }, []);
 
-  useEffect(() => {
-    const keys = Object.keys(formValue);
-    const part = {};
-    keys.forEach((key) => (part[key] = owner[key]));
+  
+  const [part, setPart] = React.useState({});
 
+  useEffect(() => {    
     let _ownerType = isIndividualTypeOwner ? {} : { ownerType: { code: "NONE" } };
-    let comparison = CompareTwoObjects(formValue,part)
-    if (!(comparison)) {
+
+    if (!_.isEqual(part, formValue)) {
+      setPart({...formValue});
       setOwners((prev) => prev.map((o) => (o.key && o.key === owner.key ? { ...o, ...formValue, ..._ownerType } : { ...o })));
       trigger();
     }
@@ -186,6 +186,7 @@ const OwnerForm = (_props) => {
   }, [errors]);
 
   const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
+
   return (
     <React.Fragment>
       <div style={{ marginBottom: "16px" }}>
@@ -222,10 +223,11 @@ const OwnerForm = (_props) => {
                       <TextInput
                         value={props.value}
                         disable={isEditScreen}
-                        autoFocus={focusIndex.index === owner?.key && focusIndex.type === "name"}
+                        name={"institution.name"}
+                        autoFocus={focusIndex.index === owner?.key && focusIndex.type === "institution.name"}
                         onChange={(e) => {
                           props.onChange(e.target.value);
-                          setFocusIndex({ index: owner.key, type: "name" });
+                          setFocusIndex({ index: owner.key, type: "institution.name"});
                         }}
                         onBlur={(e) => {
                           setFocusIndex({ index: -1 });

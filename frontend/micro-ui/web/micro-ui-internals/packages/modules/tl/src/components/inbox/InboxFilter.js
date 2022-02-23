@@ -104,7 +104,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
               <div className="filter-label" style={{ fontWeight: "normal" }}>
                 {t("CS_INBOX_STATUS_FILTER")}
               </div>
-              {statuses.map((e, index) => {
+              {statuses?.map((e, index) => {
                 const checked = _searchParams?.applicationStatus?.includes(e.statusid);
                 return (
                   <CheckBox

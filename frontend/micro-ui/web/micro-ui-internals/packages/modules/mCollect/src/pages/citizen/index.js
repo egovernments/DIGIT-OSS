@@ -6,19 +6,17 @@ import { Redirect, Switch, useRouteMatch } from "react-router-dom";
 // import MyChallanResultsComponent from "./MyChallan";
 //import BillInfo from "./SearchResults/BillInfo";
 
-
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
 
-const SearchChallanComponent = Digit?.ComponentRegistryService?.getComponent('MCollectSearchChallanComponent');
-const SearchResultsComponent = Digit?.ComponentRegistryService?.getComponent('MCollectSearchResultsComponent');
-const MyChallanResultsComponent = Digit?.ComponentRegistryService?.getComponent('MCollectMyChallanResultsComponent');
+  const SearchChallanComponent = Digit?.ComponentRegistryService?.getComponent("MCollectSearchChallanComponent");
+  const SearchResultsComponent = Digit?.ComponentRegistryService?.getComponent("MCollectSearchResultsComponent");
+  const MyChallanResultsComponent = Digit?.ComponentRegistryService?.getComponent("MCollectMyChallanResultsComponent");
 
   return (
     <span className={"mcollect-citizen"}>
       <Switch>
         <AppContainer>
-          <BackButton style={{ top: "55px" }}>Back</BackButton>
           <PrivateRoute path={`${path}/search`} component={SearchChallanComponent} />
           <PrivateRoute path={`${path}/search-results`} component={SearchResultsComponent} />
           <PrivateRoute path={`${path}/My-Challans`} component={MyChallanResultsComponent} />

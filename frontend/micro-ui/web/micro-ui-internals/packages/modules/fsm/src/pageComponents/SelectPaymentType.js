@@ -14,7 +14,7 @@ const SelectPaymentType = ({ t, config, onSelect, formData = {}, userType, regis
     {
       label: "Payment Preference",
       type: "RadioButton",
-      name: "applicantPaymentPreference",
+      name: "paymentPreference",
       options: paymentData,
       isMandatory: false,
     },
@@ -22,13 +22,13 @@ const SelectPaymentType = ({ t, config, onSelect, formData = {}, userType, regis
 
   useEffect(() => {
     if (!isLoading && paymentData) {
-      setPaymentType(paymentData);
+      const preFilledPaymentType = paymentData.filter(
+        (paymentType) => paymentType.code === (formData?.paymentPreference?.code || formData?.paymentPreference)
+      )[0];
+      setPaymentType(preFilledPaymentType);
     }
-  }, [paymentData]);
+  }, [formData, formData?.paymentPreference?.code, formData?.paymentPreference, paymentData]);
 
-  function setValue(value, input) {
-    onSelect(config.key, { ...formData[config.key], [input]: value });
-  }
 
   function selectPaymentType(value) {
     setPaymentType(value);

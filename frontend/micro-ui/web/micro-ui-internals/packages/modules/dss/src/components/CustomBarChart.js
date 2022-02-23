@@ -47,6 +47,7 @@ const CustomBarChart = ({
   showDrillDown = false,
   data,
   title,
+  setChartDenomination
 }) => {
   const { id } = data;
   const { t } = useTranslation();
@@ -63,6 +64,7 @@ const CustomBarChart = ({
   
   const chartData = useMemo(() => {
     if (!response) return null;
+    setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     return response?.responseData?.data?.map((bar) => {
       let plotValue = bar?.plots?.[0].value || 0;
       return {

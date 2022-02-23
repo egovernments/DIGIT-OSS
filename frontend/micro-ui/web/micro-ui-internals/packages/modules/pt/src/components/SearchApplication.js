@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, MobileNumber, Loader, CardText } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 
-const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) => {
+const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count, setShowToast }) => {
     const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
         defaultValues: {
             offset: 0,
@@ -171,7 +171,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                                 option={applicationTypes}
                                 optionKey="i18nKey"
                                 t={t}
-                                disable={true}
+                                disable={false}
                                 />
                             )}
                             />
@@ -189,7 +189,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                                 option={applicationStatuses}
                                 optionKey="i18nKey"
                                 t={t}
-                                disable={true}
+                                disable={false}
                                 />
                             )}
                             />
@@ -197,7 +197,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                 <SearchField>
                     <label>{t("PT_FROM_DATE")}</label>
                     <Controller
-                        render={(props) => <DatePicker date={props.value} disabled={true} onChange={props.onChange} />}
+                        render={(props) => <DatePicker date={props.value} disabled={false} onChange={props.onChange} />}
                         name="fromDate"
                         control={control}
                         />
@@ -205,14 +205,15 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                 <SearchField>
                     <label>{t("PT_TO_DATE")}</label>
                     <Controller
-                        render={(props) => <DatePicker date={props.value} disabled={true} onChange={props.onChange} />}
+                        render={(props) => <DatePicker date={props.value} disabled={false} onChange={props.onChange} />}
                         name="toDate"
                         control={control}
                         />
                 </SearchField>
                 <SearchField className="submit">
                     <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
-                    <p onClick={() => {
+                    <p style={{marginTop:"10px"}}
+                     onClick={() => {
                         reset({ 
                             acknowledgementIds: "", 
                             fromDate: "", 
@@ -226,6 +227,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                             sortBy: "commencementDate",
                             sortOrder: "DESC"
                         });
+                        setShowToast(null);
                         previousPage();
                     }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
                 </SearchField>

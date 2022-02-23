@@ -1,11 +1,11 @@
-import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable,MultiLink } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import getPTAcknowledgementData from "../../getPTAcknowledgementData";
 import PropertyDocument from "../../pageComponents/PropertyDocument";
 import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
-import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle, getMohallaLocale } from "../../utils";
+import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle, getMohallaLocale, pdfDownloadLink } from "../../utils";
 
 import get from "lodash/get";
 import { size } from "lodash";
@@ -14,6 +14,7 @@ const PTApplicationDetails = () => {
   const { t } = useTranslation();
   const { acknowledgementIds } = useParams();
   const [acknowldgementData, setAcknowldgementData] = useState([]);
+  const [showOptions, setShowOptions] = useState(false);
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
@@ -40,6 +41,17 @@ const PTApplicationDetails = () => {
       //   d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
+
+  const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
+    {
+      tenantId: tenantId,
+      businessService: "PT.MUTATION",
+      consumerCodes: acknowledgementIds,
+      isEmployee: false,
+    },
+    {}
+  );
+
 
   if (!property.workflow) {
     let workflow = {
@@ -138,14 +150,8 @@ const PTApplicationDetails = () => {
     const applications = application || {};
     const tenantInfo = tenants.find((tenant) => tenant.code === applications.tenantId);
     const acknowldgementDataAPI = await getPTAcknowledgementData({ ...applications }, tenantInfo, t);
-    setAcknowldgementData(acknowldgementDataAPI);
-  };
-  // useEffect(() => {
-  getAcknowledgementData();
-  // }, [])
-
-  const handleDownloadPdf = () => {
-    Digit.Utils.pdf.generate(acknowldgementData);
+    Digit.Utils.pdf.generate(acknowldgementDataAPI);
+    //setAcknowldgementData(acknowldgementDataAPI);
   };
 
   let documentDate = t("CS_NA");
@@ -155,13 +161,51 @@ const PTApplicationDetails = () => {
     documentDate = `${date.getDate()} ${month} ${date.getFullYear()}`;
   }
 
+  async function getRecieptSearch({tenantId,payments,...params}) {
+    let response = { filestoreIds: [payments?.fileStoreId] };
+      response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{...payments}] }, "consolidatedreceipt");
+    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    window.open(fileStore[response?.filestoreIds[0]], "_blank");
+  }
+
+  const handleDownload = async (document,tenantid) => {
+    let tenantId = tenantid ? tenantid : tenantId;
+    const res = await Digit.UploadServices.Filefetch([document?.fileStoreId], tenantId);
+    let documentLink = pdfDownloadLink(res.data, document?.fileStoreId);
+    window.open(documentLink, "_blank");
+  };
+
+
+  let dowloadOptions = [];
+
+  dowloadOptions.push({
+    label: t("MT_APPLICATION"),
+    onClick: () => getAcknowledgementData()
+  });
+  if(reciept_data && recieptDataLoading == false)
+  dowloadOptions.push({
+    label: t("MT_FEE_RECIEPT"),
+    onClick: () => getRecieptSearch({tenantId: reciept_data?.Payments[0]?.tenantId,payments: reciept_data?.Payments[0]})
+  });
+  if(data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION").length>0)
+  dowloadOptions.push({
+    label: t("MT_CERTIFICATE"),
+    onClick: () => handleDownload(data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION")[0],data?.Properties[0]?.tenantId)
+  });
+
   return (
     <React.Fragment>
-      <Header>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
       <div>
-        <div>
-          <LinkButton label={t("CS_COMMON_DOWNLOAD")} className="check-page-link-button pt-application-download-btn" onClick={handleDownloadPdf} />
-        </div>
+      <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
+        <Header styles={{fontSize: "32px"}}>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
+        {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
+          className="multilinkWrapper"
+          onHeadClick={() => setShowOptions(!showOptions)}
+          displayOptions={showOptions}
+          options={dowloadOptions}
+
+        />}
+      </div>
         <Card>
           <StatusTable>
             <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
@@ -386,7 +430,7 @@ const PTApplicationDetails = () => {
               </StatusTable>
             )}
           </div>
-          <PTWFApplicationTimeline application={application} id={acknowledgementIds} />
+          <PTWFApplicationTimeline application={application} id={acknowledgementIds} userType={'citizen'} />
         </Card>
       </div>
     </React.Fragment>

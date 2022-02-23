@@ -366,7 +366,7 @@ public class PaymentNotificationService {
 	 *
 	 */
 	public void sendBillNotification(RequestInfo requestInfo, String uuid, String tenantId, Map<String, Object> masterMap, Boolean isSuccess) {
-
+log.info("Sending Bill Notification");
 		List<String> configuredChannelNames = notificationUtil.fetchChannelList(requestInfo, tenantId, SERVICE_FIELD_VALUE_WS, ACTION_FOR_BILL);
 
 		User user = notificationUtil.fetchUserByUUID(uuid, requestInfo, tenantId);

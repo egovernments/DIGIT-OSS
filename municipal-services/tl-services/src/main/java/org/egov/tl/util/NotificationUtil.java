@@ -94,6 +94,11 @@ public class NotificationUtil {
 			message = getFieldInspectionMsg(license, messageTemplate);
 			break;
 
+		case ACTION_STATUS_PENDINGAPPROVAL:
+			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_PENDING_APPROVAL, localizationMessage);
+			message = getPendingApprovalMsg(license, messageTemplate);
+			break;
+
 		case ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION:
 			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_SENDBACK_CITIZEN, localizationMessage);
 			message = getCitizenSendBack(license, messageTemplate);
@@ -147,6 +152,11 @@ public class NotificationUtil {
 
 			case ACTION_STATUS_REJECTED:
 				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_REJECTED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_PENDINGAPPROVAL:
+				messageTemplate = getMessageTemplate(NOTIFICATION_PENDING_APPROVAL+ "." + "email", localizationMessage);
 				message = getReplacedMessage(license, messageTemplate);
 				break;
 
@@ -307,6 +317,21 @@ public class NotificationUtil {
 		// message = message.replace("{1}",);
 		message = message.replace("{2}", license.getTradeName());
 
+		return message;
+	}
+
+	/**
+	 * Creates customized message for rejected
+	 *
+	 * @param license
+	 *            tenantId of the tradeLicense
+	 * @param message
+	 *            Message from localization for rejected
+	 * @return customized message for rejected
+	 */
+	private String getPendingApprovalMsg(TradeLicense license, String message) {
+		message = message.replace("{2}", license.getApplicationNumber());
+		message = message.replace("{3}", license.getTradeName());
 		return message;
 	}
 
@@ -723,4 +748,40 @@ public class NotificationUtil {
 		}
 		return mapOfPhnoAndEmailIds;
 	}
+
+	/**
+	 * Fetches UUIDs of CITIZENs based on the phone number.
+	 *
+	 * @param mobileNumbers
+	 * @param requestInfo
+	 * @param tenantId
+	 * @return
+	 */
+	public Map<String, String> fetchUserUUIDs(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+		Map<String, String> mapOfPhnoAndUUIDs = new HashMap<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("userType", "CITIZEN");
+		for(String mobileNo: mobileNumbers) {
+			userSearchRequest.put("userName", mobileNo);
+			try {
+				Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
+				if(null != user) {
+					String uuid = JsonPath.read(user, "$.user[0].uuid");
+					mapOfPhnoAndUUIDs.put(mobileNo, uuid);
+				}else {
+					log.error("Service returned null while fetching user for username - "+mobileNo);
+				}
+			}catch(Exception e) {
+				log.error("Exception while fetching user for username - "+mobileNo);
+				log.error("Exception trace: ",e);
+				continue;
+			}
+		}
+		return mapOfPhnoAndUUIDs;
+	}
+
 }

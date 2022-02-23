@@ -5,13 +5,13 @@ import { useHistory } from "react-router-dom";
 import Background from "../../../components/Background";
 import Header from "../../../components/Header";
 
-const Login = ({ config: propsConfig, t ,isDisable}) => {
+const Login = ({ config: propsConfig, t ,isDisabled}) => {
   const { data: cities, isLoading } = Digit.Hooks.useTenants();
   const { data: storeData, isLoading: isStoreLoading } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const [user, setUser] = useState(null);
   const [showToast, setShowToast] = useState(null);
-  const [ disable, setDisable] = useState(false);
+  const [disable,setDisable]=useState(false);
   
   const history = useHistory();
   // const getUserType = () => "EMPLOYEE" || Digit.UserService.getType();
@@ -46,6 +46,7 @@ const Login = ({ config: propsConfig, t ,isDisable}) => {
       Digit.SessionStorage.set("Employee.tenantId", info?.tenantId);
       setUser({ info, ...tokens });
     } catch (err) {
+
       setShowToast(err?.response?.data?.error_description || "Invalid login credentials!");
       setTimeout(closeToast, 5000);
     }
@@ -116,7 +117,7 @@ const Login = ({ config: propsConfig, t ,isDisable}) => {
       <FormComposer
       
         onSubmit={onLogin}
-        isDisabled={ disable}
+        isDisabled={isDisabled}
         noBoxShadow
         inline
         submitInForm
@@ -128,6 +129,7 @@ const Login = ({ config: propsConfig, t ,isDisable}) => {
         headingStyle={{ textAlign: "center" }}
         cardStyle={{ margin: "auto", minWidth: "408px" }}
         className="loginFormStyleEmployee"
+        buttonStyle={{maxWidth:"100%"}}
         
       >
         <Header />

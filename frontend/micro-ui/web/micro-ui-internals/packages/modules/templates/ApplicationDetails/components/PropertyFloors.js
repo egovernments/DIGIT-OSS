@@ -18,7 +18,7 @@ function PropertyFloors({ floors }) {
                 </CardSectionHeader>
                 <StatusTable style={{ position: "relative", padding: "8px" }}>
                   <div
-                    style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", borderRadius: "4px", background: "#FAFAFA" }}
+                    style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", borderRadius: "4px", background: "#FAFAFA", maxWidth: "100%" }}
                   >
                   {value?.values?.map((value, index) => {
                     if (value.map === true && value.value !== "N/A") {

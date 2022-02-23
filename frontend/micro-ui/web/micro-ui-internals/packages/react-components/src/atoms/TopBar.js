@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Hamburger from "./Hamburger";
 import { NotificationBell } from "./svgindex";
+import { useLocation } from "react-router-dom";
+import BackButton from "./BackButton";
 
 const TopBar = ({
   img,
@@ -17,11 +19,22 @@ const TopBar = ({
   onNotificationIconClick,
   hideNotificationIconOnSomeUrlsWhenNotLoggedIn,
 }) => {
+  const location = useLocation();
+  
+  const showHaburgerorBackButton = () => {
+    if (location.pathname === "/digit-ui/citizen/") {
+      return <Hamburger handleClick={toggleSidebar} />;
+    } else {
+      return <BackButton className="top-back-btn" />;
+    }
+  };
   return (
     <div className="navbar">
       <div className="nav">
         <div className="nav-wrapper">
-          {isMobile && <Hamburger handleClick={toggleSidebar} />}
+      <div className="center-container back-wrapper">
+        <div className="hambuger-back-wrapper">
+          {showHaburgerorBackButton()}
           <img
             className="city"
             id="topbar-logo"
@@ -31,7 +44,6 @@ const TopBar = ({
           />
           <h3>{cityOfCitizenShownBesideLogo}</h3>
         </div>
-
         <div className="RightMostTopBarOptions">
           {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? (
             <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>

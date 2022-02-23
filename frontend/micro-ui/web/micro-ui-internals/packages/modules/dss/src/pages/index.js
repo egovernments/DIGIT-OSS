@@ -113,9 +113,18 @@ const DashBoard = ({ stateCode }) => {
     });
   };
   const removeST = (id) => {
+    let newStates=[...filters?.filters?.state].filter((tenant, index) => index !== id) ;
+
+    let newUlbs=filters?.filters?.ulb||[];
+    if(newStates?.length==0){
+      newUlbs=[];
+    }else{
+      let filteredUlbs=nationalInfo?.ulb?.filter((e) => Digit.Utils.dss.getCitiesAvailable(e, newStates))?.map(ulbs=>ulbs?.code)
+    newUlbs=newUlbs.filter(ulb=>filteredUlbs.includes(ulb))
+    }
     handleFilters({
       ...filters,
-      filters: { ...filters?.filters, state: [...filters?.filters?.state].filter((tenant, index) => index !== id) },
+      filters: { ...filters?.filters, state:newStates ,ulb:newUlbs},
     });
   };
   const removeTenant = (id) => {

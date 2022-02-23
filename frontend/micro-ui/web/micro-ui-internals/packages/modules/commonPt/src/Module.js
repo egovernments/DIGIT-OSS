@@ -9,7 +9,7 @@ import EmployeeApp from "./pages/employee";
 import CPTPropertyAssemblyDetails from "./pages/components/PropertyAssemblyDetails";
 import CPTPropertyLocationDetails from "./pages/components/PropertyLocationDetails";
 import CPTPropertyOwnerDetails from "./pages/components/PropertyOwnerDetails";
-import CPTSearchProperty from './pages/citizen/Create';
+import CPTSearchProperty from './pages/citizen/SearchProperty';
 import CPTPropertySearchForm from './components/search/CPTPropertySearchForm';
 import CPTPropertySearchResults from './components/search/CPTPropertySearchResults';
 import CPTKnowYourProperty from './pages/pageComponents/KnowYourProperty';
@@ -18,6 +18,7 @@ import CPTPropertySearchNSummary from './pages/pageComponents/PropertySearchNSum
 import CPTSearchResults from './pages/citizen/SearchResults';
 import CPTCreateProperty from './pages/pageComponents/createForm';
 import CPTAcknowledgement from './pages/pageComponents/PTAcknowledgement';
+import CommonPTCard from "./components/CommonPTCard";
 
 const componentsToRegister = {
   CPTPropertySearchForm,
@@ -80,6 +81,7 @@ export const CommonPTLinks = ({ matchPath, userType }) => {
 };
 
 export const CommonPTComponents = {
+  CommonPTCard,
   CommonPTModule,
   CommonPTLinks,
   ...componentsToRegister,

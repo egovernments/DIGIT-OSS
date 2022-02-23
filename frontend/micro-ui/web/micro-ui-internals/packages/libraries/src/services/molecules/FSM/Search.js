@@ -47,6 +47,7 @@ export const Search = {
     const filter = { applicationNos };
     let dsoDetails = {};
     let vehicle = {};
+    let paymentPreference = ""
     const response = await Search.application(tenantId, filter);
     if (response?.dsoId) {
       const dsoFilters = { ids: response.dsoId, vehicleIds: response?.vehicleId };
@@ -57,6 +58,9 @@ export const Search = {
       }
     }
 
+    if (response?.paymentPreference) {
+        paymentPreference = response.paymentPreference;
+    
     let slumLabel = "";
     if (response?.address?.slumName && response?.address?.locality?.code && response?.tenantId) {
       const slumData = await MdmsService.getSlumLocalityMapping(response?.tenantId, "FSM", "Slum");
@@ -102,6 +106,7 @@ export const Search = {
         values: [
           { title: "ES_APPLICATION_DETAILS_APPLICANT_NAME", value: response?.citizen?.name },
           { title: "ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO", value: response?.citizen?.mobileNumber },
+          { title: "ES_FSM_PAYMENT_PREFERENCE", value: `ES_ACTION_${response?.paymentPreference}` },
         ],
       },
       {
@@ -134,9 +139,9 @@ export const Search = {
             child:
               response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude
                 ? {
-                    element: "img",
-                    src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
-                  }
+                  element: "img",
+                  src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
+                }
                 : null,
           },
         ],
@@ -213,7 +218,8 @@ export const Search = {
       applicationDetails: citizenResponse,
       pdfData: { ...response, amountPerTrip, totalAmount, vehicleMake, vehicleCapacity, slumName, dsoDetails },
     };
-  },
+  }
+},
 
   allVehicles: (tenantId, filters) => {
     return FSMService.vehicleSearch(tenantId, filters);
@@ -238,10 +244,10 @@ export const Search = {
 
   combineResponse: (vehicleTrip, vendorOwnerKey) => {
     return vehicleTrip.map((trip) => {
-      if (vendorOwnerKey[trip.tripOwnerId]){
+      if (vendorOwnerKey[trip.tripOwnerId]) {
         return { ...trip, dsoName: vendorOwnerKey[trip.tripOwnerId].name };
       } else return {}
-    }).filter( e => e.tripOwnerId);
+    }).filter(e => e.tripOwnerId);
 
   },
 

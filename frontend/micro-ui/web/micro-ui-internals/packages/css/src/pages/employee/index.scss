@@ -108,22 +108,95 @@
   .sidebar {
     position: fixed;
     left: 0;
-    padding: 20px 0;
     background: #22394d;
     height: 100%;
-    color: white;
+    color: #ffffff;
     margin-top: 80px;
-    z-index: 1000;
+    z-index: 10;
+    transition: 0.3s ease all;
+    white-space: nowrap;
+    overflow-y: hidden;
+    height: calc(100vh - 36px);
+    padding-bottom: 5rem;
 
     .actions {
       cursor: pointer;
+      display: flex;
+      align-items: center;
       padding: 0 20px;
-      margin-bottom: 32px;
+    }
 
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+    a {
+      display: flex;
+    }
+    .sidebar-link {
+      display: flex;
+      color: #ffffff;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      font-size: 14px;
       &.active {
+        color: #f47738 !important;
+
         border-right: 4px solid #f47738;
-        padding-right: 16px;
+        svg {
+          fill: #f47738 !important;
+        }
       }
+
+      svg {
+        fill: #ffffff !important;
+        width: 21px;
+        height: 21px;
+      }
+
+      &:hover {
+        color: #f47738 !important;
+        background-color: #486480;
+
+        cursor: pointer;
+        svg {
+          fill: #f47738 !important;
+        }
+      }
+    }
+    .dropdown-link {
+      height: 40px;
+      display: flex;
+      margin-left: 2em;
+      align-items: center;
+      text-decoration: none;
+      color: #ffffff;
+      font-size: 14px;
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: #ffffff;
+      }
+      &:hover {
+        color: #fe7a51 !important;
+        background-color: #486480;
+        cursor: pointer;
+        svg {
+          fill: #fe7a51 !important;
+        }
+      }
+      &.active {
+        color: #f47738 !important;
+
+        border-right: 4px solid #f47738;
+        svg {
+          fill: #f47738 !important;
+        }
+      }
+    }
+    span {
+      margin-left: 16px;
     }
   }
 
@@ -329,4 +402,20 @@
 }
 .mb-25 {
   margin-bottom: 25px;
+}
+
+.back-wrapper {
+  display: flex;
+  justify-content: space-between;
+  .top-back-btn {
+    margin-bottom: 0px;
+    color: #ffffff;
+    margin-right: 1em;
+    & svg {
+      fill: #ffffff;
+    }
+  }
+  .hambuger-back-wrapper {
+    display: flex;
+  }
 }

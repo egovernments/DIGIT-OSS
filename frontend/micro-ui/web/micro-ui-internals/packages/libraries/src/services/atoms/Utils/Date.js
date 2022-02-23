@@ -5,8 +5,8 @@ export const ConvertTimestampToDate = (timestamp, dateFormat = "d-MMM-yyyy") => 
 };
 
 export const ConvertEpochToDate = dateEpoch => {
-  if(dateEpoch == null || dateEpoch == undefined || dateEpoch == ''){
-    return "NA" ;
+  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == '') {
+    return "NA";
   }
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;
@@ -16,3 +16,19 @@ export const ConvertEpochToDate = dateEpoch => {
   day = (day > 9 ? "" : "0") + day;
   return `${day}/${month}/${year}`;
 };
+
+
+export const ConvertEpochToTimeInHours = dateEpoch => {
+  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == '') {
+    return "NA";
+  }
+  const dateFromApi = new Date(dateEpoch);
+  return dateFromApi.toLocaleTimeString().split(":").map(e => {
+    if (e.includes(" ")) {
+      return e.split(' ')[1];
+    }
+    return e;
+  }).join(" ").replace(" ", ":");
+};
+
+

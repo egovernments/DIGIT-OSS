@@ -171,6 +171,7 @@ const ApplicationDetails = () => {
  if (applicationDetails?.applicationData?.creationReason === "MUTATION"){
    return(
     <MutationApplicationDetails 
+      propertyId = {propertyId}
       acknowledgementIds={appDetailsToShow?.applicationData?.acknowldgementNumber}
       workflowDetails={workflowDetails}
       mutate={mutate}

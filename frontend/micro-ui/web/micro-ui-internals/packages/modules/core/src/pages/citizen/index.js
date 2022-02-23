@@ -50,7 +50,6 @@ const Home = ({
       <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
         <div className="moduleLinkHomePage">
           <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
-          <BackButton className="moduleLinkHomePageBackButton" />
           <h1>{t("MODULE_" + code.toUpperCase())}</h1>
           <div className="moduleLinkHomePageModuleLinks">
             <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />

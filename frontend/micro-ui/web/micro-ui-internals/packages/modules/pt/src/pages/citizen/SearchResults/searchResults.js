@@ -168,14 +168,17 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
           <div>
             <p style={{ marginLeft: "16px", marginTop: "16px" }}>
               {t("PT_LOAD_MORE_MSG")}{" "}
-              <span className="link">{<Link to={`/digit-ui/citizen/pt/property/search-results?mobileNumber=${mobileNumber?mobileNumber:""}&propertyIds=${propertyIds?propertyIds:""}&oldPropertyIds=${oldPropertyIds?oldPropertyIds:""}&doorNo=${doorNo?doorNo:""}&name=${name?name:""}&city=${city?city:""}&PToffset=${t1}`}>{t("PT_COMMON_CLICK_HERE")}</Link>}</span>
+              <span className="link">{<Link to={`/digit-ui/citizen/pt/property/search-results?mobileNumber=${mobileNumber?mobileNumber:""}&propertyIds=${propertyIds?propertyIds:""}&oldPropertyIds=${oldPropertyIds?oldPropertyIds:""}&doorNo=${doorNo?doorNo:""}&name=${name?name:""}&city=${city?city:""}&locality=${locality?locality:""}&PToffset=${t1}`}>{t("PT_COMMON_CLICK_HERE")}</Link>}</span>
             </p>
           </div>
         )}
-      <CitizenInfoLabel
-        info={t("CS_FILE_APPLICATION_INFO_LABEL")} 
-        text={t("PT_CANNOT_TRANSFER_IF_AMOUNT_PENDING")} 
-      />
+        { isMutation && searchResults?.length !== 0
+          ? <CitizenInfoLabel
+              info={t("CS_FILE_APPLICATION_INFO_LABEL")} 
+              text={t("PT_CANNOT_TRANSFER_IF_AMOUNT_PENDING")} 
+            />
+          : null
+        }
     </div>
   );
 };

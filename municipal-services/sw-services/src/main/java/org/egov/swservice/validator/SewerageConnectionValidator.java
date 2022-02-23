@@ -53,9 +53,9 @@ public class SewerageConnectionValidator {
 		if(channel != null){
 			if(!SWConstants.CHANNEL_VALUES.contains(channel))
 				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid");
-			if(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") && channel.equalsIgnoreCase("CITIZEN"))
+			if(reqType == SWConstants.CREATE_APPLICATION && sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") && channel.equalsIgnoreCase("CITIZEN"))
 				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for employee role");
-			if(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && !channel.equalsIgnoreCase("CITIZEN"))
+			if(reqType == SWConstants.CREATE_APPLICATION && sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && !channel.equalsIgnoreCase("CITIZEN"))
 				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for citizen role");
 
 		}

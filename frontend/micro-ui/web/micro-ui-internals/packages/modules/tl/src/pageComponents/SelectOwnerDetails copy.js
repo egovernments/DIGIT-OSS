@@ -271,7 +271,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 // value={field.subOwnerShipCategory}
                 // onChange={(e) => setInstitutionName(index, e)}
               />
-              <CardHeader>{"TL_AUTHORIZED_PERSON_DETAILS"}</CardHeader>
+              <CardHeader>{t("TL_AUTHORIZED_PERSON_DETAILS")}</CardHeader>
               <CardLabel>{`${t("TL_NEW_OWNER_DETAILS_NAME_LABEL")}`}</CardLabel>
               <TextInput
                 t={t}
