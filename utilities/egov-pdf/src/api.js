@@ -178,17 +178,20 @@ async function search_water(applicationNumber, tenantId, requestinfo, allowCitiz
     params["mobileNumber"] = mobileNumber || userName;
   }
 
+  console.log("\n headers--> "+JSON.stringify(headers));
+
   let waterResponse = await axios({
     method: "post",
-    url: url.resolve('https://statea.digit.org/', config.paths.water_search),
+    url: url.resolve(config.host.waterHost, config.paths.water_search),
     data: requestinfo,
     headers: headers,
     params,
   });
 
-  console.log("\n headers--> "+JSON.stringify(headers));
-
   console.log("\n waterResponse--> "+JSON.stringify(waterResponse));
+  
+
+ 
   return waterResponse;
 }
 
