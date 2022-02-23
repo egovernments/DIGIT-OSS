@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
 import { Phone } from "@egovernments/digit-ui-react-components";
 import ChangeCity from "../../ChangeCity";
+import StaticCitizenSideBar from "./StaticCitizenSideBar";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -45,7 +46,9 @@ const Profile = ({ info, stateName, t }) => (
         <div className="label-text"> {info.emailId} </div>
       </div>
     )}
-    {window.location.href.includes("/employee") && !window.location.href.includes("/employee/user/login") && !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true}/>}
+    {window.location.href.includes("/employee") &&
+      !window.location.href.includes("/employee/user/login") &&
+      !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true} />}
   </div>
 );
 
@@ -62,7 +65,7 @@ const PoweredBy = () => (
   </div>
 );
 
-export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEmployee = false }) => {
+export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogout, isEmployee = false }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
@@ -72,12 +75,13 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
     Digit.clikOusideFired = true;
     toggleSidebar(false);
   };
+
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
   const showProfilePage = () => {
     history.push("/digit-ui/citizen/user/profile");
     closeSidebar();
-  }
+  };
 
   const redirectToLoginPage = () => {
     history.push("/digit-ui/citizen/login");
@@ -87,13 +91,13 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
   let menuItems = [...SideBarMenu(t, closeSidebar, redirectToLoginPage, isEmployee)];
   let profileItem;
   if (isFetched && user && user.access_token) {
-    profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t}/>;
-    menuItems = menuItems.filter((item) => (item?.id !== 'login-btn'))
+    profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t} />;
+    menuItems = menuItems.filter((item) => item?.id !== "login-btn");
     menuItems = [
       ...menuItems,
       {
         text: t("EDIT_PROFILE"),
-        element:"PROFILE",
+        element: "PROFILE",
         icon: <EditPencilIcon className="icon" />,
         populators: {
           onClick: showProfilePage,
@@ -141,5 +145,16 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
     menuItems = menuItems.filter((ele) => ele.element === "LANGUAGE");
   }
 
-  return <div>{<NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={closeSidebar} Footer={<PoweredBy />} />}</div>;
+  return isMobile ? (
+    <NavBar
+      open={isOpen}
+      toggleSidebar={toggleSidebar}
+      profileItem={profileItem}
+      onClose={closeSidebar}
+      menuItems={menuItems}
+      Footer={<PoweredBy />}
+    />
+  ) : (
+    <StaticCitizenSideBar logout={onLogout} />
+  );
 };

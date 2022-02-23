@@ -8,8 +8,20 @@
     min-width: 78px;
     height: 24px;
   }
+  .nav {
+    display: flex;
+    justify-content: space-between;
+  }
+  .nav-wrapper {
+    display: flex;
+    @media (min-width: 780px) {
+      .hamburger-span {
+        display: none;
+      }
+    }
+  }
 
-  h3{
+  h3 {
     @apply inline-block border-l border-solid border-white pl-sm ml-sm;
   }
 }
@@ -91,15 +103,15 @@
     @apply font-light px-sm border-solid border-l border-white border-opacity-100
 }*/
 
-.side-bar-footer{
+.side-bar-footer {
   width: 200px;
   margin-left: 50px;
   @apply absolute bottom-0;
 }
 
-.digit-footer{
+.digit-footer {
   @apply flex h-4 mb-sm;
-  img{
+  img {
     @apply mr-sm;
   }
 }

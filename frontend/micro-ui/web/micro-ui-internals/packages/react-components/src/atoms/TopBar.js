@@ -30,6 +30,8 @@ const TopBar = ({
   };
   return (
     <div className="navbar">
+      <div className="nav">
+        <div className="nav-wrapper">
       <div className="center-container back-wrapper">
         <div className="hambuger-back-wrapper">
           {showHaburgerorBackButton()}

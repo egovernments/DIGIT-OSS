@@ -24,7 +24,7 @@
     .ServicesSection {
       @apply flex flex-wrap;
       padding: 0 15px 0 15px;
-      width: calc(88% - 54px);
+      width: calc(80% - 55px);
     }
   }
 
@@ -39,11 +39,15 @@
         @apply text-link text-primary-main font-medium;
       }
     }
+    @media (min-width: 780px) {
+      padding: 0 15px;
+      width: calc(80% - 54px);
+    }
   }
 }
 
 .SideBarStatic {
-  width: 15%;
+  width: calc(20% - 15px);
   background: #ffffff;
 }
 
@@ -55,12 +59,15 @@
 .HomePageContainer {
   @media (min-width: 640px) {
     display: flex;
-    width: 85%;
+    width: calc(80% - 32px);
     height: calc(100%-30px);
   }
 }
 
 .moduleLinkHomePage {
+  @media (min-width: 780px) {
+    width: 80%;
+  }
   margin-top: -25px;
   img {
     height: 33vw;
@@ -89,6 +96,9 @@
     .header {
       @apply hidden;
     }
+    @media (min-width: 780px) {
+      margin-left: 7rem;
+    }
   }
 }
 
@@ -98,8 +108,7 @@
       margin-bottom: 56px;
       min-width: 100vw;
       .Search {
-        width: calc(87% - 51px);
-        left: calc(0% + 10px);
+        width: calc(80% - 54px);
         margin: 0;
         padding: 0 15px 0 15px;
       }
@@ -111,13 +120,11 @@
   .moduleLinkHomePage {
     img {
       min-width: 100vw;
-      margin-left: calc(-15vw - 16px);
       height: 20vw;
     }
     h1 {
       top: calc(10vw + 40px);
-      left: calc(15% + 14px);
-      @apply ml-lg;
+      left: calc(20% + 15px);
     }
     .moduleLinkHomePageBackButton {
       top: calc(10vw + 16px);

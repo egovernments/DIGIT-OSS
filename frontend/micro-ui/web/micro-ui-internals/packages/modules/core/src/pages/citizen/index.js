@@ -51,9 +51,9 @@ const Home = ({
         <div className="moduleLinkHomePage">
           <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
           <h1>{t("MODULE_" + code.toUpperCase())}</h1>
-        </div>
-        <div className="moduleLinkHomePageModuleLinks">
-          <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />
+          <div className="moduleLinkHomePageModuleLinks">
+            <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />
+          </div>
         </div>
       </Route>
     );
