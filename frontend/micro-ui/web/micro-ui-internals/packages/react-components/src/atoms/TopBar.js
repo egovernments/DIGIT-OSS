@@ -20,7 +20,7 @@ const TopBar = ({
   hideNotificationIconOnSomeUrlsWhenNotLoggedIn,
 }) => {
   const location = useLocation();
-  
+
   const showHaburgerorBackButton = () => {
     if (location.pathname === "/digit-ui/citizen/") {
       return <Hamburger handleClick={toggleSidebar} />;
@@ -32,29 +32,31 @@ const TopBar = ({
     <div className="navbar">
       <div className="nav">
         <div className="nav-wrapper">
-      <div className="center-container back-wrapper">
-        <div className="hambuger-back-wrapper">
-          {showHaburgerorBackButton()}
-          <img
-            className="city"
-            id="topbar-logo"
-            crossOrigin="anonymous"
-            src={img || "https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-css@1.0.7/img/m_seva_white_logo.png"}
-            alt="mSeva"
-          />
-          <h3>{cityOfCitizenShownBesideLogo}</h3>
-        </div>
-        <div className="RightMostTopBarOptions">
-          {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? (
-            <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>
-              {notificationCountLoaded && notificationCount ? (
-                <span>
-                  <p>{notificationCount}</p>
-                </span>
-              ) : null}
-              <NotificationBell />
+          <div className="center-container back-wrapper">
+            <div className="hambuger-back-wrapper">
+              {showHaburgerorBackButton()}
+              <img
+                className="city"
+                id="topbar-logo"
+                crossOrigin="anonymous"
+                src={img || "https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-css@1.0.7/img/m_seva_white_logo.png"}
+                alt="mSeva"
+              />
+              <h3>{cityOfCitizenShownBesideLogo}</h3>
             </div>
-          ) : null}
+            <div className="RightMostTopBarOptions">
+              {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? (
+                <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>
+                  {notificationCountLoaded && notificationCount ? (
+                    <span>
+                      <p>{notificationCount}</p>
+                    </span>
+                  ) : null}
+                  <NotificationBell />
+                </div>
+              ) : null}
+            </div>
+          </div>
         </div>
       </div>
     </div>
