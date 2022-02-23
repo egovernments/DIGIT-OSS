@@ -1,8 +1,8 @@
 package com.tarento.analytics.handler;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.amazonaws.event.DeliveryMode.Check;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,9 +19,9 @@ import com.tarento.analytics.ConfigurationLoader;
 import com.tarento.analytics.dto.AggregateDto;
 import com.tarento.analytics.dto.AggregateRequestDto;
 import com.tarento.analytics.dto.Data;
+import com.tarento.analytics.dto.Plot;
 import com.tarento.analytics.helper.ComputeHelper;
 import com.tarento.analytics.helper.ComputeHelperFactory;
-
 import com.tarento.analytics.utils.ResponseRecorder;
 
 /**
@@ -90,7 +88,9 @@ public class MetricChartResponseHandler implements IResponseHandler{
         * Sums all value of all aggrsPaths i.e all aggregations
         * */
        boolean isRoundOff = (chartNode.get(IS_ROUND_OFF)!=null && chartNode.get(IS_ROUND_OFF).asBoolean()) ? true : false;
-
+       Plot latestDateplot = new Plot("todaysDate", Double.valueOf(0), "number");;
+		Plot lastUpdatedTime = new Plot("lastUpdatedTime", Double.valueOf(0), "number");
+		Boolean isTodaysCollection = (chartNode.get("TodaysCollection") == null ? Boolean.FALSE : chartNode.get("TodaysCollection").asBoolean());
 		aggrsPaths.forEach(headerPath -> {
 			List<JsonNode> values = aggregationNode.findValues(headerPath.asText());
 			values.stream().parallel().forEach(value -> {
@@ -121,12 +121,44 @@ public class MetricChartResponseHandler implements IResponseHandler{
 				} else {
 					totalValues.add(sum);
 				}
+				
+				if (isTodaysCollection == Boolean.TRUE) {
+
+					String latestDateKey = null;
+					String lastUpdatedTimeKey = null;
+					JsonNode latestDate = aggregationNode.findValue("todaysDate");
+					if (latestDate != null) {
+						List<JsonNode> latestDateBuckets = latestDate.findValues(BUCKETS);
+						if (latestDateBuckets != null && latestDateBuckets.size() > 0) {
+							JsonNode latestDateBucket = latestDateBuckets.get(0);
+							latestDateKey = (latestDateBucket.findValue(IResponseHandler.KEY) == null ? null : latestDateBucket.findValue(IResponseHandler.KEY).asText());
+						}
+						if(latestDateKey != null && ( (Double.valueOf(latestDateKey)) > latestDateplot.getValue())){
+							latestDateplot.setValue(Double.valueOf(latestDateKey));
+						}
+						
+					}
+					JsonNode lastUpdatedTimeNode = aggregationNode.findValue("lastUpdatedTime");
+					if (lastUpdatedTimeNode != null) {
+						List<JsonNode> lastUpdatedTimeBuckets = lastUpdatedTimeNode.findValues(BUCKETS);
+						if (lastUpdatedTimeBuckets != null && lastUpdatedTimeBuckets.size() > 0) {
+							JsonNode lastUpdatedTimeBucket = lastUpdatedTimeBuckets.get(0);
+							lastUpdatedTimeKey = (lastUpdatedTimeBucket.findValue(IResponseHandler.KEY) ==null ? null : lastUpdatedTimeBucket.findValue(IResponseHandler.KEY).asText());
+						}
+						
+						if(latestDateKey != null && ( (Double.valueOf(lastUpdatedTimeKey)) > lastUpdatedTime.getValue())){
+							lastUpdatedTime.setValue(Double.valueOf(lastUpdatedTimeKey));
+						}
+					}
+				}
 			});
 		});
 
         String symbol = chartNode.get(IResponseHandler.VALUE_TYPE).asText();
+       
         try{
             Data data = new Data(chartName, action.equals(PERCENTAGE) && aggrsPaths.size()==2? percentageValue(percentageList, isRoundOff) : (totalValues==null || totalValues.isEmpty())? 0.0 :totalValues.stream().reduce(0.0, Double::sum), symbol);
+            data.setPlots( Arrays.asList(latestDateplot,lastUpdatedTime));
             responseRecorder.put(visualizationCode, request.getModuleLevel(), data);
             dataList.add(data);
             if(chartNode.get(POST_AGGREGATION_THEORY) != null) { 
