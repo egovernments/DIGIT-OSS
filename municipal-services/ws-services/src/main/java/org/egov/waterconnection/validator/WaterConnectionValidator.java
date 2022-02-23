@@ -63,9 +63,9 @@ public class WaterConnectionValidator {
 		if(channel != null){
 			if(!WCConstants.CHANNEL_VALUES.contains(channel))
 				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid");
-			if(waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") && channel.equalsIgnoreCase("CITIZEN"))
+			if( reqType == WCConstants.CREATE_APPLICATION && waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") && channel.equalsIgnoreCase("CITIZEN"))
 				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for employee role");
-			if(waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && !channel.equalsIgnoreCase("CITIZEN"))
+			if( reqType == WCConstants.CREATE_APPLICATION && waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && !channel.equalsIgnoreCase("CITIZEN"))
 				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for citizen role");
 		}
 

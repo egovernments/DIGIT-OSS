@@ -2,7 +2,7 @@ import {
   Card, CardCaption,
   CardLabel, DownloadIcon, EllipsisMenu, EmailIcon, SearchIconSvg, TextInput, WhatsappIcon
 } from "@egovernments/digit-ui-react-components";
-import React, { useRef, useState } from "react";
+import React, { useRef,Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const SearchImg = () => {
@@ -21,10 +21,13 @@ const GenericChart = ({
   onChange,
   chip = [],
   updateChip,
+  value={}
 }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [chartData, setChartData] = useState(null);
+  const [chartDenomination, setChartDenomination] = useState(null);
+
   const chart = useRef();
   const menuItems = [
     {
@@ -66,14 +69,14 @@ const GenericChart = ({
   const handleExcelDownload = () => {
     return Digit.Download.Excel(chartData, t(header));
   };
-
   return (
     <Card className={`chart-item ${className}`} ReactRef={chart}>
       <div className={`chartHeader ${showSearch && "column-direction"}`}>
         <div>
-          {showHeader && <CardLabel style={{ fontWeight: "bold" }}>
+          {showHeader && <CardLabel className={"dss-header-label"} >
           <span className="tooltip">
             {t(`${t(Digit.Utils.locale.getTransformedLocale(header))}`)}
+             {chartDenomination?.toLowerCase()==="amount"&&<>({t(`DSS_${Digit.Utils.locale.getTransformedLocale(value?.denomination)}`)})</>}
               <span className="tooltiptext" style={{ whiteSpace: "nowrap" , 
                fontSize:"medium" }}>
                   {t(`TIP_${Digit.Utils.locale.getTransformedLocale(header)}`)}
@@ -87,11 +90,11 @@ const GenericChart = ({
           {chip && chip.length > 1 && <Chip items={chip} onClick={updateChip} t={t} />}
           {showSearch && <TextInput className="searchInput" placeholder="Search" signature={true} signatureImg={<SearchImg />} onChange={onChange} />}
           {showDownload && <DownloadIcon className="mrlg cursorPointer" onClick={handleExcelDownload} />}
-          <EllipsisMenu menuItems={menuItems} displayKey="i18nKey" onSelect={(data) => download(data)} />
+          {!showDownload && <EllipsisMenu menuItems={menuItems} displayKey="i18nKey" onSelect={(data) => download(data)} />}
         </div>
       </div>
       {caption && <CardCaption>{caption}</CardCaption>}
-      {React.cloneElement(children, { setChartData })}
+      {React.cloneElement(children, { setChartData ,setChartDenomination})}
     </Card>
   );
 };

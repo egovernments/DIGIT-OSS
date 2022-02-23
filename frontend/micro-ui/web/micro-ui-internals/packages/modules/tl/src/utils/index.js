@@ -354,7 +354,7 @@ export const getwfdocuments = (data) => {
 export const getEditTradeDocumentUpdate = (data) => {
   let updateddocuments=[];
   let doc = data ? data.owners.documents : [];
-  data.tradeLicenseDetail.applicationDocuments.map((olddoc) => {
+  data?.tradeLicenseDetail?.applicationDocuments?.map((olddoc) => {
     if(olddoc.documentType === "OWNERPHOTO" && olddoc.fileStoreId === data.owners.documents["OwnerPhotoProof"].fileStoreId ||
     olddoc.documentType === "OWNERSHIPPROOF" && olddoc.fileStoreId == data.owners.documents["ProofOfOwnership"].fileStoreId ||
     olddoc.documentType === "OWNERIDPROOF" && olddoc.fileStoreId === data.owners.documents["ProofOfIdentity"].fileStoreId)
@@ -509,7 +509,7 @@ export const convertToEditTrade = (data, fy = []) => {
     Licenses: [
       {
         id: data?.id,
-        tenantId: data?.tenantId,
+        tenantId: data?.address?.city?.code,
         businessService: data?.businessService,
         licenseType: data?.licenseType,
         applicationType: "RENEWAL",
@@ -560,7 +560,7 @@ export const convertToResubmitTrade = (data) => {
     Licenses: [
       {
         id: data?.id,
-        tenantId: data?.tenantId,
+        tenantId: data?.address?.city?.code,
         businessService: data?.businessService,
         licenseType: data?.licenseType,
         applicationType: data.applicationType,

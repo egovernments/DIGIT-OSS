@@ -77,3 +77,26 @@ export const getCurrentModuleName=()=>{
  const allPaths= window.location.pathname.split('/');
  return allPaths[allPaths.length-1];
 }
+
+/* Used in DSS to get the filtered ulbs for selected city */
+export const checkSelected = (e, selectedDDRs) => {
+  if (!selectedDDRs || selectedDDRs?.length == 0) {
+    return true;
+  } else if (selectedDDRs.find((ddr) => ddr.ddrKey == e.ddrKey)) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+
+/* Used in DSS to get the filtered ulbs for selected city for global filter*/
+export const getCitiesAvailable = (e, selectedDDRs) => {
+  if (!selectedDDRs || selectedDDRs?.length == 0) {
+    return true;
+  } else if (selectedDDRs.find((ddr) => ddr == e.ddrKey)) {
+    return true;
+  } else {
+    return false;
+  }
+};

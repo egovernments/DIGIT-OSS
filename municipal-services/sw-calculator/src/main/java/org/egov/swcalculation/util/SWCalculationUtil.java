@@ -34,6 +34,7 @@ import org.springframework.web.client.RestTemplate;
 
 import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
+import static org.apache.kafka.common.requests.DeleteAclsResponse.log;
 import static org.egov.swcalculation.constants.SWCalculationConstant.*;
 
 
@@ -264,7 +265,7 @@ public class SWCalculationUtil {
 		if (topic.equalsIgnoreCase(config.getOnDemandSuccess())) {
 			messageString = getMessageTemplate(DEMAND_SUCCESS_MESSAGE_EMAIL, localizationMessage);
 		}
-		if (topic.equalsIgnoreCase(config.getOnDemandSuccess())) {
+		if (topic.equalsIgnoreCase(config.getOnDemandFailed())) {
 			messageString = getMessageTemplate(DEMAND_FAILURE_MESSAGE_EMAIL, localizationMessage);
 		}
 		return messageString;

@@ -184,7 +184,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
           <CardLabel className="card-label-smaller">{`${t("TL_LOCALIZATION_LOCALITY")} * :`}</CardLabel>
           <Controller
             name="locality"
-            defaultValue={checkingLocationForRenew ? formData.address.locality : null}
+            defaultValue={checkingLocationForRenew ? formData?.address?.locality : null}
             control={control}
             rules={{required: t("REQUIRED_FIELD")}}
             render={(props) => (

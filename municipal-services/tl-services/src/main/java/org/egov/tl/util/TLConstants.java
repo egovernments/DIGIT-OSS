@@ -59,6 +59,10 @@ public class TLConstants {
 
     public static final String NOTIFICATION_FIELD_INSPECTION = "tl.en.field.inspection";
 
+    public static final String NOTIFICATION_PENDING_APPROVAL = "tl.en.pending.approval";
+
+    public static final String NOTIFICATION_PENDING_APPROVAL_EMAIL = "tl.en.pending.approval.email";
+
     public static final String NOTIFICATION_FIELD_INSPECTION_EMAIL = "tl.en.field.inspection.email";
 
     public static final String NOTIFICATION_PAYMENT_OWNER = "tl.en.counter.payment.successful.owner";
@@ -137,12 +141,12 @@ public class TLConstants {
             NOTIFICATION_CANCELLED_EMAIL,NOTIFICATION_REJECTED_EMAIL,NOTIFICATION_APPROVED_EMAIL,NOTIFICATION_PAID_EMAIL,NOTIFICATION_RENEWAL_PAYMENT_PAYER_EMAIL,
             NOTIFICATION_RENEWAL_PAYMENT_OWNER_EMAIL,NOTIFICATION_PAYMENT_PAYER_EMAIL,NOTIFICATION_PAYMENT_OWNER_EMAIL,NOTIFICATION_FIELD_INSPECTION_EMAIL,
             NOTIFICATION_APPLIED_EMAIL,RENEWAL_NOTIFICATION_APPROVED_EMAIL,RENEWAL_NOTIFICATION_APPLIED_EMAIL,RENEWAL_NOTIFICATION_FIELD_INSPECTION_EMAIL,
-            RENEWAL_NOTIFICATION_PENDINGAPPROVAL_EMAIL,RENEWAL_NOTIFICATION_REJECTED_EMAIL));
+            RENEWAL_NOTIFICATION_PENDINGAPPROVAL_EMAIL,RENEWAL_NOTIFICATION_REJECTED_EMAIL,NOTIFICATION_PENDING_APPROVAL,NOTIFICATION_PENDING_APPROVAL_EMAIL));
 
 
-    public static final String DEFAULT_OBJECT_MODIFIED_MSG = "Dear <1>,Your Trade License with application number <APPLICATION_NUMBER> was modified.";
+    public static final String DEFAULT_OBJECT_MODIFIED_MSG = "Dear {1},Your Trade License with application number {APPLICATION_NUMBER} was modified.";
 
-    public static final String DEFAULT_OBJECT_RENEWAL_MODIFIED_MSG = "Dear <1>,Your Renewal Trade License with application number <APPLICATION_NUMBER> was modified.";
+    public static final String DEFAULT_OBJECT_RENEWAL_MODIFIED_MSG = "Dear {1},Your Renewal Trade License with application number {APPLICATION_NUMBER} was modified.";
 
 
     // MDMS
@@ -290,9 +294,7 @@ public class TLConstants {
 
     public static final String ACTION_FORWARD_CITIZENACTIONREQUIRED  = "FORWARDTOEMPLOYEE_FIELDINSPECTION";
 
-
     public static final String ACTION_STATUS_PAID  = "PAID";
-
 
     public static final String VARIABLE_ACTION = "action";
 
@@ -326,7 +328,7 @@ public class TLConstants {
 	
 	
 	public static final String TL_ACTION_INITIATE = "INITIATE";
-	
+
 
 
     public static final List<String> FIELDS_TO_IGNORE = Collections.unmodifiableList(Arrays.asList(VARIABLE_ACTION,VARIABLE_WFDOCUMENTS,

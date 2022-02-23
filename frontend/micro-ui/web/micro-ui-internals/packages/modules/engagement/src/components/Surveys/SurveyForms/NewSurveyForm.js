@@ -43,7 +43,7 @@ const dropdownOptions = [
 ];
 
 const NewSurveyForm = ({ t, index, questionStatement, type, required, options, disableInputs, dispatch }) => {
-  const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({ questionStatement, type, required, options });
+  const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({ questionStatement, type, required, options:["option 1"] });
   const { register, formState  } = useFormContext();
 
   const handleAddOption = () =>
@@ -75,9 +75,9 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
   const renderAnswerComponent = (type) => {
     switch (type) {
       case "Paragraph":
-        return <TextArea />;
+        return <TextArea value="LONG ANSWER"/>;
       case "Date":
-        return <DatePicker />;
+        return <DatePicker stylesForInput={{ width: "calc(100% - 290px)" }}/>;
       case "Time":
         return <TimePicker />;
       case "Multiple Choice":
@@ -101,7 +101,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
           />
         );
       default:
-        return <TextInput />;
+        return <TextInput value="SHORT ANSWER" />;
     }
   };
 

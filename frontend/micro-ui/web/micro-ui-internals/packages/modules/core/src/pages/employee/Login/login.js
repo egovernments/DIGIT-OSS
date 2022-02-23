@@ -50,7 +50,6 @@ const Login = ({ config: propsConfig, t ,isDisabled}) => {
       setShowToast(err?.response?.data?.error_description || "Invalid login credentials!");
       setTimeout(closeToast, 5000);
     }
-    
     setDisable(false)
   };
 
@@ -130,6 +129,7 @@ const Login = ({ config: propsConfig, t ,isDisabled}) => {
         headingStyle={{ textAlign: "center" }}
         cardStyle={{ margin: "auto", minWidth: "408px" }}
         className="loginFormStyleEmployee"
+        buttonStyle={{maxWidth:"100%"}}
         
       >
         <Header />

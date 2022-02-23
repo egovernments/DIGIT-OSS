@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 const description = {
   description: "PT_SEARCH_OR_DESC",
   descriptionStyles: {
-    fontWeight: "300",
+    fontWeight: "300  ",
     color: "#505A5F",
     marginTop: "0px",
     textAlign: "center",
@@ -31,6 +31,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     auth: true /*  to enable open search set false  */,
     configs: { enabled: Object.keys(searchData).length > 0, retry: false, retryOnMount: false, staleTime: Infinity },
   });
+
 
   useEffect(() => {
     if(propertyData?.Properties.length > 0 && (ptSearchConfig.maxResultValidation && propertyData?.Properties.length > ptSearchConfig.maxPropertyResult && !errorShown))
@@ -347,12 +348,13 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     let tempObject = Object.keys(data)
       .filter((k) => data[k])
       .reduce((acc, key) => ({ ...acc, [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {});
+    tempObject["propertyIds"] = tempObject?.propertyId;
     let city = tempObject.city;
     delete tempObject.addParam;
     delete tempObject.addParam1;
     delete tempObject.city;
+    delete tempObject.propertyId;
     setSearchData({ city: city, filters: tempObject });
-
     return;
   };
   const onFormValueChange = (setValue, data, formState) => {

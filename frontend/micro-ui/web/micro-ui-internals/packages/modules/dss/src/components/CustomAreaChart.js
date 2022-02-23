@@ -29,10 +29,10 @@ const renderUnits = (t, denomination, symbol) => {
   }
 };
 
-const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
+const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChartDenomination }) => {
   const lineLegend = {
-    margin:"10px"
-  }
+    margin: "10px",
+  };
   const { t } = useTranslation();
   const { id } = data;
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -69,6 +69,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
     if (response) {
       const totalWaste = Math.round(response?.responseData?.data?.[0]?.plots[response?.responseData?.data?.[0]?.plots.length - 1]?.value);
       setTotalWaste(totalWaste);
+      setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     }
   }, [response]);
 
@@ -106,24 +107,33 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
     }
   }, [response, totalCapacity]);
 
-  const renderPlot = (plot) => {
+  const renderPlot = (plot,key) => {
+    const plotValue = key?plot?.[key]:plot?.value || 0;
     if (id === "fsmCapacityUtilization") {
-      return Number(plot?.value.toFixed(1));
+      return Number(plotValue.toFixed(1));
     }
-    const { denomination } = value;
-    switch (denomination) {
-      case "Unit":
-        return plot?.value;
-      case "Lac":
-        return Number((plot.value / 100000).toFixed(2));
-      case "Cr":
-        return Number((plot.value / 10000000).toFixed(2));
-      default:
-        return "";
+    if (plot?.symbol?.toLowerCase() === "amount") {
+      const { denomination } = value;
+      switch (denomination) {
+        case "Unit":
+          return plotValue;
+        case "Lac":
+          return Number((plotValue / 100000).toFixed(2));
+        case "Cr":
+          return Number((plotValue/ 10000000).toFixed(2));
+        default:
+          return "";
+      }
+    } else if (plot?.symbol?.toLowerCase() === "number") {
+      return Number(plotValue.toFixed(1));
+    } else {
+      return plotValue;
     }
   };
 
   const renderLegend = () => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`DSS_${Digit.Utils.locale.getTransformedLocale(id)}`)}</span>;
+  
+  const renderLegendForLine = (ss,sss, index) => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`${Digit.Utils.locale.getTransformedLocale(keysArr[index])}`)}</span>;
 
   const tickFormatter = (value) => {
     if (typeof value === "string") {
@@ -143,10 +153,14 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data }) => {
           whiteSpace: "nowrap",
         }}
       >
-        <p>{`${tickFormatter(label)} :${id === "fsmTotalCumulativeCollection" || id === "nocCumulativeCollection" || id === "tlMonthlyCumulativeCollectionv2"
-        ? " ₹" : ""}${payload?.[0]?.value}${
+        <p>{`${tickFormatter(label)} :${
+          id === "fsmTotalCumulativeCollection" || id === "nocCumulativeCollection" || id === "tlMonthlyCumulativeCollectionv2" ? " ₹" : ""
+        }${payload?.[0]?.value}${
           id === "fsmTotalCumulativeCollection" || id === "nocCumulativeCollection" || id === "tlMonthlyCumulativeCollectionv2"
-          ? (value?.denomination !== "Unit" ? value?.denomination : "") : `%`
+            ? value?.denomination !== "Unit"
+              ? value?.denomination
+              : ""
+            : `%`
         }`}</p>
       </div>
     );
@@ -227,15 +241,18 @@ Removed this custom yaxis label for all line charts
             />
             <Tooltip />
 
-            <Legend layout="horizontal" verticalAlign="bottom" align="center" iconType="circle" className={lineLegend}/>
-            {keysArr?.map((key,i)=>{
-              return (<Line
-              type="monotone"
-              dataKey={key}
-              stroke={getColors(i)}
-              activeDot={{ r: 8 }}
-            />)
-
+            <Legend layout="horizontal" formatter={renderLegendForLine} verticalAlign="bottom" align="center" iconType="circle" className={lineLegend} />
+            {keysArr?.map((key, i) => {
+              return (
+                <Line
+                  type="monotone"
+                  dataKey={(plot)=>renderPlot(plot,key)}
+                  stroke={getColors(i)}
+                  activeDot={{ r: 8 }}
+                  strokeWidth={2}
+                  dot={{ stroke: getColors(i), strokeWidth: 1, r: 2, fill: getColors(i) }}
+                />
+              );
             })}
             {/* <Line
               type="monotone"
