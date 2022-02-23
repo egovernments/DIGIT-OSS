@@ -82,8 +82,10 @@ public class PTConstants {
             NOTIFICATION_PAYMENT_PARTIAL_ONLINE,NOTIFICATION_OLDPROPERTYID_ABSENT));
     
     public static final String ACTION_PAY = "PAY";
-    
-	public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
+
+    public static final String ACTION_PAID = "PAID";
+
+    public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
 	public static final String  USREVENTS_EVENT_NAME = "Property Tax";
 	public static final String  USREVENTS_EVENT_POSTEDBY = "SYSTEM-PT";
 
