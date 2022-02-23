@@ -11,6 +11,19 @@ const getColors = (index = 0) => {
   return COLORS[index];
 };
 
+const getDenominatedValue = (denomination, plotValue) => {
+  switch (denomination) {
+    case "Unit":
+      return plotValue;
+    case "Lac":
+      return Number((plotValue / 100000).toFixed(2));
+    case "Cr":
+      return Number((plotValue / 10000000).toFixed(2));
+    default:
+      return "";
+  }
+};
+
 const getValue = (plot) => plot.value;
 
 const renderUnits = (t, denomination, symbol) => {
@@ -107,23 +120,14 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
     }
   }, [response, totalCapacity]);
 
-  const renderPlot = (plot,key) => {
-    const plotValue = key?plot?.[key]:plot?.value || 0;
+  const renderPlot = (plot, key) => {
+    const plotValue = key ? plot?.[key] : plot?.value || 0;
     if (id === "fsmCapacityUtilization") {
       return Number(plotValue.toFixed(1));
     }
     if (plot?.symbol?.toLowerCase() === "amount") {
       const { denomination } = value;
-      switch (denomination) {
-        case "Unit":
-          return plotValue;
-        case "Lac":
-          return Number((plotValue / 100000).toFixed(2));
-        case "Cr":
-          return Number((plotValue/ 10000000).toFixed(2));
-        default:
-          return "";
-      }
+      return getDenominatedValue(denomination, plotValue);
     } else if (plot?.symbol?.toLowerCase() === "number") {
       return Number(plotValue.toFixed(1));
     } else {
@@ -132,8 +136,10 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
   };
 
   const renderLegend = () => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`DSS_${Digit.Utils.locale.getTransformedLocale(id)}`)}</span>;
-  
-  const renderLegendForLine = (ss,sss, index) => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`${Digit.Utils.locale.getTransformedLocale(keysArr[index])}`)}</span>;
+
+  const renderLegendForLine = (ss, sss, index) => (
+    <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`${Digit.Utils.locale.getTransformedLocale(keysArr[index])}`)}</span>
+  );
 
   const tickFormatter = (value) => {
     if (typeof value === "string") {
@@ -143,6 +149,9 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
   };
 
   const renderTooltip = ({ payload, label, unit }) => {
+    console.log(payload, label, unit, "payload, label, unit ");
+    let formattedLabel = tickFormatter(label);
+    let payloadObj = payload?.[0] || {};
     return (
       <div
         style={{
@@ -153,15 +162,53 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
           whiteSpace: "nowrap",
         }}
       >
-        <p>{`${tickFormatter(label)} :${
-          id === "fsmTotalCumulativeCollection" || id === "nocCumulativeCollection" || id === "tlMonthlyCumulativeCollectionv2" ? " ₹" : ""
-        }${payload?.[0]?.value}${
-          id === "fsmTotalCumulativeCollection" || id === "nocCumulativeCollection" || id === "tlMonthlyCumulativeCollectionv2"
-            ? value?.denomination !== "Unit"
-              ? value?.denomination
-              : ""
-            : `%`
-        }`}</p>
+        {payloadObj?.payload?.symbol?.toLowerCase() === "amount" && (
+          <p>{`${formattedLabel} : ${value?.denomination === "Unit" ? " ₹" : ""}${payloadObj?.value}${
+            value?.denomination !== "Unit" ? value?.denomination : ""
+          }`}</p>
+        )}
+        {payloadObj?.payload?.symbol?.toLowerCase() === "percentage" && <p>{`${formattedLabel} : ${payloadObj?.value} %`}</p>}
+        {payloadObj?.payload?.symbol?.toLowerCase() === "number" && <p>{`${formattedLabel} : ${payloadObj?.value} `}</p>}
+        {!payloadObj?.payload?.symbol && <p>{`${formattedLabel} : ${payloadObj?.value} `}</p>}
+      </div>
+    );
+  };
+
+  const renderTooltipForLine = ({ payload, label, unit }) => {
+    let payloadObj = payload?.[0] || {};
+    let prefix = payloadObj?.payload?.symbol?.toLowerCase() === "amount" && value?.denomination === "Unit" ? " ₹" : " ";
+    let postfix =
+      payloadObj?.payload?.symbol?.toLowerCase() === "percentage"
+        ? " %"
+        : payloadObj?.payload?.symbol?.toLowerCase() === "amount" && value?.denomination !== "Unit"
+        ? value?.denomination
+        : "";
+    let newPayload = { ...payloadObj?.payload };
+    delete newPayload?.label;
+    delete newPayload?.strValue;
+    delete newPayload?.symbol;
+    let newObjArray = [newPayload?.name];
+    delete newPayload?.name;
+    Object.keys(newPayload).map((key) => {
+      newObjArray.push(
+        `${key} -${prefix}${
+          payloadObj?.payload?.symbol?.toLowerCase() === "amount" ? getDenominatedValue(value?.denomination, newPayload?.[key]) : newPayload?.[key]
+        }${postfix}`
+      );
+    });
+    return (
+      <div
+        style={{
+          margin: "0px",
+          padding: "10px",
+          backgroundColor: "rgb(255, 255, 255)",
+          border: "1px solid rgb(204, 204, 204)",
+          whiteSpace: "nowrap",
+        }}
+      >
+        {newObjArray.map((ele) => (
+          <p>{ele}</p>
+        ))}
       </div>
     );
   };
@@ -225,7 +272,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
             <XAxis dataKey="name" />
             <YAxis
             /*
-Removed this custom yaxis label for all line charts 
+            Removed this custom yaxis label for all line charts 
             label={{
                 value: `${t(`DSS_Y_${response?.responseData?.data?.[0]?.headerName.replaceAll(" ", "_").toUpperCase()}`)} ${
                   renderUnits(t, value.denomination,response?.responseData?.data?.[0]?.headerSymbol) 
@@ -239,14 +286,20 @@ Removed this custom yaxis label for all line charts
               }}
               */
             />
-            <Tooltip />
-
-            <Legend layout="horizontal" formatter={renderLegendForLine} verticalAlign="bottom" align="center" iconType="circle" className={lineLegend} />
+            <Tooltip content={renderTooltipForLine} />
+            <Legend
+              layout="horizontal"
+              formatter={renderLegendForLine}
+              verticalAlign="bottom"
+              align="center"
+              iconType="circle"
+              className={lineLegend}
+            />
             {keysArr?.map((key, i) => {
               return (
                 <Line
                   type="monotone"
-                  dataKey={(plot)=>renderPlot(plot,key)}
+                  dataKey={(plot) => renderPlot(plot, key)}
                   stroke={getColors(i)}
                   activeDot={{ r: 8 }}
                   strokeWidth={2}

@@ -49,7 +49,7 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
   useEffect(() => {
     if (response) {
       let plots = response?.responseData?.data?.[0]?.plots || null;
-      if (plots && Array.isArray(plots) && plots?.every(e => e.value))
+      if (plots && Array.isArray(plots) &&plots.length>0&& plots?.every(e => e.value))
         setShowDate({
           todaysDate: Digit.DateUtils.ConvertEpochToDate(plots?.[0]?.value),
           lastUpdatedTime: Digit.DateUtils.ConvertEpochToTimeInHours(plots?.[1]?.value)
