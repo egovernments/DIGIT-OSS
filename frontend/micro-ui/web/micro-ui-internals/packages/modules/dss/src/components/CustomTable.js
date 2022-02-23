@@ -160,11 +160,11 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
   const renderUnits = (denomination) => {
     switch (denomination) {
       case "Unit":
-        return "(₹)";
+        return `(${t('DSS_'+Digit.Utils.locale.getTransformedLocale(denomination))})`;
       case "Lac":
-        return "(Lac)";
+        return `(${t('DSS_'+Digit.Utils.locale.getTransformedLocale(denomination))})`;
       case "Cr":
-        return "(Cr)";
+        return `(${t('DSS_'+Digit.Utils.locale.getTransformedLocale(denomination))})`;
       default:
         return "";
     }
