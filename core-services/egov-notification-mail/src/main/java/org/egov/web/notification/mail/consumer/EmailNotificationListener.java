@@ -33,13 +33,12 @@ public class EmailNotificationListener {
         try
         {
             emailService.sendEmail(emailRequest.getEmail());
-
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-        log.info("Email sent!");
+//        log.info("Email sent!");
     }
     
     
