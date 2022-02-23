@@ -113,6 +113,17 @@ public class NotificationUtil {
 			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED, localizationMessage);
 			message = getCancelledMsg(license, messageTemplate);
 			break;
+
+		case ACTION_STATUS_EXPIRED:
+			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_EXPIRED, localizationMessage);
+			message = getExpiredMsg(license, messageTemplate);
+			break;
+
+		case ACTION_STATUS_MANUAL_EXPIRED:
+			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_MANUAL_EXPIRED, localizationMessage);
+			message = getExpiredMsg(license, messageTemplate);
+			break;
+
 		}
 
 		return message;
@@ -177,6 +188,16 @@ public class NotificationUtil {
 
 			case ACTION_CANCEL_CANCELLED:
 				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_EXPIRED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_EXPIRED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_MANUAL_EXPIRED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_MANUAL_EXPIRED + "." + "email", localizationMessage);
 				message = getReplacedMessage(license, messageTemplate);
 				break;
 		}
@@ -439,6 +460,14 @@ public class NotificationUtil {
 
 		return message;
 	}
+
+	private String getExpiredMsg(TradeLicense license, String message) {
+		message = message.replace("{2}", license.getLicenseNumber());
+		String expiryDate = new SimpleDateFormat("dd/MM/yyyy").format(license.getValidTo());
+		message = message.replace("{3}", expiryDate);
+		return message;
+	}
+
 
 	/**
 	 * Creates message for completed payment for owners

@@ -10,6 +10,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.TLRepository;
 import org.egov.tl.service.TradeLicenseService;
+import org.egov.tl.util.BPAConstants;
 import org.egov.tl.util.BPANotificationUtil;
 import org.egov.tl.util.NotificationUtil;
 import org.egov.tl.util.TLRenewalNotificationUtil;
@@ -27,6 +28,7 @@ import java.util.*;
 
 import static org.egov.tl.util.BPAConstants.*;
 import static org.egov.tl.util.TLConstants.*;
+import static org.egov.tl.util.TLConstants.USREVENTS_EVENT_NAME;
 
 
 @Service
@@ -90,7 +92,7 @@ public class PaymentNotificationService {
     }
 
 
-    private void processBusinessService(HashMap<String, Object> record, String businessService)
+    public void processBusinessService(HashMap<String, Object> record, String businessService)
     {
         try{
             String jsonString = new JSONObject(record).toString();
@@ -104,6 +106,13 @@ public class PaymentNotificationService {
             if(valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessServiceTL())||valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessServiceBPA())){
                 TradeLicense license = getTradeLicenseFromConsumerCode(valMap.get(tenantIdKey),valMap.get(consumerCodeKey),
                         requestInfo,valMap.get(businessServiceKey));
+
+
+                String tenantId = license.getTenantId();
+                String action = license.getAction();
+                PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
+                String receiptno = paymentRequest.getPayment().getPaymentDetails().get(0).getReceiptNumber();
+
                 switch(valMap.get(businessServiceKey)) {
                     case businessService_TL:
                         String applicationType = String.valueOf(license.getApplicationType());
@@ -111,21 +120,27 @@ public class PaymentNotificationService {
                             String localizationMessages = tlRenewalNotificationUtil.getLocalizationMessages(license.getTenantId(), requestInfo);
                             List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
                             util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
+                            //message = tlRenewalNotificationUtil.getOwnerPaymentMsg(license,valMap,localizationMessages);
                         } else {
                             String localizationMessages = util.getLocalizationMessages(license.getTenantId(), requestInfo);
                             List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
                             util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
+
+                            // Event Flow
+                            String message = util.getOwnerPaymentMsg(license,valMap,localizationMessages);
+                            log.info("Message to be sent: ",message);
+                            TradeLicenseRequest tradeLicenseRequest=TradeLicenseRequest.builder().requestInfo(requestInfo).licenses(Collections.singletonList(license)).build();
+                            EventRequest eventRequest = bpaNotificationUtil.getEventsForBPA(tradeLicenseRequest,true, message,receiptno, USREVENTS_EVENT_NAME);
+                            if(null != eventRequest)
+                                util.sendEventNotification(eventRequest);
+
                         }
 
                         break;
 
                     case businessService_BPA:
-                        String tenantId = license.getTenantId();
-                        String action = license.getAction();
                         Map<Object, Object> configuredChannelList = tlNotificationService.fetchChannelList(new RequestInfo(), tenantId, businessService_BPA, action);
                         List<String> configuredChannelNames = (List<String>) configuredChannelList.get(action);
-                        PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
-                        String receiptno = paymentRequest.getPayment().getPaymentDetails().get(0).getReceiptNumber();
 
                         String localizationMessages = bpaNotificationUtil.getLocalizationMessages(license.getTenantId(), requestInfo);
                         String locMessage = bpaNotificationUtil.getMessageTemplate(NOTIFICATION_PENDINGDOCVERIFICATION, localizationMessages);
@@ -150,7 +165,7 @@ public class PaymentNotificationService {
                             if(null != config.getIsUserEventsNotificationEnabledForBPA()) {
                                 if(config.getIsUserEventsNotificationEnabledForBPA()) {
                                     TradeLicenseRequest tradeLicenseRequest=TradeLicenseRequest.builder().requestInfo(requestInfo).licenses(Collections.singletonList(license)).build();
-                                    EventRequest eventRequest = bpaNotificationUtil.getEventsForBPA(tradeLicenseRequest,true, message,receiptno);
+                                    EventRequest eventRequest = bpaNotificationUtil.getEventsForBPA(tradeLicenseRequest,true, message,receiptno, BPAConstants.USREVENTS_EVENT_NAME);
                                     if(null != eventRequest)
                                         util.sendEventNotification(eventRequest);
                                 }

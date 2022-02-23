@@ -4,6 +4,7 @@ package org.egov.tl.web.controllers;
 import org.egov.tl.service.PaymentUpdateService;
 import org.egov.tl.service.TradeLicenseService;
 import org.egov.tl.service.notification.PaymentNotificationService;
+import org.egov.tl.service.notification.TLNotificationService;
 import org.egov.tl.util.ResponseInfoFactory;
 import org.egov.tl.web.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +23,8 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
+import static org.egov.tl.util.TLConstants.businessService_TL;
+
 @RestController
     @RequestMapping("/v1")
     public class TradeLicenseController {
@@ -34,14 +37,22 @@ import javax.servlet.http.HttpServletRequest;
 
         private final ResponseInfoFactory responseInfoFactory;
 
+        private final PaymentNotificationService paymentNotificationService;
+
+        private final TLNotificationService tlNotificationService;
+
     @Autowired
-    public TradeLicenseController(ObjectMapper objectMapper, HttpServletRequest request,
-                                  TradeLicenseService tradeLicenseService, ResponseInfoFactory responseInfoFactory) {
+    public TradeLicenseController(ObjectMapper objectMapper, HttpServletRequest request, TradeLicenseService tradeLicenseService,
+                                  ResponseInfoFactory responseInfoFactory, PaymentNotificationService paymentNotificationService, TLNotificationService tlNotificationService) {
         this.objectMapper = objectMapper;
         this.request = request;
         this.tradeLicenseService = tradeLicenseService;
         this.responseInfoFactory = responseInfoFactory;
+        this.paymentNotificationService = paymentNotificationService;
+        this.tlNotificationService = tlNotificationService;
     }
+
+
 
 
     @PostMapping({"/{servicename}/_create", "/_create"})
@@ -102,7 +113,17 @@ import javax.servlet.http.HttpServletRequest;
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/_test")
+    public ResponseEntity test(@Valid @RequestBody HashMap<String, Object> record){
+        paymentNotificationService.processBusinessService(record, businessService_TL);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
+    @PostMapping("/_test1")
+    public ResponseEntity test1(@Valid @RequestBody TradeLicenseRequest tradeLicenseRequest){
+        tlNotificationService.process(tradeLicenseRequest);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
 
 }
