@@ -8,6 +8,26 @@ import NoData from "./NoData";
 
 const barColors = ["#048BD0", "#FBC02D", "#8E29BF","#EA8A3B","#0BABDE","#6E8459"];
 
+const renderPlot = (plot,key,denomination) => {
+  const plotValue = key?plot?.[key]:plot?.value || 0;
+  if (plot?.symbol?.toLowerCase() === "amount") {
+    switch (denomination) {
+      case "Unit":
+        return plotValue;
+      case "Lac":
+        return Number((plotValue / 100000).toFixed(2));
+      case "Cr":
+        return Number((plotValue/ 10000000).toFixed(2));
+      default:
+        return "";
+    }
+  } else if (plot?.symbol?.toLowerCase() === "number") {
+    return Number(plotValue.toFixed(1));
+  } else {
+    return plotValue;
+  }
+};
+
 const CustomHorizontalBarChart = ({
   data,
   xAxisType = "category",
@@ -33,13 +53,13 @@ const CustomHorizontalBarChart = ({
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
   });
-  const constructChartData = (data) => {
+  const constructChartData = (data,denomination) => {
     let result = {};
     for (let i = 0; i < data?.length; i++) {
       const row = data[i];
       for (let j = 0; j < row.plots.length; j++) {
         const plot = row.plots[j];
-        result[plot.name] = { ...result[plot.name], [t(row.headerName)]: plot.value, name: t(plot.name) };
+        result[plot.name] = { ...result[plot.name], [t(row.headerName)]: renderPlot(plot,'value',denomination), name: t(plot.name) };
       }
     }
     return Object.keys(result).map((key) => {
@@ -66,7 +86,7 @@ const CustomHorizontalBarChart = ({
     setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
   },[response])
 
-  const chartData = useMemo(() => constructChartData(response?.responseData?.data), [response]);
+  const chartData = useMemo(() => constructChartData(response?.responseData?.data,value?.denomination), [response,value?.denomination]);
 
   const renderLegend = (value) => <span style={{ fontSize: "14px", color: "#505A5F" }}>{value}</span>;
 
@@ -76,6 +96,7 @@ const CustomHorizontalBarChart = ({
     }
     return value;
   };
+
 
   if (isLoading) {
     return <Loader />;

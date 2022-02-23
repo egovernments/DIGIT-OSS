@@ -90,7 +90,7 @@ const GenericChart = ({
           {chip && chip.length > 1 && <Chip items={chip} onClick={updateChip} t={t} />}
           {showSearch && <TextInput className="searchInput" placeholder="Search" signature={true} signatureImg={<SearchImg />} onChange={onChange} />}
           {showDownload && <DownloadIcon className="mrlg cursorPointer" onClick={handleExcelDownload} />}
-          <EllipsisMenu menuItems={menuItems} displayKey="i18nKey" onSelect={(data) => download(data)} />
+          {!showDownload && <EllipsisMenu menuItems={menuItems} displayKey="i18nKey" onSelect={(data) => download(data)} />}
         </div>
       </div>
       {caption && <CardCaption>{caption}</CardCaption>}

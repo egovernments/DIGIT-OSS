@@ -107,30 +107,33 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
     }
   }, [response, totalCapacity]);
 
-  const renderPlot = (plot) => {
+  const renderPlot = (plot,key) => {
+    const plotValue = key?plot?.[key]:plot?.value || 0;
     if (id === "fsmCapacityUtilization") {
-      return Number(plot?.value.toFixed(1));
+      return Number(plotValue.toFixed(1));
     }
     if (plot?.symbol?.toLowerCase() === "amount") {
       const { denomination } = value;
       switch (denomination) {
         case "Unit":
-          return plot?.value;
+          return plotValue;
         case "Lac":
-          return Number((plot.value / 100000).toFixed(2));
+          return Number((plotValue / 100000).toFixed(2));
         case "Cr":
-          return Number((plot.value / 10000000).toFixed(2));
+          return Number((plotValue/ 10000000).toFixed(2));
         default:
           return "";
       }
     } else if (plot?.symbol?.toLowerCase() === "number") {
-      return Number(plot?.value.toFixed(1));
+      return Number(plotValue.toFixed(1));
     } else {
-      return plot?.value;
+      return plotValue;
     }
   };
 
   const renderLegend = () => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`DSS_${Digit.Utils.locale.getTransformedLocale(id)}`)}</span>;
+  
+  const renderLegendForLine = (ss,sss, index) => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`${Digit.Utils.locale.getTransformedLocale(keysArr[index])}`)}</span>;
 
   const tickFormatter = (value) => {
     if (typeof value === "string") {
@@ -238,12 +241,12 @@ Removed this custom yaxis label for all line charts
             />
             <Tooltip />
 
-            <Legend layout="horizontal" verticalAlign="bottom" align="center" iconType="circle" className={lineLegend} />
+            <Legend layout="horizontal" formatter={renderLegendForLine} verticalAlign="bottom" align="center" iconType="circle" className={lineLegend} />
             {keysArr?.map((key, i) => {
               return (
                 <Line
                   type="monotone"
-                  dataKey={key}
+                  dataKey={(plot)=>renderPlot(plot,key)}
                   stroke={getColors(i)}
                   activeDot={{ r: 8 }}
                   strokeWidth={2}
