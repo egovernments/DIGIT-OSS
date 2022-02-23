@@ -53,7 +53,7 @@ public class EmployeeRepository {
 		List<Employee> employees = new ArrayList<>();
 		List<Object> preparedStmtList = new ArrayList<>();
 		if(hrmsUtils.isAssignmentSearchReqd(criteria)) {
-			List<String> empUuids = fetchEmployeesforAssignment(criteria, requestInfo);
+			List<String> empUuids = fetchEmployeesforAssignment(criteria, requestInfo, headerTenantId);
 			if (CollectionUtils.isEmpty(empUuids))
 				return employees;
 			else {
@@ -82,10 +82,18 @@ public class EmployeeRepository {
 		return employees;
 	}
 
-	private List<String> fetchEmployeesforAssignment(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
+	private List<String> fetchEmployeesforAssignment(EmployeeSearchCriteria criteria, RequestInfo requestInfo, String headerTenantId) {
 		List<String> employeesIds = new ArrayList<>();
 		List <Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getAssignmentSearchQuery(criteria, preparedStmtList);
+
+		try {
+			query = centralInstanceUtil.replaceSchemaPlaceholder(query, headerTenantId);
+		} catch (InvalidTenantIdException e1) {
+			throw new CustomException("HRMS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+
 		try {
 
 			employeesIds = jdbcTemplate.queryForList(query, preparedStmtList.toArray(),String.class);
@@ -94,7 +102,6 @@ public class EmployeeRepository {
 			log.error("query; "+query);
 		}
 		return employeesIds;
-
 	}
 
 	/**
