@@ -180,7 +180,7 @@ public class NotificationUtil {
 				 log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
 				producer.push(config.getSmsNotifTopic(), smsRequest);
-				log.debug(" Messages: " + smsRequest.getMessage());
+				log.debug("Sending SMS Messages: " + smsRequest.getMessage());
 			}
 		}
 	}
