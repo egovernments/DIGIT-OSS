@@ -37,7 +37,7 @@ public class WorkflowQueryBuilder {
             + "       pi.createdBy as wf_createdBy,pi.lastModifiedBy as wf_lastModifiedBy,pi.status as pi_status, pi.tenantid as pi_tenantid, "
             + "       doc.lastModifiedTime as doc_lastModifiedTime,doc.createdTime as doc_createdTime,doc.createdBy as doc_createdBy,"
             + "       doc.lastModifiedBy as doc_lastModifiedBy,doc.tenantid as doc_tenantid,doc.id as doc_id,asg.assignee as assigneeuuid,"
-            + "       st.uuid as st_uuid,st.tenantId as st_tenantId, ac.uuid as ac_uuid,ac.tenantId as ac_tenantId,ac.action as ac_action"
+            + "       st.uuid as st_uuid,st.tenantId as st_tenantId, ac.uuid as ac_uuid,ac.tenantId as ac_tenantId,ac.action as ac_action" 
             + "       FROM eg_wf_processinstance_v2 pi  " + LEFT_OUTER_JOIN
             + "       eg_wf_assignee_v2 asg ON asg.processinstanceid = pi.id " + LEFT_OUTER_JOIN
             + "      eg_wf_document_v2 doc  ON doc.processinstanceid = pi.id " + INNER_JOIN
@@ -116,10 +116,10 @@ public class WorkflowQueryBuilder {
             addToPreparedStatement(preparedStmtList, statuses);
         }
         
-        if(!StringUtils.isEmpty(criteria.getAssignee())) {
-        	
-        	builder.append(" AND asg.assignee=? ");
-        	 preparedStmtList.add(criteria.getAssignee());
+        List<String> assignees = criteria.getAssignee();
+        if(!CollectionUtils.isEmpty(criteria.getAssignee())) {
+        	builder.append(" AND asg.assignee in ( ").append(createQuery(assignees)).append(")");
+            addToPreparedStatement(preparedStmtList, assignees);
         }
 
         return builder.toString();
@@ -171,9 +171,11 @@ public class WorkflowQueryBuilder {
             addToPreparedStatement(preparedStmtList, status);
         }
 
-        if(criteria.getAssignee()!=null){
-            with_query_builder.append(" and id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?) AND pi_outer.tenantid = ? ");
-            preparedStmtList.add(criteria.getAssignee());
+        if(!CollectionUtils.isEmpty(criteria.getAssignee())){
+        	List<String> assignees = criteria.getAssignee();
+            with_query_builder.append(" and id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee IN (").append(createQuery(assignees)).append(")) AND pi_outer.tenantid = ? ");;
+            addToPreparedStatement(preparedStmtList, assignees);
+//            preparedStmtList.add(criteria.getAssignee());
             preparedStmtList.add(criteria.getTenantId());
         }
 
@@ -298,39 +300,55 @@ public class WorkflowQueryBuilder {
 
         if(criteria.getIsAssignedToMeCount()!=null && criteria.getIsAssignedToMeCount())
         {
-            with_query_builder.append(" AND id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?) AND pi_outer.tenantid = ? ");
-            preparedStmtList.add(criteria.getAssignee());
+        	List<String> assignees = criteria.getAssignee();
+            with_query_builder.append(" AND id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee IN (").append(createQuery(assignees)).append(")) AND pi_outer.tenantid = ? ");
+            addToPreparedStatement(preparedStmtList, assignees);
+
+//            preparedStmtList.add(criteria.getAssignee());
             preparedStmtList.add(criteria.getTenantId());
         }
        else if(!config.getAssignedOnly() && !CollectionUtils.isEmpty(tenantSpecificStatus)){
-            String clause = " AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?)" +
-                    " AND pi_outer.tenantid = ? ) {{OR_CLUASE_PLACEHOLDER}} )";
+//            String clause = " AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?)" +
+//                    " AND pi_outer.tenantid = ? ) {{OR_CLUASE_PLACEHOLDER}} )";
 
-            preparedStmtList.add(criteria.getAssignee());
+    	   List<String> assignees = criteria.getAssignee();
+            StringBuilder clause =  new StringBuilder(" AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee IN ( "); 
+            clause.append(createQuery(assignees)).append(")) AND pi_outer.tenantid = ? ) {{OR_CLUASE_PLACEHOLDER}} )");
+            addToPreparedStatement(preparedStmtList, assignees);
+
+//            preparedStmtList.add(criteria.getAssignee());
             preparedStmtList.add(criteria.getTenantId());
 
             String statusWhereCluse = getStatusRelatedWhereClause(statuses, tenantSpecificStatus, preparedStmtList);
-            clause = clause.replace("{{OR_CLUASE_PLACEHOLDER}}", statusWhereCluse);
-            with_query_builder.append(clause);
+            String clauseReplacer = clause.toString().replace("{{OR_CLUASE_PLACEHOLDER}}", statusWhereCluse);
+            with_query_builder.append(clauseReplacer);
         } 
         else {
             if(!isNull(criteria.getModuleName()) && criteria.getModuleName().equals("BPAREG")) {
                 List<String> statusesIrrespectiveOfTenant = criteria.getStatusesIrrespectiveOfTenant();
                 if (CollectionUtils.isEmpty(tenantSpecificStatus) && !CollectionUtils.isEmpty(statusesIrrespectiveOfTenant)) {
-                    String clause = " AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?)" +
-                            " AND pi_outer.tenantid = ? ) {{OR_CLUASE_PLACEHOLDER}} )";
+//                    String clause = " AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?)" +
+//                            " AND pi_outer.tenantid = ? ) {{OR_CLUASE_PLACEHOLDER}} )";
+             	  
+                	List<String> assignees = criteria.getAssignee();
+                	StringBuilder clause = new StringBuilder(" AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee IN ( "); 
+                    clause.append(createQuery(assignees)).append(")) AND pi_outer.tenantid = ? ) {{OR_CLUASE_PLACEHOLDER}} )");
+                    addToPreparedStatement(preparedStmtList, assignees);
 
-                    preparedStmtList.add(criteria.getAssignee());
+//                    preparedStmtList.add(criteria.getAssignee());
                     preparedStmtList.add(criteria.getTenantId());
 
                     StringBuilder statusQuery = new StringBuilder(" OR pi_outer.status IN (").append(createQuery(statusesIrrespectiveOfTenant)).append(")");
                     addToPreparedStatement(preparedStmtList, statusesIrrespectiveOfTenant);
-                    clause = clause.replace("{{OR_CLUASE_PLACEHOLDER}}", statusQuery.toString());
+                    String clauseReplacer = clause.toString().replace("{{OR_CLUASE_PLACEHOLDER}}", statusQuery.toString());
                     with_query_builder.append(clause);
                 }
             } else {
-                with_query_builder.append(" AND id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?) AND pi_outer.tenantid = ? ");
-                preparedStmtList.add(criteria.getAssignee());
+            	List<String> assignees = criteria.getAssignee();
+                with_query_builder.append(" AND id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee IN (").append(createQuery(assignees)).append(")) AND pi_outer.tenantid = ? ");
+                addToPreparedStatement(preparedStmtList, assignees);
+
+//                preparedStmtList.add(criteria.getAssignee());
                 preparedStmtList.add(criteria.getTenantId());
             }
         }
@@ -466,10 +484,14 @@ public class WorkflowQueryBuilder {
             preparedStmtList.add(criteria.getTenantId());
         }
 
-        if(!isNull(criteria.getAssignee())){
+        
+        if(!CollectionUtils.isEmpty(criteria.getAssignee())){
+        	List<String> assignees = criteria.getAssignee();
             addClauseIfRequired(query, preparedStmtList);
             query.append(" createdby = ? ");
-            preparedStmtList.add(criteria.getAssignee());
+            addToPreparedStatement(preparedStmtList, assignees);
+
+//            preparedStmtList.add(criteria.getAssignee());
         }
 
         if(!isNull(criteria.getBusinessService())){

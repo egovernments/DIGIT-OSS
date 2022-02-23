@@ -20,8 +20,11 @@ public class ProcessInstanceSearchCriteria {
     @JsonProperty("businessIds")
     private List<@Size(min=4) String> businessIds;
 
+    @JsonProperty("dsoId")
+    private String  dsoId;
+
     @JsonProperty("assignee")
-    private String  assignee;
+    private List<String>  assignee;
 
     @JsonProperty("ids")
     private List<String> ids;

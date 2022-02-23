@@ -197,9 +197,9 @@ public class WorkflowService {
         criteria.setStatus(actionableStatuses);*/
 
         util.enrichStatusesInSearchCriteria(requestInfo, criteria);
-        criteria.setAssignee(requestInfo.getUserInfo().getUuid());
-
-
+        List<String> assignees = new ArrayList<>();
+        assignees.add(requestInfo.getUserInfo().getUuid());
+        criteria.setAssignee(assignees);
     }
 
 

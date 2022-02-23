@@ -74,7 +74,7 @@ public class WorkflowService {
 	}
 	
         public List<HashMap<String, Object>> getProcessStatusCount(RequestInfo requestInfo,
-                ProcessInstanceSearchCriteria criteria) {
+                ProcessInstanceSearchCriteria criteria,  String dsoId) {
             List<String> listOfBusinessServices = new ArrayList<>(criteria.getBusinessService());
             List<HashMap<String, Object>> finalResponse = null;
             for (String businessSrv : listOfBusinessServices) {
@@ -88,10 +88,13 @@ public class WorkflowService {
                         || (!ObjectUtils.isEmpty(criteria.getModuleName()) && 
                         		criteria.getModuleName().equalsIgnoreCase(BpaConstants.BPA) && !roles.contains(BpaConstants.CITIZEN)))
                     url = this.buildWorkflowUrl(criteria, url, Boolean.FALSE);
-                if (requestInfo.getUserInfo().getRoles().get(0).getCode().equals(FSMConstants.FSM_DSO)) {
-                    url.append("&assignee=").append(requestInfo.getUserInfo().getUuid());
-                }
-                
+				if (requestInfo.getUserInfo().getRoles().get(0).getCode().equals(FSMConstants.FSM_DSO)) {
+					url.append("&assignee=").append(requestInfo.getUserInfo().getUuid());
+					if (dsoId != null) {
+						url.append(", " + dsoId);
+					}
+				}
+
                 if (criteria != null && !ObjectUtils.isEmpty(criteria.getModuleName()) && criteria.getModuleName().equalsIgnoreCase(BpaConstants.BPA)
                         && roles.contains(BpaConstants.CITIZEN)) {
                     List<String> inputBusinessSrvs = new ArrayList<>(criteria.getBusinessService());

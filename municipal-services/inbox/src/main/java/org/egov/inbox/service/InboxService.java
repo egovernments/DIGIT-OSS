@@ -166,7 +166,7 @@ public class InboxService {
             for(Map.Entry<String, List<String>> t : tenantAndApplnNumbersMap.entrySet()) {
                 processCriteria.setTenantId(t.getKey());
                 processCriteria.setBusinessIds(t.getValue());
-                bpaCitizenStatusCountMap.addAll(workflowService.getProcessStatusCount(requestInfo, processCriteria));
+                bpaCitizenStatusCountMap.addAll(workflowService.getProcessStatusCount(requestInfo, processCriteria, dsoId));
             }
             processCriteria.setTenantId(inputTenantID);
             processCriteria.setBusinessIds(inputBusinessIds);
@@ -175,7 +175,7 @@ public class InboxService {
         if(ObjectUtils.isEmpty(processCriteria.getModuleName()) && !ObjectUtils.isEmpty(processCriteria.getBusinessService()) && (processCriteria.getBusinessService().contains("FSM") || processCriteria.getBusinessService().contains("FSM_VEHICLE_TRIP"))) {
         	processCriteria.setModuleName(processCriteria.getBusinessService().get(0));
         }
-        List<HashMap<String, Object>> statusCountMap = workflowService.getProcessStatusCount(requestInfo, processCriteria);
+        List<HashMap<String, Object>> statusCountMap = workflowService.getProcessStatusCount(requestInfo, processCriteria, dsoId);
         processCriteria.setModuleName(moduleName);
         if(!bpaCitizenStatusCountMap.isEmpty()) {
             statusCountMap = bpaCitizenStatusCountMap;
