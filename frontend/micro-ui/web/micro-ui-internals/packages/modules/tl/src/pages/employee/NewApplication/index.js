@@ -35,7 +35,10 @@ const NewApplication = () => {
   }, []);
 
   const onFormValueChange = (setValue, formData, formState) => {
-    setSubmitValve(!Object.keys(formState.errors).length);
+    if(Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.entries(formState.errors["owners"].type).filter((ob) => ob.type === "required").length ==0)
+    setSubmitValve(true);
+    else
+    setSubmitValve(!(Object.keys(formState.errors).length));
   };
 
   const onSubmit = (data) => {
@@ -136,7 +139,8 @@ const NewApplication = () => {
     if (address) formData.tradeLicenseDetail.address = address;
     if (structureType) formData.tradeLicenseDetail.structureType = structureType;
     if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
-    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution.designation = data?.owners[0]?.designation;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail = {...formData.tradeLicenseDetail,institution:{}}
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["designation"] = data?.owners?.[0]?.designation;
     if (data?.cpt) formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId;
 
     // setFormData(formData)

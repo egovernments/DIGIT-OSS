@@ -221,7 +221,7 @@ const OwnerForm = (_props) => {
                       control={control}
                       defaultValue={owner?.fatherOrHusbandName}
                       name={"fatherOrHusbandName"}
-                      rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("TL_NAME_ERROR_MESSAGE")) } }}
+                      rules={{ /* required: t("REQUIRED_FIELD"), */ validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("TL_NAME_ERROR_MESSAGE")) } }}
                       render={(props)=>(
                         <TextInput
                           t={t}
@@ -250,7 +250,7 @@ const OwnerForm = (_props) => {
                       control={control}
                       name={"designation"}
                       defaultValue={owner?.designation}
-                      rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("TL_NAME_ERROR_MESSAGE")) } }}
+                      rules={{ /* required: t("REQUIRED_FIELD"), */ validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("TL_NAME_ERROR_MESSAGE")) } }}
                       render={(props)=>(
                         <TextInput
                           t={t}
@@ -308,12 +308,13 @@ const OwnerForm = (_props) => {
                      control={control}
                      name={"altContactNumber"}
                      defaultValue={owner?.altContactNumber}
-                     rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^([6-9]{1}[0-9]{9})$/.test(val) ? true : t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")) } }}
+                     rules={{ /* required: t("REQUIRED_FIELD"), */ validate: { pattern: (val) => (/^$|^[0-9]{11}$/.test(val) ? false : t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")) } }}
                      render={(props)=>(
                       <MobileNumber
                         type={"text"}
                         t={t}
                         isMandatory={false}
+                        maxLength={11}
                         name="altContactNumber"
                         value={owner.altContactNumber}
                         errorStyle={localFormState.touched.altContactNumber && errors?.altContactNumber?.message ? true : false}
@@ -336,7 +337,7 @@ const OwnerForm = (_props) => {
                      control={control}
                      defaultValue={owner?.emailId}
                      name={"emailId"}
-                     rules={{ required: t("REQUIRED_FIELD"), /* validate: { pattern: (val) => (getPattern("Email").test(val) ? true : t("TL_EMAIL_ERROR_MESSAGE")) }  */}}
+                     rules={{ /* required: t("REQUIRED_FIELD"),*/ validate: { pattern: (val) => (/^$|^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/.test(val) ? true : t("TL_EMAIL_ERROR_MESSAGE")) }  }}
                      render={(props)=>(
                       <TextInput
                         t={t}
