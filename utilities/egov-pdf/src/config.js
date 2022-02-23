@@ -73,7 +73,7 @@ module.exports = {
     bill_search: "/egov-searcher/bill-genie/billswithaddranduser/_get",
     workflow_search: "/egov-workflow-v2/egov-wf/process/_search",
     mcollect_challan_search:"/echallan-services/eChallan/v1/_search",
-    mcollect_bill:"/billing-service/bill/v2/_search",
+    mcollect_bill:"billing-service/bill/v2/_search",
     bill_genie_getBill:"/egov-searcher/bill-genie/mcollectbills/_get",
     bill_ammendment_search: "/billing-service/amendment/_search",
     water_search: "ws-services/wc/_search",
