@@ -417,5 +417,10 @@
   }
   .hambuger-back-wrapper {
     display: flex;
+    @media (min-width: 780px) {
+      .cp {
+        display: none;
+      }
+    }
   }
 }

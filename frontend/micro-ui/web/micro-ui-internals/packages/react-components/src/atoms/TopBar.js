@@ -20,10 +20,9 @@ const TopBar = ({
   hideNotificationIconOnSomeUrlsWhenNotLoggedIn,
 }) => {
   const { pathname } = useLocation();
-  console.log(location);
 
   const showHaburgerorBackButton = () => {
-    if (pathname === "/digit-ui/citizen") {
+    if (pathname === "/digit-ui/citizen" || pathname === "/digit-ui/citizen/") {
       return <Hamburger handleClick={toggleSidebar} />;
     } else {
       return <BackButton className="top-back-btn" />;

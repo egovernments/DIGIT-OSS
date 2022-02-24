@@ -304,6 +304,10 @@ input[type="number"] {
 .static {
   @apply flex flex-col;
   min-height: 85vh;
+  @media (min-width: 780px) {
+    margin-left: 3rem;
+    margin-top: 1rem;
+  }
 
   &-wrapper {
     flex: 1;

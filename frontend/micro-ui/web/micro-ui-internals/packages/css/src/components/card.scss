@@ -176,13 +176,12 @@
   }
 
   .card {
-    margin-right: auto;
-    padding-right: 300px;
-    padding-left: 16px;
-    padding-top: 16px;
+    width: calc(60% - 20px);
+    display: flex;
+    margin-left: 3rem;
     max-width: 960px;
     min-width: 640px;
-    margin-left: 0px;
+    flex-direction: column;
 
     .card-header {
       @apply text-heading-xl-dt;

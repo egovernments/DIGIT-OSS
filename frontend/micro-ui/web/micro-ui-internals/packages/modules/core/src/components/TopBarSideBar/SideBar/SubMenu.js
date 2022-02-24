@@ -15,7 +15,7 @@ const SubMenu = ({ item }) => {
             {item.Icon}
             <span>{item.moduleName}</span>
           </div>
-          <div> {item.links && subnav ? "ss" : item.links ? "ee" : null} </div>
+          <div> {item.links && subnav ? <ArrowVectorDown /> : item.links ? <ArrowForward /> : null} </div>
         </div>
       </div>
 
@@ -24,7 +24,7 @@ const SubMenu = ({ item }) => {
           return (
             <Link to={item.link} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
               <div className="actions">
-                {/* <ArrowDirection className="icon" /> */}
+                <ArrowDirection className="icon" />
                 <span>{item.label}</span>
               </div>
             </Link>

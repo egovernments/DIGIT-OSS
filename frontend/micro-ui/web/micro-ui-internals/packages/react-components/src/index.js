@@ -134,7 +134,6 @@ import {
   DustbinIcon,
   InfoBannerIcon,
   WSICon,
-  CheckSvg,
   ArrowForward,
   ArrowVectorDown,
   ArrowDirection,
