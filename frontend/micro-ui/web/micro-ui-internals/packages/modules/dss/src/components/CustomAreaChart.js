@@ -5,7 +5,8 @@ import { useTranslation } from "react-i18next";
 import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
 import NoData from "./NoData";
-const COLORS = ["#EA8A3B", "#048BD0", "#8E29BF", "#FBC02D"];
+const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE" , "#6E8459", "#D4351C","#0CF7E4","#F80BF4","#22F80B"];
+
 const getColors = (index = 0) => {
   index = COLORS.length > index ? index : 0;
   return COLORS[index];

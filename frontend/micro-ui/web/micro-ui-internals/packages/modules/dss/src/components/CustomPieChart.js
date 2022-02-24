@@ -5,7 +5,7 @@ import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recha
 import FilterContext from "./FilterContext";
 import NoData from "./NoData";
 // ["#048BD0", "#FBC02D", "#8E29BF","#EA8A3B","#0BABDE","#6E8459"]
-const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE", "#6E8459", "#D4351C","#0CF7E4","#F80BF4","#F80BF4"];
+const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE" , "#6E8459", "#D4351C","#0CF7E4","#F80BF4","#22F80B"];
 const mobileView = innerWidth <= 640;
 
 const CustomPieChart = ({ dataKey = "value", data,setChartDenomination }) => {
