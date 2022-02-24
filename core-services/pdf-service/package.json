@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "nodemon -w src --exec \"babel-node src --presets es2015,stage-0\"",
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
-    "start": "node dist",
-    "prestart": "NODE_OPTIONS=--max-old-space-size=8192 npm run -s build",
+    "start": "node --max-old-space-size=8192 dist",
+    "prestart": "npm run -s build",
     "test": "eslint src"
   },
   "proxy": "https://egov-micro-dev.egovernments.org/",
