@@ -73,14 +73,6 @@ export const StoreService = {
       modules: MdmsRes?.tenant?.citymodule.filter((module) => module.active).filter((module) => enabledModules.includes(module.code)),
     };
 
-    //TODO SHOULD BE INTEGRAETED WITH MDMS NOT HARDCODED 
-    initData.modules.push({active: true,
-    code: "CommonPT",
-    module: "CommonPT",
-    tenants:[{code: 'pb.jalandhar'},
-    {code: 'pb.nawanshahr'},
-    {code: 'pb.amritsar'}]
-  })
   
     initData.selectedLanguage = Digit.SessionStorage.get("locale") || initData.languages[0].value;
 

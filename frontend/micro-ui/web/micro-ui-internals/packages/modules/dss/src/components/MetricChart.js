@@ -14,18 +14,23 @@ const MetricData = ({ t, data, code }) => {
         {code === "citizenAvgRating" ? (
           <Rating currentRating={Math.round(data?.headerValue * 10) / 10} styles={{ width: "unset" }} starStyles={{ width: "25px" }} />
         ) : (
-          `${Digit.Utils.dss.formatter(data?.headerValue, data?.headerSymbol, value?.denomination, true)} ${code === "totalSludgeTreated" ? t(`DSS_KL`) : ""
+          `${Digit.Utils.dss.formatter(data?.headerValue, data?.headerSymbol, value?.denomination, true)} ${
+            code === "totalSludgeTreated" ? t(`DSS_KL`) : ""
           }`
         )}
       </p>
       {data?.insight && (
-        <div style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "end"
-        }}>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "end",
+          }}
+        >
           {data?.insight?.indicator === "upper_green" ? ArrowUpwardElement("10px") : ArrowDownwardElement("10px")}
-          <p className={`${data?.insight.colorCode}`} style={{ whiteSpace: "pre" }}>{data?.insight.value.replace(/[+-]/g, "").replace("last year", 'LY')}</p>
+          <p className={`${data?.insight.colorCode}`} style={{ whiteSpace: "pre" }}>
+            {data?.insight.value.replace(/[+-]/g, "").replace("last year", "LY")}
+          </p>
         </div>
       )}
     </div>
@@ -49,14 +54,16 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
   useEffect(() => {
     if (response) {
       let plots = response?.responseData?.data?.[0]?.plots || null;
-      if (plots && Array.isArray(plots) &&plots.length>0&& plots?.every(e => e.value))
+      if (plots && Array.isArray(plots) && plots.length > 0 && plots?.every((e) => e.value))
         setShowDate({
           todaysDate: Digit.DateUtils.ConvertEpochToDate(plots?.[0]?.value),
-          lastUpdatedTime: Digit.DateUtils.ConvertEpochToTimeInHours(plots?.[1]?.value)
+          lastUpdatedTime: Digit.DateUtils.ConvertEpochToTimeInHours(plots?.[1]?.value),
         });
       index === 0 && setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
+    } else {
+      setShowDate({});
     }
-  }, [response])
+  }, [response]);
 
   if (isLoading) {
     return false;
@@ -64,7 +71,7 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
 
   if (!response) {
     return (
-      <div style={{ position: "relative", display: "flex", justifyContent: "space-between", marginBottom: "20px"}}>
+      <div style={{ position: "relative", display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
         <span>{t(data.name)}</span>
         <span style={{ whiteSpace: "pre" }}>{t("DSS_NO_DATA")}</span>
       </div>
@@ -76,15 +83,18 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
       <div className="tooltip">
         {t(data.name)}
 
-        <span style={{ whiteSpace: "pre-line", display: "block" }}>  {showDate?.todaysDate}</span>
+        <span style={{ whiteSpace: "pre-line", display: "block" }}> {showDate?.todaysDate}</span>
 
-        <span className="tooltiptext" style={{
-          whiteSpace: "nowrap",
-          // marginLeft: "-500%" ,
-          fontSize: "medium"
-        }}>
-          <span style={{ fontWeight: "500", color: "white" }} >{t(`TIP_${data.name}`)}</span>
-          <span style={{ color: "white" }}>  {showDate?.lastUpdatedTime}</span>
+        <span
+          className="tooltiptext"
+          style={{
+            whiteSpace: "nowrap",
+            // marginLeft: "-500%" ,
+            fontSize: "medium",
+          }}
+        >
+          <span style={{ fontWeight: "500", color: "white" }}>{t(`TIP_${data.name}`)}</span>
+          <span style={{ color: "white" }}> {showDate?.lastUpdatedTime}</span>
         </span>
       </div>
       <MetricData t={t} data={response?.responseData?.data?.[0]} code={response?.responseData?.visualizationCode} />

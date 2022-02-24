@@ -75,6 +75,7 @@ class HorBarChart extends React.Component {
         .get("chartsGData")
         .get(codekey)
         .get("data")
+        .filter(data=>data)
         .map((dat) => {
           return { ...dat };
         })

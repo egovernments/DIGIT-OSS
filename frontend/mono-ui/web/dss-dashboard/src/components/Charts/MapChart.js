@@ -151,6 +151,9 @@ class MapChart extends React.Component {
     if (this.props.selectedState !== "" && !this.state.drillDown) {
       this.callAPI2();
       this.setState({ drillDown: true });
+    } else if(this.props.selectedState == "" && this.state.drillDown){
+      this.callAPI();
+      this.setState({ drillDown: false });
     }
   }
   render() {
@@ -217,6 +220,7 @@ class MapChart extends React.Component {
         .get("chartsGData")
         .get(codekey)
         .get("data")
+        .filter(data=>data)
         .map((dat) => {
           let totalCount = dat.plots[3].value;
           let liveCount = dat.plots[4].value;
@@ -275,7 +279,7 @@ class MapChart extends React.Component {
                 }}
               >
                 <span>{getLocaleLabels(`DSS_${dat.headerName}`)}</span>
-                <span>{dat.headerValue}</span>
+                <span>{dat.plots[2].value}</span>
               </span>
             );
           })}

@@ -4,8 +4,8 @@ export const ConvertTimestampToDate = (timestamp, dateFormat = "d-MMM-yyyy") => 
   return timestamp ? format(toDate(timestamp), dateFormat) : null;
 };
 
-export const ConvertEpochToDate = dateEpoch => {
-  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == '') {
+export const ConvertEpochToDate = (dateEpoch) => {
+  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
     return "NA";
   }
   const dateFromApi = new Date(dateEpoch);
@@ -17,18 +17,16 @@ export const ConvertEpochToDate = dateEpoch => {
   return `${day}/${month}/${year}`;
 };
 
-
-export const ConvertEpochToTimeInHours = dateEpoch => {
-  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == '') {
+export const ConvertEpochToTimeInHours = (dateEpoch) => {
+  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
     return "NA";
   }
   const dateFromApi = new Date(dateEpoch);
-  return dateFromApi.toLocaleTimeString().split(":").map(e => {
-    if (e.includes(" ")) {
-      return e.split(' ')[1];
-    }
-    return e;
-  }).join(" ").replace(" ", ":");
+  let hour = dateFromApi.getHours();
+  let min = dateFromApi.getMinutes();
+  let period = hour > 12 ? "PM" : "AM";
+  hour = hour > 12 ? hour - 12 : hour;
+  hour = (hour > 9 ? "" : "0") + hour;
+  min = (min > 9 ? "" : "0") + min;
+  return `${hour}:${min} ${period}`;
 };
-
-

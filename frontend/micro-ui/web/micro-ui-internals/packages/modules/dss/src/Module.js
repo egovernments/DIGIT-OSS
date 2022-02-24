@@ -68,6 +68,7 @@ const DSSModule = ({ stateCode, userType, tenants }) => {
 const componentsToRegister = {
   DSSModule,
   DSSCard,
+  NDSSCard:DSSCard
 };
 
 export const initDSSComponents = () => {
