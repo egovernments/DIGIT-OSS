@@ -278,7 +278,7 @@ class MapChart extends React.Component {
                   background: i % 2 == 0 ? "none" : "#EEEEEE",
                 }}
               >
-                <span>{getLocaleLabels(`DSS_${dat.plots[1].strValue}`)}</span>
+                <span>{getLocaleLabels(`DSS_${dat.plots[1].label}`)}</span>
                 <span>{dat.plots[2].value}</span>
               </span>
             );
