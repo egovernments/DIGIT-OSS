@@ -11,6 +11,17 @@ import { checkArrayLength, stringReplaceAll,getSuperBuiltUpareafromob } from "..
 const getPropertyEditDetails = (data = { }) => {
   // converting owners details
 
+  if((data?.propertyType === "BUILTUP.INDEPENDENTPROPERTY" && data.units.length == 0))
+    {
+      data.units = [{
+        constructionDetail:{builtUpArea: data?.superBuiltUpArea},
+        floorNo: 0,
+        occupancyType:data?.occupancyType,
+        unitType:data?.occupancyType,
+        usageCategory:data?.usageCategory,
+      }]
+    }
+
   if (data?.ownershipCategory === "INSTITUTIONALPRIVATE" || data?.ownershipCategory === "INSTITUTIONALGOVERNMENT") {
     let document = [];
     if (data?.owners[0]?.documents[0]?.documentType?.includes("IDENTITYPROOF")) {
@@ -71,6 +82,10 @@ const getPropertyEditDetails = (data = { }) => {
   let addressDocs = data?.documents?.filter((doc) => doc?.documentType?.includes("ADDRESSPROOF"));
   if (checkArrayLength(addressDocs)) {
     addressDocs[0].documentType = { code: addressDocs[0]?.documentType, i18nKey: stringReplaceAll(addressDocs[0]?.documentType, ".", "_") };
+  }
+  if(!data.documents)
+  {
+    data = {...data,documents:[]}
   }
   if (data?.address?.documents) {
     data.address.documents["ProofOfAddress"] = addressDocs[0];
@@ -153,7 +168,7 @@ const getPropertyEditDetails = (data = { }) => {
     return ob;
   };
   // asessment details
-  if (data?.channel === "CFC_COUNTER") {
+  if (data?.channel === "CFC_COUNTER" || (data?.PropertyType === "BUILTUP.INDEPENDENTPROPERTY" && data.units.length == 0)) {
     if (data?.propertyType === "VACANT") {
       data.PropertyType = { code: data?.propertyType, i18nKey: `COMMON_PROPTYPE_${data.propertyType}` };
       data.isResdential =
@@ -346,12 +361,12 @@ const getPropertyEditDetails = (data = { }) => {
       //unitedit["-2"] ? (data.units["-2"] = unitedit["-2"]) : "";
     }
   } else {
-    if (data?.additionalDetails?.propertyType?.code === "VACANT") {
+    if (data?.additionalDetails?.propertyType?.code === "VACANT" || data?.propertyType?.code === "VACANT") {
       data.PropertyType = data?.additionalDetails?.propertyType;
       data.isResdential = data?.additionalDetails?.isResdential;
       data.usageCategoryMajor = { code: data?.usageCategory, i18nKey: `PROPERTYTAX_BILLING_SLAB_${data?.usageCategory?.split(".").pop()}` };
       data.landarea = { floorarea: data?.landArea };
-    } else if (data?.additionalDetails?.propertyType?.code === "BUILTUP.SHAREDPROPERTY") {
+    } else if (data?.additionalDetails?.propertyType?.code === "BUILTUP.SHAREDPROPERTY" || data?.propertyType?.code === "BUILTUP.SHAREDPROPERTY") {
       data.isResdential = data?.additionalDetails?.isResdential;
       data.usageCategoryMajor = { code: data?.usageCategory, i18nKey: `PROPERTYTAX_BILLING_SLAB_${data?.usageCategory?.split(".").pop()}` };
       data.PropertyType = data?.additionalDetails?.propertyType;
@@ -374,11 +389,11 @@ const getPropertyEditDetails = (data = { }) => {
           }
         });
       data.floordetails = { plotSize: data?.landArea, builtUpArea: data?.additionalDetails?.builtUpArea };
-    } else if (data?.additionalDetails?.propertyType?.code === "BUILTUP.INDEPENDENTPROPERTY") {
+    } else if (data?.additionalDetails?.propertyType?.code === "BUILTUP.INDEPENDENTPROPERTY" || data?.propertyType?.code === "BUILTUP.INDEPENDENTPROPERTY") {
       data.isResdential = data?.additionalDetails?.isResdential;
       data.usageCategoryMajor = { code: data?.usageCategory, i18nKey: `PROPERTYTAX_BILLING_SLAB_${data?.usageCategory?.split(".").pop()}` };
-      data.PropertyType = data?.additionalDetails?.propertyType;
-      data.noOfFloors = data?.additionalDetails?.noOfFloors;
+      data.PropertyType = data?.additionalDetails?.propertyType || data?.propertyType;
+      data.noOfFloors = data?.additionalDetails?.noOfFloors || data?.noOfFloors;
       data.noOofBasements = data?.additionalDetails?.noOofBasements;
       data.units = data?.additionalDetails?.unit;
       data.units[0].selfOccupied = data?.additionalDetails?.unit[0]?.selfOccupied;

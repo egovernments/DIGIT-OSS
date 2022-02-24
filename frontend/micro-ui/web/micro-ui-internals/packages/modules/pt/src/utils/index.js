@@ -909,5 +909,5 @@ export const getWorkflow = (data = {}) => {
 };
 
 export const getCreationReason = (data = {}) => {
-  return data?.isUpdateProperty ? "UPDATE" : "CREATE";
+  return data?.isUpdateProperty || data?.isEditProperty ? "UPDATE" : "CREATE";
 };

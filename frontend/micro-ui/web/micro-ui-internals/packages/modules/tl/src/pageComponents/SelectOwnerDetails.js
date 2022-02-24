@@ -272,7 +272,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                   //disable={isUpdateProperty || isEditProperty}
                   {...{validation : {
                     // isRequired: true,
-                    pattern: "[0][1-9][0-9]{9}|[1-9][0-9]{10}",
+                    pattern: "[0][1-9][0-9]{9}|[1-9][0-9]{9}",
                     type: "tel",
                     title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
                   }}}

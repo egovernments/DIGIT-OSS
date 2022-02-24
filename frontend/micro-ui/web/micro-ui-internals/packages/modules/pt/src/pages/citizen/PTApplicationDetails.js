@@ -187,7 +187,7 @@ const PTApplicationDetails = () => {
     label: t("MT_FEE_RECIEPT"),
     onClick: () => getRecieptSearch({tenantId: reciept_data?.Payments[0]?.tenantId,payments: reciept_data?.Payments[0]})
   });
-  if(data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION").length>0)
+  if(data?.Properties[0]?.documents && data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION").length>0)
   dowloadOptions.push({
     label: t("MT_CERTIFICATE"),
     onClick: () => handleDownload(data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION")[0],data?.Properties[0]?.tenantId)
