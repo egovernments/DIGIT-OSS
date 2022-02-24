@@ -183,7 +183,7 @@ class MapChart extends React.Component {
       { id: "TN", state: "Tamil Nadu", value: 0 },
       { id: "TG", state: "Telangana", value: 0 },
       { id: "TR", state: "Tripura", value: 0 },
-      { id: "UT", state: "Uttarakhand", value: 0 },
+      { id: "UK", state: "Uttarakhand", value: 0 },
       { id: "UP", state: "Uttar Pradesh", value: 0 },
       { id: "WB", state: "West Bengal", value: 0 },
       { id: "WB", state: "West Bengal", value: 0 },
