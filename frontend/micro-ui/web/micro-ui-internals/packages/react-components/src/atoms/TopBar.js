@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Hamburger from "./Hamburger";
 import { NotificationBell } from "./svgindex";
@@ -19,10 +19,11 @@ const TopBar = ({
   onNotificationIconClick,
   hideNotificationIconOnSomeUrlsWhenNotLoggedIn,
 }) => {
-  const location = useLocation();
+  const { pathname } = useLocation();
+  console.log(location);
 
   const showHaburgerorBackButton = () => {
-    if (location.pathname === "/digit-ui/citizen") {
+    if (pathname === "/digit-ui/citizen") {
       return <Hamburger handleClick={toggleSidebar} />;
     } else {
       return <BackButton className="top-back-btn" />;
