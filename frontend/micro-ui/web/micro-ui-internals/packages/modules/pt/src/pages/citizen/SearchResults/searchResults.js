@@ -59,7 +59,9 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   const result = Digit.Hooks.pt.usePropertySearch(searchArgs);
   const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
 
-  const fetchBillParams = mobileNumber ? { mobileNumber, consumerCode } : { consumerCode };
+  let fetchBillParams = mobileNumber ? { mobileNumber, consumerCode } : { consumerCode };
+
+  if (window.location.href.includes("/search-results")) fetchBillParams = { consumerCode };
 
   const paymentDetails = Digit.Hooks.useFetchBillsForBuissnessService(
     { businessService: "PT", ...fetchBillParams, tenantId: city },
