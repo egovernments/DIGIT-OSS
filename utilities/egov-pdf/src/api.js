@@ -65,7 +65,8 @@ async function search_property_by_id(
   propertyId,
   tenantId,
   requestinfo,
-  allowCitizenTOSearchOthersRecords
+  allowCitizenTOSearchOthersRecords,
+  headers
 ){
   var params = {
     tenantId: tenantId,
@@ -83,6 +84,7 @@ async function search_property_by_id(
     method: "post",
     url: url.resolve(config.host.pt, config.paths.pt_search),
     data: requestinfo,
+    headers: headers,
     params,
   });
 }
@@ -186,8 +188,6 @@ async function search_water(applicationNumber, tenantId, requestinfo, allowCitiz
     params,
   });
 
-  console.log(config.host.waterHost+" "+config.paths.water_search);
-  
   return restWns;
 }
 
@@ -330,7 +330,7 @@ async function search_amendment(tenantId, amendmentId, serviceId, requestinfo, h
   });
 }
 
-async function getPropertyDeatils(requestinfo,tenantId,propertyIds,connectionnoToPropertyMap){
+async function getPropertyDeatils(requestinfo,tenantId,propertyIds,connectionnoToPropertyMap, headers){
   var resProperty;
 
   try {
@@ -338,7 +338,8 @@ async function getPropertyDeatils(requestinfo,tenantId,propertyIds,connectionnoT
                   propertyIds.toString(),
                   tenantId,
                   requestinfo,
-                  true);
+                  true,
+                  headers);
   } catch (ex) {
       if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(res, "Failed to query details of the property", 500);
