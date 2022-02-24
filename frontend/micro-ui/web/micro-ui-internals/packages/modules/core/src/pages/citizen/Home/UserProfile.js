@@ -89,6 +89,12 @@ const UserProfile = ({ stateCode, userType }) => {
       photo: profilePic,
     }
 
+    if(!(new RegExp(/^([a-zA-Z])*$/).test(name))) {
+      setToast({ key: "error", action: `${t("PT_NAME_ERROR_MESSAGE")}` });
+      setTimeout(()=>{setToast(null)}, 5000);
+      return;
+    }
+
     const { responseInfo, user } = await Digit.UserService.updateUser(requestData, stateCode);
 
     if(currentPassword && newPassword && confirmPassword) { 
