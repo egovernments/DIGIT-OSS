@@ -21,7 +21,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   useEffect(() => {
     if (dsoData && vehicleData) {
       const allVehicles = dsoData.reduce((acc, curr) => {
-        return curr.vehicles ? curr.vehicles : acc;
+        return curr.vehicles && curr.vehicles.length ? acc.concat(curr.vehicles) : acc;
       }, []);
 
       const cpacityMenu = Array.from(new Set(allVehicles.map(a => a.capacity)))
