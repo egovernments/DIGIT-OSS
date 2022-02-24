@@ -8,7 +8,10 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.ServiceRequestRepository;
+import org.egov.tl.service.CalculationService;
 import org.egov.tl.web.models.*;
+import org.egov.tl.web.models.calculation.CalculationRes;
+import org.egov.tl.web.models.calculation.TaxHeadEstimate;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +38,15 @@ public class NotificationUtil {
 
 	private RestTemplate restTemplate;
 
+	private CalculationService calculationService;
+
 	@Autowired
-	public NotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, RestTemplate restTemplate) {
+	public NotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, RestTemplate restTemplate,CalculationService calculationService) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.producer = producer;
 		this.restTemplate = restTemplate;
+		this.calculationService = calculationService;
 	}
 
 
@@ -116,12 +122,12 @@ public class NotificationUtil {
 
 		case ACTION_STATUS_EXPIRED:
 			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_EXPIRED, localizationMessage);
-			message = getExpiredMsg(license, messageTemplate);
+			message = getExpiredMsg(requestInfo,license, messageTemplate);
 			break;
 
 		case ACTION_STATUS_MANUAL_EXPIRED:
 			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_MANUAL_EXPIRED, localizationMessage);
-			message = getExpiredMsg(license, messageTemplate);
+			message = getExpiredMsg(requestInfo,license, messageTemplate);
 			break;
 
 		}
@@ -193,12 +199,12 @@ public class NotificationUtil {
 
 			case ACTION_STATUS_EXPIRED:
 				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_EXPIRED + "." + "email", localizationMessage);
-				message = getReplacedMessage(license, messageTemplate);
+				message = getExpiredMsg(requestInfo,license, messageTemplate);
 				break;
 
 			case ACTION_STATUS_MANUAL_EXPIRED:
 				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_MANUAL_EXPIRED + "." + "email", localizationMessage);
-				message = getReplacedMessage(license, messageTemplate);
+				message = getExpiredMsg(requestInfo,license, messageTemplate);
 				break;
 		}
 
@@ -223,6 +229,7 @@ public class NotificationUtil {
 		}
 		message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
 		message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
+
 		//CCC - Designaion configurable according to ULB
 		// message = message.replace("CCC","");
 		return message;
@@ -461,10 +468,22 @@ public class NotificationUtil {
 		return message;
 	}
 
-	private String getExpiredMsg(TradeLicense license, String message) {
+	private String getExpiredMsg(RequestInfo requestInfo,TradeLicense license, String message) {
 		message = message.replace("{2}", license.getLicenseNumber());
 		String expiryDate = new SimpleDateFormat("dd/MM/yyyy").format(license.getValidTo());
 		message = message.replace("{3}", expiryDate);
+
+		license.setApplicationType(TradeLicense.ApplicationTypeEnum.valueOf(APPLICATION_TYPE_RENEWAL));
+		List<TradeLicense> tradeLicenseList = new ArrayList<>();
+		tradeLicenseList.add(license);
+		CalculationRes calculationRes = calculationService.getEstimation(requestInfo, tradeLicenseList );
+		BigDecimal amountToBePaid = (BigDecimal) calculationRes.getCalculations().get(0).getTaxHeadEstimates().stream().map(TaxHeadEstimate::getEstimateAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
+		message = message.replace("{AMOUNT_PAID}", amountToBePaid.toString());
+
+		message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
+
+		//CCC - Designaion configurable according to ULB
+		// message = message.replace("CCC","");
 		return message;
 	}
 
