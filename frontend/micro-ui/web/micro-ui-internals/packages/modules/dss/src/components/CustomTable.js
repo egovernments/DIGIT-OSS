@@ -60,7 +60,7 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
     const { id } = data;
     setChartKey(id);
     setFilterStack([{ id: id }]);
-  }, [data]);
+  }, [data,value]);
   const tableData = useMemo(() => {
     if (!response || !lastYearResponse) return;
     setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);

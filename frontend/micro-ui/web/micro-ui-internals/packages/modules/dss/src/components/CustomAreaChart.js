@@ -149,7 +149,6 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
   };
 
   const renderTooltip = ({ payload, label, unit }) => {
-    console.log(payload, label, unit, "payload, label, unit ");
     let formattedLabel = tickFormatter(label);
     let payloadObj = payload?.[0] || {};
     return (
