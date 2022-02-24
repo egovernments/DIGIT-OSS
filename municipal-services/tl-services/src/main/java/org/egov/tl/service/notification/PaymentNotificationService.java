@@ -121,6 +121,15 @@ public class PaymentNotificationService {
                             List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
                             util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
                             //message = tlRenewalNotificationUtil.getOwnerPaymentMsg(license,valMap,localizationMessages);
+
+                            // Event Flow
+                            String message = tlRenewalNotificationUtil.getOwnerPaymentMsg(license,valMap,localizationMessages);
+                            log.info("Message to be sent: ",message);
+                            TradeLicenseRequest tradeLicenseRequest=TradeLicenseRequest.builder().requestInfo(requestInfo).licenses(Collections.singletonList(license)).build();
+                            EventRequest eventRequest = bpaNotificationUtil.getEventsForBPA(tradeLicenseRequest,true, message,receiptno, USREVENTS_EVENT_NAME);
+                            if(null != eventRequest)
+                                util.sendEventNotification(eventRequest);
+
                         } else {
                             String localizationMessages = util.getLocalizationMessages(license.getTenantId(), requestInfo);
                             List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
