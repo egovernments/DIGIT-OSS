@@ -118,6 +118,17 @@ public class TLRenewalNotificationUtil {
                 messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED, localizationMessage);
                 message = getCancelledMsg(license, messageTemplate);
                 break;
+
+            case ACTION_STATUS_EXPIRED:
+                messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_EXPIRED, localizationMessage);
+                message = notificationUtil.getExpiredMsg(requestInfo,license, messageTemplate);
+                break;
+
+            case ACTION_STATUS_MANUAL_EXPIRED:
+                messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_MANUAL_EXPIRED, localizationMessage);
+                message = notificationUtil.getExpiredMsg(requestInfo,license, messageTemplate);
+                break;
+
         }
 
         return message;
@@ -191,6 +202,17 @@ public class TLRenewalNotificationUtil {
                 messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED + "." + "email", localizationMessage);
                 message = getReplacedMessage(license, messageTemplate);
                 break;
+
+            case ACTION_STATUS_EXPIRED:
+                messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_EXPIRED + "." + "email", localizationMessage);
+                message = notificationUtil.getExpiredMsg(requestInfo,license, messageTemplate);
+                break;
+
+            case ACTION_STATUS_MANUAL_EXPIRED:
+                messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_MANUAL_EXPIRED + "." + "email", localizationMessage);
+                message = notificationUtil.getExpiredMsg(requestInfo,license, messageTemplate);
+                break;
+
         }
 
         return message;

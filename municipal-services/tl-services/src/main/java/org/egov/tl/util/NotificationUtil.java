@@ -468,7 +468,7 @@ public class NotificationUtil {
 		return message;
 	}
 
-	private String getExpiredMsg(RequestInfo requestInfo,TradeLicense license, String message) {
+	String getExpiredMsg(RequestInfo requestInfo, TradeLicense license, String message) {
 		message = message.replace("{2}", license.getLicenseNumber());
 		String expiryDate = new SimpleDateFormat("dd/MM/yyyy").format(license.getValidTo());
 		message = message.replace("{3}", expiryDate);
