@@ -47,7 +47,6 @@ export const Search = {
     const filter = { applicationNos };
     let dsoDetails = {};
     let vehicle = {};
-    let paymentPreference = ""
     const response = await Search.application(tenantId, filter);
     if (response?.dsoId) {
       const dsoFilters = { ids: response.dsoId, vehicleIds: response?.vehicleId };
@@ -58,9 +57,8 @@ export const Search = {
       }
     }
 
-    if (response?.paymentPreference) {
-        paymentPreference = response.paymentPreference;
-    
+    let paymentPreference = response?.paymentPreference;
+
     let slumLabel = "";
     if (response?.address?.slumName && response?.address?.locality?.code && response?.tenantId) {
       const slumData = await MdmsService.getSlumLocalityMapping(response?.tenantId, "FSM", "Slum");
@@ -218,8 +216,7 @@ export const Search = {
       applicationDetails: citizenResponse,
       pdfData: { ...response, amountPerTrip, totalAmount, vehicleMake, vehicleCapacity, slumName, dsoDetails },
     };
-  }
-},
+  },
 
   allVehicles: (tenantId, filters) => {
     return FSMService.vehicleSearch(tenantId, filters);
