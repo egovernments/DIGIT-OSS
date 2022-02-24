@@ -91,7 +91,7 @@ const NewApplication = () => {
         if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
         if (data?.gender?.code) obj.gender = data?.gender?.code;
         if (data?.mobileNumber) obj.mobileNumber = Number(data?.mobileNumber);
-        if (data?.name) obj.name = data?.name;
+        if (data?.name) obj.name = !(data?.ownershipCategory?.code.includes("INSTITUTIONAL"))?data?.name:"";
         if (data?.permanentAddress) obj.permanentAddress = data?.permanentAddress;
         obj.permanentAddress = obj.permanentAddress ? obj.permanentAddress : null;
         if (data?.relationship) obj.relationship = data?.relationship?.code;
@@ -141,6 +141,9 @@ const NewApplication = () => {
     if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
     if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail = {...formData.tradeLicenseDetail,institution:{}}
     if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["designation"] = data?.owners?.[0]?.designation;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["instituionName"] = data?.owners?.[0]?.instituionName;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["name"] = data?.owners?.[0]?.name;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["contactNo"] = data?.owners?.[0]?.altContactNumber;
     if (data?.cpt) formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId;
 
     // setFormData(formData)

@@ -67,9 +67,9 @@ const getTradeEditDetails = (data) => {
       owner.map((ob) => {
         ownerarray.push({
           gender: {
-            code: `${ob.gender}`,
-            name: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`,
-            value: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`,
+            code: ob.gender,
+            name: `${!ob?.gender?.includes("FEMALE") ? "Male" : "Female"}`,
+            value: `${!ob?.gender?.includes("FEMALE") ? "Male" : "Female"}`,
             i18nKey: `TL_GENDER_${ob.gender}`,
           },
           isprimaryowner: false,

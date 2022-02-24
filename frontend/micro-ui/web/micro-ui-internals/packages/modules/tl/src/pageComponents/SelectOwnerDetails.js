@@ -50,7 +50,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
           // gender: initData?.gender,
           mobilenumber: initData?.[0]?.mobilenumber,
           // isprimaryowner: true,
-          fatherOrHusbandName: initData?.[0]?.fatherOrHusbandName || "",
+          institutionName: initData?.[0]?.institutionName || "",
           subOwnerShipCategory: initData?.[0]?.subOwnerShipCategory || "",
           designation: initData?.[0]?.designation || "",
           altContactNumber: initData?.[0]?.altContactNumber || "",
@@ -206,9 +206,9 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 t={t}
                 type={"text"}
                 isMandatory={false}
-                name="fatherOrHusbandName"
-                value={field.fatherOrHusbandName}
-                onChange={(e) => handleTextInputField(index, e, "fatherOrHusbandName")}
+                name="institutionName"
+                value={field.institutionName}
+                onChange={(e) => handleTextInputField(index, e, "institutionName")}
                 ValidationRequired={true}
                 {...{validation : {
                   // isRequired: true,

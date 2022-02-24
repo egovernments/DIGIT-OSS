@@ -20,6 +20,7 @@ const createOwnerDetails = () => ({
   designation: "",
   mobileNumber: "",
   altContactNumber: "",
+  instituionName: "",
   fatherOrHusbandName: "",
   relationship: "",
   emailId: "",  
@@ -62,7 +63,7 @@ const OwnerForm = (_props) => {
   const [part, setPart] = useState({});
   const { ownershipCategory: { code: keyToSearchOwnershipSubtype } = {} } = formData;
   const { data: institutionOwnershipTypeOptions } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TradeOwnershipSubType", {
-    keyToSearchOwnershipSubtype,
+    keyToSearchOwnershipSubtype : keyToSearchOwnershipSubtype ? keyToSearchOwnershipSubtype.split(".")[0]:undefined,
   });
 
   const typeOfOwner = useMemo(() => {
@@ -163,8 +164,8 @@ const OwnerForm = (_props) => {
                   <div className="field">
                     <Controller
                       control={control}
-                      name="name"
-                      defaultValue={owner?.name}
+                      name="instituionName"
+                      defaultValue={owner?.instituionName}
                       rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("TL_NAME_ERROR_MESSAGE")) } }}
                       render={(props)=>(
                         <TextInput
@@ -172,12 +173,12 @@ const OwnerForm = (_props) => {
                           type={"text"}
                           isMandatory={true}
                           value={props.value}
-                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "name"}
-                          errorStyle={localFormState.touched.name && errors?.name?.message ? true : false}
+                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "instituionName"}
+                          errorStyle={localFormState.touched.instituionName && errors?.instituionName?.message ? true : false}
                           onChange={(e)=>{
-                            if (e != owner?.name && isRenewal) setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
+                            if (e != owner?.instituionName && isRenewal) setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
                             props.onChange(e);
-                            setFocusIndex({ index: owner.key, type: "name" });
+                            setFocusIndex({ index: owner.key, type: "instituionName" });
                           }}
                           onBlur={props.onBlur} 
                         />
@@ -185,7 +186,7 @@ const OwnerForm = (_props) => {
                     ></Controller>
                   </div>
                 </LabelFieldPair>
-                <CardLabelError style={errorStyle}> {localFormState.touched.name ? errors?.name?.message : ""}</CardLabelError>
+                <CardLabelError style={errorStyle}> {localFormState.touched.instituionName ? errors?.instituionName?.message : ""}</CardLabelError>
                 <LabelFieldPair>
                   <CardLabel>{`${t("TL_INSTITUTION_TYPE_LABEL")}*`}</CardLabel>
                   <div className="field">
@@ -219,22 +220,22 @@ const OwnerForm = (_props) => {
                   <div className="field">
                     <Controller
                       control={control}
-                      defaultValue={owner?.fatherOrHusbandName}
-                      name={"fatherOrHusbandName"}
+                      defaultValue={owner?.name}
+                      name={"name"}
                       rules={{ /* required: t("REQUIRED_FIELD"), */ validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("TL_NAME_ERROR_MESSAGE")) } }}
                       render={(props)=>(
                         <TextInput
                           t={t}
                           type={"text"}
                           isMandatory={false}
-                          name="fatherOrHusbandName"
+                          name="name"
                           value={props.value}
-                          errorStyle={localFormState.touched.fatherOrHusbandName && errors?.fatherOrHusbandName?.message ? true : false}
-                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "fatherOrHusbandName"}
+                          errorStyle={localFormState.touched.name && errors?.name?.message ? true : false}
+                          autoFocus={focusIndex.index === owner?.key && focusIndex.type === "name"}
                           onChange={(e)=>{
                             if (e != owner?.name && isRenewal) setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
                             props.onChange(e);
-                            setFocusIndex({ index: owner.key, type: "fatherOrHusbandName" });
+                            setFocusIndex({ index: owner.key, type: "name" });
                           }}
                           onBlur={props.onBlur}
                         />
@@ -242,7 +243,7 @@ const OwnerForm = (_props) => {
                     ></Controller>
                   </div>
                 </LabelFieldPair>
-                <CardLabelError style={errorStyle}>{localFormState.touched.fatherOrHusbandName ? errors?.fatherOrHusbandName?.message : ""}</CardLabelError>
+                <CardLabelError style={errorStyle}>{localFormState.touched.name ? errors?.name?.message : ""}</CardLabelError>
                 <LabelFieldPair>
                   <CardLabel>{`${t("TL_NEW_OWNER_DESIG_LABEL")}`}</CardLabel>
                   <div className="field">
