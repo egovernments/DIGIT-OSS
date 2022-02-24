@@ -95,6 +95,18 @@ const UserProfile = ({ stateCode, userType }) => {
       return;
     }
 
+    if(!(new RegExp(/^[6-9]{1}[0-9]{9}$/).test(mobileNumber))) {
+      setToast({ key: "error", action: `${t("PT_MOBILE_ERROR_MESSAGE")}` });
+      setTimeout(()=>{setToast(null)}, 5000);
+      return;
+    }
+
+    if(!(email.includes("@") && email.includes("."))) {
+      setToast({ key: "error", action: `${t("PT_EMAIL_ERROR_MESSAGE")}` });
+      setTimeout(()=>{setToast(null)}, 5000);
+      return;
+    }
+
     const { responseInfo, user } = await Digit.UserService.updateUser(requestData, stateCode);
 
     if(currentPassword && newPassword && confirmPassword) { 
