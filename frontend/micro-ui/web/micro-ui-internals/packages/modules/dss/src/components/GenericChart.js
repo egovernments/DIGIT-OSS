@@ -76,7 +76,7 @@ const GenericChart = ({
           {showHeader && <CardLabel className={"dss-header-label"} >
           <span className="tooltip">
             {t(`${t(Digit.Utils.locale.getTransformedLocale(header))}`)}
-             {chartDenomination?.toLowerCase()==="amount"&&<>({t(`DSS_${Digit.Utils.locale.getTransformedLocale(value?.denomination)}`)})</>}
+             {chartDenomination?.toLowerCase()==="amount"&&<span style={{whiteSpace:"pre"}}> ({t(`DSS_${Digit.Utils.locale.getTransformedLocale(value?.denomination)}`)})</span>}
               <span className="tooltiptext" style={{ whiteSpace: "nowrap" , 
                fontSize:"medium" }}>
                   {t(`TIP_${Digit.Utils.locale.getTransformedLocale(header)}`)}
