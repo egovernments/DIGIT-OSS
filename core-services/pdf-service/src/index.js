@@ -52,6 +52,15 @@ import {
   findLocalisation
 } from "./utils/commons";
 
+
+let v8 = require("v8");
+let totalHeapSizeInGB = (((v8.getHeapStatistics().total_available_size) / 1024 / 1024 / 1024).toFixed(2));
+console.log(`*******************************************`);
+console.log(`Total Heap Size ~ ${totalHeapSizeInGB} GB`);
+console.log(`*******************************************`);
+
+
+
 var jp = require("jsonpath");
 //create binary
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
