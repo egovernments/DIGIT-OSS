@@ -186,6 +186,8 @@ async function search_water(applicationNumber, tenantId, requestinfo, allowCitiz
     params,
   });
 
+  console.log(config.host.waterHost+" "+config.paths.water_search);
+  
   return restWns;
 }
 
