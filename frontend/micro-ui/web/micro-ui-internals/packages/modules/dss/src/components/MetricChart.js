@@ -55,10 +55,10 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
     if (response) {
       let plots = response?.responseData?.data?.[0]?.plots || null;
       if (plots && Array.isArray(plots) && plots.length > 0 && plots?.every((e) => e.value))
-        setShowDate({
+        setShowDate(oldstate=>({...oldstate,[id]:{
           todaysDate: Digit.DateUtils.ConvertEpochToDate(plots?.[0]?.value),
           lastUpdatedTime: Digit.DateUtils.ConvertEpochToTimeInHours(plots?.[1]?.value),
-        });
+        }}));
       index === 0 && setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     } else {
       setShowDate({});
@@ -83,8 +83,7 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
       <div className="tooltip">
         {t(data.name)}
 
-        <span style={{ whiteSpace: "pre-line", display: "block" }}> {showDate?.todaysDate}</span>
-
+        <span style={{ whiteSpace: "pre-line", display: "block" }}> {showDate?.[id]?.todaysDate}</span>
         <span
           className="tooltiptext"
           style={{
@@ -94,7 +93,7 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
           }}
         >
           <span style={{ fontWeight: "500", color: "white" }}>{t(`TIP_${data.name}`)}</span>
-          <span style={{ color: "white" }}> {showDate?.lastUpdatedTime}</span>
+          <span style={{ color: "white" }}> {showDate?.[id]?.lastUpdatedTime}</span>
         </span>
       </div>
       <MetricData t={t} data={response?.responseData?.data?.[0]} code={response?.responseData?.visualizationCode} />
