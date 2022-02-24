@@ -89,6 +89,24 @@ const UserProfile = ({ stateCode, userType }) => {
       photo: profilePic,
     }
 
+    if(!(new RegExp(/^([a-zA-Z])*$/).test(name))) {
+      setToast({ key: "error", action: `${t("PT_NAME_ERROR_MESSAGE")}` });
+      setTimeout(()=>{setToast(null)}, 5000);
+      return;
+    }
+
+    if(!(new RegExp(/^[6-9]{1}[0-9]{9}$/).test(mobileNumber))) {
+      setToast({ key: "error", action: `${t("PT_MOBILE_ERROR_MESSAGE")}` });
+      setTimeout(()=>{setToast(null)}, 5000);
+      return;
+    }
+
+    if(!(email.includes("@") && email.includes("."))) {
+      setToast({ key: "error", action: `${t("PT_EMAIL_ERROR_MESSAGE")}` });
+      setTimeout(()=>{setToast(null)}, 5000);
+      return;
+    }
+
     const { responseInfo, user } = await Digit.UserService.updateUser(requestData, stateCode);
 
     if(currentPassword && newPassword && confirmPassword) { 
@@ -281,7 +299,7 @@ const UserProfile = ({ stateCode, userType }) => {
                   <img style={{ margin: "auto", borderRadius: "50%", justifyContent: "center", width: "50%", padding: "10%;" }} src={defaultImage} />
                 ) : (
                   <img
-                    style={{ display: "block", marginRight: "auto", marginLeft: "auto", borderRadius: "50%", justifyContent: "center" }}
+                    style={{ display: "block", marginRight: "auto", marginLeft: "auto", borderRadius: "50%", justifyContent: "center",width: "50%", padding: "10%;" }}
                     src={profileImg}
                   />
                 )}
@@ -334,7 +352,7 @@ const UserProfile = ({ stateCode, userType }) => {
                 name="mobileNumber"
                 placeholder="Enter a valid Mobile No."
                 style={{ width: "600px", height: "40px" }}
-                onChange={(value) => setMobileNo({ target: { value } })}
+                onChange={(value) => setMobileNo(value)}
                 // disable={mobileNumber && !isOpenLinkFlow ? true : false}
                 {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
               />
