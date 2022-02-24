@@ -83,7 +83,7 @@ router.post(
           var propertyId   = connection.WaterConnection[0].propertyId;
           var propertytoConsumerCodeMap = {};
           propertytoConsumerCodeMap[propertyId] = [consumerCode];
-          var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, [propertyId], propertytoConsumerCodeMap);
+          var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, [propertyId], propertytoConsumerCodeMap, headers);
 
           var billresponse;
           try {
@@ -149,7 +149,7 @@ router.post(
             var propertyId   = connection.SewerageConnections[0].propertyId;
             var propertytoConsumerCodeMap = {};
             propertytoConsumerCodeMap[propertyId] = [consumerCode];
-            var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, [propertyId], propertytoConsumerCodeMap);
+            var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, [propertyId], propertytoConsumerCodeMap, headers);
   
             var billresponse;
           try {
@@ -666,7 +666,7 @@ router.post(
           return renderError(res, "There is no billfound for the criteria");
         }
 
-        var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, propertyIdSet, connectionnoToPropertyMap);
+        var propertyDetails = await getPropertyDeatils(requestinfo, tenantId, propertyIdSet, connectionnoToPropertyMap, headers);
         if (consolidatedResult && consolidatedResult.Bill && consolidatedResult.Bill.length > 0) {
           var pdfResponse;
           var pdfkey = config.pdf.wns_bill;
