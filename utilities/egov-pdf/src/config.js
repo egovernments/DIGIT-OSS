@@ -49,16 +49,16 @@ module.exports = {
     mdms: process.env.EGOV_MDMS_HOST || HOST,
     epass: process.env.EGOV_TLSERVICES_HOST || HOST,
     tl: process.env.EGOV_TRADELICENSESERVICES_HOST || HOST,
-    pt: process.env.EGOV_PTSERVICES_HOST || HOST,
-    pdf: process.env.EGOV_PDF_HOST || HOST,
+    pt: process.env.EGOV_PTSERVICES_HOST || 'http://property-services.digit:8080/',
+    pdf: process.env.EGOV_PDF_HOST,
     user: process.env.EGOV_USER_HOST || HOST,
     payments: process.env.EGOV_PAYMENTS_HOST || HOST,
     bill: process.env.EGOV_SEARCHER_HOST || HOST,
     workflow: process.env.EGOV_WORKFLOW_HOST || HOST,
-    challan: process.env.EGOV_ECHALLAN_HOST || 'http://echallan-services.egov:8080/',
-    mcollectBilling: process.env.EGOV_BILLING_HOST || 'http://billing-service.egov:8080/',
-    waterHost: process.env.EGOV_WATER_HOST,
-    sewerageHost: process.env.EGOV_SEWERAGE_HOST || HOST
+    challan: process.env.EGOV_ECHALLAN_HOST || 'http://echallan-services.digit:8080/',
+    mcollectBilling: process.env.EGOV_BILLING_HOST || 'http://billing-service.digit:8080/',
+    waterHost: process.env.EGOV_WATER_HOST || 'http://ws-services.digit:8080/',
+    sewerageHost: process.env.EGOV_SEWERAGE_HOST || 'http://sw-services.digit:8080/'
 
   },
   paths: {
