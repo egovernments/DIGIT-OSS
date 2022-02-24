@@ -44,7 +44,7 @@ export const newConfigMutate = [
             label: "PT_PROPERTY_UNIQUE_ID",
             description: "CS_PROPERTY_ID_FORMAT_MUST_BE",
             type: "text",
-            name: "propertyId",
+            name: "propertyIds",
             error: "ERR_INVALID_PROPERTY_ID",
             validation: {
               pattern: {

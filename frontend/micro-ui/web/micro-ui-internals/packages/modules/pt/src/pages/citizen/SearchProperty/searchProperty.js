@@ -306,7 +306,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
       return;
     }
     if (!data?.city?.code) {
-      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS"});
       return;
     }
     if (action == 0) {
@@ -354,15 +354,15 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     let tempObject = Object.keys(data)
       .filter((k) => data[k])
       .reduce((acc, key) => ({ ...acc, [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {});
-    tempObject["propertyIds"] = tempObject?.propertyId;
     let city = tempObject.city;
+    
     delete tempObject.addParam;
     delete tempObject.addParam1;
     delete tempObject.city;
-    delete tempObject.propertyId;
     setSearchData({ city: city, filters: tempObject });
     return;
   };
+  
   const onFormValueChange = (setValue, data, formState) => {
     if (data?.doorNo && data?.doorNo !== "" && data?.propertyIds !== "") {
       data["propertyIds"] = "";
@@ -372,10 +372,6 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     const propId = data?.[property.name];
     const city = data?.city;
     const locality = data?.locality;
-
-    if (mobileNumberLength > 0 || propId != "" || oldPropId != "") {
-      setShowToast(null);
-    }
 
     if (city?.code !== cityCode) {
       setCityCode(city?.code);
@@ -394,10 +390,9 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     return <Loader />;
   }
 
-  let validation = ptSearchConfig.maxResultValidation
-    ? propertyData?.Properties.length < ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error))
-    : true;
-  if (propertyData && !propertyDataLoading && !error && validation) {
+  let validation = ptSearchConfig.maxResultValidation ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
+
+  if (propertyData && !propertyDataLoading && !error && validation ) {
     let qs = {};
     qs = { ...searchData.filters, city: searchData.city };
 
