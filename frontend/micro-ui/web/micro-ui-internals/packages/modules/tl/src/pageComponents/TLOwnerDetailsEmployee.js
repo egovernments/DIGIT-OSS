@@ -308,7 +308,7 @@ const OwnerForm = (_props) => {
                      control={control}
                      name={"altContactNumber"}
                      defaultValue={owner?.altContactNumber}
-                     rules={{ /* required: t("REQUIRED_FIELD"), */ validate: { pattern: (val) => (/^$|^[0-9]{11}$/.test(val) ? false : t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")) } }}
+                     rules={{ /* required: t("REQUIRED_FIELD"), */ validate: { pattern: (val) => (/^$|^[0][1-9][0-9]{9}$|^[1-9][0-9]{9}$/.test(val) ? false : t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")) } }}
                      render={(props)=>(
                       <MobileNumber
                         type={"text"}
