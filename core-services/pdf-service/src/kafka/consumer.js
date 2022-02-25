@@ -39,22 +39,22 @@ consumerGroup.on("ready", function() {
 consumerGroup.on("message", function(message) {
   logger.info("record received on consumer for create");
   try {
-    consumerGroup.pause();
-    var data = JSON.parse(message.value);
-    //console.log(JSON.stringify(data));
-    createNoSave(
-      data,
-      null,
-      () => {},
-      () => {}
-    )
-      .then(() => {
-        logger.info("record created for consumer request");
-        consumerGroup.resume();
-      })
-      .catch(error => {
-        logger.error(error.stack || error);
-      });
+    (async() => {
+      var data = JSON.parse(message.value);
+      //console.log(JSON.stringify(data));
+      await createNoSave(
+        data,
+        null,
+        () => {},
+        () => {}
+      )
+        .then(() => {
+          logger.info("record created for consumer request");
+        })
+        .catch(error => {
+          logger.error(error.stack || error);
+        });
+    })();
   } catch (error) {
     logger.error("error in create request by consumer " + error.message);
     logger.error(error.stack || error);
