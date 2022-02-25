@@ -206,7 +206,7 @@
   }
 
   .employeeCard {
-    @apply mb-md mx-md !important;
+    @apply flex-1 mb-md mx-md mt-md !important;
 
     &.filter {
       margin-left: auto;

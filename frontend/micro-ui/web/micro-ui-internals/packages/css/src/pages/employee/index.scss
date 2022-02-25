@@ -346,9 +346,7 @@
       margin-bottom: 16px;
     }
     .main {
-      padding-top: 80px;
-      margin-left: 72px;
-      width: calc(100%-83px);
+      display: flex;
     }
   }
 
@@ -422,5 +420,12 @@
         display: none;
       }
     }
+  }
+}
+
+.user-profile {
+  @media (min-width: 780px) {
+    flex: 1 0 auto;
+    margin-left: 1em;
   }
 }

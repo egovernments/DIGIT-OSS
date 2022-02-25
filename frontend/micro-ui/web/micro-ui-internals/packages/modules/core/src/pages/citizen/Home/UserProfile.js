@@ -49,12 +49,12 @@ const UserProfile = ({ stateCode, userType }) => {
 
   useEffect(() => {
     getUserInfo();
-  }, [])
+  }, []);
 
   const getUserInfo = async () => {
     const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [userInfo?.uuid] }, {});
     usersResponse && usersResponse.user && usersResponse.user.length ? setUserDetails(usersResponse.user[0]) : null;
-  }
+  };
 
   const [userDetails, setUserDetails] = useState(null);
   const [name, setName] = useState(userInfo?.name);
@@ -72,7 +72,7 @@ const UserProfile = ({ stateCode, userType }) => {
 
   let validation = {};
   const editScreen = false; // To-do: Deubug and make me dynamic or remove if not needed
-  const onClickAddPic = () => setOpenUploadSide(!openUploadSlide)
+  const onClickAddPic = () => setOpenUploadSide(!openUploadSlide);
   const TogleforPassword = () => setChangepassword(!changepassword);
   const setOwnerName = (e) => setName(e.target.value);
   const setOwnerEmail = (e) => setEmail(e.target.value);
@@ -86,21 +86,21 @@ const UserProfile = ({ stateCode, userType }) => {
       gender: gender?.value,
       emailId: email,
       photo: profilePic,
-    }
+    };
 
     const { responseInfo, user } = await Digit.UserService.updateUser(requestData, stateCode);
 
-    if(currentPassword && newPassword && confirmPassword) { 
-      if(newPassword === confirmPassword){
+    if (currentPassword && newPassword && confirmPassword) {
+      if (newPassword === confirmPassword) {
         const requestData = {
           existingPassword: currentPassword,
           newPassword: newPassword,
           tenantId: tenant,
           type: "EMPLOYEE",
-          username: userInfo?.userName
-        }
+          username: userInfo?.userName,
+        };
         const { responseInfo1 } = await Digit.UserService.changePassword(requestData, tenant);
-        if(responseInfo1?.status && responseInfo1.status === '200') {
+        if (responseInfo1?.status && responseInfo1.status === "200") {
           setToast({ key: "success", action: `${t("ES_PROFILE_UPDATE_SUCCESS_WITH_PASSWORD")}` });
           setTimeout(() => setToast(null), 5000);
         }
@@ -109,18 +109,19 @@ const UserProfile = ({ stateCode, userType }) => {
         setTimeout(() => setToast(null), 5000);
       }
     } else {
-      if(responseInfo?.status && responseInfo.status === '200') {
+      if (responseInfo?.status && responseInfo.status === "200") {
         setToast({ key: "success", action: `${t("ES_PROFILE_UPDATE_SUCCESS")}` });
         setTimeout(() => setToast(null), 5000);
       }
     }
-  }
+  };
 
   let menu = [];
   const { data: Menu } = Digit.Hooks.pt.useGenderMDMS(stateId, "common-masters", "GenderType");
-  Menu && Menu.map((genderDetails) => {
-    menu.push({ i18nKey: `PT_COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
-  });
+  Menu &&
+    Menu.map((genderDetails) => {
+      menu.push({ i18nKey: `PT_COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
+    });
 
   const setFileStoreId = async (fileStoreId) => {
     setProfilePic(fileStoreId);
@@ -146,7 +147,7 @@ const UserProfile = ({ stateCode, userType }) => {
   };
 
   return (
-    <div>
+    <div className="user-profile">
       {userType === "citizen" ? (
         <div style={{ backgroundColor: "white", borderRadius: "5px", margin: "10px", padding: "10px" }}>
           <h1>Edit Profile</h1>
@@ -160,7 +161,7 @@ const UserProfile = ({ stateCode, userType }) => {
               height: "20%",
               backgroundColor: "#EEEEEE",
               margin: "2%",
-              padding: "20px"
+              padding: "20px",
             }}
           >
             <div>
@@ -231,23 +232,22 @@ const UserProfile = ({ stateCode, userType }) => {
             </div>
           </LabelFieldPair>
           <div style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end" }}>
-        <button
-          onClick={updateProfile}
-          style={{
-            marginTop: "2px",
-            backgroundColor: "#F47738",
-            width: "328px",
-            height: "40px",
-            float: "right",
-            // marginRight: "31px",
-            color: "white",
-            borderBottom: "1px solid black",
-          }}
-        >
-          Save
-        </button>
-      </div>
-        
+            <button
+              onClick={updateProfile}
+              style={{
+                marginTop: "2px",
+                backgroundColor: "#F47738",
+                width: "328px",
+                height: "40px",
+                float: "right",
+                // marginRight: "31px",
+                color: "white",
+                borderBottom: "1px solid black",
+              }}
+            >
+              Save
+            </button>
+          </div>
         </div>
       ) : (
         <div style={{ backgroundColor: "#EEEEEE", borderRadius: "5px", margin: "10px", padding: "10px", display: "flex" }}>
@@ -362,7 +362,7 @@ const UserProfile = ({ stateCode, userType }) => {
                   Change Password
                 </a>
                 {changepassword ? (
-                  <div style={{marginTop: '10px'}}>
+                  <div style={{ marginTop: "10px" }}>
                     <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
                       <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Current Password*")}`}</CardLabel>
                       <div className="field">
@@ -417,36 +417,36 @@ const UserProfile = ({ stateCode, userType }) => {
           </div>
         </div>
       )}
-       {userType === "employee" ?
-      <div style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end" }}>
-        <button
-          onClick={updateProfile}
-          style={{
-            marginTop: "24px",
-            backgroundColor: "#F47738",
-            width: "248px",
-            height: "40px",
-            float: "right",
-            marginRight: "31px",
-            color: "white",
-            borderBottom: "1px solid black",
-          }}
-        >
-          Save
-        </button>
-      </div>
-      :
-      ""
-    }
-    { toast && (
-      <Toast
-        error={toast.key === "error"}
-        label={t(toast.key === "success" ? `ES_PROFILE_UPDATE_SUCCESS` : toast.action)}
-        onClose={() => setToast(null)}
-        style={{ maxWidth: "670px" }}
-      />
-    )}
-    {openUploadSlide == true ? <UploadDrawer setProfilePic={setFileStoreId} closeDrawer={closeFileUploadDrawer} userType={userType} /> : ""}
+      {userType === "employee" ? (
+        <div style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end" }}>
+          <button
+            onClick={updateProfile}
+            style={{
+              marginTop: "24px",
+              backgroundColor: "#F47738",
+              width: "248px",
+              height: "40px",
+              float: "right",
+              marginRight: "31px",
+              color: "white",
+              borderBottom: "1px solid black",
+            }}
+          >
+            Save
+          </button>
+        </div>
+      ) : (
+        ""
+      )}
+      {toast && (
+        <Toast
+          error={toast.key === "error"}
+          label={t(toast.key === "success" ? `ES_PROFILE_UPDATE_SUCCESS` : toast.action)}
+          onClose={() => setToast(null)}
+          style={{ maxWidth: "670px" }}
+        />
+      )}
+      {openUploadSlide == true ? <UploadDrawer setProfilePic={setFileStoreId} closeDrawer={closeFileUploadDrawer} userType={userType} /> : ""}
     </div>
   );
 };
