@@ -16,7 +16,6 @@ const TypeAnswerEnum = {
 
 const SurveyResults = () => {
    
-    
     const params = useParams();
     const mutation = Digit.Hooks.survey.useShowResults()
 
@@ -62,8 +61,8 @@ const SurveyResults = () => {
       },
     }
   );
-    if(surveyData) console.log(surveyData,"surveyData");
-    if(mutation.isSuccess) console.log(mutation.data,"mutation");
+    // if(surveyData) console.log(surveyData,"surveyData");
+    // if(mutation.isSuccess) console.log(mutation.data,"mutation");
 
     if(isLoading || (mutation.isLoading && !mutation.isIdle)) return <Loader />
     if(mutation.isError) return <div>An error occured...</div>
@@ -71,8 +70,18 @@ const SurveyResults = () => {
     // if (isLoading) return <Loader />;
     // else console.log(surveyData);
 
-  return <div>Hello World</div>
-//    return <CitizenSurveyForm surveyData={surveyData} submitDisabled={true} formdisabled={true} formDefaultValues={{}} />
+//   return <div>Hello World</div>
+    // return <CitizenSurveyForm surveyData={surveyData} submitDisabled={true} formdisabled={true} formDefaultValues={{}} />
+
+    // Need to display the Results view here.....
+    // make a whoHasResponded component
+    //make a separate component for each type of question -> this component will render the question as well as the response
+    
+    return(
+        <div>
+            Survey Results View
+        </div>
+    );
 }
 
 export default SurveyResults
