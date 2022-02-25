@@ -20,12 +20,16 @@ public class DemandNotificationObj {
 	@JsonProperty("RequestInfo")
 	private RequestInfo requestInfo = null;
 
+	@JsonProperty("tenantId")
 	private String tenantId;
 
+	@JsonProperty("billingCycle")
 	private String billingCycle;
 
+	@JsonProperty("waterConnectionIds")
 	private Set<String> waterConnectionIds;
 
+	@JsonProperty("isSuccess")
 	private boolean isSuccess;
 
 }
