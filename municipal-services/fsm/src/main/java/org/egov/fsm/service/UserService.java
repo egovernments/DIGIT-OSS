@@ -64,7 +64,7 @@ public class UserService {
 
 				userDetailResponse = userExists(applicant, requestInfo);
 				
-				if (userDetailResponse != null || !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+				if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 					
 					if( userDetailResponse.getUser().size() > 0 ){
 						Boolean foundUser = Boolean.FALSE;

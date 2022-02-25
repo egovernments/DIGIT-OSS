@@ -107,7 +107,7 @@ public class UserService {
 					uri.append(config.getUserHost()).append(config.getUserContextPath())
 							.append(config.getUserUpdateEndpoint());
 					UserDetailResponse userResponse = ownerCall(userRequest, uri);
-					if (userResponse != null || !CollectionUtils.isEmpty(userResponse.getUser())) {
+					if (userResponse != null && !CollectionUtils.isEmpty(userResponse.getUser())) {
 						owner = userResponse.getUser().get(0);
 					} else {
 						throw new CustomException(VendorErrorConstants.INVALID_OWNER_ERROR,
