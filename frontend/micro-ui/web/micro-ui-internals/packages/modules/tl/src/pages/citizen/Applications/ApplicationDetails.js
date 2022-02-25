@@ -126,7 +126,7 @@ const ApplicationDetails = () => {
                 <CardSectionHeader style={multiHeaderStyle}>{`${t("TL_PAYMENT_PAID_BY_PLACEHOLDER")} - `+ (index+1)}</CardSectionHeader>
                 <Row
                   label={`${t("TL_INSTITUTION_NAME_LABEL")}`}
-                  text={t(ele.name)}
+                  text={t(application?.tradeLicenseDetail?.institution?.instituionName)}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row
@@ -141,12 +141,12 @@ const ApplicationDetails = () => {
                 />
                 <Row
                   label={`${t("TL_TELEPHONE_NUMBER_LABEL")}`}
-                  text={t(ele.altContactNumber)}
+                  text={t(application?.tradeLicenseDetail?.institution?.contactNo)}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row
                   label={`${t("TL_LOCALIZATION_OWNER_NAME")}`}
-                  text={t(ele.fatherOrHusbandName)}
+                  text={t(ele.fatherOrHusbandName || application?.tradeLicenseDetail?.institution?.name)}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row

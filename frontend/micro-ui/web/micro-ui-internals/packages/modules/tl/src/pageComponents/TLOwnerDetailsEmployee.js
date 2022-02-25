@@ -217,13 +217,13 @@ const OwnerForm = (_props) => {
                 <CardLabelError style={errorStyle}>{localFormState.touched.subOwnerShipCategory ? errors?.subOwnerShipCategory?.message : ""}</CardLabelError>
                 <CardSectionHeader>{t("TL_AUTHORIZED_PERSON_DETAILS")}</CardSectionHeader>
                 <LabelFieldPair>
-                  <CardLabel>{`${t("TL_NEW_OWNER_DETAILS_NAME_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_NEW_OWNER_DETAILS_NAME_LABEL")}*`}</CardLabel>
                   <div className="field">
                     <Controller
                       control={control}
                       defaultValue={owner?.name}
                       name={"name"}
-                      rules={{ /* required: t("REQUIRED_FIELD"), */ validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("TL_NAME_ERROR_MESSAGE")) } }}
+                      rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("TL_NAME_ERROR_MESSAGE")) } }}
                       render={(props)=>(
                         <TextInput
                           t={t}
