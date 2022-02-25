@@ -204,10 +204,12 @@ public class DemandService {
 		Long fromDateLong = (Long) financialYearMaster.get(WSCalculationConstant.STARTING_DATE_APPLICABLES);
 		Long toDateLong = (Long) financialYearMaster.get(WSCalculationConstant.ENDING_DATE_APPLICABLES);
 
-		LocalDate fromDate = Instant.ofEpochMilli(fromDateLong).atZone(ZoneId.systemDefault()).toLocalDate();
-		LocalDate toDate = Instant.ofEpochMilli(toDateLong).atZone(ZoneId.systemDefault()).toLocalDate();
+		log.info("Dates before conversion -  "+ fromDateLong.toString() + "     "+toDateLong.toString());
 
-		String billingcycle = String.valueOf(fromDate.getYear()+'-'+ fromDate.getYear());
+		String billingcycle = calculatorUtils.epochToDate(fromDateLong) + "-" +calculatorUtils.epochToDate(toDateLong) ;
+
+		log.info("Dates after conversion -  "+ calculatorUtils.epochToDate(fromDateLong) + "     "+calculatorUtils.epochToDate(toDateLong));
+		log.info("billingcycle "+billingcycle);
 		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
 				.requestInfo(requestInfo)
 				.tenantId(calculations.get(0).getTenantId())
@@ -220,6 +222,7 @@ public class DemandService {
 		fetchBill(demandRes, requestInfo,masterMap);
 		return demandRes;
 	}
+
 
 	/**
 	 * Returns the list of new DemandDetail to be added for updating the demand

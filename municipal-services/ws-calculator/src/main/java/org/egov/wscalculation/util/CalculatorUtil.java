@@ -1,12 +1,6 @@
 package org.egov.wscalculation.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
@@ -369,5 +363,21 @@ public class CalculatorUtil {
 		url.append("tenantId=").append(tenantId).append("&");
 		url.append("businessIds=").append(businessIds);
 		return url.toString();
+	}
+
+	public String epochToDate(Long validTo){
+		Long timeStamp= validTo / 1000L;
+		java.util.Date time=new java.util.Date((Long)timeStamp*1000);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(time);
+		String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+		Integer mon = cal.get(Calendar.MONTH);
+		mon=mon+1;
+		String month = String.valueOf(mon);
+		String year = String.valueOf(cal.get(Calendar.YEAR));
+		StringBuilder date = new StringBuilder(day);
+		date.append("/").append(month).append("/").append(year);
+
+		return year;
 	}
 }
