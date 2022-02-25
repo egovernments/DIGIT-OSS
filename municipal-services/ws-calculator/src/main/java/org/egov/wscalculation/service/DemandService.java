@@ -198,7 +198,7 @@ public class DemandService {
 					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
 		}
 
-		String billingcycle = (String) masterMap.get(WSCalculationConstant.Billing_Cycle_String);
+		String billingcycle = calculatorUtils.getBillingCycle(masterMap);
 		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
 				.requestInfo(requestInfo)
 				.tenantId(calculations.get(0).getTenantId())
@@ -211,7 +211,7 @@ public class DemandService {
 		fetchBill(demandRes, requestInfo,masterMap);
 		return demandRes;
 	}
-
+	
 	/**
 	 * Returns the list of new DemandDetail to be added for updating the demand
 	 * 
