@@ -39,6 +39,7 @@ consumerGroup.on("ready", function() {
 consumerGroup.on("message", function(message) {
   logger.info("record received on consumer for create");
   try {
+    consumerGroup.pause();
     var data = JSON.parse(message.value);
     //console.log(JSON.stringify(data));
     createNoSave(
@@ -49,6 +50,7 @@ consumerGroup.on("message", function(message) {
     )
       .then(() => {
         logger.info("record created for consumer request");
+        consumerGroup.resume();
       })
       .catch(error => {
         logger.error(error.stack || error);
