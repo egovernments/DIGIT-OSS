@@ -26,11 +26,11 @@ const WorkflowComponent = ({ complaintDetails, id, getWorkFlow, zoomImage }) => 
   useEffect(() => {
     getWorkFlow(workFlowDetails.data);
   }, [workFlowDetails.data]);
-  
+
   useEffect(() => {
     workFlowDetails.revalidate();
   }, []);
-  
+
   return (
     !workFlowDetails.isLoading && (
       <TimeLine
@@ -52,7 +52,7 @@ const ComplaintDetailsPage = (props) => {
   let tenantId = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
   const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
 
-  const [imageShownBelowComplaintDetails, setImageToShowBelowComplaintDetails] = useState({})
+  const [imageShownBelowComplaintDetails, setImageToShowBelowComplaintDetails] = useState({});
 
   const [imageZoom, setImageZoom] = useState(null);
 
@@ -79,7 +79,7 @@ const ComplaintDetailsPage = (props) => {
   function zoomImage(imageSource, index) {
     setImageZoom(imageSource);
   }
-  function zoomImageWrapper(imageSource, index){
+  function zoomImageWrapper(imageSource, index) {
     zoomImage(imageShownBelowComplaintDetails?.fullImage[index]);
   }
 
@@ -90,10 +90,10 @@ const ComplaintDetailsPage = (props) => {
   const onWorkFlowChange = (data) => {
     let timeline = data?.timeline;
     timeline && timeline[0].timeLineActions?.filter((e) => e === "COMMENT").length ? setDisableComment(false) : setDisableComment(true);
-    if(timeline) {
-      const actionByCitizenOnComplaintCreation = timeline.find( e => e?.performedAction === "APPLY")
-      const { thumbnailsToShow } = actionByCitizenOnComplaintCreation
-      setImageToShowBelowComplaintDetails(thumbnailsToShow)
+    if (timeline) {
+      const actionByCitizenOnComplaintCreation = timeline.find((e) => e?.performedAction === "APPLY");
+      const { thumbnailsToShow } = actionByCitizenOnComplaintCreation;
+      setImageToShowBelowComplaintDetails(thumbnailsToShow);
     }
   };
 
@@ -127,48 +127,54 @@ const ComplaintDetailsPage = (props) => {
 
   return (
     <React.Fragment>
-      <Header>{t(`${LOCALIZATION_KEY.CS_HEADER}_COMPLAINT_SUMMARY`)}</Header>
+      <div className="complaint-summary">
+        <Header>{t(`${LOCALIZATION_KEY.CS_HEADER}_COMPLAINT_SUMMARY`)}</Header>
 
-      {Object.keys(complaintDetails).length > 0 ? (
-        <React.Fragment>
-          <Card>
-            <CardSubHeader>{t(`SERVICEDEFS.${complaintDetails.audit.serviceCode.toUpperCase()}`)}</CardSubHeader>
-            <StatusTable>
-              {Object.keys(complaintDetails.details).map((flag, index, arr) => (
-                <Row
-                  key={index}
-                  label={t(flag)}
-                  text={
-                    Array.isArray(complaintDetails.details[flag])
-                      ? complaintDetails.details[flag].map((val) => (typeof val === "object" ? t(val?.code) : t(val)))
-                      : t(complaintDetails.details[flag]) || "N/A"
-                  }
-                  last={index === arr.length - 1}
-                />
-              ))}
-            </StatusTable>
-            {imageShownBelowComplaintDetails?.thumbs ? (
-              <DisplayPhotos srcs={imageShownBelowComplaintDetails?.thumbs} onClick={(source, index) => zoomImageWrapper(source, index)} />
-            ) : null}
-            {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
-          </Card>
-          <Card>{complaintDetails?.service && <WorkflowComponent getWorkFlow={onWorkFlowChange} complaintDetails={complaintDetails} id={id} zoomImage={zoomImage} />}</Card>
-          {/* <Card>
-            <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
-            <TextArea value={comment} onChange={(e) => setComment(e.target.value)} name="" />
-            <SubmitBar disabled={disableComment || comment.length < 1} onSubmit={submitComment} label={t("CS_PGR_SEND_COMMENT")} />
-          </Card> */}
-          {toast && (
-            <Toast
-              error={commentError}
-              label={!commentError ? t(`CS_COMPLAINT_COMMENT_SUCCESS`) : t(`CS_COMPLAINT_COMMENT_ERROR`)}
-              onClose={() => setToast(false)}
-            />
-          )}{" "}
-        </React.Fragment>
-      ) : (
-        <Loader />
-      )}
+        {Object.keys(complaintDetails).length > 0 ? (
+          <React.Fragment>
+            <Card>
+              <CardSubHeader>{t(`SERVICEDEFS.${complaintDetails.audit.serviceCode.toUpperCase()}`)}</CardSubHeader>
+              <StatusTable>
+                {Object.keys(complaintDetails.details).map((flag, index, arr) => (
+                  <Row
+                    key={index}
+                    label={t(flag)}
+                    text={
+                      Array.isArray(complaintDetails.details[flag])
+                        ? complaintDetails.details[flag].map((val) => (typeof val === "object" ? t(val?.code) : t(val)))
+                        : t(complaintDetails.details[flag]) || "N/A"
+                    }
+                    last={index === arr.length - 1}
+                  />
+                ))}
+              </StatusTable>
+              {imageShownBelowComplaintDetails?.thumbs ? (
+                <DisplayPhotos srcs={imageShownBelowComplaintDetails?.thumbs} onClick={(source, index) => zoomImageWrapper(source, index)} />
+              ) : null}
+              {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
+            </Card>
+            <Card>
+              {complaintDetails?.service && (
+                <WorkflowComponent getWorkFlow={onWorkFlowChange} complaintDetails={complaintDetails} id={id} zoomImage={zoomImage} />
+              )}
+            </Card>
+            {/* <Card>
+      <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
+      <TextArea value={comment} onChange={(e) => setComment(e.target.value)} name="" />
+      <SubmitBar disabled={disableComment || comment.length < 1} onSubmit={submitComment} label={t("CS_PGR_SEND_COMMENT")} />
+    </Card> */}
+            {toast && (
+              <Toast
+                error={commentError}
+                label={!commentError ? t(`CS_COMPLAINT_COMMENT_SUCCESS`) : t(`CS_COMPLAINT_COMMENT_ERROR`)}
+                onClose={() => setToast(false)}
+              />
+            )}{" "}
+          </React.Fragment>
+        ) : (
+          <Loader />
+        )}
+      </div>
     </React.Fragment>
   );
 };

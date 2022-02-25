@@ -3,7 +3,8 @@
     @apply mx-md mb-md;
   }
   @media (min-width: 780px) {
-    width: calc(80% - 54px);
-    margin-left: 3rem;
+    flex: 1;
+    margin-left: 1rem;
+    margin-top: 1rem;
   }
 }

@@ -524,3 +524,10 @@ input[type="number"] {
     margin-top: 1rem;
   }
 }
+.complaint-summary {
+  @media (min-width: 780px) {
+    flex: 1 0 auto;
+    margin-left: 1rem;
+    margin-top: 1rem;
+  }
+}

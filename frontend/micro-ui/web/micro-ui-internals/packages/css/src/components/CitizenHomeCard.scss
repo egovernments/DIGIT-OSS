@@ -25,11 +25,11 @@
     flex-direction: column;
     justify-content: center;
     padding-top: 2rem;
+    flex: 1;
   }
 
   .CitizenHomeCard {
     min-width: 40%;
-    margin-left: 5rem;
     @apply inline-block mr-lg p-lg align-top;
     .header {
       @apply pb-lg text-heading-l-dt;

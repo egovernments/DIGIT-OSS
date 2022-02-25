@@ -416,7 +416,7 @@
   .hambuger-back-wrapper {
     display: flex;
     @media (min-width: 780px) {
-      .cp {
+      .hamburger-span {
         display: none;
       }
     }
