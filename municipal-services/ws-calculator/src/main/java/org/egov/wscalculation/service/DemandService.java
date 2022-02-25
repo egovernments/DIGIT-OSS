@@ -1,7 +1,8 @@
 package org.egov.wscalculation.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -198,7 +199,15 @@ public class DemandService {
 					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
 		}
 
-		String billingcycle = (String) masterMap.get(WSCalculationConstant.Billing_Cycle_String);
+		Map<String, Object> financialYearMaster =  (Map<String, Object>) masterMap
+				.get(WSCalculationConstant.BILLING_PERIOD);
+		Long fromDateLong = (Long) financialYearMaster.get(WSCalculationConstant.STARTING_DATE_APPLICABLES);
+		Long toDateLong = (Long) financialYearMaster.get(WSCalculationConstant.ENDING_DATE_APPLICABLES);
+
+		LocalDate fromDate = Instant.ofEpochMilli(fromDateLong).atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate toDate = Instant.ofEpochMilli(toDateLong).atZone(ZoneId.systemDefault()).toLocalDate();
+
+		String billingcycle = String.valueOf(fromDate.getYear()+'-'+ fromDate.getYear());
 		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
 				.requestInfo(requestInfo)
 				.tenantId(calculations.get(0).getTenantId())
