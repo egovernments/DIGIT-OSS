@@ -54,7 +54,8 @@
     "winston": "^3.2.1",
     "pdf-merger-js": "3.2.1",
     "base64-stream": "1.0.0",
-    "node-cache": "5.1.2"
+    "node-cache": "5.1.2",
+    "async": "3.2.3"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",

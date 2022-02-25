@@ -2,10 +2,12 @@ const kafka = require("kafka-node");
 import envVariables from "../EnvironmentVariables";
 import logger from "../config/logger";
 import { createNoSave } from "../index";
+var async = require('async'); 
 
 
 export const listenConsumer = async(topic)=>{
 //let receiveJob = envVariables.KAFKA_RECEIVE_CREATE_JOB_TOPIC;
+
 let receiveJob = topic;
 
 
@@ -32,6 +34,20 @@ var options = {
 
 var consumerGroup = new kafka.ConsumerGroup(options, topicList);
 
+var q = async.queue(function(data, cb) {
+   createNoSave(data,null,() => {},() => {}).then(function(ep) {
+  cb(); //this marks the completion of the processing by the worker
+  });
+}, 1);
+
+
+q.drain(async () => {
+  consumerGroup.resume(); //resume listening new messages from the Kafka consumer group
+});
+
+
+
+
 consumerGroup.on("ready", function() {
   logger.info("Consumer is ready");
 });
@@ -39,10 +55,9 @@ consumerGroup.on("ready", function() {
 consumerGroup.on("message", function(message) {
   logger.info("record received on consumer for create");
   try {
-    (async() => {
       var data = JSON.parse(message.value);
       //console.log(JSON.stringify(data));
-      await createNoSave(
+     /* await createNoSave(
         data,
         null,
         () => {},
@@ -53,8 +68,12 @@ consumerGroup.on("message", function(message) {
         })
         .catch(error => {
           logger.error(error.stack || error);
-        });
-    })();
+        });*/
+    q.push(data, function (err, result) {  
+      if (err) { logger.error(err); return }      
+    });
+    consumerGroup.pause();
+
   } catch (error) {
     logger.error("error in create request by consumer " + error.message);
     logger.error(error.stack || error);
