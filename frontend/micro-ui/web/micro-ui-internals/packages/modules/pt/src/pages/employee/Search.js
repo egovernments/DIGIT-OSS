@@ -126,7 +126,7 @@ const Search = () => {
   });
   const onReset = useCallback(() => {
     setFormData(defaultValues);
-    // setPayload({});
+     setPayload({});
     setShowToast(null);
   });
 

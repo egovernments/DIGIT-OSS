@@ -7,6 +7,7 @@ import {
   LabelFieldPair,
   LinkButton,
   MobileNumber,
+  CardSectionHeader,
   TextInput,
 } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
@@ -214,7 +215,7 @@ const OwnerForm = (_props) => {
                   </div>
                 </LabelFieldPair>
                 <CardLabelError style={errorStyle}>{localFormState.touched.subOwnerShipCategory ? errors?.subOwnerShipCategory?.message : ""}</CardLabelError>
-                <CardHeader>{t("TL_AUTHORIZED_PERSON_DETAILS")}</CardHeader>
+                <CardSectionHeader>{t("TL_AUTHORIZED_PERSON_DETAILS")}</CardSectionHeader>
                 <LabelFieldPair>
                   <CardLabel>{`${t("TL_NEW_OWNER_DETAILS_NAME_LABEL")}`}</CardLabel>
                   <div className="field">
