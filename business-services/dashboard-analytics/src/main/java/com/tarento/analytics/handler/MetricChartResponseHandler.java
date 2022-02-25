@@ -93,23 +93,24 @@ public class MetricChartResponseHandler implements IResponseHandler{
 		Boolean isTodaysCollection = (chartNode.get("TodaysCollection") == null ? Boolean.FALSE : chartNode.get("TodaysCollection").asBoolean());
 		aggrsPaths.forEach(headerPath -> {
 			List<JsonNode> values = aggregationNode.findValues(headerPath.asText());
-			values.stream().parallel().forEach(value -> {
+			int valueIndex = 0;
+			for (JsonNode value : values) {
 				if (isRoundOff) {
 					ObjectMapper mapper = new ObjectMapper();
 					JsonNode node = value.get("value");
-					if(node != null) {
+					if (node != null) {
 						Double roundOff = 0.0d;
 						try {
 							roundOff = mapper.treeToValue(node, Double.class);
 						} catch (JsonProcessingException e) {
 							e.printStackTrace();
 						}
-						if(roundOff!=null) {
+						if (roundOff != null) {
 							int finalvalue = (int) Math.round(roundOff);
 							((ObjectNode) value).put("value", finalvalue);
 						}
 					}
-					
+
 				}
 				List<JsonNode> valueNodes = value.findValues(VALUE).isEmpty() ? value.findValues(DOC_COUNT)
 						: value.findValues(VALUE);
@@ -121,37 +122,50 @@ public class MetricChartResponseHandler implements IResponseHandler{
 				} else {
 					totalValues.add(sum);
 				}
-				
+
 				if (isTodaysCollection == Boolean.TRUE) {
 
 					String latestDateKey = null;
 					String lastUpdatedTimeKey = null;
-					JsonNode latestDate = aggregationNode.findValue("todaysDate");
-					if (latestDate != null) {
-						List<JsonNode> latestDateBuckets = latestDate.findValues(BUCKETS);
-						if (latestDateBuckets != null && latestDateBuckets.size() > 0) {
-							JsonNode latestDateBucket = latestDateBuckets.get(0);
-							latestDateKey = (latestDateBucket.findValue(IResponseHandler.KEY) == null ? null : latestDateBucket.findValue(IResponseHandler.KEY).asText());
+					List<JsonNode> latestDates = aggregationNode.findValues("todaysDate");
+					if (latestDates != null && latestDates.size() > 0) {
+						JsonNode latestDate = latestDates.get(valueIndex);
+						if (latestDate != null) {
+							List<JsonNode> latestDateBuckets = latestDate.findValues(BUCKETS);
+							if (latestDateBuckets != null && latestDateBuckets.size() > 0) {
+								JsonNode latestDateBucket = latestDateBuckets.get(0);
+								latestDateKey = (latestDateBucket.findValue(IResponseHandler.KEY) == null ? null
+										: latestDateBucket.findValue(IResponseHandler.KEY).asText());
+							}
+							if (latestDateKey != null
+									&& ((Double.valueOf(latestDateKey)) > latestDateplot.getValue())) {
+								latestDateplot.setValue(Double.valueOf(latestDateKey));
+							}
+
 						}
-						if(latestDateKey != null && ( (Double.valueOf(latestDateKey)) > latestDateplot.getValue())){
-							latestDateplot.setValue(Double.valueOf(latestDateKey));
+						List<JsonNode >lastUpdatedTimeNodes = aggregationNode.findValues("lastUpdatedTime");
+						if (lastUpdatedTimeNodes != null && lastUpdatedTimeNodes.size() > 0) {
+							JsonNode lastUpdatedTimeNode = lastUpdatedTimeNodes.get(valueIndex);
+							if (lastUpdatedTimeNode != null) {
+								List<JsonNode> lastUpdatedTimeBuckets = lastUpdatedTimeNode.findValues(BUCKETS);
+								if (lastUpdatedTimeBuckets != null && lastUpdatedTimeBuckets.size() > 0) {
+									JsonNode lastUpdatedTimeBucket = lastUpdatedTimeBuckets.get(0);
+									lastUpdatedTimeKey = (lastUpdatedTimeBucket.findValue(IResponseHandler.KEY) == null
+											? null
+											: lastUpdatedTimeBucket.findValue(IResponseHandler.KEY).asText());
+								}
+
+								if (lastUpdatedTimeKey != null
+										&& ((Double.valueOf(lastUpdatedTimeKey)) > lastUpdatedTime.getValue())) {
+									lastUpdatedTime.setValue(Double.valueOf(lastUpdatedTimeKey));
+								}
+							}
 						}
-						
 					}
-					JsonNode lastUpdatedTimeNode = aggregationNode.findValue("lastUpdatedTime");
-					if (lastUpdatedTimeNode != null) {
-						List<JsonNode> lastUpdatedTimeBuckets = lastUpdatedTimeNode.findValues(BUCKETS);
-						if (lastUpdatedTimeBuckets != null && lastUpdatedTimeBuckets.size() > 0) {
-							JsonNode lastUpdatedTimeBucket = lastUpdatedTimeBuckets.get(0);
-							lastUpdatedTimeKey = (lastUpdatedTimeBucket.findValue(IResponseHandler.KEY) ==null ? null : lastUpdatedTimeBucket.findValue(IResponseHandler.KEY).asText());
-						}
-						
-						if(latestDateKey != null && ( (Double.valueOf(lastUpdatedTimeKey)) > lastUpdatedTime.getValue())){
-							lastUpdatedTime.setValue(Double.valueOf(lastUpdatedTimeKey));
-						}
-					}
+
 				}
-			});
+				valueIndex++;
+			}
 		});
 
         String symbol = chartNode.get(IResponseHandler.VALUE_TYPE).asText();
