@@ -36,6 +36,7 @@ public class DemandNotificationConsumer {
 			notificationObj = mapper.convertValue(request, DemandNotificationObj.class);
 			notificationService.process(notificationObj, topic);
 		} catch (final Exception e) {
+			e.printStackTrace();
 			log.error("Error while listening to value: " + request + " on topic: " + topic + ": " + e);
 		}
 	}
