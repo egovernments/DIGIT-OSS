@@ -74,8 +74,10 @@ public class IndexerService {
 		if (!ObjectUtils.isEmpty(applicableMapping)) {
 			Mapping mapping = applicableMapping;
 			try {
-				for (Index index : mapping.getIndexes()) {
-					indexProccessor(index, mapping.getConfigKey(),kafkaJson, index.getIsBulk() != null && index.getIsBulk());
+				if(mapping != null){
+					for (Index index : mapping.getIndexes()) {
+						indexProccessor(index, mapping.getConfigKey(),kafkaJson, index.getIsBulk() != null && index.getIsBulk());
+					}
 				}
 			} catch (Exception e) {
 				log.error("Exception while indexing, Uncaught at the indexer level: ", e);
