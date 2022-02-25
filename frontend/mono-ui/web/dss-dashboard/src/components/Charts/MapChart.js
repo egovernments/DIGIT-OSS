@@ -86,7 +86,7 @@ class MapChart extends React.Component {
     };
   }
 
-  onMouseEnter(geo, current = { value: "NA" }, event) {
+  onMouseEnter(geo, current = { value: "0" }, event) {
     this.setState({
       tooltipContent: `${geo.properties.name}: ${
         current.value ? Number(current.value).toFixed() + " ULBs" : "NA"
@@ -181,7 +181,7 @@ class MapChart extends React.Component {
       { id: "RJ", state: "Rajasthan", value: 0 },
       { id: "SK", state: "Sikkim", value: 0 },
       { id: "TN", state: "Tamil Nadu", value: 0 },
-      { id: "TG", state: "Telangana", value: 0 },
+      { id: "TS", state: "Telangana", value: 0 },
       { id: "TR", state: "Tripura", value: 0 },
       { id: "UK", state: "Uttarakhand", value: 0 },
       { id: "UP", state: "Uttar Pradesh", value: 0 },
@@ -290,12 +290,12 @@ class MapChart extends React.Component {
     return (
       <div className="full-width-height container">
         <ReactTooltip>{this.state.tooltipContent}</ReactTooltip>
-        <div style={{ height: "90%" }} className={"india-map-comp"}>
+        <div style={{ height: "407px" }} className={"india-map-comp"}>
           <ComposableMap
             projectionConfig={PROJECTION_CONFIG}
             projection="geoMercator"
-            width={"220"}
-            height={"200"}
+            width={"240"}
+            height={"220"}
             data-tip=""
           >
             <Geographies geography={INDIA_TOPO_JSON}>
