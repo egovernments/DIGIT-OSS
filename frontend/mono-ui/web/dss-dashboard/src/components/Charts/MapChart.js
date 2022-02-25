@@ -264,6 +264,7 @@ class MapChart extends React.Component {
           <div style={{ float: "left" }}>
             <Backsvg onClick={() => this.back()} />
           </div>
+          {data2&&data2.length==0&&<div style={{ paddingTop: "60px"}}>{getLocaleLabels("DSS_NO_DATA")}</div>}
           {data2 && data2[0] && (
             <span className={"tab-rows tab-header"}>
               <span>{getLocaleLabels(`DSS_${data2[0].plots[1].name}`)}</span>
