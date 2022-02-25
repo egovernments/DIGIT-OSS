@@ -222,13 +222,19 @@ public class SurveyService {
         if(CollectionUtils.isEmpty(surveyEntities))
             throw new CustomException("EG_SY_DOES_NOT_EXIST_ERR", "The provided survey does not exist");
 
+        List<Answer> answers = new ArrayList<>();
+        List<String> listOfCitizensWhoResponded = new ArrayList<>();
 
-        // Fetch citizens who responded
-        List<String> listOfCitizensWhoResponded = surveyRepository.fetchCitizensUuid(criteria);
+        // If citizen is accessing API, enrich his uuid in answers being fetched, in case of employee, fetch all citizens who responded
+        if(requestInfo.getUserInfo().getType().equals(CITIZEN))
+            listOfCitizensWhoResponded = Collections.singletonList(requestInfo.getUserInfo().getUuid());
+        else
+            listOfCitizensWhoResponded = surveyRepository.fetchCitizensUuid(criteria);
+
         log.info(listOfCitizensWhoResponded.toString());
 
         // Fetch answers given by the fetched citizens for the requested survey
-        List<Answer> answers = surveyRepository.fetchSurveyResults(SurveyResultsSearchCriteria.builder().citizenUuids(listOfCitizensWhoResponded).surveyId(criteria.getSurveyId()).build());
+        answers = surveyRepository.fetchSurveyResults(SurveyResultsSearchCriteria.builder().citizenUuids(listOfCitizensWhoResponded).surveyId(criteria.getSurveyId()).build());
 
         AnswerResponse response = AnswerResponse.builder()
                                                 .answers(answers)
