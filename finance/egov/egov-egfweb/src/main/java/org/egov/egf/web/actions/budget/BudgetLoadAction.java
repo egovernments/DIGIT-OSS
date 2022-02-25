@@ -357,9 +357,8 @@ public class BudgetLoadAction extends BaseFormAction {
     }
 
     private void prepareOutPutFileWithFinalStatus(List<BudgetUpload> budgetUploadList) {
-        FileInputStream fsIP;
-        try {
-            fsIP = new FileInputStream(budgetInXls);
+
+        try(FileInputStream fsIP = new FileInputStream(budgetInXls);) {
 
             Map<String, String> errorsMap = new HashMap<String, String>();
             final POIFSFileSystem fs = new POIFSFileSystem(fsIP);

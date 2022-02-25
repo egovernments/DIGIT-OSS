@@ -155,12 +155,12 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
             httpPost.setEntity(urlEncodedFormEntity);
             CloseableHttpResponse response = httpclient.execute(httpPost);
             HttpEntity responseAtom = response.getEntity();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(responseAtom.getContent()));
             final StringBuilder data = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null)
-                data.append(line);
-            reader.close();
+            try(BufferedReader reader = new BufferedReader(new InputStreamReader(responseAtom.getContent()));){
+                String line;
+                while ((line = reader.readLine()) != null)
+                    data.append(line);
+            }
 
             SAXParserFactory spf = SAXParserFactory.newInstance();
             spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
