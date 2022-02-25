@@ -112,8 +112,8 @@ const CustomHorizontalBarChart = ({
   return (
     <Fragment>
       <ResponsiveContainer
-        width="89%"
-        height={300}
+        width="94%"
+        height={450}
         margin={{
           top: 5,
           right: 10,

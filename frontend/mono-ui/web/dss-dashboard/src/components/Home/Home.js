@@ -465,7 +465,7 @@ class Home extends React.Component {
                         </div>
                         } */}
 
-            {!isMobile && (
+            {!isMobile  && !isNurtDashboard()&&(
               <div
                 id="divNotToPrint"
                 className={classes.acbtn}
@@ -487,7 +487,7 @@ class Home extends React.Component {
             {this.getTitleText(strings)}
           </Typography>
         </Grid>
-        {isMobile && (
+        {isMobile&& !isNurtDashboard() && (
           <div
             id="divNotToPrint"
             className={classes.acbtn}

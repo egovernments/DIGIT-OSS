@@ -6,7 +6,7 @@ import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, ResponsiveCont
 import FilterContext from "./FilterContext";
 import NoData from "./NoData";
 const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE" , "#6E8459", "#D4351C","#0CF7E4","#F80BF4","#22F80B"];
-
+const increasedHeightCharts=["nssOBPSTotalPermitsVsTotalOCSubmittedVsTotalOCIssued","nssNOCApplicationVsProvisionalVsActual","nocApplicationVsProvisionalVsActual","permitsandOCissued"]
 const getColors = (index = 0) => {
   index = COLORS.length > index ? index : 0;
   return COLORS[index];
@@ -223,7 +223,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
           {t("DSS_FSM_TOTAL_SLUDGE_TREATED")} - {totalWaste} {t("DSS_KL")}
         </p>
       )}
-      <ResponsiveContainer width="93%" height={id === "fsmTotalCumulativeCollection" ? 400 : 300}>
+      <ResponsiveContainer width="94%" height={increasedHeightCharts.includes(id) ? 500 : 400}>
         {!chartData || chartData?.length === 0 ? (
           <NoData t={t} />
         ) : manageChart == "Area" ? (
@@ -262,8 +262,8 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
             height={300}
             data={chartData}
             margin={{
-              top: 5,
-              right: 30,
+              top: 15,
+              right: 5,
               left: 20,
               bottom: 5,
             }}

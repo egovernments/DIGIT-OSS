@@ -61,7 +61,7 @@ const DateRange = ({ values, onFilterChange, t }) => {
         label: t("DSS_TODAY"),
         range: () => ({
           startDate: startOfToday(new Date()),
-          endDate: subSeconds(endOfToday(new Date()), 1),
+          endDate: endOfToday(new Date()),
         }),
       },
       {
@@ -75,21 +75,23 @@ const DateRange = ({ values, onFilterChange, t }) => {
         label: t("DSS_THIS_WEEK"),
         range: () => ({
           startDate: startOfWeek(new Date()),
-          endDate: subSeconds(endOfWeek(new Date()), 1),
+          endDate: endOfToday(new Date()),
         }),
       },
       {
         label: t("DSS_THIS_MONTH"),
         range: () => ({
           startDate: startOfMonth(new Date()),
-          endDate: subSeconds(endOfMonth(new Date()), 1),
+          endDate: endOfToday(new Date()),
+          // endDate: subSeconds(endOfMonth(new Date()), 1),
         }),
       },
       {
         label: t("DSS_THIS_QUARTER"),
         range: () => ({
           startDate: startOfQuarter(new Date()),
-          endDate: subSeconds(endOfQuarter(new Date()), 1),
+          endDate: subSeconds(endOfToday(new Date()), 1)
+          // endDate: subSeconds(endOfQuarter(new Date()), 1),
         }),
       },
       {
@@ -111,6 +113,12 @@ const DateRange = ({ values, onFilterChange, t }) => {
       {
         label: t("DSS_THIS_YEAR"),
         range: () => {
+          return {
+             startDate: Digit.Utils.dss.getDefaultFinacialYear().startDate,
+              endDate: Digit.Utils.dss.getDefaultFinacialYear().endDate
+          }
+          /*
+          Removed Current financial thing
           const currDate = new Date().getMonth();
           if (currDate < 3) {
             return {
@@ -123,6 +131,7 @@ const DateRange = ({ values, onFilterChange, t }) => {
               endDate: subSeconds(addMonths(endOfYear(new Date()), 3), 1),
             };
           }
+          */
         },
       },
     ]);

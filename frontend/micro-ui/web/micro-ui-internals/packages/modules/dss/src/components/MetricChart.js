@@ -71,7 +71,7 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
 
   if (!response) {
     return (
-      <div style={{ position: "relative", display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
+      <div style={{ position: "relative", display: "flex", height:"68px",justifyContent: "space-between" }}>
         <span>{t(data.name)}</span>
         <span style={{ whiteSpace: "pre" }}>{t("DSS_NO_DATA")}</span>
       </div>

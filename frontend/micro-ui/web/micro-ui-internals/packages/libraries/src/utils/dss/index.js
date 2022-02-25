@@ -1,4 +1,4 @@
-import { addMonths, endOfYear, format, startOfYear, subYears } from "date-fns";
+import { addMonths, endOfYear, format, startOfYear, subYears,subSeconds,endOfToday } from "date-fns";
 
 const amountFormatter = (value, denomination) => {
   const currencyFormatter = new Intl.NumberFormat("en-IN", { currency: "INR" });
@@ -62,12 +62,16 @@ export const getDefaultFinacialYear = () => {
   if (currDate < 3) {
     return {
       startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
-      endDate: subYears(addMonths(endOfYear(new Date()), 3), 1),
+      endDate: endOfToday(new Date()),
+        //    endDate: subYears(addMonths(endOfYear(new Date()), 3), 1), RAIN-5752 : to keep date till current date and not a financial year
+
     };
   } else {
     return {
       startDate: addMonths(startOfYear(new Date()), 3),
-      endDate: addMonths(endOfYear(new Date()), 3),
+      endDate: endOfToday(new Date()),
+//            endDate: addMonths(endOfYear(new Date()), 3),
+
     };
   }
 };
