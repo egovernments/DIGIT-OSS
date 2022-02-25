@@ -141,7 +141,7 @@ const ApplicationDetails = () => {
                 />
                 <Row
                   label={`${t("TL_TELEPHONE_NUMBER_LABEL")}`}
-                  text={t(application?.tradeLicenseDetail?.institution?.contactNo)}
+                  text={t(application?.tradeLicenseDetail?.institution?.contactNo || t("CS_NA"))}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row
@@ -151,7 +151,7 @@ const ApplicationDetails = () => {
                 />
                 <Row
                   label={`${t("TL_LOCALIZATION_EMAIL_ID")}`}
-                  text={t(ele.emailId)}
+                  text={t(ele.emailId || t("CS_NA"))}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                </div>

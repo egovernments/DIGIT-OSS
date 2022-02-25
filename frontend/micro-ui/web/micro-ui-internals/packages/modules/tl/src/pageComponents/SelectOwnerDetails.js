@@ -177,10 +177,10 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 t={t}
                 type={"text"}
                 isMandatory={true}
-                name="name"
-                value={field.name}
+                name="institutionName"
+                value={field.institutionName}
                 ValidationRequired={true}
-                onChange={(e) => handleTextInputField(index, e, "name")}
+                onChange={(e) => handleTextInputField(index, e, "institutionName")}
                 //disable={isUpdateProperty || isEditProperty}
                 {...{validation : {
                   isRequired: true,
@@ -206,9 +206,9 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 t={t}
                 type={"text"}
                 isMandatory={false}
-                name="institutionName"
-                value={field.institutionName}
-                onChange={(e) => handleTextInputField(index, e, "institutionName")}
+                name="name"
+                value={field.name}
+                onChange={(e) => handleTextInputField(index, e, "name")}
                 ValidationRequired={true}
                 {...{validation : {
                   // isRequired: true,

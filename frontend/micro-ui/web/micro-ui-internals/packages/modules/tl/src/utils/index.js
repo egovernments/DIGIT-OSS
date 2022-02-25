@@ -120,6 +120,7 @@ export const getownerarray = (data) => {
     dob: null,
     gender: ob?.gender?.code,
     permanentAddress: data?.owners?.permanentAddress,
+    emailId: ob?.emailId,
   }));
   return res;
 };
@@ -313,6 +314,13 @@ export const convertToTrade = (data = {}) => {
           structureType: data?.TradeDetails?.StructureType?.code !=="IMMOVABLE" ? data?.TradeDetails?.VehicleType?.code : data?.TradeDetails?.BuildingType?.code,
           subOwnerShipCategory: data?.owners.owners?.[0]?.subOwnerShipCategory?.code ? data?.owners.owners?.[0]?.subOwnerShipCategory?.code : data?.ownershipCategory?.code,
           tradeUnits: gettradeunits(data),
+          institution: {
+            designation: data?.owners?.owners?.[0]?.designation,
+            ContactNo: data?.owners?.owners?.[0]?.altContactNumber,
+            mobileNumber: data?.owners?.owners?.[0]?.mobilenumber,
+            instituionName: data?.owners?.owners?.[0]?.institutionName,
+            name: data?.owners?.owners?.[0]?.name,
+           },
           additionalDetail: {
             propertyId: !data?.cpt ? "" :data?.cpt?.details?.propertyId,
           }
