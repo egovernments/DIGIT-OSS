@@ -212,7 +212,7 @@ public class FarExtract_Client extends FeatureExtract {
                             newFloor.setNumber(no);
                             b.getBuilding().getFloors().add(newFloor);
                         } catch (Exception e) {
-
+                            LOG.error(e.getMessage());
                         }
                 }
         }
