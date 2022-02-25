@@ -65,7 +65,6 @@ const UserProfile = ({ stateCode, userType }) => {
     });
 
     const thumbs = userDetails?.photo?.split(","); 
-    console.log(thumbs);
     setProfileImg(thumbs?.at(thumbs?.length - 1));
   }, [userDetails !== null]);
 
