@@ -1,21 +1,10 @@
-import React, { useState, useEffect } from "react";
 import {
-  FormStep,
-  TextInput,
-  CardLabel,
-  RadioButtons,
-  LabelFieldPair,
-  Dropdown,
-  Menu,
-  MobileNumber,
-  Loader,
-  CameraIcon,
-  Toast
+  CameraIcon, CardLabel, Dropdown, LabelFieldPair, MobileNumber, TextInput, Toast
 } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import UploadDrawer from "./ImageUpload/UploadDrawer";
-import { useQuery } from "react-query";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -45,17 +34,7 @@ const UserProfile = ({ stateCode, userType }) => {
   const { t } = useTranslation();
   const stateId = Digit.ULBService.getStateId();
   const tenant = Digit.ULBService.getCurrentTenantId();
-
   const userInfo = Digit.UserService.getUser()?.info || {};
-
-  useEffect(() => {
-    getUserInfo();
-  }, [])
-
-  const getUserInfo = async () => {
-    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [userInfo?.uuid] }, {});
-    usersResponse && usersResponse.user && usersResponse.user.length ? setUserDetails(usersResponse.user[0]) : null;
-  }
 
   const [userDetails, setUserDetails] = useState(null);
   const [name, setName] = useState(userInfo?.name);
@@ -70,6 +49,26 @@ const UserProfile = ({ stateCode, userType }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [toast, setToast] = useState(null);
+  
+  const getUserInfo = async () => {
+    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [userInfo?.uuid] }, {});
+    usersResponse && usersResponse.user && usersResponse.user.length ? setUserDetails(usersResponse.user[0]) : null;
+  }
+
+  useEffect(() => {
+    getUserInfo();
+
+    setGender({
+      i18nKey: undefined,
+      code: userDetails?.gender, 
+      value: userDetails?.gender
+    });
+
+    const thumbs = userDetails?.photo?.split(","); 
+    console.log(thumbs);
+    setProfileImg(thumbs?.at(thumbs?.length - 1));
+  }, [userDetails !== null]);
+
 
   let validation = {};
   const editScreen = false; // To-do: Deubug and make me dynamic or remove if not needed
@@ -145,7 +144,6 @@ const UserProfile = ({ stateCode, userType }) => {
     setProfilePic(fileStoreId);
 
     const thumbnails = fileStoreId ? await getThumbnails([fileStoreId], stateId) : null;
-    console.log("thumbnails-", thumbnails);
 
     setProfileImg(thumbnails?.thumbs[0]);
 
@@ -279,7 +277,6 @@ const UserProfile = ({ stateCode, userType }) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-
               margin: "2%",
             }}
           >
