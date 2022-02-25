@@ -214,7 +214,7 @@ public class SurveyService {
     public AnswerResponse fetchSurveyResults(RequestInfo requestInfo, SurveyResultsSearchCriteria criteria) {
 
         // Validate whether employee is trying to fetch survey results
-        surveyValidator.validateUserType(requestInfo);
+        //surveyValidator.validateUserType(requestInfo);
 
         // Validate survey exists
         List<SurveyEntity> surveyEntities = surveyRepository.fetchSurveys(SurveySearchCriteria.builder().isCountCall(Boolean.FALSE).uuid(criteria.getSurveyId()).build());
