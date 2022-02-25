@@ -47,6 +47,20 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
                 Header: t("EVENTS_POSTEDBY_LABEL"),
                 accessor: (row) =>  row.postedBy,
             },
+            {
+                Header: t("CS_SURVEY_RESULTS"),
+                //accessor: "uuid",
+                accessor: "results",
+                Cell: ({ row }) => {
+                    return (
+                        <div>
+                            <Link to={`${parentRoute}/surveys/inbox/results/${row.original["uuid"]}`}>
+                                <span className="link">Place the logo here</span>
+                            </Link>
+                        </div>
+                    );
+                },
+            }
         ]
     })
 
