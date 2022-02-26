@@ -46,3 +46,15 @@ body {
     }
   }
   
+.app-iframe-wrapper{
+  left: 64px;
+   border-width: 0;
+    position: fixed;
+    top: 80px;
+}
+  .app-iframe{
+    width: 97%;
+    height: calc(100vh - 90px);
+    border-width: 0;
+    position: fixed;
+  }

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 // import { useRouteMatch } from "react-router";
 import { BackButton, Loader, PrivateRoute, BreadCrumb } from "@egovernments/digit-ui-react-components";
 import DashBoard from "./pages";
+import Home from "./pages/Home";
 import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom";
 import Overview from "./pages/Overview";
 import DSSCard from "./components/DSSCard";
@@ -40,6 +41,7 @@ const Routes = ({ path, stateCode }) => {
     <div className="chart-wrapper">
       <DssBreadCrumb location={location} />
       <Switch>
+         <PrivateRoute path={`${path}/home/:moduleCode`} component={() => <Home stateCode={stateCode} />} />
         <PrivateRoute path={`${path}/dashboard/:moduleCode`} component={() => <DashBoard stateCode={stateCode} />} />
         <PrivateRoute path={`${path}/drilldown`} component={() => <DrillDown  stateCode={stateCode}  />} />
       </Switch>

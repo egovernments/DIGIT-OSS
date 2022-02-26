@@ -12,6 +12,7 @@ const nationalScreenURLs = {
   obps: { key: "nss-obps",stateKey:"obps", label: "CS_COMMON_OBPS",active:true,nActive:true },
   noc: { key: "national-firenoc",stateKey:"noc", label: "ACTION_TEST_FIRE_NOC",active:true,nActive:true },
   overview: { key: "national-overview",stateKey:"overview", label: "ACTION_TEST_OVERVIEW" ,active:false,nActive:false},
+  home: { key: "NURT_DASHBOARD",stateKey:"home", label: "ACTION_TEST_HOME" ,active:true,nActive:true},
 };
 
 export const checkCurrentScreen = () => {
@@ -37,7 +38,7 @@ const DSSCard = () => {
   const propsForModuleCard = {
     Icon: <EventsIconSolid />,
     moduleName: NATADMIN ? t("ACTION_TEST_NATDASHBOARD") : t("ES_TITLE_DSS"),
-    headerLink:"/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD",
+    headerLink:`/digit-ui/employee/payment/integration/dss/${STADMIN?"home":"NURT_DASHBOARD"}`,
     links: [...links],
   };
   return <EmployeeModuleCard {...propsForModuleCard} />;
