@@ -15,7 +15,7 @@ import { bindActionCreators } from "redux";
 import APITransport from "../../actions/apitransport/apitransport";
 import ChartsAPI from "../../actions/charts/chartsAPI";
 import getChartOptions from "../../actions/getChartOptions";
-import { getLocaleLabels } from "../../utils/commons";
+import { getLocaleLabels, getTenantId } from "../../utils/commons";
 import style from "./styles";
 
 const COLORS = ["#298CFF", "#54D140"];
@@ -35,7 +35,7 @@ class HorBarChart extends React.Component {
     if (this.props.page.includes("ulb")) {
       if (!filters["tenantId"]) {
         let tenentFilter = [];
-        tenentFilter.push(`${localStorage.getItem("tenant-id")}`);
+        tenentFilter.push(`${getTenantId()}`);
         filters["tenantId"] = tenentFilter;
       }
     }

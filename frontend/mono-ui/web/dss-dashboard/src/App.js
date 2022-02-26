@@ -8,7 +8,7 @@ import { changeTheName } from '../src/actions/firstAction';
 import { updateLanguage } from './actions/languageChange';
 import './App.css';
 import variables from './styles/variables';
-import { fetchLocalisationRequest } from './utils/commons';
+import { fetchLocalisationRequest, getTenantId } from './utils/commons';
 import Layout from './utils/Layout';
 import { loadUlbLogo } from './utils/block';
 
@@ -130,7 +130,7 @@ class App extends React.Component {
   }
  
   loadLocalisation = () => {
-    let language = localStorage.getItem("Employee.locale");
+    let language = localStorage.getItem("Employee.locale")||'en_IN';
     let localisationLabels = JSON.parse(localStorage.getItem(`localization_${language}`)) || [];
     if (localisationLabels.length == 0 || localisationLabels.filter(localisation => localisation.module == "rainmaker-dss").length == 0) {
       let localisationRequest = fetchLocalisationRequest(language);
@@ -164,7 +164,7 @@ class App extends React.Component {
   componentDidMount() {
     document.title = "DSS Dashboard";
     this.loadLocalisation();
-    loadUlbLogo(localStorage.getItem('tenant-id'));
+    loadUlbLogo(getTenantId());
   }
 
   changeTheName = (e) => {
