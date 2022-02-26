@@ -117,6 +117,22 @@ const ReNewApplication = (props) => {
   let clonedData = cloneDeep(props?.location?.state?.applicationData);
   clonedData.checkForRenewal = false;
 
+  const getOwners = (application) => {
+    if(application?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL"))
+    {
+      let owner = [];
+      owner.push({...application?.tradeLicenseDetail?.owners[0],
+        instituionName:application?.tradeLicenseDetail?.institution?.instituionName,
+        name:application?.tradeLicenseDetail?.institution?.name,
+        altContactNumber:application?.tradeLicenseDetail?.institution?.contactNo,
+        designation:application?.tradeLicenseDetail?.institution?.designation,
+        subOwnerShipCategory:ownershipCategory,
+      })
+      return owner;
+    }
+    return applicationData?.tradeLicenseDetail?.owners;
+  }
+
   const defaultValues = {
     tradedetils1: clonedData,
     tradedetils: tradeDetails,
@@ -124,7 +140,7 @@ const ReNewApplication = (props) => {
     accessories: applicationData?.tradeLicenseDetail?.accessories,
     address: applicationData?.tradeLicenseDetail?.address || {},
     ownershipCategory: ownershipCategory,
-    owners: applicationData?.tradeLicenseDetail?.owners || [],
+    owners:  getOwners(applicationData)|| [],
     documents: { documents: applicationData?.tradeLicenseDetail?.applicationDocuments || [] },
     // applicationData: cloneDeep(props?.location?.state?.applicationData)
   };
@@ -140,7 +156,10 @@ const ReNewApplication = (props) => {
   }, []);
 
   const onFormValueChange = (setValue, formData, formState) => {
-    setSubmitValve(!Object.keys(formState.errors).length);
+    if(Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1  && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length ==0)
+    setSubmitValve(true);
+    else
+    setSubmitValve(!(Object.keys(formState.errors).length));
   };
 
   const onSubmit = (data) => {

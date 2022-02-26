@@ -194,6 +194,7 @@ const OwnerForm = (_props) => {
                     <Controller
                       control={control}
                       name={"subOwnerShipCategory"}
+                      defaultValue={window.location.href.includes("tl/edit-application-details") || window.location.href.includes("tl/renew-application-details/") ? formData?.ownershipCategory:""}
                       render={(props)=>(
                         <Dropdown
                           t={t}
@@ -630,6 +631,13 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
   const removeOwner = (owner) => {
     setOwners((prev) => prev.filter((o) => o.key != owner.key));
   };
+
+  useEffect(() => {
+    if(formData?.ownershipCategory?.code.includes("INSTITUTIONAL") && owners.length == 1 && formData?.tradedetils1 && !owners?.[0]?.subOwnerShipCategory)
+    {
+      setOwners([{...owners[0],subOwnerShipCategory:formData?.ownershipCategory}])
+    }
+  },[owners])
 
   useEffect(() => {
     if (formData?.ownershipCategory?.code == "INDIVIDUAL.MULTIPLEOWNERS" && owners.length > 1) clearErrors("mulipleOwnerError");
