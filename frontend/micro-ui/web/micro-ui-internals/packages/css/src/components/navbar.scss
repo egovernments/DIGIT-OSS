@@ -118,6 +118,7 @@
           margin-left: 13px;
           line-height: 48px;
           white-space: nowrap;
+          color: #5f5c62;
         }
       }
     }
@@ -129,6 +130,11 @@
         svg {
           width: 21px;
           height: 21px;
+          color: rgb(117, 117, 117);
+          fill: rgb(117, 117, 117);
+        }
+        span {
+          color: #5f5c62;
         }
       }
     }
