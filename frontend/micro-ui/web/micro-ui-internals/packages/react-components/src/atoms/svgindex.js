@@ -860,6 +860,24 @@ const EditPencilIcon = ({ styles, className }) => (
   </svg>
 );
 
+const AddressBookIcon = ({ styles, className }) => (
+  <svg className={className} style={{ ...styles }} viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M18 0H2V2H18V0ZM2 24H18V22H2V24ZM18 4H2C0.9 4 0 4.9 0 6V18C0 19.1 0.9 20 2 20H18C19.1 20 20 19.1 20 18V6C20 4.9 19.1 4 18 4ZM10 6.75C11.24 6.75 12.25 7.76 12.25 9C12.25 10.24 11.24 11.25 10 11.25C8.76 11.25 7.75 10.24 7.75 9C7.75 7.76 8.76 6.75 10 6.75ZM15 17H5V15.5C5 13.83 8.33 13 10 13C11.67 13 15 13.83 15 15.5V17Z"
+      fill="#B1B4B6"
+    />
+  </svg>
+);
+
+const LocationIcon = ({ styles, className }) => (
+  <svg className={className} style={{ ...styles }} viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M7 0C3.13 0 0 3.13 0 7C0 8.74 0.5 10.37 1.41 11.84C2.36 13.38 3.61 14.7 4.57 16.24C5.04 16.99 5.38 17.69 5.74 18.5C6 19.05 6.21 20 7 20C7.79 20 8 19.05 8.25 18.5C8.62 17.69 8.95 16.99 9.42 16.24C10.38 14.71 11.63 13.39 12.58 11.84C13.5 10.37 14 8.74 14 7C14 3.13 10.87 0 7 0ZM7 9.75C5.62 9.75 4.5 8.63 4.5 7.25C4.5 5.87 5.62 4.75 7 4.75C8.38 4.75 9.5 5.87 9.5 7.25C9.5 8.63 8.38 9.75 7 9.75Z"
+      fill="#B1B4B6"
+    />
+  </svg>
+);
+
 export {
   AnnouncementIcon,
   ReceiptIcon,
@@ -954,4 +972,6 @@ export {
   RemoveIcon,
   GalleryIcon,
   EditPencilIcon,
+  AddressBookIcon,
+  LocationIcon,
 };

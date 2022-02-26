@@ -9,7 +9,7 @@ const SubMenu = ({ item }) => {
   const showSubnav = () => setSubnav(!subnav);
   return (
     <React.Fragment>
-      <div>
+      <div className="submenu-container">
         <div onClick={item.links && showSubnav} className={`sidebar-link ${subnav === true ? "active" : ""}`}>
           <div className="actions">
             {item.Icon}

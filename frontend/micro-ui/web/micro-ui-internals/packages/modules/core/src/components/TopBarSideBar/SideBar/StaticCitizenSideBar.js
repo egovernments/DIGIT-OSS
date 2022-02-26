@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { HomeIcon, EditPencilIcon, LogoutIcon } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
-import SideBarMenu from "../../../config/citizen-destop-menu";
+import SideBarMenu from "../../../config/sidebar-menu";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { Phone } from "@egovernments/digit-ui-react-components";
+import SubMenu from "./SubMenu";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -69,7 +70,10 @@ const StaticCitizenSideBar = ({ logout }) => {
   const handleLogout = () => {
     Digit.UserService.logout();
   };
+
   let menuItems = [...SideBarMenu(t, showProfilePage, redirectToLoginPage, isEmployee)];
+  menuItems = menuItems.filter((item) => item.element !== "LANGUAGE");
+
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const MenuItem = ({ item }) => {
     let itemComponent;
@@ -97,6 +101,9 @@ const StaticCitizenSideBar = ({ logout }) => {
           <Item />
         </Link>
       );
+    }
+    if (item.type === "submenu") {
+      return <SubMenu item={item} />;
     }
     return <Item />;
   };

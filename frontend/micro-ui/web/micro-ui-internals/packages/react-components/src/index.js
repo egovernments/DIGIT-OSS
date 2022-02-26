@@ -142,6 +142,8 @@ import {
   GalleryIcon,
   RemoveIcon,
   CheckSvg,
+  AddressBookIcon,
+  LocationIcon,
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -383,4 +385,6 @@ export {
   ArrowForward,
   ArrowVectorDown,
   ArrowDirection,
+  AddressBookIcon,
+  LocationIcon,
 };

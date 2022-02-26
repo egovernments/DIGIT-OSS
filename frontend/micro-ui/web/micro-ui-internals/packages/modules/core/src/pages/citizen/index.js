@@ -72,7 +72,7 @@ const Home = ({
         logoUrl={logoUrl}
       />
 
-      <div className={`main center-container mb-25`}>
+      <div className={`main center-container citizen-home-container mb-25`}>
         <div className="SideBarStatic">
           <StaticCitizenSideBar />
         </div>
