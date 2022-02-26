@@ -37,6 +37,7 @@ const DSSCard = () => {
   const propsForModuleCard = {
     Icon: <EventsIconSolid />,
     moduleName: NATADMIN ? t("ACTION_TEST_NATDASHBOARD") : t("ES_TITLE_DSS"),
+    headerLink:"/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD",
     links: [...links],
   };
   return <EmployeeModuleCard {...propsForModuleCard} />;
