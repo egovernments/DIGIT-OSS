@@ -78,7 +78,6 @@ public class FSMValidator {
 				if(fsmRequest.getFsm().getCitizen()!=null)
 					citizen.setGender(fsmRequest.getFsm().getCitizen().getGender());
 					fsm.setCitizen(citizen);
-
 			}
 			
 			if(!StringUtils.isEmpty(fsm.getSource())) {
@@ -287,6 +286,10 @@ public class FSMValidator {
 			throw new CustomException(FSMErrorConstants.INVALID_ACTION," Workflow Action is mandatory!");
 		}
 		
+		if(fsmRequest.getFsm() !=null && !StringUtils.hasLength(fsmRequest.getFsm().getPaymentPreference())) {
+			throw new CustomException(FSMErrorConstants.INVALID_ACTION," Payment preference is mandatory!");
+		}
+		
 		validateUpdatableParams(fsmRequest, searchResult, mdmsData);
 		validateAllIds(searchResult, fsm);
 		
@@ -306,6 +309,9 @@ public class FSMValidator {
 		validateSlum(fsmRequest, mdmsData);
 		validateNoOfTrips(fsmRequest, mdmsData);
 		validateTripAmount(fsmRequest, mdmsData);
+		
+		mdmsValidator.validatePaymentPreference(fsm.getPaymentPreference());
+		
 
 	}
 	
@@ -334,15 +340,21 @@ public class FSMValidator {
 		
 
 		if (!CollectionUtils.isEmpty(listOfAllowedUpdatableParams)) {
-			log.info("SAN-790:listOfAllowedUpdatableParams: " + listOfAllowedUpdatableParams);
 			List<String> listOfUpdatedParams = getDelta(oldFsm, newFsm);
-			log.info("SAN-790:listOfUpdatedParams: " + listOfUpdatedParams);
 			if (listOfAllowedUpdatableParams.contains(FSMConstants.PIT_DETAIL)) {
 				FSMConstants.pitDetailList.forEach(property -> {
 					listOfUpdatedParams.remove(property);
 				});
 			}
-			log.info("SAN-790:listOfUpdatedParams after removing pit detail: " + listOfUpdatedParams);
+			
+			
+			if (listOfUpdatedParams.contains(FSMConstants.APPLICATION_STATUS)) {
+				listOfAllowedUpdatableParams.add(FSMConstants.APPLICATION_STATUS);
+			}
+			if (listOfUpdatedParams.contains(FSMConstants.NO_OF_TRIPS)) {
+				listOfAllowedUpdatableParams.add(FSMConstants.NO_OF_TRIPS);
+			}
+			
 			for(String updatedParam : listOfUpdatedParams) {
 				if (!contains(listOfAllowedUpdatableParams, updatedParam)) {
 					throw new CustomException(FSMErrorConstants.UPDATE_ERROR,

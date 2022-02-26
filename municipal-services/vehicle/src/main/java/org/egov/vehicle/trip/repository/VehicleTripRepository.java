@@ -50,21 +50,23 @@ public class VehicleTripRepository {
 		producer.push(config.getSaveVehicleLogTopic(), request);
 	}
 	
-	public void update(VehicleTripRequest request, boolean isStateUpdatable) {
-		RequestInfo requestInfo = request.getRequestInfo();
+	public void update(RequestInfo requestInfo, VehicleTrip trip, boolean isStateUpdatable) {
+		//RequestInfo requestInfo = request.getRequestInfo();
 
-		VehicleTrip tripForStatusUpdate = null;
-		VehicleTrip tripForUpdate = null;
+		List<VehicleTrip> tripForStatusUpdate = new ArrayList<VehicleTrip>();
+		List<VehicleTrip> tripForUpdate = new ArrayList<VehicleTrip>();
 
-		VehicleTrip trip = request.getVehicleTrip();
+		//VehicleTrip trip = request.getVehicleTrip();
 
 		if (isStateUpdatable) {
-			tripForUpdate = trip;
+			tripForUpdate.add(trip);
 		} else {
-			tripForStatusUpdate = trip;
+			tripForStatusUpdate.add(trip);
 		}
-		if (tripForUpdate != null)
-			producer.push(config.getUpdateVehicleLogTopic(), new VehicleTripRequest(requestInfo, tripForUpdate, null));
+		if (tripForUpdate != null) {
+			producer.push(config.getUpdateVehicleLogTopic(), new VehicleTripRequest(requestInfo, tripForUpdate,null));
+		}
+			
 
 		if (tripForStatusUpdate != null)
 			producer.push(config.getUpdateWorkflowVehicleLogTopic(), new VehicleTripRequest(requestInfo, tripForStatusUpdate,null));

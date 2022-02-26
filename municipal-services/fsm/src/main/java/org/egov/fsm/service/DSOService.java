@@ -54,11 +54,14 @@ public class DSOService {
 				.append(vendorSearchCriteria.getTenantId());
 
 		if(!CollectionUtils.isEmpty(vendorSearchCriteria.getIds())) {
-			uri.append("&ids=").append(vendorSearchCriteria.getIds());
+			
+			uri.append("&ids="+String.join(",",vendorSearchCriteria.getIds())); 
+			//uri.append("&ids=").append(vendorSearchCriteria.getIds());
 		}
 		
 		if(!CollectionUtils.isEmpty(vendorSearchCriteria.getOwnerIds())) {
-			uri.append("&ownerIds=").append(vendorSearchCriteria.getOwnerIds());
+			uri.append("&ownerIds="+String.join(",",vendorSearchCriteria.getOwnerIds()));
+			//uri.append("&ownerIds=").append(vendorSearchCriteria.getOwnerIds());
 		}
 		
 		if(!StringUtils.isEmpty(vendorSearchCriteria.getMobileNumber())) {
@@ -77,7 +80,7 @@ public class DSOService {
 		RequestInfoWrapper requestInfoWrpr = new RequestInfoWrapper();
 		requestInfoWrpr.setRequestInfo(requestInfo);
 		try {
-			
+			 
 			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, requestInfoWrpr);
 			VendorResponse vendorResponse = mapper.convertValue(responseMap, VendorResponse.class);
 			if(!CollectionUtils.isEmpty(vendorResponse.getVendor())) {
@@ -131,7 +134,7 @@ public class DSOService {
 			}else {
 				Vehicle vehicle = vehilceIdMap.get(fsm.getVehicleId());
 				if(!vehicle.getType().equalsIgnoreCase(fsm.getVehicleType())) {
-					throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE," Vehilce Type of FSM and vehilceType of the assigned vehicle does not match !");
+					throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE," Vehicle Type of FSM and Vehicle Type of the assigned vehicle does not match !");
 				}
 			}
 		}
