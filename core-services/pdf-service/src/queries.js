@@ -3,7 +3,7 @@ import logger from "./config/logger";
 import producer from "./kafka/producer";
 import envVariables from "./EnvironmentVariables";
 import PDFMerger from 'pdf-merger-js';
-import { fileStoreAPICall } from "./utils/fileStoreAPICall";
+import { fileStoreAPICall, getFilestoreUrl } from "./utils/fileStoreAPICall";
 import fs, {
   exists
 } from "fs";
@@ -158,7 +158,7 @@ export async function insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRec
   } 
 }
 
-export async function mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles){
+export async function mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles, mobileNumber){
 
   try {
     const updateResult = await pool.query('select * from egov_bulk_pdf_info where jobid = $1', [bulkPdfJobId]);
@@ -192,6 +192,8 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles){
             const curentTimeStamp = new Date().getTime();
             const status = 'DONE';
             pool.query(updateQuery,[filestoreid, userid, curentTimeStamp, bulkPdfJobId, status]);
+            sendNoitification(filestoreid, mobileNumber, tenantId);
+        
           }).catch((err) => {
             logger.error(err.stack || err);
           });
@@ -235,6 +237,29 @@ export async function mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles){
   }
   
 }
+
+export async function sendNoitification(filestoreid, mobileNumber, tenantId){
+  const topic = envVariables.KAFKA_TOPICS_NOTIFICATION;
+  var pdfLink = await getFilestoreUrl(filestoreid, tenantId);
+  let smsRequest = {};
+  smsRequest['mobileNumber'] = mobileNumber;
+  smsRequest['message'] = "Your download is ready. It will expire in 24 hours. Please click on the link below to download the pdf.\n"+pdfLink;
+  let payloads = [];
+  payloads.push({
+    topic,
+    messages: JSON.stringify(smsRequest)
+  });
+
+  producer.send(payloads, function(err, data) {
+    if (!err) {
+      console.log(data);
+    } else {
+      console.log(err);
+    }
+  });
+}
+
+
 
 
 export async function getBulkPdfRecordsDetails(userid, offset, limit, jobId){

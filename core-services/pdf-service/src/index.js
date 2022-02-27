@@ -913,6 +913,7 @@ export const createNoSave = async (
     var numberOfFiles = get(req, "numberOfFiles");
     var requestInfo = get(req.body || req, "RequestInfo");
     var userid = get(req.body || req, "RequestInfo.userInfo.uuid");
+    var mobileNumber = get(req, "RequestInfo.userInfo.mobileNumber");
     var billd = get(req, "Bill");
     var locality = get(req, "locality");
     var bussinessService = get(req, "service");
@@ -967,7 +968,7 @@ export const createNoSave = async (
         );
         (async () => {
           await insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid, tenantId, locality, bussinessService, consumerCode, isConsolidated);
-          await mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles);
+          await mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles, mobileNumber);
         })();
       });
       doc.end();
