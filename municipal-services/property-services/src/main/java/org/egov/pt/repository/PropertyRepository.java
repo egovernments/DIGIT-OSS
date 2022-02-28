@@ -236,7 +236,7 @@ public class PropertyRepository {
 
 			criteria.setPropertyIds(Sets.newHashSet(propertyIds));
 		}
-
+		criteria.setOwnerIds(ownerIds);
 		return false;
 	}
 	
