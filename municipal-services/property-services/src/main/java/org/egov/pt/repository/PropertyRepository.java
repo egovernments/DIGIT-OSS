@@ -28,8 +28,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import com.google.common.collect.Sets;
 import org.springframework.util.ObjectUtils;
+
+import com.google.common.collect.Sets;
 
 @Repository
 public class PropertyRepository {
@@ -212,6 +213,7 @@ public class PropertyRepository {
 			}
 		}
 		
+		// only used to eliminate property-ids which does not have the owner
 		List<String> propertyIds = getPropertyIds(ownerIds, userTenant);
 
 		// returning empty list if no property id found for user criteria
@@ -239,7 +241,7 @@ public class PropertyRepository {
 		criteria.setOwnerIds(ownerIds);
 		return false;
 	}
-	
+
 	public Integer getCount(@Valid PropertyCriteria propertyCriteria, RequestInfo requestInfo) {
 		Boolean isOpenSearch = false ? false : util.isPropertySearchOpen(requestInfo.getUserInfo());
         List<Object> preparedStmtList = new ArrayList<>();

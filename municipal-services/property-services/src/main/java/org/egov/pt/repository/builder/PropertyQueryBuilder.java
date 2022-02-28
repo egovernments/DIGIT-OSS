@@ -1,11 +1,11 @@
 package org.egov.pt.repository.builder;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
 
-import java.time.Instant;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.enums.Status;
@@ -13,8 +13,6 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
-import org.egov.pt.models.enums.Status.*;
 
 @Component
 public class PropertyQueryBuilder {
@@ -32,7 +30,7 @@ public class PropertyQueryBuilder {
 	
 	private static String PROEPRTY_AUDIT_QUERY = "select property from eg_pt_property_audit where propertyid=?";
 
-	private static String PROEPRTY_ID_QUERY = "select propertyid from eg_pt_property where id in (select propertyid from eg_pt_owner where userid IN {replace} and status='ACTIVE' )";
+	private static String PROEPRTY_ID_QUERY = "select propertyid from eg_pt_property where id in (select propertyid from eg_pt_owner where userid IN {replace} AND status='ACTIVE') ";
 
 	private static String REPLACE_STRING = "{replace}";
 	
