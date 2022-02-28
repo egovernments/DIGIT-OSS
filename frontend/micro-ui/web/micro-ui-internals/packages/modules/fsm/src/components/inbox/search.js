@@ -110,7 +110,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
                 </span>
               </div>
             )}
-            <div className="complaint-input-container" style={{ width: "100%" }}>
+            <div className={FSTP? "complaint-input-container for-pt for-search" : "complaint-input-container" } style={{ width: "100%" }}>
               {searchFields?.map((input, index) => (
                 <span key={index} className={index === 0 ? "complaint-input" : "mobile-input"}>
                   <Label>{input.label}</Label>

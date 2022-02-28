@@ -54,9 +54,11 @@ const MobileInbox = ({
   const isFstpOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const fstpOperatorData = vehicleLog?.map((vehicle) => ({
+    [t("ES_INBOX_APPLICATION_NO")]: vehicle?.tripDetails.map((i)=> i.referenceNo),
     [t("ES_INBOX_VEHICLE_LOG")]: vehicle?.applicationNo,
     [t("ES_INBOX_VEHICLE_NO")]: vehicle?.vehicle?.registrationNumber,
     [t("ES_INBOX_DSO_NAME")]: vehicle?.tripOwner.displayName,
+    [t("ES_INBOX_VEHICLE_STATUS")]: vehicle?.status,
     [t("ES_INBOX_WASTE_COLLECTED")]: vehicle?.tripDetails[0]?.volume,
   }));
 
