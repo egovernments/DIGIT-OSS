@@ -308,19 +308,19 @@ export const convertToTrade = (data = {}) => {
           applicationDocuments: [],
           accessories: data?.TradeDetails?.accessories ? getaccessories(data) : null,
           owners: getownerarray(data),
+          ...(data?.ownershipCategory?.code.includes("INSTITUTIONAL") && {institution: {
+            designation: data?.owners?.owners?.[0]?.designation,
+            ContactNo: data?.owners?.owners?.[0]?.altContactNumber,
+            mobileNumber: data?.owners?.owners?.[0]?.mobilenumber,
+            instituionName: data?.owners?.owners?.[0]?.institutionName,
+            name: data?.owners?.owners?.[0]?.name,
+           }}),
           ...data?.owners.owners?.[0]?.designation && data?.owners.owners?.[0]?.designation !== "" ? { institution: {
             designation: data?.owners.owners?.[0]?.designation
           }} : {},
           structureType: data?.TradeDetails?.StructureType?.code !=="IMMOVABLE" ? data?.TradeDetails?.VehicleType?.code : data?.TradeDetails?.BuildingType?.code,
           subOwnerShipCategory: data?.owners.owners?.[0]?.subOwnerShipCategory?.code ? data?.owners.owners?.[0]?.subOwnerShipCategory?.code : data?.ownershipCategory?.code,
           tradeUnits: gettradeunits(data),
-          institution: {
-            designation: data?.owners?.owners?.[0]?.designation,
-            ContactNo: data?.owners?.owners?.[0]?.altContactNumber,
-            mobileNumber: data?.owners?.owners?.[0]?.mobilenumber,
-            instituionName: data?.owners?.owners?.[0]?.institutionName,
-            name: data?.owners?.owners?.[0]?.name,
-           },
           additionalDetail: {
             propertyId: !data?.cpt ? "" :data?.cpt?.details?.propertyId,
           }

@@ -129,6 +129,7 @@ class Home extends React.Component {
             xl={6}
             className={classes.paper}
             style={{ paddingBottom: "5px" }}
+            data-html2canvas-ignore="true"
           >
             <Card color="blue" bgColor={"white"} page={pageId}>
               <CardHeader color="rose" icon page={pageId || "overview"}>
@@ -190,6 +191,7 @@ class Home extends React.Component {
             xl={6}
             className={classes.paper}
             style={{ paddingBottom: "5px" }}
+            data-html2canvas-ignore="true"
           >
             <Card color="blue" bgColor={"white"} page={pageId}>
               <CardHeader color="rose" icon page={pageId || "overview"}>
@@ -465,10 +467,11 @@ class Home extends React.Component {
                         </div>
                         } */}
 
-            {!isMobile  && !isNurtDashboard()&&(
+            {!isMobile  &&(
               <div
                 id="divNotToPrint"
                 className={classes.acbtn}
+                data-html2canvas-ignore="true"
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 <CustomizedMenus
@@ -487,10 +490,11 @@ class Home extends React.Component {
             {this.getTitleText(strings)}
           </Typography>
         </Grid>
-        {isMobile&& !isNurtDashboard() && (
+        {isMobile&& (
           <div
             id="divNotToPrint"
             className={classes.acbtn}
+            data-html2canvas-ignore="true"
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
             <CustomizedMenus
