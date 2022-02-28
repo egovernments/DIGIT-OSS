@@ -162,6 +162,7 @@ const UserProfile = ({ stateCode, userType }) => {
   };
 
   return (
+    <React.Fragment>
     <div>
       {userType === "citizen" ? (
         <div style={{ backgroundColor: "white", borderRadius: "5px", margin: "10px", padding: "10px" }}>
@@ -461,8 +462,9 @@ const UserProfile = ({ stateCode, userType }) => {
         style={{ maxWidth: "670px" }}
       />
     )}
-    {openUploadSlide == true ? <UploadDrawer setProfilePic={setFileStoreId} closeDrawer={closeFileUploadDrawer} userType={userType} /> : ""}
     </div>
+    {openUploadSlide == true ? <UploadDrawer style={{width: "100%"}} setProfilePic={setFileStoreId} closeDrawer={closeFileUploadDrawer} userType={userType} /> : ""}
+    </React.Fragment>
   );
 };
 
