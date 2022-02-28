@@ -193,8 +193,8 @@ public class SWConfiguration {
 	@Value("${egov.usr.events.pay.link}")
 	private String userEventApplicationPayLink;
 
-	/*@Value("${state.level.tenant.id}")
-	private String stateLevelTenantId;*/
+	@Value("${is.environment.central.instance}")
+	private Boolean isEnvironmentCentralInstace;
 
 	//mdms
 	@Value("${egov.mdms.host}")

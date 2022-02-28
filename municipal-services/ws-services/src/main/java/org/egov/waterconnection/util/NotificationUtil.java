@@ -205,6 +205,10 @@ public class NotificationUtil {
 
 	public String getHost(String tenantId){
 		log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
+
+		if(!config.getIsEnvironmentCentralInstace())
+			return config.getNotificationUrl();
+
 		Integer tenantLength = tenantId.split("\\.").length;
 		String topLevelTenant = tenantId;
 		if(tenantLength == 3){
