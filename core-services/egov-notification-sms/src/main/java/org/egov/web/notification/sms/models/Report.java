@@ -14,5 +14,4 @@ public class Report {
     private int messagestatus;
     private String doneTime;
     private String message;
-    private String receivestamp;
 }
