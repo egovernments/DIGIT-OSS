@@ -63,10 +63,11 @@ const SurveyResults = () => {
   );
     // if(surveyData) console.log(surveyData,"surveyData");
     // if(mutation.isSuccess) console.log(mutation.data,"mutation");
-
+    console.log("mutation",mutation.data);
+    console.log("surveyData",surveyData);
     if(isLoading || (mutation.isLoading && !mutation.isIdle)) return <Loader />
     if(mutation.isError) return <div>An error occured...</div>
-    
+   // if(!isLoading  && mutation.success) return <div>Data fetched success</div>
     // if (isLoading) return <Loader />;
     // else console.log(surveyData);
 
