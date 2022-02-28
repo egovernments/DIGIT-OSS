@@ -35,14 +35,14 @@ export async function getFilestoreUrl(filestoreid, tenantId){
   let response = await axios.get(url);
   let data = response.data;
   var fileURL = data['fileStoreIds'][0]['url'].split(",");
-  var shorteningUrl = getShortneningUrl(fileURL);
+  var shorteningUrl = getShortneningUrl(fileURL[0]);
   return shorteningUrl;
 }
 
 export async function getShortneningUrl(actualUrl){
-  var url = `${externalHost}/egov-url-shortening/shortener`;
+  var url = `${externalHost}egov-url-shortening/shortener`;
   var request = {
-    url: actualUrl
+    "url": actualUrl
   };
 
   let headers = {
