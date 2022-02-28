@@ -2,7 +2,7 @@ import { Card, CardLabelError, CheckBox, RadioButtons, TextArea, TextInput } fro
 import React, { Fragment } from "react";
 import { Controller } from "react-hook-form";
 
-const CitizenSurveyQuestion = ({ t, question, control, register, values, formState }) => {
+const CitizenSurveyQuestion = ({ t, question, control, register, values, formState,formDisabled }) => {
   const formErrors = formState?.errors;
   if (!question) return;
   const displayAnswerField = (answerType) => {
@@ -12,6 +12,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
           <>
             <TextInput
               name={question.uuid}
+              disabled={formDisabled}
               type="text"
               inputRef={register({
                 maxLength: {
@@ -32,6 +33,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
           <>
             <TextArea
               name={question.uuid}
+              disabled={formDisabled}
               inputRef={register({
                 maxLength: {
 
@@ -57,6 +59,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               rules={{ required: question.required }}
               render={({ onChange, value }) => (
                 <RadioButtons
+                  disabled={formDisabled}
                   onSelect={onChange}
                   selectedOption={value}
                   optionsKey=""
@@ -84,6 +87,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
                   {question.options.map((option) => {
                     return (
                       <CheckBox
+                        disabled={formDisabled}
                         key={option}
                         onChange={(e) => {
                           // console.log("onChange", {e, value});
@@ -117,8 +121,8 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
                 required: question.required,
                 // validate: { isValidToDate }
               }}
-              // render={({ onChange, value }) => <TextInput type="date" isRequired={question.required} onChange={onChange} defaultValue={value} />}
-              render={({ onChange, value }) => <TextInput type="date" onChange={onChange} defaultValue={value} />}
+
+              render={({ onChange, value }) => <TextInput disabled={formDisabled} type="date"  onChange={onChange} defaultValue={value} />}
             />
             {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
               <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_REQUIRED`)}</CardLabelError>
@@ -136,8 +140,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
                 required: question.required,
                 // validate: { isValidToTime }
               }}
-              // render={({ onChange, value }) => <TextInput type="time" isRequired={question.required} onChange={onChange} defaultValue={value} />}
-              render={({ onChange, value }) => <TextInput type="time" onChange={onChange} defaultValue={value} />}
+              render={({ onChange, value }) => <TextInput type="time" disabled={formDisabled}  onChange={onChange} defaultValue={value} />}
             />
             {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
               <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_REQUIRED`)}</CardLabelError>
@@ -149,6 +152,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
         return (
           <TextInput
             name={question.uuid}
+            disabled={formDisabled}
             type="text"
             inputRef={register({
               maxLength: {

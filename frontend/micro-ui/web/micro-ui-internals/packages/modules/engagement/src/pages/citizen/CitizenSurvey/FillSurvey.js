@@ -28,6 +28,7 @@ const FillSurvey = ({ location }) => {
         surveyId: surveyData.uuid,
         answers: transformSurveyResponseData(data),
         surveyTitle:surveyData.title,
+        hasResponded:surveyData.hasResponded,
       },
     };
    // console.log("<<<<<onSubmit>>>>>>", details);
@@ -35,7 +36,7 @@ const FillSurvey = ({ location }) => {
   };
 
   
-  return <CitizenSurveyForm surveyData={surveyData} onFormSubmit={onSubmit} />;
+  return <CitizenSurveyForm surveyData={surveyData} onFormSubmit={onSubmit} formDisabled={false} />;
 };
 
 export default FillSurvey;

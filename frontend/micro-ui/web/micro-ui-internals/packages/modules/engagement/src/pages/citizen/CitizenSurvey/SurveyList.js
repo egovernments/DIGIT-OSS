@@ -15,6 +15,7 @@ const SurveyList = () => {
   const { t } = useTranslation();
   const history = useHistory();
   const tenantIds = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  
   const { data, isLoading: isLoadingSurveys } = Digit.Hooks.survey.useSearch(
     { tenantIds },
     {
@@ -22,12 +23,16 @@ const SurveyList = () => {
         // const allSurveys = Surveys.map((survey) => ({ hasResponded: false, responseStatus: "CS_SURVEY_YT_TO_RESPOND", ...survey }));
 
         const allSurveys = Surveys.map((survey) => {
+         
           const isSurveyActive = isActive(survey.startDate, survey.endDate);
           let resStatus="";
-          if(isSurveyActive) resStatus = "CS_SURVEY_YT_TO_RESPOND"
+          if(isSurveyActive && survey.hasResponded) resStatus = "CS_SURVEY_RESPONDED"
+          else if(isSurveyActive) resStatus = "CS_SURVEY_YT_TO_RESPOND"
           else resStatus = "CANNOT_RESPOND_MSG"
-          return ({ hasResponded: false, responseStatus: resStatus, ...survey })});
-
+          return ({ hasResponded: false, responseStatus: resStatus, ...survey })
+        });
+        //console.log(allSurveys);
+        //why hasResoponded always set to false here
         const activeSurveysList = [];
         const inactiveSurveysList = [];
         for (let survey of allSurveys) {
@@ -45,8 +50,17 @@ const SurveyList = () => {
     }
   );
 
+  // const handleCardClick = (details) => {
+  //     history.push("/digit-ui/citizen/engagement/surveys/fill-survey", details);
+  // };
+
+  //trying to implement like this-> If user already responded then open ShowSurvey
   const handleCardClick = (details) => {
-    history.push("/digit-ui/citizen/engagement/surveys/fill-survey", details);
+    if(!details.hasResponded){
+      history.push("/digit-ui/citizen/engagement/surveys/fill-survey", details);
+    }else{
+      history.push("/digit-ui/citizen/engagement/surveys/show-survey", details);
+    }
   };
 
   if (isLoadingSurveys) {
