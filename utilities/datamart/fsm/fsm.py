@@ -205,7 +205,7 @@ def connect():
     citizenfeedbackstatus="select businessid as applicationno, to_char((to_timestamp(createdtime/1000)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as PendingPaymentSumbitDate from eg_wf_processinstance_v2  where businessservice='FSM'  and status in (select uuid from eg_wf_state_v2 where state='CITIZEN_FEEDBACK_PENDING')"
     citizenfeedbackstatusQuery=pd.read_sql_query(citizenfeedbackstatus,conn)
     citizenfeedbackstatusData=pd.DataFrame(citizenfeedbackstatusQuery)
-    citizenfeedbacktripcount="select applicationno, arr.item_object->'value' as nooftrips FROM eg_fsm_application, jsonb_array_elements(additionaldetails->'CheckList') with ordinality arr(item_object, position) WHERE arr.item_object->>'code' = 'NUMBER_OF_TRIPS'"
+    citizenfeedbacktripcount="select applicationno, case when (to_number(nooftrips,'99') = 1) then 'single' when (to_number(nooftrips,'99') > 1) then 'multiple' end nooftrip from ( select applicationno, arr.item_object->>'value' as nooftrips FROM eg_fsm_application, jsonb_array_elements(additionaldetails->'CheckList') with ordinality arr(item_object, position) WHERE arr.item_object->>'code' = 'NUMBER_OF_TRIPS' ) as tbl"
     citizenfeedbacktripcountQuery=pd.read_sql_query(citizenfeedbacktripcount,conn)
     citizenfeedbacktripcountData=pd.DataFrame(citizenfeedbacktripcountQuery)
     dsogender="select applicationno, gender from eg_fsm_application fsm, eg_vendor v, eg_user u where fsm.dso_id = v.id and v.owner_id = u.uuid"
