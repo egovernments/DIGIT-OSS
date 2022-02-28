@@ -30,6 +30,7 @@ const FstpInbox = () => {
     config: { enabled: searchParams?.registrationNumber?.length > 0 },
   });
 
+
   const userInfo = Digit.UserService.getUser();
 
   const { isLoading: applicationLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
