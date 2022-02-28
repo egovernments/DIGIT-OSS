@@ -495,7 +495,7 @@ public class WorkflowQueryBuilder {
         if(!CollectionUtils.isEmpty(criteria.getAssignee())){
         	List<String> assignees = criteria.getAssignee();
             addClauseIfRequired(query, preparedStmtList);
-            query.append(" createdby = ? ");
+            query.append(" createdby IN ( ").append(createQuery(assignees)).append(" )");
             addToPreparedStatement(preparedStmtList, assignees);
 
 //            preparedStmtList.add(criteria.getAssignee());
