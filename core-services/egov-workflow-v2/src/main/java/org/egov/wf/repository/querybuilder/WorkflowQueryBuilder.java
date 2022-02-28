@@ -301,12 +301,18 @@ public class WorkflowQueryBuilder {
         if(criteria.getIsAssignedToMeCount()!=null && criteria.getIsAssignedToMeCount())
         {
         	List<String> assignees = criteria.getAssignee();
-            System.out.println("Assignees :: " + assignees);
-            with_query_builder.append(" AND id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee IN (").append(createQuery(assignees)).append(")) AND pi_outer.tenantid = ? ");
-            addToPreparedStatement(preparedStmtList, assignees);
+            if (!CollectionUtils.isEmpty(criteria.getAssignee())) {
+				with_query_builder.append(
+						" AND id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee IN (")
+						.append(createQuery(assignees)).append(")) AND pi_outer.tenantid = ? ");
+				addToPreparedStatement(preparedStmtList, assignees);
 
-//            preparedStmtList.add(criteria.getAssignee());
-            preparedStmtList.add(criteria.getTenantId());
+			} else {
+				with_query_builder.append(
+						" AND id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?) AND pi_outer.tenantid = ? ");
+				preparedStmtList.add(criteria.getAssignee());
+			}
+           preparedStmtList.add(criteria.getTenantId());
         }
        else if(!config.getAssignedOnly() && !CollectionUtils.isEmpty(tenantSpecificStatus)){
 //            String clause = " AND ((id in (select processinstanceid from eg_wf_assignee_v2 asg_inner where asg_inner.assignee = ?)" +
