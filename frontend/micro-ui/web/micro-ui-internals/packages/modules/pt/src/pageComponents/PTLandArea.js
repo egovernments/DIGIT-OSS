@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 const Area = ({ t, config, onSelect, value, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState, onBlur }) => {
   let validation = {};
   const onSkip = () => onSelect();
- const [floorarea, setfloorarea] = useState(formData.landArea);
+ const [floorarea, setfloorarea] = useState(formData.landArea?.floorarea);
   const [unitareaerror, setunitareaerror] = useState(null);
 
 

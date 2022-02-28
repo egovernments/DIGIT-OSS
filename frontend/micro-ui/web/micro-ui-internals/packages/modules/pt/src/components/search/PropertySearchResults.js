@@ -103,7 +103,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
           return (
             <div>
               <span className="link">
-                <Link to={`/digit-ui/employee/pt/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
+                <Link to={`/digit-ui/employee/pt/ptsearch/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
               </span>
             </div>
           );
@@ -112,7 +112,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
       {
         Header: t("PT_COMMON_TABLE_COL_OWNER_NAME"),
         disableSortBy: true,
-        Cell: ({ row }) => GetCell(row.original.name || ""),
+        Cell: ({ row }) => GetCell(`${row.original.owners.map((ob) => ob.name).join(",")}` || ""),
       },
       {
         Header: t("ES_INBOX_LOCALITY"),

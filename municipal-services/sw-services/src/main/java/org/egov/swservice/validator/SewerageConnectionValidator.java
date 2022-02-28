@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
 import org.egov.swservice.web.models.ValidatorResult;
@@ -47,6 +48,17 @@ public class SewerageConnectionValidator {
 		}
 		if(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction().equalsIgnoreCase("PAY"))
 			errorMap.put("INVALID_ACTION","Pay action cannot perform directly");
+
+		String channel = sewerageConnectionRequest.getSewerageConnection().getChannel();
+		if(channel != null){
+			if(!SWConstants.CHANNEL_VALUES.contains(channel))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid");
+			if(reqType == SWConstants.CREATE_APPLICATION && sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") && channel.equalsIgnoreCase("CITIZEN"))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for employee role");
+			if(reqType == SWConstants.CREATE_APPLICATION && sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && !channel.equalsIgnoreCase("CITIZEN"))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for citizen role");
+
+		}
 		
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);

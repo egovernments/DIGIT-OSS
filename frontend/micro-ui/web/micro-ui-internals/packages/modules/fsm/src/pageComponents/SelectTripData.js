@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getVehicleType } from "../utils";
 import { LabelFieldPair, CardLabel, TextInput, Dropdown, Loader, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { useLocation } from "react-router-dom";
 
 const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
+  const { pathname: url } = useLocation();
+  const editScreen = url.includes("/modify-application/");
 
   const [vehicle, setVehicle] = useState(formData?.tripData?.vehicleCapacity);
   const [billError, setError] = useState(false);
@@ -18,7 +21,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   useEffect(() => {
     if (dsoData && vehicleData) {
       const allVehicles = dsoData.reduce((acc, curr) => {
-        return curr.vehicles ? curr.vehicles : acc;
+        return curr.vehicles && curr.vehicles.length ? acc.concat(curr.vehicles) : acc;
       }, []);
 
       const cpacityMenu = Array.from(new Set(allVehicles.map(a => a.capacity)))
@@ -32,14 +35,14 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const inputs = [
     {
       label: "ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS",
-      type: "text",
+      type: "number",
       name: "noOfTrips",
       error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
       validation: {
         isRequired: true,
       },
       default: formData?.tripData?.noOfTrips,
-      disable: true,
+      disable: editScreen ? false : true,
       isMandatory: true,
     },
     {
@@ -69,6 +72,10 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
       isMandatory: true,
     },
   ];
+
+  function setTripNum(value) {
+    onSelect(config.key, { ...formData[config.key], noOfTrips: value });
+  }
 
   function selectVehicle(value) {
     setVehicle(value);
@@ -111,7 +118,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         }
       }
     })();
-  }, [formData?.propertyType, formData?.subtype, formData?.address, formData?.tripData?.vehicleType?.capacity]);
+  }, [formData?.propertyType, formData?.subtype, formData?.address, formData?.tripData?.vehicleType?.capacity, formData?.tripData?.noOfTrips]);
 
   return isVehicleMenuLoading && isDsoLoading ? (
     <Loader />
@@ -138,6 +145,8 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           </CardLabel>
           <div className="field">
             <TextInput
+              type={input.type}
+              onChange={(e) => setTripNum(e.target.value)}
               key={input.name}
               value={input.default ? input.default : formData && formData[config.key] ? formData[config.key][input.name] : null}
               {...input.validation}

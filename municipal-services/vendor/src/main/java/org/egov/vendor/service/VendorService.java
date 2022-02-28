@@ -12,6 +12,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.vendor.config.VendorConfiguration;
 import org.egov.vendor.repository.VendorRepository;
+import org.egov.vendor.util.VendorUtil;
 import org.egov.vendor.validator.VendorValidator;
 import org.egov.vendor.web.model.Vendor;
 import org.egov.vendor.web.model.VendorRequest;
@@ -30,6 +31,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class VendorService {
+
+	@Autowired
+    private VendorUtil util;
 
 	@Autowired
 	private VendorRepository vendorRepository;
@@ -60,8 +64,8 @@ public class VendorService {
 		if (vendorRequest.getVendor().getTenantId().split("\\.").length == 1) {
 			throw new CustomException("Invalid TenantId", " Application cannot be create at StateLevel");
 		}
-
-		vendorValidator.validateCreate(vendorRequest);
+		Object mdmsData = util.mDMSCall(requestInfo, tenantId);
+		vendorValidator.validateCreate(vendorRequest, mdmsData);
 		enrichmentService.enrichCreate(vendorRequest);
 		vendorRepository.save(vendorRequest);
 		return vendorRequest.getVendor();

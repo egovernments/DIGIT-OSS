@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { stringReplaceAll } from "../utils";
+import { stringReplaceAll,CompareTwoObjects } from "../utils";
 
 const createOwnerDetails = () => ({
   name: "",
@@ -23,7 +23,7 @@ const PTEmployeeOwnershipDetails = ({ config, onSelect, userType, formData, setE
   const { t } = useTranslation();
 
   const { pathname } = useLocation();
-  const isEditScreen = pathname.includes("/modify-application/");
+  const isEditScreen = pathname.includes("/modify-application/" ) 
   const [owners, setOwners] = useState(formData?.owners || [createOwnerDetails()]);
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
 
@@ -126,14 +126,15 @@ const OwnerForm = (_props) => {
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
-  owner["institution"] = { name: institution.name };
+
+  owner["institution"] = { name: owner?.institution?.name ? formValue?.institution?.name : institution?.name };
   owner["institution"].type = {
     active: true,
-    code: institution?.type,
-    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`,
-    name: t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`),
+    code: formValue?.institution?.type?.code || institution?.type?.code,
+    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(formValue?.institution?.type?.code || institution?.type || "")}`,
+    name: t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(formValue?.institution?.type?.code || institution?.type || "")}`),
   };
-  owner.designation = institution.designation;
+  owner.designation = owner?.designation ? formValue?.designation : institution?.designation;
   const specialDocsMenu = useMemo(
     () =>
       mdmsData?.PropertyTax?.Documents?.filter((e) => e.code === "OWNER.SPECIALCATEGORYPROOF")?.[0]
@@ -166,14 +167,14 @@ const OwnerForm = (_props) => {
     trigger();
   }, []);
 
-  useEffect(() => {
-    const keys = Object.keys(formValue);
-    const part = {};
-    keys.forEach((key) => (part[key] = owner[key]));
+  
+  const [part, setPart] = React.useState({});
 
+  useEffect(() => {    
     let _ownerType = isIndividualTypeOwner ? {} : { ownerType: { code: "NONE" } };
 
-    if (!_.isEqual(formValue, part)) {
+    if (!_.isEqual(part, formValue)) {
+      setPart({...formValue});
       setOwners((prev) => prev.map((o) => (o.key && o.key === owner.key ? { ...o, ...formValue, ..._ownerType } : { ...o })));
       trigger();
     }
@@ -185,6 +186,7 @@ const OwnerForm = (_props) => {
   }, [errors]);
 
   const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
+
   return (
     <React.Fragment>
       <div style={{ marginBottom: "16px" }}>
@@ -210,7 +212,7 @@ const OwnerForm = (_props) => {
                   <Controller
                     control={control}
                     name={"institution.name"}
-                    defaultValue={institution?.name ? institution.name : owner?.name}
+                    defaultValue={isEditScreen ? ( institution?.name ? institution.name : owner?.name) : null}
                     rules={{
                       required: t("CORE_COMMON_REQUIRED_ERRMSG"),
                       validate: {
@@ -221,10 +223,11 @@ const OwnerForm = (_props) => {
                       <TextInput
                         value={props.value}
                         disable={isEditScreen}
-                        autoFocus={focusIndex.index === owner?.key && focusIndex.type === "name"}
+                        name={"institution.name"}
+                        autoFocus={focusIndex.index === owner?.key && focusIndex.type === "institution.name"}
                         onChange={(e) => {
                           props.onChange(e.target.value);
-                          setFocusIndex({ index: owner.key, type: "name" });
+                          setFocusIndex({ index: owner.key, type: "institution.name"});
                         }}
                         onBlur={(e) => {
                           setFocusIndex({ index: -1 });
@@ -243,12 +246,12 @@ const OwnerForm = (_props) => {
                 <Controller
                   control={control}
                   name={"institution.type"}
-                  defaultValue={{
+                  defaultValue={isEditScreen ? {
                     active: true,
                     code: institution?.type,
                     i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`,
                     name: t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(institution?.type || "")}`),
-                  }}
+                  } : null}
                   rules={{ required: t("CORE_COMMON_REQUIRED_ERRMSG") }}
                   render={(props) => (
                     <Dropdown
@@ -485,7 +488,7 @@ const OwnerForm = (_props) => {
                   <Controller
                     control={control}
                     name={"designation"}
-                    defaultValue={institution?.designation || ""}
+                    defaultValue={isEditScreen ? ( institution?.designation || "") : null}
                     rules={{ required: t("CORE_COMMON_REQUIRED_ERRMSG") }}
                     render={(props) => (
                       <TextInput

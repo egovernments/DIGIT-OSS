@@ -9,6 +9,7 @@ import CitizenHome from "./Home";
 import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
+import UserProfile from './Home/UserProfile';
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -96,6 +97,11 @@ const Home = ({
           <Route path={`${path}/register`}>
             <Login stateCode={stateCode} isUserRegistered={false} />
           </Route>
+
+          <Route path={`${path}/user/profile`}>
+            <UserProfile stateCode={stateCode} userType={'citizen'} />
+          </Route>
+
           <ErrorBoundary>
             {appRoutes}
             {ModuleLevelLinkHomePages}

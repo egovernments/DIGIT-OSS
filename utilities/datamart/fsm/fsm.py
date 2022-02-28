@@ -211,6 +211,15 @@ def connect():
     dsogender="select applicationno, gender from eg_fsm_application fsm, eg_vendor v, eg_user u where fsm.dso_id = v.id and v.owner_id = u.uuid"
     dsogenderQuery=pd.read_sql_query(dsogender,conn)
     dsogenderData=pd.DataFrame(dsogenderQuery)
+    dsoAgencyType="select applicationno, agencyType from eg_fsm_application fsm, eg_vendor v, eg_user u where fsm.dso_id = v.id and v.owner_id = u.uuid"
+    dsoAgencyTypeQuery=pd.read_sql_query(dsoAgencyType,conn)
+    dsoAgencyTypeData=pd.DataFrame(dsoAgencyTypeQuery)
+    dsoPaymentPreference="select applicationno, paymentPreference from eg_fsm_application fsm, eg_vendor v, eg_user u where fsm.dso_id = v.id and v.owner_id = u.uuid"
+    dsoPaymentPreferenceQuery=pd.read_sql_query(dsoPaymentPreference,conn)
+    dsoPaymentPreferenceData=pd.DataFrame(dsoPaymentPreferenceQuery)
+    vehicleowner="select applicationno, vehicleowner from eg_fsm_application fsm, eg_vehicle vehicle where fsm.vehicle_id =vehicle.id"
+    vehicleownerQuery=pd.read_sql_query(vehicleowner,conn)
+    vehicleownerData=pd.DataFrame(vehicleownerQuery)
     scheduledstatus="select referenceno as applicationno, to_char((to_timestamp(process.createdtime/1000)::timestamp  at time zone 'utc' at time Zone 'Asia/Kolkata'), 'dd/mm/yyyy HH24:MI:SS') as scheduleddatetime from eg_wf_processinstance_v2 as process inner join eg_vehicle_trip_detail as detail on process.businessid=detail.referenceno where businessservice='FSM_VEHICLE_TRIP' and process.status in (select uuid from eg_wf_state_v2 where state='SCHEDULED')"
     scheduledstatusQuery=pd.read_sql_query(scheduledstatus,conn)
     scheduledstatusData=pd.DataFrame(scheduledstatusQuery)
@@ -231,6 +240,9 @@ def connect():
     citizenfeedbackstatusData.columns=['Application ID','Citizen feedback Submitted Date Time']
     citizenfeedbacktripcountData.columns=['Application ID','No of Trips']
     dsogenderData.columns=['Application ID','DSO Gender']
+    dsoAgencyTypeData.columns=['Application ID','DSO AgencyType']
+    dsoPaymentPreferenceData.columns=['Application ID','DSO PaymentPreference']
+    vehicleownerData.columns=['Application ID','Vehicle Owner']
     completedstatusData.columns=['Application ID','Application Completed Time','Rating']
     scheduledstatusData.columns=['Application ID','Scheduled Time']
     waitingfordisposalstatusData.columns=['Application ID','Waiting for disposalTime']
@@ -246,6 +258,9 @@ def connect():
     fsmdata=pd.merge(fsmdata,citizenfeedbackstatusData,left_on='Application ID',right_on='Application ID',how='left')
     fsmdata=pd.merge(fsmdata,citizenfeedbacktripcountData,left_on='Application ID',right_on='Application ID',how='left')
     fsmdata=pd.merge(fsmdata,dsogenderData,left_on='Application ID',right_on='Application ID',how='left')
+    fsmdata=pd.merge(fsmdata,dsoAgencyTypeData,left_on='Application ID',right_on='Application ID',how='left')
+    fsmdata=pd.merge(fsmdata,dsoPaymentPreferenceData,left_on='Application ID',right_on='Application ID',how='left')
+    fsmdata=pd.merge(fsmdata,vehicleownerData,left_on='Application ID',right_on='Application ID',how='left')
     fsmdata=pd.merge(fsmdata,completedstatusData,left_on='Application ID',right_on='Application ID',how='left')
     fsmdata=pd.merge(fsmdata,scheduledstatusData,left_on='Application ID',right_on='Application ID',how='left')
     fsmdata=pd.merge(fsmdata,waitingfordisposalstatusData,left_on='Application ID',right_on='Application ID',how='left')

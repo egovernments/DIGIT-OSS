@@ -94,6 +94,7 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 				// Add documents id's
 				currentWaterConnection.setConnectionExecutionDate(rs.getLong("connectionExecutionDate"));
 				currentWaterConnection.setApplicationType(rs.getString("applicationType"));
+				currentWaterConnection.setChannel(rs.getString("channel"));
 				currentWaterConnection.setDateEffectiveFrom(rs.getLong("dateEffectiveFrom"));
 
 				AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("ws_createdBy"))

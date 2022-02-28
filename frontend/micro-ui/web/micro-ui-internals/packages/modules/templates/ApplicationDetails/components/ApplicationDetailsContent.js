@@ -26,7 +26,9 @@ function ApplicationDetailsContent({
   applicationData,
   businessService,
   timelineStatusPrefix,
+  showTimeLine=true,
   statusAttribute = "status",
+  paymentsList
 }) {
   const { t } = useTranslation();
 
@@ -168,7 +170,7 @@ function ApplicationDetailsContent({
             </StatusTable>
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
-          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} paymentsList={paymentsList}/>}
           {applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0 && detail?.additionalDetails?.fiReport && (
             <InspectionReport fiReport={applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending} />
           )}
@@ -220,7 +222,7 @@ function ApplicationDetailsContent({
           )}
         </React.Fragment>
       ))}
-      {workflowDetails?.data?.timeline?.length > 0 && (
+      {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
         <React.Fragment>
           <BreakLine />
           {(workflowDetails?.isLoading || isDataLoading) && <Loader />}

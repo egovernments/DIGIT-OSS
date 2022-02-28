@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.egov.common.contract.request.RequestInfo;
 import org.egov.swcalculation.service.PaymentNotificationService;
 import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.service.DemandService;
@@ -42,7 +41,6 @@ public class SWCalculationController {
 	
 	@Autowired
 	private SWCalculationServiceImpl sWCalculationServiceImpl;
-
 	
 	@PostMapping("/_calculate")
 	public ResponseEntity<CalculationRes> calculate(@RequestBody @Valid CalculationReq calculationReq) {
@@ -84,4 +82,5 @@ public class SWCalculationController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}
+
 }

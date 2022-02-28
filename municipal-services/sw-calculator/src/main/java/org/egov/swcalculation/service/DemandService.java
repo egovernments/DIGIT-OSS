@@ -201,14 +201,14 @@ public class DemandService {
 					.taxPeriodTo(toDate).consumerType("sewerageConnection").businessService(businessService)
 					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
 		}
-		log.info("Demand Object" + demands.toString());
-		String billingcycle = (String) masterMap.get(SWCalculationConstant.Billing_Cycle_String);
+
+		String billingcycle = calculatorUtils.getBillingCycle(masterMap);
 		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
 				.requestInfo(requestInfo)
 				.tenantId(calculations.get(0).getTenantId())
 				.sewerageConnetionIds(sewerageConnectionIds)
 				.billingCycle(billingcycle)
-				.isSuccess(false).build();
+				.build();
 		List<Demand> demandRes = demandRepository.saveDemand(requestInfo, demands,notificationObj);
 		if(isForConnectionNO)
 			fetchBill(demandRes, requestInfo,masterMap);
@@ -666,7 +666,7 @@ public class DemandService {
 		if (isCurrentDateIsMatching((String) master.get(SWCalculationConstant.BILLING_CYCLE_CONST), startDay)) {
 			List<String> connectionNos = sewerageCalculatorDao.getConnectionsNoList(tenantId,
 					SWCalculationConstant.nonMeterdConnection);
-			Set<String> sewerageConnetionIds = null;
+			Set<String> sewerageConnetionIds = new HashSet<String>();
 			for (String connectionNo : connectionNos) {
 				CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
 						.assessmentYear(estimationService.getAssessmentYear()).connectionNo(connectionNo).build();
@@ -677,14 +677,6 @@ public class DemandService {
 				kafkaTemplate.send(configs.getCreateDemand(), calculationReq);
 				sewerageConnetionIds.add(connectionNo);
 			}
-			String billingcycle = (String) master.get(SWCalculationConstant.Billing_Cycle_String);
-			DemandNotificationObj notificationObj = DemandNotificationObj.builder()
-					.requestInfo(requestInfo)
-					.tenantId(tenantId)
-					.sewerageConnetionIds(sewerageConnetionIds)
-					.billingCycle(billingcycle)
-					.isSuccess(true).build();
-			producer.push(configs.getOnDemandSuccess(), notificationObj);
 		}
 	}
 	

@@ -1,21 +1,39 @@
-import React, { useRef, useState } from "react";
+import {
+  Card, CardCaption,
+  CardLabel, DownloadIcon, EllipsisMenu, EmailIcon, SearchIconSvg, TextInput, WhatsappIcon
+} from "@egovernments/digit-ui-react-components";
+import React, { useRef,Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Card, DownloadIcon, TextInput, CardCaption, CardLabel, EllipsisMenu, SearchIconSvg, EmailIcon, WhatsappIcon } from "@egovernments/digit-ui-react-components";
 
 const SearchImg = () => {
   return <SearchIconSvg className="signature-img" />;
 };
 
-const GenericChart = ({ header, subHeader, className, caption, children, showHeader = true, showSearch = false, showDownload = false, onChange ,chip=[],updateChip}) => {
+const GenericChart = ({
+  header,
+  subHeader,
+  className,
+  caption,
+  children,
+  showHeader = true,
+  showSearch = false,
+  showDownload = false,
+  onChange,
+  chip = [],
+  updateChip,
+  value={}
+}) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [chartData, setChartData] = useState(null);
+  const [chartDenomination, setChartDenomination] = useState(null);
+
   const chart = useRef();
   const menuItems = [
     {
       code: "image",
       i18nKey: t("ES_COMMON_DOWNLOAD_IMAGE"),
-      icon: <DownloadIcon />
+      icon: <DownloadIcon />,
     },
     {
       code: "shareImage",
@@ -37,11 +55,11 @@ const GenericChart = ({ header, subHeader, className, caption, children, showHea
         case "pdf":
           return Digit.Download.PDF(chart, t(header));
         case "image":
-          return Digit.Download.Image(chart, t(header));
+          return Digit.Download.IndividualChartImage(chart, t(header));
         case "sharePdf":
           return Digit.ShareFiles.PDF(tenantId, chart, t(header), data.target);
         case "shareImage":
-          return Digit.ShareFiles.Image(tenantId, chart, t(header), data.target);
+          return Digit.ShareFiles.IndividualChartImage(tenantId, chart, t(header), data.target);
         default:
           return null;
       }
@@ -50,37 +68,56 @@ const GenericChart = ({ header, subHeader, className, caption, children, showHea
 
   const handleExcelDownload = () => {
     return Digit.Download.Excel(chartData, t(header));
-  }
-
+  };
   return (
     <Card className={`chart-item ${className}`} ReactRef={chart}>
       <div className={`chartHeader ${showSearch && "column-direction"}`}>
         <div>
-          {showHeader && <CardLabel style={{ fontWeight: "bold" }}>{`${t(header)}`}</CardLabel>}
+          {showHeader && <CardLabel className={"dss-header-label"} >
+          <span className="tooltip">
+            {t(`${t(Digit.Utils.locale.getTransformedLocale(header))}`)}
+             {chartDenomination?.toLowerCase()==="amount"&&<span style={{whiteSpace:"pre"}}> ({t(`DSS_${Digit.Utils.locale.getTransformedLocale(value?.denomination)}`)})</span>}
+              <span className="tooltiptext" style={{ whiteSpace: "nowrap" , 
+               fontSize:"medium" }}>
+                  {t(`TIP_${Digit.Utils.locale.getTransformedLocale(header)}`)}
+              </span>
+            </span>
+            {/* {`${t(header)}`} */}
+            </CardLabel>}
           {subHeader && <p style={{ color: "#505A5F", fontWeight: 700 }}>{subHeader}</p>}
         </div>
         <div className="sideContent">
-          {chip&&chip.length>1&&<Chip items={chip} onClick={updateChip} t={t} />}
+          {chip && chip.length > 1 && <Chip items={chip} onClick={updateChip} t={t} />}
           {showSearch && <TextInput className="searchInput" placeholder="Search" signature={true} signatureImg={<SearchImg />} onChange={onChange} />}
           {showDownload && <DownloadIcon className="mrlg cursorPointer" onClick={handleExcelDownload} />}
-          <EllipsisMenu menuItems={menuItems} displayKey="i18nKey" onSelect={(data) => download(data)} />
+          {!showDownload && <EllipsisMenu menuItems={menuItems} displayKey="i18nKey" onSelect={(data) => download(data)} />}
         </div>
       </div>
       {caption && <CardCaption>{caption}</CardCaption>}
-      {React.cloneElement(children, { setChartData })}
+      {React.cloneElement(children, { setChartData ,setChartDenomination})}
     </Card>
   );
 };
 
 export default GenericChart;
 
-const Chip = (props)=>{
-  const [state,setState]=useState(1);
-  return(<div className="table-switch-card-chip">
-    {props.items.map((item,index)=> {
-    return <div className={item.active&&state?"table-switch-card-active":"table-switch-card-inactive"} onClick={()=>{
-      props.onClick&&props.onClick(item.index);
-      setState(prev=>prev+1);
-    }}>{props.t(`DSS_TAB_${item?.tabName?.toUpperCase()}`)}</div>} )}
-  </div>)
-}
+const Chip = (props) => {
+  const [state, setState] = useState(1);
+  return (
+    <div className="table-switch-card-chip">
+      {props.items.map((item, index) => {
+        return (
+          <div
+            className={item.active && state ? "table-switch-card-active" : "table-switch-card-inactive"}
+            onClick={() => {
+              props.onClick && props.onClick(item.index);
+              setState((prev) => prev + 1);
+            }}
+          >
+            {props.t(`DSS_TAB_${item?.tabName?.toUpperCase()}`)}
+          </div>
+        );
+      })}
+    </div>
+  );
+};

@@ -55,7 +55,6 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 			String tenantId = rs.getString("tenantid");
 			String accountId = rs.getString("accountId");
 			String description = rs.getString("description");
-			String additionalDetails = rs.getString("additionalDetails");
 			String source = rs.getString("source");
 			String sanitationtype = rs.getString("sanitationtype");
 			String propertyUsage = rs.getString("propertyUsage");
@@ -71,17 +70,16 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 			Long compeletedOn = rs.getLong("completed_on");
 			String applicationType = rs.getString("applicationType");
 			String oldApplicationNo = rs.getString("oldApplicationNo");
+			String paymentPreference = rs.getString("paymentPreference");
 			if (currentfsm == null) {
-				Long lastModifiedTime = rs.getLong("lastmodifiedtime");
-
-				if (rs.wasNull()) {
-					lastModifiedTime = null;
-				}
 				currentfsm = FSM.builder().id(id).applicationNo(applicationNo).tenantId(tenantId)
-						.description(description).accountId(accountId).additionalDetails(getAdditionalDetail("additionalDetails",rs))
-						.source(source).sanitationtype(sanitationtype).propertyUsage(propertyUsage).noOfTrips(noOfTrips)
-						.vehicleId(vehicleId).applicationStatus(applicationStatus).dsoId(dsoid).possibleServiceDate(possiblesrvdate).vehicleType(vehicleType).vehicleCapacity(vehicleCapacity).completedOn(compeletedOn)
-						.applicationType(applicationType).oldApplicationNo(oldApplicationNo).build();
+						.description(description).accountId(accountId)
+						.additionalDetails(getAdditionalDetail("additionalDetails", rs)).source(source)
+						.sanitationtype(sanitationtype).propertyUsage(propertyUsage).noOfTrips(noOfTrips)
+						.vehicleId(vehicleId).applicationStatus(applicationStatus).dsoId(dsoid)
+						.possibleServiceDate(possiblesrvdate).vehicleType(vehicleType).vehicleCapacity(vehicleCapacity)
+						.completedOn(compeletedOn).applicationType(applicationType).oldApplicationNo(oldApplicationNo)
+						.paymentPreference(paymentPreference).build();
 
 				fmsMap.put(id, currentfsm);
 			}
@@ -105,6 +103,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 
 		Double latitude =  rs.getDouble("latitude");
 		Double longitude =  rs.getDouble("longitude");
+		
 
 		Boundary locality = Boundary.builder().code(rs.getString("locality")).build();
 

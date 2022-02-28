@@ -7,7 +7,9 @@ import { stringReplaceAll } from "../utils";
 const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBlur}) => {
   let validation = {};
 
-  const allCities = Digit.Hooks.pt.useTenants();
+  let allCities = Digit.Hooks.pt.useTenants();
+  // if called from tl module get tenants from tl usetenants
+  allCities = allCities ? allCities : Digit.Hooks.tl.useTenants();
   const userInfo = Digit.UserService.getUser()?.info;
   const cityId = userInfo?.tenantId;
   const cityName = 'TENANT_TENANTS_' + userInfo?.tenantId.replace('.','_');

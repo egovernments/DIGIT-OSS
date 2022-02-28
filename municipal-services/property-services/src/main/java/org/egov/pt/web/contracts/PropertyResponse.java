@@ -31,4 +31,7 @@ public class PropertyResponse   {
 
   @JsonProperty("Properties")
   private List<Property> properties;
+  
+  @JsonProperty("count")
+  private Integer count;
 }

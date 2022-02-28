@@ -389,7 +389,7 @@ export const handleFileUpload = (event, handleDocument, props,afterFileSelected,
     endPoint: "filestore/v1/files"
   };
   let uploadDocument = true;
-  const { inputProps, maxFileSize, moduleName } = props;
+  const { inputProps, maxFileSize, moduleName ="common"} = props;
   const input = event.target;
   if (input.files && input.files.length > 0) {
     const files = input.files;

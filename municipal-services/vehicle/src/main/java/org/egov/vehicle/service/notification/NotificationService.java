@@ -62,7 +62,7 @@ public class NotificationService {
 	 * @param smsRequests
 	 */
 	private void enrichSMSRequest(VehicleTripRequest tripRequest, List<SMSRequest> smsRequests) {
-		String tenantId = tripRequest.getVehicleTrip().getTenantId();
+		String tenantId = tripRequest.getVehicleTrip().get(0).getTenantId();
 		String localizationMessages = util.getLocalizationMessages(tenantId, tripRequest.getRequestInfo());
 		String message = util.getCustomizedMsg(tripRequest, localizationMessages,Constants.FSM_SMS_FSTPO_TRIP_DECLINED);
 		Map<String, String> mobileNumberToOwner = getUserList(tripRequest);
@@ -78,7 +78,7 @@ public class NotificationService {
 	 */
 	private Map<String, String> getUserList(VehicleTripRequest tripRequest) {
 		Map<String, String> mobileNumberToOwner = new HashMap<>();
-		String tenantId = tripRequest.getVehicleTrip().getTenantId();
+		String tenantId = tripRequest.getVehicleTrip().get(0).getTenantId();
 		UserSearchRequest userSearchRequest  = new UserSearchRequest();
 		userSearchRequest.setRequestInfo(tripRequest.getRequestInfo());
 		userSearchRequest.setTenantId(tenantId);

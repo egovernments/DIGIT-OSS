@@ -61,8 +61,8 @@ const ApplicationDetails = (props) => {
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationNumber,
-    moduleCode: "FSM",
-    role: "FSM_EMPLOYEE",
+    moduleCode: DSO || applicationData?.paymentPreference ? "FSM_POST_PAY_SERVICE" : "FSM",
+    role: DSO ? "FSM_DSO" : "FSM_EMPLOYEE",
     serviceData: applicationDetails,
   });
 
@@ -79,6 +79,7 @@ const ApplicationDetails = (props) => {
 
   useEffect(() => {
     switch (selectedAction) {
+      case DSO && "SCHEDULE":
       case "DSO_ACCEPT":
       case "ACCEPT":
       case "ASSIGN":
@@ -96,6 +97,7 @@ const ApplicationDetails = (props) => {
         return setShowModal(true);
       case "SUBMIT":
       case "FSM_SUBMIT":
+      case !DSO && "SCHEDULE":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
       case "PAY":
       case "FSM_PAY":
@@ -142,7 +144,7 @@ const ApplicationDetails = (props) => {
       const caption = {
         date: checkpoint?.auditDetails?.created,
         name: checkpoint?.assigner,
-        mobileNumber: applicationData?.citizen.mobileNumber,
+        mobileNumber: applicationData?.citizen?.mobileNumber,
         source: applicationData?.source || "",
       };
       return <TLCaption data={caption} />;
@@ -259,7 +261,7 @@ const ApplicationDetails = (props) => {
               </Fragment>
             )}
           </Card>
-          
+
           {showModal ? (
             <ActionModal
               t={t}

@@ -7,7 +7,8 @@ import { convertDateToEpoch } from "../../../utils";
 import cloneDeep from "lodash/cloneDeep";
 
 const NewApplication = () => {
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  let tenantId = Digit.ULBService.getCurrentTenantId();
+  tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
   const defaultValues = {};
@@ -34,7 +35,10 @@ const NewApplication = () => {
   }, []);
 
   const onFormValueChange = (setValue, formData, formState) => {
-    setSubmitValve(!Object.keys(formState.errors).length);
+    if(Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.entries(formState.errors["owners"].type).filter((ob) => ob.type === "required").length ==0)
+    setSubmitValve(true);
+    else
+    setSubmitValve(!(Object.keys(formState.errors).length));
   };
 
   const onSubmit = (data) => {
@@ -64,7 +68,14 @@ const NewApplication = () => {
     }
 
     let address = {};
-    if (data?.address) {
+    if (data?.cpt?.details?.address) {
+      address.city = data?.cpt?.details?.address?.city || null;
+      address.locality = { code: data?.cpt?.details?.address?.locality?.code || null };
+      if (data?.cpt?.details?.address?.doorNo) address.doorNo = data?.cpt?.details?.address?.doorNo || null;
+      if (data?.cpt?.details?.address?.street) address.street = data?.cpt?.details?.address?.street || null;
+      if (data?.cpt?.details?.address?.pincode) address.pincode = data?.cpt?.details?.address?.pincode;
+    }
+    else if (data?.address) {
       address.city = data?.address?.city?.code || null;
       address.locality = { code: data?.address?.locality?.code || null };
       if (data?.address?.doorNo) address.doorNo = data?.address?.doorNo || null;
@@ -76,13 +87,14 @@ const NewApplication = () => {
     if (data?.owners?.length > 0) {
       data?.owners.map((data) => {
         let obj = {};
-        if (data?.dob) obj.dob = convertDateToEpoch(data?.dob);
-        // if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
+        obj.dob = data?.dob ? convertDateToEpoch(data?.dob): null;
+        if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
         if (data?.gender?.code) obj.gender = data?.gender?.code;
         if (data?.mobileNumber) obj.mobileNumber = Number(data?.mobileNumber);
-        if (data?.name) obj.name = data?.name;
+        if (data?.name) obj.name = !(data?.ownershipCategory?.code.includes("INSTITUTIONAL"))?data?.name:"";
         if (data?.permanentAddress) obj.permanentAddress = data?.permanentAddress;
-        // if (data?.relationship) obj.relationship = data?.relationship?.code;
+        obj.permanentAddress = obj.permanentAddress ? obj.permanentAddress : null;
+        if (data?.relationship) obj.relationship = data?.relationship?.code;
         if (data?.emailId) obj.emailId = data?.emailId;
         if (data?.ownerType?.code) obj.ownerType = data?.ownerType?.code;
         owners.push(obj);
@@ -113,6 +125,7 @@ const NewApplication = () => {
       tradeLicenseDetail: {
         channel: "COUNTER",
         additionalDetail: {},
+        // institution: {}
       },
     };
 
@@ -126,6 +139,12 @@ const NewApplication = () => {
     if (address) formData.tradeLicenseDetail.address = address;
     if (structureType) formData.tradeLicenseDetail.structureType = structureType;
     if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail = {...formData.tradeLicenseDetail,institution:{}}
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["designation"] = data?.owners?.[0]?.designation;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["instituionName"] = data?.owners?.[0]?.instituionName;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["name"] = data?.owners?.[0]?.name;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["contactNo"] = data?.owners?.[0]?.altContactNumber;
+    if (data?.cpt) formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId;
 
     // setFormData(formData)
     /* use customiseCreateFormData hook to make some chnages to the licence object */

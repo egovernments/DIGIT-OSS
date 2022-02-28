@@ -28,6 +28,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     applicationData: {
       applicantName: applicationData.citizen.name,
       mobileNumber: applicationData.citizen.mobileNumber,
+      applicantGender: applicationData.citizen.gender
     },
     tripData: {
       noOfTrips: applicationData.noOfTrips,
@@ -53,6 +54,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     },
     pitType: sanitationMenu.filter((type) => type.code === applicationData.sanitationtype)[0],
     pitDetail: applicationData.pitDetail,
+    paymentPreference: applicationData.paymentPreference,
   };
 
   const onFormValueChange = (setValue, formData) => {

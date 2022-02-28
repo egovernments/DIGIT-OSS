@@ -38,6 +38,8 @@ public class Constants {
 	public static final String FSM_SMS_FSTPO_TRIP_DECLINED="FSM_SMS_FSTPO_TRIP_DECLINED";
 	
 	public static final String VEHICLE_DECLINE_REASON = "FSTPORejectionReason";
+	
+	public static final String VEHICLE_OWNER_TYPE = "VehicleOwner";
 
 	
 }

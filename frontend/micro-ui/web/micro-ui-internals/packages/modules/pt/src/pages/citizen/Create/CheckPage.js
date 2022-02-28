@@ -285,7 +285,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
               .sort((x, y) => x.floorNo - y.floorNo)
               .map((unit, unitIndex) => {
                 return (
-                  <>
+                  <div>
                     {units.length > 1 && <CardSubHeader>{t(`PT_UNIT-${unitIndex}`)}</CardSubHeader>}
                     <Row
                       label={t("PT_ASSESMENT1_PLOT_SIZE")}
@@ -325,7 +325,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
                         actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/PtUnits`} />}
                       />
                     )}
-                  </>
+                  </div>
                 );
               })}
           {/* {!isPropertyVacant(PropertyType?.i18nKey) && !isPropertyFlatorPartofBuilding(PropertyType?.i18nKey) && (

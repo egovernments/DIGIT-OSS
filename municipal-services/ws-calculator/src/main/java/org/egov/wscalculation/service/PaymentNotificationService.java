@@ -348,8 +348,10 @@ public class PaymentNotificationService {
 		if (message.contains("{ULB}"))
 			message = message.replace("{ULB}", capitalize(user.getTenantId().split("\\.")[1]));
 		if (message.contains("{billing cycle}"))
-		{String billingCycle = (String) masterMap.get(WSCalculationConstant.Billing_Cycle_String);
-			message = message.replace("{billing cycle}",billingCycle);}
+		{
+			String billingCycle = calculatorUtil.getBillingCycle(masterMap);
+			message = message.replace("{billing cycle}",billingCycle);
+		}
 
 		return message;
 
@@ -366,7 +368,7 @@ public class PaymentNotificationService {
 	 *
 	 */
 	public void sendBillNotification(RequestInfo requestInfo, String uuid, String tenantId, Map<String, Object> masterMap, Boolean isSuccess) {
-
+log.info("Sending Bill Notification");
 		List<String> configuredChannelNames = notificationUtil.fetchChannelList(requestInfo, tenantId, SERVICE_FIELD_VALUE_WS, ACTION_FOR_BILL);
 
 		User user = notificationUtil.fetchUserByUUID(uuid, requestInfo, tenantId);

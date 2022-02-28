@@ -162,5 +162,8 @@ public class FSM   {
   
   @JsonProperty("oldApplicationNo")
   private String oldApplicationNo ;
+  
+  @JsonProperty("paymentPreference")
+  private String paymentPreference ;
 
 }

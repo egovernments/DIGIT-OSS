@@ -21,6 +21,7 @@ const Urls = {
   Authenticate: "/user/oauth/token",
   RegisterUser: "/user/citizen/_create",
   ChangePassword: "/user/password/nologin/_update",
+  ChangePassword1: "/user/password/_update", 
   UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
 

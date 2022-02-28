@@ -133,7 +133,7 @@ public class NotificationUtil {
 			if (!StringUtils.isEmpty(message)) {
 				if (message.contains("{APPID}")) {
 					message = message.replace("{APPID}",
-							vehicleTripRequest.getVehicleTrip().getTripDetails().get(0).getReferenceNo());
+							vehicleTripRequest.getVehicleTrip().get(0).getTripDetails().get(0).getReferenceNo());
 				}
 				
 			}

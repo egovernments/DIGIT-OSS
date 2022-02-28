@@ -1,6 +1,5 @@
 package org.egov.vehicle.trip.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -40,10 +39,8 @@ public class VehicleTripController {
 	public ResponseEntity<VehicleTripResponse> create(@Valid @RequestBody VehicleTripRequest request) {
 		
 		vehicleLogUtil.defaultJsonPathConfig();
-		VehicleTrip vehicleLog = vehicleTripService.create(request);
-		List<VehicleTrip> vehicleLogList = new ArrayList<VehicleTrip>();
-		vehicleLogList.add(vehicleLog);
-		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleLogList)				
+		List<VehicleTrip> vehicleLog = vehicleTripService.create(request);
+		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleLog)				
 				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(request.getRequestInfo(), true))
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -53,10 +50,9 @@ public class VehicleTripController {
 	public ResponseEntity<VehicleTripResponse> update(@Valid @RequestBody VehicleTripRequest request) {
 		
 		vehicleLogUtil.defaultJsonPathConfig();
-		VehicleTrip vehicleLog = vehicleTripService.update(request);
-		List<VehicleTrip> vehicleLogList = new ArrayList<VehicleTrip>();
-		vehicleLogList.add(vehicleLog);
-		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleLogList)				
+		List<VehicleTrip> vehicleLog = vehicleTripService.update(request);
+		
+		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleLog)				
 				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(request.getRequestInfo(), true))
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);

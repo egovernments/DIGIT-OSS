@@ -40,7 +40,7 @@ export const SelectPaymentType = (props) => {
     }
   },[paymentdetails])
   const { name, mobileNumber } = state;
-
+ 
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
   const onSubmit = async (d) => {
@@ -60,8 +60,8 @@ export const SelectPaymentType = (props) => {
           },
         ],
         user: {
-          name: userInfo?.info?.name || name,
-          mobileNumber: userInfo?.info?.mobileNumber || mobileNumber,
+          name: name || userInfo?.info?.name,
+          mobileNumber:  mobileNumber || userInfo?.info?.mobileNumber,
           tenantId: tenantId,
         },
         // success
@@ -100,7 +100,6 @@ export const SelectPaymentType = (props) => {
   if (isLoading || paymentLoading) {
     return <Loader />;
   }
-
 
   return (
     <React.Fragment>

@@ -25,6 +25,8 @@ const SelectDocuments = ({ t, config, onSelect, userType, formData, setError: se
 
   if (isEditScreen) action = "update";
 
+  const propertyInitialValues = JSON.parse(sessionStorage.getItem("PropertyInitials"));
+
   const { isLoading, data } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", [
     "UsageCategory",
     "OccupancyType",
@@ -82,6 +84,7 @@ const SelectDocuments = ({ t, config, onSelect, userType, formData, setError: se
             clearFormErrors={clearFormErrors}
             config={config}
             formState={formState}
+            propertyInitialValues={propertyInitialValues}
           />
         );
       })}
@@ -105,6 +108,7 @@ function SelectDocument({
   formState,
   fromRawData,
   id,
+  propertyInitialValues,
 }) {
   const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -326,7 +330,7 @@ function SelectDocument({
           <Dropdown
             className="form-field"
             selected={selectedDocument}
-            disable={dropDownData?.length === 0 || enabledActions?.[action].disableDropdown}
+            disable={dropDownData?.length === 0 || (propertyInitialValues?.documents && propertyInitialValues?.documents.length>0 && propertyInitialValues?.documents.filter((document) => document.documentType.includes(doc?.code)).length>0? enabledActions?.[action].disableDropdown : false)}
             option={dropDownData.map((e) => ({ ...e, i18nKey: e.code?.replaceAll(".", "_") }))}
             select={handleSelectDocument}
             optionKey="i18nKey"
@@ -346,7 +350,7 @@ function SelectDocument({
             message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
             textStyles={{ width: "100%" }}
             inputStyles={{ width: "280px" }}
-            disabled={enabledActions?.[action]?.disableUpload || !selectedDocument?.code}
+            disabled={(propertyInitialValues?.documents && propertyInitialValues?.documents.length>0 && propertyInitialValues?.documents.filter((document) => document.documentType.includes(doc?.code)).length>0? enabledActions?.[action].disableUpload : false) || !selectedDocument?.code}
             buttonType="button"
             error={!uploadedFile}
           />

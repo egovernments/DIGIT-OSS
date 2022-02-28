@@ -63,12 +63,12 @@ const PaymentDetails = () => {
         <div style={{ marginLeft: "-16px" }}>
           <Card>
             <StatusTable>
-              <Row label={t("PT_HISTORY_BILL_NO")} text={payment?.billNo} textStyle={{ whiteSpace: "pre" }} />
               <Row label={t("PT_HISTORY_BILL_PERIOD")} text={payment?.billPeriod} textStyle={{ whiteSpace: "pre" }} />
+              <Row label={t("PT_HISTORY_BILL_NO")} text={payment?.billNo} textStyle={{ whiteSpace: "pre" }} />
               <Row label={t("PT_HISTORY_RECEIPT_NO")} text={payment?.receiptNumber} textStyle={{ whiteSpace: "pre" }} />
               <Row label={t("PT_HISTORY_PAYMENT_DATE")} text={payment?.transactionDate} textStyle={{ whiteSpace: "pre" }} />
-              <Row label={t("PT_HISTORY_PAYMENT_STATUS")} text={t(payment?.paymentStatus)} textStyle={{ whiteSpace: "pre" }} />
               <Row label={t("PT_HISTORY_AMOUNT_PAID")} text={payment?.amountPaid} />
+              <Row label={t("PT_HISTORY_PAYMENT_STATUS")} text={t(payment?.paymentStatus)} textStyle={{ whiteSpace: "pre" }} />
               <LinkLabel onClick={() => printReciept("PT", payment?.receiptNumber)}>{t("PT_DOWNLOAD_RECEIPT")}</LinkLabel>
             </StatusTable>
           </Card>

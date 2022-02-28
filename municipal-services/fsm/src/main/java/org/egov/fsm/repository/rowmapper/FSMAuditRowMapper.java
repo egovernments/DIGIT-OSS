@@ -19,7 +19,6 @@ public class FSMAuditRowMapper implements ResultSetExtractor<List<FSMAuditUtil>>
 	@Autowired
 	private ObjectMapper mapper;
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public List<FSMAuditUtil> extractData(ResultSet rs) throws SQLException, DataAccessException {
 		
@@ -65,6 +64,7 @@ public class FSMAuditRowMapper implements ResultSetExtractor<List<FSMAuditUtil>>
 			auditUtil.setWidth(rs.getDouble("width"));
 			auditUtil.setDiameter(rs.getDouble("diameter"));
 			auditUtil.setDistanceFromRoad(rs.getDouble("distanceFromRoad"));
+			auditUtil.setPaymentPreference(rs.getString("paymentPreference"));
 			
 			auditUtil.setModifiedBy(rs.getString("lastmodifiedby"));
 			auditUtil.setModifiedTime(rs.getLong("lastmodifiedtime"));

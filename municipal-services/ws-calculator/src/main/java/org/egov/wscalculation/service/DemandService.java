@@ -198,20 +198,20 @@ public class DemandService {
 					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
 		}
 
-		log.info("Demand Object" + demands.toString());
-		String billingcycle = (String) masterMap.get(WSCalculationConstant.Billing_Cycle_String);
+		String billingcycle = calculatorUtils.getBillingCycle(masterMap);
 		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
 				.requestInfo(requestInfo)
 				.tenantId(calculations.get(0).getTenantId())
 				.waterConnectionIds(waterConnectionIds)
 				.billingCycle(billingcycle)
-				.isSuccess(false).build();
+				.build();
+
 		List<Demand> demandRes = demandRepository.saveDemand(requestInfo, demands,notificationObj);
 		if(isForConnectionNO)
 		fetchBill(demandRes, requestInfo,masterMap);
 		return demandRes;
 	}
-
+	
 	/**
 	 * Returns the list of new DemandDetail to be added for updating the demand
 	 * 
@@ -680,7 +680,7 @@ public class DemandService {
 			List<String> connectionNos = waterCalculatorDao.getConnectionsNoList(tenantId,
 					WSCalculationConstant.nonMeterdConnection);
 			String assessmentYear = estimationService.getAssessmentYear();
-			Set<String> waterConnectionIds = null;
+			Set<String> waterConnectionIds = new HashSet<String>();
 			for (String connectionNo : connectionNos) {
 				CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
 						.assessmentYear(assessmentYear).connectionNo(connectionNo).build();
@@ -692,15 +692,7 @@ public class DemandService {
 				// log.info("Prepared Statement" + calculationRes.toString());
 				waterConnectionIds.add(connectionNo);
 			}
-			String billingcycle = (String) master.get(WSCalculationConstant.Billing_Cycle_String);
-			DemandNotificationObj notificationObj = DemandNotificationObj.builder().requestInfo(requestInfo)
-					.tenantId(tenantId)
-					.waterConnectionIds(waterConnectionIds)
-					.billingCycle(billingcycle)
-					.isSuccess(true).build();
 
-			log.info("pushing -> "+notificationObj.toString());
-		wsCalculationProducer.push(configs.getOnDemandsSaved(), notificationObj);
 		}
 	}
 
