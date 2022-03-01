@@ -1,9 +1,11 @@
-import React,{ useEffect } from 'react'
+import React,{ useEffect,useState } from 'react'
 import { useHistory, useParams } from "react-router-dom";
 import CitizenSurveyForm from "../../../components/Surveys/CitizenSurveyForm";
 import { useQueryClient } from "react-query";
 import { ActionBar, Card, SubmitBar, Menu,Loader } from "@egovernments/digit-ui-react-components";
 import { format } from "date-fns";
+import SurveyResultsView from '../../../components/Surveys/ResultsView/SurveyResultsView';
+
 
 const TypeAnswerEnum = {
   SHORT_ANSWER_TYPE: "Short Answer",
@@ -15,12 +17,10 @@ const TypeAnswerEnum = {
 };
 
 const SurveyResults = () => {
-   
+    const tenantId = Digit.ULBService.getCurrentTenantId();
     const params = useParams();
-    const mutation = Digit.Hooks.survey.useShowResults()
-
+    const mutation = Digit.Hooks.survey.useShowResults();
     const queryClient = useQueryClient();
-  
     useEffect(() => {
         const onSuccess = () => {
         queryClient.clear();
@@ -31,8 +31,7 @@ const SurveyResults = () => {
         onSuccess,
         });
     }, []);
-    const tenantId = Digit.ULBService.getCurrentTenantId();
-
+    
     const { isLoading, data: surveyData } = Digit.Hooks.survey.useSearch(
     { tenantIds: tenantId, uuid: params.id },
     {
@@ -57,32 +56,19 @@ const SurveyResults = () => {
             surveyId
           })),
           status: surveyObj.status,
+          answersCount:surveyObj.answersCount,
         };
       },
     }
   );
-    // if(surveyData) console.log(surveyData,"surveyData");
-    // if(mutation.isSuccess) console.log(mutation.data,"mutation");
-    console.log("mutation",mutation.data);
-    console.log("surveyData",surveyData);
-    if(isLoading || (mutation.isLoading && !mutation.isIdle)) return <Loader />
-    if(mutation.isError) return <div>An error occured...</div>
-   // if(!isLoading  && mutation.success) return <div>Data fetched success</div>
-    // if (isLoading) return <Loader />;
-    // else console.log(surveyData);
 
-//   return <div>Hello World</div>
-    // return <CitizenSurveyForm surveyData={surveyData} submitDisabled={true} formdisabled={true} formDefaultValues={{}} />
-
-    // Need to display the Results view here.....
-    // make a whoHasResponded component
-    //make a separate component for each type of question -> this component will render the question as well as the response
+    if(isLoading) return <Loader />
     
-    return(
-        <div>
-            Survey Results View
-        </div>
-    );
+    // else if(mutation.isLoading) return <Loader />
+    // //if(mutation.isError) return <div>An error occured...</div>
+    
+    return <SurveyResultsView surveyInfo={surveyData} responsesInfoMutation={mutation} />
+    
 }
 
 export default SurveyResults

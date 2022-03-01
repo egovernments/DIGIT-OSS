@@ -55,7 +55,7 @@ const Inbox = ({ parentRoute }) => {
     }
   }
   const InboxObjectInSessionStorage = Digit.SessionStorage.get("CITIZENSURVEY.INBOX")
-
+  
   const onSearchFormReset = (setSearchFormValue) => {
     setSearchFormValue("postedBy", "")
     setSearchFormValue("title", "")
@@ -130,10 +130,7 @@ const Inbox = ({ parentRoute }) => {
   //   history.push(`/digit-ui/employee/engagement/surveys/inbox/results/${id}`,formState)
   // }
   return( 
-  <>
     <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxMobileCards, propsForInboxTable, formState }}></InboxComposer>
-    {/* <button onClick={handleResultsClick}>Show Results</button> */}
-  </>
   );
 }
 
