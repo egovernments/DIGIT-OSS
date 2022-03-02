@@ -4,6 +4,22 @@ import jsPDF from "jspdf";
 import XLSX from "xlsx";
 import domtoimage from "dom-to-image";
 
+
+const revertCss=()=>{
+  var elements = document.getElementsByClassName("dss-white-pre-temp")
+Array.prototype.map.call(elements, function(testElement){
+  testElement.classList.add('dss-white-pre-line');
+testElement.classList.remove('dss-white-pre-temp');
+});
+}
+const applyCss=()=>{
+    var elements = document.getElementsByClassName("dss-white-pre-line")
+Array.prototype.map.call(elements, function(testElement){
+  testElement.classList.add('dss-white-pre-temp');
+testElement.classList.remove('dss-white-pre-line');
+});
+}
+
 const Download = {
   Image: (node, fileName, share, resolve = null) => {
     const saveAs = (uri, filename) => {
@@ -67,16 +83,14 @@ const Download = {
       }
       return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
     };
-
+  applyCss();
     const element = ReactDOM.findDOMNode(node.current);
-
-
 
 
 
     return domtoimage.toJpeg(element, {
       quality: 1,
-      bgcolor: 'white'
+      bgcolor: 'white',
      }).then(function (dataUrl) {
 /*  to enable pdf
     var htmlImage = new Image();
@@ -89,6 +103,7 @@ const Download = {
       pdf.addImage?.( htmlImage, 25, 50, 50, element.offsetWidth, element.offsetHeight );
       pdf.save?.( fileName +'.pdf' );
       */
+     revertCss();
        return saveAs(dataUrl, `${fileName}.jpeg`)
         });
     
@@ -158,13 +173,15 @@ const Download = {
       }
       return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
     };
+  applyCss();
 
     const element = ReactDOM.findDOMNode(node.current);
     return domtoimage.toJpeg(element, {
-      quality: 0.95,
+      quality: 1,
       bgcolor: 'white'
      }).then(function (dataUrl) {
        var blobData = dataURItoBlob(dataUrl);
+       revertCss();
        return share
        ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
        : saveAs(dataUrl, `${fileName}.jpeg`)
