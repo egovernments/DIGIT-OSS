@@ -78,11 +78,11 @@ const FstpOperatorDetails = () => {
   useEffect(() => {
     if (isSuccess) {
       let temp = {}
-      const applicationNos = vehicle.tripDetails.map((tripData) => tripData.referenceNo).join(",");
+      const applicationNos = vehicle?.tripDetails?.map((tripData) => tripData.referenceNo).join(",");
       setSearchParams({ applicationNos });
       setIsVehicleSearchCompleted(true);
-      vehicle?.tripDetails.map((i, n)=>{
-        temp = {...temp, [n]: vehicle.vehicle.tankCapacity}
+      vehicle?.tripDetails?.map((i, n) => {
+        temp = { ...temp, [n]: vehicle.vehicle.tankCapacity }
         setWasteCollected(temp)
       })
     }
@@ -104,7 +104,7 @@ const FstpOperatorDetails = () => {
   const handleError = () => {
     let bool = true
     let etemp = {}  // a temporary object create and use for validation in this function
-    vehicleInfo.tripDetails.map((i, n) => {
+    vehicleInfo?.tripDetails?.map((i, n) => {
       i.additionalDetails = n + 1
       if (!vehicleInfo.vehicle.tankCapacity || i.volume > vehicleInfo.vehicle.tankCapacity) {
         etemp[n] = { ...etemp[n], wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" }
@@ -134,7 +134,7 @@ const FstpOperatorDetails = () => {
     })
 
     setSelectedAction(null)
-    
+
     if (bool) {
       setErrors({})
       handleSubmit()
@@ -196,7 +196,7 @@ const FstpOperatorDetails = () => {
     } else if (name === "wasteRecieved") {
       temp["tripDetails"][0].volume = value;
       setVehicleInfo(temp);
-      tempWaste = {...tempWaste, [index] : value }
+      tempWaste = { ...tempWaste, [index]: value }
       setWasteCollected(tempWaste);
     }
   };
@@ -250,7 +250,7 @@ const FstpOperatorDetails = () => {
 
   return (
     <div>
-      {vehicleInfo && vehicleInfo["tripDetails"].map((i, index) => (
+      {vehicleInfo && vehicleInfo?.tripDetails && vehicleInfo?.tripDetails?.map((i, index) => (
         <Card>
           <StatusTable>
             {vehicleData.map((row, index) => (
@@ -366,7 +366,7 @@ const FstpOperatorDetails = () => {
       ) : (
         <Card>
           <StatusTable>
-            {tripDetails.map((trip, index) => {
+            {tripDetails?.map((trip, index) => {
               return (
                 <>
                   <Row key={index} label={t("CS_FILE_DESLUDGING_APPLICATION_NO")} text={trip.applicationNo} />
