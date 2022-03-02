@@ -5,25 +5,25 @@ const WSActivationDetails = ({ t, userType }) => {
   return (
     <React.Fragment>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`Meter ID`)}:`}</CardLabel>
+        <CardLabel className="card-label-smaller">{`${t(`WS_METER_ID`)}:`}</CardLabel>
         <div className="field">
           <TextInput></TextInput>
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`Meter Installation Date`)}:`}</CardLabel>
+        <CardLabel className="card-label-smaller">{`${t(`WS_METER_INSTALLATION_DATE`)}:`}</CardLabel>
         <div className="field">
           <DatePicker date={new Date()} ></DatePicker>
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`Initial Meter Reading`)}:`}</CardLabel>
+        <CardLabel className="card-label-smaller">{`${t(`WS_INIT_METER_READING`)}:`}</CardLabel>
         <div className="field">
           <TextInput></TextInput>
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`Connection Execution Date`)}:`}</CardLabel>
+        <CardLabel className="card-label-smaller">{`${t(`WS_CONN_EXEC_DATE`)}:`}</CardLabel>
         <div className="field">
           <DatePicker date={new Date()}></DatePicker>
         </div>

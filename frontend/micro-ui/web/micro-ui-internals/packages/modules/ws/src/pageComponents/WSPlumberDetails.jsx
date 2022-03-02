@@ -5,25 +5,25 @@ const WSPlumberDetails = ({ t, userType }) => {
   return (
     <React.Fragment>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{t("Plumber Provided By")}:</CardLabel>
+        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_PROVIDED_BY")}:</CardLabel>
         <div className="field">
           <Dropdown></Dropdown>
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{t("Plumber License Number")}:</CardLabel>
+        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_LICENSE_NUMBER")}:</CardLabel>
         <div className="field">
           <TextInput></TextInput>
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{t("Plumber Name")}:</CardLabel>
+        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_NAME")}:</CardLabel>
         <div className="field">
           <TextInput></TextInput>
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{t("Plumber Mobile Number")}:</CardLabel>
+        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_MOB_NUMBER")}:</CardLabel>
         <div className="field">
           <TextInput></TextInput>
         </div>

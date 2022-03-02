@@ -73,10 +73,10 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
             onSelect={setProposedPipeSizeSelect}
             t={t}
           />
-          <CardLabel>{t("WS_NO_PROPOSED_WATER_CLOSETS")}:</CardLabel>
+          <CardLabel>{t("WS_NO_OF_PROPOSED_WATER_CLOSETS")}:</CardLabel>
           <TextInput></TextInput>
 
-          <CardLabel>{t("WS_NO_PROPOSED_TOILETS")}:</CardLabel>
+          <CardLabel>{t("WS_NO_OF_PROPOSED_TOILETS")}:</CardLabel>
           <Dropdown></Dropdown>
         </FormStep>
       ) : (

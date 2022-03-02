@@ -13,7 +13,7 @@ const WSConnectionDetails = ({ t, config, userType }) => {
 
   return (
     <React.Fragment>
-      <CardCaption>WS_CONNECTION_DETAILS_DESC</CardCaption>
+      <CardCaption>{t("WS_CONNECTION_DETAILS_DESC")}</CardCaption>
       <FormStep>
         <div style={{display: "flex", gap: "0 3rem"}}>
           <CheckBox
