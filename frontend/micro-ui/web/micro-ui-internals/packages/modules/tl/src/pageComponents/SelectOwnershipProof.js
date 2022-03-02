@@ -1,6 +1,5 @@
 import { CardLabel, CardLabelDesc, FormStep, UploadFile } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
-import Timeline from "../components/TLTimeline";
 
 const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
   const [uploadedFile, setUploadedFile] = useState(formData?.owners?.documents?.ProofOfOwnership?.fileStoreId || null);
@@ -76,8 +75,6 @@ const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
   }, [file]);
 
   return (
-    <React.Fragment>
-    {window.location.href.includes("/citizen") ? <Timeline currentStep={3}/> : null}
     <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={!uploadedFile || error}>
       <CardLabelDesc style={{ fontWeight: "unset" }}>{t(`TL_UPLOAD_OWNERSHIP_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc style={{ fontWeight: "unset" }}>{t(`TL_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
@@ -105,7 +102,6 @@ const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
       {error ? <div style={{ height: "20px", width: "100%", fontSize: "20px", color: "red", marginTop: "5px" }}>{error}</div> : ""}
       <div style={{ disabled: "true", height: "20px", width: "100%" }}></div>
     </FormStep>
-    </React.Fragment>
   );
 };
 

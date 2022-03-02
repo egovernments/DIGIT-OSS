@@ -132,17 +132,10 @@ import {
   EventsIconSolid,
   SurveyIconSolid,
   DustbinIcon,
-  InfoBannerIcon,
-  WSICon,
-  CameraIcon,
-  EditPencilIcon,
-  GalleryIcon,
-  RemoveIcon,
   CheckSvg
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
-import { Phone } from "./atoms/svgindex";
 import TextArea from "./atoms/TextArea";
 import TextInput from "./atoms/TextInput";
 import Toast from "./atoms/Toast";
@@ -183,9 +176,8 @@ import OnGroundEventCard from "./molecules/OnGroundEventCard";
 import MultiUploadWrapper from "./molecules/MultiUploadWrapper";
 import { FilterForm, FilterFormField } from "./molecules/FilterForm";
 import OpenLinkContainer from "./atoms/OpenLinkContainer";
-import UploadPitPhoto from "./molecules/UploadPitPhoto";
+
 export {
-  Phone,
   Body,
   Loader,
   TopBar,
@@ -298,7 +290,6 @@ export {
   DustbinIcon,
   GenericFileIcon,
   HelpIcon,
-  InfoBannerIcon,
   NotificationBell,
   ImageIcon,
   OBPSIconSolidBg,
@@ -370,12 +361,6 @@ export {
   EditIcon,
   SearchIcon,
   DeleteIcon,
-  WSICon,
-  CameraIcon,
-  EditPencilIcon,
-  GalleryIcon,
-  RemoveIcon,
-  UploadPitPhoto,
   CheckSvg
 };
 

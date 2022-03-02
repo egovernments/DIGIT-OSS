@@ -92,14 +92,11 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const state = data?.address?.city?.state;
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
-    const gender = data.applicationData.applicantGender;
-    const paymentPreference = data?.paymentPreference;
     const formData = {
       fsm: {
         citizen: {
           name: applicantName,
           mobileNumber,
-          gender: gender
         },
         tenantId: tenantId,
         sanitationtype: sanitationtype,
@@ -108,8 +105,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           tripAmount: amount,
         },
         propertyUsage: data?.subtype,
-        vehicleType: data?.tripData?.vehicleType?.type,
-        vehicleCapacity: data?.tripData?.vehicleType?.capacity,
+        vehicleType: data?.tripData?.vehicleType?.code,
         pitDetail: {
           ...pitDimension,
           distanceFromRoad: data?.distanceFromRoad,
@@ -133,7 +129,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
           },
         },
         noOfTrips,
-        paymentPreference,
       },
       workflow: null,
     };

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, CheckBox, CardLabel, LabelFieldPair, TextArea, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
-import Timeline from "../components/TLTimeline";
 
 const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
   const [permanentAddress, setPermanentAddress] = useState(formData?.owners?.permanentAddress || "");
@@ -69,7 +68,6 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
 
   return (
     <React.Fragment>
-    {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
       <FormStep config={config} t={t} onSelect={goNext} isDisabled={(isedittrade || isrenewtrade)?false:!permanentAddress}>
         <TextArea
           isMandatory={false}

@@ -1,10 +1,8 @@
 import { Loader, Modal, FormComposer, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
-import { UploadPitPhoto } from "@egovernments/digit-ui-react-components";
 
-import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication, configScheduleDso } from "../config";
-import { configRejectFstpo } from "../config/RejectFstpo";
+import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication } from "../config";
 
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
@@ -26,7 +24,7 @@ const CloseBtn = (props) => {
 };
 
 const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData }) => {
-  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: '-1' });
+  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId);
   const { isLoading, isSuccess, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: id },
@@ -53,42 +51,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     "VehicleType",
     { staleTime: Infinity }
   );
-
-  const { data: propertyList, isLoading: isPropertyData, isSuccess: isPropertyDataLoaded } = Digit.Hooks.fsm.useMDMS(
-    stateCode,
-    "FSM",
-    "PropertyType",
-    { staleTime: Infinity }
-  );
-
-  const { data: propertySubList, isLoading: isPropertySubData, isSuccess: isPropertySubDataLoaded } = Digit.Hooks.fsm.useMDMS(
-    stateCode,
-    "FSM",
-    "PropertySubtype",
-    { staleTime: Infinity }
-  );
-
-  const { data: pitList, isLoading: isPitData, isSuccess: isPitDataLoaded } = Digit.Hooks.fsm.useMDMS(
-    stateCode,
-    "FSM",
-    "PitType",
-    { staleTime: Infinity }
-  );
-
-  const { data: Reason, isLoading: isReasonLoading } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "Reason", { staleTime: Infinity }, [
-    "ReassignReason",
-    "RejectionReason",
-    "DeclineReason",
-    "CancelReason"
-  ]);
-
-  const { data: FSTPORejectionReasons, isLoading: isFSTPORejectionReasonData } = Digit.Hooks.fsm.useMDMS(
-    stateCode,
-    "Vehicle",
-    "FSTPORejectionReason",
-    { staleTime: Infinity }
-  );
-
   const [dsoList, setDsoList] = useState([]);
   const [vehicleNoList, setVehicleNoList] = useState([]);
   const [config, setConfig] = useState({});
@@ -96,6 +58,16 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [vehicleNo, setVehicleNo] = useState(null);
   const [vehicleMenu, setVehicleMenu] = useState([]);
   const [vehicle, setVehicle] = useState(null);
+  const [defaultValues, setDefautValue] = useState({
+    capacity: vehicle?.capacity,
+    wasteCollected: vehicle?.capacity,
+  });
+  const { data: Reason, isLoading: isReasonLoading } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "Reason", { staleTime: Infinity }, [
+    "ReassignReason",
+    "RejectionReason",
+    "DeclineReason",
+    "CancelReason",
+  ]);
 
   const [reassignReason, selectReassignReason] = useState(null);
   const [rejectionReason, setRejectionReason] = useState(null);
@@ -104,71 +76,17 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   const [formValve, setFormValve] = useState(false);
 
-  const [property, setProperty] = useState(null);
-  const [propertyMenu, setPropertyMenu] = useState([]);
-  const [propertySubType, setPropertySubType] = useState(null);
-  const [pitType, setPitType] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
-  const [fileStoreId, setFileStoreId] = useState();
-  const [pitDetail, setPitDetail] = useState();
-  const [fstpoRejectionReason, setFstpoRejectionReason] = useState();
-  const [noOfTrips, setNoOfTrips] = useState(null);
-
-  const [defaultValues, setDefautValue] = useState({
-    capacity: vehicle?.capacity,
-    wasteCollected: vehicle?.capacity,
-    propertyType: applicationData?.propertyUsage.split('.')[0],
-    subtype: applicationData?.propertyUsage,
-    pitType: applicationData?.sanitationtype,
-    pitDetail: applicationData?.pitDetail,
-  });
-
   useEffect(() => {
-    if (isSuccess && isVehicleDataLoaded && applicationData) {
+    if (isSuccess && isVehicleDataLoaded) {
       const [vehicle] = vehicleList.filter((item) => item.code === applicationData.vehicleType);
-      let arrayList = defaultValues
-      arrayList.capacity = applicationData?.vehicleCapacity;
-      arrayList.wasteCollected = applicationData?.vehicleCapacity
       setVehicleMenu([vehicle]);
       setVehicle(vehicle);
-      setDefautValue(arrayList);
+      setDefautValue({
+        capacity: vehicle?.capacity,
+        wasteCollected: vehicle?.capacity,
+      });
     }
   }, [isVehicleDataLoaded, isSuccess]);
-
-  useEffect(() => {
-    if (isSuccess && isPropertyDataLoaded && applicationData) {
-      const [property] = propertyList.filter((item) => item.code === applicationData.propertyUsage.split('.')[0]);
-      let arrayList = defaultValues;
-      arrayList.propertyType = property;
-      setPropertyMenu([property]);
-      setProperty(property);
-      setDefautValue(arrayList);
-    }
-  }, [isPropertyDataLoaded, isSuccess]);
-
-  useEffect(() => {
-    if (isSuccess && isPropertySubDataLoaded && applicationData) {
-      const [propertySub] = propertySubList.filter((item) => item.code === applicationData.propertyUsage);
-      let arrayList = defaultValues;
-      arrayList.subtype = propertySub;
-      setPropertySubType(propertySub);
-      setDefautValue(arrayList);
-    }
-  }, [isPropertySubDataLoaded, isSuccess]);
-
-  useEffect(() => {
-    if (isSuccess && isPitDataLoaded && applicationData) {
-      const [pitType] = pitList.filter((item) => item.code === applicationData.sanitationtype);
-      const pitDetail = applicationData.pitDetail;
-      let arrayList = defaultValues;
-      arrayList.pitType = pitType;
-      arrayList.pitDetail = pitDetail;
-      setPitType(pitType);
-      setPitDetail(applicationData.pitDetail)
-      setDefautValue(arrayList)
-
-    }
-  }, [isPitDataLoaded, isSuccess]);
 
   useEffect(() => {
     if (vehicle && isDsoSuccess) {
@@ -178,9 +96,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }, [vehicle, isDsoSuccess]);
 
   useEffect(() => {
-    if (isSuccess && isDsoSuccess && applicationData && applicationData.dsoId) {
+    if (isSuccess && isDsoSuccess && applicationData.dsoId) {
       const [dso] = dsoData.filter((dso) => dso.id === applicationData.dsoId);
-      const vehicleNoList = dso?.vehicles?.filter((vehicle) => vehicle.capacity == applicationData?.vehicleCapacity);
+      const vehicleNoList = dso?.vehicles?.filter((vehicle) => vehicle.type === applicationData.vehicleType);
       setVehicleNoList(vehicleNoList);
     }
   }, [isSuccess, isDsoSuccess]);
@@ -220,26 +138,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     });
   }
 
-  function selectReason(reason) {
-    setFstpoRejectionReason(reason);
-  }
-
-  function getImage(e) {
-    setImageFile(e.target.files);
-  }
-
 
   function addCommentToWorkflow(state, workflow, data) {
     workflow.comments = data.comments ? state.code + "~" + data.comments : state.code;
   }
-
-  const handleUpload = (ids) => {
-    if (!fileStoreId || fileStoreId.length < 4) {
-      setFileStoreId(ids);
-    } else {
-    }
-    // Digit.SessionStorage.set("PGR_CREATE_IMAGES", ids);
-  };
 
   function submit(data) {
     const workflow = { action: action };
@@ -251,28 +153,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.date) applicationData.possibleServiceDate = new Date(`${data.date}`).getTime();
     if (data.desluged) applicationData.completedOn = new Date(data.desluged).getTime();
     if (data.wasteCollected) applicationData.wasteCollected = data.wasteCollected;
-
-    if (data.pitDetail) applicationData.pitDetail.height = Number(data.pitDetail.height);
-    if (data.pitDetail) applicationData.pitDetail.width = Number(data.pitDetail.width);
-    if (data.pitDetail) applicationData.pitDetail.diameter = Number(data.pitDetail.diameter);
-    if (data.pitDetail) applicationData.pitDetail.length = Number(data.pitDetail.length);
-    if (data.pitType) applicationData.sanitationtype = data.pitType.code;
-    if (data.subtype && typeof (data.subtype) === "object") applicationData.propertyUsage = data.subtype.code;
-    if (data.subtype && typeof (data.subtype) === "string") applicationData.propertyUsage = data.subtype;
-    if (data.noOfTrips) applicationData.noOfTrips = data.noOfTrips
-    if (fileStoreId) {
-      let temp = {}
-      fileStoreId.map((i) => (temp[fileStoreId.indexOf(i) + 1] = i))
-      applicationData.pitDetail.additionalDetails = { fileStoreId: temp };
-    }
-    if (data.noOfTrips) applicationData.noOfTrips = Number(data.noOfTrips); 
-
     if (reassignReason) addCommentToWorkflow(reassignReason, workflow, data);
     if (rejectionReason) addCommentToWorkflow(rejectionReason, workflow, data);
     if (declineReason) addCommentToWorkflow(declineReason, workflow, data);
     if (cancelReason) addCommentToWorkflow(cancelReason, workflow, data);
-    if (fstpoRejectionReason && data.comments) workflow.comments = data.comments;
-    if (fstpoRejectionReason) workflow.fstpoRejectionReason = fstpoRejectionReason?.code;
 
     submitAction({ fsm: applicationData, workflow });
   }
@@ -288,7 +172,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             dsoData,
             dso,
             vehicle,
-            vehicleCapacity: applicationData?.vehicleCapacity,
             vehicleNo,
             vehicleNoList,
             selectVehicleNo,
@@ -299,7 +182,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "ASSIGN":
       case "GENERATE_DEMAND":
       case "FSM_GENERATE_DEMAND":
-        setFormValve(dso ? true : false);
+        setFormValve(dso && vehicle ? true : false);
         return setConfig(
           configAssignDso({
             t,
@@ -308,7 +191,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             selectDSO,
             vehicleMenu,
             vehicle,
-            vehicleCapacity: applicationData?.vehicleCapacity,
             selectVehicle,
             action,
           })
@@ -317,7 +199,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "REASSING":
       case "FSM_REASSING":
         dso &&
-          (reassignReason || (actionData && actionData[0] && actionData[0].comment?.length > 0 && actionData[0]?.status === "DSO_REJECTED"))
+        vehicle &&
+        (reassignReason || (actionData && actionData[0] && actionData[0].comment?.length > 0 && actionData[0]?.status === "DSO_REJECTED"))
           ? setFormValve(true)
           : setFormValve(false);
         return setConfig(
@@ -328,7 +211,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             selectDSO,
             vehicleMenu,
             vehicle,
-            vehicleCapacity: applicationData?.vehicleCapacity,
             selectVehicle,
             reassignReasonMenu: Reason?.ReassignReason,
             reassignReason,
@@ -341,7 +223,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
-        return setConfig(configCompleteApplication({ t, vehicle, vehicleCapacity: applicationData?.vehicleCapacity, noOfTrips: applicationData?.noOfTrips, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
+        return setConfig(configCompleteApplication({ t, vehicle, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
@@ -353,8 +235,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           configRejectApplication({
             t,
             rejectMenu: Reason?.DeclineReason,
-            setTrips: setNoOfTrips,
-            trips: applicationData?.noOfTrips,
+            setReason: setDeclineReason,
+            reason: declineReason,
             action,
           })
         );
@@ -383,55 +265,25 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             action,
           })
         );
-      case "SCHEDULE":
-      case "ES_FSM_SCHEDULE":
-        setFormValve(true);
-        return setConfig(
-          configScheduleDso({
-            t,
-            rejectMenu: Reason?.DeclineReason,
-            setReason: setDeclineReason,
-            reason: declineReason,
-            applicationCreatedTime: applicationData?.auditDetails?.createdTime,
-            vehicle,
-            vehicleCapacity: applicationData?.vehicleCapacity,
-            action,
-            noOfTrips: applicationData?.noOfTrips
-          })
-        );
 
       case "PAY":
       case "ADDITIONAL_PAY_REQUEST":
       case "FSM_PAY":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
-      case "DECLINEVEHICLE":
-        setFormValve(fstpoRejectionReason ? true : false);
-        return setConfig(
-          configRejectFstpo({
-            t,
-            rejectMenu: FSTPORejectionReasons,
-            selectReason,
-            reason: fstpoRejectionReason,
-            action,
-          })
-        );
       default:
         console.debug("default case");
         break;
     }
-  }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList, Reason, fstpoRejectionReason]);
-
-  const hiddenFileInput = React.useRef(null);
+  }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList, Reason]);
 
   return action && config.form && !isDsoLoading && !isReasonLoading && isVehicleDataLoaded ? (
     <Modal
-      popupStyles={{ height: "fit-content" }}
       headerBarMain={<Heading label={t(config.label.heading)} />}
       headerBarEnd={<CloseBtn onClick={closeModal} />}
       actionCancelLabel={t(config.label.cancel)}
       actionCancelOnSubmit={closeModal}
       actionSaveLabel={t(config.label.submit)}
-      actionSaveOnSubmit={() => { }}
+      actionSaveOnSubmit={() => {}}
       formId="modal-action"
       isDisabled={!formValve}
     >
@@ -441,18 +293,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         inline
         childrenAtTheBottom
         onSubmit={submit}
-        formId="modal-action"
         defaultValues={defaultValues}
-      >
-      </FormComposer>
-      {action === "COMPLETED" ? <UploadPitPhoto
-        header=""
-        tenantId={tenantId}
-        cardText=""
-        onPhotoChange={handleUpload}
-        uploadedImages={null} /> : null
-      }
-
+        formId="modal-action"
+      />
       {/* {toastError && <Toast {...toastError} />} */}
     </Modal>
   ) : (

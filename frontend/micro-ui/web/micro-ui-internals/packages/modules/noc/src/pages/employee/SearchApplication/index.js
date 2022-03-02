@@ -53,10 +53,11 @@ const Search = ({ path }) => {
     // );
   }
 
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const { data, isLoading, isSuccess, error } = Digit.Hooks.noc.useNOCSearchApplication(tenantId,filters,{});
   return (
     <div>
-      <CardHeader styles={{fontSize: "32px", fontWeight: "700"}}>{t("ACTION_TEST_SEARCH_NOC_APPLICATION")}</CardHeader>
+      <CardHeader styles={!isMobile ? {fontSize: "32px", fontWeight: "700"} : {fontSize: "32px", fontWeight: "700", paddingLeft: "10px"}}>{t("ACTION_TEST_SEARCH_NOC_APPLICATION")}</CardHeader>
       <Search
         t={t}
         tenantId={tenantId}

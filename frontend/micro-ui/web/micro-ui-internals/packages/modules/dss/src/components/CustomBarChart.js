@@ -1,40 +1,24 @@
-import { Loader } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { startOfMonth, endOfMonth, getTime } from "date-fns";
+import { Loader } from "@egovernments/digit-ui-react-components";
+import { ResponsiveContainer, Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
-import NoData from "./NoData";
-import { checkCurrentScreen } from "./DSSCard";
-
-
-const formatValue = (value, symbol) => {
-  if (symbol?.toLowerCase() === "percentage") {
-/*   Removed by  percentage formatter.
-    const Pformatter = new Intl.NumberFormat("en-IN", { maximumSignificantDigits: 3 });
-    return `${Pformatter.format(Number(value).toFixed(2))}`;
-    */
-    return `${Number(Math.ceil(Number(value)*10)/10).toFixed(1)}`;
-  } else {
-    return value;
-  }
-};
 
 const CustomLabel = ({ x, y, name, stroke, value }) => {
   const { t } = useTranslation();
   return (
     <>
-      <text x={x} y={y} dx={-60} dy={10} fill={stroke} width="35" style={{fontSize: "medium",
-    fontVariantNumeric: "proportional-nums"}}>
-       {`${value}%`}
+      <text x={x} y={y} dx={-65} dy={10} fill={stroke} width="30">
+        {`${value}%`}
       </text>
       <text x={x} y={y} dx={-170} dy={10}>
-       {t(name)}
+        {t(name)}
       </text>
     </>
   );
 };
-const COLORS={RED:"#00703C",GREEN:"#D4351C",default:"#00703C"}
 
 const CustomBarChart = ({
   xDataKey = "value",
@@ -43,12 +27,11 @@ const CustomBarChart = ({
   yDataKey = "name",
   hideAxis = true,
   layout = "vertical",
-  fillColor = "default",
+  fillColor = "#00703C",
   showGrid = false,
   showDrillDown = false,
   data,
   title,
-  setChartDenomination
 }) => {
   const { id } = data;
   const { t } = useTranslation();
@@ -62,48 +45,47 @@ const CustomBarChart = ({
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
   });
-  
+
   const chartData = useMemo(() => {
     if (!response) return null;
-    setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     return response?.responseData?.data?.map((bar) => {
-      let plotValue = bar?.plots?.[0].value || 0;
       return {
         name: t(bar?.plots?.[0].name),
-        value:formatValue(plotValue, bar?.plots?.[0].symbol),
-        // value: Digit.Utils.dss.formatter(plotValue, bar?.plots?.[0].symbol),
+        value: bar?.plots?.[0].value,
       };
     });
   }, [response]);
 
   const goToDrillDownCharts = () => {
-    history.push(`/digit-ui/employee/dss/drilldown?chart=${response?.responseData?.visualizationCode}&ulb=${value?.filters?.tenantId}&title=${title}&fromModule=${Digit.Utils.dss.getCurrentModuleName()}&type=performing-metric&fillColor=${fillColor}&isNational=${checkCurrentScreen()?"YES":"NO"}`);
+    history.push(`/digit-ui/employee/dss/drilldown?chart=${response?.responseData?.drillDownChartId}&ulb=${value?.filters?.tenantId}&title=${title}`);
   };
   if (isLoading) {
     return <Loader />;
   }
-  if (chartData?.length === 0 || !chartData) {
-    return <NoData t={t} />;
+  if (chartData?.length === 0) {
+    return (
+      <div className="no-data">
+        <p>{t("DSS_NO_DATA")}</p>
+      </div>
+    );
   }
   return (
     <Fragment>
       <ResponsiveContainer width="99%" height={320}>
-        <BarChart width="100%" height="100%" data={showDrillDown?chartData?.slice(0,3):chartData} layout={layout} maxBarSize={8} margin={{ left: 170 }} barGap={50}>
+        <BarChart width="100%" height="100%" data={chartData} layout={layout} maxBarSize={10} margin={{ left: 170 }} barGap={70}>
           {showGrid && <CartesianGrid />}
-          <XAxis hide={hideAxis} dataKey={xDataKey} type={xAxisType} domain={[0, 90]} />
+          <XAxis hide={hideAxis} dataKey={xDataKey} type={xAxisType} domain={[0, 100]} />
           <YAxis dataKey={yDataKey} hide={hideAxis} type={yAxisType} padding={{ right: 40 }} />
           <Bar
             dataKey={xDataKey}
-            fill={COLORS[fillColor]}
-            background={{ fill: "#D6D5D4", radius: 8 }}
-            label={<CustomLabel stroke={COLORS[fillColor]} />}
-            radius={[8, 8, 8, 8]}
-            isAnimationActive={false}
-            maxBarSize={8}
+            fill={fillColor}
+            background={{ fill: "#D6D5D4", radius: 10 }}
+            label={<CustomLabel stroke={fillColor} />}
+            radius={[10, 10, 10, 10]}
           />
         </BarChart>
       </ResponsiveContainer>
-      { chartData?.length>3&&showDrillDown&&(
+      {showDrillDown && (
         <p className="showMore" onClick={goToDrillDownCharts}>
           {t("DSS_SHOW_MORE")}
         </p>

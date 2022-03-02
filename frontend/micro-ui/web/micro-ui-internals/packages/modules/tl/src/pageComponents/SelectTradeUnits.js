@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, RadioOrSelect, LinkButton } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 import {sortDropdownNames} from "../utils/index";
-import Timeline from "../components/TLTimeline";
 
 const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   let validation = {};
@@ -144,8 +143,6 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   ];
 
   return (
-    <React.Fragment>
-    {window.location.href.includes("/citizen") ? <Timeline /> : null}
     <FormStep
       config={config}
       onSelect={goNext}
@@ -259,7 +256,6 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
         </button>
       </div>
     </FormStep>
-    </React.Fragment>
   );
 };
 export default SelectTradeUnits;

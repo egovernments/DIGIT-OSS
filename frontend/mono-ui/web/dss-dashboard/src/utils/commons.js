@@ -31,8 +31,7 @@ export const getTenantId = () => {
     return `${localStorage.getItem('tenant-id')}`;
 }
 export const stateTenant= () => {
-    let globalConfigs=window&&window.globalConfigs?window.globalConfigs : window.parent&&window.parent.globalConfigs;
-    return globalConfigs&&globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")?globalConfigs.getConfig("STATE_LEVEL_TENANT_ID"):getTenantId().split('.')[0];
+    return window&&window.globalConfigs&&window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")?window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID"):getTenantId();
 }
 
 export const fetchLocalisationRequest = (language) => {
@@ -52,5 +51,3 @@ export const convertLabelValue=(label='',strings={})=>{
             return getLocaleLabels(`DSS_TB_${label}`,strings);
     }
 }
-
-export const isNurtDashboard=()=>window.location.pathname.toLowerCase().includes("nurt_dashboard")

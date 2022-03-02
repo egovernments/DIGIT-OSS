@@ -14,6 +14,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
       <Controller
           name="status"
           control={controlFilterForm}
+          defaultValue={statuses?.[0]}
           render={({ref, onChange, value}) => {
             return <>
               <div className="filter-label">{t("CS_SURVEY_STATUS")}</div>

@@ -51,11 +51,10 @@ export const Surveys = {
     showResults: (details) =>
         Request({
             url: Urls.engagement.surveys.showResults,
-            //data: details,
+            data: details,
             useCache: true,
             userService: true,
             method: "POST",
             auth: true,
-            params:{...details},
         }),
 };

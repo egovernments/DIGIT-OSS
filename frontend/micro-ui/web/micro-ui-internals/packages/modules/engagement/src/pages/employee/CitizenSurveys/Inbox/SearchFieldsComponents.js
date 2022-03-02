@@ -14,7 +14,6 @@ const SearchFormFieldsComponents = ({ registerRef, controlSearchForm, searchForm
         const filtered = ulbs.filter((item) => item.code === tenantId)
         return filtered;
     }, [ulbs])
-    
     /**
      * ToDo how to display default value correctly ask @egov-saurabh
      */

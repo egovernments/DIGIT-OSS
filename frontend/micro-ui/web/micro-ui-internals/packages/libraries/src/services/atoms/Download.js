@@ -2,7 +2,6 @@ import ReactDOM from "react-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import XLSX from "xlsx";
-import domtoimage from "dom-to-image";
 
 const Download = {
   Image: (node, fileName, share, resolve = null) => {
@@ -43,57 +42,6 @@ const Download = {
   },
 
   PDF: (node, fileName, share) => {
-
-
-
-    const saveAs = (uri, filename) => {
-      const link = document.createElement("a");
-
-      if (typeof link.download === "string") {
-        link.href = uri;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } else {
-        window.open(uri);
-      }
-    };
-    const dataURItoBlob = (dataURI) => {
-      var binary = atob(dataURI.split(',')[1]);
-      var array = [];
-      for (var i = 0; i < binary.length; i++) {
-          array.push(binary.charCodeAt(i));
-      }
-      return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
-    };
-
-    const element = ReactDOM.findDOMNode(node.current);
-
-
-
-
-
-    return domtoimage.toJpeg(element, {
-      quality: 1,
-      bgcolor: 'white'
-     }).then(function (dataUrl) {
-/*  to enable pdf
-    var htmlImage = new Image();
-      htmlImage.src = dataUrl;
-      var pdf = new jsPDF( 'l', 'pt', [element.offsetWidth, element.offsetHeight] );
-      pdf.setFontStyle?.("Bold");
-      pdf.setFontSize?.(30);
-      pdf.text?.(325, 40, 'Certificate');
-      // e(imageData, format, x, y, width, height, alias, compression, rotation)
-      pdf.addImage?.( htmlImage, 25, 50, 50, element.offsetWidth, element.offsetHeight );
-      pdf.save?.( fileName +'.pdf' );
-      */
-       return saveAs(dataUrl, `${fileName}.jpeg`)
-        });
-    
-
-        /*
     const getPDF = (canvas) => {
       const width = canvas.width;
       const height = canvas.height;
@@ -118,7 +66,7 @@ const Download = {
       const margin = 0.1;
       const pageHeight = 295;
       // const pdfWidth = pdf.internal.pageSize.width * (1 - margin);
-      const pdfWidth = (imgProps.width * pageHeight) / (imgProps.height * 1.2)
+      const pdfWidth = (imgProps.width * pageHeight) / imgProps.height
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       const x = (pdf.internal.pageSize.width - pdfWidth) / 2;
       let position = 5;
@@ -133,43 +81,6 @@ const Download = {
       // }
       return share ? new File([pdf.output("blob")], `${fileName}.pdf`, { type: "application/pdf" }) : pdf.save(`${fileName}.pdf`);
     });
-    */
-  },
-
-  IndividualChartImage: (node, fileName, share, resolve = null) => {
-    const saveAs = (uri, filename) => {
-      const link = document.createElement("a");
-
-      if (typeof link.download === "string") {
-        link.href = uri;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } else {
-        window.open(uri);
-      }
-    };
-    const dataURItoBlob = (dataURI) => {
-      var binary = atob(dataURI.split(',')[1]);
-      var array = [];
-      for (var i = 0; i < binary.length; i++) {
-          array.push(binary.charCodeAt(i));
-      }
-      return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
-    };
-
-    const element = ReactDOM.findDOMNode(node.current);
-    return domtoimage.toJpeg(element, {
-      quality: 0.95,
-      bgcolor: 'white'
-     }).then(function (dataUrl) {
-       var blobData = dataURItoBlob(dataUrl);
-       return share
-       ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
-       : saveAs(dataUrl, `${fileName}.jpeg`)
-        });
-    
   },
 };
 export default Download;

@@ -15,13 +15,12 @@ import {
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { useParams, useHistory, useLocation, Redirect } from "react-router-dom";
-import { stringReplaceAll } from "../bills/routes/bill-details/utils";
 
 export const SelectPaymentType = (props) => {
   const { state = {} } = useLocation();
   const userInfo = Digit.UserService.getUser();
   const [showToast, setShowToast] = useState(null);
-  const { tenantId: __tenantId, authorization, workflow : wrkflow } = Digit.Hooks.useQueryParams();
+  const { tenantId: __tenantId, authorization } = Digit.Hooks.useQueryParams();
   const paymentAmount = state?.paymentAmount;
   const { t } = useTranslation();
   const history = useHistory();
@@ -33,14 +32,14 @@ export const SelectPaymentType = (props) => {
   const stateTenant = Digit.ULBService.getStateId();
   const { control, handleSubmit } = useForm();
   const { data: menu, isLoading } = Digit.Hooks.useCommonMDMS(stateTenant, "DIGIT-UI", "PaymentGateway");
-  const { data: paymentdetails, isLoading: paymentLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode : wrkflow === "WNS"? stringReplaceAll(consumerCode,"+","/") : consumerCode, businessService }, {});
+  const { data: paymentdetails, isLoading: paymentLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService }, {});
   useEffect(()=>{
     if(paymentdetails?.Bill&&paymentdetails.Bill.length==0){
       setShowToast({ key: true, label: "CS_BILL_NOT_FOUND" });
     }
   },[paymentdetails])
   const { name, mobileNumber } = state;
- 
+
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
   const onSubmit = async (d) => {
@@ -50,7 +49,7 @@ export const SelectPaymentType = (props) => {
         txnAmount: paymentAmount || billDetails.totalAmount,
         module: businessService,
         billId: billDetails.id,
-        consumerCode: wrkflow === "WNS"? stringReplaceAll(consumerCode,"+","/") : consumerCode,
+        consumerCode: consumerCode,
         productInfo: "Common Payment",
         gateway: d.paymentType,
         taxAndPayments: [
@@ -60,8 +59,8 @@ export const SelectPaymentType = (props) => {
           },
         ],
         user: {
-          name: name || userInfo?.info?.name,
-          mobileNumber:  mobileNumber || userInfo?.info?.mobileNumber,
+          name: userInfo?.info?.name || name,
+          mobileNumber: userInfo?.info?.mobileNumber || mobileNumber,
           tenantId: tenantId,
         },
         // success
@@ -100,6 +99,7 @@ export const SelectPaymentType = (props) => {
   if (isLoading || paymentLoading) {
     return <Loader />;
   }
+
 
   return (
     <React.Fragment>

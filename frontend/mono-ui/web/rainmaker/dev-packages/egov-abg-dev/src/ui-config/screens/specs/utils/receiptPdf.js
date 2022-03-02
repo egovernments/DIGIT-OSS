@@ -15,6 +15,7 @@ import {
   loadPtBillData,
   loadUlbLogo
 } from "./receiptTransformer";
+import { downloadPdfFile } from "egov-ui-kit/utils/api" 
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -256,9 +257,10 @@ export const downloadMultipleBills = async (
       queryStr.push({ key: "consumerCode", value: consumerCode });
     }
     /*
-to download all bulk pdf directly egov-pdf
+to download all bulk pdf directly egov-pdf  */
      downloadPdfFile(DOWNLOADRECEIPT.GET.URL,'post',queryStr,{},{},false, `${businesService}_${locality}.pdf`); //{ Bill: bills }
-  */
+   /*
+to download all bulk pdf through jobs 
     const resp = await httpRequest(
       "post",
       DOWNLOADRECEIPT.GET.URL,
@@ -279,53 +281,10 @@ to download all bulk pdf directly egov-pdf
           "success"
         )
       );
-      // window.location.href.includes("abg/billDownload")&&window.location.reload();
     }
+    */
   } catch (error) {
-    console.error(error);
-    dispatch(toggleSnackbar(true, error.message, "error"));
-  }
-};
-
-export const cancelGeneratedJob = async (
-  dispatch,
-  jobid
-) => {
-  try {
-    const CANCEL = {
-      GET: {
-        URL: "/pdf-service/v1/_cancelProcess",
-        ACTION: "_cancel",
-      },
-    };
-    const queryStr = [
-      { key: "jobId", value: jobid },
-    ];
-  
-    const resp = await httpRequest(
-      "post",
-      CANCEL.GET.URL,
-      "create",
-      queryStr
-    );
-    if (resp) {
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "JOB_CANCELLED_STATUS",
-            labelKey: `${getLocaleLabels(
-              "GRP_JOB_CANCELLED_STATUS",
-              "GRP_JOB_CANCELLED_STATUS"
-            )} ${jobid}`,
-          },
-          "success"
-        )
-      );
-      // window.location.href.includes("abg/billDownload")&&window.location.reload();
-    }
-  } catch (error) {
-    console.error(error);
+    console.log(error);
     dispatch(toggleSnackbar(true, error.message, "error"));
   }
 };

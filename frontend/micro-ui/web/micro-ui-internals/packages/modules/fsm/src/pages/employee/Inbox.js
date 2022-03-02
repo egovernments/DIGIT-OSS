@@ -163,10 +163,6 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     if (userRoles.find((role) => role.code === "FSM_EMP_FSTPO")) {
       return [
         {
-          label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
-          name: "applicationNos",
-        },
-        {
           label: t("ES_FSTP_OPERATOR_VEHICLE_NO"),
           name: "vehicleNo",
         },

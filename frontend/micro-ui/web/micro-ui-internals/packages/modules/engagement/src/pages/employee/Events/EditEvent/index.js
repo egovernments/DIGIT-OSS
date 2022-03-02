@@ -89,7 +89,7 @@ const EditEvents = () => {
         defaultValues={defaultValues}
         config={config}
         onSubmit={onSubmit}
-        label={t("EVENTS_SAVE_CHANGES")}
+        label={t("EVENTS_EDIT_EVENT")}
       >
       </FormComposer>
     </Fragment>

@@ -46,8 +46,7 @@ export default class FileUploadAPI extends API {
             headers: {
                 "Content-Type": "multipart/form-data",
                 "type": "formData",
-                "Cache-Control":"no-cache",
-                'auth-token': `${localStorage.getItem('Employee.token')}`
+                "Cache-Control":"no-cache"
             }
         }
     }

@@ -111,21 +111,13 @@ const SurveyDetails = ({ location, match }) => {
     const details = {
       SurveyEntity: {
         uuid: surveyData.uuid,
-        //tenantIds: tenantIds.map(({ code }) => code),
-        tenantId: tenantIds[0]?.code,
+        tenantIds: tenantIds.map(({ code }) => code),
         title,
         description,
         collectCitizenInfo: collectCitizenInfo.code,
         startDate: new Date(`${fromDate} ${fromTime}`).getTime(),
         endDate: new Date(`${toDate} ${toTime}`).getTime(),
         questions: mappedQuestions,
-        status:isSurveyActive?"ACTIVE":"INACTIVE",
-        // active:true,
-        // answersCount:0,
-        // postedBy:"BPAREG Approver",
-        //lastmodifiedby:"BPAREG Approver",
-        //lastmodifiedtime:"1645074240234"
-        //These are not required to update, only status was required that we were not sending..
       },
     };
     history.push("/digit-ui/employee/engagement/surveys/update-response", details);
@@ -138,7 +130,6 @@ const SurveyDetails = ({ location, match }) => {
     history.push("/digit-ui/employee/engagement/surveys/delete-response", details);
   };
 
-  //if we don't send tenantId it violates the not null constraint in the backend...
   const handleMarkActive = (data) => {
     const { fromDate, toDate, fromTime, toTime } = data;
     const details = {
@@ -149,7 +140,6 @@ const SurveyDetails = ({ location, match }) => {
         endDate: new Date(`${toDate} ${toTime}`).getTime(),
         collectCitizenInfo: surveyData.collectCitizenInfo.code,
         questions: surveyData.questions.map(filterQuestion),
-        tenantId,
       },
     };
     history.push("/digit-ui/employee/engagement/surveys/update-response", details);
@@ -157,10 +147,7 @@ const SurveyDetails = ({ location, match }) => {
 
   const handleMarkInactive = () => {
     const details = {
-      SurveyEntity: { ...surveyData,
-        questions: surveyData.questions.map(filterQuestion), 
-        status: "INACTIVE", 
-        collectCitizenInfo: surveyData.collectCitizenInfo.code },
+      SurveyEntity: { ...surveyData, status: "INACTIVE", collectCitizenInfo: surveyData.collectCitizenInfo.code },
     };
     history.push("/digit-ui/employee/engagement/surveys/update-response", details);
   };
@@ -200,7 +187,7 @@ const SurveyDetails = ({ location, match }) => {
           closeModal={() => setShowModal(false)}
           actionCancelLabel={"CS_COMMON_CANCEL"}
           actionCancelOnSubmit={() => setShowModal(false)}
-          actionSaveLabel={"ES_COMMON_DEL"}
+          actionSaveLabel={"ES_COMMON_Y_DEL"}
           actionSaveOnSubmit={handleDelete}
         />
       )}
@@ -215,10 +202,8 @@ const SurveyDetails = ({ location, match }) => {
           actionSaveLabel={"ES_COMMON_SAVE"}
           actionSaveOnSubmit={handleMarkActive}
           onSubmit={handleMarkActive}
-          surveyTitle={surveyData.title}
         />
       )}
-      {/* CONFIRM_MARKINACTIVE_SURVEY - key for heading in modal */}
       {showModal && userAction === "INACTIVE" && (
         <MarkInActiveModal
           t={t}

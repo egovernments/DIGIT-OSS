@@ -22,7 +22,7 @@ const RadioButtons = (props) => {
                   className="radio-btn"
                   type="radio"
                   value={option}
-                  checked={(props.isPTFlow && selected?.code === option.code) || isEqual(selected, option) ? 1 : 0}
+                  checked={isEqual(selected, option) ? 1 : 0}
                   onChange={() => selectOption(option)}
                   disabled={props?.disabled}
                   name={props.name}
@@ -30,7 +30,7 @@ const RadioButtons = (props) => {
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
-              <label style={props.inputStyle}>{t(option[props.optionsKey])}</label>
+              <label>{t(option[props.optionsKey])}</label>
             </div>
           );
         } else if (props?.optionsKey && props?.isDependent) {
@@ -49,7 +49,7 @@ const RadioButtons = (props) => {
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
-              <label style={props.inputStyle}>{t(props.labelKey ? `${props.labelKey}_${option.code}` : option.code)}</label>
+              <label>{t(props.labelKey ? `${props.labelKey}_${option.code}` : option.code)}</label>
             </div>
           );
         } else {
@@ -68,7 +68,7 @@ const RadioButtons = (props) => {
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
-              <label style={props.inputStyle}>{t(option)}</label>
+              <label>{t(option)}</label>
             </div>
           );
         }

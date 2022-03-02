@@ -11,25 +11,18 @@ const ReceiptsService = {
             userService: true,
             params: { tenantId, ...filters, ...searchParams },
         }),
-    receipt_download: (bussinessService, consumerCode, tenantId,pdfKey,receiptNumbers) =>{
-        let newParam={ bussinessService,tenantId };
-        if(receiptNumbers){
-            newParam['receiptNumbers']=receiptNumbers;
-        }else{
-            newParam['consumerCode']=consumerCode;
-        }
-            return Request({
-            url: Urls.mcollect.receipt_download,
+    receipt_download: (bussinessService, consumerCode, tenantId,pdfKey) =>
+        Request({
+            url: Urls.receipts.receipt_download,
             data: {},
             useCache: true,
             method: "POST",
-            params: { ...newParam},
-            auth: window.location.href.includes("pt/property/my-payments")? false : true,
+            params: { bussinessService, consumerCode, tenantId,pdfKey },
+            auth: true,
+            userService: true,
             locale: true,
-            userService: window.location.href.includes("pt/property/my-payments")? false : true,
             userDownload: true,
-            })
-        },
+        }),
     update: (data, tenantId, businessService) =>
         Request({
             data: data,

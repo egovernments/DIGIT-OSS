@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import NewSurveyForm from "./NewSurveyForm";
 
-const SurveyFormsMaker = ({ t, formsConfig, setSurveyConfig, disableInputs }) => {
 const defaultFormsConfig = {
   question: "",
   answerType: "Short Answer",
@@ -31,6 +30,7 @@ const surveyFormReducer = (state, { type, payload }) => {
   }
 };
 
+const SurveyFormsMaker = ({ t, formsConfig, setSurveyConfig, disableInputs }) => {
   const [surveyState, dispatch] = useReducer(surveyFormReducer, formsConfig ? formsConfig : initialSurveyFormState);
 
   const passingSurveyConfigInDispatch = ({ type, payload }) => {
@@ -50,9 +50,8 @@ const surveyFormReducer = (state, { type, payload }) => {
       <div className="heading">{t("CS_SURVEYS_QUESTIONS")}</div>
       {renderPreviewForms()}
       <div className="pointer">
-        <button 
-          // disabled={surveyState.length >= 30 ? "true":""}
-          className={`unstyled-button link ${disableInputs ? "disabled-btn" : ""} ${surveyState.length >= 30 ? "disabled-btn":""} `}
+        <button
+          className={`unstyled-button link ${disableInputs ? "disabled-btn" : ""} `}
           type="button"
           onClick={() => passingSurveyConfigInDispatch({ type: "addNewForm" })}
         >

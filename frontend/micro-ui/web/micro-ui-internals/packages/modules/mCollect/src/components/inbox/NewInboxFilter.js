@@ -6,14 +6,12 @@ import { useTranslation } from "react-i18next";
 import Status from "./Status";
 import ServiceCategory from "./ServiceCategory";
 import _ from "lodash";
-import { stringReplaceAll } from "../../utils";
 
 const Filter = ({ searchParams, onFilterChange,onRefresh, defaultSearchParams, ...props }) => {
   const { t } = useTranslation();
 
   const [_searchParams, setSearchParams] = useState(() => searchParams);
   const [ clearCheck, setclearCheck] = useState(false);
-  const [selectedCategories, setselectedCategories] = useState([]);
 
   const localParamChange = (filterParam) => {
     setclearCheck(false);
@@ -91,26 +89,13 @@ const Filter = ({ searchParams, onFilterChange,onRefresh, defaultSearchParams, .
             </div>
             <div>
               <ServiceCategory
-                searchParams={_searchParams}
+                _searchParams={_searchParams}
                 setclearCheck={setclearCheck}
-                selectedCategory={selectedCategories}
                 businessServices={_searchParams.services}
                 clearCheck={clearCheck}
-                setSearchParams={setSearchParams}
-                setselectedCategories={setselectedCategories}
                 onAssignmentChange={(e, businessService) => {
-                  let filterParam = [];
-                  let selectedCategory = [];
-                  _searchParams["businessService"] = [];
-                  e && e.map((ob) => {
-                    filterParam.push(ob?.[1]?.code);
-                    selectedCategory.push({"code":ob?.[1]?.code, "i18nKey":`BILLINGSERVICE_BUSINESSSERVICE_${stringReplaceAll(ob?.[1]?.code,".","_").toUpperCase()}`});
-                  })
-                  let _new = { ..._searchParams, businessService: [...filterParam] };
-                  setSearchParams({..._new})
-                  setselectedCategories([...selectedCategory])
-                  // if (e.target.checked) localParamChange({ businessService: [..._searchParams?.businessService, businessService?.code] });
-                  // else localParamChange({ businessService: _searchParams?.businessService.filter((e) => e !== businessService?.code) });
+                  if (e.target.checked) localParamChange({ businessService: [..._searchParams?.businessService, businessService?.code] });
+                  else localParamChange({ businessService: _searchParams?.businessService.filter((e) => e !== businessService?.code) });
                 }}
               />
             </div>

@@ -16,7 +16,6 @@ const FileComplaint = ({ parentRoute }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   let config = [];
-  let configs = []
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
   const { data: commonFields, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "CommonFieldsConfig");
 
@@ -25,7 +24,7 @@ const FileComplaint = ({ parentRoute }) => {
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
   useEffect(() => {
-    if (!pathname?.includes('new-application/response')) {
+    if(!pathname?.includes('new-application/response')){
       setMutationHappened(false);
       clearSuccessData();
       clearError();
@@ -34,7 +33,7 @@ const FileComplaint = ({ parentRoute }) => {
 
   const goNext = (skipStep) => {
     const currentPath = pathname.split("/").pop();
-    const { nextStep } = configs.find((routeObj) => routeObj.route === currentPath);
+    const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
     let redirectWithHistory = history.push;
     if (skipStep) {
       redirectWithHistory = history.replace;
@@ -54,7 +53,7 @@ const FileComplaint = ({ parentRoute }) => {
     goNext(skipStep);
   }
 
-  const handleSkip = () => { };
+  const handleSkip = () => {};
 
   const handleSUccess = () => {
     clearParams();
@@ -68,46 +67,10 @@ const FileComplaint = ({ parentRoute }) => {
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-
-  const additionalConfig = [{
-    "label": "a",
-    "isMandatory": false,
-    "type": "component",
-    "route": "select-payment-preference",
-    "key": "selectPaymentPreference",
-    "component": "SelectPaymentPreference",
-    "texts": {
-      "headerCaption": "",
-      "header": "ES_FSM_PAYMENT_PREFERENCE_LABEL",
-      "cardText": "ES_FSM_PAYMENT_PREFERENCE_TEXT",
-      "submitBarLabel": "CS_COMMON_NEXT",
-      "skipText": "CORE_COMMON_SKIP_CONTINUE"
-    },
-    "nextStep": "select-gender"
-  },
-  {
-    "label": "a",
-    "isMandatory": false,
-    "type": "component",
-    "route": "select-gender",
-    "key": "selectGender",
-    "component": "SelectGender",
-    "texts": {
-      "headerCaption": "",
-      "header": "CS_COMMON_CHOOSE_GENDER",
-      "cardText": "CS_COMMON_SELECT_GENDER",
-      "submitBarLabel": "CS_COMMON_NEXT",
-      "skipText": "CORE_COMMON_SKIP_CONTINUE"
-    },
-    "nextStep": "property-type"
-  }]
-
-  configs = [...additionalConfig, ...config]
-  configs.indexRoute = "select-payment-preference";
-
+  config.indexRoute = "property-type";
   return (
     <Switch>
-      {configs.map((routeObj, index) => {
+      {config.map((routeObj, index) => {
         const { component, texts, inputs, key } = routeObj;
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
@@ -123,7 +86,7 @@ const FileComplaint = ({ parentRoute }) => {
         <Response data={params} onSuccess={handleSUccess} />
       </Route>
       <Route>
-        <Redirect to={`${match.path}/${configs.indexRoute}`} />
+        <Redirect to={`${match.path}/${config.indexRoute}`} />
       </Route>
     </Switch>
   );

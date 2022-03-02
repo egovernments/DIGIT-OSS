@@ -46,12 +46,7 @@ const SelectRating = ({ parentRoute }) => {
     });
   }
 
-  const handleSelect = (type, key) => {
-    if (type === "DROP_DOWN") {
-      return (value) => {
-        setAnswers({ ...answers, [key]: value.code });
-      };
-    }
+  const handleSelect = (key) => {
     return (value) => {
       setAnswers({ ...answers, [key]: value });
     };
@@ -61,53 +56,11 @@ const SelectRating = ({ parentRoute }) => {
     return <Loader />;
   }
 
-  const getType = (type) => {
-    switch (type) {
-      case "SINGLE_SELECT":
-        return "radio";
-      case "MULTI_SELECT":
-        return "checkbox";
-      case "DROP_DOWN":
-        return "dropDown";
-      default:
-        return "checkbox";
-    }
-  }
-
-  const getOption = (type, options) => {
-    if (type === "DROP_DOWN") {
-      let option = []
-      options.map((data) => {
-        option.push({
-          active: true,
-          citizenOnly: false,
-          code: data,
-          i18nKey: data,
-          name: data
-        })
-      })
-      return option
-    } else {
-      return options
-    }
-  }
-
-  const getSelectedOption = (type, code, options) => {
-    switch (type) {
-      case "SINGLE_SELECT":
-        return answers[code];
-      case "DROP_DOWN":
-        return options.find((element) => element.code === answers[code]);
-      default:
-        return null;
-    }
-  }
-
   const inputs = checklistData?.FSM?.CheckList.map((item) => ({
-    type: getType(item.type),
-    checkLabels: getOption(item.type, item.options),
-    onSelect: item.type === "SINGLE_SELECT" || item.type === "DROP_DOWN" ? handleSelect(item.type, item.code) : null,
-    selectedOption: getSelectedOption(item.type, item.code, getOption(item.type, item.options)),
+    type: item.type === "SINGLE_SELECT" ? "radio" : "checkbox",
+    checkLabels: item.options,
+    onSelect: item.type === "SINGLE_SELECT" ? handleSelect(item.code) : null,
+    selectedOption: item.type === "SINGLE_SELECT" ? answers[item.code] : null,
     name: item.code,
     label: item.code === "SPILLAGE" ? t("CS_FSM_APPLICATION_RATE_HELP_TEXT") : item.code,
   }));

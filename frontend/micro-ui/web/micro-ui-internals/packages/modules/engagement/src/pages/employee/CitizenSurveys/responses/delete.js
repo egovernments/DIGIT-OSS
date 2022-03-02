@@ -31,13 +31,11 @@ const Response = (props) => {
   useEffect(() => {
     const onSuccess = () => {
       queryClient.clear();
-      window.history.replaceState(null, 'DELETE_SURVEY_STATE')
     };
-    if(!!state){
-      mutation.mutate(state, {
-        onSuccess,
-      });
-    }
+
+    mutation.mutate(state, {
+      onSuccess,
+    });
   }, []);
 
   if (mutation.isLoading || mutation.isIdle) {

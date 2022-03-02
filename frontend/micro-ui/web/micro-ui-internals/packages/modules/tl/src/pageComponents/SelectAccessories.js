@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { FormStep, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-react-components";
-import Timeline from "../components/TLTimeline";
 
 const SelectAccessories = ({ t, config, onSelect, userType, formData }) => {
   const [isAccessories, setisAccessories] = useState(formData?.TradeDetails?.isAccessories);
@@ -22,8 +21,6 @@ const SelectAccessories = ({ t, config, onSelect, userType, formData }) => {
     //onSelect("usageCategoryMajor", { i18nKey: "PROPERTYTAX_BILLING_SLAB_RESIDENTIAL" });
   }
   return (
-    <React.Fragment>
-    {window.location.href.includes("/citizen") ? <Timeline /> : null}
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!isAccessories}>
       <RadioButtons
         t={t}
@@ -34,7 +31,6 @@ const SelectAccessories = ({ t, config, onSelect, userType, formData }) => {
         onSelect={selectisAccessories}
       />
     </FormStep>
-    </React.Fragment>
   );
 };
 export default SelectAccessories;

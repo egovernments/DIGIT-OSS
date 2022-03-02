@@ -11,13 +11,13 @@ export const PTService = {
       userService: auth === false ? auth : true,
       params: { tenantId, ...filters },
     }),
-  fetchPaymentDetails: ({ tenantId, consumerCodes ,auth=true}) =>
+  fetchPaymentDetails: ({ tenantId, consumerCodes }) =>
     Request({
       url: Urls.pt.fetch_payment_details,
       useCache: false,
       method: "POST",
-      auth: auth === false ? auth : true,
-      userService: auth === false ? auth : true,
+      auth: true,
+      userService: true,
       params: { tenantId, consumerCode: consumerCodes, businessService: "PT" },
     }),
   create: (details, tenantId) =>
@@ -69,15 +69,6 @@ export const PTService = {
       method: "POST",
       auth: true,
       userService: true,
-      params: { tenantId, ...filters },
-    }),
-  paymentsearch: ({ tenantId, filters, auth }) =>
-    Request({
-      url: Urls.pt.payment_search,
-      useCache: false,
-      method: "POST",
-      auth: auth === false ? auth : true,
-      userService: auth === false ? auth : true,
       params: { tenantId, ...filters },
     }),
 };

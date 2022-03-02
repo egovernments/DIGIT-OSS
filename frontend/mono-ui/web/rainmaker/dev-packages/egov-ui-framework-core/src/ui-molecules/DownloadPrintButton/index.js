@@ -55,8 +55,8 @@ class DownloadPrintButton extends React.Component {
     const { open } = this.state;
 
     return (
-      <div className={classes.root} data-html2canvas-ignore={true} style={data.props.style && data.props.style.width ? {width: data.props.style.width} : {}}>
-        <div style={data.props.style && data.props.style.width ? {width: data.props.style.width} : {}}>
+      <div className={classes.root} data-html2canvas-ignore={true}>
+        <div>
           <Button className={classes.button}
             buttonRef={node => {
               this.anchorEl = node;
@@ -71,7 +71,7 @@ class DownloadPrintButton extends React.Component {
               <span style={{marginLeft:30 ,color : data.props.color}}> |  </span>
             <Icon className={classes.rightIcon} iconName={data.rightIcon} color={data.props.color}/>
           </Button>
-          <Popper open={open} anchorEl={this.anchorEl} style={data.props && data.props.style && data.props.style.menuListStyle && data.props.style.menuListStyle.width ? data.props.style.menuListStyle: {zIndex:100}} transition disablePortal placement="bottom-end">
+          <Popper open={open} anchorEl={this.anchorEl} style={{zIndex:100}} transition disablePortal placement="bottom-end">
             {({ TransitionProps, placement }) => (
               <Grow
                 {...TransitionProps}

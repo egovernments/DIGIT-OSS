@@ -11,26 +11,15 @@ const Inbox = ({ parentRoute }) => {
   const { t } = useTranslation()
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
-  const userInfo = Digit.UserService.getUser().info;
-  const userUlbs = ulbs
-    .filter((ulb) => userInfo?.roles?.some((role) => role?.tenantId === ulb?.code))
-    
-  const statuses = [
-    { code: "ALL", name: `${t("ES_COMMON_ALL")}` },
-    { code: "ACTIVE", name: `${t("ES_COMMON_ACTIVE")}` },
-    { code: "INACTIVE", name: `${t("ES_COMMON_INACTIVE")}` }
-  ]
 
   const searchFormDefaultValues = {
-    // tenantIds: tenantId,
-    tenantIds:userUlbs[0],
+    tenantIds: tenantId,
     postedBy: "",
     title: ""
   }
 
   const filterFormDefaultValues = {
-    status: statuses[0]
+    status: ""
   }
   const tableOrderFormDefaultValues = {
     sortBy: "",
@@ -38,6 +27,12 @@ const Inbox = ({ parentRoute }) => {
     offset: 0,
     sortOrder: "DESC"
   }
+
+  const statuses = [
+    { code: "ALL", name: `${t("ES_COMMON_ALL")}` },
+    { code: "ACTIVE", name: `${t("ES_COMMON_ACTIVE")}` },
+    { code: "INACTIVE", name: `${t("ES_COMMON_INACTIVE")}` }
+  ]
 
   function formReducer(state, payload) {
     switch (payload.action) {
@@ -60,12 +55,11 @@ const Inbox = ({ parentRoute }) => {
     setSearchFormValue("postedBy", "")
     setSearchFormValue("title", "")
     setSearchFormValue("tenantIds", tenantId)
-    dispatch({ action: "mutateSearchForm", data: searchFormDefaultValues })
   }
 
   const onFilterFormReset = (setFilterFormValue) => {
-    setFilterFormValue("status", statuses[0])
-    dispatch({ action: "mutateFilterForm", data: filterFormDefaultValues })
+    setFilterFormValue("status", "")
+
   }
 
   const formInitValue = useMemo(() => {
@@ -107,7 +101,6 @@ const Inbox = ({ parentRoute }) => {
       }} />
     , [statuses])
 
-    
   const onSearchFormSubmit = (data) => {
     data.hasOwnProperty("") ? delete data?.[""] : null
     dispatch({ action: "mutateSearchForm", data })

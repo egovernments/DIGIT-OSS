@@ -49,9 +49,7 @@ module.exports = function (app) {
     "/egov-user-event",
     "/egov-document-uploader",
     "/egov-pdf",
-    "/egov-survey-services",
-    "/ws-services",
-    "/sw-services",
+    "/egov-survey-services"
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
 };

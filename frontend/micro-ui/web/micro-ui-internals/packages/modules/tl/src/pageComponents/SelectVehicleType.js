@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { FormStep, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-react-components";
-import Timeline from "../components/TLTimeline";
 
 const SelectVehicleType = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -28,8 +27,6 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData }) => {
     onSelect(config.key, { VehicleType });
   }
   return (
-    <React.Fragment>
-    {window.location.href.includes("/citizen") ? <Timeline /> : null}
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!VehicleType}>
       <RadioButtons
         t={t}
@@ -41,7 +38,6 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData }) => {
         disable={isEdit}
       />
     </FormStep>
-    </React.Fragment>
   );
 };
 export default SelectVehicleType;

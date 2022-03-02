@@ -1,21 +1,10 @@
-import { CloseSvg, FilterIcon, MultiSelectDropdown, RefreshIcon } from "@egovernments/digit-ui-react-components";
 import React, { useContext, useEffect, useMemo, useState } from "react";
+import { MultiSelectDropdown, FilterIcon, RefreshIcon, CloseSvg } from "@egovernments/digit-ui-react-components";
+import Switch from "./Switch";
 import DateRange from "./DateRange";
 import FilterContext from "./FilterContext";
-import Switch from "./Switch";
 
-
-const Filters = ({
-  t,
-  ulbTenants,
-  isOpen,
-  closeFilters,
-  showDateRange = true,
-  showDDR = true,
-  showUlb = true,
-  showDenomination = true,
-  isNational = false,
-}) => {
+const Filters = ({ t, ulbTenants, isOpen, closeFilters, showDateRange = true, showDDR = true, showUlb = true, showDenomination = true }) => {
   const { value, setValue } = useContext(FilterContext);
 
   const [selected, setSelected] = useState(() =>
@@ -31,16 +20,16 @@ const Filters = ({
   };
 
   const selectFilters = (e, data) => {
-    setValue({ ...value, filters: { tenantId: e.map((allPropsData) => allPropsData?.[1]?.code) } });
+    setValue({ ...value, filters: { tenantId: e.map( (allPropsData) =>  allPropsData?.[1]?.code) } });
   };
 
   const selectDDR = (e, data) => {
     const DDRsSelectedByUser = ulbTenants.ulb.filter((ulb) => {
-      return !!e.find((tenant) => {
-        return ulb.ddrKey === tenant?.[1].ddrKey;
-      });
-    });
-    setValue({ ...value, filters: { tenantId: DDRsSelectedByUser.map((allPropsData) => allPropsData?.code) } });
+      return !!e.find( tenant => {
+        return ulb.ddrKey === tenant?.[1].ddrKey
+      })
+    })
+    setValue({ ...value, filters: { tenantId: DDRsSelectedByUser.map( (allPropsData) =>  allPropsData?.code) } });
   };
 
   const selectedDDRs = useMemo(
@@ -57,6 +46,7 @@ const Filters = ({
       range: Digit.Utils.dss.getInitialRange(),
     });
   };
+
   return (
     <div className={`filters-wrapper ${isOpen ? "filters-modal" : ""}`}>
       <span className="filter-close" onClick={() => closeFilters()}>
@@ -78,14 +68,14 @@ const Filters = ({
       )}
       {showDDR && (
         <div className="filters-input">
-          <div className="mbsm">{t(isNational ? "ES_DSS_STATE" : "ES_DSS_DDR")}</div>
+          <div className="mbsm">{t("ES_DSS_DDR")}</div>
           <MultiSelectDropdown
-            options={ulbTenants?.ddr && ulbTenants.ddr?.sort((x, y) => x?.ddrKey?.localeCompare(y?.ddrKey))}
+            options={ulbTenants?.ddr}
             optionsKey="ddrKey"
             onSelect={selectDDR}
             selected={selectedDDRs}
-            defaultLabel={t(isNational ? "ES_DSS_ALL_STATE_SELECTED" : "ES_DSS_ALL_DDR_SELECTED")}
-            defaultUnit={t(isNational ? "ES_DSS_STATE_SELECTED" : "ES_DSS_DDR_SELECTED")}
+            defaultLabel={t("ES_DSS_ALL_DDR_SELECTED")}
+            defaultUnit={t("ES_DSS_DDR_SELECTED")}
           />
         </div>
       )}
@@ -93,12 +83,7 @@ const Filters = ({
         <div className="filters-input">
           <div className="mbsm">{t("ES_DSS_ULB")}</div>
           <MultiSelectDropdown
-            options={
-              ulbTenants?.ulb?.sort((x, y) => x?.ulbKey?.localeCompare(y?.ulbKey))
-              /*    Removed filter for selected ddr/state rain-5426
-              ulbTenants?.ulb && ulbTenants.ulb.filter((e) => Digit.Utils.dss.checkSelected(e, selectedDDRs))?.sort((x, y) => x?.ulbKey?.localeCompare(y?.ulbKey))
-             */
-            }
+            options={ulbTenants?.ulb}
             optionsKey="ulbKey"
             onSelect={selectFilters}
             selected={selected}

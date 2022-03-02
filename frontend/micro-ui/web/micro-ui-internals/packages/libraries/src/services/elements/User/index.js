@@ -13,7 +13,7 @@ export const UserService = {
       url: Urls.Authenticate,
       data,
       headers: {
-        authorization: "Basic ZWdvdi11c2VyLWNsaWVudDo=",
+        authorization: `Basic ${window?.globalConfigs?.getConfig("JWT_TOKEN")||"ZWdvdi11c2VyLWNsaWVudDo="}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
@@ -102,11 +102,10 @@ export const UserService = {
   changePassword: (details, stateCode) =>
     ServiceRequest({
       serviceName: "changePassword",
-      url: Urls.ChangePassword1,
+      url: Urls.ChangePassword,
       data: {
         ...details,
       },
-      auth: true,
       params: { tenantId: stateCode },
     }),
 

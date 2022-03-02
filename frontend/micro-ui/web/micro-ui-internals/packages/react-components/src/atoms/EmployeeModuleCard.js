@@ -13,7 +13,7 @@ const EmployeeModuleCard = ({Icon, moduleName, kpis = [], links = [], isCitizen 
                     </span>
                 </div>
                 <div className="body" style={{ margin: "0px", padding: "0px" }}>
-                    {kpis.length!==0&&<div className="flex-fit" style={isCitizen ? {paddingLeft: "17px"}: {}}>
+                    <div className="flex-fit" style={isCitizen ? {paddingLeft: "17px"}: {}}>
                         {kpis.map(({count, label, link}, index) => <div className="card-count" key={index}>
                             <div> 
                                 <span>{count || "-"}</span>
@@ -22,7 +22,7 @@ const EmployeeModuleCard = ({Icon, moduleName, kpis = [], links = [], isCitizen 
                                 {link ? <Link to={link} className="employeeTotalLink">{label}</Link> : null}
                             </div>
                         </div>)}
-                    </div>}
+                    </div>
                     <div className="links-wrapper" style={{width: "80%"}}>
                         {links.map(({count, label, link}, index) => <span className="link" key={index}>
                             {link ? <Link to={link}>{label}</Link> : null }

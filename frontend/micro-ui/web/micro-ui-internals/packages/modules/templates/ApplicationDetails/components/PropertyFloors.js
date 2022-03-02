@@ -18,8 +18,17 @@ function PropertyFloors({ floors }) {
                 </CardSectionHeader>
                 <StatusTable style={{ position: "relative", padding: "8px" }}>
                   <div
-                    style={{ border: "1px solid #D6D5D4", padding: "16px", marginTop: "8px", borderRadius: "4px", background: "#FAFAFA", maxWidth: "100%" }}
-                  >
+                    style={{
+                      position: "absolute",
+                      maxWidth: "640px",
+                      border: "1px solid #D6D5D4",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      width: "auto",
+                    }}
+                  ></div>
                   {value?.values?.map((value, index) => {
                     if (value.map === true && value.value !== "N/A") {
                       return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
@@ -35,7 +44,6 @@ function PropertyFloors({ floors }) {
                       />
                     );
                   })}
-                  </div>
                 </StatusTable>
               </React.Fragment>
             );

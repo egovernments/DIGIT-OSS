@@ -26,37 +26,33 @@ function ApplicationDetailsContent({
   applicationData,
   businessService,
   timelineStatusPrefix,
-  showTimeLine=true,
   statusAttribute = "status",
   paymentsList
 }) {
   const { t } = useTranslation();
 
-  function OpenImage(imageSource, index,thumbnailsToShow){
-    window.open(thumbnailsToShow?.fullImage?.[0],"_blank");
+  function OpenImage(imageSource, index, thumbnailsToShow) {
+    window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
   }
 
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED" && !(window.location.href.includes("/obps/"))) {
+    if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
         source: applicationData?.channel || "",
       };
       return <TLCaption data={caption} />;
-    } 
-    else if(window.location.href.includes("/obps/"))
-    {
+    } else if (window.location.href.includes("/obps/")) {
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
-        wfComment : checkpoint.wfComment,
-        thumbnailsToShow : checkpoint?.thumbnailsToShow,
+        wfComment: checkpoint.wfComment,
+        thumbnailsToShow: checkpoint?.thumbnailsToShow,
       };
       return <TLCaption data={caption} OpenImage={OpenImage} />;
-    }
-    else {
+    } else {
       const caption = {
         date: Digit.DateUtils?.ConvertTimestampToDate(applicationData?.auditDetails?.lastModifiedTime),
         // name: checkpoint?.assigner?.name,
@@ -113,9 +109,9 @@ function ApplicationDetailsContent({
 
   const getTextValue = (value) => {
     if (value?.skip) return value.value;
-    else if(value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
+    else if (value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
     else return value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("N/A");
-  }
+  };
 
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
@@ -126,7 +122,13 @@ function ApplicationDetailsContent({
               <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
               <React.Fragment>
-                <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px",fontSize: "24px" } : { marginBottom: "16px", marginTop: "32px", fontSize: "24px" }}>
+                <CardSectionHeader
+                  style={
+                    index == 0 && checkLocation
+                      ? { marginBottom: "16px", fontSize: "24px" }
+                      : { marginBottom: "16px", marginTop: "32px", fontSize: "24px" }
+                  }
+                >
                   {isNocLocation ? `${t(detail.title)}` : t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>
@@ -140,13 +142,20 @@ function ApplicationDetailsContent({
                   if (value.map === true && value.value !== "N/A") {
                     return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
                   }
-                  if (value?.isLink == true)
-                  {
+                  if (value?.isLink == true) {
                     return (
                       <Row
                         key={t(value.title)}
                         label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
-                        text={<div><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{value?.value}</span></Link></div>}
+                        text={
+                          <div>
+                            <Link to={value?.to}>
+                              <span className="link" style={{ color: "#F47738" }}>
+                                {value?.value}
+                              </span>
+                            </Link>
+                          </div>
+                        }
                         last={index === detail?.values?.length - 1}
                         caption={value.caption}
                         className="border-none"
@@ -222,7 +231,7 @@ function ApplicationDetailsContent({
           )}
         </React.Fragment>
       ))}
-      {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
+      {workflowDetails?.data?.timeline?.length > 0 && (
         <React.Fragment>
           <BreakLine />
           {(workflowDetails?.isLoading || isDataLoading) && <Loader />}

@@ -12,7 +12,6 @@ export const UploadServices = {
       method: "post",
       url:`${Urls.FileStore}${tenantInfo}`,   
       data: formData,
-      headers: { "auth-token": Digit.UserService.getUser() ? Digit.UserService.getUser()?.access_token : null},
     };
 
     return Axios(config);
@@ -28,7 +27,7 @@ export const UploadServices = {
       method: "post",
       url: Urls.FileStore,
       data: formData,
-      headers: { 'Content-Type': 'multipart/form-data',"auth-token": Digit.UserService.getUser().access_token },
+      headers: { 'Content-Type': 'multipart/form-data' },
     };
 
     return Axios(config);

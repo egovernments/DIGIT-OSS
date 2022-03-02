@@ -29,41 +29,16 @@ const FstpInbox = () => {
     filters: { registrationNumber: searchParams?.registrationNumber },
     config: { enabled: searchParams?.registrationNumber?.length > 0 },
   });
-
-
-  const userInfo = Digit.UserService.getUser();
-
-  const { isLoading: applicationLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
-    tenantId,
-    { applicationNos: searchParams?.applicationNos, uuid: userInfo.uuid },
-    { staleTime: Infinity }
-  );
-
   const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(
     tenantId,
     { name: searchParams?.name },
     { enabled: searchParams?.name?.length > 1 }
   );
   let filters = {
-    // vehicleIds: vehicles !== undefined && searchParams?.registrationNumber?.length > 0 ? vehicles?.vehicle?.[0]?.id || "null" : "",
-    vehicleIds: applicationData !== undefined && searchParams?.applicationNos?.length > 0 ? applicationData?.vehicleId || "null" : vehicles !== undefined && searchParams?.registrationNumber?.length > 0 ? vehicles?.vehicle?.[0]?.id || "null" : "",
+    vehicleIds: vehicles !== undefined && searchParams?.registrationNumber?.length > 0 ? vehicles?.vehicle?.[0]?.id || "null" : "",
     tripOwnerIds: dsoData !== undefined && searchParams?.name?.length > 0 ? dsoData?.[0]?.ownerId || "null" : "",
     applicationStatus: searchParams?.applicationStatus,
   };
-  if (applicationData == undefined){
-    filters = {
-      "responseInfo": {
-          "apiId": "Rainmaker",
-          "ver": null,
-          "ts": null,
-          "resMsgId": "uief87324",
-          "msgId": "1645827148736|en_IN",
-          "status": "successful"
-      },
-      "vehicle": [],
-      "totalCount": 0
-  }
-  }
   const { isLoading, data: { totalCount, vehicleLog } = {}, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({
     tenantId,
     filters,
@@ -87,13 +62,9 @@ const FstpInbox = () => {
     setPageSize(Number(e.target.value));
   };
 
-  const handleFilterChange = () => { };
+  const handleFilterChange = () => {};
 
   const searchFields = [
-    {
-      label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
-      name: "applicationNos",
-    },
     {
       label: t("ES_FSTP_OPERATOR_VEHICLE_NO"),
       name: "registrationNumber",
@@ -123,7 +94,7 @@ const FstpInbox = () => {
       <div>
         <Header>{t("ES_COMMON_INBOX")}</Header>
         <DesktopInbox
-          data={{ table: vehicleLog }}
+          data={{table: vehicleLog}}
           isLoading={isLoading}
           userRole={"FSM_EMP_FSTPO"}
           onFilterChange={handleFilterChange}

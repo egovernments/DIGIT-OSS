@@ -20,14 +20,14 @@ Axios.interceptors.response.use(
 );
 
 const requestInfo = () => ({
-  authToken: Digit.UserService.getUser()?.access_token || null,
+  authToken: Digit.UserService.getUser().access_token,
 });
 
 const authHeaders = () => ({
-  "auth-token": Digit.UserService.getUser()?.access_token || null,
+  "auth-token": Digit.UserService.getUser().access_token,
 });
 
-const userServiceData = () => ({ userInfo: Digit.UserService.getUser()?.info });
+const userServiceData = () => ({ userInfo: Digit.UserService.getUser().info });
 
 window.Digit = window.Digit || {};
 window.Digit = { ...window.Digit, RequestCache: window.Digit.RequestCache || {} };
@@ -55,6 +55,9 @@ export const Request = async ({
     data.RequestInfo = {
       apiId: "Rainmaker",
     };
+    if (noRequestInfo) {
+      delete data.RequestInfo;
+    }
     if (auth) {
       data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
     }
@@ -63,9 +66,6 @@ export const Request = async ({
     }
     if (locale) {
       data.RequestInfo = { ...data.RequestInfo, msgId: `${ts}|${Digit.StoreData.getCurrentLanguage()}` };
-    }
-    if (noRequestInfo) {
-      delete data.RequestInfo;
     }
   }
 
@@ -99,7 +99,7 @@ export const Request = async ({
     .join("/");
   
   if (multipartFormData) {
-    const multipartFormDataRes = await Axios({ method, url: _url, data: multipartData.data, params, headers: { "Content-Type": "multipart/form-data", "auth-token": Digit.UserService.getUser()?.access_token || null  } });
+    const multipartFormDataRes = await Axios({ method, url: _url, data: multipartData.data, params, headers: { "Content-Type": "multipart/form-data", "auth-token": Digit.UserService.getUser().access_token  } });
     return multipartFormDataRes;
   }
 

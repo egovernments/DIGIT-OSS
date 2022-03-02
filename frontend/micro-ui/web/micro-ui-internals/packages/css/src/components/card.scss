@@ -111,14 +111,6 @@
   .card-link {
     @apply block text-center text-link text-link-normal mt-md;
   }
-
-  .card-search-heading{
-    margin-right: 0px !important;
-    margin-left: 0px !important;
-    margin-bottom: 0px !important;
-    padding-bottom: 0px;
-    padding-left: 25px;
-  }
 }
 
 .header-wrap {
@@ -232,14 +224,6 @@
       @apply text-heading-m-dt;
     }
 
-    .card-search-heading{
-      margin-right: 0px !important;
-      margin-left: 0px !important;
-      margin-bottom: 0px !important;
-      padding-bottom: 0px;
-      padding-left: 25px;
-    }
-
     .card-caption {
       @apply text-caption-xl-dt;
     }
@@ -302,14 +286,6 @@
 
 .card-section-header {
   @apply text-text-primary text-heading-m font-bold;
-}
-
-.card-search-heading{
-  margin-right: 0px !important;
-  margin-left: 0px !important;
-  margin-bottom: 0px !important;
-  padding-bottom: 0px;
-  padding-left: 25px;
 }
 
 .button-sub-text {

@@ -111,18 +111,19 @@ export const setAddressDetails = (data) => {
 
 
 export const getownerarray = (data) => {
-  const ownersData = data?.owners?.owners
-  const res = ownersData?.map((ob) => ({
-    mobileNumber: ob.mobilenumber,
-    name: ob.name,
-    fatherOrHusbandName: ob?.fatherOrHusbandName,
-    relationship: ob?.relationship?.code,
-    dob: null,
-    gender: ob?.gender?.code,
-    permanentAddress: data?.owners?.permanentAddress,
-    emailId: ob?.emailId,
-  }));
-  return res;
+  let ownerarray = [];
+  data?.owners.owners.map((ob) => {
+    ownerarray.push({
+      mobileNumber: ob.mobilenumber,
+      name: ob.name,
+      fatherOrHusbandName: "",
+      relationship: "",
+      dob: null,
+      gender: ob.gender.code,
+      permanentAddress: data?.owners?.permanentAddress,
+    });
+  });
+  return ownerarray;
 };
 
 export const gettradeownerarray = (data) => {
@@ -295,35 +296,22 @@ export const convertToTrade = (data = {}) => {
         tradeLicenseDetail: {
           channel:"CITIZEN",
           address: {
-            city:  !data?.cpt ? data?.address?.city?.code : data?.cpt?.details?.address?.city?.code,
+            city: data?.address?.city?.code,
             locality: {
-              code: !data?.cpt ? data?.address?.locality?.code : data?.cpt?.details?.address?.locality?.code,
+              code: data?.address?.locality?.code,
             },
             tenantId: data?.tenantId,
-            pincode: !data?.cpt ? data?.address?.pincode :  data?.cpt?.details?.address?.pincode,
-            doorNo: !data?.cpt ? data?.address?.doorNo : data?.cpt?.details?.address?.doorNo,
-            street: !data?.cpt ? data?.address?.street : data?.cpt?.details?.address?.street,
-            landmark: !data?.cpt ? data?.address?.landmark : data?.cpt?.details?.address?.landmark,
+            pincode: data?.address?.pincode,
+            doorNo: data?.address?.doorNo,
+            street: data?.address?.street,
+            landmark: data?.address?.landmark,
           },
-          applicationDocuments: [],
+          applicationDocuments: null,
           accessories: data?.TradeDetails?.accessories ? getaccessories(data) : null,
           owners: getownerarray(data),
-          ...(data?.ownershipCategory?.code.includes("INSTITUTIONAL") && {institution: {
-            designation: data?.owners?.owners?.[0]?.designation,
-            ContactNo: data?.owners?.owners?.[0]?.altContactNumber,
-            mobileNumber: data?.owners?.owners?.[0]?.mobilenumber,
-            instituionName: data?.owners?.owners?.[0]?.institutionName,
-            name: data?.owners?.owners?.[0]?.name,
-           }}),
-          ...data?.owners.owners?.[0]?.designation && data?.owners.owners?.[0]?.designation !== "" ? { institution: {
-            designation: data?.owners.owners?.[0]?.designation
-          }} : {},
-          structureType: data?.TradeDetails?.StructureType?.code !=="IMMOVABLE" ? data?.TradeDetails?.VehicleType?.code : data?.TradeDetails?.BuildingType?.code,
-          subOwnerShipCategory: data?.owners.owners?.[0]?.subOwnerShipCategory?.code ? data?.owners.owners?.[0]?.subOwnerShipCategory?.code : data?.ownershipCategory?.code,
+          structureType: data?.TradeDetails?.StructureType.code !=="IMMOVABLE" ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code,
+          subOwnerShipCategory: data?.ownershipCategory?.code,
           tradeUnits: gettradeunits(data),
-          additionalDetail: {
-            propertyId: !data?.cpt ? "" :data?.cpt?.details?.propertyId,
-          }
         },
         tradeName: data?.TradeDetails?.TradeName,
         wfDocuments: [],
@@ -362,7 +350,7 @@ export const getwfdocuments = (data) => {
 export const getEditTradeDocumentUpdate = (data) => {
   let updateddocuments=[];
   let doc = data ? data.owners.documents : [];
-  data?.tradeLicenseDetail?.applicationDocuments?.map((olddoc) => {
+  data.tradeLicenseDetail.applicationDocuments.map((olddoc) => {
     if(olddoc.documentType === "OWNERPHOTO" && olddoc.fileStoreId === data.owners.documents["OwnerPhotoProof"].fileStoreId ||
     olddoc.documentType === "OWNERSHIPPROOF" && olddoc.fileStoreId == data.owners.documents["ProofOfOwnership"].fileStoreId ||
     olddoc.documentType === "OWNERIDPROOF" && olddoc.fileStoreId === data.owners.documents["ProofOfIdentity"].fileStoreId)
@@ -517,7 +505,7 @@ export const convertToEditTrade = (data, fy = []) => {
     Licenses: [
       {
         id: data?.id,
-        tenantId: data?.address?.city?.code,
+        tenantId: data?.tenantId,
         businessService: data?.businessService,
         licenseType: data?.licenseType,
         applicationType: "RENEWAL",
@@ -568,7 +556,7 @@ export const convertToResubmitTrade = (data) => {
     Licenses: [
       {
         id: data?.id,
-        tenantId: data?.address?.city?.code,
+        tenantId: data?.tenantId,
         businessService: data?.businessService,
         licenseType: data?.licenseType,
         applicationType: data.applicationType,

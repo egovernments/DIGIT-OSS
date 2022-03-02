@@ -10,25 +10,22 @@ const MultiLink = ({ className, onHeadClick, displayOptions = false, options, la
     showOptions?.(false)
   }, [])
   Digit.Hooks.useClickOutside(menuRef, handleOnClick, displayOptions);
-
-  const MenuWrapper = React.forwardRef((props, ref) => {
-    return <div ref={ref} className={`multilink-optionWrap ${optionsClassName}`} style={optionsStyle}>
-      {options.map((option, index) => (
-        <div onClick={() => option.onClick()} key={index} className="multilink-option">
-          {option?.icon}
-          {option.label}
-        </div>
-      ))}
-    </div>
-  })
-
   return (
     <div className={className} ref={menuRef}>
       <div className={`multilink-labelWrap ${downloadBtnClassName}`} onClick={onHeadClick} style={style}>
         {icon ? icon : <PrimaryDownlaodIcon />}
         <LinkButton label={label || t("CS_COMMON_DOWNLOAD")} className="multilink-link-button" />
       </div>
-      {displayOptions ? <MenuWrapper ref={menuRef} /> : null}
+      {displayOptions ? (
+        <div className={`multilink-optionWrap ${optionsClassName}`} style={optionsStyle}>
+          {options.map((option, index) => (
+            <div onClick={() => option.onClick()} key={index} className="multilink-option">
+              {option?.icon}
+              {option.label}
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };

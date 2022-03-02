@@ -38,16 +38,6 @@ const refObj = (tenantId, filters) => {
       key: "consumerCode",
       label: "UC_CHALLAN_NO",
     },
-    ws: {
-      searchFn: () => advtApplications(tenantId, filters),
-      key: "consumerCode",
-      label: "WS_MYCONNECTIONS_CONSUMER_NO",
-    },
-    sw: {
-      searchFn: () => advtApplications(tenantId, filters),
-      key: "consumerCode",
-      label: "WS_MYCONNECTIONS_CONSUMER_NO",
-    },
     TL: {
       searchFn: () => tlApplications(tenantId, filters),
       key: "consumerCode",

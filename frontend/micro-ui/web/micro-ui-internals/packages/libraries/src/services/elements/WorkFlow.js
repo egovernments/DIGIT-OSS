@@ -3,7 +3,7 @@ import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
 const getThumbnails = async (ids, tenantId) => {
-  tenantId = window.location.href.includes("/obps/") ? tenantId.split(".")[0] : tenantId;
+  tenantId = window.location.href.includes("/obps/")? Digit.ULBService.getStateId() : tenantId;
   const res = await Digit.UploadServices.Filefetch(ids, tenantId);
   if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
     return { thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]), images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };
@@ -12,7 +12,7 @@ const getThumbnails = async (ids, tenantId) => {
   }
 };
 
-const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
+const makeCommentsSubsidariesOfPreviousActions = async(wf) => {
   // const {info: { type: userType } = {}} = Digit.UserService.getUser()
   const TimelineMap = new Map();
   // if(userType === "CITIZEN"){
@@ -33,22 +33,22 @@ const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
   //     }
   //   }
   // } else{
-  for (const eventHappened of wf) {
-    if (eventHappened?.documents) {
-      eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId)
-    }
-    if (eventHappened.action === "COMMENT") {
-      const commentAccumulator = TimelineMap.get("tlCommentStack") || []
-      TimelineMap.set("tlCommentStack", [...commentAccumulator, eventHappened])
-    }
-    else {
-      const eventAccumulator = TimelineMap.get("tlActions") || []
-      const commentAccumulator = TimelineMap.get("tlCommentStack") || []
-      eventHappened.wfComments = [...commentAccumulator, ...eventHappened.comment ? [eventHappened] : []]
-      TimelineMap.set("tlActions", [...eventAccumulator, eventHappened])
-      TimelineMap.delete("tlCommentStack")
-    }
-  }
+    for (const eventHappened of wf ){
+      if(eventHappened?.documents){
+        eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId)
+      }
+      if( eventHappened.action === "COMMENT" ){
+        const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+        TimelineMap.set("tlCommentStack", [...commentAccumulator, eventHappened])
+      }
+      else{
+        const eventAccumulator = TimelineMap.get("tlActions") || []
+        const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+        eventHappened.wfComments = [...commentAccumulator, ...eventHappened.comment ? [eventHappened] : []]
+        TimelineMap.set("tlActions", [...eventAccumulator, eventHappened])
+        TimelineMap.delete("tlCommentStack")
+      }
+    } 
   // }
   const response = TimelineMap.get("tlActions")
   return response
@@ -120,32 +120,32 @@ export const WorkflowService = {
       if (processInstances.length > 0) {
         const TLEnrichedWithWorflowData = await makeCommentsSubsidariesOfPreviousActions(processInstances)
         const timeline = TLEnrichedWithWorflowData.map((instance, ind) => {
-          const checkPoint = {
-            performedAction: instance.action,
-            status: instance.state.applicationStatus,
-            state: instance.state.state,
-            assigner: instance?.assigner,
-            rating: instance?.rating,
-            wfComment: instance?.wfComments.map(e => e?.comment),
-            wfDocuments: instance?.documents,
-            thumbnailsToShow: { thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images },
-            assignes: instance.assignes,
-            caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
-            auditDetails: {
-              created: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime),
-              lastModified: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime),
-            },
-            timeLineActions: instance.nextActions
-              ? instance.nextActions.filter((action) => action.roles.includes(role)).map((action) => action?.action)
-              : null,
-          };
-          return checkPoint;
-        });
+            const checkPoint = {
+              performedAction: instance.action,
+              status: instance.state.applicationStatus,
+              state: instance.state.state,
+              assigner: instance?.assigner,
+              rating: instance?.rating,
+              wfComment: instance?.wfComments.map(e => e?.comment),
+              wfDocuments: instance?.documents,
+              thumbnailsToShow: {thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images},
+              assignes:instance.assignes,
+              caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
+              auditDetails: {
+                created: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime),
+                lastModified: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime),
+              },
+              timeLineActions: instance.nextActions
+                ? instance.nextActions.filter((action) => action.roles.includes(role)).map((action) => action?.action)
+                : null,
+            };
+            return checkPoint;
+          });
 
         const nextActions = actionRolePair;
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
-          const onlyPendingForAssignmentStatusArray = timeline?.filter(e => e?.status === "PENDINGFORASSIGNMENT")
+          const onlyPendingForAssignmentStatusArray = timeline?.filter( e => e?.status === "PENDINGFORASSIGNMENT")
           const duplicateCheckpointOfPendingForAssignment = onlyPendingForAssignmentStatusArray.at(-1)
           // const duplicateCheckpointOfPendingForAssignment = timeline?.find( e => e?.status === "PENDINGFORASSIGNMENT")
           timeline.push({

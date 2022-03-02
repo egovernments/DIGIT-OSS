@@ -431,21 +431,14 @@ const downloadPdf = (blob, fileName) => {
 
 /* Download Receipts */
 
-export const downloadReceipt = async (
-  consumerCode,
-  businessService,
-  pdfKey = "consolidatedreceipt",
-  tenantId = Digit.ULBService.getCurrentTenantId(),
-  receiptNumber = null
-) => {
-  const response = await Digit.ReceiptsService.receipt_download(businessService, consumerCode, tenantId, pdfKey, receiptNumber);
+export const downloadReceipt = async (consumerCode, businessService, pdfKey = "consolidatedreceipt") => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const response = await Digit.ReceiptsService.receipt_download(businessService, consumerCode, tenantId, pdfKey);
   const responseStatus = parseInt(response.status, 10);
   if (responseStatus === 201 || responseStatus === 200) {
-    let filename = receiptNumber ? `receiptNumber-${receiptNumber}.pdf` : `consumer-${consumerCode}.pdf`;
-    downloadPdf(new Blob([response.data], { type: "application/pdf" }), filename);
+    downloadPdf(new Blob([response.data], { type: "application/pdf" }), `consumer-${consumerCode}.pdf`);
   }
 };
-
 export const getFileUrl = (linkText = "") => {
   const linkList = (linkText && typeof linkText == "string" && linkText.split(",")) || [];
   let fileURL = "";

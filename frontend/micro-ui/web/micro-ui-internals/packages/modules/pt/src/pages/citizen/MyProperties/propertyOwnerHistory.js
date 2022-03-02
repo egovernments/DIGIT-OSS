@@ -33,7 +33,7 @@ const propertyOwnerHistory = ({ userType, propertyId: propertyIdFromProp }) => {
       let owner = {};
       if (institution) {
         owner = {
-          PT_COMMON_INSTITUTION_NAME: institution?.name || t("CS_NA"),
+          PT_COMMON_INSTITUTION_NAME: institution.name || t("CS_NA"),
           PT_TYPE_OF_INSTITUTION: t(institution.type) || t("CS_NA"),
           PT_OWNER_NAME: institution.nameOfAuthorizedPerson || t("CS_NA"),
           PT_COMMON_AUTHORISED_PERSON_DESIGNATION: t(institution.designation) || t("CS_NA"),

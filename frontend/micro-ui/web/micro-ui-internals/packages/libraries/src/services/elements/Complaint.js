@@ -78,8 +78,7 @@ export const Complaint = {
           ])
       : null;
 
-    if (!uploadedDocument) complaintDetails.workflow.verificationDocuments = [];
-    
+
     //TODO: get tenant id
     const response = await Digit.PGRService.update(complaintDetails, tenantId);
     return response;

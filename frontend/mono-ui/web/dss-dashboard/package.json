@@ -49,10 +49,7 @@
     "redux-thunk": "^2.3.0",
     "typeface-roboto": "^0.0.75",
     "typescript": "^3.6.3",
-    "xlsx": "^0.15.1",
-    "d3-scale": "^3.2.1",
-    "react-simple-maps": "^2.0.0",
-    "react-tooltip": "^4.1.2"
+    "xlsx": "^0.15.1"
   },
   "scripts": {
     "start": "react-scripts start",

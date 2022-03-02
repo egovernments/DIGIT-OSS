@@ -28,7 +28,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     applicationData: {
       applicantName: applicationData.citizen.name,
       mobileNumber: applicationData.citizen.mobileNumber,
-      applicantGender: applicationData.citizen.gender
     },
     tripData: {
       noOfTrips: applicationData.noOfTrips,
@@ -37,7 +36,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       vehicleType: vehicleMenu
         .filter((vehicle) => vehicle?.code === applicationData?.vehicleType)
         .map((vehicle) => ({ ...vehicle, label: getVehicleType(vehicle, t) }))[0],
-      vehicleCapacity: applicationData?.vehicleCapacity,
     },
     propertyType: applicationData.propertyUsage.split(".")[0],
     subtype: applicationData.propertyUsage,
@@ -54,7 +52,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     },
     pitType: sanitationMenu.filter((type) => type.code === applicationData.sanitationtype)[0],
     pitDetail: applicationData.pitDetail,
-    paymentPreference: applicationData.paymentPreference,
   };
 
   const onFormValueChange = (setValue, formData) => {
@@ -118,8 +115,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         tripAmount: amount,
       },
       propertyUsage,
-      vehicleType: data.tripData.vehicleType.type,
-      vehicleCapacity: data?.tripData?.vehicleType?.capacity,
+      vehicleType: data.tripData.vehicleType.code,
       noOfTrips,
       pitDetail: {
         ...applicationData.pitDetail,

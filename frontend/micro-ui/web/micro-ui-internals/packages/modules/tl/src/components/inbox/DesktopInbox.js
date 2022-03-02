@@ -163,7 +163,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
             {isLoading ? <Loader /> : 
               <FilterComponent
                 defaultSearchParams={props.defaultSearchParams}
-                statuses={data?.statuses}
+                statuses={data.statuses}
                 onFilterChange={props.onFilterChange}
                 searchParams={props.searchParams}
                 type="desktop"

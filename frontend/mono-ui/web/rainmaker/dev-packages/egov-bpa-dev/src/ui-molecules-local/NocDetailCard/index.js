@@ -88,9 +88,6 @@ const styles = {
   },
   nocTitle: {
     color: "rgba(0, 0, 0, 0.87)",
-    wordBreak: "break-word",
-    width: "90%",
-    marginRight: "7px"
   },
   spanStyle : {
     paddingLeft: "2px"

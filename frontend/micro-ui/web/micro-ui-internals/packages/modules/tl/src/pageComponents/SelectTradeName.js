@@ -1,6 +1,5 @@
 import { CardLabel, CitizenInfoLabel, FormStep, Loader, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
-import Timeline from "../components/TLTimeline";
 
 const SelectTradeName = ({ t, config, onSelect, value, userType, formData }) => {
   let validation = {};
@@ -27,7 +26,6 @@ const SelectTradeName = ({ t, config, onSelect, value, userType, formData }) => 
 
   return (
     <React.Fragment>
-      {window.location.href.includes("/citizen") ? <Timeline /> : null}
       <FormStep
         config={config}
         onSelect={goNext}

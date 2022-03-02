@@ -1,5 +1,5 @@
-import { CitizenInfoLabel, FormStep, RadioButtons } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
+import { RadioButtons, TypeSelectCard, FormStep, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 
 const PropertyBasementsDetails = ({ t, config, onSelect, userType, formData }) => {
   const [BasementDetails, setBasementDetails] = useState(formData?.noOofBasements);
@@ -7,17 +7,14 @@ const PropertyBasementsDetails = ({ t, config, onSelect, userType, formData }) =
   const menu = [
     {
       //i18nKey: "No Basement",
-      code: 0,
       i18nKey: "PT_NO_BASEMENT_OPTION",
     },
     {
       //i18nKey: "1 Basement",
-      code: 1,
       i18nKey: "PT_ONE_BASEMENT_OPTION",
     },
     {
       //i18nKey: "2 Basement",
-      code: 2,
       i18nKey: "PT_TWO_BASEMENT_OPTION",
     },
   ];
@@ -29,10 +26,10 @@ const PropertyBasementsDetails = ({ t, config, onSelect, userType, formData }) =
   }
 
   function goNext() {
-    // let index = window.location.href.charAt(window.location.href.length - 1);
+    let index = window.location.href.charAt(window.location.href.length - 1);
     //let index = window.location.href.split("/").pop();
     sessionStorage.setItem("noOofBasements", BasementDetails.i18nKey);
-    onSelect(config.key, BasementDetails,);
+    onSelect(config.key, BasementDetails, "", index);
   }
 
   return (

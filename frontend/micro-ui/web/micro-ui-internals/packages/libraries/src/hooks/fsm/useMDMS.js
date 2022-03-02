@@ -67,19 +67,6 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
     return useQuery("POST_FIELDS", () => MdmsService.getPostFieldsConfig(tenantId, moduleCode, type, payload));
   };
 
-  const useGenderDetails = () => {
-    return useQuery("FSM_GENDER_DETAILS", () => MdmsService.getFSMGenderType(tenantId, moduleCode, type), config);
-  };
-
-  const useFSTPORejectionReason = () => {
-    return useQuery("FSM_FSTPO_REJECTION", () => MdmsService.getFSTPORejectionReason(tenantId, moduleCode, type), queryConfig);
-  };
-
-  const usePaymentType = () => {
-    return useQuery("FSM_PAYMENT_TYPE", () => MdmsService.getFSMPaymentType(tenantId, moduleCode, type), queryConfig);
-  };
-
-
   switch (type) {
     case "SanitationType":
       return useSanitationType();
@@ -120,12 +107,6 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
       return usePreFieldsConfig();
     case "PostFieldsConfig":
       return usePostFieldsConfig();
-    case "FSMGenderType":
-      return useGenderDetails();
-    case "FSTPORejectionReason":
-      return useFSTPORejectionReason();
-    case "PaymentType":
-      return usePaymentType();
   }
 };
 

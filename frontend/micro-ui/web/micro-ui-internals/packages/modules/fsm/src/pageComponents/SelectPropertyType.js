@@ -42,8 +42,6 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
           <RadioOrSelect options={propertyTypesData.data} selectedOption={propertyType} optionKey="i18nKey" onSelect={selectedValue} t={t} />
         </FormStep>
         {propertyType && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT", propertyType)} />}
-        {formData && formData.selectPaymentPreference && formData.selectPaymentPreference.code === 'PRE_PAY' && <CitizenInfoLabel style={{ margin: "8px 0px", padding: "16px" }} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_PAY_NOW", formData)} />}
-        {formData && formData.selectPaymentPreference && formData.selectPaymentPreference.code === 'POST_PAY' && <CitizenInfoLabel style={{ margin: "8px 0px", padding: "16px" }} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_PAY_LATER", formData)} />}
       </React.Fragment>
     );
   }

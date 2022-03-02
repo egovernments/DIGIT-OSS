@@ -151,7 +151,7 @@ const OwnerForm1 = (_props) => {
                 control={control}
                 name={"ConsumerName"}
                 defaultValue={consumerdetail?.ConsumerName}
-                rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[A-Za-z]+$/.test(val) ? true : t("CS_ADDCOMPLAINT_NAME_ERROR")) } }}
+                rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[-@.\/#&+\w\s]*$/.test(val) ? true : t("CS_ADDCOMPLAINT_NAME_ERROR")) } }}
                 render={(props) => (
                   <TextInput
                     value={props.value}
@@ -198,7 +198,6 @@ const OwnerForm1 = (_props) => {
               />
             </div>
           </LabelFieldPair>  
-          <CardLabelError style={errorStyle}>{localFormState.touched.mobileNumber ? errors?.mobileNumber?.message : ""}</CardLabelError>
       </div>
       </div>
     </React.Fragment>

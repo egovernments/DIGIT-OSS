@@ -63,9 +63,3 @@ export const convertToLocaleData = (dropdownValues = [], key = '', t) => {
     return ele;
   });
 }
-
-/* to convert the data to locale data */
-export const getTransformedLocale = (label) => {
-  if (typeof label === "number") return label;
-  return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
-};

@@ -1,6 +1,6 @@
 import { ActionBar, Card, SubmitBar, Menu } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
-import { useForm,FormProvider } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import SurveyDetailsForms from "../SurveyForms/SurveyDetailsForms";
 import SurveyFormsMaker from "../SurveyForms/SurveyFormsMaker";
@@ -24,14 +24,7 @@ const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormD
     registerRef("questions");
   }, []);
   return (
-    <FormProvider {...{register: registerRef,
-    control: controlSurveyForm,
-    handleSubmit: handleSurveyFormSubmit,
-    setValue: setSurveyFormValue,
-    getValues: getSurveyFormValues,
-    reset: resetSurveyForm,
-    formState: surveyFormState,
-    clearErrors: clearSurveyFormsErrors}}>
+    <div>
       <form onSubmit={handleSurveyFormSubmit(onEdit)}>
         <Card>
           <SurveyDetailsForms
@@ -62,7 +55,7 @@ const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormD
         ) : null}
         <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
       </ActionBar>
-    </FormProvider>
+    </div>
   );
 };
 

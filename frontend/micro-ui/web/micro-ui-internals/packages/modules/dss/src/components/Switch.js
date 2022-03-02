@@ -1,4 +1,4 @@
-import React, { useContext ,Fragment} from "react";
+import React, { Fragment, useContext } from "react";
 import FilterContext from "./FilterContext";
 
 const denominations = ["Cr", "Lac", "Unit"];

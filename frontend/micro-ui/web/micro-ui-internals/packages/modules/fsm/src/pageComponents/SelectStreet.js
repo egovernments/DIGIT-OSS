@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import _ from "lodash";
-import Timeline from "../components/TLTimelineInFSM";
 
 const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors }) => {
   const onSkip = () => onSelect();
@@ -123,8 +122,6 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
     });
   }
   return (
-    <React.Fragment>
-    {window.location.href.includes("/tl") ? <Timeline currentStep={2}/> : null}
     <FormStep
       config={{ ...config, inputs }}
       _defaultValues={{ street: formData?.address.street, doorNo: formData?.address.doorNo }}
@@ -132,7 +129,6 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
       onSkip={onSkip}
       t={t}
     />
-    </React.Fragment>
   );
 };
 
