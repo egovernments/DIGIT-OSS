@@ -10,12 +10,12 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>inbox</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<name>inbox-services</name>
 	<description>inbox services</description>
 
 	<properties>
-		<log4j2.version>2.16.0</log4j2.version>
+		<log4j2.version>2.17.1</log4j2.version>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
