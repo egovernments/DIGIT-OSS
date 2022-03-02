@@ -10,7 +10,7 @@ export const newConfig = [
       },
       {
         route: "connection-holder",
-        component: "ConnectionHolder",
+        component: "WSConnectionHolder",
         key: "ConnectionHolderDetails",
         nextStep: "service-name",
         texts: {

@@ -10,17 +10,7 @@ export const newAppConfig = [
         }]
     },
     {
-        head: "Property Details",
-        body: [{
-            type: "component",
-            key: "property-search-n-summary",
-            component: "CPTPropertySearchNSummary",
-            withoutLabel: true,
-            hideInCitizen: true,
-        }]
-    },
-    {
-        head: "Property Details",
+        head: "PT_DETAILS",
         body: [{
             type: "component",
             key: "property-details",
@@ -34,7 +24,7 @@ export const newAppConfig = [
         body: [{
             type: "component",
             key: "connection-holder-details",
-            component: "WSConnectionHolderDetails",
+            component: "WSConnectionHolder",
             withoutLabel: true,
             hideInCitizen: true,
         }]
@@ -44,7 +34,7 @@ export const newAppConfig = [
         body: [{
             type: "component",
             key: "connection-details",
-            component: "WSWaterConnectionDetails",
+            component: "WSSewerageConnectionDetails",
             withoutLabel: true,
             hideInCitizen: true,
         }]
@@ -59,16 +49,16 @@ export const newAppConfig = [
             hideInCitizen: true,
         }]
     },
-    // {
-    //     head: "Documents Details",
-    //     body: [{
-    //         type: "component",
-    //         key: "documents-details",
-    //         component: "WSDocumentDetails",
-    //         withoutLabel: true,
-    //         hideInCitizen: true,
-    //     }]
-    // },
+    {
+        head: "Road Cutting Details",
+        body: [{
+            type: "component",
+            key: "plumber-details",
+            component: "WSRoadCuttingDetails",
+            withoutLabel: true,
+            hideInCitizen: true,
+        }]
+    },
     {
         head: "Activation Details",
         body: [{

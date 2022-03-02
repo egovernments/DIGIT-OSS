@@ -8,7 +8,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 
-const WSWaterConnectionDetails = ({ t, config, onSelect, formData }) => {
+const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) => {
     const tenantId = Digit.ULBService.getStateId();
     const [proposedTaps, setProposedTaps] = useState(formData?.waterConectionDetails?.proposedTaps || "");
     const [proposedPipeSize, setProposedPipeSize] = useState(formData?.waterConectionDetails?.proposedPipeSize || "");
@@ -52,7 +52,7 @@ const WSWaterConnectionDetails = ({ t, config, onSelect, formData }) => {
 
     return (
         <div>
-            <Timeline currentStep={2} />
+            {userType === "citizen" && (<Timeline currentStep={2} />)}
             {!wsServiceCalculationLoading ?
                 <FormStep
                     t={t}

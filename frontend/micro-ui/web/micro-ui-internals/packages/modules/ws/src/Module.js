@@ -1,15 +1,7 @@
 import React from "react";
-import {
-  useTranslation
-} from "react-i18next";
-import {
-  useRouteMatch
-} from "react-router-dom";
-import {
-  Loader,
-  CitizenHomeCard,
-  WSICon
-} from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
+import { useRouteMatch } from "react-router-dom";
+import { Loader, CitizenHomeCard, WSICon } from "@egovernments/digit-ui-react-components";
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
 
@@ -19,9 +11,9 @@ import WSDocsRequired from "./pageComponents/WSDocsRequired";
 import WSDocumentDetails from "./pageComponents/WSDocumentDetails";
 import WSSewerageConnectionDetails from "./pageComponents/WSSewerageConnectionDetails";
 import WSPlumberPreference from "./pageComponents/WSPlumberPreference";
-import ConnectionHolder from "./pageComponents/WSConnectionHolder";
+import WSConnectionHolder from "./pageComponents/WSConnectionHolder";
 import WSCheckPage from "./pages/citizen/WSCreate/CheckPage";
-import WSInfoLabel from './pageComponents/WSInfoLabel';
+import WSInfoLabel from "./pageComponents/WSInfoLabel";
 import WSActivationDetails from "./pageComponents/WSActivationDetails";
 import WSConnectionDetails from "./pageComponents/WSConnectionDetails";
 import WSDocumentsRequired from "./pageComponents/WSDocumentsRequired";
@@ -30,60 +22,34 @@ import WSRoadCuttingDetails from "./pageComponents/WSRoadCuttingDetails";
 import WSPropertyDetails from "./pageComponents/WSPropertyDetails";
 import WSConnectionHolderDetails from "./pageComponents/WSConnectionHolderDetails";
 
-const WSModule = ({
-  stateCode,
-  userType,
-  tenants
-}) => {
+const WSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "ws";
-  const {
-    path,
-    url
-  } = useRouteMatch();
+  const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
-  const {
-    isLoading,
-    data: store
-  } = Digit.Services.useStore({
+  const { isLoading, data: store } = Digit.Services.useStore({
     stateCode,
     moduleCode,
-    language
+    language,
   });
 
   Digit.SessionStorage.set("WS_TENANTS", tenants);
 
   if (isLoading) {
-    return <Loader /> ;
+    return <Loader />;
   }
 
   if (userType === "citizen") {
-    return <CitizenApp path = {
-      path
-    }
-    stateCode = {
-      stateCode
-    }
-    />;
+    return <CitizenApp path={path} stateCode={stateCode} />;
   }
 
-  return <EmployeeApp path = {
-    path
-  }
-  stateCode = {
-    stateCode
-  }
-  />
-}
+  return <EmployeeApp path={path} stateCode={stateCode} />;
+};
 
-const WSLinks = ({
-  matchPath,
-  userType
-}) => {
-  const {
-    t
-  } = useTranslation();
+const WSLinks = ({ matchPath, userType }) => {
+  const { t } = useTranslation();
 
-  const links = [{
+  const links = [
+    {
       link: ``,
       i18nKey: t("ACTION_TEST_WATER_AND_SEWERAGE_BILL"),
     },
@@ -101,8 +67,8 @@ const WSLinks = ({
     },
   ];
 
-  return <CitizenHomeCard header = {t("ACTION_TEST_WATER_AND_SEWERAGE")} links = { links } Icon = { () => < WSICon/> } />;
-}
+  return <CitizenHomeCard header={t("ACTION_TEST_WATER_AND_SEWERAGE")} links={links} Icon={() => <WSICon />} />;
+};
 
 const componentsToRegister = {
   WSModule,
@@ -113,7 +79,7 @@ const componentsToRegister = {
   WSWaterConnectionDetails,
   WSSewerageConnectionDetails,
   WSPlumberPreference,
-  ConnectionHolder,
+  WSConnectionHolder,
   WSCheckPage,
   WSInfoLabel,
   WSActivationDetails,
@@ -123,7 +89,7 @@ const componentsToRegister = {
   WSRoadCuttingDetails,
   WSPropertyDetails,
   WSConnectionHolderDetails,
-}
+};
 
 export const initWSComponents = () => {
   Object.entries(componentsToRegister).forEach(([key, value]) => {

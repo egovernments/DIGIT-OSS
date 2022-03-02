@@ -1,10 +1,9 @@
-import { BackButton, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, TextInput, UploadFile, Dropdown, CheckBox } from "@egovernments/digit-ui-react-components";
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { stringReplaceAll } from "../utils";
+import { CardLabel, CheckBox, Dropdown, FormStep, Loader, MobileNumber, RadioButtons, TextInput, UploadFile } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import Timeline from "../components/Timeline";
+import { stringReplaceAll } from "../utils";
 
-const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
+const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const [name, setName] = useState(formData?.ConnectionHolderDetails?.name || formData?.formData?.ConnectionHolderDetails?.name || "");
   const [guardian, setguardian] = useState(formData?.ConnectionHolderDetails?.guardian || formData?.formData?.ConnectionHolderDetails?.guardian || "");
@@ -131,7 +130,7 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
 
   return (
     <div>
-       <Timeline currentStep={2} />
+       {userType === "citizen" && (<Timeline currentStep={2} />)}
         {!isLoading ? 
         <FormStep
           config={config}
@@ -144,7 +143,7 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
         <CheckBox
         label={t("WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS")}
         onChange={(e) => selectChecked(e)}
-        //value={field.isPrimaryOwner}
+        // value={field.isPrimaryOwner}
         checked={isOwnerSame}
         style={{ paddingBottom: "10px", paddingTop: "10px" }}
         />  
@@ -283,4 +282,4 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
   );
 };
 
-export default ConnectionHolder;
+export default WSConnectionHolder;

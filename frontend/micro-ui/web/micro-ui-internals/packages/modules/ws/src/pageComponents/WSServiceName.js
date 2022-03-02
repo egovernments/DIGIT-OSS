@@ -51,7 +51,7 @@ const WSServiceName = ({ t, config, onSelect, formData }) => {
 
     return (
         <div>
-            <Timeline currentStep={2} />
+            {userType === "citizen" && (<Timeline currentStep={2} />)}
             <FormStep
                 t={t}
                 config={config}
