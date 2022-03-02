@@ -373,9 +373,10 @@ public class PaymentNotificationService {
 			message = message.replace("{Service}", WSCalculationConstant.SERVICE_FIELD_VALUE_WS);
 		if (message.contains("{ULB}"))
 			message = message.replace("{ULB}", capitalize(user.getTenantId().split("\\.")[1]));
-		if (message.contains("{billing cycle}"))
-		{String billingCycle = (String) masterMap.get(WSCalculationConstant.Billing_Cycle_String);
-			message = message.replace("{billing cycle}",billingCycle);}
+		if (message.contains("{billing cycle}")){
+			String billingCycle = calculatorUtil.getBillingCycle(masterMap);
+			message = message.replace("{billing cycle}",billingCycle);
+		}
 
 		return message;
 

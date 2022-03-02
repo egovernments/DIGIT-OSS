@@ -199,7 +199,7 @@ public class DemandService {
 		}
 
 		log.info("Demand Object" + demands.toString());
-		String billingcycle = (String) masterMap.get(WSCalculationConstant.Billing_Cycle_String);
+		String billingcycle = calculatorUtils.getBillingCycle(masterMap);
 		DemandNotificationObj notificationObj = DemandNotificationObj.builder()
 				.requestInfo(requestInfo)
 				.tenantId(calculations.get(0).getTenantId())
