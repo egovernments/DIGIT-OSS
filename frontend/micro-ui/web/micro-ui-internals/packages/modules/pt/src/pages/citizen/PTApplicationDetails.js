@@ -49,7 +49,7 @@ const PTApplicationDetails = () => {
       consumerCodes: acknowledgementIds,
       isEmployee: false,
     },
-    {}
+    {enabled: acknowledgementIds?true:false}
   );
 
 
@@ -182,7 +182,7 @@ const PTApplicationDetails = () => {
     label: t("MT_APPLICATION"),
     onClick: () => getAcknowledgementData()
   });
-  if(reciept_data && recieptDataLoading == false)
+  if(reciept_data && reciept_data?.Payments.length>0 && recieptDataLoading == false)
   dowloadOptions.push({
     label: t("MT_FEE_RECIEPT"),
     onClick: () => getRecieptSearch({tenantId: reciept_data?.Payments[0]?.tenantId,payments: reciept_data?.Payments[0]})
