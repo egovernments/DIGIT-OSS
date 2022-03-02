@@ -15,6 +15,8 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
   const [file, setFile] = useState(formData?.address?.documents?.ProofOfAddress);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
+  const isUpdateProperty = formData?.isUpdateProperty || false;
+  const isEditProperty = formData?.isEditProperty || false;
 
   const [dropdownValue, setDropdownValue] = useState(
     !isMutation ? formData?.address?.documents?.ProofOfAddress?.documentType || null : formData?.[config.key]?.documentType
@@ -81,7 +83,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
   }, [file]);
 
   return (
-    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={!uploadedFile || !dropdownValue || error}>
+    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={isUpdateProperty || isEditProperty ? false: (!uploadedFile || !dropdownValue || error )}>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <CardLabel>{`${t("PT_CATEGORY_DOCUMENT_TYPE")}`}</CardLabel>

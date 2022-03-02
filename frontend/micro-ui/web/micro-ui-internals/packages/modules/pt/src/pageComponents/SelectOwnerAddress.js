@@ -57,6 +57,14 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
   };
 
   useEffect(() => {
+    if( !isCorrespondenceAddress && isUpdateProperty)
+    {
+      let e = {target: {checked:true}}
+    setCorrespondenceAddress(e);
+    }
+  })
+
+  useEffect(() => {
     if (userType === "employee") {
       goNext();
     }
