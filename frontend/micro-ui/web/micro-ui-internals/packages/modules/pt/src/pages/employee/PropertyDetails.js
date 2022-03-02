@@ -146,7 +146,7 @@ const PropertyDetails = () => {
   useEffect(() => {
     if (appDetailsToShow?.applicationDetails?.[0]?.values?.[1].title !== "PT_TOTAL_DUES") {
       appDetailsToShow?.applicationDetails?.unshift({
-        title: "",
+        title: " ",
         asSectionHeader: true,
         belowComponent: () => (
           <LinkLabel
