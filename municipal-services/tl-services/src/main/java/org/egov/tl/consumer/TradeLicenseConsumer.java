@@ -35,6 +35,8 @@ public class TradeLicenseConsumer {
 
     @KafkaListener(topicPattern = "${tl.kafka.notification.topic.pattern}")
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+        log.info("Received Record from topic: ",topic);
+        log.info("Received Record: ",record);
         ObjectMapper mapper = new ObjectMapper();
         TradeLicenseRequest tradeLicenseRequest = new TradeLicenseRequest();
         try {
