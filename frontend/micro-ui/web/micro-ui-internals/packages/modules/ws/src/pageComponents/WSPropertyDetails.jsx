@@ -1,6 +1,7 @@
 import { CardLabel, LabelFieldPair, LinkButton, Loader, TextInput } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { Link } from "react-router-dom";
+import { obscureText } from "../utils";
 
 const WSPropertyDetails = ({ t, config, onSelect, userType, formData, setError, formState, clearErrors }) => {
   const redirectBackUrl = `/digit-ui/${userType}/ws/new-application`;
@@ -10,6 +11,17 @@ const WSPropertyDetails = ({ t, config, onSelect, userType, formData, setError, 
     { filters: { propertyIds: formData?.cptId?.id }, tenantId: tenantId },
     { filters: { propertyIds: formData?.cptId?.id }, tenantId: tenantId }
   );
+  const [hiddenFields, setHiddenFields] = React.useState({ownerName: true, ownerAddress: true})
+
+  const getOwnerName = () => {
+    const ownerName = propertyDetails?.Properties[0]?.owners[0]?.name;
+
+    if (ownerName) {
+      return obscureText(ownerName, hiddenFields.ownerName);
+    }
+
+    return "";
+  };
 
   const getPropertyAddress = () => {
     const property = propertyDetails?.Properties?.at(0);
@@ -20,12 +32,12 @@ const WSPropertyDetails = ({ t, config, onSelect, userType, formData, setError, 
     const city = property?.address?.city;
     const pinCode = property?.address?.pincode;
 
-    return `${doorNo ? doorNo + ", " : ""}
-      ${street ? street + ", " : ""}
-      ${landMark ? landMark + ", " : ""}
+    return `${doorNo ? obscureText(doorNo, hiddenFields.ownerAddress) + ", " : ""}
+      ${street ? obscureText(street, hiddenFields.ownerAddress) + ", " : ""}
+      ${landMark ? obscureText(landMark, hiddenFields.ownerAddress) + ", " : ""}
       ${locality ? locality + ", " : ""}
-      ${city ? city + ", " : ""}
-      ${pinCode}`;
+      ${city ? city : ""}
+      ${pinCode ? ", " + pinCode : ""}`;
   };
 
   if (loading) {
@@ -72,7 +84,7 @@ const WSPropertyDetails = ({ t, config, onSelect, userType, formData, setError, 
           <LabelFieldPair>
             <CardLabel className="card-label-smaller">{`${t(`OWNER_NAME`)}:`}</CardLabel>
             <div className="field">
-              <p>{propertyDetails?.Properties[0]?.owners[0]?.name}</p>
+              <p>{getOwnerName()}</p>
             </div>
           </LabelFieldPair>
           <LabelFieldPair>

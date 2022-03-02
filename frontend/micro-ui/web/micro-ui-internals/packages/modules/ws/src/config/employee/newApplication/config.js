@@ -1,5 +1,4 @@
-export const newAppConfig = [
-    {
+export const newAppConfig = [{
         head: "",
         body: [{
             type: "component",
@@ -10,70 +9,70 @@ export const newAppConfig = [
         }]
     },
     {
-        head: "PT_DETAILS",
+        head: "WS_PT_DETAILS",
         body: [{
             type: "component",
-            key: "property-details",
+            key: "ws-property-details",
             component: "WSPropertyDetails",
             withoutLabel: true,
             hideInCitizen: true,
         }]
     },
     {
-        head: "Connection Holder Details",
+        head: "WS_CONN_HOLDER_DETAILS",
         body: [{
             type: "component",
-            key: "connection-holder-details",
+            key: "ws-connection-holder-details",
             component: "WSConnectionHolder",
             withoutLabel: true,
             hideInCitizen: true,
         }]
     },
     {
-        head: "Connection Details",
+        head: "WS_CONN_DETAILS",
         body: [{
             type: "component",
-            key: "connection-details",
-            component: "WSSewerageConnectionDetails",
+            key: "ws-connection-details",
+            component: "WSConnectionDetails",
             withoutLabel: true,
             hideInCitizen: true,
         }]
     },
     {
-        head: "Plumber Details",
+        head: "WS_PLUMBER_DETAILS",
         body: [{
             type: "component",
-            key: "plumber-details",
+            key: "ws-plumber-details",
             component: "WSPlumberDetails",
             withoutLabel: true,
             hideInCitizen: true,
         }]
     },
     {
-        head: "Road Cutting Details",
+        head: "WS_ROAD_CUTT_DETAILS",
         body: [{
             type: "component",
-            key: "plumber-details",
+            key: "ws-plumber-details",
             component: "WSRoadCuttingDetails",
             withoutLabel: true,
             hideInCitizen: true,
         }]
     },
     {
-        head: "Activation Details",
+        head: "WS_ACTIV_DETAILS",
         body: [{
             type: "component",
-            key: "activation-details",
+            key: "ws-activation-details",
             component: "WSActivationDetails",
             withoutLabel: true,
             hideInCitizen: true,
         }]
     },
     {
-        head: "Documents Required",
+        head: "WS_DOC_REQUIRED",
         body: [{
             type: "component",
-            key: "documents-required",
+            key: "ws-documents-required",
             component: "WSDocumentDetails",
             withoutLabel: true,
             hideInCitizen: true,
