@@ -54,7 +54,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
       consumerCodes: acknowledgementIds,
       isEmployee: true,
     },
-    {}
+    {enabled: acknowledgementIds?true:false}
   );
 
   const [appDetailsToShow, setAppDetailsToShow] = useState({});
@@ -315,7 +315,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
     label: t("MT_APPLICATION"),
     onClick: () => handleDownloadPdf()
   });
-  if(reciept_data && recieptDataLoading == false)
+  if(reciept_data && reciept_data?.Payments.length>0 && recieptDataLoading == false)
   dowloadOptions.push({
     label: t("MT_FEE_RECIEPT"),
     onClick: () => getRecieptSearch({tenantId: reciept_data?.Payments[0]?.tenantId,payments: reciept_data?.Payments[0]})
