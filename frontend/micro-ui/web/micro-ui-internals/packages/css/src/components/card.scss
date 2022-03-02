@@ -176,10 +176,7 @@
   }
 
   .card {
-    width: calc(60% - 20px);
     display: flex;
-    max-width: 960px;
-    min-width: 640px;
     flex-direction: column;
 
     .card-header {
@@ -330,8 +327,6 @@
     margin-bottom: 24px;
   }
   .info-banner-wrap-citizen-override {
-    min-width: 640px;
-    max-width: 960px;
   }
   .oc-aknowledgement-screen {
     width: auto;

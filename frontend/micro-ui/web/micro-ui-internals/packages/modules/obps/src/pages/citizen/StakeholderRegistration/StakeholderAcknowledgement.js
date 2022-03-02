@@ -73,7 +73,7 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
       <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
         {/* {isOpenLinkFlow &&<OpenLinkContainer />}
     <div style={isOpenLinkFlow?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
-        {isOpenLinkFlow}
+        {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Card>
           <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
           {mutation.isSuccess && <CardText>{`${t(`TRADELICENSE_TRADETYPE_${licenseType}`)}${t(`CS_FILE_STAKEHOLDER_RESPONSE`)}`}</CardText>}

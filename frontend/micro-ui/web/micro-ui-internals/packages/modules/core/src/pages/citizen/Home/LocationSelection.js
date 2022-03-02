@@ -55,7 +55,8 @@ const LocationSelection = () => {
   return isLoading ? (
     <loader />
   ) : (
-    <div>
+    <div className="selection-card-wrapper">
+      <BackButton />
       <PageBasedInput texts={texts} onSubmit={onSubmit}>
         <CardHeader>{t("CS_COMMON_CHOOSE_LOCATION")}</CardHeader>
         <SearchOnRadioButtons {...RadioButtonProps} placeholder={t("COMMON_TABLE_SEARCH")} />

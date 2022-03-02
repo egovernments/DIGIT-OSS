@@ -94,31 +94,75 @@
       margin-left: 36px;
     }
   }
+}
 
+.drawer-desktop {
+  overflow: auto;
+  .menu-item {
+    border: 10px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+    text-decoration: none;
+    margin: 0px;
+    padding: 0px;
+    outline: none;
+    font-size: 16px;
+    position: relative;
+    color: rgb(95, 92, 98);
+    line-height: 48px;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    min-height: 48px;
+    white-space: initial;
+    background: none;
+    .icon {
+      display: block;
+      color: rgb(117, 117, 117);
+      fill: rgb(117, 117, 117);
+      height: 21px;
+      width: 21px;
+      float: left;
+      margin-top: 12px;
+    }
+    .icon + .menu-label {
+      margin-left: 36px;
+    }
+  }
   @media (min-width: 780px) {
-    .submenu-container {
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      .sidebar-link {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        svg {
-          width: 21px;
-          height: 21px;
-          color: rgb(117, 117, 117);
-          fill: rgb(117, 117, 117);
-        }
+    .sidebar-list {
+      padding-right: 16px;
+      padding-left: 16px;
+      &.active {
+        border-left: 5px solid #f47738;
       }
-      .actions {
+
+      .submenu-container {
+        cursor: pointer;
         display: flex;
-        align-items: center;
-        span {
-          margin-left: 13px;
-          line-height: 48px;
-          white-space: nowrap;
-          color: #5f5c62;
+        flex-direction: column;
+        .sidebar-link {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          svg {
+            width: 21px;
+            height: 21px;
+            color: rgb(117, 117, 117);
+            fill: rgb(117, 117, 117);
+          }
+        }
+        .actions {
+          display: flex;
+          align-items: center;
+          overflow: hidden !important;
+
+          span {
+            margin-left: 13px;
+            line-height: 48px;
+            white-space: nowrap;
+            color: #5f5c62;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
         }
       }
     }

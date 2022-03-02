@@ -29,8 +29,7 @@
   }
 
   .CitizenHomeCard {
-    min-width: 40%;
-    @apply inline-block mr-lg p-lg align-top;
+    @apply p-lg;
     .header {
       @apply pb-lg text-heading-l-dt;
       svg {
@@ -49,6 +48,10 @@
         @apply pb-md;
         padding-left: 0.2em;
         margin-bottom: 16px;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
       }
     }
   }

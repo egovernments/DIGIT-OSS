@@ -24,20 +24,23 @@ const App = () => {
 
   return (
     <React.Fragment>
-      {!location.pathname.includes("/response")}
-      <Switch>
-        {/* <AppContainer> */}
-        <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
-        <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
-        <PrivateRoute path={`${path}/complaints/:id*`} component={ComplaintDetailsPage} />
-        <PrivateRoute
-          path={`${path}/reopen`}
-          component={() => <ReopenComplaint match={{ ...match, url, path: `${path}/reopen` }} parentRoute={path} />}
-        />
-        <PrivateRoute path={`${path}/rate/:id*`} component={() => <SelectRating parentRoute={path} />} />
-        <PrivateRoute path={`${path}/response`} component={() => <Response match={{ ...match, url, path }} />} />
-        {/* </AppContainer> */}
-      </Switch>
+      <div className="pgr-citizen-wrapper">
+        {!location.pathname.includes("/response") && <BackButton>{t("CS_COMMON_BACK")}</BackButton>}
+        <Switch>
+          {/* <AppContainer> */}
+          <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
+          <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
+          <PrivateRoute path={`${path}/complaints/:id*`} component={ComplaintDetailsPage} />
+          <PrivateRoute
+            path={`${path}/reopen`}
+            component={() => <ReopenComplaint match={{ ...match, url, path: `${path}/reopen` }} parentRoute={path} />}
+          />
+          <PrivateRoute path={`${path}/rate/:id*`} component={() => <SelectRating parentRoute={path} />} />
+          <PrivateRoute path={`${path}/response`} component={() => <Response match={{ ...match, url, path }} />} />
+
+          {/* </AppContainer> */}
+        </Switch>
+      </div>
     </React.Fragment>
   );
 };

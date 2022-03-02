@@ -211,35 +211,38 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   };
 
   return (
-    <Switch>
-      <AppContainer>
-        <Route path={`${path}`} exact>
-          <SelectMobileNumber
-            onSelect={selectMobileNumber}
-            config={stepItems[0]}
-            mobileNumber={params.mobileNumber || ""}
-            onMobileChange={handleMobileChange}
-            showRegisterLink={isUserRegistered && !location.state?.role}
-            t={t}
-          />
-        </Route>
-        <Route path={`${path}/otp`}>
-          <SelectOtp
-            config={{ ...stepItems[1], texts: { ...stepItems[1].texts, cardText: `${stepItems[1].texts.cardText} ${params.mobileNumber || ""}` } }}
-            onOtpChange={handleOtpChange}
-            onResend={resendOtp}
-            onSelect={selectOtp}
-            otp={params.otp}
-            error={isOtpValid}
-            t={t}
-          />
-        </Route>
-        <Route path={`${path}/name`}>
-          <SelectName config={stepItems[2]} onSelect={selectName} t={t} />
-        </Route>
-        {error && <Toast error={true} label={error} onClose={() => setError(null)} />}
-      </AppContainer>
-    </Switch>
+    <div className="citizen-form-wrapper">
+      <Switch>
+        <AppContainer>
+          <BackButton />
+          <Route path={`${path}`} exact>
+            <SelectMobileNumber
+              onSelect={selectMobileNumber}
+              config={stepItems[0]}
+              mobileNumber={params.mobileNumber || ""}
+              onMobileChange={handleMobileChange}
+              showRegisterLink={isUserRegistered && !location.state?.role}
+              t={t}
+            />
+          </Route>
+          <Route path={`${path}/otp`}>
+            <SelectOtp
+              config={{ ...stepItems[1], texts: { ...stepItems[1].texts, cardText: `${stepItems[1].texts.cardText} ${params.mobileNumber || ""}` } }}
+              onOtpChange={handleOtpChange}
+              onResend={resendOtp}
+              onSelect={selectOtp}
+              otp={params.otp}
+              error={isOtpValid}
+              t={t}
+            />
+          </Route>
+          <Route path={`${path}/name`}>
+            <SelectName config={stepItems[2]} onSelect={selectName} t={t} />
+          </Route>
+          {error && <Toast error={true} label={error} onClose={() => setError(null)} />}
+        </AppContainer>
+      </Switch>
+    </div>
   );
 };
 

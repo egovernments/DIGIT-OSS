@@ -17,6 +17,7 @@ const App = () => {
     <span className={"mcollect-citizen"}>
       <Switch>
         <AppContainer>
+          <BackButton style={{ top: "55px" }}>Back</BackButton>
           <PrivateRoute path={`${path}/search`} component={SearchChallanComponent} />
           <PrivateRoute path={`${path}/search-results`} component={SearchResultsComponent} />
           <PrivateRoute path={`${path}/My-Challans`} component={MyChallanResultsComponent} />

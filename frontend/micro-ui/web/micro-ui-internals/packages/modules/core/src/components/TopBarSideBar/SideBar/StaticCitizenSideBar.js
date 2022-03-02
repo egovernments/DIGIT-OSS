@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HomeIcon, EditPencilIcon, LogoutIcon } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -54,9 +54,13 @@ const Profile = ({ info, stateName, t }) => (
 const StaticCitizenSideBar = ({ logout }) => {
   const { t } = useTranslation();
   const history = useHistory();
+  const location = useLocation();
+  const { pathname } = location;
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
+
+  console.log(pathname);
 
   const [isEmployee, setisEmployee] = useState(false);
 
@@ -172,20 +176,14 @@ const StaticCitizenSideBar = ({ logout }) => {
           style={{
             display: "flex",
             flexDirection: "column",
-            marginTop: "56px",
             height: "calc(100vh - 56px)",
-            position: "fixed",
-            top: 0,
-            left: 0,
-            background: "#fff",
-            width: "calc(20% - 10px)",
             zIndex: "99",
           }}
         >
           {profileItem}
-          <div className="drawer-list">
+          <div className="drawer-desktop">
             {menuItems.map((item, index) => (
-              <div key={index}>
+              <div className={`sidebar-list ${pathname === item.link ? "active" : ""}`} key={index}>
                 <MenuItem item={item} />
               </div>
             ))}

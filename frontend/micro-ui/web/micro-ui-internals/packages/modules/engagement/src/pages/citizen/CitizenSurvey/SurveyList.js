@@ -23,10 +23,11 @@ const SurveyList = () => {
 
         const allSurveys = Surveys.map((survey) => {
           const isSurveyActive = isActive(survey.startDate, survey.endDate);
-          let resStatus="";
-          if(isSurveyActive) resStatus = "CS_SURVEY_YT_TO_RESPOND"
-          else resStatus = "CANNOT_RESPOND_MSG"
-          return ({ hasResponded: false, responseStatus: resStatus, ...survey })});
+          let resStatus = "";
+          if (isSurveyActive) resStatus = "CS_SURVEY_YT_TO_RESPOND";
+          else resStatus = "CANNOT_RESPOND_MSG";
+          return { hasResponded: false, responseStatus: resStatus, ...survey };
+        });
 
         const activeSurveysList = [];
         const inactiveSurveysList = [];
@@ -54,7 +55,7 @@ const SurveyList = () => {
   }
 
   return (
-    <div>
+    <div className="survey-list-container">
       <Header>{`${t("CS_COMMON_SURVEYS")} (${data?.activeSurveysList.length})`}</Header>
 
       {data?.activeSurveysList && data.activeSurveysList.length ? (

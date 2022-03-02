@@ -18,18 +18,21 @@ const CitizenApp = ({ path, url, userType, tenants }) => {
 
   return (
     <React.Fragment>
-      <Switch>
-        <Route path={`${path}/notifications`} component={() => <NotificationsOrWhatsNew variant="notifications" parentRoute={path} />} />
-        <PrivateRoute path={`${path}/whats-new`} component={() => <NotificationsOrWhatsNew variant="whats-new" parentRoute={path} />} />
-        <PrivateRoute exact path={`${path}/events`} component={() => <Events variant="events" parentRoute={path} />} />
-        <PrivateRoute path={`${path}/events/details/:id`} component={() => <EventDetails parentRoute={path} />} />
-        <PrivateRoute path={`${path}/docs`} component={() => <DocumentCategories t={t} {...{ path }} />} />
-        <PrivateRoute path={`${path}/documents/viewDocument`} component={() => <ViewDocument t={t} {...{ path }} />} />
-        <PrivateRoute path={`${path}/documents/list/:category/:count`} component={(props) => <Documents {...props} />} />
-        <PrivateRoute path={`${path}/surveys/list`} component={(props) => <SurveyList {...props} />} />
-        <PrivateRoute path={`${path}/surveys/fill-survey`} component={(props) => <FillSurvey {...props} />} />
-        <PrivateRoute path={`${path}/surveys/submit-response`} component={(props) => <Response {...props} />} />
-      </Switch>
+      <div className="engagement-citizen-wrapper">
+        <BackButton>{t("CS_COMMON_BACK")}</BackButton>
+        <Switch>
+          <Route path={`${path}/notifications`} component={() => <NotificationsOrWhatsNew variant="notifications" parentRoute={path} />} />
+          <PrivateRoute path={`${path}/whats-new`} component={() => <NotificationsOrWhatsNew variant="whats-new" parentRoute={path} />} />
+          <PrivateRoute exact path={`${path}/events`} component={() => <Events variant="events" parentRoute={path} />} />
+          <PrivateRoute path={`${path}/events/details/:id`} component={() => <EventDetails parentRoute={path} />} />
+          <PrivateRoute path={`${path}/docs`} component={() => <DocumentCategories t={t} {...{ path }} />} />
+          <PrivateRoute path={`${path}/documents/viewDocument`} component={() => <ViewDocument t={t} {...{ path }} />} />
+          <PrivateRoute path={`${path}/documents/list/:category/:count`} component={(props) => <Documents {...props} />} />
+          <PrivateRoute path={`${path}/surveys/list`} component={(props) => <SurveyList {...props} />} />
+          <PrivateRoute path={`${path}/surveys/fill-survey`} component={(props) => <FillSurvey {...props} />} />
+          <PrivateRoute path={`${path}/surveys/submit-response`} component={(props) => <Response {...props} />} />
+        </Switch>
+      </div>
     </React.Fragment>
   );
 };

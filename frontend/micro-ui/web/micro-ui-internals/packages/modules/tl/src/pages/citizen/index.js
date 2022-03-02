@@ -24,9 +24,10 @@ const App = () => {
   const MyApplications = Digit?.ComponentRegistryService?.getComponent("MyApplications");
 
   return (
-    <span className={"tl-citizen"}>
-      <Switch>
-        <AppContainer>
+    <Switch>
+      <AppContainer>
+        <div className="citizen-card-container">
+          <BackButton /* style={{ position: "fixed", top: "55px" }} */ isSuccessScreen={isSuccessScreen}>Back</BackButton>
           <PrivateRoute path={`${path}/tradelicence/new-application`} component={CreateTradeLicence} />
           <PrivateRoute path={`${path}/tradelicence/edit-application/:id/:tenantId`} component={EditTrade} />
           <PrivateRoute path={`${path}/tradelicence/renew-trade/:id/:tenantId`} component={RenewTrade} />
@@ -36,9 +37,9 @@ const App = () => {
           <PrivateRoute path={`${path}/tradelicence/application/:id/:tenantId`} component={ApplicationDetails} />
           <PrivateRoute path={`${path}/tradelicence/renewal-list`} component={TLList} />
           <PrivateRoute path={`${path}/tradelicence/trade-search`} component={SearchTradeComponent} />
-        </AppContainer>
-      </Switch>
-    </span>
+        </div>
+      </AppContainer>
+    </Switch>
   );
 };
 

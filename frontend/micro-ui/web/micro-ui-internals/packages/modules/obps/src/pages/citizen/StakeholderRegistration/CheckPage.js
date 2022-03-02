@@ -56,7 +56,7 @@ const CheckPage = ({ onSubmit, value }) => {
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
         {/* <div style={isopenlink?{ width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
         <div>
-          {isopenlink}
+          {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
           <Timeline currentStep={4} flow="STAKEHOLDER" />
           <Header styles={{ fontSize: "32px" }}>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
           <Card style={{ paddingRight: "16px" }}>

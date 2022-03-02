@@ -21,18 +21,18 @@ const TopBar = ({
 }) => {
   const { pathname } = useLocation();
 
-  const showHaburgerorBackButton = () => {
-    if (pathname === "/digit-ui/citizen" || pathname === "/digit-ui/citizen/" || pathname === "/digit-ui/citizen/select-language") {
-      return <Hamburger handleClick={toggleSidebar} />;
-    } else {
-      return <BackButton className="top-back-btn" />;
-    }
-  };
+  // const showHaburgerorBackButton = () => {
+  //   if (pathname === "/digit-ui/citizen" || pathname === "/digit-ui/citizen/" || pathname === "/digit-ui/citizen/select-language") {
+  //     return <Hamburger handleClick={toggleSidebar} />;
+  //   } else {
+  //     return <BackButton className="top-back-btn" />;
+  //   }
+  // };
   return (
     <div className="navbar">
       <div className="center-container back-wrapper">
         <div className="hambuger-back-wrapper">
-          {showHaburgerorBackButton()}
+          {isMobile && <Hamburger handleClick={toggleSidebar} />}
           <img
             className="city"
             id="topbar-logo"

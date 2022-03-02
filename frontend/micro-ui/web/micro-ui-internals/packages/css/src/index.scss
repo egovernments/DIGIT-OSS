@@ -304,10 +304,6 @@ input[type="number"] {
 .static {
   @apply flex flex-col;
   min-height: 85vh;
-  @media (min-width: 780px) {
-    margin-left: 3rem;
-    margin-top: 1rem;
-  }
 
   &-wrapper {
     flex: 1;
@@ -518,16 +514,45 @@ input[type="number"] {
   padding: 3px;
 }
 .applications-list-container {
+}
+.complaint-summary {
   @media (min-width: 780px) {
     flex: 1 0 auto;
     margin-left: 1rem;
     margin-top: 1rem;
   }
 }
-.complaint-summary {
-  @media (min-width: 780px) {
-    flex: 1 0 auto;
-    margin-left: 1rem;
+
+@media (min-width: 780px) {
+  .citizen-form-wrapper {
+    width: calc(100% - 219px);
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+@media (min-width: 780px) {
+  .citizen-card-container {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 1rem;
+  }
+}
+
+@media (min-width: 780px) {
+  .citizen-obps-wrapper,
+  .selection-card-wrapper,
+  .fsm-citizen-wrapper,
+  .pgr-citizen-wrapper,
+  .pt-citizen,
+  .bills-citizen-wrapper,
+  .payer-bills-citizen-wrapper,
+  .engagement-citizen-wrapper {
+    width: calc(100% - 219px);
+    padding-left: 16px;
+    padding-right: 16px;
     margin-top: 1rem;
   }
 }

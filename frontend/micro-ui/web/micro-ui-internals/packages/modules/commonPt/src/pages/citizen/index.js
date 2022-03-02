@@ -13,6 +13,7 @@ const App = ({ stateCode }) => {
     <span className={"pt-citizen"}>
       <Switch>
         <AppContainer>
+          <BackButton>Back</BackButton>
           <Route path={`${path}/property/citizen-search`} component={SearchPropertyComponent} />
           <Route path={`${path}/property/search-results`}>
             <SearchResultsComponent stateCode={stateCode} />
