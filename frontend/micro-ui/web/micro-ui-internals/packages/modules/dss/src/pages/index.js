@@ -163,7 +163,7 @@ const DashBoard = ({ stateCode }) => {
     ? [
         {
           label: t("ES_DSS_SHARE_PDF"),
-          onClick: () => {
+          onClick: (e) => {
             setShowOptions(!showOptions);
             setTimeout(() => {
               return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
@@ -181,6 +181,7 @@ const DashBoard = ({ stateCode }) => {
         },
       ]
     : [
+      /*
         {
           icon: <EmailIcon />,
           label: t("ES_DSS_SHARE_PDF"),
@@ -201,13 +202,14 @@ const DashBoard = ({ stateCode }) => {
             }, 500);
           },
         },
+        */
         {
           icon: <EmailIcon />,
           label: t("ES_DSS_SHARE_IMAGE"),
           onClick: () => {
             setShowOptions(!showOptions);
             setTimeout(() => {
-              return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "mail");
+              return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "mail");
             }, 500);
           },
         },
@@ -217,7 +219,7 @@ const DashBoard = ({ stateCode }) => {
           onClick: () => {
             setShowOptions(!showOptions);
             setTimeout(() => {
-              return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "whatsapp");
+              return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "whatsapp");
             }, 500);
           },
         },
@@ -239,8 +241,10 @@ const DashBoard = ({ stateCode }) => {
                   className="multilink-block-wrapper"
                   label={t(`ES_DSS_SHARE`)}
                   icon={<ShareIcon className="mrsm" />}
-                  showOptions={(e) => setShowOptions(e)}
-                  onHeadClick={(e) => setShowOptions(e !== undefined ? e : !showOptions)}
+                  // showOptions={(e) => {
+                  // setShowOptions(e)}
+                  // }
+                  onHeadClick={(e) =>{ setShowOptions(e !== undefined ? e : !showOptions)}}
                   displayOptions={showOptions}
                   options={shareOptions}
                 />

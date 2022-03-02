@@ -51,6 +51,7 @@ const initTokens = (stateCode) => {
   const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stateCode;
 
   const employeeInfo = window.localStorage.getItem("Employee.user-info")
+            "name": "FSM Employee Dashboard Viewer",
   const employeeTenantId = window.localStorage.getItem("Employee.tenant-id");
 
   const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";

@@ -58,7 +58,7 @@ const Download = {
     XLSX.writeFile(wb, `${filename}.xlsx`);
   },
 
-  PDF: (node, fileName, share) => {
+  PDF: (node, fileName, share, resolve = null) => {
 
 
 
@@ -104,7 +104,11 @@ const Download = {
       pdf.save?.( fileName +'.pdf' );
       */
      revertCss();
-       return saveAs(dataUrl, `${fileName}.jpeg`)
+     var blobData = dataURItoBlob(dataUrl);
+       revertCss();
+       return share
+       ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
+       : saveAs(dataUrl, `${fileName}.jpeg`)
         });
     
 
