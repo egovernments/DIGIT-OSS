@@ -1,30 +1,23 @@
 import { FormComposer, Header } from "@egovernments/digit-ui-react-components";
-import {newAppConfig} from '../../../config/employee/newApplication/config';
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { newConfig } from "../../../config/wsCreateConfig";
 
 const NewApplication = () => {
   const { t } = useTranslation();
+  const [config, setConfig] = React.useState({ head: "", body: [] });
 
-  const getConfig = () => {
-    const configs = [];
-
-    // newConfig = newConfig ? newConfig : newConfigTL;
-    // newConfig?.map((conf) => {
-    //   if (conf.head !== "ES_NEW_APPLICATION_PROPERTY_ASSESSMENT" && conf.head) {
-    //     configs.push(conf);
-    //   }
-    // });
-
-    return configs;
-  };
+  React.useEffect(() => {
+    const config = newConfig.filter((conf) => conf.hideInCitizen)[0];
+    setConfig(config);
+  });
 
   return (
     <React.Fragment>
       <div style={{ marginLeft: "15px" }}>
-        <Header>{t("APPLICATION FOR NEW WATER & SEWERAGE CONNECTION")}</Header>
+        <Header>{t(config.head)}</Header>
       </div>
-      <FormComposer config={newAppConfig}></FormComposer>
+      <FormComposer config={config.body}></FormComposer>
     </React.Fragment>
   );
 };

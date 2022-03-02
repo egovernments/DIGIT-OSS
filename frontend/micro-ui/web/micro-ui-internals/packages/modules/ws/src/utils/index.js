@@ -6,17 +6,17 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   return str;
 };
 
-export const obscureText = (value, hide = true, pattern = "*") => {
-  if (!hide) return value;
+// export const obscureText = (value, hide = true, pattern = "*") => {
+//   if (!hide) return value;
 
-  return value
-    .split(" ")
-    .map(
-      (name) =>
-      name.charAt(0).toUpperCase() +
-      Array(name.length - 1)
-      .fill(pattern)
-      .join("")
-    )
-    .join(" ");
-};
+//   return value
+//     .split(" ")
+//     .map(
+//       (name) =>
+//       name.charAt(0).toUpperCase() +
+//       Array(name.length - 1)
+//       .fill(pattern)
+//       .join("")
+//     )
+//     .join(" ");
+// };
