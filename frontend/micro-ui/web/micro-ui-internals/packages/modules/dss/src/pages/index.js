@@ -229,9 +229,9 @@ const DashBoard = ({ stateCode }) => {
 
   return (
     <FilterContext.Provider value={provided}>
-      <div ref={fullPageRef}>
+      <div ref={fullPageRef} id="divToPrint">
         <div className="options">
-          <Header styles={{ marginBottom: "0px" }}>{t(dashboardConfig?.[0]?.name)}</Header>
+          <Header styles={{ marginBottom: "0px",whiteSpace:"pre" }}>{t(dashboardConfig?.[0]?.name)}</Header>
           {mobileView ? null : (
             <div>
               <div className="mrlg">

@@ -43,6 +43,57 @@ const Download = {
   },
 
   PDF: (node, fileName, share) => {
+
+
+
+    const saveAs = (uri, filename) => {
+      const link = document.createElement("a");
+
+      if (typeof link.download === "string") {
+        link.href = uri;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        window.open(uri);
+      }
+    };
+    const dataURItoBlob = (dataURI) => {
+      var binary = atob(dataURI.split(',')[1]);
+      var array = [];
+      for (var i = 0; i < binary.length; i++) {
+          array.push(binary.charCodeAt(i));
+      }
+      return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
+    };
+
+    const element = ReactDOM.findDOMNode(node.current);
+
+
+
+
+
+    return domtoimage.toJpeg(element, {
+      quality: 1,
+      bgcolor: 'white'
+     }).then(function (dataUrl) {
+/*  to enable pdf
+    var htmlImage = new Image();
+      htmlImage.src = dataUrl;
+      var pdf = new jsPDF( 'l', 'pt', [element.offsetWidth, element.offsetHeight] );
+      pdf.setFontStyle?.("Bold");
+      pdf.setFontSize?.(30);
+      pdf.text?.(325, 40, 'Certificate');
+      // e(imageData, format, x, y, width, height, alias, compression, rotation)
+      pdf.addImage?.( htmlImage, 25, 50, 50, element.offsetWidth, element.offsetHeight );
+      pdf.save?.( fileName +'.pdf' );
+      */
+       return saveAs(dataUrl, `${fileName}.jpeg`)
+        });
+    
+
+        /*
     const getPDF = (canvas) => {
       const width = canvas.width;
       const height = canvas.height;
@@ -82,6 +133,7 @@ const Download = {
       // }
       return share ? new File([pdf.output("blob")], `${fileName}.pdf`, { type: "application/pdf" }) : pdf.save(`${fileName}.pdf`);
     });
+    */
   },
 
   IndividualChartImage: (node, fileName, share, resolve = null) => {

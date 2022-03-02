@@ -80,10 +80,10 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
 
   return (
     <div className="row">
-      <div className="tooltip">
+      <div className={`tooltip`} >
         {t(data.name)}
 
-        <span style={{ whiteSpace: "pre-line", display: "block" }}> {showDate?.[id]?.todaysDate}</span>
+        <span className="dss-white-pre" style={{ display: "block" }}> {showDate?.[id]?.todaysDate}</span>
         <span
           className="tooltiptext"
           style={{
