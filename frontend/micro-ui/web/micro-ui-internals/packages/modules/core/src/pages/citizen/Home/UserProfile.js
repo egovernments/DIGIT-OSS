@@ -75,6 +75,11 @@ const UserProfile = ({ stateCode, userType }) => {
   const setGenderName = (value) => setGender(value);
   const closeFileUploadDrawer = () => setOpenUploadSide(false);
 
+  const removeProfilePic = () => {
+    setProfilePic(null);
+    setProfileImg(null);
+  };
+
   const updateProfile = async () => {
     const requestData = {
       ...userInfo,
@@ -84,24 +89,23 @@ const UserProfile = ({ stateCode, userType }) => {
       photo: profilePic,
     };
 
-    if (!new RegExp(/^([a-zA-Z])*$/).test(name)) {
-      setToast({ key: "error", action: `${t("PT_NAME_ERROR_MESSAGE")}` });
+    if (!new RegExp(/^([a-zA-Z ])*$/).test(name) || name === "") {
+      setToast({ key: "error", action: `${t("CORE_COMMON_PROFILE_NAME_INVALID")}` });
       setTimeout(() => {
         setToast(null);
       }, 5000);
       return;
     }
 
-    if (!new RegExp(/^[6-9]{1}[0-9]{9}$/).test(mobileNumber)) {
-      setToast({ key: "error", action: `${t("PT_MOBILE_ERROR_MESSAGE")}` });
+    if (userType === "employee" && !new RegExp(/^[6-9]{1}[0-9]{9}$/).test(mobileNumber)) {
+      setToast({ key: "error", action: `${t("CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID")}` });
       setTimeout(() => {
         setToast(null);
       }, 5000);
       return;
     }
-
-    if (!(email.includes("@") && email.includes("."))) {
-      setToast({ key: "error", action: `${t("PT_EMAIL_ERROR_MESSAGE")}` });
+    if (email.length && !(email.includes("@") && email.includes("."))) {
+      setToast({ key: "error", action: `${t("CORE_COMMON_PROFILE_EMAIL_INVALID")}` });
       setTimeout(() => {
         setToast(null);
       }, 5000);
@@ -121,16 +125,16 @@ const UserProfile = ({ stateCode, userType }) => {
         };
         const { responseInfo1 } = await Digit.UserService.changePassword(requestData, tenant);
         if (responseInfo1?.status && responseInfo1.status === "200") {
-          setToast({ key: "success", action: `${t("ES_PROFILE_UPDATE_SUCCESS_WITH_PASSWORD")}` });
+          setToast({ key: "success", action: `${t("CORE_COMMON_PROFILE_UPDATE_SUCCESS_WITH_PASSWORD")}` });
           setTimeout(() => setToast(null), 5000);
         }
       } else {
-        setToast({ key: "error", action: `${t("ES_ERROR_PASSWORD_NOT_MATCH")}` });
+        setToast({ key: "error", action: `${t("CORE_COMMON_PROFILE_ERROR_PASSWORD_NOT_MATCH")}` });
         setTimeout(() => setToast(null), 5000);
       }
     } else {
       if (responseInfo?.status && responseInfo.status === "200") {
-        setToast({ key: "success", action: `${t("ES_PROFILE_UPDATE_SUCCESS")}` });
+        setToast({ key: "success", action: `${t("CORE_COMMON_PROFILE_UPDATE_SUCCESS")}` });
         setTimeout(() => setToast(null), 5000);
       }
     }
@@ -170,7 +174,7 @@ const UserProfile = ({ stateCode, userType }) => {
       <div>
         {userType === "citizen" ? (
           <div style={{ backgroundColor: "white", borderRadius: "5px", margin: "10px", padding: "10px" }}>
-            <h1>Edit Profile</h1>
+            <h1>{t("CORE_COMMON_PROFILE_EDIT")}</h1>
             <div
               style={{
                 position: "relative",
@@ -185,27 +189,38 @@ const UserProfile = ({ stateCode, userType }) => {
               }}
             >
               <div>
-                {profileImg === "" ? (
-                  <img style={{ margin: "auto", borderRadius: "50%", justifyContent: "center", width: "50%", padding: "3%;" }} src={defaultImage} />
+                {!profileImg || profileImg === "" ? (
+                  <img
+                    style={{ margin: "auto", borderRadius: "300px", justifyContent: "center", padding: "3%;", height: "150px", width: "150px" }}
+                    src={defaultImage}
+                  />
                 ) : (
                   <img
-                    style={{ display: "block", marginRight: "auto", marginLeft: "auto", borderRadius: "50%", justifyContent: "center" }}
+                    style={{
+                      display: "block",
+                      marginRight: "auto",
+                      marginLeft: "auto",
+                      borderRadius: "300px",
+                      justifyContent: "center",
+                      height: "150px",
+                      width: "150px",
+                    }}
                     src={profileImg}
                   />
                 )}
-                <button style={{ position: "absolute", bottom: "3%", right: "50%", left: "45%", cursor: "pointer"}} onClick={onClickAddPic}>
+                <button style={{ position: "absolute", bottom: "3%", right: "50%", left: "45%", cursor: "pointer" }} onClick={onClickAddPic}>
                   <CameraIcon />
                 </button>
               </div>
             </div>
 
             <LabelFieldPair>
-              <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Name*")}`}</CardLabel>
+              <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_NAME")}`}*</CardLabel>
               <div className="field">
                 <TextInput
                   t={t}
                   type={"text"}
-                  isMandatory={true}
+                  isMandatory={false}
                   name="name"
                   value={name}
                   onChange={setOwnerName}
@@ -213,7 +228,7 @@ const UserProfile = ({ stateCode, userType }) => {
                     isRequired: true,
                     pattern: "^[a-zA-Z-.`' ]*$",
                     type: "tel",
-                    title: t("PT_NAME_ERROR_MESSAGE"),
+                    title: t("CORE_COMMON_PROFILE_NAME_ERROR_MESSAGE"),
                   })}
                   disable={editScreen}
                 />
@@ -221,7 +236,7 @@ const UserProfile = ({ stateCode, userType }) => {
             </LabelFieldPair>
 
             <LabelFieldPair>
-              <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Gender")}`}</CardLabel>
+              <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_GENDER")}`}</CardLabel>
               <Dropdown
                 style={{ width: "100%" }}
                 className="form-field"
@@ -237,7 +252,7 @@ const UserProfile = ({ stateCode, userType }) => {
             </LabelFieldPair>
 
             <LabelFieldPair>
-              <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Email")}`}</CardLabel>
+              <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_EMAIL")}`}</CardLabel>
               <div className="field">
                 <TextInput
                   t={t}
@@ -297,7 +312,7 @@ const UserProfile = ({ stateCode, userType }) => {
                 <div>
                   {!profileImg || profileImg === "" ? (
                     <img
-                      style={{ margin: "auto", borderRadius: "50%", justifyContent: "center", width: "50%", padding: "10%;" }}
+                      style={{ margin: "auto", borderRadius: "50%", justifyContent: "center", height: "150px", width: "150px" }}
                       src={defaultImage}
                     />
                   ) : (
@@ -308,8 +323,8 @@ const UserProfile = ({ stateCode, userType }) => {
                         marginLeft: "auto",
                         borderRadius: "50%",
                         justifyContent: "center",
-                        width: "50%",
-                        padding: "10%;",
+                        width: "150px",
+                        height: "150px",
                       }}
                       src={profileImg}
                     />
@@ -334,12 +349,12 @@ const UserProfile = ({ stateCode, userType }) => {
               }}
             >
               <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Name*")}`}</CardLabel>
+                <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_NAME")}`}*</CardLabel>
                 <div className="field">
                   <TextInput
                     t={t}
                     type={"text"}
-                    isMandatory={true}
+                    isMandatory={false}
                     name="name"
                     style={{ width: "640px", height: "40px" }}
                     value={name}
@@ -348,8 +363,8 @@ const UserProfile = ({ stateCode, userType }) => {
                     {...(validation = {
                       isRequired: true,
                       pattern: "^[a-zA-Z-.`' ]*$",
-                      type: "tel",
-                      title: t("PT_NAME_ERROR_MESSAGE"),
+                      type: "text",
+                      title: t("CORE_COMMON_PROFILE_NAME_ERROR_MESSAGE"),
                     })}
                     disable={editScreen}
                   />
@@ -357,7 +372,7 @@ const UserProfile = ({ stateCode, userType }) => {
               </LabelFieldPair>
 
               <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                <CardLabel>{`${t("Mobile Number")}*`}</CardLabel>
+                <CardLabel>{`${t("CORE_COMMON_PROFILE_MOBILE_NUMBER")}*`}</CardLabel>
                 <MobileNumber
                   value={mobileNumber}
                   name="mobileNumber"
@@ -365,12 +380,12 @@ const UserProfile = ({ stateCode, userType }) => {
                   style={{ width: "600px", height: "40px" }}
                   onChange={(value) => setMobileNo(value)}
                   // disable={mobileNumber && !isOpenLinkFlow ? true : false}
-                  {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+                  {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID") }}
                 />
               </LabelFieldPair>
 
               <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Email")}`}</CardLabel>
+                <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_EMAIL")}`}</CardLabel>
                 <div className="field">
                   <TextInput
                     t={t}
@@ -388,18 +403,18 @@ const UserProfile = ({ stateCode, userType }) => {
               </LabelFieldPair>
               <LabelFieldPair>
                 <div>
-                  <a style={{ color: "orange", cursor: "default", marginBottom: "5" }} onClick={TogleforPassword}>
+                  <a style={{ color: "orange", cursor: "default", marginBottom: "5", cursor: "pointer" }} onClick={TogleforPassword}>
                     Change Password
                   </a>
                   {changepassword ? (
                     <div style={{ marginTop: "10px" }}>
                       <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                        <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Current Password*")}`}</CardLabel>
+                        <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_CURRENT_PASSWORD")}`}</CardLabel>
                         <div className="field">
                           <TextInput
                             t={t}
                             type={"password"}
-                            isMandatory={true}
+                            isMandatory={false}
                             style={{ width: "640px", height: "40px" }}
                             name="name"
                             pattern="^([a-zA-Z0-9@#$%])+$"
@@ -409,12 +424,12 @@ const UserProfile = ({ stateCode, userType }) => {
                         </div>
                       </LabelFieldPair>
                       <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                        <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("New Password*")}`}</CardLabel>
+                        <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_NEW_PASSWORD")}`}</CardLabel>
                         <div className="field">
                           <TextInput
                             t={t}
                             type={"password"}
-                            isMandatory={true}
+                            isMandatory={false}
                             style={{ width: "640px", height: "40px" }}
                             name="name"
                             pattern="^([a-zA-Z0-9@#$%])+$"
@@ -424,12 +439,12 @@ const UserProfile = ({ stateCode, userType }) => {
                         </div>
                       </LabelFieldPair>
                       <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                        <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("Confirm Password*")}`}</CardLabel>
+                        <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_CONFIRM_PASSWORD")}`}</CardLabel>
                         <div className="field">
                           <TextInput
                             t={t}
                             type={"password"}
-                            isMandatory={true}
+                            isMandatory={false}
                             style={{ width: "640px", height: "40px" }}
                             name="name"
                             pattern="^([a-zA-Z0-9@#$%])+$"
@@ -471,13 +486,17 @@ const UserProfile = ({ stateCode, userType }) => {
         {toast && (
           <Toast
             error={toast.key === "error"}
-            label={t(toast.key === "success" ? `ES_PROFILE_UPDATE_SUCCESS` : toast.action)}
+            label={t(toast.key === "success" ? `CORE_COMMON_PROFILE_UPDATE_SUCCESS` : toast.action)}
             onClose={() => setToast(null)}
             style={{ maxWidth: "670px" }}
           />
         )}
       </div>
-      {openUploadSlide == true ? <UploadDrawer setProfilePic={setFileStoreId} closeDrawer={closeFileUploadDrawer} userType={userType} /> : ""}
+      {openUploadSlide == true ? (
+        <UploadDrawer setProfilePic={setFileStoreId} closeDrawer={closeFileUploadDrawer} userType={userType} removeProfilePic={removeProfilePic} />
+      ) : (
+        ""
+      )}
     </React.Fragment>
   );
 };

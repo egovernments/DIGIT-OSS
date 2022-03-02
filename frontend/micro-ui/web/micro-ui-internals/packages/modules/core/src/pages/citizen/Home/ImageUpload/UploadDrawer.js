@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { GalleryIcon, RemoveIcon, UploadFile } from "@egovernments/digit-ui-react-components";
 
-function UploadDrawer({ setProfilePic, closeDrawer, userType }) {
+function UploadDrawer({ setProfilePic, closeDrawer, userType, removeProfilePic }) {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [file, setFile] = useState("");
   const [error, setError] = useState(null);
 
   const selectfile = (e) => setFile(e.target.files[0]);
-  const removeimg = () => setUploadedFile(null);
+  const removeimg = () => {removeProfilePic();closeDrawer(false)};
   const onOverlayBodyClick = () => closeDrawer(false);
 
   useEffect(() => {
