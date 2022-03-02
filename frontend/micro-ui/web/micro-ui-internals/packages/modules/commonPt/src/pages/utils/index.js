@@ -5,6 +5,7 @@ export const setAddressDetailsLW = (data) => {
     city: locationDet?.cityCode?.name,
     doorNo: locationDet?.houseDoorNo,
     buildingName: locationDet?.buildingColonyName,
+    landmark: locationDet?.landmarkName,
     locality: {
       code: locationDet?.locality?.code || "NA",
     },
