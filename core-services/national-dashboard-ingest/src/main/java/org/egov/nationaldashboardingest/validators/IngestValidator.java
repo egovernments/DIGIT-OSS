@@ -163,9 +163,14 @@ public class IngestValidator {
             if(s.equals("-") || s.equals("."))
                 throw new CustomException("EG_DS_ERR", "Cannot have a string of length 1 containing separator( . OR - ) as ingest input.");
 
-        Matcher m = p.matcher(s);
         Boolean hasNewLine = s.contains("\n");
-        if (m.find() && !hasNewLine)
+        StringBuilder temp = new StringBuilder(s);
+        if(hasNewLine){
+            s = s.replaceAll("\n", "");
+        }
+        Matcher m = p.matcher(s);
+        s = temp.toString();
+        if (m.find())
             throw new CustomException("EG_DS_ERR", "Special characters are not allowed in input.");
 
         if (NumberUtils.isParsable(s)) {
