@@ -87,9 +87,13 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
         <span
           className="tooltiptext"
           style={{
-            whiteSpace: "nowrap",
+            //whiteSpace: "nowrap",
             // marginLeft: "-500%" ,
             fontSize: "medium",
+            // wordBreak: "break-word", overflowWrap: "break-word",
+            width: t(`TIP_${data.name}`).length < 50 ? "fit-content" : 400,
+            height: 50,
+            whiteSpace: "normal",
           }}
         >
           <span style={{ fontWeight: "500", color: "white" }}>{t(`TIP_${data.name}`)}</span>

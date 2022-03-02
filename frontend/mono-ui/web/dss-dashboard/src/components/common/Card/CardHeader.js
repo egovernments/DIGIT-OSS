@@ -18,7 +18,7 @@ export default function CardHeader(props) {
     [className]: className !== undefined
   });
   return (
-    <div className={cardHeaderClasses} {...rest}>
+    <div className={cardHeaderClasses} {...rest} style={{paddingTop: 30, paddingLeft: 8}}>
         {children}
     </div>
   );
