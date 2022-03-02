@@ -1,7 +1,7 @@
-import { Banner, Card, CardText, ActionBar, SubmitBar, Loader } from "@egovernments/digit-ui-react-components";
+import { Banner, Card, CardText, ActionBar, SubmitBar, Loader, LinkButton } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { stringReplaceAll } from "../../utils";
+import { stringReplaceAll, getBusinessServices } from "../../utils";
 import { Link, useHistory } from "react-router-dom";
 
 
@@ -25,8 +25,8 @@ const OBPSResponse = (props) => {
     let businessService = "BPA.LOW_RISK_PERMIT_FEE";
     if (bpaResponse?.BPA?.[0]?.businessService === "BPA") businessService = "BPA.NC_SAN_FEE";
     else if (bpaResponse?.BPA?.[0]?.businessService === "BPA_OC") businessService = "BPA.NC_OC_SAN_FEE";
-    const fetchBill = await Digit.PaymentService.fetchBill( tenantId, { consumerCode: bpaResponse?.BPA?.[0]?.applicationNo, businessService: businessService });
-    if ( bpaResponse?.BPA?.[0]?.status == "APPROVED" && fetchBill?.Bill[0] && fetchBill?.Bill[0]?.totalAmount != 0) setSanctionFee("_SAN_FEE");
+    const fetchBill = await Digit.PaymentService.fetchBill(tenantId, { consumerCode: bpaResponse?.BPA?.[0]?.applicationNo, businessService: businessService });
+    if (bpaResponse?.BPA?.[0]?.status == "APPROVED" && fetchBill?.Bill[0] && fetchBill?.Bill[0]?.totalAmount != 0) setSanctionFee("_SAN_FEE");
     setIsLoader(false);
     setApplicationData(bpaResponse?.BPA?.[0]);
   }, [])
@@ -46,12 +46,20 @@ const OBPSResponse = (props) => {
   };
 
   const onSubmit = () => {
-      history.push(`/digit-ui/employee`);
-    }
+    history.push(`/digit-ui/employee`);
+  }
 
-    const getApplicationNoLabel = () => {
-      return bpaBusinessService == "BPA" ? t("BPA_PERMIT_APPLICATION_NUMBER_LABEL") : t("BPA_OCCUPANCY_CERTIFICATE_APPLICATION_NUMBER_LABEL")
-    }
+  const getApplicationNoLabel = () => {
+    return bpaBusinessService == "BPA" ? t("BPA_PERMIT_APPLICATION_NUMBER_LABEL") : t("BPA_OCCUPANCY_CERTIFICATE_APPLICATION_NUMBER_LABEL")
+  }
+
+  const getPaymentURL = (isCitizen) => {
+    if (isCitizen == true) return `/digit-ui/citizen/payment/collect/${getBusinessServices(applicationData?.businessService, applicationData?.status)}/${applicationData?.applicationNo}/${applicationData?.tenantId}?tenantId=${applicationData?.tenantId}`;
+  }
+
+  const getPaymentURLEmployee = () => {
+    history.push(`/digit-ui/employee/payment/collect/${getBusinessServices(applicationData?.businessService, applicationData?.status)}/${applicationData?.applicationNo}/${applicationData?.tenantId}?tenantId=${applicationData?.tenantId}`);
+  }
 
   return (
     <div>
@@ -63,7 +71,7 @@ const OBPSResponse = (props) => {
             info={getApplicationNoLabel()}
             successful={applicationData?.status == "PERMIT REVOCATION" || applicationData?.status == "REJECTED" ? false : true}
             style={{ padding: "10px" }}
-            headerStyles={{fontSize: "32px"}}
+            headerStyles={{ fontSize: "32px" }}
           />
           <CardText style={{ paddingBottom: "10px", marginBottom: "10px" }}>{getSubHeaderMessage()}</CardText>
           {applicationData?.status == "PERMIT REVOCATION" ?
@@ -76,16 +84,40 @@ const OBPSResponse = (props) => {
           }
           {
             window.location.href.includes("/citizen") ?
-              <Link to={{
-                pathname: `/digit-ui/citizen`,
-              }}>
-                <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
-              </Link> :
+              <div>
+                {applicationData?.status == "PENDING_APPL_FEE" || applicationData?.status == "PENDING_FEE" || applicationData?.status == "PENDING_SANC_FEE_PAYMENT" ?
+                  <div>
+                    <Link to={{ pathname: getPaymentURL(true) }}>
+                      <SubmitBar label={t("WF_BPA_PAY")} style={{ margin: "10px 0px 0px 0px" }} />
+                    </Link>
+                    <Link to={`/digit-ui/citizen`} >
+                      <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
+                    </Link>
+                  </div> :
+                  <Link to={{ pathname: `/digit-ui/citizen` }}>
+                    <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} style={{ margin: "10px 10px 0px 0px" }} />
+                  </Link>}
+              </div>
+              :
               <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
-                <SubmitBar
-                  label={t("CORE_COMMON_GO_TO_HOME")}
-                  onSubmit={onSubmit}
-                />
+                <div>
+                  {applicationData?.status == "PENDING_APPL_FEE" || applicationData?.status == "PENDING_FEE" || applicationData?.status == "PENDING_SANC_FEE_PAYMENT" ?
+                    <div>
+                      <SubmitBar
+                        label={t("WF_BPA_PAY")}
+                        onSubmit={getPaymentURLEmployee}
+                        style={{ margin: "10px 0px 0px 0px" }}
+                      />
+                      <Link to={`/digit-ui/employee`} >
+                        {/* <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} /> */}
+                        <span style={{ color: "#f47738", margin: "0px 10px" }}>{t("CORE_COMMON_GO_TO_HOME")}</span>
+                      </Link>
+                    </div> : <SubmitBar
+                      label={t("CORE_COMMON_GO_TO_HOME")}
+                      onSubmit={onSubmit}
+                      style={{ margin: "10px 10px 0px 0px" }}
+                    />}
+                </div>
               </ActionBar>
           }
         </Card>}
