@@ -1,10 +1,12 @@
 package org.egov.web.notification.sms.controller;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.egov.web.notification.sms.config.Producer;
 import org.egov.web.notification.sms.models.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -26,11 +28,11 @@ public class CallblackAPI {
     private String TOPIC;
 
     @PostMapping("/callback")
-    public void postStatus(@RequestParam String jobno,
-                          @RequestParam String mobilenumber,
-                          @RequestParam int status,
-                          @RequestParam String doneTime,
-                          @RequestParam String message) {
+    public ResponseEntity<Void> postStatus(@RequestParam String jobno,
+                                        @RequestParam String mobilenumber,
+                                        @RequestParam int status,
+                                        @RequestParam String doneTime,
+                                        @RequestParam String message) {
 
         Report report = new Report();
         report.setJobno(jobno);
@@ -40,13 +42,13 @@ public class CallblackAPI {
         report.setMessage(message);
 
         producer.push(TOPIC, report);
-
+        return new ResponseEntity<>(org.springframework.http.HttpStatus.valueOf(HttpStatus.SC_OK));
     }
 
     @GetMapping("/callback")
-    public void getStatus(@RequestParam String jobno,
-                          @RequestParam String mobilenumber,
-                          @RequestParam int status,
+    public ResponseEntity<Void> getStatus(@RequestParam String jobno,
+                                            @RequestParam String mobilenumber,
+                                            @RequestParam int status,
                           @RequestParam String doneTime,
                           @RequestParam String message) {
 
@@ -58,6 +60,6 @@ public class CallblackAPI {
         report.setMessage(message);
 
         producer.push(TOPIC, report);
-
+        return new ResponseEntity<>(org.springframework.http.HttpStatus.valueOf(HttpStatus.SC_OK));
     }
 }
