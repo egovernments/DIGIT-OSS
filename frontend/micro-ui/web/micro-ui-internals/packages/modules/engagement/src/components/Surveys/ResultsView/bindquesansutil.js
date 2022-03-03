@@ -7,6 +7,7 @@ export const bindQuesWithAns = (ques,ans) => {
         const type = ques.type
         obj["type"] = type
         obj["questionStatement"] = ques.questionStatement
+        obj["options"]=ques.options
         ans.map(ans =>{
             if(ques.uuid===ans.questionId){
                 const answers = obj["answers"]

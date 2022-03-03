@@ -53,9 +53,11 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
                 accessor: "results",
                 Cell: ({ row }) => {
                     return (
-                        <div>
+                        <div style={{"display":"flex","justifyContent":"center"}}>
                             <Link to={`${parentRoute}/surveys/inbox/results/${row.original["uuid"]}`}>
-                                <span className="link">Place the logo here</span>
+                                <span  className="link"> <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5.5 18H0V6H5.5V18ZM12.75 0H7.25V18H12.75V0ZM20 8H14.5V18H20V8Z" fill="#F47738"/>
+</svg> </span>
                             </Link>
                         </div>
                     );
