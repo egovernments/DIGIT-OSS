@@ -235,10 +235,10 @@ const DashBoard = ({ stateCode }) => {
         <div className="options">
           <Header styles={{ marginBottom: "0px",whiteSpace:"pre" }}>{t(dashboardConfig?.[0]?.name)}</Header>
           {mobileView ? null : (
-            <div>
-              <div className="mrlg">
+            <div className="divToBeHidden">
+              <div className="mrlg divToBeHidden">
                 <MultiLink
-                  className="multilink-block-wrapper"
+                  className="multilink-block-wrapper divToBeHidden"
                   label={t(`ES_DSS_SHARE`)}
                   icon={<ShareIcon className="mrsm" />}
                   // showOptions={(e) => {
@@ -249,8 +249,8 @@ const DashBoard = ({ stateCode }) => {
                   options={shareOptions}
                 />
               </div>
-              <div className="mrsm" onClick={handlePrint}>
-                <DownloadIcon className="mrsm" />
+              <div className="mrsm divToBeHidden" onClick={handlePrint}>
+                <DownloadIcon className="mrsm divToBeHidden" />
                 {t(`ES_DSS_DOWNLOAD`)}
               </div>
             </div>
@@ -369,7 +369,7 @@ const DashBoard = ({ stateCode }) => {
             <div>
               <FilterIcon onClick={() => setIsFilterModalOpen(!isFilterModalOpen)} style />
             </div>
-            <div>
+            <div className="divToBeHidden">
               <MultiLink
                 className="multilink-block-wrapper"
                 label={t(`ES_DSS_SHARE`)}
@@ -380,7 +380,7 @@ const DashBoard = ({ stateCode }) => {
                 options={shareOptions}
               />
             </div>
-            <div onClick={handlePrint}>
+            <div onClick={handlePrint}  className="divToBeHidden">
               <DownloadIcon />
               {t(`ES_DSS_DOWNLOAD`)}
             </div>

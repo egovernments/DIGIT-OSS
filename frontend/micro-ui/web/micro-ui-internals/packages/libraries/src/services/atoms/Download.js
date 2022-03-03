@@ -5,19 +5,20 @@ import XLSX from "xlsx";
 import domtoimage from "dom-to-image";
 
 
-const revertCss=()=>{
-  var elements = document.getElementsByClassName("dss-white-pre-temp")
-Array.prototype.map.call(elements, function(testElement){
-  testElement.classList.add('dss-white-pre-line');
-testElement.classList.remove('dss-white-pre-temp');
-});
+const changeClasses=(class1,class2)=>{
+  var elements = document.getElementsByClassName(class1)
+  Array.prototype.map.call(elements, function(testElement){
+    testElement.classList.add(class2);
+    testElement.classList.remove(class1);
+  });
 }
+
+const revertCss=()=>{
+  changeClasses("dss-white-pre-temp",'dss-white-pre-line');
+}
+
 const applyCss=()=>{
-    var elements = document.getElementsByClassName("dss-white-pre-line")
-Array.prototype.map.call(elements, function(testElement){
-  testElement.classList.add('dss-white-pre-temp');
-testElement.classList.remove('dss-white-pre-line');
-});
+  changeClasses('dss-white-pre-line',"dss-white-pre-temp");
 }
 
 const Download = {
@@ -83,16 +84,18 @@ const Download = {
       }
       return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
     };
+        changeClasses('dss-white-pre-line',"dss-white-pre-temp");
+
   applyCss();
     const element = ReactDOM.findDOMNode(node.current);
-
 
 
     return domtoimage.toJpeg(element, {
       quality: 1,
       bgcolor: 'white',
+      filter:node=>!node?.className?.includes?.("divToBeHidden"),
       style:{
-        margin:'20px'
+        margin:'25px'
       }
      }).then(function (dataUrl) {
 /*  to enable pdf
@@ -106,6 +109,8 @@ const Download = {
       pdf.addImage?.( htmlImage, 25, 50, 50, element.offsetWidth, element.offsetHeight );
       pdf.save?.( fileName +'.pdf' );
       */
+            changeClasses("dss-white-pre-temp",'dss-white-pre-line');
+
      revertCss();
      var blobData = dataURItoBlob(dataUrl);
        revertCss();
@@ -180,15 +185,14 @@ const Download = {
       }
       return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
     };
-  applyCss();
-
+    changeClasses('dss-white-pre-line',"dss-white-pre-temp");
     const element = ReactDOM.findDOMNode(node.current);
     return domtoimage.toJpeg(element, {
       quality: 1,
       bgcolor: 'white'
      }).then(function (dataUrl) {
        var blobData = dataURItoBlob(dataUrl);
-       revertCss();
+      changeClasses("dss-white-pre-temp",'dss-white-pre-line');
        return share
        ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
        : saveAs(dataUrl, `${fileName}.jpeg`)
