@@ -21,7 +21,7 @@ const TextInput = (props) => {
       <div className={`text-input ${props.className}`} style={props?.textInputStyle ? { ...props.textInputStyle} : {}}>
         {props.isMandatory ? (
           <input
-            type={props.type || "text"}
+            type={props?.validation && props.ValidationRequired ? props?.validation?.type : (props.type || "text")}
             name={props.name}
             id={props.id}
             className={`${user_type ? "employee-card-input-error" : "card-input-error"} ${props.disable && "disabled"}`}
@@ -41,18 +41,19 @@ const TextInput = (props) => {
             minLength={props.minlength}
             maxLength={props.maxlength}
             max={props.max}
-            pattern={props.pattern}
+            pattern={props?.validation && props.ValidationRequired ? props?.validation?.pattern : props.pattern}
             min={props.min}
             readOnly={props.disable}
-            title={props.title}
+            title={props?.validation && props.ValidationRequired ? props?.validation?.title :props.title}
             step={props.step}
             autoFocus={props.autoFocus}
             onBlur={props.onBlur}
             autoComplete="off"
+            disabled={props.disabled}
           />
         ) : (
           <input
-            type={props.type || "text"}
+            type={props?.validation && props.ValidationRequired ? props?.validation?.type : (props.type || "text")}
             name={props.name}
             id={props.id}
             className={`${user_type ? "employee-card-input" : "citizen-card-input"} ${props.disable && "disabled"} focus-visible ${props.errorStyle && "employee-card-input-error"}`}
@@ -72,16 +73,17 @@ const TextInput = (props) => {
             minLength={props.minlength}
             maxLength={props.maxlength}
             max={props.max}
-            required={props.isRequired || (props.type === "date" && (props.name === "fromDate" ? data.toDate : data.fromDate))}
-            pattern={props.pattern}
+            required={props?.validation && props.ValidationRequired ? props?.validation?.isRequired :props.isRequired || (props.type === "date" && (props.name === "fromDate" ? data.toDate : data.fromDate))}
+            pattern={props?.validation && props.ValidationRequired ? props?.validation?.pattern : props.pattern}
             min={props.min}
             readOnly={props.disable}
-            title={props.title}
+            title={props?.validation && props.ValidationRequired ? props?.validation?.title :props.title}
             step={props.step}
             autoFocus={props.autoFocus}
             onBlur={props.onBlur}
             onKeyPress={props.onKeyPress}
             autoComplete="off"
+            disabled={props.disabled}
           />
         )}
         {props.type === "date" && <DatePicker {...props} date={date} setDate={setDate} data={data} />}

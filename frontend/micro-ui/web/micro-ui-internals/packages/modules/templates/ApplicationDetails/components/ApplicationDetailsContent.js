@@ -26,33 +26,37 @@ function ApplicationDetailsContent({
   applicationData,
   businessService,
   timelineStatusPrefix,
+  showTimeLine=true,
   statusAttribute = "status",
   paymentsList
 }) {
   const { t } = useTranslation();
 
-  function OpenImage(imageSource, index, thumbnailsToShow) {
-    window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
+  function OpenImage(imageSource, index,thumbnailsToShow){
+    window.open(thumbnailsToShow?.fullImage?.[0],"_blank");
   }
 
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
+    if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED" && !(window.location.href.includes("/obps/"))) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
         source: applicationData?.channel || "",
       };
       return <TLCaption data={caption} />;
-    } else if (window.location.href.includes("/obps/")) {
+    } 
+    else if(window.location.href.includes("/obps/"))
+    {
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
-        wfComment: checkpoint.wfComment,
-        thumbnailsToShow: checkpoint?.thumbnailsToShow,
+        wfComment : checkpoint.wfComment,
+        thumbnailsToShow : checkpoint?.thumbnailsToShow,
       };
       return <TLCaption data={caption} OpenImage={OpenImage} />;
-    } else {
+    }
+    else {
       const caption = {
         date: Digit.DateUtils?.ConvertTimestampToDate(applicationData?.auditDetails?.lastModifiedTime),
         // name: checkpoint?.assigner?.name,
@@ -109,9 +113,9 @@ function ApplicationDetailsContent({
 
   const getTextValue = (value) => {
     if (value?.skip) return value.value;
-    else if (value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
+    else if(value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
     else return value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("N/A");
-  };
+  }
 
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
@@ -142,7 +146,8 @@ function ApplicationDetailsContent({
                   if (value.map === true && value.value !== "N/A") {
                     return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
                   }
-                  if (value?.isLink == true) {
+                  if (value?.isLink == true)
+                  {
                     return (
                       <Row
                         key={t(value.title)}
@@ -231,7 +236,7 @@ function ApplicationDetailsContent({
           )}
         </React.Fragment>
       ))}
-      {workflowDetails?.data?.timeline?.length > 0 && (
+      {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
         <React.Fragment>
           <BreakLine />
           {(workflowDetails?.isLoading || isDataLoading) && <Loader />}

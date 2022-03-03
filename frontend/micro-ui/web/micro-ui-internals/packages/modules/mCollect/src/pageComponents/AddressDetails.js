@@ -42,7 +42,7 @@ const AddressDetails = ({ config, onSelect, userType, formData, setError, formSt
 
   const { data: fetchedLocalities } = Digit.Hooks.useBoundaryLocalities(
     getCities()[0]?.code,
-    type && type.code,
+    type && type.code.toLowerCase(),
     {
       enabled: !!getCities()[0],
     },

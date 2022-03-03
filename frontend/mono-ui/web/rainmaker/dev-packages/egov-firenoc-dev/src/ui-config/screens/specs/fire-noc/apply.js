@@ -489,7 +489,7 @@ const screenConfig = {
     let nocType = get(
       state,
       "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType",
-      "PROVISIONAL"
+      "NEW"
     );
     set(
       state,

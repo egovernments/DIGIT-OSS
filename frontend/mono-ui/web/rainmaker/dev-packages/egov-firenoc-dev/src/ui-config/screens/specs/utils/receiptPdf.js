@@ -4,6 +4,7 @@ import isEmpty from "lodash/isEmpty";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import QRCode from "qrcode";
+import logoNotFound from 'egov-ui-kit/utils/pdfUtils/logoNotFound.png';
 import { getMessageFromLocalization } from "./receiptTransformer";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -1126,8 +1127,8 @@ const generatePdf = async (state, dispatch, type) => {
   let ulbLogo = get(
     state.screenConfiguration.preparedFinalObject,
     "base64UlbLogoForPdf",
-    ""
-  );
+    logoNotFound
+  )|| logoNotFound;
   let auditorData = get(
     state.screenConfiguration.preparedFinalObject,
     "userDataForPdf",
@@ -1138,9 +1139,6 @@ const generatePdf = async (state, dispatch, type) => {
     return;
   } else if (isEmpty(mdmsData)) {
     console.log("Error in mdms data");
-    return;
-  } else if (isEmpty(ulbLogo)) {
-    console.log("Error in image data");
     return;
   } else if (
     (type.startsWith("receipt") || type.startsWith("certificate")) &&

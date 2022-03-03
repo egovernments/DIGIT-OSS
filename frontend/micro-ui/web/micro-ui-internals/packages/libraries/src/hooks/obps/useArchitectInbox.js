@@ -54,7 +54,6 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
           }));
         }
         catch(error){
-          console.error("error",error);
         }
         }
         return data;

@@ -78,7 +78,6 @@ export function CustomizedMenus(props) {
             props.APITrans(false);
             setAnchorEl(null);
         }.bind(this)).catch(function (err) {
-            console.log(err);
             setAnchorEl(null);
         }.bind(this))
 
@@ -105,7 +104,6 @@ export function CustomizedMenus(props) {
 
             } catch{ }
         }.bind(this)).catch(function (error) {
-            console.log(error);
             setAnchorEl(null);
         }.bind(this))
 

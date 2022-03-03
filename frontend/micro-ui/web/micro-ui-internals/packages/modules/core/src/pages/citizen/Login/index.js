@@ -51,7 +51,6 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         setErrorTO(null);
       }
       errorTimeout = setTimeout(() => {
-        console.error("clearing err");
         setError("");
       }, 5000);
       setErrorTO(errorTimeout);
@@ -108,10 +107,12 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams), role: location.state?.role });
         return;
       } else {
-        history.push(`/digit-ui/citizen/register/name`, { from: getFromLocation(location.state, searchParams), data:data });
+        if (!(location.state && location.state.role === 'FSM_DSO')) {
+          history.push(`/digit-ui/citizen/register/name`, { from: getFromLocation(location.state, searchParams), data:data });
+        }
       }
       if (location.state?.role) {
-        setError("User not registered.");
+        setError(location.state?.role === "FSM_DSO" ? t("ES_ERROR_DSO_LOGIN") : "User not registered.");
       }
     } else {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
@@ -182,7 +183,6 @@ if(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")){
       }
     } catch (err) {
       setIsOtpValid(false);
-      console.error(err);
     }
   };
 

@@ -44,9 +44,13 @@ const PTCard = () => {
         link: `/digit-ui/employee/pt/inbox`,
       },
       {
-        label: t("PT_SEARCH_PROPERTY"),
-      link: `/digit-ui/employee/pt/search`,
+        label: t("SEARCH_PROPERTY"),
+        link: `/digit-ui/employee/pt/search`,
       },
+      {
+        label: t("ES_COMMON_APPLICATION_SEARCH"),
+        link: `/digit-ui/employee/pt/application-search`,
+      }
     ],
   };
 

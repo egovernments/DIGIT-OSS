@@ -52,7 +52,6 @@ export const UserService = {
         window.location.replace("/digit-ui/employee/user/language-selection");
       }
     } catch (e) {
-      console.error(e);
     }
   },
   sendOtp: (details, stateCode) =>
@@ -102,10 +101,11 @@ export const UserService = {
   changePassword: (details, stateCode) =>
     ServiceRequest({
       serviceName: "changePassword",
-      url: Urls.ChangePassword,
+      url: Urls.ChangePassword1,
       data: {
         ...details,
       },
+      auth: true,
       params: { tenantId: stateCode },
     }),
 

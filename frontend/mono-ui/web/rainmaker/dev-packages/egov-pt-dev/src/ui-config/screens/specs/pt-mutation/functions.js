@@ -426,7 +426,6 @@ const searchApiCall = async (state, dispatch, index) => {
           "error"
         )
       );
-      console.log(error);
     }
   }
 };
@@ -471,7 +470,6 @@ export const downloadPrintContainer = (
   let ptMutationCertificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
-      console.log("clicked");
     },
     leftIcon: "book"
   };

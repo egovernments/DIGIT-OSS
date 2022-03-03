@@ -20,14 +20,14 @@ Axios.interceptors.response.use(
 );
 
 const requestInfo = () => ({
-  authToken: Digit.UserService.getUser().access_token,
+  authToken: Digit.UserService.getUser()?.access_token || null,
 });
 
 const authHeaders = () => ({
-  "auth-token": Digit.UserService.getUser().access_token,
+  "auth-token": Digit.UserService.getUser()?.access_token || null,
 });
 
-const userServiceData = () => ({ userInfo: Digit.UserService.getUser().info });
+const userServiceData = () => ({ userInfo: Digit.UserService.getUser()?.info });
 
 window.Digit = window.Digit || {};
 window.Digit = { ...window.Digit, RequestCache: window.Digit.RequestCache || {} };
@@ -49,15 +49,11 @@ export const Request = async ({
   multipartFormData = false,
   multipartData = {}
 }) => {
-
   if (method.toUpperCase() === "POST") {
     const ts = new Date().getTime()
     data.RequestInfo = {
       apiId: "Rainmaker",
     };
-    if (noRequestInfo) {
-      delete data.RequestInfo;
-    }
     if (auth) {
       data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
     }
@@ -66,6 +62,9 @@ export const Request = async ({
     }
     if (locale) {
       data.RequestInfo = { ...data.RequestInfo, msgId: `${ts}|${Digit.StoreData.getCurrentLanguage()}` };
+    }
+    if (noRequestInfo) {
+      delete data.RequestInfo;
     }
   }
 
@@ -80,7 +79,6 @@ export const Request = async ({
 
   let key = "";
   if (useCache) {
-
     key = `${method.toUpperCase()}.${url}.${btoa(escape(JSON.stringify(params, null, 0)))}.${btoa(escape(JSON.stringify(data, null, 0)))}`;
     const value = window.Digit.RequestCache[key];
     if (value) {
@@ -99,7 +97,7 @@ export const Request = async ({
     .join("/");
   
   if (multipartFormData) {
-    const multipartFormDataRes = await Axios({ method, url: _url, data: multipartData.data, params, headers: { "Content-Type": "multipart/form-data", "auth-token": Digit.UserService.getUser().access_token  } });
+    const multipartFormDataRes = await Axios({ method, url: _url, data: multipartData.data, params, headers: { "Content-Type": "multipart/form-data", "auth-token": Digit.UserService.getUser()?.access_token || null  } });
     return multipartFormDataRes;
   }
 

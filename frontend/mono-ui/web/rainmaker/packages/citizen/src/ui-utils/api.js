@@ -112,6 +112,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
     baseURL: window.location.origin,
     headers: {
       "Content-Type": "multipart/form-data",
+      "auth-token":getAccessToken(),
     },
   });
 

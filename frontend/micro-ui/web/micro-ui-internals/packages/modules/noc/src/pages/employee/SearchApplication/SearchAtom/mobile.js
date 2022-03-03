@@ -26,7 +26,7 @@ const SearchApplicationMobileView = ({ SearchFormFieldsComponent, propsMobileInb
         case "remove":
             return false;
         default:
-            console.warn("no such action defined");
+            break;        
         }
     }
 

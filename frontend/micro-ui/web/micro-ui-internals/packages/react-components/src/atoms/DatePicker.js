@@ -30,7 +30,7 @@ const DatePicker = (props) => {
         <input
           type="text"
           disabled={props.disabled}
-          value={getDatePrint() ? getDatePrint() : ""}
+          value={getDatePrint() ? getDatePrint() : "DD/MM/YYYY"}
           readOnly
           className={`employee-card-input ${props.disabled ? "disabled" : ""}`}
           style={{ width: "calc(100%-62px)" }}

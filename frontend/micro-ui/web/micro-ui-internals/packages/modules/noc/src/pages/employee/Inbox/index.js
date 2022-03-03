@@ -45,8 +45,8 @@ const Inbox = ({parentRoute}) => {
           Digit.SessionStorage.set("NOC.INBOX", {...state, tableForm: payload.data})
           return {...state, tableForm: payload.data};
         default:
-          console.warn("dispatched action has nothing to reduce")
-      }
+          break;      
+        }
     }
     const InboxObjectInSessionStorage = Digit.SessionStorage.get("NOC.INBOX")
     

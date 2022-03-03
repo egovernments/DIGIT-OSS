@@ -250,7 +250,6 @@ class EnhancedTable extends React.Component {
         }
         {_.keys(n).map(d => {
 
-          /* console.log(n,d,n[d],n[d]&&n[d][1],'table'); */
           let value = Math.round(n[d].toString().replace(/[&\/\\#,%]/g, ''));
           if (value > 100) {
             value = 100;
@@ -411,7 +410,6 @@ class EnhancedTable extends React.Component {
           if (typeof expData[i][key] === 'object') {
             expData[i][key] = expData[i][key][1]
           }
-          //console.log(expData[i][key]);     
         }
       }
     }

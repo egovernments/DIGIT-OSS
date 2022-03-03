@@ -117,7 +117,6 @@ class WhatsAppLocality extends React.Component {
       return payload;
 
     } catch (e) {
-      console.log(e);
     }
   };
   getLocalisation = async () => {
@@ -156,7 +155,6 @@ class WhatsAppLocality extends React.Component {
       return;
 
     } catch (e) {
-      console.log(e);
     }
   };
   getConnvertedString = (code = '') => {

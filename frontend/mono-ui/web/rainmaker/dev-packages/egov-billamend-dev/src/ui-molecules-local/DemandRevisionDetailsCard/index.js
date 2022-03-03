@@ -58,7 +58,6 @@ function totalAmount(arr) {
 }
 
 function DemandRevisionDetailsCard(props) {
-    console.log(props, "fees props")
     const { classes, estimate } = props;
     const total = totalAmount(estimate.fees);
     return (

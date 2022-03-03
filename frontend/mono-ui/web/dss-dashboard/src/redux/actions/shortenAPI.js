@@ -11,7 +11,6 @@ export default function shortenAPI( url,callback ) {
     .then( response => {
       callback("",response);
     } ).catch( ( error ) => {
-      console.log( error );
       callback(error,"");
     } );
 }

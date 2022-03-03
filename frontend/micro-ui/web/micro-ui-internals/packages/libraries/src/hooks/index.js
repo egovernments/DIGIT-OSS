@@ -54,6 +54,7 @@ import useWorkflowData from "./fsm/useWorkflowData";
 import useRouteSubscription from "./fsm/useRouteSubscription";
 import useDsoSearch from "./fsm/useDsoSearch";
 import usePropertySearch from "./pt/usePropertySearch";
+import usePropertySearchWithDue from "./pt/usePropertySearchWithDue";
 import usePropertyPayment from "./pt/usePropertyPayment";
 import useApplicationDetail from "./fsm/useApplicationDetail";
 import useApplicationActions from "./fsm/useApplicationActions";
@@ -69,6 +70,7 @@ import useEmployeeSearch from "./useEmployeeSearch";
 
 import usePropertyMDMS from "./pt/usePropertyMDMS";
 import usePropertyAPI from "./pt/usePropertyAPI";
+import usePropertyCreateNUpdateAPI from "./pt/usePropertyCreateNUpdateAPI";
 import usePropertyDocumentSearch from "./pt/usePropertyDocumentSearch";
 import useTenantsPT from "./pt/useTenants";
 import usePtApplicationDetail from "./pt/useApplicationDetail";
@@ -78,6 +80,7 @@ import usePropertyAssessment from "./pt/usePropertyAssessment";
 import usePtCalculationEstimate from "./pt/usePtCalculationEstimate";
 import useGenderMDMS from "./pt/useGenderMDMS";
 import usePTGenderMDMS from "./pt/usePTGenderMDMS";
+import useMyPropertyPayments from "./pt/useMyPropertyPayments";
 
 import useDssMdms from "./dss/useMDMS";
 import useDashboardConfig from "./dss/useDashboardConfig";
@@ -170,6 +173,11 @@ import useNOCDetails from "./noc/useNOCDetails";
 import useNOCInbox from "./noc/useInbox";
 import useNOCSearchApplication from "./noc/useSearchApplications";
 
+import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
+import usewsTenants from "./ws/useTenants";
+import useWaterSearch from "./ws/useWaterSearch";
+import useSewarageSearch from "./ws/useSewarageSearch";
+
 const pgr = {
   useComplaintDetails,
   useComplaintsList,
@@ -217,7 +225,9 @@ const pt = {
   usePropertySearch,
   usePropertyPayment,
   usePropertyMDMS,
+  usePropertySearchWithDue,
   usePropertyAPI,
+  usePropertyCreateNUpdateAPI,
   usePropertyDocumentSearch,
   useTenants: useTenantsPT,
   useApplicationDetail: usePtApplicationDetail,
@@ -227,6 +237,7 @@ const pt = {
   usePtCalculationEstimate,
   useGenderMDMS,
   usePTGenderMDMS,
+  useMyPropertyPayments,
 };
 
 const dss = {
@@ -343,6 +354,13 @@ const noc = {
   useNOCSearchApplication
 }
 
+const ws = {
+  WSSearchMdmsTypes,
+  usewsTenants,
+  useWaterSearch,
+  useSewarageSearch
+}
+
 const Hooks = {
   useSessionStorage,
   useQueryParams,
@@ -383,7 +401,8 @@ const Hooks = {
   events,
   engagement,
   survey,
-  noc
+  noc,
+  ws
 };
 
 export default Hooks;

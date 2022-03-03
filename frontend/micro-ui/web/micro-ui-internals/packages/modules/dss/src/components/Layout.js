@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CustomAreaChart from "./CustomAreaChart";
 import CustomBarChart from "./CustomBarChart";
@@ -12,15 +12,25 @@ import Summary from "./Summary";
 
 let index = 1;
 
+const showCustomLabel = (title,t)=>{
+  switch(title){
+    case "DSS_FSM_MONTHLY_WASTE_CAL":
+     return `${t("DSS_WASTE_RECIEVED")} ${t(`DSS_WASTE_UNIT`)}`;
+    default:
+     return "";
+  }
+}
+
 const Layout = ({ rowData }) => {
   const { t } = useTranslation();
   const { value } = useContext(FilterContext);
   const [searchQuery, onSearch] = useState("");
+  const [chip, updateChip] = useState({});
 
   const renderChart = (chart, title) => {
     switch (chart.chartType) {
       case "table":
-        return <CustomTable data={chart} onSearch={searchQuery} title={title} />;
+        return <CustomTable data={chart} onSearch={searchQuery} chip={chip} title={title} />;
       case "donut":
         return <CustomPieChart data={chart} title={title} />;
       case "line":
@@ -34,20 +44,22 @@ const Layout = ({ rowData }) => {
             layout="vertical"
             yDataKey="name"
             xDataKey=""
-            showDrillDown={true}
+            showDrillDown={false}
             title={title}
           />
         );
       case "bar":
-        return <CustomHorizontalBarChart data={chart} title={title} yAxisLabel={`${t("DSS_WASTE_RECIEVED")} ${t(`DSS_WASTE_UNIT`)}`} />;
+        return <CustomHorizontalBarChart data={chart} title={title} yAxisLabel={showCustomLabel(title,t)} />;
+      default:
+        return null;
     }
   };
 
-  const renderVisualizer = (visualizer, key) => {
+  const renderVisualizer = (visualizer, key, chip, onChipChange) => {
     switch (visualizer.vizType) {
       case "metric-collection":
         return (
-          <GenericChart header={visualizer.name} className="metricsTable" key={key}>
+          <GenericChart header={visualizer.name} className="metricsTable" key={key} value={value}>
             <MetricChart data={visualizer} />
           </GenericChart>
         );
@@ -60,14 +72,17 @@ const Layout = ({ rowData }) => {
         return (
           <GenericChart
             key={key}
-            header={visualizer.name}
+            value={value}
+            header={visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0].chartType === "line" ? `${visualizer.name}` : visualizer.name}
+            chip={chip}
+            updateChip={onChipChange}
             showDownload={visualizer?.charts?.[0].chartType === "table"}
             showSearch={visualizer?.charts?.[0].chartType === "table"}
             className={visualizer?.charts?.[0].chartType === "table" && "fullWidth"}
             onChange={(e) => onSearch(e.target.value)}
           >
             {/* {visualizer.charts.map((chart, key) => renderChart(chart, key))} */}
-            {renderChart(visualizer?.charts?.[0], visualizer.name)}
+            {renderChart(visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0], visualizer.name)}
           </GenericChart>
         );
       case "performing-metric":
@@ -77,10 +92,10 @@ const Layout = ({ rowData }) => {
         )
           return null;
         return (
-          <GenericChart header={visualizer.name} subHeader={`(${t(`DSS_SLA_ACHIEVED`)})`} key={key}>
+          <GenericChart value={value} header={visualizer.name} subHeader={`(${t(`SUB_${visualizer.name}`)})`} key={key} chip={chip} updateChip={onChipChange}>
             <CustomBarChart
-              data={visualizer?.charts?.[0]}
-              fillColor={index++ % 2 ? "#00703C" : "#D4351C"}
+              data={visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0]}
+              fillColor={index++ % 2 ? "RED" : "GREEN"}
               title={visualizer.name}
               showDrillDown={true}
             />
@@ -89,9 +104,38 @@ const Layout = ({ rowData }) => {
       case "collection":
       case "module":
         return <Summary key={key} ttile={visualizer.name} data={visualizer} key={key} />;
+      default:
+        return null;
     }
   };
-  return <div className="chart-row">{rowData.vizArray.map((chart, key) => renderVisualizer(chart, key))}</div>;
+  useEffect(() => {
+    let chipData = {};
+    rowData.vizArray.map((chart) => {
+      if (chart?.charts?.length > 1) {
+        chipData[chart.name] = chart.charts.map((ele, ind) => ({ tabName: ele.tabName, active: ind === 0, index: ind }));
+      }
+    });
+    updateChip({ ...chipData });
+  }, []);
+  return (
+    <div className="chart-row">
+      {rowData.vizArray.map(
+        useCallback(
+          (chart, key) => {
+            let chipData = chip?.[chart.name];
+            let onChipChange = (index) =>
+              updateChip((oldState) => {
+                let prevChip = oldState[chart.name];
+                oldState[chart.name] = prevChip.map((ele) => ({ ...ele, active: ele.index === index }));
+                return { ...oldState };
+              });
+            return renderVisualizer(chart, key, chipData, onChipChange);
+          },
+          [renderVisualizer, chip]
+        )
+      )}
+    </div>
+  );
 };
 
 export default Layout;

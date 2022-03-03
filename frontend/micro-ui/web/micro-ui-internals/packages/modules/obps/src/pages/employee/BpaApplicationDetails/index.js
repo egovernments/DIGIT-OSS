@@ -359,18 +359,22 @@ const BpaApplicationDetail = () => {
   }, []);
 
 
-  if(wfDocs?.length && data?.applicationDetails&& !(data?.applicationDetails.find(e => e.title === "BPA_WORKFLOW_DOCS"))){
-    data?.applicationDetails.push({
-      title: "BPA_WORKFLOW_DOCS",
-      //values: wfDocs?.map?.((e) => ({ ...e, })),
-      additionalDetails:{
-        "documents":[{values: wfDocs?.map?.((e) => ({
-        ...e,
-        title: e.documentType,
-        }))}]
-      }
-    });
-  }
+  // if(wfDocs?.length && data?.applicationDetails&& !(data?.applicationDetails.find(e => e.title === "BPA_WORKFLOW_DOCS"))){
+  //   data?.applicationDetails.push({
+  //     title: "BPA_WORKFLOW_DOCS",
+  //     //values: wfDocs?.map?.((e) => ({ ...e, })),
+  //     additionalDetails:{
+  //       "documents":[{values: wfDocs?.map?.((e) => ({
+  //       ...e,
+  //       title: e.documentType,
+  //       }))}]
+  //     }
+  //   });
+  // }
+
+  if (workflowDetails?.data?.nextActions?.length > 0) {
+    workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "SKIP_PAYMENT");
+  };
 
   if (workflowDetails?.data?.nextActions?.length > 0) {
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "SKIP_PAYMENT");

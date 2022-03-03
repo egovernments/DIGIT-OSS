@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
 import { newConfigMutate } from "../../config/Mutate/config";
 import TransfererDetails from "../../pageComponents/Mutate/TransfererDetails";
+import MutationApplicationDetails from "./MutationApplicatinDetails";
 
 
 const ApplicationDetails = () => {
@@ -16,6 +17,7 @@ const ApplicationDetails = () => {
   const [appDetailsToShow, setAppDetailsToShow] = useState({});
   const [enableAudit, setEnableAudit] = useState(false);
   const [businessService, setBusinessService] = useState("PT.CREATE");
+  sessionStorage.setItem("applicationNoinAppDetails",propertyId);
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, propertyId);
 
@@ -81,8 +83,8 @@ const ApplicationDetails = () => {
   }, [auditData, applicationDetails, appDetailsToShow]);
 
   useEffect(() => {
-    if (workflowDetails?.data?.applicationBusinessService&& businessService!=workflowDetails?.data?.applicationBusinessService) {
-          setBusinessService(workflowDetails?.data?.applicationBusinessService);
+    if (workflowDetails?.data?.applicationBusinessService && !(workflowDetails?.data?.applicationBusinessService === "PT.CREATE" && businessService === "PT.UPDATE")) {
+      setBusinessService(workflowDetails?.data?.applicationBusinessService);
     }
   }, [workflowDetails.data]);
 
@@ -166,6 +168,17 @@ const ApplicationDetails = () => {
       },
     ];
   }
+ if (applicationDetails?.applicationData?.creationReason === "MUTATION"){
+   return(
+    <MutationApplicationDetails 
+      propertyId = {propertyId}
+      acknowledgementIds={appDetailsToShow?.applicationData?.acknowldgementNumber}
+      workflowDetails={workflowDetails}
+      mutate={mutate}
+    />
+   )
+ } 
+
   return (
     <div>
       <Header>{t("PT_APPLICATION_TITLE")}</Header>
@@ -185,6 +198,7 @@ const ApplicationDetails = () => {
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
         statusAttribute={"state"}
       />
+    
     </div>
   );
 };

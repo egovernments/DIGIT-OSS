@@ -14,11 +14,13 @@ import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-m
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
+import { initWSComponents } from "@egovernments/digit-ui-module-ws"; 
 import {initCustomisationComponents} from "./Customisations";
+import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonPt";
 
 initLibraries();
 
-const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS","NOC","Engagement"];
+const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "NDSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS","NOC","Engagement", "WS","CommonPT"];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PTModule,
@@ -45,7 +47,8 @@ initReceiptsComponents();
 initOBPSComponents();
 initNOCComponents();
 initEngagementComponents();
-
+initWSComponents();
+initCommonPTComponents();
 initCustomisationComponents();
 
 const moduleReducers = (initData) => ({

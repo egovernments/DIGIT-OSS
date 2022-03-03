@@ -72,7 +72,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
               setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
             setError(t("CS_FILE_UPLOAD_ERROR"));
           }
         }
@@ -209,14 +208,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         }
       }
     })
-    // try{
-    //   mutation1.mutate({BPA:applicationData}, {
-    //     onSuccess,
-    //   });
-    // }
-    // catch (err) {
-    //   console.error(err, "inside ack");
-    // }
+
     submitAction({
       BPA:applicationData
     }, nocDetails, {isStakeholder: false, bpa: true});

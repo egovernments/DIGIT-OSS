@@ -333,7 +333,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     if (payload[0] && payload[0].provisionFireNOCNumber == "") {
       delete payload[0].provisionFireNOCNumber;
     }
-
+   
     let response;
     if (method === "CREATE") {
       response = await httpRequest(
@@ -341,7 +341,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         "/firenoc-services/v1/_create",
         "",
         [],
-        { FireNOCs: payload }
+        { FireNOCs: [payload[0]] }
       );
       response = furnishNocResponse(response);
       enableField('apply', "components.div.children.footer.children.nextButton", dispatch);

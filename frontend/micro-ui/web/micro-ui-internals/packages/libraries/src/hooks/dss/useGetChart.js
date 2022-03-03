@@ -13,6 +13,20 @@ const getRequest = (type, code, requestDate, filters) => ({
     requestDate,
   },
 });
+ const defaultSelect = (data) => {
+ if(data?.responseData){
+   if(data?.responseData?.data){
+     data.responseData.data=data?.responseData?.data?.filter(col=>col)||[];
+     data.responseData.data?.forEach(row=>{
+       if(row?.plots){
+         row.plots=row?.plots.filter(col=>col)||[];
+       }
+     })
+     }
+ }
+ return data;
+ }
+
 
 const useGetChart = (args) => {
   const { key, type, tenantId, requestDate, filters } = args;
@@ -22,7 +36,10 @@ const useGetChart = (args) => {
       headers: {
         tenantId,
       },
-    })
+    }),
+    {
+      select: defaultSelect,
+    }
   );
 };
 

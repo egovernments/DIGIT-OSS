@@ -69,11 +69,12 @@ class CustomCard extends React.Component {
             }
                    
             let label = data.label ? (strings[data.label] ? strings[data.label] : data.label) : '';
+            let tool=data.label ? (strings[`TIP_${data.label}`] ? strings[`TIP_${data.label}`] : `TIP_${data.label}`) : '';
             return (
                 <Grid container spacing={24}>
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                         <div>
-                            <Tooltip title={label} placement="top">
+                            <Tooltip title={tool} placement="top">
                                 <Typography className={classes.subTitle}>{label}</Typography>
                             </Tooltip>
                         </div>

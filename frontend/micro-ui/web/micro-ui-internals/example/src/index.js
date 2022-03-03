@@ -18,7 +18,10 @@ import { HRMSModule } from "@egovernments/digit-ui-module-hrms";
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
+import { initWSComponents } from "@egovernments/digit-ui-module-ws"; 
 import { DigitUI } from "@egovernments/digit-ui-module-core";
+import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonPt";
+
 // import {initCustomisationComponents} from "./customisations";
 
 // import { PGRModule, PGRLinks } from "@egovernments/digit-ui-module-pgr";
@@ -34,14 +37,12 @@ import { pgrCustomizations, pgrComponents } from "./pgr";
 
 var Digit = window.Digit || {};
 
-const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect", "HRMS", "TL", "Receipts", "OBPS", "Engagement", "NOC"];
+const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect", "HRMS", "TL", "Receipts", "OBPS", "Engagement", "NOC", "WS","CommonPT", "NDSS"];
 
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
   const token = window.sessionStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
-
-  // console.log(token);
  
   const citizenInfo = window.localStorage.getItem("Citizen.user-info")
  
@@ -92,6 +93,8 @@ const initDigitUI = () => {
   initOBPSComponents();
   initEngagementComponents();
   initNOCComponents();
+  initWSComponents();
+  initCommonPTComponents();
 // initCustomisationComponents();
 
 const moduleReducers = (initData) => ({
@@ -105,7 +108,6 @@ const moduleReducers = (initData) => ({
   initTokens(stateCode);
 
   const registry = window?.Digit.ComponentRegistryService.getRegistry();
-  console.log(registry);
   ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
 };
 

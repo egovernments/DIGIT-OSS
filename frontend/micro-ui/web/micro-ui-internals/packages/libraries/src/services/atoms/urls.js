@@ -21,6 +21,7 @@ const Urls = {
   Authenticate: "/user/oauth/token",
   RegisterUser: "/user/citizen/_create",
   ChangePassword: "/user/password/nologin/_update",
+  ChangePassword1: "/user/password/_update", 
   UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
 
@@ -65,6 +66,7 @@ const Urls = {
     pt_calculation_estimate: "/pt-calculator-v2/propertytax/v2/_estimate",
     assessment_create: "/property-services/assessment/_create",
     assessment_search: "/property-services/assessment/_search",
+    payment_search: "/collection-services/payments/PT/_search"
   },
 
   dss: {
@@ -128,6 +130,11 @@ const Urls = {
     updateEvent: "/egov-user-event/v1/events/_update",
     count: "/egov-user-event/v1/events/notifications/_count",
     create: "/egov-user-event/v1/events/_create",
+  },
+
+  ws: {
+    water_search: "/ws-services/wc/_search",
+    sewarage_search : "/sw-services/swc/_search",
   },
 
   engagement: {

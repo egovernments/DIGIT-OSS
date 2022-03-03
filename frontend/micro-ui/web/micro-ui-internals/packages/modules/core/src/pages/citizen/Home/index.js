@@ -63,7 +63,7 @@ const Home = () => {
         header: t("CS_COMMON_DASHBOARD_INFO_UPDATES"),
         sideOption:{ 
             name: t("DASHBOARD_VIEW_ALL_LABEL"),
-            onClick: () => console.debug("view all")
+            onClick: () => {}
         },
         options: [
             {
@@ -83,7 +83,7 @@ const Home = () => {
             {
                 name: t("CS_COMMON_SURVEYS"),
                 Icon: <DocumentIcon/>,
-                onClick: () => history.push("/digit-ui/citizen/engagement/SurveyList")
+                onClick: () => history.push("/digit-ui/citizen/engagement/surveys/list")
             },
             // {
             //     name: t("CS_COMMON_HELP"),

@@ -1,7 +1,7 @@
-import { CardLabel, Dropdown, LabelFieldPair, Loader, RemoveableTag } from "@egovernments/digit-ui-react-components";
+import { CardLabel, Dropdown, LabelFieldPair, Loader, RemoveableTag ,MultiSelectDropdown} from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import cleanup from "../Utils/cleanup";
-import MultiSelectDropdown from "./Multiselect";
+// import MultiSelectDropdown from "./Multiselect";
 
 const Jurisdictions = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -102,7 +102,7 @@ const Jurisdictions = ({ t, config, onSelect, userType, formData }) => {
   }
 
   function getroledata() {
-    return data?.MdmsRes?.["ACCESSCONTROL-ROLES"].roles.map(role => { return { code: role.code, name: 'ACCESSCONTROL_ROLES_ROLES_' + role.code } });
+    return data?.MdmsRes?.["ACCESSCONTROL-ROLES"].roles.map(role => { return { code: role.code, name: role?.name ? role?.name : " " , labelKey: 'ACCESSCONTROL_ROLES_ROLES_' + role.code } });
   }
 
   if (isLoading) {
@@ -185,16 +185,21 @@ function Jurisdiction({
   };
 
   const selectrole = (e, data) => {
-    const index = jurisdiction?.roles.filter((ele) => ele.code == data.code);
-    let res = null;
-    if (index.length) {
-      jurisdiction?.roles.splice(jurisdiction?.roles.indexOf(index[0]), 1);
-      res = jurisdiction.roles;
-    } else {
-      res = [{ ...data }, ...jurisdiction?.roles];
-    }
+    // const index = jurisdiction?.roles.filter((ele) => ele.code == data.code);
+    // let res = null;
+    // if (index.length) {
+    //   jurisdiction?.roles.splice(jurisdiction?.roles.indexOf(index[0]), 1);
+    //   res = jurisdiction.roles;
+    // } else {
+    //   res = [{ ...data }, ...jurisdiction?.roles];
+    // }
+    let res = [];
+    e && e?.map((ob) => {
+      res.push(ob?.[1]);
+    });
 
-    // if (checked) selectULB(data.code);
+    res?.forEach(resData => {resData.labelKey = 'ACCESSCONTROL_ROLES_ROLES_' + resData.code})
+
     setjurisdictions((pre) => pre.map((item) => (item.key === jurisdiction.key ? { ...item, roles: res } : item)));
   };
 
@@ -274,13 +279,13 @@ function Jurisdiction({
               selected={jurisdiction?.roles}
               options={getroledata(roleoption)}
               onSelect={selectrole}
-              optionsKey="name"
+              optionsKey="labelKey"
               t={t}
             />
             <div className="tag-container">
               {jurisdiction?.roles.length > 0 &&
                 jurisdiction?.roles.map((value, index) => {
-                  return <RemoveableTag key={index} text={`${t(value["name"]).slice(0, 22)} ...`} onClick={() => onRemove(index, value)} />;
+                  return <RemoveableTag key={index} text={`${t(value["labelKey"]).slice(0, 22)} ...`} onClick={() => onRemove(index, value)} />;
                 })}
             </div>
           </div>

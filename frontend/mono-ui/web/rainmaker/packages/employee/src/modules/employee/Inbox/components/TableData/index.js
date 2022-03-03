@@ -451,7 +451,6 @@ class TableData extends Component {
             }
   
           } catch (e) {
-            console.log("error");
           }
         } */
       } catch (e) {

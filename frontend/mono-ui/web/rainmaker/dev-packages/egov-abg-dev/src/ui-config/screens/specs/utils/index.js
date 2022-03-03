@@ -47,7 +47,6 @@ export const getMdmsData = async requestBody => {
 
     return response;
   } catch (error) {
-    console.log(error);
     return {};
   }
 };

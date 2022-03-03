@@ -32,11 +32,11 @@ const useInboxMobileCardsData = ({  table }) => {
     const sortOrderOptions = [
       {
         code: "DESC",
-        i18nKey: "ES_COMMON_SORT_BY_DESC",
+        i18nKey: "ES_INBOX_DATE_LATEST_FIRST",
       },
       {
         code: "ASC",
-        i18nKey: "ES_COMMON_SORT_BY_ASC",
+        i18nKey: "ES_INBOX_DATE_LATEST_LAST",
       },
     ];
     const { control: controlSortForm } = useFormContext();

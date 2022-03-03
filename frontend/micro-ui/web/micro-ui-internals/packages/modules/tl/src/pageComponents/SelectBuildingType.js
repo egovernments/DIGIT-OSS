@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { FormStep, RadioOrSelect, RadioButtons, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimeline";
 
 const SelectBuildingType = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -34,6 +35,7 @@ const SelectBuildingType = ({ t, config, onSelect, userType, formData }) => {
   }
   return (
     <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline /> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!BuildingType}>
         <RadioButtons
           t={t}

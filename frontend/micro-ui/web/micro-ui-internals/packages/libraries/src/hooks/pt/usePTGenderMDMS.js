@@ -10,6 +10,8 @@ const usePTGenderMDMS = (tenantId, moduleCode, type, config = {}) => {
   switch (type) {
     case "GenderType":
       return usePTGenders();
+    default:
+      return null;
   }
 };
 
