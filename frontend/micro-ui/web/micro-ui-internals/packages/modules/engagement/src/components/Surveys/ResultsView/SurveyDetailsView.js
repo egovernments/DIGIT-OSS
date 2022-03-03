@@ -1,4 +1,4 @@
-import { TextInput,Dropdown } from '@egovernments/digit-ui-react-components'
+import { TextInput,Dropdown,RemoveableTag } from '@egovernments/digit-ui-react-components'
 import React,{useMemo} from 'react'
 
 const SurveyDetailsView = ({surveyTitle,surveyDesc,t}) => {
@@ -24,6 +24,10 @@ const SurveyDetailsView = ({surveyTitle,surveyDesc,t}) => {
                     keepNull={true}
                     disable={true}
                     t={t}
+                    />
+                    <RemoveableTag
+                      key={"tag"}
+                      text={userUlbs[0].name}
                     />
             </div>  
         </span>

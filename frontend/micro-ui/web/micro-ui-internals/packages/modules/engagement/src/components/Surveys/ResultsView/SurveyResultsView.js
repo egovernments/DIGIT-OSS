@@ -7,6 +7,15 @@ import { useTranslation } from "react-i18next";
 import McqChart from './McqChart';
 import CheckBoxChart from './CheckBoxChart';
 
+
+const getUserData = (data) => {
+    const obj = {}
+    data.map(ans => {
+        obj[ans.mobileNumber]=ans.emailId
+    })
+    return obj;
+}
+
 //static for now
 const userData = [
     {
@@ -40,12 +49,19 @@ const displayResult = (ques,ans,type,resCount) => {
                         //     {ans.map(el=> <span>{el}<BreakLine /></span>)}
                         //     </Card>
                         // </div>
-                        <div>
+                        // <div>
+                        //     <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
+                        //     <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
+                        //     <Card style={{"backgroundColor":"#FAFAFA","margin":"0px"}}>
+                        //     {ans.map(el=> <p>{el}<BreakLine /></p>)}
+                        //     </Card>
+                        // </div>
+                        <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
-                            <Card style={{"backgroundColor":"#FAFAFA","margin":"0px"}}>
-                            {ans.map(el=> <p>{el}<BreakLine /></p>)}
-                            </Card>
+                            <div className='responses-container'>
+                            {ans.map(el=> <div className='response-result'>{el}<BreakLine style={{"width":"100%"}} /></div>)}
+                            </div>
                         </div>
                         )
             case "Date":
@@ -55,12 +71,12 @@ const displayResult = (ques,ans,type,resCount) => {
                         //     <span className='text-3xl font-bold'>{`${resCount} Responses`}</span>
                         //     {ans.map(el=> <span>{el}</span>)}
                         // </div>
-                        <div>
+                        <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
-                            <Card style={{"backgroundColor":"#FAFAFA","margin":"0px"}}>
-                            {ans.map(el=> <p>{el}<BreakLine /></p>)}
-                            </Card>
+                            <div className="responses-container">
+                            {ans.map(el=> <div className='response-result'>{el}<BreakLine /></div>)}
+                            </div>
                         </div>
                         )
             case "Paragraph":
@@ -70,12 +86,12 @@ const displayResult = (ques,ans,type,resCount) => {
                         //     <span className='text-3xl font-bold'>{`${resCount} Responses`}</span>
                         //     {ans.map(el=> <span>{el}</span>)}
                         // </div>
-                        <div>
+                        <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
-                            <Card style={{"backgroundColor":"#FAFAFA","margin":"0px"}}>
-                            {ans.map(el=> <p>{el}<BreakLine /></p>)}
-                            </Card>
+                            <div className='responses-container'>
+                            {ans.map(el=> <div className='response-result'>{el}<BreakLine /></div>)}
+                            </div>
                         </div>
                         )
             case "Check Boxes":
@@ -92,24 +108,26 @@ const displayResult = (ques,ans,type,resCount) => {
                         //     {ans.map(el=> <p>{el}<BreakLine /></p>)}
                         //     </Card>
                         // </div>
-                        <div>
+                        <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
-                            <Card style={{"backgroundColor":"#FAFAFA","margin":"0px"}}>
                             {/* {ans.map(el=> <p>{el}<BreakLine /></p>)} */}
+                            <div className='responses-container'>
                             <CheckBoxChart data={ques}/>
-                            </Card>
+                            </div>
+                            
                         </div>
                         )
             case "Multiple Choice":
                 return (
-                        <div>
+                        <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
-                            <Card style={{"backgroundColor":"#FAFAFA","margin":"0px"}}>
                             {/* {ans.map(el=> <p>{el}<BreakLine /></p>)} */}
+                            <div className='responses-container'>
                             <McqChart data={ques}/>
-                            </Card>
+                            </div>
+                            
                         </div>
                         
                         )
@@ -120,12 +138,12 @@ const displayResult = (ques,ans,type,resCount) => {
                         //     <span className='text-3xl font-bold'>{`${resCount} Responses`}</span>
                         //     {ans.map(el=> <span>{el}</span>)}
                         // </div>
-                        <div>
+                        <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                            <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
-                            <Card style={{"backgroundColor":"#FAFAFA","margin":"0px"}}>
-                            {ans.map(el=> <p>{el}<BreakLine /></p>)}
-                            </Card>
+                            <div className='responses-container'>
+                            {ans.map(el=> <div className='response-result'>{el}<BreakLine /></div>)}
+                            </div>
                         </div>
                         )
             
@@ -137,10 +155,13 @@ const SurveyResultsView = ({surveyInfo,responsesInfoMutation}) => {
     // console.log("surveyInfo",surveyInfo);
     // console.log("responsesInfo",responsesInfoMutation.data);
     const [data,setData]=useState(null);
+    const [userInfo,setUserInfo] = useState(null)
     useEffect(() => {
         if(responsesInfoMutation.isSuccess){
         const dp = bindQuesWithAns(surveyInfo?.questions,responsesInfoMutation.data.answers)
         setData(dp)
+        const ue = getUserData(responsesInfoMutation.data.answers)
+        setUserInfo(ue);
         }
     },[responsesInfoMutation])
 
@@ -154,8 +175,10 @@ const SurveyResultsView = ({surveyInfo,responsesInfoMutation}) => {
         <CardHeader>Surveys</CardHeader>
         {/* display survey detail form
         display whoHasResponded component */}
+        <div style={{"margin":"30px"}}>
         <SurveyDetailsView surveyTitle={surveyInfo.title} surveyDesc={surveyInfo.description} t={t} />
-        <WhoHasResponded t={t} userInfo={userData}/>
+        </div>
+        <WhoHasResponded t={t} userInfo={userInfo}/>
         {data.map(element =>( 
             displayResult(element,element.answers,element.type,element.answers.length)
         ))}

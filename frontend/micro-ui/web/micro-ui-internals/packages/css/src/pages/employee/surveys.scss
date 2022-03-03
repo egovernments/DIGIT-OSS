@@ -93,6 +93,26 @@
   font-weight: 700;
 }
 
+.responses-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px 4px; 
+  background-color: #FAFAFA;
+  border: 1px solid #D6D5D4;
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.response-result {
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  margin: 0px 0px -20px;
+}
+
 .align-columns{
   @apply grid gap-4;
 }
