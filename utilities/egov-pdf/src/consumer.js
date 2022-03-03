@@ -34,12 +34,10 @@ const listenConsumer = async()=>{
   consumerGroup.on("message", function(message) {
     logger.info("record received on consumer for create");
     try {
-      consumerGroup.pause();
       var data = JSON.parse(message.value);
       //console.log(JSON.stringify(data));
        create_bulk_pdf(data).then(() => {
           logger.info("record created for consumer request");
-          consumerGroup.resume();
       }).catch(error => {
           logger.error(error.stack || error);
       });
