@@ -136,6 +136,9 @@ public class TLConfiguration {
     @Value("${egov.tl.calculator.calculate.endpoint}")
     private String calculateEndpointTL;
 
+    @Value("${egov.tl.calculator.estimate.endpoint}")
+    private String estimateEndpointTL;
+
     @Value("${egov.bpa.calculator.calculate.endpoint}")
     private String calculateEndpointBPA;
 

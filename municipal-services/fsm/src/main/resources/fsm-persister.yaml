@@ -7,7 +7,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: INSERT INTO  eg_fsm_application( id, applicationno, tenantid, additionaldetails, accountid, description, applicationstatus, source, sanitationtype, propertyusage, nooftrips, status, vehicle_id, vehicletype, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?);
+       - query: INSERT INTO  eg_fsm_application( id, applicationno, tenantid, additionaldetails, accountid, description, applicationstatus, source, sanitationtype, propertyusage, nooftrips, status, vehicle_id, vehicletype, vehicleCapacity,paymentPreference, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: fsm
          jsonMaps:
           - jsonPath: $.fsm.id
@@ -39,6 +39,10 @@ serviceMaps:
           - jsonPath: $.fsm.vehicleId
           
           - jsonPath: $.fsm.vehicleType
+          
+          - jsonPath: $.fsm.vehicleCapacity
+          
+          - jsonPath: $.fsm.paymentPreference
 
           - jsonPath: $.fsm.auditDetails.createdBy
 
@@ -117,7 +121,7 @@ serviceMaps:
 
           - jsonPath: $.fsm.address.id
           
-       - query: INSERT INTO  eg_fsm_pit_detail( id, tenantid, height, length, width, diameter, distancefromroad, fsm_id,  createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
+       - query: INSERT INTO  eg_fsm_pit_detail( id, tenantid, height, length, width, diameter, distancefromroad, fsm_id, additionaldetails,  createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
          basePath: fsm.pitDetail
          jsonMaps:
           - jsonPath: $.fsm.pitDetail.id
@@ -135,6 +139,10 @@ serviceMaps:
           - jsonPath: $.fsm.pitDetail.distanceFromRoad
 
           - jsonPath: $.fsm.id
+          
+          - jsonPath: $.fsm.pitDetail.additionalDetails
+            type: JSON
+            dbType: JSONB
 
           - jsonPath: $.fsm.pitDetail.auditDetails.createdBy
 
@@ -156,7 +164,7 @@ serviceMaps:
          jsonMaps: 
             - jsonPath: $.fsm.id
              
-       - query: UPDATE  eg_fsm_application SET additionaldetails=?, description=?, applicationstatus=?, source=?, sanitationtype=?, propertyusage=?, nooftrips=?, status=?, vehicle_id=?, vehicletype=?, createdby=?, lastmodifiedby=?, createdtime=?, lastmodifiedtime=?, possible_srv_date=?, dso_id=?, completed_on=? where id=? 
+       - query: UPDATE  eg_fsm_application SET additionaldetails=?, description=?, applicationstatus=?, source=?, sanitationtype=?, propertyusage=?, nooftrips=?, status=?, vehicle_id=?, vehicletype=?,vehicleCapacity=?,paymentPreference=?, createdby=?, lastmodifiedby=?, createdtime=?, lastmodifiedtime=?, possible_srv_date=?, dso_id=?, completed_on=? where id=? 
          basePath: fsm
          jsonMaps:          
                 - jsonPath: $.fsm.additionalDetails
@@ -180,6 +188,10 @@ serviceMaps:
                 - jsonPath: $.fsm.vehicleId
                 
                 - jsonPath: $.fsm.vehicleType
+                
+                - jsonPath: $.fsm.vehicleCapacity
+                
+                - jsonPath: $.fsm.paymentPreference
                   
                 - jsonPath: $.fsm.auditDetails.createdBy
       
@@ -273,10 +285,15 @@ serviceMaps:
          jsonMaps: 
           - jsonPath: $.fsm.pitDetail.id
           
-       - query: UPDATE  eg_fsm_pit_detail SET height=?, length=?, width=?, diameter=?, distancefromroad=?, createdby=?, lastmodifiedby=?, createdtime=?, lastmodifiedtime=?  where id=?  
+       - query: UPDATE  eg_fsm_pit_detail SET additionaldetails=?,height=?, length=?, width=?, diameter=?, distancefromroad=?, createdby=?, lastmodifiedby=?, createdtime=?, lastmodifiedtime=?  where id=?  
          basePath: fsm.pitDetail
          jsonMaps:
             
+            
+            - jsonPath: $.fsm.pitDetail.additionalDetails
+              type: JSON
+              dbType: JSONB
+                  
             - jsonPath: $.fsm.pitDetail.height
              
             - jsonPath: $.fsm.pitDetail.length

@@ -45,8 +45,20 @@ public class PerformanceChartResponeHandler implements IResponseHandler {
 
                     ArrayNode buckets = (ArrayNode) aggrNode.findValues(IResponseHandler.BUCKETS).get(0);
                     buckets.forEach(bucket -> {
-                        String key = bucket.findValue(IResponseHandler.KEY).asText();
-                        Double value = bucket.findValue(IResponseHandler.VALUE).asDouble();
+                    	 String key = bucket.findValue(IResponseHandler.KEY).asText();
+                    	 Double value = bucket.findValue(IResponseHandler.VALUE).asDouble();
+                    	 
+                    	for (Iterator<String> it = bucket.fieldNames(); it.hasNext(); ) {
+                            String fieldName = it.next();
+                            if(bucket.get(fieldName) instanceof JsonNode){
+                                if(bucket.get(fieldName).findValue(IResponseHandler.BUCKETS) == null){
+                                	JsonNode valueNode =bucket.get(fieldName).findValue(IResponseHandler.VALUE);
+                                    value = (valueNode != null ? valueNode.asDouble(): Double.valueOf("0"));
+                                }
+
+                            }
+                        }                    
+                        
 
                         if (mappings.containsKey(key)) {
                             Double sum = (mappings.get(key)).containsKey(headerPath.asText()) ? (mappings.get(key)).get(headerPath.asText()) + value : value;

@@ -70,6 +70,16 @@ public class EnrichmentService {
 		waterConnectionRequest.getWaterConnection().setAuditDetails(auditDetails);
 		waterConnectionRequest.getWaterConnection().setId(UUID.randomUUID().toString());
 		waterConnectionRequest.getWaterConnection().setStatus(StatusEnum.ACTIVE);
+
+		if(waterConnectionRequest.getWaterConnection().getChannel() == null){
+			if(waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") )
+				waterConnectionRequest.getWaterConnection().setChannel("CFC_COUNTER");
+			if(waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") )
+				waterConnectionRequest.getWaterConnection().setChannel("CITIZEN");
+			if(waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("SYSTEM") )
+				waterConnectionRequest.getWaterConnection().setChannel("SYSTEM");
+		}
+
 		//Application creation date
 		HashMap<String, Object> additionalDetail = new HashMap<>();
 		if (waterConnectionRequest.getWaterConnection().getAdditionalDetails() == null) {

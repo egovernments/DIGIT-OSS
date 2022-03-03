@@ -81,14 +81,13 @@ public class SWCalculationConfiguration {
     
     @Value("${notification.sms.link}")
     private String smsNotificationLink;
-    
-    
+
     //Email
     @Value("${notification.mail.enabled}")
     private Boolean isMailEnabled;
     
     @Value("${kafka.topics.notification.mail.name}")
-    private String emailNotifyTopic;
+    private String emailNotifTopic;
     
     //User-events
     @Value("${egov.user.event.notification.enabled}")
@@ -152,8 +151,7 @@ public class SWCalculationConfiguration {
 	
     @Value("${sw.demand.based.batch.size}")
     private Integer batchSize;
-    
-    
+
 	@Value("${egov.seweragecalculatorservice.createdemand.topic}")
 	private String createDemand;
 	
