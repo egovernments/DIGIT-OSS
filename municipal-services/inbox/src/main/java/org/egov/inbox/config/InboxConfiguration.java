@@ -53,5 +53,20 @@ public class InboxConfiguration {
 
 	@Value("${egov.searcher.fsm.dsoid.path}")
 	private String fsmInboxDSoIDEndpoint;
+	
+	@Value("${egov.vehicle.host}")
+	private String vehicleHost;
+	
+	@Value("${vehicle.search.path}")
+	private String vehicleSearchPath;
+	
+	@Value("${vehicle.fetchApplicationStatusCount.path}")
+	private String vehicleApplicationStatusCountPath;
+	
+	@Value("${vehicle.fetchApplicationIds.path}")
+	private String fetchApplicationIds;
+	
+	@Value("${vehicle.searchTrip.path}")
+	private String vehicleSearchTripPath;
 
 }
