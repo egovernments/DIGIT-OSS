@@ -71,20 +71,23 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
 
   if (!response) {
     return (
-      <div style={{ position: "relative", display: "flex", height:"68px",justifyContent: "space-between" }}>
-    <span className="tooltip">
-             {t(data.name)}
-              <span className="tooltiptext" style={{ whiteSpace: "nowrap" , marginLeft: "-500%" , fontSize:"medium" }}>
-          <span style={{         
+      <div className="row">
+      <div className={`tooltip`} >
+        {t(data.name)}
+        <span
+          className="tooltiptext"
+          style={{
             fontSize: "medium",
             width: t(`TIP_${data.name}`).length < 50 ? "fit-content" : 400,
             height: 50,
-            whiteSpace: "normal", }}>{t(`TIP_${data.name}`)}</span>
-              </span>
-            </span>
-
-        <span style={{ whiteSpace: "pre" }}>{t("DSS_NO_DATA")}</span>
+            whiteSpace: "normal",
+          }}
+        >
+          <span style={{ fontWeight: "500", color: "white" }}>{t(`TIP_${data.name}`)}</span>
+        </span>
       </div>
+        <span style={{ whiteSpace: "pre" }}>{t("DSS_NO_DATA")}</span>
+    </div>
     );
   }
 

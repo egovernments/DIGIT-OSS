@@ -14,7 +14,7 @@ const formatValue = (value, symbol) => {
     const Pformatter = new Intl.NumberFormat("en-IN", { maximumSignificantDigits: 3 });
     return `${Pformatter.format(Number(value).toFixed(2))}`;
     */
-    return `${Number(Math.ceil(Number(value)*10)/10).toFixed(1)}`;
+    return `${Number(Math.ceil(Number(value)*10)/10).toFixed()}`;
   } else {
     return value;
   }
@@ -24,7 +24,7 @@ const CustomLabel = ({ x, y, name, stroke, value }) => {
   const { t } = useTranslation();
   return (
     <>
-      <text x={x} y={y} dx={-60} dy={10} fill={stroke} width="35" style={{fontSize: "medium",
+      <text x={x} y={y} dx={-55} dy={10} fill={stroke} width="35" style={{fontSize: "medium",
     fontVariantNumeric: "proportional-nums"}}>
        {`${value}%`}
       </text>
