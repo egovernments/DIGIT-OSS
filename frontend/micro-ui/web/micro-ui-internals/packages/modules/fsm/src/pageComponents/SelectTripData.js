@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { getVehicleType } from "../utils";
 import { LabelFieldPair, CardLabel, TextInput, Dropdown, Loader, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { useLocation } from "react-router-dom";
 
 const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
+  const { pathname: url } = useLocation();
+  const editScreen = url.includes("/modify-application/");
 
-  const [vehicle, setVehicle] = useState(formData?.tripData?.vehicleType);
+  const [vehicle, setVehicle] = useState(formData?.tripData?.vehicleCapacity);
   const [billError, setError] = useState(false);
 
   const { isLoading: isVehicleMenuLoading, data: vehicleData } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
 
-  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId);
+  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: -1 });
 
   const [vehicleMenu, setVehicleMenu] = useState([]);
 
   useEffect(() => {
     if (dsoData && vehicleData) {
       const allVehicles = dsoData.reduce((acc, curr) => {
-        return curr.vehicles ? [...acc, ...curr.vehicles.map((dsoVehicle) => dsoVehicle.type)] : acc;
+        return curr.vehicles && curr.vehicles.length ? acc.concat(curr.vehicles) : acc;
       }, []);
 
-      const __vehicleMenu = allVehicles
-        .map((vehicle) => vehicleData.filter((data) => data.code === vehicle)[0])
-        .filter((item, pos, self) => self.indexOf(item) == pos)
-        .filter((i) => i);
+      const cpacityMenu = Array.from(new Set(allVehicles.map(a => a.capacity)))
+        .map(capacity => allVehicles.find(a => a.capacity === capacity))
 
-
-      setVehicleMenu(__vehicleMenu);
+      setVehicleMenu(cpacityMenu);
     }
   }, [dsoData, vehicleData]);
 
@@ -35,14 +35,14 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const inputs = [
     {
       label: "ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS",
-      type: "text",
+      type: "number",
       name: "noOfTrips",
       error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
       validation: {
         isRequired: true,
       },
       default: formData?.tripData?.noOfTrips,
-      disable: true,
+      disable: editScreen ? false : true,
       isMandatory: true,
     },
     {
@@ -73,6 +73,10 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
     },
   ];
 
+  function setTripNum(value) {
+    onSelect(config.key, { ...formData[config.key], noOfTrips: value });
+  }
+
   function selectVehicle(value) {
     setVehicle(value);
     onSelect(config.key, { ...formData[config.key], vehicleType: value });
@@ -88,7 +92,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         setVehicle(formData?.tripData?.vehicleType);
       }
 
-      if (formData?.propertyType && formData?.subtype && formData?.address && formData?.tripData?.vehicleType?.code) {
+      if (formData?.propertyType && formData?.subtype && formData?.address && formData?.tripData?.vehicleType?.capacity) {
         const { capacity } = formData?.tripData?.vehicleType;
         const { slum: slumDetails } = formData.address;
         const slum = slumDetails ? "YES" : "NO";
@@ -114,7 +118,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         }
       }
     })();
-  }, [formData?.propertyType, formData?.subtype, formData?.address, formData?.tripData?.vehicleType?.code]);
+  }, [formData?.propertyType, formData?.subtype, formData?.address, formData?.tripData?.vehicleType?.capacity, formData?.tripData?.noOfTrips]);
 
   return isVehicleMenuLoading && isDsoLoading ? (
     <Loader />
@@ -125,7 +129,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         <Dropdown
           className="form-field"
           isMandatory
-          option={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: getVehicleType(vehicle, t) }))}
+          option={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: vehicle.capacity }))}
           optionKey="label"
           id="vehicle"
           selected={vehicle}
@@ -141,6 +145,8 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           </CardLabel>
           <div className="field">
             <TextInput
+              type={input.type}
+              onChange={(e) => setTripNum(e.target.value)}
               key={input.name}
               value={input.default ? input.default : formData && formData[config.key] ? formData[config.key][input.name] : null}
               {...input.validation}

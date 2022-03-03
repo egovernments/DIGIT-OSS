@@ -120,7 +120,6 @@ class CustomizedShare extends Component {
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
-            console.log(error);
             this.setState({
                 anchorEl: null
             })
@@ -163,7 +162,6 @@ class CustomizedShare extends Component {
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
-            console.log(error);
             this.setState({
                 anchorEl: null
             })
@@ -233,9 +231,8 @@ class CustomizedShare extends Component {
                         fakeLink.click();
                     }
                     if (image && type === 'email') {
-                        fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
-                        fakeLink.setAttribute('target', '_top');
-                        fakeLink.click();
+                                           window.open(`mailto:?body=${encodeURIComponent(image)}`, "_blank");
+
                     }
                 })
             }

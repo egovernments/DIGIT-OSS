@@ -14,6 +14,7 @@ const RadioOrSelect = ({
   isDependent = false,
   disabled = false,
   optionCardStyles,
+  isPTFlow=false,
 }) => {
   return (
     <React.Fragment>
@@ -26,6 +27,7 @@ const RadioOrSelect = ({
           disabled={disabled}
           onSelect={onSelect}
           labelKey={labelKey}
+          isPTFlow={isPTFlow}
           t={t}
         />
       ) : (

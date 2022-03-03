@@ -1,6 +1,7 @@
-import { DatePicker, Dropdown, CheckBox, TextArea, TextInput } from "@egovernments/digit-ui-react-components";
+import { DatePicker, Dropdown, CheckBox, TextArea, TextInput, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { DustbinIcon } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 import TimePicker from "react-time-picker";
 import Checkboxes from "./AnswerTypes/Checkboxes";
 import MultipleChoice from "./AnswerTypes/MultipleChoice";
@@ -42,7 +43,8 @@ const dropdownOptions = [
 ];
 
 const NewSurveyForm = ({ t, index, questionStatement, type, required, options, disableInputs, dispatch }) => {
-  const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({ questionStatement, type, required, options });
+  const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({ questionStatement, type, required, options:["option 1"] });
+  const { register, formState  } = useFormContext();
 
   const handleAddOption = () =>
     setSurveyQuestionConfig((prevState) => {
@@ -73,9 +75,9 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
   const renderAnswerComponent = (type) => {
     switch (type) {
       case "Paragraph":
-        return <TextArea />;
+        return <TextArea value="LONG ANSWER"/>;
       case "Date":
-        return <DatePicker />;
+        return <DatePicker stylesForInput={{ width: "calc(100% - 290px)" }}/>;
       case "Time":
         return <TimePicker />;
       case "Multiple Choice":
@@ -99,7 +101,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
           />
         );
       default:
-        return <TextInput />;
+        return <TextInput value="SHORT ANSWER" />;
     }
   };
 
@@ -108,20 +110,36 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
       <span className="newSurveyForm_quesno">{`${t("CS_COMMON_QUESTION")} ${index + 1}`}</span>
       <span className="newSurveyForm_mainsection">
         <div className="newSurveyForm_questions">
-          <TextInput
-            placeholder={t("CS_COMMON_TYPE_QUESTION")}
-            value={surveyQuestionConfig.questionStatement}
-            onChange={(ev) => {
-              setSurveyQuestionConfig((prevState) => ({ ...prevState, questionStatement: ev.target.value }));
-            }}
-            disable={disableInputs}
-          />
+          <div style={{width: "80%"}}>
+            <TextInput
+              placeholder={t("CS_COMMON_TYPE_QUESTION")}
+              value={surveyQuestionConfig.questionStatement}
+              onChange={(ev) => {
+                setSurveyQuestionConfig((prevState) => ({ ...prevState, questionStatement: ev.target.value }));
+              }}
+              textInputStyle={{width: "100%"}}
+              name={`QUESTION_SURVEY_${index}`}
+              disable={disableInputs}
+              inputRef={register({
+                required: t("ES_ERROR_REQUIRED"),
+                maxLength: {
+                  value: 60,
+                  message: t("EXCEEDS_60_CHAR_LIMIT"),
+                },
+                pattern:{
+                  value: /^[A-Za-z_-][A-Za-z0-9_\ -]*$/,
+                  message: t("ES_SURVEY_DONT_START_WITH_NUMBER")
+                }
+              })}
+            />
+            {formState?.errors?.title && <CardLabelError>{formState?.errors?.[`QUESTION_SURVEY_${index}`]?.message}</CardLabelError>}
+          </div>
           <Dropdown
             option={dropdownOptions}
             select={(ev) => {
               setSurveyQuestionConfig((prevState) => ({ ...prevState, type: ev.title }));
             }}
-            selected={surveyQuestionConfig.type}
+            selected={surveyQuestionConfig.type || {title: "Short Answer",value: "SHORT_ANSWER_TYPE"}}
             optionKey="title"
             disable={disableInputs}
           />

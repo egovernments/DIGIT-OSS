@@ -1,12 +1,31 @@
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
-  toggleSnackbar,
+  toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { getBulkPdfRecords } from "../../../../../ui-utils/commons";
 
+const diffInDates = (date1, date2) => {
+  const diffTime = Math.abs(date2 - date1);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+};
+const getUpdatedStatus = (item) => {
+  if (item.status == "DONE") {
+    return diffInDates(new Date(Number(item.lastmodifiedtime)), new Date()) <
+      2 && item.filestoreid
+      ? item.status
+      : "EXPIRED";
+  } else if (item.status == "INPROGRESS") {
+    return item.recordscompleted === item.totalrecords && !item.filestoreid
+      ? "FAILED"
+      : item.status;
+  } else {
+    return item.status;
+  }
+};
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
 
@@ -25,7 +44,7 @@ export const searchApiCall = async (state, dispatch) => {
       createdtime: get(item, "createdtime"),
       locality: get(item, "locality"),
       tenantId: get(item, "tenantId"),
-
+      jobid: get(item, "jobid"),
       consumercode: get(item, "consumercode"),
       bussinessService: get(item, "bussinessService"),
       isConsolidated: get(item, "isConsolidated"),
@@ -33,6 +52,7 @@ export const searchApiCall = async (state, dispatch) => {
       totalrecords: get(item, "totalrecords"),
       recordscompleted: get(item, "recordscompleted"),
       filestoreid: get(item, "filestoreid"),
+      status: get(item, "status"),
     };
   });
   dispatch(
@@ -53,7 +73,9 @@ export const searchApiCall = async (state, dispatch) => {
       ["ABG_COMMON_TABLE_COL_ACTION"]: item.filestoreid || "",
       ["ABG_COMMON_TABLE_TENANT"]: item.tenantId || "NA",
       ["ABG_IS_FAILED"]:
-        item.recordscompleted === item.totalrecords && !item.filestoreid,
+        diffInDates(new Date(Number(item.lastmodifiedtime)), new Date()) > 1 ||
+        (item.filestoreid == null &&
+          item.recordscompleted == item.totalrecords),
       ["ABG_RETRY_OBJ"]: {
         locality: item.locality,
         consumercode: item.consumercode,
@@ -63,8 +85,22 @@ export const searchApiCall = async (state, dispatch) => {
       ["ABG_PROGRESS_OBJ"]: {
         recordscompleted: item.recordscompleted,
         totalrecords: item.totalrecords,
+        status: getUpdatedStatus(item),
+        jobid: item.jobid,
+        cancel: item.status == "CANCEL",
+        success:
+          diffInDates(new Date(Number(item.lastmodifiedtime)), new Date()) <
+            2 &&
+          item.status == "DONE" &&
+          item.filestoreid,
         failed:
-          item.recordscompleted === item.totalrecords && !item.filestoreid,
+          item.recordscompleted === item.totalrecords &&
+          !item.filestoreid &&
+          diffInDates(new Date(Number(item.lastmodifiedtime)), new Date()) < 2,
+        expired:
+          diffInDates(new Date(Number(item.lastmodifiedtime)), new Date()) >
+            1 || !item.filestoreid,
+        progress: item.status == "INPROGRESS",
       },
     }));
     dispatch(
@@ -95,7 +131,6 @@ export const searchApiCall = async (state, dispatch) => {
     showHideTable(true, dispatch);
   } catch (error) {
     dispatch(toggleSnackbar(true, error.message, "error"));
-    console.log(error);
   }
 };
 

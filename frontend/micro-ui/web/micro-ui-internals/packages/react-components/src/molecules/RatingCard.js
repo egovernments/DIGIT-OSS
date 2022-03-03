@@ -10,6 +10,7 @@ import Card from "../atoms/Card";
 import CardHeader from "../atoms/CardHeader";
 import SubmitBar from "../atoms/SubmitBar";
 import RadioButtons from "../atoms/RadioButtons";
+import Dropdown from "../atoms/Dropdown";
 
 const RatingCard = ({ config, onSelect, t }) => {
   const { register, watch, handleSubmit } = useForm();
@@ -60,6 +61,23 @@ const RatingCard = ({ config, onSelect, t }) => {
         <React.Fragment key={index}>
           <CardLabel>{t(input.label)}</CardLabel>
           <TextArea name={input.name} value={comments} onChange={(e) => setComments(e.target.value)} inputRef={register}></TextArea>
+        </React.Fragment>
+      );
+    }
+
+    if (input.type === "dropDown") {
+      return (
+        <React.Fragment key={index}>
+          <CardLabel>{t(input.label)}</CardLabel>
+          <Dropdown
+            option={input.checkLabels}
+            optionKey="i18nKey"
+            id="dropdown"
+            selected={input.selectedOption}
+            select={input.onSelect}
+            t={t}
+            disable={false}
+            autoFocus={false} />
         </React.Fragment>
       );
     }

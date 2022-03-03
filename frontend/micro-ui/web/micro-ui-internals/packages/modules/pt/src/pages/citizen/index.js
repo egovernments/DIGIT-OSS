@@ -2,6 +2,9 @@ import { AppContainer, BackButton, PrivateRoute } from "@egovernments/digit-ui-r
 import React from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { shouldHideBackButton } from "../../utils";
+import Search from "../employee/Search";
+import { useTranslation } from "react-i18next";
+import { PTMyPayments } from "./MyPayments";
 
 const hideBackButtonConfig = [
   { screenPath: "property/new-application/acknowledgement" },
@@ -10,6 +13,8 @@ const hideBackButtonConfig = [
 
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
+    const { t } = useTranslation();
+
   const CreateProperty = Digit?.ComponentRegistryService?.getComponent("PTCreateProperty");
   const EditProperty = Digit?.ComponentRegistryService?.getComponent("PTEditProperty");
   const SearchPropertyComponent = Digit?.ComponentRegistryService?.getComponent("PTSearchPropertyComponent");
@@ -32,9 +37,13 @@ const App = () => {
           <PrivateRoute path={`${path}/property/application/:acknowledgementIds`} component={PTApplicationDetails}></PrivateRoute>
           <PrivateRoute path={`${path}/property/my-applications`} component={PTMyApplications}></PrivateRoute>
           <PrivateRoute path={`${path}/property/my-properties`} component={MyProperties}></PrivateRoute>
+          <PrivateRoute path={`${path}/property/my-payments`} component={PTMyPayments}></PrivateRoute>
           <PrivateRoute path={`${path}/property/property-mutation`} component={MutateProperty}></PrivateRoute>
           <PrivateRoute path={`${path}/property/properties/:propertyIds`} component={PropertyInformation}></PrivateRoute>
+          {/* <PrivateRoute path={`${path}/property/transfer-ownership`} component={MutateProperty}></PrivateRoute> */}
           <PrivateRoute path={`${path}/property/owner-history/:tenantId/:propertyIds`} component={PropertyOwnerHistory}></PrivateRoute>
+          {/* <Redirect to={`/`}></Redirect> */}
+        <PrivateRoute path={`${path}/property/search`} component={(props) => <Search {...props} t={t} parentRoute={path} />} />
         </AppContainer>
       </Switch>
     </span>

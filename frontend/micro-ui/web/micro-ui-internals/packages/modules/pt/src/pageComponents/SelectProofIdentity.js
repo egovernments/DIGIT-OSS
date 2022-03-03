@@ -15,6 +15,8 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerInd
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const onSkip = () => onSelect();
+  const isUpdateProperty = formData?.isUpdateProperty || false;
+  let isEditProperty = formData?.isEditProperty || false;
 
   const [dropdownValue, setDropdownValue] = useState(formData?.owners[index]?.documents?.proofIdentity?.documentType);
   let dropdownData = [];
@@ -55,8 +57,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerInd
               setError(t("PT_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
-            // setError(t("PT_FILE_UPLOAD_ERROR"));
+
           }
         }
       }
@@ -137,7 +138,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerInd
       onSelect={handleSubmit}
       onSkip={onSkip}
       forcedError={t(multipleownererror)}
-      isDisabled={multipleownererror || !uploadedFile || !dropdownValue || error}
+      isDisabled={isUpdateProperty || isEditProperty ? false: (multipleownererror || !uploadedFile || !dropdownValue || error)}
       onAdd={onAdd}
       isMultipleAllow={formData?.ownershipCategory?.value == "INDIVIDUAL.MULTIPLEOWNERS"}
     >

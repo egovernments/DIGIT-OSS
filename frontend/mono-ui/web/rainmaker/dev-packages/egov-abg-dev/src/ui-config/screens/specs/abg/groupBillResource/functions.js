@@ -145,7 +145,6 @@ export const searchApiCall = async (state, dispatch) => {
       };
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
-      console.log(error);
     }
   }
 };

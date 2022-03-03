@@ -12,7 +12,7 @@ const getThumbnails = async (ids, tenantId) => {
   }
 };
 
-const makeCommentsSubsidariesOfPreviousActions = async(wf) => {
+const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
   // const {info: { type: userType } = {}} = Digit.UserService.getUser()
   const TimelineMap = new Map();
   // if(userType === "CITIZEN"){
@@ -33,22 +33,22 @@ const makeCommentsSubsidariesOfPreviousActions = async(wf) => {
   //     }
   //   }
   // } else{
-    for (const eventHappened of wf ){
-      if(eventHappened?.documents){
-        eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId)
-      }
-      if( eventHappened.action === "COMMENT" ){
-        const commentAccumulator = TimelineMap.get("tlCommentStack") || []
-        TimelineMap.set("tlCommentStack", [...commentAccumulator, eventHappened])
-      }
-      else{
-        const eventAccumulator = TimelineMap.get("tlActions") || []
-        const commentAccumulator = TimelineMap.get("tlCommentStack") || []
-        eventHappened.wfComments = [...commentAccumulator, ...eventHappened.comment ? [eventHappened] : []]
-        TimelineMap.set("tlActions", [...eventAccumulator, eventHappened])
-        TimelineMap.delete("tlCommentStack")
-      }
-    } 
+  for (const eventHappened of wf) {
+    if (eventHappened?.documents) {
+      eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId)
+    }
+    if (eventHappened.action === "COMMENT") {
+      const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+      TimelineMap.set("tlCommentStack", [...commentAccumulator, eventHappened])
+    }
+    else {
+      const eventAccumulator = TimelineMap.get("tlActions") || []
+      const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+      eventHappened.wfComments = [...commentAccumulator, ...eventHappened.comment ? [eventHappened] : []]
+      TimelineMap.set("tlActions", [...eventAccumulator, eventHappened])
+      TimelineMap.delete("tlCommentStack")
+    }
+  }
   // }
   const response = TimelineMap.get("tlActions")
   return response
@@ -76,7 +76,6 @@ export const WorkflowService = {
   },
 
   getDetailsById: async ({ tenantId, id, moduleCode, role }) => {
-
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
     const getLocationDetails = window.location.href.includes("/obps/") || window.location.href.includes("noc/inbox");
@@ -120,32 +119,32 @@ export const WorkflowService = {
       if (processInstances.length > 0) {
         const TLEnrichedWithWorflowData = await makeCommentsSubsidariesOfPreviousActions(processInstances)
         const timeline = TLEnrichedWithWorflowData.map((instance, ind) => {
-            const checkPoint = {
-              performedAction: instance.action,
-              status: instance.state.applicationStatus,
-              state: instance.state.state,
-              assigner: instance?.assigner,
-              rating: instance?.rating,
-              wfComment: instance?.wfComments.map(e => e?.comment),
-              wfDocuments: instance?.documents,
-              thumbnailsToShow: {thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images},
-              assignes:instance.assignes,
-              caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
-              auditDetails: {
-                created: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime),
-                lastModified: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime),
-              },
-              timeLineActions: instance.nextActions
-                ? instance.nextActions.filter((action) => action.roles.includes(role)).map((action) => action?.action)
-                : null,
-            };
-            return checkPoint;
-          });
+          const checkPoint = {
+            performedAction: instance.action,
+            status: instance.state.applicationStatus,
+            state: instance.state.state,
+            assigner: instance?.assigner,
+            rating: instance?.rating,
+            wfComment: instance?.wfComments.map(e => e?.comment),
+            wfDocuments: instance?.documents,
+            thumbnailsToShow: { thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images },
+            assignes: instance.assignes,
+            caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
+            auditDetails: {
+              created: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime),
+              lastModified: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime),
+            },
+            timeLineActions: instance.nextActions
+              ? instance.nextActions.filter((action) => action.roles.includes(role)).map((action) => action?.action)
+              : null,
+          };
+          return checkPoint;
+        });
 
         const nextActions = actionRolePair;
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
-          const onlyPendingForAssignmentStatusArray = timeline?.filter( e => e?.status === "PENDINGFORASSIGNMENT")
+          const onlyPendingForAssignmentStatusArray = timeline?.filter(e => e?.status === "PENDINGFORASSIGNMENT")
           const duplicateCheckpointOfPendingForAssignment = onlyPendingForAssignmentStatusArray.at(-1)
           // const duplicateCheckpointOfPendingForAssignment = timeline?.find( e => e?.status === "PENDINGFORASSIGNMENT")
           timeline.push({
@@ -169,7 +168,6 @@ export const WorkflowService = {
         return details;
       }
     } else {
-      console.warn("error fetching workflow services");
       throw new Error("error fetching workflow services");
     }
     return {};

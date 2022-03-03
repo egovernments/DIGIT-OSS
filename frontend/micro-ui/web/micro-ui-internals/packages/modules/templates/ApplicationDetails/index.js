@@ -40,7 +40,8 @@ const ApplicationDetails = (props) => {
     statusAttribute,
     ActionBarStyle,
     MenuStyle,
-    paymentsList
+    paymentsList,
+    showTimeLine=true,
   } = props;
   useEffect(() => {
     if (showToast) {
@@ -60,8 +61,7 @@ const ApplicationDetails = (props) => {
           state: { ...action.redirectionUrl?.state },
         });
       }
-    } else console.debug("no action found");
-
+    } 
     setSelectedAction(action);
     setDisplayMenu(false);
   }
@@ -147,6 +147,7 @@ const ApplicationDetails = (props) => {
             timelineStatusPrefix={timelineStatusPrefix}
             statusAttribute={statusAttribute}
             paymentsList={paymentsList}
+            showTimeLine={showTimeLine}
           />
           {showModal ? (
             <ActionModal

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ApplicationCard } from "./inbox/ApplicationCard";
 import ApplicationLinks from "./inbox/ApplicationLinks";
+import Filter from "./inbox/Filter";
 
 const GetSlaCell = (value) => {
   if (isNaN(value)) return <span className="sla-cell-success">0</span>;
@@ -53,9 +54,11 @@ const MobileInbox = ({
   const isFstpOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const fstpOperatorData = vehicleLog?.map((vehicle) => ({
+    [t("ES_INBOX_APPLICATION_NO")]: vehicle?.tripDetails.map((i)=> i.referenceNo),
     [t("ES_INBOX_VEHICLE_LOG")]: vehicle?.applicationNo,
     [t("ES_INBOX_VEHICLE_NO")]: vehicle?.vehicle?.registrationNumber,
     [t("ES_INBOX_DSO_NAME")]: vehicle?.tripOwner.displayName,
+    [t("ES_INBOX_VEHICLE_STATUS")]: vehicle?.status,
     [t("ES_INBOX_WASTE_COLLECTED")]: vehicle?.tripDetails[0]?.volume,
   }));
 
@@ -64,6 +67,9 @@ const MobileInbox = ({
       <div className="inbox-container">
         <div className="filters-container">
           {!isFstpOperator && !isSearch && <ApplicationLinks linkPrefix={parentRoute} isMobile={true} />}
+          <div>
+            <Filter searchParams={searchParams} applications={data} onFilterChange={onFilterChange} type="mobile" />
+          </div>
           <ApplicationCard
             t={t}
             data={isFstpOperator ? fstpOperatorData : getData()}

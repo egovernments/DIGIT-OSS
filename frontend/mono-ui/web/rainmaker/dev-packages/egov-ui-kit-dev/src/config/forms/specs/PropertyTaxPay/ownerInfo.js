@@ -279,7 +279,6 @@ const formConfig = {
       }
       return action;
     } catch (e) {
-      console.log(e);
       return action;
     }
   },
@@ -320,7 +319,6 @@ const formConfig = {
       dispatch(setFieldProperty(action.form.name, "ownerCategoryIdType", "dropDownData", documentTypes));
       return action;
     } catch (e) {
-      console.log(e);
       return action;
     }
   },

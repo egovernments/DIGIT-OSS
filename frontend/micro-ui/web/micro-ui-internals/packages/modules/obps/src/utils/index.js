@@ -109,7 +109,7 @@ export const getBPAFormData = async (data, mdmsData, history, t) => {
   data.data = {
     scrutinyNumber: { edcrNumber: APIScrutinyDetails?.edcrNumber },
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
-    applicationDate: APIScrutinyDetails?.applicationDate,
+    applicationDate: data?.auditDetails?.createdTime,
     applicationType: APIScrutinyDetails?.appliactionType,
     holdingNumber: data?.additionalDetails?.holdingNo,
     occupancyType: APIScrutinyDetails?.planDetail?.planInformation?.occupancy,
@@ -538,7 +538,7 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
   data.address = data?.landInfo?.address;
   data.data = {
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
-    applicationDate: APIScrutinyDetails?.applicationDate,
+    applicationDate: data?.auditDetails?.createdTime,
     applicationType: APIScrutinyDetails?.appliactionType,
     holdingNumber: data?.additionalDetails?.holdingNo,
     occupancyType: APIScrutinyDetails?.planDetail?.planInformation?.occupancy,

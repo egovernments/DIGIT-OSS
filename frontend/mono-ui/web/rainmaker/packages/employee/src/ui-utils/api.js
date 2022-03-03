@@ -1,6 +1,6 @@
 import axios from "axios";
 import commonConfig from "config/common.js";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId ,getAccessToken} from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -51,6 +51,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
     baseURL: window.location.origin,
     headers: {
       "Content-Type": "multipart/form-data",
+      "auth-token":getAccessToken(),
     },
   });
 

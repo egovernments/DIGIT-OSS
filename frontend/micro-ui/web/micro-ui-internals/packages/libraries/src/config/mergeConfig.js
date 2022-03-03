@@ -92,7 +92,6 @@ const seachInDefaultConfig = (id, action) => {
 const actionHandler = (action, id, fieldList) => {
   const index = getIndex(id, fieldList);
   if (!action) {
-    console.error("no action found");
     return;
   }
   if (action.__action__ === "UPDATE") {

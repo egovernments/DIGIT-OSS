@@ -127,7 +127,6 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
       showHideAdhocPopup(state, dispatch, "pay");
     }
   } catch (e) {
-    console.log(e);
   }
 };
 

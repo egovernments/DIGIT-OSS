@@ -86,6 +86,26 @@ const DesktopInbox = (props) => {
       case "FSM_EMP_FSTPO":
         return [
           {
+            Header: t("ES_INBOX_APPLICATION_NO"),
+            accessor: "tripDetails",
+            Cell: ({ row }) => {
+              return (
+                <div>
+                  <span className="link">
+                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}>
+                      {row.original["tripDetails"].map((i) =>
+                        <div>
+                          {i.referenceNo}
+                          <br />
+                        </div>
+                      )}
+                    </Link>
+                  </span>
+                </div>
+              );
+            },
+          },
+          {
             Header: t("ES_INBOX_VEHICLE_LOG"),
             accessor: "applicationNo",
             Cell: ({ row }) => {
@@ -105,6 +125,10 @@ const DesktopInbox = (props) => {
           {
             Header: t("ES_INBOX_DSO_NAME"),
             accessor: (row) => `${row.dsoName} - ${row.tripOwner.name}`,
+          },
+          {
+            Header: t("ES_INBOX_VEHICLE_STATUS"),
+            accessor: (row) => row.status,
           },
           {
             Header: t("ES_INBOX_WASTE_COLLECTED"),

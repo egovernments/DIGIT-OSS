@@ -14,7 +14,7 @@ const createConsumerDetails = (getCities) => ({
   categoryType: "",
   fromDate: "",
   toDate: "",
-  key: Date.now(),
+  //key: Date.now(),
 });
 
 const ServiceDetails = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
@@ -44,7 +44,7 @@ const ServiceDetails = ({ config, onSelect, userType, formData, setError, formSt
 
   const { data: fetchedLocalities } = Digit.Hooks.useBoundaryLocalities(
     getCities()[0]?.code,
-    type && type.code,
+    type && type.code.toLowerCase(),
     {
       enabled: !!getCities()[0],
     },

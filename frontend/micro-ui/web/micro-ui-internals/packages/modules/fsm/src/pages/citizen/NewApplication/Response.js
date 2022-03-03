@@ -50,10 +50,13 @@ const Response = ({ data, onSuccess }) => {
   useEffect(() => {
     if (!mutationHappened && !errorInfo) {
     try {
-      const { subtype, pitDetail, address, pitType, source } = data;
+      const { subtype, pitDetail, address, pitType, source, selectGender, selectPaymentPreference } = data;
       const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
       const formdata = {
         fsm: {
+          citizen: {
+            gender: selectGender?.code
+          },
           tenantId: city.code,
           additionalDetails: {},
           propertyUsage: subtype.code,
@@ -79,6 +82,7 @@ const Response = ({ data, onSuccess }) => {
           pitDetail,
           source,
           sanitationtype: pitType?.code,
+          paymentPreference: selectPaymentPreference?.code
         },
         workflow: null,
       };
@@ -90,7 +94,6 @@ const Response = ({ data, onSuccess }) => {
         },
       });
     } catch (err) {
-      console.error(err);
     }
   }
   }, []);

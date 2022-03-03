@@ -45,7 +45,7 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, error, isLoading, Coun
   // const searchFormFieldsComponentProps = { t, previousPage };
 
   const getRedirectionLink = () => {
-    let redirectBS = "noc/search/application-overview";
+    let redirectBS = "noc/inbox/application-overview";
     return redirectBS;
   };
   const propsMobileInboxCards = useMemo(

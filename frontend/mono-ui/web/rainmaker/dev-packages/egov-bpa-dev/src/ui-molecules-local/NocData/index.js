@@ -51,6 +51,9 @@ const styles = {
     fontWeight: "500",
     color: "rgba(0, 0, 0, 0.87)",
     fontFamily: "Roboto",
+    wordBreak: "break-word",
+    width: "90%",
+    marginRight: "7px"
     // width:150,
     // overflow: "hidden", 
     // whiteSpace: "nowrap",

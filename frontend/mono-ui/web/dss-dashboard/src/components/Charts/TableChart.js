@@ -152,7 +152,6 @@ class TableChart extends Component {
           this.setState(tmpState);
         })
         .catch(error => {
-          console.log(error.response)
         });
     }
   }
@@ -214,7 +213,6 @@ class TableChart extends Component {
 
     if (this.props.page && this.props.page.includes('ulb')) {
       if (!globalFilters['tenantId']) {
-        console.log('=======tenet Id not there TableChart comp========')
         let tenentFilter = []
         tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
         globalFilters['tenantId'] = tenentFilter
@@ -246,7 +244,6 @@ class TableChart extends Component {
           this.setState(tempState);
         })
         .catch(error => {
-          console.log(error.response)
         });
     }
   }

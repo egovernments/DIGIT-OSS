@@ -3,10 +3,10 @@ import React from 'react'
 import {format, formatDistanceToNow} from "date-fns";
 import { useTranslation } from 'react-i18next';
 
-const SurveyListCard = ({header, about, activeTime, postedAt, responseStatus, hasResponded }) => {
+const SurveyListCard = ({header, about, activeTime, postedAt, responseStatus, hasResponded, onCardClick }) => {
     const {t} = useTranslation()
     return (
-        <div className="WhatsNewCard">
+        <div className="WhatsNewCard" onClick={onCardClick}>
             <h2>{header}</h2>
             <p>{about}</p>
             <div className="surveyListclockDiv">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { FormStep, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimeline";
 
 const SelectStructureType = ({ t, config, onSelect, userType, formData }) => {
   const [StructureType, setStructureType] = useState(formData?.TradeDetails?.StructureType);
@@ -21,6 +22,8 @@ const SelectStructureType = ({ t, config, onSelect, userType, formData }) => {
     onSelect(config.key, { StructureType });
   }
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline /> : null}
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!StructureType}>
       <RadioButtons
         t={t}
@@ -32,6 +35,7 @@ const SelectStructureType = ({ t, config, onSelect, userType, formData }) => {
         disabled={isEdit}
       />
     </FormStep>
+    </React.Fragment>
   );
 };
 export default SelectStructureType;

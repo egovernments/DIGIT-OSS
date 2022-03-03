@@ -217,12 +217,18 @@ const Dropdown = (props) => {
                     onClick={() => onSelect(option)}
                   >
                     {option.icon && <span className="icon"> {option.icon} </span>}
-                    {<span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>}
+                    {props.isPropertyAssess? <div>{props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</div>:
+                    <span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>} 
                   </div>
                 );
               })}
             {filteredOption && filteredOption.length === 0 && (
-              <div className={`cp profile-dropdown--item display: flex `} style={{ cursor: "not-allowed" }} key={"-1"}>
+              <div className={`cp profile-dropdown--item display: flex `} key={"-1"} onClick={() => onSelect({
+                "code": "NOOPTION",
+                "active": true,
+                "i18nKey": "CMN_NOOPTION",
+                "label": "No Options Available",
+              })}>
                 {<span> {props.t ? props.t("CMN_NOOPTION") : "CMN_NOOPTION"}</span>}
               </div>
             )}

@@ -256,11 +256,11 @@ export const getSuperBuiltUparea = (data) => {
 
 export const getSuperBuiltUpareafromob = (data) => {
   let builtuparea = 0;
-  data?.units.map((unit)=>{
+  data?.units.map((unit) => {
     builtuparea = builtuparea + unit?.constructionDetail?.builtUpArea;
-  })
+  });
   return builtuparea;
-}
+};
 
 export const getnumberoffloors = (data) => {
   let unitlenght = data?.units?.length;
@@ -463,7 +463,7 @@ export const getunitsindependent = (data) => {
 };
 
 export const setPropertyDetails = (data) => {
-  let unitleghtvalue = getnumberoffloors(data);
+  // let unitleghtvalue = getnumberoffloors(data);
   let propertyDetails = {};
   if (data?.PropertyType?.code?.includes("VACANT")) {
     propertyDetails = {
@@ -476,23 +476,22 @@ export const setPropertyDetails = (data) => {
   } else if (data?.PropertyType?.code?.includes("SHAREDPROPERTY")) {
     /*  update this case tulika*/
     propertyDetails = {
-      units: getunits(data),
-      landArea: data?.floordetails?.plotSize,
+      units: data?.units,
+      landArea: data?.units?.reduce((acc, curr) => Number(curr?.constructionDetail?.builtUpArea) + acc, 0),
       propertyType: data?.PropertyType?.code,
       noOfFloors: 1,
-      superBuiltUpArea: getSuperBuiltUparea(data),
-      usageCategory: getUsageType(data),
+      superBuiltUpArea: data?.units?.reduce((acc, curr) => Number(curr?.constructionDetail?.builtUpArea) + acc, 0),
+      usageCategory: data?.units?.[0]?.usageCategory,
     };
   } else if (data?.PropertyType?.code?.includes("INDEPENDENTPROPERTY")) {
     /*  update this case tulika*/
-    let unitleghtvalue = getnumberoffloors(data);
     propertyDetails = {
-      units: getunitsindependent(data),
-      landArea: data?.units[0]?.plotSize,
+      units: data?.units,
+      landArea: data?.landArea?.floorarea,
       propertyType: data?.PropertyType?.code,
-      noOfFloors: unitleghtvalue,
+      noOfFloors: data?.noOfFloors?.code+1,
       superBuiltUpArea: null,
-      usageCategory: getUsageType(data),
+      usageCategory: data?.units?.[0]?.usageCategory,
     };
   } else {
     propertyDetails = {
@@ -521,7 +520,6 @@ export const setPropertyDetails = (data) => {
 
 /*   method to convert collected details to proeprty create object */
 export const convertToProperty = (data = {}) => {
-  console.info("propertyFormData", data);
   let isResdential = data.isResdential;
   let propertyType = data.PropertyType;
   let selfOccupied = data.selfOccupied;
@@ -568,14 +566,41 @@ export const convertToProperty = (data = {}) => {
         basement2: basement2,
       },
 
-      creationReason: "CREATE",
+      creationReason: getCreationReason(data),
       source: "MUNICIPAL_RECORDS",
       channel: "CITIZEN",
     },
   };
-  console.info("propertyCreated", formdata);
   return formdata;
 };
+
+export const CompareTwoObjects = (ob1, ob2) => {
+  let comp = 0;
+Object.keys(ob1).map((key) =>{
+  if(typeof ob1[key] == "object")
+  {
+    if(key == "institution")
+    {
+      if((ob1[key].name || ob2[key].name) && ob1[key]?.name !== ob2[key]?.name)
+      comp=1
+      else if(ob1[key]?.type?.code !== ob2[key]?.type?.code)
+      comp=1
+      
+    }
+    else if(ob1[key]?.code !== ob2[key]?.code)
+    comp=1
+  }
+  else
+  {
+    if((ob1[key] || ob2[key]) && ob1[key] !== ob2[key])
+    comp=1
+  }
+});
+if(comp==1)
+return false
+else
+return true;
+}
 
 export const setUpdateOwnerDetails = (data = []) => {
   const { institution, owners } = data;
@@ -682,7 +707,6 @@ export const setUpdatedDocumentDetails = (data) => {
   return data;
 };
 export const convertToUpdateProperty = (data = {}) => {
-  console.info("propertyFormData", data);
   let isResdential = data.isResdential;
   let propertyType = data.PropertyType;
   let selfOccupied = data.selfOccupied;
@@ -770,7 +794,6 @@ export const convertToUpdateProperty = (data = {}) => {
   if (propertyInitialObject?.auditDetails) {
     formdata.Property["auditDetails"] = { ...propertyInitialObject.auditDetails };
   }
-  console.info("propertyUpdated", formdata);
   return formdata;
 };
 
@@ -835,7 +858,7 @@ export const pdfDocumentName = (documentLink = "", index = 0) => {
 };
 
 /* methid to get date from epoch */
-export const convertEpochToDate = (dateEpoch) => {
+export const convertEpochToDate = (dateEpoch,businessService) => {
   // Returning null in else case because new Date(null) returns initial date from calender
   if (dateEpoch) {
     const dateFromApi = new Date(dateEpoch);
@@ -844,6 +867,9 @@ export const convertEpochToDate = (dateEpoch) => {
     let year = dateFromApi.getFullYear();
     month = (month > 9 ? "" : "0") + month;
     day = (day > 9 ? "" : "0") + day;
+    if(businessService == "PT")
+    return `${day}-${month}-${year}`;
+    else
     return `${day}/${month}/${year}`;
   } else {
     return null;
@@ -856,6 +882,11 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
     str = str.replace(searcher, replaceWith);
   }
   return str;
+};
+
+export const DownloadReceipt = async (consumerCode, tenantId, businessService, pdfKey = "consolidatedreceipt") => {
+  tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
+  await Digit.Utils.downloadReceipt(consumerCode, businessService, "consolidatedreceipt", tenantId);
 };
 
 export const checkIsAnArray = (obj = []) => {
@@ -874,5 +905,5 @@ export const getWorkflow = (data = {}) => {
 };
 
 export const getCreationReason = (data = {}) => {
-  return data?.isUpdateProperty ? "UPDATE" : "CREATE";
+  return data?.isUpdateProperty || data?.isEditProperty ? "UPDATE" : "CREATE";
 };

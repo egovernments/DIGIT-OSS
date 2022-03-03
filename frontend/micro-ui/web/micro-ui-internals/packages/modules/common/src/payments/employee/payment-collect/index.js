@@ -12,7 +12,6 @@ import { BillDetailsFormConfig } from "./Bill-details/billDetails";
 export const CollectPayment = (props) => {
   // const { formData, addParams } = props;
   const { workflow: ModuleWorkflow } = Digit.Hooks.useQueryParams();
-  console.debug(ModuleWorkflow);
   const { t } = useTranslation();
   const history = useHistory();
   const queryClient = useQueryClient();

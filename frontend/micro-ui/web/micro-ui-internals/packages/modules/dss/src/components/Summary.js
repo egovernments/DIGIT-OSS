@@ -1,7 +1,7 @@
+import { Card, Details, Loader, Poll, PrintIcon } from "@egovernments/digit-ui-react-components";
+import { endOfMonth, getTime, startOfMonth } from "date-fns";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { startOfMonth, endOfMonth, getTime } from "date-fns";
-import { Card, Poll, Details, Loader, PrintIcon } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 
 const Chart = ({ data, todayValue = 15012, monthValue = 15.2, target = "72%", task = 133, monthlyTask = 4500, sla = "91%" }) => {

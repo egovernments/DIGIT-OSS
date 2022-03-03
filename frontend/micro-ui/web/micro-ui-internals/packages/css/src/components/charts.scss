@@ -73,8 +73,10 @@
   }
 }
 .no-data {
-  @apply flex justify-center items-center h-full;
-  margin-bottom: 30px;
+  @apply flex justify-center items-center;
+  height: 90%;
+  margin-bottom: 40px;
+  white-space:pre;
 }
 
 @screen dt {
