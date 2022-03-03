@@ -336,11 +336,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
    
     let response;
     if (method === "CREATE") {
-      set(
-        payload[0],
-        `fireNOCDetails.fireNOCType`,
-        'NEW'
-      );
       response = await httpRequest(
         "post",
         "/firenoc-services/v1/_create",

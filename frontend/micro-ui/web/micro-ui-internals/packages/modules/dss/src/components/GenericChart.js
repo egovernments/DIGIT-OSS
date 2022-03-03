@@ -69,13 +69,14 @@ const GenericChart = ({
   const handleExcelDownload = () => {
     return Digit.Download.Excel(chartData, t(header));
   };
+  let headerName=t(Digit.Utils.locale.getTransformedLocale(header));
   return (
     <Card className={`chart-item ${className}`} ReactRef={chart}>
       <div className={`chartHeader ${showSearch && "column-direction"}`}>
         <div>
           {showHeader && <CardLabel className={"dss-header-label"} >
-          <span className="tooltip">
-            {t(`${t(Digit.Utils.locale.getTransformedLocale(header))}`)}
+          <span className={`tooltip ${headerName?.length < 30?"dss-white-pre":"dss-white-pre-line"}`}>
+            {headerName}
              {chartDenomination?.toLowerCase()==="amount"&&<span style={{whiteSpace:"pre"}}> ({t(`DSS_${Digit.Utils.locale.getTransformedLocale(value?.denomination)}`)})</span>}
               <span className="tooltiptext" style={{ whiteSpace: "nowrap" , 
                fontSize:"medium" }}>

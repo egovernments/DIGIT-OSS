@@ -64,6 +64,7 @@ public class VehicleLogEnrichmentService {
 			vehicleTrip.getTripDetails().forEach(tripDetail->{
 				tripDetail.setAuditDetails(auditDetails);
 				tripDetail.setId(UUID.randomUUID().toString());
+				tripDetail.setTrip_id(vehicleTrip.getId());		
 				tripDetail.setStatus(VehicleTripDetail.StatusEnum.ACTIVE);
 			});
 			if(vehicleTrip.getTripOwner() != null) {

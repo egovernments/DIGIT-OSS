@@ -49,7 +49,7 @@ const PTApplicationDetails = () => {
       consumerCodes: acknowledgementIds,
       isEmployee: false,
     },
-    {}
+    {enabled: acknowledgementIds?true:false}
   );
 
 
@@ -175,6 +175,12 @@ const PTApplicationDetails = () => {
     window.open(documentLink, "_blank");
   };
 
+  const printCertificate = async () => {
+    let response = await Digit.PaymentService.generatePdf(tenantId, { Properties: [data?.Properties?.[0]] }, "ptmutationcertificate");
+    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    window.open(fileStore[response?.filestoreIds[0]], "_blank");
+  };
+
 
   let dowloadOptions = [];
 
@@ -182,15 +188,15 @@ const PTApplicationDetails = () => {
     label: t("MT_APPLICATION"),
     onClick: () => getAcknowledgementData()
   });
-  if(reciept_data && recieptDataLoading == false)
+  if(reciept_data && reciept_data?.Payments.length>0 && recieptDataLoading == false)
   dowloadOptions.push({
     label: t("MT_FEE_RECIEPT"),
     onClick: () => getRecieptSearch({tenantId: reciept_data?.Payments[0]?.tenantId,payments: reciept_data?.Payments[0]})
   });
-  if(data?.Properties[0]?.documents && data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION").length>0)
+  if(data?.Properties?.[0]?.creationReason === "MUTATION" && data?.Properties?.[0]?.status === "ACTIVE")
   dowloadOptions.push({
     label: t("MT_CERTIFICATE"),
-    onClick: () => handleDownload(data?.Properties[0]?.documents.filter((ob) => ob.documentType === "PTMUTATION")[0],data?.Properties[0]?.tenantId)
+    onClick: () => printCertificate()
   });
 
   return (

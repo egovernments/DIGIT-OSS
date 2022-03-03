@@ -168,7 +168,7 @@ const getPropertyEditDetails = (data = { }) => {
     return ob;
   };
   // asessment details
-  if (data?.channel === "CFC_COUNTER" || (data?.PropertyType === "BUILTUP.INDEPENDENTPROPERTY" && data.units.length == 0)) {
+  if (data?.channel === "CFC_COUNTER" || (data?.PropertyType === "BUILTUP.INDEPENDENTPROPERTY" && data.units.length == 0) || (data?.additionalDetails?.isRainwaterHarvesting == false)) {
     if (data?.propertyType === "VACANT") {
       data.PropertyType = { code: data?.propertyType, i18nKey: `COMMON_PROPTYPE_${data.propertyType}` };
       data.isResdential =
@@ -389,7 +389,7 @@ const getPropertyEditDetails = (data = { }) => {
           }
         });
       data.floordetails = { plotSize: data?.landArea, builtUpArea: data?.additionalDetails?.builtUpArea };
-    } else if (data?.additionalDetails?.propertyType?.code === "BUILTUP.INDEPENDENTPROPERTY" || data?.propertyType?.code === "BUILTUP.INDEPENDENTPROPERTY") {
+    } else if (data?.additionalDetails?.propertyType?.code === "BUILTUP.INDEPENDENTPROPERTY" || data?.propertyType?.code === "BUILTUP.INDEPENDENTPROPERTY" || data?.propertyType === "BUILTUP.INDEPENDENTPROPERTY") {
       data.isResdential = data?.additionalDetails?.isResdential;
       data.usageCategoryMajor = { code: data?.usageCategory, i18nKey: `PROPERTYTAX_BILLING_SLAB_${data?.usageCategory?.split(".").pop()}` };
       data.PropertyType = data?.additionalDetails?.propertyType || data?.propertyType;

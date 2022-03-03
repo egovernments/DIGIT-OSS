@@ -100,7 +100,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
       let obj = {
         doorNo: locationDet?.houseDoorNo,
         street: locationDet?.buildingColonyName,
-        landmark: locationDet?.landmark,
+        landmark: locationDet?.landmarkName,
         locality: locationDet?.locality?.i18nkey,
         city: locationDet?.cityCode?.name,
         // pincode: locationDet?.locality?.pincode[0],

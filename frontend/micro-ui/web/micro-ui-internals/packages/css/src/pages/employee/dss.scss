@@ -12,7 +12,7 @@ margin-right:25px;
 }
 
 .dss-header-label{
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   font-size: 22px !important;
   white-space: pre-line;
 }
@@ -67,4 +67,39 @@ color: #505A5F;
   .dss-switch-tabs{/* Card / Primary */
     margin-right:0px;
   }
+}
+
+.dss-white-pre{
+  white-space: pre;
+
+}
+.dss-white-pre-line{
+  white-space: pre-line;
+
+}
+.dss-white-pre-temp{
+  white-space: pre-line;
+
+}
+
+.multi-select-dropdown-wrap{
+  .master{
+    .label{
+      p{
+        white-space:pre;
+      }
+    }
+  }
+}
+
+.divToBeHidden{
+  display:block;
+}
+
+.divWillGetHidden{
+  display:none;
+}
+
+.dss-temp-white-pre{
+  white-space: pre;
 }

@@ -4,6 +4,23 @@ import jsPDF from "jspdf";
 import XLSX from "xlsx";
 import domtoimage from "dom-to-image";
 
+
+const changeClasses=(class1,class2)=>{
+  var elements = document.getElementsByClassName(class1)
+  Array.prototype.map.call(elements, function(testElement){
+    testElement.classList.add(class2);
+    testElement.classList.remove(class1);
+  });
+}
+
+const revertCss=()=>{
+  changeClasses("dss-white-pre-temp",'dss-white-pre-line');
+}
+
+const applyCss=()=>{
+  changeClasses('dss-white-pre-line',"dss-white-pre-temp");
+}
+
 const Download = {
   Image: (node, fileName, share, resolve = null) => {
     const saveAs = (uri, filename) => {
@@ -42,7 +59,68 @@ const Download = {
     XLSX.writeFile(wb, `${filename}.xlsx`);
   },
 
-  PDF: (node, fileName, share) => {
+  PDF: (node, fileName, share, resolve = null) => {
+
+
+
+    const saveAs = (uri, filename) => {
+      const link = document.createElement("a");
+
+      if (typeof link.download === "string") {
+        link.href = uri;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        window.open(uri);
+      }
+    };
+    const dataURItoBlob = (dataURI) => {
+      var binary = atob(dataURI.split(',')[1]);
+      var array = [];
+      for (var i = 0; i < binary.length; i++) {
+          array.push(binary.charCodeAt(i));
+      }
+      return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
+    };
+        changeClasses('dss-white-pre-line',"dss-white-pre-temp");
+
+  applyCss();
+    const element = ReactDOM.findDOMNode(node.current);
+
+
+    return domtoimage.toJpeg(element, {
+      quality: 1,
+      bgcolor: 'white',
+      filter:node=>!node?.className?.includes?.("divToBeHidden"),
+      style:{
+        margin:'25px'
+      }
+     }).then(function (dataUrl) {
+/*  to enable pdf
+    var htmlImage = new Image();
+      htmlImage.src = dataUrl;
+      var pdf = new jsPDF( 'l', 'pt', [element.offsetWidth, element.offsetHeight] );
+      pdf.setFontStyle?.("Bold");
+      pdf.setFontSize?.(30);
+      pdf.text?.(325, 40, 'Certificate');
+      // e(imageData, format, x, y, width, height, alias, compression, rotation)
+      pdf.addImage?.( htmlImage, 25, 50, 50, element.offsetWidth, element.offsetHeight );
+      pdf.save?.( fileName +'.pdf' );
+      */
+            changeClasses("dss-white-pre-temp",'dss-white-pre-line');
+
+     revertCss();
+     var blobData = dataURItoBlob(dataUrl);
+       revertCss();
+       return share
+       ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
+       : saveAs(dataUrl, `${fileName}.jpeg`)
+        });
+    
+
+        /*
     const getPDF = (canvas) => {
       const width = canvas.width;
       const height = canvas.height;
@@ -82,6 +160,7 @@ const Download = {
       // }
       return share ? new File([pdf.output("blob")], `${fileName}.pdf`, { type: "application/pdf" }) : pdf.save(`${fileName}.pdf`);
     });
+    */
   },
 
   IndividualChartImage: (node, fileName, share, resolve = null) => {
@@ -106,13 +185,14 @@ const Download = {
       }
       return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
     };
-
+    changeClasses('dss-white-pre-line',"dss-white-pre-temp");
     const element = ReactDOM.findDOMNode(node.current);
     return domtoimage.toJpeg(element, {
-      quality: 0.95,
+      quality: 1,
       bgcolor: 'white'
      }).then(function (dataUrl) {
        var blobData = dataURItoBlob(dataUrl);
+      changeClasses("dss-white-pre-temp",'dss-white-pre-line');
        return share
        ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
        : saveAs(dataUrl, `${fileName}.jpeg`)

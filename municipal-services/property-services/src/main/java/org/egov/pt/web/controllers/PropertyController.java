@@ -87,12 +87,12 @@ public class PropertyController {
             propertyValidator.validatePropertyCriteria(propertyCriteria, requestInfoWrapper.getRequestInfo());
         }
         List<Property> properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
-        //Integer count = propertyService.count(requestInfoWrapper.getRequestInfo(), propertyCriteria);
         PropertyResponse response = PropertyResponse.builder().properties(properties).count(properties.size()).responseInfo(
                 responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     @PostMapping("/_migration")
     public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,

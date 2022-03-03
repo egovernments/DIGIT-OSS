@@ -139,7 +139,7 @@ const Table = ({
       </table>
       </span>
       {isPaginationRequired && (
-        <div className="pagination" >
+        <div className="pagination dss-white-pre" >
           {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}
           <select
             className="cp"

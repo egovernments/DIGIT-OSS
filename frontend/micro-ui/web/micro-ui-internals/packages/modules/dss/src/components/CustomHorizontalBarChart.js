@@ -102,9 +102,9 @@ const CustomHorizontalBarChart = ({
     return <Loader />;
   }
   const formatXAxis = (tickFormat) => {
-    if (tickFormat && typeof tickFormat == "string") {
-      return `${tickFormat.slice(0, 16)}${tickFormat.length > 17 ? ".." : ""}`;
-    }
+    // if (tickFormat && typeof tickFormat == "string") {
+    //   return `${tickFormat.slice(0, 16)}${tickFormat.length > 17 ? ".." : ""}`;
+    // }
     return `${tickFormat}`;
   };
 
@@ -116,8 +116,8 @@ const CustomHorizontalBarChart = ({
         height={450}
         margin={{
           top: 5,
-          right: 10,
-          left: 10,
+          right: 5,
+          left: 5,
           bottom: 5,
         }}
       >
@@ -129,8 +129,8 @@ const CustomHorizontalBarChart = ({
             height="100%"
             margin={{
               top: 5,
-              right: 10,
-              left: 10,
+              right: 5,
+              left: 5,
               bottom: 5,
             }}
             layout={layout}
@@ -154,6 +154,7 @@ const CustomHorizontalBarChart = ({
               tickCount={10}
               tickFormatter={(value) => formatXAxis(value)}
               unit={id === "fsmCapacityUtilization" ? "%" : ""}
+              width={layout === "vertical" ? 120 : 60}
             />
             <XAxis dataKey={xDataKey} type={xAxisType} tick={{ fontSize: "14px", fill: "#505A5F" }} tickCount={10} tickFormatter={tickFormatter} />
             {bars?.map((bar, id) => (

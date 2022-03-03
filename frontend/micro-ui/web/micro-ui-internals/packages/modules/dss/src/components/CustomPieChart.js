@@ -153,7 +153,12 @@ const CustomPieChart = ({ dataKey = "value", data,setChartDenomination }) => {
         </Pie>
         <Tooltip content={renderTooltip} />
         <Legend layout="vertical" verticalAlign="middle" align="right" iconType="circle" formatter={renderLegend} iconSize={10} 
-        wrapperStyle={{paddingRight: checkChartID(id) && !mobileView? 60 : 0}} ///Padding for 2 charts in a row cases
+        wrapperStyle={
+          chartData?.length > 6  
+          ? {paddingRight: checkChartID(id) && !mobileView? 60 : 0, ///Padding for 2 charts in a row cases
+           overflowY: "scroll", height: 250,}
+           : {paddingRight: checkChartID(id) && !mobileView? 60 : 0,} ///Padding for 2 charts in a row cases
+      }
         />
       </PieChart>
     </ResponsiveContainer>
