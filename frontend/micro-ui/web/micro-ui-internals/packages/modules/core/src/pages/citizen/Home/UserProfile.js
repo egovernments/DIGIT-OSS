@@ -66,6 +66,13 @@ const UserProfile = ({ stateCode, userType }) => {
     setProfileImg(thumbs?.at(thumbs?.length - 1));
   }, [userDetails !== null]);
 
+  const showToast =(errorType, message)=>{
+    setToast({ key: errorType, action: message });
+    setTimeout(() => {
+      setToast(null);
+    }, 5000);
+  }
+
   let validation = {};
   const editScreen = false; // To-do: Deubug and make me dynamic or remove if not needed
   const onClickAddPic = () => setOpenUploadSide(!openUploadSlide);
@@ -493,7 +500,7 @@ const UserProfile = ({ stateCode, userType }) => {
         )}
       </div>
       {openUploadSlide == true ? (
-        <UploadDrawer setProfilePic={setFileStoreId} closeDrawer={closeFileUploadDrawer} userType={userType} removeProfilePic={removeProfilePic} />
+        <UploadDrawer setProfilePic={setFileStoreId} closeDrawer={closeFileUploadDrawer} userType={userType} removeProfilePic={removeProfilePic} showToast={showToast}/>
       ) : (
         ""
       )}
