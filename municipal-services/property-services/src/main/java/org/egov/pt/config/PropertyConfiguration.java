@@ -140,7 +140,10 @@ public class PropertyConfiguration {
     private String userEventViewPropertyLink;
     
     @Value("${egov.usr.events.view.mutation.history.link}")
-    private String userEventViewMutationLink;    
+    private String userEventViewMutationLink;
+
+    @Value("${egov.usr.events.download.receipt.link}")
+    private String userEventReceiptDownloadLink;
     
     //Property Search Params
     @Value("${citizen.allowed.search.params}")

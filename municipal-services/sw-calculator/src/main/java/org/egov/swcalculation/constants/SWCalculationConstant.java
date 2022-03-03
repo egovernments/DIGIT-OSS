@@ -163,6 +163,14 @@ public class SWCalculationConstant {
 
 	public static final String DEMAND_FAILURE_MESSAGE_EMAIL = "SEWERAGE_CONNECTION_DEMAND_FAILURE_EMAIL_MESSAGE";
 
+	public static final String BILL_SUCCESS_MESSAGE_SMS = "SEWERAGE_CONNECTION_BILL_SUCCESSFUL_SMS_MESSAGE";
+
+	public static final String BILL_FAILURE_MESSAGE_SMS = "SEWERAGE_CONNECTION_BILL_FAILURE_SMS_MESSAGE";
+
+	public static final String BILL_SUCCESS_MESSAGE_EMAIL = "SEWERAGE_CONNECTION_BILL_SUCCESSFUL_EMAIL_MESSAGE";
+
+	public static final String BILL_FAILURE_MESSAGE_EMAIL = "SEWERAGE_CONNECTION_BILL_FAILURE_EMAIL_MESSAGE";
+
 	public static final String BILL_SUCCESS_MESSAGE = "SEWERAGE_CONNECTION_BILL_FAILURE_MESSAGE";;
 
 	public static final String NOTIFICATION_INITIATED = "tl.en.counter.initiate";
@@ -288,4 +296,25 @@ public class SWCalculationConstant {
 
 	public static final String PROPERTY_MASTER_MODULE = "PropertyTax";
 
+	//Notification
+	public static final String CHANNEL_NAME_SMS = "SMS";
+
+	public static final String CHANNEL_NAME_EVENT = "EVENT";
+
+	public static final String CHANNEL_NAME_EMAIL = "EMAIL";
+
+	public static final String MODULECONSTANT = "module";
+
+	public static final String ACTION = "action";
+
+	public static final String CHANNEL_LIST = "channelList";
+
+	public static final String CHANNEL = "Channel";
+
+	// actions
+	public static final String ACTION_FOR_DEMAND = "DEMAND";
+
+	public static final String ACTION_FOR_BILL = "BILL";
+
+	public static String Billing_Cycle_String = "billingCycle";
 }

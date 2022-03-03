@@ -5,8 +5,6 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Component;
 
-import com.jayway.jsonpath.Configuration;
-
 @Component
 public class FSMConstants {
 
@@ -61,7 +59,7 @@ public class FSMConstants {
 	public static final String MDMS_SLUM_NAME = "Slum";
 	public static final String MDMS_VEHICLE_TYPE = "VehicleType";
 	public static final String MDMS_APPLICATION_TYPE = "ApplicationType";
-
+	public static final String MDMS_PAYMENT_PREFERENCE = "PaymentType";
 
 	// FINANCIAL YEAR
 
@@ -127,6 +125,8 @@ public class FSMConstants {
 
 	public static final String WF_ACTION_DSO_REJECT = "DSO_REJECT";
 	
+	public static final String WF_ACTION_SCHEDULE = "SCHEDULE";
+	
 
 
 	public static final String WF_STATUS_CREATED = "CREATED";
@@ -136,12 +136,15 @@ public class FSMConstants {
 
 	public static final String CHECK_LIST_SINGLE_SELECT = "SINGLE_SELECT";
 	public static final String CHECK_LIST_MULTI_SELECT = "MULTI_SELECT";
+	public static final String CHECK_LIST_DROP_DOWN = "DROP_DOWN";
 
 	public static final String VEHICLETRIP_BUSINESSSERVICE_NAME = "FSM_VEHICLE_TRIP";
 
 	public static final String TRIP_READY_FOR_DISPOSAL = "READY_FOR_DISPOSAL";
 	
 	public static final String PIT_DETAIL = "pitDetail";
+	public static final String APPLICATION_STATUS = "status";
+	public static final String NO_OF_TRIPS = "noOfTrips";
 	
 	public static final ArrayList<String> pitDetailList= new ArrayList<String>( Arrays.asList("height", "length", "width", "diameter", "distanceFromRoad") );
 
@@ -160,7 +163,10 @@ public class FSMConstants {
 	public static final String PERIODIC_SERVICE = "PERIODIC";
 
 	public static final String SYSTEM ="SYSTEM";
+	
+	public static final String FSM_POST_PAY_BusinessService = "FSM_POST_PAY_SERVICE";
 
+	public static final String FSM_PAYMENT_PREFERENCE_POST_PAY = "POST_PAY";
 
 
 

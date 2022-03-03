@@ -128,8 +128,7 @@ public class TLRepository {
             license.getTradeLicenseDetail().getTradeUnits().sort(Comparator.comparing(TradeUnit::getId));
             if(!CollectionUtils.isEmpty(license.getTradeLicenseDetail().getAccessories()))
                 license.getTradeLicenseDetail().getAccessories().sort(Comparator.comparing(Accessory::getId));
-            // By default it is returning reverse order instead of saved order, to get in the saved order
-            // reversing the documents.
+
             List<Document> applnDocuments = license.getTradeLicenseDetail().getApplicationDocuments();
             if(!CollectionUtils.isEmpty(applnDocuments)) {
                 Collections.reverse(applnDocuments);

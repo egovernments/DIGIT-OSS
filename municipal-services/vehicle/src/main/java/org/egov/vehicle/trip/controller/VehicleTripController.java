@@ -1,6 +1,5 @@
 package org.egov.vehicle.trip.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -13,9 +12,6 @@ import org.egov.vehicle.trip.web.model.VehicleTripSearchCriteria;
 import org.egov.vehicle.util.ResponseInfoFactory;
 import org.egov.vehicle.util.VehicleUtil;
 import org.egov.vehicle.web.model.RequestInfoWrapper;
-import org.egov.vehicle.web.model.Vehicle;
-import org.egov.vehicle.web.model.VehicleResponse;
-import org.egov.vehicle.web.model.VehicleSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,10 +39,8 @@ public class VehicleTripController {
 	public ResponseEntity<VehicleTripResponse> create(@Valid @RequestBody VehicleTripRequest request) {
 		
 		vehicleLogUtil.defaultJsonPathConfig();
-		VehicleTrip vehicleLog = vehicleTripService.create(request);
-		List<VehicleTrip> vehicleLogList = new ArrayList<VehicleTrip>();
-		vehicleLogList.add(vehicleLog);
-		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleLogList)				
+		List<VehicleTrip> vehicleLog = vehicleTripService.create(request);
+		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleLog)				
 				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(request.getRequestInfo(), true))
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -56,10 +50,9 @@ public class VehicleTripController {
 	public ResponseEntity<VehicleTripResponse> update(@Valid @RequestBody VehicleTripRequest request) {
 		
 		vehicleLogUtil.defaultJsonPathConfig();
-		VehicleTrip vehicleLog = vehicleTripService.update(request);
-		List<VehicleTrip> vehicleLogList = new ArrayList<VehicleTrip>();
-		vehicleLogList.add(vehicleLog);
-		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleLogList)				
+		List<VehicleTrip> vehicleLog = vehicleTripService.update(request);
+		
+		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleLog)				
 				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(request.getRequestInfo(), true))
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);

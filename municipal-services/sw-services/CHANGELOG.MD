@@ -2,6 +2,14 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.4.4 - 2022-03-03
+
+- Added channel based notification
+
+## 1.4.3 - 2022-02-03
+
+- Added channel details on application creation
+
 ## 1.4.2 - 2022-01-13
 
 - Updated to log4j2 version 2.17.1

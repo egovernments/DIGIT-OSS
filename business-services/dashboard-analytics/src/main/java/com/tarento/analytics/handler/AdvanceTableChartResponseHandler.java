@@ -236,7 +236,9 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
 			JsonNode pathDataMapping = chartNode.get("pathDataTypeMapping");
 			JsonNode node = pathDataMapping.findValue(headerName);
 			return node.textValue();
-		} else {
+		} else if( chartNode.get(VALUE_TYPE) != null) {
+			return chartNode.get(VALUE_TYPE).asText();
+		}else {
 			return valueNode.isDouble() ? "amount" : "number";
 		}
 	}

@@ -1,5 +1,6 @@
 package org.egov.fsm.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -68,6 +69,10 @@ public class EnrichmentService {
 		if( fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN)) {
 			User citzen = new User();
 			BeanUtils.copyProperties(fsmRequest.getRequestInfo().getUserInfo(), citzen);
+			if(fsmRequest.getFsm().getCitizen() != null && fsmRequest.getFsm().getCitizen().getGender() != null) {
+				UserDetailResponse userDetailResponse = userService.updateApplicantsGender(fsmRequest.getFsm().getCitizen(), fsmRequest.getRequestInfo());
+				citzen = userDetailResponse.getUser().get(0);
+			}
 			fsmRequest.getFsm().setCitizen(citzen);
 		}else {
 			userService.manageApplicant(fsmRequest);

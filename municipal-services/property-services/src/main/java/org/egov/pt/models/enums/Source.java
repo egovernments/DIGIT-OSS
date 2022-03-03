@@ -11,6 +11,8 @@ public enum Source {
   MUNICIPAL_RECORDS("MUNICIPAL_RECORDS"),
     
   FIELD_SURVEY("FIELD_SURVEY"),
+    
+  WS("WS"),
 	
   WATER_CHARGES("WATER_CHARGES");
 

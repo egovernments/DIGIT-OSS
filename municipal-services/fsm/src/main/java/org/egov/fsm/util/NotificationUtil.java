@@ -3,6 +3,7 @@ package org.egov.fsm.util;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -23,6 +24,7 @@ import org.egov.fsm.web.model.FSM;
 import org.egov.fsm.web.model.FSMRequest;
 import org.egov.fsm.web.model.RequestInfoWrapper;
 import org.egov.fsm.web.model.dso.Vendor;
+import org.egov.fsm.web.model.dso.VendorSearchCriteria;
 import org.egov.fsm.web.model.notification.EventRequest;
 import org.egov.fsm.web.model.notification.SMSRequest;
 import org.egov.fsm.web.model.vehicle.Vehicle;
@@ -85,7 +87,17 @@ public class NotificationUtil {
 		String message = null, messageTemplate;
 
 			FSM fsm = fsmRequest.getFsm();
-			Vendor vendor = this.dsoSerevice.getVendor(fsm.getDsoId(), fsm.getTenantId(), null, null,null, fsmRequest.getRequestInfo());
+			
+			VendorSearchCriteria vendorSearchCriteria=new VendorSearchCriteria();
+			vendorSearchCriteria = VendorSearchCriteria.builder()
+					.ids(Arrays.asList(fsm.getDsoId()))
+					.tenantId(fsm.getTenantId()).build();
+					
+			Vendor vendor = this.dsoSerevice.getVendor(vendorSearchCriteria,fsmRequest.getRequestInfo());
+			
+			// Vendor vendor = this.dsoSerevice.getVendor(fsm.getDsoId(), fsm.getTenantId(),
+			// null, null,null,null, fsmRequest.getRequestInfo());
+			
 			messageTemplate = getMessageTemplate(messageCode, localizationMessage);
 			
 			if (!StringUtils.isEmpty(messageTemplate)) {

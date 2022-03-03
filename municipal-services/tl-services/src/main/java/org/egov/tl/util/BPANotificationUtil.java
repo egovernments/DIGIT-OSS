@@ -326,6 +326,7 @@ public class BPANotificationUtil {
         List<SMSRequest> smsRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
             String customizedMsg = message.replace("{RECEIPT_DOWNLOAD_LINK}", getRecepitDownloadLink(license,entryset.getKey(),receiptno));
+            customizedMsg = customizedMsg.replace("{1}",entryset.getValue());
             smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
         }
         return smsRequest;
@@ -346,7 +347,7 @@ public class BPANotificationUtil {
         return link;
     }
 
-    public EventRequest getEventsForBPA(TradeLicenseRequest request, boolean isStatusPaid, String message,String receiptno) {
+    public EventRequest getEventsForBPA(TradeLicenseRequest request, boolean isStatusPaid, String message,String receiptno, String userEventName) {
         if(message == null)
             return null;
 
@@ -390,7 +391,7 @@ public class BPANotificationUtil {
             }
 
             events.add(Event.builder().tenantId(license.getTenantId()).description(mobileNumberToMsg.get(mobile))
-                    .eventType(BPAConstants.USREVENTS_EVENT_TYPE).name(BPAConstants.USREVENTS_EVENT_NAME)
+                    .eventType(BPAConstants.USREVENTS_EVENT_TYPE).name(userEventName)
                     .postedBy(BPAConstants.USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
                     .eventDetails(null).actions(action).build());
             }

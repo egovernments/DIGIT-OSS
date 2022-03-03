@@ -54,7 +54,8 @@ public class SewarageController {
 				requestInfoWrapper.getRequestInfo());
 
 		SewerageConnectionResponse response = SewerageConnectionResponse.builder()
-				.sewerageConnections(sewerageConnectionList).responseInfo(responseInfoFactory
+				.sewerageConnections(sewerageConnectionList).totalCount(sewerageConnectionList.size())
+				.responseInfo(responseInfoFactory
 						.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
