@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>echallan-services</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.5-SNAPSHOT</version>
   <name>echallan-services</name>
   <properties>
     <log4j2.version>2.16.0</log4j2.version>
