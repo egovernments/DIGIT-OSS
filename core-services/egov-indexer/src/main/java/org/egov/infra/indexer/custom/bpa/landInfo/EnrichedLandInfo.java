@@ -74,5 +74,7 @@ public class EnrichedLandInfo {
   @JsonProperty("plotAreaApproved")
   private Double plotAreaApproved = null;
 
+  @JsonProperty("plotArea")
+  private Integer plotArea = null;
 
 }

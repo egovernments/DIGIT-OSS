@@ -559,6 +559,21 @@ public class IndexerUtils {
 	}
 
 	/**
+	 * Returns mapper with all the appropriate properties reqd in our
+	 * functionalities.
+	 * Includes null values
+	 * @return ObjectMapper
+	 */
+	public ObjectMapper getObjectMapperWithNull() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		mapper.getFactory().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
+		return mapper;
+	}
+
+	/**
 	 * Util method to return Auditdetails for create and update processes
 	 *
 	 * @param by

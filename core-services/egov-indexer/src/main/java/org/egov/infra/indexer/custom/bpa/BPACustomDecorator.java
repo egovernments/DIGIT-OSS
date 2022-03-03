@@ -74,13 +74,14 @@ public class BPACustomDecorator {
 	public EnrichedBPARequest transformData(BPARequest bpaRequest){
 		List<EnrichedUnit> enrichedUnitList = new ArrayList<>();
         Double plotAreaApproved=null;
+		Integer plotArea=null;
 
 		//fetching plotArea after approval based on approval number
 		if(bpaRequest.getBPA().getStatus().equals("APPROVED"))
 		{
-			log.info("Fetching Approved Plot Area ");
 			String edcrnumber = fetchPermitNumber(bpaRequest.getRequestInfo(),bpaRequest.getBPA());
 			plotAreaApproved = getEDCRDetails(edcrnumber,bpaRequest.getRequestInfo(),bpaRequest.getBPA());
+			log.info("Fetched Approved Plot Area ");
 		}
 
 		for(Unit unit:bpaRequest.getBPA().getLandInfo().getUnit())
@@ -108,6 +109,8 @@ public class BPACustomDecorator {
 			enrichedUnitList.add(enrichedUnit);
 		}
 
+		plotArea = getPlotAreafromEdcr(bpaRequest.getBPA().getEdcrNumber(),bpaRequest.getRequestInfo(),bpaRequest.getBPA());
+
 		EnrichedLandInfo enrichedLandInfo = EnrichedLandInfo.builder()
 				.id(bpaRequest.getBPA().getLandInfo().getId())
 				.landUId(bpaRequest.getBPA().getLandInfo().getLandUId())
@@ -125,6 +128,7 @@ public class BPACustomDecorator {
 				.additionalDetails(bpaRequest.getBPA().getLandInfo().getAdditionalDetails())
 				.auditDetails(bpaRequest.getBPA().getLandInfo().getAuditDetails())
 				.plotAreaApproved(plotAreaApproved)
+				.plotArea(plotArea)
 				.build();
 
 		BPA bpa = bpaRequest.getBPA();
@@ -193,6 +197,41 @@ public class BPACustomDecorator {
 		edcrNumber = context.read("BPA[0].edcrNumber");
 
 		return edcrNumber;
+	}
+
+	/**
+	 * fetch the plotarea from edcr details for the given edcrNummber
+	 * @param requestInfo
+	 * @param bpa
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	public Integer getPlotAreafromEdcr(String edcrNo, RequestInfo requestInfo, BPA bpa) {
+		StringBuilder uri = new StringBuilder(edcrHost);
+		Integer plotArea=null;
+
+		uri.append(getPlanEndPoint);
+		uri.append("?").append("tenantId=").append(bpa.getTenantId());
+		uri.append("&").append("edcrNumber=").append(edcrNo);
+
+		RequestInfo edcrRequestInfo = new RequestInfo();
+		BeanUtils.copyProperties(requestInfo, edcrRequestInfo);
+		LinkedHashMap responseMap = null;
+		try {
+			responseMap = (LinkedHashMap) fetchResult(uri,
+					new RequestInfoWrapper(edcrRequestInfo));
+		} catch (Exception e) {
+			log.error("Exception while fetching plot area from edcr response ",e);
+		}
+		if (CollectionUtils.isEmpty(responseMap)) {
+			log.error("The response from BPA service is empty or null");
+			return null;
+		}
+		String jsonString = new JSONObject(responseMap).toString();
+		DocumentContext context = JsonPath.using(Configuration.defaultConfiguration()).parse(jsonString);
+		plotArea = context.read("edcrDetail[0].planDetail.planInformation.plotArea");
+
+		return plotArea;
 	}
 
 	/**
