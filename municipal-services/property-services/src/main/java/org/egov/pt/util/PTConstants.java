@@ -167,6 +167,8 @@ public class PTConstants {
 
     public static final String ACTION_FOR_ASSESSMENT =  "ASSESS";
 
+    public static final String ACTION_FOR_PAYMENT_FAILURE = "FAILURE";
+
     public static final String WF_STATUS_OPEN_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_OPEN";
 	
     public static final String WF_STATUS_DOCVERIFIED_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_DOCVERIFIED";
