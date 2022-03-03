@@ -28,7 +28,7 @@ public class CallblackAPI {
     private String TOPIC;
 
     @PostMapping("/callback")
-    public ResponseEntity<Void> postStatus(@RequestParam String jobno,
+    public ResponseEntity postStatus(@RequestParam String jobno,
                                         @RequestParam String mobilenumber,
                                         @RequestParam int status,
                                         @RequestParam String doneTime,
@@ -42,11 +42,11 @@ public class CallblackAPI {
         report.setMessage(message);
 
         producer.push(TOPIC, report);
-        return new ResponseEntity<>(org.springframework.http.HttpStatus.valueOf(HttpStatus.SC_OK));
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/callback")
-    public ResponseEntity<Void> getStatus(@RequestParam String jobno,
+    public ResponseEntity getStatus(@RequestParam String jobno,
                                             @RequestParam String mobilenumber,
                                             @RequestParam int status,
                           @RequestParam String doneTime,
@@ -60,6 +60,6 @@ public class CallblackAPI {
         report.setMessage(message);
 
         producer.push(TOPIC, report);
-        return new ResponseEntity<>(org.springframework.http.HttpStatus.valueOf(HttpStatus.SC_OK));
+        return ResponseEntity.ok().build();
     }
 }
