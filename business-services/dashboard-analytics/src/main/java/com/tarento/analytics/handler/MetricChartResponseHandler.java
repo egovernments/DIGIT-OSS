@@ -91,7 +91,7 @@ public class MetricChartResponseHandler implements IResponseHandler{
        Plot latestDateplot = new Plot("todaysDate", Double.valueOf(0), "number");;
 		Plot lastUpdatedTime = new Plot("lastUpdatedTime", Double.valueOf(0), "number");
 		Boolean isTodaysCollection = (chartNode.get("TodaysCollection") == null ? Boolean.FALSE : chartNode.get("TodaysCollection").asBoolean());
-		aggrsPaths.forEach(headerPath -> {
+		for( JsonNode headerPath : aggrsPaths) {
 			List<JsonNode> values = aggregationNode.findValues(headerPath.asText());
 			int valueIndex = 0;
 			for (JsonNode value : values) {
@@ -115,6 +115,19 @@ public class MetricChartResponseHandler implements IResponseHandler{
 				List<JsonNode> valueNodes = value.findValues(VALUE).isEmpty() ? value.findValues(DOC_COUNT)
 						: value.findValues(VALUE);
 				Double sum = valueNodes.stream().mapToDouble(o -> o.asDouble()).sum();
+				
+				// PreAction Theory should be consdiered and executed to modify the aggregation value
+				JsonNode preActionTheoryNode = chartNode.get("preActionTheory");
+				
+				if( preActionTheoryNode != null && preActionTheoryNode.findValue(headerPath.asText()) !=null && 
+						!preActionTheoryNode.findValue(headerPath.asText()).asText().isEmpty()) {
+					ComputeHelper computeHelper = computeHelperFactory.getInstance(preActionTheoryNode.findValue(headerPath.asText()).asText());
+					if(computeHelper !=null) {
+						sum = computeHelper.compute(request, sum); 
+					}
+	            	
+				}
+				
 				// Why is aggrsPaths.size()==2 required? Is there validation if action =
 				// PERCENTAGE and aggrsPaths > 2
 				if (action.equals(PERCENTAGE) && aggrsPaths.size() == 2) {
@@ -166,7 +179,7 @@ public class MetricChartResponseHandler implements IResponseHandler{
 				}
 				valueIndex++;
 			}
-		});
+		}
 
         String symbol = chartNode.get(IResponseHandler.VALUE_TYPE).asText();
        
