@@ -79,7 +79,7 @@ const GenericChart = ({
             {headerName}
              {chartDenomination?.toLowerCase()==="amount"&&<span style={{whiteSpace:"pre"}}> ({t(`DSS_${Digit.Utils.locale.getTransformedLocale(value?.denomination)}`)})</span>}
               <span className="tooltiptext" style={{ whiteSpace: "nowrap" , 
-               fontSize:"medium" }}>
+               fontSize:"medium", marginLeft: t(`TIP_${Digit.Utils.locale.getTransformedLocale(header)}`).length > 30 ? -120 : -60 }}>
                   {t(`TIP_${Digit.Utils.locale.getTransformedLocale(header)}`)}
               </span>
             </span>
