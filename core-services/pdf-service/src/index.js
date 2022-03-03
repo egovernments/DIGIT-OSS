@@ -921,7 +921,7 @@ export const createNoSave = async (
     var consumerCode = get(req, "consumerCode");
     
 
-    logger.info("received createnosave request on key: " + key + " totalPdfRecords: "+totalPdfRecords+" currentPdfRecords: "+currentPdfRecords + " size: "+billd.length);
+    logger.info("received createnosave request on key: " + key + " for job id:" + bulkPdfJobId +" totalPdfRecords: "+totalPdfRecords+" currentPdfRecords: "+currentPdfRecords + " size: "+billd.length);
 
     var valid = validateRequest(req, res, key, tenantId, requestInfo);
 
@@ -964,7 +964,7 @@ export const createNoSave = async (
            tempFile.end();
          });
         logger.info(
-          `createnosave success for pdf with key: ${key}, entityId ${entityIds}`
+          `createnosave success for pdf creation with job id: ${bulkPdfJobId} with key: ${key}, entityId ${entityIds}`
         );
         (async () => {
           await insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid, tenantId, locality, bussinessService, consumerCode, isConsolidated);

@@ -14,7 +14,7 @@ client = new kafka.KafkaClient({ kafkaHost: config.KAFKA_BROKER_HOST, connectRet
 //   console.log("cloud - ");
 // }
 
-const producer = new Producer(client,{partitionerType:2});
+const producer = new Producer(client,{partitionerType:3});
 
 producer.on("ready", function() {
   logger.info("Producer is ready");
