@@ -14,21 +14,27 @@ const OBPSResponse = (props) => {
   const [isLoader, setIsLoader] = useState(true);
   const history = useHistory();
   const [isSanctionFee, setSanctionFee] = useState("");
+  const [billData, setBillData] = useState(null);
 
   let bpaBusinessService = applicationData?.businessService;
   let bpaStatus = applicationData?.status;
   if (bpaBusinessService == "BPA_LOW") bpaBusinessService = "BPA"
 
+  let workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: bpaData?.tenantId, id: bpaData?.applicationNo, moduleCode: "BPA" });
+
   useEffect(async () => {
     setIsLoader(true);
     const bpaResponse = await Digit.OBPSService.BPASearch(tenantId, { applicationNo: bpaData?.applicationNo });
-    let businessService = "BPA.LOW_RISK_PERMIT_FEE";
-    if (bpaResponse?.BPA?.[0]?.businessService === "BPA") businessService = "BPA.NC_SAN_FEE";
-    else if (bpaResponse?.BPA?.[0]?.businessService === "BPA_OC") businessService = "BPA.NC_OC_SAN_FEE";
+    // let businessService = "BPA.LOW_RISK_PERMIT_FEE";
+    // if (bpaResponse?.BPA?.[0]?.businessService === "BPA") businessService = "BPA.NC_SAN_FEE";
+    // else if (bpaResponse?.BPA?.[0]?.businessService === "BPA_OC") businessService = "BPA.NC_OC_SAN_FEE";
+    let businessService = await getBusinessServices(bpaResponse?.BPA?.[0]?.businessService, bpaResponse?.BPA?.[0]?.status);
+
     const fetchBill = await Digit.PaymentService.fetchBill(tenantId, { consumerCode: bpaResponse?.BPA?.[0]?.applicationNo, businessService: businessService });
     if (bpaResponse?.BPA?.[0]?.status == "APPROVED" && fetchBill?.Bill[0] && fetchBill?.Bill[0]?.totalAmount != 0) setSanctionFee("_SAN_FEE");
     setIsLoader(false);
     setApplicationData(bpaResponse?.BPA?.[0]);
+    setBillData(fetchBill?.Bill)
   }, [])
 
   const getHeaderMessage = () => {
@@ -61,6 +67,14 @@ const OBPSResponse = (props) => {
     history.push(`/digit-ui/employee/payment/collect/${getBusinessServices(applicationData?.businessService, applicationData?.status)}/${applicationData?.applicationNo}/${applicationData?.tenantId}?tenantId=${applicationData?.tenantId}`);
   }
 
+  let isWorkflowLoading = true, isPayButtonEnable = false;
+  if (workflowDetails && workflowDetails?.data && !workflowDetails?.isLoading) {
+    isWorkflowLoading = false;
+    workflowDetails?.data?.nextActions?.forEach(data => {
+      if (data.action == "PAY" && !isPayButtonEnable) isPayButtonEnable = true;
+    })
+  }
+
   return (
     <div>
       {isLoader ? <Loader /> :
@@ -85,7 +99,7 @@ const OBPSResponse = (props) => {
           {
             window.location.href.includes("/citizen") ?
               <div>
-                {applicationData?.status == "PENDING_APPL_FEE" || applicationData?.status == "PENDING_FEE" || applicationData?.status == "PENDING_SANC_FEE_PAYMENT" ?
+                {(applicationData?.status == "PENDING_APPL_FEE" || applicationData?.status == "PENDING_FEE" || applicationData?.status == "PENDING_SANC_FEE_PAYMENT") && billData?.length > 0 && isPayButtonEnable ?
                   <div>
                     <Link to={{ pathname: getPaymentURL(true) }}>
                       <SubmitBar label={t("WF_BPA_PAY")} style={{ margin: "10px 0px 0px 0px" }} />
@@ -101,7 +115,7 @@ const OBPSResponse = (props) => {
               :
               <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
                 <div>
-                  {applicationData?.status == "PENDING_APPL_FEE" || applicationData?.status == "PENDING_FEE" || applicationData?.status == "PENDING_SANC_FEE_PAYMENT" ?
+                  {(applicationData?.status == "PENDING_APPL_FEE" || applicationData?.status == "PENDING_FEE" || applicationData?.status == "PENDING_SANC_FEE_PAYMENT") && billData?.length > 0 && isPayButtonEnable ?
                     <div>
                       <SubmitBar
                         label={t("WF_BPA_PAY")}
