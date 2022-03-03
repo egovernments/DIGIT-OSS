@@ -91,6 +91,9 @@ const Download = {
     return domtoimage.toJpeg(element, {
       quality: 1,
       bgcolor: 'white',
+      style:{
+        margin:'20px'
+      }
      }).then(function (dataUrl) {
 /*  to enable pdf
     var htmlImage = new Image();
