@@ -138,10 +138,10 @@ public class SurveyService {
         // 4. Validate answers
         surveyValidator.validateAnswers(answerEntity);
         
-        Boolean isAnonymousSurvey = fetchSurveyAnonymitySetting(answerEntity.getSurveyId());
+        Boolean collectCitizenInfo = fetchSurveyAnonymitySetting(answerEntity.getSurveyId());
 
         // Enrich answer request
-        enrichmentService.enrichAnswerEntity(answerRequest, isAnonymousSurvey);
+        enrichmentService.enrichAnswerEntity(answerRequest, collectCitizenInfo);
 
         // Persist response if it passes all validations
         producer.push("save-ss-answer", answerRequest);

@@ -54,7 +54,7 @@ public class EnrichmentService {
         }
     }
 
-    public void enrichAnswerEntity(AnswerRequest answerRequest, Boolean isAnonymousSurvey) {
+    public void enrichAnswerEntity(AnswerRequest answerRequest, Boolean collectCitizenInfo) {
         RequestInfo requestInfo = answerRequest.getRequestInfo();
         AnswerEntity answerEntity = answerRequest.getAnswerEntity();
         answerEntity.getAnswers().forEach(answer -> {
@@ -66,7 +66,7 @@ public class EnrichmentService {
                     .createdTime(System.currentTimeMillis())
                     .lastModifiedTime(System.currentTimeMillis())
                     .build());
-            if(!isAnonymousSurvey){
+            if(collectCitizenInfo){
                 answer.setEmailId(requestInfo.getUserInfo().getEmailId());
                 answer.setMobileNumber(requestInfo.getUserInfo().getMobileNumber());
             }
