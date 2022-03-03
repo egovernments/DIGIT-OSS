@@ -26,6 +26,7 @@ import Icons from "../common/Icon/Icon";
 import CustomizedMenus from "../Dashboard/download";
 import CustomizedShare from "../Dashboard/share";
 import style from "./styles";
+import Arrow_Right from "../../images/arrows/Arrow_Right.svg"
 
 class Home extends React.Component {
   constructor(props) {
@@ -255,7 +256,12 @@ class Home extends React.Component {
                 >
                   <Icons type={data.name}></Icons>
                 </CardIcon>
-                <div style={{ textAlign: "left", color: "black" }}>
+                {isNurtDashboard() && pageId === "national-overview"? <div style={{ textAlign: "right", color: "#F47738", fontSize: 14, fontWeight: "normal"}}>
+                  <span style={{paddingRight : 10}}>{strings["NATIONAL_OVERVIEW_DASHBOARD"]} 
+                  </span>
+                  <span> <img src={Arrow_Right} width={14}></img></span>
+                  </div> : <div></div>}
+                <div style={{ textAlign: "left", color: "black" , marginTop: isNurtDashboard() ? -20 : 0 }}>
                   <Typography className={classes.cardTitle}>
                     {strings[data.name] || data.name}
                   </Typography>
