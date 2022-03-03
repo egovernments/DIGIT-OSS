@@ -232,8 +232,10 @@ const FstpOperatorDetails = () => {
   const handleTimeChange = (value, index, cb) => {
     let temp = vehicleInfo
     value = String(value)
+    const d = new Date();
     if (typeof value === 'string') {
-      temp["tripDetails"][index][cb] = value;
+      const timeStamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + value)) / 1000;
+      temp["tripDetails"][index][cb] = timeStamp;
       setVehicleInfo(temp)
     }
   }
