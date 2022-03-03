@@ -421,7 +421,8 @@ router.post(
         var payloads = [];
         payloads.push({
           topic: config.KAFKA_BULK_PDF_TOPIC,
-          messages: JSON.stringify(kafkaData)
+          messages: JSON.stringify(kafkaData),
+          key: jobid
         });
         producer.send(payloads, function(err, data) {
           if (err) {

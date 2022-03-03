@@ -711,7 +711,8 @@ async function create_bulk_pdf(kafkaData){
           var pdfData = Object.assign({RequestInfo:requestinfo.RequestInfo}, billArray)
           payloads.push({
             topic: config.KAFKA_RECEIVE_CREATE_JOB_TOPIC,
-            messages: JSON.stringify(pdfData)
+            messages: JSON.stringify(pdfData),
+            key: jobid
           });
           producer.send(payloads, function(err, data) {
             if (err) {
