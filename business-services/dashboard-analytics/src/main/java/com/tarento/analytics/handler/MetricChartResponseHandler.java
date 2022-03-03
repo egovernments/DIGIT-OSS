@@ -94,6 +94,7 @@ public class MetricChartResponseHandler implements IResponseHandler{
 		for( JsonNode headerPath : aggrsPaths) {
 			List<JsonNode> values = aggregationNode.findValues(headerPath.asText());
 			int valueIndex = 0;
+			Double headerPathValue = new Double(0);
 			for (JsonNode value : values) {
 				if (isRoundOff) {
 					ObjectMapper mapper = new ObjectMapper();
@@ -128,13 +129,7 @@ public class MetricChartResponseHandler implements IResponseHandler{
 	            	
 				}
 				
-				// Why is aggrsPaths.size()==2 required? Is there validation if action =
-				// PERCENTAGE and aggrsPaths > 2
-				if (action.equals(PERCENTAGE) && aggrsPaths.size() == 2) {
-					percentageList.add(sum);
-				} else {
-					totalValues.add(sum);
-				}
+				headerPathValue = Double.sum(headerPathValue, sum);
 
 				if (isTodaysCollection == Boolean.TRUE) {
 
@@ -179,6 +174,14 @@ public class MetricChartResponseHandler implements IResponseHandler{
 				}
 				valueIndex++;
 			}
+			// Why is aggrsPaths.size()==2 required? Is there validation if action =
+			// PERCENTAGE and aggrsPaths > 2
+			if (action.equals(PERCENTAGE) && aggrsPaths.size() == 2) {
+				percentageList.add(headerPathValue);
+			} else {
+				totalValues.add(headerPathValue);
+			}
+			
 		}
 
         String symbol = chartNode.get(IResponseHandler.VALUE_TYPE).asText();
