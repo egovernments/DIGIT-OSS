@@ -106,10 +106,9 @@ public class PaymentNotificationService {
             String localizationMessages = util.getLocalizationMessages(tenantId,requestInfo);
             String consumerCode = transaction.getConsumerCode();
             String path = getJsonPath(topic, ONLINE_PAYMENT_MODE, false);
-            String action = requestInfo.getAction();
 
             String messageTemplate = null;
-            List<String> configuredChannelNames  = util.fetchChannelList(requestInfo, tenantId, PT_BUSINESSSERVICE, action);
+            List<String> configuredChannelNames  = util.fetchChannelList(requestInfo, tenantId, PT_BUSINESSSERVICE, ACTION_FOR_PAYMENT_FAILURE);
             try {
                 Object messageObj = JsonPath.parse(localizationMessages).read(path);
                 messageTemplate = ((ArrayList<String>) messageObj).get(0);
