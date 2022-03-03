@@ -4,7 +4,8 @@ All notable changes to this module will be documented in this file.
 ## 1.2.7 - 2022-02-02
 - Added security fixes for user enumerration issue.
 - Added size validation on user models
-- 
+- Added email and sms notification feature whenever user changes email.
+
 ## 1.2.6 - 2022-01-13
 - Updated to log4j2 version 2.17.1
 
