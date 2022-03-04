@@ -25,12 +25,12 @@ const NOCBreadCrumbs = ({ location }) => {
     },
     {
       path: "/digit-ui/employee/noc/search",
-      content: t("ES_OBPS_SEARCH"),
+      content: t("ES_COMMON_APPLICATION_SEARCH"),
       show: location.pathname.includes("/digit-ui/employee/noc/search") ? true : false,
     },
     {
       path: "/digit-ui/employee/noc/search/application-overview/:id",
-      content: t("ES_OBPS_SEARCH_BPA"),
+      content: t("NOC_APP_OVER_VIEW_HEADER"),
       show: location.pathname.includes("/digit-ui/employee/noc/search/application-overview") ? true : false,
     },
   ];

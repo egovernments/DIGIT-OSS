@@ -71,7 +71,7 @@ const NOCEmployeeHomeCard = () => {
           link: `/digit-ui/employee/noc/inbox`
         },
         {
-          label: t("ES_COMMON_SEARCH"),
+          label: t("ES_COMMON_APPLICATION_SEARCH"),
           link: `/digit-ui/employee/noc/search`
         }
       ]
