@@ -104,7 +104,7 @@ class HorBarChart extends React.Component {
         <div style={{ height: "90%", width: "450px" }}>
           <BarChart
             width={500}
-            height={410}
+            height={400}
             data={mergeObj}
             margin={{
               top: 5,

@@ -88,7 +88,7 @@ class MapChart extends React.Component {
 
   onMouseEnter(geo, current = { value: "0" }, event) {
     this.setState({
-      tooltipContent: `${geo.properties.name}: ${
+      tooltipContent: `${getLocaleLabels(`DSS_TB_${geo.properties.name}`)}: ${
         current.value ? Number(current.value).toFixed() + " ULBs" : "NA"
       } `,
     });
