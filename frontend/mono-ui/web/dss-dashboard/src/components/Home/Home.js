@@ -13,7 +13,7 @@ import getFilterObj from "../../actions/getFilterObj";
 import getFinancialYearObj from "../../actions/getFinancialYearObj";
 import mdmsAPI from "../../actions/mdms/mdms";
 import Variables from "../../styles/variables";
-import { isNurtDashboard } from "../../utils/commons";
+import { getLocaleLabels, isNurtDashboard } from "../../utils/commons";
 import history from "../../utils/web.history";
 import HorBarChart from "../Charts/HorBarChart";
 import MapChart from "../Charts/MapChart";
@@ -26,6 +26,7 @@ import Icons from "../common/Icon/Icon";
 import CustomizedMenus from "../Dashboard/download";
 import CustomizedShare from "../Dashboard/share";
 import style from "./styles";
+import Arrow_Right from "../../images/arrows/Arrow_Right.svg";
 
 class Home extends React.Component {
   constructor(props) {
@@ -93,7 +94,7 @@ class Home extends React.Component {
     }
   }
 
-  renderChart(data, index) {
+  renderChart(data, index, vizArray) {
     let { chartLabelName, selectedState, liveCount, totalCount } = this.state;
     let { classes, strings } = this.props;
     let filters = getFilterObj(
@@ -119,7 +120,122 @@ class Home extends React.Component {
     }
     if (data.vizType.toUpperCase() === "COLLECTION") {
       if (data.charts[0].chartType == "map") {
+        let newData = vizArray[1];
         return (
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            lg={12}
+            xl={12}
+            className={classes.paper}
+            style={{ paddingBottom: "5px" }}
+            data-html2canvas-ignore="true"
+          >
+            <Card color="blue" bgColor={"white"} page={pageId}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ width: "49%" }}>
+                  <CardHeader color="rose" icon page={pageId || "overview"}>
+                    <CardIcon color="rose" bgColor={"#F47738"}>
+                      <Icons type={data.name}></Icons>
+                    </CardIcon>
+                    <div style={{ textAlign: "left", color: "black" }}>
+                      <Typography className={classes.cardTitle}>
+                        {selectedState
+                          ? getLocaleLabels(`DSS_TB_${selectedState}`)
+                          : strings[data.name] || data.name}
+                        {selectedState && (
+                          <span style={{ fontSize: "14px", display: "block" }}>
+                            {strings[`DSS_TOTAL_ULBS`] || "DSS_TOTAL_ULBS"}{" "}
+                            {Number(totalCount).toFixed()} |{" "}
+                            {strings[`DSS_LIVE_ULBS`] || "DSS_LIVE_ULBS"}{" "}
+                            {Number(liveCount).toFixed()}
+                          </span>
+                        )}
+                      </Typography>
+                    </div>
+                  </CardHeader>
+                  <CardBody page={pageId || "overview"}>
+                    <Grid container spacing={24}>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                        className={classes.customCard}
+                      >
+                        <MapChart
+                          moduleLevel={moduleLevel}
+                          page={window.location.pathname || ""}
+                          chartData={data.charts[0]}
+                          chartId={data.charts[0].id}
+                          filters={filters}
+                          selectedState={selectedState}
+                          totalCount={totalCount}
+                          liveCount={liveCount}
+                          updateSelectedState={this.updateSelectedState}
+                        ></MapChart>
+                      </Grid>
+                    </Grid>
+                  </CardBody>
+                </div>
+                <div style={{ width: "49%", borderLeft: "1px solid #D6D5D4" }}>
+                  <CardHeader color="rose" icon page={pageId || "overview"}>
+                    <CardIcon color="rose" bgColor={"#F47738"}>
+                      <Icons type={newData.name}></Icons>
+                    </CardIcon>
+                    <div style={{ textAlign: "left", color: "black" }}>
+                      <Typography className={classes.cardTitle}>
+                        {selectedState
+                          ? strings[
+                              `${selectedState.toUpperCase()}_${newData.name}`
+                            ]
+                            ? strings[
+                                `${selectedState.toUpperCase()}_${newData.name}`
+                              ]
+                            : `${selectedState.toUpperCase()}_${newData.name}`
+                          : strings[newData.name] || newData.name}
+                      </Typography>
+                    </div>
+                  </CardHeader>
+                  <CardBody page={pageId || "overview"}>
+                    <Grid container spacing={24}>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                        className={classes.customCard}
+                      >
+                        <HorBarChart
+                          moduleLevel={moduleLevel}
+                          page={window.location.pathname || ""}
+                          chartData={newData.charts[0]}
+                          chartId={newData.charts[0].id}
+                          filters={filters}
+                          selectedState={selectedState}
+                        ></HorBarChart>
+                      </Grid>
+                    </Grid>
+                  </CardBody>
+                </div>
+              </div>
+            </Card>
+          </Grid>
+        );
+      } else if (data.charts[0].chartType == "bar") {
+        return data.charts[0].chartType == "bar" ? null : (
           <Grid
             item
             xs={12}
@@ -139,68 +255,10 @@ class Home extends React.Component {
                 <div style={{ textAlign: "left", color: "black" }}>
                   <Typography className={classes.cardTitle}>
                     {selectedState
-                      ? selectedState
+                      ? strings[`${selectedState.toUpperCase()}_${data.name}`]
+                        ? strings[`${selectedState.toUpperCase()}_${data.name}`]
+                        : `${selectedState.toUpperCase()}_${data.name}`
                       : strings[data.name] || data.name}
-                    {selectedState && (
-                      <span style={{ fontSize: "14px", display: "block" }}>
-                        {strings[`DSS_TOTAL_ULBS`] || "DSS_TOTAL_ULBS"}{" "}
-                        {Number(totalCount).toFixed()} |{" "}
-                        {strings[`DSS_LIVE_ULBS`] || "DSS_LIVE_ULBS"}{" "}
-                        {Number(liveCount).toFixed()}
-                      </span>
-                    )}
-                  </Typography>
-                </div>
-              </CardHeader>
-              <CardBody page={pageId || "overview"}>
-                <Grid container spacing={24}>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={12}
-                    md={12}
-                    lg={12}
-                    xl={12}
-                    className={classes.customCard}
-                  >
-                    <MapChart
-                      moduleLevel={moduleLevel}
-                      page={window.location.pathname || ""}
-                      chartData={data.charts[0]}
-                      chartId={data.charts[0].id}
-                      filters={filters}
-                      selectedState={selectedState}
-                      totalCount={totalCount}
-                      liveCount={liveCount}
-                      updateSelectedState={this.updateSelectedState}
-                    ></MapChart>
-                  </Grid>
-                </Grid>
-              </CardBody>
-            </Card>
-          </Grid>
-        );
-      } else if (data.charts[0].chartType == "bar") {
-        return (
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={6}
-            lg={6}
-            xl={6}
-            className={classes.paper}
-            style={{ paddingBottom: "5px" }}
-            data-html2canvas-ignore="true"
-          >
-            <Card color="blue" bgColor={"white"} page={pageId}>
-              <CardHeader color="rose" icon page={pageId || "overview"}>
-                <CardIcon color="rose" bgColor={"#F47738"}>
-                  <Icons type={data.name}></Icons>
-                </CardIcon>
-                <div style={{ textAlign: "left", color: "black" }}>
-                  <Typography className={classes.cardTitle}>
-                    {selectedState?(strings[`${selectedState.toUpperCase()}_${data.name}`]?strings[`${selectedState.toUpperCase()}_${data.name}`]:`${selectedState.toUpperCase()}_${data.name}` ):(strings[data.name] || data.name)}
                   </Typography>
                 </div>
               </CardHeader>
@@ -255,7 +313,33 @@ class Home extends React.Component {
                 >
                   <Icons type={data.name}></Icons>
                 </CardIcon>
-                <div style={{ textAlign: "left", color: "black" }}>
+                {isNurtDashboard() && pageId === "national-overview" ? (
+                  <div
+                    style={{
+                      textAlign: "right",
+                      color: "#F47738",
+                      fontSize: 14,
+                      fontWeight: "normal",
+                    }}
+                  >
+                    <span style={{ paddingRight: 10 }}>
+                      {strings["DSS_OVERVIEW"] || "DSS_OVERVIEW"}
+                    </span>
+                    <span>
+                      {" "}
+                      <img src={Arrow_Right} width={14}></img>
+                    </span>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+                <div
+                  style={{
+                    textAlign: "left",
+                    color: "black",
+                    marginTop: isNurtDashboard() ? -20 : 0,
+                  }}
+                >
                   <Typography className={classes.cardTitle}>
                     {strings[data.name] || data.name}
                   </Typography>
@@ -467,7 +551,7 @@ class Home extends React.Component {
                         </div>
                         } */}
 
-            {!isMobile  &&(
+            {!isMobile && (
               <div
                 id="divNotToPrint"
                 className={classes.acbtn}
@@ -486,11 +570,13 @@ class Home extends React.Component {
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography
-            className={classes.filter} style={{ color: "#505A5F", fontSize: "14px", fontWeight: "400" }}>
+            className={classes.filter}
+            style={{ color: "#505A5F", fontSize: "14px", fontWeight: "400" }}
+          >
             {this.getTitleText(strings)}
           </Typography>
         </Grid>
-        {isMobile&& (
+        {isMobile && (
           <div
             id="divNotToPrint"
             className={classes.acbtn}
@@ -517,7 +603,7 @@ class Home extends React.Component {
               k.vizArray.length > 0 &&
               k.vizArray.map((data, index) => {
                 // if (data.vizType.toUpperCase() !== 'COLLECTION') { this.gettingData(data) }
-                return this.renderChart(data, index);
+                return this.renderChart(data, index, k.vizArray);
               })
             );
           })}
