@@ -568,7 +568,7 @@ public class NotificationUtil {
 	 */
 	public List<EmailRequest> createEmailRequest(RequestInfo requestInfo,String message, Map<String, String> mobileNumberToEmailId) {
 
-		log.info("Map of mobileNumberToEmailId ->  "+mobileNumberToEmailId.toString())
+		log.info("Map of mobileNumberToEmailId ->  "+mobileNumberToEmailId.toString());
 		List<EmailRequest> emailRequest = new LinkedList<>();
 		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
 			String customizedMsg = message.replace("XXXX",entryset.getValue());
