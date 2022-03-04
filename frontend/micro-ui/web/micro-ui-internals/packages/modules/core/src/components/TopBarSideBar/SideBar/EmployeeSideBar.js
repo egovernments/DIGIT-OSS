@@ -22,6 +22,7 @@ const EmployeeSideBar = () => {
   const sidebarRef = useRef(null);
   const { t } = useTranslation();
   const userRoles = Digit.SessionStorage.get("User")?.info?.roles;
+  console.log("userRoles", userRoles);
   const DSS = userRoles.find((role) => role.code === "EMPLOYEE");
   const HRMS = Digit.Utils.hrmsAccess();
   const FSM = Digit.Utils.fsmAccess();
@@ -194,6 +195,7 @@ const EmployeeSideBar = () => {
         }
       })}
     </div>
+    // <div>lll</div>
   );
 };
 

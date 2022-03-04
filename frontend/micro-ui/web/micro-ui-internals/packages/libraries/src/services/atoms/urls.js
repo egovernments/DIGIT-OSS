@@ -21,14 +21,14 @@ const Urls = {
   Authenticate: "/user/oauth/token",
   RegisterUser: "/user/citizen/_create",
   ChangePassword: "/user/password/nologin/_update",
-  ChangePassword1: "/user/password/_update", 
+  ChangePassword1: "/user/password/_update",
   UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
 
   InboxSearch: "/inbox/v1/_search",
 
   UserSearch: "/user/_search",
-  UserLogout : "/user/_logout",
+  UserLogout: "/user/_logout",
 
   Shortener: "/egov-url-shortening/shortener",
 
@@ -66,7 +66,7 @@ const Urls = {
     pt_calculation_estimate: "/pt-calculator-v2/propertytax/v2/_estimate",
     assessment_create: "/property-services/assessment/_create",
     assessment_search: "/property-services/assessment/_search",
-    payment_search: "/collection-services/payments/PT/_search"
+    payment_search: "/collection-services/payments/PT/_search",
   },
 
   dss: {
@@ -134,7 +134,7 @@ const Urls = {
 
   ws: {
     water_search: "/ws-services/wc/_search",
-    sewarage_search : "/sw-services/swc/_search",
+    sewarage_search: "/sw-services/swc/_search",
   },
 
   engagement: {
@@ -150,13 +150,14 @@ const Urls = {
       search: "/egov-survey-services/egov-ss/survey/_search",
       delete: "/egov-survey-services/egov-ss/survey/_delete",
       submitResponse: "/egov-survey-services/egov-ss/survey/response/_submit",
-      showResults: "/egov-survey-services/egov-ss/survey/response/_results"
-    }
+      showResults: "/egov-survey-services/egov-ss/survey/response/_results",
+    },
   },
 
   noc: {
-    nocSearch: "/noc-services/v1/noc/_search"
+    nocSearch: "/noc-services/v1/noc/_search",
   },
+  access_control: "/access/v1/actions/mdms/_get",
 };
 
 export default Urls;
