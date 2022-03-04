@@ -1,6 +1,7 @@
 package org.egov.echallan.repository.builder;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
+import java.util.List;
 
 import org.egov.echallan.config.ChallanConfiguration;
 import org.egov.echallan.model.SearchCriteria;
@@ -8,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -174,8 +175,66 @@ public class ChallanQueryBuilder {
         return builder.toString();
     }
 
+    private String addPaginationWrapperPlainsearch(String query, List<Object> preparedStmtList,
+			SearchCriteria criteria) {
+
+		String string = addOrderByClause(criteria);
+
+		String finalQuery = paginationWrapper.replace("{}", query);
+
+		finalQuery = finalQuery.replace("{orderby}", string);
+
+		finalQuery = finalQuery.replace("{amount}",
+				" 0 as totalamount, ");
+
+		if (criteria.getLimit() != null && criteria.getLimit() != 0) {
+			int limit = 0, offset = 0;
+			if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
+				limit = criteria.getLimit();
+
+			if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+				limit = config.getMaxSearchLimit();
+
+			if (criteria.getOffset() != null)
+				offset = criteria.getOffset();
+
+			finalQuery = finalQuery.replace("WHERE offset_ > ? AND offset_ <= ?", " offset ?  limit ?  ");
+			preparedStmtList.add(offset);
+			preparedStmtList.add(limit);
+
+		} else {
+			finalQuery = finalQuery.replace("WHERE offset_ > ? AND offset_ <= ?", " ");
+		}
+
+		return finalQuery;
+	}
+	
+    /**
+	 * 
+	 * @param builder
+	 * @param criteria
+	 */
+	private String addOrderByClause(SearchCriteria criteria) {
+        StringBuilder builder = new StringBuilder();
+		builder.append("ORDER BY challan_lastModifiedTime ASC ");
+		return builder.toString();
+	}
 
 
+	public String getChallanLikeQuery(SearchCriteria criteria, List<Object> preparedStmtList) {
+		StringBuilder builder = new StringBuilder(QUERY);
+
+		List<String> ids = criteria.getIds();
+		if (!CollectionUtils.isEmpty(ids)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" challan.id IN (").append(createQuery(ids)).append(")");
+			addToPreparedStatement(preparedStmtList, ids);
+		}
+
+		return addPaginationWrapperPlainsearch(builder.toString(), preparedStmtList, criteria);
+
+	}
 
 
+	
 }
