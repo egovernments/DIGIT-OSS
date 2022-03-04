@@ -48,7 +48,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t,OCData) =
 
   data.data = {
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
-    applicationDate: APIScrutinyDetails?.applicationDate,
+    applicationDate: data?.auditDetails?.createdTime,
     applicationType: APIScrutinyDetails?.appliactionType,
     holdingNumber: data?.additionalDetails?.holdingNo,
     bpaData:OCData,

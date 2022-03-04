@@ -464,9 +464,9 @@ public class NotificationUtil {
 	private String getCancelledMsg(TradeLicense license, String message) {
 		message = message.replace("{2}", license.getTradeName());
 		message = message.replace("{3}", license.getLicenseNumber());
-
 		return message;
 	}
+
 
 	private String getExpiredMsg(RequestInfo requestInfo,TradeLicense license, String message) {
 		message = message.replace("{2}", license.getLicenseNumber());

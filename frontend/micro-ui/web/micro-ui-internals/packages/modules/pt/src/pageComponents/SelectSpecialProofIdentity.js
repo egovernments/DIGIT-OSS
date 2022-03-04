@@ -87,7 +87,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
   }, [file]);
 
   return (
-    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={!uploadedFile || !dropdownValue || error}>
+    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={isUpdateProperty || isEditProperty ? false: (!uploadedFile || !dropdownValue || error)}>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <CardLabel>{`${t("PT_CATEGORY_DOCUMENT_TYPE")}`}</CardLabel>
@@ -99,7 +99,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
         optionKey="i18nKey"
         select={setTypeOfDropdownValue}
         placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
-        disable={isUpdateProperty || isEditProperty}
+        //disable={isEditProperty}
       />
       <UploadFile
         id={"pt-doc"}

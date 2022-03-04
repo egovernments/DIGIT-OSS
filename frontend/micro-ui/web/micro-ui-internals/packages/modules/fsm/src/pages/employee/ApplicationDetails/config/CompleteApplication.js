@@ -103,7 +103,7 @@ export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTri
           nextStep: null,
         },
         {
-          label: t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS"),
+          label: `${t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS")} *`,
           type: "number",
           populators: {
               name: "noOfTrips",

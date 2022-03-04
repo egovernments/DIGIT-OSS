@@ -31,9 +31,9 @@ const formatUnits = (units = [], currentFloor, isFloor) => {
       ...unit,
       builtUpArea: unit?.constructionDetail?.builtUpArea,
       usageCategory: { code: usageCategory, i18nKey: `PROPERTYTAX_BILLING_SLAB_${usageCategory}` },
-      occupancyType: { code: unit.occupancyType, i18nKey: `PROPERTYTAX_OCCUPANCYTYPE_${unit?.occupancyType}` },
+      occupancyType: unit?.occupancyType ? { code: unit.occupancyType, i18nKey: `PROPERTYTAX_OCCUPANCYTYPE_${unit?.occupancyType}` } : "",
       floorNo: { code: unit.floorNo, i18nKey: `PROPERTYTAX_FLOOR_${unit?.floorNo}` },
-      unitType: { code: unit.unitType, i18nKey: `PROPERTYTAX_BILLING_SLAB_${unit?.unitType}` },
+      unitType: unit?.unitType ? { code: unit.unitType, i18nKey: `PROPERTYTAX_BILLING_SLAB_${unit?.unitType}` } : "",
     };
   });
 };

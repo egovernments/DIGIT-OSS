@@ -71,25 +71,42 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
 
   if (!response) {
     return (
-      <div style={{ position: "relative", display: "flex", height:"68px",justifyContent: "space-between" }}>
-        <span>{t(data.name)}</span>
-        <span style={{ whiteSpace: "pre" }}>{t("DSS_NO_DATA")}</span>
+      <div className="row">
+      <div className={`tooltip`} >
+        {t(data.name)}
+        <span
+          className="tooltiptext"
+          style={{
+            fontSize: "medium",
+            width: t(`TIP_${data.name}`).length < 50 ? "fit-content" : 400,
+            height: 50,
+            whiteSpace: "normal",
+          }}
+        >
+          <span style={{ fontWeight: "500", color: "white" }}>{t(`TIP_${data.name}`)}</span>
+        </span>
       </div>
+        <span style={{ whiteSpace: "pre" }}>{t("DSS_NO_DATA")}</span>
+    </div>
     );
   }
 
   return (
     <div className="row">
-      <div className="tooltip">
+      <div className={`tooltip`} >
         {t(data.name)}
 
-        <span style={{ whiteSpace: "pre-line", display: "block" }}> {showDate?.[id]?.todaysDate}</span>
+        <span className="dss-white-pre" style={{ display: "block" }}> {showDate?.[id]?.todaysDate}</span>
         <span
           className="tooltiptext"
           style={{
-            whiteSpace: "nowrap",
+            //whiteSpace: "nowrap",
             // marginLeft: "-500%" ,
             fontSize: "medium",
+            // wordBreak: "break-word", overflowWrap: "break-word",
+            width: t(`TIP_${data.name}`).length < 50 ? "fit-content" : 400,
+            height: 50,
+            whiteSpace: "normal",
           }}
         >
           <span style={{ fontWeight: "500", color: "white" }}>{t(`TIP_${data.name}`)}</span>
