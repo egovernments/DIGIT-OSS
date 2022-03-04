@@ -173,6 +173,7 @@ public class BPACustomDecorator {
 		uri.append("?").append("tenantId=").append(bpa.getTenantId());
 		uri.append("&").append("approvalNo=").append(bpa.getApprovalNo());
 
+		log.info("BPA host " + uri.toString());
 		Map<String, Object> apiRequest = new HashMap<>();
 		apiRequest.put("RequestInfo", requestInfo);
 		String edcrNumber="";
@@ -214,6 +215,8 @@ public class BPACustomDecorator {
 		uri.append("?").append("tenantId=").append(bpa.getTenantId());
 		uri.append("&").append("edcrNumber=").append(edcrNo);
 
+		log.info("EDCR host 1" + uri.toString());
+
 		RequestInfo edcrRequestInfo = new RequestInfo();
 		BeanUtils.copyProperties(requestInfo, edcrRequestInfo);
 		LinkedHashMap responseMap = null;
@@ -249,6 +252,8 @@ public class BPACustomDecorator {
 		uri.append("?").append("tenantId=").append(bpa.getTenantId());
 		uri.append("&").append("edcrNumber=").append(edcrNo);
 
+		log.info("EDCR host 2" + uri.toString());
+
 		RequestInfo edcrRequestInfo = new RequestInfo();
 		BeanUtils.copyProperties(requestInfo, edcrRequestInfo);
 		LinkedHashMap responseMap = null;
@@ -279,6 +284,8 @@ public class BPACustomDecorator {
 		uri.append(mdmsHost).append(mdmsEndpoint);
 		if(StringUtils.isEmpty(tenantId))
 			return occupancyType;
+
+		log.info("MDMS host " + uri.toString());
 
 		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForSubOccupancyType(requestInfo, tenantId.split("\\.")[0]);
 		try {
