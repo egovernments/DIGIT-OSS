@@ -336,7 +336,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
           </div>
         );
       })}
-      <div style={{ justifyContent: "center", display: "flex", paddingBottom: "15px", color: "#FF8C00" }}>
+      <div style={{ justifyContent: "left", display: "flex", paddingBottom: "15px", color: "#FF8C00" }}>
         <button type="button" style={{ paddingTop: "10px" }} onClick={() => handleAdd()}>
           {`${t("PT_ADD_UNIT")}`}
         </button>

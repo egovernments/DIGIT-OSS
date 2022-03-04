@@ -138,6 +138,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const DocsRequired = Digit?.ComponentRegistryService?.getComponent("PTDocsRequired");
   const isRes = window.location.href.includes("pt/response");
   const isLocation = window.location.href.includes("pt") || window.location.href.includes("application");
+  const isNewRegistration = window.location.href.includes("new-application") || window.location.href.includes("modify-application");
   return (
     <Switch>
       <React.Fragment>
@@ -148,7 +149,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             </Link>{" "}
             / <span>{getBreadCrumb()}</span>
           </p>} */}
-          {!isRes ? <div style={isLocation ? {marginLeft: "10px"} : {}}><PTBreadCrumbs location={location} /></div> : null}
+          {!isRes ? <div style={isNewRegistration ? {marginLeft: "12px" } : {marginLeft:"-4px"}}><PTBreadCrumbs location={location} /></div> : null}
           <PrivateRoute exact path={`${path}/`} component={() => <PTLinks matchPath={path} userType={userType} />} />
           <PrivateRoute
             path={`${path}/inbox`}
