@@ -13,7 +13,7 @@ import getFilterObj from "../../actions/getFilterObj";
 import getFinancialYearObj from "../../actions/getFinancialYearObj";
 import mdmsAPI from "../../actions/mdms/mdms";
 import Variables from "../../styles/variables";
-import { isNurtDashboard } from "../../utils/commons";
+import { getLocaleLabels, isNurtDashboard } from "../../utils/commons";
 import history from "../../utils/web.history";
 import HorBarChart from "../Charts/HorBarChart";
 import MapChart from "../Charts/MapChart";
@@ -149,7 +149,7 @@ class Home extends React.Component {
                     <div style={{ textAlign: "left", color: "black" }}>
                       <Typography className={classes.cardTitle}>
                         {selectedState
-                          ? selectedState
+                          ? getLocaleLabels(`DSS_TB_${selectedState}`)
                           : strings[data.name] || data.name}
                         {selectedState && (
                           <span style={{ fontSize: "14px", display: "block" }}>
