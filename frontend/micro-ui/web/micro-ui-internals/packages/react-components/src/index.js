@@ -30,7 +30,7 @@ import DisplayPhotos from "./atoms/DisplayPhotos";
 import Dropdown from "./atoms/Dropdown";
 import EllipsisMenu from "./atoms/EllipsisMenu";
 import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
-import EmployeeModuleCard from "./atoms/EmployeeModuleCard";
+import {EmployeeModuleCard,ModuleCardFullWidth} from "./atoms/EmployeeModuleCard";
 import GreyOutText from "./atoms/GreyOutText";
 import Hamburger from "./atoms/Hamburger";
 import Header from "./atoms/Header";
@@ -65,6 +65,7 @@ import {
   AnnouncementIcon,
   ArrowDown,
   ArrowLeft,
+  ArrowForward,
   ArrowRightInbox,
   Calender,
   CaseIcon,
@@ -376,6 +377,8 @@ export {
   GalleryIcon,
   RemoveIcon,
   UploadPitPhoto,
-  CheckSvg
+  CheckSvg,
+  ModuleCardFullWidth,
+  ArrowForward
 };
 

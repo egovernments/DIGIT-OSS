@@ -515,3 +515,26 @@ input[type="number"] {
   border-radius: 3px;
   padding: 3px;
 }
+
+.full-width-card{
+  width : 92vw !important;
+}
+.full-employee-card-link{
+  width: 100%!important;
+  margin: 7px 0px;
+}
+.full-employee-card-height{
+ height: unset !important;
+}
+
+@media (min-width: 640px) {
+  .full-employee-card-height{
+    height: 196px !important;
+  }
+  .full-employee-card-link{
+    width: 30%!important;
+  }
+  .full-width-card{
+    @apply w-full !important;
+  }
+}
