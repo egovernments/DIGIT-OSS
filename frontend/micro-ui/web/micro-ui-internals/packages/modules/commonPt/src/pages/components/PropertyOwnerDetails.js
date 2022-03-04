@@ -1,7 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { TextInput, CardLabel, RadioButtons, Dropdown, MobileNumber, TextArea, CheckBox } from "@egovernments/digit-ui-react-components";
-import { cardBodyStyle } from "../utils";
-import { useLocation, useRouteMatch } from "react-router-dom";
+import {
+  CardLabel,
+  CheckBox,
+  Dropdown,
+  LabelFieldPair,
+  MobileNumber,
+  RadioButtons,
+  TextArea,
+  TextInput
+} from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   const { pathname: url } = useLocation();
@@ -38,7 +46,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
     });
 
   const [ownershipCategory, setOwnershipCategory] = useState(formData?.ownershipCategory);
-  const { data: dropdownData } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TLOwnerTypeWithSubtypes",{userType});
+  const { data: dropdownData } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TLOwnerTypeWithSubtypes", { userType });
 
   const [ownerType, setOwnerType] = useState(
     (formData.owners && formData.owners[index] && formData.owners[index]?.ownerType) || formData.owners?.ownerType || {}
@@ -54,10 +62,21 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
   );
 
   let owner = formData.owners && formData.owners[index];
-  const ownerStep = { ...owner, name, gender, mobileNumber, fatherOrHusbandName, relationship, ownershipCategory, ownerType, permanentAddress, isCorrespondenceAddress };
+  const ownerStep = {
+    ...owner,
+    name,
+    gender,
+    mobileNumber,
+    fatherOrHusbandName,
+    relationship,
+    ownershipCategory,
+    ownerType,
+    permanentAddress,
+    isCorrespondenceAddress,
+  };
 
   function setOwnershipCat(value) {
-    setOwnershipCategory(value)
+    setOwnershipCategory(value);
     onSelect(config.key, { ...formData[config.key], ...ownerStep, ownershipCategory: value }, false, index);
   }
 
@@ -85,12 +104,12 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
   }
 
   function setOwnerType1(value) {
-    setOwnerType(value)
+    setOwnerType(value);
     onSelect(config.key, { ...formData[config.key], ...ownerStep, ownerType: value }, false, index);
   }
 
   function setOwnerAddress(value) {
-    setPermanentAddress(value)
+    setPermanentAddress(value);
     onSelect(config.key, { ...formData[config.key], ...ownerStep, permanentAddress: value }, false, index);
   }
 
@@ -136,114 +155,143 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
 
   return (
     <div>
-      <CardLabel className="card-label-smaller">
-          {`${t("TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL")} :`}
-      </CardLabel>
-      <Dropdown
-        className="form-field"
-        selected={ownershipCategory}
-        // errorStyle={formState.touched?.[config.key] && formState.errors[config.key]?.message ? true : false}
-        option={dropdownData}
-        select={setOwnershipCat}
-        optionKey="i18nKey"
-        // onBlur={onBlur}
-        t={t}
-      />
+      <LabelFieldPair>
+        <CardLabel className="card-label-smaller">{`${t("TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL")} :`}</CardLabel>
+        <Dropdown
+          className="form-field"
+          selected={ownershipCategory}
+          // errorStyle={formState.touched?.[config.key] && formState.errors[config.key]?.message ? true : false}
+          option={dropdownData}
+          select={setOwnershipCat}
+          optionKey="i18nKey"
+          // onBlur={onBlur}
+          t={t}
+        />
+      </LabelFieldPair>
 
-      <CardLabel>{`${t("PT_FORM3_MOBILE_NUMBER")}`}</CardLabel>
-      <MobileNumber
-        value={mobileNumber}
-        name="mobileNumber"
-        onChange={setMobileNo}
-        disable={isUpdateProperty || isEditProperty}
-        {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-      />
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_FORM3_MOBILE_NUMBER")}`}</CardLabel>
+        <div className="form-field">
+          <MobileNumber
+            value={mobileNumber}
+            name="mobileNumber"
+            onChange={setMobileNo}
+            disable={isUpdateProperty || isEditProperty}
+            {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+          />
+        </div>
+      </LabelFieldPair>
 
-      <CardLabel>{`${t("PT_OWNER_NAME")}`}</CardLabel>
-      <TextInput
-        t={t}
-        type={"text"}
-        isMandatory={false}
-        optionKey="i18nKey"
-        name="name"
-        value={name}
-        onChange={setOwnerName}
-        disable={isUpdateProperty || isEditProperty}
-        {...(validation = {
-          isRequired: true,
-          pattern: "^[a-zA-Z-.`' ]*$",
-          type: "text",
-          title: t("PT_NAME_ERROR_MESSAGE"),
-        })}
-      />
-      <CardLabel>{`${t("PT_FORM3_GENDER")}`}</CardLabel>
-      <RadioButtons
-        t={t}
-        options={menu}
-        optionsKey="code"
-        name="gender"
-        value={gender}
-        selectedOption={gender}
-        onSelect={setGenderName}
-        isDependent={true}
-        labelKey="PT_COMMON_GENDER"
-        disabled={isUpdateProperty || isEditProperty}
-      />
-     
-      <CardLabel>{`${t("PT_FORM3_GUARDIAN_NAME")}`}</CardLabel>
-      <TextInput
-        t={t}
-        type={"text"}
-        isMandatory={false}
-        optionKey="i18nKey"
-        name="fatherOrHusbandName"
-        value={fatherOrHusbandName}
-        onChange={setGuardiansName}
-        disable={isUpdateProperty || isEditProperty}
-        {...(validation = {
-          isRequired: true,
-          pattern: "^[a-zA-Z-.`' ]*$",
-          type: "text",
-          title: t("PT_NAME_ERROR_MESSAGE"),
-        })}
-      />
-      <CardLabel>{`${t("PT_FORM3_RELATIONSHIP")}`}</CardLabel>
-      <RadioButtons
-        t={t}
-        optionsKey="i18nKey"
-        name="relationship"
-        options={GuardianOptions}
-        value={relationship}
-        selectedOption={relationship}
-        onSelect={setGuardianName}
-        isDependent={true}
-        labelKey="PT_RELATION"
-        disabled={isUpdateProperty || isEditProperty}
-      />
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_OWNER_NAME")}`}</CardLabel>
+        <div className="form-field">
+          <TextInput
+            t={t}
+            type={"text"}
+            isMandatory={false}
+            optionKey="i18nKey"
+            name="name"
+            value={name}
+            onChange={setOwnerName}
+            disable={isUpdateProperty || isEditProperty}
+            {...(validation = {
+              isRequired: true,
+              pattern: "^[a-zA-Z-.`' ]*$",
+              type: "text",
+              title: t("PT_NAME_ERROR_MESSAGE"),
+            })}
+          />
+        </div>
+      </LabelFieldPair>
 
-      <CardLabel className="card-label-smaller">
-        {`${t("PT_SPECIAL_APPLICANT_CATEGORY")}`}
-      </CardLabel>
-      <Dropdown
-        className="form-field"
-        selected={Menu1?.length === 1 ? Menu1[0] : ownerType}
-        disable={Menu1?.length === 1 || editScreen}
-        option={Menu1}
-        select={setOwnerType1}
-        optionKey="i18nKey"
-        t={t}
-      />
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_FORM3_GENDER")}`}</CardLabel>
+        <div className="form-field">
+          <RadioButtons
+            t={t}
+            options={menu}
+            optionsKey="code"
+            name="gender"
+            value={gender}
+            selectedOption={gender}
+            onSelect={setGenderName}
+            isDependent={true}
+            labelKey="PT_COMMON_GENDER"
+            disabled={isUpdateProperty || isEditProperty}
+          />
+        </div>
+      </LabelFieldPair>
 
-      <CardLabel>{t("PT_CORRESPONDANCE_ADDRESS")}</CardLabel>
-      <TextArea
-        isMandatory={false}
-        optionKey="i18nKey"
-        t={t}
-        name="address"
-        onChange={(e) => setOwnerAddress(e.target.value) }
-        value={permanentAddress}
-      />
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_FORM3_GUARDIAN_NAME")}`}</CardLabel>
+        <div className="form-field">
+          <TextInput
+            t={t}
+            type={"text"}
+            isMandatory={false}
+            optionKey="i18nKey"
+            name="fatherOrHusbandName"
+            value={fatherOrHusbandName}
+            onChange={setGuardiansName}
+            disable={isUpdateProperty || isEditProperty}
+            {...(validation = {
+              isRequired: true,
+              pattern: "^[a-zA-Z-.`' ]*$",
+              type: "text",
+              title: t("PT_NAME_ERROR_MESSAGE"),
+            })}
+          />
+        </div>
+      </LabelFieldPair>
+
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_FORM3_RELATIONSHIP")}`}</CardLabel>
+        <div className="form-field">
+          <RadioButtons
+            t={t}
+            optionsKey="i18nKey"
+            name="relationship"
+            options={GuardianOptions}
+            value={relationship}
+            selectedOption={relationship}
+            onSelect={setGuardianName}
+            isDependent={true}
+            labelKey="PT_RELATION"
+            disabled={isUpdateProperty || isEditProperty}
+          />
+        </div>
+      </LabelFieldPair>
+
+      <LabelFieldPair>
+        <CardLabel className="card-label-smaller">{`${t("PT_SPECIAL_APPLICANT_CATEGORY")}`}</CardLabel>
+        <div className="form-field">
+          <Dropdown
+            selected={Menu1?.length === 1 ? Menu1[0] : ownerType}
+            disable={Menu1?.length === 1 || editScreen}
+            option={Menu1}
+            select={setOwnerType1}
+            optionKey="i18nKey"
+            t={t}
+          />
+        </div>
+      </LabelFieldPair>
+
+      <LabelFieldPair>
+        <CardLabel>{t("PT_CORRESPONDANCE_ADDRESS")}</CardLabel>
+        <div className="form-field">
+          <TextArea
+            isMandatory={false}
+            optionKey="i18nKey"
+            t={t}
+            name="address"
+            onChange={(e) => setOwnerAddress(e.target.value)}
+            value={permanentAddress}
+          />
+        </div>
+      </LabelFieldPair>
+
       <CheckBox
+        className="form-field"
         label={t("PT_COMMON_SAME_AS_PROPERTY_ADDRESS")}
         onChange={setCorrespondenceAddress}
         value={isCorrespondenceAddress}

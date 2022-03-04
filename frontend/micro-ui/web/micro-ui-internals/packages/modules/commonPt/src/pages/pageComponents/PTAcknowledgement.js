@@ -1,7 +1,7 @@
 import { Banner, Card, CardText, LinkButton, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation} from "react-router-dom";
+import { Link, useLocation, useHistory} from "react-router-dom";
 // import getPTAcknowledgementData from "../../../getPTAcknowledgementData";
 import { convertToPropertyLightWeight, convertToUpdatePropertyLightWeight } from "../utils";
 
@@ -37,6 +37,7 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
   const location = useLocation();
   const stateId = Digit.ULBService.getStateId();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const history = useHistory();  
 
   let data = location?.state?.data;
   if(onSelect) {
@@ -78,19 +79,34 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
         onSuccess,
       });
 
-      if(! createNUpdate) {
-        if(mutation.isSuccess) {
-          setTimeout(() => {
-            if(redirectUrl) {
-              history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${formdata.Property.tenantId}`);
-              return;
-            }
-          }, 3000);
+      if(!createNUpdate) {
+        if(!(mutation.isLoading && mutation.isIdle)){
+          if(mutation.isSuccess) {
+            setTimeout(() => {
+              if(redirectUrl) {
+                history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${formdata.Property.tenantId}`);
+                return;
+              }
+            }, 3000);
+          }
         }
       }
     } catch (err) {
     }
   }, []);
+
+  useEffect(()=>{
+    let tenant = userType === 'employee' ? tenantId : data?.locationDet?.city?.code;
+
+    if(mutation.isSuccess) {
+      setTimeout(() => {
+        if(redirectUrl) {
+          history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${tenant}`);
+          return;
+        } 
+      }, 3000);
+    }
+  }, [mutation]);
 
   useEffect(() => {
     if (mutation.isSuccess && createNUpdate) {

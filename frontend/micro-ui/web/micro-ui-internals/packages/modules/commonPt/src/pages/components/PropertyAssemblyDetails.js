@@ -94,55 +94,69 @@ const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, owne
 
   return (
     <div>
-      <CardLabel>{t('PT_PROP_TYPE')}</CardLabel>
-      <Dropdown
-        className="form-field"
-        selected={getPropertyTypeMenu(proptype)?.length === 1 ? getPropertyTypeMenu(proptype)[0] : BuildingType}
-        disable={getPropertyTypeMenu(proptype)?.length === 1}
-        option={getPropertyTypeMenu(proptype)}
-        select={selectBuildingType}
-        optionKey="i18nKey"
-        onBlur={onBlur}
-        t={t}
-      />
+      <LabelFieldPair>
+        <CardLabel className="card-label-smaller">{t('PT_PROP_TYPE')}</CardLabel>
+        <div class="form-field">
+          <Dropdown
+            selected={getPropertyTypeMenu(proptype)?.length === 1 ? getPropertyTypeMenu(proptype)[0] : BuildingType}
+            disable={getPropertyTypeMenu(proptype)?.length === 1}
+            option={getPropertyTypeMenu(proptype)}
+            select={selectBuildingType}
+            optionKey="i18nKey"
+            onBlur={onBlur}
+            t={t}
+            />
+        </div>
+      </LabelFieldPair>
 
-      <CardLabel>{`${t("PT_TOT_LAND_AREA")}`}</CardLabel>
-      <TextInput
-        t={t}
-        type={"number"}
-        isMandatory={false}
-        optionKey="i18nKey"
-        name="totLandArea"
-        value={floorarea}
-        onChange={setPropertyfloorarea}
-        {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_TOT_LAND_AREA_ERROR_MESSAGE") })}
-      />
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_TOT_LAND_AREA")}`}</CardLabel>
+        <div className="form-field">        
+          <TextInput
+            t={t}
+            type={"number"}
+            isMandatory={false}
+            optionKey="i18nKey"
+            name="totLandArea"
+            value={floorarea}
+            onChange={setPropertyfloorarea}
+            {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_TOT_LAND_AREA_ERROR_MESSAGE") })}
+          />
+        </div>
+      </LabelFieldPair>
 
-      <CardLabel>{`${t("PT_TOT_CONSTRUCTION_AREA")}`}</CardLabel>
-      <TextInput
-        t={t}
-        type={"number"}
-        isMandatory={false}
-        optionKey="i18nKey"
-        name="totConstructionArea"
-        value={constructionArea}
-        onChange={setPropertyConsArea}
-        {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_TOT_CONSTRUCTION_AREA_ERROR_MESSAGE") })}
-      />
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_TOT_CONSTRUCTION_AREA")}`}</CardLabel>
+        <div className="form-field">        
+          <TextInput
+            t={t}
+            type={"number"}
+            isMandatory={false}
+            optionKey="i18nKey"
+            name="totConstructionArea"
+            value={constructionArea}
+            onChange={setPropertyConsArea}
+            {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_TOT_CONSTRUCTION_AREA_ERROR_MESSAGE") })}
+          />
+        </div>
+      </LabelFieldPair>
 
-      <CardLabel>{t("PT_ASSESMENT_INFO_USAGE_TYPE")}</CardLabel>
-      <Dropdown
-        className="form-field"
-        selected={usageCategoryMajor}
-        disable={usageCategoryMajorMenu(usagecat)?.length === 1}
-        option={usageCategoryMajorMenu(usagecat)}
-        select={(e) => {
-          selectPropertyPurpose(e);
-        }}
-        optionKey="i18nKey"
-        onBlur={onBlur}
-        t={t}
-      />
+      <LabelFieldPair>
+        <CardLabel>{t("PT_ASSESMENT_INFO_USAGE_TYPE")}</CardLabel>
+        <div className="form-field">
+          <Dropdown
+            selected={usageCategoryMajor}
+            disable={usageCategoryMajorMenu(usagecat)?.length === 1}
+            option={usageCategoryMajorMenu(usagecat)}
+            select={(e) => {
+              selectPropertyPurpose(e);
+            }}
+            optionKey="i18nKey"
+            onBlur={onBlur}
+            t={t}
+          />
+        </div>
+      </LabelFieldPair>
     </div>
   );
 };
