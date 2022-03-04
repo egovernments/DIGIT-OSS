@@ -5,7 +5,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import { newConfig } from "../../config/Create/config";
 import _, { create, unset } from "lodash";
 
-const CreatePropertyForm = ({ onSelect, userType }) => {
+const CreatePropertyForm = ({ onSelect, userType, redirectUrl }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const tenants = Digit.Hooks.pt.useTenants();
   const { t } = useTranslation();
@@ -38,7 +38,7 @@ const CreatePropertyForm = ({ onSelect, userType }) => {
       onSelect('cptNewProperty', { property: formValue });
     } else {
       if(userType === 'employee') {
-        history.push(`${match.path}/save-property`, {
+        history.push(`${match.path}/save-property?redirectToUrl=${redirectUrl}`, {
           data: formValue,
         });
       } else {

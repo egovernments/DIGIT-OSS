@@ -12,8 +12,8 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBl
   allCities = allCities ? allCities : Digit.Hooks.tl.useTenants();
   const userInfo = Digit.UserService.getUser()?.info;
   const cityId = userInfo?.tenantId;
-  const cityName = 'TENANT_TENANTS_' + userInfo?.tenantId.replace('.','_');
-  const cityObj = 'employee' ? {code: cityId, name: cityName} : Digit.SessionStorage.get('CITIZEN.COMMON.HOME.CITY');
+  const cityName = 'TENANT_TENANTS_' + userInfo?.tenantId.replace('.','_').toUpperCase();
+  const cityObj = 'employee' ? {code: cityId, name: t(cityName), i18nKey: cityName} : Digit.SessionStorage.get('CITIZEN.COMMON.HOME.CITY');
 
   const [cityCode, setCityCode] = useState(cityObj);
   const [locality, setLocality] = useState(formData?.locality);
@@ -24,7 +24,7 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBl
   let index = 0;
   let locationDet = formData.locationDet;
   const locationDetStep = { ...locationDet, cityCode, locality, houseDoorNo, buildingColonyName, landmarkName };
-  
+
   useEffect(() => {
     setCity(cityObj);
   }, []);
@@ -56,64 +56,81 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBl
 
   return (
     <div>
-      <CardLabel>{t('PT_PROP_CITY')}</CardLabel>
-      <Dropdown
-        className="form-field"
-        selected={cityCode}
-        // disable={true}
-        option={allCities}
-        select={setCity}
-        optionKey="code"
-        // onBlur={props.onBlur}
-        t={t}
-      />
+      <LabelFieldPair>
+        <CardLabel>{t('PT_PROP_CITY')}</CardLabel>
+        <Dropdown
+          className="form-field"
+          selected={cityCode}
+          // disable={true}
+          option={allCities}
+          select={setCity}
+          optionKey="code"
+          // onBlur={props.onBlur}
+          t={t}
+        />
+      </LabelFieldPair>
 
-      <CardLabel>{t("PT_PROP_LOCALITY")}</CardLabel>
-      <Localities
-        selectLocality={setLocality1}
-        tenantId={cityCode?.code}
-        boundaryType="revenue"
-        keepNull={false}
-        optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10" }}
-        selected={locality}
-        disable={!cityCode?.code}
-        disableLoader={true}
-      />
+      <LabelFieldPair>
+        <CardLabel>{t("PT_PROP_LOCALITY")}</CardLabel>
+        <div className="form-field">
+          <Localities
+            selectLocality={setLocality1}
+            tenantId={cityCode?.code}
+            boundaryType="revenue"
+            keepNull={false}
+            optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10" }}
+            selected={locality}
+            disable={!cityCode?.code}
+            disableLoader={true}
+            />
+        </div>
+      </LabelFieldPair>
 
-      <CardLabel>{`${t("PT_HOUSE_DOOR_NO")}`}</CardLabel>
-      <TextInput
-        t={t}
-        type={"number"}
-        isMandatory={false}
-        optionKey="i18nKey"
-        name="houseDoorNo"
-        value={houseDoorNo}
-        onChange={setHouseDoorNumb}
-        {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_HOUSE_DOOR_NO_ERROR_MESSAGE") })}
-      />
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_HOUSE_DOOR_NO")}`}</CardLabel>
+        <div className="form-field">
+          <TextInput
+            t={t}
+            type={"number"}
+            isMandatory={false}
+            optionKey="i18nKey"
+            name="houseDoorNo"
+            value={houseDoorNo}
+            onChange={setHouseDoorNumb}
+            {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_HOUSE_DOOR_NO_ERROR_MESSAGE") })}
+            />
+        </div>
+      </LabelFieldPair>
 
-      <CardLabel>{`${t("PT_BUILDING_COLONY_NAME")}`}</CardLabel>
-      <TextInput
-        t={t}
-        type={"text"}
-        isMandatory={false}
-        optionKey="i18nKey"
-        name="buildingColonyName"
-        value={buildingColonyName}
-        onChange={setBuildingColony}
-      />
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_BUILDING_COLONY_NAME")}`}</CardLabel>
+        <div className="form-field">
+          <TextInput
+            t={t}
+            type={"text"}
+            isMandatory={false}
+            optionKey="i18nKey"
+            name="buildingColonyName"
+            value={buildingColonyName}
+            onChange={setBuildingColony}
+            />
+        </div>
+      </LabelFieldPair>
 
-      <CardLabel>{`${t("PT_LANDMARK_NAME")}`}</CardLabel>
-      <TextInput
-        t={t}
-        type={"text"}
-        isMandatory={false}
-        optionKey="i18nKey"
-        name="landmarkName"
-        value={landmarkName}
-        onChange={setLandmark}
-      />
-     
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_LANDMARK_NAME")}`}</CardLabel>
+        <div className="form-field">
+          <TextInput
+            t={t}
+            type={"text"}
+            isMandatory={false}
+            optionKey="i18nKey"
+            name="landmarkName"
+            value={landmarkName}
+            onChange={setLandmark}
+            />
+        </div>
+      </LabelFieldPair>
     </div>
   );
 };
