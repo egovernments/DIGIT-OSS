@@ -92,8 +92,8 @@ public class AdvanceTableChartResponseHandler implements IResponseHandler {
             });
 
         });
-        mappings.entrySet().stream().parallel().forEach(plotMap -> {
-            List<Plot> plotList = plotMap.getValue().values().stream().parallel().collect(Collectors.toList());
+        mappings.entrySet().stream().forEach(plotMap -> {
+            List<Plot> plotList = plotMap.getValue().values().stream().collect(Collectors.toList());
             //filter out data object with all zero data.
             List<Plot> filterPlot = plotList.stream().filter(c -> (!c.getName().equalsIgnoreCase(SERIAL_NUMBER) && !c.getName().equalsIgnoreCase(plotLabel) && c.getValue() != 0.0)).collect(Collectors.toList());
 
