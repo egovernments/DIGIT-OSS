@@ -100,7 +100,7 @@ const CustomPieChart = ({ dataKey = "value", data,setChartDenomination }) => {
           value?.denomination,
           false
         )}`}</p>
-        <p>{`(${Number(((payload?.[0]?.value) / (response?.responseData?.data?.[0]?.headerValue)) * 100).toFixed(2) }%)`}</p>
+        <p>{`(${Number(((payload?.[0]?.value) / (response?.responseData?.data?.[0]?.headerValue)) * 100).toFixed(1) }%)`}</p>
       </div>
     );
   };
