@@ -259,9 +259,12 @@ public class NotificationUtil {
 
         List<EmailRequest> emailRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-            String customizedMsg = "";
+            String customizedMsg = message;
             if(message.contains(NOTIFICATION_EMAIL))
-                customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
+                customizedMsg = customizedMsg.replace(NOTIFICATION_EMAIL, entryset.getValue());
+
+            if(StringUtils.isEmpty(entryset.getValue()))
+                log.info("Email ID is empty, no notification will be sent ");
 
             String subject = "";
             String body = customizedMsg;
@@ -292,10 +295,11 @@ public class NotificationUtil {
         Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
         List<EmailRequest> emailRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-            String customizedMsg = "";
             String message = mobileNumberToMsg.get(entryset.getKey());
+            String customizedMsg = message;
+
             if(message.contains(NOTIFICATION_EMAIL))
-                customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
+                customizedMsg = customizedMsg.replace(NOTIFICATION_EMAIL, entryset.getValue());
 
             //removing lines to match Email Templates
             if(message.contains(PT_TAX_PARTIAL))
