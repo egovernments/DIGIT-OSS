@@ -5,7 +5,7 @@ import { BackButton, Loader, PrivateRoute, BreadCrumb } from "@egovernments/digi
 import DashBoard from "./pages";
 import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom";
 import Overview from "./pages/Overview";
-import DSSCard from "./components/DSSCard";
+import {DSSCard,NDSSCard} from "./components/DSSCard";
 import DrillDown from "./pages/DrillDown";
 
 const DssBreadCrumb = ({ location }) => {
@@ -68,7 +68,7 @@ const DSSModule = ({ stateCode, userType, tenants }) => {
 const componentsToRegister = {
   DSSModule,
   DSSCard,
-  NDSSCard:DSSCard
+  NDSSCard
 };
 
 export const initDSSComponents = () => {

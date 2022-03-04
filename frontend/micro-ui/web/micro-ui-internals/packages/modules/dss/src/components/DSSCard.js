@@ -20,26 +20,48 @@ export const checkCurrentScreen = () => {
   return nationalURLS.some((e) => moduleName?.includes(e));
 };
 
-const DSSCard = () => {
-  const STADMIN = Digit.UserService.hasAccess("STADMIN");
+const NDSSCard = () => {
   const NATADMIN = Digit.UserService.hasAccess("NATADMIN");
   const { t } = useTranslation();
 
-  if (!STADMIN && !NATADMIN) {
+  if (!NATADMIN) {
     return null;
   }
 
-  let links = Object.values(nationalScreenURLs).filter(ele=>ele[NATADMIN?"nActive":"active"]==true).map((obj) => ({
+  let links = Object.values(nationalScreenURLs).filter(ele=>ele["nActive"]==true).map((obj) => ({
     label: t(obj?.label),
-    link: `/digit-ui/employee/dss/dashboard/${NATADMIN ? obj?.key : obj?.stateKey}`,
+    link: `/digit-ui/employee/dss/dashboard/${obj?.key}`,
   }));
 
   const propsForModuleCard = {
     Icon: <EventsIconSolid />,
-    moduleName: NATADMIN ? t("ACTION_TEST_NATDASHBOARD") : t("ES_TITLE_DSS"),
+    moduleName:  t("ACTION_TEST_NATDASHBOARD"),
     links: [...links],
   };
   return <EmployeeModuleCard {...propsForModuleCard} />;
 };
 
-export default DSSCard;
+
+
+const DSSCard = () => {
+  const STADMIN = Digit.UserService.hasAccess("STADMIN");
+  const { t } = useTranslation();
+
+  if (!STADMIN ) {
+    return null;
+  }
+
+  let links = Object.values(nationalScreenURLs).filter(ele=>ele["active"]==true).map((obj) => ({
+    label: t(obj?.label),
+    link: `/digit-ui/employee/dss/dashboard/${obj?.stateKey}`,
+  }));
+
+  const propsForModuleCard = {
+    Icon: <EventsIconSolid />,
+    moduleName:  t("ES_TITLE_DSS"),
+    links: [...links],
+  };
+  return <EmployeeModuleCard {...propsForModuleCard} />;
+};
+
+export { DSSCard,NDSSCard};
