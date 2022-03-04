@@ -251,16 +251,16 @@ public class EdcrRestService {
     }
 
     public void pushDataToIndexer(Object data, String topicName) {
-		try {
-			restTemplate = new RestTemplate();
-			StringBuilder uri = new StringBuilder(indexerHost).append(egovIndexerUrl);
-			LOG.info("URL created: " + uri.toString());
-			Object postForObject = restTemplate.postForObject(uri.toString(), data, Object.class, topicName);
-			LOG.info("Data pushed in topic->edcr-create-application.\n Data pushed=> \n"+data);
-		} catch (RestClientException e) {
-			LOG.error("ERROR occurred while trying to push the data to indexer : ", e);
-		}
-	}
+        try {
+            restTemplate = new RestTemplate();
+            StringBuilder uri = new StringBuilder(indexerHost).append(egovIndexerUrl);
+            LOG.info("URL created: " + uri.toString());
+            restTemplate.postForObject(uri.toString(), data, Object.class, topicName);
+            LOG.info("Data pushed in topic->edcr-create-application.\n Data pushed=> \n" + data);
+        } catch (RestClientException e) {
+            LOG.error("ERROR occurred while trying to push the data to indexer : ", e);
+        }
+    }
 
 	public EdcrIndexData setEdcrIndexData(EdcrApplication edcrApplication, EdcrApplicationDetail edcrApplnDtl) {
 
@@ -592,10 +592,9 @@ public class EdcrRestService {
         if (edcrRequest != null && edcrRequest.getTenantId().equalsIgnoreCase(stateCity.getCode())) {
             final Map<String, String> params = new ConcurrentHashMap<>();
 
-            StringBuilder queryStr = new StringBuilder();
-            searchAtStateTenantLevel(edcrRequest, userInfo, userId, onlyTenantId, params, queryStr, isStakeholder);
-            LOG.info(queryStr.toString());
-            final Query query = getCurrentSession().createSQLQuery(queryStr.toString()).setFirstResult(offset)
+            String queryString = searchAtStateTenantLevel(edcrRequest, userInfo, userId, onlyTenantId, params, isStakeholder);
+            LOG.info(queryString);
+            final Query query = getCurrentSession().createSQLQuery(queryString).setFirstResult(offset)
                     .setMaxResults(limit);
             for (final Map.Entry<String, String> param : params.entrySet())
                 query.setParameter(param.getKey(), param.getValue());
@@ -673,10 +672,9 @@ public class EdcrRestService {
         if (edcrRequest != null && edcrRequest.getTenantId().equalsIgnoreCase(stateCity.getCode())) {
             final Map<String, String> params = new ConcurrentHashMap<>();
 
-            StringBuilder queryStr = new StringBuilder();
-            searchAtStateTenantLevel(edcrRequest, userInfo, userId, onlyTenantId, params, queryStr, isStakeholder);
+            String queryString = searchAtStateTenantLevel(edcrRequest, userInfo, userId, onlyTenantId, params, isStakeholder);
 
-            final Query query = getCurrentSession().createSQLQuery(queryStr.toString());
+            final Query query = getCurrentSession().createSQLQuery(queryString);
             for (final Map.Entry<String, String> param : params.entrySet())
                 query.setParameter(param.getKey(), param.getValue());
             return query.list().size();
@@ -687,10 +685,13 @@ public class EdcrRestService {
 
     }
 
-    private void searchAtStateTenantLevel(final EdcrRequest edcrRequest, UserInfo userInfo, String userId, boolean onlyTenantId,
-            final Map<String, String> params, StringBuilder queryStr, boolean isStakeholder) {
+    private String searchAtStateTenantLevel(final EdcrRequest edcrRequest, UserInfo userInfo, String userId, boolean onlyTenantId,
+            final Map<String, String> params, boolean isStakeholder) {
+        StringBuilder queryStr = new StringBuilder();
         Map<String, String> tenants = tenantUtils.tenantsMap();
         Iterator<Map.Entry<String, String>> tenantItr = tenants.entrySet().iterator();
+        String orderByWrapperDesc = "select * from ({}) as result order by result.applicationDate desc";
+        String orderByWrapperAsc = "select * from ({}) as result order by result.applicationDate asc";
         while (tenantItr.hasNext()) {
             Map.Entry<String, String> value = tenantItr.next();
             queryStr.append("(select '")
@@ -776,6 +777,15 @@ public class EdcrRestService {
                 queryStr.append(" union ");
             }
         }
+        String query;
+        String orderBy = "desc";
+        if (isNotBlank(edcrRequest.getOrderBy()))
+            orderBy = edcrRequest.getOrderBy();
+        if (orderBy.equalsIgnoreCase("asc"))
+            query = orderByWrapperAsc.replace("{}", queryStr);
+        else
+            query = orderByWrapperDesc.replace("{}", queryStr);
+        return query;
     }
 
     private Criteria getCriteriaofSingleTenant(final EdcrRequest edcrRequest, UserInfo userInfo, String userId,
