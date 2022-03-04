@@ -27,7 +27,7 @@ const defaultImage =
   "XZOvia7VujatUwVTrIt+Q/Csc7Tuhe+BOakT10b4TuoiiJjvgU9emTO42PwEfBa+cuodKkuf42DXr1D3JpXz73Hnn0j10evHKe+nufgfUm+7B84sX9FfdEzXux2DBpWuKokkCqN/5pa/8pmvn" +
   "L+RGKCddCGmatiPyPB/+ekO/M/q/7uvbt22kTt3zEnXPzCV13T3Gel4/6NduDu66xRvlPNkM1RjjxUdv+4WhGx6TftD19Q/dfzpwcHO+rE3fAAAAAElFTkSuQmCC";
 
-const UserProfile = ({ stateCode, userType }) => {
+const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const history = useHistory();
   const { t } = useTranslation();
   const stateId = Digit.ULBService.getStateId();
@@ -35,12 +35,13 @@ const UserProfile = ({ stateCode, userType }) => {
   const userInfo = Digit.UserService.getUser()?.info || {};
 
   const [userDetails, setUserDetails] = useState(null);
-  const [name, setName] = useState(userInfo?.name);
-  const [email, setEmail] = useState(userInfo?.emailId);
+  const [name, setName] = useState(userInfo?.name ? userInfo.name : "");
+  const [email, setEmail] = useState(userInfo?.emailId ? userInfo.emailId : "");
   const [gender, setGender] = useState(userDetails?.gender);
-  const [mobileNumber, setMobileNo] = useState(userInfo?.mobileNumber);
+  const [city, setCity] = useState(userInfo?.permanentCity ? userInfo.permanentCity : cityDetails.name)
+  const [mobileNumber, setMobileNo] = useState(userInfo?.mobileNumber ? userInfo.mobileNumber : "");
   const [profilePic, setProfilePic] = useState(null);
-  const [profileImg, setProfileImg] = useState(""); // To-do: pass placeholder image
+  const [profileImg, setProfileImg] = useState("");
   const [openUploadSlide, setOpenUploadSide] = useState(false);
   const [changepassword, setChangepassword] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
@@ -66,12 +67,12 @@ const UserProfile = ({ stateCode, userType }) => {
     setProfileImg(thumbs?.at(thumbs?.length - 1));
   }, [userDetails !== null]);
 
-  const showToast =(errorType, message)=>{
+  const showToast = (errorType, message) => {
     setToast({ key: errorType, action: message });
     setTimeout(() => {
       setToast(null);
     }, 5000);
-  }
+  };
 
   let validation = {};
   const editScreen = false; // To-do: Deubug and make me dynamic or remove if not needed
@@ -94,6 +95,7 @@ const UserProfile = ({ stateCode, userType }) => {
       gender: gender?.value,
       emailId: email,
       photo: profilePic,
+      // permanentCity: city,
     };
 
     if (!new RegExp(/^([a-zA-Z ])*$/).test(name) || name === "") {
@@ -120,6 +122,23 @@ const UserProfile = ({ stateCode, userType }) => {
     }
 
     const { responseInfo, user } = await Digit.UserService.updateUser(requestData, stateCode);
+
+    if (responseInfo && responseInfo.status === "200") {
+      const user = Digit.UserService.getUser();
+
+      if (user) {
+        Digit.UserService.setUser({ 
+          ...user, 
+          info: { 
+            ...user.info, 
+            name, 
+            mobileNumber ,
+            emailId: email, 
+            permanentCity: city,
+          } 
+        });
+      }
+    }
 
     if (currentPassword && newPassword && confirmPassword) {
       if (newPassword === confirmPassword) {
@@ -189,7 +208,7 @@ const UserProfile = ({ stateCode, userType }) => {
                 alignItems: "center",
                 display: "",
                 width: "97%",
-                height: "20%",
+                height: "200px",
                 backgroundColor: "#EEEEEE",
                 margin: "2%",
                 padding: "20px",
@@ -198,24 +217,34 @@ const UserProfile = ({ stateCode, userType }) => {
               <div>
                 {!profileImg || profileImg === "" ? (
                   <img
-                    style={{ margin: "auto", borderRadius: "300px", justifyContent: "center", padding: "3%;", height: "150px", width: "150px" }}
+                    style={{ margin: "auto", 
+                    borderRadius: "300px", 
+                    justifyContent: "center", 
+                    padding: "3%;", height: "114px", 
+                    width: "114px",
+                    position: "absolute",
+                    left: "50%",
+                    transform:"translate(-50%,-50%)",
+                    top:"50%"}}
                     src={defaultImage}
                   />
                 ) : (
                   <img
                     style={{
-                      display: "block",
-                      marginRight: "auto",
-                      marginLeft: "auto",
-                      borderRadius: "300px",
-                      justifyContent: "center",
-                      height: "150px",
-                      width: "150px",
+                      margin: "auto", 
+                      borderRadius: "300px", 
+                      justifyContent: "center", 
+                      padding: "3%;", height: "114px", 
+                      width: "114px",
+                      position: "absolute",
+                      left: "50%",
+                      transform:"translate(-50%,-50%)",
+                      top:"50%"
                     }}
                     src={profileImg}
                   />
                 )}
-                <button style={{ position: "absolute", bottom: "3%", right: "50%", left: "45%", cursor: "pointer" }} onClick={onClickAddPic}>
+                <button style={{ position: "absolute",left: "50%",bottom: "18px",transform:"translateX(-50%)"}} onClick={onClickAddPic}>
                   <CameraIcon />
                 </button>
               </div>
@@ -279,12 +308,13 @@ const UserProfile = ({ stateCode, userType }) => {
                 style={{
                   marginTop: "2px",
                   backgroundColor: "#F47738",
-                  width: "328px",
+                  width: "100%",
                   height: "40px",
                   float: "right",
                   // marginRight: "31px",
                   color: "white",
                   borderBottom: "1px solid black",
+                  flex:"1"
                 }}
               >
                 Save
@@ -303,6 +333,7 @@ const UserProfile = ({ stateCode, userType }) => {
                 justifyContent: "center",
                 alignItems: "center",
                 margin: "2%",
+                position:"relative"
               }}
             >
               <div
@@ -314,12 +345,16 @@ const UserProfile = ({ stateCode, userType }) => {
                   height: "328px",
                   backgroundColor: "#EEEEEE",
                   paddingTop: "80px",
+                  position:"relative"
                 }}
               >
                 <div>
                   {!profileImg || profileImg === "" ? (
                     <img
-                      style={{ margin: "auto", borderRadius: "50%", justifyContent: "center", height: "150px", width: "150px" }}
+                      style={{ margin: "auto", borderRadius: "50%", justifyContent: "center", height: "150px", width: "150px",  position: "absolute",
+                      left: "50%",
+                      transform:"translate(-50%,-50%)",
+                      top:"50%" }}
                       src={defaultImage}
                     />
                   ) : (
@@ -332,11 +367,15 @@ const UserProfile = ({ stateCode, userType }) => {
                         justifyContent: "center",
                         width: "150px",
                         height: "150px",
+                        position: "absolute",
+                        left: "50%",
+                        transform:"translate(-50%,-50%)",
+                        top:"50%"
                       }}
                       src={profileImg}
                     />
                   )}
-                  <button style={{ position: "relative", left: "147.33px", right: "8.33%", top: "12.5%", bottom: "12.5%" }} onClick={onClickAddPic}>
+                  <button style={{  position: "absolute",left: "50%",bottom: "64px",transform:"translateX(-50%)"}} onClick={onClickAddPic}>
                     <CameraIcon />
                   </button>
                 </div>
@@ -379,6 +418,45 @@ const UserProfile = ({ stateCode, userType }) => {
               </LabelFieldPair>
 
               <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
+                <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_GENDER")}`}</CardLabel>
+                <Dropdown
+                  style={{ width: "640px", height: "40px" }}
+                  className="form-field"
+                  selected={gender?.length === 1 ? gender[0] : gender}
+                  disable={gender?.length === 1 || editScreen}
+                  option={menu}
+                  select={setGenderName}
+                  value={gender}
+                  optionKey="code"
+                  t={t}
+                  name="gender"
+                />
+              </LabelFieldPair>
+
+              <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
+                <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_CITY")}`}</CardLabel>
+                <div className="field">
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    name="city"
+                    style={{ width: "640px", height: "40px" }}
+                    value={city}
+                    onChange={(e)=>setCity(e.target.value)}
+                    placeholder="Enter Your City Name"
+                    {...(validation = {
+                      isRequired: true,
+                      // pattern: "^[a-zA-Z-.`' ]*$",
+                      type: "text",
+                      title: t("CORE_COMMON_PROFILE_CITY_ERROR_MESSAGE"),
+                    })}
+                    disable={true}
+                  />
+                </div>
+              </LabelFieldPair>
+
+              <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
                 <CardLabel>{`${t("CORE_COMMON_PROFILE_MOBILE_NUMBER")}*`}</CardLabel>
                 <MobileNumber
                   value={mobileNumber}
@@ -386,7 +464,7 @@ const UserProfile = ({ stateCode, userType }) => {
                   placeholder="Enter a valid Mobile No."
                   style={{ width: "600px", height: "40px" }}
                   onChange={(value) => setMobileNo(value)}
-                  // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                  disable={true}
                   {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID") }}
                 />
               </LabelFieldPair>
@@ -500,7 +578,13 @@ const UserProfile = ({ stateCode, userType }) => {
         )}
       </div>
       {openUploadSlide == true ? (
-        <UploadDrawer setProfilePic={setFileStoreId} closeDrawer={closeFileUploadDrawer} userType={userType} removeProfilePic={removeProfilePic} showToast={showToast}/>
+        <UploadDrawer
+          setProfilePic={setFileStoreId}
+          closeDrawer={closeFileUploadDrawer}
+          userType={userType}
+          removeProfilePic={removeProfilePic}
+          showToast={showToast}
+        />
       ) : (
         ""
       )}

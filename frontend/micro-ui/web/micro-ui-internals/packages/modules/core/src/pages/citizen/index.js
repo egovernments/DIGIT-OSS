@@ -99,7 +99,7 @@ const Home = ({
           </Route>
 
           <Route path={`${path}/user/profile`}>
-            <UserProfile stateCode={stateCode} userType={'citizen'} />
+            <UserProfile stateCode={stateCode} userType={'citizen'} cityDetails={cityDetails}/>
           </Route>
 
           <ErrorBoundary>

@@ -62,7 +62,7 @@ const EmployeeApp = ({
                 <ChangePassword />
               </Route>
               <Route path={`${path}/user/profile`}>
-                <UserProfile stateCode={stateCode} userType={"employee"} />
+                <UserProfile stateCode={stateCode} userType={"employee"} cityDetails={cityDetails}/>
              </Route>
               <Route path={`${path}/user/language-selection`}>
                 <LanguageSelection />
