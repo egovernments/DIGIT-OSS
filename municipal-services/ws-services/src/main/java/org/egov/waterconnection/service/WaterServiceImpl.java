@@ -167,7 +167,7 @@ public class WaterServiceImpl implements WaterService {
 				waterConnectionRequest.getWaterConnection().getApplicationNo(),
 				waterConnectionRequest.getWaterConnection().getTenantId(),
 				config.getBusinessServiceValue());
-		enrichmentService.enrichUpdateWaterConnection(waterConnectionRequest);
+		enrichmentService.enrichUpdateWaterConnection(waterConnectionRequest, searchResult);
 		actionValidator.validateUpdateRequest(waterConnectionRequest, businessService, previousApplicationStatus);
 		waterConnectionValidator.validateUpdate(waterConnectionRequest, searchResult, WCConstants.UPDATE_APPLICATION);
 		userService.updateUser(waterConnectionRequest, searchResult);
@@ -227,7 +227,7 @@ public class WaterServiceImpl implements WaterService {
 		String previousApplicationStatus = workflowService.getApplicationStatus(waterConnectionRequest.getRequestInfo(),
 				waterConnectionRequest.getWaterConnection().getApplicationNo(),
 				waterConnectionRequest.getWaterConnection().getTenantId(), config.getModifyWSBusinessServiceName());
-		enrichmentService.enrichUpdateWaterConnection(waterConnectionRequest);
+		enrichmentService.enrichUpdateWaterConnection(waterConnectionRequest, searchResult);
 		actionValidator.validateUpdateRequest(waterConnectionRequest, businessService, previousApplicationStatus);
 		userService.updateUser(waterConnectionRequest, searchResult);
 		waterConnectionValidator.validateUpdate(waterConnectionRequest, searchResult, WCConstants.MODIFY_CONNECTION);

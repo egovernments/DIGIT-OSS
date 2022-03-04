@@ -182,10 +182,13 @@ public class EnrichmentService {
 	 * 
 	 * @param waterConnectionRequest WaterConnectionRequest Object
 	 */
-	public void enrichUpdateWaterConnection(WaterConnectionRequest waterConnectionRequest) {
+	public void enrichUpdateWaterConnection(WaterConnectionRequest waterConnectionRequest, WaterConnection searchResult) {
 		AuditDetails auditDetails = waterServicesUtil
 				.getAuditDetails(waterConnectionRequest.getRequestInfo().getUserInfo().getUuid(), false);
+		auditDetails.setCreatedBy(searchResult.getAuditDetails().getCreatedBy());
+		auditDetails.setCreatedTime(searchResult.getAuditDetails().getCreatedTime());
 		waterConnectionRequest.getWaterConnection().setAuditDetails(auditDetails);
+
 		WaterConnection connection = waterConnectionRequest.getWaterConnection();
 		if (!CollectionUtils.isEmpty(connection.getDocuments())) {
 			connection.getDocuments().forEach(document -> {

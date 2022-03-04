@@ -169,7 +169,7 @@ public class SewerageServiceImpl implements SewerageService {
 				sewerageConnectionRequest.getRequestInfo());
 		SewerageConnection searchResult = getConnectionForUpdateRequest(
 				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
-		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
+		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest, searchResult);
 		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
 		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
 		calculationService.calculateFeeAndGenerateDemand(sewerageConnectionRequest, property);
@@ -235,7 +235,7 @@ public class SewerageServiceImpl implements SewerageService {
 				sewerageConnectionRequest.getRequestInfo());
 		SewerageConnection searchResult = getConnectionForUpdateRequest(
 				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
-		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
+		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest, searchResult);
 		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
 		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
 		userService.updateUser(sewerageConnectionRequest, searchResult);

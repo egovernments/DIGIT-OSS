@@ -188,10 +188,13 @@ public class EnrichmentService {
 	 * @param sewerageConnectionRequest
 	 *            - Sewerage Connection Request Object
 	 */
-	public void enrichUpdateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {
+	public void enrichUpdateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest, SewerageConnection searchResult) {
 		AuditDetails auditDetails = sewerageServicesUtil
 				.getAuditDetails(sewerageConnectionRequest.getRequestInfo().getUserInfo().getUuid(), false);
+		auditDetails.setCreatedBy(searchResult.getAuditDetails().getCreatedBy());
+		auditDetails.setCreatedTime(searchResult.getAuditDetails().getCreatedTime());
 		sewerageConnectionRequest.getSewerageConnection().setAuditDetails(auditDetails);
+
 		SewerageConnection connection = sewerageConnectionRequest.getSewerageConnection();
 		if (!CollectionUtils.isEmpty(connection.getDocuments())) {
 			connection.getDocuments().forEach(document -> {
