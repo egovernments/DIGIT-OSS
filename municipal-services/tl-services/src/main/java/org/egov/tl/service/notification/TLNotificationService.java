@@ -188,7 +188,7 @@ public class TLNotificationService {
 			if(message==null || message == "") continue;
 
 				license.getTradeLicenseDetail().getOwners().forEach(owner -> {
-					if (owner.getMobileNumber() != null)
+					if (owner.getMobileNumber() != null && !StringUtils.isEmpty(owner.getEmailId()))
 						mapOfPhnoAndEmail.put(owner.getMobileNumber(), owner.getEmailId());
 				});
 
