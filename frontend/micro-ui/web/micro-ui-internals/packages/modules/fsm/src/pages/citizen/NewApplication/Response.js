@@ -82,7 +82,7 @@ const Response = ({ data, onSuccess }) => {
           pitDetail,
           source,
           sanitationtype: pitType?.code,
-          paymentPreference: selectPaymentPreference?.code
+          paymentPreference: selectPaymentPreference ? selectPaymentPreference.code : 'POST_PAY'
         },
         workflow: null,
       };
