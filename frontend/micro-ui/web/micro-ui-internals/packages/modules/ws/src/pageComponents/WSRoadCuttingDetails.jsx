@@ -2,19 +2,39 @@ import { CardLabel, Dropdown, LabelFieldPair, LinkButton, TextInput } from "@ego
 import React from "react";
 import { Link } from "react-router-dom";
 
-const WSRoadCuttingDetails = ({ t, userType }) => {
+const WSRoadCuttingDetails = ({ t, config, userType, formData }) => {
+  const [roadCuttingDetails, setRoadCuttingDetails] = React.useState({
+    roadType: { code: "", value: "", i18nKey: "" },
+    area: "",
+  });
+
+  React.useEffect(() => {});
+
   return (
     <React.Fragment>
       <LabelFieldPair>
         <CardLabel className="card-label-smaller">{`${t(`WS_ROAD_TYPE`)}:`}</CardLabel>
         <div className="field">
-          <Dropdown></Dropdown>
+          <Dropdown
+            key={config.key}
+            t={t}
+            selected={roadCuttingDetails.roadType}
+            select={(value) => {
+              setRoadCuttingDetails({ ...roadCuttingDetails, roadType: value });
+            }}
+          ></Dropdown>
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
         <CardLabel className="card-label-smaller">{`${t(`WS_AREA_SQ_FT`)}:`}</CardLabel>
         <div className="field">
-          <TextInput></TextInput>
+          <TextInput
+            key={config.key}
+            value={roadCuttingDetails.area}
+            onChange={(ev) => {
+              setRoadCuttingDetails({ ...roadCuttingDetails, area: ev.target.value });
+            }}
+          ></TextInput>
         </div>
       </LabelFieldPair>
       <Link to={`/digit-ui/employee/commonpt/search?redirectToUrl=${""}`}>

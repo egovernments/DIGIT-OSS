@@ -91,7 +91,7 @@ export const newConfig = [{
         head: "",
         body: [{
           type: "component",
-          key: "ws-info-label",
+          key: "InfoLabel",
           component: "WSInfoLabel",
           withoutLabel: true,
         }]
@@ -100,7 +100,7 @@ export const newConfig = [{
         head: "WS_PT_DETAILS",
         body: [{
           type: "component",
-          key: "ws-property-details",
+          key: "PropertyDetails",
           component: "WSPropertyDetails",
           withoutLabel: true,
         }]
@@ -109,7 +109,7 @@ export const newConfig = [{
         head: "WS_CONN_HOLDER_DETAILS",
         body: [{
           type: "component",
-          key: "ws-connection-holder-details",
+          key: "ConnectionHolderDetails",
           component: "WSConnectionHolder",
           withoutLabel: true,
         }]
@@ -118,7 +118,7 @@ export const newConfig = [{
         head: "WS_CONN_DETAILS",
         body: [{
           type: "component",
-          key: "ws-connection-details",
+          key: "ConnectionDetails",
           component: "WSConnectionDetails",
           withoutLabel: true,
         }]
@@ -127,7 +127,7 @@ export const newConfig = [{
         head: "WS_PLUMBER_DETAILS",
         body: [{
           type: "component",
-          key: "ws-plumber-details",
+          key: "PlumberDetails",
           component: "WSPlumberDetails",
           withoutLabel: true,
         }]
@@ -136,7 +136,7 @@ export const newConfig = [{
         head: "WS_ROAD_CUTT_DETAILS",
         body: [{
           type: "component",
-          key: "ws-plumber-details",
+          key: "RoadCuttingDetails",
           component: "WSRoadCuttingDetails",
           withoutLabel: true,
         }]
@@ -145,7 +145,7 @@ export const newConfig = [{
         head: "WS_ACTIV_DETAILS",
         body: [{
           type: "component",
-          key: "ws-activation-details",
+          key: "ActivationDetails",
           component: "WSActivationDetails",
           withoutLabel: true,
         }]
@@ -154,7 +154,7 @@ export const newConfig = [{
         head: "WS_DOC_REQUIRED",
         body: [{
           type: "component",
-          key: "ws-documents-required",
+          key: "DocumentsRequired",
           component: "WSDocumentDetails",
           withoutLabel: true,
         }]
