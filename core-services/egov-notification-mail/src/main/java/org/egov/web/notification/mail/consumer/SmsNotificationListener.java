@@ -13,11 +13,13 @@ import org.egov.web.notification.mail.service.EmailService;
 import org.egov.web.notification.mail.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 @Service
+@ConditionalOnProperty(name="send.email.from.sms", havingValue="true")
 public class SmsNotificationListener {
 
 	private UserRepository userRepository;

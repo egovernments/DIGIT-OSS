@@ -51,6 +51,7 @@ public class ExternalEmailService implements EmailService {
 			helper.setText(email.getBody(), true);
 		} catch (MessagingException e) {
 			log.error(EXCEPTION_MESSAGE, e);
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		mailSender.send(message);
