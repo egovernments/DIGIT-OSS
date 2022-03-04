@@ -318,12 +318,12 @@ const DashBoard = ({ stateCode }) => {
               filters?.filters?.state &&
               filters.filters.state
                 .slice(0, 5)
-                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(filter)}`} onClick={() => removeST(id)} />)}
+                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`}  onClick={() => removeST(id)} />)}
             {filters?.filters?.state?.length > 6 && (
               <>
                 {showFilters &&
                   filters.filters.state.map((filter, id) => (
-                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(filter)}`} onClick={() => removeST(id)} />
+                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeST(id)} />
                   ))}
                 {!showFilters && (
                   <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>
@@ -348,12 +348,12 @@ const DashBoard = ({ stateCode }) => {
               filters?.filters?.ulb &&
               filters.filters.ulb
                 .slice(0, 5)
-                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeTenant(id)} />)}
+                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeTenant(id)} />)}
             {filters?.filters?.ulb?.length > 6 && (
               <>
                 {showFilters &&
                   filters.filters.ulb.map((filter, id) => (
-                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeTenant(id)} />
+                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`}  onClick={() => removeTenant(id)} />
                   ))}
                 {!showFilters && (
                   <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>
