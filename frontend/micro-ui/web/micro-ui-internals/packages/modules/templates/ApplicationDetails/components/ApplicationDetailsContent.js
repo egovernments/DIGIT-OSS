@@ -44,7 +44,7 @@ function ApplicationDetailsContent({
       };
       return <TLCaption data={caption} />;
     } 
-    else if(window.location.href.includes("/obps/"))
+    else if(window.location.href.includes("/obps/") || window.location.href.includes("/noc/"))
     {
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,

@@ -34,6 +34,16 @@ const SearchFormFieldsComponent = (props) => {
         <TextInput name="sourceRefId" inputRef={register({})} />
       </SearchField>
       <SearchField>
+        <label>{t("NOC_TYPE_LABEL")}</label>
+        <Controller
+          control={control}
+          name="nocType"
+          render={(props) => (
+            <Dropdown selected={nocTypeList?.length == 1 ? nocTypeList[0] : props.value} select={props.onChange} onBlur={props.onBlur} option={nocTypeList ? nocTypeList : []} optionKey="i18nKey" t={t} disable={nocTypeList?.length == 1 ? true : false}/>
+          )}
+        />
+      </SearchField>
+      <SearchField>
         <label>{t("NOC_APP_MOBILE_NO_SEARCH_PARAM")}</label>
         <MobileNumber
           name="mobileNumber"
@@ -57,16 +67,6 @@ const SearchFormFieldsComponent = (props) => {
           //maxlength={10}
         />
         <CardLabelError>{formState?.errors?.["mobileNumber"]?.message}</CardLabelError>
-      </SearchField>
-      <SearchField>
-        <label>{t("NOC_TYPE_LABEL")}</label>
-        <Controller
-          control={control}
-          name="nocType"
-          render={(props) => (
-            <Dropdown selected={nocTypeList?.length == 1 ? nocTypeList[0] : props.value} select={props.onChange} onBlur={props.onBlur} option={nocTypeList ? nocTypeList : []} optionKey="i18nKey" t={t} disable={nocTypeList?.length == 1 ? true : false}/>
-          )}
-        />
       </SearchField>
       <SearchField>
         <label>{t("NOC_NUMBER_LABEL")}</label>
