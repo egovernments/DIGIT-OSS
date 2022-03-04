@@ -25,7 +25,6 @@ class Icon extends React.Component {
 
     renderIcons(type) {
         let { classes } = this.props;
-        console.log(type);
         switch (type.toLowerCase()) {
             case 'overview':
             case 'dss_overview':

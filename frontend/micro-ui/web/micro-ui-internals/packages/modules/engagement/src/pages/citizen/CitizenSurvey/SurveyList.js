@@ -31,7 +31,6 @@ const SurveyList = () => {
           else resStatus = "CANNOT_RESPOND_MSG"
           return ({ hasResponded: false, responseStatus: resStatus, ...survey })
         });
-        //console.log(allSurveys);
         //why hasResoponded always set to false here
         const activeSurveysList = [];
         const inactiveSurveysList = [];

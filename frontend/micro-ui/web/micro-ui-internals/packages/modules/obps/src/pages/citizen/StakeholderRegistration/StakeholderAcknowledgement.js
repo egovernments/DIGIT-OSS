@@ -59,7 +59,6 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
       });
 
     } catch (err) {
-      console.error(err, "inside ack");
     }
   }, []);
 

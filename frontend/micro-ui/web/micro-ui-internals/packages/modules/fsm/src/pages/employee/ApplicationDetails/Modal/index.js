@@ -416,7 +416,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           })
         );
       default:
-        console.debug("default case");
         break;
     }
   }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList, Reason, fstpoRejectionReason]);

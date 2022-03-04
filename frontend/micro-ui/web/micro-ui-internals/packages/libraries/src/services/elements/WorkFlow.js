@@ -3,7 +3,7 @@ import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
 const getThumbnails = async (ids, tenantId) => {
-  tenantId = window.location.href.includes("/obps/") ? tenantId.split(".")[0] : tenantId;
+  tenantId = window.location.href.includes("/obps/")? Digit.ULBService.getStateId() : tenantId;
   const res = await Digit.UploadServices.Filefetch(ids, tenantId);
   if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
     return { thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]), images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };
@@ -76,7 +76,6 @@ export const WorkflowService = {
   },
 
   getDetailsById: async ({ tenantId, id, moduleCode, role }) => {
-
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
     const getLocationDetails = window.location.href.includes("/obps/") || window.location.href.includes("noc/inbox");
@@ -169,7 +168,6 @@ export const WorkflowService = {
         return details;
       }
     } else {
-      console.warn("error fetching workflow services");
       throw new Error("error fetching workflow services");
     }
     return {};

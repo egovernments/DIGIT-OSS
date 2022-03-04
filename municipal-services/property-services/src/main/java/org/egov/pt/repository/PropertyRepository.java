@@ -213,6 +213,7 @@ public class PropertyRepository {
 			}
 		}
 		
+
 		// only used to eliminate property-ids which does not have the owner
 		List<String> propertyIds = getPropertyIds(ownerIds, userTenant);
 

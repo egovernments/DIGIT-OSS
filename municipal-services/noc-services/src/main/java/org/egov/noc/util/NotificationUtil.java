@@ -195,8 +195,8 @@ public class NotificationUtil {
 		}else{
 			type = "AAI";
 		}
-		message = message.replace("<1>", type);
-		message = message.replace("<2>", noc.getApplicationNo());
+		message = message.replace("{1}", type);
+		message = message.replace("{2}", noc.getApplicationNo());
 		return message;
 	}
 

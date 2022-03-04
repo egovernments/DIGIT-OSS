@@ -62,7 +62,6 @@ class DateRange extends React.Component {
       const dateRanges = this.state.dateRanges;
       let customTitle = false;
       dateRanges.map(dateRange => {
-        console.log(dateRange.range().startDate, range[0].startDate);
         if (title == dateRange.label && this.getDate(dateRange.range().startDate, true) == this.getDate(range[0].startDate, true) && this.getDate(dateRange.range().endDate) == this.getDate(range[0].endDate)) {
           customTitle = true
         }

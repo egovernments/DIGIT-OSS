@@ -8,7 +8,6 @@ const ImgUp=()=>{
         
 
       }
-      console.log("demo",uploadedFile)
       const [error, setError] = useState(null);
 
       useEffect(() => {
@@ -26,8 +25,6 @@ const ImgUp=()=>{
                   setError(t("FILE_UPLOAD_ERROR"));
                 }
               } catch (err) {
-                console.error("Modal -> err ", err);
-                // setError(t("PT_FILE_UPLOAD_ERROR"));
               }
             }
           }

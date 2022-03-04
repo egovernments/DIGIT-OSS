@@ -84,7 +84,6 @@ class PaymentModes extends Component {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     }
   };

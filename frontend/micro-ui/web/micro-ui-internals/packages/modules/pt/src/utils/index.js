@@ -520,7 +520,6 @@ export const setPropertyDetails = (data) => {
 
 /*   method to convert collected details to proeprty create object */
 export const convertToProperty = (data = {}) => {
-  console.info("propertyFormData", data);
   let isResdential = data.isResdential;
   let propertyType = data.PropertyType;
   let selfOccupied = data.selfOccupied;
@@ -572,7 +571,6 @@ export const convertToProperty = (data = {}) => {
       channel: "CITIZEN",
     },
   };
-  console.info("propertyCreated", formdata);
   return formdata;
 };
 
@@ -709,7 +707,6 @@ export const setUpdatedDocumentDetails = (data) => {
   return data;
 };
 export const convertToUpdateProperty = (data = {}) => {
-  console.info("propertyFormData", data);
   let isResdential = data.isResdential;
   let propertyType = data.PropertyType;
   let selfOccupied = data.selfOccupied;
@@ -797,7 +794,6 @@ export const convertToUpdateProperty = (data = {}) => {
   if (propertyInitialObject?.auditDetails) {
     formdata.Property["auditDetails"] = { ...propertyInitialObject.auditDetails };
   }
-  console.info("propertyUpdated", formdata);
   return formdata;
 };
 

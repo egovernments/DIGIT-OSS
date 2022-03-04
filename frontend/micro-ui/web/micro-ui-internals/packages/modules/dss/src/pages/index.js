@@ -21,6 +21,15 @@ import Layout from "../components/Layout";
 
 const key = "DSS_FILTERS";
 
+function addFinancialYearAccordingToCurrentDate () {
+  const currentDate = new Date()
+  if(getMonth(currentDate) > 3){
+    return addMonths(startOfYear(currentDate), 3)
+  } else {
+    return addMonths(subYears(startOfYear(currentDate), 1),3)
+  }
+}
+
 const getInitialRange = () => {
   const data = Digit.SessionStorage.get(key);
   const startDate = data?.range?.startDate ? new Date(data?.range?.startDate) : Digit.Utils.dss.getDefaultFinacialYear().startDate;
@@ -309,12 +318,12 @@ const DashBoard = ({ stateCode }) => {
               filters?.filters?.state &&
               filters.filters.state
                 .slice(0, 5)
-                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(filter)}`} onClick={() => removeST(id)} />)}
+                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`}  onClick={() => removeST(id)} />)}
             {filters?.filters?.state?.length > 6 && (
               <>
                 {showFilters &&
                   filters.filters.state.map((filter, id) => (
-                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(filter)}`} onClick={() => removeST(id)} />
+                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeST(id)} />
                   ))}
                 {!showFilters && (
                   <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>
@@ -339,12 +348,12 @@ const DashBoard = ({ stateCode }) => {
               filters?.filters?.ulb &&
               filters.filters.ulb
                 .slice(0, 5)
-                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeTenant(id)} />)}
+                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeTenant(id)} />)}
             {filters?.filters?.ulb?.length > 6 && (
               <>
                 {showFilters &&
                   filters.filters.ulb.map((filter, id) => (
-                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeTenant(id)} />
+                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`}  onClick={() => removeTenant(id)} />
                   ))}
                 {!showFilters && (
                   <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>

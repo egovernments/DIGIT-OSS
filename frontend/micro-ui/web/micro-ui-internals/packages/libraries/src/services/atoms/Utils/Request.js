@@ -49,7 +49,6 @@ export const Request = async ({
   multipartFormData = false,
   multipartData = {}
 }) => {
-
   if (method.toUpperCase() === "POST") {
     const ts = new Date().getTime()
     data.RequestInfo = {
@@ -80,7 +79,6 @@ export const Request = async ({
 
   let key = "";
   if (useCache) {
-
     key = `${method.toUpperCase()}.${url}.${btoa(escape(JSON.stringify(params, null, 0)))}.${btoa(escape(JSON.stringify(data, null, 0)))}`;
     const value = window.Digit.RequestCache[key];
     if (value) {

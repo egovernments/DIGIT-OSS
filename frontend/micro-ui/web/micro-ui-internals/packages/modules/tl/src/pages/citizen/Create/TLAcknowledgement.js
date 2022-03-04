@@ -71,11 +71,11 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
 
         !isEdit ? mutation.mutate(formdata, {
           onSuccess,
-        }) : fydata["egf-master"] && fydata["egf-master"].FinancialYear.length > 0 ? (isDirectRenewal ? mutation2.mutate(formdata, {
+        }) : fydata["egf-master"] && fydata["egf-master"].FinancialYear.length > 0 && (isDirectRenewal ? mutation2.mutate(formdata, {
           onSuccess,
         }) : mutation1.mutate(formdata, {
           onSuccess,
-        })) : console.debug("skipped");
+        })) ;
       } else {
         let formdata = convertToResubmitTrade(data);
         formdata.Licenses[0].tenantId = formdata?.Licenses[0]?.tenantId || tenantId1;
@@ -85,7 +85,6 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
 
       }
     } catch (err) {
-      console.error(err);
     }
   }, [fydata]);
 
@@ -98,7 +97,6 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
         });
       }
       catch (er) {
-        console.info("error in update", er);
       }
     }
   }, [mutation.isSuccess, mutation1.isSuccess]);

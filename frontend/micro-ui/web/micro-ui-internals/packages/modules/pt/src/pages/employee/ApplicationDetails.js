@@ -44,7 +44,7 @@ const ApplicationDetails = () => {
     { enabled: enableAudit, select: (data) => data.Properties?.filter((e) => e.status === "ACTIVE") }
   );
 
-  const showTransfererDetails = () => {
+  const showTransfererDetails = React.useCallback(() => {
     if (
       auditData &&
       Object.keys(appDetailsToShow).length &&
@@ -60,7 +60,7 @@ const ApplicationDetails = () => {
       });
       setAppDetailsToShow({ ...appDetailsToShow, applicationDetails });
     }
-  };
+  },[setAppDetailsToShow,appDetailsToShow,auditData,applicationDetails,auditData,newConfigMutate]);
 
   const closeToast = () => {
     setShowToast(null);
@@ -203,4 +203,4 @@ const ApplicationDetails = () => {
   );
 };
 
-export default ApplicationDetails;
+export default React.memo(ApplicationDetails);

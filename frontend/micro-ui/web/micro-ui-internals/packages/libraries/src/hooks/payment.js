@@ -39,7 +39,6 @@ export const useFetchBillsForBuissnessService = ({ tenantId, businessService, ..
     () => Digit.PaymentService.fetchBill(_tenantId, params),
     {
       retry: (count, err) => {
-        console.error(err, "inside the payment hook");
         return false;
       },
       ...config,

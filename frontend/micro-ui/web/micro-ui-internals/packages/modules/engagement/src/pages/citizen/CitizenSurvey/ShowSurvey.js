@@ -29,7 +29,6 @@ const ShowSurvey = ({location}) => {
   }
   
     if(mutation.isError) return <div>An error occured...</div>
-    // if(mutation.isSuccess) console.log(mutation.data);
 
     //questionid in answers uuid in surveys needs to be matched
     const answers = mutation?.data?.answers;

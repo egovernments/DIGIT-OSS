@@ -16,7 +16,6 @@ export default function dispatchAPI(api, page) {
                     }
                 })
                 .catch(function(err) {
-                    // console.log(err)
                     dispatch(apiStatusAsync(false, true, 'api failed'))
                 })
         }
@@ -34,13 +33,10 @@ export default function dispatchAPI(api, page) {
                     }
                 })
                 .catch(function(err) {
-                    // console.log(err)
                     dispatch(apiStatusAsync(false, true, 'api failed'))
                 })
         }
     } else if (api.status === 401) {
-        console.log('====================== logout    ==========================')
-            // dispatch(logout(''))
     } else {
         return dispatch => {
             dispatch(apiStatusAsync(true, false, ''))
@@ -53,7 +49,6 @@ export default function dispatchAPI(api, page) {
                     }
                 })
                 .catch(function(err) {
-                    // console.log(err)
                     dispatch(apiStatusAsync(false, true, 'api failed'))
                 })
         }

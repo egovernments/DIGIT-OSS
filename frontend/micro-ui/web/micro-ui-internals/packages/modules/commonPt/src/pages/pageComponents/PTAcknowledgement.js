@@ -89,7 +89,6 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
         }
       }
     } catch (err) {
-      console.error(err, "inside ack");
     }
   }, []);
 
@@ -116,7 +115,6 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
         }
       }
       catch (er) {
-        console.info("error in update", er);
       }
     }
   }, [mutation.isSuccess]);

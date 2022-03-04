@@ -82,7 +82,7 @@ const Response = ({ data, onSuccess }) => {
           pitDetail,
           source,
           sanitationtype: pitType?.code,
-          paymentPreference: selectPaymentPreference ? selectPaymentPreference.code : 'POST_PAY'
+          paymentPreference: selectPaymentPreference?.code
         },
         workflow: null,
       };
@@ -94,7 +94,6 @@ const Response = ({ data, onSuccess }) => {
         },
       });
     } catch (err) {
-      console.error(err);
     }
   }
   }, []);

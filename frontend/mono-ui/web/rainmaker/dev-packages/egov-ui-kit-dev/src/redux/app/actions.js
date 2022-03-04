@@ -105,7 +105,6 @@ export const fetchLocalizationLabel = (locale = 'en_IN', module, tenantId, isFro
       localStorage.removeItem(`localization_${getLocale()}`);
       dispatch(setLocalizationLabels(locale, resultArray));
     } catch (error) {
-      console.log(error);
     }
   };
 };
@@ -261,7 +260,6 @@ export const fetchUiCommonConfig = () => {
       const UiCommonConfig = commonMasters["uiCommonConfig"];
       dispatch(setUiCommonConfig(UiCommonConfig[0]));
     } catch (error) {
-      console.log(error);
     }
   };
 };
@@ -291,7 +289,6 @@ export const fetchUiCommonConstants = () => {
       const UiCommonConstants = commonMasters["uiCommonConstants"];
       dispatch(setUiCommonConstants(UiCommonConstants[0]));
     } catch (error) {
-      console.log(error);
     }
   };
 };
@@ -309,7 +306,6 @@ export const getNotificationCount = (queryObject, requestBody) => {
       const payload = await httpRequest(EVENTSCOUNT.GET.URL, EVENTSCOUNT.GET.ACTION, queryObject, requestBody);
       dispatch(setNotificationCount(payload.unreadCount));
     } catch (error) {
-      console.log(error);
     }
   };
 };

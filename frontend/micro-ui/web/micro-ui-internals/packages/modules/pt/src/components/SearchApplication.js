@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, MobileNumber, Loader, CardText } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, MobileNumber, Loader, CardText, Header } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 
 const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count, setShowToast }) => {
@@ -121,6 +121,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count, set
     let validation={}
 
     return <React.Fragment>
+                <Header>{t("PT_SEARCH_PROP_APP")}</Header>
                 < Card className={"card-search-heading"}>
                     <span style={{color:"#505A5F"}}>{t("Provide at least one parameter to search for an application")}</span>
                 </Card>
@@ -243,7 +244,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count, set
                     ))
                 }
             </Card>
-            :(!isLoading ? <Table
+            :(!isLoading && data !== ""? <Table
                 t={t}
                 data={data}
                 totalRecords={count}
@@ -265,7 +266,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count, set
                 onSort={onSort}
                 disableSort={false}
                 sortParams={[{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}]}
-            />:<Loader/>)}
+            />: data !== "" || isLoading && <Loader/>)}
         </React.Fragment>
 }
 

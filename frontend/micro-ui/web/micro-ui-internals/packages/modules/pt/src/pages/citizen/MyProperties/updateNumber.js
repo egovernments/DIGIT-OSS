@@ -138,7 +138,6 @@ const UpdateNumber = ({ showPopup, t, onValidation, mobileNumber, name, UpdateNu
       }
     } catch (err) {
       compStateDispatch({ type: "verifiedotp" });
-      console.error(err);
     }
   };
 

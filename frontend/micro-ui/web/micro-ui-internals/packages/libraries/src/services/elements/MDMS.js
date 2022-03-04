@@ -1092,7 +1092,7 @@ const GetPaymentType = (MdmsRes) => {
     });
 }
 
-const getDssDashboard = () => MdmsRes["dss-dashboard"]["dashboard-config"];
+const getDssDashboard = (MdmsRes) => MdmsRes["dss-dashboard"]["dashboard-config"];
 
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
 const GetCommonFields = (MdmsRes, moduleCode) => moduleCode.toUpperCase() === "PROPERTYTAX" ? MdmsRes["PropertyTax"].CommonFieldsConfig : MdmsRes["FSM"].CommonFieldsConfig;

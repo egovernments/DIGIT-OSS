@@ -13,7 +13,7 @@ export const UserService = {
       url: Urls.Authenticate,
       data,
       headers: {
-        authorization: "Basic ZWdvdi11c2VyLWNsaWVudDo=",
+        authorization: `Basic ${window?.globalConfigs?.getConfig("JWT_TOKEN")||"ZWdvdi11c2VyLWNsaWVudDo="}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
@@ -52,7 +52,6 @@ export const UserService = {
         window.location.replace("/digit-ui/employee/user/language-selection");
       }
     } catch (e) {
-      console.error(e);
     }
   },
   sendOtp: (details, stateCode) =>

@@ -296,7 +296,6 @@ export const getCurrentAddress = async () => {
       }
     });
   } catch (error) {
-    console.log(error);
   }
 };
 
@@ -687,7 +686,6 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
     }
   } catch (error) {
     const { message } = error;
-    console.log(error);
     if (fieldKey === "mohalla") {
       dispatch(
         toggleSnackbarAndSetText(
@@ -936,7 +934,6 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
       }
     }
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -1132,7 +1129,6 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
     const businessServiceItem = await businessServiceInfo(mdmsBody, businessService);
     dispatch(prepareFinalObject("businessServiceInfo", businessServiceItem));
   } catch (e) {
-    console.log(e);
   }
 };
 

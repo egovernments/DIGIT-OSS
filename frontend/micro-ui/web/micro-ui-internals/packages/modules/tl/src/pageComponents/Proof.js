@@ -70,8 +70,6 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
               setError(t("PT_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
-            // setError(t("PT_FILE_UPLOAD_ERROR"));
           }
         }
       }

@@ -15,6 +15,7 @@ import {
   loadPtBillData,
   loadUlbLogo
 } from "./receiptTransformer";
+import { downloadPdfFile } from "egov-ui-kit/utils/api" 
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -281,6 +282,7 @@ to download all bulk pdf directly egov-pdf
       );
       // window.location.href.includes("abg/billDownload")&&window.location.reload();
     }
+    
   } catch (error) {
     console.error(error);
     dispatch(toggleSnackbar(true, error.message, "error"));

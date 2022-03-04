@@ -104,7 +104,6 @@ const ApplicationDetails = (props) => {
       case "ADDITIONAL_PAY_REQUEST":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
-        console.debug("default case");
         break;
     }
   }, [selectedAction]);
@@ -261,7 +260,6 @@ const ApplicationDetails = (props) => {
               </Fragment>
             )}
           </Card>
-
           {showModal ? (
             <ActionModal
               t={t}

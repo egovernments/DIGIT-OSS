@@ -26,7 +26,7 @@ const SearchApplicationMobileView = ({ SearchFormFieldsComponent, propsMobileInb
         case "remove":
             return false;
         default:
-            console.warn("no such action defined");
+            break;        
         }
     }
 
@@ -112,7 +112,7 @@ const SearchApplicationMobileView = ({ SearchFormFieldsComponent, propsMobileInb
             {...{
                 data: propsMobileInboxCards,
                 isTwoDynamicPrefix: false,
-                linkPrefix: `/digit-ui/employee/noc/inbox/application-overview/`,
+                linkPrefix: `/digit-ui/employee/noc/search/application-overview/`,
                 serviceRequestIdKey: t("NOC_APP_NO_LABEL"),
             }}
             />

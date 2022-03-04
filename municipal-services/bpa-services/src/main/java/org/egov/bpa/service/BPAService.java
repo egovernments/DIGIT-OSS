@@ -60,6 +60,7 @@ import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 @Slf4j
 public class BPAService {
 
+
 	@Autowired
 	private WorkflowIntegrator wfIntegrator;
 
@@ -440,6 +441,7 @@ public class BPAService {
                     Workflow workflow = Workflow.builder().action(BPAConstants.ACTION_SKIP_PAY).build();
                     bpa.setWorkflow(workflow);
                 }
+
 		wfIntegrator.callWorkFlow(bpaRequest);
 		log.debug("===> workflow done =>" +bpaRequest.getBPA().getStatus()  );
 		enrichmentService.postStatusEnrichment(bpaRequest);
@@ -451,6 +453,7 @@ public class BPAService {
                  * if (Arrays.asList(config.getSkipPaymentStatuses().split(",")).contains(bpa.getStatus())) {
                  * enrichmentService.skipPayment(bpaRequest); enrichmentService.postStatusEnrichment(bpaRequest); }
                  */
+
 		
 		repository.update(bpaRequest, workflowService.isStateUpdatable(bpa.getStatus(), businessService));
 		return bpaRequest.getBPA();
@@ -573,113 +576,113 @@ public class BPAService {
 	        } finally {
 	            if (pdfDoc != null && !pdfDoc.isClosed())
                         pdfDoc.close();
-	        }
-	    }
+                }
+            }
 
-	    /**
-	     * make edcr call and get the edcr report url to download the edcr report
-	     * @param bpaRequest
-	     * @return
-	     */
-	    private URL getEdcrReportDownloaUrl(BPARequest bpaRequest) {
-	        String pdfUrl = edcrService.getEDCRPdfUrl(bpaRequest);
-	        URL downloadUrl = null;
-	        try {
-	            downloadUrl = new URL(pdfUrl);
-	            log.debug("Connecting to redirect url" + downloadUrl.toString() + " ... ");
-	            URLConnection urlConnection = downloadUrl.openConnection();
+            /**
+             * make edcr call and get the edcr report url to download the edcr report
+             * @param bpaRequest
+             * @return
+             */
+            private URL getEdcrReportDownloaUrl(BPARequest bpaRequest) {
+                String pdfUrl = edcrService.getEDCRPdfUrl(bpaRequest);
+                URL downloadUrl = null;
+                try {
+                    downloadUrl = new URL(pdfUrl);
+                    log.debug("Connecting to redirect url" + downloadUrl.toString() + " ... ");
+                    URLConnection urlConnection = downloadUrl.openConnection();
 
-	            // Checking whether the URL contains a PDF
-	            if (!urlConnection.getContentType().equalsIgnoreCase("application/pdf")) {
-	                String downloadUrlString = urlConnection.getHeaderField("Location");
-	                if (!StringUtils.isEmpty(downloadUrlString)) {
-	                    downloadUrl = new URL(downloadUrlString);
-	                    log.debug("Connecting to download url" + downloadUrl.toString() + " ... ");
-	                    urlConnection = downloadUrl.openConnection();
-	                    if (!urlConnection.getContentType().equalsIgnoreCase("application/pdf")) {
-	                        log.error("Download url content type is not application/pdf.");
-	                        throw new CustomException(BPAErrorConstants.INVALID_EDCR_REPORT,
-	                                "Download url content type is not application/pdf.");
-	                    }
-	                } else {
-	                    log.error("Unable to fetch the location header URL");
-	                    throw new CustomException(BPAErrorConstants.INVALID_EDCR_REPORT, "Unable to fetch the location header URL");
-	                }
-	            }
-	        } catch (IOException e) {
-	            log.error("Invalid download URL::" + pdfUrl);
-	            throw new CustomException(BPAErrorConstants.INVALID_EDCR_REPORT, "Invalid download URL::" + pdfUrl);
-	        }
+                    // Checking whether the URL contains a PDF
+                    if (!urlConnection.getContentType().equalsIgnoreCase("application/pdf")) {
+                        String downloadUrlString = urlConnection.getHeaderField("Location");
+                        if (!StringUtils.isEmpty(downloadUrlString)) {
+                            downloadUrl = new URL(downloadUrlString);
+                            log.debug("Connecting to download url" + downloadUrl.toString() + " ... ");
+                            urlConnection = downloadUrl.openConnection();
+                            if (!urlConnection.getContentType().equalsIgnoreCase("application/pdf")) {
+                                log.error("Download url content type is not application/pdf.");
+                                throw new CustomException(BPAErrorConstants.INVALID_EDCR_REPORT,
+                                        "Download url content type is not application/pdf.");
+                            }
+                        } else {
+                            log.error("Unable to fetch the location header URL");
+                            throw new CustomException(BPAErrorConstants.INVALID_EDCR_REPORT, "Unable to fetch the location header URL");
+                        }
+                    }
+                } catch (IOException e) {
+                    log.error("Invalid download URL::" + pdfUrl);
+                    throw new CustomException(BPAErrorConstants.INVALID_EDCR_REPORT, "Invalid download URL::" + pdfUrl);
+                }
 
-	        return downloadUrl;
-	    }
+                return downloadUrl;
+            }
 
-	    /**
-	     * download the edcr report and create in tempfile
-	     * @param bpaRequest
-	     * @param fileName
-	     * @param document
-	     * return PdfDocument
-	     */
-	    private PdfDocument createTempReport(BPARequest bpaRequest, String fileName) {
+            /**
+             * download the edcr report and create in tempfile
+             * @param bpaRequest
+             * @param fileName
+             * @param document
+             * return PdfDocument
+             */
+            private PdfDocument createTempReport(BPARequest bpaRequest, String fileName) {
 
-	        InputStream readStream = null;
-	        PdfDocument pdfDocument = null;
-	        try {
-	            URL downloadUrl = this.getEdcrReportDownloaUrl(bpaRequest);
-	            readStream = downloadUrl.openStream();
-	            pdfDocument = new PdfDocument(new PdfReader(readStream),
-	                    new PdfWriter(fileName));
+                InputStream readStream = null;
+                PdfDocument pdfDocument = null;
+                try {
+                    URL downloadUrl = this.getEdcrReportDownloaUrl(bpaRequest);
+                    readStream = downloadUrl.openStream();
+                    pdfDocument = new PdfDocument(new PdfReader(readStream),
+                            new PdfWriter(fileName));
 
-	        } catch (IOException e) {
-	            log.error("Error while creating temp report.");
-	        } finally {
-	            try {
-	                readStream.close();
-	            } catch (IOException e) {
-	                log.error("Error while creating temp report.");
-	            }
-	        }
-	        return pdfDocument;
-	    }
+                } catch (IOException e) {
+                    log.error("Error while creating temp report.");
+                } finally {
+                    try {
+                        readStream.close();
+                    } catch (IOException e) {
+                        log.error("Error while creating temp report.");
+                    }
+                }
+                return pdfDocument;
+            }
 
-	    private void addDataToPdf(PdfDocument pdfDoc, BPARequest bpaRequest, String permitNo, String generatedOn, String fileName)
-	            throws IOException {
+            private void addDataToPdf(PdfDocument pdfDoc, BPARequest bpaRequest, String permitNo, String generatedOn, String fileName)
+                    throws IOException {
 
-	        BPA bpa = bpaRequest.getBPA();
-	        Document doc = new Document(pdfDoc);
-	        Paragraph headerLeft = new Paragraph(permitNo + " : " + bpaRequest.getBPA().getApprovalNo())
-	                .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
-	                .setFontSize(10);
-	        String generatedOnMsg;
-	        if (bpa.getApprovalDate() != null) {
-	            Date date = new Date(bpa.getApprovalDate());
-	            DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-	            String formattedDate = format.format(date);
-	            generatedOnMsg = generatedOn + " : " + formattedDate;
-	        } else {
-	            generatedOnMsg = generatedOn + " : " + "NA";
-	        }
-	        Paragraph headerRight = new Paragraph(generatedOnMsg)
-	                .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
-	                .setFontSize(10);
+                BPA bpa = bpaRequest.getBPA();
+                Document doc = new Document(pdfDoc);
+                Paragraph headerLeft = new Paragraph(permitNo + " : " + bpaRequest.getBPA().getApprovalNo())
+                        .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+                        .setFontSize(10);
+                String generatedOnMsg;
+                if (bpa.getApprovalDate() != null) {
+                    Date date = new Date(bpa.getApprovalDate());
+                    DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    String formattedDate = format.format(date);
+                    generatedOnMsg = generatedOn + " : " + formattedDate;
+                } else {
+                    generatedOnMsg = generatedOn + " : " + "NA";
+                }
+                Paragraph headerRight = new Paragraph(generatedOnMsg)
+                        .setFont(PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN))
+                        .setFontSize(10);
 
-	        for (int i = 1; i <= pdfDoc.getNumberOfPages(); i++) {
-	            Rectangle pageSize = pdfDoc.getPage(i).getPageSize();
-	            float margin = 32;
-	            float x = pageSize.getX() + margin;
-	            float y = pageSize.getTop() - (margin / 2);
-	            doc.showTextAligned(headerLeft, x, y, i, TextAlignment.LEFT, VerticalAlignment.BOTTOM, 0);
-	            float x1 = pageSize.getWidth() - 22;
-	            float y1 = pageSize.getTop() - (margin / 2);
-	            doc.showTextAligned(headerRight, x1, y1, i, TextAlignment.RIGHT, VerticalAlignment.BOTTOM, 0);
-	        }
-	        pdfDoc.close();
-	        doc.close();
-	    }
-	
-	public int getBPACount(BPASearchCriteria criteria, RequestInfo requestInfo) {
-	    
+                for (int i = 1; i <= pdfDoc.getNumberOfPages(); i++) {
+                    Rectangle pageSize = pdfDoc.getPage(i).getPageSize();
+                    float margin = 32;
+                    float x = pageSize.getX() + margin;
+                    float y = pageSize.getTop() - (margin / 2);
+                    doc.showTextAligned(headerLeft, x, y, i, TextAlignment.LEFT, VerticalAlignment.BOTTOM, 0);
+                    float x1 = pageSize.getWidth() - 22;
+                    float y1 = pageSize.getTop() - (margin / 2);
+                    doc.showTextAligned(headerRight, x1, y1, i, TextAlignment.RIGHT, VerticalAlignment.BOTTOM, 0);
+                }
+                pdfDoc.close();
+                doc.close();
+            }
+        
+        public int getBPACount(BPASearchCriteria criteria, RequestInfo requestInfo) {
+            
 
             LandSearchCriteria landcriteria = new LandSearchCriteria();
             landcriteria.setTenantId(criteria.getTenantId());
@@ -723,6 +726,6 @@ public class BPAService {
             }
             return repository.getBPACount(criteria, edcrNos);
         
-	}
-	
+        }
+        
 }

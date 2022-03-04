@@ -37,12 +37,6 @@ import { isError, useQueryClient } from "react-query";
 const MapView = (props) => {
   return (
     <div onClick={props.onClick}>
-      {/* <iframe
-        width="600"
-        height="450"
-        frameBorder="0"
-        style={{ border: 0 }}
-        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDdKOqX6EPEX9djPm-vL_8zv0HBF8z0Qjg&q=Space+Needle,Seattle+WA"></iframe> */}
       <img src="https://via.placeholder.com/640x280" />
     </div>
   );
@@ -118,7 +112,6 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
               setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
             setError(t("CS_FILE_UPLOAD_ERROR"));
           }
         }
@@ -287,7 +280,6 @@ export const ComplaintDetails = (props) => {
         setPopup(!popup);
         break;
       default:
-        console.debug(state);
         break;
     }
   }
@@ -326,7 +318,6 @@ export const ComplaintDetails = (props) => {
         setDisplayMenu(false);
         break;
       default:
-        console.debug("action not known");
         setDisplayMenu(false);
     }
   }

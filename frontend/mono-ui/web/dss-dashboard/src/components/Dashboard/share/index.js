@@ -120,7 +120,6 @@ class CustomizedShare extends Component {
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
-            console.log(error);
             this.setState({
                 anchorEl: null
             })
@@ -163,7 +162,6 @@ class CustomizedShare extends Component {
                 APITransport(fileUploadAPI)
             } catch{ }
         }).catch(function (error) {
-            console.log(error);
             this.setState({
                 anchorEl: null
             })

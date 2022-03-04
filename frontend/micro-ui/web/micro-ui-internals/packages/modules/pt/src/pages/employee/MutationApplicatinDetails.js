@@ -177,7 +177,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
           state: { ...action.redirectionUrl?.state },
         });
       }
-    } else console.debug("no action found");
+    } 
 
     setSelectedAction(action);
     setDisplayMenu(false);

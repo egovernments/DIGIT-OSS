@@ -22,7 +22,6 @@ const FillSurvey = ({ location }) => {
   const history = useHistory();
 
   const onSubmit = (data) => {
-    //console.log("<<<<<onSubmit>>>>>>", data);
     const details = {
       AnswerEntity: {
         surveyId: surveyData.uuid,
@@ -31,7 +30,6 @@ const FillSurvey = ({ location }) => {
         hasResponded:surveyData.hasResponded,
       },
     };
-   // console.log("<<<<<onSubmit>>>>>>", details);
     history.push("/digit-ui/citizen/engagement/surveys/submit-response", details);
   };
 

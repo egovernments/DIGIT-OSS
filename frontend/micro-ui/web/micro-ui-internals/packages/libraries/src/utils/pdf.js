@@ -62,7 +62,6 @@ function getBase64Image(tenantId) {
     ctx.drawImage(img, 0, 0);
     return canvas.toDataURL("image/png");
   } catch (e) {
-    console.error("asd", e);
     return "";
   }
 }

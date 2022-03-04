@@ -90,7 +90,6 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
                         disabled={formDisabled}
                         key={option}
                         onChange={(e) => {
-                          // console.log("onChange", {e, value});
                           if (e.target.checked ) {
                             value && onChange([...value, option]);
                           } else {
@@ -165,7 +164,6 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
         );
     }
   };
-  //console.log("<<<<what >>>", { question });
   return (
     <Card>
       <div className="surveyQuestion-wrapper">

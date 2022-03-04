@@ -57,8 +57,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerInd
               setError(t("PT_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
-            // setError(t("PT_FILE_UPLOAD_ERROR"));
+
           }
         }
       }

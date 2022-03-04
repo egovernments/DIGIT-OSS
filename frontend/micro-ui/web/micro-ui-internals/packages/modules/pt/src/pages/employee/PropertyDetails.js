@@ -291,7 +291,7 @@ const PropertyDetails = () => {
                     Property: newProp,
                   },
                   {
-                    onError: () => console.error("error"),
+                    onError: {},
                     onSuccess: async (successRes) => {
                       showToast();
                       setTimeout(() => {

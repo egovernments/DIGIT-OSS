@@ -46,8 +46,8 @@ const InboxComposer = ({
             case "remove":
                 return false
             default:
-                console.warn("no such action defined")
-        }
+                break;
+                    }
     }
 
     const [currentlyActiveMobileModal, setActiveMobileModal] = useReducer(activateModal, false)

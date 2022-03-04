@@ -126,6 +126,8 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
       return useFSTPORejectionReason();
     case "PaymentType":
       return usePaymentType();
+    default:
+      return null;
   }
 };
 

@@ -54,9 +54,6 @@ public class VehicleSearchCriteria {
 
 	@JsonProperty("vehicleOwner")
 	private List<String> vehicleOwner;
-	
-	@JsonProperty("applicationStatus")
-    private List<String> applicationStatus;   
 
 	  @JsonProperty("sortBy")
 	    private SortBy sortBy;

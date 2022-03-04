@@ -139,7 +139,6 @@ class App extends React.Component {
           this.setLocalisation(response.data.messages);
         })
         .catch(error => {
-          console.log(error.response)
         });
     } else {
       this.setLocalisation(localisationLabels);

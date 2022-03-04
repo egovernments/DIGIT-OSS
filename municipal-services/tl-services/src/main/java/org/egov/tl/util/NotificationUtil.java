@@ -797,6 +797,7 @@ public class NotificationUtil {
 		return mapOfPhnoAndEmailIds;
 	}
 
+
 	/**
 	 * Fetches UUIDs of CITIZENs based on the phone number.
 	 *

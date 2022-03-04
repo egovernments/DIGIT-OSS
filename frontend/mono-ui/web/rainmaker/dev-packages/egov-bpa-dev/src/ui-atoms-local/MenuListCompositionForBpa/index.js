@@ -53,7 +53,6 @@ class MenuListCompositionForBpa extends React.Component {
   render() {
     const { classes, data } = this.props;
     const { open } = this.state;
-    console.log(this.props, "urytiueyrtuyertuyeiuytueyrtueyrtierituyeiruty")
 
     return (
       <div className={classes.root} data-html2canvas-ignore={true}>

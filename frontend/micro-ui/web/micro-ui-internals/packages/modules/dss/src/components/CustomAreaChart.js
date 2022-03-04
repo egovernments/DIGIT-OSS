@@ -40,6 +40,8 @@ const renderUnits = (t, denomination, symbol) => {
       return `(${t("DSS_LAC")})`;
     case "Cr":
       return `(${t("DSS_CR")})`;
+    default:
+      return null;
   }
 };
 

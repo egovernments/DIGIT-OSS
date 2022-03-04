@@ -126,7 +126,13 @@ function ApplicationDetailsContent({
               <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
               <React.Fragment>
-                <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px",fontSize: "24px" } : { marginBottom: "16px", marginTop: "32px", fontSize: "24px" }}>
+                <CardSectionHeader
+                  style={
+                    index == 0 && checkLocation
+                      ? { marginBottom: "16px", fontSize: "24px" }
+                      : { marginBottom: "16px", marginTop: "32px", fontSize: "24px" }
+                  }
+                >
                   {isNocLocation ? `${t(detail.title)}` : t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>
@@ -146,7 +152,15 @@ function ApplicationDetailsContent({
                       <Row
                         key={t(value.title)}
                         label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
-                        text={<div><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{value?.value}</span></Link></div>}
+                        text={
+                          <div>
+                            <Link to={value?.to}>
+                              <span className="link" style={{ color: "#F47738" }}>
+                                {value?.value}
+                              </span>
+                            </Link>
+                          </div>
+                        }
                         last={index === detail?.values?.length - 1}
                         caption={value.caption}
                         className="border-none"

@@ -35,9 +35,7 @@ public class BPANotificationUtil {
 
     private Producer producer;
 
-    @Autowired
     private NotificationUtil notificationUtil;
-
 
 
     @Value("${egov.ui.app.host}")
@@ -51,10 +49,11 @@ public class BPANotificationUtil {
 
     @Autowired
     public BPANotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository,
-                               Producer producer) {
+                               Producer producer, NotificationUtil notificationUtil) {
         this.config = config;
         this.serviceRequestRepository = serviceRequestRepository;
         this.producer = producer;
+        this.notificationUtil = notificationUtil;
 
     }
 
@@ -337,7 +336,7 @@ public class BPANotificationUtil {
 
         String consumerCode;
         consumerCode = license.getApplicationNumber();
-        String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
+        String link = config.getUiAppHost() + config.getReceiptDownloadLink();
         link = link.replace("$consumerCode", consumerCode);
         link = link.replace("$tenantId", license.getTenantId());
         link = link.replace("$businessService", license.getBusinessService());

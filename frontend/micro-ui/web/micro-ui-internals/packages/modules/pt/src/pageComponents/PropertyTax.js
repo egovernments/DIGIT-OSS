@@ -56,7 +56,7 @@ const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
                       ))}
                     </div>
                   ))
-              : console.error("error")}
+              : null}
           </div>
         </div>
         <span>

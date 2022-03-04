@@ -63,7 +63,7 @@ const Home = () => {
         header: t("CS_COMMON_DASHBOARD_INFO_UPDATES"),
         sideOption:{ 
             name: t("DASHBOARD_VIEW_ALL_LABEL"),
-            onClick: () => console.debug("view all")
+            onClick: () => {}
         },
         options: [
             {
