@@ -257,7 +257,7 @@ class Home extends React.Component {
                   <Icons type={data.name}></Icons>
                 </CardIcon>
                 {isNurtDashboard() && pageId === "national-overview"? <div style={{ textAlign: "right", color: "#F47738", fontSize: 14, fontWeight: "normal"}}>
-                  <span style={{paddingRight : 10}}>{strings["NATIONAL_OVERVIEW_DASHBOARD"]} 
+                  <span style={{paddingRight : 10}}>{strings["DSS_OVERVIEW"]||"DSS_OVERVIEW"} 
                   </span>
                   <span> <img src={Arrow_Right} width={14}></img></span>
                   </div> : <div></div>}
