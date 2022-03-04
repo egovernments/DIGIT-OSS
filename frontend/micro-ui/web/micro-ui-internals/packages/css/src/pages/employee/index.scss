@@ -436,7 +436,8 @@
 
 .user-profile {
   @media (min-width: 780px) {
-    flex: 1 0 auto;
-    margin-left: 1em;
+    width: calc(100% - 219px);
+    margin-left: 16px;
+    margin-right: 16px;
   }
 }
