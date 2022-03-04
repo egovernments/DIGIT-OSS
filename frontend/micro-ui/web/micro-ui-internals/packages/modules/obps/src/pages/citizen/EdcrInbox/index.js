@@ -57,6 +57,17 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const formInitValue = useMemo(() => {
+    const inboxFromhomePage = Digit.SessionStorage.get("EDCR_BACK");
+    if (inboxFromhomePage === "IS_EDCR_BACK") {
+      return (
+        {
+          filterForm: filterFormDefaultValues,
+          searchForm: searchFormDefaultValues,
+          tableForm: tableOrderFormDefaultValues,
+        }
+      );
+    }
+
     return (
       InboxObjectInSessionStorage || {
         filterForm: filterFormDefaultValues,

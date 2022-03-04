@@ -117,6 +117,8 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     clearParams();
   }, []);
 
+  Digit.SessionStorage.set("EDCR_BACK", "IS_EDCR_BACK");
+
   if (showToast) return <Toast error={true} label={t(showToast?.message)} isDleteBtn={true} onClose={closeToast} />;
 
   if (stakeHolderDetailsLoading || !stakeHolderRoles || bpaLoading) {
