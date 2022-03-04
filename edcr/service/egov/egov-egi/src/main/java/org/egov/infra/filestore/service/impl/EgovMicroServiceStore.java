@@ -319,7 +319,6 @@ public class EgovMicroServiceStore implements FileStoreService {
         String tenant = StringUtils.isEmpty(tenantId) ? ApplicationThreadLocals.getTenantID() : tenantId;
         String urls = url + "/id?tenantId=" + tenant + "&fileStoreId=" + fileStoreId;
         LOG.info(String.format("fetch file from url   %s   ", urls));
-
         Path path = Paths.get("/tmp/" + RandomUtils.nextLong());
         try {
             RequestCallback requestCallback = request -> request.getHeaders()
@@ -332,7 +331,6 @@ public class EgovMicroServiceStore implements FileStoreService {
         } catch (RestClientException e) {
             LOG.error(String.format("Error occurred while fetching file %s", e.getMessage()));
         }
-
         LOG.debug("fetch completed....   ");
         return path.toFile();
     }
