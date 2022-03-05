@@ -105,7 +105,8 @@ const FstpOperatorDetails = () => {
     let bool = true
     let etemp = {}  // a temporary object create and use for validation in this function
     vehicleInfo?.tripDetails?.map((i, n) => {
-      i.additionalDetails = n + 1
+      const trip = { tripNo: n + 1 }
+      i.additionalDetails = trip
       if (!vehicleInfo.vehicle.tankCapacity || i.volume > vehicleInfo.vehicle.tankCapacity) {
         etemp[n] = { ...etemp[n], wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" }
         setErrors(etemp);
@@ -143,7 +144,7 @@ const FstpOperatorDetails = () => {
 
   const handleSubmit = () => {
     const details = {
-      vehicleTrip: vehicleInfo,
+      vehicleTrip: [vehicleInfo],
       workflow: {
         action: "DISPOSE",
       },
