@@ -294,7 +294,7 @@ public class FSMValidator {
 		
 		mdmsValidator.validateMdmsData(fsmRequest, mdmsData);
 		//validateVehicleType(fsmRequest);
-		validateVehicleCapacity(fsmRequest);
+		//validateVehicleCapacity(fsmRequest);
 		
 		if(!StringUtils.isEmpty(fsm.getSource())) {
 			mdmsValidator.validateApplicationChannel(fsm.getSource());
