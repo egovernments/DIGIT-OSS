@@ -118,15 +118,44 @@ const FstpOperatorDetails = () => {
     }
   }, [selectedAction]);
 
-  const handleSubmit = () => {
-    const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
-    if (!wasteCollected || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
-      setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
-      return;
-    }
-    if (tripStartTime === null) {
-      setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
-      return;
+  const handleError = () => {
+    let bool = true
+    let etemp = {}  // a temporary object create and use for validation in this function
+    vehicleInfo?.tripDetails?.map((i, n) => {
+      const trip = { tripNo: n + 1 }
+      i.additionalDetails = trip
+      if (!vehicleInfo.vehicle.tankCapacity || i.volume > vehicleInfo.vehicle.tankCapacity) {
+        etemp[n] = { ...etemp[n], wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" }
+        setErrors(etemp);
+        bool = false
+      }
+      if (i.itemStartTime === 0) {
+        etemp[n] = { ...etemp[n], tripStartTime: "ES_FSTP_INVALID_START_TIME" }
+        setErrors(etemp);
+        bool = false
+      }
+      if (n > 0 && vehicleInfo.tripDetails[n - 1].itemEndTime > i.itemStartTime) {
+        etemp[n] = { ...etemp[n], tripStartTime: "ES_FSTP_INVALID_START_TIME" }
+        setErrors(etemp);
+        bool = false
+      }
+      if (i.itemEndTime === null) {
+        etemp[n] = { ...etemp[n], tripTime: "ES_FSTP_INVALID_TRIP_TIME" }
+        setErrors(etemp);
+        bool = false
+      }
+      if (i.itemStartTime === i.itemEndTime || i.itemStartTime > i.itemEndTime) {
+        etemp[n] = { ...etemp[n], tripTime: "ES_FSTP_INVALID_TRIP_TIME" }
+        setErrors(etemp);
+        bool = false
+      }
+    })
+
+    setSelectedAction(null)
+
+    if (bool) {
+      setErrors({})
+      handleSubmit()
     }
 
     if (tripTime === null) {
@@ -152,7 +181,7 @@ const FstpOperatorDetails = () => {
     vehicle.volumeCarried = wasteCollected;
     vehicle.tripDetails[0].additionalDetails = tripDetail
     const details = {
-      vehicleTrip: [vehicle],
+      vehicleTrip: [vehicleInfo],
       workflow: {
         action: "DISPOSE",
       },
