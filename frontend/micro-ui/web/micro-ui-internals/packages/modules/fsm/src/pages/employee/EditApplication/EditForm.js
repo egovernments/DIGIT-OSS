@@ -160,7 +160,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     history.replace("/digit-ui/employee/fsm/response", {
       applicationData: formData,
       key: "update",
-      action: "SUBMIT",
+      action: applicationData?.applicationStatus === "CREATED" ? "SUBMIT" : "SCHEDULE",
     });
   };
 

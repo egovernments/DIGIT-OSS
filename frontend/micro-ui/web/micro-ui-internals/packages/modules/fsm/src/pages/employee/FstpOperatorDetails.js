@@ -1,6 +1,7 @@
-import React, { Fragment, useState, useEffect, useLayoutEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import TimePicker from "react-time-picker";
+import { Dropdown } from "@egovernments/digit-ui-react-components";
 import {
   Card,
   CardLabel,
@@ -14,8 +15,7 @@ import {
   StatusTable,
   Row,
   LabelFieldPair,
-  Menu,
-  Dropdown
+  Menu
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
@@ -25,6 +25,12 @@ import ActionModal from "./ApplicationDetails/Modal/index";
 const config = {
   select: (data) => {
     return data.vehicleTrip[0];
+  },
+};
+
+const totalconfig = {
+  select: (data) => {
+    return data.vehicleTrip;
   },
 };
 
@@ -40,7 +46,7 @@ const FstpOperatorDetails = () => {
   const [searchParams, setSearchParams] = useState({});
   const [showToast, setShowToast] = useState(null);
   const [wasteCollected, setWasteCollected] = useState(null);
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState({});
   const [tripStartTime, setTripStartTime] = useState(null);
   const [tripTime, setTripTime] = useState(() => {
     const today = new Date();
@@ -51,13 +57,18 @@ const FstpOperatorDetails = () => {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [tripNo, setTripNo] = useState(null);
+  const [tripNo, setTripNo] = useState();
+  const [appId, setAppId] = useState();
+  const [filterVehicle, setFilterVehicle] = useState();
 
+  const { isLoading: totalload, isSuccess: totalsuccess, data: totalvehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, totalconfig });
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
   const { isLoading: isSearchLoading, isIdle, data: { data: { table: tripDetails } = {} } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
     enabled: !!isVehicleSearchCompleted,
   });
-  const [vehicleInfo, setVehicleInfo] = useState(vehicle);
+
+  const currentTrip = filterVehicle?.length == 0 ? 1 : (tripNo - filterVehicle?.length) + 1
+
 
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
@@ -68,85 +79,85 @@ const FstpOperatorDetails = () => {
 
   const mutation = Digit.Hooks.fsm.useVehicleUpdate(tenantId);
 
-  useLayoutEffect(() => {
-    if (isSuccess) {
-      setVehicleInfo(vehicle);
-    }
-  }, [isSuccess])
-
-
   useEffect(() => {
     if (isSuccess) {
-      let temp = {}
+      setWasteCollected(vehicle?.vehicle?.tankCapacity);
       const applicationNos = vehicle?.tripDetails?.map((tripData) => tripData.referenceNo).join(",");
       setSearchParams({ applicationNos });
       setIsVehicleSearchCompleted(true);
-      vehicle?.tripDetails?.map((i, n) => {
-        temp = { ...temp, [n]: vehicle.vehicle.tankCapacity }
-        setWasteCollected(temp)
-      })
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (totalsuccess) {
+      const temp = totalvehicle?.vehicleTrip?.filter((c, i, r) => c?.tripDetails[0]?.referenceNo === appId && c?.applicationStatus === "WAITING_FOR_DISPOSAL");
+      setFilterVehicle(temp)
+    }
+  }, [totalsuccess]);
+
+  useEffect(() => {
+    if (!isIdle && !isSearchLoading && tripDetails) {
+      setTripNo(tripDetails[0]?.noOfTrips)
+      setAppId(tripDetails[0].applicationNo)
+    }
+  }, [isSearchLoading, isIdle]);
+
+
 
   useEffect(() => {
     switch (selectedAction) {
       case "DECLINEVEHICLE":
         return setShowModal(true);
       case "DISPOSE":
-        return handleError()
+        setSelectedAction(null)
+        return handleSubmit()
       default:
         setSelectedAction()
+        console.debug("default case");
         break;
     }
   }, [selectedAction]);
 
-  const handleError = () => {
-    let bool = true
-    let etemp = {}  // a temporary object create and use for validation in this function
-    vehicleInfo?.tripDetails?.map((i, n) => {
-      i.additionalDetails = n + 1
-      if (!vehicleInfo.vehicle.tankCapacity || i.volume > vehicleInfo.vehicle.tankCapacity) {
-        etemp[n] = { ...etemp[n], wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" }
-        setErrors(etemp);
-        bool = false
-      }
-      if (i.itemStartTime === 0) {
-        etemp[n] = { ...etemp[n], tripStartTime: "ES_FSTP_INVALID_START_TIME" }
-        setErrors(etemp);
-        bool = false
-      }
-      if (n > 0 && vehicleInfo.tripDetails[n - 1].itemEndTime > i.itemStartTime) {
-        etemp[n] = { ...etemp[n], tripStartTime: "ES_FSTP_INVALID_START_TIME" }
-        setErrors(etemp);
-        bool = false
-      }
-      if (i.itemEndTime === null) {
-        etemp[n] = { ...etemp[n], tripTime: "ES_FSTP_INVALID_TRIP_TIME" }
-        setErrors(etemp);
-        bool = false
-      }
-      if (i.itemStartTime === i.itemEndTime || i.itemStartTime > i.itemEndTime) {
-        etemp[n] = { ...etemp[n], tripTime: "ES_FSTP_INVALID_TRIP_TIME" }
-        setErrors(etemp);
-        bool = false
-      }
-    })
-
-    setSelectedAction(null)
-
-    if (bool) {
-      setErrors({})
-      handleSubmit()
-    }
-  }
-
   const handleSubmit = () => {
+    const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
+    if (!wasteCollected || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
+      setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
+      return;
+    }
+    if (tripStartTime === null) {
+      setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
+      return;
+    }
+
+    if (tripTime === null) {
+      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
+      return;
+    }
+
+    if (tripStartTime === tripTime || tripStartTime > tripTime) {
+      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
+      return;
+    }
+
+    setErrors({});
+
+    const d = new Date();
+    const timeStamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) / 1000;
+    const tripStartTimestamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripStartTime)) / 1000;
+    const tripDetail = { tripNo: currentTrip }
+    vehicle.tripStartTime = tripStartTimestamp;
+    vehicle.fstpEntryTime = tripStartTimestamp;
+    vehicle.tripEndTime = timeStamp;
+    vehicle.fstpExitTime = timeStamp;
+    vehicle.volumeCarried = wasteCollected;
+    vehicle.tripDetails[0].additionalDetails = tripDetail
     const details = {
-      vehicleTrip: vehicleInfo,
+      vehicleTrip: [vehicle],
       workflow: {
         action: "DISPOSE",
       },
     };
+
     mutation.mutate(details, {
       onSuccess: handleSuccess,
     });
@@ -186,23 +197,14 @@ const FstpOperatorDetails = () => {
     }, 5000);
   };
 
-  const handleChange = (event, index) => {
-    let temp = vehicleInfo //temporary object for mirroring vehicle details
-    let tempWaste = wasteCollected
+  const handleChange = (event) => {
     const { name, value } = event.target;
     if (name === "tripTime") {
       setTripTime(value);
     } else if (name === "wasteRecieved") {
-      temp["tripDetails"][0].volume = value;
-      setVehicleInfo(temp);
-      tempWaste = { ...tempWaste, [index]: value }
-      setWasteCollected(tempWaste);
+      setWasteCollected(value);
     }
   };
-
-  const handleTripChange = (data) => {
-    setTripNo(data.name)
-  }
 
   if (isLoading) {
     return <Loader />;
@@ -227,13 +229,9 @@ const FstpOperatorDetails = () => {
     },
   ];
 
-
-  const handleTimeChange = (value, index, cb) => {
-    let temp = vehicleInfo
-    value = String(value)
+  const handleTimeChange = (value, cb) => {
     if (typeof value === 'string') {
-      temp["tripDetails"][index][cb] = value;
-      setVehicleInfo(temp)
+      cb(value);
     }
   }
 
@@ -249,50 +247,50 @@ const FstpOperatorDetails = () => {
 
   return (
     <div>
-      {vehicleInfo && vehicleInfo?.tripDetails && vehicleInfo?.tripDetails?.map((i, index) => (
-        <Card>
-          <StatusTable>
-            {vehicleData.map((row, index) => (
-              <Row key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
-            ))}
-            <CardLabelError>{t(errors[index]?.tripStartTime)}</CardLabelError>
-            <form>
-              <Row
-                key={t("ES_VEHICLE_IN_TIME")}
-                label={`${t("ES_VEHICLE_IN_TIME")} * `}
-                rowContainerStyle={{ marginBottom: "32px" }}
-                text={
-                  <div>
-                    <CustomTimePicker name="tripStartTime" onChange={val => handleTimeChange(val, index, "itemStartTime")} value={tripStartTime} />
-                  </div>
-                }
-              />
-              <CardLabelError>{t(errors[index]?.wasteRecieved)}</CardLabelError>
-              <Row
-                key={t("ES_VEHICLE_SEPTAGE_DUMPED")}
-                label={`${t("ES_VEHICLE_SEPTAGE_DUMPED")} * `}
-                text={
-                  <div>
-                    <TextInput
-                      type="number"
-                      name="wasteRecieved"
-                      value={wasteCollected[index]}
-                      onChange={val => handleChange(val, index)}
-                      style={{ width: "100%", maxWidth: "200px" }}
-                    />
-                  </div>
-                }
-              />
-              <CardLabelError>{t(errors[index]?.tripTime)}</CardLabelError>
-              <Row
-                key={t("ES_VEHICLE_OUT_TIME")}
-                label={`${t("ES_VEHICLE_OUT_TIME")} * `}
-                text={
-                  <div>
-                    <CustomTimePicker name="tripTime" onChange={val => handleTimeChange(val, index, "itemEndTime")} value={tripTime} />
-                  </div>
-                }
-              />
+      <Card>
+        <StatusTable>
+          {vehicleData?.map((row, index) => (
+            <Row key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
+          ))}
+          <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
+          <form>
+            <Row
+              key={t("ES_VEHICLE_IN_TIME")}
+              label={`${t("ES_VEHICLE_IN_TIME")} * `}
+              rowContainerStyle={{ marginBottom: "32px" }}
+              text={
+                <div>
+                  <CustomTimePicker name="tripStartTime" onChange={val => handleTimeChange(val, setTripStartTime)} value={tripStartTime} />
+                </div>
+              }
+            />
+            <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>
+            <Row
+              key={t("ES_VEHICLE_SEPTAGE_DUMPED")}
+              label={`${t("ES_VEHICLE_SEPTAGE_DUMPED")} * `}
+              text={
+                <div>
+                  <TextInput
+                    type="number"
+                    name="wasteRecieved"
+                    value={wasteCollected}
+                    onChange={handleChange}
+                    style={{ width: "100%", maxWidth: "200px" }}
+                  />
+                </div>
+              }
+            />
+            <CardLabelError>{t(errors.tripTime)}</CardLabelError>
+            <Row
+              key={t("ES_VEHICLE_OUT_TIME")}
+              label={`${t("ES_VEHICLE_OUT_TIME")} * `}
+              text={
+                <div>
+                  <CustomTimePicker name="tripTime" onChange={val => handleTimeChange(val, setTripTime)} value={tripTime} />
+                </div>
+              }
+            />
+            {!isSearchLoading && !isIdle && tripDetails ?
               <Row
                 key={t("ES_VEHICLE_TRIP_NO")}
                 label={`${t("ES_VEHICLE_TRIP_NO")} * `}
@@ -300,42 +298,41 @@ const FstpOperatorDetails = () => {
                   <div>
                     <Dropdown
                       disable
-                      select={handleTripChange}
-                      selected={{ "name": `${vehicle["tripDetails"].indexOf(i) + 1} of ${vehicle["tripDetails"].length}` }}
+                      selected={{ "name": `${currentTrip} of ${tripDetails[0]?.noOfTrips}` }}
                       t={t}
                       optionKey="name"
                       style={{ maxWidth: '200px' }} />
                   </div>
                 }
               >
-              </Row>
-              {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
-                <ActionBar>
-                  {displayMenu && workflowDetails?.data?.nextActions ? (
-                    <Menu
-                      localeKeyPrefix={""}
-                      options={workflowDetails?.data?.nextActions.map((action) => action.action)}
-                      t={t}
-                      onSelect={onActionSelect}
-                    />
-                  ) : null}
-                  <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
-                </ActionBar>
-              )}
-            </form>
-            {showModal ? (
-              <ActionModal
-                t={t}
-                action={selectedAction}
-                tenantId={tenantId}
-                state={state}
-                id={applicationNos}
-                closeModal={closeModal}
-                submitAction={handleDecline}
-                actionData={workflowDetails?.data?.timeline}
-              />
-            ) : null}
-            {/* <LabelFieldPair>
+              </Row> : null}
+            {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
+              <ActionBar>
+                {displayMenu && workflowDetails?.data?.nextActions ? (
+                  <Menu
+                    localeKeyPrefix={""}
+                    options={workflowDetails?.data?.nextActions.map((action) => action.action)}
+                    t={t}
+                    onSelect={onActionSelect}
+                  />
+                ) : null}
+                <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+              </ActionBar>
+            )}
+          </form>
+          {showModal ? (
+            <ActionModal
+              t={t}
+              action={selectedAction}
+              tenantId={tenantId}
+              state={state}
+              id={applicationNos}
+              closeModal={closeModal}
+              submitAction={handleDecline}
+              actionData={workflowDetails?.data?.timeline}
+            />
+          ) : null}
+          {/* <LabelFieldPair>
             <CardLabel>{t("ES_VEHICLE_WASTE_RECIEVED")}</CardLabel>
             <div className="field-container">
               <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} />
@@ -356,9 +353,8 @@ const FstpOperatorDetails = () => {
               />
             </div>
           </LabelFieldPair> */}
-          </StatusTable>
-        </Card>
-      ))}
+        </StatusTable>
+      </Card>
       <h2 style={{ fontWeight: "bold", fontSize: "16px", marginLeft: "8px", marginTop: "16px" }}>{t("ES_FSTP_OPERATOR_DETAILS_WASTE_GENERATORS")}</h2>
       {isSearchLoading || isIdle ? (
         <Loader />
