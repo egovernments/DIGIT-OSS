@@ -35,7 +35,7 @@ const FstpInbox = () => {
 
   const { isLoading: applicationLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
-    { applicationNos: searchParams?.applicationNos, uuid: userInfo.uuid },
+    { applicationNos: searchParams?.refernceNos, uuid: userInfo.uuid },
     { staleTime: Infinity }
   );
 
@@ -45,24 +45,26 @@ const FstpInbox = () => {
     { enabled: searchParams?.name?.length > 1 }
   );
   let filters = {
-    // vehicleIds: vehicles !== undefined && searchParams?.registrationNumber?.length > 0 ? vehicles?.vehicle?.[0]?.id || "null" : "",
-    vehicleIds: applicationData !== undefined && searchParams?.applicationNos?.length > 0 ? applicationData?.vehicleId || "null" : vehicles !== undefined && searchParams?.registrationNumber?.length > 0 ? vehicles?.vehicle?.[0]?.id || "null" : "",
+    businessService: "FSM_VEHICLE_TRIP",
+    refernceNos: applicationData !== undefined && searchParams?.refernceNos?.length > 0 ? applicationData?.applicationNo || "null" : "",
+    vehicleIds: vehicles !== undefined && searchParams?.registrationNumber?.length > 0 ? vehicles?.vehicle?.[0]?.id || "null" : "",
+    // vehicleIds: applicationData !== undefined && searchParams?.applicationNos?.length > 0 ? applicationData?.vehicleId || "null" : vehicles !== undefined && searchParams?.registrationNumber?.length > 0 ? vehicles?.vehicle?.[0]?.id || "null" : "",
     tripOwnerIds: dsoData !== undefined && searchParams?.name?.length > 0 ? dsoData?.[0]?.ownerId || "null" : "",
     applicationStatus: searchParams?.applicationStatus,
   };
-  if (applicationData == undefined){
+  if (applicationData == undefined) {
     filters = {
       "responseInfo": {
-          "apiId": "Rainmaker",
-          "ver": null,
-          "ts": null,
-          "resMsgId": "uief87324",
-          "msgId": "1645827148736|en_IN",
-          "status": "successful"
+        "apiId": "Rainmaker",
+        "ver": null,
+        "ts": null,
+        "resMsgId": "uief87324",
+        "msgId": "1645827148736|en_IN",
+        "status": "successful"
       },
       "vehicle": [],
       "totalCount": 0
-  }
+    }
   }
   const { isLoading, data: { totalCount, vehicleLog } = {}, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({
     tenantId,
@@ -92,7 +94,7 @@ const FstpInbox = () => {
   const searchFields = [
     {
       label: t("ES_SEARCH_APPLICATION_APPLICATION_NO"),
-      name: "applicationNos",
+      name: "refernceNos",
     },
     {
       label: t("ES_FSTP_OPERATOR_VEHICLE_NO"),
