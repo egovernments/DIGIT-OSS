@@ -61,7 +61,7 @@ const ApplicationDetails = (props) => {
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationNumber,
-    moduleCode: DSO || applicationData?.paymentPreference ? "FSM_POST_PAY_SERVICE" : "FSM",
+    moduleCode: DSO || applicationData?.paymentPreference === "POST_PAY" ? "FSM_POST_PAY_SERVICE" : "FSM",
     role: DSO ? "FSM_DSO" : "FSM_EMPLOYEE",
     serviceData: applicationDetails,
   });
