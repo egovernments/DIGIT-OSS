@@ -44,13 +44,49 @@ export const TLSearch = {
   applicationDetails: async (t, tenantId, applicationNumber, userType) => {
     const filter = { applicationNumber };
     const response = await TLSearch.application(tenantId, filter);
+    const propertyDetails = await Digit.PTService.search({tenantId, filters: {propertyIds:response?.tradeLicenseDetail?.additionalDetail?.propertyId}});
     let numOfApplications = [];
     if(response?.licenseNumber) {
       const licenseNumbers = response?.licenseNumber;
       const filters = { licenseNumbers, offset: 0 };
       numOfApplications = await TLSearch.numberOfApplications(tenantId, filters);
     }
-
+    let propertyAddress = '';
+  if(propertyDetails && propertyDetails?.Properties?.length){
+    if(propertyDetails?.Properties[0]?.address?.doorNo) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.doorNo;
+      if(propertyDetails?.Properties[0]?.address?.street) {
+        propertyAddress += ', ';
+      }
+    }
+    if(propertyDetails?.Properties[0]?.address?.street) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.street;
+      if(propertyDetails?.Properties[0]?.address?.landmark) {
+        propertyAddress += ', ';
+      }
+    }
+    if(propertyDetails?.Properties[0]?.address?.landmark) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.landmark;
+      if(propertyDetails?.Properties[0]?.address?.locality?.name) {
+        propertyAddress += ', ';
+      }
+    }
+    if(propertyDetails?.Properties[0]?.address?.locality?.name) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.locality?.name;
+      if(propertyDetails?.Properties[0]?.address?.city) {
+        propertyAddress += ', ';
+      }
+    }
+    if(propertyDetails?.Properties[0]?.address?.city) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.city;
+      if(propertyDetails?.Properties[0]?.address?.pincode) {
+        propertyAddress += ', ';
+      }
+    }
+    if(propertyDetails?.Properties[0]?.address?.pincode) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.pincode;
+    }
+  }
     let employeeResponse = [];
     const tradedetails = {
       title: "TL_COMMON_TR_DETAILS",
@@ -110,6 +146,16 @@ export const TLSearch = {
         })
       },
     };
+
+    const PropertyDetail = {
+      title: "PT_DETAILS",
+      values: [
+        { title: "TL_PROPERTY_ID", value: propertyDetails?.Properties?.[0]?.propertyId || "NA" },
+        { title: "PT_OWNER_NAME", value: propertyDetails?.Properties?.[0]?.owners[0]?.name || "NA" },
+        { title: "PROPERTY_ADDRESS", value: propertyAddress || "NA"},
+        { title: "TL_VIEW_PROPERTY_DETAIL", to:`/digit-ui/employee/pt/property-details/${propertyDetails?.Properties?.[0]?.propertyId}`, value:"", isLink:true }
+      ],
+    }; 
 
     const cityOfApp = cloneDeep(response?.tradeLicenseDetail?.address?.city);
     const localityCode = cloneDeep(response?.tradeLicenseDetail?.address?.locality?.code);
@@ -209,8 +255,10 @@ export const TLSearch = {
     response && employeeResponse.push(tradedetails);
     response?.tradeLicenseDetail?.tradeUnits && employeeResponse.push(tradeUnits);
     response?.tradeLicenseDetail?.accessories && employeeResponse.push(accessories);
-    response && employeeResponse.push(tradeAddress);
+    propertyDetails?.Properties?.length>0 && employeeResponse.push(PropertyDetail);
+    response && !(propertyDetails?.Properties?.length >0) && employeeResponse.push(tradeAddress);
     response?.tradeLicenseDetail?.owners && employeeResponse.push(owners);
+    propertyDetails?.Properties?.length>0 && employeeResponse.push(PropertyDetail);
 
     return {
       tenantId: response.tenantId,
