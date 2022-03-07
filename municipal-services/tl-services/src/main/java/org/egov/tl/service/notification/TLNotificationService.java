@@ -74,9 +74,8 @@ public class TLNotificationService {
 		Map<String, String> mobileNumberToOwner = new HashMap<>();
 		String tenantId = request.getLicenses().get(0).getTenantId();
 		String action = request.getLicenses().get(0).getAction();
-		String receiptno = "";
 		Map<Object, Object> configuredChannelList = fetchChannelList(new RequestInfo(), tenantId, TL_BUSINESSSERVICE, action);
-		String propertyId = request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID).asText();
+		String propertyId = "";
 		Property property = propertyUtil.getPropertyDetails(request.getLicenses().get(0), propertyId, requestInfo);
 		String source = property.getSource().name();
 //		List<String> configuredChannelNames = Arrays.asList(new String[]{"SMS","EVENT","EMAIL"});
@@ -89,6 +88,9 @@ public class TLNotificationService {
 		});
 		}
 
+		if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null)
+			propertyId = request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID).asText();
+
 		String businessService = request.getLicenses().isEmpty() ? null : request.getLicenses().get(0).getBusinessService();
 		if (businessService == null)
 			businessService = businessService_TL;
@@ -98,7 +100,7 @@ public class TLNotificationService {
 				List<SMSRequest> smsRequestsTL = new LinkedList<>();
 					if (null != config.getIsTLSMSEnabled()) {
 						if (config.getIsTLSMSEnabled()) {
-							if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null) {
+							if(!propertyId.isEmpty()) {
 								List<SMSRequest> smsRequestsPT = new ArrayList<>();
 								String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
 								String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_SMS, propertyId, source);
@@ -116,11 +118,11 @@ public class TLNotificationService {
 
 					if (null != config.getIsUserEventsNotificationEnabledForTL()) {
 						if (config.getIsUserEventsNotificationEnabledForTL()) {
-							if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null) {
+							if(!propertyId.isEmpty()) {
 								String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
 								String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_EVENT, propertyId, source);
 								log.info("Message to be sent: ", message);
-								EventRequest eventRequest = propertyUtil.getEventsForPropertyOwner(property, true, message, receiptno, USREVENTS_EVENT_NAME, request);
+								EventRequest eventRequest = propertyUtil.getEventsForPropertyOwner(property, message, request);
 								if (null != eventRequest)
 									util.sendEventNotification(eventRequest);
 							}
@@ -132,7 +134,7 @@ public class TLNotificationService {
 				List<EmailRequest> emailRequests = new LinkedList<>();
 				if (null != config.getIsEmailNotificationEnabled()) {
 					if (config.getIsEmailNotificationEnabled()) {
-						if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null) {
+						if(!propertyId.isEmpty()) {
 							List<EmailRequest> emailRequestsPT = new LinkedList<>();
 							String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
 							Set<String> propertyMobileNumbers = new HashSet<>();

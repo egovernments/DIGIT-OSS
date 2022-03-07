@@ -21,10 +21,6 @@ public class TLConstants {
 
     public static final String PROPERTY_JSONPATH = "$.Properties[0].propertyId";
 
-    public static final String PROPERTY_OWNERNAME_JSONPATH = "$.Properties[0].owners[0].name";
-
-    public static final String PROPERTY_OWNER_MOBILE_JSONPATH = "$.Properties[0].owners[0].mobileNumber";
-
     public static final String MODULE = "rainmaker-tl";
 
     public static final String NOTIFICATION_LOCALE = "en_IN";
@@ -403,6 +399,15 @@ public class TLConstants {
 
     public static final String ACTION_STATUS_MANUAL_EXPIRED = "MANUALEXPIRE_MANUALEXPIRED";
 
+    public static final String SALUTATION_MR = "Mr. ";
+
+    public static final String SALUTATION_MS = "Ms. ";
+
+    public static final String GENDER_MALE = "Male";
+
+    public static final String NOTIF_TRADE_PROPERTY_ID_KEY = "{PROPERTY_ID}";
+
+    public static final String NOTIF_TENANT_KEY = "XYZ";
 
     public TLConstants() {}
 

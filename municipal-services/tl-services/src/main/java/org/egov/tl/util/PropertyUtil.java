@@ -33,35 +33,38 @@ public class PropertyUtil {
 
     private TLConfiguration config;
 
+    private TradeUtil tradeUtil;
+
     @Autowired
-    public PropertyUtil(ServiceRequestRepository serviceRequestRepository, NotificationUtil util, ObjectMapper mapper, TLConfiguration config) {
+    public PropertyUtil(ServiceRequestRepository serviceRequestRepository, NotificationUtil util, ObjectMapper mapper, TLConfiguration config, TradeUtil tradeUtil) {
         this.util = util;
         this.serviceRequestRepository = serviceRequestRepository;
         this.mapper = mapper;
         this.config = config;
+        this.tradeUtil = tradeUtil;
     }
 
     public String getPropertySearchMsg(TradeLicense license, String localizationMessages, String channel, String propertyId, String source) {
         String messageTemplate = "";
         if(channel.equals(CHANNEL_NAME_EMAIL)) {
-            if(source == "TL"){
+            if(source.equals(TL_BUSINESSSERVICE)){
                 messageTemplate = util.getMessageTemplate(NOTIFICATION_PROPERTY_CREATED + ".email", localizationMessages);
-                if(license.getTradeLicenseDetail().getOwners().get(0).getGender().equals("Male")) {
-                    messageTemplate = messageTemplate.replace(NOTIF_OWNER_NAME_KEY, "Mr. " + license.getTradeLicenseDetail().getOwners().get(0).getName());
+                if(license.getTradeLicenseDetail().getOwners().get(0).getGender().equals(GENDER_MALE)) {
+                    messageTemplate = messageTemplate.replace(NOTIF_OWNER_NAME_KEY, SALUTATION_MR + license.getTradeLicenseDetail().getOwners().get(0).getName());
                 } else {
-                    messageTemplate = messageTemplate.replace(NOTIF_OWNER_NAME_KEY, "Ms. " + license.getTradeLicenseDetail().getOwners().get(0).getName());
+                    messageTemplate = messageTemplate.replace(NOTIF_OWNER_NAME_KEY, SALUTATION_MS + license.getTradeLicenseDetail().getOwners().get(0).getName());
                 }
             } else {
                 messageTemplate = util.getMessageTemplate(TLConstants.NOTIFICATION_PROPERTY_TAGGED + ".email", localizationMessages);
                 messageTemplate = messageTemplate.replace(NOTIF_OWNER_NAME_KEY, license.getTradeLicenseDetail().getOwners().get(0).getName());
             }
         } else {
-            if(source == "TL"){
+            if(source.equals(TL_BUSINESSSERVICE)){
                 messageTemplate = util.getMessageTemplate(TLConstants.NOTIFICATION_PROPERTY_CREATED, localizationMessages);
-                if(license.getTradeLicenseDetail().getOwners().get(0).getGender().equals("Male")) {
-                    messageTemplate = messageTemplate.replace(NOTIF_OWNER_NAME_KEY, "Mr. " + license.getTradeLicenseDetail().getOwners().get(0).getName());
+                if(license.getTradeLicenseDetail().getOwners().get(0).getGender().equals(GENDER_MALE)) {
+                    messageTemplate = messageTemplate.replace(NOTIF_OWNER_NAME_KEY, SALUTATION_MR + license.getTradeLicenseDetail().getOwners().get(0).getName());
                 } else {
-                    messageTemplate = messageTemplate.replace(NOTIF_OWNER_NAME_KEY, "Ms. " + license.getTradeLicenseDetail().getOwners().get(0).getName());
+                    messageTemplate = messageTemplate.replace(NOTIF_OWNER_NAME_KEY, SALUTATION_MS + license.getTradeLicenseDetail().getOwners().get(0).getName());
                 }
             } else {
                 messageTemplate = util.getMessageTemplate(TLConstants.NOTIFICATION_PROPERTY_TAGGED, localizationMessages);
@@ -69,10 +72,10 @@ public class PropertyUtil {
             }
         }
         messageTemplate = messageTemplate.replace(NOTIF_TRADE_NAME_KEY, license.getTradeName());
-        messageTemplate = messageTemplate.replace("{PROPERTY_ID}", propertyId.substring(2,18)+"****");
+        messageTemplate = messageTemplate.replace(NOTIF_TRADE_PROPERTY_ID_KEY, propertyId.substring(2,18)+"****");
         messageTemplate = messageTemplate.replace(NOTIF_TRADE_LICENSENUMBER_KEY, license.getApplicationNumber());
 
-        messageTemplate = messageTemplate.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
+        messageTemplate = messageTemplate.replace(NOTIF_TENANT_KEY, capitalize(license.getTenantId().split("\\.")[1]));
         return messageTemplate;
     }
 
@@ -81,7 +84,7 @@ public class PropertyUtil {
         Property property = new Property();
         OwnerInfo ownerInfo = new OwnerInfo();
         List<OwnerInfo> ownerList = new ArrayList<>();
-        String url = getPropertySearchURL();
+        String url = tradeUtil.getPropertySearchURL();
         url = url.replace("{1}", license.getTenantId());
         url = url.replace("{2}", propertyId);
         log.info("url to fetch property owner name" + url);
@@ -94,24 +97,13 @@ public class PropertyUtil {
             DocumentContext documentContext = JsonPath.parse(jsonString);
             Map<String, Object> propertyMap = documentContext.read("$.Properties[0]");
             property = mapper.convertValue(propertyMap, Property.class);
+            if (property == null)
+                throw new CustomException("INVALID PROPERTY", " The propertyId " + license.getPropertyId() + " does not exist");
         } catch (Exception e) {
             e.printStackTrace();
             throw new CustomException("INVALID PROPERTY", " Failed to parse the response from property search on id " + license.getPropertyId());
         }
         return property;
-    }
-
-    public String getPropertySearchURL(){
-        StringBuilder url = new StringBuilder(config.getPropertyHost());
-        url.append(config.getPropertyContextPath());
-        url.append(config.getPropertySearchEndpoint());
-        url.append("?");
-        url.append("tenantId=");
-        url.append("{1}");
-        url.append("&");
-        url.append("propertyIds=");
-        url.append("{2}");
-        return url.toString();
     }
 
     public Collection<? extends EmailRequest> createPropertyEmailRequest(RequestInfo requestInfo, String message, Map<String, String> mapOfPhnoAndEmail) {
@@ -130,7 +122,7 @@ public class PropertyUtil {
         return emailRequest;
     }
 
-    public EventRequest getEventsForPropertyOwner(Property property, boolean b, String message, String receiptno, String usreventsEventName, TradeLicenseRequest request) {
+    public EventRequest getEventsForPropertyOwner(Property property, String message, TradeLicenseRequest request) {
         if(message == null)
             return null;
         List<Event> events = new ArrayList<>();
@@ -159,8 +151,8 @@ public class PropertyUtil {
             List<String> payTriggerList = Arrays.asList(config.getPayTriggers().split("[,]"));
             Action action = null;
             events.add(Event.builder().tenantId(request.getLicenses().get(0).getTenantId()).description(mobileNumberToMsg.get(mobile))
-                    .eventType(BPAConstants.USREVENTS_EVENT_TYPE).name(USREVENTS_EVENT_NAME)
-                    .postedBy(BPAConstants.USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
+                    .eventType(TLConstants.USREVENTS_EVENT_TYPE).name(USREVENTS_EVENT_NAME)
+                    .postedBy(TLConstants.USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
                     .eventDetails(null).actions(action).build());
         }
         if(!CollectionUtils.isEmpty(events)) {
