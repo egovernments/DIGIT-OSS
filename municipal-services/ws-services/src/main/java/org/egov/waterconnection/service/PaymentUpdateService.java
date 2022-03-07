@@ -237,6 +237,15 @@ public class PaymentUpdateService {
 				}
 			}
 		}
+
+		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
+			if (config.getIsEmailNotificationEnabled() != null && config.getIsEmailNotificationEnabled()) {
+				List<EmailRequest> emailRequests = getEmailRequest(waterConnectionRequest, property, paymentDetail);
+				if (!CollectionUtils.isEmpty(emailRequests)) {
+					notificationUtil.sendEmail(emailRequests);
+				}
+			}
+		}
 	}
 	/**
 	 *
@@ -343,6 +352,73 @@ public class PaymentUpdateService {
 			smsRequest.add(req);
 		});
 		return smsRequest;
+	}
+
+
+	/**
+	 * Creates email request for each owner
+	 *
+	 * @param waterConnectionRequest Water Connection Request
+	 * @param property Property Object
+	 * @param paymentDetail Payment Detail Object
+	 * @return List of EmailRequest
+	 */
+	private List<EmailRequest> getEmailRequest(WaterConnectionRequest waterConnectionRequest,
+											   Property property, PaymentDetail paymentDetail) {
+		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
+				waterConnectionRequest.getRequestInfo());
+		String message = notificationUtil.getMessageTemplate(WCConstants.PAYMENT_NOTIFICATION_EMAIL, localizationMessage);
+		if (message == null) {
+			log.info("No message template found for, {} " + WCConstants.PAYMENT_NOTIFICATION_EMAIL);
+			return Collections.emptyList();
+		}
+
+		Map<String, String> mobileNumbersAndNames = new HashMap<>();
+		Set<String> mobileNumbers = new HashSet<>();
+
+		//Send the notification to all owners
+		property.getOwners().forEach(owner -> {
+			if (owner.getMobileNumber() != null)
+				mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+			mobileNumbers.add(owner.getMobileNumber());
+		});
+
+		//send the notification to the connection holders
+		if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+			waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+				if (!org.apache.commons.lang.StringUtils.isEmpty(holder.getMobileNumber())) {
+					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					mobileNumbers.add(holder.getMobileNumber());
+
+				}
+			});
+		}
+		//Send the notification to applicant
+		if(!org.apache.commons.lang.StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+		{
+			mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
+			mobileNumbers.add(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber());
+
+		}
+
+		Map<String, String> getReplacedMessage = workflowNotificationService.getMessageForMobileNumber(mobileNumbersAndNames,
+				waterConnectionRequest, message, property);
+
+		Map<String, String> mobileNumberAndMessage =replacePaymentInfo(getReplacedMessage, paymentDetail);
+
+		Map<String,String> mobileNumberAndEmailId = notificationUtil.fetchUserEmailIds(mobileNumbers,waterConnectionRequest.getRequestInfo(),waterConnectionRequest.getWaterConnection().getTenantId());
+
+		List<EmailRequest> emailRequest = new LinkedList<>();
+		for (Map.Entry<String, String> entryset : mobileNumberAndEmailId.entrySet()) {
+			String customizedMsg = mobileNumberAndMessage.get(entryset.getKey());
+			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
+			EmailRequest email = new EmailRequest(waterConnectionRequest.getRequestInfo(),emailobj);
+			emailRequest.add(email);
+		}
+		return emailRequest;
+
 	}
 
 	/**
