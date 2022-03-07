@@ -153,7 +153,7 @@ export const TLSearch = {
         { title: "TL_PROPERTY_ID", value: propertyDetails?.Properties?.[0]?.propertyId || "NA" },
         { title: "PT_OWNER_NAME", value: propertyDetails?.Properties?.[0]?.owners[0]?.name || "NA" },
         { title: "PROPERTY_ADDRESS", value: propertyAddress || "NA"},
-        { title: "View complete property details", to:`/digit-ui/employee/pt/property-details/${propertyDetails?.Properties?.[0]?.propertyId}`, value:"", isLink:true }
+        { title: "TL_VIEW_PROPERTY_DETAIL", to:`/digit-ui/employee/pt/property-details/${propertyDetails?.Properties?.[0]?.propertyId}`, value:"", isLink:true }
       ],
     }; 
 
