@@ -3,7 +3,7 @@ import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
 const getThumbnails = async (ids, tenantId) => {
-  tenantId = window.location.href.includes("/obps/")? Digit.ULBService.getStateId() : tenantId;
+  tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : tenantId;
   const res = await Digit.UploadServices.Filefetch(ids, tenantId);
   if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
     return { thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]), images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };
@@ -92,7 +92,7 @@ export const WorkflowService = {
       /* To check state is updatable and provide edit option*/
       const currentState = businessServiceResponse?.find((state) => state.uuid === processInstances[0]?.state.uuid);
       if (currentState && currentState?.isStateUpdatable) {
-        if (moduleCode === "FSM" || moduleCode === "FSM_VEHICLE_TRIP" || moduleCode === "PGR" || moduleCode === "OBPS") null;
+        if (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE" || moduleCode === "FSM_VEHICLE_TRIP" || moduleCode === "PGR" || moduleCode === "OBPS") null;
         else nextActions.push({ action: "EDIT", state: currentState });
       }
 
