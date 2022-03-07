@@ -15,7 +15,7 @@ function UploadDrawer({ setProfilePic, closeDrawer, userType, removeProfilePic ,
     (async () => {
       setError(null);
       if (file) {
-        if (file.size >= 2000000) {
+        if (file.size >= 1000000) {
           showToast("error", t("CORE_COMMON_PROFILE_MAXIMUM_UPLOAD_SIZE_EXCEEDED"))
           setError(t("CORE_COMMON_PROFILE_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {

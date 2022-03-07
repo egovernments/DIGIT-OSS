@@ -46,10 +46,10 @@ const EmployeeApp = ({
             mobileView={mobileView}
             handleUserDropdownSelection={handleUserDropdownSelection}
             logoUrl={logoUrl}
-            showSidebar={false}
+            showSidebar={true}
             showLanguageChange={!showLanguageChange}
           />
-          <div className="loginContainer" style={{ "--banner-url": `url(${stateInfo?.bannerUrl})` }}>
+          <div className="grounded-container" style={{ padding: 0, paddingTop:"80px", marginLeft: "64px" }}>
             <Switch>
               <Route path={`${path}/user/login`}>
                 <EmployeeLogin />
@@ -58,19 +58,17 @@ const EmployeeApp = ({
                 <ForgotPassword />
               </Route>
               <Route path={`${path}/user/change-password`}>
-                {" "}
                 <ChangePassword />
               </Route>
               <Route path={`${path}/user/profile`}>
-                <UserProfile stateCode={stateCode} userType={"employee"} cityDetails={cityDetails}/>
-             </Route>
+                <UserProfile stateCode={stateCode} userType={"employee"} cityDetails={cityDetails} />
+              </Route>
               <Route path={`${path}/user/language-selection`}>
                 <LanguageSelection />
               </Route>
               <Route>
                 <Redirect to={`${path}/user/language-selection`} />
               </Route>
-              
             </Switch>
           </div>
         </Route>
