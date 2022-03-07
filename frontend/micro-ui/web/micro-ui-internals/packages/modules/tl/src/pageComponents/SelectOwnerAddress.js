@@ -16,7 +16,25 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
     setPermanentAddress(e.target.value);
   }
   function setCorrespondenceAddress(e) {
-    if (e.target.checked == true) {
+    
+    if(Object.keys(formData?.cpt?.details).length>0 && e.target.checked == true)
+    {
+      let obj = {
+        doorNo: formData?.cpt?.details?.address?.doorNo,
+        street: formData?.cpt?.details?.address?.street,
+        landmark: formData?.cpt?.details?.address?.landmark,
+        locality: formData?.cpt?.details?.address?.locality?.name,
+        city: formData?.cpt?.details?.address?.city,
+        pincode: formData?.address?.pincode,
+      };
+      let addressDetails = "";
+      for (const key in obj) {
+        if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
+        else addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
+      }
+      setPermanentAddress(addressDetails);
+    }
+    else if (e.target.checked == true) {
       let obj = {
         doorNo: formData?.address?.doorNo,
         street: formData?.address?.street,
