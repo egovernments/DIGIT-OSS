@@ -45,7 +45,7 @@ const useApplicationStatus = (select, isEnabled = true, statusMap=[]) => {
         return {
           name: t(`CS_COMMON_FSM_${state.applicationStatus}`),
           code: state.applicationStatus,
-          id: statusMap?.filter(e => e.applicationstatus === state.applicationStatus)?.[0]?.statusid,
+          id: (statusMap?.filter(e => e.applicationstatus === state.applicationStatus)?.[0]?.statusid) || state.uuid,
           roles,
         };
       })
@@ -58,7 +58,7 @@ const useApplicationStatus = (select, isEnabled = true, statusMap=[]) => {
       return {
         name: t(`CS_COMMON_FSM_${state.applicationStatus}`),
         code: state.applicationStatus,
-        id: statusMap?.filter(e => e.applicationstatus === state.applicationStatus)?.[0]?.statusid,
+        id: (statusMap?.filter(e => e.applicationstatus === state.applicationStatus)?.[0]?.statusid) || state.uuid,
         roles,
       };
     });
