@@ -44,7 +44,7 @@ import ReceiptsService from "./services/elements/Receipts";
 import { EDCRService } from "./services/elements/EDCR";
 import { OBPSService } from "./services/elements/OBPS";
 import { NOCService } from "./services/elements/NOC";
-import { AccessControlService } from "./services/elements/Access";
+import AccessControlService from "./services/elements/Access";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};

@@ -1,7 +1,7 @@
 import { Request } from "../atoms/Utils/Request";
 import Urls from "../atoms/urls";
 
-export const AccessControlService = {
+const AccessControlService = {
   getAccessControl: (tenantId) =>
     Request({
       url: Urls.access_control,
@@ -17,3 +17,4 @@ export const AccessControlService = {
       },
     }),
 };
+export default AccessControlService;

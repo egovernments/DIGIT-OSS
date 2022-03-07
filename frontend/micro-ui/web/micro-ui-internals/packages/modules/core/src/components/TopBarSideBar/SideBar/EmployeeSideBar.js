@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import EmployeeSideBarMenu from "../../../config/employee-sidebar-menu";
 import SubMenu from "./SubMenu";
-import { EventsIconSolid, HomeIcon, CaseIcon, ReceiptIcon, PropertyHouse } from "@egovernments/digit-ui-react-components";
+import { EventsIconSolid, HomeIcon, CaseIcon, ReceiptIcon, PropertyHouse, Loader } from "@egovernments/digit-ui-react-components";
 import { checkForEmployee } from "../../../../../tl/src/utils";
 import { Link } from "react-router-dom";
 
@@ -37,9 +37,10 @@ const EmployeeSideBar = () => {
   const NATADMIN = Digit.UserService.hasAccess("NATADMIN");
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
-  const { data } = Digit.Hooks.useAccessControl(tenantId);
+  const { isLoading, data } = Digit.Hooks.useAccessControl(tenantId);
 
-  console.log("newwww", data);
+  console.log(data);
+
   useEffect(() => {
     sidebarRef.current.style.cursor = "pointer";
     collapseNav();
@@ -180,25 +181,27 @@ const EmployeeSideBar = () => {
   let result = menuItems.filter((ele) => ele);
 
   return (
-    <div className="sidebar" ref={sidebarRef} onMouseOver={expandNav} onMouseLeave={collapseNav}>
-      {result.map((item, index) => {
-        if (item.type === "link") {
-          return (
-            <div className="sidebar-link">
-              <div className="actions">
-                <Link to={item.link} key={index}>
-                  {item.Icon}
-                  <span>{item.moduleName}</span>
-                </Link>
-              </div>
-            </div>
-          );
-        } else {
-          return <SubMenu item={item} key={index} />;
-        }
-      })}
+    // <div className="sidebar" ref={sidebarRef} onMouseOver={expandNav} onMouseLeave={collapseNav}>
+    //   {result.map((item, index) => {
+    //     if (item.type === "link") {
+    //       return (
+    //         <div className="sidebar-link">
+    //           <div className="actions">
+    //             <Link to={item.link} key={index}>
+    //               {item.Icon}
+    //               <span>{item.moduleName}</span>
+    //             </Link>
+    //           </div>
+    //         </div>
+    //       );
+    //     } else {
+    //       return <SubMenu item={item} key={index} />;
+    //     }
+    //   })}
+    // </div>
+    <div ref={sidebarRef} onMouseOver={expandNav} onMouseLeave={collapseNav}>
+      lll
     </div>
-    // <div>lll</div>
   );
 };
 
