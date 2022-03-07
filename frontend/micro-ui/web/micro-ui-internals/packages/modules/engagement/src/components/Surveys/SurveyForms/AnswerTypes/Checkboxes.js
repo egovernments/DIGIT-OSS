@@ -2,14 +2,14 @@ import { CheckBox, CloseSvg } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "../../../../hooks/useDebounce";
 
-const Checkboxes = ({ t, options = checkboxlist, updateOption, addOption, removeOption }) => {
+const Checkboxes = ({ t, options = checkboxlist, updateOption, addOption, removeOption,isPartiallyEnabled }) => {
   return (
     <div className="options_checkboxes">
       {options.map((title, index) => (
         <CheckBoxOption key={index} index={index} title={title} updateOption={updateOption} removeOption={removeOption}/>
       ))}
       <div>
-        <button className="unstyled-button link" type="button" onClick={() => addOption()}>
+        <button className="unstyled-button link" disabled={!isPartiallyEnabled} type="button" onClick={() => addOption()}>
           {t("CS_COMMON_ADD_OPTION")}
         </button>
       </div>

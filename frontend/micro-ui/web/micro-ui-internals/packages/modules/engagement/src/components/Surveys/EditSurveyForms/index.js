@@ -20,6 +20,7 @@ const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormD
     defaultValues: initialSurveysConfig,
   });
 
+
   useEffect(() => {
     registerRef("questions");
   }, []);
@@ -43,7 +44,7 @@ const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormD
             enableDescriptionOnly={isPartiallyEnabled}
             surveyFormData={getSurveyFormValues}
           />
-          <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} disableInputs={isFormDisabled} formsConfig={initialSurveysConfig.questions} />
+          <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} disableInputs={isFormDisabled} formsConfig={initialSurveysConfig.questions} isPartiallyEnabled={isPartiallyEnabled} />
           <SurveySettingsForms
             t={t}
             controlSurveyForm={controlSurveyForm}
@@ -52,7 +53,7 @@ const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormD
             enableEndDateTimeOnly={isPartiallyEnabled}
           />
           <span className="edit-action-btn">
-          <SubmitBar label={t("CS_EDIT_SURVEY")} submit="submit" disabled={isPartiallyEnabled ? !isPartiallyEnabled : isFormDisabled} />
+          {isPartiallyEnabled && <SubmitBar label={t("CS_EDIT_SURVEY")} submit="submit" disabled={isPartiallyEnabled ? !isPartiallyEnabled : isFormDisabled} />}
           </span>
         </Card>
       </form>
