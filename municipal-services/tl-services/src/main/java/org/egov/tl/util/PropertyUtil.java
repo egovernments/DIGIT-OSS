@@ -102,9 +102,9 @@ public class PropertyUtil {
     }
 
     public String getPropertySearchURL(){
-        StringBuilder url = new StringBuilder(config.getPropertyServiceHost());
-        url.append(config.getPropertyServiceContextPath());
-        url.append(config.getPropertyServiceSearchEndpoint());
+        StringBuilder url = new StringBuilder(config.getPropertyHost());
+        url.append(config.getPropertyContextPath());
+        url.append(config.getPropertySearchEndpoint());
         url.append("?");
         url.append("tenantId=");
         url.append("{1}");
