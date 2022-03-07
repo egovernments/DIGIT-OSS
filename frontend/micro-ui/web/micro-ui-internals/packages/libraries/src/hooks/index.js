@@ -93,7 +93,7 @@ import useMcollectSearchBill from "./mcollect/useMcollectSearchBill";
 import usemcollectTenants from "./mcollect/useTenants";
 import useMCollectCount from "./mcollect/useMCollectCount";
 import useMCollectCategory from "./mcollect/useMcollectCategory";
-import useMCollectCategoryTypes from './mcollect/useMcollectCategoryTypes';
+import useMCollectCategoryTypes from "./mcollect/useMcollectCategoryTypes";
 import useMCollectTaxHeads from "./mcollect/useMcollectTaxHeads";
 import useMcollectFormConfig from "./mcollect/useMcollectFormConfig";
 
@@ -144,12 +144,12 @@ import useBPAREGApplicationActions from "./obps/useBPAREGApplicationActions";
 import useBPADetailsPage from "./obps/useBPADetailsPage";
 import useBPAInbox from "./obps/useBPAInbox";
 import useEDCRInbox from "./obps/useEDCRInbox";
-import useBPAApplicationActions from "./obps/useApplicationActions"
+import useBPAApplicationActions from "./obps/useApplicationActions";
 import useArchitectInbox from "./obps/useArchitectInbox";
 import useBPAREGSearch from "./obps/useBPAREGSearch";
 import useEmpBPAREGSearch from "./obps/useEmpBPAREGSearch";
-import useServiceTypeFromApplicationType from "./obps/useServiceTypeFromApplicationType"
-import useBusinessServiceBasedOnServiceType from "./obps/useBusinessServiceBasedOnServiceType"
+import useServiceTypeFromApplicationType from "./obps/useServiceTypeFromApplicationType";
+import useBusinessServiceBasedOnServiceType from "./obps/useBusinessServiceBasedOnServiceType";
 import useBusinessServiceData from "./obps/useBusinessServiceData";
 import useBPATaxDocuments from "./obps/useBPATaxDocuments";
 
@@ -177,6 +177,7 @@ import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
 import usewsTenants from "./ws/useTenants";
 import useWaterSearch from "./ws/useWaterSearch";
 import useSewarageSearch from "./ws/useSewarageSearch";
+import useAccessControl from "./useAccessControl";
 
 const pgr = {
   useComplaintDetails,
@@ -319,14 +320,14 @@ const obps = {
   useOBPSSearch,
   useBusinessServiceBasedOnServiceType,
   useBusinessServiceData,
-  useBPATaxDocuments
+  useBPATaxDocuments,
 };
 
 const events = {
   useInbox: useEventInbox,
   useCreateEvent,
   useEventDetails,
-  useUpdateEvent
+  useUpdateEvent,
 };
 
 const engagement = {
@@ -345,21 +346,21 @@ const survey = {
   useSubmitResponse: useSurveySubmitResponse,
   useShowResults: useSurveyShowResults,
   useSurveyInbox,
-}
+};
 
 const noc = {
   useNOCDetails,
   useNOCApplicationActions,
   useInbox: useNOCInbox,
-  useNOCSearchApplication
-}
+  useNOCSearchApplication,
+};
 
 const ws = {
   WSSearchMdmsTypes,
   usewsTenants,
   useWaterSearch,
-  useSewarageSearch
-}
+  useSewarageSearch,
+};
 
 const Hooks = {
   useSessionStorage,
@@ -388,6 +389,7 @@ const Hooks = {
   useNotificationCount,
   useStore,
   useTenants,
+  useAccessControl,
   useInbox: useTLInbox,
   pgr,
   fsm,
@@ -402,7 +404,7 @@ const Hooks = {
   engagement,
   survey,
   noc,
-  ws
+  ws,
 };
 
 export default Hooks;

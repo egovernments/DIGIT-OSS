@@ -22,7 +22,6 @@ const EmployeeSideBar = () => {
   const sidebarRef = useRef(null);
   const { t } = useTranslation();
   const userRoles = Digit.SessionStorage.get("User")?.info?.roles;
-  console.log("userRoles", userRoles);
   const DSS = userRoles.find((role) => role.code === "EMPLOYEE");
   const HRMS = Digit.Utils.hrmsAccess();
   const FSM = Digit.Utils.fsmAccess();
@@ -36,7 +35,11 @@ const EmployeeSideBar = () => {
   const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
   const STADMIN = Digit.UserService.hasAccess("STADMIN");
   const NATADMIN = Digit.UserService.hasAccess("NATADMIN");
+  const tenantId = Digit.ULBService.getCurrentTenantId();
 
+  const { data } = Digit.Hooks.useAccessControl(tenantId);
+
+  console.log("newwww", data);
   useEffect(() => {
     sidebarRef.current.style.cursor = "pointer";
     collapseNav();

@@ -2,11 +2,18 @@ import { Request } from "../atoms/Utils/Request";
 import Urls from "../atoms/urls";
 
 export const AccessControlService = {
-  getAccessControl: (tenantId, details) =>
+  getAccessControl: (tenantId) =>
     Request({
       url: Urls.access_control,
       method: "POST",
-      params: { tenantId, ...details },
       auth: true,
+      useCache: false,
+      userService: true,
+      data: {
+        roleCodes: ["FSM_VIEW_EMP", "EMPLOYEE", "EMPLOYEE ADMIN", "FSM_DASHBOARD_VIEWER"],
+        tenantId: tenantId,
+        actionMaster: "actions-test",
+        enabled: true,
+      },
     }),
 };
