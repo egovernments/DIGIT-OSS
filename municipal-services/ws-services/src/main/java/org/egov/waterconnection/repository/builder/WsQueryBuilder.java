@@ -116,10 +116,24 @@ public class WsQueryBuilder {
 			}
 		}
 
+		//-----------------Search using DoorNo----------------------------------
+			if (!StringUtils.isEmpty(criteria.getDoorNo()) || !StringUtils.isEmpty(criteria.getPropertyId())) {
+				List<Property> propertyList = waterServicesUtil.propertySearchOnCriteria(criteria, requestInfo);
+				propertyList.forEach(property -> propertyIds.add(property.getPropertyId()));
+				criteria.setPropertyIds(propertyIds);
+				if (!propertyIds.isEmpty()) {
+					addClauseIfRequired(preparedStatement, query);
+					query.append(propertyIdQuery).append(createQuery(propertyIds)).append(" ))");
+					addToPreparedStatement(preparedStatement, propertyIds);
+					propertyIdsPresent = true;
+				}
+			}
+				
+		//---------------------------------------------------			
 		/*
 		 * to return empty result for mobilenumber empty result
 		 */
-		if (!StringUtils.isEmpty(criteria.getMobileNumber()) 
+		if ((!StringUtils.isEmpty(criteria.getMobileNumber()) ||!StringUtils.isEmpty(criteria.getDoorNo()) ) 
 				&& CollectionUtils.isEmpty(criteria.getPropertyIds()) && CollectionUtils.isEmpty(criteria.getUserIds())
 				&& StringUtils.isEmpty(criteria.getApplicationNumber()) && StringUtils.isEmpty(criteria.getPropertyId())
 				&& StringUtils.isEmpty(criteria.getConnectionNumber()) && CollectionUtils.isEmpty(criteria.getIds())) {
