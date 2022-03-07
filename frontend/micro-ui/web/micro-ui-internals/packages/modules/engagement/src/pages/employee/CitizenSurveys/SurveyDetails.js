@@ -177,6 +177,7 @@ const SurveyDetails = ({ location, match }) => {
 
   if (isLoading) return <Loader />;
 
+
   return (
     <Fragment>
       <Header>{t("CS_COMMON_SURVEYS")}</Header>
@@ -190,6 +191,7 @@ const SurveyDetails = ({ location, match }) => {
         setDisplayMenu={setDisplayMenu}
         onActionSelect={onActionSelect}
         initialSurveysConfig={surveyData}
+        isSurveyActive = {isSurveyActive}
       />
 
       {showModal && userAction === "DELETE" && (

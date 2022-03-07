@@ -6,7 +6,7 @@ import SurveyDetailsForms from "../SurveyForms/SurveyDetailsForms";
 import SurveyFormsMaker from "../SurveyForms/SurveyFormsMaker";
 import SurveySettingsForms from "../SurveyForms/SurveySettingsForm";
 
-const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormDisabled, isPartiallyEnabled, displayMenu, setDisplayMenu, onActionSelect }) => {
+const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormDisabled, isPartiallyEnabled, displayMenu, setDisplayMenu, onActionSelect ,isSurveyActive}) => {
   const {
     register: registerRef,
     control: controlSurveyForm,
@@ -52,7 +52,10 @@ const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormD
             enableEndDateTimeOnly={isPartiallyEnabled}
           />
           <span className="edit-action-btn">
-          {isPartiallyEnabled && <SubmitBar label={t("CS_EDIT_SURVEY")} submit="submit" disabled={isPartiallyEnabled ? !isPartiallyEnabled : isFormDisabled} />}
+
+          {!isSurveyActive && !isFormDisabled && <SubmitBar label={t("CS_EDIT_SURVEY")} submit="submit" disabled={isPartiallyEnabled ? !isPartiallyEnabled : isFormDisabled} /> }
+          {isPartiallyEnabled && isSurveyActive && <SubmitBar label={t("CS_EDIT_SURVEY")} submit="submit" disabled={isPartiallyEnabled ? !isPartiallyEnabled : isFormDisabled} />}
+
           </span>
         </Card>
       </form>
