@@ -42,7 +42,7 @@ const dropdownOptions = [
   },
 ];
 
-const NewSurveyForm = ({ t, index, questionStatement, type, required, options, disableInputs, dispatch }) => {
+const NewSurveyForm = ({ t, index, questionStatement, type, required, options, disableInputs, dispatch,isPartiallyEnabled }) => {
   const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({ questionStatement, type, required, options:["option 1"] });
   const { register, formState  } = useFormContext();
 
@@ -98,6 +98,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
             updateOption={handleUpdateOption}
             removeOption={handleRemoveOption}
             options={surveyQuestionConfig?.options}
+            isPartiallyEnabled={isPartiallyEnabled}
           />
         );
       default:

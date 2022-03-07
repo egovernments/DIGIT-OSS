@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import NewSurveyForm from "./NewSurveyForm";
 
-const SurveyFormsMaker = ({ t, formsConfig, setSurveyConfig, disableInputs }) => {
+const SurveyFormsMaker = ({ t, formsConfig, setSurveyConfig, disableInputs,isPartiallyEnabled }) => {
 const defaultFormsConfig = {
   question: "",
   answerType: "Short Answer",
@@ -40,7 +40,7 @@ const surveyFormReducer = (state, { type, payload }) => {
   const renderPreviewForms = () => {
     return surveyState.length
       ? surveyState.map((config, index) => (
-          <NewSurveyForm key={index} {...config} t={t} index={index} disableInputs={disableInputs} dispatch={passingSurveyConfigInDispatch} />
+          <NewSurveyForm key={index} {...config} t={t} index={index} disableInputs={disableInputs} dispatch={passingSurveyConfigInDispatch} isPartiallyEnabled={isPartiallyEnabled} />
         ))
       : null;
   };
