@@ -190,6 +190,14 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     }
   };
 
+  useEffect(() => {
+    const status = ["CITIZEN_FEEDBACK_PENDING"]
+    applications?.table?.map((data) => {
+      if (status.includes(data.status))
+        data.sla = '-'
+    })
+  }, [applications]);
+
   if (applications?.table?.length !== null) {
     if (isMobile) {
       return (

@@ -64,6 +64,7 @@ const ApplicationDetails = (props) => {
     moduleCode: DSO || applicationData?.paymentPreference === "POST_PAY" ? "FSM_POST_PAY_SERVICE" : "FSM",
     role: DSO ? "FSM_DSO" : "FSM_EMPLOYEE",
     serviceData: applicationDetails,
+    getTripData: DSO ? false : true
   });
 
   useEffect(() => {
@@ -179,6 +180,21 @@ const ApplicationDetails = (props) => {
           </Link>
         </div>
       );
+    } else if (checkpoint.status === "WAITING_FOR_DISPOSAL") {
+      const caption = {
+        date: checkpoint?.auditDetails?.created,
+        name: checkpoint?.assigner,
+        mobileNumber: checkpoint?.assigner?.mobileNumber,
+        comment: `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`
+      };
+      return <TLCaption data={caption} />;
+    } else if (checkpoint.status === "DISPOSED") {
+      const caption = {
+        date: checkpoint?.auditDetails?.created,
+        name: checkpoint?.assigner,
+        mobileNumber: checkpoint?.assigner?.mobileNumber
+      };
+      return <TLCaption data={caption} />;
     }
   };
 
