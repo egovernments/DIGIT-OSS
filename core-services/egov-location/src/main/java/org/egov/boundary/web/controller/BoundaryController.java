@@ -77,6 +77,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -396,7 +397,7 @@ public class BoundaryController {
 		}
 		if (tenantId != null && !tenantId.isEmpty() && hierarchyType != null && !hierarchyType.isEmpty()) {
 			hierarchyTypeIds = getHierarchyTypeList(tenantId, hierarchyType);
-			if (!(hierarchyTypeIds != null && !hierarchyTypeIds.isEmpty())) {
+			if (CollectionUtils.isEmpty(hierarchyTypeIds)) {
 				ErrorResponse errorResponses = addHierarchyTypeValidationError(boundaryResponse);
 				return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST);
 			}

@@ -19,6 +19,7 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.log4j.Log4j;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @Log4j
@@ -65,7 +66,7 @@ public class MdmsService {
         Map<String, String> getCity = doMdmsServiceCall(requestInfo, idRequest);
         String cityCode = null;
         try {
-            if (getCity != null) {
+            if (!CollectionUtils.isEmpty(getCity)) {
                 cityCode = getCity.get(tenantMaster);
             }
             if(cityCode== null){
@@ -92,7 +93,7 @@ public class MdmsService {
         Map<String, String> getIdFormat = doMdmsServiceCall(requestInfo, idRequest);
         String idFormat = null;
         try {
-            if (getIdFormat != null) {
+            if (!CollectionUtils.isEmpty(getIdFormat)) {
                 idFormat = getIdFormat.get(formatMaster);
             }
         } catch (Exception e) {

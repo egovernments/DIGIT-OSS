@@ -50,6 +50,8 @@ public class RequestContext {
 		return id.get();
 	}
 
+	public static void removeId(){ id.remove(); }
+
 	public static void setId(String correlationId) {
 		id.set(correlationId);
 	}
