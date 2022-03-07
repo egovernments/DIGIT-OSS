@@ -47,7 +47,8 @@ export const Request = async ({
   userDownload = false,
   noRequestInfo = false,
   multipartFormData = false,
-  multipartData = {}
+  multipartData = {},
+  reqTimestamp=false
 }) => {
 
   if (method.toUpperCase() === "POST") {
@@ -63,6 +64,9 @@ export const Request = async ({
     }
     if (locale) {
       data.RequestInfo = { ...data.RequestInfo, msgId: `${ts}|${Digit.StoreData.getCurrentLanguage()}` };
+    }
+    if (reqTimestamp) {
+      data.RequestInfo = { ...data.RequestInfo, ts:Number(ts)};
     }
     if (noRequestInfo) {
       delete data.RequestInfo;

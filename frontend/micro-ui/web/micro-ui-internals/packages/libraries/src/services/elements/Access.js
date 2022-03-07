@@ -2,7 +2,7 @@ import { Request } from "../atoms/Utils/Request";
 import Urls from "../atoms/urls";
 
 const AccessControlService = {
-  getAccessControl: (tenantId) =>
+  getAccessControl: (roles=[]) =>
     Request({
       url: Urls.access_control,
       method: "POST",
@@ -10,11 +10,12 @@ const AccessControlService = {
       useCache: false,
       userService: true,
       data: {
-        roleCodes: ["FSM_VIEW_EMP", "EMPLOYEE", "EMPLOYEE ADMIN", "FSM_DASHBOARD_VIEWER"],
-        tenantId: tenantId,
+        roleCodes:roles,
+        tenantId: Digit.ULBService.getStateId(),
         actionMaster: "actions-test",
         enabled: true,
       },
+      reqTimestamp:true
     }),
 };
 export default AccessControlService;

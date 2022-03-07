@@ -9,7 +9,10 @@ const useAccessControl = (tenantId) => {
   // console.log("queryyy", queryData);
   // return queryData;
   // console.log(fetch);
-  const response = useQuery(["ACCESS_CONTROL", tenantId], async () => await AccessControlService.getAccessControl(tenantId));
+
+
+  //use some logic to form this roles array
+  const response = useQuery(["ACCESS_CONTROL", tenantId], async () => await AccessControlService.getAccessControl(["EMPLOYEE","NATADMIN"]));
   console.log("resssss", response);
   return response;
 };
