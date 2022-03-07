@@ -9,6 +9,7 @@ import {
   CardSectionHeader,
   RemoveableTag,
   Toast,
+  Loader,
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState, useMemo } from "react";
 import { render } from "react-dom";
@@ -29,13 +30,16 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   const tenantId = user.info.permanentCity || Digit.ULBService.getCurrentTenantId();
   const checkingFlow = formData?.uiFlow?.flow;
   const [showToast, setShowToast] = useState(null);
+  const stateCode = Digit.ULBService.getStateId();
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["SubOccupancyType"]);
   const { data, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId, formData?.data?.scrutinyNumber, {
     enabled: true,
   });
 
+
   function getFloorData(block) {
     let floors = [];
-    block?.building?.floors.map((ob) => {
+    block?.building?.floors?.map((ob) => {
       floors.push({
         Floor: t(`BPA_FLOOR_NAME_${ob.number}`),
         Level: ob.number,
@@ -51,8 +55,9 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
 
   function getsuboptions() {
     let suboccoption = [];
-    data &&
-      data?.planDetail?.mdmsMasterData?.SubOccupancyType.map((ob) => {
+    // data &&
+      // data?.planDetail?.mdmsMasterData?.SubOccupancyType?.map((ob) => {
+        mdmsData?.BPA?.SubOccupancyType?.map((ob) => {
         suboccoption.push({ code: ob.code, name: ob.name, i18nKey: `BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(ob?.code?.toUpperCase(), "-", "_")}` });
       });
     return suboccoption;
@@ -127,7 +132,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   };
 
   const tableColumns = useMemo(() => {
-    return tableHeader.map((ob) => ({
+    return tableHeader?.map((ob) => ({
       Header: t(`${ob.name}`),
       accessor: accessData(ob.id),
       id: ob.id,
@@ -201,7 +206,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
     if (values?.length > 0) {
       let splitArray = values[index]?.usageCategory?.split(",");
       if (splitArray?.length) {
-        const returnValueArray = splitArray.map((data) =>
+        const returnValueArray = splitArray?.map((data) =>
           data ? `${t(`BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(data?.toUpperCase(), "-", "_")}`)}` : "NA"
         );
         returnValue = returnValueArray.join(", ");
@@ -209,6 +214,8 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
     }
     return returnValue ? returnValue : "NA";
   }
+
+  if (isMdmsLoading) return <Loader /> 
 
   return (
     <React.Fragment>
@@ -264,7 +271,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
         </StatusTable>
         <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
         <CardSubHeader style={{ fontSize: "20px" }}>{t("BPA_OCC_SUBOCC_HEADER")}</CardSubHeader>
-        {data?.planDetail?.blocks.map((block, index) => (
+        {data?.planDetail?.blocks?.map((block, index) => (
           <div key={index} style={{ marginTop: "20px" }}>
             <CardSubHeader style={{ fontSize: "18px" }}>
               {t("BPA_BLOCK_SUBHEADER")} {index + 1}
@@ -293,7 +300,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
               <div className="tag-container">
                 {subOccupancyObject[`Block_${block.number}`] &&
                   subOccupancyObject[`Block_${block.number}`].length > 0 &&
-                  subOccupancyObject[`Block_${block.number}`].map((value, index) => (
+                  subOccupancyObject[`Block_${block.number}`]?.map((value, index) => (
                     <RemoveableTag key={index} text={`${t(value["i18nKey"])}`} onClick={() => onRemove(index, value, block.number)} />
                   ))}
               </div>
