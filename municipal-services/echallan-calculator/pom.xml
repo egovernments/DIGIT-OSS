@@ -12,7 +12,6 @@
   <version>1.0.1-SNAPSHOT</version>
   <name>echallan-calculator</name>
   <properties>
-    <log4j2.version>2.16.0</log4j2.version>
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -81,12 +80,7 @@
       <version>0.0.2-SNAPSHOT</version>
     </dependency>
   </dependencies>
-  <repositories> 
- 		<repository>
-			<id>repo.egovernments.org</id>
-			<name>eGov DIGIT Releases Repository</name>
-			<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
-		</repository>
+  <repositories>
     <repository>
       <id>repo.egovernments.org</id>
       <name>eGov ERP Releases Repository</name>
