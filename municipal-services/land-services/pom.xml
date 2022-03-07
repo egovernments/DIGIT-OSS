@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>org.javers</groupId>
 			<artifactId>javers-core</artifactId>
-			<version>3.1.0</version>
+			<version>6.6.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.egov.services</groupId>
