@@ -104,6 +104,21 @@
   border-radius: 4px;
   margin-top: 20px;
   margin-bottom: 20px;
+  position: relative;
+}
+
+.responses-container-date {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 8px;
+  background: #FAFAFA;
+  border: 1px solid #D6D5D4;
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .response-result {

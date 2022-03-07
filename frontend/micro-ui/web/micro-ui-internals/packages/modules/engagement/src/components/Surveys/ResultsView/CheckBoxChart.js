@@ -33,11 +33,11 @@ const CheckBoxChart = (props) => {
   "padding": "10px",
   "width": "700px",
   "height": "260px",
-  "backgroundColor": "#fff"}}>
+  "backgroundColor": "#fafafa"}}>
     <ResponsiveContainer>
     	<BarChart 
             data={data}
-            layout="vertical" barCategoryGap={1}
+            layout="vertical" 
             margin={{ top: 0, right: 50, left: 0, bottom: 0 }}
             barCategoryGap={8}>
         <CartesianGrid strokeDasharray="3 3" />

@@ -78,7 +78,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               name={question.uuid}
               //defaultValue={surveyFormState?.collectCitizenInfo}
               //rules={{required:true}}
-              // rules={{ required:question.required }}
+              //rules={{ required:question.required }}
               render={({ onChange, value }) => (
                 <div className="align-columns">
                   {question.options.map((option) => {
@@ -106,6 +106,32 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
             )}
           </>
         );
+      // case "CHECKBOX_ANSWER_TYPE":
+      //   return (
+      //     <>
+      //     {question.options.map((option,index) => (
+      //     <div>
+      //       <label for="checkbox">
+      //         <input
+      //         control={control}
+      //         id={option}
+      //         type="checkbox"
+      //         name={option}
+      //         value={option}
+      //         ref={register({
+      //           required:false,
+      //         })}
+      //       />
+      //         {option}</label>
+            
+      //     </div>
+      //     ))}
+          
+      //       {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type ==="required" && (
+      //         <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>
+      //       )}
+      //     </>
+      //   );
       case "DATE_ANSWER_TYPE":
         return (
           <>

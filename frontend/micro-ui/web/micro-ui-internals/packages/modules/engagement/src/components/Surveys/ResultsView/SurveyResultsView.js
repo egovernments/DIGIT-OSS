@@ -7,6 +7,20 @@ import { useTranslation } from "react-i18next";
 import McqChart from './McqChart';
 import CheckBoxChart from './CheckBoxChart';
 
+const transformDate = (date) => {
+    const split = date.split('-');
+    const month = split[1];
+    const year = split[0];
+    const day = split[2];
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+]
+
+    return (<p style={{"marginTop":"16px"}}>
+        <strong>{`${monthNames[month-1]} ${year} ${day}`}</strong>
+    </p>)
+}
+
 
 const getUserData = (data) => {
     const obj = {}
@@ -16,26 +30,6 @@ const getUserData = (data) => {
     return obj;
 }
 
-//static for now
-const userData = [
-    {
-        email:"abc@gmail.com",
-        phone:9912555933
-    },
-
-{
-        email:"abc@gmail.com",
-        phone:9912555933
-    },
-    {
-        email:"abc@gmail.com",
-        phone:9912555933
-    },
-    {
-        email:"abc@gmail.com",
-        phone:9912555933
-    },
-]
 
 
 const displayResult = (ques,ans,type,resCount) => {
@@ -62,6 +56,7 @@ const displayResult = (ques,ans,type,resCount) => {
                             <div className='responses-container'>
                             {ans.map(el=> <div className='response-result'>{el}<BreakLine style={{"marginTop":"10px"}} /></div>)}
                             </div>
+                            
                         </div>
                         )
             case "Date":
@@ -75,8 +70,8 @@ const displayResult = (ques,ans,type,resCount) => {
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
-                            <div className="responses-container">
-                            {ans.map(el=> <div className='response-result'>{el}<BreakLine /></div>)}
+                            <div className="responses-container-date">
+                            {ans.map(el=> <div>{transformDate(el)}</div>)}
                             </div>
                         </div>
                         )
@@ -113,7 +108,7 @@ const displayResult = (ques,ans,type,resCount) => {
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
                             {/* {ans.map(el=> <p>{el}<BreakLine /></p>)} */}
-                            <div className='responses-container'>
+                            <div className='responses-container' style={{"padding":"30px"}}>
                             <CheckBoxChart data={ques}/>
                             </div>
                             
@@ -142,8 +137,8 @@ const displayResult = (ques,ans,type,resCount) => {
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                            <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
-                            <div className='responses-container'>
-                            {ans.map(el=> <div className='response-result'>{el}<BreakLine /></div>)}
+                            <div className='responses-container-date'>
+                            {ans.map(el=> <div style={{"marginTop":"16px"}}><strong>{el}</strong></div>)}
                             </div>
                         </div>
                         )
