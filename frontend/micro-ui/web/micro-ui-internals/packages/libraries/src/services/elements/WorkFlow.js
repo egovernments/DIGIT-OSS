@@ -75,7 +75,7 @@ export const WorkflowService = {
     });
   },
 
-  getDetailsById: async ({ tenantId, id, moduleCode, role }) => {
+  getDetailsById: async ({ tenantId, id, moduleCode, role, getTripData }) => {
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
     const getLocationDetails = window.location.href.includes("/obps/") || window.location.href.includes("noc/inbox");
@@ -119,7 +119,7 @@ export const WorkflowService = {
       if (processInstances.length > 0) {
         const TLEnrichedWithWorflowData = await makeCommentsSubsidariesOfPreviousActions(processInstances)
         const timeline = TLEnrichedWithWorflowData.map((instance, ind) => {
-          const checkPoint = {
+          let checkPoint = {
             performedAction: instance.action,
             status: instance.state.applicationStatus,
             state: instance.state.state,
@@ -140,6 +140,73 @@ export const WorkflowService = {
           };
           return checkPoint;
         });
+
+        if (getTripData) {
+          try {
+            const filters = {
+              businessService: 'FSM_VEHICLE_TRIP',
+              refernceNos: id
+            };
+            const tripSearchResp = await Digit.FSMService.vehicleSearch(tenantId, filters)
+            if (tripSearchResp && tripSearchResp.vehicleTrip && tripSearchResp.vehicleTrip.length) {
+              const numberOfTrips = tripSearchResp.vehicleTrip.length
+              let cretaedTime = 0
+              let lastModifiedTime = 0
+              let waitingForDisposedAction = []
+              let disposedAction = []
+              for (const data of tripSearchResp.vehicleTrip) {
+                const resp = await Digit.WorkflowService.getByBusinessId(tenantId, data.applicationNo)
+                resp?.ProcessInstances?.map((instance, ind) => {
+                  if (instance.state.applicationStatus === "WAITING_FOR_DISPOSAL") {
+                    cretaedTime = Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime)
+                    lastModifiedTime = Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime)
+                    waitingForDisposedAction = [{
+                      performedAction: instance.action,
+                      status: instance.state.applicationStatus,
+                      state: instance.state.state,
+                      assigner: instance?.assigner,
+                      rating: instance?.rating,
+                      thumbnailsToShow: { thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images },
+                      assignes: instance.assignes,
+                      caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
+                      auditDetails: {
+                        created: cretaedTime,
+                        lastModified: lastModifiedTime,
+                      },
+                      numberOfTrips: numberOfTrips
+                    }]
+                  }
+                  if (instance.state.applicationStatus === "DISPOSED") {
+                    cretaedTime = instance.auditDetails.createdTime > cretaedTime ? Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime) : cretaedTime
+                    lastModifiedTime = instance.auditDetails.lastModifiedTime > lastModifiedTime ? Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime) : lastModifiedTime
+                    disposedAction = [{
+                      performedAction: instance.action,
+                      status: instance.state.applicationStatus,
+                      state: instance.state.state,
+                      assigner: instance?.assigner,
+                      rating: instance?.rating,
+                      thumbnailsToShow: { thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images },
+                      assignes: instance.assignes,
+                      caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
+                      auditDetails: {
+                        created: cretaedTime,
+                        lastModified: lastModifiedTime,
+                      },
+                      numberOfTrips: numberOfTrips
+                    }]
+                  }
+                })
+              }
+              let tripTimeline = disposedAction.concat(waitingForDisposedAction)
+              const feedbackPosition = timeline.findIndex((data) => data.status === "CITIZEN_FEEDBACK_PENDING")
+              if (feedbackPosition !== -1) {
+                timeline.splice(feedbackPosition + 1, 0, ...tripTimeline)
+              } else {
+                timeline = tripTimeline.concat(timeline)
+              }
+            }
+          } catch (err) { }
+        }
 
         const nextActions = actionRolePair;
 
