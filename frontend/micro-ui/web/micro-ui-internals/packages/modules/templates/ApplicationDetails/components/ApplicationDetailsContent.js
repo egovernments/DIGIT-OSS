@@ -145,7 +145,7 @@ function ApplicationDetailsContent({
                     return (
                       <Row
                         key={t(value.title)}
-                        label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
+                        label={window.location.href.includes("tl") ? <div style={{width:"200%"}}><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{value?.title}</span></Link></div> : isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
                         text={<div><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{value?.value}</span></Link></div>}
                         last={index === detail?.values?.length - 1}
                         caption={value.caption}
