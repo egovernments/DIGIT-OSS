@@ -1,9 +1,14 @@
 package org.egov.echallan.service;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
+import org.egov.echallan.config.ChallanConfiguration;
 import org.egov.echallan.model.Challan;
 import org.egov.echallan.model.ChallanRequest;
 import org.egov.echallan.model.SearchCriteria;
@@ -34,6 +39,9 @@ public class ChallanService {
     private CalculationService calculationService;
     
     private ChallanValidator validator;
+	
+    @Autowired
+    private ChallanConfiguration config;
 
     private CommonUtils utils;
     
@@ -149,5 +157,28 @@ public class ChallanService {
 		 return  response;
 	 }
 
-	
+		public List<Challan> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
+			List<Challan> challanList = getchallanPlainSearch(criteria, requestInfo);
+			return challanList;
+		}
+
+		private List<Challan> getchallanPlainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
+			if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+				criteria.setLimit(config.getMaxSearchLimit());
+			
+			List<String> ids = null;
+
+			if (criteria.getIds() != null && !criteria.getIds().isEmpty())
+				ids = criteria.getIds();
+			else
+				ids = repository.fetchChallanIds(criteria);
+
+			if (ids.isEmpty())
+				return Collections.emptyList();
+			SearchCriteria challanCriteria = SearchCriteria.builder().ids(ids).build();
+
+			List<Challan> listFSM = repository.getChallanPlainSearch(challanCriteria);
+			return listFSM;
+		}
+
 }

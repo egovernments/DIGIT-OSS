@@ -1,8 +1,8 @@
 package org.egov.echallan.repository;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.echallan.repository.builder.ChallanQueryBuilder.CANCEL_RECEIPT_UPDATE_SQL;
+import static org.egov.echallan.repository.builder.ChallanQueryBuilder.FILESTOREID_UPDATE_SQL;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,17 +20,17 @@ import org.egov.echallan.repository.rowmapper.ChallanRowMapper;
 import org.egov.echallan.web.models.collection.Bill;
 import org.egov.echallan.web.models.collection.PaymentDetail;
 import org.egov.echallan.web.models.collection.PaymentRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.egov.echallan.util.ChallanConstants.*;
-import static org.egov.echallan.repository.builder.ChallanQueryBuilder.*;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -128,8 +128,6 @@ public class ChallanRepository {
 			 
 		}
 
-
-
 	public void updateChallanOnCancelReceipt(HashMap<String, Object> record) {
 		// TODO Auto-generated method stub
 
@@ -169,5 +167,30 @@ public class ChallanRepository {
         }
         return response;
     }
-    
+
+	public List<String> fetchChallanIds(SearchCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		preparedStmtList.add(criteria.getOffset());
+		preparedStmtList.add(criteria.getLimit());
+
+		List<String> ids = jdbcTemplate.query("SELECT id from eg_echallan ORDER BY createdtime offset " +
+						" ? " +
+						"limit ? ",
+				preparedStmtList.toArray(),
+				new SingleColumnRowMapper<>(String.class));
+		return ids;
+	}
+	public List<Challan> getChallanPlainSearch (SearchCriteria criteria) {
+
+		if(criteria.getIds() == null || criteria.getIds().isEmpty())
+			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by ids!");
+
+		List<Object> preparedStmtList = new ArrayList<>();
+		String query = queryBuilder.getChallanLikeQuery(criteria, preparedStmtList);
+		log.info("Query: "+query);
+		log.info("PS: "+preparedStmtList);
+		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+	}
+	
+
 }

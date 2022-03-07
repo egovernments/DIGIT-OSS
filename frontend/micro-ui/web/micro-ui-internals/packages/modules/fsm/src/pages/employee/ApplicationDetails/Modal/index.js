@@ -353,6 +353,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           configRejectApplication({
             t,
             rejectMenu: Reason?.DeclineReason,
+            setReason: setDeclineReason,
             setTrips: setNoOfTrips,
             trips: applicationData?.noOfTrips,
             action,

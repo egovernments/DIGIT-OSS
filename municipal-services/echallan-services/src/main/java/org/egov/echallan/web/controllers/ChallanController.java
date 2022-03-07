@@ -14,6 +14,7 @@ import org.egov.echallan.model.ChallanRequest;
 import org.egov.echallan.model.ChallanResponse;
 import org.egov.echallan.model.RequestInfoWrapper;
 import org.egov.echallan.model.SearchCriteria;
+import org.egov.echallan.repository.rowmapper.ChallanRowMapper;
 import org.egov.echallan.service.ChallanService;
 import org.egov.echallan.util.ResponseInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class ChallanController {
 
 	@Autowired
 	private ResponseInfoFactory responseInfoFactory;
+
+	@Autowired
+	private ChallanRowMapper mapper;
 
 	@PostMapping("/_create")
 	public ResponseEntity<ChallanResponse> create(@Valid @RequestBody ChallanRequest challanRequest) {
@@ -73,4 +77,14 @@ public class ChallanController {
 	}
 	
 
+	 @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+	 public ResponseEntity<ChallanResponse> planeSearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+	                                                       @Valid @ModelAttribute SearchCriteria criteria) {
+	     List<Challan> challans = challanService.plainSearch(criteria, requestInfoWrapper.getRequestInfo());
+	     ChallanResponse response = ChallanResponse.builder().challans(challans).responseInfo(
+	               responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+	              .build();
+	     return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 }

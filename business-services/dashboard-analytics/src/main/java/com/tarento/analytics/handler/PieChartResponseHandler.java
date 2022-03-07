@@ -49,7 +49,7 @@ public class PieChartResponseHandler implements IResponseHandler {
          * For every aggregation on plot object is added
          */
         aggrsPaths.forEach(headerPath -> {
-            aggregationNode.findValues(headerPath.asText()).stream().parallel().forEach(valueNode->{
+            aggregationNode.findValues(headerPath.asText()).stream().forEach(valueNode->{
                 if(valueNode.has(BUCKETS)){
                     JsonNode buckets = valueNode.findValue(BUCKETS);
                     buckets.forEach(bucket -> {
