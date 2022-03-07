@@ -5,32 +5,35 @@ const WhoHasResponded = ({t,userInfo}) => {
     const data = Object.entries(userInfo);
   return (
     <div style={{"margin":"30px"}}>
-        <CardSubHeader >{t("WHO_RESPONDED")}</CardSubHeader>
+        <header style={{"fontSize":"30px","fontWeight":"bold"}}>{t("WHO_RESPONDED")}</header>
        
-            <header style={{"display":'inline-block',"fontWeight":"bold","marginLeft":"10px"}}>Email</header>
-            <header style={{"display":'inline-block',"marginLeft":"190px","fontWeight":"bold"}}>Phone Number</header>
-         <div className='responses-container'>
-            {/* <div style={{"display":"flex","flexDirection":"column","alignItems":"flex-start","padding":"16px 8px","left":"0px","top":"41px","background":"#FAFAFA","border":"1px solid #D6D5D4","boxSizing":"border-box","borderRadius":"4px"}}>
-            {userInfo.map(user => (<div style={{"display":"inline-block","flex":"none","order":"1","flexGrow":"0","margin":"16px 0px"}}><p>{user.email}</p><p>{user.phone}<BreakLine /></p></div>))}
-            </div> */}
-            {data.map(user => <div className='response-result'> <p>{user[1]}
-            {user[0]}</p> <BreakLine /></div> )}
-        </div>
+            {/* <header style={{"display":'inline-block',"fontWeight":"bold","marginLeft":"10px","marginTop":"20px"}}>Email</header>
+            <header style={{"display":'inline-block',"marginTop":"20px","marginLeft":"190px","fontWeight":"bold"}}>Phone Number</header> */}
+         {/* <div className='responses-container'>
+            {data.map(user => <div className='response-result' style={{"whiteSpace":"nowrap"}}> <p style={{"display":"inline-block"}}>{user[1]}</p>
+            <p style={{"display":"inline-block","marginLeft":"40%"}}>{user[0]}</p><BreakLine /></div>  )} */}
 
 
-
-        {/* <Header>{t("WHO_RESPONDED")}</Header>
-        <Card>
-             
-        <table>
-            <tr>
-                <th>Email</th>
-                <th>Phone Number</th>
-            </tr>
-            {userInfo.map(user=> (<tr> <td>{user.email}</td> <td>{user.phone}</td><BreakLine /></tr>))}
-        </table>
-        </Card> */}
+            <div style={{"display":"flex","padding": "8px 4px", 
+                        "background-color": "#FAFAFA",
+                        "border": "1px solid #D6D5D4",
+                        "boxSizing": "borderBox",
+                        "borderRadius": "4px",
+                        "marginTop": "20px",
+                        "marginBottom": "20px"}}>
+                <div style={{"flex":"50%","padding":"10px"}}>
+                    <header style={{"fontWeight":"bold","fontSize":"25px"}}>Email</header>
+                    {data.map(user=> <p style={{"margin":"10px 0px 10px 0px"}}>{user[1]}</p>)}
+                </div>
+                <div style={{"flex":"50%","padding":"10px"}}>
+                    <header style={{"fontWeight":"bold","fontSize":"25px"}}>Phone Number</header>
+                    {data.map(user=> <p style={{"margin":"10px 0px 10px 0px"}}>{user[0]}</p>)}
+                </div>
+                
+            </div>
     </div>
+
+    
     )
 }
 

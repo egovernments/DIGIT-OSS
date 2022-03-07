@@ -60,7 +60,7 @@ const displayResult = (ques,ans,type,resCount) => {
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
                             <div className='responses-container'>
-                            {ans.map(el=> <div className='response-result'>{el}<BreakLine style={{"width":"100%"}} /></div>)}
+                            {ans.map(el=> <div className='response-result'>{el}<BreakLine style={{"marginTop":"10px"}} /></div>)}
                             </div>
                         </div>
                         )
@@ -71,6 +71,7 @@ const displayResult = (ques,ans,type,resCount) => {
                         //     <span className='text-3xl font-bold'>{`${resCount} Responses`}</span>
                         //     {ans.map(el=> <span>{el}</span>)}
                         // </div>
+
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
@@ -90,7 +91,7 @@ const displayResult = (ques,ans,type,resCount) => {
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
                             <div className='responses-container'>
-                            {ans.map(el=> <div className='response-result'>{el}<BreakLine /></div>)}
+                            {ans.map(el=> <div className='response-result'>{el}<BreakLine style={{"marginTop":"10px"}} /></div>)}
                             </div>
                         </div>
                         )

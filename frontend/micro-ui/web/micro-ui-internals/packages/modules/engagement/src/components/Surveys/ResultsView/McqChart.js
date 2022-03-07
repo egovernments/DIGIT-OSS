@@ -46,6 +46,21 @@ const renderCustomizedLabel = ({
   );
 };
 
+const renderLegend = (props) => {
+  const { payload } = props;
+  console.log(props);
+
+  return (
+    <ul style={{"listStyle":"disc"}}>
+      {
+        payload.map((entry, index) => (
+          <li key={`item-${index}`} style={{"display":"list-item","color":entry.color,"fontSize":"19px"}}>{entry.value}</li>
+        ))
+      }
+    </ul>
+  );
+}
+
 const McqChart = (props) => {
   const data = getData(props.data)
     return (
@@ -65,7 +80,7 @@ const McqChart = (props) => {
         ))}
       </Pie>
       <Tooltip />
-      <Legend width={100} align="right" wrapperStyle={{ top: 40, right: 20,left:500, backgroundColor: '#FAFAFA', borderRadius: 3, lineHeight: '40px' }} />
+      <Legend content={renderLegend} width={100} align="right" wrapperStyle={{ top: 40, right: 20,left:500, backgroundColor: '#FAFAFA', borderRadius: 3, lineHeight: '40px' }} />
     </PieChart>
   )
 }
