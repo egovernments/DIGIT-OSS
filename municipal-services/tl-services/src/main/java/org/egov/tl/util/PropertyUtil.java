@@ -1,7 +1,6 @@
 package org.egov.tl.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
@@ -10,7 +9,6 @@ import org.egov.tl.repository.ServiceRequestRepository;
 import org.egov.tl.web.models.*;
 import org.egov.tl.web.models.property.Property;
 import org.egov.tracer.model.CustomException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -103,11 +101,15 @@ public class PropertyUtil {
         return property;
     }
 
-    public Collection<? extends EmailRequest> createPropertyEmailRequest(RequestInfo requestInfo, String message, Map<String, String> mapOfPhnoAndEmail) {
+    public Collection<? extends EmailRequest> createPropertyEmailRequest(RequestInfo requestInfo, String message, Map<String, String> mapOfPhnoAndEmail, Property property) {
 
         List<EmailRequest> emailRequest = new LinkedList<>();
+        property.getOwners().forEach(owner -> {
+            if (owner.getMobileNumber() != null)
+                mapOfPhnoAndEmail.put(owner.getMobileNumber(), owner.getEmailId());
+        });
         for (Map.Entry<String, String> entryset : mapOfPhnoAndEmail.entrySet()) {
-            String customizedMsg = message.replace("{PROPERTY_OWNER_NAME}",entryset.getValue());
+            String customizedMsg = message.replace("{PROPERTY_OWNER_NAME}", property.getOwners().get(0).getName());
             customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
 
             String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));

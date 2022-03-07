@@ -143,7 +143,7 @@ public class TLNotificationService {
 							});
 							Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(propertyMobileNumbers, request.getRequestInfo(), tenantId);
 							String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_EMAIL, String.valueOf(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID)), source);
-							emailRequestsPT.addAll(propertyUtil.createPropertyEmailRequest(request.getRequestInfo(), message, mapOfPhnoAndEmail));
+							emailRequestsPT.addAll(propertyUtil.createPropertyEmailRequest(request.getRequestInfo(), message, mapOfPhnoAndEmail, property));
 							if (!CollectionUtils.isEmpty(emailRequestsPT))
 								util.sendEmail(emailRequestsPT, config.getIsEmailNotificationEnabled());
 						}
