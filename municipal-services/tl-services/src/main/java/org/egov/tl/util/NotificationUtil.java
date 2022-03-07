@@ -244,7 +244,7 @@ public class NotificationUtil {
 	 *            The localization messages
 	 * @return message for the specific code
 	 */
-	private String getMessageTemplate(String notificationCode, String localizationMessage) {
+	String getMessageTemplate(String notificationCode, String localizationMessage) {
 		String path = "$..messages[?(@.code==\"{}\")].message";
 		path = path.replace("{}", notificationCode);
 		String message = null;
@@ -831,5 +831,6 @@ public class NotificationUtil {
 		}
 		return mapOfPhnoAndUUIDs;
 	}
+
 
 }

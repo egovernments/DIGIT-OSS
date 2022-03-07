@@ -13,20 +13,20 @@ import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.ServiceRequestRepository;
 import org.egov.tl.util.*;
 import org.egov.tl.web.models.*;
+import org.egov.tl.web.models.property.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.awt.image.BufferStrategy;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
-import static org.egov.tl.util.BPAConstants.BUSINESS_SERVICE_BPAREG;
 import static org.egov.tl.util.TLConstants.*;
+import static org.egov.tl.util.TLConstants.PROPERTY_ID;
 
 
 @Slf4j
@@ -44,6 +44,8 @@ public class TLNotificationService {
 
 	private TLRenewalNotificationUtil tlRenewalNotificationUtil;
 
+	private PropertyUtil propertyUtil;
+
 	@Value("${egov.mdms.host}")
 	private String mdmsHost;
 
@@ -54,12 +56,13 @@ public class TLNotificationService {
 	private RestTemplate restTemplate;
 
 	@Autowired
-	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil, TLRenewalNotificationUtil tlRenewalNotificationUtil) {
+	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil, TLRenewalNotificationUtil tlRenewalNotificationUtil, PropertyUtil propertyUtil) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.util = util;
 		this.bpaNotificationUtil = bpaNotificationUtil;
 		this.tlRenewalNotificationUtil = tlRenewalNotificationUtil;
+		this.propertyUtil = propertyUtil;
 	}
 
 	/**
@@ -71,7 +74,11 @@ public class TLNotificationService {
 		Map<String, String> mobileNumberToOwner = new HashMap<>();
 		String tenantId = request.getLicenses().get(0).getTenantId();
 		String action = request.getLicenses().get(0).getAction();
+		String receiptno = "";
 		Map<Object, Object> configuredChannelList = fetchChannelList(new RequestInfo(), tenantId, TL_BUSINESSSERVICE, action);
+		String propertyId = request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID).asText();
+		Property property = propertyUtil.getPropertyDetails(request.getLicenses().get(0), propertyId, requestInfo);
+		String source = property.getSource().name();
 //		List<String> configuredChannelNames = Arrays.asList(new String[]{"SMS","EVENT","EMAIL"});
 		Set<String> mobileNumbers = new HashSet<>();
 
@@ -91,6 +98,16 @@ public class TLNotificationService {
 				List<SMSRequest> smsRequestsTL = new LinkedList<>();
 					if (null != config.getIsTLSMSEnabled()) {
 						if (config.getIsTLSMSEnabled()) {
+							if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null) {
+								List<SMSRequest> smsRequestsPT = new ArrayList<>();
+								String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
+								String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_SMS, propertyId, source);
+								log.info("Message to be sent: ", message);
+								smsRequestsPT.addAll(propertyUtil.createPropertySMSRequest(message, property));
+								if (!CollectionUtils.isEmpty(smsRequestsPT))
+									util.sendSMS(smsRequestsPT, true);
+
+							}
 							enrichSMSRequest(request, smsRequestsTL,configuredChannelList);
 							if (!CollectionUtils.isEmpty(smsRequestsTL))
 								util.sendSMS(smsRequestsTL, true);
@@ -99,6 +116,14 @@ public class TLNotificationService {
 
 					if (null != config.getIsUserEventsNotificationEnabledForTL()) {
 						if (config.getIsUserEventsNotificationEnabledForTL()) {
+							if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null) {
+								String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
+								String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_EVENT, propertyId, source);
+								log.info("Message to be sent: ", message);
+								EventRequest eventRequest = propertyUtil.getEventsForPropertyOwner(property, true, message, receiptno, USREVENTS_EVENT_NAME, request);
+								if (null != eventRequest)
+									util.sendEventNotification(eventRequest);
+							}
 							EventRequest eventRequest = getEventsForTL(request,configuredChannelList);
 							if (null != eventRequest)
 								util.sendEventNotification(eventRequest);
@@ -107,6 +132,20 @@ public class TLNotificationService {
 				List<EmailRequest> emailRequests = new LinkedList<>();
 				if (null != config.getIsEmailNotificationEnabled()) {
 					if (config.getIsEmailNotificationEnabled()) {
+						if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null) {
+							List<EmailRequest> emailRequestsPT = new LinkedList<>();
+							String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
+							Set<String> propertyMobileNumbers = new HashSet<>();
+							property.getOwners().forEach(owner -> {
+								if (owner.getMobileNumber() != null)
+									propertyMobileNumbers.add(owner.getMobileNumber());
+							});
+							Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(propertyMobileNumbers, request.getRequestInfo(), tenantId);
+							String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_EMAIL, String.valueOf(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID)), source);
+							emailRequestsPT.addAll(propertyUtil.createPropertyEmailRequest(request.getRequestInfo(), message, mapOfPhnoAndEmail));
+							if (!CollectionUtils.isEmpty(emailRequestsPT))
+								util.sendEmail(emailRequestsPT, config.getIsEmailNotificationEnabled());
+						}
 						Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
 						enrichEmailRequest(request, emailRequests, mapOfPhnoAndEmail, configuredChannelList);
 

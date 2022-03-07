@@ -301,6 +301,16 @@ public class TLConfiguration {
     @Value("${egov.tl.batch.expire.error.topic}")
     private String expiryErrorTopic;
 
+    //property_service
+    @Value("${egov.propertyService.service.host}")
+    private String propertyServiceHost;
+
+    @Value("${egov.propertyService.service.context.path}")
+    private String propertyServiceContextPath;
+
+    @Value("${egov.propertyService.endpoint}")
+    private String propertyServiceSearchEndpoint;
+
 
 
     // url shortner
