@@ -76,6 +76,8 @@ public class TLNotificationService {
 		String action = request.getLicenses().get(0).getAction();
 		Map<Object, Object> configuredChannelList = fetchChannelList(new RequestInfo(), tenantId, TL_BUSINESSSERVICE, action);
 		String propertyId = "";
+		if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null)
+			propertyId = request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID).asText();
 		Property property = propertyUtil.getPropertyDetails(request.getLicenses().get(0), propertyId, requestInfo);
 		String source = property.getSource().name();
 //		List<String> configuredChannelNames = Arrays.asList(new String[]{"SMS","EVENT","EMAIL"});
@@ -87,9 +89,6 @@ public class TLNotificationService {
 				mobileNumbers.add(owner.getMobileNumber());
 		});
 		}
-
-		if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null)
-			propertyId = request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID).asText();
 
 		String businessService = request.getLicenses().isEmpty() ? null : request.getLicenses().get(0).getBusinessService();
 		if (businessService == null)

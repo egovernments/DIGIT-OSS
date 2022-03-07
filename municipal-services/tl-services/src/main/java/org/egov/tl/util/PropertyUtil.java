@@ -80,25 +80,22 @@ public class PropertyUtil {
     }
 
     public Property getPropertyDetails(TradeLicense license, String propertyId, RequestInfo requestInfo) {
-        String ownerName = "";
         Property property = new Property();
-        OwnerInfo ownerInfo = new OwnerInfo();
-        List<OwnerInfo> ownerList = new ArrayList<>();
         String url = tradeUtil.getPropertySearchURL();
         url = url.replace("{1}", license.getTenantId());
         url = url.replace("{2}", propertyId);
         log.info("url to fetch property owner name" + url);
         try {
-            Object obj = serviceRequestRepository.fetchResult(new StringBuilder(url),
+            HashMap<String, Object> result = (HashMap<String, Object>) serviceRequestRepository.fetchResult(new StringBuilder(url),
                     RequestInfoWrapper.builder().requestInfo(requestInfo).build());
-            HashMap<String, Object> result = (HashMap<String, Object>) obj;
-            String jsonString = new JSONObject(result).toString();
-            log.info("property result "+jsonString);
-            DocumentContext documentContext = JsonPath.parse(jsonString);
-            Map<String, Object> propertyMap = documentContext.read("$.Properties[0]");
-            property = mapper.convertValue(propertyMap, Property.class);
-            if (property == null)
+            if(null != result) {
+                if(JsonPath.read(result, PROPERTY_JSON_KEY)!=null) {
+                    List<Property> properties = JsonPath.read(result, PROPERTY_JSON_KEY);
+                    property = mapper.convertValue(properties.get(0), Property.class);
+                }
+            } else {
                 throw new CustomException("INVALID PROPERTY", " The propertyId " + license.getPropertyId() + " does not exist");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new CustomException("INVALID PROPERTY", " Failed to parse the response from property search on id " + license.getPropertyId());
