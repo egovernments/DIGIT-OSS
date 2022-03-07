@@ -466,21 +466,18 @@ public class FSMService {
 			List<Role> roles = requestInfo.getUserInfo().getRoles();
 			if (roles.stream().anyMatch(role -> Objects.equals(role.getCode(), FSMConstants.ROLE_FSM_DSO))) {
 				
-				log.info("DSO MobileNumber:: ",requestInfo.getUserInfo().getMobileNumber());
-				log.info("Tenant id DSO:: ",criteria.getTenantId());
-				
 				VendorSearchCriteria vendorSearchCriteria=new VendorSearchCriteria();
 				vendorSearchCriteria = VendorSearchCriteria.builder()
 						.mobileNumber(requestInfo.getUserInfo().getMobileNumber())
 						.tenantId(criteria.getTenantId()).build();
 						
 				Vendor dso = dsoService.getVendor(vendorSearchCriteria,requestInfo);
-				log.info("Vendor DSO dso:: ",dso);
+				
 				/*
 				 * Vendor dso = dsoService.getVendor(null, criteria.getTenantId(), null,
 				 * requestInfo.getUserInfo().getMobileNumber(), null,null, requestInfo);
 				 */
-				log.info("Vendor DSO dsoid:: ",dso.getId());
+				
 				if (dso != null && org.apache.commons.lang3.StringUtils.isNotEmpty(dso.getId())) {
 					dsoId = dso.getId();
 				}
