@@ -418,7 +418,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       default:
         break;
     }
-  }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList, Reason, fstpoRejectionReason]);
+  }, [action, reassignReason, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList, Reason, fstpoRejectionReason]);
 
   const hiddenFileInput = React.useRef(null);
 

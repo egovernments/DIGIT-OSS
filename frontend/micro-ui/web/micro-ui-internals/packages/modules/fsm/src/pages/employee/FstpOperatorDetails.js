@@ -169,7 +169,7 @@ const FstpOperatorDetails = () => {
       vehicleDeclineReason: data?.workflow?.fstpoRejectionReason
     };
     const details = {
-      vehicleTrip: vehicle,
+      vehicleTrip: [vehicle],
       workflow: {
         action: "DECLINEVEHICLE",
       },

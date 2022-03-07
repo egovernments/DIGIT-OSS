@@ -61,6 +61,7 @@ const CashDetailsComponent = ({ ...props }) => {
         <div className="field">
           <div className="field-container">
             <DatePicker
+              isRequired={true}
               date={manualReceiptDate}
               onChange={(d) => {
                 setManualReceiptDate(d);
