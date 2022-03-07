@@ -43,6 +43,7 @@ import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static org.egov.swservice.util.SWConstants.CHANNEL_NAME_EMAIL;
 import static org.egov.swservice.util.SWConstants.SEWERAGE_SERVICE_BUSINESS_ID;
 
 @Slf4j
@@ -253,7 +254,7 @@ public class PaymentUpdateService {
 			}
 		}
 	}
-	}
+
 	/**
 	 *
 	 * @param request
