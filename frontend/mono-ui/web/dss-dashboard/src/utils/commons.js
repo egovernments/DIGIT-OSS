@@ -28,7 +28,12 @@ const removeSpaceInLocalisationKey = (key = "") => {
 }
 
 export const getTenantId = () => {
-    return `${localStorage.getItem('tenant-id')}`;
+    let tenant=sessionStorage.getItem('Digit.Employee.tenantId');
+    return `${JSON.parse(tenant)?.value||localStorage.getItem('tenant-id')}`;
+}
+export const getToken = () => {
+    let user=sessionStorage.getItem('Digit.User');
+    return `${JSON.parse(user)?.value?.access_token||localStorage.getItem('Employee.token')}`;
 }
 export const stateTenant= () => {
     let globalConfigs=window&&window.globalConfigs?window.globalConfigs : window.parent&&window.parent.globalConfigs;

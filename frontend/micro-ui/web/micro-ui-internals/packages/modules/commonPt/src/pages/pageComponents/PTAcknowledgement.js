@@ -164,7 +164,7 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
       </StatusTable>
       {/* {mutation.isSuccess && !onSelect && <SubmitBar label={t("PT_DOWNLOAD_ACK_FORM")} onSubmit={null} />} */}
       {mutation.isSuccess && onSelect && <SubmitBar label={t("CS_COMMON_NEXT")} onSubmit={onNext} />}
-      <Link to={`/digit-ui/citizen`}>
+      <Link to={userType === 'employee' ? `/digit-ui/employee` : `/digit-ui/citizen`}>
         <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
     </Card>

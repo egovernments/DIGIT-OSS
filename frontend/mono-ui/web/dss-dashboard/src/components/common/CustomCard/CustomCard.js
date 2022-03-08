@@ -12,7 +12,7 @@ import ChartsAPI from '../../../actions/charts/chartsAPI';
 import Arrow_Downward from "../../../images/arrows/Arrow_Downward.svg";
 import Arrow_Upward from '../../../images/arrows/Arrow_Upward.svg';
 import NFormatter from '../numberFormater';
-import { removeSignFromInsightData } from "../../../utils/commons";
+import { getTenantId, removeSignFromInsightData } from "../../../utils/commons";
 
 class CustomCard extends React.Component {
     constructor(props) {
@@ -26,7 +26,7 @@ class CustomCard extends React.Component {
         if(this.props.page.includes('ulb')) {
           if(!filters['tenantId']) {
             let tenentFilter = []
-            tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
+            tenentFilter.push(`${getTenantId()}`)
             filters['tenantId'] = tenentFilter
           }
         }

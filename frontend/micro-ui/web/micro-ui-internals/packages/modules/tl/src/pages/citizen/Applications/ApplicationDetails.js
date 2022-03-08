@@ -1,4 +1,4 @@
-import { Card, CardHeader, Loader, MultiLink, Row, SubmitBar, Header, CardSubHeader, CardSectionHeader } from "@egovernments/digit-ui-react-components";
+import { Card, CardHeader, Loader, MultiLink, Row, SubmitBar, Header, CardSubHeader, CardSectionHeader, LinkLabel, LinkButton } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -21,7 +21,13 @@ const ApplicationDetails = () => {
     tenantId: tenantId,
     applicationNumber: id,
   });
-
+const { isLoading: PTLoading, isError: isPTError, data: PTData } = Digit.Hooks.pt.usePropertySearch(
+  {
+    tenantId,
+    filters: { propertyIds: application?.[0]?.tradeLicenseDetail?.additionalDetail?.propertyId },
+  },
+  { enabled: application?.[0]?.tradeLicenseDetail?.additionalDetail?.propertyId ? true : false,}
+);
 
   useEffect(() => {
     setMutationHappened(false);
@@ -77,6 +83,43 @@ const ApplicationDetails = () => {
     window.open(receiptFile[TLcertificatefile.filestoreIds[0]], "_blank");
     setShowOptions(false);
   };
+
+  let propertyAddress = '';
+  if(PTData && PTData?.Properties?.length){
+    if(PTData?.data?.Properties[0]?.address?.doorNo) {
+      propertyAddress += PTData?.Properties[0]?.address?.doorNo;
+      if(PTData?.Properties[0]?.address?.street) {
+        propertyAddress += ', ';
+      }
+    }
+    if(PTData?.Properties[0]?.address?.street) {
+      propertyAddress += PTData?.Properties[0]?.address?.street;
+      if(PTData?.Properties[0]?.address?.landmark) {
+        propertyAddress += ', ';
+      }
+    }
+    if(PTData?.Properties[0]?.address?.landmark) {
+      propertyAddress += PTData?.Properties[0]?.address?.landmark;
+      if(PTData?.Properties[0]?.address?.locality?.name) {
+        propertyAddress += ', ';
+      }
+    }
+    if(PTData?.Properties[0]?.address?.locality?.name) {
+      propertyAddress += PTData?.Properties[0]?.address?.locality?.name;
+      if(PTData?.Properties[0]?.address?.city) {
+        propertyAddress += ', ';
+      }
+    }
+    if(PTData?.Properties[0]?.address?.city) {
+      propertyAddress += PTData?.Properties[0]?.address?.city;
+      if(PTData?.Properties[0]?.address?.pincode) {
+        propertyAddress += ', ';
+      }
+    }
+    if(PTData?.Properties[0]?.address?.pincode) {
+      propertyAddress += PTData?.Properties[0]?.address?.pincode;
+    }
+  }
 
   const dowloadOptions =
     paymentsHistory?.Payments?.length > 0
@@ -249,6 +292,11 @@ const ApplicationDetails = () => {
                   </div>
                 );
               })}
+              <CardSubHeader>{t("Property Details")}</CardSubHeader>
+              <Row label={t("TL_PROPERTY_ID")} text={ PTData?.Properties?.[0]?.propertyId} textStyle={{ whiteSpace: "pre" }} />
+              <Row label={t("PT_OWNER_NAME")} text={PTData?.Properties?.[0]?.owners[0]?.name } textStyle={{ whiteSpace: "pre" }} />
+              <Row label={t("PROPERTY_ADDRESS")} text={propertyAddress}  />
+                 <LinkButton style={{textAlign:"left"}} label={t("view property details")} onClick={() => {history.push(`/digit-ui/citizen/pt/property/properties/${PTData?.Properties?.[0]?.propertyId}`); }}></LinkButton>
               <Row label="" />
                     <Row
                       style={{ border: "none" }}

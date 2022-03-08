@@ -156,7 +156,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
   return (
     <div>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t("TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL")} :`}</CardLabel>
+        <CardLabel className="">{`${t("TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL")} :`}</CardLabel>
         <Dropdown
           className="form-field"
           selected={ownershipCategory}
@@ -263,7 +263,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
       </LabelFieldPair>
 
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t("PT_SPECIAL_APPLICANT_CATEGORY")}`}</CardLabel>
+        <CardLabel className="">{`${t("PT_SPECIAL_APPLICANT_CATEGORY")}`}</CardLabel>
         <div className="form-field">
           <Dropdown
             selected={Menu1?.length === 1 ? Menu1[0] : ownerType}

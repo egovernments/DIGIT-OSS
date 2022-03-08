@@ -156,8 +156,8 @@ const CustomPieChart = ({ dataKey = "value", data,setChartDenomination }) => {
         wrapperStyle={
           chartData?.length > 6  
           ? {paddingRight: checkChartID(id) && !mobileView? 60 : 0, ///Padding for 2 charts in a row cases
-           overflowY: "scroll", height: 250,}
-           : {paddingRight: checkChartID(id) && !mobileView? 60 : 0,} ///Padding for 2 charts in a row cases
+           overflowY: "scroll", height: 250,width:'35%',overflowX:"auto"}
+           : {paddingRight: checkChartID(id) && !mobileView? 60 : 0,width:'27%',overflowX:"auto"} ///Padding for 2 charts in a row cases
       }
         />
       </PieChart>

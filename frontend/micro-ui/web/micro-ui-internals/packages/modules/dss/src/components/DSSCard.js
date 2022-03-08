@@ -39,7 +39,8 @@ const NDSSCard = () => {
     headerStyle: { border: "none", height: "48px" },
     moduleName: t("ACTION_TEST_NATDASHBOARD"),
     subHeader: t("ACTION_TEST_NATDASHBOARD"),
-    subHeaderLink: `/employee/integration/dss/NURT_DASHBOARD}`,
+    subHeaderLink: `/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD`,
+    // subHeaderLink: `/employee/integration/dss/NURT_DASHBOARD`,
     className: "employeeCard card-home customEmployeeCard full-width-card full-employee-card-height",
     links: [...links],
   };
@@ -65,7 +66,8 @@ const DSSCard = () => {
     headerStyle: { border: "none", height: "48px" },
     moduleName: t("ES_TITLE_DSS"),
     subHeader: t("ACTION_TEST_SURE_DASHBOARD"),
-    subHeaderLink: `/employee/integration/dss/home}`,
+    subHeaderLink: `/digit-ui/employee/payment/integration/dss/home`,
+    // subHeaderLink: `/employee/integration/dss/home`,
     className: "employeeCard card-home customEmployeeCard full-width-card full-employee-card-height",
     links: [...links],
   };
