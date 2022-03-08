@@ -40,45 +40,45 @@ public class DXFHelper {
 					"/home/mani/Workspaces/bpa/eGov-Kozhikode-Implementation/egov/egov-edcr/src/test/resources/o.txt");
 			if (fout.exists())
 				fout.delete();
-			FileWriter rt = new FileWriter(fout);
-			while (line != null) {
-				/*
-				 * if(line.contains(having)) { LOG.info(line); }
-				 */
-				if (line.equals(start)) {
-					sb = new StringBuilder();
-					sb.append(line).append("\n");
-					line = buf.readLine();
-					// LOG.info(line+" -----"+i++);
-					while (line != null && !end.toString().contains(line)) {
-						// LOG.info(line+" "+i);
+			try (FileWriter rt = new FileWriter(fout);) {
+				while (line != null) {
+					/*
+					 * if(line.contains(having)) { LOG.info(line); }
+					 */
+					if (line.equals(start)) {
+						sb = new StringBuilder();
 						sb.append(line).append("\n");
 						line = buf.readLine();
-						if (line != null && end.toString().contains(line)) {
-							LOG.info(line +"   "+end.toString());
+						// LOG.info(line+" -----"+i++);
+						while (line != null && !end.toString().contains(line)) {
+							// LOG.info(line+" "+i);
+							sb.append(line).append("\n");
+							line = buf.readLine();
+							if (line != null && end.toString().contains(line)) {
+								LOG.info(line + "   " + end.toString());
+							}
 						}
-					}
-					// rt.write(sb.toString()+"
-					// &&&&&&&&&&&"+sb.toString().contains(having));
-					if (sb.toString().contains(having)) {
-						result.add(sb.toString());
-						LOG.info("******************found " + i++);
-					}
-				}else
-				line = buf.readLine();
+						// rt.write(sb.toString()+"
+						// &&&&&&&&&&&"+sb.toString().contains(having));
+						if (sb.toString().contains(having)) {
+							result.add(sb.toString());
+							LOG.info("******************found " + i++);
+						}
+					} else
+						line = buf.readLine();
+				}
+
+				// line = buf.readLine();
+
+				is.close();
+				// fileAsString = sb.toString();
+				// LOG.info("Contents : " + fileAsString);
+
+				for (String s : result)
+					rt.write(s);
+
+				rt.flush();
 			}
-
-			// line = buf.readLine();
-
-			is.close();
-			// fileAsString = sb.toString();
-			// LOG.info("Contents : " + fileAsString);
-
-			for (String s : result)
-				rt.write(s);
-			rt.flush();
-
-			rt.close();
 
 		} catch (IOException e) {
 			LOG.error(e.getMessage());

@@ -177,9 +177,7 @@ public class MainActivity extends AppCompatActivity {
 			versionName = getBaseContext().getPackageManager().getPackageInfo(getBaseContext().getPackageName(), 0 ).versionName;
 			versionCode = getBaseContext().getPackageManager().getPackageInfo(getBaseContext().getPackageName(), 0 ).versionCode;
 		} catch (PackageManager.NameNotFoundException e) {
-
-		} finally {
-
+			Log.e(TAG, "Package manager not found", e);
 		}
 
 		WebSettings webSettings = webView.getSettings();
