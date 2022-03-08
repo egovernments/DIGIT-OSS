@@ -43,7 +43,7 @@ const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormD
             enableDescriptionOnly={isPartiallyEnabled}
             surveyFormData={getSurveyFormValues}
           />
-          <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} disableInputs={isFormDisabled} formsConfig={initialSurveysConfig.questions} isPartiallyEnabled={isPartiallyEnabled} />
+          <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} disableInputs={isFormDisabled} formsConfig={initialSurveysConfig.questions} isPartiallyEnabled={isPartiallyEnabled} formDisabled={isFormDisabled}/>
           <SurveySettingsForms
             t={t}
             controlSurveyForm={controlSurveyForm}

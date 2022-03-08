@@ -192,6 +192,7 @@ const SurveyDetails = ({ location, match }) => {
         onActionSelect={onActionSelect}
         initialSurveysConfig={surveyData}
         isSurveyActive = {isSurveyActive}
+        formDisabled={isFormDisabled}
       />
 
       {showModal && userAction === "DELETE" && (
