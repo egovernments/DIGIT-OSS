@@ -77,7 +77,7 @@ export const FSMService = {
       auth: true,
     }),
   vehicleUpdate: (details) => {
-    Request({
+    return Request({
       url: Urls.fsm.vehilceUpdate,
       data: details,
       useCache: false,
