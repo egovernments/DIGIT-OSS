@@ -58,3 +58,9 @@ body {
     border-width: 0;
     position: fixed;
   }
+  @media (max-width: 768px) {
+    
+  .app-iframe-wrapper{
+  left: 0px;
+  }
+  }
