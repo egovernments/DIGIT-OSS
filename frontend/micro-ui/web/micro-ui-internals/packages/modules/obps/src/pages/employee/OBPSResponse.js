@@ -77,7 +77,7 @@ const OBPSResponse = (props) => {
 
   return (
     <div>
-      {isLoader ? <Loader /> :
+      {isLoader || workflowDetails?.isLoading ? <Loader /> :
         <Card>
           <Banner
             message={getHeaderMessage()}
