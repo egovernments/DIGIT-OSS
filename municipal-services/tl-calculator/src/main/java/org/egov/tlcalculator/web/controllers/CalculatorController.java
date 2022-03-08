@@ -100,7 +100,7 @@ public class CalculatorController {
 	 * @param calculationReq The calculation Request
 	 * @return Calculation Response
 	 */
-	@RequestMapping(value = {"/{servicename}/_calculate","/_estimate"}, method = RequestMethod.POST)
+	@RequestMapping(value = {"/{servicename}/_estimate","/_estimate"}, method = RequestMethod.POST)
 	public ResponseEntity<CalculationRes> estimate(@Valid @RequestBody CalculationReq calculationReq,@PathVariable(required = false) String servicename) {
 
 		if(servicename==null)
