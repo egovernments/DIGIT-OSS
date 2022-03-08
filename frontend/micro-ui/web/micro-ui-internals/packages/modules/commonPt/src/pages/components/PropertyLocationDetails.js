@@ -13,7 +13,9 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBl
   const userInfo = Digit.UserService.getUser()?.info;
   const cityId = userInfo?.tenantId;
   const cityName = 'TENANT_TENANTS_' + userInfo?.tenantId.replace('.','_').toUpperCase();
-  const cityObj = 'employee' ? {code: cityId, name: t(cityName), i18nKey: cityName} : Digit.SessionStorage.get('CITIZEN.COMMON.HOME.CITY');
+
+  const getUserType = () => Digit.UserService.getType();
+  const cityObj = getUserType === 'employee' ? {code: cityId, name: t(cityName), i18nKey: cityName} : Digit.SessionStorage.get('CITIZEN.COMMON.HOME.CITY');
 
   const [cityCode, setCityCode] = useState(cityObj);
   const [locality, setLocality] = useState(formData?.locality);
