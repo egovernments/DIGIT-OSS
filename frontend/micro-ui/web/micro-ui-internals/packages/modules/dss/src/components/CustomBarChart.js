@@ -29,7 +29,7 @@ const CustomLabel = ({ x, y, name, stroke, value }) => {
        {`${value}%`}
       </text>
       <text x={x} y={y} dx={-170} dy={10}>
-       {t(name)}
+        {t(name)}
       </text>
     </>
   );
@@ -88,18 +88,17 @@ const CustomBarChart = ({
   return (
     <Fragment>
       <ResponsiveContainer width="99%" height={320}>
-        <BarChart width="100%" height="100%" data={showDrillDown?chartData?.slice(0,3):chartData} layout={layout} maxBarSize={8} margin={{ left: 170 }} barGap={50}>
+        <BarChart width="100%" height="100%" data={showDrillDown?chartData?.slice(0,3):chartData} layout={layout} maxBarSize={10} margin={{ left: 170 }} barGap={70}>
           {showGrid && <CartesianGrid />}
-          <XAxis hide={hideAxis} dataKey={xDataKey} type={xAxisType} domain={[0, 90]} />
+          <XAxis hide={hideAxis} dataKey={xDataKey} type={xAxisType} domain={[0, 100]} />
           <YAxis dataKey={yDataKey} hide={hideAxis} type={yAxisType} padding={{ right: 40 }} />
           <Bar
             dataKey={xDataKey}
             fill={COLORS[fillColor]}
-            background={{ fill: "#D6D5D4", radius: 8 }}
+            background={{ fill: "#D6D5D4", radius: 10 }}
             label={<CustomLabel stroke={COLORS[fillColor]} />}
-            radius={[8, 8, 8, 8]}
+            radius={[10, 10, 10, 10]}
             isAnimationActive={false}
-            maxBarSize={8}
           />
         </BarChart>
       </ResponsiveContainer>

@@ -134,11 +134,16 @@ import {
   DustbinIcon,
   InfoBannerIcon,
   WSICon,
+  ArrowForward,
+  ArrowVectorDown,
+  ArrowDirection,
   CameraIcon,
   EditPencilIcon,
   GalleryIcon,
   RemoveIcon,
-  CheckSvg
+  CheckSvg,
+  AddressBookIcon,
+  LocationIcon,
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -153,7 +158,7 @@ import CardBasedOptions from "./atoms/CardBasedOptions";
 import WhatsNewCard from "./atoms/WhatsNewCard";
 import EventCalendarView from "./atoms/EventCalendarView";
 import InboxLinks from "./atoms/InboxLinks";
-import PopupHeadingLabel from "./atoms/PopupHeadingLabel"
+import PopupHeadingLabel from "./atoms/PopupHeadingLabel";
 
 import { FormComposer } from "./hoc/FormComposer";
 import Modal from "./hoc/Modal";
@@ -376,6 +381,10 @@ export {
   GalleryIcon,
   RemoveIcon,
   UploadPitPhoto,
-  CheckSvg
+  CheckSvg,
+  ArrowForward,
+  ArrowVectorDown,
+  ArrowDirection,
+  AddressBookIcon,
+  LocationIcon,
 };
-

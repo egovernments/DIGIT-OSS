@@ -8,7 +8,7 @@ export const TLList = () => {
   const { t } = useTranslation();
   const userInfo = Digit.UserService.getUser();
   const tenantId = userInfo?.info?.permanentCity;
-  const { mobileNumber: mobileno, LicenseNumber: licenseno, tenantId:tenantID } = Digit.Hooks.useQueryParams();
+  const { mobileNumber: mobileno, LicenseNumber: licenseno, tenantId: tenantID } = Digit.Hooks.useQueryParams();
   let filter1 = {};
   if (licenseno) filter1.licenseNumbers = licenseno;
   if (licenseno) filter1.tenantId = tenantID;
@@ -26,7 +26,7 @@ export const TLList = () => {
         <CardHeader>{`${t("TL_RENEW_TRADE_HEADER")}`}</CardHeader>
         <CardText>{`${t("TL_RENEW_TRADE_TEXT")}`}</CardText>
       </Card>
-      <div >
+      <div>
         {newapplicationlist?.length > 0 &&
           newapplicationlist.map((application, index) => (
             <div key={index}>

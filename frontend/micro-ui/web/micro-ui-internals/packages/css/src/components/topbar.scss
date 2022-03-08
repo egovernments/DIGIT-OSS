@@ -95,6 +95,15 @@
 
 .cp {
   cursor: pointer;
+  .hamburger {
+    display: none;
+  }
+
+  @media (max-width: 780px) {
+    .hamburger {
+      display: none;
+    }
+  }
 }
 
 .citizen {
