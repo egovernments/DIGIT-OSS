@@ -3,6 +3,8 @@ package org.egov.web.notification.sms.models;
 
 import lombok.*;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -12,6 +14,6 @@ public class Report {
     private String jobno;
     private String mobilenumber;
     private int messagestatus;
-    private String doneTime;
+    private Date doneTime;
     private String message;
 }
