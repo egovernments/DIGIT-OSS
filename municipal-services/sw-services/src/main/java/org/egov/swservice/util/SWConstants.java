@@ -212,6 +212,7 @@ public class SWConstants {
 	public static final String PAYMENT_NOTIFICATION_APP = "SW_PAYMENT_NOTIFICATION_APP";
 
 	public static final String PAYMENT_NOTIFICATION_SMS = "SW_PAYMENT_NOTIFICATION_SMS";
+	public static final String PAYMENT_NOTIFICATION_EMAIL = "SW_PAYMENT_NOTIFICATION_EMAIL";
 
 	public static final String NEW_SEWERAGE_APP_STATUS ="NEW_SEWERAGE_APPLICATION";
 
