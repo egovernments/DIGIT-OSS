@@ -3,13 +3,11 @@ package org.egov.inbox.service;
 import static org.egov.inbox.util.BpaConstants.BPA;
 import static org.egov.inbox.util.BpaConstants.BPAREG;
 import static org.egov.inbox.util.BpaConstants.BPA_APPLICATION_NUMBER_PARAM;
-
 import static org.egov.inbox.util.BpaConstants.LOCALITY_PARAM;
 import static org.egov.inbox.util.BpaConstants.MOBILE_NUMBER_PARAM;
 import static org.egov.inbox.util.BpaConstants.OFFSET_PARAM;
 import static org.egov.inbox.util.BpaConstants.STATUS_ID;
 import static org.egov.inbox.util.BpaConstants.STATUS_PARAM;
-
 import static org.egov.inbox.util.FSMConstants.APPLICATIONSTATUS;
 import static org.egov.inbox.util.FSMConstants.CITIZEN_FEEDBACK_PENDING_STATE;
 import static org.egov.inbox.util.FSMConstants.COMPLETED_STATE;
@@ -26,7 +24,6 @@ import static org.egov.inbox.util.NocConstants.NOC_APPLICATION_NUMBER_PARAM;
 import static org.egov.inbox.util.PTConstants.ACKNOWLEDGEMENT_IDS_PARAM;
 import static org.egov.inbox.util.PTConstants.PT;
 import static org.egov.inbox.util.TLConstants.APPLICATION_NUMBER_PARAM;
-
 import static org.egov.inbox.util.TLConstants.BUSINESS_SERVICE_PARAM;
 import static org.egov.inbox.util.TLConstants.REQUESTINFO_PARAM;
 import static org.egov.inbox.util.TLConstants.SEARCH_CRITERIA_PARAM;
@@ -45,7 +42,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
 
 import org.apache.commons.collections4.MapUtils;
 import org.egov.common.contract.request.RequestInfo;
@@ -166,7 +162,6 @@ public class InboxService {
         List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
         
          String moduleName = processCriteria.getModuleName();
-
         if(ObjectUtils.isEmpty(processCriteria.getModuleName()) && !ObjectUtils.isEmpty(processCriteria.getBusinessService()) &&
         		(processCriteria.getBusinessService().contains("FSM") || processCriteria.getBusinessService().contains("FSM_VEHICLE_TRIP"))){
         	processCriteria.setModuleName(processCriteria.getBusinessService().get(0));
@@ -421,10 +416,7 @@ public class InboxService {
             ProcessInstanceResponse processInstanceResponse;
             /*
              * In BPA, the stakeholder can able to submit applications for multiple cities
-             * and in a single inbox all cities submitted applications need to show.
-             * So tenantwise applications keeping in a map and then get process instance for
-             * the tenantid and application numbers.
-
+             * and in the single inbox all cities submitted applications need to show
              */
             if(processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName())
                     && processCriteria.getModuleName().equals(BPA) && roles.contains(BpaConstants.CITIZEN)) {
@@ -456,12 +448,10 @@ public class InboxService {
                         processInstanceRes.getProcessInstances().addAll(processInstance.getProcessInstances());
                 }
                 processInstanceResponse = processInstanceRes;
-                if(processInstanceResponse.getProcessInstances() == null)
-                    processInstanceResponse.setProcessInstances(Collections.emptyList());
             } else {
                 processInstanceResponse = workflowService.getProcessInstance(processCriteria, requestInfo);
             }
-
+            
             List<ProcessInstance> processInstances = processInstanceResponse.getProcessInstances();
             Map<String, ProcessInstance> processInstanceMap = processInstances.stream()
                     .collect(Collectors.toMap(ProcessInstance::getBusinessId, Function.identity()));
@@ -587,7 +577,7 @@ public class InboxService {
 			if (CollectionUtils.isEmpty(inboxes)) {
 				inputStatuses = inputStatuses.stream().filter(x -> x != null).collect(Collectors.toList());
 
-				List<String> fsmApplicationList = fetchVehicleStateMap(inputStatuses, requestInfo, criteria.getTenantId());
+				List<String> fsmApplicationList = fetchVehicleStateMap(inputStatuses, requestInfo, criteria.getTenantId(),criteria.getLimit(),criteria.getOffset());
 				moduleSearchCriteria.put("applicationNos", fsmApplicationList);
 				moduleSearchCriteria.put("applicationStatus", requiredApplications);
 				moduleSearchCriteria.put("offset", criteria.getOffset());
@@ -645,10 +635,12 @@ public class InboxService {
         return response;
     }
 
-    public List<String> fetchVehicleStateMap(List<String> inputStatuses, RequestInfo requestInfo, String tenantId) {
+    public List<String> fetchVehicleStateMap(List<String> inputStatuses, RequestInfo requestInfo, String tenantId,Integer limit,Integer offSet) {
 		VehicleTripSearchCriteria vehicleTripSearchCriteria = new VehicleTripSearchCriteria();
 		vehicleTripSearchCriteria.setApplicationStatus(inputStatuses);
 		vehicleTripSearchCriteria.setTenantId(tenantId);
+		vehicleTripSearchCriteria.setLimit(limit);
+		vehicleTripSearchCriteria.setOffset(offSet);
 		StringBuilder url = new StringBuilder(config.getVehicleHost());
 		url.append( config.getFetchApplicationIds());
 		
