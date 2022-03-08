@@ -258,7 +258,6 @@ export const TLSearch = {
     propertyDetails?.Properties?.length>0 && employeeResponse.push(PropertyDetail);
     response && !(propertyDetails?.Properties?.length >0) && employeeResponse.push(tradeAddress);
     response?.tradeLicenseDetail?.owners && employeeResponse.push(owners);
-    propertyDetails?.Properties?.length>0 && employeeResponse.push(PropertyDetail);
 
     return {
       tenantId: response.tenantId,
