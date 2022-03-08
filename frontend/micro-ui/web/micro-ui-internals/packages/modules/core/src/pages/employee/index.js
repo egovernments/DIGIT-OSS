@@ -49,7 +49,7 @@ const EmployeeApp = ({
             showSidebar={true}
             showLanguageChange={!showLanguageChange}
           />
-          <div className="grounded-container" style={{ padding: 0, paddingTop:"80px", marginLeft: "64px" }}>
+          <div className="grounded-container" style={{ padding: 0, paddingTop:"80px", marginLeft: mobileView ? "" : "64px" }}>
             <Switch>
               <Route path={`${path}/user/login`}>
                 <EmployeeLogin />
