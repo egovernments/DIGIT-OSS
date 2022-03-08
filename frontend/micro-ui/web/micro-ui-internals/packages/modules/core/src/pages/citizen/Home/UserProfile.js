@@ -8,6 +8,8 @@ import {
   Toast,
   CardLabelError,
   BreadCrumb,
+  BackButton,
+  Loader,
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -58,13 +60,24 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [toast, setToast] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
 
   const getUserInfo = async () => {
     const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [userInfo?.uuid] }, {});
     usersResponse && usersResponse.user && usersResponse.user.length ? setUserDetails(usersResponse.user[0]) : null;
   };
+  
+  React.useEffect(() => {
+    window.addEventListener("resize", () => setWindowWidth(window.innerWidth));
+    return () => {
+      window.removeEventListener("resize", () => setWindowWidth(window.innerWidth));
+    };
+  });
 
   useEffect(() => {
+    setLoading(true);
+
     getUserInfo();
 
     setGender({
@@ -74,7 +87,9 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
     });
 
     const thumbs = userDetails?.photo?.split(",");
-    setProfileImg(thumbs?.at(thumbs?.length - 1));
+    setProfileImg(thumbs?.at(0));
+
+    setLoading(false);
   }, [userDetails !== null]);
 
   let validation = {};
@@ -99,6 +114,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   };
 
   const updateProfile = async () => {
+    setLoading(true);
     try {
       const requestData = {
         ...userInfo,
@@ -120,6 +136,23 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
         throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_EMAIL_INVALID" });
       }
 
+      if (currentPassword.length || newPassword.length || confirmPassword.length) {
+        if (newPassword !== confirmPassword) {
+          throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_PASSWORD_MISMATCH" });
+        }
+
+        if (!(currentPassword.length && newPassword.length && confirmPassword.length)) {
+          throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID" });
+        }
+
+        if (
+          !new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(newPassword) &&
+          !new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(confirmPassword)
+        ) {
+          throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID" });
+        }
+      }
+
       const { responseInfo, user } = await Digit.UserService.updateUser(requestData, stateCode);
 
       if (responseInfo && responseInfo.status === "200") {
@@ -139,15 +172,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
         }
       }
 
-      if (currentPassword.length || newPassword.length || confirmPassword.length) {
-        if (!(currentPassword.length && newPassword.length && confirmPassword.length)) {
-          throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID" });
-        }
-
-        if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(newPassword) && !new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(confirmPassword)) {
-          throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID" });
-        }
-
+      if (currentPassword.length && newPassword.length && confirmPassword.length) {
         const requestData = {
           existingPassword: currentPassword,
           newPassword: newPassword,
@@ -159,7 +184,9 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
 
         if (newPassword === confirmPassword) {
           try {
-            const { responseInfo: changePasswordResponseInfo } = await Digit.UserService.changePassword(requestData, tenant);
+            const res = await Digit.UserService.changePassword(requestData, tenant);
+
+            const { responseInfo: changePasswordResponseInfo } = res;
             if (changePasswordResponseInfo?.status && changePasswordResponseInfo.status === "200") {
               showToast("success", t("CORE_COMMON_PROFILE_UPDATE_SUCCESS_WITH_PASSWORD"), 5000);
             } else {
@@ -181,6 +208,8 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
       const errorObj = JSON.parse(error);
       showToast(errorObj.type, t(errorObj.message), 5000);
     }
+
+    setLoading(false);
   };
 
   let menu = [];
@@ -212,68 +241,170 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
     }
   };
 
-  return (
-    <React.Fragment>
-      <div>
-        {userType === "citizen" ? (
-          <div style={{ backgroundColor: "white", borderRadius: "5px" }}>
-            <h1>{t("CORE_COMMON_PROFILE_EDIT")}</h1>
-            <div
-              style={{
-                position: "relative",
-                justifyContent: "center",
-                alignItems: "center",
-                display: "",
-                width: "97%",
-                height: "200px",
-                backgroundColor: "#EEEEEE",
-                margin: "2%",
-                padding: "20px",
-              }}
-            >
-              <div>
-                {!profileImg || profileImg === "" ? (
-                  <img
-                    style={{
-                      margin: "auto",
-                      borderRadius: "300px",
-                      justifyContent: "center",
-                      padding: "3%;",
-                      height: "114px",
-                      width: "114px",
-                      position: "absolute",
-                      left: "50%",
-                      transform: "translate(-50%,-50%)",
-                      top: "50%",
-                    }}
-                    src={defaultImage}
-                  />
-                ) : (
-                  <img
-                    style={{
-                      margin: "auto",
-                      borderRadius: "300px",
-                      justifyContent: "center",
-                      padding: "3%;",
-                      height: "114px",
-                      width: "114px",
-                      position: "absolute",
-                      left: "50%",
-                      transform: "translate(-50%,-50%)",
-                      top: "50%",
-                    }}
-                    src={profileImg}
-                  />
-                )}
-                <button style={{ position: "absolute", left: "50%", bottom: "18px", transform: "translateX(-50%)" }} onClick={onClickAddPic}>
-                  <CameraIcon />
-                </button>
-              </div>
-            </div>
+  if (loading) return <Loader></Loader>;
 
-            <LabelFieldPair>
-              <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_NAME")}`}*</CardLabel>
-              <div className="field">
+  return (
+    <div>
+      <section style={{ margin: userType === "citizen" ? "8px" : "24px" }}>
+        {userType === "citizen" ? (
+          <BackButton></BackButton>
+        ) : (
+          <BreadCrumb
+            crumbs={[
+              {
+                path: "/digit-ui/employee",
+                content: t("ES_COMMON_HOME"),
+                show: true,
+              },
+              {
+                path: "/digit-ui/employee/user/profile",
+                content: t("ES_COMMON_PAGE_1"),
+                show: url.includes("/user/profile"),
+              },
+            ]}
+          ></BreadCrumb>
+        )}
+      </section>
+      <div
+        style={{
+          display: "flex",
+          flex: 1,
+          flexDirection: windowWidth < 768 || userType === "citizen" ? "column" : "row",
+          margin: userType === "citizen" ? "8px" : "16px",
+          gap: userType === "citizen" ? "" : "0 24px",
+          boxShadow: userType === "citizen" ? "1px 1px 4px 0px rgba(0,0,0,0.2)" : "",
+          background: userType === "citizen" ? "white" : "",
+          borderRadius: userType === "citizen" ? "4px":"",
+        }}
+      >
+        <section
+          style={{
+            position: "relative",
+            display: "flex",
+            flex: userType === "citizen" ? 1 : 2.5,
+            justifyContent: "center",
+            alignItems: "center",
+            maxWidth: "100%",
+            height: "376px",
+            borderRadius: "4px",
+            boxShadow: userType === "citizen" ? "": "1px 1px 4px 0px rgba(0,0,0,0.2)",
+            border: `${userType === 'citizen' ? '8px' : '24px'} solid #fff`,
+            background: "#EEEEEE",
+            padding: userType === "citizen" ? "8px" : "16px",
+          }}
+        >
+          <div
+            style={{
+              position: "relative",
+              height: userType === "citizen" ? "114px" : "150px",
+              width: userType === "citizen" ? "114px" : "150px",
+              margin: "16px"
+            }}
+          >
+            <img
+              style={{
+                margin: "auto",
+                borderRadius: "300px",
+                justifyContent: "center",
+                height: "100%",
+                width: "100%",
+              }}
+              src={!profileImg || profileImg === "" ? defaultImage : profileImg}
+            />
+            <button style={{ position: "absolute", left: "50%", bottom: "-24px", transform: "translateX(-50%)" }} onClick={onClickAddPic}>
+              <CameraIcon />
+            </button>
+          </div>
+        </section>
+        <section
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            flex: userType === "citizen" ? 1 : 7.5,
+            width: "100%",
+            borderRadius: "4px",
+            height: "fit-content",
+            boxShadow: userType === "citizen" ? "": "1px 1px 4px 0px rgba(0,0,0,0.2)",
+            background: "white",
+            padding: userType === "citizen" ? "8px" : "24px",
+          }}
+        >
+          {userType === "citizen" ? (
+            <React.Fragment>
+              <LabelFieldPair>
+                <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_NAME")}`}*</CardLabel>
+                <div style={{ width: "100%" }}>
+                  <TextInput
+                    t={t}
+                    style={{ width: "100%" }}
+                    type={"text"}
+                    isMandatory={false}
+                    name="name"
+                    value={name}
+                    onChange={setOwnerName}
+                    {...(validation = {
+                      isRequired: true,
+                      pattern: "^[a-zA-Z-.`' ]*$",
+                      type: "tel",
+                      title: t("CORE_COMMON_PROFILE_NAME_ERROR_MESSAGE"),
+                    })}
+                    disable={editScreen}
+                  />
+                </div>
+              </LabelFieldPair>
+
+              <LabelFieldPair>
+                <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_GENDER")}`}</CardLabel>
+                <Dropdown
+                  style={{ width: "100%" }}
+                  className="form-field"
+                  selected={gender?.length === 1 ? gender[0] : gender}
+                  disable={gender?.length === 1 || editScreen}
+                  option={menu}
+                  select={setGenderName}
+                  value={gender}
+                  optionKey="code"
+                  t={t}
+                  name="gender"
+                />
+              </LabelFieldPair>
+
+              <LabelFieldPair>
+                <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_EMAIL")}`}</CardLabel>
+                <div style={{ width: "100%" }}>
+                  <TextInput
+                    t={t}
+                    style={{ width: "100%" }}
+                    type={"email"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="email"
+                    value={email}
+                    onChange={setOwnerEmail}
+                    disable={editScreen}
+                  />
+                </div>
+              </LabelFieldPair>
+              <button
+                onClick={updateProfile}
+                style={{
+                  marginTop: "24px",
+                  backgroundColor: "#F47738",
+                  width: "100%",
+                  height: "40px",
+                  color: "white",
+                  borderBottom: "1px solid black",
+                }}
+              >
+                Save
+              </button>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <LabelFieldPair style={{ display: "flex" }}>
+                <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>
+                  {`${t("CORE_COMMON_PROFILE_NAME")}`}*
+                </CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -281,345 +412,178 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                   name="name"
                   value={name}
                   onChange={setOwnerName}
+                  placeholder="Enter Your Name"
                   {...(validation = {
                     isRequired: true,
                     pattern: "^[a-zA-Z-.`' ]*$",
-                    type: "tel",
+                    type: "text",
                     title: t("CORE_COMMON_PROFILE_NAME_ERROR_MESSAGE"),
                   })}
                   disable={editScreen}
                 />
-              </div>
-            </LabelFieldPair>
+              </LabelFieldPair>
 
-            <LabelFieldPair>
-              <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_GENDER")}`}</CardLabel>
-              <Dropdown
-                style={{ width: "100%" }}
-                className="form-field"
-                selected={gender?.length === 1 ? gender[0] : gender}
-                disable={gender?.length === 1 || editScreen}
-                option={menu}
-                select={setGenderName}
-                value={gender}
-                optionKey="code"
-                t={t}
-                name="gender"
-              />
-            </LabelFieldPair>
+              <LabelFieldPair style={{ display: "flex" }}>
+                <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
+                  "CORE_COMMON_PROFILE_GENDER"
+                )}`}</CardLabel>
+                <Dropdown
+                  style={{ width: "100%" }}
+                  selected={gender?.length === 1 ? gender[0] : gender}
+                  disable={gender?.length === 1 || editScreen}
+                  option={menu}
+                  select={setGenderName}
+                  value={gender}
+                  optionKey="code"
+                  t={t}
+                  name="gender"
+                />
+              </LabelFieldPair>
 
-            <LabelFieldPair>
-              <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_EMAIL")}`}</CardLabel>
-              <div className="field">
+              <LabelFieldPair style={{ display: "flex" }}>
+                <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
+                  "CORE_COMMON_PROFILE_CITY"
+                )}`}</CardLabel>
+                <TextInput
+                  t={t}
+                  type={"text"}
+                  isMandatory={false}
+                  name="city"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="Enter Your City Name"
+                  {...(validation = {
+                    isRequired: true,
+                    // pattern: "^[a-zA-Z-.`' ]*$",
+                    type: "text",
+                    title: t("CORE_COMMON_PROFILE_CITY_ERROR_MESSAGE"),
+                  })}
+                  disable={true}
+                />
+              </LabelFieldPair>
+
+              <LabelFieldPair style={{ display: "flex" }}>
+                <CardLabel style={{ width: "300px" }}>{`${t("CORE_COMMON_PROFILE_MOBILE_NUMBER")}*`}</CardLabel>
+                <div style={{ width: "100%" }}>
+                  <MobileNumber
+                    value={mobileNumber}
+                    style={{ width: "100%" }}
+                    name="mobileNumber"
+                    placeholder="Enter a valid Mobile No."
+                    onChange={(value) => setMobileNo(value)}
+                    disable={true}
+                    {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID") }}
+                  />
+                </div>
+              </LabelFieldPair>
+
+              <LabelFieldPair style={{ display: "flex" }}>
+                <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
+                  "CORE_COMMON_PROFILE_EMAIL"
+                )}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"email"}
                   isMandatory={false}
+                  placeholder="Enter a valid Email"
                   optionKey="i18nKey"
                   name="email"
                   value={email}
                   onChange={setOwnerEmail}
                   disable={editScreen}
                 />
-              </div>
-            </LabelFieldPair>
-            <div style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end" }}>
-              <button
-                onClick={updateProfile}
-                style={{
-                  marginTop: "2px",
-                  backgroundColor: "#F47738",
-                  width: "100%",
-                  height: "40px",
-                  float: "right",
-                  // marginRight: "31px",
-                  color: "white",
-                  borderBottom: "1px solid black",
-                  flex: "1",
-                }}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div style={{ margin: "16px" }}>
-            <BreadCrumb
-              crumbs={[
-                {
-                  path: "/digit-ui/employee",
-                  content: t("ES_COMMON_HOME"),
-                  show: true,
-                },
-                {
-                  path: "/digit-ui/employee/user/profile",
-                  content: t("ES_COMMON_PAGE_1"),
-                  show: url.includes("/user/profile"),
-                },
-              ]}
-            ></BreadCrumb>
-            <div style={{ display: "flex", gap: "0 16px" }}>
-              <div
-                style={{
-                  height: "376px",
-                  width: "376px",
-                  padding: "24px",
-                  backgroundColor: "#FFFFFF",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  position: "relative",
-                }}
-              >
-                <div
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    display: "inline-block",
-                    width: "328px",
-                    height: "328px",
-                    backgroundColor: "#EEEEEE",
-                    paddingTop: "80px",
-                    position: "relative",
-                  }}
-                >
-                  <div>
-                    {!profileImg || profileImg === "" ? (
-                      <img
-                        style={{
-                          margin: "auto",
-                          borderRadius: "50%",
-                          justifyContent: "center",
-                          height: "150px",
-                          width: "150px",
-                          position: "absolute",
-                          left: "50%",
-                          transform: "translate(-50%,-50%)",
-                          top: "50%",
-                        }}
-                        src={defaultImage}
-                      />
-                    ) : (
-                      <img
-                        style={{
-                          display: "block",
-                          marginRight: "auto",
-                          marginLeft: "auto",
-                          borderRadius: "50%",
-                          justifyContent: "center",
-                          width: "150px",
-                          height: "150px",
-                          position: "absolute",
-                          left: "50%",
-                          transform: "translate(-50%,-50%)",
-                          top: "50%",
-                        }}
-                        src={profileImg}
-                      />
-                    )}
-                    <button style={{ position: "absolute", left: "50%", bottom: "64px", transform: "translateX(-50%)" }} onClick={onClickAddPic}>
-                      <CameraIcon />
-                    </button>
-                  </div>
+              </LabelFieldPair>
+              <LabelFieldPair>
+                <div>
+                  <a style={{ color: "orange", cursor: "default", marginBottom: "5", cursor: "pointer" }} onClick={TogleforPassword}>
+                    Change Password
+                  </a>
+                  {changepassword ? (
+                    <div style={{ marginTop: "10px" }}>
+                      <LabelFieldPair style={{ display: "flex" }}>
+                        <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
+                          "CORE_COMMON_PROFILE_CURRENT_PASSWORD"
+                        )}`}</CardLabel>
+                        <TextInput
+                          t={t}
+                          type={"password"}
+                          isMandatory={false}
+                          name="name"
+                          pattern="^([a-zA-Z0-9@#$%])+$"
+                          onChange={(e) => setCurrentPassword(e.target.value)}
+                          disable={editScreen}
+                        />
+                      </LabelFieldPair>
+                      <LabelFieldPair style={{ display: "flex" }}>
+                        <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
+                          "CORE_COMMON_PROFILE_NEW_PASSWORD"
+                        )}`}</CardLabel>
+                        <TextInput
+                          t={t}
+                          type={"password"}
+                          isMandatory={false}
+                          name="name"
+                          pattern="^([a-zA-Z0-9@#$%])+$"
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          disable={editScreen}
+                        />
+                      </LabelFieldPair>
+                      <LabelFieldPair style={{ display: "flex" }}>
+                        <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
+                          "CORE_COMMON_PROFILE_CONFIRM_PASSWORD"
+                        )}`}</CardLabel>
+                        <TextInput
+                          t={t}
+                          type={"password"}
+                          isMandatory={false}
+                          name="name"
+                          pattern="^([a-zA-Z0-9@#$%])+$"
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          disable={editScreen}
+                        />
+                      </LabelFieldPair>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
-              </div>
-              <div
-                style={{
-                  position: "relative",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  display: "inline-block",
-                  width: "928px",
-                  minHeight: "496px",
-                  height: "fit-content",
-                  backgroundColor: "white",
-                  padding: "20px",
-                }}
-              >
-                <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                  <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_NAME")}`}*</CardLabel>
-                  <div className="field">
-                    <TextInput
-                      t={t}
-                      type={"text"}
-                      isMandatory={false}
-                      name="name"
-                      style={{ width: "640px", height: "40px" }}
-                      value={name}
-                      onChange={setOwnerName}
-                      placeholder="Enter Your Name"
-                      {...(validation = {
-                        isRequired: true,
-                        pattern: "^[a-zA-Z-.`' ]*$",
-                        type: "text",
-                        title: t("CORE_COMMON_PROFILE_NAME_ERROR_MESSAGE"),
-                      })}
-                      disable={editScreen}
-                    />
-                  </div>
-                </LabelFieldPair>
-
-                <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                  <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_GENDER")}`}</CardLabel>
-                  <Dropdown
-                    style={{ width: "640px", height: "40px" }}
-                    className="form-field"
-                    selected={gender?.length === 1 ? gender[0] : gender}
-                    disable={gender?.length === 1 || editScreen}
-                    option={menu}
-                    select={setGenderName}
-                    value={gender}
-                    optionKey="code"
-                    t={t}
-                    name="gender"
-                  />
-                </LabelFieldPair>
-
-                <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                  <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_CITY")}`}</CardLabel>
-                  <div className="field">
-                    <TextInput
-                      t={t}
-                      type={"text"}
-                      isMandatory={false}
-                      name="city"
-                      style={{ width: "640px", height: "40px" }}
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      placeholder="Enter Your City Name"
-                      {...(validation = {
-                        isRequired: true,
-                        // pattern: "^[a-zA-Z-.`' ]*$",
-                        type: "text",
-                        title: t("CORE_COMMON_PROFILE_CITY_ERROR_MESSAGE"),
-                      })}
-                      disable={true}
-                    />
-                  </div>
-                </LabelFieldPair>
-
-                <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                  <CardLabel>{`${t("CORE_COMMON_PROFILE_MOBILE_NUMBER")}*`}</CardLabel>
-                  <MobileNumber
-                    value={mobileNumber}
-                    name="mobileNumber"
-                    placeholder="Enter a valid Mobile No."
-                    style={{ width: "600px", height: "40px" }}
-                    onChange={(value) => setMobileNo(value)}
-                    disable={true}
-                    {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID") }}
-                  />
-                </LabelFieldPair>
-
-                <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                  <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_EMAIL")}`}</CardLabel>
-                  <div className="field">
-                    <TextInput
-                      t={t}
-                      type={"email"}
-                      isMandatory={false}
-                      placeholder="Enter a valid Email"
-                      optionKey="i18nKey"
-                      style={{ width: "640px", height: "40px" }}
-                      name="email"
-                      value={email}
-                      onChange={setOwnerEmail}
-                      disable={editScreen}
-                    />
-                  </div>
-                </LabelFieldPair>
-                <LabelFieldPair>
-                  <div>
-                    <a style={{ color: "orange", cursor: "default", marginBottom: "5", cursor: "pointer" }} onClick={TogleforPassword}>
-                      Change Password
-                    </a>
-                    {changepassword ? (
-                      <div style={{ marginTop: "10px" }}>
-                        <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                          <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_CURRENT_PASSWORD")}`}</CardLabel>
-                          <div className="field">
-                            <TextInput
-                              t={t}
-                              type={"password"}
-                              isMandatory={false}
-                              style={{ width: "640px", height: "40px" }}
-                              name="name"
-                              pattern="^([a-zA-Z0-9@#$%])+$"
-                              onChange={(e) => setCurrentPassword(e.target.value)}
-                              disable={editScreen}
-                            />
-                          </div>
-                        </LabelFieldPair>
-                        <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                          <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_NEW_PASSWORD")}`}</CardLabel>
-                          <div className="field">
-                            <TextInput
-                              t={t}
-                              type={"password"}
-                              isMandatory={false}
-                              style={{ width: "640px", height: "40px" }}
-                              name="name"
-                              pattern="^([a-zA-Z0-9@#$%])+$"
-                              onChange={(e) => setNewPassword(e.target.value)}
-                              disable={editScreen}
-                            />
-                          </div>
-                        </LabelFieldPair>
-                        <LabelFieldPair style={{ display: "flex", justifyContent: "space-between" }}>
-                          <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_CONFIRM_PASSWORD")}`}</CardLabel>
-                          <div className="field">
-                            <TextInput
-                              t={t}
-                              type={"password"}
-                              isMandatory={false}
-                              style={{ width: "640px", height: "40px" }}
-                              name="name"
-                              pattern="^([a-zA-Z0-9@#$%])+$"
-                              onChange={(e) => setConfirmPassword(e.target.value)}
-                              disable={editScreen}
-                            />
-                          </div>
-                        </LabelFieldPair>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                </LabelFieldPair>
-              </div>
-            </div>
-          </div>
-        )}
-        {userType === "employee" ? (
-          <div style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end" }}>
-            <button
-              onClick={updateProfile}
-              style={{
-                marginTop: "24px",
-                backgroundColor: "#F47738",
-                width: "248px",
-                height: "40px",
-                float: "right",
-                marginRight: "31px",
-                color: "white",
-                borderBottom: "1px solid black",
-              }}
-            >
-              Save
-            </button>
-          </div>
-        ) : (
-          ""
-        )}
-        {toast && (
-          <Toast
-            error={toast.key === "error"}
-            label={t(toast.key === "success" ? `CORE_COMMON_PROFILE_UPDATE_SUCCESS` : toast.action)}
-            onClose={() => setToast(null)}
-            style={{ maxWidth: "670px" }}
-          />
-        )}
+              </LabelFieldPair>
+            </React.Fragment>
+          )}
+        </section>
       </div>
+
+      {userType === "employee" ? (
+        <div style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end", marginTop: "64px", alignItems: "center" }}>
+          <button
+            onClick={updateProfile}
+            style={{
+              marginTop: "24px",
+              backgroundColor: "#F47738",
+              width: windowWidth < 768 ? "100%": "248px",
+              height: "40px",
+              float: "right",
+              margin: windowWidth < 768 ? "0 16px" : "",
+              marginRight: windowWidth < 768 ? "16px" :"31px",
+              color: "white",
+              borderBottom: "1px solid black",
+            }}
+          >
+            Save
+          </button>
+        </div>
+      ) : (
+        ""
+      )}
+      {toast && (
+        <Toast
+          error={toast.key === "error"}
+          label={t(toast.key === "success" ? `CORE_COMMON_PROFILE_UPDATE_SUCCESS` : toast.action)}
+          onClose={() => setToast(null)}
+          style={{ maxWidth: "670px" }}
+        />
+      )}
+
       {openUploadSlide == true ? (
         <UploadDrawer
           setProfilePic={setFileStoreId}
@@ -631,7 +595,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
       ) : (
         ""
       )}
-    </React.Fragment>
+    </div>
   );
 };
 
