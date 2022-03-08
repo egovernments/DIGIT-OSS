@@ -82,7 +82,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               //defaultValue={surveyFormState?.collectCitizenInfo}
               //rules={{required:true}}
               // rules={{ required:question.required }}
-              render={({ onChange, value }) => (
+              render={({ onChange, value}) => (
                 <div className="align-columns">
                   {question.options.map((option) => {
                     return (
@@ -90,13 +90,14 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
                         disabled={formDisabled}
                         key={option}
                         onChange={(e) => {
-                          if (e.target.checked ) {
-                            value && onChange([...value, option]);
+                
+                          if (e.target.checked) {
+                            onChange([option,...value?value:[]]);             
                           } else {
                             value && onChange(value.filter((item) => item !== option));
                           }
                         }}
-                        checked={value}
+                        checked={!!value?.find(e=> e===option)}
                         label={option}
                       />
                     );
@@ -109,6 +110,9 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
             )}
           </>
         );
+           
+              
+         
       case "DATE_ANSWER_TYPE":
         return (
           <>
