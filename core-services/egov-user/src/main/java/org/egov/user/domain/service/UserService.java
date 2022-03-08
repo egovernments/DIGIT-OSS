@@ -205,7 +205,7 @@ public class UserService {
 
         list = encryptionDecryptionUtil.decryptObject(list, "UserList", User.class, requestInfo);
 
-        //setFileStoreUrlsByFileStoreIds(list);
+        setFileStoreUrlsByFileStoreIds(list);
         return list;
     }
 
