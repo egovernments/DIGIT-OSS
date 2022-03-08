@@ -10,6 +10,7 @@ import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import SubOccupancyTable from "../../../../../templates/ApplicationDetails/components/SubOccupancyTable";
 import InspectionReport from "../../../../../templates/ApplicationDetails/components/InspectionReport";
 import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData, getBPAFormData, convertDateToEpoch, printPdf,downloadPdf  } from "../../../utils";
+import cloneDeep from "lodash/cloneDeep";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -333,76 +334,91 @@ const BpaApplicationDetail = () => {
   }
 
   let dowloadOptions = [];
-  if(data?.applicationData?.businessService==="BPA_OC" && data?.applicationData?.status==="APPROVED"){
-    dowloadOptions.push({
-      label: t("BPA_OC_CERTIFICATE"),
-      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"occupancy-certificate"),
-    });
+
+  if (payments?.length > 0) {
+    const bpaPayments = cloneDeep(payments);
+    bpaPayments.forEach(pay => {
+      if (pay?.paymentDetails[0]?.businessService === "BPA.NC_OC_APP_FEE") {
+        dowloadOptions.push({
+          order: 1,
+          label: t("BPA_APP_FEE_RECEIPT"),
+          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: pay, consumerCodes: data?.applicationData?.applicationNo }),
+        });
+      }
+
+      if (pay?.paymentDetails[0]?.businessService === "BPA.NC_OC_SAN_FEE") {
+        dowloadOptions.push({
+          order: 2,
+          label: t("BPA_OC_DEV_PEN_RECEIPT"),
+          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: pay, consumerCodes: data?.applicationData?.applicationNo }),
+        });
+      }
+
+      if (pay?.paymentDetails[0]?.businessService === "BPA.LOW_RISK_PERMIT_FEE") {
+        dowloadOptions.push({
+          order: 1,
+          label: t("BPA_FEE_RECEIPT"),
+          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: pay, consumerCodes: data?.applicationData?.applicationNo }),
+        });
+      }
+
+      if (pay?.paymentDetails[0]?.businessService === "BPA.NC_APP_FEE") {
+        dowloadOptions.push({
+          order: 1,
+          label: t("BPA_APP_FEE_RECEIPT"),
+          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: pay, consumerCodes: data?.applicationData?.applicationNo }),
+        });
+      }
+
+      if (pay?.paymentDetails[0]?.businessService === "BPA.NC_SAN_FEE") {
+        dowloadOptions.push({
+          order: 2,
+          label: t("BPA_SAN_FEE_RECEIPT"),
+          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: payments[1], consumerCodes: data?.applicationData?.applicationNo }),
+        });
+      }
+    })
   }
-  if(data?.comparisionReport){
-    dowloadOptions.push({
-      label: t("BPA_COMPARISON_REPORT_LABEL"),
-      onClick: () => window.open(data?.comparisionReport?.comparisonReport, "_blank"),
-    });
-  }
-  if(data && data?.applicationData?.businessService === "BPA_LOW"  && payments.length>0)
-  {
-    dowloadOptions.push({
-      label: t("BPA_FEE_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
-    });
+
+
+  if(data && data?.applicationData?.businessService === "BPA_LOW" && payments?.length > 0) {
     !(data?.applicationData?.status.includes("REVOCATION")) && dowloadOptions.push({
+      order: 3,
       label: t("BPA_PERMIT_ORDER"),
       onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit-low"),
     });
     (data?.applicationData?.status.includes("REVOCATION")) && dowloadOptions.push({
+      order: 3,
       label: t("BPA_REVOCATION_PDF_LABEL"),
       onClick: () => getRevocationPDFSearch({tenantId: data?.applicationData?.tenantId}),
     });
     
-  }
-  else if(data && data?.applicationData?.businessService === "BPA" && payments.length>0)
-  {
+  } else if(data && data?.applicationData?.businessService === "BPA" && payments?.length > 0) {
+    if(data?.applicationData?.status==="APPROVED"){
     dowloadOptions.push({
-      label: t("BPA_APP_FEE_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
-    });
-    if(payments.length == 2){dowloadOptions.push({
-      label: t("BPA_SAN_FEE_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
-    });
-    dowloadOptions.push({
+      order: 3,
       label: t("BPA_PERMIT_ORDER"),
       onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit"),
-    });
-  }
-  }
-  else
-  {
-    payments.length>0 && dowloadOptions.push({
-      label: t("BPA_APP_FEE_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
-    });
-    if(payments.length == 1 && payments[0]?.paymentDetails[0]?.businessService==="BPA.NC_OC_SAN_FEE"){
+    });}
+  } else {
+    if(data?.applicationData?.status==="APPROVED"){
       dowloadOptions.push({
-        label: t("BPA_OC_DEV_PEN_RECEIPT"),
-        onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
+        order: 3,
+        label: t("BPA_OC_CERTIFICATE"),
+        onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"occupancy-certificate"),
       });
     }
-    if(payments.length == 2){dowloadOptions.push({
-      label: t("BPA_SAN_FEE_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
-    });
+  }
+
+  if(data?.comparisionReport){
     dowloadOptions.push({
-      label: t("BPA_PERMIT_ORDER"),
-      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit"),
-    });
-    dowloadOptions.push({
-      label: t("BPA_OC_DEV_PEN_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
+      order: 4,
+      label: t("BPA_COMPARISON_REPORT_LABEL"),
+      onClick: () => window.open(data?.comparisionReport?.comparisonReport, "_blank"),
     });
   }
-  }
+
+  dowloadOptions.sort(function (a, b) { return a.order - b.order; });
 
   if (workflowDetails?.data?.nextActions?.length > 0) {
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "INITIATE");
