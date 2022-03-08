@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation, Route } from "react-router-dom";
 import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-components";
-import WSCreate from "./WSCreate/index"
+import WSCreate from "./WSCreate/index";
 import SearchConnectionComponent from "./SearchConnection";
 import SearchResultsComponent from "./SearchResults";
 import TestAcknowledgment from "./TestAcknowledgment";
 
 const App = ({ path }) => {
-  const location = useLocation()
+  const location = useLocation();
   const { t } = useTranslation();
   return (
     <React.Fragment>
@@ -20,7 +20,7 @@ const App = ({ path }) => {
         <Route path={`${path}/test-acknowledgment`} component={TestAcknowledgment} />
       </Switch>
     </React.Fragment>
-  )
-}
+  );
+};
 
 export default App;

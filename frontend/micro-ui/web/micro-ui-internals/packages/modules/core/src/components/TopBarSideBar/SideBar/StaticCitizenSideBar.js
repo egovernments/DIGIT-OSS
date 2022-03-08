@@ -1,11 +1,11 @@
-import { LogoutIcon, NavBar, EditPencilIcon } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { HomeIcon, EditPencilIcon, LogoutIcon } from "@egovernments/digit-ui-react-components";
+import { Link, useLocation } from "react-router-dom";
+import SideBarMenu from "../../../config/sidebar-menu";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import SideBarMenu from "../../../config/sidebar-menu";
 import { Phone } from "@egovernments/digit-ui-react-components";
-import ChangeCity from "../../ChangeCity";
-import StaticCitizenSideBar from "./StaticCitizenSideBar";
+import SubMenu from "./SubMenu";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -30,87 +30,89 @@ const defaultImage =
   "XZOvia7VujatUwVTrIt+Q/Csc7Tuhe+BOakT10b4TuoiiJjvgU9emTO42PwEfBa+cuodKkuf42DXr1D3JpXz73Hnn0j10evHKe+nufgfUm+7B84sX9FfdEzXux2DBpWuKokkCqN/5pa/8pmvn" +
   "L+RGKCddCGmatiPyPB/+ekO/M/q/7uvbt22kTt3zEnXPzCV13T3Gel4/6NduDu66xRvlPNkM1RjjxUdv+4WhGx6TftD19Q/dfzpwcHO+rE3fAAAAAElFTkSuQmCC";
 
-const Profile = ({ info, stateName, t }) => {
-  const [profilePic, setProfilePic] = React.useState(null);
-
-  React.useEffect(async () => {
-    const tenant = Digit.ULBService.getCurrentTenantId();
-    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [info?.uuid] }, {});
-
-    if (usersResponse && usersResponse.user && usersResponse.user.length) {
-      const userDetails = usersResponse.user[0];
-      const thumbs = userDetails?.photo?.split(",");
-      setProfilePic(thumbs?.at(0));
-    }
-  }, [profilePic !== null]);
-
-  return (
-    <div className="profile-section">
-      <div className="imageloader imageloader-loaded">
-        <img
-          className="img-responsive img-circle img-Profile"
-          src={profilePic ? profilePic : defaultImage}
-          style={{ objectFit: "cover", objectPosition: "center" }}
-        />
-      </div>
-      <div id="profile-name" className="label-container name-Profile">
-        <div className="label-text"> {info?.name} </div>
-      </div>
-      <div id="profile-location" className="label-container loc-Profile">
-        <div className="label-text"> {info?.mobileNumber} </div>
-      </div>
-      {info?.emailId && (
-        <div id="profile-emailid" className="label-container loc-Profile">
-          <div className="label-text"> {info.emailId} </div>
-        </div>
-      )}
-      {window.location.href.includes("/employee") &&
-        !window.location.href.includes("/employee/user/login") &&
-        !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true} />}
+const Profile = ({ info, stateName, t }) => (
+  <div className="profile-section">
+    <div className="imageloader imageloader-loaded">
+      <img className="img-responsive img-circle img-Profile" src={defaultImage} />
     </div>
-  );
-};
-
-const PoweredBy = () => (
-  <div className="digit-footer">
-    <img
-      alt="Powered by DIGIT"
-      src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER")}
-      style={{ cursor: "pointer" }}
-      onClick={() => {
-        window.open(window?.globalConfigs?.getConfig?.("DIGIT_HOME_URL"), "_blank").focus();
-      }}
-    />{" "}
+    <div id="profile-name" className="label-container name-Profile">
+      <div className="label-text"> {info?.name} </div>
+    </div>
+    <div id="profile-location" className="label-container loc-Profile">
+      <div className="label-text"> {info?.mobileNumber} </div>
+    </div>
+    {info?.emailId && (
+      <div id="profile-emailid" className="label-container loc-Profile">
+        <div className="label-text"> {info.emailId} </div>
+      </div>
+    )}
+    {window.location.href.includes("/employee") &&
+      !window.location.href.includes("/employee/user/login") &&
+      !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true} />}
   </div>
 );
-
-export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogout, isEmployee = false }) => {
+const StaticCitizenSideBar = ({ logout }) => {
+  const { t } = useTranslation();
+  const history = useHistory();
+  const location = useLocation();
+  const { pathname } = location;
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
-  const { t } = useTranslation();
-  const history = useHistory();
 
-  const closeSidebar = () => {
-    Digit.clikOusideFired = true;
-    toggleSidebar(false);
-  };
+  console.log(pathname);
 
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-
-  const showProfilePage = () => {
-    const redirectUrl = isEmployee ? "/digit-ui/employee/user/profile" : "/digit-ui/citizen/user/profile";
-    history.push(redirectUrl);
-    closeSidebar();
-  };
+  const [isEmployee, setisEmployee] = useState(false);
 
   const redirectToLoginPage = () => {
     history.push("/digit-ui/citizen/login");
-    closeSidebar();
+  };
+  const showProfilePage = () => {
+    history.push("/digit-ui/citizen/user/profile");
   };
 
-  let menuItems = [...SideBarMenu(t, closeSidebar, redirectToLoginPage, isEmployee)];
+  const handleLogout = () => {
+    Digit.UserService.logout();
+  };
+
+  let menuItems = [...SideBarMenu(t, showProfilePage, redirectToLoginPage, isEmployee)];
+  menuItems = menuItems.filter((item) => item.element !== "LANGUAGE");
+
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const MenuItem = ({ item }) => {
+    let itemComponent;
+    if (item.type === "component") {
+      itemComponent = item.action;
+    } else {
+      itemComponent = item.text;
+    }
+    const Item = () => (
+      <span className="menu-item" {...item.populators}>
+        {item?.icon && item.icon}
+        <div className="menu-label">{itemComponent}</div>
+      </span>
+    );
+    if (item.type === "external-link") {
+      return (
+        <Link to={item.link}>
+          <Item />
+        </Link>
+      );
+    }
+    if (item.type === "link") {
+      return (
+        <Link to={item.link}>
+          <Item />
+        </Link>
+      );
+    }
+    if (item.type === "submenu") {
+      return <SubMenu item={item} />;
+    }
+    return <Item />;
+  };
   let profileItem;
+
   if (isFetched && user && user.access_token) {
     profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t} />;
     menuItems = menuItems.filter((item) => item?.id !== "login-btn");
@@ -128,9 +130,7 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
         text: t("CORE_COMMON_LOGOUT"),
         element: "LOGOUT",
         icon: <LogoutIcon className="icon" />,
-        populators: {
-          onClick: onLogout,
-        },
+        populators: { onClick: handleLogout },
       },
       {
         text: (
@@ -160,22 +160,38 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     ];
   }
 
-  /*  URL with openlink wont have sidebar and actions    */
-  if (history.location.pathname.includes("/openlink")) {
-    profileItem = <span></span>;
-    menuItems = menuItems.filter((ele) => ele.element === "LANGUAGE");
-  }
-
-  return isMobile ? (
-    <NavBar
-      open={isOpen}
-      toggleSidebar={toggleSidebar}
-      profileItem={profileItem}
-      onClose={closeSidebar}
-      menuItems={menuItems}
-      Footer={<PoweredBy />}
-    />
-  ) : (
-    <StaticCitizenSideBar logout={onLogout} />
+  return (
+    <React.Fragment>
+      <div>
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            backgroundColor: "rgba(0, 0, 0, 0.54)",
+            pointerzevents: "auto",
+          }}
+        ></div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            height: "calc(100vh - 56px)",
+            zIndex: "99",
+          }}
+        >
+          {profileItem}
+          <div className="drawer-desktop">
+            {menuItems.map((item, index) => (
+              <div className={`sidebar-list ${pathname === item.link ? "active" : ""}`} key={index}>
+                <MenuItem item={item} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
   );
 };
+
+export default StaticCitizenSideBar;

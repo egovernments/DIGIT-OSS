@@ -214,9 +214,9 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
 
   return (
     <React.Fragment>
-      <div>
+      <div className="user-profile">
         {userType === "citizen" ? (
-          <div style={{ backgroundColor: "white", borderRadius: "5px" }}>
+          <div style={{ backgroundColor: "white", borderRadius: "5px", padding: "10px", margin: "10px" }}>
             <h1>{t("CORE_COMMON_PROFILE_EDIT")}</h1>
             <div
               style={{

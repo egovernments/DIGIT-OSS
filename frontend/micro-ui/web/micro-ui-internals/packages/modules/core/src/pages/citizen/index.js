@@ -5,6 +5,7 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 import ErrorBoundary from "../../components/ErrorBoundaries";
 import { AppHome } from "../../components/Home";
 import TopBarSideBar from "../../components/TopBarSideBar";
+import StaticCitizenSideBar from "../../components/TopBarSideBar/SideBar/StaticCitizenSideBar";
 import CitizenHome from "./Home";
 import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
@@ -51,9 +52,9 @@ const Home = ({
           <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
           <BackButton className="moduleLinkHomePageBackButton" />
           <h1>{t("MODULE_" + code.toUpperCase())}</h1>
-        </div>
-        <div className="moduleLinkHomePageModuleLinks">
-          <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />
+          <div className="moduleLinkHomePageModuleLinks">
+            <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />
+          </div>
         </div>
       </Route>
     );
@@ -73,7 +74,10 @@ const Home = ({
         showSidebar={true}
       />
 
-      <div className={`main center-container mb-25`}>
+      <div className={`main center-container citizen-home-container mb-25`}>
+        <div className="SideBarStatic">
+          <StaticCitizenSideBar />
+        </div>
         <Switch>
           <Route exact path={path}>
             <CitizenHome />

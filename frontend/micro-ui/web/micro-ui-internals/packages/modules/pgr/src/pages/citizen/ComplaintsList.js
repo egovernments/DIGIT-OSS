@@ -27,7 +27,6 @@ export const ComplaintsList = (props) => {
     );
   }
 
-
   let complaints = data?.ServiceWrappers;
   let complaintsList;
   if (error) {
@@ -60,8 +59,10 @@ export const ComplaintsList = (props) => {
 
   return (
     <React.Fragment>
-      <Header>{t(LOCALE.MY_COMPLAINTS)}</Header>
-      {complaintsList}
+      <div className="applications-list-container">
+        <Header>{t(LOCALE.MY_COMPLAINTS)}</Header>
+        {complaintsList}
+      </div>
     </React.Fragment>
   );
 };

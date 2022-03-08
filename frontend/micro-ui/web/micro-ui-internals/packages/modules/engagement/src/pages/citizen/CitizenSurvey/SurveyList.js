@@ -67,7 +67,7 @@ const SurveyList = () => {
   }
 
   return (
-    <div>
+    <div className="survey-list-container">
       <Header>{`${t("CS_COMMON_SURVEYS")} (${data?.activeSurveysList.length})`}</Header>
 
       {data?.activeSurveysList && data.activeSurveysList.length ? (
