@@ -42,7 +42,7 @@ const dropdownOptions = [
   },
 ];
 
-const NewSurveyForm = ({ t, index, questionStatement, type, required, options, disableInputs, dispatch,isPartiallyEnabled }) => {
+const NewSurveyForm = ({ t, index, questionStatement, type, required, options, disableInputs, dispatch,isPartiallyEnabled,addOption}) => {
   const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({ questionStatement, type, required, options:["option 1"] });
   const { register, formState  } = useFormContext();
 
@@ -88,6 +88,8 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
             updateOption={handleUpdateOption}
             removeOption={handleRemoveOption}
             options={surveyQuestionConfig?.options}
+            createNewSurvey={addOption}
+            isPartiallyEnabled={isPartiallyEnabled}
           />
         );
       case "Check Boxes":
@@ -99,6 +101,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
             removeOption={handleRemoveOption}
             options={surveyQuestionConfig?.options}
             isPartiallyEnabled={isPartiallyEnabled}
+            createNewSurvey={addOption}
           />
         );
       default:
