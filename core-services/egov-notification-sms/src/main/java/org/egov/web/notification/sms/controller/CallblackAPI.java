@@ -31,36 +31,44 @@ public class CallblackAPI {
     private String TOPIC;
 
     @PostMapping("/callback")
-    public ResponseEntity postStatus(@RequestParam String jobno,
+    public ResponseEntity postStatus(@RequestParam String userId,
+                                     @RequestParam String jobno,
                                      @RequestParam String mobilenumber,
                                      @RequestParam int status,
-                                     @RequestParam @DateTimeFormat(pattern="MM/DD/YYYY HH:MM:SS AM/PM") Date doneTime,
-                                     @RequestParam String message) {
+                                     @RequestParam String DoneTime,
+                                     @RequestParam String messagepart,
+                                     @RequestParam String sender_name) {
 
         Report report = new Report();
+        report.setUserId(userId);
         report.setJobno(jobno);
         report.setMobilenumber(mobilenumber);
         report.setMessagestatus(status);
-        report.setDoneTime(doneTime);
-        report.setMessage(message);
+        report.setDoneTime(DoneTime);
+        report.setMessagepart(messagepart);
+        report.setSender_name(sender_name);
 
         producer.push(TOPIC, report);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/callback")
-    public ResponseEntity getStatus(@RequestParam String jobno,
+    public ResponseEntity getStatus(@RequestParam String userId,
+                                    @RequestParam String jobno,
                                     @RequestParam String mobilenumber,
                                     @RequestParam int status,
-                                    @RequestParam @DateTimeFormat(pattern="MM/DD/YYYY HH:MM:SS AM/PM") Date doneTime,
-                                    @RequestParam String message) {
+                                    @RequestParam String DoneTime,
+                                    @RequestParam String messagepart,
+                                    @RequestParam String sender_name) {
 
         Report report = new Report();
+        report.setUserId(userId);
         report.setJobno(jobno);
         report.setMobilenumber(mobilenumber);
         report.setMessagestatus(status);
-        report.setDoneTime(doneTime);
-        report.setMessage(message);
+        report.setDoneTime(DoneTime);
+        report.setMessagepart(messagepart);
+        report.setSender_name(sender_name);
 
         producer.push(TOPIC, report);
         return ResponseEntity.ok().build();
