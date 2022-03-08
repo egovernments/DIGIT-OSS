@@ -1,5 +1,6 @@
 package org.egov.vehicle.util;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,15 +8,18 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.tracer.model.CustomException;
 import org.egov.vehicle.config.VehicleConfiguration;
 import org.egov.vehicle.producer.VehicleProducer;
 import org.egov.vehicle.repository.ServiceRequestRepository;
+import org.egov.vehicle.trip.util.VehicleTripConstants;
 import org.egov.vehicle.trip.web.model.VehicleTripRequest;
 import org.egov.vehicle.web.model.notification.SMSRequest;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 
 import com.jayway.jsonpath.JsonPath;
 
@@ -30,15 +34,17 @@ public class NotificationUtil {
 	private ServiceRequestRepository serviceRequestRepository;
 
 	private VehicleProducer producer;
-
+	
+	private RestTemplate restTemplate;
 	
 
 	@Autowired
 	public NotificationUtil(VehicleConfiguration config, ServiceRequestRepository serviceRequestRepository,
-			VehicleProducer producer) {
+			VehicleProducer producer,RestTemplate restTemplate) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.producer = producer;
+		this.restTemplate = restTemplate;
 	}
 
 	final String receiptNumberKey = "receiptNumber";
@@ -127,17 +133,37 @@ public class NotificationUtil {
 	 * @return customized message for declined vehicle trip 
 	 */
 	@SuppressWarnings("unchecked")
-	public String getCustomizedMsg(VehicleTripRequest vehicleTripRequest, String localizationMessage,String messageCode) {
+	public String getCustomizedMsg(VehicleTripRequest vehicleTripRequest, String localizationMessage,
+			String messageCode) {
 		String message = getMessageTemplate(messageCode, localizationMessage);
-			
-			if (!StringUtils.isEmpty(message)) {
-				if (message.contains("{APPID}")) {
-					message = message.replace("{APPID}",
-							vehicleTripRequest.getVehicleTrip().get(0).getTripDetails().get(0).getReferenceNo());
+
+		if (!StringUtils.isEmpty(message)) {
+			if (message.contains("{FSM_FSTP_REJECT_REASON}")) {
+
+				Map<String, String> additionalDetails = null;
+				String vehicleDeclineReason = null;
+				try {
+					additionalDetails = vehicleTripRequest.getVehicleTrip().get(0).getAdditionalDetails() != null
+							? (Map<String, String>) vehicleTripRequest.getVehicleTrip().get(0).getAdditionalDetails()
+							: new HashMap<String, String>();
+				} catch (Exception e) {
+					throw new CustomException(VehicleTripConstants.INVALID_VEHICLE_DECLINE_REQUEST, e.getMessage());
 				}
-				
+
+				if (null != additionalDetails) {
+					vehicleDeclineReason = (String) additionalDetails.get("VehicleDeclineReason");
+				}
+
+				message = message.replace("{FSM_FSTP_REJECT_REASON}", vehicleDeclineReason);
 			}
-		
+			if (message.contains("{NEW_FSM_LINK}")) {
+				message = message.replace("{NEW_FSM_LINK}",
+						getShortenedUrl(config.getUiAppHost() + config.getNewFsmLink()));
+
+			}
+
+		}
+
 		return message;
 	}
 
@@ -166,6 +192,31 @@ public class NotificationUtil {
 			log.warn("Fetching from localization failed", e);
 		}
 		return message;
+	}
+	
+	/**
+	 * Method to shortent the url
+	 * returns the same url if shortening fails
+	 * @param url
+	 */
+	public String getShortenedUrl(String url){
+		String res = null;
+		HashMap<String,String> body = new HashMap<>();
+		body.put("url",url);
+		StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
+		builder.append(config.getUrlShortnerEndpoint());
+		try {
+			res = restTemplate.postForObject(builder.toString(), body, String.class);
+
+		}catch(Exception e) {
+			 log.error("Error while shortening the url: " + url,e);
+			
+		}
+		if(StringUtils.isEmpty(res)){
+			log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url); ;
+			return url;
+		}
+		else return res;
 	}
 	
 }

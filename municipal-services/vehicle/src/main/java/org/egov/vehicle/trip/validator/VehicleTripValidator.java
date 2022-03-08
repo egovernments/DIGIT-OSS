@@ -314,7 +314,7 @@ public class VehicleTripValidator {
 		
 					String tenantId = vehicleTrip.getTenantId().split("\\.")[0];
 					Object mdmsData = util.mDMSCall(request.getRequestInfo(), tenantId);
-					String vehicleDeclineReason = (String) additionalDetails.get("VehicleDeclineReason");
+					String vehicleDeclineReason = (String) additionalDetails.get("vehicleDeclineReason");
 					mdmsValidator.validateMdmsData(null, mdmsData);
 					mdmsValidator.validateVehicleDeclineReason(vehicleDeclineReason);
 		
