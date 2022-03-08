@@ -220,7 +220,7 @@ export const WorkflowService = {
           });
         }
 
-        if (timeline[timeline.length - 1].status !== "CREATED" && moduleCode === "FSM")
+        if (timeline[timeline.length - 1].status !== "CREATED" && (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE"))
           timeline.push({
             status: "CREATED",
           });
