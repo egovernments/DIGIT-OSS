@@ -355,6 +355,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             rejectMenu: Reason?.DeclineReason,
             setTrips: setNoOfTrips,
             trips: applicationData?.noOfTrips,
+            setReason: setDeclineReason,
             action,
           })
         );
