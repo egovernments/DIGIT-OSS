@@ -3,7 +3,7 @@ import AccessControlService from "../services/elements/Access";
 const useAccessControl = (tenantId) => {
   const getUserRoles = Digit.SessionStorage.get("User")?.info?.roles;
 
-  const roles = getUserRoles.map((role) => {
+  const roles = getUserRoles?.map((role) => {
     return role.code;
   });
 

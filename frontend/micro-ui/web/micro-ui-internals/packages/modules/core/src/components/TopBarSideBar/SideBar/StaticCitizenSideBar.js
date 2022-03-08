@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { HomeIcon, EditPencilIcon, LogoutIcon } from "@egovernments/digit-ui-react-components";
+import { HomeIcon, EditPencilIcon, LogoutIcon, Loader } from "@egovernments/digit-ui-react-components";
 import { Link, useLocation } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
 import { useTranslation } from "react-i18next";
@@ -59,8 +59,7 @@ const StaticCitizenSideBar = ({ logout }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
-
-  console.log(pathname);
+  const { isLoading, data: getCitizenMenu, isFetched: fetchedCitizrn } = Digit.Hooks.useAccessControl();
 
   const [isEmployee, setisEmployee] = useState(false);
 
@@ -75,7 +74,13 @@ const StaticCitizenSideBar = ({ logout }) => {
     Digit.UserService.logout();
   };
 
+  //wait citizen data to be fetched
+
   let menuItems = [...SideBarMenu(t, showProfilePage, redirectToLoginPage, isEmployee)];
+
+  //push getCitizenMenu into menuItems
+
+  // menuItems = [...res, ...menuItems];
   menuItems = menuItems.filter((item) => item.element !== "LANGUAGE");
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -92,6 +97,7 @@ const StaticCitizenSideBar = ({ logout }) => {
         <div className="menu-label">{itemComponent}</div>
       </span>
     );
+
     if (item.type === "external-link") {
       return (
         <Link to={item.link}>
@@ -115,9 +121,20 @@ const StaticCitizenSideBar = ({ logout }) => {
 
   if (isFetched && user && user.access_token) {
     profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t} />;
-    menuItems = menuItems.filter((item) => item?.id !== "login-btn");
+
+    if (fetchedCitizrn) {
+      const data = getCitizenMenu?.actions;
+      menuItems = [...menuItems, ...data];
+    }
+
+    menuItems = menuItems.filter((item) => item?.id !== "login-btn" && item.url === "url");
+    menuItems = menuItems.sort((a, b) => a.orderNumber - b.orderNumber);
+    console.log("aaa", menuItems);
+
     menuItems = [
       ...menuItems,
+      // ...data,
+
       {
         text: t("EDIT_PROFILE"),
         element: "PROFILE",
@@ -160,6 +177,12 @@ const StaticCitizenSideBar = ({ logout }) => {
     ];
   }
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  // console.log(menuItems);
+
   return (
     <React.Fragment>
       <div>
@@ -185,6 +208,7 @@ const StaticCitizenSideBar = ({ logout }) => {
             {menuItems.map((item, index) => (
               <div className={`sidebar-list ${pathname === item.link ? "active" : ""}`} key={index}>
                 <MenuItem item={item} />
+                <Link to={item.navigationURL}> {item.displayName} </Link>
               </div>
             ))}
           </div>
