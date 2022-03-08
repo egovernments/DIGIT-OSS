@@ -1,10 +1,11 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import EmployeeSideBarMenu from "../../../config/employee-sidebar-menu";
 import SubMenu from "./SubMenu";
 import { EventsIconSolid, HomeIcon, CaseIcon, ReceiptIcon, PropertyHouse, Loader } from "@egovernments/digit-ui-react-components";
 import { checkForEmployee } from "../../../../../tl/src/utils";
 import { Link } from "react-router-dom";
+import orderBy from "lodash/orderBy";
 
 const nationalScreenURLs = {
   propertytax: { key: "national-propertytax", stateKey: "propertytax", label: "ACTION_TEST_PROPERTY_TAX", active: false, nActive: true },
@@ -36,150 +37,167 @@ const EmployeeSideBar = () => {
   const STADMIN = Digit.UserService.hasAccess("STADMIN");
   const NATADMIN = Digit.UserService.hasAccess("NATADMIN");
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const [menuItems, setMenuItems] = useState([]);
+  const [path, setPath] = useState("");
 
-  const { isLoading, data } = Digit.Hooks.useAccessControl(tenantId);
+  const { isLoading, data } = Digit.Hooks.useAccessControl();
+  if (isLoading) {
+    return <Loader />;
+  }
 
-  console.log(data);
+  // console.log(data?.actions);
+  // useEffect(() => {
+  //   sidebarRef.current.style.cursor = "pointer";
+  //   collapseNav();
+  // }, []);
 
-  useEffect(() => {
-    sidebarRef.current.style.cursor = "pointer";
-    collapseNav();
-  }, []);
+  // const expandNav = () => {
+  //   sidebarRef.current.style.width = "260px";
+  //   sidebarRef.current.style.overflow = "auto";
 
-  const expandNav = () => {
-    sidebarRef.current.style.width = "260px";
-    sidebarRef.current.style.overflow = "auto";
+  //   sidebarRef.current.querySelectorAll(".dropdown-link").forEach((element) => {
+  //     element.style.display = "flex";
+  //   });
+  // };
+  // const collapseNav = () => {
+  //   sidebarRef.current.style.width = "55px";
+  //   sidebarRef.current.style.overflow = "hidden";
 
-    sidebarRef.current.querySelectorAll(".dropdown-link").forEach((element) => {
-      element.style.display = "flex";
-    });
+  //   sidebarRef.current.querySelectorAll(".dropdown-link").forEach((element) => {
+  //     element.style.display = "none";
+  //   });
+  //   sidebarRef.current.querySelectorAll(".actions").forEach((element) => {
+  //     element.style.padding = "0";
+  //   });
+  // };
+
+  // let links = [
+  //   {
+  //     label: t("ES_COMMON_INBOX"),
+  //     link: `/digit-ui/employee/tl/inbox`,
+  //   },
+  //   {
+  //     label: t("TL_NEW_APPLICATION"),
+  //     link: "/digit-ui/employee/tl/new-application",
+  //     role: "TL_CEMP",
+  //   },
+  //   {
+  //     label: t("TL_SEARCH_APPLICATIONS"),
+  //     link: `/digit-ui/employee/tl/search/application`,
+  //   },
+  //   {
+  //     label: t("TL_SEARCH_LICENSE"),
+  //     link: `/digit-ui/employee/tl/search/license`,
+  //     role: "TL_CEMP",
+  //   },
+  // ];
+
+  // let propsForCSR = [
+  //   {
+  //     label: t("ES_PGR_NEW_COMPLAINT"),
+  //     link: `/digit-ui/employee/pgr/complaint/create`,
+  //     role: "CSR",
+  //   },
+  // ];
+
+  // let ptProps = [
+  //   {
+  //     label: t("ES_COMMON_INBOX"),
+  //     link: `/digit-ui/employee/pt/inbox`,
+  //   },
+  //   {
+  //     label: t("SEARCH_PROPERTY"),
+  //     link: `/digit-ui/employee/pt/search`,
+  //   },
+  //   {
+  //     label: t("ES_COMMON_APPLICATION_SEARCH"),
+  //     link: `/digit-ui/employee/pt/application-search`,
+  //   },
+  // ];
+
+  // propsForCSR = propsForCSR.filter((link) => link.role && Digit.Utils.didEmployeeHasRole(link.role));
+
+  // let pgrLinks = [
+  //   {
+  //     label: t("ES_PGR_INBOX"),
+  //     link: `/digit-ui/employee/pgr/inbox`,
+  //   },
+  //   ...propsForCSR,
+  // ];
+
+  // links = links.filter((link) => (link.role ? checkForEmployee(link.role) : true));
+
+  // let menuItems = [...EmployeeSideBarMenu(t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC, FSTPOperator, PGR, pgrLinks)];
+  // let index = menuItems.findIndex((item) => item.moduleName === "Trade License");
+
+  // if (index !== -1) {
+  //   menuItems[index].links = [...menuItems[index].links, ...links];
+  // } else {
+  //   menuItems.push({
+  //     Icon: <CaseIcon />,
+  //     moduleName: "Trade License",
+  //     links: links,
+  //   });
+  // }
+  // menuItems.unshift({
+  //   type: "link",
+  //   Icon: <HomeIcon />,
+  //   moduleName: t("ES_COMMON_HOME"),
+  //   link: "/digit-ui/employee/",
+  // });
+
+  // let pgrIndex = menuItems.findIndex((item) => item.moduleName === "Complaints");
+  // if (pgrIndex !== -1) {
+  //   if (!menuItems[pgrIndex].links) {
+  //     menuItems[pgrIndex].links = [];
+  //   }
+  //   menuItems[pgrIndex].links = [...menuItems[pgrIndex].links, ...pgrLinks];
+  // } else {
+  //   menuItems.push({
+  //     Icon: <ReceiptIcon />,
+  //     moduleName: "Complaints",
+  //     links: pgrLinks,
+  //   });
+  // }
+
+  // let ptIndex = menuItems.findIndex((item) => item.moduleName === "Property Tax");
+  // if (ptIndex !== -1) {
+  //   if (!menuItems[ptIndex].links) {
+  //     menuItems[ptIndex].links = [];
+  //   }
+  //   menuItems[ptIndex].links = [...menuItems[ptIndex].links, ...ptProps];
+  // }
+
+  // let nsLinks = Object.values(nationalScreenURLs)
+  //   .filter((ele) => ele[NATADMIN ? "nActive" : "active"] == true)
+  //   .map((obj) => ({
+  //     label: t(obj?.label),
+  //     link: `/digit-ui/employee/dss/dashboard/${NATADMIN ? obj?.key : obj?.stateKey}`,
+  //   }));
+
+  // if (STADMIN && NATADMIN) {
+  //   menuItems.push({
+  //     Icon: <EventsIconSolid />,
+  //     moduleName: NATADMIN ? t("ACTION_TEST_NATDASHBOARD") : t("ES_TITLE_DSS"),
+  //     links: [...nsLinks],
+  //   });
+  // }
+
+  // let result = menuItems.filter((ele) => ele);
+  const renderMenuItems = (menuItems) => {
+    //filter out url === "url"
+    //check if menuItems has path and compare the firstpath with displayName
+
+    return menuItems
+      .filter((path) => path.url === "url")
+      .map((item) => {
+        return (
+          <div key={item.id}>
+            <Link to={item.navigationURL}>{item.displayName}</Link>
+          </div>
+        );
+      });
   };
-  const collapseNav = () => {
-    sidebarRef.current.style.width = "55px";
-    sidebarRef.current.style.overflow = "hidden";
-
-    sidebarRef.current.querySelectorAll(".dropdown-link").forEach((element) => {
-      element.style.display = "none";
-    });
-    sidebarRef.current.querySelectorAll(".actions").forEach((element) => {
-      element.style.padding = "0";
-    });
-  };
-
-  let links = [
-    {
-      label: t("ES_COMMON_INBOX"),
-      link: `/digit-ui/employee/tl/inbox`,
-    },
-    {
-      label: t("TL_NEW_APPLICATION"),
-      link: "/digit-ui/employee/tl/new-application",
-      role: "TL_CEMP",
-    },
-    {
-      label: t("TL_SEARCH_APPLICATIONS"),
-      link: `/digit-ui/employee/tl/search/application`,
-    },
-    {
-      label: t("TL_SEARCH_LICENSE"),
-      link: `/digit-ui/employee/tl/search/license`,
-      role: "TL_CEMP",
-    },
-  ];
-
-  let propsForCSR = [
-    {
-      label: t("ES_PGR_NEW_COMPLAINT"),
-      link: `/digit-ui/employee/pgr/complaint/create`,
-      role: "CSR",
-    },
-  ];
-
-  let ptProps = [
-    {
-      label: t("ES_COMMON_INBOX"),
-      link: `/digit-ui/employee/pt/inbox`,
-    },
-    {
-      label: t("SEARCH_PROPERTY"),
-      link: `/digit-ui/employee/pt/search`,
-    },
-    {
-      label: t("ES_COMMON_APPLICATION_SEARCH"),
-      link: `/digit-ui/employee/pt/application-search`,
-    },
-  ];
-
-  propsForCSR = propsForCSR.filter((link) => link.role && Digit.Utils.didEmployeeHasRole(link.role));
-
-  let pgrLinks = [
-    {
-      label: t("ES_PGR_INBOX"),
-      link: `/digit-ui/employee/pgr/inbox`,
-    },
-    ...propsForCSR,
-  ];
-
-  links = links.filter((link) => (link.role ? checkForEmployee(link.role) : true));
-
-  let menuItems = [...EmployeeSideBarMenu(t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC, FSTPOperator, PGR, pgrLinks)];
-  let index = menuItems.findIndex((item) => item.moduleName === "Trade License");
-
-  if (index !== -1) {
-    menuItems[index].links = [...menuItems[index].links, ...links];
-  } else {
-    menuItems.push({
-      Icon: <CaseIcon />,
-      moduleName: "Trade License",
-      links: links,
-    });
-  }
-  menuItems.unshift({
-    type: "link",
-    Icon: <HomeIcon />,
-    moduleName: t("ES_COMMON_HOME"),
-    link: "/digit-ui/employee/",
-  });
-
-  let pgrIndex = menuItems.findIndex((item) => item.moduleName === "Complaints");
-  if (pgrIndex !== -1) {
-    if (!menuItems[pgrIndex].links) {
-      menuItems[pgrIndex].links = [];
-    }
-    menuItems[pgrIndex].links = [...menuItems[pgrIndex].links, ...pgrLinks];
-  } else {
-    menuItems.push({
-      Icon: <ReceiptIcon />,
-      moduleName: "Complaints",
-      links: pgrLinks,
-    });
-  }
-
-  let ptIndex = menuItems.findIndex((item) => item.moduleName === "Property Tax");
-  if (ptIndex !== -1) {
-    if (!menuItems[ptIndex].links) {
-      menuItems[ptIndex].links = [];
-    }
-    menuItems[ptIndex].links = [...menuItems[ptIndex].links, ...ptProps];
-  }
-
-  let nsLinks = Object.values(nationalScreenURLs)
-    .filter((ele) => ele[NATADMIN ? "nActive" : "active"] == true)
-    .map((obj) => ({
-      label: t(obj?.label),
-      link: `/digit-ui/employee/dss/dashboard/${NATADMIN ? obj?.key : obj?.stateKey}`,
-    }));
-
-  if (STADMIN && NATADMIN) {
-    menuItems.push({
-      Icon: <EventsIconSolid />,
-      moduleName: NATADMIN ? t("ACTION_TEST_NATDASHBOARD") : t("ES_TITLE_DSS"),
-      links: [...nsLinks],
-    });
-  }
-
-  let result = menuItems.filter((ele) => ele);
-
   return (
     // <div className="sidebar" ref={sidebarRef} onMouseOver={expandNav} onMouseLeave={collapseNav}>
     //   {result.map((item, index) => {
@@ -199,9 +217,7 @@ const EmployeeSideBar = () => {
     //     }
     //   })}
     // </div>
-    <div ref={sidebarRef} onMouseOver={expandNav} onMouseLeave={collapseNav}>
-      lll
-    </div>
+    <div>{renderMenuItems(data?.actions)}</div>
   );
 };
 

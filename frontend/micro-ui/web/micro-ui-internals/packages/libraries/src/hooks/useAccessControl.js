@@ -1,19 +1,13 @@
-import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import AccessControlService from "../services/elements/Access";
 const useAccessControl = (tenantId) => {
-  // const fetch = async () => {
-  //   await AccessControlService.getAccessControl(tenantId);
-  // };
-  // const queryData = useQuery(["AccessControl", tenantId], () => fetch());
-  // console.log("queryyy", queryData);
-  // return queryData;
-  // console.log(fetch);
+  const getUserRoles = Digit.SessionStorage.get("User")?.info?.roles;
 
+  const roles = getUserRoles.map((role) => {
+    return role.code;
+  });
 
-  //use some logic to form this roles array
-  const response = useQuery(["ACCESS_CONTROL", tenantId], async () => await AccessControlService.getAccessControl(["EMPLOYEE","NATADMIN"]));
-  console.log("resssss", response);
+  const response = useQuery(["ACCESS_CONTROL", tenantId], async () => await AccessControlService.getAccessControl(roles));
   return response;
 };
 export default useAccessControl;
