@@ -35,6 +35,7 @@ public class FileStoreRepository {
      */
     public Map<String, String> getUrlByFileStoreId(String tenantId, List<String> fileStoreIds) throws Exception {
         Map<String, String> fileStoreUrls = null;
+        tenantId = tenantId.split("\\.")[0];
 
         String idLIst = fileStoreIds.toString().substring(1, fileStoreIds.toString().length() - 1).replace(", ", ",");
         log.info("idLIst: " + idLIst);
