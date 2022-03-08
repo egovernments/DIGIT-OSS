@@ -76,9 +76,10 @@ public class RestServiceAuthFilter implements Filter {
 
 		HTTPUtilities httpUtilities = ESAPI.httpUtilities();
 		httpUtilities.setCurrentHTTP(httpRequest, httpResponse);
+		LOGGER.info("***###httpRequest.getRequestURI()------>>>>"+httpRequest.getRequestURI()+"***Request****"+req.toString()+"********Response##########"+res.toString());
 		if (httpRequest.getRequestURI().contains("/ClearToken")
 				|| httpRequest.getRequestURI().contains("/refreshToken")) {
-			LOGGER.info("Clear Token request recieved ");
+			LOGGER.info("Clear Token request recieved " + httpRequest.getServletPath());
 			httpRequest.getRequestDispatcher(httpRequest.getServletPath()).forward(req, res);
 		} else if (httpRequest.getRequestURI().contains("/rest/voucher/")) {
 			try {
