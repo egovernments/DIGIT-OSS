@@ -423,7 +423,7 @@ public class UserService {
         existingUser = encryptionDecryptionUtil.decryptObject(existingUser, "User", User.class, requestInfo);
         updatedUser = encryptionDecryptionUtil.decryptObject(updatedUser, "User", User.class, requestInfo);
 
-        //setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
+        setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
         if(!(updatedUser.getEmailId().equalsIgnoreCase(existingUser.getEmailId()))){
             notificationUtil.sendEmail(requestInfo, existingUser.getEmailId(), updatedUser.getEmailId(),updatedUser.getMobileNumber());
         }
