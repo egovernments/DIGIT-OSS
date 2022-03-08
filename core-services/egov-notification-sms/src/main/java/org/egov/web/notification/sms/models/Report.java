@@ -11,9 +11,11 @@ import java.util.Date;
 @Getter
 @ToString
 public class Report {
+    private String userId;
     private String jobno;
     private String mobilenumber;
     private int messagestatus;
-    private Date doneTime;
-    private String message;
+    private String DoneTime;
+    private String messagepart;
+    private String sender_name;
 }
