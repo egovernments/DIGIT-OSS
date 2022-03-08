@@ -21,7 +21,7 @@ const showCustomLabel = (title,t)=>{
   }
 }
 
-const Layout = ({ rowData }) => {
+const Layout = ({ rowData,forHome=false }) => {
   const { t } = useTranslation();
   const { value } = useContext(FilterContext);
   const [searchQuery, onSearch] = useState("");

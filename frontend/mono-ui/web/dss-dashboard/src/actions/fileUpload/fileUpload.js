@@ -1,5 +1,6 @@
 import API from '../apis/api';
 import CONFIGS from '../../config/configs'
+import { getTenantId, getToken } from '../../utils/commons';
 
 export default class FileUploadAPI extends API {
     constructor(timeout = 2000, path, reqType, reqBody, queryParams = null) {
@@ -28,7 +29,7 @@ export default class FileUploadAPI extends API {
     getFormData() {
         var data = new FormData();
         data.append("file", this.body);
-        data.append("tenantId", `${localStorage.getItem('tenant-id')}`);
+        data.append("tenantId", `${getTenantId()}`);
         data.append("module", 'dashboard');
         data.append("tag", '123452');
         return data;
@@ -47,7 +48,7 @@ export default class FileUploadAPI extends API {
                 "Content-Type": "multipart/form-data",
                 "type": "formData",
                 "Cache-Control":"no-cache",
-                'auth-token': `${localStorage.getItem('Employee.token')}`
+                'auth-token': `${getToken()}`
             }
         }
     }
