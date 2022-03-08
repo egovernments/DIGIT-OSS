@@ -6,6 +6,7 @@ import org.egov.web.notification.sms.config.Producer;
 import org.egov.web.notification.sms.models.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Date;
 
 @Service
 @Controller
@@ -29,10 +32,10 @@ public class CallblackAPI {
 
     @PostMapping("/callback")
     public ResponseEntity postStatus(@RequestParam String jobno,
-                                        @RequestParam String mobilenumber,
-                                        @RequestParam int status,
-                                        @RequestParam String doneTime,
-                                        @RequestParam String message) {
+                                     @RequestParam String mobilenumber,
+                                     @RequestParam int status,
+                                     @RequestParam @DateTimeFormat(pattern="MM/DD/YYYY HH:MM:SS AM/PM") Date doneTime,
+                                     @RequestParam String message) {
 
         Report report = new Report();
         report.setJobno(jobno);
@@ -47,10 +50,10 @@ public class CallblackAPI {
 
     @GetMapping("/callback")
     public ResponseEntity getStatus(@RequestParam String jobno,
-                                            @RequestParam String mobilenumber,
-                                            @RequestParam int status,
-                          @RequestParam String doneTime,
-                          @RequestParam String message) {
+                                    @RequestParam String mobilenumber,
+                                    @RequestParam int status,
+                                    @RequestParam @DateTimeFormat(pattern="MM/DD/YYYY HH:MM:SS AM/PM") Date doneTime,
+                                    @RequestParam String message) {
 
         Report report = new Report();
         report.setJobno(jobno);
