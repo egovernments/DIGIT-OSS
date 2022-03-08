@@ -17,16 +17,7 @@ import org.egov.swservice.util.NotificationUtil;
 import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.validator.ValidateProperty;
-import org.egov.swservice.web.models.Action;
-import org.egov.swservice.web.models.Event;
-import org.egov.swservice.web.models.EventRequest;
-import org.egov.swservice.web.models.Property;
-import org.egov.swservice.web.models.Recepient;
-import org.egov.swservice.web.models.SMSRequest;
-import org.egov.swservice.web.models.SearchCriteria;
-import org.egov.swservice.web.models.SewerageConnection;
-import org.egov.swservice.web.models.SewerageConnectionRequest;
-import org.egov.swservice.web.models.Source;
+import org.egov.swservice.web.models.*;
 import org.egov.swservice.web.models.collection.PaymentDetail;
 import org.egov.swservice.web.models.collection.PaymentRequest;
 import org.egov.swservice.workflow.WorkflowIntegrator;
@@ -43,8 +34,7 @@ import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static org.egov.swservice.util.SWConstants.CHANNEL_NAME_EMAIL;
-import static org.egov.swservice.util.SWConstants.SEWERAGE_SERVICE_BUSINESS_ID;
+import static org.egov.swservice.util.SWConstants.*;
 
 @Slf4j
 @Service
@@ -355,7 +345,7 @@ public class PaymentUpdateService {
 	/**
 	 * Creates email request for each owner
 	 *
-	 * @param SewerageConnectionRequest Sewerage Connection Request
+	 * @param sewerageConnectionRequest Sewerage Connection Request
 	 * @param property Property Object
 	 * @param paymentDetail Payment Detail Object
 	 * @return List of EmailRequest
