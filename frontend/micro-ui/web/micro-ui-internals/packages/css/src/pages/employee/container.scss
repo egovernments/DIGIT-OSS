@@ -18,10 +18,10 @@
   @apply border-border my-lg;
 }
 
-.employee-home-footer{
-  @apply flex fixed bottom-0 h-10 bg-grey-bg pb-md pt-sm justify-center w-full;
-  img{
-    @apply ml-sm
+.employee-home-footer {
+  @apply flex  h-10 bg-grey-bg pb-md pt-sm justify-center w-full;
+  img {
+    height: 100%;
   }
 }
 

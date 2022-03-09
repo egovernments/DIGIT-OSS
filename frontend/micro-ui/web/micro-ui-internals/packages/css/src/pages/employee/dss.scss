@@ -26,29 +26,24 @@ margin-right:25px;
 
 .dss-switch-tab-selected{
   /* Revenue */
-  padding: 7px;
-  border-bottom:3px solid #F47738;
-
-font-family: Roboto;
-font-style: normal;
-font-weight: 500;
-font-size: 24px;
-
-color: #F47738;
+  border-bottom: 3px solid #f47738;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  color: #f47738;
+  padding: 7px 24px;
 
 }
 .dss-switch-tab-unselected{
 
-    padding: 10px;
-
-/* Desktop / Caption M */
-
 font-family: Roboto;
 font-style: normal;
-font-weight: normal;
-font-size: 19px;
-
+font-weight: 500;
+font-size: 22px;
 color: #505A5F;
+padding: 8px 24px;
+
 }
 
 .dss-table-subheader{
@@ -103,3 +98,10 @@ color: #505A5F;
 .dss-temp-white-pre{
   white-space: pre;
 }
+
+.dss-input-active-border{
+--border-opacity: 1;
+border: 1px solid #f47738 !important;
+border-color: rgba(244, 119, 56, var(--border-opacity));
+}
+
