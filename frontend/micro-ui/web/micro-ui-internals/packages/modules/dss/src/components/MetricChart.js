@@ -123,9 +123,12 @@ const MetricChart = ({ data, setChartDenomination }) => {
   const { charts } = data;
   return (
     <>
+    <span className="chart-metric-wrapper">
+  
       {charts.map((chart, index) => (
         <MetricChartRow data={chart} key={index} index={index} setChartDenomination={setChartDenomination} />
       ))}
+        </span>
     </>
   );
 };
