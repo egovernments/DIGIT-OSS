@@ -157,6 +157,19 @@ public class VehicleConfiguration {
 		
 		@Value("${egov.localization.search.fsm.module}")
 		private String fsmSearchModule;
-
+		
+		//URL shortner
+		@Value("${egov.url.shortner.host}")
+		private String urlShortnerHost;
+		
+		@Value("${tl.url.shortner.endpoint}")
+		private String urlShortnerEndpoint;
+		
+		@Value("${egov.ui.app.host}")
+		private String uiAppHost;
+		
+		@Value("${egov.ui.fsm.new.link}")
+		private String newFsmLink;
+		
 			
 }
