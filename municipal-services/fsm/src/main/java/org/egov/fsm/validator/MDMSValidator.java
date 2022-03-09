@@ -32,7 +32,7 @@ public class MDMSValidator {
 		String[] masterArray = { FSMConstants.MDMS_PROPERTY_TYPE, FSMConstants.MDMS_APPLICATION_CHANNEL,
 				FSMConstants.MDMS_SANITATION_TYPE, FSMConstants.MDMS_VEHICLE_MAKE_MODEL, FSMConstants.MDMS_PIT_TYPE,
 				FSMConstants.MDMS_CONFIG, FSMConstants.MDMS_SLUM_NAME, FSMConstants.MDMS_APPLICATION_TYPE,
-				FSMConstants.MDMS_PAYMENT_PREFERENCE };
+				FSMConstants.MDMS_PAYMENT_PREFERENCE,FSMConstants.MDMS_RECEIVED_PAYMENT };
 
 		validateIfMasterPresent(masterArray,this.mdmsResMap);
 	
@@ -175,6 +175,18 @@ public class MDMSValidator {
 
 		if (!((List<String>) this.mdmsResMap.get(FSMConstants.MDMS_PAYMENT_PREFERENCE)).contains(paymentPreference)) {
 			errorMap.put(FSMErrorConstants.INVALID_PAYMENT_PREFERENCE, " Payment preference is invalid");
+		}
+
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+	}
+	
+	public void validateReceivedPaymentType(String receivedPaymentType) throws CustomException {
+
+		Map<String, String> errorMap = new HashMap<>();
+
+		if (!((List<String>) this.mdmsResMap.get(FSMConstants.MDMS_RECEIVED_PAYMENT)).contains(receivedPaymentType)) {
+			errorMap.put(FSMErrorConstants.INVALID_PAYMENT_PREFERENCE, " Received payment type is invalid");
 		}
 
 		if (!errorMap.isEmpty())

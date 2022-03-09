@@ -610,6 +610,9 @@ public class InboxService {
 
 				log.info("businessIdParam :::: " + businessIdParam);
 				
+				log.info("vehicleBusinessObjects.length() :::: " + vehicleBusinessObjects.length());
+				log.info("vehicleProcessInstances.size() :::: " + vehicleProcessInstances.size());
+				
 				if (vehicleBusinessObjects.length() > 0 && vehicleProcessInstances.size() > 0) {
 					
 					log.info("vehicleBusinessObjects.length() :::: " + vehicleBusinessObjects.length());

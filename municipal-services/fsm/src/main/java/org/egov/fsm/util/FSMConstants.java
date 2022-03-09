@@ -60,6 +60,7 @@ public class FSMConstants {
 	public static final String MDMS_VEHICLE_TYPE = "VehicleType";
 	public static final String MDMS_APPLICATION_TYPE = "ApplicationType";
 	public static final String MDMS_PAYMENT_PREFERENCE = "PaymentType";
+	public static final String MDMS_RECEIVED_PAYMENT = "ReceivedPaymentType";
 
 	// FINANCIAL YEAR
 
@@ -168,7 +169,11 @@ public class FSMConstants {
 
 	public static final String FSM_PAYMENT_PREFERENCE_POST_PAY = "POST_PAY";
 
+	// Received Payment type
 
+	public static final String PAYED_IN_CASH = "Citizen Payed in Cash";
+
+	public static final String PAYED_IN_CHEQUE = "Citizen Payed in Cheque";
 
 	
 

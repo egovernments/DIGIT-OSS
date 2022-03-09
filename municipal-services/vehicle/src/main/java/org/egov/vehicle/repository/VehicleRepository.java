@@ -139,7 +139,8 @@ public class VehicleRepository {
 			}
 			
 			String query = addPaginationClause(builder,preparedStmtList,vehicleTripSearchCriteria);
-			System.out.println("query from 	fetchVehicleStateMap :::: " + query);
+			log.info("query from 	fetchVehicleStateMap :::: " + query);
+
 			
 			return jdbcTemplate.queryForList(query, preparedStmtList.toArray(), String.class);
 		}
@@ -183,8 +184,9 @@ public class VehicleRepository {
 		
 		private String addPaginationClause(StringBuilder builder, List<Object> preparedStmtList,
 				VehicleTripSearchCriteria criteria) {
+      
+			log.info("criteria.getLimit() :::: " + criteria.getLimit());
 
-			System.out.println("criteria.getLimit() :::: " + criteria.getLimit());
 			
 			if (criteria.getLimit()!=null && criteria.getLimit() != 0) {
 				builder.append(" order by fsm.applicationno offset ? limit ?");
@@ -192,9 +194,9 @@ public class VehicleRepository {
 				preparedStmtList.add(criteria.getLimit());
 			}
 			
-			
-			System.out.println("preparedStmtList :::: " + preparedStmtList);
-			System.out.println("preparedStmtList size :::: " + preparedStmtList.size());
+			log.info("preparedStmtList :::: " + preparedStmtList);
+			log.info("preparedStmtList size :::: " + preparedStmtList.size());
+
 			
 			return builder.toString();
 		}
