@@ -644,7 +644,7 @@ public class InboxService {
 		vehicleTripSearchCriteria.setTenantId(tenantId);
 		vehicleTripSearchCriteria.setLimit(limit);
 		vehicleTripSearchCriteria.setOffset(offSet);
-		StringBuilder url = new StringBuilder(config.getVehicleHost());
+		StringBuilder url = new StringBuilder(config.getFsmHost());
 		url.append( config.getFetchApplicationIds());
 		
 		Object result = serviceRequestRepository.fetchResult(url, vehicleTripSearchCriteria);

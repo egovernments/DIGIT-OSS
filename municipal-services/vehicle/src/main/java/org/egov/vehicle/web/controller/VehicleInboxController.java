@@ -53,15 +53,4 @@ public class VehicleInboxController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
     }
 	
-	@PostMapping(value = "/fetchApplicationIds")
-    public ResponseEntity<VehicleCustomResponse> fetchApplicationIds(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,@Valid @RequestBody VehicleTripSearchCriteria criteria) {
-
-		List<String> fsmApplicationIdList = vehicleInboxService.fetchApplicationIds(criteria);
-        
-		VehicleCustomResponse response = VehicleCustomResponse.builder().applicationIdList(fsmApplicationIdList)
-                .responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-                .build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-	
 }

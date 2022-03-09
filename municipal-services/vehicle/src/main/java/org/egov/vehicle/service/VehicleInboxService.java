@@ -52,18 +52,4 @@ public class VehicleInboxService {
 		
     }
 	
-	public List<String> fetchApplicationIds(VehicleTripSearchCriteria vehicleTripSearchCriteria) {
-		
-		if (vehicleTripSearchCriteria.getTenantId().split("\\.").length == 1) {
-			throw new CustomException(VehicleErrorConstants.INVALID_TENANT, " Tenant is not available");
-		}
-		
-		List<String> vehicleTripDetailList = vehicleRepository.fetchVehicleStateMap(vehicleTripSearchCriteria);
-		if(null == vehicleTripDetailList)
-			return new ArrayList<>();
-		
-		return vehicleTripDetailList;
-		
-    }
-	
 }
