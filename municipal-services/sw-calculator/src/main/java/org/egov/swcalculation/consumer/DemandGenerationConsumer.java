@@ -100,6 +100,7 @@ public class DemandGenerationConsumer {
 						// processing single
 						generateDemandInBatch(request, masterMap, config.getDeadLetterTopicSingle());
 					} catch (final Exception e) {
+						e.printStackTrace();
 						StringBuilder builder = new StringBuilder();
 						builder.append("Error while generating Demand for Criteria: ").append(calcCriteria);
 						log.error(builder.toString(), e);
@@ -133,6 +134,7 @@ public class DemandGenerationConsumer {
 			StringBuilder str = new StringBuilder("Demand generated Successfully. For records : ").append(request.getCalculationCriteria());
 			log.info(str.toString());
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			log.error("Demand generation error: ", ex);
 			log.info("From Topic: " + errorTopic);
 			producer.push(errorTopic, request);
