@@ -6,7 +6,7 @@ import WSWFCaption from "./WSWFCaption";
 
 const WSWFApplicationTimeline = (props) => {
   const { t } = useTranslation();
-  const businessService = (props.application?.creationReason && `PT.${props.application.creationReason}`) || "PT.CREATE";
+  const businessService = props.application?.applicationNo.split("_")[0];
   const { isLoading, data } = Digit.Hooks.useWorkflowDetails({
     tenantId: props.application?.tenantId,
     id: props.id,

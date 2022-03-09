@@ -9,12 +9,21 @@ const PDFSvg = ({ width = 20, height = 20, style }) => (
   </svg>
 );
 
-function PropertyDocument({ property = {} }) {
+function WSDocument({ value = {}, Code, index, }) {
   const { t } = useTranslation();
-  const { isLoading, isError, error, data } = Digit.Hooks.ws.usePropertyDocumentSearch({
-    property,
-  });
-  const documents = property?.documents || [];
+  const { isLoading, isError, error, data } = Digit.Hooks.ws.useWSDocumentSearch(
+    {
+      value,
+    },
+    { value }, Code, index
+  );
+  const documents = [];
+
+  value?.documents ? value?.documents?.documents.filter(doc => doc?.documentType === Code /* || doc?.documentType?.includes(Code.split(".")[1]) */).map((ob)=>{
+    documents.push(ob);
+  }) : value.filter(doc => doc?.documentType === Code /* || doc?.documentType.includes(Code.split(".")[1]) */).map((ob)=>{
+    documents.push(ob);
+  })
 
   if (isLoading) {
     return <Loader />;
@@ -39,4 +48,4 @@ function PropertyDocument({ property = {} }) {
   );
 }
 
-export default PropertyDocument;
+export default WSDocument;
