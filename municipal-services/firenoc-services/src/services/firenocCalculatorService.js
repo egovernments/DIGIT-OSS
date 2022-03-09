@@ -6,8 +6,11 @@ export const calculate = async (firenoc, requestInfo, header) => {
   const CalulationCriteria = [];
   CalulationCriteria.push({ fireNOC: firenoc, tenantId });
 
-  header['tenantId']=header.tenantid;
-  let headers = header;
+  let headers;
+  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+    header['tenantId']=header.tenantid;
+    headers = header;
+  }
 
   const requestBody = {
     RequestInfo: requestInfo,

@@ -2,9 +2,12 @@ import { httpRequest } from "./api";
 import envVariables from "../envVariables";
 
 export default async (requestInfo = {},tenantId, header) => {
-  header['tenantId']=header.tenantid;
-  let headers = header;
-
+  let headers;
+  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+    header['tenantId']=header.tenantid;
+    headers = header;
+  }
+ 
   var requestBody = {
     RequestInfo: requestInfo,
     MdmsCriteria: {

@@ -34,11 +34,14 @@ export const mdmsData = async (requestInfo = {}, tenantId, header) => {
     }
   };
 
-  header['tenantId']=header.tenantid;
-  let headers = header;
+  let headers;
+  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+    header['tenantId']=header.tenantid;
+    headers = header;
+  }
 
   var mdmsResponse = await httpRequest({
-    hostURL: "http://internal-gateway.digit:8080/",
+    hostURL: `${envVariables.EGOV_MDMS_HOST}`,
     endPoint: `${envVariables.EGOV_MDMS_SEARCH_ENDPOINT}`,
     requestBody,
     headers
@@ -65,11 +68,14 @@ export const mdmsFiananceYear = async (requestInfo = {}, tenantId, header) => {
     }
   };
 
-  header['tenantId']=header.tenantid;
-  let headers = header;
+  let headers;
+  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+    header['tenantId']=header.tenantid;
+    headers = header;
+  }
 
   var mdmsResponse = await httpRequest({
-    hostURL: "http://internal-gateway.digit:8080/",
+    hostURL: `${envVariables.EGOV_MDMS_HOST}`,
     endPoint: `${envVariables.EGOV_MDMS_SEARCH_ENDPOINT}`,
     requestBody,
     headers

@@ -36,8 +36,13 @@ export const addIDGenId = async (requestInfo, idRequests, header) => {
     RequestInfo: requestInfo,
     idRequests
   };
-  header['tenantId']=header.tenantid;
-  let headers = header;
+
+  let headers;
+  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+    header['tenantId']=header.tenantid;
+    headers = header;
+  }
+  
   // console.log(JSON.stringify(requestBody));
   let idGenResponse = await httpRequest({
     hostURL: envVariables.EGOV_IDGEN_HOST,
@@ -56,8 +61,11 @@ export const getLocationDetails = async (requestInfo, tenantId, header) => {
     RequestInfo: requestInfo
   };
 
-  header['tenantId']=header.tenantid;
-  let headers = header;
+  let headers;
+  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+    header['tenantId']=header.tenantid;
+    headers = header;
+  }
 
   // console.log(JSON.stringify(requestBody));
   let locationResponse = await httpRequest({
@@ -109,8 +117,11 @@ export const createWorkFlow = async (body, header) => {
     ProcessInstances: processInstances
   };
 
-  header['tenantId']=header.tenantid;
-  let headers = header;
+  let headers;
+  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+    header['tenantId']=header.tenantid;
+    headers = header;
+  }
   //console.log("Workflow requestBody", JSON.stringify(requestBody));
   let workflowResponse = await httpRequest({
     hostURL: envVariables.EGOV_WORKFLOW_HOST,
