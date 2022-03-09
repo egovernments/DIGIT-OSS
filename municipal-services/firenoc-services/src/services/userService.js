@@ -8,6 +8,9 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
   }
+  else
+    header['tenantId'] = userSearchReqCriteria.tenantId;
+
   headers = header;
 
   console.log("headers -->"+JSON.stringify(headers));
@@ -29,13 +32,16 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   return userSearchResponse;
 };
 
-export const createUser = async (requestInfo, user, header) => {
+export const createUser = async (requestInfo, user, header, tenantId) => {
   let requestBody = { RequestInfo: requestInfo, user: user };
 
   let headers;
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
-    header['tenantId']=header.tenantid;
+    header['tenantId']= header.tenantid;
   }
+  else
+    header['tenantId']= tenantId;
+
   headers = header;
 
   user.dob=dobConvetion(user.dob);
@@ -54,12 +60,15 @@ export const createUser = async (requestInfo, user, header) => {
   return userCreateResponse;
 };
 
-export const updateUser = async (requestInfo, user, header) => {
+export const updateUser = async (requestInfo, user, header, tenantId) => {
   // console.log(user);
   let headers;
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
-    header['tenantId']=header.tenantid;
+    header['tenantId'] = header.tenantid;
   }
+  else
+    header['tenantId'] = tenantId;
+
   headers = header;
 
   user.dob=dobConvetion(user.dob);

@@ -9,6 +9,9 @@ export const getFireNoc = async (requestInfo, applciationNumber, tenantId, heade
     if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
       header['tenantId']=header.tenantid;
     }
+    else
+      header['tenantId']=tenantId;
+
     headers = header;
 
     const uri = generateFireNOCSearchURL(tenantId, applciationNumber);

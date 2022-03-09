@@ -41,6 +41,9 @@ export const addIDGenId = async (requestInfo, idRequests, header) => {
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
   }
+  else
+    header['tenantId'] = idRequests[0].tenantId;
+
   headers = header;
   
   // console.log(JSON.stringify(requestBody));
@@ -65,6 +68,9 @@ export const getLocationDetails = async (requestInfo, tenantId, header) => {
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
   }
+  else
+    header['tenantId'] = tenantId;
+
   headers = header;
 
   // console.log(JSON.stringify(requestBody));
@@ -119,8 +125,11 @@ export const createWorkFlow = async (body, header) => {
 
   let headers;
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
-    header['tenantId']=header.tenantid;
+    header['tenantId'] = header.tenantid;
   }
+  else
+    header['tenantId'] = body.FireNOCs[0].tenantId;
+
   headers = header;
   //console.log("Workflow requestBody", JSON.stringify(requestBody));
   let workflowResponse = await httpRequest({

@@ -83,6 +83,9 @@ const createDemand = async (requestInfo, calculations, mdms, header) => {
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
   }
+  else
+    header['tenantId']=demands[0].tenantId;
+
   headers = header;
 
   var demandCreateResponse = await httpRequest({
@@ -144,6 +147,9 @@ const updateDemand = async (requestInfo, calculations, demandsSearch, mdms, head
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
   }
+  else
+    header['tenantId']=demands[0].tenantId;
+
   headers = header;
 
   var demandUpdateResponse = await httpRequest({
@@ -165,6 +171,9 @@ const searchDemand = async (requestInfo, tenantId, consumercodeList, header) => 
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
   }
+  else
+    header['tenantId']=tenantId;
+
   headers = header;
 
   var demandsSearch = null;
@@ -190,6 +199,9 @@ export const generateBill = async (requestInfo, billCriteria, header) => {
     if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
       header['tenantId']=header.tenantid;
     }
+    else
+      header['tenantId']=tenantId;
+
     headers = header;
 
     var billResponse = await httpRequest({

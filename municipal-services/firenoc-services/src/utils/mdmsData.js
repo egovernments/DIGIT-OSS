@@ -4,8 +4,11 @@ import envVariables from "../envVariables";
 export default async (requestInfo = {},tenantId, header) => {
   let headers;
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
-    header['tenantId']=header.tenantid;
+    header['tenantId'] = header.tenantid;
   }
+  else
+    header['tenantId'] = tenantId;
+
   headers = header;
  
   var requestBody = {

@@ -10,6 +10,9 @@ export const calculate = async (firenoc, requestInfo, header) => {
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
   }
+  else
+    header['tenantId']=tenantId;
+
   headers = header;
 
   const requestBody = {
