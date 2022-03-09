@@ -10,6 +10,8 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   }
   headers = header;
 
+  console.log("headers -->"+JSON.stringify(headers));
+
   var userSearchResponse = await httpRequest({
     hostURL: `${envVariables.EGOV_USER_HOST}`,
     endPoint: `${envVariables.EGOV_USER_CONTEXT_PATH}${
