@@ -69,7 +69,7 @@ public class InboxConfiguration {
 	@Value("${egov.fsm.host}")
 	private String fsmHost;
 	
-	@Value("${fsm.fetchApplicationIds.path}")
+	@Value("${egov.fsm.fetchApplicationIds.path}")
 	private String fetchApplicationIds;
 
 }
