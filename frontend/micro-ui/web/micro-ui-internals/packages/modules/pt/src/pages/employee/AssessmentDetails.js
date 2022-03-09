@@ -159,7 +159,7 @@ const CloseBtn = (props) => {
 function change(){
   var total_amount=ptCalculationEstimateData?.Calculation[0]?.totalAmount
   const [first,second]=[parseInt(first_temp.current.value),parseInt(second_temp.current.value)];
-    if((selectedPenalityReason && first>0)&&(!selectedRebateReason)){
+    if((selectedPenalityReason && first>0)/* &&(!selectedRebateReason) */){
       if(selectPenalityReason.value!=='Others'){
         if(first<total_amount){
           var additionalPenality=first;
@@ -198,7 +198,7 @@ function change(){
       }
     } 
 
-  else if((selectedRebateReason && second) && (!selectedPenalityReason)){
+   if((selectedRebateReason && second) /* && (!selectedPenalityReason) */){
     if(selectedRebateReason.value!=="Others"){
       if(second>0){
         if(second<total_amount){
