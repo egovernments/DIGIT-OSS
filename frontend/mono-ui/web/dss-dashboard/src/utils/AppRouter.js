@@ -11,12 +11,10 @@ class AppRouter extends Component {
         return true;
     }
 
-
-
     render() {
         return (
             <Router history={history}>
-                <div style={{ width: '100%' }}>
+                <div style={{ width: '97%' }}>
                     <Breadcrumbs/>
                     <Switch>
                         <Route exact path={`${process.env.PUBLIC_URL}/home`} component={Home} />

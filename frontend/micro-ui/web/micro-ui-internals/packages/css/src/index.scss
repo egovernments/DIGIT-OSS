@@ -538,3 +538,7 @@ input[type="number"] {
     @apply w-full !important;
   }
 }
+
+.employee-app-wrapper{
+min-height: calc(100vh - 8em);
+}
