@@ -157,9 +157,8 @@ const CustomHorizontalBarChart = ({
               width={layout === "vertical" ? 120 : 60}
             />
             <XAxis dataKey={xDataKey} type={xAxisType} tick={{ fontSize: "14px", fill: "#505A5F" }} tickCount={10} tickFormatter={tickFormatter} />
-            {bars?.map((bar, id) => (
-              <Bar key={id} dataKey={t(bar)} fill={barColors[id]} stackId={id > 1 ? 1 : id} />
-            ))}
+            {bars?.map((bar, id) => ( <Bar key={id} dataKey={t(bar)} fill={barColors[id]} stackId={1} />
+        ))}
             <Legend formatter={renderLegend} iconType="circle" />
             <Tooltip cursor={false} formatter={tooltipFormatter} />
           </BarChart>
