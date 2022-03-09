@@ -170,6 +170,7 @@ export const getUpdatedTopic = (tenantId, topic) => {
 
 export const replaceSchemaPlaceholder = (query, tenantId) => {
   let finalQuery = null;
+  console.log("inst-->"+envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE);
 	if (tenantId.includes('.') && envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE) {
 		let schemaName = tenantId.split('.')[1];
 		finalQuery = query.replace(/{schema}/g, schemaName);
