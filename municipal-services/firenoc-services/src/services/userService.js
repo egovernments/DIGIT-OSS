@@ -7,8 +7,8 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   let headers;
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  headers = header;
 
   var userSearchResponse = await httpRequest({
     hostURL: `${envVariables.EGOV_USER_HOST}`,
@@ -33,8 +33,8 @@ export const createUser = async (requestInfo, user, header) => {
   let headers;
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  headers = header;
 
   user.dob=dobConvetion(user.dob);
   var userCreateResponse = await httpRequest({
@@ -57,8 +57,8 @@ export const updateUser = async (requestInfo, user, header) => {
   let headers;
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  headers = header;
 
   user.dob=dobConvetion(user.dob);
   // console.info(user.dob);

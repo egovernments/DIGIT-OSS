@@ -37,8 +37,8 @@ export const mdmsData = async (requestInfo = {}, tenantId, header) => {
   let headers;
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  headers = header;
 
   var mdmsResponse = await httpRequest({
     hostURL: `${envVariables.EGOV_MDMS_HOST}`,
@@ -71,8 +71,8 @@ export const mdmsFiananceYear = async (requestInfo = {}, tenantId, header) => {
   let headers;
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  headers = header;
 
   var mdmsResponse = await httpRequest({
     hostURL: `${envVariables.EGOV_MDMS_HOST}`,

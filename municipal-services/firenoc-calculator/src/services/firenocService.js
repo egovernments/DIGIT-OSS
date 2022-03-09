@@ -8,8 +8,8 @@ export const getFireNoc = async (requestInfo, applciationNumber, tenantId, heade
     let headers;
     if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
       header['tenantId']=header.tenantid;
-      headers = header;
     }
+    headers = header;
 
     const uri = generateFireNOCSearchURL(tenantId, applciationNumber);
     let requestBody = { RequestInfo: requestInfo };
