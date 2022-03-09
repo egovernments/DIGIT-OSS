@@ -34,7 +34,10 @@ const ShowSurvey = ({location}) => {
     const answers = mutation?.data?.answers;
     const formDefaultValues = {}
     answers?.map(ans => {
-        formDefaultValues[ans?.questionId]=ans?.answer[0];
+        if(ans?.answer.length===1)
+          formDefaultValues[ans?.questionId]=ans?.answer[0];
+        else
+          formDefaultValues[ans?.questionId]=ans?.answer;
     })
 
     //pass this formDefaultValues in this format.....questionUuid:answerText for all the questions that are in the particular survey
