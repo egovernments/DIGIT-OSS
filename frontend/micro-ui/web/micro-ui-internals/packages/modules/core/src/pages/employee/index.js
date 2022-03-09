@@ -92,8 +92,7 @@ const EmployeeApp = ({
             logoUrl={logoUrl}
           />
           <div className={`main ${DSO ? "m-auto" : ""}`}>
-            {/* <div style={{ overflowY: "auto" }}> */}
-            <div>
+            <div className="employee-app-wrapper">
               <ErrorBoundary>
                 <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
               </ErrorBoundary>
