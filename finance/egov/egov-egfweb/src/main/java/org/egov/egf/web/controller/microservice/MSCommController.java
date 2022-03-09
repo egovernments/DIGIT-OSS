@@ -94,7 +94,8 @@ public class MSCommController {
         try {
             String accessToken = request.getRequestInfo().getAuthToken();
             String sessionId = httpReq.getSession().getId();
-            LOGGER.info("********* httpReq.toString()******** {}", httpReq.toString());
+            LOGGER.info("********* httpReq.toString()********");
+            System.out.println(sessionId);
             LOGGER.info("********* Retrieved session::authtoken******** {}::{}", sessionId, accessToken);
             if(sessionId!=null && !sessionId.equalsIgnoreCase("null")){
 				LOGGER.info("********* Retrieved session::authtoken******** {}::{}", sessionId, accessToken);

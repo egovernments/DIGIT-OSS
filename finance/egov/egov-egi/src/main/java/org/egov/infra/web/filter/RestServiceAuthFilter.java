@@ -70,16 +70,20 @@ public class RestServiceAuthFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws ServletException, IOException {
 		LOGGER.info("Rest service authentication initiated");
-
 		HttpServletRequest httpRequest = (HttpServletRequest) req;
 		HttpServletResponse httpResponse = (HttpServletResponse) res;
-
+		
+		System.out.println("***httpRequest**");
+		System.out.println(httpRequest.toString());
+		System.out.println(httpRequest.getRequestURI());
+		System.out.println(httpRequest.getServletPath());
 		HTTPUtilities httpUtilities = ESAPI.httpUtilities();
 		httpUtilities.setCurrentHTTP(httpRequest, httpResponse);
-		LOGGER.info("***###httpRequest.getRequestURI()------>>>>"+httpRequest.getRequestURI()+"***Request****"+req.toString()+"********Response##########"+res.toString());
+		LOGGER.info("***###httpRequest.getRequestURI()------>>>>");
+		LOGGER.info(httpRequest.getRequestURI());
 		if (httpRequest.getRequestURI().contains("/ClearToken")
 				|| httpRequest.getRequestURI().contains("/refreshToken")) {
-			LOGGER.info("Clear Token request recieved " + httpRequest.getServletPath());
+			LOGGER.info("Clear Token request recieved ");
 			httpRequest.getRequestDispatcher(httpRequest.getServletPath()).forward(req, res);
 		} else if (httpRequest.getRequestURI().contains("/rest/voucher/")) {
 			try {
