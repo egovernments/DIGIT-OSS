@@ -105,7 +105,12 @@ export const updateApiResponse = async (request, isExternalCall, next = {}) => {
   //console.log("Fire NoC body"+JSON.stringify(body.FireNOCs));
   let topic = envVariables.KAFKA_TOPICS_FIRENOC_UPDATE;
   let tenantId = body.FireNOCs[0].tenantId;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
+
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance)
     topic = getUpdatedTopic(tenantId, topic);
     
   payloads.push({
@@ -127,7 +132,12 @@ export const updateApiResponse = async (request, isExternalCall, next = {}) => {
   if (approvedList.length > 0) {
     let topic = envVariables.KAFKA_TOPICS_FIRENOC_WORKFLOW;
     let tenantId = body.FireNOCs[0].tenantId;
-    if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
+
+    var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+    if(typeof isCentralInstance =="string")
+      isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+    if(isCentralInstance)
       topic = getUpdatedTopic(tenantId, topic);
 
     payloads.push({

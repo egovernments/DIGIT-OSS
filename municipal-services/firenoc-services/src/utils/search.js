@@ -106,7 +106,7 @@ const fireNocOwnersRowMapper = async (row, mapper = [], header) => {
   } else {
     let user = {};
     if (row.useruuid) {
-      user = await searchUser(requestInfo, row.useruuid, header);
+      user = await searchUser(requestInfo, row.useruuid, header, envVariables.EGOV_DEFAULT_STATE_ID);
     }
     user = {
       ...ownerObject,
@@ -204,10 +204,11 @@ const removeEmpty = obj => {
   });
 };
 
-const searchUser = async (requestInfo, uuid, header) => {
+const searchUser = async (requestInfo, uuid, header, tenantId) => {
   let userSearchReqCriteria = {};
   let userSearchResponse = {};
   userSearchReqCriteria.uuid = [uuid];
+  userSearchReqCriteria.tenantId = tenantId;
   userSearchResponse = await userService.searchUser(
     requestInfo,
     userSearchReqCriteria,
@@ -222,6 +223,7 @@ export const searchByMobileNumber = async (mobileNumber, tenantId, header) => {
   userSearchReqCriteria.userType = "CITIZEN";
   userSearchReqCriteria.tenantId = tenantId;
   userSearchReqCriteria.mobileNumber = mobileNumber;
+
   var userSearchResponse = await userService.searchUser(
     requestInfo,
     userSearchReqCriteria,

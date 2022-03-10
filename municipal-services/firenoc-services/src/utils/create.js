@@ -91,7 +91,6 @@ export const addUUIDAndAuditDetails = async (request, method = "_update", header
         userSearchReqCriteria.mobileNumber = owners[owneriter].mobileNumber;
         userSearchReqCriteria.name = owners[owneriter].name;
         userSearchReqCriteria.tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
-
         userSearchResponse = await userService.searchUser(
           RequestInfo,
           userSearchReqCriteria,
@@ -102,7 +101,7 @@ export const addUUIDAndAuditDetails = async (request, method = "_update", header
         userResponse = await userService.updateUser(RequestInfo, {
         ...userSearchResponse.user[0],
         ...owners[owneriter]
-        }, header);
+        }, header,userSearchReqCriteria.tenantId);
         }
         else{
           userResponse = await createUser(
@@ -161,7 +160,7 @@ const createUser = async (requestInfo, owner, tenantId, header) => {
       userCreateResponse = await userService.updateUser(requestInfo, {
         ...userSearchResponse.user[0],
         ...owner
-      }, header);
+      }, header, tenantId);
     } else {
       // console.log("user not found");
 
@@ -171,12 +170,14 @@ const createUser = async (requestInfo, owner, tenantId, header) => {
       userCreateResponse = await userService.createUser(requestInfo, {
         ...userSearchResponse.user[0],
         ...owner
-      }, header);
+      }, header,
+      tenantId);
       // console.log("Create passed");
     }
   } else {
     //uuid present
     userSearchReqCriteria.uuid = [owner.uuid];
+    userSearchReqCriteria.tenantId = tenantId;
     userSearchResponse = await userService.searchUser(
       requestInfo,
       userSearchReqCriteria,
@@ -186,7 +187,7 @@ const createUser = async (requestInfo, owner, tenantId, header) => {
       userCreateResponse = await userService.updateUser(requestInfo, {
         ...userSearchResponse.user[0],
         ...owner
-      }, header);
+      }, header, tenantId);
       // console.log("Update passed");
     }
   }
@@ -282,7 +283,6 @@ const getUUidFromUserName = async (owners, RequestInfo, header) => {
 
     userSearchReqCriteria.userName = mobileNumber;
     userSearchReqCriteria.tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
-
     userSearchResponse = await userService.searchUser(
       RequestInfo,
       userSearchReqCriteria,

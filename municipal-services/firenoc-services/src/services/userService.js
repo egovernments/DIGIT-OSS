@@ -5,13 +5,24 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   let requestBody = { RequestInfo: requestInfo, ...userSearchReqCriteria };
   
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+  
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  else{
+    header['tenantId'] = userSearchReqCriteria.tenantId;
+  }
+    
+
+  headers = header;
+
+  
 
   var userSearchResponse = await httpRequest({
-    hostURL: envVariables.EGOV_USER_HOST,
+    hostURL: `${envVariables.EGOV_USER_HOST}`,
     endPoint: `${envVariables.EGOV_USER_CONTEXT_PATH}${
       envVariables.EGOV_USER_SEARCH_ENDPOINT
     }`,
@@ -27,14 +38,21 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   return userSearchResponse;
 };
 
-export const createUser = async (requestInfo, user, header) => {
+export const createUser = async (requestInfo, user, header, tenantId) => {
   let requestBody = { RequestInfo: requestInfo, user: user };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  else
+    header['tenantId']= tenantId;
+
+  headers = header;
 
   user.dob=dobConvetion(user.dob);
   var userCreateResponse = await httpRequest({
@@ -52,13 +70,20 @@ export const createUser = async (requestInfo, user, header) => {
   return userCreateResponse;
 };
 
-export const updateUser = async (requestInfo, user, header) => {
+export const updateUser = async (requestInfo, user, header, tenantId) => {
   // console.log(user);
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  else
+    header['tenantId'] = tenantId;
+
+  headers = header;
 
   user.dob=dobConvetion(user.dob);
   // console.info(user.dob);

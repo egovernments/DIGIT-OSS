@@ -15,7 +15,11 @@ const sendEventNotificaiton = (tenantId) => {
     };
 
     let topic = envVariables.KAFKA_TOPICS_EVENT_NOTIFICATION;
-    if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
+    var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+    if(typeof isCentralInstance =="string")
+      isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+    if(isCentralInstance)
       topic = getUpdatedTopic(tenantId, topic);
 
     payloads.push({
@@ -115,7 +119,11 @@ export const sendFireNOCSMSRequest = FireNOCs => {
       }
 
       let topic = envVariables.KAFKA_TOPICS_NOTIFICATION;
-      if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
+      var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+      if(typeof isCentralInstance =="string")
+        isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+      if(isCentralInstance)
         topic = getUpdatedTopic(tenantId, topic);
 
       payloads.push({

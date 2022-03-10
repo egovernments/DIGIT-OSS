@@ -34,12 +34,20 @@ export const searchApiResponse = async (request, next = {}) => {
   console.log("Query object:"+JSON.stringify(queryObj));
   let errors = validateFireNOCSearchModel(queryObj);
 
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE && queryObj.tenantId == null){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  var stateLevelTenantIdLength = envVariables.STATE_LEVEL_TENANTID_LENGTH;
+  if(typeof stateLevelTenantIdLength == "string")
+    stateLevelTenantIdLength = parseInt(envVariables.STATE_LEVEL_TENANTID_LENGTH);
+
+  if(isCentralInstance && queryObj.tenantId == null){
     let error = {"FIRE_NOC_INVALID_SEARCH":" TenantId is mandatory for search "};
     errors.push(error);
   }
-  else if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE && queryObj.tenantId.split('.').length < envVariables.STATE_LEVEL_TENANTID_LENGTH){
-    let error = {"FIRE_NOC_INVALID_SEARCH":" TenantId should be mandatorily " + envVariables.STATE_LEVEL_TENANTID_LENGTH + " levels for search"};
+  else if(isCentralInstance && queryObj.tenantId.split('.').length < stateLevelTenantIdLength){
+    let error = {"FIRE_NOC_INVALID_SEARCH":" TenantId should be mandatorily " + stateLevelTenantIdLength + " levels for search"};
     errors.push(error);
   }
 
@@ -75,7 +83,7 @@ export const searchApiResponse = async (request, next = {}) => {
     console.log("mobileNumber", mobileNumber);
     console.log("tenedrIDD", tenantId);
 
-    if(queryObj.tenantId.split('.').length <= envVariables.STATE_LEVEL_TENANTID_LENGTH){
+    if(queryObj.tenantId.split('.').length <= stateLevelTenantIdLength){
       text = `${text} where FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
     }
     else{
@@ -86,7 +94,7 @@ export const searchApiResponse = async (request, next = {}) => {
       text = text + " where ";
     }
     if (queryObj.tenantId) {
-      if(queryObj.tenantId.split('.').length <= envVariables.STATE_LEVEL_TENANTID_LENGTH){
+      if(queryObj.tenantId.split('.').length <= stateLevelTenantIdLength){
         text = `${text} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
       }
       else{

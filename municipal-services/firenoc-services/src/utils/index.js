@@ -38,10 +38,17 @@ export const addIDGenId = async (requestInfo, idRequests, header) => {
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  else
+    header['tenantId'] = idRequests[0].tenantId;
+
+  headers = header;
   
   // console.log(JSON.stringify(requestBody));
   let idGenResponse = await httpRequest({
@@ -62,10 +69,17 @@ export const getLocationDetails = async (requestInfo, tenantId, header) => {
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  else
+    header['tenantId'] = tenantId;
+
+  headers = header;
 
   // console.log(JSON.stringify(requestBody));
   let locationResponse = await httpRequest({
@@ -118,10 +132,17 @@ export const createWorkFlow = async (body, header) => {
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  else
+    header['tenantId'] = body.FireNOCs[0].tenantId;
+
+  headers = header;
   //console.log("Workflow requestBody", JSON.stringify(requestBody));
   let workflowResponse = await httpRequest({
     hostURL: envVariables.EGOV_WORKFLOW_HOST,
@@ -161,7 +182,11 @@ export const getUpdatedTopic = (tenantId, topic) => {
 
 export const replaceSchemaPlaceholder = (query, tenantId) => {
   let finalQuery = null;
-	if (tenantId.includes('.')) {
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+	if (tenantId.includes('.') && isCentralInstance) {
 		let schemaName = tenantId.split('.')[1];
 		finalQuery = query.replace(/{schema}/g, schemaName);
 	} else {
@@ -169,4 +194,3 @@ export const replaceSchemaPlaceholder = (query, tenantId) => {
 	}
 	return finalQuery;
 };
-

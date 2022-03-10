@@ -80,10 +80,17 @@ const createDemand = async (requestInfo, calculations, mdms, header) => {
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  else
+    header['tenantId']=demands[0].tenantId;
+
+  headers = header;
 
   var demandCreateResponse = await httpRequest({
     hostURL: envVariables.EGOV_BILLINGSERVICE_HOST,
@@ -141,10 +148,17 @@ const updateDemand = async (requestInfo, calculations, demandsSearch, mdms, head
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  else
+    header['tenantId']=demands[0].tenantId;
+
+  headers = header;
 
   var demandUpdateResponse = await httpRequest({
     hostURL: envVariables.EGOV_BILLINGSERVICE_HOST,
@@ -162,10 +176,17 @@ const searchDemand = async (requestInfo, tenantId, consumercodeList, header) => 
   let requestBody = { RequestInfo: requestInfo };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
-    headers = header;
   }
+  else
+    header['tenantId']=tenantId;
+
+  headers = header;
 
   var demandsSearch = null;
   demandsSearch = await httpRequest({
@@ -187,10 +208,17 @@ export const generateBill = async (requestInfo, billCriteria, header) => {
     let requestBody = { RequestInfo: requestInfo };
     
     let headers;
-    if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
-      header['tenantId']=header.tenantid;
-      headers = header;
-    }
+    var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
+    header['tenantId']=header.tenantid;
+  }
+    else
+      header['tenantId']=tenantId;
+
+    headers = header;
 
     var billResponse = await httpRequest({
       hostURL: envVariables.EGOV_BILLINGSERVICE_HOST,
