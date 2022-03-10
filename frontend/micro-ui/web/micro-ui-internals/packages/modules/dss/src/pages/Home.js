@@ -1,9 +1,14 @@
 import {
-    DownloadIcon,
-    EmailIcon, Header,
-    Loader,
-    MultiLink, ShareIcon,
-    WhatsappIcon
+  Card,
+  CardHeader,
+  DownloadIcon,
+  EmailIcon,
+  Header,
+  Loader,
+  MultiLink,
+  Poll,
+  ShareIcon,
+  WhatsappIcon,
 } from "@egovernments/digit-ui-react-components";
 import { format } from "date-fns";
 import React, { useMemo, useRef, useState } from "react";
@@ -24,6 +29,16 @@ const getInitialRange = () => {
   const tenantId = data?.filters?.tenantId || [];
   return { startDate, endDate, title, duration, denomination, tenantId };
 };
+
+const colors = [
+  { dark: "#0BDE85", light: "rgba(11, 222, 133, 0.14)" },
+  { dark: "#FFCA45", light: "rgba(255, 202, 69, 0.24)" },
+  { dark: "#8A53FF", light: "rgba(138, 83, 255, 0.24)" },
+  { dark: "#048BD0", light: "rgba(4, 139, 208, 0.24)" },
+  { dark: "#FF7245", light: "rgba(255, 114, 69, 0.24)" },
+  { dark: "#53FFEA", light: "rgba(83, 255, 234, 0.14)" },
+  { dark: "#DEBC0B", light: "rgba(222, 188, 11, 0.24)" },
+];
 
 const DashBoard = ({ stateCode }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -182,8 +197,34 @@ const DashBoard = ({ stateCode }) => {
             </div>
           </div>
         ) : null}
+
         {dashboardConfig?.[0]?.visualizations.map((row, key) => {
-          return <Layout rowData={row} key={key} forHome={true} />;
+          return (
+            <div className="dss-card" key={key}>
+              {row.vizArray.map((item, index) => {
+                return (
+                  <div
+                    className={`dss-card-parent  ${item.name === "DSS_OVERVIEW" ? "w-100" : null}`}
+                    style={ item.name === "DSS_OVERVIEW" ? {} : { backgroundColor: colors[index].light }}
+                  >
+                    <div className="dss-card-header">
+                      <Poll />
+                      <p style={{ marginLeft: "10px" }}>{t(item.name)}</p>
+                    </div>
+
+                    <div className="dss-card-body">
+                      {item.charts.map((chart, key) => (
+                        <div style={{ width: "100%" }} key={key}>
+                          <p style={{ fontSize: "14px" }}>{t(chart?.name)}</p>
+                          <p style={{ fontFamily: "Roboto", fontSize: "20px", fontWeight: "500" }}>500</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
         })}
       </div>
     </FilterContext.Provider>
