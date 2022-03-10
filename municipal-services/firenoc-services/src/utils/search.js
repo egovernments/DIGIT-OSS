@@ -181,6 +181,7 @@ const fireNocApplicationDocumentsRowMapper = (row, mapper = []) => {
 export const mergeSearchResults = async (response, query = {}, reqInfo) => {
   requestInfo = reqInfo;
   let result = [];
+  console.log("==== resonse lenth", response.length);
   for (var i = 0; i < response.length; i++) {
     let fireNoc = {};
     let index = findIndex(result, { id: response[i].fid });

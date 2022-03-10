@@ -189,10 +189,10 @@ export const searchApiResponse = async (request, next = {}) => {
   if (!isEmpty(queryObj) && ( queryObj.hasOwnProperty("limit" || queryObj.hasOwnProperty("offset")))) {
     let offset =0;
     let limit =10;
-    if( !queryObj.hasOwnProperty("offset") ){
+    if( queryObj.hasOwnProperty("offset") ){
       offset = queryObj.offset;
    }
-  if( !queryObj.hasOwnProperty("limit") ){
+  if( queryObj.hasOwnProperty("limit") ){
     limit = queryObj.limit;
  }
   sqlQuery = `${sqlQuery}  offset ${offset} limit ${limit}   `;
