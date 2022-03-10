@@ -179,23 +179,26 @@ export const searchApiResponse = async (request, next = {}) => {
     sqlQuery = `${sqlQuery} FN.createdtime >= ${queryObj.fromDate} `;
   }
 
-  if (!isEmpty(queryObj) && ( queryObj.hasOwnProperty("limit" || queryObj.hasOwnProperty("offset")))) {
-      let offset =0;
-      let limit =10;
-      if( !queryObj.hasOwnProperty("offset") ){
-        offset = queryObj.offset;
-     }
-    if( !queryObj.hasOwnProperty("limit") ){
-      limit = queryObj.limit;
-   }
-    sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ORDER BY FN.uuid offset ${offset} limit ${limit}   `;
-  }
+  
   
   if (!isEmpty(queryObj) && !(keys(queryObj).length==2 && 
   queryObj.hasOwnProperty("offset") && queryObj.hasOwnProperty("limit"))) {
-    sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ORDER BY FN.uuid`;
+    sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ORDER BY FN.uuid `;
   }
-  // console.log("SQL QUery:" +sqlQuery);
+
+  if (!isEmpty(queryObj) && ( queryObj.hasOwnProperty("limit" || queryObj.hasOwnProperty("offset")))) {
+    let offset =0;
+    let limit =10;
+    if( !queryObj.hasOwnProperty("offset") ){
+      offset = queryObj.offset;
+   }
+  if( !queryObj.hasOwnProperty("limit") ){
+    limit = queryObj.limit;
+ }
+  sqlQuery = `${sqlQuery}  offset ${offset} limit ${limit}   `;
+}
+
+  console.log("SQL QUery:" +sqlQuery);
   const dbResponse = await db.query(sqlQuery);
   //console.log("dbResponse"+JSON.stringify(dbResponse));
   if (dbResponse.err) {
