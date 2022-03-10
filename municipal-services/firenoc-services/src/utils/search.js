@@ -106,6 +106,7 @@ const fireNocOwnersRowMapper = async (row, mapper = [], header) => {
   } else {
     let user = {};
     if (row.useruuid) {
+      console.log("5 inst "+row.tenantId);
       user = await searchUser(requestInfo, row.useruuid, header, row.tenantId);
     }
     user = {
@@ -209,6 +210,7 @@ const searchUser = async (requestInfo, uuid, header, tenantId) => {
   let userSearchResponse = {};
   userSearchReqCriteria.uuid = [uuid];
   userSearchReqCriteria.tenantId = tenantId;
+  console.log("6 inst "+tenantId);
   userSearchResponse = await userService.searchUser(
     requestInfo,
     userSearchReqCriteria,
@@ -223,6 +225,8 @@ export const searchByMobileNumber = async (mobileNumber, tenantId, header) => {
   userSearchReqCriteria.userType = "CITIZEN";
   userSearchReqCriteria.tenantId = tenantId;
   userSearchReqCriteria.mobileNumber = mobileNumber;
+  console.log("7 inst "+tenantId);
+
   var userSearchResponse = await userService.searchUser(
     requestInfo,
     userSearchReqCriteria,

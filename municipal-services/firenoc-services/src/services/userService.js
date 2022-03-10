@@ -10,10 +10,14 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   isCentralInstance = (isCentralInstance.toLowerCase() == "true");
   
   if(isCentralInstance){
+    console.log("central");
     header['tenantId']=header.tenantid;
   }
-  else
+  else{
+    console.log("tenantId-->"+userSearchReqCriteria.tenantId);
     header['tenantId'] = userSearchReqCriteria.tenantId;
+  }
+    
 
   headers = header;
 
