@@ -177,8 +177,8 @@ export const searchApiResponse = async (request, next = {}) => {
   }
 
   if (!isEmpty(queryObj) && ( queryObj.hasOwnProperty("limit" || queryObj.hasOwnProperty("offset")))) {
-      offset =0;
-      limit =10;
+      let offset =0;
+      let limit =10;
       if( !queryObj.hasOwnProperty("offset") ){
         offset = queryObj.offset;
      }
