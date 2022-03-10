@@ -5,7 +5,7 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   let requestBody = { RequestInfo: requestInfo, ...userSearchReqCriteria };
   
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  if(Boolean(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)){
     header['tenantId']=header.tenantid;
     console.log("headers 1 -->"+JSON.stringify(headers));
     console.log("inst -->"+envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE);
