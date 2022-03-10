@@ -91,7 +91,6 @@ export const addUUIDAndAuditDetails = async (request, method = "_update", header
         userSearchReqCriteria.mobileNumber = owners[owneriter].mobileNumber;
         userSearchReqCriteria.name = owners[owneriter].name;
         userSearchReqCriteria.tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
-        console.log("1 inst"+tenantId);
         userSearchResponse = await userService.searchUser(
           RequestInfo,
           userSearchReqCriteria,
@@ -150,7 +149,6 @@ const createUser = async (requestInfo, owner, tenantId, header) => {
     userSearchReqCriteria.userType = "CITIZEN";
     userSearchReqCriteria.tenantId = tenantId;
     userSearchReqCriteria.mobileNumber = owner.mobileNumber;
-    console.log("2 inst"+tenantId);
     userSearchResponse = await userService.searchUser(
       requestInfo,
       userSearchReqCriteria,
@@ -180,7 +178,6 @@ const createUser = async (requestInfo, owner, tenantId, header) => {
     //uuid present
     userSearchReqCriteria.uuid = [owner.uuid];
     userSearchReqCriteria.tenantId = tenantId;
-    console.log("3 inst"+tenantId);
     userSearchResponse = await userService.searchUser(
       requestInfo,
       userSearchReqCriteria,
@@ -286,7 +283,6 @@ const getUUidFromUserName = async (owners, RequestInfo, header) => {
 
     userSearchReqCriteria.userName = mobileNumber;
     userSearchReqCriteria.tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
-    console.log("4 inst"+userSearchReqCriteria.tenantId);
     userSearchResponse = await userService.searchUser(
       RequestInfo,
       userSearchReqCriteria,

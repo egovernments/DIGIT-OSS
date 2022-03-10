@@ -209,7 +209,6 @@ const searchUser = async (requestInfo, uuid, header, tenantId) => {
   let userSearchResponse = {};
   userSearchReqCriteria.uuid = [uuid];
   userSearchReqCriteria.tenantId = tenantId;
-  console.log("6 inst "+tenantId);
   userSearchResponse = await userService.searchUser(
     requestInfo,
     userSearchReqCriteria,
@@ -224,7 +223,6 @@ export const searchByMobileNumber = async (mobileNumber, tenantId, header) => {
   userSearchReqCriteria.userType = "CITIZEN";
   userSearchReqCriteria.tenantId = tenantId;
   userSearchReqCriteria.mobileNumber = mobileNumber;
-  console.log("7 inst "+tenantId);
 
   var userSearchResponse = await userService.searchUser(
     requestInfo,
