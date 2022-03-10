@@ -22,7 +22,7 @@ const EmployeeSideBar = () => {
   const sidebarRef = useRef(null);
   const { t } = useTranslation();
   const userRoles = Digit.SessionStorage.get("User")?.info?.roles;
-  const DSS = userRoles.find((role) => role.code === "EMPLOYEE") || false;
+  const DSS = userRoles.find((role) => role.code === "EMPLOYEE");
   const HRMS = Digit.Utils.hrmsAccess();
   const FSM = Digit.Utils.fsmAccess();
   const PT = Digit.Utils.ptAccess();
@@ -119,8 +119,6 @@ const EmployeeSideBar = () => {
   
   let menuItems = [...EmployeeSideBarMenu(t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC, FSTPOperator, PGR, pgrLinks)];
 
-  console.log(menuItems, DSS);
-  
   let index = menuItems.findIndex((item) => item.moduleName === "Trade License");
 
   if (index !== -1) {

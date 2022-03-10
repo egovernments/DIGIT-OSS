@@ -68,8 +68,8 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
               setError(t("PT_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
-            // setError(t("PT_FILE_UPLOAD_ERROR"));
+            // console.error("Modal -> err ", err);
+            setError(t("PT_FILE_UPLOAD_ERROR"));
           }
         }
       }
