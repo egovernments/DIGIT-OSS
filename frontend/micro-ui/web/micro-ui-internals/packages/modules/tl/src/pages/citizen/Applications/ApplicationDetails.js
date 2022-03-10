@@ -5,7 +5,7 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../../utils/getTLAcknowledgementData";
 import TLWFApplicationTimeline from "../../../pageComponents/TLWFApplicationTimeline";
 
-const ApplicationDetails = () => {
+const TLApplicationDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { tenantId } = useParams();
@@ -336,4 +336,4 @@ const { isLoading: PTLoading, isError: isPTError, data: PTData } = Digit.Hooks.p
   );
 };
 
-export default ApplicationDetails;
+export default TLApplicationDetails;
