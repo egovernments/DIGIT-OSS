@@ -40,6 +40,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
       error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
       validation: {
         isRequired: true,
+        min: 1,
       },
       default: formData?.tripData?.noOfTrips,
       disable: editScreen ? false : true,
