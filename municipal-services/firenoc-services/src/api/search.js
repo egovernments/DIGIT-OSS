@@ -4,6 +4,7 @@ import { mergeSearchResults, searchByMobileNumber } from "../utils/search";
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 import some from "lodash/some";
+import keys from "lodash/keys";
 import { actions } from "../utils/search";
 import { validateFireNOCSearchModel } from "../utils/modelValidation";
 import envVariables from "../envVariables";
@@ -67,7 +68,8 @@ export const searchApiResponse = async (request, next = {}) => {
     else
       text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
   } else {
-    if (!isEmpty(queryObj)) {
+    if (!isEmpty(queryObj) && !(keys(queryObj).length==2 && 
+    queryObj.hasOwnProperty("offset") && queryObj.hasOwnProperty("limit"))) {
       text = text + " where ";
     }
     if (queryObj.tenantId) {
@@ -154,7 +156,9 @@ export const searchApiResponse = async (request, next = {}) => {
           item != "tenantId" &&
           // item != "status" &&
           item != "ids" &&
-          item != "mobileNumber"
+          item != "mobileNumber" &&
+          item != "offset" &&
+          item != "limit"
         ) {
           queryObj[item]=queryObj[item].toUpperCase();
           sqlQuery = `${sqlQuery} ${item}='${queryObj[item]}' AND`;
@@ -162,18 +166,17 @@ export const searchApiResponse = async (request, next = {}) => {
       }
     });
   }
+
   if (
     queryObj.hasOwnProperty("fromDate") &&
     queryObj.hasOwnProperty("toDate")
   ) {
-    sqlQuery = `${sqlQuery} FN.createdtime >= ${queryObj.fromDate} AND FN.createdtime <= ${queryObj.toDate} ORDER BY FN.uuid`;
+    sqlQuery = `${sqlQuery} FN.createdtime >= ${queryObj.fromDate} AND FN.createdtime <= ${queryObj.toDate} `;
   } else if (
     queryObj.hasOwnProperty("fromDate") &&
     !queryObj.hasOwnProperty("toDate")
   ) {
-    sqlQuery = `${sqlQuery} FN.createdtime >= ${queryObj.fromDate} ORDER BY FN.uuid`;
-  } else if (!isEmpty(queryObj)) {
-    sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ORDER BY FN.uuid`;
+    sqlQuery = `${sqlQuery} FN.createdtime >= ${queryObj.fromDate} `;
   }
 
   if (!isEmpty(queryObj) && ( queryObj.hasOwnProperty("limit" || queryObj.hasOwnProperty("offset")))) {
@@ -185,9 +188,14 @@ export const searchApiResponse = async (request, next = {}) => {
     if( !queryObj.hasOwnProperty("limit") ){
       limit = queryObj.limit;
    }
-    sqlQuery = `${sqlQuery} offset ${offset} limit ${limit}`;
+    sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ORDER BY FN.uuid offset ${offset} limit ${limit}   `;
   }
-  //console.log("SQL QUery:" +sqlQuery);
+  
+  if (!isEmpty(queryObj) && !(keys(queryObj).length==2 && 
+  queryObj.hasOwnProperty("offset") && queryObj.hasOwnProperty("limit"))) {
+    sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ORDER BY FN.uuid`;
+  }
+  // console.log("SQL QUery:" +sqlQuery);
   const dbResponse = await db.query(sqlQuery);
   //console.log("dbResponse"+JSON.stringify(dbResponse));
   if (dbResponse.err) {
