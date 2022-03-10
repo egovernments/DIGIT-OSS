@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
@@ -98,12 +99,15 @@ public class NotificationService {
 																											// localization
 																											// service
 																											// changes.
-		String message = util.getEventsCustomizedMsg(fsmRequest.getRequestInfo(), fsmRequest.getFsm(),
-				localizationMessages); // --need localization service changes.
+//		String message = util.getEventsCustomizedMsg(fsmRequest.getRequestInfo(), fsmRequest.getFsm(),
+//				localizationMessages); // --need localization service changes.
+		
+//		Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
+//		List<SMSRequest> smsRequests = util.createSMSRequest(message, mobileNumberToOwner);
+		
 		FSM fsmApplication = fsmRequest.getFsm();
-		Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
-
-		List<SMSRequest> smsRequests = util.createSMSRequest(message, mobileNumberToOwner);
+		List<SMSRequest> smsRequests = new LinkedList<>();
+		enrichSMSRequest(fsmRequest, smsRequests);
 		Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest::getMobileNumber).collect(Collectors.toSet());
 		Map<String, String> mapOfPhnoAndUUIDs = fetchUserUUIDs(mobileNumbers, fsmRequest.getRequestInfo(),
 				fsmRequest.getFsm().getTenantId());
@@ -118,21 +122,8 @@ public class NotificationService {
 			List<String> toUsers = new ArrayList<>();
 			toUsers.add(mapOfPhnoAndUUIDs.get(mobile));
 			Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
-			List<String> payTriggerList = Arrays.asList(config.getPayTriggers().split("[,]"));
+//			List<String> payTriggerList = Arrays.asList(config.getPayTriggers().split("[,]"));
 			Action action = null;
-			if (payTriggerList.contains(fsmApplication.getStatus())) {
-				List<ActionItem> items = new ArrayList<>();
-				String busineService = null;
-				// TODO define the value of business service 
-			
-				String actionLink = config.getPayLink().replace("$mobile", mobile)
-						.replace("$applicationNo", fsmApplication.getApplicationNo())
-						.replace("$tenantId", fsmApplication.getTenantId()).replace("$businessService", busineService);
-				actionLink = config.getUiAppHost() + actionLink;
-				ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
-				items.add(item);
-//				action = Action.builder().actionUrls(items).build();
-			}
 
 			events.add(Event.builder().tenantId(fsmApplication.getTenantId()).description(mobileNumberToMsg.get(mobile))
 					.eventType(FSMConstants.USREVENTS_EVENT_TYPE).name(FSMConstants.USREVENTS_EVENT_NAME)
