@@ -10,6 +10,9 @@ import com.tarento.analytics.dto.AggregateDto;
 import com.tarento.analytics.dto.AggregateRequestDto;
 import com.tarento.analytics.dto.Data;
 import com.tarento.analytics.dto.Plot;
+import com.tarento.analytics.helper.ComputeHelper;
+import com.tarento.analytics.helper.ComputeHelperFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,9 @@ import java.util.stream.Collectors;
 public class PerformanceChartResponeHandler implements IResponseHandler {
 
     public static final Logger logger = LoggerFactory.getLogger(PerformanceChartResponeHandler.class);
-
+    
+    @Autowired 
+    ComputeHelperFactory computeHelperFactory; 
     @Override
     public AggregateDto translate(AggregateRequestDto requestDto, ObjectNode aggregations) throws IOException {
 
@@ -59,6 +64,17 @@ public class PerformanceChartResponeHandler implements IResponseHandler {
                             }
                         }                    
                         
+                    	// PreAction Theory should be consdiered and executed to modify the aggregation value
+        				JsonNode preActionTheoryNode = chartNode.get("preActionTheory");
+        				
+        				if( preActionTheoryNode != null && preActionTheoryNode.findValue(headerPath.asText()) !=null && 
+        						!preActionTheoryNode.findValue(headerPath.asText()).asText().isEmpty()) {
+        					ComputeHelper computeHelper = computeHelperFactory.getInstance(preActionTheoryNode.findValue(headerPath.asText()).asText());
+        					if(computeHelper !=null) {
+        						value = computeHelper.compute(requestDto, value); 
+        					}
+        	            	
+        				}
 
                         if (mappings.containsKey(key)) {
                             Double sum = (mappings.get(key)).containsKey(headerPath.asText()) ? (mappings.get(key)).get(headerPath.asText()) + value : value;
@@ -73,9 +89,11 @@ public class PerformanceChartResponeHandler implements IResponseHandler {
                             mappings.put(key, additiveMap);
                         }
                     });
+                 
                 }
             });
         });
+        
         logger.info("performance chart data mappings : "+mappings);
         List<Plot> plotList = mappings.entrySet().stream().map(e -> new Plot(e.getKey(), getPercentage(e.getValue(), aggrsPaths.get(0).asText(),aggrsPaths.get(1).asText(), isRoundOff), symbol)).collect(Collectors.toList());
         List<Plot> plots = plotList.stream().filter(plot -> plot.getValue() != 0.0).collect(Collectors.toList());
