@@ -20,7 +20,7 @@ import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonPt";
 
 initLibraries();
 
-const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "NDSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS","NOC","Engagement", "WS","CommonPT"];
+const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "NDSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS","NOC","Engagement", "CommonPT","WS"];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PTModule,

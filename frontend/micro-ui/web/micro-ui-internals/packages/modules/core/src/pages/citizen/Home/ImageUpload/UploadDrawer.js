@@ -8,8 +8,8 @@ function UploadDrawer({ setProfilePic, closeDrawer, userType, removeProfilePic ,
   const [error, setError] = useState(null);
   const { t } = useTranslation();
   const selectfile = (e) => setFile(e.target.files[0]);
-  const removeimg = () => {removeProfilePic();closeDrawer(false)};
-  const onOverlayBodyClick = () => closeDrawer(false);
+  const removeimg = () => {removeProfilePic(); closeDrawer()};
+  const onOverlayBodyClick = () => closeDrawer();
 
   useEffect(() => {
     (async () => {
@@ -50,6 +50,7 @@ function UploadDrawer({ setProfilePic, closeDrawer, userType, removeProfilePic ,
           width: "100%",
           height: "100vh",
           backgroundColor: "rgba(0,0,0,.5)",
+          // zIndex: "9998",
         }}
         onClick={onOverlayBodyClick}
       ></div>
@@ -65,7 +66,7 @@ function UploadDrawer({ setProfilePic, closeDrawer, userType, removeProfilePic ,
           right: "0",
           height: "20%",
           bottom: userType === "citizen" ? "2.5rem" : "0",
-          zindex: "2",
+          zIndex: "2",
         }}
       >
         <div

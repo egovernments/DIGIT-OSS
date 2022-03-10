@@ -1,4 +1,4 @@
-import { Card, Header, LinkLabel, Loader, Row, StatusTable } from "@egovernments/digit-ui-react-components";
+import { Card, CardText, Header, LinkLabel, Loader, Row, StatusTable } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -59,7 +59,7 @@ const PaymentDetails = () => {
         <h2 style={{ fontSize: "16px", lineHeight: "24px", width: "30%", fontWeight: "700" }}>{t("PT_PROPERTY_PTUID")}</h2>
         <div style={{ whiteSpace: "pre", width: "50%", fontSize: "16px", lineHeight: "24px" }}>{applicationNumber}</div>
       </div>
-      {paymentObject?.map((payment) => (
+      {paymentObject.length>0 ? paymentObject?.map((payment) => (
         <div style={{ marginLeft: "-16px" }}>
           <Card>
             <StatusTable>
@@ -73,7 +73,9 @@ const PaymentDetails = () => {
             </StatusTable>
           </Card>
         </div>
-      ))}
+      )):<div>
+        <CardText>{t("PT_NO_PAYMENTS_HISTORY")}</CardText>
+        </div>}
     </React.Fragment>
   );
 };

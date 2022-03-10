@@ -181,8 +181,8 @@ const DateRange = ({ values, onFilterChange, t }) => {
     <>
       <div className="mbsm">{t(`ES_DSS_DATE_RANGE`)}</div>
       <div className="employee-select-wrap" ref={wrapperRef}>
-        <div className="select">
-          <input className="employee-select-wrap--elipses" type="text" value={values?.title ? `${values?.title}` : ""} readOnly />
+        <div className={`select ${ isModalOpen?'dss-input-active-border':""}`} >
+          <input className={`employee-select-wrap--elipses`} type="text" value={values?.title ? `${values?.title}` : ""} readOnly onClick={() => setIsModalOpen((prevState) => !prevState)}/>
           <Calender className="cursorPointer" onClick={() => setIsModalOpen((prevState) => !prevState)} />
         </div>
         {isModalOpen && (

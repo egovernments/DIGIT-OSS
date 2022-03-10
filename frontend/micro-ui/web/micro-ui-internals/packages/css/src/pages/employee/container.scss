@@ -24,8 +24,13 @@
     height: 100%;
   }
 }
-
-.fieldInspectionWrapper {
+.employee-login-home-footer{
+  @apply flex fixed bottom-0 h-10 bg-grey-bg pb-md pt-sm justify-center w-full;
+  img{
+    @apply ml-sm
+  }
+}
+.fieldInspectionWrapper{
   border: 1px solid #d6d5d4;
   padding: 16px;
   margin-top: 8px;

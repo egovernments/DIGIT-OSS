@@ -60,6 +60,7 @@ const FstpOperatorDetails = () => {
   const [tripNo, setTripNo] = useState();
   const [appId, setAppId] = useState();
   const [filterVehicle, setFilterVehicle] = useState();
+  const [currentTrip, setCurrentTrip] = useState();
 
   const { isLoading: totalload, isSuccess: totalsuccess, data: totalvehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, totalconfig });
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
@@ -67,7 +68,9 @@ const FstpOperatorDetails = () => {
     enabled: !!isVehicleSearchCompleted,
   });
 
-  const currentTrip = filterVehicle?.length == 0 ? 1 : (tripNo - filterVehicle?.length) + 1
+  useEffect(() => {
+    filterVehicle?.length == 0 ? setCurrentTrip(1) : setCurrentTrip((tripNo - filterVehicle?.length) + 1)
+  }, [tripNo, filterVehicle, totalvehicle, totalsuccess, isSuccess]);
 
 
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
@@ -88,21 +91,13 @@ const FstpOperatorDetails = () => {
     }
   }, [isSuccess]);
 
-  useEffect(() => {
-    if (totalsuccess) {
-      const temp = totalvehicle?.vehicleTrip?.filter((c, i, r) => c?.tripDetails[0]?.referenceNo === appId && c?.applicationStatus === "WAITING_FOR_DISPOSAL");
-      setFilterVehicle(temp)
-    }
-  }, [totalsuccess]);
 
   useEffect(() => {
     if (!isIdle && !isSearchLoading && tripDetails) {
       setTripNo(tripDetails[0]?.noOfTrips)
       setAppId(tripDetails[0].applicationNo)
     }
-  }, [isSearchLoading, isIdle]);
-
-
+  }, [isSearchLoading, isIdle, tripDetails]);
 
   useEffect(() => {
     switch (selectedAction) {
@@ -117,6 +112,14 @@ const FstpOperatorDetails = () => {
         break;
     }
   }, [selectedAction]);
+
+  useEffect(() => {
+    if (totalsuccess) {
+      const temp = totalvehicle?.vehicleTrip?.filter((c, i, r) => c?.tripDetails[0]?.referenceNo === appId && c?.applicationStatus === "WAITING_FOR_DISPOSAL");
+      setFilterVehicle(temp)
+    }
+  }, [totalsuccess, totalvehicle, isSuccess, isIdle, appId]);
+
 
   const handleSubmit = () => {
     const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
@@ -160,6 +163,7 @@ const FstpOperatorDetails = () => {
 
     mutation.mutate(details, {
       onSuccess: handleSuccess,
+      onError: handleError,
     });
   };
 
@@ -177,6 +181,7 @@ const FstpOperatorDetails = () => {
 
     mutation.mutate(details, {
       onSuccess: handleSuccess,
+      onError: handleError,
     });
   };
 
@@ -196,6 +201,20 @@ const FstpOperatorDetails = () => {
       history.push(`/digit-ui/employee/fsm/fstp-inbox`);
     }, 5000);
   };
+
+  const handleError = () => {
+    if (selectedAction === "DECLINEVEHICLE") {
+      setShowModal(false)
+      setSelectedAction(null);
+    }
+    /* Show Toast on error */
+    queryClient.invalidateQueries("FSM_VEHICLE_DATA");
+    setShowToast({ key: "error", action: `ES_FSM_DISPOSE_UPDATE_FAILURE` });
+    setTimeout(() => {
+      closeToast();
+    }, 5000);
+  };
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -290,7 +309,7 @@ const FstpOperatorDetails = () => {
                 </div>
               }
             />
-            {!isSearchLoading && !isIdle && tripDetails ?
+            {!isSearchLoading && !isIdle && tripDetails && currentTrip ?
               <Row
                 key={t("ES_VEHICLE_TRIP_NO")}
                 label={`${t("ES_VEHICLE_TRIP_NO")} * `}

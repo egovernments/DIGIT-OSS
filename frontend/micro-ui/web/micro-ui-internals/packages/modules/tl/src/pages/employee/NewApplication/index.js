@@ -4,6 +4,7 @@ import { FormComposer, Toast, Header } from "@egovernments/digit-ui-react-compon
 import { newConfig as newConfigTL } from "../../../config/config";
 import { useHistory } from "react-router-dom";
 import { convertDateToEpoch } from "../../../utils";
+import _ from "lodash";
 import cloneDeep from "lodash/cloneDeep";
 
 const NewApplication = () => {
@@ -11,16 +12,13 @@ const NewApplication = () => {
   tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
-  const defaultValues = {};
   const history = useHistory();
   // delete
-  const [_formData, setFormData, _clear] = Digit.Hooks.useSessionStorage("store-data", null);
+  const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_TRADE_NEW_FORM", {});
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
-
   const [showToast, setShowToast] = useState(null);
   const [error, setError] = useState(null);
-
   const stateId = Digit.ULBService.getStateId();
   let { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
 
@@ -35,10 +33,16 @@ const NewApplication = () => {
   }, []);
 
   const onFormValueChange = (setValue, formData, formState) => {
-    if(Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.entries(formState.errors["owners"].type).filter((ob) => ob.type === "required").length ==0)
-    setSubmitValve(true);
-    else
-    setSubmitValve(!(Object.keys(formState.errors).length));
+    if(!_.isEqual(sessionFormData, formData)){
+      setSessionFormData({ ...sessionFormData, ...formData});
+    }
+
+    if(Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.entries(formState.errors["owners"].type).filter((ob) => ob.type === "required").length ==0){
+      setSubmitValve(true);
+    }
+    else{
+      setSubmitValve(!(Object.keys(formState.errors).length));
+    }
   };
 
   const onSubmit = (data) => {
@@ -160,6 +164,7 @@ const NewApplication = () => {
             .then((response) => {
               if (response?.Licenses?.length > 0) {
                 history.replace(`/digit-ui/employee/tl/response`, { data: response?.Licenses });
+                clearSessionFormData();
               }
             })
             .catch((e) => {
@@ -216,9 +221,10 @@ const NewApplication = () => {
         })}
         fieldStyle={{ marginRight: 0 }}
         onSubmit={onSubmit}
-        defaultValues={defaultValues}
+        defaultValues={/* defaultValues */ sessionFormData}
         onFormValueChange={onFormValueChange}
         breaklineStyle={{ border: "0px" }}
+
       />
       {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
     </div>

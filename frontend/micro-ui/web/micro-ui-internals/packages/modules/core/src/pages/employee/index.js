@@ -29,6 +29,7 @@ const EmployeeApp = ({
   const { path } = useRouteMatch();
   const location = useLocation();
   const showLanguageChange = location?.pathname?.includes("language-selection");
+  const isUserProfile = location?.pathname?.includes("user/profile");
   useEffect(() => {
     Digit.UserService.setType("employee");
   }, []);
@@ -46,10 +47,17 @@ const EmployeeApp = ({
             mobileView={mobileView}
             handleUserDropdownSelection={handleUserDropdownSelection}
             logoUrl={logoUrl}
-            showSidebar={true}
+            showSidebar={isUserProfile ? true : false}
             showLanguageChange={!showLanguageChange}
           />
-          <div className="grounded-container" style={{ padding: 0, paddingTop:"80px", marginLeft: "64px" }}>
+          <div
+            className={isUserProfile ? "grounded-container" : "loginContainer"}
+            style={
+              isUserProfile
+                ? { padding: 0, paddingTop: "80px", marginLeft: mobileView ? "" : "64px" }
+                : { "--banner-url": `url(${stateInfo?.bannerUrl})` }
+            }
+          >
             <Switch>
               <Route path={`${path}/user/login`}>
                 <EmployeeLogin />
@@ -85,8 +93,7 @@ const EmployeeApp = ({
             modules={modules}
           />
           <div className={`main ${DSO ? "m-auto" : ""}`}>
-            {/* <div style={{ overflowY: "auto" }}> */}
-            <div>
+            <div className="employee-app-wrapper">
               <ErrorBoundary>
                 <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
               </ErrorBoundary>

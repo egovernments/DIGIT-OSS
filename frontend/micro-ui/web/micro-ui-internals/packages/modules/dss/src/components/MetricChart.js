@@ -8,6 +8,7 @@ import { ArrowUpwardElement } from "./ArrowUpward";
 
 const MetricData = ({ t, data, code }) => {
   const { value } = useContext(FilterContext);
+  const insight=data?.insight?.value?.replace(/[+-]/g, "")?.split('%');
   return (
     <div>
       <p className="heading-m" style={{ textAlign: "right", paddingTop: "0px", whiteSpace: "nowrap" }}>
@@ -29,7 +30,7 @@ const MetricData = ({ t, data, code }) => {
         >
           {data?.insight?.indicator === "upper_green" ? ArrowUpwardElement("10px") : ArrowDownwardElement("10px")}
           <p className={`${data?.insight.colorCode}`} style={{ whiteSpace: "pre" }}>
-            {data?.insight.value.replace(/[+-]/g, "").replace("last year", "LY")}
+            {insight?.[0]&&`${insight[0]}% ${t(Digit.Utils.locale.getTransformedLocale('DSS'+insight?.[1]||""))}`}
           </p>
         </div>
       )}
@@ -123,9 +124,12 @@ const MetricChart = ({ data, setChartDenomination }) => {
   const { charts } = data;
   return (
     <>
+    <span className="chart-metric-wrapper">
+  
       {charts.map((chart, index) => (
         <MetricChartRow data={chart} key={index} index={index} setChartDenomination={setChartDenomination} />
       ))}
+        </span>
     </>
   );
 };

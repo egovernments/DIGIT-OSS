@@ -186,7 +186,8 @@ public class LineChartResponseHandler implements IResponseHandler {
     }
 
     private void addIterationResultsToMultiAggrMap(Map<String, Double> plotMap, Map<String, Double> multiAggrPlotMap, Boolean isCumulative) {
-        Map<String, Double> finalPlotMap = new LinkedHashMap<>();
+    	
+    	Map<String, Double> finalPlotMap = new LinkedHashMap<>();
 
         multiAggrPlotMap.keySet().forEach(key -> {
             finalPlotMap.put(key, 0.0);
@@ -195,17 +196,17 @@ public class LineChartResponseHandler implements IResponseHandler {
         plotMap.keySet().forEach(key -> {
             finalPlotMap.put(key, plotMap.get(key));
         });
-
-        if(isCumulative) {
-            Double previousValue = 0.0;
-            for (String key : finalPlotMap.keySet()) {
-                if (finalPlotMap.get(key) == 0.0)
-                    finalPlotMap.put(key, previousValue);
-                previousValue = finalPlotMap.get(key);
-            }
-        }
-
-        finalPlotMap.keySet().forEach(key->{
+    	
+    	if(isCumulative) {
+             Double previousValue = 0.0;
+             for (String key : finalPlotMap.keySet()) {
+                 if (finalPlotMap.get(key) == 0.0)
+                     finalPlotMap.put(key, previousValue);
+                 previousValue = finalPlotMap.get(key);
+             }
+         }
+    	
+    	finalPlotMap.keySet().forEach(key->{
             Double previousValue = multiAggrPlotMap.get(key);
             Double currentValue = finalPlotMap.get(key);
             multiAggrPlotMap.put(key, previousValue + currentValue);
