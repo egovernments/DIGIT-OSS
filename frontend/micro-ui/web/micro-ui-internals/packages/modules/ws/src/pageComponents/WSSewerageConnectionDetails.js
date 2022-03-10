@@ -6,7 +6,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 
-const WSSewerageConnectionDetails = ({ t, config, onSelect, formData }) => {
+const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }) => {
     const [proposedWaterClosets, setProposedWaterClosets] = useState(formData?.sewerageConnectionDetails?.proposedWaterClosets || "");
     const [proposedToilets, setProposedToilets] = useState(formData?.sewerageConnectionDetails?.proposedToilets || "");
     let validation = {};
@@ -32,7 +32,7 @@ const WSSewerageConnectionDetails = ({ t, config, onSelect, formData }) => {
 
     return (
         <div>
-            <Timeline currentStep={2} />
+            {userType === "citizen" && (<Timeline currentStep={2} />)}
             <FormStep
                 t={t}
                 config={config}

@@ -42,7 +42,7 @@ const WSDocumentDetails = ({ t, config, onSelect, userType, formData, setError: 
 
     return (
         <div>
-            <Timeline currentStep={3} />
+            {userType === "citizen" && (<Timeline currentStep={3} />)}
             {!wsDocsLoading ?
                 <FormStep
                     t={t}
@@ -137,6 +137,7 @@ function SelectDocument({
                             setError(t("CS_FILE_UPLOAD_ERROR"));
                         }
                     } catch (err) {
+                        console.error("Modal -> err ", err);
                         setError(t("CS_FILE_UPLOAD_ERROR"));
                     }
                 }

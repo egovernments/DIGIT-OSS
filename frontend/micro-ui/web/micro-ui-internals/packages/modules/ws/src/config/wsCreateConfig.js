@@ -84,5 +84,82 @@ export const newConfig = [
         }
       }
     ]
+  },
+  {
+    head: "WS_NEW_WATER_SEWERAGE_CONN_APPLICATION",
+    hideInCitizen: true,
+    body: [{
+      head: "",
+      body: [{
+        type: "component",
+        key: "InfoLabel",
+        component: "WSInfoLabel",
+        withoutLabel: true,
+      }]
+    },
+    {
+      head: "WS_PT_DETAILS",
+      body: [{
+        type: "component",
+        key: "PropertyDetails",
+        component: "WSPropertyDetails",
+        withoutLabel: true,
+      }]
+    },
+    {
+      head: "WS_CONN_HOLDER_DETAILS",
+      body: [{
+        type: "component",
+        key: "ConnectionHolderDetails",
+        component: "WSConnectionHolder",
+        withoutLabel: true,
+      }]
+    },
+    {
+      head: "WS_CONN_DETAILS",
+      body: [{
+        type: "component",
+        key: "ConnectionDetails",
+        component: "WSConnectionDetails",
+        withoutLabel: true,
+      }]
+    },
+    {
+      head: "WS_PLUMBER_DETAILS",
+      body: [{
+        type: "component",
+        key: "PlumberDetails",
+        component: "WSPlumberDetails",
+        withoutLabel: true,
+      }]
+    },
+    {
+      head: "WS_ROAD_CUTT_DETAILS",
+      body: [{
+        type: "component",
+        key: "RoadCuttingDetails",
+        component: "WSRoadCuttingDetails",
+        withoutLabel: true,
+      }]
+    },
+    {
+      head: "WS_ACTIV_DETAILS",
+      body: [{
+        type: "component",
+        key: "ActivationDetails",
+        component: "WSActivationDetails",
+        withoutLabel: true,
+      }]
+    },
+    {
+      head: "WS_DOC_REQUIRED",
+      body: [{
+        type: "component",
+        key: "DocumentsRequired",
+        component: "WSDocumentDetails",
+        withoutLabel: true,
+      }]
+    }
+    ]
   }
 ]
