@@ -23,10 +23,10 @@ export const configPTApproverApplication = ({
       {
         body: [
           {
-            label: action.isTerminateState || action?.action ? null : t(assigneeLabel || `WF_ROLE_${action.assigneeRoles?.[0]}`),
+            label: action.isTerminateState || action?.action === "SENDBACKTOCITIZEN" ? null : t(assigneeLabel || `WF_ROLE_${action.assigneeRoles?.[0]}`),
             // isMandatory: !action.isTerminateState,
             type: "dropdown",
-            populators: action.isTerminateState || action?.action ? null : (
+            populators: action.isTerminateState || action?.action === "SENDBACKTOCITIZEN" ? null : (
               <Dropdown
                 option={approvers}
                 autoComplete="off"
