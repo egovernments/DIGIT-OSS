@@ -5,15 +5,18 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   let requestBody = { RequestInfo: requestInfo, ...userSearchReqCriteria };
   
   let headers;
+  var instance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
   if(Boolean(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)){
     header['tenantId']=header.tenantid;
-    console.log("headers 1 -->"+JSON.stringify(headers));
-    console.log("inst -->"+envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE);
+    console.log("headers 1 -->"+JSON.stringify(header));
+    console.log("inst -->"+instance);
+    console.log("inst -->"+typeof instance);
   }
   else{
     header['tenantId'] = userSearchReqCriteria.tenantId;
-    console.log("headers 2 -->"+JSON.stringify(headers));
-    console.log("inst -->"+envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE);
+    console.log("headers 2 -->"+JSON.stringify(header));
+    console.log("inst -->"+instance);
+    console.log("inst -->"+typeof instance);
   }
 
   headers = header;
