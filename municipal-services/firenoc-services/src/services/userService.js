@@ -7,13 +7,18 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   let headers;
   if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
     header['tenantId']=header.tenantid;
+    console.log("headers 1 -->"+JSON.stringify(headers));
+    console.log("inst -->"+envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE);
   }
-  else
+  else{
     header['tenantId'] = userSearchReqCriteria.tenantId;
+    console.log("headers 2 -->"+JSON.stringify(headers));
+    console.log("inst -->"+envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE);
+  }
 
   headers = header;
 
-  console.log("headers -->"+JSON.stringify(headers));
+  
 
   var userSearchResponse = await httpRequest({
     hostURL: `${envVariables.EGOV_USER_HOST}`,

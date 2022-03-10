@@ -173,10 +173,8 @@ export const replaceSchemaPlaceholder = (query, tenantId) => {
 	if (tenantId.includes('.') && envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE) {
 		let schemaName = tenantId.split('.')[1];
 		finalQuery = query.replace(/{schema}/g, schemaName);
-    console.log("SQL QUery1:" +finalQuery);
 	} else {
 			finalQuery = query.replace(/{schema}./g, "");
-      console.log("SQL QUery2:" +finalQuery);
 	}
 	return finalQuery;
 };
