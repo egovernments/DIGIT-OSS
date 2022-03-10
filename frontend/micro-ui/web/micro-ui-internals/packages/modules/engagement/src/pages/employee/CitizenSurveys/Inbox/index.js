@@ -5,11 +5,11 @@ import FilterFormFieldsComponent from "./FilterFieldsComponent";
 import SearchFormFieldsComponents from "./SearchFieldsComponents";
 import useInboxTableConfig from "./useInboxTableConfig";
 import useInboxMobileCardsData from "./useInboxMobileDataCard";
-
+// import { useHistory } from "react-router-dom";
 const Inbox = ({ parentRoute }) => {
 
   const { t } = useTranslation()
-
+  // const history = useHistory()
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
   const userInfo = Digit.UserService.getUser().info;
@@ -55,7 +55,7 @@ const Inbox = ({ parentRoute }) => {
     }
   }
   const InboxObjectInSessionStorage = Digit.SessionStorage.get("CITIZENSURVEY.INBOX")
-
+  
   const onSearchFormReset = (setSearchFormValue) => {
     setSearchFormValue("postedBy", "")
     setSearchFormValue("title", "")
@@ -127,6 +127,7 @@ const Inbox = ({ parentRoute }) => {
   const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table:Surveys})
   
   return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxMobileCards, propsForInboxTable, formState }}></InboxComposer>
+
 }
 
 export default Inbox
