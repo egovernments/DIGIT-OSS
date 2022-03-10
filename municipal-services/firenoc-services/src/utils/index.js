@@ -170,7 +170,11 @@ export const getUpdatedTopic = (tenantId, topic) => {
 
 export const replaceSchemaPlaceholder = (query, tenantId) => {
   let finalQuery = null;
-	if (tenantId.includes('.') && envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE) {
+  var instance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof instance =="string")
+    instance = (instance.toLowerCase() == "true");
+
+	if (tenantId.includes('.') && instance) {
 		let schemaName = tenantId.split('.')[1];
 		finalQuery = query.replace(/{schema}/g, schemaName);
 	} else {
