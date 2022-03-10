@@ -93,7 +93,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const gender = data.applicationData.applicantGender;
-    const paymentPreference = data?.paymentPreference;
+    const paymentPreference = data?.paymentPreference ? data?.paymentPreference : 'POST_PAY';
     const formData = {
       fsm: {
         citizen: {
