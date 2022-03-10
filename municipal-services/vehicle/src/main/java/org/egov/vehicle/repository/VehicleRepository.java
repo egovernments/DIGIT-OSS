@@ -53,9 +53,6 @@ public class VehicleRepository {
     	private static final String QUERY_VEHICLE_TRIP_DETAIL = "SELECT id,tenantid,trip_id,referenceno,referencestatus,additionaldetails,status,itemstarttime, "
     			+ "itemendtime, volume from eg_vehicle_trip_detail ";
 
-    	private static final String QUERY_VEHICLE_STATE = "select fsm.applicationno from eg_fsm_application fsm , eg_vehicle_trip_detail vhd, eg_vehicle_trip vh, eg_wf_state_v2 wfs "
-    			+ " where fsm.applicationno=vhd.referenceno and vh.id=vhd.trip_id and vh.applicationstatus=wfs.applicationstatus  ";
-
         public void save(VehicleRequest vehicleRequest) {
             vehicleProducer.push(config.getSaveTopic(), vehicleRequest);
         }
@@ -127,22 +124,6 @@ public class VehicleRepository {
 				throw new CustomException(ErrorConstants.PARSING_ERROR, "Failed to parse response of VehicleTripIntance");
 			}
 			return vehicleTrips;
-		}
-		
-		public List<String> fetchVehicleStateMap(VehicleTripSearchCriteria vehicleTripSearchCriteria) {
-			StringBuilder builder = new StringBuilder(QUERY_VEHICLE_STATE);
-			List<Object> preparedStmtList = new ArrayList<>();
-			
-			if (!CollectionUtils.isEmpty(vehicleTripSearchCriteria.getApplicationStatus() )) {
-				builder.append(" and wfs.uuid IN (").append(createQuery(vehicleTripSearchCriteria.getApplicationStatus())).append(")");
-				addToPreparedStatement(preparedStmtList, vehicleTripSearchCriteria.getApplicationStatus());
-			}
-			
-			String query = addPaginationClause(builder,preparedStmtList,vehicleTripSearchCriteria);
-			log.info("query from 	fetchVehicleStateMap :::: " + query);
-
-			
-			return jdbcTemplate.queryForList(query, preparedStmtList.toArray(), String.class);
 		}
 		
 

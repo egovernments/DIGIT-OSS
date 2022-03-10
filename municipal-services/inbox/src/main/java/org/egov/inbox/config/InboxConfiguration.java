@@ -63,10 +63,13 @@ public class InboxConfiguration {
 	@Value("${vehicle.fetchApplicationStatusCount.path}")
 	private String vehicleApplicationStatusCountPath;
 	
-	@Value("${vehicle.fetchApplicationIds.path}")
-	private String fetchApplicationIds;
-	
 	@Value("${vehicle.searchTrip.path}")
 	private String vehicleSearchTripPath;
+	
+	@Value("${egov.fsm.host}")
+	private String fsmHost;
+
+	@Value("${egov.fsm.fetchApplicationIds.path}")
+	private String fetchApplicationIds;
 
 }
