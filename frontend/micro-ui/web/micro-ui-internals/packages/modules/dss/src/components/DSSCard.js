@@ -3,15 +3,15 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 const nationalScreenURLs = {
-  overview: { key: "national-overview", stateKey: "overview", label: "ACTION_TEST_OVERVIEW", active: false, nActive: true },
-  propertytax: { key: "national-propertytax", stateKey: "propertytax", label: "ACTION_TEST_PROPERTY_TAX", active: false, nActive: true },
-  tradelicense: { key: "national-tradelicense", stateKey: "tradelicense", label: "ACTION_TEST_TRADELICENSE", active: false, nActive: true },
-  pgr: { key: "national-pgr", stateKey: "pgr", label: "CS_COMMON_HOME_COMPLAINTS", active: false, nActive: true },
+  overview: { key: "national-overview", stateKey: "overview", label: "NURT_OVERVIEW", active: false, nActive: true },
+  propertytax: { key: "national-propertytax", stateKey: "propertytax", label: "NURT_PROPERTY_TAX", active: false, nActive: true },
+  tradelicense: { key: "national-tradelicense", stateKey: "tradelicense", label: "NURT_TRADE_LICENCE", active: false, nActive: true },
+  pgr: { key: "national-pgr", stateKey: "pgr", label: "NURT_COMPLAINS", active: false, nActive: true },
   fsm: { key: "fsm", stateKey: "fsm", label: "CS_HOME_FSM_SERVICES", active: true, nActive: false },
-  mCollect: { key: "national-mcollect", stateKey: "mCollect", label: "ACTION_TEST_MCOLLECT", active: true, nActive: true },
-  ws: { key: "national-ws", stateKey: "ws", label: "ACTION_TEST_WATER_&_SEWERAGE", active: true, nActive: true },
-  obps: { key: "nss-obps", stateKey: "obps", label: "ACTION_TEST_BUILDING_PLAN_APPROVAL", active: true, nActive: true },
-  noc: { key: "national-firenoc", stateKey: "noc", label: "ACTION_TEST_FIRE_NOC", active: true, nActive: true },
+  mCollect: { key: "national-mcollect", stateKey: "mCollect", label: "NURT_MCOLLECT", active: true, nActive: true },
+  ws: { key: "national-ws", stateKey: "ws", label: "NURT_WATER_SEWERAGE", active: true, nActive: true },
+  obps: { key: "nss-obps", stateKey: "obps", label: "DSS_BUILDING_PERMISSION", active: true, nActive: true },
+  noc: { key: "national-firenoc", stateKey: "noc", label: "NURT_FIRENOC", active: true, nActive: true },
 };
 
 export const checkCurrentScreen = () => {
@@ -66,8 +66,8 @@ const DSSCard = () => {
     headerStyle: { border: "none", height: "48px" },
     moduleName: t("ES_TITLE_DSS"),
     subHeader: t("ACTION_TEST_SURE_DASHBOARD"),
-    subHeaderLink: `/digit-ui/employee/payment/integration/dss/home`,
-    // subHeaderLink: `/employee/integration/dss/home`,
+    // subHeaderLink: `/digit-ui/employee/payment/integration/dss/home`,
+    subHeaderLink: `/employee/integration/dss/home`,
     className: "employeeCard card-home customEmployeeCard full-width-card full-employee-card-height",
     links: [...links],
   };
