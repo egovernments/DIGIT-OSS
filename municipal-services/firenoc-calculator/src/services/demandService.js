@@ -80,7 +80,11 @@ const createDemand = async (requestInfo, calculations, mdms, header) => {
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
   }
   else
@@ -144,7 +148,11 @@ const updateDemand = async (requestInfo, calculations, demandsSearch, mdms, head
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
   }
   else
@@ -168,7 +176,11 @@ const searchDemand = async (requestInfo, tenantId, consumercodeList, header) => 
   let requestBody = { RequestInfo: requestInfo };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
   }
   else
@@ -196,9 +208,13 @@ export const generateBill = async (requestInfo, billCriteria, header) => {
     let requestBody = { RequestInfo: requestInfo };
     
     let headers;
-    if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
-      header['tenantId']=header.tenantid;
-    }
+    var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
+    header['tenantId']=header.tenantid;
+  }
     else
       header['tenantId']=tenantId;
 

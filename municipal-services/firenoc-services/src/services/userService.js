@@ -5,22 +5,15 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   let requestBody = { RequestInfo: requestInfo, ...userSearchReqCriteria };
   
   let headers;
-  var instance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
-  if(typeof instance =="string")
-    instance = (instance.toLowerCase() == "true");
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
   
-  if(instance){
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
-    console.log("headers 1 -->"+JSON.stringify(header));
-    console.log("inst -->"+instance);
-    console.log("inst -->"+typeof instance);
   }
-  else{
+  else
     header['tenantId'] = userSearchReqCriteria.tenantId;
-    console.log("headers 2 -->"+JSON.stringify(header));
-    console.log("inst -->"+instance);
-    console.log("inst -->"+typeof instance);
-  }
 
   headers = header;
 
@@ -47,8 +40,12 @@ export const createUser = async (requestInfo, user, header, tenantId) => {
   let requestBody = { RequestInfo: requestInfo, user: user };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
-    header['tenantId']= header.tenantid;
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
+    header['tenantId']=header.tenantid;
   }
   else
     header['tenantId']= tenantId;
@@ -74,8 +71,12 @@ export const createUser = async (requestInfo, user, header, tenantId) => {
 export const updateUser = async (requestInfo, user, header, tenantId) => {
   // console.log(user);
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
-    header['tenantId'] = header.tenantid;
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
+    header['tenantId']=header.tenantid;
   }
   else
     header['tenantId'] = tenantId;

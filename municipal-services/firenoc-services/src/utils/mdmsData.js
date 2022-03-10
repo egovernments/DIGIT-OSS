@@ -3,8 +3,12 @@ import envVariables from "../envVariables";
 
 export default async (requestInfo = {},tenantId, header) => {
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
-    header['tenantId'] = header.tenantid;
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
+    header['tenantId']=header.tenantid;
   }
   else
     header['tenantId'] = tenantId;

@@ -38,7 +38,11 @@ export const addIDGenId = async (requestInfo, idRequests, header) => {
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
   }
   else
@@ -65,7 +69,11 @@ export const getLocationDetails = async (requestInfo, tenantId, header) => {
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
   }
   else
@@ -124,8 +132,12 @@ export const createWorkFlow = async (body, header) => {
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
-    header['tenantId'] = header.tenantid;
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
+    header['tenantId']=header.tenantid;
   }
   else
     header['tenantId'] = body.FireNOCs[0].tenantId;
@@ -170,11 +182,11 @@ export const getUpdatedTopic = (tenantId, topic) => {
 
 export const replaceSchemaPlaceholder = (query, tenantId) => {
   let finalQuery = null;
-  var instance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
-  if(typeof instance =="string")
-    instance = (instance.toLowerCase() == "true");
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
 
-	if (tenantId.includes('.') && instance) {
+	if (tenantId.includes('.') && isCentralInstance) {
 		let schemaName = tenantId.split('.')[1];
 		finalQuery = query.replace(/{schema}/g, schemaName);
 	} else {

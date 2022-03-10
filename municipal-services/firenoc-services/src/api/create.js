@@ -79,7 +79,12 @@ export const createApiResponse = async (request, res, next) => {
   
   let topic = envVariables.KAFKA_TOPICS_FIRENOC_CREATE;
   let tenantId = body.FireNOCs[0].tenantId;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE)
+  
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance)
     topic = getUpdatedTopic(tenantId, topic);
 
   payloads.push({

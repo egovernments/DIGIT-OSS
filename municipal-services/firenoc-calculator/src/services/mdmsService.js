@@ -35,7 +35,11 @@ export const mdmsData = async (requestInfo = {}, tenantId, header) => {
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
   }
   else
@@ -72,7 +76,11 @@ export const mdmsFiananceYear = async (requestInfo = {}, tenantId, header) => {
   };
 
   let headers;
-  if(envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE){
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
     header['tenantId']=header.tenantid;
   }
   else
