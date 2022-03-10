@@ -116,7 +116,8 @@ public class UserEventsService {
 			validator.validateCreateEvent(request, true);
 		log.info("enriching and storing the event......");
 		enrichCreateEvent(request);
-		producer.push(properties.getSaveEventsPersisterTopic(), request);
+		String tenantId = request.getEvents().get(0).getTenantId();
+		producer.push(tenantId, properties.getSaveEventsPersisterTopic(), request);
 		request.getEvents().forEach(event -> event.setRecepientEventMap(null));
 		return EventResponse.builder()
 				.responseInfo(responseInfo.createResponseInfoFromRequestInfo(request.getRequestInfo(), true))
@@ -137,6 +138,7 @@ public class UserEventsService {
 		validator.validateUpdateEvent(request);
 		log.info("enriching and updating the event......");
 		enrichUpdateEvent(request);
+		String tenantId = request.getEvents().get(0).getTenantId();
 		List<Event> counterEvents = new ArrayList<>();
 		request.getEvents().forEach(event -> {
 			Boolean isCounterEventReq = true;
@@ -154,7 +156,7 @@ public class UserEventsService {
 			log.info("Generating counter events.....");
 			createEvents(req, true);
 		}
-		producer.push(properties.getUpdateEventsPersisterTopic(), request);
+		producer.push(tenantId, properties.getUpdateEventsPersisterTopic(), request);
 		request.getEvents().forEach(event -> {
 			event.setRecepientEventMap(null);
 			event.setGenerateCounterEvent(null);
@@ -401,11 +403,11 @@ public class UserEventsService {
 	 * @param requestInfo
 	 * @return
 	 */
-	public ResponseInfo persistLastAccessTime(RequestInfo requestInfo) {
+	public ResponseInfo persistLastAccessTime(RequestInfo requestInfo, String tenantId) {
 		LastAccesDetails loginDetails = LastAccesDetails.builder().userId(requestInfo.getUserInfo().getUuid())
 				.lastAccessTime(new Date().getTime()).build();
 		LATWrapper wrapper = LATWrapper.builder().lastAccessDetails(loginDetails).build();
-		producer.push(properties.getLatDetailsTopic(), wrapper);
+		producer.push(tenantId, properties.getLatDetailsTopic(), wrapper);
 
 		return responseInfo.createResponseInfoFromRequestInfo(requestInfo, true);
 

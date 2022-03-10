@@ -18,16 +18,16 @@ public class UserEventsQueryBuilder {
 	public static final String EVENT_COUNT_WRAPPER = " SELECT COUNT(id) FROM ({INTERNAL_QUERY}) AS count ";
 	
 	public static final String EVENT_SEARCH_QUERY = "SELECT id, tenantid, source, eventtype, category, description, status, referenceid, name, postedby,"
-			+ " eventdetails, actions, recepient, createdby, createdtime, lastmodifiedby, lastmodifiedtime FROM eg_usrevents_events ";
+			+ " eventdetails, actions, recepient, createdby, createdtime, lastmodifiedby, lastmodifiedtime FROM {schema}.eg_usrevents_events ";
 	
-	public static final String EVENT_INNER_SEARCH_QUERY = "id IN (SELECT eventid FROM eg_usrevents_recepnt_event_registry WHERE ";
+	public static final String EVENT_INNER_SEARCH_QUERY = "id IN (SELECT eventid FROM {schema}.eg_usrevents_recepnt_event_registry WHERE ";
 	
-	public static final String INSERT_USERLAT_IFNOT_EXISTS = "INSERT INTO eg_usrevents_user_lat VALUES (:userid, 0) ON CONFLICT DO NOTHING";
+	public static final String INSERT_USERLAT_IFNOT_EXISTS = "INSERT INTO {schema}.eg_usrevents_user_lat VALUES (:userid, 0) ON CONFLICT DO NOTHING";
 	
-	public static final String COUNT_OF_NOTIFICATION_QUERY = "SELECT (SELECT COUNT(*) as total FROM eg_usrevents_events WHERE id IN (SELECT eventid FROM eg_usrevents_recepnt_event_registry WHERE recepient IN (:recepients))), "
-			+ "COUNT(*) as unread FROM eg_usrevents_events WHERE id IN (SELECT eventid FROM eg_usrevents_recepnt_event_registry WHERE recepient IN (:recepients)) "
-			+ "AND id NOT IN (SELECT referenceid FROM eg_usrevents_events WHERE referenceid NOTNULL) AND "
-			+ "lastmodifiedtime > (SELECT lastaccesstime FROM eg_usrevents_user_lat WHERE userid IN (:userid)) AND status = :status";
+	public static final String COUNT_OF_NOTIFICATION_QUERY = "SELECT (SELECT COUNT(*) as total FROM {schema}.eg_usrevents_events WHERE id IN (SELECT eventid FROM {schema}.eg_usrevents_recepnt_event_registry WHERE recepient IN (:recepients))), "
+			+ "COUNT(*) as unread FROM {schema}.eg_usrevents_events WHERE id IN (SELECT eventid FROM {schema}.eg_usrevents_recepnt_event_registry WHERE recepient IN (:recepients)) "
+			+ "AND id NOT IN (SELECT referenceid FROM {schema}.eg_usrevents_events WHERE referenceid NOTNULL) AND "
+			+ "lastmodifiedtime > (SELECT lastaccesstime FROM {schema}.eg_usrevents_user_lat WHERE userid IN (:userid)) AND status = :status";
 	
 	/**
 	 * Returns query for search events

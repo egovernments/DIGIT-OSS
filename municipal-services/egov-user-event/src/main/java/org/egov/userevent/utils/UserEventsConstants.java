@@ -37,6 +37,7 @@ public class UserEventsConstants {
 	public static final String LOCALIZATION_COUNTEREVENT_ONUPDATE_CODE = "egovuserevents.notification.counterevent.onupdate";
 	public static final String LOCALIZATION_COUNTEREVENT_ONUPDATE_DEF_MSG = "Details of <event_name> have been updated.";
 
+	public static final String TENANTID_MDC_STRING = "TENANTID";
 
 
 	

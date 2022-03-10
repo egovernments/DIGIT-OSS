@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.tracer.model.CustomException;
 import org.egov.userevent.repository.querybuilder.UserEventsQueryBuilder;
 import org.egov.userevent.repository.rowmappers.UserEventRowMapper;
 import org.egov.userevent.repository.rowmappers.NotificationCountRowMapper;
@@ -32,7 +34,11 @@ public class UserEventRepository {
 	
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	
+
+    @Autowired
+	private MultiStateInstanceUtil multiStateInstanceUtil;
+
+
 	/**
 	 * Repository method to fetch events
 	 * 
@@ -42,9 +48,10 @@ public class UserEventRepository {
 	public List<Event> fetchEvents(EventSearchCriteria criteria){
 		Map<String, Object> preparedStatementValues = new HashMap<>();
 		String query = queryBuilder.getSearchQuery(criteria, preparedStatementValues);
-		log.info("Query: "+query);
 		List<Event> events = new ArrayList<>();
 		try {
+			query = multiStateInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+			log.info("Query: "+query);
 			events = namedParameterJdbcTemplate.query(query, preparedStatementValues, rowMapper);
 		}catch(Exception e) {
 			log.error("Error while fetching results from db: ", e);
@@ -63,9 +70,10 @@ public class UserEventRepository {
 		Map<String, Object> preparedStatementValues = new HashMap<>();
 		String insertQuery = queryBuilder.getInserIfNotExistsQuery(criteria, preparedStatementValues);
 		String query = queryBuilder.getCountQuery(criteria, preparedStatementValues);
-		log.info("Query: "+query);
 		NotificationCountResponse response = null;
 		try {
+			query = multiStateInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+			log.info("Query: "+query);
 			namedParameterJdbcTemplate.update(insertQuery, preparedStatementValues);
 			response = namedParameterJdbcTemplate.query(query, preparedStatementValues, countRowMapper);
 		}catch(Exception e) {
@@ -81,9 +89,10 @@ public class UserEventRepository {
 		String query = queryBuilder.getSearchQuery(criteria, preparedStatementValues);
 		query = queryBuilder.addCountWrapper(query);
 		criteria.setIsEventsCountCall(Boolean.FALSE);
-		log.info("Count Query: " + query);
 		Integer totalCount = 0;
 		try {
+			query = multiStateInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+			log.info("Count Query: " + query);
 			totalCount = namedParameterJdbcTemplate.queryForObject(query, preparedStatementValues, Integer.class);
 		}catch(Exception e) {
 			log.error("Error while fetching total event count from db: ", e);
