@@ -106,8 +106,7 @@ const fireNocOwnersRowMapper = async (row, mapper = [], header) => {
   } else {
     let user = {};
     if (row.useruuid) {
-      console.log("5 inst "+row.tenantId);
-      user = await searchUser(requestInfo, row.useruuid, header, row.tenantId);
+      user = await searchUser(requestInfo, row.useruuid, header, envVariables.EGOV_DEFAULT_STATE_ID);
     }
     user = {
       ...ownerObject,
