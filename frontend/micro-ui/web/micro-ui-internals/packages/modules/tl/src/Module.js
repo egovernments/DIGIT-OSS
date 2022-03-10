@@ -42,7 +42,7 @@ import ReNewApplication from "./pages/employee/ReNewApplication";
 import Search from "./pages/employee/Search";
 import Response from "./pages/Response";
 
-import ApplicationDetails from "./pages/citizen/Applications/ApplicationDetails"
+import TLApplicationDetails from "./pages/citizen/Applications/ApplicationDetails"
 import CreateTradeLicence from "./pages/citizen/Create";
 import EditTrade from "./pages/citizen/EditTrade";
 import { TLList } from "./pages/citizen/Renewal";
@@ -130,7 +130,7 @@ const componentsToRegister = {
   TL_INBOX_FILTER,
   TLInfoLabel,
   TLWFApplicationTimeline,
-  ApplicationDetails,
+  TLApplicationDetails,
   TLCreateTradeLicence : CreateTradeLicence,
   TLEditTrade : EditTrade,
   TLList,
