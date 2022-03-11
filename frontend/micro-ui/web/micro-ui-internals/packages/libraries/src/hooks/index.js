@@ -364,7 +364,7 @@ const ws = {
   useWaterSearch,
   useSewarageSearch,
   useMyBillsWaterSearch,
-  useMyBillsSewarageSearch
+  useMyBillsSewarageSearch,
   useMyApplicationSearch,
   useWSDocumentSearch
 }
