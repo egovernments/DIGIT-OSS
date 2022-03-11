@@ -1,11 +1,12 @@
 import {
     Card, CardHeader, CardSubHeader, CardText,
-    CitizenInfoLabel, LinkButton, Row, StatusTable, SubmitBar, EditIcon, Header
+    CitizenInfoLabel, LinkButton, Row, StatusTable, SubmitBar, EditIcon, Header, CardSectionHeader
   } from "@egovernments/digit-ui-react-components";
   import React from "react";
   import { useTranslation } from "react-i18next";
   import { useHistory, useRouteMatch } from "react-router-dom";
   import Timeline from "../../../components/Timeline";
+  import WSDocument from "../../../pageComponents/WSDocument";
   
   const CheckPage = ({ onSubmit, value }) => {
     const { t } = useTranslation();
@@ -74,13 +75,13 @@ import {
             style={{ width: "100px", display: "inline" }}
             onClick={() => routeTo(`${routeLink}/document-details`)}
           />
-        {documents && documents.map((doc, index) => (
+        {documents && documents?.documents.map((doc, index) => (
           <div key={`doc-${index}`}>
          {<div><CardSectionHeader>{t(doc?.documentType?.split('.').slice(0,2).join('_'))}</CardSectionHeader>
           <StatusTable>
-          {/* NEED TO BE DONE AFTER FILETSORE API IS FIXED
-           <WSDocument value={isEditApplication?[...PrevStateDocuments,...documents.documents]:value} Code={doc?.documentType} index={index} isNOC={false}/>  */}
-          {documents?.length != index+ 1 ? <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/> : null}
+          {
+           <WSDocument value={value} Code={doc?.documentType} index={index} /> }
+          {documents?.documents.length != index+ 1 ? <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/> : null}
           </StatusTable>
           </div>}
           </div>
