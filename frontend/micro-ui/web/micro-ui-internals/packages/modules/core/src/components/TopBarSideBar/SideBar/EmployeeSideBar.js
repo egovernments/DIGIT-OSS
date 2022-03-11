@@ -116,8 +116,9 @@ const EmployeeSideBar = () => {
   ];
 
   links = links.filter((link) => (link.role ? checkForEmployee(link.role) : true));
-
+  
   let menuItems = [...EmployeeSideBarMenu(t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC, FSTPOperator, PGR, pgrLinks)];
+
   let index = menuItems.findIndex((item) => item?.moduleName === "Trade License");
 
   if (index !== -1) {

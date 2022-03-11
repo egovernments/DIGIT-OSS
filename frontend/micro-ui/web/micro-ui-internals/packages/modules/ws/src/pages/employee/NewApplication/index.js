@@ -19,7 +19,7 @@ const NewApplication = () => {
       <div style={{ marginLeft: "15px" }}>
         <Header>{t(config.head)}</Header>
       </div>
-      <FormComposer config={config.body}></FormComposer>
+      <FormComposer config={config.body} userType={"employee"}></FormComposer>
     </React.Fragment>
   );
 };
