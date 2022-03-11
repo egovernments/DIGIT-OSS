@@ -86,7 +86,8 @@ public class WsQueryBuilder {
 		Set<String> propertyIds = new HashSet<>();
 		String propertyIdQuery = " (conn.property_id in (";
 
-		if (!StringUtils.isEmpty(criteria.getMobileNumber()) || !StringUtils.isEmpty(criteria.getPropertyId())) {
+		if (!StringUtils.isEmpty(criteria.getMobileNumber()) || !StringUtils.isEmpty(criteria.getDoorNo())
+				|| !StringUtils.isEmpty(criteria.getOwnerName()) || !StringUtils.isEmpty(criteria.getPropertyId())) {
 			List<Property> propertyList = waterServicesUtil.propertySearchOnCriteria(criteria, requestInfo);
 			propertyList.forEach(property -> propertyIds.add(property.getPropertyId()));
 			criteria.setPropertyIds(propertyIds);
@@ -99,10 +100,13 @@ public class WsQueryBuilder {
 		}
 		
 		Set<String> uuids = null;
-		if(!StringUtils.isEmpty(criteria.getMobileNumber())) {
-			uuids = userService.getUUIDForUsers(criteria.getMobileNumber(), criteria.getTenantId(), requestInfo);
+		if(!StringUtils.isEmpty(criteria.getMobileNumber()) || !StringUtils.isEmpty(criteria.getOwnerName())
+				|| !StringUtils.isEmpty(criteria.getDoorNo())) {
 			boolean userIdsPresent = false;
-			criteria.setUserIds(uuids);
+			if(!StringUtils.isEmpty(criteria.getMobileNumber()) || !StringUtils.isEmpty(criteria.getOwnerName())) {
+				uuids = userService.getUUIDForUsers(criteria.getMobileNumber(),criteria.getOwnerName(), criteria.getTenantId(), requestInfo);
+				criteria.setUserIds(uuids);
+				}
 			if (!CollectionUtils.isEmpty(uuids)) {
 				addORClauseIfRequired(preparedStatement, query);
 				if(!propertyIdsPresent)
@@ -114,12 +118,16 @@ public class WsQueryBuilder {
 			if(propertyIdsPresent && !userIdsPresent){
 				query.append(")");
 			}
+			if(!propertyIdsPresent && !userIdsPresent) {
+				return null;
+			}
 		}
-
+		
 		/*
 		 * to return empty result for mobilenumber empty result
 		 */
 		if (!StringUtils.isEmpty(criteria.getMobileNumber()) 
+				&& !StringUtils.isEmpty(criteria.getDoorNo()) && !StringUtils.isEmpty(criteria.getOwnerName())
 				&& CollectionUtils.isEmpty(criteria.getPropertyIds()) && CollectionUtils.isEmpty(criteria.getUserIds())
 				&& StringUtils.isEmpty(criteria.getApplicationNumber()) && StringUtils.isEmpty(criteria.getPropertyId())
 				&& StringUtils.isEmpty(criteria.getConnectionNumber()) && CollectionUtils.isEmpty(criteria.getIds())) {
@@ -137,7 +145,8 @@ public class WsQueryBuilder {
 				preparedStatement.add(criteria.getTenantId());
 			}
 		}
-		if (!StringUtils.isEmpty(criteria.getPropertyId()) && StringUtils.isEmpty(criteria.getMobileNumber())) {
+		if (!StringUtils.isEmpty(criteria.getPropertyId()) && (StringUtils.isEmpty(criteria.getMobileNumber())
+				||  StringUtils.isEmpty(criteria.getDoorNo()) ||  StringUtils.isEmpty(criteria.getOwnerName()))) {
 			if(propertyIdsPresent)
 				query.append(")");
 			else{
