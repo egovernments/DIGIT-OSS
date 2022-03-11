@@ -177,6 +177,8 @@ import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
 import usewsTenants from "./ws/useTenants";
 import useWaterSearch from "./ws/useWaterSearch";
 import useSewarageSearch from "./ws/useSewarageSearch";
+import useMyBillsWaterSearch from "./ws/useMyBillsWaterSearch";
+import useMyBillsSewarageSearch from "./ws/useMyBillsSewarageSearch";
 import useMyApplicationSearch from "./ws/useMyApplicationSearch";
 import useWSDocumentSearch from "./ws/useWSDocumentSearch";
 
@@ -361,6 +363,8 @@ const ws = {
   usewsTenants,
   useWaterSearch,
   useSewarageSearch,
+  useMyBillsWaterSearch,
+  useMyBillsSewarageSearch
   useMyApplicationSearch,
   useWSDocumentSearch
 }

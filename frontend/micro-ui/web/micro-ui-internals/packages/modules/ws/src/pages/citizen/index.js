@@ -6,9 +6,11 @@ import WSCreate from "./WSCreate/index";
 import SearchConnectionComponent from "./SearchConnection";
 import SearchResultsComponent from "./SearchResults";
 import TestAcknowledgment from "./TestAcknowledgment";
+import WNSMyBillsComponent from "./WnSMyBills";
 import { WSMyApplications } from "./WSMyApplications";
 import WSApplicationDetails from "./WSApplicationDetails";
 import WSAdditionalDetails from "./WSMyApplications/additionalDetails";
+
 
 const App = ({ path }) => {
   const location = useLocation();
@@ -19,6 +21,7 @@ const App = ({ path }) => {
       <Switch>
         <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
         <Route path={`${path}/search`} component={SearchConnectionComponent} />
+        <Route path={`${path}/wns-my-bills`} component={WNSMyBillsComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} />
         <Route path={`${path}/test-acknowledgment`} component={TestAcknowledgment} />
         <PrivateRoute path={`${path}/my-application`} component={WSMyApplications} />

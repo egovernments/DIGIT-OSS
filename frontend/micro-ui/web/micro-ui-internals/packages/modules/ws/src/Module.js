@@ -50,6 +50,10 @@ const WSLinks = ({ matchPath, userType }) => {
 
   const links = [
     {
+      link: `${matchPath}/wns-my-bills`,
+      i18nKey: t("ACTION_TEST_WNS_MY_BILLS"),
+    },
+    {
       link: ``,
       i18nKey: t("ACTION_TEST_WATER_AND_SEWERAGE_BILL"),
     },
