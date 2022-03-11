@@ -1,5 +1,6 @@
 package org.egov.demoutility.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.egov.demoutility.model.DemoUtilityRequest;
 import org.egov.demoutility.service.DemoUtilityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,11 @@ public class DemoUtilityController {
 	DemoUtilityService demoUtilityService;
 
 	@PostMapping("_createdemousers")
-	public ResponseEntity<?> createdemousers(@RequestBody DemoUtilityRequest demoUtilityRequest) {
+	public ResponseEntity<?> createdemousers(@RequestBody DemoUtilityRequest demoUtilityRequest) throws Exception {
 
-		String message = demoUtilityService.createdemousers(demoUtilityRequest);
+		demoUtilityService.createdemousers(demoUtilityRequest);
 
-		return new ResponseEntity<>(message, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 
 	}
 

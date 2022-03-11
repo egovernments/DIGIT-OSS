@@ -4,9 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UtilityConstants {
-	
-	public static final String  MESSAGE="Processing your request, you will get email with all details soon";
-	
+
 	public static final String  TENANTID="pg.cityb";
 	public static final String  TENANTID_TOKEN="pg.citya";
 	
@@ -77,23 +75,13 @@ public class UtilityConstants {
 			+ " Login url for DSO role is - <U> https://staging.digit.org/digit-ui/citizen/login </U>  <br> <br> Thank you, <br>eGov Team</p>";
 	
 	public static StringBuffer EMAIL_ENDING_CONTENT=new StringBuffer("</body></html>");
-	
 
-    public static final String PATTERN_NAME = "^[^\\\\$\\\"'<>?\\\\\\\\~`!@#$%^()+={}\\\\[\\\\]*,:;“”‘’]*$";
-
-
-    public static final String PATTERN_GENDER = "^[a-zA-Z ]*$";
-    public static final String PATTERN_MOBILE = "(^$|[0-9]{10})";
-    public static final String PATTERN_CITY = "^[a-zA-Z. ]*$";
-    public static final String PATTERN_TENANT = "^[a-zA-Z. ]*$";
     public static final List<String> NUMBERS=Arrays.asList("ONE","TWO","THREE","FOUR","FIVE","SIX");
-	
-	
-	
-	
-	
 
-	
-	
+	public static final String PATTERN_ORGANISATION_CODE = "[A-Z]{3}";
+
+	public static final String INVALID_ORGANISATION_CODE = "Invalid Code";
+
+	public static final String INVALID_ORGANISATION_CODE_MESSAGE = "Enter 3 characters code for your organization (only alphabets)";
 	
 }
