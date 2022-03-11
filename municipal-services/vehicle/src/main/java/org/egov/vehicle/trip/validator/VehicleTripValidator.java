@@ -20,7 +20,9 @@ import org.egov.vehicle.trip.service.VehicleTripFSMService;
 import org.egov.vehicle.trip.util.VehicleTripConstants;
 import org.egov.vehicle.trip.web.model.PlantMapping;
 import org.egov.vehicle.trip.web.model.VehicleTrip;
+import org.egov.vehicle.trip.web.model.VehicleTripDetail;
 import org.egov.vehicle.trip.web.model.VehicleTripRequest;
+import org.egov.vehicle.trip.web.model.VehicleTripResponse;
 import org.egov.vehicle.trip.web.model.VehicleTripSearchCriteria;
 import org.egov.vehicle.util.VehicleUtil;
 import org.egov.vehicle.validator.MDMSValidator;
@@ -186,18 +188,18 @@ public class VehicleTripValidator {
 		// TODO: Below Validation is required while marking the vehicleTrip for ReadyForDispoal
 		if( request.getWorkflow().getAction().equalsIgnoreCase(VehicleTripConstants.READY_FOR_DISPOSAL)) {
 			
-			request.getVehicleTrip().forEach(vehicleTrip->{
+				request.getVehicleTrip().forEach(vehicleTrip->{
 				
 				vehicleTrip.getTripDetails().forEach(tripDetail->{
 					
 					if(tripDetail.getItemStartTime() <=0 || tripDetail.getItemEndTime() <= 0 || tripDetail.getItemStartTime() > tripDetail.getItemEndTime()) {
-						throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR, "trip Start and End Time are invliad for tripDetails referenceNo: " + tripDetail.getReferenceNo());
+						throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR, "trip Start and End Time are invalid for tripDetails referenceNo: " + tripDetail.getReferenceNo());
 					}
 					
 					if(tripDetail.getVolume() == null  || tripDetail.getVolume() <= 0) {
 						throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR, "Invalid Volume for  tripDetails referenceNo: " + tripDetail.getReferenceNo());
 					}
-				});
+			   });
 				
 				List<Object> preparedStmtList = new ArrayList<>();
 				String query = queryBuilder.getVehicleLogExistQuery(vehicleTrip.getId(), preparedStmtList);
@@ -206,25 +208,9 @@ public class VehicleTripValidator {
 					throw new CustomException(VehicleTripConstants.UPDATE_VEHICLELOG_ERROR, "VehicleLog Not found in the System" + request.getVehicleTrip());
 				}
 			});
-//			vehicleTrip.getTripDetails().forEach(tripDetail->{
-//				
-//				if(tripDetail.getItemStartTime() <=0 || tripDetail.getItemEndTime() <= 0 || tripDetail.getItemStartTime() > tripDetail.getItemEndTime()) {
-//					throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR, "trip Start and End Time are invliad for tripDetails referenceNo: " + tripDetail.getReferenceNo());
-//				}
-//				
-//				if(tripDetail.getVolume() == null  || tripDetail.getVolume() <= 0) {
-//					throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR, "Invalid Volume for  tripDetails referenceNo: " + tripDetail.getReferenceNo());
-//				}
-//			});
-			
-//			List<Object> preparedStmtList = new ArrayList<>();
-//			String query = queryBuilder.getVehicleLogExistQuery(request.getVehicleTrip().getId(), preparedStmtList);
-//			int vehicleLogCount = vehicleTripRepository.getDataCount(query, preparedStmtList);
-//			if(vehicleLogCount <= 0) {
-//				throw new CustomException(VehicleTripConstants.UPDATE_VEHICLELOG_ERROR, "VehicleLog Not found in the System" + request.getVehicleTrip());
-//			}
 		} else if (request.getWorkflow().getAction().equalsIgnoreCase(VehicleTripConstants.DISPOSE)) {
 			ArrayList<String> ids = new ArrayList<String>();
+			
 			request.getVehicleTrip().forEach(vehicleTrip -> {
 				ids.add(vehicleTrip.getVehicleId());
 				VehicleSearchCriteria criteria = VehicleSearchCriteria.builder().ids(ids).build();
@@ -238,6 +224,8 @@ public class VehicleTripValidator {
 				if (vehicleTrip.getTripEndTime() <= 0) {
 					throw new CustomException(VehicleTripConstants.INVALID_TRIP_ENDTIME, "Invalid Trip end time");
 				}
+				
+				ValidateTripInOutTime(vehicleTrip, vehicleTrip.getTripDetails().get(0));
 
 				// For FSM_VEHICLE_TRIP service, set the plant code based on the logged in user uuid
 
@@ -263,39 +251,6 @@ public class VehicleTripValidator {
 
 			});
 
-//			ids.add(request.getVehicleTrip().getVehicleId());
-//			VehicleSearchCriteria criteria = VehicleSearchCriteria.builder().ids(ids).build();
-//			Vehicle vehicle = repository.getVehicleData(criteria).getVehicle().get(0);
-//			if(request.getVehicleTrip().getVolumeCarried() == null  || request.getVehicleTrip().getVolumeCarried() <= 0 ) {
-//				throw new CustomException(VehicleTripConstants.INVALID_VOLUME, "Invalid volume carried");
-//			}else if(request.getVehicleTrip().getVolumeCarried() > vehicle.getTankCapacity()) {
-//				throw new CustomException(VehicleTripConstants.VOLUME_GRT_CAPACITY, "Waster collected is greater than vehicle Capcity");
-//			}
-//				if(request.getVehicleTrip().getTripEndTime() <= 0) {
-//				throw new CustomException(VehicleTripConstants.INVALID_TRIP_ENDTIME, "Invalid Trip end time");
-//			}
-
-//			// For FSM_VEHICLE_TRIP service, set the plant code based on the logged in user uuid
-//
-//			if (VehicleTripConstants.FSM_VEHICLE_TRIP_BusinessService
-//					.equalsIgnoreCase(request.getVehicleTrip().getBusinessService())) {
-//				PlantMapping plantMapping = vehicleTripFSMService.getPlantMapping(request.getRequestInfo(),
-//						request.getVehicleTrip().getTenantId(), request.getRequestInfo().getUserInfo().getUuid());
-//				if (null != plantMapping && StringUtils.isNotEmpty(plantMapping.getPlantCode())) {
-//					ObjectNode additionalDtlObjectNode = (ObjectNode) request.getVehicleTrip().getAdditionalDetails();
-//					if (null == additionalDtlObjectNode) {
-//						ObjectMapper mapper = new ObjectMapper();
-//						additionalDtlObjectNode = mapper.createObjectNode();
-//					}
-//					log.info("FSTP Plant code"+ plantMapping.getPlantCode());
-//					additionalDtlObjectNode.set("plantCode", TextNode.valueOf(plantMapping.getPlantCode()));
-//					request.getVehicleTrip().setAdditionalDetails(additionalDtlObjectNode);
-//				} else {
-//					log.error("Logged user to FSTP mapping doesn't exists. ");
-//					throw new CustomException(VehicleTripConstants.EMPLOYEE_FSTP_MAP_NOT_EXISTS,
-//							"Logged user to FSTP mapping doesn't exists.");
-//				}
-//			}
 		} else if (request.getWorkflow().getAction().equalsIgnoreCase(VehicleTripConstants.DECLINEVEHICLE)) {
 					// SAN-800: Added new workflow for Vehicle Trip decline
 					request.getVehicleTrip().forEach(vehicleTrip->{
@@ -314,7 +269,7 @@ public class VehicleTripValidator {
 		
 					String tenantId = vehicleTrip.getTenantId().split("\\.")[0];
 					Object mdmsData = util.mDMSCall(request.getRequestInfo(), tenantId);
-					String vehicleDeclineReason = (String) additionalDetails.get("VehicleDeclineReason");
+					String vehicleDeclineReason = (String) additionalDetails.get("vehicleDeclineReason");
 					mdmsValidator.validateMdmsData(null, mdmsData);
 					mdmsValidator.validateVehicleDeclineReason(vehicleDeclineReason);
 		
@@ -328,6 +283,42 @@ public class VehicleTripValidator {
 				});
 			
 	
+		}
+	}
+
+	private void ValidateTripInOutTime(VehicleTrip requestVehicleTrip, VehicleTripDetail requestTripDetail) {
+
+		VehicleTripSearchCriteria tripSearchCriteria = new VehicleTripSearchCriteria();
+		String[] referenceNo = { requestTripDetail.getReferenceNo() };
+		tripSearchCriteria.setRefernceNos(Arrays.asList(referenceNo));
+		tripSearchCriteria.setTenantId(requestVehicleTrip.getTenantId());
+		tripSearchCriteria.setApplicationStatus(Arrays.asList(VehicleTripConstants.VEHICLE_LOG_APPLICATION_DISPOSED));
+		;
+
+		if (tripSearchCriteria.getRefernceNos() != null
+				&& !CollectionUtils.isEmpty(tripSearchCriteria.getRefernceNos())) {
+
+			List<String> tripIds = vehicleTripRepository.getTripFromRefrences(tripSearchCriteria.getRefernceNos());
+
+			if (CollectionUtils.isEmpty(tripSearchCriteria.getIds())) {
+				tripSearchCriteria.setIds(tripIds);
+			} else {
+				tripSearchCriteria.getIds().addAll(tripIds);
+			}
+
+		}
+
+		VehicleTripResponse response = vehicleTripRepository.getVehicleLogData(tripSearchCriteria);
+
+		if (response.getVehicleTrip() != null && !CollectionUtils.isEmpty(response.getVehicleTrip())) {
+			response.getVehicleTrip().forEach(vehicletrip -> {
+				if (requestVehicleTrip.getTripStartTime() < vehicletrip.getTripEndTime()) {
+					throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR,
+							"Current Trip Start time: " + requestVehicleTrip.getTripStartTime()
+									+ "should be after the previous trip end time : "
+									+ requestVehicleTrip.getTripEndTime());
+				}
+			});
 		}
 	}
 
