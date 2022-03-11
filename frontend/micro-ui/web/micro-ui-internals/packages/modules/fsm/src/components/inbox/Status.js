@@ -57,7 +57,7 @@ const Status = ({ onAssignmentChange, fsmfilters, mergedRoleDetails, statusMap }
             <StatusCount key={index} onAssignmentChange={onAssignmentChange} status={option} fsmfilters={fsmfilters} statusMap={statusMap} />
           ))
         : null}
-      {mergedRoleDetails.fixed === false ? (
+      {mergedRoleDetails.fixed === false && moreApplicationWithCount.length > 0 ? (
         <div className="filter-button" onClick={() => showMoreStatus(!moreStatus)}>
           {" "}
           {moreStatus ? t("ES_COMMON_LESS") : t("ES_COMMON_MORE")}{" "}
