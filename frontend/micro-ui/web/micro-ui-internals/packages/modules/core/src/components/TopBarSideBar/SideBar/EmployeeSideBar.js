@@ -118,7 +118,7 @@ const EmployeeSideBar = () => {
   links = links.filter((link) => (link.role ? checkForEmployee(link.role) : true));
 
   let menuItems = [...EmployeeSideBarMenu(t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC, FSTPOperator, PGR, pgrLinks)];
-  let index = menuItems.findIndex((item) => item.moduleName === "Trade License");
+  let index = menuItems.findIndex((item) => item?.moduleName === "Trade License");
 
   if (index !== -1) {
     menuItems[index].links = [...menuItems[index].links, ...links];
@@ -136,7 +136,7 @@ const EmployeeSideBar = () => {
     link: "/digit-ui/employee/",
   });
 
-  let pgrIndex = menuItems.findIndex((item) => item.moduleName === "Complaints");
+  let pgrIndex = menuItems.findIndex((item) => item?.moduleName === "Complaints");
   if (pgrIndex !== -1) {
     if (!menuItems[pgrIndex].links) {
       menuItems[pgrIndex].links = [];
@@ -150,7 +150,7 @@ const EmployeeSideBar = () => {
     });
   }
 
-  let ptIndex = menuItems.findIndex((item) => item.moduleName === "Property Tax");
+  let ptIndex = menuItems.findIndex((item) => item?.moduleName === "Property Tax");
   if (ptIndex !== -1) {
     if (!menuItems[ptIndex].links) {
       menuItems[ptIndex].links = [];
@@ -184,7 +184,7 @@ const EmployeeSideBar = () => {
               <div className="actions">
                 <Link to={item.link} key={index}>
                   {item.Icon}
-                  <span>{item.moduleName}</span>
+                  <span>{item?.moduleName}</span>
                 </Link>
               </div>
             </div>
