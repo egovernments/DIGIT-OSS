@@ -268,6 +268,7 @@ export const getunitforBPA = (units) => {
       unit.push({
         blockIndex: index,
         usageCategory: ob.usageCategory,
+        occupancyType: ob.occupancyType,
         floorNo: ob.floorNo,
         unitType: ob.unitType,
         id: ob.id,
