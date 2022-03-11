@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation, Route } from "react-router-dom";
-import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-components";
+import { PrivateRoute, BackButton, BreadCrumb } from "@egovernments/digit-ui-react-components";
 import NewApplication from "./NewApplication"
 import WSDocsRequired from "../../pageComponents/WSDocsRequired";
 // import SearchConnectionComponent from "./SearchConnection";
@@ -12,7 +12,8 @@ const App = ({ path }) => {
   const { t } = useTranslation();
   return (
     <React.Fragment>
-      <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>
+      {/* <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton> */}
+      <BreadCrumb></BreadCrumb>
       <Switch>
         <PrivateRoute path={`${path}/create-application`} component={WSDocsRequired} />
         <PrivateRoute path={`${path}/new-application`} component={NewApplication} />
