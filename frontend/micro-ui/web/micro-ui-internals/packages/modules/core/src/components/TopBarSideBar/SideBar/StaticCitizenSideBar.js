@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { HomeIcon, EditPencilIcon, LogoutIcon, Loader } from "@egovernments/digit-ui-react-components";
+import { HomeIcon, EditPencilIcon, LogoutIcon, Loader, AddressBookIcon } from "@egovernments/digit-ui-react-components";
 import { Link, useLocation } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { Phone } from "@egovernments/digit-ui-react-components";
-import SubMenu from "./SubMenu";
+import CitizenSubMenuSideBar from "./CitizenSubMenuSideBar";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -59,7 +59,7 @@ const StaticCitizenSideBar = ({ logout }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
-  const { isLoading, data: getCitizenMenu, isFetched: fetchedCitizrn } = Digit.Hooks.useAccessControl();
+  const { isLoading, data: getCitizenMenu, isFetched: fetchedCitizen } = Digit.Hooks.useAccessControl();
 
   const [isEmployee, setisEmployee] = useState(false);
 
@@ -74,13 +74,8 @@ const StaticCitizenSideBar = ({ logout }) => {
     Digit.UserService.logout();
   };
 
-  //wait citizen data to be fetched
-
   let menuItems = [...SideBarMenu(t, showProfilePage, redirectToLoginPage, isEmployee)];
 
-  //push getCitizenMenu into menuItems
-
-  // menuItems = [...res, ...menuItems];
   menuItems = menuItems.filter((item) => item.element !== "LANGUAGE");
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -112,28 +107,41 @@ const StaticCitizenSideBar = ({ logout }) => {
         </Link>
       );
     }
-    if (item.type === "submenu") {
-      return <SubMenu item={item} />;
+    if (item.type === "dynamic") {
+      return <CitizenSubMenuSideBar item={item} />;
     }
     return <Item />;
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
   let profileItem;
 
   if (isFetched && user && user.access_token) {
     profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t} />;
 
-    if (fetchedCitizrn) {
-      const data = getCitizenMenu?.actions;
-      menuItems = [...menuItems, ...data];
+    if (fetchedCitizen) {
+      const data = getCitizenMenu?.actions || [];
+
+      const staticModuleName = {
+        type: "dynamic",
+        moduleName: t("DASHBOARD_CITIZEN_SERVICES_LABEL"),
+        Icon: <AddressBookIcon className="icon" />,
+
+        links: [],
+      };
+      data.forEach((item) => {
+        staticModuleName.links.push(item);
+      });
+
+      menuItems = [...menuItems, staticModuleName];
     }
 
-    menuItems = menuItems.filter((item) => item?.id !== "login-btn" && item.url === "url");
-    menuItems = menuItems.sort((a, b) => a.orderNumber - b.orderNumber);
-    console.log("aaa", menuItems);
+    menuItems = menuItems.filter((item) => item?.id !== "login-btn");
 
     menuItems = [
       ...menuItems,
-      // ...data,
 
       {
         text: t("EDIT_PROFILE"),
@@ -177,12 +185,6 @@ const StaticCitizenSideBar = ({ logout }) => {
     ];
   }
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  // console.log(menuItems);
-
   return (
     <React.Fragment>
       <div>
@@ -208,7 +210,7 @@ const StaticCitizenSideBar = ({ logout }) => {
             {menuItems.map((item, index) => (
               <div className={`sidebar-list ${pathname === item.link ? "active" : ""}`} key={index}>
                 <MenuItem item={item} />
-                <Link to={item.navigationURL}> {item.displayName} </Link>
+                {/* <Link to={item.navigationURL}> {item.displayName} </Link> */}
               </div>
             ))}
           </div>

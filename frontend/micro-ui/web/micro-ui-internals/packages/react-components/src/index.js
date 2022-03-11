@@ -144,6 +144,9 @@ import {
   CheckSvg,
   AddressBookIcon,
   LocationIcon,
+  CollectionsBookmarIcons,
+  FinanceChartIcon,
+  CollectionIcon,
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -387,4 +390,7 @@ export {
   ArrowDirection,
   AddressBookIcon,
   LocationIcon,
+  CollectionsBookmarIcons,
+  FinanceChartIcon,
+  CollectionIcon,
 };
