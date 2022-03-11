@@ -69,7 +69,7 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
   
   useEffect(() => {
     try {
-      let tenant = userType === 'employee' ? tenantId : data?.locationDet?.city?.code;
+      let tenant = userType === 'employee' ? tenantId : data?.locationDet?.cityCode?.code;
       data.tenantId = tenant;
 
       let formdata = convertToPropertyLightWeight(data);
