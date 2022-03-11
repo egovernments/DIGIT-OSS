@@ -189,6 +189,10 @@ public class NotificationUtil {
 					message = message.replace("{NEW_FSM_LINK}", getShortenedUrl(config.getUiAppHost()+config.getNewFsmLink())); 
 
 				}
+				if (message.contains("{NO_OF_TRIPS}") && fsm.getNoOfTrips() != null) {
+					
+					message = message.replace("{NO_OF_TRIPS}", fsm.getNoOfTrips().toString());
+				}
 					
 			}
 		

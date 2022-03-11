@@ -271,7 +271,7 @@ public class FSMValidator {
 
 	}
 
-	public void validateUpdate(FSMRequest fsmRequest, List<FSM> searchResult, Object mdmsData) {
+	public void validateUpdate(FSMRequest fsmRequest, List<FSM> searchResult, Object mdmsData,boolean isDsoRole) {
 		boundaryService.getAreaType(fsmRequest, config.getHierarchyTypeCode());
 		FSM fsm = fsmRequest.getFsm();
 		
@@ -311,7 +311,10 @@ public class FSMValidator {
 		validateTripAmount(fsmRequest, mdmsData);
 		
 		mdmsValidator.validatePaymentPreference(fsm.getPaymentPreference());
-		
+//		if(null != fsmRequest.getWorkflow() && 
+//				null != fsmRequest.getWorkflow().getAction() && 
+//				fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE) && isDsoRole)
+//			mdmsValidator.validateReceivedPaymentType(fsm.getReceivedPayment());
 
 	}
 	
