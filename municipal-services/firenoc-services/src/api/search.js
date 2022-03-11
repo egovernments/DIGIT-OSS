@@ -186,10 +186,10 @@ export const searchApiResponse = async (request, next = {}) => {
     let offset =0;
     let limit =10;
     if( queryObj.hasOwnProperty("offset") ){
-      offset = queryObj.offset;
+      offset = queryObj.offset*1;
    }
   if( queryObj.hasOwnProperty("limit") ){
-    limit = queryObj.limit;
+    limit = queryObj.limit*1;
  }
  if(keys(queryObj).length!=2){
   sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ) s WHERE s.rn  BETWEEN ${offset} AND ${limit+offset}   `;
