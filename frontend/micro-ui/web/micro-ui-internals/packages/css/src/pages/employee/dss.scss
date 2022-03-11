@@ -113,25 +113,28 @@ border-color: rgba(244, 119, 56, var(--border-opacity));
 .dss-card-parent {
   display: flex;
   flex-direction: column;
-  width: 32%;
+  width: 30%;
   border-radius: 6px;
   padding: 25px;
   margin: 15px 11.5px;
-  opacity: 0.12;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-.dss-card-header, .dss-card-body {
+.dss-card-body {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
 }
 
 .dss-card-header {
-  margin-bottom: 20px;
+  display: flex;
+  margin-bottom: 30px;
+  align-items: center;
+
   p {
-    font-size: 20px;
+    font-size: 28px;
     font-family: "Roboto", sans-serif;
     font-weight: 500;
+    color: #183e4a;
   }
 
   svg {
@@ -140,6 +143,40 @@ border-color: rgba(244, 119, 56, var(--border-opacity));
   }
 }
 
+
+.dss-insight-card {
+  margin: 20px 0;
+
+  p {
+    font-family: "Roboto", sans-serif;
+  }
+
+  .p1 {
+    font-size: 16px; 
+    color: #585858;
+  }
+
+  .p3 {
+    font-size: 16px; 
+    font-weight: 400; 
+  }
+
+  .p2 {
+    font-size: 28px;
+    font-weight: 500; 
+    color: #183E4A;
+  }
+
+  .color-green {
+    color: #00703C;
+  }
+
+  .color-red {
+    color: #D4351C;
+  }
+}
+
 .w-100 {
   width: 100%;
 }
+

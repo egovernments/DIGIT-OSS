@@ -15,7 +15,9 @@ import React, { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import FilterContext from "../components/FilterContext";
-import Layout from "../components/Layout";
+import { endOfMonth, getTime, startOfMonth } from "date-fns";
+import { ArrowUpwardElement } from "../components/ArrowUpward";
+import { ArrowDownwardElement } from "../components/ArrowDownward";
 
 const key = "DSS_FILTERS";
 
@@ -39,6 +41,68 @@ const colors = [
   { dark: "#53FFEA", light: "rgba(83, 255, 234, 0.14)" },
   { dark: "#DEBC0B", light: "rgba(222, 188, 11, 0.24)" },
 ];
+
+const getInsightHeaderValue = (type, data) => {
+  switch (type) {
+    case "Total Collections":
+    case "Total Collection":
+      return `₹ ${data} Cr`;
+
+    case "Properties Assessed":
+      return `${data} Cr`;
+
+    case "Total Applications":
+    case "Total Receipts":
+    case "Total Grievances":
+    case "Total Permits Issued":
+    case "Total FireNoc's Issued":
+      return `${data} Lac`;
+
+    case "SLA Achievement":
+    case "Target Achievement":
+      return `${data}%`;
+
+    default:
+      return data;
+  }
+};
+
+const Chart = ({ data }) => {
+  const { t } = useTranslation();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { id, chartType } = data;
+
+  const requestDate = {
+    startDate: getTime(startOfMonth(new Date())),
+    endDate: getTime(endOfMonth(new Date())),
+    interval: "month",
+    title: "",
+  };
+
+  const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
+    key: id,
+    type: chartType,
+    tenantId,
+    requestDate,
+  });
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  return (
+    <div className="dss-insight-card">
+      <p className="p1">{t(data?.name)}</p>
+      <p className="p2">{getInsightHeaderValue(t(data?.name), response?.responseData?.data?.[0]?.headerValue)}</p>
+      {response?.responseData?.data?.[0]?.insight?.value ? (
+        <p className={`p3 ${response?.responseData?.data?.[0]?.insight?.indicator === "upper_green" ? "color-green" : "color-red"}`}>
+          {response?.responseData?.data?.[0]?.insight?.indicator === "upper_green" ? ArrowUpwardElement("10px") : ArrowDownwardElement("10px")}
+          {response?.responseData?.data?.[0]?.insight?.value}
+        </p>
+      ) : null}
+    </div>
+  );
+};
 
 const DashBoard = ({ stateCode }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -204,8 +268,9 @@ const DashBoard = ({ stateCode }) => {
               {row.vizArray.map((item, index) => {
                 return (
                   <div
-                    className={`dss-card-parent  ${item.name === "DSS_OVERVIEW" ? "w-100" : null}`}
-                    style={ item.name === "DSS_OVERVIEW" ? {} : { backgroundColor: colors[index].light }}
+                    className={`dss-card-parent  ${item.name.includes("OVERVIEW") ? "w-100" : ""}`}
+                    style={item.name.includes("OVERVIEW") ? { backgroundColor: "#fff" } : { backgroundColor: colors[index].light }}
+                    key={index}
                   >
                     <div className="dss-card-header">
                       <Poll />
@@ -214,9 +279,8 @@ const DashBoard = ({ stateCode }) => {
 
                     <div className="dss-card-body">
                       {item.charts.map((chart, key) => (
-                        <div style={{ width: "100%" }} key={key}>
-                          <p style={{ fontSize: "14px" }}>{t(chart?.name)}</p>
-                          <p style={{ fontFamily: "Roboto", fontSize: "20px", fontWeight: "500" }}>500</p>
+                        <div style={item.name.includes("OVERVIEW") ? { width: "25%" } : { width: "50%" }}>
+                          <Chart data={chart} key={key} />
                         </div>
                       ))}
                     </div>
