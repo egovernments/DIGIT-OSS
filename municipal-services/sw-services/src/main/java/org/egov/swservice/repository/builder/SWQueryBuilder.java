@@ -273,4 +273,30 @@ public class SWQueryBuilder {
 			queryString.append(" OR");
 		}
 	}
+	
+	public String getSearchQueryStringForPlainSearch(SearchCriteria criteria, List<Object> preparedStatement,
+			RequestInfo requestInfo) {
+		if(criteria.isEmpty())
+			return null;
+		StringBuilder query = new StringBuilder(SEWERAGE_SEARCH_QUERY);
+		
+		if (!StringUtils.isEmpty(criteria.getTenantId())) {
+			addClauseIfRequired(preparedStatement, query);
+			if(criteria.getTenantId().equalsIgnoreCase(config.getStateLevelTenantId())){
+				query.append(" conn.tenantid LIKE ? ");
+				preparedStatement.add(criteria.getTenantId() + '%');
+			}
+			else{
+				query.append(" conn.tenantid = ? ");
+				preparedStatement.add(criteria.getTenantId());
+			}
+		}
+		
+		//Add OrderBy clause
+		query.append(" ORDER BY sc.appCreatedDate DESC");
+		
+		if (query.toString().contains("WHERE"))
+			 return addPaginationWrapper(query.toString(), preparedStatement, criteria);
+		return query.toString();
+	}
 }

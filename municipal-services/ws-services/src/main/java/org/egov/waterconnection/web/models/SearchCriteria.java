@@ -91,6 +91,14 @@ public class SearchCriteria {
 	@JsonProperty("ownerName")
 	private String ownerName;
 	
+	@JsonProperty("sortOrder")
+	private SortOrder sortOrder;
+
+	public enum SortOrder {
+	    ASC,
+	    DESC
+	}
+	
 	public boolean isEmpty() {
 		return (StringUtils.isEmpty(this.tenantId) && StringUtils.isEmpty(this.mobileNumber)
 				&& StringUtils.isEmpty(this.propertyId) && CollectionUtils.isEmpty(this.ids)

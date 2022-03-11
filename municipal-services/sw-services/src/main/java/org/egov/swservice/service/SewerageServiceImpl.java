@@ -263,4 +263,24 @@ public class SewerageServiceImpl implements SewerageService {
 			}
 		}
 	}
+	
+	public List<SewerageConnection> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<SewerageConnection> sewerageConnectionList = getSewerageConnectionsPlainSearchList(criteria, requestInfo);
+		if(!StringUtils.isEmpty(criteria.getSearchType()) &&
+				criteria.getSearchType().equals(SWConstants.SEARCH_TYPE_CONNECTION)){
+			sewerageConnectionList = enrichmentService.filterConnections(sewerageConnectionList);
+			if(criteria.getIsPropertyDetailsRequired()){
+				sewerageConnectionList = enrichmentService.enrichPropertyDetails(sewerageConnectionList, criteria, requestInfo);
+
+			}
+		}
+		validateProperty.validatePropertyForConnection(sewerageConnectionList);
+		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
+		return sewerageConnectionList;
+	}
+	
+	public List<SewerageConnection> getSewerageConnectionsPlainSearchList(SearchCriteria criteria, RequestInfo requestInfo) {
+		return sewerageDao.getSewerageConnectionPlainSearchList(criteria, requestInfo);
+	}
+
 }
