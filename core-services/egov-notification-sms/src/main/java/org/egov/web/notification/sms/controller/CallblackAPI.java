@@ -40,13 +40,9 @@ public class CallblackAPI {
                                      @RequestParam String sender_name) {
 
         Report report = new Report();
-        report.setUserId(userId);
         report.setJobno(jobno);
-        report.setMobilenumber(mobilenumber);
         report.setMessagestatus(status);
         report.setDoneTime(DoneTime);
-        report.setMessagepart(messagepart);
-        report.setSender_name(sender_name);
 
         producer.push(TOPIC, report);
         return ResponseEntity.ok().build();
@@ -62,13 +58,9 @@ public class CallblackAPI {
                                     @RequestParam String sender_name) {
 
         Report report = new Report();
-        report.setUserId(userId);
         report.setJobno(jobno);
-        report.setMobilenumber(mobilenumber);
         report.setMessagestatus(status);
         report.setDoneTime(DoneTime);
-        report.setMessagepart(messagepart);
-        report.setSender_name(sender_name);
 
         producer.push(TOPIC, report);
         return ResponseEntity.ok().build();
