@@ -1,7 +1,6 @@
 package org.egov.fsm.service.notification;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +17,6 @@ import org.egov.fsm.util.NotificationUtil;
 import org.egov.fsm.web.model.FSM;
 import org.egov.fsm.web.model.FSMRequest;
 import org.egov.fsm.web.model.FSMSearchCriteria;
-import org.egov.fsm.web.model.notification.ActionItem;
 import org.egov.fsm.web.model.notification.Event;
 import org.egov.fsm.web.model.notification.EventRequest;
 import org.egov.fsm.web.model.notification.Recepient;
@@ -30,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
