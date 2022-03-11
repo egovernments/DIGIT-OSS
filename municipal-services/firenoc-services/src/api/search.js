@@ -192,9 +192,9 @@ export const searchApiResponse = async (request, next = {}) => {
     limit = queryObj.limit;
  }
  if(keys(queryObj).length!=2){
-  sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ) s WHERE s.rn  BETWEEN ${offset} AND ${limit}   `;
+  sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ) s WHERE s.rn  BETWEEN ${offset} AND ${limit+offset}   `;
  }else{
-  sqlQuery = `${sqlQuery}  ) s WHERE s.rn  BETWEEN ${offset} AND ${limit} ORDER BY fid `;
+  sqlQuery = `${sqlQuery}  ) s WHERE s.rn  BETWEEN ${offset} AND ${limit+offset} ORDER BY fid `;
  }
   
 }else if(isEmpty(queryObj)){
