@@ -19,7 +19,7 @@ const getUpdatedStatus = (item) => {
       ? item.status
       : "EXPIRED";
   } else if (item.status == "INPROGRESS") {
-    return item.recordscompleted === item.totalrecords && !item.filestoreid
+    return item.recordscompleted === item.totalrecords && !item.filestoreid && item.recordscompleted != 0
       ? "FAILED"
       : item.status;
   } else {
@@ -95,6 +95,7 @@ export const searchApiCall = async (state, dispatch) => {
           item.filestoreid,
         failed:
           item.recordscompleted === item.totalrecords &&
+          item.recordscompleted != 0 &&
           !item.filestoreid &&
           diffInDates(new Date(Number(item.lastmodifiedtime)), new Date()) < 2,
         expired:

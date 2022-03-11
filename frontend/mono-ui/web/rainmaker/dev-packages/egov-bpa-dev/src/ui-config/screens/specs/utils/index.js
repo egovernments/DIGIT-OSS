@@ -2779,13 +2779,16 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
       return;
     } else {
       //New number search only
+
+      let ownerTenatID = getTenantId(), userTenantId;
+      if (ownerTenatID && ownerTenatID.split(".") && ownerTenatID.split(".").length > 0) userTenantId = ownerTenatID.split(".")[0];
       let payload = await httpRequest(
         "post",
         "/user/_search?tenantId=" + tenantId,
         "_search",
         [],
         {
-          tenantId: getTenantId(),
+          tenantId: userTenantId ? userTenantId : getTenantId(),
           userName: `${ownerNo}`
         }
       );
@@ -5092,7 +5095,7 @@ export const revocationPdfDownload = async (action, state, dispatch, mode = "Dow
   );
   let res = await httpRequest(
     "post",
-    `pdf-service/v1/_create?key=bpa-revocation&tenantId=${bpaDetails.tenantId}`,
+    `pdf-service/v1/_create?key=bpa-revocation&tenantId=${bpaDetails.tenantId.split(".")[0]}`,
     "",
     [],
     { Bpa: [bpaDetails] }
@@ -5101,7 +5104,7 @@ export const revocationPdfDownload = async (action, state, dispatch, mode = "Dow
   let fileStoreId = res.filestoreIds[0];
   let pdfDownload = await httpRequest(
     "get",
-    `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []
+    `filestore/v1/files/url?tenantId=${bpaDetails.tenantId.split(".")[0]}&fileStoreIds=${fileStoreId}`, []
   );
   if (mode && mode === "Download") {
     window.open(pdfDownload[fileStoreId]);

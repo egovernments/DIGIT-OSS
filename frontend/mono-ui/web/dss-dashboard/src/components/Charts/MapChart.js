@@ -10,8 +10,7 @@ import ChartsAPI from "../../actions/charts/chartsAPI";
 import getChartOptions from "../../actions/getChartOptions";
 import { getLocaleLabels, getTenantId } from "../../utils/commons";
 import style from "./styles";
-
-const INDIA_TOPO_JSON = require("./india.topo.json");
+import { get } from "lodash";
 
 const PROJECTION_CONFIG = { scale: 350, center: [78.9629, 22.5937] };
 
@@ -151,56 +150,24 @@ class MapChart extends React.Component {
     if (this.props.selectedState !== "" && !this.state.drillDown) {
       this.callAPI2();
       this.setState({ drillDown: true });
-    } else if(this.props.selectedState == "" && this.state.drillDown){
+    } else if (this.props.selectedState == "" && this.state.drillDown) {
       this.callAPI();
       this.setState({ drillDown: false });
     }
   }
   render() {
-    const data = [
-      { id: "AP", state: "Andhra Pradesh", value: 0 },
-      { id: "AR", state: "Arunachal Pradesh", value: 0 },
-      { id: "AS", state: "Assam", value: 0 },
-      { id: "BR", state: "Bihar", value: 0 },
-      { id: "CT", state: "Chhattisgarh", value: 0 },
-      { id: "GA", state: "Goa", value: 0 },
-      { id: "GJ", state: "Gujarat", value: 0 },
-      { id: "HR", state: "Haryana", value: 0 },
-      { id: "HP", state: "Himachal Pradesh", value: 0 },
-      { id: "JH", state: "Jharkhand", value: 0 },
-      { id: "KA", state: "Karnataka", value: 0 },
-      { id: "KL", state: "Kerala", value: 0 },
-      { id: "MP", state: "Madhya Pradesh", value: 0 },
-      { id: "MH", state: "Maharashtra", value: 0 },
-      { id: "MN", state: "Manipur", value: 0 },
-      { id: "ML", state: "Meghalaya", value: 0 },
-      { id: "MZ", state: "Mizoram", value: 0 },
-      { id: "NL", state: "Nagaland", value: 0 },
-      { id: "OD", state: "Odissa", value: 0 },
-      { id: "PB", state: "Punjab", value: 0 },
-      { id: "RJ", state: "Rajasthan", value: 0 },
-      { id: "SK", state: "Sikkim", value: 0 },
-      { id: "TN", state: "Tamil Nadu", value: 0 },
-      { id: "TS", state: "Telangana", value: 0 },
-      { id: "TR", state: "Tripura", value: 0 },
-      { id: "UK", state: "Uttarakhand", value: 0 },
-      { id: "UP", state: "Uttar Pradesh", value: 0 },
-      { id: "WB", state: "West Bengal", value: 0 },
-      { id: "WB", state: "West Bengal", value: 0 },
-      { id: "AN", state: "Andaman and Nicobar Islands", value: 0 },
-      { id: "CH", state: "Chandigarh", value: 0 },
-      { id: "DN", state: "Dadra and Nagar Haveli", value: 0 },
-      { id: "DD", state: "Daman and Diu", value: 0 },
-      { id: "DL", state: "Delhi", value: 0 },
-      { id: "JK", state: "Jammu and Kashmir", value: 0 },
-      { id: "LA", state: "Ladakh", value: 0 },
-      { id: "LD", state: "Lakshadweep", value: 0 },
-      { id: "PY", state: "Puducherry", value: 0 },
-    ];
-    let DataObj = data.reduce((acc, curr) => {
-      acc[curr.state] = { ...curr };
-      return { ...acc };
-    }, {});
+    const INDIA_TOPO_JSON =
+      JSON.parse(sessionStorage.getItem("MAP_CONFIG")) || {};
+    const data = get(INDIA_TOPO_JSON, "objects.india.geometries", [])?.map(
+      (ee) => {
+        return { state: ee.properties.name, value: 0, id: ee.id };
+      }
+    );
+    let DataObj =
+      data?.reduce((acc, curr) => {
+        acc[curr.state] = { ...curr };
+        return { ...acc };
+      }, {}) || {};
 
     /*
         const colorScale = scaleQuantile()
@@ -220,13 +187,13 @@ class MapChart extends React.Component {
         .get("chartsGData")
         .get(codekey)
         .get("data")
-        .filter(data=>data)
+        .filter((data) => data)
         .map((dat) => {
           let totalCount = dat.plots[3].value;
           let liveCount = dat.plots[4].value;
           let live = dat.plots[4].strValue > 0 ? true : false;
           DataObj[dat.headerName] = {
-            ...DataObj[dat.headerName],
+            ...DataObj?.[dat.headerName],
             status: dat.plots[2].strValue,
             value: live ? liveCount : totalCount,
             live,
@@ -264,7 +231,11 @@ class MapChart extends React.Component {
           <div style={{ float: "left" }}>
             <Backsvg onClick={() => this.back()} />
           </div>
-          {data2&&data2.length==0&&<div style={{ paddingTop: "60px"}}>{getLocaleLabels("DSS_NO_DATA")}</div>}
+          {data2 && data2.length == 0 && (
+            <div style={{ paddingTop: "60px" }}>
+              {getLocaleLabels("DSS_NO_DATA")}
+            </div>
+          )}
           {data2 && data2[0] && (
             <span className={"tab-rows tab-header"}>
               <span>{getLocaleLabels(`DSS_${data2[0].plots[1].name}`)}</span>
@@ -287,6 +258,7 @@ class MapChart extends React.Component {
         </div>
       );
     }
+
     return (
       <div className="full-width-height container">
         <ReactTooltip>{this.state.tooltipContent}</ReactTooltip>

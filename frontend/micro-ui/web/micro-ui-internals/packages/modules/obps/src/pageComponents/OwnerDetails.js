@@ -157,7 +157,9 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         return usageCat;
     }
 
-    function getUnitsForAPI(ob){
+    function getUnitsForAPI(subOccupancyData){
+        const ob = subOccupancyData?.subOccupancy;
+        const blocksDetails = subOccupancyData?.data?.edcrDetails?.planDetail?.blocks || [];
         let units=[];
         if(ob) {
             let result = Object.entries(ob);
@@ -166,6 +168,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     blockIndex:index,
                     floorNo:unit[0].split("_")[1],
                     unitType:"Block",
+                    occupancyType: blocksDetails?.[index]?.building?.occupancies?.[0]?.typeHelper?.type?.code || "A", 
                     usageCategory:getusageCategoryAPI(unit[1]),
                 });
             })
@@ -289,7 +292,8 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 payload.landInfo.tenantId = formData?.address?.city?.code;
 
                 //for units
-                payload.landInfo.unit = getUnitsForAPI(formData?.subOccupancy);
+                const blockOccupancyDetails = formData;
+                payload.landInfo.unit = getUnitsForAPI(blockOccupancyDetails);
 
                 let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
                 let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";

@@ -14,7 +14,7 @@ const formatValue = (value, symbol) => {
     const Pformatter = new Intl.NumberFormat("en-IN", { maximumSignificantDigits: 3 });
     return `${Pformatter.format(Number(value).toFixed(2))}`;
     */
-    return `${Number(Math.ceil(Number(value)*10)/10).toFixed()}`;
+    return `${Number(value).toFixed()}`;
   } else {
     return value;
   }
@@ -62,7 +62,6 @@ const CustomBarChart = ({
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
   });
-  
   const chartData = useMemo(() => {
     if (!response) return null;
     setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);

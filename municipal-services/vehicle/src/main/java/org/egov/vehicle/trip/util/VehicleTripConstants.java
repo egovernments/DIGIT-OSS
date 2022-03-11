@@ -36,4 +36,5 @@ public class VehicleTripConstants {
 	public static final String INVALID_VEHICLE_DECLINE_REQUEST ="INVALID_VEHICLE_DECLINE_REQUEST";
 	public static final String VEHICLE_COMMENT_NOT_EXIST ="VEHICLE_COMMENT_NOT_EXIST";
 	public static final String VEHICLE_DECLINE_REASON_OTHERS ="OTHERS";
+	public static final String VEHICLE_LOG_APPLICATION_DISPOSED = "DISPOSED";
 }

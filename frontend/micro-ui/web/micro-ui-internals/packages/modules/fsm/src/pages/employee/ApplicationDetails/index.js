@@ -179,7 +179,7 @@ const ApplicationDetails = (props) => {
           </Link>
         </div>
       );
-    }else if (checkpoint.status === "WAITING_FOR_DISPOSAL") {
+    } else if (checkpoint.status === "WAITING_FOR_DISPOSAL") {
       const caption = {
         date: checkpoint?.auditDetails?.created,
         name: checkpoint?.assigner,
@@ -205,7 +205,7 @@ const ApplicationDetails = (props) => {
     <React.Fragment>
       {!isLoading ? (
         <React.Fragment>
-          <Header style={{ marginBottom: "16px" }}>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
+          {/* <Header style={{ marginBottom: "16px" }}>{t("ES_TITLE_APPLICATION_DETAILS")}</Header> */}
           <Card style={{ position: "relative" }}>
             {/* {!DSO && (
               <LinkButton
@@ -218,11 +218,11 @@ const ApplicationDetails = (props) => {
             )} */}
             {applicationDetails?.applicationDetails.map((detail, index) => (
               <React.Fragment key={index}>
-                {/* {index === 0 ? (
-                  <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title) }</CardSubHeader>
+                {index === 0 ? (
+                  <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
                 ) : (
                   <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>
-                )} */}
+                )}
                 <StatusTable>
                   {detail?.values?.map((value, index) => {
                     if (value.map === true && value.value !== "N/A") {

@@ -106,7 +106,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
         </div>
       </div>
       }
-      {props.type === "mobile" && (
+      {props.type === "mobile" && props.onClose && (
         <ActionBar>
           <ApplyFilterBar
             submit={false}

@@ -18,7 +18,7 @@ const CitizenApp = ({ path }) => {
 
   return (
     <React.Fragment>
-      {!location.pathname.includes("/new-application/response") && <BackButton>{t("CS_COMMON_BACK")}</BackButton>}
+      {!location.pathname.includes("/new-application/response") && !location.pathname.includes("/fsm/response") && <BackButton>{t("CS_COMMON_BACK")}</BackButton>}
       <Switch>
         <PrivateRoute
           path={`${path}/inbox`}

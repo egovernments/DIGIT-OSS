@@ -208,8 +208,8 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
           whiteSpace: "nowrap",
         }}
       >
-        {newObjArray.map((ele) => (
-          <p>{ele}</p>
+        {newObjArray.map((ele,i) => (
+          <p key={i}>{ele}</p>
         ))}
       </div>
     );
@@ -305,6 +305,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
                   stroke={getColors(i)}
                   activeDot={{ r: 8 }}
                   strokeWidth={2}
+                  key={i}
                   dot={{ stroke: getColors(i), strokeWidth: 1, r: 2, fill: getColors(i) }}
                 />
               );

@@ -131,11 +131,16 @@ public class DSOService {
 			Map<String, Vehicle> vehilceIdMap = vendor.getVehicles().stream().collect(Collectors.toMap(Vehicle::getId,Function.identity()));
 			if(!CollectionUtils.isEmpty(vehilceIdMap) && vehilceIdMap.get(fsm.getVehicleId()) == null ) {
 				throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE," Vehicle Does not belong to DSO!");
-			}else {
+			}
+			else {
+				
 				Vehicle vehicle = vehilceIdMap.get(fsm.getVehicleId());
-				if(!vehicle.getType().equalsIgnoreCase(fsm.getVehicleType())) {
-					throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE," Vehicle Type of FSM and Vehicle Type of the assigned vehicle does not match !");
+				if (vehicle.getTankCapicity() < Double.valueOf(fsm.getVehicleCapacity())) {
+					throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE,
+							" Vehicle Capacity of the assigned vehicle is less than the tank capacity of FSM application !");
 				}
+	
+
 			}
 		}
 		
