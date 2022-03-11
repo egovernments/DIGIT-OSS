@@ -14,7 +14,7 @@ const formatValue = (value, symbol) => {
     const Pformatter = new Intl.NumberFormat("en-IN", { maximumSignificantDigits: 3 });
     return `${Pformatter.format(Number(value).toFixed(2))}`;
     */
-    return `${Number(Math.ceil(Number(value)*10)/10).toFixed()}`;
+    return `${Number(value).toFixed()}`;
   } else {
     return value;
   }

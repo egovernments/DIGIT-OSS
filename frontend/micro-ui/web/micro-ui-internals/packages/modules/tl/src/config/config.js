@@ -367,7 +367,7 @@ export const newConfig = [
     ],
   },
   {
-    head: "ES_NEW_APPLICATION_PT_DETAILS",
+    head: "",
     body: [
       {
         //if want to input index in url just pul @0 after route name owner-ship-details@0
