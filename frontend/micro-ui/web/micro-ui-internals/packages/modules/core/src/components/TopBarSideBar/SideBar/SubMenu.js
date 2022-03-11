@@ -39,30 +39,9 @@ const SubMenu = ({ item }) => {
     edcr: <CollectionIcon />,
     collections: <CollectionIcon />,
   };
-  const leftIconArray = item.icon.leftIcon.split(":")[1];
+
+  const leftIconArray = item.icon.leftIcon.split(":")[1] || item.leftIcon.split(":")[1];
   const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.collections;
-
-  console.log("submennnnuu", item);
-
-  const renderSubMenu = () => {
-    //render only if the item.icon.path had dot in it
-
-    return item.links
-      .filter((item) => item.url === "url" || item.url !== "")
-      .sort((a, b) => a.orderNumber - b.orderNumber)
-      .map((item, index) => {
-        debugger;
-        console.log("itemmmmmm", item);
-        return (
-          <Link to={item.link || item.navigationURL} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
-            <div className="actions">
-              <ArrowDirection className="icon" />
-              <span>{item.label || item.displayName}</span>
-            </div>
-          </Link>
-        );
-      });
-  };
 
   return (
     <React.Fragment>
@@ -76,7 +55,19 @@ const SubMenu = ({ item }) => {
         </div>
       </div>
 
-      {subnav && renderSubMenu()}
+      {subnav &&
+        item.links
+          .filter((item) => item.url === "url" || item.url !== "")
+          .map((item, index) => {
+            return (
+              <Link to={item.link || item.navigationURL} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
+                <div className="actions">
+                  <ArrowDirection className="icon" />
+                  <span>{item.label || item.displayName}</span>
+                </div>
+              </Link>
+            );
+          })}
     </React.Fragment>
   );
 };

@@ -1,8 +1,38 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import SubMenu from "./SubMenu";
-import { Loader } from "@egovernments/digit-ui-react-components";
+import {
+  Loader,
+  HomeIcon,
+  ComplaintIcon,
+  BPAHomeIcon,
+  PropertyHouse,
+  CaseIcon,
+  ReceiptIcon,
+  PersonIcon,
+  DocumentIconSolid,
+  DropIcon,
+  CollectionsBookmarIcons,
+  FinanceChartIcon,
+  CollectionIcon,
+} from "@egovernments/digit-ui-react-components";
+import { Link } from "react-router-dom";
 
+const IconsObject = {
+  home: <HomeIcon />,
+  announcement: <ComplaintIcon />,
+  business: <BPAHomeIcon />,
+  store: <PropertyHouse />,
+  assignment: <CaseIcon />,
+  receipt: <ReceiptIcon />,
+  "business-center": <PersonIcon />,
+  description: <DocumentIconSolid />,
+  "water-tap": <DropIcon />,
+  "collections-bookmark": <CollectionsBookmarIcons />,
+  "insert-chart": <FinanceChartIcon />,
+  edcr: <CollectionIcon />,
+  collections: <CollectionIcon />,
+};
 const EmployeeSideBar = () => {
   const sidebarRef = useRef(null);
   const { isLoading, data } = Digit.Hooks.useAccessControl();
@@ -36,17 +66,27 @@ const EmployeeSideBar = () => {
   };
 
   const configEmployeeSideBar = {};
+  const singleItem = [];
   data?.actions
     .filter((e) => e.url === "url")
     .sort((a, b) => a.orderNumber - b.orderNumber)
     .forEach((item) => {
-      if (item.path !== "") {
+      if (item.path !== "" && item.path.indexOf(".") !== -1) {
         let index = item.path.split(".")[0];
         if (index === "TradeLicense") index = "Trade License";
         if (!configEmployeeSideBar[index]) {
           configEmployeeSideBar[index] = [item];
         } else {
           configEmployeeSideBar[index].push(item);
+        }
+      } else {
+        if (item.path !== "") {
+          singleItem.push({
+            displayName: item.displayName,
+            navigationURL: item.navigationURL,
+            icon: item.leftIcon,
+            orderNumber: item.orderNumber,
+          });
         }
       }
     });
@@ -59,19 +99,45 @@ const EmployeeSideBar = () => {
         moduleName: keys[i],
         links: configEmployeeSideBar[keys[i]],
         icon: configEmployeeSideBar[keys[i]][0],
+        orderNumber: configEmployeeSideBar[keys[i]][0].orderNumber,
       });
     }
-    return res.map((item, index) => {
-      return <SubMenu item={item} key={index} />;
-    });
+    return res
+      .sort((a, b) => a.orderNumber - b.orderNumber)
+      .map((item, index) => {
+        return <SubMenu item={item} key={index} />;
+      });
   };
 
   if (isLoading) {
     return <Loader />;
   }
 
+  const renderSingleItem = () => {
+    return singleItem
+      .sort((a, b) => a.orderNumber - b.orderNumber)
+      .map((item) => {
+        const leftIconArray = item.icon.split(":")[1];
+        const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.collections;
+        return (
+          <div className="submenu-container">
+            <div className={`sidebar-link`}>
+              <div className="actions">
+                {leftIcon}
+                <Link className="custom-link" to={item.navigationURL}>
+                  {item.displayName}
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      });
+  };
+
   return (
     <div className="sidebar" ref={sidebarRef} onMouseOver={expandNav} onMouseLeave={collapseNav}>
+      {renderSingleItem()}
+
       {splitKeyValue()}
     </div>
   );
