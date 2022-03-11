@@ -44,6 +44,9 @@ export const UserService = {
     const userType = UserService.getType();
     try {
       await UserService.logoutUser();
+    } catch (e) {
+    }
+    finally{
       window.localStorage.clear();
       window.sessionStorage.clear();
       if (userType === "citizen") {
@@ -51,7 +54,6 @@ export const UserService = {
       } else {
         window.location.replace("/digit-ui/employee/user/language-selection");
       }
-    } catch (e) {
     }
   },
   sendOtp: (details, stateCode) =>
