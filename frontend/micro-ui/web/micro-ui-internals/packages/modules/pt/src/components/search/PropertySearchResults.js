@@ -17,7 +17,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [ownerInvalidMobileNumberIndex, setOwnerInvalidMobileNumberIndex] = useState(0);
 
-  const { data, isLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
+  const { data, isLoading, error, isSuccess, billData ,revalidate} = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId,
     filters: searchQuery,
     configs: { enabled: Object.keys(payload).length > 0 ? true : false, retry: false, retryOnMount: false, staleTime: Infinity },
@@ -59,6 +59,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
       setShowModal(true);
       setSelectedProperty(val);
     } else {
+      revalidate();
       history.push(`/digit-ui/employee/payment/collect/PT/${val?.["propertyId"]}`)
     }
 
