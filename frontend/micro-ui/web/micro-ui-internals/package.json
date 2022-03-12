@@ -54,7 +54,7 @@
     "build:obps": "cd packages/modules/obps && yarn build",
     "build:engagement": "cd packages/modules/engagement && yarn build",
     "build:noc": "cd packages/modules/noc && yarn build",
-    "build:ws": "cd packages/modules/ws && yarn build",
+    "buildWS:ws": "cd packages/modules/ws && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
   "devDependencies": {
