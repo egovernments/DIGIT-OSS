@@ -18,6 +18,7 @@ import SubOccupancyTable from "./SubOccupancyTable";
 import TLCaption from "./TLCaption";
 import TLTradeAccessories from "./TLTradeAccessories";
 import TLTradeUnits from "./TLTradeUnits";
+import WSAdditonalDetails from "./WSAdditonalDetails";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -44,7 +45,7 @@ function ApplicationDetailsContent({
       };
       return <TLCaption data={caption} />;
     } 
-    else if(window.location.href.includes("/obps/") || window.location.href.includes("/noc/"))
+    else if(window.location.href.includes("/obps/") || window.location.href.includes("/noc/") || window.location.href.includes("/ws/"))
     {
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,
@@ -102,7 +103,7 @@ function ApplicationDetailsContent({
   };
 
   const getMainDivStyles = () => {
-    if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
+    if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc") || window.location.href.includes("employee/ws")) {
       return { lineHeight: "19px", maxWidth: "950px", minWidth: "280px" };
     } else if (checkLocation) {
       return { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" };
@@ -225,6 +226,9 @@ function ApplicationDetailsContent({
           {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
           {detail?.additionalDetails?.taxHeadEstimatesCalculation && (
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />
+          )}
+          {detail?.isWaterConnectionDetails && (
+            <WSAdditonalDetails wsAdditionalDetails={detail} />
           )}
         </React.Fragment>
       ))}

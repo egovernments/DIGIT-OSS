@@ -181,6 +181,8 @@ import useMyBillsWaterSearch from "./ws/useMyBillsWaterSearch";
 import useMyBillsSewarageSearch from "./ws/useMyBillsSewarageSearch";
 import useMyApplicationSearch from "./ws/useMyApplicationSearch";
 import useWSDocumentSearch from "./ws/useWSDocumentSearch";
+import useWSDetailsPage from "./ws/useWSDetailsPage";
+import useWSApplicationActions from "./ws/useApplicationActions"
 
 const pgr = {
   useComplaintDetails,
@@ -366,7 +368,9 @@ const ws = {
   useMyBillsWaterSearch,
   useMyBillsSewarageSearch,
   useMyApplicationSearch,
-  useWSDocumentSearch
+  useWSDocumentSearch,
+  useWSDetailsPage,
+  useWSApplicationActions
 }
 
 const Hooks = {

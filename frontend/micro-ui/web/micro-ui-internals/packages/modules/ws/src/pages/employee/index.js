@@ -4,6 +4,7 @@ import { Switch, useLocation, Route } from "react-router-dom";
 import { PrivateRoute, BackButton, BreadCrumb } from "@egovernments/digit-ui-react-components";
 import NewApplication from "./NewApplication"
 import WSDocsRequired from "../../pageComponents/WSDocsRequired";
+import ApplicationDetails from "./ApplicationDetails";
 // import SearchConnectionComponent from "./SearchConnection";
 // import SearchResultsComponent from "./SearchResults";
 
@@ -17,6 +18,7 @@ const App = ({ path }) => {
       <Switch>
         <PrivateRoute path={`${path}/create-application`} component={WSDocsRequired} />
         <PrivateRoute path={`${path}/new-application`} component={NewApplication} />
+        <PrivateRoute path={`${path}/application-details`} component={ApplicationDetails} />
         {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
       </Switch>
