@@ -1,4 +1,4 @@
-package org.egov.fsm.service;
+ackage org.egov.fsm.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,52 +35,52 @@ public class DSOService {
 
 	@Autowired
 	private FSMConfiguration config;
-	
+
 	@Autowired
 	private ObjectMapper mapper;
 
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
-	
+
 	@Autowired
 	VehicleService vehicleService;
-	
+
 	//public Vendor getVendor(String dsoId, String tenantId, String ownerId, String mobileNo, String vehicleType,
 	//		String vehicleCapacity, RequestInfo requestInfo) {
 	public Vendor getVendor(VendorSearchCriteria vendorSearchCriteria,RequestInfo requestInfo) {
-		
+
 		StringBuilder uri = new StringBuilder(config.getVendorHost()).append(config.getVendorContextPath())
 				.append(config.getVendorSearchEndpoint()).append("?tenantId=")
 				.append(vendorSearchCriteria.getTenantId());
 
 		if(!CollectionUtils.isEmpty(vendorSearchCriteria.getIds())) {
-			
+
 			uri.append("&ids="+String.join(",",vendorSearchCriteria.getIds())); 
 			//uri.append("&ids=").append(vendorSearchCriteria.getIds());
 		}
-		
+
 		if(!CollectionUtils.isEmpty(vendorSearchCriteria.getOwnerIds())) {
 			uri.append("&ownerIds="+String.join(",",vendorSearchCriteria.getOwnerIds()));
 			//uri.append("&ownerIds=").append(vendorSearchCriteria.getOwnerIds());
 		}
-		
+
 		if(!StringUtils.isEmpty(vendorSearchCriteria.getMobileNumber())) {
 			uri.append("&mobileNumber=").append(vendorSearchCriteria.getMobileNumber());
 		}
-		
+
 
 		if(!StringUtils.isEmpty(vendorSearchCriteria.getVehicleType())) {
 			uri.append("&vehicleType=").append(vendorSearchCriteria.getVehicleType());
 		}
-		
+
 		if(!StringUtils.isEmpty(vendorSearchCriteria.getVehicleCapacity())) {
 			uri.append("&vehicleCapacity=").append(vendorSearchCriteria.getVehicleCapacity());
 		}
-		
+
 		RequestInfoWrapper requestInfoWrpr = new RequestInfoWrapper();
 		requestInfoWrpr.setRequestInfo(requestInfo);
 		try {
-			 
+
 			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, requestInfoWrpr);
 			VendorResponse vendorResponse = mapper.convertValue(responseMap, VendorResponse.class);
 			if(!CollectionUtils.isEmpty(vendorResponse.getVendor())) {
@@ -88,25 +88,25 @@ public class DSOService {
 			}else {
 				return null;
 			}
-			
+
 		} catch (IllegalArgumentException e) {
 			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in validateDSO");
 		}
-		
+
 	}
-	
+
 	public void validateDSO(FSMRequest fsmRequest) {
 		FSM fsm = fsmRequest.getFsm();
-		
+
 		VendorSearchCriteria vendorSearchCriteria=new VendorSearchCriteria();
 		vendorSearchCriteria = VendorSearchCriteria.builder().ids(Arrays.asList(fsm.getDsoId()))
 				.tenantId(fsm.getTenantId()).build();
-				
+
 		Vendor vendor = this.getVendor(vendorSearchCriteria,fsmRequest.getRequestInfo());
-		
+
 		// Vendor vendor = this.getVendor(fsm.getDsoId(), fsm.getTenantId(), null, null,
 		// null, null,fsmRequest.getRequestInfo());
-		
+
 		if(vendor == null) {
 			throw new CustomException(FSMErrorConstants.INVALID_DSO," DSO Does not belong to DSO!");
 		}else {
@@ -123,9 +123,9 @@ public class DSOService {
 					}
 				}
 			}
-			
+
 		}
-		
+
 		if(!StringUtils.isEmpty(fsm.getVehicleId())) {
 			vehicleService.validateVehicle(fsmRequest);
 			Map<String, Vehicle> vehilceIdMap = vendor.getVehicles().stream().collect(Collectors.toMap(Vehicle::getId,Function.identity()));
@@ -139,6 +139,6 @@ public class DSOService {
 //				}
 //			}
 		}
-		
+
 	}
 }
