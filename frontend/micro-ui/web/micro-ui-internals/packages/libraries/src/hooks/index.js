@@ -183,6 +183,7 @@ import useMyApplicationSearch from "./ws/useMyApplicationSearch";
 import useWSDocumentSearch from "./ws/useWSDocumentSearch";
 import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions"
+import useWSConsumptionSearch from "./ws/useConsumptionSearch";
 
 const pgr = {
   useComplaintDetails,
@@ -370,7 +371,8 @@ const ws = {
   useMyApplicationSearch,
   useWSDocumentSearch,
   useWSDetailsPage,
-  useWSApplicationActions
+  useWSApplicationActions,
+  useWSConsumptionSearch
 }
 
 const Hooks = {

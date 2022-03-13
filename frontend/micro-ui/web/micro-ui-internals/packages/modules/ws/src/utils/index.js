@@ -42,3 +42,9 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
       : {};
   };
 
+export  const getAddress = (address, t) => {
+    return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+      address?.landmark ? `${address?.landmark}, ` : ""
+    }${ address.locality.code ?  t(address?.locality.code) : ""}, ${ address.city.code ?  t(address?.city.code) : ""},${address?.pincode ? `${address.pincode}` : " "}`
+} 
+

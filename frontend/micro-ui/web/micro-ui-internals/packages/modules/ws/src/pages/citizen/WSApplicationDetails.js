@@ -59,7 +59,7 @@ dowloadOptions.push({
   return (
     <React.Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
-      <Header>{t("Application Details")}</Header>
+      <Header>{t("WS_APPLICATION_DETAILS_HEADER")}</Header>
       {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
@@ -77,7 +77,7 @@ dowloadOptions.push({
           </StatusTable>
         </Card>
         {paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.length > 0 && <Card>
-          <CardSubHeader>{t("Fee Details")}</CardSubHeader>
+          <CardSubHeader>{t("WS_FEE_DEATAILS_HEADER")}</CardSubHeader>
           <StatusTable>
             {paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.map(bill => (
               <Row className="border-none" label={t(bill?.taxHeadCode)} text={bill?.amount} textStyle={{textAlign: "right" }} />
@@ -94,7 +94,7 @@ dowloadOptions.push({
           </StatusTable>
         </Card>}
         <Card>
-          <CardSubHeader>{t("Property Details")}</CardSubHeader>
+          <CardSubHeader>{t("WS_COMMON_PROPERTY_DETAILS")}</CardSubHeader>
           <StatusTable>
             <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={data?.WaterConnection?.[0]?.propertyId} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={PTData?.Properties?.[0]?.owners?.[0]?.name} textStyle={{ whiteSpace: "pre" }} />
@@ -105,7 +105,7 @@ dowloadOptions.push({
           </StatusTable>
         </Card>
         {data?.WaterConnection?.[0]?.connectionHolders && <Card>
-          <CardSubHeader>{t("Connection Holder Details")}</CardSubHeader>
+          <CardSubHeader>{t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER")}</CardSubHeader>
           <StatusTable>
             <Row className="border-none" label={t("WS_OWN_DETAIL_MOBILE_NO_LABEL")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.mobileNumber} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.name} textStyle={{ whiteSpace: "pre" }} />
@@ -117,7 +117,7 @@ dowloadOptions.push({
           </StatusTable>
         </Card>}
         <Card>
-          <CardSubHeader>{t("Connection Details")}</CardSubHeader>
+          <CardSubHeader>{t("WS_COMMON_CONNECTION_DETAIL")}</CardSubHeader>
           <StatusTable>
             <Row className="border-none" label={t("WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED")} text={data?.WaterConnection?.[0]?.proposedTaps} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_SERV_DETAIL_NO_OF_TOILETS")} text={data?.WaterConnection?.[0]?.proposedPipeSize} textStyle={{ whiteSpace: "pre" }} />

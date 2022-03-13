@@ -27,7 +27,7 @@ export const WSMyApplications = () => {
 
   const { isLoading: isSWLoading, isError : isSWError, error : SWerror, data: SWdata } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1,BusinessService:"SW"}, { filters: filter1 });
   let applicationNoWS =  data && data?.WaterConnection?.map((ob) => ob.applicationNo).join(",") || "";
-  let applicaionNoSW = data && data?.SewerageConnections?.map((ob) => ob.applicationNo).join(",") || ""
+  let applicaionNoSW = SWdata && SWdata?.SewerageConnections?.map((ob) => ob.applicationNo).join(",") || ""
   let applicationNos = applicationNoWS.concat(applicaionNoSW);
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
@@ -47,7 +47,7 @@ export const WSMyApplications = () => {
   const applicationsList =WSapplicationsList.concat(SWapplicationsList)
   return (
     <React.Fragment>
-      <Header>{`${t("My Applications")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
+      <Header>{`${t("CS_HOME_MY_APPLICATIONS")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
       <div>
         {applicationsList?.length > 0 &&
           applicationsList.map((application, index) => (
@@ -55,7 +55,7 @@ export const WSMyApplications = () => {
               <WSApplication application={application} />
             </div>
           ))}
-        {!applicationsList?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("PT_NO_APPLICATION_FOUND_MSG")}</p>}
+        {!applicationsList?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("WS_NO_APPLICATION_FOUND_MSG")}</p>}
 
       </div>
 

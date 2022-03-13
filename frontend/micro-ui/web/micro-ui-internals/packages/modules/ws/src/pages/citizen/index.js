@@ -10,6 +10,9 @@ import WNSMyBillsComponent from "./WnSMyBills";
 import { WSMyApplications } from "./WSMyApplications";
 import WSApplicationDetails from "./WSApplicationDetails";
 import WSAdditionalDetails from "./WSMyApplications/additionalDetails";
+import MyConnections from "./MyConnection";
+import ConnectionDetails from "./MyConnection/ConnectionDetails";
+import consumptionDetails from "./MyConnection/ConsumptionDetails";
 
 
 const App = ({ path }) => {
@@ -25,8 +28,11 @@ const App = ({ path }) => {
         <Route path={`${path}/search-results`} component={SearchResultsComponent} />
         <Route path={`${path}/test-acknowledgment`} component={TestAcknowledgment} />
         <PrivateRoute path={`${path}/my-application`} component={WSMyApplications} />
+        <PrivateRoute path={`${path}/my-connection`} component={MyConnections} />
         <PrivateRoute path={`${path}/connection/application/:acknowledgementIds`} component={WSApplicationDetails} />
         <PrivateRoute path={`${path}/connection/additional/:acknowledgementIds`} component={WSAdditionalDetails} />
+        <PrivateRoute path={`${path}/connection/details/:acknowledgementIds`} component={ConnectionDetails} />
+        <PrivateRoute path={`${path}/consumption/details`} component={consumptionDetails} />
       </Switch>
     </React.Fragment>
   );

@@ -52,6 +52,7 @@ module.exports = function (app) {
     "/egov-survey-services",
     "/ws-services",
     "/sw-services",
+    "/ws-calculator",
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
 };

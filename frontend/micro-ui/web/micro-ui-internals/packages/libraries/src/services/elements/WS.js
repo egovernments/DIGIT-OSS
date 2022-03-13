@@ -33,4 +33,13 @@ export const WSService = {
       params: { tenantId },
       auth: true,
     }),
+  consumptionSearch: ({ tenantId, filters, auth, businessService }) =>
+    Request({
+      url: Urls.ws.ws_connection_search,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId, ...filters },
+      auth: true,
+    }),
 };

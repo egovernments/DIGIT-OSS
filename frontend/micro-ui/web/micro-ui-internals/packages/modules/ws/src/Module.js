@@ -21,6 +21,8 @@ import WSPlumberDetails from "./pageComponents/WSPlumberDetails";
 import WSRoadCuttingDetails from "./pageComponents/WSRoadCuttingDetails";
 import WSPropertyDetails from "./pageComponents/WSPropertyDetails";
 import WSConnectionHolderDetails from "./pageComponents/WSConnectionHolderDetails";
+import MyConnections from "./pages/citizen/MyConnection";
+import ConnectionDetails from "./pages/citizen/MyConnection/ConnectionDetails";
 
 const WSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "ws";
@@ -73,6 +75,10 @@ const WSLinks = ({ matchPath, userType }) => {
       link: `${matchPath}/my-application`,
       i18nKey: t("ACTION_TEXT_WS_MY_APPLICATION"),
     },
+    {
+      link: `${matchPath}/my-connection`,
+      i18nKey: t("ACTION_TEXT_WS_MY_CONNECTION"),
+    },
   ];
 
   return <CitizenHomeCard header={t("ACTION_TEST_WATER_AND_SEWERAGE")} links={links} Icon={() => <WSICon />} />;
@@ -97,6 +103,8 @@ const componentsToRegister = {
   WSRoadCuttingDetails,
   WSPropertyDetails,
   WSConnectionHolderDetails,
+  MyConnections,
+  ConnectionDetails,
 };
 
 export const initWSComponents = () => {
