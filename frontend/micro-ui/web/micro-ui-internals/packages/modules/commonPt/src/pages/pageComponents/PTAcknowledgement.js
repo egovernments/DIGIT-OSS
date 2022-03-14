@@ -158,14 +158,14 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
             last
             label={t("PT_COMMON_TABLE_COL_PT_ID")}
             text={mutation?.data?.Properties[0]?.propertyId}
-            textStyle={{ whiteSpace: "pre", width: "60%" }}
+            textStyle={{ whiteSpace: "pre", width: "200%" }}
           />
         )}
       </StatusTable>
       {/* {mutation.isSuccess && !onSelect && <SubmitBar label={t("PT_DOWNLOAD_ACK_FORM")} onSubmit={null} />} */}
       {mutation.isSuccess && onSelect && <SubmitBar label={t("CS_COMMON_NEXT")} onSubmit={onNext} />}
       <Link to={userType === 'employee' ? `/digit-ui/employee` : `/digit-ui/citizen`}>
-        <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
+      <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} style={{color:"orange"}}/>
       </Link>
     </Card>
   );
