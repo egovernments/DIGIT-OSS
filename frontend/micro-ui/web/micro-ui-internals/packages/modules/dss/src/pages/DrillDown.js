@@ -235,7 +235,7 @@ const DrillDown = ({ stateCode }) => {
         </GenericChart>
       )}
       {type === "performing-metric" && (
-        <GenericChart header={title} subHeader={`(${t(`DSS_SLA_ACHIEVED`)})`} showHeader={false} className={"fullWidth"}>
+        <GenericChart header={title} subHeader={`(${t(`SUB_${title}`)})`} showHeader={false} className={"fullWidth"}>
           <CustomBarChart data={{ id: chart }} fillColor={fillColor} title={title} showDrillDown={false} />
         </GenericChart>
       )}
