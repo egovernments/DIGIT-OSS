@@ -54,7 +54,7 @@ const MobileInbox = ({
   const isFstpOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const fstpOperatorData = vehicleLog?.map((vehicle) => ({
-    [t("ES_INBOX_APPLICATION_NO")]: vehicle?.tripDetails.map((i)=> i.referenceNo),
+    [t("ES_INBOX_APPLICATION_NO")]: vehicle?.tripDetails.map((i) => i.referenceNo),
     [t("ES_INBOX_VEHICLE_LOG")]: vehicle?.applicationNo,
     [t("ES_INBOX_VEHICLE_NO")]: vehicle?.vehicle?.registrationNumber,
     [t("ES_INBOX_DSO_NAME")]: vehicle?.tripOwner.displayName,
@@ -66,8 +66,8 @@ const MobileInbox = ({
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
         <div className="filters-container">
-          {!isFstpOperator && !isSearch && <ApplicationLinks linkPrefix={parentRoute} isMobile={true} />}
-          <div>
+          {/* {!isFstpOperator && !isSearch && <ApplicationLinks linkPrefix={parentRoute} isMobile={true} />} */}
+          <div style={{ display: "none" }}>
             <Filter searchParams={searchParams} applications={data} onFilterChange={onFilterChange} type="mobile" />
           </div>
           <ApplicationCard
