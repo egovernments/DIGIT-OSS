@@ -102,10 +102,12 @@ public class EnrichmentServiceImpl implements EnrichmentService {
 			ObjectNode incomingNode = new ObjectMapper().convertValue(incomingData.get(DATA_OBJECT), ObjectNode.class);
 			ObjectNode copyNode = incomingNode.deepCopy();
 			String businessTypeVal = copyNode.findValue(BUSINESS_SERVICE).asText();
+			LOGGER.info("businessTypeVal -->> "+ businessTypeVal);
 
 			DomainIndexConfig indexConfig = domainConfig.getIndexConfig(businessTypeVal.toString());
-			LOGGER.info("indexConfig ## "+indexConfig);
+			LOGGER.info("indexConfig ## "+indexConfig.toString());
 			if(indexConfig != null){
+				LOGGER.info("Inside if");
 				String indexName = indexConfig.getIndexName();
 
 				String query = indexConfig.getQuery();					
