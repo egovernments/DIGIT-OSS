@@ -2,12 +2,15 @@ import { FormComposer, Header, Toast } from "@egovernments/digit-ui-react-compon
 import cloneDeep from "lodash/cloneDeep";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { convertDateToEpoch, convertEpochToDate, stringReplaceAll } from "../../../utils";
 import { newConfig as newConfigTL } from "../../../config/config";
 
 const ReNewApplication = (props) => {
   const applicationData = cloneDeep(props?.location?.state?.applicationData) || {};
+  const propertyId = useLocation()?.state?.applicationDetails
+                      .find((details)=>details.title === "PT_DETAILS").values
+                      .find((value)=> value.title === "TL_PROPERTY_ID").value;
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
@@ -142,6 +145,7 @@ const ReNewApplication = (props) => {
     ownershipCategory: ownershipCategory,
     owners:  getOwners(applicationData)|| [],
     documents: { documents: applicationData?.tradeLicenseDetail?.applicationDocuments || [] },
+    cptId: {id: propertyId}
     // applicationData: cloneDeep(props?.location?.state?.applicationData)
   };
 
