@@ -167,10 +167,11 @@ public class FSMConstants {
 	public static final String FSM_POST_PAY_BusinessService = "FSM_POST_PAY_SERVICE";
 
 	public static final String FSM_PAYMENT_PREFERENCE_POST_PAY = "POST_PAY";
-
-
-
 	
+	public static final String SMS_NOTIFICATION_POST_PAY_PREFIX="FSM_POST_PAY_SMS_";
+	
+	public static final String FSM_SMS_DSO_INPROGRESS_DSO_ACCEPT="FSM_SMS_DSO_INPROGRESS_DSO_ACCEPT";
 
+	public static final String FSM_SMS_CREATED_CREATE="FSM_SMS_CREATED_CREATE";
 
 }
