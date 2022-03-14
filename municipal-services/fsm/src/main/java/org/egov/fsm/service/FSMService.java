@@ -107,9 +107,6 @@ public class FSMService {
 	@Autowired
 	private FSMRepository repository;
 	
-	@Autowired
-	private Producer producer;
-
 	public FSM create(FSMRequest fsmRequest) {
 		RequestInfo requestInfo = fsmRequest.getRequestInfo();
 //		String tenantId = fsmRequest.getFsm().getTenantId().split("\\.")[0];
@@ -154,16 +151,6 @@ public class FSMService {
 					"Workflow action cannot be null." + String.format("{Workflow:%s}", fsmRequest.getWorkflow()));
 		}
 		
-		boolean isDsoRole = hasDsoRole(fsmRequest);
-		
-//		if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE) &&
-//				 isDsoRole &&
-//				null == fsmRequest.getFsm().getReceivedPayment() && fsmRequest.getFsm().getReceivedPayment().isEmpty()){
-//			throw new CustomException(FSMErrorConstants.UPDATE_ERROR,"Received payment type cannot be null"+fsm);
-//		}
-		
-		
-
 		List<String> ids = new ArrayList<String>();
 		ids.add(fsm.getId());
 		FSMSearchCriteria criteria = FSMSearchCriteria.builder().ids(ids).tenantId(fsm.getTenantId()).build();
@@ -187,7 +174,7 @@ public class FSMService {
 				|| fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_CANCEL)) {
 			handleRejectCancel(fsmRequest, oldFSM);
 		} else {
-			fsmValidator.validateUpdate(fsmRequest, fsms, mdmsData, isDsoRole);
+			fsmValidator.validateUpdate(fsmRequest, fsms, mdmsData);
 		}
 
 		//SAN-843: Payment demand should be generated only for Pay now payment preference on Submit Action
@@ -411,8 +398,6 @@ public class FSMService {
 		fsmRequest.getWorkflow()
 				.setAssignes(userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toList()));
 		vehicleTripService.vehicleTripReadyForDisposal(fsmRequest);
-		String message = "Hello {1}, This message is to advise you that your payment was successfully received, and your application has been completed.";
-		sendSmsToUser(fsmRequest.getFsm().getCitizen(),message);
 	}
 
 	private void handleFSMSubmitFeeback(FSMRequest fsmRequest, FSM oldFSM, Object mdmsData) {
@@ -685,34 +670,6 @@ public class FSMService {
 		fsmRequest.setRequestInfo(requestInfo);
 		FSM fsmData = create(fsmRequest);
 		return fsmData.getApplicationNo();
-
-	}
-	
-	/**
-	 * Check if user has DSO role or not
-	 * @param fsmRequest
-	 * @return
-	 */
-	private boolean hasDsoRole(FSMRequest fsmRequest) {
-		org.egov.common.contract.request.User dsoUser = fsmRequest.getRequestInfo().getUserInfo();
-		return util.isRoleAvailale(dsoUser, FSMConstants.ROLE_FSM_DSO,
-				fsmRequest.getRequestInfo().getUserInfo().getTenantId().split("\\.")[0]);
-	}
-	
-	/**
-	 * Send sms to user
-	 * @param user
-	 * @param message
-	 */
-	private void sendSmsToUser(User user, String message) {
-		if(null != user.getName() && !user.getName().isEmpty()  && null != user.getMobileNumber() ){			
-			String customizedMsg = message.replace("{1}", user.getName());
-			SMSRequest smsRequest = new SMSRequest(user.getMobileNumber(), customizedMsg);
-			log.debug("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
-			producer.push(config.getSmsNotifTopic(), smsRequest);
-		}else {
-			log.debug("Message is not send: "+"MobileNumber: " + user.getMobileNumber() + " Name: " + user.getName());	
-		}
 
 	}
 
