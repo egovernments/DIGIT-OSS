@@ -161,7 +161,7 @@ export const gettradeownerarray = (data) => {
       }
     })
   })
-  !isEditRenew && data.tradeLicenseDetail.owners.map((oldowner) => {
+  !isEditRenew && !window.location.href.includes("edit-application") && data.tradeLicenseDetail.owners.map((oldowner) => {
     let found = tradeownerarray.length > 0 ? tradeownerarray.some(el => el.id === oldowner.id):false;
     if(!found)tradeownerarray.push({...oldowner,active:false});   
   })
