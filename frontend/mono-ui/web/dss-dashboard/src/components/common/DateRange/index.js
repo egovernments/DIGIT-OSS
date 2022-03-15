@@ -160,7 +160,7 @@ class DateRange extends React.Component {
           label: fy.title,
           range: () => ({
             startDate: new Date(Number(`${fy.value.startDate}000`)),
-            endDate: new Date(Number(`${moment().endOf('day').unix()}000`)),
+            endDate: new Date(Number(`${fy.value.endDate}000`)),
             interval: fy.value.interval,
             label: fy.title
           })
