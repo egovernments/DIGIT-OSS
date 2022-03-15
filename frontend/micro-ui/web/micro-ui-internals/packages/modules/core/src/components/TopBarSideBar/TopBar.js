@@ -9,7 +9,6 @@ const TextToImg = (props) => (
     {props.name[0].toUpperCase()}
   </span>
 );
-
 const TopBar = ({
   t,
   stateInfo,
@@ -25,6 +24,19 @@ const TopBar = ({
   logoUrl,
   showLanguageChange = true,
 }) => {
+  const [profilePic, setProfilePic] = React.useState(null);
+
+  React.useEffect(async () => {
+    const tenant = Digit.ULBService.getCurrentTenantId();
+    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [userDetails?.info?.uuid] }, {});
+
+    if (usersResponse && usersResponse.user && usersResponse.user.length) {
+      const userDetails = usersResponse.user[0];
+      const thumbs = userDetails?.photo?.split(",");
+      setProfilePic(thumbs?.at(0));
+    }
+  }, [profilePic !== null]);
+
   const CitizenHomePageTenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
 
   let history = useHistory();
@@ -117,7 +129,13 @@ const TopBar = ({
                 freeze={true}
                 style={mobileView ? { right: 0 } : {}}
                 optionCardStyles={{ overflow: "revert" }}
-                customSelector={<TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />}
+                customSelector={
+                  profilePic == null ? (
+                    <TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />
+                  ) : (
+                    <img src={profilePic} style={{ height: "48px", width: "48px", borderRadius: "50%" }} />
+                  )
+                }
               />
             </div>
           )}
