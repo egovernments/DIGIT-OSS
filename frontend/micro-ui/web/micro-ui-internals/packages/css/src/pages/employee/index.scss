@@ -149,6 +149,12 @@
           fill: #f47738 !important;
         }
       }
+      .custom-link {
+        margin-left: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
       svg {
         fill: #ffffff !important;

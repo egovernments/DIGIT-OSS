@@ -12,6 +12,7 @@ const assetsProxy = createProxyMiddleware({
 });
 module.exports = function (app) {
   [
+    "/access/v1/actions/mdms",
     "/egov-mdms-service",
     "/egov-location",
     "/localization",

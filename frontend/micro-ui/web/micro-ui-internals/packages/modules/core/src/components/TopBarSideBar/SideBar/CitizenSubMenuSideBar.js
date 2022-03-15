@@ -1,53 +1,19 @@
 import React, { useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  ArrowForward,
-  ArrowVectorDown,
-  ArrowDirection,
-  HomeIcon,
-  ComplaintIcon,
-  BPAHomeIcon,
-  PropertyHouse,
-  CaseIcon,
-  ReceiptIcon,
-  PersonIcon,
-  DocumentIconSolid,
-  DropIcon,
-  CollectionsBookmarIcons,
-  FinanceChartIcon,
-  CollectionIcon,
-} from "@egovernments/digit-ui-react-components";
+import { ArrowForward, ArrowVectorDown, ArrowDirection } from "@egovernments/digit-ui-react-components";
 
-const SubMenu = ({ item }) => {
+const CitizenSubMenuSideBar = ({ item }) => {
   const [subnav, setSubnav] = useState(false);
   const location = useLocation();
   const { pathname } = location;
   const showSubnav = () => setSubnav(!subnav);
-  const IconsObject = {
-    home: <HomeIcon />,
-    announcement: <ComplaintIcon />,
-    business: <BPAHomeIcon />,
-    store: <PropertyHouse />,
-    assignment: <CaseIcon />,
-    receipt: <ReceiptIcon />,
-    "business-center": <PersonIcon />,
-    description: <DocumentIconSolid />,
-    "water-tap": <DropIcon />,
-    "collections-bookmark": <CollectionsBookmarIcons />,
-    "insert-chart": <FinanceChartIcon />,
-    edcr: <CollectionIcon />,
-    collections: <CollectionIcon />,
-  };
-
-  const leftIconArray = item.icon.leftIcon.split(":")[1] || item.leftIcon.split(":")[1];
-  const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.collections;
 
   return (
     <React.Fragment>
       <div className="submenu-container">
         <div onClick={item.links && showSubnav} className={`sidebar-link ${subnav === true ? "active" : ""}`}>
           <div className="actions">
-            {item.Icon || leftIcon}
+            {item.Icon}
             <span>{item.moduleName || item.displayName}</span>
           </div>
           <div> {item.links && subnav ? <ArrowVectorDown /> : item.links ? <ArrowForward /> : null} </div>
@@ -56,7 +22,8 @@ const SubMenu = ({ item }) => {
 
       {subnav &&
         item.links
-          .filter((item) => item.url === "url" || item.url !== "")
+          ?.filter((item) => item.url === "url" && item.displayName !== "Home")
+          .sort((a, b) => a.orderNumber - b.orderNumber)
           .map((item, index) => {
             return (
               <Link to={item.link || item.navigationURL} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
@@ -71,4 +38,4 @@ const SubMenu = ({ item }) => {
   );
 };
 
-export default SubMenu;
+export default CitizenSubMenuSideBar;

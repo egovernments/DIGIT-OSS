@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { HomeIcon, EditPencilIcon, LogoutIcon } from "@egovernments/digit-ui-react-components";
+import { HomeIcon, EditPencilIcon, LogoutIcon, Loader, AddressBookIcon } from "@egovernments/digit-ui-react-components";
 import { Link, useLocation } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { Phone } from "@egovernments/digit-ui-react-components";
-import SubMenu from "./SubMenu";
+import CitizenSubMenuSideBar from "./CitizenSubMenuSideBar";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -59,8 +59,7 @@ const StaticCitizenSideBar = ({ logout }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
-
-  console.log(pathname);
+  const { isLoading, data: getCitizenMenu, isFetched: fetchedCitizen } = Digit.Hooks.useAccessControl();
 
   const [isEmployee, setisEmployee] = useState(false);
 
@@ -106,14 +105,30 @@ const StaticCitizenSideBar = ({ logout }) => {
         </Link>
       );
     }
-    if (item.type === "submenu") {
-      return <SubMenu item={item} />;
+    if (item.type === "dynamic") {
+      return <CitizenSubMenuSideBar item={item} />;
     }
     return <Item />;
   };
   let profileItem;
 
   if (isFetched && user && user.access_token) {
+    if (fetchedCitizen) {
+      const data = getCitizenMenu?.actions || [];
+
+      const staticModuleName = {
+        type: "dynamic",
+        moduleName: t("DASHBOARD_CITIZEN_SERVICES_LABEL"),
+        Icon: <AddressBookIcon className="icon" />,
+
+        links: [],
+      };
+      data.forEach((item) => {
+        staticModuleName.links.push(item);
+      });
+
+      menuItems = [...menuItems, staticModuleName];
+    }
     profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t} />;
     menuItems = menuItems.filter((item) => item?.id !== "login-btn");
     menuItems = [
@@ -158,6 +173,9 @@ const StaticCitizenSideBar = ({ logout }) => {
         icon: <Phone className="icon" />,
       },
     ];
+  }
+  if (isLoading) {
+    return <Loader />;
   }
 
   return (

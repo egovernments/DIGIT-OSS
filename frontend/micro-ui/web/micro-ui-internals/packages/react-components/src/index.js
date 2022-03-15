@@ -30,7 +30,7 @@ import DisplayPhotos from "./atoms/DisplayPhotos";
 import Dropdown from "./atoms/Dropdown";
 import EllipsisMenu from "./atoms/EllipsisMenu";
 import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
-import {EmployeeModuleCard,ModuleCardFullWidth} from "./atoms/EmployeeModuleCard";
+import { EmployeeModuleCard, ModuleCardFullWidth } from "./atoms/EmployeeModuleCard";
 import GreyOutText from "./atoms/GreyOutText";
 import Hamburger from "./atoms/Hamburger";
 import Header from "./atoms/Header";
@@ -144,6 +144,9 @@ import {
   CheckSvg,
   AddressBookIcon,
   LocationIcon,
+  CollectionsBookmarIcons,
+  FinanceChartIcon,
+  CollectionIcon,
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -388,4 +391,7 @@ export {
   ArrowDirection,
   AddressBookIcon,
   LocationIcon,
+  CollectionsBookmarIcons,
+  FinanceChartIcon,
+  CollectionIcon,
 };

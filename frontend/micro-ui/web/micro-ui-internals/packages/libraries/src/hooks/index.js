@@ -93,7 +93,7 @@ import useMcollectSearchBill from "./mcollect/useMcollectSearchBill";
 import usemcollectTenants from "./mcollect/useTenants";
 import useMCollectCount from "./mcollect/useMCollectCount";
 import useMCollectCategory from "./mcollect/useMcollectCategory";
-import useMCollectCategoryTypes from './mcollect/useMcollectCategoryTypes';
+import useMCollectCategoryTypes from "./mcollect/useMcollectCategoryTypes";
 import useMCollectTaxHeads from "./mcollect/useMcollectTaxHeads";
 import useMcollectFormConfig from "./mcollect/useMcollectFormConfig";
 
@@ -144,12 +144,12 @@ import useBPAREGApplicationActions from "./obps/useBPAREGApplicationActions";
 import useBPADetailsPage from "./obps/useBPADetailsPage";
 import useBPAInbox from "./obps/useBPAInbox";
 import useEDCRInbox from "./obps/useEDCRInbox";
-import useBPAApplicationActions from "./obps/useApplicationActions"
+import useBPAApplicationActions from "./obps/useApplicationActions";
 import useArchitectInbox from "./obps/useArchitectInbox";
 import useBPAREGSearch from "./obps/useBPAREGSearch";
 import useEmpBPAREGSearch from "./obps/useEmpBPAREGSearch";
-import useServiceTypeFromApplicationType from "./obps/useServiceTypeFromApplicationType"
-import useBusinessServiceBasedOnServiceType from "./obps/useBusinessServiceBasedOnServiceType"
+import useServiceTypeFromApplicationType from "./obps/useServiceTypeFromApplicationType";
+import useBusinessServiceBasedOnServiceType from "./obps/useBusinessServiceBasedOnServiceType";
 import useBusinessServiceData from "./obps/useBusinessServiceData";
 import useBPATaxDocuments from "./obps/useBPATaxDocuments";
 
@@ -182,8 +182,9 @@ import useMyBillsSewarageSearch from "./ws/useMyBillsSewarageSearch";
 import useMyApplicationSearch from "./ws/useMyApplicationSearch";
 import useWSDocumentSearch from "./ws/useWSDocumentSearch";
 import useWSDetailsPage from "./ws/useWSDetailsPage";
-import useWSApplicationActions from "./ws/useApplicationActions"
+import useWSApplicationActions from "./ws/useApplicationActions";
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
+import useAccessControl from "./useAccessControl";
 
 const pgr = {
   useComplaintDetails,
@@ -326,14 +327,14 @@ const obps = {
   useOBPSSearch,
   useBusinessServiceBasedOnServiceType,
   useBusinessServiceData,
-  useBPATaxDocuments
+  useBPATaxDocuments,
 };
 
 const events = {
   useInbox: useEventInbox,
   useCreateEvent,
   useEventDetails,
-  useUpdateEvent
+  useUpdateEvent,
 };
 
 const engagement = {
@@ -352,14 +353,14 @@ const survey = {
   useSubmitResponse: useSurveySubmitResponse,
   useShowResults: useSurveyShowResults,
   useSurveyInbox,
-}
+};
 
 const noc = {
   useNOCDetails,
   useNOCApplicationActions,
   useInbox: useNOCInbox,
-  useNOCSearchApplication
-}
+  useNOCSearchApplication,
+};
 
 const ws = {
   WSSearchMdmsTypes,
@@ -372,8 +373,8 @@ const ws = {
   useWSDocumentSearch,
   useWSDetailsPage,
   useWSApplicationActions,
-  useWSConsumptionSearch
-}
+  useWSConsumptionSearch,
+};
 
 const Hooks = {
   useSessionStorage,
@@ -403,6 +404,7 @@ const Hooks = {
   useStore,
   useTenants,
   useInbox: useTLInbox,
+  useAccessControl,
   pgr,
   fsm,
   pt,
@@ -416,7 +418,7 @@ const Hooks = {
   engagement,
   survey,
   noc,
-  ws
+  ws,
 };
 
 export default Hooks;
