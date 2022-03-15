@@ -286,6 +286,11 @@ public class NotificationUtil {
      */
 
     public List<EmailRequest> createEmailRequestFromSMSRequests(RequestInfo requestInfo,List<SMSRequest> smsRequests,String tenantId) {
+        return createEmailRequestFromSMSRequests(requestInfo,smsRequests, tenantId, null);
+    }
+
+    //added fileStoreIds in the function
+    public List<EmailRequest> createEmailRequestFromSMSRequests(RequestInfo requestInfo,List<SMSRequest> smsRequests,String tenantId, Set<String> fileStoreIds) {
         Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
         Map<String, String> mobileNumberToEmailId = fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
         if (CollectionUtils.isEmpty(mobileNumberToEmailId.keySet())) {
@@ -336,8 +341,6 @@ public class NotificationUtil {
             for (EmailRequest emailRequest: emailRequestList) {
                 if (!StringUtils.isEmpty(emailRequest.getEmail().getBody())) {
                     producer.push(config.getEmailNotifTopic(), emailRequest);
-                    log.info("Sending EMAIL notification! ");
-                    log.info("Email Id: " + emailRequest.getEmail().toString());
                 } else {
                     log.info("Email body is empty, hence no email notification will be sent.");
                 }

@@ -280,12 +280,9 @@ public class NotificationService {
 		Map<String, String> mobileNumberToOwner = new HashMap<>();
 		String tenantId = request.getProperty().getTenantId();
 		String moduleName = request.getProperty().getWorkflow().getModuleName();
+		//select only application_type when testing
 		for(Document document : request.getProperty().getDocuments()) {
 			fileStoreIds.add(document.getFileStoreId());
-			log.info("documentType: " + document.getDocumentType());
-//			if(document.getDocumentType()=="ApplicationType"){
-//				fileStoreIds.add(document.getFileStoreId());
-//			}
 		}
 
 		String action;
