@@ -2,7 +2,9 @@ package org.egov.waterconnection.repository;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -14,12 +16,14 @@ import org.egov.waterconnection.repository.rowmapper.OpenWaterRowMapper;
 import org.egov.waterconnection.web.models.SearchCriteria;
 import org.egov.waterconnection.web.models.WaterConnection;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
+import org.egov.waterconnection.web.models.WaterConnectionResponse;
 import org.egov.waterconnection.producer.WaterConnectionProducer;
 import org.egov.waterconnection.repository.builder.WsQueryBuilder;
 import org.egov.waterconnection.repository.rowmapper.WaterRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -136,5 +140,61 @@ public class WaterDaoImpl implements WaterDao {
 		return userInfo.getType().equalsIgnoreCase("SYSTEM")
 				&& userInfo.getRoles().stream().map(Role::getCode).collect(Collectors.toSet()).contains("ANONYMOUS");
 	}
+	
+	@Override
+	public WaterConnectionResponse getWaterConnectionListForPlaneSearch(SearchCriteria criteria, RequestInfo requestInfo) {
+
+		List<WaterConnection> waterConnectionList = new ArrayList<>();
+		List<Object> preparedStatement = new ArrayList<>();
+		
+		Set<String> ids = new HashSet<String>();
+		List<String> connectionIds = null;
+		if (criteria.getIds() != null && !criteria.getIds().isEmpty())
+			ids = criteria.getIds();
+		else
+			connectionIds = fetchWaterConIds(criteria);
+
+		if(connectionIds!=null && connectionIds.size()>0) {
+//		for (String id : connectionIds) {
+			ids.addAll(connectionIds);
+//		}
+		}
+		if (ids.isEmpty())
+			return new WaterConnectionResponse();
+
+		criteria.setIds(ids);
+		
+		String query = wsQueryBuilder.getSearchQueryStringForPlaneSearch(criteria, preparedStatement, requestInfo);
+
+		if (query == null)
+			return null;
+		
+		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
+		WaterConnectionResponse connectionResponse = new WaterConnectionResponse();
+		if (isOpenSearch) {
+			waterConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(), openWaterRowMapper);
+			connectionResponse = WaterConnectionResponse.builder().waterConnection(waterConnectionList)
+					.totalCount(openWaterRowMapper.getFull_count()).build();
+		} else {
+			waterConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(), waterRowMapper);
+			connectionResponse = WaterConnectionResponse.builder().waterConnection(waterConnectionList)
+					.totalCount(waterRowMapper.getFull_count()).build();
+		}
+		return connectionResponse;
+	}
+	
+	public List<String> fetchWaterConIds(SearchCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		preparedStmtList.add(criteria.getOffset());
+		preparedStmtList.add(criteria.getLimit());
+
+		List<String> ids = jdbcTemplate.query("SELECT id from eg_ws_connection ORDER BY createdtime offset " +
+						" ? " +
+						"limit ? ",
+				preparedStmtList.toArray(),
+				new SingleColumnRowMapper<>(String.class));
+		return ids;
+	}
+
 
 }
