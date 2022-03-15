@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Service
@@ -31,13 +32,13 @@ public class CallblackAPI {
 
     // callback API smscountry uses to send the reports
     @GetMapping("/callback")
-    public ResponseEntity getStatus(@NotNull @RequestParam String userId,
-                                    @NotNull @RequestParam String jobno,
-                                    @NotNull @RequestParam String mobilenumber,
-                                    @NotNull @RequestParam int status,
-                                    @NotNull @RequestParam String DoneTime,
-                                    @NotNull @RequestParam String messagepart,
-                                    @NotNull @RequestParam String sender_name) {
+    public ResponseEntity getStatus(@Valid @NotNull @RequestParam String userId,
+                                    @Valid @NotNull @RequestParam String jobno,
+                                    @Valid @NotNull @RequestParam String mobilenumber,
+                                    @Valid @NotNull @RequestParam int status,
+                                    @Valid @NotNull @RequestParam String DoneTime,
+                                    @Valid @NotNull @RequestParam String messagepart,
+                                    @Valid @NotNull @RequestParam String sender_name) {
 
         Report report = new Report();
         report.setJobno(jobno);
