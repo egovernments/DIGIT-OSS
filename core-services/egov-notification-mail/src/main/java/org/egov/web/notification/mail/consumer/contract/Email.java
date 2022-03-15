@@ -21,6 +21,7 @@ import lombok.Setter;
 @Builder
 public class Email {
 
+	//added tenantId and list filestoreids for the object
 	private Set<String> emailTo;
 	private String subject;
 	private String body;

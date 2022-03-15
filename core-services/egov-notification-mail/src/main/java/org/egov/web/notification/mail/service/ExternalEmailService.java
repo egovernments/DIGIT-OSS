@@ -76,8 +76,8 @@ public class ExternalEmailService implements EmailService {
 		mailSender.send(mailMessage);
 	}
 
+	//method for HTML Email using mimemessage helper
 	private void sendHTMLEmail(Email email) {
-		log.info("inside sendHTMLEmail");
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper;
 		try {
@@ -96,11 +96,7 @@ public class ExternalEmailService implements EmailService {
 				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, "pb", email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);
 				URLConnection con = url.openConnection();
-				String fieldValue = "attachment" + i;
-//				if (fieldValue == null || ! fieldValue.contains("filename=\"")) {
-//					// no file name there -> throw exception ...
-//				}
-//				String filename = fieldValue.substring(fieldValue.indexOf("filename=\"") + 10, fieldValue.length() - 1);
+				String fieldValue = "Application Form " + "[" + i + "]";
 				File download = new File(System.getProperty("java.io.tmpdir"), fieldValue);
 				ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
 				FileOutputStream fos = new FileOutputStream(download);
@@ -119,7 +115,6 @@ public class ExternalEmailService implements EmailService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		log.info("Sending message");
 		try{
 			mailSender.send(message);
 		} catch (MailException e){
