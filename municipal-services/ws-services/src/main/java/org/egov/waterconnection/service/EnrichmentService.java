@@ -19,6 +19,8 @@ import org.egov.waterconnection.web.models.Idgen.IdResponse;
 import org.egov.waterconnection.web.models.users.User;
 import org.egov.waterconnection.web.models.users.UserDetailResponse;
 import org.egov.waterconnection.web.models.users.UserSearchRequest;
+import org.egov.waterconnection.web.models.workflow.ProcessInstance;
+import org.egov.waterconnection.workflow.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -57,7 +59,8 @@ public class EnrichmentService {
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
 
-
+	@Autowired
+	private WorkflowService wfService;
 	/**
 	 * Enrich water connection
 	 * 
@@ -466,4 +469,16 @@ public class EnrichmentService {
 		return finalConnectionList;
 	}
 
+	public void enrichProcessInstance(List<WaterConnection> waterConnectionList, SearchCriteria criteria,
+			RequestInfo requestInfo) {
+		if (CollectionUtils.isEmpty(waterConnectionList))
+			return;
+		ProcessInstance processInstance=null;
+		for (WaterConnection waterConnection : waterConnectionList) {
+			processInstance=wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(), 
+					criteria.getTenantId(), null);
+			waterConnection.getProcessInstance().setBusinessService(processInstance.getBusinessService());
+			waterConnection.getProcessInstance().setModuleName(processInstance.getModuleName());	
+		}
+	}
 }

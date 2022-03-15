@@ -18,6 +18,8 @@ import org.egov.swservice.web.models.Idgen.IdResponse;
 import org.egov.swservice.web.models.users.User;
 import org.egov.swservice.web.models.users.UserDetailResponse;
 import org.egov.swservice.web.models.users.UserSearchRequest;
+import org.egov.swservice.web.models.workflow.ProcessInstance;
+import org.egov.swservice.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +55,8 @@ public class EnrichmentService {
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
 
+	@Autowired
+	private WorkflowService wfService;
 	/**
 	 * 
 	 * @param sewerageConnectionRequest
@@ -445,4 +449,18 @@ public class EnrichmentService {
 		}
 		return finalConnectionList;
 	}
+
+	public void enrichProcessInstance(List<SewerageConnection> sewerageConnectionList, SearchCriteria criteria,
+			RequestInfo requestInfo) {
+		if (CollectionUtils.isEmpty(sewerageConnectionList))
+			return;
+		List<ProcessInstance> processInstance=null;
+		for (SewerageConnection sewerageConnection : sewerageConnectionList) {
+			processInstance=wfService.getProcessInstance(requestInfo, sewerageConnection.getApplicationNo(),
+					criteria.getTenantId(), null);
+			sewerageConnection.getProcessInstance().setBusinessService(processInstance.get(0).getBusinessService());
+			sewerageConnection.getProcessInstance().setModuleName(processInstance.get(0).getModuleName());	
+		}
+	}
+
 }

@@ -128,6 +128,7 @@ public class SewerageServiceImpl implements SewerageService {
 		}
 		validateProperty.validatePropertyForConnection(sewerageConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
+		enrichmentService.enrichProcessInstance(sewerageConnectionList, criteria, requestInfo);
 		return sewerageConnectionList;
 	}
 
