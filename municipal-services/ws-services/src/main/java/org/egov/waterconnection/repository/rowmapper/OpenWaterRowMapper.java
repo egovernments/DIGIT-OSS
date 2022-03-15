@@ -19,6 +19,17 @@ import java.util.Map;
 
 @Component
 public class OpenWaterRowMapper implements ResultSetExtractor<List<WaterConnection>> {
+	
+	private int full_count=0;
+
+	public int getFull_count() {
+		return full_count;
+	}
+
+	public void setFull_count(int full_count) {
+		this.full_count = full_count;
+	}
+	
 	@Override
     public List<WaterConnection> extractData(ResultSet rs) throws SQLException, DataAccessException {
         Map<String, WaterConnection> connectionListMap = new HashMap<>();
@@ -54,6 +65,7 @@ public class OpenWaterRowMapper implements ResultSetExtractor<List<WaterConnecti
                 currentWaterConnection.setChannel(rs.getString("channel"));
                 currentWaterConnection.setDateEffectiveFrom(rs.getLong("dateEffectiveFrom"));
 
+                this.setFull_count(rs.getInt("full_count")); 
                 AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("ws_createdBy"))
                         .createdTime(rs.getLong("ws_createdTime")).lastModifiedBy(rs.getString("ws_lastModifiedBy"))
                         .lastModifiedTime(rs.getLong("ws_lastModifiedTime")).build();
