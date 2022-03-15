@@ -52,7 +52,11 @@ const ApplicationDetails = (props) => {
   function onActionSelect(action) {
     if (action) {
       if (action?.redirectionUrll) {
-        window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/${action?.redirectionUrll?.pathname}`);
+        if (action?.redirectionUrll?.action === "ACTIVATE_CONNECTION") {
+          history.push(`${action?.redirectionUrll?.pathname}`, { data: action?.redirectionUrll?.state });
+        } else {
+          window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/${action?.redirectionUrll?.pathname}`);
+        }
       } else if (!action?.redirectionUrl) {
         setShowModal(true);
       } else {

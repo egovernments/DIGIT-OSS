@@ -14,7 +14,7 @@ export const configWSApproverApplication = ({
   businessService,
 }) => {
   let checkCondtions = true;
-  if (action?.action == "SENDBACKTOCITIZEN") checkCondtions = false;
+  if (action?.action?.includes("SEND_BACK") || action?.action == "APPROVE_FOR_CONNECTION") checkCondtions = false;
   if (action.isTerminateState) checkCondtions = false;
 
   return {

@@ -184,6 +184,7 @@ import useWSDocumentSearch from "./ws/useWSDocumentSearch";
 import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions";
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
+import useWSMDMS from "./ws/useWSMDMS";
 import useAccessControl from "./useAccessControl";
 
 const pgr = {
@@ -374,7 +375,9 @@ const ws = {
   useWSDetailsPage,
   useWSApplicationActions,
   useWSConsumptionSearch,
+  useMDMS: useWSMDMS 
 };
+
 
 const Hooks = {
   useSessionStorage,

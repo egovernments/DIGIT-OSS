@@ -24,6 +24,12 @@ import WSConnectionHolderDetails from "./pageComponents/WSConnectionHolderDetail
 import MyConnections from "./pages/citizen/MyConnection";
 import ConnectionDetails from "./pages/citizen/MyConnection/ConnectionDetails";
 
+import WSActivationConnectionDetails from "./pageComponents/WSActivationConnectionDetails";
+import WSActivationPlumberDetails from "./pageComponents/WSActivationPlumberDetails";
+import WSActivationPageDetails from "./pageComponents/WSActivationPageDetails";
+import WSActivationCommentsDetails from "./pageComponents/WSActivationCommentsDetails";
+import WSActivationSupportingDocuments from "./pageComponents/WSActivationSupportingDocuments";
+
 const WSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "ws";
   const { path, url } = useRouteMatch();
@@ -105,6 +111,12 @@ const componentsToRegister = {
   WSConnectionHolderDetails,
   MyConnections,
   ConnectionDetails,
+  
+  WSActivationConnectionDetails,
+  WSActivationPlumberDetails,
+  WSActivationPageDetails,
+  WSActivationCommentsDetails,
+  WSActivationSupportingDocuments
 };
 
 export const initWSComponents = () => {
