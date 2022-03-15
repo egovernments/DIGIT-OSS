@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FormComposer, Toast, Header } from "@egovernments/digit-ui-react-components";
 import { newConfig as newConfigTL } from "../../../config/config";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { convertDateToEpoch } from "../../../utils";
 import _ from "lodash";
 import cloneDeep from "lodash/cloneDeep";
@@ -10,6 +10,7 @@ import cloneDeep from "lodash/cloneDeep";
 const NewApplication = () => {
   let tenantId = Digit.ULBService.getCurrentTenantId();
   tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  const propertyId = new URLSearchParams(useLocation().search).get("propertyId")
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
   const history = useHistory();
@@ -46,6 +47,11 @@ const NewApplication = () => {
   };
 
   const onSubmit = (data) => {
+    if (!propertyId){
+      setShowToast({ key: "error" });
+      setError("TL_PROPERTY_ID_REQUIRED");
+      return;
+    }
     let accessories = [];
     if (data?.accessories?.length > 0) {
       data?.accessories.map((data) => {

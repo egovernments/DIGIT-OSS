@@ -136,10 +136,10 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           isMandatory: false,
         },
         {
-          label: property.label,
+          label: "",
           labelChildren: (
-            <div className="tooltip">
-              {"  "}
+            <div className="tooltip" style={{display: "flex", alignItems: "center", gap: "0 4px"}}>
+              <h2>{property.label}</h2>
               <InfoBannerIcon fill="#0b0c0c" />
               <span className="tooltiptext" style={{ whiteSpace: "nowrap" , marginLeft: "-500%" , fontSize:"medium" }}>
                 {t(property.description)  + ptSearchConfig?.propertyIdFormat}
