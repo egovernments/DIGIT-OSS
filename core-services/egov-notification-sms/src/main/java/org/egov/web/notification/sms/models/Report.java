@@ -3,8 +3,8 @@ package org.egov.web.notification.sms.models;
 
 import lombok.*;
 
-import java.util.Date;
 
+//Report object that will be stored
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter

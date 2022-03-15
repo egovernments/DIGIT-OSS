@@ -1,26 +1,18 @@
 package org.egov.web.notification.sms.controller;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.egov.hash.HashService;
 import org.egov.web.notification.sms.config.Producer;
 import org.egov.web.notification.sms.models.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 
 @Service
 @Controller
@@ -37,33 +29,15 @@ public class CallblackAPI {
     @Value("${kafka.topics.sms.bounce}")
     private String TOPIC;
 
-    @PostMapping("/callback")
-    public ResponseEntity postStatus(@RequestParam String userId,
-                                     @RequestParam String jobno,
-                                     @RequestParam String mobilenumber,
-                                     @RequestParam int status,
-                                     @RequestParam String DoneTime,
-                                     @RequestParam String messagepart,
-                                     @RequestParam String sender_name) {
-
-        Report report = new Report();
-        report.setJobno(jobno);
-        report.setMessagestatus(status);
-        report.setDoneTime(DoneTime);
-        report.setUsernameHash(hashService.getHashValue(mobilenumber));
-
-        producer.push(TOPIC, report);
-        return ResponseEntity.ok().build();
-    }
-
+    // callback API smscountry uses to send the reports
     @GetMapping("/callback")
-    public ResponseEntity getStatus(@RequestParam String userId,
-                                    @RequestParam String jobno,
-                                    @RequestParam String mobilenumber,
-                                    @RequestParam int status,
-                                    @RequestParam String DoneTime,
-                                    @RequestParam String messagepart,
-                                    @RequestParam String sender_name) {
+    public ResponseEntity getStatus(@NotNull @RequestParam String userId,
+                                    @NotNull @RequestParam String jobno,
+                                    @NotNull @RequestParam String mobilenumber,
+                                    @NotNull @RequestParam int status,
+                                    @NotNull @RequestParam String DoneTime,
+                                    @NotNull @RequestParam String messagepart,
+                                    @NotNull @RequestParam String sender_name) {
 
         Report report = new Report();
         report.setJobno(jobno);
