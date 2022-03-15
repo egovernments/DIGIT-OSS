@@ -77,6 +77,9 @@ const getTradeEditDetails = (data) => {
           mobilenumber: ob.mobileNumber,
           permanentAddress: ob.permanentAddress,
           id: ob.id,
+          uuid : ob.uuid,
+          relationship : { code: ob?.relationship , i18nKey:ob.relationship?`COMMON_RELATION_${ob.relationship}`:"CS_NA"},
+          fatherOrHusbandName : ob?.fatherOrHusbandName,
         });
       });
     // ownerarray["permanentAddress"]=owner.permanentAddress;

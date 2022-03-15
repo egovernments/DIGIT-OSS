@@ -35,6 +35,8 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
           fatherOrHusbandName: owner?.fatherOrHusbandName || "",
           emailId: initData?.emailId || "",
           relationship: owner?.relationship || "",
+          id: owner.id || "",
+          uuid: owner.uuid || "",
         })) : [{
           name: null,
           gender: null,
@@ -352,6 +354,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
               selectedOption={field.gender}
               onSelect={(e) => handleRadioButtonInput(index, e, "gender")}
               labelKey=""
+              isPTFlow={true}
               //disabled={isUpdateProperty || isEditProperty}
             />
             <CardLabel>{`${t("TL_MOBILE_NUMBER_LABEL")}`}</CardLabel>
@@ -405,6 +408,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
               selectedOption={field.relationship}
               onSelect={(e) => handleRadioButtonInput(index, e, "relationship")}
               labelKey=""
+              isPTFlow={true}
             />
             {typeOfOwner === "MULTIOWNER" && (
               <CheckBox
