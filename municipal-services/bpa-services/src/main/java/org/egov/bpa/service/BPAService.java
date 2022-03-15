@@ -728,4 +728,38 @@ public class BPAService {
         
         }
         
+        public List<BPA> plainSearch(BPASearchCriteria criteria, RequestInfo requestInfo) {
+    		List<BPA> bpas = new LinkedList<>();
+    		LandSearchCriteria landcriteria = new LandSearchCriteria();
+    		List<String> edcrNos = null;
+
+    		List<String> roles = new ArrayList<>();
+    		for (Role role : requestInfo.getUserInfo().getRoles()) {
+    			roles.add(role.getCode());
+    		}
+
+    		bpas = getBPAFromCriteriaForPlainSearch(criteria, requestInfo, edcrNos);
+    		ArrayList<String> landIds = new ArrayList<>();
+    		if (!bpas.isEmpty()) {	
+    			for (int i = 0; i < bpas.size(); i++) {
+    				landIds.add(bpas.get(i).getLandId());
+    			}
+    			landcriteria.setIds(landIds);
+    			//landcriteria.setTenantId(bpas.get(0).getTenantId());
+    			ArrayList<LandInfo> landInfos = landService.searchLandInfoToBPAForPlaneSearch(requestInfo, landcriteria);
+
+    			this.populateLandToBPA(bpas, landInfos,requestInfo);
+    		}
+
+
+    		return bpas;
+    	}
+    	
+    	public List<BPA> getBPAFromCriteriaForPlainSearch(BPASearchCriteria criteria, RequestInfo requestInfo, List<String> edcrNos) {
+    		List<BPA> bpa = repository.getBPADataForPlainSearch(criteria, edcrNos);
+    		if (bpa.isEmpty())
+    			return Collections.emptyList();
+    		return bpa;
+    	}
+        
 }
