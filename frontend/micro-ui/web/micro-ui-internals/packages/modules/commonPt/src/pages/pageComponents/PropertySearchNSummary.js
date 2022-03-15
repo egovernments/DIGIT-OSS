@@ -19,7 +19,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
     isError,
     error,
     data: propertyDetails
-  } = Digit.Hooks.pt.usePropertySearch({ filters: { propertyIds: searchPropertyId }, tenantId: tenantId }, { filters: { propertyIds: searchPropertyId }, tenantId: tenantId });
+  } = Digit.Hooks.pt.usePropertySearch({ filters: { propertyIds: propertyId || searchPropertyId }, tenantId: tenantId }, { filters: { propertyIds: propertyId || searchPropertyId }, tenantId: tenantId });
 
   useEffect(() => {
     onSelect('cpt', { details: propertyDetails?.Properties[0]})

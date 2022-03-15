@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Header, Localities, Toast } from "@egovernments/digit-ui-react-components";
+import { Header, Loader, Localities, Toast } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
 const PTSearchFields = {
@@ -137,6 +137,10 @@ const Search = ({ path }) => {
       setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
     }
   });
+
+
+  if(isLoading) return <Loader></Loader>;
+
   return (
     <React.Fragment>
       <Header>{t("SEARCH_PROPERTY")}</Header>
