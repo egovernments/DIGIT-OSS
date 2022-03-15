@@ -14,4 +14,5 @@ public class Report {
     private String jobno;
     private int messagestatus;
     private String DoneTime;
+    private String usernameHash;
 }
