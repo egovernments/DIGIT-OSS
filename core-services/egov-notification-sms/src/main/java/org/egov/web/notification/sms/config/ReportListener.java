@@ -15,25 +15,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Slf4j
 public class ReportListener {
 
-
-
     private Report report;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-//    @Autowired
-//    public ReportListener(Report report, ObjectMapper objectMapper) {
-//        this.report = report;
-//        this.objectMapper = objectMapper;
-//    }
 
     @KafkaListener(topics = "${kafka.topics.sms.bounce}")
     public void listen(final HashMap<String, Object> record) {
         Report report = objectMapper.convertValue(record, Report.class);
         log.info(report.toString());
     }
-
-
 
 }

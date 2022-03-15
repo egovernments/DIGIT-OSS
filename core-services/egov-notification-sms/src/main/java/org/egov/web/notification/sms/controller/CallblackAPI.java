@@ -2,6 +2,7 @@ package org.egov.web.notification.sms.controller;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.egov.hash.HashService;
 import org.egov.web.notification.sms.config.Producer;
 import org.egov.web.notification.sms.models.Report;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class CallblackAPI {
     @Autowired
     Producer producer;
 
+    @Autowired
+    HashService hashService;
+
     @Value("${kafka.topics.sms.bounce}")
     private String TOPIC;
 
@@ -46,7 +50,7 @@ public class CallblackAPI {
         report.setJobno(jobno);
         report.setMessagestatus(status);
         report.setDoneTime(DoneTime);
-        report.setUsernameHash(toHash(mobilenumber));
+        report.setUsernameHash(hashService.getHashValue(mobilenumber));
 
         producer.push(TOPIC, report);
         return ResponseEntity.ok().build();
@@ -65,25 +69,10 @@ public class CallblackAPI {
         report.setJobno(jobno);
         report.setMessagestatus(status);
         report.setDoneTime(DoneTime);
-        report.setUsernameHash(toHash(mobilenumber));
+        report.setUsernameHash(hashService.getHashValue(mobilenumber));
 
         producer.push(TOPIC, report);
         return ResponseEntity.ok().build();
     }
 
-    private String toHash(String mobileno) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(mobileno.getBytes());
-            BigInteger no = new BigInteger(1, messageDigest);
-            String hashtext = no.toString(16);
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-
-            return hashtext;
-        } catch(NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
