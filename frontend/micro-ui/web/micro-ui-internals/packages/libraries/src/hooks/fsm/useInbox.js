@@ -24,21 +24,7 @@ const useFSMInbox = (tenantId, filters, config = {}, overRideUUID=false) => {
         select: (data) => ({
             totalCount: data.totalCount,
             statuses: data.statusMap,
-            table: data?.items?.map( application => ({
-                tenantId: application.businessObject.tenantId,
-                totalCount: application.businessObject.totalCount,
-                applicationNo: application.businessObject.applicationNo,
-                createdTime: new Date(application.businessObject.auditDetails.createdTime),
-                locality: application.businessObject.address.locality.code,
-                status: application.businessObject.applicationStatus,
-                citizen:{
-                    name: application.ProcessInstance?.assigner?.name,
-                    mobileNumber: application.ProcessInstance?.assigner?.mobileNumber
-                },
-                propertyUsage: application.businessObject.propertyUsage,
-                sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000)) || "-",
-                mathsla: application.ProcessInstance?.businesssServiceSla,
-            }))
+            table: tableData(data)
         }),
         ...config
     }})
@@ -54,5 +40,35 @@ const useFSMInbox = (tenantId, filters, config = {}, overRideUUID=false) => {
     }
     return { ...appList }
 }
+
+const tableData = (data) => {
+    let result = [];
+    if (data && data.items && data.items.length) {
+      data.items.map((application) => {
+        result.push({
+          tenantId: application?.businessObject?.tenantId || '',
+          totalCount: application?.businessObject?.totalCount || '',
+          applicationNo: application?.businessObject?.applicationNo || '',
+          createdTime: application?.businessObject?.auditDetails?.createdTime
+            ? new Date(application.businessObject.auditDetails.createdTime)
+            : new Date(),
+          locality: application?.businessObject?.address?.locality?.code || '',
+          status: application?.businessObject?.applicationStatus || '',
+          citizen: {
+            name: application?.ProcessInstance?.assigner?.name || '',
+            mobileNumber: application?.ProcessInstance?.assigner?.mobileNumber || ''
+          },
+          propertyUsage: application?.businessObject?.propertyUsage || '',
+          sla:
+            Math.round(
+              application?.ProcessInstance?.businesssServiceSla /
+                (24 * 60 * 60 * 1000)
+            ) || "-",
+          mathsla: application?.ProcessInstance?.businesssServiceSla || ''
+        });
+      });
+    }
+    return result;
+  };
 
 export default useFSMInbox
