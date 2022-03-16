@@ -187,6 +187,9 @@ export const searchApiResponse = async (request, next = {}) => {
     let limit =10;
     if( queryObj.hasOwnProperty("offset") ){
       offset = queryObj.offset*1;
+      if( offset !=0){
+        offset = offset-1;
+      }
    }
   if( queryObj.hasOwnProperty("limit") ){
     limit = queryObj.limit*1;
