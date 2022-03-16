@@ -77,10 +77,10 @@ const WSActivationConnectionDetails = ({ config, onSelect, userType, formData, s
         setConnectionTypeList(connectionTypes);
         setWaterSourceList(waterSourceOutput);
 
-        if (connectionDetails?.waterSource?.code) {
+        if (connectionDetails?.[0]?.waterSource?.code) {
             const waterSubSource = mdmsData?.["ws-services-masters"]?.waterSource && cloneDeep(mdmsData?.["ws-services-masters"]?.waterSource) || [];
             waterSubSource?.forEach(data => data.i18nKey = `WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.code?.toUpperCase(), ".", "_")}`);
-            const listOfSubSource = waterSubSource?.filter(data => connectionDetails?.waterSource?.code?.split('.')[0] == data?.code?.split(".")[0]);
+            const listOfSubSource = waterSubSource?.filter(data => connectionDetails?.[0]?.waterSource?.code?.split('.')[0] == data?.code?.split(".")[0]);
             setWaterSubSourceList(listOfSubSource);
         }
 
@@ -168,11 +168,17 @@ const ConnectionDetails = (_props) => {
             const part = {};
             keys.forEach((key) => (part[key] = connectionDetail[key]));
             if (!_.isEqual(formValue, part)) {
+                let isErrorsFound = true;
                 Object.keys(formValue).map(data => {
-                    if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
-                        setIsErrors(true);
-                    }
+                    if (!formValue[data] && isErrorsFound) {
+                        isErrorsFound = false
+                        setIsErrors(false);
+                      }
+                    // if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
+                    //     setIsErrors(true);
+                    // }
                 });
+                if (isErrorsFound) setIsErrors(true);
                 let ob = [{ ...formValue }];
                 let mcollectFormValue = JSON.parse(sessionStorage.getItem("mcollectFormData"));
                 mcollectFormValue = { ...mcollectFormValue, ...ob[0] }
@@ -200,12 +206,13 @@ const ConnectionDetails = (_props) => {
                 <div>
                     {filters?.service === "WATER" ? <div>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_TYPE")} * :`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_TYPE")}*:`}</CardLabel>
                             <Controller
                                 control={control}
                                 name={"connectionType"}
                                 defaultValue={connectionDetail?.connectionType}
                                 rules={{ required: t("REQUIRED_FIELD") }}
+                                isMandatory={true}
                                 render={(props) => (
                                     <Dropdown
                                         className="form-field"
@@ -225,12 +232,13 @@ const ConnectionDetails = (_props) => {
                         </LabelFieldPair>
                         <CardLabelError style={errorStyle}>{localFormState.touched.connectionType ? errors?.connectionType?.message : ""}</CardLabelError>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_WATER_SOURCE")} * :`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_WATER_SOURCE")}*:`}</CardLabel>
                             <Controller
                                 control={control}
                                 name={"waterSource"}
                                 defaultValue={connectionDetail?.waterSource}
                                 rules={{ required: t("REQUIRED_FIELD") }}
+                                isMandatory={true}
                                 render={(props) => (
                                     <Dropdown
                                         className="form-field"
@@ -259,12 +267,13 @@ const ConnectionDetails = (_props) => {
                         </LabelFieldPair>
                         <CardLabelError style={errorStyle}>{localFormState.touched.waterSource ? errors?.waterSource?.message : ""}</CardLabelError>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_WATER_SUB_SOURCE")} * :`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_WATER_SUB_SOURCE")}*:`}</CardLabel>
                             <Controller
                                 control={control}
                                 name={"sourceSubData"}
                                 defaultValue={connectionDetail?.sourceSubData}
                                 rules={{ required: t("REQUIRED_FIELD") }}
+                                isMandatory={true}
                                 render={(props) => (
                                     <Dropdown
                                         className="form-field"
@@ -284,12 +293,13 @@ const ConnectionDetails = (_props) => {
                         </LabelFieldPair>
                         <CardLabelError style={errorStyle}>{localFormState.touched.sourceSubData ? errors?.sourceSubData?.message : ""}</CardLabelError>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_PIPE_SIZE")} * :`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_PIPE_SIZE")}*:`}</CardLabel>
                             <Controller
                                 control={control}
                                 name={"pipeSize"}
                                 defaultValue={connectionDetail?.pipeSize}
                                 rules={{ required: t("REQUIRED_FIELD") }}
+                                isMandatory={true}
                                 render={(props) => (
                                     <Dropdown
                                         className="form-field"
@@ -309,14 +319,15 @@ const ConnectionDetails = (_props) => {
                         </LabelFieldPair>
                         <CardLabelError style={errorStyle}>{localFormState.touched.pipeSize ? errors?.pipeSize?.message : ""}</CardLabelError>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_NO_OF_TAPS")} :`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_NO_OF_TAPS")}*:`}</CardLabel>
                             <div className="field">
                                 <Controller
                                     control={control}
                                     name="noOfTaps"
                                     defaultValue={connectionDetail?.noOfTaps}
-                                    rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
+                                    rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                     type="number"
+                                    isMandatory={true}
                                     render={(props) => (
                                         <TextInput
                                             type="number"
@@ -338,14 +349,15 @@ const ConnectionDetails = (_props) => {
                     </div>
                         : <div>
                             <LabelFieldPair>
-                                <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_NUMBER_WATER_CLOSETS_LABEL")} :`}</CardLabel>
+                                <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_NUMBER_WATER_CLOSETS_LABEL")}*:`}</CardLabel>
                                 <div className="field">
                                     <Controller
                                         control={control}
                                         name="noOfWaterClosets"
                                         defaultValue={connectionDetail?.noOfWaterClosets}
-                                        rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
+                                        rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                         type="number"
+                                        isMandatory={true}
                                         render={(props) => (
                                             <TextInput
                                                 value={props.value}
@@ -365,14 +377,15 @@ const ConnectionDetails = (_props) => {
                             </LabelFieldPair>
                             <CardLabelError style={errorStyle}>{localFormState.touched.noOfWaterClosets ? errors?.noOfWaterClosets?.message : ""}</CardLabelError>
                             <LabelFieldPair>
-                                <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_NO_OF_TOILETS")} :`}</CardLabel>
+                                <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_NO_OF_TOILETS")}*:`}</CardLabel>
                                 <div className="field">
                                     <Controller
                                         control={control}
                                         name="noOfToilets"
                                         defaultValue={connectionDetail?.noOfToilets}
-                                        rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
+                                        rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                         type="number"
+                                        isMandatory={true}
                                         render={(props) => (
                                             <TextInput
                                                 value={props.value}

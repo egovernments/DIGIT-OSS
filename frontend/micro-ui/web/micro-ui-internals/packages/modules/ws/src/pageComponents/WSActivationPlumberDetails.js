@@ -130,7 +130,7 @@ const PlumberDetails = (_props) => {
             <div style={{ marginBottom: "16px" }}>
                 <div>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")} :`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")}:`}</CardLabel>
                         <Controller
                             control={control}
                             name={"detailsProvidedBy"}
@@ -155,7 +155,7 @@ const PlumberDetails = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.detailsProvidedBy ? errors?.detailsProvidedBy?.message : ""}</CardLabelError>
                     {plumberDetail?.detailsProvidedBy?.code == "ULB" && <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PLIMBER_LICENSE_NO_LABEL")} :`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PLIMBER_LICENSE_NO_LABEL")}:`}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}
@@ -180,7 +180,7 @@ const PlumberDetails = (_props) => {
                     </LabelFieldPair>}
                     {plumberDetail?.detailsProvidedBy?.code == "ULB" && <CardLabelError style={errorStyle}>{localFormState.touched.plumberLicenseNo ? errors?.plumberLicenseNo?.message : ""}</CardLabelError>}
                     {plumberDetail?.detailsProvidedBy?.code == "ULB" && <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL")} :`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL")}:`}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}
@@ -205,7 +205,7 @@ const PlumberDetails = (_props) => {
                     </LabelFieldPair>}
                     {plumberDetail?.detailsProvidedBy?.code == "ULB" && <CardLabelError style={errorStyle}>{localFormState.touched.plumberName ? errors?.plumberName?.message : ""}</CardLabelError>}
                     {plumberDetail?.detailsProvidedBy?.code == "ULB" && <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PLUMBER_MOBILE_NO_LABEL")} :`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PLUMBER_MOBILE_NO_LABEL")}:`}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}

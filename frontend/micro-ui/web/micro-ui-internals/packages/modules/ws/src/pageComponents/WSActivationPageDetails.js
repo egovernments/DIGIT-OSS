@@ -28,6 +28,12 @@ const WSActivationPageDetails = ({ config, onSelect, userType, formData, setErro
         onSelect(config?.key, data);
     }, [activationDetails]);
 
+    useEffect(() => {
+        if (userType === "employee") {
+            onSelect(config.key, { ...formData[config.key], ...activationDetails });
+        }
+    }, [activationDetails]);
+
     const commonProps = {
         focusIndex,
         allOwners: activationDetails,
@@ -90,11 +96,17 @@ const ConnectionDetails = (_props) => {
             const part = {};
             keys.forEach((key) => (part[key] = activationDetail[key]));
             if (!_.isEqual(formValue, part)) {
+                let isErrorsFound = true;
                 Object.keys(formValue).map(data => {
-                    if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
-                        setIsErrors(true);
-                    }
+                    if (!formValue[data] && isErrorsFound) {
+                        isErrorsFound = false
+                        setIsErrors(false);
+                      }
+                    // if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
+                    //     setIsErrors(true);
+                    // }
                 });
+                if (isErrorsFound) setIsErrors(true);
                 let ob = [{ ...formValue }];
                 let mcollectFormValue = JSON.parse(sessionStorage.getItem("mcollectFormData"));
                 mcollectFormValue = { ...mcollectFormValue, ...ob[0] }
@@ -122,14 +134,15 @@ const ConnectionDetails = (_props) => {
             <div style={{ marginBottom: "16px" }}>
                 {filters?.service === "WATER" && formData?.connectionDetails?.[0]?.connectionType?.code?.toUpperCase() === "METERED" ? <div>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_METER_ID")} :`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_METER_ID")}*:`}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}
                                 name="meterId"
                                 defaultValue={activationDetail?.meterId}
                                 type="number"
-                                rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
+                                rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                                isMandatory={true}
                                 render={(props) => (
                                     <TextInput
                                         type="number"
@@ -149,11 +162,11 @@ const ConnectionDetails = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.meterId ? errors?.meterId?.message : ""}</CardLabelError>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAIL_METER_INSTALL_DATE")}:`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAIL_METER_INSTALL_DATE")}*:`}</CardLabel>
                         <div className="field">
                             <Controller
                                 name="meterInstallationDate"
-                                // rules={{ required: t("REQUIRED_FIELD") }}
+                                rules={{ required: t("REQUIRED_FIELD") }}
                                 // isMandatory={true}
                                 defaultValue={activationDetail?.meterInstallationDate}
                                 control={control}
@@ -169,14 +182,15 @@ const ConnectionDetails = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.meterInstallationDate ? errors?.meterInstallationDate?.message : ""}</CardLabelError>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_INITIAL_METER_READING_LABEL")} :`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_INITIAL_METER_READING_LABEL")}*:`}</CardLabel>
                         <div className="field">
                             <Controller
                                 type="number"
                                 control={control}
                                 name="meterInitialReading"
+                                rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                 defaultValue={activationDetail?.meterInitialReading}
-                                rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
+                                isMandatory={true}
                                 render={(props) => (
                                     <TextInput
                                         type="number"
@@ -202,7 +216,7 @@ const ConnectionDetails = (_props) => {
                         <Controller
                             name="connectionExecutionDate"
                             rules={{ required: t("REQUIRED_FIELD") }}
-                            isMandatory={true}
+                            // isMandatory={true}
                             defaultValue={activationDetail?.connectionExecutionDate}
                             control={control}
                             render={(props) => (

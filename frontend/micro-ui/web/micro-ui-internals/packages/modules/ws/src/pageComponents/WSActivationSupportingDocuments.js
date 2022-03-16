@@ -54,7 +54,7 @@ const WSActivationSupportingDocuments = ({ t, config, userType, formData, onSele
     return (
         <div>
             <LabelFieldPair>
-                <CardLabel className="card-label-smaller">{t(`WF_APPROVAL_UPLOAD_HEAD`)}</CardLabel>
+                <CardLabel className="card-label-smaller">{t(`WF_APPROVAL_UPLOAD_HEAD`)}:</CardLabel>
                 <div className="field">
                     <UploadFile
                         // id={id}

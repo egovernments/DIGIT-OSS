@@ -37,7 +37,7 @@ const ActivateConnection = () => {
         waterSource: state?.data?.waterSource ? {
             code: state?.data?.waterSource, i18nKey: `WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(state?.data?.waterSource?.split('.')[0]?.toUpperCase(), " ", "_")}`
         } : "",
-        waterSubSource: state?.data?.waterSource ? {
+        sourceSubData: state?.data?.waterSource ? {
             code: state?.data?.waterSource, i18nKey: `WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(state?.data?.waterSource?.toUpperCase(), " ", "_")}`
         } : "",
         pipeSize: state?.data?.pipeSize ? {
@@ -62,7 +62,7 @@ const ActivateConnection = () => {
 
     const activationDetails = state?.data?.connectionType?.toUpperCase() === "METERED" ? [{
         meterId: state?.data?.meterId || "",
-        meterInstallationDate: state?.data?.meterInstallationDate ? Digit.DateUtils.ConvertEpochToDate(state?.data?.meterInstallationDate) : "",
+        meterInstallationDate: state?.data?.meterInstallationDate ? Digit.DateUtils.ConvertEpochToDate(state?.data?.meterInstallationDate) : null,
         meterInitialReading: state?.data?.additionalDetails?.initialMeterReading || "",
         connectionExecutionDate: state?.data?.connectionExecutionDate ? Digit.DateUtils.ConvertEpochToDate(state?.data?.connectionExecutionDate) : null,
     }] : [{
@@ -84,6 +84,13 @@ const ActivateConnection = () => {
         setConfig(config);
     });
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (showToast?.key != "error") window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${filters?.applicationNumber}&service=${filters?.service}`
+        }, 3000);
+        return () => clearTimeout(timer);
+      }, [showToast]);
+
     const onFormValueChange = (setValue, formData, formState) => {
         if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0) setSubmitValve(true);
         else setSubmitValve(!(Object.keys(formState.errors).length));
@@ -98,7 +105,7 @@ const ActivateConnection = () => {
 
     const closeToast = () => {
         setShowToast(null);
-        history.push(`/digit-ui/employee/ws/application-details?applicationNumber=${filters?.applicationNumber}&service=${filters?.service}`, {});
+        // history.push(`/digit-ui/employee/ws/application-details?applicationNumber=${filters?.applicationNumber}&service=${filters?.service}`, {});
     };
 
     const closeToastOfError = () => { setShowToast(null); };
@@ -112,8 +119,8 @@ const ActivateConnection = () => {
         if (formDetails?.connectionDetails?.[0]?.pipeSize?.size) formData.pipeSize = formDetails?.connectionDetails?.[0]?.pipeSize?.size;
         if (formDetails?.connectionDetails?.[0]?.noOfTaps) formData.noOfTaps = formDetails?.connectionDetails?.[0]?.noOfTaps;
 
-        if (formDetails?.connectionDetails?.noOfWaterClosets) formData.noOfWaterClosets = formDetails?.connectionDetails?.[0]?.noOfWaterClosets;
-        if (formDetails?.connectionDetails?.noOfToilets) formData.noOfToilets = formDetails?.connectionDetails?.[0]?.noOfToilets;
+        if (formDetails?.connectionDetails?.[0]?.noOfWaterClosets) formData.noOfWaterClosets = formDetails?.connectionDetails?.[0]?.noOfWaterClosets;
+        if (formDetails?.connectionDetails?.[0]?.noOfToilets) formData.noOfToilets = formDetails?.connectionDetails?.[0]?.noOfToilets;
 
         if (formDetails?.plumberDetails?.[0]?.detailsProvidedBy?.code) formData.additionalDetails.detailsProvidedBy = formDetails?.plumberDetails?.[0]?.detailsProvidedBy?.code;
         if (!formData?.plumberInfo?.[0] && formDetails?.plumberDetails?.detailsProvidedBy?.code == "ULB") formData.plumberInfo = [{}];
@@ -154,24 +161,25 @@ const ActivateConnection = () => {
         const reqDetails = filters?.service == "WATER" ? { WaterConnection: formData } : { SewerageConnection: formData }
 
         if (mutate) {
-            setIsEnableLoader(true);
+            // setIsEnableLoader(true);
             mutate(reqDetails, {
                 onError: (error, variables) => {
-                    setIsEnableLoader(false);
+                    // setIsEnableLoader(false);
                     setShowToast({ key: "error", message: error?.message ? error.message : error });
-                    setTimeout(closeToastOfError, 3000);
+                    setTimeout(closeToastOfError, 5000);
                 },
                 onSuccess: (data, variables) => {
-                    setIsEnableLoader(false);
-                    setShowToast({ key: "success", message: "WS_ACTIVATE_SUCCESS_MESSAGE_MAIN" });
-                    setTimeout(closeToast(), 3000);
+                    // setIsEnableLoader(false);
+                    setShowToast({ key: false, message: "WS_ACTIVATE_SUCCESS_MESSAGE_MAIN" });
+                    setTimeout(closeToast(), 5000);
+                    // setTimeout(closeToastForSucsss(), 5000)
                 },
             });
         }
     };
 
 
-    if (updatingApplication || isEnableLoader) {
+    if (isEnableLoader) { //updatingApplication || 
         return <Loader />;
     }
 
