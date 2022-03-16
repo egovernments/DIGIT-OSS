@@ -128,6 +128,7 @@ const Urls = {
     search: "/egov-user-event/v1/events/_search",
     update: "/egov-user-event/v1/events/lat/_update",
     updateEvent: "/egov-user-event/v1/events/_update",
+    updateEventCDG: "/egov-user-event/v1/events/lat/_update",
     count: "/egov-user-event/v1/events/notifications/_count",
     create: "/egov-user-event/v1/events/_create",
   },
