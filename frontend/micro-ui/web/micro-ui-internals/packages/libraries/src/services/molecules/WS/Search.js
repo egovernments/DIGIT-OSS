@@ -43,7 +43,6 @@ export const WSSearch = {
 
   workflowDataDetails: async (tenantId, businessIds) => {
     const response = await Digit.WorkflowService.getByBusinessId(tenantId, businessIds);
-    console.log(response, "dohadoishoidhsadoiosaid")
     return response;
   },
 
@@ -203,6 +202,103 @@ export const WSSearch = {
       applicationStatus: wsDataDetails?.applicationStatus,
       propertyDetails: propertyDataDetails,
       billDetails: billDetails?.Bill,
+      processInstancesDetails: workFlowDataDetails?.ProcessInstances
+    };
+  },
+
+  connectionDetails: async (t, tenantId, connectionNumber, serviceType = "WATER", config = {}) => {
+    const filters = { connectionNumber, searchType : "CONNECTION"};
+
+    let propertyids = "", consumercodes = "", businessIds = "";
+
+    const response = await WSSearch.application(tenantId, filters, serviceType);
+
+    const wsData = cloneDeep(serviceType == "WATER" ? response?.WaterConnection : response?.SewerageConnections)
+
+    wsData?.forEach(item => {
+      propertyids = propertyids + item?.propertyId + (",");
+      consumercodes = consumercodes + item?.connectionNo + ",";
+    });
+
+    let propertyfilter = { propertyIds: propertyids.substring(0, propertyids.length - 1), }
+
+    if (propertyids !== "" && filters?.locality) propertyfilter.locality = filters?.locality;
+
+    config = { enabled: propertyids !== "" ? true : false }
+
+    const properties = await WSSearch.property(tenantId, propertyfilter);
+
+    if (filters?.connectionNumber) businessIds = filters?.connectionNumber;
+
+    const workflowDetails = await WSSearch.workflowDataDetails(tenantId, businessIds);
+
+    const wsDataDetails = cloneDeep(serviceType == "WATER" ? response?.WaterConnection?.[0] : response?.SewerageConnections?.[0]);
+    const propertyDataDetails = cloneDeep(properties?.Properties?.[0]);
+    const workFlowDataDetails = cloneDeep(workflowDetails);
+    const serviceDataType = cloneDeep(serviceType);
+
+    const applicationHeaderDetails = {
+      title: "WS_SERVICE_DETAILS",
+      asSectionHeader: true,
+      values: serviceType == "WATER" ? [
+        { title: "PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL", value: wsDataDetails?.connectionNo || t("NA") },
+        { title: "WS_SERVICE_NAME_LABEL", value: serviceType == "WATER" ? t("WATER") : t("SEWERAGE") },
+        { title: "WS_SERV_DETAIL_CONN_TYPE", value: wsDataDetails?.connectionType ? t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(wsDataDetails?.connectionType?.toUpperCase(), " ", "_")}`) : t("NA") },
+        { title: "WS_SERV_DETAIL_NO_OF_TAPS", value: wsDataDetails?.noOfTaps || t("NA") },
+        { title: "WS_PIPE_SIZE_IN_INCHES_LABEL", value: wsDataDetails?.pipeSize || t("NA") },
+        { title: "WS_SERV_DETAIL_WATER_SOURCE", value: wsDataDetails?.waterSource ? t(`WS_SERVICES_MASTERS_WATERSOURCE_${wsDataDetails?.waterSource?.toUpperCase()?.split('.')[0]}`) : t("NA") },
+        { title: "WS_SERV_DETAIL_WATER_SUB_SOURCE", value: wsDataDetails?.waterSource ? t(`${wsDataDetails?.waterSource?.toUpperCase()?.split('.')[1]}`) : t("NA") },
+        { title: "WS_SERV_DETAIL_CONN_EXECUTION_DATE", value: wsDataDetails?.connectionExecutionDate ? convertEpochToDate(wsDataDetails?.connectionExecutionDate) : t("NA") },
+        { title: "WS_SERV_DETAIL_METER_ID", value: wsDataDetails?.meterId || t("NA") },
+        { title: "WS_INSTALLATION_DATE_LABEL", value: wsDataDetails?.meterInstallationDate ? convertEpochToDate(wsDataDetails?.meterInstallationDate) : t("NA") },
+        { title: "WS_INITIAL_METER_READING_LABEL", value: wsDataDetails?.additionalDetails?.initialMeterReading || t("NA") },
+        { title: "WS_VIEW_CONSUMPTION_DETAIL", to:`/digit-ui/employee/ws/consumption-details/${wsDataDetails?.connectionNo}`, value:"", isLink:true }
+      ] : [
+        { title: "PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL", value: wsDataDetails?.connectionNo || t("NA") },
+        { title: "WS_SERVICE_NAME_LABEL", value: serviceType == "WATER" ? "WATER" : "SEWERAGE" },
+        { title: "WS_NUMBER_WATER_CLOSETS_LABEL", value: wsDataDetails?.noOfWaterClosets || t("NA") },
+        { title: "WS_SERV_DETAIL_NO_OF_TOILETS", value: wsDataDetails?.noOfToilets || t("NA") },
+        { title: "WS_SERV_DETAIL_CONN_EXECUTION_DATE", value: wsDataDetails?.connectionExecutionDate ? convertEpochToDate(wsDataDetails?.connectionExecutionDate) : t("NA") },
+      ]
+    };
+
+    const propertyDetails = {
+      title: "WS_COMMON_PROPERTY_DETAILS",
+      asSectionHeader: true,
+      values: [
+        { title: "WS_PROPERTY_ID_LABEL", value: propertyDataDetails?.propertyId },
+        { title: "WS_COMMON_OWNER_NAME_LABEL", value: propertyDataDetails?.owners?.[0]?.name },
+        { title: "WS_PROPERTY_ADDRESS_LABEL", value: propertyDataDetails?.address?.locality?.name },
+        { title: "WS_VIEW_PROPERTY_DETAIL", to:`/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}`, value:"", isLink:true }
+      ]
+    };
+
+    const connectionHolderDetails = {
+      title: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
+      asSectionHeader: true,
+      values: wsDataDetails?.connectionHolders.length > 0 ? [
+        { title: "WS_OWN_DETAIL_NAME", value: wsDataDetails?.connectionHolders?.[0]?.name || t("NA") },
+        { title: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.gender },
+        { title: "CORE_COMMON_MOBILE_NUMBER", value: wsDataDetails?.connectionHolders?.[0]?.mobileNumber },
+        { title: "WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME", value: wsDataDetails?.connectionHolders?.[0]?.fatherOrHusbandName },
+        { title: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.relationship },
+        { title: "WS_CORRESPONDANCE_ADDRESS_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.correspondenceAddress }
+      ] : [
+        { title: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS", value: " " }
+      ]
+    };
+
+    let details = [];
+    details = [...details, applicationHeaderDetails, propertyDetails, connectionHolderDetails];
+    wsDataDetails.serviceType = serviceDataType;
+    wsDataDetails.Properties = propertyDataDetails;
+    return {
+      applicationData: wsDataDetails,
+      applicationDetails: details,
+      tenantId: wsDataDetails?.tenantId,
+      applicationNo: wsDataDetails?.applicationNo,
+      applicationStatus: wsDataDetails?.applicationStatus,
+      propertyDetails: propertyDataDetails,
       processInstancesDetails: workFlowDataDetails?.ProcessInstances
     };
   },

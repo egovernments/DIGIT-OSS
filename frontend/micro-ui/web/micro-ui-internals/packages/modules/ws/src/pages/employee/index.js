@@ -7,6 +7,7 @@ import RequiredDocuments from "./RequiredDocuments"
 import NewApplication from "./NewApplication"
 import WSDocsRequired from "../../pageComponents/WSDocsRequired";
 import ApplicationDetails from "./ApplicationDetails";
+import GetConnectionDetails from "./connectionDetails/connectionDetails";
 
 const App = ({ path }) => {
   const { t } = useTranslation();
@@ -17,6 +18,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/create-application`} component={WSDocsRequired} />
         <PrivateRoute path={`${path}/new-application`} component={NewApplication} />
         <PrivateRoute path={`${path}/application-details`} component={ApplicationDetails} />
+        <PrivateRoute path={`${path}/connection-details`} component={GetConnectionDetails} />
         <PrivateRoute path={`${path}/bill-amendment`} component={() => <ApplicationBillAmendment {...{path}}/>} />
         <PrivateRoute path={`${path}/required-documents`} component={() => <RequiredDocuments {...{path}}/>} />
       </Switch>
