@@ -283,6 +283,13 @@ public class DemoUtilityService {
 		user.setRelationship(GuardianRelation.FATHER);
 		user.setFatherOrHusbandName(RandomStringUtils.randomAlphabetic(6));
 		user.setEmailId(demoUtilityRequest.getEmail());
+		List<Role> roleList = new ArrayList<Role>();
+		Role roleObj = new Role();
+		roleObj.setCode(UtilityConstants.CITIZEN_ROLE);
+		roleObj.setName(UtilityConstants.TEST);
+		roleObj.setTenantId(UtilityConstants.TENANTID.split("\\.")[0]);
+		roleList.add(roleObj);
+		user.setRoles(roleList);
 		return user;
 	}
 

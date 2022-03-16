@@ -83,5 +83,7 @@ public class UtilityConstants {
 	public static final String INVALID_ORGANISATION_CODE = "Invalid Code";
 
 	public static final String INVALID_ORGANISATION_CODE_MESSAGE = "Enter 3 characters code for your organization (only alphabets)";
+
+	public static final String CITIZEN_ROLE = "CITIZEN";
 	
 }
