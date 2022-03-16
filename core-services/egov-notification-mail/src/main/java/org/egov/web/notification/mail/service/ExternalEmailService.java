@@ -1,5 +1,6 @@
 package org.egov.web.notification.mail.service;
 
+import javax.activation.DataSource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -19,10 +20,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -51,8 +54,9 @@ public class ExternalEmailService implements EmailService {
 	public static final String EXCEPTION_MESSAGE = "Exception creating HTML email";
 	private JavaMailSenderImpl mailSender;
 
-    public ExternalEmailService(JavaMailSenderImpl mailSender) {
+    public ExternalEmailService(JavaMailSenderImpl mailSender, ApplicationConfiguration applicationConfiguration) {
         this.mailSender = mailSender;
+		this.applicationConfiguration = applicationConfiguration;
     }
     
     @Override

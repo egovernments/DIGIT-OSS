@@ -1,4 +1,3 @@
-
 package org.egov.web.notification.mail.consumer.contract;
 
 import java.util.ArrayList;

@@ -28,9 +28,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
-
 import com.google.common.collect.Sets;
+import org.springframework.util.ObjectUtils;
 
 @Repository
 public class PropertyRepository {

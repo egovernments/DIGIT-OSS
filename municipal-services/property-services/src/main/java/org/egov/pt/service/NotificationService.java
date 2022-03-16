@@ -13,6 +13,7 @@ import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.Document;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
@@ -276,6 +277,7 @@ public class NotificationService {
 	private void prepareMsgAndSend(PropertyRequest request, String msg, String state) {
 
 		Property property = request.getProperty();
+		Set<String> fileStoreIds = new HashSet<>();
 		RequestInfo requestInfo = request.getRequestInfo();
 		Map<String, String> mobileNumberToOwner = new HashMap<>();
 		String tenantId = request.getProperty().getTenantId();
@@ -305,7 +307,8 @@ public class NotificationService {
 
 		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
 			notifUtil.sendSMS(smsRequests);
-
+		}
+		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
 			Boolean isActionReq = false;
 			if(state.equalsIgnoreCase(PT_CORRECTION_PENDING))
 				isActionReq = true;
@@ -314,7 +317,7 @@ public class NotificationService {
 			notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
 		}
 		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
-			List<EmailRequest> emailRequests = notifUtil.createEmailRequestFromSMSRequests(requestInfo,smsRequests, tenantId);
+			List<EmailRequest> emailRequests = notifUtil.createEmailRequestFromSMSRequests(requestInfo,smsRequests, tenantId, fileStoreIds);
 			notifUtil.sendEmail(emailRequests);
 		}
 	}
