@@ -1,5 +1,6 @@
 package org.bel.birthdeath.common.services;
 
+import java.lang.annotation.Documented;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,28 +19,57 @@ public class CommonService {
 	
 	@Autowired
 	CommonRepository repository;
-	
+
+	/**
+	 * Search hospitals with tenantId
+	 * @param tenantId
+	 * @return list of hospitals
+	 */
 	public List<EgHospitalDtl> search(String tenantId) {
 		List<EgHospitalDtl> hospitalDtls = new ArrayList<EgHospitalDtl>() ;
 		hospitalDtls = repository.getHospitalDtls(tenantId);
 		return hospitalDtls;
 	}
 
+	/**
+	 * saves birth details
+	 * @param importJSon birth details
+	 * @param requestInfo which consists of user details and auth token
+	 * @return ImportBirthWrapper
+	 */
 	public ImportBirthWrapper saveBirthImport(BirthResponse importJSon, RequestInfo requestInfo) {
 		ImportBirthWrapper importBirthWrapper = repository.saveBirthImport(importJSon, requestInfo);
 		return importBirthWrapper;
 	}
-	
+
+	/**
+	 * saves death details
+	 * @param importJSon death details
+	 * @param requestInfo which consists of user details and auth token
+	 * @return ImportDeathWrapper
+	 */
 	public ImportDeathWrapper saveDeathImport(DeathResponse importJSon, RequestInfo requestInfo) {
 		ImportDeathWrapper importDeathWrapper = repository.saveDeathImport(importJSon, requestInfo);
 		return importDeathWrapper;
 	}
 
+	/**
+	 * updates birth details
+	 * @param importJSon birth details
+	 * @param requestInfo which consists of user details and auth token
+	 * @return ImportBirthWrapper
+	 */
 	public ImportBirthWrapper updateBirthImport(BirthResponse importJSon, RequestInfo requestInfo) {
 		ImportBirthWrapper importBirthWrapper = repository.updateBirthImport(importJSon, requestInfo);
 		return importBirthWrapper;
 	}
-	
+
+	/**
+	 * updates death details
+	 * @param importJSon death details
+	 * @param requestInfo which consists of user details and auth token
+	 * @return ImportDeathWrapper
+	 */
 	public ImportDeathWrapper updateDeathImport(DeathResponse importJSon, RequestInfo requestInfo) {
 		ImportDeathWrapper importDeathWrapper = repository.updateDeathImport(importJSon, requestInfo);
 		return importDeathWrapper;
