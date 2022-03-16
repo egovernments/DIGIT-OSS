@@ -2,7 +2,6 @@ import React, { useState ,useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { getVehicleType } from "../../../utils";
 
 const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
 
@@ -36,7 +35,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || undefined,
       vehicleType: vehicleMenu
         .filter((vehicle) => vehicle?.code === applicationData?.vehicleType)
-        .map((vehicle) => ({ ...vehicle, label: getVehicleType(vehicle, t) }))[0],
+        .map((vehicle) => ({ ...vehicle, label: applicationData?.vehicleCapacity }))[0],
       vehicleCapacity: applicationData?.vehicleCapacity,
     },
     propertyType: applicationData.propertyUsage.split(".")[0],
