@@ -219,13 +219,13 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
     return <Loader />;
   }
   return (
-    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "85%" }}>
+    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%" }}>
       {id === "fsmCapacityUtilization" && (
         <p>
           {t("DSS_FSM_TOTAL_SLUDGE_TREATED")} - {totalWaste} {t("DSS_KL")}
         </p>
       )}
-      <ResponsiveContainer width="94%" height={increasedHeightCharts.includes(id) ? 500 : 400}>
+      <ResponsiveContainer width="94%" height={increasedHeightCharts.includes(id) ? 700 : 450}>
         {!chartData || chartData?.length === 0 ? (
           <NoData t={t} />
         ) : manageChart == "Area" ? (
