@@ -34,7 +34,7 @@ var options = {
 
 var consumerGroup = new kafka.ConsumerGroup(options, topicList);
 
-var q = async.queue(function(data, cb) {
+/*var q = async.queue(function(data, cb) {
    createNoSave(data,null,() => {},() => {}).then(function(ep) {
   cb(); //this marks the completion of the processing by the worker
   });
@@ -43,7 +43,7 @@ var q = async.queue(function(data, cb) {
 
 q.drain(async () => {
   consumerGroup.resume(); //resume listening new messages from the Kafka consumer group
-});
+});*/
 
 
 
@@ -56,8 +56,7 @@ consumerGroup.on("message", function(message) {
   logger.info("record received on consumer for create");
   try {
       var data = JSON.parse(message.value);
-      //console.log(JSON.stringify(data));
-     /* await createNoSave(
+     createNoSave(
         data,
         null,
         () => {},
@@ -68,11 +67,11 @@ consumerGroup.on("message", function(message) {
         })
         .catch(error => {
           logger.error(error.stack || error);
-        });*/
-    q.push(data, function (err, result) {  
+        });
+    /*q.push(data, function (err, result) {  
       if (err) { logger.error(err); return }      
     });
-    consumerGroup.pause();
+    consumerGroup.pause();*/
 
   } catch (error) {
     logger.error("error in create request by consumer " + error.message);
