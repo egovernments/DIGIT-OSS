@@ -8,6 +8,9 @@ import NewApplication from "./NewApplication"
 import WSDocsRequired from "../../pageComponents/WSDocsRequired";
 import ApplicationDetails from "./ApplicationDetails";
 import GetConnectionDetails from "./connectionDetails/connectionDetails";
+import ActivateConnection from "./ActivateConnection";
+// import SearchConnectionComponent from "./SearchConnection";
+// import SearchResultsComponent from "./SearchResults";
 
 const App = ({ path }) => {
   const { t } = useTranslation();
@@ -21,6 +24,9 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/connection-details`} component={GetConnectionDetails} />
         <PrivateRoute path={`${path}/bill-amendment`} component={() => <ApplicationBillAmendment {...{path}}/>} />
         <PrivateRoute path={`${path}/required-documents`} component={() => <RequiredDocuments {...{path}}/>} />
+        <PrivateRoute path={`${path}/activate-connection`} component={ActivateConnection} />
+        {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
+        <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
       </Switch>
     </React.Fragment>
   )

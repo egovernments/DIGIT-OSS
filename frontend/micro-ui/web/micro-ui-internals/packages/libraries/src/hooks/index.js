@@ -185,6 +185,7 @@ import useWSDocumentSearch from "./ws/useWSDocumentSearch";
 import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions";
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
+import useWSMDMS from "./ws/useWSMDMS";
 import useAccessControl from "./useAccessControl";
 import useConnectionDetail from "./ws/useConnectionDetail";
 
@@ -377,7 +378,9 @@ const ws = {
   useWSApplicationActions,
   useWSConsumptionSearch,
   useConnectionDetail,
+  useMDMS: useWSMDMS 
 };
+
 
 const Hooks = {
   useSessionStorage,

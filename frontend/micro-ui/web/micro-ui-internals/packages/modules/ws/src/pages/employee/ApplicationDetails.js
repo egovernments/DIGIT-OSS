@@ -47,6 +47,23 @@ const ApplicationDetails = () => {
         // setError(null);
     };
 
+    workflowDetails?.data?.actionState?.nextActions?.forEach(action => {
+        if (action?.action === "ACTIVATE_CONNECTION") {
+          action.redirectionUrll =  {
+            action: action?.action,
+            pathname: `/digit-ui/employee/ws/activate-connection?applicationNumber=${applicationNumber}&service=${serviceType}&action=ACTIVATE_CONNECTION`,
+            state: applicationDetails?.applicationData
+          }
+        }
+      });
+
+    //   if (workflowDetails?.data?.actionState?.nextActions) {
+    //     workflowDetails?.data?.nextActions?.forEach(data => {
+    //         if(data.action == "EDIT") workflowDetails.data.actionState.nextActions.push(data);
+    //     })
+    //   }
+
+
     return (
         <Fragment>
             <div className={"employee-main-application-details"}>
