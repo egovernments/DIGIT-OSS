@@ -129,7 +129,6 @@ public class AppJavaScriptProxy  {
 			os = new FileOutputStream(dwldsPath, false);
 			os.write(pdfAsBytes);
 		}catch (Exception e){
-			Log.v("Error while creating temp report.");
 		}finally {
 			os.flush();
 			os.close();

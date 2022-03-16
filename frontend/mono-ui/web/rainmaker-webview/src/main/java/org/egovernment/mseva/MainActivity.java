@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
 		//Move this to Javascript Proxy
 
 		webView = (WebView) findViewById(R.id.webview);
-		webView.getSettings().setJavaScriptEnabled(false);
+		webView.getSettings().setJavaScriptEnabled(true);
 		webView.addJavascriptInterface(proxy, "mSewaApp");
 
 		String versionName = "";
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 		WebSettings webSettings = webView.getSettings();
 
 		webSettings.setUserAgentString(webSettings.getUserAgentString() + " mSewa V." + versionName + "." + versionCode);
-		webSettings.setJavaScriptEnabled(false);
+		webSettings.setJavaScriptEnabled(true);
 		webSettings.setGeolocationEnabled(true);
 		webSettings.setAllowFileAccess(true);
 		webSettings.setAllowFileAccessFromFileURLs(true);
