@@ -266,6 +266,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       applicationData.pitDetail.additionalDetails = { fileStoreId: temp };
     }
     if (data.noOfTrips) applicationData.noOfTrips = Number(data.noOfTrips); 
+    if (action === "REASSING") applicationData.vehicleId = null;
 
     if (reassignReason) addCommentToWorkflow(reassignReason, workflow, data);
     if (rejectionReason) addCommentToWorkflow(rejectionReason, workflow, data);
