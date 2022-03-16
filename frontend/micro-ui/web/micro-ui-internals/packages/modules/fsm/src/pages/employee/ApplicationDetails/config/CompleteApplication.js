@@ -114,7 +114,7 @@ export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTri
               defaultValue: noOfTrips
               // defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
           },
-          // disable: true,
+          disable: true,
           // disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
       },
       ],
