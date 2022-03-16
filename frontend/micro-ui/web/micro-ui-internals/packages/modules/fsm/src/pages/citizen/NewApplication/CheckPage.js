@@ -43,6 +43,16 @@ const CheckPage = ({ onSubmit, value }) => {
     }
   }, "");
 
+  const getInfoContent = () => {
+    let content = t("CS_DEFAULT_INFO_TEXT")
+    if (selectPaymentPreference && selectPaymentPreference.code === 'PRE_PAY') {
+      content = t("CS_CHECK_INFO_PAY_NOW")
+    } else {
+      content = t("CS_CHECK_INFO_PAY_LATER")
+    }
+    return content
+  }
+
   return (
     <React.Fragment>
       <Card>

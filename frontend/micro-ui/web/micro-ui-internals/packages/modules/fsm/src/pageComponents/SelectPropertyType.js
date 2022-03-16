@@ -29,6 +29,16 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
     onSelect(config.key, value.code);
   }
 
+  const getInfoContent = () => {
+    let content = t("CS_DEFAULT_INFO_TEXT")
+    if (formData && formData.selectPaymentPreference && formData.selectPaymentPreference.code === 'PRE_PAY') {
+      content = t("CS_CHECK_INFO_PAY_NOW")
+    } else {
+      content = t("CS_CHECK_INFO_PAY_LATER")
+    }
+    return content
+  }
+ 
   if (propertyTypesData.isLoading) {
     return <Loader />;
   }
