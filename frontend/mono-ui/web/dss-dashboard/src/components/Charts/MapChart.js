@@ -96,7 +96,8 @@ class MapChart extends React.Component {
     this.props.updateSelectedState({ state: "", totalCount: 0, liveCount: 0 });
   }
   onMouseClick(geo, current = { value: "NA" }, event) {
-    if (current && current.value > 0) this.props.updateSelectedState(current);
+    /*  to make the map clickable only on the live states */
+    if (current && current.value > 0 && current.status === "Live") this.props.updateSelectedState(current);
   }
   onMouseLeave(geo, current = { value: "NA" }, event) {
     this.setState({ tooltipContent: `` });
