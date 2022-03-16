@@ -191,7 +191,7 @@ const CheckPage = ({ onSubmit, value }) => {
         <CardSubHeader>{t("TL_COMMON_DOCS")}</CardSubHeader>
         <ActionButton jumpTo={`${routeLink}/proof-of-identity`} />
         <div>
-          {owners?.documents["OwnerPhotoProof"] ? (
+          {owners?.documents["OwnerPhotoProof"] || owners?.documents["ProofOfIdentity"] || owners?.documents["ProofOfOwnership"] ? (
             <TLDocument value={value}></TLDocument>
           ) : (
             <StatusTable>
