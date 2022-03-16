@@ -130,6 +130,7 @@ public class InboxService {
         HashMap moduleSearchCriteria = criteria.getModuleSearchCriteria();
         processCriteria.setTenantId(criteria.getTenantId());
         Integer totalCount = workflowService.getProcessCount(criteria.getTenantId(), requestInfo, processCriteria);
+        Integer nearingSlaProcessCount = workflowService.getNearingSlaProcessCount(criteria.getTenantId(), requestInfo, processCriteria);
         List<String> inputStatuses = new ArrayList<>();
         if (!CollectionUtils.isEmpty(processCriteria.getStatus()))
             inputStatuses = new ArrayList<>(processCriteria.getStatus());
@@ -633,6 +634,7 @@ public class InboxService {
 		log.info("statusCountMap size :::: " + statusCountMap.size());
 		
         response.setTotalCount(totalCount);
+        response.setNearingSlaCount(nearingSlaProcessCount);
         response.setStatusMap(statusCountMap);
         response.setItems(inboxes);
         return response;
