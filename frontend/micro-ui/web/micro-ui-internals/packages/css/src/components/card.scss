@@ -76,6 +76,10 @@
     @apply text-text-primary text-heading-m font-bold;
   }
 
+  .card-section-sub-text{
+    @apply text-text-primary text-body-s;
+  }
+
   .card-caption {
     @apply text-text-secondary text-caption-xl mb-sm;
   }
@@ -225,6 +229,10 @@
     .card-section-header {
       margin-bottom: 40px;
       @apply text-heading-m-dt;
+    }
+
+    .card-section-sub-text{
+      @apply text-text-primary text-body-s-dt;
     }
 
     .card-search-heading {

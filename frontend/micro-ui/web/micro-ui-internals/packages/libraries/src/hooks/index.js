@@ -11,6 +11,7 @@ import {
   useGetPaymentRulesForBusinessServices,
   useDemandSearch,
   useRecieptSearch,
+  usePaymentSearch,
 } from "./payment";
 import { useUserSearch } from "./userSearch";
 import { useApplicationsForBusinessServiceSearch } from "./useApplicationForBillSearch";
@@ -397,6 +398,7 @@ const Hooks = {
   useApplicationStatusGeneral,
   useModuleTenants,
   useRecieptSearch,
+  usePaymentSearch,
   useNewInboxGeneral,
   useEvents,
   useClearNotifications,

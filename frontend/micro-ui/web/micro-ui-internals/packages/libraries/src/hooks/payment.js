@@ -90,6 +90,25 @@ export const useGetPaymentRulesForBusinessServices = (tenantId) => {
   return useQuery(["getPaymentRules", tenantId], () => Digit.MDMSService.getPaymentRules(tenantId));
 };
 
+export const usePaymentSearch = (tenantId, filters, config={}) => {
+  return useQuery(["PAYMENT_SERACH", tenantId], () => Digit.PaymentService.searchBill(tenantId, filters), {
+    select: (data) => {
+      return data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.filter( e => {
+        switch(e.taxHeadCode){
+          case "WS_CHARGE":
+          case "WS_TIME_PENALTY":
+          case "WS_TIME_INTEREST":
+          case "WS_WATER_CESS":
+            return true
+          default :
+            return false
+        }
+      })
+    },
+    ...config
+  })
+};
+
 export const useDemandSearch = ({ consumerCode, businessService, tenantId }, config = {}) => {
   if (!tenantId) tenantId = Digit.ULBService.getCurrentTenantId();
   const queryFn = () => Digit.PaymentService.demandSearch(tenantId, consumerCode, businessService);

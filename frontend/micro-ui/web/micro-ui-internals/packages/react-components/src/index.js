@@ -15,6 +15,7 @@ import CardLabel from "./atoms/CardLabel";
 import CardLabelDesc from "./atoms/CardLabelDesc";
 import CardLabelError from "./atoms/CardLabelError";
 import CardSectionHeader from "./atoms/CardSectionHeader";
+import CardSectionSubText from "./atoms/CardSectionSubText";
 import CardSubHeader from "./atoms/CardSubHeader";
 import CardText from "./atoms/CardText";
 import CardTextButton from "./atoms/CardTextButton";
@@ -223,6 +224,7 @@ export {
   Banner,
   CardSubHeader,
   CardSectionHeader,
+  CardSectionSubText,
   SubmitBar,
   ButtonSelector,
   LinkButton,
