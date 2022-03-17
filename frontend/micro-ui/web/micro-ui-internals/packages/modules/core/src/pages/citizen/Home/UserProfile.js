@@ -127,7 +127,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
         photo: profilePic,
       };
 
-      if (!new RegExp(/^([a-zA-Z])*$/).test(name) || name === "" || name.length > 50 || name.length < 1) {
+      if (!new RegExp(/^([a-zA-Z ])*$/).test(name) || name === "" || name.length > 50 || name.length < 1) {
         throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_NAME_INVALID" });
       }
 
