@@ -238,7 +238,12 @@ const ReNewApplication = (props) => {
     if (data?.tradedetils1?.tradeLicenseDetail && data?.tradedetils1?.tradeLicenseDetail?.accessories == null && data.accessories) {
       EDITRENEWAL = true;
     }
-    data.address.city = data?.address?.city?.code || null;
+    if (!data?.address) {
+      data.address = {};
+      data.address = data?.tradedetils1?.tradeLicenseDetail?.address || {}
+    } else {
+      data.address.city = data?.address?.city?.code || null;
+    }
 
     if (data?.tradedetils1?.tradeLicenseDetail.address.doorNo !== data?.address?.doorNo) {
       EDITRENEWAL = true;
