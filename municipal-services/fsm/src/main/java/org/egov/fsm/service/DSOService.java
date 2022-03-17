@@ -133,9 +133,12 @@ public class DSOService {
 				throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE," Vehicle Does not belong to DSO!");
 			}
 			else {
-				
+				log.info("Printing the value of fsm vehicleid: " +  fsm.getVehicleId());
 				Vehicle vehicle = vehilceIdMap.get(fsm.getVehicleId());
-				if (vehicle.getTankCapicity() < Double.valueOf(fsm.getVehicleCapacity())) {
+				log.info("Printing the value of vehicle capacity from fsm: " +  fsm.getVehicleCapacity());
+				log.info("Printing the value of vehicle capacity from vehicle : " +  vehicle.getTankCapacity());
+				if (vehicle.getTankCapacity()!=null &&
+						(vehicle.getTankCapacity() < Double.valueOf(fsm.getVehicleCapacity()))) {
 					throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE,
 							" Vehicle Capacity of the assigned vehicle is less than the tank capacity of FSM application !");
 				}
