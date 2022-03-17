@@ -26,7 +26,7 @@ const CustomLabel = ({ x, y, name, stroke, value, maxValue }) => {
       <text
         x={x}
         y={y}
-        dx={-45}
+        dx={-46}
         dy={10}
         fill={stroke}
         width="35"
