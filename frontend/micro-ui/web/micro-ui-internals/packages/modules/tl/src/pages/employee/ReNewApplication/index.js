@@ -167,6 +167,14 @@ const ReNewApplication = (props) => {
   };
 
   const onSubmit = (data) => {
+    if (!data?.cpt?.details){
+      if(!data?.address){
+        setShowToast({ key: "error" });
+        setError("TL_PROPERTY_ID_REQUIRED");
+        return;
+      }
+    };
+
     let EDITRENEWAL = data?.tradedetils1?.checkForRenewal;
     let sendBackToCitizen = false;
     if (data?.tradedetils1?.action == "SENDBACKTOCITIZEN") {
