@@ -311,10 +311,10 @@ public class FSMValidator {
 		validateTripAmount(fsmRequest, mdmsData);
 		
 		mdmsValidator.validatePaymentPreference(fsm.getPaymentPreference());
-//		if(null != fsmRequest.getWorkflow() && 
-//				null != fsmRequest.getWorkflow().getAction() && 
-//				fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE) && isDsoRole)
-//			mdmsValidator.validateReceivedPaymentType(fsm.getReceivedPayment());
+		if(null != fsmRequest.getWorkflow() && 
+				null != fsmRequest.getWorkflow().getAction() && 
+				fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE) && isDsoRole)
+			mdmsValidator.validateReceivedPaymentType(fsm.getReceivedPayment());
 
 	}
 	

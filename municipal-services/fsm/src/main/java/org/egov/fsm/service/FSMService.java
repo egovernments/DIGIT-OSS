@@ -35,7 +35,6 @@ import org.egov.fsm.web.model.PeriodicApplicationRequest;
 import org.egov.fsm.web.model.Workflow;
 import org.egov.fsm.web.model.dso.Vendor;
 import org.egov.fsm.web.model.dso.VendorSearchCriteria;
-import org.egov.fsm.web.model.notification.SMSRequest;
 import org.egov.fsm.web.model.user.User;
 import org.egov.fsm.web.model.user.UserDetailResponse;
 import org.egov.fsm.web.model.vehicle.Vehicle;
@@ -154,13 +153,13 @@ public class FSMService {
 					"Workflow action cannot be null." + String.format("{Workflow:%s}", fsmRequest.getWorkflow()));
 		}
 		
-		boolean isDsoRole = hasDsoRole(fsmRequest);
+		boolean isDsoRole = hasDsoOrEditorRole(fsmRequest);
 		
-//		if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE) &&
-//				 isDsoRole &&
-//				null == fsmRequest.getFsm().getReceivedPayment() && fsmRequest.getFsm().getReceivedPayment().isEmpty()){
-//			throw new CustomException(FSMErrorConstants.UPDATE_ERROR,"Received payment type cannot be null"+fsm);
-//		}
+		if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE) &&
+				 isDsoRole &&
+				null == fsmRequest.getFsm().getReceivedPayment() && fsmRequest.getFsm().getReceivedPayment().isEmpty()){
+			throw new CustomException(FSMErrorConstants.UPDATE_ERROR,"Received payment type cannot be null"+fsm);
+		}
 		
 		
 
@@ -411,8 +410,6 @@ public class FSMService {
 		fsmRequest.getWorkflow()
 				.setAssignes(userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toList()));
 		vehicleTripService.vehicleTripReadyForDisposal(fsmRequest);
-		String message = "Hello {1}, This message is to advise you that your payment was successfully received, and your application has been completed.";
-		sendSmsToUser(fsmRequest.getFsm().getCitizen(),message);
 	}
 
 	private void handleFSMSubmitFeeback(FSMRequest fsmRequest, FSM oldFSM, Object mdmsData) {
@@ -693,27 +690,15 @@ public class FSMService {
 	 * @param fsmRequest
 	 * @return
 	 */
-	private boolean hasDsoRole(FSMRequest fsmRequest) {
+	private boolean hasDsoOrEditorRole(FSMRequest fsmRequest) {
 		org.egov.common.contract.request.User dsoUser = fsmRequest.getRequestInfo().getUserInfo();
-		return util.isRoleAvailale(dsoUser, FSMConstants.ROLE_FSM_DSO,
+		boolean isDsoOrEditorAccess = util.isRoleAvailale(dsoUser, FSMConstants.ROLE_FSM_DSO,
 				fsmRequest.getRequestInfo().getUserInfo().getTenantId().split("\\.")[0]);
-	}
-	
-	/**
-	 * Send sms to user
-	 * @param user
-	 * @param message
-	 */
-	private void sendSmsToUser(User user, String message) {
-		if(null != user.getName() && !user.getName().isEmpty()  && null != user.getMobileNumber() ){			
-			String customizedMsg = message.replace("{1}", user.getName());
-			SMSRequest smsRequest = new SMSRequest(user.getMobileNumber(), customizedMsg);
-			log.debug("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
-			producer.push(config.getSmsNotifTopic(), smsRequest);
-		}else {
-			log.debug("Message is not send: "+"MobileNumber: " + user.getMobileNumber() + " Name: " + user.getName());	
+		if(!isDsoOrEditorAccess) {
+			isDsoOrEditorAccess = util.isRoleAvailale(dsoUser, FSMConstants.FSM_EDITOR_EMP,
+					fsmRequest.getRequestInfo().getUserInfo().getTenantId());
 		}
-
+		return isDsoOrEditorAccess;
 	}
 
 }

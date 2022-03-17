@@ -20,7 +20,7 @@ public class FSMQueryBuilder {
 	private static final String Query = "select count(*) OVER() AS full_count,fsm.*,fsm_address.*,fsm_geo.*,fsm_pit.*,fsm.id as fsm_id, fsm.createdby as fsm_createdby,"
 			+ "  fsm.lastmodifiedby as fsm_lastmodifiedby, fsm.createdtime as fsm_createdtime, fsm.lastmodifiedtime as fsm_lastmodifiedtime,"
 			+ "	 fsm.additionaldetails,fsm_address.id as fsm_address_id,fsm_geo.id as fsm_geo_id,"
-			+ "	 fsm_pit.id as fsm_pit_id" + "	 FROM eg_fsm_application fsm"
+			+ "	 fsm_pit.id as fsm_pit_id, fsm_pit.additionalDetails as fsm_pit_additionalDetails" + "	 FROM eg_fsm_application fsm"
 			+ "	 INNER JOIN   eg_fsm_address fsm_address on fsm_address.fsm_id = fsm.id"
 			+ "	 LEFT OUTER JOIN  eg_fsm_geolocation fsm_geo on fsm_geo.address_id = fsm_address.id"
 			+ "	 LEFT OUTER JOIN  eg_fsm_pit_detail fsm_pit on fsm_pit.fsm_id = fsm.id";

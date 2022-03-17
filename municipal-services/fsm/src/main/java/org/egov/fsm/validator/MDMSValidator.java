@@ -32,8 +32,8 @@ public class MDMSValidator {
 		String[] masterArray = { FSMConstants.MDMS_PROPERTY_TYPE, FSMConstants.MDMS_APPLICATION_CHANNEL,
 				FSMConstants.MDMS_SANITATION_TYPE, FSMConstants.MDMS_VEHICLE_MAKE_MODEL, FSMConstants.MDMS_PIT_TYPE,
 				FSMConstants.MDMS_CONFIG, FSMConstants.MDMS_SLUM_NAME, FSMConstants.MDMS_APPLICATION_TYPE,
-				FSMConstants.MDMS_PAYMENT_PREFERENCE };
-//,FSMConstants.MDMS_RECEIVED_PAYMENT
+				FSMConstants.MDMS_PAYMENT_PREFERENCE,FSMConstants.MDMS_RECEIVED_PAYMENT };
+
 		validateIfMasterPresent(masterArray,this.mdmsResMap);
 	
 		
@@ -185,13 +185,20 @@ public class MDMSValidator {
 
 		Map<String, String> errorMap = new HashMap<>();
 
-		if (!((List<String>) this.mdmsResMap.get(FSMConstants.MDMS_RECEIVED_PAYMENT)).contains(receivedPaymentType)) {
-			errorMap.put(FSMErrorConstants.INVALID_PAYMENT_PREFERENCE, " Received payment type is invalid");
+		List<String> receivedPaymentModel =  (List<String>)this.mdmsResMap.get(FSMConstants.MDMS_RECEIVED_PAYMENT);
+		@SuppressWarnings("unchecked")
+		List<Map<String, String>> receivedPaymentmap = (List<Map<String, String>>) JsonPath.parse(receivedPaymentModel)
+				.read("$.[?(@.code=='" + receivedPaymentType + "')]");
+		if (receivedPaymentmap != null && receivedPaymentmap.size() > 0) {
+			Map<String, String> Data = receivedPaymentmap.get(0);
+			if (!(Data.get("code").equals(receivedPaymentType))) {
+				errorMap.put(FSMErrorConstants.INVALID_RECEIVED_PAYMENT_TYPE, " Received payment type is invalid");
+			}
+		} else {
+			errorMap.put(FSMErrorConstants.INVALID_RECEIVED_PAYMENT_TYPE, " Received payment type is invalid");
 		}
-
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 	}
-
 
 }

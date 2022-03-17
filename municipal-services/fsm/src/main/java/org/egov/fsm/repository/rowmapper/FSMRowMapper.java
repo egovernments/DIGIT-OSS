@@ -117,11 +117,10 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 				.geoLocation(geoLocation).pincode(rs.getString("pincode")).doorNo(rs.getString("doorno")).id(rs.getString("fsm_address_id"))
 				.additionalDetails(rs.getString("additionalDetails")).street(rs.getString("street")).slumName(rs.getString("slumname")).tenantId(rs.getString("tenantid")).locality(locality).auditDetails(auditdetails)
 				.build();
-
 		PitDetail pitDetail = PitDetail.builder().height(rs.getDouble("height")).width(rs.getDouble("width"))
 				.diameter(rs.getDouble("diameter")).length(rs.getDouble("length"))
 				.distanceFromRoad(rs.getDouble("distanceFromRoad")).id(rs.getString("fsm_pit_id"))
-				.additionalDetails(rs.getString("additionalDetails")).tenantId(rs.getString("tenantid")).build();
+				.additionalDetails(getAdditionalDetail("fsm_pit_additionalDetails", rs)).tenantId(rs.getString("tenantid")).build();
 		
 			
 		fsm.setAddress(address);

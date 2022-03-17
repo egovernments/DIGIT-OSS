@@ -460,10 +460,12 @@ public class InboxService {
             if (businessObjects.length() > 0 && processInstances.size() > 0) {
                 if (CollectionUtils.isEmpty(businessKeys)) {
                     businessMap.keySet().forEach(busiessKey -> {
-                        Inbox inbox = new Inbox();
-                        inbox.setProcessInstance(processInstanceMap.get(busiessKey));
-                        inbox.setBusinessObject(toMap((JSONObject) businessMap.get(busiessKey)));
-                        inboxes.add(inbox);
+                        if(null != processInstanceMap.get(busiessKey)) {
+                        	Inbox inbox = new Inbox();
+                        	inbox.setProcessInstance(processInstanceMap.get(busiessKey));
+                            inbox.setBusinessObject(toMap((JSONObject) businessMap.get(busiessKey)));
+                            inboxes.add(inbox);
+                        }
                     });
                 } else {
                     businessKeys.forEach(busiessKey -> {
@@ -581,8 +583,8 @@ public class InboxService {
 				List<String> fsmApplicationList = fetchVehicleStateMap(inputStatuses, requestInfo, criteria.getTenantId(),criteria.getLimit(),criteria.getOffset());
 				moduleSearchCriteria.put("applicationNos", fsmApplicationList);
 				moduleSearchCriteria.put("applicationStatus", requiredApplications);
-				moduleSearchCriteria.put("offset", criteria.getOffset());
-	            moduleSearchCriteria.put("limit", criteria.getLimit());
+//				moduleSearchCriteria.put("offset", criteria.getOffset());
+//	            moduleSearchCriteria.put("limit", criteria.getLimit());
 
 				processCriteria.setBusinessIds(fsmApplicationList);
 				processCriteria.setStatus(null);
@@ -620,12 +622,12 @@ public class InboxService {
 					log.info("vehicleProcessInstances.size() :::: " + vehicleProcessInstances.size());
 					
 					fsmApplicationList.forEach(busiessKey -> {
-						
-						Inbox inbox = new Inbox();
-						inbox.setProcessInstance(vehicleProcessInstanceMap.get(busiessKey));
-						inbox.setBusinessObject(toMap((JSONObject) vehicleBusinessMap.get(busiessKey)));
-
-						inboxes.add(inbox);
+//						if(null != vehicleProcessInstanceMap.get(busiessKey)) {
+							Inbox inbox = new Inbox();
+							inbox.setProcessInstance(vehicleProcessInstanceMap.get(busiessKey));
+							inbox.setBusinessObject(toMap((JSONObject) vehicleBusinessMap.get(busiessKey)));
+							inboxes.add(inbox);	
+//						}
 					});
 				}
 			}
@@ -804,7 +806,7 @@ public class InboxService {
 					url.append("&").append(param).append("=");
 					url.append(StringUtils
 							.arrayToDelimitedString(((Collection<?>) moduleSearchCriteria.get(param)).toArray(), ","));
-				} else {
+				} else if(null != moduleSearchCriteria.get(param)) {
 					url.append("&").append(param).append("=").append(moduleSearchCriteria.get(param).toString());
 				}
 			}

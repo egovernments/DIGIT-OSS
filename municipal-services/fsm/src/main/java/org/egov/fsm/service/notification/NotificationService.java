@@ -13,6 +13,7 @@ import org.egov.fsm.config.FSMConfiguration;
 import org.egov.fsm.repository.ServiceRequestRepository;
 import org.egov.fsm.service.UserService;
 import org.egov.fsm.util.FSMConstants;
+import org.egov.fsm.util.FSMUtil;
 import org.egov.fsm.util.NotificationUtil;
 import org.egov.fsm.web.model.FSM;
 import org.egov.fsm.web.model.FSMRequest;
@@ -47,6 +48,9 @@ public class NotificationService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private FSMUtil fsmUtil;
 
 
 	@Autowired
@@ -198,6 +202,14 @@ public class NotificationService {
 			smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
 		}
 		
+		if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE)) {
+			String message = "Hello {NAME}, This message is to advise you that your payment was successfully received, and application has been completed.";
+			message = message.replace("{NAME}", fsmRequest.getFsm().getCitizen().getName());
+			Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
+			smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
+			log.info("sms is sent :::  ",message);
+		}
+		
 		String localizationMessageKey = FSMConstants.SMS_NOTIFICATION_PREFIX + fsm.getApplicationStatus()
 				+ (fsmRequest.getWorkflow() == null ? "" : "_" + fsmRequest.getWorkflow().getAction());
 		
@@ -215,7 +227,8 @@ public class NotificationService {
 		}else {
 			messageCode=localizationMessageKey;
 		}
-
+		
+		
 		String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
 		Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
 		HashMap<String,String> fsmAddtlDtls = (HashMap<String,String> )fsmRequest.getFsm().getAdditionalDetails();
