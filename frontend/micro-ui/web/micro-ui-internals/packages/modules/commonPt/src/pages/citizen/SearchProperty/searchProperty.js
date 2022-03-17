@@ -134,14 +134,18 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           },
           ...description,
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 0
         },
         {
           label: "",
           labelChildren: (
-            <div className="tooltip" style={{display: "flex", alignItems: "center", gap: "0 4px"}}>
+            <div className="tooltip" style={{position:"relative"}}>
+              <div style={{display: "flex", alignItems: "center", gap: "0 4px"}}>
               <h2>{property.label}</h2>
               <InfoBannerIcon fill="#0b0c0c" />
-              <span className="tooltiptext" style={{ whiteSpace: "nowrap" , marginLeft: "-500%" , fontSize:"medium" }}>
+              </div>
+              <span className="tooltiptext" style={{ position:"absolute", whiteSpace: "nowrap" , fontSize:"medium" }}>
                 {t(property.description)  + ptSearchConfig?.propertyIdFormat}
               </span>
             </div>
@@ -154,6 +158,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           },
           ...description,
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 1
         },
         {
           label: oldProperty.label,
@@ -164,6 +170,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             validation: oldProperty?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 2
         },
       ],
       body1: [

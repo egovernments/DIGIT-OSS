@@ -45,13 +45,18 @@ const NewApplication = () => {
       setSubmitValve(!(Object.keys(formState.errors).length));
     }
   };
-
   const onSubmit = (data) => {
-    if (!propertyId){
+    if (!data?.cpt?.details){
       setShowToast({ key: "error" });
       setError("TL_PROPERTY_ID_REQUIRED");
       return;
     }
+    if (propertyId == null){
+      setShowToast({ key: "error" });
+      setError("TL_PROPERTY_ID_REQUIRED");
+      return;
+    }
+
     let accessories = [];
     if (data?.accessories?.length > 0) {
       data?.accessories.map((data) => {
