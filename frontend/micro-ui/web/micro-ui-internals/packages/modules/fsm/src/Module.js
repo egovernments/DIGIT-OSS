@@ -13,6 +13,7 @@ import SelectLandmark from "./pageComponents/SelectLandmark";
 import SelectName from "./pageComponents/SelectName";
 import SelectPincode from "./pageComponents/SelectPincode";
 import SelectPitType from "./pageComponents/SelectPitType";
+import SelectTripNo from "./pageComponents/SelectTripNo";
 import SelectPropertySubtype from "./pageComponents/SelectPropertySubtype";
 import SelectPropertyType from "./pageComponents/SelectPropertyType";
 import SelectSlumName from "./pageComponents/SelectSlumName";
@@ -142,6 +143,7 @@ const componentsToRegister = {
   SelectPincode,
   SelectTankSize,
   SelectPitType,
+  SelectTripNo,
   SelectGeolocation,
   SelectSlumName,
   CheckSlum,

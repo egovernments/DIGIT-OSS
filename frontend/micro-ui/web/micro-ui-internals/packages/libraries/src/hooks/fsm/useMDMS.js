@@ -79,6 +79,10 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
     return useQuery("FSM_PAYMENT_TYPE", () => MdmsService.getFSMPaymentType(tenantId, moduleCode, type), queryConfig);
   };
 
+  const useTripNumber = () => {
+    return useQuery("FSM_TRIP_NUMBER", () => MdmsService.getFSMTripNumber(tenantId, moduleCode, type), queryConfig);
+  };
+
 
   switch (type) {
     case "SanitationType":
@@ -126,6 +130,8 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
       return useFSTPORejectionReason();
     case "PaymentType":
       return usePaymentType();
+    case "TripNumber":
+      return useTripNumber();
     default:
       return null;
   }

@@ -71,6 +71,21 @@ const FileComplaint = ({ parentRoute }) => {
 
   const additionalConfig = [{
     "label": "a",
+    "isMandatory": true,
+    "type": "component",
+    "route": "select-trip-number",
+    "key": "selectTripNo",
+    "component": "SelectTripNo",
+    "texts": {
+      "headerCaption": "",
+      "header": "ES_FSM_NUMBER_OF_TRIPS",
+      "cardText": "ES_FSM_NUMBER_OF_TRIPS_TEXT",
+      "submitBarLabel": "CS_COMMON_NEXT",
+    },
+    "nextStep": "select-payment-preference"
+  },
+  {
+    "label": "a",
     "isMandatory": false,
     "type": "component",
     "route": "select-payment-preference",
@@ -103,7 +118,7 @@ const FileComplaint = ({ parentRoute }) => {
   }]
 
   configs = [...additionalConfig, ...config]
-  configs.indexRoute = "select-payment-preference";
+  configs.indexRoute = "select-trip-number";
 
   return (
     <Switch>

@@ -106,17 +106,17 @@ export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTri
           label: `${t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS")} *`,
           type: "number",
           populators: {
-              name: "noOfTrips",
-              error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
-              validation: {
-                  required: true,
-              },
-              defaultValue: noOfTrips
-              // defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
+            name: "noOfTrips",
+            error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
+            validation: {
+              required: true,
+            },
+            defaultValue: noOfTrips
+            // defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
           },
           disable: true,
           // disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
-      },
+        },
       ],
     },
   ],

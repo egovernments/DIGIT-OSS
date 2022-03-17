@@ -50,7 +50,7 @@ const Response = ({ data, onSuccess }) => {
   useEffect(() => {
     if (!mutationHappened && !errorInfo) {
     try {
-      const { subtype, pitDetail, address, pitType, source, selectGender, selectPaymentPreference } = data;
+      const { subtype, pitDetail, address, pitType, source, selectGender, selectPaymentPreference, selectTripNo } = data;
       const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
       const formdata = {
         fsm: {
@@ -82,7 +82,8 @@ const Response = ({ data, onSuccess }) => {
           pitDetail,
           source,
           sanitationtype: pitType?.code,
-          paymentPreference: selectPaymentPreference ? selectPaymentPreference.code : 'POST_PAY'
+          paymentPreference: selectPaymentPreference ? selectPaymentPreference.code : 'POST_PAY',
+          noOfTrips: selectTripNo ? selectTripNo?.code : 1
         },
         workflow: null,
       };

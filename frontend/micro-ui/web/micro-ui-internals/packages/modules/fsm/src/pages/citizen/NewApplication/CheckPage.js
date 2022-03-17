@@ -32,7 +32,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
 
-  const { address, propertyType, subtype, pitType, pitDetail, selectGender, selectPaymentPreference } = value;
+  const { address, propertyType, subtype, pitType, pitDetail, selectGender, selectPaymentPreference, selectTripNo } = value;
 
   const pitDetailValues = pitDetail ? Object.values(pitDetail).filter((value) => !!value) : null;
 
@@ -62,10 +62,10 @@ const CheckPage = ({ onSubmit, value }) => {
         <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
         <CardSubHeader>{t("CS_CHECK_PROPERTY_DETAILS")}</CardSubHeader>
         <StatusTable>
-          {selectPaymentPreference && <Row
-            label={t("Payment Preference Type")}
-            text={t(selectPaymentPreference.i18nKey)}
-            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-payment-preference" />}
+          {selectTripNo && <Row
+            label={t("Number of trips")}
+            text={t(selectTripNo.i18nKey)}
+            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-trip-number" />}
           />}
           {selectGender && <Row
             label={t("Gender Type")}
@@ -127,6 +127,11 @@ const CheckPage = ({ onSubmit, value }) => {
               actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
             />
           )}
+          {selectPaymentPreference && <Row
+            label={t("Payment Preference Type")}
+            text={t(selectPaymentPreference.i18nKey)}
+            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-payment-preference" />}
+          />}
         </StatusTable>
         {/* <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_CHECK_INFO_TEXT")} /> */}
         <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
