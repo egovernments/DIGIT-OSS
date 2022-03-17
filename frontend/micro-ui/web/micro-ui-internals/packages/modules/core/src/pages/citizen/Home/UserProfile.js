@@ -64,8 +64,11 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
 
   const getUserInfo = async () => {
-    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [userInfo?.uuid] }, {});
-    usersResponse && usersResponse.user && usersResponse.user.length ? setUserDetails(usersResponse.user[0]) : null;
+    const uuid=userInfo?.uuid;
+    if(uuid){
+    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+    usersResponse && usersResponse.user && usersResponse.user.length &&setUserDetails(usersResponse.user[0]);
+    } 
   };
   
   React.useEffect(() => {
@@ -124,7 +127,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
         photo: profilePic,
       };
 
-      if (!new RegExp(/^([a-zA-Z ]{3,60})*$/).test(name) || name === "") {
+      if (!new RegExp(/^([a-zA-Z])*$/).test(name) || name === "" || name.length > 50 || name.length < 1) {
         throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_NAME_INVALID" });
       }
 

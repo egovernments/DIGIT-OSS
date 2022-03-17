@@ -76,7 +76,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
     <React.Fragment>
       <LabelFieldPair>
           <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ID`)}:`}</CardLabel>
-          <div className="field" style={{marginTop: '20px'}}>
+          <div className="field" style={{marginTop: '20px' ,display:"flex"}}>
             <TextInput 
               key={config.key} 
               value={propertyId} 
@@ -84,11 +84,12 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                 setPropertyId(e.target.value)
                 onSelect(config.key, { id: e.target.value});
               }}
-              style={{width: '65%', float: 'left', marginRight: '20px'}}
+              style={{width: '80%', float: 'left', marginRight: '20px'}}
             />
              <button
               className="submit-bar"
               type="button"
+              style={{color:"white"}}
               onClick={searchProperty}
             >
               {`${t("PT_SEARCH")}`}

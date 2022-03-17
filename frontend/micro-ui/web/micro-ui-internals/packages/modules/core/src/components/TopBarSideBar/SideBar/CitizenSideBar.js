@@ -34,13 +34,16 @@ const Profile = ({ info, stateName, t }) => {
 
   React.useEffect(async () => {
     const tenant = Digit.ULBService.getCurrentTenantId();
-    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [info?.uuid] }, {});
+    const uuid=info?.uuid;
+    if(uuid){
+    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
 
     if (usersResponse && usersResponse.user && usersResponse.user.length) {
       const userDetails = usersResponse.user[0];
       const thumbs = userDetails?.photo?.split(",");
       setProfilePic(thumbs?.at(0));
     }
+  }
   }, [profilePic !== null]);
 
   return (
@@ -103,6 +106,8 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
   };
 
   const redirectToLoginPage = () => {
+    localStorage.clear();
+    sessionStorage.clear();
     history.push("/digit-ui/citizen/login");
     closeSidebar();
   };
