@@ -38,6 +38,7 @@ import org.bel.birthdeath.utils.CommonUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -69,7 +70,8 @@ public class CommonRepository {
 	
 	@Autowired
 	DeathValidator deathValidator;
-	
+
+	@Lazy
 	@Autowired
 	CommonService commonService;
 	

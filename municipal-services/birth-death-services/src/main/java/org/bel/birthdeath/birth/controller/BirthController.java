@@ -56,7 +56,7 @@ public class BirthController {
 	@RequestMapping(value = { "/_search"}, method = RequestMethod.POST)
     public ResponseEntity<BirthResponse> search(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                        @Valid @ModelAttribute SearchCriteria criteria) {
-		if(requestInfoWrapper.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && !liveCitizenTenantsList.contains(criteria.getTenantId()))
+		if(requestInfoWrapper.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && liveCitizenTenantsList.contains(criteria.getTenantId()))
 		{
 			return new ResponseEntity<>(new BirthResponse(), HttpStatus.OK);
 		}
@@ -70,7 +70,7 @@ public class BirthController {
 	@RequestMapping(value = { "/_download"}, method = RequestMethod.POST)
     public ResponseEntity<BirthCertResponse> download(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                        @Valid @ModelAttribute SearchCriteria criteria) {
-		if(!liveCitizenTenantsList.contains(criteria.getTenantId()))
+		if(liveCitizenTenantsList.contains(criteria.getTenantId()))
 		{
 			return new ResponseEntity<>(new BirthCertResponse(), HttpStatus.OK);
 		}

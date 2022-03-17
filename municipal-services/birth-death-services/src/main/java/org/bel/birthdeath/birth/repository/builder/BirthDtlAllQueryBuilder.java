@@ -183,36 +183,45 @@ public class BirthDtlAllQueryBuilder {
 		if (criteria.getDateOfBirth() != null) {
 			SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy");
 			try {
-				Date dob = sdf.parse(criteria.getDateOfBirth());
+				String dateStr = criteria.getDateOfBirth();
+				Date date = sdf.parse(dateStr);
+				sdf = new SimpleDateFormat("yyyy-MM-dd");
+				dateStr = sdf.format(date);
 				//Timestamp ts = new Timestamp(dob.getTime());
 				addClauseIfRequired(preparedStmtList, builder);
-				builder.append(" CAST(bdtl.dateofbirth as DATE)=?");
-				preparedStmtList.add(dob);
-			} catch (ParseException e) {
+				builder.append(" CAST(bdtl.dateofbirth as VarChar)=?");
+				preparedStmtList.add(dateStr);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		if (criteria.getFromDate() != null) {
 			SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy");
 			try {
-				Date dob = sdf.parse(criteria.getFromDate());
+				String dateStr = criteria.getFromDate();
+				Date date = sdf.parse(dateStr);
+				sdf = new SimpleDateFormat("yyyy-MM-dd");
+				dateStr = sdf.format(date);
 				//Timestamp ts = new Timestamp(dob.getTime());
 				addClauseIfRequired(preparedStmtList, builder);
-				builder.append(" CAST(bdtl.dateofbirth as DATE) >= ?");
-				preparedStmtList.add(dob);
-			} catch (ParseException e) {
+				builder.append(" CAST(bdtl.dateofbirth as VarChar) >= ?");
+				preparedStmtList.add(dateStr);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		if (criteria.getToDate() != null) {
 			SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy");
 			try {
-				Date dob = sdf.parse(criteria.getToDate());
+				String dateStr = criteria.getToDate();
+				Date date = sdf.parse(dateStr);
+				sdf = new SimpleDateFormat("yyyy-MM-dd");
+				dateStr = sdf.format(date);
 				//Timestamp ts = new Timestamp(dob.getTime());
 				addClauseIfRequired(preparedStmtList, builder);
-				builder.append(" CAST(bdtl.dateofbirth as DATE) <= ?");
-				preparedStmtList.add(dob);
-			} catch (ParseException e) {
+				builder.append(" CAST(bdtl.dateofbirth as VarChar) <= ?");
+				preparedStmtList.add(dateStr);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
