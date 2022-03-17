@@ -38,9 +38,10 @@ const Response = (props) => {
           <Banner
             message={t("TL_APPLICATION_SUCCESS_MESSAGE_MAIN")}
             applicationNumber={state?.data?.[0]?.applicationNumber}
-            info={""}
+            info={t("TL_REF_NO_LABEL")}
             successful={true}
           />
+         
           <CardText>{t("TL_NEW_SUCESS_RESPONSE_NOTIFICATION_LABEL")}</CardText>
           <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={printReciept}>
               <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
