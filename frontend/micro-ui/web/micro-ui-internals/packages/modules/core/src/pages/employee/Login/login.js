@@ -24,7 +24,18 @@ const Login = ({ config: propsConfig, t ,isDisabled}) => {
     const filteredRoles = user?.info?.roles?.filter(role => role.tenantId === Digit.SessionStorage.get("Employee.tenantId"));
     if (user?.info?.roles?.length > 0) user.info.roles = filteredRoles;
     Digit.UserService.setUser(user);
-    const redirectPath = location.state?.from || "/digit-ui/employee";
+    let redirectPath =  "/digit-ui/employee";
+
+    /* logic to redirect back to same screen where we left off  */
+    if(window?.location?.href?.includes("from=")){
+      redirectPath=decodeURIComponent(window?.location?.href?.split("from=")?.[1])||"/digit-ui/employee";
+    }
+
+    /*  RAIN-6489 Logic to navigate to National DSS home incase user has only one role [NATADMIN]*/
+    if(user?.info?.roles&&user?.info?.roles?.every(e=>e.code==="NATADMIN")){
+      redirectPath='/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD'
+    }
+
     history.replace(redirectPath);
   }, [user]);
 
