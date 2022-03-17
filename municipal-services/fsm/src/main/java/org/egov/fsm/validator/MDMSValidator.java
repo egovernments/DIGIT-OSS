@@ -173,12 +173,22 @@ public class MDMSValidator {
 
 		Map<String, String> errorMap = new HashMap<>();
 
-		if (!((List<String>) this.mdmsResMap.get(FSMConstants.MDMS_PAYMENT_PREFERENCE)).contains(paymentPreference)) {
-			errorMap.put(FSMErrorConstants.INVALID_PAYMENT_PREFERENCE, " Payment preference is invalid");
+		List<String> paymentPreferenceModel =  (List<String>)this.mdmsResMap.get(FSMConstants.MDMS_PAYMENT_PREFERENCE);
+		@SuppressWarnings("unchecked")
+		List<Map<String, String>> paymentPreferenceMap = (List<Map<String, String>>) JsonPath.parse(paymentPreferenceModel)
+				.read("$.[?(@.code=='" + paymentPreference + "')]");
+		if (paymentPreferenceMap != null && paymentPreferenceMap.size() > 0) {
+			Map<String, String> Data = paymentPreferenceMap.get(0);
+			if (!(Data.get("code").equals(paymentPreference))) {
+				errorMap.put(FSMErrorConstants.INVALID_RECEIVED_PAYMENT_TYPE, " Payment preference is invalid");
+			}
+		} else {
+			errorMap.put(FSMErrorConstants.INVALID_RECEIVED_PAYMENT_TYPE, " Payment preference is invalid");
 		}
-
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
+		
+		
 	}
 	
 	public void validateReceivedPaymentType(String receivedPaymentType) throws CustomException {
