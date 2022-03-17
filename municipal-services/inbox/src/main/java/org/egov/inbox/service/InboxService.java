@@ -332,11 +332,12 @@ public class InboxService {
                 }
             }
 
-            if (!ObjectUtils.isEmpty(processCriteria.getBusinessService())
+	//TODO as on now this does not seem to be required, hence commenting the code
+           /* if (!ObjectUtils.isEmpty(processCriteria.getBusinessService())
                     && processCriteria.getBusinessService().get(0).equals(FSMConstants.FSM_MODULE)) {
 
                 totalCount = fsmInboxFilter.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo, dsoId);
-            }
+            }*/
             if (processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName())
                     && processCriteria.getModuleName().equals(BPA)) {
                 totalCount = bpaInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
