@@ -33,7 +33,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
     return <React.Fragment />;
   }
 
-  const redirectBackUrl = '/digit-ui/employee/tl/new-application';
+  const redirectBackUrl =window.location.pathname;
 
   let propertyAddress = '';
   if(propertyDetails && propertyDetails?.Properties.length){
