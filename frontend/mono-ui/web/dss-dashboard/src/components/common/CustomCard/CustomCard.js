@@ -56,7 +56,7 @@ class CustomCard extends React.Component {
         }).first().value() || null;
 
         if (data) {
-            let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red" ? "#e54d42" : "#259b24" : '';
+            let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red" ? "#e54d42" : "#00703c" : '';
             let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red" ? Arrow_Downward : Arrow_Upward : '';
             let value = "";
 			if(data.insight_data.value){
@@ -85,16 +85,16 @@ class CustomCard extends React.Component {
                             <NFormatter value={data.value} nType={data.valueSymbol} />
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{"textAlign" : "left"}}>
+                   {value&& <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{"textAlign" : "left", marginBottom:"5px"}}>
                         {
                             <React.Fragment>
                                 <span style={{fontSize:'initial' }}>
                                     <img src={insightIcon} style={{ height: "15px", color: insightColor }} />
                                 </span>
-                                <span style={{ color: insightColor, fontSize: '14px', marginLeft: "1vh"  }}>{value}</span>
+                                <span style={{ color: insightColor, fontSize: '14px', marginLeft: "1vh" ,fontWeight:"500" }}>{value}</span>
                             </React.Fragment>
                         }
-                    </Grid>
+                    </Grid>}
 
 
                 </Grid>
