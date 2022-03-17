@@ -64,6 +64,8 @@ const StaticCitizenSideBar = ({ logout }) => {
   const [isEmployee, setisEmployee] = useState(false);
 
   const redirectToLoginPage = () => {
+    localStorage.clear();
+    sessionStorage.clear();
     history.push("/digit-ui/citizen/login");
   };
   const showProfilePage = () => {

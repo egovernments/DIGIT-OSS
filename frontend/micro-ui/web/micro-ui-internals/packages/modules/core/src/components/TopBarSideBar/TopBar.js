@@ -28,13 +28,15 @@ const TopBar = ({
 
   React.useEffect(async () => {
     const tenant = Digit.ULBService.getCurrentTenantId();
-    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [userDetails?.info?.uuid] }, {});
-
+    const uuid=userDetails?.info?.uuid;
+    if(uuid){
+    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
     if (usersResponse && usersResponse.user && usersResponse.user.length) {
       const userDetails = usersResponse.user[0];
       const thumbs = userDetails?.photo?.split(",");
       setProfilePic(thumbs?.at(0));
     }
+  }
   }, [profilePic !== null]);
 
   const CitizenHomePageTenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;

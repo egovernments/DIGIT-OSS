@@ -94,7 +94,9 @@ export const SelectPaymentType = (props) => {
   };
 
   if (authorization === "true" && !userInfo.access_token) {
-    return <Redirect to={`/digit-ui/citizen/login?from=${encodeURIComponent(pathname + search)}`} />;
+    localStorage.clear();
+    sessionStorage.clear();
+     return <Redirect to={`/digit-ui/citizen/login?from=${encodeURIComponent(pathname + search)}`} />;
   }
 
   if (isLoading || paymentLoading) {

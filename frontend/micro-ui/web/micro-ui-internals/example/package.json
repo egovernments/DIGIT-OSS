@@ -21,6 +21,7 @@
     "@egovernments/digit-ui-module-receipts": "^1.4.0",
     "@egovernments/digit-ui-module-tl": "^1.4.0",
     "@egovernments/digit-ui-module-ws": "^1.4.0",
+    "@egovernments/digit-ui-module-bills": "^1.4.0",
     "@egovernments/digit-ui-module-commonPt": "^1.4.0",
     "http-proxy-middleware": "^1.0.5",
     "react": "^17.0.0",

@@ -64,8 +64,11 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
 
   const getUserInfo = async () => {
-    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [userInfo?.uuid] }, {});
-    usersResponse && usersResponse.user && usersResponse.user.length ? setUserDetails(usersResponse.user[0]) : null;
+    const uuid=userInfo?.uuid;
+    if(uuid){
+    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+    usersResponse && usersResponse.user && usersResponse.user.length &&setUserDetails(usersResponse.user[0]);
+    }
   };
   
   React.useEffect(() => {

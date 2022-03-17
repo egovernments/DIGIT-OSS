@@ -5,7 +5,7 @@ import EmployeeApp from "./pages";
 import BillsCard from "./billHomeCard";
 import BillsFilter from "./components/BillsFilter";
 import BillInbox from "./pages/SearchBill/BillInbox";
-import ActionModal from "./components/modal";
+import ActionModal from "./components/Modal";
 import BillDetails from "./pages/BillDetails";
 import Banner from "./components/Banner";
 
