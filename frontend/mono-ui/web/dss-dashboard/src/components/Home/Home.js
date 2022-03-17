@@ -195,15 +195,7 @@ class Home extends React.Component {
                     </CardIcon>
                     <div style={{ textAlign: "left", color: "black" }}>
                       <Typography className={classes.cardTitle}>
-                        {selectedState
-                          ? strings[
-                              `${selectedState.toUpperCase()}_${newData.name}`
-                            ]
-                            ? strings[
-                                `${selectedState.toUpperCase()}_${newData.name}`
-                              ]
-                            : `${selectedState.toUpperCase()}_${newData.name}`
-                          : strings[newData.name] || newData.name}
+                        {getLocaleLabels(selectedState?`${selectedState.toUpperCase()}_${newData.name}`:newData.name)}
                       </Typography>
                     </div>
                   </CardHeader>
@@ -318,8 +310,8 @@ class Home extends React.Component {
                     style={{
                       textAlign: "right",
                       color: "#F47738",
-                      fontSize: 14,
-                      fontWeight: "normal",
+                      fontSize: 16,
+                      fontWeight: "bold",
                     }}
                   >
                     <span style={{ paddingRight: 10 }}>

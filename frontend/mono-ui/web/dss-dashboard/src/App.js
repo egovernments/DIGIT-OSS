@@ -164,6 +164,10 @@ class App extends React.Component {
     document.title = "DSS Dashboard";
     this.loadLocalisation();
     loadUlbLogo(getTenantId());
+    // if(process.env.NODE_ENV==="development"){
+    //   localStorage.setItem("Employee.token","cf07f444-40f7-404a-b292-9be8caf18c0d")
+    //   localStorage.setItem("tenant-id","pb.amritsar")
+    // }
   }
 
   changeTheName = (e) => {
