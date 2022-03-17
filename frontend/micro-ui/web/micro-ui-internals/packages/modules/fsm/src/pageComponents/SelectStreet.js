@@ -124,7 +124,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
   }
   return (
     <React.Fragment>
-    {window.location.href.includes("/tl") ? <Timeline currentStep={2}/> : null}
+    {window.location.href.includes("/tl") ? <Timeline currentStep={2}/> : <Timeline currentStep={2} flow="APPLY" />}
     <FormStep
       config={{ ...config, inputs }}
       _defaultValues={{ street: formData?.address.street, doorNo: formData?.address.doorNo }}

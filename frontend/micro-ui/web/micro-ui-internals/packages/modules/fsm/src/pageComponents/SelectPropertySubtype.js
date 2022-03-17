@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Loader, TypeSelectCard, Dropdown, FormStep, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimelineInFSM";
 
 const SelectPropertySubtype = ({ config, onSelect, t, userType, formData }) => {
 
@@ -60,10 +61,13 @@ const SelectPropertySubtype = ({ config, onSelect, t, userType, formData }) => {
     return <Dropdown option={subtypeOptions} optionKey="i18nKey" id="propertySubType" selected={subtype} select={selectedSubType} t={t} />;
   } else {
     return (
-      <FormStep config={config} onSelect={goNext} isDisabled={!subtype} t={t}>
-        <CardLabel>{`${t("CS_FILE_APPLICATION_PROPERTY_SUBTYPE_LABEL")} *`}</CardLabel>
-        <RadioOrSelect options={subtypeOptions} selectedOption={subtype} optionKey="i18nKey" onSelect={selectedValue} t={t} />
-      </FormStep>
+      <React.Fragment>
+        <Timeline currentStep={1} flow="APPLY" />
+        <FormStep config={config} onSelect={goNext} isDisabled={!subtype} t={t}>
+          <CardLabel>{`${t("CS_FILE_APPLICATION_PROPERTY_SUBTYPE_LABEL")} *`}</CardLabel>
+          <RadioOrSelect options={subtypeOptions} selectedOption={subtype} optionKey="i18nKey" onSelect={selectedValue} t={t} />
+        </FormStep>
+      </React.Fragment>
     );
   }
 };

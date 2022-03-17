@@ -15,6 +15,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Timeline from "../../../components/TLTimelineInFSM";
 
 const ActionButton = ({ jumpTo }) => {
   const { t } = useTranslation();
@@ -55,6 +56,7 @@ const CheckPage = ({ onSubmit, value }) => {
 
   return (
     <React.Fragment>
+      <Timeline currentStep={4} flow="APPLY" />
       <Card>
         <CardHeader>{t("CS_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
         <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
