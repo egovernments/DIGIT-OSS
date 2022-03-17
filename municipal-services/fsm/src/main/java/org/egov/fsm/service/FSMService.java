@@ -154,10 +154,10 @@ public class FSMService {
 		}
 		
 		boolean isDsoRole = hasDsoOrEditorRole(fsmRequest);
-		
+		log.info("isDsoRole :::  "+isDsoRole + "  :::  "+FSMConstants.WF_ACTION_COMPLETE);
 		if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE) &&
 				 isDsoRole &&
-				null == fsmRequest.getFsm().getReceivedPayment() && fsmRequest.getFsm().getReceivedPayment().isEmpty()){
+				(null == fsmRequest.getFsm().getReceivedPayment() || fsmRequest.getFsm().getReceivedPayment().isEmpty())){
 			throw new CustomException(FSMErrorConstants.UPDATE_ERROR,"Received payment type cannot be null"+fsm);
 		}
 		

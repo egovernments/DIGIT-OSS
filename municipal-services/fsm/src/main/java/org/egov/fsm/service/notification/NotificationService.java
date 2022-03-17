@@ -202,7 +202,8 @@ public class NotificationService {
 			smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
 		}
 		
-		if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE)) {
+		log.info("notification application status :::: "+FSMConstants.WF_ACTION_COMPLETE + "  :::  "+(null != fsmRequest.getWorkflow().getAction() && fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE)));
+		if(null != fsmRequest.getWorkflow().getAction() && fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE)) {
 			String message = "Hello {NAME}, This message is to advise you that your payment was successfully received, and application has been completed.";
 			message = message.replace("{NAME}", fsmRequest.getFsm().getCitizen().getName());
 			Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
