@@ -37,7 +37,7 @@ const TopBar = ({
       setProfilePic(thumbs?.at(0));
     }
   }
-  }, [profilePic !== null]);
+  }, [profilePic !== null,userDetails?.info?.uuid]);
 
   const CitizenHomePageTenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
 
