@@ -187,17 +187,18 @@ export const searchApiResponse = async (request, next = {}) => {
     let limit =10;
     if( queryObj.hasOwnProperty("offset") ){
       offset = queryObj.offset*1;
-      if( offset !=0){
-        offset = offset+1;
-      }
+      
    }
   if( queryObj.hasOwnProperty("limit") ){
-    limit = queryObj.limit*1;
+    limit = (queryObj.limit*1)+offset;
  }
+ if( offset !=0){
+  offset = offset+1;
+}
  if(keys(queryObj).length!=2){
   sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ) s WHERE s.rn  BETWEEN ${offset} AND ${limit+offset}   `;
  }else{
-  sqlQuery = `${sqlQuery}  ) s WHERE s.rn  BETWEEN ${offset} AND ${limit+offset} ORDER BY fid `;
+  sqlQuery = `${sqlQuery}  ) s WHERE s.rn  BETWEEN ${offset} AND ${limit} ORDER BY fid `;
  }
   
 }else if(isEmpty(queryObj)){
