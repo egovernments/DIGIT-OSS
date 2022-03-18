@@ -7,8 +7,9 @@ const useFSMInbox = (tenantId, filters, config = {}, overRideUUID=false) => {
     const _filters = {
 		tenantId,
 		processSearchCriteria: {
-			businessService: ["FSM"],
+			businessService: ["FSM", "FSM_POST_PAY_SERVICE"],
             ...(filters?.applicationStatus?.length > 0 ? {status: filters.applicationStatus.map((status) => status?.id)} : {}),
+            moduleName: "fsm",
 		},
 		moduleSearchCriteria: {
             ...(mobileNumber ? {mobileNumber}: {}),
