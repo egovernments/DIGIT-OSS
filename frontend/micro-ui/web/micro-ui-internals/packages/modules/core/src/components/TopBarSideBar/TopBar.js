@@ -99,13 +99,14 @@ const TopBar = ({
     <div className="topbar">
       {mobileView ? <Hamburger handleClick={toggleSidebar} color="#9E9E9E" /> : null}
       <img className="city" src={loggedin ? cityDetails?.logoId : stateInfo?.statelogo} />
+      <span style={{display:"flex",alignItems:"center",justifyContent:"space-between" ,width:"100%"}}>
       {loggedin &&
         (cityDetails?.city?.ulbGrade ? (
           <p className="ulb" style={mobileView ? { fontSize: "14px", display: "inline-block" } : {}}>
             {t(cityDetails?.i18nKey).toUpperCase()}{" "}
             {t(`ULBGRADE_${cityDetails?.city?.ulbGrade.toUpperCase().replace(" ", "_").replace(".", "_")}`).toUpperCase()}
           </p>
-        ) : (
+          ) : (
           <img className="state" src={logoUrl} />
         ))}
       {!loggedin && (
@@ -144,6 +145,7 @@ const TopBar = ({
           <img className="state" src={logoUrl} />
         </div>
       )}
+      </span>
     </div>
   );
 };
