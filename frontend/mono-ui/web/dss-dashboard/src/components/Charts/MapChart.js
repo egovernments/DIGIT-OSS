@@ -17,7 +17,7 @@ const PROJECTION_CONFIG = { scale: 350, center: [78.9629, 22.5937] };
 // Red Variants
 const COLOR_RANGE = ["#54D140", "#298CFF", "#F47738", "#D1D1D1"];
 
-const STATUS = ["Live", "OnBoarded", "UnderImplementation", "None"];
+const STATUS = ["Live",  "UnderImplementation","OnBoarded", "None"];
 const DEFAULT_COLOR = "#D1D1D1";
 
 const getColor = (current) => {
