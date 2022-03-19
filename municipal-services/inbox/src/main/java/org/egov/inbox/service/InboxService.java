@@ -206,7 +206,10 @@ public class InboxService {
                 if (!CollectionUtils.isEmpty(processCriteria.getStatus())) {
                     List<String> statuses = new ArrayList<String>();
                     processCriteria.getStatus().forEach(status -> {
-                        statuses.add(StatusIdNameMap.get(status));
+                        log.info("status ::::  "+StatusIdNameMap.get(status));
+                    	if(null != StatusIdNameMap.get(status)) {
+                    		statuses.add(StatusIdNameMap.get(status));
+                        }
                     });
                     moduleSearchCriteria.put(applicationStatusParam, StringUtils.arrayToDelimitedString(statuses.toArray(), ","));
                 } else {
