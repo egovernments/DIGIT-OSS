@@ -71,9 +71,12 @@ public class CommonRepository {
 	@Autowired
 	DeathValidator deathValidator;
 
-	@Lazy
+	private CommonService commonService;
+
 	@Autowired
-	CommonService commonService;
+	public CommonRepository(@Lazy CommonService commonService) {
+		this.commonService = commonService;
+	}
 	
 	@Autowired
 	EncryptionDecryptionUtil encryptionDecryptionUtil;

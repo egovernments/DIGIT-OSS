@@ -16,9 +16,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CommonService {
-	
+
+	private CommonRepository repository;
+
 	@Autowired
-	CommonRepository repository;
+	public CommonService(CommonRepository repository) {
+		this.repository = repository;
+	}
 
 	/**
 	 * Search hospitals with tenantId
