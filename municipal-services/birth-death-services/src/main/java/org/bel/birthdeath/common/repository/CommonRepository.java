@@ -69,13 +69,17 @@ public class CommonRepository {
 	
 	@Autowired
 	DeathValidator deathValidator;
-	
-	@Autowired
-	CommonService commonService;
+
+	private CommonService commonService;
 	
 	@Autowired
 	EncryptionDecryptionUtil encryptionDecryptionUtil;
-	
+
+	@Autowired
+	public CommonRepository(CommonService commonService) {
+		this.commonService = commonService;
+	}
+
 	private static final String birthDtlDeleteQry="Delete from eg_birth_dtls where tenantid = :tenantid and registrationno = :registrationno; ";
 	
 	private static final String deathDtlDeleteQry="Delete from eg_death_dtls where tenantid = :tenantid and registrationno = :registrationno; ";
