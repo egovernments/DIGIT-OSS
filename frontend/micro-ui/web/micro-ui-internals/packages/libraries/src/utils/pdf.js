@@ -444,6 +444,21 @@ export const downloadReceipt = async (
     downloadPdf(new Blob([response.data], { type: "application/pdf" }), filename);
   }
 };
+/* Download Bills */
+
+export const downloadBill = async (
+  consumerCode,
+  businessService,
+  pdfKey = "consolidatedbill",
+  tenantId = Digit.ULBService.getCurrentTenantId(),
+) => {
+  const response = await Digit.ReceiptsService.bill_download(businessService, consumerCode, tenantId, pdfKey);
+  const responseStatus = parseInt(response.status, 10);
+  if (responseStatus === 201 || responseStatus === 200) {
+    let filename = consumerCode ? `consumerCode-${consumerCode}.pdf` : `consumer-${consumerCode}.pdf`;
+    downloadPdf(new Blob([response.data], { type: "application/pdf" }), filename);
+  }
+};
 
 export const getFileUrl = (linkText = "") => {
   const linkList = (linkText && typeof linkText == "string" && linkText.split(",")) || [];
