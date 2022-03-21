@@ -184,7 +184,7 @@ public class BPALandService {
 		landRequest.setRequestInfo(requestInfo);
 		if (landcriteria.getIds() != null) {
 			landSearchCriteria.setIds(landcriteria.getIds());
-			uri.append("&").append("ids=");
+			uri.append("?").append("ids=");
 			for (int i = 0; i < landcriteria.getIds().size(); i++) {
 				if (i != 0) {
 					uri.append(",");
