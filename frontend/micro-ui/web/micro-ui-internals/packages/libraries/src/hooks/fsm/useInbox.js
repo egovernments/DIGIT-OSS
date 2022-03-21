@@ -44,6 +44,15 @@ const useFSMInbox = (tenantId, filters, config = {}, overRideUUID = false) => {
   return { ...appList }
 }
 
+const getIds = (status) => {
+  let ids = []
+  status?.map((data) => {
+    let temp = data.id.split(',')
+    ids.push(...temp)
+  })
+  return ids
+}
+
 const tableData = (data) => {
   let result = [];
   if (data && data.items && data.items.length) {
