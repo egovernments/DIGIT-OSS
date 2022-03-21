@@ -7,7 +7,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
   const [file, setFile] = useState(formData?.owners?.documents?.ProofOfIdentity);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
-  const acceptFormat = ".jpg,.png,.pdf,.jpeg"
+  let acceptFormat = ".jpg,.png,.pdf,.jpeg"
 
   const [dropdownValue, setDropdownValue] = useState(formData?.owners?.documents?.ProofOfIdentity?.documentType || null);
   //let dropdownData = [];
