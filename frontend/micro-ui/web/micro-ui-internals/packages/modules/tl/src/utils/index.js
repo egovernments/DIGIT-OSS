@@ -132,7 +132,7 @@ export const gettradeownerarray = (data) => {
     data?.owners?.owners.map((newowner) => {
       if(oldowner.id === newowner.id)
       {
-        if((oldowner.name !== newowner.name) || (oldowner.gender !== newowner.gender.code) || (oldowner.mobileNumber !== newowner.mobilenumber) || (oldowner.permanentAddress !== data?.owners?.permanentAddress))
+        if((oldowner.name !== newowner.name) || (oldowner.gender !== newowner?.gender?.code) || (oldowner.mobileNumber !== newowner.mobilenumber) || (oldowner.permanentAddress !== data?.owners?.permanentAddress) || (oldowner.relationship !== newowner.relationship?.code) || (oldowner.fatherOrHusbandName !== newowner.fatherOrHusbandName))
         {
         if (oldowner.name !== newowner.name)
         {
@@ -149,6 +149,14 @@ export const gettradeownerarray = (data) => {
         if(oldowner.permanentAddress !== data?.owners?.permanentAddress)
         {
           oldowner.permanentAddress = data?.owners?.permanentAddress;
+        }
+        if(oldowner.relationship !== newowner.relationship?.code)
+        {
+          oldowner.relationship = newowner.relationship.code;
+        }
+        if(oldowner.fatherOrHusbandName !== newowner.fatherOrHusbandName)
+        {
+          oldowner.fatherOrHusbandName = newowner.fatherOrHusbandName;
         }
         let found = tradeownerarray.length > 0 ?tradeownerarray.some(el => el.id === oldowner.id):false;
           if(!found)tradeownerarray.push(oldowner);
@@ -174,8 +182,9 @@ export const gettradeownerarray = (data) => {
               fatherOrHusbandName: "",
               relationship: "",
               dob: null,
-              gender: ob.gender.code,
+              gender: ob?.gender?.code || null,
               permanentAddress: data?.owners?.permanentAddress,
+              ...(data?.ownershipCategory?.code.includes("INSTITUTIONAL")) && {uuid : data?.tradeLicenseDetail?.owners?.[0]?.uuid } ,
             });
     }
   })
