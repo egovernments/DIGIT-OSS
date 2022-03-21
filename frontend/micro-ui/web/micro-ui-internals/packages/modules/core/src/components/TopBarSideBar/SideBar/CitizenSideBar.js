@@ -108,8 +108,8 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
   };
 
   const redirectToLoginPage = () => {
-    localStorage.clear();
-    sessionStorage.clear();
+    // localStorage.clear();
+    // sessionStorage.clear();
     history.push("/digit-ui/citizen/login");
     closeSidebar();
   };
