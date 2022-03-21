@@ -7,7 +7,7 @@ const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
   const [file, setFile] = useState(formData?.owners?.documents?.ProofOfOwnership);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
-  const acceptFormat = ".jpg,.png,.pdf,.jpeg"
+  let acceptFormat = ".jpg,.png,.pdf,.jpeg"
 
   const [dropdownValue, setDropdownValue] = useState(formData?.owners?.documents?.ProofOfOwnership?.documentType || null);
   //let dropdownData = [];

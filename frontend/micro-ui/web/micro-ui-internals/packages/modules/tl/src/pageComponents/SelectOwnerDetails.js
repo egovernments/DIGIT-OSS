@@ -25,6 +25,8 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
           // altContactNumber: initData?.[0]?.altContactNumber || "",
           emailId: initData?.[0]?.emailId || "",
           relationship: initData?.[0]?.relationship || "",
+          id: initData?.[0]?.id || "",
+          uuid: initData?.[0]?.uuid || "",
         }]
       case "MULTIOWNER":
       return(  initData?.length > 1 ? initData?.map((owner) => ({

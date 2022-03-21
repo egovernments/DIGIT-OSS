@@ -295,6 +295,15 @@ const ReNewApplication = (props) => {
       if (data?.owners?.length > 0) formData.tradeLicenseDetail.owners = data?.owners;
       if (structureType) formData.tradeLicenseDetail.structureType = structureType;
       if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
+      if (formData?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution = {
+        ...formData?.tradeLicenseDetail?.institution,
+        contactNo: data?.owners?.[0]?.altContactNumber,
+        designation: data?.owners?.[0]?.designation,
+        instituionName: data?.owners?.[0]?.instituionName,
+        name: data?.owners?.[0]?.name,
+        mobileNumber: data?.owners?.[0]?.mobileNumber,
+        emailId : data?.owners?.[0]?.emailId,
+      }
       /* use customiseCreateFormData hook to make some chnages to the licence object */
       formData = Digit?.Customizations?.TL?.customiseSendbackFormData ? Digit?.Customizations?.TL?.customiseSendbackFormData(data, formData) : formData;
       Digit.TLService.update({ Licenses: [formData] }, tenantId)
