@@ -172,7 +172,12 @@ const RenewTrade = ({ parentRoute }) => {
       nextPage;
     let { nextStep = {} } = config.find((routeObj) => routeObj.route === currentPath);
     if (typeof nextStep == "object" && nextStep != null) {
-      if (nextStep[sessionStorage.getItem("isAccessories")]) {
+      if(key==="knowyourproperty"&&
+        nextStep[sessionStorage.getItem("KnowProperty")] &&
+        (nextStep[sessionStorage.getItem("KnowProperty")] === "search-property" || nextStep[sessionStorage.getItem("KnowProperty")] === "create-property")
+      ) {
+        nextStep = `${nextStep[sessionStorage.getItem("KnowProperty")]}`;
+      }else if (nextStep[sessionStorage.getItem("isAccessories")]) {
         nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
       } else if (nextStep[sessionStorage.getItem("StructureType")]) {
         nextStep = `${nextStep[sessionStorage.getItem("StructureType")]}`;

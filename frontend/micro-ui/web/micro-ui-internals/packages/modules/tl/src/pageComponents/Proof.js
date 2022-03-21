@@ -55,7 +55,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
     (async () => {
       setError(null);
       if (file) {
-        if(!(acceptFormat.split(",").includes(`.${file.type.split("/").pop()}`)))
+        if(!(acceptFormat?.split(",")?.includes(`.${file?.type?.split("/")?.pop()}`)))
         {
           setError(t("PT_UPLOAD_FORMAT_NOT_SUPPORTED"));
         }
