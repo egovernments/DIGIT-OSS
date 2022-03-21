@@ -84,7 +84,7 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
           if(mutation.isSuccess) {
             setTimeout(() => {
               if(redirectUrl) {
-                history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${formdata.Property.tenantId}`);
+                history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${formdata.Property.tenantId}`,{...location?.state});
                 return;
               }
             }, 3000);
@@ -101,7 +101,7 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
     if(mutation.isSuccess) {
       setTimeout(() => {
         if(redirectUrl) {
-          history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${tenant}`);
+          history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${tenant}`,{...location?.state});
           return;
         } 
       }, 3000);
