@@ -2,11 +2,12 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { CardLabel, LabelFieldPair, SearchAction, Dropdown, TextInput, LinkButton, CardLabelError, MobileNumber, DatePicker, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link,useHistory } from "react-router-dom";
 
 const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
   const { t } = useTranslation();
-  const { pathname } = useLocation();
+  const history = useHistory();
+  const { pathname,state } = useLocation();
   const isEditScreen = pathname.includes("/modify-application/");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const search = useLocation().search;
@@ -71,7 +72,6 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
       propertyAddress += propertyDetails?.Properties[0]?.address?.pincode;
     }
   }
-
   return (
     <React.Fragment>
       <LabelFieldPair>
@@ -96,13 +96,13 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
             </button>
           </div>
         </LabelFieldPair>
-        <Link to={`/digit-ui/employee/commonpt/search?redirectToUrl=${redirectBackUrl}`}>
+        <span onClick={()=>history.push(`/digit-ui/employee/commonpt/search?redirectToUrl=${redirectBackUrl}`,{...state}) } >
           <LinkButton label={t("CPT_SEARCH_PROPERTY")} style={{ color: "#f47738", display: 'inline-block' }} />
-        </Link>
+        </span>
         &nbsp; | &nbsp;
-        <Link to={`/digit-ui/employee/commonpt/new-application?redirectToUrl=${redirectBackUrl}`}>
+        <span onClick={()=>history.push(`/digit-ui/employee/commonpt/new-application?redirectToUrl=${redirectBackUrl}`,{...state}) }>
           <LinkButton label={t("CPT_CREATE_PROPERTY")} style={{ color: "#f47738", display: 'inline-block' }} />
-        </Link>
+        </span>
         {
           propertyDetails && propertyDetails?.Properties.length && (
             <React.Fragment>

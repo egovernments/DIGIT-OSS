@@ -1,10 +1,13 @@
 import { DetailsCard, Loader, Table } from "@egovernments/digit-ui-react-components";
 import React, { memo, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
 const GetCell = (value) => <span className="cell-text">{value}</span>;
 
 const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchConfig, redirectToUrl }) => {
+  const history = useHistory();
+  const { state } = useLocation();
   const [searchQuery, setSearchQuery] = useState({
     /* ...defaultValues,   to enable pagination */
     ...payload,
@@ -25,7 +28,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
           return (
             <div>
               <span className="link">
-                <Link to={`/digit-ui/employee/pt/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
+              <Link to={`/digit-ui/employee/pt/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
               </span>
             </div>
           );
@@ -60,7 +63,9 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
             <div>
               <span className="link">
                 { redirectToUrl
-                  ? <Link to={`${redirectToUrl}?propertyId=${row.original["propertyId"]}&tenantId=${tenantId}`}>{t('CPT_SELECT_PROPERTY')}</Link>
+                  ?  <span onClick={()=>{
+                    history.push(`${redirectToUrl}?propertyId=${row.original["propertyId"]}&tenantId=${tenantId}`,{...state}) } }>{t('CPT_SELECT_PROPERTY')}
+                    </span>
                   : null
                 }
               </span>
