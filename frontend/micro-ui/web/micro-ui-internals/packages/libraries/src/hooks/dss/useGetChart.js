@@ -8,7 +8,7 @@ const getRequest = (type, code, requestDate, filters) => ({
     visualizationCode: code,
     queryType: "",
     filters: { ...filters },
-    moduleLevel: "",
+    moduleLevel: "", 
     aggregationFactors: null,
     requestDate,
   },
