@@ -8,10 +8,10 @@ import { newConfig as newConfigTL } from "../../../config/config";
 
 const ReNewApplication = (props) => {
   const applicationData = cloneDeep(props?.location?.state?.applicationData) || {};
-  const propertyId = useLocation()?.state?.applicationDetails
-                      .find((details)=>details.title === "PT_DETAILS").values
-                      .find((value)=> value.title === "TL_PROPERTY_ID").value;
-
+  const loc=useLocation();
+  const propertyId =new URLSearchParams(loc.search).get("propertyId")|| loc?.state?.applicationDetails
+                      .find((details)=>details?.title === "PT_DETAILS")?.values
+                      .find((value)=> value?.title === "TL_PROPERTY_ID")?.value;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
@@ -259,7 +259,11 @@ const ReNewApplication = (props) => {
     if (data?.tradedetils1?.tradeLicenseDetail.address.street !== data?.address?.street) {
       EDITRENEWAL = true;
     }
-
+   if( new URLSearchParams(loc.search).get("propertyId") && new URLSearchParams(loc.search).get("propertyId")!== loc?.state?.applicationDetails
+    .find((details)=>details?.title === "PT_DETAILS")?.values
+    .find((value)=> value?.title === "TL_PROPERTY_ID")?.value){
+      EDITRENEWAL = true;
+    }
     let applicationDocuments = data?.documents?.documents || [];
     let commencementDate = convertDateToEpoch(data?.tradedetils?.["0"]?.commencementDate);
     let financialYear = data?.tradedetils?.["0"]?.financialYear?.code;
@@ -324,9 +328,25 @@ const ReNewApplication = (props) => {
       if (data?.tradeUnits?.length > 0) formData.tradeLicenseDetail.tradeUnits = data?.tradeUnits;
       if (data?.owners?.length > 0) formData.tradeLicenseDetail.owners = data?.owners;
       if (data?.address) formData.tradeLicenseDetail.address = data?.address;
+      if (data?.cpt?.details?.address) {
+        let address = {};
+        address.city = data?.cpt?.details?.address?.city || null;
+        address.locality = { code: data?.cpt?.details?.address?.locality?.code || null };
+        if (data?.cpt?.details?.address?.doorNo) address.doorNo = data?.cpt?.details?.address?.doorNo || null;
+        if (data?.cpt?.details?.address?.street) address.street = data?.cpt?.details?.address?.street || null;
+        if (data?.cpt?.details?.address?.pincode) address.pincode = data?.cpt?.details?.address?.pincode;
+        formData.tradeLicenseDetail.address = address;
+      }
       if (structureType) formData.tradeLicenseDetail.structureType = structureType;
       if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
       if (applicationDocuments) formData.tradeLicenseDetail.applicationDocuments = applicationDocuments;
+      if (data?.cpt){
+        if(!formData?.tradeLicenseDetail?.additionalDetail?.propertyId){
+          formData.tradeLicenseDetail.additionalDetail={propertyId:null}
+        }
+        formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId;
+      }
+
       /* use customiseCreateFormData hook to make some chnages to the licence object */
       formData = Digit?.Customizations?.TL?.customiseRenewalCreateFormData ? Digit?.Customizations?.TL?.customiseRenewalCreateFormData(data, formData) : formData;
       Digit.TLService.update({ Licenses: [formData] }, tenantId)
