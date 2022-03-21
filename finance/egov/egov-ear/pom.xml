@@ -83,7 +83,7 @@
         <dependency>
             <groupId>org.egov</groupId>
             <artifactId>egov-egfweb</artifactId>
-            <version>${project.parent.version}</version>
+            <version>3.0.1-COE-SNAPSHOT</version>
             <type>war</type>
         </dependency>
      	<dependency>
@@ -95,7 +95,7 @@
         <dependency>
             <groupId>org.egov</groupId>
             <artifactId>egov-egi</artifactId>
-            <version>${project.parent.version}</version>
+            <version>3.0.1-COE-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-logging</artifactId>

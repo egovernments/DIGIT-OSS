@@ -69,7 +69,7 @@
         <dependency>
             <groupId>org.egov</groupId>
             <artifactId>egov-egi</artifactId>
-            <version>3.0.2-COE-SNAPSHOT</version>
+            <version>3.0.1-COE-SNAPSHOT</version>
         </dependency>
 
         <!-- VIEWS RELATED END -->
