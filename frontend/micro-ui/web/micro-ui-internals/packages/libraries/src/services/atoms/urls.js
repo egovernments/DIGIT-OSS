@@ -83,6 +83,7 @@ const Urls = {
     update: "/echallan-services/eChallan/v1/_update",
     download_pdf: "/egov-pdf/download/UC/mcollect-challan",
     receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
+    bill_download: "/egov-pdf/download/bills/consolidatedbill",
     count: "/echallan-services/eChallan/v1/_count",
   },
   hrms: {
