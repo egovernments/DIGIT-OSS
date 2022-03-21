@@ -8,7 +8,7 @@ const useFSMInbox = (tenantId, filters, config = {}, overRideUUID=false) => {
 		tenantId,
 		processSearchCriteria: {
 			businessService: ["FSM", "FSM_POST_PAY_SERVICE"],
-            ...(filters?.applicationStatus?.length > 0 ? {status: filters.applicationStatus.map((status) => status?.id)} : {}),
+            ...(filters?.applicationStatus?.length > 0 ? {status: getIds(filters.applicationStatus)} : {}),
             moduleName: "fsm",
 		},
 		moduleSearchCriteria: {
@@ -40,6 +40,15 @@ const useFSMInbox = (tenantId, filters, config = {}, overRideUUID=false) => {
         }
     }
     return { ...appList }
+}
+
+const getIds = (status) => {
+  let ids = []
+  status?.map((data) => {
+    let temp = data.id.split(',')
+    ids.push(...temp)
+  })
+  return ids
 }
 
 const tableData = (data) => {
