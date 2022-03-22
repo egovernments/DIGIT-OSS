@@ -3,8 +3,12 @@ package org.egov.web.notification.mail.service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.egov.web.notification.mail.config.ApplicationConfiguration;
 import org.egov.web.notification.mail.consumer.contract.Email;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -26,6 +30,23 @@ import java.nio.channels.ReadableByteChannel;
 @ConditionalOnProperty(value = "mail.enabled", havingValue = "true")
 @Slf4j
 public class ExternalEmailService implements EmailService {
+
+	ApplicationConfiguration applicationConfiguration;
+
+	@Value("${egov.filestore.host}")
+	private String FILESTORE_HOST;
+
+	@Value("${egov.filestore.workdir.path}")
+	private String FILESTORE_WORKDIR;
+
+	@Value("${egov.filestore.string.format}")
+	private String FILESTORE_FORMAT;
+
+	@Value("${egov.filestore.tenant.id}")
+	private String FILESTORE_TENANT_ID;
+
+	@Autowired
+	private Environment env;
 
 	public static final String EXCEPTION_MESSAGE = "Exception creating HTML email";
 	private JavaMailSenderImpl mailSender;
@@ -67,7 +88,7 @@ public class ExternalEmailService implements EmailService {
 			log.info(mailSender.getUsername());
 			log.info(String.valueOf(mailSender.getPort()));
 			for(int i=0; i<email.getFileStoreId().size(); i++) {
-				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, "pb", email.getFileStoreId().toArray()[i]);
+				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, FILESTORE_TENANT_ID, email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);
 				URLConnection con = url.openConnection();
 				String fieldValue = "Application Form " + "[" + i + "]";
