@@ -5,7 +5,7 @@ export default function getChartOptions(code, filters) {
     let url = code ? CONFIGS.BASE_URL + "/dashboard/getChartV2" : "";
     let newFilter = Object.assign({}, filters);
     let duration = newFilter.duration ? newFilter.duration : null;
-    let moduleLevel =  "";
+    let moduleLevel = newFilter.modulelevel ? newFilter.modulelevel : "";
     delete newFilter.duration;
     delete newFilter.modulelevel;
     if (url) {
