@@ -8,7 +8,6 @@ const CitizenHome = ({ modules }) => {
   const moduleArr = modules.filter(({ code }) => code !== "Payment");
   const moduleArray = [paymentModule, ...moduleArr];
   const showQuickPay = moduleArr.some((module) => module.code === "QuickPayLinks");
-  console.log(moduleArr);
   return (
     <React.Fragment>
       <div className="citizenAllServiceGrid">

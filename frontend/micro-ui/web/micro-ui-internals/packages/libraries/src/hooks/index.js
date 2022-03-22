@@ -188,6 +188,7 @@ import useWSConsumptionSearch from "./ws/useConsumptionSearch";
 import useWSMDMS from "./ws/useWSMDMS";
 import useAccessControl from "./useAccessControl";
 import useConnectionDetail from "./ws/useConnectionDetail";
+import useBillSearch from "./bills/useBillSearch";
 
 const pgr = {
   useComplaintDetails,
@@ -412,6 +413,7 @@ const Hooks = {
   useTenants,
   useInbox: useTLInbox,
   useAccessControl,
+  useBillSearch,
   pgr,
   fsm,
   pt,

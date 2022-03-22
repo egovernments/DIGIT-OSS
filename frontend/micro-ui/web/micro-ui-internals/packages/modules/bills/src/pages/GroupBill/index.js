@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import DesktopInbox from "../../components/inbox/BillsDesktopInbox";
 import MobileInbox from "../../components/inbox/BillsMobileInbox";
 
-const GroupBillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, filterComponent, isInbox }) => {
+const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filterComponent, isInbox }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [enableSarch, setEnableSearch] = useState(() => (isInbox ? {} : { enabled: false }));
 
@@ -22,9 +22,9 @@ const GroupBillInbox = ({ parentRoute, businessService = "TL", initialStates = {
     ? { limit: 100, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
-  const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.tl.useInbox({
+  const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.useBillSearch({
     tenantId,
-    filters: { ...searchParams, ...paginationParams, sortParams },
+    filters: { ...searchParams, businessService, ...paginationParams, sortParams },
     config: {},
   });
 

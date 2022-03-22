@@ -4,13 +4,13 @@ import { useTranslation } from "react-i18next";
 import DesktopInbox from "../../components/inbox/BillsDesktopInbox";
 import MobileInbox from "../../components/inbox/BillsMobileInbox";
 
-const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, filterComponent, isInbox }) => {
+const BillInbox = ({ parentRoute, initialStates, businessService, filterComponent, isInbox }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [enableSarch, setEnableSearch] = useState(() => (isInbox ? {} : { enabled: false }));
 
   const { t } = useTranslation();
-  const [pageOffset, setPageOffset] = useState(initialStates?.pageOffset || 0);
-  const [pageSize, setPageSize] = useState(initialStates?.pageSize || 10);
+  const [pageOffset, setPageOffset] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   const [sortParams, setSortParams] = useState(initialStates?.sortParams || [{ id: "applicationDate", desc: false }]);
   const [setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState] = useState(false);
   const [searchParams, setSearchParams] = useState(() => {
@@ -22,9 +22,9 @@ const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, fi
     ? { limit: 100, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
-  const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.tl.useInbox({
+  const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.useBillSearch({
     tenantId,
-    filters: { ...searchParams, ...paginationParams, sortParams },
+    filters: { ...searchParams, businessService, ...paginationParams, sortParams },
     config: {},
   });
 
@@ -48,9 +48,7 @@ const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, fi
     } else {
       _new = { ...searchParams, ...filterParam };
     }
-    // let _new = { ...searchParams, ...filterParam };
-    // if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
-    // delete filterParam.delete;
+
     if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
     delete _new?.delete;
     delete filterParam?.delete;
@@ -72,7 +70,7 @@ const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, fi
     return [
       {
         label: "Bill Number",
-        name: "billNumber",
+        name: "billNo",
       },
       {
         label: "Unique Property ID",
@@ -134,7 +132,6 @@ const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, fi
       <div>
         {isInbox && <Header>{"Search Bill"}</Header>}
         <DesktopInbox
-          businessService={businessService}
           data={data}
           tableConfig={rest?.tableConfig}
           isLoading={hookLoading}

@@ -27,13 +27,12 @@ const BillsMobileInbox = ({
 }) => {
   const { t } = useTranslation();
   const getData = () => {
-    return data?.Payments?.map((original) => ({
-      ["Bill Number"]: original?.paymentDetails[0]?.receiptNumber,
-      ["Consumer Name"]: GetDateCell(original?.transactionDate || ""),
-      ["Bill date"]: GetCell(original?.paymentDetails[0]?.bill?.consumerCode || ""),
-      ["Bill Amount"]: GetCell(original?.payerName),
-      ["Status"]: GetCell(t(`BILLINGSERVICE_BUSINESSSERVICE_${original?.paymentDetails[0]?.businessService}`)),
-      ["Action"]: GetCell(t(`RC_${original?.paymentStatus}`)),
+    return data?.Bills?.map((original) => ({
+      [t("ABG_COMMON_TABLE_COL_BILL_NO")]: GetCell(original?.billNumber),
+      [t("ABG_COMMON_TABLE_COL_CONSUMER_NAME")]: GetCell(original?.payerName),
+      [t("ABG_COMMON_TABLE_COL_BILL_EXP_DATE")]: GetDateCell(original?.billDate),
+      [t("ABG_COMMON_TABLE_COL_BILL_AMOUNT")]: GetCell(original?.totalAmount),
+      [t("ABG_COMMON_TABLE_COL_STATUS")]: GetCell(original?.status),
     }));
   };
   const serviceRequestIdKey = (original) => {

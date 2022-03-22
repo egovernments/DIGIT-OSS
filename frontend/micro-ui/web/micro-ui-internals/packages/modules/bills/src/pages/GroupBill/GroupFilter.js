@@ -5,11 +5,25 @@ import { useTranslation } from "react-i18next";
 
 import _ from "lodash";
 
-const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, ...props }) => {
+const GroupFilter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, ...props }) => {
   const { t } = useTranslation();
 
   const [_searchParams, setSearchParams] = useState(() => searchParams);
   const [service, setService] = useState([]);
+
+  const localParamChange = (filterParam) => {
+    let keys_to_delete = filterParam.delete;
+    let _new = { ..._searchParams, ...filterParam };
+
+    if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
+    delete filterParam.delete;
+    setSearchParams({ ..._new });
+  };
+
+  const setLocalities = (localities) => {
+    let _new = { ..._searchParams, localities };
+    setSearchParams({ ..._new });
+  };
 
   const clearAll = () => {
     setSearchParams([]);
@@ -23,6 +37,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
   }, [service]);
 
   const tenantId = Digit.SessionStorage.get("User")?.info?.tenantId;
+  const tenantIds = Digit.SessionStorage.get("HRMS_TENANTS");
 
   const { isLoading, data: generateServiceType } = Digit.Hooks.useCommonMDMS(tenantId, "BillingService", "BillsGenieKey");
 
@@ -31,13 +46,38 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
   let serviceTypeList = [];
   if (filterServiceType) {
     serviceTypeList = filterServiceType.map((element) => {
+      if (element.code === "PT") {
+        element.businessService = "Property Tax";
+      }
+      if (element.code === "ADVT.Hoardings") {
+        element.businessService = "Hoardings";
+      }
+      if (element.code === "WS") {
+        element.businessService = "Water Connection";
+      }
+      if (element.code === "SW") {
+        element.businessService = "Sewerage Connection";
+      }
+
+      // setSearchParams({ businessServices: element.businessService, billGineiURL: element.billGineiURL });
       return {
         name: element.businessService,
         url: element.billGineiURL,
         businesService: element.code,
+        // address: element.address.locality,
       };
     });
   }
+
+  const onServiceSelect = (e, label) => {
+    if (e.target.checked)
+      localParamChange({ applicationStatus: [...(_searchParams?.applicationStatus ? _searchParams.applicationStatus : []), label] });
+    else localParamChange({ applicationStatus: _searchParams?.applicationStatus.filter((o) => o !== label) });
+  };
+
+  const selectLocality = (d) => {
+    localParamChange({ locality: [...(_searchParams?.locality || []), d] });
+  };
 
   if (isLoading) {
     return <Loader />;
@@ -83,6 +123,25 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
               <div className="filter-label">{t("CR_SERVICE_CATEGORY_LABEL")}</div>
               <Dropdown t={t} option={serviceTypeList} value={service} selected={service} select={setService} optionKey={"name"} />
             </div>
+            <div>
+              <div className="filter-label" style={{ fontWeight: "normal" }}>
+                {t("ES_INBOX_LOCALITY")}:
+              </div>
+              <Localities selectLocality={selectLocality} tenantId={tenantId} boundaryType="revenue" />
+              <div className="tag-container">
+                {_searchParams?.locality?.map((locality, index) => {
+                  return (
+                    <RemoveableTag
+                      key={index}
+                      text={t(locality.i18nkey)}
+                      onClick={() => {
+                        localParamChange({ locality: _searchParams?.locality.filter((loc) => loc.code !== locality.code) });
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
 
             <div>
               <SubmitBar
@@ -98,4 +157,4 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
   );
 };
 
-export default Filter;
+export default GroupFilter;

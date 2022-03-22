@@ -16,7 +16,7 @@ const GetParamFromUrl = (key, fallback, search) => {
   return fallback;
 };
 
-const getPattern = type => {
+const getPattern = (type) => {
   switch (type) {
     case "Name":
       return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i;
@@ -37,7 +37,7 @@ const getPattern = type => {
     case "PAN":
       return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
     case "TradeName":
-      return /^[-@.\/#&+\w\s]*$/
+      return /^[-@.\/#&+\w\s]*$/;
     case "Date":
       return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i;
     case "UOMValue":
@@ -111,9 +111,11 @@ const routeSubscription = (pathname) => {
 const didEmployeeHasRole = (role) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userInfo = Digit.UserService.getUser();
-  const rolearray = userInfo?.info?.roles.filter(item => { if (item.code == role && item.tenantId === tenantId) return true; });
+  const rolearray = userInfo?.info?.roles.filter((item) => {
+    if (item.code == role && item.tenantId === tenantId) return true;
+  });
   return rolearray?.length;
-}
+};
 
 const pgrAccess = () => {
   const userInfo = Digit.UserService.getUser();
@@ -150,36 +152,60 @@ const NOCAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
 
-  const NOC_ROLES =  ["NOC_CEMP","NOC_DOC_VERIFIER","NOC_FIELD_INSPECTOR","NOC_APPROVER","BPA_NOC_VERIFIER", "AIRPORT_AUTHORITY_APPROVER", "FIRE_NOC_APPROVER", "NOC_DEPT_APPROVER"]
+  const NOC_ROLES = [
+    "NOC_CEMP",
+    "NOC_DOC_VERIFIER",
+    "NOC_FIELD_INSPECTOR",
+    "NOC_APPROVER",
+    "BPA_NOC_VERIFIER",
+    "AIRPORT_AUTHORITY_APPROVER",
+    "FIRE_NOC_APPROVER",
+    "NOC_DEPT_APPROVER",
+  ];
 
   const NOC_ACCESS = userRoles?.filter((role) => NOC_ROLES?.includes(role));
 
-  return NOC_ACCESS?.length > 0
-}
+  return NOC_ACCESS?.length > 0;
+};
 
 const BPAREGAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
 
-  const BPAREG_ROLES =["BPAREG_APPROVER","BPAREG_DOC_VERIFIER"]
+  const BPAREG_ROLES = ["BPAREG_APPROVER", "BPAREG_DOC_VERIFIER"];
 
   const BPAREG_ACCESS = userRoles?.filter((role) => BPAREG_ROLES?.includes(role));
 
-  return BPAREG_ACCESS?.length > 0
-}
+  return BPAREG_ACCESS?.length > 0;
+};
 
 const BPAAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
 
-  const BPA_ROLES = ["BPA_VERIFIER", "CEMP", "BPA_APPROVER", "BPA_FIELD_INSPECTOR", "BPA_NOC_VERIFIER", "AIRPORT_AUTHORITY_APPROVER", "FIRE_NOC_APPROVER", "NOC_DEPT_APPROVER", "BPA_NOC_VERIFIER", "BPA_TOWNPLANNER", "BPA_ENGINEER", "BPA_BUILDER", "BPA_STRUCTURALENGINEER", "BPA_SUPERVISOR", "BPA_DOC_VERIFIER", "EMPLOYEE"]
+  const BPA_ROLES = [
+    "BPA_VERIFIER",
+    "CEMP",
+    "BPA_APPROVER",
+    "BPA_FIELD_INSPECTOR",
+    "BPA_NOC_VERIFIER",
+    "AIRPORT_AUTHORITY_APPROVER",
+    "FIRE_NOC_APPROVER",
+    "NOC_DEPT_APPROVER",
+    "BPA_NOC_VERIFIER",
+    "BPA_TOWNPLANNER",
+    "BPA_ENGINEER",
+    "BPA_BUILDER",
+    "BPA_STRUCTURALENGINEER",
+    "BPA_SUPERVISOR",
+    "BPA_DOC_VERIFIER",
+    "EMPLOYEE",
+  ];
 
   const BPA_ACCESS = userRoles?.filter((role) => BPA_ROLES?.includes(role));
 
-  return BPA_ACCESS?.length > 0
-}
-
-
+  return BPA_ACCESS?.length > 0;
+};
 
 const ptAccess = () => {
   const userInfo = Digit.UserService.getUser();
@@ -211,14 +237,13 @@ const mCollectAccess = () => {
   return MCOLLECT_ACCESS?.length > 0;
 };
 
-
 const receiptsAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles.map((roleData) => roleData?.code);
   const receiptsRoles = ["CR_PT"];
   const RECEIPTS_ACCESS = userRoles?.filter((role) => receiptsRoles?.includes(role));
   return RECEIPTS_ACCESS?.length > 0;
-}
+};
 const hrmsRoles = ["HRMS_ADMIN"];
 const hrmsAccess = () => {
   const userInfo = Digit.UserService.getUser();
@@ -232,6 +257,7 @@ export default {
   downloadReceipt,
   downloadBill,
   downloadPDFFromLink,
+  downloadBill,
   getFileUrl,
   getFileTypeFromFileStoreURL,
   browser: BrowserUtil,
@@ -257,5 +283,5 @@ export default {
   getPattern,
   hrmsRoles,
   getUnique,
-  tlAccess
+  tlAccess,
 };

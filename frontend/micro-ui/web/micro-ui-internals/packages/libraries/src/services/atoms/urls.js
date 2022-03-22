@@ -83,7 +83,7 @@ const Urls = {
     update: "/echallan-services/eChallan/v1/_update",
     download_pdf: "/egov-pdf/download/UC/mcollect-challan",
     receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
-    bill_download: "/egov-pdf/download/bills/consolidatedbill",
+    bill_download: "/egov-pdf/download/BILL/consolidatedbill",
     count: "/echallan-services/eChallan/v1/_count",
   },
   hrms: {
@@ -164,6 +164,7 @@ const Urls = {
     nocSearch: "/noc-services/v1/noc/_search",
   },
   access_control: "/access/v1/actions/mdms/_get",
+  billgenie: "/egov-searcher",
 };
 
 export default Urls;

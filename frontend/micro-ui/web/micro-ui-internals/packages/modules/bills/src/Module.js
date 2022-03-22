@@ -8,6 +8,7 @@ import BillInbox from "./pages/SearchBill/BillInbox";
 import ActionModal from "./components/Modal";
 import BillDetails from "./pages/BillDetails";
 import Banner from "./components/Banner";
+import GroupFilter from "./pages/GroupBill/GroupFilter";
 
 export const BillsModule = ({ stateCode, userType }) => {
   const { path, url } = useRouteMatch();
@@ -24,6 +25,7 @@ const componentsToRegister = {
   ActionModal,
   Banner,
   BILLS_INBOX_FILTER: (props) => <BillsFilter {...props} />,
+  BILLS_GROUP_FILTER: (props) => <GroupFilter {...props} />,
 };
 
 export const initBillsComponents = () => {
