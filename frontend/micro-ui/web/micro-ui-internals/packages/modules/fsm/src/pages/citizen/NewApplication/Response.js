@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Banner, CardText, SubmitBar, LinkButton } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -30,6 +30,7 @@ const Response = ({ data, onSuccess }) => {
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
+  const [paymentPreference, setPaymentPreference] = useState(null)
 
   const Data = mutation?.data || successData;
   const localityCode = Data?.fsm?.[0].address?.locality?.code;
@@ -52,6 +53,7 @@ const Response = ({ data, onSuccess }) => {
     try {
       const { subtype, pitDetail, address, pitType, source, selectGender, selectPaymentPreference, selectTripNo } = data;
       const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
+      setPaymentPreference(selectPaymentPreference.code);
       const formdata = {
         fsm: {
           citizen: {
@@ -114,7 +116,7 @@ const Response = ({ data, onSuccess }) => {
   ) : (
     <Card>
       <BannerPicker t={t} data={Data} isSuccess={isSuccess}         isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading} />
-      <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>
+      <CardText>{t(paymentPreference && paymentPreference == 'POST_PAY' ? "CS_FILE_PROPERTY_RESPONSE_POST_PAY" : "CS_FILE_PROPERTY_RESPONSE")}</CardText>
       {isSuccess&& (
         <LinkButton
           label={

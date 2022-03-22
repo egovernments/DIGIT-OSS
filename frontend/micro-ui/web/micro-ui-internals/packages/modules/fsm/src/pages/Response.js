@@ -6,8 +6,8 @@ import { useQueryClient } from "react-query";
 import getPDFData from "../getPDFData";
 import { getVehicleType } from "../utils";
 
-const GetMessage = (type, action, isSuccess, isEmployee, t) => {
-  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action ? action : "CREATE"}_${type}${isSuccess ? "" : "_ERROR"}`);
+const GetMessage = (type, action, isSuccess, isEmployee, t, paymentPreference) => {
+  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action ? action : "CREATE"}_${type}${isSuccess ? "" : "_ERROR"}${paymentPreference === 'POST_PAY' ? "_POST_PAY" : ""}`);
 };
 
 const GetActionMessage = (action, isSuccess, isEmployee, t) => {
@@ -18,8 +18,8 @@ const GetLabel = (action, isSuccess, isEmployee, t) => {
   return GetMessage("LABEL", action, isSuccess, isEmployee, t);
 };
 
-const DisplayText = (action, isSuccess, isEmployee, t) => {
-  return GetMessage("DISPLAY", action, isSuccess, isEmployee, t);
+const DisplayText = (action, isSuccess, isEmployee, t, paymentPreference) => {
+  return GetMessage("DISPLAY", action, isSuccess, isEmployee, t, paymentPreference);
 };
 
 const BannerPicker = (props) => {
@@ -121,7 +121,7 @@ const Response = (props) => {
         isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading}
         isEmployee={props.parentRoute.includes("employee")}
       />
-      <CardText>{DisplayText(state.action, isSuccess, props.parentRoute.includes("employee"), t)}</CardText>
+      <CardText>{DisplayText(state.action, isSuccess, props.parentRoute.includes("employee"), t, state.fsm.paymentPreference)}</CardText>
       {isSuccess && (
         <LinkButton
           label={
