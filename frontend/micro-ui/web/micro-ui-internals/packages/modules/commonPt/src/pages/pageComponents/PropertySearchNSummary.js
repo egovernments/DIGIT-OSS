@@ -24,7 +24,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
 
   useEffect(() => {
     onSelect('cpt', { details: propertyDetails?.Properties[0]})
-  }, [propertyDetails]);
+  }, [propertyDetails,pathname]);
 
   const searchProperty = () => {
     setSearchPropertyId(propertyId)
@@ -52,18 +52,18 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
     }
     if(propertyDetails?.Properties[0]?.address?.landmark) {
       propertyAddress += propertyDetails?.Properties[0]?.address?.landmark;
-      if(propertyDetails?.Properties[0]?.address?.locality?.name) {
+      if(propertyDetails?.Properties[0]?.address?.locality?.code) {
         propertyAddress += ', ';
       }
     }
-    if(propertyDetails?.Properties[0]?.address?.locality?.name) {
-      propertyAddress += propertyDetails?.Properties[0]?.address?.locality?.name;
+    if(propertyDetails?.Properties[0]?.address?.locality?.code) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.locality?.code && t(Digit.Utils.pt.getMohallaLocale(propertyDetails?.Properties[0]?.address?.locality?.code,propertyDetails?.Properties[0]?.tenantId));
       if(propertyDetails?.Properties[0]?.address?.city) {
         propertyAddress += ', ';
       }
     }
     if(propertyDetails?.Properties[0]?.address?.city) {
-      propertyAddress += propertyDetails?.Properties[0]?.address?.city;
+      propertyAddress += propertyDetails?.Properties[0]?.tenantId&& t(Digit.Utils.pt.getCityLocale(propertyDetails?.Properties[0]?.tenantId));
       if(propertyDetails?.Properties[0]?.address?.pincode) {
         propertyAddress += ', ';
       }
