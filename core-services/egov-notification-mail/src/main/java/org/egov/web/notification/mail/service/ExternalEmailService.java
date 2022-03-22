@@ -81,12 +81,12 @@ public class ExternalEmailService implements EmailService {
 			helper.setSubject(email.getSubject());
 			helper.setText(email.getBody(), true);
 			/*log here*/
-			log.info(email.toString());
-			log.info(mailSender.getHost());
-			log.info(mailSender.getProtocol());
-			log.info(mailSender.getDefaultEncoding());
-			log.info(mailSender.getUsername());
-			log.info(String.valueOf(mailSender.getPort()));
+//			log.info(email.toString());
+//			log.info(mailSender.getHost());
+//			log.info(mailSender.getProtocol());
+//			log.info(mailSender.getDefaultEncoding());
+//			log.info(mailSender.getUsername());
+//			log.info(String.valueOf(mailSender.getPort()));
 			for(int i=0; i<email.getFileStoreId().size(); i++) {
 				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, FILESTORE_TENANT_ID, email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);
@@ -102,7 +102,7 @@ public class ExternalEmailService implements EmailService {
 				}
 				helper.addAttachment(fieldValue, download);
 			}
-			log.info("added attachments");
+//			log.info("added attachments");
 
 		} catch (MessagingException | MalformedURLException e) {
 			log.error(EXCEPTION_MESSAGE, e);
