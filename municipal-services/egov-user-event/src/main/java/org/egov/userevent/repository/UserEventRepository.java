@@ -73,6 +73,7 @@ public class UserEventRepository {
 		NotificationCountResponse response = null;
 		try {
 			query = multiStateInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+			insertQuery = multiStateInstanceUtil.replaceSchemaPlaceholder(insertQuery, criteria.getTenantId());
 			log.info("Query: "+query);
 			namedParameterJdbcTemplate.update(insertQuery, preparedStatementValues);
 			response = namedParameterJdbcTemplate.query(query, preparedStatementValues, countRowMapper);
