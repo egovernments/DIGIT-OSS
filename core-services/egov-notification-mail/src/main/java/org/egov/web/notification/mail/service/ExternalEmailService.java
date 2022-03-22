@@ -5,12 +5,22 @@ import javax.mail.internet.MimeMessage;
 
 import org.egov.web.notification.mail.consumer.contract.Email;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 @Service
 @ConditionalOnProperty(value = "mail.enabled", havingValue = "true")
@@ -49,10 +59,40 @@ public class ExternalEmailService implements EmailService {
 			helper.setTo(email.getEmailTo().toArray(new String[0]));
 			helper.setSubject(email.getSubject());
 			helper.setText(email.getBody(), true);
-		} catch (MessagingException e) {
+			/*log here*/
+			log.info(email.toString());
+			log.info(mailSender.getHost());
+			log.info(mailSender.getProtocol());
+			log.info(mailSender.getDefaultEncoding());
+			log.info(mailSender.getUsername());
+			log.info(String.valueOf(mailSender.getPort()));
+			for(int i=0; i<email.getFileStoreId().size(); i++) {
+				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, "pb", email.getFileStoreId().toArray()[i]);
+				URL url = new URL(uri);
+				URLConnection con = url.openConnection();
+				String fieldValue = "Application Form " + "[" + i + "]";
+				File download = new File(System.getProperty("java.io.tmpdir"), fieldValue);
+				ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
+				FileOutputStream fos = new FileOutputStream(download);
+				try {
+					fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+				} finally {
+					fos.close();
+				}
+				helper.addAttachment(fieldValue, download);
+			}
+			log.info("added attachments");
+
+		} catch (MessagingException | MalformedURLException e) {
 			log.error(EXCEPTION_MESSAGE, e);
 			throw new RuntimeException(e);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		mailSender.send(message);
+		try{
+			mailSender.send(message);
+		} catch (MailException e){
+			log.error(EXCEPTION_MESSAGE, e);
+		}
 	}
 }

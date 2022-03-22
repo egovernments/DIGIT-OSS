@@ -259,16 +259,16 @@ public class NotificationUtil {
 
         List<EmailRequest> emailRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-            String customizedMsg = message;
+            String customizedMsg = "";
             if(message.contains(NOTIFICATION_EMAIL))
-                customizedMsg = customizedMsg.replace(NOTIFICATION_EMAIL, entryset.getValue());
+                customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
 
             if(StringUtils.isEmpty(entryset.getValue()))
                 log.info("Email ID is empty, no notification will be sent ");
 
             String subject = "";
             String body = customizedMsg;
-            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).build();
+            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).tenantId(null).fileStoreId(null).build();
             EmailRequest email = new EmailRequest(requestInfo,emailobj);
             emailRequest.add(email);
         }
@@ -286,6 +286,11 @@ public class NotificationUtil {
      */
 
     public List<EmailRequest> createEmailRequestFromSMSRequests(RequestInfo requestInfo,List<SMSRequest> smsRequests,String tenantId) {
+        return createEmailRequestFromSMSRequests(requestInfo,smsRequests, tenantId, null);
+    }
+
+    //added fileStoreIds in the function
+    public List<EmailRequest> createEmailRequestFromSMSRequests(RequestInfo requestInfo,List<SMSRequest> smsRequests,String tenantId, Set<String> fileStoreIds) {
         Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
         Map<String, String> mobileNumberToEmailId = fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
         if (CollectionUtils.isEmpty(mobileNumberToEmailId.keySet())) {
@@ -295,22 +300,29 @@ public class NotificationUtil {
         Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
         List<EmailRequest> emailRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
+            String customizedMsg = "";
             String message = mobileNumberToMsg.get(entryset.getKey());
-            String customizedMsg = message;
-
+            log.info(message);
             if(message.contains(NOTIFICATION_EMAIL))
-                customizedMsg = customizedMsg.replace(NOTIFICATION_EMAIL, entryset.getValue());
+                message = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
 
             //removing lines to match Email Templates
             if(message.contains(PT_TAX_PARTIAL))
-                customizedMsg = customizedMsg.replace(PT_TAX_PARTIAL,"");
+                message = message.replace(PT_TAX_PARTIAL,"");
 
             if(message.contains(PT_TAX_FULL))
-                customizedMsg = customizedMsg.replace(PT_TAX_FULL,"");
+                message = message.replace(PT_TAX_FULL,"");
 
-            String subject = "";
-            String body = customizedMsg;
-            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).build();
+            String subject = "eGovernments Notifications";
+            String body = message;
+            log.info(body);
+            Email emailobj = new Email();
+            if(fileStoreIds==null) {
+                emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).fileStoreId(null).tenantId(tenantId).build();
+            } else {
+
+                emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).fileStoreId(fileStoreIds).tenantId(tenantId).build();
+            }
             EmailRequest email = new EmailRequest(requestInfo,emailobj);
             emailRequest.add(email);
         }
