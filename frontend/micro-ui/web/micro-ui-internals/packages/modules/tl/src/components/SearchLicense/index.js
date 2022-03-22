@@ -64,9 +64,9 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
             return (
               <div>
                 <span className="link">
-                  <Link to={`/digit-ui/employee/tl/application-details/${row.original["applicationNumber"]}?renewalPending=true`}>
+                  <a href={`/digit-ui/employee/tl/application-details/${row.original["applicationNumber"]}?renewalPending=true`}>
                     {row.original["licenseNumber"]}
-                  </Link>
+                  </a>
                 </span>
               </div>
             );

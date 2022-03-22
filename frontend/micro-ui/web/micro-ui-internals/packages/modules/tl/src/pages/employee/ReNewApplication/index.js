@@ -16,6 +16,9 @@ const ReNewApplication = (props) => {
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
   let { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(tenantId?.split?.(".")?.[0], {});
+  const { 
+    data: propertyDetails
+  } = Digit.Hooks.pt.usePropertySearch({ filters: { propertyIds: propertyId }, tenantId: tenantId }, { filters: { propertyIds: propertyId  }, tenantId: tenantId });
 
   const history = useHistory();
   // delete
@@ -167,7 +170,7 @@ const ReNewApplication = (props) => {
   };
 
   const onSubmit = (data) => {
-    if (!data?.cpt?.details){
+    if (!(data?.cpt?.details || propertyDetails)){
       if(!data?.address){
         setShowToast({ key: "error" });
         setError("TL_PROPERTY_ID_REQUIRED");
@@ -337,23 +340,24 @@ const ReNewApplication = (props) => {
       if (data?.tradeUnits?.length > 0) formData.tradeLicenseDetail.tradeUnits = data?.tradeUnits;
       if (data?.owners?.length > 0) formData.tradeLicenseDetail.owners = data?.owners;
       if (data?.address) formData.tradeLicenseDetail.address = data?.address;
-      if (data?.cpt?.details?.address) {
+      if (data?.cpt?.details?.address||propertyDetails) {
         let address = {};
-        address.city = data?.cpt?.details?.address?.city || null;
-        address.locality = { code: data?.cpt?.details?.address?.locality?.code || null };
-        if (data?.cpt?.details?.address?.doorNo) address.doorNo = data?.cpt?.details?.address?.doorNo || null;
-        if (data?.cpt?.details?.address?.street) address.street = data?.cpt?.details?.address?.street || null;
-        if (data?.cpt?.details?.address?.pincode) address.pincode = data?.cpt?.details?.address?.pincode;
+        let ptdet=data?.cpt?.details||propertyDetails;
+        address.city = ptdet?.address?.city || null;
+        address.locality = { code: ptdet?.address?.locality?.code || null };
+        if (ptdet?.address?.doorNo) address.doorNo = ptdet?.address?.doorNo || null;
+        if (ptdet?.address?.street) address.street = ptdet?.address?.street || null;
+        if (ptdet?.address?.pincode) address.pincode = ptdet?.address?.pincode;
         formData.tradeLicenseDetail.address = address;
       }
       if (structureType) formData.tradeLicenseDetail.structureType = structureType;
       if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
       if (applicationDocuments) formData.tradeLicenseDetail.applicationDocuments = applicationDocuments;
-      if (data?.cpt){
+      if (data?.cpt || propertyDetails){
         if(!formData?.tradeLicenseDetail?.additionalDetail?.propertyId){
           formData.tradeLicenseDetail.additionalDetail={propertyId:null}
         }
-        formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId;
+        formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId||propertyDetails?.propertyId;
       }
 
       /* use customiseCreateFormData hook to make some chnages to the licence object */

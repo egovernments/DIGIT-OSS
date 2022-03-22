@@ -3,6 +3,7 @@ import * as date from "./date";
 import * as dss from "./dss";
 import * as locale from "./locale";
 import * as obps from "./obps";
+import * as pt from "./pt";
 import PDFUtil, { downloadReceipt ,downloadPDFFromLink ,getFileUrl} from "./pdf";
 import getFileTypeFromFileStoreURL from "./fileType";
 
@@ -245,6 +246,7 @@ export default {
   BPAAccess,
   dss,
   obps,
+  pt,
   ptAccess,
   NOCAccess,
   mCollectAccess,

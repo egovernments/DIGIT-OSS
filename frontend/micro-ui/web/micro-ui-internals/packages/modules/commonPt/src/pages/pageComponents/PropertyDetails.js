@@ -42,18 +42,18 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
     }
     if(propertyDetails?.Properties[0]?.address?.landmark) {
       propertyAddress += propertyDetails?.Properties[0]?.address?.landmark;
-      if(propertyDetails?.Properties[0]?.address?.locality?.name) {
+      if(propertyDetails?.Properties[0]?.address?.locality?.code) {
         propertyAddress += ', ';
       }
     }
-    if(propertyDetails?.Properties[0]?.address?.locality?.name) {
-      propertyAddress += propertyDetails?.Properties[0]?.address?.locality?.name;
+    if(propertyDetails?.Properties[0]?.address?.locality?.code) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.locality?.code && t(Digit.Utils.pt.getMohallaLocale(propertyDetails?.Properties[0]?.address?.locality?.code,propertyDetails?.Properties[0]?.tenantId));
       if(propertyDetails?.Properties[0]?.address?.city) {
         propertyAddress += ', ';
       }
     }
     if(propertyDetails?.Properties[0]?.address?.city) {
-      propertyAddress += propertyDetails?.Properties[0]?.address?.city;
+      propertyAddress += propertyDetails?.Properties[0]?.tenantId&& t(Digit.Utils.pt.getCityLocale(propertyDetails?.Properties[0]?.tenantId));
       if(propertyDetails?.Properties[0]?.address?.pincode) {
         propertyAddress += ', ';
       }
@@ -96,6 +96,7 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
               <button
                 className="submit-bar"
                 type="button"
+                style={{color:"white"}}
                 onClick={goNext}
               >
                 {`${t("CS_COMMON_NEXT")}`}
