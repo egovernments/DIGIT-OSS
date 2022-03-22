@@ -4,7 +4,7 @@ import * as dss from "./dss";
 import * as locale from "./locale";
 import * as obps from "./obps";
 import * as pt from "./pt";
-import PDFUtil, { downloadReceipt ,downloadPDFFromLink ,getFileUrl} from "./pdf";
+import PDFUtil, { downloadReceipt ,downloadPDFFromLink,downloadBill ,getFileUrl} from "./pdf";
 import getFileTypeFromFileStoreURL from "./fileType";
 
 const GetParamFromUrl = (key, fallback, search) => {
@@ -230,6 +230,7 @@ const hrmsAccess = () => {
 export default {
   pdf: PDFUtil,
   downloadReceipt,
+  downloadBill,
   downloadPDFFromLink,
   getFileUrl,
   getFileTypeFromFileStoreURL,
