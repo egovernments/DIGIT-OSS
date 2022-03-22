@@ -9,7 +9,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
 
-  const [vehicle, setVehicle] = useState(formData?.tripData?.vehicleCapacity);
+  const [vehicle, setVehicle] = useState({ label: formData?.tripData?.vehicleCapacity });
   const [billError, setError] = useState(false);
 
   const { isLoading: isVehicleMenuLoading, data: vehicleData } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
@@ -79,7 +79,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   }
 
   function selectVehicle(value) {
-    setVehicle(value);
+    setVehicle({ label: value.capacity });
     onSelect(config.key, { ...formData[config.key], vehicleType: value });
   }
 
@@ -90,11 +90,11 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
     (async () => {
 
       if (formData?.tripData?.vehicleType !== vehicle) {
-        setVehicle(formData?.tripData?.vehicleType);
+        setVehicle({ label: formData?.tripData?.vehicleType?.capacity });
       }
 
       if (formData?.propertyType && formData?.subtype && formData?.address && formData?.tripData?.vehicleType?.capacity) {
-        const { capacity } = formData?.tripData?.vehicleType;
+        const capacity = formData?.tripData?.vehicleType.capacity;
         const { slum: slumDetails } = formData.address;
         const slum = slumDetails ? "YES" : "NO";
         const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
