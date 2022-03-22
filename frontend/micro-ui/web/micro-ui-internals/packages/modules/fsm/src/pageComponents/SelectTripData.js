@@ -43,8 +43,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         min: 1,
       },
       default: formData?.tripData?.noOfTrips,
-      disable: false,
-
+      disable: editScreen || formData.paymentPreference === "POST_PAY" ? false : true,
       isMandatory: true,
     },
     {
@@ -137,6 +136,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           selected={vehicle}
           select={selectVehicle}
           t={t}
+          disable={formData?.tripData?.vehicleCapacity ? true : false}
         />
       </LabelFieldPair>
       {inputs?.map((input, index) => (
