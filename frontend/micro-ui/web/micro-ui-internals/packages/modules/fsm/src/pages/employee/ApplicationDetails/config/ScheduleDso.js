@@ -33,6 +33,7 @@ export const configScheduleDso = ({ t, rejectMenu, setTrips, trips, applicationC
                         label: t("ES_FSM_ACTION_WASTE_VOLUME_LABEL"),
                         type: "number",
                         isMandatory: true,
+                        disable: true,
                         populators: {
                             name: "wasteCollected",
                             validation: {
