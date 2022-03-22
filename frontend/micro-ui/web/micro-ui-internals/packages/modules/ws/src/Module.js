@@ -29,6 +29,7 @@ import WSActivationPlumberDetails from "./pageComponents/WSActivationPlumberDeta
 import WSActivationPageDetails from "./pageComponents/WSActivationPageDetails";
 import WSActivationCommentsDetails from "./pageComponents/WSActivationCommentsDetails";
 import WSActivationSupportingDocuments from "./pageComponents/WSActivationSupportingDocuments";
+import WSDocumentsEmployee from "./pageComponents/WSDocumentsEmployee";
 
 const WSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "ws";
@@ -116,7 +117,8 @@ const componentsToRegister = {
   WSActivationPlumberDetails,
   WSActivationPageDetails,
   WSActivationCommentsDetails,
-  WSActivationSupportingDocuments
+  WSActivationSupportingDocuments,
+  WSDocumentsEmployee
 };
 
 export const initWSComponents = () => {

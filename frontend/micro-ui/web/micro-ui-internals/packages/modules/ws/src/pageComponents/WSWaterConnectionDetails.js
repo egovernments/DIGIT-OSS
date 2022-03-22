@@ -45,6 +45,17 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
   };
 
   return (
+
+
+
+
+
+
+
+
+
+
+    
     <div>
       {userType === "citizen" && <Timeline currentStep={2} />}
       {!wsServiceCalculationLoading ? (

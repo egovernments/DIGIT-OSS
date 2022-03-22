@@ -132,3 +132,59 @@ export const getPattern = type => {
   }
 };
 
+export const getFiles = async (filesArray, tenant) => {
+  const response = await Digit.UploadServices.Filefetch(filesArray, tenant);
+  response?.data?.fileStoreIds?.[0]?.url ? window.open(response?.data?.fileStoreIds?.[0]?.url) : null;
+}
+
+export const createPayloadOfWS = async (data) => {
+  let payload = {
+    water: data?.ConnectionDetails?.[0]?.water,
+    sewerage: data?.ConnectionDetails?.[0]?.sewerage,
+    proposedTaps: data?.ConnectionDetails?.[0]?.proposedTaps,
+    proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size,
+    proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets,
+    proposedToilets: data?.ConnectionDetails?.[0]?.proposedToilets,
+    connectionHolders: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
+      correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
+      fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
+      gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
+      mobileNumber: data?.ConnectionHolderDetails?.[0]?.mobileNumber || "",
+      name: data?.ConnectionHolderDetails?.[0]?.name || "",
+      ownerType: data?.ConnectionHolderDetails?.[0]?.ownerType?.code || "",
+      relationship: data?.ConnectionHolderDetails?.[0]?.relationship?.code || "",
+      sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
+    }] : null,
+    service: data?.ConnectionDetails?.[0]?.water ? "Water" : data?.ConnectionDetails?.[0]?.sewerage ? "Sewerage" : "Water And Sewerage",
+    property: data?.cpt?.details,
+    propertyId: data?.cpt?.details?.propertyId,
+    roadCuttingArea: null,
+    noOfTaps: null,
+    noOfWaterClosets: null,
+    noOfToilets: null,
+    additionalDetails: {
+      initialMeterReading: null,
+      detailsProvidedBy: null,
+      locality: data?.cpt?.details?.address?.locality?.code,
+
+    },
+    tenantId: data?.cpt?.details?.address?.tenantId,
+    processInstance: {
+      action: "INITIATE"
+    },
+    channel: "CITIZEN",
+    documents: data?.DocumentsRequired?.documents
+  }
+
+  return payload;
+}
+
+export const updatePayloadOfWS = async (data, allDetails) => {
+  let payload = {
+    ...data,
+    processInstance: {
+      action: "SUBMIT_APPLICATION"
+    }
+  }
+  return payload;
+}
