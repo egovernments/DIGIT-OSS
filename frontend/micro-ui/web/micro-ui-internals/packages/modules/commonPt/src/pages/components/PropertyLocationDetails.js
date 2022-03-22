@@ -6,15 +6,14 @@ import { stringReplaceAll } from "../utils";
 
 const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBlur}) => {
   let validation = {};
-
   let allCities = Digit.Hooks.pt.useTenants()?Digit.Hooks.pt.useTenants():Digit.Hooks.tl.useTenants();
   // if called from tl module get tenants from tl usetenants
   const userInfo = Digit.UserService.getUser()?.info;
+  userType=userInfo?.type=="EMPLOYEE"?"employee":"citizen";
   const cityId = userInfo?.tenantId;
   const cityName = 'TENANT_TENANTS_' + userInfo?.tenantId.replace('.','_').toUpperCase();
 
-  const cityObj = userType === 'employee' ? {code: cityId, name: t(cityName), i18nKey: cityName} : Digit.SessionStorage.get('CITIZEN.COMMON.HOME.CITY');
-
+  const cityObj = userType === 'employee' ? {code: cityId, name: t(cityName), i18nKey: cityName} : null;
   const [cityCode, setCityCode] = useState(cityObj);
   const [locality, setLocality] = useState(formData?.locality);
   const [houseDoorNo, setHouseDoorNo] = useState(formData.houseDoorNo);
