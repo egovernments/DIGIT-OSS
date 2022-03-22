@@ -10,11 +10,12 @@ import cloneDeep from "lodash/cloneDeep";
 const NewApplication = () => {
   let tenantId = Digit.ULBService.getCurrentTenantId();
   tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
-  const propertyId = new URLSearchParams(useLocation().search).get("propertyId")
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
   const history = useHistory();
   // delete
+  const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
+
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_TRADE_NEW_FORM", {});
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
@@ -22,7 +23,15 @@ const NewApplication = () => {
   const [error, setError] = useState(null);
   const stateId = Digit.ULBService.getStateId();
   let { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
+  const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
+    { filters: { propertyIds: propertyId }, tenantId: tenantId },
+    { filters: { propertyIds: propertyId }, tenantId: tenantId },
+    { enabled: propertyId ? true : false }
+  );
 
+  useEffect(() => {
+    !propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
+  }, [sessionFormData?.cpt]);
   const closeToast = () => {
     setShowToast(null);
     setError(null);
@@ -34,24 +43,28 @@ const NewApplication = () => {
   }, []);
 
   const onFormValueChange = (setValue, formData, formState) => {
-    if(!_.isEqual(sessionFormData, formData)){
-      setSessionFormData({ ...sessionFormData, ...formData});
+    if (!_.isEqual(sessionFormData, formData)) {
+      setSessionFormData({ ...sessionFormData, ...formData });
     }
 
-    if(Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.entries(formState.errors["owners"].type).filter((ob) => ob.type === "required").length ==0){
+    if (
+      Object.keys(formState.errors).length > 0 &&
+      Object.keys(formState.errors).length == 1 &&
+      formState.errors["owners"] &&
+      Object.entries(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0
+    ) {
       setSubmitValve(true);
-    }
-    else{
-      setSubmitValve(!(Object.keys(formState.errors).length));
+    } else {
+      setSubmitValve(!Object.keys(formState.errors).length);
     }
   };
   const onSubmit = (data) => {
-    if (!data?.cpt?.details){
+    if (!data?.cpt?.details || !propertyDetails) {
       setShowToast({ key: "error" });
       setError("TL_PROPERTY_ID_REQUIRED");
       return;
     }
-    if (propertyId == null){
+    if (propertyId == null) {
       setShowToast({ key: "error" });
       setError("TL_PROPERTY_ID_REQUIRED");
       return;
@@ -89,8 +102,7 @@ const NewApplication = () => {
       if (data?.cpt?.details?.address?.doorNo) address.doorNo = data?.cpt?.details?.address?.doorNo || null;
       if (data?.cpt?.details?.address?.street) address.street = data?.cpt?.details?.address?.street || null;
       if (data?.cpt?.details?.address?.pincode) address.pincode = data?.cpt?.details?.address?.pincode;
-    }
-    else if (data?.address) {
+    } else if (data?.address) {
       address.city = data?.address?.city?.code || null;
       address.locality = { code: data?.address?.locality?.code || null };
       if (data?.address?.doorNo) address.doorNo = data?.address?.doorNo || null;
@@ -102,11 +114,11 @@ const NewApplication = () => {
     if (data?.owners?.length > 0) {
       data?.owners.map((data) => {
         let obj = {};
-        obj.dob = data?.dob ? convertDateToEpoch(data?.dob): null;
+        obj.dob = data?.dob ? convertDateToEpoch(data?.dob) : null;
         if (data?.fatherOrHusbandName) obj.fatherOrHusbandName = data?.fatherOrHusbandName;
         if (data?.gender?.code) obj.gender = data?.gender?.code;
         if (data?.mobileNumber) obj.mobileNumber = Number(data?.mobileNumber);
-        if (data?.name) obj.name = !(data?.ownershipCategory?.code.includes("INSTITUTIONAL"))?data?.name:"";
+        if (data?.name) obj.name = !data?.ownershipCategory?.code.includes("INSTITUTIONAL") ? data?.name : "";
         if (data?.permanentAddress) obj.permanentAddress = data?.permanentAddress;
         obj.permanentAddress = obj.permanentAddress ? obj.permanentAddress : null;
         if (data?.relationship) obj.relationship = data?.relationship?.code;
@@ -154,16 +166,21 @@ const NewApplication = () => {
     if (address) formData.tradeLicenseDetail.address = address;
     if (structureType) formData.tradeLicenseDetail.structureType = structureType;
     if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
-    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail = {...formData.tradeLicenseDetail,institution:{}}
-    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["designation"] = data?.owners?.[0]?.designation;
-    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["instituionName"] = data?.owners?.[0]?.instituionName;
-    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["name"] = data?.owners?.[0]?.name;
-    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution["contactNo"] = data?.owners?.[0]?.altContactNumber;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL"))
+      formData.tradeLicenseDetail = { ...formData.tradeLicenseDetail, institution: {} };
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL"))
+      formData.tradeLicenseDetail.institution["designation"] = data?.owners?.[0]?.designation;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL"))
+      formData.tradeLicenseDetail.institution["instituionName"] = data?.owners?.[0]?.instituionName;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL"))
+      formData.tradeLicenseDetail.institution["name"] = data?.owners?.[0]?.name;
+    if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL"))
+      formData.tradeLicenseDetail.institution["contactNo"] = data?.owners?.[0]?.altContactNumber;
     if (data?.cpt) formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId;
 
     // setFormData(formData)
     /* use customiseCreateFormData hook to make some chnages to the licence object */
-    formData=Digit?.Customizations?.TL?.customiseCreateFormData?Digit?.Customizations?.TL?.customiseCreateFormData(data,formData):formData;
+    formData = Digit?.Customizations?.TL?.customiseCreateFormData ? Digit?.Customizations?.TL?.customiseCreateFormData(data, formData) : formData;
     Digit.TLService.create({ Licenses: [formData] }, tenantId)
       .then((result, err) => {
         if (result?.Licenses?.length > 0) {
@@ -174,7 +191,7 @@ const NewApplication = () => {
           Digit.TLService.update({ Licenses: [licenses] }, tenantId)
             .then((response) => {
               if (response?.Licenses?.length > 0) {
-                setTimeout(()=>window.location.reload())
+                setTimeout(() => window.location.reload());
                 history.replace(`/digit-ui/employee/tl/response`, { data: response?.Licenses });
                 clearSessionFormData();
               }
@@ -196,7 +213,7 @@ const NewApplication = () => {
   };
   // let configs = newConfig;
   let configs = [];
-  newConfig=newConfig?newConfig:newConfigTL;
+  newConfig = newConfig ? newConfig : newConfigTL;
   newConfig?.map((conf) => {
     if (conf.head !== "ES_NEW_APPLICATION_PROPERTY_ASSESSMENT" && conf.head) {
       configs.push(conf);
@@ -236,7 +253,6 @@ const NewApplication = () => {
         defaultValues={/* defaultValues */ sessionFormData}
         onFormValueChange={onFormValueChange}
         breaklineStyle={{ border: "0px" }}
-
       />
       {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
     </div>
