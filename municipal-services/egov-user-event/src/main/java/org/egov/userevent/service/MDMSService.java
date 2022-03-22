@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -32,7 +33,9 @@ public class MDMSService {
 	
 	@Autowired
 	private PropertiesManager props;
-	
+
+	@Autowired
+	private MultiStateInstanceUtil multiStateInstanceUtil;
 	
 	/**
 	 * Method to fetch event types from MDMS
@@ -83,8 +86,7 @@ public class MDMSService {
 				.masterDetails(masterDetails).build();
 		List<ModuleDetail> moduleDetails = new ArrayList<>();
 		moduleDetails.add(moduleDetail);
-		tenantId = tenantId.split("\\.")[0]; //state-level master
-		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(tenantId).moduleDetails(moduleDetails).build();
+		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(multiStateInstanceUtil.getStateLevelTenant(tenantId)).moduleDetails(moduleDetails).build();
 		return MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
 	}
 

@@ -54,6 +54,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.response.ResponseInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.userevent.config.PropertiesManager;
 import org.egov.userevent.model.AuditDetails;
 import org.egov.userevent.model.LATWrapper;
@@ -103,6 +104,9 @@ public class UserEventsService {
 
 	@Autowired
 	private LocalizationService localizationService;
+
+	@Autowired
+	private MultiStateInstanceUtil multiStateInstanceUtil;
 
 	/**
 	 * Service method to create events Enriches the request and produces it on the
@@ -179,7 +183,7 @@ public class UserEventsService {
 	private Event buildCounterEvents(RequestInfo requestInfo, Event event, Boolean isCounterEventReq) {
 		String description = null;
 		Event counterEvent = new Event();
-		String tenanId = properties.getIsLocalizationStateLevel() ? event.getTenantId().split("\\.")[0]
+		String tenanId = properties.getIsLocalizationStateLevel() ? multiStateInstanceUtil.getStateLevelTenant(event.getTenantId())
 				: event.getTenantId();
 		Map<String, String> localisedMsgs = localizationService.getLocalisedMessages(requestInfo, tenanId, "en_IN",
 				UserEventsConstants.LOCALIZATION_MODULE_NAME);
