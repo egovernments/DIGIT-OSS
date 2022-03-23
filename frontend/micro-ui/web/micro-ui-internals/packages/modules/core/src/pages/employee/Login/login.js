@@ -35,7 +35,11 @@ const Login = ({ config: propsConfig, t ,isDisabled}) => {
     if(user?.info?.roles&&user?.info?.roles?.every(e=>e.code==="NATADMIN")){
       redirectPath='/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD'
     }
-
+    /*  RAIN-6489 Logic to navigate to National DSS home incase user has only one role [NATADMIN]*/
+    if(user?.info?.roles&&user?.info?.roles?.every(e=>e.code==="STADMIN")){
+      redirectPath='/digit-ui/employee/payment/integration/dss/home'
+    }
+    
     history.replace(redirectPath);
   }, [user]);
 
