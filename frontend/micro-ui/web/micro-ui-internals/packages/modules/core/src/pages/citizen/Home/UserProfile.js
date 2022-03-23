@@ -64,13 +64,13 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
 
   const getUserInfo = async () => {
-    const uuid=userInfo?.uuid;
-    if(uuid){
-    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
-    usersResponse && usersResponse.user && usersResponse.user.length &&setUserDetails(usersResponse.user[0]);
-    } 
+    const uuid = userInfo?.uuid;
+    if (uuid) {
+      const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+      usersResponse && usersResponse.user && usersResponse.user.length && setUserDetails(usersResponse.user[0]);
+    }
   };
-  
+
   React.useEffect(() => {
     window.addEventListener("resize", () => setWindowWidth(window.innerWidth));
     return () => {
@@ -148,10 +148,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
           throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID" });
         }
 
-        if (
-          !new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(newPassword) &&
-          !new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(confirmPassword)
-        ) {
+        if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(newPassword) && !new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(confirmPassword)) {
           throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID" });
         }
       }
@@ -277,7 +274,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
           gap: userType === "citizen" ? "" : "0 24px",
           boxShadow: userType === "citizen" ? "1px 1px 4px 0px rgba(0,0,0,0.2)" : "",
           background: userType === "citizen" ? "white" : "",
-          borderRadius: userType === "citizen" ? "4px":"",
+          borderRadius: userType === "citizen" ? "4px" : "",
         }}
       >
         <section
@@ -290,8 +287,8 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
             maxWidth: "100%",
             height: "376px",
             borderRadius: "4px",
-            boxShadow: userType === "citizen" ? "": "1px 1px 4px 0px rgba(0,0,0,0.2)",
-            border: `${userType === 'citizen' ? '8px' : '24px'} solid #fff`,
+            boxShadow: userType === "citizen" ? "" : "1px 1px 4px 0px rgba(0,0,0,0.2)",
+            border: `${userType === "citizen" ? "8px" : "24px"} solid #fff`,
             background: "#EEEEEE",
             padding: userType === "citizen" ? "8px" : "16px",
           }}
@@ -301,7 +298,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
               position: "relative",
               height: userType === "citizen" ? "114px" : "150px",
               width: userType === "citizen" ? "114px" : "150px",
-              margin: "16px"
+              margin: "16px",
             }}
           >
             <img
@@ -327,7 +324,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
             width: "100%",
             borderRadius: "4px",
             height: "fit-content",
-            boxShadow: userType === "citizen" ? "": "1px 1px 4px 0px rgba(0,0,0,0.2)",
+            boxShadow: userType === "citizen" ? "" : "1px 1px 4px 0px rgba(0,0,0,0.2)",
             background: "white",
             padding: userType === "citizen" ? "8px" : "24px",
           }}
@@ -399,13 +396,13 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                   borderBottom: "1px solid black",
                 }}
               >
-                Save
+                {t("CORE_COMMON_SAVE")}
               </button>
             </React.Fragment>
           ) : (
             <React.Fragment>
               <LabelFieldPair style={{ display: "flex" }}>
-                <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>
+                <CardLabel className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>
                   {`${t("CORE_COMMON_PROFILE_NAME")}`}*
                 </CardLabel>
                 <TextInput
@@ -427,7 +424,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
               </LabelFieldPair>
 
               <LabelFieldPair style={{ display: "flex" }}>
-                <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
+                <CardLabel className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
                   "CORE_COMMON_PROFILE_GENDER"
                 )}`}</CardLabel>
                 <Dropdown
@@ -444,7 +441,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
               </LabelFieldPair>
 
               <LabelFieldPair style={{ display: "flex" }}>
-                <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
+                <CardLabel className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
                   "CORE_COMMON_PROFILE_CITY"
                 )}`}</CardLabel>
                 <TextInput
@@ -466,7 +463,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
               </LabelFieldPair>
 
               <LabelFieldPair style={{ display: "flex" }}>
-                <CardLabel style={{ width: "300px" }}>{`${t("CORE_COMMON_PROFILE_MOBILE_NUMBER")}*`}</CardLabel>
+                <CardLabel className="profile-label-margin" style={{ width: "300px" }}>{`${t("CORE_COMMON_PROFILE_MOBILE_NUMBER")}*`}</CardLabel>
                 <div style={{ width: "100%" }}>
                   <MobileNumber
                     value={mobileNumber}
@@ -481,7 +478,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
               </LabelFieldPair>
 
               <LabelFieldPair style={{ display: "flex" }}>
-                <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
+                <CardLabel className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
                   "CORE_COMMON_PROFILE_EMAIL"
                 )}`}</CardLabel>
                 <TextInput
@@ -499,14 +496,15 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
               <LabelFieldPair>
                 <div>
                   <a style={{ color: "orange", cursor: "default", marginBottom: "5", cursor: "pointer" }} onClick={TogleforPassword}>
-                    Change Password
+                    {t("CORE_COMMON_CHANGE_PASSWORD")}
                   </a>
                   {changepassword ? (
                     <div style={{ marginTop: "10px" }}>
                       <LabelFieldPair style={{ display: "flex" }}>
-                        <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
-                          "CORE_COMMON_PROFILE_CURRENT_PASSWORD"
-                        )}`}</CardLabel>
+                        <CardLabel
+                          className="profile-label-margin"
+                          style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}
+                        >{`${t("CORE_COMMON_PROFILE_CURRENT_PASSWORD")}`}</CardLabel>
                         <TextInput
                           t={t}
                           type={"password"}
@@ -518,9 +516,10 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                         />
                       </LabelFieldPair>
                       <LabelFieldPair style={{ display: "flex" }}>
-                        <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
-                          "CORE_COMMON_PROFILE_NEW_PASSWORD"
-                        )}`}</CardLabel>
+                        <CardLabel
+                          className="profile-label-margin"
+                          style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}
+                        >{`${t("CORE_COMMON_PROFILE_NEW_PASSWORD")}`}</CardLabel>
                         <TextInput
                           t={t}
                           type={"password"}
@@ -532,9 +531,10 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                         />
                       </LabelFieldPair>
                       <LabelFieldPair style={{ display: "flex" }}>
-                        <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
-                          "CORE_COMMON_PROFILE_CONFIRM_PASSWORD"
-                        )}`}</CardLabel>
+                        <CardLabel
+                          className="profile-label-margin"
+                          style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}
+                        >{`${t("CORE_COMMON_PROFILE_CONFIRM_PASSWORD")}`}</CardLabel>
                         <TextInput
                           t={t}
                           type={"password"}
@@ -557,22 +557,24 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
       </div>
 
       {userType === "employee" ? (
-        <div style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end", marginTop: "64px", alignItems: "center" }}>
+        <div
+          style={{ height: "88px", backgroundColor: "#FFFFFF", display: "flex", justifyContent: "flex-end", marginTop: "64px", alignItems: "center" }}
+        >
           <button
             onClick={updateProfile}
             style={{
               marginTop: "24px",
               backgroundColor: "#F47738",
-              width: windowWidth < 768 ? "100%": "248px",
+              width: windowWidth < 768 ? "100%" : "248px",
               height: "40px",
               float: "right",
               margin: windowWidth < 768 ? "0 16px" : "",
-              marginRight: windowWidth < 768 ? "16px" :"31px",
+              marginRight: windowWidth < 768 ? "16px" : "31px",
               color: "white",
               borderBottom: "1px solid black",
             }}
           >
-            Save
+            {t("CORE_COMMON_SAVE")}
           </button>
         </div>
       ) : (
