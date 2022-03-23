@@ -1,0 +1,347 @@
+swagger: '2.0'
+# eGSP YAML Template Version: 1.0 
+# This is a version number for the YAML template. This must not be changed.
+
+info:
+  version: 1.0.0
+  title: Report Infrastructure
+  description: |
+    API specs to enable configurable reports in needed modules - the paths here will become subpath for the given modules base path. Please note that this cannot run as a standalone service and needs to be included in any module that requires configuration based reports. This module will then add aditional report sub-paths to existing module path and provide the sub paths to get report metadata and report data
+    
+    Mainly designed to take care of RDBMS/SQL based reports
+  contact:
+    name: info
+host: phoenix-qa.egovernments.org
+schemes:
+  - https
+basePath: '/[module_base_path]/reports/v1'
+
+paths:
+  /metadata/_get:
+    post:
+      summary: Metadata API for report definition
+      description: |
+        Gets the report description, column definitions, labels and types.
+      parameters:
+        - name: reportRequest
+          in: body
+          description: Report request
+          required: true
+          schema: 
+            $ref: "#/definitions/MetadataRequest"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/MetadataResponse"
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/ReportErrorRes'
+      tags:
+       - Report Meta
+
+  /_get:
+    post:
+      summary: Search API for report data
+      description: |
+        Get the report data based on the given search parameters.
+      parameters:
+        - name: reportRequest
+          in: body
+          description: Report request
+          required: true
+          schema: 
+            $ref: "#/definitions/ReportRequest"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ReportResponse"
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/ReportErrorRes'
+      tags:
+       - Report
+       
+definitions:
+
+  MetadataRequest:
+    type: object
+    description: Request object to fetch the report data
+    properties:
+      requestInfo:
+        $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo"
+      tenantId:
+        description: tenantId for which the report is needed
+        type: string
+      reportName: 
+        description: |
+          name of the report. A tenant specific report can be defined with tenantId as the prefix of the report name. So if the system finds two reports - report1 and mytenant.report1 and the tenantId for this request is mytenant then report definition mytenant.report1 will be picked
+        type: string
+    required:
+      - requestInfo
+      - tenantId
+      - reportName
+      
+  MetadataResponse:
+    type: object
+    description: Response to the metadata request
+    properties:
+      requestInfo:
+        $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo"
+      tenantId:
+        description: tenantId for which the report is needed
+        type: string
+      reportDetails:
+        $ref: "#/definitions/ReportMetadata"
+
+  ReportRequest:
+    allOf:
+    - $ref: "#/definitions/MetadataRequest"
+    - type: object
+      description: Request object to fetch the report data
+      properties:
+        searchParams:
+          description: |
+            array of search parameters to use in report query
+          type: array
+          items:
+            $ref: "#/definitions/SearchParam"
+      
+  ReportResponse:
+    type: object
+    description: Response object that has fetched report data
+    properties:
+      requestInfo:
+        $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo"
+      reportHeader:
+        description: Array of report columns
+        type: array
+        items:
+          $ref: "#/definitions/ColumnDetail"
+      ttl:
+        description: UTC epoch upto which report data can be cached
+        type: integer
+        format: int64
+      reportData:
+        description: two dimensional array containing the report data
+        type: array
+        items:
+          type: array
+          items: 
+            type: object
+        
+  ColumnDef:
+    type: object
+    description: Header information for the report
+    properties:
+      name:
+        description: column names of the report 
+        type: string
+    required:
+      - name
+      
+  SearchParam:
+    allOf: 
+    - $ref: "#/definitions/ColumnDef"
+    - type: object
+      properties:
+        input: 
+          description: |
+            User provided input of this parameter that will be used in query. Please note that value will be format checked against the value definition of this parameter in report definition. This field has been made an object so that multiple values from things like multivalue list can be accepted.
+          type: object
+  
+  ColumnDetail:
+    allOf: 
+    - $ref: '#/definitions/ColumnDef'
+    - type: object
+      properties:
+        label:
+          description: localization label for the column. In case label is not provided, name would be used as a label.
+          type: string
+        type:
+          description: | 
+            column type to help the consumer. EPOCH means time being carried over in epoch format, while date means time in given display format
+            URL - will be used to indicate taht the column value is basically a URL to some other resource
+          type: string
+          enum:
+            - number
+            - string
+            - date
+            - datetime
+            - epoch
+            - url
+            - singlevaluelist
+            - multivaluelist
+        defaultValue:
+          type: object
+          description: |
+            any default value for the column if the column type is number, string, date, datetime, epoch or URL
+            collection contaning possible list value pairs for singlevaluelist and multivaluelist
+            the parameterized next click URL in case of drill down - the value inside {} needs to be replaced with the actual value of the column with that name
+        isMandatory:
+          type: boolean
+          default: true
+        showColumn:
+          description: |
+            whether to display the column value on the page, useful in cases like drill downs where teh value is needed for next search but is not meaningful to be shown to the user
+          type: boolean
+          default: true
+      required:
+        - type
+      
+  ReportMetadata:
+    type: object
+    description: meta information about the report
+    properties:
+      reportName: 
+        description: |
+          name of the report. A tenant specific report can be defined with tenantId as the prefix of the report name. So if the system finds two reports - report1 and mytenant.report1 and the tenantId for this request is mytenant then r eport definition mytenant.report1 will be picked.
+          
+          Please note that by convention reportname.title and reportname.summary will be teh localization key for the report title and brief description.
+        type: string
+      summary: 
+        description: |
+          Brief description about the report and its usage. E.g. "This report gives you a list of active reources within the date range provided in the search criteria"
+      reportHeader:
+        description: |
+          List of display columns in the report
+        type: array
+        items:
+          $ref: "#/definitions/ColumnDetail"
+      searchParams:
+        description: |
+          array of search parameters to use in report query
+        type: array
+        items:
+          $ref: "#/definitions/ColumnDetail"
+          
+  ReportErrorRes:
+    allOf: 
+    - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+    - type: object
+      properties:
+        codes:
+          type: string
+          enum:
+            - ReportDefNotFound
+            - InvalidSearchParams
+            - TenantNotFound
+            
+  #Let's try to define the report structure also here - will decide later whether to move it to a different YAML
+  
+  SourceColumn:
+    description: |
+      This is the column definition for the purpose of defining the report. Please note that in case of external column (basicaly columns fetched from external service) dependsOn indicates the internal column which needs to be send as the paarmeter for teh external url to respond with result that will contain the value at the configured JSONpath.
+    allOf:
+    - $ref: '#/definitions/ColumnDetail'
+    - type: object
+      properties:
+        source: 
+          type: string
+          description: |
+            Table/Index path to which the column belongs  
+        colName:
+          type: string
+          description: |
+            column name in the table/index
+        linkPattern:
+          type: string
+          description: |
+            pattern to indicate to UI about additional serach param names and their values
+            _parent?reportName={drillDownReportName}&columnname={sourceColumnValue}&columnname={sourceColumnValue}
+        isExternal: 
+          type: boolean
+          default: false
+          description: | 
+            flag to indicate that this column value can be fetched from external service. This will be useful when we start segragating the services in their own physical data stores
+        url: 
+          type: string
+          description: |
+            parameterized URL to external system if isExternal is true - Please note that all placeholders parameters in the URL (represented within {} e.g. {username}) should match one available within the report definition sourceColumn or searchParam as the case may be.
+        jsonPath:
+          type: string
+          description: |
+            JSONPath of the field in the response JSON from the external service
+        dependsOn:
+          $ref: '#/definitions/SourceColumn'
+      required:
+        - source
+        - colName
+    
+  SearchColumn:
+    description: |
+      This is the column definition for the purpose of defining the search columns
+    allOf:
+    - $ref: '#/definitions/ColumnDetail'
+    - type: object
+      properties:
+        source: 
+          type: string
+          description: |
+            Table/Index path to which the column belongsor the URL from which to fecth the data if it is a singlevalue or multivalue list
+        colName:
+          type: string
+          description: |
+            column name in the table/index
+        pattern:
+          type: string
+          description: |
+            1. display format for the column - in case of epoch type datatypes. 
+            2. In case of single/multivalue list this will be pipe separated url|keyJSONPath|valueJSONPath (URL to fetch the list values, jsonPath of the key value, jsonPath of what to display)
+              2.1 In case the URL wants the values to be statically defined as a list use list://pipe_separated_values!
+            3. In case the other datatype - this will be the parametarized URL that consumer can then use to call the next drill down/action - for drill down use _parent?key=value&key=value (where key would be name of additional params and value search value to construct new search params)
+      required:
+        - source
+        - colName
+  
+  ReportDefinition:
+    type: object
+    description: |
+      Combination of below properties provides the decription of a report that can be generically obtained from the framework. Please note that in this version, only reports out of RDBMS are supported - but later the framework will be enhanced to support reports out of RDBMS/Cross service non join reports from RDBMS/Elastic search and mashups.
+    required:
+      - reportName
+      - summary
+      - version
+      - query
+      - sourceColumns
+      - searchParams
+    properties:
+      reportName: 
+        description: |
+          name of the report. A tenant specific report can be defined with tenantId as the prefix of the report name. So if the system finds two reports - report1 and mytenant.report1 and the tenantId for this request is mytenant then report definition mytenant.report1 will be picked.
+          
+          Please note that by convention reportname.title and reportname.summary will be the localization key for the report title and brief description.
+        type: string
+      summary: 
+        description: |
+          Brief description about the report and its usage. E.g. "This report gives you a list of active reources within the date range provided in the search criteria"
+        type: string
+      version: 
+        description: |
+          Version of the report farmework - this will help in enhancing the reporting framework in phased manner - planning to support upto two recent versions of backward compatibility. Versioning scheme is purely number based and decided by the framework and not indivdual Report definitions
+        type: string
+      query:
+        description: |
+          SQL style search clause with display column mapping and replaceable search parameters. Please note that all placeholders column in the query (represented within {} e.g. {username}) should match corresponding sourceColumn or searchParam as the case may be.
+        type: string
+      sourceColumns:
+        description: |
+          list of columns to to select from the source tables. This should then correspond to the list of report columns that are send back to the caller in report metadata. Please note that all columns must have one one of the sources from above list as their source or the report definition will not be loaded.
+        type: array
+        items:
+          $ref: "#/definitions/SourceColumn"
+      searchParams:
+        description: |
+          list of the supported parameters for search. 
+        type: array
+        items:
+          $ref: "#/definitions/SearchColumn"
+      linkPattern:
+        type: string
+        description: |
+          pattern to indicate to UI about additional serach param names and their values
+          _parent?reportName={drillDownReportName}&columnname={sourceColumnValue}&columnname={sourceColumnValue}
+      

@@ -13,7 +13,7 @@ paths:
     post:
       summary: Encrypts the given input value/s OR values of the object.
       requestBody:
-        description: The request body can contain an array of Encryption Requests to support bulk encryption. The key for encryption will be decided based on the tenantId. Each tenant will have its own seperate key. The value to be encrypted can be simple string OR an array of string OR can be a JSON Object. In case the value is a JSON Object, all the values will get encrypted and keys will be left untouched. 
+        description: The request body can contain an array of Encryption Requests to support bulk encryption. The key for encryption will be decided based on the tenantId. Each tenant will have its own seperate key. The value to be encrypted can be simple string OR an array of string OR can be a JSON Object. In case the value is a JSON Object, all the values will get encrypted and keys will be left untouched.
         content:
           application/json:
             schema:
@@ -30,8 +30,8 @@ paths:
                     "tenantId": "pb.jalandhar",
                     "type": "Normal",
                     "value": [
-                      "Personal",
-                      "Private"
+                        "Personal",
+                        "Private"
                     ]
                   },
                   {
@@ -57,19 +57,19 @@ paths:
                 items:
                   type: object
               example:
-                  [
+                [
                     "437506|A5ag4DfbhHAHiqXRKFcAedFKtNOelHX+8+jB0ckNG/tihwimx7xu6akEoa+kaQPcIhSnYeveloIhdPBCOgrXWvkWGZfShx1i2bE2vAcWB+r0YIDdwZLKJbQGBHDqcEOn8mfO+LnmpJ5P4zPETtE+2EHhta+vKcE5OQj8ZQawHS4=",
-                    [
-                        "896077|I/8Xwqr5MwB6UucEP8/Q5wiCHpbaNqGE",
-                        "896077|I+gMx6TjN0BcLxudEiYQKIDKtSlmpJY="
-                    ],
-                    {
-                        "userObject1": {
-                            "mobileNumber": "395551|eSfiPrQ1UK07d0SupYQYqbr2QFNOWSuYJYcU",
-                            "name": "395551|CnCzaK1ADfnx+4FINXIQ9zjnUs1ieAtz"
-                        }
+                  [
+                      "896077|I/8Xwqr5MwB6UucEP8/Q5wiCHpbaNqGE",
+                      "896077|I+gMx6TjN0BcLxudEiYQKIDKtSlmpJY="
+                  ],
+                  {
+                    "userObject1": {
+                      "mobileNumber": "395551|eSfiPrQ1UK07d0SupYQYqbr2QFNOWSuYJYcU",
+                      "name": "395551|CnCzaK1ADfnx+4FINXIQ9zjnUs1ieAtz"
                     }
-                  ]
+                  }
+                ]
 
 
       tags:
@@ -87,16 +87,16 @@ paths:
               items:
                 type: object
             example:
-               [
+              [
                 [
                     "896077|I/8Xwqr5MwB6UucEP8/Q5wiCHpbaNqGE",
                     "896077|I+gMx6TjN0BcLxudEiYQKIDKtSlmpJY="
                 ],
                 {
-                    "userObject1": {
-                        "mobileNumber": "395551|eSfiPrQ1UK07d0SupYQYqbr2QFNOWSuYJYcU",
-                        "name": "395551|CnCzaK1ADfnx+4FINXIQ9zjnUs1ieAtz"
-                    }
+                  "userObject1": {
+                    "mobileNumber": "395551|eSfiPrQ1UK07d0SupYQYqbr2QFNOWSuYJYcU",
+                    "name": "395551|CnCzaK1ADfnx+4FINXIQ9zjnUs1ieAtz"
+                  }
                 }
               ]
 
@@ -116,18 +116,18 @@ paths:
                       "Private"
                   ],
                   {
-                      "userObject1": {
-                          "mobileNumber": "98989121234",
-                          "name": "John Doe"
-                      }
+                    "userObject1": {
+                      "mobileNumber": "98989121234",
+                      "name": "John Doe"
+                    }
                   }
                 ]
 
 
       tags:
         - Crypto
-        
-        
+
+
   /crypto/v1/_sign:
     post:
       tags:
@@ -146,7 +146,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SignResponse'
-                
+
   /crypto/v1/_verify:
     post:
       tags:
@@ -185,6 +185,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/RotateKeyResponse'
 
+  /crypto/v1/_rotateallkeys:
+    post:
+      tags:
+        - Crypto
+      summary: Deactivate the keys for all given tenants and generate new keys. It will deactivate both symmetric and asymmetric keys for all provided tenant.
+      requestBody:
+        description: Request has the name of the tenant for which the key needs to be rotated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RotateAllKeysRequest'
+      responses:
+        '200':
+          description: Acknowldgement if the operation was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RotateAllKeysResponse'
+
 
 components:
   schemas:
@@ -200,8 +219,8 @@ components:
           type: string
           description: Method to be used for encryption ( AES / RSA )
           enum:
-          - Important
-          - Normal
+            - Important
+            - Normal
         value:
           type: array
           description: Value/s to be encrypted. Can be a string or object or array
@@ -209,11 +228,11 @@ components:
           example: ["Personal", "Private"]
 
       example:
-          tenantId: "pb.jalandhar"
-          type: "Important"
-          value: {
-            "key": "secret"
-          }
+        tenantId: "pb.jalandhar"
+        type: "Important"
+        value: {
+          "key": "secret"
+        }
 
 
 
@@ -223,21 +242,21 @@ components:
       properties:
         encryptionRequests:
           type: array
-          items: 
+          items:
             $ref: '#/components/schemas/EncReqObject'
       example:
         {
           "encryptionRequests": [
-              {
-                "tenantId": "pb.amritsar",
-                "type": "Important",
-                "value": {
-                  "key": "secret"
-                }
+            {
+              "tenantId": "pb.amritsar",
+              "type": "Important",
+              "value": {
+                "key": "secret"
               }
-            ]
+            }
+          ]
         }
-    
+
     SignRequest:
       type: object
       description: A Sign request containing tenant id and the string value to be signed.
@@ -248,12 +267,12 @@ components:
         value:
           type: string
           description: The value to be signed.
-      example: 
+      example:
         {
           "tenantId": "pb.amritsar",
           "value": "claim"
         }
-    
+
     SignResponse:
       type: object
       description: Response to sign api containing the actual value and its corresponding signature.
@@ -264,12 +283,12 @@ components:
         signature:
           type: string
           description: The signature generated for the above value.
-      example: 
+      example:
         {
           "value": "claim",
           "signature": "436958|JLXQk7KP0y1nU3YHKLe0aq7EJp1iPEfNcIrbsgBh2u2U9aLCYfr8tVWGPud7JNQ5uiKJ1gTMFgzGU4XfTwUZDENHQ6mpFOhxH+LVVggj9QmDZk629ce2X7ju4aHuX6WDBx9/bxHstE8r5F47sP7f6ryY52HDQ5D5/8b7SX3WkkE="
         }
-    
+
     VerifyRequest:
       type: object
       description: A Verify request containing the value and its corresponding signature.
@@ -280,12 +299,12 @@ components:
         signature:
           type: string
           description: The signature for the claim
-      example: 
+      example:
         {
           "value": "claim",
           "signature": "436958|JLXQk7KP0y1nU3YHKLe0aq7EJp1iPEfNcIrbsgBh2u2U9aLCYfr8tVWGPud7JNQ5uiKJ1gTMFgzGU4XfTwUZDENHQ6mpFOhxH+LVVggj9QmDZk629ce2X7ju4aHuX6WDBx9/bxHstE8r5F47sP7f6ryY52HDQ5D5/8b7SX3WkkE="
         }
-    
+
     VerifyResponse:
       type: object
       description: Response to the verify api containing if the signature was correct for the input claim
@@ -293,11 +312,11 @@ components:
         verified:
           type: boolean
           description: This will be true if the signature is correct according to the claim, otherwise false.
-      example: 
+      example:
         {
           "verified": true
         }
-    
+
     RotateKeyRequest:
       type: object
       description: A request to rotate key for a given tenant
@@ -305,12 +324,32 @@ components:
         tenantId:
           type: string
           description: The tenantId for which the key needs to be changed.
-      example: 
+      example:
         {
           "tenantId": "pb.amritsar"
         }
-    
+
+    RotateAllKeysRequest:
+      type: object
+      description: A request to Deactivate old keys and generate new keys for every tenantId
+      properties:
+        tenantId:
+          type: string
+          description: The tenantId for which the key needs to be changed.
+      example:
+        {
+          "tenantId": "pb.amritsar"
+        }
+
     RotateKeyResponse:
+      type: object
+      description: An acknowledgement if the key rotation request was successful.
+      properties:
+        acknowledged:
+          type: boolean
+          description: Acknowledgement if the operation was successful.
+
+    RotateAllKeysResponse:
       type: object
       description: An acknowledgement if the key rotation request was successful.
       properties:
