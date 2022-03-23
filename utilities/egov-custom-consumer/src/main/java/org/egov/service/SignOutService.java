@@ -35,6 +35,7 @@ public class SignOutService {
 		documentContext = documentContext.put(JsonPathConstant.requestInfo, "authToken", accessToken);
 		LinkedHashMap<String, Object> jsonRequest = documentContext.read(JsonPathConstant.request);
 		log.info(coexistencehost + coexistencelogoutUri + accessToken);
+		log.info(jsonRequest.entrySet().toString());
 		response = restTemplate.exchange(coexistencehost + coexistencelogoutUri, HttpMethod.POST,
 				new HttpEntity<>(jsonRequest), ResponseEntity.class);
 		log.info("SignOutService response :" + response.getStatusCode());
