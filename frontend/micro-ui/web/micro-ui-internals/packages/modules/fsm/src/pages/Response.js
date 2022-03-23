@@ -84,34 +84,34 @@ const Response = (props) => {
       // window.history.replaceState({}, "FSM_CREATE_RESPONSE")
     };
     if (!mutationHappened && !errorInfo) {
-    if (state.key === "update") {
-      mutation.mutate(
-        {
-          fsm: state.applicationData,
-          workflow: {
-            action: state.action,
-            ...state.actionData,
+      if (state.key === "update") {
+        mutation.mutate(
+          {
+            fsm: state.applicationData,
+            workflow: {
+              action: state.action,
+              ...state.actionData,
+            },
           },
-        },
-        {
+          {
+            onError,
+            onSuccess,
+          }
+        );
+      } else {
+        mutation.mutate(state, {
           onError,
           onSuccess,
-        }
-      );
-    } else {
-      mutation.mutate(state, {
-        onError,
-        onSuccess,
-      });
+        });
+      }
     }
-  }
   }, []);
 
   if (mutation.isLoading || (mutation.isIdle && !mutationHappened)) {
     return <Loader />;
   }
   const isSuccess = !successData ? mutation?.isSuccess : true;
-    return (
+  return (
     <Card>
       <BannerPicker
         t={t}
@@ -121,7 +121,7 @@ const Response = (props) => {
         isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading}
         isEmployee={props.parentRoute.includes("employee")}
       />
-      <CardText>{DisplayText(state.action, isSuccess, props.parentRoute.includes("employee"), t, state.fsm.paymentPreference)}</CardText>
+      <CardText>{DisplayText(state.action, isSuccess, props.parentRoute.includes("employee"), t, state?.fsm?.paymentPreference)}</CardText>
       {isSuccess && (
         <LinkButton
           label={
@@ -142,9 +142,9 @@ const Response = (props) => {
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
       {props.parentRoute.includes("employee") &&
-      (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
-      paymentAccess &&
-      isSuccess ? (
+        (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
+        paymentAccess &&
+        isSuccess ? (
         <div className="secondary-action">
           <Link
             to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`}
