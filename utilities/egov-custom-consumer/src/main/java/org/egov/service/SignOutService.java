@@ -35,10 +35,13 @@ public class SignOutService {
 		String accessToken = documentContext.read(JsonPathConstant.signOutAccessToken);
 		documentContext = documentContext.delete(JsonPathConstant.userInfo);
 		documentContext = documentContext.put(JsonPathConstant.requestInfo, "authToken", accessToken);
+		String correlationId = documentContext.read(JsonPathConstant.correlationId);
 		LinkedHashMap<String, Object> jsonRequest = documentContext.read(JsonPathConstant.request);
 		log.info(coexistencehost + coexistencelogoutUri + accessToken);
 		RequestInfoWrapper reqInfoWrapper = new RequestInfoWrapper();
-		RequestInfo requestInfo = documentContext.read(JsonPathConstant.requestInfo, RequestInfo.class);
+		RequestInfo requestInfo = new RequestInfo();
+		requestInfo.setAuthToken(accessToken);
+		requestInfo.setCorrelationId(correlationId);
 		reqInfoWrapper.setRequestInfo(requestInfo);
 		log.info("Call signout API");
 		log.info(reqInfoWrapper.toString());

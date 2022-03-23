@@ -9,5 +9,6 @@ public class JsonPathConstant {
 	public static final String accessTokenKey = "authToken";
 	public static final String signOutUri = "/user/_logout";
 	public static final String signOutUriJsonPath = "$.sourceUri";
+	public static final String correlationId = "$.request.RequestInfo.correlationId";
 
 }
