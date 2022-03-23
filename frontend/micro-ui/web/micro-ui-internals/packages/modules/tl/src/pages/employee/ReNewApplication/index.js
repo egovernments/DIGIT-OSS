@@ -105,7 +105,7 @@ const ReNewApplication = (props) => {
 
   const ownershipCategory = {
     code: applicationData?.tradeLicenseDetail?.subOwnerShipCategory,
-    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(applicationData?.tradeLicenseDetail?.subOwnerShipCategory, ".", "_")}`,
+    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_INDIVIDUAL_${stringReplaceAll(applicationData?.tradeLicenseDetail?.subOwnerShipCategory, ".", "_").split("_")[1]}`,
   };
 
   if (applicationData?.tradeLicenseDetail?.owners?.length > 0) {
@@ -132,7 +132,10 @@ const ReNewApplication = (props) => {
         name:application?.tradeLicenseDetail?.institution?.name,
         altContactNumber:application?.tradeLicenseDetail?.institution?.contactNo,
         designation:application?.tradeLicenseDetail?.institution?.designation,
-        subOwnerShipCategory:ownershipCategory,
+        subOwnerShipCategory:{
+          code: applicationData?.tradeLicenseDetail?.subOwnerShipCategory,
+          i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(applicationData?.tradeLicenseDetail?.subOwnerShipCategory, ".", "_")}`,
+        },
       })
       return owner;
     }
@@ -358,6 +361,15 @@ const ReNewApplication = (props) => {
           formData.tradeLicenseDetail.additionalDetail={propertyId:null}
         }
         formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId||propertyDetails?.propertyId;
+      }
+      if (formData?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution = {
+        ...formData?.tradeLicenseDetail?.institution,
+        contactNo: data?.owners?.[0]?.altContactNumber,
+        designation: data?.owners?.[0]?.designation,
+        instituionName: data?.owners?.[0]?.instituionName,
+        name: data?.owners?.[0]?.name,
+        mobileNumber: data?.owners?.[0]?.mobileNumber,
+        emailId : data?.owners?.[0]?.emailId,
       }
 
       /* use customiseCreateFormData hook to make some chnages to the licence object */

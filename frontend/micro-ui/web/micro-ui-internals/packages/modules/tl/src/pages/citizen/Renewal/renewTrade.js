@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { newConfig as newConfigTL } from "../../../config/config";
-import { getCommencementDataFormat } from "../../../utils/index";
+import { getCommencementDataFormat, stringReplaceAll } from "../../../utils/index";
+
 
 const getPath = (path, params) => {
   params &&
@@ -68,9 +69,9 @@ const getTradeEditDetails = (data) => {
         ownerarray.push({
           gender: {
             code: `${ob.gender}`,
-            name: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`,
-            value: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`,
-            i18nKey: `TL_GENDER_${ob.gender}`,
+            name: ob.gender ? `${!ob?.gender?.includes("FEMALE") ? "Male" : "Female"}` : "",
+            value: ob.gender ? `${!ob?.gender?.includes("FEMALE") ? "Male" : "Female"}`:"",
+            i18nKey: ob.gender ? `TL_GENDER_${ob.gender}` : "",
           },
           isprimaryowner: false,
           name: ob.name,
@@ -81,6 +82,31 @@ const getTradeEditDetails = (data) => {
       });
     return ownerarray;
   };
+
+  const getInsitutionaltradeowners = (owner,institution) => {
+    let ownerarray = [];
+    owner &&
+      owner.map((ob) => {
+        ownerarray.push({
+          name: institution.name,
+          mobilenumber: ob.mobileNumber,
+          permanentAddress: ob.permanentAddress,
+          altContactNumber:institution.contactNo,
+          designation:institution.designation,
+          institutionName:institution.instituionName,
+          tenantId: data.tenantId,
+          emailId:ob.emailId,
+          subOwnerShipCategory : {
+            code: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`,
+            i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(data?.tradeLicenseDetail?.subOwnerShipCategory,".","_")}`,
+          },
+          id: ob.id,
+          uuid : ob.uuid,
+        });
+      });
+    return ownerarray;
+  };
+
   data.TradeDetails = {
     BuildingType: {
       code: `${data?.tradeLicenseDetail?.structureType}`,
@@ -119,7 +145,7 @@ const getTradeEditDetails = (data) => {
   data.address.locality.landmark = data?.tradeLicenseDetail?.address?.landmark;
   data.owners = {
     documents: gettradedocuments(data?.tradeLicenseDetail?.applicationDocuments),
-    owners: gettradeowners(data?.tradeLicenseDetail?.owners),
+    owners: data?.tradeLicenseDetail?.institution?.id ? getInsitutionaltradeowners(data?.tradeLicenseDetail?.owners,data?.tradeLicenseDetail?.institution) :  gettradeowners(data?.tradeLicenseDetail?.owners),
     permanentAddress: data?.tradeLicenseDetail?.owners[0].permanentAddress,
     isCorrespondenceAddress: false,
   };

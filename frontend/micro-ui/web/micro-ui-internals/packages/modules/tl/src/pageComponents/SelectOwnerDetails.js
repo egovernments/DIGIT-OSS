@@ -59,6 +59,8 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
           designation: initData?.[0]?.designation || "",
           altContactNumber: initData?.[0]?.altContactNumber || "",
           emailId: initData?.[0]?.emailId || "",
+          id: initData?.[0]?.id || "",
+          uuid: initData?.[0]?.uuid || "",
           // relationship: initData?.[0]?.relationship || "",
         }]
     }
