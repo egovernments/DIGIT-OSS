@@ -77,5 +77,11 @@ public class NOCRepository {
         }
         return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
     }
-
+  
+    public Integer getNocCount(NocSearchCriteria criteria) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getNocSearchQuery(criteria, preparedStmtList);
+        int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+        return count;
+}
 }
