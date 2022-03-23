@@ -118,40 +118,6 @@ public class VehicleTripValidator {
 		});
 		
 		
-//		if (StringUtils.isEmpty(request.getVehicleTrip().getTenantId())) {
-//			throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "TenantId is mandatory");
-//		}
-//		if (request.getVehicleTrip().getTenantId().split("\\.").length == 1) {
-//			throw new CustomException(VehicleTripConstants.INVALID_TENANT, " Invalid TenantId");
-//		}
-//		if (request.getVehicleTrip().getVehicle() == null  || StringUtils.isEmpty(request.getVehicleTrip().getVehicle().getId())) {
-//			throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "vehicleId is mandatory");
-//		}else {
-//			List<Vehicle> vehicles = vehicleService.search(VehicleSearchCriteria.builder()
-//							.ids(Arrays.asList(request.getVehicleTrip().getVehicle().getId()))
-//							.tenantId(request.getVehicleTrip().getTenantId()).build(), request.getRequestInfo()).getVehicle();
-//			if(CollectionUtils.isEmpty(vehicles)) {
-//				throw new CustomException(VehicleTripConstants.INVALID_VEHICLE,
-//						"vehicle does not exists with id " + request.getVehicleTrip().getVehicle().getId());
-//			}else {
-//				request.getVehicleTrip().setVehicle(vehicles.get(0));
-//			}
-//		}
-		
-//		if (StringUtils.isEmpty(request.getVehicleTrip().getBusinessService())) {
-//			throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "bussinessService is mandaotry");
-//		}
-//		if(request.getVehicleTrip().getTripOwner() != null) {
-//			ownerExists(request,request.getRequestInfo());
-//		}
-//		
-//		if(request.getVehicleTrip().getDriver() != null) {
-//			driverExists(request, request.getRequestInfo());
-//		}
-//		
-//		if(request.getVehicleTrip().getTripDetails() ==null || CollectionUtils.isEmpty(request.getVehicleTrip().getTripDetails())) {
-//			throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR, "atleast one trip detail is mandatory");
-//		}
 		
 	}
 
@@ -283,6 +249,18 @@ public class VehicleTripValidator {
 				});
 			
 	
+			} else if (VehicleTripConstants.UPDATE_ONLY_VEHICLE_TRIP_RECORD
+						.equalsIgnoreCase(request.getWorkflow().getAction())) {
+					request.getVehicleTrip().forEach(vehicleTrip -> {
+						vehicleTrip.getTripDetails().forEach(tripDetail -> {
+							if (tripDetail.getVolume() == null || tripDetail.getVolume() <= 0) {
+								throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR,
+										"Invalid Volume for  tripDetails referenceNo: " + tripDetail.getReferenceNo());
+							}
+						});
+
+					});
+
 		}
 	}
 

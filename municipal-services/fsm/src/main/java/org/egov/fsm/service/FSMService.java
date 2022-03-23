@@ -155,11 +155,14 @@ public class FSMService {
 		
 		boolean isDsoRole = hasDsoOrEditorRole(fsmRequest);
 		
-		if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE) &&
-				 isDsoRole &&
-				null == fsmRequest.getFsm().getReceivedPayment() && fsmRequest.getFsm().getReceivedPayment().isEmpty()){
-			throw new CustomException(FSMErrorConstants.UPDATE_ERROR,"Received payment type cannot be null"+fsm);
-		}
+		/*
+		 * if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.
+		 * WF_ACTION_COMPLETE) && isDsoRole && null ==
+		 * fsmRequest.getFsm().getReceivedPayment() &&
+		 * fsmRequest.getFsm().getReceivedPayment().isEmpty()){ throw new
+		 * CustomException(FSMErrorConstants.
+		 * UPDATE_ERROR,"Received payment type cannot be null"+fsm); }
+		 */
 		
 		
 
@@ -300,9 +303,6 @@ public class FSMService {
 		vendorSearchCriteria.setTenantId(fsm.getTenantId());
 		Vendor vendor = dsoService.getVendor(vendorSearchCriteria,fsmRequest.getRequestInfo());
 		
-		//Vendor vendor = dsoService.getVendor(oldFSM.getDsoId(), fsm.getTenantId(), dsoOwnerId, null, null, null,
-		//		fsmRequest.getRequestInfo());
-		
 		if (vendor == null) {
 			throw new CustomException(FSMErrorConstants.INVALID_DSO,
 					" DSO is invalid, cannot take an action, Application is not assigned to current logged in user !");
@@ -322,10 +322,6 @@ public class FSMService {
 			else {
 				vehicle = vehilceIdMap.get(fsm.getVehicleId());
 				fsm.setVehicle(vehicle);
-				//		if (!vehicle.getType().equalsIgnoreCase(fsm.getVehicleType())) {
-				//			throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE,
-				//			" Vehicle Type of FSM and vehicleType of the assigned vehicle does not match !");
-				//		}
 			}
 				
 		}
@@ -340,6 +336,7 @@ public class FSMService {
 				&& !(FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
 						.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference()))) {
 			vehicleTripService.scheduleVehicleTrip(fsmRequest);
+			
 		} else if (FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference())
 				&& fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SCHEDULE)) {
 			calculationService.addCalculation(fsmRequest, FSMConstants.APPLICATION_FEE);
@@ -409,7 +406,18 @@ public class FSMService {
 		userDetailResponse = userService.getUser(fsmsearch, null);
 		fsmRequest.getWorkflow()
 				.setAssignes(userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toList()));
-		vehicleTripService.vehicleTripReadyForDisposal(fsmRequest);
+		
+		if(fsmRequest.getFsm().getPaymentPreference() != null
+				&& !(FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
+						.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference()))) {
+			vehicleTripService.vehicleTripReadyForDisposal(fsmRequest);
+			
+		}else if (fsmRequest.getFsm().getPaymentPreference() != null
+				&& (FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
+						.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference()))) {
+			vehicleTripService.updateVehicleTrip(fsmRequest);
+		}
+		
 	}
 
 	private void handleFSMSubmitFeeback(FSMRequest fsmRequest, FSM oldFSM, Object mdmsData) {
@@ -452,11 +460,7 @@ public class FSMService {
 		// TODO based on the old application Status DSO or vehicle has to removed
 	}
 	
-	/*
-	 * private void handleSchedule(FSMRequest fsmRequest) {
-	 * calculationService.addCalculation(fsmRequest, FSMConstants.APPLICATION_FEE);
-	 * vehicleTripService.scheduleVehicleTrip(fsmRequest); }
-	 */
+	
 
 	/**
 	 * search the fsm applications based on the search criteria
@@ -485,12 +489,6 @@ public class FSMService {
 						.tenantId(criteria.getTenantId()).build();
 						
 				Vendor dso = dsoService.getVendor(vendorSearchCriteria,requestInfo);
-				
-				/*
-				 * Vendor dso = dsoService.getVendor(null, criteria.getTenantId(), null,
-				 * requestInfo.getUserInfo().getMobileNumber(), null,null, requestInfo);
-				 */
-				
 				if (dso != null && org.apache.commons.lang3.StringUtils.isNotEmpty(dso.getId())) {
 					dsoId = dso.getId();
 				}
