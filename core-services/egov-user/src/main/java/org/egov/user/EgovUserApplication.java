@@ -38,6 +38,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import redis.clients.jedis.JedisShardInfo;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;

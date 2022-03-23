@@ -1,0 +1,221 @@
+swagger: '2.0'
+
+info:
+  version: "1.1.0"
+  title: Egov otp service
+  description: Egov-otp service APIs - contains create , validate and search end point
+  contact:
+    name: eGov
+    email: info@egovernments.org
+
+basePath: "/egov-otp/v110"
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml'
+x-api-id: 'org.egov.egov-otp'
+#########################################################################################
+
+paths:
+  /otp/v1/_create:
+    post:
+      summary: create OTP Configuration entry
+      description: create OTP Configuration this API is internaly call from v1/_send end point, this  end point present in user-otp service no need of explicity call
+      parameters:
+        - name: OTPRequest
+          in: body
+          description: required parameters have to be populated
+          required: true
+          schema:
+            $ref: '#/definitions/OtpRequest'
+      responses:
+        '200':
+          description: Request acknowledged sucessfully
+          schema:
+            $ref: "#/definitions/OtpResponse"
+        '400':
+          description: Request failed
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  #########################################################################################
+
+  /otp/v1/_validate:
+    post:
+      summary: validate OTP Configuration entry
+      description: validate OTP Configuration this end point is validate the otp respect to mobilenumber
+      parameters:
+        - name: OtpValidateRequest
+          in: body
+          description: required parameters have to be populated
+          required: true
+          schema:
+            $ref: '#/definitions/OtpValidateRequest'
+      responses:
+        '200':
+          description: Request acknowledged sucessfully
+          schema:
+            $ref: "#/definitions/OtpResponse"
+        '400':
+          description: Request failed
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  #########################################################################################
+
+  /otp/v1/_search:
+    post:
+      summary: search OTP Configuration entry using uuid
+      description: search the mobile number and otp using uuid ,uuid nothing but otp reference number
+      parameters:
+        - name: OtpRequest
+          in: body
+          description: required parameters have to be populated
+          required: true
+          schema:
+            $ref: '#/definitions/OtpRequest'
+      responses:
+        '200':
+          description: Request acknowledged sucessfully
+          schema:
+            $ref: "#/definitions/OtpResponse"
+        '400':
+          description: Request failed
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+#########################################################################################
+
+definitions:
+  OtpRequest:
+    type: object
+    properties:
+      Otp:
+        $ref: '#/definitions/Otp'
+      TokenRequest:
+        $ref: '#/definitions/TokenRequest'
+      TokenSearchCriteria:
+        $ref: '#/definitions/TokenSearchCriteria'
+
+
+  #########################################################################################
+  OtpResponse:
+    type: object
+    properties:
+      Otp:
+        $ref: '#/definitions/Otp'
+      ResponseInfo:
+        $ref: '#/definitions/ResponseInfo'
+
+
+  #########################################################################################
+  OtpValidateRequest:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: '#/definitions/RequestInfo'
+      Otp:
+        $ref: '#/definitions/Otp'
+
+  #########################################################################################
+  Otp:
+    type: object
+    properties:
+      otp:
+        type: string
+      uuid:
+        type: string
+      identity:
+        type: string
+      tenantId:
+        type: string
+      validationSuccessful:
+        type: boolean
+
+  #########################################################################################
+  ResponseInfo:
+    type: object
+    properties:
+      apiId:
+        type: string
+      ver:
+        type: string
+      ts:
+        type: string
+      resMsgId:
+        type: string
+      msgId:
+        type: string
+      status:
+        type: string
+
+  #########################################################################################
+  RequestInfo:
+    type: object
+    properties:
+      apiId:
+        type: string
+      ver:
+        type: string
+      ts:
+        type: string
+      action:
+        type: string
+      did:
+        type: string
+      key:
+        type: string
+      msgId:
+        type: string
+      authToken:
+        type: string
+      correlationId:
+        type: string
+      user:
+        $ref: '#/definitions/User'
+
+  #########################################################################################
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+      userName:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      mobileNumber:
+        type: string
+      emailId:
+        type: string
+      roles:
+        type: array
+        items:
+          $ref: '#/definitions/Role'
+
+  #########################################################################################
+  Role:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      code:
+        type: string
+
+  #########################################################################################
+  TokenRequest:
+    type: object
+    properties:
+      identity:
+        type: string
+      tenantId:
+        type: string
+
+  #########################################################################################
+  TokenSearchCriteria:
+    type: object
+    properties:
+      uuid:
+        type: string
+      tenantId:
+        type: string
+
+

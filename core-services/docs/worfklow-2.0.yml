@@ -3,11 +3,11 @@ info:
   version: 1.0.0
   title: eGov Workflow Engine.
   description: |
-    APIs for Workflow engine. This modules handles Below functionality. 
-    1. Start workflow 
+    APIs for Workflow engine. This modules handles Below functionality.
+    1. Start workflow
     2. Validate documents and action on each step of workflow
     3. Calculate state wise SLA as well as overall SLA of the application
-    4. Search existing workflow applications 
+    4. Search existing workflow applications
   contact:
     name: eGovernments Foundation
     email: contacts@egovernments.org
@@ -21,8 +21,8 @@ paths:
     post:
       summary: Create new workflow entry for a given application number(businessId).
       description: |
-        To create new workflow applicationin the system. API supports bulk creation with max limit as defined in the Trade License Request. Please note that either whole batch succeeds or fails, there's no partial batch success. To create one workflow(ProcessInstance) instance, please pass array with one workflow(ProcessInstance) object. 
-          
+        To create new workflow applicationin the system. API supports bulk creation with max limit as defined in the Trade License Request. Please note that either whole batch succeeds or fails, there's no partial batch success. To create one workflow(ProcessInstance) instance, please pass array with one workflow(ProcessInstance) object.
+
 
         Following Conditions are applied -
           1. Valid action is send according to workflow configuration defined
@@ -46,61 +46,20 @@ paths:
             $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
       tags:
         - WorkFlow
-  /_search:
+  /process/_search:
     post:
       summary: Get the list of workflow applications defined in the system.
-      description: 
+      description:
         1. Search and get Application(s)  based on defined search criteria.
 
         2. In case multiple parameters are passed Application(s) will be searched as an AND combination of all the parameters.
       parameters:
-        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/requestInfo'
-        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId'
-        - name: ids
-          type: array
-          items:
-            type: integer
-            format: int64
-          in: query
-          maxItems: 50
-          description: unique identifier of Application
-        - name: businessService
-          in: query
-          description:  Name of the workflow confguration.
-          type: string
-          minLength: 2
-          maxLength: 64
-        - name: moduleName
-          in: query
-          description:  Module name to which workflow application belongs
-          type: string
-          minLength: 2
-          maxLength: 64
-        - name: businessIds
-          type: array
-          items:
-            type: string
-          in: query
-          maxItems: 50
-          description: The list of businessIds
-        - name: assignee
-          in: query
-          description: The unique  Old license number for a Application.
-          type: string
-          minLength: 2
-          maxLength: 64
-        - name: history
-          in: query
-          description: Boolean flag to return history of the workflow
-          type: boolean
-        - name: limit
-          in: query
-          description: Number of records to be returned
-          type: integer
-        - name: offset
-          in: query
-          description: Starting offset for returning search response
-          type: integer
+        - name: RequestInfoWrapper
+          in: body
+          description: contains RequestInfo object
+          required: true
+          schema:
+            $ref: '#/definitions/RequestInfoWrapper'
       responses:
         '200':
           description: Application(s) Retrived Successfully
@@ -112,11 +71,37 @@ paths:
             $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes'
       tags:
         - WorkFlow
-        
-  /_count:
+  /escalate/_search:
+    post:
+      summary: Get the list of workflow applications defined in the system.
+      description:
+        1. Search and get Application(s)  based on defined search criteria.
+
+        2. In case multiple parameters are passed Application(s) will be searched as an AND combination of all the parameters.
+      parameters:
+        - name: RequestInfoWrapper
+          in: body
+          description: contains RequestInfo object
+          required: true
+          schema:
+            $ref: '#/definitions/RequestInfoWrapper'
+      responses:
+        '200':
+          description: Application(s) Retrived Successfully
+          schema:
+            $ref: '#/definitions/ProcessIntanceResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes'
+      tags:
+        - WorkFlow
+
+
+  /process/_count:
     post:
       summary: Get the count of applications satisfying the given criteria
-      description: 
+      description:
         1. Returns the total number of application in the system based on the criteria given
 
         2. Primarily used to shoe total count in inbox
@@ -130,7 +115,7 @@ paths:
             format: int64
           in: query
           maxItems: 50
-          description: unique identifier of trade licence 
+          description: unique identifier of trade licence
         - name: businessService
           in: query
           description:  Unique application number for a trade license application.
@@ -166,13 +151,94 @@ paths:
             $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes'
       tags:
         - WorkFlow
-        
+
+
+  /process/_nearingslacount:
+    post:
+      summary: Get the count of applications satisfying the given criteria
+      description:
+        1. Returns the total number of application in the system based on the criteria given
+
+        2. Primarily used to shoe total count in inbox
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/requestInfo'
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId'
+        - name: ids
+          type: array
+          items:
+            type: integer
+            format: int64
+          in: query
+          maxItems: 50
+          description: unique identifier of trade licence
+        - name: businessService
+          in: query
+          description:  Unique application number for a trade license application.
+          type: string
+          minLength: 2
+          maxLength: 64
+        - name: businessIds
+          type: array
+          items:
+            type: integer
+            format: int64
+          in: query
+          maxItems: 50
+          description: The list of businessIds
+        - name: assignee
+          in: query
+          description: The unique  Old license number for a Trade license.
+          type: string
+          minLength: 2
+          maxLength: 64
+        - name: history
+          in: query
+          description: Boolean flag to return history of the workflow
+          type: boolean
+      responses:
+        '200':
+          description: Trade License(s) Retrived Successfully
+          schema:
+            $ref: '#/definitions/ProcessIntanceResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes'
+      tags:
+        - WorkFlow
+
+
+  /process/_statuscount:
+    post:
+      summary: Get the count of applications satisfying the given criteria
+      description:
+        1. Returns the total number of application in the system based on the criteria given
+
+        2. Primarily used to shoe total count in inbox
+      parameters:
+        - name: statusCountRequest
+          in: body
+          schema:
+            $ref: '#/definitions/StatusCountRequest'
+        - $ref: '#/definitions/ProcessInstanceSearchCriteria'
+      responses:
+        '200':
+          description: Trade License(s) Retrived Successfully
+          schema:
+            $ref: '#/definitions/ProcessIntanceResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes'
+      tags:
+        - WorkFlow
+
   /businessservice/_create:
     post:
       summary: Create new BuinessService.
       description: |
-        To create new workflow configuration(BuinessService) in the system. API supports bulk creation with max limit as defined in the BuinessService Request. Please note that either whole batch succeeds or fails, there's no partial batch success. To create one BuinessService, please pass array with one BuinessService object. 
-          
+        To create new workflow configuration(BuinessService) in the system. API supports bulk creation with max limit as defined in the BuinessService Request. Please note that either whole batch succeeds or fails, there's no partial batch success. To create one BuinessService, please pass array with one BuinessService object.
+
 
         Following Conditions are applied -
           1. All actions have valid next state i.e next state should be present in the system
@@ -200,8 +266,8 @@ paths:
     post:
       summary: Updates a existing BuinessService.
       description: |
-        Can be used only to add new state or action in the workflow. Can update any existing field. Removing of any state is not allowed as applications in that state will be in invalid state 
-          
+        Can be used only to add new state or action in the workflow. Can update any existing field. Removing of any state is not allowed as applications in that state will be in invalid state
+
 
         Following Conditions are applied -
           1. can add states and actions
@@ -227,7 +293,7 @@ paths:
   /businessservice/_search:
     post:
       summary: Get the list of BusinessServices defined in the system.
-      description: 
+      description:
         1. Search and get BusinessServices(s)  based on defined search criteria.
 
         2. In case multiple parameters are passed BusinessService(s) will be searched as an AND combination of all the parameters.
@@ -241,7 +307,7 @@ paths:
             format: int64
           in: query
           maxItems: 50
-          description: BusinessService code of the businessService 
+          description: BusinessService code of the businessService
         - name: tenantId
           in: query
           description:  TenantId of the ULB.
@@ -260,7 +326,57 @@ paths:
       tags:
         - BusinessService
 
-        
+  /auto/{businessService}/_escalate:
+    post:
+      summary: to be added
+      description: process transaction method
+      parameters:
+        - name: requestInfoWrapper
+          in: body
+          schema:
+            $ref: '#/definitions/RequestInfoWrapper'
+        - name: businessService
+          in: path
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Trade License(s) Retrived Successfully
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes'
+      tags:
+        - EscalationService
+
+  /auto/{businessService}/_test:
+    post:
+      summary: to be added
+      description: process transaction method
+      parameters:
+        - name: requestInfoWrapper
+          in: body
+          schema:
+            $ref: '#/definitions/RequestInfoWrapper'
+        - name: businessService
+          in: path
+          type: string
+          required: true
+
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes'
+      tags:
+        - EscalationService
+
+
 definitions:
   Document:
     type: object
@@ -297,7 +413,7 @@ definitions:
       - tenantId
       - documentType
       - fileStoreId
-  
+
   ProcessInstance:
     type: object
     description: A Object holds the basic data for a Trade License
@@ -320,9 +436,9 @@ definitions:
         minLength: 2
       businessId:
         type: string
-        description: | 
-         Business id is a unique identifier of a task. eg(Propertyid, 
-         TLid, ServiceRequestid) 
+        description: |
+          Business id is a unique identifier of a task. eg(Propertyid,
+          TLid, ServiceRequestid)
         maxLength: 64
         minLength: 2
       action:
@@ -333,7 +449,7 @@ definitions:
       state:
         type: string
         description: Status will be populate by efengine for each action,
-         if it is configured. 
+          if it is configured.
         maxLength: 64
         minLength: 2
         readOnly: true
@@ -354,7 +470,7 @@ definitions:
       assignes:
         type: array
         items:
-         $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-0-0.yml#/definitions/User'
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-0-0.yml#/definitions/User'
       nextActions:
         type: array
         description: Wf will return next possible action based on .
@@ -380,10 +496,10 @@ definitions:
       - action
       - businessId
       - tenantId
-      
+
   BusinessService:
     type: object
-    description: A Object holds the 
+    description: A Object holds the
     properties:
       tenantId:
         type: string
@@ -405,6 +521,15 @@ definitions:
         description: Unique License Number of the Trade. This is  unique in system for a tenant. This is mandatory but always be generated on the final approval. In Case of Legacy License User will enter the Old License Number.
         maxLength: 32
         minLength: 2
+      businessServiceSla:
+        type: integer
+        description: businessServiceSla
+        format: int64
+      business:
+        type: string
+        description: Business
+        maxLength: 256
+        minLength: 2
       postUri:
         type: string
         description: Unique License Number of the Trade. This is  unique in system for a tenant. This is mandatory but always be generated on the final approval. In Case of Legacy License User will enter the Old License Number.
@@ -415,12 +540,12 @@ definitions:
         items:
           $ref: '#/definitions/State'
       auditDetails:
-        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+        $ref: '#/definitions/AuditDetails'
     required:
       - tenantId
       - businessService
       - url
-  
+
   State:
     type: object
     description: A Object holds the basic data for a Trade License
@@ -450,7 +575,7 @@ definitions:
         description: Application status as in module
       docUploadRequired:
         type: boolean
-        description: Boolean to describe if documents are mandatory 
+        description: Boolean to describe if documents are mandatory
       isStartState:
         type: boolean
         description: Boolean to describe if the workflow can be started from this state
@@ -462,9 +587,105 @@ definitions:
         items:
           $ref: '#/definitions/Action'
       auditDetails:
-        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
-  
+        $ref: '#/definitions/AuditDetails'
+
   Action:
+    type: object
+    description: A Object holds the basic data for a Trade License
+    properties:
+      uuid:
+        type: string
+        description: State Unique Identifier uuid
+        maxLength: 64
+        minLength: 2
+      active:
+        type: boolean
+        description: whether is active or not
+      tenantId:
+        type: string
+        description: TenantId of the ULB
+        maxLength: 128
+        minLength: 2
+      currentState:
+        type: string
+        minLength: 2
+        maxLength: 64
+        description: The uuid of the state on which action is to performed
+      action:
+        type: string
+        description: The action to be performed
+      nextState:
+        type: string
+        minLength: 2
+        maxLength: 64
+        description: The uuid of the resultant state
+      roles:
+        description: Used for search result and create only
+        type: array
+        minimum: 1
+        maximum: 20
+        items:
+          type: string
+      auditDetails:
+        $ref: '#/definitions/AuditDetails'
+
+  ProcessIntanceRequest:
+    description: 'Contract class to receive request. Array of TradeLicense items are used in case of create, whereas single TradeLicense item is used for update'
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo'
+      ProcessInstances:
+        description: Used for search result and create only
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+          $ref: '#/definitions/ProcessInstance'
+
+  ProcessIntanceResponse:
+    description: 'Contract class to send response. Array of TradeLicense items are used in case of search results or response for create, whereas single TradeLicense item is used for update'
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      ProcessInstances:
+        description: Used for search result and create only
+        type: array
+        maximum: 500
+        items:
+          $ref: '#/definitions/ProcessInstance'
+
+  BusinessServiceRequest:
+    description: 'Contract class to receive request. Array of TradeLicense items are used in case of create, whereas single TradeLicense item is used for update'
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo'
+      BusinessService:
+        description: Used for search result and create only
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+          $ref: '#/definitions/BusinessService'
+
+  BusinessServiceResponse:
+    description: 'Contract class to send response. Array of TradeLicense items are used in case of search results or response for create, whereas single TradeLicense item is used for update'
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      BusinessService:
+        description: Used for search result and create only
+        type: array
+        maximum: 500
+        items:
+          $ref: '#/definitions/BusinessService'
+
+  RequestInfoWrapper:
+    description: 'Contains RequestInfo object'
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+
+  ProcessInstanceSearchCriteria:
     type: object
     description: A Object holds the basic data for a Trade License
     properties:
@@ -498,55 +719,15 @@ definitions:
         maximum: 20
         items:
           type: string
-      auditDetails:
-        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
-        
-  ProcessIntanceRequest:
-    description: 'Contract class to receive request. Array of TradeLicense items are used in case of create, whereas single TradeLicense item is used for update'
-    properties:
-      RequestInfo:
-        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo'
-      ProcessInstances:
-        description: Used for search result and create only
-        type: array
-        minimum: 1
-        maximum: 100
-        items:
-          $ref: '#/definitions/ProcessInstance'
-          
-  ProcessIntanceResponse:
-    description: 'Contract class to send response. Array of TradeLicense items are used in case of search results or response for create, whereas single TradeLicense item is used for update'
-    properties:
-      ResponseInfo:
-        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
-      ProcessInstances:
-        description: Used for search result and create only
-        type: array
-        maximum: 500
-        items:
-          $ref: '#/definitions/ProcessInstance'
 
-  BusinessServiceRequest:
-    description: 'Contract class to receive request. Array of TradeLicense items are used in case of create, whereas single TradeLicense item is used for update'
+
+  StatusCountRequest:
+    description: 'Contains RequestInfo object and ProcessInstanceSearchCriteria'
     properties:
       RequestInfo:
-        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo'
-      BusinessService:
-        description: Used for search result and create only
-        type: array
-        minimum: 1
-        maximum: 100
-        items:
-          $ref: '#/definitions/BusinessService'
-          
-  BusinessServiceResponse:
-    description: 'Contract class to send response. Array of TradeLicense items are used in case of search results or response for create, whereas single TradeLicense item is used for update'
-    properties:
-      ResponseInfo:
-        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
-      BusinessService:
-        description: Used for search result and create only
-        type: array
-        maximum: 500
-        items:
-          $ref: '#/definitions/BusinessService'          
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      ProcessInstanceSearchCriteria:
+        $ref: '#/definitions/ProcessInstanceSearchCriteria'
+
+  AuditDetails:
+    $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
