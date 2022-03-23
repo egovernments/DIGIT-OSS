@@ -2,6 +2,8 @@ package org.egov.service;
 
 import java.util.LinkedHashMap;
 
+import org.egov.models.RequestInfo;
+import org.egov.models.RequestInfoWrapper;
 import org.egov.utils.JsonPathConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,9 +37,11 @@ public class SignOutService {
 		documentContext = documentContext.put(JsonPathConstant.requestInfo, "authToken", accessToken);
 		LinkedHashMap<String, Object> jsonRequest = documentContext.read(JsonPathConstant.request);
 		log.info(coexistencehost + coexistencelogoutUri + accessToken);
-		log.info(jsonRequest.entrySet().toString());
-		response = restTemplate.exchange(coexistencehost + coexistencelogoutUri, HttpMethod.POST,
-				new HttpEntity<>(jsonRequest), ResponseEntity.class);
+		RequestInfoWrapper reqInfoWrapper = new RequestInfoWrapper();
+		RequestInfo requestInfo = (RequestInfo) jsonRequest.get("RequestInfo");
+		reqInfoWrapper.setRequestInfo(requestInfo);
+		log.info(reqInfoWrapper.toString());
+		response = restTemplate.postForEntity(coexistencehost + coexistencelogoutUri, reqInfoWrapper, ResponseEntity.class);
 		log.info("SignOutService response :" + response.getStatusCode());
 	}
 
