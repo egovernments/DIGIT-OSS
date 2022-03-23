@@ -4,7 +4,7 @@ import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown,
 import Timeline from "../components/TLTimeline";
 
 const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
-  const {ownershipCategory:{code: keyToSearchOwnershipSubtype}={}} = formData
+  let {ownershipCategory:{code: keyToSearchOwnershipSubtype}={}} = formData
   const typeOfOwner = useMemo(() => {
     if (formData?.ownershipCategory?.code.includes("SINGLEOWNER")) return "SINGLEOWNER"
     if (formData?.ownershipCategory?.code.includes("INSTITUTIONAL")) return "INSTITUTIONAL"
@@ -111,9 +111,10 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   }]
 
   const stateId = Digit.ULBService.getStateId();
+  const isEdit = window.location.href.includes("/edit-application/")
 
   const {data: Menu} = Digit.Hooks.tl.useTLGenderMDMS(stateId, "common-masters", "GenderType");
-
+  if(isEdit) keyToSearchOwnershipSubtype = keyToSearchOwnershipSubtype.split(".")[0];
   const { data: institutionOwnershipTypeOptions } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TradeOwnershipSubType",{ keyToSearchOwnershipSubtype });
   
   let TLmenu = [];
