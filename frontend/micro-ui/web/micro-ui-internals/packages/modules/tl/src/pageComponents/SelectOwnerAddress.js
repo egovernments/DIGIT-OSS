@@ -12,6 +12,25 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
   const editScreen = url.includes("/modify-application/");
   let ismultiple = formData?.ownershipCategory?.code.includes("SINGLEOWNER") ? false : true;
 
+  useEffect(() =>{
+    if(formData?.owners?.permanentAddress == null && isrenewtrade && permanentAddress === "")
+    {
+      let obj = {
+        doorNo: formData?.address?.doorNo,
+        street: formData?.address?.street,
+        landmark: formData?.address?.landmark,
+        locality: formData?.address?.locality?.name,
+        city: formData?.address?.city?.code?.split(".")[1],
+        pincode: formData?.address?.pincode,
+      };
+      let addressDetails = "";
+      for (const key in obj) {
+        if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
+        else addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
+      }
+      setPermanentAddress(addressDetails);
+    }
+  },[formData])
   function setOwnerPermanentAddress(e) {
     setPermanentAddress(e.target.value);
   }
