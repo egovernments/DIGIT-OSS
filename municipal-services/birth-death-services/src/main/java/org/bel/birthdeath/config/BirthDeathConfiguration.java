@@ -70,13 +70,13 @@ public class BirthDeathConfiguration {
     @Value("${egov.demand.create.endpoint}")
     private String demandCreateEndpoint;
     
-    @Value("${egovpdf.host}")
+    @Value("${egov.pdf.host}")
     private String pdfHost;
     
-    @Value("${egovpdf.birthcert.postendpoint}")
+    @Value("${egov.pdf.birthcert.postendpoint}")
     private String saveBirthCertEndpoint;
     
-    @Value("${egovpdf.deathcert.postendpoint}")
+    @Value("${egov.pdf.deathcert.postendpoint}")
     private String saveDeathCertEndpoint;
     
     @Value("${egov.bnd.birthcert.link}")
@@ -106,7 +106,7 @@ public class BirthDeathConfiguration {
     @Value("${egov.bnd.download.bufferdays}")
     private Integer downloadBufferDays;
     
-    @Value("${egov.collectionservice.host}")
+    @Value("${egov.collection.service.host}")
 	private String collectionServiceHost;
 	
 	@Value("${egov.payment.search.endpoint}")
