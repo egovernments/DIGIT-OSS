@@ -56,18 +56,18 @@ const DSSCard = () => {
   }
 
   let links = Object.values(nationalScreenURLs)
-    .filter((ele) => ele["active"] == true)
+    // .filter((ele) => ele["active"] == true)
     .map((obj) => ({
       label: t(obj?.label),
-      link: `/digit-ui/employee/dss/dashboard/${obj?.stateKey}`,
+      link: obj.active?`/digit-ui/employee/dss/dashboard/${obj?.stateKey}`:`/digit-ui/employee/payment/integration/dss/${obj?.stateKey}`,
     }));
 
   const propsForModuleCard = {
     headerStyle: { border: "none", height: "48px" },
     moduleName: t("ES_TITLE_DSS"),
     subHeader: t("ACTION_TEST_SURE_DASHBOARD"),
-    // subHeaderLink: `/digit-ui/employee/payment/integration/dss/home`,
-    subHeaderLink: `/employee/integration/dss/home`,
+    subHeaderLink: `/digit-ui/employee/payment/integration/dss/home`,
+    // subHeaderLink: `/employee/integration/dss/home`,
     className: "employeeCard card-home customEmployeeCard full-width-card full-employee-card-height",
     links: [...links],
   };

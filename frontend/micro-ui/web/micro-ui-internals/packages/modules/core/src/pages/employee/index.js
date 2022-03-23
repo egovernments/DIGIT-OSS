@@ -38,7 +38,7 @@ const EmployeeApp = ({
     <div className="employee">
       <Switch>
         <Route path={`${path}/user`}>
-          {/* <TopBarSideBar
+          {isUserProfile&&<TopBarSideBar
             t={t}
             stateInfo={stateInfo}
             userDetails={userDetails}
@@ -49,7 +49,7 @@ const EmployeeApp = ({
             logoUrl={logoUrl}
             showSidebar={isUserProfile ? true : false}
             showLanguageChange={!showLanguageChange}
-          /> */}
+          />}
           <div
             className={isUserProfile ? "grounded-container" : "loginContainer"}
             style={
