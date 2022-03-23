@@ -17,7 +17,7 @@ public class ReceiptConsumer {
 		this.paymentUpdateService = paymentUpdateService;
 	}
 
-	@KafkaListener(topics = { "${kafka.topics.receipt.create}" })
+	@KafkaListener(topicPattern = "${kafka.topics.receipt.topic.pattern}")
 	public void listenPayments(final HashMap<String, Object> record) {
 		paymentUpdateService.process(record);
 	}

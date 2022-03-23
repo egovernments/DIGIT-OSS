@@ -132,10 +132,8 @@ public class LandEnrichmentService {
 	public List<LandInfo> enrichLandInfoSearch(List<LandInfo> landInfos, LandSearchCriteria criteria,
 			RequestInfo requestInfo) {
 
-		List<LandInfoRequest> landInfors = new ArrayList<LandInfoRequest>();
-		landInfos.forEach(bpa -> {
-			landInfors.add(new LandInfoRequest(requestInfo, bpa));
-		});
+		List<LandInfoRequest> landInfors = new ArrayList<>();
+		landInfos.forEach(bpa -> landInfors.add(new LandInfoRequest(requestInfo, bpa)));
 		if (criteria.getLimit() == null || !criteria.getLimit().equals(-1)) {
 			enrichBoundary(landInfors);
 		}
@@ -159,14 +157,14 @@ public class LandEnrichmentService {
 		List<OwnerInfo> users = userDetailResponse.getUser();
 		Map<String, OwnerInfo> userIdToOwnerMap = new HashMap<>();
 		users.forEach(user -> userIdToOwnerMap.put(user.getUuid(), user));
-		landInfos.forEach(landInfo -> {
+		landInfos.forEach(landInfo -> 
 			landInfo.getOwners().forEach(owner -> {
 				if (userIdToOwnerMap.get(owner.getUuid()) == null)
 					throw new CustomException(LandConstants.OWNER_SEARCH_ERROR,
 							"The owner of the landInfo " + landInfo.getId() + " is not coming in user search");
 				else
 					owner.addUserWithoutAuditDetail(userIdToOwnerMap.get(owner.getUuid()));
-			});
-		});
+			})
+		);
 	}
 }

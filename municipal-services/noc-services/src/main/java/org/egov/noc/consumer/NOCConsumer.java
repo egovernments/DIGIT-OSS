@@ -20,8 +20,7 @@ public class NOCConsumer {
 	@Autowired
 	private NOCNotificationService notificationService;
 	
-	@KafkaListener(topics = { "${persister.save.noc.topic}", "${persister.update.noc.topic}",
-			"${persister.update.noc.workflow.topic}" })
+	@KafkaListener(topics = "noc.kafka.notification.topic.pattern")
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		ObjectMapper mapper = new ObjectMapper();
 		NocRequest nocRequest = new NocRequest();

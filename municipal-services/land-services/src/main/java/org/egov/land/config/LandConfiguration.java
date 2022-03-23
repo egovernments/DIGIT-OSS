@@ -91,4 +91,10 @@ public class LandConfiguration {
 //	@Value("#{${appSrvTypeBussSrvCode}}")
 //	private Map<String,Map<String,String>> appSrvTypeBussSrvCode;
 	
+        @Value("${state.level.tenantid.length}")
+        private Integer stateLevelTenantIdLength;
+        
+        @Value("${is.environment.central.instance}")
+        private Boolean isEnvironmentCentralInstance;
+	
 }

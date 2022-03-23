@@ -49,13 +49,11 @@ public class NOCNotificationService {
 	 */
 	public void process(NocRequest nocRequest) {
 		List<SMSRequest> smsRequests = new LinkedList<>();
-		if (null != config.getIsSMSEnabled()) {
-			if (config.getIsSMSEnabled()) {
-				enrichSMSRequest(nocRequest, smsRequests);
-				if (!CollectionUtils.isEmpty(smsRequests))
-					util.sendSMS(smsRequests, config.getIsSMSEnabled());
-			}
-		}
+                if (null != config.getIsSMSEnabled() && Boolean.TRUE.equals(config.getIsSMSEnabled())) {
+                    enrichSMSRequest(nocRequest, smsRequests);
+                    if (!CollectionUtils.isEmpty(smsRequests))
+                        util.sendSMS(nocRequest.getNoc().getTenantId(), smsRequests, config.getIsSMSEnabled());
+                }
 	}
 
 	/**

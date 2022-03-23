@@ -3,13 +3,17 @@ package org.egov.land.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.land.config.LandConfiguration;
 import org.egov.land.producer.Producer;
 import org.egov.land.repository.querybuilder.LandQueryBuilder;
 import org.egov.land.repository.rowmapper.LandRowMapper;
+import org.egov.land.util.LandConstants;
 import org.egov.land.web.models.LandInfo;
 import org.egov.land.web.models.LandInfoRequest;
 import org.egov.land.web.models.LandSearchCriteria;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -35,6 +39,9 @@ public class LandRepository {
 
 	@Autowired
 	private LandRowMapper rowMapper;
+	
+	@Autowired
+        private MultiStateInstanceUtil centralInstanceUtil;
 
 	/**
 	 * Pushes the request on save topic through kafka
@@ -42,13 +49,13 @@ public class LandRepository {
 	 * @param bpaRequest
 	 *            The landinfo create request
 	 */
-	public void save(LandInfoRequest landRequest) {
-		producer.push(config.getSaveLandInfoTopic(), landRequest);
-	}
+        public void save(LandInfoRequest landRequest) {
+            producer.push(landRequest.getLandInfo().getTenantId(), config.getSaveLandInfoTopic(), landRequest);
+        }
 
-	public void update(LandInfoRequest landRequest) {
-		producer.push(config.getUpdateLandInfoTopic(), landRequest);
-	}
+        public void update(LandInfoRequest landRequest) {
+            producer.push(landRequest.getLandInfo().getTenantId(), config.getUpdateLandInfoTopic(), landRequest);
+        }
 	
 	/**
 	 * LandInfo search in database
@@ -60,6 +67,12 @@ public class LandRepository {
 	public List<LandInfo> getLandInfoData(LandSearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getLandInfoSearchQuery(criteria, preparedStmtList);
+                try {
+                    query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+                } catch (InvalidTenantIdException e) {
+                    throw new CustomException(LandConstants.EG_LS_AS_TENANTID_ERROR,
+                            "TenantId length is not sufficient to replace query schema in a multi state instance");
+                }
 		List<LandInfo> landInfoData = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 		if(!CollectionUtils.isEmpty(landInfoData)) {
 			log.debug("Received data from Query..");

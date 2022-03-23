@@ -2,6 +2,7 @@ package org.egov.land.repository.querybuilder;
 
 import java.util.List;
 
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.land.config.LandConfiguration;
 import org.egov.land.web.models.LandSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ public class LandQueryBuilder {
 
 	@Autowired
 	private LandConfiguration config;
+	
+	@Autowired
+        private MultiStateInstanceUtil centralInstanceUtil;
 
 	private static final String INNER_JOIN_STRING = " INNER JOIN ";
 	private static final String LEFT_OUTER_JOIN_STRING = " LEFT OUTER JOIN ";
@@ -25,15 +29,15 @@ public class LandQueryBuilder {
 			+ "landInfoowner.id as landInfoowner_id,landInfoowner.uuid as landInfoowner_uuid, landInfo.landuniqueregno as land_regno,"
 			+ "landInstitution.type as land_inst_type, landInstitution.id as land_inst_id, "
 			+ "landInfounit.id as landInfo_un_id, landInfodoc.id as landInfo_doc_id,landInfodoc.documenttype as landInfo_doc_documenttype,landInfodoc.filestoreid as landInfo_doc_filestore"
-			+ " FROM eg_land_landInfo landInfo" + INNER_JOIN_STRING
-			+ "eg_land_Address landInfoaddress ON landInfoaddress.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
-			+ "eg_land_institution landInstitution ON landInstitution.landInfoId = landInfo.id" + INNER_JOIN_STRING
-			+ "eg_land_ownerInfo landInfoowner ON landInfoowner.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
-			+ "eg_land_unit landInfounit ON landInfounit.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
-			+ "eg_land_document landInfodoc ON landInfodoc.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
-			+ "eg_land_GeoLocation landInfogeolocation ON landInfogeolocation.addressid = landInfoaddress.id";;
+			+ " FROM {schema}.eg_land_landInfo landInfo" + INNER_JOIN_STRING
+			+ "{schema}.eg_land_Address landInfoaddress ON landInfoaddress.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
+			+ "{schema}.eg_land_institution landInstitution ON landInstitution.landInfoId = landInfo.id" + INNER_JOIN_STRING
+			+ "{schema}.eg_land_ownerInfo landInfoowner ON landInfoowner.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
+			+ "{schema}.eg_land_unit landInfounit ON landInfounit.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
+			+ "{schema}.eg_land_document landInfodoc ON landInfodoc.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
+			+ "{schema}.eg_land_GeoLocation landInfogeolocation ON landInfogeolocation.addressid = landInfoaddress.id";;
 
-	private final String paginationWrapper = "SELECT * FROM "
+	private static final String PAGINATION_WRAPPER = "SELECT * FROM "
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY landInfo_lastModifiedTime DESC) offset_ FROM " + "({})"
 			+ " result) result_offset " + "WHERE offset_ > ? AND offset_ <= ?";
 	
@@ -51,18 +55,17 @@ public class LandQueryBuilder {
 
 		StringBuilder builder = new StringBuilder(QUERY);
 
-		if (criteria.getTenantId() != null) {
-			if (criteria.getTenantId().split("\\.").length == 1) {
-
-				addClauseIfRequired(preparedStmtList, builder);
-				builder.append(" landInfo.tenantid like ?");
-				preparedStmtList.add('%' + criteria.getTenantId() + '%');
-			} else {
-				addClauseIfRequired(preparedStmtList, builder);
-				builder.append(" landInfo.tenantid=? ");
-				preparedStmtList.add(criteria.getTenantId());
-			}
-		}
+                if (criteria.getTenantId() != null) {
+                    if (Boolean.TRUE.equals(centralInstanceUtil.isTenantIdStateLevel(criteria.getTenantId()))) {
+                        addClauseIfRequired(preparedStmtList, builder);
+                        builder.append(" landInfo.tenantid like ?");
+                        preparedStmtList.add('%' + criteria.getTenantId() + '%');
+                    } else {
+                        addClauseIfRequired(preparedStmtList, builder);
+                        builder.append(" landInfo.tenantid=? ");
+                        preparedStmtList.add(criteria.getTenantId());
+                    }
+                }
 
 		List<String> ids = criteria.getIds();
 		if (!CollectionUtils.isEmpty(ids)) {
@@ -108,7 +111,7 @@ public class LandQueryBuilder {
 
 		int limit = config.getDefaultLimit();
 		int offset = config.getDefaultOffset();
-		String finalQuery = paginationWrapper.replace("{}", query);
+		String finalQuery = PAGINATION_WRAPPER.replace("{}", query);
 
 		if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
 			limit = criteria.getLimit();
@@ -140,9 +143,7 @@ public class LandQueryBuilder {
 	}
 
 	private void addToPreparedStatement(List<Object> preparedStmtList, List<String> ids) {
-		ids.forEach(id -> {
-			preparedStmtList.add(id);
-		});
+		ids.forEach(preparedStmtList::add);
 
 	}
 

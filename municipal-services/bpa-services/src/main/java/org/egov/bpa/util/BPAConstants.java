@@ -381,4 +381,6 @@ public class BPAConstants {
 
 	public static final String BPA_BUSINESSSERVICE = "BPA";
 
+	
+	public static final String TENANTID_MDC = "TENANTID";
 }

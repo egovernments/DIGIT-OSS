@@ -108,17 +108,16 @@ public class PaymentNotificationService {
 				List<SMSRequest> smsList = new ArrayList<>();
 				List<Map> users = new ArrayList<Map>();
 				users.add(mobileNumberToOwner);
-				BPARequest bpaRequestMsg = BPARequest.builder().requestInfo(requestInfo).BPA(bpa).build();
-
-				smsList.addAll(util.createSMSRequest(bpaRequestMsg,message, mobileNumberToOwner));
-				util.sendSMS(smsList, config.getIsSMSEnabled());
+				smsList.addAll(util.createSMSRequest(message, mobileNumberToOwner));
+				String tenantId = bpa.getTenantId();
+				util.sendSMS(tenantId, smsList, config.getIsSMSEnabled());
 
 				if (null != config.getIsUserEventsNotificationEnabled()) {
 					if (config.getIsUserEventsNotificationEnabled()) {
 						BPARequest bpaRequest = BPARequest.builder().requestInfo(requestInfo).BPA(bpa).build();
 						EventRequest eventRequest = bpaNotificationService.getEvents(bpaRequest);
 						if (null != eventRequest)
-							util.sendEventNotification(eventRequest);
+							util.sendEventNotification(tenantId, eventRequest);
 					}
 				}
 			}

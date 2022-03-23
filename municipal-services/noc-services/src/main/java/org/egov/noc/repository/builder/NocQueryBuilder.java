@@ -25,8 +25,8 @@ public class NocQueryBuilder {
 			+ "noc_lastModifiedTime,noc.createdBy as noc_createdBy,noc.lastModifiedBy as noc_lastModifiedBy,noc.createdTime as "
 			+ "noc_createdTime,noc.additionalDetails,noc.landId as noc_landId, nocdoc.id as noc_doc_id, nocdoc.additionalDetails as doc_details, "
 			+ "nocdoc.documenttype as noc_doc_documenttype,nocdoc.filestoreid as noc_doc_filestore"
-			+ " FROM eg_noc noc  LEFT OUTER JOIN "
-			+ "eg_noc_document nocdoc ON nocdoc.nocid = noc.id WHERE 1=1 ";
+			+ " FROM {schema}.eg_noc noc  LEFT OUTER JOIN "
+			+ "{schema}.eg_noc_document nocdoc ON nocdoc.nocid = noc.id WHERE 1=1 ";
 
 	private final String paginationWrapper = "SELECT * FROM "
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY noc_lastModifiedTime DESC) offset_ FROM " + "({})"

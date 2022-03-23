@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.noc.config.NOCConfiguration;
 import org.egov.noc.repository.ServiceRequestRepository;
 import org.egov.noc.web.model.NocSearchCriteria;
@@ -30,6 +31,9 @@ public class UserService {
 
 	@Autowired
 	private ObjectMapper mapper;
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	/**
 	 * Call search in user service based on ownerids from criteria
@@ -59,7 +63,7 @@ public class UserService {
 	private UserSearchRequest getUserSearchRequest(NocSearchCriteria criteria, RequestInfo requestInfo) {
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
 		userSearchRequest.setRequestInfo(requestInfo);
-		userSearchRequest.setTenantId(criteria.getTenantId().split("\\.")[0]);
+		userSearchRequest.setTenantId(centralInstanceUtil.getStateLevelTenant(criteria.getTenantId()));
 		userSearchRequest.setActive(true);
 		/* userSearchRequest.setUserType("CITIZEN"); */
 		if (!CollectionUtils.isEmpty(criteria.getOwnerIds()))

@@ -18,6 +18,7 @@ import org.egov.bpa.web.model.*;
 import org.egov.bpa.web.model.collection.PaymentResponse;
 import org.egov.bpa.web.model.user.UserDetailResponse;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,6 +44,8 @@ public class NotificationUtil {
 	private EDCRService edcrService;
 	
 	private BPAUtil bpaUtil;
+	
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	private RestTemplate restTemplate;
 
@@ -55,13 +58,13 @@ public class NotificationUtil {
 
 	@Autowired
 	public NotificationUtil(BPAConfiguration config, ServiceRequestRepository serviceRequestRepository,
-			Producer producer, EDCRService edcrService, BPAUtil bpaUtil) {
+			Producer producer, EDCRService edcrService, BPAUtil bpaUtil, MultiStateInstanceUtil centralInstanceUtil) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.producer = producer;
 		this.edcrService = edcrService;
 		this.bpaUtil = bpaUtil;
-		this.restTemplate = restTemplate;
+		this.centralInstanceUtil = centralInstanceUtil;
 	}
 
 	final String receiptNumberKey = "receiptNumber";
@@ -216,7 +219,7 @@ public class NotificationUtil {
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0];
+			tenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
 
 		String locale = "en_IN";
 		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -274,12 +277,12 @@ public class NotificationUtil {
 	 * @param smsRequestList
 	 *            The list of SMSRequest to be sent
 	 */
-	public void sendSMS(List<org.egov.bpa.web.model.SMSRequest> smsRequestList, boolean isSMSEnabled) {
+	public void sendSMS(String tenantId, List<org.egov.bpa.web.model.SMSRequest> smsRequestList, boolean isSMSEnabled) {
 		if (isSMSEnabled) {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.debug("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push(config.getSmsNotifTopic(), smsRequest);
+				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
 				log.debug("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
 			}
 		}
@@ -294,16 +297,11 @@ public class NotificationUtil {
 	 *            Map of mobileNumber to OwnerName
 	 * @return List of SMSRequest
 	 */
-	public List<SMSRequest> createSMSRequest(BPARequest bpaRequest,String message, Map<String, String> mobileNumberToOwner) {
+	public List<SMSRequest> createSMSRequest(String message, Map<String, String> mobileNumberToOwner) {
 		List<SMSRequest> smsRequest = new LinkedList<>();
 
 		for (Map.Entry<String, String> entryset : mobileNumberToOwner.entrySet()) {
 			String customizedMsg = message.replace("<1>", entryset.getValue());
-			if (customizedMsg.contains("{RECEIPT_LINK}")) {
-				String linkToReplace = getRecepitDownloadLink(bpaRequest, entryset.getKey());
-//				log.info("Link to replace - "+linkToReplace);
-				customizedMsg = customizedMsg.replace("{RECEIPT_LINK}",linkToReplace);
-			}
 			smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
 		}
 		return smsRequest;
@@ -315,8 +313,8 @@ public class NotificationUtil {
 	 * 
 	 * @param request
 	 */
-	public void sendEventNotification(EventRequest request) {
-		producer.push(config.getSaveUserEventsTopic(), request);
+	public void sendEventNotification(String tenantId, EventRequest request) {
+		producer.push(tenantId, config.getSaveUserEventsTopic(), request);
 
 		log.debug("STAKEHOLDER:: " + request.getEvents().get(0).getDescription());
 	}

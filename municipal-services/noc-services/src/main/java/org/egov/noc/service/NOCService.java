@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.noc.repository.NOCRepository;
 import org.egov.noc.util.NOCConstants;
 import org.egov.noc.util.NOCUtil;
@@ -43,6 +44,9 @@ public class NOCService {
 	
 	@Autowired
 	private WorkflowService workflowService;
+	
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	/**
 	 * entry point from controller, takes care of next level logic from controller to create NOC application
@@ -50,7 +54,7 @@ public class NOCService {
 	 * @return
 	 */
 	public List<Noc> create(NocRequest nocRequest) {
-		String tenantId = nocRequest.getNoc().getTenantId().split("\\.")[0];
+		String tenantId = centralInstanceUtil.getStateLevelTenant(nocRequest.getNoc().getTenantId());
 		Object mdmsData = nocUtil.mDMSCall(nocRequest.getRequestInfo(), tenantId);
 		Map<String, String> additionalDetails = nocValidator.getOrValidateBussinessService(nocRequest.getNoc(), mdmsData);
 		nocValidator.validateCreate(nocRequest,  mdmsData);
@@ -70,7 +74,7 @@ public class NOCService {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<Noc> update(NocRequest nocRequest) {
-		String tenantId = nocRequest.getNoc().getTenantId().split("\\.")[0];
+	        String tenantId = centralInstanceUtil.getStateLevelTenant(nocRequest.getNoc().getTenantId());
 		Object mdmsData = nocUtil.mDMSCall(nocRequest.getRequestInfo(), tenantId);
 		Map<String, String> additionalDetails  ;
 		if(!ObjectUtils.isEmpty(nocRequest.getNoc().getAdditionalDetails()))  {
@@ -119,6 +123,7 @@ public class NOCService {
 		List<String> ids = Arrays.asList(nocRequest.getNoc().getId());
 		NocSearchCriteria criteria = new NocSearchCriteria();
 		criteria.setIds(ids);
+		criteria.setTenantId(nocRequest.getNoc().getTenantId());
 		List<Noc> nocList = search(criteria, nocRequest.getRequestInfo());
 		if (CollectionUtils.isEmpty(nocList) ) {
 			StringBuilder builder = new StringBuilder();

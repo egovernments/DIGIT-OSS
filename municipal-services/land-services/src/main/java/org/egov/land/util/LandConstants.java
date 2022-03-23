@@ -80,6 +80,10 @@ public class LandConstants {
 
 	public static final String INVALID_TENANT_ID_MDMS_MSG = "No data found for this tenentID";
 	
+	public static final String SCHEMA_REPLACE_STRING = "{schema}";
+	
+	public static final String EG_LS_AS_TENANTID_ERROR = "EG_LS_AS_TENANTID_ERROR";
+	
 	
 	
 }

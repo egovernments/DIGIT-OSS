@@ -76,5 +76,7 @@ public class NOCConstants {
 	public static final String FIRE_NOC_TYPE = "FIRE_NOC";
 	
 	public static final String AIRPORT_NOC_TYPE = "AIRPORT_AUTHORITY";
+	
+	public static final String EG_NOC_AS_TENANTID_ERROR = "EG_NOC_AS_TENANTID_ERROR";
 
 }
