@@ -54,7 +54,7 @@ public class DeathController {
 	@RequestMapping(value = { "/_search"}, method = RequestMethod.POST)
     public ResponseEntity<DeathResponse> search(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                        @Valid @ModelAttribute SearchCriteria criteria) {
-		if(requestInfoWrapper.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && !liveCitizenTenantsList.contains(criteria.getTenantId()))
+		if(requestInfoWrapper.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && liveCitizenTenantsList.contains(criteria.getTenantId()))
 		{
 			return new ResponseEntity<>(new DeathResponse(), HttpStatus.OK);
 		}
@@ -68,7 +68,7 @@ public class DeathController {
 	@RequestMapping(value = { "/_download"}, method = RequestMethod.POST)
     public ResponseEntity<DeathCertResponse> download(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                        @Valid @ModelAttribute SearchCriteria criteria) {
-		if(!liveCitizenTenantsList.contains(criteria.getTenantId()))
+		if(liveCitizenTenantsList.contains(criteria.getTenantId()))
 		{
 			return new ResponseEntity<>(new DeathCertResponse(), HttpStatus.OK);
 		}
