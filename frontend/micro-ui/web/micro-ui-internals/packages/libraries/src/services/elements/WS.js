@@ -2,6 +2,14 @@ import Urls from "../atoms/urls";
 import { Request } from "../atoms/Utils/Request";
 
 export const WSService = {
+  createBillAmendment: ({ filters }) =>
+    Request({
+      url: Urls.ws.billAmendmentCreate,
+      method: "POST",
+      auth: true,
+      userService: true,
+      data: { ...filters },
+    }),
   search: ({ tenantId, filters, auth, businessService }) =>
     Request({
       url: businessService === "WS" ? Urls.ws.water_search : Urls.ws.sewarage_search,

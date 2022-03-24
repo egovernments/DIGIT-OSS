@@ -188,6 +188,7 @@ import useWSConsumptionSearch from "./ws/useConsumptionSearch";
 import useWSMDMS from "./ws/useWSMDMS";
 import useAccessControl from "./useAccessControl";
 import useConnectionDetail from "./ws/useConnectionDetail";
+import useCreateBillAmendment from "./ws/useCreateBillAmendment";
 
 const pgr = {
   useComplaintDetails,
@@ -378,7 +379,8 @@ const ws = {
   useWSApplicationActions,
   useWSConsumptionSearch,
   useConnectionDetail,
-  useMDMS: useWSMDMS 
+  useMDMS: useWSMDMS,
+  useCreateBillAmendment
 };
 
 
