@@ -360,7 +360,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
              <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} textStyle={{ whiteSpace: "pre" }} />
              <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
              <Row label={t("PT_FEE_AMOUNT")} text={bills[0]?.totalAmount ||t("CS_NA") } textStyle={{ whiteSpace: "pre" }} />
-             <Row label={t("PT_PAYMENT_STATUS")} text={bills[0]?.status ||t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+             <Row label={t("PT_PAYMENT_STATUS")} text={application.status ||t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
             
           </StatusTable>
                  <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
