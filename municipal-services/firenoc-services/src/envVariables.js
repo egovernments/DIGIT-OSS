@@ -26,7 +26,7 @@ const envVariables = {
   KAFKA_TOPICS_NOTIFICATION:
     process.env.KAFKA_TOPICS_NOTIFICATION || "egov.core.notification.sms",
   KAFKA_TOPICS_EVENT_NOTIFICATION:
-    process.env.KAFKA_TOPICS_EVENT_NOTIFICATION || "persist-events-async",
+    process.env.KAFKA_TOPICS_EVENT_NOTIFICATION || "persist-user-events-async",
 
   KAFKA_TOPICS_FIRENOC_CREATE_SMS:
     process.env.KAFKA_TOPICS_FIRENOC_CREATE_SMS || "save-fn-firenoc-sms",
