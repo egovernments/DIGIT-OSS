@@ -21,7 +21,7 @@ public class CustomConsumerApplication {
 	private String redisHost;
 	
 	@Value("egov.redis.port")
-	private int redisPort;
+	private String redisPort;
 	
 	@Bean
 	public RestTemplate restTemplate()	{
@@ -38,7 +38,7 @@ public class CustomConsumerApplication {
 		JedisConnectionFactory jedisConFactory
 	      = new JedisConnectionFactory();
 	    jedisConFactory.setHostName(redisHost);
-	    jedisConFactory.setPort(redisPort);
+	    jedisConFactory.setPort(6379);
 	    return jedisConFactory;
 	}
 
