@@ -114,7 +114,6 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
         pageSizeLimit={props.pageSizeLimit}
         onSort={props.onSort}
         disableSort={props.disableSort}
-        onPageSizeChange={props.onPageSizeChange}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
       />

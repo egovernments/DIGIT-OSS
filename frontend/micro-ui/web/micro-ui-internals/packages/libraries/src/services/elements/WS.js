@@ -23,6 +23,25 @@ export const WSService = {
       setTimeParam: false,
       params: { tenantId, ...filters },
     }),
+    WSWatersearch: ({ tenantId, filters }) =>
+     Request({
+      url: Urls.ws.water_search,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: false,
+      params: { tenantId, ...filters },
+    }),
+    WSSewsearch: ({ tenantId, filters }) =>
+     Request({
+      url: Urls.ws.sewarage_search,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: false,
+      params: { tenantId, ...filters },
+    }),
+    
   update: (details, businessService) =>
     Request({
       url: businessService === "WATER" ? Urls.ws.water_update : Urls.ws.sewarage_update,

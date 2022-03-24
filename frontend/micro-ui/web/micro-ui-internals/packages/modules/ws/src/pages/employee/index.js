@@ -12,6 +12,7 @@ import ActivateConnection from "./ActivateConnection";
 import WSResponse from "./WSResponse";
 // import SearchConnectionComponent from "./SearchConnection";
 // import SearchResultsComponent from "./SearchResults";
+import Search from "./search";
 
 const App = ({ path }) => {
   const { t } = useTranslation();
@@ -26,6 +27,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/bill-amendment`} component={() => <ApplicationBillAmendment {...{path}}/>} />
         <PrivateRoute path={`${path}/required-documents`} component={() => <RequiredDocuments {...{path}}/>} />
         <PrivateRoute path={`${path}/activate-connection`} component={ActivateConnection} />
+        <PrivateRoute path={`${path}/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={WSResponse} />
         {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
