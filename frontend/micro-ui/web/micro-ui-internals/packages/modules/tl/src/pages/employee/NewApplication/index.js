@@ -165,6 +165,7 @@ const NewApplication = () => {
     // if (applicationDocuments?.length > 0) formData.tradeLicenseDetail.applicationDocuments = applicationDocuments;
     if (address) formData.tradeLicenseDetail.address = address;
     if (structureType) formData.tradeLicenseDetail.structureType = structureType;
+    if (data?.ownershipCategory?.code.includes("INDIVIDUAL")) formData.tradeLicenseDetail.subOwnerShipCategory = data?.ownershipCategory?.code;
     if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
     if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL"))
       formData.tradeLicenseDetail = { ...formData.tradeLicenseDetail, institution: {} };
