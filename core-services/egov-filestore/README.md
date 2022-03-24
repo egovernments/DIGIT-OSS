@@ -25,6 +25,9 @@ The application will start successfully only when atleast one of the config of a
 
 ### API Details
 
+SWAGGER-API contract: http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-Dev/core-services/docs/filestore-service-contract.yml#!/
+
+
 The "/v1/files" Api will validate the file formats sent through it, if it doesn't fit the available formats the application will throw error for invalid files. Any images uploaded will result in creation of three additional thumbnails along with it which can be searched. 
 
 The "/v1/files/url" Api will return encrypted urls for any given UUID, multiple urls for image will be returned and will be separated by commas. each of the url will point to one of the thumbnails created for images. in case of files only one url will be returned.
