@@ -31,6 +31,7 @@
     <maven.version>3.3.9</maven.version>
     <lombok.version>1.18.8</lombok.version>
     <commons-lang-version>2.6</commons-lang-version>
+    <logback.version>1.2.0</logback.version>
   </properties>
   <dependencies>
     <dependency>
