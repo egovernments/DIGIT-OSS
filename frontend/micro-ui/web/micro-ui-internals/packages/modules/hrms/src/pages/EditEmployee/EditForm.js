@@ -78,7 +78,7 @@ const EditForm = ({ tenantId, data }) => {
           code: ele.hierarchy,
           name: ele.hierarchy,
         },
-        boundaryType: { label: ele.boundaryType },
+        boundaryType: { label: ele.boundaryType, i18text:`EGOV_LOCATION_BOUNDARYTYPE_${ele.boundaryType.toUpperCase()}` },
         boundary: { code: ele.boundary },
         roles: data?.user?.roles.filter((item) => item.tenantId == ele.boundary),
       });
