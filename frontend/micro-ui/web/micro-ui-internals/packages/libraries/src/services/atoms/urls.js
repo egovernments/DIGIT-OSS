@@ -146,6 +146,7 @@ const Urls = {
     ws_connection_search: "/ws-calculator/meterConnection/_search",
     sw_payment_search: "/collection-services/payments/SW/_search",
     ws_payment_search: "/collection-services/payments/WS/_search",
+    billAmendmentCreate: "/billing-service/amendment/_create",
   },
 
   engagement: {

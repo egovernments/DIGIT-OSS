@@ -10,6 +10,7 @@ import ApplicationDetails from "./ApplicationDetails";
 import GetConnectionDetails from "./connectionDetails/connectionDetails";
 import ActivateConnection from "./ActivateConnection";
 import WSResponse from "./WSResponse";
+import Response from "./Response";
 // import SearchConnectionComponent from "./SearchConnection";
 // import SearchResultsComponent from "./SearchResults";
 import Search from "./search";
@@ -25,8 +26,9 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/new-application`} component={NewApplication} />
         <PrivateRoute path={`${path}/application-details`} component={ApplicationDetails} />
         <PrivateRoute path={`${path}/connection-details`} component={GetConnectionDetails} />
-        <PrivateRoute path={`${path}/bill-amendment`} component={() => <ApplicationBillAmendment {...{ path }} />} />
-        <PrivateRoute path={`${path}/required-documents`} component={() => <RequiredDocuments {...{ path }} />} />
+        <PrivateRoute path={`${path}/bill-amendment`} component={() => <ApplicationBillAmendment {...{path}}/>} />
+        <PrivateRoute path={`${path}/response`} component={() => <Response {...{path}}/>} />
+        <PrivateRoute path={`${path}/required-documents`} component={() => <RequiredDocuments {...{path}}/>} />
         <PrivateRoute path={`${path}/activate-connection`} component={ActivateConnection} />
         <PrivateRoute path={`${path}/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={WSResponse} />
