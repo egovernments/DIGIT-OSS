@@ -5,7 +5,7 @@ import { Loader, CitizenHomeCard, WSICon } from "@egovernments/digit-ui-react-co
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
 
-import Search from "./pages/employee/Search";
+import Search from "./pages/employee/search";
 import WSServiceName from "./pageComponents/WSServiceName";
 import WSWaterConnectionDetails from "./pageComponents/WSWaterConnectionDetails";
 import WSDocsRequired from "./pageComponents/WSDocsRequired";
