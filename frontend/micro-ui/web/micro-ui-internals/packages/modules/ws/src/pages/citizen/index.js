@@ -13,6 +13,7 @@ import WSAdditionalDetails from "./WSMyApplications/additionalDetails";
 import MyConnections from "./MyConnection";
 import ConnectionDetails from "./MyConnection/ConnectionDetails";
 import consumptionDetails from "./MyConnection/ConsumptionDetails";
+import NewApplication from "../employee/NewApplication";
 
 
 const App = ({ path }) => {
@@ -22,6 +23,7 @@ const App = ({ path }) => {
     <React.Fragment>
       <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>
       <Switch>
+        <PrivateRoute path={`${path}/new-application`} component={NewApplication} />
         <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
         <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/wns-my-bills`} component={WNSMyBillsComponent} />

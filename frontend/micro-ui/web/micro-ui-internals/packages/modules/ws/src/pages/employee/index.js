@@ -9,6 +9,7 @@ import WSDocsRequired from "../../pageComponents/WSDocsRequired";
 import ApplicationDetails from "./ApplicationDetails";
 import GetConnectionDetails from "./connectionDetails/connectionDetails";
 import ActivateConnection from "./ActivateConnection";
+import WSResponse from "./WSResponse";
 // import SearchConnectionComponent from "./SearchConnection";
 // import SearchResultsComponent from "./SearchResults";
 
@@ -25,6 +26,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/bill-amendment`} component={() => <ApplicationBillAmendment {...{path}}/>} />
         <PrivateRoute path={`${path}/required-documents`} component={() => <RequiredDocuments {...{path}}/>} />
         <PrivateRoute path={`${path}/activate-connection`} component={ActivateConnection} />
+        <PrivateRoute path={`${path}/response`} component={WSResponse} />
         {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
       </Switch>

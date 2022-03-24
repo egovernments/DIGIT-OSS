@@ -4,12 +4,14 @@ import * as func from "../utils";
 import { useForm, Controller } from "react-hook-form";
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
+import { getPattern } from "../utils";
 
 const createPlumberDetails = () => ([{
     plumberName: "",
     plumberMobileNo: "",
     plumberLicenseNo: "",
-    detailsProvidedBy: ""
+    detailsProvidedBy: "",
+    key: Date.now(),
 }]);
 
 
@@ -30,8 +32,9 @@ const WSActivationPlumberDetails = ({ config, onSelect, userType, formData, setE
         const data = plumberDetails.map((e) => {
             return e;
         });
+        if (data?.[0]) data[0].key = Date.now()
         onSelect(config?.key, data);
-    }, [plumberDetails]);
+    }, [plumberDetails, formData?.connectionDetails?.[0]?.connectionType]);
 
 
     const commonProps = {
@@ -99,15 +102,15 @@ const PlumberDetails = (_props) => {
             const part = {};
             keys.forEach((key) => (part[key] = plumberDetail[key]));
             if (!_.isEqual(formValue, part)) {
+                let isErrorsFound = true;
                 Object.keys(formValue).map(data => {
-                    if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
-                        setIsErrors(true);
+                    if (!formValue[data] && isErrorsFound) {
+                        isErrorsFound = false;
+                        setIsErrors(false);
                     }
                 });
+                if (isErrorsFound) setIsErrors(true);
                 let ob = [{ ...formValue }];
-                let mcollectFormValue = JSON.parse(sessionStorage.getItem("mcollectFormData"));
-                mcollectFormValue = { ...mcollectFormValue, ...ob[0] }
-                sessionStorage.setItem("mcollectFormData", JSON.stringify(mcollectFormValue));
                 setPlumberDetails(ob);
                 trigger();
             }
@@ -119,7 +122,7 @@ const PlumberDetails = (_props) => {
         if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) {
             setError(config.key, { type: errors });
         }
-        else if (!Object.keys(errors).length && formState.errors[config.key] && isErrors) {
+        else if (!Object.keys(errors).length && formState.errors[config.key]) {
             clearErrors(config.key);
         }
     }, [errors]);
@@ -130,12 +133,13 @@ const PlumberDetails = (_props) => {
             <div style={{ marginBottom: "16px" }}>
                 <div>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")}:`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")}*:`}</CardLabel>
                         <Controller
                             control={control}
                             name={"detailsProvidedBy"}
                             defaultValue={plumberDetail?.detailsProvidedBy}
-                            // rules={{ required: t("REQUIRED_FIELD") }}
+                            rules={{ required: t("REQUIRED_FIELD") }}
+                            isMandatory={true}
                             render={(props) => (
                                 <Dropdown
                                     className="form-field"
@@ -144,6 +148,20 @@ const PlumberDetails = (_props) => {
                                     option={options}
                                     errorStyle={(localFormState.touched.detailsProvidedBy && errors?.detailsProvidedBy?.message) ? true : false}
                                     select={(e) => {
+                                        if (e.code == "ULB") {
+                                            let obj = {
+                                                ...plumberDetails?.[0],
+                                                detailsProvidedBy: e,
+                                                plumberName: "",
+                                                plumberMobileNo: "",
+                                                plumberLicenseNo: "",
+                                                key: Date.now()
+                                            }
+                                            setPlumberDetails([obj])
+                                        } else {
+                                            let obj = { detailsProvidedBy: e, key: Date.now() }
+                                            setPlumberDetails([obj])
+                                        }
                                         props.onChange(e);
                                     }}
                                     optionKey="i18nKey"
@@ -154,83 +172,92 @@ const PlumberDetails = (_props) => {
                         />
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.detailsProvidedBy ? errors?.detailsProvidedBy?.message : ""}</CardLabelError>
-                    {plumberDetail?.detailsProvidedBy?.code == "ULB" && <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PLIMBER_LICENSE_NO_LABEL")}:`}</CardLabel>
-                        <div className="field">
-                            <Controller
-                                control={control}
-                                name="plumberLicenseNo"
-                                defaultValue={plumberDetail?.plumberLicenseNo}
-                                // rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
-                                render={(props) => (
-                                    <TextInput
-                                        value={props.value}
-                                        autoFocus={focusIndex.index === plumberDetail?.key && focusIndex.type === "plumberLicenseNo"}
-                                        errorStyle={(localFormState.touched.plumberLicenseNo && errors?.plumberLicenseNo?.message) ? true : false}
-                                        onChange={(e) => {
-                                            props.onChange(e.target.value);
-                                            setFocusIndex({ index: plumberDetail?.key, type: "plumberLicenseNo" });
-                                        }}
-                                        labelStyle={{ marginTop: "unset" }}
-                                        onBlur={props.onBlur}
+                    {plumberDetail?.detailsProvidedBy?.code == "ULB" ?
+                        <div>
+                            <LabelFieldPair>
+                                <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PLIMBER_LICENSE_NO_LABEL")}*:`}</CardLabel>
+                                <div className="field">
+                                    <Controller
+                                        control={control}
+                                        name="plumberLicenseNo"
+                                        defaultValue={plumberDetail?.plumberLicenseNo}
+                                        rules={{ required: t("REQUIRED_FIELD") }}
+                                        // rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) , required: t("REQUIRED_FIELD")}}
+                                        isMandatory={true}
+                                        render={(props) => (
+                                            <TextInput
+                                                value={props.value}
+                                                autoFocus={focusIndex.index === plumberDetail?.key && focusIndex.type === "plumberLicenseNo"}
+                                                errorStyle={(localFormState.touched.plumberLicenseNo && errors?.plumberLicenseNo?.message) ? true : false}
+                                                onChange={(e) => {
+                                                    props.onChange(e.target.value);
+                                                    setFocusIndex({ index: plumberDetail?.key, type: "plumberLicenseNo" });
+                                                }}
+                                                labelStyle={{ marginTop: "unset" }}
+                                                onBlur={props.onBlur}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
-                        </div>
-                    </LabelFieldPair>}
-                    {plumberDetail?.detailsProvidedBy?.code == "ULB" && <CardLabelError style={errorStyle}>{localFormState.touched.plumberLicenseNo ? errors?.plumberLicenseNo?.message : ""}</CardLabelError>}
-                    {plumberDetail?.detailsProvidedBy?.code == "ULB" && <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL")}:`}</CardLabel>
-                        <div className="field">
-                            <Controller
-                                control={control}
-                                name="plumberName"
-                                defaultValue={plumberDetail?.plumberName}
-                                // rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
-                                render={(props) => (
-                                    <TextInput
-                                        value={props.value}
-                                        autoFocus={focusIndex.index === plumberDetail?.key && focusIndex.type === "plumberName"}
-                                        errorStyle={(localFormState.touched.plumberName && errors?.plumberName?.message) ? true : false}
-                                        onChange={(e) => {
-                                            props.onChange(e.target.value);
-                                            setFocusIndex({ index: plumberDetail?.key, type: "plumberName" });
-                                        }}
-                                        labelStyle={{ marginTop: "unset" }}
-                                        onBlur={props.onBlur}
+                                </div>
+                            </LabelFieldPair>
+                            <CardLabelError style={errorStyle}>{localFormState.touched.plumberLicenseNo ? errors?.plumberLicenseNo?.message : ""}</CardLabelError>
+                            <LabelFieldPair>
+                                <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL")}*:`}</CardLabel>
+                                <div className="field">
+                                    <Controller
+                                        control={control}
+                                        name="plumberName"
+                                        defaultValue={plumberDetail?.plumberName}
+                                        rules={{ required: t("REQUIRED_FIELD") }}
+                                        // rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                                        isMandatory={true}
+                                        render={(props) => (
+                                            <TextInput
+                                                value={props.value}
+                                                autoFocus={focusIndex.index === plumberDetail?.key && focusIndex.type === "plumberName"}
+                                                errorStyle={(localFormState.touched.plumberName && errors?.plumberName?.message) ? true : false}
+                                                onChange={(e) => {
+                                                    props.onChange(e.target.value);
+                                                    setFocusIndex({ index: plumberDetail?.key, type: "plumberName" });
+                                                }}
+                                                labelStyle={{ marginTop: "unset" }}
+                                                onBlur={props.onBlur}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
-                        </div>
-                    </LabelFieldPair>}
-                    {plumberDetail?.detailsProvidedBy?.code == "ULB" && <CardLabelError style={errorStyle}>{localFormState.touched.plumberName ? errors?.plumberName?.message : ""}</CardLabelError>}
-                    {plumberDetail?.detailsProvidedBy?.code == "ULB" && <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PLUMBER_MOBILE_NO_LABEL")}:`}</CardLabel>
-                        <div className="field">
-                            <Controller
-                                control={control}
-                                name="mobileNumber"
-                                defaultValue={plumberDetail?.plumberMobileNo}
-                                // rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
-                                type="mobileNumber"
-                                render={(props) => (
-                                    <TextInput
+                                </div>
+                            </LabelFieldPair>
+                            <CardLabelError style={errorStyle}>{localFormState.touched.plumberName ? errors?.plumberName?.message : ""}</CardLabelError>
+                            <LabelFieldPair>
+                                <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PLUMBER_MOBILE_NO_LABEL")}*:`}</CardLabel>
+                                <div className="field">
+                                    <Controller
+                                        control={control}
+                                        name="plumberMobileNo"
+                                        defaultValue={plumberDetail?.plumberMobileNo}
+                                        rules={{ required: t("REQUIRED_FIELD") }}
+                                        // rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                         type="mobileNumber"
-                                        value={props.value}
-                                        autoFocus={focusIndex.index === plumberDetail?.key && focusIndex.type === "plumberMobileNo"}
-                                        errorStyle={(localFormState.touched.plumberMobileNo && errors?.plumberMobileNo?.message) ? true : false}
-                                        onChange={(e) => {
-                                            props.onChange(e.target.value);
-                                            setFocusIndex({ index: plumberDetail?.key, type: "plumberMobileNo" });
-                                        }}
-                                        labelStyle={{ marginTop: "unset" }}
-                                        onBlur={props.onBlur}
+                                        isMandatory={true}
+                                        render={(props) => (
+                                            <TextInput
+                                                type="mobileNumber"
+                                                value={props.value}
+                                                autoFocus={focusIndex.index === plumberDetail?.key && focusIndex.type === "plumberMobileNo"}
+                                                errorStyle={(localFormState.touched.plumberMobileNo && errors?.plumberMobileNo?.message) ? true : false}
+                                                onChange={(e) => {
+                                                    props.onChange(e.target.value);
+                                                    setFocusIndex({ index: plumberDetail?.key, type: "plumberMobileNo" });
+                                                }}
+                                                labelStyle={{ marginTop: "unset" }}
+                                                onBlur={props.onBlur}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
-                        </div>
-                    </LabelFieldPair>}
-                    {plumberDetail?.detailsProvidedBy?.code == "ULB" && <CardLabelError style={errorStyle}>{localFormState.touched.plumberMobileNo ? errors?.plumberMobileNo?.message : ""}</CardLabelError>}
+                                </div>
+                            </LabelFieldPair>
+                            <CardLabelError style={errorStyle}>{localFormState.touched.plumberMobileNo ? errors?.plumberMobileNo?.message : ""}</CardLabelError>
+                        </div> : null}
                 </div>
             </div>
         </div>
