@@ -195,6 +195,7 @@ import useConnectionDetail from "./ws/useConnectionDetail";
 import useBillSearch from "./bills/useBillSearch";
 import useWaterCreateAPI from "./ws/useWaterCreateAPI";
 import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
+import useCreateBillAmendment from "./ws/useCreateBillAmendment";
 
 const pgr = {
   useComplaintDetails,
@@ -391,7 +392,8 @@ const ws = {
   useConnectionDetail,
   useMDMS: useWSMDMS,
   useWaterCreateAPI,
-  useSewerageCreateAPI
+  useSewerageCreateAPI,
+  useCreateBillAmendment
 };
 
 
