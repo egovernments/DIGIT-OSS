@@ -81,26 +81,21 @@ public class VehicleTripService {
 				request.getVehicleTrip().get(0).getTenantId(), request.getRequestInfo(),
 				VehicleTripConstants.FSM_VEHICLE_TRIP_BusinessService, null);
 
-		actionValidator.validateUpdateRequest(request, businessService);
+		if(!VehicleTripConstants.UPDATE_ONLY_VEHICLE_TRIP_RECORD.equalsIgnoreCase(request.getWorkflow().getAction())) {
+			actionValidator.validateUpdateRequest(request, businessService);	
+		}
 		validator.validateCreateOrUpdateRequest(request);
 		validator.validateUpdateRecord(request);
 		vehicleLogEnrichmentService.setUpdateData(request);
-		wfIntegrator.callWorkFlow(request);
-
 		
-		request.getVehicleTrip().forEach(vehicleTrip->{
-			
-//			if(StringUtils.isEmpty(vehicleTrip.getId()))
-//				throw new CustomException(VehicleTripConstants.UPDATE_VEHICLELOG_ERROR,
-//						"vehicleLogId not found in the Request" + vehicleTrip);
-//			
-						//vehicleLogEnrichmentService.postStatusEnrichment(request);
+		if(!VehicleTripConstants.UPDATE_ONLY_VEHICLE_TRIP_RECORD.equalsIgnoreCase(request.getWorkflow().getAction())) {
+			wfIntegrator.callWorkFlow(request);	
+		}
+
+			request.getVehicleTrip().forEach(vehicleTrip->{
 			vehicleLogRepository.update(request.getRequestInfo(),vehicleTrip,
 			workflowService.isStateUpdatable(vehicleTrip.getApplicationStatus(), businessService));
 		});
-		
-		
-		
 		
 		//SAN-800: Send SMS notification if the vehicle trip is declined
 		if(VehicleTripConstants.DECLINEVEHICLE.equalsIgnoreCase(request.getWorkflow().getAction())) {

@@ -173,5 +173,9 @@ public class FSMConstants {
 	public static final String FSM_SMS_DSO_INPROGRESS_DSO_ACCEPT="FSM_SMS_DSO_INPROGRESS_DSO_ACCEPT";
 
 	public static final String FSM_SMS_CREATED_CREATE="FSM_SMS_CREATED_CREATE";
+	
+	public static final String UPDATE_ONLY_VEHICLE_TRIP_RECORD = "UPDATE_ONLY_VEHICLE_TRIP_RECORD";
+
+	public static final String WF_DISPOSAL_IN_PROGRESS = "DISPOSAL_IN_PROGRESS";
 
 }
