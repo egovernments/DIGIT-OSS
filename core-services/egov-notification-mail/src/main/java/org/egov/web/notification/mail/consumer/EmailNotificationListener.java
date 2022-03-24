@@ -30,7 +30,6 @@ public class EmailNotificationListener {
     public void listen(final HashMap<String, Object> record) {
         EmailRequest emailRequest = objectMapper.convertValue(record, EmailRequest.class);
         emailService.sendEmail(emailRequest.getEmail());
-//        log.info("Email sent");
         
     }
     
