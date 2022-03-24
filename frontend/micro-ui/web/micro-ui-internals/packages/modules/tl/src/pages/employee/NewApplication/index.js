@@ -136,7 +136,7 @@ const NewApplication = () => {
     let operationalArea = Number(data?.tradedetils?.["0"]?.operationalArea) || "";
     let structureType = data?.tradedetils?.["0"]?.structureSubType?.code || "";
     let tradeName = data?.tradedetils?.["0"]?.tradeName || "";
-    let subOwnerShipCategory = data?.ownershipCategory?.code || "";
+    let subOwnerShipCategory = data?.owners?.[0]?.subOwnerShipCategory?.code || "";
     let licenseType = data?.tradedetils?.["0"]?.licenseType?.code || "PERMANENT";
 
     let formData = {
