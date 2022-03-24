@@ -535,7 +535,7 @@ public class InboxService {
 			
 			//log.info("CollectionUtils.isEmpty(inboxes) :::: " + CollectionUtils.isEmpty(inboxes));
 
-			if (CollectionUtils.isEmpty(inboxes) && totalCount>0) {
+			if (CollectionUtils.isEmpty(inboxes) && totalCount>0 && !moduleSearchCriteria.containsKey("applicationNos")) {
 				inputStatuses = inputStatuses.stream().filter(x -> x != null).collect(Collectors.toList());
 				List<String> fsmApplicationList = fetchVehicleStateMap(inputStatuses, requestInfo, criteria.getTenantId(),
 						criteria.getLimit(),criteria.getOffset());
