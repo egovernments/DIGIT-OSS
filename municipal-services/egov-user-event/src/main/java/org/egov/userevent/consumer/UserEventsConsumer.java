@@ -51,9 +51,9 @@ public class UserEventsConsumer {
 			String tenantId = eventReq.getEvents().get(0).getTenantId();
 			MDC.put(TENANTID_MDC_STRING, tenantId);
 
-			if(topic.equals(props.getSaveEventsTopic())) {
+			if(topic.contains(props.getSaveEventsTopic())) {
 				service.createEvents(eventReq, false);
-			}else if(topic.equals(props.getUpdateEventsTopic())) {
+			}else if(topic.contains(props.getUpdateEventsTopic())) {
 				service.updateEvents(eventReq);
 			}
 		}catch(Exception e) {
