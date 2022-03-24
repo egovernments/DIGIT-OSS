@@ -1,18 +1,19 @@
 package org.egov.service;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.egov.models.RequestInfo;
 import org.egov.models.RequestInfoWrapper;
 import org.egov.utils.JsonPathConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,9 @@ public class SignOutService {
 
 	@Value("${egov.coexistence.singout.uri}")
 	private String coexistencelogoutUri;
+	
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
 
 	public void callFinanceForSignOut(DocumentContext documentContext) {
 		ResponseEntity<?> response = null;
@@ -45,6 +49,19 @@ public class SignOutService {
 		reqInfoWrapper.setRequestInfo(requestInfo);
 		log.info("Call signout API");
 		log.info(reqInfoWrapper.toString());
+		if (Boolean.TRUE.equals(redisTemplate.hasKey(accessToken))) {
+			log.info("Reading session from Redis");
+            Object sessionIdFromRedis = redisTemplate.opsForValue().get(accessToken);
+            ObjectMapper oMapper = new ObjectMapper();
+            Map<String, String> map = oMapper.convertValue(sessionIdFromRedis, Map.class);
+            log.info(map.toString());
+            for(Map.Entry<String, String> entries : map.entrySet()) {
+            	log.info("Redis-->Auth Token--->>> Keys::"+entries.getKey()+"::Values"+entries.getValue());
+            	redisTemplate.delete(entries.getKey());
+            }
+            redisTemplate.delete(accessToken);
+        }
+		
 		response = restTemplate.postForEntity(coexistencehost + coexistencelogoutUri, reqInfoWrapper, ResponseEntity.class);
 		log.info("SignOutService response :" + response.getStatusCode());
 	}
