@@ -70,7 +70,12 @@ public class PieChartResponseHandler implements IResponseHandler {
                     List<JsonNode> valueNodes = valueNode.findValues(VALUE).isEmpty() ? valueNode.findValues(DOC_COUNT) : valueNode.findValues(VALUE);
                     double sum = valueNodes.stream().mapToLong(o -> o.asLong()).sum();
                     totalValue.add(sum);
-                    plotMap.put(headerPath.asText(), sum);
+                    if(plotMap.containsKey(headerPath.asText())) {
+                    	plotMap.put(headerPath.asText(),plotMap.get(headerPath.asText())+sum);
+                    }
+                    else {
+                    	plotMap.put(headerPath.asText(), sum);
+                    }
 //                    Plot plot = new Plot(headerPath.asText(), sum, symbol);
 //                    headerPlotList.add(plot);
                 }
