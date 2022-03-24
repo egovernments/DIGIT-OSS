@@ -5,6 +5,7 @@ import java.util.*;
 import com.jayway.jsonpath.Filter;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -46,6 +47,9 @@ public class NotificationUtil {
 
 	@Autowired
 	private RestTemplate restTemplate;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 
 	/**
@@ -250,7 +254,7 @@ public class NotificationUtil {
 		uri.append(config.getMdmsHost()).append(config.getMdmsUrl());
 		if(StringUtils.isEmpty(tenantId))
 			return masterData;
-		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
+		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, centralInstanceUtil.getStateLevelTenant(tenantId));
 
 		Filter masterDataFilter = filter(
 				where(MODULECONSTANT).is(moduleName).and(ACTION).is(action)
