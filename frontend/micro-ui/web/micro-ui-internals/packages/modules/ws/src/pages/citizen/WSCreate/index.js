@@ -33,6 +33,14 @@ const WSCreate = () => {
     const currentPath = pathname.split("/").pop();
     let { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
     let routeObject = config.find((routeObj) => routeObj.route === currentPath && routeObj);
+    if (typeof nextStep == "object" && nextStep != null) {
+    if (
+        nextStep[sessionStorage.getItem("KnowProperty")] &&
+        (nextStep[sessionStorage.getItem("KnowProperty")] === "search-property" || nextStep[sessionStorage.getItem("KnowProperty")] === "create-property")
+      ) {
+        nextStep = `${nextStep[sessionStorage.getItem("KnowProperty")]}`;
+      }
+    }
     if (routeObject[sessionStorage.getItem("serviceName")]) nextStep = routeObject[sessionStorage.getItem("serviceName")];
     let redirectWithHistory = history.push;
     if (nextStep === null) {

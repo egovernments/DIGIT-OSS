@@ -36,7 +36,7 @@ const CustomPieChart = ({ dataKey = "value", data,setChartDenomination }) => {
   }, [response]);
 
   const renderLegend = (value) => (
-    <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`PROPERTYTYPE_MASTERS_${value && Digit.Utils.locale.getTransformedLocale(value)}`)}</span>
+    <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`COMMON_MASTERS_${value && Digit.Utils.locale.getTransformedLocale(value)}`)}</span>
   );
 
   const renderCustomLabel = (args) => {
@@ -94,7 +94,7 @@ const CustomPieChart = ({ dataKey = "value", data,setChartDenomination }) => {
           whiteSpace: "nowrap",
         }}
       >
-        <p className="recharts-tooltip-label">{`${t(`PROPERTYTYPE_MASTERS_${payload?.[0]?.name && Digit.Utils.locale.getTransformedLocale(payload?.[0]?.name)}`)}: ${Digit.Utils.dss.formatter(
+        <p className="recharts-tooltip-label">{`${t(`COMMON_MASTERS_${payload?.[0]?.name && Digit.Utils.locale.getTransformedLocale(payload?.[0]?.name)}`)}: ${Digit.Utils.dss.formatter(
           payload?.[0]?.value,
           payload?.[0]?.payload?.payload?.symbol,
           value?.denomination,

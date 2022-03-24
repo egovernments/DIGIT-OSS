@@ -34,7 +34,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       amountPerTrip: applicationData.additionalDetails.tripAmount,
       amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || undefined,
       vehicleType: vehicleMenu
-        .filter((vehicle) => vehicle?.make === applicationData?.vehicleType)
+        .filter((vehicle) => vehicle?.capacity === applicationData?.vehicleCapacity)
         .map((vehicle) => ({ ...vehicle, label: applicationData?.vehicleCapacity }))[0],
       vehicleCapacity: applicationData?.vehicleCapacity,
     },

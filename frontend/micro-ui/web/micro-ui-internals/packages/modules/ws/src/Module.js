@@ -41,6 +41,7 @@ const WSModule = ({ stateCode, userType, tenants }) => {
   });
 
   Digit.SessionStorage.set("WS_TENANTS", tenants);
+  Digit.SessionStorage.set("PT_TENANTS", tenants);
 
   if (isLoading) {
     return <Loader />;
