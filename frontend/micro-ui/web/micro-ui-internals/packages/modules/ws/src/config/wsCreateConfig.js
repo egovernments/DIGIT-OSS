@@ -159,7 +159,7 @@ export const newConfig = [
     ],
   },
   {
-    head: "WS_NEW_WATER_SEWERAGE_CONN_APPLICATION",
+    head: "WS_APP_FOR_WATER_AND_SEWERAGE_LABEL",
     hideInCitizen: true,
     body: [{
       head: "",
@@ -170,26 +170,47 @@ export const newConfig = [
         withoutLabel: true,
       }]
     },
+    // {
+    //   head: "WS_PT_DETAILS",
+    //   body: [{
+    //     type: "component",
+    //     key: "PropertyDetails",
+    //     component: "WSPropertyDetails",
+    //     withoutLabel: true,
+    //   }]
+    // },
+    // {
+    //   head: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
+    //   body: [{
+    //     type: "component",
+    //     key: "ConnectionHolderDetails",
+    //     component: "WSConnectionHolder",
+    //     withoutLabel: true,
+    //   }]
+    // },
     {
-      head: "WS_PT_DETAILS",
-      body: [{
-        type: "component",
-        key: "PropertyDetails",
-        component: "WSPropertyDetails",
-        withoutLabel: true,
-      }]
+      head: "WS_COMMON_PROPERTY_DETAILS",
+      body: [
+        {
+          component: "CPTPropertySearchNSummary",
+          withoutLabel: true,
+          key: "cpt",
+          type: "component",
+          hideInCitizen: true
+        },
+      ],
     },
     {
-      head: "WS_CONN_HOLDER_DETAILS",
+      head: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
       body: [{
         type: "component",
         key: "ConnectionHolderDetails",
-        component: "WSConnectionHolder",
+        component: "WSConnectionHolderDetails",
         withoutLabel: true,
       }]
     },
     {
-      head: "WS_CONN_DETAILS",
+      head: "WS_COMMON_CONNECTION_DETAIL",
       body: [{
         type: "component",
         key: "ConnectionDetails",
@@ -197,39 +218,39 @@ export const newConfig = [
         withoutLabel: true,
       }]
     },
+    // {
+    //   head: "WS_PLUMBER_DETAILS",
+    //   body: [{
+    //     type: "component",
+    //     key: "PlumberDetails",
+    //     component: "WSPlumberDetails",
+    //     withoutLabel: true,
+    //   }]
+    // },
+    // {
+    //   head: "WS_ROAD_CUTT_DETAILS",
+    //   body: [{
+    //     type: "component",
+    //     key: "RoadCuttingDetails",
+    //     component: "WSRoadCuttingDetails",
+    //     withoutLabel: true,
+    //   }]
+    // },
+    // {
+    //   head: "WS_ACTIV_DETAILS",
+    //   body: [{
+    //     type: "component",
+    //     key: "ActivationDetails",
+    //     component: "WSActivationDetails",
+    //     withoutLabel: true,
+    //   }]
+    // },
     {
-      head: "WS_PLUMBER_DETAILS",
-      body: [{
-        type: "component",
-        key: "PlumberDetails",
-        component: "WSPlumberDetails",
-        withoutLabel: true,
-      }]
-    },
-    {
-      head: "WS_ROAD_CUTT_DETAILS",
-      body: [{
-        type: "component",
-        key: "RoadCuttingDetails",
-        component: "WSRoadCuttingDetails",
-        withoutLabel: true,
-      }]
-    },
-    {
-      head: "WS_ACTIV_DETAILS",
-      body: [{
-        type: "component",
-        key: "ActivationDetails",
-        component: "WSActivationDetails",
-        withoutLabel: true,
-      }]
-    },
-    {
-      head: "WS_DOC_REQUIRED",
+      head: "WS_COMMON_DOCS",
       body: [{
         type: "component",
         key: "DocumentsRequired",
-        component: "WSDocumentDetails",
+        component: "WSDocumentsEmployee",
         withoutLabel: true,
       }]
     }

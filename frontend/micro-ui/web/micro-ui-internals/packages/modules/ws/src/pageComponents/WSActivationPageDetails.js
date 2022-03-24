@@ -102,15 +102,9 @@ const ConnectionDetails = (_props) => {
                         isErrorsFound = false
                         setIsErrors(false);
                       }
-                    // if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
-                    //     setIsErrors(true);
-                    // }
                 });
                 if (isErrorsFound) setIsErrors(true);
                 let ob = [{ ...formValue }];
-                let mcollectFormValue = JSON.parse(sessionStorage.getItem("mcollectFormData"));
-                mcollectFormValue = { ...mcollectFormValue, ...ob[0] }
-                sessionStorage.setItem("mcollectFormData", JSON.stringify(mcollectFormValue));
                 setActivationDetails(ob);
                 trigger();
             }

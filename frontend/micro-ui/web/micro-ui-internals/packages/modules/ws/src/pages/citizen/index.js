@@ -14,7 +14,6 @@ import MyConnections from "./MyConnection";
 import ConnectionDetails from "./MyConnection/ConnectionDetails";
 import consumptionDetails from "./MyConnection/ConsumptionDetails";
 
-
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();

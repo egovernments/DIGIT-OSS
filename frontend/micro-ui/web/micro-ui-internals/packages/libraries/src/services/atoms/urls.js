@@ -135,6 +135,8 @@ const Urls = {
   },
 
   ws: {
+    water_create: "/ws-services/wc/_create",
+    sewarage_create: "/sw-services/swc/_create",
     water_search: "/ws-services/wc/_search",
     sewarage_search: "/sw-services/swc/_search",
     water_update: "/ws-services/wc/_update",
