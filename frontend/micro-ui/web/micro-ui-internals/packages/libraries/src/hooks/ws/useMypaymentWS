@@ -1,0 +1,29 @@
+import { useQuery, useQueryClient } from "react-query";
+
+export const useMypaymentWS = ({ tenantId, filters, auth,searchedFrom="" }, config = {}) => {
+  const client = useQueryClient();
+
+  const args = tenantId ? { tenantId, filters, auth } : { filters, auth };
+
+  const defaultSelect = (data,Swdata) => {
+    
+    return data,Swdata;
+  };
+
+  const { isLoading, error, data, isSuccess } = useQuery(["WSSearchList", tenantId, filters, auth], () => Digit.WSService.paymentsearch(args), {
+    select: defaultSelect,
+    ...config,
+  });
+ console.log(data,"dfgfhfgh")
+  const { isSwLoading, Swerror, Swdata, isSwSuccess } = useQuery(["WSSearchList", tenantId, filters, auth], () => Digit.WSService.sw_paymentsearch(args), {
+    select: defaultSelect,
+    ...config,
+  });
+  console.log(Swdata,"Swdata")
+ 
+  return {isLoading,error, data, isSuccess, revalidate: () => client.invalidateQueries(["WSSearchList", tenantId, filters, auth]) };
+
+};
+
+
+export default useMypaymentWS

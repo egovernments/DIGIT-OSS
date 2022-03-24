@@ -42,4 +42,22 @@ export const WSService = {
       params: { tenantId, ...filters },
       auth: true,
     }),
+    paymentsearch: ({ tenantId, filters, auth }) =>
+    Request({
+      url: Urls.ws.ws_payment_search,
+      useCache: false,
+      method: "POST",
+      auth: auth === false ? auth : true,
+      userService: auth === false ? auth : true,
+      params: { tenantId, ...filters },
+    }),
+    sw_paymentsearch: ({ tenantId, filters, auth }) =>
+    Request({
+      url: Urls.ws.sw_payment_search,
+      useCache: false,
+      method: "POST",
+      auth: auth === false ? auth : true,
+      userService: auth === false ? auth : true,
+      params: { tenantId, ...filters },
+    })
 };

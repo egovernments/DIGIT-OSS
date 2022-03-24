@@ -13,6 +13,7 @@ import WSAdditionalDetails from "./WSMyApplications/additionalDetails";
 import MyConnections from "./MyConnection";
 import ConnectionDetails from "./MyConnection/ConnectionDetails";
 import consumptionDetails from "./MyConnection/ConsumptionDetails";
+import WSMyPayments from "./MyPayment";
 
 
 const App = ({ path }) => {
@@ -27,6 +28,7 @@ const App = ({ path }) => {
         <Route path={`${path}/wns-my-bills`} component={WNSMyBillsComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} />
         <Route path={`${path}/test-acknowledgment`} component={TestAcknowledgment} />
+        <PrivateRoute path={`${path}/mypayment`} component={WSMyPayments} />
         <PrivateRoute path={`${path}/my-application`} component={WSMyApplications} />
         <PrivateRoute path={`${path}/my-connection`} component={MyConnections} />
         <PrivateRoute path={`${path}/connection/application/:acknowledgementIds`} component={WSApplicationDetails} />

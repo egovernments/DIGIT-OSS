@@ -5,7 +5,18 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
     }
     return str;
   };
-
+  export const convertEpochToDate = (dateEpoch) => {
+    if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
+      return "NA";
+    }
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${day}/${month}/${year}`;
+  };
   export const pdfDownloadLink = (documents = {}, fileStoreId = "", format = "") => {
     /* Need to enhance this util to return required format*/
   

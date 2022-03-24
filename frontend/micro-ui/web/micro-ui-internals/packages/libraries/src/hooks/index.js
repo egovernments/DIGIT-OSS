@@ -186,6 +186,7 @@ import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions";
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
 import useAccessControl from "./useAccessControl";
+import useMypaymentWS from "./ws/useMypaymentWS";
 
 const pgr = {
   useComplaintDetails,
@@ -375,6 +376,7 @@ const ws = {
   useWSDetailsPage,
   useWSApplicationActions,
   useWSConsumptionSearch,
+  useMypaymentWS,
 };
 
 const Hooks = {

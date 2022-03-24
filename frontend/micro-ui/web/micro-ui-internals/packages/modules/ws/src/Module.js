@@ -23,7 +23,7 @@ import WSPropertyDetails from "./pageComponents/WSPropertyDetails";
 import WSConnectionHolderDetails from "./pageComponents/WSConnectionHolderDetails";
 import MyConnections from "./pages/citizen/MyConnection";
 import ConnectionDetails from "./pages/citizen/MyConnection/ConnectionDetails";
-
+import WSPayments from "./pages/citizen/MyPayment/WSPayment";
 const WSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "ws";
   const { path, url } = useRouteMatch();
@@ -72,6 +72,10 @@ const WSLinks = ({ matchPath, userType }) => {
       i18nKey: t("ACTION_TEXT_WS_SEARCH_AND_PAY"),
     },
     {
+      link: `${matchPath}/mypayment`,
+      i18nKey: t("My Payments"),
+    },
+    {
       link: `${matchPath}/my-application`,
       i18nKey: t("ACTION_TEXT_WS_MY_APPLICATION"),
     },
@@ -105,6 +109,7 @@ const componentsToRegister = {
   WSConnectionHolderDetails,
   MyConnections,
   ConnectionDetails,
+  WSPayments
 };
 
 export const initWSComponents = () => {
