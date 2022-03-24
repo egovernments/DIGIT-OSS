@@ -183,9 +183,9 @@ const ApplicationDetails = (props) => {
       const caption = {
         date: checkpoint?.auditDetails?.created,
         name: checkpoint?.assigner,
-        mobileNumber: checkpoint?.assigner?.mobileNumber,
-        comment: `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`
+        mobileNumber: checkpoint?.assigner?.mobileNumber
       };
+      if (checkpoint?.numberOfTrips) caption.comment= `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`
       return <TLCaption data={caption} />;
     }
   };
