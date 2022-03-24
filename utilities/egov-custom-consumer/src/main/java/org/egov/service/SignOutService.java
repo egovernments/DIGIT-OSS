@@ -49,9 +49,12 @@ public class SignOutService {
 		reqInfoWrapper.setRequestInfo(requestInfo);
 		log.info("Call signout API");
 		log.info(reqInfoWrapper.toString());
-		if (Boolean.TRUE.equals(redisTemplate.hasKey(accessToken))) {
+		String authStr = "auth:" + accessToken;
+		if (Boolean.TRUE.equals(redisTemplate.hasKey(authStr))) {
 			log.info("Reading session from Redis");
-            Object sessionIdFromRedis = redisTemplate.opsForValue().get(accessToken);
+            Object sessionIdFromRedis = redisTemplate.opsForValue().get(authStr);
+            if(sessionIdFromRedis != null)
+            	log.info(sessionIdFromRedis.toString());
             ObjectMapper oMapper = new ObjectMapper();
             Map<String, String> map = oMapper.convertValue(sessionIdFromRedis, Map.class);
             log.info(map.toString());
