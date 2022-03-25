@@ -113,7 +113,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   }]
 
   const stateId = Digit.ULBService.getStateId();
-  const isEdit = window.location.href.includes("/edit-application/")
+  const isEdit = window.location.href.includes("/edit-application/") || window.location.href.includes("/renew-trade/")
 
   const {data: Menu} = Digit.Hooks.tl.useTLGenderMDMS(stateId, "common-masters", "GenderType");
   if(isEdit) keyToSearchOwnershipSubtype = keyToSearchOwnershipSubtype.split(".")[0];
