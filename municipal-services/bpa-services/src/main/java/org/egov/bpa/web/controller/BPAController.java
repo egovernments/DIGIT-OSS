@@ -7,10 +7,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
 import org.egov.bpa.service.BPAService;
 import org.egov.bpa.util.BPAConstants;
 import org.egov.bpa.util.BPAErrorConstants;
 import org.egov.bpa.util.BPAUtil;
+import org.egov.bpa.util.NotificationUtil;
 import org.egov.bpa.util.ResponseInfoFactory;
 import org.egov.bpa.web.model.BPA;
 import org.egov.bpa.web.model.BPARequest;
@@ -30,8 +32,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/v1/bpa")
+@Slf4j
 public class BPAController {
 
 	@Autowired
@@ -70,6 +75,10 @@ public class BPAController {
 	@PostMapping(value = "/_search")
 	public ResponseEntity<BPAResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute BPASearchCriteria criteria) {
+		log.debug("criteria:: " + criteria.toString());
+		log.debug("requestInfoWrapper:: " + requestInfoWrapper.toString());
+		
+	
 
 		List<BPA> bpas = bpaService.search(criteria, requestInfoWrapper.getRequestInfo());
 		int count = bpaService.getBPACount(criteria, requestInfoWrapper.getRequestInfo());

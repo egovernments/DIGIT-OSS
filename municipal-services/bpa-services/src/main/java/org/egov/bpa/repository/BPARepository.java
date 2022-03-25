@@ -19,7 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
+@Slf4j
 public class BPARepository {
 
 	@Autowired
@@ -107,6 +110,8 @@ public class BPARepository {
         public int getBPACount(BPASearchCriteria criteria, List<String> edcrNos) {
                 List<Object> preparedStmtList = new ArrayList<>();
                 String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos);
+                log.debug("query issue statement" +preparedStmtList.toString());
+                log.debug("query issue" +edcrNos);
                 int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
                 return count;
         }
