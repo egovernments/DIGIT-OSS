@@ -1,7 +1,6 @@
 package org.egov.service;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.egov.models.RequestInfo;
 import org.egov.models.RequestInfoWrapper;
@@ -50,6 +49,15 @@ public class SignOutService {
 		log.info("Call signout API");
 		log.info(reqInfoWrapper.toString());
 		String authStr = "auth:" + accessToken;
+
+		Set<String> redisKeys = redisTemplate.keys("*");
+// Store the keys in a List
+		Iterator<String> it = redisKeys.iterator();
+		while (it.hasNext()) {
+			String data = it.next();
+			log.info("Keys in redis: "+data);
+		}
+
 		if (Boolean.TRUE.equals(redisTemplate.hasKey(authStr))) {
 			log.info("Reading session from Redis");
             Object sessionIdFromRedis = redisTemplate.opsForValue().get(authStr);
