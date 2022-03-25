@@ -49,21 +49,25 @@ public class SignOutService {
 		reqInfoWrapper.setRequestInfo(requestInfo);
 		log.info("Call signout API");
 		log.info(reqInfoWrapper.toString());
-		String authStr = "auth:" + accessToken;
-		if (Boolean.TRUE.equals(redisTemplate.hasKey(authStr))) {
-			log.info("Reading session from Redis");
-            Object sessionIdFromRedis = redisTemplate.opsForValue().get(authStr);
-            if(sessionIdFromRedis != null)
-            	log.info(sessionIdFromRedis.toString());
-            ObjectMapper oMapper = new ObjectMapper();
-            Map<String, String> map = oMapper.convertValue(sessionIdFromRedis, Map.class);
-            log.info(map.toString());
-            for(Map.Entry<String, String> entries : map.entrySet()) {
-            	log.info("Redis-->Auth Token--->>> Keys::"+entries.getKey()+"::Values"+entries.getValue());
-            	redisTemplate.delete(entries.getKey());
-            }
-            redisTemplate.delete(accessToken);
-        }
+		String authStr = "auth_test:" + accessToken;
+		log.info("Save to redis*********");
+		redisTemplate.opsForHash().putIfAbsent(authStr, "auth_test", accessToken);
+		log.info("Fetch from redis*********");
+		Object sessionIdFromRedi = redisTemplate.opsForHash().get(authStr, "auth_test");
+		log.info("sessionIdFromRedi---->>>"+ sessionIdFromRedi);
+		/*
+		 * if (Boolean.TRUE.equals(redisTemplate.hasKey(authStr))) {
+		 * log.info("Reading session from Redis"); Object sessionIdFromRedis =
+		 * redisTemplate.opsForValue().get(authStr); if(sessionIdFromRedis != null)
+		 * log.info(sessionIdFromRedis.toString()); ObjectMapper oMapper = new
+		 * ObjectMapper(); Map<String, String> map =
+		 * oMapper.convertValue(sessionIdFromRedis, Map.class);
+		 * log.info(map.toString()); for(Map.Entry<String, String> entries :
+		 * map.entrySet()) {
+		 * log.info("Redis-->Auth Token--->>> Keys::"+entries.getKey()+"::Values"+
+		 * entries.getValue()); redisTemplate.delete(entries.getKey()); }
+		 * redisTemplate.delete(accessToken); }
+		 */
 		
 		response = restTemplate.postForEntity(coexistencehost + coexistencelogoutUri, reqInfoWrapper, ResponseEntity.class);
 		log.info("SignOutService response :" + response.getStatusCode());
