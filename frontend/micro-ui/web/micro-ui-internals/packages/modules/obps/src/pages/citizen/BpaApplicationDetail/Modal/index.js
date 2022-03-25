@@ -109,7 +109,7 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action, applicat
       //style={{height: "auto", padding: "10px"}}
       isOBPSFlow={true}
       popupStyles={mobileView?{width:"720px"}:{}}
-      style={!mobileView?{height: "45px", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{height:"45px",width:"160px"}}
+      style={!mobileView?{minHeight: "45px", height: "auto", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{minHeight: "45px", height: "auto",width:"160px"}}
       hideSubmit={config?.label?.hideSubmit ? true : false}
       popupModuleMianStyles={action == "TERMS_AND_CONDITIONS" ? {height : "92%", boxSizing: "border-box"}: mobileView?{paddingLeft:"0px"}: {}}
       headerBarMainStyle={action == "TERMS_AND_CONDITIONS" ? {margin: "0px", height: "35px"}: {}}
