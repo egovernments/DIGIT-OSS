@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useHistory } from "react-router-dom";
 import * as func from "../../../utils";
-import _, { clone } from "lodash";
+import _ from "lodash";
 import { newConfig as newConfigLocal } from "../../../config/wsCreateConfig";
 import {
   createPayloadOfWS,
@@ -22,11 +22,30 @@ const NewApplication = () => {
   const [appDetails, setAppDetails] = useState({});
   const [waterAndSewerageBoth, setWaterAndSewerageBoth] = useState(null);
   const [config, setConfig] = useState({ head: "", body: [] });
+  let tenantId = Digit.ULBService.getCurrentTenantId();
+  tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
+
+  const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_WS_NEW_FORM", {});
+
+  const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
+    { filters: { propertyIds: propertyId }, tenantId: tenantId },
+    { filters: { propertyIds: propertyId }, tenantId: tenantId },
+    { enabled: propertyId ? true : false }
+  );
 
   useEffect(() => {
     const config = newConfigLocal.find((conf) => conf.hideInCitizen);
     setConfig(config);
   });
+
+  useEffect(() => {
+    !propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
+  }, [sessionFormData?.cpt]);
+
+  useEffect(() => {
+    setSessionFormData({ ...sessionFormData, cpt: {details: propertyDetails?.Properties?.[0]} });
+  }, [propertyDetails])
 
   const {
     isLoading: creatingWaterApplicationLoading,
@@ -61,6 +80,10 @@ const NewApplication = () => {
   } = Digit.Hooks.ws.useWSApplicationActions("SEWERAGE");
 
   const onFormValueChange = (setValue, formData, formState) => {
+    if (!_.isEqual(sessionFormData, formData)) {
+      setSessionFormData({ ...sessionFormData, ...formData });
+    }
+
     if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0 && !formData?.cpt?.details?.propertyId) setSubmitValve(true);
     else setSubmitValve(!(Object.keys(formState.errors).length));
   };
@@ -108,11 +131,15 @@ const NewApplication = () => {
               onSuccess: (data, variables) => {
                 setAppDetails({ ...appDetails, waterConnection: data?.WaterConnection?.[0] });
                 sessionStorage.setItem("waterConnectionDetails", JSON.stringify(data?.WaterConnection?.[0]));
-                if (JSON.parse(sessionStorage.getItem("setWaterAndSewerageBoth"))) {
+                if (sessionStorage.getItem("setWaterAndSewerageBoth") && JSON.parse(sessionStorage.getItem("setWaterAndSewerageBoth"))) {
                   const sewerageDetails = JSON.parse(sessionStorage.getItem("sewerageConnectionDetails"));
+                  clearSessionFormData();
                   window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}&applicationNumber1=${sewerageDetails?.applicationNo}`;
                 } else {
-                  if (waterLoader && !sewerageLoader) window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
+                  if (waterLoader && !sewerageLoader) {
+                    clearSessionFormData();
+                    window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
+                  }
                 }
               },
             })
@@ -142,11 +169,15 @@ const NewApplication = () => {
               onSuccess: (data, variables) => {
                 setAppDetails({ ...appDetails, sewerageConnection: data?.SewerageConnections?.[0] });
                 sessionStorage.setItem("sewerageConnectionDetails", JSON.stringify(data?.SewerageConnections?.[0]));
-                if (JSON.parse(sessionStorage.getItem("setWaterAndSewerageBoth"))) {
+                if (sessionStorage.getItem("setWaterAndSewerageBoth") && JSON.parse(sessionStorage.getItem("setWaterAndSewerageBoth"))) {
                   const waterDetails = JSON.parse(sessionStorage.getItem("waterConnectionDetails"));
+                  clearSessionFormData();
                   window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${waterDetails?.applicationNo}&applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
                 } else {
-                  if (sewerageLoader && !waterLoader) window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
+                  if (sewerageLoader && !waterLoader) {
+                    clearSessionFormData();
+                    window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
+                  }
                 }
               },
             });
@@ -181,6 +212,7 @@ const NewApplication = () => {
         isDisabled={!canSubmit}
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
+        defaultValues={sessionFormData}
       ></FormComposer>
       {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />}
     </React.Fragment>

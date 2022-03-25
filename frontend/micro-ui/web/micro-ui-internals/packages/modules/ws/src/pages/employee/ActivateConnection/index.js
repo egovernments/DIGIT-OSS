@@ -96,8 +96,6 @@ const ActivateConnection = () => {
     const onFormValueChange = (setValue, formData, formState) => {
         if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0) setSubmitValve(true);
         else setSubmitValve(!(Object.keys(formState.errors).length));
-
-        console.log(formState.errors, "formState.errorsformState.errors")
     };
 
     const getConvertedDate = (dateOfTime) => {

@@ -18,8 +18,6 @@ const WSResponse = (props) => {
   const { isLoading: waterLoading, isError: waterError, data: waterApplicationDetails } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, filters?.applicationNumber, "WATER", { enabled: filters?.applicationNumber ? true : false });
   const { isLoading: sewerageLoading, isError: sewerageError, data: sewerageApplicationDetails } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, filters?.applicationNumber1, "SEWERAGE", { enabled: filters?.applicationNumber1 ? true : false });
 
-  console.log(waterApplicationDetails, sewerageApplicationDetails, "dkaoiasdiadshoihsd")
-
   useEffect(async () => {
     setWaterApplicationData(waterApplicationDetails);
     setSewerageApplicationData(sewerageApplicationDetails);

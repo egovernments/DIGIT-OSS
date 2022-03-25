@@ -8,6 +8,7 @@ const WSCard = () => {
   }
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
 
   const propsForModuleCard = {
     Icon: <PTIcon />,
@@ -30,7 +31,7 @@ const WSCard = () => {
       },
       {
         label: t("WS_NEW_APP"),
-        link: `/digit-ui/employee/ws/search-application`
+        link: `/digit-ui/employee/ws/create-application`
       },
 
     ]
