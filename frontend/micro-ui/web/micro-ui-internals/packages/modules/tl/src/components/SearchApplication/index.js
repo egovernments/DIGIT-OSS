@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form";
-import { SearchForm, Table, Card } from "@egovernments/digit-ui-react-components";
+import { SearchForm, Table, Card, Header } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from  "../../utils";
 import SearchFields from "./SearchFields";
@@ -106,6 +106,7 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
       ]), [] )
 
     return <React.Fragment>
+                <Header>{t("TL_SEARCH_APPLICATIONS")}</Header>
                 <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
                   <SearchFields {...{register, control, reset, tenantId, t}} />
                 </SearchForm>
@@ -120,7 +121,7 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
                     ))
                 }
             </Card>
-            : <Table
+            : data !== "" && <Table
                 t={t}
                 data={data}
                 totalRecords={count}

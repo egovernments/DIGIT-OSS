@@ -44,7 +44,7 @@ export const TLSearch = {
   applicationDetails: async (t, tenantId, applicationNumber, userType) => {
     const filter = { applicationNumber };
     const response = await TLSearch.application(tenantId, filter);
-    const propertyDetails = await Digit.PTService.search({tenantId, filters: {propertyIds:response?.tradeLicenseDetail?.additionalDetail?.propertyId}});
+    const propertyDetails =response?.tradeLicenseDetail?.additionalDetail?.propertyId && await Digit.PTService.search({tenantId, filters: {propertyIds:response?.tradeLicenseDetail?.additionalDetail?.propertyId}});
     let numOfApplications = [];
     if(response?.licenseNumber) {
       const licenseNumbers = response?.licenseNumber;

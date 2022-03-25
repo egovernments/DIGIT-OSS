@@ -36,6 +36,8 @@ module.exports = function (app) {
     "/echallan-services",
     "/egov-searcher/bill-genie/mcollectbills/_get",
     "/egov-searcher/bill-genie/billswithaddranduser/_get",
+    "/egov-searcher/bill-genie/waterbills/_get",
+    "/egov-searcher/bill-genie/seweragebills/_get",
     "/egov-pdf/download/UC/mcollect-challan",
     "/egov-hrms/employees/_count",
     "/tl-services/v1/_create",
@@ -54,6 +56,7 @@ module.exports = function (app) {
     "/ws-services",
     "/sw-services",
     "/ws-calculator",
+    "/egov-searcher",
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
 };

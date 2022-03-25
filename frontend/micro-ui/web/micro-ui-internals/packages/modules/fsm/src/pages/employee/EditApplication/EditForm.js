@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
@@ -34,7 +34,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       amountPerTrip: applicationData.additionalDetails.tripAmount,
       amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || undefined,
       vehicleType: vehicleMenu
-        .filter((vehicle) => vehicle?.code === applicationData?.vehicleType)
+        .filter((vehicle) => vehicle?.capacity === applicationData?.vehicleCapacity)
         .map((vehicle) => ({ ...vehicle, label: applicationData?.vehicleCapacity }))[0],
       vehicleCapacity: applicationData?.vehicleCapacity,
     },

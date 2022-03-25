@@ -6,17 +6,14 @@ import { stringReplaceAll } from "../utils";
 
 const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBlur}) => {
   let validation = {};
-
-  let allCities = Digit.Hooks.pt.useTenants();
+  let allCities = Digit.Hooks.pt.useTenants()?Digit.Hooks.pt.useTenants():Digit.Hooks.tl.useTenants();
   // if called from tl module get tenants from tl usetenants
-  allCities = allCities ? allCities : Digit.Hooks.tl.useTenants();
   const userInfo = Digit.UserService.getUser()?.info;
+  userType=userInfo?.type=="EMPLOYEE"?"employee":"citizen";
   const cityId = userInfo?.tenantId;
   const cityName = 'TENANT_TENANTS_' + userInfo?.tenantId.replace('.','_').toUpperCase();
 
-  const getUserType = () => Digit.UserService.getType();
-  const cityObj = getUserType === 'employee' ? {code: cityId, name: t(cityName), i18nKey: cityName} : Digit.SessionStorage.get('CITIZEN.COMMON.HOME.CITY');
-
+  const cityObj = userType === 'employee' ? {code: cityId, name: t(cityName), i18nKey: cityName} : null;
   const [cityCode, setCityCode] = useState(cityObj);
   const [locality, setLocality] = useState(formData?.locality);
   const [houseDoorNo, setHouseDoorNo] = useState(formData.houseDoorNo);
@@ -26,7 +23,9 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBl
   let index = 0;
   let locationDet = formData.locationDet;
   const locationDetStep = { ...locationDet, cityCode, locality, houseDoorNo, buildingColonyName, landmarkName };
-
+  useEffect(() => {
+    setCityCode(cityObj);
+  }, [cityObj]);
   useEffect(() => {
     setCity(cityObj);
   }, []);
@@ -55,7 +54,6 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBl
     setLandmarkName(e.target.value)
     onSelect(config.key, { ...formData[config.key], ...locationDetStep, landmarkName: e.target.value }, false, index);
   }
-
   return (
     <div>
       <LabelFieldPair>
@@ -63,7 +61,7 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBl
         <Dropdown
           className="form-field"
           selected={cityCode}
-          // disable={true}
+          disable={userType==="employee"}
           option={allCities}
           select={setCity}
           optionKey="code"

@@ -118,7 +118,7 @@ export const WorkflowService = {
 
       if (processInstances.length > 0) {
         const TLEnrichedWithWorflowData = await makeCommentsSubsidariesOfPreviousActions(processInstances)
-        const timeline = TLEnrichedWithWorflowData.map((instance, ind) => {
+        let timeline = TLEnrichedWithWorflowData.map((instance, ind) => {
           let checkPoint = {
             performedAction: instance.action,
             status: instance.state.applicationStatus,
@@ -152,12 +152,15 @@ export const WorkflowService = {
               const numberOfTrips = tripSearchResp.vehicleTrip.length
               let cretaedTime = 0
               let lastModifiedTime = 0
+              let waitingForDisposedCount = 0
+              let disposedCount = 0
               let waitingForDisposedAction = []
               let disposedAction = []
               for (const data of tripSearchResp.vehicleTrip) {
                 const resp = await Digit.WorkflowService.getByBusinessId(tenantId, data.applicationNo)
                 resp?.ProcessInstances?.map((instance, ind) => {
                   if (instance.state.applicationStatus === "WAITING_FOR_DISPOSAL") {
+                    waitingForDisposedCount++
                     cretaedTime = Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime)
                     lastModifiedTime = Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime)
                     waitingForDisposedAction = [{
@@ -177,6 +180,7 @@ export const WorkflowService = {
                     }]
                   }
                   if (instance.state.applicationStatus === "DISPOSED") {
+                    disposedCount++
                     cretaedTime = instance.auditDetails.createdTime > cretaedTime ? Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime) : cretaedTime
                     lastModifiedTime = instance.auditDetails.lastModifiedTime > lastModifiedTime ? Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime) : lastModifiedTime
                     disposedAction = [{
@@ -192,12 +196,21 @@ export const WorkflowService = {
                         created: cretaedTime,
                         lastModified: lastModifiedTime,
                       },
-                      numberOfTrips: numberOfTrips
+                      numberOfTrips: disposedCount
                     }]
                   }
                 })
               }
-              let tripTimeline = disposedAction.concat(waitingForDisposedAction)
+
+              let tripTimeline = []
+              const disposalInProgressPosition = timeline.findIndex((data) => data.status === "DISPOSAL_IN_PROGRESS")
+              if (disposalInProgressPosition !== -1) {
+                timeline[disposalInProgressPosition].numberOfTrips = numberOfTrips
+                timeline.splice(disposalInProgressPosition + 1, 0, ...waitingForDisposedAction)
+                tripTimeline = disposedAction
+              } else {
+                tripTimeline = disposedAction.concat(waitingForDisposedAction)
+              }
               const feedbackPosition = timeline.findIndex((data) => data.status === "CITIZEN_FEEDBACK_PENDING")
               if (feedbackPosition !== -1) {
                 timeline.splice(feedbackPosition + 1, 0, ...tripTimeline)

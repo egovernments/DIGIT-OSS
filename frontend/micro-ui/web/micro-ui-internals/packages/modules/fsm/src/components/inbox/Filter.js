@@ -97,7 +97,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
             </div>
           ) : null}
           <div>
-            {isRoleStatusFetched && mergedRoleDetails ? (
+            {isRoleStatusFetched && mergedRoleDetails && props?.applications?.statuses ? (
               <Status onAssignmentChange={onStatusChange} fsmfilters={searchParams} mergedRoleDetails={mergedRoleDetails} statusMap={props?.applications?.statuses} />
             ) : (
               <Loader />

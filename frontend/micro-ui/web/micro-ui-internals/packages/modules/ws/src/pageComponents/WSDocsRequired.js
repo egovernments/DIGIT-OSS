@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Card, CardHeader, SubmitBar, CitizenInfoLabel, CardText, Loader, CardSubHeader, BackButton, BreadCrumb, Header, CardLabel, CardSectionHeader, CardCaption } from "@egovernments/digit-ui-react-components";
+import { Card, CardHeader, SubmitBar, CitizenInfoLabel, CardText, Loader, CardSubHeader, BackButton, BreadCrumb, Header, CardLabel, CardSectionHeader, CardCaption, ActionBar } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
@@ -49,27 +49,34 @@ const WSDocsRequired = ({ onSelect, userType, onSkip, config }) => {
   }
 
   return (
-    <div style={{margin: "16px"}}>
-      <Header>{t("WS_DOCS_REQ_WS_NEW_CONN_HEAD")}</Header>
-      <Card>
+    <div style={{ margin: "16px" }}>
+      <Header styles={{fontSize: "32px", marginLeft: "18px"}}>{t("WS_WATER_AND_SEWERAGE_NEW_CONNECTION_LABEL")}</Header>
+      <Card >
         {wsDocsLoading ?
           <Loader /> :
           <Fragment>
             {wsDocs?.Documents?.map((doc, index) => (
               <div key={index} style={{ marginTop: "16px" }}>
-                <CardSectionHeader>{t(doc?.code.replace('.', '_'))}</CardSectionHeader>
-                {doc.dropdownData && doc.dropdownData.length > 1 && <p style={{ lineHeight: "32px" }}>{t("WS_DOCS_REQ_MULT_DOCS_DESC")}</p>}
-                <div style={{ margin: "16px 0" }}>
+                <CardSectionHeader style={{ marginBottom: "16px", lineHeight: "28px", fontSize: "24px" }}>{t(doc?.code.replace('.', '_'))}</CardSectionHeader>
+                {doc.dropdownData && doc.dropdownData.length > 1 && <p style={{ lineHeight: "24px", fontSize: "16px" }}>{t(`${doc?.code.replace('.', '_')}_DESCRIPTION`)}</p>}
+                <div style={{ margin: "16px 0", lineHeight: "18px", fontSize: "16px" }}>
                   {doc?.dropdownData?.map((value, idx) => <p style={{ fontWeight: "bold", lineHeight: "32px" }}>{`${idx + 1}. ${t(value?.i18nKey)}`}</p>)}
                 </div>
-                <p>{t(doc.code.toLowerCase().includes("owner") ? "WS_DOCS_REQ_MULT_APPLICANTS_DESC" : "WS_DOCS_REQ_MULT_REG_DESC")}</p>
+                <p style={{fontSize: "16px"}}>{t(`${doc?.code.replace('.', '_')}_BELOW_DESCRIPTION`)}</p>
               </div>
             ))}
           </Fragment>
         }
-        <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={() => {
-          history.push(match.path.replace("create-application", "new-application"));
-        }} />
+        <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
+          {
+            <SubmitBar
+              label={t("ACTION_TEST_APPLY")}
+              onSubmit={() => {
+                history.push(match.path.replace("create-application", "new-application"));
+              }}
+              style={{ margin: "10px 10px 0px 0px" }}
+            />}
+        </ActionBar>
       </Card>
     </div>
   )

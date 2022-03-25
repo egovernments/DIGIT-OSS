@@ -5,19 +5,19 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import { newConfig } from "../../config/Create/config";
 import _, { create, unset } from "lodash";
 
-const CreatePropertyForm = ({ onSelect, userType, redirectUrl }) => {
+const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const tenants = Digit.Hooks.pt.useTenants();
   const { t } = useTranslation();
   const [canSubmit, setCanSubmit] = useState(false);
-  const defaultValues = { };
+  const defaultValues = { ...value};
   const history = useHistory();
   const match = useRouteMatch();
 
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   
-  const [formValue, setFormValue] = useState();
-  const [cityCode, setCityCode] = useState();
+  const [formValue, setFormValue] = useState("");
+  const [cityCode, setCityCode] = useState("");
   
   // delete
   // const [_formData, setFormData,_clear] = Digit.Hooks.useSessionStorage("store-data",null);
@@ -87,6 +87,7 @@ const CreatePropertyForm = ({ onSelect, userType, redirectUrl }) => {
       headingStyle={{ fontSize: "32px", marginBottom: "16px", fontFamily: "Roboto Condensed,sans-serif" }}
       // headingStyle={{ fontSize: "32px", marginBottom: "16px" }}
       isDisabled={!canSubmit}
+      defaultValues={defaultValues}
       onFormValueChange={onFormValueChange}
     />
   );

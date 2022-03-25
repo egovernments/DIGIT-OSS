@@ -11,11 +11,11 @@ const BillsCard = () => {
     links: [
       {
         label: "Inbox",
-        link: `/digit-ui/employee/bills/inbox/`,
+        link: `/digit-ui/employee/bills/inbox`,
       },
       {
         label: "Group Bills",
-        link: `/digit-ui/employee/bills/gb`,
+        link: `/digit-ui/employee/bills/group-bill`,
       },
     ],
   };

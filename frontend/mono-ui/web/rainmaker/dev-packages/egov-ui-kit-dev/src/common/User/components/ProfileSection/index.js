@@ -7,7 +7,7 @@ const addIconStyle = {
   background: "#00bbd3",
   position: "absolute",
   right: "-5%",
-  bottom: window.location.href.includes("/employee/user/profile") ? "32%" : "0px",//process.env.REACT_APP_NAME === "Citizen" ? "0px" : "32%",
+  bottom: window.location.href.includes("/employee") ? "32%" : "0px",//process.env.REACT_APP_NAME === "Citizen" ? "0px" : "32%",
   color: "rgb(255, 255, 255)",
   borderRadius: "50%",
   padding: "12px",

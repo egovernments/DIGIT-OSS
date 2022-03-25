@@ -180,9 +180,9 @@ const ConnectionDetails = (_props) => {
                 });
                 if (isErrorsFound) setIsErrors(true);
                 let ob = [{ ...formValue }];
-                let mcollectFormValue = JSON.parse(sessionStorage.getItem("mcollectFormData"));
-                mcollectFormValue = { ...mcollectFormValue, ...ob[0] }
-                sessionStorage.setItem("mcollectFormData", JSON.stringify(mcollectFormValue));
+                // let mcollectFormValue = JSON.parse(sessionStorage.getItem("mcollectFormData"));
+                // mcollectFormValue = { ...mcollectFormValue, ...ob[0] }
+                // sessionStorage.setItem("mcollectFormData", JSON.stringify(mcollectFormValue));
                 setConnectionDetails(ob);
                 trigger();
             }

@@ -11,13 +11,15 @@ import getChartOptions from "../../actions/getChartOptions";
 import { getLocaleLabels, getTenantId } from "../../utils/commons";
 import style from "./styles";
 import { get } from "lodash";
+import { Typography, Tooltip } from '@material-ui/core';
+
 
 const PROJECTION_CONFIG = { scale: 350, center: [78.9629, 22.5937] };
 
 // Red Variants
 const COLOR_RANGE = ["#54D140", "#298CFF", "#F47738", "#D1D1D1"];
 
-const STATUS = ["Live", "OnBoarded", "UnderImplementation", "None"];
+const STATUS = ["Live",  "UnderImplementation","OnBoarded", "None"];
 const DEFAULT_COLOR = "#D1D1D1";
 
 const getColor = (current) => {
@@ -157,6 +159,7 @@ class MapChart extends React.Component {
     }
   }
   render() {
+    const {classes}=this.props;
     const INDIA_TOPO_JSON =
       JSON.parse(sessionStorage.getItem("MAP_CONFIG")) || {};
     const data = get(INDIA_TOPO_JSON, "objects.india.geometries", [])?.map(
@@ -309,7 +312,9 @@ class MapChart extends React.Component {
                   style={{ background: getColor({ status: sta }) }}
                 ></span>
                 <span className="map-text">
-                  {getLocaleLabels(`DSS_${sta}`)}
+                <Tooltip title= {getLocaleLabels(`TIP_DSS_${sta}`)} placement="top">
+                                <Typography className={classes.subTitle} style={{fontSize:"12px"}}> {getLocaleLabels(`DSS_${sta}`)}</Typography>
+                            </Tooltip>
                 </span>
               </span>
             );

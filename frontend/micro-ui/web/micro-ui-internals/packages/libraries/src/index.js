@@ -45,6 +45,7 @@ import { EDCRService } from "./services/elements/EDCR";
 import { OBPSService } from "./services/elements/OBPS";
 import { NOCService } from "./services/elements/NOC";
 import AccessControlService from "./services/elements/Access";
+import BillServices from "./services/elements/Bill";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -98,6 +99,7 @@ const initLibraries = () => {
 
   setupLibraries("NOCService", NOCService);
   setupLibraries("AccessControlService", AccessControlService);
+  setupLibraries("BillServices", BillServices);
 
   return new Promise((resolve) => {
     initI18n(resolve);

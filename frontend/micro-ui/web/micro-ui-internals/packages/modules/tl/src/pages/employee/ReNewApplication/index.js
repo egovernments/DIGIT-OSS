@@ -8,14 +8,17 @@ import { newConfig as newConfigTL } from "../../../config/config";
 
 const ReNewApplication = (props) => {
   const applicationData = cloneDeep(props?.location?.state?.applicationData) || {};
-  const propertyId = useLocation()?.state?.applicationDetails
-                      .find((details)=>details.title === "PT_DETAILS").values
-                      .find((value)=> value.title === "TL_PROPERTY_ID").value;
-
+  const loc=useLocation();
+  const propertyId =new URLSearchParams(loc.search).get("propertyId")|| loc?.state?.applicationDetails
+                      .find((details)=>details?.title === "PT_DETAILS")?.values
+                      .find((value)=> value?.title === "TL_PROPERTY_ID")?.value;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
   let { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(tenantId?.split?.(".")?.[0], {});
+  const { 
+    data: propertyDetails
+  } = Digit.Hooks.pt.usePropertySearch({ filters: { propertyIds: propertyId }, tenantId: tenantId }, { filters: { propertyIds: propertyId  }, tenantId: tenantId });
 
   const history = useHistory();
   // delete
@@ -102,7 +105,7 @@ const ReNewApplication = (props) => {
 
   const ownershipCategory = {
     code: applicationData?.tradeLicenseDetail?.subOwnerShipCategory,
-    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(applicationData?.tradeLicenseDetail?.subOwnerShipCategory, ".", "_")}`,
+    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_INDIVIDUAL_${stringReplaceAll(applicationData?.tradeLicenseDetail?.subOwnerShipCategory, ".", "_").split("_")[1]}`,
   };
 
   if (applicationData?.tradeLicenseDetail?.owners?.length > 0) {
@@ -129,7 +132,10 @@ const ReNewApplication = (props) => {
         name:application?.tradeLicenseDetail?.institution?.name,
         altContactNumber:application?.tradeLicenseDetail?.institution?.contactNo,
         designation:application?.tradeLicenseDetail?.institution?.designation,
-        subOwnerShipCategory:ownershipCategory,
+        subOwnerShipCategory:{
+          code: applicationData?.tradeLicenseDetail?.subOwnerShipCategory,
+          i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(applicationData?.tradeLicenseDetail?.subOwnerShipCategory, ".", "_")}`,
+        },
       })
       return owner;
     }
@@ -167,6 +173,14 @@ const ReNewApplication = (props) => {
   };
 
   const onSubmit = (data) => {
+    if (!(data?.cpt?.details || propertyDetails)){
+      if(!data?.address){
+        setShowToast({ key: "error" });
+        setError("TL_PROPERTY_ID_REQUIRED");
+        return;
+      }
+    };
+
     let EDITRENEWAL = data?.tradedetils1?.checkForRenewal;
     let sendBackToCitizen = false;
     if (data?.tradedetils1?.action == "SENDBACKTOCITIZEN") {
@@ -251,7 +265,11 @@ const ReNewApplication = (props) => {
     if (data?.tradedetils1?.tradeLicenseDetail.address.street !== data?.address?.street) {
       EDITRENEWAL = true;
     }
-
+   if( new URLSearchParams(loc.search).get("propertyId") && new URLSearchParams(loc.search).get("propertyId")!== loc?.state?.applicationDetails
+    .find((details)=>details?.title === "PT_DETAILS")?.values
+    .find((value)=> value?.title === "TL_PROPERTY_ID")?.value){
+      EDITRENEWAL = true;
+    }
     let applicationDocuments = data?.documents?.documents || [];
     let commencementDate = convertDateToEpoch(data?.tradedetils?.["0"]?.commencementDate);
     let financialYear = data?.tradedetils?.["0"]?.financialYear?.code;
@@ -283,6 +301,15 @@ const ReNewApplication = (props) => {
       if (data?.owners?.length > 0) formData.tradeLicenseDetail.owners = data?.owners;
       if (structureType) formData.tradeLicenseDetail.structureType = structureType;
       if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
+      if (formData?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution = {
+        ...formData?.tradeLicenseDetail?.institution,
+        contactNo: data?.owners?.[0]?.altContactNumber,
+        designation: data?.owners?.[0]?.designation,
+        instituionName: data?.owners?.[0]?.instituionName,
+        name: data?.owners?.[0]?.name,
+        mobileNumber: data?.owners?.[0]?.mobileNumber,
+        emailId : data?.owners?.[0]?.emailId,
+      }
       /* use customiseCreateFormData hook to make some chnages to the licence object */
       formData = Digit?.Customizations?.TL?.customiseSendbackFormData ? Digit?.Customizations?.TL?.customiseSendbackFormData(data, formData) : formData;
       Digit.TLService.update({ Licenses: [formData] }, tenantId)
@@ -316,9 +343,35 @@ const ReNewApplication = (props) => {
       if (data?.tradeUnits?.length > 0) formData.tradeLicenseDetail.tradeUnits = data?.tradeUnits;
       if (data?.owners?.length > 0) formData.tradeLicenseDetail.owners = data?.owners;
       if (data?.address) formData.tradeLicenseDetail.address = data?.address;
+      if (data?.cpt?.details?.address||propertyDetails) {
+        let address = {};
+        let ptdet=data?.cpt?.details||propertyDetails;
+        address.city = ptdet?.address?.city || null;
+        address.locality = { code: ptdet?.address?.locality?.code || null };
+        if (ptdet?.address?.doorNo) address.doorNo = ptdet?.address?.doorNo || null;
+        if (ptdet?.address?.street) address.street = ptdet?.address?.street || null;
+        if (ptdet?.address?.pincode) address.pincode = ptdet?.address?.pincode;
+        formData.tradeLicenseDetail.address = address;
+      }
       if (structureType) formData.tradeLicenseDetail.structureType = structureType;
       if (subOwnerShipCategory) formData.tradeLicenseDetail.subOwnerShipCategory = subOwnerShipCategory;
       if (applicationDocuments) formData.tradeLicenseDetail.applicationDocuments = applicationDocuments;
+      if (data?.cpt || propertyDetails){
+        if(!formData?.tradeLicenseDetail?.additionalDetail?.propertyId){
+          formData.tradeLicenseDetail.additionalDetail={propertyId:null}
+        }
+        formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId||propertyDetails?.propertyId;
+      }
+      if (formData?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution = {
+        ...formData?.tradeLicenseDetail?.institution,
+        contactNo: data?.owners?.[0]?.altContactNumber,
+        designation: data?.owners?.[0]?.designation,
+        instituionName: data?.owners?.[0]?.instituionName,
+        name: data?.owners?.[0]?.name,
+        mobileNumber: data?.owners?.[0]?.mobileNumber,
+        emailId : data?.owners?.[0]?.emailId,
+      }
+
       /* use customiseCreateFormData hook to make some chnages to the licence object */
       formData = Digit?.Customizations?.TL?.customiseRenewalCreateFormData ? Digit?.Customizations?.TL?.customiseRenewalCreateFormData(data, formData) : formData;
       Digit.TLService.update({ Licenses: [formData] }, tenantId)

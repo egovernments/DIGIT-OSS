@@ -182,12 +182,19 @@ import useMyBillsWaterSearch from "./ws/useMyBillsWaterSearch";
 import useMyBillsSewarageSearch from "./ws/useMyBillsSewarageSearch";
 import useMyApplicationSearch from "./ws/useMyApplicationSearch";
 import useWSDocumentSearch from "./ws/useWSDocumentSearch";
+import useWSMDMSWS from "./ws/useWSMDMSWS"
+import WSuseSearch from "./ws/useSearch";
+import useSewSearch from "./ws/useSewSearch"
+import useSearchWS from "./ws/useSearchWS"
 import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions";
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
 import useWSMDMS from "./ws/useWSMDMS";
 import useAccessControl from "./useAccessControl";
 import useConnectionDetail from "./ws/useConnectionDetail";
+import useBillSearch from "./bills/useBillSearch";
+import useWaterCreateAPI from "./ws/useWaterCreateAPI";
+import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
 import useCreateBillAmendment from "./ws/useCreateBillAmendment";
 
 const pgr = {
@@ -375,13 +382,20 @@ const ws = {
   useMyBillsSewarageSearch,
   useMyApplicationSearch,
   useWSDocumentSearch,
+  useWSMDMSWS,
+  WSuseSearch,
+  useSewSearch,
+  useSearchWS,
   useWSDetailsPage,
   useWSApplicationActions,
   useWSConsumptionSearch,
   useConnectionDetail,
   useMDMS: useWSMDMS,
+  useWaterCreateAPI,
+  useSewerageCreateAPI,
   useCreateBillAmendment
 };
+
 
 
 const Hooks = {
@@ -414,6 +428,7 @@ const Hooks = {
   useTenants,
   useInbox: useTLInbox,
   useAccessControl,
+  useBillSearch,
   pgr,
   fsm,
   pt,

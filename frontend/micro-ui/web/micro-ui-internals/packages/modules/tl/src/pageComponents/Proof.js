@@ -9,7 +9,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
   const [file, setFile] = useState(formData?.owners?.documents?.OwnerPhotoProof);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
-  const acceptFormat = ".jpg,.png,.pdf,.jpeg"
+  let acceptFormat = ".jpg,.png,.pdf,.jpeg"
 
   const [dropdownValue, setDropdownValue] = useState(formData?.owners?.documents?.OwnerPhotoProof?.documentType || null);
   // let dropdownData = [];
@@ -52,10 +52,11 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
   }
 
   useEffect(() => {
+    acceptFormat = ".jpg,.png,.pdf,.jpeg"
     (async () => {
       setError(null);
       if (file) {
-        if(!(acceptFormat.split(",").includes(`.${file.type.split("/").pop()}`)))
+        if(!(acceptFormat?.split(",")?.includes(`.${file?.type?.split("/")?.pop()}`)))
         {
           setError(t("PT_UPLOAD_FORMAT_NOT_SUPPORTED"));
         }

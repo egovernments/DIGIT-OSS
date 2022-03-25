@@ -5,6 +5,7 @@ import { Loader, CitizenHomeCard, WSICon } from "@egovernments/digit-ui-react-co
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
 
+import Search from "./pages/employee/search";
 import WSServiceName from "./pageComponents/WSServiceName";
 import WSWaterConnectionDetails from "./pageComponents/WSWaterConnectionDetails";
 import WSDocsRequired from "./pageComponents/WSDocsRequired";
@@ -21,6 +22,9 @@ import WSPlumberDetails from "./pageComponents/WSPlumberDetails";
 import WSRoadCuttingDetails from "./pageComponents/WSRoadCuttingDetails";
 import WSPropertyDetails from "./pageComponents/WSPropertyDetails";
 import WSConnectionHolderDetails from "./pageComponents/WSConnectionHolderDetails";
+
+import SearchApplication from "./components/SearchApplication";
+import WSCard from './components/WSCard';
 import MyConnections from "./pages/citizen/MyConnection";
 import ConnectionDetails from "./pages/citizen/MyConnection/ConnectionDetails";
 
@@ -29,6 +33,7 @@ import WSActivationPlumberDetails from "./pageComponents/WSActivationPlumberDeta
 import WSActivationPageDetails from "./pageComponents/WSActivationPageDetails";
 import WSActivationCommentsDetails from "./pageComponents/WSActivationCommentsDetails";
 import WSActivationSupportingDocuments from "./pageComponents/WSActivationSupportingDocuments";
+import WSDocumentsEmployee from "./pageComponents/WSDocumentsEmployee";
 
 const WSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "ws";
@@ -41,6 +46,7 @@ const WSModule = ({ stateCode, userType, tenants }) => {
   });
 
   Digit.SessionStorage.set("WS_TENANTS", tenants);
+  Digit.SessionStorage.set("PT_TENANTS", tenants);
 
   if (isLoading) {
     return <Loader />;
@@ -109,14 +115,17 @@ const componentsToRegister = {
   WSRoadCuttingDetails,
   WSPropertyDetails,
   WSConnectionHolderDetails,
+  WSSearch:Search,
+  WSSearchApplication:SearchApplication,
   MyConnections,
   ConnectionDetails,
-  
   WSActivationConnectionDetails,
   WSActivationPlumberDetails,
   WSActivationPageDetails,
   WSActivationCommentsDetails,
-  WSActivationSupportingDocuments
+  WSActivationSupportingDocuments,
+  WSCard,
+  WSDocumentsEmployee
 };
 
 export const initWSComponents = () => {

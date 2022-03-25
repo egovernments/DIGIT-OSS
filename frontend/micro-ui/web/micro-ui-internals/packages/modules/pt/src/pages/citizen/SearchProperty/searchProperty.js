@@ -3,7 +3,7 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory ,Link } from "react-router-dom";
 
 const description = {
   description: "PT_SEARCH_OR_DESC",
@@ -425,7 +425,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   }
 
   return (
-    <div style={{ marginTop: "16px", marginBottom: "16px" }}>
+    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white"}}>
       <FormComposer
         onSubmit={onPropertySearch}
         noBoxShadow
@@ -436,7 +436,11 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
         text={t(propsConfig.texts.text)}
         headingStyle={{ fontSize: "32px", marginBottom: "16px", fontFamily: "Roboto Condensed,sans-serif" }}
         onFormValueChange={onFormValueChange}
+        cardStyle={{marginBottom:"0"}}
       ></FormComposer>
+      <span className="link" style={{display:"flex", justifyContent:"center",paddingBottom:"16px"}}>
+        <Link to={"/digit-ui/citizen/pt/property/new-application"}>{t("CPT_REG_NEW_PROPERTY")}</Link>
+      </span>
       {showToast && (
         <Toast
           error={showToast.error}

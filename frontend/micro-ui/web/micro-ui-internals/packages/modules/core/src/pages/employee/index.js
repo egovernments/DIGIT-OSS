@@ -38,7 +38,7 @@ const EmployeeApp = ({
     <div className="employee">
       <Switch>
         <Route path={`${path}/user`}>
-          <TopBarSideBar
+          {isUserProfile&&<TopBarSideBar
             t={t}
             stateInfo={stateInfo}
             userDetails={userDetails}
@@ -49,13 +49,13 @@ const EmployeeApp = ({
             logoUrl={logoUrl}
             showSidebar={isUserProfile ? true : false}
             showLanguageChange={!showLanguageChange}
-          />
+          />}
           <div
             className={isUserProfile ? "grounded-container" : "loginContainer"}
             style={
               isUserProfile
                 ? { padding: 0, paddingTop: "80px", marginLeft: mobileView ? "" : "64px" }
-                : { "--banner-url": `url(${stateInfo?.bannerUrl})` }
+                : { "--banner-url": `url(${stateInfo?.bannerUrl})` ,padding:"0px"}
             }
           >
             <Switch>
@@ -98,7 +98,7 @@ const EmployeeApp = ({
                 <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
               </ErrorBoundary>
             </div>
-            <div className="employee-home-footer">
+            <div className="employee-home-footer" >
               <img
                 alt="Powered by DIGIT"
                 src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER")}

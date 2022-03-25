@@ -132,15 +132,15 @@ export const gettradeownerarray = (data) => {
     data?.owners?.owners.map((newowner) => {
       if(oldowner.id === newowner.id)
       {
-        if((oldowner.name !== newowner.name) || (oldowner.gender !== newowner.gender.code) || (oldowner.mobileNumber !== newowner.mobilenumber) || (oldowner.permanentAddress !== data?.owners?.permanentAddress))
+        if((oldowner.name !== newowner.name) || (oldowner.gender !== newowner?.gender?.code) || (oldowner.mobileNumber !== newowner.mobilenumber) || (oldowner.permanentAddress !== data?.owners?.permanentAddress) || (oldowner.relationship !== newowner.relationship?.code) || (oldowner.fatherOrHusbandName !== newowner.fatherOrHusbandName))
         {
         if (oldowner.name !== newowner.name)
         {
           oldowner.name = newowner.name;
         }
-        if(oldowner.gender !== newowner.gender.code)
+        if(oldowner.gender !== newowner.gender?.code)
         {
-          oldowner.gender = newowner.gender.code;
+          oldowner.gender = newowner.gender?.code;
         }
         if(oldowner.mobileNumber !== newowner.mobilenumber)
         {
@@ -149,6 +149,14 @@ export const gettradeownerarray = (data) => {
         if(oldowner.permanentAddress !== data?.owners?.permanentAddress)
         {
           oldowner.permanentAddress = data?.owners?.permanentAddress;
+        }
+        if(oldowner.relationship !== newowner.relationship?.code)
+        {
+          oldowner.relationship = newowner.relationship?.code;
+        }
+        if(oldowner.fatherOrHusbandName !== newowner.fatherOrHusbandName)
+        {
+          oldowner.fatherOrHusbandName = newowner.fatherOrHusbandName;
         }
         let found = tradeownerarray.length > 0 ?tradeownerarray.some(el => el.id === oldowner.id):false;
           if(!found)tradeownerarray.push(oldowner);
@@ -174,8 +182,9 @@ export const gettradeownerarray = (data) => {
               fatherOrHusbandName: "",
               relationship: "",
               dob: null,
-              gender: ob.gender.code,
+              gender: ob?.gender?.code || null,
               permanentAddress: data?.owners?.permanentAddress,
+              ...(data?.ownershipCategory?.code.includes("INSTITUTIONAL")) && {uuid : data?.tradeLicenseDetail?.owners?.[0]?.uuid } ,
             });
     }
   })
@@ -545,7 +554,13 @@ export const convertToEditTrade = (data, fy = []) => {
           auditDetails: data.tradeLicenseDetail.auditDetails,
           channel: data.tradeLicenseDetail.channel,
           id: data.tradeLicenseDetail.id,
-          institution: data.tradeLicenseDetail.institution,
+          ...(data?.ownershipCategory?.code.includes("INSTITUTIONAL") && {institution: {
+            designation: data?.owners?.owners?.[0]?.designation,
+            ContactNo: data?.owners?.owners?.[0]?.altContactNumber,
+            mobileNumber: data?.owners?.owners?.[0]?.mobilenumber,
+            instituionName: data?.owners?.owners?.[0]?.institutionName,
+            name: data?.owners?.owners?.[0]?.name,
+           }}),
         },
         calculation: null,
         auditDetails: data?.auditDetails,
@@ -596,7 +611,13 @@ export const convertToResubmitTrade = (data) => {
           auditDetails: data.tradeLicenseDetail.auditDetails,
           channel: data.tradeLicenseDetail.channel,
           id: data.tradeLicenseDetail.id,
-          institution: data.tradeLicenseDetail.institution,
+          institution: {
+            designation: data?.owners?.owners?.[0]?.designation,
+            ContactNo: data?.owners?.owners?.[0]?.altContactNumber,
+            mobileNumber: data?.owners?.owners?.[0]?.mobilenumber,
+            instituionName: data?.owners?.owners?.[0]?.institutionName,
+            name: data?.owners?.owners?.[0]?.name,
+           },
         },
         calculation: null,
         auditDetails: data?.auditDetails,

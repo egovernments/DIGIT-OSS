@@ -1,3 +1,14 @@
+import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+
+export const printReciept = async (businessService, consumerCode) => {
+  await Digit.Utils.downloadReceipt(consumerCode, businessService, "consolidatedreceipt");
+};
+
+export const printBill = async (businessService, consumerCode) => {
+  await Digit.Utils.downloadBill(consumerCode, businessService, "consolidatedreceipt");
+};
+
 /* method to get date from epoch */
 export const convertEpochToDate = (dateEpoch) => {
   // Returning NA in else case because new Date(null) returns Current date from calender
@@ -13,6 +24,7 @@ export const convertEpochToDate = (dateEpoch) => {
     return "NA";
   }
 };
+
 export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   if (searcher == "") return str;
   while (str.includes(searcher)) {
@@ -53,4 +65,40 @@ export const getFinancialYears = (from, to) => {
     return `FY${fromDate.getYear() + 1900}-${toDate.getYear() - 100}`;
   }
   return `${fromDate.toLocaleDateString()}-${toDate.toLocaleDateString()}`;
+};
+
+export const getActionButton = (businessService, receiptNumber) => {
+  const { t } = useTranslation();
+  return (
+    <a
+      href="javascript:void(0)"
+      style={{
+        color: "#FE7A51",
+        cursor: "pointer",
+      }}
+      onClick={() => {
+        printReciept(businessService, receiptNumber);
+      }}
+    >
+      {" "}
+      {t(`${"ABG_DOWNLOAD_RECEIPT"}`)}{" "}
+    </a>
+  );
+};
+
+export const getBillNumber = (businessService, consumerCode, billNumber) => {
+  return (
+    <a
+      href="javascript:void(0)"
+      style={{
+        color: "#FE7A51",
+        cursor: "pointer",
+      }}
+      onClick={() => {
+        printBill(businessService, consumerCode);
+      }}
+    >
+      {billNumber}
+    </a>
+  );
 };

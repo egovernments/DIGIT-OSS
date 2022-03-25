@@ -2,13 +2,13 @@ import { useQuery } from "react-query";
 import { startOfMonth, endOfMonth, getTime } from "date-fns";
 import { DSSService } from "../../services/elements/DSS";
 
-const getRequest = (type, code, requestDate, filters) => ({
+const getRequest = (type, code, requestDate, filters, moduleLevel="") => ({
   aggregationRequestDto: {
     visualizationType: type.toUpperCase(),
     visualizationCode: code,
     queryType: "",
     filters: { ...filters },
-    moduleLevel: "",
+    moduleLevel: moduleLevel, 
     aggregationFactors: null,
     requestDate,
   },
@@ -29,10 +29,10 @@ const getRequest = (type, code, requestDate, filters) => ({
 
 
 const useGetChart = (args) => {
-  const { key, type, tenantId, requestDate, filters } = args;
+  const { key, type, tenantId, requestDate, filters, moduleLevel } = args;
   return useQuery([args], () =>
     DSSService.getCharts({
-      ...getRequest(type, key, requestDate, filters),
+      ...getRequest(type, key, requestDate, filters, moduleLevel),
       headers: {
         tenantId,
       },

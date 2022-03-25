@@ -32,7 +32,6 @@ import static org.egov.inbox.util.TLConstants.TL;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -163,10 +162,14 @@ public class InboxService {
         List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
         
          String moduleName = processCriteria.getModuleName();
-        if(ObjectUtils.isEmpty(processCriteria.getModuleName()) && !ObjectUtils.isEmpty(processCriteria.getBusinessService()) &&
-        		(processCriteria.getBusinessService().contains("FSM") || processCriteria.getBusinessService().contains("FSM_VEHICLE_TRIP"))){
-        	processCriteria.setModuleName(processCriteria.getBusinessService().get(0));
-        }
+			/*
+			 * SAN-920: Commenting out this code as Module name will now be passed for FSM
+			 * if(ObjectUtils.isEmpty(processCriteria.getModuleName()) &&
+			 * !ObjectUtils.isEmpty(processCriteria.getBusinessService()) &&
+			 * (processCriteria.getBusinessService().contains("FSM") ||
+			 * processCriteria.getBusinessService().contains("FSM_VEHICLE_TRIP"))){
+			 * processCriteria.setModuleName(processCriteria.getBusinessService().get(0)); }
+			 */
         List<HashMap<String, Object>> statusCountMap = workflowService.getProcessStatusCount(requestInfo, processCriteria);
         processCriteria.setModuleName(moduleName);
         processCriteria.setStatus(inputStatuses);
@@ -176,7 +179,7 @@ public class InboxService {
         InboxResponse response = new InboxResponse();
         JSONArray businessObjects = null;
         // Map<String,String> srvMap = (Map<String, String>) config.getServiceSearchMapping().get(businessServiceName.get(0));
-        Map<String, String> srvMap = fetchAppropriateServiceMap(businessServiceName);
+        Map<String, String> srvMap = fetchAppropriateServiceMap(businessServiceName,moduleName);
         if (CollectionUtils.isEmpty(businessServiceName)) {
             throw new CustomException(ErrorConstants.MODULE_SEARCH_INVLAID, "Bussiness Service is mandatory for module search");
         }
@@ -332,9 +335,9 @@ public class InboxService {
                 }
             }
 
-	//TODO as on now this does not seem to be required, hence commenting the code
-           /* if (!ObjectUtils.isEmpty(processCriteria.getBusinessService())
-                    && processCriteria.getBusinessService().get(0).equals(FSMConstants.FSM_MODULE)) {
+           //TODO as on now this does not seem to be required, hence commenting the code
+           /* if (!ObjectUtils.isEmpty(processCriteria.getModuleName())
+					&& processCriteria.getModuleName().equalsIgnoreCase(FSMConstants.FSM_MODULE)) {
 
                 totalCount = fsmInboxFilter.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo, dsoId);
             }*/
@@ -514,114 +517,83 @@ public class InboxService {
 
         }
         
-        log.info("businessServiceName.contains(FSM_MODULE) ::: " + businessServiceName.contains(FSM_MODULE));
+       // log.info("businessServiceName.contains(FSM_MODULE) ::: " + businessServiceName.contains(FSM_MODULE));
         
-		if (businessServiceName.contains(FSM_MODULE)) {
+		if (!ObjectUtils.isEmpty(processCriteria.getModuleName())
+				&& processCriteria.getModuleName().equalsIgnoreCase(FSMConstants.FSM_MODULE)) {
 
-			
 			List<String> applicationStatus = new ArrayList<>();
-			
 			applicationStatus.add(WAITING_FOR_DISPOSAL_STATE);
 			applicationStatus.add(DISPOSED_STATE);
-			
 			List<Map<String, Object>> vehicleResponse = fetchVehicleTripResponse(criteria, requestInfo,applicationStatus);
-
 			BusinessService businessService = workflowService.getBusinessService(criteria.getTenantId(), requestInfo,
 					FSM_VEHICLE_TRIP_MODULE);
-			
-			log.info("businessService :::: " + businessService);
+			//log.info("businessService :::: " + businessService);
 			populateStatusCountMap(statusCountMap, vehicleResponse, businessService);
 
-			for(HashMap<String, Object> vTripMap : statusCountMap) {
-				if((WAITING_FOR_DISPOSAL_STATE.equals(vTripMap.get(APPLICATIONSTATUS)) ||
-						DISPOSED_STATE.equals(vTripMap.get(APPLICATIONSTATUS))) && 
-						inputStatuses.contains(vTripMap.get(STATUSID)) ) {
-					totalCount+=((int)vTripMap.get(COUNT));
+			for (HashMap<String, Object> vTripMap : statusCountMap) {
+				if ((WAITING_FOR_DISPOSAL_STATE.equals(vTripMap.get(APPLICATIONSTATUS))
+						|| DISPOSED_STATE.equals(vTripMap.get(APPLICATIONSTATUS)))
+						&& inputStatuses.contains(vTripMap.get(STATUSID))) {
+					totalCount += ((int) vTripMap.get(COUNT));
 				}
 			}
-			
 			List<String> requiredApplications = new ArrayList<>();
-
 			inboxes.forEach(inbox -> {
 				ProcessInstance inboxProcessInstance = inbox.getProcessInstance();
 				if (null != inboxProcessInstance && null!= inboxProcessInstance.getState()) {
-					
 					String appStatus = inboxProcessInstance.getState().getApplicationStatus();
-
 					if (DSO_INPROGRESS_STATE.equals(appStatus) || CITIZEN_FEEDBACK_PENDING_STATE.equals(appStatus)
 							|| COMPLETED_STATE.equals(appStatus)) {
 						requiredApplications.add(inboxProcessInstance.getBusinessId());
 					}
 				}
 			});
-			
-			log.info("requiredApplications :::: " + requiredApplications);
+			//log.info("requiredApplications :::: " + requiredApplications);
 			
 			List<VehicleTripDetail> vehicleTripDetail = fetchVehicleStatusForApplication(requiredApplications,requestInfo,criteria.getTenantId());
-
-			log.info("vehicleTripDetail :::: " + vehicleTripDetail);			
+			//log.info("vehicleTripDetail :::: " + vehicleTripDetail);			
 			inboxes.forEach(inbox -> {
-				
 				if (null != inbox && null != inbox.getProcessInstance()
 						&& null != inbox.getProcessInstance().getBusinessId()) {
-
-
 					List<VehicleTripDetail> vehicleTripDetails = vehicleTripDetail.stream()
 							.filter(trip -> inbox.getProcessInstance().getBusinessId().equals(trip.getReferenceNo()))
 							.collect(Collectors.toList());
-
 					Map<String, Object> vehicleBusinessObject = inbox.getBusinessObject();
-
 					vehicleBusinessObject.put(VEHICLE_LOG, vehicleTripDetails);
 				}
 			});
-			
-			log.info("CollectionUtils.isEmpty(inboxes) :::: " + CollectionUtils.isEmpty(inboxes));
-
-			if (CollectionUtils.isEmpty(inboxes)) {
+			//log.info("CollectionUtils.isEmpty(inboxes) :::: " + CollectionUtils.isEmpty(inboxes));
+			if (CollectionUtils.isEmpty(inboxes) && totalCount>0 && !moduleSearchCriteria.containsKey("applicationNos")) {
 				inputStatuses = inputStatuses.stream().filter(x -> x != null).collect(Collectors.toList());
-
 				List<String> fsmApplicationList = fetchVehicleStateMap(inputStatuses, requestInfo, criteria.getTenantId(),criteria.getLimit(),criteria.getOffset());
 				moduleSearchCriteria.put("applicationNos", fsmApplicationList);
 				moduleSearchCriteria.put("applicationStatus", requiredApplications);
 //				moduleSearchCriteria.put("offset", criteria.getOffset());
 //	            moduleSearchCriteria.put("limit", criteria.getLimit());
-
 				processCriteria.setBusinessIds(fsmApplicationList);
 				processCriteria.setStatus(null);
-
 				ProcessInstanceResponse processInstanceResponse = workflowService.getProcessInstance(processCriteria,
 						requestInfo);
-
-				log.info("processInstanceResponse :::: " + processInstanceResponse);
-				
+				//log.info("processInstanceResponse :::: " + processInstanceResponse);
 				List<ProcessInstance> vehicleProcessInstances = processInstanceResponse.getProcessInstances();
-
 				Map<String, ProcessInstance> vehicleProcessInstanceMap = vehicleProcessInstances.stream()
 						.collect(Collectors.toMap(ProcessInstance::getBusinessId, Function.identity()));
-
 				JSONArray vehicleBusinessObjects = fetchModuleObjects(moduleSearchCriteria, businessServiceName,
 						criteria.getTenantId(), requestInfo, srvMap);
-
 				String businessIdParam = srvMap.get("businessIdProperty");
-				
-				log.info("businessIdParam :::: " + businessIdParam);
-
+				//log.info("businessIdParam :::: " + businessIdParam);
 				Map<String, Object> vehicleBusinessMap = StreamSupport
 						.stream(vehicleBusinessObjects.spliterator(), false)
 						.collect(Collectors.toMap(s1 -> ((JSONObject) s1).get(businessIdParam).toString(), s1 -> s1,
 								(e1, e2) -> e1, LinkedHashMap::new));
-
-				log.info("businessIdParam :::: " + businessIdParam);
-				
-				log.info("vehicleBusinessObjects.length() :::: " + vehicleBusinessObjects.length());
-				log.info("vehicleProcessInstances.size() :::: " + vehicleProcessInstances.size());
+				//log.info("businessIdParam :::: " + businessIdParam);
+				//log.info("vehicleBusinessObjects.length() :::: " + vehicleBusinessObjects.length());
+				//log.info("vehicleProcessInstances.size() :::: " + vehicleProcessInstances.size());
 				
 				if (vehicleBusinessObjects.length() > 0 && vehicleProcessInstances.size() > 0) {
-					
-					log.info("vehicleBusinessObjects.length() :::: " + vehicleBusinessObjects.length());
-					log.info("vehicleProcessInstances.size() :::: " + vehicleProcessInstances.size());
-					
+					//log.info("vehicleBusinessObjects.length() :::: " + vehicleBusinessObjects.length());
+					//log.info("vehicleProcessInstances.size() :::: " + vehicleProcessInstances.size());
 					fsmApplicationList.forEach(busiessKey -> {
 //						if(null != vehicleProcessInstanceMap.get(busiessKey)) {
 							Inbox inbox = new Inbox();
@@ -632,8 +604,48 @@ public class InboxService {
 					});
 				}
 			}
+			
+			//SAN-920: Logic for aggregating the statuses of Pay now and post pay application
+			List<HashMap<String, Object>> aggregateStatusCountMap = new ArrayList<>();
+			for (HashMap<String, Object> statusCountEntry : statusCountMap) {
+				 HashMap<String, Object> tempStatusMap = new HashMap<>();
+				 boolean matchFound=false;
+					for (HashMap<String, Object> aggrMapInstance : aggregateStatusCountMap) {
+	
+						String statusMapAppStatus = (String) statusCountEntry.get("applicationstatus");
+						String aggrMapAppStatus = (String) aggrMapInstance.get("applicationstatus");
+	
+	 					if (aggrMapAppStatus.equalsIgnoreCase(statusMapAppStatus)) {
+							aggrMapInstance.put(COUNT,
+									((Integer) statusCountEntry.get(COUNT) + (Integer) aggrMapInstance.get(COUNT)));
+							aggrMapInstance.put(APPLICATIONSTATUS, (String) statusCountEntry.get(APPLICATIONSTATUS));
+							aggrMapInstance.put(BUSINESS_SERVICE_PARAM, (String) statusCountEntry.get(BUSINESS_SERVICE_PARAM) + ","
+									+ (String) aggrMapInstance.get(BUSINESS_SERVICE_PARAM));
+							aggrMapInstance.put(STATUSID, (String) statusCountEntry.get(STATUSID) + ","
+									+ (String) aggrMapInstance.get(STATUSID));
+							matchFound=true;
+							break;
+						} else {
+							tempStatusMap.put(COUNT, (Integer) statusCountEntry.get(COUNT));
+							tempStatusMap.put(APPLICATIONSTATUS, (String) statusCountEntry.get(APPLICATIONSTATUS));
+							tempStatusMap.put(BUSINESS_SERVICE_PARAM, (String) statusCountEntry.get(BUSINESS_SERVICE_PARAM));
+							tempStatusMap.put(STATUSID, (String) statusCountEntry.get(STATUSID));
+							
+						}
+				 }
+					if (ObjectUtils.isEmpty(aggregateStatusCountMap)) {
+						aggregateStatusCountMap.add(statusCountEntry);
+					} else {
+						if (!matchFound) {
+							aggregateStatusCountMap.add(tempStatusMap);
+						}
+					}
+			}
+			
+			statusCountMap=	aggregateStatusCountMap;
+			//log.info("removeStatusCountMap:: "+ new Gson().toJson(statusCountMap));
+
 		}
-		
 		log.info("statusCountMap size :::: " + statusCountMap.size());
 		
         response.setTotalCount(totalCount);
@@ -766,7 +778,7 @@ public class InboxService {
      * log.error("Exception trace: ", e); } return uuid; }
      */
 
-    private Map<String, String> fetchAppropriateServiceMap(List<String> businessServiceName) {
+    private Map<String, String> fetchAppropriateServiceMap(List<String> businessServiceName,String  moduleName) {
         StringBuilder appropriateKey = new StringBuilder();
         for (String businessServiceKeys : config.getServiceSearchMapping().keySet()) {
             if (businessServiceKeys.contains(businessServiceName.get(0))) {
@@ -778,11 +790,15 @@ public class InboxService {
             throw new CustomException("EG_INBOX_SEARCH_ERROR",
                     "Inbox service is not configured for the provided business services");
         }
-        for (String inputBusinessService : businessServiceName) {
-            if (!appropriateKey.toString().contains(inputBusinessService)) {
-                throw new CustomException("EG_INBOX_SEARCH_ERROR", "Cross module search is NOT allowed.");
-            }
-        }
+        //SAN-920: Added check for enabling multiple business services only for FSM module
+      		for (String inputBusinessService : businessServiceName) {
+      			if (!FSMConstants.FSM_MODULE.equalsIgnoreCase(moduleName)) {
+      				if (!appropriateKey.toString().contains(inputBusinessService)) {
+      					throw new CustomException("EG_INBOX_SEARCH_ERROR", "Cross module search is NOT allowed.");
+      				}
+      			}
+
+      		}
         return config.getServiceSearchMapping().get(appropriateKey.toString());
     }
 

@@ -17,6 +17,7 @@ const ActivateConnection = () => {
     const [isEnableLoader, setIsEnableLoader] = useState(false);
     const [showToast, setShowToast] = useState(null);
     const [appDetails, setAppDetails] = useState({});
+    const [isAppDetailsPage, setIsAppDetailsPage] = useState(false);
 
     const [config, setConfig] = React.useState({ head: "", body: [] });
 
@@ -58,6 +59,7 @@ const ActivateConnection = () => {
         detailsProvidedBy: state?.data?.additionalDetails?.detailsProvidedBy ? {
             i18nKey: `WS_PLUMBER_${state?.data?.additionalDetails?.detailsProvidedBy?.toUpperCase()}`, code: state?.data?.additionalDetails?.detailsProvidedBy
         } : "",
+        key: Date.now(),
     }];
 
     const activationDetails = state?.data?.connectionType?.toUpperCase() === "METERED" ? [{
@@ -86,7 +88,7 @@ const ActivateConnection = () => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (showToast?.key != "error") window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${filters?.applicationNumber}&service=${filters?.service}`
+            if (showToast?.key != "error" && isAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${filters?.applicationNumber}&service=${filters?.service}`
         }, 3000);
         return () => clearTimeout(timer);
       }, [showToast]);
@@ -94,6 +96,8 @@ const ActivateConnection = () => {
     const onFormValueChange = (setValue, formData, formState) => {
         if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0) setSubmitValve(true);
         else setSubmitValve(!(Object.keys(formState.errors).length));
+
+        console.log(formState.errors, "formState.errorsformState.errors")
     };
 
     const getConvertedDate = (dateOfTime) => {
@@ -171,6 +175,7 @@ const ActivateConnection = () => {
                 onSuccess: (data, variables) => {
                     // setIsEnableLoader(false);
                     setShowToast({ key: false, message: "WS_ACTIVATE_SUCCESS_MESSAGE_MAIN" });
+                    setIsAppDetailsPage(true);
                     setTimeout(closeToast(), 5000);
                     // setTimeout(closeToastForSucsss(), 5000)
                 },

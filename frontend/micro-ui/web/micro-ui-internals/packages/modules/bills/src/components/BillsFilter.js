@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Dropdown, RadioButtons, ActionBar, RemoveableTag, CloseSvg, CheckBox, Localities, SubmitBar } from "@egovernments/digit-ui-react-components";
-
+import React, { useState, useEffect } from "react";
+import { Dropdown, CloseSvg, SubmitBar, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
 import _ from "lodash";
@@ -9,33 +8,49 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
   const { t } = useTranslation();
 
   const [_searchParams, setSearchParams] = useState(() => searchParams);
-  const [service, setService] = useState({ name: `BILLINGSERVICE_BUSINESSSERVICE_`, code: {} });
-
-  const localParamChange = (filterParam) => {
-    let keys_to_delete = filterParam.delete;
-    let _new = { ..._searchParams, ...filterParam };
-    if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
-    delete filterParam.delete;
-    setSearchParams({ ..._new });
-  };
-  const data = {};
+  const [service, setService] = useState([]);
+  const [ulbLists, setulbLists] = useState([]);
 
   const clearAll = () => {
-    setSearchParams({ applicationStatus: [] });
-    onFilterChange({ applicationStatus: [] });
+    setService([]);
+    onFilterChange([]);
   };
 
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  useEffect(() => {
+    if (service) {
+      setSearchParams({ ...service });
+    }
+  }, [service]);
 
-  const onServiceSelect = (e, label) => {
-    if (e.target.checked)
-      localParamChange({ applicationStatus: [...(_searchParams?.applicationStatus ? _searchParams.applicationStatus : []), label] });
-    else localParamChange({ applicationStatus: _searchParams?.applicationStatus.filter((o) => o !== label) });
-  };
+  const tenantId = Digit.SessionStorage.get("User")?.info?.tenantId;
 
-  const selectLocality = (d) => {
-    localParamChange({ locality: [...(_searchParams?.locality || []), d] });
-  };
+  const { isLoading, data: generateServiceType } = Digit.Hooks.useCommonMDMS(tenantId, "BillingService", "BillsGenieKey");
+
+  const filterServiceType = generateServiceType?.BillingService?.BusinessService?.filter((element) => element.billGineiURL);
+
+  const getUlbLists = generateServiceType?.tenant?.tenants?.filter((element) => element.code === tenantId);
+
+  let serviceTypeList = [];
+  if (filterServiceType) {
+    serviceTypeList = filterServiceType.map((element) => {
+      return {
+        name: element.businessService,
+        url: element.billGineiURL,
+        businesService: element.code,
+      };
+    });
+  }
+
+  useEffect(() => {
+    if (getUlbLists) {
+      setulbLists(getUlbLists[0]);
+    }
+  }, []);
+
+  const userUlbs = [];
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <React.Fragment>
@@ -74,10 +89,12 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
           </div>
           <div>
             <div>
-              <div className="filter-label">{t("CR_SERVICE_CATEGORY_LABEL")}</div>
-              <Dropdown t={t} option={data?.dropdownData || null} value={service} selected={service} select={setService} optionKey={"name"} />
-              <div className="filter-label">{t("CR_SERVICE_CATEGORY_LABEL")}</div>
-              <Dropdown t={t} option={data?.dropdownData || null} value={service} selected={service} select={setService} optionKey={"name"} />
+              <div className="filter-label">{t("LABEL_FOR_ULB")}</div>
+              <Dropdown option={userUlbs} optionKey={"name"} value={ulbLists} selected={ulbLists} select={setulbLists} t={t} disable={userUlbs} />
+            </div>
+            <div>
+              <div className="filter-label">{t("ABG_SERVICE_CATEGORY_LABEL")}</div>
+              <Dropdown t={t} option={serviceTypeList} value={service} selected={service} select={setService} optionKey={"name"} />
             </div>
 
             <div>

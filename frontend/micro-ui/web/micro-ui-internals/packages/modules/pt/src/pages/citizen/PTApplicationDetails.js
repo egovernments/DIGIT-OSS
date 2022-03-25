@@ -81,7 +81,6 @@ const PTApplicationDetails = () => {
         owners.push(owner);
       }
     });
-
     property.ownersInit = owners;
     property.ownersTemp = ownersTemp;
   }
@@ -97,9 +96,12 @@ const PTApplicationDetails = () => {
     const propertyIndex = property.status == "ACTIVE" ? 1 : 0;
     // const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
     // Removed filter(property => property.status == 'ACTIVE') condition to match result in qa env
-    const previousActiveProperty = propertiesAudit.sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
     property.ownersInit = previousActiveProperty.owners.filter((owner) => owner.status == "ACTIVE");
+
+    const curWFProperty = propertiesAudit.sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
+    property.ownersTemp = curWFProperty.owners.filter((owner) => owner.status =="ACTIVE");
 
     if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
       property.institutionInit = previousActiveProperty.institution;
@@ -110,7 +112,7 @@ const PTApplicationDetails = () => {
   let transferorOwners = get(property, "ownersInit", []);
 
   let transfereeInstitution = get(property, "institutionTemp", []);
-
+let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
   let transferorInstitution = get(property, "institutionInit", []);
 
   let units = [];
@@ -198,7 +200,6 @@ const PTApplicationDetails = () => {
     label: t("MT_CERTIFICATE"),
     onClick: () => printCertificate()
   });
-
   return (
     <React.Fragment>
       <div>
@@ -257,7 +258,7 @@ const PTApplicationDetails = () => {
                       </CardSubHeader>
                       <StatusTable>
                         <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
-                        <Row label={t("Guardian Name")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
+                        <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
                         <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
                         <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
                         <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={owner?.ownerType.toLowerCase() || t("CS_NA")} />
@@ -268,7 +269,7 @@ const PTApplicationDetails = () => {
               </div>
 
               <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_MUTATION_TRANSFEREE_DETAILS")}</CardSubHeader>
-              {transferorInstitution ? (
+              {isInstitution ? (
                 <div>
                   {Array.isArray(transfereeOwners) &&
                     transfereeOwners.map((owner, index) => (
@@ -295,11 +296,11 @@ const PTApplicationDetails = () => {
                 </div>
               ) : (
                 <div>
-                  {Array.isArray(transferorOwners) &&
-                    transferorOwners.map((owner, index) => (
+                  {Array.isArray(transfereeOwners) &&
+                    transfereeOwners.map((owner, index) => (
                       <div key={index}>
                         <CardSubHeader>
-                          {transferorOwners.length != 1 && (
+                          {transfereeOwners.length != 1 && (
                             <span>
                               {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
                             </span>
@@ -311,7 +312,7 @@ const PTApplicationDetails = () => {
                           <Row label={t("PT_COMMON_GENDER_LABEL")} text={owner?.gender || t("CS_NA")} />
                           <Row
                             label={t("PT_FORM3_OWNERSHIP_TYPE")}
-                            text={`${application?.ownershipCategory ? t(`PT_OWNERSHIP_${owner?.ownershipCategory}`) : t("CS_NA")}`}
+                            text={`${application?.ownershipCategory ? t(`PT_OWNERSHIP_${application?.ownershipCategory}`) : t("CS_NA")}`}
                           />
                           <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
                           <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />

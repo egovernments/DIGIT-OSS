@@ -194,7 +194,7 @@ const OwnerForm = (_props) => {
                     <Controller
                       control={control}
                       name={"subOwnerShipCategory"}
-                      defaultValue={window.location.href.includes("tl/edit-application-details") || window.location.href.includes("tl/renew-application-details/") ? formData?.ownershipCategory:""}
+                      defaultValue={window.location.href.includes("tl/edit-application-details") || window.location.href.includes("tl/renew-application-details/") ? owner?.subOwnerShipCategory:""}
                       render={(props)=>(
                         <Dropdown
                           t={t}

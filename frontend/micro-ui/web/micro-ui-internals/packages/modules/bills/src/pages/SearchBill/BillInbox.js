@@ -4,13 +4,15 @@ import { useTranslation } from "react-i18next";
 import DesktopInbox from "../../components/inbox/BillsDesktopInbox";
 import MobileInbox from "../../components/inbox/BillsMobileInbox";
 
-const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, filterComponent, isInbox }) => {
+const BillInbox = ({ parentRoute, initialStates, businessService, filterComponent, isInbox }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [enableSarch, setEnableSearch] = useState(() => (isInbox ? {} : { enabled: false }));
 
   const { t } = useTranslation();
-  const [pageOffset, setPageOffset] = useState(initialStates?.pageOffset || 0);
-  const [pageSize, setPageSize] = useState(initialStates?.pageSize || 10);
+  const [pageOffset, setPageOffset] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  const [pageSize, setPageSize] = useState(10);
   const [sortParams, setSortParams] = useState(initialStates?.sortParams || [{ id: "applicationDate", desc: false }]);
   const [setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState] = useState(false);
   const [searchParams, setSearchParams] = useState(() => {
@@ -19,14 +21,18 @@ const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, fi
 
   let isMobile = window.Digit.Utils.browser.isMobile();
   let paginationParams = isMobile
-    ? { limit: 100, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
+    ? { limit: 10, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
-  const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.tl.useInbox({
+  const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.useBillSearch({
     tenantId,
-    filters: { ...searchParams, ...paginationParams, sortParams },
+    filters: { ...searchParams, businessService, ...paginationParams, sortParams },
     config: {},
   });
+
+  useEffect(() => {
+    setTotalRecords(data?.Bills?.length);
+  }, [data]);
 
   useEffect(() => {
     setPageOffset(0);
@@ -40,6 +46,14 @@ const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, fi
     setPageOffset((prevState) => prevState - pageSize);
   };
 
+  const fetchFirstPage = () => {
+    setPageOffset((prevState) => 0);
+  };
+
+  const fetchLastPage = () => {
+    setPageOffset(totalRecords && Math.ceil(totalRecords / 10) * 10 - pageSize);
+  };
+
   const handleFilterChange = (filterParam) => {
     let keys_to_delete = filterParam?.delete;
     let _new = {};
@@ -48,9 +62,7 @@ const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, fi
     } else {
       _new = { ...searchParams, ...filterParam };
     }
-    // let _new = { ...searchParams, ...filterParam };
-    // if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
-    // delete filterParam.delete;
+
     if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
     delete _new?.delete;
     delete filterParam?.delete;
@@ -71,15 +83,15 @@ const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, fi
   const getSearchFields = () => {
     return [
       {
-        label: "Bill Number",
-        name: "billNumber",
+        label: t("ABG_BILL_NUMBER_LABEL"),
+        name: "billNo",
       },
       {
         label: "Unique Property ID",
-        name: "billNumber",
+        name: "propertyId",
       },
       {
-        label: t("CORE_COMMON_MOBILE_NUMBER"),
+        label: t("ABG_MOBILE_NO_LABEL"),
         name: "mobileNumber",
         maxlength: 10,
 
@@ -127,14 +139,14 @@ const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, fi
         parentRoute={parentRoute}
         searchParams={searchParams}
         sortParams={sortParams}
+        totalRecords={totalRecords}
       />
     );
   } else {
     return (
       <div>
-        {isInbox && <Header>{"Search Bill"}</Header>}
+        {isInbox && <Header>{t("ABG_SEARCH_BILL_COMMON_HEADER")}</Header>}
         <DesktopInbox
-          businessService={businessService}
           data={data}
           tableConfig={rest?.tableConfig}
           isLoading={hookLoading}
@@ -148,14 +160,16 @@ const BillInbox = ({ parentRoute, businessService = "TL", initialStates = {}, fi
           onSort={handleSort}
           onNextPage={fetchNextPage}
           onPrevPage={fetchPrevPage}
+          onFirstPage={fetchFirstPage}
+          onLastPage={fetchLastPage}
           currentPage={Math.floor(pageOffset / pageSize)}
-          pageSizeLimit={pageSize}
+          pageSizeLimit={10}
           disableSort={false}
           onPageSizeChange={handlePageSizeChange}
           parentRoute={parentRoute}
           searchParams={searchParams}
           sortParams={sortParams}
-          totalRecords={Number(data?.totalCount)}
+          totalRecords={totalRecords}
           filterComponent={filterComponent}
         />
       </div>
