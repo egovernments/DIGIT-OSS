@@ -20,6 +20,7 @@
     <joda-time-version>2.9.6</joda-time-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <lombok.version>1.18.8</lombok.version>
+      <logback.version>1.2.0</logback.version>
   </properties>
   <dependencies>
     <dependency>
