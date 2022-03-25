@@ -178,7 +178,7 @@ const CheckPage = ({ onSubmit, value }) => {
               />
               <Row
                 label={t("TL_NEW_OWNER_DETAILS_GENDER_LABEL")}
-                text={t(owner?.gender?.i18nKey)}
+                text={t(owner?.gender?.i18nKey) || t("CS_NA")}
                 actionButton={<ActionButton jumpTo={`${routeLink}/owner-details`} />}
               />
               <Row
