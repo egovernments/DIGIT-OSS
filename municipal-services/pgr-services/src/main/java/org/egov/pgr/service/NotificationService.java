@@ -103,61 +103,43 @@ public class NotificationService {
      */
     private String getFinalMessage(ServiceRequest request, String topic, String applicationStatus) {
         String tenantId = request.getService().getTenantId();
-        String action = request.getWorkflow().getAction();
         String localizationMessage = notificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo(),PGR_MODULE);
 
-        String message = notificationUtil.getCustomizedMsg(action, applicationStatus, localizationMessage);
+        String message = notificationUtil.getCustomizedMsg(request.getWorkflow().getAction(), applicationStatus, localizationMessage);
         if (message == null) {
             log.info("No message Found For Topic : " + topic);
             return message;
         }
 
-        if (message.contains("{complaint_type}")){
-            String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
-            message = message.replace("{complaint_type}", localisedComplaint);
-        }
-
-        String finalMessage = getMessageForMobileNumber(message,request);
+        String finalMessage = getMessageForMobileNumber(message,request,localizationMessage);
         return finalMessage;
     }
 
-    public String getMessageForMobileNumber(String message, ServiceRequest request){
+    public String getMessageForMobileNumber(String message, ServiceRequest request, String localizationMessage){
         String messageToReplace = message;
         ServiceWrapper serviceWrapper = ServiceWrapper.builder().service(request.getService()).workflow(request.getWorkflow()).build();
 
         /*if (messageToReplace.contains("{complaint_type}"))
             messageToReplace = messageToReplace.replace("{complaint_type}", pgrEntity.getService().getServiceCode());*/
 
-        if (messageToReplace.contains("{id}"))
-            messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
-
-        if (messageToReplace.contains("{date}")){
-            Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
-            LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
-                    .atZone(ZoneId.systemDefault()).toLocalDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
-            messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
-        }
-
-        if (messageToReplace.contains("{download link}")){
-            String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
-            messageToReplace = messageToReplace.replace("{download link}", appLink);
-        }
-
-        if (messageToReplace.contains("{emp_name}")){
-            ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),PGR_WF_RESOLVE);
-            messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
-        }
-
-        if (messageToReplace.contains("{additional_comments}"))
-            messageToReplace = messageToReplace.replace("{additional_comments}", serviceWrapper.getWorkflow().getComments());
-
-       /* if (messageToReplace.contains("{reason}"))
-            messageToReplace = messageToReplace.replace("{reason}", pgrEntity.getWorkflow().getComments());*/
-
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN)){
 
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if (messageToReplace.contains("{date}")){
+                Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
+                LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+                messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            }
 
             if (messageToReplace.contains("{reassign_emp_name}"))
                 messageToReplace = messageToReplace.replace("{reassign_emp_name}",reassigneeDetails.get("employeeName"));
@@ -166,10 +148,399 @@ public class NotificationService {
                 messageToReplace = messageToReplace.replace("{emp_department}",reassigneeDetails.get("department"));
 
             if (messageToReplace.contains("{emp_designation}"))
-                messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designamtion"));
+                messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designation"));
+
+            if (messageToReplace.contains("{download link}")){
+                String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
+                messageToReplace = messageToReplace.replace("{download link}", appLink);
+            }
         }
 
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(REJECTED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REJECT)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
 
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if (messageToReplace.contains("{date}")){
+                Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
+                LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+                messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            }
+
+            if(messageToReplace.contains("{reason}")) {
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REJECT_REJECTED);
+                messageToReplace = messageToReplace.replace("{reason}", processInstance.getComment());
+            }
+
+            if (messageToReplace.contains("{additional_comments}"))
+                messageToReplace = messageToReplace.replace("{additional_comments}", serviceWrapper.getWorkflow().getComments());
+
+            if (messageToReplace.contains("{download link}")){
+                String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
+                messageToReplace = messageToReplace.replace("{download link}", appLink);
+            }
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGFORASSIGNMENT) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(PGR_WF_REOPEN)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if (messageToReplace.contains("{date}")){
+                Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
+                LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+                messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            }
+
+            if (messageToReplace.contains("{download link}")){
+                String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
+                messageToReplace = messageToReplace.replace("{download link}", appLink);
+            }
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(RESOLVED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(PGR_WF_RESOLVE)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if (messageToReplace.contains("{date}")){
+                Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
+                LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+                messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            }
+
+            if (messageToReplace.contains("{emp_name}")){
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),PGR_WF_RESOLVE);
+                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
+            }
+
+            if (messageToReplace.contains("{download link}")){
+                String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
+                messageToReplace = messageToReplace.replace("{download link}", appLink);
+            }
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(ASSIGN_CITIZEN)){
+            Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
+
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if (messageToReplace.contains("{date}")){
+                Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
+                LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+                messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            }
+
+            if (messageToReplace.contains("{emp_name}")){
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN_CITIZEN);
+                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
+            }
+
+            if (messageToReplace.contains("{emp_department}"))
+                messageToReplace = messageToReplace.replace("{emp_department}",reassigneeDetails.get("department"));
+
+            if (messageToReplace.contains("{emp_designation}"))
+                messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designation"));
+
+            if (messageToReplace.contains("{download link}")){
+                String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
+                messageToReplace = messageToReplace.replace("{download link}", appLink);
+            }
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(ASSIGN_EMPLOYEE)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if(messageToReplace.contains("{ulb}"))
+                messageToReplace = messageToReplace.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
+
+            if(messageToReplace.contains("{ao_designation}")){
+                String localisationMessageForPlaceholder =  notificationUtil.getLocalizationMessages(request.getService().getTenantId(), request.getRequestInfo(),COMMON_MODULE);
+                String path = "$..messages[?(@.code==\"COMMON_MASTERS_DESIGNATION_AO\")].message";
+
+                try {
+                    ArrayList<String> messageObj = JsonPath.parse(localisationMessageForPlaceholder).read(path);
+                    if(messageObj != null && messageObj.size() > 0) {
+                        messageToReplace = messageToReplace.replace("{ao_designation}", messageObj.get(0));
+                    }
+                } catch (Exception e) {
+                    log.warn("Fetching from localization failed", e);
+                }
+            }
+
+            if (messageToReplace.contains("{emp_name}")){
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN_EMPLOYEE);
+                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
+            }
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(CLOSED_AFTER_RESOLUTION) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(CLOSE_EMPLOYEE)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if(messageToReplace.contains("{rating}"))
+                messageToReplace=messageToReplace.replace("{rating}",serviceWrapper.getService().getRating().toString());
+
+            if (messageToReplace.contains("{emp_name}")){
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN_EMPLOYEE);
+                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
+            }
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN_CITIZEN)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if (messageToReplace.contains("{date}")){
+                Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
+                LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+                messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            }
+
+            if (messageToReplace.contains("{download_link}")){
+                String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
+                messageToReplace = messageToReplace.replace("{download_link}", appLink);
+            }
+
+            if (messageToReplace.contains("{emp_name}")){
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REASSIGN_CITIZEN);
+                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
+            }
+
+            Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
+
+            if (messageToReplace.contains("{emp_department}"))
+                messageToReplace = messageToReplace.replace("{emp_department}",reassigneeDetails.get("department"));
+
+            if (messageToReplace.contains("{emp_designation}"))
+                messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designation"));
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN_EMPLOYEE)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if(messageToReplace.contains("{ulb}"))
+                messageToReplace = messageToReplace.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
+
+            if(messageToReplace.contains("{ao_designation}")){
+                String localisationMessageForPlaceholder =  notificationUtil.getLocalizationMessages(request.getService().getTenantId(), request.getRequestInfo(),COMMON_MODULE);
+                String path = "$..messages[?(@.code==\"COMMON_MASTERS_DESIGNATION_AO\")].message";
+
+                try {
+                    ArrayList<String> messageObj = JsonPath.parse(localisationMessageForPlaceholder).read(path);
+                    if(messageObj != null && messageObj.size() > 0) {
+                        messageToReplace = messageToReplace.replace("{ao_designation}", messageObj.get(0));
+                    }
+                } catch (Exception e) {
+                    log.warn("Fetching from localization failed", e);
+                }
+            }
+
+            if (messageToReplace.contains("{emp_name}")){
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REASSIGN_EMPLOYEE);
+                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
+            }
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(REJECTED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REJECT_CITIZEN)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if (messageToReplace.contains("{date}")){
+                Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
+                LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+                messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            }
+
+            if (messageToReplace.contains("{download_link}")){
+                String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
+                messageToReplace = messageToReplace.replace("{download_link}", appLink);
+            }
+
+            if (messageToReplace.contains("{additional_comments}"))
+                messageToReplace = messageToReplace.replace("{additional_comments}", serviceWrapper.getWorkflow().getComments());
+
+            if(messageToReplace.contains("{reason}")) {
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REJECT_REJECTED);
+                messageToReplace = messageToReplace.replace("{reason}", processInstance.getComment());
+            }
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGFORASSIGNMENT) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REOPEN_CITIZEN)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if (messageToReplace.contains("{date}")){
+                Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
+                LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+                messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            }
+
+            if (messageToReplace.contains("{download_link}")){
+                String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
+                messageToReplace = messageToReplace.replace("{download_link}", appLink);
+            }
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGFORASSIGNMENT) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REOPEN_EMPLOYEE)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if(messageToReplace.contains("{ulb}"))
+                messageToReplace = messageToReplace.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
+
+            if (messageToReplace.contains("{emp_name}")){
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REOPEN_EMPLOYEE);
+                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
+            }
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(RESOLVED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(RESOLVE_CITIZEN)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if (messageToReplace.contains("{date}")){
+                Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
+                LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+                messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            }
+
+            if (messageToReplace.contains("{download_link}")){
+                String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
+                messageToReplace = messageToReplace.replace("{download_link}", appLink);
+            }
+
+            if (messageToReplace.contains("{emp_name}")){
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),RESOLVE_CITIZEN);
+                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
+            }
+        }
+
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGFORASSIGNMENT) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(APPLY)){
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if (messageToReplace.contains("{date}")){
+                Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
+                LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+                messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            }
+
+            if (messageToReplace.contains("{download_link}")){
+                String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
+                messageToReplace = messageToReplace.replace("{download_link}", appLink);
+            }
+        }
+
+        if(serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(COMMENT)) {
+            if (message.contains("{complaint_type}")){
+                String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
+                message = message.replace("{complaint_type}", localisedComplaint);
+            }
+
+            if (messageToReplace.contains("{id}"))
+                messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+
+            if (messageToReplace.contains("{comment}"))
+                messageToReplace = messageToReplace.replace("{comment}", serviceWrapper.getWorkflow().getComments());
+
+            if (messageToReplace.contains("{emp_name}")){
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),RESOLVE_CITIZEN);
+                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
+            }
+        }
+
+//        if(serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(COMMENT_DEFAULT)) {
+//
+//        }
+
+        if(serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(DEFAULT)) {
+            if(messageToReplace.contains("{status}"))
+                messageToReplace = messageToReplace.replace("{status}", serviceWrapper.getService().getApplicationStatus());
+        }
 
         return messageToReplace;
     }

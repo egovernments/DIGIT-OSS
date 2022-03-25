@@ -52,9 +52,69 @@ public class PGRConstants {
 
     public static final String REASSIGN = "REASSIGN";
 
+    public static final String REJECT = "REJECT";
+
+    public static final String REJECTED = "REJECTED";
+
+    public static final String PENDINGFORASSIGNMENT = "PENDINGFORASSIGNMENT";
+
+    public static final String RESOLVED = "RESOLVED";
+
+    public static final String RESOLVE = "RESOLVE";
+
+    public static final String CLOSED_AFTER_RESOLUTION = "CLOSEDAFTERRESOLUTION";
+
+    public static final String ASSIGN_CITIZEN = "ASSIGN_CITIZEN";
+
+    public static final String REASSIGN_CITIZEN = "REASSIGN_CITIZEN";
+
+    public static final String REASSIGN_EMPLOYEE = "REASSIGN_EMPLOYEE";
+
+    public static final String ASSIGN_EMPLOYEE = "ASSIGN_EMPLOYEE";
+
+    public static final String CLOSE_EMPLOYEE = "CLOSE_EMPLOYEE";
+
+    public static final String REJECT_CITIZEN = "REJECT_CITIZEN";
+
+    public static final String REOPEN_CITIZEN = "REOPEN_CITIZEN";
+
+    public static final String REOPEN_EMPLOYEE = "REOPEN_EMPLOYEE";
+
+    public static final String RESOLVE_CITIZEN = "RESOLVE_CITIZEN";
+
+    public static final String APPLY = "APPLY";
+
+    public static final String COMMENT = "COMMENT";
+
+    public static final String COMMENT_DEFAULT = "COMMENT_DEFAULT";
+
+    public static final String DEFAULT = "DEFAULT";
+
+    public static final String ASSIGN_CITIZEN_PENDINGATLME = "ASSIGN_CITIZEN_PENDINGATLME";
+
+    public static final String ASSIGN_EMPLOYEE_PENDINGATLME = "ASSIGN_EMPLOYEE_PENDINGATLME";
+
+    public static final String CLOSE_EMPLOYEE_CLOSED_AFTER_RESOLUTION = "CLOSE_EMPLOYEE_CLOSEDAFTERRESOLUTION";
+
+    public static final String REASSIGN_CITIZEN_PENDINGATLME = "REASSIGN_CITIZEN_PENDINGATLME";
+
+    public static final String REASSIGN_EMPLOYEE_PENDINGATLME = "REASSIGN_EMPLOYEE_PENDINGATLME";
+
+    public static final String REJECT_CITIZEN_REJECTED = "REJECT_CITIZEN_REJECTED";
+
+    public static final String REOPEN_CITIZEN_PENDINGFORASSIGNMENT = "REOPEN_CITIZEN_PENDINGFORASSIGNMENT";
+
+    public static final String REOPEN_EMPLOYEE_PENDINGFORASSIGNMENT = "REOPEN_EMPLOYEE_PENDINGFORASSIGNMENT";
+
+    public static final String RESOLVE_CITIZEN_RESOLVED = "RESOLVE_CITIZEN_RESOLVED";
+
+    public static final String APPLY_PENDINGFORASSIGNMENT = "APPLY_PENDINGFORASSIGNMENT";
+
     public static final List<String> NOTIFICATION_ENABLE_FOR_STATUS = Collections
             .unmodifiableList(Arrays.asList(APPLY_PENDING_FOR_REASSIGNMENT,RESOLVE_RESOLVED,REOPEN_PENDING_FOR_ASSIGNMENT,REASSIGN_PENDINGATLME,
-                    REJECT_REJECTED));
+                    REJECT_REJECTED,ASSIGN_CITIZEN_PENDINGATLME,ASSIGN_EMPLOYEE_PENDINGATLME,CLOSE_EMPLOYEE_CLOSED_AFTER_RESOLUTION,
+                    REASSIGN_CITIZEN_PENDINGATLME,REASSIGN_EMPLOYEE_PENDINGATLME,REJECT_CITIZEN_REJECTED,REOPEN_CITIZEN_PENDINGFORASSIGNMENT,
+                    REOPEN_EMPLOYEE_PENDINGFORASSIGNMENT,RESOLVE_CITIZEN_RESOLVED,APPLY_PENDINGFORASSIGNMENT,COMMENT, COMMENT_DEFAULT, DEFAULT));
 
     public static final String NOTIFICATION_LOCALE = "en_IN";
 
