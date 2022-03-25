@@ -1,17 +1,24 @@
 import { CardLabel, CardLabelError, Dropdown, LabelFieldPair, MobileNumber, TextInput } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
 import React from "react";
+import { getPattern } from "../utils";
 import { Controller, useForm } from "react-hook-form";
 
-const WSPlumberDetails = ({ t, config, onSelect, userType, formData }) => {
+const WSPlumberDetails = ({ t, config, onSelect, formData }) => {
   const [plumberDetails, setPlumberDetails] = React.useState(formData[config?.key] || {
     plumberName: "",
     plumberMobileNo: "",
     plumberLicenseNo:  "",
     plumberProvideBy: { code: "", value: "", i18nKey: "" },
   });
+  const [plumberProvidedByOptions, setPlumberProvidedByOptions] = React.useState([]);
   const [focusedField, setFocusedField] = React.useState('');
   
+  const { 
+    isWSServicesCalculationLoading, 
+    data: wsServicesCalculationData
+   } = Digit.Hooks.ws.useMDMS(Digit.ULBService.getStateId(), "ws-services-calculation", ["PlumberProvidedBy"]);
+
   const { 
     control, 
     formState, 
@@ -23,86 +30,20 @@ const WSPlumberDetails = ({ t, config, onSelect, userType, formData }) => {
 
   const formValues = watch();
 
-  const setPlumberName = (props, value) => {
-    const key = "plumberName";
-    const error = { };
-
-    if (!new RegExp(/^[a-zA-Z]{1, 50}/i).test(value) && !new RegExp(/^[a-zA-Z ]{1, 50}/i).test(value)) {
-      error["type"] = "regex";
-      error["message"] = "WS_INVALID_NAME";
-    }
-
-    if(Object.keys(error).length){
-      setError(key, {type: error.type, message: error.message})
-    }else{
-      clearErrors(key);
-    }
-
-    props.onChange(value);
-    setFocusedField("plumberName");
-  }
-
-  const setPlumberMobileNo = (props, value) => {
-    const key = "plumberMobileNo";
-    const error = { }
-
-    if (!new RegExp(/^[6-9]{1}[0-9]{9}/i).test(value)) {
-      error["type"] = "regex";
-      error["message"] = "WS_INVALID_PHONE_NO"
-    }
-
-    if(Object.keys(error).length){
-      setError(key, {type: error.type, message: error.message})
-    }else{
-      clearErrors(key);
-    }
-
-    props.onChange(value);
-    setFocusedField(key);
-  }
-
-  const setPlumberLicenseNo = (props, value) => {
-    const key = "plumberLicenseNo";
-    const error = { }
-
-    if (!new RegExp(/^[0-9]{1,10}/i).test(value)) {
-      error["type"] = "regex";
-      error["message"] = "WS_INVALID_LICENSE_NO"
-    }
-
-    if(Object.keys(error).length){
-      setError(key, {type: error.type, message: error.message})
-    }else{
-      clearErrors(key);
-    }
-
-    props.onChange(value);
-    setFocusedField(key);
-    
-  }
-
-  const setPlumberProvidedBy = (props, value) => {
-    const key = "plumberProvidedBy";
-    const error = { }
-
-    if (!Object.keys(value).length || !value?.value?.length ) {
-      error["type"] = "regex";
-      error["message"] = "WS_FIELD_CANT_BLANK"
-    }
-
-    if(Object.keys(error).length){
-      setError(key, {type: error.type, message: error.message})
-    }else{
-      clearErrors(key);
-    }
-
-    props.onChange(value);
-    setFocusedField(key);
+  const isPlumberProvideByULB = () => {
+    // if plumber provided is ULB
+    return true;
   }
 
   React.useEffect(()=>{
     trigger();
   },[])
+
+  React.useEffect(()=>{
+    const plumberProvidedBy = wsServicesCalculationData?.["ws-services-calculation"]?.PlumberProvidedBy
+    ?.map((type)=>({...type, i18nKey: type.code})) || [{code: "ULB", value: "ULB", i18nKey:"ULB"}];
+    setPlumberProvidedByOptions(plumberProvidedByOptions)
+  }, [wsServicesCalculationData])
 
   React.useEffect(()=>{
     const part = {};
@@ -129,14 +70,17 @@ const WSPlumberDetails = ({ t, config, onSelect, userType, formData }) => {
           <Controller
             control={control}
             name="plumberProvidedBy"
-            defaultValue={""}
+            defaultValue={plumberDetails.plumberProvidedBy}
             render={(props)=>(
               <Dropdown
                 t={t}
                 key={config?.key}
                 selected={props.value}
                 optionKey="i18nKey"
-                select={(value) => setPlumberProvidedBy(props, value)}
+                option={plumberProvidedByOptions}
+                select={(value) => {
+                  props.onChange(value);
+                }}
               ></Dropdown>
             )}
           ></Controller>
@@ -152,15 +96,23 @@ const WSPlumberDetails = ({ t, config, onSelect, userType, formData }) => {
           <Controller
             control={control}
             name="plumberLicenseNo"
-            defaultValue={""}
+            defaultValue={plumberDetails.plumberLicenseNo}
+            rules={{
+              validate: (e)=>e && getPattern("OldLicenceNo").test(e) ? true: t(""),
+              required: t("REQUIRED_FIELD") ,
+            }}
             render={(props)=>(
               <TextInput
                 type="text"
                 key={config.key}
                 value={props.value}
                 autoFocus={focusedField === "plumberLicenseNo"}
+                disable={isPlumberProvideByULB()}
                 onBlur={props.onBlur}
-                onChange={(ev) => setPlumberLicenseNo(props, ev.target.value)}
+                onChange={(ev) => {
+                  props.onChange(ev.target.value);
+                  setFocusedField("plumberLicenseNo");
+                }}
               ></TextInput>
             )}
           ></Controller>
@@ -176,15 +128,23 @@ const WSPlumberDetails = ({ t, config, onSelect, userType, formData }) => {
           <Controller
             control={control}
             name="plumberName"
-            defaultValue={""}
+            defaultValue={plumberDetails.plumberName}
+            rules={{
+              validate: (e)=>e && getPattern("Name").test(e) ? true: t(""),
+              required: t("REQUIRED_FIELD") ,
+            }}
             render={(props)=>(
               <TextInput
                 key={config.key}
                 type="text"
+                disable={isPlumberProvideByULB()}
                 value={props.value}
                 autoFocus={focusedField === "plumberName"}
                 onBlur={props.onBlur}
-                onChange={(ev) => setPlumberName(props, ev.target.value)}
+                onChange={(ev) => {
+                  props.onChange(ev.target.value);
+                  setFocusedField("plumberName");
+                }}
               ></TextInput>
             )}
           ></Controller>
@@ -200,15 +160,23 @@ const WSPlumberDetails = ({ t, config, onSelect, userType, formData }) => {
           <Controller
             control={control}
             name="plumberMobileNo"
-            defaultValue={""}
+            defaultValue={plumberDetails.plumberMobileNo}
+            rules={{
+              validate: (e)=>e && getPattern("MobileNo").test(e) ? true: t(""),
+              required: t("REQUIRED_FIELD") ,
+            }}
             render={(props)=>(
               <MobileNumber
                 key={config.key}
                 type="number"
                 value={props.value}
+                disable={isPlumberProvideByULB()}
                 autoFocus={focusedField === "plumberMobileNo"}
                 onBlur={props.onBlur}
-                onChange={(value) => setPlumberMobileNo(props, value)}
+                onChange={(value) => {
+                  props.onChange(value);
+                  setFocusedField("plumberMobileNo");
+                }}
               ></MobileNumber>
             )}
           ></Controller>

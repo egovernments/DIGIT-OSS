@@ -93,7 +93,7 @@ export const newConfig = [
         type: "component",
         route: "know-your-property",
         isMandatory: true,
-        component: "CPTKnowYourProperty", 
+        component: "CPTKnowYourProperty",
         texts: {
           header: "PT_DO_YOU_KNOW_YOUR_PROPERTY",
           submitBarLabel: "CS_COMMON_NEXT",
@@ -110,7 +110,7 @@ export const newConfig = [
         type: "component",
         route: "search-property",
         isMandatory: true,
-        component: "CPTSearchProperty", 
+        component: "CPTSearchProperty",
         key: "cptsearchproperty",
         withoutLabel: true,
         nextStep: 'search-results',
@@ -120,7 +120,7 @@ export const newConfig = [
         type: "component",
         route: "search-results",
         isMandatory: true,
-        component: "CPTSearchResults", 
+        component: "CPTSearchResults",
         key: "cptsearchresults",
         withoutLabel: true,
         nextStep: 'property-details',
@@ -128,9 +128,9 @@ export const newConfig = [
       },
       {
         type: "component",
-        route: "create-property", 
+        route: "create-property",
         isMandatory: true,
-        component: "CPTCreateProperty", 
+        component: "CPTCreateProperty",
         key: "cptcreateproperty",
         withoutLabel: true,
         nextStep: 'acknowledge-create-property',
@@ -138,9 +138,9 @@ export const newConfig = [
       },
       {
         type: "component",
-        route: "acknowledge-create-property", 
+        route: "acknowledge-create-property",
         isMandatory: true,
-        component: "CPTAcknowledgement", 
+        component: "CPTAcknowledgement",
         key: "cptacknowledgement",
         withoutLabel: true,
         nextStep: 'connection-holder',
@@ -150,7 +150,7 @@ export const newConfig = [
         type: "component",
         route: "property-details",
         isMandatory: true,
-        component: "CPTPropertyDetails", 
+        component: "CPTPropertyDetails",
         key: "propertydetails",
         withoutLabel: true,
         nextStep: 'connection-holder',
@@ -211,6 +211,7 @@ export const newConfig = [
     },
     {
       head: "WS_COMMON_CONNECTION_DETAIL",
+      role: "fieldInspector",
       body: [{
         type: "component",
         key: "ConnectionDetails",
@@ -218,24 +219,26 @@ export const newConfig = [
         withoutLabel: true,
       }]
     },
-    // {
-    //   head: "WS_PLUMBER_DETAILS",
-    //   body: [{
-    //     type: "component",
-    //     key: "PlumberDetails",
-    //     component: "WSPlumberDetails",
-    //     withoutLabel: true,
-    //   }]
-    // },
-    // {
-    //   head: "WS_ROAD_CUTT_DETAILS",
-    //   body: [{
-    //     type: "component",
-    //     key: "RoadCuttingDetails",
-    //     component: "WSRoadCuttingDetails",
-    //     withoutLabel: true,
-    //   }]
-    // },
+    {
+      head: "WS_PLUMBER_DETAILS",
+      role:"fieldInspector",
+      body: [{
+        type: "component",
+        key: "PlumberDetails",
+        component: "WSPlumberDetails",
+        withoutLabel: true,
+      }]
+    },
+    {
+      head: "WS_ROAD_CUTT_DETAILS",
+      role:"fieldInspector",
+      body: [{
+        type: "component",
+        key: "RoadCuttingDetails",
+        component: "WSRoadCuttingDetails",
+        withoutLabel: true,
+      }]
+    },
     // {
     //   head: "WS_ACTIV_DETAILS",
     //   body: [{
