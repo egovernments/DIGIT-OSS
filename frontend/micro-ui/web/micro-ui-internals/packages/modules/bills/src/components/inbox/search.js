@@ -1,5 +1,15 @@
-import { ActionBar, CloseSvg, DatePicker, Label, LinkLabel, MobileNumber, SubmitBar, TextInput } from "@egovernments/digit-ui-react-components";
-import React, { useEffect } from "react";
+import {
+  ActionBar,
+  CloseSvg,
+  DatePicker,
+  Label,
+  LinkLabel,
+  MobileNumber,
+  SubmitBar,
+  TextInput,
+  Toast,
+} from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -13,9 +23,17 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   const { register, handleSubmit, reset, watch, control, setError, clearErrors, formState } = useForm({
     defaultValues: searchParams,
   });
+  const [showToast, setShowToast] = useState(null);
 
   const form = watch();
   const mobileView = innerWidth <= 640;
+
+  const closeToast = () => {
+    setShowToast(null);
+  };
+  setTimeout(() => {
+    closeToast();
+  }, 10000);
 
   useEffect(() => {
     searchFields.forEach(({ pattern, name, maxLength, minLength, errorMessages, ...el }) => {
@@ -40,6 +58,11 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   }, [form, formState, setError, clearErrors]);
 
   const onSubmitInput = (data) => {
+    if (!searchParams.businesService) {
+      setShowToast({ key: true, label: "ABG_SEARCH_SELECT_AT_LEAST_SERVICE_TOAST_MESSAGE" });
+      return;
+    }
+
     if (true) {
       if (!data.mobileNumber) {
         delete data.mobileNumber;
@@ -73,14 +96,25 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
     const mobileViewStyles = mobileView ? { margin: 0 } : {};
     return (
       <LinkLabel style={{ display: "inline", ...mobileViewStyles }} onClick={clearSearch}>
-        {t("CR_RESET_BUTTON")}
+        {t("ABG_RESET_BUTTON")}
       </LinkLabel>
     );
   };
 
+  const formValueEmpty = () => {
+    let isEmpty = true;
+    Object.keys(form).forEach((key) => {
+      console.log("keys", key, searchFields);
+      if (!["locality", "city"].includes(key) && form[key]) isEmpty = false;
+    });
+
+    if (searchFields?.find((e) => e.name === "locality") && !form?.locality?.code) isEmpty = true;
+    return isEmpty;
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmitInput)}>
-      <React.Fragment>
+    <React.Fragment>
+      <form onSubmit={handleSubmit(onSubmitInput)}>
         <div className="search-container" style={{ width: "auto", marginLeft: isInboxPage ? "24px" : "revert" }}>
           <div className="search-complaint-container">
             {(type === "mobile" || mobileView) && (
@@ -91,7 +125,7 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
                 </span>
               </div>
             )}
-            <div className="complaint-input-container" style={{ width: "100%" }}>
+            <div className="complaint-input-container group-complaint-input-container " style={{ width: "100%" }}>
               {searchFields
                 ?.filter((e) => true)
                 ?.map((input, index) => (
@@ -142,7 +176,7 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
                 <div className="search-action-wrapper">
                   <SubmitBar
                     className="submit-bar-search"
-                    label={t("CR_SEARCH_BUTTON")}
+                    label={t("ABG_SEARCH_BUTTON")}
                     // disabled={!!Object.keys(formState.errors).length || Object.keys(form).every((key) => !form?.[key])}
                     submit
                   />
@@ -160,7 +194,13 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
                   </span>
                 )}
                 {type === "desktop" && !mobileView && (
-                  <SubmitBar style={{ marginTop: "unset" }} className="submit-bar-search" label={t("CR_SEARCH_BUTTON")} submit />
+                  <SubmitBar
+                    style={{ marginTop: "unset" }}
+                    disabled={!!Object.keys(formState.errors).length || formValueEmpty()}
+                    className="submit-bar-search"
+                    label={t("ABG_SEARCH_BUTTON")}
+                    submit
+                  />
                 )}
               </div>
             )}
@@ -171,11 +211,12 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
             <button className="clear-search" style={{ flex: 1 }}>
               {clearAll(mobileView)}
             </button>
-            <SubmitBar label={t("CR_SEARCH_BUTTON")} style={{ flex: 1 }} submit={true} />
+            <SubmitBar label={t("ABG_SEARCH_BUTTON")} style={{ flex: 1 }} submit={true} />
           </ActionBar>
         )}
-      </React.Fragment>
-    </form>
+      </form>
+      {showToast && <Toast error={showToast.key} label={t(showToast.label)} onClose={closeToast} />}
+    </React.Fragment>
   );
 };
 

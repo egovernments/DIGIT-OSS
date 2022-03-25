@@ -531,11 +531,11 @@ public class InboxService {
 			//log.info("businessService :::: " + businessService);
 			populateStatusCountMap(statusCountMap, vehicleResponse, businessService);
 
-			for(HashMap<String, Object> vTripMap : statusCountMap) {
-				if((WAITING_FOR_DISPOSAL_STATE.equals(vTripMap.get(APPLICATIONSTATUS)) ||
-						DISPOSED_STATE.equals(vTripMap.get(APPLICATIONSTATUS))) && 
-						inputStatuses.contains(vTripMap.get(STATUSID)) ) {
-					totalCount+=((int)vTripMap.get(COUNT));
+			for (HashMap<String, Object> vTripMap : statusCountMap) {
+				if ((WAITING_FOR_DISPOSAL_STATE.equals(vTripMap.get(APPLICATIONSTATUS))
+						|| DISPOSED_STATE.equals(vTripMap.get(APPLICATIONSTATUS)))
+						&& inputStatuses.contains(vTripMap.get(STATUSID))) {
+					totalCount += ((int) vTripMap.get(COUNT));
 				}
 			}
 			List<String> requiredApplications = new ArrayList<>();
@@ -563,9 +563,8 @@ public class InboxService {
 					vehicleBusinessObject.put(VEHICLE_LOG, vehicleTripDetails);
 				}
 			});
-			
 			//log.info("CollectionUtils.isEmpty(inboxes) :::: " + CollectionUtils.isEmpty(inboxes));
-			if (CollectionUtils.isEmpty(inboxes) && totalCount>0) {
+			if (CollectionUtils.isEmpty(inboxes) && totalCount>0 && !moduleSearchCriteria.containsKey("applicationNos")) {
 				inputStatuses = inputStatuses.stream().filter(x -> x != null).collect(Collectors.toList());
 				List<String> fsmApplicationList = fetchVehicleStateMap(inputStatuses, requestInfo, criteria.getTenantId(),criteria.getLimit(),criteria.getOffset());
 				moduleSearchCriteria.put("applicationNos", fsmApplicationList);

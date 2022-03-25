@@ -179,20 +179,13 @@ const ApplicationDetails = (props) => {
           </Link>
         </div>
       );
-    } else if (checkpoint.status === "WAITING_FOR_DISPOSAL") {
-      const caption = {
-        date: checkpoint?.auditDetails?.created,
-        name: checkpoint?.assigner,
-        mobileNumber: checkpoint?.assigner?.mobileNumber,
-        comment: `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`
-      };
-      return <TLCaption data={caption} />;
-    } else if (checkpoint.status === "DISPOSED") {
+    } else if (checkpoint.status === "WAITING_FOR_DISPOSAL" || checkpoint.status === "DISPOSED" || checkpoint.status === "DISPOSAL_IN_PROGRESS") {
       const caption = {
         date: checkpoint?.auditDetails?.created,
         name: checkpoint?.assigner,
         mobileNumber: checkpoint?.assigner?.mobileNumber
       };
+      if (checkpoint?.numberOfTrips) caption.comment= `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`
       return <TLCaption data={caption} />;
     }
   };

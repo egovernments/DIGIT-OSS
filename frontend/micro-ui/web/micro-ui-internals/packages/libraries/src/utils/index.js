@@ -252,6 +252,17 @@ const hrmsAccess = () => {
   return HRMS_ACCESS?.length > 0;
 };
 
+const wsAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
+  const waterRoles = ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER","WS_CLERK"];
+  const sewerageRoles = ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER","SW_CLERK"];
+
+  const WS_ACCESS = userRoles?.filter((role) => waterRoles?.includes(role)||sewerageRoles?.includes(role));
+
+  return WS_ACCESS?.length > 0;
+};
+
 export default {
   pdf: PDFUtil,
   downloadReceipt,
@@ -284,4 +295,5 @@ export default {
   hrmsRoles,
   getUnique,
   tlAccess,
+  wsAccess
 };

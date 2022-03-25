@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
-  const [documents, setDocuments] = useState(formData?.documents?.documents || []);
+  const [documents, setDocuments] = useState(formData?.DocumentsRequired?.documents || []);
   const [error, setError] = useState(null);
 
   let action = "create";
@@ -87,7 +87,7 @@ function SelectDocument({
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [selectedDocument, setSelectedDocument] = useState(
     filteredDocument
-      ? { ...filteredDocument, active: filteredDocument?.status === "ACTIVE", code: filteredDocument?.documentType }
+      ? { ...filteredDocument, code: filteredDocument?.documentType }
       : doc?.dropdownData?.length === 1
         ? doc?.dropdownData[0]
         : {}
@@ -143,12 +143,13 @@ function SelectDocument({
             documentType: selectedDocument?.code,
             fileStoreId: uploadedFile,
             documentUid: uploadedFile,
+            i18nKey: selectedDocument?.code
           },
         ];
       });
     }
     if (!isHidden) {
-      if (!uploadedFile || !selectedDocument?.code) {
+      if ((!uploadedFile || !selectedDocument?.code) && doc?.required) {
         addError();
       } else if (uploadedFile && selectedDocument?.code) {
         removeError();
@@ -168,7 +169,7 @@ function SelectDocument({
         } else {
           try {
             setUploadedFile(null);
-            const response = await Digit.UploadServices.Filestorage("PT", file, Digit.ULBService.getStateId());
+            const response = await Digit.UploadServices.Filestorage("WS", file, Digit.ULBService.getStateId());
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {
@@ -190,7 +191,7 @@ function SelectDocument({
     <div style={{ marginBottom: "24px" }}>
       {doc?.hasDropdown ? (
         <LabelFieldPair>
-          <CardLabel>{doc?.required ? `${t(doc?.i18nKey)} *` : `${t(doc?.i18nKey)}`}</CardLabel>
+          <CardLabel>{doc?.required ? `${t(doc?.i18nKey)}*:` : `${t(doc?.i18nKey)}:`}</CardLabel>
           <Dropdown
             className="form-field"
             selected={selectedDocument}

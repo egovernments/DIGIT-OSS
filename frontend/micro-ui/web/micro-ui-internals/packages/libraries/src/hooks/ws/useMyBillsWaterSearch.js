@@ -47,7 +47,7 @@ const useMyBillsWaterSearch = ({tenantId, filters = {}, BusinessService="WS", t 
     response?.data?.SewerageConnections?.forEach( item => {
       propertyids=propertyids+item?.propertyId+(",");
       consumercodes=consumercodes+item?.connectionNo+",";
-  })
+    })
     let propertyfilter = { propertyIds : propertyids.substring(0, propertyids.length-1),}
     if(propertyids !== "" && filters?.locality) propertyfilter.locality = filters?.locality;
     config={enabled:propertyids!==""?true:false}

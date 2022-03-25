@@ -1,4 +1,4 @@
-import { Header } from "@egovernments/digit-ui-react-components";
+import { Header, DownloadIcon } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import DesktopInbox from "../../components/inbox/BillsDesktopInbox";
@@ -10,6 +10,7 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
 
   const { t } = useTranslation();
   const [pageOffset, setPageOffset] = useState(initialStates?.pageOffset || 0);
+  const [totalRecords, setTotalRecords] = useState(0);
   const [pageSize, setPageSize] = useState(initialStates?.pageSize || 10);
   const [sortParams, setSortParams] = useState(initialStates?.sortParams || [{ id: "applicationDate", desc: false }]);
   const [setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState] = useState(false);
@@ -32,6 +33,10 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
     setPageOffset(0);
   }, [searchParams]);
 
+  useEffect(() => {
+    setTotalRecords(data?.Bills?.length);
+  }, [data]);
+
   const fetchNextPage = () => {
     setPageOffset((prevState) => prevState + pageSize);
   };
@@ -48,9 +53,6 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
     } else {
       _new = { ...searchParams, ...filterParam };
     }
-    // let _new = { ...searchParams, ...filterParam };
-    // if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
-    // delete filterParam.delete;
     if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
     delete _new?.delete;
     delete filterParam?.delete;
@@ -71,11 +73,20 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
   const getSearchFields = () => {
     return [
       {
-        label: "Consumer ID",
-        name: "consumerId",
+        label: t("ABG_CONSUMER_ID_LABEL"),
+        name: "consumerCode",
       },
     ];
   };
+
+  const GetLogo = () => (
+    <div className="header">
+      <span className="logo">
+        <DownloadIcon />
+      </span>
+      <Header>{"Merge and Download"}</Header>
+    </div>
+  );
 
   //DONOT DELETE NEEDS IMPOVEMENT
   // const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -115,8 +126,12 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
     );
   } else {
     return (
-      <div>
-        {isInbox && <Header>{"Group Bills"}</Header>}
+      <div className="groupBill-custom">
+        <div className="custom-group-merge-container">
+          {isInbox && <Header>{"Group Bills"}</Header>}
+          {GetLogo()}
+        </div>
+
         <DesktopInbox
           businessService={businessService}
           data={data}
@@ -139,7 +154,7 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
           parentRoute={parentRoute}
           searchParams={searchParams}
           sortParams={sortParams}
-          totalRecords={Number(data?.totalCount)}
+          totalRecords={totalRecords}
           filterComponent={filterComponent}
         />
       </div>

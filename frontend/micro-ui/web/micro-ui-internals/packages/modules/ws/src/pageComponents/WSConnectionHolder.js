@@ -145,7 +145,7 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
         onChange={(e) => selectChecked(e)}
         // value={field.isPrimaryOwner}
         checked={isOwnerSame}
-        style={{ paddingBottom: "10px", paddingTop: "10px" }}
+        style={{ paddingBottom: "10px", paddingTop: "3px" }}
         />  
         </div>
         {!isOwnerSame  && <div style={{border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA"}}>

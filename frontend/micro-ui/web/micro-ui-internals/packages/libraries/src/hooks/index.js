@@ -182,6 +182,10 @@ import useMyBillsWaterSearch from "./ws/useMyBillsWaterSearch";
 import useMyBillsSewarageSearch from "./ws/useMyBillsSewarageSearch";
 import useMyApplicationSearch from "./ws/useMyApplicationSearch";
 import useWSDocumentSearch from "./ws/useWSDocumentSearch";
+import useWSMDMSWS from "./ws/useWSMDMSWS"
+import WSuseSearch from "./ws/useSearch";
+import useSewSearch from "./ws/useSewSearch"
+import useSearchWS from "./ws/useSearchWS"
 import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions";
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
@@ -377,6 +381,10 @@ const ws = {
   useMyBillsSewarageSearch,
   useMyApplicationSearch,
   useWSDocumentSearch,
+  useWSMDMSWS,
+  WSuseSearch,
+  useSewSearch,
+  useSearchWS,
   useWSDetailsPage,
   useWSApplicationActions,
   useWSConsumptionSearch,
@@ -385,6 +393,7 @@ const ws = {
   useWaterCreateAPI,
   useSewerageCreateAPI
 };
+
 
 
 const Hooks = {

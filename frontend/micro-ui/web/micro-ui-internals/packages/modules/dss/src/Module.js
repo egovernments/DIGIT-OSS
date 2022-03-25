@@ -23,7 +23,7 @@ const DssBreadCrumb = ({ location }) => {
     {
       path: fromModule?`/digit-ui/employee/dss/dashboard/${fromModule}`:`/digit-ui/employee/dss/dashboard/${Digit.Utils.dss.getCurrentModuleName()}`,
       content: t(`ES_COMMON_DSS_${Digit.Utils.locale.getTransformedLocale(fromModule?fromModule:moduleName)}`),
-      show: true,
+      show: location.pathname.includes("dashboard") ? true : false,
     },
     {
       path: "/digit-ui/employee/dss/drilldown",
@@ -41,7 +41,7 @@ const Routes = ({ path, stateCode }) => {
     <div className="chart-wrapper">
       <DssBreadCrumb location={location} />
       <Switch>
-         <PrivateRoute path={`${path}/home/:moduleCode`} component={() => <Home stateCode={stateCode} />} />
+        <PrivateRoute path={`${path}/landing/:moduleCode`} component={() => <Home stateCode={stateCode} />} />
         <PrivateRoute path={`${path}/dashboard/:moduleCode`} component={() => <DashBoard stateCode={stateCode} />} />
         <PrivateRoute path={`${path}/drilldown`} component={() => <DrillDown  stateCode={stateCode}  />} />
       </Switch>

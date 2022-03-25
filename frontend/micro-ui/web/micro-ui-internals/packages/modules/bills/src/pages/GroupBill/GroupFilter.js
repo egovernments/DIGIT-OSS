@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Dropdown, CloseSvg, SubmitBar, Loader, RemoveableTag, Localities } from "@egovernments/digit-ui-react-components";
-
 import { useTranslation } from "react-i18next";
-
 import _ from "lodash";
 
-const GroupFilter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, ...props }) => {
+const GroupFilter = ({ searchParams, onFilterChange, controlSearchForm, defaultSearchParams, statuses, ...props }) => {
   const { t } = useTranslation();
 
   const [_searchParams, setSearchParams] = useState(() => searchParams);
   const [service, setService] = useState([]);
+  const [ulbLists, setulbLists] = useState([]);
+
+  const tenantId = Digit.SessionStorage.get("User")?.info?.tenantId;
 
   const localParamChange = (filterParam) => {
     let keys_to_delete = filterParam.delete;
@@ -26,7 +27,7 @@ const GroupFilter = ({ searchParams, onFilterChange, defaultSearchParams, status
   };
 
   const clearAll = () => {
-    setSearchParams([]);
+    setService([]);
     onFilterChange([]);
   };
 
@@ -36,48 +37,34 @@ const GroupFilter = ({ searchParams, onFilterChange, defaultSearchParams, status
     }
   }, [service]);
 
-  const tenantId = Digit.SessionStorage.get("User")?.info?.tenantId;
-  const tenantIds = Digit.SessionStorage.get("HRMS_TENANTS");
-
   const { isLoading, data: generateServiceType } = Digit.Hooks.useCommonMDMS(tenantId, "BillingService", "BillsGenieKey");
 
   const filterServiceType = generateServiceType?.BillingService?.BusinessService?.filter((element) => element.billGineiURL);
-
+  const getUlbLists = generateServiceType?.tenant?.tenants?.filter((element) => element.code === tenantId);
+  useEffect(() => {
+    if (getUlbLists) {
+      setulbLists(getUlbLists[0]);
+    }
+  }, []);
   let serviceTypeList = [];
   if (filterServiceType) {
     serviceTypeList = filterServiceType.map((element) => {
-      if (element.code === "PT") {
-        element.businessService = "Property Tax";
-      }
-      if (element.code === "ADVT.Hoardings") {
-        element.businessService = "Hoardings";
-      }
-      if (element.code === "WS") {
-        element.businessService = "Water Connection";
-      }
-      if (element.code === "SW") {
-        element.businessService = "Sewerage Connection";
-      }
-
-      // setSearchParams({ businessServices: element.businessService, billGineiURL: element.billGineiURL });
       return {
         name: element.businessService,
         url: element.billGineiURL,
         businesService: element.code,
-        // address: element.address.locality,
       };
     });
   }
 
-  const onServiceSelect = (e, label) => {
-    if (e.target.checked)
-      localParamChange({ applicationStatus: [...(_searchParams?.applicationStatus ? _searchParams.applicationStatus : []), label] });
-    else localParamChange({ applicationStatus: _searchParams?.applicationStatus.filter((o) => o !== label) });
-  };
+  const disableSubmitBar = useMemo(() => {
+    return !_searchParams.businesService || !_searchParams.locality;
+  }, [_searchParams]);
 
   const selectLocality = (d) => {
     localParamChange({ locality: [...(_searchParams?.locality || []), d] });
   };
+  const userUlbs = [];
 
   if (isLoading) {
     return <Loader />;
@@ -120,9 +107,14 @@ const GroupFilter = ({ searchParams, onFilterChange, defaultSearchParams, status
           </div>
           <div>
             <div>
-              <div className="filter-label">{t("CR_SERVICE_CATEGORY_LABEL")}</div>
+              <div className="filter-label">{t("LABEL_FOR_ULB")}</div>
+              <Dropdown option={userUlbs} optionKey={"name"} value={ulbLists} selected={ulbLists} select={setulbLists} t={t} disable={userUlbs} />
+            </div>
+            <div>
+              <div className="filter-label">{t("ABG_SERVICE_CATEGORY_LABEL")}</div>
               <Dropdown t={t} option={serviceTypeList} value={service} selected={service} select={setService} optionKey={"name"} />
             </div>
+
             <div>
               <div className="filter-label" style={{ fontWeight: "normal" }}>
                 {t("ES_INBOX_LOCALITY")}:
@@ -145,7 +137,8 @@ const GroupFilter = ({ searchParams, onFilterChange, defaultSearchParams, status
 
             <div>
               <SubmitBar
-                disabled={_.isEqual(_searchParams, searchParams)}
+                // disabled={_.isEqual(_searchParams, searchParams)}
+                disabled={disableSubmitBar}
                 onSubmit={() => onFilterChange(_searchParams)}
                 label={t("ES_COMMON_APPLY")}
               />

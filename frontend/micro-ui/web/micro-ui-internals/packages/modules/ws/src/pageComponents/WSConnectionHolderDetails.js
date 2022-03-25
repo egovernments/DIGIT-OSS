@@ -27,7 +27,7 @@ const WSConnectionHolderDetails = ({ config, onSelect, userType, formData, setEr
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const filters = func.getQueryStringParams(location.search);
-  const [connectionHolderDetails, setConnectionHolderDetails] = useState(formData?.connectionHolderDetails || [createConnectionHolderDetails()]);
+  const [connectionHolderDetails, setConnectionHolderDetails] = useState(formData?.ConnectionHolderDetails ? [formData?.ConnectionHolderDetails?.[0]] : [createConnectionHolderDetails()]);
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
   const stateId = Digit.ULBService.getStateId();
   const [isErrors, setIsErrors] = useState(false);
@@ -206,7 +206,7 @@ const ConnectionDetails = (_props) => {
                 setFocusIndex({ index: connectionHolderDetail?.key, type: "sameAsOwnerDetails" });
               }}
               checked={connectionHolderDetails?.[0]?.sameAsOwnerDetails}
-              style={{ paddingBottom: "10px", paddingTop: "10px" }}
+              style={{ paddingBottom: "10px", paddingTop: "3px" }}
               onBlur={props.onBlur}
             />
           )}
@@ -242,7 +242,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.name ? errors?.name?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL")}*:`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL")}*:`}</CardLabel>
           <Controller
             control={control}
             name={"gender"}
@@ -322,7 +322,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.guardian ? errors?.guardian?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}*:`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}*:`}</CardLabel>
           <Controller
             control={control}
             name={"relationship"}
@@ -374,7 +374,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.address ? errors?.address?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}*:`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}*:`}</CardLabel>
           <Controller
             control={control}
             name={"ownerType"}
