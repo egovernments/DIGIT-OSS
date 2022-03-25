@@ -143,6 +143,8 @@ const Urls = {
     sewarage_update: "/sw-services/swc/_update",
     ws_calculation_estimate: "/ws-calculator/waterCalculator/_estimate",
     ws_connection_search: "/ws-calculator/meterConnection/_search",
+    sw_payment_search: "/collection-services/payments/SW/_search",
+    ws_payment_search: "/collection-services/payments/WS/_search",
   },
 
   engagement: {

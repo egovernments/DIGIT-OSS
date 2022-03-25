@@ -186,6 +186,7 @@ import useWSMDMSWS from "./ws/useWSMDMSWS"
 import WSuseSearch from "./ws/useSearch";
 import useSewSearch from "./ws/useSewSearch"
 import useSearchWS from "./ws/useSearchWS"
+import useMypaymentWS from "./ws/useMypaymentWS";
 import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions";
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
@@ -391,7 +392,8 @@ const ws = {
   useConnectionDetail,
   useMDMS: useWSMDMS,
   useWaterCreateAPI,
-  useSewerageCreateAPI
+  useSewerageCreateAPI,
+  useMypaymentWS,
 };
 
 
