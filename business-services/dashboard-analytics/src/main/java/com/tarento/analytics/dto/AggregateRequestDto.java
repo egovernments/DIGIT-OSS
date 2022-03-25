@@ -1,6 +1,7 @@
 package com.tarento.analytics.dto;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tarento.analytics.utils.ResponseRecorder;
 
 import java.util.Map;
 
@@ -17,6 +18,7 @@ public class AggregateRequestDto {
 	private RequestDate requestDate; 
 	private String interval;
 	private ObjectNode chartNode;
+	private ResponseRecorder responseRecorder;
 	
 	public AggregateRequestDto() {} 
 	public AggregateRequestDto(AggregateRequestDtoV3 requestDtoV3, String visualizationType, String visualizationCode) { 
@@ -101,6 +103,12 @@ public class AggregateRequestDto {
 	}
 	public void setInterval(String interval) {
 		this.interval = interval;
+	}
+	public ResponseRecorder getResponseRecorder() {
+		return responseRecorder;
+	}
+	public void setResponseRecorder(ResponseRecorder responseRecorder) {
+		this.responseRecorder = responseRecorder;
 	} 
 	
 	

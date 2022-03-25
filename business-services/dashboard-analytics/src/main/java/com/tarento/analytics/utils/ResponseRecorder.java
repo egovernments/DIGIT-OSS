@@ -8,17 +8,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
 
 import com.tarento.analytics.constant.Constants;
 
-@Component("responseRecorder")
+//@Component("responseRecorder")
 public class ResponseRecorder {
 	
 	private static Logger logger = LoggerFactory.getLogger(ResponseRecorder.class);
-	public static volatile ConcurrentHashMap<String, Map<String, Object>> requestModuleResponseMap = new ConcurrentHashMap<>();
+	public static  HashMap<String, Map<String, Object>> requestModuleResponseMap = new HashMap<>();
     
 	public Object get(String visualizationCode, String module) {
-    	if(StringUtils.isNotBlank(module)) { 
+    	if(!StringUtils.isNotBlank(module)) { 
     		module = Constants.Modules.COMMON.toString();
     	}
     	if(requestModuleResponseMap.get(visualizationCode) != null && requestModuleResponseMap.get(visualizationCode).get(module) != null) { 
@@ -29,7 +30,7 @@ public class ResponseRecorder {
 
     
 	public Boolean put(String visualizationCode, String module, Object object) {
-    	if(StringUtils.isNotBlank(module)) { 
+    	if(!StringUtils.isNotBlank(module)) { 
     		module = Constants.Modules.COMMON.toString();
     	}
     	if(requestModuleResponseMap.containsKey(visualizationCode)) { 
