@@ -75,11 +75,7 @@ public class BPAController {
 	@PostMapping(value = "/_search")
 	public ResponseEntity<BPAResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute BPASearchCriteria criteria) {
-		log.debug("criteria:: " + criteria.toString());
-		log.debug("requestInfoWrapper:: " + requestInfoWrapper.toString());
 		
-	
-
 		List<BPA> bpas = bpaService.search(criteria, requestInfoWrapper.getRequestInfo());
 		int count = bpaService.getBPACount(criteria, requestInfoWrapper.getRequestInfo());
 		BPAResponse response = BPAResponse.builder().BPA(bpas).responseInfo(

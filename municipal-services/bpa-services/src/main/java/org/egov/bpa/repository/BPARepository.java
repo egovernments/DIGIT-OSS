@@ -110,8 +110,12 @@ public class BPARepository {
         public int getBPACount(BPASearchCriteria criteria, List<String> edcrNos) {
                 List<Object> preparedStmtList = new ArrayList<>();
                 String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos);
-                log.debug("query issue statement" +preparedStmtList.toString());
-                log.debug("query issue" +edcrNos);
+                try {
+                    query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+                } catch (InvalidTenantIdException e) {
+                    throw new CustomException(BPAErrorConstants.EG_BPA_AS_TENANTID_ERROR,
+                            "TenantId length is not sufficient to replace query schema in a multi state instance");
+                }
                 int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
                 return count;
         }
