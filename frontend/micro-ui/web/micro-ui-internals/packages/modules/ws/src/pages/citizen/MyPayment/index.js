@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import WSPayment from "./WSPayment";
 import { propertyCardBodyStyle } from "../../../utils";
-// import useWSSearch from "../../../../../../libraries/src/hooks/ws/useMyPaymentWS";
+
 
 const WSMyPayments = () => {
 
@@ -32,16 +32,28 @@ const WSMyPayments = () => {
   const { isLoading: isSWLoading, isError : isSWError, error : SWerror, data: SWdata } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1,BusinessService:"SW"}, { filters: filter1 });
   // const result = Digit.Hooks.ws.useMypaymentWS({});
   // const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
+  let connectionNoWS =  data ? data?.WaterConnection?.map((ob) => ob.connectionNo).join(",") : null;
+  let connectionNoSW =  data ? data?.SewerageConnections?.map((ob)=>ob.connectionNo).join(",") : null;
 
-  // const {data, isLoading, error} = Digit.Hooks.ws.useMypaymentWS({tenantId : tenantId,filters: {consumerCodes:consumerCode}},{enabled:result?.data?.Properties.length>0?true:false, propertyData:result?.data?.Properties});
-  console.log(data, "data")
-  console.log(SWdata,"swdata")
-  
-  if (isLoading || result?.isLoading) {
+  const {data:wspayments, isLoading:iswsLoading} = Digit.Hooks.ws.useMypaymentWS({tenantId : tenantId,filters: {consumerCodes:connectionNoWS},BusinessService:"WS"},{enabled:connectionNoWS!==null?true:false});
+  const {data:swpayments, isLoading:isswLoading} = Digit.Hooks.ws.useMypaymentWS({tenantId : tenantId,filters: {consumerCodes:connectionNoSW},BusinessService:"SW"},{enabled:connectionNoSW!==null?true:false});
+
+  if (isLoading || iswsLoading||isswLoading||isSWLoading) {
     return <Loader />;
   }
+  const wspayment = wspayments && wspayments?.Payments || [];
+  const swpayment = swpayments && swpayments?.Payments || [];
+
+  let applicationsList = wspayment.concat(swpayment);
+
   
-  const applicationsList = data && data?.Payments || [];
+  // let applicationNoWS =  data && data?.WaterConnection?.map((ob) => ob.propertyId).join(",") || "";
+  // let applicaionNoSW = SWdata && SWdata?.SewerageConnections?.map((ob) => ob.propertyId).join(",") || "";
+  // let applicationNos = applicationNoWS.concat(applicaionNoSW);
+  // const { isLoading: PTisLoading, isError: PTisError, error: PTerror, data : PTdata } = Digit.Hooks.pt.usePropertySearch({ filters: { propertyIds:applicationNos } }, { filters: { propertyIds:applicationNos },enabled:applicationNos?true:false });
+  // applicationsList = applicationsList && applicationsList.map((ob) => {return({...ob,"property":PTdata?.Properties?.filter((pt) => pt.propertyId === ob.propertyId)[0]})})
+
+  // const applicationsList = wspayments && wspayments?.Payments || [];
   // console.log("mypaymentindex")
 
   return (
@@ -56,12 +68,12 @@ const WSMyPayments = () => {
           ))}
         {!applicationsList?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("PT_NO_APPLICATION_FOUND_MSG")}</p>}
       </div>
-      <p style={{ marginLeft: "16px", marginTop: "16px" }}>
+      {/* <p style={{ marginLeft: "16px", marginTop: "16px" }}>
         {t("WS_TEXT_NOT_ABLE_TO_FIND_THE_PAYMENT")}{" "}
         <span className="link" style={{ display: "block" }}>
           <Link to="/digit-ui/citizen/pt/property/citizen-search">{t("PT_COMMON_CLICK_HERE_TO_SEARCH_THE_PROPERTY")}</Link>
         </span>
-      </p>
+      </p> */}
     </React.Fragment>
   );
 };

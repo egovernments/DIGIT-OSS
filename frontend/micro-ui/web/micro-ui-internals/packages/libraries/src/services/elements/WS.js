@@ -42,22 +42,22 @@ export const WSService = {
       params: { tenantId, ...filters },
       auth: true,
     }),
-    paymentsearch: ({ tenantId, filters, auth }) =>
+    paymentsearch: ({ tenantId, filters, auth,BusinessService }) =>
     Request({
-      url: Urls.ws.ws_payment_search,
+      url: BusinessService==="WS"? Urls.ws.ws_payment_search:Urls.ws.sw_payment_search,
       useCache: false,
       method: "POST",
       auth: auth === false ? auth : true,
       userService: auth === false ? auth : true,
       params: { tenantId, ...filters },
     }),
-    sw_paymentsearch: ({ tenantId, filters, auth }) =>
-    Request({
-      url: Urls.ws.sw_payment_search,
-      useCache: false,
-      method: "POST",
-      auth: auth === false ? auth : true,
-      userService: auth === false ? auth : true,
-      params: { tenantId, ...filters },
-    })
+    // sw_paymentsearch: ({ tenantId, filters, auth }) =>
+    // Request({
+    //   url: ,
+    //   useCache: false,
+    //   method: "POST",
+    //   auth: auth === false ? auth : true,
+    //   userService: auth === false ? auth : true,
+    //   params: { tenantId, ...filters },
+    // })
 };

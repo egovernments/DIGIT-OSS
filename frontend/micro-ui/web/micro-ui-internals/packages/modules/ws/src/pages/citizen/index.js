@@ -14,13 +14,14 @@ import MyConnections from "./MyConnection";
 import ConnectionDetails from "./MyConnection/ConnectionDetails";
 import consumptionDetails from "./MyConnection/ConsumptionDetails";
 import WSMyPayments from "./MyPayment";
+import { useFlexLayout } from "react-table";
 
 
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
   return (
-    <React.Fragment>
+    <React.Fragment >
       <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>
       <Switch>
         <PrivateRoute path={`${path}/create-application`} component={WSCreate} />

@@ -32,6 +32,11 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
     return fileURL;
   };
   
+  export const DownloadReceipt = async (consumerCode, tenantId, businessService, pdfKey = "consolidatedreceipt") => {
+    tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
+    await Digit.Utils.downloadReceipt(consumerCode, businessService, "consolidatedreceipt", tenantId);
+  };
+  
   /*   method to get filename  from fielstore url*/
   export const pdfDocumentName = (documentLink = "", index = 0) => {
     let documentName = decodeURIComponent(documentLink.split("?")[0].split("/").pop().slice(13)) || `Document - ${index + 1}`;
