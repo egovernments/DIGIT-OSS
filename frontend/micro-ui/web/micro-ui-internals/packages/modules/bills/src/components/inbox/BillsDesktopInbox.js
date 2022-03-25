@@ -28,6 +28,53 @@ const BillsDesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
   };
 
   const columns = React.useMemo(() => {
+    if (window.location.href.includes("/digit-ui/employee/bills/group-bill")) {
+      return [
+        {
+          Header: t("ABG_COMMON_TABLE_COL_BILL_NO"),
+          disableSortBy: true,
+          Cell: ({ row }) => {
+            return (
+              <div>
+                <span className="link">
+                  {GetCell(getBillNumber(row.original?.businessService, row.original?.consumerCode, row.original?.billNumber))}
+                </span>
+              </div>
+            );
+          },
+        },
+        {
+          Header: t("ABG_COMMON_TABLE_COL_CONSUMER_NAME"),
+          disableSortBy: true,
+          Cell: ({ row }) => {
+            return GetCell(`${row.original?.["payerName"]}`);
+          },
+        },
+        {
+          Header: t("ABG_COMMON_TABLE_COL_BILL_EXP_DATE"),
+          disableSortBy: true,
+          Cell: ({ row }) => {
+            const billDate = row.original?.billDate === "NA" ? t("CS_NA") : convertEpochToDate(row.original?.billDate);
+            return GetCell(t(`${billDate}`));
+          },
+        },
+        {
+          Header: t("ABG_COMMON_TABLE_COL_BILL_AMOUNT"),
+          disableSortBy: true,
+          Cell: ({ row }) => {
+            return GetCell(`${row.original?.["totalAmount"]}`);
+          },
+        },
+
+        {
+          Header: t("ABG_COMMON_TABLE_COL_STATUS"),
+          disableSortBy: true,
+          Cell: ({ row }) => {
+            return GetCell(`${row.original?.["status"]}`);
+          },
+        },
+      ];
+    }
     return [
       {
         Header: t("ABG_COMMON_TABLE_COL_BILL_NO"),
@@ -87,6 +134,9 @@ const BillsDesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
   }, []);
 
   const getActionItem = (status, row) => {
+    if (window.location.href.includes("/digit-ui/employee/bills/group-bill")) {
+      return null;
+    }
     switch (status) {
       case "ACTIVE":
         return (
@@ -171,23 +221,43 @@ const BillsDesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
     );
   }
 
+  const dynamicRoutes = () => {
+    if (window.location.href.includes("/digit-ui/employee/bills/group-bill")) {
+      return (
+        <InboxLinks
+          parentRoute={props.parentRoute}
+          allLinks={[
+            {
+              text: "ABG_SEARCH_BILL_COMMON_HEADER",
+              link: "/digit-ui/employee/bills/inbox",
+            },
+          ]}
+          headerText={t("ACTION_TEST_BILLGENIE")}
+          businessService={props.businessService}
+        />
+      );
+    } else {
+      return (
+        <InboxLinks
+          parentRoute={props.parentRoute}
+          allLinks={[
+            {
+              text: "ABG_COMMON_HEADER",
+              link: "/digit-ui/employee/bills/group-bill",
+            },
+          ]}
+          headerText={t("ACTION_TEST_BILLGENIE")}
+          businessService={props.businessService}
+        />
+      );
+    }
+  };
+
   return (
     <div className="inbox-container">
       {!props.isSearch && (
         <div className="filters-container">
-          <InboxLinks
-            parentRoute={props.parentRoute}
-            allLinks={[
-              {
-                text: "Group Bills",
-                link: "/digit-ui/employee/bills/gb",
-                businessService: "receipts",
-                roles: ["CR_PT"],
-              },
-            ]}
-            headerText={t("ACTION_TEST_BILLS")}
-            businessService={props.businessService}
-          />
+          {dynamicRoutes()}
           <div>
             {
               <FilterComponent

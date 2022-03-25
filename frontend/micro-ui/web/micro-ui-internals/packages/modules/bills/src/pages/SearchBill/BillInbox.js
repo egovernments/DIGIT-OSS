@@ -10,6 +10,8 @@ const BillInbox = ({ parentRoute, initialStates, businessService, filterComponen
 
   const { t } = useTranslation();
   const [pageOffset, setPageOffset] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
+
   const [pageSize, setPageSize] = useState(10);
   const [sortParams, setSortParams] = useState(initialStates?.sortParams || [{ id: "applicationDate", desc: false }]);
   const [setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState] = useState(false);
@@ -19,7 +21,7 @@ const BillInbox = ({ parentRoute, initialStates, businessService, filterComponen
 
   let isMobile = window.Digit.Utils.browser.isMobile();
   let paginationParams = isMobile
-    ? { limit: 100, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
+    ? { limit: 10, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
   const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.useBillSearch({
@@ -27,6 +29,10 @@ const BillInbox = ({ parentRoute, initialStates, businessService, filterComponen
     filters: { ...searchParams, businessService, ...paginationParams, sortParams },
     config: {},
   });
+
+  useEffect(() => {
+    setTotalRecords(data?.Bills?.length);
+  }, [data]);
 
   useEffect(() => {
     setPageOffset(0);
@@ -38,6 +44,14 @@ const BillInbox = ({ parentRoute, initialStates, businessService, filterComponen
 
   const fetchPrevPage = () => {
     setPageOffset((prevState) => prevState - pageSize);
+  };
+
+  const fetchFirstPage = () => {
+    setPageOffset((prevState) => 0);
+  };
+
+  const fetchLastPage = () => {
+    setPageOffset(totalRecords && Math.ceil(totalRecords / 10) * 10 - pageSize);
   };
 
   const handleFilterChange = (filterParam) => {
@@ -69,15 +83,15 @@ const BillInbox = ({ parentRoute, initialStates, businessService, filterComponen
   const getSearchFields = () => {
     return [
       {
-        label: "Bill Number",
+        label: t("ABG_BILL_NUMBER_LABEL"),
         name: "billNo",
       },
       {
         label: "Unique Property ID",
-        name: "billNumber",
+        name: "propertyId",
       },
       {
-        label: t("CORE_COMMON_MOBILE_NUMBER"),
+        label: t("ABG_MOBILE_NO_LABEL"),
         name: "mobileNumber",
         maxlength: 10,
 
@@ -125,12 +139,13 @@ const BillInbox = ({ parentRoute, initialStates, businessService, filterComponen
         parentRoute={parentRoute}
         searchParams={searchParams}
         sortParams={sortParams}
+        totalRecords={totalRecords}
       />
     );
   } else {
     return (
       <div>
-        {isInbox && <Header>{"Search Bill"}</Header>}
+        {isInbox && <Header>{t("ABG_SEARCH_BILL_COMMON_HEADER")}</Header>}
         <DesktopInbox
           data={data}
           tableConfig={rest?.tableConfig}
@@ -145,14 +160,16 @@ const BillInbox = ({ parentRoute, initialStates, businessService, filterComponen
           onSort={handleSort}
           onNextPage={fetchNextPage}
           onPrevPage={fetchPrevPage}
+          onFirstPage={fetchFirstPage}
+          onLastPage={fetchLastPage}
           currentPage={Math.floor(pageOffset / pageSize)}
-          pageSizeLimit={pageSize}
+          pageSizeLimit={10}
           disableSort={false}
           onPageSizeChange={handlePageSizeChange}
           parentRoute={parentRoute}
           searchParams={searchParams}
           sortParams={sortParams}
-          totalRecords={Number(data?.totalCount)}
+          totalRecords={totalRecords}
           filterComponent={filterComponent}
         />
       </div>

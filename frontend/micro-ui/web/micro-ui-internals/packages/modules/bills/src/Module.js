@@ -11,6 +11,10 @@ import Banner from "./components/Banner";
 import GroupFilter from "./pages/GroupBill/GroupFilter";
 
 export const BillsModule = ({ stateCode, userType }) => {
+  const moduleCode = "abg";
+  const state = useSelector((state) => state);
+  const language = state?.common?.selectedLanguage;
+  const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
   const { path, url } = useRouteMatch();
   if (userType === "employee") {
     return <EmployeeApp path={path} url={url} userType={"employee"} />;

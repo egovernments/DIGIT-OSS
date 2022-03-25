@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, CloseSvg, SubmitBar, Loader, RemoveableTag, Localities } from "@egovernments/digit-ui-react-components";
-
+import { Dropdown, CloseSvg, SubmitBar, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
 import _ from "lodash";
@@ -10,9 +9,10 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
 
   const [_searchParams, setSearchParams] = useState(() => searchParams);
   const [service, setService] = useState([]);
+  const [ulbLists, setulbLists] = useState([]);
 
   const clearAll = () => {
-    setSearchParams([]);
+    setService([]);
     onFilterChange([]);
   };
 
@@ -28,6 +28,8 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
 
   const filterServiceType = generateServiceType?.BillingService?.BusinessService?.filter((element) => element.billGineiURL);
 
+  const getUlbLists = generateServiceType?.tenant?.tenants?.filter((element) => element.code === tenantId);
+
   let serviceTypeList = [];
   if (filterServiceType) {
     serviceTypeList = filterServiceType.map((element) => {
@@ -39,6 +41,13 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
     });
   }
 
+  useEffect(() => {
+    if (getUlbLists) {
+      setulbLists(getUlbLists[0]);
+    }
+  }, []);
+
+  const userUlbs = [];
   if (isLoading) {
     return <Loader />;
   }
@@ -80,7 +89,11 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
           </div>
           <div>
             <div>
-              <div className="filter-label">{t("CR_SERVICE_CATEGORY_LABEL")}</div>
+              <div className="filter-label">{t("LABEL_FOR_ULB")}</div>
+              <Dropdown option={userUlbs} optionKey={"name"} value={ulbLists} selected={ulbLists} select={setulbLists} t={t} disable={userUlbs} />
+            </div>
+            <div>
+              <div className="filter-label">{t("ABG_SERVICE_CATEGORY_LABEL")}</div>
               <Dropdown t={t} option={serviceTypeList} value={service} selected={service} select={setService} optionKey={"name"} />
             </div>
 
