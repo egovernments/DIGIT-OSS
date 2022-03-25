@@ -44,13 +44,49 @@ export const TLSearch = {
   applicationDetails: async (t, tenantId, applicationNumber, userType) => {
     const filter = { applicationNumber };
     const response = await TLSearch.application(tenantId, filter);
+    const propertyDetails =response?.tradeLicenseDetail?.additionalDetail?.propertyId && await Digit.PTService.search({tenantId, filters: {propertyIds:response?.tradeLicenseDetail?.additionalDetail?.propertyId}});
     let numOfApplications = [];
     if(response?.licenseNumber) {
       const licenseNumbers = response?.licenseNumber;
       const filters = { licenseNumbers, offset: 0 };
       numOfApplications = await TLSearch.numberOfApplications(tenantId, filters);
     }
-
+    let propertyAddress = '';
+  if(propertyDetails && propertyDetails?.Properties?.length){
+    if(propertyDetails?.Properties[0]?.address?.doorNo) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.doorNo;
+      if(propertyDetails?.Properties[0]?.address?.street) {
+        propertyAddress += ', ';
+      }
+    }
+    if(propertyDetails?.Properties[0]?.address?.street) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.street;
+      if(propertyDetails?.Properties[0]?.address?.landmark) {
+        propertyAddress += ', ';
+      }
+    }
+    if(propertyDetails?.Properties[0]?.address?.landmark) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.landmark;
+      if(propertyDetails?.Properties[0]?.address?.locality?.name) {
+        propertyAddress += ', ';
+      }
+    }
+    if(propertyDetails?.Properties[0]?.address?.locality?.name) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.locality?.name;
+      if(propertyDetails?.Properties[0]?.address?.city) {
+        propertyAddress += ', ';
+      }
+    }
+    if(propertyDetails?.Properties[0]?.address?.city) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.city;
+      if(propertyDetails?.Properties[0]?.address?.pincode) {
+        propertyAddress += ', ';
+      }
+    }
+    if(propertyDetails?.Properties[0]?.address?.pincode) {
+      propertyAddress += propertyDetails?.Properties[0]?.address?.pincode;
+    }
+  }
     let employeeResponse = [];
     const tradedetails = {
       title: "TL_COMMON_TR_DETAILS",
@@ -111,6 +147,16 @@ export const TLSearch = {
       },
     };
 
+    const PropertyDetail = {
+      title: "PT_DETAILS",
+      values: [
+        { title: "TL_PROPERTY_ID", value: propertyDetails?.Properties?.[0]?.propertyId || "NA" },
+        { title: "PT_OWNER_NAME", value: propertyDetails?.Properties?.[0]?.owners[0]?.name || "NA" },
+        { title: "PROPERTY_ADDRESS", value: propertyAddress || "NA"},
+        { title: "TL_VIEW_PROPERTY_DETAIL", to:`/digit-ui/employee/pt/property-details/${propertyDetails?.Properties?.[0]?.propertyId}`, value:"", isLink:true }
+      ],
+    }; 
+
     const cityOfApp = cloneDeep(response?.tradeLicenseDetail?.address?.city);
     const localityCode = cloneDeep(response?.tradeLicenseDetail?.address?.locality?.code);
     const tradeAddress = {
@@ -125,7 +171,41 @@ export const TLSearch = {
     };
 
     const checkOwnerLength = response?.tradeLicenseDetail?.owners?.length || 1;
-    const owners = {
+    const owners = response?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL") ? 
+    {
+      title: "ES_NEW_APPLICATION_OWNERSHIP_DETAILS",
+      additionalDetails: {
+        owners: response?.tradeLicenseDetail?.owners?.map((owner, index) => {
+          let subOwnerShipCategory = response?.tradeLicenseDetail?.subOwnerShipCategory ? `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(response?.tradeLicenseDetail?.subOwnerShipCategory, ".", "_")}` : "NA";
+          return {
+            title: (Number(checkOwnerLength) > 1)  ? "TL_PAYMENT_PAID_BY_PLACEHOLDER" : "",
+            values: [
+              { title: "TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL", value: subOwnerShipCategory },
+              { title: "TL_INSTITUTION_NAME_LABEL", value: response?.tradeLicenseDetail?.institution?.instituionName || "NA" },
+              { title: "TL_NEW_OWNER_DESIG_LABEL", value: response?.tradeLicenseDetail?.institution?.designation || "NA" },
+              { title: "TL_TELEPHONE_NUMBER_LABEL", value: response?.tradeLicenseDetail?.institution?.contactNo || response?.tradeLicenseDetail?.institution?.contactNo !== ""? response?.tradeLicenseDetail?.institution?.contactNo : "NA" },
+              { title: "TL_OWNER_S_MOBILE_NUM_LABEL", value: owner?.mobileNumber || "NA" },
+              { title: "TL_NEW_OWNER_DETAILS_NAME_LABEL", value: response?.tradeLicenseDetail?.institution?.name || "NA" },
+              { title: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL", value: owner?.emailId || owner?.emailId !== ""? owner?.emailId : "NA" },
+            ],
+          };
+        }),
+        documents: [
+          {
+            title: "PT_COMMON_DOCS",
+            values: response?.tradeLicenseDetail?.applicationDocuments?.map((document) => {
+              return {
+                title: `TL_NEW_${document?.documentType.replace(".", "_")}`,
+                documentType: document?.documentType,
+                documentUid: document?.documentUid,
+                fileStoreId: document?.fileStoreId,
+              };
+            }),
+          },
+        ]
+      },
+    }:
+    {
       title: "ES_NEW_APPLICATION_OWNERSHIP_DETAILS",
       additionalDetails: {
         owners: response?.tradeLicenseDetail?.owners?.map((owner, index) => {
@@ -136,8 +216,8 @@ export const TLSearch = {
               { title: "TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL", value: subOwnerShipCategory },
               { title: "TL_OWNER_S_NAME_LABEL", value: owner?.name || "NA" },
               { title: "TL_OWNER_S_MOBILE_NUM_LABEL", value: owner?.mobileNumber || "NA" },
-              // { title: "TL_GUARDIAN_S_NAME_LABEL", value: owner?.fatherOrHusbandName || "NA" },
-              // { title: "TL_RELATIONSHIP_WITH_GUARDIAN_LABEL", value: owner?.relationship || "NA" },
+              { title: "TL_GUARDIAN_S_NAME_LABEL", value: owner?.fatherOrHusbandName || "NA" },
+              { title: "TL_RELATIONSHIP_WITH_GUARDIAN_LABEL", value: owner?.relationship || "NA" },
               { title: "TL_NEW_OWNER_DETAILS_GENDER_LABEL", value: owner?.gender || "NA" },
               { title: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL", value: owner?.emailId || "NA" },
               { title: "TL_OWNER_SPECIAL_CATEGORY", value: owner?.ownerType ? `COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}` : "NA" },
@@ -175,7 +255,8 @@ export const TLSearch = {
     response && employeeResponse.push(tradedetails);
     response?.tradeLicenseDetail?.tradeUnits && employeeResponse.push(tradeUnits);
     response?.tradeLicenseDetail?.accessories && employeeResponse.push(accessories);
-    response && employeeResponse.push(tradeAddress);
+    propertyDetails?.Properties?.length>0 && employeeResponse.push(PropertyDetail);
+    response && !(propertyDetails?.Properties?.length >0) && employeeResponse.push(tradeAddress);
     response?.tradeLicenseDetail?.owners && employeeResponse.push(owners);
 
     return {

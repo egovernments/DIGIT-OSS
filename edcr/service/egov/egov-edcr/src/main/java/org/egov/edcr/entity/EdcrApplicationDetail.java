@@ -39,6 +39,9 @@
  */
 package org.egov.edcr.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -47,6 +50,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -96,10 +101,10 @@ public class EdcrApplicationDetail extends AbstractAuditable {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "scrutinizedDxfFileId")
     private FileStoreMapper scrutinizedDxfFileId;
-    /*
-     * @OneToMany(mappedBy = "edcrApplicationDetail", fetch = LAZY, cascade = ALL)
-     * @OrderBy("id DESC ") private List<EdcrPdfDetail> edcrPdfDetails;
-     */
+
+    @OneToMany(mappedBy = "edcrApplicationDetail", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("id DESC ")
+    private List<EdcrPdfDetail> edcrPdfDetails = new ArrayList<>();
 
     @Transient
     private Long noOfErrors;
@@ -176,10 +181,14 @@ public class EdcrApplicationDetail extends AbstractAuditable {
         this.scrutinizedDxfFileId = scrutinizedDxfFileId;
     }
 
-    /*
-     * public List<EdcrPdfDetail> getEdcrPdfDetails() { return edcrPdfDetails; } public void setEdcrPdfDetails(List<EdcrPdfDetail>
-     * edcrPdfDetails) { this.edcrPdfDetails = edcrPdfDetails; }
-     */
+    public List<EdcrPdfDetail> getEdcrPdfDetails() {
+        return edcrPdfDetails;
+    }
+
+    public void setEdcrPdfDetails(List<EdcrPdfDetail> edcrPdfDetails) {
+        this.edcrPdfDetails = edcrPdfDetails;
+    }
+
     public Long getNoOfErrors() {
         return noOfErrors;
     }

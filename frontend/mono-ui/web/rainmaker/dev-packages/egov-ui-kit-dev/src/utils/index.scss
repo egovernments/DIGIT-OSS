@@ -2,6 +2,7 @@
 .report-pdf-button {
   color: #fe7a51 !important;
   border: none !important;
+  margin: 0px 4px !important;
 }
 
 .report-result-table {
@@ -85,8 +86,15 @@
 @media only screen and (max-width: 704px) {
   #reportTable_wrapper {
     overflow: scroll;
+    .col-xs-12 .text-center{
+position: unset;
+    }
+  }
+  .unique-jk-report-btns{
+    position: unset!important;
   }
 }
+
 
 
 .dt-button-collection{
@@ -94,4 +102,9 @@
     display: flex!important;
     flex-direction: row-reverse!important;
     width: 100%!important;
+}
+.dt-buttons{
+  display: flex;
+justify-content: end;
+cursor: pointer;
 }

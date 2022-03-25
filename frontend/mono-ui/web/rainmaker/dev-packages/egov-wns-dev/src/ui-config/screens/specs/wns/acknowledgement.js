@@ -28,6 +28,8 @@ import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getMdmsData } from './apply';
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+
 let headerLabel = "WS_APPLICATION_NEW_CONNECTION_HEADER";
 const applicationNo = getQueryArg(window.location.href, "applicationNumber");
 if(isModifyMode()){
@@ -745,7 +747,7 @@ const fetchData = async (dispatch) => {
 const getWaterData = async (dispatch, applicationNumber, tenantId) => {
   let waterResponse = [];
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
-  try { waterResponse = await getSearchResults(queryObject); } catch (error) { console.log(error); waterResponse = [] };
+  try { waterResponse = await getSearchResults(queryObject); } catch (error) {  waterResponse = [] };
   if (waterResponse && waterResponse.WaterConnection !== undefined && waterResponse.WaterConnection.length > 0) {
     waterResponse.WaterConnection[0].service = serviceConst.WATER;
     dispatch(prepareFinalObject("WaterConnection", findAndReplace(waterResponse.WaterConnection, "NA", null)));
@@ -755,7 +757,7 @@ const getWaterData = async (dispatch, applicationNumber, tenantId) => {
 const getSewerageData = async (dispatch, applicationNumber, tenantId) => {
   let sewerResponse = [];
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
-  try { sewerResponse = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.log(error); sewerResponse = [] };
+  try { sewerResponse = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) {  sewerResponse = [] };
   if (sewerResponse && sewerResponse.SewerageConnections !== undefined && sewerResponse.SewerageConnections.length > 0) {
     sewerResponse.SewerageConnections[0].service = serviceConst.SEWERAGE;
     dispatch(prepareFinalObject("SewerageConnection", findAndReplace(sewerResponse.SewerageConnections, "NA", null)));
@@ -795,6 +797,7 @@ const screenConfig = {
         const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
         const secondNumber = getQueryArg(window.location.href, "secondNumber");
         const tenant = getQueryArg(window.location.href, "tenantId");
+        loadUlbLogo(tenant);
         let consumerNo = ""
         if (applicationNumber && applicationNumber.includes("WS")) {
           consumerNo = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].connectionNo");
@@ -827,7 +830,7 @@ const screenConfig = {
       .then(() => prepareDocumentsUploadRedux(state, dispatch))
       .then(() => downloadAndPrintForNonApply(state, dispatch))
       
-      .catch(error => console.log(error))    
+      .catch(error => {})    
     return action;
   }
 };

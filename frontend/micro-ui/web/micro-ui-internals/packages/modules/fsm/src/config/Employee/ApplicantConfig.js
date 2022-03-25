@@ -16,6 +16,12 @@ const ApplicantDetails = [
         withoutLabel: true,
         component: "SelectName",
       },
+      {
+        type: "component",
+        key: "paymentPreference",
+        withoutLabel: true,
+        component: "SelectPaymentType",
+      },
     ],
   },
 ];

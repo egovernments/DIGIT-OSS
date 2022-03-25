@@ -6,36 +6,8 @@ import { useQueryClient } from "react-query";
 import getPDFData from "../getPDFData";
 import { getVehicleType } from "../utils";
 
-const GetMessage = (type, action, isSuccess, isEmployee, t) => {
-  //   if (isSuccess) {
-  //     switch (action) {
-  //       case "REOPEN":
-  //         return t(`CS_COMMON_COMPLAINT_REOPENED`);
-  //       case "RATE":
-  //         return t("CS_COMMON_THANK_YOU");
-  //       case "PENDING_APPL_FEE_PAYMENT":
-  //         return t("CS_FILE_DESLUDGING_APPLICATION_SUCCESS");
-  //       case "SUBMIT_FEEDBACK":
-  //       case "COMPLETED":
-  //         return t("CS_APPLICATION_FEEDBACK_SUCCESSFUL");
-  //       default:
-  //         return t(`CS_COMMON_THANK_YOU`);
-  //     }
-  //   }
-
-  //   switch (action) {
-  //     case "REOPEN":
-  //       return t(`CS_COMMON_COMPLAINT_REOPENED_FAILED`);
-  //     case "RATE":
-  //       return t("CS_COMMON_ERROR");
-  //     case "PENDING_APPL_FEE_PAYMENT":
-  //       return t("CS_FILE_DESLUDGING_APPLICATION_FAILED");
-  //     case "SUBMIT_FEEDBACK":
-  //       return t("CS_APPLICATION_FEEDBACK_FAILED");
-  //     default:
-  //       return t(`CS_COMMON_SOMETHING_WENT_WRONG`);
-  //   }
-  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action ? action : "CREATE"}_${type}${isSuccess ? "" : "_ERROR"}`);
+const GetMessage = (type, action, isSuccess, isEmployee, t, paymentPreference) => {
+  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action ? action : "CREATE"}_${type}${isSuccess ? "" : "_ERROR"}${paymentPreference === 'POST_PAY' ? "_POST_PAY" : ""}`);
 };
 
 const GetActionMessage = (action, isSuccess, isEmployee, t) => {
@@ -46,16 +18,16 @@ const GetLabel = (action, isSuccess, isEmployee, t) => {
   return GetMessage("LABEL", action, isSuccess, isEmployee, t);
 };
 
-const DisplayText = (action, isSuccess, isEmployee, t) => {
-  return GetMessage("DISPLAY", action, isSuccess, isEmployee, t);
+const DisplayText = (action, isSuccess, isEmployee, t, paymentPreference) => {
+  return GetMessage("DISPLAY", action, isSuccess, isEmployee, t, paymentPreference);
 };
 
 const BannerPicker = (props) => {
   return (
     <Banner
-      message={GetActionMessage(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
-      applicationNumber={props.data?.fsm[0].applicationNo}
-      info={GetLabel(props.data?.fsm[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
+      message={GetActionMessage(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
+      applicationNumber={props.data?.fsm?.[0].applicationNo}
+      info={GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
       successful={props.isSuccess}
     />
   );
@@ -66,30 +38,38 @@ const Response = (props) => {
   const queryClient = useQueryClient();
 
   const paymentAccess = Digit.UserService.hasAccess("FSM_COLLECTOR");
-  // console.log("find payment Roles here", paymentAccess)
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { state } = props.location;
 
   const mutation = state.key === "update" ? Digit.Hooks.fsm.useApplicationActions(tenantId) : Digit.Hooks.fsm.useDesludging(tenantId);
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
+  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
-  const localityCode = mutation?.data?.fsm[0].address?.locality?.code;
-  const slumCode = mutation?.data?.fsm[0].address?.slumName;
-  // console.log("find mutation here", mutation);
-  // debugger
-  const slum = Digit.Hooks.fsm.useSlum(mutation?.data?.fsm[0]?.tenantId, slumCode, localityCode, {
+  const onError = (error, variables) => {
+    setErrorInfo(error?.response?.data?.Errors[0]?.code || 'ERROR');
+    setMutationHappened(true);
+  };
+  useEffect(() => {
+    if (mutation.data) setsuccessData(mutation.data);
+  }, [mutation.data]);
+  const localityCode = mutation?.data?.fsm?.[0].address?.locality?.code;
+  const slumCode = mutation?.data?.fsm?.[0].address?.slumName;
+  const slum = Digit.Hooks.fsm.useSlum(mutation?.data?.fsm?.[0]?.tenantId, slumCode, localityCode, {
     enabled: slumCode ? true : false,
     retry: slumCode ? true : false,
   });
   const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(stateId, "Vehicle", "VehicleType", { staleTime: Infinity });
-  const vehicle = vehicleMenu?.find((vehicle) => mutation?.data?.fsm[0]?.vehicleType === vehicle?.code);
+  const Data = mutation?.data || successData;
+  const vehicle = vehicleMenu?.find((vehicle) => Data?.fsm?.[0]?.vehicleType === vehicle?.code);
   const pdfVehicleType = getVehicleType(vehicle, t);
 
   const handleDownloadPdf = () => {
-    const { fsm } = mutation.data;
+    const { fsm } = mutation.data || successData;
     const [applicationDetails, ...rest] = fsm;
     const tenantInfo = tenants.find((tenant) => tenant.code === applicationDetails.tenantId);
 
@@ -100,66 +80,49 @@ const Response = (props) => {
   useEffect(() => {
     const onSuccess = () => {
       queryClient.clear();
+      setMutationHappened(true);
+      // window.history.replaceState({}, "FSM_CREATE_RESPONSE")
     };
-    if (state.key === "update") {
-      // console.log("find state here", state.applicationData, state.action)
-      mutation.mutate(
-        {
-          fsm: state.applicationData,
-          workflow: {
-            action: state.action,
-            ...state.actionData,
+    if (!mutationHappened && !errorInfo) {
+      if (state.key === "update") {
+        mutation.mutate(
+          {
+            fsm: state.applicationData,
+            workflow: {
+              action: state.action,
+              ...state.actionData,
+            },
           },
-        },
-        {
+          {
+            onError,
+            onSuccess,
+          }
+        );
+      } else {
+        mutation.mutate(state, {
+          onError,
           onSuccess,
-        }
-      );
-    } else {
-      // console.log("find state here", state);
-      mutation.mutate(state, {
-        onSuccess,
-      });
+        });
+      }
     }
   }, []);
 
-  const displayText = (action) => {
-    // console.log("find new application action here", action)
-    // console.log("find mutation error here", mutation)
-    if (mutation.isSuccess) {
-      switch (action) {
-        case "SUBMIT_FEEDBACK":
-          return t("CS_SUBMIT_FEEDBACK_RESPONSE");
-        case "SUBMIT":
-          return t("CS_SUBMIT_APPLICATION_RESPONSE");
-        case undefined:
-          return t("CS_FILE_PROPERTY_RESPONSE");
-        default:
-          return t("CS_COMMON_THANK_YOU");
-      }
-    } else if (mutation.isError) {
-      switch (action) {
-        default:
-          return mutation?.error?.message;
-      }
-    }
-  };
-  if (mutation.isLoading || mutation.isIdle) {
+  if (mutation.isLoading || (mutation.isIdle && !mutationHappened)) {
     return <Loader />;
   }
-
+  const isSuccess = !successData ? mutation?.isSuccess : true;
   return (
     <Card>
       <BannerPicker
         t={t}
-        data={mutation.data}
+        data={Data}
         action={state.action}
-        isSuccess={mutation.isSuccess}
-        isLoading={mutation.isIdle || mutation.isLoading}
+        isSuccess={isSuccess}
+        isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading}
         isEmployee={props.parentRoute.includes("employee")}
       />
-      <CardText>{DisplayText(state.action, mutation.isSuccess, props.parentRoute.includes("employee"), t)}</CardText>
-      {mutation.isSuccess && (
+      <CardText>{DisplayText(state.action, isSuccess, props.parentRoute.includes("employee"), t, state?.fsm?.paymentPreference)}</CardText>
+      {isSuccess && (
         <LinkButton
           label={
             <div className="response-download-button">
@@ -179,12 +142,12 @@ const Response = (props) => {
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
       {props.parentRoute.includes("employee") &&
-      (state?.applicationData?.applicationNo || (mutation.isSuccess && mutation.data.fsm[0].applicationNo)) &&
-      paymentAccess &&
-      mutation.isSuccess ? (
+        (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
+        paymentAccess &&
+        isSuccess ? (
         <div className="secondary-action">
           <Link
-            to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || mutation.data.fsm[0].applicationNo}`}
+            to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`}
           >
             <SubmitBar label={t("ES_COMMON_PAY")} />
           </Link>

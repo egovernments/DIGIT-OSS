@@ -57,7 +57,7 @@ const SelectEmployeePhoneNumber = ({ t, config, onSelect, formData = {}, userTyp
                 <div>{iserror ? <CardLabelError style={{ width: "100%" }}>{t(input.populators.error)}</CardLabelError> : <span style={{
                   color: "gray", width: "100%", border: "none",
                   background: "none",
-                  justifyContent: "end"
+                  justifyContent: "start"
                 }}>
                   {t("HR_MOBILE_NO_CHECK")}
                 </span>}</div>

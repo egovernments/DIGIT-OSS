@@ -78,9 +78,23 @@ public class BPARepository {
 	 */
 	public List<BPA> getBPAData(BPASearchCriteria criteria, List<String> edcrNos) {
 		List<Object> preparedStmtList = new ArrayList<>();
-		String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos);
+		String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos, false);
 		List<BPA> BPAData = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 		return BPAData;
 	}
+	
+	/**
+         * BPA search count in database
+         *
+         * @param criteria
+         *            The BPA Search criteria
+         * @return count of BPA from search
+         */
+        public int getBPACount(BPASearchCriteria criteria, List<String> edcrNos) {
+                List<Object> preparedStmtList = new ArrayList<>();
+                String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos, true);
+                int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+                return count;
+        }
 
 }

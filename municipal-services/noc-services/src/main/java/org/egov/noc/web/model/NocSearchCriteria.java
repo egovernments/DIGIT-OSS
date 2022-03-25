@@ -21,55 +21,60 @@ import org.hibernate.validator.constraints.SafeHtml;
 @Builder
 public class NocSearchCriteria {
 
-	    @NotNull
-		@SafeHtml
-	    @JsonProperty("tenantId")
-	    private String tenantId;
+    @NotNull
+    @SafeHtml
+    @JsonProperty("tenantId")
+    private String tenantId;
 
-	    @JsonProperty("ids")
-	    private List<String> ids;
+    @JsonProperty("ids")
+    private List<String> ids;
 
-		@SafeHtml
-	    @JsonProperty("applicationNo")
-	    private String applicationNo;
+    @SafeHtml
+    @JsonProperty("applicationNo")
+    private String applicationNo;
 
-		@SafeHtml
-		@JsonProperty("nocNo")
-	    private String nocNo;
+    @SafeHtml
+    @JsonProperty("mobileNumber")
+    private String mobileNumber;
 
-		@SafeHtml
-		@JsonProperty("source")
-	    private String source;
+    @SafeHtml
+    @JsonProperty("nocNo")
+    private String nocNo;
 
-		@SafeHtml
-		@JsonProperty("nocType")
-	    private String nocType;
+    @SafeHtml
+    @JsonProperty("source")
+    private String source;
 
-		@SafeHtml
-		@JsonProperty("sourceRefId")
-	    private String sourceRefId;
-	    
-	    @JsonProperty("offset")
-	    private Integer offset;
+    @SafeHtml
+    @JsonProperty("nocType")
+    private String nocType;
 
-	    @JsonProperty("limit")
-	    private Integer limit; 
-	    
-	    @JsonIgnore
-	    private List<String> ownerIds;
+    @SafeHtml
+    @JsonProperty("sourceRefId")
+    private String sourceRefId;
 
-	    @JsonProperty("accountId")
-	    private List<String> accountId; 
+    @JsonProperty("offset")
+    private Integer offset;
 
-	    public boolean isEmpty() {
-	        return (this.tenantId == null && this.ids == null && this.applicationNo == null
-	                && this.nocNo == null && this.accountId == null	                
-	        );
-	    }
+    @JsonProperty("limit")
+    private Integer limit;
 
-	    public boolean tenantIdOnly() {
-	        return (this.tenantId == null && this.ids == null && this.applicationNo == null
-	                && this.nocNo == null && this.accountId == null  
-	        );
-	    }
+    @JsonIgnore
+    private List<String> ownerIds;
+
+    @JsonProperty("accountId")
+    private List<String> accountId;
+    
+    @JsonProperty("status")
+    private List<String> status;
+
+    public boolean isEmpty() {
+        return (this.tenantId == null && this.ids == null && this.applicationNo == null
+                && this.nocNo == null && this.accountId == null && this.status == null);
+    }
+
+    public boolean tenantIdOnly() {
+        return (this.tenantId == null && this.ids == null && this.applicationNo == null
+                && this.nocNo == null && this.accountId == null && this.status == null);
+    }
 }

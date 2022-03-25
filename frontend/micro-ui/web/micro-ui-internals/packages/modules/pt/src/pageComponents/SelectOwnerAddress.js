@@ -9,7 +9,7 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
 
   let index = isMutation ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
   const [permanentAddress, setPermanentAddress] = useState(
-    (formData.owners && formData.owners[index] && formData.owners[index].permanentAddress) || formData?.owners?.permanentAddress || ""
+    (formData.owners && formData.owners[index] && formData.owners[index].permanentAddress) || (formData.owners[index].correspondenceAddress) || formData?.owners?.permanentAddress || ""
   );
   const [isCorrespondenceAddress, setIsCorrespondenceAddress] = useState(
     formData.owners && formData.owners[index] && formData.owners[index].isCorrespondenceAddress
@@ -55,6 +55,14 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
       else onSelect(config.key, ownerDetails, "", index);
     }
   };
+
+  useEffect(() => {
+    if( !isCorrespondenceAddress && isUpdateProperty)
+    {
+      let e = {target: {checked:true}}
+    setCorrespondenceAddress(e);
+    }
+  })
 
   useEffect(() => {
     if (userType === "employee") {

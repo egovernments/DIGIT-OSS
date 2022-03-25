@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 import MobileNumber from "../atoms/MobileNumber";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit, setValue, getValues, watch, control, formState, errors, setError, clearErrors, unregister } = useForm({
+  const { register, handleSubmit, setValue, getValues, watch, control, formState, errors, setError, buttonStyle,clearErrors, unregister } = useForm({
     defaultValues: props.defaultValues,
   });
   const { t } = useTranslation();
@@ -28,6 +28,7 @@ export const FormComposer = (props) => {
   useEffect(() => {
     props.getFormAccessors && props.getFormAccessors({ setValue, getValues });
   }, []);
+
 
   function onSubmit(data) {
     props.onSubmit(data);
@@ -42,15 +43,19 @@ export const FormComposer = (props) => {
   }, [formData]);
 
   const fieldSelector = (type, populators, isMandatory, disable = false, component, config) => {
+
+    const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
+
     switch (type) {
       case "text":
       case "date":
       case "number":
       case "password":
+      case "time":
         // if (populators.defaultValue) setTimeout(setValue(populators?.name, populators.defaultValue));
         return (
           <div className="field-container">
-            {populators.componentInFront ? (
+            {populators?.componentInFront ? (
               <span className={`component-in-front ${disable && "disabled"}`}>{populators.componentInFront}</span>
             ) : null}
             <TextInput
@@ -88,7 +93,6 @@ export const FormComposer = (props) => {
           />
         );
       case "component":
-        const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Controller
             render={(props) => (
@@ -113,10 +117,41 @@ export const FormComposer = (props) => {
             control={control}
           />
         );
+
+      case "form":
+        return (
+          <form>
+            <Component
+              userType={"employee"}
+              t={t}
+              setValue={setValue}
+              onSelect={setValue}
+              config={config}
+              data={formData}
+              formData={formData}
+              register={register}
+              errors={errors}
+              setError={setError}
+              clearErrors={clearErrors}
+              formState={formState}
+              control={control}
+            />
+          </form>)
       default:
         return populators?.dependency !== false ? populators : null;
     }
   };
+
+  const getCombinedStyle = (placementinBox) => {
+    switch(placementinBox){
+      case 0:
+        return ({border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA",marginBottom:"20px"})
+      case 1:
+        return ({border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"-30px",borderColor:"#f3f3f3",background:"#FAFAFA",borderTop:"0px",borderBottom:"0px"})
+      case 2:
+        return ({border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"-30px",borderColor:"#f3f3f3",background:"#FAFAFA",marginBottom:"20px",borderTop:"0px"})
+    }
+  }
 
   const formFields = useMemo(
     () =>
@@ -128,15 +163,16 @@ export const FormComposer = (props) => {
               if (props.inline)
                 return (
                   <React.Fragment key={index}>
+                    <div style={field.isInsideBox ? getCombinedStyle(field?.placementinbox) : {}} >
                     {!field.withoutLabel && (
                       <CardLabel style={{ marginBottom: props.inline ? "8px" : "revert" }} className={field?.disable ? "disabled" : ""}>
                         {t(field.label)}
                         {field.isMandatory ? " * " : null}
+                        {field.labelChildren&&field.labelChildren}
                       </CardLabel>
                     )}
-
                     {errors && errors[field.populators?.name] && Object.keys(errors[field.populators?.name]).length ? (
-                      <CardLabelError>{field.populators.error}</CardLabelError>
+                      <CardLabelError>{t(field.populators.error||errors[field.populators?.name]?.message)}</CardLabelError>
                     ) : null}
                     <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
                       {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
@@ -154,6 +190,7 @@ export const FormComposer = (props) => {
                         </CardLabel>
                       )}
                     </div>
+                  </div>
                   </React.Fragment>
                 );
               return (
@@ -167,11 +204,12 @@ export const FormComposer = (props) => {
                     )}
                     <div style={field.withoutLabel ? { width: "100%", ...props?.fieldStyle } : {}} className="field">
                       {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
+                      {field?.description && <CardText style={{ fontSize: "14px", marginTop: "-24px" }}>{t(field?.description)}</CardText>}
                     </div>
                   </LabelFieldPair>
                   {field?.populators?.name && errors && errors[field?.populators?.name] && Object.keys(errors[field?.populators?.name]).length ? (
                     <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>
-                      {field?.populators?.error}
+                      {t(field?.populators?.error)}
                     </CardLabelError>
                   ) : null}
                 </Fragment>
@@ -191,17 +229,17 @@ export const FormComposer = (props) => {
   };
 
   const isDisabled = props.isDisabled || false;
-
+  const checkKeyDown = (e) => { const keyCode = e.keyCode ? e.keyCode : e.key ? e.key : e.which; if (keyCode === 13) { e.preventDefault() }; };
   return (
-    <form onSubmit={handleSubmit(onSubmit)} id={props.formId}>
-      <Card style={getCardStyles()}>
+    <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => checkKeyDown(e)} id={props.formId} className={props.className}>
+      <Card style={getCardStyles()} className={props?.className}>
         {!props.childrenAtTheBottom && props.children}
         {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}
         {props.description && <CardLabelDesc> {props.description} </CardLabelDesc>}
         {props.text && <CardText>{props.text}</CardText>}
         {formFields}
         {props.childrenAtTheBottom && props.children}
-        {props.submitInForm && <SubmitBar label={t(props.label)} submit="submit" className="w-full" />}
+        {props.submitInForm && <SubmitBar label={t(props.label)} style={{...buttonStyle}} submit="submit" disabled={isDisabled} className="w-full" />}
         {props.secondaryActionLabel && (
           <div className="primary-label-btn" style={{ margin: "20px auto 0 auto" }} onClick={onSecondayActionClick}>
             {props.secondaryActionLabel}

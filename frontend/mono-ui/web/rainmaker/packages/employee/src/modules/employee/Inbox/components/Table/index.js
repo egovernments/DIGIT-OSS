@@ -175,7 +175,6 @@ class InboxData extends React.Component {
         })
       }
     } catch (e) {
-      console.log(e);
     }
   }
 

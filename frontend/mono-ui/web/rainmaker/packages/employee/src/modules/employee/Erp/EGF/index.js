@@ -8,7 +8,6 @@ class EGFFinance extends Component {
     this.resetIframe = this.resetIframe.bind(this);
   }
   onFrameLoad() {
-    console.log("iframe got loaded");
     document.getElementById("erp_iframe").style.display = "block";
   }
 
@@ -31,7 +30,6 @@ class EGFFinance extends Component {
     // Preparing finance subdomain url using the above environment name and the domain url
     subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
     erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + menuUrl;
-    console.log("ERP URL : " + erp_url);
 
     return (
       <div>
@@ -61,7 +59,6 @@ class EGFFinance extends Component {
   }
   onMessage = (event) => {
     if (event.data != "close") return;
-    console.log("event recieved from iframe client");
     // document.getElementById('erp_iframe').style.display='none';
     this.props.history.push("/inbox");
   };

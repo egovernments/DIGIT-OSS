@@ -13,35 +13,18 @@ const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
   if (mobileNumber) filters.mobileNumber = mobileNumber;
   if (challanNo) filters.consumerCode = challanNo;
   if (Servicecategory) filters.businesService = Servicecategory;
-  //filters.url = "egov-searcher/bill-genie/mcollectbills/_get"
 
-  //const tenantId = Digit.ULBService.getCurrentTenantId();
-  // const userInfo = Digit.UserService.getUser();
-  // let tenantId = userInfo?.info?.permanentCity;
-  // tenantId = tenantId;
   const result = Digit.Hooks.mcollect.useMcollectSearchBill({ tenantId, filters });
-  //const result = await Axios.post(`https://qa.digit.org/egov-searcher/bill-genie/mcollectbills/_get?`, {"searchCriteria":{"tenantId":"pb.amritsar","mobileNumber":"7878787878","businesService":"ADVT.Hoardings"},"RequestInfo":{"apiId":"Rainmaker","authToken":"1fff79b7-694d-4b18-8a6f-2dbdac1531aa"}})
   let bills = result?.data?.Bills;
-  //const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
 
-  /* const paymentDetails = Digit.Hooks.useFetchCitizenBillsForBuissnessService(
-    { consumerCode, businessService: "PT", mobileNumber: mobileNumber },
-    { enabled: consumerCode ? true : false }
-  ); */
 
   if (result.isLoading) {
     return <Loader />;
   }
 
-  /* if (result.error || !consumerCode) {
-    return <div>{t("CS_PT_NO_PROPERTIES_FOUND")}</div>;
-  } */
 
   const onSubmit = (data) => {
-    //debugger;
-    //history.push(`/digit-ui/citizen/payment/my-bills/PT/${data.property_id}`, { tenantId });
-    //history.push(`/digit-ui/citizen/mcollect/bill-details/${data.businesService}/${data?.ChannelNo}`, { tenantId });
-    history.push(`/digit-ui/citizen/payment/my-bills/${data?.businesService}/${data?.ChannelNo}?workflow=mcollect`);
+ history.push(`/digit-ui/citizen/payment/my-bills/${data?.businesService}/${data?.ChannelNo}?workflow=mcollect`);
   };
 
   const payment = {};

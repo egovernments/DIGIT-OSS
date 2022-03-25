@@ -28,7 +28,6 @@ module.exports = {
 //   const prefix = ctx.env === 'compat' ? '' : cssConfig.prefix;
 //   const devMessage = `🎉🎉🎉🎉 \n${name} ${ctx.env} build was compiled sucessfully! \n`;
 
-//   console.log(devMessage);
 
 //   return {
 //     map: ctx.options.map,

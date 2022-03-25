@@ -107,3 +107,25 @@
     width: calc(33% - 9.333px);
   }
 }
+
+.banner {
+  @apply flex justify-center items-center;
+  height: calc(100vh - 80px);
+  background: linear-gradient(rgba(11,75,102,0.8), rgba(11,75,102,0.8)), var(--banner-url) center center;
+
+  .bannerCard {
+    min-width: 400px;
+  }
+  .bannerLogo {
+    width: 80px;
+    height: 40px;
+    object-fit: contain;
+    padding-right: 10px;
+    margin-right: 10px;
+    border-right: 1px solid #0b0c0c;
+  }
+  .bannerHeader {
+    @apply flex justify-center items-center;
+    margin-bottom: 24px;
+  }
+}

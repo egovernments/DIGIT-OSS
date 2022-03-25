@@ -1,79 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { FormStep, RadioOrSelect, RadioButtons, LabelFieldPair, Dropdown, CardLabel, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlur, formState, setError, clearErrors }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   //const isUpdateProperty = formData?.isUpdateProperty || false;
   //let isEditProperty = formData?.isEditProperty || false;
   let isEdit = window.location.href.includes("edit-application")||window.location.href.includes("renew-trade");
   const [ownershipCategory, setOwnershipCategory] = useState(formData?.ownershipCategory);
-  const { data: OwnerShipCategoryOb } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TLOwnerShipCategory");
-  const ownerShipdropDown = [];
-  let subCategoriesInOwnersType = ["INDIVIDUAL"];
-  let OwnerShipCategory = {};
-  let SubOwnerShipCategory = {};
+  const { data: dropdownData } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TLOwnerTypeWithSubtypes",{userType});
+
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
-
-  OwnerShipCategoryOb &&
-    OwnerShipCategoryOb.length > 0 &&
-    OwnerShipCategoryOb.map((category) => {
-      OwnerShipCategory[category.code] = category;
-    });
-
-  getOwnerDetails();
-
-  function formDropdown(category) {
-    const { name, code } = category;
-    return {
-      label: name,
-      value: code,
-      code: code,
-    };
-  }
-
-  function getDropdwonForProperty(ownerShipdropDown) {
-
-    if (userType === "employee") {
-      const arr = ownerShipdropDown
-        ?.filter((e) => e.code.split(".").length <= 2)
-        ?.splice(0, 4)
-        ?.map((ownerShipDetails) => ({
-          ...ownerShipDetails,
-          i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_INDIVIDUAL_${
-            ownerShipDetails.value.split(".")[1] ? ownerShipDetails.value.split(".")[1] : ownerShipDetails.value.split(".")[0]
-          }`,
-        }));
-        const finalArr = arr.filter(data => data.code.includes("INDIVIDUAL"));
-      return finalArr;
-    }
-
-    return (
-      ownerShipdropDown &&
-      ownerShipdropDown.length &&
-      ownerShipdropDown
-        .splice(0, 4)
-        .map((ownerShipDetails) => ({
-          ...ownerShipDetails,
-          i18nKey: `PT_OWNERSHIP_${
-            ownerShipDetails.value.split(".")[1] ? ownerShipDetails.value.split(".")[1] : ownerShipDetails.value.split(".")[0]
-          }`,
-        }))
-        .filter((ownerShipDetails) => ownerShipDetails.code.includes("INDIVIDUAL"))
-    );
-  }
-
-  function getOwnerDetails() {
-    if (OwnerShipCategory && SubOwnerShipCategory) {
-      Object.keys(OwnerShipCategory).forEach((category) => {
-        const categoryCode = OwnerShipCategory[category].code;
-        ownerShipdropDown.push(formDropdown(OwnerShipCategory[category]));
-      });
-    }
-  }
 
   function selectedValue(value) {
     setOwnershipCategory(value);
@@ -93,7 +34,6 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
     }
   }, [ownershipCategory]);
 
-  const dropdownData = getDropdwonForProperty(ownerShipdropDown);
 
   // useEffect(() => {
   //   if (userType === "employee") {
@@ -115,7 +55,6 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
             className="form-field"
             selected={ownershipCategory}
             errorStyle={formState.touched?.[config.key] && formState.errors[config.key]?.message ? true : false}
-            // selected={ownershipCategory ? ownershipCategory : dropdownData[0]}
             disable={isRenewal}
             option={dropdownData}
             select={selectedValue}
@@ -134,10 +73,11 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   }
 
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownershipCategory}>
       <RadioButtons
         isMandatory={config.isMandatory}
-        //options={getDropdwonForProperty(ownerShipdropDown) || []}
         options={dropdownData?dropdownData:[]}
         selectedOption={ownershipCategory}
         optionsKey="i18nKey"
@@ -148,6 +88,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
         disabled={isEdit}
       />
     </FormStep>
+    </React.Fragment>
   );
 };
 

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { newConfig as newConfigTL } from "../../../config/config";
-import { getCommencementDataFormat } from "../../../utils/index";
+import { getCommencementDataFormat, stringReplaceAll } from "../../../utils/index";
 
 const getPath = (path, params) => {
   params &&
@@ -67,23 +67,55 @@ const getTradeEditDetails = (data) => {
       owner.map((ob) => {
         ownerarray.push({
           gender: {
-            code: `${ob.gender}`,
-            name: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`,
-            value: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`,
-            i18nKey: `TL_GENDER_${ob.gender}`,
+            code: ob.gender,
+            name: `${!ob?.gender?.includes("FEMALE") ? "Male" : "Female"}`,
+            value: `${!ob?.gender?.includes("FEMALE") ? "Male" : "Female"}`,
+            i18nKey: ob.gender?`TL_GENDER_${ob.gender}`:"CS_NA",
           },
           isprimaryowner: false,
           name: ob.name,
           mobilenumber: ob.mobileNumber,
           permanentAddress: ob.permanentAddress,
           id: ob.id,
+          uuid : ob.uuid,
+          relationship : { code: ob?.relationship , i18nKey:ob.relationship?`COMMON_RELATION_${ob.relationship}`:"CS_NA"},
+          fatherOrHusbandName : ob?.fatherOrHusbandName,
         });
       });
     // ownerarray["permanentAddress"]=owner.permanentAddress;
     return ownerarray;
   };
+
+  const getInsitutionaltradeowners = (owner,institution) => {
+    let ownerarray = [];
+    owner &&
+      owner.map((ob) => {
+        ownerarray.push({
+          name: institution.name,
+          mobilenumber: ob.mobileNumber,
+          permanentAddress: ob.permanentAddress,
+          altContactNumber:institution.contactNo,
+          designation:institution.designation,
+          institutionName:institution.instituionName,
+          tenantId: data.tenantId,
+          emailId:ob.emailId,
+          subOwnerShipCategory : {
+            code: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`,
+            i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(data?.tradeLicenseDetail?.subOwnerShipCategory,".","_")}`,
+          },
+          id: ob.id,
+          uuid : ob.uuid,
+        });
+      });
+    return ownerarray;
+  };
+
   data.TradeDetails = {
     BuildingType: {
+      code: `${data?.tradeLicenseDetail?.structureType}`,
+      i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${data.tradeLicenseDetail?.structureType.replaceAll(".", "_")}`,
+    },
+    VehicleType:{
       code: `${data?.tradeLicenseDetail?.structureType}`,
       i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${data.tradeLicenseDetail?.structureType.replaceAll(".", "_")}`,
     },
@@ -120,7 +152,7 @@ const getTradeEditDetails = (data) => {
   data.address.locality.landmark = data?.tradeLicenseDetail?.address?.landmark;
   data.owners = {
     documents: gettradedocuments(data?.tradeLicenseDetail?.applicationDocuments),
-    owners: gettradeowners(data?.tradeLicenseDetail?.owners),
+    owners: data?.tradeLicenseDetail?.institution?.id ? getInsitutionaltradeowners(data?.tradeLicenseDetail?.owners,data?.tradeLicenseDetail?.institution) :  gettradeowners(data?.tradeLicenseDetail?.owners),
     permanentAddress: data?.tradeLicenseDetail?.owners[0].permanentAddress,
     isCorrespondenceAddress: false,
   };
@@ -165,6 +197,10 @@ const EditTrade = ({ parentRoute }) => {
       let tradeEditDetails = getTradeEditDetails(application);
       setParams({ ...params, ...tradeEditDetails });
     }
+
+    const setCustomEditState = Digit?.ComponentRegistryService?.getComponent("TLCitizenEditFormDataLoad");
+    if (setCustomEditState) setCustomEditState({ data, setParams, params, licenseNo, tenantId });
+    
   }, [data]);
 
   const goNext = (skipStep, index, isAddMultiple, key) => {

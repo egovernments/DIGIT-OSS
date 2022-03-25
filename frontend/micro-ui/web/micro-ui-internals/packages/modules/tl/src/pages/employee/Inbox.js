@@ -20,7 +20,7 @@ const Inbox = ({
   const [pageOffset, setPageOffset] = useState(initialStates?.pageOffset || 0);
   const [pageSize, setPageSize] = useState(initialStates?.pageSize || 10);
   const [sortParams, setSortParams] = useState(initialStates?.sortParams || [{ id: "applicationDate", desc: false }]);
-
+  const [setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState] = useState(false)
   const [searchParams, setSearchParams] = useState(() => {
     return initialStates?.searchParams || {};
   });
@@ -63,6 +63,7 @@ const Inbox = ({
     if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
     delete _new?.delete;
     delete filterParam?.delete;
+    setSetSearchFieldsBackToOriginalState(true)
     setSearchParams({ ..._new });
     setEnableSearch({ enabled: true });
   };
@@ -145,6 +146,8 @@ const Inbox = ({
         isSearch={!isInbox}
         onFilterChange={handleFilterChange}
         searchFields={getSearchFields()}
+        setSearchFieldsBackToOriginalState={setSearchFieldsBackToOriginalState}
+        setSetSearchFieldsBackToOriginalState={setSetSearchFieldsBackToOriginalState}
         onSearch={handleFilterChange}
         onSort={handleSort}
         onNextPage={fetchNextPage}

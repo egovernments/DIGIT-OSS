@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const CitizenHomeCard = ({ header, links, state, Icon }) => {
+const CitizenHomeCard = ({ header, links, state, Icon, Info, isInfo = false, styles }) => {
   return (
-    <div className="CitizenHomeCard">
+    <div className="CitizenHomeCard" style={styles ? styles : {}}>
       <div className="header">
         <h2>{header}</h2>
         <Icon />
@@ -11,10 +11,13 @@ const CitizenHomeCard = ({ header, links, state, Icon }) => {
 
       <div className="links">
         {links.map((e, i) => (
-          <Link key={i} to={{ pathname: e.link, state }}>
+          <Link key={i} to={{ pathname: e.link, state: e.state }}>
             {e.i18nKey}
           </Link>
         ))}
+      </div>
+      <div>
+        {isInfo ? <Info /> : null} 
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 package com.tarento.analytics.handler;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.amazonaws.event.DeliveryMode.Check;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,9 +19,9 @@ import com.tarento.analytics.ConfigurationLoader;
 import com.tarento.analytics.dto.AggregateDto;
 import com.tarento.analytics.dto.AggregateRequestDto;
 import com.tarento.analytics.dto.Data;
+import com.tarento.analytics.dto.Plot;
 import com.tarento.analytics.helper.ComputeHelper;
 import com.tarento.analytics.helper.ComputeHelperFactory;
-
 import com.tarento.analytics.utils.ResponseRecorder;
 
 /**
@@ -90,43 +88,107 @@ public class MetricChartResponseHandler implements IResponseHandler{
         * Sums all value of all aggrsPaths i.e all aggregations
         * */
        boolean isRoundOff = (chartNode.get(IS_ROUND_OFF)!=null && chartNode.get(IS_ROUND_OFF).asBoolean()) ? true : false;
-
-		aggrsPaths.forEach(headerPath -> {
+       Plot latestDateplot = new Plot("todaysDate", Double.valueOf(0), "number");;
+		Plot lastUpdatedTime = new Plot("lastUpdatedTime", Double.valueOf(0), "number");
+		Boolean isTodaysCollection = (chartNode.get("TodaysCollection") == null ? Boolean.FALSE : chartNode.get("TodaysCollection").asBoolean());
+		for( JsonNode headerPath : aggrsPaths) {
 			List<JsonNode> values = aggregationNode.findValues(headerPath.asText());
-			values.stream().parallel().forEach(value -> {
+			int valueIndex = 0;
+			Double headerPathValue = new Double(0);
+			for (JsonNode value : values) {
 				if (isRoundOff) {
 					ObjectMapper mapper = new ObjectMapper();
 					JsonNode node = value.get("value");
-					if(node != null) {
+					if (node != null) {
 						Double roundOff = 0.0d;
 						try {
 							roundOff = mapper.treeToValue(node, Double.class);
 						} catch (JsonProcessingException e) {
 							e.printStackTrace();
 						}
-						if(roundOff!=null) {
+						if (roundOff != null) {
 							int finalvalue = (int) Math.round(roundOff);
 							((ObjectNode) value).put("value", finalvalue);
 						}
 					}
-					
+
 				}
 				List<JsonNode> valueNodes = value.findValues(VALUE).isEmpty() ? value.findValues(DOC_COUNT)
 						: value.findValues(VALUE);
 				Double sum = valueNodes.stream().mapToDouble(o -> o.asDouble()).sum();
-				// Why is aggrsPaths.size()==2 required? Is there validation if action =
-				// PERCENTAGE and aggrsPaths > 2
-				if (action.equals(PERCENTAGE) && aggrsPaths.size() == 2) {
-					percentageList.add(sum);
-				} else {
-					totalValues.add(sum);
+				
+				// PreAction Theory should be consdiered and executed to modify the aggregation value
+				JsonNode preActionTheoryNode = chartNode.get("preActionTheory");
+				
+				if( preActionTheoryNode != null && preActionTheoryNode.findValue(headerPath.asText()) !=null && 
+						!preActionTheoryNode.findValue(headerPath.asText()).asText().isEmpty()) {
+					ComputeHelper computeHelper = computeHelperFactory.getInstance(preActionTheoryNode.findValue(headerPath.asText()).asText());
+					if(computeHelper !=null) {
+						sum = computeHelper.compute(request, sum); 
+					}
+	            	
 				}
-			});
-		});
+				
+				headerPathValue = Double.sum(headerPathValue, sum);
+
+				if (isTodaysCollection == Boolean.TRUE) {
+
+					String latestDateKey = null;
+					String lastUpdatedTimeKey = null;
+					List<JsonNode> latestDates = aggregationNode.findValues("todaysDate");
+					if (latestDates != null && latestDates.size() > 0) {
+						JsonNode latestDate = latestDates.get(valueIndex);
+						if (latestDate != null) {
+							List<JsonNode> latestDateBuckets = latestDate.findValues(BUCKETS);
+							if (latestDateBuckets != null && latestDateBuckets.size() > 0) {
+								JsonNode latestDateBucket = latestDateBuckets.get(0);
+								latestDateKey = (latestDateBucket.findValue(IResponseHandler.KEY) == null ? null
+										: latestDateBucket.findValue(IResponseHandler.KEY).asText());
+							}
+							if (latestDateKey != null
+									&& ((Double.valueOf(latestDateKey)) > latestDateplot.getValue())) {
+								latestDateplot.setValue(Double.valueOf(latestDateKey));
+							}
+
+						}
+						List<JsonNode >lastUpdatedTimeNodes = aggregationNode.findValues("lastUpdatedTime");
+						if (lastUpdatedTimeNodes != null && lastUpdatedTimeNodes.size() > 0) {
+							JsonNode lastUpdatedTimeNode = lastUpdatedTimeNodes.get(valueIndex);
+							if (lastUpdatedTimeNode != null) {
+								List<JsonNode> lastUpdatedTimeBuckets = lastUpdatedTimeNode.findValues(BUCKETS);
+								if (lastUpdatedTimeBuckets != null && lastUpdatedTimeBuckets.size() > 0) {
+									JsonNode lastUpdatedTimeBucket = lastUpdatedTimeBuckets.get(0);
+									lastUpdatedTimeKey = (lastUpdatedTimeBucket.findValue(IResponseHandler.KEY) == null
+											? null
+											: lastUpdatedTimeBucket.findValue(IResponseHandler.KEY).asText());
+								}
+
+								if (lastUpdatedTimeKey != null
+										&& ((Double.valueOf(lastUpdatedTimeKey)) > lastUpdatedTime.getValue())) {
+									lastUpdatedTime.setValue(Double.valueOf(lastUpdatedTimeKey));
+								}
+							}
+						}
+					}
+
+				}
+				valueIndex++;
+			}
+			// Why is aggrsPaths.size()==2 required? Is there validation if action =
+			// PERCENTAGE and aggrsPaths > 2
+			if (action.equals(PERCENTAGE) && aggrsPaths.size() == 2) {
+				percentageList.add(headerPathValue);
+			} else {
+				totalValues.add(headerPathValue);
+			}
+			
+		}
 
         String symbol = chartNode.get(IResponseHandler.VALUE_TYPE).asText();
+       
         try{
             Data data = new Data(chartName, action.equals(PERCENTAGE) && aggrsPaths.size()==2? percentageValue(percentageList, isRoundOff) : (totalValues==null || totalValues.isEmpty())? 0.0 :totalValues.stream().reduce(0.0, Double::sum), symbol);
+            data.setPlots( Arrays.asList(latestDateplot,lastUpdatedTime));
             responseRecorder.put(visualizationCode, request.getModuleLevel(), data);
             dataList.add(data);
             if(chartNode.get(POST_AGGREGATION_THEORY) != null) { 

@@ -71,10 +71,8 @@ export const callPGService = async (state, dispatch) => {
       const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl");
       window.location = redirectionUrl;
     } catch (e) {
-      console.log(e);
     }
   } catch (e) {
-    console.log(e);
   }
 };
 

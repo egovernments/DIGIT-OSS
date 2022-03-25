@@ -4,7 +4,7 @@ import { plumberDetails, roadDetails, additionDetailsWater, additionDetailsSewer
 import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import { reviewModificationsEffectiveDate } from "egov-wns/ui-config/screens/specs/wns/applyResource/reviewModificationsEffective";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard, generateKeyValueForModify } from "./generatePDF";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getTransformedLocalStorgaeLabels, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print", service, connType) => {
     propertyDetails.reviewPropertyType.localiseValue = true;
@@ -12,7 +12,26 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     propertyDetails.reviewPropertyUsageType.localiseValue = true;
     propertyDetails.reviewPropertySubUsageType.localiseValue = true;
     roadDetails.reviewRoadType.localiseValue = true;
-    propertyOwnerDetail.gender.localiseValue = true;
+
+    connDetailsWater.taskApplicationType.localiseValue = true;
+    connDetailsSewerage.taskApplicationType.localiseValue = true;
+
+    plumberDetails.reviewPlumberProvidedBy.localiseValue = true;
+
+    additionDetailsWater.reviewConnectionType.localiseValue = true;
+    additionDetailsWater.reviewWaterSubSource.localiseValue = true;
+    additionDetailsWater.reviewWaterSource.localiseValue = true;
+    additionDetailsSewerage.reviewConnectionType.localiseValue = true;
+
+    Object.keys(propertyOwnerDetail).forEach(owner => {
+        if(owner == "gender" || owner == "relationship" || owner == "specialApplicantCategory") propertyOwnerDetail[owner].localiseValue = true
+    });
+
+    Object.keys(connectionHolderDetails).forEach(owner => {
+        if(owner == "gender" || owner == "relationship" || owner == "specialApplicantCategory") propertyOwnerDetail[owner].localiseValue = true
+    });
+    
+
     let propDetail = generateKeyValue(preparedFinalObject, propertyDetails);
     let propertyDetail = propDetail.map(cur => {
         if (cur.key === "Rainwater harvesting Facility") {

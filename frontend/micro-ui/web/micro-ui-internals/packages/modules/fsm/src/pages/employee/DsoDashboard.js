@@ -61,7 +61,7 @@ const DsoDashboard = () => {
 
   useEffect(() => {
     if (inbox) {
-      const total = inbox?.totalCount || 0;
+      const total = inbox?.statuses.filter(e => e.applicationstatus === "DSO_INPROGRESS")[0]?.count + inbox?.statuses.filter(e => e.applicationstatus === "PENDING_DSO_APPROVAL")[0]?.count;
       setTotal(total);
       if (Object.keys(info).length) setLoader(false);
     }

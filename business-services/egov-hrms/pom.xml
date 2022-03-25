@@ -9,10 +9,11 @@
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>egov-hrms</artifactId>
-  <version>1.2.3-SNAPSHOT</version>
+  <version>1.2.5-SNAPSHOT</version>
   <name>egov-hrms</name>
   <description>HR Management System</description>
   <properties>
+    <log4j2.version>2.17.1</log4j2.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <joda-time-version>2.9.6</joda-time-version>

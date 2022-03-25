@@ -59,7 +59,7 @@ export const createApiResponse = async ({ body }, res, next) => {
 
   // console.log(JSON.stringify(mdms));
   body = await addUUIDAndAuditDetails(body, "_create");
-  console.log("Created Body:  "+JSON.stringify(body));
+  //console.log("Created Body:  "+JSON.stringify(body));
   let workflowResponse = await createWorkFlow(body);
   // console.log(JSON.stringify(workflowResponse));
 

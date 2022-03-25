@@ -11,7 +11,8 @@ const defaultFinancialYear = () => {
   const data = convertEpochToDate(Date.now());
   const splitData = data.split("-")[0];
   const year = splitData.slice(2, 4);
-  const currentFinancialYear = `${Number(splitData)}-${Number(year) + 1}`;
+  let monthNo = Number(data.split("-")[1]);
+  const currentFinancialYear = monthNo < 4?`${Number(splitData)-1}-${Number(year)}`:`${Number(splitData)}-${Number(year) + 1}`;
   return { 
     code: currentFinancialYear, 
     i18nKey: `FY${currentFinancialYear}`, 
@@ -40,7 +41,7 @@ const TLTradeDetailsEmployee = ({ config, onSelect, userType, formData, setError
   const [owners, setOwners] = useState(formData?.owners || [createTradeDetailsDetails()]);
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const [isErrors, setIsErrors] = useState(false);
   const [licenseTypeList, setLicenseTypeList] = useState([]);
   const [licenseTypeValue, setLicenseTypeValue] = useState([]);

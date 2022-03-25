@@ -262,7 +262,6 @@ class ShowField extends Component {
           }
         },
         function (err) {
-          console.log(err);
         }
       );
     } else if (object.defaultValue && object.defaultValue.search("_url") > -1) {
@@ -479,7 +478,6 @@ class ShowField extends Component {
             }
           },
           function (err) {
-            console.log(err);
           }
         );
     }
@@ -711,7 +709,9 @@ class ShowField extends Component {
     let self = this;
     const viewTabel = () => {
       return (
-        <div>
+        // <div>
+              <div class="table-responsive">  
+
           <table
             id="reportTable"
             style={{

@@ -55,7 +55,9 @@ public class TypicalFloor implements Serializable {
     private static final long serialVersionUID = 5L;
     private Integer modelFloorNo;
     private List<Integer> repetitiveFloorNos = new ArrayList<>();
-
+    public TypicalFloor() {
+		//default
+	}
     public Integer getModelFloorNo() {
         return modelFloorNo;
     }

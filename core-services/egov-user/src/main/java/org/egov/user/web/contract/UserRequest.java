@@ -46,6 +46,9 @@ public class UserRequest {
 
     @Pattern(regexp = UserServiceConstants.PATTERN_MOBILE)
     private String mobileNumber;
+    
+    @Pattern(regexp = UserServiceConstants.PATTERN_MOBILE)
+    private String alternatemobilenumber;
 
     @Email
     @Size(max = 128)
@@ -104,17 +107,23 @@ public class UserRequest {
     private GuardianRelation relationship;
 
     @SafeHtml
+    @Size(max = 36)
     private String signature;
 
     @SafeHtml
+    @Size(max = 32)
     private String bloodGroup;
 
     @SafeHtml
+    @Size(max = 36)
     private String photo;
 
     @SafeHtml
+    @Size(max = 300)
     private String identificationMark;
     private Long createdBy;
+
+    @Size(max = 64)
     private String password;
 
     @SafeHtml
@@ -173,6 +182,7 @@ public class UserRequest {
         this.fatherOrHusbandName = user.getGuardian();
         this.relationship = user.getGuardianRelation();
         this.uuid = user.getUuid();
+        this.alternatemobilenumber=user.getAlternateMobileNumber();
         mapPermanentAddress(user);
         mapCorrespondenceAddress(user);
     }
@@ -240,7 +250,7 @@ public class UserRequest {
                 .permanentAddress(toDomainPermanentAddress())
                 .correspondenceAddress(toDomainCorrespondenceAddress())
                 .guardian(fatherOrHusbandName)
-                .guardianRelation(relationship)
+                .guardianRelation(relationship).alternateMobileNumber(this.alternatemobilenumber)
                 .build();
     }
 

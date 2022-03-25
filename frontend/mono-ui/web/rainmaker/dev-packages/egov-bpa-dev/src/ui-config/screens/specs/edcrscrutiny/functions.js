@@ -46,7 +46,6 @@ export const fetchData = async (
       }
     }
   } catch (error) {
-    console.log(error);
   }
 };
 
@@ -103,7 +102,6 @@ export const fetchDataForStakeHolder = async (
       );
     }
   } catch (error) {
-    console.log(error);
   }
 };
 
@@ -189,7 +187,6 @@ const getSearchResultsfromEDCR = async (action, state, dispatch) => {
     );
     return response.data;
   } catch (error) {
-    console.log(error);
     return null;
   }
 };
@@ -224,7 +221,6 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
     );
     return response;
   } catch (error) {
-    console.log(error);
     return null;
   }
 };
@@ -310,7 +306,6 @@ const scrutinizePlan = async (state, dispatch) => {
   } catch (e) {
     dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
     dispatch(toggleSpinner());
-    console.log(e);
   }
 };
 
@@ -414,7 +409,6 @@ export const getMdmsData = async () => {
     );
     return payload;
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -470,7 +464,6 @@ export const getMdmsDataForOc = async () => {
     );
     return payload;
   } catch (e) {
-    console.log(e);
   }
 };
 

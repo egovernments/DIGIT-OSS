@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
@@ -9,14 +9,22 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // const __initPropertyType__ = window.Digit.SessionStorage.get("propertyType");
   // const __initSubType__ = window.Digit.SessionStorage.get("subType");
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   // const { data: commonFields, isLoading } = useQuery('newConfig', () => fetch(`http://localhost:3002/commonFields`).then(res => res.json()))
   // const { data: postFields, isLoading: isTripConfigLoading } = useQuery('tripConfig', () => fetch(`http://localhost:3002/tripDetails`).then(res => res.json()))
   const { data: commonFields, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "CommonFieldsConfig");
   const { data: preFields, isLoading: isApplicantConfigLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PreFieldsConfig");
   const { data: postFields, isLoading: isTripConfigLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PostFieldsConfig");
-  // const state = tenantId?.split(".")[0] || "pb";
 
+  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
+
+  useEffect(() => {
+    setMutationHappened(false);
+    clearSuccessData();
+    clearError();
+  }, []);
   // const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   // const { data: channelMenu } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
 
@@ -35,9 +43,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-    // setNoOfTrips(formData?.noOfTrips || 1);
-    // console.log("abcd2",vehicle, formData?.propertyType , formData?.subtype)
-    // console.log("find form data here helllo", formData);
+    
     if (
       formData?.propertyType &&
       formData?.subtype &&
@@ -69,7 +75,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // }, [propertyType, subType, vehicle]);
 
   const onSubmit = (data) => {
-    console.log("find submit data", data);
     const applicationChannel = data.channel;
     const sanitationtype = data?.pitType?.code;
     const pitDimension = data?.pitDetail;
@@ -87,11 +92,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const state = data?.address?.city?.state;
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
+    const gender = data.applicationData.applicantGender;
+    const paymentPreference = data?.paymentPreference ? data?.paymentPreference : 'POST_PAY';
     const formData = {
       fsm: {
         citizen: {
           name: applicantName,
           mobileNumber,
+          gender: gender
         },
         tenantId: tenantId,
         sanitationtype: sanitationtype,
@@ -100,7 +108,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
           tripAmount: amount,
         },
         propertyUsage: data?.subtype,
-        vehicleType: data?.tripData?.vehicleType?.code,
+        vehicleType: data?.tripData?.vehicleType?.type,
+        vehicleCapacity: data?.tripData?.vehicleType?.capacity,
         pitDetail: {
           ...pitDimension,
           distanceFromRoad: data?.distanceFromRoad,
@@ -124,6 +133,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
           },
         },
         noOfTrips,
+        paymentPreference,
       },
       workflow: null,
     };

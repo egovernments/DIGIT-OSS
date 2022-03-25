@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import {sortDropdownNames} from "../utils/index";
 import isUndefined from "lodash/isUndefined";
 import { getUniqueItemsFromArray, commonTransform, stringReplaceAll, getPattern } from "../utils";
+import Timeline from "../components/TLTimeline";
 
 const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) => {
   let validation = {};
@@ -25,7 +26,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
   const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "AccessoryCategory");
   const [ accessories, SetAccessories] = useState([]);
@@ -160,13 +161,14 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     let formdata;
 
     formdata = { ...data, accessories: fields };
-    // debugger;
     onSelect(config.key, formdata);
   };
 
   const onSkip = () => onSelect();
 
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline /> : null}
     <FormStep
       config={config}
       onSelect={goNext}
@@ -268,6 +270,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
         </button>
       </div>
     </FormStep>
+    </React.Fragment>
   );
 };
 

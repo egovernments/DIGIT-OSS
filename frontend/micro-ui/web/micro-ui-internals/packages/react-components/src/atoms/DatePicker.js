@@ -12,7 +12,6 @@ const DatePicker = (props) => {
       const years = operationDate?.getFullYear();
       const month = operationDate?.getMonth() + 1;
       const _date = operationDate?.getDate();
-      // console.log("find current date", _date, month, years)
       return _date && month && years ? `${_date}/${month}/${years}` : "";
     }
     return "";
@@ -31,7 +30,7 @@ const DatePicker = (props) => {
         <input
           type="text"
           disabled={props.disabled}
-          value={getDatePrint() ? getDatePrint() : ""}
+          value={getDatePrint() ? getDatePrint() : "DD/MM/YYYY"}
           readOnly
           className={`employee-card-input ${props.disabled ? "disabled" : ""}`}
           style={{ width: "calc(100%-62px)" }}

@@ -25,13 +25,18 @@ export const CreateComplaint = () => {
   const config = useMemo(() => merge(defaultConfig, Digit.Customizations.PGR.complaintConfig), [Digit.Customizations.PGR.complaintConfig]);
   const [paramState, setParamState] = useState(params);
   const [nextStep, setNextStep] = useState("");
+  const [canSubmit, setCanSubmit] = useState(false);
+
   const [rerender, setRerender] = useState(0);
   const client = useQueryClient();
+  useEffect(() => {
+    setCanSubmit(false);
+  }, []);
 
   useEffect(() => {
     setParamState(params);
     if (nextStep === null) {
-      submitComplaint();
+      wrapperSubmit();
     } else {
       history.push(`${match.path}/${nextStep}`);
     }
@@ -53,6 +58,12 @@ export const CreateComplaint = () => {
     setNextStep(nextStep);
   };
 
+  const wrapperSubmit = () => {
+    if (!canSubmit) {
+      setCanSubmit(true);
+      submitComplaint();
+    }
+  };
   const submitComplaint = async () => {
     if (paramState?.complaintType) {
       const { city_complaint, locality_complaint, uploadedImages, complaintType, subType, details, ...values } = paramState;
@@ -79,7 +90,6 @@ export const CreateComplaint = () => {
         uploadedImages: _uploadImages,
       };
 
-      // console.log("this is the request data", data);
       await dispatch(createComplaint(data));
       await client.refetchQueries(["complaintsList"]);
       history.push(`${match.path}/response`);
@@ -87,8 +97,6 @@ export const CreateComplaint = () => {
   };
 
   const handleSelect = (data) => {
-    // console.clear();
-    console.log("DATA selected", data);
     setParams({ ...params, ...data });
     goNext();
   };

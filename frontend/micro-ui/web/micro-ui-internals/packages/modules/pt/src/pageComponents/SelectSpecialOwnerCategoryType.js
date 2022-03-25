@@ -10,7 +10,7 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
 
   let index = isMutation ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const isUpdateProperty = formData?.isUpdateProperty || false;
   let isEditProperty = formData?.isEditProperty || false;
   const [ownerType, setOwnerType] = useState(

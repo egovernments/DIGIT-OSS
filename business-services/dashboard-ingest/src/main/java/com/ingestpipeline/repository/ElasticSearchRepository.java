@@ -14,6 +14,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.ingestpipeline.util.Constants;
+
 /**
  * This Repository Class is used to perform the transactions of storing the data into the Elastic Search Repository 
  * @author Darshan Nagesh
@@ -54,5 +56,16 @@ public class ElasticSearchRepository {
 			return true;
 		}
 		return false;
+	}
+	
+	public ResponseEntity<Map> fetchMDMSResponse(Object mdmsRequestObject) {
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.set(Constants.CONTENT_TYPE, Constants.JSON);
+		
+		HttpEntity<Object> httpEntity = new HttpEntity<>(mdmsRequestObject, headers);
+		ResponseEntity<Map> result  = restTemplate.exchange(Constants.MDMS_URL,  HttpMethod.POST, httpEntity, Map.class);
+		
+		return result;
 	}
 	}

@@ -1,9 +1,11 @@
 package org.egov.pt.repository.builder;
-
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.time.Instant;
+
+import javax.validation.Valid;
+
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.enums.Status;
@@ -11,13 +13,15 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 
 @Component
 public class PropertyQueryBuilder {
 	
 	@Autowired
 	private PropertyConfiguration config;
+	
+	@Autowired
+	private PropertyQueryBuilder queryBuilder;
 
 	private static final String SELECT = "SELECT ";
 	private static final String INNER_JOIN = "INNER JOIN";
@@ -26,7 +30,7 @@ public class PropertyQueryBuilder {
 	
 	private static String PROEPRTY_AUDIT_QUERY = "select property from eg_pt_property_audit where propertyid=?";
 
-	private static String PROEPRTY_ID_QUERY = "select propertyid from eg_pt_property where id in (select propertyid from eg_pt_owner where userid IN {replace})";
+	private static String PROEPRTY_ID_QUERY = "select propertyid from eg_pt_property where id in (select propertyid from eg_pt_owner where userid IN {replace} AND status='ACTIVE') ";
 
 	private static String REPLACE_STRING = "{replace}";
 	
@@ -67,7 +71,7 @@ public class PropertyQueryBuilder {
 			+   ownerDocSelectValues  
 			
 			+   UnitSelectValues
-			
+
 			+   " FROM EG_PT_PROPERTY property " 
 			
 			+   INNER_JOIN +  " EG_PT_ADDRESS address         ON property.id = address.propertyid " 
@@ -81,6 +85,7 @@ public class PropertyQueryBuilder {
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
 			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
+	
 
 	private static final String ID_QUERY = SELECT
 
@@ -142,18 +147,18 @@ public class PropertyQueryBuilder {
 					&& null == criteria.getName()
 					&& null == criteria.getDoorNo()
 					&& null == criteria.getOldPropertyId()
+					&& (null == criteria.getFromDate() && null == criteria.getToDate())
 					&& CollectionUtils.isEmpty(criteria.getCreationReason());
 		
 		if(isEmpty)
 			throw new CustomException("EG_PT_SEARCH_ERROR"," No criteria given for the property search");
-
+		
 		StringBuilder builder;
 
 		if(onlyIds)
 			builder = new StringBuilder(ID_QUERY);
 		else
 			builder = new StringBuilder(QUERY);
-
 		Boolean appendAndQuery = false;
 		if(isPlainSearch)
 		{
@@ -251,9 +256,18 @@ public class PropertyQueryBuilder {
 			builder.append("property.oldpropertyid IN (").append(createQuery(oldpropertyids)).append(")");
 			addToPreparedStatement(preparedStmtList, oldpropertyids);
 		}
+		
+		/* 
+		 * Condition to evaluate if owner is active.
+		 * Inactive owners should never be shown in results
+		*/
+		
+		addClauseIfRequired(preparedStmtList,builder);
+		builder.append("owner.status = ?");
+		preparedStmtList.add(Status.ACTIVE.toString());
+		
 
 		String withClauseQuery = WITH_CLAUSE_QUERY.replace(REPLACE_STRING, builder);
-
 		if (onlyIds)
 			return builder.toString();
 		else
@@ -384,5 +398,13 @@ public class PropertyQueryBuilder {
 	public String getpropertyAuditQuery() {
 		return PROEPRTY_AUDIT_QUERY;
 	}
+	
+	private static final String PT_COUNT = "select count(distinct pid) from ({INTERNAL_QUERY}) as count";
+	
+	public String getCountQuery(@Valid PropertyCriteria propertyCriteria, List<Object> preparedStmtList, Boolean isPlainSearch) {
+        String query = queryBuilder.getPropertySearchQuery(propertyCriteria, preparedStmtList, isPlainSearch, false);
+        String countQuery = PT_COUNT.replace("{INTERNAL_QUERY}", query);
+        return countQuery;
+    }
 
 }

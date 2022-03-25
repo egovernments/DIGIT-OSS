@@ -12,22 +12,14 @@ export const TLList = () => {
   let filter1 = {};
   if (licenseno) filter1.licenseNumbers = licenseno;
   if (licenseno) filter1.tenantId = tenantID;
+  if (!licenseno) filter1.mobileNumber = userInfo?.info?.mobileNumber;
+  if (!licenseno) filter1.RenewalPending = true;
   const { isLoading, isError, error, data } = Digit.Hooks.tl.useTradeLicenseSearch({ filters: filter1 }, {});
   if (isLoading) {
     return <Loader />;
   }
   let { Licenses: applicationsList } = data || {};
-  let applications = {};
-  applicationsList.filter((response)=>response.licenseNumber).map((ob)=>{
-    if(applications[ob.licenseNumber]){
-    if(applications[ob.licenseNumber].applicationDate<ob.applicationDate)
-    applications[ob.licenseNumber]=ob
-    }
-    else
-    applications[ob.licenseNumber]=ob;    
-    })
-  let newapplicationlist = Object.values(applications);
-  newapplicationlist = newapplicationlist ? newapplicationlist.filter(ele => ele.financialYear != "2021-22" && (ele.status == "EXPIRED" || ele.status == "APPROVED")) : [];
+  let newapplicationlist = applicationsList;
   return (
     <React.Fragment>
       <Card>

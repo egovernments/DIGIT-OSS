@@ -25,6 +25,7 @@ public class FSMErrorConstants {
 	public static final String INVALID_COMMENT_CANCEL_REJECT ="INVALID_COMMENT_CANCEL_REJECT";
 	public static final String INVALID_VEHICLE_TYPE = "INVALID_VEHICLE_TYPE";
 	public static final String NO_VEHICLE_VEHICLE_TYPE = "NO_VEHICLE_VEHICLE_TYPE";
+	public static final String INVALID_PAYMENT_PREFERENCE ="INVALID_PAYMENT_PREFERENCE";
 	
 	
 	public static final String INVALID_APPLICANT_ERROR ="INVALID_APPLICANT_ERROR";
@@ -82,5 +83,6 @@ public class FSMErrorConstants {
 	public static final String FSTP_EMPLOYEE_MAP_EXISTS_ERROR ="FSTP_EMPLOYEE_MAP_EXISTS_ERROR";
 	public static final String FSTP_EMPLOYEE_INVALID_ERROR ="FSTP_EMPLOYEE_INVALID_ERROR";
 	public static final String INVALID_FSTP_CODE ="INVALID_FSTP_CODE";
+	public static final String INVALID_VEHICLE_ASSIGN_ACTION = "INVALID_VEHICLE_ASSIGN_ACTION";
 
 }

@@ -59,6 +59,7 @@ module.exports = {
       "body-l-dt": ["19px", "28px"],
       "body-l": ["16px", "24px"],
       "body-s-dt": ["16px", "24px"],
+      "body-s": ["14px", "16px"],
       legend: ["19px", "23px"],
       link: ["16px", "24px"],
       "text-btn": ["16px", "24px"],

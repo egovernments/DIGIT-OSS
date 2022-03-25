@@ -686,13 +686,14 @@ export const createAndSave = async (
   }
   //let key = get(req.query || req, "key");
   let tenantId = get(req.query || req, "tenantId");
-  var formatconfig = formatConfigMap[key];
+  var formatconfigNew = formatConfigMap[key];
   var dataconfig = dataConfigMap[key];
   var userid = get(req.body || req, "RequestInfo.userInfo.id");
   var requestInfo = get(req.body || req, "RequestInfo");
   var documentType = get(dataconfig, "documentType", "");
   var moduleName = get(dataconfig, "DataConfigs.moduleName", "");
-
+  var formatconfig =JSON.parse(JSON.stringify(formatconfigNew))
+  console.log(formatconfig.defaultStyle);
   var valid = validateRequest(req, res, key, tenantId, requestInfo);
   if (valid) {
     let [formatConfigByFile, totalobjectcount, entityIds] = await prepareBegin(
@@ -715,8 +716,13 @@ export const createAndSave = async (
     if(!locale)
       locale = envVariables.DEFAULT_LOCALISATION_LOCALE;
 
-    if(defaultFontMapping[locale] != 'default')
+    if(defaultFontMapping[locale] != 'default'){
       formatconfig.defaultStyle.font = defaultFontMapping[locale];
+    }
+     
+
+      console.log(" Font type selected :::: " + formatconfig.defaultStyle.font);
+      console.log("Locale passed:::::::"+locale);
 
     createPdfBinary(
       key,
@@ -991,8 +997,9 @@ const prepareBulk = async (
         if(!locale)
           locale = envVariables.DEFAULT_LOCALISATION_LOCALE;
 
-        if(defaultFontMapping[locale] != 'default')
-         formatconfigCopy.defaultStyle.font = defaultFontMapping[locale];
+        if(defaultFontMapping[locale] != 'default'){
+          formatconfigCopy.defaultStyle.font = defaultFontMapping[locale];
+        }
 
         formatconfigCopy["content"] = formatObjectArrayObject;
         formatConfigByFile.push(formatconfigCopy);

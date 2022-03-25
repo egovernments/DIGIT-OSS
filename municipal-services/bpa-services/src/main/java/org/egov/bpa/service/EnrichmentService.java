@@ -2,8 +2,10 @@ package org.egov.bpa.service;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -14,24 +16,35 @@ import java.util.stream.Collectors;
 
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.repository.IdGenRepository;
+import org.egov.bpa.repository.ServiceRequestRepository;
 import org.egov.bpa.util.BPAConstants;
 import org.egov.bpa.util.BPAErrorConstants;
 import org.egov.bpa.util.BPAUtil;
+import org.egov.bpa.validator.MDMSValidator;
 import org.egov.bpa.web.model.AuditDetails;
 import org.egov.bpa.web.model.BPA;
 import org.egov.bpa.web.model.BPARequest;
+
 import org.egov.bpa.web.model.Workflow;
+import org.egov.bpa.web.model.edcr.RequestInfoWrapper;
 import org.egov.bpa.web.model.idgen.IdResponse;
 import org.egov.bpa.web.model.workflow.BusinessService;
 import org.egov.bpa.workflow.WorkflowIntegrator;
 import org.egov.bpa.workflow.WorkflowService;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
+import org.egov.tracer.model.ServiceCallException;
+import org.json.JSONObject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.TypeRef;
+
 
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
@@ -66,6 +79,11 @@ public class EnrichmentService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private MDMSValidator mdmsValidator;
+	@Autowired
+	private ServiceRequestRepository serviceRequestRepository;
 
 	/**
 	 * encrich create BPA Reqeust by adding audidetails and uuids
@@ -205,7 +223,52 @@ public class EnrichmentService {
 			if (bpa.getBusinessService().equals(BPAConstants.BPA_LOW_MODULE_CODE)) {
 				bpa.setRiskType(BPAConstants.LOW_RISKTYPE);
 			} else {
-				bpa.setRiskType(BPAConstants.HIGH_RISKTYPE);
+				Map<String, List<String>> masterData = mdmsValidator.getAttributeValues(mdmsData);
+				StringBuilder uri = new StringBuilder(config.getEdcrHost());
+				uri.append(config.getGetPlanEndPoint());
+				uri.append("?").append("tenantId=").append(bpa.getTenantId().split("\\.")[0]);
+				uri.append("&").append("edcrNumber=").append(bpa.getEdcrNumber());
+				org.egov.bpa.web.model.edcr.RequestInfo edcrRequestInfo = new org.egov.bpa.web.model.edcr.RequestInfo();
+				
+				BeanUtils.copyProperties(bpaRequest.getRequestInfo(), edcrRequestInfo);
+				
+				LinkedHashMap responseMap = null;
+				
+				try {
+					responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri,
+							new RequestInfoWrapper(edcrRequestInfo));
+				} catch (ServiceCallException se) {
+					throw new CustomException(BPAErrorConstants.EDCR_ERROR, " EDCR Number is Invalid");
+				}
+
+				if (CollectionUtils.isEmpty(responseMap))
+					throw new CustomException(BPAErrorConstants.EDCR_ERROR, "The response from EDCR service is empty or null");
+				String jsonString = new JSONObject(responseMap).toString();
+			
+				DocumentContext context = JsonPath.using(Configuration.defaultConfiguration()).parse(jsonString);
+			
+			Integer	plotArea = context.read("edcrDetail[0].planDetail.planInformation.plotArea");
+			Double	buildingHeight = context.read("edcrDetail[0].planDetail.blocks[0].building.buildingHeight");
+
+			
+				List jsonOutput = JsonPath.read(masterData, BPAConstants.RISKTYPE_COMPUTATION);
+				String filterExp = "$.[?((@.fromPlotArea < " + plotArea + " && @.toPlotArea >= " + plotArea
+						+ ") || ( @.fromBuildingHeight < " + buildingHeight + "  &&  @.toBuildingHeight >= "
+						+ buildingHeight + "  ))].riskType";
+
+				List<String> riskTypes = JsonPath.read(jsonOutput, filterExp);
+				                                                                                     
+				if (!CollectionUtils.isEmpty(riskTypes)) {
+					String	expectedRiskType  = riskTypes.get(0);
+					bpa.setRiskType(expectedRiskType);
+				}else
+				{
+					throw new CustomException(BPAErrorConstants.INVALID_RISK_TYPE, "The Risk Type is not valid " );
+				}
+				
+				
+				
+				
 			}
 		}
 
@@ -311,7 +374,8 @@ public class EnrichmentService {
 
 			// Adding owners to assignes list
 			bpa.getLandInfo().getOwners().forEach(ownerInfo -> {
-				assignes.add(ownerInfo.getUuid());
+			        if(ownerInfo.getUuid() != null)
+			            assignes.add(ownerInfo.getUuid());
 			});
 
 			Set<String> registeredUUIDS = userService.getUUidFromUserName(bpa);

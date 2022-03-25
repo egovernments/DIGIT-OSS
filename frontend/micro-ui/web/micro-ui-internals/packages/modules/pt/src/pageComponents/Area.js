@@ -89,7 +89,6 @@ const Area = ({ t, config, onSelect, value, userType, formData, setError: setFor
 
   useEffect(() => {
     if (presentInModifyApplication && userType === "employee") {
-      // console.log(formData?.originalData?.superBuiltUpArea, "inside landArea");
       setfloorarea(formData?.originalData?.landArea);
     }
   }, []);

@@ -204,7 +204,6 @@ export const getMdmsData = async (action, state, dispatch) => {
       )
     );
   } catch (e) {
-    console.log(e);
   }
 };
 

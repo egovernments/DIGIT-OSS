@@ -15,9 +15,8 @@ const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
 const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
 
 const getOwner = (application, t, customTitle) => {
-  console.log(customTitle, application, "inside owner details");
   let owners = [];
-  if(customTitle&&customTitle.includes("TRANSFEROR"))
+  if(customTitle && customTitle.includes("TRANSFEROR"))
   owners = [...(application?.owners.filter((owner) => owner.status == "INACTIVE") || [])];
   else
   owners = [...(application?.owners.filter((owner) => owner.status == "ACTIVE") || [])];
@@ -188,9 +187,8 @@ const mutationRegistrationDetails = (application, t) => {
 };
 
 const getPTAcknowledgementData = async (application, tenantInfo, t) => {
-  console.log(application, "inside acknowledgement data");
   const filesArray = application?.documents?.map((value) => value?.fileStoreId);
-  const res = await Digit.UploadServices.Filefetch(filesArray, application?.tenantId.split(".")[0]);
+  const res = await Digit.UploadServices.Filefetch(filesArray, Digit.ULBService.getStateId());
 
   if (application.creationReason === "MUTATION") {
     return {

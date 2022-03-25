@@ -245,7 +245,6 @@ class FormWizard extends Component {
         }
       );
     } catch (e) {
-      console.log("e", e);
     }
   };
 
@@ -377,7 +376,6 @@ class FormWizard extends Component {
       }
       //---------------------------------------------
     } catch (e) {
-      console.log("e");
       toggleSpinner();
     }
     if (selected > 2) {
@@ -1056,7 +1054,6 @@ class FormWizard extends Component {
       return billResponse;
     } catch (e) {
       toggleSpinner();
-      console.log(e);
     }
   };
 
@@ -1146,11 +1143,9 @@ class FormWizard extends Component {
         }
       } catch (e) {
         toggleSpinner();
-        console.log(e);
       }
     } catch (e) {
       toggleSpinner();
-      console.log(e);
     }
   };
 

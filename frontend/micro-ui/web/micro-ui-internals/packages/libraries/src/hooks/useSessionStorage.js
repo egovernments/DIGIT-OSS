@@ -16,7 +16,6 @@ const useSessionStorage = (key, initialValue) => {
       setStoredValue(valueToStore);
       Digit.SessionStorage.set(key, valueToStore);
     } catch (err) {
-      console.log(err);
     }
   };
 

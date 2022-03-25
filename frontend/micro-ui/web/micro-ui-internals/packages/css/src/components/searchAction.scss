@@ -8,3 +8,13 @@
     }
   }
 }
+
+.svgPrimaryH16px{
+  svg{
+    width: 18px;
+    @apply h-6;
+    path{
+      fill: #F47738;
+    }
+  }
+}

@@ -7,10 +7,8 @@ const Status = ({ onAssignmentChange, fsmfilters, mergedRoleDetails, statusMap }
   const { t } = useTranslation();
 
   const { data: applicationsWithCount, isLoading } = Digit.Hooks.fsm.useApplicationStatus(true, true, statusMap);
-  // console.log("find application stats", applicationsWithCount)
 
   const [moreStatus, showMoreStatus] = useState(false);
-
   const finalApplicationWithCount = mergedRoleDetails.statuses
     .map((roleDetails) => applicationsWithCount?.filter((application) => application.code === roleDetails)[0])
     .filter((status) => status?.code);
@@ -19,7 +17,6 @@ const Status = ({ onAssignmentChange, fsmfilters, mergedRoleDetails, statusMap }
     (application) => !finalApplicationWithCount.find((listedApplication) => listedApplication.code === application.code)
   );
 
-  // console.log("find role status from here", applicationsWithCount , mergedRoleDetails, finalApplicationWithCount, moreApplicationWithCount);
   if (isLoading) {
     return <Loader />;
   }
@@ -35,7 +32,7 @@ const Status = ({ onAssignmentChange, fsmfilters, mergedRoleDetails, statusMap }
             <StatusCount key={index} onAssignmentChange={onAssignmentChange} status={option} fsmfilters={fsmfilters} statusMap={statusMap} />
           ))
         : null}
-      {mergedRoleDetails.fixed === false ? (
+      {mergedRoleDetails.fixed === false && moreApplicationWithCount.length > 0 ? (
         <div className="filter-button" onClick={() => showMoreStatus(!moreStatus)}>
           {" "}
           {moreStatus ? t("ES_COMMON_LESS") : t("ES_COMMON_MORE")}{" "}

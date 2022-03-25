@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-
 import { Card, Loader } from "@egovernments/digit-ui-react-components";
-import InboxLinks from "./inbox/InboxLink";
-import ApplicationTable from "./inbox/ApplicationTable";
-import SearchApplication from "./inbox/search";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { getActionButton } from "../utils";
+import ApplicationTable from "./inbox/ApplicationTable";
+import InboxLinks from "./inbox/InboxLink";
+import SearchApplication from "./inbox/search";
+
 
 const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
   const { data } = props;
@@ -73,6 +73,13 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
         return GetCell(t(`BILLINGSERVICE_BUSINESSSERVICE_${code}`));
       },
       mobileCell: (original) => GetMobCell(`BILLINGSERVICE_BUSINESSSERVICE_${original?.["businessService"]}`),
+    },
+    {
+      Header: t("UC_RECIEPT_NUMBER_LABEL"),
+      Cell: ({ row }) => {
+        return row.original?.["recieptNumber"] ? GetCell(`${row.original?.["recieptNumber"]}`) : "-";
+      },
+      mobileCell: (original) => GetMobCell(original?.["recieptNumber"]) || "-",
     },
     {
       Header: t("UC_DUE_DATE"),
@@ -159,9 +166,9 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
               minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
               padding: "20px 18px",
               fontSize: "16px",
-              wordBreak:"break-word",
-              overflowWrap: 'break-word',
-              width: "250px"
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+              width: "250px",
             },
           };
         }}
@@ -169,10 +176,11 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
         currentPage={props.currentPage}
         onNextPage={props.onNextPage}
         onPrevPage={props.onPrevPage}
+        onLastPage={props.onLastPage}
+        onFirstPage={props.onFirstPage}
         pageSizeLimit={props.pageSizeLimit}
         onSort={props.onSort}
         disableSort={props.disableSort}
-        onPageSizeChange={props.onPageSizeChange}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
       />

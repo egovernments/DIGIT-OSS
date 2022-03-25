@@ -62,7 +62,6 @@ class DateRange extends React.Component {
       const dateRanges = this.state.dateRanges;
       let customTitle = false;
       dateRanges.map(dateRange => {
-        console.log(dateRange.range().startDate, range[0].startDate);
         if (title == dateRange.label && this.getDate(dateRange.range().startDate, true) == this.getDate(range[0].startDate, true) && this.getDate(dateRange.range().endDate) == this.getDate(range[0].endDate)) {
           customTitle = true
         }
@@ -181,7 +180,7 @@ class DateRange extends React.Component {
       label: 'This Week',
       range: () => ({
         startDate: new Date(Number(`${moment().startOf('week').unix()}000`)),
-        endDate: new Date(Number(`${moment().endOf('week').unix()}000`)),
+        endDate:  new Date(Number(`${moment().endOf('day').unix()}000`)),
         interval: 'week',
         label: 'This Week'
       })
@@ -190,7 +189,7 @@ class DateRange extends React.Component {
       label: 'This Month',
       range: () => ({
         startDate: new Date(Number(`${moment().startOf('month').unix()}000`)),
-        endDate: new Date(Number(`${moment().endOf('month').unix()}000`)),
+        endDate:  new Date(Number(`${moment().endOf('day').unix()}000`)),
         interval: 'week',
         label: 'This Month'
       })
@@ -199,7 +198,7 @@ class DateRange extends React.Component {
       label: 'This Quarter',
       range: () => ({
         startDate: new Date(Number(`${moment().startOf('quarter').unix()}000`)),
-        endDate: new Date(Number(`${moment().endOf('quarter').unix()}000`)),
+        endDate:  new Date(Number(`${moment().endOf('day').unix()}000`)),
         interval: 'month',
         label: 'This Quarter'
       })

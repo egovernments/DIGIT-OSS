@@ -75,6 +75,8 @@ const useReceiptsMDMS = (tenantId, type, config = {}) => {
       return useCancelReceiptStatus();
     case "CancelReceiptReasonAndStatus":
       return useCancelReceiptReasonAndStatus();
+    default:
+      return null;
   }
 };
 export default useReceiptsMDMS;

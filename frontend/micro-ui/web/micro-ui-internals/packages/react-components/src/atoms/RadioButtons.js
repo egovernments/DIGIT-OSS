@@ -12,7 +12,7 @@ const RadioButtons = (props) => {
   }
 
   return (
-    <div style={props.style} className="radio-wrap">
+    <div style={props.style} className={`radio-wrap ${props?.additionalWrapperClass}`}>
       {props?.options?.map((option, ind) => {
         if (props?.optionsKey && !props?.isDependent) {
           return (
@@ -22,13 +22,15 @@ const RadioButtons = (props) => {
                   className="radio-btn"
                   type="radio"
                   value={option}
-                  checked={isEqual(selected, option) ? 1 : 0}
+                  checked={(props.isPTFlow && selected?.code === option.code) || isEqual(selected, option) ? 1 : 0}
                   onChange={() => selectOption(option)}
                   disabled={props?.disabled}
+                  name={props.name}
+                  ref={props.inputRef}
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
-              <label>{t(option[props.optionsKey])}</label>
+              <label style={props.inputStyle}>{t(option[props.optionsKey])}</label>
             </div>
           );
         } else if (props?.optionsKey && props?.isDependent) {
@@ -42,10 +44,12 @@ const RadioButtons = (props) => {
                   checked={selected?.code === option.code ? 1 : 0}
                   onChange={() => selectOption(option)}
                   disabled={props?.disabled}
+                  name={props.name}
+                  ref={props.inputRef}
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
-              <label>{t(props.labelKey ? `${props.labelKey}_${option.code}` : option.code)}</label>
+              <label style={props.inputStyle}>{t(props.labelKey ? `${props.labelKey}_${option.code}` : option.code)}</label>
             </div>
           );
         } else {
@@ -59,10 +63,12 @@ const RadioButtons = (props) => {
                   checked={selected === option ? 1 : 0}
                   onChange={() => selectOption(option)}
                   disabled={props?.disabled}
+                  name={props.name}
+                  ref={props.inputRef}
                 />
                 <span className="radio-btn-checkmark"></span>
               </span>
-              <label>{t(option)}</label>
+              <label style={props.inputStyle}>{t(option)}</label>
             </div>
           );
         }

@@ -21,12 +21,14 @@ const Urls = {
   Authenticate: "/user/oauth/token",
   RegisterUser: "/user/citizen/_create",
   ChangePassword: "/user/password/nologin/_update",
+  ChangePassword1: "/user/password/_update", 
   UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
 
   InboxSearch: "/inbox/v1/_search",
 
   UserSearch: "/user/_search",
+  UserLogout : "/user/_logout",
 
   Shortener: "/egov-url-shortening/shortener",
 
@@ -52,6 +54,7 @@ const Urls = {
     update_citizen_reciept: "/pg-service/transaction/v1/_update",
     search_bill: "/billing-service/bill/v2/_search",
     reciept_search: "/collection-services/payments/:buisnessService/_search",
+    obps_Reciept_Search: "/collection-services/payments/_search",
   },
 
   pt: {
@@ -63,6 +66,7 @@ const Urls = {
     pt_calculation_estimate: "/pt-calculator-v2/propertytax/v2/_estimate",
     assessment_create: "/property-services/assessment/_create",
     assessment_search: "/property-services/assessment/_search",
+    payment_search: "/collection-services/payments/PT/_search"
   },
 
   dss: {
@@ -79,7 +83,8 @@ const Urls = {
     update: "/echallan-services/eChallan/v1/_update",
     download_pdf: "/egov-pdf/download/UC/mcollect-challan",
     receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
-    count: "/echallan-services/eChallan/v1/_count"
+    bill_download: "/egov-pdf/download/bills/consolidatedbill",
+    count: "/echallan-services/eChallan/v1/_count",
   },
   hrms: {
     search: "/egov-hrms/employees/_search",
@@ -92,13 +97,67 @@ const Urls = {
     search: "/tl-services/v1/_search",
     fetch_payment_details: "/billing-service/bill/v2/_fetchbill",
     download_pdf: "/egov-pdf/download/TL/",
-    update:"/tl-services/v1/_update",
-    billingslab: "/tl-calculator/billingslab/_search"
+    update: "/tl-services/v1/_update",
+    billingslab: "/tl-calculator/billingslab/_search",
   },
   receipts: {
     receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
     payments: "/collection-services/payments",
-    count: "/egov-hrms/employees/_count"
+    count: "/egov-hrms/employees/_count",
+  },
+  obps: {
+    scrutinyDetails: "/edcr/rest/dcr/scrutinydetails",
+    comparisionReport: "/edcr/rest/dcr/occomparison",
+    create: "/bpa-services/v1/bpa/_create",
+    nocSearch: "/noc-services/v1/noc/_search",
+    updateNOC: "/noc-services/v1/noc/_update",
+    update: "/bpa-services/v1/bpa/_update",
+    bpaSearch: "/bpa-services/v1/bpa/_search",
+    bpaRegSearch: "/tl-services/v1/BPAREG/_search",
+    bpaRegCreate: "/tl-services/v1/BPAREG/_create",
+    bpaRegGetBill: "/tl-calculator/v1/BPAREG/_getbill",
+    bpaRegUpdate: "/tl-services/v1/BPAREG/_update",
+    receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
+    edcrreportdownload: "/bpa-services/v1/bpa/_permitorderedcr",
+  },
+
+  edcr: {
+    create: "/edcr/rest/dcr/scrutinize",
+  },
+
+  events: {
+    search: "/egov-user-event/v1/events/_search",
+    update: "/egov-user-event/v1/events/lat/_update",
+    updateEvent: "/egov-user-event/v1/events/_update",
+    updateEventCDG: "/egov-user-event/v1/events/lat/_update",
+    count: "/egov-user-event/v1/events/notifications/_count",
+    create: "/egov-user-event/v1/events/_create",
+  },
+
+  ws: {
+    water_search: "/ws-services/wc/_search",
+    sewarage_search : "/sw-services/swc/_search",
+  },
+
+  engagement: {
+    document: {
+      search: "/egov-document-uploader/egov-du/document/_search",
+      create: "/egov-document-uploader/egov-du/document/_create",
+      delete: "/egov-document-uploader/egov-du/document/_delete",
+      update: "/egov-document-uploader/egov-du/document/_update",
+    },
+    surveys: {
+      create: "/egov-survey-services/egov-ss/survey/_create",
+      update: "/egov-survey-services/egov-ss/survey/_update",
+      search: "/egov-survey-services/egov-ss/survey/_search",
+      delete: "/egov-survey-services/egov-ss/survey/_delete",
+      submitResponse: "/egov-survey-services/egov-ss/survey/response/_submit",
+      showResults: "/egov-survey-services/egov-ss/survey/response/_results"
+    }
+  },
+
+  noc: {
+    nocSearch: "/noc-services/v1/noc/_search"
   },
 };
 

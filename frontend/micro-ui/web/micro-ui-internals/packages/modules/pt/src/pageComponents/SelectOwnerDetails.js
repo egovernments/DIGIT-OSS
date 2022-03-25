@@ -26,7 +26,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
   let isEditProperty = formData?.isEditProperty || false;
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
 
   const { data: Menu } = Digit.Hooks.pt.useGenderMDMS(stateId, "common-masters", "GenderType");
 
@@ -109,6 +109,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
               name="mobileNumber"
               value={mobileNumber}
               onChange={setMobileNo}
+              ValidationRequired = {true}
               {...(validation = {
                 isRequired: true,
                 pattern: "[6-9]{1}[0-9]{9}",
@@ -129,6 +130,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
               name="name"
               value={name}
               onChange={setOwnerName}
+              ValidationRequired = {true}
               {...(validation = {
                 isRequired: true,
                 pattern: "^[a-zA-Z-.`' ]*$",
@@ -149,6 +151,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
               name="fatherOrHusbandName"
               value={fatherOrHusbandName}
               onChange={setGuardiansName}
+              ValidationRequired = {true}
               {...(validation = {
                 pattern: "^[a-zA-Z-.`' ]*$",
                 type: "tel",
@@ -222,6 +225,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
           value={name}
           onChange={setOwnerName}
           disable={isUpdateProperty || isEditProperty}
+          ValidationRequired = {true}
           {...(validation = {
             isRequired: true,
             pattern: "^[a-zA-Z-.`' ]*$",
@@ -260,6 +264,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
           value={fatherOrHusbandName}
           onChange={setGuardiansName}
           disable={isUpdateProperty || isEditProperty}
+          ValidationRequired = {true}
           {...(validation = {
             isRequired: true,
             pattern: "^[a-zA-Z-.`' ]*$",

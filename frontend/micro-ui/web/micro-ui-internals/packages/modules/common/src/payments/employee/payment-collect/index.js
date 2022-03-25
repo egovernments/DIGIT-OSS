@@ -12,7 +12,6 @@ import { BillDetailsFormConfig } from "./Bill-details/billDetails";
 export const CollectPayment = (props) => {
   // const { formData, addParams } = props;
   const { workflow: ModuleWorkflow } = Digit.Hooks.useQueryParams();
-  console.log(ModuleWorkflow);
   const { t } = useTranslation();
   const history = useHistory();
   const queryClient = useQueryClient();
@@ -154,7 +153,6 @@ export const CollectPayment = (props) => {
     }
 
     try {
-      // console.log(recieptRequest);
       const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
       queryClient.invalidateQueries();
       history.push(

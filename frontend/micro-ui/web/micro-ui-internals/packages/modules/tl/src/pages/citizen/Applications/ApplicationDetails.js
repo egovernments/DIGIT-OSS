@@ -1,11 +1,11 @@
-import { Card, CardHeader, Loader, MultiLink, Row, SubmitBar, Header, CardSubHeader, CardSectionHeader } from "@egovernments/digit-ui-react-components";
+import { Card, CardHeader, Loader, MultiLink, Row, SubmitBar, Header, CardSubHeader, CardSectionHeader, LinkLabel, LinkButton } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../../utils/getTLAcknowledgementData";
 import TLWFApplicationTimeline from "../../../pageComponents/TLWFApplicationTimeline";
 
-const ApplicationDetails = () => {
+const TLApplicationDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { tenantId } = useParams();
@@ -21,7 +21,13 @@ const ApplicationDetails = () => {
     tenantId: tenantId,
     applicationNumber: id,
   });
-
+const { isLoading: PTLoading, isError: isPTError, data: PTData } = Digit.Hooks.pt.usePropertySearch(
+  {
+    tenantId,
+    filters: { propertyIds: application?.[0]?.tradeLicenseDetail?.additionalDetail?.propertyId },
+  },
+  { enabled: application?.[0]?.tradeLicenseDetail?.additionalDetail?.propertyId ? true : false,}
+);
 
   useEffect(() => {
     setMutationHappened(false);
@@ -78,6 +84,43 @@ const ApplicationDetails = () => {
     setShowOptions(false);
   };
 
+  let propertyAddress = '';
+  if(PTData && PTData?.Properties?.length){
+    if(PTData?.data?.Properties[0]?.address?.doorNo) {
+      propertyAddress += PTData?.Properties[0]?.address?.doorNo;
+      if(PTData?.Properties[0]?.address?.street) {
+        propertyAddress += ', ';
+      }
+    }
+    if(PTData?.Properties[0]?.address?.street) {
+      propertyAddress += PTData?.Properties[0]?.address?.street;
+      if(PTData?.Properties[0]?.address?.landmark) {
+        propertyAddress += ', ';
+      }
+    }
+    if(PTData?.Properties[0]?.address?.landmark) {
+      propertyAddress += PTData?.Properties[0]?.address?.landmark;
+      if(PTData?.Properties[0]?.address?.locality?.name) {
+        propertyAddress += ', ';
+      }
+    }
+    if(PTData?.Properties[0]?.address?.locality?.name) {
+      propertyAddress += PTData?.Properties[0]?.address?.locality?.name;
+      if(PTData?.Properties[0]?.address?.city) {
+        propertyAddress += ', ';
+      }
+    }
+    if(PTData?.Properties[0]?.address?.city) {
+      propertyAddress += PTData?.Properties[0]?.address?.city;
+      if(PTData?.Properties[0]?.address?.pincode) {
+        propertyAddress += ', ';
+      }
+    }
+    if(PTData?.Properties[0]?.address?.pincode) {
+      propertyAddress += PTData?.Properties[0]?.address?.pincode;
+    }
+  }
+
   const dowloadOptions =
     paymentsHistory?.Payments?.length > 0
       ? [
@@ -121,8 +164,41 @@ const ApplicationDetails = () => {
               <Row label={t("TL_APPLICATION_CATEGORY")} text={t("ACTION_TEST_TRADE_LICENSE")} textStyle={{ whiteSpace: "pre" }} />
               <CardSectionHeader>{t("TL_OWNERSHIP_DETAILS_HEADER")}</CardSectionHeader>
               {application?.tradeLicenseDetail.owners.map((ele, index) => {
-                return (
-                  <div key = {index} style={multiBoxStyle}>
+               return application?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL") ?                   
+               <div key = {index} style={multiBoxStyle}>
+                <CardSectionHeader style={multiHeaderStyle}>{`${t("TL_PAYMENT_PAID_BY_PLACEHOLDER")} - `+ (index+1)}</CardSectionHeader>
+                <Row
+                  label={`${t("TL_INSTITUTION_NAME_LABEL")}`}
+                  text={t(application?.tradeLicenseDetail?.institution?.instituionName)}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+                <Row
+                  label={`${t("TL_INSTITUTION_TYPE_LABEL")}`}
+                  text={t(`TL_${application?.tradeLicenseDetail?.subOwnerShipCategory}`)}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+                <Row
+                  label={`${t("TL_MOBILE_NUMBER_LABEL")}`}
+                  text={t(ele.mobileNumber)}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+                <Row
+                  label={`${t("TL_TELEPHONE_NUMBER_LABEL")}`}
+                  text={t(application?.tradeLicenseDetail?.institution?.contactNo || t("CS_NA"))}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+                <Row
+                  label={`${t("TL_LOCALIZATION_OWNER_NAME")}`}
+                  text={t(ele.fatherOrHusbandName || application?.tradeLicenseDetail?.institution?.name)}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+                <Row
+                  label={`${t("TL_LOCALIZATION_EMAIL_ID")}`}
+                  text={t(ele.emailId || t("CS_NA"))}
+                  textStyle={{ whiteSpace: "pre" }}
+                />
+               </div>
+               : <div key = {index} style={multiBoxStyle}>
                   <CardSectionHeader style={multiHeaderStyle}>{`${t("TL_PAYMENT_PAID_BY_PLACEHOLDER")} - `+ (index+1)}</CardSectionHeader>
                   <Row
                     label={`${t("TL_COMMON_TABLE_COL_OWN_NAME")}`}
@@ -139,8 +215,17 @@ const ApplicationDetails = () => {
                     text={t(ele.mobileNumber)}
                     textStyle={{ whiteSpace: "pre" }}
                   />
+                  <Row
+                    label={`${t("TL_GUARDIAN_S_NAME_LABEL")}`}
+                    text={t(ele.fatherOrHusbandName)}
+                    textStyle={{ whiteSpace: "pre" }}
+                  />
+                  <Row
+                    label={`${t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL")}`}
+                    text={t(ele.relationship)}
+                    textStyle={{ whiteSpace: "pre" }}
+                  />
                   </div>
-                );
               })}
               <Row
                 style={{ border: "none" }}
@@ -207,6 +292,11 @@ const ApplicationDetails = () => {
                   </div>
                 );
               })}
+              <CardSubHeader>{t("Property Details")}</CardSubHeader>
+              <Row label={t("TL_PROPERTY_ID")} text={ PTData?.Properties?.[0]?.propertyId} textStyle={{ whiteSpace: "pre" }} />
+              <Row label={t("PT_OWNER_NAME")} text={PTData?.Properties?.[0]?.owners[0]?.name } textStyle={{ whiteSpace: "pre" }} />
+              <Row label={t("PROPERTY_ADDRESS")} text={propertyAddress}  />
+                 <LinkButton style={{textAlign:"left"}} label={t("view property details")} onClick={() => {history.push(`/digit-ui/citizen/pt/property/properties/${PTData?.Properties?.[0]?.propertyId}`); }}></LinkButton>
               <Row label="" />
                     <Row
                       style={{ border: "none" }}
@@ -246,4 +336,4 @@ const ApplicationDetails = () => {
   );
 };
 
-export default ApplicationDetails;
+export default TLApplicationDetails;

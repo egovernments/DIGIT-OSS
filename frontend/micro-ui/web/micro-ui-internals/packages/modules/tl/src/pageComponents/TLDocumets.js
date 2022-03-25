@@ -18,9 +18,9 @@ function TLDocument({ value = {} }) {
     { value }
   );
   let documents = [];
-  documents.push(value.owners.documents["ProofOfIdentity"]);
-  documents.push(value.owners.documents["ProofOfOwnership"]);
-  documents.push(value.owners.documents["OwnerPhotoProof"]);
+  if(value?.owners?.documents["ProofOfIdentity"]) documents.push(value.owners.documents["ProofOfIdentity"]);
+  if(value?.owners?.documents["ProofOfOwnership"]) documents.push(value.owners.documents["ProofOfOwnership"]);
+  if(value?.owners?.documents["OwnerPhotoProof"]) documents.push(value.owners.documents["OwnerPhotoProof"]);
   
 
   if (isLoading) {

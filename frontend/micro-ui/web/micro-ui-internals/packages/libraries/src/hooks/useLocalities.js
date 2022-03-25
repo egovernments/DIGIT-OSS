@@ -3,8 +3,7 @@ import { getLocalities } from "../services/molecules/getLocalities";
 import { LocalityService } from "../services/elements/Localities";
 
 const useLocalities = (tenant, boundaryType = "admin", config, t) => {
-  // console.log("find boundary type here",boundaryType)
-  return useQuery(["BOUNDARY_DATA", tenant, boundaryType], () => getLocalities[boundaryType](tenant), {
+  return useQuery(["BOUNDARY_DATA", tenant, boundaryType], () => getLocalities[boundaryType.toLowerCase()](tenant), {
     select: (data) => {
       return LocalityService.get(data).map((key) => {
         return { ...key, i18nkey: t(key.i18nkey) };

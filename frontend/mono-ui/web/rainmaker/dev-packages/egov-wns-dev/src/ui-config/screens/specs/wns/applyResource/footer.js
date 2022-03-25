@@ -195,7 +195,6 @@ const getMdmsData = async (state, dispatch) => {
     dispatch(prepareFinalObject("applyScreenMdmsData.applyScreen.Documents", payload.MdmsRes['ws-services-masters'].Documents));
     prepareDocumentsUploadData(state, dispatch);
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -623,6 +622,13 @@ const callBackForNext = async (state, dispatch) => {
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
     if (isModifyMode()) {
+      let connType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.connectionType", "");
+      if (connType === undefined || connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") {
+        showHideFeilds(dispatch, false);
+      }
+      else {
+        showHideFeilds(dispatch, true);
+      }
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);
         isFormValid = true; hasFieldToaster = false;

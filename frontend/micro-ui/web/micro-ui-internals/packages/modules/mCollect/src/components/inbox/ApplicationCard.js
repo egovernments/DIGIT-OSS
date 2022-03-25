@@ -8,6 +8,7 @@ import SortBy from "./SortBy";
 export const ApplicationCard = ({
   t,
   data,
+  defaultSearchParams={},
   onFilterChange,
   onSearch,
   onSort,
@@ -106,7 +107,7 @@ export const ApplicationCard = ({
         <PopUp>
           {type === "FILTER" && (
             <div className="popup-module">
-              {<FilterComp onFilterChange={onSearchFilter} Close={handlePopupClose} type="mobile" searchParams={searchFilterParams} />}
+              {<FilterComp onFilterChange={onSearchFilter} onRefresh={onFilterChange} Close={handlePopupClose} type="mobile" searchParams={searchFilterParams} defaultSearchParams={defaultSearchParams} />}
             </div>
           )}
           {/* {type === "SORT" && (

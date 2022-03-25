@@ -95,7 +95,6 @@ const PropertyUsageType = ({ t, config, onSelect, userType, formData, formState,
             disable={usageCategoryMajorMenu(usagecat)?.length === 1}
             option={usageCategoryMajorMenu(usagecat)}
             select={(e) => {
-              // console.log(t("PROPERTYTAX_BILLING_SLAB_" + e.code.split(".")[1]), e, "selected option is");
               selectPropertyPurpose(e);
             }}
             optionKey="i18nKey"

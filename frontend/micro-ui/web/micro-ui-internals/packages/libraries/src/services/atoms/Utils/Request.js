@@ -7,8 +7,10 @@ Axios.interceptors.response.use(
     if (err?.response?.data?.Errors) {
       for (const error of err.response.data.Errors) {
         if (error.message.includes("InvalidAccessTokenException")) {
+          localStorage.clear();
+          sessionStorage.clear()
           window.location.href =
-            (isEmployee ? "/employee/user/login" : "/digit-ui/citizen/login") +
+            (isEmployee ? "/digit-ui/employee/user/login" : "/digit-ui/citizen/login") +
             `?from=${encodeURIComponent(window.location.pathname + window.location.search)}`;
         }
       }
@@ -18,14 +20,14 @@ Axios.interceptors.response.use(
 );
 
 const requestInfo = () => ({
-  authToken: Digit.UserService.getUser().access_token,
+  authToken: Digit.UserService.getUser()?.access_token || null,
 });
 
 const authHeaders = () => ({
-  "auth-token": Digit.UserService.getUser().access_token,
+  "auth-token": Digit.UserService.getUser()?.access_token || null,
 });
 
-const userServiceData = () => ({ userInfo: Digit.UserService.getUser().info });
+const userServiceData = () => ({ userInfo: Digit.UserService.getUser()?.info });
 
 window.Digit = window.Digit || {};
 window.Digit = { ...window.Digit, RequestCache: window.Digit.RequestCache || {} };
@@ -44,18 +46,14 @@ export const Request = async ({
   setTimeParam = true,
   userDownload = false,
   noRequestInfo = false,
+  multipartFormData = false,
+  multipartData = {}
 }) => {
-  // console.log("params:", params);
-  // console.log("in request", method);
-  // console.log("url:", url);
   if (method.toUpperCase() === "POST") {
     const ts = new Date().getTime()
     data.RequestInfo = {
       apiId: "Rainmaker",
     };
-    if (noRequestInfo) {
-      delete data.RequestInfo;
-    }
     if (auth) {
       data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
     }
@@ -65,11 +63,14 @@ export const Request = async ({
     if (locale) {
       data.RequestInfo = { ...data.RequestInfo, msgId: `${ts}|${Digit.StoreData.getCurrentLanguage()}` };
     }
+    if (noRequestInfo) {
+      delete data.RequestInfo;
+    }
   }
 
   const headers1 = {
     "Content-Type": "application/json",
-    Accept: "application/pdf",
+    Accept: window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")?"application/pdf,application/json":"application/pdf",
   };
 
   if (authHeader) headers = { ...headers, ...authHeaders() };
@@ -78,8 +79,6 @@ export const Request = async ({
 
   let key = "";
   if (useCache) {
-    // console.log("find request params here",JSON.stringify(params, null, 0));
-    // console.log("find request data here",JSON.stringify(data, null, 0));
     key = `${method.toUpperCase()}.${url}.${btoa(escape(JSON.stringify(params, null, 0)))}.${btoa(escape(JSON.stringify(data, null, 0)))}`;
     const value = window.Digit.RequestCache[key];
     if (value) {
@@ -96,6 +95,18 @@ export const Request = async ({
       return urlParams[key] ? urlParams[key] : path;
     })
     .join("/");
+  
+  if (multipartFormData) {
+    const multipartFormDataRes = await Axios({ method, url: _url, data: multipartData.data, params, headers: { "Content-Type": "multipart/form-data", "auth-token": Digit.UserService.getUser()?.access_token || null  } });
+    return multipartFormDataRes;
+  }
+
+ 
+    /* Fix for central instance to send tenantID in all query params  */
+    const tenantInfo = Digit.SessionStorage.get("userType") === "citizen" ? Digit.ULBService.getStateId():Digit.ULBService.getCurrentTenantId() || Digit.ULBService.getStateId() ;
+    if ((!params["tenantId"])&&(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE"))) {
+      params["tenantId"]=tenantInfo;
+    }
 
   const res = userDownload
     ? await Axios({ method, url: _url, data, params, headers, responseType: "arraybuffer" })
