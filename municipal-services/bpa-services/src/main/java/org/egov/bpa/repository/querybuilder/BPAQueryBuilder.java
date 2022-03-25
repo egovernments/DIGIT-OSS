@@ -197,7 +197,7 @@ public class BPAQueryBuilder {
         int offset = config.getDefaultOffset();
         String finalQuery = paginationWrapper.replace("{}", query);
 
-        if(criteria.getLimit() == null && criteria.getOffset() == null) {
+        if(criteria.getLimit() != null && criteria.getOffset() != null) {
         	limit = config.getMaxSearchLimit();
         } 
         
