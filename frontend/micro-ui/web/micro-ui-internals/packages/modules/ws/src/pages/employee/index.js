@@ -10,6 +10,7 @@ import ApplicationDetails from "./ApplicationDetails";
 import GetConnectionDetails from "./connectionDetails/connectionDetails";
 import ActivateConnection from "./ActivateConnection";
 import Response from "./Response";
+import ApplicationDetailsBillAmendment from "./ApplicationDetailsBillAmendment";
 // import SearchConnectionComponent from "./SearchConnection";
 // import SearchResultsComponent from "./SearchResults";
 
@@ -24,6 +25,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/application-details`} component={ApplicationDetails} />
         <PrivateRoute path={`${path}/connection-details`} component={GetConnectionDetails} />
         <PrivateRoute path={`${path}/bill-amendment`} component={() => <ApplicationBillAmendment {...{path}}/>} />
+        <PrivateRoute path={`${path}/application-details-bill-amendment`} component={() => <ApplicationDetailsBillAmendment {...{path}}/>} />
         <PrivateRoute path={`${path}/response`} component={() => <Response {...{path}}/>} />
         <PrivateRoute path={`${path}/required-documents`} component={() => <RequiredDocuments {...{path}}/>} />
         <PrivateRoute path={`${path}/activate-connection`} component={ActivateConnection} />
