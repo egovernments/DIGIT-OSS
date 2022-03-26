@@ -97,11 +97,12 @@ public class NotificationUtil {
 
     @Autowired
     public NotificationUtil(ServiceRequestRepository serviceRequestRepository, PropertyConfiguration config,
-                            Producer producer, RestTemplate restTemplate) {
+                            Producer producer, RestTemplate restTemplate, MultiStateInstanceUtil centralInstanceUtil) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.config = config;
         this.producer = producer;
         this.restTemplate = restTemplate;
+        this.centralInstanceUtil = centralInstanceUtil;
     }
 
 
