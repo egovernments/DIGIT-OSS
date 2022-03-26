@@ -544,7 +544,7 @@ public class NotificationUtil {
         uri.append(mdmsHost).append(mdmsUrl);
         if(StringUtils.isEmpty(tenantId))
             return masterData;
-        MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
+        MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, centralInstanceUtil.getStateLevelTenant(tenantId));
 
         Filter masterDataFilter = filter(
                 where(MODULE).is(moduleName).and(ACTION).is(action)
