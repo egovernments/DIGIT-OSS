@@ -29,7 +29,7 @@ const sendEventNotificaiton = (tenantId) => {
     });
   };
 
-export const sendFireNOCSMSRequest = FireNOCs => {
+export const sendFireNOCSMSRequest = async FireNOCs => {
     let tenantId = get(FireNOCs[0], "tenantId");
     for (let i = 0; i < FireNOCs.length; i++) {
       let mobileNumber = get(
