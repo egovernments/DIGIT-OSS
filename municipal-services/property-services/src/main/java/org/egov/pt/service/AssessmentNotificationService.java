@@ -61,11 +61,12 @@ public class AssessmentNotificationService {
     private MultiStateInstanceUtil centralInstanceUtil;
 
     @Autowired
-    public AssessmentNotificationService(NotificationUtil util, PropertyService propertyService, PropertyConfiguration config,BillingService billingService ) {
+    public AssessmentNotificationService(NotificationUtil util, PropertyService propertyService, PropertyConfiguration config,BillingService billingService, MultiStateInstanceUtil centralInstanceUtil) {
         this.util = util;
         this.propertyService = propertyService;
         this.config = config;
         this.billingService = billingService;
+        this.centralInstanceUtil = centralInstanceUtil;
     }
 
     public void process(String topicName, AssessmentRequest assessmentRequest){

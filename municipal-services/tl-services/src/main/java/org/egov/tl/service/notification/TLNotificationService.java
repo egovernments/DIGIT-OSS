@@ -5,6 +5,7 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -44,6 +45,8 @@ public class TLNotificationService {
 
 	private TLRenewalNotificationUtil tlRenewalNotificationUtil;
 
+	private MultiStateInstanceUtil centralInstanceUtil;
+
 	@Value("${egov.mdms.host}")
 	private String mdmsHost;
 
@@ -54,12 +57,13 @@ public class TLNotificationService {
 	private RestTemplate restTemplate;
 
 	@Autowired
-	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil, TLRenewalNotificationUtil tlRenewalNotificationUtil) {
+	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil, TLRenewalNotificationUtil tlRenewalNotificationUtil, MultiStateInstanceUtil centralInstanceUtil) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.util = util;
 		this.bpaNotificationUtil = bpaNotificationUtil;
 		this.tlRenewalNotificationUtil = tlRenewalNotificationUtil;
+		this.centralInstanceUtil = centralInstanceUtil;
 	}
 
 	/**
@@ -430,7 +434,7 @@ public class TLNotificationService {
 
 		if(StringUtils.isEmpty(tenantId))
 			return map;
-		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
+		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, centralInstanceUtil.getStateLevelTenant(tenantId));
 
         Filter masterDataFilter = filter(
                 where(MODULENAME).is(moduleName)

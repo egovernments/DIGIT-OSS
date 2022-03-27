@@ -41,7 +41,7 @@ const run = async () => {
 
         const sendEventNotificaiton = (tenantId) => {
           let requestPayload = {
-            // RequestInfo,
+            RequestInfo,
             events
           };
       
