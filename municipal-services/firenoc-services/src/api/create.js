@@ -92,7 +92,7 @@ export const createApiResponse = async (request, res, next) => {
     messages: JSON.stringify(body)
   });
   
-  //sendFireNOCSMSRequest(body.FireNOCs, RequestInfo);
+  sendFireNOCSMSRequest(body.FireNOCs);
 
 
   let response = {

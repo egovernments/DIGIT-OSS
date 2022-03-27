@@ -3,6 +3,7 @@ import producer from "../kafka/producer";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getUpdatedTopic } from "../utils/index";
+import userService from "../services/userService";
 
 let payloads = [];
 let smsRequest = {};
@@ -31,10 +32,11 @@ const sendEventNotificaiton = (tenantId) => {
 export const sendFireNOCSMSRequest = FireNOCs => {
     let tenantId = get(FireNOCs[0], "tenantId");
     for (let i = 0; i < FireNOCs.length; i++) {
-      smsRequest["mobileNumber"] = get(
+      let mobileNumber = get(
         FireNOCs[i],
         "fireNOCDetails.applicantDetails.owners.0.mobileNumber"
       );
+      smsRequest["mobileNumber"] = mobileNumber;
       let firenocType =
         get(FireNOCs[i], "fireNOCDetails.fireNOCType") === "NEW"
           ? "new"
@@ -132,16 +134,31 @@ export const sendFireNOCSMSRequest = FireNOCs => {
       });
       // console.log("smsRequest",smsRequest);
       if (smsRequest.message) {
-        events.push({
-          tenantId: tenantId,
-          eventType: "SYSTEMGENERATED",
-          description: smsRequest.message,
-          name: "Firenoc notification",
-          source: "webapp",
-          recepient: {
-            toUsers: [uuid]
-          }
-        });
+        let userSearchReqCriteria = {};
+        let userSearchResponse = {};
+        let header = {
+          tenantid:tenantId
+        };
+        userSearchReqCriteria.userName = mobileNumber;
+        userSearchReqCriteria.active = true;
+        userSearchReqCriteria.tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
+        userSearchResponse = await userService.searchUser(
+          RequestInfo,
+          userSearchReqCriteria,
+          header
+        );
+        if (get(userSearchResponse, "user", []).length > 0) {
+          events.push({
+            tenantId: tenantId,
+            eventType: "SYSTEMGENERATED",
+            description: smsRequest.message,
+            name: "Firenoc notification",
+            source: "webapp",
+            recepient: {
+              toUsers: [userSearchResponse.user[0].uuid]
+            }
+          });
+        }
       }
     }
     // console.log("events",events);
