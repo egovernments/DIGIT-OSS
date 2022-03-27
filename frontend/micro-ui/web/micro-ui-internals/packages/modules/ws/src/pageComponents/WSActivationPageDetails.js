@@ -111,6 +111,10 @@ const ConnectionDetails = (_props) => {
         }
     }, [formValue]);
 
+    useEffect(() => {
+        trigger();
+    }, [formData?.connectionDetails?.[0]?.connectionType]);
+
 
     useEffect(() => {
         if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) {

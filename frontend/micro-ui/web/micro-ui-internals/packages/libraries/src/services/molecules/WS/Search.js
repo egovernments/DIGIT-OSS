@@ -46,6 +46,12 @@ export const WSSearch = {
     return response;
   },
 
+  wsEstimationDetails: async (data, serviceType) => {
+    let businessService = serviceType === "WATER" ? "WS" : "SW";
+    const response = await WSService.wsCalculationEstimate(data, businessService );
+    return response;
+  },
+
   applicationDetails: async (t, tenantId, applicationNumber, serviceType = "WATER", config = {}) => {
     const filters = { applicationNumber };
 
@@ -74,6 +80,26 @@ export const WSSearch = {
 
     const workflowDetails = await WSSearch.workflowDataDetails(tenantId, businessIds);
 
+    const data = {
+      CalculationCriteria: serviceType == "WATER" ? [{
+        applicationNo: filters?.applicationNumber,
+        tenantId: wsData?.[0]?.tenantId ? wsData?.[0]?.tenantId : tenantId,
+        waterConnection: {...wsData?.[0], property: properties?.Properties?.[0]}
+      }] : [{
+        applicationNo: filters?.applicationNumber,
+        tenantId: wsData?.[0]?.tenantId ? wsData?.[0]?.tenantId : tenantId,
+        sewerageConnection: {...wsData?.[0], property: properties?.Properties?.[0], service: "SEWERAGE"}
+      }],
+      isconnectionCalculation: false
+    }
+    let estimationResponse = {};
+    if (serviceType == "WATER" && response?.WaterConnection?.length > 0) {
+      estimationResponse = await WSSearch.wsEstimationDetails(data, serviceType);
+    }
+    if (serviceType !== "WATER" && response?.SewerageConnections?.length > 0) {
+      estimationResponse = await WSSearch.wsEstimationDetails(data, serviceType);
+    }
+    
     const wsDataDetails = cloneDeep(serviceType == "WATER" ? response?.WaterConnection?.[0] : response?.SewerageConnections?.[0]);
     const propertyDataDetails = cloneDeep(properties?.Properties?.[0]);
     const billDetails = cloneDeep(billData);
@@ -96,6 +122,22 @@ export const WSSearch = {
       ]
     };
 
+    const feeEstimation = {
+      title: "WS_TASK_DETAILS_FEE_ESTIMATE",
+      asSectionHeader: true,
+      additionalDetails: {
+        estimationDetails: true,
+        data: estimationResponse?.Calculation?.[0],
+        appDetails: wsDataDetails,
+        values: [
+          { title: "WS_APPLICATION_FEE_HEADER", value: estimationResponse?.Calculation?.[0]?.fee },
+          { title: "WS_SERVICE_FEE_HEADER", value: estimationResponse?.Calculation?.[0]?.charge },
+          { title: "WS_TAX_HEADER", value: estimationResponse?.Calculation?.[0]?.taxAmount }
+        ],
+      }
+      
+    }
+
     const propertyDetails = {
       title: "WS_COMMON_PROPERTY_DETAILS",
       asSectionHeader: true,
@@ -103,7 +145,13 @@ export const WSSearch = {
         { title: "WS_PROPERTY_ID_LABEL", value: propertyDataDetails?.propertyId },
         { title: "WS_COMMON_OWNER_NAME_LABEL", value: propertyDataDetails?.owners?.[0]?.name },
         { title: "WS_PROPERTY_ADDRESS_LABEL", value: propertyDataDetails?.address?.locality?.name }
-      ]
+      ],
+      additionalDetails:{
+        redirectUrl: {
+          title: "View Complete Property details",
+          url: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}`
+        }
+      }
     };
 
     const connectionHolderDetails = {
@@ -192,7 +240,7 @@ export const WSSearch = {
     };
 
     let details = [];
-    details = [...details, applicationHeaderDetails, propertyDetails, connectionHolderDetails, documentDetails, AdditionalDetailsByWS];
+    details = [...details, applicationHeaderDetails, feeEstimation,  propertyDetails, connectionHolderDetails, documentDetails, AdditionalDetailsByWS];
     wsDataDetails.serviceType = serviceDataType;
     return {
       applicationData: wsDataDetails,

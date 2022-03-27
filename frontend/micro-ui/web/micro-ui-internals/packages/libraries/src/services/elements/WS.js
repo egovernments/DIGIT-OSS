@@ -52,14 +52,15 @@ export const WSService = {
       params: {},
       auth: true,
     }),
-  wsCalculationEstimate: (details, tenantId) =>
+  wsCalculationEstimate: (details, businessService) =>
     Request({
-      url: Urls.ws.ws_calculation_estimate,
+      url: businessService === "WS" ? Urls.ws.ws_calculation_estimate : Urls.ws.sw_calculation_estimate,
       data: details,
       useCache: false,
+      setTimeParam: false,
       userService: true,
       method: "POST",
-      params: { tenantId },
+      params: {},
       auth: true,
     }),
   consumptionSearch: ({ tenantId, filters, auth, businessService }) =>

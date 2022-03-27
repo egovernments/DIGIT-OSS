@@ -79,6 +79,20 @@ export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   }
 };
 
+export const convertEpochToDates = (dateEpoch) => {
+  if (dateEpoch) {
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${month}/${day}/${year}`;
+  } else {
+    return null;
+  }
+};
+
 export const getPattern = type => {
   switch (type) {
     case "Name":
@@ -210,4 +224,23 @@ export const updatePayloadOfWS = async (data) => {
     connectionType: "Non Metered"
   }
   return payload;
+}
+
+export const checkForEmployee = (roles) => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const userInfo = Digit.UserService.getUser();
+  let rolesArray = [];
+
+  const rolearray = userInfo?.info?.roles.filter(item => {
+    for (let i = 0; i < roles.length; i++) {
+      if (item.code == roles[i] && item.tenantId === tenantId) rolesArray.push(true);
+    }
+  });
+
+  return rolesArray?.length;
+}
+
+export const getBusinessService = (data) => {
+  if (data?.service == "WATER") return "WS.ONE_TIME_FEE"
+  else return "SW.ONE_TIME_FEE"
 }

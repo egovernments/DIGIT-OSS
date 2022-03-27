@@ -19,6 +19,7 @@ import TLCaption from "./TLCaption";
 import TLTradeAccessories from "./TLTradeAccessories";
 import TLTradeUnits from "./TLTradeUnits";
 import WSAdditonalDetails from "./WSAdditonalDetails";
+import WSFeeEstimation from "./WSFeeEstimation";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -230,6 +231,11 @@ function ApplicationDetailsContent({
           {detail?.isWaterConnectionDetails && (
             <WSAdditonalDetails wsAdditionalDetails={detail} />
           )}
+          {detail?.additionalDetails?.redirectUrl &&
+            <div style={{fontSize: "16px", lineHeight: "24px", fontWeight: "400", padding: "10px 0px"}}>
+              <Link to={detail?.additionalDetails?.redirectUrl?.url}><span className="link" style={{ color: "#F47738" }}>{detail?.additionalDetails?.redirectUrl?.title}</span></Link>
+            </div>}
+          {detail?.additionalDetails?.estimationDetails && <WSFeeEstimation wsAdditionalDetails={detail} />}
         </React.Fragment>
       ))}
       {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
