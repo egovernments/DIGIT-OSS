@@ -11,7 +11,7 @@ let events = [];
 
 const sendEventNotificaiton = (tenantId) => {
     let requestPayload = {
-      // RequestInfo,
+      RequestInfo,
       events
     };
 
@@ -29,7 +29,7 @@ const sendEventNotificaiton = (tenantId) => {
     });
   };
 
-export const sendFireNOCSMSRequest = async FireNOCs => {
+export const sendFireNOCSMSRequest = async (FireNOCs, RequestInfo) => {
     let tenantId = get(FireNOCs[0], "tenantId");
     for (let i = 0; i < FireNOCs.length; i++) {
       let mobileNumber = get(

@@ -45,7 +45,7 @@ const run = async () => {
             RequestInfo,
             events
           };
-      
+
           let topic = envVariables.KAFKA_TOPICS_EVENT_NOTIFICATION;
           var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
           if(typeof isCentralInstance =="string")
@@ -209,6 +209,15 @@ const run = async () => {
           if (events.length > 0) {
             sendEventNotificaiton(tenantId);
           }
+
+          producer.send(payloads, function(err, data) {
+            if (!err) {
+              console.log(data);
+            } else {
+              console.log(err);
+            }
+          });   
+
         };
         const FireNOCPaymentStatus = async value => {
           try {
@@ -287,14 +296,7 @@ const run = async () => {
           const { FireNOCs } = value;
           sendFireNOCSMSRequest(FireNOCs);
         }
-
-        producer.send(payloads, function(err, data) {
-          if (!err) {
-            console.log(data);
-          } else {
-            console.log(err);
-          }
-        });        
+     
       },
   })
 }
