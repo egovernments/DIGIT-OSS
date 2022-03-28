@@ -232,7 +232,7 @@ const ConnectionDetails = (_props) => {
                   control={control}
                   name="connectionType"
                   defaultValue={connectionDetail?.connectionType}
-                  rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                  rules={{ validate: (e) => ((e && e.length) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                   type="text"
                   isMandatory={true}
                   render={(props) => (
@@ -261,7 +261,7 @@ const ConnectionDetails = (_props) => {
                   control={control}
                   name="waterSource"
                   defaultValue={connectionDetail?.waterSource}
-                  rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                  rules={{ validate: (e) => ((e && e.length) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                   type="text"
                   isMandatory={true}
                   render={(props) => (
@@ -290,12 +290,12 @@ const ConnectionDetails = (_props) => {
                   control={control}
                   name="waterSubSource"
                   defaultValue={connectionDetail?.waterSubSource}
-                  rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
-                  type="number"
+                  rules={{ validate: (e) => ((e && e.length) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                  type="text"
                   isMandatory={true}
                   render={(props) => (
                     <TextInput
-                      type="number"
+                      type="text"
                       value={props.value}
                       autoFocus={focusIndex.index === connectionDetail?.key && focusIndex.type === "waterSubSource"}
                       errorStyle={(localFormState.touched.waterSubSource && errors?.waterSubSource?.message) ? true : false}

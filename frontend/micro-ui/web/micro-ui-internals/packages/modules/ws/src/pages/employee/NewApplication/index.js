@@ -78,6 +78,7 @@ const NewApplication = () => {
   } = Digit.Hooks.ws.useWSApplicationActions("WATER");
 
   const onFormValueChange = (setValue, formData, formState) => {
+
     if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0) setSubmitValve(true);
     else setSubmitValve(!(Object.keys(formState.errors).length));
   };
@@ -115,11 +116,12 @@ const NewApplication = () => {
                 setIsEnableLoader(false);
                 setShowToast({ key: "error", message: error?.message ? error.message : error });
                 setTimeout(closeToastOfError, 5000);
+          
               },
               onSuccess: (data, variables) => {
                 setIsEnableLoader(false);
                 setAppDetails({ ...appDetails, waterConnection: data?.WaterConnection?.[0] })
-                if (waterLoader) window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNumber}`
+                if (waterLoader) window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`
               },
             })
           },
@@ -148,7 +150,7 @@ const NewApplication = () => {
               onSuccess: (data, variables) => {
                 setIsEnableLoader(false);
                 setAppDetails({ ...appDetails, sewerageConnection: data?.SewerageConnections?.[0] })
-                if (sewerageLoader) window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNumber}`
+                if (sewerageLoader) window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`
               },
             });
           },
@@ -178,7 +180,7 @@ const NewApplication = () => {
       <FormComposer
         config={config.body}
         onFormValueChange={onFormValueChange}
-        // isDisabled={!canSubmit}
+        isDisabled={!canSubmit}
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
       ></FormComposer>
