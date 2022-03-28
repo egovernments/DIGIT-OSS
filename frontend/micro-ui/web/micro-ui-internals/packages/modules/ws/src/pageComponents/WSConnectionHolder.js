@@ -117,7 +117,20 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
     if(isOwnerSame == true)
     {
       //need to add property data here from previous screen
-      onSelect(config.key, {"property ID":"PT-23-45-677903", isOwnerSame:isOwnerSame});
+      let ConnectionDet = {
+      isOwnerSame:isOwnerSame,
+      name: formData?.cpt?.details?.owners?.[0]?.name,
+      mobileNumber: formData?.cpt?.details?.owners?.[0]?.mobileNumber,
+      gender: {code:formData?.cpt?.details?.owners?.[0]?.gender, i18nKey:`COMMON_GENDER_${formData?.cpt?.details?.owners?.[0]?.gender}`},
+      guardian: formData?.cpt?.details?.owners?.[0]?.fatherOrHusbandName, 
+      address: formData?.cpt?.details?.owners?.[0]?.permanentAddress,
+      relationship:{code : formData?.cpt?.details?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${formData?.cpt?.details?.owners?.[0]?.relationship}`},
+      specialCategoryType:ownerType,
+      documentId:documentId,
+      fileStoreId:uploadedFile,
+      documentType:dropdownValue   
+    }
+      onSelect(config.key, ConnectionDet);
     }
     else
     {

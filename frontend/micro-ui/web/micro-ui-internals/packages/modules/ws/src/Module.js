@@ -33,6 +33,7 @@ import WSActivationPageDetails from "./pageComponents/WSActivationPageDetails";
 import WSActivationCommentsDetails from "./pageComponents/WSActivationCommentsDetails";
 import WSActivationSupportingDocuments from "./pageComponents/WSActivationSupportingDocuments";
 import WSDocumentsEmployee from "./pageComponents/WSDocumentsEmployee";
+import WSAcknowledgement from "./pages/citizen/WSCreate/WSAcknowledgement";
 import WSPayments from "./pages/citizen/MyPayment/WSPayments";
 
 const WSModule = ({ stateCode, userType, tenants }) => {
@@ -122,6 +123,7 @@ const componentsToRegister = {
   WSActivationSupportingDocuments,
   WSCard,
   WSDocumentsEmployee,
+  WSAcknowledgement,
   WSPayments,
 };
 

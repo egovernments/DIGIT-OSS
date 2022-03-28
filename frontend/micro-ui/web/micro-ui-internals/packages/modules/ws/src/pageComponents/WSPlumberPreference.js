@@ -5,7 +5,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 
-const WSPlumberPreference = ({ t, config, onSelect, formData }) => {
+const WSPlumberPreference = ({ t, config, onSelect, userType, formData }) => {
 
     const [plumberPreference, setPlumberPreference] = useState(formData?.plumberPreference || "");
 

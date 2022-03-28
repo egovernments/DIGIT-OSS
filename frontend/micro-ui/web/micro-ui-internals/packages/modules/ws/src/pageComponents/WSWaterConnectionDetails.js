@@ -1,4 +1,4 @@
-import { CardLabel, Dropdown, FormStep, Loader, RadioOrSelect, TextInput } from "@egovernments/digit-ui-react-components";
+import { CardLabel, Dropdown, FormStep, Loader, RadioOrSelect, TextInput, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import Timeline from "../components/Timeline";
 
@@ -6,6 +6,9 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
   const tenantId = Digit.ULBService.getStateId();
   const [proposedTaps, setProposedTaps] = useState(formData?.waterConectionDetails?.proposedTaps || "");
   const [proposedPipeSize, setProposedPipeSize] = useState(formData?.waterConectionDetails?.proposedPipeSize || "");
+  const [isDisableForNext, setIsDisableForNext] = useState(false);
+  const [showToast, setShowToast] = useState(null);
+  const [error, setError] = useState(null);
   const [proposedPipeSizeList, setProposedPipeSizeList] = useState([]);
   let validation = {};
   const { isLoading: wsServiceCalculationLoading, data: wsServiceCalculation } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesCalculation(tenantId);
@@ -13,7 +16,7 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
   useEffect(() => {
     if (wsServiceCalculation?.PipeSize?.length > 0) {
       let pipeLists = [];
-      wsServiceCalculation?.PipeSize.forEach((type) => {
+      wsServiceCalculation?.PipeSize?.forEach((type) => {
         pipeLists.push({
           i18nKey: `${type.size} ${t("WS_INCHES_LABEL")}`,
           code: type.size,
@@ -38,17 +41,76 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
   const onSkip = () => onSelect();
 
   const handleSubmit = () => {
+
+    if (!(formData?.WaterConnectionResult && formData?.WaterConnectionResult?.WaterConnection?.id) && formData?.serviceName?.code === "WATER") {
+      setIsDisableForNext(true);
+      let payload = {
+        "WaterConnection": {
+          "water": true,
+          "sewerage": false,
+          "property": {...formData?.cpt?.details},
+          "proposedTaps": proposedTaps,
+          "proposedPipeSize": proposedPipeSize?.code,
+          "proposedWaterClosets": null,
+          "proposedToilets": null,
+          "connectionHolders": formData?.ConnectionHolderDetails?.isOwnerSame ? null : [{
+            correspondenceAddress: formData?.ConnectionHolderDetails?.address,
+            fatherOrHusbandName: formData?.ConnectionHolderDetails?.guardian,
+            gender: formData?.ConnectionHolderDetails?.gender?.code,
+            mobileNumber: formData?.ConnectionHolderDetails?.mobileNumber,
+            name: formData?.ConnectionHolderDetails?.name,
+            ownerType: formData?.ConnectionHolderDetails?.specialCategoryType?.code,
+            relationship: formData?.ConnectionHolderDetails?.relationship?.code,
+            sameAsPropertyAddress: false,
+          }],
+          "service": "Water",
+          "roadCuttingArea": null,
+          "noOfTaps": null,
+          "noOfWaterClosets": null,
+          "noOfToilets": null,
+          "propertyId": formData?.cptId?.id,
+          "additionalDetails": {
+              "initialMeterReading": null,
+              "detailsProvidedBy": "",
+              "locality": formData?.cpt?.details?.address?.locality?.code
+          },
+          "tenantId": formData?.cpt?.details?.tenantId,
+          "processInstance": {
+              "action": "INITIATE"
+          },
+          "channel": "CITIZEN"
+      }
+      }
+
+      Digit.WSService.create(payload, "WATER")
+        .then((result, err) => {
+          setIsDisableForNext(false);
+          let data = {...formData, WaterConnectionResult: result, waterConectionDetails : {proposedTaps : proposedTaps, proposedPipeSize : proposedPipeSize}  }
+          //1, units
+          onSelect("", data, "", true);
+
+        })
+        .catch((e) => {
+          setIsDisableForNext(false);
+          setShowToast({ key: "error" });
+          setError(e?.response?.data?.Errors[0]?.message || null);
+        });
+    }
+    else {
+     
     let details = {};
     details.proposedTaps = proposedTaps;
     details.proposedPipeSize = proposedPipeSize;
     onSelect(config.key, details);
+
+    }
   };
 
   return (
     <div>
       {userType === "citizen" && <Timeline currentStep={2} />}
       {!wsServiceCalculationLoading ? (
-        <FormStep t={t} config={config} onSelect={handleSubmit} onSkip={onSkip} isDisabled={!proposedTaps || !proposedPipeSize} onAdd={onAdd}>
+        <FormStep t={t} config={config} onSelect={handleSubmit} onSkip={onSkip} isDisabled={!proposedTaps || !proposedPipeSize || isDisableForNext} onAdd={onAdd}>
           <CardLabel>{t("WS_NO_OF_TAPS_PROPOSED")}*</CardLabel>
           <TextInput
             isMandatory={false}
@@ -73,15 +135,15 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
             onSelect={setProposedPipeSizeSelect}
             t={t}
           />
-          <CardLabel>{t("WS_NO_OF_PROPOSED_WATER_CLOSETS")}:</CardLabel>
+          {/* <CardLabel>{t("WS_NO_OF_PROPOSED_WATER_CLOSETS")}:</CardLabel>
           <TextInput></TextInput>
 
-          <CardLabel>{t("WS_NO_OF_PROPOSED_TOILETS")}:</CardLabel>
-          <Dropdown></Dropdown>
+          <CardLabel>{t("WS_NO_OF_PROPOSED_TOILETS")}:</CardLabel> */}
         </FormStep>
       ) : (
         <Loader />
       )}
+      {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
     </div>
   );
 };

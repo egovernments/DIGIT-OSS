@@ -256,7 +256,7 @@ const ConnectionDetails = (_props) => {
             </LabelFieldPair>
             <CardLabelError style={errorStyle}>{localFormState.touched.proposedTaps ? errors?.proposedTaps?.message : ""}</CardLabelError>
             <LabelFieldPair>
-              <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PROPOSED_PIPE_SIZE_IN_INCHES_LABEL")}*:`}</CardLabel>
+              <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PROPOSED_PIPE_SIZE_IN_INCHES_LABEL")}*:`}</CardLabel>
               <Controller
                 control={control}
                 name={"proposedPipeSize"}

@@ -242,7 +242,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.name ? errors?.name?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL")}*:`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px" }}className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL")}*:`}</CardLabel>
           <Controller
             control={control}
             name={"gender"}
@@ -322,7 +322,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.guardian ? errors?.guardian?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}*:`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}*:`}</CardLabel>
           <Controller
             control={control}
             name={"relationship"}
@@ -374,7 +374,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.address ? errors?.address?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}*:`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}*:`}</CardLabel>
           <Controller
             control={control}
             name={"ownerType"}

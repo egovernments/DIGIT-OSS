@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import {
     FormStep,
     TextInput,
-    CardLabel
+    CardLabel,
+    Toast
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 
 const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }) => {
     const [proposedWaterClosets, setProposedWaterClosets] = useState(formData?.sewerageConnectionDetails?.proposedWaterClosets || "");
     const [proposedToilets, setProposedToilets] = useState(formData?.sewerageConnectionDetails?.proposedToilets || "");
+    const [isDisableForNext, setIsDisableForNext] = useState(false);
+    const [showToast, setShowToast] = useState(null);
+    const [error, setError] = useState(null);
     let validation = {};
 
     function onAdd() { }
@@ -24,10 +28,167 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
     const onSkip = () => onSelect();
 
     const handleSubmit = () => {
-        let details = {};
-        details.proposedWaterClosets = proposedWaterClosets;
-        details.proposedToilets = proposedToilets;
-        onSelect(config.key, details);
+
+        if (!(formData?.SewerageConnectionResult && formData?.SewerageConnectionResult?.SewerageConnection?.id) && formData?.serviceName?.code === "SEWERAGE") {
+            setIsDisableForNext(true);
+            let payload = {
+              "SewerageConnection": {
+                "water": false,
+                "sewerage": true,
+                "property": {...formData?.cpt?.details},
+                "proposedTaps": null,
+                "proposedPipeSize": null,
+                "proposedWaterClosets": parseInt(proposedWaterClosets),
+                "proposedToilets": parseInt(proposedToilets),
+                "connectionHolders": formData?.ConnectionHolderDetails?.isOwnerSame ? null : [{
+                    correspondenceAddress: formData?.ConnectionHolderDetails?.address,
+                    fatherOrHusbandName: formData?.ConnectionHolderDetails?.guardian,
+                    gender: formData?.ConnectionHolderDetails?.gender?.code,
+                    mobileNumber: formData?.ConnectionHolderDetails?.mobileNumber,
+                    name: formData?.ConnectionHolderDetails?.name,
+                    ownerType: formData?.ConnectionHolderDetails?.specialCategoryType?.code,
+                    relationship: formData?.ConnectionHolderDetails?.relationship?.code,
+                    sameAsPropertyAddress: false,
+                  }],
+                "service": "Sewerage",
+                "roadCuttingArea": null,
+                "noOfTaps": null,
+                "noOfWaterClosets": null,
+                "noOfToilets": null,
+                "propertyId": formData?.cptId?.id,
+                "additionalDetails": {
+                    "initialMeterReading": null,
+                    "detailsProvidedBy": "",
+                    "locality": formData?.cpt?.details?.address?.locality?.code,
+                },
+                "tenantId": formData?.cpt?.details?.tenantId,
+                "processInstance": {
+                    "action": "INITIATE"
+                },
+                "channel": "CITIZEN"
+            }
+            }
+      
+            Digit.WSService.create(payload, "SEWERAGE")
+              .then((result, err) => {
+                setIsDisableForNext(false);
+                let data = {...formData, SewerageConnectionResult: result, sewerageConnectionDetails : {proposedWaterClosets : proposedWaterClosets, proposedToilets : proposedToilets}  }
+                //1, units
+                onSelect("", data, "", true);
+      
+              })
+              .catch((e) => {
+                setIsDisableForNext(false);
+                setShowToast({ key: "error" });
+                setError(e?.response?.data?.Errors[0]?.message || null);
+              });
+          }
+          else if (!(formData?.SewerageConnectionResult && formData?.SewerageConnectionResult?.SewerageConnection?.id) && !(formData?.WaterConnectionResult && formData?.WaterConnectionResult?.WaterConnection?.id) && formData?.serviceName?.code === "BOTH"){
+            setIsDisableForNext(true);
+            let payload1 = {
+                "WaterConnection": {
+                  "water": true,
+                  "sewerage": true,
+                  "property": {...formData?.cpt?.details},
+                  "proposedTaps": formData?.waterConectionDetails?.proposedTaps,
+                  "proposedPipeSize": formData?.waterConectionDetails?.proposedPipeSize?.code,
+                  "proposedWaterClosets": parseInt(proposedWaterClosets),
+                  "proposedToilets": parseInt(proposedToilets),
+                  "connectionHolders": formData?.ConnectionHolderDetails?.isOwnerSame ? null : [{
+                    correspondenceAddress: formData?.ConnectionHolderDetails?.address,
+                    fatherOrHusbandName: formData?.ConnectionHolderDetails?.guardian,
+                    gender: formData?.ConnectionHolderDetails?.gender?.code,
+                    mobileNumber: formData?.ConnectionHolderDetails?.mobileNumber,
+                    name: formData?.ConnectionHolderDetails?.name,
+                    ownerType: formData?.ConnectionHolderDetails?.specialCategoryType?.code,
+                    relationship: formData?.ConnectionHolderDetails?.relationship?.code,
+                    sameAsPropertyAddress: false,
+                  }],
+                  "service": "Water and Sewerage",
+                  "roadCuttingArea": null,
+                  "noOfTaps": null,
+                  "noOfWaterClosets": null,
+                  "noOfToilets": null,
+                  "propertyId": formData?.cptId?.id,
+                  "additionalDetails": {
+                      "initialMeterReading": null,
+                      "detailsProvidedBy": "",
+                      "locality": formData?.cpt?.details?.address?.locality?.code,
+                  },
+                  "tenantId": formData?.cpt?.details?.tenantId,
+                  "processInstance": {
+                      "action": "INITIATE"
+                  },
+                  "channel": "CITIZEN"
+              }
+              }
+
+            let payload2 = {
+              "SewerageConnection": {
+                "water": true,
+                "sewerage": true,
+                "property": {...formData?.cpt?.details},
+                "proposedTaps": formData?.waterConectionDetails?.proposedTaps,
+                "proposedPipeSize": formData?.waterConectionDetails?.proposedPipeSize?.code,
+                "proposedWaterClosets": parseInt(proposedWaterClosets),
+                "proposedToilets": parseInt(proposedToilets),
+                "connectionHolders": formData?.ConnectionHolderDetails?.isOwnerSame ? null : [{
+                    correspondenceAddress: formData?.ConnectionHolderDetails?.address,
+                    fatherOrHusbandName: formData?.ConnectionHolderDetails?.guardian,
+                    gender: formData?.ConnectionHolderDetails?.gender?.code,
+                    mobileNumber: formData?.ConnectionHolderDetails?.mobileNumber,
+                    name: formData?.ConnectionHolderDetails?.name,
+                    ownerType: formData?.ConnectionHolderDetails?.specialCategoryType?.code,
+                    relationship: formData?.ConnectionHolderDetails?.relationship?.code,
+                    sameAsPropertyAddress: false,
+                  }],
+                "service": "Water and Sewerage",
+                "roadCuttingArea": null,
+                "noOfTaps": null,
+                "noOfWaterClosets": null,
+                "noOfToilets": null,
+                "propertyId": formData?.cptId?.id,
+                "additionalDetails": {
+                    "initialMeterReading": null,
+                    "detailsProvidedBy": "",
+                    "locality": formData?.cpt?.details?.address?.locality?.code,
+                },
+                "tenantId": formData?.cpt?.details?.tenantId,
+                "processInstance": {
+                    "action": "INITIATE"
+                },
+                "channel": "CITIZEN"
+            }
+            }
+
+            Digit.WSService.create(payload1, "WATER")
+            .then((result1, err) => {
+                Digit.WSService.create(payload2, "SEWERAGE")
+                .then((result2, err) => {
+                  setIsDisableForNext(false);
+                  let data = {...formData,WaterConnectionResult: result1, SewerageConnectionResult: result2, sewerageConnectionDetails : {proposedWaterClosets : proposedWaterClosets, proposedToilets : proposedToilets}  }
+                  //1, units
+                  onSelect("", data, "", true);
+        
+                })
+                .catch((e) => {
+                  setIsDisableForNext(false);
+                  setShowToast({ key: "error" });
+                  setError(e?.response?.data?.Errors[0]?.message || null);
+                });
+             })
+        .catch((e) => {
+          setIsDisableForNext(false);
+          setShowToast({ key: "error" });
+          setError(e?.response?.data?.Errors[0]?.message || null);
+        });
+          }
+          else {
+            let details = {};
+            details.proposedWaterClosets = proposedWaterClosets;
+            details.proposedToilets = proposedToilets;
+            onSelect(config.key, details);
+          }
     };
 
     return (
@@ -38,7 +199,7 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
                 config={config}
                 onSelect={handleSubmit}
                 onSkip={onSkip}
-                isDisabled={!proposedWaterClosets || !proposedToilets}
+                isDisabled={!proposedWaterClosets || !proposedToilets || isDisableForNext}
                 onAdd={onAdd}
             >
                 <CardLabel>{t("WS_NO_OF_WATER_CLOSETS")}*</CardLabel>
@@ -72,6 +233,7 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
                     })}
                 />
             </FormStep>
+            {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
         </div>
     );
 }

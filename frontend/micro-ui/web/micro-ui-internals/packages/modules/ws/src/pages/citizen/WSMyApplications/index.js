@@ -42,8 +42,8 @@ export const WSMyApplications = () => {
   }
   let { WaterConnection: WSapplicationsList } = data || {};
   let { SewerageConnections: SWapplicationsList } = SWdata || {};
-  WSapplicationsList = WSapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0].businesssServiceSla})})
-  SWapplicationsList = SWapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0].businesssServiceSla})})
+  WSapplicationsList = WSapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0]?.businesssServiceSla})})
+  SWapplicationsList = SWapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0]?.businesssServiceSla})})
   const applicationsList =WSapplicationsList.concat(SWapplicationsList)
   return (
     <React.Fragment>
