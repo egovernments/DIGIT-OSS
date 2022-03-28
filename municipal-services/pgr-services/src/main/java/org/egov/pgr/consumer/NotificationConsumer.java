@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import java.util.HashMap;
 import static org.apache.kafka.common.requests.FetchMetadata.log;
 import static org.egov.pgr.util.PGRConstants.TENANTID_MDC_STRING;
 
-@Service
+@Component
 @Slf4j
 public class NotificationConsumer {
     @Autowired
@@ -28,7 +29,7 @@ public class NotificationConsumer {
 
 
 /**
-     * Consumes the water connection record and send notification
+     * Consumes record and send notification
      *
      * @param record
      * @param topic
