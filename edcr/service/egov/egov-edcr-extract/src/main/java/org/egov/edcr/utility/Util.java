@@ -17,7 +17,8 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.bpa.SubOccupancy;
 import org.egov.common.entity.bpa.Usage;
 import org.egov.common.entity.dcr.helper.OccupancyHelperDetail;
@@ -65,7 +66,7 @@ public class Util {
 	public static final int COMPARE_WITH_2_PERCENT_ERROR_DIGITS = 2;
     private static final int DECIMALDIGITS = 10;
     private static final String FLOOR_NAME_PREFIX = "FLOOR_";
-    static final Logger LOG = Logger.getLogger(Util.class);
+    static final Logger LOG = LogManager.getLogger(Util.class);
     private static final BigDecimal ONEHUNDREDFIFTY = BigDecimal.valueOf(150);
     private static final BigDecimal FIFTY = BigDecimal.valueOf(50);
     private static final BigDecimal THREEHUNDRED = BigDecimal.valueOf(300);

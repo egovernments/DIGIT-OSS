@@ -3,7 +3,8 @@ package org.egov.commons.service;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -13,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class RestCallService {
-    private static final Logger LOG = Logger.getLogger(RestCallService.class);
+    private static final Logger LOG = LogManager.getLogger(RestCallService.class);
 
     public Object fetchResult(StringBuilder uri, Object request) {
         Object response = null;

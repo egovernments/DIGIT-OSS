@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.kabeja.dxf.DXFBlock;
 import org.kabeja.dxf.DXFConstants;
@@ -17,7 +18,7 @@ import org.kabeja.dxf.helpers.Point;
 import org.kabeja.math.MathUtils;
 
 public class DimensionMeasurement extends FeatureExtract {
-	private static final Logger LOG = Logger.getLogger(DimensionMeasurement.class);
+	private static final Logger LOG = LogManager.getLogger(DimensionMeasurement.class);
     /*
      * We are taking the reference points 3 and 4 from dimension, checking the reference points with the lines start point . which
      * 2 line matches we calculate the distance

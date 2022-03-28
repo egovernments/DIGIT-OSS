@@ -4,7 +4,8 @@ package org.egov.edcr.feature;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.Road;
 import org.egov.edcr.entity.blackbox.MeasurementDetail;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RoadReserveExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(RoadReserveExtract.class);
+    private static final Logger LOG = LogManager.getLogger(RoadReserveExtract.class);
     @Autowired
     private LayerNames layerNames;
 

@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.edcr.feature.DimensionMeasurement;
 import org.egov.edcr.utility.DcrConstants;
 import org.junit.Before;
@@ -29,7 +30,7 @@ import org.mockito.runners.MockitoJUnit44Runner;
 
 public class DimensionMeasurementTest extends BaseTest {
 
-	private static final Logger LOG = Logger.getLogger(DimensionMeasurementTest.class);
+	private static final Logger LOG = LogManager.getLogger(DimensionMeasurementTest.class);
 
 	DimensionMeasurement e = new DimensionMeasurement();
 

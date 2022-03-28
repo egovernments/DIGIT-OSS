@@ -10,10 +10,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DXFHelper {
-	private static final Logger LOG = Logger.getLogger(DXFHelper.class);
+	private static final Logger LOG = LogManager.getLogger(DXFHelper.class);
 	public static void main(String[] args) {
 		DXFHelper rc = new DXFHelper();
 		String filePath = "/home/mani/Workspaces/bpa/eGov-Kozhikode-Implementation/egov/egov-edcr/src/test/resources/Sanity.dxf";

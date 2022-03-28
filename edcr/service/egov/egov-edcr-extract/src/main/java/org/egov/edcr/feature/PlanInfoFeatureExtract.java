@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.PlanInformation;
@@ -35,7 +36,7 @@ public class PlanInfoFeatureExtract extends FeatureExtract {
 	private static final String LAYER_NAME_PLOT_BOUNDARY = "LAYER_NAME_PLOT_BOUNDARY";
 	private static final String LAYER_NAME_MECHANICAL_PARKING = "LAYER_NAME_MECHANICAL_PARKING";
 	private static final String LAYER_NAME_EXISTING_FLOOR_AREA_TO_BE_DEMOLISHED = "LAYER_NAME_EXISTING_FLOOR_AREA_TO_BE_DEMOLISHED";
-	private static final Logger LOG = Logger.getLogger(PlanInfoFeatureExtract.class);
+	private static final Logger LOG = LogManager.getLogger(PlanInfoFeatureExtract.class);
 	public static final String MSG_ERROR_MANDATORY = "msg.error.mandatory.object.not.defined";
 	private static final String DIGITS_REGEX = "[^\\d.]";
 	private static final BigDecimal ONEHUDREDTWENTYFIVE = BigDecimal.valueOf(125);

@@ -55,7 +55,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
@@ -64,7 +65,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SepticTank extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(SepticTank.class);
+	private static final Logger LOG = LogManager.getLogger(SepticTank.class);
 	private static final String RULE_45_E = "45-e";
 	public static final String DISTANCE_FROM_WATERSOURCE = "Distance from watersource";
 	public static final String DISTANCE_FROM_BUILDING = "Distance from Building";

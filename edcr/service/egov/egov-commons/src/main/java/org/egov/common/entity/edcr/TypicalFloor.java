@@ -51,10 +51,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TypicalFloor implements Serializable {
-	private static final Logger LOG = Logger.getLogger(TypicalFloor.class);
+	private static final Logger LOG = LogManager.getLogger(TypicalFloor.class);
     private static final long serialVersionUID = 5L;
     private Integer modelFloorNo;
     private List<Integer> repetitiveFloorNos = new ArrayList<>();

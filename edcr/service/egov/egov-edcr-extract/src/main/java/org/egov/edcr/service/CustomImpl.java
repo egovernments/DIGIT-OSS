@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +20,7 @@ public class CustomImpl {
     public static final String DISTRICT_NAME = "DISTRICT_NAME";
     public static final String GRADE = "GRADE";
     public static final String STATE_NAME = "STATE_NAME";
-    private static final Logger LOG = Logger.getLogger(CustomImpl.class);
+    private static final Logger LOG = LogManager.getLogger(CustomImpl.class);
 
     @Autowired
     private ApplicationContext applicationContext;

@@ -3,7 +3,8 @@ package org.egov.edcr.feature;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.SolidLiqdWasteTrtmnt;
 import org.egov.edcr.entity.blackbox.MeasurementDetail;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SolidLiquidWasteTreatmentExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(SolidLiquidWasteTreatmentExtract.class);
+    private static final Logger LOG = LogManager.getLogger(SolidLiquidWasteTreatmentExtract.class);
     public static final String SUBRULE_55_11_DESC = "Collection and disposal of solid and liquid Waste";
     @Autowired
     private LayerNames layerNames;

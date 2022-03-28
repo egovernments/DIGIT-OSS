@@ -17,7 +17,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.EdcrPdfDetail;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.utility.DcrConstants;
@@ -51,7 +52,7 @@ public class DxfToPdfConverterExtract extends FeatureExtract {
 
 	private static final String OTHERS = " others ";
 
-	private static final Logger LOG = Logger.getLogger(DxfToPdfConverterExtract.class);
+	private static final Logger LOG = LogManager.getLogger(DxfToPdfConverterExtract.class);
 
     private static final String MULTIPLE_LAYER = "Multiple layers is defined with %s";
     private static final String LAYER_NOT_DEFINED = "%s is not defined.";

@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.dcr.helper.ErrorDetail;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -17,7 +18,7 @@ import com.jayway.jsonpath.JsonPath;
 @Service
 public class MDMSValidator {
 
-    private static final Logger LOG = Logger.getLogger(MDMSValidator.class);
+    private static final Logger LOG = LogManager.getLogger(MDMSValidator.class);
 
     public List<ErrorDetail> validateMdmsData(Map<String, List<Object>> masterData, Map<String, String> data) {
 

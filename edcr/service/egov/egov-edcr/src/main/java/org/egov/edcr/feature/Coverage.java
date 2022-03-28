@@ -54,7 +54,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.OccupancyType;
@@ -69,7 +70,7 @@ import org.springframework.stereotype.Service;
 public class Coverage extends FeatureProcess {
     // private static final String OCCUPANCY2 = "OCCUPANCY";
 
-    private static final Logger LOG = Logger.getLogger(Coverage.class);
+    private static final Logger LOG = LogManager.getLogger(Coverage.class);
 
     //private static final String RULE_NAME_KEY = "coverage.rulename";
     private static final String RULE_DESCRIPTION_KEY = "coverage.description";

@@ -53,7 +53,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.CompoundWall;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.edcr.entity.blackbox.PlanDetail;
@@ -69,7 +70,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CompoundWallServiceExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(CompoundWallServiceExtract.class);
+    private static final Logger LOG = LogManager.getLogger(CompoundWallServiceExtract.class);
 
     @Autowired
     private LayerNames layerNames;

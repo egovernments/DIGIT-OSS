@@ -54,7 +54,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Plan;
@@ -65,7 +66,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class Basement extends FeatureProcess {
 
-    private static final Logger LOG = Logger.getLogger(Basement.class);
+    private static final Logger LOG = LogManager.getLogger(Basement.class);
     private static final String RULE_46_6A = "46-6a";
     private static final String RULE_46_6C = "46-6c";
     private static final String BASEMENT_DESCRIPTION_ONE = "Height from the floor to the soffit of the roof slab or ceiling";

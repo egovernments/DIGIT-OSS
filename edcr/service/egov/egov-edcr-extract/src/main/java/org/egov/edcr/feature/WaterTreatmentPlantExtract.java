@@ -2,7 +2,8 @@ package org.egov.edcr.feature;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.LiquidWasteTreatementPlant;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.edcr.entity.blackbox.MeasurementDetail;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WaterTreatmentPlantExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(WaterTreatmentPlantExtract.class);
+    private static final Logger LOG = LogManager.getLogger(WaterTreatmentPlantExtract.class);
     @Autowired
     private LayerNames layerNames;
 

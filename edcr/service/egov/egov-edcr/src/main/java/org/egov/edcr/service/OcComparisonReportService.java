@@ -22,8 +22,9 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Building;
 import org.egov.common.entity.edcr.Floor;
@@ -82,7 +83,7 @@ public class OcComparisonReportService {
 	private static final String ACCEPTED = "Accepted";
 	private static final String REMARKS = "Remarks_";
 	private static final String GENERATE_REPORT = "Generate Report.......";
-	private static final Logger LOG = Logger.getLogger(OcComparisonReportService.class);
+	private static final Logger LOG = LogManager.getLogger(OcComparisonReportService.class);
     public static final String STATUS = STATUS2;
     public static final String BLOCK = "Block";
     public static final BigDecimal DEVIATION_VALUE = BigDecimal.valueOf(5);

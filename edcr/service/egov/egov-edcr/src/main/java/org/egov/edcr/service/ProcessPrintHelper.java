@@ -52,13 +52,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.ScrutinyDetail;
 
 public class ProcessPrintHelper {
 
-    private static final Logger LOG = Logger.getLogger(ProcessPrintHelper.class);
+    private static final Logger LOG = LogManager.getLogger(ProcessPrintHelper.class);
 
     private ProcessPrintHelper() {
         // Hide implicitly

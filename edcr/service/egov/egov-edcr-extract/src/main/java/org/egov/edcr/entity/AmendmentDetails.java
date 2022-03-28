@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.infra.exception.ApplicationRuntimeException;
 
 /**
@@ -15,7 +16,7 @@ import org.egov.infra.exception.ApplicationRuntimeException;
  *
  */
 public class AmendmentDetails implements Comparable<AmendmentDetails> {
-	private static final Logger LOG = Logger.getLogger(AmendmentDetails.class);
+	private static final Logger LOG = LogManager.getLogger(AmendmentDetails.class);
 	private String code;
 	private Date dateOfBylaw;
 	private Map<String, String> changes=new HashMap<>();

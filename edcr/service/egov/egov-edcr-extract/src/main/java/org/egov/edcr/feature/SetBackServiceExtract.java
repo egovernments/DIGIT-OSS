@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.SetBack;
 import org.egov.edcr.constants.DxfFileConstants;
@@ -28,7 +29,7 @@ public class SetBackServiceExtract extends FeatureExtract {
     private static final String LAYER_NAME_LEVEL_NAME_PREFIX = "LAYER_NAME_LEVEL_NAME_PREFIX";
 	private static final String LAYER_NAME_BLOCK_NAME_PREFIX = "LAYER_NAME_BLOCK_NAME_PREFIX";
 	private static final String MIN_DISTANCE = "_MIN_DISTANCE";
-	private static final Logger LOG = Logger.getLogger(SetBackServiceExtract.class);
+	private static final Logger LOG = LogManager.getLogger(SetBackServiceExtract.class);
     @Autowired
     private LayerNames layerNames;
     @Autowired

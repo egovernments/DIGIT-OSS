@@ -66,7 +66,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.junit.AfterClass;
@@ -82,7 +83,7 @@ public class LocalDiskFileStoreServiceTest {
 	private static final String XYZ = "xyz";
 	private static final String TESTMODULE = "testmodule";
 	private static final String TEXT_PLAIN = "text/plain";
-	private static final Logger LOG = Logger.getLogger(LocalDiskFileStoreServiceTest.class);
+	private static final Logger LOG = LogManager.getLogger(LocalDiskFileStoreServiceTest.class);
     private static Path tempFilePath = Paths.get(System.getProperty(USER_HOME) + File.separator + "testtmpr");
     private LocalDiskFileStoreService diskFileService;
 

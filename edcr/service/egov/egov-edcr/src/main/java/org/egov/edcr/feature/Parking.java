@@ -66,7 +66,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Measurement;
@@ -85,7 +86,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class Parking extends FeatureProcess {
 
-    private static final Logger LOGGER = Logger.getLogger(Parking.class);
+    private static final Logger LOGGER = LogManager.getLogger(Parking.class);
 
     private static final String OUT_OF = "Out of ";
     private static final String SLOT_HAVING_GT_4_PTS = " number of polygon not having only 4 points.";

@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Flight;
 import org.egov.common.entity.edcr.Floor;
@@ -31,7 +32,7 @@ public class GeneralStair extends FeatureProcess {
 	private static final String TYPICAL_FLOORS = "typicalFloors";
 	private static final String STAIR = " stair ";
 	private static final String BLOCK2 = "Block_";
-	private static final Logger LOG = Logger.getLogger(GeneralStair.class);
+    private static final Logger LOG = LogManager.getLogger(GeneralStair.class);
     private static final String FLOOR = "Floor";
     private static final String RULE42_5_II = "42-5-ii";
     private static final String EXPECTED_NO_OF_RISER = "12";

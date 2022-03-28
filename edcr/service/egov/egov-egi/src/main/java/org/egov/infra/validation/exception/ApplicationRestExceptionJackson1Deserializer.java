@@ -53,7 +53,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.map.DeserializationContext;
@@ -61,7 +62,7 @@ import org.codehaus.jackson.map.JsonDeserializer;
 
 public class ApplicationRestExceptionJackson1Deserializer extends JsonDeserializer<ApplicationRestException> {
 
-    private static final Logger LOG = Logger.getLogger(ApplicationRestExceptionJackson1Deserializer.class);
+    private static final Logger LOG = LogManager.getLogger(ApplicationRestExceptionJackson1Deserializer.class);
 
     private static final String ERROR_DESCRIPTION = "error_description";
 

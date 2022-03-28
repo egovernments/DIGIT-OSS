@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
 import org.egov.edcr.utility.DcrConstants;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TravelDistanceToExitExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(TravelDistanceToExitExtract.class);
+    private static final Logger LOG = LogManager.getLogger(TravelDistanceToExitExtract.class);
     @Autowired
     private LayerNames layerNames;
 

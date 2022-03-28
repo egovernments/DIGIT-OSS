@@ -5,10 +5,11 @@ import java.math.RoundingMode;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CalculationUtil {
-	private static final Logger LOG = Logger.getLogger(CalculationUtil.class);
+	private static final Logger LOG = LogManager.getLogger(CalculationUtil.class);
     public static void main(String[] args) {
         //CalculationUtil rc = new CalculationUtil();
         LOG.info(CalculationUtil.process("10 * 20 / 10"));

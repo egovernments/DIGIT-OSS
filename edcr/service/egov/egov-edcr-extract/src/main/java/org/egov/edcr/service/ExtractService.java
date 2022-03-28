@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.PlanFeature;
 import org.egov.common.entity.edcr.PlanInformation;
@@ -36,7 +37,7 @@ public class ExtractService {
 	private CustomImplProvider specificRuleService;
 	@Autowired
     private AppConfigValueService appConfigValueService;
-	private static final Logger LOG = Logger.getLogger(ExtractService.class);
+	private static final Logger LOG = LogManager.getLogger(ExtractService.class);
 
 	       
 	public Plan extract(File dxfFile, Amendment amd, Date scrutinyDate, List<PlanFeature> features) {

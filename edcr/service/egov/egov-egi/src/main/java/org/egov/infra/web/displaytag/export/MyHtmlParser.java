@@ -54,10 +54,11 @@ import java.io.Reader;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MyHtmlParser {
-	private static final Logger LOG = Logger.getLogger(MyHtmlParser.class);
+	private static final Logger LOG = LogManager.getLogger(MyHtmlParser.class);
 	Reader inReader;
 	String outText;
 	Boolean bRemoveSpaces = true;

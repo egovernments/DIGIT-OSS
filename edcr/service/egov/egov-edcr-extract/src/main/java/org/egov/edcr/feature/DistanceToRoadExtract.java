@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.CulDeSacRoad;
 import org.egov.common.entity.edcr.Lane;
 import org.egov.common.entity.edcr.Measurement;
@@ -32,7 +33,7 @@ import org.springframework.stereotype.Service;
 public class DistanceToRoadExtract extends FeatureExtract {
     private static final String LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD = "LAYER_NAME_SHORTEST_DISTANCE_TO_ROAD";
 	private static final String REG_EXP_D = "[^\\d.]";
-	private static final Logger LOG = Logger.getLogger(DistanceToRoadExtract.class);
+	private static final Logger LOG = LogManager.getLogger(DistanceToRoadExtract.class);
     @Autowired
     private LayerNames layerNames;
 

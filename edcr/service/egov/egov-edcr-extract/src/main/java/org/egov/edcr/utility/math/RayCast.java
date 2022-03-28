@@ -6,11 +6,12 @@ import static java.lang.Math.min;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RayCast {
 	
-	private static final Logger LOG = Logger.getLogger(RayCast.class);
+	private static final Logger LOG = LogManager.getLogger(RayCast.class);
     private static final int DECIMALDIGITS = 8;
 
     static int i = 0;

@@ -56,7 +56,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Flight;
 import org.egov.common.entity.edcr.Floor;
@@ -80,7 +81,7 @@ public class FireStair extends FeatureProcess {
 	private static final String BLOCK_UNDERSCORE_DESC = "Block_";
 	private static final String TYPICAL_FLOORS = "typicalFloors";
 	private static final String IS_TYPICAL_REPITITIVE_FLOOR = "isTypicalRepititiveFloor";
-	private static final Logger LOG = Logger.getLogger(FireStair.class);
+	private static final Logger LOG = LogManager.getLogger(FireStair.class);
     private static final String FLOOR = "Floor";
     private static final String RULE42_5_II = "42-5-iii-f";
     private static final String EXPECTED_NO_OF_RISE = "12";

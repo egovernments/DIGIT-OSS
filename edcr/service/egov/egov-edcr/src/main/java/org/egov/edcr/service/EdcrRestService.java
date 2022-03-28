@@ -65,8 +65,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.dcr.helper.ErrorDetail;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.PlanInformation;
@@ -124,7 +125,7 @@ public class EdcrRestService {
 
     private static final String BPA_05 = "BPA-05";
 
-    private static final Logger LOG = Logger.getLogger(EdcrRestService.class);
+    private static final Logger LOG = LogManager.getLogger(EdcrRestService.class);
 
     public static final String FILE_DOWNLOAD_URL = "%s/edcr/rest/dcr/downloadfile";
 

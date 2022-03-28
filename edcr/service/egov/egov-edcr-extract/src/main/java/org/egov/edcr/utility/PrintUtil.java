@@ -8,7 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.ScrutinyDetail;
 import org.egov.edcr.entity.blackbox.MeasurementDetail;
@@ -21,7 +22,7 @@ import org.kabeja.dxf.helpers.Point;
 public class PrintUtil {
     private static final String BY_LAYER = "ByLayer";
 	private static final String AC_DB_ENTITY = "AcDbEntity";
-	private static final Logger LOG = Logger.getLogger(PrintUtil.class);
+	private static final Logger LOG = LogManager.getLogger(PrintUtil.class);
     public static final String POINT_PRECISION = "ALL";
 
     public static void print(Map<String, String> map) {

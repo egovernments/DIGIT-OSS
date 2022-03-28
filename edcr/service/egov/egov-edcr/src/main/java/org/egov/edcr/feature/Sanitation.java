@@ -61,7 +61,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.dcr.helper.OccupancyHelperDetail;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
@@ -110,7 +111,7 @@ public class Sanitation extends FeatureProcess {
      * DIMESION_DESC_BATH_WC = "The area of combined bathroom and latrine shall be not less than 2.2 square " +
      * "metres with one side not less than 1. 1 metres";
      */
-    private static final Logger LOG = Logger.getLogger(Sanitation.class);
+    private static final Logger LOG = LogManager.getLogger(Sanitation.class);
     /*
      * private static final String RULE_NAME_KEY = "sanitation.rulename"; private static final String RULE_DESCRIPTION_KEY =
      * "sanitation.description"; private static final String RULE_EXPECTED_KEY = "sanitation.expected"; private static final

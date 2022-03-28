@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.bpa.SubOccupancy;
 import org.egov.common.entity.bpa.Usage;
 import org.egov.common.entity.edcr.Block;
@@ -43,7 +44,7 @@ public class FarExtractWithOutDBCall extends FeatureExtract {
     private static final String FLR = "FLR_";
 	private static final String BLK = "BLK_";
 	private static final String EXISTING = "_EXISTING";
-	private static final Logger LOG = Logger.getLogger(FarExtractWithOutDBCall.class);
+	private static final Logger LOG = LogManager.getLogger(FarExtractWithOutDBCall.class);
     @Autowired
     private OccupancyService occupancyService;
     @Autowired

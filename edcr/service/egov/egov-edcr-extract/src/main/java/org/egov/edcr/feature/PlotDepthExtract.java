@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.SetBack;
 import org.egov.common.entity.edcr.Yard;
@@ -34,7 +35,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlotDepthExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(PlotDepthExtract.class);
+    private static final Logger LOG = LogManager.getLogger(PlotDepthExtract.class);
     final Ray rayCasting = new Ray(new Point(-1.123456789, -1.987654321, 0d));
     @Autowired
     private static LayerNames layerNames;

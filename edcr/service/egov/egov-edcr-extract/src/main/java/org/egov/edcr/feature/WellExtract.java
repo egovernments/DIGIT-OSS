@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.RoadOutput;
 import org.egov.common.entity.edcr.WellUtility;
@@ -28,7 +29,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class WellExtract extends FeatureExtract {
     private static final String LAYER_NAME_WELL = "LAYER_NAME_WELL";
-	private static final Logger LOG = Logger.getLogger(WellExtract.class);
+	private static final Logger LOG = LogManager.getLogger(WellExtract.class);
     @Autowired
     private LayerNames layerNames;
 
