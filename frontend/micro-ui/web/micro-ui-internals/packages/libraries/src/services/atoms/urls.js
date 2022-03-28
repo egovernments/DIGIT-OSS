@@ -146,6 +146,10 @@ const Urls = {
     ws_connection_search: "/ws-calculator/meterConnection/_search",
     sw_payment_search: "/collection-services/payments/SW/_search",
     ws_payment_search: "/collection-services/payments/WS/_search",
+    ws_meter_reading: "/ws-calculator/meterConnection/_search",
+    sw_meter_reading: "/sw-calculator/meterConnection/_search",
+    ws_meter_conncetion_create: "/ws-calculator/meterConnection/_create",
+    sw_meter_conncetion_create: "/sw-calculator/meterConnection/_create",
   },
 
   engagement: {

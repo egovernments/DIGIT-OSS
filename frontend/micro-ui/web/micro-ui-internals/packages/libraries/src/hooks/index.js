@@ -197,6 +197,8 @@ import useBillSearch from "./bills/useBillSearch";
 import useWaterCreateAPI from "./ws/useWaterCreateAPI";
 import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
 import useWSUpdateAPI from "./ws/useWSUpdateAPI";
+import useMeterReadingSearch from "./ws/useGetMeterReading";
+import useMeterReadingCreateAPI from "./ws/useMeterConnectionCreateAPI";
 
 const pgr = {
   useComplaintDetails,
@@ -396,6 +398,8 @@ const ws = {
   useSewerageCreateAPI,
   useWSUpdateAPI,
   useMypaymentWS,
+  useMeterReadingSearch,
+  useMeterReadingCreateAPI,
 };
 
 
