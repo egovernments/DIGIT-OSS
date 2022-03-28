@@ -206,7 +206,7 @@ const ConnectionDetails = (_props) => {
                 <div>
                     {filters?.service === "WATER" ? <div>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_TYPE")}*:`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_TYPE")}*:`}</CardLabel>
                             <Controller
                                 control={control}
                                 name={"connectionType"}

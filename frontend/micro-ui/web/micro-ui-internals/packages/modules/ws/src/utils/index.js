@@ -497,3 +497,80 @@ export const getBusinessService = (data) => {
   if (data?.service == "WATER") return "WS.ONE_TIME_FEE"
   else return "SW.ONE_TIME_FEE"
 }
+
+export const convertApplicationData = (data, serviceType) => {
+
+  data?.propertyDetails?.owners?.forEach(owner => {
+    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
+  })
+
+  let ConnectionDetails = [{
+    water: serviceType === "WATER" ? true : false,
+    sewerage: serviceType === "WATER" ? false : true,
+    proposedTaps: Number(data?.applicationData?.proposedTaps) || "",
+    proposedPipeSize: data?.applicationData?.proposedPipeSize ? {
+      i18nKey : data?.applicationData?.proposedPipeSize,
+      code: data?.applicationData?.proposedPipeSize,
+      size: data?.applicationData?.proposedPipeSize
+    } : "",
+    proposedToilets: data?.applicationData?.proposedPipeSize || "",
+    proposedWaterClosets: data?.applicationData?.proposedPipeSize || ""
+  }];
+
+
+  const ConnectionHolderDetails = data?.applicationData?.connectionHolders?.length > 0 ? [{
+    sameAsOwnerDetails: false,
+    name: data?.applicationData?.connectionHolders?.[0]?.name || "",
+    mobileNumber: data?.applicationData?.connectionHolders?.[0]?.mobileNumber || "",
+    guardian: data?.applicationData?.connectionHolders?.[0]?.fatherOrHusbandName || "",
+    address: data?.applicationData?.connectionHolders?.[0]?.correspondenceAddress || "",
+    gender: data?.applicationData?.connectionHolders?.[0]?.gender ? {
+      code: data?.applicationData?.connectionHolders?.[0]?.gender,
+      i18nKey : data?.applicationData?.connectionHolders?.[0]?.gender,
+    } : "",
+    relationship: data?.applicationData?.connectionHolders?.[0]?.relationship ?  {
+      code: data?.applicationData?.connectionHolders?.[0]?.relationship,
+      i18nKey: data?.applicationData?.connectionHolders?.[0]?.relationship
+    } : "",
+    ownerType: data?.applicationData?.connectionHolders?.[0]?.ownerType ? {
+      code: data?.applicationData?.connectionHolders?.[0]?.ownerType,
+      i18nKey: data?.applicationData?.connectionHolders?.[0]?.ownerType
+    } : "",
+
+    documentId: "",
+    documentType: "",
+    file: "",
+  }] : [{
+    sameAsOwnerDetails: true,
+    name: "",
+    gender: "",
+    mobileNumber: "",
+    guardian: "",
+    relationship: "",
+    address: "",
+    ownerType: "",
+    documentId: "",
+    documentType: "",
+    file: "",
+  }];
+
+  let DocumentsRequired = {
+    documents : data?.applicationData?.documents
+  } || [];
+
+  let cpt = {};
+  cpt["details"] = data?.propertyDetails || {};
+
+  let payload = {
+    ConnectionDetails: ConnectionDetails,
+    ConnectionHolderDetails: ConnectionHolderDetails,
+    DocumentsRequired: DocumentsRequired,
+    cpt: cpt,
+    InfoLabel: undefined
+  }
+
+  sessionStorage.setItem("Digit.PT_CREATE_EMP_WS_NEW_FORM", JSON.stringify(payload));
+  sessionStorage.setItem("WS_EDIT_APPLICATION_DETAILS", JSON.stringify(data));
+
+  return payload;
+}

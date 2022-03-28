@@ -59,6 +59,12 @@ const WSConnectionDetails = ({ config, onSelect, userType, formData, setError, f
     if (connectionDetails?.[0]?.sewerage) setWaterSewarageSelection({ water: false, sewerage: true })
   }, [connectionDetails]);
 
+  useEffect(() => {
+    if (!formData?.ConnectionDetails) {
+      setConnectionDetails([createConnectionDetails()]);
+    }
+  }, [formData?.ConnectionDetails]);
+
   if (isWSServicesCalculationLoading) return <Loader />
 
   const commonProps = {

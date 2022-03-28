@@ -170,24 +170,6 @@ export const newConfig = [
         withoutLabel: true,
       }]
     },
-    // {
-    //   head: "WS_PT_DETAILS",
-    //   body: [{
-    //     type: "component",
-    //     key: "PropertyDetails",
-    //     component: "WSPropertyDetails",
-    //     withoutLabel: true,
-    //   }]
-    // },
-    // {
-    //   head: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
-    //   body: [{
-    //     type: "component",
-    //     key: "ConnectionHolderDetails",
-    //     component: "WSConnectionHolder",
-    //     withoutLabel: true,
-    //   }]
-    // },
     {
       head: "WS_COMMON_PROPERTY_DETAILS",
       body: [
@@ -218,33 +200,6 @@ export const newConfig = [
         withoutLabel: true,
       }]
     },
-    // {
-    //   head: "WS_PLUMBER_DETAILS",
-    //   body: [{
-    //     type: "component",
-    //     key: "PlumberDetails",
-    //     component: "WSPlumberDetails",
-    //     withoutLabel: true,
-    //   }]
-    // },
-    // {
-    //   head: "WS_ROAD_CUTT_DETAILS",
-    //   body: [{
-    //     type: "component",
-    //     key: "RoadCuttingDetails",
-    //     component: "WSRoadCuttingDetails",
-    //     withoutLabel: true,
-    //   }]
-    // },
-    // {
-    //   head: "WS_ACTIV_DETAILS",
-    //   body: [{
-    //     type: "component",
-    //     key: "ActivationDetails",
-    //     component: "WSActivationDetails",
-    //     withoutLabel: true,
-    //   }]
-    // },
     {
       head: "WS_COMMON_DOCS",
       body: [{

@@ -97,6 +97,14 @@ function SelectDocument({
 
   const handleSelectDocument = (value) => setSelectedDocument(value);
 
+  useEffect(() => {
+    setSelectedDocument(filteredDocument
+      ? { ...filteredDocument, code: filteredDocument?.documentType }
+      : doc?.dropdownData?.length === 1
+        ? doc?.dropdownData[0]
+        : {})
+  }, [filteredDocument])
+
   function selectfile(e) {
     setFile(e.target.files[0]);
   }
@@ -193,8 +201,10 @@ function SelectDocument({
         <LabelFieldPair>
           <CardLabel>{doc?.required ? `${t(doc?.i18nKey)}*:` : `${t(doc?.i18nKey)}:`}</CardLabel>
           <Dropdown
+            id={`doc-${doc?.code}`}
+            key={`doc-${doc?.code}`}
             className="form-field"
-            selected={selectedDocument}
+            selected={selectedDocument ? selectedDocument : filteredDocument ? filteredDocument : selectedDocument}
             option={dropDownData.map((e) => ({ ...e, i18nKey: e.code?.replaceAll(".", "_") }))}
             select={handleSelectDocument}
             optionKey="i18nKey"

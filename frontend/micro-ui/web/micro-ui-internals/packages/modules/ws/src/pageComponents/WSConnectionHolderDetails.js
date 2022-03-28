@@ -79,6 +79,11 @@ const WSConnectionHolderDetails = ({ config, onSelect, userType, formData, setEr
     }
   }, [connectionHolderDetails]);
 
+  useEffect(() => {
+    if (!formData?.ConnectionHolderDetails) {
+      setConnectionHolderDetails([createConnectionHolderDetails()]);
+    }
+  }, [formData?.ConnectionHolderDetails]);
 
   const commonProps = {
     focusIndex,
@@ -242,7 +247,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.name ? errors?.name?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }}className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL")}*:`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL")}*:`}</CardLabel>
           <Controller
             control={control}
             name={"gender"}
