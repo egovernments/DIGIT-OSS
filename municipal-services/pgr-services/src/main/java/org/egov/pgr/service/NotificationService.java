@@ -116,11 +116,11 @@ public class NotificationService {
             message = message.replace("{complaint_type}", localisedComplaint);
         }
 
-        String finalMessage = getMessageForMobileNumber(message,request,localizationMessage);
+        String finalMessage = getMessageForMobileNumber(message,request);
         return finalMessage;
     }
 
-    public String getMessageForMobileNumber(String message, ServiceRequest request, String localizationMessage){
+    public String getMessageForMobileNumber(String message, ServiceRequest request){
         String messageToReplace = message;
         ServiceWrapper serviceWrapper = ServiceWrapper.builder().service(request.getService()).workflow(request.getWorkflow()).build();
 
@@ -141,6 +141,11 @@ public class NotificationService {
         if (messageToReplace.contains("{download_link}")){
             String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
             messageToReplace = messageToReplace.replace("{download_link}", appLink);
+        }
+
+        if (messageToReplace.contains("{emp_name}")){
+            ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN_EMPLOYEE);
+            messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
         }
 
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN)){
@@ -171,20 +176,12 @@ public class NotificationService {
 //
 //        }
 
-        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(RESOLVED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(PGR_WF_RESOLVE)){
-            if (messageToReplace.contains("{emp_name}")){
-                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),PGR_WF_RESOLVE);
-                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
-            }
-        }
+//        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(RESOLVED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(PGR_WF_RESOLVE)){
+//
+//        }
 
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(ASSIGN_CITIZEN)){
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
-
-            if (messageToReplace.contains("{emp_name}")){
-                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN_CITIZEN);
-                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
-            }
 
             if (messageToReplace.contains("{emp_department}"))
                 messageToReplace = messageToReplace.replace("{emp_department}",reassigneeDetails.get("department"));
@@ -210,29 +207,14 @@ public class NotificationService {
                     log.warn("Fetching from localization failed", e);
                 }
             }
-
-            if (messageToReplace.contains("{emp_name}")){
-                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN_EMPLOYEE);
-                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
-            }
         }
 
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(CLOSED_AFTER_RESOLUTION) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(CLOSE_EMPLOYEE)){
             if(messageToReplace.contains("{rating}"))
                 messageToReplace=messageToReplace.replace("{rating}",serviceWrapper.getService().getRating().toString());
-
-            if (messageToReplace.contains("{emp_name}")){
-                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN_EMPLOYEE);
-                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
-            }
         }
 
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN_CITIZEN)){
-            if (messageToReplace.contains("{emp_name}")){
-                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REASSIGN_CITIZEN);
-                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
-            }
-
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
 
             if (messageToReplace.contains("{emp_department}"))
@@ -259,11 +241,6 @@ public class NotificationService {
                     log.warn("Fetching from localization failed", e);
                 }
             }
-
-            if (messageToReplace.contains("{emp_name}")){
-                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REASSIGN_EMPLOYEE);
-                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
-            }
         }
 
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(REJECTED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REJECT_CITIZEN)){
@@ -283,11 +260,6 @@ public class NotificationService {
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGFORASSIGNMENT) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REOPEN_EMPLOYEE)){
             if(messageToReplace.contains("{ulb}"))
                 messageToReplace = messageToReplace.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
-
-            if (messageToReplace.contains("{emp_name}")){
-                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REOPEN_EMPLOYEE);
-                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
-            }
         }
 
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(RESOLVED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(RESOLVE_CITIZEN)){
@@ -298,11 +270,6 @@ public class NotificationService {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
                 messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
             }
-
-            if (messageToReplace.contains("{emp_name}")){
-                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),RESOLVE_CITIZEN);
-                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
-            }
         }
 
 //        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGFORASSIGNMENT) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(APPLY)){
@@ -312,11 +279,6 @@ public class NotificationService {
         if(serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(COMMENT)) {
             if (messageToReplace.contains("{comment}"))
                 messageToReplace = messageToReplace.replace("{comment}", serviceWrapper.getWorkflow().getComments());
-
-            if (messageToReplace.contains("{emp_name}")){
-                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),RESOLVE_CITIZEN);
-                messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
-            }
         }
 
 //        if(serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(COMMENT_DEFAULT)) {
