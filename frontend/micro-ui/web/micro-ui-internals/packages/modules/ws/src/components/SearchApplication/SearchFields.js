@@ -32,7 +32,12 @@ const SearchFields = ({ register, control, reset, tenantId, t }) => {
         let found = applicationStatuses.length > 0 ? applicationStatuses?.some(el => el?.code === status.applicationStatus) : false;
         if (!found) applicationStatuses.push({ code: status?.applicationStatus, i18nKey: `WF_NEWWS1_${(status?.applicationStatus)}` })
     })
-
+    const propsForMobileNumber = {
+        maxlength: 10,
+        pattern: "[6-9][0-9]{9}",
+        title: t("ES_SEARCH_APPLICATION_MOBILE_INVALID"),
+        componentInFront: "+91"
+    }
     return <>
         <SearchField>
             <label>{t("WS_ACK_COMMON_APP_NO_LABEL")}</label>
@@ -44,7 +49,7 @@ const SearchFields = ({ register, control, reset, tenantId, t }) => {
         </SearchField>
         <SearchField>
             <label>{t("CONSUMER_MOBILE_NUMBER")}</label>
-            <TextInput name="mobileNumber" inputRef={register({})} />
+            <TextInput name="mobileNumber" inputRef={register({})} {...propsForMobileNumber}/>
         </SearchField>
         {applicationTypesLoading ? <Loader /> : <SearchField>
             <label>{t("WS_APPLICATION_TYPE_LABEL")}</label>
