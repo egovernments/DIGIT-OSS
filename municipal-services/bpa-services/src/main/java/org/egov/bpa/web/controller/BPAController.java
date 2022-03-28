@@ -77,6 +77,7 @@ public class BPAController {
 			@Valid @ModelAttribute BPASearchCriteria criteria) {
 		
 		List<BPA> bpas = bpaService.search(criteria, requestInfoWrapper.getRequestInfo());
+		log.debug("bpa size" + bpas.size());
 		int count = bpaService.getBPACount(criteria, requestInfoWrapper.getRequestInfo());
 		BPAResponse response = BPAResponse.builder().BPA(bpas).responseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true)).count(count)
