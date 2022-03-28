@@ -3,6 +3,7 @@ package org.egov.web.notification.mail.service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.egov.tracer.model.CustomException;
 import org.egov.web.notification.mail.config.ApplicationConfiguration;
 import org.egov.web.notification.mail.consumer.contract.Email;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Map;
 
 @Service
 @ConditionalOnProperty(value = "mail.enabled", havingValue = "true")
@@ -80,6 +82,7 @@ public class ExternalEmailService implements EmailService {
 			helper.setTo(email.getEmailTo().toArray(new String[0]));
 			helper.setSubject(email.getSubject());
 			helper.setText(email.getBody(), true);
+
 			for(int i=0; i<email.getFileStoreId().size(); i++) {
 				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, FILESTORE_TENANT_ID, email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);
@@ -88,23 +91,18 @@ public class ExternalEmailService implements EmailService {
 				File download = new File(System.getProperty("java.io.tmpdir"), fieldValue);
 				ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
 				FileOutputStream fos = new FileOutputStream(download);
-				try {
-					fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-				} finally {
-					fos.close();
-				}
+				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+				fos.close();
 				helper.addAttachment(fieldValue, download);
 			}
 
+			mailSender.send(message);
+
 		} catch (MessagingException | MalformedURLException e) {
 			log.error(EXCEPTION_MESSAGE, e);
-			throw new RuntimeException(e);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		try{
-			mailSender.send(message);
-		} catch (MailException e){
+		}catch (MailException e){
 			log.error(EXCEPTION_MESSAGE, e);
 		}
 	}

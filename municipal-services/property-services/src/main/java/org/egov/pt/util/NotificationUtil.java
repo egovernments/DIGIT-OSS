@@ -268,7 +268,7 @@ public class NotificationUtil {
 
             String subject = "";
             String body = customizedMsg;
-            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).tenantId(null).fileStoreId(null).build();
+            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).build();
             EmailRequest email = new EmailRequest(requestInfo,emailobj);
             emailRequest.add(email);
         }
@@ -317,8 +317,8 @@ public class NotificationUtil {
             String body = message;
             log.info(body);
             Email emailobj = new Email();
-            if(fileStoreIds==null) {
-                emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).fileStoreId(null).tenantId(tenantId).build();
+            if(CollectionUtils.isEmpty(fileStoreIds)) {
+                emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).tenantId(tenantId).build();
             } else {
 
                 emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).fileStoreId(fileStoreIds).tenantId(tenantId).build();
