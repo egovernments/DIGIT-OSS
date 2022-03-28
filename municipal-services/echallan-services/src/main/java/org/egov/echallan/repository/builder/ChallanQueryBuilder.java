@@ -98,6 +98,13 @@ public class ChallanQueryBuilder {
                 addToPreparedStatement(preparedStmtList, status);
             }
 
+            if (criteria.getReceiptNumber() != null) {
+                List<String> receiptNumbers = Arrays.asList(criteria.getReceiptNumber().split(","));
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append(" challan.receiptnumber IN (").append(createQuery(receiptNumbers)).append(")");
+                addToPreparedStatement(preparedStmtList, receiptNumbers);
+            }
+
 
         }
 
