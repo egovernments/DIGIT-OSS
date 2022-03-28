@@ -65,7 +65,10 @@ public class PaymentUpdateService {
 				if(!CollectionUtils.isEmpty(challans) ) {
 					String uuid = requestInfo.getUserInfo().getUuid();
 				    AuditDetails auditDetails = commUtils.getAuditDetails(uuid, true);
-					challans.forEach(challan -> challan.setApplicationStatus(StatusEnum.PAID));
+					for(Challan challan: challans){
+						challan.setApplicationStatus(StatusEnum.PAID);
+						challan.setReceiptNumber(paymentDetail.getReceiptNumber());
+					}
 					challans.get(0).setAuditDetails(auditDetails);
 					ChallanRequest request = ChallanRequest.builder().requestInfo(requestInfo).challan(challans.get(0)).build();
 					producer.push(config.getUpdateChallanTopic(), request);
