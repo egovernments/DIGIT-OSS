@@ -33,6 +33,8 @@ public class BPAQueryBuilder {
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY bpa_lastModifiedTime DESC) offset_ FROM " + "({})"
 			+ " result) result_offset " + "WHERE offset_ > ? AND offset_ <= ?";
 
+        private final String countWrapper = "SELECT COUNT(DISTINCT(bpa_id)) FROM ({INTERNAL_QUERY}) as bpa_count";
+
 	/**
 	 * To give the Search query based on the requirements.
 	 * 
@@ -42,7 +44,7 @@ public class BPAQueryBuilder {
 	 *            values to be replased on the query
 	 * @return Final Search Query
 	 */
-	public String getBPASearchQuery(BPASearchCriteria criteria, List<Object> preparedStmtList, List<String> edcrNos) {
+	public String getBPASearchQuery(BPASearchCriteria criteria, List<Object> preparedStmtList, List<String> edcrNos,boolean isCount) {
 
 		StringBuilder builder = new StringBuilder(QUERY);
 
@@ -155,6 +157,9 @@ public class BPAQueryBuilder {
 			}
 			addToPreparedStatement(preparedStmtList, createdBy);
 		}
+
+          if(isCount)
+            return addCountWrapper(builder.toString());
 		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 
 	}
@@ -234,4 +239,7 @@ public class BPAQueryBuilder {
 		}
 		return builder.toString();
 	}
+  private String addCountWrapper(String query) {
+        return countWrapper.replace("{INTERNAL_QUERY}", query);
+    }
 }

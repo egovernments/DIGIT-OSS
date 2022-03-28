@@ -89,7 +89,7 @@ public class BPARepository {
 	 */
 	public List<BPA> getBPAData(BPASearchCriteria criteria, List<String> edcrNos) {
 		List<Object> preparedStmtList = new ArrayList<>();
-		String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos);
+		String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos,false);
 		try {
                     query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
                 } catch (InvalidTenantIdException e) {
@@ -109,9 +109,9 @@ public class BPARepository {
          */
         public int getBPACount(BPASearchCriteria criteria, List<String> edcrNos) {
                 List<Object> preparedStmtList = new ArrayList<>();
-                String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos);
+                String query = queryBuilder.getBPASearchQuery(criteria, preparedStmtList, edcrNos,true);
                 try {
-                	log.debug("query"+ query);
+                //	log.debug("query"+ query);
                     query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
                 } catch (InvalidTenantIdException e) {
                     throw new CustomException(BPAErrorConstants.EG_BPA_AS_TENANTID_ERROR,
