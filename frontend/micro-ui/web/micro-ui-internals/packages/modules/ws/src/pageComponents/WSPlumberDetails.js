@@ -3,40 +3,37 @@ import _ from "lodash";
 import React from "react";
 import { getPattern } from "../utils";
 import { Controller, useForm } from "react-hook-form";
-const WSPlumberDetails = ({ t, config, onSelect, formData,formState,setError,clearErrors}) => {
+const WSPlumberDetails = ({ t, config, onSelect, formData, formState, setError, clearErrors }) => {
   const [plumberDetails, setPlumberDetails] = React.useState(formData[config?.key] || {
     plumberName: "",
     plumberMobileNo: "",
-    plumberLicenseNo:  "",
+    plumberLicenseNo: "",
   });
-  const [plumberProvidedBy, setPlumberProvidedBy] = React.useState({code: "ULB", value: "ULB", i18nKey: "ULB"});
-  const [plumberProvidedByOptions] = React.useState([
-    {code: "ULB", value: "ULB", i18nKey: "ULB"},
-    {code: "SELF", value: "SELF", i18nKey: "SELF"},
-  ]);
+  const [plumberProvidedBy, setPlumberProvidedBy] = React.useState({ code: "ULB", value: "ULB", i18nKey: "ULB" });
   const [isErrors, setIsErrors] = React.useState(false);
   const [focusedField, setFocusedField] = React.useState('');
 
-  const { 
-    control, 
-    formState : localFormState, 
-    watch, 
-    trigger, 
+  const {
+    control,
+    formState: localFormState,
+    watch,
+    trigger,
   } = useForm();
 
   const formValues = watch();
 
   const isPlumberProvidedByULB = () => plumberProvidedBy.code === "ULB";
-  React.useEffect(()=>{
-    trigger();
-  },[])
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
+    trigger();
+  }, [])
+
+  React.useEffect(() => {
     const part = {};
 
-    Object.keys(formValues).forEach((key)=>part[key] = formValues[key]);
+    Object.keys(formValues).forEach((key) => part[key] = formValues[key]);
 
-    if(!_.isEqual(part, plumberDetails)){
+    if (!_.isEqual(part, plumberDetails)) {
       let isErrorsFound = true;
 
       Object.keys(formValues).map(data => {
@@ -51,7 +48,7 @@ const WSPlumberDetails = ({ t, config, onSelect, formData,formState,setError,cle
       setPlumberDetails(part);
       trigger();
     }
-  },[formValues]);
+  }, [formValues]);
 
   React.useEffect(() => {
     let isClear = true;
@@ -72,15 +69,14 @@ const WSPlumberDetails = ({ t, config, onSelect, formData,formState,setError,cle
   }, [plumberDetails]);
 
   React.useEffect(() => {
-    if(! isPlumberProvidedByULB()){
-    if (Object.keys(localFormState.errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, localFormState.errors)) {
+    if (isPlumberProvidedByULB() && Object.keys(localFormState.errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, localFormState.errors)) {
       setError(config.key, { type: localFormState.errors });
     }
-    else if (!Object.keys(localFormState.errors).length && formState.errors[config.key] && isErrors) {
+    else if (!isPlumberProvidedByULB() || !Object.keys(localFormState.errors).length && formState.errors[config.key] && isErrors) {
       clearErrors(config.key);
-    }}
-  }, [localFormState.errors]);
-  
+    }
+  }, [localFormState.errors, plumberProvidedBy]);
+
   React.useEffect(() => {
     onSelect(config.key, plumberDetails);
   }, [plumberDetails]);
@@ -95,14 +91,17 @@ const WSPlumberDetails = ({ t, config, onSelect, formData,formState,setError,cle
           <Controller
             control={control}
             name="plumberProvidedBy"
-            defaultValue={plumberDetails.plumberProvidedBy}
-            render={(props)=>(
+            defaultValue={plumberProvidedBy}
+            render={(props) => (
               <Dropdown
                 t={t}
                 key={config?.key}
                 selected={props.value}
                 optionKey="i18nKey"
-                option={plumberProvidedByOptions}
+                option={[
+                  { code: "ULB", value: "ULB", i18nKey: "ULB" },
+                  { code: "SELF", value: "SELF", i18nKey: "SELF" },
+                ]}
                 select={(value) => {
                   props.onChange(value);
                   setPlumberProvidedBy(value)
@@ -112,7 +111,7 @@ const WSPlumberDetails = ({ t, config, onSelect, formData,formState,setError,cle
           ></Controller>
         </div>
       </LabelFieldPair>
-      { localFormState.touched?.plumberProvideBy && (
+      {localFormState.touched?.plumberProvideBy && (
         <CardLabelError style={errorStyle}> {t(ormState.errors?.plumberProvideBy?.message)} </CardLabelError>
       )}
 
@@ -125,16 +124,16 @@ const WSPlumberDetails = ({ t, config, onSelect, formData,formState,setError,cle
             type="text"
             defaultValue={plumberDetails.plumberLicenseNo}
             rules={{
-              validate: (e)=>e && getPattern("OldLicenceNo").test(e) ? true: t(""),
-              required: t("REQUIRED_FIELD") ,
+              validate: (e) => isPlumberProvidedByULB() && e && getPattern("OldLicenceNo").test(e) ? true : t(""),
+              required: t(isPlumberProvidedByULB() ? "REQUIRED_FIELD": ""),
             }}
-            render={(props)=>(
+            render={(props) => (
               <TextInput
                 type="text"
                 key={config.key}
                 value={props.value}
                 autoFocus={focusedField === "plumberLicenseNo"}
-                disable={isPlumberProvidedByULB()}
+                disable={!isPlumberProvidedByULB()}
                 onBlur={props.onBlur}
                 onChange={(ev) => {
                   props.onChange(ev.target.value);
@@ -145,7 +144,7 @@ const WSPlumberDetails = ({ t, config, onSelect, formData,formState,setError,cle
           ></Controller>
         </div>
       </LabelFieldPair>
-      { localFormState.touched?.plumberLicenseNo && (
+      {localFormState.touched?.plumberLicenseNo && (
         <CardLabelError style={errorStyle}> {t(localFormState.errors?.plumberLicenseNo?.message)} </CardLabelError>
       )}
 
@@ -158,14 +157,14 @@ const WSPlumberDetails = ({ t, config, onSelect, formData,formState,setError,cle
             type="text"
             defaultValue={plumberDetails.plumberName}
             rules={{
-              validate: (e)=>e && getPattern("Name").test(e) ? true: t(""),
-              required: t("REQUIRED_FIELD") ,
+              validate: (e) => isPlumberProvidedByULB() && e && getPattern("Name").test(e) ? true : t(""),
+              required: t(isPlumberProvidedByULB() ? "REQUIRED_FIELD": ""),
             }}
-            render={(props)=>(
+            render={(props) => (
               <TextInput
                 key={config.key}
                 type="text"
-                disable={isPlumberProvidedByULB()}
+                disable={!isPlumberProvidedByULB()}
                 value={props.value}
                 autoFocus={focusedField === "plumberName"}
                 onBlur={props.onBlur}
@@ -178,7 +177,7 @@ const WSPlumberDetails = ({ t, config, onSelect, formData,formState,setError,cle
           ></Controller>
         </div>
       </LabelFieldPair>
-      { localFormState.touched?.plumberName && (
+      {localFormState.touched?.plumberName && (
         <CardLabelError style={errorStyle}> {t(localFormState.errors?.plumberName?.message)} </CardLabelError>
       )}
 
@@ -191,15 +190,15 @@ const WSPlumberDetails = ({ t, config, onSelect, formData,formState,setError,cle
             name="plumberMobileNo"
             defaultValue={plumberDetails.plumberMobileNo}
             rules={{
-              validate: (e)=>e && getPattern("MobileNo").test(e) ? true: t(""),
-              required: t("REQUIRED_FIELD") ,
+              validate: (e) => isPlumberProvidedByULB() && e && getPattern("MobileNo").test(e) ? true : t(""),
+              required: t(isPlumberProvidedByULB() ? "REQUIRED_FIELD": ""),
             }}
-            render={(props)=>(
+            render={(props) => (
               <MobileNumber
                 key={config.key}
                 type="number"
                 value={props.value}
-                disable={isPlumberProvidedByULB()}
+                disable={!isPlumberProvidedByULB()}
                 autoFocus={focusedField === "plumberMobileNo"}
                 onBlur={props.onBlur}
                 onChange={(value) => {
@@ -211,8 +210,8 @@ const WSPlumberDetails = ({ t, config, onSelect, formData,formState,setError,cle
           ></Controller>
         </div>
       </LabelFieldPair>
-      { localFormState.touched?.plumberMobileNo && (
-        <CardLabelError style={errorStyle}> {t(localFormState.errors?.plumberMobileNo?.message)} </CardLabelError> 
+      {localFormState.touched?.plumberMobileNo && (
+        <CardLabelError style={errorStyle}> {t(localFormState.errors?.plumberMobileNo?.message)} </CardLabelError>
       )}
     </React.Fragment>
   );

@@ -22,6 +22,7 @@ import WSPlumberDetails from "./pageComponents/WSPlumberDetails";
 import WSRoadCuttingDetails from "./pageComponents/WSRoadCuttingDetails";
 import WSPropertyDetails from "./pageComponents/WSPropertyDetails";
 import WSConnectionHolderDetails from "./pageComponents/WSConnectionHolderDetails";
+import WSAdditionalConnectionDetails from './pageComponents/WSAdditionalConnectionDetails';
 
 import SearchApplication from "./components/SearchApplication";
 import WSCard from './components/WSCard';
@@ -125,7 +126,8 @@ const componentsToRegister = {
   WSActivationCommentsDetails,
   WSActivationSupportingDocuments,
   WSCard,
-  WSDocumentsEmployee
+  WSDocumentsEmployee,
+  WSAdditionalConnectionDetails
 };
 
 export const initWSComponents = () => {

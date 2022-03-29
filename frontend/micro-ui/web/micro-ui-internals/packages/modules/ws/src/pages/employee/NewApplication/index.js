@@ -21,15 +21,17 @@ const NewApplication = () => {
   const [waterAndSewerageBoth, setWaterAndSewerageBoth] = useState(null);
   const [config, setConfig] = useState({ head: "", body: [] });
 
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(Digit.ULBService.getCurrentTenantId(), newConfigLocal);
+
   useEffect(() => {
     const config = newConfigLocal.find((conf) => {
-      if (conf.hideInCitizen){
+      if (conf.hideInCitizen) {
         const config = {};
 
         config["head"] = conf.head;
 
-        config["body"] = conf.body.map((comp)=>{
-          if(comp.role && comp.role === "fieldInspector"){
+        config["body"] = conf.body.map((comp) => {
+          if (comp.role && comp.role === "fieldInspector") {
             return null;
           }
 
@@ -43,7 +45,7 @@ const NewApplication = () => {
     });
 
     setConfig(config);
-  });
+  }, []);
 
   const {
     isLoading: creatingWaterApplicationLoading,
@@ -116,7 +118,7 @@ const NewApplication = () => {
                 setIsEnableLoader(false);
                 setShowToast({ key: "error", message: error?.message ? error.message : error });
                 setTimeout(closeToastOfError, 5000);
-          
+
               },
               onSuccess: (data, variables) => {
                 setIsEnableLoader(false);

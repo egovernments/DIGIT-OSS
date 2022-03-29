@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { getPattern } from "../utils";
 
-const WSRoadCuttingDetails = ({ t, config, onSelect, formData,formState,setError,clearErrors}) => {
+const WSRoadCuttingDetails = ({ t, config, onSelect, formData, formState, setError, clearErrors }) => {
   const [roadCuttingDetails, setRoadCuttingDetails] = React.useState(formData[config?.key] || {
     roadType: { code: "", value: "", i18nKey: "" },
     roadArea: "",
@@ -21,7 +21,7 @@ const WSRoadCuttingDetails = ({ t, config, onSelect, formData,formState,setError
 
   const {
     control,
-    formState : localFormState,
+    formState: localFormState,
     watch,
     trigger,
   } = useForm();
@@ -100,10 +100,6 @@ const WSRoadCuttingDetails = ({ t, config, onSelect, formData,formState,setError
             control={control}
             name="roadType"
             defaultValue={roadCuttingDetails.roadType}
-            // rules={{
-            //   validate: (e) => e && e.length ? true : t(""),
-            //   required: t("REQUIRED_FIELD"),
-            // }}
             render={(props) => (
               <Dropdown
                 key={config.key}
@@ -155,9 +151,7 @@ const WSRoadCuttingDetails = ({ t, config, onSelect, formData,formState,setError
         <CardLabelError style={errorStyle}> {t(localFormState.errors?.roadArea?.message)} </CardLabelError>
       )}
 
-      <Link to={`/digit-ui/employee/commonpt/search?redirectToUrl=${""}`}>
-        <LinkButton label={t("WS_ADD_ROAD_TYPE")} style={{ color: "#f47738", display: "inline-block" }} />
-      </Link>
+      <button style={{ color: "#f47738", display: "inline-block" }}>{t("WS_ADD_ROAD_TYPE")}</button>
     </React.Fragment>
   );
 }
