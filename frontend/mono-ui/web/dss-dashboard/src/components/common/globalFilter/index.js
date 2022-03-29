@@ -437,7 +437,8 @@ class GlobalFilter extends Component {
                     case "DDRs":
                         return this.renderAutoComplete(object.label, this.handleChanges, this.state.ddrs, object.values, '')
                     case "Services":
-                        return this.renderSimpleSelect(object.label,JSON.parse(sessionStorage.getItem('SERVICES')) , this.handleChanges)
+                        return null;
+                        // return this.renderSimpleSelect(object.label,JSON.parse(sessionStorage.getItem('SERVICES')) , this.handleChanges)
                     case "Date Range":
                         return this.renderDateRange(object.label, object.values);
                 }
@@ -552,7 +553,7 @@ class GlobalFilter extends Component {
                         <div className={classes.mainFilter}>
 
                             {globalFilterData.map(ro => {
-                                if (this.props.hideDepart && ro.label == "Services") {
+                                if (ro.label == "Services") {
                                     return (<div></div>);
 
                                 } else if (ro.label == "DDRs" && !_.isEmpty(mdmsData, true)) {
