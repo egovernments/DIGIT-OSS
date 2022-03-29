@@ -103,10 +103,9 @@ public class NotificationService {
      */
     private String getFinalMessage(ServiceRequest request, String topic, String applicationStatus) {
         String tenantId = request.getService().getTenantId();
-        String action = request.getWorkflow().getAction();
         String localizationMessage = notificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo(),PGR_MODULE);
 
-        String message = notificationUtil.getCustomizedMsg(action, applicationStatus, localizationMessage);
+        String message = notificationUtil.getCustomizedMsg(request.getWorkflow().getAction(), applicationStatus, localizationMessage);
         if (message == null) {
             log.info("No message Found For Topic : " + topic);
             return message;
@@ -139,22 +138,19 @@ public class NotificationService {
             messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
         }
 
-        if (messageToReplace.contains("{download link}")){
+        if (messageToReplace.contains("{download_link}")){
             String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
-            messageToReplace = messageToReplace.replace("{download link}", appLink);
+            messageToReplace = messageToReplace.replace("{download_link}", appLink);
         }
 
         if (messageToReplace.contains("{emp_name}")){
-            ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),PGR_WF_RESOLVE);
+            ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN_EMPLOYEE);
             messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
         }
 
-        if (messageToReplace.contains("{additional_comments}"))
-            messageToReplace = messageToReplace.replace("{additional_comments}", serviceWrapper.getWorkflow().getComments());
-
-       /* if (messageToReplace.contains("{reason}"))
-            messageToReplace = messageToReplace.replace("{reason}", pgrEntity.getWorkflow().getComments());*/
-
+        /**
+         * SMS to citizens, when the complaint is re-assigned to an employee
+         */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN)){
 
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
@@ -166,10 +162,149 @@ public class NotificationService {
                 messageToReplace = messageToReplace.replace("{emp_department}",reassigneeDetails.get("department"));
 
             if (messageToReplace.contains("{emp_designation}"))
-                messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designamtion"));
+                messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designation"));
         }
 
+        /**
+         * SMS to citizens, when their complaint is rejected
+         */
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(REJECTED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REJECT)){
+            if(messageToReplace.contains("{reason}")) {
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REJECT_REJECTED);
+                messageToReplace = messageToReplace.replace("{reason}", processInstance.getComment());
+            }
 
+            if (messageToReplace.contains("{additional_comments}"))
+                messageToReplace = messageToReplace.replace("{additional_comments}", serviceWrapper.getWorkflow().getComments());
+        }
+
+        /**
+         * SMS to citizens, when their complaint is assigned to an employee
+         */
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(ASSIGN_CITIZEN)){
+            Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
+
+            if (messageToReplace.contains("{emp_department}"))
+                messageToReplace = messageToReplace.replace("{emp_department}",reassigneeDetails.get("department"));
+
+            if (messageToReplace.contains("{emp_designation}"))
+                messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designation"));
+        }
+
+        /**
+         * SMS to employees, when the complaint is assigned to him/her name
+         */
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(ASSIGN_EMPLOYEE)){
+            if(messageToReplace.contains("{ulb}"))
+                messageToReplace = messageToReplace.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
+
+            if(messageToReplace.contains("{ao_designation}")){
+                String localisationMessageForPlaceholder =  notificationUtil.getLocalizationMessages(request.getService().getTenantId(), request.getRequestInfo(),COMMON_MODULE);
+                String path = "$..messages[?(@.code==\"COMMON_MASTERS_DESIGNATION_AO\")].message";
+
+                try {
+                    ArrayList<String> messageObj = JsonPath.parse(localisationMessageForPlaceholder).read(path);
+                    if(messageObj != null && messageObj.size() > 0) {
+                        messageToReplace = messageToReplace.replace("{ao_designation}", messageObj.get(0));
+                    }
+                } catch (Exception e) {
+                    log.warn("Fetching from localization failed", e);
+                }
+            }
+        }
+
+        /**
+         * SMS to employees, when the complaint is closed and employee received feedback from citizen
+         */
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(CLOSED_AFTER_RESOLUTION) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(CLOSE_EMPLOYEE)){
+            if(messageToReplace.contains("{rating}"))
+                messageToReplace=messageToReplace.replace("{rating}",serviceWrapper.getService().getRating().toString());
+        }
+
+        /**
+         * SMS to citizens, when the complaint is re-assigned to an employee
+         */
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN_CITIZEN)){
+            Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
+
+            if (messageToReplace.contains("{emp_department}"))
+                messageToReplace = messageToReplace.replace("{emp_department}",reassigneeDetails.get("department"));
+
+            if (messageToReplace.contains("{emp_designation}"))
+                messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designation"));
+        }
+
+        /**
+         * SMS to employees, when a complaint is re-assigned on their request
+         */
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN_EMPLOYEE)){
+            if(messageToReplace.contains("{ulb}"))
+                messageToReplace = messageToReplace.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
+
+            if(messageToReplace.contains("{ao_designation}")){
+                String localisationMessageForPlaceholder =  notificationUtil.getLocalizationMessages(request.getService().getTenantId(), request.getRequestInfo(),COMMON_MODULE);
+                String path = "$..messages[?(@.code==\"COMMON_MASTERS_DESIGNATION_AO\")].message";
+
+                try {
+                    ArrayList<String> messageObj = JsonPath.parse(localisationMessageForPlaceholder).read(path);
+                    if(messageObj != null && messageObj.size() > 0) {
+                        messageToReplace = messageToReplace.replace("{ao_designation}", messageObj.get(0));
+                    }
+                } catch (Exception e) {
+                    log.warn("Fetching from localization failed", e);
+                }
+            }
+        }
+
+        /**
+         * SMS to citizens, when complaint got rejected with reason
+         */
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(REJECTED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REJECT_CITIZEN)){
+            if (messageToReplace.contains("{additional_comments}"))
+                messageToReplace = messageToReplace.replace("{additional_comments}", serviceWrapper.getWorkflow().getComments());
+
+            if(messageToReplace.contains("{reason}")) {
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REJECT_REJECTED);
+                messageToReplace = messageToReplace.replace("{reason}", processInstance.getComment());
+            }
+        }
+
+        /**
+         * SMS to citizens, when the complaint has been re-opened on their request
+         */
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGFORASSIGNMENT) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REOPEN_EMPLOYEE)){
+            if(messageToReplace.contains("{ulb}"))
+                messageToReplace = messageToReplace.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
+        }
+
+        /**
+         * SMS to employees, when a complaint get re-opened their name by citizen
+         */
+        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(RESOLVED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(RESOLVE_CITIZEN)){
+            if (messageToReplace.contains("{date}")){
+                Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
+                LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+                messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            }
+        }
+
+        /**
+         * SMS to citizens, when an employee commented on their complaint
+         */
+        if(serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(COMMENT)) {
+            if (messageToReplace.contains("{comment}"))
+                messageToReplace = messageToReplace.replace("{comment}", serviceWrapper.getWorkflow().getComments());
+        }
+
+        /**
+         * SMS to citizens, regarding the current status of their complaint
+         */
+        if(serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(DEFAULT)) {
+            if(messageToReplace.contains("{status}"))
+                messageToReplace = messageToReplace.replace("{status}", serviceWrapper.getService().getApplicationStatus());
+        }
 
         return messageToReplace;
     }

@@ -9,6 +9,7 @@ import org.egov.pgr.producer.Producer;
 import org.egov.pgr.repository.ServiceRequestRepository;
 import org.egov.pgr.web.models.Notification.EventRequest;
 import org.egov.pgr.web.models.Notification.SMSRequest;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -59,18 +60,31 @@ public class NotificationUtil {
 
     public String getCustomizedMsg(String action, String applicationStatus, String localizationMessage) {
         StringBuilder notificationCode = new StringBuilder();
-        notificationCode.append("PGR_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
+
+        /**
+         * when action is either "COMMENT" or "COMMENT_DEFAULT" or "DEFAULT",
+         *  localisation code would be "PGR_ACTION_SMS_MESSAGE"
+         *  otherwise, localisation code would be "PGR_ACTION_APPLICATIONSTATUS_SMS_MESSAGE"
+         */
+        if(action.equalsIgnoreCase(COMMENT) || action.equalsIgnoreCase(COMMENT_DEFAULT) || action.equalsIgnoreCase(DEFAULT)) {
+            notificationCode.append("PGR_").append(action.toUpperCase()).append("_SMS_MESSAGE");
+        }
+        else {
+            notificationCode.append("PGR_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
+        }
+
         String path = "$..messages[?(@.code==\"{}\")].message";
         path = path.replace("{}", notificationCode);
         String message = null;
         try {
-            ArrayList<String> messageObj = (ArrayList<String>) JsonPath.parse(localizationMessage).read(path);
+            ArrayList<String> messageObj = JsonPath.parse(localizationMessage).read(path);
             if(messageObj != null && messageObj.size() > 0) {
                 message = messageObj.get(0);
             }
         } catch (Exception e) {
             log.warn("Fetching from localization failed", e);
         }
+
         return message;
     }
 
