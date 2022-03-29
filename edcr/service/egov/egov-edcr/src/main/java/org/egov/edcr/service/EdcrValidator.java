@@ -128,7 +128,7 @@ public class EdcrValidator {
                             error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
                             return error;
                         }
-                         if (!isAllowNumeric) {
+                         if (isAllowNumeric) {
                             LOG.info("The Inalid Value is" + value);
                             error.setErrorCode("EDCR-31");
                             error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
