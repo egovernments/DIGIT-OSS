@@ -213,7 +213,7 @@ export const newConfig =[
                     "texts": {
                         "headerCaption": "",
                         "header": "PT_PLOT_SIZE_HEADER",
-                        "cardText": "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
+                        "cardText": "",
                         "submitBarLabel": "PT_COMMON_NEXT"
                     },
                     "key": "units",
