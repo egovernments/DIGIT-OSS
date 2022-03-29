@@ -197,7 +197,7 @@ export const FormComposer = (props) => {
                 <Fragment>
                   <LabelFieldPair key={index}>
                     {!field.withoutLabel && (
-                      <CardLabel style={{ color:props.isSectionText ? "#505A5F":"",marginBottom: props.inline ? "8px" : "revert" }}>
+                      <CardLabel style={{ color:field.isSectionText ? "#505A5F":"",marginBottom: props.inline ? "8px" : "revert" }}>
                         {t(field.label)}
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
