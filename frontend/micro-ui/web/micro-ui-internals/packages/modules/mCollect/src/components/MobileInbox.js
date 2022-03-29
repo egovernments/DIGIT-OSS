@@ -64,6 +64,10 @@ const MobileInbox = ({
       mobileCell: (original) => GetMobCell(original?.dueDate === "NA" ? t("CS_NA") : convertEpochToDate(original?.dueDate)),
     },
     {
+      Header: t("UC_RECIEPT_NUMBER_LABEL"),
+      mobileCell: (original) => GetMobCell(original?.receiptNumber === null ? t("CS_NA") : original?.receiptNumber),
+    },
+    {
       Header: t("UC_TOTAL_AMOUNT"),
       mobileCell: (original) => GetMobCell(original?.["totalAmount"]),
     },

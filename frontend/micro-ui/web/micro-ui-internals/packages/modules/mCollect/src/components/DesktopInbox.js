@@ -77,9 +77,9 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, ...props }) => {
     {
       Header: t("UC_RECIEPT_NUMBER_LABEL"),
       Cell: ({ row }) => {
-        return row.original?.["recieptNumber"] ? GetCell(`${row.original?.["recieptNumber"]}`) : "-";
+        return row.original?.["receiptNumber"] ? GetCell(`${row.original?.["receiptNumber"]}`) : "-";
       },
-      mobileCell: (original) => GetMobCell(original?.["recieptNumber"]) || "-",
+      mobileCell: (original) => GetMobCell(original?.["receiptNumber"]) || "-",
     },
     {
       Header: t("UC_DUE_DATE"),
