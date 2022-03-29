@@ -18,6 +18,13 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
   );
   const { data: Menu, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType");
   Menu ? Menu.sort((a, b) => a.name.localeCompare(b.name)) : "";
+  if (Menu?.length > 0) {
+    Menu?.forEach((data, index) => {
+      if (data.code == "NONE") data.order = 0
+      else data.order = index + 1
+    });
+    Menu.sort(function (a, b) { return a.order - b.order; });
+  }
 
   const onSkip = () => onSelect();
 
