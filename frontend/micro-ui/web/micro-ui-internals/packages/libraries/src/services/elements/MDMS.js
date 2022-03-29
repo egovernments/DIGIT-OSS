@@ -858,6 +858,24 @@ const getFSMReceivedPaymentTypeCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getWSTaxHeadMasterCritera = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: "BillingService",
+        masterDetails: [
+          {
+            name: "TaxHeadMaster",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+})
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -1566,5 +1584,8 @@ export const MdmsService = {
 
   getFSMReceivedPaymentType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getFSMReceivedPaymentTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getWSTaxHeadMaster: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getWSTaxHeadMasterCritera(tenantId, moduleCode, type), moduleCode);
   },
 };
