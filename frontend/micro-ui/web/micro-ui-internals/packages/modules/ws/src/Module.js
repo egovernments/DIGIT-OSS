@@ -36,6 +36,7 @@ import WSActivationSupportingDocuments from "./pageComponents/WSActivationSuppor
 import WSDocumentsEmployee from "./pageComponents/WSDocumentsEmployee";
 import WSAcknowledgement from "./pages/citizen/WSCreate/WSAcknowledgement";
 import WSPayments from "./pages/citizen/MyPayment/WSPayments";
+import WSEditConnectionDetails from"./pageComponents/WSEditConnectionDetails";
 
 const WSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "ws";
@@ -127,6 +128,7 @@ const componentsToRegister = {
   WSSearchWaterConnection: SearchWaterConnection,
   WSAcknowledgement,
   WSPayments,
+  WSEditConnectionDetails
 };
 
 export const initWSComponents = () => {

@@ -111,6 +111,8 @@ export const convertEpochToDates = (dateEpoch) => {
 
 export const getPattern = type => {
   switch (type) {
+    case "WSOnlyNumbers":
+    return /^[0-9]*$/i;
     case "Name":
       return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i;
     case "MobileNo":
@@ -195,7 +197,7 @@ export const createPayloadOfWS = async (data) => {
     proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
     proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
     proposedToilets: data?.ConnectionDetails?.[0]?.proposedToilets && Number(data?.ConnectionDetails?.[0]?.proposedToilets),
-    connectionHolders: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
+    connectionHolders: !data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
       correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
       fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
       gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
@@ -496,4 +498,130 @@ export const checkForEmployee = (roles) => {
 export const getBusinessService = (data) => {
   if (data?.service == "WATER") return "WS.ONE_TIME_FEE"
   else return "SW.ONE_TIME_FEE"
+}
+
+export const convertApplicationData = (data, serviceType) => {
+
+  data?.propertyDetails?.owners?.forEach(owner => {
+    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
+  })
+
+  let ConnectionDetails = [{
+    water: serviceType === "WATER" ? true : false,
+    sewerage: serviceType === "WATER" ? false : true,
+    applicationNo: data?.applicationData?.applicationNo,
+    serviceName: serviceType,
+    proposedTaps: Number(data?.applicationData?.proposedTaps) || "",
+    proposedPipeSize: data?.applicationData?.proposedPipeSize ? {
+      i18nKey : data?.applicationData?.proposedPipeSize,
+      code: data?.applicationData?.proposedPipeSize,
+      size: data?.applicationData?.proposedPipeSize
+    } : "",
+    proposedToilets: data?.applicationData?.noOfToilets || "",
+    proposedWaterClosets: data?.applicationData?.noOfWaterClosets || ""
+  }];
+
+
+  const ConnectionHolderDetails = data?.applicationData?.connectionHolders?.length > 0 ? [{
+    sameAsOwnerDetails: false,
+    name: data?.applicationData?.connectionHolders?.[0]?.name || "",
+    mobileNumber: data?.applicationData?.connectionHolders?.[0]?.mobileNumber || "",
+    guardian: data?.applicationData?.connectionHolders?.[0]?.fatherOrHusbandName || "",
+    address: data?.applicationData?.connectionHolders?.[0]?.correspondenceAddress || "",
+    gender: data?.applicationData?.connectionHolders?.[0]?.gender ? {
+      code: data?.applicationData?.connectionHolders?.[0]?.gender,
+      i18nKey : data?.applicationData?.connectionHolders?.[0]?.gender,
+    } : "",
+    relationship: data?.applicationData?.connectionHolders?.[0]?.relationship ?  {
+      code: data?.applicationData?.connectionHolders?.[0]?.relationship,
+      i18nKey: data?.applicationData?.connectionHolders?.[0]?.relationship
+    } : "",
+    ownerType: data?.applicationData?.connectionHolders?.[0]?.ownerType ? {
+      code: data?.applicationData?.connectionHolders?.[0]?.ownerType,
+      i18nKey: data?.applicationData?.connectionHolders?.[0]?.ownerType
+    } : "",
+
+    documentId: "",
+    documentType: "",
+    file: "",
+  }] : [{
+    sameAsOwnerDetails: true,
+    name: "",
+    gender: "",
+    mobileNumber: "",
+    guardian: "",
+    relationship: "",
+    address: "",
+    ownerType: "",
+    documentId: "",
+    documentType: "",
+    file: "",
+  }];
+
+  let documents = [];
+  if (data?.applicationData?.documents) {
+    data.applicationData.documents.forEach(data => {
+      documents.push({
+        active: true,
+        code: data?.documentType,
+        i18nKey: data?.documentType?.replaceAll('.', '_'),
+        documentType: data?.documentType,
+        id: data.id,
+        documentUid: data?.documentUid,
+        fileStoreId: data?.fileStoreId
+      })
+    })
+  }
+  let DocumentsRequired = {
+    documents : documents
+  } || [];
+
+  let cpt = {};
+  cpt["details"] = data?.propertyDetails || {};
+
+  let payload = {
+    ConnectionDetails: ConnectionDetails,
+    ConnectionHolderDetails: ConnectionHolderDetails,
+    DocumentsRequired: DocumentsRequired,
+    cpt: cpt,
+    InfoLabel: "InfoLabel"
+  }
+
+  sessionStorage.setItem("Digit.PT_CREATE_EMP_WS_NEW_FORM", JSON.stringify(payload));
+  sessionStorage.setItem("WS_EDIT_APPLICATION_DETAILS", JSON.stringify(data));
+
+  return payload;
+}
+
+export const convertEditApplicationDetails = async (data, appData) => {
+
+  data?.cpt?.details?.owners?.forEach(owner => {
+    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
+  });
+
+  let payload = {
+    ...appData.applicationData,
+    proposedTaps: data?.ConnectionDetails?.[0]?.proposedTaps && Number(data?.ConnectionDetails?.[0]?.proposedTaps),
+    proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
+    proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
+    proposedToilets: data?.ConnectionDetails?.[0]?.proposedToilets && Number(data?.ConnectionDetails?.[0]?.proposedToilets),
+    connectionHolders: !data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
+      correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
+      fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
+      gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
+      mobileNumber: data?.ConnectionHolderDetails?.[0]?.mobileNumber || "",
+      name: data?.ConnectionHolderDetails?.[0]?.name || "",
+      ownerType: data?.ConnectionHolderDetails?.[0]?.ownerType?.code || "",
+      relationship: data?.ConnectionHolderDetails?.[0]?.relationship?.code || "",
+      sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
+    }] : null,
+    property: data?.cpt?.details,
+    processInstance: {
+      action: "RESUBMIT_APPLICATION"
+    },
+    action: "RESUBMIT_APPLICATION",
+    documents: data?.DocumentsRequired?.documents,
+  }
+
+  return payload;
 }

@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 
 const WSActivationSupportingDocuments = ({ t, config, userType, formData, onSelect }) => {
     const stateId = Digit.ULBService.getStateId();
+    const tenantIdCode = Digit.ULBService.getCurrentTenantId();
     const [documents, setDocuments] = useState(formData?.supportingDocuments?.[0] ? [formData?.supportingDocuments?.[0]] : []);
     const [error, setError] = useState(null);
     const [uploadedFile, setUploadedFile] = useState(null);
@@ -35,7 +36,7 @@ const WSActivationSupportingDocuments = ({ t, config, userType, formData, onSele
                     setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
                 } else {
                     try {
-                        const response = await Digit.UploadServices.Filestorage("WS", file, stateId);
+                        const response = await Digit.UploadServices.Filestorage("WS", file, tenantIdCode);
                         if (response?.data?.files?.length > 0) {
                             setUploadedFile(response?.data?.files[0]?.fileStoreId);
                         } else {

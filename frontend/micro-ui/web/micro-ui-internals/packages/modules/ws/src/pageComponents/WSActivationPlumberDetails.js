@@ -139,7 +139,7 @@ const PlumberDetails = (_props) => {
             <div style={{ marginBottom: "16px" }}>
                 <div>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")}*:`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")}*:`}</CardLabel>
                         <Controller
                             control={control}
                             name={"detailsProvidedBy"}
@@ -186,8 +186,8 @@ const PlumberDetails = (_props) => {
                                         control={control}
                                         name="plumberLicenseNo"
                                         defaultValue={plumberDetail?.plumberLicenseNo}
-                                        rules={{ required: t("REQUIRED_FIELD") }}
-                                        // rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) , required: t("REQUIRED_FIELD")}}
+                                        // rules={{ required: t("REQUIRED_FIELD") }}
+                                        rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) , required: t("REQUIRED_FIELD")}}
                                         isMandatory={true}
                                         render={(props) => (
                                             <TextInput
@@ -213,8 +213,8 @@ const PlumberDetails = (_props) => {
                                         control={control}
                                         name="plumberName"
                                         defaultValue={plumberDetail?.plumberName}
-                                        rules={{ required: t("REQUIRED_FIELD") }}
-                                        // rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                                        // rules={{ required: t("REQUIRED_FIELD") }}
+                                        rules={{ validate: (e) => ((e && getPattern("Name").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                         isMandatory={true}
                                         render={(props) => (
                                             <TextInput
@@ -240,8 +240,8 @@ const PlumberDetails = (_props) => {
                                         control={control}
                                         name="plumberMobileNo"
                                         defaultValue={plumberDetail?.plumberMobileNo}
-                                        rules={{ required: t("REQUIRED_FIELD") }}
-                                        // rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                                        // rules={{ required: t("REQUIRED_FIELD") }}
+                                        rules={{ validate: (e) => ((e && getPattern("MobileNo").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                         type="mobileNumber"
                                         isMandatory={true}
                                         render={(props) => (

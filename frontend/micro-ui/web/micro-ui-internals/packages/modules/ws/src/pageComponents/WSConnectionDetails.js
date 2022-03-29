@@ -59,6 +59,12 @@ const WSConnectionDetails = ({ config, onSelect, userType, formData, setError, f
     if (connectionDetails?.[0]?.sewerage) setWaterSewarageSelection({ water: false, sewerage: true })
   }, [connectionDetails]);
 
+  useEffect(() => {
+    if (!formData?.ConnectionDetails) {
+      setConnectionDetails([createConnectionDetails()]);
+    }
+  }, [formData?.ConnectionDetails]);
+
   if (isWSServicesCalculationLoading) return <Loader />
 
   const commonProps = {
@@ -76,7 +82,8 @@ const WSConnectionDetails = ({ config, onSelect, userType, formData, setError, f
     isErrors,
     pipeSizeList,
     wsServicesCalculationData,
-    waterSewarageSelection
+    waterSewarageSelection,
+    formData
   };
 
   return (
@@ -105,7 +112,8 @@ const ConnectionDetails = (_props) => {
     wsServicesCalculationData,
     pipeSizeList,
     connectionDetails,
-    waterSewarageSelection
+    waterSewarageSelection,
+    formData
   } = _props;
 
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
@@ -156,7 +164,7 @@ const ConnectionDetails = (_props) => {
       clearErrors(config.key, { type: "proposedTaps" })
     }
     trigger();
-  }, [connectionDetails, waterSewarageSelection]);
+  }, [connectionDetails, waterSewarageSelection, formData?.DocumentsRequired?.documents]);
 
 
   useEffect(() => {
@@ -234,7 +242,7 @@ const ConnectionDetails = (_props) => {
                   control={control}
                   name="proposedTaps"
                   defaultValue={connectionDetail?.proposedTaps}
-                  rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                  rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                   type="number"
                   isMandatory={true}
                   render={(props) => (
@@ -292,7 +300,7 @@ const ConnectionDetails = (_props) => {
                   control={control}
                   name="proposedWaterClosets"
                   defaultValue={connectionDetail?.proposedWaterClosets}
-                  rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                  rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                   type="number"
                   isMandatory={true}
                   render={(props) => (
@@ -320,7 +328,7 @@ const ConnectionDetails = (_props) => {
                   control={control}
                   name="proposedToilets"
                   defaultValue={connectionDetail?.proposedToilets}
-                  rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                  rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                   type="number"
                   isMandatory={true}
                   render={(props) => (

@@ -14,6 +14,7 @@ import WSResponse from "./WSResponse";
 // import SearchResultsComponent from "./SearchResults";
 import Search from "./search";
 import SearchWater from "./SearchWater";
+import EditApplication from "./EditApplication";
 
 const App = ({ path }) => {
   const { t } = useTranslation();
@@ -23,6 +24,7 @@ const App = ({ path }) => {
       <Switch>
         <PrivateRoute path={`${path}/create-application`} component={WSDocsRequired} />
         <PrivateRoute path={`${path}/new-application`} component={NewApplication} />
+        <PrivateRoute path={`${path}/edit-application`} component={EditApplication} />
         <PrivateRoute path={`${path}/application-details`} component={ApplicationDetails} />
         <PrivateRoute path={`${path}/connection-details`} component={GetConnectionDetails} />
         <PrivateRoute path={`${path}/bill-amendment`} component={() => <ApplicationBillAmendment {...{ path }} />} />

@@ -206,7 +206,7 @@ const ConnectionDetails = (_props) => {
                 <div>
                     {filters?.service === "WATER" ? <div>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_TYPE")}*:`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_TYPE")}*:`}</CardLabel>
                             <Controller
                                 control={control}
                                 name={"connectionType"}
@@ -325,7 +325,7 @@ const ConnectionDetails = (_props) => {
                                     control={control}
                                     name="noOfTaps"
                                     defaultValue={connectionDetail?.noOfTaps}
-                                    rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                                    rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                     type="number"
                                     isMandatory={true}
                                     render={(props) => (
@@ -355,7 +355,7 @@ const ConnectionDetails = (_props) => {
                                         control={control}
                                         name="noOfWaterClosets"
                                         defaultValue={connectionDetail?.noOfWaterClosets}
-                                        rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                                        rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                         type="number"
                                         isMandatory={true}
                                         render={(props) => (
@@ -383,7 +383,7 @@ const ConnectionDetails = (_props) => {
                                         control={control}
                                         name="noOfToilets"
                                         defaultValue={connectionDetail?.noOfToilets}
-                                        rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                                        rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                         type="number"
                                         isMandatory={true}
                                         render={(props) => (

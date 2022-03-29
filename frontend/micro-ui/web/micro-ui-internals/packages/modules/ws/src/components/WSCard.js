@@ -10,6 +10,7 @@ const WSCard = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
+  sessionStorage.removeItem("IsDetailsExists");
 
   let links = [
      
@@ -21,7 +22,7 @@ const WSCard = () => {
       label: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
       link: `/digit-ui/employee/ws/create-application`,
       roles: ["WS_CEMP", "SW_CEMP"]
-    },
+    }
 
   ];
 

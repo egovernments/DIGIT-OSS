@@ -27,6 +27,9 @@ const ApplicationDetails = () => {
     let filters = func.getQueryStringParams(location.search);
     const applicationNumber = filters?.applicationNumber;
     const serviceType = filters?.service;
+    
+    sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
+    sessionStorage.removeItem("IsDetailsExists");
 
     const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, applicationNumber, serviceType);
 
@@ -55,17 +58,26 @@ const ApplicationDetails = () => {
     workflowDetails?.data?.actionState?.nextActions?.forEach(action => {
         if (action?.action === "ACTIVATE_CONNECTION") {
             action.redirectionUrll = {
-                action: action?.action,
+                action: "ACTIVATE_CONNECTION",
                 pathname: `/digit-ui/employee/ws/activate-connection?applicationNumber=${applicationNumber}&service=${serviceType}&action=ACTIVATE_CONNECTION`,
                 state: applicationDetails?.applicationData
             }
         }
+        if (action?.action === "RESUBMIT_APPLICATION") {
+          action.redirectionUrll = {
+              action: "ACTIVATE_CONNECTION",
+              pathname: `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`,
+              state: applicationDetails
+          }
+      }
     });
 
   if (
     workflowDetails?.data?.nextActions?.length > 0 &&
     workflowDetails?.data?.actionState?.nextActions?.length > 0 &&
-    !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "EDIT")
+    !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "EDIT") &&
+    !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "RESUBMIT_APPLICATION") && 
+    !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "ACTIVATE_CONNECTION")
   ) {
     workflowDetails?.data?.nextActions?.forEach(data => {
       if (data.action == "EDIT") workflowDetails.data.actionState.nextActions.push(data);
