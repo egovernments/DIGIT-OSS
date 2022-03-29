@@ -196,6 +196,7 @@ import useBillSearch from "./bills/useBillSearch";
 import useWaterCreateAPI from "./ws/useWaterCreateAPI";
 import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
 import useCreateBillAmendment from "./ws/useCreateBillAmendment";
+import useWSApplicationDetailsBillAmendment from "./ws/useWSApplicationDetailsBillAmendment";
 
 const pgr = {
   useComplaintDetails,
@@ -393,7 +394,8 @@ const ws = {
   useMDMS: useWSMDMS,
   useWaterCreateAPI,
   useSewerageCreateAPI,
-  useCreateBillAmendment
+  useCreateBillAmendment,
+  useWSApplicationDetailsBillAmendment,
 };
 
 
