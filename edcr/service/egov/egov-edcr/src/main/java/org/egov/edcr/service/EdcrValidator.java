@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class EdcrValidator {
     private static Logger LOG = Logger.getLogger(EdcrValidator.class);
     private static final String INVALID_VAL = "The %s value is invalid";
-    private static final String ALPHANUMERIC_WITH_SPECIAL_CHARS = "^[a-zA-Z]+(([ _\\-&:,/.][a-zA-Z])?[a-zA-Z]*)*$";
+    private static final String ALPHANUMERIC_WITH_SPECIAL_CHARS = "^[a-zA-Z0-9]+(([ _\\-&:,/.][a-zA-Z0-9])?[a-zA-Z0-9]*)*$";
     private static final String NUMERIC_CHARS = "[a-zA-Z]";
     private static final String INVALID_CHAR_MSG = " _-&:,/.";
     private static final String INVALID_CHAR = "The (%s) contains invalid value. Only following special characters are allowed %s, The String should not start with special characters and should not follow two immediately.";
