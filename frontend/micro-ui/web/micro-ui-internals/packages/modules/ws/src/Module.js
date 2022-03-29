@@ -23,7 +23,8 @@ import WSPropertyDetails from "./pageComponents/WSPropertyDetails";
 import WSConnectionHolderDetails from "./pageComponents/WSConnectionHolderDetails";
 
 import SearchApplication from "./components/SearchApplication";
-import WSCard from './components/WSCard';
+import SearchWaterConnection from "./components/SearchWaterConnection";
+import WSCard from "./components/WSCard";
 import MyConnections from "./pages/citizen/MyConnection";
 import ConnectionDetails from "./pages/citizen/MyConnection/ConnectionDetails";
 
@@ -112,8 +113,8 @@ const componentsToRegister = {
   WSRoadCuttingDetails,
   WSPropertyDetails,
   WSConnectionHolderDetails,
-  WSSearch:Search,
-  WSSearchApplication:SearchApplication,
+  WSSearch: Search,
+  WSSearchApplication: SearchApplication,
   MyConnections,
   ConnectionDetails,
   WSActivationConnectionDetails,
@@ -123,6 +124,7 @@ const componentsToRegister = {
   WSActivationSupportingDocuments,
   WSCard,
   WSDocumentsEmployee,
+  WSSearchWaterConnection: SearchWaterConnection,
   WSAcknowledgement,
   WSPayments,
 };
