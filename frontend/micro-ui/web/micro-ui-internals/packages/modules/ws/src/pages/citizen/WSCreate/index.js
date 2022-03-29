@@ -25,6 +25,7 @@ const WSCreate = () => {
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("WS_CREATE", state?.edcrNumber ? { data: { scrutinyNumber: { edcrNumber: state?.edcrNumber } } } : {});
 
   const CheckPage = Digit?.ComponentRegistryService?.getComponent('WSCheckPage') ;
+  const Acknowledgement = Digit?.ComponentRegistryService?.getComponent('WSAcknowledgement') ;
 
   const stateId = Digit.ULBService.getStateId();
   let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
@@ -88,9 +89,9 @@ const WSCreate = () => {
       <Route path={`${getPath(match.path, match.params)}/check`}>
         <CheckPage onSubmit={createApplication} value={params} />
       </Route>
-      {/*<Route path={`${getPath(match.path, match.params)}/acknowledgement`}>
-        <OBPSAcknowledgement data={params} onSuccess={onSuccess} />
-      </Route> */}
+      <Route path={`${getPath(match.path, match.params)}/acknowledgement`}>
+        <Acknowledgement data={params} onSuccess={onSuccess} clearParams={clearParams} />
+      </Route>
       <Route>
         <Redirect to={`${getPath(match.path, match.params)}/${config.indexRoute}`} />
       </Route>

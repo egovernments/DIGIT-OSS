@@ -728,4 +728,63 @@ public class BPAService {
         
         }
         
+        public List<BPA> plainSearch(BPASearchCriteria criteria, RequestInfo requestInfo) {
+    		List<BPA> bpas = new LinkedList<>();
+    		bpaValidator.validateSearch(requestInfo, criteria);
+    		LandSearchCriteria landcriteria = new LandSearchCriteria();
+    		List<String> edcrNos = null;
+
+    		List<String> roles = new ArrayList<>();
+    		for (Role role : requestInfo.getUserInfo().getRoles()) {
+    			roles.add(role.getCode());
+    		}
+
+    		bpas = getBPAFromCriteriaForPlainSearch(criteria, requestInfo, edcrNos);
+    		ArrayList<String> landIds = new ArrayList<>();
+    		if (!bpas.isEmpty()) {	
+    			for (int i = 0; i < bpas.size(); i++) {
+    				landIds.add(bpas.get(i).getLandId());
+    			}
+    			landcriteria.setIds(landIds);
+    			landcriteria.setTenantId(criteria.getTenantId());
+    			ArrayList<LandInfo> landInfos = landService.searchLandInfoToBPAForPlaneSearch(requestInfo, landcriteria);
+
+    			this.populateLandToBPAForPlainSearch(bpas, landInfos,requestInfo);
+    		}
+
+
+    		return bpas;
+    	}
+    	
+    	public List<BPA> getBPAFromCriteriaForPlainSearch(BPASearchCriteria criteria, RequestInfo requestInfo, List<String> edcrNos) {
+    		List<BPA> bpa = repository.getBPADataForPlainSearch(criteria, edcrNos);
+    		if (bpa.isEmpty())
+    			return Collections.emptyList();
+    		return bpa;
+    	}
+    	
+    	private void populateLandToBPAForPlainSearch(List<BPA> bpas, List<LandInfo> landInfos, RequestInfo requestInfo) {
+    		for (int i = 0; i < bpas.size(); i++) {
+    			for (int j = 0; j < landInfos.size(); j++) {
+    				if (landInfos.get(j).getId().equalsIgnoreCase(bpas.get(i).getLandId())) {
+    					bpas.get(i).setLandInfo(landInfos.get(j));
+    				}
+    			}
+    			if(bpas.get(i).getLandId() != null && bpas.get(i).getLandInfo() == null) {
+    				LandSearchCriteria missingLandcriteria = new LandSearchCriteria();
+    				List<String> missingLandIds = new ArrayList<>();
+    				missingLandIds.add(bpas.get(i).getLandId());
+    				missingLandcriteria.setTenantId(bpas.get(i).getTenantId());
+    				missingLandcriteria.setIds(missingLandIds);
+    				log.debug("Call with land ids to Land::" + missingLandcriteria.getTenantId() + missingLandcriteria.getIds());
+    				List<LandInfo> newLandInfo = landService.searchLandInfoToBPAForPlaneSearch(requestInfo, missingLandcriteria);
+    				for (int j = 0; j < newLandInfo.size(); j++) {
+    					if (newLandInfo.get(j).getId().equalsIgnoreCase(bpas.get(i).getLandId())) {
+    						bpas.get(i).setLandInfo(newLandInfo.get(j));
+    					}
+    				}
+    			}
+    		}
+    	}
+        
 }

@@ -81,7 +81,11 @@ const Response = ({ data, onSuccess }) => {
               additionalDetails: {},
             },
           },
-          pitDetail,
+          pitDetail: {
+            additionalDetails: {
+              fileStoreId: pitDetail?.images
+            }
+          },
           source,
           sanitationtype: pitType?.code,
           paymentPreference: selectPaymentPreference ? selectPaymentPreference.code : 'POST_PAY',

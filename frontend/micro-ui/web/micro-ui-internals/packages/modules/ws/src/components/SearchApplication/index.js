@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import SearchFields from './SearchFields';
 import { useTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
-
+import MobileSearchApplication from './MobileSearchApplication'
 const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk }) => {
   const replaceUnderscore = (str) => {
     str = str.replace(/_/g, " ");
@@ -49,6 +49,12 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk }) => {
     handleSubmit(onSubmit)()
   }
 
+    const isMobile = window.Digit.Utils.browser.isMobile();
+
+    if (isMobile) {
+      return <MobileSearchApplication {...{ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit }}/>
+    }
+
 
   //need to get from workflow
   const GetCell = (value) => <span className="cell-text">{value}</span>;
@@ -80,7 +86,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk }) => {
         return (
           <div>
             <span className="link">
-              <Link to={`/digit-ui/employee/ws/application-details/${row.original["applicationNo"]}/${tenantId}/${service}`}>
+              <Link to={`/digit-ui/employee/ws/application-details?applicationNumber=${row.original["applicationNo"]}&tenantId=${tenantId}&service=${service}`}>
                 {row.original["applicationNo"]}
               </Link>
             </span>

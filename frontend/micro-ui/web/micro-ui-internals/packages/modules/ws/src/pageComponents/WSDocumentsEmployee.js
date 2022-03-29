@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
-  const [documents, setDocuments] = useState(formData?.documents?.documents || []);
+  const [documents, setDocuments] = useState(formData?.DocumentsRequired?.documents || []);
   const [error, setError] = useState(null);
 
   let action = "create";
@@ -87,7 +87,7 @@ function SelectDocument({
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [selectedDocument, setSelectedDocument] = useState(
     filteredDocument
-      ? { ...filteredDocument, active: filteredDocument?.status === "ACTIVE", code: filteredDocument?.documentType }
+      ? { ...filteredDocument, code: filteredDocument?.documentType }
       : doc?.dropdownData?.length === 1
         ? doc?.dropdownData[0]
         : {}
@@ -143,6 +143,7 @@ function SelectDocument({
             documentType: selectedDocument?.code,
             fileStoreId: uploadedFile,
             documentUid: uploadedFile,
+            i18nKey: selectedDocument?.code
           },
         ];
       });

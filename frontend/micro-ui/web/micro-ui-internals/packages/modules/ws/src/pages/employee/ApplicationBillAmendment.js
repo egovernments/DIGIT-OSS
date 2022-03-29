@@ -15,7 +15,6 @@ const ApplicationBillAmendment = () => {
 	const { data, isFetched } = Digit.Hooks.fsm.useMDMS(stateId, "DIGIT-UI", "WSTaxHeadMaster");
 	const availableBillAmendmentTaxHeads = data?.BillingService?.TaxHeadMaster?.filter(w=>w.IsBillamend)
 	const billSearchData =  preBillSearchData?.filter( e => availableBillAmendmentTaxHeads.find(taxHeadMaster => taxHeadMaster.code === e.taxHeadCode))
-	debugger
 	
 	const { register, control, watch, setValue, unregister, handleSubmit, formState:{ errors }, ...methods } = useForm()
 	const amendmentReason = watch("amendmentReason");

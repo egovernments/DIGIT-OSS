@@ -31,8 +31,8 @@ export const WSService = {
       setTimeParam: false,
       params: { tenantId, ...filters },
     }),
-    WSWatersearch: ({ tenantId, filters }) =>
-     Request({
+  WSWatersearch: ({ tenantId, filters }) =>
+    Request({
       url: Urls.ws.water_search,
       useCache: false,
       method: "POST",
@@ -40,8 +40,8 @@ export const WSService = {
       userService: false,
       params: { tenantId, ...filters },
     }),
-    WSSewsearch: ({ tenantId, filters }) =>
-     Request({
+  WSSewsearch: ({ tenantId, filters }) =>
+    Request({
       url: Urls.ws.sewarage_search,
       useCache: false,
       method: "POST",
@@ -49,7 +49,6 @@ export const WSService = {
       userService: false,
       params: { tenantId, ...filters },
     }),
-    
   update: (details, businessService) =>
     Request({
       url: businessService === "WATER" ? Urls.ws.water_update : Urls.ws.sewarage_update,
@@ -61,14 +60,15 @@ export const WSService = {
       params: {},
       auth: true,
     }),
-  wsCalculationEstimate: (details, tenantId) =>
+  wsCalculationEstimate: (details, businessService) =>
     Request({
-      url: Urls.ws.ws_calculation_estimate,
+      url: businessService === "WS" ? Urls.ws.ws_calculation_estimate : Urls.ws.sw_calculation_estimate,
       data: details,
       useCache: false,
+      setTimeParam: false,
       userService: true,
       method: "POST",
-      params: { tenantId },
+      params: {},
       auth: true,
     }),
   consumptionSearch: ({ tenantId, filters, auth, businessService }) =>
@@ -80,5 +80,13 @@ export const WSService = {
       params: { tenantId, ...filters },
       auth: true,
     }),
-  
+  paymentsearch: ({ tenantId, filters, auth, BusinessService }) =>
+    Request({
+      url: BusinessService === "WS" ? Urls.ws.ws_payment_search : Urls.ws.sw_payment_search,
+      useCache: false,
+      method: "POST",
+      auth: auth === false ? auth : true,
+      userService: auth === false ? auth : true,
+      params: { tenantId, ...filters },
+    }),
 };

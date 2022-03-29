@@ -13,6 +13,7 @@ import WSAdditionalDetails from "./WSMyApplications/additionalDetails";
 import MyConnections from "./MyConnection";
 import ConnectionDetails from "./MyConnection/ConnectionDetails";
 import consumptionDetails from "./MyConnection/ConsumptionDetails";
+import WSMyPayments from "./MyPayment";
 
 const App = ({ path }) => {
   const location = useLocation();
@@ -23,11 +24,12 @@ const App = ({ path }) => {
       <Switch>
         <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
         <Route path={`${path}/search`} component={SearchConnectionComponent} />
-        <Route path={`${path}/wns-my-bills`} component={WNSMyBillsComponent} />
+        <Route path={`${path}/my-bills`} component={WNSMyBillsComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} />
         <Route path={`${path}/test-acknowledgment`} component={TestAcknowledgment} />
-        <PrivateRoute path={`${path}/my-application`} component={WSMyApplications} />
-        <PrivateRoute path={`${path}/my-connection`} component={MyConnections} />
+        <PrivateRoute path={`${path}/my-payments`} component={WSMyPayments} />
+        <PrivateRoute path={`${path}/my-applications`} component={WSMyApplications} />
+        <PrivateRoute path={`${path}/my-connections`} component={MyConnections} />
         <PrivateRoute path={`${path}/connection/application/:acknowledgementIds`} component={WSApplicationDetails} />
         <PrivateRoute path={`${path}/connection/additional/:acknowledgementIds`} component={WSAdditionalDetails} />
         <PrivateRoute path={`${path}/connection/details/:acknowledgementIds`} component={ConnectionDetails} />

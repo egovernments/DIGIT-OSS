@@ -10,8 +10,7 @@ const createPlumberDetails = () => ([{
     plumberName: "",
     plumberMobileNo: "",
     plumberLicenseNo: "",
-    detailsProvidedBy: "",
-    key: Date.now(),
+    detailsProvidedBy: ""
 }]);
 
 
@@ -32,7 +31,6 @@ const WSActivationPlumberDetails = ({ config, onSelect, userType, formData, setE
         const data = plumberDetails.map((e) => {
             return e;
         });
-        if (data?.[0]) data[0].key = Date.now()
         onSelect(config?.key, data);
     }, [plumberDetails, formData?.connectionDetails?.[0]?.connectionType]);
 
@@ -90,11 +88,19 @@ const PlumberDetails = (_props) => {
     const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
     const formValue = watch();
     const { errors } = localFormState;
-    const isMobile = window.Digit.Utils.browser.isMobile();
 
     useEffect(() => {
         trigger();
     }, []);
+
+    useEffect(() => {
+        // if (plumberDetails?.[0]?.detailsProvidedBy !== "Self") {
+        //   clearErrors("PlumberDetails");
+        // } else {
+        //   trigger();
+        // }
+        trigger();
+      }, [plumberDetails?.[0]?.detailsProvidedBy]);
 
     useEffect(() => {
         if (Object.entries(formValue).length > 0) {
@@ -115,7 +121,7 @@ const PlumberDetails = (_props) => {
                 trigger();
             }
         }
-    }, [formValue]);
+    }, [formValue, plumberDetails]);
 
 
     useEffect(() => {
@@ -154,12 +160,11 @@ const PlumberDetails = (_props) => {
                                                 detailsProvidedBy: e,
                                                 plumberName: "",
                                                 plumberMobileNo: "",
-                                                plumberLicenseNo: "",
-                                                key: Date.now()
+                                                plumberLicenseNo: ""
                                             }
                                             setPlumberDetails([obj])
                                         } else {
-                                            let obj = { detailsProvidedBy: e, key: Date.now() }
+                                            let obj = { detailsProvidedBy: e }
                                             setPlumberDetails([obj])
                                         }
                                         props.onChange(e);
@@ -172,7 +177,7 @@ const PlumberDetails = (_props) => {
                         />
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.detailsProvidedBy ? errors?.detailsProvidedBy?.message : ""}</CardLabelError>
-                    {plumberDetail?.detailsProvidedBy?.code == "ULB" ?
+                    {!plumberDetail?.detailsProvidedBy?.code || plumberDetail?.detailsProvidedBy?.code == "ULB" ?
                         <div>
                             <LabelFieldPair>
                                 <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PLIMBER_LICENSE_NO_LABEL")}*:`}</CardLabel>

@@ -16,6 +16,9 @@ import org.egov.echallan.model.RequestInfoWrapper;
 import org.egov.echallan.model.SearchCriteria;
 import org.egov.echallan.service.ChallanService;
 import org.egov.echallan.util.ResponseInfoFactory;
+import org.egov.echallan.producer.Producer;
+
+import org.egov.echallan.web.models.collection.PaymentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +34,9 @@ public class ChallanController {
 
 	@Autowired
 	private ResponseInfoFactory responseInfoFactory;
+
+	@Autowired
+	private Producer producer;
 
 	@PostMapping("/_create")
 	public ResponseEntity<ChallanResponse> create(@Valid @RequestBody ChallanRequest challanRequest) {
@@ -71,6 +77,10 @@ public class ChallanController {
 		response = challanService.getChallanCountResponse(requestInfo,tenantId);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
-	
 
+	@PostMapping("/_test")
+	public ResponseEntity test( @RequestBody ChallanRequest challanRequest){
+		producer.push("update-challan",challanRequest);
+		return new ResponseEntity(HttpStatus.OK);
+	}
 }

@@ -15,6 +15,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const inboxInitialState = {
     searchParams: {},
   };
+
   const { isLoading, data: generateServiceType } = Digit.Hooks.useCommonMDMS(tenantId, "BillingService", "BillsGenieKey");
 
   const filterServiceType = generateServiceType?.BillingService?.BusinessService?.filter((element) => element.billGineiURL);
@@ -44,7 +45,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           />
           <PrivateRoute
             path={`${path}/group-bill`}
-            component={() => <GroupBillInbox parentRoute={path} filterComponent="BILLS_GROUP_FILTER" initialStates={{}} isInbox={true} />}
+            component={() => <GroupBillInbox parentRoute={path} filterComponent="BILLS_GROUP_FILTER" initialStates={{}} isInbox={true} keys={generateServiceType?.["common-masters"]?.uiCommonPay} />}
           />
         </div>
       </React.Fragment>

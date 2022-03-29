@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast, Card, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useHistory, useParams, useRouteMatch } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch, useLocation } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { useCashPaymentDetails } from "./ManualReciept";
 import { useCardPaymentDetails } from "./card";
@@ -17,8 +17,10 @@ export const CollectPayment = (props) => {
   const queryClient = useQueryClient();
 
   const { path: currentPath } = useRouteMatch();
-  const { consumerCode, businessService } = useParams();
+  let { consumerCode, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const search = useLocation().search;
+  if (window.location.href.includes("ISWSAPP")) consumerCode = new URLSearchParams(search).get("applicationNumber");
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 

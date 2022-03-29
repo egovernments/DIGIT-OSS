@@ -186,6 +186,7 @@ import useWSMDMSWS from "./ws/useWSMDMSWS"
 import WSuseSearch from "./ws/useSearch";
 import useSewSearch from "./ws/useSewSearch"
 import useSearchWS from "./ws/useSearchWS"
+import useMypaymentWS from "./ws/useMypaymentWS";
 import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions";
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
@@ -195,6 +196,7 @@ import useConnectionDetail from "./ws/useConnectionDetail";
 import useBillSearch from "./bills/useBillSearch";
 import useWaterCreateAPI from "./ws/useWaterCreateAPI";
 import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
+import useWSUpdateAPI from "./ws/useWSUpdateAPI";
 import useCreateBillAmendment from "./ws/useCreateBillAmendment";
 import useWSApplicationDetailsBillAmendment from "./ws/useWSApplicationDetailsBillAmendment";
 
@@ -394,6 +396,9 @@ const ws = {
   useMDMS: useWSMDMS,
   useWaterCreateAPI,
   useSewerageCreateAPI,
+  useWSUpdateAPI,
+  useMypaymentWS,
+  useCreateBillAmendment,
   useCreateBillAmendment,
   useWSApplicationDetailsBillAmendment,
 };

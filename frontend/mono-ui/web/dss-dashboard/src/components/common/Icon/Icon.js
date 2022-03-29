@@ -36,6 +36,7 @@ class Icon extends React.Component {
             case 'dss_trade_licence':
                 return <SVG src={TradeIcon} fill="white" className={classes.icon} style={{ width: '54px', height: '54px' }}></SVG>
             case 'complains':
+            case 'dss_pgr_overview':
             case 'dss_complains':
                 return <SVG src={ComplaintsIcon} fill="white" className={classes.icon} style={{ width: '54px', height: '54px' }}></SVG>
             case 'water sewerage':
@@ -49,9 +50,11 @@ class Icon extends React.Component {
                 return <SVG src={Mcollect} fill="white" className={classes.icon} style={{ width: '54px', height: '54px' }}></SVG>
             case 'fire noc dashboard':
             case 'fire noc dashboard':
+            case 'dss_firenoc_overview':
                 return <SVG src={FireNoc} fill="white" className={classes.icon} style={{ width: '54px', height: '54px' }}></SVG>
             case 'obps dashboard':
             case 'obps dashboard':
+            case 'dss_obps_overview':
                 return <SVG src={OBPS} fill="white" className={classes.icon} style={{ width: '54px', height: '54px' }}></SVG>
             case 'nurt_overview':
                 return <SVG src={DashBoardIcon} fill="white" className={classes.icon} style={{ width: '54px', height: '54px', color: 'white' }}></SVG>

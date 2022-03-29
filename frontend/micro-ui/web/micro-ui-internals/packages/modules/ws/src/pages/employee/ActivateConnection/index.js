@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useHistory } from "react-router-dom";
 import { newConfig as newConfigLocal } from "../../../config/wsActivationConfig";
-import { stringReplaceAll, convertDateToEpoch } from "../../../utils";
+import { stringReplaceAll, convertDateToEpoch, convertEpochToDates } from "../../../utils";
 import * as func from "../../../utils";
 import _ from "lodash";
 
@@ -64,11 +64,11 @@ const ActivateConnection = () => {
 
     const activationDetails = state?.data?.connectionType?.toUpperCase() === "METERED" ? [{
         meterId: state?.data?.meterId || "",
-        meterInstallationDate: state?.data?.meterInstallationDate ? Digit.DateUtils.ConvertEpochToDate(state?.data?.meterInstallationDate) : null,
+        meterInstallationDate: state?.data?.meterInstallationDate ? convertEpochToDates(state?.data?.meterInstallationDate) : null,
         meterInitialReading: state?.data?.additionalDetails?.initialMeterReading || "",
-        connectionExecutionDate: state?.data?.connectionExecutionDate ? Digit.DateUtils.ConvertEpochToDate(state?.data?.connectionExecutionDate) : null,
+        connectionExecutionDate: state?.data?.connectionExecutionDate ? convertEpochToDates(state?.data?.connectionExecutionDate) : null,
     }] : [{
-        connectionExecutionDate: state?.data?.connectionExecutionDate ? Digit.DateUtils.ConvertEpochToDate(state?.data?.connectionExecutionDate) : null
+        connectionExecutionDate: state?.data?.connectionExecutionDate ? convertEpochToDates(state?.data?.connectionExecutionDate) : null
     }];
 
     const defaultValues = {
@@ -96,14 +96,17 @@ const ActivateConnection = () => {
     const onFormValueChange = (setValue, formData, formState) => {
         if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0) setSubmitValve(true);
         else setSubmitValve(!(Object.keys(formState.errors).length));
-
-        console.log(formState.errors, "formState.errorsformState.errors")
     };
 
-    const getConvertedDate = (dateOfTime) => {
+    const getConvertedDate = async (dateOfTime) => {
         let dateOfReplace = stringReplaceAll(dateOfTime, "/", "-");
-        const formattedDate = `${dateOfReplace.split("-")[0]}-${dateOfReplace.split("-")[1]}-${dateOfReplace.split("-")[2]}`;
-        const convertedDate = convertDateToEpoch(formattedDate);
+        let formattedDate = "";
+        if (dateOfReplace.split("-")[2] > 1900) {
+            formattedDate = `${dateOfReplace.split("-")[2]}-${dateOfReplace.split("-")[1]}-${dateOfReplace.split("-")[0]}`;
+        } else {
+            formattedDate = `${dateOfReplace.split("-")[0]}-${dateOfReplace.split("-")[2]}-${dateOfReplace.split("-")[1]}`;
+        }
+        const convertedDate = await convertDateToEpoch(formattedDate);
         return convertedDate;
     }
 
@@ -114,7 +117,7 @@ const ActivateConnection = () => {
 
     const closeToastOfError = () => { setShowToast(null); };
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         const formDetails = cloneDeep(data);
         const formData = { ...appDetails };
 
@@ -133,33 +136,31 @@ const ActivateConnection = () => {
         if (formDetails?.plumberDetails?.[0]?.plumberMobileNo) formData.plumberInfo[0].mobileNumber = formDetails?.plumberDetails?.[0]?.plumberMobileNo;
 
         if (formDetails?.activationDetails?.[0]?.meterId) formData.meterId = formDetails?.activationDetails?.[0]?.meterId;
-        if (formDetails?.activationDetails?.[0]?.meterInstallationDate) formData.meterInstallationDate = getConvertedDate(formDetails?.activationDetails?.[0]?.meterInstallationDate);
+        if (formDetails?.activationDetails?.[0]?.meterInstallationDate) formData.meterInstallationDate = await getConvertedDate(formDetails?.activationDetails?.[0]?.meterInstallationDate);
         if (formDetails?.activationDetails?.[0]?.meterInitialReading) formData.additionalDetails.initialMeterReading = formDetails?.activationDetails?.[0]?.meterInitialReading;
-        if (formDetails?.activationDetails?.[0]?.connectionExecutionDate) formData.connectionExecutionDate = getConvertedDate(formDetails?.activationDetails?.[0]?.connectionExecutionDate);
+        if (formDetails?.activationDetails?.[0]?.connectionExecutionDate) formData.connectionExecutionDate = await getConvertedDate(formDetails?.activationDetails?.[0]?.connectionExecutionDate);
 
         formData.comment = formDetails?.comments?.comments || "";
         formData.action = filters?.action;
-        // formData.wfDocuments = uploadedFile
-        // ? [
-        //   {
-        //     documentType: filters?.action + " DOC",
-        //     fileName: file?.name,
-        //     fileStoreId: uploadedFile,
-        //   },
-        // ]
-        // : null,
+        formData.wfDocuments = data?.supportingDocuments?.[0]?.fileStoreId
+        ? [
+          {
+            documentType: "Document - 1",
+            fileStoreId: data?.supportingDocuments?.[0]?.fileStoreId
+          },
+        ]
+        : [],
         formData.processInstance = {
             action: filters?.action,
             comment: formDetails?.comments?.comments || "",
-            //   documents: uploadedFile
-            //     ? [
-            //       {
-            //         documentType: filters?.action + " DOC",
-            //         fileName: file?.name,
-            //         fileStoreId: uploadedFile,
-            //       },
-            //     ]
-            //     : []
+            documents: data?.supportingDocuments?.[0]?.fileStoreId
+              ? [
+                {
+                  documentType: "Document - 1",
+                  fileStoreId: data?.supportingDocuments?.[0]?.fileStoreId,
+                },
+              ]
+              : []
         }
 
         const reqDetails = filters?.service == "WATER" ? { WaterConnection: formData } : { SewerageConnection: formData }

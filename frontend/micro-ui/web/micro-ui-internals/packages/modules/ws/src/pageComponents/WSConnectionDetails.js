@@ -25,7 +25,7 @@ const WSConnectionDetails = ({ config, onSelect, userType, formData, setError, f
 
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const [connectionDetails, setConnectionDetails] = useState(formData?.connectionDetails || [createConnectionDetails()]);
+  const [connectionDetails, setConnectionDetails] = useState(formData?.ConnectionDetails ? [formData?.ConnectionDetails?.[0]] : [createConnectionDetails()]);
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
   const stateCode = Digit.ULBService.getStateId();
   const [isErrors, setIsErrors] = useState(false);
@@ -256,7 +256,7 @@ const ConnectionDetails = (_props) => {
             </LabelFieldPair>
             <CardLabelError style={errorStyle}>{localFormState.touched.proposedTaps ? errors?.proposedTaps?.message : ""}</CardLabelError>
             <LabelFieldPair>
-              <CardLabel style={{ marginTop: "-5px" }} style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PROPOSED_PIPE_SIZE_IN_INCHES_LABEL")}*:`}</CardLabel>
+              <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_PROPOSED_PIPE_SIZE_IN_INCHES_LABEL")}*:`}</CardLabel>
               <Controller
                 control={control}
                 name={"proposedPipeSize"}

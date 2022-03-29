@@ -4,7 +4,6 @@ import { useRouteMatch } from "react-router-dom";
 import { Loader, CitizenHomeCard, WSICon } from "@egovernments/digit-ui-react-components";
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
-
 import Search from "./pages/employee/search";
 import WSServiceName from "./pageComponents/WSServiceName";
 import WSWaterConnectionDetails from "./pageComponents/WSWaterConnectionDetails";
@@ -34,6 +33,8 @@ import WSActivationPageDetails from "./pageComponents/WSActivationPageDetails";
 import WSActivationCommentsDetails from "./pageComponents/WSActivationCommentsDetails";
 import WSActivationSupportingDocuments from "./pageComponents/WSActivationSupportingDocuments";
 import WSDocumentsEmployee from "./pageComponents/WSDocumentsEmployee";
+import WSAcknowledgement from "./pages/citizen/WSCreate/WSAcknowledgement";
+import WSPayments from "./pages/citizen/MyPayment/WSPayments";
 
 const WSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "ws";
@@ -64,16 +65,12 @@ const WSLinks = ({ matchPath, userType }) => {
 
   const links = [
     {
-      link: `${matchPath}/wns-my-bills`,
+      link: `${matchPath}/my-bills`,
       i18nKey: t("ACTION_TEST_WNS_MY_BILLS"),
     },
     {
-      link: ``,
-      i18nKey: t("ACTION_TEST_WATER_AND_SEWERAGE_BILL"),
-    },
-    {
-      link: ``,
-      i18nKey: t("ACTION_TEST_MY_CONNECTIONS"),
+      link: `${matchPath}/my-payments`,
+      i18nKey: t("ACTION_TEST_MY_PAYMENTS"),
     },
     {
       link: `${matchPath}/create-application`,
@@ -84,11 +81,11 @@ const WSLinks = ({ matchPath, userType }) => {
       i18nKey: t("ACTION_TEXT_WS_SEARCH_AND_PAY"),
     },
     {
-      link: `${matchPath}/my-application`,
+      link: `${matchPath}/my-applications`,
       i18nKey: t("ACTION_TEXT_WS_MY_APPLICATION"),
     },
     {
-      link: `${matchPath}/my-connection`,
+      link: `${matchPath}/my-connections`,
       i18nKey: t("ACTION_TEXT_WS_MY_CONNECTION"),
     },
   ];
@@ -125,7 +122,9 @@ const componentsToRegister = {
   WSActivationCommentsDetails,
   WSActivationSupportingDocuments,
   WSCard,
-  WSDocumentsEmployee
+  WSDocumentsEmployee,
+  WSAcknowledgement,
+  WSPayments,
 };
 
 export const initWSComponents = () => {

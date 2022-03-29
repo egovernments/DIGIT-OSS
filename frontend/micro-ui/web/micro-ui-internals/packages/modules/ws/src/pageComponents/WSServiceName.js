@@ -6,7 +6,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 
-const WSServiceName = ({ t, config, onSelect, formData }) => {
+const WSServiceName = ({ t, config, onSelect, userType, formData }) => {
     const [serviceName, setServiceName] = useState(formData?.serviceName || "");
     const [formDetails, setFormDetails] = useState(formData || {});
 

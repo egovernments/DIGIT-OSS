@@ -33,8 +33,8 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
   );
 
   useEffect(() => {
-    onSelect("cpt", { details: propertyDetails?.Properties[0] });
-  }, [propertyDetails, pathname]);
+      onSelect("cpt", { details: propertyDetails?.Properties[0] });
+  }, [propertyDetails, pathname, propertyId]);
 
   const searchProperty = () => {
     setSearchPropertyId(propertyId);

@@ -132,6 +132,10 @@ const getBillsGenieKey = (tenantId, moduleCode) => ({
         moduleName: "tenant",
         masterDetails: [{ name: "tenants" }, { name: "citymodule" }],
       },
+      {
+      moduleName: "common-masters",
+      masterDetails: [{name: "uiCommonPay"}]
+      }
     ],
   },
 });

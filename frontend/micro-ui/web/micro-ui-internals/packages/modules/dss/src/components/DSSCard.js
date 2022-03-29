@@ -3,10 +3,10 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 const nationalScreenURLs = {
-  overview: { key: "national-overview", stateKey: "overview", label: "NURT_OVERVIEW", active: false, nActive: true },
-  propertytax: { key: "national-propertytax", stateKey: "propertytax", label: "NURT_PROPERTY_TAX", active: false, nActive: true },
-  tradelicense: { key: "national-tradelicense", stateKey: "tradelicense", label: "NURT_TRADE_LICENCE", active: false, nActive: true },
-  pgr: { key: "national-pgr", stateKey: "pgr", label: "NURT_COMPLAINS", active: false, nActive: true },
+  overview: { key: "national-overview", stateKey: "overview", label: "NURT_OVERVIEW", active: true, nActive: true },
+  propertytax: { key: "national-propertytax", stateKey: "propertytax", label: "NURT_PROPERTY_TAX", active: true, nActive: true },
+  tradelicense: { key: "national-tradelicense", stateKey: "tradelicense", label: "NURT_TRADE_LICENCE", active: true, nActive: true },
+  pgr: { key: "national-pgr", stateKey: "pgr", label: "NURT_COMPLAINS", active: true, nActive: true },
   fsm: { key: "fsm", stateKey: "fsm", label: "CS_HOME_FSM_SERVICES", active: true, nActive: false },
   mCollect: { key: "national-mcollect", stateKey: "mCollect", label: "NURT_MCOLLECT", active: true, nActive: true },
   ws: { key: "national-ws", stateKey: "ws", label: "NURT_WATER_SEWERAGE", active: true, nActive: true },
@@ -39,8 +39,8 @@ const NDSSCard = () => {
     headerStyle: { border: "none", height: "48px" },
     moduleName: t("ACTION_TEST_NATDASHBOARD"),
     subHeader: t("ACTION_TEST_NATDASHBOARD"),
-    subHeaderLink: `/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD`,
-    // subHeaderLink: `/employee/integration/dss/NURT_DASHBOARD`,
+    // subHeaderLink: `/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD`,
+    subHeaderLink: `/digit-ui/employee/dss/landing/NURT_DASHBOARD`,
     className: "employeeCard card-home customEmployeeCard full-width-card full-employee-card-height",
     links: [...links],
   };
@@ -66,8 +66,8 @@ const DSSCard = () => {
     headerStyle: { border: "none", height: "48px" },
     moduleName: t("ES_TITLE_DSS"),
     subHeader: t("ACTION_TEST_SURE_DASHBOARD"),
-    subHeaderLink: `/digit-ui/employee/payment/integration/dss/home`,
-    // subHeaderLink: `/employee/integration/dss/home`,
+    // subHeaderLink: `/digit-ui/employee/payment/integration/dss/home`,
+    subHeaderLink: `/digit-ui/employee/dss/landing/home`,
     className: "employeeCard card-home customEmployeeCard full-width-card full-employee-card-height",
     links: [...links],
   };

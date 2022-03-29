@@ -6,6 +6,33 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
     return str;
   };
 
+  export const convertEpochToDateDMY = (dateEpoch) => {
+  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
+    return "NA";
+  }
+  const dateFromApi = new Date(dateEpoch);
+  let month = dateFromApi.getMonth() + 1;
+  let day = dateFromApi.getDate();
+  let year = dateFromApi.getFullYear();
+  month = (month > 9 ? "" : "0") + month;
+  day = (day > 9 ? "" : "0") + day;
+  return `${day}/${month}/${year}`;
+};
+
+
+  export const convertEpochToDate = (dateEpoch) => {
+    if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
+      return "NA";
+    }
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${day}/${month}/${year}`;
+  };
+
   export const pdfDownloadLink = (documents = {}, fileStoreId = "", format = "") => {
     /* Need to enhance this util to return required format*/
   
@@ -22,6 +49,10 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   };
   
   /*   method to get filename  from fielstore url*/
+  export const DownloadReceipt = async (consumerCode, tenantId, businessService, pdfKey = "consolidatedreceipt") => {
+    tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
+    await Digit.Utils.downloadReceipt(consumerCode, businessService, "consolidatedreceipt", tenantId);
+  };
   export const pdfDocumentName = (documentLink = "", index = 0) => {
     let documentName = decodeURIComponent(documentLink.split("?")[0].split("/").pop().slice(13)) || `Document - ${index + 1}`;
     return documentName;
@@ -61,6 +92,20 @@ export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
     return DateObj.getTime();
   } catch (e) {
     return dateString;
+  }
+};
+
+export const convertEpochToDates = (dateEpoch) => {
+  if (dateEpoch) {
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${month}/${day}/${year}`;
+  } else {
+    return null;
   }
 };
 
@@ -195,4 +240,260 @@ export const updatePayloadOfWS = async (data) => {
     connectionType: "Non Metered"
   }
   return payload;
+}
+
+
+export const convertToWSUpdate = (data) => {
+
+  let formdata = {
+    "WaterConnection": {
+      ...data?.WaterConnectionResult?.WaterConnection?.[0],
+       "documents": [...data?.documents?.documents],
+      "processInstance": {
+          "action": "SUBMIT_APPLICATION",
+      }
+      
+  }
+  }
+  return formdata;
+}
+
+export const convertToSWUpdate = (data) => {
+
+  let formdata = {
+    "SewerageConnection": {
+      ...data?.SewerageConnectionResult?.SewerageConnections?.[0],
+       "documents": [...data?.documents?.documents],
+      "processInstance": {
+          "action": "SUBMIT_APPLICATION",
+      },
+      
+  }
+  }
+  return formdata;
+}
+
+export const getOwnersforPDF = (property,t) => {
+  let interarray = [];
+  let finalarray = [];
+  property?.owners?.map((ob,index) => {
+  interarray =   [
+          { title: t(`WS_OWNER - ${index}`), value: "" },
+          { title: t("WS_CONN_HOLDER_OWN_DETAIL_MOBILE_NO_LABEL"), value: ob?.mobileNumber || "N/A" },
+          { title: t("WS_MYCONNECTIONS_OWNER_NAME"), value: ob?.name || "N/A" },
+          {
+            title: t("WS_OWNER_DETAILS_EMAIL_LABEL"),
+            value: ob?.emailId || "N/A",
+          },
+          {
+            title: t("WS_OWN_DETAIL_GENDER_LABEL"),
+            value: ob?.gender || "N/A",
+          },
+          { title: t("WS_OWN_DETAIL_DOB_LABEL"), value: "N/A" },
+          { title: t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"), value: ob?.fatherOrHusbandName || "N/A" },
+          { title: t("WS_OWN_DETAIL_RELATION_LABEL"), value: ob?.relationship || "N/A" },
+          { title: t("WS_CONN_HOLDER_OWN_DETAIL_CROSADD"), value: ob?.correspondenceAddress || "N/A" },
+          { title: t("WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"), value: "none" },
+        ]
+      finalarray = finalarray.concat(interarray);
+      })
+    return finalarray;
+}
+
+export const getDocumentsForPDF = (app,t) => {
+let finaldocarray=[];
+  app?.documents?.map((doc) => {
+    finaldocarray.push(
+      {
+      title: t(doc?.documentType),
+      value: doc?.fileName,
+    })
+  })
+}
+
+export  const getPDFData = (application,data,tenantInfo, t) => {
+
+  return {
+    t: t,
+    tenantId: tenantInfo?.code,
+    name: `${t(tenantInfo?.i18nKey)} ${t(`ULBGRADE_${tenantInfo?.city?.ulbGrade.toUpperCase().replace(" ", "_").replace(".", "_")}`)}`,
+    email: tenantInfo?.emailId,
+    phoneNumber: tenantInfo?.contactNumber,
+    heading: t(`WS_${application?.applicationType}`),
+    breakPageLimit: 4,
+    details: [
+      {
+        title: t("CS_TITLE_APPLICATION_DETAILS"),
+        values: [
+          { title: t("WS_COMMON_APPLICATION_NO_LABEL"), value: application?.applicationNo },
+        ],
+      },
+      {
+        title: t("WS_COMMON_PROPERTY_DETAILS"),
+        values: [
+          { title: t("WS_PROPERTY_ID_LABEL"), value: application?.propertyId || "N/A" },
+          { title: t("WS_PROPERTY_TYPE_LABEL"), value: data?.cpt?.details?.propertyType || "N/A" },
+          { title: t("WS_PROPERTY_USAGE_TYPE_LABEL"), value: data?.cpt?.details?.usageCategory || "N/A" },
+          { title: t("WS_PROPERTY_SUB_USAGE_TYPE_LABEL"), value: "N/A" },
+          { title: t("WS_PROP_DETAIL_PLOT_SIZE_LABEL"), value: data?.cpt?.details?.superBuiltUpArea || "N/A" },
+          { title: t("WS_PROPERTY_NO_OF_FLOOR_LABEL"), value: data?.cpt?.details?.noOfFloors || "N/A" },
+          { title: t("WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC"), value: data?.cpt?.details?.additionalDetails?.isRainwaterHarvesting },
+        ],
+      },
+      {
+        title: t("WS_COMMON_PROP_LOC_DETAIL_HEADER"),
+        values: [
+          { title: t("WS_PROP_DETAIL_CITY"), value: data?.cpt?.details?.address?.city },
+          { title: t("WS_PROP_DETAIL_DHNO"), value: data?.cpt?.details?.address?.doorNo },
+          { title: t("WS_PROP_DETAIL_BUILD_NAME_LABEL"), value: data?.cpt?.details?.address?.buildingName },
+          { title: t("WS_PROP_DETAIL_STREET_NAME"), value: data?.cpt?.details?.address?.street },
+          { title: t("WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"), value: data?.cpt?.details?.address?.locality?.name },
+        ],
+      },
+      {
+        title: t("WS_TASK_PROP_OWN_HEADER"),
+        values: getOwnersforPDF(data?.cpt?.details,t),
+      },
+      {...application?.applicationType.includes("WATER")?{
+        title: t("WS_COMMON_CONNECTION_DETAILS"),
+        values: [
+          {
+            title: t("WS_APPLY_FOR"),
+            value: application?.applicationType.includes("WATER")?t("WS_WATER"):t("WS_SEWERAGE"),
+          },
+          {
+            title: t("WS_CONN_DETAIL_NO_OF_TAPS"),
+            value: application?.proposedTaps,
+          },
+          {
+            title: t("WS_CONN_DETAIL_PIPE_SIZE"),
+            value: application?.proposedPipeSize,
+          }
+        ],
+      }:{
+        title: t("WS_COMMON_CONNECTION_DETAILS"),
+        values: [
+          {
+            title: t("WS_APPLY_FOR"),
+            value: application?.applicationType.includes("WATER")?t("WS_WATER"):t("WS_SEWERAGE"),
+          },
+          {
+            title: t("WS_CONN_DETAIL_NO_OF_TOILETS"),
+            value: application?.proposedToilets,
+          },
+          {
+            title: t("WS_CONN_DETAIL_WATER_CLOSETS"),
+            value: application?.proposedWaterClosets,
+          }
+        ],
+      }},
+      {
+        title: t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER"),
+        values: [
+          {
+            title: t("WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS"),
+            value: application?.connectionHolders == null ? t("CS_YES") : t("CS_NO"),
+          }
+        ],
+      },
+      {
+        title: t("WS_COMMON_DOCS"),
+        values: getDocumentsForPDF(data?.documents,t),
+      },
+      {
+        title: t("WS_COMMON_ADDN_DETAILS"),
+        values: [
+          {
+            title: t("WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"),
+            value: application?.connectionType || "NA",
+          },
+          {
+            title: t("WS_SERV_DETAIL_NO_OF_TAPS"),
+            value: application?.noOfTaps || "NA",
+          },
+          {
+            title: t("WS_SERV_DETAIL_WATER_SOURCE"),
+            value: application?.waterSource || "NA",
+          },
+          {
+            title: t("WS_SERV_DETAIL_WATER_SUB_SOURCE"),
+            value: application?.waterSource || "NA",
+          },
+          {
+            title: t("WS_SERV_DETAIL_PIPE_SIZE"),
+            value: application?.pipeSize || "NA",
+          },
+        ],
+      },
+      {
+        title: t("WS_COMMON_PLUMBER_DETAILS"),
+        values: [
+          {
+            title: t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY"),
+            value: application?.plumberInfo?.providedBy || "NA",
+          },
+          {
+            title: t("WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"),
+            value: application?.plumberInfo?.licenseNo || "NA",
+          },
+          {
+            title: t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"),
+            value: application?.plumberInfo?.name || "NA",
+          },
+          {
+            title: t("WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"),
+            value: application?.plumberInfo?.mobileNumber || "NA",
+          },
+        ],
+      },
+      {
+        title: t("WS_ROAD_CUTTING_CHARGE"),
+        values: [
+          {
+            title: t("WS_ADDN_DETAIL_ROAD_TYPE"),
+            value: application?.roadType || "NA",
+          },
+          {
+            title: t("WS_ADDN_DETAILS_AREA_LABEL"),
+            value: application?.roadCuttingArea || "NA",
+          }
+        ],
+      },
+      {
+        title: t("WS_ACTIVATION_DETAILS"),
+        values: [
+          {
+            title: t("WS_SERV_DETAIL_CONN_EXECUTION_DATE"),
+            value: application?.connectionExecutionDate || "NA",
+          },
+          {
+            title: t("WS_SERV_DETAIL_METER_ID"),
+            value: application?.meterId || "NA",
+          },
+          {
+            title: t("WS_ADDN_DETAIL_METER_INSTALL_DATE"),
+            value: application?.meterInstallationDate || "NA",
+          },
+        ],
+      },
+    ],
+  };
+};
+export const checkForEmployee = (roles) => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const userInfo = Digit.UserService.getUser();
+  let rolesArray = [];
+
+  const rolearray = userInfo?.info?.roles.filter(item => {
+    for (let i = 0; i < roles.length; i++) {
+      if (item.code == roles[i] && item.tenantId === tenantId) rolesArray.push(true);
+    }
+  });
+
+  return rolesArray?.length;
+}
+
+export const getBusinessService = (data) => {
+  if (data?.service == "WATER") return "WS.ONE_TIME_FEE"
+  else return "SW.ONE_TIME_FEE"
 }

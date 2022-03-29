@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FormStep, LabelFieldPair, CardLabel, Loader } from "@egovernments/digit-ui-react-components";
+import Timeline from "../../components/Timeline";
 
 const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
@@ -69,6 +70,7 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
 
   return (
     <React.Fragment>
+      {userType === "citizen" && (<Timeline currentStep={2} businessService={"WS"} />)}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
        {
           propertyDetails && propertyDetails?.Properties.length && (

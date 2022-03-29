@@ -8,7 +8,7 @@ import orderBy from "lodash/orderBy";
 import cloneDeep from "lodash/cloneDeep";
 import * as func from "../../utils"
 import getPDFData from "../../utils/getWSAcknowledgementData";
-import { getFiles } from "../../utils";
+import { getFiles, getBusinessService } from "../../utils";
 
 
 const ApplicationDetails = () => {
@@ -34,6 +34,8 @@ const ApplicationDetails = () => {
         tenantId: tenantId,
         id: applicationNumber,
         moduleCode: applicationDetails?.processInstancesDetails?.[0]?.businessService,
+    }, {
+      enabled: applicationDetails?.processInstancesDetails?.[0]?.businessService ? true : false,
     });
 
     const {
@@ -60,11 +62,33 @@ const ApplicationDetails = () => {
         }
     });
 
-    //   if (workflowDetails?.data?.actionState?.nextActions) {
-    //     workflowDetails?.data?.nextActions?.forEach(data => {
-    //         if(data.action == "EDIT") workflowDetails.data.actionState.nextActions.push(data);
-    //     })
-    //   }
+  if (
+    workflowDetails?.data?.nextActions?.length > 0 &&
+    workflowDetails?.data?.actionState?.nextActions?.length > 0 &&
+    !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "EDIT")
+  ) {
+    workflowDetails?.data?.nextActions?.forEach(data => {
+      if (data.action == "EDIT") workflowDetails.data.actionState.nextActions.push(data);
+    })
+  }
+
+    workflowDetails?.data?.nextActions?.forEach(action => {
+      if (action?.action === "PAY") {
+        action.redirectionUrll =  {
+          pathname: `${getBusinessService(filters)}/${applicationDetails?.applicationNo}/${applicationDetails?.tenantId}?tenantId=${applicationDetails?.tenantId}&ISWSAPP&applicationNumber=${applicationDetails?.applicationNo}`,
+          state: applicationDetails?.tenantId
+        }
+      }
+    });
+
+    workflowDetails?.data?.actionState?.nextActions?.forEach(action => {
+      if (action?.action === "PAY") {
+        action.redirectionUrll =  {
+          pathname: `${getBusinessService(filters)}/${applicationDetails?.applicationNo}/${applicationDetails?.tenantId}?tenantId=${applicationDetails?.tenantId}&ISWSAPP&applicationNumber=${applicationDetails?.applicationNo}`,
+          state: applicationDetails?.tenantId
+        }
+      }
+    })
 
 
     const handleDownloadPdf = async () => {

@@ -104,7 +104,6 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   const formValueEmpty = () => {
     let isEmpty = true;
     Object.keys(form).forEach((key) => {
-      console.log("keys", key, searchFields);
       if (!["locality", "city"].includes(key) && form[key]) isEmpty = false;
     });
 

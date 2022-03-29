@@ -3,13 +3,11 @@ import { CardLabel, LabelFieldPair, Dropdown, UploadFile, Toast, Loader } from "
 import { useLocation } from "react-router-dom";
 
 const WSActivationSupportingDocuments = ({ t, config, userType, formData, onSelect }) => {
-    const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = Digit.ULBService.getStateId();
-    const [documents, setDocuments] = useState(formData?.documents?.documents || []);
+    const [documents, setDocuments] = useState(formData?.supportingDocuments?.[0] ? [formData?.supportingDocuments?.[0]] : []);
     const [error, setError] = useState(null);
     const [uploadedFile, setUploadedFile] = useState(null);
     const [file, setFile] = useState(null);
-
 
     const goNext = () => {
         onSelect(config.key, { documents });
@@ -50,6 +48,14 @@ const WSActivationSupportingDocuments = ({ t, config, userType, formData, onSele
             }
         })();
     }, [file]);
+
+    useEffect(() => {
+        if (uploadedFile) {
+          setDocuments((prev) => {
+            return [{ fileStoreId: uploadedFile, documentUid: uploadedFile }];
+          });
+        }
+      }, [uploadedFile]);
 
     return (
         <div>
