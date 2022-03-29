@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { ActionBar, SubmitBar, KeyNote, Dropdown, Header, Modal, FormComposer, Loader, DatePicker } from "@egovernments/digit-ui-react-components";
+import { ActionBar, SubmitBar, KeyNote, Dropdown, Header, Modal, FormComposer, Loader, DatePicker, Toast } from "@egovernments/digit-ui-react-components";
 import * as func from "../../utils"
 
 const AddMeterReading = () => {
@@ -17,8 +17,12 @@ const AddMeterReading = () => {
   const [defaultValues, setDefaultValues] = useState({});
   const businessService = serviceType === "WATER" ? "WS" : "SW"
   const mobileView = Digit.Utils.browser.isMobile() ? true : false;
+  const [selectMeterStatus, setSelectMeterStatus] = useState("");
+  const [showToast, setShowToast] = useState(null);
+  const [error, setError] = useState(null);
+  const [isEnableLoader, setIsEnableLoader] = useState(false);
     
-  const { isLoading, isError, error, data: response } =  Digit.Hooks.ws.useMeterReadingSearch({tenantId, filters: {...filter1}, BusinessService: businessService , t}) ;
+  const { isLoading, isError, data: response } =  Digit.Hooks.ws.useMeterReadingSearch({tenantId, filters: {...filter1}, BusinessService: businessService , t}) ;
 
   const {
     isLoading: updatingMeterConnectionLoading,
@@ -26,21 +30,72 @@ const AddMeterReading = () => {
     data: updateMeterConnectionResponse,
     error: updateMeterError,
     mutate: meterReadingMutation,
-  } = Digit.Hooks.ws.useMeterReadingCreateAPI(serviceType);
+  } = Digit.Hooks.ws.useMeterReadingCreateAPI(businessService);
 
+
+  const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
+    //example input format : "2018-10-02"
+    try {
+      const parts = dateString.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+      const DateObj = new Date(Date.UTC(parts[1], parts[2] - 1, parts[3]));
+      DateObj.setMinutes(DateObj.getMinutes() + DateObj.getTimezoneOffset());
+      if (dayStartOrEnd === "dayend") {
+        DateObj.setHours(DateObj.getHours() + 24);
+        DateObj.setSeconds(DateObj.getSeconds() - 1);
+      }
+      return DateObj.getTime();
+    } catch (e) {
+      return dateString;
+    }
+  };
 
   const popUp = () => {
     setOpenModal(true);
-    setMeterDetails(response?.meterReadings);
+    setMeterDetails(response?.meterReadings[0]);
+    setSelectMeterStatus(response?.meterReadings[0]?.meterStatus);
   };
 
   const closeModal = () => {
     setOpenModal(false);
   };
+  const closeToast = () => {
+    setShowToast(null);
+    setError(null);
+  };
 
   const onSubmit = async(data) => {
-    let meterReadingsPayload = {}
-    setOpenModal(false);
+
+    if(!data?.currentReading || data?.currentReading == null || data?.currentReading === ""){
+      setShowToast({ key: "error" });
+      setError("WS_CURRENT_READING_REQUIRED");
+      return;
+    }
+    let meterReadingsJS = {
+      "billingPeriod" : `${getDate(meterDetails?.currentReadingDate)} - ${getDate(data?.currentReadingDate)}`,
+      "connectionNo" : meterDetails?.connectionNo,
+      "currentReading" : data?.currentReading,
+      "currentReadingDate" : convertDateToEpoch(data?.currentReadingDate),
+      "lastReading" : meterDetails?.lastReading,
+      "lastReadingDate" : meterDetails?.lastReadingDate,
+      "meterStatus" : selectMeterStatus,
+      "tenantId" : meterDetails?.tenantId, 
+    };
+    let meterReadingsPayload = {meterReadings : meterReadingsJS};
+
+    if(meterReadingMutation){
+      setIsEnableLoader(true);
+      await meterReadingMutation(meterReadingsPayload, {
+        onError: (error, variables) => {
+          setIsEnableLoader(false);
+          setShowToast({ key: "error", message: error?.message ? error.message : error });
+          setTimeout(closeToastOfError, 5000);
+        },
+        onSuccess: async (data, variables) => {
+          setIsEnableLoader(false);
+          console.log("Data Meter: " + JSON.stringify(data?.meterReadings));
+        },
+      })
+    }
   };
   const optionsList = [
     "Working",
@@ -69,6 +124,10 @@ const AddMeterReading = () => {
           {
             populators: (
               <KeyNote keyValue={t("WS_BILLING_PERIOD")} note={details?.[0]?.billingPeriod} />
+              // <tr >
+              //   <td style={{fontWeight: 700}}>{t("WS_BILLING_PERIOD")}</td>
+              //   <td style={{paddingLeft: "60px", textAlign: "end"}}>{details?.[0]?.billingPeriod}</td>
+              // </tr>
             ),
           },
           {
@@ -80,9 +139,9 @@ const AddMeterReading = () => {
                 option={optionsList}
                 autoComplete="off"
                 // optionKey="name"
-                // id="fieldInspector"
-                // select={setSelectedApprover}
-                selected={details?.[0]?.meterStatus}
+                id="meterStatus"
+                select={setSelectMeterStatus}
+                selected={selectMeterStatus}
               />
             ),
           },
@@ -98,13 +157,10 @@ const AddMeterReading = () => {
           },
           {
             label: t("WS_CURRENT_READING"),
-            isMandatory: true,
-            type: "text",
+            isMandatory: false,
+            type: "number",
             populators: {
               name: "currentReading",
-              validation: {
-                required: true,
-              },
             },
           },
           {
@@ -112,7 +168,7 @@ const AddMeterReading = () => {
             isMandatory: true,
             type: "custom",
             populators: {
-              name: "date",
+              name: "currentReadingDate",
               validation: {
                 required: true,
               },
@@ -123,13 +179,13 @@ const AddMeterReading = () => {
           },
           {
             label: t("WS_CONSUMPTION"),
-            isMandatory: true,
+            isMandatory: false,
             type: "text",
             populators: {
               name: "consumption",
-              validation: {
-                required: true,
-              },
+              // validation: {
+              //   required: true,
+              // },
             },
           },
         ],
@@ -161,15 +217,11 @@ const AddMeterReading = () => {
       <div>
         <Header>{t("Meter_Reading")}</Header>
         <div>
-        {/* <div className="mrsm" onClick={null}>
-          <PrintIcon/>
-            {t(`CS_COMMON_PRINT`)}
-          </div> */}
-        
         </div>
+        {isLoading ? null :
         <ActionBar>
         <SubmitBar label={t("ADD_METER_READING")} onSubmit={popUp} />
-        </ActionBar>
+        </ActionBar> }
       </div>
       {openModal && (
           <Modal
@@ -184,7 +236,7 @@ const AddMeterReading = () => {
           style={!mobileView?{minHeight: "45px", height: "auto", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{minHeight: "45px", height: "auto",width:"44%"}}
           popupModuleMianStyles={mobileView?{paddingLeft:"5px"}: {}}
         >
-          {isLoading ? (
+          {isEnableLoader ? (
             <Loader />
           ) : (
             <FormComposer
@@ -201,6 +253,7 @@ const AddMeterReading = () => {
           )}
         </Modal>
         )}
+        {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
     </div>
     </Fragment>
   );
