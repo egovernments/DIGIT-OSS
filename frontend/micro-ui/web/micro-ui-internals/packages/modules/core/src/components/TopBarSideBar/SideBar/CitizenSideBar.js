@@ -122,7 +122,7 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
       {
         text: t("EDIT_PROFILE"),
         element: "PROFILE",
-        icon: <EditPencilIcon className="icon" />,
+        icon: <EditPencilIcon className="icon edit-btn-ico" width="16" height="16"/>,
         populators: {
           onClick: showProfilePage,
         },
