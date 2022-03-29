@@ -148,6 +148,9 @@ public class NotificationService {
             messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
         }
 
+        /**
+         * SMS to citizens, when the complaint is re-assigned to an employee
+         */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN)){
 
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
@@ -162,6 +165,9 @@ public class NotificationService {
                 messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designation"));
         }
 
+        /**
+         * SMS to citizens, when their complaint is rejected
+         */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(REJECTED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REJECT)){
             if(messageToReplace.contains("{reason}")) {
                 ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REJECT_REJECTED);
@@ -172,14 +178,9 @@ public class NotificationService {
                 messageToReplace = messageToReplace.replace("{additional_comments}", serviceWrapper.getWorkflow().getComments());
         }
 
-//        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGFORASSIGNMENT) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(PGR_WF_REOPEN)){
-//
-//        }
-
-//        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(RESOLVED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(PGR_WF_RESOLVE)){
-//
-//        }
-
+        /**
+         * SMS to citizens, when their complaint is assigned to an employee
+         */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(ASSIGN_CITIZEN)){
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
 
@@ -190,6 +191,9 @@ public class NotificationService {
                 messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designation"));
         }
 
+        /**
+         * SMS to employees, when the complaint is assigned to him/her name
+         */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(ASSIGN_EMPLOYEE)){
             if(messageToReplace.contains("{ulb}"))
                 messageToReplace = messageToReplace.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
@@ -209,11 +213,17 @@ public class NotificationService {
             }
         }
 
+        /**
+         * SMS to employees, when the complaint is closed and employee received feedback from citizen
+         */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(CLOSED_AFTER_RESOLUTION) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(CLOSE_EMPLOYEE)){
             if(messageToReplace.contains("{rating}"))
                 messageToReplace=messageToReplace.replace("{rating}",serviceWrapper.getService().getRating().toString());
         }
 
+        /**
+         * SMS to citizens, when the complaint is re-assigned to an employee
+         */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN_CITIZEN)){
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
 
@@ -224,6 +234,9 @@ public class NotificationService {
                 messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designation"));
         }
 
+        /**
+         * SMS to employees, when a complaint is re-assigned on their request
+         */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN_EMPLOYEE)){
             if(messageToReplace.contains("{ulb}"))
                 messageToReplace = messageToReplace.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
@@ -243,6 +256,9 @@ public class NotificationService {
             }
         }
 
+        /**
+         * SMS to citizens, when complaint got rejected with reason
+         */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(REJECTED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REJECT_CITIZEN)){
             if (messageToReplace.contains("{additional_comments}"))
                 messageToReplace = messageToReplace.replace("{additional_comments}", serviceWrapper.getWorkflow().getComments());
@@ -253,15 +269,17 @@ public class NotificationService {
             }
         }
 
-//        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGFORASSIGNMENT) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REOPEN_CITIZEN)){
-//
-//        }
-
+        /**
+         * SMS to citizens, when the complaint has been re-opened on their request
+         */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGFORASSIGNMENT) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REOPEN_EMPLOYEE)){
             if(messageToReplace.contains("{ulb}"))
                 messageToReplace = messageToReplace.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
         }
 
+        /**
+         * SMS to employees, when a complaint get re-opened their name by citizen
+         */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(RESOLVED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(RESOLVE_CITIZEN)){
             if (messageToReplace.contains("{date}")){
                 Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
@@ -272,19 +290,17 @@ public class NotificationService {
             }
         }
 
-//        if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGFORASSIGNMENT) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(APPLY)){
-//
-//        }
-
+        /**
+         * SMS to citizens, when an employee commented on their complaint
+         */
         if(serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(COMMENT)) {
             if (messageToReplace.contains("{comment}"))
                 messageToReplace = messageToReplace.replace("{comment}", serviceWrapper.getWorkflow().getComments());
         }
 
-//        if(serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(COMMENT_DEFAULT)) {
-//
-//        }
-
+        /**
+         * SMS to citizens, regarding the current status of their complaint
+         */
         if(serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(DEFAULT)) {
             if(messageToReplace.contains("{status}"))
                 messageToReplace = messageToReplace.replace("{status}", serviceWrapper.getService().getApplicationStatus());

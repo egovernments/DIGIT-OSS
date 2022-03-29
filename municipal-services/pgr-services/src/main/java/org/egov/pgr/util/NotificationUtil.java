@@ -60,6 +60,12 @@ public class NotificationUtil {
 
     public String getCustomizedMsg(String action, String applicationStatus, String localizationMessage) {
         StringBuilder notificationCode = new StringBuilder();
+
+        /**
+         * when action is either "COMMENT" or "COMMENT_DEFAULT" or "DEFAULT",
+         *  localisation code would be "PGR_ACTION_SMS_MESSAGE"
+         *  otherwise, localisation code would be "PGR_ACTION_APPLICATIONSTATUS_SMS_MESSAGE"
+         */
         if(action.equalsIgnoreCase(COMMENT) || action.equalsIgnoreCase(COMMENT_DEFAULT) || action.equalsIgnoreCase(DEFAULT)) {
             notificationCode.append("PGR_").append(action.toUpperCase()).append("_SMS_MESSAGE");
         }
