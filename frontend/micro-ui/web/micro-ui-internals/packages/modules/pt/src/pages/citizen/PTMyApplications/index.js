@@ -44,8 +44,7 @@ export const PTMyApplications = () => {
         {applicationsList?.length !== 0 && (
           <div>
             <p style={{ marginLeft: "16px", marginTop: "16px" }}>
-              {t("PT_LOAD_MORE_MSG")}{" "}
-              <span className="link">{<Link to={`/digit-ui/citizen/pt/property/my-applications/${t1}`}>{t("PT_COMMON_CLICK_HERE")}</Link>}</span>
+              <span className="link">{<Link to={`/digit-ui/citizen/pt/property/my-applications/${t1}`}>{t("PT_LOAD_MORE_MSG")}</Link>}</span>
             </p>
           </div>
         )}

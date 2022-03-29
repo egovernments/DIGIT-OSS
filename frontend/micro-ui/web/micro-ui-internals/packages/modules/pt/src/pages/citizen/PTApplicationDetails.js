@@ -84,10 +84,10 @@ const PTApplicationDetails = () => {
     property.ownersInit = owners;
     property.ownersTemp = ownersTemp;
   }
-  property.ownershipCategoryTemp = property.ownershipCategory;
+  property.ownershipCategoryTemp = property?.ownershipCategory;
   property.ownershipCategoryInit = "NA";
   // Set Institution/Applicant info card visibility
-  if (get(application, "Properties[0].ownershipCategory", "").startsWith("INSTITUTION")) {
+  if (get(application, "Properties[0].ownershipCategory", "")?.startsWith("INSTITUTION")) {
     property.institutionTemp = property.institution;
   }
 
@@ -97,13 +97,13 @@ const PTApplicationDetails = () => {
     // const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
     // Removed filter(property => property.status == 'ACTIVE') condition to match result in qa env
     const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
-    property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
-    property.ownersInit = previousActiveProperty.owners.filter((owner) => owner.status == "ACTIVE");
+    property.ownershipCategoryInit = previousActiveProperty?.ownershipCategory;
+    property.ownersInit = previousActiveProperty?.owners?.filter((owner) => owner.status == "ACTIVE");
 
     const curWFProperty = propertiesAudit.sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
     property.ownersTemp = curWFProperty.owners.filter((owner) => owner.status =="ACTIVE");
 
-    if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
+    if (property?.ownershipCategoryInit?.startsWith("INSTITUTION")) {
       property.institutionInit = previousActiveProperty.institution;
     }
   }
@@ -112,7 +112,7 @@ const PTApplicationDetails = () => {
   let transferorOwners = get(property, "ownersInit", []);
 
   let transfereeInstitution = get(property, "institutionTemp", []);
-let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
+let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
   let transferorInstitution = get(property, "institutionInit", []);
 
   let units = [];
@@ -215,8 +215,8 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
       </div>
         <Card>
           <StatusTable>
-            <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} /* textStyle={{ whiteSpace: "pre" }} */ />
+            <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} /* textStyle={{ whiteSpace: "pre" }} */ />
             <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
 
             {isPropertyTransfer && (
@@ -366,7 +366,7 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
                       {(flrno !== unit?.floorNo ? (i = 1) : (i = i + 1)) && i === 1 && (
                         <CardSubHeader>{t(`PROPERTYTAX_FLOOR_${unit?.floorNo}`)}</CardSubHeader>
                       )}
-                      <div style={{ border: "groove" }}>
+                      <div style={{ border: "groove", padding:"7px",marginBottom:"10px" }}>
                         <CardSubHeader>
                           {t("ES_APPLICATION_DETAILS_UNIT")} {i}
                         </CardSubHeader>
