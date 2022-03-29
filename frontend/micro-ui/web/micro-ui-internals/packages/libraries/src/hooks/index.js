@@ -198,6 +198,7 @@ import useWaterCreateAPI from "./ws/useWaterCreateAPI";
 import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
 import useWSUpdateAPI from "./ws/useWSUpdateAPI";
 import useCreateBillAmendment from "./ws/useCreateBillAmendment";
+import useWSApplicationDetailsBillAmendment from "./ws/useWSApplicationDetailsBillAmendment";
 
 const pgr = {
   useComplaintDetails,
@@ -397,7 +398,9 @@ const ws = {
   useSewerageCreateAPI,
   useWSUpdateAPI,
   useMypaymentWS,
-  useCreateBillAmendment
+  useCreateBillAmendment,
+  useCreateBillAmendment,
+  useWSApplicationDetailsBillAmendment,
 };
 
 

@@ -9,6 +9,9 @@ const useWSMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
   const useTradeTypetoRoleMapping = () => {
     return useQuery('ROLE_DOCUMENT_MAPPING', () => MdmsService.getTradeTypeRoleTypes(tenantId, moduleCode, type), queryConfig);
   }
+  const useTaxHeadMasterMapping = () => {
+    return useQuery("TAX_HEAD_MASTER", ()=> MdmsService.getWSTaxHeadMaster(tenantId, moduleCode, type), queryConfig)
+  }
   const _default = () => {
     return useQuery([tenantId, moduleCode, type], () => MdmsService.getMultipleTypes(tenantId, moduleCode, type), config);
   };
@@ -18,6 +21,8 @@ const useWSMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
       return useDocumentMapping();
     case "TradeTypetoRoleMapping":
       return useTradeTypetoRoleMapping();
+    case "TaxHeadMaster":
+      return useTaxHeadMasterMapping()
     default:
       return _default();
   }
