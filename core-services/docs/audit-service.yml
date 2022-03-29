@@ -1,0 +1,243 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Signed Data Audit Logs
+  description: |
+    ### API specs for Signed Data Audit Logs ###
+    The API provides functionality to maintain and verify a immutable data audit trail of data entries 
+  contact:
+    name: Client Placeholder
+    email: client@email.com
+x-module: DSS
+x-common-path: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml'
+paths:
+  /audit-service/log/v1/_create:
+    post:
+      summary: API to insert data audit logs in the system
+      description: Insert audit logs for changes in entity. The data will be signed and stored
+      tags:
+      - Audit Log
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditLogRequest'
+        description: Request schema.
+        required: true
+      responses:
+        '202':
+          description: Audit Logs created successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuditLogResponse'
+        '400':
+          description: Failed to create Audit Logs
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+ 
+  /audit-service/log/v1/_search:
+    post:
+      tags:
+        - Audit Log
+      summary: Searches Audit logs based on the given criteria
+      operationId: searchUsingPOST
+      parameters:
+        - name: objectId
+          in: query
+          schema:
+            type: string    
+        - name: id
+          in: query
+          schema:
+            type: string   
+        - name: module
+          in: query
+          schema:
+            type: string    
+        - name: userUUID
+          in: query
+          schema:
+            type: string
+        - name: tenantId
+          in: query
+          schema:
+            type: string             
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      x-codegen-request-body-name: requestInfoWrapper
+
+
+
+  /audit-service/log/v1/_verify:
+    post:
+      tags:
+        - Audit Log
+      summary: Verifies if integrity hash is correct for given Object Id
+      operationId: verifyUsingPOST
+      parameters:
+        - name: objectId
+          in: query
+          schema:
+            type: string      
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      x-codegen-request-body-name: requestInfoWrapper
+
+
+
+components:
+  schemas:
+    AuditLog:
+      type: object
+      description: 'Data object containing static master data to be ingested for DSS Dashboards'
+      properties:
+        id:
+          type: string
+          description: unique identifier of each record
+          example: ccc7daa-as23-2245-b909-0242ac1256023      
+        userUUID:
+          type: string
+          description: UUID of the user
+          example: b9267daa-af23-11ec-b909-0242ac120002
+        module:
+          type: string
+          description: Module for which data log is generated
+          example: PT
+        tenantId:
+          type: string
+          description: TenantId of the data log
+          minLength: 1
+          maxLength: 64
+          example: "amritsar"
+        transactionCode:
+          type: string
+          description: Unique transaction code (like GUID) identifying the transaction. 
+          minLength: 1
+          maxLength: 64
+          example: PROPERTY_UPDATE, PROPERTY_MUTATION etc
+        changeDate:
+          type: integer
+          format: int64
+          description:  Transaction date
+        entityName:
+          type: string
+          description: Entity (table) that is being manipulated.
+          example: eg_pt_property
+        objectId:
+          type: string
+          description: Reference Id of the entity 
+          minLength: 1
+          maxLength: 64
+          example: 5b493cd0-af24-11ec-b909-0242ac120002
+        fieldName:
+          type: string
+          description: Name of the field  
+          minLength: 1
+          maxLength: 64
+          example: "Property,Address"
+        newValue:
+          type: string
+          description: The new updated value
+          minLength: 1
+          maxLength: 64
+        operationType:
+          type: string
+          description: CRUD operation discriminator
+          minLength: 1
+          maxLength: 64
+          example: "CREATE,UPDATE etc."
+        integrityHash:
+          type: string
+          description: Integrity hash of the data 
+      required:
+      - financialYear
+      - module
+      - ulb
+      - region
+      - state
+      - metrics
+
+    AuditLogRequest:
+      type: object
+      description: Request object to ingest data in DSS system
+      properties:
+        RequestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/RequestHeader'
+        AuditLogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLog' 
+      required:
+      - RequestInfo
+      - AuditLog
+
+    AuditLogResponse:
+      type: object
+      description: Response object 
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ResponseHeader'    
+        AuditLogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLog'          
+
+    RequestInfoWrapper:
+      title: RequestInfoWrapper
+      type: object
+      properties:
+        RequestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/RequestHeader'          
+   
+
