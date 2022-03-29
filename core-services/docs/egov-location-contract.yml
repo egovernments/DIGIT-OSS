@@ -10,7 +10,7 @@ schemes:
 basePath: /location/v11
 x-api-id: org.egov.boundary
 paths:
-  /boundarys/_search:
+  /boundarys/:
     post:
       summary: >-
         It Will provide the List of boundaries based on search criteria Like
@@ -19,28 +19,10 @@ paths:
         Provides a list of boundaries based on TenantId And List of Boundary
         id's And List Of codes And BoundaryType And HierarchyType
       parameters:
-        - $ref: >-
-            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo
-        - $ref: >-
-            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId
-        - name: boundaryType
-          in: query
-          type: integer
-          description: lable of boundary within the tenant boundary structure
-        - name: hierarchyTypeCode
-          in: query
-          description: 'Type Of the BoundaryType Like REVENUE, ADMIN'
-          required: false
-          type: string
-          format: varchar
-        - name: codes
-          in: query
-          description: Unique List of boundary codes.
-          required: false
-          type: array
-          items:
-            type: string
-            format: varchar
+        - name: boundaryRequest
+          in: body
+          schema:
+            $ref: '#/definitions/BoundaryRequest'
       tags:
         - Boundary
       responses:
@@ -53,7 +35,553 @@ paths:
           schema:
             $ref: >-
               https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
-  /geography/_search:
+
+  /boundarys/{code}:
+    put:
+      summary: boundarys/code
+      description: boundarys/code
+      parameters:
+        - name: boundaryRequest
+          in: body
+          schema:
+            $ref: '#/definitions/BoundaryRequest'
+        - name: code
+          in: path
+          type: string
+          required: true
+        - name: tenantId
+          in: query
+          type: string
+          required: true
+      tags:
+        - Boundary
+      responses:
+        '200':
+          description: Successful Response.
+          schema:
+            $ref: '#/definitions/BoundaryResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarys:
+    get:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: boundaryRequest
+          in: body
+          schema:
+            $ref: '#/definitions/BoundaryRequest'
+        - name: tenantId
+          in: query
+          type: string
+          required: true
+        - name: boundary
+          in: query
+          type: integer
+          format: int64
+          required: true
+      tags:
+        - Boundary
+      responses:
+        '200':
+          description: Successful Response.
+          schema:
+            $ref: '#/definitions/BoundaryResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarys/getLocationByLocationName:
+    get:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: tenantId
+          in: query
+          type: string
+          required: true
+        - name: locationName
+          in: query
+          type: string
+          required: true
+      tags:
+        - Boundary
+      responses:
+        '200':
+          $ref: '#/definitions/BoundaryResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarys/getByBoundaryType:
+    post:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: tenantId
+          in: query
+          type: string
+          required: true
+        - name: boundaryTypeId
+          in: query
+          type: string
+          required: true
+      tags:
+        - Boundary
+      responses:
+        '200':
+          $ref: '#/definitions/BoundaryResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarys/boundariesByBndryTypeNameAndHierarchyTypeName:
+    post:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: tenantId
+          in: query
+          type: string
+          required: true
+        - name: boundaryTypeName
+          in: query
+          type: string
+          required: true
+        - name: hierarchyTypeName
+          in: query
+          type: string
+          required: true
+      tags:
+        - Boundary
+      responses:
+        '200':
+          $ref: '#/definitions/BoundaryResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarys/isshapefileexist:
+    post:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: tenantId
+          in: query
+          type: string
+          required: true
+        - name: requestInfoWrapper
+          in: body
+          schema:
+            $ref: '#/definitions/RequestInfoWrapper'
+      tags:
+        - Boundary
+      responses:
+        '200':
+          $ref: '#/definitions/ShapeFileResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarys/childLocationsByBoundaryId:
+    post:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: tenantId
+          in: query
+          type: string
+          required: true
+        - name: boundaryId
+          in: query
+          type: string
+          required: true
+      tags:
+        - Boundary
+      responses:
+        '200':
+          description: Successful Response.
+          schema:
+            type: array
+            items:
+              type: object
+              additionalProperties:
+                type: string
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarys/getshapefile:
+    get:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: tenantId
+          in: query
+          type: string
+          required: true
+      tags:
+        - Boundary
+      responses:
+        '200':
+          $ref: '#/definitions/BoundaryResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarys/_search:
+    post:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: tenantId
+          in: query
+          type: string
+          required: true
+        - name: boundaryIds
+          in: query
+          type: string
+          required: true
+        - name: boundaryNum
+          in: query
+          type: string
+          required: true
+        - name: boundaryType
+          in: query
+          type: string
+          required: true
+        - name: hierarchyType
+          in: query
+          type: string
+          required: true
+        - name: codes
+          in: query
+          type: array
+          items:
+            type: string
+      tags:
+        - Boundary
+      responses:
+        '200':
+          $ref: '#/definitions/BoundaryResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarytypes:
+    post:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: boundaryTypeRequest
+          in: body
+          schema:
+            $ref: '#/definitions/BoundaryTypeRequest'
+      tags:
+        - Boundarytype
+      responses:
+        '200':
+          $ref: '#/definitions/BoundaryTypeResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+    get:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: boundaryTypeRequest
+          in: body
+          schema:
+            $ref: '#/definitions/BoundaryTypeRequest'
+        - name: tenantId
+          in: query
+          type: string
+        - name: boundaryType
+          in: query
+          type: integer
+          format: int64
+      tags:
+        - Boundarytype
+      responses:
+        '200':
+          $ref: '#/definitions/BoundaryTypeResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarytypes/{code}:
+    put:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: boundaryTypeRequest
+          in: body
+          schema:
+            $ref: '#/definitions/BoundaryTypeRequest'
+        - name: tenantId
+          in: query
+          type: string
+        - name: code
+          in: path
+          type: string
+          required: true
+      tags:
+        - Boundarytype
+      responses:
+        '200':
+          $ref: '#/definitions/BoundaryTypeResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarytypes/_search:
+    post:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: boundaryTypeRequest
+          in: body
+          schema:
+            $ref: '#/definitions/BoundaryTypeSearchRequest'
+      tags:
+        - Boundarytype
+      responses:
+        '200':
+          $ref: '#/definitions/BoundaryTypeResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarytypes/getByHierarchyType:
+    post:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: hierarchyTypeName
+          in: query
+          type: string
+        - name: tenantId
+          in: query
+          type: string
+      tags:
+        - Boundarytype
+      responses:
+        '200':
+          $ref: '#/definitions/BoundaryTypeResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /city:
+    get:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: code
+          in: query
+          type: string
+        - name: tenantId
+          in: query
+          type: string
+      tags:
+        - City
+      responses:
+        '200':
+          description: returns string
+          schema:
+            type: string
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /city/getCitybyCityRequest:
+    post:
+      summary: get boundarys
+      description: get boundarys
+      parameters:
+        - name: cityRequest
+          in: body
+          schema:
+            $ref: '#/definitions/CityRequest'
+      tags:
+        - City
+      responses:
+        '200':
+          $ref: '#/definitions/CityResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /boundarytype/create:
+    get:
+      summary: get boundarytype
+      description: get boundarytype
+      parameters:
+        - name: tenantId
+          in: query
+          type: string
+      tags:
+        - BoundaryType
+      responses:
+        '200':
+          description: returns string
+          schema:
+            type: string
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+    post:
+      summary: get boundarytype
+      description: get boundarytype
+      parameters:
+        - name: boundaryType
+          in: body
+          schema:
+            $ref: '#/definitions/BoundaryType'
+      tags:
+        - BoundaryType
+      responses:
+        '200':
+          description: returns string
+          schema:
+            type: string
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /crosshierarchys:
+    post:
+      summary: get boundarytype
+      description: get boundarytype
+      parameters:
+        - name: crossHierarchyRequest
+          in: body
+          schema:
+            $ref: '#/definitions/CrossHierarchyRequest'
+      tags:
+        - CrossHierarchys
+      responses:
+        '200':
+          description: returns crossHierarchyResponse
+          schema:
+            $ref: '#/definitions/CrossHierarchyResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+    get:
+      summary: get boundarytype
+      description: get boundarytype
+      parameters:
+        - name: crossHierarchySearchRequest
+          in: body
+          schema:
+            $ref: '#/definitions/CrossHierarchySearchRequest'
+      tags:
+        - CrossHierarchys
+      responses:
+        '200':
+          description: returns crossHierarchyResponse
+          schema:
+            $ref: '#/definitions/CrossHierarchyResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /crosshierarchys/{code}:
+    put:
+      summary: get boundarytype
+      description: get boundarytype
+      parameters:
+        - name: crossHierarchyRequest
+          in: body
+          schema:
+            $ref: '#/definitions/CrossHierarchyRequest'
+        - name: code
+          in: path
+          type: string
+          required: true
+        - name: tenantId
+          in: query
+          type: string
+      tags:
+        - CrossHierarchys
+      responses:
+        '200':
+          description: returns crossHierarchyResponse
+          schema:
+            $ref: '#/definitions/CrossHierarchyResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /crosshierarchys_search:
+    post:
+      summary: get boundarytype
+      description: get boundarytype
+      parameters:
+        - name: crossHierarchySearchRequest
+          in: body
+          schema:
+            $ref: '#/definitions/CrossHierarchySearchRequest'
+      tags:
+        - CrossHierarchys
+      responses:
+        '200':
+          description: returns crossHierarchyResponse
+          schema:
+            $ref: '#/definitions/CrossHierarchyResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+
+  /location/v11/geography/_search:
     post:
       summary: >-
         Handles all requests related to Geographical boundaries by providing appropriate GeoJson and other associated data
@@ -71,8 +599,8 @@ paths:
           in: body
           description: JSON path filter string for filtering the output
           schema:
-           $ref: >-
-             #/definitions/RequestInfoWrapper
+            $ref: >-
+              #/definitions/RequestInfoWrapper
       tags:
         - Geography
       responses:
@@ -85,10 +613,151 @@ paths:
           schema:
             $ref: >-
               https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
-  /tenant/_search:
+
+  /hierarchytypes:
+    post:
+      summary: get hierarchytypes
+      description: get hierarchytypes
+      parameters:
+        - name: hierarchyTypeRequest
+          in: body
+          schema:
+            $ref: '#/definitions/HierarchyTypeRequest'
+      tags:
+        - Hierarchytypes
+      responses:
+        '200':
+          description: returns HierarchyTypeResponse
+          schema:
+            $ref: '#/definitions/HierarchyTypeResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+    get:
+      summary: get hierarchytypes
+      description: get hierarchytypes
+      parameters:
+        - name: hierarchyTypeRequest
+          in: body
+          schema:
+            $ref: '#/definitions/HierarchyTypeRequest'
+        - name: hierarchyType
+          in: query
+          type: string
+          required: true
+        - name: tenantId
+          in: query
+          type: string
+          required: true
+      tags:
+        - Hierarchytypes
+      responses:
+        '200':
+          description: returns HierarchyTypeResponse
+          schema:
+            $ref: '#/definitions/HierarchyTypeResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /hierarchytypes/{code}:
+    post:
+      summary: get hierarchytypes
+      description: get hierarchytypes
+      parameters:
+        - name: hierarchyTypeRequest
+          in: body
+          schema:
+            $ref: '#/definitions/HierarchyTypeRequest'
+        - name: code
+          in: path
+          type: string
+          required: true
+        - name: tenantId
+          in: query
+          type: string
+          required: true
+
+      tags:
+        - Hierarchytypes
+      responses:
+        '200':
+          description: returns HierarchyTypeResponse
+          schema:
+            $ref: '#/definitions/HierarchyTypeResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /hierarchytypes/_search:
+    post:
+      summary: searches hierarchytypes
+      description: searches hierarchytypes
+      parameters:
+        - name: hierarchyTypeRequest
+          in: body
+          schema:
+            $ref: '#/definitions/HierarchyTypeRequest'
+      tags:
+        - Hierarchytypes
+      responses:
+        '200':
+          description: returns HierarchyTypeResponse
+          schema:
+            $ref: '#/definitions/HierarchyTypeResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  /location/v11/boundarys/_search:
+    post:
+      summary: search boundaries
+      description: search boundaries
+      parameters:
+        - name: requestInfo
+          in: body
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+        - name: tenantId
+          in: query
+          type: string
+        - name: hierarchyTypeCode
+          in: query
+          type: string
+        - name: boundaryType
+          in: query
+          type: string
+        - name: codes
+          in: query
+          type: array
+          items:
+            type: string
+      tags:
+        - LocationBoundary
+      responses:
+        '200':
+          description: returns BoundaryMdmsResponse
+          schema:
+            $ref: '#/definitions/BoundaryMdmsResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+
+  //location/v11/tenant/_search:
     post:
       summary: >-
-        Resolves a given latitude / longitude to the corresponding tenant Id 
+        Resolves a given latitude / longitude to the corresponding tenant Id
       description: >
         Tries to resolve a given lat, long to a corresponding tenant, provided there exists a mapping between the reverse geocoded city to tenant.
       parameters:
@@ -108,8 +777,8 @@ paths:
           in: body
           description: JSON path filter string for filtering the output
           schema:
-           $ref: >-
-             #/definitions/RequestInfoWrapper
+            $ref: >-
+              #/definitions/RequestInfoWrapper
       tags:
         - Tenant
       responses:
@@ -136,30 +805,84 @@ definitions:
         type: string
         format: varchar
         description: HierarchyType Name.
-      label:
+      localName:
         type: string
-        format: varchar
-        description: label in localization service
+      tenantId:
+        type: string
+      createdby:
+        type: integer
+        format: int64
+      createdDate:
+        type: integer
+        format: int64
+      lastModifiedBy:
+        type: integer
+        format: int64
+      lastModifiedDate:
+        type: integer
+        format: int64
+      version:
+        type: integer
+      isNew:
+        type: boolean
     required:
       - code
       - name
+
   Boundary:
     type: object
     properties:
+      id:
+        type: string
       code:
         type: string
         description: code of the boundary.
+      boundaryNum:
+        type: integer
+        format: int64
       name:
         type: string
         description: name of the boundary.
-      label:
+      area:
         type: string
-        description: localized label for the boundry.
+      codes:
+        type: string
+      parent:
+        $ref: '#/definitions/Boundary'
+      boundaryType:
+        $ref: '#/definitions/BoundaryType'
+      fromDate:
+        type: string
+        format: date
+      toDate:
+        type: string
+        format: date
+      isHistory:
+        type: boolean
+      bndryId:
+        type: integer
+        format: int64
+      localName:
+        type: string
+      tenantId:
+        type: string
+      createdBy:
+        type: integer
+        format: int64
+      createdDate:
+        type: integer
+        format: int64
+      lastModifiedBy:
+        type: integer
+        format: int64
+      lastModifiedDate:
+        type: integer
+        format: int64
       latitude:
-        type: string
+        type: number
         description: latitude of the boundary.
       longitude:
-        type: string
+        type: number
         description: longitude of the boundary.
       children:
         type: array
@@ -174,6 +897,48 @@ definitions:
     required:
       - code
       - name
+
+  BoundaryType:
+    type: object
+    properties:
+      id:
+        type: string
+      code:
+        type: string
+        description: code of the boundary.
+      name:
+        type: string
+        description: name of the boundary.
+      hierarchyType:
+        $ref: '#/definitions/HierarchyType'
+      parent:
+        $ref: '#/definitions/Boundary'
+      childBoundaryTypes:
+        type: array
+        items:
+          $ref: '#/definitions/BoundaryType'
+      hierarchy:
+        type: integer
+        format: int64
+      localName:
+        type: string
+      parentName:
+        type: string
+      tenantid:
+        type: string
+      createdBy:
+        type: integer
+        format: int64
+      createdDate:
+        type: integer
+        format: int64
+      lastModifiedBy:
+        type: integer
+        format: int64
+      lastModifiedDate:
+        type: integer
+        format: int64
+
   Geography:
     type: object
     properties:
@@ -197,6 +962,89 @@ definitions:
       - division
       - geoJson
       - tenantId
+
+  ShapeFile:
+    type: object
+    properties:
+      fileExists:
+        type: boolean
+
+  MdmsBoundary:
+    type: object
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+      label:
+        type: string
+      latitude:
+        type: string
+      longitude:
+        type: string
+      area:
+        type: string
+      pincode:
+        type: array
+        items:
+          type: integer
+      boundaryNum:
+        type: integer
+        format: int64
+      children:
+        $ref: '#/definitions/MdmsBoundary'
+
+  City:
+    type: object
+    properties:
+      id:
+        type: string
+      code:
+        type: string
+      name:
+        type: string
+      districtCode:
+        type: string
+      districtName:
+        type: string
+      grade:
+        type: string
+      domainUrl:
+        type: string
+      regionName:
+        type: string
+      tenantId:
+        type: string
+
+  CrossHierarchy:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      code:
+        type: string
+      child:
+        $ref: '#/definitions/Boundary'
+      childType:
+        $ref: '#/definitions/BoundaryType'
+      parentType:
+        $ref: '#/definitions/BoundaryType'
+      tenantId:
+        type: string
+      createdBy:
+        type: integer
+        format: int64
+      createdDate:
+        type: string
+        format: date
+      lastModifiedBy:
+        type: integer
+        format: int64
+      lastModifiedDate:
+        type: string
+        format: date
+
   TenantBoundary:
     type: object
     properties:
@@ -209,6 +1057,86 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Boundary'
+
+  MdmsTenantBoundary:
+    type: object
+    properties:
+      tenantId:
+        type: string
+        description: Unique id of the boundary tenant.
+      hierarchyType:
+        $ref: '#/definitions/HierarchyType'
+      boundary:
+        type: array
+        items:
+          $ref: '#/definitions/MdmsBoundary'
+
+  BoundaryRequest:
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+      boundary:
+        $ref: '#/definitions/Boundary'
+
+  CityRequest:
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+      city:
+        $ref: '#/definitions/City'
+
+  BoundaryTypeRequest:
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+      boundaryType:
+        $ref: '#/definitions/BoundaryType'
+
+  BoundaryTypeSearchRequest:
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+      boundaryType:
+        $ref: '#/definitions/BoundaryType'
+
+  CrossHierarchyRequest:
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+      crossHierarchy:
+        $ref: '#/definitions/CrossHierarchy'
+
+  CrossHierarchySearchRequest:
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+      crossHierarchy:
+        $ref: '#/definitions/CrossHierarchy'
+
+  HierarchyTypeRequest:
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+      hierarchyType:
+        $ref: '#/definitions/HierarchyType'
+
+  BoundaryTypeResponse:
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      boundaryTypes:
+        type: array
+        items:
+          $ref: '#/definitions/BoundaryType'
+
   BoundaryResponse:
     properties:
       ResponseInfo:
@@ -217,7 +1145,18 @@ definitions:
       Boundary:
         type: array
         items:
-          $ref: '#/definitions/TenantBoundary'
+          $ref: '#/definitions/Boundary'
+
+  ShapeFileResponse:
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      shapeFile:
+        type: array
+        items:
+          $ref: '#/definitions/ShapeFile'
+
   GeographicalResponse:
     properties:
       ResponseInfo:
@@ -227,7 +1166,17 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Geography'
-    type: object
+
+  BoundaryMdmsResponse:
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      boundarys:
+        type: array
+        items:
+          $ref: '#/definitions/MdmsTenantBoundary'
+
   TenantResponse:
     properties:
       ResponseInfo:
@@ -237,7 +1186,37 @@ definitions:
         $ref: >-
           https://raw.githubusercontent.com/egovernments/egov-services/master/docs/tenant/contracts/v1.0.1.yml#/definitions/Tenant
     type: object
-  
+
+  CrossHierarchyResponse:
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      crossHierarchys:
+        type: array
+        items:
+          $ref: '#/definitions/CrossHierarchy'
+
+  CityResponse:
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      City:
+        type: array
+        items:
+          $ref: '#/definitions/City'
+
+  HierarchyTypeResponse:
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      hierarchyType:
+        type: array
+        items:
+          $ref: '#/definitions/HierarchyType'
+
   RequestInfoWrapper:
     type: object
     properties:
