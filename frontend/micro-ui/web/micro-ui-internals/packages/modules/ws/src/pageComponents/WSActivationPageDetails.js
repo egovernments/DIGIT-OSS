@@ -139,7 +139,7 @@ const ConnectionDetails = (_props) => {
                                 name="meterId"
                                 defaultValue={activationDetail?.meterId}
                                 type="number"
-                                rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                                rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                 isMandatory={true}
                                 render={(props) => (
                                     <TextInput
@@ -186,7 +186,7 @@ const ConnectionDetails = (_props) => {
                                 type="number"
                                 control={control}
                                 name="meterInitialReading"
-                                rules={{ validate: (e) => ((e && getPattern("Amount").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                                rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                 defaultValue={activationDetail?.meterInitialReading}
                                 isMandatory={true}
                                 render={(props) => (

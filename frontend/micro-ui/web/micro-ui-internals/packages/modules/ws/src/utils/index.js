@@ -111,6 +111,8 @@ export const convertEpochToDates = (dateEpoch) => {
 
 export const getPattern = type => {
   switch (type) {
+    case "WSOnlyNumbers":
+    return /^[0-9]*$/i;
     case "Name":
       return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i;
     case "MobileNo":
@@ -195,7 +197,7 @@ export const createPayloadOfWS = async (data) => {
     proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
     proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
     proposedToilets: data?.ConnectionDetails?.[0]?.proposedToilets && Number(data?.ConnectionDetails?.[0]?.proposedToilets),
-    connectionHolders: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
+    connectionHolders: !data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
       correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
       fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
       gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
@@ -507,14 +509,16 @@ export const convertApplicationData = (data, serviceType) => {
   let ConnectionDetails = [{
     water: serviceType === "WATER" ? true : false,
     sewerage: serviceType === "WATER" ? false : true,
+    applicationNo: data?.applicationData?.applicationNo,
+    serviceName: serviceType,
     proposedTaps: Number(data?.applicationData?.proposedTaps) || "",
     proposedPipeSize: data?.applicationData?.proposedPipeSize ? {
       i18nKey : data?.applicationData?.proposedPipeSize,
       code: data?.applicationData?.proposedPipeSize,
       size: data?.applicationData?.proposedPipeSize
     } : "",
-    proposedToilets: data?.applicationData?.proposedPipeSize || "",
-    proposedWaterClosets: data?.applicationData?.proposedPipeSize || ""
+    proposedToilets: data?.applicationData?.noOfToilets || "",
+    proposedWaterClosets: data?.applicationData?.noOfWaterClosets || ""
   }];
 
 
@@ -554,8 +558,22 @@ export const convertApplicationData = (data, serviceType) => {
     file: "",
   }];
 
+  let documents = [];
+  if (data?.applicationData?.documents) {
+    data.applicationData.documents.forEach(data => {
+      documents.push({
+        active: true,
+        code: data?.documentType,
+        i18nKey: data?.documentType?.replaceAll('.', '_'),
+        documentType: data?.documentType,
+        id: data.id,
+        documentUid: data?.documentUid,
+        fileStoreId: data?.fileStoreId
+      })
+    })
+  }
   let DocumentsRequired = {
-    documents : data?.applicationData?.documents
+    documents : documents
   } || [];
 
   let cpt = {};
@@ -566,11 +584,44 @@ export const convertApplicationData = (data, serviceType) => {
     ConnectionHolderDetails: ConnectionHolderDetails,
     DocumentsRequired: DocumentsRequired,
     cpt: cpt,
-    InfoLabel: undefined
+    InfoLabel: "InfoLabel"
   }
 
   sessionStorage.setItem("Digit.PT_CREATE_EMP_WS_NEW_FORM", JSON.stringify(payload));
   sessionStorage.setItem("WS_EDIT_APPLICATION_DETAILS", JSON.stringify(data));
+
+  return payload;
+}
+
+export const convertEditApplicationDetails = async (data, appData) => {
+
+  data?.cpt?.details?.owners?.forEach(owner => {
+    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
+  });
+
+  let payload = {
+    ...appData.applicationData,
+    proposedTaps: data?.ConnectionDetails?.[0]?.proposedTaps && Number(data?.ConnectionDetails?.[0]?.proposedTaps),
+    proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
+    proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
+    proposedToilets: data?.ConnectionDetails?.[0]?.proposedToilets && Number(data?.ConnectionDetails?.[0]?.proposedToilets),
+    connectionHolders: !data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
+      correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
+      fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
+      gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
+      mobileNumber: data?.ConnectionHolderDetails?.[0]?.mobileNumber || "",
+      name: data?.ConnectionHolderDetails?.[0]?.name || "",
+      ownerType: data?.ConnectionHolderDetails?.[0]?.ownerType?.code || "",
+      relationship: data?.ConnectionHolderDetails?.[0]?.relationship?.code || "",
+      sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
+    }] : null,
+    property: data?.cpt?.details,
+    processInstance: {
+      action: "RESUBMIT_APPLICATION"
+    },
+    action: "RESUBMIT_APPLICATION",
+    documents: data?.DocumentsRequired?.documents,
+  }
 
   return payload;
 }

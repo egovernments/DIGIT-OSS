@@ -47,8 +47,8 @@ const ActivateConnection = () => {
         noOfTaps: state?.data?.noOfTaps || "",
         formDetails: details
     } : {
-        noOfWaterClosets: state?.data?.connectionType || "",
-        noOfToilets: state?.data?.connectionType || "",
+        noOfWaterClosets: state?.data?.noOfWaterClosets || "",
+        noOfToilets: state?.data?.noOfToilets || "",
         formDetails: details
     };
 
@@ -88,10 +88,10 @@ const ActivateConnection = () => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (showToast?.key != "error" && isAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${filters?.applicationNumber}&service=${filters?.service}`
+            if (isAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${filters?.applicationNumber}&service=${filters?.service}`
         }, 3000);
         return () => clearTimeout(timer);
-      }, [showToast]);
+      }, [isAppDetailsPage]);
 
     const onFormValueChange = (setValue, formData, formState) => {
         if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0) setSubmitValve(true);
@@ -177,7 +177,7 @@ const ActivateConnection = () => {
                     // setIsEnableLoader(false);
                     setShowToast({ key: false, message: "WS_ACTIVATE_SUCCESS_MESSAGE_MAIN" });
                     setIsAppDetailsPage(true);
-                    setTimeout(closeToast(), 5000);
+                    // setTimeout(closeToast(), 5000);
                     // setTimeout(closeToastForSucsss(), 5000)
                 },
             });

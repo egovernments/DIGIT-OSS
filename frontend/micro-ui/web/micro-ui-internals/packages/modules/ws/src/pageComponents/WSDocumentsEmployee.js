@@ -98,12 +98,14 @@ function SelectDocument({
   const handleSelectDocument = (value) => setSelectedDocument(value);
 
   useEffect(() => {
-    setSelectedDocument(filteredDocument
-      ? { ...filteredDocument, code: filteredDocument?.documentType }
-      : doc?.dropdownData?.length === 1
-        ? doc?.dropdownData[0]
-        : {})
-  }, [filteredDocument])
+    if (filteredDocument) {
+      setSelectedDocument(filteredDocument
+        ? { ...filteredDocument, code: filteredDocument?.documentType }
+        : doc?.dropdownData?.length === 1
+          ? doc?.dropdownData[0]
+          : {})
+    }
+  }, [])
 
   function selectfile(e) {
     setFile(e.target.files[0]);
@@ -150,8 +152,9 @@ function SelectDocument({
           {
             documentType: selectedDocument?.code,
             fileStoreId: uploadedFile,
-            documentUid: uploadedFile,
-            i18nKey: selectedDocument?.code
+            documentUid: selectedDocument?.documentUid ? selectedDocument?.documentUid : uploadedFile,
+            i18nKey: selectedDocument?.code,
+            id: selectedDocument?.id
           },
         ];
       });

@@ -36,6 +36,9 @@ const NewApplication = () => {
 
   useEffect(() => {
     const config = newConfigLocal.find((conf) => conf.hideInCitizen);
+    let bodyDetails = [];
+    config?.body?.forEach(data => { if(data?.isCreateConnection) bodyDetails.push(data); })
+    config.body = bodyDetails;
     setConfig(config);
   });
 
@@ -86,6 +89,7 @@ const NewApplication = () => {
 
     if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0 && !formData?.cpt?.details?.propertyId) setSubmitValve(true);
     else setSubmitValve(!(Object.keys(formState.errors).length));
+    if(!formData?.cpt?.details?.propertyId) setSubmitValve(false);
   };
 
   const closeToastOfError = () => { setShowToast(null); };

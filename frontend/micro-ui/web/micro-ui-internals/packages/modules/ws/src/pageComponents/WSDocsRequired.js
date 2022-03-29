@@ -12,6 +12,9 @@ const WSDocsRequired = ({ onSelect, userType, onSkip, config }) => {
     onSelect("DocsReq", "");
   }
 
+  sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
+  sessionStorage.removeItem("IsDetailsExists");
+
   const { isLoading: wsDocsLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId);
 
   if (userType === "citizen") {
@@ -75,6 +78,7 @@ const WSDocsRequired = ({ onSelect, userType, onSkip, config }) => {
                 history.push(match.path.replace("create-application", "new-application"));
               }}
               style={{ margin: "10px 10px 0px 0px" }}
+              disabled={wsDocsLoading ? true : false}
             />}
         </ActionBar>
       </Card>

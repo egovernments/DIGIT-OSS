@@ -22,12 +22,7 @@ const WSCard = () => {
       label: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
       link: `/digit-ui/employee/ws/create-application`,
       roles: ["WS_CEMP", "SW_CEMP"]
-    },
-    {
-      label: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
-      link: `/digit-ui/employee/ws/edit-application?applicationNumber=WS_AP/107/2021-22/251375&service=WATER&propertyId=PB-PT-2022-02-24-026486`,
-      roles: ["WS_CEMP", "SW_CEMP"]
-    },
+    }
 
   ];
 
