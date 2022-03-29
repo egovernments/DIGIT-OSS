@@ -32,18 +32,30 @@ const WSCard = () => {
     moduleName: t("ACTION_TEST_WATER_AND_SEWERAGE"),
     kpis: [
       {
-        count: '-',
-        label: t("TOTAL_CONNECTIONS")
+        count: "-",
+        label: t("TOTAL_CONNECTIONS"),
       },
       // {
       //     label: t(""),
       //     link: `/digit-ui/employee/receipts/inbox`
-      // }  
+      // }
     ],
-    links: links
-  }
+    links: [
+      {
+        label: t("WS_SEARCH_APP"),
+        link: `/digit-ui/employee/ws/search-application`,
+      },
+      {
+        label: t("WS_NEW_APP"),
+        link: `/digit-ui/employee/ws/create-application`,
+      },
+      {
+        label: t("WS_SEARCH_CONNECTION"),
+        link: `/digit-ui/employee/ws/search`,
+      },
+    ],
+  };
   return <EmployeeModuleCard {...propsForModuleCard} />
 };
 
 export default WSCard;
-

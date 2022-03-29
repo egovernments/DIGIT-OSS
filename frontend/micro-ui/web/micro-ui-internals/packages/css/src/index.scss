@@ -515,25 +515,25 @@ input[type="number"] {
   padding: 3px;
 }
 
-.full-width-card{
-  width : 92vw !important;
+.full-width-card {
+  width: 92vw !important;
 }
-.full-employee-card-link{
-  width: 100%!important;
+.full-employee-card-link {
+  width: 100% !important;
   margin: 7px 0px;
 }
-.full-employee-card-height{
- height: unset !important;
+.full-employee-card-height {
+  height: unset !important;
 }
 
 @media (min-width: 640px) {
-  .full-employee-card-height{
+  .full-employee-card-height {
     height: 196px !important;
   }
-  .full-employee-card-link{
-    width: 30%!important;
+  .full-employee-card-link {
+    width: 30% !important;
   }
-  .full-width-card{
+  .full-width-card {
     @apply w-full !important;
   }
 }
@@ -581,6 +581,22 @@ input[type="number"] {
   }
 }
 
-.employee-app-wrapper{
-min-height: calc(100vh - 8em);
+.employee-app-wrapper {
+  min-height: calc(100vh - 8em);
+}
+
+.ws-custom-wrapper {
+  .submit {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    width: 100% !important;
+    align-items: center;
+    button {
+      width: 240px !important;
+    }
+    p {
+      width: unset;
+      margin-right: 1rem;
+    }
+  }
 }
