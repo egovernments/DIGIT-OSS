@@ -130,7 +130,7 @@ public class EdcrValidator {
                         }
                          if (isAllowNumeric) {
                             LOG.info("The Inalid Value is" + value);
-                            error.setErrorCode("EDCR-31");
+                            error.setErrorCode("EDCR-33");
                             error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
                             return error;
                         }
