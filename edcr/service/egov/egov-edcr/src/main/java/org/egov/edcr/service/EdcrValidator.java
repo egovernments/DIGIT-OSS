@@ -122,7 +122,7 @@ public class EdcrValidator {
                         value = value.trim();
                         boolean isAllow = Pattern.matches(ALPHANUMERIC_WITH_SPECIAL_CHARS, value);
                         boolean isAllowNumeric = Pattern.matches(NUMERIC_CHARS, value);
-                        if (!isAllow && !isAllowNumeric) {
+                        if (!isAllow || !isAllowNumeric) {
                             LOG.info("The Inalid Value is" + value);
                             error.setErrorCode("EDCR-31");
                             error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
