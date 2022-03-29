@@ -11,10 +11,13 @@ const ApplicationBillAmendment = () => {
 	const stateId = Digit.ULBService.getStateId();
 	const { isLoading: BillAmendmentMDMSLoading, data: BillAmendmentMDMS } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSMDMSBillAmendment({tenantId: stateId});
 	const billSearchFilters = { tenantId, consumerCode:connectionNumber, service:"WS" }
-	const {data: billSearchData, isLoading: isBillSearchLoading} = Digit.Hooks.usePaymentSearch(tenantId, billSearchFilters );
+	const {data: preBillSearchData, isLoading: isBillSearchLoading} = Digit.Hooks.usePaymentSearch(tenantId, billSearchFilters );
+	const { data, isFetched } = Digit.Hooks.fsm.useMDMS(stateId, "DIGIT-UI", "WSTaxHeadMaster");
+	const availableBillAmendmentTaxHeads = data?.BillingService?.TaxHeadMaster?.filter(w=>w.IsBillamend)
+	const billSearchData =  preBillSearchData?.filter( e => availableBillAmendmentTaxHeads.find(taxHeadMaster => taxHeadMaster.code === e.taxHeadCode))
+	debugger
 	
 	const { register, control, watch, setValue, unregister, handleSubmit, formState:{ errors }, ...methods } = useForm()
-
 	const amendmentReason = watch("amendmentReason");
 	const WS_REDUCED_AMOUNT = watch("WS_REDUCED_AMOUNT");
 	const WS_ADDITIONAL_AMOUNT = watch("WS_ADDITIONAL_AMOUNT");
