@@ -24,6 +24,7 @@ public class EdcrValidator {
     private static Logger LOG = Logger.getLogger(EdcrValidator.class);
     private static final String INVALID_VAL = "The %s value is invalid";
     private static final String ALPHANUMERIC_WITH_SPECIAL_CHARS = "^[a-zA-Z0-9]+(([ _\\-&:,/.][a-zA-Z0-9])?[a-zA-Z0-9]*)*$";
+    private static final String NUMERIC_CHARS = "[0-9]+";
     private static final String INVALID_CHAR_MSG = " _-&:,/.";
     private static final String INVALID_CHAR = "The (%s) contains invalid value. Only following special characters are allowed %s, The String should not start with special characters and should not follow two immediately.";
     
@@ -120,7 +121,8 @@ public class EdcrValidator {
                     if (StringUtils.isNotBlank(value) && value.length() > 1) {
                         value = value.trim();
                         boolean isAllow = Pattern.matches(ALPHANUMERIC_WITH_SPECIAL_CHARS, value);
-                        if (!isAllow) {
+                        boolean isAllowNumeric = Pattern.matches(NUMERIC_CHARS, value);
+                        if (!isAllow && !isAllowNumeric) {
                             LOG.info("The Inalid Value is" + value);
                             error.setErrorCode("EDCR-31");
                             error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
