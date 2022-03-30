@@ -46,7 +46,7 @@ const ReceiptDetails = () => {
     return <Loader />;
   }
   const PaymentReceipt = !isLoading && data?.Payments?.length > 0 ? data.Payments[0] : {};
-
+  const pendingDue= PaymentReceipt?.totalDue - PaymentReceipt?.totalAmountPaid;
   return (
     <React.Fragment>
       <div style={{ width: "30%", fontFamily: "calibri", color: "#FF0000" }}>
@@ -64,7 +64,7 @@ const ReceiptDetails = () => {
               <Row label={t("CR_RECEIPT_SERVICE_TYPE")} text={t(convertToLocale(PaymentReceipt?.paymentDetails[0]?.businessService, 'BILLINGSERVICE_BUSINESSSERVICE')) || "NA"} />
               <Row label={t("CR_RECEIPT_BILL_PERIOD")} text={getFinancialYears(PaymentReceipt?.paymentDetails[0]?.bill?.billDetails[0]?.fromPeriod,PaymentReceipt?.paymentDetails[0]?.bill?.billDetails[0]?.toPeriod) || "NA"} />
               <Row label={t("CR_RECEIPT_AMOUNT")} text={'₹' + PaymentReceipt?.totalAmountPaid || "NA"} />
-              <Row label={t("CR_RECEIPT_PENDING_AMOUNT")} text={'₹' + PaymentReceipt?.totalDue || "₹0"} />
+              <Row label={t("CR_RECEIPT_PENDING_AMOUNT")} text={'₹' + (pendingDue) || "₹0"} />
               <Row label={t("CR_RECEIPT_PAYMENT_MODE")} text={PaymentReceipt?.paymentMode ? t(`COMMON_MASTERS_PAYMENTMODE_${PaymentReceipt?.paymentMode}`) || "NA" : "NA"} />
               <Row label={t("CR_RECEIPT_TXN_ID")} text={PaymentReceipt?.transactionNumber || "NA"} />
               <Row label={t("CR_RECEIPT_G8_RECEIPT_NO")} text={PaymentReceipt?.paymentDetails[0]?.manualReceiptNumber || "NA"} />
