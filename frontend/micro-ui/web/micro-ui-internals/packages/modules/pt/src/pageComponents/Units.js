@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CardLabel, LabelFieldPair, Dropdown, TextInput, LinkButton, CardLabelError, Loader } from "@egovernments/digit-ui-react-components";
+import { CardLabel, LabelFieldPair, Dropdown, TextInput, LinkButton, CardLabelError, Loader, DeleteIcon } from "@egovernments/digit-ui-react-components";
 import { stringReplaceAll } from "../utils";
 import { useForm, Controller } from "react-hook-form";
 import _ from "lodash";
@@ -372,10 +372,16 @@ function Unit({
       </div>
       <div style={{ border: "1px solid #E3E3E3", padding: "16px", marginTop: "8px" }}>
         {allUnits.length > 1 ? (
-          <div onClick={() => handleRemoveUnit(unit)} style={{ marginBottom: "16px", padding: "5px", cursor: "pointer", textAlign: "right" }}>
-            X
-          </div>
+            <LinkButton
+            label={ <DeleteIcon style={{ float: "right", position: "relative", bottom: "5px" }} fill={!(allUnits.length == 1) ? "#494848" : "#FAFAFA"}/>}
+            style={{ marginBottom: "16px", padding: "5px", cursor: "pointer", textAlign: "right" }}
+            onClick={(e) => handleRemoveUnit(unit)}
+            />
+          // <div onClick={() => handleRemoveUnit(unit)} style={{ marginBottom: "16px", padding: "5px", cursor: "pointer", textAlign: "right" }}>
+          //   X
+          // </div>
         ) : null}
+        <div style={{ marginTop: "30px" }}>
         <LabelFieldPair>
           <CardLabel className="card-label-smaller">{t("PT_FORM2_SELECT_FLOOR") + " *"}</CardLabel>
           <Controller
@@ -397,6 +403,7 @@ function Unit({
           />
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.floorNo ? errors?.floorNo?.message : ""}</CardLabelError>
+        </div>
         <LabelFieldPair>
           <CardLabel className="card-label-smaller">{t("PT_PROPERTY_DETAILS_USAGE_TYPE_HEADER") + " *"}</CardLabel>
           <Dropdown
