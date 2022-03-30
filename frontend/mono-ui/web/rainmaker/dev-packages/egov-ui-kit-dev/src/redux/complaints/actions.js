@@ -159,10 +159,6 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite) => {
           queryObject.push({ key: "tenantId", value: getTenantId() })
         }
       }
-
-      if (queryObject && queryObject.length == 0) {
-        queryObject.push({ key: "tenantId", value: getTenantId() })
-      }
       
       const payload = await httpRequest(COMPLAINT.GET.URL, COMPLAINT.GET.ACTION, queryObject);
       if (payload.services && payload.services.length === 1) {
