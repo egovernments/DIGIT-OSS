@@ -198,6 +198,8 @@ const PropertyDetails = () => {
                 {
                   action: !fetchBillData?.Bill[0]?.totalAmount ? "MUTATE_PROPERTY" : "PT_TOTALDUES_PAY",
                   forcedName: "PT_OWNERSHIP_TRANSFER",
+                  AmountDueForPay : fetchBillData?.Bill[0]?.totalAmount,
+                  isWarningPopUp : !fetchBillData?.Bill[0]?.totalAmount ? false:true,
                   redirectionUrl: {
                     pathname: !fetchBillData?.Bill[0]?.totalAmount
                       ? `/digit-ui/employee/pt/property-mutate-docs-required/${applicationNumber}`
