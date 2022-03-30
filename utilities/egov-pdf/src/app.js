@@ -11,7 +11,7 @@ var paymentRouter = require("./routes/payments");
 var mcollectRouter = require("./routes/mcollect");
 var billRouter = require("./routes/bills");
 var wnsRouter = require("./routes/wns");
-
+var birthDeath =require("./routes/birth-death");
 var app = express();
 app.disable('x-powered-by');
 
@@ -32,6 +32,7 @@ app.use(config.app.contextPath + "/download/UC", mcollectRouter);
 app.use(config.app.contextPath + "/download/PAYMENT", paymentRouter);
 app.use(config.app.contextPath + "/download/BILL", billRouter);
 app.use(config.app.contextPath + "/download/WNS", wnsRouter);
+app.use(config.app.contextPath + "/download/BIRTHDEATH", birthDeath);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
