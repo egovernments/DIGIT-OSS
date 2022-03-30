@@ -162,7 +162,7 @@ const PropertyInformation = () => {
       <div>
         <Card>
           <StatusTable>
-            <Row label={t("PT_PROPERTY_PTUID")} text={`${property.propertyId || t("CS_NA")}`} textStyle={{ whiteSpace: "pre" }} />
+            <Row label={t("PT_PROPERTY_PTUID")} text={`${property.propertyId || t("CS_NA")}`} /* textStyle={{ whiteSpace: "pre" }} */ />
             <Row label={t("CS_COMMON_TOTAL_AMOUNT_DUE")} text={`${t(getBillAmount(fetchBillData))}`} />
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
@@ -240,7 +240,7 @@ const PropertyInformation = () => {
                   {property?.institution && property?.institution?.type && <Row label={t("PT_INSTITUTION_TYPE")} text={`${t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${property?.institution?.type}`) || t("CS_NA")}`} />}
                     <Row
                       label={t("PT_COMMON_APPLICANT_NAME_LABEL")}
-                      textStyle={isMobile?{width:"22%"}:{width:"40%"}}
+                      textStyle={isMobile?{marginLeft:"28%"}:{marginLeft:"22%"}}
                       text={`${owner?.name || t("CS_NA")}`}
                       actionButton={
                         <ActionButton jumpTo={`/digit-ui/citizen/pt/property/owner-history/${property.tenantId}/${property.propertyId}`} />
@@ -251,6 +251,7 @@ const PropertyInformation = () => {
                     <Row
                     label={t("PT_FORM3_MOBILE_NUMBER")}
                     text={`${t(owner?.mobileNumber)}` || t("CS_NA")}
+                    textStyle={isMobile?{marginLeft:"16%"}:{marginLeft:"13%"}}
                     actionButton={
                     property?.status === "ACTIVE"&&owner?.mobileNumber&&Digit.UserService.getUser()?.info?.mobileNumber&&owner.mobileNumber===Digit.UserService.getUser()?.info?.mobileNumber&&<div onClick={() => showPopup({ name: owner?.name, mobileNumber: owner?.mobileNumber, ownerIndex: index })}>
                     <EditIcon />
