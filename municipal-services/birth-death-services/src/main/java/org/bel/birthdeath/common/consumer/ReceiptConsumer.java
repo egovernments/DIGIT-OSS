@@ -5,7 +5,6 @@ import static org.bel.birthdeath.utils.BirthDeathConstants.DEATH_CERT;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import org.bel.birthdeath.birth.certmodel.BirthCertRequest;
 import org.bel.birthdeath.birth.certmodel.BirthCertificate;
@@ -102,7 +101,7 @@ public class ReceiptConsumer {
 		try {
 			DeathCertificate deathCertificate = repositoryDeath.getDeathCertReqByConsumerCode(paymentDetail.getBill().getConsumerCode(),requestInfo);
 			if(deathCertificate.getApplicationStatus().equals(org.bel.birthdeath.death.certmodel.DeathCertificate.StatusEnum.ACTIVE)) {
-				String uuid = UUID.randomUUID().toString();
+				String uuid = requestInfo.getUserInfo().getUuid();
 			    AuditDetails auditDetails = commUtils.getAuditDetails(uuid, false);
 				deathCertificate.getAuditDetails().setLastModifiedBy(auditDetails.getLastModifiedBy());
 				deathCertificate.getAuditDetails().setLastModifiedTime(auditDetails.getLastModifiedTime());
