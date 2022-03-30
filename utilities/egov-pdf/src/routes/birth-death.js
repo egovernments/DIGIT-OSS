@@ -72,7 +72,7 @@ router.post(
           console.log("error===",ex.stack);
         }
         var pdfResponse;
-        pdfkey = pdfkey+"-birth";
+        pdfkey = pdfkey;
         console.log("pdfkey---",pdfkey);
         try {
           pdfResponse = await create_pdf(
@@ -153,7 +153,7 @@ router.post(
         console.log("error===",ex.stack);  
       }
       var pdfResponse;
-      pdfkey = pdfkey+"-death";
+      pdfkey = pdfkey;
       console.log("pdfkey---",pdfkey);
       try {
         pdfResponse = await create_pdf(
