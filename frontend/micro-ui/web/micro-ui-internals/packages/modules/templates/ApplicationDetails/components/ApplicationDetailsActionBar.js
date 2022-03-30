@@ -13,7 +13,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
   });
 
-  if ((window.location.href.includes("/obps") || window.location.href.includes("/noc")) && actions?.length == 1) {
+  if (((window.location.href.includes("/obps") || window.location.href.includes("/noc")) && actions?.length == 1) || (actions?.[0]?.redirectionUrl?.pathname.includes("/pt/property-details/")) && actions?.length == 1) {
     isMenuBotton = false;
     isSingleButton = true; 
   } else if (actions?.length > 0) {
