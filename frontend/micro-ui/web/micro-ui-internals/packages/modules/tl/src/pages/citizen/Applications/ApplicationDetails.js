@@ -132,6 +132,10 @@ const { isLoading: PTLoading, isError: isPTError, data: PTData } = Digit.Hooks.p
           label: t("CS_COMMON_PAYMENT_RECEIPT"),
           onClick: downloadPaymentReceipt,
         },
+        {
+          label: t("CS_COMMON_APPLICATION_ACKNOWLEDGEMENT"),
+          onClick: handleDownloadPdf,
+        }
       ]
       : [
         {

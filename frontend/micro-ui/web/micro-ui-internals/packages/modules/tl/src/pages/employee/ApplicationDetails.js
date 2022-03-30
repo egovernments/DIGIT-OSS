@@ -3,11 +3,14 @@ import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
 import cloneDeep from "lodash/cloneDeep";
 import { useParams } from "react-router-dom";
-import { Header } from "@egovernments/digit-ui-react-components";
+import { Header,MultiLink } from "@egovernments/digit-ui-react-components";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
+import getPDFData from "../../utils/getTLAcknowledgementData"
 
 const ApplicationDetails = () => {
+  const { data: storeData } = Digit.Hooks.useStore.getInitData();
+  const { tenants } = storeData || {};
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { id: applicationNumber } = useParams();
@@ -170,12 +173,63 @@ const ApplicationDetails = () => {
     }];
   }
 
+    const handleDownloadPdf = async () => {
+      const tenantInfo = tenants.find((tenant) => tenant.code === applicationDetails.tenantId);
+      const data = await getPDFData(applicationDetails?.applicationData, tenantInfo, t);
+      //data.then((ress) => Digit.Utils.pdf.generate(ress));
+      Digit.Utils.pdf.generate(data);
+      setIsDisplayDownloadMenu(false)
+    };
 
+  const printReciept = async (businessService="TL", consumerCode=applicationDetails?.applicationData?.applicationNumber) => {
+    await Digit.Utils.downloadReceipt(consumerCode, businessService, 'tradelicense-receipt');
+    setIsDisplayDownloadMenu(false)
+  };
+
+  const printCertificate = async () => {
+     let res = await Digit.TLService.TLsearch({ tenantId: applicationDetails?.tenantId, filters: { applicationNumber:applicationDetails?.applicationData?.applicationNumber } });
+     const fileStoreId = res?.Licenses[0]?.fileStoreId;
+     const stateId = Digit.ULBService.getStateId()
+     const resv1 = await Digit.UploadServices.Filefetch([fileStoreId],stateId);
+     window.open(resv1.data[resv1.data.fileStoreIds[0].id]);
+     setIsDisplayDownloadMenu(false)
+  }
+  const [isDisplayDownloadMenu, setIsDisplayDownloadMenu] = useState(false);
+  const applicationStatus = applicationDetails?.applicationData?.status
+  
+  const dowloadOptions =
+    applicationStatus==="APPROVED"
+      ? [
+        {
+          label: t("TL_CERTIFICATE"),
+          onClick: printCertificate,
+        },
+        {
+          label: t("TL_RECEIPT"),
+          onClick: printReciept,
+        },
+        {
+          label: t("TL_APPLICATION"),
+          onClick: handleDownloadPdf,
+        }
+      ]
+      : [
+        {
+          label: t("TL_APPLICATION"),
+          onClick: handleDownloadPdf,
+        },
+      ];
 
   return (
     <div >
-      <div style={{marginLeft: "15px"}}>
+      <div className="cardHeaderWithOptions" >
         <Header>{(applicationDetails?.applicationData?.workflowCode == "NewTL" && applicationDetails?.applicationData?.status !== "APPROVED") ? t("TL_TRADE_APPLICATION_DETAILS_LABEL") : t("TL_TRADE_LICENSE_DETAILS_LABEL")}</Header>
+        <MultiLink
+                className="multilinkWrapper"
+                onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
+                displayOptions={isDisplayDownloadMenu}
+                options={dowloadOptions}
+        />
       </div>
       <ApplicationDetailsTemplate
         applicationDetails={applicationDetails}
