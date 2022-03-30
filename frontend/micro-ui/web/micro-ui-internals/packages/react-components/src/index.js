@@ -152,7 +152,8 @@ import {
   MCollectIcon,
   PGRIcon,
   TLIcon,
-  BillsIcon
+  BillsIcon,
+  ErrorIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -405,5 +406,6 @@ export {
   MCollectIcon,
   PGRIcon,
   TLIcon,
-  BillsIcon
+  BillsIcon,
+  ErrorIcon
 };
