@@ -20,31 +20,24 @@ const NewApplication = () => {
   const [appDetails, setAppDetails] = useState({});
   const [waterAndSewerageBoth, setWaterAndSewerageBoth] = useState(null);
   const [config, setConfig] = useState({ head: "", body: [] });
-
-  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(Digit.ULBService.getCurrentTenantId(), newConfigLocal);
+  const isFieldInspector = () => Digit.UserService.getUser()?.info?.roles?.some((role) => role?.code === "WS_FIELD_INSPECTOR");
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => {
-      if (conf.hideInCitizen) {
-        const config = {};
+    const config = newConfigLocal.find((conf) => conf.hideInCitizen);
 
-        config["head"] = conf.head;
-
-        config["body"] = conf.body.map((comp) => {
-          if (comp.role && comp.role === "fieldInspector") {
-            return null;
+    setConfig({
+      ...config, body: config.body.filter((c) => {
+        if (["WS_PLUMBER_DETAILS", "WS_ROAD_CUTT_DETAILS", "WS_COMMON_CONNECTION_DETAIL"].includes(c.head)) {
+          if (isFieldInspector()) {
+            return true;
           }
 
-          return comp;
-        });
+          return false;
+        }
 
-        return config;
-      }
-
-      return null;
+        return true;;
+      })
     });
-
-    setConfig(config);
   }, []);
 
   const {

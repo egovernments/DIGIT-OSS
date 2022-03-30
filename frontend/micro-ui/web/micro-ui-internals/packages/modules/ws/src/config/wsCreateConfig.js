@@ -211,7 +211,6 @@ export const newConfig = [
     },
     {
       head: "WS_COMMON_CONNECTION_DETAIL",
-      role: "fieldInspector",
       body: [{
         type: "component",
         key: "ConnectionDetails",
@@ -221,7 +220,6 @@ export const newConfig = [
     },
     {
       head: "WS_PLUMBER_DETAILS",
-      role:"fieldInspector",
       body: [{
         type: "component",
         key: "PlumberDetails",
@@ -231,7 +229,6 @@ export const newConfig = [
     },
     {
       head: "WS_ROAD_CUTT_DETAILS",
-      role:"fieldInspector",
       body: [{
         type: "component",
         key: "RoadCuttingDetails",

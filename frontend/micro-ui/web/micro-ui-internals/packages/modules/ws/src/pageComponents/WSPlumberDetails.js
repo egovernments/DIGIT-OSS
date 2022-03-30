@@ -125,7 +125,7 @@ const WSPlumberDetails = ({ t, config, onSelect, formData, formState, setError, 
             defaultValue={plumberDetails.plumberLicenseNo}
             rules={{
               validate: (e) => isPlumberProvidedByULB() && e && getPattern("OldLicenceNo").test(e) ? true : t(""),
-              required: t(isPlumberProvidedByULB() ? "REQUIRED_FIELD": ""),
+              required: t(isPlumberProvidedByULB() ? "REQUIRED_FIELD" : ""),
             }}
             render={(props) => (
               <TextInput
@@ -158,7 +158,7 @@ const WSPlumberDetails = ({ t, config, onSelect, formData, formState, setError, 
             defaultValue={plumberDetails.plumberName}
             rules={{
               validate: (e) => isPlumberProvidedByULB() && e && getPattern("Name").test(e) ? true : t(""),
-              required: t(isPlumberProvidedByULB() ? "REQUIRED_FIELD": ""),
+              required: t(isPlumberProvidedByULB() ? "REQUIRED_FIELD" : ""),
             }}
             render={(props) => (
               <TextInput
@@ -191,7 +191,7 @@ const WSPlumberDetails = ({ t, config, onSelect, formData, formState, setError, 
             defaultValue={plumberDetails.plumberMobileNo}
             rules={{
               validate: (e) => isPlumberProvidedByULB() && e && getPattern("MobileNo").test(e) ? true : t(""),
-              required: t(isPlumberProvidedByULB() ? "REQUIRED_FIELD": ""),
+              required: t(isPlumberProvidedByULB() ? "REQUIRED_FIELD" : ""),
             }}
             render={(props) => (
               <MobileNumber

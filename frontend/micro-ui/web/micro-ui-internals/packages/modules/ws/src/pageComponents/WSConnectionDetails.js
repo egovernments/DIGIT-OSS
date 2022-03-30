@@ -34,7 +34,6 @@ const WSConnectionDetails = ({ config, onSelect, userType, formData, setError, f
 
   const { isWSServicesCalculationLoading, data: wsServicesCalculationData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-calculation", ["PipeSize"]);
 
-
   useEffect(() => {
     const data = connectionDetails.map((e) => {
       return e;
