@@ -15,7 +15,7 @@ const PTApplicationDetails = () => {
   const { acknowledgementIds } = useParams();
   const [acknowldgementData, setAcknowldgementData] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
-
+  const [bill, setBill] = useState({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
@@ -29,6 +29,12 @@ const PTApplicationDetails = () => {
   let property = (properties && properties.length > 0 && properties[0]) || {};
   const application = property;
   sessionStorage.setItem("pt-property", JSON.stringify(application));
+
+  
+  useEffect(async ()=>{
+    const res = await Digit.PaymentService.fetchBill(tenantId, {businessService: "PT.MUTATION", consumerCode: acknowledgementIds});
+    setBill(res.Bill[0])
+  },[tenantId, acknowledgementIds])
 
   const { isLoading: auditDataLoading, isError: isAuditError, data: auditResponse } = Digit.Hooks.pt.usePropertySearch(
     {
@@ -221,8 +227,8 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
 
             {isPropertyTransfer && (
               <React.Fragment>
-                <Row label={t("PT_FEE_AMOUNT")} text={application?.name || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
-                <Row label={t("PT_PAYMENT_STATUS")} text={application?.status || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+                <Row label={t("PT_FEE_AMOUNT")} text={bill?.totalAmount ||t("CS_NA") } textStyle={{ whiteSpace: "pre" }} />
+                <Row label={t("PT_PAYMENT_STATUS")} text={bill?.totalAmount &&  bill?.totalAmount > 0 ? t("PT_UNPAID") : t("PT_PAID")} textStyle={{ whiteSpace: "pre" }} />
               </React.Fragment>
             )}
           </StatusTable>
