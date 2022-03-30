@@ -223,7 +223,7 @@ export const WorkflowService = {
 
         const nextActions = actionRolePair;
 
-        if (role !== "CITIZEN" && moduleCode === "PGR") {
+        if ( moduleCode === "PGR") {
           const onlyPendingForAssignmentStatusArray = timeline?.filter(e => e?.status === "PENDINGFORASSIGNMENT")
           const duplicateCheckpointOfPendingForAssignment = onlyPendingForAssignmentStatusArray.at(-1)
           // const duplicateCheckpointOfPendingForAssignment = timeline?.find( e => e?.status === "PENDINGFORASSIGNMENT")

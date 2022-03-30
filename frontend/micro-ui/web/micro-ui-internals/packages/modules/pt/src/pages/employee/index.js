@@ -138,7 +138,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const DocsRequired = Digit?.ComponentRegistryService?.getComponent("PTDocsRequired");
   const isRes = window.location.href.includes("pt/response");
   const isLocation = window.location.href.includes("pt") || window.location.href.includes("application");
-  const isNewRegistration = window.location.href.includes("new-application") || window.location.href.includes("modify-application");
+  const isNewRegistration = window.location.href.includes("new-application") || window.location.href.includes("modify-application") || window.location.href.includes("pt/application-details");
   return (
     <Switch>
       <React.Fragment>
