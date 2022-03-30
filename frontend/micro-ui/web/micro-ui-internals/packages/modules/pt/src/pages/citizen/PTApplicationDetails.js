@@ -187,7 +187,7 @@ let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
   let dowloadOptions = [];
 
   dowloadOptions.push({
-    label: t("MT_APPLICATION"),
+    label: data?.Properties?.[0]?.creationReason === "MUTATION" ? t("MT_APPLICATION") : t("PT_APPLICATION_ACKNOWLEDGMENT"),
     onClick: () => getAcknowledgementData()
   });
   if(reciept_data && reciept_data?.Payments.length>0 && recieptDataLoading == false)
