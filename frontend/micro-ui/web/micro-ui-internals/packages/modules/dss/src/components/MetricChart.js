@@ -91,12 +91,12 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
     </div>
     );
   }
-
+  let name=t(data?.name)||"";
   return (
     <div className="row">
       <div className={`tooltip`} >
-        {t(data.name)}
-
+        {typeof name=="string"&&name}
+        {Array.isArray(name)&&name?.filter(ele=>ele)?.map(ele=><div style={{ whiteSpace: "pre" }}>{ele}</div>)}
         <span className="dss-white-pre" style={{ display: "block" }}> {showDate?.[id]?.todaysDate}</span>
         <span
           className="tooltiptext"
