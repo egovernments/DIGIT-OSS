@@ -837,6 +837,12 @@ const EditPencilIcon = ({ className ,width=18, height=18}) => <svg className={cl
 <path  d="M9.126 5.12482L11.063 3.18782L14.81 6.93482L12.873 8.87282L9.126 5.12482ZM17.71 2.62982L15.37 0.289816C15.1826 0.103565 14.9292 -0.000976562 14.665 -0.000976562C14.4008 -0.000976563 14.1474 0.103565 13.96 0.289816L12.13 2.11982L15.88 5.86982L17.71 3.99982C17.8844 3.81436 17.9815 3.56938 17.9815 3.31482C17.9815 3.06025 17.8844 2.81528 17.71 2.62982ZM5.63 8.62982L0 14.2498V17.9998H3.75L9.38 12.3798L12.873 8.87282L9.126 5.12482L5.63 8.62982Z" fill="#505A5F"/>
 </svg>
 
+const ErrorIcon = ({ className }) => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 15H9V13H11V15ZM11 11H9V5H11V11Z" fill="white" />
+  </svg>
+);
+
 export {
   AnnouncementIcon,
   ReceiptIcon,
@@ -929,4 +935,5 @@ export {
   RemoveIcon,
   GalleryIcon,
   EditPencilIcon,
+  ErrorIcon
 };

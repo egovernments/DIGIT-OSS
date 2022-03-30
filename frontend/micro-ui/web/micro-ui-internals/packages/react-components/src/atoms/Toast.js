@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { RoundedCheck, DeleteBtn } from "./svgindex";
+import { RoundedCheck, DeleteBtn, ErrorIcon } from "./svgindex";
 import ButtonSelector from "./ButtonSelector";
 
 const Toast = (props) => {
   if (props.error) {
     return (
       <div className="toast-success" style={{ backgroundColor: "red", ...props.style }}>
-        <RoundedCheck />
+        <ErrorIcon />
         <h2>{props.label}</h2>
         { props.isDleteBtn ? <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} /> : null }
       </div>
@@ -20,11 +20,11 @@ const Toast = (props) => {
         <div className="toast-success" style={props?.isWarningButtons ? { backgroundColor: "#EA8A3B", display: "block", ...props.style } : { backgroundColor: "#EA8A3B", ...props.style }}>
           {!props?.isWarningButtons ?
             <div className="toast-success" style={{ backgroundColor: "#EA8A3B", ...props.style }}>
-              <RoundedCheck />
+              <ErrorIcon />
               <h2 style={{ marginLeft: "10px" }}>{props.label}</h2>
               {props.isDleteBtn ? <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} /> : null}
             </div> : <div style={{ display: "flex" }}>
-              <RoundedCheck />
+              <ErrorIcon />
               <h2 style={{ marginLeft: "10px" }}>{props.label}</h2>
               {props.isDleteBtn ? <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} /> : null}
             </div>
