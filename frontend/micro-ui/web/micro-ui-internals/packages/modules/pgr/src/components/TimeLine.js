@@ -10,17 +10,19 @@ import Resolved from "./timelineInstances/resolved";
 import Rejected from "./timelineInstances/rejected";
 import StarRated from "./timelineInstances/StarRated";
 
-const TLCaption = ({ data }) => {
+const TLCaption = ({ data , comments}) => {
+  const { t } = useTranslation()
   return (
     <div>
       {data?.date && <p>{data?.date}</p>}
       <p>{data?.name}</p>
       <p>{data?.mobileNumber}</p>
+      {data?.source && <p>{t("ES_COMMON_FILED_VIA_" + data?.source.toUpperCase())}</p>}
     </div>
   );
 };
 
-const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating, zoomImage }) => {
+const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating, zoomImage, complaintDetails }) => {
   const { t } = useTranslation();
 
   function zoomImageWrapper(imageSource, index,thumbnailsToShow){
@@ -49,11 +51,12 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
     });
   }, [timeline]);
 
-  const getCommentsInCustomChildComponent = ({comment, thumbnailsToShow, auditDetails, assigner}) => {
+  const getCommentsInCustomChildComponent = ({comment, thumbnailsToShow, auditDetails, assigner, status}) => {
     const captionDetails = {
       date: auditDetails?.lastModified,
       name: assigner?.name,
-      mobileNumber: assigner?.mobileNumber
+      mobileNumber: assigner?.mobileNumber,
+      source: status == "COMPLAINT_FILED" ? complaintDetails?.audit.source : ""
     }
     return <>
     {comment ? <div>{comment?.map( e => 
@@ -66,7 +69,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       <h3>{t("CS_COMMON_ATTACHMENTS")}</h3>
       <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => {zoomImageWrapper(src, index,thumbnailsToShow)}} />
     </div> : null}
-    {captionDetails?.date ? <TLCaption data={captionDetails}/> : null}
+    {captionDetails?.date ? <TLCaption data={captionDetails} comments={comment}/> : null}
     </>
   }
 
@@ -74,18 +77,18 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
     const isCurrent = 0 === index;
     switch (status) {
       case "PENDINGFORREASSIGNMENT":
-        return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_PENDINGFORASSIGNMENT`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
+        return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_${status}`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
 
       case "PENDINGFORASSIGNMENT":
         const isFirstPendingForAssignment = totalTimelineLength - (index + 1) === 0 ? true : false
-        return <PendingForAssignment key={index} isCompleted={isCurrent} text={t("CS_COMMON_PENDINGFORASSIGNMENT")} customChild={getCommentsInCustomChildComponent({comment, ...isFirstPendingForAssignment ? {} : {thumbnailsToShow, auditDetails} })} />;
+        return <PendingForAssignment key={index} isCompleted={isCurrent} text={t(`CS_COMMON_${status}`)} customChild={getCommentsInCustomChildComponent({comment, ...isFirstPendingForAssignment ? {auditDetails} : {thumbnailsToShow, auditDetails} })} />;
 
       case "PENDINGFORASSIGNMENT_AFTERREOPEN":
-        return <PendingForAssignment isCompleted={isCurrent} key={index} text={t(`CS_COMMON_PENDINGFORASSIGNMENT`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
+        return <PendingForAssignment isCompleted={isCurrent} key={index} text={t(`CS_COMMON_${status}`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
 
       case "PENDINGATLME":
         let { name, mobileNumber } = caption && caption.length > 0 ? caption[0] : { name: "", mobileNumber: "" };
-        const assignedTo = `${t("CS_COMMON_COMPLAINT_ASSIGNED_TO")}`;
+        const assignedTo = `${t(`CS_COMMON_${status}`)}`;
         return <PendingAtLME isCompleted={isCurrent} key={index} name={name} mobile={mobileNumber} text={assignedTo} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
 
       case "RESOLVED":
@@ -115,7 +118,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
           />
         );
       case "CLOSEDAFTERRESOLUTION":
-        return <CheckPoint isCompleted={isCurrent} key={index} label={t("CS_COMMON_CLOSEDAFTERRESOLUTION")} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
+        return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_${`CS_COMMON_${status}`}`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
 
       // case "RESOLVE":
       // return (
@@ -128,10 +131,10 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
       //   />
       // );
       case "COMPLAINT_FILED":
-        return <CheckPoint isCompleted={isCurrent} key={index} label={t("CS_COMMON_COMPLAINT_FILED")} customChild={getCommentsInCustomChildComponent({thumbnailsToShow:[], assigner})} />;
+        return <CheckPoint isCompleted={isCurrent} key={index} label={t("CS_COMMON_COMPLAINT_FILED")} customChild={getCommentsInCustomChildComponent({comment, auditDetails, assigner, status})} />;
 
       default:
-        return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_${status}`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
+        return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_${status}`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner, status})} />;
     }
   };
 
