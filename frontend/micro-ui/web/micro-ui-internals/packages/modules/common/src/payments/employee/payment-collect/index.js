@@ -50,11 +50,6 @@ export const CollectPayment = (props) => {
     CARD: cardConfig,
   };
 
-  console.log(useLocation());
-
-  // const { isLoading: isLoadingApplicationDetails, isError: isErrorApplicationDetails, data: applicationDetails, error: errorApplicationDetails } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, propertyId);
-
-
   useEffect(() => {
     props.setLink(t("PAYMENT_COLLECT_LABEL"));
   }, []);
