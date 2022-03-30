@@ -28,8 +28,8 @@ const Rejected = ({ action, nextActions, rating, serviceRequestId, reopenDate, i
         isCompleted={isCompleted}
         label={t(`CS_COMMON_COMPLAINT_REJECTED`)}
         customChild={<div>
-        {rating ? <StarRated text={t("CS_ADDCOMPLAINT_YOU_RATED")} rating={rating} /> : null}
-        {customChild}
+          {rating ? <StarRated text={t("CS_ADDCOMPLAINT_YOU_RATED")} rating={rating} /> : null}
+          {customChild}
         </div>}
       />
     );
