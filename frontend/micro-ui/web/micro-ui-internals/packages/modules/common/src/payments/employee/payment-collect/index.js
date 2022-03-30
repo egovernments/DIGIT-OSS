@@ -317,7 +317,7 @@ export const CollectPayment = (props) => {
 
   return (
     <React.Fragment>
-      <Header>{t("PAYMENT_COLLECT abc")}</Header>
+      <Header>{t("PAYMENT_COLLECT")}</Header>
       <FormComposer
         cardStyle={{ paddingBottom: "100px" }}
         //heading={t("PAYMENT_COLLECT")}
