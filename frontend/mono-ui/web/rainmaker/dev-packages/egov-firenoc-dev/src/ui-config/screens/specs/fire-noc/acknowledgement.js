@@ -166,7 +166,7 @@ const screenConfig = {
       dispatch,
       purpose,
       status,
-      applicationNumber:purpose=="approve"&status=="success"?secondNumber:applicationNumber,
+      applicationNumber,
       secondNumber,
       tenant,
       moduleName: "Fire Noc",
