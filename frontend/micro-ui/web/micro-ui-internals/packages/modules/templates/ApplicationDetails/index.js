@@ -10,6 +10,7 @@ import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsContent from "./components/ApplicationDetailsContent";
 import ApplicationDetailsToast from "./components/ApplicationDetailsToast";
 import ApplicationDetailsActionBar from "./components/ApplicationDetailsActionBar";
+import ApplicationDetailsWarningPopup from "./components/ApplicationDetailsWarningPopup";
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -21,6 +22,7 @@ const ApplicationDetails = (props) => {
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isEnableLoader, setIsEnableLoader] = useState(false);
+  const [isWarningPop, setWarningPopUp ] = useState(false);
 
   const {
     applicationDetails,
@@ -51,7 +53,10 @@ const ApplicationDetails = (props) => {
 
   function onActionSelect(action) {
     if (action) {
-      if (action?.redirectionUrll) {
+      if(action?.isWarningPopUp){
+        setWarningPopUp(true);
+      }
+      else if (action?.redirectionUrll) {
         window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/${action?.redirectionUrll?.pathname}`);
       } else if (!action?.redirectionUrl) {
         setShowModal(true);
@@ -72,6 +77,10 @@ const ApplicationDetails = (props) => {
     setSelectedAction(null);
     setShowModal(false);
   };
+
+  const closeWarningPopup = () => {
+    setWarningPopUp(false);
+  }
 
   const submitAction = async (data, nocData = false, isOBPS = {}) => {
     setIsEnableLoader(true);
@@ -164,6 +173,15 @@ const ApplicationDetails = (props) => {
               businessService={businessService}
               workflowDetails={workflowDetails}
               moduleCode={moduleCode}
+            />
+          ) : null}
+          {isWarningPop ? (
+            <ApplicationDetailsWarningPopup 
+            action={selectedAction}
+            workflowDetails={workflowDetails}
+            businessService={businessService}
+            isWarningPop={isWarningPop}
+            closeWarningPopup={closeWarningPopup}
             />
           ) : null}
           <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} />
