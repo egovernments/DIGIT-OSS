@@ -62,8 +62,8 @@ public class ReceiptConsumer {
 	
 	@Autowired
 	private DeathRepository repositoryDeath;
-	
-    @KafkaListener(topics = {"${kafka.topics.receipt.create}"})
+
+	@KafkaListener(topics = {"${kafka.topics.receipt.create}"})
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         try {
         process(record);
@@ -75,7 +75,7 @@ public class ReceiptConsumer {
     public void process(HashMap<String, Object> record) {
 
 		try {
-			//log.info("Process for object"+ record);
+			log.info("Process for object"+ record);
 			PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
 			RequestInfo requestInfo = paymentRequest.getRequestInfo();
 			if( paymentRequest.getPayment().getTotalAmountPaid().compareTo(paymentRequest.getPayment().getTotalDue())!=0) 
