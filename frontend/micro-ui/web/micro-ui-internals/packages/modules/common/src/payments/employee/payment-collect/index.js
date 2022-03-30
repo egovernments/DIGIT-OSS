@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast, Card, Header, CardText } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useHistory, useParams, useRouteMatch } from "react-router-dom";
+import { useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { useCashPaymentDetails } from "./ManualReciept";
 import { useCardPaymentDetails } from "./card";
@@ -49,6 +49,8 @@ export const CollectPayment = (props) => {
     CHEQUE: chequeConfig,
     CARD: cardConfig,
   };
+
+  console.log(useLocation());
 
   // const { isLoading: isLoadingApplicationDetails, isError: isErrorApplicationDetails, data: applicationDetails, error: errorApplicationDetails } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, propertyId);
 
@@ -194,6 +196,10 @@ export const CollectPayment = (props) => {
           label: t("DUE_DATE"),
           populators: <CardText style={{ marginBottom: 0, textAlign: "right" }}> {new Date(bill?.billDetails?.[0]?.expiryDate).toLocaleDateString()} </CardText>,
         },
+        ...bill?.billDetails?.[0]?.billAccountDetails?.map((details)=>({
+          label: t(details?.taxHeadCode), 
+          populators: <CardText style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${details?.amount}`} </CardText>,
+        })),
         {
           label: t("PAY_TOTAL_AMOUNT"),
           populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${bill?.totalAmount}`} </CardSectionHeader>,
