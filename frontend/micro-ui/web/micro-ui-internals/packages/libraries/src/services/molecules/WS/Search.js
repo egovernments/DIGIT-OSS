@@ -477,7 +477,8 @@ export const WSSearch = {
       applicationStatus: wsDataDetails?.applicationStatus,
       propertyDetails: propertyDataDetails,
       billDetails: billDetails?.Bill,
-      processInstancesDetails: workFlowDataDetails?.ProcessInstances
+      processInstancesDetails: workFlowDataDetails?.ProcessInstances,
+      billAmendmentSearch,
     };
   },
 
