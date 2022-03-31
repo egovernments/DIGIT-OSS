@@ -147,13 +147,13 @@ const PropertyInformation = () => {
   let flrno,
     i = 0;
   flrno = units && units[0]?.floorNo;
-  const ActionButton = ({ jumpTo }) => {
+  const ActionButton = ({ jumpTo, style }) => {
     const { t } = useTranslation();
     const history = useHistory();
     function routeTo() {
       history.push(jumpTo);
     }
-    return <LinkButton label={t("PT_OWNER_HISTORY")} className="check-page-link-button" onClick={routeTo} />;
+    return <LinkButton style={style} label={t("PT_OWNER_HISTORY")} className="check-page-link-button" onClick={routeTo} />;
   };
   const UpdatePropertyNumberComponent = Digit?.ComponentRegistryService?.getComponent("UpdateNumber");
   return (
@@ -197,7 +197,7 @@ const PropertyInformation = () => {
                   {(flrno !== unit?.floorNo ? (i = 1) : (i = i + 1)) && i === 1 && (
                     <CardSubHeader>{t(`PROPERTYTAX_FLOOR_${unit?.floorNo}`)}</CardSubHeader>
                   )}
-                  <div style={{ border: "groove" }}>
+                  <div style={{ border: "groove", marginBottom:"10px" }}>
                     <CardSubHeader>
                       {t("ES_APPLICATION_DETAILS_UNIT")} {i}
                     </CardSubHeader>
@@ -243,10 +243,11 @@ const PropertyInformation = () => {
                     <Row 
                       className="border-none" 
                       label={t("PT_COMMON_APPLICANT_NAME_LABEL")}
-                      textStyle={isMobile?{marginLeft:"28%"}:{marginLeft:"22%"}}
+                      textStyle={isMobile?{marginLeft:"29%",marginRight:"5%",wordBreak:"break-word"}:{marginLeft:"21%"}}
                       text={`${owner?.name || t("CS_NA")}`}
+                      actionButtonStyle={{marginRight:"-10px"}}
                       actionButton={
-                        <ActionButton jumpTo={`/digit-ui/citizen/pt/property/owner-history/${property.tenantId}/${property.propertyId}`} />
+                        <ActionButton style={{marginRight:"-10px"}} jumpTo={`/digit-ui/citizen/pt/property/owner-history/${property.tenantId}/${property.propertyId}`} />
                       }
                     />
                     <Row className="border-none"  label={t("PT_COMMON_GENDER_LABEL")} text={`${owner?.gender ? owner?.gender.toLowerCase() : t("CS_NA")}`} />

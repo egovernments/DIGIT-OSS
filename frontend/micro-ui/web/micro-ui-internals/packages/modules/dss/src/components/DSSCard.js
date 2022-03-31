@@ -59,7 +59,7 @@ const DSSCard = () => {
     // .filter((ele) => ele["active"] == true)
     .map((obj) => ({
       label: t(obj?.label),
-      link: obj.active?`/digit-ui/employee/dss/dashboard/${obj?.stateKey}`:`/digit-ui/employee/payment/integration/dss/${obj?.stateKey}`,
+      link: obj.active?`/digit-ui/employee/dss/dashboard/${obj?.stateKey}`:`/employee/integration/dss/${obj?.stateKey}`,
     }));
 
   const propsForModuleCard = {
