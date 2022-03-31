@@ -139,7 +139,8 @@ import {
   EditPencilIcon,
   GalleryIcon,
   RemoveIcon,
-  CheckSvg
+  CheckSvg,
+  ErrorIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -379,6 +380,7 @@ export {
   UploadPitPhoto,
   CheckSvg,
   ModuleCardFullWidth,
-  ArrowForward
+  ArrowForward,
+  ErrorIcon
 };
 

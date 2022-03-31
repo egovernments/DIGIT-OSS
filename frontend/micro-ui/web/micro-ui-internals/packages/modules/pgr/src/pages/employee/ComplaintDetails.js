@@ -33,6 +33,7 @@ import {
 import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
 import { isError, useQueryClient } from "react-query";
+import StarRated from "../../components/timelineInstances/StarRated";
 
 const MapView = (props) => {
   return (
@@ -386,6 +387,7 @@ export const ComplaintDetails = (props) => {
     }
     // return (checkpoint.caption && checkpoint.caption.length !== 0) || checkpoint?.wfComment?.length > 0 ? <TLCaption data={checkpoint?.caption?.[0]} comments={checkpoint?.wfComment} /> : null;
     return <>
+      {(checkpoint.status == "RESOLVED" && complaintDetails.workflow.action == "RATE" && index <= 1) && complaintDetails.audit.rating ? <StarRated text={t("CS_ADDCOMPLAINT_YOU_RATED")} rating={complaintDetails.audit.rating} />: null}
       {comment ? <div>{comment?.map( e => 
         <div className="TLComments">
           <h3>{t("WF_COMMON_COMMENTS")}</h3>

@@ -116,6 +116,7 @@ const Inbox = ({
       totalAmount: businessIdToOwnerMappings[data.challanNo]?.totalAmount || 0,
       dueDate: businessIdToOwnerMappings[data.challanNo]?.dueDate || "NA",
       tenantId: data?.tenantId,
+      receiptNumber:data?.receiptNumber
     });
   });
 

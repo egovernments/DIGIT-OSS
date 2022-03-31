@@ -155,6 +155,14 @@ const OwnerForm = (_props) => {
     [mdmsData]
   );
 
+  if (ownerTypesMenu?.length > 0) {
+    ownerTypesMenu ? ownerTypesMenu.sort((a, b) => a.code.localeCompare(b.code)) : "";
+    ownerTypesMenu?.forEach((data, index) => {
+      if (data.code == "NONE") data.order = 0
+      else data.order = index + 1
+    });
+    ownerTypesMenu.sort(function (a, b) { return a.order - b.order; });
+  }
   const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
 
   const institutionTypeMenu = useMemo(() => {
