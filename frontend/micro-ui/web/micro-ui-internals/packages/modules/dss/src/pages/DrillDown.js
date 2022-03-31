@@ -49,7 +49,7 @@ const DrillDown = ({ stateCode }) => {
     setFilters(data);
   };
 
-  const { data: ulbTenants, isLoading: isUlbLoading } = Digit.Hooks.useModuleTenants("FSM");
+  const { data: ulbTenants, isLoading: isUlbLoading } = Digit.Hooks.useModuleTenants("DSS");
   const provided = useMemo(
     () => ({
       value: filters,
