@@ -39,9 +39,11 @@
     width: 30% !important;
     margin-bottom: 20px;
   }
-  .pt-form-field{
-    width: 32% !important;
-    margin-bottom: 20px;
+  @media (min-width: 780px) {
+    .pt-form-field{
+      width: 32% !important;
+      margin-bottom: 20px;
+    }
   }
   @media (max-width: 780px) {
   .form-field{
