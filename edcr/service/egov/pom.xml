@@ -181,7 +181,7 @@
         <mvn.release.plugin.version>2.5.3</mvn.release.plugin.version>
         <mvn.ear.plugin.version>2.10.1</mvn.ear.plugin.version>
         <mvn.war.plugin.version>3.2.0</mvn.war.plugin.version>
-        <mvn.jar.plugin.version>3.5.0</mvn.jar.plugin.version>
+        <mvn.jar.plugin.version>3.0.2</mvn.jar.plugin.version>
         <mvn.compiler.plugin.version>3.7.0</mvn.compiler.plugin.version>
         <mvn.dependency.plugin.version>3.0.2</mvn.dependency.plugin.version>
         <mvn.resource.plugin.version>3.0.1</mvn.resource.plugin.version>
