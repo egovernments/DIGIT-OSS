@@ -58,7 +58,14 @@
 
     <name>e-governments config</name>
     <artifactId>egov-config</artifactId>
-
+<dependencies>
+<dependency>
+    <groupId>org.apache.taglibs</groupId>
+    <artifactId>taglibs-standard-impl</artifactId>
+    <version>1.2.6-RC1</version>
+    <scope>runtime</scope>
+</dependency>
+</dependencies>
     <build>
         <plugins>
             <plugin>
