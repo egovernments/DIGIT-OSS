@@ -199,6 +199,7 @@ import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
 import useWSUpdateAPI from "./ws/useWSUpdateAPI";
 import useCreateBillAmendment from "./ws/useCreateBillAmendment";
 import useWSApplicationDetailsBillAmendment from "./ws/useWSApplicationDetailsBillAmendment";
+import useWSInbox from "./ws/useInbox";
 
 const pgr = {
   useComplaintDetails,
@@ -401,6 +402,7 @@ const ws = {
   useCreateBillAmendment,
   useCreateBillAmendment,
   useWSApplicationDetailsBillAmendment,
+  useInbox: useWSInbox,
 };
 
 
