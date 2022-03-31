@@ -64,8 +64,10 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
   const { isLoading: isLoadingApplicationDetails, isError: isErrorApplicationDetails, data: applicationDetails, error: errorApplicationDetails } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, propertyId);
 
   useEffect(async ()=>{
-    const res = await Digit.PaymentService.fetchBill(tenantId, {businessService: businessService, consumerCode: acknowledgementIds});
-    setBills(res.Bill)
+    if(acknowledgementIds){
+      const res = await Digit.PaymentService.searchBill(tenantId, {Service: businessService, consumerCode: acknowledgementIds});
+      setBills(res.Bill)
+    }
   },[tenantId, acknowledgementIds, businessService])
 
   useEffect(() => {
@@ -364,7 +366,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
              <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} textStyle={{ whiteSpace: "pre" }} />
              <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
              <Row label={t("PT_FEE_AMOUNT")} text={bills[0]?.totalAmount ||t("CS_NA") } textStyle={{ whiteSpace: "pre" }} />
-             <Row label={t("PT_PAYMENT_STATUS")} text={application.status ||t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+             <Row label={t("PT_PAYMENT_STATUS")} text={t(`PT_MUT_BILL_${bills[0]?.status?.toUpperCase()}`)} textStyle={{ whiteSpace: "pre" }} />
             
           </StatusTable>
                  <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
