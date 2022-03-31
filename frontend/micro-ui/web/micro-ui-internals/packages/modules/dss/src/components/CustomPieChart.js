@@ -21,7 +21,7 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
     type: "metric",
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
-    filters: isPieClicked ? { selectedType: pieSelected } : value?.filters,
+    filters: isPieClicked ? { ...value?.filters,selectedType: pieSelected } : value?.filters,
   });
 
   const chartData = useMemo(() => {
@@ -128,7 +128,6 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
   const onPieClick = ({ payload }) => {
     setIsPieClicked(true);
     setdrillDownId(response?.responseData?.drillDownChartId);
-    console.log(payload, "payload");
     setPieSelected(payload.name);
   };
 
