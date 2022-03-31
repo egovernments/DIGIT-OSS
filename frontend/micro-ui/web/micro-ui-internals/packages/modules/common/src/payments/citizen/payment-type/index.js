@@ -11,6 +11,7 @@ import {
   InfoBanner,
   Loader,
   Toast,
+  CardText
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
@@ -109,6 +110,30 @@ export const SelectPaymentType = (props) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Header>{t("PAYMENT_CS_HEADER")}</Header>
         <Card>
+          <div className="payment-amount-info">
+            <CardLabelDesc className="dark">{t("PAYMENT_CS_CONSUMER_NO")}</CardLabelDesc>
+            <CardText> {billDetails?.consumerCode}</CardText>
+          </div>
+          <div className="payment-amount-info">
+            <CardLabelDesc className="dark">{t("PAYMENT_CS_BILLING_PERIOD")}</CardLabelDesc>
+            <CardText> {new Date(billDetails?.billDetails?.[0]?.fromPeriod).toLocaleDateString() + '-' + new Date(billDetails?.billDetails?.[0]?.toPeriod).toLocaleDateString()}</CardText>
+          </div>
+          <div className="payment-amount-info">
+            <CardLabelDesc className="dark">{t("PAYMENT_CS_BILL_NO")}</CardLabelDesc>
+            <CardText> {billDetails?.billNumber}</CardText>
+          </div>
+          <div className="payment-amount-info">
+            <CardLabelDesc className="dark">{t("PAYMENT_CS_TOTAL_DUE_DATE")}</CardLabelDesc>
+            <CardText> {new Date(billDetails?.billDetails?.[0]?.expiryDate).toLocaleDateString()}</CardText>
+          </div>
+            {
+              billDetails?.billDetails?.[0]?.billAccountDetails?.map((details)=>(
+                <div className="payment-amount-info">
+                  <CardLabelDesc className="dark">{t(details?.taxHeadCode)}</CardLabelDesc>
+                  <CardText> ₹ {details?.amount}</CardText>
+                </div>
+              ))
+            }
           <div className="payment-amount-info">
             <CardLabelDesc className="dark">{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</CardLabelDesc>
             <CardSectionHeader> ₹ {paymentAmount || billDetails?.totalAmount}</CardSectionHeader>
