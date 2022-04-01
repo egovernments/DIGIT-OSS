@@ -97,7 +97,6 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
           if (prevData === cellValue) insight = 0;
           else insight = prevData === 0 ? 100 : Math.round(((cellValue - prevData) / prevData) * 100);
         }
-        // if (row?.name === "CapacityUtilization") cellValue = cellValue + "%"
         if (typeof cellValue === "number" && !Number.isInteger(cellValue)) {
           cellValue = Math.round((cellValue + Number.EPSILON) * 100) / 100;
         }
@@ -139,10 +138,16 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
                 .toLowerCase()
                 .startsWith(filterValue?.toLowerCase());
             }
-            return String(row?.values?.[key]?.[id])?.toLowerCase().startsWith(filterValue?.toLowerCase());
+            return String(row?.values?.[key]?.[id])?.toLowerCase().includes(filterValue?.toLowerCase());
           });
         }
         return (
+          String(row?.values?.[key])
+          .toLowerCase()?.includes(filterValue?.toLowerCase()) ||
+        String(t(row?.values?.[key]))
+          .toLowerCase()?.includes(filterValue?.toLowerCase())
+          /* search in the table to get filter along with space is currently enabled
+          Also replace startsWith with includes
           String(row?.values?.[key])
             .toLowerCase()
             .split(" ")
@@ -151,6 +156,7 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
             .toLowerCase()
             .split(" ")
             .some((str) => str.startsWith(filterValue?.toLowerCase()))
+            */
         );
       });
       return res;
@@ -172,10 +178,6 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
 
   const renderHeader = (plot) => {
     const code = `DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`;
-    // const units = ["TotalSeptageDumped", "TotalSeptageCollected"];
-    // if (id === "fsmVehicleLogReportByDDR" && units.includes(plot?.name)) {
-    //   return `${t(code)} (${t("DSS_KL")})`;
-    // }
     if (plot?.symbol === "amount") {
       return `${t(code)} ${renderUnits(value?.denomination)}`;
     }
