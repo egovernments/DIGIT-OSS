@@ -61,12 +61,12 @@ const NewApplication = () => {
   const onSubmit = (data) => {
     if (!data?.cpt?.details || !propertyDetails) {
       setShowToast({ key: "error" });
-      setError("TL_PROPERTY_ID_REQUIRED");
+      setError(t("TL_PROPERTY_ID_REQUIRED"));
       return;
     }
     if (propertyId == null) {
       setShowToast({ key: "error" });
-      setError("TL_PROPERTY_ID_REQUIRED");
+      setError(t("TL_PROPERTY_ID_REQUIRED"));
       return;
     }
 
