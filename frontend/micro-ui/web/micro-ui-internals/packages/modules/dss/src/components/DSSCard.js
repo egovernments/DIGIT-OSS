@@ -17,7 +17,7 @@ const nationalScreenURLs = {
 export const checkCurrentScreen = () => {
   const moduleName = Digit.Utils.dss.getCurrentModuleName();
   const nationalURLS = Object.keys(nationalScreenURLs).map((key) => nationalScreenURLs[key].key);
-  return nationalURLS.some((e) => moduleName?.includes(e));
+  return nationalURLS.filter(ele=>ele!=="fsm").some((e) => moduleName?.includes(e));
 };
 
 const NDSSCard = () => {
