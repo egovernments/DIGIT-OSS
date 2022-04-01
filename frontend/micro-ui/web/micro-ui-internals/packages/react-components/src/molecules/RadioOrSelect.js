@@ -15,10 +15,11 @@ const RadioOrSelect = ({
   disabled = false,
   optionCardStyles,
   isPTFlow=false,
+  isDropDown = false
 }) => {
   return (
     <React.Fragment>
-      {options?.length < 5 ? (
+      {options?.length < 5 && !isDropDown ? (
         <RadioButtons
           selectedOption={selectedOption}
           options={options}

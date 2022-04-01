@@ -111,7 +111,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
       <span onClick={() => history.push(`/digit-ui/employee/commonpt/new-application?redirectToUrl=${redirectBackUrl}`, { ...state })}>
         <LinkButton label={t("CPT_CREATE_PROPERTY")} style={{ color: "#f47738", display: "inline-block" }} />
       </span>
-      {propertyDetails && propertyDetails?.Properties.length && (
+      {propertyDetails && propertyDetails?.Properties.length ? (
         <React.Fragment>
           <header className="card-section-header" style={{ marginBottom: 0, marginTop: "20px" }}>
             {t("PT_DETAILS")}
@@ -138,7 +138,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
             <LinkButton label={t("CPT_COMPLETE_PROPERTY_DETAILS")} style={{ color: "#f47738" }} />
           </Link>
         </React.Fragment>
-      )}
+      ) : null}
     </React.Fragment>
   );
 };
