@@ -32,7 +32,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-          <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
+          <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "12px" }}>
             <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
               {t("ES_COMMON_HOME")}
             </Link>{" "}
