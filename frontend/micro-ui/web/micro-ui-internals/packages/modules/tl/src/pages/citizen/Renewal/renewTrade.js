@@ -176,7 +176,7 @@ const RenewTrade = ({ parentRoute }) => {
 
   const editProperty = window.location.href.includes("edit");
   const tlTrade = JSON.parse(sessionStorage.getItem("tl-trade")) || {};
-
+  let isReneworEditTrade = window.location.href.includes("/renew-trade/") || window.location.href.includes("/edit-application/")
   const stateId = Digit.ULBService.getStateId();
   let { data: newConfig, isLoading: configLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
 
@@ -200,16 +200,35 @@ const RenewTrade = ({ parentRoute }) => {
       nextPage;
     let { nextStep = {} } = config.find((routeObj) => routeObj.route === currentPath);
     if (typeof nextStep == "object" && nextStep != null) {
-      if(key==="knowyourproperty"&&
+      if((params?.cptId?.id || params?.cpt?.details?.propertyId || isReneworEditTrade)  && (nextStep[sessionStorage.getItem("isAccessories")] && nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")  )
+      {
+        nextStep = "property-details";
+      }
+      if (
+        nextStep[sessionStorage.getItem("isAccessories")] &&
+        (nextStep[sessionStorage.getItem("isAccessories")] === "accessories-details" ||
+          nextStep[sessionStorage.getItem("isAccessories")] === "map" ||
+          nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details" || 
+          nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")
+      ) {
+        nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
+      } else if (
+        nextStep[sessionStorage.getItem("StructureType")] &&
+        (nextStep[sessionStorage.getItem("StructureType")] === "Building-type" ||
+          nextStep[sessionStorage.getItem("StructureType")] === "vehicle-type")
+      ) {
+        nextStep = `${nextStep[sessionStorage.getItem("StructureType")]}`;
+      } else if (
         nextStep[sessionStorage.getItem("KnowProperty")] &&
-        (nextStep[sessionStorage.getItem("KnowProperty")] === "search-property" || nextStep[sessionStorage.getItem("KnowProperty")] === "create-property")
+        (nextStep[sessionStorage.getItem("KnowProperty")] === "search-property" ||
+          nextStep[sessionStorage.getItem("KnowProperty")] === "create-property")
       ) {
         nextStep = `${nextStep[sessionStorage.getItem("KnowProperty")]}`;
-      }else if (nextStep[sessionStorage.getItem("isAccessories")]) {
-        nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
-      } else if (nextStep[sessionStorage.getItem("StructureType")]) {
-        nextStep = `${nextStep[sessionStorage.getItem("StructureType")]}`;
       }
+    }
+    if( (params?.cptId?.id || params?.cpt?.details?.propertyId || isReneworEditTrade)  && nextStep === "know-your-property" )
+    { 
+      nextStep = "property-details";
     }
     let redirectWithHistory = history.push;
     if (skipStep) {

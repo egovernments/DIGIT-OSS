@@ -169,7 +169,7 @@ export const newConfig = [
           submitBarLabel: "CS_COMMON_NEXT",
         },
         withoutLabel: true,
-        nextStep: "know-your-property",
+        nextStep: "isAccessories",
         hideInEmployee: true,
       },
       {
@@ -189,7 +189,7 @@ export const newConfig = [
         //nextStep: "property-usage-type",
         nextStep: {
           TL_COMMON_YES: "accessories-details",
-          TL_COMMON_NO: "owner-ship-details",
+          TL_COMMON_NO: "know-your-property",
         },
       },
       {
@@ -205,7 +205,7 @@ export const newConfig = [
           submitBarLabel: "CS_COMMON_NEXT",
         },
         withoutLabel: true,
-        nextStep: "owner-ship-details",
+        nextStep: "know-your-property",
         hideInEmployee: true,
       },
     ],
@@ -424,7 +424,7 @@ export const newConfig = [
         component: "CPTAcknowledgement", 
         key: "cptacknowledgement",
         withoutLabel: true,
-        nextStep: 'isAccessories',
+        nextStep: 'property-details',
         hideInEmployee: true,
       },
       {
@@ -434,7 +434,7 @@ export const newConfig = [
         component: "CPTPropertyDetails", 
         key: "propertydetails",
         withoutLabel: true,
-        nextStep: 'isAccessories',
+        nextStep: 'owner-ship-details',
         hideInEmployee: true,
       },
     ],
