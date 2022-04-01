@@ -1,8 +1,8 @@
 import { Card, DetailsCard, FilterAction, Loader, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
-import BillsFilter from "../BillsFilter";
-import SearchApplication from "./search";
-export const ApplicationCard = ({
+import SearchCitizenFilter from "./SearchCitizenFilter";
+import SearchCitizen from "./SearchCitizen";
+const ApplicationCitizenCard = ({
   t,
   data,
   onFilterChange,
@@ -24,9 +24,15 @@ export const ApplicationCard = ({
   const [params, setParams] = useState(searchParams);
   const [_sortparams, setSortParams] = useState(sortParams);
 
+  const onSearchFilter = (params) => {
+    onFilterChange(params, true);
+    setPopup(false);
+  };
+
   useEffect(() => {
     if (type) setPopup(true);
   }, [type]);
+
   const handlePopupClose = () => {
     setPopup(false);
     setType("");
@@ -90,9 +96,9 @@ export const ApplicationCard = ({
           {type === "FILTER" && (
             <div className="popup-module">
               {
-                <BillsFilter
+                <SearchCitizenFilter
                   defaultSearchParams={defaultSearchParams}
-                  onFilterChange={onFilterChange}
+                  onFilterChange={onSearchFilter}
                   searchParams={searchParams}
                   type="mobile"
                   onClose={handlePopupClose}
@@ -102,7 +108,7 @@ export const ApplicationCard = ({
           )}
           {type === "SEARCH" && (
             <div className="popup-module">
-              <SearchApplication
+              <SearchCitizen
                 type="mobile"
                 onClose={handlePopupClose}
                 onSearch={onSearch}
@@ -117,3 +123,4 @@ export const ApplicationCard = ({
     </React.Fragment>
   );
 };
+export default ApplicationCitizenCard;

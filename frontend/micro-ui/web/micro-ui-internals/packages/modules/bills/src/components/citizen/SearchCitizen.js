@@ -18,15 +18,20 @@ const fieldComponents = {
   mobileNumber: MobileNumber,
 };
 
-const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams, isInboxPage, defaultSearchParams, clearSearch: _clearSearch }) => {
+const SearchCitizen = ({ onSearch, type, onClose, searchFields, searchParams, isInboxPage, defaultSearchParams, clearSearch: _clearSearch }) => {
   const { t } = useTranslation();
   const { register, handleSubmit, reset, watch, control, setError, clearErrors, formState } = useForm({
     defaultValues: searchParams,
   });
   const [showToast, setShowToast] = useState(null);
-
   const form = watch();
   const mobileView = innerWidth <= 640;
+
+  const [mobileNumber, setMobileNumber] = useState("");
+
+  useEffect(() => {
+    setMobileNumber(Digit.SessionStorage.get("User")?.info?.mobileNumber);
+  }, []);
 
   const closeToast = () => {
     setShowToast(null);
@@ -101,16 +106,6 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
     );
   };
 
-  const formValueEmpty = () => {
-    let isEmpty = true;
-    Object.keys(form).forEach((key) => {
-      if (!["locality", "city"].includes(key) && form[key]) isEmpty = false;
-    });
-
-    if (searchFields?.find((e) => e.name === "locality") && !form?.locality?.code) isEmpty = true;
-    return isEmpty;
-  };
-
   return (
     <React.Fragment>
       <form onSubmit={handleSubmit(onSubmitInput)}>
@@ -141,7 +136,14 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
                                     {input?.componentInFront}
                                   </span>
                                 ) : null}
-                                <TextInput {...input} inputRef={register} watch={watch} shouldUpdate={true} />
+                                <TextInput
+                                  {...input}
+                                  value={input.name === "mobileNumber" ? mobileNumber : form[input.name]}
+                                  inputRef={register()}
+                                  watch={watch}
+                                  shouldUpdate={true}
+                                  disabled={input.name === "mobileNumber"}
+                                />
                               </div>
                             );
                           }}
@@ -195,7 +197,7 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
                 {type === "desktop" && !mobileView && (
                   <SubmitBar
                     style={{ marginTop: "unset" }}
-                    disabled={!!Object.keys(formState.errors).length || formValueEmpty()}
+                    // disabled={!!Object.keys(formState.errors).length || formValueEmpty()}
                     className="submit-bar-search"
                     label={t("ABG_SEARCH_BUTTON")}
                     submit
@@ -219,4 +221,4 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   );
 };
 
-export default SearchApplication;
+export default SearchCitizen;
