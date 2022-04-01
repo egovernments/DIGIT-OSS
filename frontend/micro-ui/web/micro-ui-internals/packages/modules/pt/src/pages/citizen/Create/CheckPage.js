@@ -17,6 +17,7 @@ import {
   getFixedFilename, isPropertyIndependent, isPropertyselfoccupied,
   ispropertyunoccupied
 } from "../../../utils";
+import Timeline from "../../../components/TLTimeline";
 
 const ActionButton = ({ jumpTo }) => {
   const { t } = useTranslation();
@@ -80,6 +81,8 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     setAgree(!agree);
   };
   return (
+    <React.Fragment>
+     {window.location.href.includes("/citizen") ? <Timeline currentStep={4}/> : null}
     <Card>
       <CardHeader>{t("PT_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
       <div>
@@ -584,6 +587,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       </div>
       <SubmitBar label={t("PT_COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} disabled={!agree} />
     </Card>
+   </React.Fragment>
   );
 };
 

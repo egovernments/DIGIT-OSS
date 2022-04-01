@@ -3,6 +3,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, clearErrors, formState }) => {
   const allCities = Digit.Hooks.pt.useTenants();
@@ -176,6 +177,8 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
     );
   }
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
       <div>
         <CardLabel>{`${t("MYCITY_CODE_LABEL")} `}</CardLabel>
@@ -211,6 +214,7 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
         )}
       </div>
     </FormStep>
+    </React.Fragment>
   );
 };
 

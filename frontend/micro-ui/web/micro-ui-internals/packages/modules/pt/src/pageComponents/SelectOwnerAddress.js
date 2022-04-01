@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, CheckBox, CardLabel, LabelFieldPair, TextArea } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerIndex = 0 }) => {
   const { pathname: url } = useLocation();
@@ -84,6 +85,8 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
   }
 
   return (
+    <React.Fragment>
+     {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep config={config} t={t} onSelect={goNext} isDisabled={!permanentAddress}>
       <TextArea
         isMandatory={false}
@@ -104,6 +107,7 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
         disable={isUpdateProperty || isEditProperty}
       />
     </FormStep>
+    </React.Fragment>
   );
 };
 
