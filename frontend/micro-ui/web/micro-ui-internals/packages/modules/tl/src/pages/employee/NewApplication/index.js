@@ -25,8 +25,7 @@ const NewApplication = () => {
   let { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { enabled: propertyId ? true : false }
+    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId ? true : false },
   );
 
   useEffect(() => {
@@ -255,7 +254,7 @@ const NewApplication = () => {
         onFormValueChange={onFormValueChange}
         breaklineStyle={{ border: "0px" }}
       />
-      {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
+      {showToast && <Toast isDleteBtn={true} error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
     </div>
   );
 };
