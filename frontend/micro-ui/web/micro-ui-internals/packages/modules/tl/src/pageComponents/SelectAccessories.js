@@ -18,6 +18,7 @@ const SelectAccessories = ({ t, config, onSelect, userType, formData }) => {
 
   function goNext() {
     sessionStorage.setItem("isAccessories", isAccessories.i18nKey);
+    sessionStorage.setItem("VisitedisAccessories",true);
     onSelect(config.key, { isAccessories, accessories:[] });
     //onSelect("usageCategoryMajor", { i18nKey: "PROPERTYTAX_BILLING_SLAB_RESIDENTIAL" });
   }

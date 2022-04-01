@@ -13,6 +13,7 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
   let isSuccessScreen = window.location.href.includes("acknowledgement");
+  let isCommonPTPropertyScreen = window.location.href.includes("/tl/tradelicence/new-application/property-details");
 
   const ApplicationDetails = Digit.ComponentRegistryService.getComponent("TLApplicationDetails");
   const CreateTradeLicence = Digit?.ComponentRegistryService?.getComponent('TLCreateTradeLicence');
@@ -23,11 +24,22 @@ const App = () => {
   const SearchTradeComponent = Digit?.ComponentRegistryService?.getComponent('TLSearchTradeComponent');
   const MyApplications = Digit?.ComponentRegistryService?.getComponent('MyApplications');
 
+  const getBackPageNumber = () => {
+    let goBacktoFromProperty = -1;
+  if(sessionStorage.getItem("VisitedCommonPTSearch") === "true" && (sessionStorage.getItem("VisitedAccessoriesDetails") === "true" || sessionStorage.getItem("VisitedisAccessories") === "true") && isCommonPTPropertyScreen)
+  {
+    goBacktoFromProperty = -4;
+    sessionStorage.removeItem("VisitedCommonPTSearch");
+    return goBacktoFromProperty;
+  }
+  return goBacktoFromProperty;
+  }
+
   return (
     <span className={"tl-citizen"}>
       <Switch>
         <AppContainer>
-          <BackButton /* style={{ position: "fixed", top: "55px" }} */ isSuccessScreen={isSuccessScreen}  >Back</BackButton>
+          <BackButton /* style={{ position: "fixed", top: "55px" }} */ isCommonPTPropertyScreen={isCommonPTPropertyScreen} isSuccessScreen={isSuccessScreen} getBackPageNumber={getBackPageNumber}>Back</BackButton>
           <PrivateRoute path={`${path}/tradelicence/new-application`} component={CreateTradeLicence} />
           <PrivateRoute path={`${path}/tradelicence/edit-application/:id/:tenantId`} component={EditTrade} />
           <PrivateRoute path={`${path}/tradelicence/renew-trade/:id/:tenantId`} component={RenewTrade} />

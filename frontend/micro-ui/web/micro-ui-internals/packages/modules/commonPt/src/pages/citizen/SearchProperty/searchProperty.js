@@ -21,6 +21,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   const { action = 0 } = Digit.Hooks.useQueryParams();
   const [searchData, setSearchData] = useState({});
   const [showToast, setShowToast] = useState(null);
+  sessionStorage.setItem("VisitedCommonPTSearch",true);
   let allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   // if called from tl module get tenants from tl usetenants
   allCities = allCities ? allCities : Digit.Hooks.tl.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));  
@@ -125,6 +126,12 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           },
         },
         {
+          label: t("PT_PROVIDE_ONE_MORE_PARAM"),
+          isInsideBox: true,
+          placementinbox: 0,
+          isSectionText : true,
+        },
+        {
           label: mobileNumber.label,
           type: mobileNumber.type,
           populators: {
@@ -135,7 +142,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           ...description,
           isMandatory: false,
           isInsideBox: true,
-          placementinbox: 0
+          placementinbox: 1
         },
         {
           label: "",
@@ -259,6 +266,12 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           },
         },
         {
+          label: t("PT_PROVIDE_ONE_MORE_PARAM"),
+          isInsideBox: true,
+          placementinbox: 0,
+          isSectionText : true,
+        },
+        {
           label: doorNumber.label,
           type: doorNumber.type,
           populators: {
@@ -267,6 +280,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             validation: doorNumber?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 1,
         },
         {
           label: name.label,
@@ -277,6 +292,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             validation: name?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 2,
         },
       ],
     },
@@ -284,43 +301,43 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
 
   const onPropertySearch = async (data) => {
     if (!data?.city?.code) {
-      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+      setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
       return;
     }
    
     if (action == 0) {
       if (!(data?.mobileNumber || data?.propertyIds || data?.oldPropertyId)) {
-        setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+        setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
         return;
       }
       if (data?.mobileNumber && !data.mobileNumber?.match(mobileNumber?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: mobileNumber?.validation?.pattern?.message });
+        setShowToast({ error: true, label: mobileNumber?.validation?.pattern?.message });
         return;
       }
       if (data?.propertyIds && !data.propertyIds?.match(property?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: property?.validation?.pattern?.message });
+        setShowToast({ error: true, label: property?.validation?.pattern?.message });
         return;
       }
       if (data?.oldPropertyId && !data.oldPropertyId?.match(oldProperty?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: oldProperty?.validation?.pattern?.message });
+        setShowToast({ error: true, label: oldProperty?.validation?.pattern?.message });
         return;
       }
     } else {
       if (!data?.locality?.code) {
-        setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+        setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
         return;
       }
       if (!(data?.doorNumber || data?.name)) {
-        setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+        setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
         return;
       }
 
       if (data?.name && !data.name?.match(name?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: name?.validation?.pattern?.message });
+        setShowToast({ error: true, label: name?.validation?.pattern?.message });
         return;
       }
       if (data?.doorNumber && !data.doorNumber?.match(doorNumber?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: doorNumber?.validation?.pattern?.message });
+        setShowToast({ error: true, label: doorNumber?.validation?.pattern?.message });
         return;
       }
     }
@@ -348,13 +365,12 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
     //   setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
     // }
 
-    if (mobileNumberLength > 0 || oldPropId!="" || propId!="") {
-    setShowToast(null);
-
-    }
-    if (city!=null && Object.keys(city).length !=0){
-      setShowToast(null)
-    }
+    // if (mobileNumberLength > 0 || oldPropId!="" || propId!="") {
+    // setShowToast(null);
+    // }
+    // if (city!=null && Object.keys(city).length !=0 && (mobileNumberLength > 0 || oldPropId!="" || propId!="")){
+    //   setShowToast(null)
+    // }
     const locality = data?.locality;
     if (city?.code !== cityCode) {
       setCityCode(city?.code);
