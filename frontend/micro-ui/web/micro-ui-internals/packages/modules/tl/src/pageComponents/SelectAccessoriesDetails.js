@@ -159,7 +159,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   const goNext = () => {
     let data = formData.TradeDetails.Units;
     let formdata;
-
+    sessionStorage.setItem("VisitedAccessoriesDetails",true);
     formdata = { ...data, accessories: fields };
     onSelect(config.key, formdata);
   };

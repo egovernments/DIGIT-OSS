@@ -14,6 +14,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
   const history = useHistory();
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_TRADE", {});
+  let isReneworEditTrade = window.location.href.includes("/renew-trade/") || window.location.href.includes("/edit-application/")
 
   const stateId = Digit.ULBService.getStateId();
   let { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
@@ -23,11 +24,16 @@ const CreateTradeLicence = ({ parentRoute }) => {
       nextPage;
     let { nextStep = {} } = config.find((routeObj) => routeObj.route === currentPath);
     if (typeof nextStep == "object" && nextStep != null) {
+      if((params?.cptId?.id || params?.cpt?.details?.propertyId || isReneworEditTrade)  && (nextStep[sessionStorage.getItem("isAccessories")] && nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")  )
+      {
+        nextStep = "property-details";
+      }
       if (
         nextStep[sessionStorage.getItem("isAccessories")] &&
         (nextStep[sessionStorage.getItem("isAccessories")] === "accessories-details" ||
           nextStep[sessionStorage.getItem("isAccessories")] === "map" ||
-          nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details")
+          nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details" || 
+          nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")
       ) {
         nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
       } else if (
@@ -43,6 +49,10 @@ const CreateTradeLicence = ({ parentRoute }) => {
       ) {
         nextStep = `${nextStep[sessionStorage.getItem("KnowProperty")]}`;
       }
+    }
+    if( (params?.cptId?.id || params?.cpt?.details?.propertyId || isReneworEditTrade)  && nextStep === "know-your-property" )
+    { 
+      nextStep = "property-details";
     }
     let redirectWithHistory = history.push;
     if (skipStep) {

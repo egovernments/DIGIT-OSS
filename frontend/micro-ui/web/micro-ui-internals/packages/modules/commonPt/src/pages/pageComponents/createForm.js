@@ -13,6 +13,7 @@ const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
   const defaultValues = { ...value};
   const history = useHistory();
   const match = useRouteMatch();
+  sessionStorage.setItem("VisitedCommonPTSearch",true);
 
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   
