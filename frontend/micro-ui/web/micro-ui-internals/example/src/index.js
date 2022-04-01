@@ -42,13 +42,13 @@ const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
-  const token = window.sessionStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
+  const token =window.localStorage.getItem("token")|| process.env[`REACT_APP_${userType}_TOKEN`];
  
   const citizenInfo = window.localStorage.getItem("Citizen.user-info")
  
   const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stateCode;
 
-  const employeeInfo = window.localStorage.getItem("Employee.user-info")
+  const employeeInfo = window.localStorage.getItem("Employee.user-info");
   const employeeTenantId = window.localStorage.getItem("Employee.tenant-id");
 
   const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";
@@ -56,7 +56,7 @@ const initTokens = (stateCode) => {
   window.Digit.SessionStorage.set("userType", userTypeInfo);
 
   if (userType !== "CITIZEN") {
-    window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? employeeInfo : citizenInfo });
+    window.Digit.SessionStorage.set("User", { access_token: token, info: userType !== "CITIZEN" ? JSON.parse(employeeInfo) : citizenInfo });
   } else {
     // if (!window.Digit.SessionStorage.get("User")?.extraRoleInfo) window.Digit.SessionStorage.set("User", { access_token: token, info: citizenInfo });
   }
