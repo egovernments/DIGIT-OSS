@@ -16,7 +16,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import variables from '../../../../styles/variables';
 import { isMobile } from 'react-device-detect';
 import Chip from '@material-ui/core/Chip';
-import { getLocaleLabels, getTenantId,stateTenant } from '../../../../utils/commons';
+import { getLocaleLabels } from '../../../../utils/commons';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" style={{ color: 'grey' }} />;
@@ -60,15 +60,21 @@ const theme = createMuiTheme({
 });
 
 const localaliseTenant = ((tenant, type) => {
-    let prefix = 'DSS_'
+    let prefix = 'DDR_'
     if (type == "DDRS") {
-        prefix = `TENANT_TENANTS_${stateTenant()}_` ;
+        prefix = `DDR_` ;
     } else if (type == "ULBS") {
-        prefix = `TENANT_TENANTS_${stateTenant()}_` ; 
+        prefix = `TENANT_TENANTS_` ; 
     }
-    return getLocaleLabels(`${prefix}${tenant.toUpperCase()}`);
+    return getLocaleLabels(`${prefix}${getTransformedLocale(tenant)}`);
 })
 
+
+const getTransformedLocale = label => {
+    if (typeof label === "number") return label;
+    label=label?.trim();
+    return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
+};
 class CheckboxesTags extends React.Component {
     constructor(props) {
         super(props)

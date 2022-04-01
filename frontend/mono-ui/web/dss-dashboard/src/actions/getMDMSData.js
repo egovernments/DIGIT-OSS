@@ -7,17 +7,17 @@ _.each(tenants,(v,k) => {
 
     if(v.code){
         tenantLogo[v.code] = v.logoId;
-        tempULBS.push(v.name);
+        tempULBS.push(v.code);
     }
     if(v.code === getTenantId())
-        tenantName = v.name;
+        tenantName = v.code;
     if(v.city.ddrName){     
         tenantId = v.code;
-        if(!_.isEmpty(tempDRRsObj,true) && typeof tempDRRsObj[v.city.ddrName] != 'undefined'){
-            tempDRRsObj[v.city.ddrName].push(tenantId);
+        if(!_.isEmpty(tempDRRsObj,true) && typeof tempDRRsObj[v.city.districtTenantCode] != 'undefined'){
+            tempDRRsObj[v.city.districtTenantCode].push(tenantId);
         }else{
-            tempDRRsObj[v.city.ddrName] = [tenantId]
-            tempDDRs.push(v.city.ddrName);
+            tempDRRsObj[v.city.districtTenantCode] = [tenantId]
+            tempDDRs.push(v.city.districtTenantCode);
         }
     }
 })

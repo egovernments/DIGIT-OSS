@@ -195,7 +195,7 @@ const CheckPage = ({ onSubmit, value }) => {
             <TLDocument value={value}></TLDocument>
           ) : (
             <StatusTable>
-              <Row text="TL_NO_DOCUMENTS_MSG" />
+              <Row text={t("TL_NO_DOCUMENTS_MSG")} />
             </StatusTable>
           )}
         </div>
