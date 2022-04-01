@@ -87,11 +87,12 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
   return (
     <React.Fragment>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ID`)}:`}</CardLabel>
+        <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ID`)} *:`}</CardLabel>
         <div className="field" style={{ marginTop: "20px", display: "flex" }}>
           <TextInput
             key={config.key}
             value={propertyId}
+            isMandatory={true}
             onChange={(e) => {
               setPropertyId(e.target.value);
               onSelect(config.key, { id: e.target.value });
