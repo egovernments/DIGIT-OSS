@@ -81,6 +81,12 @@ public class NOCRepository {
     public Integer getNocCount(NocSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getNocSearchQuery(criteria, preparedStmtList,true);
+        try {
+            query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+        } catch (InvalidTenantIdException e) {
+            throw new CustomException(NOCConstants.EG_NOC_AS_TENANTID_ERROR,
+                    "TenantId length is not sufficient to replace query schema in a multi state instance");
+        }
         int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
 }
