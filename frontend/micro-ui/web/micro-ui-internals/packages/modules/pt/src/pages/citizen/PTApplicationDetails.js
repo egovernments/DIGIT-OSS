@@ -215,30 +215,31 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
       </div>
         <Card>
           <StatusTable>
-            <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
+            <Row className="border-none" label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} /* textStyle={{ whiteSpace: "pre" }} */ />
+            <Row className="border-none" label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} /* textStyle={{ whiteSpace: "pre" }} */ />
+            <Row className="border-none" label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
 
             {isPropertyTransfer && (
               <React.Fragment>
-                <Row label={t("PT_FEE_AMOUNT")} text={application?.name || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
-                <Row label={t("PT_PAYMENT_STATUS")} text={application?.status || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+                <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={bill?.totalAmount ||t("CS_NA") } textStyle={{ whiteSpace: "pre" }} />
+                <Row className="border-none" label={t("PT_PAYMENT_STATUS")} text={t(`PT_MUT_BILL_${bill?.status?.toUpperCase()}`)} textStyle={{ whiteSpace: "pre" }} />
               </React.Fragment>
             )}
           </StatusTable>
           <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
           <StatusTable>
-            <Row label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={property?.address?.pincode || t("CS_NA")} />
-            <Row label={t("PT_COMMON_CITY")} text={property?.address?.city || t("CS_NA")} />
+            <Row className="border-none" label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={property?.address?.pincode || t("CS_NA")} />
+            <Row className="border-none" label={t("PT_COMMON_CITY")} text={property?.address?.city || t("CS_NA")} />
             <Row
+              className="border-none"
               label={t("PT_COMMON_LOCALITY_OR_MOHALLA")}
               text=/* {`${t(application?.address?.locality?.name)}` || t("CS_NA")} */ {t(`${property?.address?.locality?.area}`) || t("CS_NA")}
             />
-            <Row label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={property?.address?.street || t("CS_NA")} />
+            <Row className="border-none" label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={property?.address?.street || t("CS_NA")} />
             {isPropertyTransfer ? (
-              <Row label={t("PT_DOOR_OR_HOUSE")} text={property?.address?.doorNo || t("CS_NA")} />
+              <Row className="border-none" label={t("PT_DOOR_OR_HOUSE")} text={property?.address?.doorNo || t("CS_NA")} />
             ) : (
-              <Row label={t("PT_PROPERTY_ADDRESS_COLONY_NAME")} text={property?.address?.buildingName || t("CS_NA")} />
+              <Row className="border-none" label={t("PT_PROPERTY_ADDRESS_COLONY_NAME")} text={property?.address?.buildingName || t("CS_NA")} />
             )}
           </StatusTable>
 
@@ -257,12 +258,12 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
                         )}
                       </CardSubHeader>
                       <StatusTable>
-                        <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
-                        <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
-                        <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
-                        <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
-                        <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={owner?.ownerType.toLowerCase() || t("CS_NA")} />
-                        <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
+                        <Row className="border-none" label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
+                        <Row className="border-none" label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
+                        <Row className="border-none" label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
+                        <Row className="border-none" label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
+                        <Row className="border-none" label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={owner?.ownerType.toLowerCase() || t("CS_NA")} />
+                        <Row className="border-none" label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
                       </StatusTable>
                     </div>
                   ))}
@@ -282,14 +283,14 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
                           )}
                         </CardSubHeader>
                         <StatusTable>
-                          <Row label={t("PT_INSTITUTION_NAME")} text={transferorInstitution?.name || t("CS_NA")} />
-                          <Row label={t("PT_TYPE_OF_INSTITUTION")} text={`${t(transferorInstitution?.type)}` || t("CS_NA")} />
-                          <Row label={t("PT_NAME_AUTHORIZED_PERSON")} text={transferorInstitution?.nameOfAuthorizedPerson || t("CS_NA")} />
-                          <Row label={t("PT_LANDLINE_NUMBER")} text={owner?.altContactNumber || t("CS_NA")} />
-                          <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
-                          <Row label={t("PT_INSTITUTION_DESIGNATION")} text={transferorInstitution?.designation || t("CS_NA")} />
-                          <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
-                          <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_INSTITUTION_NAME")} text={transferorInstitution?.name || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_TYPE_OF_INSTITUTION")} text={`${t(transferorInstitution?.type)}` || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_NAME_AUTHORIZED_PERSON")} text={transferorInstitution?.nameOfAuthorizedPerson || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_LANDLINE_NUMBER")} text={owner?.altContactNumber || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_INSTITUTION_DESIGNATION")} text={transferorInstitution?.designation || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
                         </StatusTable>
                       </div>
                     ))}
@@ -307,17 +308,18 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
                           )}
                         </CardSubHeader>
                         <StatusTable>
-                          <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
-                          <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
-                          <Row label={t("PT_COMMON_GENDER_LABEL")} text={owner?.gender || t("CS_NA")} />
-                          <Row
+                          <Row className="border-none" label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_COMMON_GENDER_LABEL")} text={owner?.gender || t("CS_NA")} />
+                          <Row 
+                            className="border-none"
                             label={t("PT_FORM3_OWNERSHIP_TYPE")}
                             text={`${application?.ownershipCategory ? t(`PT_OWNERSHIP_${application?.ownershipCategory}`) : t("CS_NA")}`}
                           />
-                          <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
-                          <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
-                          <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={(owner?.ownerType).toLowerCase() || t("CS_NA")} />
-                          <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={(owner?.ownerType).toLowerCase() || t("CS_NA")} />
+                          <Row className="border-none" label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
                         </StatusTable>
                       </div>
                     ))}
@@ -325,20 +327,20 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
               )}
               <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_MUTATION_DETAILS")}</CardSubHeader>
               <StatusTable>
-                <Row label={t("PT_MUTATION_PENDING_COURT")} text={property?.additionalDetails?.isMutationInCourt || t("CS_NA")} />
-                <Row label={t("PT_DETAILS_COURT_CASE")} text={property?.additionalDetails?.caseDetails || t("CS_NA")} />
-                <Row label={t("PT_PROP_UNDER_GOV_AQUISITION")} text={property?.additionalDetails?.isPropertyUnderGovtPossession || t("CS_NA")} />
-                <Row label={t("PT_DETAILS_GOV_AQUISITION")} text={t("CS_NA")} />
+                <Row className="border-none" label={t("PT_MUTATION_PENDING_COURT")} text={property?.additionalDetails?.isMutationInCourt || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_DETAILS_COURT_CASE")} text={property?.additionalDetails?.caseDetails || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_PROP_UNDER_GOV_AQUISITION")} text={property?.additionalDetails?.isPropertyUnderGovtPossession || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_DETAILS_GOV_AQUISITION")} text={t("CS_NA")} />
               </StatusTable>
 
               <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_REGISTRATION_DETAILS")}</CardSubHeader>
               <StatusTable>
-                <Row label={t("PT_REASON_PROP_TRANSFER")} text={`${t(property?.additionalDetails?.reasonForTransfer)}` || t("CS_NA")} />
-                <Row label={t("PT_PROP_MARKET_VALUE")} text={property?.additionalDetails?.marketValue || t("CS_NA")} />
-                <Row label={t("PT_REG_NUMBER")} text={property?.additionalDetails?.documentNumber || t("CS_NA")} />
-                <Row label={t("PT_DOC_ISSUE_DATE")} text={documentDate} />
-                <Row label={t("PT_REG_DOC_VALUE")} text={property?.additionalDetails?.documentValue || t("CS_NA")} />
-                <Row label={t("PT_REMARKS")} text={t("CS_NA")} />
+                <Row className="border-none" label={t("PT_REASON_PROP_TRANSFER")} text={`${t(property?.additionalDetails?.reasonForTransfer)}` || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_PROP_MARKET_VALUE")} text={property?.additionalDetails?.marketValue || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_REG_NUMBER")} text={property?.additionalDetails?.documentNumber || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_DOC_ISSUE_DATE")} text={documentDate} />
+                <Row className="border-none" label={t("PT_REG_DOC_VALUE")} text={property?.additionalDetails?.documentValue || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_REMARKS")} text={t("CS_NA")} />
               </StatusTable>
             </React.Fragment>
           ) : (
@@ -346,6 +348,7 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
               <CardSubHeader style={{ fontSize: "24px" }}> {t("PT_PROPERTY_ASSESSMENT_DETAILS_HEADER")}</CardSubHeader>
               <StatusTable>
                 <Row
+                  className="border-none"
                   label={t("PT_ASSESMENT_INFO_USAGE_TYPE")}
                   text={
                     `${t(
@@ -354,9 +357,9 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
                     )}` || t("CS_NA")
                   }
                 />
-                <Row label={t("PT_COMMON_PROPERTY_TYPE")} text={`${t(getPropertyTypeLocale(property?.propertyType))}` || t("CS_NA")} />
-                <Row label={t("PT_ASSESMENT1_PLOT_SIZE")} text={(property?.landArea && `${t(`${property?.landArea} sq.ft`)}`) || t("CS_NA")} />
-                <Row label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${t(property?.noOfFloors)}` || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_COMMON_PROPERTY_TYPE")} text={`${t(getPropertyTypeLocale(property?.propertyType))}` || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_ASSESMENT1_PLOT_SIZE")} text={(property?.landArea && `${t(`${property?.landArea} sq.ft`)}`) || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${t(property?.noOfFloors)}` || t("CS_NA")} />
               </StatusTable>
               <div>
                 {Array.isArray(units) &&
@@ -373,6 +376,7 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
                         {(flrno = unit?.floorNo) > -3 && (
                           <StatusTable>
                             <Row
+                              className="border-none"
                               label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")}
                               text={
                                 `${t(
@@ -383,12 +387,13 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
                               }
                             />
                             <Row
+                              className="border-none"
                               label={t("PT_OCCUPANY_TYPE_LABEL")}
                               text={`${t("PROPERTYTAX_OCCUPANCYTYPE_" + unit?.occupancyType)}` || t("CS_NA")}
                             />
-                            <Row label={t("PT_BUILTUP_AREA_LABEL")} text={`${`${unit?.constructionDetail?.builtUpArea} sq.ft` || t("CS_NA")}`} />
+                            <Row className="border-none" label={t("PT_BUILTUP_AREA_LABEL")} text={`${`${unit?.constructionDetail?.builtUpArea} sq.ft` || t("CS_NA")}`} />
                             {unit.occupancyType == "RENTED" && (
-                              <Row label={t("PT_FORM2_TOTAL_ANNUAL_RENT")} text={`${(unit?.arv && `₹${unit?.arv}`) || t("CS_NA")}`} />
+                              <Row className="border-none" label={t("PT_FORM2_TOTAL_ANNUAL_RENT")} text={`${(unit?.arv && `₹${unit?.arv}`) || t("CS_NA")}`} />
                             )}
                           </StatusTable>
                         )}
@@ -409,17 +414,18 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
                         )}
                       </CardSubHeader>
                       <StatusTable>
-                        <Row label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
-                        <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
-                        <Row label={t("PT_COMMON_GENDER_LABEL")} text={owner?.gender || t("CS_NA")} />
+                        <Row className="border-none" label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
+                        <Row className="border-none" label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
+                        <Row className="border-none" label={t("PT_COMMON_GENDER_LABEL")} text={owner?.gender || t("CS_NA")} />
                         <Row
+                          className="border-none"
                           label={t("PT_FORM3_OWNERSHIP_TYPE")}
                           text={`${property?.ownershipCategory ? t(`PT_OWNERSHIP_${property?.ownershipCategory}`) : t("CS_NA")}`}
                         />
-                        <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber} />
-                        <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${owner?.emailId || (t("CS_NA"))}`} />
-                        <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={(owner?.ownerType).toLowerCase()} />
-                        <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
+                        <Row className="border-none" label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber} />
+                        <Row className="border-none" label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${owner?.emailId || (t("CS_NA"))}`} />
+                        <Row className="border-none" label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={(owner?.ownerType).toLowerCase()} />
+                        <Row className="border-none" label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
                       </StatusTable>
                     </div>
                   ))}
@@ -433,7 +439,7 @@ let isInstitution=property.ownershipCategoryInit.startsWith("INSTITUTION");
               docs.length > 0 && <PropertyDocument property={property}></PropertyDocument>
             ) : (
               <StatusTable>
-                <Row text={t("PT_NO_DOCUMENTS_MSG")} />
+                <Row className="border-none" text={t("PT_NO_DOCUMENTS_MSG")} />
               </StatusTable>
             )}
           </div>
