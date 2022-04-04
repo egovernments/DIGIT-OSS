@@ -10,6 +10,7 @@ import {
   MobileNumber,
   DatePicker,
   Loader,
+  Toast,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
@@ -25,12 +26,19 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
   const urlPropertyId = new URLSearchParams(search).get("propertyId");
   const [propertyId, setPropertyId] = useState(formData?.cptId?.id || urlPropertyId || "");
   const [searchPropertyId, setSearchPropertyId] = useState(urlPropertyId);
+  const [showToast, setShowToast] = useState(null);
 
   const { isLoading, isError, error, data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
-    { filters: { propertyIds: propertyId || searchPropertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId || searchPropertyId }, tenantId: tenantId, enabled: propertyId || searchPropertyId ? true : false },
+    { filters: { propertyIds: searchPropertyId }, tenantId: tenantId },
+    { filters: { propertyIds: searchPropertyId }, tenantId: tenantId, enabled: searchPropertyId ? true : false },
   );
 
+  useEffect(() => {
+    if(isLoading == false && (error && error == true ) || propertyDetails?.Properties?.length == 0)
+    {
+      setShowToast({ error: true, label: "PT_ENTER_VALID_PROPERTY_ID" });
+    }
+  },[error,propertyDetails])
   useEffect(() => {
     onSelect("cpt", { details: propertyDetails?.Properties[0] });
   }, [propertyDetails, pathname]);
@@ -138,6 +146,17 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
           </Link>
         </React.Fragment>
       ) : null}
+      {showToast && (
+        <Toast
+          isDleteBtn={true}
+          error={showToast.error}
+          warning={showToast.warning}
+          label={t(showToast.label)}
+          onClose={() => {
+            setShowToast(null);
+          }}
+        />
+      )}
     </React.Fragment>
   );
 };
