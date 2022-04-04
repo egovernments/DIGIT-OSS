@@ -78,6 +78,12 @@ public class BirthCertificate {
 
   private AuditDetails auditDetails = null;
 
+  @JsonProperty("gender")
+  private String gender = null;
+
+  @JsonProperty("birthPlace")
+  private String birthPlace = null;
+
   public enum StatusEnum {
 	  ACTIVE("ACTIVE"),
 	  

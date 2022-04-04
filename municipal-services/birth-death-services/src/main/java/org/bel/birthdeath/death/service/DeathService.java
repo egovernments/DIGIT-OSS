@@ -88,6 +88,8 @@ public class DeathService {
 		deathCertificate.setTenantId(criteria.getTenantId());
 		DeathCertRequest deathCertRequest = DeathCertRequest.builder().deathCertificate(deathCertificate).requestInfo(requestInfo).build();
 		List<EgDeathDtl> deathDtls = repository.getDeathDtlsAll(criteria,requestInfo);
+			deathCertificate.setGender(deathDtls.get(0).getGenderStr());
+			deathCertificate.setAge(deathDtls.get(0).getAge());
 		if(deathDtls.size()>1) 
 			throw new CustomException("Invalid_Input","Error in processing data");
 		enrichmentServiceDeath.enrichCreateRequest(deathCertRequest);

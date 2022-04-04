@@ -78,6 +78,12 @@ public class DeathCertificate {
 
   private AuditDetails auditDetails = null;
 
+  @JsonProperty("gender")
+  private String gender = null;
+
+  @JsonProperty("age")
+  private String age = null;
+
   public enum StatusEnum {
 	  ACTIVE("ACTIVE"),
 	  
