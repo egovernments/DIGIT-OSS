@@ -198,5 +198,9 @@ public class WSCalculationConfiguration {
 	@Value("${workflow.process.search.path}")
 	private String searchWorkflowProcessEndPoint;
 
+	@Value("${bulk.demand.batch.value}")
+	private Integer bulkbatchSize;
 
+	@Value("${bulk.demand.offset.value}")
+	private Integer batchOffset;
 }

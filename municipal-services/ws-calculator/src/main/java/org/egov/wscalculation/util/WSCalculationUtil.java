@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.wscalculation.config.WSCalculationConfiguration;
 import org.egov.wscalculation.constants.WSCalculationConstant;
@@ -89,8 +90,9 @@ public class WSCalculationUtil {
 	 */
 	public StringBuilder getDemandSearchUrl(GetBillCriteria getBillCriteria) {
 
+		StringBuilder url;
 		if (CollectionUtils.isEmpty(getBillCriteria.getConsumerCodes()))
-			return new StringBuilder().append(configurations.getBillingServiceHost())
+			url = new StringBuilder().append(configurations.getBillingServiceHost())
 					.append(configurations.getDemandSearchEndPoint()).append(WSCalculationConstant.URL_PARAMS_SEPARATER)
 					.append(WSCalculationConstant.TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
 					.append(WSCalculationConstant.SEPARATER)
@@ -99,14 +101,21 @@ public class WSCalculationUtil {
 					.append(WSCalculationConstant.WS_CONSUMER_CODE_SEPARATOR)
 					.append(getBillCriteria.getConnectionNumber());
 
-		else
-			return new StringBuilder().append(configurations.getBillingServiceHost())
+		else {
+			 url = new StringBuilder().append(configurations.getBillingServiceHost())
 					.append(configurations.getDemandSearchEndPoint()).append(WSCalculationConstant.URL_PARAMS_SEPARATER)
 					.append(WSCalculationConstant.TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
 					.append(WSCalculationConstant.SEPARATER)
 					.append(WSCalculationConstant.CONSUMER_CODE_SEARCH_FIELD_NAME)
 					.append(StringUtils.join(getBillCriteria.getConsumerCodes(), ","));
 
+			 if(getBillCriteria.getIsPaymentCompleted() != null)
+				 url.append(WSCalculationConstant.SEPARATER)
+				 .append(WSCalculationConstant.PAYMENT_COMPLETED_SEARCH_FIELD_NAME)
+				 .append(getBillCriteria.getIsPaymentCompleted());
+		}
+
+		return url;
 	}
 
 	/**
@@ -168,6 +177,30 @@ public class WSCalculationUtil {
 		return propertyList;
 	}
 
+
+	/**
+	 * 
+	 * @param waterConnectionRequest
+	 *            WaterConnectionRequest containing property
+	 * @return List of Property
+	 */
+	public List<Property> propertySearch(RequestInfo requestInfo, Set<String> propertyUuids, String tenantId) {
+
+		PropertyCriteria propertyCriteria = PropertyCriteria.builder()
+				.uuids(propertyUuids)
+				.tenantId(tenantId)
+				.build();
+
+		StringBuilder url = getPropertyURL(propertyCriteria);
+		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder()
+				.requestInfo(requestInfo)
+				.build();
+
+		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+		List<Property> propertyList = getPropertyDetails(result);
+		return propertyList;
+	}
+	
 	/**
 	 * 
 	 * @param waterConnectionRequest

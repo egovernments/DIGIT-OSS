@@ -101,10 +101,12 @@ public class SewerageServiceImpl implements SewerageService {
 		mDMSValidator.validateMasterForCreateRequest(sewerageConnectionRequest);
 		enrichmentService.enrichSewerageConnection(sewerageConnectionRequest, reqType);
 		userService.createUser(sewerageConnectionRequest);
-		sewerageDao.saveSewerageConnection(sewerageConnectionRequest);
+
 		// call work-flow
 		if (config.getIsExternalWorkFlowEnabled())
 			wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
+		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);
+		sewerageDao.saveSewerageConnection(sewerageConnectionRequest);
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
 	}
 
