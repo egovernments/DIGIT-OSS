@@ -223,14 +223,14 @@ let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
       </div>
         <Card>
           <StatusTable>
-            <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} /* textStyle={{ whiteSpace: "pre" }} */ />
-            <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} /* textStyle={{ whiteSpace: "pre" }} */ />
-            <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
+            <Row className="border-none" label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} /* textStyle={{ whiteSpace: "pre" }} */ />
+            <Row className="border-none" label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} /* textStyle={{ whiteSpace: "pre" }} */ />
+            <Row className="border-none" label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
 
             {isPropertyTransfer && (
               <React.Fragment>
-                <Row label={t("PT_FEE_AMOUNT")} text={bill?.totalAmount ||t("CS_NA") } textStyle={{ whiteSpace: "pre" }} />
-                <Row label={t("PT_PAYMENT_STATUS")} text={t(`PT_MUT_BILL_${bill?.status?.toUpperCase()}`)} textStyle={{ whiteSpace: "pre" }} />
+                <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={bill?.totalAmount ||t("CS_NA") } textStyle={{ whiteSpace: "pre" }} />
+                <Row className="border-none" label={t("PT_PAYMENT_STATUS")} text={t(`PT_MUT_BILL_${bill?.status?.toUpperCase()}`)} textStyle={{ whiteSpace: "pre" }} />
               </React.Fragment>
             )}
           </StatusTable>
