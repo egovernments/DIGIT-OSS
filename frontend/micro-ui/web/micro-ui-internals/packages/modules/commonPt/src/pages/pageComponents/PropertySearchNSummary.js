@@ -149,6 +149,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
       {showToast && (
         <Toast
           isDleteBtn={true}
+          labelstyle={{width:"100%"}}
           error={showToast.error}
           warning={showToast.warning}
           label={t(showToast.label)}
