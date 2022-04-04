@@ -1,10 +1,7 @@
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { Header, CitizenHomeCard, PTIcon,WSICon,FSMIcon,MCollectIcon,PGRIcon,TLIcon,OBPSIcon, Loader, CollectionIcon } from "@egovernments/digit-ui-react-components";
-// const processLinkData= data => {
-//   const newData =  data?.filter(el=> el.url==="digit-ui-card").reduce((a,b)=>{a[b.parentModule]=a[b.parentModule]?.length>0?[b,...a[b.parentModule]]:[b]; return a},{})
-//   return newData
-// }
+import { Header, CitizenHomeCard, PTIcon,WSICon,FSMIcon,MCollectIcon,PGRIcon,TLIcon,OBPSIcon, Loader, BillsIcon,CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
+
 const processLinkData= (data,code,t) => {
   const newData =  data?.filter(el=> el.url==="digit-ui-card").reduce((a,b)=>{a[b.parentModule]=a[b.parentModule]?.length>0?[b,...a[b.parentModule]]:[b]; return a},{})
   const obj = newData?.[`${code}`]
@@ -18,6 +15,30 @@ const processLinkData= (data,code,t) => {
     links:obj?.reverse(),
     header:`${code}_HEADER`,
     iconName:`CITIZEN_${code}_ICON`
+  }
+  if(code === "FSM"){
+  const roleBasedLoginRoutes = [
+    {
+      role: "FSM_DSO",
+      from: "/digit-ui/citizen/fsm/dso-dashboard",
+      dashoardLink: "CS_LINK_DSO_DASHBOARD",
+      loginLink: "CS_LINK_LOGIN_DSO",
+    },
+  ];
+
+  roleBasedLoginRoutes.map(({ role, from, loginLink, dashoardLink }) => {
+      if (Digit.UserService.hasAccess(role))
+        newObj?.links?.push({
+          link: from,
+          i18nKey: t(dashoardLink),
+        });
+      else
+        newObj?.links?.push({
+          link: `/digit-ui/citizen/login`,
+          state: { role: "FSM_DSO", from },
+          i18nKey: t(loginLink),
+        });
+    });
   }
   console.log(newObj);
   return newObj
@@ -39,7 +60,7 @@ const iconSelector = code => {
     case "OBPS":
       return <OBPSIcon className="fill-path-primary-main" />
     case "Bills":
-      return <CollectionIcon className="fill-path-primary-main" />
+      return <BillsIcon className="fill-path-primary-main" />
     default:
       return <PTIcon className="fill-path-primary-main" />
   }
@@ -71,7 +92,7 @@ const CitizenHome = ({ modules,getCitizenMenu,fetchedCitizen,isLoading }) => {
             if(fetchedCitizen)
               mdmsDataObj = fetchedCitizen? processLinkData(getCitizenMenu?.actions,code,t):undefined;
             if(mdmsDataObj?.links?.length > 0)
-            return <CitizenHomeCard header={t(mdmsDataObj?.header)} links={ mdmsDataObj?.links} Icon={()=>iconSelector(code)} />;
+            return <CitizenHomeCard header={t(mdmsDataObj?.header)} links={ mdmsDataObj?.links} Icon={()=>iconSelector(code)} Info={code==="OBPS" ? () => <CitizenInfoLabel style={{margin: "0px", padding: "10px"}} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)} />:null } isInfo={code==="OBPS"?true:false}/>;
             else return <React.Fragment /> 
           })}
       </div>
