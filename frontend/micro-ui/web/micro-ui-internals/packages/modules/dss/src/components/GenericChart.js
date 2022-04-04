@@ -1,8 +1,15 @@
 import {
-  Card, CardCaption,
-  CardLabel, DownloadIcon, EllipsisMenu, EmailIcon, SearchIconSvg, TextInput, WhatsappIcon
+  Card,
+  CardCaption,
+  CardLabel,
+  DownloadIcon,
+  EllipsisMenu,
+  EmailIcon,
+  SearchIconSvg,
+  TextInput,
+  WhatsappIcon,
 } from "@egovernments/digit-ui-react-components";
-import React, { useRef,Fragment, useState } from "react";
+import React, { useRef, Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const SearchImg = () => {
@@ -21,13 +28,13 @@ const GenericChart = ({
   onChange,
   chip = [],
   updateChip,
-  value={}
+  value = {},
 }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [chartData, setChartData] = useState(null);
   const [chartDenomination, setChartDenomination] = useState(null);
-
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const chart = useRef();
   const menuItems = [
     {
@@ -69,22 +76,32 @@ const GenericChart = ({
   const handleExcelDownload = () => {
     return Digit.Download.Excel(chartData, t(header));
   };
-  let headerName=t(Digit.Utils.locale.getTransformedLocale(header));
+  let headerName = t(Digit.Utils.locale.getTransformedLocale(header));
   return (
     <Card className={`chart-item ${className}`} ReactRef={chart}>
       <div className={`chartHeader ${showSearch && "column-direction"}`}>
         <div>
-          {showHeader && <CardLabel className={"dss-header-label"} >
-          <span className={`tooltip ${headerName?.length < 30?"dss-white-pre":"dss-white-pre-line"}`}>
-            {headerName}
-             {chartDenomination?.toLowerCase()==="amount"&&<span style={{whiteSpace:"pre"}}> ({t(`DSS_${Digit.Utils.locale.getTransformedLocale(value?.denomination)}`)})</span>}
-              <span className="tooltiptext" style={{ whiteSpace: "nowrap" , 
-               fontSize:"medium", marginLeft: t(`TIP_${Digit.Utils.locale.getTransformedLocale(header)}`).length > 30 ? -120 : -60 }}>
+          {showHeader && (
+            <CardLabel className={"dss-header-label"}>
+              <span className={`tooltip ${headerName?.length < (isMobile ? 20 : 30) ? "dss-white-pre" : "dss-white-pre-line"}`}>
+                {headerName}
+                {chartDenomination?.toLowerCase() === "amount" && (
+                  <span style={{ whiteSpace: "pre" }}> ({t(`DSS_${Digit.Utils.locale.getTransformedLocale(value?.denomination)}`)})</span>
+                )}
+                <span
+                  className="tooltiptext"
+                  style={{
+                    whiteSpace: "nowrap",
+                    fontSize: "medium",
+                    marginLeft: t(`TIP_${Digit.Utils.locale.getTransformedLocale(header)}`).length > 30 ? -120 : -60,
+                  }}
+                >
                   {t(`TIP_${Digit.Utils.locale.getTransformedLocale(header)}`)}
+                </span>
               </span>
-            </span>
-            {/* {`${t(header)}`} */}
-            </CardLabel>}
+              {/* {`${t(header)}`} */}
+            </CardLabel>
+          )}
           {subHeader && <p style={{ color: "#505A5F", fontWeight: 700 }}>{subHeader}</p>}
         </div>
         <div className="sideContent">
@@ -95,7 +112,7 @@ const GenericChart = ({
         </div>
       </div>
       {caption && <CardCaption>{caption}</CardCaption>}
-      {React.cloneElement(children, { setChartData ,setChartDenomination})}
+      {React.cloneElement(children, { setChartData, setChartDenomination })}
     </Card>
   );
 };

@@ -513,6 +513,11 @@ button:focus {
   .rowList {
     padding-top: 0px;
   }
+  .rdrDateDisplay{
+    justify-content:unset!important;
+    margin: 0px !important;
+  }
+
 }
 
 @media (min-width: 480px) {
