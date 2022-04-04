@@ -42,7 +42,7 @@ public class RequestsApiController{
 
     @RequestMapping(value="/request/_create", method = RequestMethod.POST)
     public ResponseEntity<ServiceResponse> requestsCreatePost(@Valid @RequestBody ServiceRequest request) throws IOException {
-
+        log.info("Test create");
         ServiceRequest enrichedReq = pgrService.create(request);
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(request.getRequestInfo(), true);
         ServiceWrapper serviceWrapper = ServiceWrapper.builder().service(enrichedReq.getService()).workflow(enrichedReq.getWorkflow()).build();
@@ -54,6 +54,7 @@ public class RequestsApiController{
     @RequestMapping(value="/request/_search", method = RequestMethod.POST)
     public ResponseEntity<ServiceResponse> requestsSearchPost(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                      @Valid @ModelAttribute RequestSearchCriteria criteria) {
+        log.info("Test search");
         List<ServiceWrapper> serviceWrappers = pgrService.search(requestInfoWrapper.getRequestInfo(), criteria);
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
         ServiceResponse response = ServiceResponse.builder().responseInfo(responseInfo).serviceWrappers(serviceWrappers).build();
@@ -63,6 +64,7 @@ public class RequestsApiController{
 
     @RequestMapping(value = "request/_plainsearch", method = RequestMethod.POST)
     public ResponseEntity<ServiceResponse> requestsPlainSearchPost(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper, @Valid @ModelAttribute RequestSearchCriteria requestSearchCriteria) {
+        log.info("Test plainsearch");
         List<ServiceWrapper> serviceWrappers = pgrService.plainSearch(requestInfoWrapper.getRequestInfo(), requestSearchCriteria);
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
         ServiceResponse response = ServiceResponse.builder().responseInfo(responseInfo).serviceWrappers(serviceWrappers).build();
@@ -72,6 +74,7 @@ public class RequestsApiController{
 
     @RequestMapping(value="/request/_update", method = RequestMethod.POST)
     public ResponseEntity<ServiceResponse> requestsUpdatePost(@Valid @RequestBody ServiceRequest request) throws IOException {
+        log.info("Test update");
         ServiceRequest enrichedReq = pgrService.update(request);
         ServiceWrapper serviceWrapper = ServiceWrapper.builder().service(enrichedReq.getService()).workflow(enrichedReq.getWorkflow()).build();
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(request.getRequestInfo(), true);
@@ -82,6 +85,7 @@ public class RequestsApiController{
     @RequestMapping(value="/request/_count", method = RequestMethod.POST)
     public ResponseEntity<CountResponse> requestsCountPost(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                               @Valid @ModelAttribute RequestSearchCriteria criteria) {
+        log.info("Test count");
         Integer count = pgrService.count(requestInfoWrapper.getRequestInfo(), criteria);
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
         CountResponse response = CountResponse.builder().responseInfo(responseInfo).count(count).build();
