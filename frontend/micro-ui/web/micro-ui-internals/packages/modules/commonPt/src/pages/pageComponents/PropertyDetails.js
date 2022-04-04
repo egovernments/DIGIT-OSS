@@ -70,17 +70,18 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
     <React.Fragment>
       {window.location.href.includes("/citizen") ? <Timeline currentStep={2} businessService={"WS"} /> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
-        {propertyDetails && propertyDetails?.Properties.length && (
-          <React.Fragment>
-            <CardHeader>{t("PT_DETAILS")}</CardHeader>
-            <StatusTable>
-              <Row className="border-none" label={t(`PROPERTY_ID`)} text={propertyDetails?.Properties[0]?.propertyId} />
-              <Row className="border-none" label={t(`OWNER_NAME`)} text={propertyDetails?.Properties[0]?.owners[0]?.name} />
-              <Row className="border-none" textStyle={{ wordBreak: "break-word" }} label={t(`PROPERTY_ADDRESS`)} text={propertyAddress} />
-              <Row className="border-none" label={t(`PT_MUTATION_STATUS`)} text={propertyDetails?.Properties[0]?.status} />
-              <div style={{ textAlign: "left" }}>
-                <Link to={`/digit-ui/citizen/pt/property/application/${propertyDetails?.Properties[0]?.acknowldgementNumber}`}>
-                  <LinkButton style={{ textAlign: "left" }} label={t("PT_VIEW_MORE_DETAILS")} />
+       {
+          propertyDetails && propertyDetails?.Properties.length && (
+            <React.Fragment>
+              <CardHeader>{t("PT_DETAILS")}</CardHeader>
+              <StatusTable>
+                <Row className="border-none" label={t(`PROPERTY_ID`)} text={propertyDetails?.Properties[0]?.propertyId} />
+                <Row className="border-none" label={t(`OWNER_NAME`)} text={propertyDetails?.Properties[0]?.owners[0]?.name}/>
+                <Row className="border-none" textStyle={{wordBreak:"break-word"}} label={t(`PROPERTY_ADDRESS`)} text={propertyAddress} />
+                <Row className="border-none" label={t(`PT_MUTATION_STATUS`)} text={propertyDetails?.Properties[0]?.status}/>
+                <div style={{textAlign:"left"}}>
+                <Link to={`/digit-ui/citizen/pt/property/application/${propertyDetails?.Properties[0]?.acknowldgementNumber}/${propertyDetails?.Properties[0]?.tenantId}`}>
+                  <LinkButton style={{textAlign:"left"}} label={t("PT_VIEW_MORE_DETAILS")} />
                 </Link>
                 <Link to={`/digit-ui/citizen/tl/tradelicence/new-application/know-your-property`}>
                   <LinkButton style={{ textAlign: "left" }} label={t("PT_CHANGE_PROPERTY")} />

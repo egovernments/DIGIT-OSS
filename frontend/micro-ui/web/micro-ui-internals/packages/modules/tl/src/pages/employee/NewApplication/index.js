@@ -50,7 +50,7 @@ const NewApplication = () => {
       Object.keys(formState.errors).length > 0 &&
       Object.keys(formState.errors).length == 1 &&
       formState.errors["owners"] &&
-      Object.entries(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0
+      Object.entries(formState.errors["owners"].type).filter((ob) => ob?.[1].type === "required").length == 0
     ) {
       setSubmitValve(true);
     } else {
