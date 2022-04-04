@@ -31,6 +31,9 @@ const Home = ({
   sourceUrl,
   pathname,
 }) => {
+  const { isLoading, data: getCitizenMenu, isFetched: fetchedCitizen } = Digit.Hooks.useAccessControl();
+
+
   const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
   const { t } = useTranslation();
   const { path } = useRouteMatch();
@@ -76,7 +79,7 @@ const Home = ({
 
       <div className={`main center-container citizen-home-container mb-25`}>
         <div className="SideBarStatic">
-          <StaticCitizenSideBar />
+          <StaticCitizenSideBar getCitizenMenu={getCitizenMenu} fetchedCitizen={fetchedCitizen} isLoading={isLoading} />
         </div>
         <Switch>
           <Route exact path={path}>
@@ -92,7 +95,7 @@ const Home = ({
           </Route>
 
           <Route path={`${path}/all-services`}>
-            <AppHome userType="citizen" modules={modules} />
+            <AppHome userType="citizen" modules={modules} getCitizenMenu={getCitizenMenu} fetchedCitizen={fetchedCitizen} isLoading={isLoading} />
           </Route>
 
           <Route path={`${path}/login`}>

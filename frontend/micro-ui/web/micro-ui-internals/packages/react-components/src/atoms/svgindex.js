@@ -631,6 +631,12 @@ const CaseIcon = ({ className, styles }) => (
   </svg>
 );
 
+const TLIcon = ({ className, styles }) => (
+  <svg className={className} style={{ ...styles }} fill="#ffffff" width="24" height="24" viewBox="0 0 34 32" xmlns="http://www.w3.org/2000/svg">
+    <path d="M30.3333 6.99967H23.6667V3.66634C23.6667 1.81634 22.1833 0.333008 20.3333 0.333008H13.6667C11.8167 0.333008 10.3333 1.81634 10.3333 3.66634V6.99967H3.66667C1.81667 6.99967 0.350001 8.48301 0.350001 10.333L0.333334 28.6663C0.333334 30.5163 1.81667 31.9997 3.66667 31.9997H30.3333C32.1833 31.9997 33.6667 30.5163 33.6667 28.6663V10.333C33.6667 8.48301 32.1833 6.99967 30.3333 6.99967ZM20.3333 6.99967H13.6667V3.66634H20.3333V6.99967Z" />
+  </svg>
+);
+
 const PersonIcon = ({ className, styles }) => (
   <svg className={className} style={{ ...styles }} width="24" height="24" viewBox="0 0 38 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
     <path d="M25.6667 10.3333C28.4334 10.3333 30.65 8.1 30.65 5.33333C30.65 2.56666 28.4334 0.333328 25.6667 0.333328C22.9 0.333328 20.6667 2.56666 20.6667 5.33333C20.6667 8.1 22.9 10.3333 25.6667 10.3333ZM12.3334 10.3333C15.1 10.3333 17.3167 8.1 17.3167 5.33333C17.3167 2.56666 15.1 0.333328 12.3334 0.333328C9.56669 0.333328 7.33335 2.56666 7.33335 5.33333C7.33335 8.1 9.56669 10.3333 12.3334 10.3333ZM12.3334 13.6667C8.45002 13.6667 0.666687 15.6167 0.666687 19.5V23.6667H24V19.5C24 15.6167 16.2167 13.6667 12.3334 13.6667ZM25.6667 13.6667C25.1834 13.6667 24.6334 13.7 24.05 13.75C25.9834 15.15 27.3334 17.0333 27.3334 19.5V23.6667H37.3334V19.5C37.3334 15.6167 29.55 13.6667 25.6667 13.6667Z" />
@@ -689,6 +695,16 @@ const CitizenTruck = ({ className }) => (
     />
   </svg>
 );
+
+const FSMIcon = ({ className }) => (
+  <svg width="40" height="40" viewBox="0 0 23 19" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      fill={"#F47738"}
+      d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"
+    />
+  </svg>
+);
+
 
 const EDCRIcon = ({ className }) => (
   <svg width="30" height="32" viewBox="0 0 30 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -889,6 +905,18 @@ const CollectionIcon = ({ styles, className }) => (
   </svg>
 );
 
+const MCollectIcon = ({styles,className}) => (
+  <svg width="37" height="35" className={className} style={{...styles}} viewBox="0 0 37 35" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+    <path d="M34.375 28.75V30.625C34.375 32.6875 32.6875 34.375 30.625 34.375H4.375C2.29375 34.375 0.625 32.6875 0.625 30.625V4.375C0.625 2.3125 2.29375 0.625 4.375 0.625H30.625C32.6875 0.625 34.375 2.3125 34.375 4.375V6.25H17.5C15.4187 6.25 13.75 7.9375 13.75 10V25C13.75 27.0625 15.4187 28.75 17.5 28.75H34.375ZM17.5 25H36.25V10H17.5V25ZM25 20.3125C23.4438 20.3125 22.1875 19.0562 22.1875 17.5C22.1875 15.9438 23.4438 14.6875 25 14.6875C26.5562 14.6875 27.8125 15.9438 27.8125 17.5C27.8125 19.0562 26.5562 20.3125 25 20.3125Z"/>
+  </svg>
+);
+
+const PGRIcon = ({styles,className}) => (
+  <svg width="35" height="39" className={className} style={{...styles}} viewBox="0 0 35 39" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+  <path d="M31.168 0.75H3.83464C1.95547 0.75 0.435052 2.4375 0.435052 4.5L0.417969 38.25L7.2513 30.75H31.168C33.0471 30.75 34.5846 29.0625 34.5846 27V4.5C34.5846 2.4375 33.0471 0.75 31.168 0.75ZM19.2096 17.625H15.793V6.375H19.2096V17.625ZM19.2096 25.125H15.793V21.375H19.2096V25.125Z" />
+</svg>
+
+);
 export {
   AnnouncementIcon,
   ReceiptIcon,
@@ -959,6 +987,7 @@ export {
   OBPSIcon,
   OBPSIconSolidBg,
   CitizenTruck,
+  FSMIcon,
   EDCRIcon,
   BPAIcon,
   BPAHomeIcon,
@@ -988,4 +1017,7 @@ export {
   CollectionsBookmarIcons,
   FinanceChartIcon,
   CollectionIcon,
+  MCollectIcon,
+  PGRIcon,
+  TLIcon
 };

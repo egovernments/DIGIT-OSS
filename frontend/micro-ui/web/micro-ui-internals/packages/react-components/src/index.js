@@ -148,6 +148,10 @@ import {
   CollectionsBookmarIcons,
   FinanceChartIcon,
   CollectionIcon,
+  FSMIcon,
+  MCollectIcon,
+  PGRIcon,
+  TLIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -396,4 +400,8 @@ export {
   CollectionsBookmarIcons,
   FinanceChartIcon,
   CollectionIcon,
+  FSMIcon,
+  MCollectIcon,
+  PGRIcon,
+  TLIcon
 };

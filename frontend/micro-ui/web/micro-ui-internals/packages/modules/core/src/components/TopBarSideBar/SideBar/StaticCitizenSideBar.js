@@ -51,7 +51,7 @@ const Profile = ({ info, stateName, t }) => (
       !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true} />}
   </div>
 );
-const StaticCitizenSideBar = ({ logout }) => {
+const StaticCitizenSideBar = ({ logout,getCitizenMenu,isLoading,fetchedCitizen }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation();
@@ -59,7 +59,7 @@ const StaticCitizenSideBar = ({ logout }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
-  const { isLoading, data: getCitizenMenu, isFetched: fetchedCitizen } = Digit.Hooks.useAccessControl();
+  // const { isLoading, data: getCitizenMenu, isFetched: fetchedCitizen } = Digit.Hooks.useAccessControl();
 
   const [isEmployee, setisEmployee] = useState(false);
 
