@@ -28,7 +28,8 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
     { filters: { acknowledgementIds },tenantId },
     { filters: { acknowledgementIds },tenantId }
   );
-  const [bills, setBills] = useState([]);
+  const [billAmount, setBillAmount] = useState(null);
+  const [billStatus, setBillStatus] = useState(null);
 
   const properties = get(data, "Properties", []);
   // const propertyId = get(data, "Properties[0].propertyId", []);
@@ -66,7 +67,14 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
   useEffect(async ()=>{
     if(acknowledgementIds){
       const res = await Digit.PaymentService.searchBill(tenantId, {Service: businessService, consumerCode: acknowledgementIds});
-      setBills(res.Bill)
+      if(! res.Bill.length) {
+        const res1 = await Digit.PTService.ptCalculateMutation({Property: applicationDetails?.applicationData}, tenantId);
+        setBillAmount(res1?.[acknowledgementIds]?.totalAmount || t("CS_NA"))
+        setBillStatus(t(`PT_MUT_BILL_ACTIVE`))
+      } else {
+        setBillAmount(res?.Bill[0]?.totalAmount || t("CS_NA"))
+        setBillStatus(t(`PT_MUT_BILL_${res?.Bill[0]?.status?.toUpperCase()}`))
+      }
     }
   },[tenantId, acknowledgementIds, businessService])
 
@@ -365,8 +373,8 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
              <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
              <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} textStyle={{ whiteSpace: "pre" }} />
              <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
-             <Row label={t("PT_FEE_AMOUNT")} text={bills[0]?.totalAmount ||t("CS_NA") } textStyle={{ whiteSpace: "pre" }} />
-             <Row label={t("PT_PAYMENT_STATUS")} text={t(`PT_MUT_BILL_${bills[0]?.status?.toUpperCase()}`)} textStyle={{ whiteSpace: "pre" }} />
+             <Row label={t("PT_FEE_AMOUNT")} text={billAmount} textStyle={{ whiteSpace: "pre" }} />
+             <Row label={t("PT_PAYMENT_STATUS")} text={billStatus} textStyle={{ whiteSpace: "pre" }} />
             
           </StatusTable>
                  <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
