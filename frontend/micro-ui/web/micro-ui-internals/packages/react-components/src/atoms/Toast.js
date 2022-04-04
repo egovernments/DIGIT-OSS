@@ -8,7 +8,7 @@ const Toast = (props) => {
     return (
       <div className="toast-success" style={{ backgroundColor: "red", ...props.style }}>
         <ErrorIcon />
-        <h2>{props.label}</h2>
+        <h2 style={{...props.labelstyle}}>{props.label}</h2>
         { props.isDleteBtn ? <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} /> : null }
       </div>
     );
