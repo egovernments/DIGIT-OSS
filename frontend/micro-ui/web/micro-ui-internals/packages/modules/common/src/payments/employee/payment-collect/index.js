@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast, Card, Header, CardText } from "@egovernments/digit-ui-react-components";
+import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast, Card, Header, CardText, Row } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { useQueryClient } from "react-query";
@@ -171,44 +171,46 @@ export const CollectPayment = (props) => {
     document?.querySelector("#paymentInfo + .label-field-pair input")?.focus();
   }, [selectedPaymentMode]);
 
-  
-  const billAmounts = () => {
-    if(bill?.billDetails?.[0]?.billAccountDetails) {
-      return bill?.billDetails?.[0]?.billAccountDetails?.map((details)=>({
-        label: t(details?.taxHeadCode), 
-        populators: <CardText style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${details?.amount}`} </CardText>,
-      }))
-    }
-    
-    return [];
-  }
-  
   const config = [
     {
       head: !ModuleWorkflow && businessService !== "TL" ? t("COMMON_PAYMENT_HEAD") : "",
       body: [
         {
-          label: t("CONSUMER_NO"),
-          populators: <CardText style={{ marginBottom: 0, textAlign: "right" }}> {`${bill?.consumerCode}`} </CardText>,
+          label: t("MUT_CONSUMER_NO"),
+          populators: <span> {`${bill?.consumerCode}`} </span>,
         },
         {
-          label: t("BILLING_PERIOD"),
-          populators: <CardText style={{ marginBottom: 0, textAlign: "right" }}> {new Date(bill?.billDetails?.[0]?.fromPeriod).toLocaleDateString() + '-' + new Date(bill?.billDetails?.[0]?.toPeriod).toLocaleDateString()} </CardText>,
+          label: t("MUT_BILL_NO"),
+          populators: <span> {`${bill?.billNumber}`} </span>,
         },
         {
-          label: t("BILL_NO"),
-          populators: <CardText style={{ marginBottom: 0, textAlign: "right" }}> {`${bill?.billNumber}`} </CardText>,
+          label: t("MUT_DUE_DATE"),
+          populators: <span> {new Date(bill?.billDetails?.[0]?.expiryDate).toLocaleDateString()} </span>,
         },
         {
-          label: t("DUE_DATE"),
-          populators: <CardText style={{ marginBottom: 0, textAlign: "right" }}> {new Date(bill?.billDetails?.[0]?.expiryDate).toLocaleDateString()} </CardText>,
+          withoutLabel: true,
+          populators: <CardSectionHeader style={{ marginTop: "40px" }}>{t("PAYMENT_DETAILS")}</CardSectionHeader>
         },
-        ...billAmounts(),
+        ...(bill?.billDetails?.[0]?.billAccountDetails || []).map((details) => (
+          {
+            label: t(details?.taxHeadCode),
+            populators: <span >{`₹ ${details?.amount}`}</span>
+          }
+        )),
         {
-          label: t("PAY_TOTAL_AMOUNT"),
-          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${bill?.totalAmount}`} </CardSectionHeader>,
+          withoutLabel: true,
+          populators: <hr style={{ width: "40%" }} className="underline" />
         },
-      ],
+        {
+          withoutLabel: true,
+          populators: <Row
+            labelStyle={{ display: "inline-block", fontWeight: "bold", float: "left" }}
+            textStyle={{ display: "inline-block", fontWeight: "bold", float: "left", fontSize: '24px' }}
+            label={t("PAY_TOTAL_AMOUNT")}
+            text={`₹ ${bill?.totalAmount}`}
+          />
+        },
+      ]
     },
     {
       head: t("PAYMENT_PAID_BY_HEAD"),
