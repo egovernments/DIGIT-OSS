@@ -8,7 +8,7 @@ import { changeTheName } from '../src/actions/firstAction';
 import { updateLanguage } from './actions/languageChange';
 import './App.css';
 import variables from './styles/variables';
-import { fetchLocalisationRequest, getTenantId } from './utils/commons';
+import { fetchLocalisationRequest, getLocaleLabels, getTenantId } from './utils/commons';
 import Layout from './utils/Layout';
 import { loadUlbLogo } from './utils/block';
 
@@ -136,6 +136,7 @@ class App extends React.Component {
       let localisationRequest = fetchLocalisationRequest(language);
       axios.post(localisationRequest.reqUrl, localisationRequest.reqBody, localisationRequest.reqHeaders)
         .then(response => {
+          localStorage.setItem(`localization_${language}`,JSON.stringify(response.data.messages));
           this.setLocalisation(response.data.messages);
         })
         .catch(error => {
@@ -157,6 +158,7 @@ class App extends React.Component {
       'en': newIndex,
       'hi': {}
     }
+    getLocaleLabels("check",dataL?.en);
     this.props.updateLanguage(dataL);
   }
 
@@ -165,8 +167,8 @@ class App extends React.Component {
     this.loadLocalisation();
     loadUlbLogo(getTenantId());
     // if(process.env.NODE_ENV==="development"){
-    //   localStorage.setItem("Employee.token","cf07f444-40f7-404a-b292-9be8caf18c0d")
-    //   localStorage.setItem("tenant-id","pb.amritsar")
+      // localStorage.setItem("Employee.token","25f8252c-683c-4bda-a065-7180dea56a6b")
+      // localStorage.setItem("tenant-id","pg.citya")
     // }
   }
 
