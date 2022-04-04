@@ -162,8 +162,8 @@ const PropertyInformation = () => {
       <div>
         <Card>
           <StatusTable>
-            <Row label={t("PT_PROPERTY_PTUID")} text={`${property.propertyId || t("CS_NA")}`} /* textStyle={{ whiteSpace: "pre" }} */ />
-            <Row label={t("CS_COMMON_TOTAL_AMOUNT_DUE")} text={`${t(getBillAmount(fetchBillData))}`} />
+            <Row className="border-none" label={t("PT_PROPERTY_PTUID")} text={`${property.propertyId || t("CS_NA")}`} /* textStyle={{ whiteSpace: "pre" }} */ />
+            <Row className="border-none" label={t("CS_COMMON_TOTAL_AMOUNT_DUE")} text={`${t(getBillAmount(fetchBillData))}`} />
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
           <StatusTable>
