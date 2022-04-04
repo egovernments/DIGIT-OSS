@@ -1,3 +1,4 @@
+import { BackButton } from "@egovernments/digit-ui-react-components";
 import React, { useContext } from "react";
 
 const CitizenHome = ({ modules }) => {
@@ -11,6 +12,7 @@ const CitizenHome = ({ modules }) => {
   return (
     <React.Fragment>
       <div className="citizenAllServiceGrid">
+      <BackButton />
         {moduleArray
           .filter((mod) => mod)
           .map(({ code }, index) => {
