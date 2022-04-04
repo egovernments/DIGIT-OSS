@@ -7,12 +7,12 @@ const ConsumptionDetails = ({ view }) => {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
   const tenantId = user?.info?.tenantId || Digit.ULBService.getCurrentTenantId();
-  console.log(user)
+  
   const {applicationNo} = Digit.Hooks.useQueryParams();
   let filter1 = { tenantId: tenantId, connectionNos:applicationNo };
 
   const { isLoading, isError, error, data } = Digit.Hooks.ws.useWSConsumptionSearch({ filters: filter1 }, { filters: filter1 });
- console.log(data)
+ 
   if (isLoading) {
     return <Loader />;
   }
