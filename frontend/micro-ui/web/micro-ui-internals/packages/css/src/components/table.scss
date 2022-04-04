@@ -94,6 +94,34 @@
     }
   }
 }
+.table-fixed-column-common-pay {
+  thead {
+    th:first-child {
+      position: sticky;
+      background: rgb(238, 238, 238);
+      left: 0;
+      border-top-left-radius: 4px;
+    }
+    th:last-child {
+      position: sticky;
+      background: rgb(238, 238, 238);
+      right: 0;
+      border-top-left-radius: 4px;
+    }
+  }
+  tbody {
+    td:first-child {
+      position: sticky;
+      background: rgb(238, 238, 238);
+      left: 0;
+    }
+    td:last-child {
+      position: sticky;
+      background: rgb(238, 238, 238);
+      right: 0;
+    }
+  }
+}
 
 .table-fixed-first-second-column {
   thead {
