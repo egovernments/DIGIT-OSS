@@ -141,7 +141,7 @@ public class ReceiptConsumer {
 			return deathCertificate;
 		}
 		catch (Exception e) {
-			throw new CustomException("UPDATE_ERROR","Exception while processing payment update ");
+			throw new CustomException("Exception while processing payment update ", e.getMessage());
 		}
 	}
 
@@ -162,7 +162,7 @@ public class ReceiptConsumer {
 			return birthCertificate;
 		}
 		catch (Exception e) {
-			throw new CustomException("UPDATE_ERROR","Exception while processing payment update ");
+			throw new CustomException("Exception while processing payment update",e.getMessage());
 		}
 	}
 
@@ -190,7 +190,7 @@ public class ReceiptConsumer {
 			return birthCertificate;
 		}
 		catch (Exception e) {
-			throw new CustomException("UPDATE_ERROR","Exception while processing payment update ");
+			throw new CustomException("Exception while processing payment update ", e.getMessage());
 		}
 	}
 }

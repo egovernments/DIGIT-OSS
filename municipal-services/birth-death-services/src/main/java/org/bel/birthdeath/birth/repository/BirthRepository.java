@@ -2,12 +2,11 @@ package org.bel.birthdeath.birth.repository;
 
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 import org.bel.birthdeath.birth.certmodel.BirthCertAppln;
 import org.bel.birthdeath.birth.certmodel.BirthCertRequest;
 import org.bel.birthdeath.birth.certmodel.BirthCertificate;
@@ -21,14 +20,19 @@ import org.bel.birthdeath.birth.repository.rowmapper.BirthCertRowMapper;
 import org.bel.birthdeath.birth.repository.rowmapper.BirthDtlsAllRowMapper;
 import org.bel.birthdeath.birth.repository.rowmapper.BirthDtlsRowMapper;
 import org.bel.birthdeath.birth.repository.rowmapper.BirthMasterDtlRowMapper;
+import org.bel.birthdeath.common.Idgen.IdGenerationRequest;
+import org.bel.birthdeath.common.Idgen.IdGenerationResponse;
 import org.bel.birthdeath.common.contract.BirthPdfApplicationRequest;
 import org.bel.birthdeath.common.contract.EgovPdfResp;
 import org.bel.birthdeath.common.contract.EncryptionDecryptionUtil;
 import org.bel.birthdeath.common.producer.BndProducer;
+import org.bel.birthdeath.common.repository.ServiceRequestRepository;
 import org.bel.birthdeath.config.BirthDeathConfiguration;
 import org.bel.birthdeath.utils.CommonUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -40,6 +44,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -116,6 +121,7 @@ public class BirthRepository {
             throw new CustomException("PARSING ERROR","Failed to parse response of create demand");
         }
         return response;*/
+		EgovPdfResp result= new EgovPdfResp();
 		try {
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");	
 		pdfApplicationRequest.getBirthCertificate().forEach(cert-> {
@@ -132,23 +138,25 @@ public class BirthRepository {
         });
 		log.info(new Gson().toJson(pdfApplicationRequest));
 		//RestTemplate restTemplate = new RestTemplate();
-		MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
-		mappingJackson2HttpMessageConverter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_PDF, MediaType.APPLICATION_OCTET_STREAM));
-		restTemplate.getMessageConverters().add(mappingJackson2HttpMessageConverter);
-		String url = config.getPdfHost() + config.getSaveBirthCertEndpoint();
-		HttpMethod requestMethod = HttpMethod.POST;
+
+			BirthPdfApplicationRequest req = BirthPdfApplicationRequest.builder().birthCertificate(pdfApplicationRequest.getBirthCertificate()).requestInfo(pdfApplicationRequest.getRequestInfo()).build();
+			EgovPdfResp response = null;
+			response = restTemplate.postForObject( config.getEgovPdfHost()+ config.getEgovPdfBirthEndPoint(), req, EgovPdfResp.class);
+			if (CollectionUtils.isEmpty(response.getFilestoreIds())) {
+				throw new CustomException("EMPTY_FILESTORE_IDS_FROM_PDF_SERVICE",
+						"No file store id found from pdf service");
+			}
+			result.setFilestoreIds(response.getFilestoreIds());
+
+		/*HttpMethod requestMethod = HttpMethod.POST;
 		HttpEntity<BirthPdfApplicationRequest> requestEntity = new HttpEntity<BirthPdfApplicationRequest>(pdfApplicationRequest);
 
-		ResponseEntity<EgovPdfResp> response = restTemplate.exchange(url, requestMethod, requestEntity, EgovPdfResp.class);
-
-		if(response.getStatusCode().equals(HttpStatus.OK)) {
-			return response.getBody();
-		}
+		ResponseEntity<EgovPdfResp> response = restTemplate.exchange(url, requestMethod, requestEntity, EgovPdfResp.class);*/
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new CustomException("PDF_ERROR","Error in generating PDF");
 		}
-		return null;
+		return result;
 	}
 
 	public List<EgBirthDtl> getBirthDtlsAll(SearchCriteria criteria ,RequestInfo requestInfo) {

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bel.birthdeath.common.contract.BirthPdfApplicationRequest;
 import org.bel.birthdeath.common.contract.DeathPdfApplicationRequest;
 import org.bel.birthdeath.common.contract.EgovPdfResp;
 import org.bel.birthdeath.common.contract.EncryptionDecryptionUtil;
@@ -41,6 +42,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -117,6 +119,7 @@ public class DeathRepository {
             throw new CustomException("PARSING ERROR","Failed to parse response of create demand");
         }
         return response;*/
+		EgovPdfResp result= new EgovPdfResp();
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");	
 			pdfApplicationRequest.getDeathCertificate().forEach(cert-> {
@@ -133,20 +136,15 @@ public class DeathRepository {
 	        });
 		
 		log.info(new Gson().toJson(pdfApplicationRequest));
-		
-		//RestTemplate restTemplate = new RestTemplate();
-		MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
-		mappingJackson2HttpMessageConverter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_PDF, MediaType.APPLICATION_OCTET_STREAM));
-		restTemplate.getMessageConverters().add(mappingJackson2HttpMessageConverter);
-		String url = config.getPdfHost() + config.getSaveDeathCertEndpoint();
-		HttpMethod requestMethod = HttpMethod.POST;
-		HttpEntity<DeathPdfApplicationRequest> requestEntity = new HttpEntity<DeathPdfApplicationRequest>(pdfApplicationRequest);
 
-		ResponseEntity<EgovPdfResp> response = restTemplate.exchange(url, requestMethod, requestEntity, EgovPdfResp.class);
-
-		if(response.getStatusCode().equals(HttpStatus.OK)) {
-			return response.getBody();
-		}
+			DeathPdfApplicationRequest req = DeathPdfApplicationRequest.builder().deathCertificate(pdfApplicationRequest.getDeathCertificate()).requestInfo(pdfApplicationRequest.getRequestInfo()).build();
+			EgovPdfResp response = null;
+			response = restTemplate.postForObject( config.getEgovPdfHost()+ config.getEgovPdfDeathEndPoint(), req, EgovPdfResp.class);
+			if (CollectionUtils.isEmpty(response.getFilestoreIds())) {
+				throw new CustomException("EMPTY_FILESTORE_IDS_FROM_PDF_SERVICE",
+						"No file store id found from pdf service");
+			}
+			result.setFilestoreIds(response.getFilestoreIds());
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new CustomException("PDF_ERROR","Error in generating PDF");

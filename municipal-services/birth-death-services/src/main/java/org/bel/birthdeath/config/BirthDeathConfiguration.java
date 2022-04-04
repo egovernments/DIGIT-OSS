@@ -111,4 +111,14 @@ public class BirthDeathConfiguration {
 	
 	@Value("${egov.payment.search.endpoint}")
 	private String	PaymentSearchEndpoint;
+
+    @Value("${egov.pdfservice.host}")
+    private String	egovPdfHost;
+
+    @Value("${egov.pdf.birthcert.createEndPoint}")
+    private String	egovPdfBirthEndPoint;
+
+    @Value("${egov.pdf.deathcert.createEndPoint}")
+    private String	egovPdfDeathEndPoint;
+
 }
