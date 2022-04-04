@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { Header, CitizenHomeCard, PTIcon,WSICon,FSMIcon,MCollectIcon,PGRIcon,TLIcon,OBPSIcon, Loader } from "@egovernments/digit-ui-react-components";
+import { Header, CitizenHomeCard, PTIcon,WSICon,FSMIcon,MCollectIcon,PGRIcon,TLIcon,OBPSIcon, Loader, CollectionIcon } from "@egovernments/digit-ui-react-components";
 // const processLinkData= data => {
 //   const newData =  data?.filter(el=> el.url==="digit-ui-card").reduce((a,b)=>{a[b.parentModule]=a[b.parentModule]?.length>0?[b,...a[b.parentModule]]:[b]; return a},{})
 //   return newData
@@ -38,6 +38,8 @@ const iconSelector = code => {
       return <TLIcon className="fill-path-primary-main" />
     case "OBPS":
       return <OBPSIcon className="fill-path-primary-main" />
+    case "Bills":
+      return <CollectionIcon className="fill-path-primary-main" />
     default:
       return <PTIcon className="fill-path-primary-main" />
   }
