@@ -40,7 +40,6 @@ const processLinkData= (data,code,t) => {
         });
     });
   }
-  console.log(newObj);
   return newObj
 }
 const iconSelector = code => {
