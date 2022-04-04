@@ -68,7 +68,7 @@ public class NOCRepository {
      */
     public List<Noc> getNocData(NocSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getNocSearchQuery(criteria, preparedStmtList);
+        String query = queryBuilder.getNocSearchQuery(criteria, preparedStmtList,false);
         try {
             query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
         } catch (InvalidTenantIdException e) {
@@ -80,7 +80,7 @@ public class NOCRepository {
   
     public Integer getNocCount(NocSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getNocSearchQuery(criteria, preparedStmtList);
+        String query = queryBuilder.getNocSearchQuery(criteria, preparedStmtList,true);
         int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
 }

@@ -26,6 +26,9 @@ public class NocQueryBuilder {
 	private final String paginationWrapper = "SELECT * FROM "
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY noc_lastModifiedTime DESC) offset_ FROM " + "({})"
 			+ " result) result_offset " + "WHERE offset_ > ? AND offset_ <= ?";
+	
+	private final String countWrapper = "SELECT COUNT(DISTINCT(noc_id)) FROM ({INTERNAL_QUERY}) as noc_count";
+
 
 	/**
 	 * To give the Search query based on the requirements.
@@ -36,7 +39,7 @@ public class NocQueryBuilder {
 	 *            values to be replased on the query
 	 * @return Final Search Query
 	 */
-	public String getNocSearchQuery(NocSearchCriteria criteria, List<Object> preparedStmtList) {
+	public String getNocSearchQuery(NocSearchCriteria criteria, List<Object> preparedStmtList,boolean isCount) {
 
 		StringBuilder builder = new StringBuilder(QUERY);
 
@@ -95,6 +98,8 @@ public class NocQueryBuilder {
 		log.info(criteria.toString());
 		log.info("Final Query");
 		log.info(builder.toString());
+		if(isCount)
+            return addCountWrapper(builder.toString());
 		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 
 	}
@@ -157,5 +162,8 @@ public class NocQueryBuilder {
 				builder.append(",");
 		}
 		return builder.toString();
+	}
+	private String addCountWrapper(String query) {
+	    return countWrapper.replace("{INTERNAL_QUERY}", query);
 	}
 }
