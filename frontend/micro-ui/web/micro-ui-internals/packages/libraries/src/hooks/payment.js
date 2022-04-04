@@ -3,11 +3,8 @@ import { useQuery, useQueryClient } from "react-query";
 export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...filters }, config = {}) => {
   const queryClient = useQueryClient();
   const { mobileNumber, tenantId } = Digit.UserService.getUser()?.info || {};
-
   const params = { mobileNumber, businessService, ...filters };
-
   if (!params["mobileNumber"]) delete params["mobileNumber"];
-
   const { isLoading, error, isError, data, status } = useQuery(
     ["citizenBillsForBuisnessService", businessService, { ...params }],
     () => Digit.PaymentService.fetchBill(tenantId, { ...params }),
@@ -31,11 +28,9 @@ export const useFetchBillsForBuissnessService = ({ tenantId, businessService, ..
   const queryClient = useQueryClient();
   let isPTAccessDone = sessionStorage.getItem("IsPTAccessDone");
   const params = { businessService, ...filters };
-
   const _tenantId = tenantId || Digit.UserService.getUser()?.info?.tenantId;
-
   const { isLoading, error, isError, data, status } = useQuery(
-    ["billsForBuisnessService", businessService, { ...filters }, config,isPTAccessDone],
+    ["billsForBuisnessService", businessService, { ...filters }, config, isPTAccessDone],
     () => Digit.PaymentService.fetchBill(_tenantId, params),
     {
       retry: (count, err) => {
@@ -58,7 +53,26 @@ export const useFetchPayment = ({ tenantId, consumerCode, businessService }, con
   const queryClient = useQueryClient();
 
   const fetchBill = async () => {
-    return Digit.PaymentService.fetchBill(tenantId, { consumerCode, businessService });
+    /*  Currently enabled the logic to get bill no and expiry date for PT Module  */
+    if (businessService == "PT") {
+      const fetchedBill = await Digit.PaymentService.fetchBill(tenantId, { consumerCode, businessService });
+      if (fetchedBill && fetchedBill?.Bill?.[0]?.billDetails?.length > 1) {
+        fetchedBill?.Bill?.[0]?.billDetails?.map(async (billdet) => {
+          const searchBill = await Digit.PaymentService.searchBill(tenantId, {
+            consumerCode,
+            fromPeriod: billdet?.fromPeriod,
+            toPeriod: billdet?.toPeriod,
+            service: businessService,
+            retrieveOldest: true,
+          });
+          billdet.expiryDate = searchBill?.Bill?.[0]?.billDetails?.[0]?.expiryDate;
+          billdet.billNumber = searchBill?.Bill?.[0]?.billNumber;
+        });
+      }
+      return fetchedBill;
+    } else {
+      return Digit.PaymentService.fetchBill(tenantId, { consumerCode, businessService });
+    }
   };
 
   const retry = (failureCount, error) => {
