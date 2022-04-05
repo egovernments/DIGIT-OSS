@@ -73,6 +73,10 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
       if (data?.display){
         return []
       }
+      if(data === "")
+      {
+      return [];
+      }
       return data?.map((data) => ({
         [t("TL_TRADE_LICENSE_LABEL")]: data.licenseNumber,
         [t("TL_COMMON_TABLE_COL_APP_NO")]: data.applicationNumber,

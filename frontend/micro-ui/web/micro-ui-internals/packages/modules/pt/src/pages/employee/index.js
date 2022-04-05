@@ -14,6 +14,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const location = useLocation();
   const mobileView = innerWidth <= 640;
   sessionStorage.removeItem("revalidateddone");
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const inboxInitialState = {
     searchParams: {
@@ -125,7 +126,7 @@ const EmployeeApp = ({ path, url, userType }) => {
       },
     ];
   
-    return <BreadCrumb crumbs={crumbs} />;
+    return <BreadCrumb style={isMobile?{display:"flex"}:{}}  spanStyle={{maxWidth:"min-content"}} crumbs={crumbs} />;
   }
 
   const NewApplication = Digit?.ComponentRegistryService?.getComponent("PTNewApplication");

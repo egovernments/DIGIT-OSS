@@ -21,6 +21,7 @@ const AssessmentDetails = () => {
   const queryClient = useQueryClient();
   const history = useHistory();
   const [appDetailsToShow, setAppDetailsToShow] = useState({});
+  const isMobile = window.Digit.Utils.browser.isMobile();
   
   const [popup,showPopUp]=useState(false);
   const [selectedPenalityReason,setSelectedPenalityReason]=useState(null);
@@ -410,7 +411,7 @@ const Penality_menu=[
                 },
               },
               {
-                belowComponent:()=><LinkLabel onClick={()=>{showPopUp(true)}} style={{color:"#F47738"}}>{t("PT_ADD_REBATE_PENALITY")}</LinkLabel>
+                belowComponent:()=><LinkLabel onClick={()=>{showPopUp(true)}} style={isMobile ? {color:"#F47738",marginLeft:"0px"} : {color:"#F47738"}}>{t("PT_ADD_REBATE_PENALITY")}</LinkLabel>
               },
               {
                 title: "PT_ASSESMENT_INFO_SUB_HEADER",
