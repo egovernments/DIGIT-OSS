@@ -12,7 +12,7 @@ const PTApplication = ({ application, tenantId }) => {
       <KeyNote keyValue={t("PT_SEARCHPROPERTY_TABEL_PTUID")} note={application?.propertyId} />
       <KeyNote keyValue={t("PT_COMMON_TABLE_COL_APP_TYPE")} note={(application?.creationReason && t(`PT.${application.creationReason}`)) || t("CS_NA")} />
       <KeyNote keyValue={t("PT_COMMON_TABLE_COL_STATUS_LABEL")} note={t(`PT_COMMON_${application?.status}`)} />
-      <Link to={`/digit-ui/citizen/pt/property/application/${application?.acknowldgementNumber}/${tenantId}`}>
+      <Link to={`/digit-ui/citizen/pt/property/application/${application?.acknowldgementNumber}/${application?.tenantId}`}>
         <SubmitBar label={t("PT_MY_APPLICATION_TRACK")} />
       </Link>
     </Card>
