@@ -15,7 +15,7 @@ import WSResponse from "./WSResponse";
 import Search from "./search";
 import SearchWater from "./SearchWater";
 import EditApplication from "./EditApplication";
-
+import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
 const App = ({ path }) => {
   const { t } = useTranslation();
   return (
@@ -33,6 +33,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={WSResponse} />
         <PrivateRoute path={`${path}/search`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
+        <PrivateRoute path={`${path}/consumption-details`} component={ConsumptionDetails} />
 
         {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
