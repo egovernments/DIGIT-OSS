@@ -31,8 +31,12 @@ const Home = ({
   sourceUrl,
   pathname,
 }) => {
-  const { isLoading, data: getCitizenMenu, isFetched: fetchedCitizen } = Digit.Hooks.useAccessControl();
 
+  const { isLoading: islinkDataLoading, data: linkData,isFetched:isLinkDataFetched } = Digit.Hooks.useMDMSData.linkData(Digit.ULBService.getStateId());
+  let processedLinkData;
+  if(isLinkDataFetched){
+     processedLinkData =  linkData?.["ACCESSCONTROL-ACTIONS-TEST"]?.["actions-test"]?.filter(el=>el.enabled===true).reduce((a,b)=>{a[b.parentModule]=a[b.parentModule]?.length>0?[b,...a[b.parentModule]]:[b]; return a},{})
+  }
 
   const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
   const { t } = useTranslation();
@@ -79,7 +83,7 @@ const Home = ({
 
       <div className={`main center-container citizen-home-container mb-25`}>
         <div className="SideBarStatic">
-          <StaticCitizenSideBar getCitizenMenu={getCitizenMenu} fetchedCitizen={fetchedCitizen} isLoading={isLoading} />
+          <StaticCitizenSideBar />
         </div>
         <Switch>
           <Route exact path={path}>
@@ -94,8 +98,15 @@ const Home = ({
             <LocationSelection />
           </Route>
 
-          <Route path={`${path}/all-services`}>
+          {/* <Route path={`${path}/all-services`}>
             <AppHome userType="citizen" modules={modules} getCitizenMenu={getCitizenMenu} fetchedCitizen={fetchedCitizen} isLoading={isLoading} />
+          </Route> */}
+
+          {/* <Route path={`${path}/all-services`}>
+            <AppHome userType="citizen" modules={modules} getCitizenMenu={linkData?.["ACCESSCONTROL-ACTIONS-TEST"]?.["actions-test"]} fetchedCitizen={isLinkDataFetched} isLoading={islinkDataLoading} />
+          </Route> */}
+          <Route path={`${path}/all-services`}>
+            <AppHome userType="citizen" modules={modules} getCitizenMenu={processedLinkData} fetchedCitizen={isLinkDataFetched} isLoading={islinkDataLoading} />
           </Route>
 
           <Route path={`${path}/login`}>

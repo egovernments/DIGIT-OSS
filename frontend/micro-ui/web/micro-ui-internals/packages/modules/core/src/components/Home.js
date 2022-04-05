@@ -2,8 +2,7 @@ import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Header, CitizenHomeCard, PTIcon,WSICon,FSMIcon,MCollectIcon,PGRIcon,TLIcon,OBPSIcon, Loader, BillsIcon,CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 
-const processLinkData= (data,code,t) => {
-  const newData =  data?.filter(el=> el.url==="digit-ui-card").reduce((a,b)=>{a[b.parentModule]=a[b.parentModule]?.length>0?[b,...a[b.parentModule]]:[b]; return a},{})
+const processLinkData= (newData,code,t) => {
   const obj = newData?.[`${code}`]
   if(obj) {
     obj.map(link => {
@@ -79,7 +78,8 @@ const CitizenHome = ({ modules,getCitizenMenu,fetchedCitizen,isLoading }) => {
         {moduleArray
           .filter((mod) => mod)
           .map(({ code }, index) => {
-          //  let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`)
+            //-------------------------
+           //  let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`)
           //   if (code === "Payment" || !Links) {
           //     return <React.Fragment />
           //   }
@@ -87,9 +87,11 @@ const CitizenHome = ({ modules,getCitizenMenu,fetchedCitizen,isLoading }) => {
           //   const mdmsDataObj = fetchedCitizen? processLinkData(getCitizenMenu?.actions,code,t):undefined;
           //   return <CitizenHomeCard header={t(mdmsDataObj?.header)} links={ mdmsDataObj?.links} Icon={()=>iconSelector(code)} />;
           //   }
+
+          //---------------
             let mdmsDataObj
             if(fetchedCitizen)
-              mdmsDataObj = fetchedCitizen? processLinkData(getCitizenMenu?.actions,code,t):undefined;
+              mdmsDataObj = fetchedCitizen? processLinkData(getCitizenMenu,code,t):undefined;
             if(mdmsDataObj?.links?.length > 0)
             return <CitizenHomeCard header={t(mdmsDataObj?.header)} links={ mdmsDataObj?.links} Icon={()=>iconSelector(code)} Info={code==="OBPS" ? () => <CitizenInfoLabel style={{margin: "0px", padding: "10px"}} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)} />:null } isInfo={code==="OBPS"?true:false}/>;
             else return <React.Fragment /> 

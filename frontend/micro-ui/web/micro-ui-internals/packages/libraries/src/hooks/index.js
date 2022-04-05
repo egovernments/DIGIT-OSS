@@ -183,6 +183,7 @@ import useMyBillsSewarageSearch from "./ws/useMyBillsSewarageSearch";
 import useMyApplicationSearch from "./ws/useMyApplicationSearch";
 import useWSDocumentSearch from "./ws/useWSDocumentSearch";
 import useWSMDMSWS from "./ws/useWSMDMSWS"
+import useMDMSData from "./useMDMSData";
 import WSuseSearch from "./ws/useSearch";
 import useSewSearch from "./ws/useSewSearch"
 import useSearchWS from "./ws/useSearchWS"
@@ -445,6 +446,7 @@ const Hooks = {
   survey,
   noc,
   ws,
+  useMDMSData
 };
 
 export default Hooks;
