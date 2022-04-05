@@ -20,6 +20,7 @@ const TLBreadCrumb = ({ location }) => {
   const isApplicationDetails = location?.pathname?.includes("tl/application-details");
   const isNewApplication = location?.pathname?.includes("tl/new-application");
   const isResponse = location?.pathname?.includes("tl/response");
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const [search, setSearch] = useState(false);
 
@@ -140,7 +141,7 @@ const TLBreadCrumb = ({ location }) => {
     }
   ];
 
-  return <BreadCrumb crumbs={crumbs} />;
+  return <BreadCrumb style={isMobile?{display:"flex"}:{}}  spanStyle={{maxWidth:"min-content"}} crumbs={crumbs} />;
 };
 
 
