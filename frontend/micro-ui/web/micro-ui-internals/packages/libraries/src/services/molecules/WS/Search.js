@@ -300,7 +300,7 @@ export const WSSearch = {
         { title: "WS_SERV_DETAIL_METER_ID", value: wsDataDetails?.meterId || t("NA") },
         { title: "WS_INSTALLATION_DATE_LABEL", value: wsDataDetails?.meterInstallationDate ? convertEpochToDate(wsDataDetails?.meterInstallationDate) : t("NA") },
         { title: "WS_INITIAL_METER_READING_LABEL", value: wsDataDetails?.additionalDetails?.initialMeterReading || t("NA") },
-        { title: "WS_VIEW_CONSUMPTION_DETAIL", to:`/digit-ui/employee/ws/consumption-details/${wsDataDetails?.connectionNo}`, value:"", isLink:true }
+        { title: "WS_VIEW_CONSUMPTION_DETAIL", to:`/digit-ui/employee/ws/consumption-details?applicationNo=${wsDataDetails.connectionNo}`, value:"", isLink:true }
       ] : [
         { title: "PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL", value: wsDataDetails?.connectionNo || t("NA") },
         { title: "WS_SERVICE_NAME_LABEL", value: serviceType == "WATER" ? "WATER" : "SEWERAGE" },
