@@ -40,8 +40,14 @@
     display: flex;
     cursor: pointer;
     padding-right: 10px;
+    width: 100%;
 }
 
+.table-search-wrapper{
+    display:flex;
+    width:100%;
+    align-items:center;
+}
 .table-switch-card-inactive{
     /* Frame 58 */
 

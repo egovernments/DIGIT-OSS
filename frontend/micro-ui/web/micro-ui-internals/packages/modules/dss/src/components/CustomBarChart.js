@@ -26,7 +26,7 @@ const CustomLabel = ({ x, y, name, stroke, value, maxValue }) => {
       <text
         x={x}
         y={y}
-        dx={-46}
+        dx={-55}
         dy={10}
         fill={stroke}
         width="35"
@@ -34,7 +34,7 @@ const CustomLabel = ({ x, y, name, stroke, value, maxValue }) => {
       >
         {`${maxValue?.[t(name)]}%`}
       </text>
-      <text x={x} y={y} dx={-170} dy={10}>
+      <text x={x} y={y} dx={-200} dy={10}>
         {t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(name)}`)}
       </text>
     </>
@@ -109,12 +109,12 @@ const CustomBarChart = ({
     <Fragment>
       <ResponsiveContainer width="98%" height={320}>
         <BarChart
-          width="100%"
+          width="70%"
           height="100%"
           data={showDrillDown ? chartData?.slice(0, 3) : chartData}
           layout={layout}
           maxBarSize={8}
-          margin={{ left: 170 }}
+          margin={{ left: 200 }}
           barGap={50}
         >
           {showGrid && <CartesianGrid />}
