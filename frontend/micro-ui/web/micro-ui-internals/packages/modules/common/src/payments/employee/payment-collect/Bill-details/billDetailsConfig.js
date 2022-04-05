@@ -22,6 +22,32 @@ export const BillDetailsKeyNoteConfig = () => ({
         ],
         fallback: "N/A",
       },
+      {
+        keyValue: "CS_BILL_NO",
+        keyPath: [
+          "billDetails",
+          (d) => {
+            const { currentBillNo } = d[0];
+            if (currentBillNo) {
+              return currentBillNo;
+            } else return "N/A";
+          },
+        ],
+        fallback: "N/A",
+      },
+      {
+        keyValue: "CS_BILL_DUEDATE",
+        keyPath: [
+          "billDetails",
+          (d) => {
+            const { currentExpiryDate } = d[0];
+            if (currentExpiryDate) {
+              return new Date(currentExpiryDate).toLocaleDateString();
+            } else return "N/A";
+          },
+        ],
+        fallback: "N/A",
+      },
     ],
   },
   mcollect: {
