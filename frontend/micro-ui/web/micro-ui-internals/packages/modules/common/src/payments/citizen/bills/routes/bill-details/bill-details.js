@@ -136,8 +136,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
         <div>
           <KeyNote keyValue={t(label)} note={wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode} />
           <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
-          {businessService === "PT" && <KeyNote keyValue={t("CS_BILL_NO")} note={billDetails?.currentBillNo} />}
-          {businessService === "PT" && (
+          {businessService === "PT" && billDetails?.currentBillNo && <KeyNote keyValue={t("CS_BILL_NO")} note={billDetails?.currentBillNo} />}
+          {businessService === "PT" && billDetails?.currentExpiryDate && (
             <KeyNote keyValue={t("CS_BILL_DUEDATE")} note={new Date(billDetails?.currentExpiryDate).toLocaleDateString()} />
           )}
           <BillSumary billAccountDetails={getBillBreakDown()} total={getTotal()} businessService={businessService} arrears={Arrears} />
