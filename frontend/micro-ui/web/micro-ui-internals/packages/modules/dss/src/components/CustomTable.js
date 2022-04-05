@@ -300,7 +300,7 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
         <div className="tag-container">
           <span style={{ marginTop: "20px" }}>{t("DSS_FILTERS_APPLIED")}: </span>
           {filterStack.map((filter, id) =>
-            id > 0 ? <RemoveableTag key={id} text={`${filter?.label}: ${t(filter?.name)}`} onClick={() => removeULB(id)} /> : null
+            id > 0 ? <RemoveableTag key={id} text={`${filter?.label}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter?.name)}`)}`} onClick={() => removeULB(id)} /> : null
           )}
         </div>
       )}
