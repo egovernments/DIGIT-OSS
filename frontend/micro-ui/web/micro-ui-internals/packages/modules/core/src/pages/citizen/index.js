@@ -98,13 +98,6 @@ const Home = ({
             <LocationSelection />
           </Route>
 
-          {/* <Route path={`${path}/all-services`}>
-            <AppHome userType="citizen" modules={modules} getCitizenMenu={getCitizenMenu} fetchedCitizen={fetchedCitizen} isLoading={isLoading} />
-          </Route> */}
-
-          {/* <Route path={`${path}/all-services`}>
-            <AppHome userType="citizen" modules={modules} getCitizenMenu={linkData?.["ACCESSCONTROL-ACTIONS-TEST"]?.["actions-test"]} fetchedCitizen={isLinkDataFetched} isLoading={islinkDataLoading} />
-          </Route> */}
           <Route path={`${path}/all-services`}>
             <AppHome userType="citizen" modules={modules} getCitizenMenu={processedLinkData} fetchedCitizen={isLinkDataFetched} isLoading={islinkDataLoading} />
           </Route>
