@@ -19,6 +19,7 @@ const CloseBtn = (props) => {
 
 function ApplicationDetailsWarningPopup({ action,workflowDetails,businessService,isWarningPop,closeWarningPopup  }) {
 const { t } = useTranslation();
+const isMobile = window.Digit.Utils.browser.isMobile();
 return (
     <React.Fragment>
     <Modal
@@ -32,7 +33,7 @@ return (
       }
       hideSubmit={true}
       isDisabled={false}
-      popupStyles={{ width: "29%", marginTop: "auto" }}
+      popupStyles={isMobile ? {} : { width: "29%", marginTop: "auto" }}
     >
    <Card>
         <div style={{marginBottom:"30px"}}>
