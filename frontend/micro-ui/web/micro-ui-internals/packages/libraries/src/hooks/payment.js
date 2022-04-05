@@ -56,11 +56,12 @@ export const useFetchPayment = ({ tenantId, consumerCode, businessService }, con
     /*  Currently enabled the logic to get bill no and expiry date for PT Module  */
     if (businessService == "PT") {
       const fetchedBill = await Digit.PaymentService.fetchBill(tenantId, { consumerCode, businessService });
-      fetchedBill.Bill[0].billDetails[0] = {
-        ...fetchedBill.Bill[0].billDetails[0],
+      const billdetail=fetchedBill?.Bill?.[0]?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod)?.[0]||{};
+      fetchedBill.Bill[0].billDetails=fetchedBill.Bill[0].billDetails.map(ele=>({
+        ...ele,
         currentBillNo: fetchedBill?.Bill?.[0]?.billNumber,
-        currentExpiryDate: fetchedBill?.Bill?.[0]?.billDetails?.[0]?.expiryDate,
-      };
+        currentExpiryDate: billdetail?.expiryDate,
+      }))
       if (fetchedBill && fetchedBill?.Bill?.[0]?.billDetails?.length > 1) {
         fetchedBill?.Bill?.[0]?.billDetails?.map(async (billdet) => {
           const searchBill = await Digit.PaymentService.searchBill(tenantId, {
