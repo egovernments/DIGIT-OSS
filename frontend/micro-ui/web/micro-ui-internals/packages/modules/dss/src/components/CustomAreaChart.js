@@ -5,8 +5,13 @@ import { useTranslation } from "react-i18next";
 import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
 import NoData from "./NoData";
-const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE" , "#6E8459", "#D4351C","#0CF7E4","#F80BF4","#22F80B"];
-const increasedHeightCharts=["nssOBPSTotalPermitsVsTotalOCSubmittedVsTotalOCIssued","nssNOCApplicationVsProvisionalVsActual","nocApplicationVsProvisionalVsActual","permitsandOCissued"]
+const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE", "#6E8459", "#D4351C", "#0CF7E4", "#F80BF4", "#22F80B"];
+const increasedHeightCharts = [
+  "nssOBPSTotalPermitsVsTotalOCSubmittedVsTotalOCIssued",
+  "nssNOCApplicationVsProvisionalVsActual",
+  "nocApplicationVsProvisionalVsActual",
+  "permitsandOCissued",
+];
 const getColors = (index = 0) => {
   index = COLORS.length > index ? index : 0;
   return COLORS[index];
@@ -140,9 +145,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
 
   const renderLegend = () => <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`DSS_${Digit.Utils.locale.getTransformedLocale(id)}`)}</span>;
 
-  const renderLegendForLine = (ss, sss, index) => (
-    <span style={{ fontSize: "14px", color: "#505A5F" }}>{t(`${Digit.Utils.locale.getTransformedLocale(keysArr[index])}`)}</span>
-  );
+  const renderLegendForLine = (ss, sss, index) => <span style={{ fontSize: "14px", color: "#505A5F" }}>{keysArr?.[index]}</span>;
 
   const tickFormatter = (value) => {
     if (typeof value === "string") {
@@ -208,7 +211,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
           whiteSpace: "nowrap",
         }}
       >
-        {newObjArray.map((ele,i) => (
+        {newObjArray.map((ele, i) => (
           <p key={i}>{ele}</p>
         ))}
       </div>
