@@ -20,6 +20,11 @@
     div#custom-atoms-rightdiv {
       width: 100%;
     }
+    .firenoc-btn-search-reset{
+      div{
+        flex-basis: auto;
+      }  
+      }
   }
   
   @media only screen and (min-width: 768px) {
@@ -51,3 +56,4 @@
   }
   p[class^="MuiFormHelperText-root"] {
     font-size: 14px !important; }
+
