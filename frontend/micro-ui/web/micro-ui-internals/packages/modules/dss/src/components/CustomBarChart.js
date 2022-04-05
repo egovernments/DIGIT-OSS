@@ -35,7 +35,7 @@ const CustomLabel = ({ x, y, name, stroke, value, maxValue }) => {
         {`${maxValue?.[t(name)]}%`}
       </text>
       <text x={x} y={y} dx={-170} dy={10}>
-        {t(name)}
+      {t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(name)}`)}
       </text>
     </>
   );
