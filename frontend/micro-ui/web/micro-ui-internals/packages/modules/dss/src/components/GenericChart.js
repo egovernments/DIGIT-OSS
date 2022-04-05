@@ -106,8 +106,12 @@ const GenericChart = ({
         </div>
         <div className="sideContent">
           {chip && chip.length > 1 && <Chip items={chip} onClick={updateChip} t={t} />}
-          {showSearch && <TextInput className="searchInput" placeholder="Search" signature={true} signatureImg={<SearchImg />} onChange={onChange} />}
-          {showDownload && <DownloadIcon className="mrlg cursorPointer" onClick={handleExcelDownload} />}
+          <span className="table-search-wrapper">
+            {showSearch && (
+              <TextInput className="searchInput" placeholder="Search" signature={true} signatureImg={<SearchImg />} onChange={onChange} />
+            )}
+            {showDownload && <DownloadIcon className="mrlg cursorPointer" onClick={handleExcelDownload} />}
+          </span>
           {!showDownload && <EllipsisMenu menuItems={menuItems} displayKey="i18nKey" onSelect={(data) => download(data)} />}
         </div>
       </div>
