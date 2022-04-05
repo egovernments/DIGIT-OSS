@@ -95,7 +95,7 @@ const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, owne
   return (
     <div>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{t('PT_PROP_TYPE')}</CardLabel>
+        <CardLabel>{t('PT_PROP_TYPE')}</CardLabel>
         <div class="form-field">
           <Dropdown
             selected={getPropertyTypeMenu(proptype)?.length === 1 ? getPropertyTypeMenu(proptype)[0] : BuildingType}

@@ -6,7 +6,8 @@ import {
   MobileNumber,
   RadioButtons,
   TextArea,
-  TextInput
+  TextInput,
+  RadioOrSelect
 } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -168,7 +169,15 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
           t={t}
         />
       </LabelFieldPair>
+      <div style={{
+        border: "1px solid #D6D5D4", 
+        background: "#FAFAFA", 
+        borderRadius: "4px",
+        boxSizing: "border-box",
+        margin: "16px 0px",
+        padding: "16px 8px",
 
+        }}>
       <LabelFieldPair>
         <CardLabel>{`${t("PT_FORM3_MOBILE_NUMBER")}`}</CardLabel>
         <div className="form-field">
@@ -178,6 +187,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
             onChange={setMobileNo}
             disable={isUpdateProperty || isEditProperty}
             {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+            labelStyle={{border: "1px solid #000", borderRight: "none"}}
           />
         </div>
       </LabelFieldPair>
@@ -207,7 +217,17 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
       <LabelFieldPair>
         <CardLabel>{`${t("PT_FORM3_GENDER")}`}</CardLabel>
         <div className="form-field">
-          <RadioButtons
+          <RadioOrSelect
+            name="gender"
+            options={menu}
+            selectedOption={gender}
+            optionKey="code"
+            onSelect={setGenderName}
+            t={t}
+            disabled={isUpdateProperty || isEditProperty}
+            isDropDown={window.location.href.includes("/employee") ? true : false}
+          />
+          {/* <RadioButtons
             t={t}
             options={menu}
             optionsKey="code"
@@ -218,7 +238,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
             isDependent={true}
             labelKey="PT_COMMON_GENDER"
             disabled={isUpdateProperty || isEditProperty}
-          />
+          /> */}
         </div>
       </LabelFieldPair>
 
@@ -247,7 +267,17 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
       <LabelFieldPair>
         <CardLabel>{`${t("PT_FORM3_RELATIONSHIP")}`}</CardLabel>
         <div className="form-field">
-          <RadioButtons
+          <RadioOrSelect
+            name="relationship"
+            options={GuardianOptions}
+            selectedOption={relationship}
+            optionKey="i18nKey"
+            onSelect={setGuardianName}
+            t={t}
+            disabled={isUpdateProperty || isEditProperty}
+            isDropDown={window.location.href.includes("/employee") ? true : false}
+          />
+          {/* <RadioButtons
             t={t}
             optionsKey="i18nKey"
             name="relationship"
@@ -258,7 +288,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
             isDependent={true}
             labelKey="PT_RELATION"
             disabled={isUpdateProperty || isEditProperty}
-          />
+          /> */}
         </div>
       </LabelFieldPair>
 
@@ -298,6 +328,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
         checked={isCorrespondenceAddress || false}
         style={{ paddingTop: "10px" }}
       />
+      </div>
     </div>
   );
 };

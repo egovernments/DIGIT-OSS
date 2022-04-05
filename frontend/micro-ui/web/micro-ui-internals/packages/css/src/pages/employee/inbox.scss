@@ -274,6 +274,9 @@
           }
         }
       }
+      .citizen-filter {
+        margin-top: unset;
+      }
     }
 
     .search-container {
@@ -495,4 +498,8 @@
       }
     }
   }
+}
+
+.inboxLinksFSM {
+  margin: 0 !important;
 }

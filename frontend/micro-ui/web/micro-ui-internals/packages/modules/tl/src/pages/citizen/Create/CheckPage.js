@@ -43,8 +43,9 @@ const CheckPage = ({ onSubmit, value }) => {
     routeLink = routeLink.replace('/check', '');
   }
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={4}/> : null}
     <Card>
-      {window.location.href.includes("/citizen") ? <Timeline currentStep={4}/> : null}
       <CardHeader>{t("CS_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
       <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
       {isEdit && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("TL_RENEWAL_INFO_TEXT")} />}
@@ -202,6 +203,7 @@ const CheckPage = ({ onSubmit, value }) => {
       </StatusTable>
       <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
     </Card>
+    </React.Fragment>
   );
 };
 

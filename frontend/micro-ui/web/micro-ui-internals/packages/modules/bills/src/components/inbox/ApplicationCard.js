@@ -27,7 +27,6 @@ export const ApplicationCard = ({
   useEffect(() => {
     if (type) setPopup(true);
   }, [type]);
-  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   const handlePopupClose = () => {
     setPopup(false);
     setType("");
@@ -53,13 +52,7 @@ export const ApplicationCard = ({
       </Card>
     );
   } else if (data && data?.length > 0) {
-    result = (
-      <DetailsCard
-        data={data}
-        serviceRequestIdKey={serviceRequestIdKey}
-        linkPrefix={linkPrefix ? linkPrefix : DSO ? "/digit-ui/employee/fsm/application-details/" : "/digit-ui/employee/fsm/"}
-      />
-    );
+    result = <DetailsCard data={data} serviceRequestIdKey={serviceRequestIdKey} linkPrefix={linkPrefix ? linkPrefix : "/digit-ui/employee/bills"} />;
   }
 
   return (

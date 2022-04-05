@@ -37,7 +37,7 @@ import WSDocumentsEmployee from "./pageComponents/WSDocumentsEmployee";
 import WSAcknowledgement from "./pages/citizen/WSCreate/WSAcknowledgement";
 import WSPayments from "./pages/citizen/MyPayment/WSPayments";
 import WSEditConnectionDetails from"./pageComponents/WSEditConnectionDetails";
-
+import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails"
 const WSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "ws";
   const { path, url } = useRouteMatch();
@@ -128,7 +128,9 @@ const componentsToRegister = {
   WSSearchWaterConnection: SearchWaterConnection,
   WSAcknowledgement,
   WSPayments,
-  WSEditConnectionDetails
+  WSEditConnectionDetails,
+  ConsumptionDetails
+
 };
 
 export const initWSComponents = () => {

@@ -4,10 +4,6 @@
         width: calc( 25% - 16px );
         @apply inline-block mr-md align-middle;
     }
-    .pt-form-field{
-        width: 32% !important;
-        margin-bottom: 20px;
-      }
     .SubmitAndClearAllContainer{
         @apply w-full;
         .submit{
@@ -40,4 +36,21 @@
         justify-content: unset;
     }
 
+}
+
+@media (min-width: 780px) {
+    .search-form-wrapper{
+        .pt-form-field{
+            width: 32% !important;
+            margin-bottom: 20px;
+          }
+    }
+  }
+  @media (max-width: 780px) {
+    .search-form-wrapper{
+        .pt-form-field{
+            width: 100% !important;
+            margin-bottom: 15px;
+          }
+    }
 }

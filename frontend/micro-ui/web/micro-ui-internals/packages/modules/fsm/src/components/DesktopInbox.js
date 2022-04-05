@@ -243,12 +243,12 @@ const DesktopInbox = (props) => {
       {props.userRole !== "FSM_EMP_FSTPO" && !props.isSearch && (
         <div className="filters-container">
           <FSMLink parentRoute={props.parentRoute} />
-          <div>
+          <div style={{marginTop: "24px"}}>
             <Filter searchParams={props.searchParams} paginationParms={props.paginationParms} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
           </div>
         </div>
       )}
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, marginLeft: "24px" }}>
         <SearchApplication
           onSearch={props.onSearch}
           type="desktop"

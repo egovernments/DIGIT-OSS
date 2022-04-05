@@ -45,6 +45,16 @@
       padding: 0 15px;
     }
   }
+
+  .WhatsAppBanner{
+    width: 100%;
+    padding: 0px 20px 0px 20px;
+    margin: auto;
+    cursor: pointer;
+    img {
+      width: 100%;
+    }
+  }
 }
 
 @media (min-width: 780px) {
@@ -117,6 +127,15 @@
         height: 20vw;
       }
     }
+
+    .WhatsAppBanner {
+      width: 100%;
+      img{
+        height: 20vw;
+        width: 100%;
+      }
+    }
+
   }
   .moduleLinkHomePage {
     img {

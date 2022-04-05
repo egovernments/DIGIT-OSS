@@ -40,6 +40,7 @@ const WorkflowComponent = ({ complaintDetails, id, getWorkFlow, zoomImage }) => 
         complaintWorkflow={complaintDetails.workflow}
         rating={complaintDetails.audit.rating}
         zoomImage={zoomImage}
+        complaintDetails={complaintDetails}
       />
     )
   );

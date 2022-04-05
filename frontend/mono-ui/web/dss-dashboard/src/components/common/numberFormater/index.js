@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { useSelector } from "react-redux";
+import { getLocaleLabels } from '../../../utils/commons';
 
 export function convertJs(type, value) {
     return value;
@@ -23,10 +24,10 @@ export default function NFormatter(props) {
 
                 switch (_.get(GFilterData, 'Denomination')) {
                     case SI_SYMBOL[1]:
-                        return `${Rformatter.format((props.value / 100000).toFixed(2) || 0)}  ${_.get(GFilterData, 'Denomination')}`
+                        return `${Rformatter.format((props.value / 100000).toFixed(2) || 0)}  ${getLocaleLabels(`ES_DSS_${_.get(GFilterData, 'Denomination')}`)}`
 
                     case SI_SYMBOL[2]:
-                        return `${Rformatter.format((props.value / 10000000).toFixed(2) || 0)}  ${_.get(GFilterData, 'Denomination')}`
+                        return `${Rformatter.format((props.value / 10000000).toFixed(2) || 0)}  ${getLocaleLabels(`ES_DSS_${_.get(GFilterData, 'Denomination')}`)}`
                     case SI_SYMBOL[0]:
                         if (props.value <= 9999999) {
                             return `${Rformatter.format(props.value || 0)}`

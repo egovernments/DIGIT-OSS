@@ -1,3 +1,4 @@
+import { BackButton } from "@egovernments/digit-ui-react-components";
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Header, CitizenHomeCard, PTIcon,WSICon,FSMIcon,MCollectIcon,PGRIcon,TLIcon,OBPSIcon, Loader, BillsIcon,CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
@@ -75,6 +76,7 @@ const CitizenHome = ({ modules,getCitizenMenu,fetchedCitizen,isLoading }) => {
   return (
     <React.Fragment>
       <div className="citizenAllServiceGrid">
+      <BackButton />
         {moduleArray
           .filter((mod) => mod)
           .map(({ code }, index) => {

@@ -1,8 +1,8 @@
 import { Header, DownloadIcon } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import DesktopInbox from "../../components/inbox/BillsDesktopInbox";
-import MobileInbox from "../../components/inbox/BillsMobileInbox";
+import DesktopInbox from "../../../components/inbox/BillsDesktopInbox";
+import MobileInbox from "../../../components/inbox/BillsMobileInbox";
 
 const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filterComponent, isInbox ,keys}) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
