@@ -169,11 +169,6 @@ public class NotificationService {
          * SMS to citizens, when their complaint is rejected
          */
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(REJECTED) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REJECT)){
-            if(messageToReplace.contains("{reason}")) {
-                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REJECT_REJECTED);
-                messageToReplace = messageToReplace.replace("{reason}", processInstance.getComment());
-            }
-
             if (messageToReplace.contains("{additional_comments}"))
                 messageToReplace = messageToReplace.replace("{additional_comments}", serviceWrapper.getWorkflow().getComments());
         }
