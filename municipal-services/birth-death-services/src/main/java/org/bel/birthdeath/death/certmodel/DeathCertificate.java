@@ -128,5 +128,5 @@ public class DeathCertificate {
   
   private String embeddedUrl;
   
-  private Long dateofissue;
+  private Timestamp dateofissue;
 }
