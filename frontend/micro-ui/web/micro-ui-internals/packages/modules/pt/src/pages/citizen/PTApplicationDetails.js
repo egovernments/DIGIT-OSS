@@ -1,7 +1,7 @@
-import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable,MultiLink } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, MultiLink, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import getPTAcknowledgementData from "../../getPTAcknowledgementData";
 import PropertyDocument from "../../pageComponents/PropertyDocument";
 import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
@@ -12,6 +12,7 @@ import { size } from "lodash";
 
 const PTApplicationDetails = () => {
   const { t } = useTranslation();
+  const history = useHistory();
   const { acknowledgementIds, tenantId } = useParams();
   const [acknowldgementData, setAcknowldgementData] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
@@ -30,13 +31,13 @@ const PTApplicationDetails = () => {
   const application = property;
   sessionStorage.setItem("pt-property", JSON.stringify(application));
 
-  
-  useEffect(async ()=>{
-    if(acknowledgementIds){
-      const res = await Digit.PaymentService.searchBill(tenantId, {Service: "PT.MUTATION", consumerCode: acknowledgementIds});
+
+  useEffect(async () => {
+    if (acknowledgementIds) {
+      const res = await Digit.PaymentService.searchBill(tenantId, { Service: "PT.MUTATION", consumerCode: acknowledgementIds });
       setBill(res.Bill[0])
     }
-  },[tenantId, acknowledgementIds])
+  }, [tenantId, acknowledgementIds])
 
   const { isLoading: auditDataLoading, isError: isAuditError, data: auditResponse } = Digit.Hooks.pt.usePropertySearch(
     {
@@ -57,7 +58,7 @@ const PTApplicationDetails = () => {
       consumerCodes: acknowledgementIds,
       isEmployee: false,
     },
-    {enabled: acknowledgementIds?true:false}
+    { enabled: acknowledgementIds ? true : false }
   );
 
 
@@ -109,7 +110,7 @@ const PTApplicationDetails = () => {
     property.ownersInit = previousActiveProperty?.owners?.filter((owner) => owner.status == "ACTIVE");
 
     const curWFProperty = propertiesAudit.sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
-    property.ownersTemp = curWFProperty.owners.filter((owner) => owner.status =="ACTIVE");
+    property.ownersTemp = curWFProperty.owners.filter((owner) => owner.status == "ACTIVE");
 
     if (property?.ownershipCategoryInit?.startsWith("INSTITUTION")) {
       property.institutionInit = previousActiveProperty.institution;
@@ -120,7 +121,7 @@ const PTApplicationDetails = () => {
   let transferorOwners = get(property, "ownersInit", []);
 
   let transfereeInstitution = get(property, "institutionTemp", []);
-let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
+  let isInstitution = property?.ownershipCategoryInit?.startsWith("INSTITUTION");
   let transferorInstitution = get(property, "institutionInit", []);
 
   let units = [];
@@ -171,14 +172,14 @@ let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
     documentDate = `${date.getDate()} ${month} ${date.getFullYear()}`;
   }
 
-  async function getRecieptSearch({tenantId,payments,...params}) {
+  async function getRecieptSearch({ tenantId, payments, ...params }) {
     let response = { filestoreIds: [payments?.fileStoreId] };
-      response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{...payments}] }, "consolidatedreceipt");
+    response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{ ...payments }] }, "consolidatedreceipt");
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
-  const handleDownload = async (document,tenantid) => {
+  const handleDownload = async (document, tenantid) => {
     let tenantId = tenantid ? tenantid : tenantId;
     const res = await Digit.UploadServices.Filefetch([document?.fileStoreId], tenantId);
     let documentLink = pdfDownloadLink(res.data, document?.fileStoreId);
@@ -198,29 +199,30 @@ let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
     label: data?.Properties?.[0]?.creationReason === "MUTATION" ? t("MT_APPLICATION") : t("PT_APPLICATION_ACKNOWLEDGMENT"),
     onClick: () => getAcknowledgementData()
   });
-  if(reciept_data && reciept_data?.Payments.length>0 && recieptDataLoading == false)
-  dowloadOptions.push({
-    label: t("MT_FEE_RECIEPT"),
-    onClick: () => getRecieptSearch({tenantId: reciept_data?.Payments[0]?.tenantId,payments: reciept_data?.Payments[0]})
-  });
-  if(data?.Properties?.[0]?.creationReason === "MUTATION" && data?.Properties?.[0]?.status === "ACTIVE")
-  dowloadOptions.push({
-    label: t("MT_CERTIFICATE"),
-    onClick: () => printCertificate()
-  });
+  if (reciept_data && reciept_data?.Payments.length > 0 && recieptDataLoading == false)
+    dowloadOptions.push({
+      label: t("MT_FEE_RECIEPT"),
+      onClick: () => getRecieptSearch({ tenantId: reciept_data?.Payments[0]?.tenantId, payments: reciept_data?.Payments[0] })
+    });
+  if (data?.Properties?.[0]?.creationReason === "MUTATION" && data?.Properties?.[0]?.status === "ACTIVE")
+    dowloadOptions.push({
+      label: t("MT_CERTIFICATE"),
+      onClick: () => printCertificate()
+    });
+
   return (
     <React.Fragment>
       <div>
-      <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
-        <Header styles={{fontSize: "32px"}}>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
-        {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
-          className="multilinkWrapper"
-          onHeadClick={() => setShowOptions(!showOptions)}
-          displayOptions={showOptions}
-          options={dowloadOptions}
+        <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
+          <Header styles={{ fontSize: "32px" }}>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
+          {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
+            className="multilinkWrapper"
+            onHeadClick={() => setShowOptions(!showOptions)}
+            displayOptions={showOptions}
+            options={dowloadOptions}
 
-        />}
-      </div>
+          />}
+        </div>
         <Card>
           <StatusTable>
             <Row className="border-none" label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} /* textStyle={{ whiteSpace: "pre" }} */ />
@@ -229,7 +231,7 @@ let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
 
             {isPropertyTransfer && (
               <React.Fragment>
-                <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={bill?.totalAmount ||t("CS_NA") } textStyle={{ whiteSpace: "pre" }} />
+                <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={bill?.totalAmount || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
                 <Row className="border-none" label={t("PT_PAYMENT_STATUS")} text={t(`PT_MUT_BILL_${bill?.status?.toUpperCase()}`)} textStyle={{ whiteSpace: "pre" }} />
               </React.Fragment>
             )}
@@ -319,7 +321,7 @@ let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
                           <Row className="border-none" label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
                           <Row className="border-none" label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
                           <Row className="border-none" label={t("PT_COMMON_GENDER_LABEL")} text={owner?.gender || t("CS_NA")} />
-                          <Row 
+                          <Row
                             className="border-none"
                             label={t("PT_FORM3_OWNERSHIP_TYPE")}
                             text={`${application?.ownershipCategory ? t(`PT_OWNERSHIP_${application?.ownershipCategory}`) : t("CS_NA")}`}
@@ -361,7 +363,7 @@ let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
                   text={
                     `${t(
                       (property?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                        (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory)
+                      (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory)
                     )}` || t("CS_NA")
                   }
                 />
@@ -377,7 +379,7 @@ let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
                       {(flrno !== unit?.floorNo ? (i = 1) : (i = i + 1)) && i === 1 && (
                         <CardSubHeader>{t(`PROPERTYTAX_FLOOR_${unit?.floorNo}`)}</CardSubHeader>
                       )}
-                      <div style={{ border: "groove", padding:"7px",marginBottom:"10px" }}>
+                      <div style={{ border: "groove", padding: "7px", marginBottom: "10px" }}>
                         <CardSubHeader>
                           {t("ES_APPLICATION_DETAILS_UNIT")} {i}
                         </CardSubHeader>
@@ -389,8 +391,8 @@ let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
                               text={
                                 `${t(
                                   (property?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                                    (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory) +
-                                    (property?.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
+                                  (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory) +
+                                  (property?.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
                                 )}` || t("CS_NA")
                               }
                             />
@@ -452,6 +454,13 @@ let isInstitution=property?.ownershipCategoryInit?.startsWith("INSTITUTION");
             )}
           </div>
           <PTWFApplicationTimeline application={application} id={acknowledgementIds} userType={'citizen'} />
+
+          {isPropertyTransfer && (
+            <SubmitBar disabled={!isPropertyTransfer} label={t("PT_MUT_PAY_APPLICATION_FEE")} onSubmit={()=>{
+              history.push(`/digit-ui/citizen/pt/property/fee-details/${acknowledgementIds}/${tenantId}`)
+            }}></SubmitBar>
+          )}
+
         </Card>
       </div>
     </React.Fragment>

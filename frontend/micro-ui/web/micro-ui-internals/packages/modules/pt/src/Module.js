@@ -51,6 +51,7 @@ import SearchPropertyComponent from "./pages/citizen/SearchProperty";
 import SearchResultsComponent from "./pages/citizen/SearchResults";
 import EditProperty from "./pages/citizen/EditProperty";
 import MutateProperty from "./pages/citizen/Mutate";
+import PTFeeDetails from './pages/citizen/FeeDetails';
 
 import PropertyInformation from "./pages/citizen/MyProperties/propertyInformation";
 import PTWFCaption from "./pageComponents/PTWFCaption";
@@ -158,6 +159,7 @@ const componentsToRegister = {
   PTSearchPropertyComponent : SearchPropertyComponent,
   PTSearchResultsComponent : SearchResultsComponent,
   PTEditProperty : EditProperty,
+  PTFeeDetails,
   PTMutateProperty : MutateProperty,
   SelectOtp, // To-do: Temp fix, Need to check why not working if selectOtp module is already imported from core module
 };
