@@ -34,6 +34,11 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
   );
 
   useEffect(() => {
+    if(propertyId && window.location.href.includes("/renew-application-details/"))
+    setSearchPropertyId(propertyId);
+  },[propertyId])
+
+  useEffect(() => {
     if(isLoading == false && (error && error == true ) || propertyDetails?.Properties?.length == 0)
     {
       setShowToast({ error: true, label: "PT_ENTER_VALID_PROPERTY_ID" });
