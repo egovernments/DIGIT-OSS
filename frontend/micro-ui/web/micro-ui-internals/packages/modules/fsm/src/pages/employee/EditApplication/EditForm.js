@@ -33,9 +33,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       noOfTrips: applicationData.noOfTrips,
       amountPerTrip: applicationData.additionalDetails.tripAmount,
       amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || undefined,
-      vehicleType: vehicleMenu
-        .filter((vehicle) => vehicle?.capacity === applicationData?.vehicleCapacity)
-        .map((vehicle) => ({ ...vehicle, label: applicationData?.vehicleCapacity }))[0],
+      vehicleType: { capacity: applicationData?.vehicleCapacity },
       vehicleCapacity: applicationData?.vehicleCapacity,
     },
     propertyType: applicationData.propertyUsage.split(".")[0],
@@ -57,7 +55,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
   };
 
   const onFormValueChange = (setValue, formData) => {
-   
+
     if (
       formData?.propertyType &&
       formData?.subtype &&
@@ -173,7 +171,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     <FormComposer
       heading={t("ES_TITLE_MODIFY_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
-      label={t("ES_FSM_APPLICATION_UPDATE")}
+      label={defaultValues?.tripData?.vehicleCapacity ? t("ES_FSM_APPLICATION_SCHEDULE") : t("ES_FSM_APPLICATION_UPDATE")}
       config={configs.map((config) => {
         return {
           ...config,
