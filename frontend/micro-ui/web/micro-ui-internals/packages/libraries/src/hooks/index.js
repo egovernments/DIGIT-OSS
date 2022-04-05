@@ -17,6 +17,7 @@ import { useUserSearch } from "./userSearch";
 import { useApplicationsForBusinessServiceSearch } from "./useApplicationForBillSearch";
 import useBoundaryLocalities from "./useLocalities";
 import useCommonMDMS from "./useMDMS";
+import useCustomMDMS from "./useCustomMDMS";
 import useInboxGeneral from "./useInboxGeneral/useInboxGeneral";
 import useApplicationStatusGeneral from "./useStatusGeneral";
 import useModuleTenants from "./useModuleTenants";
@@ -182,7 +183,8 @@ import useMyBillsWaterSearch from "./ws/useMyBillsWaterSearch";
 import useMyBillsSewarageSearch from "./ws/useMyBillsSewarageSearch";
 import useMyApplicationSearch from "./ws/useMyApplicationSearch";
 import useWSDocumentSearch from "./ws/useWSDocumentSearch";
-import useWSMDMSWS from "./ws/useWSMDMSWS";
+
+import useWSMDMSWS from "./ws/useWSMDMSWS"
 import WSuseSearch from "./ws/useSearch";
 import useSewSearch from "./ws/useSewSearch";
 import useSearchWS from "./ws/useSearchWS";
@@ -445,6 +447,7 @@ const Hooks = {
   survey,
   noc,
   ws,
+  useCustomMDMS
 };
 
 export default Hooks;
