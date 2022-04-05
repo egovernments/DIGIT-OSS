@@ -11,6 +11,8 @@ import {
   DatePicker,
   Loader,
   Toast,
+  StatusTable,
+  Row,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
@@ -27,6 +29,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
   const [propertyId, setPropertyId] = useState(formData?.cptId?.id || urlPropertyId || "");
   const [searchPropertyId, setSearchPropertyId] = useState(urlPropertyId);
   const [showToast, setShowToast] = useState(null);
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const { isLoading, isError, error, data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: searchPropertyId }, tenantId: tenantId },
@@ -125,27 +128,16 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
       </span>
       {propertyDetails && propertyDetails?.Properties.length ? (
         <React.Fragment>
-          <header className="card-section-header" style={{ marginBottom: 0, marginTop: "20px" }}>
+          <header className="card-section-header" style={{ marginBottom: "5px", marginTop: "20px" }}>
             {t("PT_DETAILS")}
           </header>
-          <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ID`)}:`}</CardLabel>
-            <div className="field">
-              <p>{propertyDetails?.Properties[0]?.propertyId}</p>
+          <StatusTable>
+            <div style={isMobile ? {} : {maxWidth:"60%"}}>
+                <Row className="border-none" labelStyle={isMobile ? {width:"40%"} : {}} label={t(`PROPERTY_ID`)} text={propertyDetails?.Properties[0]?.propertyId} />
+                <Row className="border-none" labelStyle={isMobile ? {width:"40%"} : {}} label={t(`OWNER_NAME`)} text={propertyDetails?.Properties[0]?.owners[0]?.name}/>
+                <Row className="border-none" labelStyle={isMobile ? {width:"40%"} : {}} textStyle={{wordBreak:"break-word"}} label={t(`PROPERTY_ADDRESS`)} text={propertyAddress} />
             </div>
-          </LabelFieldPair>
-          <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t(`OWNER_NAME`)}:`}</CardLabel>
-            <div className="field">
-              <p>{propertyDetails?.Properties[0]?.owners[0]?.name}</p>
-            </div>
-          </LabelFieldPair>
-          <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ADDRESS`)}:`}</CardLabel>
-            <div className="field">
-              <p>{propertyAddress}</p>
-            </div>
-          </LabelFieldPair>
+          </StatusTable>
           <Link to={`/digit-ui/employee/pt/property-details/${propertyId}`}>
             <LinkButton label={t("CPT_COMPLETE_PROPERTY_DETAILS")} style={{ color: "#f47738" }} />
           </Link>
