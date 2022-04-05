@@ -16,7 +16,6 @@ const PTApplicationDetails = () => {
   const { acknowledgementIds, tenantId } = useParams();
   const [acknowldgementData, setAcknowldgementData] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
-  const [bill, setBill] = useState({});
   // const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
@@ -24,6 +23,8 @@ const PTApplicationDetails = () => {
     { filters: { acknowledgementIds } },
     { filters: { acknowledgementIds } }
   );
+  const [billAmount, setBillAmount] = useState(null);
+  const [billStatus, setBillStatus] = useState(null);
 
   const properties = get(data, "Properties", []);
   const propertyId = get(data, "Properties[0].propertyId", []);
@@ -32,12 +33,19 @@ const PTApplicationDetails = () => {
   sessionStorage.setItem("pt-property", JSON.stringify(application));
 
 
-  useEffect(async () => {
-    if (acknowledgementIds) {
-      const res = await Digit.PaymentService.searchBill(tenantId, { Service: "PT.MUTATION", consumerCode: acknowledgementIds });
-      setBill(res.Bill[0])
+  useEffect(async ()=>{
+    if(acknowledgementIds && tenantId && property){
+      const res = await Digit.PaymentService.searchBill(tenantId, {Service: "PT.MUTATION", consumerCode: acknowledgementIds});
+      if(! res.Bill.length) {
+        const res1 = await Digit.PTService.ptCalculateMutation({Property: property}, tenantId);
+        setBillAmount(res1?.[acknowledgementIds]?.totalAmount || t("CS_NA"))
+        setBillStatus(t(`PT_MUT_BILL_ACTIVE`))
+      } else {
+        setBillAmount(res?.Bill[0]?.totalAmount || t("CS_NA"))
+        setBillStatus(t(`PT_MUT_BILL_${res?.Bill[0]?.status?.toUpperCase()}`))
+      }
     }
-  }, [tenantId, acknowledgementIds])
+  },[tenantId, acknowledgementIds, property])
 
   const { isLoading: auditDataLoading, isError: isAuditError, data: auditResponse } = Digit.Hooks.pt.usePropertySearch(
     {
@@ -231,8 +239,8 @@ const PTApplicationDetails = () => {
 
             {isPropertyTransfer && (
               <React.Fragment>
-                <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={bill?.totalAmount || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
-                <Row className="border-none" label={t("PT_PAYMENT_STATUS")} text={t(`PT_MUT_BILL_${bill?.status?.toUpperCase()}`)} textStyle={{ whiteSpace: "pre" }} />
+                <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={billAmount || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+                <Row className="border-none" label={t("PT_PAYMENT_STATUS")} text={billStatus} textStyle={{ whiteSpace: "pre" }} />
               </React.Fragment>
             )}
           </StatusTable>
