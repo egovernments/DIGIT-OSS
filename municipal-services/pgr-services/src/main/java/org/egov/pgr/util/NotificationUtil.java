@@ -58,20 +58,30 @@ public class NotificationUtil {
         return uri;
     }
 
-    public String getCustomizedMsg(String action, String applicationStatus, String localizationMessage) {
+    public String getCustomizedMsg(String action, String applicationStatus, String roles, String localizationMessage) {
         StringBuilder notificationCode = new StringBuilder();
 
-        /**
-         * when action is either "COMMENT" or "COMMENT_DEFAULT" or "DEFAULT",
-         *  localisation code would be "PGR_ACTION_SMS_MESSAGE"
-         *  otherwise, localisation code would be "PGR_ACTION_APPLICATIONSTATUS_SMS_MESSAGE"
-         */
-        if(action.equalsIgnoreCase(COMMENT) || action.equalsIgnoreCase(COMMENT_DEFAULT) || action.equalsIgnoreCase(DEFAULT)) {
-            notificationCode.append("PGR_").append(action.toUpperCase()).append("_SMS_MESSAGE");
+        notificationCode.append("PGR_").append(roles.toUpperCase()).append("_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
+
+        String path = "$..messages[?(@.code==\"{}\")].message";
+        path = path.replace("{}", notificationCode);
+        String message = null;
+        try {
+            ArrayList<String> messageObj = JsonPath.parse(localizationMessage).read(path);
+            if(messageObj != null && messageObj.size() > 0) {
+                message = messageObj.get(0);
+            }
+        } catch (Exception e) {
+            log.warn("Fetching from localization failed", e);
         }
-        else {
-            notificationCode.append("PGR_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
-        }
+
+        return message;
+    }
+
+    public String getDefaultMsg(String roles, String localizationMessage) {
+        StringBuilder notificationCode = new StringBuilder();
+
+        notificationCode.append("DEFAULT_").append(roles.toUpperCase()).append("_").append("_SMS_MESSAGE");
 
         String path = "$..messages[?(@.code==\"{}\")].message";
         path = path.replace("{}", notificationCode);
