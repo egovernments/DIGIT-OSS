@@ -11,15 +11,17 @@ const CitizenHome = ({ modules }) => {
   const showQuickPay = moduleArr.some((module) => module.code === "QuickPayLinks");
   return (
     <React.Fragment>
-      <div className="citizenAllServiceGrid">
       <BackButton />
-      {moduleArray.filter(mod=>mod).map(({ code }, index) => {
-        let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
-        if (code === "Payment" && !showQuickPay) {
-          Links = () => <React.Fragment />;
-        }
-        return <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />;
-      })}
+      <div className="citizenAllServiceGrid">
+        {moduleArray
+          .filter((mod) => mod)
+          .map(({ code }, index) => {
+            let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
+            if (code === "Payment" && !showQuickPay) {
+              Links = () => <React.Fragment />;
+            }
+            return <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />;
+          })}
       </div>
     </React.Fragment>
   );

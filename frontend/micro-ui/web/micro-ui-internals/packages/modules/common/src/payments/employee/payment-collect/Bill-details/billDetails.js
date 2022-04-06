@@ -39,6 +39,22 @@ export const BillDetailsFormConfig = (props, t) => ({
       ],
     },
   ],
+  "PT.MUTATION": [
+    {
+      head: t("COMMON_PAY_SCREEN_HEADER"),
+      body: [
+        {
+          withoutLabel: true,
+          type: "custom",
+          populators: {
+            name: "amount",
+            customProps: { businessService: props.businessService, consumerCode: props.consumerCode },
+            component: (props, customProps) => <BillDetails onChange={props.onChange} amount={props.value} {...customProps} />,
+          },
+        },
+      ],
+    },
+  ],
   TL: [
     {
       body: [
