@@ -72,6 +72,10 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
       if (data?.display){
         return []
       }
+      if(data === "")
+      {
+      return [];
+      }
       return data?.map((data) => ({
         [t("TL_COMMON_TABLE_COL_APP_NO")]: data.applicationNumber,
         [t("TL_COMMON_TABLE_COL_APP_DATE")]: convertEpochToDateDMY(data.auditDetails?.createdTime) || "",

@@ -7,7 +7,7 @@ const createProxy = createProxyMiddleware({
   changeOrigin: true,
 });
 const assetsProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_ASSETS || "https://qa.digit.org",
+  target: process.env.REACT_APP_PROXY_ASSETS || "https://dev.digit.org",
   changeOrigin: true,
 });
 module.exports = function (app) {

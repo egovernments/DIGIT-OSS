@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FormStep, RadioButtons } from "@egovernments/digit-ui-react-components";
+import Timeline from "../../components/CPTTimeline";
 
 const KnowYourProperty = ({ t, config, onSelect, userType, formData }) => {
   const [KnowProperty, setKnowProperty] = useState(formData?.PropDetails?.KnowProperty);
@@ -21,6 +22,7 @@ const KnowYourProperty = ({ t, config, onSelect, userType, formData }) => {
   }
   return (
     <React.Fragment>
+      {window.location.href.includes("/citizen") ? <Timeline /> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!KnowProperty}>
         <RadioButtons
           t={t}

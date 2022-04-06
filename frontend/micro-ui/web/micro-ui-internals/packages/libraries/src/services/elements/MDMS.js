@@ -51,7 +51,7 @@ const initRequestBody = (tenantId) => ({
     moduleDetails: [
       {
         moduleName: "common-masters",
-        masterDetails: [{ name: "Department" }, { name: "Designation" }, { name: "StateInfo" }, { name: "wfSlaConfig" }],
+        masterDetails: [{ name: "Department" }, { name: "Designation" }, { name: "StateInfo" }, { name: "wfSlaConfig" }, { name: "uiHomePage" }],
       },
       {
         moduleName: "tenant",
@@ -95,6 +95,16 @@ export const getMultipleTypes = (tenantId, moduleCode, types) => ({
       {
         moduleName: moduleCode,
         masterDetails: types.map((type) => ({ name: type })),
+      },
+    ],
+  },
+});
+export const getMultipleTypesWithFilter = (moduleCode, masterDetails) => ({
+  details: {
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: masterDetails,
       },
     ],
   },
@@ -1507,6 +1517,9 @@ export const MdmsService = {
   },
   getMultipleTypes: (tenantId, moduleCode, types) => {
     return MdmsService.getDataByCriteria(tenantId, getMultipleTypes(tenantId, moduleCode, types), moduleCode);
+  },
+  getMultipleTypesWithFilter: (tenantId, moduleCode, types) => {
+    return MdmsService.getDataByCriteria(tenantId, getMultipleTypesWithFilter(moduleCode, types), moduleCode);
   },
   getFSTPPlantInfo: (tenantId, moduleCode, types) => {
     return MdmsService.getDataByCriteria(tenantId, getFSTPPlantCriteria(tenantId, moduleCode, types), moduleCode);

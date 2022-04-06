@@ -2,8 +2,8 @@ import { ActionBar, Card, Header, Loader, Row, StatusTable, SubmitBar } from "@e
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import ActionModal from "../components/Modal";
-import { convertEpochToDate, convertToLocale, getFinancialYears } from "../utils";
+import ActionModal from "../../components/Modal";
+import { convertEpochToDate, convertToLocale, getFinancialYears } from "../../utils";
 
 const canCancelReceipt = (Receipt = {}) => {
   return (

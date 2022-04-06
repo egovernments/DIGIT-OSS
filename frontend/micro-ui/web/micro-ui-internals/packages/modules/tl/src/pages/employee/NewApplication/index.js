@@ -25,8 +25,7 @@ const NewApplication = () => {
   let { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { enabled: propertyId ? true : false }
+    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId ? true : false },
   );
 
   useEffect(() => {
@@ -51,7 +50,7 @@ const NewApplication = () => {
       Object.keys(formState.errors).length > 0 &&
       Object.keys(formState.errors).length == 1 &&
       formState.errors["owners"] &&
-      Object.entries(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0
+      Object.entries(formState.errors["owners"].type).filter((ob) => ob?.[1].type === "required").length == 0
     ) {
       setSubmitValve(true);
     } else {
@@ -61,12 +60,12 @@ const NewApplication = () => {
   const onSubmit = (data) => {
     if (!data?.cpt?.details || !propertyDetails) {
       setShowToast({ key: "error" });
-      setError("TL_PROPERTY_ID_REQUIRED");
+      setError(t("TL_PROPERTY_ID_REQUIRED"));
       return;
     }
     if (propertyId == null) {
       setShowToast({ key: "error" });
-      setError("TL_PROPERTY_ID_REQUIRED");
+      setError(t("TL_PROPERTY_ID_REQUIRED"));
       return;
     }
 
@@ -255,7 +254,7 @@ const NewApplication = () => {
         onFormValueChange={onFormValueChange}
         breaklineStyle={{ border: "0px" }}
       />
-      {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
+      {showToast && <Toast isDleteBtn={true} error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
     </div>
   );
 };

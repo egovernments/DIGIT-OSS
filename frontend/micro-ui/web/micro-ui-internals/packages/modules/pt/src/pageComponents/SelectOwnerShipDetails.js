@@ -11,6 +11,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlur, formState, setError, clearErrors }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -160,6 +161,8 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   }
 
   return (
+    <React.Fragment>
+     {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownershipCategory}>
       <div>
         <RadioButtons
@@ -175,6 +178,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
         />
       </div>
     </FormStep>
+    </React.Fragment>
   );
 };
 

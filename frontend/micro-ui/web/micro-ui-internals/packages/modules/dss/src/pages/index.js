@@ -7,10 +7,10 @@ import {
   MultiLink,
   RemoveableTag,
   ShareIcon,
-  WhatsappIcon
+  WhatsappIcon,
 } from "@egovernments/digit-ui-react-components";
 import { format } from "date-fns";
-import React, { useEffect, Fragment,useMemo, useRef, useState } from "react";
+import React, { useEffect, Fragment, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { checkCurrentScreen } from "../components/DSSCard";
@@ -20,15 +20,6 @@ import FiltersNational from "../components/FiltersNational";
 import Layout from "../components/Layout";
 
 const key = "DSS_FILTERS";
-
-function addFinancialYearAccordingToCurrentDate () {
-  const currentDate = new Date()
-  if(getMonth(currentDate) > 3){
-    return addMonths(startOfYear(currentDate), 3)
-  } else {
-    return addMonths(subYears(startOfYear(currentDate), 1),3)
-  }
-}
 
 const getInitialRange = () => {
   const data = Digit.SessionStorage.get(key);
@@ -90,7 +81,7 @@ const DashBoard = ({ stateCode }) => {
     enabled: isNational,
   });
   const { data: response, isLoading } = Digit.Hooks.dss.useDashboardConfig(moduleCode);
-  const { data: ulbTenants, isLoading: isUlbLoading } = Digit.Hooks.useModuleTenants("FSM");
+  const { data: ulbTenants, isLoading: isUlbLoading } = Digit.Hooks.useModuleTenants("DSS");
   const { isLoading: isMdmsLoading, data: mdmsData } = Digit.Hooks.useCommonMDMS(stateCode, "FSM", "FSTPPlantInfo");
   const [showOptions, setShowOptions] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -111,7 +102,7 @@ const DashBoard = ({ stateCode }) => {
     [filters, isUlbLoading, isMdmsLoading]
   );
 
-  const mobileView = innerWidth <= 640;
+  const mobileView = window.Digit.Utils.browser.isMobile();
 
   const handlePrint = () => Digit.Download.PDF(fullPageRef, t(dashboardConfig?.[0]?.name));
 
@@ -122,20 +113,20 @@ const DashBoard = ({ stateCode }) => {
     });
   };
   const removeST = (id) => {
-    let newStates=[...filters?.filters?.state].filter((tenant, index) => index !== id) ;
-
-    let newUlbs=filters?.filters?.ulb||[];
-    if(newStates?.length==0){
-      newUlbs=[];
-    }else{
-      let filteredUlbs=nationalInfo?.ulb?.filter((e) => Digit.Utils.dss.getCitiesAvailable(e, newStates))?.map(ulbs=>ulbs?.code)
-    newUlbs=newUlbs.filter(ulb=>filteredUlbs.includes(ulb))
+    let newStates = [...filters?.filters?.state].filter((tenant, index) => index !== id);
+    let newUlbs = filters?.filters?.ulb || [];
+    if (newStates?.length == 0) {
+      newUlbs = [];
+    } else {
+      let filteredUlbs = nationalInfo?.ulb?.filter((e) => Digit.Utils.dss.getCitiesAvailable(e, newStates))?.map((ulbs) => ulbs?.code);
+      newUlbs = newUlbs.filter((ulb) => filteredUlbs.includes(ulb));
     }
     handleFilters({
       ...filters,
-      filters: { ...filters?.filters, state:newStates ,ulb:newUlbs},
+      filters: { ...filters?.filters, state: newStates, ulb: newUlbs },
     });
   };
+
   const removeTenant = (id) => {
     handleFilters({
       ...filters,
@@ -190,7 +181,7 @@ const DashBoard = ({ stateCode }) => {
         },
       ]
     : [
-      /*
+        /*
         {
           icon: <EmailIcon />,
           label: t("ES_DSS_SHARE_PDF"),
@@ -242,7 +233,9 @@ const DashBoard = ({ stateCode }) => {
     <FilterContext.Provider value={provided}>
       <div ref={fullPageRef} id="divToPrint">
         <div className="options">
-          <Header styles={{ marginBottom: "0px",whiteSpace:"pre" }}>{t(dashboardConfig?.[0]?.name)}</Header>
+          <Header styles={mobileView ? { marginLeft: "0px", whiteSpace: "pre-line" } : { marginBottom: "0px", whiteSpace: "pre" }}>
+            {t(dashboardConfig?.[0]?.name)}
+          </Header>
           {mobileView ? null : (
             <div className="divToBeHidden">
               <div className="mrlg divToBeHidden">
@@ -253,7 +246,9 @@ const DashBoard = ({ stateCode }) => {
                   // showOptions={(e) => {
                   // setShowOptions(e)}
                   // }
-                  onHeadClick={(e) =>{ setShowOptions(e !== undefined ? e : !showOptions)}}
+                  onHeadClick={(e) => {
+                    setShowOptions(e !== undefined ? e : !showOptions);
+                  }}
                   displayOptions={showOptions}
                   options={shareOptions}
                 />
@@ -318,12 +313,22 @@ const DashBoard = ({ stateCode }) => {
               filters?.filters?.state &&
               filters.filters.state
                 .slice(0, 5)
-                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`}  onClick={() => removeST(id)} />)}
+                .map((filter, id) => (
+                  <RemoveableTag
+                    key={id}
+                    text={`${t(`DSS_HEADER_STATE`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`}
+                    onClick={() => removeST(id)}
+                  />
+                ))}
             {filters?.filters?.state?.length > 6 && (
               <>
                 {showFilters &&
                   filters.filters.state.map((filter, id) => (
-                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeST(id)} />
+                    <RemoveableTag
+                      key={id}
+                      text={`${t(`DSS_HEADER_STATE`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`}
+                      onClick={() => removeST(id)}
+                    />
                   ))}
                 {!showFilters && (
                   <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>
@@ -348,12 +353,22 @@ const DashBoard = ({ stateCode }) => {
               filters?.filters?.ulb &&
               filters.filters.ulb
                 .slice(0, 5)
-                .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeTenant(id)} />)}
+                .map((filter, id) => (
+                  <RemoveableTag
+                    key={id}
+                    text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`}
+                    onClick={() => removeTenant(id)}
+                  />
+                ))}
             {filters?.filters?.ulb?.length > 6 && (
               <>
                 {showFilters &&
                   filters.filters.ulb.map((filter, id) => (
-                    <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`}  onClick={() => removeTenant(id)} />
+                    <RemoveableTag
+                      key={id}
+                      text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`}
+                      onClick={() => removeTenant(id)}
+                    />
                   ))}
                 {!showFilters && (
                   <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>
@@ -389,7 +404,7 @@ const DashBoard = ({ stateCode }) => {
                 options={shareOptions}
               />
             </div>
-            <div onClick={handlePrint}  className="divToBeHidden">
+            <div onClick={handlePrint} className="divToBeHidden">
               <DownloadIcon />
               {t(`ES_DSS_DOWNLOAD`)}
             </div>

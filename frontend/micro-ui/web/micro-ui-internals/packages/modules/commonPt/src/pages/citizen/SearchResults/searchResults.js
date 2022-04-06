@@ -68,7 +68,11 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   }
 
   if (result.error || !consumerCode) {
-    return <div>{t("CS_PT_NO_PROPERTIES_FOUND")}</div>;
+    return (
+      <div style={{height : "150px"}}>
+        <Card style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100%"}}>{t("CS_PT_NO_PROPERTIES_FOUND")}</Card>
+      </div>
+    );
   }
 
   const onSubmit = (data) => {

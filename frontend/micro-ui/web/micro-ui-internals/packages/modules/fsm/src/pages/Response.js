@@ -23,11 +23,15 @@ const DisplayText = (action, isSuccess, isEmployee, t, paymentPreference) => {
 };
 
 const BannerPicker = (props) => {
+  let labelMessage = GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)
+  if (props.errorInfo && props.errorInfo !== null && props.errorInfo !== '' && typeof props.errorInfo === 'string') {
+    labelMessage = props.errorInfo
+  }
   return (
     <Banner
       message={GetActionMessage(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
       applicationNumber={props.data?.fsm?.[0].applicationNo}
-      info={GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
+      info={labelMessage}
       successful={props.isSuccess}
     />
   );
@@ -51,7 +55,7 @@ const Response = (props) => {
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
   const onError = (error, variables) => {
-    setErrorInfo(error?.response?.data?.Errors[0]?.code || 'ERROR');
+    setErrorInfo(error?.response?.data?.Errors[0]?.code || error?.message || 'ERROR');
     setMutationHappened(true);
   };
   useEffect(() => {
@@ -120,6 +124,7 @@ const Response = (props) => {
         isSuccess={isSuccess}
         isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading}
         isEmployee={props.parentRoute.includes("employee")}
+        errorInfo={errorInfo}
       />
       <CardText>{DisplayText(state.action, isSuccess, props.parentRoute.includes("employee"), t, state?.fsm?.paymentPreference)}</CardText>
       {isSuccess && (

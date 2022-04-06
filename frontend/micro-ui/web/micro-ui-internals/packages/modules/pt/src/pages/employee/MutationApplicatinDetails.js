@@ -28,7 +28,8 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
     { filters: { acknowledgementIds },tenantId },
     { filters: { acknowledgementIds },tenantId }
   );
-  const [bills, setBills] = useState([]);
+  const [billAmount, setBillAmount] = useState(null);
+  const [billStatus, setBillStatus] = useState(null);
 
   const properties = get(data, "Properties", []);
   // const propertyId = get(data, "Properties[0].propertyId", []);
@@ -64,8 +65,17 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
   const { isLoading: isLoadingApplicationDetails, isError: isErrorApplicationDetails, data: applicationDetails, error: errorApplicationDetails } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, propertyId);
 
   useEffect(async ()=>{
-    const res = await Digit.PaymentService.fetchBill(tenantId, {businessService: businessService, consumerCode: acknowledgementIds});
-    setBills(res.Bill)
+    if(acknowledgementIds){
+      const res = await Digit.PaymentService.searchBill(tenantId, {Service: businessService, consumerCode: acknowledgementIds});
+      if(! res.Bill.length) {
+        const res1 = await Digit.PTService.ptCalculateMutation({Property: applicationDetails?.applicationData}, tenantId);
+        setBillAmount(res1?.[acknowledgementIds]?.totalAmount || t("CS_NA"))
+        setBillStatus(t(`PT_MUT_BILL_ACTIVE`))
+      } else {
+        setBillAmount(res?.Bill[0]?.totalAmount || t("CS_NA"))
+        setBillStatus(t(`PT_MUT_BILL_${res?.Bill[0]?.status?.toUpperCase()}`))
+      }
+    }
   },[tenantId, acknowledgementIds, businessService])
 
   useEffect(() => {
@@ -338,10 +348,14 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
     onClick: () => printCertificate()
   });
 
+  const getCardSubHeadrStyles = () => {
+    return { fontSize: "24px", fontWeight: "700", lineHeight: "28px", margin: "20px 0px" }
+  }
+
   return (
     <React.Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto" }}>
-      <Header styles={{fontSize: "32px"}}>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
+      <Header styles={{fontSize: "32px", marginLeft: "12px"}}>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
       <div>
           <div>
           {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
@@ -359,11 +373,11 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
              <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
              <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} textStyle={{ whiteSpace: "pre" }} />
              <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
-             <Row label={t("PT_FEE_AMOUNT")} text={bills[0]?.totalAmount ||t("CS_NA") } textStyle={{ whiteSpace: "pre" }} />
-             <Row label={t("PT_PAYMENT_STATUS")} text={bills[0]?.status ||t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+             <Row label={t("PT_FEE_AMOUNT")} text={billAmount} textStyle={{ whiteSpace: "pre" }} />
+             <Row label={t("PT_PAYMENT_STATUS")} text={billStatus} textStyle={{ whiteSpace: "pre" }} />
             
           </StatusTable>
-                 <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
+                 <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
           <StatusTable>
               <Row label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={property?.address?.pincode || t("CS_NA")} />
               <Row label={t("PT_COMMON_CITY")} text={property?.address?.city || t("CS_NA")} />
@@ -373,12 +387,12 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
          
           </StatusTable>
 
-              <CardSubHeader>{t("PT_MUTATION_TRANSFEROR_DETAILS")}</CardSubHeader>
+              <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_MUTATION_TRANSFEROR_DETAILS")}</CardSubHeader>
               <div>
                 {Array.isArray(transferorOwners) &&
                   transferorOwners.map((owner, index) => (
                     <div key={index}>
-                      <CardSubHeader>
+                      <CardSubHeader style={getCardSubHeadrStyles()}>
                         {transferorOwners.length != 1 && (
                           <span>
                             {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
@@ -397,14 +411,14 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
                   ))}
               </div>
 
-              <CardSubHeader>{t("PT_MUTATION_TRANSFEREE_DETAILS")}</CardSubHeader>
+              <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_MUTATION_TRANSFEREE_DETAILS")}</CardSubHeader>
                {
                 transferorInstitution.length ? (
                   <div>
                     {Array.isArray(transfereeOwners) &&
                       transfereeOwners.map((owner, index) => (
                         <div key={index}>
-                          <CardSubHeader>
+                          <CardSubHeader style={getCardSubHeadrStyles()}>
                             {transfereeOwners.length != 1 && (
                               <span>
                                 {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
@@ -429,7 +443,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
                     {Array.isArray(transfereeOwners) &&
                       transfereeOwners.map((owner, index) => (
                         <div key={index}>
-                          <CardSubHeader>
+                          <CardSubHeader  style={getCardSubHeadrStyles()}>
                             {transfereeOwners.length != 1 && (
                               <span>
                                 {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
@@ -455,7 +469,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
                   </div>
                        )
                    }
-                   <CardSubHeader>{t("PT_MUTATION_DETAILS")}</CardSubHeader>
+                   <CardSubHeader  style={getCardSubHeadrStyles()}>{t("PT_MUTATION_DETAILS")}</CardSubHeader>
                       <StatusTable>
                         <Row label={t("PT_MUTATION_PENDING_COURT")} text={property?.additionalDetails?.isMutationInCourt || t("CS_NA")} />
                         <Row label={t("PT_DETAILS_COURT_CASE")} text={property?.additionalDetails?.caseDetails || t("CS_NA")}  />
@@ -463,7 +477,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
                         <Row label={t("PT_DETAILS_GOV_AQUISITION")} text={t("CS_NA")}  />
                       </StatusTable>
                   
-                   <CardSubHeader>{t("PT_REGISTRATION_DETAILS")}</CardSubHeader>
+                   <CardSubHeader  style={getCardSubHeadrStyles()}>{t("PT_REGISTRATION_DETAILS")}</CardSubHeader>
                      <StatusTable>
                         <Row label={t("PT_REASON_PROP_TRANSFER")} text={`${t(property?.additionalDetails?.reasonForTransfer) }` || t("CS_NA")} />
                         <Row label={t("PT_PROP_MARKET_VALUE")} text={property?.additionalDetails?.marketValue || t("CS_NA")} />
@@ -473,7 +487,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
                         <Row label={t("PT_REMARKS")} text={t("CS_NA")} />
                      </StatusTable>
           
-          <CardSubHeader>{t("PT_COMMON_DOCS")}</CardSubHeader>
+          <CardSubHeader  style={getCardSubHeadrStyles()}>{t("PT_COMMON_DOCS")}</CardSubHeader>
           <div>
             {Array.isArray(docs) ? (
               docs.length > 0 && <PropertyDocument property={property}></PropertyDocument>

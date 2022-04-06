@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { CardHeader, CardLabel, Dropdown, FormStep, TextInput } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
+import Timeline from "../components/TLTimeline";
+
 const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
@@ -90,6 +92,8 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
   };
 
   return (
+    <React.Fragment>
+     {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep
       config={config}
       t={t}
@@ -205,6 +209,7 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
         />
       </div>
     </FormStep>
+    </React.Fragment>
   );
 };
 

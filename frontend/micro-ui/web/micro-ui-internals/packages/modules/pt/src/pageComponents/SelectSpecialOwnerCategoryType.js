@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormStep, RadioOrSelect, RadioButtons, LabelFieldPair, CardLabel, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   const { pathname: url } = useLocation();
@@ -77,6 +78,8 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
   }
 
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownerType}>
       <div>
         <RadioButtons
@@ -92,6 +95,7 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
         />
       </div>
     </FormStep>
+    </React.Fragment>
   );
 };
 

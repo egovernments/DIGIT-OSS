@@ -19,6 +19,7 @@
     "start:dev": "run-p dev:**",
     "start:script": "./scripts/create.sh",
     "dev:css": "cd packages/css && yarn start",
+    "publish:css": "cd packages/css && yarn publish --access public",
     "dev:libraries": "cd packages/libraries && yarn start",
     "dev:components": "cd packages/react-components && yarn start",
     "dev:common": "cd packages/modules/common && yarn start",

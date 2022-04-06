@@ -1,5 +1,6 @@
 import { CardLabel, CitizenInfoLabel, Dropdown, FormStep, LabelFieldPair, RadioButtons } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
+import Timeline from "../components/TLTimeline";
 
 const PropertyFloorsDetails = ({ t, config, onSelect, formData, userType }) => {
   const [FloorDetails, setFloorDetails] = useState(formData?.noOfFloors);
@@ -53,6 +54,7 @@ const PropertyFloorsDetails = ({ t, config, onSelect, formData, userType }) => {
 
   return (
     <React.Fragment>
+          {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!FloorDetails} isMultipleAllow={true}>
         <RadioButtons
           t={t}

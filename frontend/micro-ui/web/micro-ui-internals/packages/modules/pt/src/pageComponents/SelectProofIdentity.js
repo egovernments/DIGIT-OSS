@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FormStep, UploadFile, CardLabelDesc, Dropdown, CardLabel } from "@egovernments/digit-ui-react-components";
 import { stringReplaceAll } from "../utils";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner }) => {
   const { pathname: url } = useLocation();
@@ -132,6 +133,8 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerInd
     onSelect("owner-details", {}, false, newIndex, true);
   }
   return (
+    <React.Fragment>
+     {window.location.href.includes("/citizen") ? <Timeline currentStep={3}/> : null}
     <FormStep
       t={t}
       config={config}
@@ -168,6 +171,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerInd
       {error ? <div style={{ height: "20px", width: "100%", fontSize: "20px", color: "red", marginTop: "5px" }}>{error}</div> : ""}
       <div style={{ disabled: "true", height: "20px", width: "100%" }}></div>
     </FormStep>
+    </React.Fragment>
   );
 };
 

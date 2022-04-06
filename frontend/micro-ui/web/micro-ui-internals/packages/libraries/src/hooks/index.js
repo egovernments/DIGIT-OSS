@@ -17,6 +17,7 @@ import { useUserSearch } from "./userSearch";
 import { useApplicationsForBusinessServiceSearch } from "./useApplicationForBillSearch";
 import useBoundaryLocalities from "./useLocalities";
 import useCommonMDMS from "./useMDMS";
+import useCustomMDMS from "./useCustomMDMS";
 import useInboxGeneral from "./useInboxGeneral/useInboxGeneral";
 import useApplicationStatusGeneral from "./useStatusGeneral";
 import useModuleTenants from "./useModuleTenants";
@@ -182,10 +183,11 @@ import useMyBillsWaterSearch from "./ws/useMyBillsWaterSearch";
 import useMyBillsSewarageSearch from "./ws/useMyBillsSewarageSearch";
 import useMyApplicationSearch from "./ws/useMyApplicationSearch";
 import useWSDocumentSearch from "./ws/useWSDocumentSearch";
+
 import useWSMDMSWS from "./ws/useWSMDMSWS"
 import WSuseSearch from "./ws/useSearch";
-import useSewSearch from "./ws/useSewSearch"
-import useSearchWS from "./ws/useSearchWS"
+import useSewSearch from "./ws/useSewSearch";
+import useSearchWS from "./ws/useSearchWS";
 import useMypaymentWS from "./ws/useMypaymentWS";
 import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions";
@@ -197,6 +199,7 @@ import useBillSearch from "./bills/useBillSearch";
 import useWaterCreateAPI from "./ws/useWaterCreateAPI";
 import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
 import useWSUpdateAPI from "./ws/useWSUpdateAPI";
+import useTenantsBills from "./bills/useTenants";
 
 const pgr = {
   useComplaintDetails,
@@ -398,8 +401,6 @@ const ws = {
   useMypaymentWS,
 };
 
-
-
 const Hooks = {
   useSessionStorage,
   useQueryParams,
@@ -431,6 +432,7 @@ const Hooks = {
   useInbox: useTLInbox,
   useAccessControl,
   useBillSearch,
+  useTenantsBills,
   pgr,
   fsm,
   pt,
@@ -445,6 +447,7 @@ const Hooks = {
   survey,
   noc,
   ws,
+  useCustomMDMS
 };
 
 export default Hooks;

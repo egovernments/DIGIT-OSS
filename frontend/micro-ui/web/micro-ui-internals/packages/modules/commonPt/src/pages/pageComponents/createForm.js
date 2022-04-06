@@ -1,4 +1,4 @@
-import { FormComposer, Loader, Dropdown, Localities } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Loader, Dropdown, Localities, Header } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
@@ -13,6 +13,7 @@ const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
   const defaultValues = { ...value};
   const history = useHistory();
   const match = useRouteMatch();
+  sessionStorage.setItem("VisitedCommonPTSearch",true);
 
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   
@@ -75,21 +76,29 @@ const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
     setCanSubmit(true);
   };
 
+  const getHeaderLabel = () => {
+    let url = window.location.href;
+    let moduleName = url?.split("=")?.[1]?.split("/")?.[3];
+    if (moduleName) return t(`ES_COMMON_CREATE_PROPERTY_HEADER_${moduleName?.toUpperCase()}`);
+    else return t('ES_COMMON_CREATE_PROPERTY_HEADER');
+  }
+
   return (
+    <React.Fragment>
+      <div style={{marginLeft: "12px"}}>
+        <Header styles={window.location.href.includes("citizen") ? {paddingLeft: "0px", marginLeft: "0px"} : {}}>{t(getHeaderLabel())}</Header>
+      </div>
     <FormComposer
       onSubmit={onSubmit}
       noBoxShadow
       inline
       config={newConfig}
       label={t('SUBMIT')}
-      heading={t('CREATE_PROP_ON_NEW_CONN')}
-      text={t('CREATE_PROP_ON_NEW_CONN')}
-      headingStyle={{ fontSize: "32px", marginBottom: "16px", fontFamily: "Roboto Condensed,sans-serif" }}
-      // headingStyle={{ fontSize: "32px", marginBottom: "16px" }}
       isDisabled={!canSubmit}
       defaultValues={defaultValues}
       onFormValueChange={onFormValueChange}
     />
+    </React.Fragment>
   );
 };
 

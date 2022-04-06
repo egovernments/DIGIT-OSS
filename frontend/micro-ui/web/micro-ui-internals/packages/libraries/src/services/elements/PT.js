@@ -80,6 +80,16 @@ export const PTService = {
       userService: auth === false ? auth : true,
       params: { tenantId, ...filters },
     }),
+  ptCalculateMutation: (details, tenantId) =>
+    Request({
+      url: Urls.pt.pt_calculate_mutation,
+      data: details,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
 };
 
 // export const PTService = {

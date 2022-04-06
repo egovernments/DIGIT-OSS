@@ -88,6 +88,7 @@ const DesktopInbox = (props) => {
         return [
           {
             Header: t("ES_INBOX_APPLICATION_NO"),
+            disableSortBy: true,
             accessor: "tripDetails",
             Cell: ({ row }) => {
               return (
@@ -109,6 +110,7 @@ const DesktopInbox = (props) => {
           {
             Header: t("ES_INBOX_VEHICLE_LOG"),
             accessor: "applicationNo",
+            disableSortBy: true,
             Cell: ({ row }) => {
               return (
                 <div>
@@ -120,19 +122,32 @@ const DesktopInbox = (props) => {
             },
           },
           {
+            Header: t("ES_INBOX_APPLICATION_DATE"),
+            accessor: "createdTime",
+            Cell: ({ row }) => {
+              return GetCell(
+                `${new Date(row.original.auditDetails.createdTime).getDate()}/${new Date(row.original.auditDetails.createdTime).getMonth() + 1}/${new Date(row.original.auditDetails.createdTime).getFullYear()}`
+              );
+            },
+          },
+          {
             Header: t("ES_INBOX_VEHICLE_NO"),
+            disableSortBy: true,
             accessor: (row) => row.vehicle?.registrationNumber,
           },
           {
             Header: t("ES_INBOX_DSO_NAME"),
+            disableSortBy: true,
             accessor: (row) => `${row.dsoName} - ${row.tripOwner.name}`,
           },
           {
             Header: t("ES_INBOX_VEHICLE_STATUS"),
+            disableSortBy: true,
             accessor: (row) => row.status,
           },
           {
             Header: t("ES_INBOX_WASTE_COLLECTED"),
+            disableSortBy: true,
             accessor: (row) => row.tripDetails[0]?.volume,
           },
         ];
@@ -231,7 +246,6 @@ const DesktopInbox = (props) => {
         pageSizeLimit={props.pageSizeLimit}
         onSort={props.onSort}
         disableSort={props.disableSort}
-        onPageSizeChange={props.onPageSizeChange}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
       />
@@ -243,7 +257,7 @@ const DesktopInbox = (props) => {
       {props.userRole !== "FSM_EMP_FSTPO" && !props.isSearch && (
         <div className="filters-container">
           <FSMLink parentRoute={props.parentRoute} />
-          <div style={{marginTop: "24px"}}>
+          <div style={{ marginTop: "24px" }}>
             <Filter searchParams={props.searchParams} paginationParms={props.paginationParms} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
           </div>
         </div>
