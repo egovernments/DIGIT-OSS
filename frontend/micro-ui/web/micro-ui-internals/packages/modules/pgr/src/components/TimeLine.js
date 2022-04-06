@@ -98,7 +98,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
             isCompleted={isCurrent}
             action={complaintWorkflow.action}
             nextActions={index <= 1 && timeLineActions}
-            rating={index <= 1 && rating}
+            //rating={index <= 1 && rating}
             serviceRequestId={serviceRequestId}
             reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}
             customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})}
@@ -111,14 +111,14 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
             isCompleted={isCurrent}
             action={complaintWorkflow.action}
             nextActions={index <= 1 && timeLineActions}
-            rating={index <= 1 && rating}
+            //rating={index <= 1 && rating}
             serviceRequestId={serviceRequestId}
             reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}
             customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})}
           />
         );
       case "CLOSEDAFTERRESOLUTION":
-        return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_${`CS_COMMON_${status}`}`)} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
+        return <CheckPoint isCompleted={isCurrent} key={index} label={t(`CS_COMMON_${`CS_COMMON_${status}`}`)} customChild={<div>{getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})}{rating ? <StarRated text={t("CS_ADDCOMPLAINT_YOU_RATED")} rating={rating} /> : null}</div>} />;
 
       // case "RESOLVE":
       // return (
