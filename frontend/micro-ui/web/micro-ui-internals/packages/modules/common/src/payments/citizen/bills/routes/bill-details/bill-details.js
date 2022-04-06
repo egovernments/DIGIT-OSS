@@ -21,8 +21,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
         businessService,
         consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
       });
-  const { minAmountPayable = wrkflow === "WNS" ? 100 : minAmountPayable, isAdvanceAllowed } = paymentRules;
-
+  let { minAmountPayable, isAdvanceAllowed } = paymentRules;
+  minAmountPayable=wrkflow === "WNS"?100:minAmountPayable;
   const billDetails = bill?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod)?.[0] || [];
   const Arrears =
     bill?.billDetails
@@ -134,7 +134,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
       <Header>{t("CS_PAYMENT_BILL_DETAILS")}</Header>
       <Card>
         <div>
-          <KeyNote keyValue={t(label)} note={wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode} />
+          <KeyNote keyValue={t(businessService=="PT.MUTATION"?"PDF_STATIC_LABEL_MUATATION_NUMBER_LABEL":label)} note={wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode} />
           <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
           {businessService === "PT" && billDetails?.currentBillNo && <KeyNote keyValue={t("CS_BILL_NO")} note={billDetails?.currentBillNo} />}
           {businessService === "PT" && billDetails?.currentExpiryDate && (
