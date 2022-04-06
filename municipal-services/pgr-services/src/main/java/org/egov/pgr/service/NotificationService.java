@@ -84,8 +84,9 @@ public class NotificationService {
                 }
 
                 if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
-                    List<SMSRequest> smsRequests = new ArrayList<>();
                     for (Map.Entry<String,String> entry : finalMessage.entrySet()) {
+                        List<SMSRequest> smsRequests = new ArrayList<>();
+
                         if(entry.getKey().equalsIgnoreCase(CITIZEN))
                             smsRequests = enrichSmsRequest(citizenMobileNumber,entry.getValue());
                         else
@@ -372,6 +373,7 @@ public class NotificationService {
 
         String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
 
+        log.info("Yeeeeeeeeeeeeeee                           " + messageForCitizen);
         if(messageForCitizen != null) {
             messageForCitizen = messageForCitizen.replace("{complaint_type}", localisedComplaint);
             messageForCitizen = messageForCitizen.replace("{id}", serviceWrapper.getService().getServiceRequestId());
@@ -380,6 +382,7 @@ public class NotificationService {
             messageForCitizen = messageForCitizen.replace("{emp_name}", fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getName());
         }
 
+        log.info("Yeeeeeeeeeeeeeee                           " + messageForEmployee);
         if(messageForEmployee != null) {
             messageForCitizen = messageForCitizen.replace("{complaint_type}", localisedComplaint);
             messageForCitizen = messageForCitizen.replace("{id}", serviceWrapper.getService().getServiceRequestId());
