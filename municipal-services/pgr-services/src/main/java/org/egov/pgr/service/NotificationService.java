@@ -224,7 +224,7 @@ public class NotificationService {
 
 
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
-
+            log.info(reassigneeDetails.toString());
             if (messageForCitizen.contains("{emp_department}"))
                 messageForCitizen = messageForCitizen.replace("{emp_department}",reassigneeDetails.get("department"));
 
@@ -364,25 +364,29 @@ public class NotificationService {
 //        }
 
         String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
-        messageForCitizen = messageForCitizen.replace("{complaint_type}", localisedComplaint);
-        messageForEmployee = messageForEmployee.replace("{complaint_type}", localisedComplaint);
-
-        messageForCitizen = messageForCitizen.replace("{id}", serviceWrapper.getService().getServiceRequestId());
-        messageForEmployee = messageForEmployee.replace("{id}", serviceWrapper.getService().getServiceRequestId());
 
         Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
         LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
                 .atZone(ZoneId.systemDefault()).toLocalDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
-        messageForCitizen = messageForCitizen.replace("{date}", date.format(formatter));
-        messageForEmployee = messageForEmployee.replace("{date}", date.format(formatter));
 
         String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
-        messageForCitizen = messageForCitizen.replace("{download_link}", appLink);
-        messageForEmployee = messageForEmployee.replace("{download_link}", appLink);
 
-        messageForCitizen = messageForCitizen.replace("{emp_name}", fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getName());
-        messageForEmployee = messageForEmployee.replace("{emp_name}", fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getName());
+        if(messageForCitizen != null) {
+            messageForCitizen = messageForCitizen.replace("{complaint_type}", localisedComplaint);
+            messageForCitizen = messageForCitizen.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+            messageForCitizen = messageForCitizen.replace("{date}", date.format(formatter));
+            messageForCitizen = messageForCitizen.replace("{download_link}", appLink);
+            messageForCitizen = messageForCitizen.replace("{emp_name}", fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getName());
+        }
+
+        if(messageForEmployee != null) {
+            messageForCitizen = messageForCitizen.replace("{complaint_type}", localisedComplaint);
+            messageForCitizen = messageForCitizen.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+            messageForCitizen = messageForCitizen.replace("{date}", date.format(formatter));
+            messageForCitizen = messageForCitizen.replace("{download_link}", appLink);
+            messageForCitizen = messageForCitizen.replace("{emp_name}", fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getName());
+        }
 
         message.put(CITIZEN, messageForCitizen);
         message.put(EMPLOYEE, messageForEmployee);
