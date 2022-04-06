@@ -83,7 +83,7 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
                 <Row className="border-none" textStyle={{wordBreak:"break-word"}} label={t(`PROPERTY_ADDRESS`)} text={propertyAddress} />
                 <Row className="border-none" label={t(`PT_MUTATION_STATUS`)} text={propertyDetails?.Properties[0]?.status}/>
                 <div style={{textAlign:"left"}}>
-                <Link to={`/digit-ui/citizen/pt/property/application/${propertyDetails?.Properties[0]?.acknowldgementNumber}/${propertyDetails?.Properties[0]?.tenantId}`}>
+                <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${propertyDetails?.Properties[0]?.propertyId}&tenantId=${propertyDetails?.Properties[0]?.tenantId}`}>
                   <LinkButton style={{textAlign:"left"}} label={t("PT_VIEW_MORE_DETAILS")} />
                 </Link>
                 <Link to={`/digit-ui/citizen/tl/tradelicence/new-application/know-your-property`}>
