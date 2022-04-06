@@ -81,7 +81,7 @@ public class NotificationUtil {
     public String getDefaultMsg(String roles, String localizationMessage) {
         StringBuilder notificationCode = new StringBuilder();
 
-        notificationCode.append("DEFAULT_").append(roles.toUpperCase()).append("_").append("_SMS_MESSAGE");
+        notificationCode.append("PGR_").append("DEFAULT_").append(roles.toUpperCase()).append("_SMS_MESSAGE");
 
         String path = "$..messages[?(@.code==\"{}\")].message";
         path = path.replace("{}", notificationCode);
