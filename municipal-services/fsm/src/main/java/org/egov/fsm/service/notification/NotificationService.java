@@ -192,7 +192,7 @@ public class NotificationService {
 				+ (fsmRequest.getWorkflow() == null ? "" : "_" + fsmRequest.getWorkflow().getAction());
 		
 		if(FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(fsm.getPaymentPreference())) {
-			
+			log.info("Entered the FSM_PAYMENT_PREFERENCE_POST_PAY Block:: ");
 			if(FSMConstants.FSM_SMS_DSO_INPROGRESS_DSO_ACCEPT.equalsIgnoreCase(localizationMessageKey)) {
 				messageCode=FSMConstants.SMS_NOTIFICATION_POST_PAY_PREFIX + fsm.getApplicationStatus()
 				+ (fsmRequest.getWorkflow() == null ? "" : "_" + fsmRequest.getWorkflow().getAction());
@@ -202,11 +202,18 @@ public class NotificationService {
 				+ (fsmRequest.getWorkflow() == null ? "" : "_" + fsmRequest.getWorkflow().getAction());
 			}
 			
-		}else {
+		} /*
+			 * else { messageCode=localizationMessageKey; }
+			 */
+		log.info("Printing the value of before final messageCode:: "+ messageCode);
+		if(null==messageCode) {
 			messageCode=localizationMessageKey;
 		}
-
+		log.info("Printing the value of final messageCode:: "+ messageCode);
+		
 		String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
+		log.info("Printing the value of final getCustomizedMsg:: "+ message);
+		
 		Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
 		HashMap<String,String> fsmAddtlDtls = (HashMap<String,String> )fsmRequest.getFsm().getAdditionalDetails();
 		if(fsmAddtlDtls !=null && fsmAddtlDtls.get("payerMobileNumber") !=null  && fsmAddtlDtls.get("payerName") != null && mobileNumberToOwner.get(fsmAddtlDtls.get("payerMobileNumber")) == null) {
