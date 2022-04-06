@@ -306,8 +306,8 @@ public class NotificationService {
             if(defaultMessage.contains("{status}"))
                 defaultMessage = defaultMessage.replace("{status}", serviceWrapper.getService().getApplicationStatus());
 
-            if(messageForCitizen.contains("{ulb}"))
-                messageForCitizen = messageForCitizen.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
+            if(messageForEmployee.contains("{ulb}"))
+                messageForEmployee = messageForEmployee.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
         }
 
         /**
@@ -399,7 +399,7 @@ public class NotificationService {
             messageForEmployee = messageForEmployee.replace("{emp_name}", fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getName());
         }
 
-        message.put(CITIZEN, Arrays.asList(messageForCitizen, defaultMessage));
+        message.put(CITIZEN, Arrays.asList(new String[] {messageForCitizen, defaultMessage}));
         message.put(EMPLOYEE, Arrays.asList(messageForEmployee));
 
         return message;
