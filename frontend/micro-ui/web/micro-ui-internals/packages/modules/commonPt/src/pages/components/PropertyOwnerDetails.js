@@ -295,6 +295,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
       <LabelFieldPair>
         <CardLabel className="">{`${t("PT_SPECIAL_APPLICANT_CATEGORY")}`}</CardLabel>
         <div className="form-field">
+           <div className={"form-pt-dropdown-only"}>
           <Dropdown
             selected={Menu1?.length === 1 ? Menu1[0] : ownerType}
             disable={Menu1?.length === 1 || editScreen}
@@ -303,6 +304,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
             optionKey="i18nKey"
             t={t}
           />
+        </div>
         </div>
       </LabelFieldPair>
 
