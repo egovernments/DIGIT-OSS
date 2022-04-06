@@ -168,8 +168,8 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
         }}
       >
         {payloadObj?.payload?.symbol?.toLowerCase() === "amount" && (
-          <p>{`${formattedLabel} : ${value?.denomination === "Unit" ? " ₹" : ""}${payloadObj?.value}${
-            value?.denomination !== "Unit" ? value?.denomination : ""
+          <p>{`${formattedLabel} : ${value?.denomination === "Unit" ? " ₹" : ""}${payloadObj?.value} ${
+            value?.denomination !== "Unit" ? t(Digit.Utils.locale.getTransformedLocale(`ES_DSS_${value?.denomination}`)) : ""
           }`}</p>
         )}
         {payloadObj?.payload?.symbol?.toLowerCase() === "percentage" && <p>{`${formattedLabel} : ${payloadObj?.value} %`}</p>}
@@ -186,7 +186,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
       payloadObj?.payload?.symbol?.toLowerCase() === "percentage"
         ? " %"
         : payloadObj?.payload?.symbol?.toLowerCase() === "amount" && value?.denomination !== "Unit"
-        ? value?.denomination
+        ? t(Digit.Utils.locale.getTransformedLocale(`ES_DSS_${value?.denomination}`))
         : "";
     let newPayload = { ...payloadObj?.payload };
     delete newPayload?.label;
@@ -198,7 +198,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
       newObjArray.push(
         `${key} -${prefix}${
           payloadObj?.payload?.symbol?.toLowerCase() === "amount" ? getDenominatedValue(value?.denomination, newPayload?.[key]) : newPayload?.[key]
-        }${postfix}`
+        } ${postfix}`
       );
     });
     return (
