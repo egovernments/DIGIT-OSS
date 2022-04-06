@@ -87,21 +87,24 @@ public class NotificationService {
 
                 if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
                     for (Map.Entry<String,List<String>> entry : finalMessage.entrySet()) {
-                        List<SMSRequest> smsRequests = new ArrayList<>();
 
                         if(entry.getKey().equalsIgnoreCase(CITIZEN)) {
                             for(String msg : entry.getValue()) {
+                                List<SMSRequest> smsRequests = new ArrayList<>();
                                 smsRequests = enrichSmsRequest(citizenMobileNumber, msg);
+                                if (!CollectionUtils.isEmpty(smsRequests)) {
+                                    notificationUtil.sendSMS(smsRequests);
+                                }
                             }
                         }
                         else {
                             for(String msg : entry.getValue()) {
+                                List<SMSRequest> smsRequests = new ArrayList<>();
                                 smsRequests = enrichSmsRequest(employeeMobileNumber, msg);
+                                if (!CollectionUtils.isEmpty(smsRequests)) {
+                                    notificationUtil.sendSMS(smsRequests);
+                                }
                             }
-                        }
-
-                        if (!CollectionUtils.isEmpty(smsRequests)) {
-                            notificationUtil.sendSMS(smsRequests);
                         }
                     }
                 }
