@@ -86,8 +86,8 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
 
   return (
     <React.Fragment>
+      <BackButton />
       <div className="citizenAllServiceGrid">
-        <BackButton />
         {moduleArray
           .filter((mod) => mod)
           .map(({ code }, index) => {

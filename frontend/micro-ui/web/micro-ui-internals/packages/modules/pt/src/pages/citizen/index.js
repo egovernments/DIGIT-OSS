@@ -27,6 +27,7 @@ const App = () => {
   const MutateProperty = Digit?.ComponentRegistryService?.getComponent("PTMutateProperty");
   const PropertyInformation = Digit?.ComponentRegistryService?.getComponent("PropertyInformation");
   const PropertyOwnerHistory = Digit?.ComponentRegistryService?.getComponent("PropertyOwnerHistory");
+
   return (
     <span className={"pt-citizen"}>
       <Switch>
@@ -46,7 +47,6 @@ const App = () => {
           <PrivateRoute path={`${path}/property/owner-history/:tenantId/:propertyIds`} component={PropertyOwnerHistory}></PrivateRoute>
           {/* <Redirect to={`/`}></Redirect> */}
           <PrivateRoute path={`${path}/property/search`} component={(props) => <Search {...props} t={t} parentRoute={path} />} />
-          {/* <PrivateRoute path={`${path}/test`} component={(props) => <Search {...props} t={t} parentRoute={path} />} /> */}
         </AppContainer>
       </Switch>
     </span>
