@@ -138,7 +138,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                 <Row className="border-none" labelStyle={isMobile ? {width:"40%"} : {}} textStyle={{wordBreak:"break-word"}} label={t(`PROPERTY_ADDRESS`)} text={propertyAddress} />
             </div>
           </StatusTable>
-          <Link to={`/digit-ui/employee/pt/property-details/${propertyId}`}>
+          <Link to={`/digit-ui/employee/commonpt/view-property?propertyId=${propertyId}&tenantId=${tenantId}`}>
             <LinkButton label={t("CPT_COMPLETE_PROPERTY_DETAILS")} style={{ color: "#f47738" }} />
           </Link>
         </React.Fragment>

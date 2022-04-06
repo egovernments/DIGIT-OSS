@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Switch, useLocation } from "react-router-dom";
 import { CommonPTLinks } from "../../Module";
+import ViewProperty from "../pageComponents/ViewProperty";
 import NewApplication from "./NewApplication";
 import Search from "./Search";
 
@@ -26,6 +27,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     else if (location.pathname.includes("digit-ui/employee/pt/property-mutate-docs-required")) return t("PT_REQIURED_DOC_TRANSFER_OWNERSHIP");
     else if (location.pathname.includes("/digit-ui/employee/pt/property-mutate/")) return t("ES_TITLE_MUTATE_PROPERTY");
     else if (location.pathname.includes("/digit-ui/employee/pt/modify-application/")) return t("PT_UPDATE_PROPERTY");
+    else if (location.pathname.includes("/view-property")) return t("PT_PROPERTY_INFORMATION");
   };
 
   return (
@@ -41,6 +43,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute exact path={`${path}/`} component={() => <CommonPTLinks matchPath={path} userType={userType} />} />
           <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
           <PrivateRoute path={`${path}/search`} component={() => <Search />} />
+          <PrivateRoute path={`${path}/view-property`} component={() => <ViewProperty />} />
         </div>
       </React.Fragment>
     </Switch>
