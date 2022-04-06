@@ -198,16 +198,14 @@ public class NotificationService {
 			messageCode=FSMConstants.SMS_NOTIFICATION_PREFIX +FSMConstants.WF_STATUS_CREATED+"_"+FSMConstants.WF_ACTION_CREATE;
 			String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
 			Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
-			
 			smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
 		}
 		
 		if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE)) {
-			String message = "Hello {NAME}, This message is to advise you that your payment was successfully received, and application has been completed.";
-			message = message.replace("{NAME}", fsmRequest.getFsm().getCitizen().getName());
+			String message = "Dear citizen, This message is to advise you that your payment was successfully received, and application has been completed.";
 			Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
 			smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
-			log.info("sms is sent :::  ",message);
+			log.info("sms is sent :::  "+message);
 		}
 		
 		String localizationMessageKey = FSMConstants.SMS_NOTIFICATION_PREFIX + fsm.getApplicationStatus()
@@ -224,13 +222,26 @@ public class NotificationService {
 				+ (fsmRequest.getWorkflow() == null ? "" : "_" + fsmRequest.getWorkflow().getAction());
 			}
 			
+			if(FSMConstants.FSM_SMS_PENDING_APPL_FEE_PAYMENT_SCHEDULE.equalsIgnoreCase(localizationMessageKey)) {
+				messageCode=localizationMessageKey;
+			}
+			
+			if(FSMConstants.WF_ACTION_DSO_ACCEPT.equalsIgnoreCase(fsmRequest.getWorkflow().getAction())) {
+				messageCode=FSMConstants.FSM_SMS_DISPOSAL_IN_PROGRESS_PAY;
+			}
+			
 		}else {
 			messageCode=localizationMessageKey;
 		}
-		
+		Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
+		log.info("localizationMessageKey ::::  {} "+localizationMessageKey);
+		log.info("messageCode ::::  {} "+messageCode);
+		log.info("mobileNumberToOwner ::: {} "+(null != mobileNumberToOwner ? mobileNumberToOwner.toString() : "null"));
 		
 		String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
-		Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
+		
+		log.info("localizationMessages ::::: {} "+message);
+		
 		HashMap<String,String> fsmAddtlDtls = (HashMap<String,String> )fsmRequest.getFsm().getAdditionalDetails();
 		if(fsmAddtlDtls !=null && fsmAddtlDtls.get("payerMobileNumber") !=null  && fsmAddtlDtls.get("payerName") != null && mobileNumberToOwner.get(fsmAddtlDtls.get("payerMobileNumber")) == null) {
 			mobileNumberToOwner.put(fsmAddtlDtls.get("payerMobileNumber"),  fsmAddtlDtls.get("payerName"));

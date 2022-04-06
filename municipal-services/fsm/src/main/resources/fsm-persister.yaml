@@ -7,7 +7,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: INSERT INTO  eg_fsm_application( id, applicationno, tenantid, additionaldetails, accountid, description, applicationstatus, source, sanitationtype, propertyusage, nooftrips, status, vehicle_id, vehicletype, vehicleCapacity,paymentPreference, receivedpayment, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+       - query: INSERT INTO  eg_fsm_application( id, applicationno, tenantid, additionaldetails, accountid, description, applicationstatus, source, sanitationtype, propertyusage, nooftrips, status, vehicle_id, vehicletype, vehicleCapacity,paymentPreference,receivedpayment, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: fsm
          jsonMaps:
           - jsonPath: $.fsm.id
