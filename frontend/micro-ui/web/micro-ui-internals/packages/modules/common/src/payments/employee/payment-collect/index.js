@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast, Card, Header, CardText, Row } from "@egovernments/digit-ui-react-components";
+import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast, Card, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { useCashPaymentDetails } from "./ManualReciept";
 import { useCardPaymentDetails } from "./card";
@@ -156,7 +156,8 @@ export const CollectPayment = (props) => {
       const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
       queryClient.invalidateQueries();
       history.push(
-        `${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}/${resposne?.Payments[0]?.paymentDetails[0]?.bill?.consumerCode
+        `${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}/${
+          resposne?.Payments[0]?.paymentDetails[0]?.bill?.consumerCode
         }`
       );
     } catch (error) {
@@ -176,41 +177,10 @@ export const CollectPayment = (props) => {
       head: !ModuleWorkflow && businessService !== "TL" ? t("COMMON_PAYMENT_HEAD") : "",
       body: [
         {
-          label: t("MUT_CONSUMER_NO"),
-          populators: <span> {`${bill?.consumerCode}`} </span>,
+          label: t("PAY_TOTAL_AMOUNT"),
+          populators: <CardSectionHeader style={{ marginBottom: 0, textAlign: "right" }}> {`₹ ${bill?.totalAmount}`} </CardSectionHeader>,
         },
-        {
-          label: t("MUT_BILL_NO"),
-          populators: <span> {`${bill?.billNumber}`} </span>,
-        },
-        {
-          label: t("MUT_DUE_DATE"),
-          populators: <span> {new Date(bill?.billDetails?.[0]?.expiryDate).toLocaleDateString()} </span>,
-        },
-        {
-          withoutLabel: true,
-          populators: <CardSectionHeader style={{ marginTop: "40px" }}>{t("PAYMENT_DETAILS")}</CardSectionHeader>
-        },
-        ...(bill?.billDetails?.[0]?.billAccountDetails || []).map((details) => (
-          {
-            label: t(details?.taxHeadCode),
-            populators: <span >{`₹ ${details?.amount}`}</span>
-          }
-        )),
-        {
-          withoutLabel: true,
-          populators: <hr style={{ width: "40%" }} className="underline" />
-        },
-        {
-          withoutLabel: true,
-          populators: <Row
-            labelStyle={{ display: "inline-block", fontWeight: "bold", float: "left" }}
-            textStyle={{ display: "inline-block", fontWeight: "bold", float: "left", fontSize: '24px' }}
-            label={t("PAY_TOTAL_AMOUNT")}
-            text={`₹ ${bill?.totalAmount}`}
-          />
-        },
-      ]
+      ],
     },
     {
       head: t("PAYMENT_PAID_BY_HEAD"),
