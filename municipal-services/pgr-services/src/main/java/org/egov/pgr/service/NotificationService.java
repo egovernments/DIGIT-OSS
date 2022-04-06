@@ -66,7 +66,7 @@ public class NotificationService {
                 return;
             }
 
-            Map<String, String > finalMessage = getFinalMessage(request, topic, applicationStatus);
+            Map<String, List<String>> finalMessage = getFinalMessage(request, topic, applicationStatus);
             String citizenMobileNumber = request.getService().getCitizen().getMobileNumber();
             String employeeMobileNumber = fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getMobileNumber();
 
@@ -75,22 +75,30 @@ public class NotificationService {
                 log.info(citizenMobileNumber);
                 log.info(employeeMobileNumber);
                 if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
-                    for (Map.Entry<String,String> entry : finalMessage.entrySet()) {
-                        EventRequest eventRequest = enrichEventRequest(request, entry.getValue());
-                        if (eventRequest != null) {
-                            notificationUtil.sendEventNotification(eventRequest);
+                    for (Map.Entry<String,List<String>> entry : finalMessage.entrySet()) {
+                        for(String msg : entry.getValue()) {
+                            EventRequest eventRequest = enrichEventRequest(request, msg);
+                            if (eventRequest != null) {
+                                notificationUtil.sendEventNotification(eventRequest);
+                            }
                         }
                     }
                 }
 
                 if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
-                    for (Map.Entry<String,String> entry : finalMessage.entrySet()) {
+                    for (Map.Entry<String,List<String>> entry : finalMessage.entrySet()) {
                         List<SMSRequest> smsRequests = new ArrayList<>();
 
-                        if(entry.getKey().equalsIgnoreCase(CITIZEN))
-                            smsRequests = enrichSmsRequest(citizenMobileNumber,entry.getValue());
-                        else
-                            smsRequests = enrichSmsRequest(employeeMobileNumber,entry.getValue());
+                        if(entry.getKey().equalsIgnoreCase(CITIZEN)) {
+                            for(String msg : entry.getValue()) {
+                                smsRequests = enrichSmsRequest(citizenMobileNumber, msg);
+                            }
+                        }
+                        else {
+                            for(String msg : entry.getValue()) {
+                                smsRequests = enrichSmsRequest(employeeMobileNumber, msg);
+                            }
+                        }
 
                         if (!CollectionUtils.isEmpty(smsRequests)) {
                             notificationUtil.sendSMS(smsRequests);
@@ -115,12 +123,12 @@ public class NotificationService {
      * @param applicationStatus Application Status
      * @return Returns list of SMSRequest
      */
-    private Map<String, String> getFinalMessage(ServiceRequest request, String topic, String applicationStatus) {
+    private Map<String, List<String>> getFinalMessage(ServiceRequest request, String topic, String applicationStatus) {
         String tenantId = request.getService().getTenantId();
         String localizationMessage = notificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo(),PGR_MODULE);
 
         ServiceWrapper serviceWrapper = ServiceWrapper.builder().service(request.getService()).workflow(request.getWorkflow()).build();
-        Map<String, String> message = new HashMap<>();
+        Map<String, List<String>> message = new HashMap<>();
 
         String messageForCitizen = null;
         String messageForEmployee = null;
@@ -384,16 +392,15 @@ public class NotificationService {
 
         log.info("Yeeeeeeeeeeeeeee                           " + messageForEmployee);
         if(messageForEmployee != null) {
-            messageForCitizen = messageForCitizen.replace("{complaint_type}", localisedComplaint);
-            messageForCitizen = messageForCitizen.replace("{id}", serviceWrapper.getService().getServiceRequestId());
-            messageForCitizen = messageForCitizen.replace("{date}", date.format(formatter));
-            messageForCitizen = messageForCitizen.replace("{download_link}", appLink);
-            messageForCitizen = messageForCitizen.replace("{emp_name}", fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getName());
+            messageForEmployee = messageForEmployee.replace("{complaint_type}", localisedComplaint);
+            messageForEmployee = messageForEmployee.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+            messageForEmployee = messageForEmployee.replace("{date}", date.format(formatter));
+            messageForEmployee = messageForEmployee.replace("{download_link}", appLink);
+            messageForEmployee = messageForEmployee.replace("{emp_name}", fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getName());
         }
 
-        message.put(CITIZEN, messageForCitizen);
-        message.put(EMPLOYEE, messageForEmployee);
-        message.put(CITIZEN, defaultMessage);
+        message.put(CITIZEN, Arrays.asList(messageForCitizen, defaultMessage));
+        message.put(EMPLOYEE, Arrays.asList(messageForEmployee));
 
         return message;
     }
