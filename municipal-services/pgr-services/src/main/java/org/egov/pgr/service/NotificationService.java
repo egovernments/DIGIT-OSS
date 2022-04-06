@@ -238,7 +238,7 @@ public class NotificationService {
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
             log.info(reassigneeDetails.toString() + "                        ... ");
             if (messageForCitizen.contains("{emp_department}"))
-                messageForCitizen = messageForCitizen.replace("{emp_department}",getDepartment(request));
+                messageForCitizen = messageForCitizen.replace("{emp_department}",reassigneeDetails.get("department"));
 
             if (messageForCitizen.contains("{emp_designation}"))
                 messageForCitizen = messageForCitizen.replace("{emp_designation}",reassigneeDetails.get("designation"));
@@ -384,12 +384,14 @@ public class NotificationService {
 
         String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
 
+        ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),request.getWorkflow().getAction());
+
         if(messageForCitizen != null) {
             messageForCitizen = messageForCitizen.replace("{complaint_type}", localisedComplaint);
             messageForCitizen = messageForCitizen.replace("{id}", serviceWrapper.getService().getServiceRequestId());
             messageForCitizen = messageForCitizen.replace("{date}", date.format(formatter));
             messageForCitizen = messageForCitizen.replace("{download_link}", appLink);
-            messageForCitizen = messageForCitizen.replace("{emp_name}", fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getName());
+            messageForCitizen = messageForCitizen.replace("{emp_name}", processInstance.getAssigner().getName());
         }
 
         if(messageForEmployee != null) {
@@ -397,7 +399,7 @@ public class NotificationService {
             messageForEmployee = messageForEmployee.replace("{id}", serviceWrapper.getService().getServiceRequestId());
             messageForEmployee = messageForEmployee.replace("{date}", date.format(formatter));
             messageForEmployee = messageForEmployee.replace("{download_link}", appLink);
-            messageForEmployee = messageForEmployee.replace("{emp_name}", fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getName());
+            messageForEmployee = messageForEmployee.replace("{emp_name}", processInstance.getAssigner().getName());
         }
 
         message.put(CITIZEN, Arrays.asList(new String[] {messageForCitizen, defaultMessage}));
