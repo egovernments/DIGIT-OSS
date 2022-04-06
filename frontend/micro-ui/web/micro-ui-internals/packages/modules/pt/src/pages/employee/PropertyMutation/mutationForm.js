@@ -54,8 +54,12 @@ const MutationForm = ({ applicationData, tenantId }) => {
   };
 
   const onSubmit = (data) => {
-    data.originalData.owners=data.originalData?.owners?.filter(owner=>owner.status=="ACTIVE");
+    data.originalData.owners = data.originalData?.owners?.filter((owner) => owner.status == "ACTIVE");
     let { additionalDetails } = data;
+    let prevDocs =
+      data?.originalData?.documents?.filter(
+        (oldDoc) => !mutationDocs?.PropertyTax?.MutationDocuments.some((mut) => oldDoc.documentType.includes(mut.code))
+      ) || [];
     const submitData = {
       Property: {
         ...data.originalData,
@@ -99,10 +103,8 @@ const MutationForm = ({ applicationData, tenantId }) => {
         },
         ownershipCategory: data.ownershipCategory.code,
         documents: [
-          ...data.originalData?.documents.filter(
-            (oldDoc) => !mutationDocs?.PropertyTax?.MutationDocuments.some((mut) => oldDoc.documentType.includes(mut.code))
-          ),
-          ...data.documents.documents.map((e) =>
+          ...prevDocs,
+          ...data?.documents?.documents.map((e) =>
             e.documentType.includes("OWNER.TRANSFERREASONDOCUMENT") ? { ...e, documentType: e.documentType.split(".")[2] } : e
           ),
         ],
