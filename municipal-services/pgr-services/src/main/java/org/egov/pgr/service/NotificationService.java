@@ -236,9 +236,9 @@ public class NotificationService {
 
 
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
-            log.info(reassigneeDetails.toString());
+            log.info(reassigneeDetails.toString() + "                        ... ");
             if (messageForCitizen.contains("{emp_department}"))
-                messageForCitizen = messageForCitizen.replace("{emp_department}",reassigneeDetails.get("department"));
+                messageForCitizen = messageForCitizen.replace("{emp_department}",getDepartment(request));
 
             if (messageForCitizen.contains("{emp_designation}"))
                 messageForCitizen = messageForCitizen.replace("{emp_designation}",reassigneeDetails.get("designation"));
@@ -384,7 +384,6 @@ public class NotificationService {
 
         String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
 
-        log.info("Yeeeeeeeeeeeeeee                           " + messageForCitizen);
         if(messageForCitizen != null) {
             messageForCitizen = messageForCitizen.replace("{complaint_type}", localisedComplaint);
             messageForCitizen = messageForCitizen.replace("{id}", serviceWrapper.getService().getServiceRequestId());
@@ -393,7 +392,6 @@ public class NotificationService {
             messageForCitizen = messageForCitizen.replace("{emp_name}", fetchUserByUUID(request.getService().getAuditDetails().getCreatedBy(), request.getRequestInfo(), request.getService().getTenantId()).getName());
         }
 
-        log.info("Yeeeeeeeeeeeeeee                           " + messageForEmployee);
         if(messageForEmployee != null) {
             messageForEmployee = messageForEmployee.replace("{complaint_type}", localisedComplaint);
             messageForEmployee = messageForEmployee.replace("{id}", serviceWrapper.getService().getServiceRequestId());
@@ -531,13 +529,13 @@ public class NotificationService {
         Map<String, String> reassigneeDetails = new HashMap<>();
         List<String> mdmsDepartmentList = null;
         List<String> hrmsDepartmentList = null;
-        List<String> designamtion = null;
+        List<String> designation = null;
         List<String> employeeName = null;
         String departmentFromMDMS;
 
         String localisationMessageForPlaceholder =  notificationUtil.getLocalizationMessages(request.getService().getTenantId(), request.getRequestInfo(),COMMON_MODULE);
         //HRSMS CALL
-        StringBuilder url = hrmsUtils.getHRMSURI(Arrays.asList(request.getService().getAuditDetails().getCreatedBy()));
+        StringBuilder url = hrmsUtils.getHRMSURI(request.getWorkflow().getAssignes());
         RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(request.getRequestInfo()).build();
         Object response = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
 
@@ -565,16 +563,17 @@ public class NotificationService {
         String designationJsonPath = HRMS_DESIGNATION_JSONPATH.replace("{department}",departmentFromMDMS);
 
         try{
-            designamtion = JsonPath.read(response, designationJsonPath);
+            designation = JsonPath.read(response, designationJsonPath);
             employeeName = JsonPath.read(response, HRMS_EMP_NAME_JSONPATH);
         }
         catch (Exception e){
             throw new CustomException("JSONPATH_ERROR","Failed to parse mdms response for department");
         }
 
-        String localisedDesignation = notificationUtil.getCustomizedMsgForPlaceholder(localisationMessageForPlaceholder,"COMMON_MASTERS_DESIGNATION_"+designamtion.get(0));
+        log.info("Size = " + designation.size());
+        String localisedDesignation = notificationUtil.getCustomizedMsgForPlaceholder(localisationMessageForPlaceholder,"COMMON_MASTERS_DESIGNATION_"+designation.get(0));
 
-        reassigneeDetails.put("designamtion",localisedDesignation);
+        reassigneeDetails.put("designation",localisedDesignation);
         reassigneeDetails.put("employeeName",employeeName.get(0));
 
         return reassigneeDetails;
