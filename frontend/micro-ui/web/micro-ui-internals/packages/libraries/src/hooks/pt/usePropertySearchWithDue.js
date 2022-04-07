@@ -35,7 +35,7 @@ const usePropertySearchWithDue = ({ tenantId, filters, auth = true, configs }) =
   );
   let consumerCodes = data?.ConsumerCodes?.join(",") || "";
   const { isLoading: billLoading, data: billData, isSuccess } = useQuery(
-    ["propertySearchBillList", tenantId, filters, auth, consumerCodes],
+    ["propertySearchBillList", tenantId, filters, data, auth, consumerCodes],
     () => configs.enabled && data && Digit.PTService.fetchPaymentDetails({ tenantId, consumerCodes, auth: auth }),
     {...configs,
       select: (billResp) => {
