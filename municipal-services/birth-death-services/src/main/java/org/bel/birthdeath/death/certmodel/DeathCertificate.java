@@ -84,6 +84,12 @@ public class DeathCertificate {
   @JsonProperty("age")
   private String age = null;
 
+  @JsonProperty("state")
+  private String state = null;
+
+  @JsonProperty("ward")
+  private String ward = null;
+
   public enum StatusEnum {
 	  ACTIVE("ACTIVE"),
 	  

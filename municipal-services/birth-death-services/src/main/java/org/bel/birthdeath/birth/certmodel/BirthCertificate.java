@@ -84,6 +84,12 @@ public class BirthCertificate {
   @JsonProperty("birthPlace")
   private String birthPlace = null;
 
+  @JsonProperty("state")
+  private String state = null;
+
+  @JsonProperty("ward")
+  private String ward = null;
+
   public enum StatusEnum {
 	  ACTIVE("ACTIVE"),
 	  
