@@ -251,7 +251,7 @@ export const CollectPayment = (props) => {
       head: t("PAYMENT_MODE_HEAD"),
       body: [
         {
-          withoutLabel: true,
+          label: t("PAYMENT_MODE_LABEL"),
           type: "custom",
           populators: {
             name: "paymentMode",
