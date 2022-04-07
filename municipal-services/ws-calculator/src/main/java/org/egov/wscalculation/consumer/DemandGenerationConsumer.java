@@ -57,6 +57,7 @@ public class DemandGenerationConsumer {
 			log.info(" Bulk bill Consumerbatch records log for batch :  "
 					+ calculationReq.getMigrationCount().getOffset() + "Count is : "
 					+ calculationReq.getMigrationCount().getLimit());
+			generateDemandInBatch(calculationReq);
 		}catch (final Exception e){
 			log.error("KAFKA_PROCESS_ERROR", e);
 		}
