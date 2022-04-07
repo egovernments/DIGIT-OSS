@@ -24,9 +24,6 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBl
   let locationDet = formData.locationDet;
   const locationDetStep = { ...locationDet, cityCode, locality, houseDoorNo, buildingColonyName, landmarkName };
   useEffect(() => {
-    setCityCode(cityObj);
-  }, [cityObj]);
-  useEffect(() => {
     setCity(cityObj);
   }, []);
 
