@@ -638,6 +638,35 @@ const getGenderTypeList = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getMeterStatusTypeList = (tenantId) => ({
+    moduleDetails: [
+      {
+        moduleName: "ws-services-calculation",
+        masterDetails: [
+          {
+            name: "MeterStatus",
+            filter: `$.*.name`
+          },
+        ],
+      },
+    ],
+
+});
+
+const getBillingPeriodValidation = (tenantId) => ({
+    moduleDetails: [
+      {
+        moduleName: "ws-services-masters",
+        masterDetails: [
+          {
+            name: "billingPeriod",
+            filter: "*"
+          },
+        ],
+      },
+    ],
+});
+
 const getDssDashboardCriteria = (tenantId, moduleCode) => ({
   details: {
     tenantId,
@@ -1580,4 +1609,12 @@ export const MdmsService = {
   getFSMReceivedPaymentType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getFSMReceivedPaymentTypeCriteria(tenantId, moduleCode, type), moduleCode);
   },
+
+  getMeterStatusType: (tenantId) => {
+    return MdmsService.call(tenantId, getMeterStatusTypeList(tenantId));
+  },
+
+  getBillingPeriod: (tenantId) => {
+    return MdmsService.call(tenantId, getBillingPeriodValidation(tenantId));
+  }
 };

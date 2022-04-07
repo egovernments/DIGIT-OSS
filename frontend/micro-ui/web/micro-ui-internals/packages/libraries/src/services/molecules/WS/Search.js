@@ -300,7 +300,8 @@ export const WSSearch = {
         { title: "WS_SERV_DETAIL_METER_ID", value: wsDataDetails?.meterId || t("NA") },
         { title: "WS_INSTALLATION_DATE_LABEL", value: wsDataDetails?.meterInstallationDate ? convertEpochToDate(wsDataDetails?.meterInstallationDate) : t("NA") },
         { title: "WS_INITIAL_METER_READING_LABEL", value: wsDataDetails?.additionalDetails?.initialMeterReading || t("NA") },
-        { title: "WS_VIEW_CONSUMPTION_DETAIL", to:`/digit-ui/employee/ws/consumption-details?applicationNo=${wsDataDetails.connectionNo}`, value:"", isLink:true }
+        { title: "WS_VIEW_CONSUMPTION_DETAIL", to:`/digit-ui/employee/ws/consumption-details?applicationNo=${wsDataDetails?.connectionNo}&tenantId=${wsDataDetails?.tenantId}&service=${serviceType}`, value:"", isLink:true }
+   
       ] : [
         { title: "PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL", value: wsDataDetails?.connectionNo || t("NA") },
         { title: "WS_SERVICE_NAME_LABEL", value: serviceType == "WATER" ? "WATER" : "SEWERAGE" },
@@ -324,7 +325,7 @@ export const WSSearch = {
     const connectionHolderDetails = {
       title: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
       asSectionHeader: true,
-      values: wsDataDetails?.connectionHolders.length > 0 ? [
+      values: wsDataDetails?.connectionHolders != null && wsDataDetails?.connectionHolders.length > 0 ? [
         { title: "WS_OWN_DETAIL_NAME", value: wsDataDetails?.connectionHolders?.[0]?.name || t("NA") },
         { title: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.gender },
         { title: "CORE_COMMON_MOBILE_NUMBER", value: wsDataDetails?.connectionHolders?.[0]?.mobileNumber },
@@ -339,7 +340,7 @@ export const WSSearch = {
     let details = [];
     details = [...details, applicationHeaderDetails, propertyDetails, connectionHolderDetails];
     wsDataDetails.serviceType = serviceDataType;
-    wsDataDetails.Properties = propertyDataDetails;
+    wsDataDetails.property = propertyDataDetails;
     return {
       applicationData: wsDataDetails,
       applicationDetails: details,

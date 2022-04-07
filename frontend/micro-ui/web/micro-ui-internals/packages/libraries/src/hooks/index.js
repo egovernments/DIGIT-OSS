@@ -200,6 +200,9 @@ import useWaterCreateAPI from "./ws/useWaterCreateAPI";
 import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
 import useWSUpdateAPI from "./ws/useWSUpdateAPI";
 import useTenantsBills from "./bills/useTenants";
+import useMeterReadingCreateAPI from "./ws/useMeterConnectionCreateAPI";
+import useGetMeterStatusList from "./ws/useGetMeterStatusList";
+import useGetBillingPeriodValidation from "./ws/useBillingPeriodValidation";
 
 const pgr = {
   useComplaintDetails,
@@ -399,6 +402,9 @@ const ws = {
   useSewerageCreateAPI,
   useWSUpdateAPI,
   useMypaymentWS,
+  useMeterReadingCreateAPI,
+  useGetMeterStatusList,
+  useGetBillingPeriodValidation,
 };
 
 const Hooks = {
