@@ -7,17 +7,17 @@ export const PTSearch = {
     return response;
   },
   /**
-   * Custom service which can be make a 
-   * property search using property id and tenant id 
+   * Custom service which can be make a
+   * property search using property id and tenant id
    * and return the property generic template to show employee and citizen view
-   * 
+   *
    * @author jagankumar-egov
-   * 
+   *
    * @example
    *  PTSearch.genericPropertyDetails(t,
-   *                                  tenantId, 
+   *                                  tenantId,
    *                                  propertyId)
-   * 
+   *
    * @returns {Object} Returns the object which contains
    *                   applicationDetails [which is a template of property details ]
    *                   applicationData  {which is a property object itself}
@@ -59,22 +59,24 @@ export const PTSearch = {
     const ownerdetails = {
       title: "PT_OWNERSHIP_INFO_SUB_HEADER",
       additionalDetails: {
-        owners: property?.owners?.filter(owner=>owner.status === "ACTIVE").map((owner, index) => {
-          return {
-            status: owner.status,
-            title: "ES_OWNER",
-            values: [
-              { title: "PT_OWNERSHIP_INFO_NAME", value: owner?.name },
-              { title: "PT_OWNERSHIP_INFO_GENDER", value: owner?.gender },
-              { title: "PT_OWNERSHIP_INFO_MOBILE_NO", value: owner?.mobileNumber },
-              { title: "PT_OWNERSHIP_INFO_USER_CATEGORY", value: `COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}` || "NA" },
-              { title: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", value: owner?.fatherOrHusbandName },
-              { title: "PT_FORM3_OWNERSHIP_TYPE", value: property?.ownershipCategory },
-              { title: "PT_OWNERSHIP_INFO_EMAIL_ID", value: owner?.emailId },
-              { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.correspondenceAddress },
-            ],
-          };
-        }),
+        owners: property?.owners
+          ?.filter((owner) => owner.status === "ACTIVE")
+          .map((owner, index) => {
+            return {
+              status: owner.status,
+              title: "ES_OWNER",
+              values: [
+                { title: "PT_OWNERSHIP_INFO_NAME", value: owner?.name },
+                { title: "PT_OWNERSHIP_INFO_GENDER", value: owner?.gender },
+                { title: "PT_OWNERSHIP_INFO_MOBILE_NO", value: owner?.mobileNumber },
+                { title: "PT_OWNERSHIP_INFO_USER_CATEGORY", value: `COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}` || "NA" },
+                { title: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", value: owner?.fatherOrHusbandName },
+                { title: "PT_FORM3_OWNERSHIP_TYPE", value: property?.ownershipCategory },
+                { title: "PT_OWNERSHIP_INFO_EMAIL_ID", value: owner?.emailId },
+                { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.correspondenceAddress },
+              ],
+            };
+          }),
       },
     };
 
