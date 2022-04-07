@@ -63,12 +63,12 @@ const CheckPage = ({ onSubmit, value }) => {
         <CardSubHeader>{t("CS_CHECK_PROPERTY_DETAILS")}</CardSubHeader>
         <StatusTable>
           {selectTripNo && <Row
-            label={t("Number of trips")}
+            label={t("ES_FSM_ACTION_NUMBER_OF_TRIPS")}
             text={t(selectTripNo.i18nKey)}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-trip-number" />}
           />}
           {selectGender && <Row
-            label={t("Gender Type")}
+            label={t("ES_FSM_ACTION_GENDER_TYPE")}
             text={t(selectGender.i18nKey)}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-gender" />}
           />}
@@ -128,7 +128,7 @@ const CheckPage = ({ onSubmit, value }) => {
             />
           )}
           {selectPaymentPreference && <Row
-            label={t("Payment Preference Type")}
+            label={t("ES_FSM_ACTION_PAYMENT_PREFERENCE_TYPE")}
             text={t(selectPaymentPreference.i18nKey)}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-payment-preference" />}
           />}

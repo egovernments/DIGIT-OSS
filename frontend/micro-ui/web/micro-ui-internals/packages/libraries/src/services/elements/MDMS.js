@@ -1201,6 +1201,17 @@ const GetReceivedPaymentType = (MdmsRes) => {
   });
 };
 
+const GetTripNumber = (MdmsRes) => {
+
+  return MdmsRes["FSM"].TripNumber.filter((option) => option.active)
+    .map((reasonDetails) => {
+      return {
+        ...reasonDetails,
+        i18nKey: `ES_ACTION_TRIP_${reasonDetails.code}`,
+      };
+    });
+}
+
 const getDssDashboard = (MdmsRes) => MdmsRes["dss-dashboard"]["dashboard-config"];
 
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;

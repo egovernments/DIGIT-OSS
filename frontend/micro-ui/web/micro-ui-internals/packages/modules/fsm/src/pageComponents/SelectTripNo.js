@@ -48,6 +48,7 @@ const SelectTripNo = ({ config, formData, t, onSelect, userType }) => {
                     selectedOption={tripNo}
                     optionKey="i18nKey"
                     onSelect={SelectTrip}
+                    optionCardStyles={{ zIndex: "60" }}
                     t={t}
                     isMandatory={config.isMandatory}
                 />
