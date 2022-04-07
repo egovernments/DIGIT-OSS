@@ -5,7 +5,10 @@ import { Link, useLocation} from "react-router-dom";
 
 const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
-
+  if(window.location.href.includes("/tl/tradelicence/edit-application/") || window.location.href.includes("/renew-trade/") )
+  {
+    sessionStorage.setItem("EditFormData",JSON.stringify(formData));
+  }
   const { 
     isLoading,
     isError,
@@ -86,7 +89,7 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
                 <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${propertyDetails?.Properties[0]?.propertyId}&tenantId=${propertyDetails?.Properties[0]?.tenantId}`}>
                   <LinkButton style={{textAlign:"left"}} label={t("PT_VIEW_MORE_DETAILS")} />
                 </Link>
-                <Link to={`/digit-ui/citizen/tl/tradelicence/new-application/know-your-property`}>
+                <Link to={window.location.href.includes("/edit-application/") || window.location.href.includes("/renew-trade/") ? `/digit-ui/citizen/tl/tradelicence/edit-application/${formData?.applicationNumber}/${formData?.tenantId}/know-your-property` : `/digit-ui/citizen/tl/tradelicence/new-application/know-your-property`}>
                   <LinkButton style={{textAlign:"left"}} label={t("PT_CHANGE_PROPERTY")} />
                 </Link>
                 </div>

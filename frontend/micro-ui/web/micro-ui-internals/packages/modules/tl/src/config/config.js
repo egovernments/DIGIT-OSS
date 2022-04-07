@@ -60,6 +60,157 @@ export const newConfig = [
     ],
   },
   {
+    "head": "ES_NEW_APPLICATION_LOCATION_DETAILS",
+    "body": [
+        {
+            "route": "map",
+            component: "TLSelectGeolocation",
+            nextStep: "pincode",
+            hideInEmployee: true,
+            key: "address",
+            withoutLabel: true,
+            texts: {
+                header: "TL_GEOLOACTION_HEADER",
+                cardText: "TL_GEOLOCATION_TEXT",
+                nextText: "CS_COMMON_NEXT",
+                skipAndContinueText: "CORE_COMMON_SKIP_CONTINUE"
+            }
+        },
+        {
+            route: "pincode",
+            component: "TLSelectPincode",
+            texts: {
+                "headerCaption": "TL_LOCATION_CAPTION",
+                "header": "TL_PINCODE_HEADER",
+                "cardText": "TL_PINCODE_TEXT",
+                "submitBarLabel": "CS_COMMON_NEXT",
+                "skipText": "CORE_COMMON_SKIP_CONTINUE"
+            },
+            withoutLabel: true,
+            key: "address",
+            nextStep: "address",
+            type: "component"
+        },
+        {
+            "route": "address",
+            "component": "TLSelectAddress",
+            "withoutLabel": true,
+            "texts": {
+                "headerCaption": "TL_LOCATION_CAPTION",
+                "header": "TL_ADDRESS_HEADER",
+                "cardText": "TL_ADDRESS_TEXT",
+                "submitBarLabel": "CS_COMMON_NEXT"
+            },
+            "key": "address",
+            "nextStep": "street",
+            "isMandatory": true,
+            "type": "component"
+        },
+        {
+            "type": "component",
+            "route": "street",
+            "component": "SelectStreet",
+            "key": "address",
+            "withoutLabel": true,
+            "hideInEmployee": true,
+            "texts": {
+                "headerCaption": "TL_LOCATION_CAPTION",
+                "header": "TL_ADDRESS_HEADER",
+                "cardText": "TL_STREET_TEXT",
+                "submitBarLabel": "CS_COMMON_NEXT"
+            },
+            "inputs": [
+                {
+                    "label": "TL_LOCALIZATION_STREET_NAME",
+                    "type": "text",
+                    "name": "street",
+                    "disable": "window.location.href.includes(`edit-application`)||window.location.href.includes(`renew-trade`)",
+                    "validation": {
+                        "maxlength": 256,
+                        "title": "CORE_COMMON_STREET_INVALID"
+                    }
+                },
+                {
+                    "label": "TL_LOCALIZATION_BUILDING_NO",
+                    "type": "text",
+                    "name": "doorNo",
+                    "disable": "window.location.href.includes(`edit-application`)||window.location.href.includes(`renew-trade`)",
+                    "validation": {
+                        "maxlength": 256,
+                        "title": "CORE_COMMON_DOOR_INVALID"
+                    }
+                }
+            ],
+            "nextStep": "landmark"
+        },
+        {
+            "type": "component",
+            "component": "SelectStreet",
+            "key": "address",
+            "withoutLabel": true,
+            "hideInCitizen": true,
+            "texts": {
+                "headerCaption": "TL_LOCATION_CAPTION",
+                "header": "TL_ADDRESS_HEADER",
+                "cardText": "TL_STREET_TEXT",
+                "submitBarLabel": "CS_COMMON_NEXT"
+            },
+            "inputs": [
+                {
+                    "label": "TL_LOCALIZATION_BUILDING_NO",
+                    "type": "text",
+                    "name": "doorNo",
+                    "validation": {
+                        "maxlength": 256,
+                        "title": "CORE_COMMON_DOOR_INVALID"
+                    }
+                },
+                {
+                    "label": "TL_LOCALIZATION_STREET_NAME",
+                    "type": "text",
+                    "name": "street",
+                    "validation": {
+                        "maxlength": 256,
+                        "title": "CORE_COMMON_STREET_INVALID"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "component",
+            "route": "landmark",
+            "component": "SelectLandmark",
+            "withoutLabel": true,
+            "texts": {
+                "headerCaption": "TL_LOCATION_CAPTION",
+                "header": "CS_FILE_APPLICATION_PROPERTY_LOCATION_PROVIDE_LANDMARK_TITLE",
+                "cardText": "TL_LANDMARK_TEXT",
+                "submitBarLabel": "CS_COMMON_NEXT",
+                "skipText": "CORE_COMMON_SKIP_CONTINUE"
+            },
+            "key": "address",
+            "nextStep": "owner-ship-details",
+            "hideInEmployee": true
+        },
+        {
+            "type": "component",
+            "route": "proof",
+            "component": "Proof",
+            "withoutLabel": true,
+            "texts": {
+                "headerCaption": "TL_OWNERS_DETAILS",
+                "header": "TL_OWNERS_PHOTOGRAPH_HEADER",
+                "cardText": "",
+                "nextText": "CS_COMMON_NEXT",
+                "submitBarLabel": "CS_COMMON_NEXT"
+            },
+            "key": "owners",
+            "nextStep": null,
+            "hideInEmployee": true
+        }
+    ]
+  },
+  {
     head: "ES_NEW_APPLICATION_PROPERTY_ASSESSMENT",
     body: [
       {
@@ -380,6 +531,7 @@ export const newConfig = [
           submitBarLabel: "CS_COMMON_NEXT",
         },
         key: "knowyourproperty",
+        isCreateEnabled : true,
         withoutLabel: true,
         nextStep: {
           TL_COMMON_YES: "search-property",
@@ -414,6 +566,7 @@ export const newConfig = [
         component: "CPTCreateProperty", 
         key: "cptcreateproperty",
         withoutLabel: true,
+        isSkipEnabled : true,
         nextStep: 'acknowledge-create-property',
         hideInEmployee: true,
       },

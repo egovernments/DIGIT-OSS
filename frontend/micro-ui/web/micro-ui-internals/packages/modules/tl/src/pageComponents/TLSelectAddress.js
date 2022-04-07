@@ -215,7 +215,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
         <RadioOrSelect
           options={cities.sort((a, b) => a.name.localeCompare(b.name))}
           selectedOption={selectedCity}
-          optionKey="i18nkey"
+          optionKey="i18nKey"
           onSelect={selectCity}
           t={t}
           isDependent={true}

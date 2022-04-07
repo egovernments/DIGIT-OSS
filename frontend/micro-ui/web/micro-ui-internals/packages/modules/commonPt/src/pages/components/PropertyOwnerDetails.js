@@ -59,7 +59,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
     (formData.owners && formData.owners[index] && formData.owners[index].permanentAddress) || formData?.owners?.permanentAddress || ""
   );
   const [isCorrespondenceAddress, setIsCorrespondenceAddress] = useState(
-    formData.owners && formData.owners[index] && formData.owners[index].isCorrespondenceAddress
+    formData.owners && formData.owners[index] && formData.owners[index]?.isCorrespondenceAddress
   );
 
   let owner = formData.owners && formData.owners[index];

@@ -293,7 +293,7 @@ const TLApplicationDetails = () => {
                     </div>
                   );
                 })}
-              <CardSubHeader>{t("PT_DETAILS")}</CardSubHeader>
+              {PTData?.Properties && PTData?.Properties.length>0 && <div><CardSubHeader>{t("PT_DETAILS")}</CardSubHeader>
               <Row label={t("TL_PROPERTY_ID")} text={PTData?.Properties?.[0]?.propertyId} textStyle={{ whiteSpace: "pre" }} />
               <Row label={t("PT_OWNER_NAME")} text={PTData?.Properties?.[0]?.owners[0]?.name} textStyle={{ whiteSpace: "pre" }} />
               <Row label={t("PROPERTY_ADDRESS")} text={propertyAddress} />
@@ -305,7 +305,7 @@ const TLApplicationDetails = () => {
                     `/digit-ui/citizen/commonpt/view-property?propertyId=${PTData?.Properties?.[0]?.propertyId}&tenantId=${PTData?.Properties?.[0]?.tenantId}`
                   );
                 }}
-              ></LinkButton>
+              ></LinkButton></div>}
               <Row label="" />
               <Row
                 style={{ border: "none" }}
