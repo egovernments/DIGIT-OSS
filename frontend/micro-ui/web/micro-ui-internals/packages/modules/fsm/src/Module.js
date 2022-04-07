@@ -19,6 +19,7 @@ import SelectSlumName from "./pageComponents/SelectSlumName";
 import SelectStreet from "./pageComponents/SelectStreet";
 import SelectTankSize from "./pageComponents/SelectTankSize";
 import SelectTripData from "./pageComponents/SelectTripData";
+import SelectTripNo from "./pageComponents/SelectTripNo";
 import SelectPaymentPreference from "./pageComponents/SelectPaymentPreference";
 import CitizenApp from "./pages/citizen";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
@@ -142,6 +143,7 @@ const componentsToRegister = {
   SelectPincode,
   SelectTankSize,
   SelectPitType,
+  SelectTripNo,
   SelectGeolocation,
   SelectSlumName,
   CheckSlum,

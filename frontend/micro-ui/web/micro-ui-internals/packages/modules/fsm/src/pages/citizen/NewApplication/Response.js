@@ -50,54 +50,55 @@ const Response = ({ data, onSuccess }) => {
 
   useEffect(() => {
     if (!mutationHappened && !errorInfo) {
-    try {
-      const { subtype, pitDetail, address, pitType, source, selectGender, selectPaymentPreference } = data;
-      const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
-      setPaymentPreference(selectPaymentPreference.code);
-      const formdata = {
-        fsm: {
-          citizen: {
-            gender: selectGender?.code
-          },
-          tenantId: city.code,
-          additionalDetails: {},
-          propertyUsage: subtype.code,
-          address: {
+      try {
+        const { subtype, pitDetail, address, pitType, source, selectGender, selectPaymentPreference, selectTripNo } = data;
+        const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
+        setPaymentPreference(selectPaymentPreference.code);
+        const formdata = {
+          fsm: {
+            citizen: {
+              gender: selectGender?.code
+            },
             tenantId: city.code,
-            additionalDetails: null,
-            street: street?.trim(),
-            doorNo: doorNo?.trim(),
-            landmark: landmark?.trim(),
-            slumName: slum,
-            city: city.name,
-            pincode,
-            locality: {
-              code: locality.code,
-              name: locality.name,
+            additionalDetails: {},
+            propertyUsage: subtype.code,
+            address: {
+              tenantId: city.code,
+              additionalDetails: null,
+              street: street?.trim(),
+              doorNo: doorNo?.trim(),
+              landmark: landmark?.trim(),
+              slumName: slum,
+              city: city.name,
+              pincode,
+              locality: {
+                code: locality.code,
+                name: locality.name,
+              },
+              geoLocation: {
+                latitude: geoLocation?.latitude,
+                longitude: geoLocation?.longitude,
+                additionalDetails: {},
+              },
             },
-            geoLocation: {
-              latitude: geoLocation?.latitude,
-              longitude: geoLocation?.longitude,
-              additionalDetails: {},
-            },
+            pitDetail,
+            source,
+            sanitationtype: pitType?.code,
+            paymentPreference: selectPaymentPreference ? selectPaymentPreference.code : 'POST_PAY',
+            noOfTrips: selectTripNo ? selectTripNo?.code : 1
           },
-          pitDetail,
-          source,
-          sanitationtype: pitType?.code,
-          paymentPreference: selectPaymentPreference ? selectPaymentPreference.code : 'POST_PAY'
-        },
-        workflow: null,
-      };
-      mutation.mutate(formdata, {
-        onError,
-        onSuccess:()=>{
-          setMutationHappened(true);
-          onSuccess();
-        },
-      });
-    } catch (err) {
+          workflow: null,
+        };
+        mutation.mutate(formdata, {
+          onError,
+          onSuccess: () => {
+            setMutationHappened(true);
+            onSuccess();
+          },
+        });
+      } catch (err) {
+      }
     }
-  }
   }, []);
 
   const handleDownloadPdf = () => {
@@ -114,9 +115,9 @@ const Response = ({ data, onSuccess }) => {
     <Loader />
   ) : (
     <Card>
-      <BannerPicker t={t} data={Data} isSuccess={isSuccess}         isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading} />
+      <BannerPicker t={t} data={Data} isSuccess={isSuccess} isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading} />
       <CardText>{t(paymentPreference && paymentPreference == 'POST_PAY' ? "CS_FILE_PROPERTY_RESPONSE_POST_PAY" : "CS_FILE_PROPERTY_RESPONSE")}</CardText>
-      {isSuccess&& (
+      {isSuccess && (
         <LinkButton
           label={
             <div className="response-download-button">
