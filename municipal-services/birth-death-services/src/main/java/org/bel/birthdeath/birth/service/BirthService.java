@@ -90,8 +90,8 @@ public class BirthService {
 		List<EgBirthDtl> birtDtls = repository.getBirthDtlsAll(criteria,requestInfo);
 			birthCertificate.setBirthPlace(birtDtls.get(0).getPlaceofbirth());
 			birthCertificate.setGender(birtDtls.get(0).getGenderStr());
-			birthCertificate.setWard(birtDtls.get(0).getBirthPermaddr().getTehsil());
-			birthCertificate.setState(birtDtls.get(0).getBirthPermaddr().getState());
+			birthCertificate.setWard(birtDtls.get(0).getBirthPresentaddr().getTehsil());
+			birthCertificate.setState(birtDtls.get(0).getBirthPresentaddr().getState());
 		if(birtDtls.size()>1) 
 			throw new CustomException("Invalid_Input","Error in processing data");
 		enrichmentService.enrichCreateRequest(birthCertRequest);
