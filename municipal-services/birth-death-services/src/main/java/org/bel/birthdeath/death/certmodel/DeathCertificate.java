@@ -135,4 +135,8 @@ public class DeathCertificate {
   private String embeddedUrl;
   
   private Timestamp dateofissue;
+
+  private Timestamp dateofdeath;
+
+  private Timestamp dateofreport;
 }

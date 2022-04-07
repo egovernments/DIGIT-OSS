@@ -92,6 +92,8 @@ public class BirthService {
 			birthCertificate.setGender(birtDtls.get(0).getGenderStr());
 			birthCertificate.setWard(birtDtls.get(0).getBirthPresentaddr().getTehsil());
 			birthCertificate.setState(birtDtls.get(0).getBirthPresentaddr().getState());
+			birthCertificate.setDateofbirth(birtDtls.get(0).getDateofbirth());
+			birthCertificate.setDateofreport(birtDtls.get(0).getDateofreport());
 		if(birtDtls.size()>1) 
 			throw new CustomException("Invalid_Input","Error in processing data");
 		enrichmentService.enrichCreateRequest(birthCertRequest);
