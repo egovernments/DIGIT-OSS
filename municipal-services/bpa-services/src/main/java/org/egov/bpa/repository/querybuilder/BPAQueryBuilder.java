@@ -197,6 +197,10 @@ public class BPAQueryBuilder {
         int offset = config.getDefaultOffset();
         String finalQuery = paginationWrapper.replace("{}", query);
 
+        if(criteria.getLimit() == null && criteria.getOffset() == null) {
+        	limit = config.getMaxSearchLimit();
+        } 
+        
         if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
             limit = criteria.getLimit();
 
@@ -261,5 +265,30 @@ public class BPAQueryBuilder {
     
     private String addCountWrapper(String query) {
         return countWrapper.replace("{INTERNAL_QUERY}", query);
+    }
+    
+    public String getBPASearchQueryForPlainSearch(BPASearchCriteria criteria, List<Object> preparedStmtList, List<String> edcrNos, boolean isCount) {
+
+        StringBuilder builder = new StringBuilder(QUERY);
+
+        if (criteria.getTenantId() != null) {
+            if (criteria.getTenantId().split("\\.").length == 1) {
+
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append(" bpa.tenantid like ?");
+                preparedStmtList.add('%' + criteria.getTenantId() + '%');
+            } else {
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append(" bpa.tenantid=? ");
+                preparedStmtList.add(criteria.getTenantId());
+            }
+        }
+
+
+        if(isCount)
+            return addCountWrapper(builder.toString());
+        
+        return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
+
     }
 }
