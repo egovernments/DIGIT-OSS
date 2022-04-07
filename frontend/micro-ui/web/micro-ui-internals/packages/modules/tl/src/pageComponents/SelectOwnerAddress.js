@@ -36,7 +36,7 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
   }
   function setCorrespondenceAddress(e) {
     
-    if(Object.keys(formData?.cpt?.details).length>0 && e.target.checked == true)
+    if(formData?.cpt?.details && Object.keys(formData?.cpt?.details).length>0 && e.target.checked == true)
     {
       let obj = {
         doorNo: formData?.cpt?.details?.address?.doorNo,

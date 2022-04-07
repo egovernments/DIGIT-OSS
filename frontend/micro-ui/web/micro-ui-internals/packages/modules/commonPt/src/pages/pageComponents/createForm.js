@@ -5,7 +5,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import { newConfig } from "../../config/Create/config";
 import _, { create, unset } from "lodash";
 
-const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
+const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const tenants = Digit.Hooks.pt.useTenants();
   const { t } = useTranslation();
@@ -19,7 +19,7 @@ const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
   
   const [formValue, setFormValue] = useState("");
   const [cityCode, setCityCode] = useState("");
-  
+  let enableSkip = config?.isSkipEnabled;
   // delete
   // const [_formData, setFormData,_clear] = Digit.Hooks.useSessionStorage("store-data",null);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
@@ -55,6 +55,10 @@ const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
     }
   };
 
+  const onSkip = () => {
+    onSelect("isSkip",true);
+  }
+
   const onFormValueChange = (setValue, data, formState) => {
     const city = data?.locationDet?.city;
     const locality = data?.locationDet?.locality;
@@ -89,6 +93,8 @@ const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
         <Header styles={window.location.href.includes("citizen") ? {paddingLeft: "0px", marginLeft: "0px"} : {}}>{t(getHeaderLabel())}</Header>
       </div>
     <FormComposer
+      onSkip = {onSkip}
+      showSkip = {enableSkip}
       onSubmit={onSubmit}
       noBoxShadow
       inline

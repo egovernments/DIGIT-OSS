@@ -14,6 +14,7 @@ import TextInput from "../atoms/TextInput";
 import ActionBar from "../atoms/ActionBar";
 import SubmitBar from "../atoms/SubmitBar";
 import LabelFieldPair from "../atoms/LabelFieldPair";
+import LinkButton from "../atoms/LinkButton";
 
 import { useTranslation } from "react-i18next";
 import MobileNumber from "../atoms/MobileNumber";
@@ -248,8 +249,12 @@ export const FormComposer = (props) => {
         {!props.submitInForm && props.label && (
           <ActionBar>
             <SubmitBar label={t(props.label)} submit="submit" disabled={isDisabled} />
-          </ActionBar>
+            {props.onSkip && props.showSkip && (
+              <LinkButton label={t(`CS_SKIP_CONTINUE`)} onClick={props.onSkip} />
+            )}
+        </ActionBar>
         )}
+        
       </Card>
     </form>
   );
