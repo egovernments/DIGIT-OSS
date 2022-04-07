@@ -81,4 +81,15 @@ export const WSService = {
       userService: auth === false ? auth : true,
       params: { tenantId, ...filters },
     }),
+  meterConnectioncreate: (details, businessService) =>
+    Request({
+      url: businessService === "WS" ? Urls.ws.ws_meter_conncetion_create : Urls.ws.sw_meter_conncetion_create,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
 };

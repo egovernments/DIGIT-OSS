@@ -82,7 +82,7 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk }) =>
             <div>
               {row.original["connectionNo"] ? (
                 <span className={"link"}>
-                  <Link to={`/digit-ui/employee/ws/connection-details/${row.original["connectionNo"]}`}>{row.original["connectionNo"] || "NA"}</Link>
+                  <Link to={`/digit-ui/employee/ws/connection-details?applicationNumber=${row.original["connectionNo"]}&tenantId=${tenantId}&service=${row.original?.["service"]}&connectionType=${row.original?.["connectionType"]}`}>{row.original["connectionNo"] || "NA"}</Link>
                 </span>
               ) : (
                 <span>{t("NA")}</span>

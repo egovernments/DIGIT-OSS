@@ -5,6 +5,7 @@ import cloneDeep from "lodash/cloneDeep";
 import { useParams } from "react-router-dom";
 import { Header, DownloadIcon, PrintIcon } from "@egovernments/digit-ui-react-components";
 import * as func from "../../../utils"
+import { DownloadBtnColored } from "../../../components/DownloadBtnColored";
 
 const GetConnectionDetails = () => {
   const { t } = useTranslation();
@@ -25,7 +26,8 @@ const GetConnectionDetails = () => {
   } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
 
   const downloadConnectionDetails = async () => {
-    const ConnectionDetailsfile = await Digit.PaymentService.generatePdf(tenantId, { WaterConnection: applicationDetails?.applicationData } ,"ws-consolidatedacknowlegment");
+    const ConnectionDetailsfile = serviceType === "WATER" ? await Digit.PaymentService.generatePdf(tenantId, { WaterConnection: [applicationDetails?.applicationData] } ,"ws-consolidatedacknowlegment")
+      : await Digit.PaymentService.generatePdf(tenantId, { SewerageConnections: [applicationDetails?.applicationData] } ,"ws-consolidatedsewerageconnection");
     const file = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: ConnectionDetailsfile.filestoreIds[0] });
     window.open(file[ConnectionDetailsfile.filestoreIds[0]], "_blank");
   };
@@ -46,8 +48,7 @@ const GetConnectionDetails = () => {
             {t(`CS_COMMON_PRINT`)}
           </div> */}
         <div className="mrsm" onClick={downloadConnectionDetails}>
-          <DownloadIcon className="mrsm"/>
-            {t(`CS_COMMON_DOWNLOAD`)}
+          <DownloadBtnColored className="mrsm"/>
           </div>
         </div>
       </div>
