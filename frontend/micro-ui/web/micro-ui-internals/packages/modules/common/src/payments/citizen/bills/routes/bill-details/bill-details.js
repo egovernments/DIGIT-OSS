@@ -14,9 +14,15 @@ const BillDetails = ({ paymentRules, businessService }) => {
   const { workflow: wrkflow, tenantId: _tenantId } = Digit.Hooks.useQueryParams();
   const [bill, setBill] = useState(state?.bill);
   const tenantId = state?.tenantId || _tenantId || Digit.UserService.getUser().info?.tenantId;
-  const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService, consumerCode : wrkflow === "WNS" ? stringReplaceAll(consumerCode,"+","/") : consumerCode });
-  const { minAmountPayable = wrkflow === "WNS"?100:minAmountPayable, isAdvanceAllowed } = paymentRules;
-
+  const { data, isLoading } = state?.bill
+    ? { isLoading: false }
+    : Digit.Hooks.useFetchPayment({
+        tenantId,
+        businessService,
+        consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
+      });
+  let { minAmountPayable, isAdvanceAllowed } = paymentRules;
+  minAmountPayable = wrkflow === "WNS" ? 100 : minAmountPayable;
   const billDetails = bill?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod)?.[0] || [];
   const Arrears =
     bill?.billDetails
@@ -46,9 +52,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
       }
       from = new Date(billDetails.fromPeriod).getFullYear().toString();
       to = new Date(billDetails.toPeriod).getFullYear().toString();
-      if(from === to)
-      {
-        return "FY "+from;
+      if (from === to) {
+        return "FY " + from;
       }
       return "FY " + from + "-" + to;
     } else return "N/A";
@@ -73,8 +78,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
 
   useEffect(() => {
     let changeAdvanceAllowed = isAdvanceAllowed;
-    if(isAdvanceAllowed && wrkflow === "WNS")
-    changeAdvanceAllowed = false;
+    if (isAdvanceAllowed && wrkflow === "WNS") changeAdvanceAllowed = false;
     const allowPayment = minAmountPayable && amount >= minAmountPayable && !changeAdvanceAllowed && amount <= getTotal() && !formError;
     if (paymentType != t("CS_PAYMENT_FULL_AMOUNT")) setPaymentAllowed(allowPayment);
     else setPaymentAllowed(true);
@@ -82,7 +86,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
 
   useEffect(() => {
     if (!bill && data) {
-      let requiredBill = data.Bill.filter((e) => e.consumerCode == (wrkflow === "WNS" ? stringReplaceAll(consumerCode,"+","/") : consumerCode))[0];
+      let requiredBill = data.Bill.filter((e) => e.consumerCode == (wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode))[0];
       setBill(requiredBill);
     }
   }, [isLoading]);
@@ -94,14 +98,12 @@ const BillDetails = ({ paymentRules, businessService }) => {
         paymentAmount,
         tenantId: billDetails.tenantId,
       });
-    }
-    else if (wrkflow === "WNS") {
+    } else if (wrkflow === "WNS") {
       history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS`, {
         paymentAmount,
         tenantId: billDetails.tenantId,
       });
-    }
-    else if (businessService === "PT") {
+    } else if (businessService === "PT") {
       history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}`, {
         paymentAmount,
         tenantId: billDetails.tenantId,
@@ -132,8 +134,15 @@ const BillDetails = ({ paymentRules, businessService }) => {
       <Header>{t("CS_PAYMENT_BILL_DETAILS")}</Header>
       <Card>
         <div>
-          <KeyNote keyValue={t(label)} note={wrkflow === "WNS" ? stringReplaceAll(consumerCode,"+","/") : consumerCode} />
-          <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />
+          <KeyNote
+            keyValue={t(businessService == "PT.MUTATION" ? "PDF_STATIC_LABEL_MUATATION_NUMBER_LABEL" : label)}
+            note={wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode}
+          />
+          {businessService !== "PT.MUTATION" && <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />}
+          {businessService?.includes("PT") && billDetails?.currentBillNo && <KeyNote keyValue={t("CS_BILL_NO")} note={billDetails?.currentBillNo} />}
+          {businessService?.includes("PT") && billDetails?.currentExpiryDate && (
+            <KeyNote keyValue={t("CS_BILL_DUEDATE")} note={new Date(billDetails?.currentExpiryDate).toLocaleDateString()} />
+          )}
           <BillSumary billAccountDetails={getBillBreakDown()} total={getTotal()} businessService={businessService} arrears={Arrears} />
           <ArrearSummary bill={bill} />
         </div>

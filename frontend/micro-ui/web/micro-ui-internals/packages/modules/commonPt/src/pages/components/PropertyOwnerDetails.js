@@ -157,12 +157,12 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
   return (
     <div>
       <LabelFieldPair>
-        <CardLabel className="">{`${t("TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL")} :`}</CardLabel>
+        <CardLabel className="">{`${t("TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL")} `}</CardLabel>
         <Dropdown
           className="form-field"
           selected={ownershipCategory}
           // errorStyle={formState.touched?.[config.key] && formState.errors[config.key]?.message ? true : false}
-          option={dropdownData}
+          option={dropdownData?.filter(dd=>dd.code?.includes("INDIVIDUAL"))}
           select={setOwnershipCat}
           optionKey="i18nKey"
           // onBlur={onBlur}
@@ -295,6 +295,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
       <LabelFieldPair>
         <CardLabel className="">{`${t("PT_SPECIAL_APPLICANT_CATEGORY")}`}</CardLabel>
         <div className="form-field">
+           <div className={"form-pt-dropdown-only"}>
           <Dropdown
             selected={Menu1?.length === 1 ? Menu1[0] : ownerType}
             disable={Menu1?.length === 1 || editScreen}
@@ -303,6 +304,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIn
             optionKey="i18nKey"
             t={t}
           />
+        </div>
         </div>
       </LabelFieldPair>
 

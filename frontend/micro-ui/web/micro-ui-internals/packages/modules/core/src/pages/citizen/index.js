@@ -31,6 +31,28 @@ const Home = ({
   sourceUrl,
   pathname,
 }) => {
+  const { isLoading: islinkDataLoading, data: linkData, isFetched: isLinkDataFetched } = Digit.Hooks.useCustomMDMS(
+    Digit.ULBService.getStateId(),
+    "ACCESSCONTROL-ACTIONS-TEST",
+    [
+      {
+        name: "actions-test",
+        filter: "[?(@.url == 'digit-ui-card')]",
+      },
+    ],
+    {
+      select: (data) => {
+        const formattedData = data?.["ACCESSCONTROL-ACTIONS-TEST"]?.["actions-test"]
+          ?.filter((el) => el.enabled === true)
+          .reduce((a, b) => {
+            a[b.parentModule] = a[b.parentModule]?.length > 0 ? [b, ...a[b.parentModule]] : [b];
+            return a;
+          }, {});
+        return formattedData;
+      },
+    }
+  );
+
   const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
   const { t } = useTranslation();
   const { path } = useRouteMatch();
@@ -92,7 +114,13 @@ const Home = ({
           </Route>
 
           <Route path={`${path}/all-services`}>
-            <AppHome userType="citizen" modules={modules} />
+            <AppHome
+              userType="citizen"
+              modules={modules}
+              getCitizenMenu={linkData}
+              fetchedCitizen={isLinkDataFetched}
+              isLoading={islinkDataLoading}
+            />
           </Route>
 
           <Route path={`${path}/login`}>

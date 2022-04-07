@@ -72,7 +72,7 @@ const ModuleCardFullWidth = ({ moduleName,  links = [], isCitizen = false, class
           <div className="links-wrapper" style={{ width: "100%", display: "flex", flexWrap: "wrap" }}>
             {links.map(({ count, label, link }, index) => (
               <span className="link full-employee-card-link" key={index}>
-                {link ? <Link to={link}>{label}</Link> : null}
+                {link ? (link?.includes('digit-ui/')?<Link to={link}>{label}</Link>:<a href={link}>{label}</a>) : null}
               </span>
             ))}
           </div>

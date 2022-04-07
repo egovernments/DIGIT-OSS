@@ -34,7 +34,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
 
 
   useEffect(() => {
-    if (
+    if ( !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1) && 
       propertyData?.Properties.length > 0 &&
       ptSearchConfig.maxResultValidation &&
       propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
@@ -136,6 +136,12 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
         },
         {
+          label: t("PT_PROVIDE_ONE_MORE_PARAM"),
+          isInsideBox: true,
+          placementinbox: 0,
+          isSectionText : true,
+        },
+        {
           label: mobileNumber.label,
           type: mobileNumber.type,
           populators: {
@@ -146,7 +152,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           ...description,
           isMandatory: false,
           isInsideBox: true,
-          placementinbox: 0,
+          placementinbox: 1,
         },
         {
           label: property.label,
@@ -154,7 +160,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             <div className="tooltip" style={{ paddingLeft: "10px", marginBottom: "-3px" }}>
               {"  "}
               <InfoBannerIcon fill="#0b0c0c" />
-              <span className="tooltiptext" style={{ width: "150px", bottom: "-290%", left: "230%" }}>
+              <span className="tooltiptext" style={{ width: "150px", left: "230%", fontSize:"14px" }}>
                 {t(property.description) + " " + ptSearchConfig?.propertyIdFormat}
               </span>
             </div>
@@ -268,6 +274,12 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
         },
         {
+          label: t("PT_PROVIDE_ONE_MORE_PARAM"),
+          isInsideBox: true,
+          placementinbox: 0,
+          isSectionText : true,
+        },
+        {
           label: doorNo.label,
           type: doorNo.type,
           populators: {
@@ -277,7 +289,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
           isMandatory: false,
           isInsideBox: true,
-          placementinbox: 0,
+          placementinbox: 1,
         },
         {
           label: name.label,
@@ -390,13 +402,13 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     return <Loader />;
   }
 
-  let validation = ptSearchConfig.maxResultValidation ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
+  let validation = ptSearchConfig.maxResultValidation && !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1)   ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
 
   if (propertyData && !propertyDataLoading && !error && validation ) {
     let qs = {};
     qs = { ...searchData.filters, city: searchData.city };
 
-    if (
+    if ( !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1) && 
       ptSearchConfig?.ptSearchCount &&
       searchData?.filters?.locality &&
       propertyDataLoading &&

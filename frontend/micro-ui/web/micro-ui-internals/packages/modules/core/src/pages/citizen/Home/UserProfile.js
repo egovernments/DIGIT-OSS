@@ -386,6 +386,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
             boxShadow: userType === "citizen" ? "" : "1px 1px 4px 0px rgba(0,0,0,0.2)",
             background: "white",
             padding: userType === "citizen" ? "8px" : "24px",
+            paddingBottom : "20px",
           }}
         >
           {userType === "citizen" ? (

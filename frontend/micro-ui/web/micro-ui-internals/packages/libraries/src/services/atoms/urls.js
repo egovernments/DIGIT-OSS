@@ -67,6 +67,7 @@ const Urls = {
     assessment_create: "/property-services/assessment/_create",
     assessment_search: "/property-services/assessment/_search",
     payment_search: "/collection-services/payments/PT/_search",
+    pt_calculate_mutation: "/pt-calculator-v2/propertytax/mutation/_calculate"
   },
 
   dss: {

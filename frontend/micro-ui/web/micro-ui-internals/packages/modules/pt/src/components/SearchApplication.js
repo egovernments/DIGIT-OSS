@@ -2,12 +2,14 @@ import React, { useCallback, useMemo, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, MobileNumber, Loader, CardText, Header } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
+import MobileSearchApplication from "./MobileSearchApplication";
 
 const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count, setShowToast }) => {
+    const isMobile = window.Digit.Utils.browser.isMobile();
     const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
         defaultValues: {
             offset: 0,
-            limit: 10,
+            limit: !isMobile && 10,
             sortBy: "commencementDate",
             sortOrder: "DESC"
         }
@@ -121,6 +123,10 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count, set
     let validation={}
 
     return <React.Fragment>
+                {isMobile ?
+                <MobileSearchApplication {...{ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit, formState, setShowToast }}/>
+                 :
+                <div>
                 <Header>{t("PT_SEARCH_PROP_APP")}</Header>
                 < Card className={"card-search-heading"}>
                     <span style={{color:"#505A5F"}}>{t("Provide at least one parameter to search for an application")}</span>
@@ -267,6 +273,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count, set
                 disableSort={false}
                 sortParams={[{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}]}
             />: data !== "" || isLoading && <Loader/>)}
+            </div>}
         </React.Fragment>
 }
 

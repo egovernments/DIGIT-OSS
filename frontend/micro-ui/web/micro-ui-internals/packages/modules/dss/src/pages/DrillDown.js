@@ -49,7 +49,7 @@ const DrillDown = ({ stateCode }) => {
     setFilters(data);
   };
 
-  const { data: ulbTenants, isLoading: isUlbLoading } = Digit.Hooks.useModuleTenants("FSM");
+  const { data: ulbTenants, isLoading: isUlbLoading } = Digit.Hooks.useModuleTenants("DSS");
   const provided = useMemo(
     () => ({
       value: filters,
@@ -138,12 +138,12 @@ const DrillDown = ({ stateCode }) => {
             filters?.filters?.tenantId &&
             filters.filters.tenantId
               .slice(0, 5)
-              .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeULB(id)} />)}
+              .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeULB(id)} />)}
           {filters?.filters?.tenantId?.length > 6 && (
             <>
               {showFilters &&
                 filters.filters.tenantId.map((filter, id) => (
-                  <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeULB(id)} />
+                  <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeULB(id)} />
                 ))}
               {!showFilters && (
                 <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>
@@ -168,12 +168,12 @@ const DrillDown = ({ stateCode }) => {
             filters?.filters?.state &&
             filters.filters.state
               .slice(0, 5)
-              .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(filter)}`} onClick={() => removeST(id)} />)}
+              .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeST(id)} />)}
           {filters?.filters?.state?.length > 6 && (
             <>
               {showFilters &&
                 filters.filters.state.map((filter, id) => (
-                  <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(filter)}`} onClick={() => removeST(id)} />
+                  <RemoveableTag key={id} text={`${t(`DSS_HEADER_STATE`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeST(id)} />
                 ))}
               {!showFilters && (
                 <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>
@@ -198,12 +198,12 @@ const DrillDown = ({ stateCode }) => {
             filters?.filters?.ulb &&
             filters.filters.ulb
               .slice(0, 5)
-              .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeTenant(id)} />)}
+              .map((filter, id) => <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeTenant(id)} />)}
           {filters?.filters?.ulb?.length > 6 && (
             <>
               {showFilters &&
                 filters.filters.ulb.map((filter, id) => (
-                  <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(filter)}`} onClick={() => removeTenant(id)} />
+                  <RemoveableTag key={id} text={`${t(`DSS_HEADER_ULB`)}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter)}`)}`} onClick={() => removeTenant(id)} />
                 ))}
               {!showFilters && (
                 <p className="clearText cursorPointer" onClick={() => setShowFilters(true)}>

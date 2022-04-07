@@ -122,13 +122,11 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 				.distanceFromRoad(rs.getDouble("distanceFromRoad")).id(rs.getString("fsm_pit_id"))
 				.additionalDetails(getAdditionalDetail("fsm_pit_additionalDetails", rs)).tenantId(rs.getString("tenantid")).build();
 		
-			
 		fsm.setAddress(address);
 		fsm.setPitDetail(pitDetail);
 		fsm.setAuditDetails(auditdetails);
 		
 	}
-
 
     private JsonNode getAdditionalDetail(String columnName, ResultSet rs){
 

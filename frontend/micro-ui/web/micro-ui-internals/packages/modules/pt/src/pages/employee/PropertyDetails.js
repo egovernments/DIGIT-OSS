@@ -34,6 +34,7 @@ const PropertyDetails = () => {
   const [businessService, setBusinessService] = useState("PT.CREATE");
   const history = useHistory();
   sessionStorage.setItem("propertyIdinPropertyDetail",applicationNumber);
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, applicationNumber);
   const { data: fetchBillData, isLoading: fetchBillLoading, revalidate } = Digit.Hooks.useFetchBillsForBuissnessService({
@@ -151,7 +152,7 @@ const PropertyDetails = () => {
         belowComponent: () => (
           <LinkLabel
             onClick={() => history.push({ pathname: `/digit-ui/employee/pt/ptsearch/payment-details/${applicationNumber}` })}
-            style={{ marginTop: "15px" }}
+            style={isMobile ? {marginTop: "15px", marginLeft:"0px"} : { marginTop: "15px" }}
           >
             {t("PT_VIEW_PAYMENT")}
           </LinkLabel>
@@ -198,6 +199,8 @@ const PropertyDetails = () => {
                 {
                   action: !fetchBillData?.Bill[0]?.totalAmount ? "MUTATE_PROPERTY" : "PT_TOTALDUES_PAY",
                   forcedName: "PT_OWNERSHIP_TRANSFER",
+                  AmountDueForPay : fetchBillData?.Bill[0]?.totalAmount,
+                  isWarningPopUp : !fetchBillData?.Bill[0]?.totalAmount ? false:true,
                   redirectionUrl: {
                     pathname: !fetchBillData?.Bill[0]?.totalAmount
                       ? `/digit-ui/employee/pt/property-mutate-docs-required/${applicationNumber}`

@@ -13,7 +13,7 @@ export const configScheduleDso = ({ t, rejectMenu, setTrips, trips, applicationC
             {
                 body: [
                     {
-                        label: "Desuldged On",
+                        label: t("ES_FSM_ACTION_DESLUDGING_ON"),
                         isMandatory: true,
                         type: "custom",
                         populators: {

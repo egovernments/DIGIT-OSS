@@ -387,7 +387,6 @@ export const ComplaintDetails = (props) => {
     }
     // return (checkpoint.caption && checkpoint.caption.length !== 0) || checkpoint?.wfComment?.length > 0 ? <TLCaption data={checkpoint?.caption?.[0]} comments={checkpoint?.wfComment} /> : null;
     return <>
-      {(checkpoint.status == "RESOLVED" && complaintDetails.workflow.action == "RATE" && index <= 1) && complaintDetails.audit.rating ? <StarRated text={t("CS_ADDCOMPLAINT_YOU_RATED")} rating={complaintDetails.audit.rating} />: null}
       {comment ? <div>{comment?.map( e => 
         <div className="TLComments">
           <h3>{t("WF_COMMON_COMMENTS")}</h3>
@@ -399,6 +398,7 @@ export const ComplaintDetails = (props) => {
         <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => zoomImageTimeLineWrapper(src, index,thumbnailsToShow)} />
       </div> : null}
       {captionForOtherCheckpointsInTL?.date ? <TLCaption data={captionForOtherCheckpointsInTL}/> : null}
+      {(checkpoint.status == "CLOSEDAFTERRESOLUTION" && complaintDetails.workflow.action == "RATE" && index <= 1) && complaintDetails.audit.rating ? <StarRated text={t("CS_ADDCOMPLAINT_YOU_RATED")} rating={complaintDetails.audit.rating} />: null}
     </>
   }
 

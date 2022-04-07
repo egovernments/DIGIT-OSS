@@ -47,6 +47,7 @@ const setSearchResponse = async (
     ], dispatch);
 
     dispatch(prepareFinalObject("PaymentReceipt", get(response, 'Payments[0]', {})));
+    dispatch(prepareFinalObject("PaymentReceipt.pendingAmountCalculated",Number(get(response, 'Payments[0].totalDue', 0))-Number(get(response, 'Payments[0].totalAmountPaid', 0)) ));
   }
   catch (error) {
     // enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, RadioButtons, LabelFieldPair, CardLabel, TextInput } from "@egovernments/digit-ui-react-components";
+import { FormStep, RadioButtons, LabelFieldPair, CardLabel, TextInput, CheckBox } from "@egovernments/digit-ui-react-components";
 
 const PTPropertyUnderStateAquire = ({ ...props }) => {
   const { t, config, onSelect, userType, formData, setError, clearErrors, errors } = props;
@@ -25,15 +25,30 @@ const PTPropertyUnderStateAquire = ({ ...props }) => {
 
   const onSkip = () => {};
 
+  function setPropertyUnderGovtPossession(e) {
+    if (e.target.checked == true) {
+      setSelected({ code: "YES"});
+    } else {
+      setSelected({ code: "NO"});
+    }
+  }
+
   if (userType === "employee") {
     return (
       <React.Fragment>
         <LabelFieldPair style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-          <CardLabel style={{ fontWeight: "bold" }} className="card-label-smaller">
+          {/* <CardLabel style={{ fontWeight: "bold" }} className="card-label-smaller">
             {t("PT_MUTATION_STATE_ACQUISITION") + " *"}
-          </CardLabel>
-          <div className="field">
-            <RadioButtons
+          </CardLabel> */}
+          <div className="field" style={{width: "55%"}}>
+            <CheckBox
+              label={`${t("PT_MUTATION_STATE_ACQUISITION")}*`}
+              name={"isPropertyUnderGovtPossession"}
+              onChange={setPropertyUnderGovtPossession}
+              checked={isPropertyUnderGovtPossession?.code === "YES" ? true : false}
+              style={{ paddingBottom: "10px", paddingTop: "3px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#0b0c0c" }}
+            />
+            {/* <RadioButtons
               style={{ display: "flex" }}
               innerStyles={{ paddingRight: "250px" }}
               t={t}
@@ -46,7 +61,7 @@ const PTPropertyUnderStateAquire = ({ ...props }) => {
               }}
               labelKey="PT_MUTATION_STATE_ACQUISITION"
               isDependent={true}
-            />
+            /> */}
           </div>
         </LabelFieldPair>
 

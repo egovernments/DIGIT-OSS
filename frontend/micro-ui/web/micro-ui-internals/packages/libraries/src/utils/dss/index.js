@@ -1,12 +1,14 @@
 import { addMonths, endOfYear, format, startOfYear, subYears,subSeconds,endOfToday } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 const amountFormatter = (value, denomination) => {
   const currencyFormatter = new Intl.NumberFormat("en-IN", { currency: "INR" });
+  const { t } = useTranslation();
   switch (denomination) {
     case "Lac":
-      return `₹ ${currencyFormatter.format((value / 100000).toFixed(2) || 0)} Lac`;
+      return `₹ ${currencyFormatter.format((value / 100000).toFixed(2) || 0)} ${t("ES_DSS_LAC")}`;
     case "Cr":
-      return `₹ ${currencyFormatter.format((value / 10000000).toFixed(2) || 0)} Cr`;
+      return `₹ ${currencyFormatter.format((value / 10000000).toFixed(2) || 0)} ${t("ES_DSS_CR")}`;
     case "Unit":
       return `₹ ${currencyFormatter.format(value?.toFixed(2) || 0)}`;
     default:

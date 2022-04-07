@@ -24,7 +24,7 @@ const EmployeePayment = ({ stateCode, cityCode, moduleCode }) => {
 
   return (
     <React.Fragment>
-      <p className="breadcrumb">
+      <p className="breadcrumb" style={{"marginLeft":"15px"}}>
         <Link to={`/digit-ui/employee`}>{t("ES_COMMON_HOME")}</Link>/{link}
       </p>
       <Switch>

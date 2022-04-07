@@ -290,6 +290,10 @@ public class FSMValidator {
 			throw new CustomException(FSMErrorConstants.INVALID_ACTION," Payment preference is mandatory!");
 		}
 		
+		if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE) && isDsoRole && fsmRequest.getFsm() !=null && !StringUtils.hasLength(fsmRequest.getFsm().getReceivedPayment())) {
+			throw new CustomException(FSMErrorConstants.INVALID_ACTION," Received payment type is mandatory!");
+		}
+		
 		validateUpdatableParams(fsmRequest, searchResult, mdmsData);
 		validateAllIds(searchResult, fsm);
 		
@@ -312,13 +316,9 @@ public class FSMValidator {
 		
 		mdmsValidator.validatePaymentPreference(fsm.getPaymentPreference());
 		
-		/*
-		 * if(null != fsmRequest.getWorkflow() && null !=
-		 * fsmRequest.getWorkflow().getAction() &&
-		 * fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.
-		 * WF_ACTION_COMPLETE) && isDsoRole)
-		 * mdmsValidator.validateReceivedPaymentType(fsm.getReceivedPayment());
-		 */
+		if (null != fsmRequest.getWorkflow() && null != fsmRequest.getWorkflow().getAction()
+				&& fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE) && isDsoRole)
+			mdmsValidator.validateReceivedPaymentType(fsm.getReceivedPayment());
 
 	}
 	
