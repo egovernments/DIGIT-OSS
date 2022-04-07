@@ -265,7 +265,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       fileStoreId.map((i) => (temp[fileStoreId.indexOf(i) + 1] = i))
       applicationData.pitDetail.additionalDetails = { fileStoreId: temp };
     }
-    if (data.noOfTrips) applicationData.noOfTrips = Number(data.noOfTrips); 
+    if (data.noOfTrips) applicationData.noOfTrips = Number(data.noOfTrips);
     if (action === "REASSING") applicationData.vehicleId = null;
 
     if (reassignReason) addCommentToWorkflow(reassignReason, workflow, data);
@@ -290,6 +290,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             dso,
             vehicle,
             vehicleCapacity: applicationData?.vehicleCapacity,
+            noOfTrips: applicationData?.noOfTrips,
             vehicleNo,
             vehicleNoList,
             selectVehicleNo,

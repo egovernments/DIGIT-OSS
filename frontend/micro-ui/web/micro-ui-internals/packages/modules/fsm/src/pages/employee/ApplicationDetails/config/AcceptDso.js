@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
 
-export const configAcceptDso = ({ t, dsoData, dso, selectVehicleNo, vehicleNoList, vehicleNo, vehicle, action }) => {
+export const configAcceptDso = ({ t, dsoData, dso, selectVehicleNo, vehicleNoList, vehicleNo, vehicle, noOfTrips, action }) => {
   return {
     label: {
       heading: `ES_FSM_ACTION_TITLE_${action}`,
@@ -35,6 +35,19 @@ export const configAcceptDso = ({ t, dsoData, dso, selectVehicleNo, vehicleNoLis
               validation: {
                 required: true,
               },
+            },
+            disable: true,
+          },
+          {
+            label: t("ES_FSM_ACTION_NUMBER_OF_TRIPS"),
+            isMandatory: true,
+            type: "text",
+            populators: {
+              name: "noOfTrips",
+              validation: {
+                required: true,
+              },
+              defaultValue: noOfTrips
             },
             disable: true,
           },
