@@ -17,7 +17,7 @@ const Dialog = ({ onSelect, onCancel,userType}) => {
         left: "0",
         right: "0",
         bottom: "0",
-        backgroundColor: "rgba(0,0,0,0.5)",
+        backgroundColor: "rgba(0,0,0,0.7)",
         zIndex:"1000"
       }}
     >
@@ -93,7 +93,7 @@ const Dialog = ({ onSelect, onCancel,userType}) => {
       left: "0",
       right: "0",
       bottom: "0",
-      backgroundColor: "rgba(0,0,0,0.5)",
+      backgroundColor: "rgba(0,0,0,0.7)",
       zIndex:"1000"
     }}
   >
@@ -101,7 +101,6 @@ const Dialog = ({ onSelect, onCancel,userType}) => {
       style={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
         justifyContent: "space-between",
         position: "absolute",
         top: "200px",
@@ -111,19 +110,20 @@ const Dialog = ({ onSelect, onCancel,userType}) => {
         borderRadius: "4px",
         width: "402px",
         height: "252px",
+        boxShadow:"0px 1px 2px rgba(0, 0, 0, 0.16)"
       }}
     >
-      <h2 style={{ fontSize: "24px", width: "100%", textAlign: "left", fontWeight: "bold", margin: "5px",fontFamily:"Roboto"}}> Logout</h2>
+      <h2 style={{ fontSize: "24px", width: "100%", textAlign: "left", fontWeight: "bold",fontFamily:"Roboto"}}> Logout</h2>
       <div style={{ position: "absolute", top: "5px", right: "5px", height: "24px", width: "24px", fill: "grey" }}>
 
         <button onClick={onCancel}>
           <CloseSvg />
         </button>
       </div>
-
-      <CardText stlye={{ textAlign: "left",fontSize: "16px", width: "100%", height: "19px" ,fontFamily:"Roboto" }}>Are you sure you want to <span fontWeight="bold">Logout</span>?</CardText>
+        
+      <h3 stlye={{ fontSize: "16px", width: "100%",fontFamily:"Roboto",textAlign:"left"}}>Are you sure you want to <span style={{fontWeight:"bold"}}>Logout</span>?</h3>
       
-      <div style={{ display: "flex", gap: "18px"}}>
+      <div style={{ display: "flex", gap: "28px",marginLeft:"90px"}}>
         <button
           onClick={() => onCancel()}
           style={{
@@ -133,7 +133,7 @@ const Dialog = ({ onSelect, onCancel,userType}) => {
             marginLeft: "4px",
             border: "none",
             cursor: "pointer",
-            width: "149px",
+            width: "107px",
             height: "40px",
             boxShadow: "inset 0px -2px 0px #0B0C0C",
             fontFamily:"Roboto",
@@ -148,7 +148,6 @@ const Dialog = ({ onSelect, onCancel,userType}) => {
             background: "#F47738",
             color: "white",
             padding: "2px",
-            marginRight: "4px",
             border: "none",
             cursor: "pointer",
             width: "148px",
