@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Passage;
 import org.egov.edcr.entity.blackbox.PlanDetail;
@@ -21,9 +22,13 @@ import org.springframework.stereotype.Service;
 public class PassageServiceExtract extends FeatureExtract {
 	@Autowired
 	private LayerNames layerNames;
+
 	private static final Logger LOG = Logger.getLogger(PassageServiceExtract.class);
 	private static final String LAYER_PASSAGE="LAYER_NAME_PASSAGE";
 	private static final String LAYER_PASSAGESTAIR="LAYER_NAME_PASSAGE_STAIR";
+
+	private static final Logger LOG = LogManager.getLogger(PassageServiceExtract.class);
+
 
 	@Override
 	public PlanDetail extract(PlanDetail planDetail) {

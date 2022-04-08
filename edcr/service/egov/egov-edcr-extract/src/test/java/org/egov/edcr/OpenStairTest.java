@@ -1,7 +1,19 @@
 package org.egov.edcr;
 
+
 import java.io.IOException;
 
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.egov.common.entity.edcr.Block;
+import org.egov.common.entity.edcr.Measurement;
 import org.egov.edcr.feature.FarExtract;
 import org.egov.edcr.feature.OpenStairServiceExtract;
 import org.junit.Before;
@@ -12,6 +24,8 @@ import org.mockito.runners.MockitoJUnit44Runner;
 @RunWith(MockitoJUnit44Runner.class)
 
 public class OpenStairTest extends BaseTest {
+
+	private static final Logger LOG = LogManager.getLogger(OpenStair.class);
 
 	FarExtract far = new FarExtract();
 	OpenStairServiceExtract openStairExtract = new OpenStairServiceExtract();

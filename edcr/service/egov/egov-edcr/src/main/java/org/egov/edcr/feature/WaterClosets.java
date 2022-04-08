@@ -53,6 +53,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Measurement;
@@ -64,6 +67,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WaterClosets extends FeatureProcess {
+
+	private static final Logger LOG = LogManager.getLogger(WaterClosets.class);
 
 	private static final String RULE_41_IV = "41-iv";
 	private static final String WATERCLOSETS_DESCRIPTION = "Water Closets";

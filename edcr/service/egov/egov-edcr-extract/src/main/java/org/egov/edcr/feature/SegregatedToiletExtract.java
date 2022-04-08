@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.SegregatedToilet;
 import org.egov.edcr.entity.blackbox.MeasurementDetail;
 import org.egov.edcr.entity.blackbox.PlanDetail;
@@ -15,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SegregatedToiletExtract extends FeatureExtract {
+
+    private static final Logger LOGGER = LogManager.getLogger(SegregatedToiletExtract.class);
+
     @Autowired
     private LayerNames layerNames;
 

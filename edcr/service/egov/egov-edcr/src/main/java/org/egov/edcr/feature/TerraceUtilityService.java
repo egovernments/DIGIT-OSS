@@ -55,6 +55,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -66,6 +69,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TerraceUtilityService extends FeatureProcess {
+
+    private static final Logger LOG = LogManager.getLogger(TerraceUtility.class);
 
     private static final String RULE_34 = "43-1";
     public static final String TERRACEUTILITIESDISTANCE = "TerraceUtilitiesDistance";

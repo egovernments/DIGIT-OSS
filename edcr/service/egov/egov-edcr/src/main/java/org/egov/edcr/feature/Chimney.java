@@ -54,6 +54,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -63,6 +65,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class Chimney extends FeatureProcess {
 
+	private static final Logger LOG = LogManager.getLogger(Chimney.class);
 
 	private static final String RULE_44_D = "44-d";
 	public static final String CHIMNEY_DESCRIPTION = "Chimney";

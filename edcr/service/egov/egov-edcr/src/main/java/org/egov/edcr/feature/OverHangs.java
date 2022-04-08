@@ -56,6 +56,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Building;
 import org.egov.common.entity.edcr.Floor;
@@ -67,6 +71,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OverHangs extends FeatureProcess {
+
+    private static final Logger LOG = LogManager.getLogger(OverHangs.class);
 
     private static final String RULE_45 = "45";
     private static final String OVERHANGS_DESCRIPTION = "Minimum width of chajja";

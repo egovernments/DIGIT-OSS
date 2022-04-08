@@ -2,7 +2,8 @@ package org.egov.edcr;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.edcr.feature.PlantationGreenStripExtract;
@@ -15,7 +16,7 @@ import org.mockito.runners.MockitoJUnit44Runner;
 
 public class GreenStripTest extends BaseTest {
 
-    private static final Logger LOG = Logger.getLogger(GreenStripTest.class);
+    private static final Logger LOG = LogManager.getLogger(GreenStripTest.class);
     PlantationGreenStripExtract feature = new PlantationGreenStripExtract();
 
     @Before

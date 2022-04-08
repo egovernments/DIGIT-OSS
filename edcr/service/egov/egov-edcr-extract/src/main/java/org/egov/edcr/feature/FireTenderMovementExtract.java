@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.FireTenderMovement;
 import org.egov.common.entity.edcr.Measurement;
@@ -25,6 +29,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FireTenderMovementExtract extends FeatureExtract {
+
+    private static final Logger LOG = LogManager.getLogger(FireTenderMovementExtract.class);
 
     final Ray rayCasting = new Ray(new Point(-1.123456789, -1.987654321, 0d));
     @Autowired

@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.bpa.SubOccupancy;
 import org.egov.common.entity.bpa.Usage;
 import org.egov.common.entity.edcr.Block;
@@ -44,6 +45,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class FarExtract extends FeatureExtract {
 
+
     private static final String LAYER_NAME_CRPT_UP_AREA = "LAYER_NAME_CRPT_UP_AREA";
 	private static final String LAYER_NAME_CRPT_AREA_DEDUCT = "LAYER_NAME_CRPT_AREA_DEDUCT";
 	private static final String LAYER_NAME_EXISTING_PREFIX = "LAYER_NAME_EXISTING_PREFIX";
@@ -51,7 +53,9 @@ public class FarExtract extends FeatureExtract {
 	private static final String LAYER_NAME_BUILT_UP_AREA_DEDUCT = "LAYER_NAME_BUILT_UP_AREA_DEDUCT";
 	private static final String LAYER_NAME_FLOOR_NAME_PREFIX = "LAYER_NAME_FLOOR_NAME_PREFIX";
 	private static final String LAYER_NAME_BLOCK_NAME_PREFIX = "LAYER_NAME_BLOCK_NAME_PREFIX";
-	private static final Logger LOG = Logger.getLogger(FarExtract.class);
+	
+    private static final Logger LOG = LogManager.getLogger(FarExtract.class);
+
     @Autowired
     private OccupancyService occupancyService;
     @Autowired

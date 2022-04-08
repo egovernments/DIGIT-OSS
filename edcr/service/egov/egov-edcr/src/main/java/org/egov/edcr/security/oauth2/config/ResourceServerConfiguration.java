@@ -51,7 +51,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -77,7 +78,7 @@ import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHand
 @EnableResourceServer
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-    private static final Logger LOGGER = Logger.getLogger(ResourceServerConfiguration.class);
+    private static final Logger LOGGER = LogManager.getLogger(ResourceServerConfiguration.class);
     private static final String APIS_CONFIG = "config/restapi-secured-apis-config.json";
     private static final String APIS_CONFIG_OVERRIDE = "config/restapi-secured-apis-config-override.json";
     private static final String RESOURCE_ID = "egov-edcr";

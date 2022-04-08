@@ -3,6 +3,9 @@ package org.egov.edcr.feature;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.edcr.entity.blackbox.MeasurementDetail;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LocationPlanExtract extends FeatureExtract {
+
+    private static final Logger LOG = LogManager.getLogger(LocationPlanExtract.class);
 
     @Autowired
     private LayerNames layerNames;

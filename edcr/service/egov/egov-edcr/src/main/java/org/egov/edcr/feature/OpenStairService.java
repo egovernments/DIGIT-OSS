@@ -4,15 +4,19 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Plan;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OpenStairService extends FeatureProcess {
+
 	// private static final String SUB_RULE_24_11 = "24-11";
 	// private static final BigDecimal OPENSTAIR_DISTANCE =
 	// BigDecimal.valueOf(0.60);
-
+  private static final Logger LOG = LogManager.getLogger(OpenStairService.class);
 	@Override
 	public Plan validate(Plan plan) {
 
@@ -59,5 +63,6 @@ public class OpenStairService extends FeatureProcess {
 	public Map<String, Date> getAmendments() {
 		return new LinkedHashMap<>();
 	}
+
 
 }

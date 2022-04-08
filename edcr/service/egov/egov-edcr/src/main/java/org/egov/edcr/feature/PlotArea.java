@@ -61,6 +61,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.dcr.helper.OccupancyHelperDetail;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -69,6 +72,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PlotArea extends FeatureProcess {
+
+    private static final Logger LOG = LogManager.getLogger(PlotArea.class);
 
     private static final String RULE_34 = "34-1";
     private static final String PLOTAREA_DESCRIPTION = "Minimum Plot Area";

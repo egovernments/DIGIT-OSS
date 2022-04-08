@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.PlanFeature;
 import org.egov.common.entity.edcr.PlanInformation;
@@ -36,31 +37,41 @@ public class ExtractService {
 	private CustomImplProvider specificRuleService;
 	@Autowired
     private AppConfigValueService appConfigValueService;
-	private static final Logger LOG = Logger.getLogger(ExtractService.class);
+    @Autowired
+    private EDCRMdmsUtil edcrMdmsUtil;
+    @Autowired
+    private MdmsConfiguration mdmsConfiguration;
+    @Autowired
+    private CityService cityService;
+    @Autowired
+    private MDMSValidator mdmsValidator;
 
-	       
-	public Plan extract(File dxfFile, Amendment amd, Date scrutinyDate, List<PlanFeature> features) {
+    private Logger LOG = LogManager.getLogger(ExtractService.class);
 
-		PlanInformation pi = new PlanInformation();
-		DXFDocument doc = getDxfDocument(dxfFile);
-		PlanDetail planDetail = new PlanDetail();
-		planDetail.setDoc(doc);
-		planDetail.setPlanInformation(pi);
-		planDetail.setApplicationDate(scrutinyDate);
-        
-                if (doc.getDXFHeader().getVariable("$INSUNITS") != null) {
-                    String unitValue = doc.getDXFHeader().getVariable("$INSUNITS").getValue("70");
-                    if ("1".equalsIgnoreCase(unitValue)) {
-                        planDetail.getDrawingPreference().setUom(DxfFileConstants.INCH_UOM);
-                    } else if ("2".equalsIgnoreCase(unitValue)) {
-                        planDetail.getDrawingPreference().setUom(DxfFileConstants.FEET_UOM);
-                    } else if ("6".equalsIgnoreCase(unitValue)) {
-                        planDetail.getDrawingPreference().setUom(DxfFileConstants.METER_UOM);
-                    } else {
-                        planDetail.getDrawingPreference().setInMeters(false);
-                        planDetail.getErrors().put("units not in meters", "The 'Drawing Unit' is not as per standard. ");
-                    }
-                }
+    public Plan extract(File dxfFile, Amendment amd, Date scrutinyDate, List<PlanFeature> features) {
+
+        PlanInformation pi = new PlanInformation();
+        DXFDocument doc = getDxfDocument(dxfFile);
+        PlanDetail planDetail = new PlanDetail();
+        planDetail.setDoc(doc);
+        planDetail.setPlanInformation(pi);
+        planDetail.setApplicationDate(scrutinyDate);
+        Map<String, String> cityDetails = specificRuleService.getCityDetails();
+
+        if (doc.getDXFHeader().getVariable("$INSUNITS") != null) {
+            String unitValue = doc.getDXFHeader().getVariable("$INSUNITS").getValue("70");
+            if ("1".equalsIgnoreCase(unitValue)) {
+                planDetail.getDrawingPreference().setUom(DxfFileConstants.INCH_UOM);
+            } else if ("2".equalsIgnoreCase(unitValue)) {
+                planDetail.getDrawingPreference().setUom(DxfFileConstants.FEET_UOM);
+            } else if ("6".equalsIgnoreCase(unitValue)) {
+                planDetail.getDrawingPreference().setUom(DxfFileConstants.METER_UOM);
+            } else {
+                planDetail.getDrawingPreference().setInMeters(false);
+                planDetail.getErrors().put("units not in meters", "The 'Drawing Unit' is not as per standard. ");
+            }
+        }
+
 
         /*
          * // dimension length factor should be 1 if (doc.getDXFHeader() != null && doc.getDXFHeader().getVariable("$DIMLFAC") !=

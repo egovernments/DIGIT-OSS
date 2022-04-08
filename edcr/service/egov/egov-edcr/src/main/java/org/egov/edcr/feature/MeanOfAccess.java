@@ -52,6 +52,12 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.egov.common.entity.edcr.Block;
+import org.egov.common.entity.edcr.OccupancyType;
+
 import org.egov.common.entity.edcr.Plan;
 import org.egov.edcr.utility.DcrConstants;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -59,6 +65,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MeanOfAccess extends FeatureProcess {
+
+    private static final Logger LOG = LogManager.getLogger(MeanOfAccess.class);
+
 
 	//private static final BigDecimal VAL_4000 = BigDecimal.valueOf(4000);
 	private static final String ACCESS_WIDTH = "Access Width";

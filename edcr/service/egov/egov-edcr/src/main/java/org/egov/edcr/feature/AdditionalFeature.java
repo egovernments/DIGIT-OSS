@@ -61,6 +61,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.OccupancyTypeHelper;
 import org.egov.common.entity.edcr.Plan;
@@ -75,6 +79,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AdditionalFeature extends FeatureProcess {
+
+    private static final Logger LOG = LogManager.getLogger(AdditionalFeature.class);
+
 
     private static final String RULE_55_4_A = "55-4-a";
 	private static final String SEGREGATION_OF_WASTE_DETAILS = "Segregation of waste details";

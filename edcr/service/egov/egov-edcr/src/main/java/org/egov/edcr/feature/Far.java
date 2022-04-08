@@ -100,7 +100,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.dcr.helper.OccupancyHelperDetail;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Building;
@@ -120,69 +121,53 @@ import org.springframework.stereotype.Service;
 @Service
 public class Far extends FeatureProcess {
 
-        private static final String LESS_THAN_OR_EQUAL = "<=";
+    private static final Logger LOG = LogManager.getLogger(Far.class);
 
-		private static final String LESS_THAN_2_POINT_5 = "<= 2.5";
+    private static final String VALIDATION_NEGATIVE_FLOOR_AREA = "msg.error.negative.floorarea.occupancy.floor";
+    private static final String VALIDATION_NEGATIVE_EXISTING_FLOOR_AREA = "msg.error.negative.existing.floorarea.occupancy.floor";
+    private static final String VALIDATION_NEGATIVE_BUILTUP_AREA = "msg.error.negative.builtuparea.occupancy.floor";
+    private static final String VALIDATION_NEGATIVE_EXISTING_BUILTUP_AREA = "msg.error.negative.existing.builtuparea.occupancy.floor";
+    public static final String RULE_31_1 = "31-1";
+    public static final String RULE_38 = "38";
 
-		private static final String OCCUPANCY2 = "occupancy";
+    private static final BigDecimal POINTTWO = BigDecimal.valueOf(0.2);
+    private static final BigDecimal POINTFOUR = BigDecimal.valueOf(0.4);
+    private static final BigDecimal POINTFIVE = BigDecimal.valueOf(0.5);
+    private static final BigDecimal POINTSIX = BigDecimal.valueOf(0.6);
+    private static final BigDecimal POINTSEVEN = BigDecimal.valueOf(0.7);
+    private static final BigDecimal ONE = BigDecimal.valueOf(1);
+    private static final BigDecimal ONE_POINTTWO = BigDecimal.valueOf(1.2);
+    private static final BigDecimal ONE_POINTFIVE = BigDecimal.valueOf(1.5);
+    private static final BigDecimal ONE_POINTEIGHT = BigDecimal.valueOf(1.8);
+    private static final BigDecimal TWO = BigDecimal.valueOf(2);
+    private static final BigDecimal TWO_POINTFIVE = BigDecimal.valueOf(2.5);
+    private static final BigDecimal THREE = BigDecimal.valueOf(3);
+    private static final BigDecimal THREE_POINTTWOFIVE = BigDecimal.valueOf(3.25);
+    private static final BigDecimal THREE_POINTFIVE = BigDecimal.valueOf(3.5);
+    private static final BigDecimal FIFTEEN = BigDecimal.valueOf(15);
 
-		private static final String EXISTING_FLOOR_AREA = "existingFloorArea";
+    private static final BigDecimal ROAD_WIDTH_TWO_POINTFOUR = BigDecimal.valueOf(2.4);
+    private static final BigDecimal ROAD_WIDTH_TWO_POINTFOURFOUR = BigDecimal.valueOf(2.44);
+    private static final BigDecimal ROAD_WIDTH_THREE_POINTSIX = BigDecimal.valueOf(3.6);
+    private static final BigDecimal ROAD_WIDTH_FOUR_POINTEIGHT = BigDecimal.valueOf(4.8);
+    private static final BigDecimal ROAD_WIDTH_SIX_POINTONE = BigDecimal.valueOf(6.1);
+    private static final BigDecimal ROAD_WIDTH_NINE_POINTONE = BigDecimal.valueOf(9.1);
+    private static final BigDecimal ROAD_WIDTH_TWELVE_POINTTWO = BigDecimal.valueOf(12.2);
 
-		private static final String EXISTING_BUILT_UP_AREA = "existingBuiltUpArea";
+    private static final BigDecimal ROAD_WIDTH_EIGHTEEN_POINTTHREE = BigDecimal.valueOf(18.3);
+    private static final BigDecimal ROAD_WIDTH_TWENTYFOUR_POINTFOUR = BigDecimal.valueOf(24.4);
+    private static final BigDecimal ROAD_WIDTH_TWENTYSEVEN_POINTFOUR = BigDecimal.valueOf(27.4);
+    private static final BigDecimal ROAD_WIDTH_THIRTY_POINTFIVE = BigDecimal.valueOf(30.5);
 
-		private static final String TOTAL_BUILT_UP_AREA = "totalBuiltUpArea";
+    public static final String OLD = "OLD";
+    public static final String NEW = "NEW";
+    public static final String OLD_AREA_ERROR = "road width old area";
+    public static final String NEW_AREA_ERROR = "road width new area";
+    public static final String OLD_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 2.4m for old area.";
+    public static final String NEW_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 6.1m for new area.";
 
-		private static final String TOTAL_FLOOR_AREA = "totalFloorArea";
+    @Override
 
-		private static final String FLOOR = "floor ";
-
-		private static final Logger LOG = Logger.getLogger(Far.class);
-
-        private static final String VALIDATION_NEGATIVE_FLOOR_AREA = "msg.error.negative.floorarea.occupancy.floor";
-        private static final String VALIDATION_NEGATIVE_EXISTING_FLOOR_AREA = "msg.error.negative.existing.floorarea.occupancy.floor";
-        private static final String VALIDATION_NEGATIVE_BUILTUP_AREA = "msg.error.negative.builtuparea.occupancy.floor";
-        private static final String VALIDATION_NEGATIVE_EXISTING_BUILTUP_AREA = "msg.error.negative.existing.builtuparea.occupancy.floor";
-        //private static final String RULE_31_1 = "31-1";
-        private static final String RULE_38 = "38";
-
-        //private static final BigDecimal POINTTWO = BigDecimal.valueOf(0.2);
-        //private static final BigDecimal POINTFOUR = BigDecimal.valueOf(0.4);
-        private static final BigDecimal POINTFIVE = BigDecimal.valueOf(0.5);
-        //private static final BigDecimal POINTSIX = BigDecimal.valueOf(0.6);
-        //private static final BigDecimal POINTSEVEN = BigDecimal.valueOf(0.7);
-        //private static final BigDecimal ONE = BigDecimal.valueOf(1);
-        private static final BigDecimal ONE_POINTTWO = BigDecimal.valueOf(1.2);
-        private static final BigDecimal ONE_POINTFIVE = BigDecimal.valueOf(1.5);
-        private static final BigDecimal ONE_POINTEIGHT = BigDecimal.valueOf(1.8);
-        private static final BigDecimal TWO = BigDecimal.valueOf(2);
-        private static final BigDecimal TWO_POINTFIVE = BigDecimal.valueOf(2.5);
-        private static final BigDecimal THREE = BigDecimal.valueOf(3);
-        private static final BigDecimal THREE_POINTTWOFIVE = BigDecimal.valueOf(3.25);
-        private static final BigDecimal THREE_POINTFIVE = BigDecimal.valueOf(3.5);
-        //private static final BigDecimal FIFTEEN = BigDecimal.valueOf(15);
-
-        private static final BigDecimal ROAD_WIDTH_TWO_POINTFOUR = BigDecimal.valueOf(2.4);
-        private static final BigDecimal ROAD_WIDTH_TWO_POINTFOURFOUR = BigDecimal.valueOf(2.44);
-        private static final BigDecimal ROAD_WIDTH_THREE_POINTSIX = BigDecimal.valueOf(3.6);
-        private static final BigDecimal ROAD_WIDTH_FOUR_POINTEIGHT = BigDecimal.valueOf(4.8);
-        private static final BigDecimal ROAD_WIDTH_SIX_POINTONE = BigDecimal.valueOf(6.1);
-        private static final BigDecimal ROAD_WIDTH_NINE_POINTONE = BigDecimal.valueOf(9.1);
-        private static final BigDecimal ROAD_WIDTH_TWELVE_POINTTWO = BigDecimal.valueOf(12.2);
-
-        private static final BigDecimal ROAD_WIDTH_EIGHTEEN_POINTTHREE = BigDecimal.valueOf(18.3);
-        private static final BigDecimal ROAD_WIDTH_TWENTYFOUR_POINTFOUR = BigDecimal.valueOf(24.4);
-        private static final BigDecimal ROAD_WIDTH_TWENTYSEVEN_POINTFOUR = BigDecimal.valueOf(27.4);
-        private static final BigDecimal ROAD_WIDTH_THIRTY_POINTFIVE = BigDecimal.valueOf(30.5);
-
-        private static final String OLD = "OLD";
-        private static final String NEW = "NEW";
-        private static final String OLD_AREA_ERROR = "road width old area";
-        private static final String NEW_AREA_ERROR = "road width new area";
-        private static final String OLD_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 2.4m for old area.";
-        private static final String NEW_AREA_ERROR_MSG = "No construction shall be permitted if the road width is less than 6.1m for new area.";
-
-
-        @Override
     public Plan validate(Plan pl) {
         if (pl.getPlot() == null
                 || (pl.getPlot() != null && (pl.getPlot().getArea() == null || pl.getPlot().getArea().doubleValue() == 0))) {

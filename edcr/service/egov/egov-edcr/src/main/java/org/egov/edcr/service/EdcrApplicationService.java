@@ -17,7 +17,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.edcr.entity.ApplicationType;
 import org.egov.edcr.entity.EdcrApplication;
@@ -49,7 +50,9 @@ public class EdcrApplicationService {
     private static final String NEW_SCRTNY = "New Plan Scrutiny";
     public static final String ULB_NAME = "ulbName";
     public static final String ABORTED = "Aborted";
-    private static final Logger LOG = Logger.getLogger(EdcrApplicationService.class);
+
+    private static Logger LOG = LogManager.getLogger(EdcrApplicationService.class);
+
     @Autowired
     protected SecurityUtils securityUtils;
 

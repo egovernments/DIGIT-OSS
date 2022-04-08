@@ -11,7 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.FloorUnit;
@@ -37,9 +38,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ParkingExtract extends FeatureExtract {
+
     private static final String LAYER_NAME_FLOOR_NAME_PREFIX = "LAYER_NAME_FLOOR_NAME_PREFIX";
 	private static final String LAYER_NAME_BLOCK_NAME_PREFIX = "LAYER_NAME_BLOCK_NAME_PREFIX";
-	private static final Logger LOGGER = Logger.getLogger(ParkingExtract.class);
+
+    private static final Logger LOGGER = LogManager.getLogger(ParkingExtract.class);
+
     private static final String DA_PARKING = "DA parking";
     final Ray rayCasting = new Ray(new Point(-1.123456789, -1.987654321, 0d));
 

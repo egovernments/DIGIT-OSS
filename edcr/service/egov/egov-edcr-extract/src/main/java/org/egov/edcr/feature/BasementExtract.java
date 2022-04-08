@@ -2,6 +2,9 @@ package org.egov.edcr.feature;
 
 import java.util.Map;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.edcr.entity.blackbox.PlanDetail;
@@ -12,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BasementExtract extends FeatureExtract {
+
+    private static final Logger LOG = LogManager.getLogger(BasementExtract.class);
 
     @Autowired
     private LayerNames layerNames;
