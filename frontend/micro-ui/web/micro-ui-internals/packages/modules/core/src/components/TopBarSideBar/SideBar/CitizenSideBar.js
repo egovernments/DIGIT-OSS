@@ -1,10 +1,11 @@
-import { LogoutIcon, NavBar, EditPencilIcon } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import { LogoutIcon, NavBar, EditPencilIcon} from "@egovernments/digit-ui-react-components";
+import  React,{useState} from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
 import { Phone } from "@egovernments/digit-ui-react-components";
 import ChangeCity from "../../ChangeCity";
+import Dialog from "./ConfirmationDialog";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -32,6 +33,8 @@ const defaultImage =
 const Profile = ({ info, stateName, t }) => {
   const [profilePic, setProfilePic] = React.useState(null);
 
+  
+
   React.useEffect(async () => {
     const tenant = Digit.ULBService.getCurrentTenantId();
     const uuid=info?.uuid;
@@ -45,6 +48,8 @@ const Profile = ({ info, stateName, t }) => {
     }
   }
   }, [profilePic !== null]);
+
+
 
   return (
     <div className="profile-section">
@@ -98,13 +103,16 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
     toggleSidebar(false);
   };
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
+  const [showDialog,setShowDialog] = useState(false);
   const showProfilePage = () => {
     const redirectUrl = isEmployee ? "/digit-ui/employee/user/profile" : "/digit-ui/citizen/user/profile";
     history.push(redirectUrl);
     closeSidebar();
   };
 
+  const Logout = ()=>{
+    setShowDialog(true);
+  }
   const redirectToLoginPage = () => {
     // localStorage.clear();
     // sessionStorage.clear();
@@ -132,7 +140,7 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
         element: "LOGOUT",
         icon: <LogoutIcon className="icon" />,
         populators: {
-          onClick: onLogout,
+          onClick: Logout,
         },
       },
       {
@@ -168,7 +176,9 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
     profileItem = <span></span>;
     menuItems = menuItems.filter((ele) => ele.element === "LANGUAGE");
   }
-
+  if(showDialog){
+    return <Dialog onSelect={()=> setShowDialog(false)} onCancel={()=>setShowDialog(false)}/>;
+  }
   return (
     <div>
       <NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={closeSidebar} Footer={<PoweredBy />} />

@@ -3,9 +3,11 @@ import { EditPencilIcon, LogoutIcon } from "@egovernments/digit-ui-react-compone
 import TopBar from "./TopBar";
 import { useHistory } from "react-router-dom";
 import SideBar from "./SideBar";
+import Dialog from "./SideBar/ConfirmationDialog";
 
 const TopBarSideBar = ({ t, stateInfo, userDetails, CITIZEN, cityDetails, mobileView, handleUserDropdownSelection, logoUrl, showSidebar = true ,showLanguageChange}) => {
     const [isSidebarOpen, toggleSidebar] = useState(false);
+    const [showDialog,setShowDialog] = useState(false);
     const history = useHistory();
 
     const handleLogout = () => {
@@ -14,11 +16,16 @@ const TopBarSideBar = ({ t, stateInfo, userDetails, CITIZEN, cityDetails, mobile
     };
     const userProfile=()=>{
       history.push("/digit-ui/employee/user/profile");
-
     }
   
-    const userOptions = [{ name: t("EDIT_PROFILE"), icon: <EditPencilIcon className="icon" />, func: userProfile },{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout }];
-  
+    const Logout = ()=>{
+      setShowDialog(true);
+    }
+
+    const userOptions = [{ name: t("EDIT_PROFILE"), icon: <EditPencilIcon className="icon" />, func: userProfile },{ name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: Logout }];
+    if(showDialog){
+      return <Dialog onSelect={()=> setShowDialog(false)} onCancel={()=>setShowDialog(false)}/>;
+    }
     return (
       <React.Fragment>
         <TopBar
