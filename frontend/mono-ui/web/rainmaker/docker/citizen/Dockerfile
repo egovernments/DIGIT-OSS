@@ -6,6 +6,7 @@ ENV NODE_OPTIONS "--max-old-space-size=1792"
 
 # copy the project files
 COPY ${WORK_DIR} .
+RUN node -v
 RUN yarn run prod:citizen
 
 # Create runtime image
