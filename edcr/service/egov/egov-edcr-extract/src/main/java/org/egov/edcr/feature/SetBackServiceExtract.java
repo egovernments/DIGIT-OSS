@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.SetBack;
 import org.egov.edcr.constants.DxfFileConstants;
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SetBackServiceExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(SetBackServiceExtract.class);
+    private static final Logger LOG = LogManager.getLogger(SetBackServiceExtract.class);
     @Autowired
     private LayerNames layerNames;
     @Autowired

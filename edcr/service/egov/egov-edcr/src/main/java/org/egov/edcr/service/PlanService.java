@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -51,7 +52,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Service
 public class PlanService {
-    private static final Logger LOG = Logger.getLogger(PlanService.class);
+    private static final Logger LOG = LogManager.getLogger(PlanService.class);
     @Autowired
     private PlanFeatureService featureService;
     @Autowired

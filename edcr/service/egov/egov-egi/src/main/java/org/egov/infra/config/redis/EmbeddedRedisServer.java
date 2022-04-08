@@ -51,7 +51,8 @@ package org.egov.infra.config.redis;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -63,7 +64,7 @@ import redis.embedded.RedisServer;
 
 public class EmbeddedRedisServer implements InitializingBean, DisposableBean, BeanDefinitionRegistryPostProcessor {
     
-    private static final Logger LOG = Logger.getLogger(EmbeddedRedisServer.class);
+    private static final Logger LOG = LogManager.getLogger(EmbeddedRedisServer.class);
 
     private RedisServer redisServer;
 
