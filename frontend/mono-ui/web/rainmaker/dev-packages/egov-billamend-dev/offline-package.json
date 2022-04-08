@@ -43,7 +43,7 @@
     "react-responsive-carousel": "^3.1.45",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^1.1.4",
+    "react-scripts": "4.0.3",
     "react-select": "^2.3.0",
     "react-swipeable-views": "^0.13.1",
     "react-table": "^6.8.6",
