@@ -57,6 +57,7 @@ const EmployeeSideBar = () => {
           />
         </div>
       </a>
+      {/*
       <a href={key.includes("DASHBOARD") ? `/employee/integration/dss/${NATADMIN ? "NURT_DASHBOARD" : "home"}` : "/employee"}>
         <div className="actions">
           <ToolTipWrapper
@@ -96,7 +97,8 @@ const EmployeeSideBar = () => {
             label={"ACTION_TEST_HOME"}
           />
         </div>
-      </a>
+      </a> 
+      */}
     </div>
   );
 };
