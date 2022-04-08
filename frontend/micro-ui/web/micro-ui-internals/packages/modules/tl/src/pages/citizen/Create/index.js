@@ -106,6 +106,9 @@ const CreateTradeLicence = ({ parentRoute }) => {
   newConfig?.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
+  let skipenanbledOb = newConfig?.filter(obj => obj?.body?.some(com => com.component === "CPTCreateProperty"))?.[0];
+  let skipenabled = skipenanbledOb?.body?.filter((ob) => ob?.component === "CPTCreateProperty")?.[0]?.isSkipEnabled;
+  sessionStorage.setItem("skipenabled",skipenabled);
   config.indexRoute = "info";
 
   const CheckPage = Digit?.ComponentRegistryService?.getComponent("TLCheckPage");

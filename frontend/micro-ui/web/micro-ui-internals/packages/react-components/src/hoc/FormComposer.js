@@ -250,7 +250,7 @@ export const FormComposer = (props) => {
           <ActionBar>
             <SubmitBar label={t(props.label)} submit="submit" disabled={isDisabled} />
             {props.onSkip && props.showSkip && (
-              <LinkButton label={t(`CS_SKIP_CONTINUE`)} onClick={props.onSkip} />
+              <LinkButton style={props?.skipStyle} label={t(`CS_SKIP_CONTINUE`)} onClick={props.onSkip} />
             )}
         </ActionBar>
         )}

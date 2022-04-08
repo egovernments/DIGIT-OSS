@@ -14,12 +14,13 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
   const history = useHistory();
   const match = useRouteMatch();
   sessionStorage.setItem("VisitedCommonPTSearch",true);
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   
   const [formValue, setFormValue] = useState("");
   const [cityCode, setCityCode] = useState("");
-  let enableSkip = config?.isSkipEnabled;
+  let enableSkip = config?.isSkipEnabled || sessionStorage.getItem("skipenabled");
   // delete
   // const [_formData, setFormData,_clear] = Digit.Hooks.useSessionStorage("store-data",null);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
@@ -95,6 +96,7 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
     <FormComposer
       onSkip = {onSkip}
       showSkip = {enableSkip}
+      skipStyle = {isMobile?{}:{textAlign:"right",marginRight:"55px"}}
       onSubmit={onSubmit}
       noBoxShadow
       inline
