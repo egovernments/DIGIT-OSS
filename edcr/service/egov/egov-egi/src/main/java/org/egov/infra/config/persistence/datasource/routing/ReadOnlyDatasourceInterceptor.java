@@ -48,7 +48,8 @@
 
 package org.egov.infra.config.persistence.datasource.routing;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -64,7 +65,7 @@ import org.springframework.stereotype.Component;
 @Conditional(RoutingDatasourceConfigCondition.class)
 public class ReadOnlyDatasourceInterceptor implements Ordered {
     
-    private static final Logger LOG = Logger.getLogger(ReadOnlyDatasourceInterceptor.class);
+    private static final Logger LOG = LogManager.getLogger(ReadOnlyDatasourceInterceptor.class);
 
     private int order;
 

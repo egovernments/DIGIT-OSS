@@ -61,7 +61,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -71,7 +72,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class Plantation extends FeatureProcess {
 
-    private static final Logger LOGGER = Logger.getLogger(Plantation.class);
+    private static final Logger LOGGER = LogManager.getLogger(Plantation.class);
     private static final String RULE_32 = "32";
     public static final String PLANTATION_TREECOVER_DESCRIPTION = "Plantation tree cover";
 
