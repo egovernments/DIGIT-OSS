@@ -32,6 +32,7 @@ const IconsObject = {
   "insert-chart": <FinanceChartIcon />,
   edcr: <CollectionIcon />,
   collections: <CollectionIcon />,
+  "open-complaints": <ComplaintIcon />,
 };
 const EmployeeSideBar = () => {
   const sidebarRef = useRef(null);
@@ -80,7 +81,18 @@ const EmployeeSideBar = () => {
           configEmployeeSideBar[index].push(item);
         }
       } else {
-        if (item.path !== "") {
+        if (item.navigationURL.indexOf("/digit-ui/employee") === -1 && item.displayName !== "Home") {
+          item.navigationURL = "/digit-ui/employee/" + item.navigationURL;
+        } else if (item.displayName === "Home") {
+          item.navigationURL = "/digit-ui/employee";
+          singleItem.unshift({
+            displayName: item.displayName,
+            navigationURL: item.navigationURL,
+            icon: item.leftIcon,
+            orderNumber: item.orderNumber,
+          });
+        }
+        if (item.path !== "" && item.displayName !== "Home") {
           singleItem.push({
             displayName: item.displayName,
             navigationURL: item.navigationURL,

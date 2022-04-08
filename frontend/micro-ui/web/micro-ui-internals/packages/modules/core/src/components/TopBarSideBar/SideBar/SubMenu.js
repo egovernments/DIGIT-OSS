@@ -58,8 +58,9 @@ const SubMenu = ({ item }) => {
         item.links
           .filter((item) => item.url === "url" || item.url !== "")
           .map((item, index) => {
+            const url = item.navigationURL.indexOf("/digit-ui/employee/") === -1 ? `/digit-ui/employee/${item.navigationURL}` : item.navigationURL;
             return (
-              <Link to={item.link || item.navigationURL} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
+              <Link to={item.link || url} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
                 <div className="actions">
                   <ArrowDirection className="icon" />
                   <span>{item.label || item.displayName}</span>
