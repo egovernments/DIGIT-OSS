@@ -422,7 +422,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           propertyIds : qs?.propertyIds || "",
           oldPropertyIds : qs?.oldPropertyIds || "",
           locality : qs?.locality || "",
-          doorNo : qs?.doorNo || "",
+          doorNo : qs?.doorNumber || "",
           name : qs?.name || "",
         }
         //onSelect('cptSearchQuery',{...SearchParams});
