@@ -3,7 +3,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
-import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
+import ApplicationDetailsTemplate from "../../templates/ApplicationDetails";
 import OwnerHistory from "./PropertyMutation/ownerHistory";
 
 const Close = () => (

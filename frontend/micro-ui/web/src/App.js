@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{Suspense}from 'react';
 
 import { initPGRComponents, PGRReducers } from "@egovernments/digit-ui-module-pgr";
 import { initFSMComponents } from "@egovernments/digit-ui-module-fsm";
@@ -21,6 +21,15 @@ import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonPt";
 initLibraries();
 //"WS" removed the ws enabledModules ;
 const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "NDSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS","NOC","Engagement", "CommonPT"];
+
+var registry=window.Digit.ComponentRegistryService.getRegistry();
+window.Digit.ComponentRegistryService.getComponent=(comp)=>(<Suspense fallback={<div>Loading...</div>}>
+{/* <OtherComponent /> */}
+{registry.getComponent(comp)}
+</Suspense>)
+window.Digit.ComponentRegistryService.setComponent=(id, component = {})=>{
+  registry.setComponent(id, React.lazy(() => component) )
+}
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PTModule,

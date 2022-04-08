@@ -3,7 +3,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
+import ApplicationDetailsTemplate from "../../templates/ApplicationDetails";
 import { newConfigMutate } from "../../config/Mutate/config";
 import TransfererDetails from "../../pageComponents/Mutate/TransfererDetails";
 import MutationApplicationDetails from "./MutationApplicatinDetails";

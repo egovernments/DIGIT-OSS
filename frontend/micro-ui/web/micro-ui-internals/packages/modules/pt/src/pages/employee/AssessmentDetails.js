@@ -1,6 +1,6 @@
 import React, { useEffect, useState,useRef } from "react";
 import { useTranslation } from "react-i18next";
-import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
+import ApplicationDetailsTemplate from "../../templates/ApplicationDetails";
 
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import { ActionBar, Header, Loader, SubmitBar,Card,CardSubHeader,CardSectionHeader,LinkLabel, CardLabel, CardHeader, CardText} from "@egovernments/digit-ui-react-components";

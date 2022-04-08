@@ -36,6 +36,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "sprint": "start:script",
+    "start:script": "./install-deps.sh",
     "build:prepare": "./build.sh"
   },
   "eslintConfig": {

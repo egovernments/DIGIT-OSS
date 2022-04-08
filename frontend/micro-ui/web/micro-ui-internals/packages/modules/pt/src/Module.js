@@ -1,9 +1,8 @@
 import { Header, CitizenHomeCard, PTIcon } from "@egovernments/digit-ui-react-components";
-import React, { useEffect } from "react";
+import React, { useEffect ,Suspense} from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
 import Area from "./pageComponents/Area";
-import PTLandArea from "./pageComponents/PTLandArea";
 import GroundFloorDetails from "./pageComponents/GroundFloorDetails";
 import IsAnyPartOfThisFloorUnOccupied from "./pageComponents/IsAnyPartOfThisFloorUnOccupied";
 import IsResidential from "./pageComponents/IsResidential";
@@ -34,10 +33,9 @@ import SelectAltContactNumber from "./pageComponents/SelectAltContactNumber";
 import SelectDocuments from "./pageComponents/SelectDocuments";
 import UnOccupiedArea from "./pageComponents/UnOccupiedArea";
 import PTEmployeeOwnershipDetails from "./pageComponents/OwnerDetailsEmployee";
-import CitizenApp from "./pages/citizen";
+// import CitizenApp from "./pages/citizen";
 import SearchPropertyCitizen from "./pages/citizen/SearchProperty/searchProperty";
 import SearchResultCitizen from "./pages/citizen/SearchResults";
-import PTCheckPage from "./pages/citizen/Create/CheckPage";
 import PTAcknowledgement from "./pages/citizen/Create/PTAcknowledgement";
 import PropertySearchForm from './components/search/PropertySearchForm';
 import PropertySearchResults from './components/search/PropertySearchResults';
@@ -70,7 +68,7 @@ import TransferProof from "./pageComponents/Mutate/transferReasonDocument";
 import UpdateNumber from "./pages/citizen/MyProperties/updateNumber";
 import EmployeeUpdateOwnerNumber from "./pages/employee/updateNumber";
 
-import EmployeeApp from "./pages/employee";
+// import EmployeeApp from "./pages/employee";
 import PTCard from "./components/PTCard";
 import InboxFilter from "./components/inbox/NewInboxFilter";
 import EmptyResultInbox from "./components/empty-result";
@@ -83,11 +81,11 @@ import EditApplication from "./pages/employee/EditApplication";
 import Response from "./pages/Response";
 import TransferOwnership from "./pages/employee/PropertyMutation";
 import DocsRequired from "./pages/employee/PropertyMutation/docsRequired";
-import SelectOtp from "../../core/src/pages/citizen/Login/SelectOtp";
+// import SelectOtp from "../../core/src/pages/citizen/Login/SelectOtp";
 
 const componentsToRegister = {
-  PTLandArea,
-  PTCheckPage,
+  PTLandArea:React.lazy(() => import('./pageComponents/PTLandArea')),
+  PTCheckPage:React.lazy(() => import("./pages/citizen/Create/CheckPage")),
   PTAcknowledgement,
   PropertyTax,
   PTSelectPincode,
@@ -159,8 +157,10 @@ const componentsToRegister = {
   PTSearchResultsComponent : SearchResultsComponent,
   PTEditProperty : EditProperty,
   PTMutateProperty : MutateProperty,
-  SelectOtp, // To-do: Temp fix, Need to check why not working if selectOtp module is already imported from core module
+  // SelectOtp, // To-do: Temp fix, Need to check why not working if selectOtp module is already imported from core module
 };
+const EmployeeApp=React.lazy(() => import('./pages/employee'));
+const CitizenApp=React.lazy(() => import('./pages/citizen'));
 
 const addComponentsToRegistry = () => {
   Object.entries(componentsToRegister).forEach(([key, value]) => {
@@ -186,8 +186,12 @@ export const PTModule = ({ stateCode, userType, tenants }) => {
    []);
 
   if (userType === "employee") {
-    return <EmployeeApp path={path} url={url} userType={userType} />;
-  } else return <CitizenApp />;
+    return (<Suspense fallback={<div>EMployeeLoading...</div>}>
+<EmployeeApp path={path} url={url} userType={userType} />
+  </Suspense>) ;
+  } else return (<Suspense fallback={<div>Citizen Loading...</div>}>
+ <CitizenApp />
+ </Suspense>);
 };
 
 export const PTLinks = ({ matchPath, userType }) => {
