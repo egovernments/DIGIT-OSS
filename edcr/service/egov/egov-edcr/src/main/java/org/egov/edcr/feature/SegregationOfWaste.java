@@ -51,14 +51,15 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Plan;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SegregationOfWaste extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(SegregationOfWaste.class);
+	private static final Logger LOG = LogManager.getLogger(SegregationOfWaste.class);
 
 	@Override
 	public Plan validate(Plan pl) {

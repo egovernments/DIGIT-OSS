@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Measurement;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BathRoomExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(BathRoomExtract.class);
+    private static final Logger LOG = LogManager.getLogger(BathRoomExtract.class);
     @Autowired
     private LayerNames layerNames;
 

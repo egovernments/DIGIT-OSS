@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Door;
 import org.egov.common.entity.edcr.Floor;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExitWidthExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(ExitWidthExtract.class);
+    private static final Logger LOG = LogManager.getLogger(ExitWidthExtract.class);
     public static final BigDecimal VAL_0_75 = BigDecimal.valueOf(0.75);
     public static final BigDecimal VAL_1_2 = BigDecimal.valueOf(1.2);
     @Autowired
