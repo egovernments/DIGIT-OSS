@@ -7,7 +7,7 @@ import Header from "../../../components/Header";
 
 /* set employee details to enable backward compatiable */
 const setEmployeeDetail=(userObject,token)=>{
-  let locale=JSON.parse(sessionStorage.getItem("Digit.initData"))?.value?.selectedLanguage;
+  let locale=JSON.parse(sessionStorage.getItem("Digit.locale"))?.value;
   localStorage.setItem("Employee.tenant-id",userObject?.tenantId);
   localStorage.setItem("tenant-id",userObject?.tenantId);
   localStorage.setItem("citizen.userRequestObject",JSON.stringify(userObject));
