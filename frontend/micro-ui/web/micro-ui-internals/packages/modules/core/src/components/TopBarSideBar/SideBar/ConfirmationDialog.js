@@ -6,10 +6,9 @@ const Dialog = ({ onSelect, onCancel,userType}) => {
     onSelect();
     Digit.UserService.logout();
   };
-  const userInfo = Digit.UserService.getUser()?.info;
-  userType=userInfo?.type=="EMPLOYEE"?"employee":"citizen";
+
   return (
-    userType==="citizen" ? (
+    window.innerWidth <= 400 ? (
     <div
       style={{
         position: "fixed",
@@ -110,7 +109,7 @@ const Dialog = ({ onSelect, onCancel,userType}) => {
         borderRadius: "4px",
         width: "402px",
         height: "252px",
-        boxShadow:"0px 1px 2px rgba(0, 0, 0, 0.16)"
+        boxShadow:"0px 1px 2px rgba(0, 0, 0, 0.16)",
       }}
     >
       <h2 style={{ fontSize: "24px", width: "100%", textAlign: "left", fontWeight: "bold",fontFamily:"Roboto"}}> Logout</h2>
