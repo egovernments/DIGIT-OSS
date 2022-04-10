@@ -14,6 +14,8 @@ import {
     const match = useRouteMatch();
     const { ConnectionHolderDetails, plumberPreference, serviceName, waterConectionDetails, sewerageConnectionDetails, documents } = value;
     let routeLink = `/digit-ui/citizen/ws/create-application`;
+    if(window.location.href.includes("/edit-application/"))
+    routeLink=`/digit-ui/citizen/ws/edit-application`
 
     function routeTo(jumpTo) {
         location.href=jumpTo;

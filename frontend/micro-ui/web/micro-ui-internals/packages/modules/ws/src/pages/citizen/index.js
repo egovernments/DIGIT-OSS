@@ -14,13 +14,26 @@ import MyConnections from "./MyConnection";
 import ConnectionDetails from "./MyConnection/ConnectionDetails";
 import consumptionDetails from "./MyConnection/ConsumptionDetails";
 import WSMyPayments from "./MyPayment";
+import EditApplication from "./EditApplication";
 
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
+  let isCommonPTPropertyScreen = window.location.href.includes("/ws/create-application/property-details");
+
+  const getBackPageNumber = () => {
+  let goBacktoFromProperty = -1;
+  if(sessionStorage.getItem("VisitedCommonPTSearch") === "true" && isCommonPTPropertyScreen)
+  {
+    goBacktoFromProperty = -4;
+    return goBacktoFromProperty;
+  }
+    return goBacktoFromProperty;
+  }
+
   return (
     <React.Fragment>
-      <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>
+      <BackButton style={{ border: "none" }} isCommonPTPropertyScreen={isCommonPTPropertyScreen} getBackPageNumber={getBackPageNumber}>{t("CS_COMMON_BACK")}</BackButton>
       <Switch>
         <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
         <Route path={`${path}/search`} component={SearchConnectionComponent} />
@@ -34,6 +47,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/connection/additional/:acknowledgementIds`} component={WSAdditionalDetails} />
         <PrivateRoute path={`${path}/connection/details/:acknowledgementIds`} component={ConnectionDetails} />
         <PrivateRoute path={`${path}/consumption/details`} component={consumptionDetails} />
+        <PrivateRoute path={`${path}/edit-application`} component={EditApplication} />
       </Switch>
     </React.Fragment>
   );

@@ -21,6 +21,7 @@ import WSPlumberDetails from "./pageComponents/WSPlumberDetails";
 import WSRoadCuttingDetails from "./pageComponents/WSRoadCuttingDetails";
 import WSPropertyDetails from "./pageComponents/WSPropertyDetails";
 import WSConnectionHolderDetails from "./pageComponents/WSConnectionHolderDetails";
+import EditApplication from "./pages/citizen/EditApplication";
 
 import SearchApplication from "./components/SearchApplication";
 import SearchWaterConnection from "./components/SearchWaterConnection";
@@ -129,8 +130,8 @@ const componentsToRegister = {
   WSAcknowledgement,
   WSPayments,
   WSEditConnectionDetails,
-  ConsumptionDetails
-
+  ConsumptionDetails,
+  EditApplication
 };
 
 export const initWSComponents = () => {

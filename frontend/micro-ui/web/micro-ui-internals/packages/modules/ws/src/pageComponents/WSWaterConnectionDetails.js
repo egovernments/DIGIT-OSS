@@ -42,7 +42,7 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
 
   const handleSubmit = () => {
 
-    if (!(formData?.WaterConnectionResult && formData?.WaterConnectionResult?.WaterConnection?.id) && formData?.serviceName?.code === "WATER") {
+    if (!(formData?.WaterConnectionResult && formData?.WaterConnectionResult?.WaterConnection?.[0]?.id) && formData?.serviceName?.code === "WATER") {
       setIsDisableForNext(true);
       let payload = {
         "WaterConnection": {

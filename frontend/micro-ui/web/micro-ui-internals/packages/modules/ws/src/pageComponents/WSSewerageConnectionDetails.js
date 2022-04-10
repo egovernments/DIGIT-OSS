@@ -29,7 +29,7 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
 
     const handleSubmit = () => {
 
-        if (!(formData?.SewerageConnectionResult && formData?.SewerageConnectionResult?.SewerageConnection?.id) && formData?.serviceName?.code === "SEWERAGE") {
+        if (!(formData?.SewerageConnectionResult && formData?.SewerageConnectionResult?.SewerageConnections?.[0]?.id) && formData?.serviceName?.code === "SEWERAGE") {
             setIsDisableForNext(true);
             let payload = {
               "SewerageConnection": {

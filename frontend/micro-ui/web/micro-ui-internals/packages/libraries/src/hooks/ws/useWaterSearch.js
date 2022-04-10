@@ -14,7 +14,13 @@ const getAddress = (address, t) => {
 } 
 
 const combineResponse = (WaterConnections, properties, billData, t) => {
-  if(WaterConnections && properties )
+  if(WaterConnections && properties ){
+    if(window.location.href.includes("/edit-application/"))
+    return {
+      ...WaterConnections?.[0],
+      property : {...properties?.[0]},
+      billData : {...billData?.[0]},
+    }
   return WaterConnections.map((app) => ({
     ConsumerNumber : app?.connectionNo,
     ConsumerName : app?.connectionHolders ? app?.connectionHolders.map((owner) => owner?.name).join(",") : properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.owners?.map((ow) => ow.name).join(","),
@@ -22,6 +28,7 @@ const combineResponse = (WaterConnections, properties, billData, t) => {
     AmountDue : billData ? (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.amount ? billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.amount : "NA")  : "NA",
     DueDate : billData ? getDate(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.expiryDate) : "NA",
     }))
+  }
   else
   return undefined
 }

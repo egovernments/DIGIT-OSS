@@ -260,6 +260,204 @@ export const convertToWSUpdate = (data) => {
   return formdata;
 }
 
+export const convertToEditWSUpdate = (data) => {
+  let formdata = {
+    "WaterConnection": {
+      "id": data?.id,
+      "tenantId": data?.tenantId,
+      "propertyId": data?.propertyId,
+      "applicationNo": data?.applicationNo,
+      "applicationStatus": data?.applicationStatus,
+      "status": data?.status,
+      "connectionNo": null,
+      "oldConnectionNo": null,
+      "documents": [...data?.documents?.documents],
+      "plumberInfo": [],
+      "roadType": null,
+      "roadCuttingArea": null,
+      "roadCuttingInfo": [],
+      "connectionExecutionDate": null,
+      "connectionCategory": null,
+      "connectionType": null,
+      "additionalDetails": {
+          "initialMeterReading": null,
+          "detailsProvidedBy": "",
+          "locality": data?.additionalDetails?.locality,
+      },
+      "auditDetails": data?.auditDetails,
+      "processInstance": {
+          "documents": [],
+          "assignes": [],
+          "comment": "",
+          "action": "RESUBMIT_APPLICATION"
+      },
+      "applicationType": data?.applicationType,
+      "dateEffectiveFrom": null,
+      "connectionHolders": data?.connectionHolders,
+      "oldApplication": false,
+      "channel": "CITIZEN",
+      "waterSource": null,
+      "meterId": null,
+      "meterInstallationDate": null,
+      "proposedPipeSize": data?.waterConectionDetails?.proposedPipeSize?.code,
+      "proposedTaps": data?.waterConectionDetails?.proposedTaps,
+      "pipeSize": null,
+      "noOfTaps": null,
+      "waterSourceSubSource": null,
+      "property": {...data?.property},
+      "water": data?.applicationType?.includes("WATER")?true:false,
+      "sewerage": data?.applicationType?.includes("WATER")?true:false,
+      "service": data?.serviceName?.code,
+      "reviewDocData": [
+          // {
+          //     "title": "WS_OWNER.IDENTITYPROOF.AADHAAR",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486955487fBbBCkGcdp.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=935dfb4f76083dc3ab7cf0f50aaa0c1c52731e535cf662473118a4118dcc8d87",
+          //     "linkText": "View",
+          //     "name": "fBbBCkGcdp.png"
+          // },
+          // {
+          //     "title": "WS_OWNER.ADDRESSPROOF.ELECTRICITYBILL",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486960218pBQoKhcLup.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=ed55fd96ec6d54421a6ed4b1734f9a951c54061cbd8bdd4bf3ed676935fc6b2f",
+          //     "linkText": "View",
+          //     "name": "pBQoKhcLup.png"
+          // },
+          // {
+          //     "title": "WS_ELECTRICITY_BILL",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486965232AirZwKrIUG.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=db098ee216984d9f413eed0bdb42d8b7a3b61794bc9261d92db2476300064323",
+          //     "linkText": "View",
+          //     "name": "AirZwKrIUG.png"
+          // },
+          // {
+          //     "title": "WS_PLUMBER_REPORT_DRAWING",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486969233XZrstDVnbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6a21266b1aa4352113b115e41dd075b47e20e7989e8b8fee7114957ee26193eb",
+          //     "linkText": "View",
+          //     "name": "XZrstDVnbf.png"
+          // },
+          // {
+          //     "title": "WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486973093GAbDOLwmFf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6c6eff841623980714ddb4db3bd69219ae0398675f563c5bc73ed799763d2785",
+          //     "linkText": "View",
+          //     "name": "GAbDOLwmFf.png"
+          // },
+          // {
+          //     "title": "WS_PROPERTY_TAX_RECIEPT",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486975966JOdiYvhKXM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=00c949dbb7c66fe67ecee67de401202011ed2fc8c66ec5677230b1a1aa389f9e",
+          //     "linkText": "View",
+          //     "name": "JOdiYvhKXM.png"
+          // }
+          ...data?.documents?.documents
+      ],
+      "proposedWaterClosets": data?.sewerageConnectionDetails?.proposedWaterClosets,
+      "proposedToilets": data?.sewerageConnectionDetails?.proposedToilets,
+      "comment": "",
+      "wfDocuments": [],
+      "assignee": [],
+      "action": "RESUBMIT_APPLICATION",
+      "assignees": []
+  }
+  }
+  return formdata;
+}
+
+export const convertToEditSWUpdate = (data) => {
+  let formdata = {
+    "SewerageConnection": {
+      "id": data?.id,
+      "tenantId": data?.tenantId,
+      "propertyId": data?.propertyId,
+      "applicationNo": data?.applicationNo,
+      "applicationStatus": data?.applicationStatus,
+      "status": data?.status,
+      "connectionNo": null,
+      "oldConnectionNo": null,
+      "documents": [...data?.documents?.documents],
+      "plumberInfo": [],
+      "roadType": null,
+      "roadCuttingArea": null,
+      "roadCuttingInfo": [],
+      "connectionExecutionDate": null,
+      "connectionCategory": null,
+      "connectionType": null,
+      "additionalDetails": {
+          "initialMeterReading": null,
+          "detailsProvidedBy": "",
+          "locality": data?.additionalDetails?.locality,
+      },
+      "auditDetails": data?.auditDetails,
+      "processInstance": {
+          "documents": [],
+          "assignes": [],
+          "comment": "",
+          "action": "RESUBMIT_APPLICATION"
+      },
+      "applicationType": data?.applicationType,
+      "dateEffectiveFrom": null,
+      "connectionHolders": data?.connectionHolders,
+      "oldApplication": false,
+      "channel": "CITIZEN",
+      "waterSource": null,
+      "meterId": null,
+      "meterInstallationDate": null,
+      "proposedPipeSize": data?.waterConectionDetails?.proposedPipeSize?.code,
+      "proposedTaps": data?.waterConectionDetails?.proposedTaps,
+      "pipeSize": null,
+      "noOfTaps": null,
+      "waterSourceSubSource": null,
+      "property": {...data?.property},
+      "water": data?.applicationType?.includes("WATER")?true:false,
+      "sewerage": data?.applicationType?.includes("WATER")?true:false,
+      "service": data?.serviceName?.code,
+      "reviewDocData": [
+          // {
+          //     "title": "WS_OWNER.IDENTITYPROOF.AADHAAR",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486955487fBbBCkGcdp.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=935dfb4f76083dc3ab7cf0f50aaa0c1c52731e535cf662473118a4118dcc8d87",
+          //     "linkText": "View",
+          //     "name": "fBbBCkGcdp.png"
+          // },
+          // {
+          //     "title": "WS_OWNER.ADDRESSPROOF.ELECTRICITYBILL",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486960218pBQoKhcLup.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=ed55fd96ec6d54421a6ed4b1734f9a951c54061cbd8bdd4bf3ed676935fc6b2f",
+          //     "linkText": "View",
+          //     "name": "pBQoKhcLup.png"
+          // },
+          // {
+          //     "title": "WS_ELECTRICITY_BILL",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486965232AirZwKrIUG.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=db098ee216984d9f413eed0bdb42d8b7a3b61794bc9261d92db2476300064323",
+          //     "linkText": "View",
+          //     "name": "AirZwKrIUG.png"
+          // },
+          // {
+          //     "title": "WS_PLUMBER_REPORT_DRAWING",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486969233XZrstDVnbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6a21266b1aa4352113b115e41dd075b47e20e7989e8b8fee7114957ee26193eb",
+          //     "linkText": "View",
+          //     "name": "XZrstDVnbf.png"
+          // },
+          // {
+          //     "title": "WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486973093GAbDOLwmFf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6c6eff841623980714ddb4db3bd69219ae0398675f563c5bc73ed799763d2785",
+          //     "linkText": "View",
+          //     "name": "GAbDOLwmFf.png"
+          // },
+          // {
+          //     "title": "WS_PROPERTY_TAX_RECIEPT",
+          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486975966JOdiYvhKXM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=00c949dbb7c66fe67ecee67de401202011ed2fc8c66ec5677230b1a1aa389f9e",
+          //     "linkText": "View",
+          //     "name": "JOdiYvhKXM.png"
+          // }
+          ...data?.documents?.documents
+      ],
+      "proposedWaterClosets": data?.sewerageConnectionDetails?.proposedWaterClosets,
+      "proposedToilets": data?.sewerageConnectionDetails?.proposedToilets,
+      "comment": "",
+      "wfDocuments": [],
+      "assignee": [],
+      "action": "RESUBMIT_APPLICATION",
+      "assignees": []
+  }
+  }
+  return formdata;
+}
+
 export const convertToSWUpdate = (data) => {
 
   let formdata = {
