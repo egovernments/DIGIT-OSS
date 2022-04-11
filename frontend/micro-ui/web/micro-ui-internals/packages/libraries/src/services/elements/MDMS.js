@@ -1201,7 +1201,6 @@ const GetReceivedPaymentType = (MdmsRes) => {
   });
 };
 
-
 const getDssDashboard = (MdmsRes) => MdmsRes["dss-dashboard"]["dashboard-config"];
 
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;

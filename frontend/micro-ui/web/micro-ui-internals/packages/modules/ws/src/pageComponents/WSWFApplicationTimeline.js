@@ -23,7 +23,7 @@ const WSWFApplicationTimeline = (props) => {
     } else if (checkpoint.status === "ACTIVE") {
       return (
         <div>
-          <Link to={`/digit-ui/citizen/pt/property/properties/${props?.application?.propertyId}`}>
+          <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${props?.application?.propertyId}&tenantId=${props?.application?.tenantId}`}>
             <ActionLinks>{t("PT_VIEW_PROPERTY_DETAILS")}</ActionLinks>
           </Link>
         </div>

@@ -1,29 +1,20 @@
 import React, { Fragment, useCallback, useMemo, useReducer } from "react";
-import { Link } from 'react-router-dom';
-import {
-  CloseSvg,
-  SearchForm,
-  Table,
-  Card,
-  SearchAction,
-  PopUp,
-  DetailsCard,
-  Loader,
-  Toast,
-} from "@egovernments/digit-ui-react-components";
+import { Link } from "react-router-dom";
+import { CloseSvg, SearchForm, Table, Card, SearchAction, PopUp, DetailsCard, Loader, Toast } from "@egovernments/digit-ui-react-components";
 
 import SearchFormFields from "./SearchFields";
-import { convertEpochToDateDMY } from "../../utils/index"
+import { convertEpochToDateDMY } from "../../utils/index";
 
-const MobileSearchApplication = ({ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit}) => {
-    function activateModal(state, action) {
+const MobileSearchApplication = ({ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit }) => {
+  function activateModal(state, action) {
     switch (action.type) {
       case "set":
         return action.payload;
       case "remove":
         return false;
       default:
-        break;    }
+        break;
+    }
   }
 
   const [currentlyActiveMobileModal, setActiveMobileModal] = useReducer(activateModal, false);
@@ -70,34 +61,35 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
   const replaceUnderscore = (str) => {
     str = str.replace(/_/g, " ");
     return str;
-  }
+  };
 
-  const propsMobileInboxCards = useMemo(
-    () => {
-      if (data?.display){
-        return []
-      }
-      return data?.map((data) => ({
-        [t("WS_MYCONNECTIONS_CONSUMER_NO")]: data?.connectionNo || "NA",
-        //[t("WS_ACK_COMMON_APP_NO_LABEL")]: data?.applicationNo || "-",
-        [t("WS_ACK_COMMON_APP_NO_LABEL")]:<div>
-            <span className="link">
-              <Link to={`/digit-ui/employee/ws/application-details?applicationNumber=${data.applicationNo}&tenantId=${tenantId}&service=${data.applicationNo.includes("SW")?"SEWERAGE" :"WATER"}`}>
-                {data.applicationNo}
-              </Link>
-            </span>
-          </div>,
-        [t("WS_APPLICATION_TYPE_LABEL")]: data?.applicationType
-          ? replaceUnderscore(data.applicationType)
-          : "-",
-        [t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL")]: data?.owner || "-",
-        [t("WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL")]: t(data?.applicationStatus || "NA"),
-        [t("WS_COMMON_TABLE_COL_ADDRESS")]: data?.address || "-",
-        // [t("TL_LOCALIZATION_TRADE_OWNER_NAME")]: data?.tradeLicenseDetail?.owners?.map( o => o.name ). join(",") || "" ,
-      }))
-    },
-    [data]
-  );
+  const propsMobileInboxCards = useMemo(() => {
+    if (data?.display) {
+      return [];
+    }
+    return data?.map((data) => ({
+      [t("WS_MYCONNECTIONS_CONSUMER_NO")]: data?.connectionNo || "NA",
+      //[t("WS_ACK_COMMON_APP_NO_LABEL")]: data?.applicationNo || "-",
+      [t("WS_ACK_COMMON_APP_NO_LABEL")]: (
+        <div>
+          <span className="link">
+            <Link
+              to={`/digit-ui/employee/ws/application-details?applicationNumber=${data?.applicationNo}&tenantId=${tenantId}&service=${
+                data?.applicationNo.includes("SW") ? "SEWERAGE" : "WATER"
+              }`}
+            >
+              {data?.applicationNo}
+            </Link>
+          </span>
+        </div>
+      ),
+      [t("WS_APPLICATION_TYPE_LABEL")]: data?.applicationType ? replaceUnderscore(data.applicationType) : "-",
+      [t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL")]: data?.owner || "-",
+      [t("WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL")]: t(data?.applicationStatus || "NA"),
+      [t("WS_COMMON_TABLE_COL_ADDRESS")]: data?.address || "-",
+      // [t("TL_LOCALIZATION_TRADE_OWNER_NAME")]: data?.tradeLicenseDetail?.owners?.map( o => o.name ). join(",") || "" ,
+    }));
+  }, [data]);
 
   return (
     <React.Fragment>
@@ -105,7 +97,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
         <SearchAction
           text={t("ES_COMMON_SEARCH")}
           handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SearchFormComponent" })}
-          {...{tenantId, t}} 
+          {...{ tenantId, t }}
         />
         {/* {isInboxLoading ? <Loader /> : <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"FilterFormComponent"})}/>} */}
         {/* <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"SortComponent"})}/> */}
@@ -144,8 +136,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
         />
       )}
     </React.Fragment>
-  )    
-}
+  );
+};
 
-
-export default MobileSearchApplication
+export default MobileSearchApplication;

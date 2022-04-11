@@ -184,9 +184,9 @@ import useMyBillsWaterSearch from "./ws/useMyBillsWaterSearch";
 import useMyBillsSewarageSearch from "./ws/useMyBillsSewarageSearch";
 import useMyApplicationSearch from "./ws/useMyApplicationSearch";
 import useWSDocumentSearch from "./ws/useWSDocumentSearch";
-
-import useWSMDMSWS from "./ws/useWSMDMSWS"
+import useWSMDMSWS from "./ws/useWSMDMSWS";
 import WSuseSearch from "./ws/useSearch";
+import useOldValue from "./ws/useOldValue";
 import useSewSearch from "./ws/useSewSearch";
 import useSearchWS from "./ws/useSearchWS";
 import useMypaymentWS from "./ws/useMypaymentWS";
@@ -265,7 +265,7 @@ const pt = {
   useGenderMDMS,
   usePTGenderMDMS,
   useMyPropertyPayments,
-  useGenericViewProperty
+  useGenericViewProperty,
 };
 
 const dss = {
@@ -404,6 +404,7 @@ const ws = {
   useSewerageCreateAPI,
   useWSUpdateAPI,
   useMypaymentWS,
+  useOldValue,
   useMeterReadingCreateAPI,
   useGetMeterStatusList,
   useGetBillingPeriodValidation,
@@ -455,7 +456,7 @@ const Hooks = {
   survey,
   noc,
   ws,
-  useCustomMDMS
+  useCustomMDMS,
 };
 
 export default Hooks;

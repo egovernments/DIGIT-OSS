@@ -86,17 +86,33 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk }) => {
         Cell: ({ row }) => {
           let service = "WATER";
           if (row.original["applicationNo"].includes("SW")) service = "SEWERAGE";
-          return (
-            <div>
-              <span className="link">
-                <Link
-                  to={`/digit-ui/employee/ws/application-details?applicationNumber=${row.original["applicationNo"]}&tenantId=${tenantId}&service=${service}`}
-                >
-                  {row.original["applicationNo"]}
-                </Link>
-              </span>
-            </div>
-          );
+          if (row.original["applicationType"] === "MODIFY_SEWERAGE_CONNECTION" || row.original["applicationType"] === "MODIFY_WATER_CONNECTION") {
+            return (
+              <div>
+                <span className="link">
+                  <Link
+                    to={`/digit-ui/employee/ws/application-details?applicationNumber=${
+                      row.original["applicationNo"]
+                    }&tenantId=${tenantId}&service=${service}&mode=${"MODIFY"} `}
+                  >
+                    {row.original["applicationNo"]}
+                  </Link>
+                </span>
+              </div>
+            );
+          } else {
+            return (
+              <div>
+                <span className="link">
+                  <Link
+                    to={`/digit-ui/employee/ws/application-details?applicationNumber=${row.original["applicationNo"]}&tenantId=${tenantId}&service=${service}`}
+                  >
+                    {row.original["applicationNo"]}
+                  </Link>
+                </span>
+              </div>
+            );
+          }
         },
       },
       {

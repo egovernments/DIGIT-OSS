@@ -99,8 +99,8 @@ dowloadOptions.push({
             <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={data?.WaterConnection?.[0]?.propertyId} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={PTData?.Properties?.[0]?.owners?.[0]?.name} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_CROSADD")} text={PTData?.Properties?.[0]?.owners?.[0]?.correspondenceAddress} textStyle={{ whiteSpace: "pre" }} />
-            <Link to={`/digit-ui/citizen/pt/property/application/${data?.WaterConnection?.[0]?.propertyId}`}>
-            <LinkButton label={t("View Property details")} />
+            <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${data?.WaterConnection?.[0]?.propertyId}&tenantId=${data?.WaterConnection?.[0]?.tenantId}`}>
+            <LinkButton style={{textAlign:"left"}} label={t("WS_VIEW_PROPERTY")} />
             </Link>
           </StatusTable>
         </Card>
