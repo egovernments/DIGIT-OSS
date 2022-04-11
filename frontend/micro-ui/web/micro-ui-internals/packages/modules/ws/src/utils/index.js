@@ -1,12 +1,12 @@
 export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
-    if (searcher == "") return str;
-    while (str.includes(searcher)) {
-      str = str.replace(searcher, replaceWith);
-    }
-    return str;
-  };
+  if (searcher == "") return str;
+  while (str.includes(searcher)) {
+    str = str.replace(searcher, replaceWith);
+  }
+  return str;
+};
 
-  export const convertEpochToDateDMY = (dateEpoch) => {
+export const convertEpochToDateDMY = (dateEpoch) => {
   if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
     return "NA";
   }
@@ -20,64 +20,63 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
 };
 
 
-  export const convertEpochToDate = (dateEpoch) => {
-    if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
-      return "NA";
-    }
-    const dateFromApi = new Date(dateEpoch);
-    let month = dateFromApi.getMonth() + 1;
-    let day = dateFromApi.getDate();
-    let year = dateFromApi.getFullYear();
-    month = (month > 9 ? "" : "0") + month;
-    day = (day > 9 ? "" : "0") + day;
-    return `${day}/${month}/${year}`;
-  };
-
-  export const pdfDownloadLink = (documents = {}, fileStoreId = "", format = "") => {
-    /* Need to enhance this util to return required format*/
-  
-    let downloadLink = documents[fileStoreId] || "";
-    let differentFormats = downloadLink?.split(",") || [];
-    let fileURL = "";
-    differentFormats.length > 0 &&
-      differentFormats.map((link) => {
-        if (!link.includes("large") && !link.includes("medium") && !link.includes("small")) {
-          fileURL = link;
-        }
-      });
-    return fileURL;
-  };
-  
-  /*   method to get filename  from fielstore url*/
-  export const DownloadReceipt = async (consumerCode, tenantId, businessService, pdfKey = "consolidatedreceipt") => {
-    tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
-    await Digit.Utils.downloadReceipt(consumerCode, businessService, "consolidatedreceipt", tenantId);
-  };
-  export const pdfDocumentName = (documentLink = "", index = 0) => {
-    let documentName = decodeURIComponent(documentLink.split("?")[0].split("/").pop().slice(13)) || `Document - ${index + 1}`;
-    return documentName;
-  };
-  
-  export const getTransaltedLocality = (data) => {
-    let localityVariable = data?.tenantId?.replaceAll(".","_") || stringReplaceAll(data?.tenantId,".","_");
-    return (localityVariable.toUpperCase()+"_REVENUE_"+data?.locality?.code);
+export const convertEpochToDate = (dateEpoch) => {
+  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
+    return "NA";
   }
+  const dateFromApi = new Date(dateEpoch);
+  let month = dateFromApi.getMonth() + 1;
+  let day = dateFromApi.getDate();
+  let year = dateFromApi.getFullYear();
+  month = (month > 9 ? "" : "0") + month;
+  day = (day > 9 ? "" : "0") + day;
+  return `${day}/${month}/${year}`;
+};
 
-  export const getQueryStringParams = (query) => {
-    return query
-      ? (/^[?#]/.test(query) ? query.slice(1) : query).split("&").reduce((params, param) => {
-        let [key, value] = param.split("=");
-        params[key] = value ? decodeURIComponent(value.replace(/\+/g, " ")) : "";
-        return params;
-      }, {})
-      : {};
-  };
+export const pdfDownloadLink = (documents = {}, fileStoreId = "", format = "") => {
+  /* Need to enhance this util to return required format*/
 
-export  const getAddress = (address, t) => {
-    return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
-      address?.landmark ? `${address?.landmark}, ` : ""
-    }${ address.locality.code ?  t(address?.locality.code) : ""}, ${ address.city.code ?  t(address?.city.code) : ""},${address?.pincode ? `${address.pincode}` : " "}`
-} 
+  let downloadLink = documents[fileStoreId] || "";
+  let differentFormats = downloadLink?.split(",") || [];
+  let fileURL = "";
+  differentFormats.length > 0 &&
+    differentFormats.map((link) => {
+      if (!link.includes("large") && !link.includes("medium") && !link.includes("small")) {
+        fileURL = link;
+      }
+    });
+  return fileURL;
+};
+
+/*   method to get filename  from fielstore url*/
+export const DownloadReceipt = async (consumerCode, tenantId, businessService, pdfKey = "consolidatedreceipt") => {
+  tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
+  await Digit.Utils.downloadReceipt(consumerCode, businessService, "consolidatedreceipt", tenantId);
+};
+export const pdfDocumentName = (documentLink = "", index = 0) => {
+  let documentName = decodeURIComponent(documentLink.split("?")[0].split("/").pop().slice(13)) || `Document - ${index + 1}`;
+  return documentName;
+};
+
+export const getTransaltedLocality = (data) => {
+  let localityVariable = data?.tenantId?.replaceAll(".", "_") || stringReplaceAll(data?.tenantId, ".", "_");
+  return (localityVariable.toUpperCase() + "_REVENUE_" + data?.locality?.code);
+}
+
+export const getQueryStringParams = (query) => {
+  return query
+    ? (/^[?#]/.test(query) ? query.slice(1) : query).split("&").reduce((params, param) => {
+      let [key, value] = param.split("=");
+      params[key] = value ? decodeURIComponent(value.replace(/\+/g, " ")) : "";
+      return params;
+    }, {})
+    : {};
+};
+
+export const getAddress = (address, t) => {
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${address?.landmark ? `${address?.landmark}, ` : ""
+    }${address.locality.code ? t(address?.locality.code) : ""}, ${address.city.code ? t(address?.city.code) : ""},${address?.pincode ? `${address.pincode}` : " "}`
+}
 
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"
@@ -112,7 +111,7 @@ export const convertEpochToDates = (dateEpoch) => {
 export const getPattern = type => {
   switch (type) {
     case "WSOnlyNumbers":
-    return /^[0-9]*$/i;
+      return /^[0-9]*$/i;
     case "Name":
       return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i;
     case "MobileNo":
@@ -187,7 +186,7 @@ export const getFiles = async (filesArray, tenant) => {
 export const createPayloadOfWS = async (data) => {
 
   data?.cpt?.details?.owners?.forEach(owner => {
-    if(owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
+    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
   })
 
   let payload = {
@@ -250,12 +249,12 @@ export const convertToWSUpdate = (data) => {
   let formdata = {
     "WaterConnection": {
       ...data?.WaterConnectionResult?.WaterConnection?.[0],
-       "documents": [...data?.documents?.documents],
+      "documents": [...data?.documents?.documents],
       "processInstance": {
-          "action": "SUBMIT_APPLICATION",
+        "action": "SUBMIT_APPLICATION",
       }
-      
-  }
+
+    }
   }
   return formdata;
 }
@@ -280,16 +279,16 @@ export const convertToEditWSUpdate = (data) => {
       "connectionCategory": null,
       "connectionType": null,
       "additionalDetails": {
-          "initialMeterReading": null,
-          "detailsProvidedBy": "",
-          "locality": data?.additionalDetails?.locality,
+        "initialMeterReading": null,
+        "detailsProvidedBy": "",
+        "locality": data?.additionalDetails?.locality,
       },
       "auditDetails": data?.auditDetails,
       "processInstance": {
-          "documents": [],
-          "assignes": [],
-          "comment": "",
-          "action": "RESUBMIT_APPLICATION"
+        "documents": [],
+        "assignes": [],
+        "comment": "",
+        "action": "RESUBMIT_APPLICATION"
       },
       "applicationType": data?.applicationType,
       "dateEffectiveFrom": null,
@@ -304,48 +303,48 @@ export const convertToEditWSUpdate = (data) => {
       "pipeSize": null,
       "noOfTaps": null,
       "waterSourceSubSource": null,
-      "property": {...data?.property},
-      "water": data?.applicationType?.includes("WATER")?true:false,
-      "sewerage": data?.applicationType?.includes("WATER")?true:false,
+      "property": { ...data?.property },
+      "water": data?.applicationType?.includes("WATER") ? true : false,
+      "sewerage": data?.applicationType?.includes("WATER") ? true : false,
       "service": data?.serviceName?.code,
       "reviewDocData": [
-          // {
-          //     "title": "WS_OWNER.IDENTITYPROOF.AADHAAR",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486955487fBbBCkGcdp.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=935dfb4f76083dc3ab7cf0f50aaa0c1c52731e535cf662473118a4118dcc8d87",
-          //     "linkText": "View",
-          //     "name": "fBbBCkGcdp.png"
-          // },
-          // {
-          //     "title": "WS_OWNER.ADDRESSPROOF.ELECTRICITYBILL",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486960218pBQoKhcLup.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=ed55fd96ec6d54421a6ed4b1734f9a951c54061cbd8bdd4bf3ed676935fc6b2f",
-          //     "linkText": "View",
-          //     "name": "pBQoKhcLup.png"
-          // },
-          // {
-          //     "title": "WS_ELECTRICITY_BILL",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486965232AirZwKrIUG.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=db098ee216984d9f413eed0bdb42d8b7a3b61794bc9261d92db2476300064323",
-          //     "linkText": "View",
-          //     "name": "AirZwKrIUG.png"
-          // },
-          // {
-          //     "title": "WS_PLUMBER_REPORT_DRAWING",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486969233XZrstDVnbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6a21266b1aa4352113b115e41dd075b47e20e7989e8b8fee7114957ee26193eb",
-          //     "linkText": "View",
-          //     "name": "XZrstDVnbf.png"
-          // },
-          // {
-          //     "title": "WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486973093GAbDOLwmFf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6c6eff841623980714ddb4db3bd69219ae0398675f563c5bc73ed799763d2785",
-          //     "linkText": "View",
-          //     "name": "GAbDOLwmFf.png"
-          // },
-          // {
-          //     "title": "WS_PROPERTY_TAX_RECIEPT",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486975966JOdiYvhKXM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=00c949dbb7c66fe67ecee67de401202011ed2fc8c66ec5677230b1a1aa389f9e",
-          //     "linkText": "View",
-          //     "name": "JOdiYvhKXM.png"
-          // }
-          ...data?.documents?.documents
+        // {
+        //     "title": "WS_OWNER.IDENTITYPROOF.AADHAAR",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486955487fBbBCkGcdp.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=935dfb4f76083dc3ab7cf0f50aaa0c1c52731e535cf662473118a4118dcc8d87",
+        //     "linkText": "View",
+        //     "name": "fBbBCkGcdp.png"
+        // },
+        // {
+        //     "title": "WS_OWNER.ADDRESSPROOF.ELECTRICITYBILL",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486960218pBQoKhcLup.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=ed55fd96ec6d54421a6ed4b1734f9a951c54061cbd8bdd4bf3ed676935fc6b2f",
+        //     "linkText": "View",
+        //     "name": "pBQoKhcLup.png"
+        // },
+        // {
+        //     "title": "WS_ELECTRICITY_BILL",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486965232AirZwKrIUG.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=db098ee216984d9f413eed0bdb42d8b7a3b61794bc9261d92db2476300064323",
+        //     "linkText": "View",
+        //     "name": "AirZwKrIUG.png"
+        // },
+        // {
+        //     "title": "WS_PLUMBER_REPORT_DRAWING",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486969233XZrstDVnbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6a21266b1aa4352113b115e41dd075b47e20e7989e8b8fee7114957ee26193eb",
+        //     "linkText": "View",
+        //     "name": "XZrstDVnbf.png"
+        // },
+        // {
+        //     "title": "WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486973093GAbDOLwmFf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6c6eff841623980714ddb4db3bd69219ae0398675f563c5bc73ed799763d2785",
+        //     "linkText": "View",
+        //     "name": "GAbDOLwmFf.png"
+        // },
+        // {
+        //     "title": "WS_PROPERTY_TAX_RECIEPT",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486975966JOdiYvhKXM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=00c949dbb7c66fe67ecee67de401202011ed2fc8c66ec5677230b1a1aa389f9e",
+        //     "linkText": "View",
+        //     "name": "JOdiYvhKXM.png"
+        // }
+        ...data?.documents?.documents
       ],
       "proposedWaterClosets": data?.sewerageConnectionDetails?.proposedWaterClosets,
       "proposedToilets": data?.sewerageConnectionDetails?.proposedToilets,
@@ -354,7 +353,7 @@ export const convertToEditWSUpdate = (data) => {
       "assignee": [],
       "action": "RESUBMIT_APPLICATION",
       "assignees": []
-  }
+    }
   }
   return formdata;
 }
@@ -379,16 +378,16 @@ export const convertToEditSWUpdate = (data) => {
       "connectionCategory": null,
       "connectionType": null,
       "additionalDetails": {
-          "initialMeterReading": null,
-          "detailsProvidedBy": "",
-          "locality": data?.additionalDetails?.locality,
+        "initialMeterReading": null,
+        "detailsProvidedBy": "",
+        "locality": data?.additionalDetails?.locality,
       },
       "auditDetails": data?.auditDetails,
       "processInstance": {
-          "documents": [],
-          "assignes": [],
-          "comment": "",
-          "action": "RESUBMIT_APPLICATION"
+        "documents": [],
+        "assignes": [],
+        "comment": "",
+        "action": "RESUBMIT_APPLICATION"
       },
       "applicationType": data?.applicationType,
       "dateEffectiveFrom": null,
@@ -403,48 +402,48 @@ export const convertToEditSWUpdate = (data) => {
       "pipeSize": null,
       "noOfTaps": null,
       "waterSourceSubSource": null,
-      "property": {...data?.property},
-      "water": data?.applicationType?.includes("WATER")?true:false,
-      "sewerage": data?.applicationType?.includes("WATER")?true:false,
+      "property": { ...data?.property },
+      "water": data?.applicationType?.includes("WATER") ? true : false,
+      "sewerage": data?.applicationType?.includes("WATER") ? true : false,
       "service": data?.serviceName?.code,
       "reviewDocData": [
-          // {
-          //     "title": "WS_OWNER.IDENTITYPROOF.AADHAAR",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486955487fBbBCkGcdp.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=935dfb4f76083dc3ab7cf0f50aaa0c1c52731e535cf662473118a4118dcc8d87",
-          //     "linkText": "View",
-          //     "name": "fBbBCkGcdp.png"
-          // },
-          // {
-          //     "title": "WS_OWNER.ADDRESSPROOF.ELECTRICITYBILL",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486960218pBQoKhcLup.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=ed55fd96ec6d54421a6ed4b1734f9a951c54061cbd8bdd4bf3ed676935fc6b2f",
-          //     "linkText": "View",
-          //     "name": "pBQoKhcLup.png"
-          // },
-          // {
-          //     "title": "WS_ELECTRICITY_BILL",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486965232AirZwKrIUG.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=db098ee216984d9f413eed0bdb42d8b7a3b61794bc9261d92db2476300064323",
-          //     "linkText": "View",
-          //     "name": "AirZwKrIUG.png"
-          // },
-          // {
-          //     "title": "WS_PLUMBER_REPORT_DRAWING",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486969233XZrstDVnbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6a21266b1aa4352113b115e41dd075b47e20e7989e8b8fee7114957ee26193eb",
-          //     "linkText": "View",
-          //     "name": "XZrstDVnbf.png"
-          // },
-          // {
-          //     "title": "WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486973093GAbDOLwmFf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6c6eff841623980714ddb4db3bd69219ae0398675f563c5bc73ed799763d2785",
-          //     "linkText": "View",
-          //     "name": "GAbDOLwmFf.png"
-          // },
-          // {
-          //     "title": "WS_PROPERTY_TAX_RECIEPT",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486975966JOdiYvhKXM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=00c949dbb7c66fe67ecee67de401202011ed2fc8c66ec5677230b1a1aa389f9e",
-          //     "linkText": "View",
-          //     "name": "JOdiYvhKXM.png"
-          // }
-          ...data?.documents?.documents
+        // {
+        //     "title": "WS_OWNER.IDENTITYPROOF.AADHAAR",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486955487fBbBCkGcdp.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=935dfb4f76083dc3ab7cf0f50aaa0c1c52731e535cf662473118a4118dcc8d87",
+        //     "linkText": "View",
+        //     "name": "fBbBCkGcdp.png"
+        // },
+        // {
+        //     "title": "WS_OWNER.ADDRESSPROOF.ELECTRICITYBILL",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486960218pBQoKhcLup.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=ed55fd96ec6d54421a6ed4b1734f9a951c54061cbd8bdd4bf3ed676935fc6b2f",
+        //     "linkText": "View",
+        //     "name": "pBQoKhcLup.png"
+        // },
+        // {
+        //     "title": "WS_ELECTRICITY_BILL",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486965232AirZwKrIUG.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=db098ee216984d9f413eed0bdb42d8b7a3b61794bc9261d92db2476300064323",
+        //     "linkText": "View",
+        //     "name": "AirZwKrIUG.png"
+        // },
+        // {
+        //     "title": "WS_PLUMBER_REPORT_DRAWING",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486969233XZrstDVnbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6a21266b1aa4352113b115e41dd075b47e20e7989e8b8fee7114957ee26193eb",
+        //     "linkText": "View",
+        //     "name": "XZrstDVnbf.png"
+        // },
+        // {
+        //     "title": "WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486973093GAbDOLwmFf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6c6eff841623980714ddb4db3bd69219ae0398675f563c5bc73ed799763d2785",
+        //     "linkText": "View",
+        //     "name": "GAbDOLwmFf.png"
+        // },
+        // {
+        //     "title": "WS_PROPERTY_TAX_RECIEPT",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486975966JOdiYvhKXM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=00c949dbb7c66fe67ecee67de401202011ed2fc8c66ec5677230b1a1aa389f9e",
+        //     "linkText": "View",
+        //     "name": "JOdiYvhKXM.png"
+        // }
+        ...data?.documents?.documents
       ],
       "proposedWaterClosets": data?.sewerageConnectionDetails?.proposedWaterClosets,
       "proposedToilets": data?.sewerageConnectionDetails?.proposedToilets,
@@ -453,7 +452,7 @@ export const convertToEditSWUpdate = (data) => {
       "assignee": [],
       "action": "RESUBMIT_APPLICATION",
       "assignees": []
-  }
+    }
   }
   return formdata;
 }
@@ -463,55 +462,55 @@ export const convertToSWUpdate = (data) => {
   let formdata = {
     "SewerageConnection": {
       ...data?.SewerageConnectionResult?.SewerageConnections?.[0],
-       "documents": [...data?.documents?.documents],
+      "documents": [...data?.documents?.documents],
       "processInstance": {
-          "action": "SUBMIT_APPLICATION",
+        "action": "SUBMIT_APPLICATION",
       },
-      
-  }
+
+    }
   }
   return formdata;
 }
 
-export const getOwnersforPDF = (property,t) => {
+export const getOwnersforPDF = (property, t) => {
   let interarray = [];
   let finalarray = [];
-  property?.owners?.map((ob,index) => {
-  interarray =   [
-          { title: t(`WS_OWNER - ${index}`), value: "" },
-          { title: t("WS_CONN_HOLDER_OWN_DETAIL_MOBILE_NO_LABEL"), value: ob?.mobileNumber || "N/A" },
-          { title: t("WS_MYCONNECTIONS_OWNER_NAME"), value: ob?.name || "N/A" },
-          {
-            title: t("WS_OWNER_DETAILS_EMAIL_LABEL"),
-            value: ob?.emailId || "N/A",
-          },
-          {
-            title: t("WS_OWN_DETAIL_GENDER_LABEL"),
-            value: ob?.gender || "N/A",
-          },
-          { title: t("WS_OWN_DETAIL_DOB_LABEL"), value: "N/A" },
-          { title: t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"), value: ob?.fatherOrHusbandName || "N/A" },
-          { title: t("WS_OWN_DETAIL_RELATION_LABEL"), value: ob?.relationship || "N/A" },
-          { title: t("WS_CONN_HOLDER_OWN_DETAIL_CROSADD"), value: ob?.correspondenceAddress || "N/A" },
-          { title: t("WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"), value: "none" },
-        ]
-      finalarray = finalarray.concat(interarray);
-      })
-    return finalarray;
+  property?.owners?.map((ob, index) => {
+    interarray = [
+      { title: t(`WS_OWNER - ${index}`), value: "" },
+      { title: t("WS_CONN_HOLDER_OWN_DETAIL_MOBILE_NO_LABEL"), value: ob?.mobileNumber || "N/A" },
+      { title: t("WS_MYCONNECTIONS_OWNER_NAME"), value: ob?.name || "N/A" },
+      {
+        title: t("WS_OWNER_DETAILS_EMAIL_LABEL"),
+        value: ob?.emailId || "N/A",
+      },
+      {
+        title: t("WS_OWN_DETAIL_GENDER_LABEL"),
+        value: ob?.gender || "N/A",
+      },
+      { title: t("WS_OWN_DETAIL_DOB_LABEL"), value: "N/A" },
+      { title: t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"), value: ob?.fatherOrHusbandName || "N/A" },
+      { title: t("WS_OWN_DETAIL_RELATION_LABEL"), value: ob?.relationship || "N/A" },
+      { title: t("WS_CONN_HOLDER_OWN_DETAIL_CROSADD"), value: ob?.correspondenceAddress || "N/A" },
+      { title: t("WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"), value: "none" },
+    ]
+    finalarray = finalarray.concat(interarray);
+  })
+  return finalarray;
 }
 
-export const getDocumentsForPDF = (app,t) => {
-let finaldocarray=[];
+export const getDocumentsForPDF = (app, t) => {
+  let finaldocarray = [];
   app?.documents?.map((doc) => {
     finaldocarray.push(
       {
-      title: t(doc?.documentType),
-      value: doc?.fileName,
-    })
+        title: t(doc?.documentType),
+        value: doc?.fileName,
+      })
   })
 }
 
-export  const getPDFData = (application,data,tenantInfo, t) => {
+export const getPDFData = (application, data, tenantInfo, t) => {
 
   return {
     t: t,
@@ -552,41 +551,43 @@ export  const getPDFData = (application,data,tenantInfo, t) => {
       },
       {
         title: t("WS_TASK_PROP_OWN_HEADER"),
-        values: getOwnersforPDF(data?.cpt?.details,t),
+        values: getOwnersforPDF(data?.cpt?.details, t),
       },
-      {...application?.applicationType.includes("WATER")?{
-        title: t("WS_COMMON_CONNECTION_DETAILS"),
-        values: [
-          {
-            title: t("WS_APPLY_FOR"),
-            value: application?.applicationType.includes("WATER")?t("WS_WATER"):t("WS_SEWERAGE"),
-          },
-          {
-            title: t("WS_CONN_DETAIL_NO_OF_TAPS"),
-            value: application?.proposedTaps,
-          },
-          {
-            title: t("WS_CONN_DETAIL_PIPE_SIZE"),
-            value: application?.proposedPipeSize,
-          }
-        ],
-      }:{
-        title: t("WS_COMMON_CONNECTION_DETAILS"),
-        values: [
-          {
-            title: t("WS_APPLY_FOR"),
-            value: application?.applicationType.includes("WATER")?t("WS_WATER"):t("WS_SEWERAGE"),
-          },
-          {
-            title: t("WS_CONN_DETAIL_NO_OF_TOILETS"),
-            value: application?.proposedToilets,
-          },
-          {
-            title: t("WS_CONN_DETAIL_WATER_CLOSETS"),
-            value: application?.proposedWaterClosets,
-          }
-        ],
-      }},
+      {
+        ...application?.applicationType.includes("WATER") ? {
+          title: t("WS_COMMON_CONNECTION_DETAILS"),
+          values: [
+            {
+              title: t("WS_APPLY_FOR"),
+              value: application?.applicationType.includes("WATER") ? t("WS_WATER") : t("WS_SEWERAGE"),
+            },
+            {
+              title: t("WS_CONN_DETAIL_NO_OF_TAPS"),
+              value: application?.proposedTaps,
+            },
+            {
+              title: t("WS_CONN_DETAIL_PIPE_SIZE"),
+              value: application?.proposedPipeSize,
+            }
+          ],
+        } : {
+          title: t("WS_COMMON_CONNECTION_DETAILS"),
+          values: [
+            {
+              title: t("WS_APPLY_FOR"),
+              value: application?.applicationType.includes("WATER") ? t("WS_WATER") : t("WS_SEWERAGE"),
+            },
+            {
+              title: t("WS_CONN_DETAIL_NO_OF_TOILETS"),
+              value: application?.proposedToilets,
+            },
+            {
+              title: t("WS_CONN_DETAIL_WATER_CLOSETS"),
+              value: application?.proposedWaterClosets,
+            }
+          ],
+        }
+      },
       {
         title: t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER"),
         values: [
@@ -598,7 +599,7 @@ export  const getPDFData = (application,data,tenantInfo, t) => {
       },
       {
         title: t("WS_COMMON_DOCS"),
-        values: getDocumentsForPDF(data?.documents,t),
+        values: getDocumentsForPDF(data?.documents, t),
       },
       {
         title: t("WS_COMMON_ADDN_DETAILS"),
@@ -711,7 +712,7 @@ export const convertApplicationData = (data, serviceType) => {
     serviceName: serviceType,
     proposedTaps: Number(data?.applicationData?.proposedTaps) || "",
     proposedPipeSize: data?.applicationData?.proposedPipeSize ? {
-      i18nKey : data?.applicationData?.proposedPipeSize,
+      i18nKey: data?.applicationData?.proposedPipeSize,
       code: data?.applicationData?.proposedPipeSize,
       size: data?.applicationData?.proposedPipeSize
     } : "",
@@ -728,9 +729,9 @@ export const convertApplicationData = (data, serviceType) => {
     address: data?.applicationData?.connectionHolders?.[0]?.correspondenceAddress || "",
     gender: data?.applicationData?.connectionHolders?.[0]?.gender ? {
       code: data?.applicationData?.connectionHolders?.[0]?.gender,
-      i18nKey : data?.applicationData?.connectionHolders?.[0]?.gender,
+      i18nKey: data?.applicationData?.connectionHolders?.[0]?.gender,
     } : "",
-    relationship: data?.applicationData?.connectionHolders?.[0]?.relationship ?  {
+    relationship: data?.applicationData?.connectionHolders?.[0]?.relationship ? {
       code: data?.applicationData?.connectionHolders?.[0]?.relationship,
       i18nKey: data?.applicationData?.connectionHolders?.[0]?.relationship
     } : "",
@@ -771,7 +772,7 @@ export const convertApplicationData = (data, serviceType) => {
     })
   }
   let DocumentsRequired = {
-    documents : documents
+    documents: documents
   } || [];
 
   let cpt = {};
@@ -798,11 +799,8 @@ export const convertEditApplicationDetails = async (data, appData) => {
   });
 
   let payload = {
-    ...appData.applicationData,
-    proposedTaps: data?.ConnectionDetails?.[0]?.proposedTaps && Number(data?.ConnectionDetails?.[0]?.proposedTaps),
-    proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
-    proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
-    proposedToilets: data?.ConnectionDetails?.[0]?.proposedToilets && Number(data?.ConnectionDetails?.[0]?.proposedToilets),
+    ...appData,
+    action: "RESUBMIT_APPLICATION",
     connectionHolders: !data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
       correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
       fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
@@ -813,12 +811,22 @@ export const convertEditApplicationDetails = async (data, appData) => {
       relationship: data?.ConnectionHolderDetails?.[0]?.relationship?.code || "",
       sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
     }] : null,
+    documents: data?.DocumentsRequired?.documents,
+    proposedTaps: data?.ConnectionDetails?.[0]?.proposedTaps && Number(data?.ConnectionDetails?.[0]?.proposedTaps),
+    proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
+    proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
+    proposedToilets: data?.ConnectionDetails?.[0]?.proposedToilets && Number(data?.ConnectionDetails?.[0]?.proposedToilets),
     property: data?.cpt?.details,
     processInstance: {
-      action: "RESUBMIT_APPLICATION"
+      ...appData,
+      action: appData?.action === "EDIT" ? "ACTIVATE_CONNECTION" : "RESUBMIT_APPLICATION",
     },
-    action: "RESUBMIT_APPLICATION",
-    documents: data?.DocumentsRequired?.documents,
+    roadCuttingInfo: null,
+    roadCuttingArea: null,
+    roadType: null,
+    connectionType: null,
+    connectionNo: null,
+    waterSource: null,
   }
 
   return payload;

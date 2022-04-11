@@ -225,6 +225,17 @@ export const newConfig = [
       }]
     },
     {
+      head: "WS_COMMON_ROAD_CUTTING_DETAILS",
+      isEditConnection: true,
+      isCreateConnection: false,
+      body:[{
+        type: "component",
+        key: "RoadCuttingDetails",
+        component: "WSRoadCuttingDetails",
+        withoutLabel: true,
+      }]
+    },
+    {
       head: "WS_COMMON_DOCS",
       isEditConnection: true,
       isCreateConnection: true,

@@ -10,7 +10,7 @@ import cloneDeep from "lodash/cloneDeep";
 
 const EditApplication = () => {
   const { t } = useTranslation();
-  const { state } = useLocation();
+  const {state, search} = useLocation();  
   const history = useHistory();
   let filters = func.getQueryStringParams(location.search);
   const [canSubmit, setSubmitValve] = useState(false);
@@ -20,11 +20,11 @@ const EditApplication = () => {
   const [enabledLoader, setEnabledLoader] = useState(true);
   const [isAppDetailsPage, setIsAppDetailsPage] = useState(false);
 
-  let tenantId = Digit.ULBService.getCurrentTenantId();
-  tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  const tenantId = Digit.ULBService.getCurrentTenantId() || Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  const urlParams = new URLSearchParams(location.search);
 
-  const applicationNumber = filters?.applicationNumber;
-  const serviceType = filters?.service;
+  const applicationNumber = urlParams.get("applicationNumber");
+  const serviceType = urlParams.get("service");
 
   const details = cloneDeep(state?.data);
 
@@ -73,7 +73,7 @@ const EditApplication = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (isAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${sessionFormData?.ConnectionDetails?.[0]?.applicationNo}&service=${sessionFormData?.ConnectionDetails?.[0]?.serviceName?.toUpperCase()}`
+      if (isAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${applicationNumber}&service=${serviceType}`
     }, 3000);
     return () => clearTimeout(timer);
   }, [isAppDetailsPage]);
@@ -95,9 +95,9 @@ const EditApplication = () => {
   };
 
   const onSubmit = async (data) => {
-    const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
+    const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : state?.data;
     let convertAppData = await convertEditApplicationDetails(data, details);
-    const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
+    const reqDetails = serviceType === "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
 
     if (mutate) {
       mutate(reqDetails, {
@@ -119,9 +119,9 @@ const EditApplication = () => {
     setShowToast(null);
   };
 
-  if (enabledLoader) {
-    return <Loader />;
-  }
+  // if (enabledLoader) {
+  //   return <Loader />;
+  // }
 
   return (
     <React.Fragment>

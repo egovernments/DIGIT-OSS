@@ -6,7 +6,7 @@ import { Loader } from "@egovernments/digit-ui-react-components";
 
 import ActionModal from "./Modal";
 
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import ApplicationDetailsContent from "./components/ApplicationDetailsContent";
 import ApplicationDetailsToast from "./components/ApplicationDetailsToast";
 import ApplicationDetailsActionBar from "./components/ApplicationDetailsActionBar";
@@ -17,12 +17,16 @@ const ApplicationDetails = (props) => {
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
-  let { id: applicationNumber } = useParams();
+  const {search} = useLocation();
+  const urlParams = new URLSearchParams(search);
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp ] = useState(false);
+
+  const applicationNumber = urlParams.get("applicationNumber");
+  const serviceType = urlParams.get("service");
 
   const {
     applicationDetails,
@@ -113,6 +117,12 @@ const ApplicationDetails = (props) => {
     }
     if (mutate) {
       setIsEnableLoader(true);
+
+      if(selectedAction?.action === "EDIT"){
+        history.push(`/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`,
+        {data: {...(data?.WaterConnection || data?.SewerageConnection), action: selectedAction.action}}) 
+      }
+
       mutate(data, {
         onError: (error, variables) => {
           setIsEnableLoader(false);
