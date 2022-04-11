@@ -10,16 +10,19 @@ const ApplicationBillAmendment = () => {
 	const {connectionNumber, tenantId, service, connectionType } = Digit.Hooks.useQueryParams();
 	const stateId = Digit.ULBService.getStateId();
 	const { isLoading: BillAmendmentMDMSLoading, data: BillAmendmentMDMS } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSMDMSBillAmendment({tenantId: stateId});
-	const billSearchFilters = { tenantId, consumerCode:connectionNumber, service:"WS" }
+	const servicev1 = connectionNumber.includes("WS")?"WS":"SW" 
+	const billSearchFilters = { tenantId, consumerCode: connectionNumber, service: servicev1}
 	const {data: preBillSearchData, isLoading: isBillSearchLoading} = Digit.Hooks.usePaymentSearch(tenantId, billSearchFilters );
 	const { data, isFetched } = Digit.Hooks.fsm.useMDMS(stateId, "DIGIT-UI", "WSTaxHeadMaster");
 	const availableBillAmendmentTaxHeads = data?.BillingService?.TaxHeadMaster?.filter(w=>w.IsBillamend)
-	const billSearchData =  preBillSearchData?.filter( e => availableBillAmendmentTaxHeads.find(taxHeadMaster => taxHeadMaster.code === e.taxHeadCode))
-	
+	const billSearchData =  preBillSearchData?.filter( e => availableBillAmendmentTaxHeads?.find(taxHeadMaster => taxHeadMaster.code === e.taxHeadCode))
+
 	const { register, control, watch, setValue, unregister, handleSubmit, formState:{ errors }, ...methods } = useForm()
 	const amendmentReason = watch("amendmentReason");
 	const WS_REDUCED_AMOUNT = watch("WS_REDUCED_AMOUNT");
 	const WS_ADDITIONAL_AMOUNT = watch("WS_ADDITIONAL_AMOUNT");
+	const SW_REDUCED_AMOUNT = watch("SW_REDUCED_AMOUNT");
+	const SW_ADDITIONAL_AMOUNT = watch("SW_ADDITIONAL_AMOUNT")
 	const history = useHistory()
 	// const { replace: replaceReducedTrigger } = useFieldArray({
 	// 	control,
@@ -96,7 +99,11 @@ const ApplicationBillAmendment = () => {
 	}
 
 	const getDemandDetailsComparingUpdates = (d) => {
-		const actionPerformed = JSON.parse(JSON.stringify(d?.WS_REDUCED_AMOUNT?.VALUE ? d?.WS_REDUCED_AMOUNT : d?.WS_ADDITIONAL_AMOUNT))
+		let actionPerformed
+		if(servicev1==="WS")
+			 actionPerformed = JSON.parse(JSON.stringify(d?.WS_REDUCED_AMOUNT?.VALUE ? d?.WS_REDUCED_AMOUNT : d?.WS_ADDITIONAL_AMOUNT))
+		else 
+			actionPerformed = JSON.parse(JSON.stringify(d?.SW_REDUCED_AMOUNT?.VALUE ? d?.SW_REDUCED_AMOUNT : d?.SW_ADDITIONAL_AMOUNT))
 		delete actionPerformed?.VALUE
 		const actionPerformedInArray = Object.entries(actionPerformed)	
 		return actionPerformedInArray.map( e => {
@@ -109,7 +116,11 @@ const ApplicationBillAmendment = () => {
 	}
 
 	const getTotalDetailsOfUpdatedData = (d) => {
-		const actionPerformed = JSON.parse(JSON.stringify(d?.WS_REDUCED_AMOUNT?.VALUE ? d?.WS_REDUCED_AMOUNT : d?.WS_ADDITIONAL_AMOUNT))
+		let actionPerformed
+		if(servicev1==="WS")
+		 	actionPerformed = JSON.parse(JSON.stringify(d?.WS_REDUCED_AMOUNT?.VALUE ? d?.WS_REDUCED_AMOUNT : d?.WS_ADDITIONAL_AMOUNT))
+		else
+			actionPerformed = JSON.parse(JSON.stringify(d?.SW_REDUCED_AMOUNT?.VALUE ? d?.SW_REDUCED_AMOUNT : d?.SW_ADDITIONAL_AMOUNT))
 		delete actionPerformed?.VALUE
 		return {...actionPerformed, TOTAL: Object.values(actionPerformed).reduce((a,b) => parseInt(a)+parseInt(b),0)}
 	}
@@ -119,7 +130,7 @@ const ApplicationBillAmendment = () => {
 			Amendment: {
 				consumerCode: connectionNumber,
 				tenantId,
-				businessService: "SW",
+				businessService: servicev1,
 				amendmentReason: amendmentReason?.code,
 				reasonDocumentNumber: d?.reasonDocumentNumber,
 				effectiveFrom: new Date(d?.effectiveFrom).getTime(),
@@ -142,18 +153,19 @@ const ApplicationBillAmendment = () => {
 		}
 		history.push("/digit-ui/employee/ws/response",data)
 	}
-
+	
 	return <form onSubmit={handleSubmit(onFormSubmit)}>
 		<Header>{t("WS_BILL_AMENDMENT_BUTTON")}</Header>
 		<Card>
 			<LabelFieldPair>
-				<CardLabel style={{fontWeight: "500"}}>{t("WS_ACKNO_CONNECTION_NO_LABEL")}</CardLabel>
+				<CardLabel style={{fontWeight: "500"}}>{t(`WS_ACKNO_CONNECTION_NO_LABEL`)}</CardLabel>
 				<CardText style={{marginBottom: "0px"}}>{connectionNumber}</CardText>
 			</LabelFieldPair>
-			<CardSectionHeader style={{marginBottom: "16px"}}>{t("WS_ADJUSTMENT_AMOUNT")}</CardSectionHeader>
-			<CardSectionSubText style={{marginBottom: "16px"}}>{t("WS_ADJUSTMENT_AMOUNT_ADDITION_TEXT")}</CardSectionSubText>
+			<CardSectionHeader style={{marginBottom: "16px"}}>{t(`WS_ADJUSTMENT_AMOUNT`)}</CardSectionHeader>
+			<CardSectionSubText style={{marginBottom: "16px"}}>{t(`WS_ADJUSTMENT_AMOUNT_ADDITION_TEXT`)}</CardSectionSubText>
+
 			{!isBillSearchLoading ? <table>
-				<tr style={{textAlign: "left"}}>
+				<tr style={{ textAlign: "left" }}>
 					<th>{t("WS_TAX_HEADS")}</th>
 					<th>{t("WS_CURRENT_AMOUNT")}</th>
 					<th>
@@ -162,11 +174,13 @@ const ApplicationBillAmendment = () => {
 								name="WS_REDUCED_AMOUNT.VALUE"
 								key="WS_REDUCED_AMOUNT.VALUE"
 								control={control}
-								rules={{validate: (value) => {
-									return !!value || !!WS_ADDITIONAL_AMOUNT?.VALUE
-								}}}
+								rules={{
+									validate: (value) => {
+										return !!value || !!WS_ADDITIONAL_AMOUNT?.VALUE
+									}
+								}}
 								render={(props) => {
-									return <CheckBox 
+									return <CheckBox
 										// className="form-field"
 										label={t("WS_REDUCED_AMOUNT")}
 										onChange={(e) => {
@@ -190,11 +204,13 @@ const ApplicationBillAmendment = () => {
 								name="WS_ADDITIONAL_AMOUNT.VALUE"
 								key="WS_ADDITIONAL_AMOUNT.VALUE"
 								control={control}
-								rules={{validate: (value) => {
-									return !!value || !!WS_REDUCED_AMOUNT?.VALUE
-								}}}
+								rules={{
+									validate: (value) => {
+										return !!value || !!WS_REDUCED_AMOUNT?.VALUE
+									}
+								}}
 								render={(props) => {
-									return <CheckBox 
+									return <CheckBox
 										// className="form-field"
 										label={t("WS_ADDITIONAL_AMOUNT")}
 										onChange={(e) => {
@@ -209,98 +225,40 @@ const ApplicationBillAmendment = () => {
 									/>
 								}}
 							/>
-							{errors?.WS_ADDITIONAL_AMOUNT?.VALUE ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError>: null}
+							{errors?.WS_ADDITIONAL_AMOUNT?.VALUE ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
 						</>
 					</th>
 				</tr>
+				{billSearchData?.map(node => (
 				<tr>
-					<td style={{paddingRight: "60px"}}>{t("WS_CHARGE")}</td>
-					<td style={{paddingRight: "60px", textAlign: "end"}}>₹ {billSearchData?.find(e => e.taxHeadCode === "WS_CHARGE")?.amount}</td>
-					<td style={{paddingRight: "60px"}}>
+					<td style={{ paddingRight: "60px" }}>{t(`${node.taxHeadCode}`)}</td>
+					<td style={{ paddingRight: "60px", textAlign: "end" }}>₹ {node.amount}</td>
+					<td style={{ paddingRight: "60px" }}>
 						<>
-							<TextInput disabled={!WS_REDUCED_AMOUNT?.VALUE} name="WS_REDUCED_AMOUNT.WS_CHARGE" inputRef={register({
+							<TextInput disabled={servicev1 === "WS" ? !WS_REDUCED_AMOUNT?.VALUE : !SW_REDUCED_AMOUNT} name={`${servicev1}_REDUCED_AMOUNT.${servicev1}_CHARGE`} inputRef={register({
 								max: {
-									value: billSearchData?.find(e => e.taxHeadCode === "WS_CHARGE")?.amount,
-									message: t("WS_ERROR_ENTER_LESS_THAN_MAX_VALUE")
-							}})} />
-							{errors?.WS_REDUCED_AMOUNT?.WS_CHARGE && <CardLabelError>{errors?.WS_REDUCED_AMOUNT?.WS_CHARGE?.message}</CardLabelError>}
+									value: node.amount,
+									message: t(`${servicev1}_ERROR_ENTER_LESS_THAN_MAX_VALUE`)
+								}
+							})} />
+							{servicev1 === "WS" ? errors?.WS_REDUCED_AMOUNT?.WS_CHARGE && <CardLabelError>{errors?.WS_REDUCED_AMOUNT?.WS_CHARGE?.message}</CardLabelError> : errors?.SW_REDUCED_AMOUNT?.SW_CHARGE && <CardLabelError>{errors?.SW_REDUCED_AMOUNT?.SW_CHARGE?.message}</CardLabelError>}
 						</>
 					</td>
-					<td style={{paddingRight: "60px"}}><>
-						<TextInput disabled={!WS_ADDITIONAL_AMOUNT?.VALUE} name="WS_ADDITIONAL_AMOUNT.WS_CHARGE" inputRef={register({
-							min: {
-								value: billSearchData?.find(e => e.taxHeadCode === "WS_CHARGE")?.amount,
-								message: t("WS_ERROR_ENTER_MORE_THAN_MIN_VALUE")
-							}})}/>
-							{errors?.WS_ADDITIONAL_AMOUNT?.WS_CHARGE && <CardLabelError>{errors?.WS_ADDITIONAL_AMOUNT?.WS_CHARGE?.message}</CardLabelError>}
-						</>
-					</td>
-				</tr>
-				<tr>
-					<td style={{paddingRight: "60px"}}>{t("WS_TIME_INTEREST")}</td>
-					<td style={{paddingRight: "60px", textAlign: "end"}}>₹ {billSearchData?.find(e => e.taxHeadCode === "WS_TIME_INTEREST")?.amount}</td>
-					<td style={{paddingRight: "60px"}}>
-						<>
-							<TextInput disabled={!WS_REDUCED_AMOUNT?.VALUE} name="WS_REDUCED_AMOUNT.WS_TIME_INTEREST" inputRef={register({max: {
-								value: billSearchData?.find(e => e.taxHeadCode === "WS_TIME_INTEREST")?.amount,
-								message: t("WS_ERROR_ENTER_LESS_THAN_MAX_VALUE")
-							}})} />
-							{errors?.WS_REDUCED_AMOUNT?.WS_TIME_INTEREST && <CardLabelError>{errors?.WS_REDUCED_AMOUNT?.WS_TIME_INTEREST?.message}</CardLabelError>}
-						</>
-					</td>
-					<td style={{paddingRight: "60px"}}>
-						<>
-							<TextInput disabled={!WS_ADDITIONAL_AMOUNT?.VALUE} name="WS_ADDITIONAL_AMOUNT.WS_TIME_INTEREST" inputRef={register({min: {
-								value: billSearchData?.find(e => e.taxHeadCode === "WS_TIME_INTEREST")?.amount,
-								message: t("WS_ERROR_ENTER_MORE_THAN_MIN_VALUE")
-							}})} />
-							{errors?.WS_ADDITIONAL_AMOUNT?.WS_TIME_INTEREST && <CardLabelError>{errors?.WS_ADDITIONAL_AMOUNT?.WS_TIME_INTEREST?.message}</CardLabelError>}
-						</>
+						<td style={{ paddingRight: "60px" }}>
+							<>
+								<TextInput disabled={servicev1 === "WS" ? !WS_ADDITIONAL_AMOUNT?.VALUE : !SW_ADDITIONAL_AMOUNT?.VALUE} name={`${servicev1}_ADDITIONAL_AMOUNT.${servicev1}_CHARGE`} inputRef={register({
+									min: {
+										value: node.amount,
+										message: t(`${servicev1}_ERROR_ENTER_MORE_THAN_MIN_VALUE`)
+									}
+								})} />
+								{servicev1 === "WS" ? errors?.WS_ADDITIONAL_AMOUNT?.WS_CHARGE && <CardLabelError>{errors?.WS_ADDITIONAL_AMOUNT?.WS_CHARGE?.message}</CardLabelError> : errors?.SW_ADDITIONAL_AMOUNT?.SW_CHARGE && <CardLabelError>{errors?.SW_ADDITIONAL_AMOUNT?.SW_CHARGE?.message}</CardLabelError> }
+							</>
 					</td>
 				</tr>
-				<tr>
-					<td style={{paddingRight: "60px"}}>{t("WS_WATER_CESS")}</td>
-					<td style={{paddingRight: "60px", textAlign: "end"}}>₹ {billSearchData?.find(e => e.taxHeadCode === "WS_WATER_CESS")?.amount}</td>
-					<td style={{paddingRight: "60px"}}>
-						<>
-							<TextInput disabled={!WS_REDUCED_AMOUNT?.VALUE} name="WS_REDUCED_AMOUNT.WS_WATER_CESS" inputRef={register({max: {
-								value: billSearchData?.find(e => e.taxHeadCode === "WS_WATER_CESS")?.amount,
-								message: t("WS_ERROR_ENTER_LESS_THAN_MAX_VALUE")
-							}})} />
-							{errors?.WS_REDUCED_AMOUNT?.WS_WATER_CESS && <CardLabelError>{errors?.WS_REDUCED_AMOUNT?.WS_WATER_CESS?.message}</CardLabelError>}
-						</>
-					</td>
-					<td style={{paddingRight: "60px"}}>
-						<>
-							<TextInput disabled={!WS_ADDITIONAL_AMOUNT?.VALUE} name="WS_ADDITIONAL_AMOUNT.WS_WATER_CESS" inputRef={register({min: {
-								value: billSearchData?.find(e => e.taxHeadCode === "WS_WATER_CESS")?.amount,
-								message: t("WS_ERROR_ENTER_MORE_THAN_MIN_VALUE")
-							}})} />
-							{errors?.WS_ADDITIONAL_AMOUNT?.WS_WATER_CESS && <CardLabelError>{errors?.WS_ADDITIONAL_AMOUNT?.WS_WATER_CESS?.message}</CardLabelError>}
-						</>
-					</td>
-				</tr>
-				<tr>
-					<td style={{paddingRight: "60px"}}>{t("WS_TIME_PENALTY")}</td>
-					<td style={{paddingRight: "60px", textAlign: "end"}}>₹ {billSearchData?.find(e => e.taxHeadCode === "WS_TIME_PENALTY")?.amount}</td>
-					<td style={{paddingRight: "60px"}}><>
-						<TextInput disabled={!WS_REDUCED_AMOUNT?.VALUE} name="WS_REDUCED_AMOUNT.WS_TIME_PENALTY" inputRef={register({max: {
-							value: billSearchData?.find(e => e.taxHeadCode === "WS_TIME_PENALTY")?.amount,
-							message: t("WS_ERROR_ENTER_LESS_THAN_MAX_VALUE")
-						}})} />
-						{errors?.WS_REDUCED_AMOUNT?.WS_TIME_PENALTY && <CardLabelError>{errors?.WS_REDUCED_AMOUNT?.WS_TIME_PENALTY?.message}</CardLabelError>}
-						</>
-					</td>
-					<td style={{paddingRight: "60px"}}><>
-						<TextInput disabled={!WS_ADDITIONAL_AMOUNT?.VALUE} name="WS_ADDITIONAL_AMOUNT.WS_TIME_PENALTY" inputRef={register({min: {
-							value: billSearchData?.find(e => e.taxHeadCode === "WS_TIME_PENALTY")?.amount,
-							message: t("WS_ERROR_ENTER_MORE_THAN_MIN_VALUE")
-						}})} />
-						{errors?.WS_ADDITIONAL_AMOUNT?.WS_TIME_PENALTY && <CardLabelError>{errors?.WS_ADDITIONAL_AMOUNT?.WS_TIME_PENALTY?.message}</CardLabelError>}
-						</>
-					</td>
-				</tr>
-			</table> : <Loader />}
+				)
+				)}
+			</table> :<Loader />}
 			{ BillAmendmentMDMSLoading ? <Loader/> : <>
 				<CardSectionHeader style={{marginBottom: "16px"}}>{t("WS_ADD_DEMAND_REVISION_BASIS")}</CardSectionHeader>
 				<CardSectionSubText style={{marginBottom: "16px"}}>{t("WS_SELECT_DEMAND_REVISION")}</CardSectionSubText>

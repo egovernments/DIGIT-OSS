@@ -98,6 +98,9 @@ export const usePaymentSearch = (tenantId, filters, config={}) => {
           case "WS_CHARGE":
           case "WS_TIME_PENALTY":
           case "WS_TIME_INTEREST":
+          case "SW_TIME_INTEREST":
+          case "SW_TIME_PENALTY":
+          case "SW_CHARGE":
           case "WS_WATER_CESS":
             return true
           default :
