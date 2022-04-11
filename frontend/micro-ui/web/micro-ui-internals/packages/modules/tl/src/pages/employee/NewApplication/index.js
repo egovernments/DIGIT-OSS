@@ -1,15 +1,13 @@
+import { FormComposer, Header, Toast } from "@egovernments/digit-ui-react-components";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Toast, Header } from "@egovernments/digit-ui-react-components";
-import { newConfig as newConfigTL } from "../../../config/config";
 import { useHistory, useLocation } from "react-router-dom";
+import { newConfig as newConfigTL } from "../../../config/config";
 import { convertDateToEpoch } from "../../../utils";
-import _ from "lodash";
-import cloneDeep from "lodash/cloneDeep";
 
 const NewApplication = () => {
-  let tenantId = Digit.ULBService.getCurrentTenantId();
-  tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  let tenantId = Digit.ULBService.getCurrentTenantId() || Digit.ULBService.getCitizenCurrentTenant();
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
   const history = useHistory();
@@ -25,7 +23,7 @@ const NewApplication = () => {
   let { data: newConfig, isLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId ? true : false },
+    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId ? true : false }
   );
 
   useEffect(() => {

@@ -22,7 +22,7 @@ import StaticCitizenSideBar from "../../../components/TopBarSideBar/SideBar/Stat
 const Home = () => {
   const { t } = useTranslation();
   const history = useHistory();
-  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  const tenantId = Digit.ULBService.getCitizenCurrentTenant();
   const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
   let isMobile = window.Digit.Utils.browser.isMobile();
 
@@ -140,6 +140,7 @@ const Home = () => {
             <StandaloneSearchBar placeholder={t("CS_COMMON_SEARCH_PLACEHOLDER")} />
           </div>
         </div>
+      </div>
 
         <div className="ServicesSection">
           <CardBasedOptions {...allCitizenServicesProps} />
