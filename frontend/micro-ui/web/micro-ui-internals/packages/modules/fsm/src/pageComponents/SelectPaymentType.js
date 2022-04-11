@@ -25,14 +25,14 @@ const SelectPaymentType = ({ t, config, onSelect, formData = {}, userType, regis
       const preFilledPaymentType = paymentData.filter(
         (paymentType) => paymentType.code === (formData?.paymentPreference?.code || formData?.paymentPreference)
       )[0];
-      setPaymentType(preFilledPaymentType);
+      preFilledPaymentType ? setPaymentType(preFilledPaymentType) : setPaymentType(paymentData.find((i) => i.code === "POST_PAY"))
     }
   }, [formData, formData?.paymentPreference?.code, formData?.paymentPreference, paymentData]);
 
 
   function selectPaymentType(value) {
     setPaymentType(value);
-    onSelect(config.key, value.code );
+    onSelect(config.key, value.code);
   }
 
   return (
