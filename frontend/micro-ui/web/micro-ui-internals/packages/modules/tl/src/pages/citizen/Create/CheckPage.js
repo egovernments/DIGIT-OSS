@@ -150,10 +150,9 @@ const CheckPage = ({ onSubmit, value }) => {
             />
             <Row
               label={t("TL_CHECK_ADDRESS")}
-              text={`${cpt.details?.address?.doorNo?.trim() ? `${cpt.details?.address?.doorNo?.trim()}, ` : ""} ${cpt.details?.address?.street?.trim() ? `${cpt.details?.address?.street?.trim()}, ` : ""}${t(
-                cpt.details?.address?.locality?.i18nkey
-              )}, ${t(cpt.details?.address?.city.code)} ${cpt.details?.address?.pincode?.trim() ? `,${cpt.details?.address?.pincode?.trim()}` : ""}`}
-              actionButton={<ActionButton jumpTo={`${routeLink}/map`} />}
+              text={`${cpt.details?.address?.doorNo?.trim() ? `${cpt.details?.address?.doorNo?.trim()}, ` : ""} ${cpt.details?.address?.street?.trim() ? `${cpt.details?.address?.street?.trim()}, ` : ""} ${cpt.details?.address?.buildingName?.trim() ? `${cpt.details?.address?.buildingName?.trim()}, ` : ""}
+              ${t(cpt.details?.address?.locality?.name)}, ${t(cpt.details?.address?.city)} ${cpt.details?.address?.pincode?.trim() ? `,${cpt.details?.address?.pincode?.trim()}` : ""}`}
+              actionButton={cpt && cpt.details && cpt.details.propertyId ? <ActionButton jumpTo={`${routeLink}/property-details`} /> : <ActionButton jumpTo={`${routeLink}/map`} />}
             />
           </React.Fragment>
         :
