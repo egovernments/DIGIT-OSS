@@ -214,6 +214,17 @@ export const newConfig = [
       }]
     },
     {
+      head: "WS_COMMON_PLUMBER_DETAILS",
+      isEditConnection: false,
+      isCreateConnection: true,
+      body: [{
+        type: "component",
+        key: "PlumberDetails",
+        component: "WSPlumberDetails",
+        withoutLabel: true,
+      }]
+    },
+    {
       head: "WS_COMMON_CONNECTION_DETAIL",
       isEditConnection: false,
       isCreateConnection: true,
