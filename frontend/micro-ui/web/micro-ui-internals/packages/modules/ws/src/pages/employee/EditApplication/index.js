@@ -1,42 +1,88 @@
-import { FormComposer, Header, Loader, Toast } from "@egovernments/digit-ui-react-components";
-import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useLocation, useHistory } from "react-router-dom";
-import * as func from "../../../utils";
+import { FormComposer, Header, Toast } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useHistory, useLocation } from "react-router-dom";
 import { newConfig as newConfigLocal } from "../../../config/wsCreateConfig";
 import { convertApplicationData, convertEditApplicationDetails } from "../../../utils";
-import cloneDeep from "lodash/cloneDeep";
 
 const EditApplication = () => {
   const { t } = useTranslation();
-  const {state, search} = useLocation();  
+  const { state, search } = useLocation();
   const history = useHistory();
-  let filters = func.getQueryStringParams(location.search);
   const [canSubmit, setSubmitValve] = useState(false);
   const [showToast, setShowToast] = useState(null);
   const [appData, setAppData] = useState({});
   const [config, setConfig] = useState({ head: "", body: [] });
   const [enabledLoader, setEnabledLoader] = useState(true);
   const [isAppDetailsPage, setIsAppDetailsPage] = useState(false);
-
-  const tenantId = Digit.ULBService.getCurrentTenantId() || Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
   const urlParams = new URLSearchParams(location.search);
-
+  const tenantId = Digit.ULBService.getCurrentTenantId() || Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
   const applicationNumber = urlParams.get("applicationNumber");
   const serviceType = urlParams.get("service");
-
+  const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
   const details = cloneDeep(state?.data);
 
-  const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
+  const [
+    sessionFormData,
+    setSessionFormData,
+    clearSessionFormData
+  ] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_WS_NEW_FORM", {});
 
-  const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_WS_NEW_FORM", {});
+  const {
+    isLoading: isApplicationDetailsLoading,
+    data: applicationDetails,
+    error: applicationDetailsError
+  } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, applicationNumber, serviceType);
 
-  const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
+  const {
+    data: propertyDetails
+  } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
     { enabled: propertyId ? true : false }
   );
+
+  const {
+    isLoading: updatingApplication,
+    isError: updateApplicationError,
+    data: updateResponse,
+    error: updateError,
+    mutate,
+  } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
+
+  const onFormValueChange = (setValue, formData, formState) => {
+    if (!_.isEqual(sessionFormData, formData)) {
+      setSessionFormData({ ...sessionFormData, ...formData });
+    }
+    if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0 && !formData?.cpt?.details?.propertyId) setSubmitValve(true);
+    else setSubmitValve(!(Object.keys(formState.errors).length));
+  };
+
+  const onSubmit = async (data) => {
+    const appDetails = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : state?.data;
+    let convertAppData = await convertEditApplicationDetails(data, appDetails);
+    const reqDetails = serviceType === "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
+
+    if (mutate) {
+      mutate(reqDetails, {
+        onError: (error, variables) => {
+          setShowToast({ key: "error", message: error?.message ? error.message : error });
+          setTimeout(closeToastOfError, 5000);
+        },
+        onSuccess: (data, variables) => {
+          setShowToast({ key: false, message: "CS_PROPERTY_APPLICATION_SUCCESS" });
+          setIsAppDetailsPage(true);
+          // setTimeout(closeToast(), 5000);
+        },
+      });
+    }
+  };
+
+  const closeToast = () => {
+    setShowToast(null);
+  };
 
   useEffect(() => {
     const config = newConfigLocal.find((conf) => conf.hideInCitizen);
@@ -54,7 +100,7 @@ const EditApplication = () => {
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
     if (details?.applicationData?.id && !IsDetailsExists) {
-      const convertAppData = await convertApplicationData(details, serviceType);
+      const convertAppData = convertApplicationData(details, serviceType);
       setSessionFormData({ ...sessionFormData, ...convertAppData });
       setAppData({ ...convertAppData })
       sessionStorage.setItem("IsDetailsExists", JSON.stringify(true));
@@ -77,47 +123,6 @@ const EditApplication = () => {
     }, 3000);
     return () => clearTimeout(timer);
   }, [isAppDetailsPage]);
-
-  const {
-    isLoading: updatingApplication,
-    isError: updateApplicationError,
-    data: updateResponse,
-    error: updateError,
-    mutate,
-  } = Digit.Hooks.ws.useWSApplicationActions(filters?.service);
-
-  const onFormValueChange = (setValue, formData, formState) => {
-    if (!_.isEqual(sessionFormData, formData)) {
-      setSessionFormData({ ...sessionFormData, ...formData });
-    }
-    if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0 && !formData?.cpt?.details?.propertyId) setSubmitValve(true);
-    else setSubmitValve(!(Object.keys(formState.errors).length));
-  };
-
-  const onSubmit = async (data) => {
-    const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : state?.data;
-    let convertAppData = await convertEditApplicationDetails(data, details);
-    const reqDetails = serviceType === "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
-
-    if (mutate) {
-      mutate(reqDetails, {
-        onError: (error, variables) => {
-          setShowToast({ key: "error", message: error?.message ? error.message : error });
-          setTimeout(closeToastOfError, 5000);
-        },
-        onSuccess: (data, variables) => {
-          setShowToast({ key: false, message: "CS_PROPERTY_APPLICATION_SUCCESS" });
-          setIsAppDetailsPage(true);
-          // setTimeout(closeToast(), 5000);
-        },
-      });
-    }
-  };
-
-
-  const closeToast = () => {
-    setShowToast(null);
-  };
 
   // if (enabledLoader) {
   //   return <Loader />;

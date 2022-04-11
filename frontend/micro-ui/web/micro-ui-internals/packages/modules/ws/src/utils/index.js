@@ -700,7 +700,6 @@ export const getBusinessService = (data) => {
 }
 
 export const convertApplicationData = (data, serviceType) => {
-
   data?.propertyDetails?.owners?.forEach(owner => {
     if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
   })
@@ -793,14 +792,13 @@ export const convertApplicationData = (data, serviceType) => {
 }
 
 export const convertEditApplicationDetails = async (data, appData) => {
-
   data?.cpt?.details?.owners?.forEach(owner => {
     if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
   });
 
   let payload = {
     ...appData,
-    action: "RESUBMIT_APPLICATION",
+    action: "SUBMIT_APPLICATION",
     connectionHolders: !data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
       correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
       fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
@@ -819,14 +817,22 @@ export const convertEditApplicationDetails = async (data, appData) => {
     property: data?.cpt?.details,
     processInstance: {
       ...appData,
-      action: appData?.action === "EDIT" ? "ACTIVATE_CONNECTION" : "RESUBMIT_APPLICATION",
+      action:  "RESUBMIT_APPLICATION",
     },
-    // roadCuttingInfo: data?.RoadCuttingDetails || appData?.roadCuttingInfo,
+    // plumberInfo: [data?.PlumberDetails] || appData?.plumberInfo,
+    plumberInfo: [],
+    roadCuttingInfo: data?.RoadCuttingDetails || appData?.roadCuttingInfo,
     // roadCuttingArea: data?.RoadCuttingDetails?.map(e=>e?.area),
+    roadCuttingArea: null,
     // roadType: data?.RoadCuttingDetails?.map(e=>e?.roadType),
-    connectionType: null,
+    roadType: null,
+    // connectionNo: data?.AdditionalConnectionDetails?.connectionNo || appData?.connectionNo,
     connectionNo: null,
-    waterSource: null,
+    connectionType: data?.AdditionalConnectionDetails?.[0]?.connectionType?.code || appData?.connectionType,
+    waterSource: data?.AdditionalConnectionDetails?.[0]?.waterSource?.code || appData?.waterSource,
+    pipeSize: data?.AdditionalConnectionDetails?.[0]?.pipeSize?.code || appData?.pipeSize,
+    noOfTaps: data?.AdditionalConnectionDetails?.[0]?.noOfTaps || appData?.noOfTaps,
+    sourceSubData: data?.AdditionalConnectionDetails?.[0]?.sourceSubData?.code || appData?.sourceSubData,
   }
 
   return payload;

@@ -22,6 +22,7 @@ import WSRoadCuttingDetails from "./pageComponents/WSRoadCuttingDetails";
 import WSPropertyDetails from "./pageComponents/WSPropertyDetails";
 import WSConnectionHolderDetails from "./pageComponents/WSConnectionHolderDetails";
 import EditApplication from "./pages/citizen/EditApplication";
+import WSAdditionalConnectionDetails from './pageComponents/WSAdditionalConnectionDetails';
 
 import SearchApplication from "./components/SearchApplication";
 import SearchWaterConnection from "./components/SearchWaterConnection";
@@ -131,7 +132,8 @@ const componentsToRegister = {
   WSPayments,
   WSEditConnectionDetails,
   ConsumptionDetails,
-  EditApplication
+  EditApplication,
+  WSAdditionalConnectionDetails,
 };
 
 export const initWSComponents = () => {

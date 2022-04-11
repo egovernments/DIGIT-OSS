@@ -23,8 +23,6 @@ const createConnectionDetails = (service) => (service == "WATER" ? {
 
 
 const WSActivationConnectionDetails = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
-
-
     const { t } = useTranslation();
     const { pathname } = useLocation();
     const filters = func.getQueryStringParams(location.search);
@@ -43,7 +41,6 @@ const WSActivationConnectionDetails = ({ config, onSelect, userType, formData, s
     const { isMdmsLoading, data: mdmsData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["connectionType", "waterSource"]);
     const { isWSServicesCalculationLoading, data: wsServicesCalculationData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-calculation", ["PipeSize"]);
 
-
     useEffect(() => {
         const data = connectionDetails.map((e) => {
             return e;
@@ -53,8 +50,8 @@ const WSActivationConnectionDetails = ({ config, onSelect, userType, formData, s
 
 
     useEffect(() => {
-        const list = mdmsData?.["ws-services-calculation"]?.PipeSize || [];
-        list?.forEach(data => data.i18nKey = data.size);
+        const list = wsServicesCalculationData?.["ws-services-calculation"]?.PipeSize || [];
+        list?.forEach(data => data.i18nKey = `${data.size}`);
 
         const connectionTypes = mdmsData?.["ws-services-masters"]?.connectionType || [];
         connectionTypes?.forEach(data => data.i18nKey = `WS_CONNECTIONTYPE_${stringReplaceAll(data?.code?.toUpperCase(), " ", "_")}`);
