@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import isEqual from "lodash/isEqual";
 import { useTranslation } from "react-i18next";
@@ -7,7 +7,7 @@ const RadioButtons = (props) => {
   const { t } = useTranslation();
   var selected = props.selectedOption;
   function selectOption(value) {
-    selected = value;
+    //selected = value;
     props.onSelect(value);
   }
 
