@@ -417,7 +417,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         );
       } else {
         let SearchParams = {};
-        if(action === "0")
+        if(action == 0)
         SearchParams = {
             city : qs?.city,
             mobileNumber : qs?.mobileNumber || "",
