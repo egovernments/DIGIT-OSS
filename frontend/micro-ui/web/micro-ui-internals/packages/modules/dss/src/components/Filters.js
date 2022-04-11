@@ -19,12 +19,12 @@ const Filters = ({
   const { value, setValue } = useContext(FilterContext);
 
   const [selected, setSelected] = useState(() =>
-    ulbTenants?.ulb.filter((tenant) => value.filters.tenantId.find((selectedTenant) => selectedTenant === tenant.code))
+    ulbTenants?.ulb.filter((tenant) => value?.filters?.tenantId?.find((selectedTenant) => selectedTenant === tenant?.code))
   );
 
   useEffect(() => {
-    setSelected(ulbTenants?.ulb.filter((tenant) => value.filters.tenantId.find((selectedTenant) => selectedTenant === tenant.code)));
-  }, [value.filters.tenantId]);
+    setSelected(ulbTenants?.ulb?.filter((tenant) => value?.filters?.tenantId?.find((selectedTenant) => selectedTenant === tenant?.code)));
+  }, [value?.filters?.tenantId]);
 
   const handleFilterChange = (data) => {
     setValue({ ...value, ...data });
