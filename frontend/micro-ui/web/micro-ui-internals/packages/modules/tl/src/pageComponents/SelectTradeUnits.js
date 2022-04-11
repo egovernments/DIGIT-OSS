@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, RadioOrSelect, LinkButton } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, RadioOrSelect, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 import {sortDropdownNames} from "../utils/index";
 import Timeline from "../components/TLTimeline";
@@ -171,19 +171,18 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
               style={{ width: "100px", display:"inline" }}
               onClick={(e) => handleRemove(index)}
            />
-            <RadioButtons
+            {!isLoading ? <RadioButtons
               t={t}
               options={TradeCategoryMenu}
-              optionsKey="code"
-              name="TradeCategory"
-              value={TradeCategory}
-              //selectedOption={TradeCategory}
+              optionsKey="i18nKey"
+              name={`TradeCategory-${index}`}
+              value={field?.tradecategory}
               selectedOption={field?.tradecategory}
               onSelect={(e) => selectTradeCategory(index, e)}
-              isDependent={true}
-              labelKey="TRADELICENSE_TRADETYPE"
-              //disabled={isUpdateProperty || isEditProperty}
-            />
+              labelKey=""
+              isPTFlow={true}
+            /> :
+            <Loader />}
             <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL")}`}</CardLabel>
             <Dropdown
               t={t}

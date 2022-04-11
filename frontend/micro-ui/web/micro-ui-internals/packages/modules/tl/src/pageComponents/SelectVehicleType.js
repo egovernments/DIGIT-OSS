@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
+import { Loader, TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { FormStep, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/TLTimeline";
 
@@ -31,7 +31,7 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData }) => {
     <React.Fragment>
     {window.location.href.includes("/citizen") ? <Timeline /> : null}
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!VehicleType}>
-      <RadioButtons
+      {!isLoading ? <RadioButtons
         t={t}
         optionsKey="i18nKey"
         isMandatory={config.isMandatory}
@@ -39,7 +39,8 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData }) => {
         selectedOption={VehicleType}
         onSelect={selectVehicleType}
         disable={isEdit}
-      />
+      />:
+      <Loader />}
     </FormStep>
     </React.Fragment>
   );

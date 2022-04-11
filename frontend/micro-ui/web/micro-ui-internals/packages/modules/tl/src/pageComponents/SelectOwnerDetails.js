@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useReducer } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, CheckBox, LinkButton, CardHeader } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, CheckBox, LinkButton, CardHeader, Loader } from "@egovernments/digit-ui-react-components";
 
 import Timeline from "../components/TLTimeline";
 
@@ -115,7 +115,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   const stateId = Digit.ULBService.getStateId();
   const isEdit = window.location.href.includes("/edit-application/") || window.location.href.includes("/renew-trade/")
 
-  const {data: Menu} = Digit.Hooks.tl.useTLGenderMDMS(stateId, "common-masters", "GenderType");
+  const {data: Menu, isLoading : isGenderLoading} = Digit.Hooks.tl.useTLGenderMDMS(stateId, "common-masters", "GenderType");
   if(isEdit) keyToSearchOwnershipSubtype = keyToSearchOwnershipSubtype.split(".")[0];
   const { data: institutionOwnershipTypeOptions } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TradeOwnershipSubType",{ keyToSearchOwnershipSubtype });
   
@@ -351,7 +351,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
               }}}
             />
             <CardLabel>{`${t("TL_NEW_OWNER_DETAILS_GENDER_LABEL")}`}</CardLabel>
-            <RadioButtons
+            {!isGenderLoading ? <RadioButtons
               t={t}
               options={TLmenu}
               optionsKey="i18nKey"
@@ -361,7 +361,8 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
               labelKey=""
               isPTFlow={true}
               //disabled={isUpdateProperty || isEditProperty}
-            />
+            /> :
+            <Loader />}
             <CardLabel>{`${t("TL_MOBILE_NUMBER_LABEL")}`}</CardLabel>
             <div className="field-container">
               <span className="employee-card-input employee-card-input--front" style={{ marginTop: "-1px" }}>
@@ -391,7 +392,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
               style={typeOfOwner === "MULTIOWNER" ? {background:"#FAFAFA"}:{}}
               t={t}
               type={"text"}
-              isMandatory={true}
+              isMandatory={false}
               name="fatherOrHusbandName"
               value={field.fatherOrHusbandName}
               onChange={(e) => handleTextInputField(index, e, "fatherOrHusbandName")}

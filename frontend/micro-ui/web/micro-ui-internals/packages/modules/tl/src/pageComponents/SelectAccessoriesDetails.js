@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, RadioOrSelect, LinkButton } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, RadioOrSelect, LinkButton, Loader } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 import {sortDropdownNames} from "../utils/index";
 import isUndefined from "lodash/isUndefined";
@@ -195,7 +195,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
               style={{ width: "100px", display:"inline" }}
               onClick={(e) => handleRemove(index)}
            />
-            <RadioOrSelect
+            {!isLoading ? <RadioOrSelect
               t={t}
               optionKey="i18nKey"
               isMandatory={config.isMandatory}
@@ -203,7 +203,8 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
               options={sortDropdownNames(accessories.length !== 0?accessories:getAccessoryCategoryDropDown(),"i18nKey",t)}
               selectedOption={field.accessory}
               onSelect={(e) => selectAccessory(index, e)}
-            />
+            /> : 
+            <Loader />}
             <CardLabel>{`${t("TL_ACCESSORY_COUNT_LABEL")}`}</CardLabel>
             <TextInput
               style={{background:"#FAFAFA"}}
