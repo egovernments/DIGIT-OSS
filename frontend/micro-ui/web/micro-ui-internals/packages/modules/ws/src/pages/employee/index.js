@@ -10,12 +10,12 @@ import ApplicationDetails from "./ApplicationDetails";
 import GetConnectionDetails from "./connectionDetails/connectionDetails";
 import ActivateConnection from "./ActivateConnection";
 import WSResponse from "./WSResponse";
-// import SearchConnectionComponent from "./SearchConnection";
-// import SearchResultsComponent from "./SearchResults";
 import Search from "./search";
 import SearchWater from "./SearchWater";
 import EditApplication from "./EditApplication";
 import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
+import ModifyApplication from "./ModifyApplication";
+
 const App = ({ path }) => {
   const { t } = useTranslation();
   return (
@@ -34,9 +34,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/response`} component={WSResponse} />
         <PrivateRoute path={`${path}/search`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/consumption-details`} component={ConsumptionDetails} />
-
-        {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
-        <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
+        <PrivateRoute path={`${path}/modify-application`} component={ModifyApplication} />
       </Switch>
     </React.Fragment>
   );

@@ -28,7 +28,9 @@ const WSActivationConnectionDetails = ({ config, onSelect, userType, formData, s
     const { t } = useTranslation();
     const { pathname } = useLocation();
     const filters = func.getQueryStringParams(location.search);
-    const [connectionDetails, setConnectionDetails] = useState(formData?.connectionDetails || [createConnectionDetails(filters?.service?.toUpperCase())]);
+    const [connectionDetails, setConnectionDetails] = window.location.href.includes("modify") ? useState(
+         formData?.connectionDetails ? [formData?.connectionDetails?.[0]] : [createConnectionDetails(filters?.service?.toUpperCase())]
+    ) : useState(formData?.connectionDetails || [createConnectionDetails(filters?.service?.toUpperCase())]);
     const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateCode = Digit.ULBService.getStateId();
@@ -161,6 +163,10 @@ const ConnectionDetails = (_props) => {
     useEffect(() => {
         trigger();
     }, []);
+
+    useEffect(() => {
+        if (window.location.href.includes("modify")) trigger(); 
+     }, [connectionDetails]);
 
     useEffect(() => {
         if (Object.entries(formValue).length > 0) {

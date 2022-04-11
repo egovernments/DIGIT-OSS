@@ -13,9 +13,9 @@ const WSSearchMdmsTypes = {
       ...config
     });
   },
-  useWSServicesMasters: (tenantId) =>
+  useWSServicesMasters: (tenantId, type) =>
     useQuery(
-      [tenantId, "WS_WS_SERVICES_MASTERS"],
+      [tenantId, type, "WS_WS_SERVICES_MASTERS"],
       () =>
         MdmsService.getDataByCriteria(
           tenantId,
@@ -27,7 +27,7 @@ const WSSearchMdmsTypes = {
                   moduleName: "ws-services-masters",
                   masterDetails: [
                     {
-                      name: "Documents",
+                      name: type ?  type : "Documents"
                     },
                   ],
                 },
@@ -38,7 +38,8 @@ const WSSearchMdmsTypes = {
         ),
       {
         select: (data) => {
-          data?.["ws-services-masters"]?.Documents?.forEach(type => {
+          const wsDocsData = type ? type : "Documents";
+          data?.["ws-services-masters"]?.[wsDocsData]?.forEach(type => {
             type.code = type.code;
             type.i18nKey = type.code ? type.code.replaceAll('.', '_') : "";
             type.dropdownData.forEach(value => {

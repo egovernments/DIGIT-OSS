@@ -165,6 +165,7 @@ export const newConfig = [
       head: "",
       isEditConnection: true,
       isCreateConnection: true,
+      isModifyConnection: true,
       body: [
         {
           type: "component",
@@ -178,6 +179,7 @@ export const newConfig = [
       head: "",
       isEditConnection: true,
       isCreateConnection: false,
+      isModifyConnection: true,
       body: [
         {
           component: "WSEditConnectionDetails",
@@ -192,6 +194,7 @@ export const newConfig = [
       head: "WS_COMMON_PROPERTY_DETAILS",
       isEditConnection: true,
       isCreateConnection: true,
+      isModifyConnection: true,
       body: [
         {
           component: "CPTPropertySearchNSummary",
@@ -206,11 +209,36 @@ export const newConfig = [
       head: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
       isEditConnection: true,
       isCreateConnection: true,
+      isModifyConnection: true,
       body: [{
         type: "component",
         key: "ConnectionHolderDetails",
         component: "WSConnectionHolderDetails",
         withoutLabel: true
+      }]
+    },
+    {
+      head: "WS_COMMON_CONNECTION_DETAIL",
+      isEditConnection: false,
+      isCreateConnection: false,
+      isModifyConnection: true,
+      body: [{
+        type: "component",
+        key: "connectionDetails",
+        component: "WSActivationConnectionDetails",
+        withoutLabel: true,
+      }]
+    },
+    {
+      head: "WS_ACTIVATION_DETAILS",
+      isEditConnection: false,
+      isCreateConnection: false,
+      isModifyConnection: true,
+      body: [{
+        type: "component",
+        key: "activationDetails",
+        component: "WSActivationPageDetails",
+        withoutLabel: true,
       }]
     },
     {
@@ -228,6 +256,7 @@ export const newConfig = [
       head: "WS_COMMON_DOCS",
       isEditConnection: true,
       isCreateConnection: true,
+      isModifyConnection: true,
       body: [{
         type: "component",
         key: "DocumentsRequired",

@@ -16,7 +16,7 @@ const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
   const stateId = Digit.ULBService.getStateId();
   const [documents, setDocuments] = useState(formData?.DocumentsRequired?.documents || []);
   const [error, setError] = useState(null);
-
+  const wsDocsData = window.location.href.includes("modify") ? "ModifyConnectionDocuments" : "Documents";
   let action = "create";
 
   const { pathname } = useLocation();
@@ -25,7 +25,7 @@ const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
 
   if (isEditScreen) action = "update";
 
-  const { isLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateId);
+  const { isLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateId, wsDocsData);
 
 
   const goNext = () => {
@@ -39,10 +39,10 @@ const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
   if (isLoading) {
     return <Loader />;
   }
-
+  
   return (
     <div>
-      {wsDocs?.Documents?.map((document, index) => {
+      {wsDocs?.[wsDocsData]?.map((document, index) => {
         return (
           <SelectDocument
             key={index}

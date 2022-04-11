@@ -1,4 +1,4 @@
-import { CardLabel, Dropdown, LabelFieldPair, Loader, TextInput, CardLabelError, CheckBox } from "@egovernments/digit-ui-react-components";
+import { CardLabel, Dropdown, LabelFieldPair, Loader, TextInput, CardLabelError, CheckBox, StatusTable, Row, CardSubHeader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { getPattern } from "../utils";
 import { useForm, Controller } from "react-hook-form";
@@ -175,7 +175,15 @@ const ConnectionDetails = (_props) => {
     const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
 
     return (
-        <div >
+        <div >{
+            window.location.href.includes("modify-application") ? 
+            <div>
+                <CardSubHeader>{t("WS_COMMON_SERV_DETAIL")}</CardSubHeader>
+                <StatusTable>
+                    <Row className="border-none" key={`WS_MYCONNECTIONS_CONSUMER_NO`} label={`${t(`WS_MYCONNECTIONS_CONSUMER_NO`)}`} text={connectionDetail?.applicationNo} />
+                    <Row className="border-none" key={`WS_SERVICE_NAME_LABEL`} label={`${t(`WS_SERVICE_NAME_LABEL`)}`} text={connectionDetail?.serviceName} />
+                </StatusTable>
+            </div> : 
             <div style={{ marginBottom: "16px" }}>
                 <LabelFieldPair>
                     <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL")}:`}</CardLabel>
@@ -347,7 +355,7 @@ const ConnectionDetails = (_props) => {
                         <CardLabelError style={errorStyle}>{localFormState.touched.proposedToilets ? errors?.proposedToilets?.message : ""}</CardLabelError>
                     </div>
                 )}
-            </div>
+            </div>}
         </div>
     );
 };

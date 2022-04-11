@@ -698,8 +698,7 @@ export const getBusinessService = (data) => {
   else return "SW.ONE_TIME_FEE"
 }
 
-export const convertApplicationData = (data, serviceType) => {
-
+export const convertApplicationData = (data, serviceType, modify = false, t) => {
   data?.propertyDetails?.owners?.forEach(owner => {
     if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
   })
@@ -777,12 +776,58 @@ export const convertApplicationData = (data, serviceType) => {
   let cpt = {};
   cpt["details"] = data?.propertyDetails || {};
 
-  let payload = {
-    ConnectionDetails: ConnectionDetails,
-    ConnectionHolderDetails: ConnectionHolderDetails,
-    DocumentsRequired: DocumentsRequired,
-    cpt: cpt,
-    InfoLabel: "InfoLabel"
+  let payload = {}
+
+  if (modify) {
+    const activationDetails = [{
+      meterId: data?.applicationData?.meterId || "",
+      meterInstallationDate: data?.applicationData?.meterInstallationDate ? convertEpochToDates(data?.applicationData?.meterInstallationDate) : null,
+      meterInitialReading: data?.applicationData?.additionalDetails?.initialMeterReading || "",
+      connectionExecutionDate: data?.applicationData?.connectionExecutionDate ? convertEpochToDates(data?.applicationData?.connectionExecutionDate) : null,
+    }];
+
+    const sourceSubDataValue = data?.applicationData?.waterSource ? stringReplaceAll(data?.applicationData?.waterSource?.toUpperCase(), " ", "_") : "";
+    const sourceSubDataFilter = sourceSubDataValue ? stringReplaceAll(sourceSubDataValue?.toUpperCase(), ".", "_") : "";
+
+    const connectionDetails = serviceType === "WATER" ? {
+      connectionType: data?.applicationData?.connectionType ? {
+          code: data?.applicationData?.connectionType, i18nKey: t(`WS_CONNECTIONTYPE_${stringReplaceAll(data?.applicationData?.connectionType?.toUpperCase(), " ", "_")}`)
+      } : "",
+      waterSource: data?.applicationData?.waterSource ? {
+          code: data?.applicationData?.waterSource, i18nKey: t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.applicationData?.waterSource?.split('.')[0]?.toUpperCase(), " ", "_")}`)
+      } : "",
+      sourceSubData: data?.applicationData?.waterSource ? {
+          code: data?.applicationData?.waterSource, i18nKey: t(`WS_SERVICES_MASTERS_WATERSOURCE_${sourceSubDataFilter}`)
+      } : "",
+      pipeSize: data?.applicationData?.pipeSize ? {
+          code: data?.applicationData?.pipeSize, i18nKey: data?.applicationData?.pipeSize
+      } : "",
+      noOfTaps: data?.applicationData?.noOfTaps || ""
+  } : {
+      noOfWaterClosets: data?.applicationData?.noOfWaterClosets || "",
+      noOfToilets: data?.applicationData?.noOfToilets || ""
+  };
+  DocumentsRequired = {
+    documents : []
+  };
+
+    payload = {
+      ConnectionDetails: ConnectionDetails,
+      connectionDetails: [connectionDetails],
+      ConnectionHolderDetails: ConnectionHolderDetails,
+      activationDetails: activationDetails,
+      DocumentsRequired: DocumentsRequired,
+      cpt: cpt,
+      InfoLabel: "InfoLabel"
+    }
+  } else {
+    payload = {
+      ConnectionDetails: ConnectionDetails,
+      ConnectionHolderDetails: ConnectionHolderDetails,
+      DocumentsRequired: DocumentsRequired,
+      cpt: cpt,
+      InfoLabel: "InfoLabel"
+    }
   }
 
   sessionStorage.setItem("Digit.PT_CREATE_EMP_WS_NEW_FORM", JSON.stringify(payload));
@@ -823,3 +868,71 @@ export const convertEditApplicationDetails = async (data, appData) => {
 
   return payload;
 }
+
+export const getConvertedDate = async (dateOfTime) => {
+  let dateOfReplace = stringReplaceAll(dateOfTime, "/", "-");
+  let formattedDate = "";
+  if (dateOfReplace.split("-")[2] > 1900) {
+    formattedDate = `${dateOfReplace.split("-")[2]}-${dateOfReplace.split("-")[1]}-${dateOfReplace.split("-")[0]}`;
+  } else {
+    formattedDate = `${dateOfReplace.split("-")[0]}-${dateOfReplace.split("-")[2]}-${dateOfReplace.split("-")[1]}`;
+  }
+  const convertedDate = await convertDateToEpoch(formattedDate);
+  return convertedDate;
+}
+
+export const convertModifyApplicationDetails = async (data, appData) => {
+
+  data?.cpt?.details?.owners?.forEach(owner => {
+    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
+  });
+
+  let formData = { ...appData.applicationData }
+
+  if (data?.connectionDetails?.[0]?.connectionType?.code) formData.connectionType = data?.connectionDetails?.[0]?.connectionType?.code;
+  if (data?.connectionDetails?.[0]?.waterSource?.code) formData.waterSource = data?.connectionDetails?.[0]?.waterSource?.code;
+  if (data?.connectionDetails?.[0]?.pipeSize?.size) formData.pipeSize = data?.connectionDetails?.[0]?.pipeSize?.size;
+  if (data?.connectionDetails?.[0]?.noOfTaps) formData.noOfTaps = data?.connectionDetails?.[0]?.noOfTaps;
+
+  if (data?.connectionDetails?.[0]?.noOfWaterClosets) formData.noOfWaterClosets = data?.connectionDetails?.[0]?.noOfWaterClosets;
+  if (data?.connectionDetails?.[0]?.noOfToilets) formData.noOfToilets = data?.connectionDetails?.[0]?.noOfToilets;
+
+  if (data?.activationDetails?.[0]?.meterId) formData.meterId = data?.activationDetails?.[0]?.meterId;
+  if (data?.activationDetails?.[0]?.meterInstallationDate) formData.meterInstallationDate = await getConvertedDate(data?.activationDetails?.[0]?.meterInstallationDate);
+  if (data?.activationDetails?.[0]?.meterInitialReading) formData.additionalDetails.initialMeterReading = data?.activationDetails?.[0]?.meterInitialReading;
+  if (data?.activationDetails?.[0]?.connectionExecutionDate) formData.connectionExecutionDate = await getConvertedDate(data?.activationDetails?.[0]?.connectionExecutionDate);
+  if (data?.activationDetails?.[0]?.dateEffectiveFrom) formData.dateEffectiveFrom = await getConvertedDate(data?.activationDetails?.[0]?.dateEffectiveFrom);
+
+  if (data?.DocumentsRequired?.documents?.length) formData.documents = data?.DocumentsRequired?.documents;
+  else formData.documents = null;
+
+  if (!data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails) {
+    formData.connectionHolders = [{
+      ...appData?.applicationData?.connectionHolders,
+      correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
+      fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
+      gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
+      mobileNumber: data?.ConnectionHolderDetails?.[0]?.mobileNumber || "",
+      name: data?.ConnectionHolderDetails?.[0]?.name || "",
+      ownerType: data?.ConnectionHolderDetails?.[0]?.ownerType?.code || "",
+      relationship: data?.ConnectionHolderDetails?.[0]?.relationship?.code || "",
+      sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
+    }]
+  }
+  formData.processInstance = { action: "INITIATE" };
+  formData.action = "INITIATE";
+  formData.channel = "CFC_COUNTER"
+
+  sessionStorage.setItem("WS_DOCUMENTS_INOF", JSON.stringify(data?.DocumentsRequired?.documents || []));
+  sessionStorage.setItem("WS_PROPERTY_INOF", JSON.stringify(data?.cpt?.details));
+
+  return formData;
+}
+
+export const ifUserRoleExists = (role) => {
+  const userInfo = Digit.UserService.getUser();
+  const roleCodes = userInfo?.info?.roles ? userInfo?.info?.roles.map(role => role.code) : [];
+  if (roleCodes.indexOf(role) > -1) {
+    return true;
+  } else return false;
+};

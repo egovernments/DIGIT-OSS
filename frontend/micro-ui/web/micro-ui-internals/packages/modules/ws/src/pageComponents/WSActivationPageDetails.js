@@ -17,7 +17,9 @@ const createActivationDetails = () => ({
 const WSActivationPageDetails = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
     const { t } = useTranslation();
     const filters = func.getQueryStringParams(location.search);
-    const [activationDetails, setActivationDetails] = useState(formData?.activationDetails || [createActivationDetails()]);
+    const [activationDetails, setActivationDetails] = window.location.href.includes("modify") ? useState(
+         formData?.activationDetails ? [formData?.activationDetails?.[0]] : [createActivationDetails()]
+    ) : useState(formData?.activationDetails || [createActivationDetails()]);
     const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
     const [isErrors, setIsErrors] = useState(false);
 
@@ -114,6 +116,10 @@ const ConnectionDetails = (_props) => {
     useEffect(() => {
         trigger();
     }, [formData?.connectionDetails?.[0]?.connectionType]);
+
+    useEffect(() => {
+        if (window.location.href.includes("modify")) trigger(); 
+     }, [activationDetails, formData?.ConnectionDetails, formData?.ConnectionHolderDetails, formData?.DocumentsRequired, formData?.connectionDetails, formData?.cpt]);
 
 
     useEffect(() => {
@@ -230,6 +236,30 @@ const ConnectionDetails = (_props) => {
                     </div>
                 </LabelFieldPair>
                 <CardLabelError style={errorStyle}>{localFormState.touched.connectionExecutionDate ? errors?.connectionExecutionDate?.message : ""}</CardLabelError>
+                {window.location.href.includes("modify") ? <div>
+                <LabelFieldPair>
+                    <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_MODIFICATIONS_EFFECTIVE_FROM")}*:`}</CardLabel>
+                    <div className="field">
+                        <Controller
+                            name="dateEffectiveFrom"
+                            rules={{ required: t("REQUIRED_FIELD") }}
+                            isMandatory={true}
+                            defaultValue={activationDetail?.dateEffectiveFrom}
+                            control={control}
+                            render={(props) => (
+                                <DatePicker
+                                    date={props.value}
+                                    name="dateEffectiveFrom"
+                                    onChange={props.onChange}
+                                    autoFocus={focusIndex.index === activationDetail?.key && focusIndex.type === "dateEffectiveFrom"}
+                                    errorStyle={(localFormState.touched.dateEffectiveFrom && errors?.dateEffectiveFrom?.message) ? true : false}
+                                />
+                            )}
+                        />
+                    </div>
+                </LabelFieldPair>
+                <CardLabelError style={errorStyle}>{localFormState.touched.dateEffectiveFrom ? errors?.dateEffectiveFrom?.message : ""}</CardLabelError>
+                </div> : null}
             </div>
         </div>
     );
