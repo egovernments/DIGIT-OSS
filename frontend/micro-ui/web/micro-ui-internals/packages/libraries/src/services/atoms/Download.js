@@ -27,6 +27,7 @@ const Download = {
       const link = document.createElement("a");
       console.log("Image link type: " + typeof link.download);
       if (typeof link.download === "string") {
+        console.log("Image exec");
         link.href = uri;
         link.download = filename;
         document.body.appendChild(link);
@@ -64,6 +65,7 @@ const Download = {
       const link = document.createElement("a");
       console.log("PDF link type: " + typeof link.download);
       if (typeof link.download === "string") {
+        console.log("PDF exec");
         link.href = uri;
         link.download = filename;
         document.body.appendChild(link);
@@ -163,6 +165,7 @@ const Download = {
       const link = document.createElement("a");
       console.log("INDividual chart link type: " + typeof link.download);
       if (typeof link.download === "string") {
+        console.log("Ind chart exec");
         link.href = uri;
         link.download = filename;
         document.body.appendChild(link);
