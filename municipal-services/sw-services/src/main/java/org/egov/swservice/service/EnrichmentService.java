@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.swservice.config.SWConfiguration;
@@ -456,10 +457,16 @@ public class EnrichmentService {
 			return;
 		List<ProcessInstance> processInstance=null;
 		for (SewerageConnection sewerageConnection : sewerageConnectionList) {
-			processInstance=wfService.getProcessInstance(requestInfo, sewerageConnection.getApplicationNo(),
+			if(criteria.getTenantId()!=null)
+				processInstance=wfService.getProcessInstance(requestInfo, sewerageConnection.getApplicationNo(),
 					criteria.getTenantId(), null);
-			sewerageConnection.getProcessInstance().setBusinessService(processInstance.get(0).getBusinessService());
-			sewerageConnection.getProcessInstance().setModuleName(processInstance.get(0).getModuleName());	
+			else
+				processInstance=wfService.getProcessInstance(requestInfo, sewerageConnection.getApplicationNo(),
+						sewerageConnection.getTenantId(), null);
+			if(!ObjectUtils.isEmpty(processInstance)) {
+				sewerageConnection.getProcessInstance().setBusinessService(processInstance.get(0).getBusinessService());
+				sewerageConnection.getProcessInstance().setModuleName(processInstance.get(0).getModuleName());
+			}
 		}
 	}
 
