@@ -37,6 +37,8 @@ import com.mchange.rmi.NotAuthorizedException;
 public class ApplicationSecurityRepository implements SecurityContextRepository {
 
 	private static final String AUTH_TOKEN = "auth_token";
+	
+	private static final String SESSION_ID = "session_id";
 
 	private static final Logger LOGGER = Logger.getLogger(ApplicationSecurityRepository.class);
 
@@ -122,15 +124,20 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 		session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
 		session.setAttribute(USERID_KEY, user.getId());
 		UserSearchResponse response = this.microserviceUtils.getUserInfo(userToken, user.getTenantId(), user.getUuid());
-
+		LOGGER.info("Before remove session::"+userToken + "::" + session.getId());
 		this.microserviceUtils.removeSessionFromRedis(userToken, session.getId());
+		
 		this.microserviceUtils.savetoRedis(session.getId(), AUTH_TOKEN, userToken);
+		this.microserviceUtils.savetoRedis("session_token_fetch:" + userToken, SESSION_ID, session.getId());
 		this.microserviceUtils.savetoRedis(session.getId(), "_details", user);
 		this.microserviceUtils.saveAuthToken(userToken, session.getId());
 
 		this.microserviceUtils.setExpire(session.getId());
 		this.microserviceUtils.setExpire(userToken);
-
+		
+		Object sessionIdFromRedis = redisTemplate.opsForHash().get("session_token_fetch:" + userToken, SESSION_ID);
+                LOGGER.info("**Redis:: sessionID*****"+sessionIdFromRedis);
+        
 		return this.parepareCurrentUser(response.getUserSearchResponseContent().get(0));
 	}
 

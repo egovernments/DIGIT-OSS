@@ -48,6 +48,11 @@
 
 package org.egov.infra.config.redis;
 
+import static org.egov.infra.utils.ApplicationConstant.COLON;
+
+import java.time.Duration;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
@@ -56,13 +61,10 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisShardInfo;
-
-import java.time.Duration;
-import java.util.List;
-
-import static org.egov.infra.utils.ApplicationConstant.COLON;
 
 @Configuration
 public class RedisServerConfiguration {
@@ -137,6 +139,8 @@ public class RedisServerConfiguration {
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         return redisTemplate;
     }
 }
