@@ -59,7 +59,9 @@ public class WsQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" 
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno";
+			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
 
 	private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
@@ -189,11 +191,6 @@ public class WsQueryBuilder {
 			query.append("  conn.applicationno IN (").append(createQuery(criteria.getApplicationNumbers())).append(")");
 			addToPreparedStatement(preparedStatement, criteria.getApplicationNumbers());
 		}
-		/*if (!StringUtils.isEmpty(criteria.getApplicationStatus())) {
-			addClauseIfRequired(preparedStatement, query);
-			query.append(" conn.applicationStatus = ? ");
-			preparedStatement.add(criteria.getApplicationStatus());
-		}*/
 		// Added clause to support multiple applicationStatuses search
 		if (!StringUtils.isEmpty(criteria.getApplicationStatus())) {
 			addClauseIfRequired(preparedStatement, query);
@@ -203,7 +200,7 @@ public class WsQueryBuilder {
 		// Added clause to support assignee search
 		if (!StringUtils.isEmpty(criteria.getAssignee())) {
 			addClauseIfRequired(preparedStatement, query);
-			query.append(" pi.assignee= ? ");
+			query.append(" assg.assignee= ? ");
 			preparedStatement.add(criteria.getAssignee());
 		}
 		if (criteria.getFromDate() != null) {
