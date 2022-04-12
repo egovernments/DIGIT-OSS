@@ -159,7 +159,7 @@ const DashBoard = ({ stateCode }) => {
     }
   }, [tabArray]);
 
-  const shareOptions = navigator.share
+  const shareOptions = mobileView
     ? [
         {
           label: t("ES_DSS_SHARE_PDF"),
@@ -229,6 +229,7 @@ const DashBoard = ({ stateCode }) => {
     return <Loader />;
   }
 
+  console.log("Navigator.Share: " + navigator.share);
   return (
     <FilterContext.Provider value={provided}>
       <div ref={fullPageRef} id="divToPrint">
@@ -243,9 +244,9 @@ const DashBoard = ({ stateCode }) => {
                   className="multilink-block-wrapper divToBeHidden"
                   label={t(`ES_DSS_SHARE`)}
                   icon={<ShareIcon className="mrsm" />}
-                  // showOptions={(e) => {
-                  // setShowOptions(e)}
-                  // }
+                  showOptions={(e) => {
+                  setShowOptions(e)}
+                  }
                   onHeadClick={(e) => {
                     setShowOptions(e !== undefined ? e : !showOptions);
                   }}

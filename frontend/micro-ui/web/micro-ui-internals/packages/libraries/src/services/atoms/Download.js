@@ -25,7 +25,7 @@ const Download = {
   Image: (node, fileName, share, resolve = null) => {
     const saveAs = (uri, filename) => {
       const link = document.createElement("a");
-
+      console.log("Image link type: " + typeof link.download);
       if (typeof link.download === "string") {
         link.href = uri;
         link.download = filename;
@@ -59,13 +59,10 @@ const Download = {
     XLSX.writeFile(wb, `${filename}.xlsx`);
   },
 
-  PDF: (node, fileName, share, resolve = null) => {
-
-
-
+  PDF: async (node, fileName, share, resolve = null) => {
     const saveAs = (uri, filename) => {
       const link = document.createElement("a");
-
+      console.log("PDF link type: " + typeof link.download);
       if (typeof link.download === "string") {
         link.href = uri;
         link.download = filename;
@@ -90,34 +87,32 @@ const Download = {
     const element = ReactDOM.findDOMNode(node.current);
 
 
-    return domtoimage.toJpeg(element, {
+    const dataUrl = await domtoimage.toJpeg(element, {
       quality: 1,
       bgcolor: 'white',
-      filter:node=>!node?.className?.includes?.("divToBeHidden"),
-      style:{
-        margin:'25px'
+      filter: node_4 => !node_4?.className?.includes?.("divToBeHidden"),
+      style: {
+        margin: '25px'
       }
-     }).then(function (dataUrl) {
-/*  to enable pdf
-    var htmlImage = new Image();
-      htmlImage.src = dataUrl;
-      var pdf = new jsPDF( 'l', 'pt', [element.offsetWidth, element.offsetHeight] );
-      pdf.setFontStyle?.("Bold");
-      pdf.setFontSize?.(30);
-      pdf.text?.(325, 40, 'Certificate');
-      // e(imageData, format, x, y, width, height, alias, compression, rotation)
-      pdf.addImage?.( htmlImage, 25, 50, 50, element.offsetWidth, element.offsetHeight );
-      pdf.save?.( fileName +'.pdf' );
-      */
-            changeClasses("dss-white-pre-temp",'dss-white-pre-line');
-
-     revertCss();
-     var blobData = dataURItoBlob(dataUrl);
-       revertCss();
-       return share
-       ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
-       : saveAs(dataUrl, `${fileName}.jpeg`)
-        });
+    });
+    /*  to enable pdf
+        var htmlImage = new Image();
+          htmlImage.src = dataUrl;
+          var pdf = new jsPDF( 'l', 'pt', [element.offsetWidth, element.offsetHeight] );
+          pdf.setFontStyle?.("Bold");
+          pdf.setFontSize?.(30);
+          pdf.text?.(325, 40, 'Certificate');
+          // e(imageData, format, x, y, width, height, alias, compression, rotation)
+          pdf.addImage?.( htmlImage, 25, 50, 50, element.offsetWidth, element.offsetHeight );
+          pdf.save?.( fileName +'.pdf' );
+          */
+    changeClasses("dss-white-pre-temp", 'dss-white-pre-line');
+    revertCss();
+    var blobData = dataURItoBlob(dataUrl);
+    revertCss();
+    return share
+      ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
+      : saveAs(dataUrl, `${fileName}.jpeg`);
     
 
         /*
@@ -163,10 +158,10 @@ const Download = {
     */
   },
 
-  IndividualChartImage: (node, fileName, share, resolve = null) => {
+  IndividualChartImage: async (node, fileName, share, resolve = null) => {
     const saveAs = (uri, filename) => {
       const link = document.createElement("a");
-
+      console.log("INDividual chart link type: " + typeof link.download);
       if (typeof link.download === "string") {
         link.href = uri;
         link.download = filename;
@@ -187,16 +182,15 @@ const Download = {
     };
     changeClasses('dss-white-pre-line',"dss-white-pre-temp");
     const element = ReactDOM.findDOMNode(node.current);
-    return domtoimage.toJpeg(element, {
+    const dataUrl = await domtoimage.toJpeg(element, {
       quality: 1,
       bgcolor: 'white'
-     }).then(function (dataUrl) {
-       var blobData = dataURItoBlob(dataUrl);
-      changeClasses("dss-white-pre-temp",'dss-white-pre-line');
-       return share
-       ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
-       : saveAs(dataUrl, `${fileName}.jpeg`)
-        });
+    });
+    var blobData = dataURItoBlob(dataUrl);
+    changeClasses("dss-white-pre-temp", 'dss-white-pre-line');
+    return share
+      ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
+      : saveAs(dataUrl, `${fileName}.jpeg`);
     
   },
 };

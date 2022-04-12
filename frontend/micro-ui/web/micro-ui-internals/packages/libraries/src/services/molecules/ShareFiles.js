@@ -45,6 +45,7 @@ const ShareFiles = {
   },
 
   IndividualChartImage: async (tenantId, node, filename, target) => {
+    console.log("SHare File Navigator.Share: " + navigator.share);
     const imageData = await new Promise((resolve) => Download.IndividualChartImage(node, filename, true, resolve));
     if (!target && navigator.share) {
       return navigator.share({
