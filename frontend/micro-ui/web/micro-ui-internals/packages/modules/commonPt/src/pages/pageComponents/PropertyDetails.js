@@ -12,10 +12,10 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
   }
   const { isLoading, isError, error, data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     {
-      filters: { propertyIds: formData?.cptId?.id },
+      filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId },
       tenantId: tenantId,
     },
-    { filters: { propertyIds: formData?.cptId?.id }, tenantId: tenantId }
+    { filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId }, tenantId: tenantId }
   );
 
   const onSkip = () => onSelect();
