@@ -134,7 +134,7 @@ public class BirthCertificate {
   
   private String embeddedUrl;
   
-  private Timestamp dateofissue;
+  private Long dateofissue;
 
   private Timestamp dateofbirth;
 

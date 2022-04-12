@@ -33,7 +33,7 @@ public class EgBirthDtl{
 	
 	private int excelrowindex;
 	//@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
-	private Timestamp dateofissue;
+	private Long dateofissue;
 
 	private String firstname;
 

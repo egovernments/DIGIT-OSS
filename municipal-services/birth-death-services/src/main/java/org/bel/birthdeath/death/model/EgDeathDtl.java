@@ -33,7 +33,7 @@ public class EgDeathDtl{
 	
 	private String dateofreportepoch;
 	
-	private Timestamp dateofissue;
+	private Long dateofissue;
 
 	private String firstname;
 
