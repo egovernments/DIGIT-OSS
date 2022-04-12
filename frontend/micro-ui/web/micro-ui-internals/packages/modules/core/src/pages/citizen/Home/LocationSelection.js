@@ -9,7 +9,7 @@ const LocationSelection = () => {
 
   const { data: cities, isLoading } = Digit.Hooks.useTenants();
 
-  const [selectedCity, setSelectedCity] = useState(() => ({ code: Digit.ULBService.getCitizenCurrentTenant() }));
+  const [selectedCity, setSelectedCity] = useState(() => ({ code: Digit.ULBService.getCitizenCurrentTenant(true) }));
   const [showError, setShowError] = useState(false);
 
   const texts = useMemo(
