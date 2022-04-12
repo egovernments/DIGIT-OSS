@@ -67,9 +67,6 @@ const Download = {
       console.log("PDF link type: " + typeof link.download);
       if (typeof link.download === "string") {
         console.log("PDF exec");
-        if(isMobile){
-          window.mSewaApp.downloadBase64File(uri, filename);
-        }
         link.href = uri;
         link.download = filename;
         document.body.appendChild(link);
@@ -118,7 +115,7 @@ const Download = {
     revertCss();
     return share
       ? resolve(new File([blobData], `${fileName}.jpeg`, { type: "image/jpeg" }))
-      : saveAs(dataUrl, `${fileName}.jpeg`);
+      : isMobile ? window.mSewaApp.downloadBase64File(uri, filename) : saveAs(dataUrl, `${fileName}.jpeg`);
     
 
         /*
