@@ -72,6 +72,7 @@
   },
   "dependencies": {
     "lodash": "4.17.21",
-    "microbundle-crl": "0.13.11"
+    "microbundle-crl": "0.13.11",
+    "react-device-detect": "^2.2.2"
   }
 }

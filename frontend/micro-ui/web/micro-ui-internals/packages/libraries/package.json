@@ -38,6 +38,7 @@
     "react-redux": "7.2.8",
     "react-router-dom": "5.3.0",
     "redux": "4.1.2",
-    "xlsx": "0.17.5"
+    "xlsx": "0.17.5",
+    "react-device-detect": "^2.2.2"
   }
 }
