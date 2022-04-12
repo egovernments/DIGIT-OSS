@@ -5,10 +5,10 @@ import { useLocation, useHistory } from "react-router-dom";
 import * as func from "../../../utils";
 import _ from "lodash";
 import { newConfig as newConfigLocal } from "../../../config/wsCreateConfig";
-import { convertApplicationData, convertModifyApplicationDetails, updatePayloadOfWS } from "../../../utils";
+import { convertApplicationData, convertModifyApplicationDetails } from "../../../utils";
 import cloneDeep from "lodash/cloneDeep";
 
-const ModifyApplication = () => {
+const EditModifyApplication = () => {
   const { t } = useTranslation();
   const { state } = useLocation();
   const history = useHistory();
@@ -19,12 +19,9 @@ const ModifyApplication = () => {
   const [config, setConfig] = useState({ head: "", body: [] });
   const [enabledLoader, setEnabledLoader] = useState(true);
   const [isAppDetailsPage, setIsAppDetailsPage] = useState(false);
-  const [isEnableLoader, setIsEnableLoader] = useState(false);
-
-  let tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const applicationNumber = filters?.applicationNumber;
   const serviceType = filters?.service;
-
   const details = cloneDeep(state?.data);
 
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
@@ -73,42 +70,18 @@ const ModifyApplication = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (isAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${sessionFormData?.ConnectionDetails?.[0]?.applicationNo}&service=${sessionFormData?.ConnectionDetails?.[0]?.serviceName?.toUpperCase()}`
+      if (isAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${sessionFormData?.ConnectionDetails?.[0]?.applicationNo}&service=${sessionFormData?.ConnectionDetails?.[0]?.serviceName?.toUpperCase()}&mode=MODIFY`
     }, 3000);
     return () => clearTimeout(timer);
   }, [isAppDetailsPage]);
 
   const {
-    isLoading: creatingWaterApplicationLoading,
-    isError: createWaterApplicationError,
-    data: createWaterResponse,
-    error: createWaterError,
-    mutate: waterMutation,
-  } = Digit.Hooks.ws.useWaterCreateAPI("WATER");
-
-  const {
-    isLoading: updatingWaterApplicationLoading,
-    isError: updateWaterApplicationError,
-    data: updateWaterResponse,
-    error: updateWaterError,
-    mutate: waterUpdateMutation,
-  } = Digit.Hooks.ws.useWSApplicationActions("WATER");
-
-  const {
-    isLoading: creatingSewerageApplicationLoading,
-    isError: createSewerageApplicationError,
-    data: createSewerageResponse,
-    error: createSewerageError,
-    mutate: sewerageMutation,
-  } = Digit.Hooks.ws.useWaterCreateAPI("SEWERAGE");
-
-  const {
-    isLoading: updatingSewerageApplicationLoading,
-    isError: updateSewerageApplicationError,
-    data: updateSewerageResponse,
-    error: updateSewerageError,
-    mutate: sewerageUpdateMutation,
-  } = Digit.Hooks.ws.useWSApplicationActions("SEWERAGE");
+    isLoading: updatingApplication,
+    isError: updateApplicationError,
+    data: updateResponse,
+    error: updateError,
+    mutate,
+  } = Digit.Hooks.ws.useWSApplicationActions(filters?.service);
 
   const onFormValueChange = (setValue, formData, formState) => {
     if (!_.isEqual(sessionFormData, formData)) {
@@ -120,63 +93,20 @@ const ModifyApplication = () => {
 
   const onSubmit = async (data) => {
     const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
-    let convertAppData = await convertModifyApplicationDetails(data, details);
+    let convertAppData = await convertModifyApplicationDetails(data, details, "SUBMIT_APPLICATION");
     const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
 
-    if (serviceType == "WATER") {
-      if (waterMutation) {
-        setIsEnableLoader(true);
-        await waterMutation(reqDetails, {
-          onError: (error, variables) => {
-            setIsEnableLoader(false);
-            setShowToast({ key: "error", message: error?.message ? error.message : error });
-            setTimeout(closeToastOfError, 5000);
-          },
-          onSuccess: async (data, variables) => {
-            let response = await updatePayloadOfWS(data?.WaterConnection?.[0]);
-            let waterConnectionUpdate = { WaterConnection: response };
-            waterUpdateMutation(waterConnectionUpdate, {
-              onError: (error, variables) => {
-                setIsEnableLoader(false);
-                setShowToast({ key: "error", message: error?.message ? error.message : error });
-                setTimeout(closeToastOfError, 5000);
-              },
-              onSuccess: (data, variables) => {
-                clearSessionFormData();
-                window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
-              },
-            })
-          },
-        });
-      }
-    }
-
-    if (serviceType !== "WATER") {
-      if (sewerageMutation) {
-        setIsEnableLoader(true);
-        await sewerageMutation(reqDetails, {
-          onError: (error, variables) => {
-            setIsEnableLoader(false);
-            setShowToast({ key: "error", message: error?.message ? error.message : error });
-            setTimeout(closeToastOfError, 5000);
-          },
-          onSuccess: async (data, variables) => {
-            let response = await updatePayloadOfWS(data?.SewerageConnections?.[0]);
-            let sewerageConnectionUpdate = { SewerageConnection: response };
-            await sewerageUpdateMutation(sewerageConnectionUpdate, {
-              onError: (error, variables) => {
-                setIsEnableLoader(false);
-                setShowToast({ key: "error", message: error?.message ? error.message : error });
-                setTimeout(closeToastOfError, 5000);
-              },
-              onSuccess: (data, variables) => {
-                clearSessionFormData();
-                window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
-              }
-            });
-          },
-        });
-      }
+    if (mutate) {
+      mutate(reqDetails, {
+        onError: (error, variables) => {
+          setShowToast({ key: "error", message: error?.message ? error.message : error });
+          setTimeout(closeToastOfError, 5000);
+        },
+        onSuccess: (data, variables) => {
+          setShowToast({ key: false, message: "CS_PROPERTY_APPLICATION_SUCCESS" });
+          setIsAppDetailsPage(true);
+        },
+      });
     }
   };
 
@@ -185,7 +115,7 @@ const ModifyApplication = () => {
     setShowToast(null);
   };
 
-  if (enabledLoader || isEnableLoader) {
+  if (enabledLoader) {
     return <Loader />;
   }
 
@@ -204,9 +134,15 @@ const ModifyApplication = () => {
         defaultValues={sessionFormData}
       // noBreakLine={true}
       ></FormComposer>
-      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />}
+      {showToast &&
+        <Toast
+          error={showToast.key}
+          label={t(showToast?.message)}
+          onClose={closeToast}
+          isDleteBtn={true}
+        />}
     </React.Fragment>
   );
 };
 
-export default ModifyApplication;
+export default EditModifyApplication;

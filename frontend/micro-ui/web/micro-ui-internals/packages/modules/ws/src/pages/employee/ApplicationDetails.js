@@ -70,8 +70,8 @@ const ApplicationDetails = () => {
 
   const currentValue = applicationDetails?.applicationData;
   const res = newValueFilter[0]?.flatMap((o) => {
-    const pairs = Object.entries(o).filter(([k, v]) => currentValue[k] !== v);
-    return pairs.length ? Object.fromEntries(pairs) : [];
+    const pairs = Object.entries(o).filter(([k, v]) => currentValue?.[k] !== v);
+    return pairs?.length ? Object.fromEntries(pairs) : [];
   });
 
   const {
@@ -102,6 +102,13 @@ const ApplicationDetails = () => {
         state: applicationDetails,
       };
     }
+    if (action?.action === "SUBMIT_APPLICATION") {
+      action.redirectionUrll = {
+        action: "ACTIVATE_CONNECTION",
+        pathname: `/digit-ui/employee/ws/modify-application-edit?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`,
+        state: applicationDetails,
+      };
+    }
   });
 
   if (
@@ -109,7 +116,8 @@ const ApplicationDetails = () => {
     workflowDetails?.data?.actionState?.nextActions?.length > 0 &&
     !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "EDIT") &&
     !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "RESUBMIT_APPLICATION") &&
-    !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "ACTIVATE_CONNECTION")
+    !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "ACTIVATE_CONNECTION") && 
+    !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "SUBMIT_APPLICATION")
   ) {
     workflowDetails?.data?.nextActions?.forEach((data) => {
       if (data.action == "EDIT") workflowDetails.data.actionState.nextActions.push(data);

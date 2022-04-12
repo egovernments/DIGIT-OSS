@@ -714,8 +714,8 @@ export const convertApplicationData = (data, serviceType, modify = false, t) => 
       code: data?.applicationData?.proposedPipeSize,
       size: data?.applicationData?.proposedPipeSize
     } : "",
-    proposedToilets: data?.applicationData?.noOfToilets || "",
-    proposedWaterClosets: data?.applicationData?.noOfWaterClosets || ""
+    proposedToilets: data?.applicationData?.proposedToilets || "",
+    proposedWaterClosets: data?.applicationData?.proposedWaterClosets || ""
   }];
 
 
@@ -781,10 +781,12 @@ export const convertApplicationData = (data, serviceType, modify = false, t) => 
   if (modify) {
     const activationDetails = [{
       meterId: data?.applicationData?.meterId || "",
-      meterInstallationDate: data?.applicationData?.meterInstallationDate ? convertEpochToDates(data?.applicationData?.meterInstallationDate) : null,
+      meterInstallationDate: data?.applicationData?.meterInstallationDate ? convertEpochToDateDMY(data?.applicationData?.meterInstallationDate) : null,
       meterInitialReading: data?.applicationData?.additionalDetails?.initialMeterReading || "",
-      connectionExecutionDate: data?.applicationData?.connectionExecutionDate ? convertEpochToDates(data?.applicationData?.connectionExecutionDate) : null,
+      connectionExecutionDate: data?.applicationData?.connectionExecutionDate ? convertEpochToDateDMY(data?.applicationData?.connectionExecutionDate) : null,
     }];
+
+    if (window.location.href.includes("modify-application-edit")) activationDetails[0].dateEffectiveFrom = data?.applicationData?.dateEffectiveFrom ? convertEpochToDateDMY(data?.applicationData?.dateEffectiveFrom) : null;
 
     const sourceSubDataValue = data?.applicationData?.waterSource ? stringReplaceAll(data?.applicationData?.waterSource?.toUpperCase(), " ", "_") : "";
     const sourceSubDataFilter = sourceSubDataValue ? stringReplaceAll(sourceSubDataValue?.toUpperCase(), ".", "_") : "";
@@ -807,9 +809,12 @@ export const convertApplicationData = (data, serviceType, modify = false, t) => 
       noOfWaterClosets: data?.applicationData?.noOfWaterClosets || "",
       noOfToilets: data?.applicationData?.noOfToilets || ""
   };
-  DocumentsRequired = {
-    documents : []
-  };
+  if (window.location.href.includes("modify-application-edit")) {
+    DocumentsRequired = { documents : documents };
+  } else {
+    DocumentsRequired = { documents : [] };
+  }
+  
 
     payload = {
       ConnectionDetails: ConnectionDetails,
@@ -881,7 +886,7 @@ export const getConvertedDate = async (dateOfTime) => {
   return convertedDate;
 }
 
-export const convertModifyApplicationDetails = async (data, appData) => {
+export const convertModifyApplicationDetails = async (data, appData, actionData = "INITIATE") => {
 
   data?.cpt?.details?.owners?.forEach(owner => {
     if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
@@ -919,8 +924,8 @@ export const convertModifyApplicationDetails = async (data, appData) => {
       sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
     }]
   }
-  formData.processInstance = { action: "INITIATE" };
-  formData.action = "INITIATE";
+  formData.processInstance = { action: actionData };
+  formData.action = actionData;
   formData.channel = "CFC_COUNTER"
 
   sessionStorage.setItem("WS_DOCUMENTS_INOF", JSON.stringify(data?.DocumentsRequired?.documents || []));
