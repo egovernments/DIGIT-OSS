@@ -43,18 +43,20 @@ public class SWQueryBuilder {
 			+ " conn.adhocpenaltyreason, conn.adhocpenaltycomment, conn.adhocrebatereason, conn.adhocrebatecomment, conn.applicationType, conn.channel, conn.dateEffectiveFrom,"
 			+ " conn.locality, conn.isoldapplication, conn.roadtype, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id, plumber.name as plumber_name, plumber.licenseno,"
 			+ " roadcuttingInfo.id as roadcutting_id, roadcuttingInfo.roadtype as roadcutting_roadtype, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.active as roadcutting_active,"
-			+ " plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress, plumber.relationship, " + holderSelectValues +
-			" FROM eg_sw_connection conn "
-	+  INNER_JOIN_STRING 
-	+" eg_sw_service sc ON sc.connection_id = conn.id"
-	+  LEFT_OUTER_JOIN_STRING
-	+ "eg_sw_applicationdocument document ON document.swid = conn.id" 
-	+  LEFT_OUTER_JOIN_STRING
-	+ "eg_sw_plumberinfo plumber ON plumber.swid = conn.id"
-	+ LEFT_OUTER_JOIN_STRING
-    + "eg_sw_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
-	+ LEFT_OUTER_JOIN_STRING
-	+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id";
+			+ " plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress, plumber.relationship, " + holderSelectValues 
+			+ " FROM eg_sw_connection conn "
+			+  INNER_JOIN_STRING 
+			+ " eg_sw_service sc ON sc.connection_id = conn.id"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_sw_applicationdocument document ON document.swid = conn.id" 
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_sw_plumberinfo plumber ON plumber.swid = conn.id"
+			+ LEFT_OUTER_JOIN_STRING
+		    + "eg_sw_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
+			+ LEFT_OUTER_JOIN_STRING
+			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno";
 
 	private final String paginationWrapper = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
@@ -175,10 +177,29 @@ public class SWQueryBuilder {
 			query.append(" conn.applicationno = ? ");
 			preparedStatement.add(criteria.getApplicationNumber());
 		}
-		if (!StringUtils.isEmpty(criteria.getApplicationStatus())) {
+		// Added clause to support multiple applicationNumbers search
+		if (!CollectionUtils.isEmpty(criteria.getApplicationNumbers())) {
+			addClauseIfRequired(preparedStatement, query);
+			query.append("  conn.applicationno IN (").append(createQuery(criteria.getApplicationNumbers())).append(")");
+			addToPreparedStatement(preparedStatement, criteria.getApplicationNumbers());
+		}
+		/*if (!StringUtils.isEmpty(criteria.getApplicationStatus())) {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.applicationStatus = ? ");
 			preparedStatement.add(criteria.getApplicationStatus());
+		}*/
+		// Added clause to support multiple applicationStatuses search
+		if (!CollectionUtils.isEmpty(criteria.getApplicationStatus())) {
+			addClauseIfRequired(preparedStatement, query);
+			query.append("  conn.applicationStatus IN (").append(createQuery(criteria.getApplicationStatus()))
+					.append(")");
+			addToPreparedStatement(preparedStatement, criteria.getApplicationStatus());
+		}
+		// Added clause to support assignee search
+		if (!StringUtils.isEmpty(criteria.getAssignee())) {
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" pi.assignee= ? ");
+			preparedStatement.add(criteria.getAssignee());
 		}
 		if (criteria.getFromDate() != null) {
 			addClauseIfRequired(preparedStatement, query);
@@ -255,7 +276,7 @@ public class SWQueryBuilder {
 		if (criteria.getLimit() != null && criteria.getLimit() <= config.getDefaultLimit())
 			limit = criteria.getLimit();
 
-		if (criteria.getLimit() != null && criteria.getLimit() > config.getDefaultOffset())
+		if (criteria.getLimit() != null && criteria.getLimit() > config.getDefaultLimit())
 			limit = config.getDefaultLimit();
 
 		if (criteria.getOffset() != null)
