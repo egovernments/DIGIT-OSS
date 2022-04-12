@@ -61,6 +61,10 @@ const EditApplication = () => {
   };
 
   const onSubmit = async (data) => {
+    if(!canSubmit){
+      return;
+    }
+
     const appDetails = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : state?.data;
     let convertAppData = await convertEditApplicationDetails(data, appDetails);
     const reqDetails = serviceType === "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
