@@ -50,7 +50,7 @@ export default function NFormatter(props) {
             case "percentage":
             case "Percentage":
                 const Pformatter = new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 });
-                return `${parseFloat(Pformatter.format(props.value) || '0').toFixed()} %`;
+                return `${parseFloat(props.value || '0').toFixed()} %`;
             case "text":
             case "Text":
                 return props.value;

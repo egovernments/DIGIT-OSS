@@ -39,6 +39,28 @@ const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
   if (isLoading) {
     return <Loader />;
   }
+
+  const applicationDetailsData = JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS"));
+
+  if (
+    (window.location.href.includes("edit") && applicationDetailsData?.applicationData?.documents?.length > 0)
+  ) {
+    const documentsData = applicationDetailsData?.applicationData?.documents || [];
+    documentsData?.map(documentData => {
+      wsDocs?.[wsDocsData]?.forEach(docData => {
+        const docType = docData?.code?.split(".")[1] ? docData?.code?.split(".")[0] + "." + docData?.code?.split(".")[1] : docData?.code?.split(".")[0]
+        const dataDocType = documentData?.documentType?.split(".")[1] ? documentData?.documentType?.split(".")[0] + "." + documentData?.documentType?.split(".")[1] : documentData?.documentType?.split(".")[0]
+        if (docType == dataDocType) {
+          docData.auditDetails = documentData.auditDetails
+          docData.documentType = docData.documentType
+          docData.documentUid = documentData.documentUid
+          docData.fileStoreId = documentData.fileStoreId
+          docData.id = documentData.id
+          docData.status = "ACTIVE"
+        }
+      })
+    })
+  }
   
   return (
     <div>
@@ -152,9 +174,9 @@ function SelectDocument({
           {
             documentType: selectedDocument?.code,
             fileStoreId: uploadedFile,
-            documentUid: selectedDocument?.documentUid ? selectedDocument?.documentUid : uploadedFile,
+            documentUid: doc?.documentUid ? doc?.documentUid : uploadedFile,
             i18nKey: selectedDocument?.code,
-            id: selectedDocument?.id
+            id: doc?.id
           },
         ];
       });

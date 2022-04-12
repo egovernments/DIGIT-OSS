@@ -15,6 +15,7 @@ import SearchWater from "./SearchWater";
 import EditApplication from "./EditApplication";
 import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
 import ModifyApplication from "./ModifyApplication";
+import EditModifyApplication from "./EditModifyApplication";
 
 const App = ({ path }) => {
   const { t } = useTranslation();
@@ -35,6 +36,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/search`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/consumption-details`} component={ConsumptionDetails} />
         <PrivateRoute path={`${path}/modify-application`} component={ModifyApplication} />
+        <PrivateRoute path={`${path}/modify-application-edit`} component={EditModifyApplication} />
       </Switch>
     </React.Fragment>
   );

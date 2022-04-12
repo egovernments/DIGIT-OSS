@@ -30,6 +30,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
   if (isLoading) {
     return <Loader />;
   }
+
   const onConnectionSearch = async (data) => {
     if(searchType.code === "CONSUMER_NUMBER")
     {

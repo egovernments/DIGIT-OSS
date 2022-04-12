@@ -70,8 +70,8 @@ const ApplicationDetails = () => {
 
   const currentValue = applicationDetails?.applicationData;
   const res = newValueFilter[0]?.flatMap((o) => {
-    const pairs = Object.entries(o).filter(([k, v]) => currentValue[k] !== v);
-    return pairs.length ? Object.fromEntries(pairs) : [];
+    const pairs = Object.entries(o).filter(([k, v]) => currentValue?.[k] !== v);
+    return pairs?.length ? Object.fromEntries(pairs) : [];
   });
 
   const {
@@ -102,6 +102,13 @@ const ApplicationDetails = () => {
         state: applicationDetails,
       };
     }
+    if (action?.action === "SUBMIT_APPLICATION") {
+      action.redirectionUrll = {
+        action: "ACTIVATE_CONNECTION",
+        pathname: `/digit-ui/employee/ws/modify-application-edit?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`,
+        state: applicationDetails,
+      };
+    }
   });
 
   if (
@@ -109,7 +116,8 @@ const ApplicationDetails = () => {
     workflowDetails?.data?.actionState?.nextActions?.length > 0 &&
     !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "EDIT") &&
     !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "RESUBMIT_APPLICATION") &&
-    !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "ACTIVATE_CONNECTION")
+    !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "ACTIVATE_CONNECTION") && 
+    !workflowDetails?.data?.actionState?.nextActions?.find((e) => e.action === "SUBMIT_APPLICATION")
   ) {
     workflowDetails?.data?.nextActions?.forEach((data) => {
       if (data.action == "EDIT") workflowDetails.data.actionState.nextActions.push(data);
@@ -145,6 +153,7 @@ const ApplicationDetails = () => {
     PDFdata.then((ress) => Digit.Utils.pdf.generate(ress));
   };
 
+
   let dowloadOptions = [],
     appStatus = applicationDetails?.applicationData?.applicationStatus || "";
 
@@ -165,6 +174,16 @@ const ApplicationDetails = () => {
     label: t("WS_APPLICATION"),
     onClick: handleDownloadPdf,
   };
+  
+  const applicationFeeReceipt = {
+    order: 4,
+    label: t("WS_APLICATION_RECEIPT"),
+    onClick: async () => {
+      const ConnectionDetailsfile = await Digit.PaymentService.generatePdf(tenantId, { WaterConnection: [applicationDetails?.applicationData] }, "ws-consolidatedacknowlegment");
+      const file = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: ConnectionDetailsfile.filestoreIds[0] });
+      window.open(file[ConnectionDetailsfile.filestoreIds[0]], "_blank");
+    }
+  };
 
   switch (appStatus) {
     case "PENDING_FOR_DOCUMENT_VERIFICATION":
@@ -183,6 +202,7 @@ const ApplicationDetails = () => {
     case "REJECTED":
       dowloadOptions = [applicationDownloadObject];
       break;
+
     default:
       dowloadOptions = [applicationDownloadObject];
       break;
@@ -197,6 +217,7 @@ const ApplicationDetails = () => {
       <div className={"employee-main-application-details"}>
         <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
           <Header styles={{ marginLeft: "0px", paddingTop: "10px", fontSize: "32px" }}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+
           {dowloadOptions && dowloadOptions.length > 0 && (
             <MultiLink
               className="multilinkWrapper employee-mulitlink-main-div"

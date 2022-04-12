@@ -23,8 +23,8 @@ const DisplayText = (action, isSuccess, isEmployee, t, paymentPreference) => {
 };
 
 const BannerPicker = (props) => {
-  let actionMessage
-  if (props.data?.fsm?.[0].applicationStatus === 'ASSING_DSO') {
+  let actionMessage = props.data?.fsm?.[0].applicationStatus
+  if (props.data?.fsm?.[0].applicationStatus === 'ASSIGN_DSO') {
     actionMessage = props.action === 'SUBMIT' ? props.action : props.data?.fsm?.[0].applicationStatus
   }
   let labelMessage = GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)

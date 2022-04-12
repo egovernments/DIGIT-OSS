@@ -1,13 +1,7 @@
-import React, { Fragment, useMemo, useState } from "react";
 import {
-  PageBasedInput,
-  Loader,
-  RadioButtons,
-  CardHeader,
-  BackButton,
-  SearchOnRadioButtons,
-  CardLabelError,
+  BackButton, CardHeader, CardLabelError, PageBasedInput, SearchOnRadioButtons
 } from "@egovernments/digit-ui-react-components";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
@@ -17,7 +11,7 @@ const LocationSelection = () => {
 
   const { data: cities, isLoading } = Digit.Hooks.useTenants();
 
-  const [selectedCity, setSelectedCity] = useState(() => Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY"));
+  const [selectedCity, setSelectedCity] = useState(() => ({ code: Digit.ULBService.getCitizenCurrentTenant(true) }));
   const [showError, setShowError] = useState(false);
 
   const texts = useMemo(
