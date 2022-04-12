@@ -75,12 +75,18 @@ export const ULBService = {
    * @author jagankumar-egov
    *
    * @example
-   * Digit.ULBService.getCitizenCurrentTenant()
+   * Digit.ULBService.getCitizenCurrentTenant() -> will return selected home city if not loggedin users city if not state tenant
    *
+   * Digit.ULBService.getCitizenCurrentTenant(true) -> will return selected home city
+   * 
    * @returns {String}
    */,
-  getCitizenCurrentTenant: () => {
-    return Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || Digit.UserService.getUser()?.info?.permanentCity || ULBService.getStateId();
+  getCitizenCurrentTenant: (selectedCity=false) => {
+    const homeCity=Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+    if(selectedCity){
+      return homeCity;
+    }
+    return homeCity|| Digit.UserService.getUser()?.info?.permanentCity || ULBService.getStateId();
   },
   /**
    * Custom method to get all ulb's which the loggedin employee has access to

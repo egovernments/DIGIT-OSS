@@ -22,7 +22,7 @@ import StaticCitizenSideBar from "../../../components/TopBarSideBar/SideBar/Stat
 const Home = () => {
   const { t } = useTranslation();
   const history = useHistory();
-  const tenantId = Digit.ULBService.getCitizenCurrentTenant();
+  const tenantId = Digit.ULBService.getCitizenCurrentTenant(true);
   const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
   let isMobile = window.Digit.Utils.browser.isMobile();
 
