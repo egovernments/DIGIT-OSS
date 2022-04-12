@@ -34,6 +34,7 @@ const ShareFiles = {
 
   Image: async (tenantId, node, filename, target) => {
     const imageData = await new Promise((resolve) => Download.Image(node, filename, true, resolve));
+    console.log("NAvigator share Image: " + navigator.share);
     if (!target && navigator.share) {
       return navigator.share({
         files: [imageData],
@@ -47,6 +48,7 @@ const ShareFiles = {
   IndividualChartImage: async (tenantId, node, filename, target) => {
     console.log("SHare File Navigator.Share: " + navigator.share);
     const imageData = await new Promise((resolve) => Download.IndividualChartImage(node, filename, true, resolve));
+    console.log("NAvigator share Ind Chart: " + navigator.share);
     if (!target && navigator.share) {
       return navigator.share({
         files: [imageData],
@@ -58,6 +60,7 @@ const ShareFiles = {
   },
   DownloadImage: async (tenantId, node, filename, target) => {
     const imageData = await new Promise((resolve) => Download.PDF(node, filename, true, resolve));
+    console.log("NAvigator share DownloadImage: " + navigator.share);
     if (!target && navigator.share) {
       return navigator.share({
         files: [imageData],
