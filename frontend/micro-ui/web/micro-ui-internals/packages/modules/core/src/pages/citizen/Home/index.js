@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 const Home = () => {
   const { t } = useTranslation();
   const history = useHistory();
-  const tenantId = Digit.ULBService.getCitizenCurrentTenant();
+  const tenantId = Digit.ULBService.getCitizenCurrentTenant(true);
   const { data: { stateInfo } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
 
   const conditionsToDisableNotificationCountTrigger = () => {

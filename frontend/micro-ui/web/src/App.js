@@ -16,7 +16,7 @@ import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 // import { initWSComponents } from "@egovernments/digit-ui-module-ws"; 
 import {initCustomisationComponents} from "./Customisations";
-import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonPt";
+import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonpt";
 
 initLibraries();
 //"WS" removed the ws enabledModules ;

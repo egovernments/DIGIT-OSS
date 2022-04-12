@@ -39,7 +39,7 @@ const TopBar = ({
     }
   }, [profilePic !== null, userDetails?.info?.uuid]);
 
-  const CitizenHomePageTenantId = Digit.ULBService.getCitizenCurrentTenant();
+  const CitizenHomePageTenantId = Digit.ULBService.getCitizenCurrentTenant(true);
 
   let history = useHistory();
   const { pathname } = useLocation();
