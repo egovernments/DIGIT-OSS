@@ -19,7 +19,8 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
   const location = useLocation();
 
   const user = Digit.UserService.getUser();
-  if (!user) {
+
+  if (!user || !user?.access_token || !user?.info) {
     return <Redirect to={{ pathname: "/digit-ui/employee/user/login", state: { from: location.pathname + location.search } }} />;
   }
 

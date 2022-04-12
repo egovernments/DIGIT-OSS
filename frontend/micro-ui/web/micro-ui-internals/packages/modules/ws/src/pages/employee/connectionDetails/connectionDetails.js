@@ -35,6 +35,13 @@ const GetConnectionDetails = () => {
     window.open(file[ConnectionDetailsfile.filestoreIds[0]], "_blank");
   };
 
+  const downloadApplicationDetails = async () => {
+    const res = { ...applicationDetails }
+    const tenantInfo = res?.tenantId;
+    const PDFdata = getPDFData({ ...res }, { ...res?.property }, tenantInfo, t);
+    PDFdata.then((ress) => Digit.Utils.pdf.generate(ress));  
+  }
+
   const closeToast = () => {
     setShowToast(null);
   };
@@ -50,10 +57,10 @@ const GetConnectionDetails = () => {
       <div className="options">
         <Header>{t("WS_CONNECTION_DETAILS")}</Header>
         <div>
-        {/* <div className="mrsm" onClick={null}>
+        <div className="mrsm" onClick={printApplicationReceipts}>
           <PrintIcon/>
             {t(`CS_COMMON_PRINT`)}
-          </div> */}
+          </div>
         <div className="mrsm" onClick={downloadConnectionDetails}>
           <DownloadBtnColored className="mrsm"/>
           </div>
