@@ -53,7 +53,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -65,7 +66,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SegregatedToilet extends FeatureProcess {
 
-    private static final Logger LOG = Logger.getLogger(SegregatedToilet.class);
+    private static final Logger LOG = LogManager.getLogger(SegregatedToilet.class);
     private static final String RULE_59_10  = "59-10-i";
     public static final String SEGREGATEDTOILET_DESCRIPTION = "Num. of segregated toilets";
     public static final String SEGREGATEDTOILET_DIMENSION_DESCRIPTION = "Segregated toilet distance from main entrance";

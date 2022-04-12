@@ -140,7 +140,7 @@ const getTradeEditDetails = (data) => {
   data.address.street = data?.tradeLicenseDetail?.address?.street;
   data.address.landmark = data?.tradeLicenseDetail?.address?.landmark;
   data.address.pincode = data?.tradeLicenseDetail?.address?.pincode;
-  data.address.city = { code: data?.tradeLicenseDetail?.address?.tenantId };
+  data.address.city = { code: data?.tradeLicenseDetail?.address?.tenantId, i18nKey:`TENANT_TENANTS_${stringReplaceAll(data?.tradeLicenseDetail?.address?.tenantId,".","_").toUpperCase()}` };
   data.address.locality = data?.tradeLicenseDetail?.address?.locality;
   data.address.locality.i18nkey = data?.tenantId.replace(".", "_").toUpperCase() + "_" + "REVENUE" + "_" + data?.address?.locality?.code;
   data.address.locality.doorNo = data?.tradeLicenseDetail?.address?.doorNo;
@@ -193,14 +193,15 @@ const RenewTrade = ({ parentRoute }) => {
     }
   }, [data]);
 
-  const goNext = (skipStep, index, isAddMultiple, key) => {
+  const goNext = (skipStep, index, isAddMultiple, key, isPTCreateSkip) => {
     let currentPath = pathname.split("/").pop(),
       lastchar = currentPath.charAt(currentPath.length - 1),
       isMultiple = false,
       nextPage;
     let { nextStep = {} } = config.find((routeObj) => routeObj.route === currentPath);
+    let { isCreateEnabled : enableCreate = true } = config.find((routeObj) => routeObj.route === currentPath);
     if (typeof nextStep == "object" && nextStep != null) {
-      if((params?.cptId?.id || params?.cpt?.details?.propertyId || isReneworEditTrade)  && (nextStep[sessionStorage.getItem("isAccessories")] && nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")  )
+      if((params?.cptId?.id || params?.cpt?.details?.propertyId || (isReneworEditTrade && params?.tradeLicenseDetail?.additionalDetail?.propertyId))  && (nextStep[sessionStorage.getItem("isAccessories")] && nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")  )
       {
         nextStep = "property-details";
       }
@@ -211,6 +212,9 @@ const RenewTrade = ({ parentRoute }) => {
           nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details" || 
           nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")
       ) {
+        if((isReneworEditTrade && !(params?.tradeLicenseDetail?.additionalDetail?.propertyId)  ) )
+        nextStep = `map`
+        else
         nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
       } else if (
         nextStep[sessionStorage.getItem("StructureType")] &&
@@ -223,10 +227,16 @@ const RenewTrade = ({ parentRoute }) => {
         (nextStep[sessionStorage.getItem("KnowProperty")] === "search-property" ||
           nextStep[sessionStorage.getItem("KnowProperty")] === "create-property")
       ) {
-        nextStep = `${nextStep[sessionStorage.getItem("KnowProperty")]}`;
+        if(nextStep[sessionStorage.getItem("KnowProperty")] === "create-property" && !enableCreate)
+          {
+            nextStep = `map`;
+          }
+          else{
+         nextStep = `${nextStep[sessionStorage.getItem("KnowProperty")]}`;
+          }
       }
     }
-    if( (params?.cptId?.id || params?.cpt?.details?.propertyId || isReneworEditTrade)  && nextStep === "know-your-property" )
+    if( (params?.cptId?.id || params?.cpt?.details?.propertyId || (isReneworEditTrade && params?.tradeLicenseDetail?.additionalDetail?.propertyId ))  && nextStep === "know-your-property" )
     { 
       nextStep = "property-details";
     }
@@ -240,6 +250,10 @@ const RenewTrade = ({ parentRoute }) => {
     if (nextStep === null) {
       return redirectWithHistory(`${getPath(match.path, match.params)}/check`);
     }
+    if(isPTCreateSkip && nextStep === "acknowledge-create-property")
+    {
+      nextStep = "map";
+    }
     nextPage = `${getPath(match.path, match.params)}/${nextStep}`;
     redirectWithHistory(nextPage);
   };
@@ -248,7 +262,14 @@ const RenewTrade = ({ parentRoute }) => {
   };
   function handleSelect(key, data, skipStep, index, isAddMultiple = false) {
     setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
+    if(key === "isSkip" && data === true)
+    {
+      goNext(skipStep, index, isAddMultiple, key, true);
+    }
+    else
+    {
     goNext(skipStep, index, isAddMultiple, key);
+    }
   }
   const handleSkip = () => {};
   const handleMultiple = () => {};
@@ -268,11 +289,11 @@ const RenewTrade = ({ parentRoute }) => {
   return (
     <Switch>
       {config.map((routeObj, index) => {
-        const { component, texts, inputs, key } = routeObj;
+        const { component, texts, inputs, key, isSkipEnabled } = routeObj;
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${getPath(match.path, match.params)}/${routeObj.route}`} key={index}>
-            <Component config={{ texts, inputs, key }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} onAdd={handleMultiple} />
+            <Component config={{ texts, inputs, key, isSkipEnabled }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} onAdd={handleMultiple} />
           </Route>
         );
       })}

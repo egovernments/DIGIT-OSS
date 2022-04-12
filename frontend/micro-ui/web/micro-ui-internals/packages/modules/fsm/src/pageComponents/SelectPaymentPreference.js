@@ -12,7 +12,7 @@ const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) =>
       const preFilledPaymentType = PaymentTypeData.filter(
         (paymentType) => paymentType.code === (formData?.selectPaymentPreference?.code || formData?.selectPaymentPreference)
       )[0];
-      setPaymentType(preFilledPaymentType);
+      preFilledPaymentType ? setPaymentType(preFilledPaymentType) : setPaymentType(PaymentTypeData.find((i) => i.code === "POST_PAY"))
     }
   }, [formData?.selectPaymentPreference, PaymentTypeData]);
 

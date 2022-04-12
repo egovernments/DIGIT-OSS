@@ -81,7 +81,7 @@ const WSPropertyDetails = ({ t, config, onSelect, userType, formData, setError, 
               <p>{getPropertyAddress()}</p>
             </div>
           </LabelFieldPair>
-          <Link to={`/digit-ui/employee/pt/property-details/${propertyId}`}>
+          <Link to={`/digit-ui/employee/commonpt/view-property?propertyId=${propertyId}&tenantId=${tenantId}`}>
             <LinkButton label={t("CPT_COMPLETE_PROPERTY_DETAILS")} style={{ color: "#f47738" }} />
           </Link>
         </React.Fragment>

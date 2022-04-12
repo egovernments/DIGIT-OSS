@@ -119,7 +119,7 @@ export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTri
           // disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
         },
         {
-          label: "Payment Received",
+          label: "FSM_PAYMENT_RECEIVED",
           isMandatory: true,
           type: "custom",
           populators: {

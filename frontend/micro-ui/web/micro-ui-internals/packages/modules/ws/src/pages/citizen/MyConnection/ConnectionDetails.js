@@ -70,7 +70,7 @@ dowloadOptions.push({
             <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={state?.propertyId} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={state?.owners?.[0]?.name} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_CROSADD")} text={state?.property?.owners?.[0]?.correspondenceAddress} textStyle={{ whiteSpace: "pre" }} />
-            <Link to={`/digit-ui/citizen/pt/property/application/${state?.propertyId}`}>
+            <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${state?.propertyId}&tenantId=${state?.tenantId}`}>
             <LinkButton style={{textAlign:"left"}} label={t("WS_VIEW_PROPERTY")} />
             </Link>
           </StatusTable>

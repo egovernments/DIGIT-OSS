@@ -191,7 +191,7 @@ const NewApplication = () => {
     }
   };
 
-  if (waterAndSewerageBoth && appDetails?.waterConnection && appDetails?.sewerageConnection) {
+  if (waterAndSewerageBoth && appDetails?.waterConnection?.applicationNo && appDetails?.sewerageConnection?.applicationNo) {
     window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${appDetails?.waterConnection?.applicationNo}&applicationNumber1=${appDetails?.sewerageConnection?.applicationNo}`
   }
 

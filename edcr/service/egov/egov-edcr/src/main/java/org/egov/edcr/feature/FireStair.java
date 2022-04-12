@@ -55,7 +55,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Flight;
 import org.egov.common.entity.edcr.Floor;
@@ -73,7 +74,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FireStair extends FeatureProcess {
-    private static final Logger LOG = Logger.getLogger(FireStair.class);
+    private static final Logger LOG = LogManager.getLogger(FireStair.class);
     private static final String FLOOR = "Floor";
     private static final String RULE42_5_II = "42-5-iii-f";
     private static final String EXPECTED_NO_OF_RISE = "12";

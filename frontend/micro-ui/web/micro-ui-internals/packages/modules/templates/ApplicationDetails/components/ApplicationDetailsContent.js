@@ -1,7 +1,15 @@
 import {
   BreakLine,
-  Card, CardSectionHeader, CardSubHeader, CheckPoint, ConnectingCheckPoints, Loader, Row, StatusTable
+  Card,
+  CardSectionHeader,
+  CardSubHeader,
+  CheckPoint,
+  ConnectingCheckPoints,
+  Loader,
+  Row,
+  StatusTable,
 } from "@egovernments/digit-ui-react-components";
+import { values } from "lodash";
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -28,43 +36,40 @@ function ApplicationDetailsContent({
   applicationData,
   businessService,
   timelineStatusPrefix,
-  showTimeLine=true,
+  showTimeLine = true,
   statusAttribute = "status",
-  paymentsList
+  paymentsList,
+  oldValue,
 }) {
   const { t } = useTranslation();
 
-  function OpenImage(imageSource, index,thumbnailsToShow){
-    window.open(thumbnailsToShow?.fullImage?.[0],"_blank");
+  function OpenImage(imageSource, index, thumbnailsToShow) {
+    window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
   }
-
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED" && !(window.location.href.includes("/obps/"))) {
+    if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
       const caption = {
         date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
         source: applicationData?.channel || "",
       };
       return <TLCaption data={caption} />;
-    } 
-    else if(window.location.href.includes("/obps/") || window.location.href.includes("/noc/") || window.location.href.includes("/ws/"))
-    {
+    } else if (window.location.href.includes("/obps/") || window.location.href.includes("/noc/") || window.location.href.includes("/ws/")) {
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
-        wfComment : checkpoint.wfComment,
-        thumbnailsToShow : checkpoint?.thumbnailsToShow,
+        wfComment: checkpoint.wfComment,
+        thumbnailsToShow: checkpoint?.thumbnailsToShow,
       };
       return <TLCaption data={caption} OpenImage={OpenImage} />;
-    }
-    else {
+    } else {
       const caption = {
         date: Digit.DateUtils?.ConvertTimestampToDate(applicationData?.auditDetails?.lastModifiedTime),
         // name: checkpoint?.assigner?.name,
         name: checkpoint?.assignes?.[0]?.name,
         // mobileNumber: checkpoint?.assigner?.mobileNumber,
-        wfComment : checkpoint?.wfComment,
+        wfComment: checkpoint?.wfComment,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
       };
       return <TLCaption data={caption} />;
@@ -105,7 +110,11 @@ function ApplicationDetailsContent({
   };
 
   const getMainDivStyles = () => {
-    if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc") || window.location.href.includes("employee/ws")) {
+    if (
+      window.location.href.includes("employee/obps") ||
+      window.location.href.includes("employee/noc") ||
+      window.location.href.includes("employee/ws")
+    ) {
       return { lineHeight: "19px", maxWidth: "950px", minWidth: "280px" };
     } else if (checkLocation) {
       return { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" };
@@ -116,9 +125,9 @@ function ApplicationDetailsContent({
 
   const getTextValue = (value) => {
     if (value?.skip) return value.value;
-    else if(value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
+    else if (value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
     else return value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("N/A");
-  }
+  };
 
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
@@ -149,13 +158,34 @@ function ApplicationDetailsContent({
                   if (value.map === true && value.value !== "N/A") {
                     return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
                   }
-                  if (value?.isLink == true)
-                  {
+                  if (value?.isLink == true) {
                     return (
                       <Row
                         key={t(value.title)}
-                        label={window.location.href.includes("tl") || window.location.href.includes("ws") ? <div style={{width:"200%"}}><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{t(value?.title)}</span></Link></div> : isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
-                        text={<div><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{value?.value}</span></Link></div>}
+                        label={
+                          window.location.href.includes("tl") || window.location.href.includes("ws") ? (
+                            <div style={{ width: "200%" }}>
+                              <Link to={value?.to}>
+                                <span className="link" style={{ color: "#F47738" }}>
+                                  {t(value?.title)}
+                                </span>
+                              </Link>
+                            </div>
+                          ) : isNocLocation || isBPALocation ? (
+                            `${t(value.title)}`
+                          ) : (
+                            t(value.title)
+                          )
+                        }
+                        text={
+                          <div>
+                            <Link to={value?.to}>
+                              <span className="link" style={{ color: "#F47738" }}>
+                                {value?.value}
+                              </span>
+                            </Link>
+                          </div>
+                        }
                         last={index === detail?.values?.length - 1}
                         caption={value.caption}
                         className="border-none"
@@ -179,7 +209,9 @@ function ApplicationDetailsContent({
             </StatusTable>
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
-          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} paymentsList={paymentsList}/>}
+          {detail?.additionalDetails?.inspectionReport && (
+            <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} paymentsList={paymentsList} />
+          )}
           {applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0 && detail?.additionalDetails?.fiReport && (
             <InspectionReport fiReport={applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending} />
           )}
@@ -229,13 +261,17 @@ function ApplicationDetailsContent({
           {detail?.additionalDetails?.taxHeadEstimatesCalculation && (
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />
           )}
-          {detail?.isWaterConnectionDetails && (
-            <WSAdditonalDetails wsAdditionalDetails={detail} />
+          {detail?.isWaterConnectionDetails && <WSAdditonalDetails wsAdditionalDetails={detail} oldValue={oldValue} />}
+
+          {detail?.additionalDetails?.redirectUrl && (
+            <div style={{ fontSize: "16px", lineHeight: "24px", fontWeight: "400", padding: "10px 0px" }}>
+              <Link to={detail?.additionalDetails?.redirectUrl?.url}>
+                <span className="link" style={{ color: "#F47738" }}>
+                  {detail?.additionalDetails?.redirectUrl?.title}
+                </span>
+              </Link>
+            </div>
           )}
-          {detail?.additionalDetails?.redirectUrl &&
-            <div style={{fontSize: "16px", lineHeight: "24px", fontWeight: "400", padding: "10px 0px"}}>
-              <Link to={detail?.additionalDetails?.redirectUrl?.url}><span className="link" style={{ color: "#F47738" }}>{detail?.additionalDetails?.redirectUrl?.title}</span></Link>
-            </div>}
           {detail?.additionalDetails?.estimationDetails && <WSFeeEstimation wsAdditionalDetails={detail} />}
         </React.Fragment>
       ))}

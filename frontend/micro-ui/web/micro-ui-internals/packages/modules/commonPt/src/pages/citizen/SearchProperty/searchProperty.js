@@ -416,8 +416,18 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             .join("&")}${redirectToUrl ? `&redirectToUrl=${redirectToUrl}` : ''}`
         );
       } else {
-        onSelect('cptSearchQuery', qs, null, null, null, {
-          queryParams: { ...qs },
+        let SearchParams = {
+          city : qs?.city,
+          mobileNumber : qs?.mobileNumber || "",
+          propertyIds : qs?.propertyIds || "",
+          oldPropertyIds : qs?.oldPropertyIds || "",
+          locality : qs?.locality || "",
+          doorNo : qs?.doorNumber || "",
+          name : qs?.name || "",
+        }
+        //onSelect('cptSearchQuery',{...SearchParams});
+        onSelect('cptSearchQuery', SearchParams, null, null, null, {
+          queryParams: { ...SearchParams },
         });
       }
     }

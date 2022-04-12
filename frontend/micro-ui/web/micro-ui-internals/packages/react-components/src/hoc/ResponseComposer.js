@@ -3,7 +3,7 @@ import Card from "../atoms/Card";
 import KeyNote from "../atoms/KeyNote";
 import SubmitBar from "../atoms/SubmitBar";
 import PropTypes from "prop-types";
-
+import CitizenInfoLabel  from "../atoms/CitizenInfoLabel";
 import { useTranslation } from "react-i18next";
 
 const ResponseComposer = ({ data, template, actionButtonLabel, onSubmit }) => {
@@ -23,13 +23,17 @@ const ResponseComposer = ({ data, template, actionButtonLabel, onSubmit }) => {
                 />
               );
             })}
-            {actionButtonLabel && (
+            {actionButtonLabel && result.status !== "INACTIVE" && (
               <SubmitBar
                 submit={false}
                 label={t(actionButtonLabel)}
                 onSubmit={() => {
                   onSubmit(result);
                 }}
+              />
+            )}
+            {result.status === "INACTIVE" && (
+              <CitizenInfoLabel style={{margin:"0px"}} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_INACTIVE_PROPERTY_NOT_ELIGIBLE")} 
               />
             )}
           </Card>

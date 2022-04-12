@@ -25,7 +25,23 @@ const CloseBtn = (props) => {
   );
 };
 
+const popupActionBarStyles = {
+  boxShadow: '0 -2px 8px rgb(0 0 0 / 16%)',
+  maxWidth: '480px',
+  zIndex: '100',
+  left: '0',
+  bottom: '0',
+  width: '100%',
+  backgroundColor: 'rgba(255, 255, 255)',
+  padding: '8px',
+  position: 'fixed',
+  textAlign: 'right',
+  display: 'flex',
+  justifyContent: 'space-around'
+}
+
 const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData }) => {
+  const mobileView = Digit.Utils.browser.isMobile() ? true : false;
   const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: '-1' });
   const { isLoading, isSuccess, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
@@ -277,7 +293,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       fileStoreId.map((i) => (temp[fileStoreId.indexOf(i) + 1] = i))
       applicationData.pitDetail.additionalDetails = { fileStoreId: temp };
     }
-    if (data.noOfTrips) applicationData.noOfTrips = Number(data.noOfTrips); 
+    if (data.noOfTrips) applicationData.noOfTrips = Number(data.noOfTrips);
     if (action === "REASSING") applicationData.vehicleId = null;
 
     if (reassignReason) addCommentToWorkflow(reassignReason, workflow, data);
@@ -439,7 +455,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   return action && config.form && !isDsoLoading && !isReasonLoading && isVehicleDataLoaded ? (
     <Modal
-      popupStyles={{ height: "fit-content" }}
+      popupStyles={mobileView ? { height: 'fit-content', minHeight: '100vh' } : { height: "fit-content" }}
       headerBarMain={<Heading label={t(config.label.heading)} />}
       headerBarEnd={<CloseBtn onClick={closeModal} />}
       actionCancelLabel={t(config.label.cancel)}
@@ -448,6 +464,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionSaveOnSubmit={() => { }}
       formId="modal-action"
       isDisabled={!formValve}
+      popupModuleMianStyles={mobileView ? { paddingBottom: '60px' } : {}}
+      popupModuleActionBarStyles={mobileView ? popupActionBarStyles : {}}
     >
       <FormComposer
         config={config.form}

@@ -55,7 +55,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -65,7 +66,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GuardRoom extends FeatureProcess {
 
-	private static final Logger LOGGER = Logger.getLogger(Parking.class);
+	private static final Logger LOGGER = LogManager.getLogger(Parking.class);
 	private static final String RULE_48_A = "48-A";
 	public static final String GUARD_ROOM_DIMENSION_DESCRIPTION = "Guard Room Dimension";
 	public static final String GUARD_ROOM_AREA_DESCRIPTION = "Guard Room Area";

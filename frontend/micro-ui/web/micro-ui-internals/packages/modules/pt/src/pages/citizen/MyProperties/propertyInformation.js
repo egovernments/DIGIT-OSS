@@ -286,7 +286,7 @@ const PropertyInformation = () => {
               docs.length > 0 && <PropertyDocument property={property}></PropertyDocument>
             ) : (
               <StatusTable>
-                <Row className="border-none" text="PT_NO_DOCUMENTS_MSG" />
+                <Row className="border-none" text={t("PT_NO_DOCUMENTS_MSG")} />
               </StatusTable>
             )}
           </div>

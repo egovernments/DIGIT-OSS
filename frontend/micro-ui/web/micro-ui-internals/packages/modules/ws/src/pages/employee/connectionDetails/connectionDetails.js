@@ -2,14 +2,17 @@ import React, { useEffect, useState, Fragment, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
 import cloneDeep from "lodash/cloneDeep";
-import { useParams } from "react-router-dom";
-import { Header, DownloadIcon, PrintIcon } from "@egovernments/digit-ui-react-components";
+import { useParams, useHistory } from "react-router-dom";
+import { Header, DownloadIcon, PrintIcon, ActionBar } from "@egovernments/digit-ui-react-components";
 import * as func from "../../../utils"
 import { DownloadBtnColored } from "../../../components/DownloadBtnColored";
+import { ifUserRoleExists } from "../../../utils";
 
 const GetConnectionDetails = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const history = useHistory();
+
   // const { connectionNumber, service, connectionType  } = useParams();
   const [showToast, setShowToast] = useState(null);
   let filters = func.getQueryStringParams(location.search);
@@ -35,7 +38,11 @@ const GetConnectionDetails = () => {
   const closeToast = () => {
     setShowToast(null);
   };
-    
+  
+  function onActionSelect(action) {
+    let pathname = `/digit-ui/employee/ws/modify-application?applicationNumber=${applicationDetails?.applicationData?.applicationNo}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+    history.push(`${pathname}`, { data: applicationDetails });
+  }
 
   return (
     <Fragment>
@@ -64,6 +71,19 @@ const GetConnectionDetails = () => {
         setShowToast={setShowToast}
         closeToast={closeToast}
       />
+        {ifUserRoleExists('WS_CEMP') ?
+          <ActionBar>
+            <button
+              style={{ color: "#FFFFFF", fontSize: "19px" }}
+              className={"submit-bar"}
+              name={"WS_MODIFY_CONNECTION_BUTTON"}
+              value={"WS_MODIFY_CONNECTION_BUTTON"}
+              onClick={(e) => { onActionSelect("WS_MODIFY_CONNECTION_BUTTON" || {}) }}
+            >
+              {t(`WS_MODIFY_CONNECTION_BUTTON`)}
+            </button>
+          </ActionBar> : null
+        }
     </div>
     </Fragment>
   );

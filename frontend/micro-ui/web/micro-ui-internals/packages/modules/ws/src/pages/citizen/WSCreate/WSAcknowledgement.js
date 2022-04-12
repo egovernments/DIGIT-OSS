@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 //import { convertToEditTrade, convertToResubmitTrade, convertToTrade, convertToUpdateTrade, stringToBoolean } from "../../../utils";
 //import getPDFData from "../../../utils/getTLAcknowledgementData";
 //import getPDFData from "../TestAcknowledgment";
-import {convertToWSUpdate, convertToSWUpdate, getPDFData} from "../../../utils/index";
+import {convertToWSUpdate, convertToSWUpdate, getPDFData, convertToEditWSUpdate, convertToEditSWUpdate} from "../../../utils/index";
 
 const GetActionMessage = (props) => {
   const { t } = useTranslation();
@@ -44,6 +44,7 @@ const WSAcknowledgement = ({ data, onSuccess, clearParams }) => {
   const SWmutation = Digit.Hooks.ws.useWSUpdateAPI(
    "SEWERAGE"
   );
+  let isEdit = window.location.href.includes("/edit-application/");
  
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
@@ -54,7 +55,7 @@ const WSAcknowledgement = ({ data, onSuccess, clearParams }) => {
         let tenantId;
      if(data?.serviceName?.code === "WATER" || data?.serviceName?.code === "BOTH"){
         tenantId = data?.cpt?.details?.tenantId || tenantId;
-        let formdata = convertToWSUpdate(data);
+        let formdata = isEdit ? convertToEditWSUpdate(data) : convertToWSUpdate(data);
         WSmutation.mutate(formdata, {
           onSuccess,
         })
@@ -69,7 +70,7 @@ const WSAcknowledgement = ({ data, onSuccess, clearParams }) => {
     if(data?.serviceName?.code === "SEWERAGE" || (data?.serviceName?.code === "BOTH" && WSmutation.isSuccess))
       {
         let tenantId = data?.cpt?.details?.tenantId || tenantId;
-        let formdata = convertToSWUpdate(data);
+        let formdata = isEdit ? convertToEditSWUpdate(data) : convertToSWUpdate(data);
         SWmutation.mutate(formdata, {
           onSuccess,
         })
