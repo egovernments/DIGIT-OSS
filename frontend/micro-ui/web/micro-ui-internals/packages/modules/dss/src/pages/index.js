@@ -18,6 +18,7 @@ import FilterContext from "../components/FilterContext";
 import Filters from "../components/Filters";
 import FiltersNational from "../components/FiltersNational";
 import Layout from "../components/Layout";
+import { isMobile } from "react-device-detect";
 
 const key = "DSS_FILTERS";
 
@@ -160,28 +161,28 @@ const DashBoard = ({ stateCode }) => {
   }, [tabArray]);
 
   const shareOptions = 
-  // navigator.share
-  //   ? [
-  //       {
-  //         label: t("ES_DSS_SHARE_PDF"),
-  //         onClick: (e) => {
-  //           setShowOptions(!showOptions);
-  //           setTimeout(() => {
-  //             return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
-  //           }, 500);
-  //         },
-  //       },
-  //       {
-  //         label: t("ES_DSS_SHARE_IMAGE"),
-  //         onClick: () => {
-  //           setShowOptions(!showOptions);
-  //           setTimeout(() => {
-  //             return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
-  //           }, 500);
-  //         },
-  //       },
-  //     ]
-  //   : 
+  isMobile
+    ? [
+        {
+          label: t("ES_DSS_SHARE_PDF"),
+          onClick: (e) => {
+            setShowOptions(!showOptions);
+            setTimeout(() => {
+              return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
+            }, 500);
+          },
+        },
+        {
+          label: t("ES_DSS_SHARE_IMAGE"),
+          onClick: () => {
+            setShowOptions(!showOptions);
+            setTimeout(() => {
+              return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
+            }, 500);
+          },
+        },
+      ]
+    : 
     [
         /*
         {
