@@ -62,7 +62,7 @@ const GenericChart = ({
         case "pdf":
           return Digit.Download.PDF(chart, t(header));
         case "image":
-          return Digit.Download.DownloadImage(chart, t(header));
+          return Digit.Download.PDF(chart, t(header));
         case "sharePdf":
           return Digit.ShareFiles.PDF(tenantId, chart, t(header), data.target);
         case "shareImage":
