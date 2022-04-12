@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Timeline from "../../components/CPTTimeline";
 
 const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
-  const tenantId = Digit.ULBService.getCitizenCurrentTenant();
+  const tenantId = (formData?.knowyourproperty?.KnowProperty?.code === "YES" ? formData?.cptSearchQuery?.city : formData?.cpt?.details?.tenantId ) || Digit.ULBService.getCitizenCurrentTenant();
   if (window.location.href.includes("/tl/tradelicence/edit-application/") || window.location.href.includes("/renew-trade/")) {
     sessionStorage.setItem("EditFormData", JSON.stringify(formData));
   }
