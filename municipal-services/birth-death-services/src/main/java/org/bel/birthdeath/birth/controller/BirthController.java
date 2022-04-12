@@ -130,4 +130,18 @@ public class BirthController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @RequestMapping(value = { "/_plainsearch"}, method = RequestMethod.POST)
+    public ResponseEntity<BirthResponse> plainSearch(@RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                     @Valid @ModelAttribute SearchCriteria criteria) {
+        if(requestInfoWrapper.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && liveCitizenTenantsList.contains(criteria.getTenantId()))
+        {
+            return new ResponseEntity<>(new BirthResponse(), HttpStatus.OK);
+        }
+        List<EgBirthDtl> birthCerts = birthService.plainSearch(criteria,requestInfoWrapper.getRequestInfo());
+        BirthResponse response = BirthResponse.builder().birthCerts(birthCerts).responseInfo(
+                        responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

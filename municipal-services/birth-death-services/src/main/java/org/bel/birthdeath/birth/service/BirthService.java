@@ -214,4 +214,10 @@ public class BirthService {
                 .append(StringUtils.join(criteria.getConsumerCodes(),","))
                 .append("&").append("status=APPROVED,DEPOSITED,NEW");
     }
+
+	public List<EgBirthDtl> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<EgBirthDtl> birthDtls = new ArrayList<EgBirthDtl>() ;
+		birthDtls = repository.getBirthDtlsForPlainSearch(criteria);
+		return birthDtls;
+	}
 }

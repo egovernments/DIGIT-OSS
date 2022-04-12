@@ -255,4 +255,11 @@ public class DeathRepository {
         });
         return deathCertMasterDtl;
 	}
+
+	public List<EgDeathDtl> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		String query = allqueryBuilder.getDeathDtlsForPlainSearch(criteria, preparedStmtList);
+		List<EgDeathDtl> deathDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+		return deathDtls;
+	}
 }

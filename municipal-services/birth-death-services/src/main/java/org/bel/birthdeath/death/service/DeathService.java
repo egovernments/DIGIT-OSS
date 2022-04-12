@@ -214,4 +214,10 @@ public class DeathService {
                 .append(StringUtils.join(criteria.getConsumerCodes(),","))
                 .append("&").append("status=APPROVED,DEPOSITED,NEW");
     }
+
+	public List<EgDeathDtl> plainSearch(SearchCriteria criteria,RequestInfo requestInfo) {
+		List<EgDeathDtl> deathDtls = new ArrayList<EgDeathDtl>() ;
+		deathDtls = repository.getDeathDtlsForPlainSearch(criteria);
+		return deathDtls;
+	}
 }

@@ -127,4 +127,14 @@ public class DeathController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @RequestMapping(value = { "/_plainsearch"}, method = RequestMethod.POST)
+    public ResponseEntity<DeathResponse> plainSearch(@RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                @Valid @ModelAttribute SearchCriteria criteria) {
+        List<EgDeathDtl> deathCerts = deathService.plainSearch(criteria,requestInfoWrapper.getRequestInfo());
+        DeathResponse response = DeathResponse.builder().deathCerts(deathCerts).responseInfo(
+                        responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

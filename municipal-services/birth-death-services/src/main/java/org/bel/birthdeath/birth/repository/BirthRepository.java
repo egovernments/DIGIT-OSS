@@ -255,4 +255,11 @@ public class BirthRepository {
         });
         return birthCertMasterDtl;
 	}
+
+	public List<EgBirthDtl> getBirthDtlsForPlainSearch(SearchCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		String query = allqueryBuilder.getBirtDtlsForPlainSearch(criteria, preparedStmtList);
+		List<EgBirthDtl> birthDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+		return birthDtls;
+	}
 }
