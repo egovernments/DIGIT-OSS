@@ -286,7 +286,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.subtype && typeof (data.subtype) === "object") applicationData.propertyUsage = data.subtype.code;
     if (data.subtype && typeof (data.subtype) === "string") applicationData.propertyUsage = data.subtype;
     if (data.noOfTrips) applicationData.noOfTrips = data.noOfTrips;
-    if (data.paymentMode) applicationData.receivedPayment = data.paymentMode.code;
+    if (data.paymentMode) applicationData.additionalDetails.receivedPayment = data.paymentMode.code;
 
     if (fileStoreId) {
       let temp = {}

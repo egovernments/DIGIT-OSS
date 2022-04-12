@@ -50,6 +50,7 @@ export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTri
           route: "property-type",
           key: "propertyType",
           component: "SelectPropertyType",
+          disable: true,
           texts: {
             headerCaption: "",
             header: "CS_FILE_APPLICATION_PROPERTY_LABEL",
@@ -65,6 +66,7 @@ export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTri
           route: "property-subtype",
           key: "subtype",
           component: "SelectPropertySubtype",
+          disable: true,
           texts: {
             headerCaption: "",
             header: "CS_FILE_APPLICATION_PROPERTY_SUBTYPE_LABEL",
