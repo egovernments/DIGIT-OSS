@@ -3,6 +3,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import XLSX from "xlsx";
 import domtoimage from "dom-to-image";
+import { isMobile } from "react-device-detect";
 
 
 const changeClasses=(class1,class2)=>{
@@ -66,6 +67,9 @@ const Download = {
       console.log("PDF link type: " + typeof link.download);
       if (typeof link.download === "string") {
         console.log("PDF exec");
+        if(isMobile){
+          window.mSewaApp.downloadBase64File(uri, filename);
+        }
         link.href = uri;
         link.download = filename;
         document.body.appendChild(link);
