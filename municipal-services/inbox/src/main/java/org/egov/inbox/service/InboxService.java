@@ -406,16 +406,16 @@ public class InboxService {
                 List<String> applicationNumbers = wsInboxFilterService.fetchApplicationNumbersFromSearcher(criteria,
                         StatusIdNameMap, requestInfo);
                 if (!CollectionUtils.isEmpty(applicationNumbers) && StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
-					moduleSearchCriteria.put(WS_BUSINESS_IDS_PARAM, applicationNumbers);
-					businessKeys.addAll(applicationNumbers);
-					moduleSearchCriteria.remove(applicationStatusParam);
-					moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
-					moduleSearchCriteria.remove(WS_APPLICATION_NUMBER_PARAM);
-					moduleSearchCriteria.remove(WS_APPLICATION_TYPE_PARAM);
-					moduleSearchCriteria.remove(WS_CONNECTION_NO_PARAM);
-					moduleSearchCriteria.remove(PROPERTY_ID_PARAM);
-					moduleSearchCriteria.remove(LOCALITY_PARAM);
-					moduleSearchCriteria.remove(OFFSET_PARAM);
+				moduleSearchCriteria.put(WS_BUSINESS_IDS_PARAM, applicationNumbers);
+				businessKeys.addAll(applicationNumbers);
+				moduleSearchCriteria.remove(applicationStatusParam);
+				moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
+				moduleSearchCriteria.remove(WS_APPLICATION_NUMBER_PARAM);
+				moduleSearchCriteria.remove(WS_APPLICATION_TYPE_PARAM);
+				moduleSearchCriteria.remove(WS_CONNECTION_NO_PARAM);
+				moduleSearchCriteria.remove(PROPERTY_ID_PARAM);
+				moduleSearchCriteria.remove(LOCALITY_PARAM);
+				moduleSearchCriteria.remove(OFFSET_PARAM);
                 } else if(!StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
                 	if(!StringUtils.isEmpty(processCriteria.getAssignee()))
                 		moduleSearchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
@@ -430,16 +430,16 @@ public class InboxService {
                  List<String> applicationNumbers = swInboxFilterService.fetchApplicationNumbersFromSearcher(criteria,
                          StatusIdNameMap, requestInfo);
                 if (!CollectionUtils.isEmpty(applicationNumbers) && StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
-					moduleSearchCriteria.put(WS_BUSINESS_IDS_PARAM, applicationNumbers);
-					businessKeys.addAll(applicationNumbers);
-					moduleSearchCriteria.remove(applicationStatusParam);
-					moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
-					moduleSearchCriteria.remove(SW_APPLICATION_NUMBER_PARAM);
-					moduleSearchCriteria.remove(SW_APPLICATION_TYPE_PARAM);
-					moduleSearchCriteria.remove(SW_CONNECTION_NO_PARAM);
-					moduleSearchCriteria.remove(PROPERTY_ID_PARAM);
-					moduleSearchCriteria.remove(LOCALITY_PARAM);
-					moduleSearchCriteria.remove(OFFSET_PARAM);
+				moduleSearchCriteria.put(WS_BUSINESS_IDS_PARAM, applicationNumbers);
+				businessKeys.addAll(applicationNumbers);
+				moduleSearchCriteria.remove(applicationStatusParam);
+				moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
+				moduleSearchCriteria.remove(SW_APPLICATION_NUMBER_PARAM);
+				moduleSearchCriteria.remove(SW_APPLICATION_TYPE_PARAM);
+				moduleSearchCriteria.remove(SW_CONNECTION_NO_PARAM);
+				moduleSearchCriteria.remove(PROPERTY_ID_PARAM);
+				moduleSearchCriteria.remove(LOCALITY_PARAM);
+				moduleSearchCriteria.remove(OFFSET_PARAM);
                 } else if(!StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
                 	if(!StringUtils.isEmpty(processCriteria.getAssignee()))
                 		moduleSearchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());

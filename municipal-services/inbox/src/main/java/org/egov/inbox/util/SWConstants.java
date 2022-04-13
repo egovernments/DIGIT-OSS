@@ -23,6 +23,6 @@ public class SWConstants {
     public static final String USERID_PARAM = "userIds";
     public static final String SORT_ORDER_PARAM = "sortOrder";
     public static final String DESC_PARAM = "DESC";
-    public static final String SW_BUSINESS_IDS_PARAM = "businessIds";
+    public static final String SW_BUSINESS_IDS_PARAM = "applicationNumbers";
     public static final String SW_CONNECTION_NO_PARAM = "consumerNo";
 }
