@@ -18,6 +18,6 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - run: cd core-services/egov-telemetry/telemetry-client && yarn && yarn build && npm publish --access public
+      - run: cd core-services/egov-telemetry/telemetry-client && yarn && yarn build && npm publish --tag beta-2.7
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

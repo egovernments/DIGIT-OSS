@@ -1,14 +1,14 @@
 # This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: obps.js Publish obps Package
+name: Node.js Publish Common PT Package
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
     branches: 
-      # Push events on main branch
+        # Push events on main branch
       - 'master'
       # Push events to branches matching refs/heads/mona/octocat
       - 'develop'
@@ -24,6 +24,6 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - run: cd frontend/micro-ui/web/micro-ui-internals/packages/modules/obps && yarn && yarn prepublish && npm publish --tag beta-2.7
+      - run: cd frontend/micro-ui/web/micro-ui-internals/packages/modules/commonPt && yarn && yarn prepublish && npm publish --tag beta-2.7
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

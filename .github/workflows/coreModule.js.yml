@@ -24,6 +24,6 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - run: cd frontend/micro-ui/web/micro-ui-internals/packages/modules/core && yarn && yarn prepublish && npm publish --access public
+      - run: cd frontend/micro-ui/web/micro-ui-internals/packages/modules/core && yarn && yarn prepublish && npm publish --tag beta-2.7
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
