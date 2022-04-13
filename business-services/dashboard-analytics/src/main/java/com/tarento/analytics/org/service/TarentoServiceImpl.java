@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +34,7 @@ import com.tarento.analytics.handler.ResponseHandlerFactory;
 import com.tarento.analytics.model.InsightsConfiguration;
 import com.tarento.analytics.service.QueryService;
 import com.tarento.analytics.service.impl.RestService;
+import com.tarento.analytics.utils.ResponseRecorder;
 
 
 @Component
@@ -86,6 +88,9 @@ public class TarentoServiceImpl implements ClientService {
 
 		executeConfiguredQueries(chartNode, aggrObjectNode, nodes, request, interval);
 		request.setChartNode(chartNode);
+		ResponseRecorder responseRecorder = new ResponseRecorder();
+		request.setResponseRecorder(responseRecorder);
+		
 		IResponseHandler responseHandler = responseHandlerFactory.getInstance(chartType);
 		AggregateDto aggregateDto = new AggregateDto();
 		if(aggrObjectNode.fields().hasNext()){
@@ -109,7 +114,7 @@ public class TarentoServiceImpl implements ClientService {
 					responseHandler.translate(request, insightAggrObjectNode);
 				}
 				InsightsHandler insightsHandler = insightsHandlerFactory.getInstance(chartType);
-				aggregateDto = insightsHandler.getInsights(aggregateDto, request.getVisualizationCode(), request.getModuleLevel(), insightsConfig);
+				aggregateDto = insightsHandler.getInsights(aggregateDto, request.getVisualizationCode(), request.getModuleLevel(), insightsConfig, request.getResponseRecorder());
 			}
 		}
 
@@ -129,7 +134,8 @@ public class TarentoServiceImpl implements ClientService {
 		preHandle(request, chartNode, mdmsApiMappings);
 
 		ArrayNode queries = (ArrayNode) chartNode.get(Constants.JsonPaths.QUERIES);
-		queries.forEach(query -> {
+		int randIndexCount = 1;
+		for(JsonNode query : queries) {
 			String module = query.get(Constants.JsonPaths.MODULE).asText();
 			if(request.getModuleLevel().equals(Constants.Modules.HOME_REVENUE) || 
 					request.getModuleLevel().equals(Constants.Modules.HOME_SERVICES) ||
@@ -141,7 +147,8 @@ public class TarentoServiceImpl implements ClientService {
 				try {
 					JsonNode aggrNode = restService.search(indexName,objectNode.toString());
 					if(nodes.has(indexName)) { 
-						indexName = indexName + "_1";
+						indexName = indexName + "_" + randIndexCount;
+						randIndexCount += 1;
 					}
 					nodes.set(indexName,aggrNode.get(Constants.JsonPaths.AGGREGATIONS));
 				}catch (Exception e) {
@@ -151,7 +158,7 @@ public class TarentoServiceImpl implements ClientService {
 				aggrObjectNode.set(Constants.JsonPaths.AGGREGATIONS, nodes);
 
 			}
-		});
+		}
 	}
 
 	/**
