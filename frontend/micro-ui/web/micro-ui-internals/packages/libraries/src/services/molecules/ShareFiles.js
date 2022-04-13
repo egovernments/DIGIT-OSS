@@ -8,6 +8,9 @@ const ShareFiles = {
       case "mail":
         return window.open(`mailto:?body=${shortUrl}`, "_blank");
       case "whatsapp":
+        if(window.mSewaApp && window.mSewaApp.isMsewaApp())
+        return window.open(`https://wa.me/send?text=${shortUrl}`, "_blank");
+        else
         return window.open(`https://web.whatsapp.com/send?text=${shortUrl}`, "_blank");
       default:
         return window.open(shortUrl, "_blank");
