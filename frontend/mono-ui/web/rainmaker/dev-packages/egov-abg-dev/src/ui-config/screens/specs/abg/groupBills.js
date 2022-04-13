@@ -74,7 +74,6 @@ const getMDMSData = async (action, state, dispatch) => {
     payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.billGineiURL);
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -114,7 +113,6 @@ const abgSearchAndResult = {
               },
               ...header
             },
-           /* removed group bill download through job
            downloadBillButton: {
               componentPath: "Button",
               gridDefination: {
@@ -147,7 +145,7 @@ const abgSearchAndResult = {
                     : `/abg/billDownload`
               },
               visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
-            } */
+            } 
           } 
         },
         abgSearchCard,

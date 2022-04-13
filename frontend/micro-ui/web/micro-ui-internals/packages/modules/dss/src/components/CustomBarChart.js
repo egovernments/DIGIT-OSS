@@ -1,24 +1,46 @@
-import React, { Fragment, useContext, useMemo } from "react";
+import { Loader } from "@egovernments/digit-ui-react-components";
+import React, { Fragment, useContext, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { startOfMonth, endOfMonth, getTime } from "date-fns";
-import { Loader } from "@egovernments/digit-ui-react-components";
-import { ResponsiveContainer, Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import FilterContext from "./FilterContext";
+import NoData from "./NoData";
+import { checkCurrentScreen } from "./DSSCard";
 
-const CustomLabel = ({ x, y, name, stroke, value }) => {
+const formatValue = (value, symbol) => {
+  if (symbol?.toLowerCase() === "percentage") {
+    /*   Removed by  percentage formatter.
+    const Pformatter = new Intl.NumberFormat("en-IN", { maximumSignificantDigits: 3 });
+    return `${Pformatter.format(Number(value).toFixed(2))}`;
+    */
+    return `${Number(value).toFixed()}`;
+  } else {
+    return value;
+  }
+};
+
+const CustomLabel = ({ x, y, name, stroke, value, maxValue }) => {
   const { t } = useTranslation();
   return (
     <>
-      <text x={x} y={y} dx={-65} dy={10} fill={stroke} width="30">
-        {`${value}%`}
+      <text
+        x={x}
+        y={y}
+        dx={-55}
+        dy={10}
+        fill={stroke}
+        width="35"
+        style={{ fontSize: "medium", textAlign: "right", fontVariantNumeric: "proportional-nums" }}
+      >
+        {`${maxValue?.[t(name)]}%`}
       </text>
-      <text x={x} y={y} dx={-170} dy={10}>
-        {t(name)}
+      <text x={x} y={y} dx={-200} dy={10}>
+        {t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(name)}`)}
       </text>
     </>
   );
 };
+const COLORS = { RED: "#00703C", GREEN: "#D4351C", default: "#00703C" };
 
 const CustomBarChart = ({
   xDataKey = "value",
@@ -27,16 +49,18 @@ const CustomBarChart = ({
   yDataKey = "name",
   hideAxis = true,
   layout = "vertical",
-  fillColor = "#00703C",
+  fillColor = "default",
   showGrid = false,
   showDrillDown = false,
   data,
   title,
+  setChartDenomination,
 }) => {
   const { id } = data;
   const { t } = useTranslation();
   const history = useHistory();
   const { value } = useContext(FilterContext);
+  const [maxValue, setMaxValue] = useState({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
     key: id,
@@ -45,47 +69,69 @@ const CustomBarChart = ({
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
   });
-
   const chartData = useMemo(() => {
     if (!response) return null;
-    return response?.responseData?.data?.map((bar) => {
+    setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
+    const dd = response?.responseData?.data?.map((bar) => {
+      let plotValue = bar?.plots?.[0].value || 0;
       return {
         name: t(bar?.plots?.[0].name),
-        value: bar?.plots?.[0].value,
+        value: formatValue(plotValue, bar?.plots?.[0].symbol),
+        // value: Digit.Utils.dss.formatter(plotValue, bar?.plots?.[0].symbol),
       };
     });
+    let newMax = Math.max(...dd.map((e) => Number(e.value)));
+    let newObj = {};
+    let newReturn = dd.map((ele) => {
+      newObj[ele.name] = ele.value;
+      return { ...ele, value: (Number(ele.value) / newMax) * 100 };
+    });
+    setMaxValue(newObj);
+    return newReturn;
   }, [response]);
 
   const goToDrillDownCharts = () => {
-    history.push(`/digit-ui/employee/dss/drilldown?chart=${response?.responseData?.drillDownChartId}&ulb=${value?.filters?.tenantId}&title=${title}`);
+    history.push(
+      `/digit-ui/employee/dss/drilldown?chart=${response?.responseData?.visualizationCode}&ulb=${
+        value?.filters?.tenantId
+      }&title=${title}&fromModule=${Digit.Utils.dss.getCurrentModuleName()}&type=performing-metric&fillColor=${fillColor}&isNational=${
+        checkCurrentScreen() ? "YES" : "NO"
+      }`
+    );
   };
   if (isLoading) {
     return <Loader />;
   }
-  if (chartData?.length === 0) {
-    return (
-      <div className="no-data">
-        <p>{t("DSS_NO_DATA")}</p>
-      </div>
-    );
+  if (chartData?.length === 0 || !chartData) {
+    return <NoData t={t} />;
   }
   return (
     <Fragment>
-      <ResponsiveContainer width="99%" height={320}>
-        <BarChart width="100%" height="100%" data={chartData} layout={layout} maxBarSize={10} margin={{ left: 170 }} barGap={70}>
+      <ResponsiveContainer width="98%" height={320}>
+        <BarChart
+          width="70%"
+          height="100%"
+          data={showDrillDown ? chartData?.slice(0, 3) : chartData}
+          layout={layout}
+          maxBarSize={8}
+          margin={{ left: 200 }}
+          barGap={50}
+        >
           {showGrid && <CartesianGrid />}
-          <XAxis hide={hideAxis} dataKey={xDataKey} type={xAxisType} domain={[0, 100]} />
-          <YAxis dataKey={yDataKey} hide={hideAxis} type={yAxisType} padding={{ right: 40 }} />
+          <XAxis hide={hideAxis} dataKey={xDataKey} type={xAxisType} domain={[0, 90]} />
+          <YAxis dataKey={yDataKey} hide={hideAxis} type={yAxisType} padding={{ right: 60 }} />
           <Bar
             dataKey={xDataKey}
-            fill={fillColor}
-            background={{ fill: "#D6D5D4", radius: 10 }}
-            label={<CustomLabel stroke={fillColor} />}
-            radius={[10, 10, 10, 10]}
+            fill={COLORS[fillColor]}
+            background={{ fill: "#D6D5D4", radius: 8 }}
+            label={<CustomLabel stroke={COLORS[fillColor]} maxValue={maxValue} />}
+            radius={[8, 8, 8, 8]}
+            isAnimationActive={false}
+            maxBarSize={8}
           />
         </BarChart>
       </ResponsiveContainer>
-      {showDrillDown && (
+      {chartData?.length > 3 && showDrillDown && (
         <p className="showMore" onClick={goToDrillDownCharts}>
           {t("DSS_SHOW_MORE")}
         </p>

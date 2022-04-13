@@ -2,6 +2,7 @@ import { CardLabel, Dropdown, FormStep, LabelFieldPair, RadioOrSelect, RadioButt
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import _ from "lodash";
+import Timeline from "../components/TLTimeline";
 
 const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, formState, clearErrors }) => {
   const allCities = Digit.Hooks.tl.useTenants();
@@ -183,7 +184,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
           <CardLabel className="card-label-smaller">{`${t("TL_LOCALIZATION_LOCALITY")} * :`}</CardLabel>
           <Controller
             name="locality"
-            defaultValue={checkingLocationForRenew ? formData.address.locality : null}
+            defaultValue={checkingLocationForRenew ? formData?.address?.locality : null}
             control={control}
             rules={{required: t("REQUIRED_FIELD")}}
             render={(props) => (
@@ -206,17 +207,19 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
     );
   }
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
       <CardLabel>{`${t("MYCITY_CODE_LABEL")}*`}</CardLabel>
       <span className={"form-pt-dropdown-only"}>
         <RadioOrSelect
           options={cities.sort((a, b) => a.name.localeCompare(b.name))}
           selectedOption={selectedCity}
-          optionKey="code"
+          optionKey="i18nKey"
           onSelect={selectCity}
           t={t}
           isDependent={true}
-          labelKey="TENANT_TENANTS"
+          labelKey=""
           disabled={isEdit}
         />
       </span>
@@ -238,6 +241,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
         </span>
       )}
     </FormStep>
+    </React.Fragment>
   );
 };
 

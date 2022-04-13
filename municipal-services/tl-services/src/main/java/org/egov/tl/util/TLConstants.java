@@ -59,6 +59,10 @@ public class TLConstants {
 
     public static final String NOTIFICATION_FIELD_INSPECTION = "tl.en.field.inspection";
 
+    public static final String NOTIFICATION_PENDING_APPROVAL = "tl.en.pending.approval";
+
+    public static final String NOTIFICATION_PENDING_APPROVAL_EMAIL = "tl.en.pending.approval.email";
+
     public static final String NOTIFICATION_FIELD_INSPECTION_EMAIL = "tl.en.field.inspection.email";
 
     public static final String NOTIFICATION_PAYMENT_OWNER = "tl.en.counter.payment.successful.owner";
@@ -90,6 +94,14 @@ public class TLConstants {
     public static final String NOTIFICATION_REJECTED_EMAIL = "tl.en.counter.rejected.email";
 
     public static final String NOTIFICATION_CANCELLED = "tl.en.counter.cancelled";
+
+    public static final String NOTIFICATION_EXPIRED = "tl.en.counter.expire";
+
+    public static final String NOTIFICATION_EXPIRED_EMAIL = "tl.en.counter.expire.email";
+
+    public static final String NOTIFICATION_MANUAL_EXPIRED = "tl.en.counter.manual.expire";
+
+    public static final String NOTIFICATION_MANUAL_EXPIRED_EMAIL = "tl.en.counter.manual.expire.email";
 
     public static final String NOTIFICATION_CANCELLED_EMAIL = "tl.en.counter.cancelled.email";
 
@@ -137,12 +149,13 @@ public class TLConstants {
             NOTIFICATION_CANCELLED_EMAIL,NOTIFICATION_REJECTED_EMAIL,NOTIFICATION_APPROVED_EMAIL,NOTIFICATION_PAID_EMAIL,NOTIFICATION_RENEWAL_PAYMENT_PAYER_EMAIL,
             NOTIFICATION_RENEWAL_PAYMENT_OWNER_EMAIL,NOTIFICATION_PAYMENT_PAYER_EMAIL,NOTIFICATION_PAYMENT_OWNER_EMAIL,NOTIFICATION_FIELD_INSPECTION_EMAIL,
             NOTIFICATION_APPLIED_EMAIL,RENEWAL_NOTIFICATION_APPROVED_EMAIL,RENEWAL_NOTIFICATION_APPLIED_EMAIL,RENEWAL_NOTIFICATION_FIELD_INSPECTION_EMAIL,
-            RENEWAL_NOTIFICATION_PENDINGAPPROVAL_EMAIL,RENEWAL_NOTIFICATION_REJECTED_EMAIL));
+            RENEWAL_NOTIFICATION_PENDINGAPPROVAL_EMAIL,RENEWAL_NOTIFICATION_REJECTED_EMAIL,NOTIFICATION_PENDING_APPROVAL,NOTIFICATION_PENDING_APPROVAL_EMAIL,
+            NOTIFICATION_EXPIRED,NOTIFICATION_EXPIRED_EMAIL,NOTIFICATION_MANUAL_EXPIRED,NOTIFICATION_MANUAL_EXPIRED_EMAIL));
 
 
-    public static final String DEFAULT_OBJECT_MODIFIED_MSG = "Dear <1>,Your Trade License with application number <APPLICATION_NUMBER> was modified.";
+    public static final String DEFAULT_OBJECT_MODIFIED_MSG = "Dear {1},Your Trade License with application number {APPLICATION_NUMBER} was modified.";
 
-    public static final String DEFAULT_OBJECT_RENEWAL_MODIFIED_MSG = "Dear <1>,Your Renewal Trade License with application number <APPLICATION_NUMBER> was modified.";
+    public static final String DEFAULT_OBJECT_RENEWAL_MODIFIED_MSG = "Dear {1},Your Renewal Trade License with application number {APPLICATION_NUMBER} was modified.";
 
 
     // MDMS
@@ -290,9 +303,7 @@ public class TLConstants {
 
     public static final String ACTION_FORWARD_CITIZENACTIONREQUIRED  = "FORWARDTOEMPLOYEE_FIELDINSPECTION";
 
-
     public static final String ACTION_STATUS_PAID  = "PAID";
-
 
     public static final String VARIABLE_ACTION = "action";
 
@@ -326,7 +337,7 @@ public class TLConstants {
 	
 	
 	public static final String TL_ACTION_INITIATE = "INITIATE";
-	
+
 
 
     public static final List<String> FIELDS_TO_IGNORE = Collections.unmodifiableList(Arrays.asList(VARIABLE_ACTION,VARIABLE_WFDOCUMENTS,
@@ -370,6 +381,12 @@ public class TLConstants {
     public static final String CHANNEL = "Channel";
 
     public static final String TL_BUSINESSSERVICE = "TL";
+
+    //Expired notification
+    public static final String ACTION_STATUS_EXPIRED = "EXPIRE_EXPIRED";
+
+    public static final String ACTION_STATUS_MANUAL_EXPIRED = "MANUALEXPIRE_MANUALEXPIRED";
+
 
     public TLConstants() {}
 

@@ -25,8 +25,10 @@ const BannerPicker = (props) => {
     <Banner
       message={GetActionMessage(props)}
       applicationNumber={props.data?.Licenses[0].applicationNumber}
-      info={props.isSuccess ? props.t("Stakeholder Registartion Application Number") : ""}
+      info={props.isSuccess ? props.t("BPA_NEW_STAKEHOLDER_REGISTRATION_APP_LABEL") : ""}
       successful={props.isSuccess}
+      style={{ padding: "10px" }}
+      headerStyles={{fontSize: "32px"}}
     />
   );
 };
@@ -43,6 +45,7 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
   const { tenants } = storeData || {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
+  const licenseType = mutation?.data?.Licenses?.[0]?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0] || "ARCHITECT";
 
 
   useEffect(() => {
@@ -56,7 +59,6 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
       });
 
     } catch (err) {
-      console.error(err, "inside ack");
     }
   }, []);
 
@@ -78,7 +80,7 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Card>
           <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
-          {mutation.isSuccess && <CardText>{t("CS_FILE_STAKEHOLDER_RESPONSE")}</CardText>}
+          {mutation.isSuccess && <CardText>{`${t(`TRADELICENSE_TRADETYPE_${licenseType}`)}${t(`CS_FILE_STAKEHOLDER_RESPONSE`)}`}</CardText>}
           {!mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
           {(mutation.isSuccess && !isOpenLinkFlow) && <Link to={{
             pathname: `/digit-ui/citizen/payment/collect/${mutation.data.Licenses[0].businessService}/${mutation.data.Licenses[0].applicationNumber}/${mutation.data.Licenses[0].tenantId}?tenantId=${mutation.data.Licenses[0].tenantId}`,

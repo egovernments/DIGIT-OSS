@@ -1,4 +1,4 @@
-import { CardHeader, Header, Toast, Card, StatusTable, Row, Loader, Menu, PDFSvg, SubmitBar, LinkButton, ActionBar, CheckBox, MultiLink, CardText } from "@egovernments/digit-ui-react-components";
+import { CardHeader, Header, Toast, Card, StatusTable, Row, Loader, Menu, PDFSvg, SubmitBar, LinkButton, ActionBar, CheckBox, MultiLink, CardText, CardSubHeader } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useQueryClient } from "react-query";
@@ -10,6 +10,7 @@ import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import SubOccupancyTable from "../../../../../templates/ApplicationDetails/components/SubOccupancyTable";
 import InspectionReport from "../../../../../templates/ApplicationDetails/components/InspectionReport";
 import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData, getBPAFormData, convertDateToEpoch, printPdf,downloadPdf  } from "../../../utils";
+import cloneDeep from "lodash/cloneDeep";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -26,11 +27,16 @@ const BpaApplicationDetail = () => {
   const [appDetails, setAppDetails] = useState({});
   const [showOptions, setShowOptions] = useState(false);
   const [payments, setpayments] = useState([]);
+  const [sanctionFee, setSanctionFee] = useState([]);
   const [checkBoxVisible, setCheckBoxVisible] = useState(false);
+  const [isEnableLoader, setIsEnableLoader] = useState(false);
+  sessionStorage.removeItem("BPA_SUBMIT_APP");
+
   const history = useHistory();
   sessionStorage.setItem("bpaApplicationDetails", false);
   let isFromSendBack = false;
   const { data: stakeHolderDetails, isLoading: stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
+  const { isLoading: bpaDocsLoading, data: bpaDocs } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["DocTypeMapping"]);
   const { data, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: id });
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(tenantId.split(".")[0], "BPA", ["RiskTypeComputation"]);
   const mutation = Digit.Hooks.obps.useObpsAPI(data?.applicationData?.tenantId, false);
@@ -58,8 +64,39 @@ const BpaApplicationDetail = () => {
     businessService = ["BPA.NC_OC_APP_FEE","BPA.NC_OC_SAN_FEE"];
   }
 
+  useEffect(() => {
+    if(!bpaDocsLoading && !isLoading){
+      let filtredBpaDocs = [];
+      if (bpaDocs?.BPA?.DocTypeMapping) {
+        filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(ob => (ob.WFState == "INPROGRESS" && ob.RiskType == data?.applicationData?.riskType && ob.ServiceType == data?.applicationData?.additionalDetails?.serviceType && ob.applicationType == data?.applicationData?.additionalDetails?.applicationType))
+        let documents = data?.applicationDetails?.filter((ob) => ob.title === "BPA_DOCUMENT_DETAILS_LABEL")[0]?.additionalDetails?.obpsDocuments?.[0]?.values;
+        let RealignedDocument = [];
+        filtredBpaDocs && filtredBpaDocs?.[0]?.docTypes && filtredBpaDocs?.[0]?.docTypes.map((ob) => {
+            documents && documents.filter(x => ob.code === x.documentType.slice(0,x.documentType.lastIndexOf("."))).map((doc) => {
+                RealignedDocument.push(doc);
+            })
+        })
+        const newApplicationDetails = data.applicationDetails.map((obj) => {
+          if(obj.title === "BPA_DOCUMENT_DETAILS_LABEL")
+          {
+            return {...obj, additionalDetails:{obpsDocuments:[{title:"",values:RealignedDocument}]}}
+          }
+          return obj;
+        })
+        data.applicationDetails = [...newApplicationDetails];
+    }
+    }
+  },[bpaDocs,data])
+
 
   useEffect(async() => {
+    if(data && data?.applicationData?.businessService  && businessService[1]/*  && data?.applicationData?.status === "PENDING_SANC_FEE_PAYMENT" */){
+    let res = Digit.PaymentService.fetchBill( data?.applicationData?.tenantId, { consumerCode: data?.applicationData?.applicationNo, businessService: businessService[1] }).then((result) => {
+      result?.Bill[0] && result?.Bill[0]?.totalAmount != 0 && !(sanctionFee.filter((val) => val?.id ===result?.Bill[0].id).length>0) && setSanctionFee([...result?.Bill]);
+    })
+  
+    }
+    if(data?.applicationData?.tenantId && data?.applicationData?.applicationNo)
     businessService.length > 0 && businessService.map((buss,index) => {
       let res = Digit.PaymentService.recieptSearch(data?.applicationData?.tenantId, buss, {consumerCodes: data?.applicationData?.applicationNo}).then((value) => {
 
@@ -70,24 +107,51 @@ const BpaApplicationDetail = () => {
   },[data, businessService]);
 
   useEffect(() => {
+    if(data && data?.applicationData?.businessService && sanctionFee == {})
+    {
+      return <Loader />
+    } 
+  },[sanctionFee])
+
+  useEffect(() => {
     let payval=[]
+    let total = 0;
     payments.length>0 && payments.map((ob) => {
       ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill,index) => {
         payval.push({title:`${bill?.taxHeadCode}_DETAILS`, value:" "});
         payval.push({title:bill?.taxHeadCode, value:`₹${bill?.amount}`});
         payval.push({title:"BPA_STATUS_LABEL", value:"Paid"});
+        total = total + parseInt(bill?.amount);
       })
-      payval.push({title:"BPA_TOT_AMT_PAID", value:`₹${ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.amount}`});
+      if(sanctionFee && sanctionFee.length>0 && !(payval.filter((ob) => ob.title === "BPA_SANC_FEE_LABEL").length>0)){
+          payval.push({title:`BPA_SANC_FEE_DETAILS`, value:" "});
+          payval.push({title:`BPA_SANC_FEE_LABEL`, value:`₹${sanctionFee?.[0]?.billDetails?.[0].amount}`});
+          payval.push({title:"BPA_STATUS_LABEL", value:"Unpaid"});
+      } 
     })
-    payments.length > 0 && !(data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0)&& data.applicationDetails.push({
-      title:"BPA_FEE_DETAILS_LABEL",
+   total > 0 && payval.push({title:"BPA_TOT_AMT_PAID", value:`₹${total}`});
+    payments.length > 0 && (!(data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0))&& data.applicationDetails.push({
+        title:"BPA_FEE_DETAILS_LABEL",
       additionalDetails:{
         inspectionReport:[],
         isFeeDetails: true,
         values:[...payval]
       }
     })
-  },[payments]);
+    if(data && data?.applicationData?.businessService && (data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL")?.[0]?.additionalDetails?.values.length < payval.length ))
+    {
+      var foundIndex = data?.applicationDetails.findIndex(x => x.title === "BPA_FEE_DETAILS_LABEL");
+      data?.applicationDetails.splice(foundIndex,1);
+      data.applicationDetails.push({
+        title:"BPA_FEE_DETAILS_LABEL",
+        additionalDetails:{
+          inspectionReport:[],
+          isFeeDetails: true,
+          values:[...payval]
+        }
+      })
+    }
+  },[payments,sanctionFee]);
 
   useEffect(() => {
     if (data?.applicationData?.status == "CITIZEN_APPROVAL_INPROCESS" || data?.applicationData?.status == "INPROGRESS") setCheckBoxVisible(true);
@@ -189,15 +253,19 @@ const BpaApplicationDetail = () => {
   }
 
   const submitAction = (workflow) => {
+    setIsEnableLoader(true);
     mutation.mutate(
       { BPA: { ...data?.applicationData, workflow } },
       {
         onError: (error, variables) => {
+          setIsEnableLoader(false);
           setShowModal(false);
           setShowToast({ key: "error", action: error?.response?.data?.Errors[0]?.message ? error?.response?.data?.Errors[0]?.message : error });
           setTimeout(closeToast, 5000);
         },
         onSuccess: (data, variables) => {
+          setIsEnableLoader(false);
+          history.replace(`/digit-ui/citizen/obps/response`, { data: data });
           setShowModal(false);
           setShowToast({ key: "success", action: selectedAction });
           setTimeout(closeToast, 5000);
@@ -261,81 +329,96 @@ const BpaApplicationDetail = () => {
       }
   }
 
-  if (isLoading) {
+  if (isLoading || isEnableLoader) {
     return <Loader />
   }
 
   let dowloadOptions = [];
-  if(data?.applicationData?.businessService==="BPA_OC" && data?.applicationData?.status==="APPROVED"){
-    dowloadOptions.push({
-      label: t("BPA_OC_CERTIFICATE"),
-      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"occupancy-certificate"),
-    });
+
+  if (payments?.length > 0) {
+    const bpaPayments = cloneDeep(payments);
+    bpaPayments.forEach(pay => {
+      if (pay?.paymentDetails[0]?.businessService === "BPA.NC_OC_APP_FEE") {
+        dowloadOptions.push({
+          order: 1,
+          label: t("BPA_APP_FEE_RECEIPT"),
+          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: pay, consumerCodes: data?.applicationData?.applicationNo }),
+        });
+      }
+
+      if (pay?.paymentDetails[0]?.businessService === "BPA.NC_OC_SAN_FEE") {
+        dowloadOptions.push({
+          order: 2,
+          label: t("BPA_OC_DEV_PEN_RECEIPT"),
+          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: pay, consumerCodes: data?.applicationData?.applicationNo }),
+        });
+      }
+
+      if (pay?.paymentDetails[0]?.businessService === "BPA.LOW_RISK_PERMIT_FEE") {
+        dowloadOptions.push({
+          order: 1,
+          label: t("BPA_FEE_RECEIPT"),
+          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: pay, consumerCodes: data?.applicationData?.applicationNo }),
+        });
+      }
+
+      if (pay?.paymentDetails[0]?.businessService === "BPA.NC_APP_FEE") {
+        dowloadOptions.push({
+          order: 1,
+          label: t("BPA_APP_FEE_RECEIPT"),
+          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: pay, consumerCodes: data?.applicationData?.applicationNo }),
+        });
+      }
+
+      if (pay?.paymentDetails[0]?.businessService === "BPA.NC_SAN_FEE") {
+        dowloadOptions.push({
+          order: 2,
+          label: t("BPA_SAN_FEE_RECEIPT"),
+          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: payments[1], consumerCodes: data?.applicationData?.applicationNo }),
+        });
+      }
+    })
   }
-  if(data?.comparisionReport){
-    dowloadOptions.push({
-      label: t("BPA_COMPARISON_REPORT_LABEL"),
-      onClick: () => window.open(data?.comparisionReport?.comparisonReport, "_blank"),
-    });
-  }
-  if(data && data?.applicationData?.businessService === "BPA_LOW"  && payments.length>0)
-  {
-    dowloadOptions.push({
-      label: t("BPA_FEE_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
-    });
+
+
+  if(data && data?.applicationData?.businessService === "BPA_LOW" && payments?.length > 0) {
     !(data?.applicationData?.status.includes("REVOCATION")) && dowloadOptions.push({
+      order: 3,
       label: t("BPA_PERMIT_ORDER"),
       onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit-low"),
     });
     (data?.applicationData?.status.includes("REVOCATION")) && dowloadOptions.push({
+      order: 3,
       label: t("BPA_REVOCATION_PDF_LABEL"),
       onClick: () => getRevocationPDFSearch({tenantId: data?.applicationData?.tenantId}),
     });
     
-  }
-  else if(data && data?.applicationData?.businessService === "BPA" && payments.length>0)
-  {
+  } else if(data && data?.applicationData?.businessService === "BPA" && payments?.length > 0) {
+    if(data?.applicationData?.status==="APPROVED"){
     dowloadOptions.push({
-      label: t("BPA_APP_FEE_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
-    });
-    if(payments.length == 2){dowloadOptions.push({
-      label: t("BPA_SAN_FEE_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
-    });
-    dowloadOptions.push({
+      order: 3,
       label: t("BPA_PERMIT_ORDER"),
       onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit"),
-    });
-  }
-  }
-  else
-  {
-    payments.length>0 && dowloadOptions.push({
-      label: t("BPA_APP_FEE_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[0],consumerCodes: data?.applicationData?.applicationNo}),
-    });
-    if(payments.length == 1 && payments[0]?.paymentDetails[0]?.businessService==="BPA.NC_OC_SAN_FEE"){
+    });}
+  } else {
+    if(data?.applicationData?.status==="APPROVED"){
       dowloadOptions.push({
-        label: t("BPA_OC_DEV_PEN_RECEIPT"),
-        onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
+        order: 3,
+        label: t("BPA_OC_CERTIFICATE"),
+        onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"occupancy-certificate"),
       });
     }
-    if(payments.length == 2){dowloadOptions.push({
-      label: t("BPA_SAN_FEE_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
-    });
+  }
+
+  if(data?.comparisionReport){
     dowloadOptions.push({
-      label: t("BPA_PERMIT_ORDER"),
-      onClick: () => getPermitOccupancyOrderSearch({tenantId: data?.applicationData?.tenantId},"buildingpermit"),
-    });
-    dowloadOptions.push({
-      label: t("BPA_OC_DEV_PEN_RECEIPT"),
-      onClick: () => getRecieptSearch({tenantId: data?.applicationData?.tenantId,payments: payments[1],consumerCodes: data?.applicationData?.applicationNo}),
+      order: 4,
+      label: t("BPA_COMPARISON_REPORT_LABEL"),
+      onClick: () => window.open(data?.comparisionReport?.comparisonReport, "_blank"),
     });
   }
-  }
+
+  dowloadOptions.sort(function (a, b) { return a.order - b.order; });
 
   if (workflowDetails?.data?.nextActions?.length > 0) {
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "INITIATE");
@@ -353,10 +436,20 @@ const BpaApplicationDetail = () => {
       </div>
     )
   }
+
+  const results = data?.applicationDetails?.filter(element => {
+    if (Object.keys(element).length !== 0) {
+      return true;
+    }
+    return false;
+  });
+
+  data.applicationDetails = results;
+
   return (
     <Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
-        <Header style={{marginLeft: "0px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+        <Header styles={{fontSize: "32px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
@@ -371,19 +464,23 @@ const BpaApplicationDetail = () => {
           <div>
             {!detail?.isNotAllowed ? <Card key={index} style={!detail?.additionalDetails?.fiReport && detail?.title === "" ? { marginTop: "-30px" } : {}}>
 
-              {!detail?.isTitleVisible ? <CardHeader>{t(detail?.title)}</CardHeader> : null}
+              {!detail?.isTitleVisible ? <CardSubHeader style={{fontSize: "24px"}}>{t(detail?.title)}</CardSubHeader> : null}
               
               <div style={detail?.isBackGroundColor ? { marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "950px", minWidth: "280px" } : {}}>
 
               <StatusTable>
                 {/* to get common values */}
-                {(detail?.isCommon && detail?.values?.length > 0) ? detail?.values?.map((value) => (
-                  <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
-                )) : null}
-
+                {(detail?.isCommon && detail?.values?.length > 0) ? detail?.values?.map((value) => {
+                  if (value?.isUnit) return <Row className="border-none" label={t(value?.title)} text={value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("CS_NA")} />
+                  else return <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
+                }) : null}
                 {/* to get additional common values */}
                 {detail?.additionalDetails?.values?.length > 0 ? detail?.additionalDetails?.values?.map((value) => (
-                    !detail?.isTitleRepeat ? <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} /> : null 
+                    <div>
+                    {!detail?.isTitleRepeat && !value?.isHeader && !value?.isUnit ? <Row className="border-none" label={t(value?.title)} textStyle={value?.value === "Paid"?{color:"darkgreen"}:(value?.value === "Unpaid"?{color:"red"}:{})} text={value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("CS_NA")} /> : null}
+                    {!detail?.isTitleRepeat && value?.isUnit ? <Row className="border-none" label={t(value?.title)} text={value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("CS_NA")} /> : null}
+                    {!detail?.isTitleRepeat && value?.isHeader ? <CardSubHeader style={{fontSize: "20px"}}>{t(value?.title)}</CardSubHeader> : null}
+                    </div>
                 )) : null}
 
                 {/* to get subOccupancyValues values */}
@@ -396,9 +493,9 @@ const BpaApplicationDetail = () => {
                       <Row className="border-none" label={t(scrutiny?.title)} />
                       <LinkButton
                         onClick={() => downloadDiagram(scrutiny?.value)}
-                        label={<PDFSvg style={{ background: "#f6f6f6", padding: "8px" }} width="100px" height="100px" viewBox="0 0 25 25" minWidth="100px" />}>
+                        label={<PDFSvg />}>
                       </LinkButton>
-                      <Row className="border-none" label={t(scrutiny?.text)} labelStyle={{ fontSize: "14px", color: "#505A5F", fontWeight: "400" }} />
+                      <p style={{ marginTop: "8px", marginBottom: "20px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F", fontWeight: "400" }}>{t(scrutiny?.text)}</p>
                     </Fragment>
                   )) : null}
 
@@ -414,10 +511,10 @@ const BpaApplicationDetail = () => {
 
                 {/* to get Document values */}
                 {(detail?.isDocumentDetails && detail?.additionalDetails?.obpsDocuments?.[0]?.values) && (
-                  <Fragment>
-                    <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} />
+                  <div style={{marginTop: "-8px"}}>
+                    {/* <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} /> */}
                     <DocumentDetails documents={getOrderedDocs(detail?.additionalDetails?.obpsDocuments?.[0]?.values)} />
-                  </Fragment>
+                  </div>
                 )}
 
                 {/* to get FieldInspection values */}
@@ -427,7 +524,7 @@ const BpaApplicationDetail = () => {
                 {detail?.additionalDetails?.noc?.length > 0 ? detail?.additionalDetails?.noc.map((nocob, ind) => (
                   <div key={ind} style={{ marginTop: "19px", background: "#FAFAFA", border: "1px solid #D6D5D4", borderRadius: "4px", padding: "8px", lineHeight: "19px", maxWidth: "960px", minWidth: "280px" }}>
                     <StatusTable>
-                      <Row className="border-none" label={t(`${`BPA_${detail?.additionalDetails?.data?.nocType}_HEADER`}`)}></Row>
+                      <Row className="border-none" label={t(`${`BPA_${detail?.additionalDetails?.data?.nocType}_HEADER`}`)} labelStyle={{fontSize: "20px"}}></Row>
                       <Row className="border-none" label={t(`${detail?.values?.[0]?.title}`)} textStyle={{ marginLeft: "10px" }} text={getTranslatedValues(detail?.values?.[0]?.value, detail?.values?.[0]?.isNotTranslated)} />
                       <Row className="border-none" label={t(`${detail?.values?.[1]?.title}`)} textStyle={detail?.values?.[1]?.value == "APPROVED" || detail?.values?.[1]?.value == "AUTO_APPROVED" ? { marginLeft: "10px", color: "#00703C" } : { marginLeft: "10px", color: "#D4351C" }} text={getTranslatedValues(detail?.values?.[1]?.value, detail?.values?.[1]?.isNotTranslated)} />
                       { detail?.values?.[2]?.value ? <Row className="border-none" label={t(`${detail?.values?.[2]?.title}`)} textStyle={{ marginLeft: "10px" }} text={getTranslatedValues(detail?.values?.[2]?.value, detail?.values?.[2]?.isNotTranslated)} /> : null }
@@ -451,7 +548,7 @@ const BpaApplicationDetail = () => {
                 {/* to get Fee values */}
                 {(detail?.isFeeDetails && detail?.additionalDetails?.values?.length > 0) ? detail?.additionalDetails?.permit?.map((value) => (
                   <StatusTable>
-                    <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
+                    <Row className="border-none" label={t(value?.title)} textStyle={value?.value === "Paid"?{color:"darkgreen"}:(value?.value === "Unpaid"?{color:"red"}:{})} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
                   </StatusTable>
                 )) : null}
 
@@ -473,7 +570,7 @@ const BpaApplicationDetail = () => {
                       onChange={() => { setIsTocAccepted(!isTocAccepted); isTocAccepted ? setDisplayMenu(!isTocAccepted) : "" }}
                     />
                   )}
-                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
+                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 1 && (
                     <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}>
                       <div style={{ width: "100%" }}>
                         {displayMenu && workflowDetails?.data?.nextActions ? (
@@ -486,6 +583,21 @@ const BpaApplicationDetail = () => {
                           />
                         ) : null}
                         <SubmitBar style={{ width: "100%" }} disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+                      </div>
+                    </ActionBar>
+                  )}
+                  {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length == 1 && (
+                    <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}>
+                      <div style={{ width: "100%" }}>
+                        <button 
+                        style={{ width: "100%", color: "#FFFFFF", fontSize: "19px" }}
+                        className={`${checkForSubmitDisable(isFromSendBack, isTocAccepted) ? "submit-bar-disabled" : "submit-bar"}`}
+                        disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} 
+                        name={workflowDetails?.data?.nextActions?.[0]?.action} 
+                        value={workflowDetails?.data?.nextActions?.[0]?.action}
+                        onClick={(e) => {onActionSelect(e.target.value)}}>
+                        {t(`WF_BPA_${workflowDetails?.data?.nextActions?.[0]?.action}`)}
+                        </button>
                       </div>
                     </ActionBar>
                   )}

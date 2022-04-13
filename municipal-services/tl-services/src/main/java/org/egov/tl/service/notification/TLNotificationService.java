@@ -265,7 +265,7 @@ public class TLNotificationService {
             });
             List<SMSRequest> smsRequests = util.createSMSRequest(message,mobileNumberToOwner);
         	Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
-        	Map<String, String> mapOfPhnoAndUUIDs = fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getLicenses().get(0).getTenantId());
+        	Map<String, String> mapOfPhnoAndUUIDs = util.fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getLicenses().get(0).getTenantId());
     		if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
     			log.info("UUID search failed!");
     			continue;
@@ -347,7 +347,7 @@ public class TLNotificationService {
 			});
 			List<SMSRequest> smsRequests = util.createSMSRequest(message,mobileNumberToOwner);
 			Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
-			Map<String, String> mapOfPhnoAndUUIDs = fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getLicenses().get(0).getTenantId());
+			Map<String, String> mapOfPhnoAndUUIDs = util.fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getLicenses().get(0).getTenantId());
 			if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
 				log.info("UUID search failed!");
 				continue;
@@ -390,43 +390,9 @@ public class TLNotificationService {
 		}
 
 	}
-    
-    
-    
-    /**
-     * Fetches UUIDs of CITIZENs based on the phone number.
-     * 
-     * @param mobileNumbers
-     * @param requestInfo
-     * @param tenantId
-     * @return
-     */
-    public Map<String, String> fetchUserUUIDs(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
-    	Map<String, String> mapOfPhnoAndUUIDs = new HashMap<>();
-    	StringBuilder uri = new StringBuilder();
-    	uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
-    	Map<String, Object> userSearchRequest = new HashMap<>();
-    	userSearchRequest.put("RequestInfo", requestInfo);
-		userSearchRequest.put("tenantId", tenantId);
-		userSearchRequest.put("userType", "CITIZEN");
-    	for(String mobileNo: mobileNumbers) {
-    		userSearchRequest.put("userName", mobileNo);
-    		try {
-    			Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
-    			if(null != user) {
-    				String uuid = JsonPath.read(user, "$.user[0].uuid");
-    				mapOfPhnoAndUUIDs.put(mobileNo, uuid);
-    			}else {
-        			log.error("Service returned null while fetching user for username - "+mobileNo);
-    			}
-    		}catch(Exception e) {
-    			log.error("Exception while fetching user for username - "+mobileNo);
-    			log.error("Exception trace: ",e);
-    			continue;
-    		}
-    	}
-    	return mapOfPhnoAndUUIDs;
-    }
+
+
+
 
 
 	/**

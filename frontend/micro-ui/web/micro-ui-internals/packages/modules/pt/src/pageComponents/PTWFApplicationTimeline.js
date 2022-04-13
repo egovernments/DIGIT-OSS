@@ -20,7 +20,7 @@ const PTWFApplicationTimeline = (props) => {
         source: props.application?.channel || "",
       };
       return <PTWFCaption data={caption} />;
-    } else if (checkpoint.status === "ACTIVE") {
+    } else if (checkpoint.status === "ACTIVE" && props?.userType === 'citizen') {
       return (
         <div>
           <Link to={`/digit-ui/citizen/pt/property/properties/${props?.application?.propertyId}`}>
@@ -59,13 +59,16 @@ const PTWFApplicationTimeline = (props) => {
     switch (nextAction?.action) {
       case "PAY":
         return (
+          props?.userType === 'citizen'
+          ? (
           <div style={{ marginTop: "1em", bottom: "0px", width: "100%", marginBottom: "1.2em" }}>
             <Link
-              to={{ pathname: `/digit-ui/citizen/payment/collect/${businessService}/${props.id}`, state: { tenantId: props.application.tenantId } }}
+              to={{ pathname: `/digit-ui/citizen/payment/my-bills/${businessService}/${props.id}`, state: { tenantId: props.application.tenantId } }}
             >
               <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
             </Link>
           </div>
+          ) : null
         );
       case "EDIT":
         return (
@@ -90,6 +93,8 @@ const PTWFApplicationTimeline = (props) => {
             </Link>
           </div>
         );
+      default:
+        return null;
     }
   };
 

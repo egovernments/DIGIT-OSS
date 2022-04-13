@@ -3,11 +3,11 @@ import { Switch, useLocation, Link } from "react-router-dom";
 import { PrivateRoute, BreadCrumb } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import Inbox from "./Inbox";
-import NewApplication from "./NewApplication";
-import Search from "./Search";
-import Response from "../Response";
+// import NewApplication from "./NewApplication";
+// import Search from "./Search";
+// import Response from "../Response";
 import ApplicationDetails from "./ApplicationDetails";
-import ReNewApplication from "./ReNewApplication";
+//import ReNewApplication from "./ReNewApplication";
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -20,6 +20,7 @@ const TLBreadCrumb = ({ location }) => {
   const isApplicationDetails = location?.pathname?.includes("tl/application-details");
   const isNewApplication = location?.pathname?.includes("tl/new-application");
   const isResponse = location?.pathname?.includes("tl/response");
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const [search, setSearch] = useState(false);
 
@@ -140,7 +141,7 @@ const TLBreadCrumb = ({ location }) => {
     }
   ];
 
-  return <BreadCrumb crumbs={crumbs} />;
+  return <BreadCrumb style={isMobile?{display:"flex"}:{}}  spanStyle={{maxWidth:"min-content"}} crumbs={crumbs} />;
 };
 
 
@@ -150,6 +151,11 @@ const EmployeeApp = ({ path, url, userType }) => {
   const mobileView = innerWidth <= 640;
 
   const locationCheck = window.location.href.includes("employee/tl/new-application") || window.location.href.includes("employee/tl/response") || window.location.href.includes("employee/tl/application-details") || window.location.href.includes("employee/tl/edit-application-details") || window.location.href.includes("employee/tl/renew-application-details");
+
+  const NewApplication = Digit?.ComponentRegistryService?.getComponent('TLNewApplication');
+  const ReNewApplication = Digit?.ComponentRegistryService?.getComponent('TLReNewApplication');
+  const Response = Digit?.ComponentRegistryService?.getComponent('TLResponse');
+  const Search = Digit?.ComponentRegistryService?.getComponent('TLSearch');
 
   return (
     <Switch>

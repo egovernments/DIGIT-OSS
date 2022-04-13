@@ -2,6 +2,7 @@ import { ActionBar, ApplyFilterBar, CloseSvg, Dropdown, SubmitBar, FilterIcon, L
 import React ,{useMemo, useState}from "react";
 import { useTranslation } from "react-i18next";
 import Status from "./Status";
+import cloneDeep from "lodash/cloneDeep";
 
 const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClose, removeParam, statuses, ...props }) => {
   const { t } = useTranslation();
@@ -10,28 +11,44 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
   
   const { data: applicationTypes, isLoading: loadingApplicationTypes } = Digit.Hooks.obps.SearchMdmsTypes.useApplicationTypes(tenantId);
   const availableBusinessServicesOptions = Digit.Hooks.obps.useBusinessServiceBasedOnServiceType({applicationType: _searchParams?.applicationType})
-  const filteredStatus = useMemo(() => _searchParams?.applicationType?.length > 0 && _searchParams.businessService ? statuses?.filter(e => e.businessservice === _searchParams.businessService) : null ,[statuses, _searchParams.businessService, _searchParams?.applicationType])
+  const filteredStatus = useMemo(() => _searchParams?.applicationType?.length > 0 && _searchParams.businessService ? statuses?.filter(e => {
+    let value = cloneDeep(_searchParams.businessService);
+    if (value == "BPA_OC_LOW") value = "BPA_OC"
+    return e.businessservice === value;
+  }) : null ,[statuses, _searchParams.businessService, _searchParams?.applicationType])
   
   const onStatusChange = (e, type) => {
     if (e.target.checked) setSearchParams({..._searchParams, applicationStatus: [..._searchParams?.applicationStatus, type] });
-    else setSearchParams({..._searchParams, applicationStatus: _searchParams?.applicationStatus.filter((option) => type.name !== option.name) });
+    else setSearchParams({..._searchParams, applicationStatus: _searchParams?.applicationStatus.filter((option) => type !== option) });
   };
 
-  const handleChange = (option) => {
-    setSearchParams(old=>({...old,...option}));
+  const handleChange = (option, typeOfValue) => {
+    if (typeOfValue == "APPLICATION_TYPE") setSearchParams({ ...searchParams, applicationType: option?.applicationType, applicationStatus: [], businessService: [] });
+    if (typeOfValue == "RISK_TYPE") setSearchParams({ ...searchParams, applicationType: _searchParams?.applicationType, applicationStatus: [], businessService: option?.businessService });
   };
-  const clearAll = () => {setSearchParams({applicationType: [], applicationStatus:[]});
-  onFilterChange({});
+
+
+  const clearAll = () => {
+  setSearchParams({...searchParams, applicationType: [], applicationStatus:[], businessService: []});
+  onFilterChange({applicationStatus:[], applicationType: [], businessService: []});
 };
 
+const onRiskTypeChange = () => {
+  setSearchParams({..._searchParams, applicationStatus:[]});
+}
   return (
     <React.Fragment>
       <div className="filter">
         <div className="filter-card">
+        {props.type === "mobile" && (
+            <span onClick={onClose} className="filter-card-close-button">
+              <CloseSvg />
+            </span>
+          )}
           <div className="heading">
             <div className="filter-label">
               <FilterIcon />
-              {t("ES_COMMON_FILTER_BY")}:
+              {t("ES_COMMON_FILTER_BY")}
               <span className="clear-search" onClick={clearAll} style={{ border: "1px solid #e0e0e0", padding: "6px" }}>
                 <svg width="17" height="17" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -41,36 +58,24 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
                 </svg>
               </span>
             </div>
-            {props.type === "mobile" && (
-              <span onClick={onClose}>
-                <CloseSvg />
-              </span>
-            )}
           </div>
           {loadingApplicationTypes ? <Loader/> : <div>
-            <div className="filter-label">{t("BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL")}</div>
-            {/* <Dropdown t={t} option={applicationTypes} selected={_searchParams?.applicationType} optionKey={"i18nKey"} select={(arg) => handleChange({ applicationType: arg })} /> */}
-            {applicationTypes.map(applicationType => {
-                return <CheckBox
-                  key={applicationType.code}
-                  onChange={(e) =>{
-                    e.target.checked ?
-                    handleChange({applicationType : [..._searchParams?.applicationType, applicationType]}) 
-                    : setSearchParams({applicationType : _searchParams?.applicationType.filter( item => item.code !== applicationType.code), applicationStatus:[]})
-                  }}
-                  checked={_searchParams?.applicationType?.filter(e => e.code === applicationType.code)[0]}
-                  label={t(applicationType?.i18nKey)}
-                />  
-              })}
-          </div>}
-          {/* {filteredServiceTypes?.length > 0 ? loadingServiceTypes ? <Loader/> : <div>
-            <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
-            <Dropdown t={t} option={filteredServiceTypes} optionKey={"i18nKey"} selected={_searchParams?.serviceType} select={(arg) => handleChange({ serviceType: arg })} />
-          </div> : null} */}
-          {availableBusinessServicesOptions?.length > 0 ? <div>
-            <div className="filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
+            <div className="filter-label sub-filter-label">{t("BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL")}</div>
             <RadioButtons
-                onSelect={(e) => handleChange({businessService: e.code})}
+                onSelect={(e) => handleChange({applicationType: e.code}, "APPLICATION_TYPE")}
+                selectedOption={applicationTypes.filter((option) => option.code === _searchParams?.applicationType)[0]}
+                optionsKey="i18nKey"
+                name="applicationType"
+                options={applicationTypes}
+              />
+          </div> }
+          {availableBusinessServicesOptions?.length > 0 ? <div>
+            <div className="filter-label sub-filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
+            <RadioButtons
+                onSelect={(e) => {
+                  onRiskTypeChange({businessService: e.code});
+                  handleChange({businessService: e.code}, "RISK_TYPE")}
+                }
                 selectedOption={availableBusinessServicesOptions.filter((option) => option.code === _searchParams?.businessService)[0]}
                 optionsKey="i18nKey"
                 name="businessService"
@@ -85,7 +90,11 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
               <SubmitBar
                 // disabled={status?.length == mdmsStatus?.length&& service?.code == defaultService}
                 onSubmit={() => {
-                  onFilterChange({applicationStatus: _searchParams?.applicationStatus });
+                  onFilterChange({
+                    applicationStatus: _searchParams?.applicationStatus ? _searchParams?.applicationStatus  : {},
+                    applicationType: _searchParams?.applicationType ? _searchParams?.applicationType : {},
+                    businessService: _searchParams?.businessService ? _searchParams?.businessService : {},
+                  });
                   props?.onClose?.();
                 }}
                 label={t("ACTION_TEST_APPLY")}
@@ -102,7 +111,11 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, onClo
               buttonLink={t("ES_COMMON_FILTER")}
               onClear={clearAll}
               onSubmit={() => {
-                onFilterChange({applicationStatus: _searchParams?.applicationStatus });
+                onFilterChange({
+                  applicationStatus: _searchParams?.applicationStatus ? _searchParams?.applicationStatus  : {},
+                  applicationType: _searchParams?.applicationType ? _searchParams?.applicationType : {},
+                  businessService: _searchParams?.businessService ? _searchParams?.businessService : {},
+                });
                 if (props.type === "mobile") {
                   onClose();
                 }

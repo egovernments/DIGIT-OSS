@@ -38,12 +38,27 @@ const refObj = (tenantId, filters) => {
       key: "consumerCode",
       label: "UC_CHALLAN_NO",
     },
+    ws: {
+      searchFn: () => advtApplications(tenantId, filters),
+      key: "consumerCode",
+      label: "WS_MYCONNECTIONS_CONSUMER_NO",
+    },
+    sw: {
+      searchFn: () => advtApplications(tenantId, filters),
+      key: "consumerCode",
+      label: "WS_MYCONNECTIONS_CONSUMER_NO",
+    },
     TL: {
       searchFn: () => tlApplications(tenantId, filters),
       key: "consumerCode",
       label: "REFERENCE_NO",
     },
     BPAREG: {
+      searchFn: () => tlApplications(tenantId, filters),
+      key: "consumerCode",
+      label: "REFERENCE_NO",
+    },
+    BPA: {
       searchFn: () => tlApplications(tenantId, filters),
       key: "consumerCode",
       label: "REFERENCE_NO",
@@ -62,6 +77,10 @@ export const useApplicationsForBusinessServiceSearch = ({ tenantId, businessServ
   if (window.location.href.includes("BPAREG")) {
     _key = businessService
   }
+  if (window.location.href.includes("BPA.")) {
+    _key = "BPA"
+  }
+
   /* key from application ie being used as consumer code in bill */
   const { searchFn, key, label } = refObj(tenantId, filters)[_key];
   const applications = useQuery(["applicationsForBillDetails", { tenantId, businessService, filters, searchFn }], searchFn, {

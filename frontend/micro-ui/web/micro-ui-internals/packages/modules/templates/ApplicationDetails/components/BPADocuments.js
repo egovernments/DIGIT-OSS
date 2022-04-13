@@ -192,13 +192,13 @@ function SelectDocument({
 
     return (
         <div style={{ marginBottom: "24px", maxWidth: "950px", minWidth: "280px", background: "#FAFAFA", borderRadius: "4px", border: "1px solid #D6D5D4", padding: "8px" }}>
-            <CardSubHeader style={{ marginBottom: "8px", paddingBottom: "9px", color: "#0B0C0C", fontSize: "16px", lineHeight: "19px" }}>{`${t(doc?.code)}:`}</CardSubHeader>
+            <CardSubHeader style={{ marginBottom: "8px", paddingBottom: "9px", color: "#0B0C0C", fontSize: "16px", lineHeight: "19px" }}>{`${t(doc?.code)}`}</CardSubHeader>
             {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
             {
                 checkEnablingDocs ?
                     <div style={{ marginTop: "20px" }}>
-                        <LabelFieldPair>
-                            <CardLabel>{doc?.required ? `${t(doc?.code)}* :` : `${t(doc?.code)}:`}</CardLabel>
+                        <LabelFieldPair style={{width: "100%"}}>
+                            <CardLabel style={{marginTop:"-10px", width :"100%"}}>{doc?.required ? `${t(doc?.code)}* ` : `${t(doc?.code)}`}</CardLabel>
                             <Dropdown
                                 className="form-field"
                                 t={t}
@@ -207,12 +207,12 @@ function SelectDocument({
                                 selected={selectedDocument}
                                 optionKey="i18nKey"
                                 select={handleSelectDocument}
-                                style={{width: "70%"}}
+                                style={{width: "100%"}}
                             />
                         </LabelFieldPair>
-                        <LabelFieldPair>
-                            <CardLabel className="card-label-smaller"></CardLabel>
-                            <div className="field"  style={{width: "70%"}}>
+                        <LabelFieldPair style={{width: "100%"}}>
+                            <CardLabel className="card-label-smaller" style={{ width :"100%"}}></CardLabel>
+                            <div className="field"  style={{width: "100%"}}>
                                 <MultiUploadWrapper
                                     module="BPA"
                                     tenantId={tenantId}

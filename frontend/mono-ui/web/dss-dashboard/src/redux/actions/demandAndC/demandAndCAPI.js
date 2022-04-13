@@ -42,7 +42,7 @@ export default class DashboardAPI extends API {
         return {
             headers: {
                 'Content-Type': 'application/json',
-                'auth-token': `${localStorage.getItem('Employee.token')}`
+                'auth-token': `${getToken()}`
             }
         }
     }

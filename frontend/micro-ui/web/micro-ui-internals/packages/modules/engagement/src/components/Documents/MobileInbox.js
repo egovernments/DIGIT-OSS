@@ -20,8 +20,8 @@ const MobileInbox = ({ data, t, title, iconName, links, searchFields, searchPara
           [t("DOCUMENTS_CATEGORY_CARD_LABEL")]: t(`${document?.category}`),
           [t("CE_TABLE_DOCUMENT_LINK")]: 
           <div className="mobileInbox_attachments">
-          { document?.filestoreId ? <div className="link" onClick={(ev)=> {ev.stopPropagation(); openUploadedDocument(document.filestoreId, document.name)}}>{t('CE_DOCUMENT_VIEW_LINK')}</div> : null}
-          { document?.documentLink ? <div className="link" onClick={(ev)=> {ev.stopPropagation(); openDocumentLink(document.documentLink, document.name)}}>{t('CE_DOCUMENT_OPEN_LINK')}</div> : null}
+          { document?.filestoreId ? <div className="link" onClick={(ev)=> {openUploadedDocument(document.filestoreId, document.name)}}>{t('CE_DOCUMENT_VIEW_LINK')}</div> : null}
+          { document?.documentLink ? <div className="link" onClick={(ev)=> { openDocumentLink(document.documentLink, document.name)}}>{t('CE_DOCUMENT_OPEN_LINK')}</div> : null}
           </div>
           , 
           [t("CE_TABLE_DOCUMENT_POSTED_BY")]: document?.postedBy

@@ -1,8 +1,8 @@
-import { StatusTable, Row, PDFSvg, CardLabel } from "@egovernments/digit-ui-react-components";
+import { StatusTable, Row, PDFSvg, CardLabel, CardSubHeader } from "@egovernments/digit-ui-react-components";
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
-const ScruntinyDetails = ({ scrutinyDetails }) => {
+const ScruntinyDetails = ({ scrutinyDetails, paymentsList=[] }) => {
   const { t } = useTranslation();
   let count = 0;
   const getTextValues = (data) => {
@@ -17,7 +17,9 @@ const ScruntinyDetails = ({ scrutinyDetails }) => {
         <StatusTable>
           <div>
             {scrutinyDetails?.values?.map((value, index) => {
-              return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:{}} key={`${value.title}:`} label={`${t(`${value.title}`)}:`} text={getTextValues(value)} />
+              if (value?.isUnit) return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:(value?.value === "Unpaid"?{color:"red"}:{})} key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.value ? `${getTextValues(value)} ${t(value?.isUnit)}` : t("NA")} labelStyle={value?.isHeader ? {fontSize: "20px"} : {}}/>
+              else if (value?.isHeader && !value?.isUnit) return <CardSubHeader style={{fontSize: "20px", paddingBottom: "10px"}}>{t(value?.title)}</CardSubHeader>
+              else return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:(value?.value === "Unpaid"?{color:"red"}:{})} key={`${value.title}`} label={`${t(`${value.title}`)}`} text={getTextValues(value)} labelStyle={value?.isHeader ? {fontSize: "20px"} : {}}/>
             })}
             {scrutinyDetails?.permit?.map((value,ind) => {
               return <CardLabel style={{fontWeight:"400"}}>{value?.title}</CardLabel>
@@ -27,7 +29,7 @@ const ScruntinyDetails = ({ scrutinyDetails }) => {
             {scrutinyDetails?.scruntinyDetails?.map((report, index) => {
               return (
                 <Fragment>
-                  <Row className="border-none" label={`${t(report?.title)}:`} />
+                  <Row className="border-none" label={`${t(report?.title)}`} labelStyle={{width:"150%"}} />
                   <a href={report?.value}> <PDFSvg /> </a>
                   <p style={{ margin: "8px 0px", fontWeight: "bold", fontSize: "16px", lineHeight: "19px", color: "#505A5F" }}>{t(report?.text)}</p>
                 </Fragment>

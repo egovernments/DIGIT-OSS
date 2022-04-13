@@ -30,7 +30,7 @@ const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: s
 
   const goNext = () => {
     let data = formData;
-    data && data?.FieldReports && data?.FieldReports.length > 0 && documents.length > 0 ? data.FieldReports[indexx] = { ...data.FieldReports[indexx], Documents: documents } : "";
+    data && data?.FieldReports && data?.FieldReports.length > 0 && documents?.length > 0 ? data.FieldReports[indexx] = { ...data.FieldReports[indexx], Documents: documents } : "";
     data && data?.FieldReports && data?.FieldReports.length > 0 && documents.length > 0 ? setFieldReports(data.FieldReports) : "";
   };
 
@@ -46,7 +46,7 @@ const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: s
     <div>
       {finalTlDocumentsList?.map((document, index) => {
         return (
-          <div style={{ paddingLeft: "16px" }}>
+          <div >
           <SelectDocument
             key={index}
             document={document}
@@ -62,6 +62,7 @@ const OBPSDocumentsEmp = ({ t, config, onSelect, userType, formData, setError: s
             clearFormErrors={clearFormErrors}
             config={config}
             formState={formState}
+            stateId={stateId}
           />
           </div>
         );
@@ -86,7 +87,8 @@ function SelectDocument({
   formState,
   fromRawData,
   key,
-  id
+  id,
+  stateId={stateId}
 }) {
   const filteredDocument = documents?.filter((item) => item?.documentType);
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -99,6 +101,7 @@ function SelectDocument({
   function selectfile(e, key) {
     e && setSelectedDocument({ documentType: key });
     e && setFile(e.file);
+    e && setUploadedFile(e?.fileStoreId?.fileStoreId);
   }
 
   function getData(e, key) {
@@ -144,6 +147,7 @@ function SelectDocument({
           return prev;
         }
         const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile);
+        const filteredDocumentByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.documentType);
         if (selectedDocument?.id) {
           return [
             ...filteredDocumentsByFileStoreId,
@@ -154,15 +158,20 @@ function SelectDocument({
               id: selectedDocument?.id
             },
           ];
-        } else {
-          return [
-            ...filteredDocumentsByFileStoreId,
+        } 
+        else{
+        let UniqueDocTypeTempArray =[];
+        newArray.map((ob) => {
+          UniqueDocTypeTempArray.push( 
+            //...filteredDocumentsByFileStoreId,
             {
               documentType: selectedDocument?.documentType,
-              fileStoreId: uploadedFile,
-              tenantId: tenantId
+              fileStoreId: ob?.fileStoreId?.fileStoreId,
+              tenantId: ob?.fileStoreId?.tenantId,
             },
-          ];
+          );
+          })
+          return [...filteredDocumentByDocumentType, ...UniqueDocTypeTempArray];
         }
       });
     }
@@ -181,29 +190,28 @@ function SelectDocument({
     }
   }, [uploadedFile, selectedDocument, isHidden]);
 
-  useEffect(() => {
-    (async () => {
-      setError(null);
-      if (file) {
-        if (file.size >= 5242880) {
-          setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
-        } else {
-          try {
-            setUploadedFile(null);
-            const response = await Digit.UploadServices.Filestorage("TL", file, Digit.ULBService.getStateId());
-            if (response?.data?.files?.length > 0) {
-              setUploadedFile(response?.data?.files[0]?.fileStoreId);
-            } else {
-              setError(t("CS_FILE_UPLOAD_ERROR"));
-            }
-          } catch (err) {
-            console.error("Modal -> err ", err);
-            setError(t("CS_FILE_UPLOAD_ERROR"));
-          }
-        }
-      }
-    })();
-  }, [file]);
+  // useEffect(() => {
+  //   (async () => {
+  //     setError(null);
+  //     if (file) {
+  //       if (file.size >= 5242880) {
+  //         setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+  //       } else {
+  //         try {
+  //           setUploadedFile(null);
+  //           const response = await Digit.UploadServices.Filestorage("TL", file, Digit.ULBService.getStateId());
+  //           if (response?.data?.files?.length > 0) {
+  //             setUploadedFile(response?.data?.files[0]?.fileStoreId);
+  //           } else {
+  //             setError(t("CS_FILE_UPLOAD_ERROR"));
+  //           }
+  //         } catch (err) {
+  //           setError(t("CS_FILE_UPLOAD_ERROR"));
+  //         }
+  //       }
+  //     }
+  //   })();
+  // }, [file]);
 
   useEffect(() => {
     if (doc && formData?.documents?.documents?.length > 0) {
@@ -217,16 +225,16 @@ function SelectDocument({
   }, [doc])
   return (
     <div style={{ marginBottom: "24px" }}>
-      <LabelFieldPair>
-        <CardLabel className="card-label-smaller">
+      <LabelFieldPair style={{width :"100%"}}>
+        <CardLabel className="card-label-smaller" style={{width :"100%"}}>
           {doc?.documentType != "OLDLICENCENO" ?
-            `${t(`${doc?.documentType.replaceAll(".", "_")}`)}*:` :
-            `${t(`${doc?.documentType.replaceAll(".", "_")}`)}:`}
+            `${t(`${doc?.documentType.replaceAll(".", "_")}`)}*` :
+            `${t(`${doc?.documentType.replaceAll(".", "_")}`)}`}
         </CardLabel>
-        <div className="field" style={{ width: "70%" }}>
+        <div className="field" style={{ width: "100%" }}>
           <MultiUploadWrapper
             module="BPA"
-            tenantId={tenantId}
+            tenantId={stateId}
             getFormState={e => getData(e, doc?.documentType.replaceAll(".", "_"))}
             t={t}
           />

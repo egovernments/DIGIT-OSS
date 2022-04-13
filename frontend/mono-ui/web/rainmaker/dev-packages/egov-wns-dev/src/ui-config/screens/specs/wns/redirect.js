@@ -27,7 +27,6 @@ const getSewerageDetails = async (queryObject, dispatch) => {
         }
         return response;
     } catch (error) {
-        console.log(error)
     }
 }
 
@@ -48,7 +47,6 @@ const getWaterDetails = async (queryObject, dispatch) => {
             dispatch(setRoute(`/wns/connection-details?connectionNumber=${get(response, 'WaterConnection[0].connectionNo', '')}&tenantId=${get(response, 'WaterConnection[0].tenantId', '')}&service=${serviceConst.WATER}&connectionType=${get(response, 'WaterConnection[0].connectionType', '')}`))
         } return response;
     } catch (error) {
-        console.log(error)
     }
 }
 const header = getCommonHeader({

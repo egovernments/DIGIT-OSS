@@ -10,18 +10,26 @@
 .heading-m {
   @apply font-bold text-text-primary text-heading-m ml-md pt-sm;
 }
+.BPAheading-m{
+  margin-left:22px;
+}
 
 .break-line {
   @apply border-border my-lg;
 }
 
-.employee-home-footer{
+.employee-home-footer {
+  @apply flex  h-10 bg-grey-bg pb-md pt-sm justify-center w-full;
+  img {
+    height: 100%;
+  }
+}
+.employee-login-home-footer{
   @apply flex fixed bottom-0 h-10 bg-grey-bg pb-md pt-sm justify-center w-full;
   img{
     @apply ml-sm
   }
 }
-
 .fieldInspectionWrapper{
   border: 1px solid #d6d5d4;
   padding: 16px;
@@ -45,6 +53,9 @@
   }
   .heading-m {
     @apply text-heading-m-dt;
+  }
+  .BPAheading-m{
+    margin-left:22px;
   }
   .break-line {
     margin-top: 40px;

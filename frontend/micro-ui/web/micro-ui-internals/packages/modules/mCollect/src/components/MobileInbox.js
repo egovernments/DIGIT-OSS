@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 const MobileInbox = ({
   data,
+  defaultSearchParams={},
   isLoading,
   isSearch,
   searchFields,
@@ -61,6 +62,10 @@ const MobileInbox = ({
     {
       Header: t("UC_DUE_DATE"),
       mobileCell: (original) => GetMobCell(original?.dueDate === "NA" ? t("CS_NA") : convertEpochToDate(original?.dueDate)),
+    },
+    {
+      Header: t("UC_RECIEPT_NUMBER_LABEL"),
+      mobileCell: (original) => GetMobCell(original?.receiptNumber === null ? t("CS_NA") : original?.receiptNumber),
     },
     {
       Header: t("UC_TOTAL_AMOUNT"),
@@ -147,6 +152,7 @@ const MobileInbox = ({
           <ApplicationCard
             t={t}
             data={getData()}
+            defaultSearchParams={defaultSearchParams}
             onFilterChange={onFilterChange}
             isLoading={isLoading}
             isSearch={isSearch}

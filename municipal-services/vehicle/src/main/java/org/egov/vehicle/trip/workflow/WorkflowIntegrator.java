@@ -8,7 +8,6 @@ import java.util.Map;
 import org.egov.tracer.model.CustomException;
 import org.egov.vehicle.config.VehicleConfiguration;
 import org.egov.vehicle.trip.util.VehicleTripConstants;
-import org.egov.vehicle.trip.web.model.VehicleTrip;
 import org.egov.vehicle.trip.web.model.VehicleTripRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,71 +77,141 @@ public class WorkflowIntegrator {
 	 * @param request
 	 */
 	public void callWorkFlow(VehicleTripRequest request) {
-		String wfTenantId = request.getVehicleTrip().getTenantId();
-		JSONArray array = new JSONArray();
-		VehicleTrip trip = request.getVehicleTrip();
-		JSONObject obj = new JSONObject();
-		obj.put(BUSINESSIDKEY, trip.getApplicationNo());
-		obj.put(TENANTIDKEY, wfTenantId);
-		obj.put(BUSINESSSERVICEKEY, VehicleTripConstants.FSM_VEHICLE_TRIP_BusinessService);
-		obj.put(MODULENAMEKEY, MODULENAMEVALUE);
-		obj.put(ACTIONKEY, request.getWorkflow().getAction());
-		obj.put(COMMENTKEY, request.getWorkflow().getComments());
 		
-		if (!CollectionUtils.isEmpty(request.getWorkflow().getAssignes())) {
-			List<Map<String, String>> uuidmaps = new LinkedList<>();
-			request.getWorkflow().getAssignes().forEach(assignee -> {
-				Map<String, String> uuidMap = new HashMap<>();
-				uuidMap.put(UUIDKEY, assignee);
-				uuidmaps.add(uuidMap);
-			});
-			obj.put(ASSIGNEEKEY, uuidmaps);
-		}
-		
-		obj.put(DOCUMENTSKEY, request.getWorkflow().getVerificationDocuments());
-		array.add(obj);
-		JSONObject workFlowRequest = new JSONObject();
-		workFlowRequest.put(REQUESTINFOKEY, request.getRequestInfo());
-		workFlowRequest.put(WORKFLOWREQUESTARRAYKEY, array);
-		String response = null;
-		try {
-			response = rest.postForObject(config.getWfHost().concat(config.getWfTransitionPath()), workFlowRequest,
-					String.class);
-		} catch (HttpClientErrorException e) {
+		request.getVehicleTrip().forEach(trip-> {
+			
+			String wfTenantId = trip.getTenantId();
+			JSONArray array = new JSONArray();
+			JSONObject obj = new JSONObject();
+			obj.put(BUSINESSIDKEY, trip.getApplicationNo());
+			obj.put(TENANTIDKEY, wfTenantId);
+			obj.put(BUSINESSSERVICEKEY, VehicleTripConstants.FSM_VEHICLE_TRIP_BusinessService);
+			obj.put(MODULENAMEKEY, MODULENAMEVALUE);
+			obj.put(ACTIONKEY, request.getWorkflow().getAction());
+			obj.put(COMMENTKEY, request.getWorkflow().getComments());
+			
+			if (!CollectionUtils.isEmpty(request.getWorkflow().getAssignes())) {
+				List<Map<String, String>> uuidmaps = new LinkedList<>();
+				request.getWorkflow().getAssignes().forEach(assignee -> {
+					Map<String, String> uuidMap = new HashMap<>();
+					uuidMap.put(UUIDKEY, assignee);
+					uuidmaps.add(uuidMap);
+				});
+				obj.put(ASSIGNEEKEY, uuidmaps);
+			}
+			
+			obj.put(DOCUMENTSKEY, request.getWorkflow().getVerificationDocuments());
+			array.add(obj);
+			JSONObject workFlowRequest = new JSONObject();
+			workFlowRequest.put(REQUESTINFOKEY, request.getRequestInfo());
+			workFlowRequest.put(WORKFLOWREQUESTARRAYKEY, array);
+			String response = null;
+			try {
+				response = rest.postForObject(config.getWfHost().concat(config.getWfTransitionPath()), workFlowRequest,
+						String.class);
+			} catch (HttpClientErrorException e) {
+
+				/*
+				 * extracting message from client error exception
+				 */
+				DocumentContext responseContext = JsonPath.parse(e.getResponseBodyAsString());
+				List<Object> errros = null;
+				try {
+					errros = responseContext.read("$.Errors");
+				} catch (PathNotFoundException pnfe) {
+					log.error(VehicleTripConstants.EG_FSM_WF_ERROR_KEY_NOT_FOUND,
+							" Unable to read the json path in error object : " + pnfe.getMessage());
+					throw new CustomException(VehicleTripConstants.EG_FSM_WF_ERROR_KEY_NOT_FOUND,
+							" Unable to read the json path in error object : " + pnfe.getMessage());
+				}
+				throw new CustomException(VehicleTripConstants.EG_WF_ERROR, errros.toString());
+			} catch (Exception e) {
+				throw new CustomException(VehicleTripConstants.EG_WF_ERROR,
+						" Exception occured while integrating with workflow : " + e.getMessage());
+			}
 
 			/*
-			 * extracting message from client error exception
+			 * on success result from work-flow read the data and set the status
+			 * back to fsm object
 			 */
-			DocumentContext responseContext = JsonPath.parse(e.getResponseBodyAsString());
-			List<Object> errros = null;
-			try {
-				errros = responseContext.read("$.Errors");
-			} catch (PathNotFoundException pnfe) {
-				log.error(VehicleTripConstants.EG_FSM_WF_ERROR_KEY_NOT_FOUND,
-						" Unable to read the json path in error object : " + pnfe.getMessage());
-				throw new CustomException(VehicleTripConstants.EG_FSM_WF_ERROR_KEY_NOT_FOUND,
-						" Unable to read the json path in error object : " + pnfe.getMessage());
-			}
-			throw new CustomException(VehicleTripConstants.EG_WF_ERROR, errros.toString());
-		} catch (Exception e) {
-			throw new CustomException(VehicleTripConstants.EG_WF_ERROR,
-					" Exception occured while integrating with workflow : " + e.getMessage());
-		}
+			DocumentContext responseContext = JsonPath.parse(response);
+			List<Map<String, Object>> responseArray = responseContext.read(PROCESSINSTANCESJOSNKEY);
+			Map<String, String> idStatusMap = new HashMap<>();
+			responseArray.forEach(object -> {
 
-		/*
-		 * on success result from work-flow read the data and set the status
-		 * back to fsm object
-		 */
-		DocumentContext responseContext = JsonPath.parse(response);
-		List<Map<String, Object>> responseArray = responseContext.read(PROCESSINSTANCESJOSNKEY);
-		Map<String, String> idStatusMap = new HashMap<>();
-		responseArray.forEach(object -> {
+				DocumentContext instanceContext = JsonPath.parse(object);
+				idStatusMap.put(instanceContext.read(BUSINESSIDJOSNKEY), instanceContext.read(STATUSJSONKEY));
+			});
+			// setting the status back to fsm object from wf response
+			trip.setApplicationStatus(idStatusMap.get(trip.getApplicationNo()));
 
-			DocumentContext instanceContext = JsonPath.parse(object);
-			idStatusMap.put(instanceContext.read(BUSINESSIDJOSNKEY), instanceContext.read(STATUSJSONKEY));
 		});
-		// setting the status back to fsm object from wf response
-		trip.setApplicationStatus(idStatusMap.get(trip.getApplicationNo()));
+		
+	//		String wfTenantId = request.getVehicleTrip().getTenantId();
+	//		JSONArray array = new JSONArray();
+	//		VehicleTrip trip = request.getVehicleTrip();
+	//		JSONObject obj = new JSONObject();
+	//		obj.put(BUSINESSIDKEY, trip.getApplicationNo());
+	//		obj.put(TENANTIDKEY, wfTenantId);
+	//		obj.put(BUSINESSSERVICEKEY, VehicleTripConstants.FSM_VEHICLE_TRIP_BusinessService);
+	//		obj.put(MODULENAMEKEY, MODULENAMEVALUE);
+	//		obj.put(ACTIONKEY, request.getWorkflow().getAction());
+	//		obj.put(COMMENTKEY, request.getWorkflow().getComments());
+	//		
+	//		if (!CollectionUtils.isEmpty(request.getWorkflow().getAssignes())) {
+	//			List<Map<String, String>> uuidmaps = new LinkedList<>();
+	//			request.getWorkflow().getAssignes().forEach(assignee -> {
+	//				Map<String, String> uuidMap = new HashMap<>();
+	//				uuidMap.put(UUIDKEY, assignee);
+	//				uuidmaps.add(uuidMap);
+	//			});
+	//			obj.put(ASSIGNEEKEY, uuidmaps);
+	//		}
+	//		
+	//		obj.put(DOCUMENTSKEY, request.getWorkflow().getVerificationDocuments());
+	//		array.add(obj);
+	//		JSONObject workFlowRequest = new JSONObject();
+	//		workFlowRequest.put(REQUESTINFOKEY, request.getRequestInfo());
+	//		workFlowRequest.put(WORKFLOWREQUESTARRAYKEY, array);
+	//		String response = null;
+	//		try {
+	//			response = rest.postForObject(config.getWfHost().concat(config.getWfTransitionPath()), workFlowRequest,
+	//					String.class);
+	//		} catch (HttpClientErrorException e) {
+	//
+	//			/*
+	//			 * extracting message from client error exception
+	//			 */
+	//			DocumentContext responseContext = JsonPath.parse(e.getResponseBodyAsString());
+	//			List<Object> errros = null;
+	//			try {
+	//				errros = responseContext.read("$.Errors");
+	//			} catch (PathNotFoundException pnfe) {
+	//				log.error(VehicleTripConstants.EG_FSM_WF_ERROR_KEY_NOT_FOUND,
+	//						" Unable to read the json path in error object : " + pnfe.getMessage());
+	//				throw new CustomException(VehicleTripConstants.EG_FSM_WF_ERROR_KEY_NOT_FOUND,
+	//						" Unable to read the json path in error object : " + pnfe.getMessage());
+	//			}
+	//			throw new CustomException(VehicleTripConstants.EG_WF_ERROR, errros.toString());
+	//		} catch (Exception e) {
+	//			throw new CustomException(VehicleTripConstants.EG_WF_ERROR,
+	//					" Exception occured while integrating with workflow : " + e.getMessage());
+	//		}
+	//
+	//		/*
+	//		 * on success result from work-flow read the data and set the status
+	//		 * back to fsm object
+	//		 */
+	//		DocumentContext responseContext = JsonPath.parse(response);
+	//		List<Map<String, Object>> responseArray = responseContext.read(PROCESSINSTANCESJOSNKEY);
+	//		Map<String, String> idStatusMap = new HashMap<>();
+	//		responseArray.forEach(object -> {
+	//
+	//			DocumentContext instanceContext = JsonPath.parse(object);
+	//			idStatusMap.put(instanceContext.read(BUSINESSIDJOSNKEY), instanceContext.read(STATUSJSONKEY));
+	//		});
+	//		// setting the status back to fsm object from wf response
+	//		trip.setApplicationStatus(idStatusMap.get(trip.getApplicationNo()));
 
 	}
 }

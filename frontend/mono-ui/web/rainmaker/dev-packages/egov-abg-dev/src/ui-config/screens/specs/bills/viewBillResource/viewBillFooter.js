@@ -9,7 +9,6 @@ import get from "lodash/get";
 import { ifUserRoleExists, validateFields } from "../../utils";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 
-
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/inbox" : "/inbox";
   return redirectionURL;
@@ -20,7 +19,10 @@ const getCommonApplyFooter = children => {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: "apply-wizard-footer", //window.location.href.includes("viewBill?connectionNumber") ? "footer-styles-bill-cancellation" : "footer-style-bill-cancellation"
+      style: {
+        padding: "14px"
+      }
     },
     children
   };
@@ -33,9 +35,11 @@ export const cancelBillFooter = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
+        minWidth: "270px",
+        maxWidth: "360px",
+        width: "100%",
+        margin: "0px 5px 5px 0px",
+        minHeight: "50px"
       }
     },
     children: {
@@ -65,9 +69,11 @@ export const cancelBillFooter = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
+        minWidth: "300px",
+        maxWidth: "400px",
+        width: "100%",
+        margin: "0px 5px 5px 0px",
+        minHeight: "50px"
       }
     },
     children: {
@@ -98,9 +104,11 @@ export const viewBillFooter = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
+        minWidth: "270px",
+        maxWidth: "360px",
+        width: "100%",
+        marginRight: "10px",
+        minHeight: "50px"
       }
     },
     children: {
@@ -173,7 +181,6 @@ const cancelReceipt = async (state, dispatch) => {
         { UpdateBillCriteria: UpdateBillCriteria }
       );
       if (payload) {
-        console.log(payload, "payloadpayloadpayloadpayloadpayloadpayloadpayload")
         dispatch(hideSpinner());
         dispatch(setRoute(`/bills/acknowledgement?purpose=apply&status=success&consumerNumber=${getQueryArg(window.location.href, "consumerNumber", "")}&service=${getQueryArg(window.location.href, "service", "")}&billNo=${getQueryArg(window.location.href, "billNumber", "")}`));
       }

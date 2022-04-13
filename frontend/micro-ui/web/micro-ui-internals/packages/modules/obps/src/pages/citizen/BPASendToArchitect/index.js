@@ -48,7 +48,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
   data.address.locality = {...data?.landInfo?.address?.locality, "i18nkey":data?.landInfo?.address?.locality?.name}
   data.data = {
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
-    applicationDate: APIScrutinyDetails?.applicationDate,
+    applicationDate: data?.auditDetails?.createdTime,
     applicationType: APIScrutinyDetails?.appliactionType,
     holdingNumber: data?.additionalDetails?.holdingNo,
     occupancyType: APIScrutinyDetails?.planDetail?.planInformation?.occupancy,
@@ -106,6 +106,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
 }
 
 const BPASendToArchitect = ({ parentRoute }) => {
+  sessionStorage.setItem("BPA_SUBMIT_APP", JSON.stringify("BPA_SUBMIT_APP"));
   const queryClient = useQueryClient();
   const match = useRouteMatch();
   const { t } = useTranslation();

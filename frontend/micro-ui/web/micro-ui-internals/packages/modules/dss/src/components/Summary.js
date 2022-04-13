@@ -1,10 +1,10 @@
+import { Card, Details, Loader, Poll, PrintIcon } from "@egovernments/digit-ui-react-components";
+import { endOfMonth, getTime, startOfMonth } from "date-fns";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { startOfMonth, endOfMonth, getTime } from "date-fns";
-import { Card, Poll, Details, Loader, PrintIcon } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
-const Chart = ({ data, todayValue = 15012, monthValue = 15.2, target = "72%", task = 133, monthlyTask = 4500, sla = "91%" }) => {
+const Chart = ({ data, todayValue = 15012,url="", monthValue = 15.2, target = "72%", task = 133, monthlyTask = 4500, sla = "91%" }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { id, name, chartType } = data;
@@ -14,6 +14,7 @@ const Chart = ({ data, todayValue = 15012, monthValue = 15.2, target = "72%", ta
     interval: "month",
     title: "",
   };
+  const history =useHistory();
   const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
     key: id,
     type: chartType,
@@ -26,8 +27,8 @@ const Chart = ({ data, todayValue = 15012, monthValue = 15.2, target = "72%", ta
   }
 
   return (
-    <div className="blocks">
-      <div>
+    <div className="blocks cursorPointer">
+      <div onClick={()=>url&&history.push(`/digit-ui/employee/dss/dashboard/${url}`)}>
         <p>{t(data?.name)}</p>
         <p>{response?.responseData?.data?.[0]?.headerValue}</p>
       </div>
@@ -64,20 +65,20 @@ const Summary = ({
           </div>
           <div style={{ display: "flex" }}>
             {data.charts.map((chart, key) => (
-              <Chart data={chart} key={key} />
+              <Chart data={chart} key={key} url={data?.ref?.url}/>
             ))}
           </div>
         </div>
         <div className="wrapper-child">
           <div className="blocks cell-text" style={{ justifyContent: "space-around" }}>
-            <p style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
+            {/* <p style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
               <Details />
-              <Link to="/digit-ui/employee/dss/dashboard">View Details</Link>
-            </p>
-            <p style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
+              <Link to={`/digit-ui/employee/dss/dashboard/${data?.ref?.url}`}>View Details</Link>
+            </p> */}
+            {/* <p style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
               <PrintIcon />
               Print
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

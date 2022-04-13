@@ -35,11 +35,7 @@ public class BPANotificationUtil {
 
     private Producer producer;
 
-    @Autowired
     private NotificationUtil notificationUtil;
-
-    @Autowired
-    private TLNotificationService tlNotificationService;
 
 
     @Value("${egov.ui.app.host}")
@@ -53,10 +49,11 @@ public class BPANotificationUtil {
 
     @Autowired
     public BPANotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository,
-                               Producer producer) {
+                               Producer producer, NotificationUtil notificationUtil) {
         this.config = config;
         this.serviceRequestRepository = serviceRequestRepository;
         this.producer = producer;
+        this.notificationUtil = notificationUtil;
 
     }
 
@@ -329,6 +326,7 @@ public class BPANotificationUtil {
         List<SMSRequest> smsRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
             String customizedMsg = message.replace("{RECEIPT_DOWNLOAD_LINK}", getRecepitDownloadLink(license,entryset.getKey(),receiptno));
+            customizedMsg = customizedMsg.replace("{1}",entryset.getValue());
             smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
         }
         return smsRequest;
@@ -349,7 +347,7 @@ public class BPANotificationUtil {
         return link;
     }
 
-    public EventRequest getEventsForBPA(TradeLicenseRequest request, boolean isStatusPaid, String message,String receiptno) {
+    public EventRequest getEventsForBPA(TradeLicenseRequest request, boolean isStatusPaid, String message,String receiptno, String userEventName) {
         if(message == null)
             return null;
 
@@ -364,7 +362,7 @@ public class BPANotificationUtil {
 
         List<SMSRequest> smsRequests = createSMSRequestForBPA(message, mobileNumberToOwner,license,receiptno);
         Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
-        Map<String, String> mapOfPhnoAndUUIDs = tlNotificationService.fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getLicenses().get(0).getTenantId());
+        Map<String, String> mapOfPhnoAndUUIDs = notificationUtil.fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getLicenses().get(0).getTenantId());
         if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
             log.info("UUID search failed!");
             return null;
@@ -393,7 +391,7 @@ public class BPANotificationUtil {
             }
 
             events.add(Event.builder().tenantId(license.getTenantId()).description(mobileNumberToMsg.get(mobile))
-                    .eventType(BPAConstants.USREVENTS_EVENT_TYPE).name(BPAConstants.USREVENTS_EVENT_NAME)
+                    .eventType(BPAConstants.USREVENTS_EVENT_TYPE).name(userEventName)
                     .postedBy(BPAConstants.USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
                     .eventDetails(null).actions(action).build());
             }

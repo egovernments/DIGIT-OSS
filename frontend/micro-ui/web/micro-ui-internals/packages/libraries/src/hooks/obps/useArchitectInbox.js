@@ -16,13 +16,13 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
         tenantId,
 		processSearchCriteria: {
             moduleName: moduleName ? moduleName : "bpa-services",
-			businessService: businessService?.length > 0 ? businessService.map( o => o.code) : ["BPA_LOW", "BPA", "BPA_OC"],
+			businessService: businessService?.length > 0 ? [businessService] : ["BPA_LOW", "BPA", "BPA_OC"],
             ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
         },
 		moduleSearchCriteria: {
             assignee,
             ...(mobileNumber ? {mobileNumber}: {}),
-            ...(applicationType ? { applicationType } : {}),
+            ...(applicationType && applicationType.length > 0 ? { applicationType } : {}),
             ...(serviceType ? { serviceType } : {}),
             ...(applicationNo ? {applicationNo} : {}),
             ...(sortOrder ? {sortOrder} : {}),
@@ -54,7 +54,6 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
           }));
         }
         catch(error){
-          console.error("error",error);
         }
         }
         return data;
@@ -69,9 +68,10 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
               applicationType:application?.businessObject?.additionalDetails?.applicationType,
               serviceType:application?.businessObject?.additionalDetails?.serviceType,
               locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
-              status: application.businessObject.status,
+              status: application?.ProcessInstance?.state?.state,
               state:  application?.ProcessInstance?.state?.state,
               owner: application.ProcessInstance?.assigner?.name,
+              applicantName: application?.businessObject?.landInfo?.owners?.length == 1 ? application?.businessObject?.landInfo?.owners?.[0]?.name : application?.businessObject?.landInfo?.owners?.filter(owner => owner.isPrimaryOwner)?.[0]?.name,
               edcr: application?.edcr,
               sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
           })),

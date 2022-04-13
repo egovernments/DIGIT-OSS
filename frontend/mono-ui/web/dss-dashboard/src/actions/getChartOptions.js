@@ -1,4 +1,5 @@
 import CONFIGS from '../config/configs';
+import { getTenantId, getToken } from '../utils/commons';
 
 export default function getChartOptions(code, filters) {
     let url = code ? CONFIGS.BASE_URL + "/dashboard/getChartV2" : "";
@@ -12,15 +13,15 @@ export default function getChartOptions(code, filters) {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'auth-token': `${localStorage.getItem('Employee.token')}`
+                'auth-token': `${getToken()}`
             }
         };
         let dataoption = {
             "RequestInfo":{
-                "authToken": `${localStorage.getItem('Employee.token')}`
+                "authToken": `${getToken()}`
             },
             "headers": {
-                "tenantId": `${localStorage.getItem('tenant-id')}`
+                "tenantId": `${getTenantId()}`
             },
 
             "aggregationRequestDto": {

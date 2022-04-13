@@ -12,7 +12,7 @@ import ChartsAPI from '../../../actions/charts/chartsAPI';
 import Arrow_Downward from "../../../images/arrows/Arrow_Downward.svg";
 import Arrow_Upward from '../../../images/arrows/Arrow_Upward.svg';
 import NFormatter from '../numberFormater';
-import { removeSignFromInsightData } from "../../../utils/commons";
+import { getTenantId, removeSignFromInsightData } from "../../../utils/commons";
 
 class CustomCard extends React.Component {
     constructor(props) {
@@ -26,7 +26,7 @@ class CustomCard extends React.Component {
         if(this.props.page.includes('ulb')) {
           if(!filters['tenantId']) {
             let tenentFilter = []
-            tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
+            tenentFilter.push(`${getTenantId()}`)
             filters['tenantId'] = tenentFilter
           }
         }
@@ -56,7 +56,7 @@ class CustomCard extends React.Component {
         }).first().value() || null;
 
         if (data) {
-            let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red" ? "#e54d42" : "#259b24" : '';
+            let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red" ? "#e54d42" : "#00703c" : '';
             let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red" ? Arrow_Downward : Arrow_Upward : '';
             let value = "";
 			if(data.insight_data.value){
@@ -69,11 +69,12 @@ class CustomCard extends React.Component {
             }
                    
             let label = data.label ? (strings[data.label] ? strings[data.label] : data.label) : '';
+            let tool=data.label ? (strings[`TIP_${data.label}`] ? strings[`TIP_${data.label}`] : `TIP_${data.label}`) : '';
             return (
                 <Grid container spacing={24}>
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                         <div>
-                            <Tooltip title={label} placement="top">
+                            <Tooltip title={tool} placement="top">
                                 <Typography className={classes.subTitle}>{label}</Typography>
                             </Tooltip>
                         </div>
@@ -84,16 +85,16 @@ class CustomCard extends React.Component {
                             <NFormatter value={data.value} nType={data.valueSymbol} />
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{"textAlign" : "left"}}>
+                   {value&& <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{"textAlign" : "left", marginBottom:"5px"}}>
                         {
                             <React.Fragment>
                                 <span style={{fontSize:'initial' }}>
                                     <img src={insightIcon} style={{ height: "15px", color: insightColor }} />
                                 </span>
-                                <span style={{ color: insightColor, fontSize: '14px', marginLeft: "1vh"  }}>{value}</span>
+                                <span style={{ color: insightColor, fontSize: '14px', marginLeft: "1vh" ,fontWeight:"500" }}>{value}</span>
                             </React.Fragment>
                         }
-                    </Grid>
+                    </Grid>}
 
 
                 </Grid>

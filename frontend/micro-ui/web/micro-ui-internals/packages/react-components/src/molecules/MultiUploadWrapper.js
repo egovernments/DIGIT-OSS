@@ -58,7 +58,7 @@ const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.get
     const removeFile = (state, payload) => {
         const __indexOfItemToDelete = state.findIndex(e => e[0] === payload.file.name)
         const mutatedState = state.filter((e, index) => index !== __indexOfItemToDelete)
-        return mutatedState
+        return [...mutatedState]
     }
 
     const uploadReducer = (state, action) => {
@@ -68,7 +68,7 @@ const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.get
             case TARGET_FILE_REMOVAL:
                 return removeFile(state, action.payload)
             default:
-                return console.warn("ACTION NOT DEFINED")
+                break;
         }
     }
 
@@ -82,7 +82,6 @@ const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.get
                 const { data: { files: fileStoreIds } = {} } = await Digit.UploadServices.MultipleFilesStorage(module, e.target.files, tenantId)
                 return dispatch({ type: FILES_UPLOADED, payload: { files: e.target.files, fileStoreIds } })
             } catch (err) {
-                console.error('Failed to upload files', err);
             }
         } else {
             setFileErrors(validationMsg)

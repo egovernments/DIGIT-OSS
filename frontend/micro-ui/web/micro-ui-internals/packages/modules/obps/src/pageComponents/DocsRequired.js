@@ -13,7 +13,10 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
   const [uiFlow, setUiFlow] = useState([]);
   const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", "DocumentTypes");
   const { isLoading: commonDocsLoading, data: commonDocs } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["DocumentType"]);
-
+  const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["RiskTypeComputation"]);
+  const userInfo = Digit.UserService.getUser();
+  const queryObject = { 0: { tenantId: stateCode }, 1: { id: userInfo?.info?.id } };
+  const { data: LicenseData, isLoading:LicenseDataLoading } = Digit.Hooks.obps.useBPAREGSearch(tenantId, queryObject);
   const checkingUrl = window.location.href.includes("ocbpa");
 
   const { data:homePageUrlLinks , isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["homePageUrlLinks"]);
@@ -29,6 +32,17 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
     else
     onSelect("uiFlow", uiFlow);
   }
+
+  useEffect(() => {
+    let architectName = "", isDone = true;
+    for (let i = 0; i < LicenseData?.Licenses?.length; i++) {
+      if (LicenseData?.Licenses?.[i]?.status === "APPROVED" && isDone) {
+        isDone = false;
+        architectName = LicenseData?.Licenses?.[i]?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split('.')[0] || "ARCHITECT";
+        sessionStorage.setItem("BPA_ARCHITECT_NAME", JSON.stringify(architectName));
+      }
+    }
+  }, [LicenseData])
 
   useEffect(() => {
     if (!homePageUrlLinksLoading) {
@@ -90,8 +104,8 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
       <Card>
         <CardHeader>{checkingUrl ? t(`BPA_OOCUPANCY_CERTIFICATE_APP_LABEL`) : t(`OBPS_NEW_BUILDING_PERMIT`)}</CardHeader>
         {/* TODO: Change text styles */}
-        <CitizenInfoLabel style={{margin:"0px"}} textStyle={{color:"#0B0C0C"}} text={t(`OBPS_DOCS_REQUIRED_TIME`)} showInfo={false} />
-        <CardText style={{ color: "#0B0C0C", marginTop: "12px" }}>{t(`OBPS_NEW_BUILDING_PERMIT_DESCRIPTION`)}</CardText>
+        {/* <CitizenInfoLabel style={{margin:"0px"}} textStyle={{color:"#0B0C0C"}} text={t(`OBPS_DOCS_REQUIRED_TIME`)} showInfo={false} /> */}
+        <CardText style={{ color: "#0B0C0C", marginTop: "12px", fontSize: "16px", fontWeight: "400", lineHeight: "24px" }}>{t(`OBPS_NEW_BUILDING_PERMIT_DESCRIPTION`)}</CardText>
         {isLoading ?
           <Loader /> :
           <Fragment>

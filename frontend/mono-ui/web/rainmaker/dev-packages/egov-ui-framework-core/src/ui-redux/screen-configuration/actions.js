@@ -106,8 +106,7 @@ export const submitForm = (
             query,
             queryObjectJsonPath
           );
-          console.log(screenConfigQueryData);
-          //preparing body data
+ 
           screenConfigResponse = await httpRequest(
             method,
             endpoint,
@@ -115,7 +114,6 @@ export const submitForm = (
             [],
             screenConfigBodyData
           );
-          console.log(screenConfigResponse);
         }
         dispatch(toggleSpinner());
         if (redirectionUrl) {
@@ -124,7 +122,6 @@ export const submitForm = (
       } catch (error) {
         dispatch(hideSpinner());
         // const { message } = error;
-        console.log(error);
         // throw new Error(error);
       }
     } else {

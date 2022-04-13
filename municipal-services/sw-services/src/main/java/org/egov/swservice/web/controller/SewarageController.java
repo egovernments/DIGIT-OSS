@@ -54,7 +54,8 @@ public class SewarageController {
 				requestInfoWrapper.getRequestInfo());
 
 		SewerageConnectionResponse response = SewerageConnectionResponse.builder()
-				.sewerageConnections(sewerageConnectionList).responseInfo(responseInfoFactory
+				.sewerageConnections(sewerageConnectionList).totalCount(sewerageConnectionList.size())
+				.responseInfo(responseInfoFactory
 						.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -68,6 +69,21 @@ public class SewarageController {
 		SewerageConnectionResponse response = SewerageConnectionResponse.builder().sewerageConnections(sewerageConnection)
 				.responseInfo(responseInfoFactory
 						.createResponseInfoFromRequestInfo(sewerageConnectionRequest.getRequestInfo(), true))
+				.build();
+		return new ResponseEntity<>(response, HttpStatus.OK);
+
+	}
+	
+	@RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+	public ResponseEntity<SewerageConnectionResponse> plainSearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+			@Valid @ModelAttribute SearchCriteria criteria) {
+		List<SewerageConnection> sewerageConnectionList = sewarageService.plainSearch(criteria,
+				requestInfoWrapper.getRequestInfo());
+
+		SewerageConnectionResponse response = SewerageConnectionResponse.builder()
+				.sewerageConnections(sewerageConnectionList).totalCount(sewerageConnectionList.size())
+				.responseInfo(responseInfoFactory
+						.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 

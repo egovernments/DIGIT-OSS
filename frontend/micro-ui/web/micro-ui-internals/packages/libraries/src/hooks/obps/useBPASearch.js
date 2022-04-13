@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery,useQueryClient } from "react-query";
 import { OBPSService } from "../../services/elements/OBPS";
 
 // @ayan-egov TODO: use inbox api wrapper raise requirement
@@ -26,7 +26,8 @@ const combineResponse = (applications, workflowData) => {
 }
 
 const useBPASearch = (tenantId, filters = {}, config = {}) => {
-  return useQuery(['BPA_SEARCH', tenantId, filters], async () => {
+  const client = useQueryClient();
+  return {...useQuery(['BPA_SEARCH', tenantId, filters], async () => {
     const response = await OBPSService.BPASearch(tenantId, { ...filters });
     let tenantMap = {}, processInstanceArray = [], appNumbers = [];
     response?.BPA?.forEach(item => {
@@ -43,14 +44,13 @@ const useBPASearch = (tenantId, filters = {}, config = {}) => {
           let payload = await Digit.WorkflowService.getAllApplication(key, { businessIds: tenantMap[key]?.slice(i * 100, (i * 100) + 100)?.join()  });
           processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
         } catch (error) {
-          console.error(error);
           return [];
         }
       }
       processInstanceArray = processInstanceArray.filter(record => record.moduleName.includes("bpa-services"));
     }
     return combineResponse(response?.BPA, processInstanceArray);
-  }, config)
+  }, config),revalidate: () => client.removeQueries(['BPA_SEARCH', tenantId, filters])}
 }
 
 export default useBPASearch;

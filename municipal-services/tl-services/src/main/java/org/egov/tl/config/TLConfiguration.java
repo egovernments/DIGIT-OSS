@@ -79,16 +79,16 @@ public class TLConfiguration {
     @Value("${egov.idgen.tl.licensenumber.format}")
     private String licenseNumberIdgenFormatTL;
 
-    @Value("${egov.idgen.bpa.applicationNum.name}")
+    @Value("${egov.idgen.bpareg.applicationNum.name}")
     private String applicationNumberIdgenNameBPA;
 
-    @Value("${egov.idgen.bpa.applicationNum.format}")
+    @Value("${egov.idgen.bpareg.applicationNum.format}")
     private String applicationNumberIdgenFormatBPA;
 
-    @Value("${egov.idgen.bpa.licensenumber.name}")
+    @Value("${egov.idgen.bpareg.licensenumber.name}")
     private String licenseNumberIdgenNameBPA;
 
-    @Value("${egov.idgen.bpa.licensenumber.format}")
+    @Value("${egov.idgen.bpareg.licensenumber.format}")
     private String licenseNumberIdgenFormatBPA;
 
     //Persister Config
@@ -135,6 +135,9 @@ public class TLConfiguration {
 
     @Value("${egov.tl.calculator.calculate.endpoint}")
     private String calculateEndpointTL;
+
+    @Value("${egov.tl.calculator.estimate.endpoint}")
+    private String estimateEndpointTL;
 
     @Value("${egov.bpa.calculator.calculate.endpoint}")
     private String calculateEndpointBPA;

@@ -10,3 +10,7 @@
     @apply min-h-screen;
   }
 }
+
+.popup-close-icon{
+  @apply flex justify-end;
+}

@@ -1,3 +1,4 @@
+import { BackButton } from "@egovernments/digit-ui-react-components";
 import React, { useContext } from "react";
 
 const CitizenHome = ({ modules }) => {
@@ -10,14 +11,17 @@ const CitizenHome = ({ modules }) => {
   const showQuickPay = moduleArr.some((module) => module.code === "QuickPayLinks");
   return (
     <React.Fragment>
+      <BackButton />
       <div className="citizenAllServiceGrid">
-      {moduleArray.map(({ code }, index) => {
-        let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
-        if (code === "Payment" && !showQuickPay) {
-          Links = () => <React.Fragment />;
-        }
-        return <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />;
-      })}
+        {moduleArray
+          .filter((mod) => mod)
+          .map(({ code }, index) => {
+            let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
+            if (code === "Payment" && !showQuickPay) {
+              Links = () => <React.Fragment />;
+            }
+            return <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />;
+          })}
       </div>
     </React.Fragment>
   );

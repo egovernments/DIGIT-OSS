@@ -110,7 +110,6 @@ export const bpaLocationDetails = getCommonCard(
               )
             );
           } catch (e) {
-            console.log(e);
           }
         }
       },

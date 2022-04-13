@@ -44,7 +44,7 @@ const ApplicationCard = ({
   if (data?.length === 0) {
     result = (
       <Card style={{ marginTop: 20 }}>
-        {t("ES_NO_EVENTS")
+        {t("BPA_NO_APPLICATION_PRESENT")
           .split("\\n")
           .map((text, index) => (
             <p key={index} style={{ textAlign: "center" }}>
@@ -55,7 +55,7 @@ const ApplicationCard = ({
     );
   }
   else if (data && data?.length > 0) {
-    result = <DetailsCard data={data} handleSelect={(e) => console.debug(e)} handleDetailCardClick={(e) => { history.push(`/digit-ui/citizen/obps/bpa/${e?.[idKey]}`); }} />
+    result = <DetailsCard data={data} handleSelect={(e) => {}} handleDetailCardClick={(e) => { history.push(`/digit-ui/citizen/obps/bpa/${e?.[idKey]}`); }} />
   }
 
   return (

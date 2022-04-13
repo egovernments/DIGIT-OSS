@@ -23,6 +23,11 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
     let isopenlink = window.location.href.includes("/openlink/");
 
+    if(isopenlink)  
+    window.onunload = function () {
+      sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+    }
+
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
     
 
@@ -198,7 +203,6 @@ function SelectDocument({
                             setError(t("CS_FILE_UPLOAD_ERROR"));
                         }
                     } catch (err) {
-                        console.error("Modal -> err ", err);
                         setError(t("CS_FILE_UPLOAD_ERROR"));
                     }
                 }
@@ -209,7 +213,7 @@ function SelectDocument({
     return (
         <div style={{ marginBottom: "24px" }}>
             <CardLabel style={{marginBottom: "10px"}}>{doc?.required ? `${t(`BPAREG_HEADER_${doc?.code?.replace('.', '_')}`)} *` : `${t(`BPAREG_HEADER_${doc?.code?.replace('.', '_')}`)}`}</CardLabel>
-            {doc?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px"}}>{`${t(doc?.info)}`}</div> : null}
+            {doc?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", marginBottom: "10px"}}>{`${t(doc?.info)}`}</div> : null}
             <UploadFile
                 extraStyleName={"propertyCreate"}
                 accept=".jpg,.png,.pdf"
@@ -220,7 +224,7 @@ function SelectDocument({
                 }}
                 message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
                 error={error}
-                inputStyles={{top:"0%"}}
+                inputStyles={{top:"0%",maxHeight:""}}
                 Multistyle={isCitizenUrl?{marginTop:"-15px",position:"absolute"}:{marginTop:"-11px",position:"absolute"}}
             />
         </div>

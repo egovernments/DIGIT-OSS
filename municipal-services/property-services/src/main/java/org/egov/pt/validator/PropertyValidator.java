@@ -574,13 +574,17 @@ public class PropertyValidator {
 			throw new CustomException("EG_PT_INVALID_SEARCH", "Inbox search has been disabled for property service");
 		}
 		
-		if(propertyUtil.isPropertySearchOpen(user)) {
-			
-			if(StringUtils.isEmpty(criteria.getLocality()))
-					throw new CustomException("EG_PT_INVALID_SEARCH"," locality is mandatory for open search");
+		if (propertyUtil.isPropertySearchOpen(user)) {
+
+			if (StringUtils.isEmpty(criteria.getMobileNumber()) && CollectionUtils.isEmpty(criteria.getPropertyIds())
+					&& StringUtils.isEmpty(criteria.getLocality()))
+				throw new CustomException("EG_PT_INVALID_SEARCH",
+						" locality is mandatory for open search when PropertyId OR MobileNumber is not provided");
 		}
-		
-		
+
+		if ((criteria.getFromDate() != null && criteria.getToDate() == null) || (criteria.getToDate() != null && criteria.getFromDate() == null))
+			throw new CustomException("EG_PT_INVALID_SEARCH", "Search is mandatory for both fromDate and toDate : " + userType);
+
 		Boolean isCriteriaEmpty = CollectionUtils.isEmpty(criteria.getOldpropertyids())
 				&& CollectionUtils.isEmpty(criteria.getAcknowledgementIds())
 				&& CollectionUtils.isEmpty(criteria.getPropertyIds())
@@ -589,9 +593,11 @@ public class PropertyValidator {
 				&& null == criteria.getMobileNumber()
 				&& null == criteria.getName()
 				&& null == criteria.getDoorNo()
-				&& null == criteria.getOldPropertyId();
+				&& null == criteria.getOldPropertyId()
+				&& (null == criteria.getFromDate() && null == criteria.getToDate());
 		
 		if (isUserCitizen) {
+			criteria.setIsCitizen(true);
 			
 			if (isCriteriaEmpty)
 				criteria.setMobileNumber(user.getMobileNumber());

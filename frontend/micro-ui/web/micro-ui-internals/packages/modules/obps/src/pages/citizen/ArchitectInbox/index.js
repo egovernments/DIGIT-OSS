@@ -17,6 +17,8 @@ const Inbox = ({ tenants, parentRoute }) => {
   const stateCode = Digit.ULBService.getStateId();
   const [searchParams, setSearchParams] = useState({
     applicationStatus: [],
+    applicationType: [],
+    businessService: []
   });
   let isMobile = window.Digit.Utils.browser.isMobile();
   const userInfo = Digit.UserService.getUser();
@@ -43,12 +45,9 @@ const Inbox = ({ tenants, parentRoute }) => {
       },
       filterForm: {
         moduleName: "bpa-services",
-        businessService: [
-          { code: "BPA_LOW", name: t("BPA_LOW") },
-          { code: "BPA", name: t("BPA") },
-          { code: "BPA_OC", name: t("BPA_OC") }
-        ],
+        businessService: searchParams?.businessService ? searchParams?.businessService : [],
         applicationStatus: searchParams?.applicationStatus,
+        applicationType: searchParams?.applicationType ? searchParams?.applicationType : [],
         locality: [],
         assignee: "ASSIGNED_TO_ALL"
       }
@@ -56,66 +55,6 @@ const Inbox = ({ tenants, parentRoute }) => {
     config: {},
     withEDCRData:false
   });
-
-  /*   const searchFormDefaultValues = {
-      // mobileNumber: "",
-      applicationNo: searchParams?.applicationNo,
-    }
-  
-    const filterFormDefaultValues = {
-      moduleName: "bpa-services",
-      // businessService: {code: "BPA", name:t("BPA")},
-      applicationStatus: "",
-      locality: [],
-      assignee: "ASSIGNED_TO_ALL"
-    }
-    const tableOrderFormDefaultValues = {
-      sortBy: sortParams?.[0]?.id,
-      limit: 10,
-      offset: 0,
-      sortOrder: sortParams?.[0]?.sortOrder
-    } */
-
-  /*   const { isLoading: isInboxLoading, data: { table, statuses, totalCount } = {} } = Digit.Hooks.obps.useBPAInbox({
-      // tenantId, moduleName, businessService, filters, config
-      tenantId,
-      filters: {
-        filterForm: filterFormDefaultValues,
-        searchForm: searchFormDefaultValues,
-        tableForm: tableOrderFormDefaultValues
-      },
-      config: {
-        select: (data) =>({
-          statuses: data.statusMap,
-          table: data?.items.map( application => ({
-              applicationId: application.businessObject.applicationNumber,
-              date: application.businessObject.applicationDate,
-              businessService: application?.ProcessInstance?.businessService,
-              applicationType:application?.businessObject?.additionalDetails?.applicationType,
-              serviceType:application?.businessObject?.additionalDetails?.serviceType,
-              locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.landInfo?.address?.locality?.code?.toUpperCase()}`,
-              status: application.businessObject.status,
-              owner: application.ProcessInstance?.assigner?.name,
-              sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
-          })),
-          totalCount: data.totalCount
-        })
-      },
-  
-    }); */
-
-  /*   const { data: edcrData, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(stateCode, {
-      limit: pageSize,
-      offset: pageOffset,
-      sortBy: sortParams?.[0]?.id,
-      sortOrder: sortParams?.[0]?.sortOrder
-    }, {
-      enabled: true,
-      retry:false,
-      staleTime: Infinity
-    },
-    "OBPS_SCRUTINYDETAILS_ALL"
-    ) */
 
     const fetchLastPage = () => {
       setPageOffset(bpaInboxData?.totalCount && (Math.ceil(bpaInboxData?.totalCount / 10) * 10 - pageSize));
@@ -169,7 +108,7 @@ const Inbox = ({ tenants, parentRoute }) => {
   if (isMobile) {
     return (
       <React.Fragment>
-        <h2 style={headerStyle} >{`${t("OBPS_ARCH_INBOX")} ( ${bpaInboxData?.totalCount || 0} )`}</h2>
+        <h2 style={headerStyle} >{`${t("ES_COMMON_OBPS_INBOX_LABEL")} ( ${bpaInboxData?.totalCount || 0} )`}</h2>
         <MobileInbox
           bparegData={[]}
           edcrData={[]}

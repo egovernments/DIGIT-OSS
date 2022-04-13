@@ -63,7 +63,6 @@ const fetchComplaintDetails = async (tenantId, id) => {
     const details = transformDetails({ id, service, workflow, thumbnails, complaintType });
     return details;
   } else {
-    console.error("error fetching complaint details or service defs");
     return {};
   }
 };

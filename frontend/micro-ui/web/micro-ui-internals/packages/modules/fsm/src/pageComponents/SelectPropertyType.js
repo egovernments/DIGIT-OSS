@@ -29,6 +29,16 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
     onSelect(config.key, value.code);
   }
 
+  const getInfoContent = () => {
+    let content = t("CS_DEFAULT_INFO_TEXT")
+    if (formData && formData.selectPaymentPreference && formData.selectPaymentPreference.code === 'PRE_PAY') {
+      content = t("CS_CHECK_INFO_PAY_NOW")
+    } else {
+      content = t("CS_CHECK_INFO_PAY_LATER")
+    }
+    return content
+  }
+ 
   if (propertyTypesData.isLoading) {
     return <Loader />;
   }
@@ -41,7 +51,7 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
           <CardLabel>{`${t("CS_FILE_APPLICATION_PROPERTY_LABEL")} *`}</CardLabel>
           <RadioOrSelect options={propertyTypesData.data} selectedOption={propertyType} optionKey="i18nKey" onSelect={selectedValue} t={t} />
         </FormStep>
-        {propertyType && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT", propertyType)} />}
+        {propertyType && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_FILE_APPLICATION_INFO_TEXT", { content: getInfoContent(), ...propertyType })} />}
       </React.Fragment>
     );
   }

@@ -82,7 +82,6 @@ const getAssessmentDetails = async () => {
         );
         return searchPropertyResponse;
     } catch (e) {
-        console.log(e.message);
     }
 }
 export const createProperty = async (Properties, action, props, isModify, preparedFinalObject) => {

@@ -3,6 +3,12 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.2 - 2022-03-03
+-Added support for randomized short url generation
+
+## 1.1.1 - 2022-01-13
+- Updated to log4j2 version 2.17.1
+
 ## 1.1.1 - 2021-12-15
 - Added Support for link tracking
 

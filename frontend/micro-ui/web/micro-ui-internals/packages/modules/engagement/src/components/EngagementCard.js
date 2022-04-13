@@ -6,6 +6,11 @@ import { EmployeeModuleCard, DocumentIconSolid, EventsIconSolid, PMBIconSolid, S
 const EngagementCard = () => {
   const userRoles = Digit.SessionStorage.get('User')?.info?.roles
   const isEmployee = userRoles.find((role) => role.code === 'EMPLOYEE');
+  
+  useEffect(() => {
+    Digit.SessionStorage.set("CITIZENSURVEY.INBOX", null)
+  },[])
+
   if (!isEmployee) return null;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: documentsCount, isLoading: isLoadingDocs, } = Digit.Hooks.engagement.useDocSearch({ tenantIds: tenantId }, {

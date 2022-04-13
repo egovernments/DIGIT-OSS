@@ -5,7 +5,7 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import difference from "lodash/difference";
 import uniq from "lodash/uniq";
 import commonConfig from "config/common.js";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
@@ -148,6 +148,22 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite) => {
     dispatch(complaintFetchPending());
     try {
       let tenantId = "";
+      if (queryObject && queryObject.length) {
+        let isTenantId = true;
+        queryObject.forEach(obj => {
+          if (obj.key === "tenantId") {
+            isTenantId = false
+          }
+        })
+        if (isTenantId) {
+          queryObject.push({ key: "tenantId", value: getTenantId() })
+        }
+      }
+
+      if (queryObject && queryObject.length == 0) {
+        queryObject.push({ key: "tenantId", value: getTenantId() })
+      }
+      
       const payload = await httpRequest(COMPLAINT.GET.URL, COMPLAINT.GET.ACTION, queryObject);
       if (payload.services && payload.services.length === 1) {
         tenantId = payload.services[0].tenantId;

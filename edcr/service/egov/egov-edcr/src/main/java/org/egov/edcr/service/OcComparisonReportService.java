@@ -21,8 +21,10 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Building;
 import org.egov.common.entity.edcr.Floor;
@@ -73,7 +75,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @Service
 public class OcComparisonReportService {
 
-    private static final Logger LOG = Logger.getLogger(OcComparisonReportService.class);
+    private static final Logger LOG = LogManager.getLogger(OcComparisonReportService.class);
     public static final String STATUS = "Status";
     public static final String BLOCK = "Block";
     public static final BigDecimal DEVIATION_VALUE = BigDecimal.valueOf(5);

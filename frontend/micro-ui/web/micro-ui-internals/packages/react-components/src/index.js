@@ -30,7 +30,7 @@ import DisplayPhotos from "./atoms/DisplayPhotos";
 import Dropdown from "./atoms/Dropdown";
 import EllipsisMenu from "./atoms/EllipsisMenu";
 import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
-import EmployeeModuleCard from "./atoms/EmployeeModuleCard";
+import {EmployeeModuleCard,ModuleCardFullWidth} from "./atoms/EmployeeModuleCard";
 import GreyOutText from "./atoms/GreyOutText";
 import Hamburger from "./atoms/Hamburger";
 import Header from "./atoms/Header";
@@ -65,6 +65,7 @@ import {
   AnnouncementIcon,
   ArrowDown,
   ArrowLeft,
+  ArrowForward,
   ArrowRightInbox,
   Calender,
   CaseIcon,
@@ -96,6 +97,7 @@ import {
   PTIcon,
   ReceiptIcon,
   RefreshIcon,
+  RefreshSVG,
   RupeeIcon,
   SearchIconSvg,
   ShareIcon,
@@ -130,10 +132,19 @@ import {
   PMBIconSolid,
   EventsIconSolid,
   SurveyIconSolid,
-  DustbinIcon
+  DustbinIcon,
+  InfoBannerIcon,
+  WSICon,
+  CameraIcon,
+  EditPencilIcon,
+  GalleryIcon,
+  RemoveIcon,
+  CheckSvg,
+  ErrorIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
+import { Phone } from "./atoms/svgindex";
 import TextArea from "./atoms/TextArea";
 import TextInput from "./atoms/TextInput";
 import Toast from "./atoms/Toast";
@@ -174,8 +185,9 @@ import OnGroundEventCard from "./molecules/OnGroundEventCard";
 import MultiUploadWrapper from "./molecules/MultiUploadWrapper";
 import { FilterForm, FilterFormField } from "./molecules/FilterForm";
 import OpenLinkContainer from "./atoms/OpenLinkContainer";
-
+import UploadPitPhoto from "./molecules/UploadPitPhoto";
 export {
+  Phone,
   Body,
   Loader,
   TopBar,
@@ -288,6 +300,7 @@ export {
   DustbinIcon,
   GenericFileIcon,
   HelpIcon,
+  InfoBannerIcon,
   NotificationBell,
   ImageIcon,
   OBPSIconSolidBg,
@@ -324,6 +337,7 @@ export {
   ExternalLinkIcon,
   Ellipsis,
   RefreshIcon,
+  RefreshSVG,
   Poll,
   Details,
   InboxComposer,
@@ -357,6 +371,16 @@ export {
   DateRange,
   EditIcon,
   SearchIcon,
-  DeleteIcon
+  DeleteIcon,
+  WSICon,
+  CameraIcon,
+  EditPencilIcon,
+  GalleryIcon,
+  RemoveIcon,
+  UploadPitPhoto,
+  CheckSvg,
+  ModuleCardFullWidth,
+  ArrowForward,
+  ErrorIcon
 };
 

@@ -10,11 +10,11 @@
   </parent>
   <groupId>collection-services</groupId>
   <artifactId>collection-services</artifactId>
-  <version>1.1.5-SNAPSHOT</version>
+  <version>1.1.6-SNAPSHOT</version>
   <name>collection-services</name>
   <description>Spring Boot Project for Collection Services</description>
   <properties>
-    <log4j2.version>2.16.0</log4j2.version>
+    <log4j2.version>2.17.1</log4j2.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <joda-time-version>2.9.6</joda-time-version>

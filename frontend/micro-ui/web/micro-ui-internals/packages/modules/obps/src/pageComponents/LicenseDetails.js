@@ -7,10 +7,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
-  const [name, setName] = useState(userInfo?.info?.name || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
+  let isOpenLinkFlow = window.location.href.includes("openlink");
+  const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
   const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.formData?.LicneseDetails?.gender);
-  const [mobileNumber, setMobileNumber] = useState(userInfo?.info?.mobileNumber ||
+  const [mobileNumber, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber: "") ||
     formData?.LicneseDetails?.mobileNumber || formData?.formData?.LicneseDetails?.mobileNumber || ""
   );
   const [PanNumber, setPanNumber] = useState(
@@ -19,9 +20,14 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
 
-  let isOpenLinkFlow = window.location.href.includes("openlink");
+  
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
+  if(isOpenLinkFlow)  
+    window.onunload = function () {
+      sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+    }
+  
   const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
 
   let menu = [];

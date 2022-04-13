@@ -11,9 +11,9 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 import PropertyDocuments from "../../../templates/ApplicationDetails/components/PropertyDocuments";
+import { stringReplaceAll } from "../utils";
 
 const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
-    const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = Digit.ULBService.getStateId();
     const [documents, setDocuments] = useState(formData?.documents?.documents || []);
     const [error, setError] = useState(null);
@@ -21,16 +21,20 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
     const checkingFlow = formData?.uiFlow?.flow;
     const {data: bpaTaxDocuments, isLoading} = Digit.Hooks.obps.useBPATaxDocuments(stateId, formData, formData?.PrevStateDocuments || []);
-
     const handleSubmit = () => {
         let document = formData.documents;
         let documentStep;
-        documentStep = { ...document, documents: documents };
+        let RealignedDocument = [];
+        bpaTaxDocuments && bpaTaxDocuments.map((ob) => {
+            documents && documents.filter(x => ob.code === stringReplaceAll(x?.additionalDetails.category,"_",".")).map((doc) => {
+                RealignedDocument.push(doc);
+            })
+        })
+        documentStep = { ...document, documents: RealignedDocument };
         onSelect(config.key, documentStep);
      };
     const onSkip = () => onSelect();
     function onAdd() { }
-
     useEffect(() => {
         const allRequiredDocumentsCode = bpaTaxDocuments.filter( e => e.required).map(e => e.code)
 
@@ -81,12 +85,12 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
                     })}
                     {error && <Toast label={error} onClose={() => setError(null)} error />}
                 </FormStep>: <Loader />}
-                {window.location.href.includes("/bpa/building_plan_scrutiny/new_construction") || window.location.href.includes("/ocbpa/building_oc_plan_scrutiny/new_construction") && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.applicationNo} ${t("BPA_DOCS_INFORMATION")}`} className={"info-banner-wrap-citizen-override"} />}
+                {(window.location.href.includes("/bpa/building_plan_scrutiny/new_construction") || window.location.href.includes("/ocbpa/building_oc_plan_scrutiny/new_construction")) && formData?.applicationNo ? <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.applicationNo} ${t("BPA_DOCS_INFORMATION")}`} className={"info-banner-wrap-citizen-override"} /> : ""}
         </div>
     );
 }
 
-function SelectDocument({
+const SelectDocument = React.memo(function MyComponent({
     t,
     document: doc,
     setDocuments,
@@ -103,7 +107,7 @@ function SelectDocument({
     const [selectedDocument, setSelectedDocument] = useState(
         filteredDocument
             ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
-            : doc?.dropdownData?.length === 1
+            : doc?.dropdownData?.length > 0
                 ? doc?.dropdownData[0]
                 : {}
     );
@@ -113,7 +117,16 @@ function SelectDocument({
     const [uploadedfileArray, setuploadedfileArray] = useState([]);
     const [fileArray, setfileArray] = useState([] || formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code) );
 
-    const handleSelectDocument = (value) => setSelectedDocument(value);
+    const handleSelectDocument = (value) => {
+        if(filteredDocument?.documentType && !(doc?.uploadedDocuments?.length)){
+            filteredDocument.documentType=value?.code;
+            let currDocs=documents?.filter((item) => item?.documentType?.includes(doc?.code));
+            currDocs.map(doc=>doc.documentType=value?.code);
+            let newDoc=[ ...documents?.filter((item) => !item?.documentType?.includes(doc?.code)),...currDocs]
+            setDocuments(newDoc);
+        }
+        setSelectedDocument(value);
+    };
 
     function selectfile(e, key) {
         e && setFile(e.file);
@@ -133,6 +146,7 @@ function SelectDocument({
             e?.map((doc, index) => {
                 newfiles.push({
                         documentType: selectedDocument?.code,
+                        additionalDetails:{category:selectedDocument?.code.split(".").slice(0,2).join('_')},
                         fileStoreId: doc?.[1]?.fileStoreId?.fileStoreId,
                         documentUid: doc?.[1].fileStoreId?.fileStoreId,
                         fileName: doc?.[0] || "",
@@ -144,6 +158,11 @@ function SelectDocument({
                 ...newfiles,
             ]
             setDocuments(__documents)
+        }else if(e?.length==0){
+            const __documents = [
+                ...documents.filter(e => e.documentType !== key ),
+            ]
+            setDocuments(__documents);
         }
     
         newArr?.map((ob) => {
@@ -170,6 +189,7 @@ function SelectDocument({
                     newfiles.push({
                         documentType: selectedDocument?.code,
                             fileStoreId: doc.fileStoreId,
+                            additionalDetails:{category:selectedDocument?.code.split(".").slice(0,2).join('_')},
                             documentUid: doc.fileStoreId,
                             fileName: fileArray[index]?.name || "",
                             id:documents? documents.find(x => x.documentType === selectedDocument?.code)?.id:undefined,
@@ -236,7 +256,7 @@ function SelectDocument({
                 optionKey="i18nKey"
                 select={handleSelectDocument}
             />
-            <MultiUploadWrapper
+          <MultiUploadWrapper
                 module="BPA"
                 tenantId={tenantId}
                 getFormState={getData}
@@ -244,11 +264,10 @@ function SelectDocument({
                 allowedMaxSizeInMB={5}
                 setuploadedstate={uploadedFilesPreFill}
                 t={t}
-            />
+            /> 
         {doc?.uploadedDocuments?.length && <PropertyDocuments isSendBackFlow={true} documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
         </div>
     );
-
-}
+    });
 
 export default DocumentDetails;

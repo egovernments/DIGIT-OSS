@@ -14,7 +14,7 @@ export const configTLApproverApplication = ({
   businessService,
 }) => {
   let checkCondtions = true;
-  if (action?.action == "SENDBACKTOCITIZEN") checkCondtions = false;
+  if (action?.action == "SENDBACKTOCITIZEN" || action?.action == "APPROVE") checkCondtions = false;
   if (action.isTerminateState) checkCondtions = false;
 
   return {

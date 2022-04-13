@@ -102,7 +102,7 @@ const Inbox = ({
           searchParams={searchParams}
           sortParams={sortParams}
           linkPrefix={`${parentRoute}/application-details/`}
-          tableConfig={rest?.tableConfig}
+          tableConfig={rest?.tableConfig?res?.tableConfig:TableConfig(t)["PT"]}
           filterComponent={filterComponent}
           EmptyResultInboxComp={EmptyResultInboxComp}
           useNewInboxAPI={useNewInboxAPI}
@@ -113,6 +113,8 @@ const Inbox = ({
       return (
         <div>
           {isInbox && <Header>{t("ES_COMMON_INBOX")}</Header>}
+          {!isInbox && <Header>{t("SEARCH_PROPERTY")}</Header>}
+          
           <DesktopInbox
             moduleCode={moduleCode}
             data={data}

@@ -8,6 +8,7 @@ import { newConfig as newConfigOCBPA } from "../../../config/ocbuildingPermitCon
 import { getBPAEditDetails, getPath } from "../../../utils";
 
 const OCSendBackToCitizen = ({ parentRoute }) => {
+  sessionStorage.setItem("BPA_SUBMIT_APP", JSON.stringify("BPA_SUBMIT_APP"));
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const match = useRouteMatch();

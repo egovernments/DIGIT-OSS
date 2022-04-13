@@ -19,6 +19,7 @@ const useApplicationStatus = (select, isEnabled = true, statusMap=[]) => {
     "CANCELED",
     "COMPLETED",
     "CITIZEN_FEEDBACK_PENDING",
+    "DISPOSAL_IN_PROGRESS"
   ];
 
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
@@ -26,11 +27,19 @@ const useApplicationStatus = (select, isEnabled = true, statusMap=[]) => {
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const fetch = async () => {
-    let WorkflowService = await Digit.WorkflowService.init(tenantId, "FSM");
+    let WorkflowService = await Digit.WorkflowService.init(tenantId, "FSM,FSM_POST_PAY_SERVICE");
     return workflowOrder.map(
-      (status) => WorkflowService.BusinessServices[0].states?.filter((workflowDetails) => status === workflowDetails?.state)[0]
+      (status) => getStates(WorkflowService.BusinessServices)?.filter((workflowDetails) => status === workflowDetails?.state)[0]
     );
   };
+
+  const getStates = (businessServices) => {
+    let states = []
+    businessServices.map((data) => {
+      states = states.concat(data.states)
+    })
+    return states
+  }
 
   const roleWiseSelect = (WorkflowService) => {
     const response = WorkflowService.filter((state) => state.applicationStatus)
@@ -45,7 +54,7 @@ const useApplicationStatus = (select, isEnabled = true, statusMap=[]) => {
         return {
           name: t(`CS_COMMON_FSM_${state.applicationStatus}`),
           code: state.applicationStatus,
-          id: statusMap?.filter(e => e.applicationstatus === state.applicationStatus)?.[0]?.statusid,
+          id: (statusMap?.filter(e => e.applicationstatus === state.applicationStatus)?.[0]?.statusid) || state.uuid,
           roles,
         };
       })
@@ -58,7 +67,7 @@ const useApplicationStatus = (select, isEnabled = true, statusMap=[]) => {
       return {
         name: t(`CS_COMMON_FSM_${state.applicationStatus}`),
         code: state.applicationStatus,
-        id: statusMap?.filter(e => e.applicationstatus === state.applicationStatus)?.[0]?.statusid,
+        id: (statusMap?.filter(e => e.applicationstatus === state.applicationStatus)?.[0]?.statusid) || state.uuid,
         roles,
       };
     });

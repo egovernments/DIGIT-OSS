@@ -2,6 +2,7 @@ import React, { Fragment, useMemo } from "react"
 import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown, CheckBox, MultiSelectDropdown } from "@egovernments/digit-ui-react-components";
 import { Controller, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import cloneDeep from "lodash/cloneDeep";
 
 const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant }) => {
   const { t } = useTranslation()
@@ -17,15 +18,11 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
   const availableBusinessServicesOptions = Digit.Hooks.obps.useBusinessServiceBasedOnServiceType({applicationType: selectedApplicationType})
   const selectedBusinessService = useWatch({control: controlFilterForm, name: "businessService", defaultValue: filterFormState?.businessService || null});
   
-  const selectrole = (e, data, props) => {
-    const index = props?.value.filter((ele) => ele.code == data.code);
-    let res = null;
-    if (index.length) {
-      props?.value.splice(props?.value.indexOf(index[0]), 1);
-      res = [...props?.value];
-    } else {
-      res = [...props?.value, {...data}];
-    }
+  const selectrole = (listOfSelections, props) => {
+    const res = listOfSelections.map( (propsData) => {
+      const data = propsData[1]
+        return data
+     })
     return props.onChange(res);
   };
 
@@ -76,15 +73,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
                 );
               }),[props?.value])
             return loadingLocalitiesForEmployeesCurrentTenant ? <Loader/> : <>
-              <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
-              {/* Done: know that it is rerendering once in mobile view this is due to the fact that controlled components can not react to async calls inside the components ie controlled caomponent can only entertain PURE components hence this molecule needs to be removed and dropdown is to be placed, with this localities should be fetched at the top of the inbox/index.js and memoized functions should be handled accordingly */}
-              {/* <Localities selectLocality={ (e) => {props.onChange([e, ...props?.value])}} tenantId={tenantId} optionCardStyles={{maxHeight:'350px'}} boundaryType="revenue" /> */}
-              {/* <Dropdown
-                option={localitiesForEmployeesCurrentTenant}
-                select={(e) => {props.onChange([e, ...props?.value])}}
-                optionCardStyles={{maxHeight:'350px'}}
-                optionKey="i18nkey"
-              /> */}
+              <div className="filter-label sub-filter-label">{t("ES_INBOX_LOCALITY")}</div>
               <MultiSelectDropdown
               options={localitiesForEmployeesCurrentTenant ? localitiesForEmployeesCurrentTenant : []}
               optionsKey="i18nkey"
@@ -92,7 +81,8 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               isPropsNeeded={true}
               onSelect={selectrole}
               selected={props?.value}
-              defaultUnit="Selected"
+              defaultLabel={t("ES_BPA_ALL_SELECTED")}
+              defaultUnit={t("BPA_SELECTED_TEXT")}
               />
               <div className="tag-container">
                 {renderRemovableTokens}
@@ -104,23 +94,26 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     </FilterFormField>
     <FilterFormField>
       <Controller
-          name="applicationType"
-          control={controlFilterForm}
-          render={(props) => {
-            return loadingApplicationTypesOfBPA ? <Loader/> : <>
-              <div className="filter-label">{t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}</div>
-              {applicationTypesOfBPA.map(applicationType => {
-                return <CheckBox
-                  key={applicationType.code}
-                  onChange={(e) => selectCheckbox({e, applicationType, onChange: props.onChange, values: props.value})}
-                  checked={isChecked(props.value, applicationType)}
-                  label={t(applicationType?.i18nKey)}
-                />  
-              })}
-            </>
-          }
+        name="applicationType"
+        control={controlFilterForm}
+        render={(props) => {
+          return loadingApplicationTypesOfBPA ? <Loader /> : <>
+            <div className="filter-label sub-filter-label">{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</div>
+            <RadioButtons
+              onSelect={(e) => {
+                props.onChange(e.code);
+                setFilterFormValue("applicationStatus", []);
+                setFilterFormValue("businessService", []);
+              }}
+              selectedOption={applicationTypesOfBPA.filter((option) => option.code === props.value)[0]}
+              optionsKey="i18nKey"
+              name="applicationType"
+              options={applicationTypesOfBPA}
+            />
+          </>
         }
-        />
+        }
+      />
     </FilterFormField>
     {selectedApplicationType?.length > 0 ? <FilterFormField>
       <Controller
@@ -128,7 +121,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           control={controlFilterForm}
           render={(props) => {
             return <>
-              <div className="filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
+              <div className="filter-label sub-filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
               <RadioButtons
                 onSelect={(e) => {props.onChange(e.code);
                 setFilterFormValue("applicationStatus",[])}}
@@ -143,7 +136,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
         />
     </FilterFormField> : null}
     {selectedApplicationType?.length > 0 && selectedBusinessService?.length > 0 ? <FilterFormField>
-      <div className="filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
+      <div className="filter-label sub-filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
       <Controller
         name="applicationStatus"
         control={controlFilterForm}
@@ -151,12 +144,18 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           function changeItemCheckStatus(value){
             props.onChange(value)
           }
-          const renderStatusCheckBoxes = useMemo(()=>statuses?.filter( e => e.businessservice === selectedBusinessService )?.map( (status, index) => {
+          const renderStatusCheckBoxes = useMemo(()=>statuses?.filter( e => {
+            let value = cloneDeep(selectedBusinessService);
+            if (value == "BPA_OC_LOW") value = "BPA_OC"
+            return e.businessservice === value
+          } )?.map( (status, index) => {
             return <CheckBox
               key={index}
               onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
               checked={props.value?.includes(status?.statusid)}
-              label={`${t(`WF_STATE_${status.businessservice}_${status.applicationstatus}`)} (${status.count})`}
+              label={`${t(`WF_STATE_${status.businessservice}_${status.applicationstatus}`)}`}
+              //Hidden due to RAIN-5010 percieved as wrong count here
+              // (${status.count})`}
             />}),[props.value, statuses, selectedBusinessService])
           return <>
             {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}

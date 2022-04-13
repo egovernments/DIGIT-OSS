@@ -50,7 +50,7 @@ const ComplaintsLink = ({ isMobile, data }) => {
   );
 
   return (
-    <Card className="employeeCard filter">
+    <Card className="employeeCard filter inboxLinks">
       <div className="complaint-links-container">
         {GetLogo()}
         <div className="body">

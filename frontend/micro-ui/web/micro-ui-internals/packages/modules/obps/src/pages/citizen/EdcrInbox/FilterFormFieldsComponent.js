@@ -22,12 +22,13 @@ const FilterFormFieldsComponent = ({ controlFilterForm }) => {
           render={(props) => {
             return (
               <>
-                <div className="filter-label" style={{ fontWeight: "500", fontSize: "20px" }}>
+                <div className="filter-label sub-filter-label" style={{ fontWeight: "400", fontSize: "16px" }}>
                   {t("BPA_COMMON_TABLE_COL_APP_STATUS_LABEL")}
                 </div>
                 <RadioButtons
                   onSelect={(e) => {
                     props.onChange(e.code);
+                    Digit.SessionStorage.set("EDCR_BACK", "");
                   }}
                   selectedOption={availableOptions.filter((option) => option.code === props.value)[0]}
                   optionsKey="name"
@@ -48,7 +49,7 @@ const FilterFormFieldsComponent = ({ controlFilterForm }) => {
               <Loader />
             ) : (
               <>
-                <div className="filter-label" style={{ fontWeight: "500", fontSize: "20px" }}>
+                <div className="filter-label sub-filter-label" style={{ fontWeight: "400", fontSize: "16px" }}>
                   {t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}
                 </div>
                 <Dropdown
@@ -58,6 +59,7 @@ const FilterFormFieldsComponent = ({ controlFilterForm }) => {
                   optionKey={"i18nKey"}
                   select={(e) => {
                     props.onChange(e.code);
+                    Digit.SessionStorage.set("EDCR_BACK", "");
                   }}
                 />
               </>

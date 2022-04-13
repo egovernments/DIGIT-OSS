@@ -53,6 +53,7 @@ public class RowMapper  implements ResultSetExtractor<List<Vehicle>> {
 			String type = rs.getString("type");
 			Double tankCapicity = rs.getDouble("tankCapicity");
 			String suctionType = rs.getString("suctionType");
+			String vehicleOwner = rs.getString("vehicleOwner");
 			Long pollutionCertiValidTill = rs.getLong("pollutionCertiValidTill");
 			Long InsuranceCertValidTill = rs.getLong("InsuranceCertValidTill");
 			Long fitnessValidTill = rs.getLong("fitnessValidTill");
@@ -72,7 +73,7 @@ public class RowMapper  implements ResultSetExtractor<List<Vehicle>> {
 				}
 
 				currentVehicle = Vehicle.builder().tenantId(tenantId).registrationNumber(registrationNumber).model(model).type(type).tankCapacity(tankCapicity)
-						.suctionType(suctionType).pollutionCertiValidTill(pollutionCertiValidTill).InsuranceCertValidTill(InsuranceCertValidTill)
+						.suctionType(suctionType).vehicleOwner(vehicleOwner).pollutionCertiValidTill(pollutionCertiValidTill).InsuranceCertValidTill(InsuranceCertValidTill)
 						.fitnessValidTill(fitnessValidTill).roadTaxPaidTill(roadTaxPaidTill).gpsEnabled(gpsEnabled).source(source).ownerId(owner_id)
 						.status(Vehicle.StatusEnum.valueOf(status)).additionalDetails(getAdditionalDetail("additionalDetails",rs)).id(id).build();
 				

@@ -40,7 +40,7 @@ const Events = {
       }),
     Update: (data) =>
       Request({
-        url: Urls.events.updateEvent,
+        url: window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE") ? Urls.events.updateEventCDG : Urls.events.updateEvent ,
         useCache: false,
         method: "POST",
         auth: true,

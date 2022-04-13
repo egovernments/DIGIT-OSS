@@ -68,7 +68,6 @@ const EngagementDocUploadDocument = ({ userType, t, onSelect, setValue, config, 
       }
 
     } catch (err) {
-      console.error("Modal -> err ", err);
     } finally {
       setIsUploadingImage(false)
     }

@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { ActionLinks, CardSectionHeader, CheckPoint, ConnectingCheckPoints, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import BPACaption from "../pages/citizen/BpaApplicationDetail/BPACaption";
 
 const ApplicationTimeline = ({ id, tenantId }) => {
   const { t } = useTranslation();
@@ -13,6 +14,25 @@ const ApplicationTimeline = ({ id, tenantId }) => {
   if (isLoading) {
     return <Loader />;
   }
+
+  const getTimelineCaptions = (checkpoint) => {
+    if (checkpoint.state === "INITIATE") {
+      const caption = {
+        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails?.createdTime),
+        source: props.application?.tradeLicenseDetail?.channel || "",
+      };
+      return <BPACaption data={caption} />;
+    }  
+    else {
+      const caption = {
+        date: checkpoint?.auditDetails?.lastModified,
+        name: checkpoint?.assignes?.[0]?.name,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
+        comment: t(checkpoint?.comment),
+      };
+      return <BPACaption data={caption} />;
+    }
+  };
 
   const showNextActions = (nextAction) => {
     switch (nextAction?.action) {
@@ -51,7 +71,7 @@ const ApplicationTimeline = ({ id, tenantId }) => {
             <CheckPoint
               isCompleted={true}
               label={t((data?.timeline[0]?.state && `WF_ARCHITECT_${data.timeline[0].state}`) || "NA")}
-              // customChild={getTimelineCaptions(data?.timeline[0])}
+              customChild={getTimelineCaptions(data?.timeline[0])}
             />
           ) : (
             <ConnectingCheckPoints>
@@ -63,7 +83,7 @@ const ApplicationTimeline = ({ id, tenantId }) => {
                         keyValue={index}
                         isCompleted={index === 0}
                         label={checkpoint.state ? t(`WF_ARCHITECT_${checkpoint.state}`) : "NA"}
-                        // customChild={getTimelineCaptions(checkpoint)}
+                        customChild={getTimelineCaptions(checkpoint)}
                       />
                     </React.Fragment>
                   );

@@ -1,16 +1,14 @@
 package org.egov.vehicle.trip.service;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.vehicle.config.VehicleConfiguration;
+import org.egov.vehicle.service.notification.NotificationService;
 import org.egov.vehicle.trip.repository.VehicleTripRepository;
 import org.egov.vehicle.trip.util.VehicleTripConstants;
 import org.egov.vehicle.trip.validator.VehicleTripValidator;
@@ -53,10 +51,16 @@ public class VehicleTripService {
     
     @Autowired
     private VehicleConfiguration config;
+    
+    @Autowired
+	private NotificationService notificationService;
+
 	
-	public VehicleTrip create(VehicleTripRequest request) {
-		if (request.getVehicleTrip() == null) {
-			throw new CustomException(VehicleTripConstants.CREATE_VEHICLETRIP_ERROR, "vehicleTrip not found in the Request" + request.getVehicleTrip());
+	public List<VehicleTrip> create(VehicleTripRequest request) {
+		
+		if (CollectionUtils.isEmpty(request.getVehicleTrip())) {
+			throw new CustomException(VehicleTripConstants.CREATE_VEHICLETRIP_ERROR,
+					"vehicleTrip not found in the Request" + request.getVehicleTrip());
 		}
 		validator.validateCreateOrUpdateRequest(request);
 		vehicleLogEnrichmentService.setInsertData(request);
@@ -65,26 +69,38 @@ public class VehicleTripService {
 		return request.getVehicleTrip();
 	}
 	
-	public VehicleTrip update(VehicleTripRequest request) {
-		if (request.getVehicleTrip() == null || StringUtils.isEmpty(request.getVehicleTrip().getId())) {
-			throw new CustomException(VehicleTripConstants.UPDATE_VEHICLELOG_ERROR, "vehicleLogId not found in the Request" + request.getVehicleTrip());
+	public List<VehicleTrip> update(VehicleTripRequest request) {
+		
+		
+		if (CollectionUtils.isEmpty(request.getVehicleTrip())) {
+			throw new CustomException(VehicleTripConstants.UPDATE_VEHICLELOG_ERROR,
+					"vehicleLogId not found in the Request" + request.getVehicleTrip());
 		}
 		
-		BusinessService businessService = workflowService.getBusinessService(request.getVehicleTrip(), request.getRequestInfo(),
-				VehicleTripConstants.FSM_VEHICLE_TRIP_BusinessService,null);
-		
-		actionValidator.validateUpdateRequest(request, businessService);
-		
+		BusinessService businessService = workflowService.getBusinessService(
+				request.getVehicleTrip().get(0).getTenantId(), request.getRequestInfo(),
+				VehicleTripConstants.FSM_VEHICLE_TRIP_BusinessService, null);
+
+		if(!VehicleTripConstants.UPDATE_ONLY_VEHICLE_TRIP_RECORD.equalsIgnoreCase(request.getWorkflow().getAction())) {
+			actionValidator.validateUpdateRequest(request, businessService);	
+		}
 		validator.validateCreateOrUpdateRequest(request);
 		validator.validateUpdateRecord(request);
 		vehicleLogEnrichmentService.setUpdateData(request);
 		
-		wfIntegrator.callWorkFlow(request);
+		if(!VehicleTripConstants.UPDATE_ONLY_VEHICLE_TRIP_RECORD.equalsIgnoreCase(request.getWorkflow().getAction())) {
+			wfIntegrator.callWorkFlow(request);	
+		}
 
-		vehicleLogEnrichmentService.postStatusEnrichment(request);
+			request.getVehicleTrip().forEach(vehicleTrip->{
+			vehicleLogRepository.update(request.getRequestInfo(),vehicleTrip,
+			workflowService.isStateUpdatable(vehicleTrip.getApplicationStatus(), businessService));
+		});
 		
-		vehicleLogRepository.update(request, workflowService.isStateUpdatable(request.getVehicleTrip().getApplicationStatus(), businessService)); 
-		
+		//SAN-800: Send SMS notification if the vehicle trip is declined
+		if(VehicleTripConstants.DECLINEVEHICLE.equalsIgnoreCase(request.getWorkflow().getAction())) {
+			notificationService.process(request);
+		}
 		return request.getVehicleTrip();
 	}
 	

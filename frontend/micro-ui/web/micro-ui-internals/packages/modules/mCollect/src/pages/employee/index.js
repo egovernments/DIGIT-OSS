@@ -4,11 +4,11 @@ import Inbox from "./Inbox";
 import { Switch, useLocation, Link } from "react-router-dom";
 import { PrivateRoute } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import EmployeeChallan from "../../EmployeeChallan";
-import CreateChallen from "../employee/CreateChallan";
-import MCollectAcknowledgement from "../employee/EmployeeChallanAcknowledgement";
-import EditChallan from "../employee/EditChallan/index";
-import NewChallan from "./NewChallan";
+// import EmployeeChallan from "../../EmployeeChallan";
+// import CreateChallen from "../employee/CreateChallan";
+// import MCollectAcknowledgement from "../employee/EmployeeChallanAcknowledgement";
+// import EditChallan from "../employee/EditChallan/index";
+// import NewChallan from "./NewChallan";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -48,11 +48,16 @@ const EmployeeApp = ({ path, url, userType }) => {
 
   const searchMW = [{ combineTaxDueInSearchData }];
 
+  const EmployeeChallan = Digit?.ComponentRegistryService?.getComponent('MCollectEmployeeChallan');
+  const MCollectAcknowledgement = Digit?.ComponentRegistryService?.getComponent('MCollectAcknowledgement');
+  const EditChallan = Digit?.ComponentRegistryService?.getComponent('MCollectEditChallan');
+  const NewChallan = Digit?.ComponentRegistryService?.getComponent('MCollectNewChallan');
+
   return (
     <Switch>
       <React.Fragment>
-        <div className="ground-container" style={{ padding: "10px 0px 0px 30px" }}>
-          <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
+        <div className="ground-container" /* style={{ padding: "10px 0px 0px 30px" }} */>
+          <p className="breadcrumb employee-main-application-details"  style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
             <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
               {t("ES_COMMON_HOME")}
             </Link>{" "}

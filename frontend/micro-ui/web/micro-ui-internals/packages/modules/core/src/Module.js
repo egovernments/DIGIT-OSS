@@ -5,8 +5,10 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { getI18n } from "react-i18next";
 import { Body, Loader } from "@egovernments/digit-ui-react-components";
 import { DigitApp } from "./App";
+import SelectOtp from './pages/citizen/Login/SelectOtp';
 
 import getStore from "./redux/store";
+import ErrorBoundary from "./components/ErrorBoundaries";
 
 const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
   const { isLoading, data: initData } = Digit.Hooks.useInitStore(stateCode, enabledModules);
@@ -39,7 +41,12 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
     defaultOptions: {
       queries: {
         staleTime: 15 * 60 * 1000,
-        cacheTime: 30 * 60 * 1000,
+        cacheTime: 50 * 60 * 1000,
+        retryDelay: attemptIndex => Infinity
+        /*
+          enable this to have auto retry incase of failure
+          retryDelay: attemptIndex => Math.min(1000 * 3 ** attemptIndex, 60000)
+         */
       },
     },
   });
@@ -49,16 +56,20 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
 
   return (
     <div>
-      <QueryClientProvider client={queryClient}>
-        <ComponentProvider.Provider value={registry}>
-          <DigitUIWrapper stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />
-        </ComponentProvider.Provider>
-      </QueryClientProvider>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <ComponentProvider.Provider value={registry}>
+            <DigitUIWrapper stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />
+          </ComponentProvider.Provider>
+        </QueryClientProvider>
+      </ErrorBoundary>
     </div>
   );
 };
 
-const componentsToRegister = {}
+const componentsToRegister = {
+  SelectOtp
+}
 
 export const initCoreComponents = () => {
   Object.entries(componentsToRegister).forEach(([key, value]) => {

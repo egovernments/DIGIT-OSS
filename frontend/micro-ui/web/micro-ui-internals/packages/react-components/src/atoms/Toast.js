@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { RoundedCheck, DeleteBtn } from "./svgindex";
+import { RoundedCheck, DeleteBtn, ErrorIcon } from "./svgindex";
 import ButtonSelector from "./ButtonSelector";
 
 const Toast = (props) => {
   if (props.error) {
     return (
       <div className="toast-success" style={{ backgroundColor: "red", ...props.style }}>
-        <RoundedCheck />
-        <h2>{props.label}</h2>
+        <ErrorIcon />
+        <h2 style={{...props.labelstyle}}>{props.label}</h2>
         { props.isDleteBtn ? <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} /> : null }
       </div>
     );
@@ -18,11 +18,17 @@ const Toast = (props) => {
     return (
       <div>
         <div className="toast-success" style={props?.isWarningButtons ? { backgroundColor: "#EA8A3B", display: "block", ...props.style } : { backgroundColor: "#EA8A3B", ...props.style }}>
-          <div style={{display: "flex"}}>
-            <RoundedCheck />
-            <h2 style={{marginLeft: "10px"}}>{props.label}</h2>
-            {props.isDleteBtn ? <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} /> : null}
-          </div>
+          {!props?.isWarningButtons ?
+            <div className="toast-success" style={{ backgroundColor: "#EA8A3B", ...props.style }}>
+              <ErrorIcon />
+              <h2 style={{ marginLeft: "10px" }}>{props.label}</h2>
+              {props.isDleteBtn ? <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} /> : null}
+            </div> : <div style={{ display: "flex" }}>
+              <ErrorIcon />
+              <h2 style={{ marginLeft: "10px" }}>{props.label}</h2>
+              {props.isDleteBtn ? <DeleteBtn fill="none" className="toast-close-btn" onClick={props.onClose} /> : null}
+            </div>
+          }
           {props?.isWarningButtons ?
             <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
               <ButtonSelector theme="border" label={"NO"} onSubmit={props.onNo} style={{ marginLeft: "10px" }} />

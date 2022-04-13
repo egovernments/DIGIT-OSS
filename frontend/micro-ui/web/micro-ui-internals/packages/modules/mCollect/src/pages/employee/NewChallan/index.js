@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Toast, Header } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Toast, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { newConfig as newConfigMcollect } from "../../../config/config";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { stringReplaceAll } from "../../../utils";
@@ -59,6 +59,9 @@ const NewChallan = ({ChallanData}) => {
   const [_formData, setFormData, _clear] = Digit.Hooks.useSessionStorage("store-data", null);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
+  const [defaultUpdatedValue, setdefaultUpdatedValue] = useState(false)
+  const isMobile = window.Digit.Utils.browser.isMobile();
+
 
 
   const [showToast, setShowToast] = useState(null);
@@ -81,6 +84,7 @@ const NewChallan = ({ChallanData}) => {
     if(isEdit && fetchBillData)
     {
       let formdata = getformDataforEdit(ChallanData, fetchBillData);
+      setdefaultUpdatedValue(true)
       sessionStorage.setItem("mcollectEditObject", JSON.stringify({consomerDetails1:[{...formdata}]}))
     }
   },[isEdit,fetchBillData])
@@ -95,6 +99,9 @@ const NewChallan = ({ChallanData}) => {
     clearSuccessData();
   }, []);
 
+  window.onunload = function () {
+    sessionStorage.removeItem("mcollectFormData");
+  }
   const onFormValueChange = (setValue, formData, formState) => {
     setSubmitValve(!Object.keys(formState.errors).length);
   };
@@ -102,8 +109,8 @@ const NewChallan = ({ChallanData}) => {
   const onSubmit = (data) => {
     let mcollectFormValue = JSON.parse(sessionStorage.getItem("mcollectFormData"));
     data = mcollectFormValue? mcollectFormValue : data?.consomerDetails1?.[0];
-    let TaxHeadMasterKeys= Object.keys(data[`${data?.category?.code?.split(".")[0]}`]);
-    let TaxHeadMasterValues = Object.values(data[`${data?.category?.code?.split(".")[0]}`]);
+    let TaxHeadMasterKeys= data[`${data?.category?.code?.split(".")[0]}`] ? Object.keys(data[`${data?.category?.code?.split(".")[0]}`]) : [];
+    let TaxHeadMasterValues = data[`${data?.category?.code?.split(".")[0]}`] ? Object.values(data[`${data?.category?.code?.split(".")[0]}`]) : [];
     let Challan = {};
     if(!isEdit){
       let temp = data?.category?.code;
@@ -113,7 +120,7 @@ const NewChallan = ({ChallanData}) => {
           mobileNumber: data.mobileNumber,
         },
         //businessService: selectedCategoryType ? temp + "." + humanized(selectedCategoryType.code, temp) : "",
-        businessService:data?.category?.code,
+        businessService:data?.categoryType?.code,
         consumerType: data?.category?.code?.split(".")[0],
         description: data?.comments,
         taxPeriodFrom: Date.parse(data?.fromDate),
@@ -162,6 +169,7 @@ const NewChallan = ({ChallanData}) => {
         .then((result, err) => {
           if (result.challans && result.challans.length > 0) {
             const challan = result.challans[0];
+            sessionStorage.removeItem('mcollectEditObject');
             let LastModifiedTime = Digit.SessionStorage.set("isMcollectAppChanged", challan.auditDetails.lastModifiedTime);
             Digit.MCollectService.generateBill(challan.challanNo, tenantId, challan.businessService, "challan").then((response) => {
               if (response.Bill && response.Bill.length > 0) {
@@ -181,6 +189,7 @@ const NewChallan = ({ChallanData}) => {
         .then((result, err) => {
           if (result.challans && result.challans.length > 0) {
             const challan = result.challans[0];
+            sessionStorage.removeItem("mcollectFormData");
             Digit.MCollectService.generateBill(challan.challanNo, tenantId, challan.businessService, "challan").then((response) => {
               if (response.Bill && response.Bill.length > 0) {
                 history.push(
@@ -191,7 +200,7 @@ const NewChallan = ({ChallanData}) => {
             });
           }
         })
-        .catch((e) => setShowToast({ key: true, label: e?.response?.data?.Errors[0].message }));
+        .catch((e) => {setShowToast({ key: true, label: e?.response?.data?.Errors[0].message })});
     }
   };
   let configs = newConfig || [];
@@ -216,10 +225,11 @@ const NewChallan = ({ChallanData}) => {
 
   return (
     <div>
-      <div style={{ marginLeft: "15px" }}>
-        <Header>{t("UC_COMMON_HEADER")}</Header>
+      <div style={isMobile?{}:{ marginLeft: "15px" }}>
+        <Header>{isEdit ? t("UC_UPDATE_CHALLAN"):t("UC_COMMON_HEADER")}</Header>
       </div>
-      <FormComposer
+      {isEdit && !(JSON.parse(sessionStorage.getItem("mcollectEditObject"))) && !defaultUpdatedValue ? <Loader />
+       :<FormComposer
         heading={t("")}
         //isDisabled={!canSubmit}
         label={t("ES_COMMON_APPLICATION_SUBMIT")}
@@ -237,7 +247,7 @@ const NewChallan = ({ChallanData}) => {
         defaultValues={defaultValues}
         onFormValueChange={onFormValueChange}
         breaklineStyle={{ border: "0px" }}
-      />
+      />}
       {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
     </div>
   );

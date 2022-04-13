@@ -1,8 +1,10 @@
-import { LogoutIcon, NavBar } from "@egovernments/digit-ui-react-components";
+import { LogoutIcon, NavBar, EditPencilIcon } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
+import { Phone } from "@egovernments/digit-ui-react-components";
+import ChangeCity from "../../ChangeCity";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -27,24 +29,49 @@ const defaultImage =
   "XZOvia7VujatUwVTrIt+Q/Csc7Tuhe+BOakT10b4TuoiiJjvgU9emTO42PwEfBa+cuodKkuf42DXr1D3JpXz73Hnn0j10evHKe+nufgfUm+7B84sX9FfdEzXux2DBpWuKokkCqN/5pa/8pmvn" +
   "L+RGKCddCGmatiPyPB/+ekO/M/q/7uvbt22kTt3zEnXPzCV13T3Gel4/6NduDu66xRvlPNkM1RjjxUdv+4WhGx6TftD19Q/dfzpwcHO+rE3fAAAAAElFTkSuQmCC";
 
-const Profile = ({ info, stateName }) => (
-  <div className="profile-section">
-    <div className="imageloader imageloader-loaded">
-      <img className="img-responsive img-circle img-Profile" src={defaultImage} />
-    </div>
-    <div id="profile-name" className="label-container name-Profile">
-      <div className="label-text"> {info.name} </div>
-    </div>
-    <div id="profile-location" className="label-container loc-Profile">
-      <div className="label-text"> {info?.mobileNumber} </div>
-    </div>
-    {info.emailId && (
-      <div id="profile-emailid" className="label-container loc-Profile">
-        <div className="label-text"> {info.emailId} </div>
+const Profile = ({ info, stateName, t }) => {
+  const [profilePic, setProfilePic] = React.useState(null);
+
+  React.useEffect(async () => {
+    const tenant = Digit.ULBService.getCurrentTenantId();
+    const uuid=info?.uuid;
+    if(uuid){
+    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+
+    if (usersResponse && usersResponse.user && usersResponse.user.length) {
+      const userDetails = usersResponse.user[0];
+      const thumbs = userDetails?.photo?.split(",");
+      setProfilePic(thumbs?.at(0));
+    }
+  }
+  }, [profilePic !== null]);
+
+  return (
+    <div className="profile-section">
+      <div className="imageloader imageloader-loaded">
+        <img
+          className="img-responsive img-circle img-Profile"
+          src={profilePic ? profilePic : defaultImage}
+          style={{ objectFit: "cover", objectPosition: "center" }}
+        />
       </div>
-    )}
-  </div>
-);
+      <div id="profile-name" className="label-container name-Profile">
+        <div className="label-text"> {info?.name} </div>
+      </div>
+      <div id="profile-location" className="label-container loc-Profile">
+        <div className="label-text"> {info?.mobileNumber} </div>
+      </div>
+      {info?.emailId && (
+        <div id="profile-emailid" className="label-container loc-Profile">
+          <div className="label-text"> {info.emailId} </div>
+        </div>
+      )}
+      {window.location.href.includes("/employee") &&
+        !window.location.href.includes("/employee/user/login") &&
+        !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true} />}
+    </div>
+  );
+};
 
 const PoweredBy = () => (
   <div className="digit-footer">
@@ -65,12 +92,22 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
   const user = Digit.UserService.getUser();
   const { t } = useTranslation();
   const history = useHistory();
+
   const closeSidebar = () => {
     Digit.clikOusideFired = true;
     toggleSidebar(false);
   };
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+
+  const showProfilePage = () => {
+    const redirectUrl = isEmployee ? "/digit-ui/employee/user/profile" : "/digit-ui/citizen/user/profile";
+    history.push(redirectUrl);
+    closeSidebar();
+  };
 
   const redirectToLoginPage = () => {
+    // localStorage.clear();
+    // sessionStorage.clear();
     history.push("/digit-ui/citizen/login");
     closeSidebar();
   };
@@ -78,27 +115,60 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
   let menuItems = [...SideBarMenu(t, closeSidebar, redirectToLoginPage, isEmployee)];
   let profileItem;
   if (isFetched && user && user.access_token) {
-    profileItem = <Profile info={user.info} stateName={stateInfo.name} />;
+    profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t} />;
     menuItems = menuItems.filter((item) => item?.id !== "login-btn");
     menuItems = [
       ...menuItems,
       {
+        text: t("EDIT_PROFILE"),
+        element: "PROFILE",
+        icon: <EditPencilIcon className="icon edit-btn-ico" width="16" height="16"/>,
+        populators: {
+          onClick: showProfilePage,
+        },
+      },
+      {
         text: t("CORE_COMMON_LOGOUT"),
-        element:"LOGOUT",
+        element: "LOGOUT",
         icon: <LogoutIcon className="icon" />,
         populators: {
           onClick: onLogout,
         },
       },
+      {
+        text: (
+          <React.Fragment>
+            {t("CS_COMMON_HELPLINE")}
+            <div className="telephone" style={{ marginTop: "-10%" }}>
+              {storeData?.tenants.map((i) => {
+                i.code === tenantId ? (
+                  <div className="link">
+                    <a href={`tel:${storeData?.tenants[i].contactNumber}`}>{storeData?.tenants[i].contactNumber}</a>
+                  </div>
+                ) : (
+                  <div className="link">
+                    <a href={`tel:${storeData?.tenants[0].contactNumber}`}>{storeData?.tenants[0].contactNumber}</a>
+                  </div>
+                );
+              })}
+              <div className="link">
+                <a href={`tel:${storeData?.tenants[0].contactNumber}`}>{storeData?.tenants[0].contactNumber}</a>
+              </div>
+            </div>
+          </React.Fragment>
+        ),
+        element: "Helpline",
+        icon: <Phone className="icon" />,
+      },
     ];
   }
-  
-    /*  URL with openlink wont have sidebar and actions    */
-  if(history.location.pathname.includes("/openlink")){
-    profileItem=(<span></span>);
-    menuItems=menuItems.filter(ele=>ele.element==="LANGUAGE");
+
+  /*  URL with openlink wont have sidebar and actions    */
+  if (history.location.pathname.includes("/openlink")) {
+    profileItem = <span></span>;
+    menuItems = menuItems.filter((ele) => ele.element === "LANGUAGE");
   }
-  
+
   return (
     <div>
       <NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={closeSidebar} Footer={<PoweredBy />} />

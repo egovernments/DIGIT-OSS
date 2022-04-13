@@ -9,14 +9,17 @@ const RadioOrSelect = ({
   selectedOption,
   isMandatory,
   t,
+  labelKey,
   dropdownStyle = {},
   isDependent = false,
   disabled = false,
   optionCardStyles,
+  isPTFlow=false,
+  isDropDown = false
 }) => {
   return (
     <React.Fragment>
-      {options?.length < 5 ? (
+      {options?.length < 5 && !isDropDown ? (
         <RadioButtons
           selectedOption={selectedOption}
           options={options}
@@ -24,6 +27,8 @@ const RadioOrSelect = ({
           isDependent={isDependent}
           disabled={disabled}
           onSelect={onSelect}
+          labelKey={labelKey}
+          isPTFlow={isPTFlow}
           t={t}
         />
       ) : (

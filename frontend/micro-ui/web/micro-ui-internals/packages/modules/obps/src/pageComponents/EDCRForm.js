@@ -1,9 +1,9 @@
 import { CardLabel, Dropdown, FormStep, Loader, TextInput, Toast, UploadFile } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { getPattern, stringReplaceAll } from "../utils";
+import { useLocation, useHistory } from "react-router-dom";
+import { getPattern, stringReplaceAll, sortDropdownNames  } from "../utils";
 
-const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast, isSubmitBtnDisable }) => {
+const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast, isSubmitBtnDisable, setIsShowToast }) => {
     const { pathname: url } = useLocation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = Digit.ULBService.getStateId();
@@ -15,6 +15,8 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
     const [error, setError] = useState(null);
     const [uploadMessage, setUploadMessage] = useState("");
     const [showToast, setShowToast] = useState(null);
+    const history = useHistory();
+
 
     let validation = { };
 
@@ -45,19 +47,26 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
                 data.i18nKey = `TENANT_TENANTS_${stringReplaceAll(data?.code?.toUpperCase(), ".", "_")}`;
             })
             if (Array.isArray(list?.[0]?.tenants)) list?.[0]?.tenants.reverse();
-            setCitymoduleList(list?.[0]?.tenants);
+            let sortTenants = sortDropdownNames(list?.[0]?.tenants, "code", t)
+            setCitymoduleList(sortTenants);
         }
     }, [citymodules]);
 
     useEffect(() => {
-        if (uploadMessage) {
+        if (uploadMessage || isShowToast) {
             setName("");
             setTenantIdData("");
             setUploadedFile(null);
             setFile("");
             setUploadMessage("");
         }
-    }, [uploadMessage]);
+        if (isShowToast) {
+            history.replace(
+                `/digit-ui/citizen/obps/edcrscrutiny/apply/acknowledgement`,
+                { data: isShowToast?.label ? isShowToast?.label : "BPA_INTERNAL_SERVER_ERROR", type: "ERROR"}
+              );
+        }
+    }, [uploadMessage, isShowToast, isSubmitBtnDisable]);
 
     function onAdd() {
         setUploadMessage("NEED TO DELETE");
@@ -71,7 +80,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
         onSelect(config.key, data);
     };
 
-    if (isLoading) {
+    if (isLoading || isSubmitBtnDisable) {
         return <Loader />;
     }
     return (
@@ -103,11 +112,12 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
                 onChange={setApplicantName}
                 uploadMessage={uploadMessage}
                 value={name}
-                {...(validation = {
-                    isRequired: true,
-                    pattern: getPattern("Name"),
-                    title: t("BPA_INVALID_NAME"),
-                })}
+                // {...(validation = {
+                //     isRequired: true,
+                //     pattern: "^[a-zA-Z-.`' ]*$",
+                //     type: "text",
+                //     title: t("TL_NAME_ERROR_MESSAGE"),
+                // })}
             />
             <CardLabel>{`${t("BPA_PLAN_DIAGRAM_LABEL")} *`}</CardLabel>
             <UploadFile
@@ -124,7 +134,8 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
                 uploadMessage={uploadMessage}
             />
             <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}>{t("EDCR_UPLOAD_FILE_LIMITS_LABEL")}</div>
-            {isShowToast && <Toast error={isShowToast.key} label={t(isShowToast.label)} onClose={() => setShowToast(null)} />}
+            {isShowToast && <Toast error={isShowToast.key} label={t(isShowToast.label)} onClose={() => setIsShowToast(null)} isDleteBtn={true} />}
+            {/* {isSubmitBtnDisable ? <Loader /> : null} */}
         </FormStep>
     );
 };

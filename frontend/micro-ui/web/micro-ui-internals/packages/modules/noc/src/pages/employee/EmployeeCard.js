@@ -2,11 +2,14 @@ import React, { useMemo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
+import { businessServiceList } from "../../utils";
 
 const NOCEmployeeHomeCard = () => {
     const { t } = useTranslation();
     const location = useLocation()
     const tenantId = Digit.ULBService.getCurrentTenantId();
+
+    if (!Digit.Utils.NOCAccess()) return null;
        
     const searchFormDefaultValues = {}
   
@@ -14,7 +17,8 @@ const NOCEmployeeHomeCard = () => {
         moduleName: "noc-services",
         applicationStatus: "",
         locality: [],
-        assignee: "ASSIGNED_TO_ALL"
+        assignee: "ASSIGNED_TO_ALL",
+        businessServiceArray: businessServiceList(true) || []
     }
 
     const tableOrderFormDefaultValues = {
@@ -65,6 +69,10 @@ const NOCEmployeeHomeCard = () => {
           count: totalCount ,
           label: t("ES_COMMON_INBOX"),
           link: `/digit-ui/employee/noc/inbox`
+        },
+        {
+          label: t("ES_COMMON_APPLICATION_SEARCH"),
+          link: `/digit-ui/employee/noc/search`
         }
       ]
     }),[isInboxLoading, totalCount]);

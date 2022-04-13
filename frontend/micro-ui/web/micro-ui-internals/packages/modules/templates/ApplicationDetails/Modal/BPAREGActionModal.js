@@ -5,7 +5,7 @@ import { configBPAREGApproverApplication } from "../config";
 import * as predefinedConfig from "../config";
 
 const Heading = (props) => {
-  return <h1 className="heading-m">{props.label}</h1>;
+  return <h1 style={{marginLeft:"22px"}} className="heading-m BPAheading-m">{props.label}</h1>;
 };
 
 const Close = () => (
@@ -54,6 +54,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [error, setError] = useState(null);
   const [financialYears, setFinancialYears] = useState([]);
   const [selectedFinancialYear, setSelectedFinancialYear] = useState(null);
+  const mobileView = Digit.Utils.browser.isMobile() ? true : false;
 
   useEffect(() => {
     if (financialYearsData && financialYearsData["egf-master"]) {
@@ -84,7 +85,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
               setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
             setError(t("CS_FILE_UPLOAD_ERROR"));
           }
         }
@@ -111,7 +111,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     };
     submitAction({
       Licenses: [applicationData],
-    });
+    }, false, {isStakeholder: true, bpa: false});
   }
 
   useEffect(() => {
@@ -141,12 +141,18 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionSaveLabel={t(config.label.submit)}
       actionSaveOnSubmit={() => { }}
       formId="modal-action"
+      isOBPSFlow={true}
+      popupStyles={mobileView?{width:"720px"}:{}}
+      style={!mobileView?{height: "45px", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{height:"45px",width:"44%"}}
+      popupModuleMianStyles={mobileView?{paddingLeft:"5px"}: {}}
     >
       {financialYearsLoading ? (
         <Loader />
       ) : (
         <FormComposer
           config={config.form}
+          cardStyle={{marginLeft:"0px",marginRight:"0px", marginTop:"-25px"}}
+          className="BPAemployeeCard"
           noBoxShadow
           inline
           childrenAtTheBottom

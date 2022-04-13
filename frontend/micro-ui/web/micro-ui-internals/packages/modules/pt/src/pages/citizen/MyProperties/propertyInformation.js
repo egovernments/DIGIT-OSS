@@ -1,4 +1,15 @@
-import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
+import {
+  Card,
+  CardSubHeader,
+  EditIcon,
+  Header,
+  LinkButton,
+  Loader,
+  PopUp,
+  Row,
+  StatusTable,
+  SubmitBar,
+} from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -14,7 +25,6 @@ const setBillData = async (tenantId, propertyIds, updatefetchBillData, updateCan
       consumerCode: propertyIds,
     });
   }
-
   updatefetchBillData(billData);
   updateCanFetchBillData({
     loading: false,
@@ -36,6 +46,13 @@ const PropertyInformation = () => {
   const [enableAudit, setEnableAudit] = useState(false);
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { data: UpdateNumberConfig } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(),"PropertyTax",["UpdateNumber"],{
+    select: (data) => {
+      return data?.PropertyTax?.UpdateNumber?.[0];
+    },
+    retry:false,
+    enable:false
+  });
 
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch({ filters: { propertyIds } }, { filters: { propertyIds } });
 
@@ -46,10 +63,12 @@ const PropertyInformation = () => {
     },
     {
       enabled: enableAudit,
-      select: (d) => d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
+      select: (d) =>
+        d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
 
+  const [popup, showPopup] = useState(false);
   const [billData, updateCanFetchBillData] = useState({
     loading: false,
     loaded: false,
@@ -59,6 +78,7 @@ const PropertyInformation = () => {
   const [fetchBillData, updatefetchBillData] = useState({});
 
   const [property, setProperty] = useState(() => data?.Properties[0] || " ");
+  const mutation = Digit.Hooks.pt.usePropertyAPI(property?.tenantId, false);
 
   let specialCategoryDoc = [];
   property?.documents?.filter(ob => ob.documentType.includes("SPECIALCATEGORYPROOF")).map((doc) => {
@@ -75,9 +95,9 @@ const PropertyInformation = () => {
   useEffect(() => {
     if (auditData?.[0]) {
       const property = auditData?.[0] || {};
-      property.owners = property?.owners?.filter(owner => owner.status == "ACTIVE");
-      setProperty(property)
-    };
+      property.owners = property?.owners?.filter((owner) => owner.status == "ACTIVE");
+      setProperty(property);
+    }
   }, [enableAudit, auditData]);
 
   sessionStorage.setItem("pt-property", JSON.stringify(property));
@@ -127,45 +147,47 @@ const PropertyInformation = () => {
   let flrno,
     i = 0;
   flrno = units && units[0]?.floorNo;
-  const ActionButton = ({ jumpTo }) => {
+  const ActionButton = ({ jumpTo, style }) => {
     const { t } = useTranslation();
     const history = useHistory();
     function routeTo() {
       history.push(jumpTo);
     }
-    return <LinkButton label={t("PT_OWNER_HISTORY")} className="check-page-link-button" onClick={routeTo} />;
+    return <LinkButton style={style} label={t("PT_OWNER_HISTORY")} className="check-page-link-button" onClick={routeTo} />;
   };
+  const UpdatePropertyNumberComponent = Digit?.ComponentRegistryService?.getComponent("UpdateNumber");
   return (
     <React.Fragment>
       <Header>{t("PT_PROPERTY_INFORMATION")}</Header>
       <div>
         <Card>
           <StatusTable>
-            <Row label={t("PT_PROPERTY_PTUID")} text={`${property.propertyId || t("CS_NA")}`} textStyle={{ whiteSpace: "pre" }} />
-            <Row label={t("CS_COMMON_TOTAL_AMOUNT_DUE")} text={`${t(getBillAmount(fetchBillData))}`} />
+            <Row className="border-none" label={t("PT_PROPERTY_PTUID")} text={`${property.propertyId || t("CS_NA")}`} /* textStyle={{ whiteSpace: "pre" }} */ />
+            <Row className="border-none" label={t("CS_COMMON_TOTAL_AMOUNT_DUE")} text={`${t(getBillAmount(fetchBillData))}`} />
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
           <StatusTable>
-            <Row label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={`${property.address?.pincode || t("CS_NA")}`} />
-            <Row label={t("PT_COMMON_CITY")} text={`${t(getCityLocale(property?.tenantId)) || t("CS_NA")}`} />
-            <Row label={t("PT_COMMON_LOCALITY_OR_MOHALLA")} text={`${t(property?.address?.locality?.name)}` || t("CS_NA")} />
-            <Row label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={`${property.address?.street || t("CS_NA")}`} />
-            <Row label={t("PT_PROPERTY_ADDR_DOOR_HOUSE_NO")} text={`${property.address?.doorNo || t("CS_NA")}`} />
+            <Row className="border-none" label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={`${property.address?.pincode || t("CS_NA")}`} />
+            <Row className="border-none" label={t("PT_COMMON_CITY")} text={`${t(getCityLocale(property?.tenantId)) || t("CS_NA")}`} />
+            <Row className="border-none" label={t("PT_COMMON_LOCALITY_OR_MOHALLA")} text={`${t(property?.address?.locality?.name)}` || t("CS_NA")} />
+            <Row className="border-none" label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={`${property.address?.street || t("CS_NA")}`} />
+            <Row className="border-none" label={t("PT_PROPERTY_ADDR_DOOR_HOUSE_NO")} text={`${property.address?.doorNo || t("CS_NA")}`} />
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ASSESSMENT_DETAILS_HEADER")}</CardSubHeader>
           <StatusTable>
-            <Row
+            <Row 
+              className="border-none" 
               label={t("PT_ASSESMENT_INFO_USAGE_TYPE")}
               text={
                 `${t(
                   (property.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                  (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory)
+                    (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory)
                 )}` || t("CS_NA")
               }
             />
-            <Row label={t("PT_COMMON_PROPERTY_TYPE")} text={`${t(getPropertyTypeLocale(property?.propertyType))}` || t("CS_NA")} />
-            <Row label={t("PT_ASSESMENT1_PLOT_SIZE")} text={`${property.landArea} sq.ft` || t("CS_NA")} />
-            <Row label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${property.noOfFloors || t("CS_NA")}`} />
+            <Row className="border-none" label={t("PT_COMMON_PROPERTY_TYPE")} text={`${t(getPropertyTypeLocale(property?.propertyType))}` || t("CS_NA")} />
+            <Row className="border-none" label={t("PT_ASSESMENT1_PLOT_SIZE")} text={`${property.landArea} sq.ft` || t("CS_NA")} />
+            <Row className="border-none" label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${property.noOfFloors || t("CS_NA")}`} />
           </StatusTable>
           <div>
             {Array.isArray(units) &&
@@ -175,26 +197,27 @@ const PropertyInformation = () => {
                   {(flrno !== unit?.floorNo ? (i = 1) : (i = i + 1)) && i === 1 && (
                     <CardSubHeader>{t(`PROPERTYTAX_FLOOR_${unit?.floorNo}`)}</CardSubHeader>
                   )}
-                  <div style={{ border: "groove" }}>
+                  <div style={{ border: "groove", marginBottom:"10px" }}>
                     <CardSubHeader>
                       {t("ES_APPLICATION_DETAILS_UNIT")} {i}
                     </CardSubHeader>
                     {(flrno = unit?.floorNo) > -5 && (
                       <StatusTable>
-                        <Row
+                        <Row 
+                          className="border-none" 
                           label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")}
                           text={
                             `${t(
                               (property.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                              (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory) +
-                              (property.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
+                                (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory) +
+                                (property.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
                             )}` || t("CS_NA")
                           }
                         />
-                        <Row label={t("PT_OCCUPANY_TYPE_LABEL")} text={`${t("PROPERTYTAX_OCCUPANCYTYPE_" + unit?.occupancyType)}` || t("CS_NA")} />
-                        <Row label={t("PT_BUILTUP_AREA_LABEL")} text={`${`${unit?.constructionDetail?.builtUpArea} sq.ft` || t("CS_NA")}`} />
+                        <Row className="border-none" label={t("PT_OCCUPANY_TYPE_LABEL")} text={`${t("PROPERTYTAX_OCCUPANCYTYPE_" + unit?.occupancyType)}` || t("CS_NA")} />
+                        <Row className="border-none" label={t("PT_BUILTUP_AREA_LABEL")} text={`${`${unit?.constructionDetail?.builtUpArea} sq.ft` || t("CS_NA")}`} />
                         {unit.occupancyType == "RENTED" && (
-                          <Row label={t("PT_FORM2_TOTAL_ANNUAL_RENT")} text={`${(unit?.arv && `₹${unit?.arv}`) || t("CS_NA")}`} />
+                          <Row className="border-none" label={t("PT_FORM2_TOTAL_ANNUAL_RENT")} text={`${(unit?.arv && `₹${unit?.arv}`) || t("CS_NA")}`} />
                         )}
                       </StatusTable>
                     )}
@@ -215,26 +238,44 @@ const PropertyInformation = () => {
                     )}
                   </CardSubHeader>
                   <StatusTable>
-                  {property?.institution && property?.institution?.name && <Row label={t("PT_INSTITUTION_NAME")} text={`${property?.institution?.name || t("CS_NA")}`} />}
-                  {property?.institution && property?.institution?.type && <Row label={t("PT_INSTITUTION_TYPE")} text={`${t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${property?.institution?.type}`) || t("CS_NA")}`} />}
-                    <Row
+                  {property?.institution && property?.institution?.name && <Row className="border-none" label={t("PT_INSTITUTION_NAME")} text={`${property?.institution?.name || t("CS_NA")}`} />}
+                  {property?.institution && property?.institution?.type && <Row className="border-none" label={t("PT_INSTITUTION_TYPE")} text={`${t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${property?.institution?.type}`) || t("CS_NA")}`} />}
+                    <Row 
+                      className="border-none" 
                       label={t("PT_COMMON_APPLICANT_NAME_LABEL")}
-                      textStyle={isMobile?{width:"22%"}:{width:"40%"}}
+                      textStyle={isMobile?{marginLeft:"29%",marginRight:"5%",wordBreak:"break-word"}:{marginLeft:"21%"}}
                       text={`${owner?.name || t("CS_NA")}`}
+                      actionButtonStyle={{marginRight:"-10px"}}
                       actionButton={
-                        <ActionButton jumpTo={`/digit-ui/citizen/pt/property/owner-history/${property.tenantId}/${property.propertyId}`} />
+                        <ActionButton style={{marginRight:"-10px"}} jumpTo={`/digit-ui/citizen/pt/property/owner-history/${property.tenantId}/${property.propertyId}`} />
                       }
                     />
-                    <Row label={t("PT_COMMON_GENDER_LABEL")} text={`${owner?.gender ? owner?.gender.toLowerCase() : t("CS_NA")}`} />
-                    {property?.institution && <Row label={t("PT_LANDLINE_NUMBER_FLOATING_LABEL")} text={`${owner?.altContactNumber || t("CS_NA")}`} />}
-                    <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={`${t(owner?.mobileNumber)}` || t("CS_NA")} />
-                    {property?.institution && property?.institution?.designation && <Row label={t("Designation")} text={`${property?.institution?.designation || t("CS_NA")}`} />}
-                    <Row label={t("PT_FORM3_GUARDIAN_NAME")} text={`${owner?.fatherOrHusbandName || t("CS_NA")}`} />
-                    <Row label={t("PT_FORM3_RELATIONSHIP")} text={`${owner?.relationship || t("CS_NA")}`} />
-                    {specialCategoryDoc && specialCategoryDoc.length>0 && <Row label={t("PT_SPL_CAT_DOC_TYPE")} text={`${t(stringReplaceAll(specialCategoryDoc[index].documentType,".","_"))}` || t("CS_NA")} />}
-                    {specialCategoryDoc && specialCategoryDoc.length>0 && <Row label={t("PT_SPL_CAT_DOC_ID")} text={`${t(specialCategoryDoc[index].id)}` || t("CS_NA")} />}
-                    <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={`${t(t("CS_NA"))}`} />
-                    <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(owners?.correspondenceAddress)}` || t("CS_NA")} />
+                    <Row className="border-none"  label={t("PT_COMMON_GENDER_LABEL")} text={`${owner?.gender ? owner?.gender.toLowerCase() : t("CS_NA")}`} />
+                    {property?.institution && <Row className="border-none" label={t("PT_LANDLINE_NUMBER_FLOATING_LABEL")} text={`${owner?.altContactNumber || t("CS_NA")}`} />}
+                    <Row 
+                    className="border-none" 
+                    label={t("PT_FORM3_MOBILE_NUMBER")}
+                    text={`${t(owner?.mobileNumber)}` || t("CS_NA")}
+                    textStyle={isMobile?{marginLeft:"16%"}:{marginLeft:"13%"}}
+                    actionButton={
+                    property?.status === "ACTIVE"&&owner?.mobileNumber&&Digit.UserService.getUser()?.info?.mobileNumber&&owner.mobileNumber===Digit.UserService.getUser()?.info?.mobileNumber&&<div onClick={() => showPopup({ name: owner?.name, mobileNumber: owner?.mobileNumber, ownerIndex: index })}>
+                    <EditIcon />
+                    </div>
+                    }
+                    />         
+                    {property?.institution && property?.institution?.designation && <Row className="border-none"  label={t("Designation")} text={`${property?.institution?.designation || t("CS_NA")}`} />}
+                    <Row className="border-none" label={t("PT_FORM3_GUARDIAN_NAME")} text={`${owner?.fatherOrHusbandName || t("CS_NA")}`} />
+                    <Row 
+                      className="border-none" 
+                      label={t("PT_FORM3_OWNERSHIP_TYPE")}
+                      text={`${property?.ownershipCategory ? t(`PT_OWNERSHIP_${property?.ownershipCategory}`) : t("CS_NA")}`}
+                    />
+                    <Row className="border-none"  label={t("PT_FORM3_RELATIONSHIP")} text={`${owner?.relationship || t("CS_NA")}`} />
+                    {specialCategoryDoc && specialCategoryDoc.length>0 && <Row className="border-none" label={t("PT_SPL_CAT_DOC_TYPE")} text={`${t(stringReplaceAll(specialCategoryDoc[index]?.documentType,".","_"))}` || t("NA")} />}
+                    {specialCategoryDoc && specialCategoryDoc.length>0 && <Row className="border-none" label={t("PT_SPL_CAT_DOC_ID")} text={`${t(specialCategoryDoc[index]?.id)}` || t("CS_NA")} />}
+                    <Row className="border-none" label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId ? owner?.emailId:`${(t("CS_NA"))}`} />
+                    <Row className="border-none" label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={`${t(owner?.correspondenceAddress)}` || t("CS_NA")} />
+                    {specialCategoryDoc?.length == 0 && <Row className="border-none"  label={t("PT_SPL_CAT")} text={t("CS_NONE")} /> }
                   </StatusTable>
                 </div>
               ))}
@@ -245,7 +286,7 @@ const PropertyInformation = () => {
               docs.length > 0 && <PropertyDocument property={property}></PropertyDocument>
             ) : (
               <StatusTable>
-                <Row text="PT_NO_DOCUMENTS_MSG" />
+                <Row className="border-none" text={t("PT_NO_DOCUMENTS_MSG")} />
               </StatusTable>
             )}
           </div>
@@ -258,6 +299,37 @@ const PropertyInformation = () => {
               </div>
             )}
           </div>
+          {popup && (
+            <PopUp>
+              <UpdatePropertyNumberComponent
+                showPopup={showPopup}
+                name={popup?.name}
+                UpdateNumberConfig={UpdateNumberConfig}
+                mobileNumber={popup?.mobileNumber}
+                t={t}
+                onValidation={(data, showToast) => {
+                  let newProp = { ...property };
+                  newProp.owners[popup?.ownerIndex].mobileNumber = data.mobileNumber;
+                  newProp.creationReason = "UPDATE";
+                  newProp.workflow = null;
+                  mutation.mutate(
+                    {
+                      Property: newProp,
+                    },
+                    {
+                      onError: () => {},
+                      onSuccess: async (successRes) => {
+                        showToast();
+                        setTimeout(() => {
+                          window.location.reload();
+                        }, 3000);
+                      },
+                    }
+                  );
+                }}
+              ></UpdatePropertyNumberComponent>
+            </PopUp>
+          )}
         </Card>
       </div>
     </React.Fragment>

@@ -1,11 +1,13 @@
-import { BackButton, BreadCrumb, CitizenHomeCard, CitizenTruck, Loader, PrivateRoute } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
+import { CitizenHomeCard, CitizenTruck, Loader } from "@egovernments/digit-ui-react-components";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, Redirect, Switch, useLocation, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import FSMCard from "./components/FsmCard";
 import CheckSlum from "./pageComponents/CheckSlum";
 import SelectAddress from "./pageComponents/SelectAddress";
 import SelectChannel from "./pageComponents/SelectChannel";
+import SelectGender from "./pageComponents/SelectGender";
+import SelectPaymentType from "./pageComponents/SelectPaymentType";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectLandmark from "./pageComponents/SelectLandmark";
 import SelectName from "./pageComponents/SelectName";
@@ -17,11 +19,15 @@ import SelectSlumName from "./pageComponents/SelectSlumName";
 import SelectStreet from "./pageComponents/SelectStreet";
 import SelectTankSize from "./pageComponents/SelectTankSize";
 import SelectTripData from "./pageComponents/SelectTripData";
+import SelectTripNo from "./pageComponents/SelectTripNo";
+import SelectPaymentPreference from "./pageComponents/SelectPaymentPreference";
+import CitizenApp from "./pages/citizen";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import { MyApplications } from "./pages/citizen/MyApplications";
 import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
 import RateView from "./pages/citizen/Rating/RateView";
 import SelectRating from "./pages/citizen/Rating/SelectRating";
+import EmployeeApp from "./pages/employee";
 import ApplicationAudit from "./pages/employee/ApplicationAudit";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails";
 import DsoDashboard from "./pages/employee/DsoDashboard";
@@ -31,118 +37,6 @@ import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import Inbox from "./pages/employee/Inbox";
 import { NewApplication } from "./pages/employee/NewApplication";
 import Response from "./pages/Response";
-
-
-
-
-
-const FsmBreadCrumb = ({ location }) => {
-  const { t } = useTranslation();
-  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
-  const isApplicationDetails = location?.pathname?.includes("application-details");
-  const isInbox = location?.pathname?.includes("inbox");
-  const isFsm = location?.pathname?.includes("fsm");
-  const isSearch = location?.pathname?.includes("search");
-  const [search, setSearch] = useState(false);
-
-  useEffect(() => {
-    if (!search) {
-      setSearch(isSearch);
-    } else if (isInbox && search) {
-      setSearch(false);
-    }
-  }, [location]);
-
-  const crumbs = [
-    {
-      path: DSO ? "/digit-ui/citizen/fsm/dso-dashboard" : "/digit-ui/employee",
-      content: t("ES_COMMON_HOME"),
-      show: isFsm,
-    },
-    {
-      path: "/digit-ui/employee/fsm/inbox",
-      content: isInbox || isApplicationDetails || search ? t("ES_TITLE_INBOX") : "FSM",
-      show: isFsm,
-    },
-    {
-      path: "/digit-ui/employee/fsm/search",
-      content: t("ES_TITILE_SEARCH_APPLICATION"),
-      show: search,
-    },
-    { content: t("ES_TITLE_APPLICATION_DETAILS"), show: isApplicationDetails },
-  ];
-
-  return <BreadCrumb crumbs={crumbs} />;
-};
-
-const EmployeeApp = ({ path, url, userType }) => {
-  const location = useLocation();
-
-  useEffect(() => {
-    if (!location?.pathname?.includes("application-details")) {
-      if (!location?.pathname?.includes("inbox")) {
-        Digit.SessionStorage.del("fsm/inbox/searchParams");
-      } else if (!location?.pathname?.includes("search")) {
-        Digit.SessionStorage.del("fsm/search/searchParams");
-      }
-    }
-  }, [location]);
-
-  return (
-    <Switch>
-      <React.Fragment>
-        <div className="ground-container">
-          <FsmBreadCrumb location={location} />
-          <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
-          <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} isInbox={true} />} />
-          <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
-          <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
-          <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
-          <PrivateRoute path={`${path}/application-details/:id`} component={() => <EmployeeApplicationDetails parentRoute={path} />} />
-          <PrivateRoute path={`${path}/fstp-operator-details/:id`} component={FstpOperatorDetails} />
-          <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
-          <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />
-          <PrivateRoute path={`${path}/search`} component={() => <Inbox parentRoute={path} isSearch={true} />} />
-          <PrivateRoute path={`${path}/rate-view/:id`} component={() => <RateView parentRoute={path} />} />
-          <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <MarkForDisposal parentRoute={path} />} />
-        </div>
-      </React.Fragment>
-    </Switch>
-  );
-};
-
-const CitizenApp = ({ path }) => {
-  const location = useLocation();
-  const { t } = useTranslation();
-
-  return (
-    <React.Fragment>
-      {!location.pathname.includes("/new-application/response") && <BackButton>{t("CS_COMMON_BACK")}</BackButton>}
-      <Switch>
-        <PrivateRoute
-          path={`${path}/inbox`}
-          component={() =>
-            Digit.UserService.hasAccess(["FSM_DSO"]) ? <Inbox parentRoute={path} isInbox={true} /> : <Redirect to="/digit-ui/citizen" />
-          }
-        />
-        <PrivateRoute
-          path={`${path}/search`}
-          component={() =>
-            Digit.UserService.hasAccess(["FSM_DSO"]) ? <Inbox parentRoute={path} isSearch={true} /> : <Redirect to="/digit-ui/citizen" />
-          }
-        />
-        <PrivateRoute path={`${path}/new-application`} component={() => <NewApplicationCitizen parentRoute={path} />} />
-        <PrivateRoute path={`${path}/my-applications`} component={MyApplications} />
-        <PrivateRoute path={`${path}/dso-application-details/:id`} component={() => <EmployeeApplicationDetails parentRoute={path} />} />
-        <PrivateRoute path={`${path}/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
-        <PrivateRoute path={`${path}/rate/:id`} component={() => <SelectRating parentRoute={path} />} />
-        <PrivateRoute path={`${path}/rate-view/:id`} component={() => <RateView parentRoute={path} />} />
-        <PrivateRoute path={`${path}/response`} component={(props) => <Response parentRoute={path} {...props} />} />
-        <PrivateRoute path={`${path}/dso-dashboard`} component={() => <DsoDashboard parentRoute={path} />} />
-      </Switch>
-    </React.Fragment>
-  );
-};
 
 const FSMModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "FSM";
@@ -231,9 +125,6 @@ const FSMLinks = ({ matchPath, userType }) => {
                 <span className="link">
                   <Link to={`${matchPath}/new-application/`}>{t("ES_TITLE_NEW_DESULDGING_APPLICATION")}</Link>
                 </span>
-                {/* <span className="link">
-                  <Link to={`${matchPath}/application-audit/`}>{t("ES_TITLE_APPLICATION_AUDIT")}</Link>
-                </span> */}
               </div>
             </div>
           </div>
@@ -252,6 +143,7 @@ const componentsToRegister = {
   SelectPincode,
   SelectTankSize,
   SelectPitType,
+  SelectTripNo,
   SelectGeolocation,
   SelectSlumName,
   CheckSlum,
@@ -261,6 +153,24 @@ const componentsToRegister = {
   SelectChannel,
   SelectName,
   SelectTripData,
+  SelectGender,
+  SelectPaymentType,
+  SelectPaymentPreference,
+  FSMEmpInbox: Inbox,
+  FSMFstpInbox: FstpInbox,
+  FSMNewApplicationEmp: NewApplication,
+  FSMEditApplication: EditApplication,
+  FSMEmployeeApplicationDetails: EmployeeApplicationDetails,
+  FSMFstpOperatorDetails: FstpOperatorDetails,
+  FSMResponse: Response,
+  FSMApplicationAudit: ApplicationAudit,
+  FSMRateView: RateView,
+  FSMNewApplicationCitizen: NewApplicationCitizen,
+  FSMMyApplications: MyApplications,
+  FSMCitizenApplicationDetails: ApplicationDetails,
+  FSMSelectRating: SelectRating,
+  FSMDsoDashboard: DsoDashboard,
+  SelectPaymentPreference,
 };
 
 export const initFSMComponents = () => {

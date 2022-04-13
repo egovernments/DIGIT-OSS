@@ -19,11 +19,15 @@ const Modal = ({
   formId,
   isDisabled,
   hideSubmit,
-  style={}
+  style={},
+  popupModuleMianStyles,
+  headerBarMainStyle,
+  isOBPSFlow = false,
 }) => {
   /**
    * TODO: It needs to be done from the desgin changes
    */
+   const mobileView = Digit.Utils.browser.isMobile() ? true : false;
   useEffect(() => {
     document.body.style.overflowY = 'hidden';
     return () =>{
@@ -33,10 +37,10 @@ const Modal = ({
   return (
     <PopUp>
       <div className="popup-module" style={popupStyles}>
-        <HeaderBar main={headerBarMain} end={headerBarEnd} />
-        <div className="popup-module-main">
+        <HeaderBar main={headerBarMain} end={headerBarEnd} style={headerBarMainStyle ? headerBarMainStyle : {}}/>
+        <div className="popup-module-main" style={popupModuleMianStyles ? popupModuleMianStyles : {}}>
           {children}
-          <div className="popup-module-action-bar">
+          <div className="popup-module-action-bar" style={isOBPSFlow?!mobileView?{marginRight:"18px"}:{position:"absolute",bottom:"5%",right:"10%",left:window.location.href.includes("employee")?"0%":"7%"}:{}}>
             {actionCancelLabel ? <ButtonSelector theme="border" label={actionCancelLabel} onSubmit={actionCancelOnSubmit} style={style}/> : null}
             {!hideSubmit ? <ButtonSelector label={actionSaveLabel} onSubmit={actionSaveOnSubmit} formId={formId} isDisabled={isDisabled} style={style}/> : null}
           </div>

@@ -6,6 +6,7 @@ import cloneDeep from "lodash/cloneDeep";
 
 const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     let validation = {};
+    sessionStorage.removeItem("currentPincode");
     let isedittrade = window.location.href.includes("edit-application");
     let isrenewtrade = window.location.href.includes("renew-trade");
     const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -26,7 +27,10 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     );
 
     useEffect(() => {
+        var flag=0;
         fields.map((ob) => {
+            if(ob.isPrimaryOwner)
+            flag=1;
             if (ob.name && ob.mobileNumber && ob.gender) {
                 setCanmovenext(false);
             }
@@ -34,11 +38,18 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 setCanmovenext(true);
             }
         })
+        if(!canmovenext && ownershipCategory && !(ownershipCategory?.code.includes("SINGLEOWNER")))
+        {
+            if(flag==1)
+            setCanmovenext(false);
+            else
+            setCanmovenext(true);
+        }
     }, [fields])
 
     useEffect(() => {
         const values = cloneDeep(fields);
-        if (ownershipCategory && !ismultiple && values?.length > 1) setFeilds([values[0]]);
+        if (ownershipCategory && !ismultiple && values?.length > 1) setFeilds([{...values[0],isPrimaryOwner:true}]);
     }, [ownershipCategory])
 
     const { isLoading, data: ownerShipCategories } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["OwnerShipCategory"]);
@@ -67,6 +78,11 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         }
     }, [genderTypeData]);
 
+    // useEffect(() => {
+    //     if(showToast) {
+    //         setTimeout(closeToast, 5000);
+    //     }
+    // },[showToast]);
 
     function selectedValue(value) {
         setOwnershipCategory(value);
@@ -84,6 +100,10 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         const values = [...fields];
         if (values.length != 1) {
             values.splice(index, 1);
+            if(values.length == 1)
+            {
+                values[0] = {...values[0], isPrimaryOwner:true}
+            }
             setFeilds(values);
         }
 
@@ -137,7 +157,9 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         return usageCat;
     }
 
-    function getUnitsForAPI(ob){
+    function getUnitsForAPI(subOccupancyData){
+        const ob = subOccupancyData?.subOccupancy;
+        const blocksDetails = subOccupancyData?.data?.edcrDetails?.planDetail?.blocks || [];
         let units=[];
         if(ob) {
             let result = Object.entries(ob);
@@ -146,6 +168,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     blockIndex:index,
                     floorNo:unit[0].split("_")[1],
                     unitType:"Block",
+                    occupancyType: blocksDetails?.[index]?.building?.occupancies?.[0]?.typeHelper?.type?.code || "A", 
                     usageCategory:getusageCategoryAPI(unit[1]),
                 });
             })
@@ -168,6 +191,8 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     const getOwnerDetails = async (indexValue, eData) => {
         const ownersCopy = cloneDeep(fields);
         const ownerNo = ownersCopy?.[indexValue]?.mobileNumber || "";
+        setShowToast(null);
+
 
         if (!ownerNo.match(getPattern("MobileNo"))) {
             setShowToast({ key: "true", error: true, message: "ERR_MOBILE_NUMBER_INCORRECT" });
@@ -258,7 +283,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 if (formData?.address?.city?.code) payload.landInfo.address.city = formData?.address?.city?.code;
                 if (formData?.address?.locality?.code) payload.landInfo.address.locality = { code: formData?.address?.locality?.code };
                 if (formData?.address?.pincode) payload.landInfo.address.pincode = formData?.address?.pincode;
-                if (formData?.address?.Landmark) payload.landInfo.address.landmark = formData?.address?.Landmark;
+                if (formData?.address?.landmark) payload.landInfo.address.landmark = formData?.address?.landmark;
                 if (formData?.address?.street) payload.landInfo.address.street = formData?.address?.street;
                 if (formData?.address?.geoLocation) payload.landInfo.address.geoLocation = formData?.address?.geoLocation;
 
@@ -267,8 +292,12 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 payload.landInfo.tenantId = formData?.address?.city?.code;
 
                 //for units
-                payload.landInfo.unit = getUnitsForAPI(formData?.subOccupancy);
+                const blockOccupancyDetails = formData;
+                payload.landInfo.unit = getUnitsForAPI(blockOccupancyDetails);
 
+                let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
+                let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
+                payload.additionalDetails.typeOfArchitect = parsedArchitectName;
                 // create BPA call
                 Digit.OBPSService.create({ BPA: payload }, tenantId)
                     .then((result, err) => {
@@ -280,6 +309,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                             result.BPA[0].address = result?.BPA?.[0]?.landInfo?.address;
                             result.BPA[0].address.city = formData.address.city;
                             result.BPA[0].address.locality = formData.address.locality;
+                            result.BPA[0].placeName = formData?.address?.placeName;
                             result.BPA[0].data = formData.data;
                             result.BPA[0].BlockIds = getBlockIds(result.BPA[0].landInfo.unit);
                             result.BPA[0].subOccupancy= formData?.subOccupancy;

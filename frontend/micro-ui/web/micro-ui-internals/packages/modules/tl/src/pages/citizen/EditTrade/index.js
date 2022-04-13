@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { newConfig as newConfigTL } from "../../../config/config";
-import { getCommencementDataFormat } from "../../../utils/index";
+import { getCommencementDataFormat, stringReplaceAll } from "../../../utils/index";
 
 const getPath = (path, params) => {
   params &&
@@ -67,21 +67,49 @@ const getTradeEditDetails = (data) => {
       owner.map((ob) => {
         ownerarray.push({
           gender: {
-            code: `${ob.gender}`,
-            name: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`,
-            value: `${!ob?.gender.includes("FEMALE") ? "Male" : "Female"}`,
-            i18nKey: `TL_GENDER_${ob.gender}`,
+            code: ob.gender,
+            name: `${!ob?.gender?.includes("FEMALE") ? "Male" : "Female"}`,
+            value: `${!ob?.gender?.includes("FEMALE") ? "Male" : "Female"}`,
+            i18nKey: ob.gender?`TL_GENDER_${ob.gender}`:"CS_NA",
           },
           isprimaryowner: false,
           name: ob.name,
           mobilenumber: ob.mobileNumber,
           permanentAddress: ob.permanentAddress,
           id: ob.id,
+          uuid : ob.uuid,
+          relationship : { code: ob?.relationship , i18nKey:ob.relationship?`COMMON_RELATION_${ob.relationship}`:"CS_NA"},
+          fatherOrHusbandName : ob?.fatherOrHusbandName,
         });
       });
     // ownerarray["permanentAddress"]=owner.permanentAddress;
     return ownerarray;
   };
+
+  const getInsitutionaltradeowners = (owner,institution) => {
+    let ownerarray = [];
+    owner &&
+      owner.map((ob) => {
+        ownerarray.push({
+          name: institution.name,
+          mobilenumber: ob.mobileNumber,
+          permanentAddress: ob.permanentAddress,
+          altContactNumber:institution.contactNo,
+          designation:institution.designation,
+          institutionName:institution.instituionName,
+          tenantId: data.tenantId,
+          emailId:ob.emailId,
+          subOwnerShipCategory : {
+            code: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`,
+            i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(data?.tradeLicenseDetail?.subOwnerShipCategory,".","_")}`,
+          },
+          id: ob.id,
+          uuid : ob.uuid,
+        });
+      });
+    return ownerarray;
+  };
+
   data.TradeDetails = {
     BuildingType: {
       code: `${data?.tradeLicenseDetail?.structureType}`,
@@ -117,14 +145,14 @@ const getTradeEditDetails = (data) => {
   data.address.street = data?.tradeLicenseDetail?.address?.street;
   data.address.landmark = data?.tradeLicenseDetail?.address?.landmark;
   data.address.pincode = data?.tradeLicenseDetail?.address?.pincode;
-  data.address.city = { code: data?.tradeLicenseDetail?.address?.tenantId };
+  data.address.city = { code: data?.tradeLicenseDetail?.address?.tenantId, i18nKey:`TENANT_TENANTS_${stringReplaceAll(data?.tradeLicenseDetail?.address?.tenantId,".","_").toUpperCase()}` };
   data.address.locality = data?.tradeLicenseDetail?.address?.locality;
   data.address.locality.i18nkey = data?.tenantId.replace(".", "_").toUpperCase() + "_" + "REVENUE" + "_" + data?.address?.locality?.code;
   data.address.locality.doorNo = data?.tradeLicenseDetail?.address?.doorNo;
   data.address.locality.landmark = data?.tradeLicenseDetail?.address?.landmark;
   data.owners = {
     documents: gettradedocuments(data?.tradeLicenseDetail?.applicationDocuments),
-    owners: gettradeowners(data?.tradeLicenseDetail?.owners),
+    owners: data?.tradeLicenseDetail?.institution?.id ? getInsitutionaltradeowners(data?.tradeLicenseDetail?.owners,data?.tradeLicenseDetail?.institution) :  gettradeowners(data?.tradeLicenseDetail?.owners),
     permanentAddress: data?.tradeLicenseDetail?.owners[0].permanentAddress,
     isCorrespondenceAddress: false,
   };
@@ -157,6 +185,7 @@ const EditTrade = ({ parentRoute }) => {
   const { isLoading, isError, error, data } = Digit.Hooks.tl.useTradeLicenseSearch({ filters: filter1 }, { filters: filter1 });
   const editProperty = window.location.href.includes("edit");
   const tlTrade = JSON.parse(sessionStorage.getItem("tl-trade")) || {};
+  let isReneworEditTrade = window.location.href.includes("/renew-trade/") || window.location.href.includes("/edit-application/")
 
   useEffect(() => {
     application = data?.Licenses && data.Licenses[0] && data.Licenses[0];
@@ -175,18 +204,52 @@ const EditTrade = ({ parentRoute }) => {
     
   }, [data]);
 
-  const goNext = (skipStep, index, isAddMultiple, key) => {
+  const goNext = (skipStep, index, isAddMultiple, key,isPTCreateSkip) => {
     let currentPath = pathname.split("/").pop(),
       lastchar = currentPath.charAt(currentPath.length - 1),
       isMultiple = false,
       nextPage;
     let { nextStep = {} } = config.find((routeObj) => routeObj.route === currentPath);
+    let { isCreateEnabled : enableCreate = true } = config.find((routeObj) => routeObj.route === currentPath);
     if (typeof nextStep == "object" && nextStep != null) {
-      if (nextStep[sessionStorage.getItem("isAccessories")]) {
-        nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
-      } else if (nextStep[sessionStorage.getItem("StructureType")]) {
-        nextStep = `${nextStep[sessionStorage.getItem("StructureType")]}`;
+      if((params?.cptId?.id || params?.cpt?.details?.propertyId || (isReneworEditTrade && params?.tradeLicenseDetail?.additionalDetail?.propertyId))  && (nextStep[sessionStorage.getItem("isAccessories")] && nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")  )
+      {
+        nextStep = "property-details";
       }
+      if (
+        nextStep[sessionStorage.getItem("isAccessories")] &&
+        (nextStep[sessionStorage.getItem("isAccessories")] === "accessories-details" ||
+          nextStep[sessionStorage.getItem("isAccessories")] === "map" ||
+          nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details" || 
+          nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")
+      ) {
+        if((isReneworEditTrade && !(params?.tradeLicenseDetail?.additionalDetail?.propertyId)  ) )
+        nextStep = `map`
+        else
+        nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
+      } else if (
+        nextStep[sessionStorage.getItem("StructureType")] &&
+        (nextStep[sessionStorage.getItem("StructureType")] === "Building-type" ||
+          nextStep[sessionStorage.getItem("StructureType")] === "vehicle-type")
+      ) {
+        nextStep = `${nextStep[sessionStorage.getItem("StructureType")]}`;
+      } else if (
+        nextStep[sessionStorage.getItem("KnowProperty")] &&
+        (nextStep[sessionStorage.getItem("KnowProperty")] === "search-property" ||
+          nextStep[sessionStorage.getItem("KnowProperty")] === "create-property")
+      ) {
+        if(nextStep[sessionStorage.getItem("KnowProperty")] === "create-property" && !enableCreate)
+          {
+            nextStep = `map`;
+          }
+          else{
+         nextStep = `${nextStep[sessionStorage.getItem("KnowProperty")]}`;
+          }
+      }
+    }
+    if( (params?.cptId?.id || params?.cpt?.details?.propertyId || (isReneworEditTrade && params?.tradeLicenseDetail?.additionalDetail?.propertyId ))  && nextStep === "know-your-property" )
+    { 
+      nextStep = "property-details";
     }
     let redirectWithHistory = history.push;
     if (skipStep) {
@@ -198,6 +261,10 @@ const EditTrade = ({ parentRoute }) => {
     if (nextStep === null) {
       return redirectWithHistory(`${getPath(match.path, match.params)}/check`);
     }
+    if(isPTCreateSkip && nextStep === "acknowledge-create-property")
+    {
+      nextStep = "map";
+    }
     nextPage = `${getPath(match.path, match.params)}/${nextStep}`;
     redirectWithHistory(nextPage);
   };
@@ -206,7 +273,14 @@ const EditTrade = ({ parentRoute }) => {
   };
   function handleSelect(key, data, skipStep, index, isAddMultiple = false) {
     setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
+    if(key === "isSkip" && data === true)
+    {
+      goNext(skipStep, index, isAddMultiple, key, true);
+    }
+    else
+    {
     goNext(skipStep, index, isAddMultiple, key);
+    }
   }
   const handleSkip = () => {};
   const handleMultiple = () => {};
@@ -226,11 +300,11 @@ const EditTrade = ({ parentRoute }) => {
   return (
     <Switch>
       {config.map((routeObj, index) => {
-        const { component, texts, inputs, key } = routeObj;
+        const { component, texts, inputs, key, isSkipEnabled } = routeObj;
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${getPath(match.path, match.params)}/${routeObj.route}`} key={index}>
-            <Component config={{ texts, inputs, key }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} onAdd={handleMultiple} />
+            <Component config={{ texts, inputs, key, isSkipEnabled }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} onAdd={handleMultiple} />
           </Route>
         );
       })}

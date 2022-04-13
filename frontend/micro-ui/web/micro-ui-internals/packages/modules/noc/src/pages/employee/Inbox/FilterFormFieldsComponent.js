@@ -2,6 +2,7 @@ import React, { Fragment, useMemo } from "react"
 import { FilterFormField, Loader, RadioButtons, Localities, RemoveableTag, Dropdown, CheckBox } from "@egovernments/digit-ui-react-components";
 import { Controller, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { businessServiceList } from "../../../utils";
 
 const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState, getFilterFormValue, applicationTypesOfBPA, loadingApplicationTypesOfBPA,  localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}) => {
   const { t } = useTranslation()
@@ -11,24 +12,11 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
     { code: "ASSIGNED_TO_ALL", name: `${t("ES_INBOX_ASSIGNED_TO_ALL")}` },
   ];
 
-  const availableBusinessServices = [{
-      code: "FIRE_NOC_SRV",
-      i18nKey: "WF_FIRE_NOC_FIRE_NOC_SRV"
-    },{
-      code: "FIRE_NOC_OFFLINE",
-      i18nKey: "WF_FIRE_NOC_FIRE_NOC_OFFLINE"
-    },{
-      code: "AIRPORT_NOC_OFFLINE",
-      i18nKey: "WF_FIRE_NOC_AIRPORT_NOC_OFFLINE"
-    },{
-      code: "AIRPORT_NOC_SRV",
-      i18nKey: "WF_FIRE_NOC_AIRPORT_NOC_SRV"
-  }]
-
   applicationTypesOfBPA?.forEach(type => {
     type.name = t(`WF_BPA_${type.code}`);
     type.i18nKey = t(`WF_BPA_${type.code}`);
   });
+
 
   const selectedBusinessService = useWatch({control: controlFilterForm, name: "businessService", defaultValue: null});
 
@@ -53,7 +41,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           control={controlFilterForm}
           render={(props) => {
             return <>
-              <div className="filter-label">{t("BUSINESS_SERVICE")}</div>
+              <div className="filter-label sub-filter-label">{t("BUSINESS_SERVICE")}</div>
                 <RadioButtons
                   onSelect={(e) => {
                     setFilterFormValue("applicationStatus",[]);
@@ -61,7 +49,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
                 }}
                   selectedOption={props.value}
                   optionsKey="i18nKey"
-                  options={availableBusinessServices}
+                  options={businessServiceList() || []}
                 />  
               </>
           }}
@@ -82,7 +70,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               label={`${t(`WF_${status.businessservice}_${status.applicationstatus.split('_').pop()}`)} (${status.count})`}
             />}),[props.value, statuses, selectedBusinessService])
           return <>
-            <div className="filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
+            <div className="filter-label sub-filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
             {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}
           </>
         }}

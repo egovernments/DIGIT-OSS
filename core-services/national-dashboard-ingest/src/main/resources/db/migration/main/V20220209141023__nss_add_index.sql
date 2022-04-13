@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS index_nss_ingest_data_datakey ON nss_ingest_data (datakey);

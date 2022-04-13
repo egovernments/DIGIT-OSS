@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
+import { Redirect, Route, Switch, useLocation, useRouteMatch } from "react-router-dom";
 import { AppModules } from "../../components/AppModules";
+import ErrorBoundary from "../../components/ErrorBoundaries";
 import TopBarSideBar from "../../components/TopBarSideBar";
 import ChangePassword from "./ChangePassword";
 import ForgotPassword from "./ForgotPassword";
 import LanguageSelection from "./LanguageSelection";
 import EmployeeLogin from "./Login";
+import UserProfile from "../citizen/Home/UserProfile";
 
 const EmployeeApp = ({
   stateInfo,
@@ -25,14 +27,18 @@ const EmployeeApp = ({
 }) => {
   const { t } = useTranslation();
   const { path } = useRouteMatch();
+  const location = useLocation();
+  const showLanguageChange = location?.pathname?.includes("language-selection");
+  const isUserProfile = location?.pathname?.includes("user/profile");
   useEffect(() => {
     Digit.UserService.setType("employee");
   }, []);
+
   return (
     <div className="employee">
       <Switch>
         <Route path={`${path}/user`}>
-          <TopBarSideBar
+          {isUserProfile&&<TopBarSideBar
             t={t}
             stateInfo={stateInfo}
             userDetails={userDetails}
@@ -41,9 +47,17 @@ const EmployeeApp = ({
             mobileView={mobileView}
             handleUserDropdownSelection={handleUserDropdownSelection}
             logoUrl={logoUrl}
-            showSidebar={false}
-          />
-          <div className="loginContainer" style={{ "--banner-url": `url(${stateInfo?.bannerUrl})` }}>
+            showSidebar={isUserProfile ? true : false}
+            showLanguageChange={!showLanguageChange}
+          />}
+          <div
+            className={isUserProfile ? "grounded-container" : "loginContainer"}
+            style={
+              isUserProfile
+                ? { padding: 0, paddingTop: "80px", marginLeft: mobileView ? "" : "64px" }
+                : { "--banner-url": `url(${stateInfo?.bannerUrl})` ,padding:"0px"}
+            }
+          >
             <Switch>
               <Route path={`${path}/user/login`}>
                 <EmployeeLogin />
@@ -52,8 +66,10 @@ const EmployeeApp = ({
                 <ForgotPassword />
               </Route>
               <Route path={`${path}/user/change-password`}>
-                {" "}
                 <ChangePassword />
+              </Route>
+              <Route path={`${path}/user/profile`}>
+                <UserProfile stateCode={stateCode} userType={"employee"} cityDetails={cityDetails} />
               </Route>
               <Route path={`${path}/user/language-selection`}>
                 <LanguageSelection />
@@ -76,11 +92,12 @@ const EmployeeApp = ({
             logoUrl={logoUrl}
           />
           <div className={`main ${DSO ? "m-auto" : ""}`}>
-            {/* <div style={{ overflowY: "auto" }}> */}
-            <div>
-              <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
+            <div className="employee-app-wrapper">
+              <ErrorBoundary>
+                <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />
+              </ErrorBoundary>
             </div>
-            <div className="employee-home-footer">
+            <div className="employee-home-footer" style={{position:"absolute"}}>
               <img
                 alt="Powered by DIGIT"
                 src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER")}
