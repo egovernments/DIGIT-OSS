@@ -35,12 +35,18 @@ import static org.egov.inbox.util.WSConstants.WS_REQUESTINFO_PARAM;
 import static org.egov.inbox.util.WSConstants.WS_SEARCH_CRITERIA_PARAM;
 import static org.egov.inbox.util.WSConstants.WS_BUSINESS_SERVICE_PARAM;
 import static org.egov.inbox.util.WSConstants.WS_BUSINESS_IDS_PARAM;
+import static org.egov.inbox.util.WSConstants.WS_CONNECTION_NO_PARAM;
+import static org.egov.inbox.util.WSConstants.WS_APPLICATION_TYPE_PARAM;
+import static org.egov.inbox.util.WSConstants.PROPERTY_ID_PARAM;
+import static org.egov.inbox.util.WSConstants.ASSIGNEE_PARAM;
 import static org.egov.inbox.util.SWConstants.SW;
 import static org.egov.inbox.util.SWConstants.SW_APPLICATION_NUMBER_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_REQUESTINFO_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_SEARCH_CRITERIA_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_BUSINESS_SERVICE_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_BUSINESS_IDS_PARAM;
+import static org.egov.inbox.util.SWConstants.SW_CONNECTION_NO_PARAM;
+import static org.egov.inbox.util.SWConstants.SW_APPLICATION_TYPE_PARAM;
 
 
 import java.util.ArrayList;
@@ -396,33 +402,47 @@ public class InboxService {
             
             // Redirect request to searcher in case of WS to fetch acknowledgement IDS
             if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(WS)) {
-                totalCount = wsInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap,
-                        requestInfo);
+                totalCount = wsInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
                 List<String> applicationNumbers = wsInboxFilterService.fetchApplicationNumbersFromSearcher(criteria,
                         StatusIdNameMap, requestInfo);
-                if (!CollectionUtils.isEmpty(applicationNumbers)) {
-                    //moduleSearchCriteria.put(WS_BUSINESS_IDS_PARAM, acknowledgementNumbers);
-                    //businessKeys.addAll(acknowledgementNumbers);
-                    moduleSearchCriteria.remove(applicationStatusParam);
-                    //moduleSearchCriteria.remove(LOCALITY_PARAM);
-                    moduleSearchCriteria.remove(OFFSET_PARAM);
+                if (!CollectionUtils.isEmpty(applicationNumbers) && StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
+					moduleSearchCriteria.put(WS_BUSINESS_IDS_PARAM, applicationNumbers);
+					businessKeys.addAll(applicationNumbers);
+					moduleSearchCriteria.remove(applicationStatusParam);
+					moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
+					moduleSearchCriteria.remove(WS_APPLICATION_NUMBER_PARAM);
+					moduleSearchCriteria.remove(WS_APPLICATION_TYPE_PARAM);
+					moduleSearchCriteria.remove(WS_CONNECTION_NO_PARAM);
+					moduleSearchCriteria.remove(PROPERTY_ID_PARAM);
+					moduleSearchCriteria.remove(LOCALITY_PARAM);
+					moduleSearchCriteria.remove(OFFSET_PARAM);
+                } else if(!StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
+                	if(!StringUtils.isEmpty(processCriteria.getAssignee()))
+                		moduleSearchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
                 } else {
                     isSearchResultEmpty = true;
                 }
             }
            
-            // Redirect request to searcher in case of WS to fetch acknowledgement IDS
+            // Redirect request to searcher in case of SW to fetch acknowledgement IDS
             if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(SW)) {
-            	 totalCount = swInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap,
-                         requestInfo);
+            	 totalCount = swInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
                  List<String> applicationNumbers = swInboxFilterService.fetchApplicationNumbersFromSearcher(criteria,
                          StatusIdNameMap, requestInfo);
-                if (!CollectionUtils.isEmpty(applicationNumbers)) {
-                    //moduleSearchCriteria.put(WS_BUSINESS_IDS_PARAM, acknowledgementNumbers);
-                    //businessKeys.addAll(acknowledgementNumbers);
-                    moduleSearchCriteria.remove(applicationStatusParam);
-                    //moduleSearchCriteria.remove(LOCALITY_PARAM);
-                    moduleSearchCriteria.remove(OFFSET_PARAM);
+                if (!CollectionUtils.isEmpty(applicationNumbers) && StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
+					moduleSearchCriteria.put(WS_BUSINESS_IDS_PARAM, applicationNumbers);
+					businessKeys.addAll(applicationNumbers);
+					moduleSearchCriteria.remove(applicationStatusParam);
+					moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
+					moduleSearchCriteria.remove(SW_APPLICATION_NUMBER_PARAM);
+					moduleSearchCriteria.remove(SW_APPLICATION_TYPE_PARAM);
+					moduleSearchCriteria.remove(SW_CONNECTION_NO_PARAM);
+					moduleSearchCriteria.remove(PROPERTY_ID_PARAM);
+					moduleSearchCriteria.remove(LOCALITY_PARAM);
+					moduleSearchCriteria.remove(OFFSET_PARAM);
+                } else if(!StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
+                	if(!StringUtils.isEmpty(processCriteria.getAssignee()))
+                		moduleSearchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
                 } else {
                     isSearchResultEmpty = true;
                 }
