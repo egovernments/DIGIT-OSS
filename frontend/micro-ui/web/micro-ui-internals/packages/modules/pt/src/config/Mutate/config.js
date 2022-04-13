@@ -36,7 +36,7 @@ export const newConfigMutate = [
             label: "PT_HOME_SEARCH_RESULTS_OWN_MOB_LABEL",
             type: "mobileNumber",
             name: "mobileNumber",
-            validation:{pattern:{  value: /[789][0-9]{9}/,
+            validation:{pattern:{  value: /[6789][0-9]{9}/,
             message: "CORE_COMMON_MOBILE_ERROR",}},
             error: "CORE_COMMON_MOBILE_ERROR",
           },

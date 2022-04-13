@@ -56,7 +56,7 @@ const getConfig = (t, selectFile, setUploadedFile, uploadedFile, UpdateNumberCon
                 message: "CORE_COMMON_MOBILE_ERROR",
               },
               pattern: {
-                value: /[789][0-9]{9}/,
+                value: /[6789][0-9]{9}/,
                 message: "CORE_COMMON_MOBILE_ERROR",
               },
             },
