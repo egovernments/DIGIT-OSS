@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation, useRouteMatch } from "react-router-dom";
 import { stringReplaceAll } from "../utils";
+import { Controller, useForm } from "react-hook-form";
+import _ from "lodash";
 
-const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, ownerIndex, onBlur}) => {
-  let proptype = [];
-  let validation = {};
-  
-  const [BuildingType, setBuildingType] = useState(formData?.PropertyType);
+const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, formState, ownerIndex, setError, clearErrors }) => {  
+  const [assemblyDetails, setAssemblyDetails] = React.useState({
+    ...formData.assemblyDet,
+    'BuildingType': formData?.PropertyType,
+    'floorarea': formData?.landArea,
+    'constructionArea': formData?.constructionArea,
+    'usageCategoryMajor': formData?.usageCategoryMajor && formData?.usageCategoryMajor?.code === "NONRESIDENTIAL.OTHERS"
+    ? { code: `${formData?.usageCategoryMajor?.code}`, i18nKey: `PROPERTYTAX_BILLING_SLAB_OTHERS` }
+    : formData?.usageCategoryMajor
+  });
+  const [focusField, setFocusField] = React.useState("");
   const stateId = Digit.ULBService.getStateId();
-  const [floorarea, setfloorarea] = useState(formData.landArea);
-  const [constructionArea, setConstructionArea] = useState(formData.constructionArea);
-  const [usageCategoryMajor, setPropertyPurpose] = useState(
-    formData?.usageCategoryMajor && formData?.usageCategoryMajor?.code === "NONRESIDENTIAL.OTHERS"
-      ? { code: `${formData?.usageCategoryMajor?.code}`, i18nKey: `PROPERTYTAX_BILLING_SLAB_OTHERS` }
-      : formData?.usageCategoryMajor
-  );
+  const [isErrors, setIsErrors] = useState(false);
+  
+  let proptype = [];
 
   const { data: Menu = {}, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "PTPropertyType") || {};
   proptype = Menu?.PropertyTax?.PropertyType;
@@ -25,29 +29,9 @@ const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, owne
   let usagecat = [];
   usagecat = Menu1?.PropertyTax?.UsageCategory || [];
 
-  let index = 0;
-  let assemblyDet = formData.assemblyDet;
-  const assemblyDetStep = { ...assemblyDet, BuildingType, floorarea, constructionArea, usageCategoryMajor };
-
-  function setPropertyfloorarea(e) {
-    setfloorarea(e.target.value);
-    onSelect(config.key, { ...formData[config.key], ...assemblyDetStep, floorarea: e.target.value }, false, index);
-  }
-
-  function setPropertyConsArea(e) {
-    setConstructionArea(e.target.value);
-    onSelect(config.key, { ...formData[config.key], ...assemblyDetStep, constructionArea: e.target.value }, false, index);
-  }
-  
-  function selectBuildingType(value) {
-    setBuildingType(value);
-    onSelect(config.key, { ...formData[config.key], ...assemblyDetStep, BuildingType: value }, false, index);
-  }
-
-  function selectPropertyPurpose(value) {
-    setPropertyPurpose(value);
-    onSelect(config.key, { ...formData[config.key], ...assemblyDetStep, usageCategory: value }, false, index);
-  }
+  // let index = 0;
+  // let assemblyDet = formData.assemblyDet;
+  // const assemblyDetStep = { ...assemblyDet, ...assemblyDetails };
 
   function getPropertyTypeMenu(proptype) {
     if (userType === "employee") {
@@ -92,71 +76,179 @@ const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, owne
     }
   }
 
+  const { control, formState: { errors, touched }, trigger, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, getValues } = useForm();
+  const formValue = watch();
+  const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
+
+  React.useEffect(() => {
+    let hasErrors = false;
+    const part = {};
+
+    Object.keys(assemblyDetails).forEach((key) => {
+      part[key] = formValue?.[key];
+    });
+
+    if (!_.isEqual(part, assemblyDetails)) {
+      Object.keys(assemblyDetails).forEach((key) => {
+        if (assemblyDetails[key]) {
+          hasErrors = false;
+          clearLocalErrors(key);
+        } else {
+          hasErrors = true;
+        }
+      });
+    }
+
+    if (hasErrors) {
+      setError(config?.key, { type: errors })
+    } else {
+      clearErrors(config?.key);
+    }
+
+    
+    trigger();
+    setIsErrors(hasErrors);
+    onSelect(config?.key, assemblyDetails);
+  }, [assemblyDetails]);
+
+  React.useEffect(() => {
+    if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) {
+      setError(config.key, { type: errors });
+    } else if (!Object.keys(errors).length && formState.errors[config.key] && isErrors) {
+      clearErrors(config.key);
+    }
+  }, [errors]);
+
   return (
     <div>
       <LabelFieldPair>
-        <CardLabel>{t('PT_PROP_TYPE')}</CardLabel>
+        <CardLabel>{`${t('PT_PROP_TYPE')}*`}</CardLabel>
         <div class="form-field">
-          <Dropdown
-            selected={getPropertyTypeMenu(proptype)?.length === 1 ? getPropertyTypeMenu(proptype)[0] : BuildingType}
-            disable={getPropertyTypeMenu(proptype)?.length === 1}
-            option={getPropertyTypeMenu(proptype)}
-            select={selectBuildingType}
-            optionKey="i18nKey"
-            onBlur={onBlur}
-            t={t}
-            />
+          <Controller
+            name="BuildingType"
+            control={control}
+            defaultValue={assemblyDetails?.BuildingType}
+            rules={{ required: t("REQUIRED_FIELD") }}
+            key={config?.key}
+            render={(props) => (
+              <Dropdown
+                selected={getPropertyTypeMenu(proptype)?.length === 1 ? getPropertyTypeMenu(proptype)[0] : assemblyDetails?.BuildingType}
+                disable={getPropertyTypeMenu(proptype)?.length === 1}
+                option={getPropertyTypeMenu(proptype)}
+                autoFocus={focusField === "BuildingType"}
+                select={(value) => {
+                  props.onChange(value);
+                  setAssemblyDetails({ ...assemblyDetails, ['BuildingType']: value });
+                  setFocusField("BuildingType");
+                }}
+                optionKey="i18nKey"
+                onBlur={props?.onBlur}
+                t={t}
+              />
+            )} />
         </div>
       </LabelFieldPair>
+      <CardLabelError style={errorStyle}>{touched?.BuildingType ? errors?.BuildingType?.message : ""}</CardLabelError>
 
       <LabelFieldPair>
-        <CardLabel>{`${t("PT_TOT_LAND_AREA")}`}</CardLabel>
-        <div className="form-field">        
-          <TextInput
-            t={t}
-            type={"number"}
-            isMandatory={false}
-            optionKey="i18nKey"
-            name="totLandArea"
-            value={floorarea}
-            onChange={setPropertyfloorarea}
-            {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_TOT_LAND_AREA_ERROR_MESSAGE") })}
-          />
-        </div>
-      </LabelFieldPair>
-
-      <LabelFieldPair>
-        <CardLabel>{`${t("PT_TOT_CONSTRUCTION_AREA")}`}</CardLabel>
-        <div className="form-field">        
-          <TextInput
-            t={t}
-            type={"number"}
-            isMandatory={false}
-            optionKey="i18nKey"
-            name="totConstructionArea"
-            value={constructionArea}
-            onChange={setPropertyConsArea}
-            {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_TOT_CONSTRUCTION_AREA_ERROR_MESSAGE") })}
-          />
-        </div>
-      </LabelFieldPair>
-
-      <LabelFieldPair>
-        <CardLabel>{t("PT_ASSESMENT_INFO_USAGE_TYPE")}</CardLabel>
+        <CardLabel>{`${t("PT_TOT_LAND_AREA")}*`}</CardLabel>
         <div className="form-field">
-          <Dropdown
-            selected={usageCategoryMajor}
-            disable={usageCategoryMajorMenu(usagecat)?.length === 1}
-            option={usageCategoryMajorMenu(usagecat)}
-            select={(e) => {
-              selectPropertyPurpose(e);
+          <Controller
+            name="floorarea"
+            control={control}
+            defaultValue={assemblyDetails?.floorarea}
+            rules={{ 
+              required: t("REQUIRED_FIELD"),
+              validate: {
+                pattern: (val)=> /^([0-9]){0,8}$/i.test(val) ? true : t("PT_TOT_LAND_AREA_ERROR_MESSAGE")
+              }
             }}
-            optionKey="i18nKey"
-            onBlur={onBlur}
-            t={t}
+            key={config?.key}
+            render={(props) => (
+              <TextInput
+                t={t}
+                type={"number"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="totLandArea"
+                value={props?.value}
+                autoFocus={focusField === "floorarea"}
+                onChange={(ev) => {
+                  props?.onChange(ev.target.value)
+                  setAssemblyDetails({ ...assemblyDetails, ['floorarea']: ev.target.value });
+                  setFocusField("floorarea");
+                }}
+                onBlur={props?.onBlur}
+              />
+            )}
           />
         </div>
       </LabelFieldPair>
+      <CardLabelError style={errorStyle}>{touched?.floorarea ? errors?.floorarea?.message : ""}</CardLabelError>
+
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_TOT_CONSTRUCTION_AREA")}*`}</CardLabel>
+        <div className="form-field">
+          <Controller
+            name="constructionArea"
+            control={control}
+            defaultValue={assemblyDetails?.constructionArea}
+            key={config?.key}
+            rules={{ 
+              required: t("REQUIRED_FIELD"),
+              validate: (val) => /^([0-9]){0,8}$/i.test(val) ? true: t("PT_TOT_CONSTRUCTION_AREA_ERROR_MESSAGE")
+             }}
+            render={(props) => (
+              <TextInput
+                t={t}
+                type={"number"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="totConstructionArea"
+                value={props?.value}
+                autoFocus={focusField === "constructionArea"}
+                onChange={(ev) => {
+                  props?.onChange(ev.target.value);
+                  setFocusField("constructionArea")
+                  setAssemblyDetails({ ...assemblyDetails, ['constructionArea']: ev.target.value });
+                }}
+                onBlur={props?.onBlur}
+              />
+            )}
+          />
+        </div>
+      </LabelFieldPair>
+      <CardLabelError style={errorStyle}>{touched?.constructionArea ? errors?.constructionArea?.message : ""}</CardLabelError>
+
+      <LabelFieldPair>
+        <CardLabel>{`${t("PT_ASSESMENT_INFO_USAGE_TYPE")}*`}</CardLabel>
+        <div className="form-field">
+          <Controller
+            name="usageCategoryMajor"
+            defaultValue={assemblyDetails?.usageCategoryMajor}
+            rules={{ required: t("REQUIRED_FIELD") }}
+            control={control}
+            key={config?.key}
+            render={(props) => (
+              <Dropdown
+                selected={props?.value}
+                disable={usageCategoryMajorMenu(usagecat)?.length === 1}
+                option={usageCategoryMajorMenu(usagecat)}
+                autoFocus={focusField === "usageCategoryMajor"}
+                select={(value) => {
+                  props?.onChange(value);
+                  setFocusField("usageCategoryMajor")
+                  setAssemblyDetails({ ...assemblyDetails, ['usageCategoryMajor']: value });
+                }}
+                optionKey="i18nKey"
+                onBlur={props?.onBlur}
+                t={t}
+              />
+            )}
+          />
+        </div>
+      </LabelFieldPair>
+      <CardLabelError style={errorStyle}>{touched?.usageCategoryMajor ? errors?.usageCategoryMajor?.message : ""}</CardLabelError>
     </div>
   );
 };

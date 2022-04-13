@@ -4,7 +4,6 @@ import jsPDF from "jspdf";
 import XLSX from "xlsx";
 import domtoimage from "dom-to-image";
 
-
 const changeClasses=(class1,class2)=>{
   var elements = document.getElementsByClassName(class1)
   Array.prototype.map.call(elements, function(testElement){

@@ -61,24 +61,30 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
   }
 
   const onFormValueChange = (setValue, data, formState) => {
-    const city = data?.locationDet?.city;
-    const locality = data?.locationDet?.locality;
+    // const city = data?.locationDet?.city;
+    // const locality = data?.locationDet?.locality;
 
-    if (city?.code !== cityCode) {
-      setCityCode(city?.code);
-    }
+    // if (city?.code !== cityCode) {
+    //   setCityCode(city?.code);
+    // }
 
     if (!_.isEqual(data, formValue)) {
       // if (data?.city.code !== formValue?.city?.code) setValue("locality", null);
       setFormValue(data);
     }
 
-    if (!locality) {
+    if(data.assemblyDet && data.locationDet && data.owners && !Object.keys(formState?.errors).length){
+      setCanSubmit(true);
+    }else{
       setCanSubmit(false);
-      return;
     }
 
-    setCanSubmit(true);
+    // if (!locality) {
+    //   setCanSubmit(false);
+    //   return;
+    // }
+
+    // setCanSubmit(true);
   };
 
   const getHeaderLabel = () => {

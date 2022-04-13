@@ -167,7 +167,7 @@ const DashBoard = ({ stateCode }) => {
   //         onClick: (e) => {
   //           setShowOptions(!showOptions);
   //           setTimeout(() => {
-  //             return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
+  //             return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
   //           }, 500);
   //         },
   //       },
@@ -176,7 +176,7 @@ const DashBoard = ({ stateCode }) => {
   //         onClick: () => {
   //           setShowOptions(!showOptions);
   //           setTimeout(() => {
-  //             return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
+  //             return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
   //           }, 500);
   //         },
   //       },
