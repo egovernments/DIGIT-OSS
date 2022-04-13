@@ -73,6 +73,7 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
       data.tenantId = tenant;
 
       let formdata = convertToPropertyLightWeight(data);
+      // debugger;
       formdata.Property.tenantId = formdata?.Property?.tenantId || tenant;
       
       mutation.mutate(formdata, {

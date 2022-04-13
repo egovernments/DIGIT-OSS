@@ -10,7 +10,7 @@ export const config = [
         label: "Owner Mobile Number",
         type: "mobileNumber",
         name: "mobileNumber",
-        validation:{pattern:{  value: /[789][0-9]{9}/,
+        validation:{pattern:{  value: /[6789][0-9]{9}/,
         message: "CORE_COMMON_MOBILE_ERROR",}},
         error: "CORE_COMMON_MOBILE_ERROR",
       },

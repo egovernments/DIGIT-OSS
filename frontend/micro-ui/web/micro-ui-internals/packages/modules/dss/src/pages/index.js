@@ -159,28 +159,30 @@ const DashBoard = ({ stateCode }) => {
     }
   }, [tabArray]);
 
-  const shareOptions = navigator.share
-    ? [
-        {
-          label: t("ES_DSS_SHARE_PDF"),
-          onClick: (e) => {
-            setShowOptions(!showOptions);
-            setTimeout(() => {
-              return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
-            }, 500);
-          },
-        },
-        {
-          label: t("ES_DSS_SHARE_IMAGE"),
-          onClick: () => {
-            setShowOptions(!showOptions);
-            setTimeout(() => {
-              return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
-            }, 500);
-          },
-        },
-      ]
-    : [
+  const shareOptions = 
+  // navigator.share
+  //   ? [
+  //       {
+  //         label: t("ES_DSS_SHARE_PDF"),
+  //         onClick: (e) => {
+  //           setShowOptions(!showOptions);
+  //           setTimeout(() => {
+  //             return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
+  //           }, 500);
+  //         },
+  //       },
+  //       {
+  //         label: t("ES_DSS_SHARE_IMAGE"),
+  //         onClick: () => {
+  //           setShowOptions(!showOptions);
+  //           setTimeout(() => {
+  //             return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
+  //           }, 500);
+  //         },
+  //       },
+  //     ]
+  //   : 
+    [
         /*
         {
           icon: <EmailIcon />,
