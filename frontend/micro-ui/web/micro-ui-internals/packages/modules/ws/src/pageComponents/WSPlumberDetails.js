@@ -17,7 +17,7 @@ const WSPlumberDetails = ({ t, config, userType, formData }) => {
   return (
     <React.Fragment>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_PROVIDED_BY")}:</CardLabel>
+        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_PROVIDED_BY")}</CardLabel>
         <div className="field">
           <Dropdown
             t={t}
@@ -30,7 +30,7 @@ const WSPlumberDetails = ({ t, config, userType, formData }) => {
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_LICENSE_NUMBER")}:</CardLabel>
+        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_LICENSE_NUMBER")}</CardLabel>
         <div className="field">
           <TextInput
             key={config.key}
@@ -42,7 +42,7 @@ const WSPlumberDetails = ({ t, config, userType, formData }) => {
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_NAME")}:</CardLabel>
+        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_NAME")}</CardLabel>
         <div className="field">
           <TextInput
             key={config.key}
@@ -54,7 +54,7 @@ const WSPlumberDetails = ({ t, config, userType, formData }) => {
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_MOB_NUMBER")}:</CardLabel>
+        <CardLabel className="card-label-smaller">{t("WS_PLUMBER_MOB_NUMBER")}</CardLabel>
         <div className="field">
           <TextInput
             key={config.key}

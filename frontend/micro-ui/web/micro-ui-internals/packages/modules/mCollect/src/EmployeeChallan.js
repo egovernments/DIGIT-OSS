@@ -1,4 +1,4 @@
-import { Card, CardSubHeader, Header, Row, StatusTable, SubmitBar, ActionBar, Menu, Toast } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, Header, Row, StatusTable, SubmitBar, ActionBar, Menu, Toast} from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useHistory, useRouteMatch } from "react-router-dom";
@@ -20,7 +20,6 @@ const EmployeeChallan = (props) => {
   const { url } = useRouteMatch();
   const [isDisplayDownloadMenu, setIsDisplayDownloadMenu] = useState(false);
   const [showToast, setShowToast] = useState(null);
-
   useEffect(() => {
     switch (selectedAction) {
       case "CANCEL_CHALLAN":
@@ -110,6 +109,7 @@ const EmployeeChallan = (props) => {
         <Header>{`${t("CHALLAN_DETAILS")}`} </Header>
         <div>
           <SubmitBar label={t("TL_DOWNLOAD")} onSubmit={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)} />
+          
           {isDisplayDownloadMenu ? (
             <div
               style={{
@@ -141,7 +141,7 @@ const EmployeeChallan = (props) => {
       <div>
         <Card>
           <StatusTable style={{ padding: "10px 0px" }}>
-            <Row label={`${t("UC_CHALLAN_NO")}:`} text={challanno} />
+            <Row label={`${t("UC_CHALLAN_NO")}`} text={challanno} />
             <hr style={{ width: "35%", border: "1px solid #D6D5D4", marginTop: "1rem", marginBottom: "1rem" }} />
             {challanBillDetails?.map((data) => {
               return (
@@ -158,24 +158,24 @@ const EmployeeChallan = (props) => {
           <div style={{ fontSize: "24px", padding: "10px 0px", fontWeight: "700" }}>{t("UC_SERVICE_DETAILS_LABEL")}</div>
           <StatusTable>
             <Row
-              label={`${t("UC_SERVICE_CATEGORY_LABEL")}:`}
+              label={`${t("UC_SERVICE_CATEGORY_LABEL")}`}
               text={`${t(`BILLINGSERVICE_BUSINESSSERVICE_${stringReplaceAll(challanDetails?.businessService?.toUpperCase(), ".", "_")}` || t("CS_NA"))}`}
               textStyle={{ whiteSpace: "pre" }}
             />
-            <Row label={`${t("UC_FROM_DATE_LABEL")}:`} text={convertEpochToDate(challanDetails?.taxPeriodFrom) || t("CS_NA")} />
-            <Row label={`${t("UC_TO_DATE_LABEL")}:`} text={convertEpochToDate(challanDetails?.taxPeriodTo) || t("CS_NA")} />
-            <Row label={`${t("UC_COMMENT_LABEL")}:`} text={`${challanDetails?.description || t("CS_NA")}`} />
-            <Row label={`${t("CS_INBOX_STATUS_FILTER")}:`} text={t(`UC_${challanDetails?.applicationStatus || t("CS_NA")}`)} />
+            <Row label={`${t("UC_FROM_DATE_LABEL")}`} text={convertEpochToDate(challanDetails?.taxPeriodFrom) || t("CS_NA")} />
+            <Row label={`${t("UC_TO_DATE_LABEL")}`} text={convertEpochToDate(challanDetails?.taxPeriodTo) || t("CS_NA")} />
+            <Row label={`${t("UC_COMMENT_LABEL")}`} text={`${challanDetails?.description || t("CS_NA")}`} />
+            <Row label={`${t("CS_INBOX_STATUS_FILTER")}`} text={t(`UC_${challanDetails?.applicationStatus || t("CS_NA")}`)} />
           </StatusTable>
           <div style={{ fontSize: "24px", padding: "10px 0px", fontWeight: "700" }}>{t("UC_CONSUMER_DETAILS_LABEL")}</div>
           <StatusTable>
-            <Row label={`${t("UC_CONS_NAME_LABEL")}:`} text={challanDetails?.citizen.name || t("CS_NA")} />
-            <Row label={`${t("UC_MOBILE_NUMBER")}:`} text={challanDetails?.citizen.mobileNumber || t("CS_NA")} />
-            <Row label={`${t("UC_DOOR_NO_LABEL")}:`} text={challanDetails?.address.doorNo || t("CS_NA")} />
-            <Row label={`${t("UC_BUILDING_NAME_LABEL")}:`} text={challanDetails?.address.buildingName || t("CS_NA")} />
-            <Row label={`${t("UC_STREET_NAME_LABEL")}:`} text={challanDetails?.address.street || t("CS_NA")} />
+            <Row label={`${t("UC_CONS_NAME_LABEL")}`} text={challanDetails?.citizen.name || t("CS_NA")} />
+            <Row label={`${t("UC_MOBILE_NUMBER")}`} text={challanDetails?.citizen.mobileNumber || t("CS_NA")} />
+            <Row label={`${t("UC_DOOR_NO_LABEL")}`} text={challanDetails?.address.doorNo || t("CS_NA")} />
+            <Row label={`${t("UC_BUILDING_NAME_LABEL")}`} text={challanDetails?.address.buildingName || t("CS_NA")} />
+            <Row label={`${t("UC_STREET_NAME_LABEL")}`} text={challanDetails?.address.street || t("CS_NA")} />
             <Row
-              label={`${t("UC_MOHALLA_LABEL")}:`}
+              label={`${t("UC_MOHALLA_LABEL")}`}
               text={`${t(
                 `${stringReplaceAll(challanDetails?.address?.tenantId?.toUpperCase(), ".", "_")}_REVENUE_${
                   challanDetails?.address?.locality?.code

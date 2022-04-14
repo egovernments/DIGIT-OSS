@@ -35,7 +35,7 @@ const WSPropertyDetails = ({ t, config, onSelect, userType, formData, setError, 
   return (
     <React.Fragment>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ID`)}:`}</CardLabel>
+        <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ID`)}`}</CardLabel>
         <div className="field" style={{ marginTop: "20px" }}>
           <TextInput
             key={config.key}
@@ -64,19 +64,19 @@ const WSPropertyDetails = ({ t, config, onSelect, userType, formData, setError, 
             {t("PT_DETAILS")}
           </header>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ID`)}:`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ID`)}`}</CardLabel>
             <div className="field">
               <p>{propertyDetails?.Properties[0]?.propertyId}</p>
             </div>
           </LabelFieldPair>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t(`OWNER_NAME`)}:`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t(`OWNER_NAME`)}`}</CardLabel>
             <div className="field">
               <p>{propertyDetails?.Properties[0]?.owners[0]?.name}</p>
             </div>
           </LabelFieldPair>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ADDRESS`)}:`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ADDRESS`)}`}</CardLabel>
             <div className="field">
               <p>{getPropertyAddress()}</p>
             </div>
