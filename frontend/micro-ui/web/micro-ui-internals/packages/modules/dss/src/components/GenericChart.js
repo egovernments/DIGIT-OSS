@@ -91,7 +91,7 @@ const GenericChart = ({
                 <span
                   className="tooltiptext"
                   style={{
-                    whiteSpace: "nowrap",
+                    whiteSpace: !isMobile ? "nowrap" : "normal",
                     fontSize: "medium",
                     marginLeft: t(`TIP_${Digit.Utils.locale.getTransformedLocale(header)}`).length > 30 ? -120 : -60,
                   }}

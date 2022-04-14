@@ -103,7 +103,7 @@ const Layout = ({ rowData,forHome=false }) => {
         );
       case "collection":
       case "module":
-        return <Summary key={key} ttile={visualizer.name} data={visualizer} key={key} />;
+        return <Summary key={key} ttile={visualizer.name} data={visualizer} />;
       default:
         return null;
     }
