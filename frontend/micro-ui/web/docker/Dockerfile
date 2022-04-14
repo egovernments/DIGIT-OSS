@@ -13,7 +13,7 @@ RUN ls -lah
 RUN cd web/ \
     && node envs.js \
     && npm install \
-    && npm build 
+    && npm run-script build 
 
 #FROM nginx:mainline-alpine
 FROM ghcr.io/egovernments/nginx:mainline-alpine
