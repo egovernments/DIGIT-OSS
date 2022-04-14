@@ -12,7 +12,7 @@ RUN ls -lah
 #RUN node web/envs.js
 RUN cd web/ \
     && node envs.js \
-    && npm ci \
+    && npm install \
     && npm build 
 
 #FROM nginx:mainline-alpine
