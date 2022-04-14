@@ -4,7 +4,7 @@ RUN apk update && apk upgrade
 RUN apk add --no-cache git>2.30.0
 ARG WORK_DIR
 WORKDIR /app
-ENV NODE_OPTIONS "--max-old-space-size=5120"
+ENV NODE_OPTIONS "--max-old-space-size=3792"
 
 COPY ${WORK_DIR} .
 RUN ls -lah
@@ -12,8 +12,8 @@ RUN ls -lah
 #RUN node web/envs.js
 RUN cd web/ \
     && node envs.js \
-    && yarn install \
-    && yarn build 
+    && npm ci \
+    && npm build 
 
 #FROM nginx:mainline-alpine
 FROM ghcr.io/egovernments/nginx:mainline-alpine
