@@ -110,6 +110,21 @@
   color: #F47738;
 }
 
+@media (max-width: 420px) { 
+  .recharts-default-tooltip {
+    width: 85%;
+    ul {
+      width: 100% !important;
+    }
+    ul li {
+      width: 100%;
+      display: flex !important;
+      flex-wrap: wrap;
+    }
+  }  
+}
+
+
 @media print{
   .page-break {
     margin-top: 1rem;
