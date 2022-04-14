@@ -6,12 +6,9 @@ const ShareFiles = {
   targetLink: (target, shortUrl) => {
     switch (target) {
       case "mail":
-        return window.open(`mailto:?body=${shortUrl}`, "_blank");
+        return window.open(`mailto:?body=${encodeURIComponent(shortUrl)}`, "_blank");
       case "whatsapp":
-        if(window.mSewaApp && window.mSewaApp.isMsewaApp())
-        return window.open(`https://wa.me/send?text=${shortUrl}`, "_blank");
-        else
-        return window.open(`https://web.whatsapp.com/send?text=${shortUrl}`, "_blank");
+        return window.open('https://' + (window.mSewaApp && window.mSewaApp.isMsewaApp() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(shortUrl), "_blank");
       default:
         return window.open(shortUrl, "_blank");
     }

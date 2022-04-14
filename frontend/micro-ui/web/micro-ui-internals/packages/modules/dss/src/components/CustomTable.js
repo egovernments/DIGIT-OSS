@@ -223,6 +223,12 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
       return originalRow[name];
     };
   };
+  const isMobile = window.Digit.Utils.browser.isMobile();
+
+  const getTooltipStyles = () => {
+    if (isMobile) return {height: "fit-content", background: "#555", padding: "5px", wordBreak: "break-word", overflowWrap: "break-word", borderRadius: "6px", maxWidth: "205px" };
+    else return {height: "fit-content", background: "#555", width: "fit-content", padding: "5px", wordBreak: "break-word", overflowWrap: "break-word", borderRadius: "6px"}
+  } 
 
   const tableColumns = useMemo(() => {
     const columns = response?.responseData?.data?.find((row) => !!row);
@@ -232,7 +238,7 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
         Header:<span className="tooltip">
              {renderHeader(plot)}
               <span className="tooltiptext" style={{fontSize:"14px" , marginLeft: ((t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)).length < 10) ? -40 : (tableData?.length > 2) ? -100 : -160, height:"35px" ,bottom:'0%', top: '100%', background: "none", width: (tableData?.length > 2 || (t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)).length < 42) ?  "120px" : "250px"}} >
-                <div style={{height: "fit-content", background: "#555", width: "fit-content", padding: "5px", wordBreak: "break-word", overflowWrap: "break-word", borderRadius: "6px" }}>{t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)}</div>
+                <div style={getTooltipStyles()}>{t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)}</div>
               </span>
             </span>,
         accessor: accessData(plot),
