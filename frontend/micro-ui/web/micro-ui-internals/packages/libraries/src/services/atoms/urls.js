@@ -55,6 +55,7 @@ const Urls = {
     search_bill: "/billing-service/bill/v2/_search",
     reciept_search: "/collection-services/payments/:buisnessService/_search",
     obps_Reciept_Search: "/collection-services/payments/_search",
+    billAmendmentSearch: "/billing-service/amendment/_search",
   },
 
   pt: {
@@ -147,6 +148,7 @@ const Urls = {
     ws_connection_search: "/ws-calculator/meterConnection/_search",
     sw_payment_search: "/collection-services/payments/SW/_search",
     ws_payment_search: "/collection-services/payments/WS/_search",
+    billAmendmentCreate: "/billing-service/amendment/_create",
     ws_meter_conncetion_create: "/ws-calculator/meterConnection/_create",
     sw_meter_conncetion_create: "/sw-calculator/meterConnection/_create",
   },

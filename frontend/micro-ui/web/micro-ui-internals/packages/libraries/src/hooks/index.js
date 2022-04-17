@@ -200,6 +200,9 @@ import useBillSearch from "./bills/useBillSearch";
 import useWaterCreateAPI from "./ws/useWaterCreateAPI";
 import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
 import useWSUpdateAPI from "./ws/useWSUpdateAPI";
+import useCreateBillAmendment from "./ws/useCreateBillAmendment";
+import useWSApplicationDetailsBillAmendment from "./ws/useWSApplicationDetailsBillAmendment";
+import useWSInbox from "./ws/useInbox";
 import useTenantsBills from "./bills/useTenants";
 import useMeterReadingCreateAPI from "./ws/useMeterConnectionCreateAPI";
 import useGetMeterStatusList from "./ws/useGetMeterStatusList";
@@ -404,6 +407,9 @@ const ws = {
   useSewerageCreateAPI,
   useWSUpdateAPI,
   useMypaymentWS,
+  useCreateBillAmendment,
+  useWSApplicationDetailsBillAmendment,
+  useInbox: useWSInbox,
   useOldValue,
   useMeterReadingCreateAPI,
   useGetMeterStatusList,
