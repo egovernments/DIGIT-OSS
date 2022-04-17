@@ -26,7 +26,27 @@ const PTCard = () => {
   if (!Digit.Utils.ptAccess()) {
     return null;
   }
-
+  const links=[
+    {
+      count: isLoading ? "-" : total,
+      label: t("ES_COMMON_INBOX"),
+      link: `/digit-ui/employee/pt/inbox`,
+    },
+    {
+      label: t("ES_TITLE_NEW_REGISTRATION"),
+      link: `/digit-ui/employee/pt/new-application`,
+      role: "PT_CEMP"
+    },
+    {
+      label: t("SEARCH_PROPERTY"),
+      link: `/digit-ui/employee/pt/search`,
+    },
+    {
+      label: t("ES_COMMON_APPLICATION_SEARCH"),
+      link: `/digit-ui/employee/pt/application-search`,
+    }
+  ]
+  const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
   const propsForModuleCard = {
     Icon: <PropertyHouse />,
     moduleName: t("ES_TITLE_PROPERTY_TAX"),
@@ -37,30 +57,8 @@ const PTCard = () => {
         link: `/digit-ui/employee/pt/inbox`,
       },
     ],
-    links: [
-      {
-        count: isLoading ? "-" : total,
-        label: t("ES_COMMON_INBOX"),
-        link: `/digit-ui/employee/pt/inbox`,
-      },
-      {
-        label: t("SEARCH_PROPERTY"),
-        link: `/digit-ui/employee/pt/search`,
-      },
-      {
-        label: t("ES_COMMON_APPLICATION_SEARCH"),
-        link: `/digit-ui/employee/pt/application-search`,
-      }
-    ],
+    links:links.filter(link=>!link?.role||PT_CEMP),
   };
-
-  const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
-  if (PT_CEMP && !propsForModuleCard.links?.[2]) {
-    propsForModuleCard.links.push({
-      label: t("ES_TITLE_NEW_REGISTRATION"),
-      link: `/digit-ui/employee/pt/new-application`,
-    });
-  }
 
   return <EmployeeModuleCard {...propsForModuleCard} />;
 };

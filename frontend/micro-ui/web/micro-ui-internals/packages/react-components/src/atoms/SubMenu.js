@@ -1,37 +1,23 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  PropertyHouse,
-  CaseIcon,
-  CollectionIcon,
-  PTIcon,
-  OBPSIcon,
-  PGRIcon,
-  FSMIcon,
-  WSICon,
-  MCollectIcon,
-} from "@egovernments/digit-ui-react-components";
-import { useTranslation } from "react-i18next";
+import { PTIcon, OBPSIcon, PropertyHouse, CaseIcon, PGRIcon, FSMIcon, WSICon, MCollectIcon, CollectionIcon } from "./svgindex";
 
-const CitizenSubMenuSideBar = ({ item }) => {
+const IconsObject = {
+  CommonPTIcon: <PTIcon />,
+  OBPSIcon: <OBPSIcon />,
+  propertyIcon: <PropertyHouse />,
+  TLIcon: <CaseIcon />,
+  PGRIcon: <PGRIcon />,
+  FSMIcon: <FSMIcon />,
+  WSIcon: <WSICon />,
+  MCollectIcon: <MCollectIcon />,
+  BillsIcon: <CollectionIcon />,
+};
+const SubMenu = ({ item, t }) => {
   const [subnav, setSubnav] = useState(false);
   const location = useLocation();
   const { pathname } = location;
   const showSubnav = () => setSubnav(!subnav);
-  const { t } = useTranslation();
-
-  const IconsObject = {
-    CommonPTIcon: <PTIcon />,
-    OBPSIcon: <OBPSIcon />,
-    propertyIcon: <PropertyHouse />,
-    TLIcon: <CaseIcon />,
-    PGRIcon: <PGRIcon />,
-    FSMIcon: <FSMIcon />,
-    WSIcon: <WSICon />,
-    MCollectIcon: <MCollectIcon />,
-    BillsIcon: <CollectionIcon />,
-  };
-
   const leftIconArray = item.icon;
   const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.BillsIcon;
 
@@ -43,7 +29,6 @@ const CitizenSubMenuSideBar = ({ item }) => {
             {leftIcon}
             <span>{t(Digit.Utils.locale.getTransformedLocale(`ACTION_TEST_${item.moduleName}`))}</span>
           </div>
-
           <div> {item.links && subnav} </div>
         </div>
       </div>
@@ -64,4 +49,4 @@ const CitizenSubMenuSideBar = ({ item }) => {
   );
 };
 
-export default CitizenSubMenuSideBar;
+export default SubMenu;

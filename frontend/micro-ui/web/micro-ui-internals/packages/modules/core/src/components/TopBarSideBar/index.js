@@ -15,6 +15,8 @@ const TopBarSideBar = ({
   logoUrl,
   showSidebar = true,
   showLanguageChange,
+  linkData,
+  islinkDataLoading,
 }) => {
   const [isSidebarOpen, toggleSidebar] = useState(false);
   const history = useHistory();
@@ -58,6 +60,8 @@ const TopBarSideBar = ({
           handleLogout={handleLogout}
           mobileView={mobileView}
           userDetails={userDetails}
+          linkData={linkData}
+          islinkDataLoading={islinkDataLoading}
         />
       )}
     </React.Fragment>

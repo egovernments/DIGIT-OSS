@@ -94,11 +94,13 @@ const Home = ({
         handleUserDropdownSelection={handleUserDropdownSelection}
         logoUrl={logoUrl}
         showSidebar={true}
+        linkData={linkData}
+        islinkDataLoading={islinkDataLoading}
       />
 
       <div className={`main center-container citizen-home-container mb-25`}>
         <div className="SideBarStatic">
-          <StaticCitizenSideBar />
+          <StaticCitizenSideBar linkData={linkData} islinkDataLoading={islinkDataLoading} />
         </div>
         <Switch>
           <Route exact path={path}>
