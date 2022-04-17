@@ -16,7 +16,6 @@ import ApplicationDetailsBillAmendment from "./ApplicationDetailsBillAmendment";
 // import SearchResultsComponent from "./SearchResults";
 import Search from "./search";
 import SearchWater from "./SearchWater";
-import BillAmendmentInbox from "./BillAmendmentInbox";
 
 const App = ({ path }) => {
   const { t } = useTranslation();
@@ -36,7 +35,6 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/response`} component={WSResponse} />
         <PrivateRoute path={`${path}/search`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
-        <PrivateRoute path={`${path}/inbox/bill-amendment`} component={(props) => <BillAmendmentInbox {...props} parentRoute={path} />} />
         {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
       </Switch>
