@@ -170,6 +170,7 @@ export const convertToPropertyLightWeight = (data = {}) => {
       propertyType: propertyType,
       ...data.propertyDetails,
       ownershipCategory: data?.ownershipCategory,
+      usageCategory: data?.assemblyDet?.usageCategoryMajor?.code,
       owners: data.owners,
       noOfFloors: noOfFloors,
       additionalDetails: {

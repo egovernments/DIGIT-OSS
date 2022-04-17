@@ -574,7 +574,10 @@ input[type="number"] {
   .bill-citizen,
   .bills-citizen-wrapper,
   .payer-bills-citizen-wrapper,
-  .engagement-citizen-wrapper {
+  .engagement-citizen-wrapper,
+  .citizen-all-services-wrapper,
+  .mcollect-citizen,
+  .ws-citizen-wrapper {
     width: calc(100% - 219px);
     padding-left: 16px;
     padding-right: 16px;

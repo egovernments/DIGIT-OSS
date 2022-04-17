@@ -318,9 +318,9 @@
 }
 
 .RightMostTopBarOptions {
-  @apply inline-block float-right;
+  @apply flex;
   .EventNotificationWrapper {
-    @apply relative cursor-pointer;
+    @apply relative cursor-pointer ml-md;
     span {
       top: -10px;
       right: -10px;
@@ -328,6 +328,12 @@
       p {
         line-height: 20px;
       }
+    }
+  }
+  .select-wrap {
+    margin-bottom: unset;
+    svg {
+      fill: #ffffff;
     }
   }
 }
@@ -364,6 +370,7 @@
       flex-direction: unset !important;
       width: unset !important;
       margin-left: unset !important;
+      padding-top: 58px;
     }
   }
 
@@ -422,6 +429,7 @@
 .back-wrapper {
   display: flex;
   justify-content: space-between;
+
   .top-back-btn {
     margin-bottom: 0px;
     color: #ffffff;
@@ -437,6 +445,13 @@
         display: none;
       }
     }
+  }
+}
+
+@screen dt {
+  .back-wrapper {
+    margin-right: 2rem;
+    margin-left: 2rem;
   }
 }
 

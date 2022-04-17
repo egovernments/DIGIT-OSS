@@ -44,6 +44,7 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
   const { t } = useTranslation();
   const { value } = useContext(FilterContext);
   const [showDate, setShowDate] = useState({});
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
     key: id,
     type: chartType,
@@ -92,6 +93,17 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
     );
   }
   let name=t(data?.name)||"";
+
+  const getWidth = (data) => {
+    if (isMobile) return t(`TIP_${data.name}`).length < 50 ? "fit-content" : 300;
+    else return t(`TIP_${data.name}`).length < 50 ? "fit-content" : 400;
+  }
+
+  const getHeight = (data) => {
+    if (isMobile) return t(`TIP_${data.name}`).length < 50 ? 50 : "auto";
+    else return 50;
+  }
+
   return (
     <div className="row">
       <div className={`tooltip`} >
@@ -105,8 +117,8 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
             // marginLeft: "-500%" ,
             fontSize: "medium",
             // wordBreak: "break-word", overflowWrap: "break-word",
-            width: t(`TIP_${data.name}`).length < 50 ? "fit-content" : 400,
-            height: 50,
+            width: getWidth(data),
+            height: getHeight(data),
             whiteSpace: "normal",
           }}
         >

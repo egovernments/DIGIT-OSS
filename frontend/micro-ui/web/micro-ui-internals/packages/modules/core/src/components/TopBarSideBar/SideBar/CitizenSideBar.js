@@ -1,4 +1,4 @@
-import { LogoutIcon, NavBar, EditPencilIcon } from "@egovernments/digit-ui-react-components";
+import { LogoutIcon, NavBar, EditPencilIcon, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -35,16 +35,16 @@ const Profile = ({ info, stateName, t }) => {
 
   React.useEffect(async () => {
     const tenant = Digit.ULBService.getCurrentTenantId();
-    const uuid=info?.uuid;
-    if(uuid){
-    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+    const uuid = info?.uuid;
+    if (uuid) {
+      const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
 
-    if (usersResponse && usersResponse.user && usersResponse.user.length) {
-      const userDetails = usersResponse.user[0];
-      const thumbs = userDetails?.photo?.split(",");
-      setProfilePic(thumbs?.at(0));
+      if (usersResponse && usersResponse.user && usersResponse.user.length) {
+        const userDetails = usersResponse.user[0];
+        const thumbs = userDetails?.photo?.split(",");
+        setProfilePic(thumbs?.at(0));
+      }
     }
-  }
   }, [profilePic !== null]);
 
   return (
@@ -67,6 +67,7 @@ const Profile = ({ info, stateName, t }) => {
           <div className="label-text"> {info.emailId} </div>
         </div>
       )}
+      <div className="profile-divider"></div>
       {window.location.href.includes("/employee") &&
         !window.location.href.includes("/employee/user/login") &&
         !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true} />}
@@ -87,7 +88,7 @@ const PoweredBy = () => (
   </div>
 );
 
-export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogout, isEmployee = false }) => {
+export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogout, isEmployee = false, linkData, islinkDataLoading }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
@@ -113,6 +114,9 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     history.push("/digit-ui/citizen/login");
     closeSidebar();
   };
+  if (islinkDataLoading) {
+    return <Loader />;
+  }
 
   let menuItems = [...SideBarMenu(t, closeSidebar, redirectToLoginPage, isEmployee)];
   let profileItem;
@@ -124,7 +128,7 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
       {
         text: t("EDIT_PROFILE"),
         element: "PROFILE",
-        icon: <EditPencilIcon className="icon edit-btn-ico" width="16" height="16"/>,
+        icon: <EditPencilIcon className="icon edit-btn-ico" width="16" height="16" />,
         populators: {
           onClick: showProfilePage,
         },
@@ -164,6 +168,10 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
       },
     ];
   }
+
+  Object.keys(linkData).map((key) => {
+    menuItems.splice(1, 0, { type: "dynamic", moduleName: key, links: linkData[key], icon: linkData[key][0]?.leftIcon });
+  });
 
   /*  URL with openlink wont have sidebar and actions    */
   if (history.location.pathname.includes("/openlink")) {

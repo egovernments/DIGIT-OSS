@@ -18,6 +18,7 @@ const TopBar = ({
   cityOfCitizenShownBesideLogo,
   onNotificationIconClick,
   hideNotificationIconOnSomeUrlsWhenNotLoggedIn,
+  changeLanguage,
 }) => {
   const { pathname } = useLocation();
 
@@ -44,6 +45,7 @@ const TopBar = ({
         </div>
 
         <div className="RightMostTopBarOptions">
+          {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? changeLanguage : null}
           {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? (
             <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>
               {notificationCountLoaded && notificationCount ? (
