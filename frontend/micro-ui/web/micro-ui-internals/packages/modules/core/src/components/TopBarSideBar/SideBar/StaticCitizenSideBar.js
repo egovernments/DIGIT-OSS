@@ -46,12 +46,13 @@ const Profile = ({ info, stateName, t }) => (
         <div className="label-text"> {info.emailId} </div>
       </div>
     )}
+    <div className="profile-divider"></div>
     {window.location.href.includes("/employee") &&
       !window.location.href.includes("/employee/user/login") &&
       !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true} />}
   </div>
 );
-const StaticCitizenSideBar = ({ logout }) => {
+const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation();
@@ -59,9 +60,12 @@ const StaticCitizenSideBar = ({ logout }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
-  const { isLoading, data: getCitizenMenu, isFetched: fetchedCitizen } = Digit.Hooks.useAccessControl();
 
   const [isEmployee, setisEmployee] = useState(false);
+
+  if (islinkDataLoading) {
+    return <Loader />;
+  }
 
   const redirectToLoginPage = () => {
     // localStorage.clear();
@@ -77,6 +81,7 @@ const StaticCitizenSideBar = ({ logout }) => {
   };
 
   let menuItems = [...SideBarMenu(t, showProfilePage, redirectToLoginPage, isEmployee)];
+
   menuItems = menuItems.filter((item) => item.element !== "LANGUAGE");
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -93,6 +98,7 @@ const StaticCitizenSideBar = ({ logout }) => {
         <div className="menu-label">{itemComponent}</div>
       </span>
     );
+
     if (item.type === "external-link") {
       return (
         <Link to={item.link}>
@@ -115,22 +121,6 @@ const StaticCitizenSideBar = ({ logout }) => {
   let profileItem;
 
   if (isFetched && user && user.access_token) {
-    if (fetchedCitizen) {
-      const data = getCitizenMenu?.actions || [];
-
-      const staticModuleName = {
-        type: "dynamic",
-        moduleName: t("DASHBOARD_CITIZEN_SERVICES_LABEL"),
-        Icon: <AddressBookIcon className="icon" />,
-
-        links: [],
-      };
-      data.forEach((item) => {
-        staticModuleName.links.push(item);
-      });
-
-      menuItems = [...menuItems, staticModuleName];
-    }
     profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t} />;
     menuItems = menuItems.filter((item) => item?.id !== "login-btn");
     menuItems = [
@@ -176,9 +166,10 @@ const StaticCitizenSideBar = ({ logout }) => {
       },
     ];
   }
-  if (isLoading) {
-    return <Loader />;
-  }
+
+  Object.keys(linkData).map((key) => {
+    menuItems.splice(1, 0, { type: "dynamic", moduleName: key, links: linkData[key], icon: linkData[key][0]?.leftIcon });
+  });
 
   return (
     <React.Fragment>

@@ -1,34 +1,60 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowForward, ArrowVectorDown, ArrowDirection } from "@egovernments/digit-ui-react-components";
+import {
+  PropertyHouse,
+  CaseIcon,
+  CollectionIcon,
+  PTIcon,
+  OBPSIcon,
+  PGRIcon,
+  FSMIcon,
+  WSICon,
+  MCollectIcon,
+} from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 
 const CitizenSubMenuSideBar = ({ item }) => {
   const [subnav, setSubnav] = useState(false);
   const location = useLocation();
   const { pathname } = location;
   const showSubnav = () => setSubnav(!subnav);
+  const { t } = useTranslation();
+
+  const IconsObject = {
+    CommonPTIcon: <PTIcon />,
+    OBPSIcon: <OBPSIcon />,
+    propertyIcon: <PropertyHouse />,
+    TLIcon: <CaseIcon />,
+    PGRIcon: <PGRIcon />,
+    FSMIcon: <FSMIcon />,
+    WSIcon: <WSICon />,
+    MCollectIcon: <MCollectIcon />,
+    BillsIcon: <CollectionIcon />,
+  };
+
+  const leftIconArray = item.icon;
+  const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.BillsIcon;
 
   return (
     <React.Fragment>
       <div className="submenu-container">
         <div onClick={item.links && showSubnav} className={`sidebar-link ${subnav === true ? "active" : ""}`}>
           <div className="actions">
-            {item.Icon}
-            <span>{item.moduleName || item.displayName}</span>
+            {leftIcon}
+            <span>{t(Digit.Utils.locale.getTransformedLocale(`ACTION_TEST_${item.moduleName}`))}</span>
           </div>
-          <div> {item.links && subnav ? <ArrowVectorDown /> : item.links ? <ArrowForward /> : null} </div>
+
+          <div> {item.links && subnav} </div>
         </div>
       </div>
 
       {subnav &&
         item.links
-          ?.filter((item) => item.url === "url" && item.displayName !== "Home")
           .sort((a, b) => a.orderNumber - b.orderNumber)
           .map((item, index) => {
             return (
-              <Link to={item.link || item.navigationURL} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
+              <Link to={item.link || item.navigationURL} key={index} className={`dropdown-link ${pathname === item.navigationURL ? "active" : ""}`}>
                 <div className="actions">
-                  <ArrowDirection className="icon" />
                   <span>{item.label || item.displayName}</span>
                 </div>
               </Link>

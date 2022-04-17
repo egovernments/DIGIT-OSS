@@ -13,7 +13,7 @@ const WSRoadCuttingDetails = ({ t, config, userType, formData }) => {
   return (
     <React.Fragment>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`WS_ROAD_TYPE`)}:`}</CardLabel>
+        <CardLabel className="card-label-smaller">{`${t(`WS_ROAD_TYPE`)}`}</CardLabel>
         <div className="field">
           <Dropdown
             key={config.key}
@@ -26,7 +26,7 @@ const WSRoadCuttingDetails = ({ t, config, userType, formData }) => {
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`WS_AREA_SQ_FT`)}:`}</CardLabel>
+        <CardLabel className="card-label-smaller">{`${t(`WS_AREA_SQ_FT`)}`}</CardLabel>
         <div className="field">
           <TextInput
             key={config.key}

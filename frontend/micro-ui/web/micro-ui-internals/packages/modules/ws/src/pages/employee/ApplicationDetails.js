@@ -43,6 +43,16 @@ const ApplicationDetails = () => {
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
 
+  //for common receipt key.
+  const { isBillingServiceLoading, data: mdmsBillingServiceData } = Digit.Hooks.obps.useMDMS(stateCode, "BillingService", ["BusinessService"]);
+  const { isCommonmastersLoading, data: mdmsCommonmastersData } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["uiCommonPay"]);
+  const commonPayDetails = mdmsCommonmastersData?.["common-masters"]?.uiCommonPay || [];
+  const index = commonPayDetails && commonPayDetails.findIndex((item) => { return item.code == "WS.ONE_TIME_FEE"; });
+  let commonPayInfo = "";
+  if (index > -1) commonPayInfo = commonPayDetails[index];
+  else commonPayInfo = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
+  const receiptKey = commonPayInfo?.receiptKey || "consolidatedreceipt";
+  
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, applicationNumber, serviceType);
   let workflowDetails = Digit.Hooks.useWorkflowDetails(
     {
@@ -52,6 +62,17 @@ const ApplicationDetails = () => {
     },
     {
       enabled: applicationDetails?.processInstancesDetails?.[0]?.businessService ? true : false,
+    }
+  );
+
+  const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
+    {
+      tenantId: stateCode,
+      businessService:  serviceType == "WATER" ? "WS.ONE_TIME_FEE" : "SW.ONE_TIME_FEE",
+      consumerCodes: applicationDetails?.applicationData?.applicationNo
+    },
+    {
+      enabled: applicationDetails?.applicationData?.applicationType?.includes("NEW_")
     }
   );
 
@@ -153,6 +174,12 @@ const ApplicationDetails = () => {
     PDFdata.then((ress) => Digit.Utils.pdf.generate(ress));
   };
 
+  async function getRecieptSearch(tenantId, payments, consumerCodes, receiptKey) {
+    let response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{...payments}] }, receiptKey);
+    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    window.open(fileStore[response?.filestoreIds[0]], "_blank");
+  }
+
 
   let dowloadOptions = [],
     appStatus = applicationDetails?.applicationData?.applicationStatus || "";
@@ -173,6 +200,12 @@ const ApplicationDetails = () => {
     order: 3,
     label: t("WS_APPLICATION"),
     onClick: handleDownloadPdf,
+  };
+
+  const appFeeDownloadReceipt = {
+    order: 4,
+    label: t("DOWNLOAD_RECEIPT_HEADER"),
+    onClick: () => getRecieptSearch(applicationDetails?.applicationData?.tenantId ? applicationDetails?.applicationData?.tenantId : Digit.ULBService.getCurrentTenantId(), reciept_data?.Payments?.[0], applicationDetails?.applicationData?.applicationNo, receiptKey ),
   };
   
   const applicationFeeReceipt = {
@@ -197,7 +230,8 @@ const ApplicationDetails = () => {
       break;
     case "PENDING_FOR_CONNECTION_ACTIVATION":
     case "CONNECTION_ACTIVATED":
-      dowloadOptions = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject];
+      if (applicationDetails?.applicationData?.applicationType?.includes("NEW_") && reciept_data?.Payments?.length > 0) dowloadOptions = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject, appFeeDownloadReceipt]; 
+      else dowloadOptions = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject];
       break;
     case "REJECTED":
       dowloadOptions = [applicationDownloadObject];
@@ -231,8 +265,8 @@ const ApplicationDetails = () => {
         </div>
         <ApplicationDetailsTemplate
           applicationDetails={applicationDetails}
-          isLoading={isLoading}
-          isDataLoading={isLoading}
+          isLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading}
+          isDataLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading}
           applicationData={applicationDetails?.applicationData}
           mutate={mutate}
           workflowDetails={workflowDetails}

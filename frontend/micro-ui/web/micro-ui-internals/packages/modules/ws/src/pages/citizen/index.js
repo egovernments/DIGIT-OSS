@@ -22,33 +22,36 @@ const App = ({ path }) => {
   let isCommonPTPropertyScreen = window.location.href.includes("/ws/create-application/property-details");
 
   const getBackPageNumber = () => {
-  let goBacktoFromProperty = -1;
-  if(sessionStorage.getItem("VisitedCommonPTSearch") === "true" && isCommonPTPropertyScreen)
-  {
-    goBacktoFromProperty = -4;
+    let goBacktoFromProperty = -1;
+    if (sessionStorage.getItem("VisitedCommonPTSearch") === "true" && isCommonPTPropertyScreen) {
+      goBacktoFromProperty = -4;
+      return goBacktoFromProperty;
+    }
     return goBacktoFromProperty;
-  }
-    return goBacktoFromProperty;
-  }
+  };
 
   return (
     <React.Fragment>
-      <BackButton style={{ border: "none" }} isCommonPTPropertyScreen={isCommonPTPropertyScreen} getBackPageNumber={getBackPageNumber}>{t("CS_COMMON_BACK")}</BackButton>
-      <Switch>
-        <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
-        <Route path={`${path}/search`} component={SearchConnectionComponent} />
-        <Route path={`${path}/my-bills`} component={WNSMyBillsComponent} />
-        <Route path={`${path}/search-results`} component={SearchResultsComponent} />
-        <Route path={`${path}/test-acknowledgment`} component={TestAcknowledgment} />
-        <PrivateRoute path={`${path}/my-payments`} component={WSMyPayments} />
-        <PrivateRoute path={`${path}/my-applications`} component={WSMyApplications} />
-        <PrivateRoute path={`${path}/my-connections`} component={MyConnections} />
-        <PrivateRoute path={`${path}/connection/application/:acknowledgementIds`} component={WSApplicationDetails} />
-        <PrivateRoute path={`${path}/connection/additional/:acknowledgementIds`} component={WSAdditionalDetails} />
-        <PrivateRoute path={`${path}/connection/details/:acknowledgementIds`} component={ConnectionDetails} />
-        <PrivateRoute path={`${path}/consumption/details`} component={consumptionDetails} />
-        <PrivateRoute path={`${path}/edit-application`} component={EditApplication} />
-      </Switch>
+      <div className="ws-citizen-wrapper">
+        <BackButton style={{ border: "none" }} isCommonPTPropertyScreen={isCommonPTPropertyScreen} getBackPageNumber={getBackPageNumber}>
+          {t("CS_COMMON_BACK")}
+        </BackButton>
+        <Switch>
+          <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
+          <Route path={`${path}/search`} component={SearchConnectionComponent} />
+          <Route path={`${path}/my-bills`} component={WNSMyBillsComponent} />
+          <Route path={`${path}/search-results`} component={SearchResultsComponent} />
+          <Route path={`${path}/test-acknowledgment`} component={TestAcknowledgment} />
+          <PrivateRoute path={`${path}/my-payments`} component={WSMyPayments} />
+          <PrivateRoute path={`${path}/my-applications`} component={WSMyApplications} />
+          <PrivateRoute path={`${path}/my-connections`} component={MyConnections} />
+          <PrivateRoute path={`${path}/connection/application/:acknowledgementIds`} component={WSApplicationDetails} />
+          <PrivateRoute path={`${path}/connection/additional/:acknowledgementIds`} component={WSAdditionalDetails} />
+          <PrivateRoute path={`${path}/connection/details/:acknowledgementIds`} component={ConnectionDetails} />
+          <PrivateRoute path={`${path}/consumption/details`} component={consumptionDetails} />
+          <PrivateRoute path={`${path}/edit-application`} component={EditApplication} />
+        </Switch>
+      </div>
     </React.Fragment>
   );
 };
