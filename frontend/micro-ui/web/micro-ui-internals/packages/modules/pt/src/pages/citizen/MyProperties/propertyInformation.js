@@ -300,7 +300,7 @@ const PropertyInformation = () => {
             )}
           </div>
           {popup && (
-            <PopUp>
+            <PopUp className="updatenumber-warper-citizen">
               <UpdatePropertyNumberComponent
                 showPopup={showPopup}
                 name={popup?.name}
