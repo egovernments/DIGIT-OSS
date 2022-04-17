@@ -80,6 +80,21 @@ public class DeathService {
 		return deathDtls;
 	}
 
+	public List<EgDeathDtl> plainSearch(SearchCriteria criteria,RequestInfo requestInfo) {
+		List<EgDeathDtl> deathDtls = new ArrayList<EgDeathDtl>() ;
+		if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE")) {
+			if(validator.validateFieldsEmployee(criteria)) {
+				deathDtls = repository.getDeathDtlsForPlainSearch(criteria);
+			}
+		}
+		else {
+			if(validator.validateFieldsCitizen(criteria)) {
+				deathDtls = repository.getDeathDtlsForPlainSearch(criteria);
+			}
+		}
+		return deathDtls;
+	}
+
 	public DeathCertificate download(SearchCriteria criteria, RequestInfo requestInfo) {
 		try {
 		DeathCertificate deathCertificate = new DeathCertificate();
@@ -214,10 +229,4 @@ public class DeathService {
                 .append(StringUtils.join(criteria.getConsumerCodes(),","))
                 .append("&").append("status=APPROVED,DEPOSITED,NEW");
     }
-
-	public List<EgDeathDtl> plainSearch(SearchCriteria criteria,RequestInfo requestInfo) {
-		List<EgDeathDtl> deathDtls = new ArrayList<EgDeathDtl>() ;
-		deathDtls = repository.getDeathDtlsForPlainSearch(criteria);
-		return deathDtls;
-	}
 }

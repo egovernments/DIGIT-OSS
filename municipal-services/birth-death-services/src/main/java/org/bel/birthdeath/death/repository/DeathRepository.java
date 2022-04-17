@@ -103,6 +103,13 @@ public class DeathRepository {
         return deathDtls;
 	}
 
+	public List<EgDeathDtl> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		String query = allqueryBuilder.getDeathDtls(criteria, preparedStmtList);
+		List<EgDeathDtl> deathDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+		return deathDtls;
+	}
+
 	public void save(DeathCertRequest deathCertRequest) {
 		bndProducer.push(config.getSaveDeathTopic(), deathCertRequest);
 	}
@@ -254,12 +261,5 @@ public class DeathRepository {
         		commonUtils.maskAndShowLast4Chars(deathDtl);
         });
         return deathCertMasterDtl;
-	}
-
-	public List<EgDeathDtl> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
-		List<Object> preparedStmtList = new ArrayList<>();
-		String query = allqueryBuilder.getDeathDtlsForPlainSearch(criteria, preparedStmtList);
-		List<EgDeathDtl> deathDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-		return deathDtls;
 	}
 }

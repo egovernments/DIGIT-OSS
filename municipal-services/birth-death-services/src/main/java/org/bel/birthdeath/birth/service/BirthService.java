@@ -80,6 +80,22 @@ public class BirthService {
 		return birthDtls;
 	}
 
+	public List<EgBirthDtl> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<EgBirthDtl> birthDtls = new ArrayList<EgBirthDtl>() ;
+		if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE")) {
+			if(validator.validateFieldsEmployee(criteria)) {
+				birthDtls = repository.getBirthDtlsForPlainSearch(criteria);
+			}
+		}
+		else {
+			if(validator.validateFieldsCitizen(criteria)) {
+				birthDtls = repository.getBirthDtlsForPlainSearch(criteria);
+			}
+		}
+
+		return birthDtls;
+	}
+
 	public BirthCertificate download(SearchCriteria criteria, RequestInfo requestInfo) {
 		try {
 		BirthCertificate birthCertificate = new BirthCertificate();
@@ -214,10 +230,4 @@ public class BirthService {
                 .append(StringUtils.join(criteria.getConsumerCodes(),","))
                 .append("&").append("status=APPROVED,DEPOSITED,NEW");
     }
-
-	public List<EgBirthDtl> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
-		List<EgBirthDtl> birthDtls = new ArrayList<EgBirthDtl>() ;
-		birthDtls = repository.getBirthDtlsForPlainSearch(criteria);
-		return birthDtls;
-	}
 }

@@ -105,6 +105,13 @@ public class BirthRepository {
         return birthDtls;
 	}
 
+	public List<EgBirthDtl> getBirthDtlsForPlainSearch(SearchCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		String query = allqueryBuilder.getBirtDtls(criteria, preparedStmtList);
+		List<EgBirthDtl> birthDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+		return birthDtls;
+	}
+
 	public void save(BirthCertRequest birthCertRequest) {
 		bndProducer.push(config.getSaveBirthTopic(), birthCertRequest);
 	}
@@ -254,12 +261,5 @@ public class BirthRepository {
         		commonUtils.maskAndShowLast4Chars(birthDtl);
         });
         return birthCertMasterDtl;
-	}
-
-	public List<EgBirthDtl> getBirthDtlsForPlainSearch(SearchCriteria criteria) {
-		List<Object> preparedStmtList = new ArrayList<>();
-		String query = allqueryBuilder.getBirtDtlsForPlainSearch(criteria, preparedStmtList);
-		List<EgBirthDtl> birthDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-		return birthDtls;
 	}
 }
