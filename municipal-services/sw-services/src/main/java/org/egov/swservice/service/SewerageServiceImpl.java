@@ -138,7 +138,7 @@ public class SewerageServiceImpl implements SewerageService {
 	 *            SewerageConnectionSearchCriteria contains search criteria on
 	 *            sewerage connection
 	 * @param requestInfo - Request Info Object
-	 * @return List of matching water connection
+	 * @return List of matching sewerage connection
 	 */
 
 	public List<SewerageConnection> getSewerageConnectionsList(SearchCriteria criteria, RequestInfo requestInfo) {
@@ -147,10 +147,36 @@ public class SewerageServiceImpl implements SewerageService {
 
 	/**
 	 * 
+	 * @param criteria
+	 *            SewerageConnectionSearchCriteria contains search criteria on
+	 *            sewerage connection
+	 * @param requestInfo - Request Info
+	 * @return List of matching sewerage connection
+	 */
+	public Integer countAllSewerageApplications(SearchCriteria criteria, RequestInfo requestInfo) {
+		criteria.setIsCountCall(Boolean.TRUE);
+		return getSewerageConnectionsCount(criteria, requestInfo);
+	}
+
+	/**
+	 * 
+	 * @param criteria
+	 *            SewerageConnectionSearchCriteria contains search criteria on
+	 *            sewerage connection
+	 * @param requestInfo - Request Info Object
+	 * @return Count of List of matching sewerage connection
+	 */
+
+	public Integer getSewerageConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
+		return sewerageDao.getSewerageConnectionsCount(criteria, requestInfo);
+	}
+	
+	/**
+	 * 
 	 * @param sewerageConnectionRequest
 	 *            SewerageConnectionRequest contains sewerage connection to be
 	 *            updated
-	 * @return List of SewerageConnection after update
+	 * @return Count of List of SewerageConnection after update
 	 */
 	@Override
 	public List<SewerageConnection> updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {

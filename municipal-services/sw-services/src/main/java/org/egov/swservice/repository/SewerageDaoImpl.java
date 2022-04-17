@@ -78,6 +78,16 @@ public class SewerageDaoImpl implements SewerageDao {
 		return sewerageConnectionList;
 	}
 
+	public Integer getSewerageConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = swQueryBuilder.getSearchCountQueryString(criteria, preparedStatement, requestInfo);
+		if (query == null)
+			return 0;
+
+		Integer count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
+		return count;
+	}
+
 	public Boolean isSearchOpen(User userInfo) {
 
 		return userInfo.getType().equalsIgnoreCase("SYSTEM")

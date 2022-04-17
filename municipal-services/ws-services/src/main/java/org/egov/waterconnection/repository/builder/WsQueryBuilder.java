@@ -69,6 +69,8 @@ public class WsQueryBuilder {
             " result) result_offset " +
             "WHERE offset_ > ? AND offset_ <= ?";
 	
+	private static final String COUNT_WRAPPER = " SELECT COUNT(*) FROM ({INTERNAL_QUERY}) AS count ";
+
 	private static final String ORDER_BY_CLAUSE= " ORDER BY wc.appCreatedDate DESC";
 	/**
 	 * 
@@ -223,6 +225,8 @@ public class WsQueryBuilder {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.isoldapplication = ? ");
 			preparedStatement.add(Boolean.FALSE);
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" conn.connectionno is not null ");
 		}
 		if (!StringUtils.isEmpty(criteria.getLocality())) {
 			addClauseIfRequired(preparedStatement, query);
@@ -230,8 +234,22 @@ public class WsQueryBuilder {
 			preparedStatement.add(criteria.getLocality());
 		}
 		query.append(ORDER_BY_CLAUSE);
-		return addPaginationWrapper(query.toString(), preparedStatement, criteria);
+		
+		// Pagination to limit results, do not paginate query in case of count call.
+		if (!criteria.getIsCountCall())
+			return addPaginationWrapper(query.toString(), preparedStatement, criteria);
+		
+		String queryInString=query.toString();
+		
+		return queryInString;		
 	}
+	
+	
+	public String getSearchCountQueryString(SearchCriteria criteria, List<Object> preparedStmtList,
+			RequestInfo requestInfo) {
+        String query = getSearchQueryString(criteria, preparedStmtList, requestInfo);
+        return COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
+    }
 	
 	private void addClauseIfRequired(List<Object> values, StringBuilder queryString) {
 		if (values.isEmpty())

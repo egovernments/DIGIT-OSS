@@ -140,10 +140,35 @@ public class WaterServiceImpl implements WaterService {
 	 *            WaterConnectionSearchCriteria contains search criteria on water
 	 *            connection
 	 * @param requestInfo
-	 * @return List of matching water connection
+	 * @return Count of List of matching water connection
 	 */
 	public List<WaterConnection> getWaterConnectionsList(SearchCriteria criteria, RequestInfo requestInfo) {
 		return waterDao.getWaterConnectionList(criteria, requestInfo);
+	}
+	
+	/**
+	 * 
+	 * @param criteria
+	 *            WaterConnectionSearchCriteria contains search criteria on water
+	 *            connection
+	 * @param requestInfo
+	 * @return Count of List of matching water connection
+	 */
+	@Override
+	public Integer countAllWaterApplications(SearchCriteria criteria, RequestInfo requestInfo) {
+		criteria.setIsCountCall(Boolean.TRUE);
+		return getWaterConnectionsCount(criteria, requestInfo);
+	}
+	/**
+	 * 
+	 * @param criteria
+	 *            WaterConnectionSearchCriteria contains search criteria on water
+	 *            connection
+	 * @param requestInfo
+	 * @return count of matching water connection
+	 */
+	public Integer getWaterConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
+		return waterDao.getWaterConnectionsCount(criteria, requestInfo);
 	}
 
 	/**
