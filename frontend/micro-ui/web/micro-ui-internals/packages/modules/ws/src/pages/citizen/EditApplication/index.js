@@ -46,9 +46,9 @@ const getEditDetails = (waterResult,sewerageresult) => {
     waterResult.WaterConnectionResult={WaterConnection:[{...waterResult}]}
     waterResult.cpt = {details:{...waterResult?.property}}
     waterResult.cptId = {id:waterResult?.propertyId}
-    waterResult.documents = {documents : [...waterResult?.documents]}
+    waterResult.documents = {documents : waterResult?.documents}
     waterResult.plumberPreference = {code:"ULB", i18nKey:"WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE"}
-    waterResult.serviceName = waterResult?.applicationType.includes("WATER") ? {code:"WATER",i18nKey:"WS_WATER_CONNECTION_ONLY"} : {code:"SEWERAGE",i18nKey:"WS_SEWERAGE_CONNECTION_ONLY"}
+    waterResult.serviceName = waterResult?.applicationType?.includes("WATER") ? {code:"WATER",i18nKey:"WS_WATER_CONNECTION_ONLY"} : {code:"SEWERAGE",i18nKey:"WS_SEWERAGE_CONNECTION_ONLY"}
     waterResult.waterConectionDetails = {
       proposedPipeSize : {code:waterResult?.proposedPipeSize, i18nKey:`${waterResult?.proposedPipeSize} WS_INCHES_LABEL`, size:waterResult?.proposedPipeSize},
       proposedTaps : waterResult?.proposedTaps,
@@ -103,11 +103,12 @@ else
 
 const EditApplication = ({ parentRoute }) => {
   const queryClient = useQueryClient();
-  const match = useRouteMatch();
+  let match = useRouteMatch();
   const { t } = useTranslation();
-  const { id: applicationNumber = "SW_AP/107/2022-23/251465", tenantId = "pb.amritsar" } = Digit.Hooks.useQueryParams();
-  const { pathname } = useLocation();
+  let {  tenantId } = useParams();
+  const { pathname, state } = useLocation();
   const history = useHistory();
+  let applicationNumber = state?.id || sessionStorage.getItem("ApplicationNoState");
   let config = [];
   let waterapplication = {};
   let sewerageapplication = {};
@@ -137,6 +138,12 @@ const EditApplication = ({ parentRoute }) => {
         waterapplication.isEditApplication = true;
         if(sewerageapplication)
         sewerageapplication.isEditApplication = true;
+      }
+      else if(window.location.href.includes("modify-connection")){
+        if(waterapplication)
+        waterapplication.isModifyConnection = true;
+        if(sewerageapplication)
+        sewerageapplication.isModifyConnection = true;
       }
       sessionStorage.setItem("WaterInitialObject", JSON.stringify({ ...waterapplication }));
       sessionStorage.setItem("SewerageInitialObject", JSON.stringify({ ...sewerageapplication }));

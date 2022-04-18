@@ -15,7 +15,7 @@ const getAddress = (address, t) => {
   
 const combineResponse = (WaterConnections, properties, billData, t) => {
     if(WaterConnections && properties){
-    if(window.location.href.includes("/edit-application/"))
+    if(window.location.href.includes("/edit-application/") || window.location.href.includes("/modify-connection/"))
     return {
       ...WaterConnections?.[0],
       property : {...properties?.[0]},

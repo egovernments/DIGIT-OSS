@@ -44,7 +44,7 @@ const WSAcknowledgement = ({ data, onSuccess, clearParams }) => {
   const SWmutation = Digit.Hooks.ws.useWSUpdateAPI(
    "SEWERAGE"
   );
-  let isEdit = window.location.href.includes("/edit-application/");
+  let isEdit = window.location.href.includes("/edit-application/") || window.location.href.includes("/modify-connection/");
  
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};

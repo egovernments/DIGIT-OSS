@@ -1,4 +1,4 @@
-import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, CardSectionHeader, MultiLink, CardText } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, CardSectionHeader, MultiLink, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React,{useState} from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation} from "react-router-dom";
@@ -107,7 +107,7 @@ const ConnectionDetails = () => {
   if(isLoading || isPTLoading) {
     return <Loader />
   }
-
+  sessionStorage.setItem("ApplicationNoState",state?.applicationNo);
   return (
     <React.Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
@@ -176,6 +176,16 @@ const ConnectionDetails = () => {
               </div>}
             </div>
           ))}
+          {state?.applicationStatus === "CONNECTION_ACTIVATED" ? (
+                <Link
+                  to={{
+                    pathname: `/digit-ui/citizen/ws/modify-connection/${state?.tenantId}`,
+                    state: {id:`${state?.applicationNo}`},
+                  }}
+                >
+                  <SubmitBar label={t("MODIFY_CONNECTION")} />
+                </Link>
+              ) : null}
         </Card>
       </div>
     </React.Fragment>
