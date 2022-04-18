@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MODULES=( "components" "common" "core" "libraries" "example" )
+MODULES=( "dss" "common" "core" "libraries" "example" )
 
 RUNARGS=()
 BUILDARGS=()
