@@ -140,18 +140,21 @@ const Home = () => {
             <StandaloneSearchBar placeholder={t("CS_COMMON_SEARCH_PLACEHOLDER")} />
           </div>
         </div>
-      </div>
 
         <div className="ServicesSection">
           <CardBasedOptions {...allCitizenServicesProps} />
           <CardBasedOptions {...allInfoAndUpdatesProps} />
         </div>
 
-       {(whatsAppBannerMobObj||whatsAppBannerWebObj)&& <div className="WhatsAppBanner">
-        {isMobile 
-        ? <img src={whatsAppBannerMobObj?.bannerUrl} onClick={() => handleClickOnWhatsAppBanner(whatsAppBannerMobObj)}/> 
-        : <img src={whatsAppBannerWebObj?.bannerUrl} onClick={() => handleClickOnWhatsAppBanner(whatsAppBannerWebObj)}/>}
-        </div>}
+        {(whatsAppBannerMobObj || whatsAppBannerWebObj) && (
+          <div className="WhatsAppBanner">
+            {isMobile ? (
+              <img src={whatsAppBannerMobObj?.bannerUrl} onClick={() => handleClickOnWhatsAppBanner(whatsAppBannerMobObj)} />
+            ) : (
+              <img src={whatsAppBannerWebObj?.bannerUrl} onClick={() => handleClickOnWhatsAppBanner(whatsAppBannerWebObj)} />
+            )}
+          </div>
+        )}
 
         {conditionsToDisableNotificationCountTrigger() ? (
           EventsDataLoading ? (
@@ -167,6 +170,7 @@ const Home = () => {
           )
         ) : null}
       </div>
+    </div>
   );
 };
 

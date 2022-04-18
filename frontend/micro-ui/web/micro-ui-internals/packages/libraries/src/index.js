@@ -25,6 +25,7 @@ import { PTService } from "./services/elements/PT";
 import { WSService } from "./services/elements/WS";
 import { TLService } from "./services/elements/TL";
 import { MCollectService } from "./services/elements/MCollect";
+import { ReportsService } from "./services/elements/Reports";
 import HrmsService from "./services/elements/HRMS";
 import { InboxGeneral } from "./services/elements/InboxService";
 import EventsServices from "./services/elements/Events";
@@ -73,6 +74,7 @@ const initLibraries = () => {
   setupLibraries("HRMSService", HrmsService);
   setupLibraries("ReceiptsService", ReceiptsService);
   setupLibraries("MCollectService", MCollectService);
+  setupLibraries("ReportsService", ReportsService)
   setupLibraries("PaymentService", PaymentService);
   setupLibraries("EDCRService", EDCRService);
   setupLibraries("OBPSService", OBPSService);
