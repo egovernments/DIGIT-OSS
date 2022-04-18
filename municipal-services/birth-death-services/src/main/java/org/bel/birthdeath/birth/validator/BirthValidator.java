@@ -112,79 +112,79 @@ public class BirthValidator {
 			setRejectionReason(BirthDeathConstants.GENDER_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getPlaceofbirth()==null) {
+		if(birthDtl.getPlaceofbirth()==null || birthDtl.getPlaceofbirth().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PLACE_OF_BIRTH_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthFatherInfo().getFirstname()==null) {
+		if(birthDtl.getBirthFatherInfo().getFirstname()==null || birthDtl.getBirthFatherInfo().getFirstname().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.FATHER_FIRSTNAME_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthFatherInfo().getLastname()==null) {
+		if(birthDtl.getBirthFatherInfo().getLastname()==null || birthDtl.getBirthFatherInfo().getLastname().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.FATHER_LASTNAME_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthFatherInfo().getMiddlename()==null) {
+		if(birthDtl.getBirthFatherInfo().getMiddlename()==null || birthDtl.getBirthFatherInfo().getMiddlename().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.FATHER_MIDDLE_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthFatherInfo().getNationality()==null) {
+		if(birthDtl.getBirthFatherInfo().getNationality()==null || birthDtl.getBirthFatherInfo().getNationality().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.FATHER_NATIONALITY_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthMotherInfo().getFirstname()==null) {
+		if(birthDtl.getBirthMotherInfo().getFirstname()==null || birthDtl.getBirthMotherInfo().getFirstname().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.MOTHER_FIRSTNAME_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthMotherInfo().getLastname()==null) {
+		if(birthDtl.getBirthMotherInfo().getLastname()==null || birthDtl.getBirthMotherInfo().getLastname().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.MOTHER_LASTNAME_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthMotherInfo().getMiddlename()==null) {
+		if(birthDtl.getBirthMotherInfo().getMiddlename()==null || birthDtl.getBirthMotherInfo().getMiddlename().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.MOTHER_MIDDLE_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthMotherInfo().getNationality()==null) {
+		if(birthDtl.getBirthMotherInfo().getNationality()==null || birthDtl.getBirthMotherInfo().getNationality().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.MOTHER_NATIONALITY_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthPermaddr().getBuildingno()==null) {
+		if(birthDtl.getBirthPermaddr().getBuildingno()==null || birthDtl.getBirthPermaddr().getBuildingno().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_BUILDING_NO_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthPermaddr().getCity()==null) {
+		if(birthDtl.getBirthPermaddr().getCity()==null || birthDtl.getBirthPermaddr().getCity().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_CITY_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthPermaddr().getCountry()==null) {
+		if(birthDtl.getBirthPermaddr().getCountry()==null || birthDtl.getBirthPermaddr().getCountry().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_COUNTRY_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthPermaddr().getDistrict()==null) {
+		if(birthDtl.getBirthPermaddr().getDistrict()==null || birthDtl.getBirthPermaddr().getDistrict().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_DISTRICT_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthPermaddr().getHouseno()==null) {
+		if(birthDtl.getBirthPermaddr().getHouseno()==null || birthDtl.getBirthPermaddr().getHouseno().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_HOUSE_NO_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthPermaddr().getStreetname()==null) {
+		if(birthDtl.getBirthPermaddr().getStreetname()==null || birthDtl.getBirthPermaddr().getStreetname().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_STREET_NAME_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthPermaddr().getState()==null) {
+		if(birthDtl.getBirthPermaddr().getState()==null || birthDtl.getBirthPermaddr().getState().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_STATE_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthPermaddr().getTehsil()==null) {
+		if(birthDtl.getBirthPermaddr().getTehsil()==null || birthDtl.getBirthPermaddr().getTehsil().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_TEHSIL_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthPermaddr().getLocality()==null) {
+		if(birthDtl.getBirthPermaddr().getLocality()==null || birthDtl.getBirthPermaddr().getLocality().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_LOCALITY_EMPTY,birthDtl,importBirthWrapper);
 			return false;
 		}
-		if(birthDtl.getBirthPermaddr().getPinno()==null) {
+		if(birthDtl.getBirthPermaddr().getPinno()==null || birthDtl.getBirthPermaddr().getPinno().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_PINCODE_EMPTY, birthDtl, importBirthWrapper);
 			return false;
 		}

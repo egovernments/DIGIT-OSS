@@ -118,75 +118,75 @@ public class DeathValidator {
 			setRejectionReason(BirthDeathConstants.GENDER_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getPlaceofdeath()==null) {
+		if(deathDtl.getPlaceofdeath()==null || deathDtl.getPlaceofdeath().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PLACE_OF_BIRTH_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathFatherInfo().getFirstname()==null) {
+		if(deathDtl.getDeathFatherInfo().getFirstname()==null || deathDtl.getDeathFatherInfo().getFirstname().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.FATHER_FIRSTNAME_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathFatherInfo().getLastname()==null) {
+		if(deathDtl.getDeathFatherInfo().getLastname()==null || deathDtl.getDeathFatherInfo().getLastname().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.FATHER_LASTNAME_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathFatherInfo().getMiddlename()==null) {
+		if(deathDtl.getDeathFatherInfo().getMiddlename()==null || deathDtl.getDeathFatherInfo().getMiddlename().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.FATHER_MIDDLE_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getNationality()==null) {
+		if(deathDtl.getNationality()==null || deathDtl.getNationality().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.NATIONALITY_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathMotherInfo().getFirstname()==null) {
+		if(deathDtl.getDeathMotherInfo().getFirstname()==null || deathDtl.getDeathMotherInfo().getFirstname().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.MOTHER_FIRSTNAME_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathMotherInfo().getLastname()==null) {
+		if(deathDtl.getDeathMotherInfo().getLastname()==null || deathDtl.getDeathMotherInfo().getLastname().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.MOTHER_LASTNAME_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathMotherInfo().getMiddlename()==null) {
+		if(deathDtl.getDeathMotherInfo().getMiddlename()==null || deathDtl.getDeathMotherInfo().getMiddlename().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.MOTHER_MIDDLE_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathPermaddr().getBuildingno()==null) {
+		if(deathDtl.getDeathPermaddr().getBuildingno()==null || deathDtl.getDeathPermaddr().getBuildingno().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_BUILDING_NO_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathPermaddr().getCity()==null) {
+		if(deathDtl.getDeathPermaddr().getCity()==null || deathDtl.getDeathPermaddr().getCity().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_CITY_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathPermaddr().getCountry()==null) {
+		if(deathDtl.getDeathPermaddr().getCountry()==null || deathDtl.getDeathPermaddr().getCountry().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_COUNTRY_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathPermaddr().getDistrict()==null) {
+		if(deathDtl.getDeathPermaddr().getDistrict()==null || deathDtl.getDeathPermaddr().getDistrict().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_DISTRICT_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathPermaddr().getHouseno()==null) {
+		if(deathDtl.getDeathPermaddr().getHouseno()==null || deathDtl.getDeathPermaddr().getHouseno().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_HOUSE_NO_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathPermaddr().getStreetname()==null) {
+		if(deathDtl.getDeathPermaddr().getStreetname()==null || deathDtl.getDeathPermaddr().getStreetname().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_STREET_NAME_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathPermaddr().getState()==null) {
+		if(deathDtl.getDeathPermaddr().getState()==null || deathDtl.getDeathPermaddr().getState().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_STATE_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathPermaddr().getTehsil()==null) {
+		if(deathDtl.getDeathPermaddr().getTehsil()==null || deathDtl.getDeathPermaddr().getTehsil().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_TEHSIL_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathPermaddr().getLocality()==null) {
+		if(deathDtl.getDeathPermaddr().getLocality()==null || deathDtl.getDeathPermaddr().getLocality().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_LOCALITY_EMPTY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getDeathPermaddr().getPinno()==null) {
+		if(deathDtl.getDeathPermaddr().getPinno()==null || deathDtl.getDeathPermaddr().getPinno().isEmpty()) {
 			setRejectionReason(BirthDeathConstants.PERMENANT_PINCODE_EMPTY, deathDtl, importDeathWrapper);
 			return false;
 		}
