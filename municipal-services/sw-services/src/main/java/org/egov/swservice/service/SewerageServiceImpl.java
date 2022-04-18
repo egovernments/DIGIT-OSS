@@ -128,7 +128,7 @@ public class SewerageServiceImpl implements SewerageService {
 		}
 		validateProperty.validatePropertyForConnection(sewerageConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
-		enrichmentService.enrichProcessInstance(sewerageConnectionList, criteria, requestInfo);
+		//enrichmentService.enrichProcessInstance(sewerageConnectionList, criteria, requestInfo);
 		return sewerageConnectionList;
 	}
 
@@ -239,7 +239,8 @@ public class SewerageServiceImpl implements SewerageService {
 	 */
 	private List<SewerageConnection> getAllSewerageApplications(SewerageConnectionRequest sewerageConnectionRequest) {
 		SearchCriteria criteria = SearchCriteria.builder()
-				.connectionNumber(sewerageConnectionRequest.getSewerageConnection().getConnectionNo()).build();
+				.connectionNumber(sewerageConnectionRequest.getSewerageConnection().getConnectionNo()).isCountCall(false)
+				.build();
 		return search(criteria, sewerageConnectionRequest.getRequestInfo());
 	}
 

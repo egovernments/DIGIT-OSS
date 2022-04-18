@@ -60,6 +60,23 @@ public class SWQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
 
+	private final static String SEARCH_COUNT_QUERY = "SELECT  DISTINCT(conn.applicationNo), sc.appCreatedDate, conn.id as conn_id"
+			+ " FROM eg_sw_connection conn "
+			+  INNER_JOIN_STRING 
+			+ " eg_sw_service sc ON sc.connection_id = conn.id"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_sw_applicationdocument document ON document.swid = conn.id" 
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_sw_plumberinfo plumber ON plumber.swid = conn.id"
+			+  LEFT_OUTER_JOIN_STRING
+		    + "eg_sw_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
+	
 	private final String paginationWrapper = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
             "({})" +
@@ -76,10 +93,15 @@ public class SWQueryBuilder {
 	 */
 	public String getSearchQueryString(SearchCriteria criteria, List<Object> preparedStatement,
 			RequestInfo requestInfo) {
-		if(criteria.isEmpty())
+		if (criteria.isEmpty())
 			return null;
 		Set<String> propertyIds = new HashSet<>();
-		StringBuilder query = new StringBuilder(SEWERAGE_SEARCH_QUERY);
+		StringBuilder query;
+		if (!criteria.getIsCountCall())
+			query = new StringBuilder(SEWERAGE_SEARCH_QUERY);
+		else
+			query = new StringBuilder(SEARCH_COUNT_QUERY);
+		
 		boolean propertyIdsPresent = false;
 		
 		if (!StringUtils.isEmpty(criteria.getMobileNumber()) || !StringUtils.isEmpty(criteria.getDoorNo())
@@ -144,7 +166,7 @@ public class SWQueryBuilder {
 		}
 
 		if (!StringUtils.isEmpty(criteria.getPropertyId()) && (StringUtils.isEmpty(criteria.getMobileNumber())
-				||  StringUtils.isEmpty(criteria.getDoorNo()) ||  StringUtils.isEmpty(criteria.getOwnerName()))) {
+				&&  StringUtils.isEmpty(criteria.getDoorNo()) &&  StringUtils.isEmpty(criteria.getOwnerName()))) {
 			if(propertyIdsPresent)
 				query.append(")");
 			else{
@@ -243,7 +265,10 @@ public class SWQueryBuilder {
 	public String getSearchCountQueryString(SearchCriteria criteria, List<Object> preparedStmtList,
 			RequestInfo requestInfo) {
         String query = getSearchQueryString(criteria, preparedStmtList, requestInfo);
-        return COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
+        if(query!=null)
+        	return COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
+        else
+        	return query;
     }
 	
 	private void addClauseIfRequired(List<Object> values, StringBuilder queryString) {

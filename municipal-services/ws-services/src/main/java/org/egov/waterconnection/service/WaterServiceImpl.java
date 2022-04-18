@@ -237,7 +237,8 @@ public class WaterServiceImpl implements WaterService {
 
 	private List<WaterConnection> getAllWaterApplications(WaterConnectionRequest waterConnectionRequest) {
 		SearchCriteria criteria = SearchCriteria.builder()
-				.connectionNumber(waterConnectionRequest.getWaterConnection().getConnectionNo()).build();
+				.connectionNumber(waterConnectionRequest.getWaterConnection().getConnectionNo()).isCountCall(false)
+				.build();
 		return search(criteria, waterConnectionRequest.getRequestInfo());
 	}
 
