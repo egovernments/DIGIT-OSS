@@ -1,3 +1,4 @@
+import { AssetLoader } from "@egovernments/digit-ui-react-components/src";
 import React from "react";
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class ErrorBoundary extends React.Component {
       // You can render any custom fallback UI
       return (
         <div className="error-boundary">
+          <AssetLoader />
           <summary>Something went wrong</summary>
           <details style={{ whiteSpace: "pre-wrap" }}>
             {this.state?.errorStack && this.state.errorStack.toString().substring(0, 600)}

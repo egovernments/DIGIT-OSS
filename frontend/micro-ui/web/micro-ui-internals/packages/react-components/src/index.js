@@ -2,6 +2,7 @@ import ActionBar from "./atoms/ActionBar";
 import ActionLinks from "./atoms/ActionLinks";
 import AppContainer from "./atoms/AppContainer";
 import ApplyFilterBar from "./atoms/ApplyFilterBar";
+import AssetLoader from "./atoms/AssetLoader";
 import BackButton from "./atoms/BackButton";
 import Banner from "./atoms/Banner";
 import Body from "./atoms/Body";
@@ -281,6 +282,8 @@ export {
   EventCalendarView,
   InboxLinks,
   PopupHeadingLabel,
+  AssetLoader,
+
   // Icons
   GetApp,
   ArrowLeft,
@@ -318,6 +321,7 @@ export {
   NotificationBell,
   ImageIcon,
   OBPSIconSolidBg,
+
   // Molecule
   InputCard,
   FormStep,
@@ -337,6 +341,7 @@ export {
   FilterForm,
   FilterFormField,
   SortAction,
+
   // hoc
   FormComposer,
   ResponseComposer,
@@ -355,6 +360,7 @@ export {
   Poll,
   Details,
   InboxComposer,
+
   // Icons
   FilterIcon,
   FilterSvg,
@@ -407,5 +413,5 @@ export {
   PGRIcon,
   TLIcon,
   BillsIcon,
-  ErrorIcon
+  ErrorIcon,
 };
