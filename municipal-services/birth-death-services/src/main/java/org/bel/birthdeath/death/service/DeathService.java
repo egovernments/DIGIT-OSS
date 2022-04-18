@@ -81,8 +81,7 @@ public class DeathService {
 	}
 
 	public List<EgDeathDtl> plainSearch(SearchCriteria criteria,RequestInfo requestInfo) {
-		List<EgDeathDtl> deathDtls = new ArrayList<EgDeathDtl>() ;
-		deathDtls = repository.getDeathDtlsForPlainSearch(criteria);
+		List<EgDeathDtl> deathDtls = repository.getDeathDtlsForPlainSearch(criteria);
 		return deathDtls;
 	}
 

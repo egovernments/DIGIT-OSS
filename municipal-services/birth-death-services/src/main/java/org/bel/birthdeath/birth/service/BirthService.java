@@ -81,9 +81,7 @@ public class BirthService {
 	}
 
 	public List<EgBirthDtl> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
-		List<EgBirthDtl> birthDtls = new ArrayList<EgBirthDtl>() ;
-		birthDtls = repository.getBirthDtlsForPlainSearch(criteria);
-
+		List<EgBirthDtl> birthDtls = repository.getBirthDtlsForPlainSearch(criteria);
 		return birthDtls;
 	}
 
