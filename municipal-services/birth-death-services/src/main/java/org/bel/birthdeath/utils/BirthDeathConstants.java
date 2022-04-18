@@ -4,42 +4,22 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BirthDeathConstants {
-
-    public static final String STATUS_ACTIVE = "ACTIVE";
-
-    public static final String STATUS_CANCELLED  = "CANCELLED";
-
-    public static final String STATUS_PAID  = "PAID";
-    
-
-    public static final String KEY_ID = "id";
-
-    public static final String KEY_FILESTOREID = "filestoreid";
-
-    public static final String KEY_PDF_JOBS = "jobs";
-
-    public static final String KEY_PDF_ENTITY_ID = "entityid";
-
-    public static final String KEY_PDF_FILESTOREID = "filestoreids";
-    
-    public static final String KEY_NAME = "key";
-    
 	public static final String GL_CODE_JSONPATH_CODE = "$.MdmsRes.BillingService.GLCode[?(@.code==\"{}\")]";
 
 	public static final String GL_CODE = "glcode";
-	
+
 	public static final String GL_CODE_MASTER = "GLCode";
 
 	public static final String BILLING_SERVICE = "BillingService";
-	
+
 	public static final String BIRTH_CERT = "BIRTH_CERT";
-	
+
 	public static final String BIRTH_CERT_FEE = "BIRTH_CERT_FEE";
-	
+
 	public static final String DEATH_CERT = "DEATH_CERT";
-	
+
 	public static final String DEATH_CERT_FEE = "DEATH_CERT_FEE";
-	
+
 	public static final String TENANT_EMPTY = "Tenantid cannot be empty";
 	public static final String B_MANDATORY_MISSING = "DOB/GENDER is empty";
 	public static final String D_MANDATORY_MISSING = "DOD/GENDER is empty";
@@ -65,10 +45,6 @@ public class BirthDeathConstants {
 	public static final String M_RELIGION_LARGE = "Mother Religion cannot exceed 100 chars";
 	public static final String M_PROFFESSION_LARGE = "Mother Profession cannot exceed 100 chars";
 	public static final String M_NATIONALITY_LARGE = "Mother Nationality cannot exceed 100 chars";
-	public static final String S_EDUCATION_LARGE = "Spouse Education cannot exceed 100 chars";
-	public static final String S_RELIGION_LARGE = "Spouse Religion cannot exceed 100 chars";
-	public static final String S_PROFFESSION_LARGE = "Spouse Profession cannot exceed 100 chars";
-	public static final String S_NATIONALITY_LARGE = "Spouse Nationality cannot exceed 100 chars";
 	public static final String M_FIRSTNAME_LARGE = "Mother Firstname cannot exceed 200 chars";
 	public static final String M_MIDDLENAME_LARGE = "Mother Middlename cannot exceed 200 chars";
 	public static final String M_LASTNAME_LARGE = "Mother Lastname cannot exceed 200 chars";
@@ -89,8 +65,8 @@ public class BirthDeathConstants {
 	public static final String AADHAR_LARGE = "Aadhar No cannot exceed 150 chars";
 	public static final String NATIONALITY_LARGE = "Nationality cannot exceed 100 chars";
 	public static final String RELIGION_LARGE = "Religion cannot exceed 100 chars";
-	public static final String ICDCODE_LARGE = "ICD Code cannot exceed 300 chars";	
-	
+	public static final String ICDCODE_LARGE = "ICD Code cannot exceed 300 chars";
+
 	public static final String INVALID_DOB = "DOB not valid";
 	public static final String INVALID_DOB_RANGE = "DOB not in range";
 	public static final String INVALID_DOR = "DOR not valid";
@@ -103,7 +79,7 @@ public class BirthDeathConstants {
 	public static final String S_MIDDLENAME_LARGE = "Spouse Middlename cannot exceed 200 chars";
 	public static final String S_LASTNAME_LARGE = "Spouse Lastname cannot exceed 200 chars";
 	public static final String PLACEOFDEATH_LARGE = "Place of Death cannot exceed 1000 chars";
-	
+
 	public static final String PERM_BUILDINGNO = "Building No in Permanent Address cannot exceed 1000 chars";
 	public static final String PERM_HOUSENO = "House No in Permanent Address cannot exceed 1000 chars";
 	public static final String PERM_STREETNAME = "Street name in Permanent Address cannot exceed 1000 chars";
@@ -114,7 +90,7 @@ public class BirthDeathConstants {
 	public static final String PERM_STATE = "State in Permanent Address cannot exceed 100 chars";
 	public static final String PERM_PINNO = "Pin No in Permanent Address cannot exceed 100 chars";
 	public static final String PERM_COUNTRY = "Country in Permanent Address cannot exceed 100 chars";
-	
+
 	public static final String PRESENT_BUILDINGNO = "Building No in Present Address cannot exceed 1000 chars";
 	public static final String PRESENT_HOUSENO = "House No in Present Address cannot exceed 1000 chars";
 	public static final String PRESENT_STREETNAME = "Street name in Present Address cannot exceed 1000 chars";
@@ -125,11 +101,52 @@ public class BirthDeathConstants {
 	public static final String PRESENT_STATE = "State in Present Address cannot exceed 100 chars";
 	public static final String PRESENT_PINNO = "Pin No in Present Address cannot exceed 100 chars";
 	public static final String PRESENT_COUNTRY = "Country in Present Address cannot exceed 100 chars";
-	
+
 	public static final String DATA_ERROR = "Data Error";
 	public static final String EXCEL_DATA_ERROR = "Excel Data Error";
 	public static final String UPDATE_ERROR = "Id cannot be empty for Updation";
+
+	public static final String PLACE_OF_BIRTH_EMPTY = "Place of birth cannot be empty";
+
+	public static final String FATHER_FIRSTNAME_EMPTY = "Father firstname cannot be empty";
+
+	public static final String FATHER_NATIONALITY_EMPTY = "Father nationality cannot be empty";
+
+	public static final String FATHER_MIDDLE_EMPTY = "Father middlename cannot be empty";
+
+	public static final String FATHER_LASTNAME_EMPTY = "Father lastname cannot be empty";
+
+	public static final String MOTHER_FIRSTNAME_EMPTY = "Mother firstname cannot be empty";
+
+	public static final String MOTHER_MIDDLE_EMPTY = "Mother middlename cannot be empty";
+
+	public static final String MOTHER_LASTNAME_EMPTY = "Mother lastname cannot be empty";
+
+	public static final String MOTHER_NATIONALITY_EMPTY = "Mother nationality cannot be empty";
+
+	public static final String PERMENANT_BUILDING_NO_EMPTY = "Building no cannot be empty";
+
+	public static final String PERMENANT_HOUSE_NO_EMPTY = "House no cannot be empty";
+
+	public static final String PERMENANT_STREET_NAME_EMPTY = "Street name cannot be empty";
+
+	public static final String PERMENANT_LOCALITY_EMPTY = "locality cannot be empty";
+
+	public static final String PERMENANT_TEHSIL_EMPTY = "Tehsil cannot be empty";
+
+	public static final String PERMENANT_DISTRICT_EMPTY = "District cannot be empty";
+
+	public static final String PERMENANT_CITY_EMPTY = "City cannot be empty";
+
+	public static final String PERMENANT_STATE_EMPTY = "State cannot be empty";
+
+	public static final String PERMENANT_PINCODE_EMPTY = "Pincode cannot be empty";
+
+	public static final String PERMENANT_COUNTRY_EMPTY = "Country cannot be empty";
+
+    public static final String NATIONALITY_EMPTY = "Nationality cannot be empty";
+
 	//public static final String INVALID_DATA_SPACES = "Data contains extra spaces";
-    public BirthDeathConstants() {}
+	public BirthDeathConstants() {}
 
 }
