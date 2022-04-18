@@ -31,10 +31,10 @@ const getInitialRange = () => {
   const startDate = data?.range?.startDate ? new Date(data?.range?.startDate) : Digit.Utils.dss.getDefaultFinacialYear().startDate;
   const endDate = data?.range?.endDate ? new Date(data?.range?.endDate) : Digit.Utils.dss.getDefaultFinacialYear().endDate;
   const title = `${format(startDate, "MMM d, yyyy")} - ${format(endDate, "MMM d, yyyy")}`;
-  const duration = Digit.Utils.dss.getDuration(startDate, endDate);
+  const interval = Digit.Utils.dss.getDuration(startDate, endDate);
   const denomination = data?.denomination || "Lac";
   const tenantId = data?.filters?.tenantId || [];
-  return { startDate, endDate, title, duration, denomination, tenantId };
+  return { startDate, endDate, title, interval, denomination, tenantId };
 };
 const colors = [
   { 'dark': 'rgba(12, 157, 149, 0.85)', 'light': 'rgba(11, 222, 133, 0.14)' },
@@ -51,11 +51,11 @@ const Chart = ({ data , moduleLevel}) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { id, chartType } = data;
-  const { startDate, endDate, duration } = getInitialRange();
+  const { startDate, endDate, interval } = getInitialRange();
   const requestDate = {
     startDate: startDate.getTime(),
     endDate: endDate.getTime(),
-    interval: duration,
+    interval: interval,
     title: "home",
   };
 
@@ -96,11 +96,11 @@ const HorBarChart = ({ data, setselectState = "" }) => {
   if (setselectState !== "") filters.state = setselectState;
 
   filters = { ...filters }
-  const { startDate, endDate, duration } = getInitialRange();
+  const { startDate, endDate, interval } = getInitialRange();
   const requestDate = {
     startDate: startDate.getTime(),
     endDate: endDate.getTime(),
-    interval: duration,
+    interval: interval,
     title: "home",
   };
 
@@ -198,7 +198,6 @@ const Home = ({ stateCode }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const [filters, setFilters] = useState(() => {
-
   });
   const { moduleCode } = useParams();
   const language = Digit.StoreData.getCurrentLanguage();

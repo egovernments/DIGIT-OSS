@@ -2,7 +2,10 @@ import { Calender } from "@egovernments/digit-ui-react-components";
 import {
   addHours,
   addMinutes,
-  addMonths, addSeconds, differenceInDays, endOfMonth,
+  addMonths,
+  addSeconds,
+  differenceInDays,
+  endOfMonth,
   endOfQuarter,
   endOfToday,
   endOfWeek,
@@ -14,9 +17,11 @@ import {
   startOfToday,
   startOfWeek,
   startOfYear,
-  startOfYesterday, subSeconds, subYears
+  startOfYesterday,
+  subSeconds,
+  subYears,
 } from "date-fns";
-import React, { useEffect,Fragment, useMemo, useRef, useState } from "react";
+import React, { useEffect, Fragment, useMemo, useRef, useState } from "react";
 import { createStaticRanges, DateRangePicker } from "react-date-range";
 
 function isEndDateFocused(focusNumber) {
@@ -49,9 +54,9 @@ const DateRange = ({ values, onFilterChange, t }) => {
     if (!isModalOpen) {
       const startDate = selectionRange?.startDate;
       const endDate = selectionRange?.endDate;
-      const duration = getDuration(selectionRange?.startDate, selectionRange?.endDate);
+      const interval = getDuration(selectionRange?.startDate, selectionRange?.endDate);
       const title = `${format(selectionRange?.startDate, "MMM d, yyyy")} - ${format(selectionRange?.endDate, "MMM d, yyyy")}`;
-      onFilterChange({ range: { startDate, endDate, duration, title }, requestDate: { startDate, endDate, duration, title } });
+      onFilterChange({ range: { startDate, endDate, interval, title }, requestDate: { startDate, endDate, interval, title } });
     }
   }, [selectionRange, isModalOpen]);
 
@@ -90,7 +95,7 @@ const DateRange = ({ values, onFilterChange, t }) => {
         label: t("DSS_THIS_QUARTER"),
         range: () => ({
           startDate: startOfQuarter(new Date()),
-          endDate: subSeconds(endOfToday(new Date()), 1)
+          endDate: subSeconds(endOfToday(new Date()), 1),
           // endDate: subSeconds(endOfQuarter(new Date()), 1),
         }),
       },
@@ -114,9 +119,9 @@ const DateRange = ({ values, onFilterChange, t }) => {
         label: t("DSS_THIS_YEAR"),
         range: () => {
           return {
-             startDate: Digit.Utils.dss.getDefaultFinacialYear().startDate,
-              endDate: Digit.Utils.dss.getDefaultFinacialYear().endDate
-          }
+            startDate: Digit.Utils.dss.getDefaultFinacialYear().startDate,
+            endDate: Digit.Utils.dss.getDefaultFinacialYear().endDate,
+          };
           /*
           Removed Current financial thing
           const currDate = new Date().getMonth();
@@ -151,7 +156,7 @@ const DateRange = ({ values, onFilterChange, t }) => {
 
   const handleSelect = (ranges, e) => {
     const { range1: selection } = ranges;
-    const { startDate, endDate, title, duration } = selection;
+    const { startDate, endDate, title, interval } = selection;
     if (
       staticRanges.some((range) => {
         let newRange = range.range();
@@ -163,7 +168,7 @@ const DateRange = ({ values, onFilterChange, t }) => {
     } else if (isStartDateFocused(focusedRange[1])) {
       setSelectionRange(selection);
     } else if (isEndDateFocused(focusedRange[1])) {
-      setSelectionRange({ title, duration, startDate, endDate: addSeconds(addMinutes(addHours(endDate, 23), 59), 59) });
+      setSelectionRange({ title, interval, startDate, endDate: addSeconds(addMinutes(addHours(endDate, 23), 59), 59) });
       setIsModalOpen(false);
     }
   };
@@ -181,8 +186,14 @@ const DateRange = ({ values, onFilterChange, t }) => {
     <>
       <div className="mbsm">{t(`ES_DSS_DATE_RANGE`)}</div>
       <div className="employee-select-wrap" ref={wrapperRef}>
-        <div className={`select ${ isModalOpen?'dss-input-active-border':""}`} >
-          <input className={`employee-select-wrap--elipses`} type="text" value={values?.title ? `${values?.title}` : ""} readOnly onClick={() => setIsModalOpen((prevState) => !prevState)}/>
+        <div className={`select ${isModalOpen ? "dss-input-active-border" : ""}`}>
+          <input
+            className={`employee-select-wrap--elipses`}
+            type="text"
+            value={values?.title ? `${values?.title}` : ""}
+            readOnly
+            onClick={() => setIsModalOpen((prevState) => !prevState)}
+          />
           <Calender className="cursorPointer" onClick={() => setIsModalOpen((prevState) => !prevState)} />
         </div>
         {isModalOpen && (

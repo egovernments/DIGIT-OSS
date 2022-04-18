@@ -28,10 +28,10 @@ const getInitialRange = () => {
   const startDate = data?.range?.startDate ? new Date(data?.range?.startDate) : Digit.Utils.dss.getDefaultFinacialYear().startDate;
   const endDate = data?.range?.endDate ? new Date(data?.range?.endDate) : Digit.Utils.dss.getDefaultFinacialYear().endDate;
   const title = `${format(startDate, "MMM d, yyyy")} - ${format(endDate, "MMM d, yyyy")}`;
-  const duration = Digit.Utils.dss.getDuration(startDate, endDate);
+  const interval = Digit.Utils.dss.getDuration(startDate, endDate);
   const denomination = data?.denomination || "Lac";
   const tenantId = data?.filters?.tenantId || [];
-  return { startDate, endDate, title, duration, denomination, tenantId };
+  return { startDate, endDate, title, interval, denomination, tenantId };
 };
 
 const MapDrillChart = ({
@@ -55,11 +55,11 @@ const MapDrillChart = ({
   
     filters = {...filters};
   
-    const { startDate, endDate, duration, } = getInitialRange();
+    const { startDate, endDate, interval, } = getInitialRange();
     const requestDate = {
       startDate: startDate.getTime(),
       endDate: endDate.getTime(),
-      interval: duration,
+      interval: interval,
       title: "home",
     };
   
