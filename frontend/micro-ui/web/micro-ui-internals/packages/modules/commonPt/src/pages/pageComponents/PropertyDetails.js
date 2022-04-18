@@ -25,42 +25,25 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
     onSelect("cpt", { details: propertyDetails?.Properties[0] });
   };
 
-  let propertyAddress = "";
+  let propAddArr = [];
   if (propertyDetails && propertyDetails?.Properties.length) {
     if (propertyDetails?.Properties[0]?.address?.doorNo) {
-      propertyAddress += propertyDetails?.Properties[0]?.address?.doorNo;
-      if (propertyDetails?.Properties[0]?.address?.street) {
-        propertyAddress += ", ";
-      }
+      propAddArr.push(propertyDetails?.Properties[0]?.address?.doorNo);
     }
     if (propertyDetails?.Properties[0]?.address?.street) {
-      propertyAddress += propertyDetails?.Properties[0]?.address?.street;
-      if (propertyDetails?.Properties[0]?.address?.landmark) {
-        propertyAddress += ", ";
-      }
+      propAddArr.push(propertyDetails?.Properties[0]?.address?.street);
     }
     if (propertyDetails?.Properties[0]?.address?.landmark) {
-      propertyAddress += propertyDetails?.Properties[0]?.address?.landmark;
-      if (propertyDetails?.Properties[0]?.address?.locality?.code) {
-        propertyAddress += ", ";
-      }
+      propAddArr.push(propertyDetails?.Properties[0]?.address?.landmark);
     }
     if (propertyDetails?.Properties[0]?.address?.locality?.code) {
-      propertyAddress +=
-        propertyDetails?.Properties[0]?.address?.locality?.code &&
-        t(Digit.Utils.pt.getMohallaLocale(propertyDetails?.Properties[0]?.address?.locality?.code, propertyDetails?.Properties[0]?.tenantId));
-      if (propertyDetails?.Properties[0]?.address?.city) {
-        propertyAddress += ", ";
-      }
+      propAddArr.push(t(Digit.Utils.pt.getMohallaLocale(propertyDetails?.Properties[0]?.address?.locality?.code, propertyDetails?.Properties[0]?.tenantId)));
     }
-    if (propertyDetails?.Properties[0]?.address?.city) {
-      propertyAddress += propertyDetails?.Properties[0]?.tenantId && t(Digit.Utils.pt.getCityLocale(propertyDetails?.Properties[0]?.tenantId));
-      if (propertyDetails?.Properties[0]?.address?.pincode) {
-        propertyAddress += ", ";
-      }
+    if (propertyDetails?.Properties[0]?.tenantId) {
+      propAddArr.push(t(Digit.Utils.pt.getCityLocale(propertyDetails?.Properties[0]?.tenantId)));
     }
     if (propertyDetails?.Properties[0]?.address?.pincode) {
-      propertyAddress += propertyDetails?.Properties[0]?.address?.pincode;
+      propAddArr.push(propertyDetails?.Properties[0]?.address?.pincode);
     }
   }
 
@@ -78,7 +61,7 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
             <StatusTable>
               <Row className="border-none" label={t(`PROPERTY_ID`)} text={propertyDetails?.Properties[0]?.propertyId} />
               <Row className="border-none" label={t(`OWNER_NAME`)} text={propertyDetails?.Properties[0]?.owners[0]?.name} />
-              <Row className="border-none" textStyle={{ wordBreak: "break-word" }} label={t(`PROPERTY_ADDRESS`)} text={propertyAddress} />
+              <Row className="border-none" textStyle={{ wordBreak: "break-word" }} label={t(`PROPERTY_ADDRESS`)} text={propAddArr.join(', ')} />
               <Row className="border-none" label={t(`PT_MUTATION_STATUS`)} text={propertyDetails?.Properties[0]?.status} />
               <div style={{ textAlign: "left" }}>
                 <Link
