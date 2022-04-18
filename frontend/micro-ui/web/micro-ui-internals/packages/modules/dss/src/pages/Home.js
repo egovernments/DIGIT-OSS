@@ -1,10 +1,4 @@
-import {
-    DownloadIcon,
-    EmailIcon, Header,
-    Loader,
-    MultiLink, ShareIcon,
-    WhatsappIcon
-} from "@egovernments/digit-ui-react-components";
+import { DownloadIcon, EmailIcon, Header, Loader, MultiLink, ShareIcon, WhatsappIcon } from "@egovernments/digit-ui-react-components";
 import { format } from "date-fns";
 import React, { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -19,24 +13,24 @@ const getInitialRange = () => {
   const startDate = data?.range?.startDate ? new Date(data?.range?.startDate) : Digit.Utils.dss.getDefaultFinacialYear().startDate;
   const endDate = data?.range?.endDate ? new Date(data?.range?.endDate) : Digit.Utils.dss.getDefaultFinacialYear().endDate;
   const title = `${format(startDate, "MMM d, yyyy")} - ${format(endDate, "MMM d, yyyy")}`;
-  const duration = Digit.Utils.dss.getDuration(startDate, endDate);
+  const interval = Digit.Utils.dss.getDuration(startDate, endDate);
   const denomination = data?.denomination || "Lac";
   const tenantId = data?.filters?.tenantId || [];
-  return { startDate, endDate, title, duration, denomination, tenantId };
+  return { startDate, endDate, title, interval, denomination, tenantId };
 };
 
 const DashBoard = ({ stateCode }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const [filters, setFilters] = useState(() => {
-    const { startDate, endDate, title, duration, denomination, tenantId } = getInitialRange();
+    const { startDate, endDate, title, interval, denomination, tenantId } = getInitialRange();
     return {
       denomination,
-      range: { startDate, endDate, title, duration },
+      range: { startDate, endDate, title, interval },
       requestDate: {
         startDate: startDate.getTime(),
         endDate: endDate.getTime(),
-        interval: duration,
+        interval: interval,
         title: title,
       },
       filters: {
