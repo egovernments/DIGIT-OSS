@@ -105,7 +105,7 @@ public class DeathRepository {
 
 	public List<EgDeathDtl> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
-		String query = allqueryBuilder.getDeathDtls(criteria, preparedStmtList);
+		String query = allqueryBuilder.getDeathDtlsForPlainSearch(criteria, preparedStmtList);
 		List<EgDeathDtl> deathDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 		return deathDtls;
 	}

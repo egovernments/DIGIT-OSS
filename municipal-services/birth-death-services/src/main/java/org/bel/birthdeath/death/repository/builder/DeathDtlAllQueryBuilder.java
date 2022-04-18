@@ -231,6 +231,107 @@ public class DeathDtlAllQueryBuilder {
 		}
 		return addPaginationWrapper(builder.toString(),preparedStmtList,criteria);
 	}
+
+	public String getDeathDtlsForPlainSearch(SearchCriteria criteria, List<Object> preparedStmtList) {
+		StringBuilder builder = new StringBuilder(QUERY_Master);
+
+		if (criteria.getTenantId() != null) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" bdtl.tenantid=? ");
+			preparedStmtList.add(criteria.getTenantId());
+		}
+		if (criteria.getRegistrationNo() != null) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" bdtl.registrationno=? ");
+			preparedStmtList.add(criteria.getRegistrationNo());
+		}
+
+		addClauseIfRequired(preparedStmtList, builder);
+		builder.append(" bdtl.gender=? ");
+		preparedStmtList.add(criteria.getGender());
+
+		if (criteria.getHospitalId() != null) {
+			if(criteria.getHospitalId().equalsIgnoreCase("0")) {
+				addClauseIfRequired(preparedStmtList, builder);
+				builder.append(" bdtl.hospitalid is null ");
+			}
+			else {
+				addClauseIfRequired(preparedStmtList, builder);
+				builder.append(" bdtl.hospitalid=? ");
+				preparedStmtList.add(criteria.getHospitalId());
+			}
+		}
+		if (criteria.getMotherName() != null) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" ( bmot.firstname ilike ? or bmot.middlename ilike ? or bmot.lastname ilike ? ) ");
+			preparedStmtList.add("%"+criteria.getMotherName()+"%");
+			preparedStmtList.add("%"+criteria.getMotherName()+"%");
+			preparedStmtList.add("%"+criteria.getMotherName()+"%");
+		}
+		if (criteria.getFatherName() != null) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" ( bfat.firstname ilike ? or bfat.middlename ilike ? or bfat.lastname ilike ? ) ");
+			preparedStmtList.add("%"+criteria.getFatherName()+"%");
+			preparedStmtList.add("%"+criteria.getFatherName()+"%");
+			preparedStmtList.add("%"+criteria.getFatherName()+"%");
+		}
+		if (criteria.getSpouseName() != null) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" ( bfat.firstname ilike ? or bfat.middlename ilike ? or bfat.lastname ilike ? ) ");
+			preparedStmtList.add("%"+criteria.getSpouseName()+"%");
+			preparedStmtList.add("%"+criteria.getSpouseName()+"%");
+			preparedStmtList.add("%"+criteria.getSpouseName()+"%");
+		}
+		if (criteria.getId() != null) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" bdtl.id=? ");
+			preparedStmtList.add(criteria.getId());
+		}
+
+		SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy");
+		try {
+			Date dob = sdf.parse(criteria.getDateOfDeath());
+			//Timestamp ts = new Timestamp(dob.getTime());
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" CAST(bdtl.dateofdeath as DATE)=?");
+			preparedStmtList.add(dob);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		if (criteria.getFromDate() != null) {
+			sdf= new SimpleDateFormat("dd-MM-yyyy");
+			try {
+				Date dob = sdf.parse(criteria.getFromDate());
+				//Timestamp ts = new Timestamp(dob.getTime());
+				addClauseIfRequired(preparedStmtList, builder);
+				builder.append(" CAST(bdtl.dateofdeath as DATE) >= ?");
+				preparedStmtList.add(dob);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		if (criteria.getToDate() != null) {
+			sdf= new SimpleDateFormat("dd-MM-yyyy");
+			try {
+				Date dob = sdf.parse(criteria.getToDate());
+				//Timestamp ts = new Timestamp(dob.getTime());
+				addClauseIfRequired(preparedStmtList, builder);
+				builder.append(" CAST(bdtl.dateofdeath as DATE) <= ?");
+				preparedStmtList.add(dob);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		if(criteria.getName() !=null) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" ( bdtl.firstname ilike ? or bdtl.middlename ilike ? or bdtl.lastname ilike ? )");
+			preparedStmtList.add("%"+criteria.getName()+"%");
+			preparedStmtList.add("%"+criteria.getName()+"%");
+			preparedStmtList.add("%"+criteria.getName()+"%");
+		}
+		return addPaginationWrapper(builder.toString(),preparedStmtList,criteria);
+	}
 	
 	public String getDeathCertMasterDtl(SearchCriteria criteria, List<Object> preparedStmtList) {
 		StringBuilder builder = new StringBuilder(QUERY_Master_Full_Dtl);

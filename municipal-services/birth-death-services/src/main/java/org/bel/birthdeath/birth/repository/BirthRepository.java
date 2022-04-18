@@ -107,7 +107,7 @@ public class BirthRepository {
 
 	public List<EgBirthDtl> getBirthDtlsForPlainSearch(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
-		String query = allqueryBuilder.getBirtDtls(criteria, preparedStmtList);
+		String query = allqueryBuilder.getBirtDtlsForPlainSearch(criteria, preparedStmtList);
 		List<EgBirthDtl> birthDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 		return birthDtls;
 	}

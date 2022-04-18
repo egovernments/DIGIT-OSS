@@ -82,16 +82,7 @@ public class BirthService {
 
 	public List<EgBirthDtl> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
 		List<EgBirthDtl> birthDtls = new ArrayList<EgBirthDtl>() ;
-		if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE")) {
-			if(validator.validateFieldsEmployee(criteria)) {
-				birthDtls = repository.getBirthDtlsForPlainSearch(criteria);
-			}
-		}
-		else {
-			if(validator.validateFieldsCitizen(criteria)) {
-				birthDtls = repository.getBirthDtlsForPlainSearch(criteria);
-			}
-		}
+		birthDtls = repository.getBirthDtlsForPlainSearch(criteria);
 
 		return birthDtls;
 	}

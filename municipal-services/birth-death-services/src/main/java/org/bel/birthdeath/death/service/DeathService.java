@@ -82,16 +82,7 @@ public class DeathService {
 
 	public List<EgDeathDtl> plainSearch(SearchCriteria criteria,RequestInfo requestInfo) {
 		List<EgDeathDtl> deathDtls = new ArrayList<EgDeathDtl>() ;
-		if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE")) {
-			if(validator.validateFieldsEmployee(criteria)) {
-				deathDtls = repository.getDeathDtlsForPlainSearch(criteria);
-			}
-		}
-		else {
-			if(validator.validateFieldsCitizen(criteria)) {
-				deathDtls = repository.getDeathDtlsForPlainSearch(criteria);
-			}
-		}
+		deathDtls = repository.getDeathDtlsForPlainSearch(criteria);
 		return deathDtls;
 	}
 
