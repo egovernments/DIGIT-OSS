@@ -400,8 +400,9 @@ const DashBoard = ({ stateCode }) => {
                 className="multilink-block-wrapper"
                 label={t(`ES_DSS_SHARE`)}
                 icon={<ShareIcon className="mrsm" />}
-                showOptions={(e) => setShowOptions(e)}
-                onHeadClick={(e) => setShowOptions(e !== undefined ? e : !showOptions)}
+                onHeadClick={(e) => {
+                  setShowOptions(!showOptions);
+                }}
                 displayOptions={showOptions}
                 options={shareOptions}
               />
