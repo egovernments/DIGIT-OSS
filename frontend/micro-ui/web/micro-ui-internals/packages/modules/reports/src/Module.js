@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import EmployeeApp from "./pages";
 import ReportsCard from "./components/ReportsCard";
+import ReportSearchApplication from "./components/ReportSearchApplication";
 
 export const ReportsModule = ({ stateCode, userType }) => {
     const moduleCode = "REPORTS";
@@ -17,7 +18,8 @@ export const ReportsModule = ({ stateCode, userType }) => {
 
 const componentsToRegister = {
     ReportsModule,
-    ReportsCard
+    ReportsCard,
+    ReportSearchApplication
 };
 
 export const initReportsComponents = () => {

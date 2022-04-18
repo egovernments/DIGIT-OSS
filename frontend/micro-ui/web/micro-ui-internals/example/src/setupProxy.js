@@ -57,7 +57,8 @@ module.exports = function (app) {
     "/sw-services",
     "/ws-calculator",
     "/sw-calculator/",
-    "/egov-searcher"
+    "/egov-searcher",
+    "/report"
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
 };

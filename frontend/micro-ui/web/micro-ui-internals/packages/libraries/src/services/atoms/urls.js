@@ -173,6 +173,9 @@ const Urls = {
   noc: {
     nocSearch: "/noc-services/v1/noc/_search",
   },
+  reports:{
+    reportSearch:"/report/"
+  },
   access_control: "/access/v1/actions/mdms/_get",
   billgenie: "/egov-searcher",
 };
