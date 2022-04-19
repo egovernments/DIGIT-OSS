@@ -3,7 +3,6 @@ package org.egov.web.notification.mail.service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.egov.tracer.model.CustomException;
 import org.egov.web.notification.mail.config.ApplicationConfiguration;
 import org.egov.web.notification.mail.consumer.contract.Email;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.Map;
 
 @Service
 @ConditionalOnProperty(value = "mail.enabled", havingValue = "true")
@@ -36,16 +34,16 @@ public class ExternalEmailService implements EmailService {
 	ApplicationConfiguration applicationConfiguration;
 
 	@Value("${egov.filestore.host}")
-	private String FILESTORE_HOST;
+	private String filestore_host;
 
 	@Value("${egov.filestore.workdir.path}")
-	private String FILESTORE_WORKDIR;
+	private String filestore_workdir;
 
 	@Value("${egov.filestore.string.format}")
-	private String FILESTORE_FORMAT;
+	private String filestore_format;
 
 	@Value("${egov.filestore.tenant.id}")
-	private String FILESTORE_TENANT_ID;
+	private String filestore_tenant_id;
 
 	@Autowired
 	private Environment env;
@@ -83,8 +81,17 @@ public class ExternalEmailService implements EmailService {
 			helper.setSubject(email.getSubject());
 			helper.setText(email.getBody(), true);
 
+			/*log here*/
+			log.info(email.toString());
+			log.info(mailSender.getHost());
+			log.info(mailSender.getProtocol());
+			log.info(mailSender.getDefaultEncoding());
+			log.info(mailSender.getUsername());
+			log.info(String.valueOf(mailSender.getPort()));
+
+
 			for(int i=0; i<email.getFileStoreId().size(); i++) {
-				String uri = String.format(FILESTORE_FORMAT, FILESTORE_HOST,FILESTORE_WORKDIR, FILESTORE_TENANT_ID, email.getFileStoreId().toArray()[i]);
+				String uri = String.format(filestore_format, filestore_host, filestore_workdir, filestore_tenant_id, email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);
 				URLConnection con = url.openConnection();
 				String fieldValue = "Application Form " + "[" + i + "]";
@@ -101,9 +108,11 @@ public class ExternalEmailService implements EmailService {
 		} catch (MessagingException | MalformedURLException e) {
 			log.error(EXCEPTION_MESSAGE, e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.info(EXCEPTION_MESSAGE, e);
 		}catch (MailException e){
 			log.error(EXCEPTION_MESSAGE, e);
+		} finally {
+
 		}
 	}
 }
