@@ -128,7 +128,7 @@ public class SewerageServiceImpl implements SewerageService {
 		}
 		validateProperty.validatePropertyForConnection(sewerageConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
-		//enrichmentService.enrichProcessInstance(sewerageConnectionList, criteria, requestInfo);
+		enrichmentService.enrichProcessInstance(sewerageConnectionList, criteria, requestInfo);
 		return sewerageConnectionList;
 	}
 
@@ -151,7 +151,7 @@ public class SewerageServiceImpl implements SewerageService {
 	 *            SewerageConnectionSearchCriteria contains search criteria on
 	 *            sewerage connection
 	 * @param requestInfo - Request Info
-	 * @return List of matching sewerage connection
+	 * @return Count of List of matching sewerage connection
 	 */
 	public Integer countAllSewerageApplications(SearchCriteria criteria, RequestInfo requestInfo) {
 		criteria.setIsCountCall(Boolean.TRUE);
@@ -176,7 +176,7 @@ public class SewerageServiceImpl implements SewerageService {
 	 * @param sewerageConnectionRequest
 	 *            SewerageConnectionRequest contains sewerage connection to be
 	 *            updated
-	 * @return Count of List of SewerageConnection after update
+	 * @return List of SewerageConnection after update
 	 */
 	@Override
 	public List<SewerageConnection> updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {

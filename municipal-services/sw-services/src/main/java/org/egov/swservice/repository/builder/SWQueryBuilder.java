@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import static org.egov.swservice.util.SWConstants.SEARCH_TYPE_CONNECTION;
-import static org.egov.waterconnection.constants.WCConstants.SEARCH_TYPE_CONNECTION;
 
 @Component
 public class SWQueryBuilder {
@@ -294,12 +293,12 @@ public class SWQueryBuilder {
 
 	public String getSearchCountQueryString(SearchCriteria criteria, List<Object> preparedStmtList,
 			RequestInfo requestInfo) {
-        String query = getSearchQueryString(criteria, preparedStmtList, requestInfo);
-        if(query!=null)
-        	return COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
-        else
-        	return query;
-    }
+		String query = getSearchQueryString(criteria, preparedStmtList, requestInfo);
+		if (query != null)
+			return COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
+		else
+			return query;
+	}
 	
 	private void addClauseIfRequired(List<Object> values, StringBuilder queryString) {
 		if (values.isEmpty())

@@ -140,7 +140,7 @@ public class WaterServiceImpl implements WaterService {
 	 *            WaterConnectionSearchCriteria contains search criteria on water
 	 *            connection
 	 * @param requestInfo
-	 * @return Count of List of matching water connection
+	 * @return List of matching water connection
 	 */
 	public List<WaterConnection> getWaterConnectionsList(SearchCriteria criteria, RequestInfo requestInfo) {
 		return waterDao.getWaterConnectionList(criteria, requestInfo);

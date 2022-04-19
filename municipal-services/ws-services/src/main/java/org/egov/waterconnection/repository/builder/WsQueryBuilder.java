@@ -54,8 +54,8 @@ public class WsQueryBuilder {
 			+ "eg_ws_applicationdocument document ON document.wsid = conn.id" 
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_plumberinfo plumber ON plumber.wsid = conn.id"
-		    +  LEFT_OUTER_JOIN_STRING
-		    + "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
+			+ LEFT_OUTER_JOIN_STRING
+			+ "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" 
 			+  LEFT_OUTER_JOIN_STRING
@@ -71,8 +71,8 @@ public class WsQueryBuilder {
 			+ "eg_ws_applicationdocument document ON document.wsid = conn.id" 
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_plumberinfo plumber ON plumber.wsid = conn.id"
-		    +  LEFT_OUTER_JOIN_STRING
-		    + "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
+			+ LEFT_OUTER_JOIN_STRING
+			+ "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" 
 			+  LEFT_OUTER_JOIN_STRING
@@ -88,8 +88,8 @@ public class WsQueryBuilder {
 			+ "eg_ws_applicationdocument document ON document.wsid = conn.id" 
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_plumberinfo plumber ON plumber.wsid = conn.id"
-		    +  LEFT_OUTER_JOIN_STRING
-		    + "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
+			+ LEFT_OUTER_JOIN_STRING
+			+ "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" 
 			+  LEFT_OUTER_JOIN_STRING
@@ -299,12 +299,12 @@ public class WsQueryBuilder {
 	
 	public String getSearchCountQueryString(SearchCriteria criteria, List<Object> preparedStmtList,
 			RequestInfo requestInfo) {
-        String query = getSearchQueryString(criteria, preparedStmtList, requestInfo);
-        if(query!=null)
-        	return COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
-        else
-        	return query;
-    }
+		String query = getSearchQueryString(criteria, preparedStmtList, requestInfo);
+		if (query != null)
+			return COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
+		else
+			return query;
+	}
 	
 	private void addClauseIfRequired(List<Object> values, StringBuilder queryString) {
 		if (values.isEmpty())
