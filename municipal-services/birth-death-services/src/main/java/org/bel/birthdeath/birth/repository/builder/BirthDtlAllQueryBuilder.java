@@ -71,6 +71,8 @@ public class BirthDtlAllQueryBuilder {
     		"FROM public.eg_birth_dtls bdtl " + 
     		"left join eg_birth_father_info bfat on bfat.birthdtlid = bdtl.id " + 
     		"left join eg_birth_mother_info bmot on bmot.birthdtlid = bdtl.id " ;
+
+	private static final String QUERY_Master_For_PLAINSEARCH = "SELECT bcert FROM eg_birth_cert_request bcert";
     
     private static String applsQuery ="select breq.birthCertificateNo, breq.createdtime, breq.status, bdtl.registrationno, bdtl.tenantid, "
     		+ "concat(COALESCE(bdtl.firstname,'') , ' ', COALESCE(bdtl.middlename,'') ,' ', COALESCE(bdtl.lastname,'')) as name, "
@@ -220,7 +222,7 @@ public class BirthDtlAllQueryBuilder {
 	}
 
 	public String getBirtDtlsForPlainSearch(SearchCriteria criteria, List<Object> preparedStmtList) {
-		StringBuilder builder = new StringBuilder(QUERY_Master);
+		StringBuilder builder = new StringBuilder(QUERY_Master_For_PLAINSEARCH);
 		return addPaginationWrapper(builder.toString(),preparedStmtList,criteria);
 	}
 
