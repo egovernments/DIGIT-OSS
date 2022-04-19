@@ -77,7 +77,7 @@ public class SWQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
 	
-	private final static String SEARCH_CONNECTION_COUNT_QUERY = "SELECT DISTINCT(conn.connectionno),conn.applicationno, wc.appCreatedDate,conn.lastmodifiedtime"
+	private final static String SEARCH_CONNECTION_COUNT_QUERY = "SELECT DISTINCT(conn.connectionno),conn.applicationno, sc.appCreatedDate,conn.lastmodifiedtime"
 			+ " FROM eg_sw_connection conn "
 			+  INNER_JOIN_STRING 
 			+ " eg_sw_service sc ON sc.connection_id = conn.id"
