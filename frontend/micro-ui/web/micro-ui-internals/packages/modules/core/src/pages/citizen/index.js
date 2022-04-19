@@ -1,7 +1,7 @@
 import { BackButton } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useRouteMatch, useHistory } from "react-router-dom";
 import ErrorBoundary from "../../components/ErrorBoundaries";
 import { AppHome } from "../../components/Home";
 import TopBarSideBar from "../../components/TopBarSideBar";
@@ -11,6 +11,7 @@ import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
 import UserProfile from "./Home/UserProfile";
+import ErrorComponent from "../../components/ErrorComponent";
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -30,6 +31,7 @@ const Home = ({
   appTenants,
   sourceUrl,
   pathname,
+  initData
 }) => {
   const { isLoading: islinkDataLoading, data: linkData, isFetched: isLinkDataFetched } = Digit.Hooks.useCustomMDMS(
     Digit.ULBService.getStateId(),
@@ -56,6 +58,7 @@ const Home = ({
   const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
   const { t } = useTranslation();
   const { path } = useRouteMatch();
+  const history = useHistory();
 
   const appRoutes = modules.map(({ code, tenants }, index) => {
     const Module = Digit.ComponentRegistryService.getComponent(`${code}Module`);
@@ -114,7 +117,14 @@ const Home = ({
           <Route exact path={`${path}/select-location`}>
             <LocationSelection />
           </Route>
-
+          <Route path={`${path}/error`}>
+            <ErrorComponent
+            initData={initData}
+              goToHome={() => {
+                history.push("/digit-ui/citizen");
+              }}
+            />
+          </Route>
           <Route path={`${path}/all-services`}>
             <AppHome
               userType="citizen"
@@ -137,7 +147,7 @@ const Home = ({
             <UserProfile stateCode={stateCode} userType={"citizen"} cityDetails={cityDetails} />
           </Route>
 
-          <ErrorBoundary>
+          <ErrorBoundary initData={initData}>
             {appRoutes}
             {ModuleLevelLinkHomePages}
           </ErrorBoundary>
