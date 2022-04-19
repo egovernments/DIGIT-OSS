@@ -188,7 +188,7 @@ export const searchSetCommon = getCommonContainer({
      labelName: "Select Gender",
      labelKey: "BND_GENDER_PLACEHOLDER"
    },
-   required: true,
+   required: false,
    localePrefix: {
      moduleName: "BND",
      masterName: "GENDER"
