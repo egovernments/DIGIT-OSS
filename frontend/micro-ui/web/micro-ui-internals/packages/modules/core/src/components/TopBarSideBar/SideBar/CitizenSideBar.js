@@ -1,4 +1,21 @@
-import { LogoutIcon, NavBar, EditPencilIcon, Loader } from "@egovernments/digit-ui-react-components";
+import {
+  LogoutIcon,
+  NavBar,
+  EditPencilIcon,
+  Loader,
+  HomeIcon,
+  ComplaintIcon,
+  BPAHomeIcon,
+  PropertyHouse,
+  CaseIcon,
+  ReceiptIcon,
+  PersonIcon,
+  DocumentIconSolid,
+  DropIcon,
+  CollectionsBookmarIcons,
+  FinanceChartIcon,
+  CollectionIcon,
+} from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -7,6 +24,22 @@ import { Phone } from "@egovernments/digit-ui-react-components";
 import ChangeCity from "../../ChangeCity";
 import StaticCitizenSideBar from "./StaticCitizenSideBar";
 
+const IconsObject = {
+  home: <HomeIcon className="icon" />,
+  announcement: <ComplaintIcon className="icon" />,
+  business: <ComplaintIcon className="icon" />,
+  store: <PropertyHouse className="icon" />,
+  assignment: <CaseIcon className="icon" />,
+  receipt: <CollectionIcon className="icon" />,
+  "business-center": <PersonIcon className="icon" />,
+  description: <CollectionIcon className="icon" />,
+  "water-tap": <DropIcon className="icon" />,
+  "collections-bookmark": <CollectionsBookmarIcons className="icon" />,
+  "insert-chart": <FinanceChartIcon className="icon" />,
+  edcr: <CollectionIcon className="icon" />,
+  collections: <CollectionIcon className="icon" />,
+  "open-complaints": <ComplaintIcon className="icon" />,
+};
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
   "/" +
@@ -93,6 +126,8 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     Digit.clikOusideFired = true;
     toggleSidebar(false);
   };
+
+  const { isLoading, data } = Digit.Hooks.useAccessControl();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const showProfilePage = () => {
     const redirectUrl = isEmployee ? "/digit-ui/employee/user/profile" : "/digit-ui/citizen/user/profile";
@@ -105,8 +140,7 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     history.push("/digit-ui/citizen/login");
     closeSidebar();
   };
-
-  if (islinkDataLoading) {
+  if (islinkDataLoading || isLoading) {
     return <Loader />;
   }
 
@@ -161,9 +195,71 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     ];
   }
 
-  Object.keys(linkData).map((key) => {
-    menuItems.splice(1, 0, { type: "dynamic", moduleName: key, links: linkData[key], icon: linkData[key][0]?.leftIcon });
-  });
+  let singleItem = [];
+
+  if (!isEmployee) {
+    Object.keys(linkData).map((key) => {
+      menuItems.splice(1, 0, { type: "dynamic", moduleName: key, links: linkData[key], icon: linkData[key][0]?.leftIcon });
+    });
+  } else {
+    const configEmployeeSideBar = {};
+    data?.actions
+      .filter((e) => e.url === "url")
+      .sort((a, b) => a.orderNumber - b.orderNumber)
+      .forEach((item) => {
+        if (item.path !== "" && item.path.indexOf(".") !== -1) {
+          let index = item.path.split(".")[0];
+          if (index === "TradeLicense") index = "Trade License";
+          if (!configEmployeeSideBar[index]) {
+            configEmployeeSideBar[index] = [item];
+          } else {
+            configEmployeeSideBar[index].push(item);
+          }
+        } else {
+          if (item.navigationURL.indexOf("/digit-ui/employee") === -1 && item.displayName !== "Home") {
+            item.navigationURL = "/digit-ui/employee/" + item.navigationURL;
+          } else if (item.displayName === "Home") {
+            item.navigationURL = "/digit-ui/employee";
+            singleItem.unshift({
+              displayName: item.displayName,
+              navigationURL: item.navigationURL,
+              icon: item.leftIcon,
+              orderNumber: item.orderNumber,
+            });
+          }
+          if (item.path !== "" && item.displayName !== "Home") {
+            singleItem.push({
+              displayName: item.displayName,
+              navigationURL: item.navigationURL,
+              icon: item.leftIcon,
+              orderNumber: item.orderNumber,
+            });
+          }
+        }
+      });
+    Object.keys(configEmployeeSideBar).map((key) => {
+      menuItems.splice(1, 0, { type: "dynamic", moduleName: key, links: configEmployeeSideBar[key], icon: configEmployeeSideBar[key][0]?.leftIcon });
+    });
+  }
+  singleItem
+    .filter((ele) => ele.displayName !== "Home")
+    .map((item) => {
+      const leftIconArray = item.icon.split(":")[1];
+      const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.collections;
+
+      menuItems.splice(1, 0, {
+        type: "link",
+        text: item.displayName,
+        link: item.navigationURL,
+        icon: leftIcon,
+        populators: {
+          onClick: () => {
+            history.push(item.navigationURL);
+            closeSidebar();
+          },
+        },
+      });
+    });
 
   /*  URL with openlink wont have sidebar and actions    */
   if (history.location.pathname.includes("/openlink")) {
@@ -178,21 +274,10 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
       onClose={closeSidebar}
       menuItems={menuItems}
       Footer={<PoweredBy />}
+      isEmployee={isEmployee}
+      singleItem={singleItem}
     />
   ) : (
     <StaticCitizenSideBar logout={onLogout} />
   );
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
