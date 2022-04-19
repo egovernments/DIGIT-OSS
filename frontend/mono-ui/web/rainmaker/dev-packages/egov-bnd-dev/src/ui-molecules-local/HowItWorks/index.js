@@ -15,7 +15,7 @@ const gethelpURL=()=>{
     hostname  = "https://13.71.65.215.nip.io";
   else  
     hostname  = window.location.origin;
-  const url=new URL(hostname+"/filestore/v1/files/static?fileStoreId=BirthDeathUserManual_Citizen.pdf");
+  const url=new URL(hostname+"/egov-qa-assets/BDUserManual_Citizen.pdf");
   return url;
 
 }
