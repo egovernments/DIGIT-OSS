@@ -97,6 +97,8 @@ public class BirthRepository {
 	
 	@Value("${egov.bnd.freedownload.tenants}")
     private String freeDownloadTenants;
+
+	private static final String QUERY_Master_For_PLAINSEARCH = "SELECT * FROM eg_birth_cert_request";
 	
 	public List<EgBirthDtl> getBirthDtls(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
@@ -107,7 +109,7 @@ public class BirthRepository {
 
 	public List<EgBirthDtl> getBirthDtlsForPlainSearch(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
-		String query = allqueryBuilder.getBirtDtlsForPlainSearch(criteria, preparedStmtList);
+		String query = QUERY_Master_For_PLAINSEARCH;
 		List<EgBirthDtl> birthDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 		return birthDtls;
 	}
