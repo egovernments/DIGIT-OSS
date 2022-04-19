@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { Phone } from "@egovernments/digit-ui-react-components";
 import CitizenSubMenuSideBar from "./CitizenSubMenuSideBar";
+import LogoutDialog from "../../Dialog/LogoutDialog";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -62,6 +63,20 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
   const user = Digit.UserService.getUser();
 
   const [isEmployee, setisEmployee] = useState(false);
+  const [isSidebarOpen, toggleSidebar] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+
+  const handleLogout = () => {
+    toggleSidebar(false);
+    setShowDialog(true);
+  };
+  const handleOnSubmit = () => {
+    Digit.UserService.logout();
+    setShowDialog(false);
+  };
+  const handleOnCancel = () => {
+    setShowDialog(false);
+  };
 
   if (islinkDataLoading) {
     return <Loader />;
@@ -74,10 +89,6 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
   };
   const showProfilePage = () => {
     history.push("/digit-ui/citizen/user/profile");
-  };
-
-  const handleLogout = () => {
-    Digit.UserService.logout();
   };
 
   let menuItems = [...SideBarMenu(t, showProfilePage, redirectToLoginPage, isEmployee)];
@@ -200,6 +211,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
             ))}
           </div>
         </div>
+        <div>{showDialog && <LogoutDialog onSelect={handleOnSubmit} onCancel={handleOnCancel} onDismiss={handleOnCancel}></LogoutDialog>}</div>
       </div>
     </React.Fragment>
   );

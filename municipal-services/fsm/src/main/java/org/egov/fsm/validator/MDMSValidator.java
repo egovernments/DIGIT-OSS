@@ -184,8 +184,10 @@ public class MDMSValidator {
 	public void validateReceivedPaymentType(String receivedPaymentType) throws CustomException {
 
 		Map<String, String> errorMap = new HashMap<>();
-
+		log.info("validateReceivedPaymentType:: "+ receivedPaymentType);
+		log.info("validateReceivedPaymentType mdmsResMap :: "+ mdmsResMap);
 		List<String> receivedPaymentModel =  (List<String>)this.mdmsResMap.get(FSMConstants.MDMS_RECEIVED_PAYMENT);
+		log.info("validateReceivedPaymentType receivedPaymentModel :: "+ receivedPaymentModel);
 		@SuppressWarnings("unchecked")
 		List<Map<String, String>> receivedPaymentmap = (List<Map<String, String>>) JsonPath.parse(receivedPaymentModel)
 				.read("$.[?(@.code=='" + receivedPaymentType + "')]");

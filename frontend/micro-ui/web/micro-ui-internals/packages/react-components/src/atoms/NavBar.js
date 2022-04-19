@@ -2,8 +2,37 @@ import React, { useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SubMenu from "./SubMenu";
+import {
+  HomeIcon,
+  CollectionIcon,
+  BPAHomeIcon,
+  PropertyHouse,
+  CaseIcon,
+  PersonIcon,
+  DocumentIconSolid,
+  DropIcon,
+  CollectionsBookmarIcons,
+  FinanceChartIcon,
+  ComplaintIcon,
+} from "./svgindex";
 
-const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer }) => {
+const IconsObject = {
+  home: <HomeIcon />,
+  announcement: <ComplaintIcon />,
+  business: <BPAHomeIcon />,
+  store: <PropertyHouse />,
+  assignment: <CaseIcon />,
+  receipt: <CollectionIcon />,
+  "business-center": <PersonIcon />,
+  description: <DocumentIconSolid />,
+  "water-tap": <DropIcon />,
+  "collections-bookmark": <CollectionsBookmarIcons />,
+  "insert-chart": <FinanceChartIcon />,
+  edcr: <CollectionIcon />,
+  collections: <CollectionIcon />,
+  "open-complaints": <ComplaintIcon />,
+};
+const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, isEmployee, singleItem }) => {
   const node = useRef();
   const location = useLocation();
   const { pathname } = location;
@@ -17,12 +46,16 @@ const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer }
     } else {
       itemComponent = item.text;
     }
+    const leftIconArray = item.icon;
+    const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.BillsIcon;
+
     const Item = () => (
       <span className="menu-item" {...item.populators}>
-        {item?.icon && item.icon}
+        {item?.icon || leftIcon}
         <div className="menu-label">{itemComponent}</div>
       </span>
     );
+
     if (item.type === "external-link") {
       return (
         <a href={item.link}>
@@ -37,8 +70,9 @@ const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer }
         </Link>
       );
     }
+
     if (item.type === "dynamic") {
-      return <SubMenu item={item} t={t} toggleSidebar={toggleSidebar} />;
+      return <SubMenu item={item} t={t} toggleSidebar={toggleSidebar} isEmployee={isEmployee} />;
     }
     return <Item />;
   };
