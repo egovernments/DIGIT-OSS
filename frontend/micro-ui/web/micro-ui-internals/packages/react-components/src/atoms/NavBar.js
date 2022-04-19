@@ -32,7 +32,7 @@ const IconsObject = {
   collections: <CollectionIcon />,
   "open-complaints": <ComplaintIcon />,
 };
-const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, isEmployee, singleItem }) => {
+const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, isEmployee }) => {
   const node = useRef();
   const location = useLocation();
   const { pathname } = location;
@@ -47,8 +47,7 @@ const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, 
       itemComponent = item.text;
     }
     const leftIconArray = item.icon;
-    const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.BillsIcon;
-
+    const leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
     const Item = () => (
       <span className="menu-item" {...item.populators}>
         {item?.icon || leftIcon}
@@ -64,6 +63,14 @@ const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, 
       );
     }
     if (item.type === "link") {
+      if (item.link.indexOf("/digit-ui") === -1 && isEmployee) {
+        const getOrigin = window.location.origin;
+        return (
+          <a href={getOrigin + "/employee/" + item.link}>
+            <Item />
+          </a>
+        );
+      }
       return (
         <Link to={item.link}>
           <Item />

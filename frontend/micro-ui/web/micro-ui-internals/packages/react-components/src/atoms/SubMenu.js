@@ -12,8 +12,6 @@ import {
   CollectionIcon,
   HomeIcon,
   ComplaintIcon,
-  BPAHomeIcon,
-  ReceiptIcon,
   PersonIcon,
   DocumentIconSolid,
   DropIcon,
@@ -52,10 +50,10 @@ const SubMenu = ({ item, t, isEmployee }) => {
   const showSubnav = () => setSubnav(!subnav);
 
   const leftIconCitizenArray = item.icon;
-  const leftIconCitizen = leftIconCitizenArray ? IconsObject[leftIconCitizenArray] : IconsObject.BillsIcon;
+  const leftIconCitizen = IconsObject[leftIconCitizenArray] || IconsObject.BillsIcon;
 
   const leftIconEmployeeItems = item.icon.split(":")[1];
-  const leftIconEmployee = leftIconEmployeeItems ? IconsObject[leftIconEmployeeItems] : IconsObject.collections;
+  const leftIconEmployee = IconsObject[leftIconEmployeeItems] || IconsObject.collections;
 
   return (
     <React.Fragment>
@@ -73,6 +71,16 @@ const SubMenu = ({ item, t, isEmployee }) => {
         item.links
           .sort((a, b) => a.orderNumber - b.orderNumber)
           .map((item, index) => {
+            if (item.navigationURL.indexOf("/digit-ui") === -1) {
+              const getOrigin = window.location.origin;
+              return (
+                <a className={`dropdown-link ${pathname === item.link ? "active" : ""}`} href={getOrigin + "/employee/" + item.navigationURL}>
+                  <div className="actions">
+                    <span>{item.label || item.displayName}</span>
+                  </div>
+                </a>
+              );
+            }
             return (
               <Link to={item.link || item.navigationURL} key={index} className={`dropdown-link ${pathname === item.navigationURL ? "active" : ""}`}>
                 <div className="actions">

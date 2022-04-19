@@ -216,9 +216,7 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
             configEmployeeSideBar[index].push(item);
           }
         } else {
-          if (item.navigationURL.indexOf("/digit-ui/employee") === -1 && item.displayName !== "Home") {
-            item.navigationURL = "/digit-ui/employee/" + item.navigationURL;
-          } else if (item.displayName === "Home") {
+          if (item.displayName === "Home") {
             item.navigationURL = "/digit-ui/employee";
             singleItem.unshift({
               displayName: item.displayName,
@@ -245,7 +243,7 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     .filter((ele) => ele.displayName !== "Home")
     .map((item) => {
       const leftIconArray = item.icon.split(":")[1];
-      const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.collections;
+      const leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
 
       menuItems.splice(1, 0, {
         type: "link",
@@ -260,7 +258,6 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
         },
       });
     });
-
   /*  URL with openlink wont have sidebar and actions    */
   if (history.location.pathname.includes("/openlink")) {
     profileItem = <span></span>;
@@ -275,7 +272,6 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
       menuItems={menuItems}
       Footer={<PoweredBy />}
       isEmployee={isEmployee}
-      singleItem={singleItem}
     />
   ) : (
     <StaticCitizenSideBar logout={onLogout} />
