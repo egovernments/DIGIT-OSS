@@ -5,6 +5,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.egov.web.notification.mail.consumer.contract.Email;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -34,25 +35,41 @@ public class ExternalEmailService implements EmailService {
     }
 
 	private void sendTextEmail(Email email) {
-		final SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setTo(email.getEmailTo().toArray(new String[0]));
-		mailMessage.setSubject(email.getSubject());
-		mailMessage.setText(email.getBody());
-		mailSender.send(mailMessage);
+		try {
+			log.info(email.toString());
+			log.info(mailSender.getHost());
+			log.info(mailSender.getProtocol());
+			log.info(mailSender.getDefaultEncoding());
+			log.info(mailSender.getUsername());
+			log.info(String.valueOf(mailSender.getPort()));
+			final SimpleMailMessage mailMessage = new SimpleMailMessage();
+			mailMessage.setTo(email.getEmailTo().toArray(new String[0]));
+			mailMessage.setSubject(email.getSubject());
+			mailMessage.setText(email.getBody());
+			mailSender.send(mailMessage);
+		} catch (MailException e){
+			log.info(EXCEPTION_MESSAGE, e);
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void sendHTMLEmail(Email email) {
-		MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper helper;
 		try {
-			helper = new MimeMessageHelper(message, true);
-			helper.setTo(email.getEmailTo().toArray(new String[0]));
-			helper.setSubject(email.getSubject());
-			helper.setText(email.getBody(), true);
-		} catch (MessagingException e) {
-			log.error(EXCEPTION_MESSAGE, e);
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper helper;
+			try {
+				helper = new MimeMessageHelper(message, true);
+				helper.setTo(email.getEmailTo().toArray(new String[0]));
+				helper.setSubject(email.getSubject());
+				helper.setText(email.getBody(), true);
+			} catch (MessagingException e) {
+				log.error(EXCEPTION_MESSAGE, e);
+				throw new RuntimeException(e);
+			}
+			mailSender.send(message);
+		} catch (MailException e) {
+			log.info(EXCEPTION_MESSAGE, e);
 			throw new RuntimeException(e);
 		}
-		mailSender.send(message);
 	}
 }
