@@ -29,10 +29,8 @@ const defaultImage =
   "Ue6ilunu8jF8pFwgv1FXp3mUt35OtRbr7eM4u4Gs6vUBXgeuHc5kfE/cbvWZtkROLm1DMtLCy80tzsu2PRj0hTI8fvrQuvsjlJkyutszq+m423wHaLTyniy/XuiGZ84LuT+m5ZfNfRxyGs7L" +
   "XZOvia7VujatUwVTrIt+Q/Csc7Tuhe+BOakT10b4TuoiiJjvgU9emTO42PwEfBa+cuodKkuf42DXr1D3JpXz73Hnn0j10evHKe+nufgfUm+7B84sX9FfdEzXux2DBpWuKokkCqN/5pa/8pmvn" +
   "L+RGKCddCGmatiPyPB/+ekO/M/q/7uvbt22kTt3zEnXPzCV13T3Gel4/6NduDu66xRvlPNkM1RjjxUdv+4WhGx6TftD19Q/dfzpwcHO+rE3fAAAAAElFTkSuQmCC";
-
 const Profile = ({ info, stateName, t }) => {
   const [profilePic, setProfilePic] = React.useState(null);
-
   React.useEffect(async () => {
     const tenant = Digit.ULBService.getCurrentTenantId();
     const uuid = info?.uuid;
@@ -46,7 +44,6 @@ const Profile = ({ info, stateName, t }) => {
       }
     }
   }, [profilePic !== null]);
-
   return (
     <div className="profile-section">
       <div className="imageloader imageloader-loaded">
@@ -74,7 +71,6 @@ const Profile = ({ info, stateName, t }) => {
     </div>
   );
 };
-
 const PoweredBy = () => (
   <div className="digit-footer">
     <img
@@ -87,33 +83,29 @@ const PoweredBy = () => (
     />{" "}
   </div>
 );
-
 export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogout, isEmployee = false, linkData, islinkDataLoading }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
   const { t } = useTranslation();
   const history = useHistory();
-
   const closeSidebar = () => {
     Digit.clikOusideFired = true;
     toggleSidebar(false);
   };
-
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
   const showProfilePage = () => {
     const redirectUrl = isEmployee ? "/digit-ui/employee/user/profile" : "/digit-ui/citizen/user/profile";
     history.push(redirectUrl);
     closeSidebar();
   };
-
   const redirectToLoginPage = () => {
     // localStorage.clear();
     // sessionStorage.clear();
     history.push("/digit-ui/citizen/login");
     closeSidebar();
   };
+
   if (islinkDataLoading) {
     return <Loader />;
   }
@@ -178,7 +170,6 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     profileItem = <span></span>;
     menuItems = menuItems.filter((ele) => ele.element === "LANGUAGE");
   }
-
   return isMobile ? (
     <NavBar
       open={isOpen}
@@ -192,3 +183,16 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     <StaticCitizenSideBar logout={onLogout} />
   );
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
