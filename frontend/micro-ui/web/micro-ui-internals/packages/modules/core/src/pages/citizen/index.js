@@ -63,9 +63,9 @@ const Home = ({
   const appRoutes = modules.map(({ code, tenants }, index) => {
     const Module = Digit.ComponentRegistryService.getComponent(`${code}Module`);
     return (
-      <Route key={index} path={`${path}/${code.toLowerCase()}`}>
+      Module?<Route key={index} path={`${path}/${code.toLowerCase()}`}>
         <Module stateCode={stateCode} moduleCode={code} userType="citizen" tenants={getTenants(tenants, appTenants)} />
-      </Route>
+      </Route>:null
     );
   });
 
