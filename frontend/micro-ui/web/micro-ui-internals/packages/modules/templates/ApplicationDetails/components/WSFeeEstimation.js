@@ -45,7 +45,7 @@ const WSFeeEstimation = ({ wsAdditionalDetails }) => {
               if(first<total_amount){
                 var additionalPenality=first;
                 ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]={
-                  "taxHeadCode": "PT_TIME_PENALTY",
+                  "taxHeadCode": "WS_TIME_PENALTY",
                   "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]?.estimateAmount+first,
                   "category": "TAX"
               }
@@ -63,7 +63,7 @@ const WSFeeEstimation = ({ wsAdditionalDetails }) => {
               if(first<total_amount){
                 var additionalPenality=first;
                 ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]={
-                  "taxHeadCode": "PT_TIME_PENALTY",
+                  "taxHeadCode": "WS_TIME_PENALTY",
                   "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[6]?.estimateAmount+first,
                   "category": "TAX"
               }
@@ -85,7 +85,7 @@ const WSFeeEstimation = ({ wsAdditionalDetails }) => {
             if(second>0){
               if(second<total_amount){
                 ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
-                  "taxHeadCode": "PT_TIME_REBATE",
+                  "taxHeadCode": "WS_TIME_REBATE",
                   "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount+second,
                   "category": "TAX"
               }
@@ -104,7 +104,7 @@ const WSFeeEstimation = ({ wsAdditionalDetails }) => {
             if(second>0){
               if(second<total_amount){
                 ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]={
-                  "taxHeadCode": "PT_TIME_REBATE",
+                  "taxHeadCode": "WS_TIME_REBATE",
                   "estimateAmount": ptCalculationEstimateData.Calculation[0].taxHeadEstimates[5]?.estimateAmount-second,
                   "category": "TAX"
               }
@@ -127,37 +127,37 @@ const WSFeeEstimation = ({ wsAdditionalDetails }) => {
       
       const Penality_menu=[
         {
-          title:"PT_PENDING_DUES_FROM_EARLIER",
+          title:"WS_PENDING_DUES_FROM_EARLIER",
           value:"Pending dues from earlier",
         },
         {
-          title:"PT_MISCALCULATION_OF_EARLIER_ASSESSMENT",
+          title:"WS_MISCALCULATION_OF_EARLIER_ASSESSMENT",
           value:"Miscalculation of earlier Assessment",
         },
         {
-          title:"PT_ONE_TIME_PENALITY",
+          title:"WS_ONE_TIME_PENALITY",
           value:"One time penality",
         },
         {
-          title:"PT_OTHERS",
+          title:"WS_OTHERS",
           value:"Others",
         },
         ]
         const Rebate_menu=[
           {
-            title:"PT_ADVANCED_PAID_BY_CITIZEN_EARLIER",
+            title:"WS_ADVANCED_PAID_BY_CITIZEN_EARLIER",
             value:"Advanced Paid By Citizen Earlier",
           },
           {
-            title:"PT_REBATE_PROVIDED_BY_COMMISSIONER_EO",
+            title:"WS_REBATE_PROVIDED_BY_COMMISSIONER_EO",
             value:"Rebate provided by commissioner/EO",
           },
           {
-            title:"PT_ADDITIONAL_AMOUNT_CHARGED_FROM_THE_CITIZEN",
+            title:"WS_ADDITIONAL_AMOUNT_CHARGED_FROM_THE_CITIZEN",
             value:"Additional amount charged from the citizen",
           },
           {
-            title:"PT_OTHERS",
+            title:"WS_OTHERS",
             value:"Others",
           },
           ]
@@ -183,23 +183,23 @@ const WSFeeEstimation = ({ wsAdditionalDetails }) => {
                             <Row className="border-none" key={`CS_INBOX_STATUS_FILTER`} label={`${t(`CS_INBOX_STATUS_FILTER`)}`} text={isPaid ? t("WS_COMMON_PAID") : t("WS_COMMON_NOT_PAID")} textStyle={!isPaid ? { color: "#D4351C" }: {color : "#00703C"}} />
                         </div>
                     </StatusTable>}
-                    <LinkLabel onClick={()=>{showPopUp(true)}}>{t("PT_ADD_REBATE_PENALITY")}</LinkLabel>
+                    <LinkLabel onClick={()=>{showPopUp(true)}}>{t("WS_ADD_REBATE_PENALITY")}</LinkLabel>
             </div> 
             {  popup && <Modal
-          headerBarMain={<Heading label={t("PT_ADD_REBATE_PENALITY")}/>}
+          headerBarMain={<Heading label={t("WS_ADD_REBATE_PENALITY")}/>}
           headerBarEnd={<CloseBtn onClick={()=> {showPopUp(false), ptCalculationEstimateData.Calculation[0] = ptCalculationEstimateDataCopy; setSelectedPenalityReason(null); setSelectedRebateReason(null);}}/>}
-          actionCancelLabel={t("PT_CANCEL")}
+          actionCancelLabel={t("WS_CANCEL")}
           actionCancelOnSubmit={()=>{ptCalculationEstimateData.Calculation[0] = ptCalculationEstimateDataCopy; setSelectedPenalityReason(null);setSelectedRebateReason(null); showPopUp(false)}}
-          actionSaveLabel={t("PT_ADD")}
+          actionSaveLabel={t("WS_ADD")}
           actionSaveOnSubmit={()=>(change())}
           hideSubmit={false}
           >
       {
       <div>
         <Card>
-        <CardSectionHeader>{t("PT_AD_PENALTY")}</CardSectionHeader>
+        <CardSectionHeader>{t("WS_AD_PENALTY")}</CardSectionHeader>
             <CardLabel>
-            {t("PT_TX_HEADS")}
+            {t("WS_TX_HEADS")}
             </CardLabel>
             <div className="field">
               <div className="field-container">
@@ -217,14 +217,14 @@ const WSFeeEstimation = ({ wsAdditionalDetails }) => {
               </div>
             </div>  
             {selectedPenalityReason && selectedPenalityReason.value==="Others" && <div className="field">
-            <CardLabel>{t("PT_REASON")}</CardLabel>
+            <CardLabel>{t("WS_REASON")}</CardLabel>
               <div className="field-container">
                 <div className="text-input field">
                 <input type="type" className="employee-card-input false focus-visible undefined" ref={fourth_temp}/>
                 </div>
               </div>
             </div>}      
-            <CardLabel>{t("PT_HEAD_AMT")}</CardLabel>
+            <CardLabel>{t("WS_HEAD_AMT")}</CardLabel>
             <div className="field">
               <div className="field-container">
                 <div className="text-input field">
@@ -243,8 +243,8 @@ const WSFeeEstimation = ({ wsAdditionalDetails }) => {
             </div>                  
         </Card>
         <Card>
-        <CardSectionHeader>{t("PT_AD_REBATE")}</CardSectionHeader>
-            <CardLabel>{t("PT_TX_HEADS")}</CardLabel>
+        <CardSectionHeader>{t("WS_AD_REBATE")}</CardSectionHeader>
+            <CardLabel>{t("WS_TX_HEADS")}</CardLabel>
             <div className="field">
               <div className="field-container">
                 <div className="text-input field">
@@ -261,14 +261,14 @@ const WSFeeEstimation = ({ wsAdditionalDetails }) => {
               </div>
             </div>    
             {selectedRebateReason && selectedRebateReason.value==="Others" && <div className="field">
-            <CardLabel>{t("PT_REASON")}</CardLabel>
+            <CardLabel>{t("WS_REASON")}</CardLabel>
               <div className="field-container">
                 <div className="text-input field">
                 <input type="type" className="employee-card-input false focus-visible undefined" ref={third_temp}/>
                 </div>
               </div>
             </div>}  
-            <CardLabel>{t("PT_HEAD_AMT")}</CardLabel>
+            <CardLabel>{t("WS_HEAD_AMT")}</CardLabel>
             <div className="field">
               <div className="field-container">
                 <div className="text-input field">
