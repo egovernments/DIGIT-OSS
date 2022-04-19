@@ -115,6 +115,10 @@ public class SWQueryBuilder {
 			return null;
 		Set<String> propertyIds = new HashSet<>();
 		StringBuilder query;
+		
+		if (criteria.getIsCountCall() == null)
+			criteria.setIsCountCall(Boolean.FALSE);
+
 		if (!criteria.getIsCountCall())
 			query = new StringBuilder(SEWERAGE_SEARCH_QUERY);
 		else if (criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())

@@ -122,6 +122,9 @@ public class WsQueryBuilder {
 			return null;
 		StringBuilder query;
 
+		if (criteria.getIsCountCall() == null)
+			criteria.setIsCountCall(Boolean.FALSE);
+		
 		if (!criteria.getIsCountCall())
 			query = new StringBuilder(WATER_SEARCH_QUERY);
 		else if (criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())
