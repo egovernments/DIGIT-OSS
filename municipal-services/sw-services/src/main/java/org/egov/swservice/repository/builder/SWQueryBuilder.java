@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import static org.egov.swservice.util.SWConstants.SEARCH_TYPE_CONNECTION;
+import static org.egov.waterconnection.constants.WCConstants.SEARCH_TYPE_CONNECTION;
 
 @Component
 public class SWQueryBuilder {
@@ -77,6 +78,23 @@ public class SWQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
 	
+	private final static String SEARCH_CONNECTION_COUNT_QUERY = "SELECT DISTINCT(conn.connectionno),conn.applicationno, wc.appCreatedDate,conn.lastmodifiedtime"
+			+ " FROM eg_sw_connection conn "
+			+  INNER_JOIN_STRING 
+			+ " eg_sw_service sc ON sc.connection_id = conn.id"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_sw_applicationdocument document ON document.swid = conn.id" 
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_sw_plumberinfo plumber ON plumber.swid = conn.id"
+			+  LEFT_OUTER_JOIN_STRING
+		    + "eg_sw_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno"
+			+  LEFT_OUTER_JOIN_STRING
+			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
+	
 	private final String paginationWrapper = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
             "({})" +
@@ -99,6 +117,9 @@ public class SWQueryBuilder {
 		StringBuilder query;
 		if (!criteria.getIsCountCall())
 			query = new StringBuilder(SEWERAGE_SEARCH_QUERY);
+		else if (criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())
+				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION))
+			query = new StringBuilder(SEARCH_CONNECTION_COUNT_QUERY);
 		else
 			query = new StringBuilder(SEARCH_COUNT_QUERY);
 		
@@ -210,10 +231,13 @@ public class SWQueryBuilder {
 		}
 		// Added clause to support multiple applicationStatuses search
 		if (!CollectionUtils.isEmpty(criteria.getApplicationStatus())) {
-			addClauseIfRequired(preparedStatement, query);
-			query.append("  conn.applicationStatus IN (").append(createQuery(criteria.getApplicationStatus()))
-					.append(")");
-			addToPreparedStatement(preparedStatement, criteria.getApplicationStatus());
+			if (StringUtils.isEmpty(criteria.getSearchType())
+					|| !criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION)) {
+				addClauseIfRequired(preparedStatement, query);
+				query.append("  conn.applicationStatus IN (").append(createQuery(criteria.getApplicationStatus()))
+						.append(")");
+				addToPreparedStatement(preparedStatement, criteria.getApplicationStatus());
+			}
 		}
 		// Added clause to support assignee search
 		if (!StringUtils.isEmpty(criteria.getAssignee())) {
@@ -243,6 +267,8 @@ public class SWQueryBuilder {
 			preparedStatement.add(Boolean.FALSE);
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.connectionno is not null ");
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" conn.applicationstatus in ('APPROVED','CONNECTION_ACTIVATED') ");
 		}
 		if (!StringUtils.isEmpty(criteria.getLocality())) {
 			addClauseIfRequired(preparedStatement, query);
