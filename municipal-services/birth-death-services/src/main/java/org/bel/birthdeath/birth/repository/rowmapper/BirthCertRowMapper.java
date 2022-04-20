@@ -27,10 +27,10 @@ public class BirthCertRowMapper implements ResultSetExtractor<List<BirthCertific
 				BirthCertificate certReq = birthDtlMap.get(id);
 
 				if (certReq == null) {
-					certReq = BirthCertificate.builder().id(id).filestoreid(rs.getString("filestoreid")).applicationStatus(StatusEnum.fromValue(rs.getString("status")))
-							.birthDtlId(rs.getString("birthdtlid")).tenantId(rs.getString("tenantid")).birthCertificateNo(rs.getString("birthcertificateno"))
-							.embeddedUrl(rs.getString("embeddedurl")).dateofissue(rs.getLong("dateofissue"))
-							.auditDetails(AuditDetails.builder().createdBy(rs.getString("createdBy")).createdTime(rs.getLong("createdtime")).build())
+					certReq = BirthCertificate.builder().id(id).filestoreid(rs.getString("filestoreid")).applicationStatus(StatusEnum.fromValue(rs.getString("applicationStatus")))
+							.birthDtlId(rs.getString("birthDtlId")).tenantId(rs.getString("tenantId")).birthCertificateNo(rs.getString("birthCertificateNo"))
+							.embeddedUrl(rs.getString("embeddedUrl")).dateofissue(rs.getLong("dateofissue"))
+							.auditDetails(AuditDetails.builder().createdBy(rs.getString("createdBy")).createdTime(rs.getLong("createdTime")).build())
 							.build();
 					birthDtlMap.put(id, certReq);
 				}
