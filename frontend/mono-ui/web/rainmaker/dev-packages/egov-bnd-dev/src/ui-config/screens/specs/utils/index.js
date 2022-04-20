@@ -1,63 +1,62 @@
+import commonConfig from "config/common.js";
+import {
+  getCommonCaption, getCommonCard
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import {
+  captureSource, getFileUrlFromAPI, getLocaleLabels, getQueryArg,
+  getTransformedLocalStorgaeLabels
+} from "egov-ui-framework/ui-utils/commons";
+import { openPdf, printPdf } from "egov-ui-kit/utils/commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getQueryArg,getTransformedLocalStorgaeLabels ,getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField, toggleSpinner , toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getCommonCard,
-  getCommonCaption
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { httpRequest } from "../../../../ui-utils";
-import commonConfig from "config/common.js";
-import {prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";   //returns action object
 import store from "ui-redux/store";
-import { openPdf, printPdf } from "egov-ui-kit/utils/commons";
-import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
-import { captureSource } from "egov-ui-framework/ui-utils/commons";
+import { httpRequest } from "../../../../ui-utils";
 
-        // sms("sms"),
-        // email("email"),
-        // ivr("ivr"),
-        // mobileapp("mobileapp"),
-        // whatsapp("whatsapp"),
-        // csc("csc"),
-        // web("web");
+// sms("sms"),
+// email("email"),
+// ivr("ivr"),
+// mobileapp("mobileapp"),
+// whatsapp("whatsapp"),
+// csc("csc"),
+// web("web");
 
-export const downloadPdf = (link, openIn = '_blank') => {
-  var win = window.open(link, '_self');
+export const downloadPdf = (link, openIn = "_blank") => {
+  var win = window.open(link, "_self");
   if (win) {
     win.focus();
-  }
-  else
-  {
+  } else {
     toggleSnackbar(
       true,
       {
-        labelName: "Looks like your browser is blocking pop-ups. Allow pop-ups in your browser to download certificate.",
-        labelKey: "BND_BROWSER_WARN_BROWSER_BLOCKED"
+        labelName:
+          "Looks like your browser is blocking pop-ups. Allow pop-ups in your browser to download certificate.",
+        labelKey: "BND_BROWSER_WARN_BROWSER_BLOCKED",
       },
       "error"
     );
   }
-}
+};
 
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
-    if (mode === 'download') {
+    if (mode === "download") {
       downloadPdf(fileRes[fileStoreId]);
-    } else if (mode === 'open') {
-      openPdf(fileRes[fileStoreId], '_self')
-    }
-    else {
+    } else if (mode === "open") {
+      openPdf(fileRes[fileStoreId], "_self");
+    } else {
       printPdf(fileRes[fileStoreId]);
     }
   });
-}
+};
 
-export const convertEpochToDateCustom = dateEpoch => {
+export const convertEpochToDateCustom = (dateEpoch) => {
   // Returning null in else case because new Date(null) returns initial date from calender
-  if(dateEpoch){
+  if (dateEpoch) {
     const dateFromApi = new Date(dateEpoch);
     let month = dateFromApi.getMonth() + 1;
     let day = dateFromApi.getDate();
@@ -70,31 +69,32 @@ export const convertEpochToDateCustom = dateEpoch => {
   }
 };
 
-export const validateTimeZone = () =>{
-  try{
+export const validateTimeZone = () => {
+  try {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if(tz != "Asia/Calcutta" && tz != "Asia/Kolkata")    
-    {
-      alert("Looks like your system's time zone is not correct! \nChange your system's time zone to Indian Standard Time (UTC+5:30 Chennai,Kolkata,Mumbai,NewDelhi)\nand try again.")
+    if (tz != "Asia/Calcutta" && tz != "Asia/Kolkata") {
+      alert(
+        "Looks like your system's time zone is not correct! \nChange your system's time zone to Indian Standard Time (UTC+5:30 Chennai,Kolkata,Mumbai,NewDelhi)\nand try again."
+      );
       return false;
     }
-  }
-  catch(e)
-  {
-    alert("Looks like this browser is very old. Please update your browser and continue");
+  } catch (e) {
+    alert(
+      "Looks like this browser is very old. Please update your browser and continue"
+    );
     return false;
   }
   return true;
-}
+};
 
-export const getCommonApplyFooter = children => {
+export const getCommonApplyFooter = (children) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: "apply-wizard-footer",
     },
-    children
+    children,
   };
 };
 
@@ -103,7 +103,7 @@ export const transformById = (payload, id) => {
     payload &&
     payload.reduce((result, item) => {
       result[item[id]] = {
-        ...item
+        ...item,
       };
 
       return result;
@@ -111,7 +111,7 @@ export const transformById = (payload, id) => {
   );
 };
 
-export const getMdmsData = async  requestBody=> {
+export const getMdmsData = async (requestBody) => {
   try {
     const response = await httpRequest(
       "post",
@@ -120,7 +120,7 @@ export const getMdmsData = async  requestBody=> {
       [],
       requestBody
     );
-   
+
     return response;
   } catch (error) {
     console.log(error);
@@ -162,7 +162,7 @@ export const validateFields = (
         (fields[variable].props.disabled === undefined ||
           !fields[variable].props.disabled) &&
         (fields[variable].props.disableValidation === undefined ||
-          !fields[variable].props.disableValidation) && 
+          !fields[variable].props.disableValidation) &&
         !validate(
           screen,
           {
@@ -170,7 +170,7 @@ export const validateFields = (
             value: get(
               state.screenConfiguration.preparedFinalObject,
               fields[variable].jsonPath
-            )
+            ),
           },
           dispatch,
           true
@@ -200,15 +200,15 @@ export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
 };
 
 //Convert IST epoch to IST Date.
-export const convertEpochToDateWithTimeIST = dateEpoch => {
+export const convertEpochToDateWithTimeIST = (dateEpoch) => {
   let ist;
-  try{
-     ist = new Date(dateEpoch).toLocaleString("en-IN", {timeZone: 'Asia/Kolkata'}).split(",")[0];
-     return ist;
-  }
-  catch(e)
-  {
-    return 'Use latest browser.';
+  try {
+    ist = new Date(dateEpoch)
+      .toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+      .split(",")[0];
+    return ist;
+  } catch (e) {
+    return "Use latest browser.";
     //alert("Catching error");
     // var now = new Date(dateEpoch);
     // var utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
@@ -217,7 +217,7 @@ export const convertEpochToDateWithTimeIST = dateEpoch => {
   }
 };
 
-export const getEpochForDate = date => {
+export const getEpochForDate = (date) => {
   const dateSplit = date.split("/");
   return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
 };
@@ -234,18 +234,18 @@ export const sortByEpoch = (data, order) => {
   }
 };
 
-export const ifUserRoleExists = role => {
+export const ifUserRoleExists = (role) => {
   let userInfo = JSON.parse(getUserInfo());
   const roles = get(userInfo, "roles");
-  const roleCodes = roles ? roles.map(role => role.code) : [];
+  const roleCodes = roles ? roles.map((role) => role.code) : [];
   if (roleCodes.indexOf(role) > -1) {
     return true;
   } else return false;
 };
 
-export const convertEpochToDate = dateEpoch => {
+export const convertEpochToDate = (dateEpoch) => {
   const dateFromApi = new Date(dateEpoch);
-  console.log("Check the data epoch",dateFromApi);
+  console.log("Check the data epoch", dateFromApi);
   let month = dateFromApi.getMonth() + 1;
   let day = dateFromApi.getDate();
   let year = dateFromApi.getFullYear();
@@ -331,7 +331,7 @@ export const showHideAdhocPopup = (state, dispatch) => {
   );
 };
 
-export const getCommonGrayCard = children => {
+export const getCommonGrayCard = (children) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -345,18 +345,18 @@ export const getCommonGrayCard = children => {
               backgroundColor: "rgb(242, 242, 242)",
               boxShadow: "none",
               borderRadius: 0,
-              overflow: "visible"
-            }
-          })
+              overflow: "visible",
+            },
+          }),
         },
         gridDefination: {
-          xs: 12
-        }
-      }
+          xs: 12,
+        },
+      },
     },
     gridDefination: {
-      xs: 12
-    }
+      xs: 12,
+    },
   };
 };
 
@@ -366,30 +366,32 @@ export const getLabelOnlyValue = (value, props = {}) => {
     componentPath: "Div",
     gridDefination: {
       xs: 6,
-      sm: 4
+      sm: 4,
     },
     props: {
       style: {
-        marginBottom: "16px"
+        marginBottom: "16px",
       },
-      ...props
+      ...props,
     },
     children: {
-      value: getCommonCaption(value)
-    }
+      value: getCommonCaption(value),
+    },
   };
 };
 
-
-export const onActionClick = (rowData) =>{
-  switch(rowData[8]){
-    case "PAY" : return "";
-    case "DOWNLOAD RECEIPT" : ""
-    case "GENERATE NEW RECEIPT" : ""
+export const onActionClick = (rowData) => {
+  switch (rowData[8]) {
+    case "PAY":
+      return "";
+    case "DOWNLOAD RECEIPT":
+      "";
+    case "GENERATE NEW RECEIPT":
+      "";
   }
-}
+};
 
-export const getTextToLocalMapping = label => {
+export const getTextToLocalMapping = (label) => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
     case "Bill No.":
@@ -446,14 +448,14 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-   case "Owner Name":
+    case "Owner Name":
       return getLocaleLabels(
         "Owner Name",
         "ABG_COMMON_TABLE_COL_OWN_NAME",
         localisationLabels
       );
 
-  case "Download":
+    case "Download":
       return getLocaleLabels(
         "Download",
         "ABG_COMMON_TABLE_COL_DOWNLOAD_BUTTON"
@@ -466,89 +468,89 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-      case "ACTIVE":
+    case "ACTIVE":
       return getLocaleLabels(
         "Pending",
         "BILL_GENIE_ACTIVE_LABEL",
         localisationLabels
       );
 
-      case "CANCELLED":
+    case "CANCELLED":
       return getLocaleLabels(
         "Cancelled",
         "BILL_GENIE_CANCELLED_LABEL",
         localisationLabels
       );
 
-      case "PAID":
+    case "PAID":
       return getLocaleLabels(
         "Paid",
         "BILL_GENIE_PAID_LABEL",
         localisationLabels
       );
-      case "PAY":
-      case "PARTIALLY PAID":
-      return getLocaleLabels(
-        "PAY",
-        "BILL_GENIE_PAY",
-        localisationLabels
-      );
-      case "EXPIRED":
+    case "PAY":
+    case "PARTIALLY PAID":
+      return getLocaleLabels("PAY", "BILL_GENIE_PAY", localisationLabels);
+    case "EXPIRED":
       return getLocaleLabels(
         "Expired",
         "BILL_GENIE_EXPIRED",
         localisationLabels
       );
-      case "GENERATE NEW BILL":
+    case "GENERATE NEW BILL":
       return getLocaleLabels(
         "GENERATE NEW BILL",
         "BILL_GENIE_GENERATE_NEW_BILL",
         localisationLabels
       );
 
-      case "DOWNLOAD RECEIPT":
-        return getLocaleLabels(
-          "DOWNLOAD RECEIPT",
-          "BILL_GENIE_DOWNLOAD_RECEIPT",
-          localisationLabels
-        );
-      case "Search Results for Bill":
-        return getLocaleLabels(
-          "Search Results for Bill",
-          "BILL_GENIE_SEARCH_TABLE_HEADER",
-          localisationLabels
-        );
-      case "PARTIALLY_PAID":
-      case "PARTIALLY PAID":
-        return getLocaleLabels(
-            "Partially Paid",
-            "BILL_GENIE_PARTIALLY_PAID",
-            localisationLabels
-          ); 
-      case "BILL_GENIE_GROUP_SEARCH_HEADER" : 
-          return getLocaleLabels(
-            "Search Results for Group Bills",
-            "BILL_GENIE_GROUP_SEARCH_HEADER",
-            localisationLabels
-          ); 
+    case "DOWNLOAD RECEIPT":
+      return getLocaleLabels(
+        "DOWNLOAD RECEIPT",
+        "BILL_GENIE_DOWNLOAD_RECEIPT",
+        localisationLabels
+      );
+    case "Search Results for Bill":
+      return getLocaleLabels(
+        "Search Results for Bill",
+        "BILL_GENIE_SEARCH_TABLE_HEADER",
+        localisationLabels
+      );
+    case "PARTIALLY_PAID":
+    case "PARTIALLY PAID":
+      return getLocaleLabels(
+        "Partially Paid",
+        "BILL_GENIE_PARTIALLY_PAID",
+        localisationLabels
+      );
+    case "BILL_GENIE_GROUP_SEARCH_HEADER":
+      return getLocaleLabels(
+        "Search Results for Group Bills",
+        "BILL_GENIE_GROUP_SEARCH_HEADER",
+        localisationLabels
+      );
   }
 };
 
-export const loadCertDetails = async (action, state, dispatch,data) => {
-
+export const loadCertDetails = async (action, state, dispatch, data) => {
   let requestBody = {};
   const queryParams = [
-    { key: "tenantId", value: data.tenantId},
-    { key: "id", value: data.id}    
+    { key: "tenantId", value: data.tenantId },
+    { key: "id", value: data.id },
   ];
 
-  if(data.birthcertificateno)
-    queryParams.push({ key: "birthcertificateno", value: data.birthcertificateno})
-  else
-  if(data.deathcertificateno)
-    queryParams.push({ key: "deathcertificateno", value: data.deathcertificateno})
+  if (data.birthcertificateno)
+    queryParams.push({
+      key: "birthcertificateno",
+      value: data.birthcertificateno,
+    });
+  else if (data.deathcertificateno)
+    queryParams.push({
+      key: "deathcertificateno",
+      value: data.deathcertificateno,
+    });
 
-  try{
+  try {
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -558,31 +560,29 @@ export const loadCertDetails = async (action, state, dispatch,data) => {
       requestBody
     );
     return payload;
-  }
-  catch (e) {
+  } catch (e) {
     toggleSnackbar(
       true,
       {
         labelName: "Api Error",
-        labelKey: "ERR_API_ERROR"
+        labelKey: "ERR_API_ERROR",
       },
       "error"
     );
     console.error(e);
     //return {"RequestInfo":{"apiId":"Mihy","ver":".01","ts":null,"resMsgId":"uief87324","msgId":"20170310130900|en_IN","status":"successful"},"BirthCertificate":[{"id":"1","createdby":null,"createdtime":null,"dateofbirth":1614063655148,"dateofreport":1614063655148,"firstname":"san","gender":1,"hospitalname":null,"informantsaddress":null,"informantsname":null,"lastname":null,"middlename":null,"placeofbirth":"Bangalore","registrationno":"2021-1","remarks":null,"lastmodifiedby":null,"lastmodifiedtime":null,"counter":0,"tenantid":null,"fullname":"SRI V S","birthFatherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"R S H"},"birthMotherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc1","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"S V H"},"birthPermaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"},"birthPresentaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"}}]};
   }
-}
+};
 
-export const loadFullCertDetails = async (action, state, dispatch,data) => {
-
+export const loadFullCertDetails = async (action, state, dispatch, data) => {
   let requestBody = {};
   const queryParams = [
-    { key: "tenantId", value: data.tenantId},
-    { key: "id", value: data.id}    
+    { key: "tenantId", value: data.tenantId },
+    { key: "id", value: data.id },
   ];
 
   let payload = null;
-  try{
+  try {
     payload = await httpRequest(
       "post",
       `/birth-death-services/${data.module}/_viewfullCertData`,
@@ -591,13 +591,12 @@ export const loadFullCertDetails = async (action, state, dispatch,data) => {
       requestBody
     );
     return payload;
-  }
-  catch (e) {
+  } catch (e) {
     toggleSnackbar(
       true,
       {
         labelName: "Api Error",
-        labelKey: "ERR_API_ERROR"
+        labelKey: "ERR_API_ERROR",
       },
       "error"
     );
@@ -605,10 +604,9 @@ export const loadFullCertDetails = async (action, state, dispatch,data) => {
     return payload;
     //return {"RequestInfo":{"apiId":"Mihy","ver":".01","ts":null,"resMsgId":"uief87324","msgId":"20170310130900|en_IN","status":"successful"},"BirthCertificate":[{"id":"1","createdby":null,"createdtime":null,"dateofbirth":1614063655148,"dateofreport":1614063655148,"firstname":"san","gender":1,"hospitalname":null,"informantsaddress":null,"informantsname":null,"lastname":null,"middlename":null,"placeofbirth":"Bangalore","registrationno":"2021-1","remarks":null,"lastmodifiedby":null,"lastmodifiedtime":null,"counter":0,"tenantid":null,"fullname":"SRI V S","birthFatherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"R S H"},"birthMotherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc1","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"S V H"},"birthPermaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"},"birthPresentaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"}}]};
   }
-}
+};
 
 export const loadMdmsData = async (action, state, dispatch) => {
-
   let requestBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -617,22 +615,20 @@ export const loadMdmsData = async (action, state, dispatch) => {
           moduleName: "tenant",
           masterDetails: [
             {
-              name: "tenants"
+              name: "tenants",
             },
-            { name: "citymodule" }
-          ]
+            { name: "citymodule" },
+          ],
         },
         {
           moduleName: "common-masters",
-          masterDetails: [            
-            { name: "Help" }
-          ]
-        }
-      ]
-    }
+          masterDetails: [{ name: "Help" }],
+        },
+      ],
+    },
   };
 
-  try{
+  try {
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -641,32 +637,37 @@ export const loadMdmsData = async (action, state, dispatch) => {
       [],
       requestBody
     );
-    console.log("Mdms Data Recieved is ",payload);
     if (payload) {
       dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
       const citymodule = get(payload, "MdmsRes.tenant.citymodule");
-      const liveTenants = citymodule && citymodule.filter(item => item.code === "UC");
+      const liveTenants =
+        citymodule && citymodule.filter((item) => item.code === "UC");
       dispatch(
-        prepareFinalObject("applyScreenMdmsData.tenant.citiesByModule", get(liveTenants[0], "tenants"))
+        prepareFinalObject(
+          "applyScreenMdmsData.tenant.citiesByModule",
+          get(liveTenants[0], "tenants")
+        )
       );
     }
     return payload;
-  }
-  catch (e) {
+  } catch (e) {
     console.log(e);
   }
-}
+};
 
-export const loadHospitals = async (action, state, dispatch, module, tenantId) => {
+export const loadHospitals = async (
+  action,
+  state,
+  dispatch,
+  module,
+  tenantId
+) => {
   let requestBody = {};
   let payload = null;
 
-  const queryParams = [
-    { key: "tenantId", value: tenantId }  
-    ];
-  
-  try
-  {
+  const queryParams = [{ key: "tenantId", value: tenantId }];
+
+  try {
     payload = await httpRequest(
       "post",
       "birth-death-services/common/getHospitals",
@@ -674,34 +675,31 @@ export const loadHospitals = async (action, state, dispatch, module, tenantId) =
       queryParams,
       requestBody
     );
-  }
-  catch(e)
-  {
+  } catch (e) {
     toggleSnackbar(
       true,
       {
         labelName: "",
-        labelKey: "ERR_API_ERROR"
+        labelKey: "ERR_API_ERROR",
       },
       "error"
     );
     console.error(e);
   }
   return payload;
-}
+};
 
 export const downloadCert = async (tenantId, id, module) => {
   let requestBody = {};
   let payload = null;
 
   const queryParams = [
-    { key: "tenantId", value: tenantId } ,
-    { key: "id" , value: id },
-    { key: "source" , value: captureSource() }
+    { key: "tenantId", value: tenantId },
+    { key: "id", value: id },
+    { key: "source", value: captureSource() },
     // { key: "source" , value: "web" }
-    ];
-  try
-  {
+  ];
+  try {
     payload = await httpRequest(
       "post",
       `/birth-death-services/${module}/_download`,
@@ -709,9 +707,7 @@ export const downloadCert = async (tenantId, id, module) => {
       queryParams,
       requestBody
     );
-  }
-  catch(e)
-  {
+  } catch (e) {
     console.error(e);
     store.dispatch(
       toggleSnackbar(
@@ -735,49 +731,45 @@ export const downloadCert = async (tenantId, id, module) => {
   }
 
   return payload;
-}
+};
 
-
-export const postPaymentSuccess = async(data) => {
-
+export const postPaymentSuccess = async (data) => {
   store.dispatch(toggleSpinner());
-  setTimeout(() => {     
+  setTimeout(() => {
     postPaymentActivity(data);
     store.dispatch(toggleSpinner());
   }, 4000); //Give 2 sec gap so that the screen is loaded correctly
-    
 };
 
-export const postPaymentActivity = async(data, doDownloadCertificate = true)=> {
+export const postPaymentActivity = async (
+  data,
+  doDownloadCertificate = true
+) => {
   try {
-    if(data.tenantId && data.consumerCode)
-    {
+    if (data.tenantId && data.consumerCode) {
       store.dispatch(toggleSpinner());
-      let queryParams = [{key:"tenantId",value:data.tenantId},{key:"consumerCode",value:data.consumerCode}];
-      let module = (data.businessService == "BIRTH_CERT")? "birth" : "death";
+      let queryParams = [
+        { key: "tenantId", value: data.tenantId },
+        { key: "consumerCode", value: data.consumerCode },
+      ];
+      let module = data.businessService == "BIRTH_CERT" ? "birth" : "death";
       const response = await httpRequest(
         "post",
         `birth-death-services/${module}/_getfilestoreid`,
         "getfilestoreid",
         queryParams,
-        {}//{ searchCriteria: queryObject }
+        {} //{ searchCriteria: queryObject }
       );
       store.dispatch(toggleSpinner());
-      if(doDownloadCertificate && response && response.filestoreId)
-      {
-        let mode = 'download';
+      if (doDownloadCertificate && response && response.filestoreId) {
+        let mode = "download";
         downloadReceiptFromFilestoreID(response.filestoreId, mode);
 
         store.dispatch(toggleSpinner());
-        setTimeout(() => {     
+        setTimeout(() => {
           store.dispatch(toggleSpinner());
-          store.dispatch(
-            setRoute(
-              `/${module}-citizen/myApplications`
-            )
-          );
+          store.dispatch(setRoute(`/${module}-citizen/myApplications`));
         }, 5000); //Give 5 sec gap redirect to my applications page.
-
       }
       return response;
     }
@@ -795,73 +787,63 @@ export const postPaymentActivity = async(data, doDownloadCertificate = true)=> {
 };
 
 export const triggerDownload = (module) => {
-
   const state = store.getState();
-  const certificateId = get(state,`screenConfiguration.preparedFinalObject.bnd.${module}.download.certificateId`);
-  const tenantId = get(state,`screenConfiguration.preparedFinalObject.bnd.${module}.download.tenantId`);
-  const businessService = get(state,`screenConfiguration.preparedFinalObject.bnd.${module}.download.businessService`);
+  const certificateId = get(
+    state,
+    `screenConfiguration.preparedFinalObject.bnd.${module}.download.certificateId`
+  );
+  const tenantId = get(
+    state,
+    `screenConfiguration.preparedFinalObject.bnd.${module}.download.tenantId`
+  );
+  const businessService = get(
+    state,
+    `screenConfiguration.preparedFinalObject.bnd.${module}.download.businessService`
+  );
 
-  downloadCert(tenantId,certificateId, module).then((response) => {
-
-    if(response && response.consumerCode) // Redirect to payment page
-    {
+  downloadCert(tenantId, certificateId, module).then((response) => {
+    if (response && response.consumerCode) {
+      // Redirect to payment page
       const appName =
-          process.env.REACT_APP_NAME === "Citizen"
-            ? "citizen"
-            : "employee";
-            
+        process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee";
+
       const url =
-      process.env.NODE_ENV === "development"
-        ? `/egov-common/pay?consumerCode=${
-            response.consumerCode
-          }&tenantId=${tenantId}&businessService=${
-            businessService
-          }`
-        : `/${appName}/egov-common/pay?consumerCode=${
-            response.consumerCode
-          }&tenantId=${tenantId}&businessService=${
-            businessService
-          }`;
+        process.env.NODE_ENV === "development"
+          ? `/egov-common/pay?consumerCode=${response.consumerCode}&tenantId=${tenantId}&businessService=${businessService}`
+          : `/${appName}/egov-common/pay?consumerCode=${response.consumerCode}&tenantId=${tenantId}&businessService=${businessService}`;
       document.location.href = `${document.location.origin}${url}`;
+    } else if (response && response.filestoreId) {
+      downloadReceiptFromFilestoreID(response.filestoreId, "download");
     }
-    else 
-    if(response && response.filestoreId)
-    {
-      downloadReceiptFromFilestoreID(response.filestoreId,'download')
-    }
-
   });
+};
 
-}
-
-export const downloadReceipt = async (consumerCode,tenantId) => {
-
+export const downloadReceipt = async (consumerCode, tenantId) => {
   const state = store.getState();
 
   store.dispatch(toggleSpinner());
-  let queryParams = [{key:"tenantId",value:tenantId},{key:"consumerCodes",value:consumerCode}];
+  let queryParams = [
+    { key: "tenantId", value: tenantId },
+    { key: "consumerCodes", value: consumerCode },
+  ];
   const response = await httpRequest(
     "post",
     "collection-services/payments/_search",
     "_search",
     queryParams,
-    {}//{ searchCriteria: queryObject }
+    {} //{ searchCriteria: queryObject }
   );
   store.dispatch(toggleSpinner());
-  if(response && response.Payments && response.Payments.length>0 && response.Payments[0].fileStoreId)
-  {
-    let mode = 'download';
+  if (
+    response &&
+    response.Payments &&
+    response.Payments.length > 0 &&
+    response.Payments[0].fileStoreId
+  ) {
+    let mode = "download";
     downloadReceiptFromFilestoreID(response.Payments[0].fileStoreId, mode);
-  }else
-  {
-    store.dispatch(
-      setRoute(
-        `/uc-citizen/search`
-      )
-    );
+  } else {
+    store.dispatch(setRoute(`/uc-citizen/search`));
   }
   return response;
-
-}
-
-
+};
