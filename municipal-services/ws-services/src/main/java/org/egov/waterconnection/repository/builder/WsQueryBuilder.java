@@ -63,25 +63,7 @@ public class WsQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
 
-	private static final String SEARCH_COUNT_QUERY = "SELECT DISTINCT(conn.applicationNo),wc.appCreatedDate"
-			+ " FROM eg_ws_connection conn "
-			+  INNER_JOIN_STRING 
-			+" eg_ws_service wc ON wc.connection_id = conn.id"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_applicationdocument document ON document.wsid = conn.id" 
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_plumberinfo plumber ON plumber.wsid = conn.id"
-			+ LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" 
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
-	
-	private static final String SEARCH_CONNECTION_COUNT_QUERY = "SELECT DISTINCT(conn.connectionno),conn.applicationno, wc.appCreatedDate,conn.lastmodifiedtime"
-			+ " FROM eg_ws_connection conn "
+	private static final String SEARCH_COUNT_QUERY =  " FROM eg_ws_connection conn "
 			+  INNER_JOIN_STRING 
 			+" eg_ws_service wc ON wc.connection_id = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
@@ -121,17 +103,18 @@ public class WsQueryBuilder {
 		if (criteria.isEmpty())
 			return null;
 		StringBuilder query;
-
-		if (criteria.getIsCountCall() == null)
-			criteria.setIsCountCall(Boolean.FALSE);
 		
 		if (!criteria.getIsCountCall())
 			query = new StringBuilder(WATER_SEARCH_QUERY);
 		else if (criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())
-				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION))
-			query = new StringBuilder(SEARCH_CONNECTION_COUNT_QUERY);
-		else
-			query = new StringBuilder(SEARCH_COUNT_QUERY);
+				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION)) {
+			query = new StringBuilder("SELECT DISTINCT(conn.connectionno),conn.applicationno, wc.appCreatedDate,conn.lastmodifiedtime");
+			query.append(SEARCH_COUNT_QUERY);
+		}
+		else {
+			query = new StringBuilder("SELECT DISTINCT(conn.applicationNo),wc.appCreatedDate");
+			query.append(SEARCH_COUNT_QUERY);
+		}
 
 		boolean propertyIdsPresent = false;
 

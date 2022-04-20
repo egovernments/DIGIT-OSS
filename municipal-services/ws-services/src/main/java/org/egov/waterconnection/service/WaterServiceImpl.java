@@ -157,7 +157,20 @@ public class WaterServiceImpl implements WaterService {
 	@Override
 	public Integer countAllWaterApplications(SearchCriteria criteria, RequestInfo requestInfo) {
 		criteria.setIsCountCall(Boolean.TRUE);
-		return getWaterConnectionsCount(criteria, requestInfo);
+		List<WaterConnection> waterConnectionList;
+		waterConnectionList = getWaterConnectionsList(criteria, requestInfo);
+		if (!StringUtils.isEmpty(criteria.getSearchType()) &&
+				criteria.getSearchType().equals(WCConstants.SEARCH_TYPE_CONNECTION)) {
+			waterConnectionList = enrichmentService.filterConnections(waterConnectionList);
+			if(criteria.getIsPropertyDetailsRequired()){
+				waterConnectionList = enrichmentService.enrichPropertyDetails(waterConnectionList, criteria, requestInfo);
+
+			}
+		}
+		waterConnectionValidator.validatePropertyForConnection(waterConnectionList);
+		enrichmentService.enrichConnectionHolderDeatils(waterConnectionList, criteria, requestInfo);
+		return (waterConnectionList.size());
+		//return getWaterConnectionsCount(criteria, requestInfo);
 	}
 	/**
 	 * 
@@ -237,8 +250,7 @@ public class WaterServiceImpl implements WaterService {
 
 	private List<WaterConnection> getAllWaterApplications(WaterConnectionRequest waterConnectionRequest) {
 		SearchCriteria criteria = SearchCriteria.builder()
-				.connectionNumber(waterConnectionRequest.getWaterConnection().getConnectionNo()).isCountCall(false)
-				.build();
+				.connectionNumber(waterConnectionRequest.getWaterConnection().getConnectionNo()).build();
 		return search(criteria, waterConnectionRequest.getRequestInfo());
 	}
 
