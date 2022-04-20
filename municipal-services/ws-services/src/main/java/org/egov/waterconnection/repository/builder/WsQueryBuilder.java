@@ -103,8 +103,8 @@ public class WsQueryBuilder {
 		if (criteria.isEmpty())
 			return null;
 		StringBuilder query;
-		
-		if (!criteria.getIsCountCall())
+		query = new StringBuilder(WATER_SEARCH_QUERY);
+		/*if (!criteria.getIsCountCall())
 			query = new StringBuilder(WATER_SEARCH_QUERY);
 		else if (criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())
 				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION)) {
@@ -114,7 +114,7 @@ public class WsQueryBuilder {
 		else {
 			query = new StringBuilder("SELECT DISTINCT(conn.applicationNo),wc.appCreatedDate");
 			query.append(SEARCH_COUNT_QUERY);
-		}
+		}*/
 
 		boolean propertyIdsPresent = false;
 
