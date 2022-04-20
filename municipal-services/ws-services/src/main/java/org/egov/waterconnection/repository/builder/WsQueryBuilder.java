@@ -63,22 +63,6 @@ public class WsQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
 
-	private static final String SEARCH_COUNT_QUERY =  " FROM eg_ws_connection conn "
-			+  INNER_JOIN_STRING 
-			+" eg_ws_service wc ON wc.connection_id = conn.id"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_applicationdocument document ON document.wsid = conn.id" 
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_plumberinfo plumber ON plumber.wsid = conn.id"
-			+ LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" 
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
-	
 	private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
             "({})" +
@@ -102,19 +86,11 @@ public class WsQueryBuilder {
 			RequestInfo requestInfo) {
 		if (criteria.isEmpty())
 			return null;
-		StringBuilder query;
-		query = new StringBuilder(WATER_SEARCH_QUERY);
-		/*if (!criteria.getIsCountCall())
-			query = new StringBuilder(WATER_SEARCH_QUERY);
-		else if (criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())
-				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION)) {
-			query = new StringBuilder("SELECT DISTINCT(conn.connectionno),conn.applicationno, wc.appCreatedDate,conn.lastmodifiedtime");
-			query.append(SEARCH_COUNT_QUERY);
-		}
-		else {
-			query = new StringBuilder("SELECT DISTINCT(conn.applicationNo),wc.appCreatedDate");
-			query.append(SEARCH_COUNT_QUERY);
-		}*/
+		
+		if (criteria.getIsCountCall() == null)
+			criteria.setIsCountCall(Boolean.FALSE);
+		
+		StringBuilder query = new StringBuilder(WATER_SEARCH_QUERY);
 
 		boolean propertyIdsPresent = false;
 
@@ -224,13 +200,10 @@ public class WsQueryBuilder {
 		}
 		// Added clause to support multiple applicationStatuses search
 		if (!StringUtils.isEmpty(criteria.getApplicationStatus())) {
-			if (StringUtils.isEmpty(criteria.getSearchType())
-					|| !criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION)) {
-				addClauseIfRequired(preparedStatement, query);
-				query.append("  conn.applicationStatus IN (").append(createQuery(criteria.getApplicationStatus()))
-						.append(")");
-				addToPreparedStatement(preparedStatement, criteria.getApplicationStatus());
-			}
+			addClauseIfRequired(preparedStatement, query);
+			query.append("  conn.applicationStatus IN (").append(createQuery(criteria.getApplicationStatus()))
+					.append(")");
+			addToPreparedStatement(preparedStatement, criteria.getApplicationStatus());
 		}
 		// Added clause to support assignee search
 		if (!StringUtils.isEmpty(criteria.getAssignee())) {
@@ -258,10 +231,6 @@ public class WsQueryBuilder {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.isoldapplication = ? ");
 			preparedStatement.add(Boolean.FALSE);
-			addClauseIfRequired(preparedStatement, query);
-			query.append(" conn.connectionno is not null ");
-			addClauseIfRequired(preparedStatement, query);
-			query.append(" conn.applicationstatus in ('APPROVED','CONNECTION_ACTIVATED') ");
 		}
 		if (!StringUtils.isEmpty(criteria.getLocality())) {
 			addClauseIfRequired(preparedStatement, query);

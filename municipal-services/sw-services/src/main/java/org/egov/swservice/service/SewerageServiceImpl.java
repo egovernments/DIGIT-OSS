@@ -155,20 +155,19 @@ public class SewerageServiceImpl implements SewerageService {
 	 */
 	public Integer countAllSewerageApplications(SearchCriteria criteria, RequestInfo requestInfo) {
 		criteria.setIsCountCall(Boolean.TRUE);
-		return getSewerageConnectionsCount(criteria, requestInfo);
-	}
+		List<SewerageConnection> sewerageConnectionList = getSewerageConnectionsList(criteria, requestInfo);
+		if(!StringUtils.isEmpty(criteria.getSearchType()) &&
+				criteria.getSearchType().equals(SWConstants.SEARCH_TYPE_CONNECTION)){
+			sewerageConnectionList = enrichmentService.filterConnections(sewerageConnectionList);
+			if(criteria.getIsPropertyDetailsRequired()){
+				sewerageConnectionList = enrichmentService.enrichPropertyDetails(sewerageConnectionList, criteria, requestInfo);
 
-	/**
-	 * 
-	 * @param criteria
-	 *            SewerageConnectionSearchCriteria contains search criteria on
-	 *            sewerage connection
-	 * @param requestInfo - Request Info Object
-	 * @return Count of List of matching sewerage connection
-	 */
-
-	public Integer getSewerageConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
-		return sewerageDao.getSewerageConnectionsCount(criteria, requestInfo);
+			}
+		}
+		validateProperty.validatePropertyForConnection(sewerageConnectionList);
+		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
+		enrichmentService.enrichProcessInstance(sewerageConnectionList, criteria, requestInfo);
+		return (sewerageConnectionList.size());
 	}
 	
 	/**
