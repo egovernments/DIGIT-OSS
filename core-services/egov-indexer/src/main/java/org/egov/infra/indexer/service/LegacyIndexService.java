@@ -20,10 +20,14 @@ import org.egov.infra.indexer.web.contract.LegacyIndexRequest;
 import org.egov.infra.indexer.web.contract.LegacyIndexResponse;
 import org.egov.infra.indexer.web.contract.Mapping;
 import org.egov.infra.indexer.web.contract.Mapping.ConfigKeyEnum;
+import org.egov.tracer.model.CustomException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -79,6 +83,15 @@ public class LegacyIndexService {
 
     @Value("${egov.infra.indexer.host}")
     private String esHostUrl;
+
+    @Value("${kafka.connector.uri}")
+    private String kafkaConnectorUri;
+
+    @Value("#{${kafka.connector.config}}")
+    private Map<String, String> connectorConfig;
+
+    @Value("${enable.auto.connector.creation.for.legacy.indexing}")
+    private Boolean enableAutoConnectorCreationForLegacyIndexing;
 
     @Autowired
     private PGRCustomDecorator pgrCustomDecorator;
@@ -272,6 +285,25 @@ public class LegacyIndexService {
         scheduler.schedule(legacyIndexer, indexThreadPollInterval, TimeUnit.MILLISECONDS);
     }
 
+    private void createKafkaConnectorForLegacyIndexing(LegacyIndexRequest legacyIndexRequest) {
+        StringBuilder kafkaConnectUri = new StringBuilder(kafkaConnectorUri);
+
+        Object response = new HashMap<>();
+
+        // Form kafka connector request body
+        Map requestBody = new HashMap<>();
+        requestBody.put("name", legacyIndexRequest.getLegacyIndexTopic().toLowerCase());
+        connectorConfig.put("topics", legacyIndexRequest.getLegacyIndexTopic());
+        requestBody.put("config", connectorConfig);
+        try {
+            response = restTemplate.postForObject(kafkaConnectUri.toString(), requestBody, Map.class);
+        }catch (HttpClientErrorException ignore){
+            log.info("Connector already present, no new connector will be created for the topic: " + legacyIndexRequest.getLegacyIndexTopic());
+        }catch (ResourceAccessException e){
+            throw new CustomException("EG_KAFKA_CONNECT_ERR", "Failed to make request for kafka connector creation. Kafka connect appears to be down with error message : " + e.getMessage());
+        }
+    }
+
 
     /**
      * Child threads which perform the primary data transformation and pass it on to
@@ -283,6 +315,10 @@ public class LegacyIndexService {
      * @param resultSize
      */
     public void childThreadExecutor(LegacyIndexRequest legacyIndexRequest, ObjectMapper mapper, Object response) {
+        // This method creates kafka connector for legacy indexing if config flag is enabled
+        if(enableAutoConnectorCreationForLegacyIndexing)
+            createKafkaConnectorForLegacyIndexing(legacyIndexRequest);
+
         try {
             //log.info("childThreadExecutor + response----"+mapper.writeValueAsString(response));
             if (legacyIndexRequest.getLegacyIndexTopic().equals(pgrLegacyTopic)) {
