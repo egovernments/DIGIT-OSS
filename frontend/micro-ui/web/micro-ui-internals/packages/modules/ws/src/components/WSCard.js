@@ -13,20 +13,18 @@ const WSCard = () => {
   sessionStorage.removeItem("IsDetailsExists");
 
   let links = [
-     
     {
       label: t("WS_SEARCH_APP"),
-      link: `/digit-ui/employee/ws/search-application`
+      link: `/digit-ui/employee/ws/search-application`,
     },
     {
       label: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
       link: `/digit-ui/employee/ws/create-application`,
-      roles: ["WS_CEMP", "SW_CEMP"]
-    }
-
+      roles: ["WS_CEMP", "SW_CEMP"],
+    },
   ];
 
-  links = links.filter(link => link.roles ? checkForEmployee(link.roles) : true);
+  links = links.filter((link) => (link.roles ? checkForEmployee(link.roles) : true));
 
   const propsForModuleCard = {
     Icon: <PTIcon />,
@@ -43,6 +41,10 @@ const WSCard = () => {
     ],
     links: [
       {
+        label: t("ES_COMMON_INBOX"),
+        link: `/digit-ui/employee/ws/bill-amend/inbox`,
+      },
+      {
         label: t("WS_SEARCH_APP"),
         link: `/digit-ui/employee/ws/search-application`,
       },
@@ -56,7 +58,7 @@ const WSCard = () => {
       },
     ],
   };
-  return <EmployeeModuleCard {...propsForModuleCard} />
+  return <EmployeeModuleCard {...propsForModuleCard} />;
 };
 
 export default WSCard;

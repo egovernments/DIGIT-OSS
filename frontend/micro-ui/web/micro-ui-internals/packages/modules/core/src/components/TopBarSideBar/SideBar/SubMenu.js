@@ -40,14 +40,14 @@ const SubMenu = ({ item }) => {
   };
 
   const leftIconArray = item.icon.leftIcon.split(":")[1] || item.leftIcon.split(":")[1];
-  const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.collections;
+  const leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
 
   return (
     <React.Fragment>
       <div className="submenu-container">
         <div onClick={item.links && showSubnav} className={`sidebar-link ${subnav === true ? "active" : ""}`}>
           <div className="actions">
-            {item.Icon || leftIcon}
+            {leftIcon}
             <span>{item.moduleName || item.displayName}</span>
           </div>
           <div> {item.links && subnav ? <ArrowVectorDown /> : item.links ? <ArrowForward /> : null} </div>
@@ -58,9 +58,19 @@ const SubMenu = ({ item }) => {
         item.links
           .filter((item) => item.url === "url" || item.url !== "")
           .map((item, index) => {
-            const url = item.navigationURL.indexOf("/digit-ui/employee/") === -1 ? `/digit-ui/employee/${item.navigationURL}` : item.navigationURL;
+            if (item.navigationURL.indexOf("/digit-ui") === -1) {
+              const getOrigin = window.location.origin;
+              return (
+                <a className={`dropdown-link ${pathname === item.link ? "active" : ""}`} href={getOrigin + "/employee/" + item.navigationURL}>
+                  <div className="actions">
+                    <ArrowDirection className="icon" />
+                    <span>{item.label || item.displayName}</span>
+                  </div>
+                </a>
+              );
+            }
             return (
-              <Link to={item.link || url} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
+              <Link to={item.link} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
                 <div className="actions">
                   <ArrowDirection className="icon" />
                   <span>{item.label || item.displayName}</span>

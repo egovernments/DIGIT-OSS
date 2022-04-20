@@ -54,7 +54,11 @@ const ApplicationDetails = (props) => {
 
   function onActionSelect(action) {
     if (action) {
-      if (action?.isWarningPopUp) {
+      if(action?.isToast){
+        setShowToast({ key: "error", error: { message: action?.toastMessage } });
+        setTimeout(closeToast, 5000);
+      }
+      else if (action?.isWarningPopUp) {
         setWarningPopUp(true);
       } else if (action?.redirectionUrll) {
         if (action?.redirectionUrll?.action === "ACTIVATE_CONNECTION") {

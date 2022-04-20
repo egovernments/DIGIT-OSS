@@ -503,6 +503,26 @@ input[type="number"] {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  .error-container{
+  display: flex;
+  width: 400px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  h1{
+    font-size: 32px;
+    font-weight: bold;
+  }
+  button{
+    height: 40px;
+width: 153px;
+border-radius: 0px;
+padding: 8px 24px;
+color: white;
+cursor: pointer;
+background-color:  #F47738;
+  }
+}
 }
 
 .error-boundary summary,
@@ -556,6 +576,8 @@ input[type="number"] {
     padding-left: 16px;
     padding-right: 16px;
   }
+  
+
 }
 @media (min-width: 780px) {
   .citizen-card-container {
@@ -583,8 +605,14 @@ input[type="number"] {
     padding-right: 16px;
     margin-top: 1rem;
   }
-}
 
+}
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .error-boundary{
+    height: 75vh;
+  }
+}
 .employee-app-wrapper {
   min-height: calc(100vh - 8em);
 }
