@@ -19,6 +19,8 @@ const ApplicationDetails = () => {
   const [businessService, setBusinessService] = useState("NewTL"); //DIRECTRENEWAL
   const [numberOfApplications, setNumberOfApplications] = useState([]);
   const [allowedToNextYear, setAllowedToNextYear] = useState(false);
+  const [oldRenewalAppNo, setoldRenewalAppNo] = useState("");
+  const [latestRenewalYearofAPP, setlatestRenewalYearofAPP] = useState("");
   sessionStorage.setItem("applicationNumber", applicationNumber)
   const { renewalPending: renewalPending } = Digit.Hooks.useQueryParams();
 
@@ -54,8 +56,13 @@ const ApplicationDetails = () => {
       let financialYear = cloneDeep(applicationDetails?.applicationData?.financialYear);
       const financialYearDate = financialYear?.split('-')[1];
       const finalFinancialYear = `20${Number(financialYearDate)}-${Number(financialYearDate)+1}`
+      const latestFinancialYear = Math.max.apply(Math, applicationDetails?.numOfApplications?.filter(ob => ob.licenseNumber === applicationDetails?.applicationData?.licenseNumber)?.map(function(o){return parseInt(o.financialYear.split("-")[0])}))
       const isAllowedToNextYear = applicationDetails?.numOfApplications?.filter(data => (data.financialYear == finalFinancialYear && data?.status !== "REJECTED"));
-      if (isAllowedToNextYear?.length > 0) setAllowedToNextYear(false);
+      if (isAllowedToNextYear?.length > 0){
+         setAllowedToNextYear(false);
+         setoldRenewalAppNo(isAllowedToNextYear?.[0]?.applicationNumber);
+      }
+      if(!(applicationDetails?.applicationData?.financialYear.includes(`${latestFinancialYear}`))) setlatestRenewalYearofAPP(applicationDetails?.applicationData?.financialYear);
       if (!isAllowedToNextYear || isAllowedToNextYear?.length == 0) setAllowedToNextYear(true);
       setNumberOfApplications(applicationDetails?.numOfApplications);
     }
@@ -97,8 +104,23 @@ const ApplicationDetails = () => {
   const duration = validTo - currentDate;
   const renewalPeriod = TradeRenewalDate?.TradeLicense?.TradeRenewal?.[0]?.renewalPeriod;
 
-  if (rolecheck && (applicationDetails?.applicationData?.status === "APPROVED" || applicationDetails?.applicationData?.status === "EXPIRED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" && renewalPending==="true")) && duration <= renewalPeriod) {
-    if(workflowDetails?.data && allowedToNextYear) {
+  const getToastMessages = () => {
+    if(allowedToNextYear == false && oldRenewalAppNo && applicationDetails?.applicationData?.status !== "MANUALEXPIRED")
+    {
+      return `${t("TL_ERROR_TOAST_RENEWAL_1")} ${oldRenewalAppNo} ${t("TL_ERROR_TOAST_RENEWAL_2")}`;
+    }
+    else if(applicationDetails?.applicationData?.status === "CANCELLED")
+    {
+      return `${t("TL_ERROR_TOAST_RENEWAL_CANCEL")}`
+    }
+    else if(latestRenewalYearofAPP && applicationDetails?.applicationData?.status === "MANUALEXPIRED")
+    {
+      return `${t("TL_ERROR_TOAST_MUTUALLY_EXPIRED")}`;
+    }
+  }
+
+  if (rolecheck && (applicationDetails?.applicationData?.status === "APPROVED" || applicationDetails?.applicationData?.status === "EXPIRED" || applicationDetails?.applicationData?.status === "CANCELLED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" /* && renewalPending==="true" */)) && duration <= renewalPeriod) {
+    if(workflowDetails?.data /* && allowedToNextYear */) {
       if(!workflowDetails?.data?.actionState) {
         workflowDetails.data.actionState = {};
         workflowDetails.data.actionState.nextActions = [];
@@ -107,6 +129,8 @@ const ApplicationDetails = () => {
       if(flagData && flagData.length === 0) {
         workflowDetails?.data?.actionState?.nextActions?.push({
           action: "RENEWAL_SUBMIT_BUTTON",
+          isToast : allowedToNextYear == false || applicationDetails?.applicationData?.status === "CANCELLED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" && latestRenewalYearofAPP) ? true : false,
+          toastMessage : getToastMessages(),
           redirectionUrl: {
             pathname: `/digit-ui/employee/tl/renew-application-details/${applicationNumber}`,
             state: applicationDetails

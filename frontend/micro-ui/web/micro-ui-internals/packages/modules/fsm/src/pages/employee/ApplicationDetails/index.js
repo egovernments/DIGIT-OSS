@@ -28,6 +28,7 @@ import { useQueryClient } from "react-query";
 
 import { Link, useHistory, useParams } from "react-router-dom";
 import { actions } from "react-table";
+import { ViewImages } from "../../../components/ViewImages";
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -235,6 +236,18 @@ const ApplicationDetails = (props) => {
                 </StatusTable>
               </React.Fragment>
             ))}
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN?.length &&
+              <>
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t('ES_FSM_SUB_HEADING_CITIZEN_UPLOADS')}</CardSectionHeader>
+                <ViewImages fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN} tenantId={tenantId} />
+              </>
+            }
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO?.length &&
+              <>
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t('ES_FSM_SUB_HEADING_DSO_UPLOADS')}</CardSectionHeader>
+                <ViewImages fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO} tenantId={tenantId} />
+              </>
+            }
 
             <BreakLine />
             {(workflowDetails?.isLoading || isDataLoading) && <Loader />}

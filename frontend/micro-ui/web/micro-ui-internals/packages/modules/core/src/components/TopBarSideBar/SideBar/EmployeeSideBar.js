@@ -1,5 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import React, { useRef, useEffect } from "react";
 import SubMenu from "./SubMenu";
 import {
   Loader,
@@ -81,9 +80,7 @@ const EmployeeSideBar = () => {
           configEmployeeSideBar[index].push(item);
         }
       } else {
-        if (item.navigationURL.indexOf("/digit-ui/employee") === -1 && item.displayName !== "Home") {
-          item.navigationURL = "/digit-ui/employee/" + item.navigationURL;
-        } else if (item.displayName === "Home") {
+        if (item.displayName === "Home") {
           item.navigationURL = "/digit-ui/employee";
           singleItem.unshift({
             displayName: item.displayName,
@@ -131,14 +128,21 @@ const EmployeeSideBar = () => {
       .map((item) => {
         const leftIconArray = item.icon.split(":")[1];
         const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.collections;
+        const getOrigin = window.location.origin;
         return (
           <div className="submenu-container">
             <div className={`sidebar-link`}>
               <div className="actions">
                 {leftIcon}
-                <Link className="custom-link" to={item.navigationURL}>
-                  {item.displayName}
-                </Link>
+                {item.navigationURL.indexOf("/digit-ui") === -1 ? (
+                  <a className="custom-link" href={getOrigin + "/employee/" + item.navigationURL}>
+                    {item.displayName}
+                  </a>
+                ) : (
+                  <Link className="custom-link" to={item.navigationURL}>
+                    {item.displayName}
+                  </Link>
+                )}
               </div>
             </div>
           </div>

@@ -83,7 +83,9 @@ const Response = ({ data, onSuccess }) => {
             },
             pitDetail: {
               additionalDetails: {
-                fileStoreId: pitDetail?.images
+                fileStoreId: {
+                  CITIZEN: pitDetail?.images
+                }
               }
             },
             source,

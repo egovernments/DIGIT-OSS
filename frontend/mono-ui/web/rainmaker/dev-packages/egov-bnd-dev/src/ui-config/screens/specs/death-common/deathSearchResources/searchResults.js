@@ -2,16 +2,18 @@ import React from "react";
 import {
   sortByEpoch,
   getEpochForDate,
-  getTextToLocalMapping
+  getTextToLocalMapping,
 } from "../../utils";
-import { download, downloadReceiptFromFilestoreID, downloadChallan } from "egov-common/ui-utils/commons";
-import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
-import {downloadCert} from "../../utils"
-import store from "ui-redux/store";
 import {
-  prepareFinalObject,
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {showHideConfirmationPopup} from "./deathSearchCard";
+  download,
+  downloadReceiptFromFilestoreID,
+  downloadChallan,
+} from "egov-common/ui-utils/commons";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { downloadCert } from "../../utils";
+import store from "ui-redux/store";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { showHideConfirmationPopup } from "./deathSearchCard";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -47,8 +49,8 @@ export const searchResults = {
         labelKey: "BND_COMMON_TABLE_ID",
         options: {
           display: false,
-          viewColumns  :false
-        }
+          viewColumns: false,
+        },
       },
       {
         labelName: "Registration Number",
@@ -56,37 +58,44 @@ export const searchResults = {
       },
       {
         labelName: "Name",
-        labelKey: "BND_COMMON_NAME"
+        labelKey: "BND_COMMON_NAME",
       },
       {
         labelName: "Death Date",
-        labelKey: "BND_DEATH_DATE"
+        labelKey: "BND_DEATH_DATE",
       },
       {
         labelName: "Gender",
-        labelKey: "BND_COMMON_GENDER"
+        labelKey: "BND_COMMON_GENDER",
       },
       {
         labelName: "Mother's Name",
-        labelKey: "BND_COMMON_MOTHERSNAME"
+        labelKey: "BND_COMMON_MOTHERSNAME",
       },
       {
         labelName: "Father's Name",
-        labelKey: "BND_COMMON_FATHERSNAME"
+        labelKey: "BND_COMMON_FATHERSNAME",
       },
       {
         labelName: "Spouse's Name",
-        labelKey: "BND_SPOUSE_NAME_LABEL"
+        labelKey: "BND_SPOUSE_NAME_LABEL",
       },
       {
         labelName: "Action",
         labelKey: "BND_COMMON_TABLE_ACTION",
         options: {
-          display: (process.env.REACT_APP_NAME === "Citizen"),
-          viewColumns  :(process.env.REACT_APP_NAME === "Citizen"),
+          display: process.env.REACT_APP_NAME === "Citizen",
+          viewColumns: process.env.REACT_APP_NAME === "Citizen",
           filter: false,
-          customBodyRender: (value, tableMeta) => value === "PAY AND DOWNLOAD" ? (tableMeta.rowData[4] > 0 ? getActionButton(value, tableMeta):(tableMeta.rowData[4] <= 0 && tableMeta.rowData[13] ? getActionButton(value, tableMeta) : "")) : getActionButton(value, tableMeta)
-        }
+          customBodyRender: (value, tableMeta) =>
+            value === "PAY AND DOWNLOAD"
+              ? tableMeta.rowData[4] > 0
+                ? getActionButton(value, tableMeta)
+                : tableMeta.rowData[4] <= 0 && tableMeta.rowData[13]
+                ? getActionButton(value, tableMeta)
+                : ""
+              : getActionButton(value, tableMeta),
+        },
       },
       // {
       //   labelName: "Status",
@@ -113,26 +122,27 @@ export const searchResults = {
         labelKey: "TENANT_ID",
         options: {
           display: false,
-          viewColumns  :false
-        }
+          viewColumns: false,
+        },
       },
       {
         labelName: "Business Service",
         labelKey: "BUSINESS_SERVICE",
         options: {
           display: false,
-          viewColumns  :false
-        }
+          viewColumns: false,
+        },
       },
       {
         labelName: "BND_VIEW_CERTIFICATE",
         labelKey: "BND_VIEW_CERTIFICATE",
         options: {
-          display: (process.env.REACT_APP_NAME === "Employee"),
-          viewColumns  :(process.env.REACT_APP_NAME === "Employee"),
-          customBodyRender: (value, tableMeta) => getViewButton(value, tableMeta)
-        }
-      }
+          display: process.env.REACT_APP_NAME === "Employee",
+          viewColumns: process.env.REACT_APP_NAME === "Employee",
+          customBodyRender: (value, tableMeta) =>
+            getViewButton(value, tableMeta),
+        },
+      },
       // {
       //   labelName: "Pay Required",
       //   labelKey: "PAYREQUIRED",
@@ -144,16 +154,17 @@ export const searchResults = {
     ],
     title: {
       labelName: "Search Results for Death",
-      labelKey: "BND_SEARCH_TABLE_HEADER"
+      labelKey: "BND_SEARCH_TABLE_HEADER",
     },
-    rows : "",
+    rows: "",
     options: {
       filter: false,
       download: false,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20]
+      ignoreFirstColumnHover: true,
+      rowsPerPageOptions: [10, 15, 20],
     },
     customSortColumn: {
       column: "Death Date",
@@ -163,60 +174,73 @@ export const searchResults = {
           return acc;
         }, []);
         const order = sortDateOrder === "asc" ? true : false;
-        const finalData = sortByEpoch(epochDates, !order).map(item => {
+        const finalData = sortByEpoch(epochDates, !order).map((item) => {
           item.pop();
           return item;
         });
         return { data: finalData, currentOrder: !order ? "asc" : "desc" };
-      }
-    }
-  }
+      },
+    },
+  },
 };
 
 const getActionButton = (value, tableMeta) => {
   return (
-    <a href="javascript:void(0)"
+    <a
+      href="javascript:void(0)"
       style={{
         color: "#FE7A51",
-        cursor: "pointer"
+        cursor: "pointer",
       }}
-      onClick={value => {
+      onClick={(value) => {
+        let tenantId = tableMeta.rowData[9];
+        let id = tableMeta.rowData[0];
+        let action = tableMeta.rowData[8];
+        let businessService = tableMeta.rowData[10];
 
-          let tenantId = tableMeta.rowData[9];
-          let id = tableMeta.rowData[0];
-          let action = tableMeta.rowData[8];
-          let businessService = tableMeta.rowData[10];
+        store.dispatch(
+          prepareFinalObject("bnd.death.download.certificateId", id)
+        );
+        store.dispatch(
+          prepareFinalObject("bnd.death.download.tenantId", tenantId)
+        );
+        store.dispatch(
+          prepareFinalObject(
+            "bnd.death.download.businessService",
+            businessService
+          )
+        );
 
-          store.dispatch(prepareFinalObject("bnd.death.download.certificateId", id));
-          store.dispatch(prepareFinalObject("bnd.death.download.tenantId", tenantId));
-          store.dispatch(prepareFinalObject("bnd.death.download.businessService", businessService));
+        showHideConfirmationPopup(
+          store.getState(),
+          store.dispatch,
+          "getCertificate"
+        );
 
-          showHideConfirmationPopup(store.getState(), store.dispatch, "getCertificate")
-
-      //}
-
+        //}
       }}
     >
-      {getLocaleLabels(value,value)}
+      {getLocaleLabels(value, value)}
     </a>
-  )
-}
+  );
+};
 
 const getViewButton = (value, tableMeta) => {
   return (
-    <a href="javascript:void(0)"
+    <a
+      href="javascript:void(0)"
       style={{
-        color: "#FE7A51",  
-        cursor: "pointer"
+        color: "#FE7A51",
+        cursor: "pointer",
       }}
-      onClick={value => {
-          let id = tableMeta.rowData[0];
-          let tenantId = tableMeta.rowData[9];
-          let url = `/employee/bnd-common/fullViewCertificate?tenantId=${tenantId}&certificateId=${id}&module=death`;
-          document.location.href = `${document.location.origin}${url}`;
+      onClick={(value) => {
+        let id = tableMeta.rowData[0];
+        let tenantId = tableMeta.rowData[9];
+        let url = `/employee/bnd-common/fullViewCertificate?tenantId=${tenantId}&certificateId=${id}&module=death`;
+        document.location.href = `${document.location.origin}${url}`;
       }}
     >
-      {getLocaleLabels(value,value)}
+      {getLocaleLabels(value, value)}
     </a>
-  )
-}
+  );
+};
