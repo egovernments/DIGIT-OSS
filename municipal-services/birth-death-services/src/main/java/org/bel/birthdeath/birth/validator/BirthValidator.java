@@ -36,7 +36,7 @@ public class BirthValidator {
 	}
 	
 	public boolean validateFieldsEmployee(SearchCriteria criteria) {
-		if (criteria.getTenantId() == null || criteria.getTenantId().isEmpty() || criteria.getGender() == null
+		if (criteria.getTenantId() == null || criteria.getTenantId().isEmpty()
 				|| criteria.getFromDate() == null || criteria.getFromDate().isEmpty()  || criteria.getToDate() == null || criteria.getToDate().isEmpty())
 			throw new CustomException("null_input", BirthDeathConstants.B_MANDATORY_MISSING);
 		return true;
