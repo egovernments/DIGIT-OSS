@@ -51,26 +51,26 @@ public class WorkflowController {
 
 
 
-        @RequestMapping(value="/process/_transition", method = RequestMethod.POST)
-        public ResponseEntity<ProcessInstanceResponse> processTransition(@Valid @RequestBody ProcessInstanceRequest processInstanceRequest) {
-                List<ProcessInstance> processInstances =  workflowService.transition(processInstanceRequest);
-                ProcessInstanceResponse response = ProcessInstanceResponse.builder().processInstances(processInstances)
-                        .responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(processInstanceRequest.getRequestInfo(), true))
-                        .build();
-                return new ResponseEntity<>(response,HttpStatus.OK);
-        }
+    @RequestMapping(value="/process/_transition", method = RequestMethod.POST)
+    public ResponseEntity<ProcessInstanceResponse> processTransition(@Valid @RequestBody ProcessInstanceRequest processInstanceRequest) {
+        List<ProcessInstance> processInstances =  workflowService.transition(processInstanceRequest);
+        ProcessInstanceResponse response = ProcessInstanceResponse.builder().processInstances(processInstances)
+                .responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(processInstanceRequest.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
 
 
 
-        @RequestMapping(value="/process/_search", method = RequestMethod.POST)
-        public ResponseEntity<ProcessInstanceResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-                                                              @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
+    @RequestMapping(value="/process/_search", method = RequestMethod.POST)
+    public ResponseEntity<ProcessInstanceResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                          @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
         List<ProcessInstance> processInstances = workflowService.search(requestInfoWrapper.getRequestInfo(),criteria);
-        Integer count = workflowService.getUserBasedProcessInstancesCount(requestInfoWrapper.getRequestInfo(),criteria);
-            ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances).totalCount(count).build();
-                return new ResponseEntity<>(response,HttpStatus.OK);
-        }
+        ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances)
+                .build();
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
     /**
      * Returns the count of records matching the given criteria
@@ -79,18 +79,17 @@ public class WorkflowController {
      * @return
      */
     @RequestMapping(value="/process/_count", method = RequestMethod.POST)
-        public ResponseEntity<Integer> count(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-                                                              @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
-            Integer count = workflowService.count(requestInfoWrapper.getRequestInfo(),criteria);
-            return new ResponseEntity<>(count,HttpStatus.OK);
-        }
+    public ResponseEntity<Integer> count(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                         @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
+        Integer count = workflowService.count(requestInfoWrapper.getRequestInfo(),criteria);
+        return new ResponseEntity<>(count,HttpStatus.OK);
+    }
 
     @RequestMapping(value="/escalate/_search", method = RequestMethod.POST)
     public ResponseEntity<ProcessInstanceResponse> searchEscalatedApplications(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-                                                          @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
+                                                                               @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
         List<ProcessInstance> processInstances = workflowService.escalatedApplicationsSearch(requestInfoWrapper.getRequestInfo(),criteria);
-        Integer count = workflowService.countEscalatedApplications(requestInfoWrapper.getRequestInfo(),criteria);
-        ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances).totalCount(count)
+        ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances)
                 .build();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -101,9 +100,21 @@ public class WorkflowController {
      * @param criteria
      * @return
      */
+
+    /*
+     * @RequestMapping(value="/process/_statuscount", method = RequestMethod.POST)
+     * public ResponseEntity<List> StatusCount(@Valid @RequestBody
+     * RequestInfoWrapper requestInfoWrapper,
+     *
+     * @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) { List result
+     * = workflowService.statusCount(requestInfoWrapper.getRequestInfo(),criteria);
+     * return new ResponseEntity<>(result,HttpStatus.OK); }
+     */
+
     @RequestMapping(value = "/process/_statuscount", method = RequestMethod.POST)
     public ResponseEntity<List> StatusCount(@Valid @RequestBody StatusCountRequest statusCountRequest,
-            @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
+
+                                            @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
         ProcessInstanceSearchCriteria statusCriteria = statusCountRequest.getProcessInstanceSearchCriteria();
         if (statusCriteria == null) {
             statusCriteria = criteria;
@@ -111,5 +122,6 @@ public class WorkflowController {
         List result = workflowService.statusCount(statusCountRequest.getRequestInfo(), statusCriteria);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
 
 }
