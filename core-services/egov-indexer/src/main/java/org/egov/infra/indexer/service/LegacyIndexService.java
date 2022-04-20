@@ -301,6 +301,8 @@ public class LegacyIndexService {
             log.info("Connector already present, no new connector will be created for the topic: " + legacyIndexRequest.getLegacyIndexTopic());
         }catch (ResourceAccessException e){
             throw new CustomException("EG_KAFKA_CONNECT_ERR", "Failed to make request for kafka connector creation. Kafka connect appears to be down with error message : " + e.getMessage());
+        }catch (Exception e){
+            throw new CustomException("EG_KAFKA_CONNECT_ERR", "Some error occurred while creating kafka connector: " + e.getMessage());
         }
     }
 
