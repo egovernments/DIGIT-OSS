@@ -75,9 +75,6 @@ public class BirthRepository {
 	private BirthMasterDtlRowMapper birthMasterDtlRowMapper;
 	
 	@Autowired
-	private BirthCertRowMapper birthCertRowMapper;
-	
-	@Autowired
 	private BirthCertApplnRowMapper certApplnRowMapper;
 	
 	@Autowired
@@ -110,7 +107,7 @@ public class BirthRepository {
         return birthDtls;
 	}
 
-	public List<BirthCertificate> getBirthCertificate(SearchCriteria criteria) {
+	public List<BirthCertificate> getBirthCertificateForPlainSearch(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = QUERY_Master_For_PLAINSEARCH;
 		List<BirthCertificate> birthCertificates =  jdbcTemplate.query(query, preparedStmtList.toArray(), birthCertRowMapper);

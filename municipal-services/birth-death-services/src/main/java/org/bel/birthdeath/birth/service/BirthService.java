@@ -81,7 +81,7 @@ public class BirthService {
 	}
 
 	public List<BirthCertificate> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
-		List<BirthCertificate> birthCertificates = repository.getBirthCertificate(criteria);
+		List<BirthCertificate> birthCertificates = repository.getBirthCertificateForPlainSearch(criteria);
 		return birthCertificates;
 	}
 

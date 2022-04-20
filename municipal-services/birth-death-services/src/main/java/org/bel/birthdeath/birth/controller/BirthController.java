@@ -68,10 +68,10 @@ public class BirthController {
     }
 
     @RequestMapping(value = { "/_plainsearch"}, method = RequestMethod.POST)
-    public ResponseEntity<BirthResponse> plainSearch(@RequestBody RequestInfoWrapper requestInfoWrapper,
+    public ResponseEntity<BirthCertResponse> plainSearch(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                      @Valid @ModelAttribute SearchCriteria criteria) {
         List<BirthCertificate> birthCertificates = birthService.plainSearch(criteria,requestInfoWrapper.getRequestInfo());
-        BirthResponse response = BirthResponse.builder().birthCerts(birthCertificates).responseInfo(
+        BirthCertResponse response = BirthCertResponse.builder().birthCertificates(birthCertificates).responseInfo(
                         responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
