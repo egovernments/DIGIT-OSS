@@ -199,11 +199,14 @@ public class WsQueryBuilder {
 			addToPreparedStatement(preparedStatement, criteria.getApplicationNumbers());
 		}
 		// Added clause to support multiple applicationStatuses search
-		if (!StringUtils.isEmpty(criteria.getApplicationStatus())) {
-			addClauseIfRequired(preparedStatement, query);
-			query.append("  conn.applicationStatus IN (").append(createQuery(criteria.getApplicationStatus()))
-					.append(")");
-			addToPreparedStatement(preparedStatement, criteria.getApplicationStatus());
+		if (!CollectionUtils.isEmpty(criteria.getApplicationStatus())) {
+			if (StringUtils.isEmpty(criteria.getSearchType())
+					|| !criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION)) {
+				addClauseIfRequired(preparedStatement, query);
+				query.append("  conn.applicationStatus IN (").append(createQuery(criteria.getApplicationStatus()))
+						.append(")");
+				addToPreparedStatement(preparedStatement, criteria.getApplicationStatus());
+			}
 		}
 		// Added clause to support assignee search
 		if (!StringUtils.isEmpty(criteria.getAssignee())) {
@@ -231,6 +234,10 @@ public class WsQueryBuilder {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.isoldapplication = ? ");
 			preparedStatement.add(Boolean.FALSE);
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" conn.connectionno is not null ");
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" conn.applicationstatus in ('APPROVED','CONNECTION_ACTIVATED') ");
 		}
 		if (!StringUtils.isEmpty(criteria.getLocality())) {
 			addClauseIfRequired(preparedStatement, query);
