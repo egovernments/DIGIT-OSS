@@ -4,6 +4,8 @@ import { withStyles } from "@material-ui/core/styles";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import store from "ui-redux/store";
+
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { connect } from "react-redux";
@@ -26,8 +28,11 @@ class CheckboxLabels extends React.Component {
 
   handleChange = name => event => {
     this.setState({ [name]: event.target.checked });
-    const { jsonPath, prepareFinalObject } = this.props;
+    const { jsonPath, prepareFinalObject,callBack } = this.props;
+
     prepareFinalObject(jsonPath, !this.state.checkedG);
+    callBack( store.getState(),store.dispatch
+    )
   };
 
   render() {
