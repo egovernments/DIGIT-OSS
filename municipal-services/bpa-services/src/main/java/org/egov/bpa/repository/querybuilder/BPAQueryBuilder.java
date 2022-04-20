@@ -49,7 +49,9 @@ public class BPAQueryBuilder {
 		StringBuilder builder = new StringBuilder(QUERY);
 
 		if (criteria.getTenantId() != null) {
-			if (Boolean.TRUE.equals(centralInstanceUtil.isTenantIdStateLevel(criteria.getTenantId()))) {
+		String[] t =	criteria.getTenantId().split("\\.");
+			System.out.println(t.length);
+			if (criteria.getTenantId().split("\\.").length == 2) {
 
 				addClauseIfRequired(preparedStmtList, builder);
 				builder.append(" bpa.tenantid like ?");
