@@ -13,48 +13,29 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
   const tableColumnConfig = useMemo(() => {
     return [
       {
-        Header: t("NOC_APP_NO_LABEL"),
-        accessor: "applicationNo",
-        disableSortBy: true,
-        Cell: ({ row }) => {
-          return (
-            <div>
-              <Link to={`${parentRoute}/inbox/application-overview/${row.original["applicationId"]}`}>
-                <span className="link">{row.original["applicationId"]}</span>
-              </Link>
-            </div>
-          );
-        },
-      },
-      {
-        Header: t("TL_COMMON_TABLE_COL_APP_DATE"),
-        accessor: "applicationDate",
-        Cell: ({ row }) => (row.original?.["date"] ? GetCell(format(new Date(row.original?.["date"]), "dd/MM/yyyy")) : ""),
-      },
-      // {
-      //   Header: t("ES_INBOX_LOCALITY"),
-      //   accessor: (row) => t(row?.locality),
-      // disableSortBy: true,
-
-      // },
-      {
-        Header: t("NOC_MODULE_SOURCE_LABEL"),
-        accessor: (row) => t(`MODULE_${row?.source}`),
+        Header: t("WS_COMMON_TABLE_COL_SERVICE_LABEL"),
         disableSortBy: true,
       },
       {
-        Header: t("NOC_STATUS_LABEL"),
-        accessor: (row) => t(row?.status),
+        Header: t("WS_COMMON_TABLE_COL_APP_NO_LABEL"),
+        disableSortBy: true,
+      },
+      ,
+      {
+        Header: t("CORE_COMMON_NAME"),
         disableSortBy: true,
       },
       {
-        Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
-        accessor: (row) => row?.owner,
+        Header: t("WS_COMMON_TABLE_COL_ADDRESS"),
         disableSortBy: true,
       },
       {
-        Header: t("ES_INBOX_SLA_DAYS_REMAINING"),
-        accessor: (row) => GetStatusCell(row?.sla),
+        Header: t("WS_COMMON_TABLE_COL_APPLICATION_STATUS"),
+        disableSortBy: true,
+      },
+      {
+        Header: t("WS_COMMON_TABLE_COL_TASK_OWNER"),
+        disableSortBy: true,
       },
     ];
   });
