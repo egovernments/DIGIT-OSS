@@ -1,7 +1,7 @@
-import { BackButton } from "@egovernments/digit-ui-react-components";
+import { BackButton, Card, WhatsappIcon } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
 import ErrorBoundary from "../../components/ErrorBoundaries";
 import { AppHome } from "../../components/Home";
 import TopBarSideBar from "../../components/TopBarSideBar";
@@ -11,6 +11,7 @@ import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
 import UserProfile from "./Home/UserProfile";
+import HowItWorks from "./HowItWorks/howItWorks";
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -77,6 +78,16 @@ const Home = ({
           <div className="moduleLinkHomePageModuleLinks">
             <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />
           </div>
+          <Card>
+            <Link>
+              <span className="link" style={{ color: "#25D366" }}>
+                  {t("PAY_VIA_WHATSAPP")}
+              </span>
+              <span style={{float: right}}>
+                <WhatsappIcon></WhatsappIcon>
+              </span>
+            </Link>
+          </Card>
         </div>
       </Route>
     );
@@ -136,6 +147,13 @@ const Home = ({
           <Route path={`${path}/user/profile`}>
             <UserProfile stateCode={stateCode} userType={"citizen"} cityDetails={cityDetails} />
           </Route>
+          {/* {modules.map(({ code }, index) => {
+            return (
+              <Route path={`${path}/howItWorks`}>
+                <HowItWorks moduleCode={code}/>
+              </Route>
+            );
+  })} */}
 
           <ErrorBoundary>
             {appRoutes}

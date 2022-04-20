@@ -5,7 +5,7 @@ import { shouldHideBackButton } from "../../utils";
 import Search from "../employee/Search";
 import { useTranslation } from "react-i18next";
 import { PTMyPayments } from "./MyPayments";
-import PTHowItWorks from "./HowItWorks/howItWorks";
+import PTHowItWorks from "./PTHowItWorks/PTHowItWorks";
 const hideBackButtonConfig = [
   { screenPath: "property/new-application/acknowledgement" },
   { screenPath: "property/edit-application/acknowledgement" },
@@ -48,7 +48,7 @@ const App = () => {
           <PrivateRoute path={`${path}/property/owner-history/:tenantId/:propertyIds`} component={PropertyOwnerHistory}></PrivateRoute>
           {/* <Redirect to={`/`}></Redirect> */}
           <PrivateRoute path={`${path}/property/search`} component={(props) => <Search {...props} t={t} parentRoute={path} />} />
-          <PrivateRoute path={`${path}/howItWorks`} component={PTHowItWorks}></PrivateRoute>
+          <PrivateRoute path={`${path}/howItWorks`} component={PTHowItWorks}/>
         </AppContainer>
       </Switch>
     </span>

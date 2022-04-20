@@ -1,0 +1,42 @@
+[
+    {
+        "moduleCode" : "PT",
+        "videosJson":  [
+            {
+                "headerLabel": "Adding a Property",
+                "description": "Pay your property tax dues before due date and get 10% rebate"
+            },
+            {
+                "headerLabel": "Property Bifurcation",
+                "description": "Pay your property tax dues before due date and get 10% rebate"
+            },
+            {
+                "headerLabel": "Modifying Property Details",
+                "description": "Pay your property tax dues before due date and get 10% rebate"
+            }
+        ],
+        "pdfHeader": "CITIZEN_CHARTER_DOCUMENT",
+        "pdfDesc": "New Municipal document has been released in July 2021 and will be effect from October 2021"
+    },
+
+    {
+        "moduleCode" : "TL",
+        "videosJson":  [
+            {
+                "headerLabel": "Adding a Trade License",
+                "description": "Pay your property tax dues before due date and get 10% rebate"
+            },
+            {
+                "headerLabel": "TL Bifurcation",
+                "description": "Pay your property tax dues before due date and get 10% rebate"
+            },
+            {
+                "headerLabel": "Modifying TL Details",
+                "description": "Pay your property tax dues before due date and get 10% rebate"
+            }
+        ],
+        "pdfHeader": "CITIZEN_CHARTER_DOCUMENT",
+        "pdfDesc": "New Municipal document has been released in July 2021 and will be effect from October 2021"
+    }
+
+]
