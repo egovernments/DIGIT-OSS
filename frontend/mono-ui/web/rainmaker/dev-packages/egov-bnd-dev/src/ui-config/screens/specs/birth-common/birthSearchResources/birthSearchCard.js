@@ -101,19 +101,17 @@ const cbChanged = (action, state, dispatch) => {
     "tenantId"
   );
 
-  loadHospitals(action, state, dispatch, "birth", tenantId).then((response) => {
-    if (response && response.hospitalDtls) {
-      for (let hospital of response.hospitalDtls) {
-        hospital.code = hospital.id;
-        hospital.name = hospital.name;
-      }
-      response.hospitalDtls.push({
-        code: "0",
-        name: "Others / Non Institutional",
-      });
-      dispatch(prepareFinalObject("bnd.allHospitals", response.hospitalDtls));
+  if(response && response.MdmsRes && response.MdmsRes["birth-death-service"] && response.MdmsRes["birth-death-service"].hospitalList)
+  {
+   const hptList= response.MdmsRes["birth-death-service"].hospitalList;
+   const newList=[...hptList.filter(hos=>hos.active), {
+    hospitalName : "Others"      }]
+    for (let hospital of newList) {
+      hospital.code = hospital.hospitalName;
+      hospital.name = hospital.hospitalName;
     }
-  });
+    dispatch(prepareFinalObject("bnd.allHospitals", newList));
+  }
 };
 
 const setVisibilityOptionsSet1 = (state, dispatch, visible) => {

@@ -69,13 +69,16 @@ const newRegistration = {
     let module = getQueryArg(window.location.href, "module");
     loadHospitals(action, state, dispatch, "death",getTenantId()).then((response)=>{
 
-      if(response && response.hospitalDtls)
+      if(response && response.MdmsRes && response.MdmsRes["birth-death-service"] && response.MdmsRes["birth-death-service"].hospitalList)
       {
-        for (let hospital of response.hospitalDtls) {
-          hospital.code = hospital.name;
-          hospital.name = hospital.name;
+       const hptList= response.MdmsRes["birth-death-service"].hospitalList;
+       const newList=[...hptList.filter(hos=>hos.active), {
+        hospitalName : "Others"      }]
+        for (let hospital of newList) {
+          hospital.code = hospital.hospitalName;
+          hospital.name = hospital.hospitalName;
         }
-        dispatch(prepareFinalObject("bnd.allHospitals", response.hospitalDtls));
+        dispatch(prepareFinalObject("bnd.allHospitals", newList));
       }
     if(userAction=="EDIT" && id && module)
     {

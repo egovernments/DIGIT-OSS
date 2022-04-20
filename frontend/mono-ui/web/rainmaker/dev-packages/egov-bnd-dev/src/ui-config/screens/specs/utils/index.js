@@ -662,7 +662,19 @@ export const loadHospitals = async (
   module,
   tenantId
 ) => {
-  let requestBody = {};
+  let requestBody = {"MdmsCriteria": {
+    "tenantId": tenantId,
+    "moduleDetails": [
+        {
+            "moduleName": "birth-death-service",
+            "masterDetails": [
+                {
+                    "name": "hospitalList"
+                }
+            ]
+        }
+    ]
+}};
   let payload = null;
 
   const queryParams = [{ key: "tenantId", value: tenantId }];
@@ -670,8 +682,8 @@ export const loadHospitals = async (
   try {
     payload = await httpRequest(
       "post",
-      "birth-death-services/common/getHospitals",
-      "getHospitals",
+      "egov-mdms-service/v1/_search",
+      "_search",
       queryParams,
       requestBody
     );
