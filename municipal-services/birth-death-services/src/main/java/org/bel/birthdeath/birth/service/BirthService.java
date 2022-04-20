@@ -80,9 +80,9 @@ public class BirthService {
 		return birthDtls;
 	}
 
-	public List<EgBirthDtl> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
-		List<EgBirthDtl> birthDtls = repository.getBirthDtlsForPlainSearch(criteria);
-		return birthDtls;
+	public List<BirthCertificate> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<BirthCertificate> birthCertificates = repository.getBirthCertificate(criteria);
+		return birthCertificates;
 	}
 
 	public BirthCertificate download(SearchCriteria criteria, RequestInfo requestInfo) {
