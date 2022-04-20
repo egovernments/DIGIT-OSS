@@ -169,19 +169,8 @@ public class WaterServiceImpl implements WaterService {
 		}
 		waterConnectionValidator.validatePropertyForConnection(waterConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(waterConnectionList, criteria, requestInfo);
+		enrichmentService.enrichProcessInstance(waterConnectionList, criteria, requestInfo);
 		return (waterConnectionList.size());
-		//return getWaterConnectionsCount(criteria, requestInfo);
-	}
-	/**
-	 * 
-	 * @param criteria
-	 *            WaterConnectionSearchCriteria contains search criteria on water
-	 *            connection
-	 * @param requestInfo
-	 * @return count of matching water connection
-	 */
-	public Integer getWaterConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
-		return waterDao.getWaterConnectionsCount(criteria, requestInfo);
 	}
 
 	/**
