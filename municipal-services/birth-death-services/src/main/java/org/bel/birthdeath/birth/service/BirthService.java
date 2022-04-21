@@ -80,6 +80,11 @@ public class BirthService {
 		return birthDtls;
 	}
 
+	public List<BirthCertificate> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<BirthCertificate> birthCertificates = repository.getBirthCertificateForPlainSearch(criteria);
+		return birthCertificates;
+	}
+
 	public BirthCertificate download(SearchCriteria criteria, RequestInfo requestInfo) {
 		try {
 		BirthCertificate birthCertificate = new BirthCertificate();
@@ -214,10 +219,4 @@ public class BirthService {
                 .append(StringUtils.join(criteria.getConsumerCodes(),","))
                 .append("&").append("status=APPROVED,DEPOSITED,NEW");
     }
-
-	public List<EgBirthDtl> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
-		List<EgBirthDtl> birthDtls = new ArrayList<EgBirthDtl>() ;
-		birthDtls = repository.getBirthDtlsForPlainSearch(criteria);
-		return birthDtls;
-	}
 }

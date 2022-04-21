@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -22,8 +24,8 @@ public class BirthCertResponse {
   @JsonProperty("responseInfo")
   private ResponseInfo responseInfo = null;
 
-  //@JsonProperty("birthCertificate")
-  //private BirthCertificate birthCertificate = null;
+  @JsonProperty("birthCertificate")
+  private List<BirthCertificate> birthCertificates = null;
   
   @JsonProperty("filestoreId")
   private String filestoreId;

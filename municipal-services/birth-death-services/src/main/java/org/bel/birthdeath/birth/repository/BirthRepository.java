@@ -41,6 +41,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -97,12 +98,20 @@ public class BirthRepository {
 	
 	@Value("${egov.bnd.freedownload.tenants}")
     private String freeDownloadTenants;
+
+	private final String QUERY_Birth_For_PLAINSEARCH = "SELECT * FROM eg_birth_cert_request";
 	
 	public List<EgBirthDtl> getBirthDtls(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
         String query = allqueryBuilder.getBirtDtls(criteria, preparedStmtList);
         List<EgBirthDtl> birthDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         return birthDtls;
+	}
+
+	public List<BirthCertificate> getBirthCertificateForPlainSearch(SearchCriteria criteria) {
+		String query = QUERY_Birth_For_PLAINSEARCH;
+		List<BirthCertificate> birthCertificates =  jdbcTemplate.query(query, new BeanPropertyRowMapper(BirthCertificate.class));
+		return birthCertificates;
 	}
 
 	public void save(BirthCertRequest birthCertRequest) {
@@ -255,12 +264,5 @@ public class BirthRepository {
         		commonUtils.maskAndShowLast4Chars(birthDtl);
         });
         return birthCertMasterDtl;
-	}
-
-	public List<EgBirthDtl> getBirthDtlsForPlainSearch(SearchCriteria criteria) {
-		List<Object> preparedStmtList = new ArrayList<>();
-		String query = allqueryBuilder.getBirtDtlsForPlainSearch(criteria, preparedStmtList);
-		List<EgBirthDtl> birthDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-		return birthDtls;
 	}
 }

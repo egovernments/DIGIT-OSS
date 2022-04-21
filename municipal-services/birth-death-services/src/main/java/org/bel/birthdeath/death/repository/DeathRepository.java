@@ -39,6 +39,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -95,12 +96,20 @@ public class DeathRepository {
 	
 	@Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+	private final String QUERY_Death_For_PLAINSEARCH = "SELECT * FROM eg_death_cert_request";
 	
 	public List<EgDeathDtl> getDeathDtls(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
         String query = allqueryBuilder.getDeathDtls(criteria, preparedStmtList);
         List<EgDeathDtl> deathDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         return deathDtls;
+	}
+
+	public List<DeathCertificate> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
+		String query = QUERY_Death_For_PLAINSEARCH;
+		List<DeathCertificate> deathCertificates =  jdbcTemplate.query(query, new BeanPropertyRowMapper(DeathCertificate.class));
+		return deathCertificates;
 	}
 
 	public void save(DeathCertRequest deathCertRequest) {
@@ -254,12 +263,5 @@ public class DeathRepository {
         		commonUtils.maskAndShowLast4Chars(deathDtl);
         });
         return deathCertMasterDtl;
-	}
-
-	public List<EgDeathDtl> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
-		List<Object> preparedStmtList = new ArrayList<>();
-		String query = allqueryBuilder.getDeathDtlsForPlainSearch(criteria, preparedStmtList);
-		List<EgDeathDtl> deathDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-		return deathDtls;
 	}
 }

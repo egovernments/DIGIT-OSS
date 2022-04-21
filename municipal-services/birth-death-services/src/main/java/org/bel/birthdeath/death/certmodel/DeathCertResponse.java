@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -22,8 +24,8 @@ public class DeathCertResponse {
   @JsonProperty("responseInfo")
   private ResponseInfo responseInfo = null;
 
-  //@JsonProperty("deathCertificate")
-  //private DeathCertificate deathCertificate = null;
+  @JsonProperty("deathCertificate")
+  private List<DeathCertificate> deathCertificates = null;
   
   @JsonProperty("filestoreId")
   private String filestoreId;
