@@ -112,7 +112,7 @@ const EmployeeChallan = (props) => {
                   className="multilink-block-wrapper"
                   // label={t(`ES_DSS_DOWNLOAD`)}
                   label=" "
-                  icon={<DownloadBtnCommon className="mrsm" />}
+                  icon={<DownloadBtnCommon />}
                   onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
                   displayOptions={isDisplayDownloadMenu}
                   options={challanDetails?.applicationStatus === "PAID" ? ["CHALLAN", "RECEIPT"] : ["CHALLAN"]}
