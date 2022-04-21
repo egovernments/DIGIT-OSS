@@ -17,7 +17,6 @@ import { searchApiCall } from "./function";
 import "./index.css";
 
 // const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-// console.log("tenantId--- ", tenantId);
 const resetFields = (state, dispatch) => {
   //const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 
@@ -259,8 +258,8 @@ export const searchSetCommon = getCommonContainer({
     afterFieldChange: (action, state, dispatch) => {},
   }),
   cantonmentSelect: {
-    uiFramework: "custom-containers",
-    moduleName: "egov-abg",
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bnd",
     componentPath: "AutosuggestContainer",
     jsonPath: "bnd.death.tenantId",
     sourceJsonPath: "bnd.allTenants",
@@ -293,7 +292,6 @@ export const searchSetCommon = getCommonContainer({
         shrink: true,
       },
       onClickHandler: (action, state, dispatch) => {
-        //console.log(action,state, dispatch );
       },
     },
     gridDefination: {
@@ -381,7 +379,7 @@ export const searchSet2 = getCommonContainer({
     },
   }),
   hospital: {
-    uiFramework: "custom-containers",
+    uiFramework: "custom-containers-local",
     moduleName: "egov-bnd",
     componentPath: "AutosuggestContainer",
     jsonPath: "bnd.death.hosptialId",
@@ -414,7 +412,6 @@ export const searchSet2 = getCommonContainer({
         shrink: true,
       },
       onClickHandler: (action, state, dispatch) => {
-        //console.log(action,state, dispatch );
       },
     },
     gridDefination: {

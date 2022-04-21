@@ -51,7 +51,6 @@ class SingleApplication extends React.Component {
   };
 
   onCardClick = async (item) => {
-    console.log("The item is ", item);
     const { moduleName, toggleSnackbar, setRoute } = this.props;
     if(moduleName === "BIRTH")
     {
@@ -147,14 +146,13 @@ class SingleApplication extends React.Component {
           } else if (businessService == 'PT.CREATE') {
             setRoute("/property-tax/application-preview?propertyId=" + item.propertyId + "&applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId + "&type=property");
           } else {
-            console.log('Navigation Error');
           }
         } else {
           toggleSnackbar(
             true,
             {
               labelName: "Business service returns empty response!",
-              labelKey: "Business service returns empty response!",
+              labelKey: "BND_NO_BUSINESS_SERVICE",
             },
             "error"
           );
@@ -379,7 +377,7 @@ class SingleApplication extends React.Component {
                 labelKey={"No results Found!"}
                 style={{ marginBottom: 10 }}
               />
-              <Button
+              {/* <Button
                 style={{
                   height: 36,
                   lineHeight: "auto",
@@ -391,7 +389,7 @@ class SingleApplication extends React.Component {
                 onClick={this.onButtonCLick}
               >
                 <Label labelKey={`BND_NEW_APPLICATION`} />
-              </Button>
+              </Button> */}
             </div>
           )}
       </div>

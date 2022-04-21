@@ -420,8 +420,8 @@ export const newRegistrationForm = getCommonCard(
             }
           }),
           hospitalName: {
-            uiFramework: "custom-containers",
-              //moduleName: "egov-lams",
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-bnd",
               componentPath: "AutosuggestContainer",
               jsonPath: "bnd.death.newRegistration.hospitalname",
               sourceJsonPath: "bnd.allHospitals",
@@ -453,7 +453,6 @@ export const newRegistrationForm = getCommonCard(
                   shrink: true
                 },
                 onClickHandler: (action, state, dispatch) => {
-                  //console.log(action,state, dispatch );
                 },
               },
               gridDefination: {

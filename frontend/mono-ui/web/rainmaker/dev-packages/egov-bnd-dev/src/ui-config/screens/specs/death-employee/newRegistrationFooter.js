@@ -275,6 +275,7 @@ export const postData = async (state, dispatch) => {
             "success"
           )
         );
+        location.reload();
       }
     } else {
       // dispatch(
@@ -284,13 +285,12 @@ export const postData = async (state, dispatch) => {
       // );
     }
   } catch (error) {
-    console.log(error);
     dispatch(
       toggleSnackbar(
         true,
         {
           labelName: "API Error",
-          labelKey: "Session expired. Please login again and try.",
+          labelKey: "BND_SESSION_EXPIRED",
         },
         "info"
       )

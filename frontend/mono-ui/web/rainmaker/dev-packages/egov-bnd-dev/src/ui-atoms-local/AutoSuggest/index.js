@@ -43,7 +43,7 @@ const styles = theme => ({
   },
   ac_placeholder: {
     position: "absolute",
-    left: 2,
+    top: 4,
     fontSize: 16,
     color: "rgba(162, 162, 162, 0.77)"
   },
