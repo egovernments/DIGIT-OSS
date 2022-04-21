@@ -8,7 +8,7 @@ const getSearchField = (field, formState, Controller, register, control, t) => {
     switch (field.type) {
         case "singlevaluelist":
             return (<SearchField>
-                <label>{t(`${field.label}`)}</label>
+                <label>{t(`${field.label}${field.isMandatory?"*":""}`)}</label>
                 <Controller
                     control={control}
                     name={field.name}
@@ -28,7 +28,7 @@ const getSearchField = (field, formState, Controller, register, control, t) => {
             return (
                 <>
                 <SearchField>
-                    <label>{t(field.label)}</label>
+                        <label>{`${t(field.label)}${field.isMandatory ? "*" : ""}`}</label>
                     <Controller 
                     rules = {{
                         required:field.isMandatory

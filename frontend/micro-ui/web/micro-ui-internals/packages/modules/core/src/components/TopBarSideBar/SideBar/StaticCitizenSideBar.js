@@ -167,7 +167,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
     ];
   }
 
-  Object.keys(linkData).map((key) => {
+  Object.keys(linkData)?.map((key) => {
     menuItems.splice(1, 0, { type: "dynamic", moduleName: key, links: linkData[key], icon: linkData[key][0]?.leftIcon });
   });
 

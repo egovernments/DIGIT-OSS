@@ -4,7 +4,9 @@ import { useParams } from "react-router-dom";
 
 const getSearchParamsObj = (field,data,key,t) => {
   let obj = {}
-      switch (field.type) {
+  if (data[key] === undefined || data[key] === '' || field===undefined)
+    return
+      switch (field?.type) {
         case "singlevaluelist":
           const defaultValueObj = field.defaultValue
           const isLoc = field.localisationRequired;
@@ -31,31 +33,47 @@ const getSearchParamsObj = (field,data,key,t) => {
 }
 
 const Report = () => {
+  const [isFormSubmitted,setIsFormSubmitted] = useState(false)
   const { moduleName,reportName } = useParams();
   const {t} = useTranslation()
   const [filter,setFilter] = useState([])
+  const [searchData,setSearchData] = useState({})
   const { isLoading:SearchFormIsLoading, data:SearchFormUIData } = Digit.Hooks.reports.useReportMeta.fetchMetaData(moduleName,reportName,"pb.amritsar")
 
   const { isLoading: isLoadingReportsData, data: ReportsData } = Digit.Hooks.reports.useReportMeta.fetchReportData(moduleName, reportName, "pb.amritsar", filter,{
-    enabled: !!filter.length > 0
+    //enabled: !!filter.length > 0
+    enabled: isFormSubmitted 
   })
 
 
   const SearchApplication = Digit.ComponentRegistryService.getComponent("ReportSearchApplication");
 
   const onSubmit = (data) => {
+    setSearchData(data)
     const reportData = SearchFormUIData.reportDetails.searchParams;
     let searchParams = []
     Object.keys(data).map((key) => {
       const field = reportData.filter(field => field.name === key )[0]
       const obj = getSearchParamsObj(field,data,key,t)
+      if(obj)
       searchParams.push(obj)
     })
+    
     setFilter(searchParams)
+    setIsFormSubmitted(true)
   }
 
   return (
-    <SearchApplication onSubmit={onSubmit} isLoading={SearchFormIsLoading} data={SearchFormUIData}/>
+    <SearchApplication 
+    onSubmit={onSubmit} 
+    isLoading={SearchFormIsLoading} 
+    data={SearchFormUIData}
+    tableData={!isLoadingReportsData && ReportsData?.reportData.length > 0 ? ReportsData : { display: "ES_COMMON_NO_DATA" }}
+    isTableDataLoading={isLoadingReportsData}
+    Count={ReportsData?.reportData.length}
+    searchData={searchData}
+    reportName={reportName}
+    />
   )
 }
 
