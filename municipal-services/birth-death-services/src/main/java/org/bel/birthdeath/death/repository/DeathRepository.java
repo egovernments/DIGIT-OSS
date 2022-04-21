@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bel.birthdeath.birth.certmodel.BirthCertificate;
 import org.bel.birthdeath.common.contract.BirthPdfApplicationRequest;
 import org.bel.birthdeath.common.contract.DeathPdfApplicationRequest;
 import org.bel.birthdeath.common.contract.EgovPdfResp;
@@ -39,6 +40,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -95,6 +97,8 @@ public class DeathRepository {
 	
 	@Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+	private static final String QUERY_Death_For_PLAINSEARCH = "SELECT * FROM eg_death_cert_request";
 	
 	public List<EgDeathDtl> getDeathDtls(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
@@ -103,11 +107,10 @@ public class DeathRepository {
         return deathDtls;
 	}
 
-	public List<EgDeathDtl> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
-		List<Object> preparedStmtList = new ArrayList<>();
-		String query = allqueryBuilder.getDeathDtlsForPlainSearch(criteria, preparedStmtList);
-		List<EgDeathDtl> deathDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-		return deathDtls;
+	public List<DeathCertificate> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
+		String query = QUERY_Death_For_PLAINSEARCH;
+		List<DeathCertificate> deathCertificates =  jdbcTemplate.query(query, new BeanPropertyRowMapper(DeathCertificate.class));
+		return deathCertificates;
 	}
 
 	public void save(DeathCertRequest deathCertRequest) {

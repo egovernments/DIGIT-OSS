@@ -66,10 +66,10 @@ public class DeathController {
     }
 
     @RequestMapping(value = { "/_plainsearch"}, method = RequestMethod.POST)
-    public ResponseEntity<DeathResponse> plainSearch(@RequestBody RequestInfoWrapper requestInfoWrapper,
+    public ResponseEntity<DeathCertResponse> plainSearch(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                      @Valid @ModelAttribute SearchCriteria criteria) {
-        List<EgDeathDtl> deathCerts = deathService.plainSearch(criteria,requestInfoWrapper.getRequestInfo());
-        DeathResponse response = DeathResponse.builder().deathCerts(deathCerts).responseInfo(
+        List<DeathCertificate> deathCertificates = deathService.plainSearch(criteria,requestInfoWrapper.getRequestInfo());
+        DeathCertResponse response = DeathCertResponse.builder().deathCertificates(deathCertificates).responseInfo(
                         responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
