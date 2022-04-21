@@ -25,12 +25,14 @@ const styles = theme => ({
     height: 250
   },
   ac_input: {
+    marginTop:"-5px",
     display: "flex",
     padding: 0
   },
   ac_valueContainer: {
     display: "flex",
     // flexWrap: "wrap",
+    // marginTop:'-2px',
     flex: 1,
     alignItems: "center"
   },

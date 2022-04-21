@@ -974,10 +974,10 @@ export const captureSource = () => {
   else localStorageSet("isNative", false);
   const isNative = localStorageGet("isNative");
   try {
-    let source = ifUserRoleExists("CITIZEN")
-      ? isNative
+    let source = process.env.REACT_APP_NAME !== "Employee"
+      ? (isNative
         ? "mobileapp"
-        : "web"
+        : "web")
       : "ivr";
     return source;
   } catch (error) {
