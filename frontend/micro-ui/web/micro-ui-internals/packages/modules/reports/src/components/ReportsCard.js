@@ -3,9 +3,9 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 const ReportsCard = () => {
-    if (!Digit.Utils.receiptsAccess()) {
-        return null;
-    }
+    // if (!Digit.Utils.receiptsAccess()) {
+    //     return null;
+    // }
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const { t } = useTranslation();
 
@@ -17,8 +17,8 @@ const ReportsCard = () => {
         ],
         links: [
             {
-                label: t("CR_SEARCH_COMMON_HEADER"),
-                link: `/digit-ui/employee/receipts/inbox`,
+                label: t("ACTION_TEST_DEFAULTER_REPORT"),
+                link: `/digit-ui/employee/reports/search/pt-reports/DefaulterReport`,
             },
         ],
     };

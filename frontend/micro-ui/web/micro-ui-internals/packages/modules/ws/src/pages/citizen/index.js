@@ -49,7 +49,8 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/connection/additional/:acknowledgementIds`} component={WSAdditionalDetails} />
           <PrivateRoute path={`${path}/connection/details/:acknowledgementIds`} component={ConnectionDetails} />
           <PrivateRoute path={`${path}/consumption/details`} component={consumptionDetails} />
-          <PrivateRoute path={`${path}/edit-application`} component={EditApplication} />
+          <PrivateRoute path={`${path}/edit-application/:tenantId`} component={EditApplication} />
+          <PrivateRoute path={`${path}/modify-connection/:tenantId`} component={EditApplication} />
         </Switch>
       </div>
     </React.Fragment>

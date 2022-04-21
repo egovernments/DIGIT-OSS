@@ -207,6 +207,7 @@ import useTenantsBills from "./bills/useTenants";
 import useMeterReadingCreateAPI from "./ws/useMeterConnectionCreateAPI";
 import useGetMeterStatusList from "./ws/useGetMeterStatusList";
 import useGetBillingPeriodValidation from "./ws/useBillingPeriodValidation";
+import  useReportMeta  from "./reports/useReport";
 
 const pgr = {
   useComplaintDetails,
@@ -416,6 +417,10 @@ const ws = {
   useGetBillingPeriodValidation,
 };
 
+const reports = {
+  useReportMeta
+}
+
 const Hooks = {
   useSessionStorage,
   useQueryParams,
@@ -463,6 +468,7 @@ const Hooks = {
   noc,
   ws,
   useCustomMDMS,
+  reports
 };
 
 export default Hooks;

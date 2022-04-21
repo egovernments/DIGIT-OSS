@@ -222,17 +222,25 @@ public class NotificationService {
 				+ (fsmRequest.getWorkflow() == null ? "" : "_" + fsmRequest.getWorkflow().getAction());
 			}
 			
-			if(FSMConstants.FSM_SMS_PENDING_APPL_FEE_PAYMENT_SCHEDULE.equalsIgnoreCase(localizationMessageKey)) {
-				messageCode=localizationMessageKey;
-			}
+			/*
+			 * if(FSMConstants.FSM_SMS_PENDING_APPL_FEE_PAYMENT_SCHEDULE.equalsIgnoreCase(
+			 * localizationMessageKey)) { messageCode=localizationMessageKey; }
+			 * 
+			 * if(FSMConstants.WF_ACTION_DSO_ACCEPT.equalsIgnoreCase(fsmRequest.getWorkflow(
+			 * ).getAction())) { messageCode=FSMConstants.FSM_SMS_DISPOSAL_IN_PROGRESS_PAY;
+			 * }
+			 */
 			
-			if(FSMConstants.WF_ACTION_DSO_ACCEPT.equalsIgnoreCase(fsmRequest.getWorkflow().getAction())) {
-				messageCode=FSMConstants.FSM_SMS_DISPOSAL_IN_PROGRESS_PAY;
-			}
-			
-		}else {
+		} /*
+			 * else { messageCode=localizationMessageKey; }
+			 */
+		
+		log.info("Printing the value of before final messageCode:: "+ messageCode);
+		if(null==messageCode) {
 			messageCode=localizationMessageKey;
 		}
+		log.info("Printing the value of final messageCode:: "+ messageCode);
+		
 		Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
 		log.info("localizationMessageKey ::::  {} "+localizationMessageKey);
 		log.info("messageCode ::::  {} "+messageCode);

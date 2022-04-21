@@ -95,13 +95,17 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
   let name=t(data?.name)||"";
 
   const getWidth = (data) => {
-    if (isMobile) return t(`TIP_${data.name}`).length < 50 ? "fit-content" : 300;
+    if (isMobile) return "auto";
     else return t(`TIP_${data.name}`).length < 50 ? "fit-content" : 400;
+    // if (isMobile) return t(`TIP_${data.name}`).length < 50 ? "fit-content" : 300;
+    // else return t(`TIP_${data.name}`).length < 50 ? "fit-content" : 400;
   }
 
   const getHeight = (data) => {
-    if (isMobile) return t(`TIP_${data.name}`).length < 50 ? 50 : "auto";
+    if (isMobile) return "auto";
     else return 50;
+    // if (isMobile) return t(`TIP_${data.name}`).length < 50 ? 50 : "auto";
+    // else return 50;
   }
 
   return (
@@ -113,10 +117,7 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
         <span
           className="tooltiptext"
           style={{
-            //whiteSpace: "nowrap",
-            // marginLeft: "-500%" ,
             fontSize: "medium",
-            // wordBreak: "break-word", overflowWrap: "break-word",
             width: getWidth(data),
             height: getHeight(data),
             whiteSpace: "normal",

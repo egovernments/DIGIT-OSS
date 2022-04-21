@@ -19,6 +19,7 @@ import {
   Rating,
   ActionLinks,
   Header,
+  ImageViewer
 } from "@egovernments/digit-ui-react-components";
 
 import ActionModal from "./Modal";
@@ -28,6 +29,7 @@ import { useQueryClient } from "react-query";
 
 import { Link, useHistory, useParams } from "react-router-dom";
 import { actions } from "react-table";
+import { ViewImages } from "../../../components/ViewImages";
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -41,6 +43,7 @@ const ApplicationDetails = (props) => {
   const [config, setCurrentConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
+  const [imageZoom, setImageZoom] = useState(null);
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber, {}, props.userType);
@@ -136,6 +139,14 @@ const ApplicationDetails = (props) => {
     closeModal();
   };
 
+  function zoomImageWrapper(imageSource, index) {
+    setImageZoom(imageSource);
+  }
+
+  function onCloseImageZoom() {
+    setImageZoom(null);
+  }
+
   const getTimelineCaptions = (checkpoint) => {
     const __comment = checkpoint?.comment?.split("~");
     const reason = __comment ? __comment[0] : null;
@@ -185,7 +196,7 @@ const ApplicationDetails = (props) => {
         name: checkpoint?.assigner,
         mobileNumber: checkpoint?.assigner?.mobileNumber
       };
-      if (checkpoint?.numberOfTrips) caption.comment= `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`
+      if (checkpoint?.numberOfTrips) caption.comment = `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`
       return <TLCaption data={caption} />;
     }
   };
@@ -235,6 +246,19 @@ const ApplicationDetails = (props) => {
                 </StatusTable>
               </React.Fragment>
             ))}
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN?.length &&
+              <>
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t('ES_FSM_SUB_HEADING_CITIZEN_UPLOADS')}</CardSectionHeader>
+                <ViewImages fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN} tenantId={state} onClick={(source, index) => zoomImageWrapper(source, index)} />
+              </>
+            }
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO?.length &&
+              <>
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t('ES_FSM_SUB_HEADING_DSO_UPLOADS')}</CardSectionHeader>
+                <ViewImages fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO} tenantId={tenantId} onClick={(source, index) => zoomImageWrapper(source, index)} />
+              </>
+            }
+            {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
 
             <BreakLine />
             {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
@@ -289,7 +313,7 @@ const ApplicationDetails = (props) => {
             />
           )}
           {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
-            <ActionBar>
+            <ActionBar style={{ zIndex: '19' }}>
               {displayMenu && workflowDetails?.data?.nextActions ? (
                 <Menu
                   localeKeyPrefix={"ES_FSM"}
