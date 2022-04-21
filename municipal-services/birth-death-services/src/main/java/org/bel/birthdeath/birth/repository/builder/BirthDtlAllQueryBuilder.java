@@ -73,7 +73,8 @@ public class BirthDtlAllQueryBuilder {
     		"left join eg_birth_mother_info bmot on bmot.birthdtlid = bdtl.id " ;
     
     private static String applsQuery ="select breq.birthCertificateNo, breq.createdtime, breq.status, bdtl.registrationno, bdtl.tenantid, "
-    		+ "concat(COALESCE(bdtl.firstname,'') , ' ', COALESCE(bdtl.middlename,'') ,' ', COALESCE(bdtl.lastname,'')) as name, breq.filestoreid "
+    		+ "concat(COALESCE(bdtl.firstname,'') , ' ', COALESCE(bdtl.middlename,'') ,' ', COALESCE(bdtl.lastname,'')) as name, "
+    		+ "CASE WHEN breq.lastmodifiedtime/1000 < (extract(epoch from NOW())-?*24*60*60) THEN 'EXPIRED' ELSE breq.filestoreid END as filestoreid "
     		+ "from eg_birth_cert_request breq left join eg_birth_dtls bdtl on bdtl.id=breq.birthDtlId where  "
     		+ "breq.createdby=? order by breq.createdtime DESC ";
     
@@ -126,7 +127,7 @@ public class BirthDtlAllQueryBuilder {
 
 	public String searchApplications( String uuid, List<Object> preparedStmtList) {
 		StringBuilder builder = new StringBuilder(applsQuery);
-		//preparedStmtList.add(config.getDownloadBufferDays());
+		preparedStmtList.add(config.getDownloadBufferDays());
 		preparedStmtList.add(uuid);
 		return builder.toString();
 	}
