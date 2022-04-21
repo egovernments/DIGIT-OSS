@@ -3,9 +3,14 @@ import ErrorComponent from "./ErrorComponent";
 
 const Redircter = () => {
   const path = Digit.UserService.getType() === "employee" ? "/digit-ui/employee/user/error" : "/digit-ui/citizen/error";
-  if(window.location.href.includes('employee/user/error')||window.location.href.includes('citizen/error') ||process.env.NODE_ENV !== "development"  ){
+  debugger;
+  if (
+    window.location.href.includes("employee/user/error") ||
+    window.location.href.includes("citizen/error") ||
+    process.env.NODE_ENV === "development"
+  ) {
     //do nothing
-  }else{
+  } else {
     window.location.href = path;
   }
   return <span></span>;
@@ -36,7 +41,7 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="error-boundary">
           <Redircter />
-          <ErrorComponent initData={this.props.initData}/>
+          <ErrorComponent initData={this.props.initData} />
           {/* <summary>Something went wrong</summary>
           <details style={{ whiteSpace: "pre-wrap" }}>
             {this.state?.errorStack && this.state.errorStack.toString().substring(0, 600)}
