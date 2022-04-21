@@ -101,17 +101,21 @@ const cbChanged = (action, state, dispatch) => {
     "tenantId"
   );
 
-  if(response && response.MdmsRes && response.MdmsRes["birth-death-service"] && response.MdmsRes["birth-death-service"].hospitalList)
-  {
-   const hptList= response.MdmsRes["birth-death-service"].hospitalList;
-   const newList=[...hptList.filter(hos=>hos.active), {
-    hospitalName : "Others"      }]
-    for (let hospital of newList) {
-      hospital.code = hospital.hospitalName;
-      hospital.name = hospital.hospitalName;
+  loadHospitals(action, state, dispatch, "death", tenantId).then((response) => {
+    if(response && response.MdmsRes && response.MdmsRes["birth-death-service"] && response.MdmsRes["birth-death-service"].hospitalList)
+    {
+     const hptList= response.MdmsRes["birth-death-service"].hospitalList;
+     const newList=[...hptList.filter(hos=>hos.active), {
+      hospitalName : "Others"      }]
+      for (let hospital of newList) {
+        hospital.code = hospital.hospitalName;
+        hospital.name = hospital.hospitalName;
+      }
+      dispatch(prepareFinalObject("bnd.allHospitals", newList));
+    }else{
+      dispatch(prepareFinalObject("bnd.allHospitals", [{code:"Others",name:"Others"}]));
     }
-    dispatch(prepareFinalObject("bnd.allHospitals", newList));
-  }
+  });
 };
 
 const setVisibilityOptionsSet1 = (state, dispatch, visible) => {
@@ -258,8 +262,8 @@ export const searchSetCommon = getCommonContainer({
     afterFieldChange: (action, state, dispatch) => {},
   }),
   cantonmentSelect: {
-    uiFramework: "custom-containers",
-    //moduleName: "egov-lams",
+    uiFramework: "custom-containers-local",
+            moduleName: "egov-bnd",
     componentPath: "AutosuggestContainer",
     jsonPath: "bnd.birth.tenantId",
     sourceJsonPath: "bnd.allTenants",
@@ -286,6 +290,7 @@ export const searchSetCommon = getCommonContainer({
       },
       labelsFromLocalisation: true,
       required: true,
+      errorText:"Required",
       jsonPath: "bnd.birth.tenantId",
       sourceJsonPath: "bnd.allTenants",
       inputLabelProps: {

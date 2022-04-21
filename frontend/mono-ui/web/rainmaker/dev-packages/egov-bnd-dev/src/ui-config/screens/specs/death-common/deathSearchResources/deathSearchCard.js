@@ -109,6 +109,8 @@ const cbChanged = (action, state, dispatch) => {
         hospital.name = hospital.hospitalName;
       }
       dispatch(prepareFinalObject("bnd.allHospitals", newList));
+    }else{
+      dispatch(prepareFinalObject("bnd.allHospitals", [{code:"Others",name:"Others"}]));
     }
   });
 };
