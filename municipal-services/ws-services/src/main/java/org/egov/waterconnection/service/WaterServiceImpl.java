@@ -123,10 +123,14 @@ public class WaterServiceImpl implements WaterService {
 		if (!StringUtils.isEmpty(criteria.getSearchType()) &&
 				criteria.getSearchType().equals(WCConstants.SEARCH_TYPE_CONNECTION)) {
 			waterConnectionList = enrichmentService.filterConnections(waterConnectionList);
-			if(criteria.getIsPropertyDetailsRequired()){
+			/*if(criteria.getIsPropertyDetailsRequired()){
 				waterConnectionList = enrichmentService.enrichPropertyDetails(waterConnectionList, criteria, requestInfo);
 
-			}
+			}*/
+		}
+		if(criteria.getIsPropertyDetailsRequired()){
+			waterConnectionList = enrichmentService.enrichPropertyDetails(waterConnectionList, criteria, requestInfo);
+
 		}
 		waterConnectionValidator.validatePropertyForConnection(waterConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(waterConnectionList, criteria, requestInfo);

@@ -50,9 +50,10 @@ public class SWQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_sw_applicationdocument document ON document.swid = conn.id" 
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_sw_plumberinfo plumber ON plumber.swid = conn.id" + LEFT_OUTER_JOIN_STRING
+			+ "eg_sw_plumberinfo plumber ON plumber.swid = conn.id" 
+			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_sw_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
-			+ LEFT_OUTER_JOIN_STRING
+			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno"
@@ -66,9 +67,9 @@ public class SWQueryBuilder {
 			+ "eg_sw_applicationdocument document ON document.swid = conn.id" 
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_sw_plumberinfo plumber ON plumber.swid = conn.id" 
-			+ LEFT_OUTER_JOIN_STRING
+			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_sw_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
-			+ LEFT_OUTER_JOIN_STRING
+			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno"
