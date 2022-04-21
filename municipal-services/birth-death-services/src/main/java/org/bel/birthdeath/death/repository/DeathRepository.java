@@ -117,7 +117,7 @@ public class DeathRepository {
 		if (criteria.getOffset() != null)
 			offset = criteria.getOffset();
 
-		String query = "SELECT * FROM eg_death_cert_request OFFSET offset AND LIMIT limit";
+		String query = "SELECT * FROM eg_death_cert_request OFFSET " + offset + " AND LIMIT " + limit;
 		List<DeathCertificate> deathCertificates =  jdbcTemplate.query(query, new BeanPropertyRowMapper(DeathCertificate.class));
 		return deathCertificates;
 	}

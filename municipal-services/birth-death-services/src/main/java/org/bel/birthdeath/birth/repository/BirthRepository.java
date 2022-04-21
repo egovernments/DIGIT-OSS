@@ -119,7 +119,7 @@ public class BirthRepository {
 		if (criteria.getOffset() != null)
 			offset = criteria.getOffset();
 
-		String query = "SELECT * FROM eg_birth_cert_request OFFSET offset AND LIMIT limit";
+		String query = "SELECT * FROM eg_birth_cert_request OFFSET " + offset + " AND LIMIT " + limit;
 		List<BirthCertificate> birthCertificates =  jdbcTemplate.query(query, new BeanPropertyRowMapper(BirthCertificate.class));
 		return birthCertificates;
 	}
