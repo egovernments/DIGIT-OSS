@@ -35,18 +35,14 @@ import static org.egov.inbox.util.WSConstants.WS_REQUESTINFO_PARAM;
 import static org.egov.inbox.util.WSConstants.WS_SEARCH_CRITERIA_PARAM;
 import static org.egov.inbox.util.WSConstants.WS_BUSINESS_SERVICE_PARAM;
 import static org.egov.inbox.util.WSConstants.WS_BUSINESS_IDS_PARAM;
-import static org.egov.inbox.util.WSConstants.WS_CONNECTION_NO_PARAM;
-import static org.egov.inbox.util.WSConstants.WS_APPLICATION_TYPE_PARAM;
-import static org.egov.inbox.util.WSConstants.PROPERTY_ID_PARAM;
 import static org.egov.inbox.util.WSConstants.ASSIGNEE_PARAM;
+import static org.egov.inbox.util.WSConstants.WS_CONNECTION_NO_PARAM;
 import static org.egov.inbox.util.SWConstants.SW;
 import static org.egov.inbox.util.SWConstants.SW_APPLICATION_NUMBER_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_REQUESTINFO_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_SEARCH_CRITERIA_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_BUSINESS_SERVICE_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_BUSINESS_IDS_PARAM;
-import static org.egov.inbox.util.SWConstants.SW_CONNECTION_NO_PARAM;
-import static org.egov.inbox.util.SWConstants.SW_APPLICATION_TYPE_PARAM;
 
 
 import java.util.ArrayList;
@@ -364,7 +360,6 @@ public class InboxService {
            //TODO as on now this does not seem to be required, hence commenting the code
            /* if (!ObjectUtils.isEmpty(processCriteria.getModuleName())
 					&& processCriteria.getModuleName().equalsIgnoreCase(FSMConstants.FSM_MODULE)) {
-
                 totalCount = fsmInboxFilter.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo, dsoId);
             }*/
             if (processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName())
@@ -400,53 +395,18 @@ public class InboxService {
                 }
             }
             
-            // Redirect request to searcher in case of WS to fetch acknowledgement IDS
-            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(WS)) {
-                totalCount = wsInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
-                List<String> applicationNumbers = wsInboxFilterService.fetchApplicationNumbersFromSearcher(criteria,
-                        StatusIdNameMap, requestInfo);
-                if (!CollectionUtils.isEmpty(applicationNumbers) && StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
-				moduleSearchCriteria.put(WS_BUSINESS_IDS_PARAM, applicationNumbers);
-				businessKeys.addAll(applicationNumbers);
-				moduleSearchCriteria.remove(applicationStatusParam);
-				moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
-				moduleSearchCriteria.remove(WS_APPLICATION_NUMBER_PARAM);
-				moduleSearchCriteria.remove(WS_APPLICATION_TYPE_PARAM);
-				moduleSearchCriteria.remove(WS_CONNECTION_NO_PARAM);
-				moduleSearchCriteria.remove(PROPERTY_ID_PARAM);
-				moduleSearchCriteria.remove(LOCALITY_PARAM);
-				moduleSearchCriteria.remove(OFFSET_PARAM);
-                } else if(!StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
-                	if(!StringUtils.isEmpty(processCriteria.getAssignee()))
-                		moduleSearchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
-                } else {
-                    isSearchResultEmpty = true;
-                }
+            // Redirect request to searcher in case of WS and SW to fetch acknowledgement IDS
+            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && (processCriteria.getModuleName().equals(WS)
+            		|| processCriteria.getModuleName().equals(SW))) {
+            	if (!StringUtils.isEmpty(processCriteria.getAssignee())) {
+            		moduleSearchCriteria.put(ASSIGNEE_PARAM,processCriteria.getAssignee());
+            	}
+            	if (!StringUtils.isEmpty(moduleSearchCriteria.get(WS_CONNECTION_NO_PARAM))) {
+            		moduleSearchCriteria.put("connectionNumber",moduleSearchCriteria.get(WS_CONNECTION_NO_PARAM));
+            		moduleSearchCriteria.remove(WS_CONNECTION_NO_PARAM);
+            	}
+            	moduleSearchCriteria.put("isPropertyDetailsRequired", true);
             }
-           
-            // Redirect request to searcher in case of SW to fetch acknowledgement IDS
-            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(SW)) {
-            	 totalCount = swInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap, requestInfo);
-                 List<String> applicationNumbers = swInboxFilterService.fetchApplicationNumbersFromSearcher(criteria,
-                         StatusIdNameMap, requestInfo);
-                if (!CollectionUtils.isEmpty(applicationNumbers) && StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
-				moduleSearchCriteria.put(WS_BUSINESS_IDS_PARAM, applicationNumbers);
-				businessKeys.addAll(applicationNumbers);
-				moduleSearchCriteria.remove(applicationStatusParam);
-				moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
-				moduleSearchCriteria.remove(SW_APPLICATION_NUMBER_PARAM);
-				moduleSearchCriteria.remove(SW_APPLICATION_TYPE_PARAM);
-				moduleSearchCriteria.remove(SW_CONNECTION_NO_PARAM);
-				moduleSearchCriteria.remove(PROPERTY_ID_PARAM);
-				moduleSearchCriteria.remove(LOCALITY_PARAM);
-				moduleSearchCriteria.remove(OFFSET_PARAM);
-                } else if(!StringUtils.isEmpty(moduleSearchCriteria.get(MOBILE_NUMBER_PARAM))) {
-                	if(!StringUtils.isEmpty(processCriteria.getAssignee()))
-                		moduleSearchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
-                } else {
-                    isSearchResultEmpty = true;
-                }
-            } 
                       
             /*
              * if(!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(PT)){ Boolean
@@ -493,6 +453,12 @@ public class InboxService {
             // processCriteria.setLimit(criteria.getLimit());
             processCriteria.setIsProcessCountCall(false);
             ProcessInstanceResponse processInstanceResponse;
+            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && (processCriteria.getModuleName().equals(WS)
+            		|| processCriteria.getModuleName().equals(SW))) {
+                JSONObject json=null;
+                totalCount = fetchModuleObjectsCount(moduleSearchCriteria, businessServiceName, criteria.getTenantId(),
+                        requestInfo, srvMap);
+            }
             /*
              * In BPA, the stakeholder can able to submit applications for multiple cities
              * and in the single inbox all cities submitted applications need to show
@@ -897,12 +863,6 @@ public class InboxService {
 					url.append("&").append(param).append("=");
 					url.append(StringUtils
 							.arrayToDelimitedString(((Collection<?>) moduleSearchCriteria.get(param)).toArray(), ","));
-				} else if(param.equalsIgnoreCase("appStatus")){
-					url.append("&").append("applicationStatus").append("=")
-					.append(moduleSearchCriteria.get(param).toString());
-				} else if(param.equalsIgnoreCase("consumerNo")){
-					url.append("&").append("connectionNumber").append("=")
-					.append(moduleSearchCriteria.get(param).toString());
 				} else if(null != moduleSearchCriteria.get(param)) {
 					url.append("&").append(param).append("=").append(moduleSearchCriteria.get(param).toString());
 				}
@@ -935,6 +895,58 @@ public class InboxService {
         return resutls;
     }
 
+    private Integer fetchModuleObjectsCount(HashMap moduleSearchCriteria, List<String> businessServiceName, String tenantId,
+            RequestInfo requestInfo, Map<String, String> srvMap) {
+    	Integer totalCount;
+        if (CollectionUtils.isEmpty(srvMap) || StringUtils.isEmpty(srvMap.get("searchPath"))) {
+            throw new CustomException(ErrorConstants.INVALID_MODULE_SEARCH_PATH,
+                    "search path not configured for the businessService : " + businessServiceName);
+        }
+        StringBuilder url = new StringBuilder(srvMap.get("searchPath"));
+        url.append("?tenantId=").append(tenantId);
+       
+        Set<String> searchParams = moduleSearchCriteria.keySet();
+        
+		searchParams.forEach((param) -> {
+
+			if (!param.equalsIgnoreCase("tenantId")) {
+
+				if (moduleSearchCriteria.get(param) instanceof Collection) {
+					url.append("&").append(param).append("=");
+					url.append(StringUtils
+							.arrayToDelimitedString(((Collection<?>) moduleSearchCriteria.get(param)).toArray(), ","));
+				} else if(null != moduleSearchCriteria.get(param)) {
+					url.append("&").append(param).append("=").append(moduleSearchCriteria.get(param).toString());
+				}
+			}
+		});
+		
+		log.info("\nfetchModuleObjectsCount URL :::: " + url.toString());
+		
+        RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+        Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+        
+        LinkedHashMap responseMap;
+        try {
+            responseMap = mapper.convertValue(result, LinkedHashMap.class);
+        } catch (IllegalArgumentException e) {
+            throw new CustomException(ErrorConstants.PARSING_ERROR, "Failed to parse response of ProcessInstance Count");
+        }
+        
+        
+        JSONObject jsonObject = new JSONObject(responseMap);
+        try {
+        	totalCount = (Integer) jsonObject.getInt("TotalCount");
+        	System.out.println("\n\n"+jsonObject.get("TotalCount"));
+        	System.out.println("\n\n"+jsonObject.getInt("TotalCount"));
+        } catch (Exception e) {
+            throw new CustomException(ErrorConstants.INVALID_MODULE_DATA,
+                    " search api could not find data for TotalCount in " + jsonObject.toString());
+        }
+        
+        return totalCount;
+    }
+    
     public static Map<String, Object> toMap(JSONObject object) throws JSONException {
         Map<String, Object> map = new HashMap<String, Object>();
 
