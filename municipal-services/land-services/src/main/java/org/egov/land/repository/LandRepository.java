@@ -69,6 +69,7 @@ public class LandRepository {
 		String query = queryBuilder.getLandInfoSearchQuery(criteria, preparedStmtList);
                 try {
                     query = centralInstanceUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+                    log.error("query"+ query);
                 } catch (InvalidTenantIdException e) {
                     throw new CustomException(LandConstants.EG_LS_AS_TENANTID_ERROR,
                             "TenantId length is not sufficient to replace query schema in a multi state instance");
