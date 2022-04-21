@@ -25,14 +25,14 @@ export const ViewImages = (props) => {
     var thumbnails = [];
 
     const newThumbnails = keys.map((key) => {
-      return { image: thumbnailsData.data[key].split(",")[2], key };
+      return { image: thumbnailsData.data[key].split(",")[2], key, fullImage: Digit.Utils.getFileUrl(thumbnailsData.data[key]) };
     });
     setUploadedImagesThumbs([...thumbnails, ...newThumbnails]);
   }
 
   const submit = useCallback(async () => {
     if (uploadedImagesIds !== null && uploadedImagesIds.length > 0) {
-      const res = await Digit.UploadServices.Filefetch(uploadedImagesIds, props.tenantId.split('.')[0]);
+      const res = await Digit.UploadServices.Filefetch(uploadedImagesIds, props.tenantId);
       addImageThumbnails(res);
     }
   }, [uploadedImagesIds]);
@@ -43,7 +43,7 @@ export const ViewImages = (props) => {
         {uploadedImagesThumbs?.map((thumbnail, index) => {
           return (
             <div key={index} style={{ minWidth: '160px', marginRight: '8px', marginBottom: '8px', maxWidth: '200px' }}>
-              <img src={thumbnail.image} alt="uploaded thumbnail" />
+              <img src={thumbnail.image} alt="uploaded thumbnail"  onClick={() => props.onClick(thumbnail.fullImage, index)} />
             </div>
           );
         })}
