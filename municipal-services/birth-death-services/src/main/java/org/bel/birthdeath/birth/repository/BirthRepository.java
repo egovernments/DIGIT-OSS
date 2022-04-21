@@ -98,8 +98,6 @@ public class BirthRepository {
 	
 	@Value("${egov.bnd.freedownload.tenants}")
     private String freeDownloadTenants;
-
-	private final String QUERY_Birth_For_PLAINSEARCH = "SELECT * FROM eg_birth_cert_request";
 	
 	public List<EgBirthDtl> getBirthDtls(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
@@ -109,7 +107,19 @@ public class BirthRepository {
 	}
 
 	public List<BirthCertificate> getBirthCertificateForPlainSearch(SearchCriteria criteria) {
-		String query = QUERY_Birth_For_PLAINSEARCH;
+		int limit = config.getDefaultBndLimit();
+		int offset = config.getDefaultOffset();
+
+		if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
+			limit = criteria.getLimit();
+
+		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+			limit = config.getMaxSearchLimit();
+
+		if (criteria.getOffset() != null)
+			offset = criteria.getOffset();
+
+		String query = "SELECT * FROM eg_birth_cert_request OFFSET offset AND LIMIT limit";
 		List<BirthCertificate> birthCertificates =  jdbcTemplate.query(query, new BeanPropertyRowMapper(BirthCertificate.class));
 		return birthCertificates;
 	}

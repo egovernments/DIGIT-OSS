@@ -96,8 +96,6 @@ public class DeathRepository {
 	
 	@Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-	private final String QUERY_Death_For_PLAINSEARCH = "SELECT * FROM eg_death_cert_request";
 	
 	public List<EgDeathDtl> getDeathDtls(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
@@ -107,7 +105,19 @@ public class DeathRepository {
 	}
 
 	public List<DeathCertificate> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
-		String query = QUERY_Death_For_PLAINSEARCH;
+		int limit = config.getDefaultBndLimit();
+		int offset = config.getDefaultOffset();
+
+		if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
+			limit = criteria.getLimit();
+
+		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+			limit = config.getMaxSearchLimit();
+
+		if (criteria.getOffset() != null)
+			offset = criteria.getOffset();
+
+		String query = "SELECT * FROM eg_death_cert_request OFFSET offset AND LIMIT limit";
 		List<DeathCertificate> deathCertificates =  jdbcTemplate.query(query, new BeanPropertyRowMapper(DeathCertificate.class));
 		return deathCertificates;
 	}
