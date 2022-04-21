@@ -289,9 +289,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.paymentMode) applicationData.additionalDetails.receivedPayment = data.paymentMode.code;
 
     if (fileStoreId) {
-      let temp = {}
-      fileStoreId.map((i) => (temp[fileStoreId.indexOf(i) + 1] = i))
-      applicationData.pitDetail.additionalDetails = { fileStoreId: temp };
+      if (applicationData.pitDetail.additionalDetails && applicationData.pitDetail.additionalDetails.fileStoreId) {
+        applicationData.pitDetail.additionalDetails.fileStoreId = { ...applicationData.pitDetail.additionalDetails.fileStoreId, FSM_DSO: fileStoreId };
+      } else {
+        applicationData.pitDetail.additionalDetails = { fileStoreId: { FSM_DSO: fileStoreId } };
+      }
     }
     if (data.noOfTrips) applicationData.noOfTrips = Number(data.noOfTrips);
     if (action === "REASSING") applicationData.vehicleId = null;
