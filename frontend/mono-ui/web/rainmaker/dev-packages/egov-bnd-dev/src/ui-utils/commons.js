@@ -31,6 +31,13 @@ export const acceptedFiles = acceptedExt => {
   }, []);
   return acceptedFileTypes;
 };
+export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (conditionCheckerFn(arr[i])) {
+      return arr[i];
+    }
+  }
+};
 
 export const getFileSize = file => {
   const size = parseFloat(file.size / 1024).toFixed(2);

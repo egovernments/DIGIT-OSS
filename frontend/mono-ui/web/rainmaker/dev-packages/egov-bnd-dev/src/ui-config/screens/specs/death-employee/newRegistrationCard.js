@@ -32,7 +32,7 @@ export const getPersonDetailsForm = (type) =>{
         labelName: "First Name",
         labelKey: "BND_FIRSTNAME_LABEL"
       },
-      required:false,
+      required:true,
       visible: true,
       pattern: patterns["name"],
       jsonPath: `bnd.death.newRegistration.${type}.firstname`,
@@ -50,7 +50,7 @@ export const getPersonDetailsForm = (type) =>{
         labelName: "Middle Name",
         labelKey: "BND_MIDDLENAME_LABEL"
       },
-      required:false,
+      required:true,
       visible: true,
       pattern: patterns["name"],
       jsonPath: `bnd.death.newRegistration.${type}.middlename`,
@@ -68,7 +68,7 @@ export const getPersonDetailsForm = (type) =>{
         labelName: "Last Name",
         labelKey: "BND_LASTNAME_LABEL"
       },
-      required:false,
+      required:true,
       visible: true,
       pattern: patterns["name"],
       jsonPath: `bnd.death.newRegistration.${type}.lastname`,
@@ -157,7 +157,7 @@ export const getPersonDetailsForm = (type) =>{
   });
 }
 
-export const getAddressForm = (type) =>{
+export const getAddressForm = (type, mandatory = false) =>{
   return getCommonContainer({
     buildingNo: getTextField({
       label: {
@@ -168,7 +168,7 @@ export const getAddressForm = (type) =>{
         labelName: "buildingno",
         labelKey: "BND_BUILDINGNO_LABEL"
       },
-      required:false,
+      required:mandatory,
       visible: true,
       pattern: patterns["addressBig"],
       jsonPath: `bnd.death.newRegistration.${type}.buildingno`,
@@ -186,7 +186,7 @@ export const getAddressForm = (type) =>{
         labelName: "houseno",
         labelKey: "BND_HOUSENO_LABEL"
       },
-      required:false,
+      required:mandatory,
       visible: true,
       pattern: patterns["addressBig"],
       jsonPath: `bnd.death.newRegistration.${type}.houseno`,
@@ -204,7 +204,7 @@ export const getAddressForm = (type) =>{
         labelName: "streetname",
         labelKey: "BND_STREETNAME_LABEL"
       },
-      required:false,
+      required:mandatory,
       visible: true,
       pattern: patterns["addressBig"],
       jsonPath: `bnd.death.newRegistration.${type}.streetname`,
@@ -222,7 +222,7 @@ export const getAddressForm = (type) =>{
         labelName: "locality",
         labelKey: "BND_LOCALITY_LABEL"
       },
-      required:false,
+      required:mandatory,
       visible: true,
       pattern: patterns["addressBig"],
       jsonPath: `bnd.death.newRegistration.${type}.locality`,
@@ -240,7 +240,7 @@ export const getAddressForm = (type) =>{
         labelName: "tehsil",
         labelKey: "BND_TEHSIL_LABEL"
       },
-      required:false,
+      required:mandatory,
       visible: true,
       pattern: patterns["addressTehsil"],
       jsonPath: `bnd.death.newRegistration.${type}.tehsil`,
@@ -258,7 +258,7 @@ export const getAddressForm = (type) =>{
         labelName: "district",
         labelKey: "BND_DISTRICT_LABEL"
       },
-      required:false,
+      required:mandatory,
       visible: true,
       pattern: patterns["addressSmall"],
       jsonPath: `bnd.death.newRegistration.${type}.district`,
@@ -276,7 +276,7 @@ export const getAddressForm = (type) =>{
         labelName: "city",
         labelKey: "BND_CITY_LABEL"
       },
-      required:false,
+      required:mandatory,
       visible: true,
       pattern: patterns["addressSmall"],
       jsonPath: `bnd.death.newRegistration.${type}.city`,
@@ -294,7 +294,7 @@ export const getAddressForm = (type) =>{
         labelName: "city",
         labelKey: "BND_STATE_LABEL"
       },
-      required:false,
+      required:mandatory,
       visible: true,
       pattern: patterns["addressSmall"],
       jsonPath: `bnd.death.newRegistration.${type}.state`,
@@ -312,7 +312,7 @@ export const getAddressForm = (type) =>{
         labelName: "pinno",
         labelKey: "BND_PINNO_LABEL"
       },
-      required:false,
+      required:mandatory,
       visible: true,
       pattern: getPattern("Pincode"),
       jsonPath: `bnd.death.newRegistration.${type}.pinno`,
@@ -330,7 +330,7 @@ export const getAddressForm = (type) =>{
         labelName: "country",
         labelKey: "BND_COUNTRY_LABEL"
       },
-      required:false,
+      required:mandatory,
       visible: true,
       pattern: patterns["addressSmall"],
       jsonPath: `bnd.death.newRegistration.${type}.country`,
@@ -371,6 +371,10 @@ export const newRegistrationForm = getCommonCard(
         }
       }
     ),
+    subText: getCommonParagraph({
+      labelName: "(*) marked items are mandatory",
+      labelKey: "BND_NEW_REGISTRATION_SUBTEXT",
+    }),
     checkBox:{
       required: true,
       uiFramework: "custom-atoms-local",
@@ -463,33 +467,6 @@ export const newRegistrationForm = getCommonCard(
         
               },
           },
-          addHospital: {
-            componentPath: "Button",
-            visible: (getQueryArg(window.location.href, "action")!="VIEW"),
-            props: {
-              disableValidation:true,
-              variant: "contained",
-              color: "primary",
-              style: {
-                minWidth: "100px",
-                height: "20px",
-                marginRight: "20px",
-                marginTop: "16px"
-              }
-            },
-            children: {
-              previousButtonLabel: getLabel({
-                labelName: "YES",
-                labelKey: "ADD_HOSPITAL"
-              })
-            },
-            onClickDefination: {
-              action: "condition",
-              callBack: (state, dispatch) => {
-                showHideAddHospitalDialog(state, dispatch, "newRegistration")
-              }
-            }
-          },
           dateOfReporting: getDateField({
             label: { labelName: "DOB", labelKey: "BND_DEATH_DOR" },
             placeholder: {
@@ -503,7 +480,7 @@ export const newRegistrationForm = getCommonCard(
             },
             pattern: getPattern("Date"),
             errorMessage: "ERR_INVALID_DATE",
-            required: false,
+            required: true,
             props: {
               inputProps: {
                 max: getTodaysDateInYMD()
@@ -770,7 +747,7 @@ export const newRegistrationForm = getCommonCard(
             labelName: "Place of Death",
             labelKey: "BND_DEATH_PLACE"
           },
-          required:false,
+          required: true,
           visible: true,
           pattern: patterns["addressBig"],
           jsonPath: "bnd.death.newRegistration.placeofdeath",
@@ -883,7 +860,7 @@ export const newRegistrationForm = getCommonCard(
           }
         }
       ),
-      permAddressofParents: getAddressForm("deathPermaddr")
+      permAddressofParents: getAddressForm("deathPermaddr",true)
     }),
     informantsInfo: getCommonGrayCard({
       header: getCommonSubHeader(
