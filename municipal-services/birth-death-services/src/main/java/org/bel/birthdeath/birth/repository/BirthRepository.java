@@ -110,7 +110,7 @@ public class BirthRepository {
 	public List<BirthCertificate> getBirthCertificateForPlainSearch(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = QUERY_Master_For_PLAINSEARCH;
-		List<BirthCertificate> birthCertificates =  jdbcTemplate.query(query, preparedStmtList.toArray(), birthCertRowMapper);
+		List<BirthCertificate> birthCertificates =  jdbcTemplate.queryForList(query, preparedStmtList.toArray(), BirthCertificate.class);
 		return birthCertificates;
 	}
 
