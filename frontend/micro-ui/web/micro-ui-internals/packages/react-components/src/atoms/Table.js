@@ -110,8 +110,7 @@ const Table = ({
             return (
               <tr {...row.getRowProps()}>
               {showAutoSerialNo&&  <td >
-              {/* {i+1} */}
-              <span style={{ "padding": "20px" }}>{i + 1}</span>
+              {i+1}
               </td>}
                 {row.cells.map((cell) => {
                   return (
