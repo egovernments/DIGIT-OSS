@@ -64,6 +64,16 @@ public class DeathController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @RequestMapping(value = { "/_plainsearch"}, method = RequestMethod.POST)
+    public ResponseEntity<DeathCertResponse> plainSearch(@RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                         @Valid @ModelAttribute SearchCriteria criteria) {
+        List<DeathCertificate> deathCertificates = deathService.plainSearch(criteria,requestInfoWrapper.getRequestInfo());
+        DeathCertResponse response = DeathCertResponse.builder().deathCertificates(deathCertificates).responseInfo(
+                        responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 	
 	@RequestMapping(value = { "/_download"}, method = RequestMethod.POST)
     public ResponseEntity<DeathCertResponse> download(@RequestBody RequestInfoWrapper requestInfoWrapper,
@@ -124,16 +134,6 @@ public class DeathController {
                                                         @ModelAttribute SearchCriteria criteria ) {
         List<EgDeathDtl> certData = deathService.viewfullCertMasterData(criteria,requestInfoWrapper.getRequestInfo());
         DeathPdfApplicationRequest response = DeathPdfApplicationRequest.builder().deathCertificate(certData).requestInfo(requestInfoWrapper.getRequestInfo())
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = { "/_plainsearch"}, method = RequestMethod.POST)
-    public ResponseEntity<DeathResponse> plainSearch(@RequestBody RequestInfoWrapper requestInfoWrapper,
-                                                @Valid @ModelAttribute SearchCriteria criteria) {
-        List<EgDeathDtl> deathCerts = deathService.plainSearch(criteria,requestInfoWrapper.getRequestInfo());
-        DeathResponse response = DeathResponse.builder().deathCerts(deathCerts).responseInfo(
-                        responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

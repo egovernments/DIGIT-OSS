@@ -80,6 +80,11 @@ public class DeathService {
 		return deathDtls;
 	}
 
+	public List<DeathCertificate> plainSearch(SearchCriteria criteria,RequestInfo requestInfo) {
+		List<DeathCertificate> deathCertificates = repository.getDeathDtlsForPlainSearch(criteria);
+		return deathCertificates;
+	}
+
 	public DeathCertificate download(SearchCriteria criteria, RequestInfo requestInfo) {
 		try {
 		DeathCertificate deathCertificate = new DeathCertificate();
@@ -214,10 +219,4 @@ public class DeathService {
                 .append(StringUtils.join(criteria.getConsumerCodes(),","))
                 .append("&").append("status=APPROVED,DEPOSITED,NEW");
     }
-
-	public List<EgDeathDtl> plainSearch(SearchCriteria criteria,RequestInfo requestInfo) {
-		List<EgDeathDtl> deathDtls = new ArrayList<EgDeathDtl>() ;
-		deathDtls = repository.getDeathDtlsForPlainSearch(criteria);
-		return deathDtls;
-	}
 }

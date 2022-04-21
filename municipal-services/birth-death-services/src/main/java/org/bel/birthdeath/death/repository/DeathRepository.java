@@ -39,6 +39,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -101,6 +102,24 @@ public class DeathRepository {
         String query = allqueryBuilder.getDeathDtls(criteria, preparedStmtList);
         List<EgDeathDtl> deathDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         return deathDtls;
+	}
+
+	public List<DeathCertificate> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
+		int limit = config.getDefaultBndLimit();
+		int offset = config.getDefaultOffset();
+
+		if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
+			limit = criteria.getLimit();
+
+		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+			limit = config.getMaxSearchLimit();
+
+		if (criteria.getOffset() != null)
+			offset = criteria.getOffset();
+
+		String query = "SELECT * FROM eg_death_cert_request OFFSET " + offset + " LIMIT " + limit;
+		List<DeathCertificate> deathCertificates =  jdbcTemplate.query(query, new BeanPropertyRowMapper(DeathCertificate.class));
+		return deathCertificates;
 	}
 
 	public void save(DeathCertRequest deathCertRequest) {
@@ -254,12 +273,5 @@ public class DeathRepository {
         		commonUtils.maskAndShowLast4Chars(deathDtl);
         });
         return deathCertMasterDtl;
-	}
-
-	public List<EgDeathDtl> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
-		List<Object> preparedStmtList = new ArrayList<>();
-		String query = allqueryBuilder.getDeathDtlsForPlainSearch(criteria, preparedStmtList);
-		List<EgDeathDtl> deathDtls =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-		return deathDtls;
 	}
 }
