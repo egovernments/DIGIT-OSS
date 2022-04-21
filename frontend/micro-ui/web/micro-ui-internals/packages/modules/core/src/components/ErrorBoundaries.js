@@ -3,7 +3,11 @@ import ErrorComponent from "./ErrorComponent";
 
 const Redircter = () => {
   const path = Digit.UserService.getType() === "employee" ? "/digit-ui/employee/user/error" : "/digit-ui/citizen/error";
-  if(window.location.href.includes('employee/user/error')||window.location.href.includes('citizen/error') ||process.env.NODE_ENV !== "development"  ){
+  if (
+    window.location.href.includes("employee/user/error") ||
+    window.location.href.includes("citizen/error") ||
+    process.env.NODE_ENV === "development"
+  ) {
     //do nothing
   }else{
     window.location.href = path;
