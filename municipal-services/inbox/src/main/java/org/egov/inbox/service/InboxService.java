@@ -937,8 +937,6 @@ public class InboxService {
         JSONObject jsonObject = new JSONObject(responseMap);
         try {
         	totalCount = (Integer) jsonObject.getInt("TotalCount");
-        	System.out.println("\n\n"+jsonObject.get("TotalCount"));
-        	System.out.println("\n\n"+jsonObject.getInt("TotalCount"));
         } catch (Exception e) {
             throw new CustomException(ErrorConstants.INVALID_MODULE_DATA,
                     " search api could not find data for TotalCount in " + jsonObject.toString());
