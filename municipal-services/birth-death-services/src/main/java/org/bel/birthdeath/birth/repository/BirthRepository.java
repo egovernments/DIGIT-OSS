@@ -41,6 +41,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -110,7 +111,7 @@ public class BirthRepository {
 	public List<BirthCertificate> getBirthCertificateForPlainSearch(SearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = QUERY_Master_For_PLAINSEARCH;
-		List<BirthCertificate> birthCertificates =  jdbcTemplate.queryForList(query, preparedStmtList.toArray(), BirthCertificate.class);
+		List<BirthCertificate> birthCertificates =  jdbcTemplate.query(query, new BeanPropertyRowMapper(BirthCertificate.class));
 		return birthCertificates;
 	}
 
