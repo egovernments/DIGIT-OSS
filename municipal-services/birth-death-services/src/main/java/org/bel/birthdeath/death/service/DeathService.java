@@ -95,8 +95,8 @@ public class DeathService {
 		List<EgDeathDtl> deathDtls = repository.getDeathDtlsAll(criteria,requestInfo);
 			deathCertificate.setGender(deathDtls.get(0).getGenderStr());
 			deathCertificate.setAge(deathDtls.get(0).getAge());
-			deathCertificate.setWard(deathDtls.get(0).getDeathPresentaddr().getTehsil());
-			deathCertificate.setState(deathDtls.get(0).getDeathPresentaddr().getState());
+			deathCertificate.setWard(deathDtls.get(0).getDeathPermaddr().getTehsil());
+			deathCertificate.setState(deathDtls.get(0).getDeathPermaddr().getState());
 			deathCertificate.setDateofdeath(deathDtls.get(0).getDateofdeath());
 			deathCertificate.setDateofreport(deathDtls.get(0).getDateofreport());
 		if(deathDtls.size()>1) 
