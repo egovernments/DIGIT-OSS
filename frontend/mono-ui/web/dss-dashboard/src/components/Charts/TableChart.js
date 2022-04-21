@@ -1,6 +1,6 @@
 import { withStyles } from '@material-ui/styles';
 import axios from 'axios';
-import _ from 'lodash';
+import _, { get } from 'lodash';
 import moment from 'moment';
 import React, { Component } from 'react';
 import { isMobile } from 'react-device-detect';
@@ -155,6 +155,7 @@ class TableChart extends Component {
         });
     }
   }
+  
 
 
   getRequest(calledFrom, visualcode, active, filterList) {
@@ -168,7 +169,7 @@ class TableChart extends Component {
         if (filterList[v] && filterList[v].length > 0) {
           tempFL = filterList[v][filterList[v].length - 1];
           if (tempFL[2]['column'] == 'DDRs') {
-            let tempDDR = this.props.mdmsData['master'][tempFL[4]];
+            let tempDDR = this.props.tenantObj[tempFL[4]];
             for (var j = 0; j < tempDDR.length; j++) {
               ttest.push(tempDDR[j]);
             }
@@ -517,12 +518,25 @@ class TableChart extends Component {
   }
 }
 const mapStateToProps = (state) => {
+  let tenants=get(state,'tenents.MdmsRes.tenant.tenants',[]);
+  const tenantObj=tenants.reduce((prev,curr)=>{
+    let ddrname=curr.city.ddrName;
+        if(prev[ddrname])
+        {
+            prev[ddrname].push(curr.code)
+        }else{
+            prev[ddrname]=[curr.code]
+        }
+        return prev;
+        
+    },{})
   return {
     dncData: state.DemandAndCollectionData,
     GFilterData: state.GFilterData,
     chartsData: state.chartsData,
     mdmsData: state.mdmsData,
-    strings: state.lang
+    strings: state.lang,
+    tenantObj
   }
 }
 const mapDispatchToProps = dispatch => {
