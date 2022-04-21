@@ -206,6 +206,7 @@ public class BirthRepository {
 		try {
 			List<Object> preparedStmtList = new ArrayList<>();
 			String applQuery=allqueryBuilder.searchApplications(uuid, preparedStmtList);
+			log.info("query for search applications"+ applQuery.toString() + preparedStmtList);
 			birthCertAppls = jdbcTemplate.query(applQuery, preparedStmtList.toArray(), certApplnRowMapper);
 			//log.info("searchApplications "+birthCertAppls.size());
 		}
