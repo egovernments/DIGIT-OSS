@@ -12,6 +12,8 @@ public interface SewerageDao {
 
 	List<SewerageConnection> getSewerageConnectionList(SearchCriteria criteria, RequestInfo requestInfo);
 	
+	Integer getSewerageConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo);
+	
 	void updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest, boolean isStateUpdatable);
 
 	List<SewerageConnection> getSewerageConnectionPlainSearchList(SearchCriteria criteria,
