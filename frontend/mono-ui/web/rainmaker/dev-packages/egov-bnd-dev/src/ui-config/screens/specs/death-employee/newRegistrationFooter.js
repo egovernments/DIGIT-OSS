@@ -319,6 +319,7 @@ export const footer = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
+        backgroundColor:"white",
         marginRight: "16px",
       },
     },

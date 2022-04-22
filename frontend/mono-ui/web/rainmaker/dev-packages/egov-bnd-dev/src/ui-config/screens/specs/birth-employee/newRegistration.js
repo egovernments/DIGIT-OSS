@@ -12,6 +12,7 @@ import { addHospitalDialog } from "./addHospitalDialog";
 import { newRegistrationForm } from "./newRegistrationCard";
 import { confirmationDialog } from "./newRegistrationConfirmDialog";
 import { footer } from "./newRegistrationFooter";
+import "./index.css";
 
 const header = getCommonHeader({
   labelName: "Search Certificate",

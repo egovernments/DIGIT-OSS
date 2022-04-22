@@ -83,5 +83,5 @@ export const confirmationDialog = getCommonContainer({
         }
       }
     }
-  })
-});
+  }, { className: "confirm-bnd-popup" })
+}, { className: "confirm-bnd-popup" });

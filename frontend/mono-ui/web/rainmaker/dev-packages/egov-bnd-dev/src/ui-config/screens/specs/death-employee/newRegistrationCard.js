@@ -694,7 +694,7 @@ export const newRegistrationForm = getCommonCard(
             labelName: "nationality",
             labelKey: "BND_NATIONALITY"
           },
-          required: false,
+          required: true,
           pattern: patterns["commonPattern"],
           jsonPath: `bnd.death.newRegistration.nationality`,
           gridDefination: {
