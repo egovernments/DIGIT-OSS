@@ -44,9 +44,9 @@ const ReportSearchApplication = ({onSubmit,isLoading,data,tableData,isTableDataL
 
     const rowHeaders = tableData?.reportHeader
     //this code is leading to a bug in resetting the form due to duplicate cols
-    // rowHeaders?.unshift({
-    //     label:"#"
-    // })
+    rowHeaders?.unshift({
+        label:"#"
+    })
     const rowHeadersCopy = rowHeaders && JSON.parse(JSON.stringify(rowHeaders))//deep copy
     rowHeadersCopy?.unshift({
         label:"#"
