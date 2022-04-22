@@ -89,6 +89,42 @@ const resetFields = (state, dispatch) => {
     let tenantId = getTenantId();
     dispatch(prepareFinalObject("bnd.death.tenantId", tenantId));
   }
+  dispatch(
+    prepareFinalObject("bnd.death.deathSearchResponse", [])
+  );
+  dispatch(
+    handleField(
+      "getCertificate",
+      "components.div.children.searchResults",
+      "props.data",
+      []
+    )
+  );
+  dispatch(
+    handleField(
+      "getCertificate",
+      "components.div.children.searchResults",
+      "props.tableData",
+      []
+    )
+  );
+  dispatch(
+    handleField(
+      "getCertificate",
+      "components.div.children.searchResults",
+      "props.rows",
+      0
+    )
+  );
+
+  dispatch(
+    handleField(
+      "getCertificate",
+      "components.div.children.searchResults",
+      "visible",
+      false
+    )
+  );
 };
 
 const cbChanged = (action, state, dispatch) => {

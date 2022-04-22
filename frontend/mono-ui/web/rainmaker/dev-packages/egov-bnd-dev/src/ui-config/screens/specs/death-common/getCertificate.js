@@ -5,7 +5,7 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import { get, set } from "lodash";
-import { loadMdmsData } from "./../utils";
+import { loadHospitals, loadMdmsData } from "./../utils";
 import { deathSearchCard } from "./deathSearchResources/deathSearchCard";
 import { searchResults } from "./deathSearchResources/searchResults";
 
@@ -44,6 +44,21 @@ const getCertificate = {
           "components.div.children.deathSearchCard.children.cardContent.children.searchContainerCommon.children.gender.required",
           false
         );
+        loadHospitals(action, state, dispatch, "death", tenantId).then((response) => {
+          if(response && response.MdmsRes && response.MdmsRes["birth-death-service"] && response.MdmsRes["birth-death-service"].hospitalList)
+          {
+           const hptList= response.MdmsRes["birth-death-service"].hospitalList;
+           const newList=[...hptList.filter(hos=>hos.active), {
+            hospitalName : "Others"      }]
+            for (let hospital of newList) {
+              hospital.code = hospital.hospitalName;
+              hospital.name = hospital.hospitalName;
+            }
+            dispatch(prepareFinalObject("bnd.allHospitals", newList));
+          }else{
+            dispatch(prepareFinalObject("bnd.allHospitals", [{code:"Others",name:"Others"}]));
+          }
+        });
       }
       onlyCBs.sort((a, b) => (a.code > b.code ? 1 : -1));
       dispatch(prepareFinalObject("bnd.allTenants", onlyCBs));

@@ -241,7 +241,12 @@ export const postData = async (state, dispatch) => {
             "success"
           )
         );
-        location.reload();
+        let userAction = getQueryArg(window.location.href, "action");
+        if(userAction=="EDIT"){
+          window.location.href='/employee/birth-common/getCertificate'
+        }else{
+          location.reload();
+        }
       }
     } else {
       // dispatch(
