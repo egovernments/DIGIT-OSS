@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.SortOrder;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.service.UserService;
@@ -90,6 +92,10 @@ public class WsQueryBuilder {
 	private static final String ORDER_BY_CLAUSE= " ORDER BY wc.appCreatedDate DESC";
 	
 	private static final String ORDER_BY_COUNT_CLAUSE= " ORDER BY appCreatedDate DESC";
+	
+	private static final String ORDER_BY_INBOX_DESC_CLAUSE= " ORDER BY pi.createdtime DESC";
+	
+	private static final String ORDER_BY_INBOX_ASC_CLAUSE= " ORDER BY pi.createdtime ASC";
 	/**
 	 * 
 	 * @param criteria
@@ -275,16 +281,22 @@ public class WsQueryBuilder {
 		}
 		
 		//Add group by and order by clause as per the search scenario
-		if(criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())
+		if(criteria.getIsCountCall()!=null && criteria.getIsCountCall() 
+				&& !StringUtils.isEmpty(criteria.getSearchType())
 				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION))
 			query.append("GROUP BY conn.connectionno ").append(ORDER_BY_COUNT_CLAUSE);
-		else if(criteria.getIsCountCall())
+		else if(criteria.getIsCountCall()!=null && criteria.getIsCountCall())
 			query.append("GROUP BY conn.applicationno ").append(ORDER_BY_COUNT_CLAUSE);
+		else if(criteria.getSortBy()!=null && (criteria.getSortBy()).equalsIgnoreCase("createdtime"))
+			if(criteria.getSortOrder()!=null && (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
+				query.append(ORDER_BY_INBOX_DESC_CLAUSE);
+			else
+				query.append(ORDER_BY_INBOX_ASC_CLAUSE);
 		else
 			query.append(ORDER_BY_CLAUSE);
 		
 		// Pagination to limit results, do not paginate query in case of count call.
-		if (!criteria.getIsCountCall())
+		if (!criteria.getIsCountCall() && (criteria.getSortBy()==null))
 			return addPaginationWrapper(query.toString(), preparedStatement, criteria);
 		
 		String queryInString=query.toString();

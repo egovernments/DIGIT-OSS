@@ -128,7 +128,7 @@ public class WaterServiceImpl implements WaterService {
 
 			}*/
 		}
-		if(criteria.getIsPropertyDetailsRequired()){
+		if((criteria.getIsPropertyDetailsRequired()!=null) && criteria.getIsPropertyDetailsRequired()){
 			waterConnectionList = enrichmentService.enrichPropertyDetails(waterConnectionList, criteria, requestInfo);
 
 		}

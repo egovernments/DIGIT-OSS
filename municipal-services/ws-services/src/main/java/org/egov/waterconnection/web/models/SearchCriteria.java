@@ -102,6 +102,9 @@ public class SearchCriteria {
 	
 	@JsonProperty("sortOrder")
 	private SortOrder sortOrder;
+	
+	@JsonProperty("sortBy")
+	private String sortBy;
 
 	@JsonIgnore
 	private Boolean isCountCall = false;
