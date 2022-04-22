@@ -43,20 +43,44 @@ const ReportSearchApplication = ({onSubmit,isLoading,data,tableData,isTableDataL
     })
 
     const rowHeaders = tableData?.reportHeader
-    rowHeaders?.unshift({
+    //this code is leading to a bug in resetting the form due to duplicate cols
+    // rowHeaders?.unshift({
+    //     label:"#"
+    // })
+    const rowHeadersCopy = rowHeaders && JSON.parse(JSON.stringify(rowHeaders))//deep copy
+    rowHeadersCopy?.unshift({
         label:"#"
     })
-
-    const headersXLS = rowHeaders?.map(header=>t(header.label))
+    rowHeadersCopy?.unshift({
+        label: "#"
+    }) //added this code twice because in xls file a SNO col in already added
+    const headersXLS = rowHeadersCopy?.map(header=>t(header.label))
     const rowDataXLS = rowData && JSON.parse(JSON.stringify(rowData))//deep copy
     rowDataXLS?.unshift(headersXLS)
+
+    const getCellValue = (row,header,index) => {
+        
+    if (header.type ==="stringarray"){
+        const rowVal = row?.[index]?.split(',')
+        let finalRowVal;
+        if(header.localisationRequired){
+            finalRowVal = rowVal.map(role=> t(`${header.localisationPrefix}${role}`))
+            return finalRowVal.toString().replaceAll(","," ")
+        }else{
+            finalRowVal = rowVal.map(role =>role)
+            return finalRowVal.toString().replaceAll(","," ")
+        }
+    }
+    const rowVal = header?.localisationRequired ? t(`${header?.localisationPrefix}${row[index]}`):row?.[index]
+        return rowVal?rowVal:"-"
+    }
 
     const columns = useMemo(() => {
         const colArray = rowHeaders?.map((header, index) => {
             return {
-                Header: t(header.label),
+                Header:t(header.label),
                 disableSortBy: true,
-                accessor: ( row ) => <span className="cell-text">{row[index]?row[index]:"-"}</span>
+                accessor: ( row ) => <span className="cell-text">{getCellValue(row,header,index)}</span>
             }
         })
         return colArray
@@ -105,8 +129,9 @@ const ReportSearchApplication = ({onSubmit,isLoading,data,tableData,isTableDataL
                             padding: "20px 18px",
                             fontSize: "16px",
                             // overflowWrap:"break-work",
-                            // whiteSpace: 'pre-wrap',
-                            wordBreak:"break-all"
+                            //whiteSpace: 'pre-wrap',
+                            wordBreak:cellInfo?.column?.Header===t("reports.hrms.role")? "break-all":null,
+                            //whiteSpace:"break-space"
                         },
                     };
                 }}
