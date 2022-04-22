@@ -249,7 +249,8 @@ public class EnrichmentService {
 					equals(waterConnectionrequest.getWaterConnection().getProcessInstance().getAction())) {
 				SearchCriteria criteria = SearchCriteria.builder()
 						.tenantId(waterConnectionrequest.getWaterConnection().getTenantId())
-						.connectionNumber(waterConnectionrequest.getWaterConnection().getConnectionNo()).build();
+						.connectionNumber(waterConnectionrequest.getWaterConnection().getConnectionNo()).isCountCall(false)
+						.build();
 				List<WaterConnection> connections = waterService.search(criteria, waterConnectionrequest.getRequestInfo());
 				if (!CollectionUtils.isEmpty(connections)) {
 					WaterConnection connection = connections.get(connections.size() - 1);

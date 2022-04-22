@@ -70,7 +70,7 @@ public class WaterDaoImpl implements WaterDao {
 		List<WaterConnection> waterConnectionList = new ArrayList<>();
 		List<Object> preparedStatement = new ArrayList<>();
 		String query = wsQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
-		
+
 		if (query == null)
 			return Collections.emptyList();
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
@@ -86,6 +86,17 @@ public class WaterDaoImpl implements WaterDao {
 		return waterConnectionList;
 	}
 
+	public Integer getWaterConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = wsQueryBuilder.getSearchCountQueryString(criteria, preparedStatement, requestInfo);
+		
+		if (query == null)
+			return 0;
+
+		Integer count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
+		return count;
+	}
+	
 	@Override
 	public void updateWaterConnection(WaterConnectionRequest waterConnectionRequest, boolean isStateUpdatable) {
 		if (isStateUpdatable) {

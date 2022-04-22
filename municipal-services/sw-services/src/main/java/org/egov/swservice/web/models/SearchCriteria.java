@@ -100,7 +100,10 @@ public class SearchCriteria {
 	
 	@JsonProperty("assignee")
 	private String assignee;
-	
+
+	@JsonIgnore
+	private Boolean isCountCall = false;
+
 	public boolean isEmpty() {
 		return (StringUtils.isEmpty(this.tenantId) && StringUtils.isEmpty(this.mobileNumber)
 				&& StringUtils.isEmpty(this.propertyId) && CollectionUtils.isEmpty(this.ids)
