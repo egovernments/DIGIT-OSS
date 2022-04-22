@@ -20,6 +20,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     const [gender, setGender] = useState(formData?.owners?.gender);
     const [mobileNumber, setMobileNumber] = useState(formData?.owners?.mobileNumber || "");
     const [showToast, setShowToast] = useState(null);
+    const [isDisable, setIsDisable] = useState(false);
     let Webview = !Digit.Utils.browser.isMobile();
     const ismultiple = ownershipCategory?.code.includes("MULTIPLEOWNERS") ? true : false;
     const [fields, setFeilds] = useState(
@@ -245,6 +246,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
             ownerStep = { ...owner, owners: fields, ownershipCategory: ownershipCategory };
 
             if (!formData?.id) {
+                setIsDisable(true);
                 //for owners conversion
                 let conversionOwners = [];
                 ownerStep?.owners?.map(owner => {
@@ -313,11 +315,13 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                             result.BPA[0].data = formData.data;
                             result.BPA[0].BlockIds = getBlockIds(result.BPA[0].landInfo.unit);
                             result.BPA[0].subOccupancy= formData?.subOccupancy;
-                            result.BPA[0].uiFlow = formData?.uiFlow
+                            result.BPA[0].uiFlow = formData?.uiFlow;
+                            setIsDisable(false);
                             onSelect("", result.BPA[0], "", true);
                         }
                     })
                     .catch((e) => {
+                        setIsDisable(false);
                         setShowToast({ key: "true", error: true, message: e?.response?.data?.Errors[0]?.message });
                     });
             } else {
@@ -335,7 +339,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     return (
         <div>
         <Timeline currentStep={2} />
-        <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext || !ownershipCategory} forcedError={t(error)}>   
+        <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext || !ownershipCategory || isDisable} forcedError={t(error)}>   
             {!isLoading ?
                 <div style={{marginBottom: "10px"}}>
                     <div>
