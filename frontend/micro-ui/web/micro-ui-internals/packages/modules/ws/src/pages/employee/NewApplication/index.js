@@ -98,7 +98,6 @@ const NewApplication = () => {
   const onSubmit = async (data) => {
     const allDetails = cloneDeep(data);
     const payload = await createPayloadOfWS(data);
-    // const seweragePayload = await sewerageCreatePayload(allDetails);
     let waterAndSewerageLoader = false, waterLoader = false, sewerageLoader = false;
     if (payload?.water && payload?.sewerage) waterAndSewerageLoader = true;
     if (payload?.water && !payload?.sewerage) waterLoader = true;
@@ -114,7 +113,55 @@ const NewApplication = () => {
       sessionStorage.setItem("setWaterAndSewerageBoth", JSON.stringify(false));
     }
 
-    if (payload?.water) {
+    if (payload?.water && payload?.sewerage) {
+      if (waterMutation && sewerageMutation) {
+        setIsEnableLoader(true);
+        await waterMutation(waterConnection, {
+          onError: (error, variables) => {
+            setIsEnableLoader(false);
+            setShowToast({ key: "error", message: error?.message ? error.message : error });
+            setTimeout(closeToastOfError, 5000);
+          },
+          onSuccess: async (waterData, variables) => {
+            let response = await updatePayloadOfWS(waterData?.WaterConnection?.[0]);
+            let waterConnectionUpdate = { WaterConnection: response };
+            waterUpdateMutation(waterConnectionUpdate, {
+              onError: (error, variables) => {
+                setIsEnableLoader(false);
+                setShowToast({ key: "error", message: error?.message ? error.message : error });
+                setTimeout(closeToastOfError, 5000);
+              },
+              onSuccess: async (waterUpdateData, variables) => {
+                setAppDetails({ ...appDetails, waterConnection: waterUpdateData?.WaterConnection?.[0] });
+                await sewerageMutation(sewerageConnection, {
+                  onError: (error, variables) => {
+                    setIsEnableLoader(false);
+                    setShowToast({ key: "error", message: error?.message ? error.message : error });
+                    setTimeout(closeToastOfError, 5000);
+                  },
+                  onSuccess: async (sewerageData, variables) => {
+                    let response = await updatePayloadOfWS(sewerageData?.SewerageConnections?.[0]);
+                    let sewerageConnectionUpdate = { SewerageConnection: response };
+                    await sewerageUpdateMutation(sewerageConnectionUpdate, {
+                      onError: (error, variables) => {
+                        setIsEnableLoader(false);
+                        setShowToast({ key: "error", message: error?.message ? error.message : error });
+                        setTimeout(closeToastOfError, 5000);
+                      },
+                      onSuccess: async (sewerageUpdateData, variables) => {
+                        setAppDetails({ ...appDetails, sewerageConnection: sewerageUpdateData?.SewerageConnections?.[0] });
+                        clearSessionFormData();
+                        window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${waterUpdateData?.WaterConnection?.[0]?.applicationNo}&applicationNumber1=${sewerageUpdateData?.SewerageConnections?.[0]?.applicationNo}`
+                      },
+                    });
+                  },
+                });
+              },
+            })
+          },
+        });
+      }
+    } else if (payload?.water && !payload?.sewerage) {
       if (waterMutation) {
         setIsEnableLoader(true);
         await waterMutation(waterConnection, {
@@ -134,25 +181,14 @@ const NewApplication = () => {
               },
               onSuccess: (data, variables) => {
                 setAppDetails({ ...appDetails, waterConnection: data?.WaterConnection?.[0] });
-                sessionStorage.setItem("waterConnectionDetails", JSON.stringify(data?.WaterConnection?.[0]));
-                if (sessionStorage.getItem("setWaterAndSewerageBoth") && JSON.parse(sessionStorage.getItem("setWaterAndSewerageBoth"))) {
-                  const sewerageDetails = JSON.parse(sessionStorage.getItem("sewerageConnectionDetails"));
-                  clearSessionFormData();
-                  window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}&applicationNumber1=${sewerageDetails?.applicationNo}`;
-                } else {
-                  if (waterLoader && !sewerageLoader) {
-                    clearSessionFormData();
-                    window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
-                  }
-                }
+                clearSessionFormData();
+                window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
               },
             })
           },
         });
       }
-    }
-
-    if (payload?.sewerage) {
+    } else if (payload?.sewerage && !payload?.water) {
       if (sewerageMutation) {
         setIsEnableLoader(true);
         await sewerageMutation(sewerageConnection, {
@@ -172,17 +208,8 @@ const NewApplication = () => {
               },
               onSuccess: (data, variables) => {
                 setAppDetails({ ...appDetails, sewerageConnection: data?.SewerageConnections?.[0] });
-                sessionStorage.setItem("sewerageConnectionDetails", JSON.stringify(data?.SewerageConnections?.[0]));
-                if (sessionStorage.getItem("setWaterAndSewerageBoth") && JSON.parse(sessionStorage.getItem("setWaterAndSewerageBoth"))) {
-                  const waterDetails = JSON.parse(sessionStorage.getItem("waterConnectionDetails"));
-                  clearSessionFormData();
-                  window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${waterDetails?.applicationNo}&applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
-                } else {
-                  if (sewerageLoader && !waterLoader) {
-                    clearSessionFormData();
-                    window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
-                  }
-                }
+                clearSessionFormData();
+                window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
               },
             });
           },
@@ -190,11 +217,6 @@ const NewApplication = () => {
       }
     }
   };
-
-  if (waterAndSewerageBoth && appDetails?.waterConnection?.applicationNo && appDetails?.sewerageConnection?.applicationNo) {
-    window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${appDetails?.waterConnection?.applicationNo}&applicationNumber1=${appDetails?.sewerageConnection?.applicationNo}`
-  }
-
 
   const closeToast = () => {
     setShowToast(null);
