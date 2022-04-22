@@ -1,4 +1,4 @@
-import { EmployeeModuleCard, PTIcon } from "@egovernments/digit-ui-react-components";
+import { EmployeeModuleCard, WSICon } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { checkForEmployee } from "../utils";
@@ -27,7 +27,7 @@ const WSCard = () => {
   links = links.filter((link) => (link.roles ? checkForEmployee(link.roles) : true));
 
   const propsForModuleCard = {
-    Icon: <PTIcon />,
+    Icon: <WSICon />,
     moduleName: t("ACTION_TEST_WATER_AND_SEWERAGE"),
     kpis: [
       {
@@ -45,15 +45,15 @@ const WSCard = () => {
         link: `/digit-ui/employee/ws/bill-amend/inbox`,
       },
       {
-        label: t("WS_SEARCH_APP"),
+        label: t("ES_COMMON_APPLICATION_SEARCH"),
         link: `/digit-ui/employee/ws/search-application`,
       },
       {
-        label: t("WS_NEW_APP"),
+        label: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
         link: `/digit-ui/employee/ws/create-application`,
       },
       {
-        label: t("WS_SEARCH_CONNECTION"),
+        label: t("ES_COMMON_CONNECTION_SEARCH_LABEL"),
         link: `/digit-ui/employee/ws/search`,
       },
     ],

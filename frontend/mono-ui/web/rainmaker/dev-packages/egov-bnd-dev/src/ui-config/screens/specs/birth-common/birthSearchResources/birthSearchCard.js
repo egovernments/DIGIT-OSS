@@ -297,7 +297,6 @@ export const searchSetCommon = getCommonContainer({
         shrink: true,
       },
       onClickHandler: (action, state, dispatch) => {
-        //console.log(action,state, dispatch );
       },
     },
     gridDefination: {
@@ -368,8 +367,8 @@ export const searchSet2 = getCommonContainer({
     },
   }),
   hospital: {
-    uiFramework: "custom-containers",
-    //moduleName: "egov-lams",
+    uiFramework: "custom-containers-local",
+            moduleName: "egov-bnd",
     componentPath: "AutosuggestContainer",
     jsonPath: "bnd.birth.hosptialId",
     sourceJsonPath: "bnd.allHospitals",
@@ -401,7 +400,6 @@ export const searchSet2 = getCommonContainer({
         shrink: true,
       },
       onClickHandler: (action, state, dispatch) => {
-        //console.log(action,state, dispatch );
       },
     },
     gridDefination: {

@@ -123,7 +123,6 @@ export const getMdmsData = async (requestBody) => {
 
     return response;
   } catch (error) {
-    console.log(error);
     return {};
   }
 };
@@ -245,7 +244,6 @@ export const ifUserRoleExists = (role) => {
 
 export const convertEpochToDate = (dateEpoch) => {
   const dateFromApi = new Date(dateEpoch);
-  console.log("Check the data epoch", dateFromApi);
   let month = dateFromApi.getMonth() + 1;
   let day = dateFromApi.getDate();
   let year = dateFromApi.getFullYear();
@@ -569,7 +567,6 @@ export const loadCertDetails = async (action, state, dispatch, data) => {
       },
       "error"
     );
-    console.error(e);
     //return {"RequestInfo":{"apiId":"Mihy","ver":".01","ts":null,"resMsgId":"uief87324","msgId":"20170310130900|en_IN","status":"successful"},"BirthCertificate":[{"id":"1","createdby":null,"createdtime":null,"dateofbirth":1614063655148,"dateofreport":1614063655148,"firstname":"san","gender":1,"hospitalname":null,"informantsaddress":null,"informantsname":null,"lastname":null,"middlename":null,"placeofbirth":"Bangalore","registrationno":"2021-1","remarks":null,"lastmodifiedby":null,"lastmodifiedtime":null,"counter":0,"tenantid":null,"fullname":"SRI V S","birthFatherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"R S H"},"birthMotherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc1","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"S V H"},"birthPermaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"},"birthPresentaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"}}]};
   }
 };
@@ -600,7 +597,6 @@ export const loadFullCertDetails = async (action, state, dispatch, data) => {
       },
       "error"
     );
-    console.error(e);
     return payload;
     //return {"RequestInfo":{"apiId":"Mihy","ver":".01","ts":null,"resMsgId":"uief87324","msgId":"20170310130900|en_IN","status":"successful"},"BirthCertificate":[{"id":"1","createdby":null,"createdtime":null,"dateofbirth":1614063655148,"dateofreport":1614063655148,"firstname":"san","gender":1,"hospitalname":null,"informantsaddress":null,"informantsname":null,"lastname":null,"middlename":null,"placeofbirth":"Bangalore","registrationno":"2021-1","remarks":null,"lastmodifiedby":null,"lastmodifiedtime":null,"counter":0,"tenantid":null,"fullname":"SRI V S","birthFatherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"R S H"},"birthMotherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc1","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"S V H"},"birthPermaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"},"birthPresentaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"}}]};
   }
@@ -651,7 +647,6 @@ export const loadMdmsData = async (action, state, dispatch) => {
     }
     return payload;
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -696,7 +691,6 @@ export const loadHospitals = async (
       },
       "error"
     );
-    console.error(e);
   }
   return payload;
 };
@@ -720,7 +714,6 @@ export const downloadCert = async (tenantId, id, module) => {
       requestBody
     );
   } catch (e) {
-    console.error(e);
     store.dispatch(
       toggleSnackbar(
         true,
@@ -787,7 +780,6 @@ export const postPaymentActivity = async (
     }
   } catch (error) {
     store.dispatch(toggleSpinner());
-    console.error(error);
     store.dispatch(
       toggleSnackbar(
         true,

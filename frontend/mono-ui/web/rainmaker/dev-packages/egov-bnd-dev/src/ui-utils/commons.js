@@ -141,7 +141,6 @@ export const postXlsxFile = async (state, dispatch, module, file) => {
     return resp;
   }
   catch(e){
-    console.error(e);
     store.dispatch(
       toggleSnackbar(
         true,
@@ -194,7 +193,6 @@ export const deleteAllRecords = async (state, dispatch, module) => {
         "error"
       )
     );
-    console.error(e);
   }
   return payload;
 }
@@ -213,7 +211,6 @@ export const searchForBirth = async (dispatch,queryParams,queryObject) => {
     return response;
   } catch (error) {
     dispatch(toggleSpinner());
-    console.error(error);
     store.dispatch(
       toggleSnackbar(
         true,
@@ -238,7 +235,6 @@ export const searchForDeath = async (dispatch,queryParams,queryObject) => {
     return response;
   } catch (error) {
     dispatch(toggleSpinner());
-    console.error(error);
     store.dispatch(
       toggleSnackbar(
         true,

@@ -19,7 +19,6 @@ export const getWorkFlowData = queryObject => {
       );
       dispatch(setProcessInstances(payload));
     } catch (error) {
-      console.log(error);
     }
   };
 };

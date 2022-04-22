@@ -161,8 +161,6 @@ const ApplicationDetails = (props) => {
       return <TLCaption data={caption} />;
     } else if (
       checkpoint.status === "PENDING_APPL_FEE_PAYMENT" ||
-      checkpoint.status === "ASSING_DSO" ||
-      checkpoint.status === "PENDING_DSO_APPROVAL" ||
       checkpoint.status === "DSO_REJECTED" ||
       checkpoint.status === "CANCELED" ||
       checkpoint.status === "REJECTED"
@@ -190,7 +188,10 @@ const ApplicationDetails = (props) => {
           </Link>
         </div>
       );
-    } else if (checkpoint.status === "WAITING_FOR_DISPOSAL" || checkpoint.status === "DISPOSED" || checkpoint.status === "DISPOSAL_IN_PROGRESS") {
+    } else if (checkpoint.status === "WAITING_FOR_DISPOSAL" ||
+      checkpoint.status === "DISPOSAL_IN_PROGRESS" ||
+      checkpoint.status === "DISPOSED" ||
+      checkpoint.status === "CITIZEN_FEEDBACK_PENDING") {
       const caption = {
         date: checkpoint?.auditDetails?.created,
         name: checkpoint?.assigner,

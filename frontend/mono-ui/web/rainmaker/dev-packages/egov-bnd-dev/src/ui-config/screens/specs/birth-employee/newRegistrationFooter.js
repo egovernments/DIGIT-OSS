@@ -84,7 +84,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
         true,
         {
           labelName: "Please fill the required fields.",
-          labelKey: "Please fill all mandatory fields / Invalid field values !",
+          labelKey: "BND_FILL_REQUIRED_FIELDS",
         },
         "info"
       )
@@ -106,7 +106,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
         true,
         {
           labelName: "",
-          labelKey: "Date of Registration should not be before Date of Birth",
+          labelKey: "BND_DOR_SHNT_ABOVE_DEATHDATE",
         },
         "info"
       )
@@ -159,7 +159,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
           labelName:
             "Please enter child's name or father's name or mother's name",
           labelKey:
-            "Please enter child's name or father's name or mother's name",
+            "BND_ENTER_ANYONE_NAME",
         },
         "info"
       )
@@ -241,6 +241,7 @@ export const postData = async (state, dispatch) => {
             "success"
           )
         );
+        location.reload();
       }
     } else {
       // dispatch(
@@ -250,13 +251,12 @@ export const postData = async (state, dispatch) => {
       // );
     }
   } catch (error) {
-    console.log(error);
     dispatch(
       toggleSnackbar(
         true,
         {
           labelName: "API Error",
-          labelKey: "Session expired. Please login again and try.",
+          labelKey: "BND_SESSION_EXPIRED",
         },
         "info"
       )
