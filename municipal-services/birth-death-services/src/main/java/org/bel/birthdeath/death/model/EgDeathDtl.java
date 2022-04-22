@@ -77,7 +77,7 @@ public class EgDeathDtl{
 	
 	private EgDeathSpouseInfo deathSpouseInfo;
 	
-	private String age;
+	private Long age;
 	
 	private String eidno;
 	

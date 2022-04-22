@@ -82,7 +82,7 @@ public class DeathCertificate {
   private String gender = null;
 
   @JsonProperty("age")
-  private String age = null;
+  private Long age = null;
 
   @JsonProperty("state")
   private String state = null;
