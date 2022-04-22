@@ -8,6 +8,7 @@ import { get, set } from "lodash";
 import { loadHospitals, loadMdmsData } from "./../utils";
 import { birthSearchCard } from "./birthSearchResources/birthSearchCard";
 import { searchResults } from "./birthSearchResources/searchResults";
+import "./birthSearchResources/index.css";
 
 const header = getCommonHeader({
   labelName: "Search Certificate",
@@ -71,14 +72,16 @@ const getCertificate = {
       uiFramework: "custom-atoms",
       componentPath: "Form",
       props: {
-        className: "common-div-css",
+        className: "common-div-css bd-search-header",
         id: "bndBirthSearch",
       },
       children: {
         headerDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Container",
-
+          props:{
+            className:"bd-btn-hiw",
+          },
           children: {
             header: {
               gridDefination: {
@@ -131,6 +134,7 @@ const getCertificate = {
               props: {
                 //variant: "outlined",
                 color: "primary",
+                className:"bd-btn-hiw",
                 style: {
                   minWidth: "180px",
                   height: "48px",

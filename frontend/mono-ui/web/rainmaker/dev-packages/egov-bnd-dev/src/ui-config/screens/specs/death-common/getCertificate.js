@@ -8,6 +8,7 @@ import { get, set } from "lodash";
 import { loadHospitals, loadMdmsData } from "./../utils";
 import { deathSearchCard } from "./deathSearchResources/deathSearchCard";
 import { searchResults } from "./deathSearchResources/searchResults";
+import "./deathSearchResources/index.css";
 
 const header = getCommonHeader({
   labelName: "Search Certificate",
@@ -71,13 +72,16 @@ const getCertificate = {
       uiFramework: "custom-atoms",
       componentPath: "Form",
       props: {
-        className: "common-div-css",
+        className: "common-div-css bd-search-header",
         id: "bndDeathSearch",
       },
       children: {
         headerDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Container",
+props:{
+  className:"bd-btn-hiw",
+},
 
           children: {
             header: {
