@@ -378,7 +378,7 @@ public class DeathValidator {
 			setRejectionReason(BirthDeathConstants.PRESENT_COUNTRY,deathDtl,importDeathWrapper);
 			return false;
 		}
-		if(deathDtl.getAge()!=null && deathDtl.getAge().length()>100) {
+		if(deathDtl.getAge()!=null && deathDtl.getAge()>100) {
 			setRejectionReason(BirthDeathConstants.AGE_LARGE,deathDtl,importDeathWrapper);
 			return false;
 		}
@@ -581,7 +581,7 @@ public class DeathValidator {
 		deathDtl.setLastname(replaceSpaceChars(deathDtl.getLastname()));
 		deathDtl.setPlaceofdeath(replaceSpaceChars(deathDtl.getPlaceofdeath()));
 		deathDtl.setRemarks(replaceSpaceChars(deathDtl.getRemarks()));
-		deathDtl.setAge(replaceSpaceChars(deathDtl.getAge()));
+		deathDtl.setAge(Long.valueOf(replaceSpaceChars(String.valueOf(deathDtl.getAge()))));
 		deathDtl.setEidno(replaceSpaceChars(deathDtl.getEidno()));
 		deathDtl.setAadharno(replaceSpaceChars(deathDtl.getAadharno()));
 		deathDtl.setNationality(replaceSpaceChars(deathDtl.getNationality()));

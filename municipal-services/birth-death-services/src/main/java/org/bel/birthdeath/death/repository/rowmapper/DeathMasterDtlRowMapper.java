@@ -70,7 +70,7 @@ public class DeathMasterDtlRowMapper implements ResultSetExtractor<List<EgDeathD
 							.deathPermaddr(permaddr).deathPresentaddr(presentaddr).placeofdeath(rs.getString("placeofdeath")).remarks(rs.getString("remarks"))
 							.hospitalid(rs.getString("hospitalid")).informantsname(rs.getString("informantsname")).informantsaddress(rs.getString("informantsaddress"))
 							.eidno(rs.getString("eidno")).aadharno(rs.getString("bdtlaadharno"))
-							.nationality(rs.getString("bdtlnationality")).religion(rs.getString("bdtlreligion")).icdcode(rs.getString("icdcode")).age(rs.getString("age"))
+							.nationality(rs.getString("bdtlnationality")).religion(rs.getString("bdtlreligion")).icdcode(rs.getString("icdcode")).age(rs.getLong("age"))
 							.build();
 					deathDtl.setFullName(utils.addfullName(deathDtl.getFirstname(), deathDtl.getMiddlename(), deathDtl.getLastname()));
 					deathDtlMap.put(deathdtlid, deathDtl);
