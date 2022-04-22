@@ -97,6 +97,7 @@ public class DeathService {
 			deathCertificate.setAge(deathDtls.get(0).getAge());
 			deathCertificate.setWard(deathDtls.get(0).getDeathPermaddr().getTehsil());
 			deathCertificate.setState(deathDtls.get(0).getDeathPermaddr().getState());
+			deathCertificate.setState(deathDtls.get(0).getDeathPermaddr().getDistrict());
 			deathCertificate.setDateofdeath(deathDtls.get(0).getDateofdeath());
 			deathCertificate.setDateofreport(deathDtls.get(0).getDateofreport());
 		if(deathDtls.size()>1) 

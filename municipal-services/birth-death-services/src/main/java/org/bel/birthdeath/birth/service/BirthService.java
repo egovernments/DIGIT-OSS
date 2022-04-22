@@ -97,6 +97,7 @@ public class BirthService {
 			birthCertificate.setGender(birtDtls.get(0).getGenderStr());
 			birthCertificate.setWard(birtDtls.get(0).getBirthPermaddr().getTehsil());
 			birthCertificate.setState(birtDtls.get(0).getBirthPermaddr().getState());
+			birthCertificate.setState(birtDtls.get(0).getBirthPermaddr().getDistrict());
 			birthCertificate.setDateofbirth(birtDtls.get(0).getDateofbirth());
 			birthCertificate.setDateofreport(birtDtls.get(0).getDateofreport());
 		if(birtDtls.size()>1) 
