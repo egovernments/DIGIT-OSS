@@ -101,8 +101,18 @@ public class SearchCriteria {
 	@JsonProperty("assignee")
 	private String assignee;
 
+	@JsonProperty("sortOrder")
+	private SortOrder sortOrder;
+
+	@JsonProperty("sortBy")
+	private String sortBy;
+
 	@JsonIgnore
 	private Boolean isCountCall = false;
+
+	public enum SortOrder {
+		ASC, DESC
+	}
 
 	public boolean isEmpty() {
 		return (StringUtils.isEmpty(this.tenantId) && StringUtils.isEmpty(this.mobileNumber)
@@ -111,8 +121,8 @@ public class SearchCriteria {
 				&& StringUtils.isEmpty(this.status) && StringUtils.isEmpty(this.applicationNumber)
 				&& StringUtils.isEmpty(this.applicationStatus) && StringUtils.isEmpty(this.fromDate)
 				&& StringUtils.isEmpty(this.toDate) && StringUtils.isEmpty(this.applicationType)
-				&& StringUtils.isEmpty(this.doorNo) && StringUtils.isEmpty(this.ownerName))
-				&& StringUtils.isEmpty(this.applicationNumbers) && StringUtils.isEmpty(this.assignee);
+				&& StringUtils.isEmpty(this.doorNo) && StringUtils.isEmpty(this.ownerName)
+				&& StringUtils.isEmpty(this.applicationNumbers) && StringUtils.isEmpty(this.assignee));
 	}
 
 	public boolean tenantIdOnly() {

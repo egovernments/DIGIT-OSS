@@ -87,6 +87,11 @@ public class SWQueryBuilder {
 	private static final String ORDER_BY_CLAUSE = " ORDER BY sc.appCreatedDate DESC";
 
 	private static final String ORDER_BY_COUNT_CLAUSE = " ORDER BY appCreatedDate DESC";
+
+	private static final String ORDER_BY_INBOX_DESC_CLAUSE = " ORDER BY pi.createdtime DESC";
+
+	private static final String ORDER_BY_INBOX_ASC_CLAUSE = " ORDER BY pi.createdtime ASC";
+
 	/**
 	 *
 	 * @param criteria on search criteria
@@ -272,8 +277,14 @@ public class SWQueryBuilder {
 		if (criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())
 				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION))
 			query.append("GROUP BY conn.connectionno ").append(ORDER_BY_COUNT_CLAUSE);
-		else if (criteria.getIsCountCall())
+		else if(criteria.getIsCountCall()!=null && criteria.getIsCountCall())
 			query.append("GROUP BY conn.applicationno ").append(ORDER_BY_COUNT_CLAUSE);
+		else if(criteria.getSortBy()!=null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
+			if(criteria.getSortOrder()!=null && (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
+				query.append(ORDER_BY_INBOX_DESC_CLAUSE);
+			else
+				query.append(ORDER_BY_INBOX_ASC_CLAUSE);
+		}
 		else
 			query.append(ORDER_BY_CLAUSE);
 		

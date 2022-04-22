@@ -93,9 +93,9 @@ public class WsQueryBuilder {
 	
 	private static final String ORDER_BY_COUNT_CLAUSE= " ORDER BY appCreatedDate DESC";
 	
-	private static final String ORDER_BY_INBOX_DESC_CLAUSE= " ORDER BY pi.createdtime DESC";
-	
-	private static final String ORDER_BY_INBOX_ASC_CLAUSE= " ORDER BY pi.createdtime ASC";
+	private static final String ORDER_BY_INBOX_DESC_CLAUSE = " ORDER BY pi.createdtime DESC";
+
+	private static final String ORDER_BY_INBOX_ASC_CLAUSE = " ORDER BY pi.createdtime ASC";
 	/**
 	 * 
 	 * @param criteria
@@ -287,16 +287,17 @@ public class WsQueryBuilder {
 			query.append("GROUP BY conn.connectionno ").append(ORDER_BY_COUNT_CLAUSE);
 		else if(criteria.getIsCountCall()!=null && criteria.getIsCountCall())
 			query.append("GROUP BY conn.applicationno ").append(ORDER_BY_COUNT_CLAUSE);
-		else if(criteria.getSortBy()!=null && (criteria.getSortBy()).equalsIgnoreCase("createdtime"))
+		else if(criteria.getSortBy()!=null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
 			if(criteria.getSortOrder()!=null && (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
 				query.append(ORDER_BY_INBOX_DESC_CLAUSE);
 			else
 				query.append(ORDER_BY_INBOX_ASC_CLAUSE);
+		}
 		else
 			query.append(ORDER_BY_CLAUSE);
 		
 		// Pagination to limit results, do not paginate query in case of count call.
-		if (!criteria.getIsCountCall() && (criteria.getSortBy()==null))
+		if (!criteria.getIsCountCall())
 			return addPaginationWrapper(query.toString(), preparedStatement, criteria);
 		
 		String queryInString=query.toString();
