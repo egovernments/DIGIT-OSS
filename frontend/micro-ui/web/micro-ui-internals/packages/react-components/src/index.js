@@ -199,6 +199,7 @@ import MultiUploadWrapper from "./molecules/MultiUploadWrapper";
 import { FilterForm, FilterFormField } from "./molecules/FilterForm";
 import OpenLinkContainer from "./atoms/OpenLinkContainer";
 import UploadPitPhoto from "./molecules/UploadPitPhoto";
+import { DownloadBtnCommon } from "./atoms/svgindex";
 export {
   Phone,
   Body,
@@ -407,5 +408,6 @@ export {
   PGRIcon,
   TLIcon,
   BillsIcon,
-  ErrorIcon
+  ErrorIcon,
+  DownloadBtnCommon,
 };

@@ -1,4 +1,4 @@
-import { Card, CardSubHeader, Header, Row, StatusTable, SubmitBar, ActionBar, Menu, Toast} from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, Header, Row, StatusTable, SubmitBar, ActionBar, Menu, Toast,MultiLink,DownloadBtnCommon} from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useHistory, useRouteMatch } from "react-router-dom";
@@ -108,8 +108,16 @@ const EmployeeChallan = (props) => {
       <div style={{ width: "100%", fontFamily: "calibri", color: "#FF0000", display: "flex", justifyContent: "space-between" }}>
         <Header>{`${t("CHALLAN_DETAILS")}`} </Header>
         <div>
-          <SubmitBar label={t("TL_DOWNLOAD")} onSubmit={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)} />
-          
+          {/* <SubmitBar label={t("TL_DOWNLOAD")} onSubmit={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)} /> */}
+          <MultiLink
+                  className="multilink-block-wrapper"
+                  // label={t(`ES_DSS_DOWNLOAD`)}
+                  label=" "
+                  icon={<DownloadBtnCommon />}
+                  onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
+                  displayOptions={isDisplayDownloadMenu}
+                  options={challanDetails?.applicationStatus === "PAID" ? ["CHALLAN", "RECEIPT"] : ["CHALLAN"]}
+                />
           {isDisplayDownloadMenu ? (
             <div
               style={{
