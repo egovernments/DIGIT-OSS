@@ -51,7 +51,7 @@ const getSearchField = (field, formState, Controller, register, control, t) => {
                     rules={{
                         required: field.isMandatory
                     }}
-                    render={(props) => {(
+                    render={(props) => (
                         <MultiSelectDropdown
                             options={optionsObjArr}
                             props={props}
@@ -61,7 +61,7 @@ const getSearchField = (field, formState, Controller, register, control, t) => {
                             optionsKey="name"
                             defaultUnit={t("BPA_SELECTED_TEXT")}
                         />
-                    )}}
+                    )}
                 />
                 {formErrors && formErrors?.[field.name] && formErrors?.[field.name]?.type === "required" && (
                     <CardLabelError>{t(`This field is required`)}</CardLabelError>
