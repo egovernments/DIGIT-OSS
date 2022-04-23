@@ -970,9 +970,9 @@ export const sortDropdownLabels = (e1, e2) => {
 
 export const captureSource = () => {
   //Set the source of the Booking.
-  if (window.mSewaApp) localStorageSet("isNative", true);
-  else localStorageSet("isNative", false);
-  const isNative = Boolean(localStorageGet("isNative"));
+  if (window.mSewaApp) localStorageSet("isNative", "true");
+  else localStorageSet("isNative", "false");
+  const isNative = localStorageGet("isNative")==="true";
   try {
     let source = process.env.REACT_APP_NAME === "Citizen"
       ? (isNative

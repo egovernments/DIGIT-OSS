@@ -11,6 +11,7 @@ import { newRegistrationForm } from "./newRegistrationCard";
 import { confirmationDialog } from "./newRegistrationConfirmDialog";
 import { footer } from "./newRegistrationFooter";
 import "./index.css";
+import { set } from "lodash";
 
 const header = getCommonHeader({
   labelName: "Search Certificate",
@@ -114,6 +115,11 @@ const newRegistration = {
           dispatch(prepareFinalObject("bnd.allHospitals", [{code:"Others",name:"Others"}]));
         }
         if (userAction == "EDIT" && id && module) {
+          set(
+            action.screenConfig,
+            "components.div2.children.details.children.cardContent.children.registrationInfo.children.cardContent.children.registrationInfoCont.children.hospitalName.props.isDisabled",
+            true
+          );
           loadFullCertDetails(action, state, dispatch, {
             tenantId: getTenantId(),
             id: id,
@@ -128,6 +134,12 @@ const newRegistration = {
                 prepareFinalObject(
                   "bnd.death.newRegistration",
                   response.DeathCertificate[0]
+                )
+              );
+              dispatch(
+                prepareFinalObject(
+                  "bnd.death.newRegistration.isLegacyRecord",
+                  response.DeathCertificate[0].counter==1
                 )
               );
               prepareEditScreenData(action, state, dispatch, response);

@@ -4,7 +4,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
-  handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner
+  handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, toggleSnackbar, toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import {
@@ -770,9 +770,9 @@ export const postPaymentActivity = async (
         let mode = "download";
         downloadReceiptFromFilestoreID(response.filestoreId, mode);
 
-        store.dispatch(toggleSpinner());
+        store.dispatch(hideSpinner());
         setTimeout(() => {
-          store.dispatch(toggleSpinner());
+          // store.dispatch(toggleSpinner());
           store.dispatch(setRoute(`/${module}-citizen/myApplications`));
         }, 5000); //Give 5 sec gap redirect to my applications page.
       }

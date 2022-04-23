@@ -245,7 +245,7 @@ export const postData = async (state, dispatch) => {
         if(userAction=="EDIT"){
           window.location.href='/employee/birth-common/getCertificate'
         }else{
-          location.reload();
+          setTimeout(()=>location.reload(),2000);
         }
       }
     } else {

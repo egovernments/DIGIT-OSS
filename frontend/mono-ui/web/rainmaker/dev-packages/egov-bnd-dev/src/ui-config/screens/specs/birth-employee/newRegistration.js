@@ -13,6 +13,7 @@ import { newRegistrationForm } from "./newRegistrationCard";
 import { confirmationDialog } from "./newRegistrationConfirmDialog";
 import { footer } from "./newRegistrationFooter";
 import "./index.css";
+import { set } from "lodash";
 
 const header = getCommonHeader({
   labelName: "Search Certificate",
@@ -118,7 +119,12 @@ const newRegistration = {
         }
 
         if (userAction == "EDIT" && id && module) {
-          loadFullCertDetails(action, state, dispatch, {
+          set(
+            action.screenConfig,
+            "components.div2.children.details.children.cardContent.children.registrationInfo.children.cardContent.children.registrationInfoCont.children.hospitalName.props.isDisabled",
+            true
+          );
+                    loadFullCertDetails(action, state, dispatch, {
             tenantId: getTenantId(),
             id: id,
             module: module,
@@ -132,6 +138,12 @@ const newRegistration = {
                 prepareFinalObject(
                   "bnd.birth.newRegistration",
                   response.BirthCertificate[0]
+                )
+              );
+              dispatch(
+                prepareFinalObject(
+                  "bnd.birth.newRegistration.isLegacyRecord",
+                  response.BirthCertificate[0].counter==1
                 )
               );
               prepareEditScreenData(action, state, dispatch, response);
