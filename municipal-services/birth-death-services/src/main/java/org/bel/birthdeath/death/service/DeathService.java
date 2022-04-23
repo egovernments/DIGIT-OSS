@@ -100,6 +100,7 @@ public class DeathService {
 			deathCertificate.setDistrict(deathDtls.get(0).getDeathPermaddr().getDistrict());
 			deathCertificate.setDateofdeath(deathDtls.get(0).getDateofdeath());
 			deathCertificate.setDateofreport(deathDtls.get(0).getDateofreport());
+			deathCertificate.setPlaceofdeath(deathDtls.get(0).getPlaceofdeath());
 		if(deathDtls.size()>1) 
 			throw new CustomException("Invalid_Input","Error in processing data");
 		enrichmentServiceDeath.enrichCreateRequest(deathCertRequest);

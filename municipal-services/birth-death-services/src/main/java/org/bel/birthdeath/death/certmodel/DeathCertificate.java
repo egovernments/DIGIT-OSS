@@ -142,4 +142,6 @@ public class DeathCertificate {
   private Timestamp dateofdeath;
 
   private Timestamp dateofreport;
+
+  private String placeofdeath;
 }
