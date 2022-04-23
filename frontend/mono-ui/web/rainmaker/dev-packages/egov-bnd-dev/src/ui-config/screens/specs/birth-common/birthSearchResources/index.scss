@@ -15,7 +15,7 @@
 
     .bd-search-header{
       #custom-atoms-headerDiv{
-        flex-flow:row;
+        flex-flow:inherit;
         }
     }
     .bd-btn-hiw{
@@ -25,7 +25,7 @@
         max-width:unset;
         flex-basis: unset;
   button{
-  min-width: none;
+  min-width: unset!important;
   }
       }
     }

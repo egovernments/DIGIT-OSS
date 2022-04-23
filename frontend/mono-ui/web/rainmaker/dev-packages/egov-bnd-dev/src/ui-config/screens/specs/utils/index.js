@@ -26,7 +26,7 @@ import { httpRequest } from "../../../../ui-utils";
 // web("web");
 
 export const downloadPdf = (link, openIn = "_blank") => {
-  var win = window.open(link, "_self");
+  var win = window.open(link, openIn);
   if (win) {
     win.focus();
   } else {
@@ -45,7 +45,7 @@ export const downloadPdf = (link, openIn = "_blank") => {
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
     if (mode === "download") {
-      downloadPdf(fileRes[fileStoreId]);
+      downloadPdf(fileRes[fileStoreId],"_blank");
     } else if (mode === "open") {
       openPdf(fileRes[fileStoreId], "_self");
     } else {

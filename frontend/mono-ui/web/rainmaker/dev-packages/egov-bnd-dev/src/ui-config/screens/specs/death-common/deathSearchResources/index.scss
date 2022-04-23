@@ -12,20 +12,20 @@
   }
   @media only screen and (max-width: 768px) {
 
-  .bd-search-header{
-    #custom-atoms-headerDiv{
-      flex-flow:row;
-      }
-  }
-  .bd-btn-hiw{
-    flex-basis: unset;
-    align-self: self-end;
-    div{
-      max-width:unset;
+    .bd-search-header{
+      #custom-atoms-headerDiv{
+        flex-flow:inherit;
+        }
+    }
+    .bd-btn-hiw{
       flex-basis: unset;
-button{
-min-width: none;
-}
+      align-self: self-end;
+      div{
+        max-width:unset;
+        flex-basis: unset;
+  button{
+  min-width: unset!important;
+  }
+      }
     }
   }
-}
