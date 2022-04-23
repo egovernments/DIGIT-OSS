@@ -581,7 +581,7 @@ public class DeathValidator {
 		deathDtl.setLastname(replaceSpaceChars(deathDtl.getLastname()));
 		deathDtl.setPlaceofdeath(replaceSpaceChars(deathDtl.getPlaceofdeath()));
 		deathDtl.setRemarks(replaceSpaceChars(deathDtl.getRemarks()));
-		deathDtl.setAge(Long.valueOf(replaceSpaceChars(String.valueOf(deathDtl.getAge()))));
+		//deathDtl.setAge(replaceSpaceChars(deathDtl.getAge()));
 		deathDtl.setEidno(replaceSpaceChars(deathDtl.getEidno()));
 		deathDtl.setAadharno(replaceSpaceChars(deathDtl.getAadharno()));
 		deathDtl.setNationality(replaceSpaceChars(deathDtl.getNationality()));
