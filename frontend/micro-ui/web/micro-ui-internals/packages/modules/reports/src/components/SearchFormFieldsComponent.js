@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, CardLabelError, MobileNumber,MultiSelectDropdown } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, CardLabelError, MobileNumber,MultiSelectDropdown,FilterFormField } from "@egovernments/digit-ui-react-components";
 import { useWatch } from "react-hook-form";
 
 
@@ -29,6 +29,7 @@ const getSearchField = (field, formState, Controller, register, control, t) => {
             )
         case "multivaluelist":
             var optionsArr = Object.values(field.defaultValue).map(el => t(el))
+            optionsArr.unshift(t('ALL'))
             const optionsObjArr = optionsArr.map((option)=> {
                 return {
                     name: field.islocalisationRequired ? t(`${field.localisationPrefix}${option}`):option
@@ -98,7 +99,7 @@ const getSearchField = (field, formState, Controller, register, control, t) => {
 const SearchFormFieldsComponent = ({ formState, Controller, register, control, t,reset,data }) => {
     let resetObj={};
 
-    data?.reportDetails?.searchParams?.map(el=> resetObj[el?.name]="")
+    data?.reportDetails?.searchParams?.map(el => el.type === "multivaluelist" ? resetObj[el?.name] = [] : resetObj[el?.name] = "")
     return (
         <>
             {data?.reportDetails?.searchParams?.map(field => (

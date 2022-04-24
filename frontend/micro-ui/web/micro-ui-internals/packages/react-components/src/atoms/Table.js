@@ -31,7 +31,8 @@ const Table = ({
   customTableWrapperClassName="",
   styles={},
   tableTopComponent,
-  tableRef
+  tableRef,
+  isReportTable=false
 }) => {
   const {
     getTableProps,

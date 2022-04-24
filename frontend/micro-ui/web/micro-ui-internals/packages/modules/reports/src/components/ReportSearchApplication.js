@@ -29,8 +29,8 @@ const ReportSearchApplication = ({onSubmit,isLoading,data,tableData,isTableDataL
     useEffect(()=>{
         if (formState.isSubmitSuccessful) {
             let resetObj = {}
-            data?.reportDetails?.searchParams?.map(el => resetObj[el?.name] = "")
-            reset({ ...resetObj, ...searchData, isSubmitSuccessful: false,})
+            data?.reportDetails?.searchParams?.map(el => el.type === "multivaluelist" ? resetObj[el?.name] = [] : resetObj[el?.name] = "")
+            reset({ ...resetObj, isSubmitSuccessful: false,})
         }
     },[formState])
     
@@ -124,6 +124,7 @@ const ReportSearchApplication = ({onSubmit,isLoading,data,tableData,isTableDataL
                 data={rowData}
                 columns={columns}
                 getCellProps={(cellInfo) => {
+                    //console.log(cellInfo);
                     return {
                         style: {
                             padding: "20px 18px",
@@ -131,6 +132,8 @@ const ReportSearchApplication = ({onSubmit,isLoading,data,tableData,isTableDataL
                             // overflowWrap:"break-work",
                             //whiteSpace: 'pre-wrap',
                             wordBreak:cellInfo?.column?.Header===t("reports.hrms.role")? "break-all":null,
+                            minWidth:cellInfo?.column?.Header==="#"?"100px":null,
+                            width: cellInfo?.column?.Header === "#" ? "100px" : null
                             //whiteSpace:"break-space"
                         },
                     };
@@ -145,6 +148,7 @@ const ReportSearchApplication = ({onSubmit,isLoading,data,tableData,isTableDataL
                         displayOptions={isDisplayDownloadMenu}
                         options={downloadOptions}
                 />}
+                isReportTable={true}
                 /> ):<Loader/>}
         </React.Fragment>
     )

@@ -22,6 +22,8 @@ const getSearchParamsObj = (field, data, key, t) => {
       return obj
 
     case "multivaluelist":
+      if(data?.[key]?.[0]?.name === "All")
+       return 
       var defaultValueObj = field.defaultValue
       var isLoc = field.localisationRequired;
       var input
@@ -65,7 +67,7 @@ const Report = () => {
 
   const onSubmit = (data) => {
     //console.log("formdata", data);
-    setSearchData(data)
+    setSearchData(data)   
     const reportData = SearchFormUIData.reportDetails.searchParams;
     let searchParams = []
     Object.keys(data).map((key) => {
