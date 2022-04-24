@@ -1,4 +1,4 @@
-import React, { Fragment,useState,useEffect,useMemo,useCallback,useRef } from 'react'
+import React, { Fragment, useState, useEffect, useMemo, useCallback, useRef, useReducer } from 'react'
 import SearchFormFieldsComponent from './SearchFormFieldsComponent'
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from 'react-i18next';
@@ -17,95 +17,212 @@ import {
 } from "@egovernments/digit-ui-react-components";
 
 
-const ReportSearchApplication = ({onSubmit,isLoading,data,tableData,isTableDataLoading,Count,searchData,reportName}) => {
-    const {t} = useTranslation()
+const ReportSearchApplication = ({ onSubmit, isLoading, data, tableData, isTableDataLoading, Count, searchData, reportName }) => {
+    const { t } = useTranslation()
     const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
-        defaultValues:{
+        defaultValues: {
             ...searchData
         }
     }
     )
 
-    useEffect(()=>{
+    useEffect(() => {
         if (formState.isSubmitSuccessful) {
             let resetObj = {}
             data?.reportDetails?.searchParams?.map(el => el.type === "multivaluelist" ? resetObj[el?.name] = [] : resetObj[el?.name] = "")
-            reset({ ...resetObj, isSubmitSuccessful: false,})
+            reset({ ...resetObj, isSubmitSuccessful: false, })
         }
-    },[formState])
-    
+    }, [formState])
 
-    const searchFormFieldsComponentProps = { formState, Controller, register, control, t,reset,data };
+
+    const searchFormFieldsComponentProps = { formState, Controller, register, control, t, reset, data };
 
     const rowData = tableData?.reportData;
-    rowData?.map((row,index) =>{
-        row?.unshift(index+1)
+    rowData?.map((row, index) => {
+        row?.unshift(index + 1)
     })
 
     const rowHeaders = tableData?.reportHeader
     //this code is leading to a bug in resetting the form due to duplicate cols
     rowHeaders?.unshift({
-        label:"#"
+        label: "#"
     })
     const rowHeadersCopy = rowHeaders && JSON.parse(JSON.stringify(rowHeaders))//deep copy
     rowHeadersCopy?.unshift({
-        label:"#"
+        label: "#"
     })
     rowHeadersCopy?.unshift({
         label: "#"
     }) //added this code twice because in xls file a SNO col in already added
-    const headersXLS = rowHeadersCopy?.map(header=>t(header.label))
+    const headersXLS = rowHeadersCopy?.map(header => t(header.label))
     const rowDataXLS = rowData && JSON.parse(JSON.stringify(rowData))//deep copy
     rowDataXLS?.unshift(headersXLS)
 
-    const getCellValue = (row,header,index) => {
-        
-    if (header.type ==="stringarray"){
-        const rowVal = row?.[index]?.split(',')
-        let finalRowVal;
-        if(header.localisationRequired){
-            finalRowVal = rowVal.map(role=> t(`${header.localisationPrefix}${role}`))
-            return finalRowVal.toString().replaceAll(","," ")
-        }else{
-            finalRowVal = rowVal.map(role =>role)
-            return finalRowVal.toString().replaceAll(","," ")
+    const getCellValue = (row, header, index) => {
+
+        if (header.type === "stringarray") {
+            const rowVal = row?.[index]?.split(',')
+            let finalRowVal;
+            if (header.localisationRequired) {
+                finalRowVal = rowVal.map(role => t(`${header.localisationPrefix}${role}`))
+                return finalRowVal.toString().replaceAll(",", " ")
+            } else {
+                finalRowVal = rowVal.map(role => role)
+                return finalRowVal.toString().replaceAll(",", " ")
+            }
         }
-    }
-    const rowVal = header?.localisationRequired ? t(`${header?.localisationPrefix}${row[index]}`):row?.[index]
-        return rowVal?rowVal:"-"
+        const rowVal = header?.localisationRequired ? t(`${header?.localisationPrefix}${row[index]}`) : row?.[index]
+        return rowVal ? rowVal : "-"
     }
 
     const columns = useMemo(() => {
         const colArray = rowHeaders?.map((header, index) => {
             return {
-                Header:t(header.label),
+                Header: t(header.label),
                 disableSortBy: true,
-                accessor: ( row ) => <span className="cell-text">{getCellValue(row,header,index)}</span>
+                accessor: (row) => <span className="cell-text">{getCellValue(row, header, index)}</span>
             }
         })
         return colArray
-    },[rowHeaders])
-    const [isDisplayDownloadMenu,setIsDisplayDownloadMenu] = useState(false)
+    }, [rowHeaders])
+    const [isDisplayDownloadMenu, setIsDisplayDownloadMenu] = useState(false)
     const downloadOptions = [
         {
-            label:"pdf",
+            label: "pdf",
             onClick: () => Digit.Download.PDF(tableRef, reportName)
         },
         {
-            label:"xls",
-            onClick: () => Digit.Download.Excel(rowDataXLS,reportName)
-            
+            label: "xls",
+            onClick: () => Digit.Download.Excel(rowDataXLS, reportName)
+
         }
     ]
     const tableRef = useRef()
+
+    const isMobile = window.Digit.Utils.browser.isMobile();
+
+    const propsMobileInboxCards = useMemo(
+        () =>
+            !rowData?.length > 0 ? [] : rowData?.map((data) => {
+                //map over columns and display the data in this format
+                //[t(columnheader)]:data to display
+                //here finalObj is each row
+                const finalObj = {}
+                columns?.map((col, index) => {
+                    finalObj[[t(`${col?.Header}`)]] = getCellValue(data, rowHeaders[index], index)
+                })
+                return finalObj;
+            }),
+        [rowData, isTableDataLoading]
+    );
+
+    if (isMobile) {
+
+        function activateModal(state, action) {
+            switch (action.type) {
+                case "set":
+                    return action.payload;
+                case "remove":
+                    return false;
+                default:
+                    break;
+            }
+        }
+
+        const [currentlyActiveMobileModal, setActiveMobileModal] = useReducer(activateModal, false);
+
+        const closeMobilePopupModal = () => {
+            setActiveMobileModal({ type: "remove" });
+        };
+
+        const MobilePopUpCloseButton = () => (
+            <div className="InboxMobilePopupCloseButtonWrapper" onClick={closeMobilePopupModal}>
+                <CloseSvg />
+            </div>
+        );
+
+        const MobileComponentDirectory = ({ currentlyActiveMobileModal, searchFormFieldsComponentProps, ...props }) => {
+            const { closeMobilePopupModal } = props;
+            switch (currentlyActiveMobileModal) {
+                case "SearchFormComponent":
+                    return (
+                        <SearchForm {...props}>
+                            <MobilePopUpCloseButton />
+                            <div className="MobilePopupHeadingWrapper">
+                                <h2>{t("ES_COMMON_SEARCH")}:</h2>
+                            </div>
+                            <SearchFormFieldsComponent {...searchFormFieldsComponentProps} {...{ closeMobilePopupModal }} />
+                        </SearchForm>
+                    );
+                default:
+                    return <span></span>;
+            }
+        };
+
+        const CurrentMobileModalComponent = useCallback(
+            ({ currentlyActiveMobileModal, searchFormFieldsComponentProps, ...props }) =>
+                MobileComponentDirectory({ currentlyActiveMobileModal, searchFormFieldsComponentProps, ...props }),
+            [currentlyActiveMobileModal]
+        );
+
+        if (isLoading) {
+            return <Loader />;
+        }
+        return (
+            <React.Fragment>
+                <div className="searchBox">
+                    <SearchAction
+                        text={t("ES_COMMON_SEARCH")}
+                        handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SearchFormComponent" })}
+                    />
+                </div>
+                {currentlyActiveMobileModal ? (
+                    <PopUp>
+                        <CurrentMobileModalComponent
+                            onSubmit={(data) => {
+                                setActiveMobileModal({ type: "remove" });
+                                onSubmit(data);
+                            }}
+                            handleSubmit={handleSubmit}
+                            id="search-form"
+                            className="rm-mb form-field-flex-one inboxPopupMobileWrapper"
+                            {...{ searchFormFieldsComponentProps, currentlyActiveMobileModal, closeMobilePopupModal }}
+                        />
+                    </PopUp>
+                ) : null}
+                {!isTableDataLoading && tableData?.display ? (
+                    <Card style={{ marginTop: 20 }}>
+                        {
+                            t(tableData?.display)
+                                .split("\\n")
+                                .map((text, index) => (
+                                    <p key={index} style={{ textAlign: "center" }}>
+                                        {text}
+                                    </p>
+                                ))
+                        }
+                    </Card>
+                ) : !isTableDataLoading ? (
+                    <DetailsCard
+                        {...{
+                            data: propsMobileInboxCards,
+                            isTwoDynamicPrefix: true,
+                        }}
+                    />
+                ) : <Loader />}
+            </React.Fragment>
+        );
+
+    }
+
     return (
         <React.Fragment>
             <Header>{reportName}</Header>
-            {isLoading ? <Loader /> : 
-            <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-                <SearchFormFieldsComponent {...searchFormFieldsComponentProps} />
-            </SearchForm>}
-            
+            {isLoading ? <Loader /> :
+                <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
+                    <SearchFormFieldsComponent {...searchFormFieldsComponentProps} />
+                </SearchForm>}
+
             {!isTableDataLoading && tableData?.display ? (
                 <Card style={{ marginTop: 20 }}>
                     {
@@ -131,8 +248,8 @@ const ReportSearchApplication = ({onSubmit,isLoading,data,tableData,isTableDataL
                             fontSize: "16px",
                             // overflowWrap:"break-work",
                             //whiteSpace: 'pre-wrap',
-                            wordBreak:cellInfo?.column?.Header===t("reports.hrms.role")? "break-all":null,
-                            minWidth:cellInfo?.column?.Header==="#"?"100px":null,
+                            wordBreak: cellInfo?.column?.Header === t("reports.hrms.role") ? "break-all" : null,
+                            minWidth: cellInfo?.column?.Header === "#" ? "100px" : null,
                             width: cellInfo?.column?.Header === "#" ? "100px" : null
                             //whiteSpace:"break-space"
                         },
@@ -141,15 +258,15 @@ const ReportSearchApplication = ({onSubmit,isLoading,data,tableData,isTableDataL
                 manualPagination={false}
                 totalRecords={Count}
                 tableTopComponent={<MultiLink
-                        className="multilinkWrapper"
-                        // optionsStyle={{ "position": "relative" }}
-                        // style={{"position":"relative"}}
-                        onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
-                        displayOptions={isDisplayDownloadMenu}
-                        options={downloadOptions}
+                    className="multilinkWrapper"
+                    // optionsStyle={{ "position": "relative" }}
+                    // style={{"position":"relative"}}
+                    onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
+                    displayOptions={isDisplayDownloadMenu}
+                    options={downloadOptions}
                 />}
                 isReportTable={true}
-                /> ):<Loader/>}
+            />) : <Loader />}
         </React.Fragment>
     )
 }
