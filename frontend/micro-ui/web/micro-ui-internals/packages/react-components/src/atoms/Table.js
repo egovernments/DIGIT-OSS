@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import { ArrowBack, ArrowForward, ArrowToFirst, ArrowToLast, SortDown, SortUp } from "./svgindex";
 
-const noop = () => {};
+const noop = () => { };
 
 const Table = ({
   className = "table",
@@ -27,9 +27,12 @@ const Table = ({
   onFirstPage,
   isPaginationRequired = true,
   sortParams = [],
-  showAutoSerialNo=false,
-  customTableWrapperClassName="",
-  styles={}
+  showAutoSerialNo = false,
+  customTableWrapperClassName = "",
+  styles = {},
+  tableTopComponent,
+  tableRef,
+  isReportTable = false
 }) => {
   const {
     getTableProps,
@@ -83,60 +86,61 @@ const Table = ({
   useEffect(() => setGlobalFilter(onSearch), [onSearch, setGlobalFilter]);
   return (
     <React.Fragment>
-    <span className={customTableWrapperClassName}>
-      <table className={className} {...getTableProps()} style={styles}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-             {showAutoSerialNo&& <th style={{  verticalAlign: "top"}}>
-              {showAutoSerialNo&& typeof showAutoSerialNo =="string"?t(showAutoSerialNo):t("TB_SNO")}
-              </th>}
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())} style={{ verticalAlign: "top" }}>
-                  {column.render("Header")}
-                  <span>{column.isSorted ? column.isSortedDesc ? <SortDown /> : <SortUp /> : ""}</span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row, i) => {
-            // rows.slice(0, 10).map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-              {showAutoSerialNo&&  <td >
-              {i+1}
-              </td>}
-                {row.cells.map((cell) => {
-                  return (
-                    <td
-                      // style={{ padding: "20px 18px", fontSize: "16px", borderTop: "1px solid grey", textAlign: "left", verticalAlign: "middle" }}
-                      {...cell.getCellProps([
-                        // {
-                        //   className: cell.column.className,
-                        //   style: cell.column.style,
-                        // },
-                        // getColumnProps(cell.column),
-                        getCellProps(cell),
-                      ])}
-                    >
-                      {cell.attachment_link ? (
-                        <a style={{ color: "#1D70B8" }} href={cell.attachment_link}>
-                          {cell.render("Cell")}
-                        </a>
-                      ) : (
-                        <React.Fragment> {cell.render("Cell")} </React.Fragment>
-                      )}
-                    </td>
-                  );
-                })}
+      <span className={customTableWrapperClassName}>
+        <table className={className} {...getTableProps()} style={styles} ref={tableRef}>
+          {tableTopComponent ? tableTopComponent : null}
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {showAutoSerialNo && <th style={{ verticalAlign: "top" }}>
+                  {showAutoSerialNo && typeof showAutoSerialNo == "string" ? t(showAutoSerialNo) : t("TB_SNO")}
+                </th>}
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())} style={{ verticalAlign: "top" }}>
+                    {column.render("Header")}
+                    <span>{column.isSorted ? column.isSortedDesc ? <SortDown /> : <SortUp /> : ""}</span>
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row, i) => {
+              // rows.slice(0, 10).map((row, i) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {showAutoSerialNo && <td >
+                    {i + 1}
+                  </td>}
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        // style={{ padding: "20px 18px", fontSize: "16px", borderTop: "1px solid grey", textAlign: "left", verticalAlign: "middle" }}
+                        {...cell.getCellProps([
+                          // {
+                          //   className: cell.column.className,
+                          //   style: cell.column.style,
+                          // },
+                          // getColumnProps(cell.column),
+                          getCellProps(cell),
+                        ])}
+                      >
+                        {cell.attachment_link ? (
+                          <a style={{ color: "#1D70B8" }} href={cell.attachment_link}>
+                            {cell.render("Cell")}
+                          </a>
+                        ) : (
+                          <React.Fragment> {cell.render("Cell")} </React.Fragment>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </span>
       {isPaginationRequired && (
         <div className="pagination dss-white-pre" >
@@ -167,11 +171,11 @@ const Table = ({
             </span>{" "}
           </span>
           {/* to go to first and last page we need to do a manual pagination , it can be updated later*/}
-          {!manualPagination&& pageIndex!=0 &&<ArrowToFirst onClick={() => gotoPage(0)} className={"cp"} />}
+          {!manualPagination && pageIndex != 0 && <ArrowToFirst onClick={() => gotoPage(0)} className={"cp"} />}
           {canPreviousPage && manualPagination && onFirstPage && <ArrowToFirst onClick={() => manualPagination && onFirstPage()} className={"cp"} />}
           {canPreviousPage && <ArrowBack onClick={() => (manualPagination ? onPrevPage() : previousPage())} className={"cp"} />}
           {canNextPage && <ArrowForward onClick={() => (manualPagination ? onNextPage() : nextPage())} className={"cp"} />}
-          {!manualPagination&& pageIndex != pageCount-1 && <ArrowToLast onClick={() => gotoPage(pageCount-1 )} className={"cp"} />}
+          {!manualPagination && pageIndex != pageCount - 1 && <ArrowToLast onClick={() => gotoPage(pageCount - 1)} className={"cp"} />}
           {rows.length == pageSizeLimit && canNextPage && manualPagination && onLastPage && (
             <ArrowToLast onClick={() => manualPagination && onLastPage()} className={"cp"} />
           )}

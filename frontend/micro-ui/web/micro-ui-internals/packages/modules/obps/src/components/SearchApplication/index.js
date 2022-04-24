@@ -200,10 +200,6 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
                 <h2>{t("ES_COMMON_SEARCH")}:</h2>
               </div>
               <SearchFormFieldsComponent {...searchFormFieldsComponentProps} {...{ closeMobilePopupModal }} />
-              {/* <SearchField className="submit">
-                        <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
-                        <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
-                    </SearchField> */}
             </SearchForm>
           );
         default:
@@ -227,8 +223,6 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
             text={t("ES_COMMON_SEARCH")}
             handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SearchFormComponent" })}
           />
-          {/* {isInboxLoading ? <Loader /> : <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"FilterFormComponent"})}/>} */}
-          {/* <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"SortComponent"})}/> */}
         </div>
         {currentlyActiveMobileModal ? (
           <PopUp>
@@ -254,17 +248,17 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
                 </p>
               ))}
           </Card>
-        ) : (
+        ) : !isTableDataLoading? (
           <DetailsCard
             {...{
               data: propsMobileInboxCards,
-              isTwoDynamicPrefix: true,
-              linkPrefix: window.location.href.includes("/citizen") ? `/digit-ui/citizen/obps/` : `/digit-ui/employee/obps/`,
-              getRedirectionLink: getRedirectionLink,
-              serviceRequestIdKey: "applicationNo",
+              // isTwoDynamicPrefix: true,
+              // linkPrefix: window.location.href.includes("/citizen") ? `/digit-ui/citizen/obps/` : `/digit-ui/employee/obps/`,
+              // getRedirectionLink: getRedirectionLink,
+              // serviceRequestIdKey: "applicationNo",
             }}
           />
-        )}
+        ):<Loader />}
       </React.Fragment>
     );
   }
