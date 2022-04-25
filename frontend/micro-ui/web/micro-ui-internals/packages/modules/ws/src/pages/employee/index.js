@@ -17,6 +17,7 @@ import EditApplication from "./EditApplication";
 import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
 import ModifyApplication from "./ModifyApplication";
 import EditModifyApplication from "./EditModifyApplication";
+import WSDisconnectionDocsRequired from "../../pageComponents/WSDisconnectionDocsRequired";
 
 import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
 
@@ -72,10 +73,10 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/consumption-details`} component={ConsumptionDetails} />
         <PrivateRoute path={`${path}/modify-application`} component={ModifyApplication} />
         <PrivateRoute path={`${path}/modify-application-edit`} component={EditModifyApplication} />
+        <PrivateRoute path={`${path}/disconnection-application`} component={WSDisconnectionDocsRequired} />
         <PrivateRoute path={`${path}/bill-amend/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/water/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/sewerage/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
-
         {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
       </Switch>

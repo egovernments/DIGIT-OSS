@@ -39,6 +39,7 @@ import WSAcknowledgement from "./pages/citizen/WSCreate/WSAcknowledgement";
 import WSPayments from "./pages/citizen/MyPayment/WSPayments";
 import WSEditConnectionDetails from"./pageComponents/WSEditConnectionDetails";
 import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails";
+import WSDisconnectionDocsRequired from "./pageComponents/WSDisconnectionDocsRequired";
 import WSInbox from "./components/WSInbox";
 
 const WSModule = ({ stateCode, userType, tenants }) => {
@@ -134,6 +135,7 @@ const componentsToRegister = {
   WSEditConnectionDetails,
   ConsumptionDetails,
   EditApplication,
+  WSDisconnectionDocsRequired,
   WSInbox
 };
 
