@@ -129,7 +129,8 @@ public class BirthRepository {
 			birthCertificate.getAuditDetails().setLastModifiedBy(map.get("lastmodifiedby"));
 			birthCertificate.getAuditDetails().setCreatedTime(Long.parseLong(map.get("createdtime")));
 			birthCertificate.getAuditDetails().setLastModifiedTime(Long.parseLong(map.get("lastmodifiedtime")));
-
+			log.info("Created by : " + map.get("createdby"));
+			log.info(birthCertificate.getAuditDetails().toString());
 			birthCertificates.add(birthCertificate);
 		}
 		return birthCertificates;
