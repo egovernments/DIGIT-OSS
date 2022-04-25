@@ -4,12 +4,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-<<<<<<< HEAD
-=======
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
->>>>>>> f41f50c893... RAIN-5549:EDCR Security Fix: Upgrade log4j version and testing (#2380)
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.Parapet;
@@ -24,13 +20,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ParapetExtract extends FeatureExtract {
-<<<<<<< HEAD
 
-	@Autowired
-=======
     private static final Logger LOG = LogManager.getLogger(ParapetExtract.class);
     @Autowired
->>>>>>> f41f50c893... RAIN-5549:EDCR Security Fix: Upgrade log4j version and testing (#2380)
     private LayerNames layerNames;
 
     @Override
