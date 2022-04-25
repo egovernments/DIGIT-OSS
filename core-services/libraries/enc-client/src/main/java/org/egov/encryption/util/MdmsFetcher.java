@@ -43,9 +43,7 @@ public class MdmsFetcher {
                 restTemplate.postForEntity(encProperties.getEgovMdmsHost() + encProperties.getEgovMdmsSearchEndpoint(),
                         mdmsCriteriaReq, MdmsResponse.class);
         return response.getBody().getMdmsRes().get(EncClientConstants.MDMS_MODULE_NAME)
-                .get(EncClientConstants.MDMS_ENCRYPTION_MASTER_NAME);
+                .get(masterName);
     }
-
-
 
 }

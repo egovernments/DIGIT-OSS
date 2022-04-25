@@ -73,7 +73,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         JsonNode encryptedNode = encryptJsonArray(plaintextNodeCopy, key, tenantId);
 
         if(!plaintextNode.isArray()) {
-            encryptedNode.get(0);
+            return encryptedNode.get(0);
         }
         return encryptedNode;
     }
