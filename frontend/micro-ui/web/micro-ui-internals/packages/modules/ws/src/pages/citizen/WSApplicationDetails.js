@@ -1,4 +1,4 @@
-import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, CardSectionHeader, MultiLink } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, CardSectionHeader, MultiLink, CardText, CardHeader } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
@@ -14,11 +14,11 @@ const WSApplicationDetails = () => {
   const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   const stateCode = Digit.ULBService.getStateId();
   const [showOptions, setShowOptions] = useState(false);
-  const applicationNobyData = window.location.href.substring(window.location.href.indexOf("WS_"));
+  const applicationNobyData = window.location.href.includes("SW_")? window.location.href.substring(window.location.href.indexOf("SW_")) : window.location.href.substring(window.location.href.indexOf("WS_")) ;
   //const { acknowledgementIds } = useParams();
 
   let filter1 = { tenantId: tenantId, applicationNumber: applicationNobyData }
-  const { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1 }, { filters: filter1 });
+  const { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1, BusinessService:applicationNobyData?.includes("SW")?"SW":"WS" }, { filters: filter1 });
 
   const fetchBillParams = { consumerCode: data?.WaterConnection?.[0]?.applicationNo };
 
@@ -141,20 +141,20 @@ const WSApplicationDetails = () => {
       <div className='hide-seperator'>
         <Card>
           <StatusTable>
-            <Row className="border-none" label={t("WS_MYCONNECTIONS_APPLICATION_NO")} text={data?.WaterConnection?.[0]?.applicationNo} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none" label={t("WS_MYCONNECTIONS_SERVICE")} text={data?.WaterConnection?.[0]?.applicationType} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_MYCONNECTIONS_APPLICATION_NO")} text={data?.WaterConnection?.[0]?.applicationNo || data?.SewerageConnections?.[0]?.applicationNo} textStyle={{}} />
+            <Row className="border-none" label={t("WS_SERVICE_NAME_LABEL")} text={t(`WS_APPLICATION_TYPE_${data?.WaterConnection?.[0]?.applicationType || data?.SewerageConnections?.[0]?.applicationType}`)} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")} text={paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount || "NA"} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
         </Card>
         {paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.length > 0 && <Card>
-          <CardSubHeader>{t("WS_FEE_DEATAILS_HEADER")}</CardSubHeader>
+          <CardHeader styles={{fontSize:"28px"}}>{t("WS_FEE_DEATAILS_HEADER")}</CardHeader>
           <StatusTable>
             {paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.map(bill => (
               <Row className="border-none" label={t(bill?.taxHeadCode)} text={bill?.amount} textStyle={{ textAlign: "right" }} />
             ))
             }
             <Row className="border-none" label={t("WS_TOTAL_AMOUNT_DUE")} text={paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount} textStyle={{ textAlign: "right" }} />
-            <Row className="border-none" label={t("WS_COMMON_TABLE_COL_APPLICATION_STATUS")} text={paymentDetails?.data?.Bill?.[0]?.billDetails?.amountPaid == null ? "Unpaid" : "paid"} textStyle={{ textAlign: "right" }} />
+            <Row className="border-none" label={t("WS_COMMON_TABLE_COL_APPLICATION_STATUS")} text={paymentDetails?.data?.Bill?.[0]?.billDetails?.amountPaid == null ? "Unpaid" : "Paid"} textStyle={paymentDetails?.data?.Bill?.[0]?.billDetails?.amountPaid == null ? {textAlign: "right", color:"red"} :{ textAlign: "right", color:"darkgreen" }} />
             {/* <Row label={t("One time Fee")} text={"₹ 16500.00"} textStyle={{textAlign: "right" }} />
             <Row label={t("Security Charge")} text={"₹ 500.00"} textStyle={{textAlign: "right" }} />
             <Row label={t("Meter Charge")} text={"₹ 2000.00"} textStyle={{textAlign: "right" }} />
@@ -164,42 +164,57 @@ const WSApplicationDetails = () => {
           </StatusTable>
         </Card>}
         <Card>
-          <CardSubHeader>{t("WS_COMMON_PROPERTY_DETAILS")}</CardSubHeader>
+          <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_PROPERTY_DETAILS")}</CardHeader>
           <StatusTable>
-            <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={data?.WaterConnection?.[0]?.propertyId} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={data?.WaterConnection?.[0]?.propertyId || data?.SewerageConnections?.[0]?.propertyId} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={PTData?.Properties?.[0]?.owners?.[0]?.name} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none" label={t("WS_OWN_DETAIL_CROSADD")} text={PTData?.Properties?.[0]?.owners?.[0]?.correspondenceAddress} textStyle={{ whiteSpace: "pre" }} />
-            <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${data?.WaterConnection?.[0]?.propertyId}&tenantId=${data?.WaterConnection?.[0]?.tenantId}`}>
+            <Row className="border-none" label={t("WS_OWN_DETAIL_CROSADD")} text={PTData?.Properties?.[0]?.owners?.[0]?.correspondenceAddress || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${data?.WaterConnection?.[0]?.propertyId || data?.SewerageConnections?.[0]?.propertyId}&tenantId=${data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId}`}>
             <LinkButton style={{textAlign:"left"}} label={t("WS_VIEW_PROPERTY")} />
             </Link>
           </StatusTable>
         </Card>
-        {data?.WaterConnection?.[0]?.connectionHolders && <Card>
-          <CardSubHeader>{t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER")}</CardSubHeader>
+        {data?.WaterConnection?.[0]?.connectionHolders?.length>0 || data?.SewerageConnections?.[0]?.connectionHolders?.length>0 ? <Card>
+          <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER")}</CardHeader>
           <StatusTable>
             <Row className="border-none" label={t("WS_OWN_DETAIL_MOBILE_NO_LABEL")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.mobileNumber} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.name} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_GENDER_LABEL")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.gender} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none" label={t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.fatherOrHusbandName} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none" label={t("WS_OWN_DETAIL_RELATION_LABEL")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.relationship} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none" label={t("WS_OWN_DETAIL_CROSADD")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.correspondenceAddress} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.fatherOrHusbandName || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_OWN_DETAIL_RELATION_LABEL")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.relationship || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_OWN_DETAIL_CROSADD")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.correspondenceAddress || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={"NA"} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
-        </Card>}
+        </Card>:
+        <div>
+          <Card><CardSubHeader>{t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER")}</CardSubHeader>
+        <CardText>{t("WS_SAME_AS_PROPERTY_OWNERS")}</CardText></Card></div>}
         <Card>
-          <CardSubHeader>{t("WS_COMMON_CONNECTION_DETAIL")}</CardSubHeader>
-          <StatusTable>
-            <Row className="border-none" label={t("WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED")} text={data?.WaterConnection?.[0]?.proposedTaps} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none" label={t("WS_SERV_DETAIL_NO_OF_TOILETS")} text={data?.WaterConnection?.[0]?.proposedPipeSize} textStyle={{ whiteSpace: "pre" }} />
+          <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_CONNECTION_DETAIL")}</CardHeader>
+          {data?.WaterConnection && data?.WaterConnection?.length > 0 && <StatusTable>
+          <Row className="border-none" label={t("WS_SERV_DETAIL_CONN_TYPE")} text={data?.WaterConnection?.[0]?.connectionType || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED")} text={data?.WaterConnection?.[0]?.proposedTaps || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_SERV_DETAIL_PIPE_SIZE")} text={`${data?.WaterConnection?.[0]?.proposedPipeSize} ${t("WS_INCHES_LABEL")}` || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SOURCE")} text={data?.WaterConnection?.[0]?.waterSource || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")} text={data?.WaterConnection?.[0]?.waterSubSource || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+
             <Link to={`/digit-ui/citizen/ws/connection/additional/${data?.WaterConnection?.[0]?.applicationNo}`}>
-              <LinkButton label={t("additinal details")} />
+              <LinkButton style={{textAlign:"left"}}  label={t("WS_ADDITIONAL_DETAILS")} />
             </Link>
-          </StatusTable>
+          </StatusTable>}
+          {data?.SewerageConnections && data?.SewerageConnections?.length > 0 && <StatusTable>
+            <Row className="border-none" label={t("WS_NO_OF_WATER_CLOSETS_LABEL")} text={data?.SewerageConnections?.[0]?.proposedWaterClosets} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_SERV_DETAIL_NO_OF_TOILETS")} text={data?.SewerageConnections?.[0]?.proposedPipeSize} textStyle={{ whiteSpace: "pre" }} />
+            <Link to={`/digit-ui/citizen/ws/connection/additional/${data?.SewerageConnections?.[0]?.applicationNo}`}>
+              <LinkButton style={{textAlign:"left"}} label={t("WS_ADDITIONAL_DETAILS")} />
+            </Link>
+          </StatusTable>}
         </Card>
         {/* <Card>
         <PropertyDocument property={application}></PropertyDocument>
         </Card> */}
         <Card>
+        <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_DOCUMENT_DETAILS")}</CardHeader>
           {data?.WaterConnection?.[0]?.documents && data?.WaterConnection?.[0]?.documents.map((doc, index) => (
             <div key={`doc-${index}`}>
               {<div><CardSectionHeader>{t(doc?.documentType?.split('.').slice(0, 2).join('_'))}</CardSectionHeader>
@@ -211,10 +226,21 @@ const WSApplicationDetails = () => {
               </div>}
             </div>
           ))}
+          {data?.SewerageConnections?.[0]?.documents && data?.SewerageConnections?.[0]?.documents.map((doc, index) => (
+            <div key={`doc-${index}`}>
+              {<div><CardSectionHeader>{t(doc?.documentType?.split('.').slice(0, 2).join('_'))}</CardSectionHeader>
+                <StatusTable>
+                  {
+                    <WSDocument value={data?.SewerageConnections?.[0]?.documents} Code={doc?.documentType} index={index} />}
+                  {data?.SewerageConnections?.[0]?.documents.length != index + 1 ? <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} /> : null}
+                </StatusTable>
+              </div>}
+            </div>
+          ))}
         </Card>
         <Card>
           {/* <PTWFApplicationTimeline application={application} id={acknowledgementIds} /> */}
-          <WSWFApplicationTimeline application={data?.WaterConnection?.[0]} id={data?.WaterConnection?.[0]?.applicationNo} />
+          <WSWFApplicationTimeline application={data?.WaterConnection?.[0] || data?.SewerageConnections?.[0]} id={data?.WaterConnection?.[0]?.applicationNo || data?.SewerageConnections?.[0]?.applicationNo} />
         </Card>
       </div>
     </React.Fragment>

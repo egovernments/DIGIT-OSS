@@ -11,7 +11,8 @@ const WNSMyBills = ({ template, header, actionButtonLabel }) => {
   const history = useHistory();
   const location = useLocation();
   const { tenantId: _tenantId } = Digit.Hooks.useQueryParams();
-  const { tenantId } = Digit.UserService.getUser()?.info || location?.state || { tenantId: _tenantId } || {};
+  let { tenantId } = Digit.UserService.getUser()?.info || location?.state || { tenantId: _tenantId } || {};
+   tenantId = Digit.UserService.getUser()?.info?.permanentCity || tenantId
   if (!tenantId && !location?.state?.fromSearchResults) {
     history.replace(`/digit-ui/citizen/login`, { from: url });
   }

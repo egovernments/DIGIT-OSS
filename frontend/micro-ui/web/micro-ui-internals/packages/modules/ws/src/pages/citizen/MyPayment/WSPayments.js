@@ -16,7 +16,7 @@ const WSPayments = ({ application }) => {
       <KeyNote keyValue={t("WS_RECEIPT_DATE_LABEL")} note={convertEpochToDate(application?.paymentDetails?.[0]?.receiptDate) || t("CS_NA")} />
       <SubmitBar
         label={t("WS_DOWNLOAD_RECEIPT")}
-        onSubmit={(e) => DownloadReceipt(application?.paymentDetails?.[0]?.bill?.consumerCode, application?.tenantId, "SW")}
+        onSubmit={(e) => DownloadReceipt(application?.paymentDetails?.[0]?.bill?.consumerCode, application?.tenantId, application?.paymentDetails?.[0]?.bill?.consumerCode?.includes("SW")?"SW":"WS")}
       />
     </Card>
   );

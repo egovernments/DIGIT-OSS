@@ -23,11 +23,20 @@ const rowContainerStyle = {
   justifyContent: "space-between",
 };
 
+const getApplicationNumber = (water,sewerage) => {
+  if(water && sewerage && water?.WaterConnection?.[0]?.applicationNo && sewerage?.SewerageConnections?.[0]?.applicationNo)
+  return `${water?.WaterConnection?.[0]?.applicationNo} , ${sewerage?.SewerageConnections?.[0]?.applicationNo}`;
+  else if(water && water?.WaterConnection?.[0]?.applicationNo)
+  return `${water?.WaterConnection?.[0]?.applicationNo}`
+  else if(sewerage && sewerage?.SewerageConnections?.[0]?.applicationNo)
+  return `${sewerage?.SewerageConnections?.[0]?.applicationNo}`;
+}
+
 const BannerPicker = (props) => {
   return (
     <Banner
       message={GetActionMessage(props)}
-      applicationNumber={`${props.data?.WaterConnection?.[0]?.applicationNo || props.data?.SewerageConnections?.[0]?.applicationNo}`}
+      applicationNumber={getApplicationNumber(props?.Waterdata,props?.Seweragedata)}
       info={props.isSuccess ? props.t("WS_REF_NO_LABEL") : ""}
       successful={props.isSuccess}
     />
@@ -109,10 +118,10 @@ const WSAcknowledgement = ({ data, onSuccess, clearParams }) => {
     <Loader />
   ) : (
     <Card>
-      <BannerPicker t={t} clearParams={clearParams} data={data?.serviceName?.code === "WATER"? WSmutation.data : SWmutation.data} isSuccess={data?.serviceName?.code === "WATER"? WSmutation.isSuccess : SWmutation.isSuccess} isLoading={data?.serviceName?.code === "WATER"? WSmutation.isLoading || WSmutation.isIdle : (data?.serviceName?.code === "SEWERAGE") ? SWmutation.isLoading || SWmutation.isIdle : (WSmutation.isLoading || WSmutation.isIdle || SWmutation.isLoading || SWmutation.isIdle)} />
+      <BannerPicker t={t} clearParams={clearParams} Waterdata={WSmutation.data } Seweragedata={SWmutation.data} isSuccess={data?.serviceName?.code === "WATER"? WSmutation.isSuccess : SWmutation.isSuccess} isLoading={data?.serviceName?.code === "WATER"? WSmutation.isLoading || WSmutation.isIdle : (data?.serviceName?.code === "SEWERAGE") ? SWmutation.isLoading || SWmutation.isIdle : (WSmutation.isLoading || WSmutation.isIdle || SWmutation.isLoading || SWmutation.isIdle)} />
       {(data?.serviceName?.code === "WATER"? WSmutation.isSuccess : SWmutation.isSuccess) && <CardText>{t("WS_FILE_RESPONSE")}</CardText>}
-      {(!(data?.serviceName?.code === "WATER"? WSmutation.isSuccess : SWmutation.isSuccess)) && <CardText>{t("TL_FILE_TRADE_FAILED_RESPONSE")}</CardText>}
-      {<SubmitBar label={t("TL_DOWNLOAD_ACK_FORM")} onSubmit={handleDownloadPdf} />}
+      {(!(data?.serviceName?.code === "WATER"? WSmutation.isSuccess : SWmutation.isSuccess)) && <CardText>{t("WS_FILE_TRADE_FAILED_RESPONSE")}</CardText>}
+      {<SubmitBar label={t("WS_DOWNLOAD_ACK_FORM")} onSubmit={handleDownloadPdf} />}
       {/* {(data?.serviceName?.code === "WATER"? WSmutation.isSuccess : SWmutation.isSuccess) && (
         <LinkButton
           label={

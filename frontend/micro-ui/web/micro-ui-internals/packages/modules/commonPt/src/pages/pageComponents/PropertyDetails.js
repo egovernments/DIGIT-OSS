@@ -53,7 +53,7 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
 
   return (
     <React.Fragment>
-      {window.location.href.includes("/citizen") ? <Timeline currentStep={2} businessService={"WS"} /> : null}
+      {window.location.href.includes("/citizen") ? <Timeline currentStep={window.location.href.includes("/ws/") ? 1 : 2} flow={window.location.href.includes("/ws/") ? "WS":""} businessService={"WS"} /> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
         {propertyDetails && propertyDetails?.Properties.length && (
           <React.Fragment>

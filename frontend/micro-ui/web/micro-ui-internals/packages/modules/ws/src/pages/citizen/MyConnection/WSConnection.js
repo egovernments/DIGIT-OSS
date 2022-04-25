@@ -11,11 +11,11 @@ const WSConnection = ({ application }) => {
     <Card>
     <KeyNote keyValue={t("WS_MYCONNECTIONS_CONSUMER_NO")} note={application?.propertyId} />
     <KeyNote keyValue={t("WS_SERVICE_NAME_LABEL")} note={t(`WS_APPLICATION_TYPE_${application?.applicationType}`)} />
-    <KeyNote keyValue={t("WS_CONSUMER_NAME")} note={application?.connectionHolders?.map((owner) => owner.name).join(",")} />
+    <KeyNote keyValue={t("WS_CONSUMER_NAME")} note={application?.connectionHolders?.map((owner) => owner.name).join(",") || application?.property?.owners?.map((owner) => owner.name).join(",")} />
     <KeyNote keyValue={t("WS_MYCONNECTION_ADDRESS")} note={getAddress(application?.property?.address,t)} />
-    <KeyNote keyValue={t("WS_MYCONNECTIONS_STATUS")} note={application?.applicationStatus} />
+    <KeyNote keyValue={t("WS_MYCONNECTIONS_STATUS")} note={t(application?.applicationStatus)} />
       <Link to={{pathname:`/digit-ui/citizen/ws/connection/details/${encodeApplicationNo}`,state:{...application}}}>
-        <SubmitBar label={t("WS_VIEW_DETAILS")} />
+        <SubmitBar label={t("WS_VIEW_DETAILS_LABEL")} />
       </Link>
     </Card>
   );

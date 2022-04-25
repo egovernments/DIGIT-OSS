@@ -1,12 +1,85 @@
 export const newConfig = [
   {
+    head: "",
+    body: [
+      {
+        //if want to input index in url just pul @0 after route name owner-ship-details@0
+        type: "component",
+        route: "know-your-property",
+        isMandatory: true,
+        component: "CPTKnowYourProperty",
+        texts: {
+          header: "PT_DO_YOU_KNOW_YOUR_PROPERTY",
+          submitBarLabel: "CS_COMMON_NEXT",
+        },
+        key: "knowyourproperty",
+        withoutLabel: true,
+        nextStep: {
+          TL_COMMON_YES: "search-property",
+          TL_COMMON_NO: "create-property",
+        },
+        hideInEmployee: true,
+      },
+      {
+        type: "component",
+        route: "search-property",
+        isMandatory: true,
+        component: "CPTSearchProperty",
+        key: "cptsearchproperty",
+        withoutLabel: true,
+        nextStep: 'search-results',
+        hideInEmployee: true,
+      },
+      {
+        type: "component",
+        route: "search-results",
+        isMandatory: true,
+        component: "CPTSearchResults",
+        key: "cptsearchresults",
+        withoutLabel: true,
+        nextStep: 'docsrequired',
+        hideInEmployee: true,
+      },
+      {
+        type: "component",
+        route: "create-property",
+        isMandatory: true,
+        component: "CPTCreateProperty",
+        key: "cptcreateproperty",
+        withoutLabel: true,
+        nextStep: 'acknowledge-create-property',
+        hideInEmployee: true,
+      },
+      {
+        type: "component",
+        route: "acknowledge-create-property",
+        isMandatory: true,
+        component: "CPTAcknowledgement",
+        key: "cptacknowledgement",
+        withoutLabel: true,
+        nextStep: 'docsrequired',
+        hideInEmployee: true,
+      },
+      {
+        type: "component",
+        route: "property-details",
+        isMandatory: true,
+        component: "CPTPropertyDetails",
+        key: "propertydetails",
+        withoutLabel: true,
+        nextStep: 'connection-holder',
+        hideInEmployee: true,
+      },
+    ],
+  },
+  {
     head: "ES_NEW_APPLICATION_PROPERTY_ASSESSMENT",
     body: [
       {
-        route: "docs-required",
+        route: "docsrequired",
         component: "WSDocsRequired",
         key: "data",
-        nextStep: "know-your-property"
+        nextStep: "property-details"
       },
       {
         route: "connection-holder",
@@ -84,79 +157,6 @@ export const newConfig = [
         }
       }
     ]
-  },
-  {
-    head: "",
-    body: [
-      {
-        //if want to input index in url just pul @0 after route name owner-ship-details@0
-        type: "component",
-        route: "know-your-property",
-        isMandatory: true,
-        component: "CPTKnowYourProperty",
-        texts: {
-          header: "PT_DO_YOU_KNOW_YOUR_PROPERTY",
-          submitBarLabel: "CS_COMMON_NEXT",
-        },
-        key: "knowyourproperty",
-        withoutLabel: true,
-        nextStep: {
-          TL_COMMON_YES: "search-property",
-          TL_COMMON_NO: "create-property",
-        },
-        hideInEmployee: true,
-      },
-      {
-        type: "component",
-        route: "search-property",
-        isMandatory: true,
-        component: "CPTSearchProperty",
-        key: "cptsearchproperty",
-        withoutLabel: true,
-        nextStep: 'search-results',
-        hideInEmployee: true,
-      },
-      {
-        type: "component",
-        route: "search-results",
-        isMandatory: true,
-        component: "CPTSearchResults",
-        key: "cptsearchresults",
-        withoutLabel: true,
-        nextStep: 'property-details',
-        hideInEmployee: true,
-      },
-      {
-        type: "component",
-        route: "create-property",
-        isMandatory: true,
-        component: "CPTCreateProperty",
-        key: "cptcreateproperty",
-        withoutLabel: true,
-        nextStep: 'acknowledge-create-property',
-        hideInEmployee: true,
-      },
-      {
-        type: "component",
-        route: "acknowledge-create-property",
-        isMandatory: true,
-        component: "CPTAcknowledgement",
-        key: "cptacknowledgement",
-        withoutLabel: true,
-        nextStep: 'connection-holder',
-        hideInEmployee: true,
-      },
-      {
-        type: "component",
-        route: "property-details",
-        isMandatory: true,
-        component: "CPTPropertyDetails",
-        key: "propertydetails",
-        withoutLabel: true,
-        nextStep: 'connection-holder',
-        hideInEmployee: true,
-      },
-    ],
   },
   {
     head: "WS_APP_FOR_WATER_AND_SEWERAGE_LABEL",

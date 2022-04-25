@@ -76,7 +76,7 @@ const WSCreate = () => {
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = "docs-required";
+  config.indexRoute = "search-property";
 
   // const CheckPage = Digit?.ComponentRegistryService?.getComponent('BPACheckPage') ;
   // const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('BPAAcknowledgement');

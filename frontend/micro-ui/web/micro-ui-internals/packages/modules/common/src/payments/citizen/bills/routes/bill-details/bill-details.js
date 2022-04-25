@@ -99,9 +99,11 @@ const BillDetails = ({ paymentRules, businessService }) => {
         tenantId: billDetails.tenantId,
       });
     } else if (wrkflow === "WNS") {
-      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS`, {
+      history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}?workflow=WNS`, {
         paymentAmount,
         tenantId: billDetails.tenantId,
+        name: bill.payerName,
+        mobileNumber: bill.mobileNumber,
       });
     } else if (businessService === "PT") {
       history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}`, {

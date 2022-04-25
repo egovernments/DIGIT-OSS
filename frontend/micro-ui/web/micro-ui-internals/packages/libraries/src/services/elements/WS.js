@@ -21,7 +21,7 @@ export const WSService = {
       userService: true,
       data: { ...filters },
     }),
-  search: ({ tenantId, filters, auth, businessService }) =>
+  search: ({ tenantId, filters, businessService }) =>
     Request({
       url: businessService === "WS" ? Urls.ws.water_search : Urls.ws.sewarage_search,
       useCache: false,

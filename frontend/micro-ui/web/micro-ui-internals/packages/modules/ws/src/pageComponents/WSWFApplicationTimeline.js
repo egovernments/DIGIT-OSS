@@ -102,14 +102,14 @@ const WSWFApplicationTimeline = (props) => {
       {!isLoading && (
         <Fragment>
           {data?.timeline?.length > 0 && (
-            <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
+            <CardSectionHeader style={{ marginBottom: "16px"}}>
               {t("CS_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
             </CardSectionHeader>
           )}
           {data?.timeline && data?.timeline?.length === 1 ? (
             <CheckPoint
               isCompleted={true}
-              label={t((data?.timeline[0]?.state && `WF_${businessService}_${data.timeline[0].state}`) || "NA")}
+              label={t((data?.timeline[0]?.state && `CS_${data.timeline[0].state}`) || "NA")}
               customChild={getTimelineCaptions(data?.timeline[0])}
             />
           ) : (
@@ -121,7 +121,7 @@ const WSWFApplicationTimeline = (props) => {
                       <CheckPoint
                         keyValue={index}
                         isCompleted={index === 0}
-                        label={checkpoint.state ? t(`WF_${businessService}_${checkpoint.state}`) : "NA"}
+                        label={checkpoint.state ? t(`CS_${checkpoint.state}`) : "NA"}
                         customChild={getTimelineCaptions(checkpoint)}
                       />
                     </React.Fragment>

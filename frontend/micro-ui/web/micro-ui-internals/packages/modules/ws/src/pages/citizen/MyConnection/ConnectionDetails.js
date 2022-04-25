@@ -1,4 +1,4 @@
-import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, CardSectionHeader, MultiLink, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader,CardHeader, Header, LinkButton, Loader, Row, StatusTable, CardSectionHeader, MultiLink, CardText, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React,{useState} from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation} from "react-router-dom";
@@ -123,10 +123,10 @@ const ConnectionDetails = () => {
         <Card>
           <StatusTable>
             <Row className="border-none" label={t("WS_MYCONNECTIONS_CONSUMER_NO")} text={state?.propertyId} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none" label={t("WS_MYCONNECTIONS_SERVICE")} text={t(`WS_APPLICATION_TYPE_${state?.applicationType}`)} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_SERVICE_NAME_LABEL")} text={t(`WS_APPLICATION_TYPE_${state?.applicationType}`)} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_STATUS")} text={state?.status || "NA"} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
-          <CardSubHeader>{t("WS_COMMON_CONNECTION_DETAIL")}</CardSubHeader>
+          <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_CONNECTION_DETAIL")}</CardHeader>
           <StatusTable>
             <Row className="border-none" label={t("WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL")} text={state?.connectionType || t("NA")} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_SERV_DETAIL_NO_OF_TAPS")} text={state?.noOfTaps} textStyle={{ whiteSpace: "pre" }} />
@@ -139,20 +139,20 @@ const ConnectionDetails = () => {
               <Row className="border-none" label={t("WS_ADDN_DETAIL_METER_INSTALL_DATE")} text={state?.meterInstallationDate || "NA"} textStyle={{ whiteSpace: "pre" }} />
               <Row className="border-none" label={t("WS_ADDN_DETAILS_INITIAL_METER_READING")} text={state?.additionalDetails?.initialMeterReading || "NA"} textStyle={{ whiteSpace: "pre" }} />
             </div>}
-            <Link to={`/digit-ui/citizen/ws/consumption/details?applicationNo=${state?.connectionNo}`}>
-              <LinkButton style={{ textAlign: "left" }} label={t("WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL")} />
-            </Link>
+            {state?.connectionType === "Metered" && <Link to={`/digit-ui/citizen/ws/consumption/details?applicationNo=${state?.connectionNo}`}>
+              <LinkButton style={{ textAlign: "left", marginBottom:"10px", marginTop:"5px" }} label={t("WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL")} />
+            </Link>}
           </StatusTable>
-          <CardSubHeader>{t("WS_COMMON_PROPERTY_DETAILS")}</CardSubHeader>
+          <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_PROPERTY_DETAILS")}</CardHeader>
           <StatusTable>
             <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={state?.propertyId} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none" label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={state?.owners?.[0]?.name} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none" label={t("WS_OWN_DETAIL_CROSADD")} text={state?.property?.owners?.[0]?.correspondenceAddress} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={state?.property?.owners?.[0]?.name} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_OWN_DETAIL_CROSADD")} text={state?.property?.owners?.[0]?.correspondenceAddress || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
             <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${state?.propertyId}&tenantId=${state?.tenantId}`}>
-            <LinkButton style={{textAlign:"left"}} label={t("WS_VIEW_PROPERTY")} />
+            <LinkButton style={{textAlign:"left", marginBottom:"10px", marginTop:"5px"}} label={t("WS_VIEW_PROPERTY")} />
             </Link>
           </StatusTable>
-          <CardSubHeader>{t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER")}</CardSubHeader>
+          <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER")}</CardHeader>
           {state?.connectionHolders ? <div>
             <StatusTable>
               <Row className="border-none" label={t("WS_OWN_DETAIL_MOBILE_NO_LABEL")} text={state?.connectionHolders?.[0]?.mobileNumber} textStyle={{ whiteSpace: "pre" }} />

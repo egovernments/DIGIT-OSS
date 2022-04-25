@@ -47,7 +47,7 @@ const getEditDetails = (waterResult,sewerageresult) => {
     waterResult.cpt = {details:{...waterResult?.property}}
     waterResult.cptId = {id:waterResult?.propertyId}
     waterResult.documents = {documents : waterResult?.documents}
-    waterResult.plumberPreference = {code:"ULB", i18nKey:"WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE"}
+    waterResult.plumberPreference.plumberPreference = {code:"ULB", i18nKey:"WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE"}
     waterResult.serviceName = waterResult?.applicationType?.includes("WATER") ? {code:"WATER",i18nKey:"WS_WATER_CONNECTION_ONLY"} : {code:"SEWERAGE",i18nKey:"WS_SEWERAGE_CONNECTION_ONLY"}
     waterResult.waterConectionDetails = {
       proposedPipeSize : {code:waterResult?.proposedPipeSize, i18nKey:`${waterResult?.proposedPipeSize} WS_INCHES_LABEL`, size:waterResult?.proposedPipeSize},
@@ -87,7 +87,7 @@ const getEditDetails = (waterResult,sewerageresult) => {
     sewerageresult.cpt = {details:{...sewerageresult?.property}}
     sewerageresult.cptId = {id:sewerageresult?.propertyId}
     sewerageresult.documents = {documents : [...sewerageresult?.documents]}
-    sewerageresult.plumberPreference = {code:"ULB", i18nKey:"WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE"}
+    sewerageresult.plumberPreference.plumberPreference = {code:"ULB", i18nKey:"WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE"}
     sewerageresult.serviceName = sewerageresult?.applicationType.includes("WATER") ? {code:"WATER",i18nKey:"WS_WATER_CONNECTION_ONLY"} : {code:"SEWERAGE",i18nKey:"WS_SEWERAGE_CONNECTION_ONLY"}
     sewerageresult.sewerageConnectionDetails = {
       proposedToilets: sewerageresult?.proposedToilets,
@@ -197,7 +197,7 @@ const EditApplication = ({ parentRoute }) => {
   newConfig?.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = "docs-required";
+  config.indexRoute = "search-property";
   if ((Waterresult && Object.keys(Waterresult).length>0 || !Sewarageresult) && Waterresult?.isLoading || Sewarageresult?.isLoading) {
     return <Loader />;
   }
