@@ -40,7 +40,8 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="error-boundary">
           <Redircter />
-          <ErrorComponent initData={this.props.initData}/>
+          <ErrorComponent initData={this.props.initData} />
+
           {/* <summary>Something went wrong</summary>
           <details style={{ whiteSpace: "pre-wrap" }}>
             {this.state?.errorStack && this.state.errorStack.toString().substring(0, 600)}

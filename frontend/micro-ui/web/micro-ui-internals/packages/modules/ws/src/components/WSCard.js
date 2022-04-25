@@ -14,10 +14,6 @@ const WSCard = () => {
 
   let links = [
     {
-      label: t("WS_SEARCH_APP"),
-      link: `/digit-ui/employee/ws/search-application`,
-    },
-    {
       label: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
       link: `/digit-ui/employee/ws/create-application`,
       roles: ["WS_CEMP", "SW_CEMP"],
@@ -40,17 +36,22 @@ const WSCard = () => {
       // }
     ],
     links: [
+      // {    commented until api is integrated
+      //   label: t("ES_COMMON_INBOX"),
+      //   link: `/digit-ui/employee/ws/bill-amend/inbox`,
+      // },
+      ...links,
       {
-        label: t("ES_COMMON_INBOX"),
-        link: `/digit-ui/employee/ws/bill-amend/inbox`,
+        label: t("WS_WATER_INBOX"),
+        link: `/digit-ui/employee/ws/water/inbox`,
+      },
+      {
+        label: t("WS_SEWERAGE_INBOX"),
+        link: `/digit-ui/employee/ws/sewerage/inbox`,
       },
       {
         label: t("ES_COMMON_APPLICATION_SEARCH"),
         link: `/digit-ui/employee/ws/search-application`,
-      },
-      {
-        label: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
-        link: `/digit-ui/employee/ws/create-application`,
       },
       {
         label: t("ES_COMMON_CONNECTION_SEARCH_LABEL"),

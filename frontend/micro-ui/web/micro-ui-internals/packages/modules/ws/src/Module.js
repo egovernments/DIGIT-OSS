@@ -38,7 +38,9 @@ import WSDocumentsEmployee from "./pageComponents/WSDocumentsEmployee";
 import WSAcknowledgement from "./pages/citizen/WSCreate/WSAcknowledgement";
 import WSPayments from "./pages/citizen/MyPayment/WSPayments";
 import WSEditConnectionDetails from"./pageComponents/WSEditConnectionDetails";
-import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails"
+import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails";
+import WSInbox from "./components/WSInbox";
+
 const WSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "ws";
   const { path, url } = useRouteMatch();
@@ -131,7 +133,8 @@ const componentsToRegister = {
   WSPayments,
   WSEditConnectionDetails,
   ConsumptionDetails,
-  EditApplication
+  EditApplication,
+  WSInbox
 };
 
 export const initWSComponents = () => {
