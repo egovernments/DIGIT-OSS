@@ -23,7 +23,7 @@ public class PassageServiceExtract extends FeatureExtract {
 	@Autowired
 	private LayerNames layerNames;
 
-	private static final Logger LOG = Logger.getLogger(PassageServiceExtract.class);
+	
 	private static final String LAYER_PASSAGE="LAYER_NAME_PASSAGE";
 	private static final String LAYER_PASSAGESTAIR="LAYER_NAME_PASSAGE_STAIR";
 

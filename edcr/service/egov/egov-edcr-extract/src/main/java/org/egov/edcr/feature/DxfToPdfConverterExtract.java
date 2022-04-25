@@ -21,8 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.pdfbox.printing.Orientation;
-import org.egov.common.entity.dcr.helper.DxfToPdfLayerConfig;
-import org.egov.common.entity.dcr.helper.PlanPdfLayerConfig;
 import org.egov.common.entity.edcr.Block;
 
 import org.egov.common.entity.edcr.EdcrPdfDetail;

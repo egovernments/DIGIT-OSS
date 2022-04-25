@@ -26,14 +26,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class SetBackServiceExtract extends FeatureExtract {
 
-
     private static final String LAYER_NAME_LEVEL_NAME_PREFIX = "LAYER_NAME_LEVEL_NAME_PREFIX";
 	private static final String LAYER_NAME_BLOCK_NAME_PREFIX = "LAYER_NAME_BLOCK_NAME_PREFIX";
 	private static final String MIN_DISTANCE = "_MIN_DISTANCE";
-	private static final Logger LOG = Logger.getLogger(SetBackServiceExtract.class);
-
-    private static final Logger LOG = LogManager.getLogger(SetBackServiceExtract.class);
-
+	private static final Logger LOG = LogManager.getLogger(SetBackServiceExtract.class);
     @Autowired
     private LayerNames layerNames;
     @Autowired
