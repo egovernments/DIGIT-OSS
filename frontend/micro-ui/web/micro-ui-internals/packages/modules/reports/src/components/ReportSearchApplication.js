@@ -238,6 +238,7 @@ const ReportSearchApplication = ({ onSubmit, isLoading, data, tableData, isTable
             ) : !isTableDataLoading ? (<Table
                 tableRef={tableRef}
                 t={t}
+                className={"table reports-table"}
                 data={rowData}
                 columns={columns}
                 getCellProps={(cellInfo) => {
@@ -264,6 +265,7 @@ const ReportSearchApplication = ({ onSubmit, isLoading, data, tableData, isTable
                     onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
                     displayOptions={isDisplayDownloadMenu}
                     options={downloadOptions}
+                    downloadBtnClassName={"reports-download-btn"}
                 />}
                 isReportTable={true}
             />) : <Loader />}
