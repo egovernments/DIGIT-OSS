@@ -25,7 +25,7 @@ import org.mockito.runners.MockitoJUnit44Runner;
 
 public class OpenStairTest extends BaseTest {
 
-	private static final Logger LOG = LogManager.getLogger(OpenStair.class);
+	private static final Logger LOG = LogManager.getLogger(OpenStairTest.class);
 
 	FarExtract far = new FarExtract();
 	OpenStairServiceExtract openStairExtract = new OpenStairServiceExtract();
