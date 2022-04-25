@@ -21,6 +21,8 @@ public class EncProperties {
 
     @Value("${egov.state.level.tenant.id}")
     private String stateLevelTenantId;
+    @Value("${default.encrypt.data.type}")
+    private String defaultEncryptDataType;
 
     @Value("${egov.enc.host}")
     private String egovEncHost;

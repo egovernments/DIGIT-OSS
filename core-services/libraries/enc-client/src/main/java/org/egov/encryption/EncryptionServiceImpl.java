@@ -2,12 +2,14 @@ package org.egov.encryption;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.encryption.accesscontrol.AbacFilter;
 import org.egov.encryption.config.AbacConfiguration;
 import org.egov.encryption.config.EncClientConstants;
+import org.egov.encryption.config.EncProperties;
 import org.egov.encryption.config.EncryptionPolicyConfiguration;
 import org.egov.encryption.masking.MaskingService;
 import org.egov.encryption.models.AccessType;
@@ -30,6 +32,8 @@ import java.util.stream.Collectors;
 public class EncryptionServiceImpl implements EncryptionService {
 
     @Autowired
+    private EncProperties encProperties;
+    @Autowired
     private EncryptionServiceRestConnection encryptionServiceRestConnection;
     @Autowired
     private EncryptionPolicyConfiguration encryptionPolicyConfiguration;
@@ -42,28 +46,36 @@ public class EncryptionServiceImpl implements EncryptionService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public JsonNode encryptJson(Object plaintextJson, String key, String tenantId) throws IOException {
-
-        JsonNode plaintextNode = createJsonNode(plaintextJson);
+    private JsonNode encryptJsonArray(JsonNode plaintextNode, String model, String tenantId) throws IOException {
         JsonNode encryptNode = plaintextNode.deepCopy();
+        List<String> attributesToEncrypt = encryptionPolicyConfiguration.getAttributesJsonPathForModel(model);
+        JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(plaintextNode, attributesToEncrypt);
 
-        List<Attribute> attributesToEncrypt = encryptionPolicyConfiguration.getAttributesForKey(key);
-        Map<String, List<Attribute>> typeAttributeMap = encryptionPolicyConfiguration.getTypeAttributeMap(attributesToEncrypt);
-
-        for (String type : typeAttributeMap.keySet()) {
-            List<Attribute> attributes = typeAttributeMap.get(type);
-            List<String> paths = attributes.stream().map(Attribute::getJsonPath).collect(Collectors.toList());
-
-            JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(plaintextNode, paths);
-
-            if(! jsonNode.isEmpty(objectMapper.getSerializerProvider())) {
-                JsonNode returnedEncryptedNode = objectMapper.valueToTree(encryptionServiceRestConnection.callEncrypt(tenantId,
-                        type, jsonNode));
-                encryptNode = JacksonUtils.merge(returnedEncryptedNode, encryptNode);
-            }
+        if(! jsonNode.isEmpty(objectMapper.getSerializerProvider())) {
+            JsonNode returnedEncryptedNode = objectMapper.valueToTree(encryptionServiceRestConnection.callEncrypt(tenantId,
+                    encProperties.getDefaultEncryptDataType(), jsonNode));
+            encryptNode = JacksonUtils.merge(returnedEncryptedNode, encryptNode);
         }
 
         return encryptNode;
+    }
+
+    public JsonNode encryptJson(Object plaintextJson, String key, String tenantId) throws IOException {
+        JsonNode plaintextNode = createJsonNode(plaintextJson);
+        JsonNode plaintextNodeCopy = plaintextNode.deepCopy();
+
+        // Convert input to array if it isn't already
+        if(!plaintextNodeCopy.isArray()) {
+            ArrayNode arrayNode = objectMapper.createArrayNode();
+            arrayNode.add(plaintextNodeCopy);
+            plaintextNodeCopy = arrayNode;
+        }
+        JsonNode encryptedNode = encryptJsonArray(plaintextNodeCopy, key, tenantId);
+
+        if(!plaintextNode.isArray()) {
+            encryptedNode.get(0);
+        }
+        return encryptedNode;
     }
 
     public <E,P> P encryptJson(Object plaintextJson, String key, String tenantId, Class<E> valueType) throws IOException {
@@ -123,6 +135,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         return ConvertClass.convertTo(decryptJson(ciphertextJson, key, user), valueType);
     }
 
+
     JsonNode createJsonNode(Object json) throws IOException {
         JsonNode jsonNode;
         if(json instanceof JsonNode)
@@ -134,6 +147,10 @@ public class EncryptionServiceImpl implements EncryptionService {
         return jsonNode;
     }
 
+
+    public String encryptValue(Object plaintext, String tenantId) throws IOException {
+        return encryptValue(plaintext, tenantId, encProperties.getDefaultEncryptDataType());
+    }
 
     public String encryptValue(Object plaintext, String tenantId, String type) throws IOException {
         return encryptValue(new ArrayList<>(Collections.singleton(plaintext)), tenantId, type).get(0);
