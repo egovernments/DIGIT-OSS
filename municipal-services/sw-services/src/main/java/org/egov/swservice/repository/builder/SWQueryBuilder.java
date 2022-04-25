@@ -88,9 +88,13 @@ public class SWQueryBuilder {
 
 	private static final String ORDER_BY_COUNT_CLAUSE = " ORDER BY appCreatedDate DESC";
 
-	private static final String ORDER_BY_INBOX_DESC_CLAUSE = " ORDER BY pi.createdtime DESC";
+	private static final String ORDER_BY_INBOX_DESC_CLAUSE = " AND pi.createdtime IN (select max(createdtime) "
+			+ " from eg_wf_processinstance_v2 wf where wf.businessid = conn.applicationno GROUP BY wf.businessid)"
+			+ " order by pi.createdtime DESC";
 
-	private static final String ORDER_BY_INBOX_ASC_CLAUSE = " ORDER BY pi.createdtime ASC";
+	private static final String ORDER_BY_INBOX_ASC_CLAUSE = " AND pi.createdtime IN (select max(createdtime) "
+			+ " from eg_wf_processinstance_v2 wf where wf.businessid = conn.applicationno GROUP BY wf.businessid)"
+			+ " order by pi.createdtime ASC";
 
 	/**
 	 *
