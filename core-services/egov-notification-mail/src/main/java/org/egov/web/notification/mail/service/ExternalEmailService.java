@@ -3,6 +3,7 @@ package org.egov.web.notification.mail.service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.io.FileUtils;
 import org.egov.web.notification.mail.config.ApplicationConfiguration;
 import org.egov.web.notification.mail.consumer.contract.Email;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,14 +82,6 @@ public class ExternalEmailService implements EmailService {
 			helper.setSubject(email.getSubject());
 			helper.setText(email.getBody(), true);
 
-			/*log here*/
-			log.info(email.toString());
-			log.info(mailSender.getHost());
-			log.info(mailSender.getProtocol());
-			log.info(mailSender.getDefaultEncoding());
-			log.info(mailSender.getUsername());
-			log.info(String.valueOf(mailSender.getPort()));
-
 
 			for(int i=0; i<email.getFileStoreId().size(); i++) {
 				String uri = String.format(filestore_format, filestore_host, filestore_workdir, filestore_tenant_id, email.getFileStoreId().toArray()[i]);
@@ -112,7 +105,11 @@ public class ExternalEmailService implements EmailService {
 		}catch (MailException e){
 			log.error(EXCEPTION_MESSAGE, e);
 		} finally {
-
+			try {
+				FileUtils.deleteDirectory(new File(System.getProperty("java.io.tmpdir")));
+			} catch (IOException e) {
+				log.info(EXCEPTION_MESSAGE, e);
+			}
 		}
 	}
 }

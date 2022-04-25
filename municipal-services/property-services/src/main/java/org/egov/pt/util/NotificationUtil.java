@@ -315,7 +315,6 @@ public class NotificationUtil {
 
             String subject = "eGovernments Notifications";
             String body = message;
-            log.info(body);
             Email emailobj = new Email();
             if(CollectionUtils.isEmpty(fileStoreIds)) {
                 emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).tenantId(tenantId).build();
