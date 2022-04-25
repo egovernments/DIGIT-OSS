@@ -122,6 +122,7 @@ public class BirthRepository {
 
 		String query = "SELECT * FROM eg_birth_cert_request OFFSET " + offset + " LIMIT " + limit;
 		List<Map<String,String>> list =  jdbcTemplate.query(query, new BeanPropertyRowMapper(Map.class));
+		log.info("Size of list: " + list.size());
 		for(Map<String,String> map: list) {
 			ObjectMapper mapper = new ObjectMapper();
 			BirthCertificate birthCertificate = mapper.convertValue(map, BirthCertificate.class);
