@@ -1330,10 +1330,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-nop</artifactId>
         </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-        </dependency>
+       
         <!-- LOGGING END -->
 
         <!-- DATABASE START -->
