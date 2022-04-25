@@ -36,17 +36,9 @@ public class ExtractService {
 	@Autowired
 	private CustomImplProvider specificRuleService;
 	@Autowired
-    private AppConfigValueService appConfigValueService;
-    @Autowired
-    private EDCRMdmsUtil edcrMdmsUtil;
-    @Autowired
-    private MdmsConfiguration mdmsConfiguration;
-    @Autowired
-    private CityService cityService;
-    @Autowired
-    private MDMSValidator mdmsValidator;
-
-    private Logger LOG = LogManager.getLogger(ExtractService.class);
+       private AppConfigValueService appConfigValueService;
+   
+       private Logger LOG = LogManager.getLogger(ExtractService.class);
 
     public Plan extract(File dxfFile, Amendment amd, Date scrutinyDate, List<PlanFeature> features) {
 
