@@ -26,13 +26,14 @@ const ReportSearchApplication = ({ onSubmit, isLoading, data, tableData, isTable
     }
     )
 
-    useEffect(() => {
-        if (formState.isSubmitSuccessful) {
-            let resetObj = {}
-            data?.reportDetails?.searchParams?.map(el => el.type === "multivaluelist" ? resetObj[el?.name] = [] : resetObj[el?.name] = "")
-            reset({ ...resetObj, isSubmitSuccessful: false, })
-        }
-    }, [formState])
+    //this resets the form after every search
+    // useEffect(() => {
+    //     if (formState.isSubmitSuccessful) {
+    //         let resetObj = {}
+    //         data?.reportDetails?.searchParams?.map(el => el.type === "multivaluelist" ? resetObj[el?.name] = [] : resetObj[el?.name] = "")
+    //         reset({ ...resetObj, isSubmitSuccessful: false, })
+    //     }
+    // }, [formState])
 
 
     const searchFormFieldsComponentProps = { formState, Controller, register, control, t, reset, data };
