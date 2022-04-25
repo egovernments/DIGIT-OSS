@@ -122,7 +122,21 @@ import org.springframework.stereotype.Service;
 public class Far extends FeatureProcess {
 
     private static final Logger LOG = LogManager.getLogger(Far.class);
+    private static final String LESS_THAN_OR_EQUAL = "<=";
 
+	private static final String LESS_THAN_2_POINT_5 = "<= 2.5";
+
+	private static final String OCCUPANCY2 = "occupancy";
+
+	private static final String EXISTING_FLOOR_AREA = "existingFloorArea";
+
+	private static final String EXISTING_BUILT_UP_AREA = "existingBuiltUpArea";
+
+	private static final String TOTAL_BUILT_UP_AREA = "totalBuiltUpArea";
+
+	private static final String TOTAL_FLOOR_AREA = "totalFloorArea";
+
+	private static final String FLOOR = "floor ";
     private static final String VALIDATION_NEGATIVE_FLOOR_AREA = "msg.error.negative.floorarea.occupancy.floor";
     private static final String VALIDATION_NEGATIVE_EXISTING_FLOOR_AREA = "msg.error.negative.existing.floorarea.occupancy.floor";
     private static final String VALIDATION_NEGATIVE_BUILTUP_AREA = "msg.error.negative.builtuparea.occupancy.floor";

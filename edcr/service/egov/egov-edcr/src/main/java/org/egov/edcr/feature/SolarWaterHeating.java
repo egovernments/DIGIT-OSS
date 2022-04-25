@@ -51,22 +51,19 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-<<<<<<< HEAD
-=======
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
->>>>>>> f41f50c893... RAIN-5549:EDCR Security Fix: Upgrade log4j version and testing (#2380)
+
 import org.egov.common.entity.edcr.Plan;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SolarWaterHeating extends FeatureProcess {
 
-<<<<<<< HEAD
-=======
 	private static final Logger LOG = LogManager.getLogger(SolarWaterHeating.class);
 
->>>>>>> f41f50c893... RAIN-5549:EDCR Security Fix: Upgrade log4j version and testing (#2380)
+
 	@Override
 	public Plan validate(Plan pl) {
 
