@@ -37,27 +37,23 @@ const ReportSearchApplication = ({ onSubmit, isLoading, data, tableData, isTable
 
 
     const searchFormFieldsComponentProps = { formState, Controller, register, control, t, reset, data };
-
+    
     const rowData = tableData?.reportData;
     rowData?.map((row, index) => {
         row?.unshift(index + 1)
     })
 
     const rowHeaders = tableData?.reportHeader
-    //this code is leading to a bug in resetting the form due to duplicate cols
+    
     rowHeaders?.unshift({
         label: "#"
     })
     const rowHeadersCopy = rowHeaders && JSON.parse(JSON.stringify(rowHeaders))//deep copy
-    rowHeadersCopy?.unshift({
-        label: "#"
-    })
-    rowHeadersCopy?.unshift({
-        label: "#"
-    }) //added this code twice because in xls file a SNO col in already added
+    
     const headersXLS = rowHeadersCopy?.map(header => t(header.label))
-    const rowDataXLS = rowData && JSON.parse(JSON.stringify(rowData))//deep copy
+    let rowDataXLS = rowData && JSON.parse(JSON.stringify(rowData))//deep copy
     rowDataXLS?.unshift(headersXLS)
+    rowDataXLS = rowDataXLS?.map(row => row.splice(1))
 
     const getCellValue = (row, header, index) => {
 
@@ -94,7 +90,9 @@ const ReportSearchApplication = ({ onSubmit, isLoading, data, tableData, isTable
         },
         {
             label: "xls",
-            onClick: () => Digit.Download.Excel(rowDataXLS, reportName)
+            onClick: () => {
+              return  Digit.Download.Excel(rowDataXLS, reportName)
+            }
 
         }
     ]
@@ -243,7 +241,7 @@ const ReportSearchApplication = ({ onSubmit, isLoading, data, tableData, isTable
                 data={rowData}
                 columns={columns}
                 getCellProps={(cellInfo) => {
-                    //console.log(cellInfo);
+                    
                     return {
                         style: {
                             padding: "20px 18px",

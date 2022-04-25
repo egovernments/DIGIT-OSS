@@ -66,7 +66,7 @@ const Report = () => {
   const SearchApplication = Digit.ComponentRegistryService.getComponent("ReportSearchApplication");
 
   const onSubmit = (data) => {
-    //console.log("formdata", data);
+    
     setSearchData(data)   
     const reportData = SearchFormUIData.reportDetails.searchParams;
     let searchParams = []
