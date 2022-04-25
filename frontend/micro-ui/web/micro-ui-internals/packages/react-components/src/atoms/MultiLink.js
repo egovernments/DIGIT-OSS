@@ -3,7 +3,7 @@ import LinkButton from "./LinkButton";
 import { PrimaryDownlaodIcon } from "./svgindex";
 import { useTranslation } from "react-i18next";
 
-const MultiLink = ({ className, onHeadClick, displayOptions = false, options, label, icon, showOptions, downloadBtnClassName, optionsClassName,style,optionsStyle }) => {
+const MultiLink = ({ className, onHeadClick, displayOptions = false, options, label, icon, showOptions, downloadBtnClassName, downloadOptionsClassName, optionsClassName,style,optionsStyle }) => {
   const { t } = useTranslation();
   const menuRef = useRef();
   const handleOnClick = useCallback(() => {
@@ -12,9 +12,9 @@ const MultiLink = ({ className, onHeadClick, displayOptions = false, options, la
   Digit.Hooks.useClickOutside(menuRef, handleOnClick, displayOptions);
 
   const MenuWrapper = React.forwardRef((props, ref) => {
-    return <div ref={ref} className={`multilink-optionWrap ${optionsClassName}`} style={optionsStyle}>
+    return <div ref={ref} className={`multilink-optionWrap ${optionsClassName} ${downloadOptionsClassName}`} style={optionsStyle}>
       {options.map((option, index) => (
-        <div onClick={() => option.onClick()} key={index} className="multilink-option">
+        <div onClick={() => option.onClick()} key={index} className={`multilink-option`}>
           {option?.icon}
           {option.label}
         </div>
