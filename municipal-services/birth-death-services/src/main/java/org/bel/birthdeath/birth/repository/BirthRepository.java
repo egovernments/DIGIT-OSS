@@ -107,6 +107,7 @@ public class BirthRepository {
 	}
 
 	public List<BirthCertificate> getBirthCertificateForPlainSearch(SearchCriteria criteria) {
+		List<BirthCertificate> birthCertificates = new ArrayList<>();
 		int limit = config.getDefaultBndLimit();
 		int offset = config.getDefaultOffset();
 
@@ -120,7 +121,17 @@ public class BirthRepository {
 			offset = criteria.getOffset();
 
 		String query = "SELECT * FROM eg_birth_cert_request OFFSET " + offset + " LIMIT " + limit;
-		List<BirthCertificate> birthCertificates =  jdbcTemplate.query(query, new BeanPropertyRowMapper(BirthCertificate.class));
+		List<Map<String,String>> list =  jdbcTemplate.query(query, new BeanPropertyRowMapper(Map.class));
+		for(Map<String,String> map: list) {
+			ObjectMapper mapper = new ObjectMapper();
+			BirthCertificate birthCertificate = mapper.convertValue(map, BirthCertificate.class);
+			birthCertificate.getAuditDetails().setCreatedBy(map.get("createdby"));
+			birthCertificate.getAuditDetails().setLastModifiedBy(map.get("lastmodifiedby"));
+			birthCertificate.getAuditDetails().setCreatedTime(Long.parseLong(map.get("createdtime")));
+			birthCertificate.getAuditDetails().setLastModifiedTime(Long.parseLong(map.get("lastmodifiedtime")));
+
+			birthCertificates.add(birthCertificate);
+		}
 		return birthCertificates;
 	}
 
