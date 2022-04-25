@@ -4,7 +4,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
-  handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner
+  handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, toggleSnackbar, toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import {
@@ -26,7 +26,7 @@ import { httpRequest } from "../../../../ui-utils";
 // web("web");
 
 export const downloadPdf = (link, openIn = "_blank") => {
-  var win = window.open(link, "_self");
+  var win = window.open(link, openIn);
   if (win) {
     win.focus();
   } else {
@@ -45,7 +45,7 @@ export const downloadPdf = (link, openIn = "_blank") => {
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
     if (mode === "download") {
-      downloadPdf(fileRes[fileStoreId]);
+      downloadPdf(fileRes[fileStoreId],"_blank");
     } else if (mode === "open") {
       openPdf(fileRes[fileStoreId], "_self");
     } else {
@@ -770,9 +770,9 @@ export const postPaymentActivity = async (
         let mode = "download";
         downloadReceiptFromFilestoreID(response.filestoreId, mode);
 
-        store.dispatch(toggleSpinner());
+        store.dispatch(hideSpinner());
         setTimeout(() => {
-          store.dispatch(toggleSpinner());
+          // store.dispatch(toggleSpinner());
           store.dispatch(setRoute(`/${module}-citizen/myApplications`));
         }, 5000); //Give 5 sec gap redirect to my applications page.
       }

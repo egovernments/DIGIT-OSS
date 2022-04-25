@@ -5,9 +5,10 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import { get, set } from "lodash";
-import { loadMdmsData } from "./../utils";
+import { loadHospitals, loadMdmsData } from "./../utils";
 import { birthSearchCard } from "./birthSearchResources/birthSearchCard";
 import { searchResults } from "./birthSearchResources/searchResults";
+import "./birthSearchResources/index.css";
 
 const header = getCommonHeader({
   labelName: "Search Certificate",
@@ -29,7 +30,21 @@ const getCertificate = {
         onlyCBs = jp.query(onlyCBs, currentCbFilter);
 
         dispatch(prepareFinalObject("bnd.birth.tenantId", tenantId));
-
+        loadHospitals(action, state, dispatch, "death", tenantId).then((response) => {
+          if(response && response.MdmsRes && response.MdmsRes["birth-death-service"] && response.MdmsRes["birth-death-service"].hospitalList)
+          {
+           const hptList= response.MdmsRes["birth-death-service"].hospitalList;
+           const newList=[...hptList.filter(hos=>hos.active), {
+            hospitalName : "Others"      }]
+            for (let hospital of newList) {
+              hospital.code = hospital.hospitalName;
+              hospital.name = hospital.hospitalName;
+            }
+            dispatch(prepareFinalObject("bnd.allHospitals", newList));
+          }else{
+            dispatch(prepareFinalObject("bnd.allHospitals", [{code:"Others",name:"Others"}]));
+          }
+        });
         set(
           action.screenConfig,
           "components.div.children.birthSearchCard.children.cardContent.children.searchContainerCommon.children.cantonmentSelect.props.isDisabled",
@@ -57,14 +72,16 @@ const getCertificate = {
       uiFramework: "custom-atoms",
       componentPath: "Form",
       props: {
-        className: "common-div-css",
+        className: "common-div-css bd-search-header",
         id: "bndBirthSearch",
       },
       children: {
         headerDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Container",
-
+          props:{
+            className:"bd-btn-hiw",
+          },
           children: {
             header: {
               gridDefination: {
@@ -117,6 +134,7 @@ const getCertificate = {
               props: {
                 //variant: "outlined",
                 color: "primary",
+                className:"bd-btn-hiw",
                 style: {
                   minWidth: "180px",
                   height: "48px",

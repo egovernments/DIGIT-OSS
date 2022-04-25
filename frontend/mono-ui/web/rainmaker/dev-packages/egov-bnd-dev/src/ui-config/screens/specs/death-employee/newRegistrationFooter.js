@@ -275,7 +275,12 @@ export const postData = async (state, dispatch) => {
             "success"
           )
         );
-        location.reload();
+        let userAction = getQueryArg(window.location.href, "action");
+        if(userAction=="EDIT"){
+          window.location.href='/employee/death-common/getCertificate'
+        }else{
+          setTimeout(()=>location.reload(),2000);
+        }
       }
     } else {
       // dispatch(
@@ -319,6 +324,7 @@ export const footer = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
+        backgroundColor:"white",
         marginRight: "16px",
       },
     },
