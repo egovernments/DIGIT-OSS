@@ -132,7 +132,7 @@ public class BirthRepository {
 			birthCertificate.setBirthCertificateNo((String) map.get("birthcertificateno"));
 			birthCertificate.setBirthDtlId((String) map.get("birthdtlid"));
 			birthCertificate.setFilestoreid((String) map.get("filestoreid"));
-			birthCertificate.setApplicationStatus((BirthCertificate.StatusEnum) map.get("status"));
+			birthCertificate.setApplicationStatus(BirthCertificate.StatusEnum.valueOf((String) map.get("status")));
 			birthCertificate.setAdditionalDetail(map.get("additionaldetail"));
 			birthCertificate.setEmbeddedUrl((String) map.get("embeddedurl"));
 			birthCertificate.setDateofissue(((Long) map.get("dateofissue")).longValue());
