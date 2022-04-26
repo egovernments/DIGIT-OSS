@@ -135,7 +135,7 @@ public class BirthRepository {
 			log.info("Application Status = " + BirthCertificate.StatusEnum.valueOf((String) map.get("status")));
 			log.info("Additional Details = " + map.get("additionaldetail"));
 			log.info("Embedded URL = " + (String) map.get("embeddedurl"));
-			log.info("Date Of Issue = " + ((Long) map.get("dateofissue")).longValue());
+			log.info("Date Of Issue = " + ((Long) map.get("dateofissue")));
 			log.info("Source = " + (String) map.get("source"));
 			log.info("Birth Place = " + birthDtl.getPlaceofbirth());
 			log.info("Gender = " + birthDtl.getGenderStr());
@@ -159,7 +159,7 @@ public class BirthRepository {
 			birthCertificate.setApplicationStatus(BirthCertificate.StatusEnum.valueOf((String) map.get("status")));
 			birthCertificate.setAdditionalDetail(map.get("additionaldetail"));
 			birthCertificate.setEmbeddedUrl((String) map.get("embeddedurl"));
-			birthCertificate.setDateofissue(((Long) map.get("dateofissue")).longValue());
+			birthCertificate.setDateofissue(((Long) map.get("dateofissue")));
 			birthCertificate.setSource((String) map.get("source"));
 			birthCertificate.setBirthPlace(birthDtl.getPlaceofbirth());
 			birthCertificate.setGender(birthDtl.getGenderStr());
@@ -172,11 +172,12 @@ public class BirthRepository {
 
 			AuditDetails auditDetails = new AuditDetails();
 			auditDetails.setCreatedBy((String) map.get("createdby"));
-			auditDetails.setCreatedTime(((Long) map.get("createdtime")).longValue());
-			auditDetails.setLastModifiedTime(((Long) map.get("lastmodifiedtime")).longValue());
+			auditDetails.setCreatedTime(((Long) map.get("createdtime")));
+			auditDetails.setLastModifiedTime(((Long) map.get("lastmodifiedtime")));
 			auditDetails.setLastModifiedBy((String) map.get("lastmodifiedby"));
 			birthCertificate.setAuditDetails(auditDetails);
 
+			log.info("Audit Details = " + birthCertificate.getAuditDetails().toString());
 			birthCertificates.add(birthCertificate);
 		}
 		return birthCertificates;
