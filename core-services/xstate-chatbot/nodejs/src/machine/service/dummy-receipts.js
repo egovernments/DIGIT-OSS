@@ -82,7 +82,6 @@ class DummyReceipts{
     }
     async findreceipts(user,service){ 
       let randomUserBehaviour = parseInt(Math.random() * 3 + 1);
-      console.log(randomUserBehaviour);
       let receipts =  [
           {
             service: 'Water & Sewerage',
@@ -284,12 +283,10 @@ class DummyReceipts{
       }
     }
     async fetchReceiptsForParam(user, service, searchParamOption, paraminput) {
-        console.log(`Received params: ${user}, ${service}, ${searchParamOption}, ${paraminput}`);
         return this.findreceipts(user,service);
     }
     async multipleRecordReceipt(user,service,receiptNumber){ 
       let randomUserBehaviour = parseInt(Math.random() * 3 + 1);
-      console.log(randomUserBehaviour);
       let receipts =  [
         {
           service: 'Water & Sewerage',

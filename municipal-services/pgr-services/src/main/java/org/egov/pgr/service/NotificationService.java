@@ -112,9 +112,9 @@ public class NotificationService {
             return message;
         }
 
-        if (message.contains("{complaint_type}")){
+        if (message.contains("<complaint_type>")){
             String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"pgr.complaint.category."+request.getService().getServiceCode());
-            message = message.replace("{complaint_type}", localisedComplaint);
+            message = message.replace("<complaint_type>", localisedComplaint);
         }
 
         String finalMessage = getMessageForMobileNumber(message,request);
@@ -125,48 +125,48 @@ public class NotificationService {
         String messageToReplace = message;
         ServiceWrapper serviceWrapper = ServiceWrapper.builder().service(request.getService()).workflow(request.getWorkflow()).build();
 
-        /*if (messageToReplace.contains("{complaint_type}"))
-            messageToReplace = messageToReplace.replace("{complaint_type}", pgrEntity.getService().getServiceCode());*/
+        /*if (messageToReplace.contains("<complaint_type>"))
+            messageToReplace = messageToReplace.replace("<complaint_type>", pgrEntity.getService().getServiceCode());*/
 
-        if (messageToReplace.contains("{id}"))
-            messageToReplace = messageToReplace.replace("{id}", serviceWrapper.getService().getServiceRequestId());
+        if (messageToReplace.contains("<id>"))
+            messageToReplace = messageToReplace.replace("<id>", serviceWrapper.getService().getServiceRequestId());
 
-        if (messageToReplace.contains("{date}")){
+        if (messageToReplace.contains("<date>")){
             Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
             LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
                     .atZone(ZoneId.systemDefault()).toLocalDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
-            messageToReplace = messageToReplace.replace("{date}", date.format(formatter));
+            messageToReplace = messageToReplace.replace("<date>", date.format(formatter));
         }
 
-        if (messageToReplace.contains("{download link}")){
+        if (messageToReplace.contains("<download link>")){
             String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
-            messageToReplace = messageToReplace.replace("{download link}", appLink);
+            messageToReplace = messageToReplace.replace("<download link>", appLink);
         }
 
-        if (messageToReplace.contains("{emp_name}")){
+        if (messageToReplace.contains("<emp_name>")){
             ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),PGR_WF_RESOLVE);
-            messageToReplace = messageToReplace.replace("{emp_name}", processInstance.getAssigner().getName());
+            messageToReplace = messageToReplace.replace("<emp_name>", processInstance.getAssigner().getName());
         }
 
-        if (messageToReplace.contains("{additional_comments}"))
-            messageToReplace = messageToReplace.replace("{additional_comments}", serviceWrapper.getWorkflow().getComments());
+        if (messageToReplace.contains("<additional_comments>"))
+            messageToReplace = messageToReplace.replace("<additional_comments>", serviceWrapper.getWorkflow().getComments());
 
-       /* if (messageToReplace.contains("{reason}"))
-            messageToReplace = messageToReplace.replace("{reason}", pgrEntity.getWorkflow().getComments());*/
+       /* if (messageToReplace.contains("<reason>"))
+            messageToReplace = messageToReplace.replace("<reason>", pgrEntity.getWorkflow().getComments());*/
 
         if(serviceWrapper.getService().getApplicationStatus().equalsIgnoreCase(PENDINGATLME) && serviceWrapper.getWorkflow().getAction().equalsIgnoreCase(REASSIGN)){
 
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
 
-            if (messageToReplace.contains("{reassign_emp_name}"))
-                messageToReplace = messageToReplace.replace("{reassign_emp_name}",reassigneeDetails.get("employeeName"));
+            if (messageToReplace.contains("<reassign_emp_name>"))
+                messageToReplace = messageToReplace.replace("<reassign_emp_name>",reassigneeDetails.get("employeeName"));
 
-            if (messageToReplace.contains("{emp_department}"))
-                messageToReplace = messageToReplace.replace("{emp_department}",reassigneeDetails.get("department"));
+            if (messageToReplace.contains("<emp_department>"))
+                messageToReplace = messageToReplace.replace("<emp_department>",reassigneeDetails.get("department"));
 
-            if (messageToReplace.contains("{emp_designation}"))
-                messageToReplace = messageToReplace.replace("{emp_designation}",reassigneeDetails.get("designamtion"));
+            if (messageToReplace.contains("<emp_designation>"))
+                messageToReplace = messageToReplace.replace("<emp_designation>",reassigneeDetails.get("designamtion"));
         }
 
 
@@ -291,30 +291,10 @@ public class NotificationService {
         List<Event> events = new ArrayList<>();
         List<String> toUsers = new ArrayList<>();
         toUsers.add(mapOfPhoneNoAndUUIDs.get(mobileNumber));
-
-        Action action = null;
-        if(request.getWorkflow().getAction().equals("RESOLVE")) {
-
-            List<ActionItem> items = new ArrayList<>();
-            String rateLink = "";
-            String reopenLink = "";
-            String rateUrl = config.getRateLink();
-            String reopenUrl = config.getReopenLink();
-            rateLink = rateUrl.replace("{application-id}", request.getService().getServiceRequestId());
-            reopenLink = reopenUrl.replace("{application-id}", request.getService().getServiceRequestId());
-            rateLink = config.getUiAppHost() + rateLink;
-            reopenLink = config.getUiAppHost() + reopenLink;
-            ActionItem rateItem = ActionItem.builder().actionUrl(rateLink).code(config.getRateCode()).build();
-            ActionItem reopenItem = ActionItem.builder().actionUrl(reopenLink).code(config.getReopenCode()).build();
-            items.add(rateItem);
-            items.add(reopenItem);
-
-            action = Action.builder().actionUrls(items).build();
-        }
         Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
         events.add(Event.builder().tenantId(tenantId).description(finalMessage).eventType(USREVENTS_EVENT_TYPE)
                 .name(USREVENTS_EVENT_NAME).postedBy(USREVENTS_EVENT_POSTEDBY)
-                .source(Source.WEBAPP).recepient(recepient).actions(action).eventDetails(null).build());
+                .source(Source.WEBAPP).recepient(recepient).eventDetails(null).build());
 
         if (!CollectionUtils.isEmpty(events)) {
             return EventRequest.builder().requestInfo(request.getRequestInfo()).events(events).build();

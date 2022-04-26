@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Measurement;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class KitchenExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(KitchenExtract.class);
+    private static final Logger LOG = LogManager.getLogger(KitchenExtract.class);
     @Autowired
     private LayerNames layerNames;
 
@@ -39,11 +40,11 @@ public class KitchenExtract extends FeatureExtract {
                             for (TypicalFloor tp : block.getTypicalFloor())
                                 if (tp.getRepetitiveFloorNos().contains(floor.getNumber()))
                                     for (Floor allFloors : block.getBuilding().getFloors())
-                                        if (allFloors.getNumber().equals(tp.getModelFloorNo()))
-                                            if (allFloors.getKitchen() != null) {
-                                                floor.setKitchen(allFloors.getKitchen());
-                                                continue outside;
-                                            }
+										if (allFloors.getNumber().equals(tp.getModelFloorNo())
+												&& allFloors.getKitchen() != null) {
+											floor.setKitchen(allFloors.getKitchen());
+											continue outside;
+										}
 
                         List<DXFLWPolyline> kitchenPolyLines = new ArrayList<>();
 

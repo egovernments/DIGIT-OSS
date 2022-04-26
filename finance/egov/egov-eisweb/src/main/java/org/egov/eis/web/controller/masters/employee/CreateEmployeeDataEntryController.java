@@ -209,7 +209,7 @@ public class CreateEmployeeDataEntryController {
         for (final Role role : roles) {
             user = userService.getUsersByUsernameAndRolename(employee.getUsername(),
                     roleService.getRoleByName(role.getName()).getName());
-            if (fromDate.before(new Date()) && toDate.after(new Date()))
+            if ((fromDate!=null && toDate!=null) && fromDate.before(new Date()) && toDate.after(new Date()))
                 if (user.isEmpty() || null == user)
                     employee.addRole(roleService.getRoleByName(role.getName()));
         }

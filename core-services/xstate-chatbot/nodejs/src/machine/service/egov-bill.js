@@ -218,8 +218,7 @@ class BillService {
   }
 
 
-  async prepareBillResult(responseBody, user){
-    let locale = user.locale;
+  async prepareBillResult(responseBody,authToken,locale){
     let results=responseBody.Bill;
     let billLimit = config.billsAndReceiptsUseCase.billSearchLimit;
 
@@ -243,7 +242,7 @@ class BillService {
         let toBillYear = new Date(result.billDetails[result.billDetails.length-1].toPeriod).getFullYear();
         let billPeriod = fromMonth+" "+fromBillYear+"-"+toMonth+" "+toBillYear;
         let tenantId= result.tenantId;
-        let link = await self.getPaymentLink(result.consumerCode,tenantId,result.businessService,locale, user);
+        let link = await self.getPaymentLink(result.consumerCode,tenantId,result.businessService,locale);
         let serviceCode = localisationService.getMessageBundleForCode(localisationServicePrefix + result.businessService.toUpperCase());
 
         var data={
@@ -344,15 +343,12 @@ class BillService {
 
     if(response.status === 201) {
       let responseBody = await response.json();
-      results = await this.prepareBillResult(responseBody, user);
+      results = await this.prepareBillResult(responseBody, user.authToken, user.locale);
       totalBillSize=responseBody.Bill.length;
       pendingBillSize=results.length;
       
     } 
-    /*else {
-      console.error('Error in fetching the bill');
-      return undefined;
-    }*/
+    
     
     if(totalBillSize==0){
       return {                        
@@ -466,7 +462,7 @@ class BillService {
     return data;
   }
 
-  async getPaymentLink(consumerCode,tenantId,businessService,locale, user)
+  async getPaymentLink(consumerCode,tenantId,businessService,locale)
   {
     var UIHost = config.egovServices.externalHost;
     var paymentPath = config.egovServices.msgpaylink;
@@ -475,9 +471,6 @@ class BillService {
     paymentPath = paymentPath.replace(/\$businessservice/g,businessService);
     paymentPath = paymentPath.replace(/\$redirectNumber/g,"+"+config.whatsAppBusinessNumber);
     paymentPath = paymentPath.replace(/\$locale/g,locale);
-    paymentPath = paymentPath.replace(/\$name/g,user.name);
-    paymentPath = paymentPath.replace(/\$mobileNumber/g,user.mobileNumber);
-
     var finalPath = UIHost + paymentPath;
     var link = await this.getShortenedURL(finalPath);
     return link;
@@ -520,7 +513,6 @@ class BillService {
     if(response.status === 200) {
       localitySearchResults = await response.json();
     } else {
-      console.error('Error in fetching the Locality data');
       return undefined;
     }
 
@@ -610,17 +602,13 @@ class BillService {
     return messageBundle;  
   }
 
-  async getOpenSearchLink(service, name, mobileNumber, locale){
+  async getOpenSearchLink(service){
     var UIHost = config.egovServices.externalHost;
     var paymentPath;
     if(service=='WS')
       paymentPath = config.egovServices.wsOpenSearch;
     else
       paymentPath = config.egovServices.ptOpenSearch;
-
-    paymentPath = paymentPath.replace(/\$name/g,name);
-    paymentPath = paymentPath.replace(/\$mobileNumber/g,mobileNumber);
-    paymentPath = paymentPath.replace(/\$locale/g,locale);
 
     var finalPath = UIHost + paymentPath;
     var link =  await this.getShortenedURL(finalPath);

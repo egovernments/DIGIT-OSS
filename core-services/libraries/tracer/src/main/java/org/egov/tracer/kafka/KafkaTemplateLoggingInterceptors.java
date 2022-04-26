@@ -123,7 +123,9 @@ public class KafkaTemplateLoggingInterceptors<K,V> implements ConsumerIntercepto
                     correlationId = (String) ((Map) requestInfo).get(CORRELATION_ID_FIELD_NAME);
                 }
             }
-        } catch (Exception ignored){}
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
 
         return correlationId;
     }

@@ -65,6 +65,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.Metamodel;
 
+import org.apache.log4j.Logger;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.service.CFinancialYearService;
 import org.egov.egf.model.ClosedPeriod;
@@ -76,9 +77,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
+import com.exilant.eGov.src.reports.CashBook;
+
 @Service
 @Transactional(readOnly = true)
 public class ClosedPeriodService {
+	
+    private static final Logger LOGGER = Logger.getLogger(ClosedPeriodService.class);
+    
 	final SimpleDateFormat dtFormat = new SimpleDateFormat("dd-MM-yyyy");
 
 	@Autowired
@@ -179,6 +185,7 @@ public class ClosedPeriodService {
 			closedPeriods.setStartingDate(dtFormat.parse(sdFormat));
 			closedPeriods.setEndingDate(dtFormat.parse(edFormat));
 		} catch (final ParseException e) {
+			LOGGER.error("Parse exception");
 			
 		}
 

@@ -62,7 +62,6 @@ $(document).ready(function () {
 
             },
             error: function (response) {
-                console.log("failed");
             }
         });
     });
@@ -147,7 +146,6 @@ $(document).ready(function () {
         // `d` is the original data object for the row
         var tablerows = '';
         $.each(d.values, function (index, value) {
-            console.log(value["Effective Date"] + '<--->' + value["Value"]);
             var tr = '<tr><td>' + value["Effective Date"] + '</td><td>' + value["Value"] + '</td></tr>';
             tablerows += tr;
         });
@@ -207,11 +205,9 @@ $(document).ready(function () {
                 deleteandreplaceindexintable($(this));
             } else {
                 if ($(this).closest('tr').find('input').hasClass('dynamicInput')) {
-                    console.log('Dynamic Row deleted');
                     deleteandreplaceindexintable($(this));
                 }
                 else {
-                    console.log('Existing Row deleted');
                     $(this).closest('tr').hide().find('input.markedForRemoval').val('true');
                 }
 

@@ -96,7 +96,10 @@ public class DataUploadService {
     @Value("${uploadjob.update.progress.size}")
     private int updateProgressSize;
 
+
     private static final Logger logger = LoggerFactory.getLogger(DataUploadService.class);
+
+    private static final String ERROR_NO_UPLOAD_DEFINITION = "There's no Upload Definition provided for this upload feature";
 
     public List<UploadJob> createUploadJob(UploaderRequest uploaderRequest) {
         UploadJob uploadJob = uploaderRequest.getUploadJobs().get(0);
@@ -162,9 +165,9 @@ public class DataUploadService {
 
         Optional<Definition> definitionOptional = runner.getUploadDefinition(uploadJob.getModuleName(), uploadJob.getDefName());
         if (!definitionOptional.isPresent()) {
-            logger.error("There's no Upload Definition provided for this upload feature");
+            logger.error(ERROR_NO_UPLOAD_DEFINITION);
             throw new CustomException(HttpStatus.BAD_REQUEST.toString(),
-                    "There's no Upload Definition provided for this upload feature");
+                    ERROR_NO_UPLOAD_DEFINITION);
         }
 
         Definition uploadDefinition = definitionOptional.get();
@@ -185,9 +188,9 @@ public class DataUploadService {
         UploadJob uploadJob = uploaderRequest.getUploadJobs().get(0);
         Optional<Definition> definitionOptional = runner.getUploadDefinition(uploadJob.getModuleName(), uploadJob.getDefName());
         if (!definitionOptional.isPresent()) {
-            logger.error("There's no Upload Definition provided for this upload feature");
+            logger.error(ERROR_NO_UPLOAD_DEFINITION);
             throw new CustomException(HttpStatus.BAD_REQUEST.toString(),
-                    "There's no Upload Definition provided for this upload feature");
+                    ERROR_NO_UPLOAD_DEFINITION);
         }
 //        Definition uploadDefinition = null;
 //        try {
@@ -570,7 +573,8 @@ public class DataUploadService {
                         Error error = objectMapper.readValue(response, Error.class);
                         failureMessage.append(error.toString());
                         failureMessage.append(", ");
-                    }catch(PathNotFoundException | IOException ignored){}  {
+                    }catch(PathNotFoundException | IOException ignored){
+                        logger.error(ignored.getMessage());
                     }
                 }
                 if(!Objects.isNull(errors)) {
@@ -733,7 +737,9 @@ public class DataUploadService {
         } catch (Exception e) {
             logger.error("Exception while parsing requestMap to String", e);
         }
-        return requestContentBody.toString();
+        if (requestContentBody != null)
+            return requestContentBody.toString();
+        else return null;
     }
 
     @SuppressWarnings("rawtypes")

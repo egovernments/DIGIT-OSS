@@ -15,7 +15,7 @@ export default function CardIcon(props) {
     [className]: className !== undefined
   });
   return (
-    <div className={cardIconClasses} {...rest} style={{color: 'white', background: bgColor, width:'60px', height: '63px'}}> 
+    <div className={cardIconClasses} {...rest} style={{color: 'white', background: bgColor, width:'60px', height: '60px'}}> 
       {children}
     </div>
   );

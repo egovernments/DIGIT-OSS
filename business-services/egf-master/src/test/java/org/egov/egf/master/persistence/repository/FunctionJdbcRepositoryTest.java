@@ -38,7 +38,7 @@ public class FunctionJdbcRepositoryTest {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		functionJdbcRepository = new FunctionJdbcRepository(namedParameterJdbcTemplate);
 	}
 

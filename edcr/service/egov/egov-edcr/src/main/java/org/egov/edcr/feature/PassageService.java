@@ -53,6 +53,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
@@ -101,10 +102,10 @@ public class PassageService extends FeatureProcess {
 					List<BigDecimal> passagePolylines = passage.getPassageDimensions();
 					List<BigDecimal> passageStairPolylines = passage.getPassageStairDimensions();
 
-					if (passagePolylines != null && passagePolylines.size() > 0) {
+					if (passagePolylines != null && !passagePolylines.isEmpty()) {
 
-						BigDecimal minPassagePolyLine = 
-						passagePolylines.stream().reduce(BigDecimal::min).get();
+						Optional<BigDecimal> minPassagewidth = passagePolylines.stream().reduce(BigDecimal::min);
+						BigDecimal minPassagePolyLine = minPassagewidth.isPresent() ? minPassagewidth.get() : BigDecimal.ZERO;
 
 						BigDecimal minWidth = Util.roundOffTwoDecimal(minPassagePolyLine);
 						
@@ -119,9 +120,10 @@ public class PassageService extends FeatureProcess {
 						}
 					}
 
-					if (passageStairPolylines != null && passageStairPolylines.size() > 0) {
+					if (passageStairPolylines != null && !passageStairPolylines.isEmpty()) {
 
-						BigDecimal minPassageStairPolyLine = passageStairPolylines.stream().reduce(BigDecimal::min).get();;
+						Optional<BigDecimal> minPassageStairWidth = passageStairPolylines.stream().reduce(BigDecimal::min);
+						BigDecimal minPassageStairPolyLine = minPassageStairWidth.isPresent() ? minPassageStairWidth.get() : BigDecimal.ZERO;
 
 						BigDecimal minWidth = Util.roundOffTwoDecimal(minPassageStairPolyLine);
 						

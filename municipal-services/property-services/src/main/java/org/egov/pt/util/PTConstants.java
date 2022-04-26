@@ -65,15 +65,13 @@ public class PTConstants {
 
     public static final String NOTIFICATION_PAYMENT_ONLINE = "PT_NOTIFICATION_PAYMENT_ONLINE";
 
-    public static final String NOTIFICATION_PAYMENT_OFFLINE = "PT_NOTIFICATION_PAYMENT_OFFLINE";
+    public static final String NOTIFICATION_PAYMENT_OFFLINE = "PT_NOTIFICATION_PAYMENT_OFFILE";
 
     public static final String NOTIFICATION_PAYMENT_FAIL = "PT_NOTIFICATION_PAYMENT_FAIL";
 
     public static final String NOTIFICATION_PAYMENT_PARTIAL_OFFLINE = "PT_NOTIFICATION_PAYMENT_PARTIAL_OFFLINE";
 
     public static final String NOTIFICATION_PAYMENT_PARTIAL_ONLINE = "PT_NOTIFICATION_PAYMENT_PARTIAL_ONLINE";
-    
-    public static final String DUES_NOTIFICATION = "DUES_NOTIFICATION";
 
     public static final String NOTIFICATION_OLDPROPERTYID_ABSENT = "pt.oldpropertyid.absent";
 
@@ -82,10 +80,8 @@ public class PTConstants {
             NOTIFICATION_PAYMENT_PARTIAL_ONLINE,NOTIFICATION_OLDPROPERTYID_ABSENT));
     
     public static final String ACTION_PAY = "PAY";
-
-    public static final String ACTION_PAID = "PAID";
-
-    public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
+    
+	public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
 	public static final String  USREVENTS_EVENT_NAME = "Property Tax";
 	public static final String  USREVENTS_EVENT_POSTEDBY = "SYSTEM-PT";
 
@@ -134,12 +130,10 @@ public class PTConstants {
 	
 	public static final String MUTATION_PROCESS_CONSTANT = "MUTATION";
 	
-	public static final String ALTERNATE_PROCESS_CONSTANT = "ALTERNATE";
-	
 	public static final String PREVIOUS_PROPERTY_PREVIOUD_UUID = "previousPropertyUuid";
 	
 	
-	/* notification constants */
+	/* notificaion constants */
 	
 	public static final String WF_STATUS_PAID = "PAID";
 	
@@ -158,18 +152,8 @@ public class PTConstants {
 	public static final String WF_STATUS_OPEN = "OPEN";
 	
 	public static final String WF_NO_WORKFLOW = "NO_WORKFLOW";
-
-    public static final String ACTION_UPDATE_MOBILE = "UPDATE_MOBILE";
-
-    public static final String ACTION_ALTERNATE_MOBILE = "ALTERNATE_MOBILE";
-
-    public static final String ACTION_FOR_DUES = "DUE";
-
-    public static final String ACTION_FOR_ASSESSMENT =  "ASSESS";
-
-    public static final String ACTION_FOR_PAYMENT_FAILURE = "FAILURE";
-
-    public static final String WF_STATUS_OPEN_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_OPEN";
+	
+	public static final String WF_STATUS_OPEN_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_OPEN";
 	
     public static final String WF_STATUS_DOCVERIFIED_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_DOCVERIFIED";
     
@@ -197,10 +181,6 @@ public class PTConstants {
 	
 	public static final String MT_NO_WORKFLOW = "PT_NOTIF_WF_MT_NONE";
 	
-	public static final String PT_UPDATE_OWNER_NUMBER = "PT_UPDATE_OWNER_NUMBER";
-	
-	public static final String PT_UPDATE_ALTERNATE_NUMBER = "PT_UPDATE_ALTERNATE_NUMBER";
-	
 	/* update */
 	public static final String WF_UPDATE_STATUS_OPEN_CODE  = "PT_NOTIF_WF_OPEN";
 	
@@ -227,13 +207,11 @@ public class PTConstants {
 
 
 
-
+	
 	
 	//  NOTIFICATION PLACEHOLDER
 
     public static final String NOTIFICATION_OWNERNAME = "{OWNER_NAME}";
-
-    public static final String NOTIFICATION_EMAIL = "{EMAIL_ID}";
 
     public static final String NOTIFICATION_STATUS = "{STATUS}";
     
@@ -253,14 +231,6 @@ public class PTConstants {
 
 
     public static final String NOTIFICATION_PROPERTYID = "{PROPERTYID}";
-    
-    public static final String PT_OWNER_NAME = "{ownername}";
-    
-    public static final String PT_ALTERNATE_NUMBER = "{alternatenumber}";
-    
-    public static final String PT_OLD_MOBILENUMBER = "{oldmobilenumber}";
-    
-    public static final String PT_NEW_MOBILENUMBER = "{newmobilenumber}";
     
     // PROPERTY & MUTATION
     public static final String NOTIFICATION_APPID =  "{APPID}";
@@ -342,20 +312,6 @@ public class PTConstants {
 
     public static final String VIEW_APPLICATION_CODE = "View Application";
 
-    public static final String VIEW_PROPERTY_CODE = "VIEW PROPERTY";
-
-    public static final String TRACK_APPLICATION_CODE = "TRACK APPLICATION";
-
-    public static final String DOWNLOAD_MUTATION_CERTIFICATE_CODE = "DOWNLOAD MUTATION CERTIFICATE";
-
-    public static final String DOWNLOAD_MUTATION_RECEIPT_CODE = "DOWNLOAD RECEIPT";
-
-    public static final String PAY_PENDING_PAYMENT_CODE = "DOWNLOAD RECEIPT";
-
-    public static final String VIEW_PROPERTY = "view";
-
-    public static final String TRACK_APPLICATION = "track";
-
 
     // Fuzzy Search
     public static final String ES_DATA_PATH = "$..Data";
@@ -364,55 +320,6 @@ public class PTConstants {
 
     public static final String ES_DATA_PROPERTYID_PATH = "$.propertyId";
 
-    //Notification Enhancement
-    public static final String CHANNEL_NAME_SMS = "SMS";
-
-    public static final String CHANNEL_NAME_EVENT = "EVENT";
-
-    public static final String CHANNEL_NAME_EMAIL = "EMAIL";
-
-    public static final String MODULE = "module";
-
-    public static final String ACTION = "action";
-
-    public static final String CHANNEL_LIST = "channelList";
-
-    public static final String CHANNEL = "Channel";
-
-    public static final String LOCALIZATION_CODES_JSONPATH = "$.messages.*.code";
-  
-    public static final String LOCALIZATION_MSGS_JSONPATH = "$.messages.*.message";
-
-  //EVENT PAY
-    public static final String EVENT_PAY_TENANTID = "$tenantId";
-
-    public static final String EVENT_PAY_BUSINESSSERVICE = "$businessService";
-
-    public static final String EVENT_PAY_PROPERTYID = "$propertyId";
-
-    //Notification Strings for In App
-
-    public static final String TRACK_APPLICATION_STRING = "You can track your application on the link given below - {PTURL} Thank you";
-
-    public static final String VIEW_PROPERTY_STRING = "You can view your property on the link given below - {PTURL} Thank you";
-
-    public static final String PAY_ONLINE_STRING = "Click on the URL to view the details and pay online {PAYMENT_LINK}";
-
-    public static final String PT_ONLINE_STRING = "You can pay your Property Tax online here - {PAYMENT_LINK}";
-
-    public static final String MT_TRACK_APPLICATION_STRING ="You can track your application on the link given below - {MTURL} Thank you";
-
-    public static final String MT_PAYLINK_STRING = "You can pay your mutation fee on the below link - {PAYLINK} or visit your ULB to pay your dues. Thank you";
-
-    public static final String MT_CERTIFICATE_STRING = "You can download your mutation certificate on the below link - {MTURL} Thank you";
-
-    public static final String MT_RECEIPT_STRING = "You can download your receipt on the below link - {MTURL} Thank you";
-
-    public static final String PT_TAX_FAIL = "Please try again. Ignore this message if you have completed your payment. You can pay your Property Tax online here - {payLink}";
-
-    public static final String PT_TAX_FULL = "Click on the link to download payment receipt {receipt download link}";
-
-    public static final String PT_TAX_PARTIAL = "You can pay your Property Tax online here - {payLink} Click on the link to download payment receipt {receipt download link}";
 
 }
 

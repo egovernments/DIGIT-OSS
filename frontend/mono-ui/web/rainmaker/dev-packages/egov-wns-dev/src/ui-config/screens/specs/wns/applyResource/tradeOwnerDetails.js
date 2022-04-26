@@ -483,6 +483,7 @@ export const tradeOwnerDetails = getCommonCard({
             );
           }
         } catch (e) {
+          console.log(e);
         }
       }
     },

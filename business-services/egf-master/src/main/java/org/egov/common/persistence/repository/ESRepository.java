@@ -18,7 +18,7 @@ public abstract class ESRepository {
     protected TransportClient esClient;
 
     public void validateSortByOrder(final String sortBy) {
-        List<String> sortByList = new ArrayList<String>();
+        List<String> sortByList;
         InvalidDataException invalidDataException = new InvalidDataException();
         if (sortBy.contains(",")) {
             sortByList = Arrays.asList(sortBy.split(","));
@@ -39,7 +39,7 @@ public abstract class ESRepository {
 
     public void validateEntityFieldName(String sortBy, final Class<?> object) {
         InvalidDataException invalidDataException = new InvalidDataException();
-        List<String> sortByList = new ArrayList<String>();
+        List<String> sortByList;
         if (sortBy.contains(",")) {
             sortByList = Arrays.asList(sortBy.split(","));
         } else {
@@ -66,7 +66,7 @@ public abstract class ESRepository {
 
     public List<String> prepareOrderBys(String sortBy) {
         List<String> orderByList = new ArrayList<String>();
-        List<String> sortByList = new ArrayList<String>();
+        List<String> sortByList;
         if (sortBy.contains(",")) {
             sortByList = Arrays.asList(sortBy.split(","));
         } else {
@@ -86,7 +86,7 @@ public abstract class ESRepository {
 
     public void add(Object fieldValue, String field, BoolQueryBuilder boolQueryBuilder) {
         if (fieldValue != null) {
-            boolQueryBuilder = boolQueryBuilder.filter(termsQuery(field, fieldValue));
+            boolQueryBuilder.filter(termsQuery(field, fieldValue));
         }
 
     }
@@ -98,18 +98,5 @@ public abstract class ESRepository {
 
     }
 
-    public void gte(Object fieldValue, String field, BoolQueryBuilder boolQueryBuilder) {
-        if (fieldValue != null) {
-            boolQueryBuilder = boolQueryBuilder.filter(QueryBuilders.rangeQuery(field).from(fieldValue));
-        }
-
-    }
-
-    public void lte(Object fieldValue, String field, BoolQueryBuilder boolQueryBuilder) {
-        if (fieldValue != null) {
-            boolQueryBuilder = boolQueryBuilder.filter(QueryBuilders.rangeQuery(field).to(fieldValue));
-        }
-
-    }
 
 }

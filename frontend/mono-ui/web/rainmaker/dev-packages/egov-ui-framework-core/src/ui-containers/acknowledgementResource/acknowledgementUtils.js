@@ -159,7 +159,7 @@ const getHeader = (applicationNumber, moduleName) => {
   })
 }
 
-const getAcknowledgementCardContent = (purpose, status, applicationNumber,moduleName,secondNumber) => {
+const getAcknowledgementCardContent = (purpose, status, applicationNumber,moduleName) => {
   const ackCardContentObj = {
     "icon" : status === "success" ? "done" : "close",
     "backgroundColor": status === "success" ? "#39CB74" : "#d32f2f",
@@ -172,9 +172,6 @@ const getAcknowledgementCardContent = (purpose, status, applicationNumber,module
     }
   }
   ackCardContentObj["number"] = applicationNumber
-  if(secondNumber&&purpose=="approve" && status=="success"){
-    ackCardContentObj["number"] = secondNumber;
-  }
   return ackCardContentObj
 }
 
@@ -218,7 +215,7 @@ export const getAcknowledgementCard = ({
         }
       },
       body: {
-        ...acknowledgementCard(getAcknowledgementCardContent(purpose, status, applicationNumber, moduleName,secondNumber))
+        ...acknowledgementCard(getAcknowledgementCardContent(purpose, status, applicationNumber, moduleName))
       },
       footer: [...footerUrlConfig]
     };

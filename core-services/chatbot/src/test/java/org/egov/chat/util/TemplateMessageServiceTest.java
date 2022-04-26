@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
+@Slf4j
 public class TemplateMessageServiceTest {
 
     private ObjectMapper objectMapper;
@@ -28,11 +30,10 @@ public class TemplateMessageServiceTest {
     public void testFetchParams() throws IOException {
 
         Iterator<Map.Entry<String, JsonNode>> paramIterator = params.fields();
-        System.out.println(params.size());
         while (paramIterator.hasNext()) {
             Map.Entry<String, JsonNode> param = paramIterator.next();
-            System.out.println(param.getKey());
-            System.out.println(param.getValue().toString());
+            log.info(param.getKey());
+            log.info(param.getValue().toString());
         }
 
     }
@@ -51,7 +52,7 @@ public class TemplateMessageServiceTest {
             templateString = templateString.replace("{{" + key + "}}" , localizedValue);
         }
 
-        System.out.println(templateString);
+        log.info(templateString);
     }
 
 }

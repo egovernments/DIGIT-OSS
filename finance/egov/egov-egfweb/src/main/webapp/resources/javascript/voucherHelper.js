@@ -913,9 +913,7 @@ function autocompletecodeFunctionHeader(obj,myEvent)
 	var target = document.getElementById('codescontainer');	
 	var posSrc=findPos(src); 
 	target.style.left=posSrc[0]+"px";	
-	target.style.top=(posSrc[1]-((452/3)+10))+"px";  
-	console.log(posSrc[1]);
-	console.log(target.style.top);
+	target.style.top=(posSrc[1]-((452/3)+10))+"px";
 	
 	target.style.width=650;	
 		
@@ -961,7 +959,6 @@ function fillNeibrAfterSplitGlcode(obj)
 	temp = temp.split("`-`");
 	var currRow=getRowIndex(obj);
 	/*var acchead= document.getElementById('billDetailslist['+currRow+'].accounthead').value;
-	console.log(acchead);
 	if(acchead !=null && acchead !=""){
 		key = key+"`-`";
 		key = key+acchead;
@@ -1096,7 +1093,6 @@ function loadSlFunction(){
 			 accountCodeId = document.getElementById('billDetailslist['+i+'].glcodeIdDetail').value;
 			 accountCode = document.getElementById('billDetailslist['+i+'].glcodeDetail').value;
 		}
-		console.log(slAccountCodes);
 		if(accGridFunc !=''  && slAccountCodes.indexOf(accountCodeId) !=-1){
 			if(functionArray.indexOf(accGridFunc) == -1){
 				functionArray.push(accGridFunc);
@@ -1139,8 +1135,6 @@ function getSlAccountCodes(){
 	var obj = document.getElementById('subLedgerlist[0].glcode.id');
 	for (var j=0; j< obj.options.length;j++ )
 	{
-		console.log("---"+obj.options[j].value+"---");
-		console.log("---"+(obj.options[j].value).trim()+"---");
 		slAccountCodeArray.push((obj.options[j].value).trim());
 		
 	}
@@ -1255,7 +1249,6 @@ var onDropdownChange = function(index,obj) {
 		// loadSLFunc(obj,document.getElementById('subLedgerlist['+obj.value+'].functionDetail').value);
 		var subledgerid=document.getElementById('subLedgerlist['+obj.value+'].glcode.id');
 		var accountCode = subledgerid.options[subledgerid.selectedIndex].text;
-		console.log("---"+accountCode+"-------");
 		document.getElementById('subLedgerlist['+obj.value+'].subledgerCode').value =accountCode;
 		if(accountCode != '---Select---'){
 			var url = path+'/voucher/common-getDetailType.action?accountCode='+accountCode+'&_csrf='+csrfToken+'&index='+obj.value;

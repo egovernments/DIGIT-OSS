@@ -73,6 +73,7 @@ class OTP extends Component {
   };
 
   completed = () => {
+    console.log('Timer has completed')
     this.setState({
       timerSwitch: true
     });

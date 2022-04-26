@@ -1,6 +1,7 @@
 package org.egov.pg.repository;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pg.config.AppProperties;
 import org.egov.pg.models.IdGenerationResponse;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import org.springframework.mock.env.MockEnvironment;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Ignore
 public class IdGenRepositoryTest {
 
@@ -33,6 +35,6 @@ public class IdGenRepositoryTest {
         IdGenerationResponse response = idGenRepository.getId(requestInfo, "pb", "pg.txnid",
                 "" +
                         "PB-PG-[cy:yyyy/MM/dd]-[SEQ_EG_PG_TXN]-[d{2}]", 1);
-        System.out.println(response.getIdResponses());
+        log.info(response.getIdResponses().toString());
     }
 }

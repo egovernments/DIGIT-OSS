@@ -275,6 +275,7 @@ const callBackForPay = async (state, dispatch) => {
     } catch (e) {
       dispatch(toggleSpinner());
       dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
+      console.log(e);
     }
   } else {
     dispatch(

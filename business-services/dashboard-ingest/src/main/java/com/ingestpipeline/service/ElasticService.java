@@ -43,7 +43,6 @@ import com.ingestpipeline.util.Constants;
 public class ElasticService implements IESService {
 
 
-	//public Map<String , JsonNode > caughtFailedRequests = new HashMap<>();
 
 
 	@Value("${es.index.type}")
@@ -84,6 +83,10 @@ public class ElasticService implements IESService {
 	private IngestService ingestService;
 
 	private static final String SLASH_SEPERATOR  = "/";
+
+	private final  String TOTAL="total";
+
+	private final String ERROR_MESSAGE="client error while searching ES : ";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(ElasticService.class);
 
@@ -128,7 +131,6 @@ public class ElasticService implements IESService {
 
 		try {
 			response = retryTemplate.postForEntity(uriBuilder.toString(), requestEntity);
-			//restTemplate.postForEntity(uri,requestEntity);
 			LOGGER.info("RestTemplate response status :: {}", response.getStatusCode());
 
 		} catch (HttpClientErrorException e) {
@@ -168,12 +170,12 @@ public class ElasticService implements IESService {
 
             Map responseNode = new ObjectMapper().convertValue(response.getBody(), Map.class);
 			Map hits = (Map)responseNode.get("hits");
-            if((Integer)hits.get("total") >=1)
+            if((Integer)hits.get(TOTAL) >=1)
                 return (Map)((ArrayList)hits.get("hits")).get(0);
 
         } catch (HttpClientErrorException e) {
             e.printStackTrace();
-            LOGGER.error("client error while searching ES : " + e.getMessage());
+            LOGGER.error(ERROR_MESSAGE + e.getMessage());
 
         }
         return null;
@@ -203,7 +205,6 @@ public class ElasticService implements IESService {
 		//LOGGER.info(" new request body json ### " +request);
 
 		HttpEntity<String> requestEntity = new HttpEntity<>(request.toString(), headers);
-		ArrayNode hitNodes = null;
 
 		try {
 			ResponseEntity<Object> response = retryTemplate.postForEntity(url.toString(), requestEntity);
@@ -224,7 +225,6 @@ public class ElasticService implements IESService {
 	@Override
 	public Boolean push(TargetData requestBody) throws Exception {
 
-		Long currentDateTime = new Date().getTime();
 		String url = indexerServiceHost + targetIndexName + DOC_TYPE + requestBody.getId();
 
 		HttpHeaders headers = new HttpHeaders();
@@ -236,12 +236,10 @@ public class ElasticService implements IESService {
 		JsonNode request = new ObjectMapper().convertValue(requestBody, JsonNode.class);
 
 		HttpEntity<String> requestEntity = new HttpEntity<>(request.toString(), headers);
-		ArrayNode hitNodes = null;
 
 		try {
 			ResponseEntity<Object> response = retryTemplate.postForEntity(url, requestEntity);
 
-			//ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Object.class);
 			LOGGER.info("Status code on pushing to target index : " + response.getStatusCode());
 			if (response.getStatusCode().value() == 201)
 				return Boolean.TRUE;
@@ -255,7 +253,7 @@ public class ElasticService implements IESService {
 	}
 	
 	@Override
-	public Boolean searchIndex(String index, String searchQuery, String dataContextVersion) throws Exception {
+	public Boolean searchIndex(String index, String searchQuery, String dataContextVersion) {
 		LOGGER.info("searching ES for query: " + searchQuery + " on " + index);
 		
 		Map<String, String> scrollSearchParams = getScrollIdForScrollSearch(index, dataContextVersion);
@@ -289,14 +287,14 @@ public class ElasticService implements IESService {
 							} catch (IOException e) {
 								LOGGER.error("Encountered an exception while reading the JSON Node on Thread : " + e.getMessage());
 							}
-							JsonNode dataObjectNode = null; 
-							if(dataNode != null && dataNode.get("Data") == null) { 
-								dataObjectNode = dataNode; 
-							} else { 
-								dataObjectNode= dataNode.get("Data");
+							JsonNode dataObjectNode = null;
+							if(dataNode != null){
+								if(dataNode.get("Data") == null) {
+									dataObjectNode = dataNode;
+								} else {
+									dataObjectNode= dataNode.get("Data");
+								}
 							}
-	    					Map<Object, Object> dataMap = new Gson().fromJson(dataObjectNode.toString(), new TypeToken<HashMap<Object, Object>>() {}.getType()
-	    						);
 							ingestService.ingestToPipeline(
 									setIncomingData(scrollSearchParams.get(Constants.DataContexts.CONTEXT), dataContextVersion, dataObjectNode));
 	    				}
@@ -325,7 +323,7 @@ public class ElasticService implements IESService {
 
             Map responseNode = new ObjectMapper().convertValue(response.getBody(), Map.class);
 			Map hits = (Map)responseNode.get("hits");
-            if((Integer)hits.get("total") >=1)
+            if((Integer)hits.get(TOTAL) >=1)
                 return (List) ((ArrayList)hits.get("hits"));
 
         } catch (HttpClientErrorException e) {
@@ -353,12 +351,12 @@ public class ElasticService implements IESService {
 					Object.class);
 			Map responseNode = new ObjectMapper().convertValue(response.getBody(), Map.class);
 			hits = (Map) responseNode.get("hits");
-			if ((Integer) hits.get("total") >= 1) {
+			if ((Integer) hits.get(TOTAL) >= 1) {
 				hitsToMap.put("hits", ((ArrayList) hits.get("hits")));
 				return hitsToMap;
 			}
 		} catch (HttpClientErrorException e) {
-			LOGGER.error("client error while searching ES : " + e.getMessage());
+			LOGGER.error(ERROR_MESSAGE + e.getMessage());
 		}
 		return hitsToMap;
 	}
@@ -390,7 +388,7 @@ public class ElasticService implements IESService {
 			Map<String, List<JsonObject>> hitsToMap = new LinkedHashMap();
 			Map hits = new LinkedHashMap();
 			hits = (Map) responseNode.get("hits");
-			if ((Integer) hits.get("total") >= 1) {
+			if ((Integer) hits.get(TOTAL) >= 1) {
 				hitsToMap.put("hits", ((ArrayList) hits.get("hits")));
 			}
 			
@@ -407,14 +405,14 @@ public class ElasticService implements IESService {
 					} catch (IOException e) {
 						LOGGER.error("Encountered an exception while reading the JSON Node on Thread : " + e.getMessage());
 					}
-					JsonNode dataObjectNode = null; 
-					if(dataNode != null && dataNode.get("Data") == null) { 
-						dataObjectNode = dataNode; 
-					} else { 
-						dataObjectNode= dataNode.get("Data");
+					JsonNode dataObjectNode = null;
+					if(dataNode != null){
+						if(dataNode.get("Data") == null) {
+							dataObjectNode = dataNode;
+						} else {
+							dataObjectNode= dataNode.get("Data");
+						}
 					}
-					Map<Object, Object> dataMap = new Gson().fromJson(dataObjectNode.toString(), new TypeToken<HashMap<Object, Object>>() {}.getType()
-						);
 					ingestService.ingestToPipeline(
 							setIncomingData(scrollSearchParams.get(Constants.DataContexts.CONTEXT), dataContextVersion, dataObjectNode));
 				}
@@ -425,7 +423,7 @@ public class ElasticService implements IESService {
 			String queryForScrollId = Constants.ScrollSearch.SCROLL_SEARCH_DEFAULT_QUERY + "\"" + scrollSearchParams.get(Constants.ScrollSearch.SCROLL_ID) + "\"" + "}";
 			scrollSearchParams.put(Constants.ScrollSearch.QUERY, queryForScrollId); 
 		} catch (HttpClientErrorException e) {
-			LOGGER.error("client error while searching ES : " + e.getMessage());
+			LOGGER.error(ERROR_MESSAGE + e.getMessage());
 		}
 		return scrollSearchParams; 
 	}

@@ -12,7 +12,6 @@ public class PlanInfoFeature extends FeatureProcess {
 
     @Override
     public Plan validate(Plan pl) {
-        // TODO Auto-generated method stub
         return pl;
     }
 

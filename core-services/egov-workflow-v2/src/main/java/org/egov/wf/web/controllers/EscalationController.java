@@ -54,7 +54,6 @@ public class EscalationController {
     public ResponseEntity<List> processTransitionTest(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                           @PathVariable(required = true) String businessService) {
         List<String> ids = escalationService.escalateApplicationsTest(requestInfoWrapper.getRequestInfo(), businessService);
-        ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
         return new ResponseEntity<>(ids, HttpStatus.OK);
     }
 

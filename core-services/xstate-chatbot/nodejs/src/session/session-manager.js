@@ -6,8 +6,6 @@ const sevaStateMachine =  require('../machine/seva'),
     userService = require('./user-service');
 const { State, interpret } = require('xstate');
 const dialog = require('../machine/util/dialog.js');
-const uuid = require('uuid');
-const config= require('../env-variables');
 
 class SessionManager {
 
@@ -17,7 +15,6 @@ class SessionManager {
         reformattedMessage.user = user;
         let userId = user.userId;
 
-        await chatStateRepository.updateSessionId(userId, config.avgSessionTime);
         let chatState = await chatStateRepository.getActiveStateForUserId(userId);
         telemetry.log(userId, 'from_user', reformattedMessage);
 
@@ -34,8 +31,7 @@ class SessionManager {
             chatState = this.createChatStateFor(user);
             let saveState = JSON.parse(JSON.stringify(chatState));
             saveState = this.removeUserDataFromState(saveState);
-            let sessionId = uuid.v4();
-            await chatStateRepository.insertNewState(userId, true, JSON.stringify(saveState), sessionId, new Date().getTime());
+            await chatStateRepository.insertNewState(userId, true, JSON.stringify(saveState));
         } 
         service = this.getChatServiceFor(chatState, reformattedMessage);
         
@@ -45,7 +41,7 @@ class SessionManager {
     async toUser(user, outputMessages, extraInfo) {
         channelProvider.sendMessageToUser(user, outputMessages, extraInfo);
         for(let message of outputMessages) {
-            telemetry.log(user.userId, 'to_user', {message : {type: "text", output: message, locale: user.locale}});
+            telemetry.log(user.userId, 'to_user', {message : {type: "text", output: message}});
         }
     }
 
@@ -58,7 +54,6 @@ class SessionManager {
         state._event = {};
         if(state.history)
             state.history.context.user = {};
-
         return state;
     }
 
@@ -77,19 +72,13 @@ class SessionManager {
         service.onTransition( state => {
             if(state.changed) {
                 let userId = state.context.user.userId;
-                let stateStrings = state.toStrings();
-                let sourceStrings = state.history.toStrings();
+                let stateStrings = state.toStrings()
+                telemetry.log(userId, 'transition', {destination: stateStrings[stateStrings.length-1]});
 
                 let active = !state.done && !state.forcedClose;
                 let saveState = JSON.parse(JSON.stringify(state));      // deep copy
                 saveState = this.removeUserDataFromState(saveState);
-                let timeStamp = new Date().getTime();
-                (async() => { 
-                    await chatStateRepository.updateState(userId, active, JSON.stringify(saveState), timeStamp);
-                    let sessionId = await chatStateRepository.getSessionId(userId);
-                    telemetry.log(userId, 'transition', {input: reformattedMessage.message.input, source: sourceStrings[sourceStrings.length-1], destination: stateStrings[stateStrings.length-1], locale: locale, sessionId: sessionId, timestamp: timeStamp, extraInfo: reformattedMessage.extraInfo});
-                })();
-                
+                chatStateRepository.updateState(userId, active, JSON.stringify(saveState));
             }
         });
 
@@ -113,7 +102,7 @@ class SessionManager {
 
 let grammer = {
     reset: [
-        {intention: 'reset', recognize: ['Hello', 'hello', 'Hi', 'hi', 'mseva', 'seva', 'सेवा']},
+        {intention: 'reset', recognize: ['Hi', 'hi', 'mseva', 'seva', 'सेवा']},
     ]
 }
 

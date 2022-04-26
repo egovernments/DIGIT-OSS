@@ -1,15 +1,11 @@
 package org.egov.pt.service;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.validation.Valid;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
@@ -41,9 +37,6 @@ public class PropertyService {
 
 	@Autowired
 	private Producer producer;
-	
-	@Autowired
-	private NotificationService notifService;
 
 	@Autowired
 	private PropertyConfiguration config;
@@ -119,62 +112,14 @@ public class PropertyService {
 		Property propertyFromSearch = propertyValidator.validateCommonUpdateInformation(request);
 
 		boolean isRequestForOwnerMutation = CreationReason.MUTATION.equals(request.getProperty().getCreationReason());
-		
-		boolean isNumberDifferent = checkIsRequestForMobileNumberUpdate(request, propertyFromSearch);
-		
+
 		if (isRequestForOwnerMutation)
 			processOwnerMutation(request, propertyFromSearch);
-		else if(isNumberDifferent)
-			processMobileNumberUpdate(request, propertyFromSearch);
-			
 		else
 			processPropertyUpdate(request, propertyFromSearch);
 
 		request.getProperty().setWorkflow(null);
 		return request.getProperty();
-	}
-	
-	/*
-		Method to check if the update request is for updating owner mobile numbers
-	*/
-	
-	private boolean checkIsRequestForMobileNumberUpdate(PropertyRequest request, Property propertyFromSearch) {
-		Map <String, String> uuidToMobileNumber = new HashMap <String, String>();
-		List <OwnerInfo> owners = propertyFromSearch.getOwners();
-		
-		for(OwnerInfo owner : owners) {
-			uuidToMobileNumber.put(owner.getUuid(), owner.getMobileNumber());
-		}
-		
-		List <OwnerInfo> ownersFromRequest = request.getProperty().getOwners();
-		
-		Boolean isNumberDifferent = false;
-		
-		for(OwnerInfo owner : ownersFromRequest) {
-			if(uuidToMobileNumber.containsKey(owner.getUuid()) && !uuidToMobileNumber.get(owner.getUuid()).equals(owner.getMobileNumber())) {
-				isNumberDifferent = true;
-				break;
-			}
-		}
-		
-		return isNumberDifferent;
-	}
-	
-	/*
-		Method to process owner mobile number update
-	*/
-	
-	private void processMobileNumberUpdate(PropertyRequest request, Property propertyFromSearch) {
-		
-				if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {
-					userService.createUser(request);
-				} else {			
-					updateOwnerMobileNumbers(request,propertyFromSearch);
-				}
-				
-				enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
-				util.mergeAdditionalDetails(request, propertyFromSearch);
-				producer.push(config.getUpdatePropertyTopic(), request);		
 	}
 
 	/**
@@ -188,9 +133,6 @@ public class PropertyService {
 		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
 		if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {
 			userService.createUser(request);
-		} else if (request.getProperty().getSource().toString().equals("WS")
-				&& CreationReason.UPDATE.equals(request.getProperty().getCreationReason())) {
-			userService.updateUser(request);
 		} else {
 			request.getProperty().setOwners(util.getCopyOfOwners(propertyFromSearch.getOwners()));
 		}
@@ -237,24 +179,6 @@ public class PropertyService {
 			 */
 			producer.push(config.getUpdatePropertyTopic(), request);
 		}
-	}
-	
-	/*
-		Method to update owners mobile number
-	*/
-
-	private void updateOwnerMobileNumbers(PropertyRequest request, Property propertyFromSearch) {
-		
-		
-		Map <String, String> uuidToMobileNumber = new HashMap <String, String>();
-		List <OwnerInfo> owners = propertyFromSearch.getOwners();
-		
-		for(OwnerInfo owner : owners) {
-			uuidToMobileNumber.put(owner.getUuid(), owner.getMobileNumber());
-		}
-		
-		userService.updateUserMobileNumber(request, uuidToMobileNumber);
-		notifService.sendNotificationForMobileNumberUpdate(request, propertyFromSearch,uuidToMobileNumber);		
 	}
 
 	/**
@@ -362,9 +286,11 @@ public class PropertyService {
 			throw new CustomException("EG_PT_PROPERTY_AUDIT_ERROR", "Audit can only be provided for a single propertyId");
 		}
 
+
 		if(criteria.getDoorNo()!=null || criteria.getName()!=null || criteria.getOldPropertyId()!=null){
 			return fuzzySearchService.getProperties(requestInfo, criteria);
 		}
+
 
 		if (criteria.getMobileNumber() != null || criteria.getName() != null || criteria.getOwnerIds() != null) {
 
@@ -375,7 +301,6 @@ public class PropertyService {
 				return Collections.emptyList();
 
 			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
-			filterPropertiesForUser(properties, criteria.getOwnerIds());
 		} else {
 			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
 		}
@@ -385,27 +310,6 @@ public class PropertyService {
 		});
 
 		return properties;
-	}
-
-	private void filterPropertiesForUser(List<Property> properties, Set<String> ownerIds) {
-
-		List<Property> propertiesToBeRemoved = new ArrayList<>();
-
-		for (Property property : properties) {
-
-			boolean isOwnerPresent = false;
-
-			for (OwnerInfo owner : property.getOwners()) {
-
-				if (ownerIds.contains(owner.getUuid())) {
-					isOwnerPresent = true;
-					break;
-				}
-			}
-			if (!isOwnerPresent)
-				propertiesToBeRemoved.add(property);
-		}
-		properties.removeAll(propertiesToBeRemoved);
 	}
 
 	public List<Property> searchPropertyPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
@@ -450,44 +354,4 @@ public class PropertyService {
 		util.enrichOwner(userDetailResponse, properties, false);
 		return properties;
 	}
-
-	public Property addAlternateNumber(PropertyRequest request) {
-		
-		Property propertyFromSearch = propertyValidator.validateAlternateMobileNumberInformation(request);
-		userService.createUserForAlternateNumber(request);
-		
-		request.getProperty().setAlternateUpdated(true);		
-		
-		Map <String, String> uuidToAlternateMobileNumber = new HashMap <String, String>();
-		List <OwnerInfo> owners = propertyFromSearch.getOwners();
-		
-		for(OwnerInfo owner : owners) {
-			
-			if(owner.getAlternatemobilenumber()!=null) {
-			   uuidToAlternateMobileNumber.put(owner.getUuid(), owner.getAlternatemobilenumber());
-			}
-			else {
-				uuidToAlternateMobileNumber.put(owner.getUuid(), " ");
-			}
-		}
-		
-		notifService.sendNotificationForAlternateNumberUpdate(request, propertyFromSearch,uuidToAlternateMobileNumber);	
-		
-		//enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
-		util.mergeAdditionalDetails(request, propertyFromSearch);
-		
-		producer.push(config.getUpdatePropertyTopic(), request);
-		
-		request.getProperty().setWorkflow(null);
-		
-		
-		return request.getProperty();
-	}
-	
-	public Integer count(RequestInfo requestInfo, @Valid PropertyCriteria propertyCriteria) {
-		propertyCriteria.setIsInboxSearch(false);
-        Integer count = repository.getCount(propertyCriteria, requestInfo);
-        return count;
-	}
-	
 }

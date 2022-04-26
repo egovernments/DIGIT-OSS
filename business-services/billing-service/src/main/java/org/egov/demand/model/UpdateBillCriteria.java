@@ -28,7 +28,6 @@ public class UpdateBillCriteria {
 	@NotNull
 	private String businessService;
 	
-	@NotNull
 	private  JsonNode additionalDetails;
 	
 	private Set<String> billIds;

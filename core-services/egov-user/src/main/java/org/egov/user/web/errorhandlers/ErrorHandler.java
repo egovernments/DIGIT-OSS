@@ -17,18 +17,20 @@ public class ErrorHandler {
     @Autowired
     private ResponseInfoFactory responseInfoFactory;
 
+    private static final String ERROR_MISSING_REQUESTBODY_FIELDS = "Missing RequestBody Fields";
+
     public ResponseEntity<org.egov.common.contract.response.ErrorResponse> getErrorResponseEntityForMissingRequestInfo(BindingResult bindingResult,
                                                                                                                        RequestInfo requestInfo) {
         org.egov.common.contract.response.Error error = new org.egov.common.contract.response.Error();
         error.setCode(400);
-        error.setMessage("Missing RequestBody Fields");
+        error.setMessage(ERROR_MISSING_REQUESTBODY_FIELDS);
         error.setDescription("Error While Binding RequestBody");
 
         if (bindingResult.hasFieldErrors()) {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 ErrorField errorField = new ErrorField();
                 errorField.setCode("400");
-                errorField.setMessage("Missing RequestBody Fields");
+                errorField.setMessage(ERROR_MISSING_REQUESTBODY_FIELDS);
                 errorField.setField(fieldError.getField());
                 error.getFields().add(errorField);
             }
@@ -53,7 +55,7 @@ public class ErrorHandler {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 ErrorField errorField = new ErrorField();
                 errorField.setCode("400");
-                errorField.setMessage("Missing RequestBody Fields");
+                errorField.setMessage(ERROR_MISSING_REQUESTBODY_FIELDS);
                 errorField.setField(fieldError.getField());
                 error.getFields().add(errorField);
             }

@@ -28,8 +28,6 @@
 
         var options, $this, self = this;
 
-        // console.log("Printing", this, arguments);
-
         if ( self instanceof $) {
             // Get the node if it is a jQuery object
             self = self.get(0);
@@ -138,7 +136,6 @@
                 }, 250);
             } catch (e) {
                 // Use the pop-up method if iframe fails for some reason
-                console.error("Failed to print from iframe", e.stack, e.message);
                 w = window.open();
                 w.document.write(content);
                 w.document.close();

@@ -98,6 +98,7 @@ const getMdmsData = async (state, dispatch) => {
     );
     prepareDocumentsUploadData(state, dispatch);
   } catch (e) {
+    console.log(e);
   }
 };
 

@@ -1,6 +1,12 @@
 package org.egov.swcalculation.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
@@ -41,6 +47,11 @@ public class CalculatorUtils {
 
 	@Autowired
 	private ObjectMapper mapper;
+
+	private static final String URL_APPEND_TENANT_ID = "tenantId=";
+	private static final String FILTER_ACTIVE = "[?(@.active== ";
+	private static final String FILTER_IS_ACTIVE = "[?(@.isActive== ";
+
 
 	/**
 	 * Prepares and returns MDMS search request with financial master criteria
@@ -134,7 +145,7 @@ public class CalculatorUtils {
 		StringBuilder url = new StringBuilder(configurations.getSewerageConnectionHost());
 		url.append(configurations.getSewerageConnectionSearchEndPoint());
 		url.append("?");
-		url.append("tenantId=");
+		url.append(URL_APPEND_TENANT_ID);
 		url.append(tenantId);
 		url.append("&");
 		url.append("connectionNumber=");
@@ -153,7 +164,7 @@ public class CalculatorUtils {
 		details.add(MasterDetail.builder().name(SWCalculationConstant.SW_INTEREST_MASTER).build());
 		details.add(MasterDetail.builder().name(SWCalculationConstant.SW_BILLING_SLAB_MASTER).build());
 		details.add(MasterDetail.builder().name(SWCalculationConstant.CALCULATION_ATTRIBUTE_CONST)
-				.filter("[?(@.active== " + true + ")]").build());
+				.filter(FILTER_ACTIVE + true + ")]").build());
 		ModuleDetail mdDtl = ModuleDetail.builder().masterDetails(details)
 				.moduleName(SWCalculationConstant.SW_TAX_MODULE).build();
 		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Arrays.asList(mdDtl)).tenantId(tenantId)
@@ -164,7 +175,7 @@ public class CalculatorUtils {
 	public MdmsCriteriaReq getBillingFrequency(RequestInfo requestInfo, String tenantId) {
 
 		MasterDetail masterDetail = MasterDetail.builder().name(SWCalculationConstant.BILLING_PERIOD)
-				.filter("[?(@.active== " + true + ")]").build();
+				.filter(FILTER_ACTIVE + true + ")]").build();
 		ModuleDetail moduleDetail = ModuleDetail.builder().moduleName(SWCalculationConstant.SW_MODULE)
 				.masterDetails(Arrays.asList(masterDetail)).build();
 		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Arrays.asList(moduleDetail)).tenantId(tenantId)
@@ -237,7 +248,7 @@ public class CalculatorUtils {
 		StringBuilder url = new StringBuilder(configurations.getSewerageConnectionHost());
 		url.append(configurations.getSewerageConnectionSearchEndPoint());
 		url.append("?");
-		url.append("tenantId=").append(searchCriteria.getTenantId());
+		url.append(URL_APPEND_TENANT_ID).append(searchCriteria.getTenantId());
 		if (searchCriteria.getConnectionNumber() != null) {
 			url.append("&");
 			url.append("connectionNumber=").append(searchCriteria.getConnectionNumber());
@@ -258,13 +269,13 @@ public class CalculatorUtils {
 	public MdmsCriteriaReq getEstimationMasterCriteria(RequestInfo requestInfo, String tenantId) {
 		List<MasterDetail> details = new ArrayList<>();
 		details.add(MasterDetail.builder().name(SWCalculationConstant.SC_PLOTSLAB_MASTER)
-				.filter("[?(@.isActive== " + true + ")]").build());
+				.filter(FILTER_IS_ACTIVE + true + ")]").build());
 		details.add(MasterDetail.builder().name(SWCalculationConstant.SC_PROPERTYUSAGETYPE_MASTER)
-				.filter("[?(@.isActive== " + true + ")]").build());
+				.filter(FILTER_IS_ACTIVE + true + ")]").build());
 		details.add(MasterDetail.builder().name(SWCalculationConstant.SC_FEESLAB_MASTER)
-				.filter("[?(@.isActive== " + true + ")]").build());
+				.filter(FILTER_IS_ACTIVE + true + ")]").build());
 		details.add(MasterDetail.builder().name(SWCalculationConstant.SC_ROADTYPE_MASTER)
-				.filter("[?(@.isActive== " + true + ")]").build());
+				.filter(FILTER_IS_ACTIVE + true + ")]").build());
 		ModuleDetail mdDtl = ModuleDetail.builder().masterDetails(details)
 				.moduleName(SWCalculationConstant.SW_TAX_MODULE).build();
 		MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Arrays.asList(mdDtl)).tenantId(tenantId)
@@ -281,7 +292,7 @@ public class CalculatorUtils {
 	private MdmsCriteriaReq getBillingFrequencyForScheduler(RequestInfo requestInfo, String tenantId) {
 
 		MasterDetail masterDetail = MasterDetail.builder().name(SWCalculationConstant.BILLING_PERIOD)
-				.filter("[?(@.active== " + true + " && @.connectionType== '" + SWCalculationConstant.nonMeterdConnection
+				.filter(FILTER_ACTIVE + true + " && @.connectionType== '" + SWCalculationConstant.nonMeterdConnection
 						+ "')]")
 				.build();
 		ModuleDetail moduleDetail = ModuleDetail.builder().moduleName(SWCalculationConstant.SW_MODULE)
@@ -331,7 +342,7 @@ public class CalculatorUtils {
 	public String getPropertySearchURL(String propertyId,String tenantId){
 		StringBuilder url = new StringBuilder(configurations.getPropertyHost());
 		url.append(configurations.getSearchPropertyEndPoint()).append("?");
-		url.append("tenantId=").append(tenantId).append("&");
+		url.append(URL_APPEND_TENANT_ID).append(tenantId).append("&");
 		url.append("propertyIds=").append(propertyId);
 		return url.toString();
 	}
@@ -360,46 +371,8 @@ public class CalculatorUtils {
 	public String getWorkflowProcessInstanceSearchURL(String tenantId, String businessIds){
 		StringBuilder url = new StringBuilder(configurations.getWorkflowHost());
 		url.append(configurations.getSearchWorkflowProcessEndPoint()).append("?");
-		url.append("tenantId=").append(tenantId).append("&");
+		url.append(URL_APPEND_TENANT_ID).append(tenantId).append("&");
 		url.append("businessIds=").append(businessIds);
 		return url.toString();
-	}
-
-	/**
-	 *
-	 * @param dateInLong
-	 *
-	 * @return year from date object
-	 */
-	public String epochToDate(Long dateInLong){
-		Long timeStamp= dateInLong / 1000L;
-		java.util.Date time=new java.util.Date((Long)timeStamp*1000);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(time);
-		String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-		Integer mon = cal.get(Calendar.MONTH);
-		mon=mon+1;
-		String month = String.valueOf(mon);
-		String year = String.valueOf(cal.get(Calendar.YEAR));
-		StringBuilder date = new StringBuilder(day);
-		date.append("/").append(month).append("/").append(year);
-
-		return year;
-	}
-
-	/**
-	 *
-	 * @param masterMap
-	 *
-	 * @return billingcycle from mastermap
-	 */
-	public String getBillingCycle(Map<String, Object> masterMap)
-	{
-		Map<String, Object> financialYearMaster =  (Map<String, Object>) masterMap
-				.get(SWCalculationConstant.BILLING_PERIOD);
-		Long fromDateLong = (Long) financialYearMaster.get(SWCalculationConstant.STARTING_DATE_APPLICABLES);
-		Long toDateLong = (Long) financialYearMaster.get(SWCalculationConstant.ENDING_DATE_APPLICABLES);
-
-		return epochToDate(fromDateLong) + "-" +epochToDate(toDateLong) ;
 	}
 }

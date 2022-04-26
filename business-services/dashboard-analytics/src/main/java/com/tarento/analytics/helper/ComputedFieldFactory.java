@@ -1,5 +1,6 @@
 package com.tarento.analytics.helper;
 
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,7 @@ public class ComputedFieldFactory {
             return additiveComputedField;
 
         } else {
-            throw new RuntimeException("Computer field not found for className "+className);
+            throw new CustomException("COMPUTEDFIELD_NOT_FOUND","Computer field not found for className "+className);
         }
 
     }

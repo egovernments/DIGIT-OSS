@@ -49,13 +49,16 @@ const TransferOwnerShipDialog = (props) => {
   const { open, closeDialogue, amount, routeUrl } = props;
   const printDiv = () => {
     let content = document.getElementById("documents-div").innerHTML;
-    let printWindow = window.open("", "");
-  
-    printWindow.document.write(`<html><body>${content}</body></html>`);
-  
+    let printWindow = window.open("", "Print");
+
+    printWindow.document.write("<html><body >");
+    printWindow.document.write(content);
+    printWindow.document.write("</body></html>");
+
     printWindow.document.close();
     printWindow.focus();
     printWindow.print();
+    printWindow.close();
   };
   return (
     <Dialog

@@ -22,9 +22,7 @@ export default function getFinancialYearObj(onlyText,yearObj) {
 		            title: `FY ${moment(moment().subtract(2,'year')).month(3).startOf('month').format("YY")}-${moment(moment().subtract(1,'year')).month(2).endOf('month').format("YY")}`,
 		            value: {
 		              startDate: moment(moment().subtract(2,'year')).month(3).startOf('month').unix(),
-		            //   endDate: moment(moment().subtract(1,'year')).month(2).endOf('month').unix(),
-					endDate: moment().endOf('day').unix(),
-
+		              endDate: moment(moment().subtract(1,'year')).month(2).endOf('month').unix(),
 		              interval: 'month'
 		            }
 		        })
@@ -32,9 +30,7 @@ export default function getFinancialYearObj(onlyText,yearObj) {
 		            title: `FY ${moment(moment().subtract(1,'year')).month(3).startOf('month').format("YY")}-${moment().month(2).endOf('month').format("YY")}`,
 		            value: {
 		              startDate: moment(moment().subtract(1,'year')).month(3).startOf('month').unix(),
-		            //   endDate: moment().month(2).endOf('month').unix(),
-					endDate: moment().endOf('day').unix(),
-
+		              endDate: moment().month(2).endOf('month').unix(),
 		              interval: 'month'
 		            }
 		        })
@@ -43,9 +39,7 @@ export default function getFinancialYearObj(onlyText,yearObj) {
 		            title: `FY ${moment(moment().subtract(1,'year')).month(3).startOf('month').format("YY")}-${moment().month(2).endOf('month').format("YY")}`,
 		            value: {
 		              startDate: moment(moment().subtract(1,'year')).month(3).startOf('month').unix(),
-		            //   endDate: moment().month(2).endOf('month').unix(),
-					endDate: moment().endOf('day').unix(),
-
+		              endDate: moment().month(2).endOf('month').unix(),
 		              interval: 'month'
 		            }
 		        }
@@ -60,9 +54,7 @@ export default function getFinancialYearObj(onlyText,yearObj) {
 		            title: `FY ${moment(moment().subtract(1,'year')).month(3).startOf('month').format("YY")}-${moment().month(2).endOf('month').format("YY")}`,
 		            value: {
 		              startDate: moment(moment().subtract(1,'year')).month(3).startOf('month').unix(),
-		            //   endDate: moment().month(2).endOf('month').unix(),
-					endDate: moment().endOf('day').unix(),
-
+		              endDate: moment().month(2).endOf('month').unix(),
 		              interval: 'month'
 		            }
 		        })
@@ -70,9 +62,7 @@ export default function getFinancialYearObj(onlyText,yearObj) {
 		            title: `FY ${moment().month(3).startOf('month').format("YY")}-${moment().month(2).endOf('month').add(1, 'years').format("YY")}`,
 		            value: {
 		              startDate: moment().month(3).startOf('month').unix(),
-		            //   endDate: moment().month(2).endOf('month').add(1, 'years').unix(),
-					endDate: moment().endOf('day').unix(),
-
+		              endDate: moment().month(2).endOf('month').add(1, 'years').unix(),
 		              interval: 'month'
 		            }
 		        })
@@ -81,9 +71,7 @@ export default function getFinancialYearObj(onlyText,yearObj) {
 		            title: `FY ${moment().month(3).startOf('month').format("YY")}-${moment().month(2).endOf('month').add(1, 'years').format("YY")}`,
 		            value: {
 		              startDate: moment().month(3).startOf('month').unix(),
-		            //   endDate: moment().month(2).endOf('month').add(1, 'years').unix(),
-					endDate: moment().endOf('day').unix(),
-
+		              endDate: moment().month(2).endOf('month').add(1, 'years').unix(),
 		              interval: 'month'
 		            }
 		        }

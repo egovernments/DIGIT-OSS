@@ -40,7 +40,7 @@ public class ReceiptService {
 
 		if (null != receiptRequest && CollectionUtils.isEmpty(receiptRequest.getReceipt())
 				|| Objects.isNull(receiptRequest)
-				|| CollectionUtils.isEmpty(receiptRequest.getReceipt().get(0).getBill())) {
+				|| (null != receiptRequest && CollectionUtils.isEmpty(receiptRequest.getReceipt().get(0).getBill()))) {
 
 			log.info(" no data found in receipt for update : {} " + receiptRequest);
 			return;

@@ -2,13 +2,6 @@
 
 All notable changes to this module will be documented in this file.
 
-## 1.0.5 - 2022-03-03
-- Removed unnecessary validation for invalid access.
-- Added receipt number based search feature.
-
-## 1.0.4 - 2022-01-13
-- Updated to log4j2 version 2.17.1
-
 ## 1.0.3 - 2021-07-26
 
 - Added _count API

@@ -217,8 +217,9 @@ public class RecoveryController {
 		CChartOfAccounts chartOfAccounts = null;
 		if (recoverySearchRequest != null && recoverySearchRequest.getChartofaccountsId() != null)
 			chartOfAccounts = chartOfAccountsService.findById(recoverySearchRequest.getChartofaccountsId(), false);
-		final List<Recovery> searchResultList = recoveryService.search(chartOfAccounts, recoverySearchRequest.getType(),
-				recoverySearchRequest.getRecoveryName());
+		String recoveryType = recoverySearchRequest ==null ? "" : recoverySearchRequest.getType();
+		String recoveryName = recoverySearchRequest ==null ? "" : recoverySearchRequest.getRecoveryName();
+		final List<Recovery> searchResultList = recoveryService.search(chartOfAccounts,recoveryType ,recoveryName);
 		return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
 	}
 

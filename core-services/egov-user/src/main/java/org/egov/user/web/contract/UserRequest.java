@@ -46,9 +46,6 @@ public class UserRequest {
 
     @Pattern(regexp = UserServiceConstants.PATTERN_MOBILE)
     private String mobileNumber;
-    
-    @Pattern(regexp = UserServiceConstants.PATTERN_MOBILE)
-    private String alternatemobilenumber;
 
     @Email
     @Size(max = 128)
@@ -121,6 +118,7 @@ public class UserRequest {
     @SafeHtml
     @Size(max = 300)
     private String identificationMark;
+
     private Long createdBy;
 
     @Size(max = 64)
@@ -128,6 +126,7 @@ public class UserRequest {
 
     @SafeHtml
     private String otpReference;
+
     private Long lastModifiedBy;
 
     @Pattern(regexp = UserServiceConstants.PATTERN_TENANT)
@@ -182,7 +181,6 @@ public class UserRequest {
         this.fatherOrHusbandName = user.getGuardian();
         this.relationship = user.getGuardianRelation();
         this.uuid = user.getUuid();
-        this.alternatemobilenumber=user.getAlternateMobileNumber();
         mapPermanentAddress(user);
         mapCorrespondenceAddress(user);
     }
@@ -250,7 +248,7 @@ public class UserRequest {
                 .permanentAddress(toDomainPermanentAddress())
                 .correspondenceAddress(toDomainCorrespondenceAddress())
                 .guardian(fatherOrHusbandName)
-                .guardianRelation(relationship).alternateMobileNumber(this.alternatemobilenumber)
+                .guardianRelation(relationship)
                 .build();
     }
 

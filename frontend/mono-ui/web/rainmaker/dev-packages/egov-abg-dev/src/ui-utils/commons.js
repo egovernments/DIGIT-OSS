@@ -126,31 +126,6 @@ export const getGroupBillSearch = async (dispatch, searchScreenObject) => {
   }
 };
 
-export const getBulkPdfRecords = async (dispatch, queryObject=[]) => {
-  try {
-    dispatch(toggleSpinner());
-    const response = await httpRequest(
-      "post",
-      "pdf-service/v1/_getBulkPdfRecordsDetails",
-      "",
-      queryObject,
-      {  }
-    );
-    dispatch(toggleSpinner());
-    return response;
-  } catch (error) {
-    dispatch(toggleSpinner());
-    console.error(error);
-    store.dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: error.message, labelCode: error.message },
-        "error"
-      )
-    );
-  }
-};
-
 const setDocsForEditFlow = async (state, dispatch) => {
   const applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,
@@ -233,7 +208,32 @@ export const getBoundaryData = async (
     dispatch(
       prepareFinalObject("searchScreenMdmsData.localities", mohallaData)
     );
+
+    // dispatch(
+    //   handleField(
+    //     "apply",
+    //     "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
+    //     "props.suggestions",
+    //     mohallaData
+    //   )
+    // );
+    // if (code) {
+    //   let data = payload.TenantBoundary[0].boundary;
+    //   let messageObject =
+    //     data &&
+    //     data.find(item => {
+    //       return item.code == code;
+    //     });
+    //   if (messageObject)
+    //     dispatch(
+    //       prepareFinalObject(
+    //         "Licenses[0].tradeLicenseDetail.address.locality.name",
+    //         messageObject.name
+    //       )
+    //     );
+    // }
   } catch (e) {
+    console.log(e);
   }
 };
 
@@ -505,6 +505,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     return true;
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    console.log(error);
     return false;
   }
 };
@@ -609,7 +610,7 @@ export const getSearchResultsForCurrentBill = async (queryObject, filter = false
       result.WaterConnection[0].waterSubSource = waterSubSource;
       result.WaterConnection = await getPropertyObj(result.WaterConnection);
       return result;
-  } catch (error) {  }
+  } catch (error) { console.log(error) }
 };
 
 export const getSearchResultsForSewerage = async (queryObject, dispatch, filter = false) => {
@@ -636,6 +637,7 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch, filter 
       return result;
   } catch (error) {
       dispatch(toggleSpinner());
+      console.log(error)
   }
 };
 
@@ -794,6 +796,7 @@ export const getPropertyResultsWODispatch = async (queryObject) => {
       );
       return findAndReplace(response, null, "NA");
   } catch (error) {
+      console.log(error);
   }
 
 };

@@ -50,26 +50,3 @@
       // background: rgb(242, 242, 242) !important;
       padding: 10px !important; 
     }
-
-    @media only screen and (max-width: 960px) {
-      #material-ui-blocksContainer,
-      #material-ui-buildingDetailsContainer {
-        table {
-          table-layout: fixed !important;
-        }
-        table tbody tr td {
-          width: 45% !important;
-          padding:4px 8px 4px 10px !important;
-          font-size: 15px !important;
-          height: 75px !important;
-          white-space: unset !important;
-          word-break: break-all !important;
-        }
-        table tbody tr td p{
-          margin: 0px !important;
-        }
-        table tbody tr td div a{
-          font-size: 11px !important;
-        }
-      }
-    }

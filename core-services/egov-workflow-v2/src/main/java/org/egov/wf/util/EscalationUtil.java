@@ -46,7 +46,6 @@ public class EscalationUtil {
                                                 .businessService(escalation.getBusinessService())
                                                 .moduleName(escalation.getModuleName())
                                                 .tenantId(tenantId)
-                                                .escalated(true)
                                                 .build();
             processInstances.add(processInstance);
         }

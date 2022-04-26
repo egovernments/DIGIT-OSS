@@ -27,6 +27,8 @@ public class OrderByPriority implements ApportionV2 {
 
     private ApportionConfig config;
 
+    private static final String ADVANCE="ADVANCE";
+
 
     @Autowired
     public OrderByPriority(TaxHeadMasterService taxHeadMasterService, ApportionConfig config) {
@@ -106,7 +108,7 @@ public class OrderByPriority implements ApportionV2 {
                 else {
                     // FIX ME
                     // advance should be checked from purpose
-                    if(!bucket.getTaxHeadCode().contains("ADVANCE")) {
+                    if(!bucket.getTaxHeadCode().contains(ADVANCE)) {
                         bucket.setAdjustedAmount(amount);
                         remainingAmount = remainingAmount.subtract(amount);
                     }
@@ -148,7 +150,7 @@ public class OrderByPriority implements ApportionV2 {
 
         // Search if advance bucket already exist
         for(Bucket bucket : latestTaxDetail.getBuckets()){
-            if(bucket.getTaxHeadCode().contains("ADVANCE")){
+            if(bucket.getTaxHeadCode().contains(ADVANCE)){
                 bucketForAdvance = bucket;
                 break;
             }
@@ -259,7 +261,7 @@ public class OrderByPriority implements ApportionV2 {
 
                 // FIX ME
                 // advance should be checked from purpose
-                if(bucket.getTaxHeadCode().contains("ADVANCE")){
+                if(bucket.getTaxHeadCode().contains(ADVANCE)){
 
                     BigDecimal net = bucket.getAmount().subtract(bucket.getAdjustedAmount());
                     if(advance.add(net).abs().compareTo(totalPositiveAmount) > 0){

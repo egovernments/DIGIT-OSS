@@ -28,7 +28,6 @@ import UiTable from '../common/UiTable/UiTable';
 import getFinancialYearObj from '../../actions/getFinancialYearObj';
 import mdmsAPI from '../../actions/mdms/mdms';
 import moment from 'moment';
-import { getTenantId } from '../../utils/commons';
 
 class Dashboard extends Component {
 
@@ -94,7 +93,7 @@ class Dashboard extends Component {
     if(this.state.page.includes('ulb')) {
       if(!filters['tenantId']) {
         let tenentFilter = []
-        tenentFilter.push(`${getTenantId()}`)
+        tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
         filters['tenantId'] = tenentFilter
       }
     }

@@ -123,7 +123,6 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
-  // console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = false;
   let isMultiownerSelected = false;

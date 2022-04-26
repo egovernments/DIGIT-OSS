@@ -1,28 +1,22 @@
 package org.egov.edcr.feature;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
-import org.egov.common.entity.edcr.OccupancyType;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Ramp;
 import org.egov.common.entity.edcr.Result;
-import org.egov.common.entity.edcr.ScrutinyDetail;
-import org.egov.edcr.utility.Util;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CommonFeature extends FeatureProcess {
 
     private static final String FLOOR = "Floor";
-    private static final String SUBRULE_48_3_DESC = "Minimum number of lifts";
+    //private static final String SUBRULE_48_3_DESC = "Minimum number of lifts";
     private static final String SUBRULE_42_5_V = "42-5-v";
     // private static final String SUBRULE_40A_3 = "40A(3)";
     private static final String REMARKS = "Remarks";

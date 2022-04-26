@@ -124,7 +124,6 @@ $(document).ready(function()
 		$('.today').datepicker('setDate',startDate);
 
 		}catch(e){
-		//console.warn("No Date Picker");
 	}
 	
 	try { 
@@ -132,7 +131,6 @@ $(document).ready(function()
 			'placement': 'bottom'
 		});
 		}catch(e){
-		//console.warn("No tooltip");
 	}
 		
 	try{
@@ -148,7 +146,6 @@ $(document).ready(function()
 		});
 		
 	}catch(e){
-		//console.log('No select2');
 	}
 	
 	$("a.open-popup").click(function(e) {
@@ -194,7 +191,6 @@ $(document).ready(function()
 			required: "Required"
 		});
 	}catch(e){
-		//console.warn("No validation involved");
 	}
 
 	$('form[data-ajaxsubmit="true"]').submit(function(e){
@@ -371,7 +367,6 @@ function cleardependentfield(dependentfield){
 	if(!dependentfield){
 		return;
 	}
-	console.log($(dependentfield).prop("type"));
 	if($(dependentfield).prop("type") == 'select-one' || $(dependentfield).prop("type") == 'select-multiple'){
 		$(dependentfield).empty();
 	}else if($(dependentfield).prop("type") == 'text' || $(dependentfield).prop("type") == 'textarea'){

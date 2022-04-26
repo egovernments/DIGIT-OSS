@@ -364,21 +364,4 @@ public class BPAConstants {
 	public static final String NOC_APPLICATIONTYPE = "NEW";
 
 	public static final String NOC_SOURCE = "BPA";
-
-	public static final String CHANNEL_NAME_SMS = "SMS";
-
-	public static final String CHANNEL_NAME_EVENT = "EVENT";
-
-	public static final String CHANNEL_NAME_EMAIL = "EMAIL";
-
-	public static final String MODULE = "module";
-
-	public static final String ACTION = "action";
-
-	public static final String CHANNEL_LIST = "channelList";
-
-	public static final String CHANNEL = "Channel";
-
-	public static final String BPA_BUSINESSSERVICE = "BPA";
-
 }

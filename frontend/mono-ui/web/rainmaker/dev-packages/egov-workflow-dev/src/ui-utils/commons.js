@@ -35,6 +35,7 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     .endingDate;
     return financialYears.filter(item => item.startingDate === currrentFYending)[0].code;
   }catch(e){
+    console.log(e.message)
   }
 }
 

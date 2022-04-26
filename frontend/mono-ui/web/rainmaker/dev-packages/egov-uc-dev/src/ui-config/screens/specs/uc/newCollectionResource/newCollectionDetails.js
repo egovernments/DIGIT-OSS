@@ -320,7 +320,6 @@ export const newCollectionDetailsCard = getCommonCard(
         //     );
         //     if (!demandId && action.value) {
         //       const taxHeads = setTaxHeadFields(action, state, dispatch);
-        //       console.log(taxHeads);
         //     }
         //   }
         // },

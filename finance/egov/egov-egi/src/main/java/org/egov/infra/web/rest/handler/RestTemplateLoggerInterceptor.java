@@ -17,7 +17,7 @@ public class RestTemplateLoggerInterceptor implements ClientHttpRequestIntercept
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
-        System.out.println("**************** recieved request***********");
+    	LOGGER.info("**************** recieved request***********");
         logRequest(request, body);
         ClientHttpResponse response = execution.execute(request, body);
         logResponse(response);

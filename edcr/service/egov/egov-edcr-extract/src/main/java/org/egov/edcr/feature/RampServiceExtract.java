@@ -19,13 +19,15 @@ import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
 import org.egov.edcr.utility.Util;
 import org.kabeja.dxf.DXFLWPolyline;
+import org.kabeja.dxf.DXFPolyline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RampServiceExtract extends FeatureExtract {
 
-    @Autowired
+    private static final String REPLACE_TEXT1 = "[^\\d.]";
+	@Autowired
     private LayerNames layerNames;
 
     @Override
@@ -56,15 +58,19 @@ public class RampServiceExtract extends FeatureExtract {
                 }
                 if (block.getBuilding() != null && !block.getBuilding().getFloors().isEmpty()) {
                     outside: for (Floor floor : block.getBuilding().getFloors()) {
-                        if (!block.getTypicalFloor().isEmpty())
-                            for (TypicalFloor tp : block.getTypicalFloor())
-                                if (tp.getRepetitiveFloorNos().contains(floor.getNumber()))
-                                    for (Floor allFloors : block.getBuilding().getFloors())
-                                        if (allFloors.getNumber().equals(tp.getModelFloorNo()))
-                                            if (!allFloors.getDaRooms().isEmpty()) {
-                                                floor.setDaRooms(allFloors.getDaRooms());
-                                                continue outside;
-                                            }
+                        if (!block.getTypicalFloor().isEmpty()) {
+                            for (TypicalFloor tp : block.getTypicalFloor()) {
+                                if (tp.getRepetitiveFloorNos().contains(floor.getNumber())) {
+                                    for (Floor allFloors : block.getBuilding().getFloors()) {
+										if (allFloors.getNumber().equals(tp.getModelFloorNo())
+												&& !allFloors.getDaRooms().isEmpty()) {
+											floor.setDaRooms(allFloors.getDaRooms());
+											continue outside;
+										}
+                                    }
+                                }
+                            }
+                        }
                         String daRoomLayerName = String.format(layerNames.getLayerName("LAYER_NAME_DA_ROOM"), block.getNumber(),
                                 floor.getNumber());
                         List<DXFLWPolyline> polyLinesByLayer = Util.getPolyLinesByLayer(pl.getDoc(), daRoomLayerName);
@@ -76,15 +82,19 @@ public class RampServiceExtract extends FeatureExtract {
                             }
                     }
                     outside: for (Floor floor : block.getBuilding().getFloors()) {
-                        if (!block.getTypicalFloor().isEmpty())
-                            for (TypicalFloor tp : block.getTypicalFloor())
-                                if (tp.getRepetitiveFloorNos().contains(floor.getNumber()))
-                                    for (Floor allFloors : block.getBuilding().getFloors())
-                                        if (allFloors.getNumber().equals(tp.getModelFloorNo()))
-                                            if (!allFloors.getRamps().isEmpty()) {
-                                                floor.setRamps(allFloors.getRamps());
-                                                continue outside;
-                                            }
+                        if (!block.getTypicalFloor().isEmpty()) {
+                            for (TypicalFloor tp : block.getTypicalFloor()) {
+                                if (tp.getRepetitiveFloorNos().contains(floor.getNumber())) {
+                                    for (Floor allFloors : block.getBuilding().getFloors()) {
+										if (allFloors.getNumber().equals(tp.getModelFloorNo())
+												&& !allFloors.getRamps().isEmpty()) {
+											floor.setRamps(allFloors.getRamps());
+											continue outside;
+										}
+                                    }
+                                }
+                            }
+                        }
                         String rampRegex = String.format(layerNames.getLayerName("LAYER_NAME_RAMP"), block.getNumber(),
                                 floor.getNumber()) + "_+\\d";
                         List<String> rampLayer = Util.getLayerNamesLike(pl.getDoc(), rampRegex);
@@ -96,7 +106,7 @@ public class RampServiceExtract extends FeatureExtract {
                                     Ramp ramp = new Ramp();
                                     ramp.setNumber(Integer.valueOf(splitLayer[5]));
                                     boolean isClosed = polylines.stream()
-                                            .allMatch(dxflwPolyline -> dxflwPolyline.isClosed());
+                                            .allMatch(DXFPolyline::isClosed);
                                     ramp.setRampClosed(isClosed);
                                     List<Measurement> rampPolyLine = polylines.stream()
                                             .map(dxflwPolyline -> new MeasurementDetail(dxflwPolyline, true))
@@ -107,10 +117,10 @@ public class RampServiceExtract extends FeatureExtract {
                                     if (!isBlank(floorHeight)) {
                                         if (floorHeight.contains("="))
                                             floorHeight = floorHeight.split("=")[1] != null
-                                                    ? floorHeight.split("=")[1].replaceAll("[^\\d.]", "")
+                                                    ? floorHeight.split("=")[1].replaceAll(REPLACE_TEXT1, "")
                                                     : "";
                                         else
-                                            floorHeight = floorHeight.replaceAll("[^\\d.]", "");
+                                            floorHeight = floorHeight.replaceAll(REPLACE_TEXT1, "");
 
                                         if (!isBlank(floorHeight)) {
                                             BigDecimal height = BigDecimal.valueOf(Double.parseDouble(floorHeight));
@@ -136,8 +146,8 @@ public class RampServiceExtract extends FeatureExtract {
 				String[] slopeDividendAndDivisor = slopeText.toUpperCase().split("IN", 2);
 				if (slopeDividendAndDivisor != null && slopeDividendAndDivisor.length == 2
 						&& slopeDividendAndDivisor[0] != null && slopeDividendAndDivisor[1] != null) {
-					slopeDividendAndDivisor[0] = slopeDividendAndDivisor[0].replaceAll("[^\\d.]", "");
-					slopeDividendAndDivisor[1] = slopeDividendAndDivisor[1].replaceAll("[^\\d.]", "");
+					slopeDividendAndDivisor[0] = slopeDividendAndDivisor[0].replaceAll(REPLACE_TEXT1, "");
+					slopeDividendAndDivisor[1] = slopeDividendAndDivisor[1].replaceAll(REPLACE_TEXT1, "");
 					slope = BigDecimal.valueOf(Double.valueOf(slopeDividendAndDivisor[0])).divide(
 							BigDecimal.valueOf(Double.valueOf(slopeDividendAndDivisor[1])), 2, RoundingMode.HALF_UP);
 				}

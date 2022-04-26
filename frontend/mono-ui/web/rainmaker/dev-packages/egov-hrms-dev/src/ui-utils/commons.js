@@ -267,7 +267,6 @@ export const convertToFilestoreid = async (link) => {
   // };
   // img.src = link;
   // const file = new Blob([response.data], { type: "application/jpeg" });
-  // console.log(file,'file');
   // const fileStoreId = await uploadFile(
   //   FILESTORE.endPoint,
   //   'rainmaker-pgr',
@@ -287,7 +286,6 @@ export const convertToFilestoreid = async (link) => {
   //   response1,
   //   commonConfig.tenantId
   // );
-  // console.log(fileStoreId,base64,'fileStoreId',fileStoreId1,fileStoreId2,fileStoreId23);
 
   // const fileURL = URL.createObjectURL(file);
   // var myWindow = window.open(fileURL);

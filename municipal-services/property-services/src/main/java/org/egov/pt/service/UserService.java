@@ -58,6 +58,10 @@ public class UserService {
     @Value("${egov.user.update.path}")
     private String userUpdateEndpoint;
 
+	private static final String CODE_CITIZEN = "CITIZEN";
+	private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
+	private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+
     /**
      * Creates user of the owners of property if it is not created already
      * @param request PropertyRequest received for creating properties
@@ -195,7 +199,7 @@ public class UserService {
         owner.setActive(true);
         owner.setTenantId(tenantId);
         owner.setRoles(Collections.singletonList(role));
-        owner.setType("CITIZEN");
+        owner.setType(CODE_CITIZEN);
         owner.setCreatedDate(null);
         owner.setCreatedBy(null );
         owner.setLastModifiedDate(null);
@@ -205,7 +209,7 @@ public class UserService {
     private Role getCitizenRole() {
     	
 		return Role.builder()
-				.code("CITIZEN")
+				.code(CODE_CITIZEN)
 				.name("Citizen")
 				.build();
 	}
@@ -259,7 +263,7 @@ public class UserService {
         
         UserSearchRequest userSearchRequest = UserSearchRequest.builder()
         		.requestInfo(requestInfo)
-        		.userType("CITIZEN")
+        		.userType(CODE_CITIZEN)
 				.tenantId(tenantId)
 				.build();
         
@@ -338,12 +342,12 @@ public class UserService {
             users.forEach( map -> {
             	
                         map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
-                        if((String)map.get("lastModifiedDate")!=null)
-                            map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),format1));
+                        if((String)map.get(GET_LAST_MODIFIED_DATE)!=null)
+                            map.put(GET_LAST_MODIFIED_DATE,dateTolong((String)map.get(GET_LAST_MODIFIED_DATE),format1));
                         if((String)map.get("dob")!=null)
                             map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
-                        if((String)map.get("pwdExpiryDate")!=null)
-                            map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),format1));
+                        if((String)map.get(GET_PWD_EXPIRY_DATE)!=null)
+                            map.put(GET_PWD_EXPIRY_DATE,dateTolong((String)map.get(GET_PWD_EXPIRY_DATE),format1));
                     }
             );
         }
@@ -363,7 +367,10 @@ public class UserService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return  d.getTime();
+		if(d != null)
+			return d.getTime();
+
+		return null;
     }
 
     /**
@@ -420,7 +427,7 @@ public class UserService {
     	
 		return UserSearchRequest.builder()
 				.requestInfo(requestInfo)
-				.userType("CITIZEN")
+				.userType(CODE_CITIZEN)
 				.tenantId(tenantId)
 				.active(true)
 				.build();
@@ -454,7 +461,7 @@ public class UserService {
 
 	private UserDetailResponse searchByUserName(String userName,String tenantId){
 		UserSearchRequest userSearchRequest = new UserSearchRequest();
-		userSearchRequest.setUserType("CITIZEN");
+		userSearchRequest.setUserType(CODE_CITIZEN);
 		userSearchRequest.setUserName(userName);
 		userSearchRequest.setTenantId(tenantId);
 		return getUser(userSearchRequest);
@@ -463,82 +470,7 @@ public class UserService {
 	private String getStateLevelTenant(String tenantId){
 		return tenantId.split("\\.")[0];
 	}
-	
-    public void createUserForAlternateNumber(PropertyRequest request){
-    
-        Property property = request.getProperty();
-		RequestInfo requestInfo = request.getRequestInfo();
-		Role role = getCitizenRole();
 
-		List <OwnerInfo> owners = property.getOwners();
 
-		for (OwnerInfo owner: owners) {
-			OwnerInfo ownerFromRequest = new OwnerInfo();
-
-			ownerFromRequest.setUuid(owner.getUuid());
-			ownerFromRequest.setName(owner.getName());
-			ownerFromRequest.setMobileNumber(owner.getMobileNumber());
-
-			addUserDefaultFields(property.getTenantId(), role, ownerFromRequest);
-			UserDetailResponse userDetailResponse = userExists(ownerFromRequest, requestInfo);
-			List<OwnerInfo> existingUsersFromService = userDetailResponse.getUser();
-
-			if (CollectionUtils.isEmpty(existingUsersFromService)) {
-
-				throw new CustomException("USER DOES NOT EXIST", "The owner to be updated does not exist");
-				
-			} 
-			
-			for (OwnerInfo existingUser : existingUsersFromService) {
-				if(existingUser.getUuid().equals(ownerFromRequest.getUuid())) {
-					ownerFromRequest.setAlternatemobilenumber(owner.getAlternatemobilenumber());
-					userDetailResponse = updateExistingUser(property, requestInfo, role, ownerFromRequest, existingUser);
-					break;
-				}
-			}
-
-			// Assigns value of fields from user got from userDetailResponse to owner object
-			setOwnerFields(ownerFromRequest, userDetailResponse, requestInfo);
-		}
-	}
-
-    /*
-		Method to update user mobile number
-	*/
-    
-	public void updateUserMobileNumber(PropertyRequest request,Map <String, String> uuidToMobileNumber) {
-		
-		Property property = request.getProperty();
-		RequestInfo requestInfo = request.getRequestInfo();
-
-		property.getOwners().forEach(owner -> {
-
-			UserDetailResponse userDetailResponse = searchedSingleUserExists(owner, requestInfo);
-			StringBuilder uri = new StringBuilder(userHost);
-			 
-				owner.setId(userDetailResponse.getUser().get(0).getId());
-				uri = uri.append(userContextPath).append(userUpdateEndpoint);
-			
-			userDetailResponse = userCall(new CreateUserRequest(requestInfo, owner), uri);
-			setOwnerFields(owner, userDetailResponse, requestInfo);
-		});
-				
-	}
-	
-	/*
-	 	Method to check if the searched user exists
-	*/
-
-	private UserDetailResponse searchedSingleUserExists(OwnerInfo owner, RequestInfo requestInfo) {
-		
-		UserSearchRequest userSearchRequest = getBaseUserSearchRequest(owner.getTenantId(), requestInfo);
-		userSearchRequest.setUserType(owner.getType());
-		Set <String> uuids = new HashSet<String>();
-		uuids.add(owner.getUuid());
-		userSearchRequest.setUuid(uuids);
-		
-        StringBuilder uri = new StringBuilder(userHost).append(userSearchEndpoint);
-        return userCall(userSearchRequest,uri);
-	}
 
 }

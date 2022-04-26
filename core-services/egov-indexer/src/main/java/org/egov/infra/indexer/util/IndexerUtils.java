@@ -18,6 +18,7 @@ import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
+import org.egov.tracer.model.CustomException;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -82,6 +83,8 @@ public class IndexerUtils {
 	private IndexerProducer producer;
 
 	private ObjectMapper mapper = new ObjectMapper();
+
+	private static final String LOG_DATA = "Data:";
 
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -307,7 +310,7 @@ public class IndexerUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public JSONArray constructArrayForBulkIndex(String kafkaJson, Index index, boolean isBulk) throws Exception {
+	public JSONArray constructArrayForBulkIndex(String kafkaJson, Index index, boolean isBulk) {
 		JSONArray kafkaJsonArray = null;
 		try {
 			if (isBulk) {
@@ -337,7 +340,7 @@ public class IndexerUtils {
 		} catch (Exception e) {
 			log.error("Exception while constructing json array for bulk index: ", e);
 			log.error("Object: " + kafkaJson);
-			throw e;
+			throw new CustomException("BULK_INDEX_ERROR","Exception while constructing json array for bulk index");
 		}
 		return transformData(index, kafkaJsonArray);
 	}
@@ -450,7 +453,7 @@ public class IndexerUtils {
 							tranformedArray.put(context.jsonString());
 						} catch (Exception e) {
 							log.error("Exception while transforiming data: ", e);
-							log.info("Data: " + kafkaJsonArray.get(i));
+							log.info(LOG_DATA + " " + kafkaJsonArray.get(i));
 							continue;
 						}
 					} else {
@@ -488,7 +491,7 @@ public class IndexerUtils {
 					context.put(expression, expressionArray[expressionArray.length - 1], "XXXXXXXX");
 				} catch (Exception e) {
 					log.error("Exception while masking field: ", e);
-					log.error("Data: " + context.jsonString());
+					log.error(LOG_DATA + " " + context.jsonString());
 				}
 			}
 			return context;
@@ -536,7 +539,7 @@ public class IndexerUtils {
 			encodedString = getObjectMapper().writeValueAsString(stringToBeEncoded);
 		} catch (Exception e) {
 			log.error("Exception while encoding non ascii characters ", e);
-			log.error("Data: " + stringToBeEncoded);
+			log.error(LOG_DATA + " " + stringToBeEncoded);
 			encodedString = stringToBeEncoded;
 		}
 		return encodedString;
@@ -553,21 +556,6 @@ public class IndexerUtils {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		mapper.getFactory().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
-		return mapper;
-	}
-
-	/**
-	 * Returns mapper with all the appropriate properties reqd in our
-	 * functionalities.
-	 * Includes null values
-	 * @return ObjectMapper
-	 */
-	public ObjectMapper getObjectMapperWithNull() {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		mapper.getFactory().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
 		return mapper;

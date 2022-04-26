@@ -157,7 +157,7 @@ public class EGovExcelView extends BaseExportView {
 	 * Custom-method. Checks for nbsp spaces and replaces with empty string
 	 */
 	private String removeHtmlTagsAndSpaces(final String strValue) {
-		String returnValue = null;
+		String returnValue = "";
 		if (strValue != null) {
 			// if((strValue.trim().indexOf("&nbsp;") > -1) ||(strValue.trim().indexOf("<hr>") > -1) || (strValue.trim().indexOf("<B>") > -1) ||
 			// (strValue.trim().indexOf("</B>") > -1) || (strValue.trim().indexOf("Br") > -1)) {

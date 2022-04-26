@@ -193,7 +193,7 @@ public class CashBook {
                 try {
 					dt = sdf.parse(endDate);
 				} catch (ParseException e) {
-
+                  LOGGER.error("Parse exception");
 
 				}
                 CFinancialYear finYearByDate = financialYearDAO.getFinYearByDate(dt);
@@ -223,6 +223,7 @@ public class CashBook {
 			try {
 				dt1 = sdf.parse(endDate);
 			} catch (ParseException e1) {
+				 LOGGER.error("Parse exception");
 			}
             CFinancialYear finYearByDate = financialYearDAO.getFinYearByDate(dt1);
             final String fyId=finYearByDate.getId().toString();

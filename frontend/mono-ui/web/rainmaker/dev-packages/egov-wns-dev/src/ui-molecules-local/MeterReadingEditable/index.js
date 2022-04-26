@@ -48,13 +48,14 @@ class MeterReading extends React.Component {
 
     }
     onSelectFieldChange(event, key, payload, history, item) {
+
     }
     getDate(val) {
         this.createBody.currentReadingDate = val
     }
 
     saveMeterReading() {
-      
+
         addMeterReading(this.createBody);
     }
 

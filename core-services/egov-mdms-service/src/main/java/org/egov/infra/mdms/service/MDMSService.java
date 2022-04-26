@@ -116,7 +116,7 @@ public class MDMSService {
             } else {
                 return null;
             }
-        } else if (ulbLevel != null && ulbLevel.get(moduleName) != null) {
+        } else if (ulbLevel.get(moduleName) != null) {
             return ulbLevel.get(moduleName).get(masterName);
         } else {
             return null;

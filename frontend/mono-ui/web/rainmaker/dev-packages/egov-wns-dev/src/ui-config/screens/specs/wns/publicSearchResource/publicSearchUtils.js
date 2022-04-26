@@ -144,6 +144,7 @@ export const generateBill = async (
         "error"
       )
     );
+    console.log(e);
   }
 };
 
@@ -164,6 +165,7 @@ export const getSearchBillResult = async (queryObject) => {
         "error"
       )
     );
+    console.log(error, "fetxh");
   }
 };
 
@@ -184,6 +186,7 @@ export const getBill = async (queryObject) => {
     //     "error"
     //   )
     // );
+    console.log(error, "fetxh");
   }
 };
 
@@ -263,5 +266,6 @@ export const getPropertyWithBillAmount = (propertyResponse, billResponse, type, 
         "error"
       )
     );
+    console.log(error, "Bill Error");
   }
 }

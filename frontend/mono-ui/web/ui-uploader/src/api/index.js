@@ -93,7 +93,6 @@ export const Api = () => {
     for (var i = 0; i < requestBody.UploadJobs.length; i++) {
       requestBody.UploadJobs[i].tenantId = tenantId;
     }
-    console.log(JSON.parse(fetchFromLocalStorage("Employee.user-info")));
     requestBody.RequestInfo.userInfo = JSON.parse(
       fetchFromLocalStorage("Employee.user-info")
     );

@@ -249,6 +249,7 @@ const fetchMohalla = (queryObj) => {
       }
       dispatch(mohallaFetchComplete(mergedMohallas));
     } catch (e) {
+      console.log(e);
     }
   };
 };
@@ -680,6 +681,7 @@ export const getFileUrlFromAPI = async fileStoreId => {
     );
     return fileUrl;
   } catch (e) {
+    console.log(e);
   }
 };
 

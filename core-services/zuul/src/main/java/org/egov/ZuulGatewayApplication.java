@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.cloud.netflix.zuul.filters.ProxyRequestHelper;
@@ -28,8 +27,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import javax.annotation.PostConstruct;
-
 @EnableZuulProxy
 @EnableCaching
 @SpringBootApplication
@@ -38,15 +35,6 @@ public class ZuulGatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(ZuulGatewayApplication.class, args);
     }
-
-    @Autowired
-    CacheManager cacheManager;
-
-    @PostConstruct
-    public void evictUserCaches() {
-        cacheManager.getCache("systemUser").clear();
-    }
-
 
     @Value("${egov.user-info-header}")
     private String userInfoHeader;

@@ -65,8 +65,6 @@ public class RemittanceRepository {
         }
     }
 
-    public void updateRemittance(Remittance remittance) {
-    }
 
     public List<Remittance> fetchRemittances(RemittanceSearchRequest remittanceSearchRequest) {
         Map<String, Object> preparedStatementValues = new HashMap<>();

@@ -247,6 +247,8 @@ public class BankReconciliationAction extends BaseFormAction {
 			netTotal = subTotal - ( unReconciledDr + unReconciledDrOthers + unReconciledDrBrsEntry);
 
 		} catch (ParseException e) {
+			
+			LOGGER.error("Parse exception.");
 
 		}
 

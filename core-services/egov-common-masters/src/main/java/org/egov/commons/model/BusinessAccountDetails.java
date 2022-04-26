@@ -75,7 +75,6 @@ public class BusinessAccountDetails {
 
 	@Override
 	public boolean equals(Object obj) {
-		System.out.println("beginning");
 		if (this == obj)
 			return true;
 		if (obj == null)

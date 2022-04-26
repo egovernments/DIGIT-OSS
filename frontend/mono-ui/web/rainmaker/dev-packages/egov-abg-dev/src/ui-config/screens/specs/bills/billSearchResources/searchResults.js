@@ -1,10 +1,8 @@
-
+import { download, downloadBill } from "egov-common/ui-utils/commons";
 import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { setRoute } from "egov-ui-kit/utils/commons";
 import React from "react";
 import { getEpochForDate, sortByEpoch } from "../../utils";
-import { billDownload } from "../../abg/billSearchResources/searchResults";
-
+import { setRoute } from "egov-ui-kit/utils/commons";
 
 
 export const searchResults = {
@@ -21,7 +19,7 @@ export const searchResults = {
           customBodyRender: (value, tableMeta, updateValue) => (
             <a href="javascript:void(0)"
               onClick={() => {
-                billDownload(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9], tableMeta.rowData[12], tableMeta.rowData[7]);
+                downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9], tableMeta.rowData[12]);
               }}
             >
               {value}
@@ -162,7 +160,7 @@ const getActionButton = (value, tableMeta) => {
         if (tableMeta.rowData[7] == "SW") {
           service = "SEWERAGE"
         }
-        setRoute(`/bills/viewBill?connectionNumber=${tableMeta.rowData[1]}&tenantId=${tableMeta.rowData[10]}&service=${service}`)
+         setRoute(`/bills/viewBill?connectionNumber=${tableMeta.rowData[1]}&tenantId=${tableMeta.rowData[10]}&service=${service}`)
       }}
     >
       {getLocaleLabels(value, getTransformedLocale(`${value}`))}

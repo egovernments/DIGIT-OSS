@@ -76,6 +76,7 @@ const searchBill = async (state, dispatch, billId, tenantId) => {
       dispatch(prepareFinalObject("ReceiptTemp[0].tenantId", tenantId));
     }
   } catch (e) {
+    console.log(e);
   }
 };
 
@@ -147,6 +148,7 @@ const generateBill = async (
       // dispatch(setRoute(`/uc/pay?tenantId=${tenantId}`));
     }
   } catch (e) {
+    console.log(e);
   }
 };
 

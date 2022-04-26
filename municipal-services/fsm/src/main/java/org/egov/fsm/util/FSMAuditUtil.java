@@ -88,8 +88,5 @@ public class FSMAuditUtil {
 	private String createdBy = null;
 
 	private Long createdTime = null;
-	
-	private String vehicleCapacity = null;
-	
-	private String paymentPreference = null;
+
 }

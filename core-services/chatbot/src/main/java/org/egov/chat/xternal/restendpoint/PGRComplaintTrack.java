@@ -41,6 +41,8 @@ public class PGRComplaintTrack implements RestEndpoint {
     private NumeralLocalization numeralLocalization;
 
     private String complaintCategoryLocalizationPrefix = "pgr.complaint.category.";
+    private static final String FIELD_NAME_VALUE = "value";
+    private static final String SERVICE_WRAPPERS_KEY = "$.ServiceWrappers.[";
 
     private String trackComplaintHeaderLocalizationCode = "chatbot.message.pgrTrackComplaintEndHeader";
     private String complaintSummaryTemplateLocalizationCode = "chatbot.template.pgrTrackComplaintSummary";
@@ -112,7 +114,7 @@ public class PGRComplaintTrack implements RestEndpoint {
                         localizationCodesArrayNode.addAll(localisationCodes);
                     } else {
                         ObjectNode valueString = objectMapper.createObjectNode();
-                        valueString.put("value", "\n");
+                        valueString.put(FIELD_NAME_VALUE, "\n");
                         localizationCodesArrayNode.add(valueString);
                     }
 
@@ -123,19 +125,19 @@ public class PGRComplaintTrack implements RestEndpoint {
 
                     ObjectNode params = objectMapper.createObjectNode();
 
-                    String complaintNumber = documentContext.read("$.ServiceWrappers.[" + i + "].service.serviceRequestId");
+                    String complaintNumber = documentContext.read(SERVICE_WRAPPERS_KEY + i + "].service.serviceRequestId");
                     params.set("complaintNumber", objectMapper.valueToTree(numeralLocalization.getLocalizationCodesForStringContainingNumbers(complaintNumber)));
 
-                    String complaintCategory = documentContext.read("$.ServiceWrappers.[" + i + "].service.serviceCode");
+                    String complaintCategory = documentContext.read(SERVICE_WRAPPERS_KEY + i + "].service.serviceCode");
                     param = objectMapper.createObjectNode();
                     param.put("code", complaintCategoryLocalizationPrefix + complaintCategory);
                     params.set("complaintCategory", param);
 
-                    Date createdDate = new Date((long) documentContext.read("$.ServiceWrappers.[" + i + "].service.auditDetails.createdTime"));
+                    Date createdDate = new Date((long) documentContext.read(SERVICE_WRAPPERS_KEY + i + "].service.auditDetails.createdTime"));
                     String filedDate = getDateFromTimestamp(createdDate);
                     params.set("filedDate", objectMapper.valueToTree(numeralLocalization.getLocalizationCodesForStringContainingNumbers(filedDate)));
 
-                    String status = documentContext.read("$.ServiceWrappers.[" + i + "].service.applicationStatus");
+                    String status = documentContext.read(SERVICE_WRAPPERS_KEY + i + "].service.applicationStatus");
                     param = objectMapper.createObjectNode();
                     param.put("code", pgrStatusLocalisationPrefix + status.toLowerCase());
                     params.set("status", param);
@@ -144,7 +146,7 @@ public class PGRComplaintTrack implements RestEndpoint {
                     String url = egovExternalHost + "citizen/otpLogin?mobileNo=" + mobileNumber + "&redirectTo=complaint-details/" + encodedPath + "?source=whatsapp";
                     String encodedURL = urlShorteningService.shortenURL(url);
                     param = objectMapper.createObjectNode();
-                    param.put("value", "\n" + encodedURL);
+                    param.put(FIELD_NAME_VALUE, "\n" + encodedURL);
                     params.set("url", param);
 
                     template.set("params", params);
@@ -158,7 +160,7 @@ public class PGRComplaintTrack implements RestEndpoint {
                 ObjectNode localizationCodeForLink = objectMapper.createObjectNode();
                 String complaintViewURL = egovExternalHost + "citizen/otpLogin?mobileNo=" + mobileNumber + "&redirectTo=my-complaints?source=whatsapp";
                 String shortenedcomplaintViewURL = urlShorteningService.shortenURL(complaintViewURL);
-                localizationCodeForLink.put("value", shortenedcomplaintViewURL);
+                localizationCodeForLink.put(FIELD_NAME_VALUE, shortenedcomplaintViewURL);
                 localizationCodesArrayNode.add(localizationCodeForLink);
                 responseMessage.set("localizationCodes", localizationCodesArrayNode);
             } else {

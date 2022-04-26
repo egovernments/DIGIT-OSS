@@ -11,11 +11,11 @@ import set from "lodash/set";
 import { generateBill, getBusinessServiceMdmsData, getCurrentFinancialYear } from "../utils";
 import "./pay.css";
 import AmountToBePaid from "./payResource/amount-to-be-paid";
-import arrearsCard from "./payResource/arrears-details";
 import capturePayerDetails from "./payResource/capture-payer-details";
 import capturePaymentDetails from "./payResource/capture-payment-details";
 import { paybuttonJsonpath, radioButtonJsonPath } from "./payResource/constants";
 import estimateDetails from "./payResource/estimate-details";
+import arrearsCard from "./payResource/arrears-details";
 import { footer } from "./payResource/footer";
 import g8Details from "./payResource/g8-details";
 
@@ -78,7 +78,7 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     } else {
         const details = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
         dispatch(prepareFinalObject("commonPayInfo", details));
-        dispatch(prepareFinalObject("isArrears", get(details && details[0], "arrears", true)));
+        dispatch(prepareFinalObject("isArrears", get(details&&details[0], "arrears", true)));
     }
 
     if (get(commonPayDetails[index], "arrears", true)) {
@@ -123,45 +123,13 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     const raidButtonComponentPath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.AmountToPaidButton";
     dispatch(handleField("pay", raidButtonComponentPath, "props.value", "full_amount"));
 
-    /* To disable the payer name and mobile number incase the user is not owner 
-        and autofill the owner or paidby others deatils in case of payment through whatsapp */
-
-    let payerName = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName");
-    let paidBy = "COMMON_OWNER";
-    let payerNumber = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber");
-    if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "mobileNumber") && getQueryArg(window.location.href, "name")) {
-        if (payerNumber != getQueryArg(window.location.href, "mobileNumber")) {
-            payerName = getQueryArg(window.location.href, "name");
-            paidBy = "COMMON_OTHER";
-            payerNumber = getQueryArg(window.location.href, "mobileNumber");
-        }
-    }
-    if (paidBy != "COMMON_OTHER") {
-        dispatch(
-            handleField(
-                "pay",
-                "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePayerDetails.children.cardContent.children.payerDetailsCardContainer.children.payerName",
-                "props.disabled",
-                true
-            )
-        );
-        dispatch(
-            handleField(
-                "pay",
-                "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePayerDetails.children.cardContent.children.payerDetailsCardContainer.children.payerMobileNo",
-                "props.disabled",
-                true
-            )
-        );
-    }
-    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", paidBy));
-    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", payerName));
-    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", payerNumber));
+    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "COMMON_OWNER"));
+    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName")));
+    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber")));
     dispatch(handleField("pay", `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.cash.children.payeeDetails.children.payerName`,
-        "props.value", payerName));
+        "props.value", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName", '')));
     dispatch(handleField("pay", `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.cash.children.payeeDetails.children.payerMobileNo`,
-        "props.value", payerNumber));
-
+        "props.value", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber", '')));
     //Initially select instrument type as Cash
     dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", "Cash"));
 
@@ -247,9 +215,9 @@ const screenConfig = {
                                 ...AmountToBePaid,
                                 visible: false
                             },
-                            capturePaymentDetails: process.env.REACT_APP_NAME === "Citizen" ? { } : capturePaymentDetails,
-                            capturePayerDetails: process.env.REACT_APP_NAME === "Citizen" ? capturePayerDetails : { },
-                            g8Details: process.env.REACT_APP_NAME === "Citizen" ? { } : g8Details
+                            capturePaymentDetails: process.env.REACT_APP_NAME === "Citizen" ? {} : capturePaymentDetails,
+                            capturePayerDetails: process.env.REACT_APP_NAME === "Citizen" ? capturePayerDetails : {},
+                            g8Details: process.env.REACT_APP_NAME === "Citizen" ? {} : g8Details
                         })
                     }
                 },

@@ -344,7 +344,7 @@ public class BillRegisterReportAction extends SearchFormAction {
                                     " and mis.billVoucherHeader.voucherNumber=?", billRegReport.getBillNumber(),
                                     billRegReport.getVoucherNumber());
                     if (null != miscBillList && miscBillList.size() > 0) {
-                        BigDecimal paidAmount = null;
+                        BigDecimal paidAmount = BigDecimal.ZERO;
                         final StringBuffer payMentVoucherNumber = new StringBuffer("");
                         final StringBuffer chequeNoAndDate = new StringBuffer("");
                         preVoucherId = miscBillList.get(0).getPayVoucherHeader().getId();

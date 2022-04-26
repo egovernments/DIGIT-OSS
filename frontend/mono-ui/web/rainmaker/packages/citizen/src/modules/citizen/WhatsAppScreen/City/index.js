@@ -83,6 +83,7 @@ class WhatsAppCity extends React.Component {
       );
       return payload;
     } catch (e) {
+      console.log(e);
     }
   };
 

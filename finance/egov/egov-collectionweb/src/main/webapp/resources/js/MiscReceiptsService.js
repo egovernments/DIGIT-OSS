@@ -234,7 +234,6 @@ loadFinAccSuccessHandler = function(req, res) {
 		});
 		updateAccountTableIndex();
 	}
-	console.log('res.results :: ',res.results);
 
 	for (i = 0; i < res.results.length; i++) {
 		updateGridMisc(VOUCHERCREDITDETAILLIST, 'glcodeIdDetail', i,

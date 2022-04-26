@@ -183,8 +183,9 @@ class CustomInfo extends React.Component {
               fakeLink.click();
             }
             if (image && type === 'email') {
-                                  window.open(`mailto:?body=${encodeURIComponent(image)}`, "_blank");
-
+              fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(image));
+              fakeLink.setAttribute('target', '_top');
+              fakeLink.click();
             }
           })
         }

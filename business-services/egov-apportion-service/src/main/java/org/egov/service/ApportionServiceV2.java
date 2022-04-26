@@ -71,13 +71,11 @@ public class ApportionServiceV2 {
         for (Bill bill : bills) {
         	
             // Create a map of businessService to list of billDetails belonging to that businessService
-         //   Map<String, List<BillDetail>> businessServiceToBillDetails = util.groupByBusinessService(billInfo.getBillDetails());
 
             bill.getBillDetails().sort(Comparator.comparing(BillDetail::getFromPeriod));
 
 
             String businessKey = bill.getBusinessService();
-            BigDecimal amountPaid = bill.getAmountPaid();
 
             List<BillDetail> billDetails = bill.getBillDetails();
 

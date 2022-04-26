@@ -12,25 +12,13 @@ class ActionMenu extends Component {
     let userInfo = JSON.parse(getUserInfo());
     let { fetchActionMenu } = this.props;
     const roles = get(userInfo, "roles");
-    let roleCodes = roles
+    const roleCodes = roles
       ? roles.map((role) => {
           if (role.tenantId == getTenantId()) {
             return role.code;
           }
         })
       : [];
-
-      const bpaRolesArray = ["BPA_ARCHITECT", "BPA_ENGINEER", "BPA_BUILDER", "BPA_STRUCTURALENGINEER", "BPA_TOWNPLANNER", "BPA_SUPERVISOR"];
-      
-      let citizenRoles = ["CITIZEN"];
-      if (process.env.REACT_APP_NAME === "Citizen") {
-        let rolesArray = ["CITIZEN"];
-        roles.map(data => { if(bpaRolesArray.includes(data.code)) return rolesArray.push(data.code); })
-        if (rolesArray.length > 1) citizenRoles = rolesArray;
-        else citizenRoles
-      }
-      roleCodes=process.env.REACT_APP_NAME === "Citizen" ? citizenRoles :roleCodes ;
-      
     await fetchActionMenu(
       {
         roleCodes: roleCodes,

@@ -118,7 +118,7 @@ public class EnrichmentService {
 			property.setStatus(Status.ACTIVE);
 			property.getAddress().setId(propertyFromDb.getAddress().getId());
 
-		} else if (isWfEnabled && iswfStarting) {
+		} else if (iswfStarting) {
 
 			enrichPropertyForNewWf(requestInfo, property, false);
 		}
@@ -221,7 +221,7 @@ public class EnrichmentService {
 
 			property.setStatus(Status.ACTIVE);
 
-		} else if (isWfEnabled && iswfStarting) {
+		} else if (iswfStarting) {
 
 			enrichPropertyForNewWf(requestInfo, property, true);
 		}
@@ -314,7 +314,7 @@ public class EnrichmentService {
      */
     public void enrichAssignes(Property property){
 
-            if(config.getIsWorkflowEnabled() && property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.CITIZEN_SENDBACK_ACTION)){
+            if(property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.CITIZEN_SENDBACK_ACTION)){
 
                     List<User> assignes = new LinkedList<>();
 

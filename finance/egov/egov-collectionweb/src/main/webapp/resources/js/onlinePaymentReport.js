@@ -56,8 +56,7 @@ $('#onlinePaymentReportSearch').click(function(e){
 		var transid = $("#transid").val();
 		oTable= $('#onlinePaymentReport-table');
 		$('#onlinePayment-header').show();
-		
-		console.log('district name --->'+districtname);
+
 		
 		var resultInfo="Online Payment Report Result for District: "+ (districtname?districtname:"All Districts") +" and Ulb: " +(ulbname?ulbname:"All Ulbs")+ "  and from Date: " + (fromdate?fromdate:"All Dates") + " and to Date: " + (todate?todate:"All Dates") +" and Transaction id: " + (transid?transid: "All transaction ids");
 		
@@ -125,7 +124,6 @@ $('#onlinePaymentReportSearch').click(function(e){
 	});
 
 $('#districtname').change(function(){
-	console.log("came on change of districtname "+$('#districtname').val());
 	$.ajax({
 		url: "/collection/citizen/getUlbNamesByDistrict",
 		type: "GET",
@@ -135,7 +133,6 @@ $('#districtname').change(function(){
 		cache: false,
 		dataType: "json",
 		success: function (response) {
-			console.log("success"+response);
 			jQuery('#ulbname').html("");
 			jQuery('#ulbname').append("<option value=''>Select</option>");
 			jQuery.each(response, function(index, value) {
@@ -145,7 +142,6 @@ $('#districtname').change(function(){
 		error: function (response) {
 			jQuery('#ulbname').html("");
 			jQuery('#ulbname').append("<option value=''>Select</option>");
-			console.log("failed");
 		}
 	});
 });

@@ -308,6 +308,7 @@ public class RecoveryService extends PersistenceService<Recovery, Long> {
         }
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("deductionAmt :" + deductionAmt);
-        return deductionAmt = deductionAmt.setScale(2, BigDecimal.ROUND_HALF_UP);
+        deductionAmt = deductionAmt.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return deductionAmt;
     }
 }

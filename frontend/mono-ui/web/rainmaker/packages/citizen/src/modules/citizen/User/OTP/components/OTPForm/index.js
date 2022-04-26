@@ -2,7 +2,7 @@ import React from "react";
 import { TextField, Card, Image } from "components";
 import { Button} from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
-import logo from "egov-ui-kit/assets/images/logo_black.png";
+import logo from "egov-ui-kit/assets/images/nugp_logo.png";
 import { Icon } from "egov-ui-framework/ui-atoms";
 import { CountdownTimer } from "egov-ui-framework/ui-atoms/index";
 import "./index.css";
@@ -22,11 +22,11 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,
       className="col-sm-offset-4 col-sm-4  user-screens-card"
       textChildren={
         <div>
-          <div className="rainmaker-displayInline" style={{ justifyContent: "center"  ,alignItems:"center",marginBottom: "24px"}}>
-            <div style={{ }}>
-              <Image className="mseva-logo" source={logoUrl?logoUrl:`${logo}`} />
+          <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
+            <div style={{ marginBottom: "24px" }}>
+              <Image className="mseva-logo" source={`${logo}`} />
             </div >
-          <div style={{marginLeft:"7px" }}>
+          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>

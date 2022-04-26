@@ -48,7 +48,21 @@
 
 package org.egov.infra.elasticsearch.service.es;
 
-import org.apache.commons.lang3.StringUtils;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.time.DateUtils.addDays;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.egov.infra.config.mapper.BeanMapperConfiguration;
 import org.egov.infra.elasticsearch.entity.ApplicationIndex;
 import org.egov.infra.elasticsearch.entity.bean.ApplicationDetails;
@@ -85,16 +99,6 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 @Transactional(readOnly = true)
@@ -197,7 +201,7 @@ public class ApplicationDocumentService {
     private ElasticsearchTemplate elasticsearchTemplate;
 
     private static final String DATE_FORMAT_YYYYMMDD = "yyyy-MM-dd";
-    private static final SimpleDateFormat DATEFORMATTER_YYYY_MM_DD = new SimpleDateFormat(DATE_FORMAT_YYYYMMDD);
+    private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_YYYYMMDD);
 
     @Autowired
     public ApplicationDocumentService(ApplicationDocumentRepository applicationDocumentRepository) {
@@ -221,25 +225,25 @@ public class ApplicationDocumentService {
         ValueCount valueCount;
         Date fromDate = null;
         Date toDate = null;
-        if (StringUtils.isNotBlank(applicationIndexRequest.getFromDate())
-                && StringUtils.isNotBlank(applicationIndexRequest.getToDate())) {
+        if (isNotBlank(applicationIndexRequest.getFromDate())
+                && isNotBlank(applicationIndexRequest.getToDate())) {
             fromDate = DateUtils.getDate(applicationIndexRequest.getFromDate(), DATE_FORMAT_YYYYMMDD);
-            toDate = DateUtils.addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
+            toDate = addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
                     1);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, RECEIVED, StringUtils.EMPTY,
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, RECEIVED, EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalReceived(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, CLOSED, StringUtils.EMPTY,
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, CLOSED, EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalClosed(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, OPEN, StringUtils.EMPTY, 0);
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, OPEN, EMPTY, 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalOpen(valueCount != null ? valueCount.getValue() : 0);
@@ -247,14 +251,14 @@ public class ApplicationDocumentService {
 
         // For today's counts
         fromDate = new Date();
-        toDate = DateUtils.addDays(new Date(), 1);
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, CLOSED, StringUtils.EMPTY,
+        toDate = addDays(new Date(), 1);
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, CLOSED, EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTodaysClosed(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, RECEIVED, StringUtils.EMPTY,
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, RECEIVED, EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
@@ -280,10 +284,10 @@ public class ApplicationDocumentService {
         Date fromDate = null;
         Date toDate = null;
         List<ServiceGroupDetails> serviceGroups = new ArrayList<>();
-        if (StringUtils.isNotBlank(applicationIndexRequest.getFromDate())
-                && StringUtils.isNotBlank(applicationIndexRequest.getToDate())) {
+        if (isNotBlank(applicationIndexRequest.getFromDate())
+                && isNotBlank(applicationIndexRequest.getToDate())) {
             fromDate = DateUtils.getDate(applicationIndexRequest.getFromDate(), DATE_FORMAT_YYYYMMDD);
-            toDate = DateUtils.addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
+            toDate = addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
                     1);
         }
         aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, MODULE_NAME, RECEIVED, MODULE_NAME,
@@ -331,10 +335,10 @@ public class ApplicationDocumentService {
         List<ServiceGroupTrend> receivedApplications = new ArrayList<>();
         Aggregations aggregation;
 
-        if (StringUtils.isNotBlank(applicationIndexRequest.getFromDate())
-                && StringUtils.isNotBlank(applicationIndexRequest.getToDate())) {
+        if (isNotBlank(applicationIndexRequest.getFromDate())
+                && isNotBlank(applicationIndexRequest.getToDate())) {
             fromDate = DateUtils.getDate(applicationIndexRequest.getFromDate(), DATE_FORMAT_YYYYMMDD);
-            toDate = DateUtils.addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
+            toDate = addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
                     1);
         }
 
@@ -359,48 +363,48 @@ public class ApplicationDocumentService {
         ValueCount valueCount;
         Date fromDate = null;
         Date toDate = null;
-        if (StringUtils.isNotBlank(applicationIndexRequest.getFromDate())
-                && StringUtils.isNotBlank(applicationIndexRequest.getToDate())) {
+        if (isNotBlank(applicationIndexRequest.getFromDate())
+                && isNotBlank(applicationIndexRequest.getToDate())) {
             fromDate = DateUtils.getDate(applicationIndexRequest.getFromDate(), DATE_FORMAT_YYYYMMDD);
-            toDate = DateUtils.addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
+            toDate = addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
                     1);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, RECEIVED, StringUtils.EMPTY,
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, RECEIVED, EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalReceived(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, MEESEVA_TOTAL,
-                StringUtils.EMPTY,
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, MEESEVA_TOTAL,
+                EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalMeeseva(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, CSC_TOTAL,
-                StringUtils.EMPTY,
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, CSC_TOTAL,
+                EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalCsc(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, ULB_TOTAL,
-                StringUtils.EMPTY,
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, ULB_TOTAL,
+                EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalUlb(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, ONLINE_TOTAL,
-                StringUtils.EMPTY,
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, ONLINE_TOTAL,
+                EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalOnline(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, OTHERS_TOTAL,
-                StringUtils.EMPTY,
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, OTHERS_TOTAL,
+                EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
@@ -425,10 +429,10 @@ public class ApplicationDocumentService {
         List<SourceTrend> receivedApplications = new ArrayList<>();
         Aggregations aggregation;
 
-        if (StringUtils.isNotBlank(applicationIndexRequest.getFromDate())
-                && StringUtils.isNotBlank(applicationIndexRequest.getToDate())) {
+        if (isNotBlank(applicationIndexRequest.getFromDate())
+                && isNotBlank(applicationIndexRequest.getToDate())) {
             fromDate = DateUtils.getDate(applicationIndexRequest.getFromDate(), DATE_FORMAT_YYYYMMDD);
-            toDate = DateUtils.addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
+            toDate = addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
                     1);
         }
 
@@ -497,7 +501,7 @@ public class ApplicationDocumentService {
                 .addAggregation(aggregationBuilder).build();
 
         return elasticsearchTemplate.query(searchQueryColl,
-                response -> response.getAggregations());
+                SearchResponse::getAggregations);
     }
 
     private void prepareMonthwiseServiceGroupDetails(Map<Integer, String> monthValuesMap,
@@ -529,37 +533,37 @@ public class ApplicationDocumentService {
 
     private BoolQueryBuilder prepareWhereClause(ApplicationIndexRequest applicationIndexRequest, Date fromDate, Date toDate) {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
-                .mustNot(QueryBuilders.matchQuery(APPLICATION_NUMBER, StringUtils.EMPTY));
+                .mustNot(QueryBuilders.matchQuery(APPLICATION_NUMBER, EMPTY));
 
-        if (StringUtils.isNotBlank(applicationIndexRequest.getRegion()))
+        if (isNotBlank(applicationIndexRequest.getRegion()))
             boolQuery = boolQuery
                     .filter(QueryBuilders.matchQuery(REGION_NAME, applicationIndexRequest.getRegion()));
-        if (StringUtils.isNotBlank(applicationIndexRequest.getDistrict()))
+        if (isNotBlank(applicationIndexRequest.getDistrict()))
             boolQuery = boolQuery
                     .filter(QueryBuilders.matchQuery(DISTRICT_NAME, applicationIndexRequest.getDistrict()));
-        if (StringUtils.isNotBlank(applicationIndexRequest.getGrade()))
+        if (isNotBlank(applicationIndexRequest.getGrade()))
             boolQuery = boolQuery
                     .filter(QueryBuilders.matchQuery(CITY_GRADE, applicationIndexRequest.getGrade()));
-        if (StringUtils.isNotBlank(applicationIndexRequest.getUlbCode()))
+        if (isNotBlank(applicationIndexRequest.getUlbCode()))
             boolQuery = boolQuery
                     .filter(QueryBuilders.matchQuery(CITY_CODE, applicationIndexRequest.getUlbCode()));
-        if (StringUtils.isNotBlank(applicationIndexRequest.getServiceGroup()))
+        if (isNotBlank(applicationIndexRequest.getServiceGroup()))
             boolQuery = boolQuery
                     .filter(QueryBuilders.matchQuery(MODULE_NAME, applicationIndexRequest.getServiceGroup()));
-        if (StringUtils.isNotBlank(applicationIndexRequest.getService()))
+        if (isNotBlank(applicationIndexRequest.getService()))
             boolQuery = boolQuery
                     .filter(QueryBuilders.matchQuery(APPLICATION_TYPE, applicationIndexRequest.getService()));
-        if (StringUtils.isNotBlank(applicationIndexRequest.getSource()))
+        if (isNotBlank(applicationIndexRequest.getSource()))
             boolQuery = boolQuery
                     .filter(QueryBuilders.matchQuery(CHANNEL, applicationIndexRequest.getSource()));
         if (fromDate != null && toDate != null)
             boolQuery = boolQuery
-                    .filter(QueryBuilders.rangeQuery(APPLICATION_DATE).gte(DATEFORMATTER_YYYY_MM_DD.format(fromDate))
-                            .lte(DATEFORMATTER_YYYY_MM_DD.format(toDate)).includeUpper(false));
-        if (StringUtils.isNotBlank(applicationIndexRequest.getFunctionaryCode())) {
+                    .filter(QueryBuilders.rangeQuery(APPLICATION_DATE).gte(dateFormat.format(fromDate))
+                            .lte(dateFormat.format(toDate)).includeUpper(false));
+        if (isNotBlank(applicationIndexRequest.getFunctionaryCode())) {
             boolQuery = boolQuery
                     .filter(QueryBuilders.matchQuery(OWNER_NAME, applicationIndexRequest.getFunctionaryCode()));
-            if (StringUtils.isNotBlank(applicationIndexRequest.getClosed())) {
+            if (isNotBlank(applicationIndexRequest.getClosed())) {
                 if ("Y".equalsIgnoreCase(applicationIndexRequest.getClosed()))
                     boolQuery = boolQuery
                             .filter(QueryBuilders.matchQuery(IS_CLOSED, 1));
@@ -567,7 +571,7 @@ public class ApplicationDocumentService {
                     boolQuery = boolQuery
                             .filter(QueryBuilders.matchQuery(IS_CLOSED, 0));
             }
-            if (StringUtils.isNotBlank(applicationIndexRequest.getBeyondSLA()))
+            if (isNotBlank(applicationIndexRequest.getBeyondSLA()))
                 boolQuery = filterBasedOnSLAForFunctionary(applicationIndexRequest, boolQuery);
         }
 
@@ -578,7 +582,7 @@ public class ApplicationDocumentService {
             BoolQueryBuilder boolQuery) {
         BoolQueryBuilder slaQuery = boolQuery;
         if ("Y".equalsIgnoreCase(applicationIndexRequest.getBeyondSLA())) {
-            if (StringUtils.isNotBlank(applicationIndexRequest.getAgeing())) {
+            if (isNotBlank(applicationIndexRequest.getAgeing())) {
                 if ("0-1Wdays".equalsIgnoreCase(applicationIndexRequest.getAgeing()))
                     slaQuery = slaQuery
                             .filter(QueryBuilders.rangeQuery(SLA_GAP).gte(1).lt(8));
@@ -632,16 +636,16 @@ public class ApplicationDocumentService {
         Map<String, List<ApplicationDetails>> moduleWiseDetailsMap = new LinkedHashMap<>();
         List<ApplicationDetails> modulewiseDetails;
 
-        if (StringUtils.isNotBlank(applicationIndexRequest.getAggregationLevel())) {
+        if (isNotBlank(applicationIndexRequest.getAggregationLevel())) {
             Map<String, String> aggrTypeAndSize = fetchAggregationTypeAndSize(applicationIndexRequest.getAggregationLevel());
             aggregationField = aggrTypeAndSize.get("aggregationField");
             size = Integer.parseInt(aggrTypeAndSize.get("size"));
         }
 
-        if (StringUtils.isNotBlank(applicationIndexRequest.getFromDate())
-                && StringUtils.isNotBlank(applicationIndexRequest.getToDate())) {
+        if (isNotBlank(applicationIndexRequest.getFromDate())
+                && isNotBlank(applicationIndexRequest.getToDate())) {
             fromDate = DateUtils.getDate(applicationIndexRequest.getFromDate(), DATE_FORMAT_YYYYMMDD);
-            toDate = DateUtils.addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
+            toDate = addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
                     1);
         }
 
@@ -727,7 +731,7 @@ public class ApplicationDocumentService {
                 applicationDetails.setSource(name);
             else if (OWNER_NAME.equalsIgnoreCase(aggregationField)) {
                 applicationDetails.setFunctionaryName(name);
-                if (StringUtils.isNotBlank(applicationIndexRequest.getService()))
+                if (isNotBlank(applicationIndexRequest.getService()))
                     applicationDetails.setServiceType(applicationIndexRequest.getService());
                 if (!detailsForAggregationField.isEmpty()) {
                     applicationDetails.setUlbName(detailsForAggregationField.get(CITY_NAME).toString());
@@ -790,8 +794,8 @@ public class ApplicationDocumentService {
 
     private Map<String, String> fetchAggregationTypeAndSize(String aggregationLevel) {
         Map<String, String> aggrTypeAndSize = new HashMap<>();
-        String aggregationField = DISTRICT_NAME;
-        int size = 15;
+        String aggregationField;
+        int size;
         if ("region".equalsIgnoreCase(aggregationLevel)) {
             aggregationField = REGION_NAME;
             size = 4;
@@ -816,6 +820,9 @@ public class ApplicationDocumentService {
         } else if ("functionary".equalsIgnoreCase(aggregationLevel)) {
             aggregationField = OWNER_NAME;
             size = 1000;
+        } else {
+        	aggregationField = DISTRICT_NAME;
+        	size = 15;
         }
         aggrTypeAndSize.put("aggregationField", aggregationField);
         aggrTypeAndSize.put("size", String.valueOf(size));
@@ -837,10 +844,10 @@ public class ApplicationDocumentService {
         Map<String, Long> openApplications = new LinkedHashMap<>();
         Aggregations aggregation;
 
-        if (StringUtils.isNotBlank(applicationIndexRequest.getFromDate())
-                && StringUtils.isNotBlank(applicationIndexRequest.getToDate())) {
+        if (isNotBlank(applicationIndexRequest.getFromDate())
+                && isNotBlank(applicationIndexRequest.getToDate())) {
             fromDate = DateUtils.getDate(applicationIndexRequest.getFromDate(), DATE_FORMAT_YYYYMMDD);
-            toDate = DateUtils.addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
+            toDate = addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
                     1);
         }
 
@@ -859,8 +866,8 @@ public class ApplicationDocumentService {
         prepareMonthwiseDetails(monthValuesMap, openApplications, dateaggs);
         Trend trend;
 
-        if (StringUtils.isBlank(applicationIndexRequest.getFromDate())
-                && StringUtils.isBlank(applicationIndexRequest.getToDate())) {
+        if (isBlank(applicationIndexRequest.getFromDate())
+                && isBlank(applicationIndexRequest.getToDate())) {
             for (Map.Entry<Integer, String> entry : DateUtils.getAllFinancialYearMonthsWithFullNames().entrySet()) {
                 trend = new Trend();
                 trend.setMonth(entry.getValue());
@@ -919,8 +926,7 @@ public class ApplicationDocumentService {
                 .withQuery(boolQuery)
                 .addAggregation(aggregationBuilder).build();
 
-        return elasticsearchTemplate.query(searchQueryColl,
-                response -> response.getAggregations());
+        return elasticsearchTemplate.query(searchQueryColl, SearchResponse::getAggregations);
     }
 
     @SuppressWarnings("rawtypes")
@@ -944,8 +950,7 @@ public class ApplicationDocumentService {
                 .withQuery(boolQuery)
                 .addAggregation(aggregationBuilder).build();
 
-        return elasticsearchTemplate.query(searchQueryColl,
-                response -> response.getAggregations());
+        return elasticsearchTemplate.query(searchQueryColl, SearchResponse::getAggregations);
     }
 
     private Aggregations getDocumentCounts(ApplicationIndexRequest applicationIndexRequest, Date fromDate,
@@ -955,22 +960,21 @@ public class ApplicationDocumentService {
         ValueCountBuilder countBuilder = AggregationBuilders.count(TOTAL_COUNT).field(APPLICATION_NUMBER);
         BoolQueryBuilder boolQuery = prepareWhereClause(applicationIndexRequest, fromDate, toDate);
 
-        if (StringUtils.isNotBlank(applicationStatus))
+        if (isNotBlank(applicationStatus))
             boolQuery = prepareQueryForApplicationStatus(applicationStatus, boolQuery);
 
-        if (StringUtils.isNotBlank(aggregationName))
+        if (isNotBlank(aggregationName))
             aggregation = AggregationBuilders.terms(aggregationName).field(aggregationField).size(size)
                     .subAggregation(countBuilder);
 
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder().withIndices(APPLICATIONS_INDEX)
                 .withQuery(boolQuery).addAggregation(countBuilder);
-        if (StringUtils.isNotBlank(aggregationName))
+        if (isNotBlank(aggregationName))
             searchQueryColl = queryBuilder.addAggregation(aggregation).build();
         else
             searchQueryColl = queryBuilder.build();
 
-        return elasticsearchTemplate.query(searchQueryColl,
-                response -> response.getAggregations());
+        return elasticsearchTemplate.query(searchQueryColl, SearchResponse::getAggregations);
     }
 
     private BoolQueryBuilder prepareQueryForApplicationStatus(String applicationStatus, BoolQueryBuilder boolQuery) {
@@ -1032,11 +1036,11 @@ public class ApplicationDocumentService {
         BoolQueryBuilder boolQuery = prepareWhereClause(applicationIndexRequest, fromDate, toDate);
 
         if (DISTRICT_NAME.equalsIgnoreCase(aggregationField)) {
-            boolQuery = boolQuery.filter(QueryBuilders.matchQuery("districtName", value));
+            boolQuery = boolQuery.filter(QueryBuilders.matchQuery(DISTRICT_NAME, value));
             requiredFields = new String[1];
             requiredFields[0] = REGION_NAME;
         } else if (CITY_NAME.equalsIgnoreCase(aggregationField)) {
-            boolQuery = boolQuery.filter(QueryBuilders.matchQuery("cityName", value));
+            boolQuery = boolQuery.filter(QueryBuilders.matchQuery(CITY_NAME, value));
             requiredFields = new String[4];
             requiredFields[0] = REGION_NAME;
             requiredFields[1] = DISTRICT_NAME;
@@ -1073,50 +1077,50 @@ public class ApplicationDocumentService {
         ValueCount valueCount;
         Date fromDate = null;
         Date toDate = null;
-        if (StringUtils.isNotBlank(applicationIndexRequest.getFromDate())
-                && StringUtils.isNotBlank(applicationIndexRequest.getToDate())) {
+        if (isNotBlank(applicationIndexRequest.getFromDate())
+                && isNotBlank(applicationIndexRequest.getToDate())) {
             fromDate = DateUtils.getDate(applicationIndexRequest.getFromDate(), DATE_FORMAT_YYYYMMDD);
-            toDate = org.apache.commons.lang3.time.DateUtils.addDays(
+            toDate = addDays(
                     DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
                     1);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, RECEIVED, StringUtils.EMPTY,
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, RECEIVED, EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalReceived(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, CLOSED, StringUtils.EMPTY,
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, CLOSED, EMPTY,
                 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalClosed(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, OPEN, StringUtils.EMPTY, 0);
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, OPEN, EMPTY, 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalOpen(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, TOTAL_BEYOND_SLA,
-                StringUtils.EMPTY, 0);
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, TOTAL_BEYOND_SLA,
+                EMPTY, 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalBeyondSLA(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, TOTAL_WITHIN_SLA,
-                StringUtils.EMPTY, 0);
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, TOTAL_WITHIN_SLA,
+                EMPTY, 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setTotalWithinSLA(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, OPEN_BEYOND_SLA,
-                StringUtils.EMPTY, 0);
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, OPEN_BEYOND_SLA,
+                EMPTY, 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setOpenBeyondSLA(valueCount != null ? valueCount.getValue() : 0);
         }
-        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, StringUtils.EMPTY, CLOSED_BEYOND_SLA,
-                StringUtils.EMPTY, 0);
+        aggregation = getDocumentCounts(applicationIndexRequest, fromDate, toDate, EMPTY, CLOSED_BEYOND_SLA,
+                EMPTY, 0);
         if (aggregation != null) {
             valueCount = aggregation.get(TOTAL_COUNT);
             applicationIndexResponse.setClosedBeyondSLA(valueCount != null ? valueCount.getValue() : 0);
@@ -1144,8 +1148,7 @@ public class ApplicationDocumentService {
                 .withQuery(boolQuery).addAggregation(aggregation);
         searchQueryColl = queryBuilder.build();
 
-        final Aggregations aggr = elasticsearchTemplate.query(searchQueryColl,
-                response -> response.getAggregations());
+        final Aggregations aggr = elasticsearchTemplate.query(searchQueryColl, SearchResponse::getAggregations);
         final Map<String, Long> aggregationResults = new LinkedHashMap<>();
         final StringTerms serviceAggr = aggr.get("by_service1");
         ValueCount valueCount;
@@ -1188,8 +1191,7 @@ public class ApplicationDocumentService {
                 .withQuery(boolQuery);
         SearchQuery searchQueryColl = queryBuilder.addAggregation(aggregationBuilder).build();
 
-        Aggregations aggregation = elasticsearchTemplate.query(searchQueryColl,
-                response -> response.getAggregations());
+        Aggregations aggregation = elasticsearchTemplate.query(searchQueryColl, SearchResponse::getAggregations);
 
         StringTerms stringTerms = aggregation.get("by_service");
         for (Terms.Bucket entry : stringTerms.getBuckets()) {
@@ -1210,10 +1212,10 @@ public class ApplicationDocumentService {
         ApplicationInfo appInfo;
         Date fromDate = null;
         Date toDate = null;
-        if (StringUtils.isNotBlank(applicationIndexRequest.getFromDate())
-                && StringUtils.isNotBlank(applicationIndexRequest.getToDate())) {
+        if (isNotBlank(applicationIndexRequest.getFromDate())
+                && isNotBlank(applicationIndexRequest.getToDate())) {
             fromDate = DateUtils.getDate(applicationIndexRequest.getFromDate(), DATE_FORMAT_YYYYMMDD);
-            toDate = DateUtils.addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
+            toDate = addDays(DateUtils.getDate(applicationIndexRequest.getToDate(), DATE_FORMAT_YYYYMMDD),
                     1);
         }
         BoolQueryBuilder boolQuery = prepareWhereClause(applicationIndexRequest, fromDate, toDate);

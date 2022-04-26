@@ -66,6 +66,9 @@ public class UserService {
     private EncryptionDecryptionUtil encryptionDecryptionUtil;
     private TokenStore tokenStore;
 
+    private static final String MAP_ADD_PASSWORD = "password";
+    private static final String GET_USER_REQUEST = "UserRequest";
+
     @Value("${egov.user.host}")
     private String userHost;
 
@@ -186,19 +189,9 @@ public class UserService {
 
         searchCriteria.setTenantId(getStateLevelTenantForCitizen(searchCriteria.getTenantId(), searchCriteria.getType()));
         /* encrypt here / encrypted searchcriteria will be used for search*/
-        
-        String altmobnumber=null;
-        
-        if(searchCriteria.getMobileNumber()!=null) {
-        	altmobnumber = searchCriteria.getMobileNumber();
-        }
+
 
         searchCriteria = encryptionDecryptionUtil.encryptObject(searchCriteria, "UserSearchCriteria", UserSearchCriteria.class);
-        
-        if(altmobnumber!=null) {
-        	searchCriteria.setAlternatemobilenumber(altmobnumber);
-        }
-        
         List<org.egov.user.domain.model.User> list = userRepository.findAll(searchCriteria);
 
         /* decrypt here / final reponse decrypted*/
@@ -296,10 +289,10 @@ public class UserService {
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
             map.add("username", user.getUsername());
             if (!isEmpty(password))
-                map.add("password", password);
+                map.add(MAP_ADD_PASSWORD, password);
             else
-                map.add("password", user.getPassword());
-            map.add("grant_type", "password");
+                map.add(MAP_ADD_PASSWORD, user.getPassword());
+            map.add("grant_type", MAP_ADD_PASSWORD);
             map.add("scope", "read");
             map.add("tenantId", user.getTenantId());
             map.add("isInternal", "true");
@@ -360,7 +353,7 @@ public class UserService {
         user.setPassword(encryptPwd(user.getPassword()));
         /* encrypt */
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
-        userRepository.update(user, existingUser,requestInfo.getUserInfo().getId(), requestInfo.getUserInfo().getUuid() );
+        userRepository.update(user, existingUser);
 
         // If user is being unlocked via update, reset failed login attempts
         if (user.getAccountLocked() != null && !user.getAccountLocked() && existingUser.getAccountLocked())
@@ -376,11 +369,11 @@ public class UserService {
                 user.getUsername());
 
         for (OAuth2AccessToken token : tokens) {
-            if (token.getAdditionalInformation() != null && token.getAdditionalInformation().containsKey("UserRequest")) {
-                if (token.getAdditionalInformation().get("UserRequest") instanceof org.egov.user.web.contract.auth.User) {
+            if (token.getAdditionalInformation() != null && token.getAdditionalInformation().containsKey(GET_USER_REQUEST)) {
+                if (token.getAdditionalInformation().get(GET_USER_REQUEST) instanceof org.egov.user.web.contract.auth.User) {
                     org.egov.user.web.contract.auth.User userInfo =
                             (org.egov.user.web.contract.auth.User) token.getAdditionalInformation().get(
-                                    "UserRequest");
+                                    GET_USER_REQUEST);
                     if (user.getUsername().equalsIgnoreCase(userInfo.getUserName()) && user.getTenantId().equalsIgnoreCase(userInfo.getTenantId())
                             && user.getType().equals(UserType.fromValue(userInfo.getType())))
                         tokenStore.removeAccessToken(token);
@@ -416,10 +409,10 @@ public class UserService {
         validateProfileUpdateIsDoneByTheSameLoggedInUser(user);
         user.nullifySensitiveFields();
         validatePassword(user.getPassword());
-        userRepository.update(user, existingUser,requestInfo.getUserInfo().getId(), requestInfo.getUserInfo().getUuid() );
+        userRepository.update(user, existingUser);
         User updatedUser = getUserByUuid(user.getUuid());
-        
         /* decrypt here */
+
         existingUser = encryptionDecryptionUtil.decryptObject(existingUser, "User", User.class, requestInfo);
         updatedUser = encryptionDecryptionUtil.decryptObject(updatedUser, "User", User.class, requestInfo);
 
@@ -448,7 +441,7 @@ public class UserService {
         validateExistingPassword(user, updatePasswordRequest.getExistingPassword());
         validatePassword(updatePasswordRequest.getNewPassword());
         user.updatePassword(encryptPwd(updatePasswordRequest.getNewPassword()));
-        userRepository.update(user, user, user.getId() , user.getUuid());
+        userRepository.update(user, user);
     }
 
     /**
@@ -478,7 +471,7 @@ public class UserService {
         /* encrypt here */
         /* encrypted value is stored in DB*/
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
-        userRepository.update(user, user,requestInfo.getUserInfo().getId() , requestInfo.getUserInfo().getUuid());
+        userRepository.update(user, user);
     }
 
 

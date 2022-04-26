@@ -52,8 +52,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Plan;
@@ -64,11 +66,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class Basement extends FeatureProcess {
 
-    private static final Logger LOG = Logger.getLogger(Basement.class);
+    private static final Logger LOG = LogManager.getLogger(Basement.class);
     private static final String RULE_46_6A = "46-6a";
     private static final String RULE_46_6C = "46-6c";
-    public static final String BASEMENT_DESCRIPTION_ONE = "Height from the floor to the soffit of the roof slab or ceiling";
-    public static final String BASEMENT_DESCRIPTION_TWO = "Minimum height of the ceiling of upper basement above ground level";
+    private static final String BASEMENT_DESCRIPTION_ONE = "Height from the floor to the soffit of the roof slab or ceiling";
+    private static final String BASEMENT_DESCRIPTION_TWO = "Minimum height of the ceiling of upper basement above ground level";
 
     @Override
     public Plan validate(Plan pl) {
@@ -78,7 +80,7 @@ public class Basement extends FeatureProcess {
 
     @Override
     public Plan process(Plan pl) {
-
+    	LOG.info("******Processing Basement***");
         ScrutinyDetail scrutinyDetail = new ScrutinyDetail();
         scrutinyDetail.setKey("Common_Basement");
         scrutinyDetail.addColumnHeading(1, RULE_NO);
@@ -89,7 +91,7 @@ public class Basement extends FeatureProcess {
 
         Map<String, String> details = new HashMap<>();
 
-        BigDecimal minLength = BigDecimal.ZERO;
+        BigDecimal minLength;
 
         if (pl.getBlocks() != null) {
             for (Block b : pl.getBlocks()) {
@@ -103,7 +105,8 @@ public class Basement extends FeatureProcess {
                             if (f.getHeightFromTheFloorToCeiling() != null
                                     && !f.getHeightFromTheFloorToCeiling().isEmpty()) {
 
-                                minLength = f.getHeightFromTheFloorToCeiling().stream().reduce(BigDecimal::min).get();
+                                Optional<BigDecimal> minHeightFromCeilings = f.getHeightFromTheFloorToCeiling().stream().reduce(BigDecimal::min);
+								minLength = minHeightFromCeilings.isPresent() ? minHeightFromCeilings.get() : BigDecimal.ZERO;
 
                                 if (minLength.compareTo(BigDecimal.valueOf(2.4)) >= 0) {
                                     details.put(RULE_NO, RULE_46_6A);
@@ -123,11 +126,11 @@ public class Basement extends FeatureProcess {
                                     scrutinyDetail.getDetail().add(details);
                                 }
                             }
-                            minLength = BigDecimal.ZERO;
                             if (f.getHeightOfTheCeilingOfUpperBasement() != null
                                     && !f.getHeightOfTheCeilingOfUpperBasement().isEmpty()) {
 
-                                minLength = f.getHeightOfTheCeilingOfUpperBasement().stream().reduce(BigDecimal::min).get();
+                                Optional<BigDecimal> minHeights = f.getHeightOfTheCeilingOfUpperBasement().stream().reduce(BigDecimal::min);
+								minLength = minHeights.isPresent()? minHeights.get() : BigDecimal.ZERO;
 
                                 if (minLength.compareTo(BigDecimal.valueOf(1.2)) >= 0
                                         && minLength.compareTo(BigDecimal.valueOf(1.5)) < 0) {

@@ -43,7 +43,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.egov.tracer.model.CustomException;
 import org.elasticsearch.search.aggregations.support.ValuesSource.Numeric;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -79,6 +79,8 @@ public class ReadUtil {
 
 	private static Boolean useNumbers;
 
+	private static final String SEPARATOR="file.separator";
+
 	@Value("${filename.length}")
 	public void setFilenameLength(Integer filenameLengthValue) {
 		ReadUtil.filenameLength = filenameLengthValue;
@@ -98,9 +100,9 @@ public class ReadUtil {
 	private static String UPLOADED_FOLDER = "";
 	public static Path path;
 	public static File uploadFile = new File(
-			System.getProperty("user.dir") + System.getProperty("file.separator") + "uploads");
+			System.getProperty("user.dir") + System.getProperty(SEPARATOR) + "uploads");
 
-	public static JSONArray getFiletoDirectory(MultipartFile file) throws Exception {
+	public static JSONArray getFiletoDirectory(MultipartFile file) throws IOException {
 		byte[] bytes = file.getBytes();
 		if (!uploadFile.exists()) {
 			uploadFile.mkdir();
@@ -113,7 +115,7 @@ public class ReadUtil {
 		String fileName =  System.currentTimeMillis() + randomString;
 		String extension = FilenameUtils.getExtension(orignalFileName);
 
-		path = Paths.get(UPLOADED_FOLDER + System.getProperty("file.separator") + fileName + '.' + extension);
+		path = Paths.get(UPLOADED_FOLDER + System.getProperty(SEPARATOR) + fileName + '.' + extension);
 		Files.write(path, bytes);
 		JSONArray fileIntoJsonArray = readFilefromDirectory();
 		String jsonArrayFileName = fileName + ".json";
@@ -121,26 +123,34 @@ public class ReadUtil {
 		return fileIntoJsonArray;
 	}
 
-	private static JSONArray readFilefromDirectory() throws Exception {
+	private static JSONArray readFilefromDirectory() throws IOException {
 		String workbookSheetName = null;
 		int workbookSheetIndex = -1;
 		String getFileExtension = FilenameUtils.getExtension(path.toString());
 		Workbook workbook = null;
-		if (getFileExtension.endsWith("xlsx")) {
-			workbook = new XSSFWorkbook();
-			workbook = WorkbookFactory.create(new File(path.toString()));
-		} else {
-			throw new Exception("invalid file, should be xlsx");
-		}
-
 		JSONArray workbookToJsonArray = new JSONArray();
-		for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
-			Sheet sheet = workbook.getSheetAt(i);
-			workbookSheetName = sheet.getSheetName();
-			workbookSheetIndex = workbook.getSheetIndex(workbookSheetName);
-			if (workbookSheetName != null && workbookSheetName.length() > 0) {
-				workbookToJsonArray = workbookToJsonArray.put(getSheetToJsonObject(workbook, sheet));
+		try {
+			if (getFileExtension.endsWith("xlsx")) {
+				workbook = WorkbookFactory.create(new File(path.toString()));
+			} else {
+				throw new CustomException("INVALID_FILE","invalid file, should be xlsx");
 			}
+
+			for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+				Sheet sheet = workbook.getSheetAt(i);
+				workbookSheetName = sheet.getSheetName();
+				workbookSheetIndex = workbook.getSheetIndex(workbookSheetName);
+				if (workbookSheetName != null && workbookSheetName.length() > 0) {
+					workbookToJsonArray = workbookToJsonArray.put(getSheetToJsonObject(workbook, sheet));
+				}
+			}
+		}
+		catch (IOException e){
+			throw new CustomException("WORKBOOK_ERROR","Failed to open WorkBook");
+		}
+		finally {
+			if (workbook != null)
+				workbook.close();
 		}
 
 		JSONArray bookInJsonArray = new JSONArray();
@@ -158,7 +168,6 @@ public class ReadUtil {
 
 	private static JSONArray getSheetToJsonObject(Workbook workbook, Sheet sheet) {
 		String workbookSheetName = sheet.getSheetName();
-		int workbookSheetIndex = workbook.getSheetIndex(workbookSheetName);
 		Object financialYear = null;
 		int firstRowNum = sheet.getFirstRowNum(), lastRowNum = sheet.getLastRowNum(),
 				ulbFirstRowNumber = Constants.HEADER_ROW + 2, ulbDestRowNumber = -1;
@@ -201,8 +210,6 @@ public class ReadUtil {
 		List<Object> sheetHeaderList = new LinkedList<Object>();
 		List<String> customHeaderList = new LinkedList<String>();
 		Map<String, Object> customHeaderMap = new LinkedHashMap<String, Object>();
-		JSONArray getMunicipalCityToJsonArray = new JSONArray();
-		Map<Integer, List<String>> lastRowRecord = new LinkedHashMap<Integer, List<String>>();
 		customHeaderList.add("Sheet Name");
 		customHeaderList.add("Financial Year");
 		customHeaderList.add("Timestamp");
@@ -212,7 +219,6 @@ public class ReadUtil {
 		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:S");
 		Date dateobj = new Date();
 		customHeaderMap.put(customHeaderList.get(2), df.format(dateobj));
-		JSONObject customHeaderJsonObject = new JSONObject();
 		JSONArray municipalCitiesIntoJsonArray = new JSONArray();
 		for (Map.Entry<Integer, List<Object>> itrRowRecordMap : rowRecordMap.entrySet()) {
 			if (itrRowRecordMap.getKey() == Constants.HEADER_ROW) {
@@ -220,7 +226,6 @@ public class ReadUtil {
 			}
 			if (itrRowRecordMap.getKey() >= ulbFirstRowNumber) {
 				JSONObject municipalCitiesIntoJsonObject = new JSONObject();
-				Map<String, String> mc = new LinkedHashMap<String, String>();
 				municipalCity.put(itrRowRecordMap.getKey(), itrRowRecordMap.getValue());
 				for (Map.Entry<String, Object> itrCustomHeaderMap : customHeaderMap.entrySet()) {
 					municipalCitiesIntoJsonObject.accumulate(itrCustomHeaderMap.getKey().toString(),
@@ -315,7 +320,6 @@ public class ReadUtil {
 			if (cellRow >= firstRow && cellRow <= lastRow) {
 				if (cellColumn >= firstCol && cellColumn <= lastCol) {
 					retVal = lastCol - firstCol + 1;
-					Row row = sheet.getRow(i);
 					if (retVal > 0) {
 						for (int j = firstRow; j <= lastRow; j++) {
 							for (int k = firstCol; k <= lastCol; k++) {
@@ -374,7 +378,7 @@ public class ReadUtil {
 
 	private static void writeJsonArrayToFile(JSONArray data, String fileName) throws IOException {
 		String currentWorkingFolder = System.getProperty("user.dir"),
-				filePathSeperator = System.getProperty("file.separator"),
+				filePathSeperator = System.getProperty(SEPARATOR),
 				filePath = currentWorkingFolder + filePathSeperator + fileName;
 		BufferedWriter bufferedWriter = null;
 		try {
@@ -383,8 +387,10 @@ public class ReadUtil {
 		}catch (Exception e){
 			LOGGER.error("Error while writing to file. ");
 		}finally {
-			bufferedWriter.flush();
-			bufferedWriter.close();
+			if(bufferedWriter != null){
+				bufferedWriter.flush();
+				bufferedWriter.close();
+			}
 		}
 	}
 }

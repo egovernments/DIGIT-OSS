@@ -38,8 +38,7 @@ class App extends Component {
 
   handleClick(data, index) {
     const {dispatch} = this.props
-    console.log(data)
-    console.log('Clicked')
+
   }
 
 

@@ -155,7 +155,7 @@ public class FinanceDashboardService {
                 if(data instanceof Set){
                     HashSet<Long> ids = (HashSet<Long>) data;
                     List<CVoucherHeader> list = this.getVoucherHeaderById(ids);
-                    if(!list.isEmpty()){
+                    if(list != null && !list.isEmpty()){
                         for(CVoucherHeader vh1 : list){
                             VoucherHeaderData vhData = this.prepareVoucherHeaderData(vh1, tenantId, token);
                             vhDataList.add(vhData);

@@ -315,10 +315,8 @@ public class WorkflowUtil {
         if(!CollectionUtils.isEmpty(tenantSpecificStatuses))
             criteria.setTenantSpecifiStatus(tenantSpecificStatuses);
 
-        if(!CollectionUtils.isEmpty(statusIrrespectiveOfTenant)) {
+        if(!CollectionUtils.isEmpty(statusIrrespectiveOfTenant))
             criteria.setStatus(statusIrrespectiveOfTenant);
-            criteria.setStatusesIrrespectiveOfTenant(statusIrrespectiveOfTenant);
-        }
 
 
     }

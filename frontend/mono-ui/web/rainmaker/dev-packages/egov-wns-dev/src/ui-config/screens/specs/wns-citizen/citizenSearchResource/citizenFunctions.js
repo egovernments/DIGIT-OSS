@@ -14,8 +14,8 @@ export const fetchData = async (action, state, dispatch) => {
     }
   ];
   let responseWater = [], responseSewerage = [];
-  try { responseWater = await getWSMyResults(queryObject, 'CONNECTION', dispatch); } catch (error) { responseWater = [];   }
-  try { responseSewerage = await getSWMyResults(queryObject, 'CONNECTION', dispatch); } catch (error) { responseSewerage = [];   }
+  try { responseWater = await getWSMyResults(queryObject, 'CONNECTION', dispatch); } catch (error) { responseWater = []; console.log(error) }
+  try { responseSewerage = await getSWMyResults(queryObject, 'CONNECTION', dispatch); } catch (error) { responseSewerage = []; console.log(error) }
   try {
     const water = (responseWater && responseWater.WaterConnection)?responseWater.WaterConnection:[]
     const sewerage = (responseSewerage && responseSewerage.SewerageConnections)?responseSewerage.SewerageConnections:[]
@@ -34,5 +34,5 @@ export const fetchData = async (action, state, dispatch) => {
 
      }
   }
-  catch (error) { }
+  catch (error) { console.log(error); }
 }

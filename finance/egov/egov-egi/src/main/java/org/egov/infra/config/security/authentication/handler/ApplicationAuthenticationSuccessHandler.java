@@ -48,6 +48,8 @@
 
 package org.egov.infra.config.security.authentication.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -67,6 +69,8 @@ import static org.springframework.util.StringUtils.hasText;
 
 public class ApplicationAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationAuthenticationSuccessHandler.class);
+
     private RequestCache requestCache = new HttpSessionRequestCache();
 
     private Pattern excludedUrls;
@@ -84,7 +88,7 @@ public class ApplicationAuthenticationSuccessHandler extends SimpleUrlAuthentica
                                         Authentication authentication) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         session.setAttribute(LOGIN_TIME, new Date());
-        System.out.println("******************Authentication processed successfully********");
+        LOG.info("******************Authentication processed successfully********");
      //   redirectToSuccessPage(request, response, authentication);
     }
 

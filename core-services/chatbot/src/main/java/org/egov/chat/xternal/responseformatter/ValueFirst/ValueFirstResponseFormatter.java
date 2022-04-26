@@ -55,10 +55,13 @@ public class ValueFirstResponseFormatter implements ResponseFormatter {
     @Autowired
     private FileStore fileStore;
 
+    private static final String PUT_IMAGE = "image";
+    private static final String REQUEST_SET_SMS_TEXT = "$.SMS[0].@TEXT";
+
     private Map<String, String> mimeTypeToAttachmentTypeMapping = new HashMap<String, String>() {{
         put("application/pdf", "document");
-        put("image/jpeg", "image");
-        put("image/png", "image");
+        put("image/jpeg", PUT_IMAGE);
+        put("image/png", PUT_IMAGE);
     }};
 
     @Override
@@ -142,27 +145,29 @@ public class ValueFirstResponseFormatter implements ResponseFormatter {
                 request = JsonPath.parse(valueFirstTextMessageRequestBody);
                 String message = response.at(ChatNodeJsonPointerConstants.responseText).asText();
                 String encodedMessage = URLEncoder.encode(message, "UTF-8");
-                request.set("$.SMS[0].@TEXT", encodedMessage);
+                request.set(REQUEST_SET_SMS_TEXT, encodedMessage);
             } else if (type.equalsIgnoreCase("contactcard")) {
                 request = JsonPath.parse(valueFirstTextMessageRequestBody);
                 String message = response.at(ChatNodeJsonPointerConstants.responseText).asText();
                 String encodedMessage = URLEncoder.encode(message, "UTF-8");
-                request.set("$.SMS[0].@TEXT", encodedMessage);
-            } else if (type.equalsIgnoreCase("image")) {
+                request.set(REQUEST_SET_SMS_TEXT, encodedMessage);
+            } else if (type.equalsIgnoreCase(PUT_IMAGE)) {
                 String fileStoreId = response.at(ChatNodeJsonPointerConstants.fileStoreId).asText();
                 File file = fileStore.getFileForFileStoreId(fileStoreId);
                 String base64Image = fileStore.getBase64EncodedStringOfFile(file);
                 file.delete();
                 request = JsonPath.parse(valueFirstImageMessageRequestBody);
                 String message = response.at(ChatNodeJsonPointerConstants.responseText).asText();
-                request.set("$.SMS[0].@TEXT", base64Image);
+                request.set(REQUEST_SET_SMS_TEXT, base64Image);
                 request.set("$.SMS[0].@CAPTION", message);
                 String uniqueImageMessageId = UUID.randomUUID().toString();
                 request.set("$.SMS[0].@ID", uniqueImageMessageId);
             }
-            request.set("$.SMS[0].ADDRESS[0].@TO", "91" + userMobileNumber);
-            request.set("$.SMS[0].ADDRESS[0].@FROM", fromMobileNumber);
-            valueFirstRequests.add(objectMapper.readTree(request.jsonString()));
+            if(request != null){
+                request.set("$.SMS[0].ADDRESS[0].@TO", "91" + userMobileNumber);
+                request.set("$.SMS[0].ADDRESS[0].@FROM", fromMobileNumber);
+                valueFirstRequests.add(objectMapper.readTree(request.jsonString()));
+            }
         }
 
         log.debug("ValueFirst Requests : " + valueFirstRequests.size());

@@ -76,7 +76,6 @@ jQuery(document).click(function() {
 	if(this.activeElement.defaultValue){
 		var name = this.activeElement.defaultValue;
 		name = name.toUpperCase();
-		console.log(name);
 		if(name.indexOf("EXCEL")!=-1 || name.indexOf("PDF")!=-1 || name.indexOf("XLS")!=-1 ){
 			setTimeout(function() {
 				undoLoadingMask();

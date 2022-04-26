@@ -3,9 +3,6 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.3.2 - 2022-01-13
-- Updated to log4j2 version 2.17.1
-
 ## 1.3.1 - 2021-05-11
 - Added finally blocked wherever missing
 - Changes to error handling

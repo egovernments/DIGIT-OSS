@@ -1,8 +1,5 @@
-import {
-  getPattern
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleFieldChange, setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import get from "lodash/get";
+import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
 const formConfig = {
   name: "institutionAuthority",
   fields: {
@@ -23,16 +20,6 @@ const formConfig = {
       pattern: /^(\+\d{1,2}[-]{0,1})?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i,
       errorMessage: "PT_MOBILE_NUMBER_ERROR_MESSAGE",
       required: true,
-    },
-    alterMobile: {
-      id: "authority-altermobile",
-      jsonPath: "Properties[0].propertyDetails[0].owners[0].alternatemobilenumber",
-      type: "textfield",
-      floatingLabelText: "PT_FORM3_ALT_MOBILE_NO",
-      hintText: "PT_FORM3_ALT_MOBILE_NO_PLACEHOLDER",
-      pattern: getPattern("MobileNo"),
-      errorMessage: "PT_MOBILE_NUMBER_ERROR_MESSAGE",
-      required: false,
     },
     designation: {
       id: "authority-designation",
@@ -96,7 +83,7 @@ const formConfig = {
             .join(", ")
             .replace(/^(,\s)+|(,\s)+$/g, "")
             .replace(/(,\s){2,}/g, ", ")
-            .replace(":", "");
+            .replace(":","");
           dispatch(setFieldProperty(formKey, "address", "value", correspondingAddress));
           dispatch(handleFieldChange(formKey, "address", correspondingAddress));
         } else {

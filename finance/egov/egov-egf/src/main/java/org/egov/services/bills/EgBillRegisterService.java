@@ -193,7 +193,7 @@ public class EgBillRegisterService extends PersistenceService<EgBillregister, Lo
             wfInitiator = getWorkflowInitiator(billregister);
 
         if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
-            if (wfInitiator.equals(userAssignment)) {
+            if (wfInitiator!=null &&wfInitiator.equals(userAssignment)) {
                 billregister.transition().end().withSenderName(user.getName())
                         .withComments(workflowBean.getApproverComments())
                         .withDateInfo(currentDate.toDate());
@@ -202,7 +202,7 @@ public class EgBillRegisterService extends PersistenceService<EgBillregister, Lo
                 billregister.transition().progressWithStateCopy().withSenderName(user.getName())
                         .withComments(workflowBean.getApproverComments())
                         .withStateValue(stateValue).withDateInfo(currentDate.toDate())
-                        .withOwner(wfInitiator.getPosition()).withNextAction(FinancialConstants.WF_STATE_EOA_Approval_Pending);
+                        .withOwner(wfInitiator==null?null:wfInitiator.getPosition()).withNextAction(FinancialConstants.WF_STATE_EOA_Approval_Pending);
             }
 
         } else if (FinancialConstants.BUTTONAPPROVE.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {

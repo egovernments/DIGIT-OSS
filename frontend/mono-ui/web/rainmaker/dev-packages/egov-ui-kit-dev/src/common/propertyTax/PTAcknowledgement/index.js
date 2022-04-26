@@ -134,7 +134,6 @@ class PTAcknowledgement extends React.Component {
         // generatePdfFromDiv("download", propertyId, "#property-review-form");
         this.download();
         //this.downloadAcknowledgementForm();
-        console.log("Download");
       },
       leftIcon: "assignment",
     };
@@ -144,7 +143,6 @@ class PTAcknowledgement extends React.Component {
       link: () => {
         this.print();
         // generatePdfFromDiv("print", propertyId, "#property-review-form");
-        //console.log("Print");
       },
       leftIcon: "book",
     };

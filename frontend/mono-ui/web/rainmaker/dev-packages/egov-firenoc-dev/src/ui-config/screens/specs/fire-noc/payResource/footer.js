@@ -307,7 +307,6 @@ const callBackForPay = async (state, dispatch) => {
 
   ReceiptBody.Receipt.push(finalReceiptData);
 
-  // console.log(ReceiptBody);
 
   //---------------- Create Receipt ------------------//
   if (isFormValid) {

@@ -105,35 +105,29 @@ const commonApplicantInformation = () => {
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath:
           "Property.ownersTemp[0].mobileNumber",
+        // props: {
+        //   style: {
+        //     maxWidth: "450px"
+        //   }
+        // },
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         }
       }),
-      alterMobileNo: getTextField({
-        label: {
-          labelName: "Mobile No.",
-          labelKey: "PT_FORM3_ALT_MOBILE_NO"
-        },
-        placeholder: {
-          labelName: "Enter Mobile No.",
-          labelKey: "PT_FORM3_ALT_MOBILE_NO_PLACEHOLDER"
-        },
-        required: false,
-        props: {
-          className: "applicant-details-error"
-        },
-        pattern: getPattern("MobileNo"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath:
-          "Property.ownersTemp[0].alternatemobilenumber",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        }
-      }),
+      // dummyDiv: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Div",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //     md: 6
+      //   },
+      //   props: {
+      //     disabled: true
+      //   }
+      // },
       guardianName: getTextField({
         label: {
           labelName: "Guardian's Name",
@@ -546,28 +540,6 @@ const institutionInformation = () => {
           required: true,
           pattern: getPattern("MobileNo"),
           jsonPath: "Property.institutionTemp.mobileNumber"
-        }), alterMobileNo: getTextField({
-          label: {
-            labelName: "Mobile No.",
-            labelKey: "PT_FORM3_ALT_MOBILE_NO"
-          },
-          placeholder: {
-            labelName: "Enter Mobile No.",
-            labelKey: "PT_FORM3_ALT_MOBILE_NO_PLACEHOLDER"
-          },
-          required: false,
-          props: {
-            className: "applicant-details-error"
-          },
-          pattern: getPattern("MobileNo"),
-          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-          jsonPath:
-            "Property.ownersTemp[0].alternatemobilenumber",
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          }
         }),
         authorisedLandline: getTextField({
           label: {

@@ -188,6 +188,7 @@ import com.jayway.jsonpath.JsonPath;
 @Service
 public class MicroserviceUtils {
 
+    private static final String ACCESS_TOKEN = "ACCESS_TOKEN";
     private static final Logger LOGGER = Logger.getLogger(MicroserviceUtils.class);
     private static final String CLIENT_ID = "client.id";
     private static final int DEFAULT_PAGE_SIZE = 100;
@@ -1284,13 +1285,18 @@ public class MicroserviceUtils {
 
     public void removeSessionFromRedis(String access_token, String sessionId) {
         LOGGER.info("Logout for authtoken : " + access_token + " and session : " + sessionId);
-        if (null != access_token && redisTemplate.hasKey(access_token)) {
-            sessionId = (String) redisTemplate.opsForHash().get(sessionId, sessionId);
-            if (sessionId != null) {
-                System.out.println("***********sessionId**** " + sessionId);
+        Object sessionIdFromRedis = redisTemplate.opsForHash().get("session_token_fetch:" + access_token, "session_id");
+        LOGGER.info("**Redis:: sessionID*****"+sessionIdFromRedis);
+        if (null != access_token && (redisTemplate.hasKey(access_token) || redisTemplate.hasKey("auth:"+access_token))) {
+            if (sessionIdFromRedis != null) {
+            	redisTemplate.delete(sessionId);
+            	sessionId = String.valueOf(sessionIdFromRedis);
+            	LOGGER.info("***********sessionId**** " + sessionId);
+                redisTemplate.delete(access_token);
+                redisTemplate.delete("auth:"+access_token);
                 redisTemplate.delete(sessionId);
-                System.out.println("spring:session:sessions:" + sessionId);
-                System.out.println("spring:session:sessions:expires:" + sessionId);
+                LOGGER.info("spring:session:sessions:" + sessionId);
+                LOGGER.info("spring:session:sessions:expires:" + sessionId);
                 redisTemplate.delete("spring:session:sessions:" + sessionId);
                 redisTemplate.delete("spring:session:sessions:expires:" + sessionId);
                 redisTemplate.opsForHash().delete(access_token, sessionId);
@@ -1303,18 +1309,18 @@ public class MicroserviceUtils {
 
     public void refreshToken(String oldToken, String newToken) {
         LOGGER.info("Refresh Token is called OLD::NEW" + oldToken + " :: " + newToken);
-        if (redisTemplate.hasKey(oldToken)) {
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(oldToken))) {
 
             while (redisTemplate.opsForList().size(oldToken) > 0) {
 
                 Object sessionId = redisTemplate.opsForList().leftPop(oldToken);
-                if (redisTemplate.hasKey(sessionId))
-                    if (oldToken.equals(redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"))) {
-                        redisTemplate.opsForHash().delete(sessionId, "ACCESS_TOKEN");
-                        redisTemplate.opsForHash().put(sessionId, "ACCESS_TOKEN", newToken);
-                        redisTemplate.delete(oldToken);
-                        redisTemplate.opsForValue().set(newToken, sessionId);
-                    }
+                if (Boolean.TRUE.equals(redisTemplate.hasKey(sessionId))
+                        && oldToken.equals(redisTemplate.opsForHash().get(sessionId, ACCESS_TOKEN))) {
+                    redisTemplate.opsForHash().delete(sessionId, ACCESS_TOKEN);
+                    redisTemplate.opsForHash().put(sessionId, ACCESS_TOKEN, newToken);
+                    redisTemplate.delete(oldToken);
+                    redisTemplate.opsForValue().set(newToken, sessionId);
+                }
                 redisTemplate.opsForList().leftPush(newToken, sessionId);
             }
             redisTemplate.delete(oldToken);
@@ -1383,6 +1389,9 @@ public class MicroserviceUtils {
         String ulbGrade = "";
         List<ModuleDetail> moduleDetailList = new ArrayList<>();
         String tenentId = getTenentId();
+        if(tenentId==null){
+        	tenentId="";
+        }
         try {
             this.prepareModuleDetails(moduleDetailList, "tenant", "tenants", "code", tenentId, String.class);
             Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailList, true, null, null), Map.class);
@@ -1614,7 +1623,7 @@ public class MicroserviceUtils {
     }
 
     public InstrumentAccountCode getInstrumentAccountGlCodeByType(String type) {
-        List<InstrumentAccountCode> list = null;
+        List<InstrumentAccountCode> list = new ArrayList<>();
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
         this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "InstrumentGLcodeMapping", "instrumenttype", type,
                 String.class);

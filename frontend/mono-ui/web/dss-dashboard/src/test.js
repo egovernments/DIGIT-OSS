@@ -11,3 +11,27 @@ let previousStartOf = moment(previous).startOf('quarter');
 let previousEndOf   = moment(previous).  endOf('quarter').add(1, 'day');
 
 
+console.log(
+	'Current FY',
+	moment().month(3).startOf('month').format("YY"),
+	'-',
+	moment().month(2).endOf('month').add(1, 'years').format("YY")
+);
+
+console.log(
+	'Previous FY',
+	moment(moment().subtract(2,'year')).month(3).startOf('month').format("YY"),
+	'-',
+	moment(moment().subtract(1,'year')).month(2).endOf('month').format("YY")
+);
+
+
+
+console.log(
+	'Previous FY',
+	
+	moment().month(3).startOf('month').format("YY"),
+	'-',
+	moment().month(2).endOf('month').add(1, 'years').format("YY")
+);
+

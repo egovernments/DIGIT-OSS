@@ -39,34 +39,32 @@ public class CryptoApiController{
     }
 
     @RequestMapping(value="/crypto/v1/_encrypt", method = RequestMethod.POST)
-    public ResponseEntity<Object> cryptoEncryptPost(@Valid @RequestBody EncryptionRequest encryptionRequest) throws Exception {
+    public ResponseEntity<Object> cryptoEncryptPost(@Valid @RequestBody EncryptionRequest encryptionRequest) {
         return new ResponseEntity<>(encryptionService.encrypt(encryptionRequest), HttpStatus.OK );
     }
 
     @RequestMapping(value="/crypto/v1/_decrypt", method = RequestMethod.POST)
-    public ResponseEntity<Object> cryptoDecryptPost(@Valid @RequestBody Object decryptionRequest) throws Exception {
+    public ResponseEntity<Object> cryptoDecryptPost(@Valid @RequestBody Object decryptionRequest) {
         return new ResponseEntity<>(encryptionService.decrypt(decryptionRequest), HttpStatus.OK );
     }
 
     @RequestMapping(value="/crypto/v1/_sign", method = RequestMethod.POST)
-    public ResponseEntity<SignResponse> cryptoSignPost(@Valid @RequestBody SignRequest signRequest) throws Exception {
+    public ResponseEntity<SignResponse> cryptoSignPost(@Valid @RequestBody SignRequest signRequest) {
         return new ResponseEntity<>(signatureService.hashAndSign(signRequest), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/crypto/v1/_verify", method = RequestMethod.POST)
-    public ResponseEntity<VerifyResponse> cryptoVerifyPost(@Valid @RequestBody VerifyRequest verifyRequest) throws Exception {
+    public ResponseEntity<VerifyResponse> cryptoVerifyPost(@Valid @RequestBody VerifyRequest verifyRequest) {
         return new ResponseEntity<>(signatureService.hashAndVerify(verifyRequest), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/crypto/v1/_rotateallkeys", method=RequestMethod.POST)
-    public ResponseEntity<RotateKeyResponse> cryptoRotateAllKeys(@Valid @RequestBody RotateKeyRequest rotateKeyRequest)
-            throws Exception {
+    public ResponseEntity<RotateKeyResponse> cryptoRotateAllKeys(@Valid @RequestBody RotateKeyRequest rotateKeyRequest) {
         return new ResponseEntity<RotateKeyResponse>(keyManagementService.rotateAllKeys(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/crypto/v1/_rotatekey", method=RequestMethod.POST)
-    public ResponseEntity<RotateKeyResponse> cryptoRotateKeys(@Valid @RequestBody RotateKeyRequest rotateKeyRequest) throws
-            Exception {
+    public ResponseEntity<RotateKeyResponse> cryptoRotateKeys(@Valid @RequestBody RotateKeyRequest rotateKeyRequest) {
         return new ResponseEntity<RotateKeyResponse>(keyManagementService.rotateKey(rotateKeyRequest), HttpStatus.OK);
     }
 

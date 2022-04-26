@@ -33,7 +33,7 @@ public class MeasurementDetail extends Measurement {
     public MeasurementDetail(DXFLWPolyline polyLine, Boolean smallSide) {
         this.polyLine = polyLine;
         area = Util.getPolyLineArea(polyLine);
-        if (smallSide) {
+        if (Boolean.TRUE.equals(smallSide)) {
             Util.setDimension(this, polyLine);
             colorCode = polyLine.getColor();
             length = BigDecimal.valueOf(polyLine.getLength());

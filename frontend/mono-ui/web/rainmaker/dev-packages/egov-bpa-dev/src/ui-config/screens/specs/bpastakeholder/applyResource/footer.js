@@ -913,11 +913,6 @@ export const updateDownloadandPrintMenu = (action, state, dispatch, status) => {
         state.screenConfiguration.preparedFinalObject.Licenses[0],
         "tenantId"
       )
-    },
-    {
-      key: "businessService",
-      value: "BPAREG"
-      
     }
   ];
   let receiptDownloadObject = {

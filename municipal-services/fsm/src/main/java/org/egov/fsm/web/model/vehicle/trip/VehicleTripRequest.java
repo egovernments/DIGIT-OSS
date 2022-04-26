@@ -1,7 +1,5 @@
 package org.egov.fsm.web.model.vehicle.trip;
 
-import java.util.List;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -33,7 +31,7 @@ public class VehicleTripRequest {
 	@NotNull
 	@Valid
 	@JsonProperty("vehicleTrip")
-	private List<VehicleTrip> vehicleTrip;
+	private VehicleTrip vehicleTrip;
 
 	
 	@JsonProperty("workflow")

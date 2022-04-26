@@ -207,7 +207,8 @@ public class EmployeeAssignmentReportPDFController {
             Log.error("Error while generating employee assignment report ", e);
         }
         final ReportOutput reportOutput = new ReportOutput();
-        reportOutput.setReportOutputData(outputBytes.toByteArray());
+        if(outputBytes != null)
+            reportOutput.setReportOutputData(outputBytes.toByteArray());
         final HttpHeaders headers = new HttpHeaders();
         if (contentType.equalsIgnoreCase("pdf")) {
             reportOutput.setReportFormat(ReportFormat.PDF);

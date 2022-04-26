@@ -143,6 +143,7 @@ const formConfig = {
       process.env.REACT_APP_NAME == "Citizen" ? set(action, "form.fields.propertyEntryType.visible", false) : set(action, "form.fields.propertyEntryType.visible", true)
       return action;
     } catch (e) {
+      console.log(e);
     }
   },
 };

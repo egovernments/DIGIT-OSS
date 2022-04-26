@@ -137,13 +137,6 @@ public class BPAConfiguration {
 	@Value("${notification.sms.enabled}")
 	private Boolean isSMSEnabled;
 
-	// Email
-	@Value("${kafka.topics.notification.email}")
-	private String emailNotifTopic;
-
-	@Value("${notification.email.enabled}")
-	private Boolean isEmailNotificationEnabled;
-
 	// Localization
 	@Value("${egov.localization.host}")
 	private String localizationHost;
@@ -156,9 +149,6 @@ public class BPAConfiguration {
 
 	@Value("${egov.localization.statelevel}")
 	private Boolean isLocalizationStateLevel;
-
-	@Value("${egov.localization.fallback.locale}")
-	private String fallBackLocale;
 
 	// Calculator
 	@Value("${egov.bpa.calculator.host}")
@@ -324,23 +314,4 @@ public class BPAConfiguration {
 
 	@Value("#{${workflowStatusFeeBusinessSrvMap}}")
 	private Map<String,Map<String,String>> workflowStatusFeeBusinessSrvMap;
-
-	@Value("${egov.collection.host}")
-	private String collectionHost;
-
-	@Value("${egov.collection.payment.search}")
-	private String paymentSearch;
-
-	@Value("${notification.url}")
-	private String notificationUrl;
-
-	@Value("${egov.download.receipt.link}")
-	private String receiptDownloadLink;
-
-	// url shortner
-	@Value("${egov.url.shortner.host}")
-	private String urlShortnerHost;
-
-	@Value("${egov.shortener.url}")
-	private String shortenerURL;
 }

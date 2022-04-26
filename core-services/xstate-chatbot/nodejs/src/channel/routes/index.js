@@ -12,7 +12,6 @@ router.post('/message', async (req, res) =>  {
         if(reformattedMessage != null)
             sessionManager.fromUser(reformattedMessage);        
     } catch(e) {
-        console.log(e);
     }
     res.end();
 });
@@ -23,7 +22,6 @@ router.post('/status', async (req, res) => {
         if(reformattedMessage != null)
             sessionManager.fromUser(reformattedMessage); 
     } catch(e) {
-        console.log(e);
     }
     res.end();
 });

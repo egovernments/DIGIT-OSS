@@ -1,5 +1,6 @@
 package org.egov.id.service;
 
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -51,6 +52,9 @@ public class IdGenerationService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private SecureRandom random;
+
     // by default 'idformat' will be taken from MDMS. Change value of 'ismdms.on' to 'false'
     // in application.properties to get data from DB instead.
     @Value("${idformat.from.mdms}")
@@ -73,7 +77,7 @@ public class IdGenerationService {
      * @throws Exception
      */
 
-    public IdGenerationResponse generateIdResponse(IdGenerationRequest idGenerationRequest) throws Exception {
+    public IdGenerationResponse generateIdResponse(IdGenerationRequest idGenerationRequest) {
 
         RequestInfo requestInfo = idGenerationRequest.getRequestInfo();
         List<IdRequest> idRequests = idGenerationRequest.getIdRequests();
@@ -106,7 +110,7 @@ public class IdGenerationService {
      * @return generatedId
      * @throws Exception
      */
-    private List generateIdFromIdRequest(IdRequest idRequest, RequestInfo requestInfo) throws Exception {
+    private List generateIdFromIdRequest(IdRequest idRequest, RequestInfo requestInfo) {
 
         List<String> generatedId = new LinkedList<>();
         boolean autoCreateNewSeqFlag = false;
@@ -141,7 +145,7 @@ public class IdGenerationService {
      * @return generatedId
      * @throws Exception
      */
-    private String getIdFormatFinal(IdRequest idRequest, RequestInfo requestInfo) throws Exception {
+    private String getIdFormatFinal(IdRequest idRequest, RequestInfo requestInfo) {
 
         String idFormat = null;
         try{
@@ -168,7 +172,7 @@ public class IdGenerationService {
      * @return idFormat
      * @throws Exception
      */
-    private String getIdFormatfromDB(IdRequest idRequest, RequestInfo requestInfo) throws Exception {
+    private String getIdFormatfromDB(IdRequest idRequest, RequestInfo requestInfo) {
         // connection and prepared statement
 
         String idFormat = null;
@@ -205,7 +209,7 @@ public class IdGenerationService {
      * @throws Exception
      */
 
-    private List getFormattedId(IdRequest idRequest, RequestInfo requestInfo, boolean autoCreateNewSeqFlag) throws Exception {
+    private List getFormattedId(IdRequest idRequest, RequestInfo requestInfo, boolean autoCreateNewSeqFlag) {
         List<String> idFormatList = new LinkedList();
         String idFormat = idRequest.getFormat();
 
@@ -293,7 +297,7 @@ public class IdGenerationService {
                 SimpleDateFormat formatter = new SimpleDateFormat(yearPattern.trim());
                 formattedYear = formatter.format(date);
 
-                if (financialYearPatternArray[0] == yearPattern) {
+                if (financialYearPatternArray[0].equals(yearPattern)) {
                     if (month > 3) {
                         preYear = Integer.valueOf(formattedYear);
                     } else {
@@ -353,7 +357,6 @@ public class IdGenerationService {
      * @return randomTxt
      */
     private String generateRandomText(String regex, RequestInfo requestInfo) {
-        Random random = new Random();
         List<String> matchList = new ArrayList<String>();
         int length = 2;// default digits length
         try {
@@ -400,7 +403,7 @@ public class IdGenerationService {
      * @param sequenceName
      */
 
-    private void createSequenceInDb(String sequenceName) throws Exception {
+    private void createSequenceInDb(String sequenceName) {
 
         StringBuilder query = new StringBuilder("CREATE SEQUENCE ");
         try {
@@ -418,7 +421,7 @@ public class IdGenerationService {
      * @param requestInfo
      * @return seqNumber
      */
-    private List<String> generateSequenceNumber(String sequenceName, RequestInfo requestInfo, IdRequest idRequest,boolean autoCreateNewSeqFlag) throws Exception {
+    private List<String> generateSequenceNumber(String sequenceName, RequestInfo requestInfo, IdRequest idRequest,boolean autoCreateNewSeqFlag)  {
         Integer count = getCount(idRequest);
         List<String> sequenceList = new LinkedList<>();
         List<String> sequenceLists = new LinkedList<>();

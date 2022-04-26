@@ -145,7 +145,7 @@ public class CityService {
             } else {
                 if (getCityByURL(getDomainName()) != null)
                     cityPrefCache.putAll(cityPrefCacheKey(), getCityByURL(getDomainName()).toMap());
-                else
+                else if(cityEntries != null && !cityEntries.isEmpty())
                     cityPrefCache.putAll(cityPrefCacheKey(), cityEntries.get(0).toMap());
             }
             // cityPrefCache.putAll(cityPrefCacheKey(), getCityByURL(getDomainName()).toMap());

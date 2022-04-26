@@ -138,7 +138,7 @@ public class DishonoredChequeReportAction extends BaseFormAction {
         try {
             dishonoredChequeDisplayList = dishonoredCheque.getDishonoredChequeDetails(dishonoredChequeReport);
         } catch (final HibernateException | ParseException e) {
-
+        	LOGGER.error("Parse exception");
         }
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("DishonoredChequeAction | list | End");

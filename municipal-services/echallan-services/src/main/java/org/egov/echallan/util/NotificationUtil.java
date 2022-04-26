@@ -75,9 +75,9 @@ public class NotificationUtil {
 
 	private String getCancelMsg(RequestInfo requestInfo,Challan challan, String message) {
 		 HashMap<String, String> businessMsg  =  fetchContentFromLocalization(requestInfo,challan.getTenantId(),MODULE,formatCodes(challan.getBusinessService()));
-		 message = message.replace("{citizen}",challan.getCitizen().getName());
-	     message = message.replace("{challanno}", challan.getChallanNo());
-	     message = message.replace("{service}", businessMsg.get(MSG_KEY));
+		 message = message.replace("<citizen>",challan.getCitizen().getName());
+	     message = message.replace("<challanno>", challan.getChallanNo());
+	     message = message.replace("<service>", businessMsg.get(MSG_KEY));
 	     return message;
 	}
 	
@@ -97,22 +97,22 @@ public class NotificationUtil {
 		
 		Calendar tocal = Calendar.getInstance();
 		tocal.setTimeInMillis((long) challan.getTaxPeriodTo());
-        message = message.replace("{citizen}",challan.getCitizen().getName());
-        message = message.replace("{challanno}", challan.getChallanNo());
-        message = message.replace("{service}", businessMsg.get(MSG_KEY));
-        message = message.replace("{fromdate}", " "+ fromcal.get(Calendar.DATE) + "/" + (fromcal.get(Calendar.MONTH)+1) + "/" + fromcal.get(Calendar.YEAR)+ " ".toUpperCase());
-        message = message.replace("{todate}", " "+ tocal.get(Calendar.DATE) + "/" + (tocal.get(Calendar.MONTH)+1) + "/" + tocal.get(Calendar.YEAR)+ " ".toUpperCase());
+        message = message.replace("<citizen>",challan.getCitizen().getName());
+        message = message.replace("<challanno>", challan.getChallanNo());
+        message = message.replace("<service>", businessMsg.get(MSG_KEY));
+        message = message.replace("<fromdate>", " "+ fromcal.get(Calendar.DATE) + "/" + (fromcal.get(Calendar.MONTH)+1) + "/" + fromcal.get(Calendar.YEAR)+ " ".toUpperCase());
+        message = message.replace("<todate>", " "+ tocal.get(Calendar.DATE) + "/" + (tocal.get(Calendar.MONTH)+1) + "/" + tocal.get(Calendar.YEAR)+ " ".toUpperCase());
 
         
-        message = message.replace("{duedate}", " "+ cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR)+ " ".toUpperCase());
-        message = message.replace("{amount}", amountToBePaid.toString());
+        message = message.replace("<duedate>", " "+ cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR)+ " ".toUpperCase());
+        message = message.replace("<amount>", amountToBePaid.toString());
         String UIHost = config.getUiAppHost();
 		String paymentPath = config.getPayLinkSMS();
 		paymentPath = paymentPath.replace("$consumercode",challan.getChallanNo());
 		paymentPath = paymentPath.replace("$tenantId",challan.getTenantId());
 		paymentPath = paymentPath.replace("$businessservice",challan.getBusinessService());
 		String finalPath = UIHost + paymentPath;
-		message = message.replace("{Link}",getShortenedUrl(finalPath));
+		message = message.replace("<Link>",getShortenedUrl(finalPath));
 
         return message;
     }
@@ -143,7 +143,6 @@ public class NotificationUtil {
 		request.put("RequestInfo", requestInfo);
 		try {
 			result = restTemplate.postForObject(uri.toString(), request, Map.class);
-			System.out.println("result=="+result);
 			Configuration suppressExceptionConfiguration = Configuration.defaultConfiguration().addOptions(Option.SUPPRESS_EXCEPTIONS);
 		    ReadContext jsonData = JsonPath.using(suppressExceptionConfiguration).parse(result);
 
@@ -204,7 +203,6 @@ public class NotificationUtil {
 	private String getMessageTemplate(String notificationCode, String localizationMessage) {
 		String path = "$..messages[?(@.code==\"{}\")].message";
 		path = path.replace("{}", notificationCode);
-		System.out.println("notificationCode=="+notificationCode);
 		String message = null;
 		try {
 			Object messageObj = JsonPath.parse(localizationMessage).read(path);

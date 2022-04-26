@@ -985,7 +985,7 @@ public class PaymentAction extends BasePaymentAction {
                 date = df.parse(cutOffDateconfigValue.get(0).getValue());
                 cutOffDate = formatter.format(date);
             } catch (final ParseException e) {
-
+               LOGGER.error("Parse exception.");
             }
         try {
             final String paymentMd = parameters.get("paymentMode")[0];

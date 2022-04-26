@@ -357,9 +357,8 @@ public class BudgetLoadAction extends BaseFormAction {
     }
 
     private void prepareOutPutFileWithFinalStatus(List<BudgetUpload> budgetUploadList) {
-        FileInputStream fsIP;
-        try {
-            fsIP = new FileInputStream(budgetInXls);
+
+        try(FileInputStream fsIP = new FileInputStream(budgetInXls);) {
 
             Map<String, String> errorsMap = new HashMap<String, String>();
             final POIFSFileSystem fs = new POIFSFileSystem(fsIP);
@@ -595,8 +594,12 @@ public class BudgetLoadAction extends BaseFormAction {
                         : getStrValue(row.getCell(REAMOUNT_CELL_INDEX)))));
                 budget.setBeAmount(BigDecimal.valueOf(Long.valueOf(getStrValue(row.getCell(BEAMOUNT_CELL_INDEX)) == null ? "0"
                         : getStrValue(row.getCell(BEAMOUNT_CELL_INDEX)))));
-                budget.setPlanningPercentage(getNumericValue(row.getCell(PLANNINGPERCENTAGE_CELL_INDEX)) == null ? 0
-                        : getNumericValue(row.getCell(PLANNINGPERCENTAGE_CELL_INDEX)).longValue());
+                BigDecimal numericValue = getNumericValue(row.getCell(PLANNINGPERCENTAGE_CELL_INDEX));
+                Long planningPercentage = 0l;
+                if (numericValue != null)
+                    planningPercentage = numericValue.longValue();
+                budget.setPlanningPercentage(planningPercentage);
+
             }
         } catch (final ValidationException e)
         {
@@ -643,7 +646,7 @@ public class BudgetLoadAction extends BaseFormAction {
     }
 
     private String getStrValue(final HSSFCell cell) {
-        if (cell == null && cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
+        if (cell == null || cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
             return null;
         double numericCellValue = 0d;
         String strValue = "";
@@ -663,7 +666,7 @@ public class BudgetLoadAction extends BaseFormAction {
     }
 
     private BigDecimal getNumericValue(final HSSFCell cell) {
-        if (cell == null && cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
+        if (cell == null || cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
             return null;
         double numericCellValue = 0d;
         BigDecimal bigDecimalValue = BigDecimal.ZERO;

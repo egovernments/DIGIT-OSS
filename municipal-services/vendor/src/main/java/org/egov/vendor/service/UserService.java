@@ -62,6 +62,12 @@ public class UserService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	private static final String ERROR_MANDATORY_PARAMETERS = "Dob, relationShip, relation ship name and gender are mandaotry !";
+	private static final String ILLEGAL_ARGUMENT_EXCEPTION = "IllegalArgumentException";
+	private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
+	private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+
+
 	/**
 	 * 
 	 * @param vendorRequest
@@ -101,7 +107,7 @@ public class UserService {
 					uri.append(config.getUserHost()).append(config.getUserContextPath())
 							.append(config.getUserUpdateEndpoint());
 					UserDetailResponse userResponse = ownerCall(userRequest, uri);
-					if (userResponse != null || !CollectionUtils.isEmpty(userResponse.getUser())) {
+					if (userResponse != null && !CollectionUtils.isEmpty(userResponse.getUser())) {
 						owner = userResponse.getUser().get(0);
 					} else {
 						throw new CustomException(VendorErrorConstants.INVALID_OWNER_ERROR,
@@ -216,7 +222,7 @@ public class UserService {
 
 		if (!isUserValid(owner)) {
 			throw new CustomException(VendorErrorConstants.INVALID_OWNER_ERROR,
-					"Dob, relationShip, relation ship name and gender are mandaotry !");
+					ERROR_MANDATORY_PARAMETERS);
 		}
 
 		if (owner.getRoles() != null) {
@@ -294,14 +300,13 @@ public class UserService {
 		else if (uri.toString().contains(config.getUserCreateEndpoint()))
 			dobFormat = "dd/MM/yyyy";
 		try {
-//			System.out.println("user search url: " + uri + userRequest);
 
 			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, userRequest);
 			parseResponse(responseMap, dobFormat);
 			UserDetailResponse userDetailResponse = mapper.convertValue(responseMap, UserDetailResponse.class);
 			return userDetailResponse;
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in userCall");
+			throw new CustomException(ILLEGAL_ARGUMENT_EXCEPTION, "ObjectMapper not able to convertValue in userCall");
 		}
 	}
 
@@ -316,7 +321,7 @@ public class UserService {
 
 		if (!isUserValid(owner)) {
 			throw new CustomException(VendorErrorConstants.INVALID_OWNER_ERROR,
-					"Dob, relationShip, relation ship name and gender are mandaotry !");
+					ERROR_MANDATORY_PARAMETERS);
 		}
 
 		if (owner.getRoles() != null) {
@@ -349,7 +354,7 @@ public class UserService {
 			}
 			return newOwner;
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException",
+			throw new CustomException(ILLEGAL_ARGUMENT_EXCEPTION,
 					"ObjectMapper not able to convertValue in create vendor owner");
 		}
 	}
@@ -365,7 +370,7 @@ public class UserService {
 
 		if (!isUserValid(driver)) {
 			throw new CustomException(VendorErrorConstants.INVALID_DRIVER_ERROR,
-					"Dob, relationShip, relation ship name and gender are mandaotry !");
+					ERROR_MANDATORY_PARAMETERS);
 		}
 		if (driver.getRoles() != null) {
 			driver.getRoles().add(getRolObj(config.getDsoDriver(), config.getDsoDriverRoleName()));
@@ -395,7 +400,7 @@ public class UserService {
 
 		if (!isUserValid(driver)) {
 			throw new CustomException(VendorErrorConstants.INVALID_DRIVER_ERROR,
-					"Dob, relationShip, relation ship name and gender are mandaotry !");
+					ERROR_MANDATORY_PARAMETERS);
 		}
 		if (driver.getRoles() != null) {
 			driver.getRoles().add(getRolObj(config.getDsoDriver(), config.getDsoDriverRoleName()));
@@ -427,7 +432,7 @@ public class UserService {
 			}
 			return newDriver;
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException",
+			throw new CustomException(ILLEGAL_ARGUMENT_EXCEPTION,
 					"ObjectMapper not able to convertValue in create vendor owner");
 		}
 	}
@@ -517,7 +522,7 @@ public class UserService {
 			UserDetailResponse ownerDetailResponse = mapper.convertValue(responseMap, UserDetailResponse.class);
 			return ownerDetailResponse;
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in ownerCall");
+			throw new CustomException(ILLEGAL_ARGUMENT_EXCEPTION, "ObjectMapper not able to convertValue in ownerCall");
 		}
 
 	}
@@ -529,12 +534,12 @@ public class UserService {
 		if (owners != null) {
 			owners.forEach(map -> {
 				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get("lastModifiedDate") != null)
-					map.put("lastModifiedDate", dateTolong((String) map.get("lastModifiedDate"), format1));
+				if ((String) map.get(GET_LAST_MODIFIED_DATE) != null)
+					map.put(GET_LAST_MODIFIED_DATE, dateTolong((String) map.get(GET_LAST_MODIFIED_DATE), format1));
 				if ((String) map.get("dob") != null)
 					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-				if ((String) map.get("pwdExpiryDate") != null)
-					map.put("pwdExpiryDate", dateTolong((String) map.get("pwdExpiryDate"), format1));
+				if ((String) map.get(GET_PWD_EXPIRY_DATE) != null)
+					map.put(GET_PWD_EXPIRY_DATE, dateTolong((String) map.get(GET_PWD_EXPIRY_DATE), format1));
 			});
 		}
 	}
@@ -547,7 +552,10 @@ public class UserService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return d.getTime();
+		if(d != null){
+			return d.getTime();
+		}
+		return null;
 	}
 
 	public UserDetailResponse getOwner(VendorSearchCriteria criteria, RequestInfo requestInfo) {

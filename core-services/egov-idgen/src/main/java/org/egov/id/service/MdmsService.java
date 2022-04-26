@@ -19,6 +19,7 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.log4j.Log4j;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @Log4j
@@ -36,6 +37,7 @@ public class MdmsService {
     private static final String formatMaster = "IdFormat";
     private static final String formatModule = "common-masters";
 
+    private static final String CUSTOM_EXCEPTION_PARSING_ERROR = "PARSING ERROR";
 
     public MdmsResponse getMasterData(RequestInfo requestInfo, String tenantId,
                                       Map<String, List<MasterDetail>> masterDetails) {
@@ -64,16 +66,16 @@ public class MdmsService {
         Map<String, String> getCity = doMdmsServiceCall(requestInfo, idRequest);
         String cityCode = null;
         try {
-            if (getCity != null) {
+            if (!CollectionUtils.isEmpty(getCity)) {
                 cityCode = getCity.get(tenantMaster);
             }
             if(cityCode== null){
-                throw new CustomException("PARSING ERROR", "City code is Null/not valid");
+                throw new CustomException(CUSTOM_EXCEPTION_PARSING_ERROR, "City code is Null/not valid");
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             log.error("Error occurred while fetching city code", e);
-            throw new CustomException("PARSING ERROR", "Failed to get citycode from MDMS");
+            throw new CustomException(CUSTOM_EXCEPTION_PARSING_ERROR, "Failed to get citycode from MDMS");
         }
         return cityCode;
     }
@@ -91,13 +93,13 @@ public class MdmsService {
         Map<String, String> getIdFormat = doMdmsServiceCall(requestInfo, idRequest);
         String idFormat = null;
         try {
-            if (getIdFormat != null) {
+            if (!CollectionUtils.isEmpty(getIdFormat)) {
                 idFormat = getIdFormat.get(formatMaster);
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             log.error("Error while fetching id format", e);
-            throw new CustomException("PARSING ERROR", "Failed to get formatid from MDMS");
+            throw new CustomException(CUSTOM_EXCEPTION_PARSING_ERROR, "Failed to get formatid from MDMS");
         }
         return idFormat;
     }
@@ -163,7 +165,7 @@ public class MdmsService {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             log.error("MDMS Fetch failed", e);
-            throw new CustomException("PARSING ERROR", "Failed to get citycode/formatid from MDMS");
+            throw new CustomException(CUSTOM_EXCEPTION_PARSING_ERROR, "Failed to get citycode/formatid from MDMS");
         }
         Map<String, String> mdmsCallMap = new HashMap();
         mdmsCallMap.put(formatMaster, idFormatFromMdms);

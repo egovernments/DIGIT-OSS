@@ -422,7 +422,9 @@ export const generateBillAmendPdf = async (Amendments, tenantId, mode = 'downloa
           res.filestoreIds.map(fileStoreId => {
             downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId)
           })
-        } 
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
       });
   } catch (exception) {
     alert('Some Error Occured while downloading Acknowledgement form!');
@@ -449,6 +451,7 @@ export const getSewerageDetails = async (queryObject) => {
     }
 
   } catch (error) {
+    console.log(error)
   }
 }
 
@@ -469,5 +472,6 @@ export const getWaterDetails = async (queryObject) => {
       return response;
     }
   } catch (error) {
+    console.log(error)
   }
 }

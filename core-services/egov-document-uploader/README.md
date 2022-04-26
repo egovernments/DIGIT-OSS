@@ -1,1 +1,0 @@
-# eGov Document Uploader service

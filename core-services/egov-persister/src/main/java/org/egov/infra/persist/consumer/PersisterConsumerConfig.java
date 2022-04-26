@@ -51,6 +51,8 @@ public class PersisterConsumerConfig {
 
     private Set<String> topics = new HashSet<>();
 
+    private static final String LOG_CONTAINER_COULDNT_BE_STARTED = "Container couldn't be started: ";
+
     @PostConstruct
     public void setTopics(){
         topicMap.getTopicMap().keySet().forEach(topic -> {
@@ -110,7 +112,7 @@ public class PersisterConsumerConfig {
         try {
             container = container();
         } catch (Exception e) {
-            log.error("Container couldn't be started: ",e);
+            log.error(LOG_CONTAINER_COULDNT_BE_STARTED,e);
             return false;
         }
         container.start();
@@ -124,7 +126,7 @@ public class PersisterConsumerConfig {
         try {
             container = container();
         } catch (Exception e) {
-            log.error("Container couldn't be started: ",e);
+            log.error(LOG_CONTAINER_COULDNT_BE_STARTED,e);
             return false;
         }
         container.stop();
@@ -138,7 +140,7 @@ public class PersisterConsumerConfig {
         try {
             container = container();
         } catch (Exception e) {
-            log.error("Container couldn't be started: ",e);
+            log.error(LOG_CONTAINER_COULDNT_BE_STARTED,e);
             return false;
         }
         container.start();

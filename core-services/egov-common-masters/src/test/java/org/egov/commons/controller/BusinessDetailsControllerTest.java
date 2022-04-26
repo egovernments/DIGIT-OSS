@@ -129,7 +129,6 @@ public class BusinessDetailsControllerTest {
 	}
 
     private List<BusinessDetails> getBusinessDetails() {
-        List<BusinessDetails> businessDetails = new ArrayList<BusinessDetails>();
         BusinessDetails businessDetail1 = BusinessDetails.builder().id(1L).code("TL")
                     .name("Trade Licence").active(true).businessCategory(1L).businessType("C")
                     .businessUrl("/receipts/receipt-create.action").voucherCreation(true).isVoucherApproved(true)
@@ -149,11 +148,6 @@ public class BusinessDetailsControllerTest {
 		User userInfo = User.builder().id(1L).build();
 		RequestInfo requestInfo = RequestInfo.builder().apiId("org.egov.collection").ver("1.0").action("POST")
 				.did("4354648646").key("xyz").msgId("654654").authToken("345678f").userInfo(userInfo).build();
-		BusinessDetails detailsRequestInfo = BusinessDetails.builder().id(1L).code("TLM")
-				.name("Trade Licence Mutation").active(true).businessCategory(1L).businessType("C")
-				.callBackForApportioning(true).businessUrl("/receipts/receipt-create.action").voucherCreation(true)
-				.isVoucherApproved(true).ordernumber(2).fund("12").function("123").fundSource("234").functionary("456")
-				.department("56").tenantId("default").accountDetails(getListOfModelAccountDetailsForUpdate()).build();
 		return BusinessDetailsRequest.builder().requestInfo(requestInfo).businessDetails(getBusinessDetails()).build();
 	}
 
@@ -168,10 +162,6 @@ public class BusinessDetailsControllerTest {
 				.businessUrl("/receipts/receipt-create.action").voucherCreation(true).isVoucherApproved(true)
 				.ordernumber(2).fund("12").function("123").fundSource("234").functionary("456").department("56")
 				.tenantId("default").businessCategory(1L).build();
-		org.egov.commons.model.BusinessDetails details = org.egov.commons.model.BusinessDetails.builder().id(1L)
-				.build();
-		org.egov.commons.model.BusinessDetails details12 = org.egov.commons.model.BusinessDetails.builder().id(2L)
-				.build();
 		List<org.egov.commons.model.BusinessDetails> listBusinessDetails = Arrays.asList(details1, details2);
 		org.egov.commons.model.BusinessAccountDetails account1 = org.egov.commons.model.BusinessAccountDetails.builder()
 				.id(1L).chartOfAccount(56L).amount(1000.0).tenantId("default").businessDetails(1L).build();

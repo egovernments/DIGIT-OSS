@@ -29,6 +29,8 @@ public class BPARowMapper implements ResultSetExtractor<List<BPA>> {
 	@Autowired
 	private ObjectMapper mapper;
 
+	private static final String GET_STRING_ADDITION_DETAILS = "additionalDetails";
+
 	/**
 	 * extract the data from the resultset and prepare the BPA Object
 	 * @see org.springframework.jdbc.core.ResultSetExtractor#extractData(java.sql.ResultSet)
@@ -51,8 +53,8 @@ public class BPARowMapper implements ResultSetExtractor<List<BPA>> {
 					lastModifiedTime = null;
 				}
 
-				Object additionalDetails = new Gson().fromJson(rs.getString("additionalDetails").equals("{}")
-						|| rs.getString("additionalDetails").equals("null") ? null : rs.getString("additionalDetails"),
+				Object additionalDetails = new Gson().fromJson(rs.getString(GET_STRING_ADDITION_DETAILS).equals("{}")
+						|| rs.getString(GET_STRING_ADDITION_DETAILS).equals("null") ? null : rs.getString(GET_STRING_ADDITION_DETAILS),
 						Object.class);
 				
 				AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("bpa_createdBy"))

@@ -7,7 +7,6 @@ import get from "lodash/get";
 import some from "lodash/some";
 
 const calculalte = async (req, res, pool, next) => {
-  console.log("calculalte");
   let errors = validateCalculationReq(req.body);
   if (errors.length <= 0) errors = await calculateValidate(req.body, errors);
 

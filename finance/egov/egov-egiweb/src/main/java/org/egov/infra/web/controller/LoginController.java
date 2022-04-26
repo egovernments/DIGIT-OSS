@@ -49,6 +49,7 @@
 package org.egov.infra.web.controller;
 
 import org.apache.http.HttpStatus;
+import org.apache.log4j.Logger;
 import org.egov.infra.admin.common.service.IdentityRecoveryService;
 import org.egov.infra.admin.master.entity.Location;
 import org.egov.infra.admin.master.service.LocationService;
@@ -69,6 +70,8 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/login")
 public class LoginController {
+	
+	private static final Logger LOGGER = Logger.getLogger(LoginController.class);
 
     @Autowired
     private IdentityRecoveryService identityRecoveryService;
@@ -123,7 +126,7 @@ public class LoginController {
     @PostMapping
     public String login() {
     
-    	System.out.println("***********EGI WEB LOGIN PROCESSING**************");
+    	LOGGER.info("***********EGI WEB LOGIN PROCESSING**************");
     	return "home";
     }
 }

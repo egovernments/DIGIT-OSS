@@ -45,6 +45,9 @@ public class RecoveryControllerTest {
     @Captor
     private ArgumentCaptor<List<Recovery>> captor;
 
+    private static final String DEFAULT="default";
+
+
     private RequestJsonReader resources = new RequestJsonReader();
 
     @Test
@@ -103,7 +106,7 @@ public class RecoveryControllerTest {
     private List<Recovery> getRecoverys() {
         List<Recovery> recoverys = new ArrayList<Recovery>();
         Recovery recovery = Recovery.builder().name("name").code("code").type("M").mode('M').remittanceMode('M').active(true).build();
-        recovery.setTenantId("default");
+        recovery.setTenantId(DEFAULT);
         recovery.setChartOfAccount(getCOAccount());
         recovery.setRemitted("S");
         recovery.setIfscCode("SBIN0005532");
@@ -116,14 +119,14 @@ public class RecoveryControllerTest {
     private ChartOfAccount getCOAccount() {
         ChartOfAccount chartOfAccount = new ChartOfAccount();
         chartOfAccount.setGlcode("341");
-        chartOfAccount.setTenantId("default");
+        chartOfAccount.setTenantId(DEFAULT);
         return chartOfAccount;
     }
 
     private List<Recovery> getUpdateRecoverys() {
         List<Recovery> recoverys = new ArrayList<Recovery>();
         Recovery recovery = Recovery.builder().name("nameU").code("codeU").type("M").mode('M').remittanceMode('M').active(true).build();
-        recovery.setTenantId("default");
+        recovery.setTenantId(DEFAULT);
         recovery.setChartOfAccount(getCOAccount());
         recovery.setRemitted("S");
         recovery.setIfscCode("SBIN0005532");

@@ -71,7 +71,7 @@ public class EmployeeValidator {
 
 	public Map<String, List<String>> getBoundaryList(RequestInfo requestInfo,Employee employee){
 		List<String> boundarytList = new ArrayList<>();
-		Map<String, List<String>> eachMasterMap = new HashMap<>();
+		Map<String, List<String>> eachMasterMap;
 		Map<String, List<String>> masterData = new HashMap<>();
 		if(!CollectionUtils.isEmpty(employee.getJurisdictions())){
 			for(Jurisdiction jurisdiction: employee.getJurisdictions()){
@@ -115,7 +115,7 @@ public class EmployeeValidator {
 	public void validateSearchRequest(RequestInfo requestInfo, EmployeeSearchCriteria criteria) {
 		Map<String, String> errorMap = new HashMap<>();
 
-		if(requestInfo.getUserInfo().getType().equalsIgnoreCase(CITIZEN_TYPE_CODE) && !CollectionUtils.isEmpty(criteria.getIds()))
+		if(requestInfo.getUserInfo().getType().equalsIgnoreCase(CITIZEN_TYPE_CODE) && CollectionUtils.isEmpty(criteria.getIds()))
 			errorMap.put(ErrorConstants.HRMS_INVALID_SEARCH_CITIZEN_CODE, ErrorConstants.HRMS_INVALID_SEARCH_CITIZEN_MSG);
 
 		if(criteria.isCriteriaEmpty(criteria)) {

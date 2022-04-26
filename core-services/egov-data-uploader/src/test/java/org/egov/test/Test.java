@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.dataupload.model.Document;
 import org.egov.dataupload.model.UploadDefinition;
 import org.egov.dataupload.utils.DataUploadUtils;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Ignore
 public class Test {
 
@@ -25,7 +27,7 @@ public class Test {
                 ("C:\\Users\\Nithin\\Documents\\eGov\\egov-services\\core\\egov-data-uploader\\src\\main\\resources" +
                         "\\Immovable_Asset_Template (1).xls"));
         List<Integer> integers = Arrays.asList(0, 3);
-        System.out.println(DataUploadUtils.groupRowsByIndexes(document.getRows(), integers));
+        log.info(DataUploadUtils.groupRowsByIndexes(document.getRows(), integers).toString());
 
     }
 
@@ -46,11 +48,10 @@ public class Test {
         ObjectMapper mapper = new ObjectMapper();
         String json = "{\"RequestInfo\": null,\"Asset\":{\"anticipatedLife\":15,\"orderNumber\":\"\"," +
                 "\"orderDate\":\"\",\"wipReferenceNo\":\"\",\"acquiredFrom\":\"\",\"warrantyAvailable\":false,\"securityDepositRetained\":0,\"securityDepositRealized\":0,\"acquisitionDate\":1417153591000,\"originalValue\":0,\"address\":\"\",\"longitude\":\"\",\"latitude\":\"\",\"tenantId\":\"default\",\"name\":\"corpoaration land\",\"oldCode\":\"oldCodecorpland\",\"department\":{\"id\":null,\"name\":null,\"code\":\"TP\"},\"assetCategory\":{\"name\":\"Open Land\",\"code\":\"043\"},\"modeOfAcquisition\":{\"code\":\"ACQUIRED\"},\"grossValue\":7000000,\"accumulatedDepreciationAccount\":45653245,\"revaluationReserveAccount\":\"\",\"depreciationExpenseAccount\":\"\",\"assetAccount\":\"\",\"description\":\"trucks\",\"dateOfCreation\":13112017,\"defectLiabilityPeriod\":{\"year\":\"1\",\"month\":\"2\",\"day\":\"3\"},\"location\":null,\"fundSource\":null,\"openingDate\":123455656,\"landDetails\":[{}]}}\n";
-        System.out.println( JsonPath.read(json, "$.155").toString());
+        log.info( JsonPath.read(json, "$.155").toString());
 //        JsonNode tree = mapper.readTree(json);
 //        StringBuilder builder = new StringBuilder();
 //        process(tree, new Object(), builder);
-//        System.out.println(builder.toString());
     }
 
 
@@ -58,7 +59,7 @@ public class Test {
         if(!node.get("dependantRequest").isNull()) {
             process(node.get("dependantRequest"), result, message);
         }
-        System.out.println(result);
+        log.info(result.toString());
         result = node.get("isParentChild").asBoolean();
         message.append(node.get("uri"));
 
@@ -69,15 +70,7 @@ public class Test {
         ObjectMapper mapper = new ObjectMapper();
         UploadDefinition definition = mapper.readValue(new FileInputStream("C:\\Users\\Nithin\\Documents\\eGov\\egov-services\\core\\egov-data-uploader\\src\\main\\resources" +
                 "\\assets.json"), UploadDefinition.class);
-        System.out.println(definition);
+        log.info(definition.toString());
     }
 
-    @org.junit.Test
-    public void name() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Object> list1 = objectMapper.readValue("[{\"code\":\"EMPLOYEE\"}]", List.class);
-        List<Object> list2 = objectMapper.readValue("[{\"code\":\"EMPLOYEE\"}]", List.class);
-        System.out.println(list1.get(0).getClass());
-        System.out.println(list1.containsAll(list2));
-    }
 }

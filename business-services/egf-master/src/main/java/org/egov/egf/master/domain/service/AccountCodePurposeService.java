@@ -36,6 +36,8 @@ public class AccountCodePurposeService {
 	@Autowired
 	private SmartValidator validator;
 
+	private String ACCOUNT_CODE_PURPOSES="accountcodepurposes";
+
 	@Transactional
 	public List<AccountCodePurpose> create(List<AccountCodePurpose> accountCodePurposes, BindingResult errors,
 			RequestInfo requestInfo) {
@@ -95,7 +97,7 @@ public class AccountCodePurposeService {
 				break;
 			case ACTION_CREATE:
 				if (accountcodepurposes == null) {
-					throw new InvalidDataException("accountcodepurposes", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(ACCOUNT_CODE_PURPOSES, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountCodePurpose accountCodePurpose : accountcodepurposes) {
 					validator.validate(accountCodePurpose, errors);
@@ -109,7 +111,7 @@ public class AccountCodePurposeService {
 				break;
 			case ACTION_UPDATE:
 				if (accountcodepurposes == null) {
-					throw new InvalidDataException("accountcodepurposes", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(ACCOUNT_CODE_PURPOSES, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountCodePurpose accountCodePurpose : accountcodepurposes) {
 					if (accountCodePurpose.getId() == null) {
@@ -127,7 +129,7 @@ public class AccountCodePurposeService {
 				break;
 			case Constants.ACTION_SEARCH:
 				if (accountcodepurposes == null) {
-					throw new InvalidDataException("accountcodepurposes", ErrorCode.NOT_NULL.getCode(), null);
+					throw new InvalidDataException(ACCOUNT_CODE_PURPOSES, ErrorCode.NOT_NULL.getCode(), null);
 				}
 				for (AccountCodePurpose accountcodepurpose : accountcodepurposes) {
 					if (accountcodepurpose.getTenantId() == null) {

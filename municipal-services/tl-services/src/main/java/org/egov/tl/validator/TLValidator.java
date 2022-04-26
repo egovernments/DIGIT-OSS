@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import static org.egov.tl.util.TLConstants.businessService_BPA;
 import static org.egov.tl.util.TLConstants.businessService_TL;
-import static org.egov.tl.util.TLConstants.APPLICATION_TYPE_RENEWAL;
 
 @Component
 public class TLValidator {
@@ -170,11 +169,11 @@ public class TLValidator {
 //            }else{
 //                taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
 //            }
-            taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);                
+            taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
             if(license.getValidTo()!=null && license.getValidTo()>taxPeriods.get(TLConstants.MDMS_ENDDATE)){
                 Date expiry = new Date(license.getValidTo());
                 throw new CustomException("INVALID TO DATE"," Validto cannot be greater than: "+expiry);
-            }            
+            }
             if(license.getLicenseType().toString().equalsIgnoreCase(TradeLicense.LicenseTypeEnum.TEMPORARY.toString())) {
                 Long startOfDay = getStartOfDay();
                 if (!config.getIsPreviousTLAllowed() && license.getValidFrom() != null
@@ -238,33 +237,11 @@ public class TLValidator {
                 
             }
         });
-        
-        request.getLicenses().forEach(license->{
-        	if(license.getStatus().equalsIgnoreCase(TLConstants.STATUS_CANCELLED)) {
-        		throw new CustomException("LICENSE CANCELLED", "Licenses which are cancelled cannot be renewed");
-        	}
-        }       		        		
-        	);
-        
-        request.getLicenses().forEach(license->{
-        	if(license.getStatus().equalsIgnoreCase(TLConstants.STATUS_MANUALLYEXPIRED) && license.getValidTo()>System.currentTimeMillis()) {
-        		throw new CustomException("LICENSE MANUALLY EXPIRED", "Licenses which are manually expired cannot be renewed");
-        	}
-        }       		        		
-        	);
-        
         criteria.setTenantId(request.getLicenses().get(0).getTenantId());
-        
-        List<String> statuses = new ArrayList<String>();
-        statuses.add(TLConstants.STATUS_APPROVED);
-        statuses.add(TLConstants.STATUS_MANUALLYEXPIRED);
-        statuses.add(TLConstants.STATUS_EXPIRED);
-
-        criteria.setStatus(statuses);
+        criteria.setStatus(Collections.singletonList(TLConstants.STATUS_APPROVED));
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
         criteria.setLicenseNumbers(licenseNumbers);
         List<TradeLicense> searchResult = tlRepository.getLicenses(criteria);
-
         Map<String , TradeLicense> licenseMap = new HashMap<>();
         searchResult.forEach(license -> {
             licenseMap.put(license.getLicenseNumber() , license);
@@ -305,7 +282,7 @@ public class TLValidator {
     }
 
 
-	/**
+    /**
      *  Validates the update request
      * @param request The input TradeLicenseRequest Object
      */
@@ -572,6 +549,14 @@ public class TLValidator {
 
         if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search based only on tenantId is not allowed");
+
+        if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& !criteria.tenantIdOnly()
+                && criteria.getTenantId()==null)
+            throw new CustomException("INVALID SEARCH","TenantId is mandatory in search");
+
+        if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" ) && !criteria.isEmpty()
+                && !criteria.tenantIdOnly() && criteria.getTenantId()==null)
+            throw new CustomException("INVALID SEARCH","TenantId is mandatory in search");
 
         if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");

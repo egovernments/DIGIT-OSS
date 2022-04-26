@@ -58,6 +58,7 @@ import static org.egov.edcr.constants.DxfFileConstants.A_PO;
 import static org.egov.edcr.constants.DxfFileConstants.G;
 import static org.egov.edcr.utility.DcrConstants.FRONT_YARD_DESC;
 import static org.egov.edcr.utility.DcrConstants.OBJECTNOTDEFINED;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -73,11 +74,11 @@ import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
 import org.egov.common.entity.edcr.SetBack;
 import org.egov.edcr.constants.DxfFileConstants;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FrontYardService extends GeneralRule {
+	private static final String BASEMENT_FRONT_YARD = "Basement Front Yard";
 	private static final String RULE_35 = "35 Table-8";
 	private static final String RULE_36 = "36";
 	private static final String RULE_37_TWO_A = "37-2-A";
@@ -114,7 +115,7 @@ public class FrontYardService extends GeneralRule {
 	private static final BigDecimal FRONTYARDMINIMUM_DISTANCE_15 = BigDecimal.valueOf(15);
 	public static final BigDecimal ROAD_WIDTH_TWELVE_POINTTWO = BigDecimal.valueOf(12.2);
 
-	public static final String BSMT_FRONT_YARD_DESC = "Basement Front Yard";
+	public static final String BSMT_FRONT_YARD_DESC = BASEMENT_FRONT_YARD;
 	private static final int PLOTAREA_300 = 300;
 
 	private class FrontYardResult {
@@ -181,7 +182,7 @@ public class FrontYardService extends GeneralRule {
 								scrutinyDetail.setKey("Block_" + block.getName() + "_" + FRONT_YARD_DESC);
 
 								if (setback.getLevel() < 0) {
-									scrutinyDetail.setKey("Block_" + block.getName() + "_" + "Basement Front Yard");
+									scrutinyDetail.setKey("Block_" + block.getName() + "_" + BASEMENT_FRONT_YARD);
 									checkFrontYardBasement(pl, block.getBuilding(), block.getName(), setback.getLevel(),
 											plot, BSMT_FRONT_YARD_DESC, min, mean, occupancy.getTypeHelper(),
 											frontYardResult);
@@ -258,7 +259,7 @@ public class FrontYardService extends GeneralRule {
 		// level front yard defined or not ?
 
 		for (Block block : pl.getBlocks()) {
-			if (!block.getCompletelyExisting()) {
+			if (Boolean.FALSE.equals(block.getCompletelyExisting())) {
 				Boolean frontYardDefined = false;
 				for (SetBack setback : block.getSetBacks()) {
 					if (setback.getFrontYard() != null
@@ -266,7 +267,7 @@ public class FrontYardService extends GeneralRule {
 						frontYardDefined = true;
 					}
 				}
-				if (!frontYardDefined) {
+				if (Boolean.FALSE.equals(frontYardDefined)) {
 					HashMap<String, String> errors = new HashMap<>();
 					errors.put(FRONT_YARD_DESC,
 							prepareMessage(OBJECTNOTDEFINED, FRONT_YARD_DESC + " for Block " + block.getName()));
@@ -293,7 +294,7 @@ public class FrontYardService extends GeneralRule {
                 || A_PO.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode())
                         && block.getBuilding().getFloorsAboveGround().compareTo(BigDecimal.valueOf(5)) <= 0) {
 			if (pl.getPlanInformation() != null && pl.getPlanInformation().getRoadWidth() != null
-					&& StringUtils.isNotBlank(pl.getPlanInformation().getLandUseZone())
+					&& isNotBlank(pl.getPlanInformation().getLandUseZone())
 					&& DxfFileConstants.COMMERCIAL.equalsIgnoreCase(pl.getPlanInformation().getLandUseZone())
 					&& pl.getPlanInformation().getRoadWidth().compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0) {
 				valid = commercialUptoSixteenMts(level, block.getName(), min, mean, mostRestrictiveOccupancy,
@@ -464,7 +465,7 @@ public class FrontYardService extends GeneralRule {
 				|| A_AF.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode())
 				|| A_PO.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode()))) {
 			if (pl.getPlanInformation() != null && pl.getPlanInformation().getRoadWidth() != null
-					&& StringUtils.isNotBlank(pl.getPlanInformation().getLandUseZone())
+					&& isNotBlank(pl.getPlanInformation().getLandUseZone())
 					&& DxfFileConstants.COMMERCIAL.equalsIgnoreCase(pl.getPlanInformation().getLandUseZone())
 					&& pl.getPlanInformation().getRoadWidth().compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0) {
 				valid = commercialUptoSixteenMts(level, blockName, min, mean, mostRestrictiveOccupancy, frontYardResult,
@@ -485,7 +486,7 @@ public class FrontYardService extends GeneralRule {
 			OccupancyTypeHelper mostRestrictiveOccupancy, FrontYardResult frontYardResult) {
 		Boolean valid = false;
 		String subRule = RULE_47;
-		String rule = FRONT_YARD_DESC;
+		String rule;
 		BigDecimal minVal = BigDecimal.ZERO;
 		BigDecimal meanVal = BigDecimal.ZERO;
 		if ((mostRestrictiveOccupancy.getSubtype() != null
@@ -620,7 +621,7 @@ public class FrontYardService extends GeneralRule {
 				|| A_AF.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode())
 				|| A_PO.equalsIgnoreCase(mostRestrictiveOccupancy.getSubtype().getCode())) {
 			if (pl.getPlanInformation() != null && pl.getPlanInformation().getRoadWidth() != null
-					&& StringUtils.isNotBlank(pl.getPlanInformation().getLandUseZone())
+					&& isNotBlank(pl.getPlanInformation().getLandUseZone())
 					&& DxfFileConstants.COMMERCIAL.equalsIgnoreCase(pl.getPlanInformation().getLandUseZone())
 					&& pl.getPlanInformation().getRoadWidth().compareTo(ROAD_WIDTH_TWELVE_POINTTWO) < 0) {
 				valid = commercialUptoSixteenMts(level, blockName, min, mean, mostRestrictiveOccupancy, frontYardResult,

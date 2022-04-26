@@ -180,7 +180,7 @@ class DateRange extends React.Component {
       label: 'This Week',
       range: () => ({
         startDate: new Date(Number(`${moment().startOf('week').unix()}000`)),
-        endDate:  new Date(Number(`${moment().endOf('day').unix()}000`)),
+        endDate: new Date(Number(`${moment().endOf('week').unix()}000`)),
         interval: 'week',
         label: 'This Week'
       })
@@ -189,7 +189,7 @@ class DateRange extends React.Component {
       label: 'This Month',
       range: () => ({
         startDate: new Date(Number(`${moment().startOf('month').unix()}000`)),
-        endDate:  new Date(Number(`${moment().endOf('day').unix()}000`)),
+        endDate: new Date(Number(`${moment().endOf('month').unix()}000`)),
         interval: 'week',
         label: 'This Month'
       })
@@ -198,7 +198,7 @@ class DateRange extends React.Component {
       label: 'This Quarter',
       range: () => ({
         startDate: new Date(Number(`${moment().startOf('quarter').unix()}000`)),
-        endDate:  new Date(Number(`${moment().endOf('day').unix()}000`)),
+        endDate: new Date(Number(`${moment().endOf('quarter').unix()}000`)),
         interval: 'month',
         label: 'This Quarter'
       })

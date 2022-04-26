@@ -28,7 +28,7 @@ Module is used to apply NOC application for approval of respective noc users.
 
 ### Swagger API Contract
 
- - [Swagger API](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/noc-v-1.0.0.yaml#!)
+ - [Swagger API](https://github.com/egovernments/municipal-services/blob/Noc-Contract/docs/noc/noc-v-1.0.0.yaml)
 
 
 ## Service Details

@@ -15,9 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.io.IOUtils;
+import org.egov.infra.exception.ApplicationRuntimeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RestRequestWrapper extends HttpServletRequestWrapper {
     
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestRequestWrapper.class);
     private String  strBody;
     private Map<String,String[]> reqParamMap;
     
@@ -32,7 +36,7 @@ public class RestRequestWrapper extends HttpServletRequestWrapper {
     @Override
     public ServletInputStream getInputStream() throws IOException{
         final ByteArrayInputStream bsiStream = new ByteArrayInputStream(strBody.getBytes("UTF-8"));
-        System.out.println("********** getinputstream request************* ");
+        LOGGER.info("********** getinputstream request************* ");
         
         return new ServletInputStream() {
             
@@ -46,7 +50,7 @@ public class RestRequestWrapper extends HttpServletRequestWrapper {
             
             @Override
             public void setReadListener(ReadListener readListener) {
-                throw new RuntimeException("Not implemented");
+                throw new ApplicationRuntimeException("Not implemented");
             }
             
             @Override

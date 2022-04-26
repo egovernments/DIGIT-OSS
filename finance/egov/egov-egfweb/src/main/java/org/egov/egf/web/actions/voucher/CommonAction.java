@@ -2922,9 +2922,7 @@ public class CommonAction extends BaseFormAction {
         final StringBuilder qry = new StringBuilder(" select * from (SELECT pc.code || '`-`'|| pc.description|| '`~`' || pc.id FROM egw_projectcode pc LEFT OUTER JOIN")
                 .append(" egf_subscheme_project sp ON pc.id = sp.projectcodeid WHERE sp.projectcodeid IS NULL and pc.code like :startsWith")
                 .append(" ORDER BY pc.code) where rownum <= 20");
-        if (null == subSchemeId) {
-
-        } else {
+        if (null != subSchemeId) {
         	Query query = persistenceService.getSession().createSQLQuery(qry.toString())
                     .setParameter("startsWith", startsWith, StringType.INSTANCE);
             projectCodeStringList = query.list();
@@ -3683,31 +3681,33 @@ public class CommonAction extends BaseFormAction {
 
 			queryString.append(bankaccountFundQuery);
 
-			final List<Object[]> bankAccounts = persistenceService.getSession().createSQLQuery(queryString.toString())
-					.setParameter("fundId", fundId.longValue(), LongType.INSTANCE)
-					.setParameter("voucherName", FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE, StringType.INSTANCE)
-					.setParameter("paymentType", FinancialConstants.MODEOFPAYMENT_RTGS, StringType.INSTANCE)
-					.setParameter("branchId", branchId, IntegerType.INSTANCE)
-					.setParameter("voucherType", FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT, StringType.INSTANCE)
-					.list();
-
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("Bank accont list size is " + bankAccounts.size() + "and Query is " + queryString.toString());
-            final List<String> addedBanks = new ArrayList<String>();
-            for (final Object[] account : bankAccounts) {
-                final String accountNumberAndType = account[0].toString() + "-" + account[1].toString();
-                if (!addedBanks.contains(accountNumberAndType)) {
-                    final Bankaccount bankaccount = new Bankaccount();
-                    bankaccount.setAccountnumber(account[0].toString());
-                    bankaccount.setAccounttype(account[1].toString());
-                    final CChartOfAccounts chartofaccounts = new CChartOfAccounts();
-                    chartofaccounts.setGlcode(account[3].toString());
-                    bankaccount.setChartofaccounts(chartofaccounts);
-                    bankaccount.setId(Long.valueOf(account[2].toString()));
-                    addedBanks.add(accountNumberAndType);
-                    accNumList.add(bankaccount);
+			if(fundId != null){
+                final List<Object[]> bankAccounts = persistenceService.getSession().createSQLQuery(queryString.toString())
+                        .setParameter("fundId", fundId.longValue(), LongType.INSTANCE)
+                        .setParameter("voucherName", FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE, StringType.INSTANCE)
+                        .setParameter("paymentType", FinancialConstants.MODEOFPAYMENT_RTGS, StringType.INSTANCE)
+                        .setParameter("branchId", branchId, IntegerType.INSTANCE)
+                        .setParameter("voucherType", FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT, StringType.INSTANCE)
+                        .list();
+                if (LOGGER.isDebugEnabled())
+                    LOGGER.debug("Bank accont list size is " + bankAccounts.size() + "and Query is " + queryString.toString());
+                final List<String> addedBanks = new ArrayList<String>();
+                for (final Object[] account : bankAccounts) {
+                    final String accountNumberAndType = account[0].toString() + "-" + account[1].toString();
+                    if (!addedBanks.contains(accountNumberAndType)) {
+                        final Bankaccount bankaccount = new Bankaccount();
+                        bankaccount.setAccountnumber(account[0].toString());
+                        bankaccount.setAccounttype(account[1].toString());
+                        final CChartOfAccounts chartofaccounts = new CChartOfAccounts();
+                        chartofaccounts.setGlcode(account[3].toString());
+                        bankaccount.setChartofaccounts(chartofaccounts);
+                        bankaccount.setId(Long.valueOf(account[2].toString()));
+                        addedBanks.add(accountNumberAndType);
+                        accNumList.add(bankaccount);
+                    }
                 }
             }
+
         } catch (final HibernateException e) {
             LOGGER.error("Exception occured while getting the data for bank dropdown " + e.getMessage(),
                     new HibernateException(e.getMessage()));

@@ -92,14 +92,14 @@ public class BulkTask extends AbstractTask
         {
             final String action = dc.getValue(nameInDC);
 
-            if (action == NONE_ACTION)
+            if (NONE_ACTION.equals(action))
                 return; // no work
 
-            if (action == INSERT_ACTION)
+            if (INSERT_ACTION.equals(action))
                 sql = tableDefinition.getInsertSQL(dc);
-            else if (action == UPDATE_ACTION)
+            else if (UPDATE_ACTION.equals(action))
                 sql = tableDefinition.getUpdateSQL(dc);
-            else if (action == DELETE_ACTION)
+            else if (DELETE_ACTION.equals(action))
                 sql = tableDefinition.getDeleteSQL(dc);
             else
             {
@@ -119,14 +119,14 @@ public class BulkTask extends AbstractTask
             for (int i = 0; i < actions.length; i++)
             {
                 action = actions[i];
-                if (action == NONE_ACTION)
+                if (NONE_ACTION.equals(action))
                     continue; // no work
 
-                if (action == INSERT_ACTION)
+                if (INSERT_ACTION.equals(action))
                     sql = tableDefinition.getInsertSQL(dc, i);
-                else if (action == UPDATE_ACTION)
+                else if (UPDATE_ACTION.equals(action))
                     sql = tableDefinition.getUpdateSQL(dc, i);
-                else if (action == DELETE_ACTION)
+                else if (DELETE_ACTION.equals(action))
                     sql = tableDefinition.getDeleteSQL(dc, i);
                 else
                 {

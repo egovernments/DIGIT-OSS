@@ -151,7 +151,7 @@ public class XMLLoader extends DefaultHandler {
 
             // Set an ErrorHandler before parsing. This error handler is
             // defifined as a subClass in this class
-            xmlReader.setErrorHandler(new MyErrorHandler(System.err));
+            xmlReader.setErrorHandler(new MyErrorHandler());
 
             // Tell the XMLReader to parse the XML document
             xmlReader.parse(fileName);
@@ -338,13 +338,8 @@ public class XMLLoader extends DefaultHandler {
      * error message, and continue..
      */
     private class MyErrorHandler implements ErrorHandler {
-        /** Error handler output goes here */
-        private final PrintStream out;
 
-        MyErrorHandler(final PrintStream out) {
-            this.out = out;
-        }
-
+        
         /**
          * Returns a string describing parse exception details
          */
@@ -362,7 +357,7 @@ public class XMLLoader extends DefaultHandler {
 
         @Override
         public void warning(final SAXParseException spe) throws SAXException {
-            out.println("Warning: " + getParseExceptionInfo(spe));
+            LOGGER.info("Warning: " + getParseExceptionInfo(spe));
         }
 
         @Override

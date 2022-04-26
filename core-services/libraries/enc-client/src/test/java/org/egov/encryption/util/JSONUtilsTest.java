@@ -22,6 +22,14 @@ public class JSONUtilsTest {
     ObjectMapper mapper;
     Configuration configuration;
 
+    private static final String REQUEST_INFO_NULL = "{\"RequestInfo\":{\"api_id\":\"1\",\"ver\":\"1\",\"ts\":null,";
+    private static final String ACTION_CREATE_REQUESTER_ID = "\"action\":\"create\",\"did\":\"\",\"key\":\"\",\"msg_id\":\"\",\"requester_id\":\"\",";
+    private static final String AUTH_TOKEN_MALE = "\"auth_token\":null},\"User\":{\"userName\":\"ajay\",\"name\":\"ajay\",\"gender\":\"male\",";
+    private static final String MOBILE_NUMBER_CITIZEN_PASSWORD_LAST = "\"mobileNumber\":\"12312312\",\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}}";
+    private static final String MOBILE_NUMBER_CITIZEN_PASSWORD = "\"mobileNumber\":\"12312312\",\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"},";
+    private static final String USER_NAME_MOBILE_NUMBER = "{\"userName\":\"ajay\",\"name\":\"ajay\",\"gender\":\"male\",\"mobileNumber\":\"12312312\",";
+    private static final String ACTIVE_CITIZEN_PASSWORD = "\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}]}";
+
     @Before
     public void initializeCommonObjects() {
         JsonFactory jsonFactory = new JsonFactory();
@@ -31,18 +39,18 @@ public class JSONUtilsTest {
 
     @Test
     public void superimposeEncryptedDataOnOriginalNodeTest() throws IOException {
-        JsonNode originalNode = mapper.readTree("{\"RequestInfo\":{\"api_id\":\"1\",\"ver\":\"1\",\"ts\":null," +
-                "\"action\":\"create\",\"did\":\"\",\"key\":\"\",\"msg_id\":\"\",\"requester_id\":\"\"," +
-                "\"auth_token\":null},\"User\":{\"userName\":\"ajay\",\"name\":\"ajay\",\"gender\":\"male\"," +
-                "\"mobileNumber\":\"12312312\",\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}}");
+        JsonNode originalNode = mapper.readTree(REQUEST_INFO_NULL +
+                ACTION_CREATE_REQUESTER_ID +
+                AUTH_TOKEN_MALE +
+                MOBILE_NUMBER_CITIZEN_PASSWORD_LAST);
 
         JsonNode encryptedNode = mapper.readTree("{\"User\":{\"userName\":\"123|jkafsdhkjhalfsj\",\"name\":\"123|" +
                 "jkafsdhkjhalfsj\",\"mobileNumber\":\"123|hdskjahkjfk\"}}");
 
         JsonNode outputNode = JSONUtils.merge(encryptedNode, originalNode);
 
-        JsonNode expectedNode = mapper.readTree("{\"RequestInfo\":{\"api_id\":\"1\",\"ver\":\"1\",\"ts\":null," +
-                "\"action\":\"create\",\"did\":\"\",\"key\":\"\",\"msg_id\":\"\",\"requester_id\":\"\"," +
+        JsonNode expectedNode = mapper.readTree(REQUEST_INFO_NULL +
+                ACTION_CREATE_REQUESTER_ID +
                 "\"auth_token\":null},\"User\":{\"userName\":\"123|jkafsdhkjhalfsj\"," +
                 "\"name\":\"123|jkafsdhkjhalfsj\",\"gender\":\"male\",\"mobileNumber\":\"123|hdskjahkjfk\"," +
                 "\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}}");
@@ -55,10 +63,10 @@ public class JSONUtilsTest {
     @Test
     public void filterJsonNode() throws IOException {
 
-        JsonNode originalNode = mapper.readTree("{\"RequestInfo\":{\"api_id\":\"1\",\"ver\":\"1\",\"ts\":null," +
-                "\"action\":\"create\",\"did\":\"\",\"key\":\"\",\"msg_id\":\"\",\"requester_id\":\"\"," +
-                "\"auth_token\":null},\"User\":{\"userName\":\"ajay\",\"name\":\"ajay\",\"gender\":\"male\"," +
-                "\"mobileNumber\":\"12312312\",\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}}");
+        JsonNode originalNode = mapper.readTree(REQUEST_INFO_NULL +
+                ACTION_CREATE_REQUESTER_ID +
+                AUTH_TOKEN_MALE +
+                MOBILE_NUMBER_CITIZEN_PASSWORD_LAST);
 
         List fieldsToBeEncrypted = Arrays.asList("userName", "name", "mobileNumber");
 
@@ -72,10 +80,10 @@ public class JSONUtilsTest {
 
     @Test
     public void filterJsonNodeWithNoMatchingFields() throws IOException {
-        JsonNode originalNode = mapper.readTree("{\"RequestInfo\":{\"api_id\":\"1\",\"ver\":\"1\",\"ts\":null," +
-                "\"action\":\"create\",\"did\":\"\",\"key\":\"\",\"msg_id\":\"\",\"requester_id\":\"\"," +
-                "\"auth_token\":null},\"User\":{\"userName\":\"ajay\",\"name\":\"ajay\",\"gender\":\"male\"," +
-                "\"mobileNumber\":\"12312312\",\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}}");
+        JsonNode originalNode = mapper.readTree(REQUEST_INFO_NULL +
+                ACTION_CREATE_REQUESTER_ID +
+                AUTH_TOKEN_MALE +
+                MOBILE_NUMBER_CITIZEN_PASSWORD_LAST);
 
         List fieldsToBeEncrypted = Arrays.asList();
 
@@ -106,12 +114,12 @@ public class JSONUtilsTest {
 
     @Test
     public void filterWithGivenPaths() throws IOException {
-        JsonNode originalNode = mapper.readTree("{\"RequestInfo\":{\"api_id\":\"1\",\"ver\":\"1\",\"ts\":null," +
-                "\"action\":\"create\",\"did\":\"\",\"key\":\"\",\"msg_id\":\"\",\"requester_id\":\"\"," +
+        JsonNode originalNode = mapper.readTree(REQUEST_INFO_NULL +
+                ACTION_CREATE_REQUESTER_ID +
                 "\"auth_token\":null},\"User\":[{\"userName\":\"ajay\",\"name\":\"ajay\",\"gender\":\"male\"," +
-                "\"mobileNumber\":\"12312312\",\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}," +
-                "{\"userName\":\"ajay\",\"name\":\"ajay\",\"gender\":\"male\",\"mobileNumber\":\"12312312\"," +
-                "\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}]}");
+                MOBILE_NUMBER_CITIZEN_PASSWORD +
+                USER_NAME_MOBILE_NUMBER +
+                ACTIVE_CITIZEN_PASSWORD);
 
         List<String> filterPaths = Arrays.asList("$.RequestInfo.api_id", "$.asd", "$.User.[*].name");
 
@@ -127,12 +135,12 @@ public class JSONUtilsTest {
 
     @Test
     public void mergeWithGivenPaths() throws IOException {
-        JsonNode originalNode = mapper.readTree("{\"RequestInfo\":{\"api_id\":\"1\",\"ver\":\"1\",\"ts\":null," +
-                "\"action\":\"create\",\"did\":\"\",\"key\":\"\",\"msg_id\":\"\",\"requester_id\":\"\"," +
+        JsonNode originalNode = mapper.readTree(REQUEST_INFO_NULL +
+                ACTION_CREATE_REQUESTER_ID +
                 "\"auth_token\":null},\"User\":[{\"userName\":\"ajay\",\"name\":\"ajay\",\"gender\":\"male\"," +
-                "\"mobileNumber\":\"12312312\",\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}," +
-                "{\"userName\":\"ajay\",\"name\":\"ajay\",\"gender\":\"male\",\"mobileNumber\":\"12312312\"," +
-                "\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}]}");
+                MOBILE_NUMBER_CITIZEN_PASSWORD +
+                USER_NAME_MOBILE_NUMBER +
+                ACTIVE_CITIZEN_PASSWORD);
 
         List<String> filterPaths = Arrays.asList("$.RequestInfo.api_id", "$.asd", "$.User.[*].name");
 
@@ -143,7 +151,7 @@ public class JSONUtilsTest {
         JsonNode finalNode = JSONUtils.mergeNodesForGivenPaths(encryptedNode, originalNode, filterPaths);
 
         JsonNode expectedNode = mapper.readTree("{\"RequestInfo\":{\"api_id\":\"EncValue\",\"ver\":\"1\",\"ts\":null," +
-                "\"action\":\"create\",\"did\":\"\",\"key\":\"\",\"msg_id\":\"\",\"requester_id\":\"\"," +
+                ACTION_CREATE_REQUESTER_ID +
                 "\"auth_token\":null},\"User\":[{\"userName\":\"ajay\",\"name\":\"EncryptedName1\"," +
                 "\"gender\":\"male\",\"mobileNumber\":\"12312312\",\"active\":true,\"type\":\"CITIZEN\"," +
                 "\"password\":\"password\"},{\"userName\":\"ajay\",\"name\":\"EncryptedName2\",\"gender\":\"male\"," +
@@ -154,12 +162,12 @@ public class JSONUtilsTest {
 
     @Test
     public void filterJsonNodeForPathTest() throws IOException {
-        JsonNode jsonNode = mapper.readTree("{\"RequestInfo\":{\"api_id\":\"1\",\"ver\":\"1\",\"ts\":null," +
-                "\"action\":\"create\",\"did\":\"\",\"key\":\"\",\"msg_id\":\"\",\"requester_id\":\"\"," +
+        JsonNode jsonNode = mapper.readTree(REQUEST_INFO_NULL +
+                ACTION_CREATE_REQUESTER_ID +
                 "\"auth_token\":null},\"User\":[{\"userName\":\"ajay\",\"gender\":\"male\"," +
-                "\"mobileNumber\":\"12312312\",\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}," +
-                "{\"userName\":\"ajay\",\"name\":\"ajay\",\"gender\":\"male\",\"mobileNumber\":\"12312312\"," +
-                "\"active\":true,\"type\":\"CITIZEN\",\"password\":\"password\"}]}");
+                MOBILE_NUMBER_CITIZEN_PASSWORD +
+                USER_NAME_MOBILE_NUMBER +
+                ACTIVE_CITIZEN_PASSWORD);
 
         JsonNode newNode = JSONUtils.filterJsonNodeWithPaths2(jsonNode, Arrays.asList("User/*/name", "RequestInfo" +
                 "/api_id"));

@@ -76,6 +76,10 @@ public class PropertyCustomUploader {
 
 	public static final String FAILEDSTRING = "FAILED";
 
+	private static final String STATUS_KEY = "Status";
+	private static final String MESSAGE_KEY = "Message";
+	private static final String ROW_INDEX_KEY = "_rowindex";
+
 	public void uploadPropertyData(UploaderRequest uploaderRequest) {
 
 		RequestInfo requestInfo = uploaderRequest.getRequestInfo();
@@ -127,31 +131,31 @@ public class PropertyCustomUploader {
 			if(entry.getKey().contains("duplicate"))
 			{
 				failCnt++;
-				resp.put("Status", FAILEDSTRING);
-				resp.put("Message", "Duplicate property found");
+				resp.put(STATUS_KEY, FAILEDSTRING);
+				resp.put(MESSAGE_KEY, "Duplicate property found");
 			}
 			else{
 				Object response = dataUploadService.hitApi(getRequestForPost((Property) entry.getValue().get("Property"), requestInfo),
 						getUrlForPost());
 
 				if (null == response) {
-					resp.put("Status", FAILEDSTRING);
-					resp.put("Message", "Module API failed with empty body in response");
+					resp.put(STATUS_KEY, FAILEDSTRING);
+					resp.put(MESSAGE_KEY, "Module API failed with empty body in response");
 					failCnt++;
 				} else {
 					if (response instanceof String) {
-						resp.put("Status", FAILEDSTRING);
-						resp.put("Message", response.toString());
+						resp.put(STATUS_KEY, FAILEDSTRING);
+						resp.put(MESSAGE_KEY, response.toString());
 						failCnt++;
 					} else {
 						sucCnt++;
-						resp.put("Status", SUCCESSSTRING);
-						resp.put("Message", "");
+						resp.put(STATUS_KEY, SUCCESSSTRING);
+						resp.put(MESSAGE_KEY, "");
 						resp.put("Property ID", getPropertyId(response));
 						resp.put("Assessment Number", getPropertyAssessmentNumber(response));
 					}
 				}
-				resp.put("_rowindex", entry.getValue().get("_rowindex").toString());
+				resp.put(ROW_INDEX_KEY, entry.getValue().get(ROW_INDEX_KEY).toString());
 			}
 			responses.add(resp);
 
@@ -249,7 +253,7 @@ public class PropertyCustomUploader {
 
 			Map<String, Integer> columnToIndex = dataUploadUtils.getColumnIndexMap(firstRow);
 
-			String[] responseColumns =  {"Status", "Message", "Property ID", "Assessment Number"};
+			String[] responseColumns =  {STATUS_KEY, MESSAGE_KEY, "Property ID", "Assessment Number"};
 
 			for (String respCol : responseColumns) {
 				if (!columnToIndex.containsKey(dataUploadUtils.getCleanedName(respCol))) {
@@ -262,7 +266,7 @@ public class PropertyCustomUploader {
 
 				Map<String, String> resp = responses.get(i);
 
-				Row currRow = propertySheet.getRow(Integer.parseInt(resp.get("_rowindex")));
+				Row currRow = propertySheet.getRow(Integer.parseInt(resp.get(ROW_INDEX_KEY)));
 
 				for (String respCol : responseColumns) {
 					String colName = dataUploadUtils.getCleanedName(respCol);
@@ -272,7 +276,7 @@ public class PropertyCustomUploader {
 					}
 				}
 
-				if (resp.containsKey("Status"))
+				if (resp.containsKey(STATUS_KEY))
 					// In case we processed the row, set the Process column value to blank
 					// this will be later treated as false only for process
 					currRow.getCell(PTTemplateDetail.Process.ordinal()).setCellValue("");

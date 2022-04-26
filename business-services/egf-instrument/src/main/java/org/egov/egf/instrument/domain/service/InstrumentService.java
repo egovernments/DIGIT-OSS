@@ -130,8 +130,7 @@ public class InstrumentService {
         try {
             switch (method) {
             case ACTION_VIEW:
-                // validator.validate(instrumentContractRequest.getInstrument(),
-                // errors);
+
                 break;
             case ACTION_CREATE:
                 if (instruments == null)
@@ -144,17 +143,10 @@ public class InstrumentService {
                     case "cash":
                         if (instrument.getTransactionNumber() == null)
                             throw new InvalidDataException("TransactionNumber(Cash)", ErrorCode.NOT_NULL.getCode(), null);
-                        // Assert.isTrue(DateUtils.isSameDay(instrument.getTransactionDate(), Calendar.getInstance().getTime()),
-                        // "Cash Transaction Date must be current date");
-                        // Assert.notNull(instrument.getPayee(), "Payee Details for Cash Transaction must not be null");
                         break;
                     case "cheque":
                         if (instrument.getTransactionNumber() == null)
                             throw new InvalidDataException("TransactionNumber(Cheque)", ErrorCode.NOT_NULL.getCode(), null);
-                        // Assert.notNull(instrument.getPayee(), "Cheque Payee Details must not be null");
-                        // cal1.setTime(instrument.getTransactionDate());
-                        // Assert.isTrue(cal1.after(cal), "Cheque Transaction should be before 6 months of current date or a
-                        // future date");
                         if (instrument.getBank() == null)
                             throw new InvalidDataException("BankDetails(Cheque)", ErrorCode.NOT_NULL.getCode(), null);
                         break;
@@ -162,19 +154,12 @@ public class InstrumentService {
                         if (instrument.getTransactionNumber() == null)
                             throw new InvalidDataException("TransactionNumber(DD)", ErrorCode.NOT_NULL.getCode(), null);
                         cal1.setTime(instrument.getTransactionDate());
-                        // Assert.isTrue(cal1.after(cal), "DD Transaction should be before 6 months of current date or a future
-                        // date");
-                        // Assert.notNull(instrument.getPayee(), "DD Payee Details must not be null");
                         if (instrument.getBank() == null)
                             throw new InvalidDataException("BankDetails(DD)", ErrorCode.NOT_NULL.getCode(), null);
                         break;
                     case "online":
                         if (instrument.getTransactionNumber() == null)
                             throw new InvalidDataException("TransactionNumber(Online)", ErrorCode.NOT_NULL.getCode(), null);
-                        // Assert.notNull(instrument.getPayee(), "Online Payee Details must not be null");
-                        // cal1.setTime(instrument.getTransactionDate());
-                        // Assert.isTrue(cal1.after(cal), "DD Transaction should be before 6 months of current date or a future
-                        // date");
                         break;
                     case "bankchallan":
                         if (instrument.getTransactionNumber() == null)
@@ -183,10 +168,6 @@ public class InstrumentService {
                             throw new InvalidDataException("BankDetails(BankChallan)", ErrorCode.NOT_NULL.getCode(), null);
                         if (instrument.getBankAccount() == null)
                             throw new InvalidDataException("BankAccountDetails(BankChallan)", ErrorCode.NOT_NULL.getCode(), null);
-                        // Assert.notNull(instrument.getPayee(), "Bank Challan Payee Details must not be null");
-                        // cal1.setTime(instrument.getTransactionDate());
-                        // Assert.isTrue(cal1.after(cal), "DD Transaction should be before 6 months of current date or a future
-                        // date");
                         break;
                     }
                     validator.validate(instrument, errors);
@@ -239,43 +220,8 @@ public class InstrumentService {
                     instrument.setInstrumentType(response.getPagedData().get(0));
                 }
                 bankContractRepository.getClass();
-               /* if (instrument.getBank() != null && instrument.getBank().getId() != null) {
-                    instrument.getBank().setTenantId(instrument.getTenantId());
-                    BankContract bank = bankContractRepository.findById(instrument.getBank(), requestInfo);
-                    if (bank == null)
-                        throw new InvalidDataException("bank", "bank.invalid", " Invalid bank");
-                    instrument.setBank(bank);
-                }*/
-               /* if (instrument.getBankAccount() != null && instrument.getBankAccount().getAccountNumber() != null) {
-                    instrument.getBankAccount().setTenantId(instrument.getTenantId());
-                    BankAccountContract bankAccount = bankAccountContractRepository
-                            .findByAccountNumber(instrument.getBankAccount(), requestInfo);
-                    if (bankAccount == null)
-                        throw new InvalidDataException("bankAccount", "bankAccount.invalid", " Invalid bankAccount");
-                    instrument.setBankAccount(bankAccount);
-                }*/
                 bankAccountContractRepository.getClass();
-//                if (instrument.getFinancialStatus() != null) {
-//                    instrument.getFinancialStatus().setTenantId(instrument.getTenantId());
-//                    FinancialStatusContract financialStatus = financialStatusContractRepository
-//                            .findById(instrument.getFinancialStatus(), requestInfo);
-//                    if (financialStatus == null)
-//                        throw new InvalidDataException("financialStatus", "financialStatus.invalid",
-//                                " Invalid financialStatus");
-//                    instrument.setFinancialStatus(financialStatus);
-//                }
-                
-                //Reason for instrument surrender is not initiated by collection service so that for now we are commenting out the validation from this service.
-                
-                /* if (instrument.getSurrenderReason() != null) {
-                    instrument.getSurrenderReason().setTenantId(instrument.getTenantId());
-                    SurrenderReason surrenderReason = surrenderReasonRepository
-                            .findById(instrument.getSurrenderReason());
-                    if (surrenderReason == null)
-                        throw new InvalidDataException("surrenderReason", "surrenderReason.invalid",
-                                " Invalid surrenderReason");
-                    instrument.setSurrenderReason(surrenderReason);
-                } */
+
 
             }
 
@@ -312,7 +258,7 @@ public class InstrumentService {
         financialStatusContract.setModuleType("Instrument");
 
         instrument = instrumentRepository.findById(instrument);
-        FinancialStatusContract financialStatusContract1 = new FinancialStatusContract();
+        FinancialStatusContract financialStatusContract1;
         financialStatusContract1 = financialStatusContractRepository.findByModuleCode(financialStatusContract);
         instrument.setFinancialStatus(financialStatusContract1);
         instrument.setRemittanceVoucherId(instrumentDepositRequest.getInstruments().get(0).getRemittanceVoucherId());
@@ -332,7 +278,7 @@ public class InstrumentService {
         financialStatusContract.setModuleType("Instrument");
 
         instrument = instrumentRepository.findById(instrument);
-        FinancialStatusContract financialStatusContract1 = new FinancialStatusContract();
+        FinancialStatusContract financialStatusContract1;
         financialStatusContract1 = financialStatusContractRepository.findByModuleCode(financialStatusContract);
         instrument.setFinancialStatus(financialStatusContract1);
         List<Instrument> instrumentsToUpdate = new ArrayList<>();

@@ -313,7 +313,7 @@ public class AccessoryBuildingService extends FeatureProcess{
                     if (accessoryBlock.getAccessoryBuilding().getHeight().compareTo(BigDecimal.valueOf(2.5)) <= 0) {
                         valid = true;
                     }
-                    if (valid) {
+                    if (Boolean.TRUE.equals(valid)) {
                        
                         setReportOutputDetails(plan, subRule, String.format(subRuleDesc, accessoryBlock.getNumber()), BigDecimal.valueOf(2.5) + DcrConstants.IN_METER,
                                 accessoryBlock.getAccessoryBuilding().getHeight() + DcrConstants.IN_METER, Result.Accepted.getResultVal(), scrutinyDetail1);
@@ -354,7 +354,7 @@ public class AccessoryBuildingService extends FeatureProcess{
                         if (fifteenPercentOfEmptyArea.compareTo(accessoryBlockArea) >= 0) {
                             valid = true;
                         }
-                        if (valid) {
+                        if (Boolean.TRUE.equals(valid)) {
                            
                             setReportOutputDetails(plan, subRule, String.format(subRuleDesc, accessoryBlock.getNumber()), fifteenPercentOfEmptyArea + DcrConstants.IN_METER_SQR,
                                     accessoryBlockArea + DcrConstants.IN_METER_SQR, Result.Accepted.getResultVal(), scrutinyDetail);

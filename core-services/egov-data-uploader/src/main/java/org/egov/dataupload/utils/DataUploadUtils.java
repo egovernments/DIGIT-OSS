@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -41,12 +42,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 
+@Slf4j
 @Component
 public class DataUploadUtils {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DataUploadUtils.class);
 	private DateFormat format = new SimpleDateFormat("dd/MM/YYYY");
 	private DataFormatter dataFormatter = new DataFormatter();
+    private static final String INVALID_FORMAT_FIELD_TYPE = "field type";
 	
 	@Value("${internal.file.folder.path}")
 	private String internalFolderPath;
@@ -67,7 +70,7 @@ public class DataUploadUtils {
         } else if (cell.getCellTypeEnum() == CellType.BLANK || cell.getCellTypeEnum() == CellType._NONE) {
             return 0;
         } else {
-            throw new InvalidFormatException("Cannot read int from a " + cell.getCellTypeEnum().toString() + " field type");
+            throw new InvalidFormatException("Cannot read int from a " + cell.getCellTypeEnum().toString() + " " + INVALID_FORMAT_FIELD_TYPE);
         }
     }
 
@@ -83,7 +86,7 @@ public class DataUploadUtils {
             return "";
         }
         else {
-            throw new InvalidFormatException("Cannot read string from a " + cell.getCellTypeEnum().toString() + " field type");
+            throw new InvalidFormatException("Cannot read string from a " + cell.getCellTypeEnum().toString() + " " + INVALID_FORMAT_FIELD_TYPE);
         }
     }
 
@@ -98,14 +101,14 @@ public class DataUploadUtils {
             } else if (val.equals("false") || val.equals("no") || val.equals("off") || val.isEmpty()) {
                 return false;
             } else {
-                throw new InvalidFormatException("Unsupported boolean value " + cell.getStringCellValue() + " field type");
+                throw new InvalidFormatException("Unsupported boolean value " + cell.getStringCellValue() + " " + INVALID_FORMAT_FIELD_TYPE);
             }
         } else if (cell.getCellTypeEnum() == CellType.BOOLEAN) {
             return cell.getBooleanCellValue();
         } else if (cell.getCellTypeEnum() == CellType.BLANK || cell.getCellTypeEnum() == CellType._NONE) {
             return false;
         } else {
-            throw new InvalidFormatException("Cannot read bool from a " + cell.getCellTypeEnum().toString() + " field type");
+            throw new InvalidFormatException("Cannot read bool from a " + cell.getCellTypeEnum().toString() + " " + INVALID_FORMAT_FIELD_TYPE);
         }
     }
 
@@ -273,7 +276,7 @@ public class DataUploadUtils {
 	
 	public String createANewFile(String fileName) throws IOException{
 		String outputFile = internalFolderPath + File.separator + fileName;
-        System.out.println("file create : "+outputFile);
+        log.info("file create : "+outputFile);
 		logger.info("Attempting to create a new file: "+outputFile);
 		try (FileOutputStream fileOut = new FileOutputStream(outputFile);
              HSSFWorkbook workbook = new HSSFWorkbook();
@@ -441,8 +444,7 @@ public class DataUploadUtils {
 	
 	public Map<String, Object> eliminateEmptyList(Map<String, Object> objectMap) {
 		for(String key: objectMap.keySet()) {
-			if(key.equals("RequestInfo") || key.equals("requestInfo")) {
-			}else {
+			if(!(key.equals("RequestInfo") || key.equals("requestInfo"))) {
 				if(!(objectMap.get(key) instanceof Map)) {
 					continue;
 				}

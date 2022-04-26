@@ -2,20 +2,23 @@ import {
   getBreak,
   getCommonCard,
   getCommonContainer,
-  getCommonTitle, getPattern, getTextField
+  getCommonTitle,
+  getTextField,
+  getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject, toggleSnackbar
+  prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import set from "lodash/set";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   furnishNocResponse,
   getSearchResults
 } from "../../../../../ui-utils/commons";
 import "./index.css";
+import { prepareEditFlow } from "../apply";
+import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import { onchangeOfTenant } from "./propertyLocationDetails";
 
 const loadProvisionalNocData = async (state, dispatch) => {
@@ -25,13 +28,14 @@ const loadProvisionalNocData = async (state, dispatch) => {
     ""
   );
 
+
   if (!fireNOCNumber.match(getPattern("FireNOCNo"))) {
     dispatch(
       toggleSnackbar(
         true,
         {
           labelName: "Incorrect FireNOC Number!",
-          labelKey: "ERR_FIRENOC_NUMBER_INCORRECT",
+          labelKey: "ERR_FIRENOC_NUMBER_INCORRECT"
         },
         "error"
       )
@@ -40,24 +44,15 @@ const loadProvisionalNocData = async (state, dispatch) => {
   }
 
   let response = await getSearchResults([
-    { key: "fireNOCNumber", value: fireNOCNumber },
+    { key: "fireNOCNumber", value: fireNOCNumber }
   ]);
 
   response = furnishNocResponse(response);
+  
 
-  let firenoc = get(response, "FireNOCs[0]", {});
-  set(
-    firenoc,
-    "fireNOCDetails.fireNOCType",
-    get(
-      state.screenConfiguration.screenConfig,
-      "apply.components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup.props.value",
-      "NEW"
-    )
-  );
-  dispatch(prepareFinalObject("FireNOCs", [firenoc]));
-  const tenantId = get(response, "FireNOCs[0].tenantId", getTenantIdCommon());
-  await onchangeOfTenant({ value: tenantId }, state, dispatch);
+  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  const tenantId=get(response, "FireNOCs[0].tenantId", getTenantIdCommon())
+  await onchangeOfTenant({value:tenantId},state,dispatch);
   // Set no of buildings radiobutton and eventually the cards
   let noOfBuildings =
     get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===
@@ -100,12 +95,12 @@ export const nocDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "NOC Details",
-      labelKey: "NOC_NEW_NOC_DETAILS_HEADER",
+      labelKey: "NOC_NEW_NOC_DETAILS_HEADER"
     },
     {
       style: {
-        marginBottom: 18,
-      },
+        marginBottom: 18
+      }
     }
   ),
   break: getBreak(),
@@ -114,7 +109,7 @@ export const nocDetails = getCommonCard({
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
-        xs: 12,
+        xs: 12
       },
       jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
       type: "array",
@@ -125,16 +120,16 @@ export const nocDetails = getCommonCard({
           {
             labelName: "New",
             labelKey: "NOC_TYPE_NEW_RADIOBUTTON",
-            value: "NEW",
+            value: "NEW"
           },
           {
             label: "Provisional",
             labelKey: "NOC_TYPE_PROVISIONAL_RADIOBUTTON",
-            value: "PROVISIONAL",
-          },
+            value: "PROVISIONAL"
+          }
         ],
         jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
-        defaultValue: "NEW",
+        defaultValue: "PROVISIONAL"
       },
       type: "array",
       beforeFieldChange: (action, state, dispatch) => {
@@ -157,13 +152,7 @@ export const nocDetails = getCommonCard({
             )
           );
         }
-        if (
-          get(
-            state.screenConfiguration.preparedFinalObject,
-            "FireNOCs[0].fireNOCDetails.action",
-            ""
-          ) === "SENDBACKTOCITIZEN"
-        ) {
+        if(get(state.screenConfiguration.preparedFinalObject, "FireNOCs[0].fireNOCDetails.action", "") === "SENDBACKTOCITIZEN") {
           dispatch(
             handleField(
               "apply",
@@ -173,17 +162,17 @@ export const nocDetails = getCommonCard({
             )
           );
         }
-      },
+      }
     },
     provisionalNocNumber: {
       ...getTextField({
         label: {
           labelName: "Provisional fire NoC number",
-          labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL",
+          labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
         },
         placeholder: {
           labelName: "Enter Provisional fire NoC number",
-          labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_PLACEHOLDER",
+          labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_PLACEHOLDER"
         },
         pattern: getPattern("FireNOCNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
@@ -198,15 +187,15 @@ export const nocDetails = getCommonCard({
             action: "condition",
             callBack: (state, dispatch, fieldInfo) => {
               loadProvisionalNocData(state, dispatch);
-            },
-          },
-        },
+            }
+          }
+        }
         // title: {
         //   value: "Please search owner profile linked to the mobile no.",
         //   key: "TL_MOBILE_NO_TOOLTIP_MESSAGE"
         // },
         // infoIcon: "info_circle"
-      }),
-    },
-  }),
+      })
+    }
+  })
 });

@@ -61,7 +61,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.dcr.helper.OccupancyHelperDetail;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -71,11 +73,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlotArea extends FeatureProcess {
 
-    private static final Logger LOG = Logger.getLogger(PlotArea.class);
+    private static final Logger LOG = LogManager.getLogger(PlotArea.class);
+
     private static final String RULE_34 = "34-1";
-    public static final String PLOTAREA_DESCRIPTION = "Minimum Plot Area";
-    public static final BigDecimal THREE_ZERO = BigDecimal.valueOf(300);
-    public static final BigDecimal FIVE_ZERO = BigDecimal.valueOf(500);
+    private static final String PLOTAREA_DESCRIPTION = "Minimum Plot Area";
+    private static final BigDecimal THREE_ZERO = BigDecimal.valueOf(300);
+    private static final BigDecimal FIVE_ZERO = BigDecimal.valueOf(500);
 
     @Override
     public Map<String, Date> getAmendments() {

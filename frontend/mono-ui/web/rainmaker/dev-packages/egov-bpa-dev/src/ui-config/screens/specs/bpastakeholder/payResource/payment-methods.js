@@ -57,6 +57,7 @@ const onIconClick = (state, dispatch, index) => {
         }
       })
       .catch(error => {
+        console.log(error);
         dispatch(toggleSpinner());
       });
   }

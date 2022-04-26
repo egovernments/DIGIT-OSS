@@ -38,8 +38,11 @@ public class ValidationServiceImpl implements ValidationService {
 
 		try {
 			//getSchema(OBJECTIVE.concat(SEPARATOR).concat(incomingData.getDataContext()).concat(SEPARATOR).concat(incomingData.getDataContextVersion())
-			getSchema(OBJECTIVE.concat(SEPARATOR).concat(incomingData.get("dataContext").toString()).concat(SEPARATOR).concat(incomingData.get("dataContextVersion").toString())
-					.concat(JSON_EXTENSION)).validate(jsonSubject);
+			Schema schema = getSchema(OBJECTIVE.concat(SEPARATOR).concat(incomingData.get("dataContext").toString()).concat(SEPARATOR).concat(incomingData.get("dataContextVersion").toString())
+					.concat(JSON_EXTENSION));
+			if (schema != null){
+				schema.validate(jsonSubject);
+			}
 		} catch (ValidationException ve) {
 			LOGGER.info("Validation Exception : " + ve.getMessage());
 			return Boolean.FALSE;

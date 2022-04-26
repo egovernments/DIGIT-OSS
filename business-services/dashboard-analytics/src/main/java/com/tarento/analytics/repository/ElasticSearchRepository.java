@@ -53,7 +53,7 @@ public class ElasticSearchRepository {
 		} catch (Exception e) {
 			LOGGER.error("Error : " + e);
 		}
-		if (map != null && map.getStatusCode() != null && (map.getStatusCode() == HttpStatus.OK) || (map.getStatusCode() == HttpStatus.CREATED)) {
+		if (map != null && map.getStatusCode() != null && (map.getStatusCode() == HttpStatus.OK) || (map != null && map.getStatusCode() == HttpStatus.CREATED)) {
 			return true;
 		}
 		return false;
@@ -75,8 +75,10 @@ public class ElasticSearchRepository {
 			} catch (Exception e) {
 				LOGGER.error("Error : " + e);
 			}
-			if (map != null && map.getStatusCode() != null && (map.getStatusCode() == HttpStatus.OK) || (map.getStatusCode() == HttpStatus.CREATED)) {
-				return true;
+			if (map != null) {
+				if (map.getStatusCode() != null && (map.getStatusCode() == HttpStatus.OK) || (map.getStatusCode() == HttpStatus.CREATED)) {
+					return true;
+				}
 			}
 			return false;
 		}

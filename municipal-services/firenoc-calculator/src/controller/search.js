@@ -2,7 +2,6 @@ import { requestInfoToResponseInfo, upadteForAuditDetails } from "../utils";
 import { validateBillingSlabSearch } from "../utils/modelValidation";
 
 const search = async (req, res, pool, next) => {
-  console.log("search");
   const queryObj = JSON.parse(JSON.stringify(req.query));
 
   let errors = validateBillingSlabSearch(queryObj);

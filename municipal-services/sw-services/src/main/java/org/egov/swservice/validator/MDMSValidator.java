@@ -43,6 +43,8 @@ public class MDMSValidator {
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsEndpoint;
 
+	private static final String ATTRIBUTES_FILTER_CODE = "$.*.code";
+
 	public void validateMasterData(SewerageConnectionRequest request, int reqType) {
 			switch (reqType) {
 				case SWConstants.UPDATE_APPLICATION:
@@ -119,7 +121,7 @@ public class MDMSValidator {
 		// calling property related master
 		List<String> propertyModuleMasters = new ArrayList<>(Arrays.asList(SWConstants.PROPERTY_OWNERTYPE));
 		Map<String, List<String>> codesFromPropetyMasters = getAttributeValues(request.getSewerageConnection().getTenantId(),
-				SWConstants.PROPERTY_MASTER_MODULE, propertyModuleMasters, "$.*.code",
+				SWConstants.PROPERTY_MASTER_MODULE, propertyModuleMasters, ATTRIBUTES_FILTER_CODE,
 				SWConstants.PROPERTY_JSONPATH_ROOT, request.getRequestInfo());
 		// merge codes
 		String[] finalmasterNames = {SWConstants.PROPERTY_OWNERTYPE};
@@ -153,10 +155,10 @@ public class MDMSValidator {
 			List<String> names = new ArrayList<>(Arrays.asList(SWConstants.MDMS_SW_CONNECTION_TYPE));
 			List<String> taxModelnames = new ArrayList<>(Arrays.asList(SWConstants.SC_ROADTYPE_MASTER));
 			Map<String, List<String>> codes = getAttributeValues(request.getSewerageConnection().getTenantId(),
-					SWConstants.MDMS_SW_MOD_NAME, names, "$.*.code",
+					SWConstants.MDMS_SW_MOD_NAME, names, ATTRIBUTES_FILTER_CODE,
 					SWConstants.JSONPATH_ROOT, request.getRequestInfo());
 			Map<String, List<String>> codeFromCalculatorMaster = getAttributeValues(request.getSewerageConnection().getTenantId(),
-					SWConstants.SW_TAX_MODULE, taxModelnames, "$.*.code",
+					SWConstants.SW_TAX_MODULE, taxModelnames, ATTRIBUTES_FILTER_CODE,
 					SWConstants.TAX_JSONPATH_ROOT, request.getRequestInfo());
 			// merge codes
 			String[] masterNames = {SWConstants.MDMS_SW_CONNECTION_TYPE, SWConstants.SC_ROADTYPE_MASTER};
@@ -175,10 +177,10 @@ public class MDMSValidator {
 			List<String> names = new ArrayList<>(Arrays.asList(SWConstants.MDMS_SW_CONNECTION_TYPE));
 			List<String> taxModelnames = new ArrayList<>(Arrays.asList(SWConstants.SC_ROADTYPE_MASTER));
 			Map<String, List<String>> codes = getAttributeValues(request.getSewerageConnection().getTenantId(),
-					SWConstants.MDMS_SW_MOD_NAME, names, "$.*.code",
+					SWConstants.MDMS_SW_MOD_NAME, names, ATTRIBUTES_FILTER_CODE,
 					SWConstants.JSONPATH_ROOT, request.getRequestInfo());
 			Map<String, List<String>> codeFromCalculatorMaster = getAttributeValues(request.getSewerageConnection().getTenantId(),
-					SWConstants.SW_TAX_MODULE, taxModelnames, "$.*.code",
+					SWConstants.SW_TAX_MODULE, taxModelnames, ATTRIBUTES_FILTER_CODE,
 					SWConstants.TAX_JSONPATH_ROOT, request.getRequestInfo());
 			// merge codes
 			String[] masterNames = {SWConstants.MDMS_SW_CONNECTION_TYPE, SWConstants.SC_ROADTYPE_MASTER};

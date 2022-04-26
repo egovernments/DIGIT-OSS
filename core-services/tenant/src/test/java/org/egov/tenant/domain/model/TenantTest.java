@@ -14,6 +14,19 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TenantTest {
 
+    private static final String TENANT_CODE = "tenantcode";
+    private static final String TENANT_DESCRIPTION = "description";
+    private static final String TENANT_LOGO_ID = "logoId";
+    private static final String TENANT_IMAGE_ID = "imageId";
+    private static final String TENANT_DOMAIN_URL = "domainUrl";
+    private static final String TENANT_TWITTER_URL = "twitterUrl";
+    private static final String TENANT_FACEBOOK_URL = "faceBookUrl";
+    private static final String TENANT_EMAIL_ID = "email";
+    private static final String TENANT_ADDRESS = "address";
+    private static final String TENANT_CONTACT_NUMBER = "contactNumber";
+    private static final String TENANT_HELPLINE_NUMBER = "helpLineNumber";
+    private static final String TENANT_OTHER_LOGO_ID = "logoid";
+
     @Mock
     City city;
 
@@ -27,20 +40,20 @@ public class TenantTest {
         when(city.isValid()).thenReturn(false);
 
         Tenant tenant = Tenant.builder()
-            .code("tenantcode")
+            .code(TENANT_CODE)
             .name("name")
-            .description("description")
-            .logoId("logoId")
-            .imageId("imageId")
-            .domainUrl("domainUrl")
+            .description(TENANT_DESCRIPTION)
+            .logoId(TENANT_LOGO_ID)
+            .imageId(TENANT_IMAGE_ID)
+            .domainUrl(TENANT_DOMAIN_URL)
             .type("CITY")
             .city(city)
-            .twitterUrl("twitterUrl")
-            .facebookUrl("faceBookUrl")
-            .emailId("email")
-            .address("address")
-            .contactNumber("contactNumber")
-            .helpLineNumber("helpLineNumber")
+            .twitterUrl(TENANT_TWITTER_URL)
+            .facebookUrl(TENANT_FACEBOOK_URL)
+            .emailId(TENANT_EMAIL_ID)
+            .address(TENANT_ADDRESS)
+            .contactNumber(TENANT_CONTACT_NUMBER)
+            .helpLineNumber(TENANT_HELPLINE_NUMBER)
             .build();
         assertThat(tenant.isCityAbsent()).isFalse();
         tenant.validate();
@@ -49,19 +62,19 @@ public class TenantTest {
     @Test(expected = InvalidTenantDetailsException.class)
     public void test_should_throw_exception_when_city_is_not_present() {
         Tenant tenant = Tenant.builder()
-            .code("tenantcode")
+            .code(TENANT_CODE)
             .name("name")
-            .description("description")
-            .logoId("logoId")
-            .imageId("imageId")
-            .domainUrl("domainUrl")
+            .description(TENANT_DESCRIPTION)
+            .logoId(TENANT_LOGO_ID)
+            .imageId(TENANT_IMAGE_ID)
+            .domainUrl(TENANT_DOMAIN_URL)
             .type("CITY")
-            .twitterUrl("twitterUrl")
-            .facebookUrl("faceBookUrl")
-            .address("address")
-            .contactNumber("contactNumber")
-            .helpLineNumber("helpLineNumber")
-            .emailId("email")
+            .twitterUrl(TENANT_TWITTER_URL)
+            .facebookUrl(TENANT_FACEBOOK_URL)
+            .address(TENANT_ADDRESS)
+            .contactNumber(TENANT_CONTACT_NUMBER)
+            .helpLineNumber(TENANT_HELPLINE_NUMBER)
+            .emailId(TENANT_EMAIL_ID)
             .city(null)
             .build();
 
@@ -74,18 +87,18 @@ public class TenantTest {
         Tenant tenant = Tenant.builder()
             .code(null)
             .name("name")
-            .description("description")
-            .logoId("logoId")
-            .imageId("imageId")
-            .domainUrl("domainUrl")
+            .description(TENANT_DESCRIPTION)
+            .logoId(TENANT_LOGO_ID)
+            .imageId(TENANT_IMAGE_ID)
+            .domainUrl(TENANT_DOMAIN_URL)
             .type("CITY")
             .city(city)
-            .twitterUrl("twitterUrl")
-            .facebookUrl("faceBookUrl")
-            .address("address")
-            .contactNumber("contactNumber")
-            .helpLineNumber("helpLineNumber")
-            .emailId("email")
+            .twitterUrl(TENANT_TWITTER_URL)
+            .facebookUrl(TENANT_FACEBOOK_URL)
+            .address(TENANT_ADDRESS)
+            .contactNumber(TENANT_CONTACT_NUMBER)
+            .helpLineNumber(TENANT_HELPLINE_NUMBER)
+            .emailId(TENANT_EMAIL_ID)
             .build();
 
         assertThat(tenant.isCodeAbsent()).isTrue();
@@ -97,18 +110,18 @@ public class TenantTest {
         Tenant tenant = Tenant.builder()
             .code("")
             .name("name")
-            .description("description")
-            .logoId("logoId")
-            .imageId("imageId")
-            .domainUrl("domainUrl")
+            .description(TENANT_DESCRIPTION)
+            .logoId(TENANT_LOGO_ID)
+            .imageId(TENANT_IMAGE_ID)
+            .domainUrl(TENANT_DOMAIN_URL)
             .type("CITY")
             .city(city)
-            .twitterUrl("twitterUrl")
-            .facebookUrl("faceBookUrl")
-            .address("address")
-            .contactNumber("contactNumber")
-            .helpLineNumber("helpLineNumber")
-            .emailId("email")
+            .twitterUrl(TENANT_TWITTER_URL)
+            .facebookUrl(TENANT_FACEBOOK_URL)
+            .address(TENANT_ADDRESS)
+            .contactNumber(TENANT_CONTACT_NUMBER)
+            .helpLineNumber(TENANT_HELPLINE_NUMBER)
+            .emailId(TENANT_EMAIL_ID)
             .build();
 
         assertThat(tenant.isCodeAbsent()).isTrue();
@@ -122,18 +135,18 @@ public class TenantTest {
         Tenant tenant = Tenant.builder()
             .code(code)
             .name("name")
-            .description("description")
-            .logoId("logoId")
-            .imageId("imageId")
-            .domainUrl("domainUrl")
+            .description(TENANT_DESCRIPTION)
+            .logoId(TENANT_LOGO_ID)
+            .imageId(TENANT_IMAGE_ID)
+            .domainUrl(TENANT_DOMAIN_URL)
             .type("CITY")
             .city(city)
-            .twitterUrl("twitterUrl")
-            .facebookUrl("faceBookUrl")
-            .address("address")
-            .contactNumber("contactNumber")
-            .helpLineNumber("helpLineNumber")
-            .emailId("email")
+            .twitterUrl(TENANT_TWITTER_URL)
+            .facebookUrl(TENANT_FACEBOOK_URL)
+            .address(TENANT_ADDRESS)
+            .contactNumber(TENANT_CONTACT_NUMBER)
+            .helpLineNumber(TENANT_HELPLINE_NUMBER)
+            .emailId(TENANT_EMAIL_ID)
             .build();
 
         assertThat(tenant.isCodeOfInvalidLength()).isTrue();
@@ -143,20 +156,20 @@ public class TenantTest {
     @Test(expected = InvalidTenantDetailsException.class)
     public void test_should_throw_exception_when_logoId_is_not_present() {
         Tenant tenant = Tenant.builder()
-            .code("tenantcode")
+            .code(TENANT_CODE)
             .name("name")
-            .description("description")
+            .description(TENANT_DESCRIPTION)
             .logoId(null)
-            .imageId("imageId")
-            .domainUrl("domainUrl")
+            .imageId(TENANT_IMAGE_ID)
+            .domainUrl(TENANT_DOMAIN_URL)
             .type("CITY")
             .city(city)
-            .twitterUrl("twitterUrl")
-            .facebookUrl("faceBookUrl")
-            .address("address")
-            .contactNumber("contactNumber")
-            .helpLineNumber("helpLineNumber")
-            .emailId("email")
+            .twitterUrl(TENANT_TWITTER_URL)
+            .facebookUrl(TENANT_FACEBOOK_URL)
+            .address(TENANT_ADDRESS)
+            .contactNumber(TENANT_CONTACT_NUMBER)
+            .helpLineNumber(TENANT_HELPLINE_NUMBER)
+            .emailId(TENANT_EMAIL_ID)
             .build();
 
         assertThat(tenant.isLogoIdAbsent()).isTrue();
@@ -166,20 +179,20 @@ public class TenantTest {
     @Test(expected = InvalidTenantDetailsException.class)
     public void test_should_throw_exception_when_logoId_is_empty() {
         Tenant tenant = Tenant.builder()
-            .code("tenantcode")
+            .code(TENANT_CODE)
             .name("name")
-            .description("description")
+            .description(TENANT_DESCRIPTION)
             .logoId("")
-            .imageId("imageId")
-            .domainUrl("domainUrl")
+            .imageId(TENANT_IMAGE_ID)
+            .domainUrl(TENANT_DOMAIN_URL)
             .type("CITY")
             .city(city)
-            .twitterUrl("twitterUrl")
-            .facebookUrl("faceBookUrl")
-            .address("address")
-            .contactNumber("contactNumber")
-            .helpLineNumber("helpLineNumber")
-            .emailId("email")
+            .twitterUrl(TENANT_TWITTER_URL)
+            .facebookUrl(TENANT_FACEBOOK_URL)
+            .address(TENANT_ADDRESS)
+            .contactNumber(TENANT_CONTACT_NUMBER)
+            .helpLineNumber(TENANT_HELPLINE_NUMBER)
+            .emailId(TENANT_EMAIL_ID)
             .build();
 
         assertThat(tenant.isLogoIdAbsent()).isTrue();
@@ -189,20 +202,20 @@ public class TenantTest {
     @Test(expected = InvalidTenantDetailsException.class)
     public void test_should_throw_exception_when_imageId_is_not_present() {
         Tenant tenant = Tenant.builder()
-            .code("tenantcode")
+            .code(TENANT_CODE)
             .name("name")
-            .description("description")
-            .logoId("logoid")
+            .description(TENANT_DESCRIPTION)
+            .logoId(TENANT_OTHER_LOGO_ID)
             .imageId(null)
-            .domainUrl("domainUrl")
+            .domainUrl(TENANT_DOMAIN_URL)
             .type("CITY")
             .city(city)
-            .twitterUrl("twitterUrl")
-            .facebookUrl("faceBookUrl")
-            .address("address")
-            .contactNumber("contactNumber")
-            .helpLineNumber("helpLineNumber")
-            .emailId("email")
+            .twitterUrl(TENANT_TWITTER_URL)
+            .facebookUrl(TENANT_FACEBOOK_URL)
+            .address(TENANT_ADDRESS)
+            .contactNumber(TENANT_CONTACT_NUMBER)
+            .helpLineNumber(TENANT_HELPLINE_NUMBER)
+            .emailId(TENANT_EMAIL_ID)
             .build();
 
         assertThat(tenant.isImageIdAbsent()).isTrue();
@@ -212,20 +225,20 @@ public class TenantTest {
     @Test(expected = InvalidTenantDetailsException.class)
     public void test_should_throw_exception_when_imageId_is_empty() {
         Tenant tenant = Tenant.builder()
-            .code("tenantcode")
+            .code(TENANT_CODE)
             .name("name")
-            .description("description")
-            .logoId("logoid")
+            .description(TENANT_DESCRIPTION)
+            .logoId(TENANT_OTHER_LOGO_ID)
             .imageId("")
-            .domainUrl("domainUrl")
+            .domainUrl(TENANT_DOMAIN_URL)
             .type("CITY")
             .city(city)
-            .twitterUrl("twitterUrl")
-            .facebookUrl("faceBookUrl")
-            .address("address")
-            .contactNumber("contactNumber")
-            .helpLineNumber("helpLineNumber")
-            .emailId("email")
+            .twitterUrl(TENANT_TWITTER_URL)
+            .facebookUrl(TENANT_FACEBOOK_URL)
+            .address(TENANT_ADDRESS)
+            .contactNumber(TENANT_CONTACT_NUMBER)
+            .helpLineNumber(TENANT_HELPLINE_NUMBER)
+            .emailId(TENANT_EMAIL_ID)
             .build();
 
         assertThat(tenant.isImageIdAbsent()).isTrue();
@@ -235,20 +248,20 @@ public class TenantTest {
     @Test(expected = InvalidTenantDetailsException.class)
     public void test_should_throw_exception_when_type_is_not_present() {
         Tenant tenant = Tenant.builder()
-            .code("tenantcode")
+            .code(TENANT_CODE)
             .name("name")
-            .description("description")
-            .logoId("logoid")
+            .description(TENANT_DESCRIPTION)
+            .logoId(TENANT_OTHER_LOGO_ID)
             .imageId("imageid")
-            .domainUrl("domainUrl")
+            .domainUrl(TENANT_DOMAIN_URL)
             .type(null)
             .city(city)
-            .twitterUrl("twitterUrl")
-            .facebookUrl("faceBookUrl")
-            .address("address")
-            .contactNumber("contactNumber")
-            .helpLineNumber("helpLineNumber")
-            .emailId("email")
+            .twitterUrl(TENANT_TWITTER_URL)
+            .facebookUrl(TENANT_FACEBOOK_URL)
+            .address(TENANT_ADDRESS)
+            .contactNumber(TENANT_CONTACT_NUMBER)
+            .helpLineNumber(TENANT_HELPLINE_NUMBER)
+            .emailId(TENANT_EMAIL_ID)
             .build();
 
         assertThat(tenant.isTypeAbsent()).isTrue();
@@ -258,20 +271,20 @@ public class TenantTest {
     @Test(expected = InvalidTenantDetailsException.class)
     public void test_should_throw_exception_when_type_is_invalid() {
         Tenant tenant = Tenant.builder()
-            .code("tenantcode")
+            .code(TENANT_CODE)
             .name("name")
-            .description("description")
-            .logoId("logoid")
+            .description(TENANT_DESCRIPTION)
+            .logoId(TENANT_OTHER_LOGO_ID)
             .imageId("imageid")
-            .domainUrl("domainUrl")
+            .domainUrl(TENANT_DOMAIN_URL)
             .type("INVALID")
             .city(city)
-            .twitterUrl("twitterUrl")
-            .facebookUrl("faceBookUrl")
-            .address("address")
-            .contactNumber("contactNumber")
-            .helpLineNumber("helpLineNumber")
-            .emailId("email")
+            .twitterUrl(TENANT_TWITTER_URL)
+            .facebookUrl(TENANT_FACEBOOK_URL)
+            .address(TENANT_ADDRESS)
+            .contactNumber(TENANT_CONTACT_NUMBER)
+            .helpLineNumber(TENANT_HELPLINE_NUMBER)
+            .emailId(TENANT_EMAIL_ID)
             .build();
 
         assertThat(tenant.isTypeInvalid()).isTrue();

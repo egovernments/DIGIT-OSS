@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class ConfigLoader {
      * Loads config resources
      * @throws Exception
      */
-	public void loadResources() throws Exception {
+	public void loadResources() throws IOException{
 	    logger.info("RESOURCE_LOCATION:: "+RESOURCE_LOCATION);
 		Resource[] resources = getResources(RESOURCE_LOCATION);
 
@@ -49,6 +50,9 @@ public class ConfigLoader {
      * @return
      */
     public String get(String name) {
+        if(!nameContentMap.containsKey(name)){
+            throw new CustomException("EG_KEY_DOES_NOT_EXIST_ERR", "The provided keyname does not exist in nameContentMap");
+        }
         return nameContentMap.get(name);
     }
 
@@ -58,7 +62,7 @@ public class ConfigLoader {
      * @return
      * @throws IOException
      */
-    private Resource[] getResources(String pattern) throws IOException {
+    private Resource[] getResources(String pattern) throws IOException{
         Resource[] resources = ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(pattern);
         return resources;
     }
@@ -82,7 +86,9 @@ public class ConfigLoader {
 
         } finally{
             try {
-                is.close();
+                if(is != null){
+                    is.close();
+                }
             } catch (IOException e) {
                 logger.error("Error while closing input stream. ");
             }

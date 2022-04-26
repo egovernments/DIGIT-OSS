@@ -150,18 +150,17 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
                 + receiptHeader.getConsumerCode().replace("-", "").replace("/", ""))));
         LOGGER.info("First request ATOM: " + formData);
         UrlEncodedFormEntity urlEncodedFormEntity = null;
-        try {
+        try(final CloseableHttpClient httpclient = HttpClients.createDefault();) {
             urlEncodedFormEntity = new UrlEncodedFormEntity(formData);
             httpPost.setEntity(urlEncodedFormEntity);
-            final CloseableHttpClient httpclient = HttpClients.createDefault();
             CloseableHttpResponse response = httpclient.execute(httpPost);
             HttpEntity responseAtom = response.getEntity();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(responseAtom.getContent()));
             final StringBuilder data = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null)
-                data.append(line);
-            reader.close();
+            try(BufferedReader reader = new BufferedReader(new InputStreamReader(responseAtom.getContent()));){
+                String line;
+                while ((line = reader.readLine()) != null)
+                    data.append(line);
+            }
 
             SAXParserFactory spf = SAXParserFactory.newInstance();
             spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
@@ -256,7 +255,7 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
     public PaymentResponse createOfflinePaymentRequest(final OnlinePayment onlinePayment) throws ApplicationException, ClientProtocolException, IOException, JAXBException {
         LOGGER.debug("Inside AtomAdaptor createOfflinePaymentRequest");
         PaymentResponse atomResponse = new DefaultPaymentResponse();
-        try {
+        try(final CloseableHttpClient httpclient = HttpClients.createDefault();) {
             final HttpPost httpPost = new HttpPost(collectionApplicationProperties.atomReconcileUrl());
             final List<NameValuePair> formData = new ArrayList<>(0);
             formData.add(
@@ -270,15 +269,15 @@ public class AtomAdaptor implements PaymentGatewayAdaptor {
             LOGGER.debug("ATOM  Reconcilation request : " + formData);
             UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(formData);
             httpPost.setEntity(urlEncodedFormEntity);
-            final CloseableHttpClient httpclient = HttpClients.createDefault();
+            
             CloseableHttpResponse response = httpclient.execute(httpPost);
             HttpEntity responseAtom = response.getEntity();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(responseAtom.getContent()));
             final StringBuilder data = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null)
-                data.append(line);
-            reader.close();
+            try(BufferedReader reader = new BufferedReader(new InputStreamReader(responseAtom.getContent()));){
+                String line;
+                while ((line = reader.readLine()) != null)
+                    data.append(line);
+            }
             LOGGER.info("ATOM Reconcile Response : " + data.toString());
             JAXBContext jaxbContext = JAXBContext.newInstance(ResponseAtomReconcilation.class);
             Unmarshaller unMarshaller = jaxbContext.createUnmarshaller();

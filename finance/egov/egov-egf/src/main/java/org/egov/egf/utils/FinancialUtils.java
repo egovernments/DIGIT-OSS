@@ -414,8 +414,11 @@ public class FinancialUtils {
                 }
             } catch (ApplicationRuntimeException e) {
                 LOGGER.info("Exception while after pushing to S3 bucket filstoreId's : ", e);
-                LOGGER.info(("NFSFile-------------------" + fileStoreMapperNFS.getFileStoreId()));
 
+                if (fileStoreMapperNFS != null)
+                    LOGGER.info(("NFSFile-------------------" + fileStoreMapperNFS.getFileStoreId()));
+
+                if (fileStoreS3 != null)
                 LOGGER.info("S3File-------------------" + fileStoreS3.getFileStoreId());
                 
             }

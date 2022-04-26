@@ -53,6 +53,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
@@ -63,8 +64,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class HeadRoom extends FeatureProcess {
-    private static final String RULE42_5_ii = "42-5-ii";
-    private static final String RULE_42_5_ii_DESCRIPTION = "Minimum clear of stair head-room";
+    private static final String RULE42_5_II = "42-5-ii";
+    private static final String RULE_42_5_II_DESCRIPTION = "Minimum clear of stair head-room";
     private static final BigDecimal TWO_POINTTWO = BigDecimal.valueOf(2.2);
 
     @Override
@@ -91,18 +92,19 @@ public class HeadRoom extends FeatureProcess {
 
                     List<BigDecimal> headRoomDimensions = headRoom.getHeadRoomDimensions();
 
-                    if (headRoomDimensions != null && headRoomDimensions.size() > 0) {
+                    if (headRoomDimensions != null && !headRoomDimensions.isEmpty()) {
 
-                        BigDecimal minHeadRoomDimension = headRoomDimensions.stream().reduce(BigDecimal::min).get();
+                        Optional<BigDecimal> minHeadRoomDim = headRoomDimensions.stream().reduce(BigDecimal::min);
+						BigDecimal minHeadRoomDimension = minHeadRoomDim.isPresent() ? minHeadRoomDim.get() : BigDecimal.ZERO;
 
                         BigDecimal minWidth = Util.roundOffTwoDecimal(minHeadRoomDimension);
 
                         if (minWidth.compareTo(TWO_POINTTWO) >= 0) {
-                            setReportOutputDetails(plan, RULE42_5_ii, RULE_42_5_ii_DESCRIPTION,
+                            setReportOutputDetails(plan, RULE42_5_II, RULE_42_5_II_DESCRIPTION,
                                     String.valueOf(TWO_POINTTWO), String.valueOf(minWidth), Result.Accepted.getResultVal(),
                                     scrutinyDetail);
                         } else {
-                            setReportOutputDetails(plan, RULE42_5_ii, RULE_42_5_ii_DESCRIPTION,
+                            setReportOutputDetails(plan, RULE42_5_II, RULE_42_5_II_DESCRIPTION,
                                     String.valueOf(TWO_POINTTWO), String.valueOf(minWidth), Result.Not_Accepted.getResultVal(),
                                     scrutinyDetail);
                         }

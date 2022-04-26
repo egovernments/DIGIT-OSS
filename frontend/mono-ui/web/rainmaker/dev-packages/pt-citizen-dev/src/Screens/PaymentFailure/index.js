@@ -98,6 +98,7 @@ class PaymentFailure extends Component {
       // );
       // this.setState({ bill: payload["Bill"] });
     } catch (e) {
+      console.log(e);
     }
     return;
   };

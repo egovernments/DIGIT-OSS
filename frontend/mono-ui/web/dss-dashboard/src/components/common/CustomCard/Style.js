@@ -17,7 +17,7 @@ const styles = theme => ({
     subTitle: {
         textAlign: 'left',
         fontFamily: 'Roboto',
-        fontSize: '16px',
+        fontSize: '14px',
         fontWeight: '400',
         color: 'rgba(0, 0, 0, 0.87)',
         textOverflow: 'ellipsis',
@@ -27,11 +27,10 @@ const styles = theme => ({
     value: {
         textAlign: 'left',
         fontFamily: 'Roboto',
-        fontSize: '24px',
-        fontWeight: '700',
+        fontSize: '20px',
+        fontWeight: '500',
         color: 'rgba(0, 0, 0, 0.87)',
-        marginTop: '1px',
-        lineHeight:"32px",
+        marginTop: '5px',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         overflow: 'hidden',

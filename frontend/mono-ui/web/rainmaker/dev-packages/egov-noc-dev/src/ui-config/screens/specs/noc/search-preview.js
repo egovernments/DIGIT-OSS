@@ -1,20 +1,23 @@
-import commonConfig from "config/common.js";
 import {
   getCommonCard,
   getCommonContainer,
-  getCommonGrayCard, getCommonHeader, getCommonSubHeader, getCommonTitle,
-  getLabel, getLabelWithValue
+  getCommonGrayCard,
+  getCommonSubHeader,
+  getCommonHeader,
+  getLabelWithValue,
+  getCommonTitle,
+  getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import set from "lodash/set";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
-import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils/api";
-import { checkValueForNA, getNocSearchResults, requiredDocumentsData } from "../utils";
+import { requiredDocumentsData, checkValueForNA, getNocSearchResults } from "../utils";
 
 const titlebar = {
   uiFramework: "custom-atoms",
@@ -41,7 +44,7 @@ const titlebar2 = {
       uiFramework: "custom-atoms-local",
       moduleName: "egov-noc",
       componentPath: "NocNumber",
-      gridDefination: { },
+      gridDefination: {},
       props: {
         number: "NA"
       },
@@ -190,7 +193,7 @@ const setSearchResponse = async (
     },
     { key: "applicationNo", value: applicationNumber }
   ]);
-  dispatch(prepareFinalObject("Noc", get(response, "Noc[0]", { })));
+  dispatch(prepareFinalObject("Noc", get(response, "Noc[0]", {})));
   const queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "businessServices", value: get(response, "Noc[0].additionalDetails.workflowCode") }
@@ -229,7 +232,7 @@ const setSearchResponse = async (
 const getRequiredMdmsDetails = async (state, dispatch, action) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: getTenantId().split('.')[0],
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -301,23 +304,23 @@ export const prepareDocsInEmployee = (state, dispatch, action) => {
   }
   const nocDocuments = documentsList;
   let documentsContract = [];
-  let tempDoc = { };
+  let tempDoc = {};
 
   if (nocDocuments && nocDocuments.length > 0) {
     nocDocuments.forEach(doc => {
-      let card = { };
+      let card = {};
       card["code"] = doc.documentType.split(".")[0];
       card["title"] = doc.documentType.split(".")[0];
       card["cards"] = [];
       tempDoc[doc.documentType.split(".")[0]] = card;
     });
     nocDocuments.forEach(doc => {
-      let card = { };
+      let card = {};
       card["name"] = doc.documentType;
       card["code"] = doc.documentType;
       card["required"] = doc.required ? true : false;
       if (doc.hasDropdown && doc.dropDownValues) {
-        let dropDownValues = { };
+        let dropDownValues = {};
         dropDownValues.label = "Select Documents";
         dropDownValues.required = doc.required;
         dropDownValues.menu = doc.dropDownValues.filter(item => {
@@ -412,4 +415,4 @@ const screenConfig = {
   }
 };
 
-export default screenConfig;
+export default screenConfig; 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { commonApiPost } from "egov-ui-kit/utils/api";
 import SearchForm from "./searchForm";
-import ReportResult from "egov-ui-kit/utils/reportResult";
+import ReportResult from "./reportResult";
 import { getMetaDataUrl } from "./commons/url";
 import commonConfig from "config/common.js";
 import { Screen } from "modules/common";

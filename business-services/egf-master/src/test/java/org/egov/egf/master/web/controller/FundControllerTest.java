@@ -47,6 +47,7 @@ public class FundControllerTest {
     private ArgumentCaptor<List<Fund>> captor;
 
     private RequestJsonReader resources = new RequestJsonReader();
+    private static final String DEFAULT="default";
 
     @Test
     public void testCreate() throws IOException, Exception {
@@ -64,7 +65,7 @@ public class FundControllerTest {
         assertEquals("name", actualRequest.get(0).getName());
         assertEquals("code", actualRequest.get(0).getCode());
         assertEquals(Character.valueOf('I'), actualRequest.get(0).getIdentifier());
-        assertEquals("default", actualRequest.get(0).getTenantId());
+        assertEquals(DEFAULT, actualRequest.get(0).getTenantId());
     }
 
     @Test
@@ -95,7 +96,7 @@ public class FundControllerTest {
         assertEquals("nameupdate", actualRequest.get(0).getName());
         assertEquals("code", actualRequest.get(0).getCode());
         assertEquals(Character.valueOf('U'), actualRequest.get(0).getIdentifier());
-        assertEquals("default", actualRequest.get(0).getTenantId());
+        assertEquals(DEFAULT, actualRequest.get(0).getTenantId());
     }
 
     @Test
@@ -120,7 +121,7 @@ public class FundControllerTest {
     private List<Fund> getFunds() {
         List<Fund> funds = new ArrayList<Fund>();
         Fund fund = Fund.builder().name("name").code("code").identifier('I').level(1234l).active(true).build();
-        fund.setTenantId("default");
+        fund.setTenantId(DEFAULT);
         funds.add(fund);
         return funds;
     }
@@ -128,7 +129,7 @@ public class FundControllerTest {
     private List<Fund> getUpdateFunds() {
         List<Fund> funds = new ArrayList<Fund>();
         Fund fund = Fund.builder().name("nameupdate").code("code").identifier('U').active(true).id("1").level(1234l).build();
-        fund.setTenantId("default");
+        fund.setTenantId(DEFAULT);
         funds.add(fund);
         return funds;
     }

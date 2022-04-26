@@ -73,22 +73,7 @@ public class UserEventRepository {
 		}
 		return response;
 	}
+	
+	
 
-
-	public Integer fetchTotalEventCount(EventSearchCriteria criteria) {
-		Map<String, Object> preparedStatementValues = new HashMap<>();
-		criteria.setIsEventsCountCall(Boolean.TRUE);
-		String query = queryBuilder.getSearchQuery(criteria, preparedStatementValues);
-		query = queryBuilder.addCountWrapper(query);
-		criteria.setIsEventsCountCall(Boolean.FALSE);
-		log.info("Count Query: " + query);
-		Integer totalCount = 0;
-		try {
-			totalCount = namedParameterJdbcTemplate.queryForObject(query, preparedStatementValues, Integer.class);
-		}catch(Exception e) {
-			log.error("Error while fetching total event count from db: ", e);
-		}
-
-		return totalCount;
-	}
 }

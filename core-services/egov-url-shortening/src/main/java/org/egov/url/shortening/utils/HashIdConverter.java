@@ -11,7 +11,7 @@ public class HashIdConverter {
 
     @Value("${hashids.salt}")
     private String salt;
-    @Value("${hsahids.min.length}")
+    @Value("${hashids.min.length}")
     private Integer minimumLength;
 
     private Hashids hashids;

@@ -21,7 +21,8 @@ the steps for approval of the application.
 
 Link to the swagger API contract yaml and editor link like below
 
-https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/tl-service.yml#!/
+http://editor.swagger.io/?url=https://github.com/egovernments/egov-services/blob/master/docs/rainmaker/trade-license/tl-service.yml#!/
+
 
 ## Service Details
 

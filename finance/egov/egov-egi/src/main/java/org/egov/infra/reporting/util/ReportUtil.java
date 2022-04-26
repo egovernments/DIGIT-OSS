@@ -175,7 +175,7 @@ public final class ReportUtil {
     }
 
     public static String amountInWords(BigDecimal amount) {
-        System.out.println("************* Report amout********"+amount);
+    	LOGGER.info("************* Report amout******** {} ",amount);
         return NumberUtil.amountInWords(amount);
     }
 

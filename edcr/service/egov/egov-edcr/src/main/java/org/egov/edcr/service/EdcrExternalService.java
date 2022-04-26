@@ -44,8 +44,10 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.dcr.helper.EdcrApplicationInfo;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
@@ -65,22 +67,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class EdcrExternalService {
 
-    private Logger LOG = Logger.getLogger(EdcrExternalService.class);
+
+    private Logger LOG = LogManager.getLogger(EdcrExternalService.class);
 
     /*
      * Names should same as DCR checklist name in application with underscore concatenation for each space
      */
-    private static final String SITE_PLAN = "Site_Plan";
-    private static final String SERVICE_PLAN = "Service_Plan";
-    private static final String PARKING_PLAN = "Parking_Plan";
-    private static final String BUILDING_PLAN = "Building_Plan";
-    private static final String TERRACE_PLAN = "Terrace_Plan";
-    private static final String ROOF_PLAN = "Roof_Plan";
-    private static final String ELEVATION_PLAN = "Elevation_Plans";
-    private static final String SECTION_PLAN = "Section_Plans";
-    private static final String DETAILS_PLAN = "Details_Plan";
-    private static final String FLOOR_PLAN = "Floor_Plans";
-    private static final String FLOOR_PLAN_ELEVTN_SECTN = "Floor_Plans,_Elevations,_Sections";
+	/*
+	 * private static final String SITE_PLAN = "Site_Plan"; private static final
+	 * String SERVICE_PLAN = "Service_Plan"; private static final String
+	 * PARKING_PLAN = "Parking_Plan"; private static final String BUILDING_PLAN =
+	 * "Building_Plan"; private static final String TERRACE_PLAN = "Terrace_Plan";
+	 * private static final String ROOF_PLAN = "Roof_Plan"; private static final
+	 * String ELEVATION_PLAN = "Elevation_Plans"; private static final String
+	 * SECTION_PLAN = "Section_Plans"; private static final String DETAILS_PLAN =
+	 * "Details_Plan"; private static final String FLOOR_PLAN = "Floor_Plans";
+	 * private static final String FLOOR_PLAN_ELEVTN_SECTN =
+	 * "Floor_Plans,_Elevations,_Sections";
+	 */
 
     @Autowired
     private EdcrApplicationDetailService edcrApplicationDetailService;

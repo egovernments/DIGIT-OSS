@@ -67,6 +67,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CChartOfAccountDetail;
@@ -529,7 +530,7 @@ public class ChartOfAccounts {
 		rs = pst.list();
 		for (final Object[] element : rs)
 			if (Integer.parseInt(element[0].toString()) == 1)
-				if (fuctid.length() > 0 && fuctid != null) {
+				if (StringUtils.isNotBlank(fuctid) && fuctid.length() > 0 ) {
 					if (LOGGER.isInfoEnabled())
 						LOGGER.info("in COA33--" + fuctid);
 				} else {
@@ -1055,38 +1056,9 @@ public class ChartOfAccounts {
 		return true;
 	}
 
-	public String getGLCode(final String detailName, final String detailKey, final Connection con) {
-		String code = "";
-		try {
-			final StringBuilder str = new StringBuilder("select glcode as \"code\" from chartofaccounts,bankaccount")
-					.append(" where bankaccount.glcodeid=chartofaccounts.id and bankaccount.id= ?");
-			final PreparedStatement pst = con.prepareStatement(str.toString());
-			pst.setString(0, detailKey);
-			final ResultSet resultset = pst.executeQuery();
 
-			if (resultset.next())
-				code = resultset.getString("code");
-		} catch (final SQLException e) {
-			LOGGER.error("error" + e.toString(), e);
-		}
-		return code;
-	}
 
-	public String getFiscalYearID(final String voucherDate, final Connection con, final DataCollection dc) {
-		String fiscalyearid = "";
-		final StringBuilder sql = new StringBuilder("select ID as \"fiscalperiodID\" from fiscalperiod where ")
-				.append("to_date(?,'dd-mon-yyyy') between startingdate and endingdate");
-		try {
-			final PreparedStatement pst = con.prepareStatement(sql.toString());
-			pst.setString(0, voucherDate);
-			final ResultSet rs = pst.executeQuery();
-			if (rs.next())
-				fiscalyearid = rs.getString("fiscalperiodID");
-		} catch (final SQLException e) {
-			LOGGER.error("Excepion in getFiscalYearID() " + e, e);
-		}
-		return fiscalyearid;
-	}
+
 
 	private boolean validPeriod(final String vDate) throws TaskFailedException  {
 		try {

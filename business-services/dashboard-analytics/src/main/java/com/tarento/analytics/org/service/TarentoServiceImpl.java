@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
@@ -73,13 +72,6 @@ public class TarentoServiceImpl implements ClientService {
 		ObjectNode insightNodes = JsonNodeFactory.instance.objectNode();
 		Boolean continueWithInsight = Boolean.FALSE; 
 
-		//TODO should be remove temporary fix for national dashboard
-		Map<String, Object> filters = request.getFilters();
-		if( filters != null && filters.get("ulb") != null) {
-			filters.put("tenantId", filters.get("ulb"));
-		}
-		
-		
 		// Load Chart API configuration to Object Node for easy retrieval later
 		ObjectNode node = configurationLoader.get(Constants.ConfigurationFiles.CHART_API_CONFIG);
 		ObjectNode chartNode = (ObjectNode) node.get(internalChartId);
@@ -137,8 +129,7 @@ public class TarentoServiceImpl implements ClientService {
 		preHandle(request, chartNode, mdmsApiMappings);
 
 		ArrayNode queries = (ArrayNode) chartNode.get(Constants.JsonPaths.QUERIES);
-		int randIndexCount = 1;
-		for(JsonNode query : queries) {
+		queries.forEach(query -> {
 			String module = query.get(Constants.JsonPaths.MODULE).asText();
 			if(request.getModuleLevel().equals(Constants.Modules.HOME_REVENUE) || 
 					request.getModuleLevel().equals(Constants.Modules.HOME_SERVICES) ||
@@ -150,8 +141,7 @@ public class TarentoServiceImpl implements ClientService {
 				try {
 					JsonNode aggrNode = restService.search(indexName,objectNode.toString());
 					if(nodes.has(indexName)) { 
-						indexName = indexName + "_" + randIndexCount;
-						randIndexCount += 1;
+						indexName = indexName + "_1";
 					}
 					nodes.set(indexName,aggrNode.get(Constants.JsonPaths.AGGREGATIONS));
 				}catch (Exception e) {
@@ -161,7 +151,7 @@ public class TarentoServiceImpl implements ClientService {
 				aggrObjectNode.set(Constants.JsonPaths.AGGREGATIONS, nodes);
 
 			}
-		}
+		});
 	}
 
 	/**

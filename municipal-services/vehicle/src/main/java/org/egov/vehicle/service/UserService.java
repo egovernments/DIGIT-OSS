@@ -60,6 +60,10 @@ public class UserService {
 	@Autowired
 	private Constants constants;
 
+	private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
+	private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+	private static final String ILLEGAL_ARGUMENT_EXCEPTION = "IllegalArgumentException";
+
 	/**
 	 * 
 	 * @param vendorRequest
@@ -197,14 +201,13 @@ public class UserService {
 		else if (uri.toString().contains(config.getUserCreateEndpoint()))
 			dobFormat = "dd/MM/yyyy";
 		try {
-//			System.out.println("user search url: " + uri + userRequest);
-			
+
 			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, userRequest);
 			parseResponse(responseMap, dobFormat);
 			UserDetailResponse userDetailResponse = mapper.convertValue(responseMap, UserDetailResponse.class);
 			return userDetailResponse;
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in userCall");
+			throw new CustomException(ILLEGAL_ARGUMENT_EXCEPTION, "ObjectMapper not able to convertValue in userCall");
 		}
 	}
 	/**
@@ -254,7 +257,7 @@ public class UserService {
 			}
 			return newOwner;
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException",
+			throw new CustomException(ILLEGAL_ARGUMENT_EXCEPTION,
 					"ObjectMapper not able to convertValue in create vendor owner");
 		}
 	}
@@ -344,7 +347,7 @@ public class UserService {
 			UserDetailResponse ownerDetailResponse = mapper.convertValue(responseMap, UserDetailResponse.class);
 			return ownerDetailResponse;
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in ownerCall");
+			throw new CustomException(ILLEGAL_ARGUMENT_EXCEPTION, "ObjectMapper not able to convertValue in ownerCall");
 		}
 
 	}
@@ -356,12 +359,12 @@ public class UserService {
 		if (owners != null) {
 			owners.forEach(map -> {
 				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get("lastModifiedDate") != null)
-					map.put("lastModifiedDate", dateTolong((String) map.get("lastModifiedDate"), format1));
+				if ((String) map.get(GET_LAST_MODIFIED_DATE) != null)
+					map.put(GET_LAST_MODIFIED_DATE, dateTolong((String) map.get(GET_LAST_MODIFIED_DATE), format1));
 				if ((String) map.get("dob") != null)
 					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-				if ((String) map.get("pwdExpiryDate") != null)
-					map.put("pwdExpiryDate", dateTolong((String) map.get("pwdExpiryDate"), format1));
+				if ((String) map.get(GET_PWD_EXPIRY_DATE) != null)
+					map.put(GET_PWD_EXPIRY_DATE, dateTolong((String) map.get(GET_PWD_EXPIRY_DATE), format1));
 			});
 		}
 	}
@@ -374,7 +377,10 @@ public class UserService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return d.getTime();
+		if(d != null){
+			return d.getTime();
+		}
+		return null;
 	}
 
 	public UserDetailResponse getOwner(VehicleSearchCriteria criteria, RequestInfo requestInfo) {
@@ -429,18 +435,4 @@ public class UserService {
 		
 		return Boolean.TRUE;
 	}
-	
-	public UserDetailResponse  searchUsersByCriteria(UserSearchRequest userSearchRequest) {
-		
-		StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
-		UserDetailResponse ownerDetailResponse = ownerCall(userSearchRequest, uri);
-		
-		if (ownerDetailResponse != null && ownerDetailResponse.getUser() != null
-				&& ownerDetailResponse.getUser().size() > 0) {
-			return ownerDetailResponse;
-		}else {
-			return null;
-		}
-	}
-
 }

@@ -8,6 +8,7 @@ import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.web.contract.User;
 import org.egov.demand.web.contract.UserResponse;
 import org.egov.demand.web.contract.UserSearchRequest;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,20 +55,20 @@ public class PayerRepository {
 			} catch (JsonMappingException jme) {
 				log.error("Following Exception Occurred While Mapping JSON Response From User Service : "
 						+ jme.getMessage());
-				throw new RuntimeException(jme);
+				throw new CustomException("JSON_MAPPING_EXCEPTION",jme.getMessage());
 			} catch (JsonProcessingException jpe) {
 				log.error("Following Exception Occurred While Processing JSON Response From User Service : "
 						+ jpe.getMessage());
-				throw new RuntimeException(jpe);
+				throw new CustomException("JSON_PROCESSING_EXCEPTION",jpe.getMessage());
 			} catch (IOException ioe) {
 				log.error("Following Exception Occurred Calling User Service : " + ioe.getMessage());
-				throw new RuntimeException(ioe);
+				throw new CustomException("IOEXCEPTION",ioe.getMessage());
 			}
 				log.debug("the exception from user module inside first catch block ::"+userErrorResponse.getError().toString());
-				throw new RuntimeException(e);
+				throw new CustomException("USER_EXCEPTION",e.getMessage());
 		} catch (Exception e) {
 			log.error("Following Exception Occurred While Calling User Service : " + e.getMessage());
-			throw new RuntimeException(e);
+			throw new CustomException("USER_EXCEPTION",e.getMessage());
 		}
 	
 		return userResponse.getUser();

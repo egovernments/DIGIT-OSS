@@ -418,7 +418,6 @@ export const transformPropertyDataToAssessInfo = (data) => {
     }
   }
 
-  
   return { basicInformation: basicInfoConfig, plotDetails: configPlot, ...dictFloor, ...dictCustomSelect };
 };
 

@@ -68,7 +68,6 @@ $(document).ready(function(){
 	    cache: true,
 		language: getLocale("locale"),
 		callback: function() {
-			console.log('File loaded successfully');
 		}
 	});
 	
@@ -1081,7 +1080,6 @@ function loadAccountCodeTemplate(){
 
 $('#accountCodeTemplateId').change(function () {
 	var selectedTemp = $(this).val();
-	console.log("current1 : ",$.data(this, 'current'));
 	if($(this).val()){
 		populateAccountCodeTemplateDetails(selectedTemp);
 	}

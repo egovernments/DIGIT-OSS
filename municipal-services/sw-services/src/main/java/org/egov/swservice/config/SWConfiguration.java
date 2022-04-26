@@ -95,14 +95,7 @@ public class SWConfiguration {
 	
 	@Value("${egov.user.event.notification.enabled}")
 	private Boolean isUserEventsNotificationEnabled;
-
-	// Email
-	@Value("${kafka.topics.notification.email}")
-	private String emailNotifTopic;
-
-	@Value("${notification.email.enabled}")
-	private Boolean isEmailNotificationEnabled;
-
+	
     	//User Configuration
     	@Value("${egov.user.host}")
     	private String userHost;
@@ -193,11 +186,4 @@ public class SWConfiguration {
 
 	@Value("${state.level.tenant.id}")
 	private String stateLevelTenantId;
-
-	//mdms
-	@Value("${egov.mdms.host}")
-	private String mdmsHost;
-
-	@Value("${egov.mdms.search.endpoint}")
-	private String mdmsUrl;
 }

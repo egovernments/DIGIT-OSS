@@ -154,7 +154,6 @@ public class BusinessCategoryServiceTest {
 	}
 
     private List<org.egov.commons.web.contract.BusinessCategory> getBusinessCategory() {
-        List<org.egov.commons.web.contract.BusinessCategory> categories = new ArrayList<org.egov.commons.web.contract.BusinessCategory>();
         org.egov.commons.web.contract.BusinessCategory businessCategory1 = org.egov.commons.web.contract.BusinessCategory
                     .builder().id(1L).code("TLM").name("Trade Licence").active(true).tenantId("default").build();
         org.egov.commons.web.contract.BusinessCategory businessCategory2 = org.egov.commons.web.contract.BusinessCategory

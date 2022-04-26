@@ -52,7 +52,7 @@ Module is used to apply for Building Plan Approval, Building Plan Occupancy Cert
 
 ### Swagger API Contract
 
-- [Swagger API](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/bpa/bpa-service.yaml#!/)
+- [Swagger API](https://github.com/egovernments/municipal-services/blob/master/docs/bpa/bpa-service.yaml)
 
 ## Service Details
 

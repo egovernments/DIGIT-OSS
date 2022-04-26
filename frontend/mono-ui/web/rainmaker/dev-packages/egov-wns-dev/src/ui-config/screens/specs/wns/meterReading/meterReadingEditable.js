@@ -79,6 +79,7 @@ const saveData = async (state, dispatch) => {
         var selectedDate = new Date(new Date(data.currentReadingDate).toDateString());
         let fromDate = new Date(data.billingPeriod.split(' - ')[0].replace(/(\d{2})\/(\d{2})\/(\d{4})/,"$2/$1/$3"));
         let toDate = new Date(new Date().toDateString());
+        
         if(!(selectedDate > fromDate && selectedDate <= toDate))
         {
             dispatch(

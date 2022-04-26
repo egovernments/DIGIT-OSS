@@ -10,6 +10,8 @@ import static org.junit.Assert.assertNotEquals;
 
 public class RoleSearchCriteriaTest {
 
+	private static final String CITIZEN_KEY = "CITIZEN";
+
 	@Test
 	public void testForEqualsAndHashCode() {
 		RoleSearchCriteria searchCriteria1 = RoleSearchCriteria.builder().codes(Arrays.asList("EMP")).build();
@@ -23,7 +25,7 @@ public class RoleSearchCriteriaTest {
 	public void testForNotEqualObjects() {
 		RoleSearchCriteria searchCriteria1 = RoleSearchCriteria.builder().codes(Arrays.asList("CITIZEN,EMPLOYEE"))
 				.build();
-		RoleSearchCriteria searchCriteria2 = RoleSearchCriteria.builder().codes(Arrays.asList("CITIZEN")).build();
+		RoleSearchCriteria searchCriteria2 = RoleSearchCriteria.builder().codes(Arrays.asList(CITIZEN_KEY)).build();
 
 		assertNotEquals(searchCriteria1, searchCriteria2);
 		assertNotEquals(searchCriteria1.hashCode(), searchCriteria2.hashCode());
@@ -31,8 +33,8 @@ public class RoleSearchCriteriaTest {
 
 	@Test
 	public void testGetCodes() {
-		RoleSearchCriteria searchCriteria = RoleSearchCriteria.builder().codes(Arrays.asList("CITIZEN", "EMPLOYEE"))
+		RoleSearchCriteria searchCriteria = RoleSearchCriteria.builder().codes(Arrays.asList(CITIZEN_KEY, "EMPLOYEE"))
 				.build();
-		assertEquals(Arrays.asList("CITIZEN", "EMPLOYEE"), searchCriteria.getCodes());
+		assertEquals(Arrays.asList(CITIZEN_KEY, "EMPLOYEE"), searchCriteria.getCodes());
 	}
 }

@@ -67,25 +67,25 @@ public class NotificationService {
             return message;
         }
 
-        if(message.contains("{amount}"))
-            message = message.replace("{amount}",transaction.getTxnAmount());
+        if(message.contains("<amount>"))
+            message = message.replace("<amount>",transaction.getTxnAmount());
 
-        if(message.contains("{consumerCode}"))
-            message = message.replace("{consumerCode}",transaction.getConsumerCode());
+        if(message.contains("<consumerCode>"))
+            message = message.replace("<consumerCode>",transaction.getConsumerCode());
 
-        if(message.contains("{txnId}"))
-            message = message.replace("{txnId}",transaction.getTxnId());
+        if(message.contains("<txnId>"))
+            message = message.replace("<txnId>",transaction.getTxnId());
 
-        if(message.contains("{Payment failure reason}"))
-            message = message.replace("{Payment failure reason}",transaction.getTxnStatusMsg());
+        if(message.contains("<Payment failure reason>"))
+            message = message.replace("<Payment failure reason>",transaction.getTxnStatusMsg());
 
-        if (message.contains("{payment link}")) {
+        if (message.contains("<payment link>")) {
             String businessService = notificationUtil.getBusinessService(transactionRequest);
             String paymentLink = appProperties.getNotificationHost() + appProperties.getApplicationPayLink();
             paymentLink = paymentLink.replace("$consumerCode", transaction.getConsumerCode());
             paymentLink = paymentLink.replace("$tenantId", transaction.getTenantId());
             paymentLink = paymentLink.replace("$businessService", businessService);
-            message = message.replace("{payment link}", notificationUtil.getShortnerURL(paymentLink));
+            message = message.replace("<payment link>", notificationUtil.getShortnerURL(paymentLink));
         }
 
         return message;

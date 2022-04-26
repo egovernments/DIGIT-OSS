@@ -3,7 +3,6 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { searchApiCall } from "./function";
 
-// const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 const resetFields = (state, dispatch) => {
   const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   dispatch(

@@ -101,7 +101,7 @@ public class LocalDiskFileStoreServiceTest {
 
             });
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
     }
 

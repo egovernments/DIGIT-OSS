@@ -73,7 +73,8 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 
         if(tracerProperties.isRestTemplateDetailedLoggingEnabled() && isBodyCompatibleForParsing(httpRequest)){
             String body = getBodyString(response);
-            log.info(RESPONSE_MESSAGE_WITH_BODY, httpRequest.getURI(), response.getStatusCode(), body);
+            if(response != null)
+                log.info(RESPONSE_MESSAGE_WITH_BODY, httpRequest.getURI(), response.getStatusCode(), body);
         } else{
             log.info(RESPONSE_MESSAGE, httpRequest.getURI());
         }

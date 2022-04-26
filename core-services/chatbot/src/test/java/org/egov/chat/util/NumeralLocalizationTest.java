@@ -16,13 +16,6 @@ public class NumeralLocalizationTest {
         objectMapper = new ObjectMapper(new JsonFactory());
     }
 
-    @Test
-    public void testNumberDetection() {
-        String stringWithNumbers = "19/07/2019";
-        for(char c : stringWithNumbers.toCharArray()) {
-            System.out.println(c + " is Numberic : " + Character.isDigit(c));
-        }
-    }
 
     @Test
     public void testArrayNodeAdd() {
@@ -44,7 +37,6 @@ public class NumeralLocalizationTest {
 
         arrayNode.addAll(newArrayNode);
 
-        System.out.println(arrayNode.toString());
     }
 
 }

@@ -3,6 +3,7 @@ package org.egov.web.notification.mail.service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.egov.tracer.model.CustomException;
 import org.egov.web.notification.mail.consumer.contract.Email;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.mail.SimpleMailMessage;
@@ -51,7 +52,7 @@ public class ExternalEmailService implements EmailService {
 			helper.setText(email.getBody(), true);
 		} catch (MessagingException e) {
 			log.error(EXCEPTION_MESSAGE, e);
-			throw new RuntimeException(e);
+			throw new CustomException("EG_SEND_HTML_EMAIL_ERR", e.getMessage());
 		}
 		mailSender.send(message);
 	}

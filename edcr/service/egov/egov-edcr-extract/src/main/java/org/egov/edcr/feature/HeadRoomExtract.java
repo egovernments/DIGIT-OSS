@@ -27,7 +27,7 @@ public class HeadRoomExtract extends FeatureExtract {
                 String layerName = String.format(layerNames.getLayerName("LAYER_NAME_STAIR_HEAD_ROOM"), block.getNumber());
                 List<BigDecimal> headRoomDimensions = Util.getListOfDimensionValueByLayer(planDetail, layerName);
 
-                if (headRoomDimensions != null && headRoomDimensions.size() > 0) {
+                if (headRoomDimensions != null && !headRoomDimensions.isEmpty()) {
                     HeadRoom headRoom = new HeadRoom();
                     headRoom.setHeadRoomDimensions(headRoomDimensions);
                     block.getBuilding().setHeadRoom(headRoom);

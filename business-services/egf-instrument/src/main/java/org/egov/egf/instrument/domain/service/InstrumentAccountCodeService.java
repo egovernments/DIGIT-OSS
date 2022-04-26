@@ -33,6 +33,7 @@ public class InstrumentAccountCodeService {
     public static final String ACTION_VIEW = "view";
     public static final String ACTION_EDIT = "edit";
     public static final String ACTION_SEARCH = "search";
+    private static final String INSTRUMENT_ACCOUNT_CODES="instrumentaccountcodes";
 
     private InstrumentAccountCodeRepository instrumentAccountCodeRepository;
 
@@ -128,7 +129,7 @@ public class InstrumentAccountCodeService {
                 break;
             case ACTION_CREATE:
                 if (instrumentaccountcodes == null)
-                    throw new InvalidDataException("instrumentaccountcodes", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(INSTRUMENT_ACCOUNT_CODES, ErrorCode.NOT_NULL.getCode(), null);
                 for (InstrumentAccountCode instrumentAccountCode : instrumentaccountcodes) {
                     validator.validate(instrumentAccountCode, errors);
                     if (!instrumentAccountCodeRepository.uniqueCheck("instrumentTypeId", instrumentAccountCode))
@@ -139,7 +140,7 @@ public class InstrumentAccountCodeService {
                 break;
             case ACTION_UPDATE:
                 if (instrumentaccountcodes == null)
-                    throw new InvalidDataException("instrumentaccountcodes", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(INSTRUMENT_ACCOUNT_CODES, ErrorCode.NOT_NULL.getCode(), null);
                 for (InstrumentAccountCode instrumentAccountCode : instrumentaccountcodes) {
                     if (instrumentAccountCode.getId() == null)
                         throw new InvalidDataException("id", ErrorCode.MANDATORY_VALUE_MISSING.getCode(),
@@ -153,7 +154,7 @@ public class InstrumentAccountCodeService {
                 break;
             case ACTION_DELETE:
                 if (instrumentaccountcodes == null)
-                    throw new InvalidDataException("instrumentaccountcodes", ErrorCode.NOT_NULL.getCode(), null);
+                    throw new InvalidDataException(INSTRUMENT_ACCOUNT_CODES, ErrorCode.NOT_NULL.getCode(), null);
                 for (InstrumentAccountCode instrumentaccountcode : instrumentaccountcodes)
                     if (instrumentaccountcode.getId() == null)
                         throw new InvalidDataException("id", ErrorCode.MANDATORY_VALUE_MISSING.getCode(),

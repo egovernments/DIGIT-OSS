@@ -121,7 +121,7 @@ public class DishonoredChequeAction extends SearchFormAction {
     }
 
     private void populateAccountCodes(final AjaxDishonoredAction ajaxDishonoredAction) {
-        if (bankBranchId != null && bankBranchId != "-1" && bankBranchId != "") {
+        if (bankBranchId != null && !bankBranchId.equals("-1") && !bankBranchId.equals("")) {
             ajaxDishonoredAction.setBankBranchId(bankBranchId);
             ajaxDishonoredAction.populateAccountCodes();
             addDropdownData("accountCodeList", ajaxDishonoredAction.getBankAccountList());
@@ -150,7 +150,7 @@ public class DishonoredChequeAction extends SearchFormAction {
 	public SearchQuery prepareQuery(final String sortField, final String sortOrder) {
 
 		Long bankId = null;
-		if (!bankBranchId.equals("-1") && bankBranchId != null && bankBranchId != "") {
+		if (bankBranchId != null && !bankBranchId.equals("-1")  && !bankBranchId.equals("")) {
 			final String id[] = bankBranchId.split("-");
 			bankId = Long.parseLong(id[0]);
 		}

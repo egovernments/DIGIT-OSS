@@ -132,6 +132,7 @@ export const searchApiCall = async (state, dispatch) => {
       showHideTable(true, dispatch);
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
+      console.log(error);
     }
     // } else {
     //   dispatch(

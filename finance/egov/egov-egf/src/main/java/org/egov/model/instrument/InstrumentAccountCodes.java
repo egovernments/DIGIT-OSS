@@ -90,7 +90,7 @@ public class InstrumentAccountCodes extends BaseModel {
 			return true;
 		if (!super.equals(obj))
 			return false;
-		if (getClass() != obj.getClass())
+		if (obj != null && getClass() != obj.getClass())
 			return false;
 		InstrumentAccountCodes other = (InstrumentAccountCodes) obj;
 		if (accountCode == null) {

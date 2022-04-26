@@ -81,7 +81,6 @@ export const searchApiCall = async (state, dispatch) => {
 
     searchScreenObject.url = serviceObject&&serviceObject[0]&&serviceObject[0].billGineiURL;
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-    searchScreenObject.billActive = "ACTIVE";
     const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject);
     const businessUrl = cloneDeep(searchScreenObject.url);
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
@@ -116,7 +115,6 @@ export const searchApiCall = async (state, dispatch) => {
         ["TENANT_ID"]: item.tenantId,
         ["BUSINESS_URL"]: businessUrl,
         ["BILL_KEY"]: get(configObject[0], "billKey","consolidatedbill")||"consolidatedbill",
-        ["BUSINESS_SERVICE"]: searchScreenObject.businesService,
       }));
       const copyOfSearchScreenObject = cloneDeep(searchScreenObject);
       dispatch(
@@ -146,6 +144,7 @@ export const searchApiCall = async (state, dispatch) => {
       };
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
+      console.log(error);
     }
   }
 };

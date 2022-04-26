@@ -47,85 +47,79 @@
 
 package org.egov.edcr.feature;
 
-import static org.egov.edcr.utility.DcrConstants.BIOMETRIC_WASTE_TREATMENT;
-import static org.egov.edcr.utility.DcrConstants.OBJECTDEFINED_DESC;
-import static org.egov.edcr.utility.DcrConstants.OBJECTNOTDEFINED;
-import static org.egov.edcr.utility.DcrConstants.OBJECTNOTDEFINED_DESC;
-
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.egov.common.entity.edcr.OccupancyType;
 import org.egov.common.entity.edcr.Plan;
-import org.egov.common.entity.edcr.Result;
-import org.egov.common.entity.edcr.ScrutinyDetail;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BiometricWasteManagement extends FeatureProcess {
-    private static final String SUBRULE_54_4_DESC = "Biomedical Waste Treatment";
-    private static final String SUBRULE_54_4 = "54-4";
+	//private static final String SUBRULE_54_4_DESC = "Biomedical Waste Treatment";
+	//private static final String SUBRULE_54_4 = "54-4";
 
-    @Override
-    public Plan validate(Plan pl) {/*
-                                    * HashMap<String, String> errors = new HashMap<>(); // biometric waste treatment defined or
-                                    * not if (pl != null && pl.getVirtualBuilding() != null &&
-                                    * !pl.getVirtualBuilding().getOccupancies().isEmpty()) { for (OccupancyType occupancyType :
-                                    * pl.getVirtualBuilding().getOccupancies()) { if
-                                    * ((occupancyType.equals(OccupancyType.OCCUPANCY_C) ||
-                                    * occupancyType.equals(OccupancyType.OCCUPANCY_C1) ||
-                                    * occupancyType.equals(OccupancyType.OCCUPANCY_C2) ||
-                                    * occupancyType.equals(OccupancyType.OCCUPANCY_C3)) && pl.getUtility() != null &&
-                                    * pl.getUtility().getBiometricWasteTreatment().isEmpty()) {
-                                    * errors.put(BIOMETRIC_WASTE_TREATMENT, edcrMessageSource.getMessage(OBJECTNOTDEFINED, new
-                                    * String[] { BIOMETRIC_WASTE_TREATMENT }, LocaleContextHolder.getLocale()));
-                                    * pl.addErrors(errors); break; } } }
-                                    */
+	@Override
+	public Plan validate(Plan pl) {
+		/*
+		 * HashMap<String, String> errors = new HashMap<>(); // biometric waste
+		 * treatment defined or not if (pl != null && pl.getVirtualBuilding() != null &&
+		 * !pl.getVirtualBuilding().getOccupancies().isEmpty()) { for (OccupancyType
+		 * occupancyType : pl.getVirtualBuilding().getOccupancies()) { if
+		 * ((occupancyType.equals(OccupancyType.OCCUPANCY_C) ||
+		 * occupancyType.equals(OccupancyType.OCCUPANCY_C1) ||
+		 * occupancyType.equals(OccupancyType.OCCUPANCY_C2) ||
+		 * occupancyType.equals(OccupancyType.OCCUPANCY_C3)) && pl.getUtility() != null
+		 * && pl.getUtility().getBiometricWasteTreatment().isEmpty()) {
+		 * errors.put(BIOMETRIC_WASTE_TREATMENT,
+		 * edcrMessageSource.getMessage(OBJECTNOTDEFINED, new String[] {
+		 * BIOMETRIC_WASTE_TREATMENT }, LocaleContextHolder.getLocale()));
+		 * pl.addErrors(errors); break; } } }
+		 */
 
-        return pl;
+		return pl;
 
-    }
+	}
 
-    @Override
-    public Plan process(Plan pl) {/*
-                                   * validate(pl); scrutinyDetail = new ScrutinyDetail(); scrutinyDetail.addColumnHeading(1,
-                                   * RULE_NO); scrutinyDetail.addColumnHeading(2, DESCRIPTION); scrutinyDetail.addColumnHeading(3,
-                                   * REQUIRED); scrutinyDetail.addColumnHeading(4, PROVIDED); scrutinyDetail.addColumnHeading(5,
-                                   * STATUS); scrutinyDetail.setKey("Common_Biometric Waste Treatment"); String subRule =
-                                   * SUBRULE_54_4; if (pl != null && pl.getVirtualBuilding() != null &&
-                                   * !pl.getVirtualBuilding().getOccupancies().isEmpty()) { for (OccupancyType occupancyType :
-                                   * pl.getVirtualBuilding().getOccupancies()) { if
-                                   * ((occupancyType.equals(OccupancyType.OCCUPANCY_C) ||
-                                   * occupancyType.equals(OccupancyType.OCCUPANCY_C1) ||
-                                   * occupancyType.equals(OccupancyType.OCCUPANCY_C2) ||
-                                   * occupancyType.equals(OccupancyType.OCCUPANCY_C3)) && pl.getUtility() != null) { if
-                                   * (!pl.getUtility().getBiometricWasteTreatment().isEmpty()) {
-                                   * setReportOutputDetailsWithoutOccupancy(pl, subRule, SUBRULE_54_4_DESC, "",
-                                   * OBJECTDEFINED_DESC, Result.Accepted.getResultVal()); break; } else if
-                                   * (pl.getUtility().getBiometricWasteTreatment().isEmpty()) {
-                                   * setReportOutputDetailsWithoutOccupancy(pl, subRule, SUBRULE_54_4_DESC, "",
-                                   * OBJECTNOTDEFINED_DESC, Result.Not_Accepted.getResultVal()); break; } } } }
-                                   */
-        return pl;
-    }
+	@Override
+	public Plan process(Plan pl) {
+		/*
+		 * validate(pl); scrutinyDetail = new ScrutinyDetail();
+		 * scrutinyDetail.addColumnHeading(1, RULE_NO);
+		 * scrutinyDetail.addColumnHeading(2, DESCRIPTION);
+		 * scrutinyDetail.addColumnHeading(3, REQUIRED);
+		 * scrutinyDetail.addColumnHeading(4, PROVIDED);
+		 * scrutinyDetail.addColumnHeading(5, STATUS);
+		 * scrutinyDetail.setKey("Common_Biometric Waste Treatment"); String subRule =
+		 * SUBRULE_54_4; if (pl != null && pl.getVirtualBuilding() != null &&
+		 * !pl.getVirtualBuilding().getOccupancies().isEmpty()) { for (OccupancyType
+		 * occupancyType : pl.getVirtualBuilding().getOccupancies()) { if
+		 * ((occupancyType.equals(OccupancyType.OCCUPANCY_C) ||
+		 * occupancyType.equals(OccupancyType.OCCUPANCY_C1) ||
+		 * occupancyType.equals(OccupancyType.OCCUPANCY_C2) ||
+		 * occupancyType.equals(OccupancyType.OCCUPANCY_C3)) && pl.getUtility() != null)
+		 * { if (!pl.getUtility().getBiometricWasteTreatment().isEmpty()) {
+		 * setReportOutputDetailsWithoutOccupancy(pl, subRule, SUBRULE_54_4_DESC, "",
+		 * OBJECTDEFINED_DESC, Result.Accepted.getResultVal()); break; } else if
+		 * (pl.getUtility().getBiometricWasteTreatment().isEmpty()) {
+		 * setReportOutputDetailsWithoutOccupancy(pl, subRule, SUBRULE_54_4_DESC, "",
+		 * OBJECTNOTDEFINED_DESC, Result.Not_Accepted.getResultVal()); break; } } } }
+		 */
+		return pl;
+	}
 
-    private void setReportOutputDetailsWithoutOccupancy(Plan pl, String ruleNo, String ruleDesc, String expected, String actual,
-            String status) {
-        Map<String, String> details = new HashMap<>();
-        details.put(RULE_NO, ruleNo);
-        details.put(DESCRIPTION, ruleDesc);
-        details.put(REQUIRED, expected);
-        details.put(PROVIDED, actual);
-        details.put(STATUS, status);
-        scrutinyDetail.getDetail().add(details);
-        pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail);
-    }
-    
-    @Override
-    public Map<String, Date> getAmendments() {
-        return new LinkedHashMap<>();
-    }
+	/*
+	 * private void setReportOutputDetailsWithoutOccupancy(Plan pl, String ruleNo,
+	 * String ruleDesc, String expected, String actual, String status) { Map<String,
+	 * String> details = new HashMap<>(); details.put(RULE_NO, ruleNo);
+	 * details.put(DESCRIPTION, ruleDesc); details.put(REQUIRED, expected);
+	 * details.put(PROVIDED, actual); details.put(STATUS, status);
+	 * scrutinyDetail.getDetail().add(details);
+	 * pl.getReportOutput().getScrutinyDetails().add(scrutinyDetail); }
+	 */
+
+	@Override
+	public Map<String, Date> getAmendments() {
+		return new LinkedHashMap<>();
+	}
 }

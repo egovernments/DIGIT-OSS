@@ -6,10 +6,8 @@ const fetch = require("node-fetch");
 
 class RemindersService {
   async triggerReminders() {
-    console.log('Sending reminders to people');
     let userIdList = await repoProvider.getUserId(true);
     await this.sendMessages(userIdList);
-    console.log('Reminders execution end');
   }
 
   async sendMessages(userIdList) {
@@ -68,7 +66,7 @@ class RemindersService {
 let messages = {
   reminder:{
     en_IN: 'You have not selected any option.\n\n👉 To continue, please type and send mseva.',
-    hi_IN: 'आपने कोई विकल्प नहीं चुना है।\n\n👉 जारी रखने के लिए, कृपया mseva टाइप करें और भेजें'
+    hi_IN: 'आपने कोई विकल्प नहीं चुना है।\n\n👉 जारी रखने के लिए, कृपया टाइप करें और mseva भेजें'
   }
 
 }

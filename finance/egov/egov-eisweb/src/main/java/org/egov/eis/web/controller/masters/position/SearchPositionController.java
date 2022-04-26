@@ -156,12 +156,13 @@ public class SearchPositionController {
 				if (positionList != null && positionList.size() > 0)
 					return "POSITIONNAMEALREADYEXIST";
 			}
-
+			if(positionObj != null){
 			positionObj.setName(positionName);
+			}
 
 			if (isoutsourced != null && isoutsourced.equalsIgnoreCase("TRUE")) {
 				// Current position outsource is true.
-				if (!positionObj.isPostOutsourced()) {
+				if (positionObj != null && !positionObj.isPostOutsourced()) {
 					positionObj.setPostOutsourced(true);
 					positionObj.getDeptDesig()
 							.setOutsourcedPosts(positionObj.getDeptDesig().getOutsourcedPosts() != null
@@ -169,7 +170,7 @@ public class SearchPositionController {
 									: 1);
 				}
 			} else // If outsourced is false.
-			if (positionObj.isPostOutsourced()) {
+			if (positionObj!=null && positionObj.isPostOutsourced()) {
 				positionObj.setPostOutsourced(false);
 				positionObj.getDeptDesig()
 						.setOutsourcedPosts(positionObj.getDeptDesig().getOutsourcedPosts() != null

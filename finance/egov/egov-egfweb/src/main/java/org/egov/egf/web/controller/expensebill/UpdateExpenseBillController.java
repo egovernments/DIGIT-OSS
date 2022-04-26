@@ -298,12 +298,17 @@ public class UpdateExpenseBillController extends BaseBillController {
                         egBillregister, null, mode, workFlowAction);
 
             final String approverName = String.valueOf(request.getParameter("approverName"));
-            final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
-                    updatedEgBillregister.getState(), updatedEgBillregister.getId(), approvalPosition, approverName);
+			if (updatedEgBillregister != null) {
+				final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
+						updatedEgBillregister.getState(), updatedEgBillregister.getId(), approvalPosition,
+						approverName);
 
-            return "redirect:/expensebill/success?approverDetails=" + approverDetails + "&billNumber="
-                    + updatedEgBillregister.getBillnumber();
-        }
+				return "redirect:/expensebill/success?approverDetails=" + approverDetails + "&billNumber="
+						+ updatedEgBillregister.getBillnumber();
+			} else
+				return "redirect:/expensebill/success";
+		}
+            
     }
 
     private String populateOnException(final EgBillregister egBillregister, final Model model,

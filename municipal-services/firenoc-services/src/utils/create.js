@@ -96,7 +96,6 @@ export const addUUIDAndAuditDetails = async (request, method = "_update") => {
           RequestInfo,
           userSearchReqCriteria
         );
-        
         if (get(userSearchResponse, "user", []).length > 0) {
         userResponse = await userService.updateUser(RequestInfo, {
         ...userSearchResponse.user[0],
@@ -160,16 +159,12 @@ const createUser = async (requestInfo, owner, tenantId) => {
         ...owner
       });
     } else {
-      // console.log("user not found");
 
       owner = addDefaultUserDetails(tenantId, owner);
-      // console.log("userSearchResponse.user[0]", userSearchResponse.user[0]);
-      // console.log("owner", owner);
       userCreateResponse = await userService.createUser(requestInfo, {
         ...userSearchResponse.user[0],
         ...owner
       });
-      // console.log("Create passed");
     }
   } else {
     //uuid present
@@ -183,7 +178,6 @@ const createUser = async (requestInfo, owner, tenantId) => {
         ...userSearchResponse.user[0],
         ...owner
       });
-      // console.log("Update passed");
     }
   }
   return userCreateResponse;

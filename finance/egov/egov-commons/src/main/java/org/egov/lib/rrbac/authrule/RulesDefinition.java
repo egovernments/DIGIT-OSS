@@ -61,7 +61,7 @@ public class RulesDefinition {
 		}
 		if (userBndryHeir == 1) { // Top boundary type heirarchy
 			authorized = true;
-		} else if (userBndryHeir == objBndryHeir) {
+		} else if (userBndryHeir.equals(objBndryHeir)) {
 			if (userBoundary.equals(objectBoundary)) {
 				authorized = true;
 			} else {

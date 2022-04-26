@@ -1,5 +1,6 @@
 package org.egov.edcr.feature;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ public class CompoundWallService extends FeatureProcess {
 
     @Override
     public Map<String, Date> getAmendments() {
-        return null;
+        return Collections.emptyMap();
     }
 
     @Override

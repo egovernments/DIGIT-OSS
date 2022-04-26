@@ -138,6 +138,7 @@ export const searchApiCall = async (state, dispatch) => {
       showHideTable(true, dispatch);
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
+      console.log(error);
     }
   }
 };
@@ -185,6 +186,7 @@ export const getWorkFlowData = async Licenses => {
     });
     return businessIdToOwnerMapping;
   } catch (error) {
+    console.log(error);
     return [];
   }
 };
@@ -223,6 +225,7 @@ export const getWorkFlowDataForBPA = async Licenses => {
         processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
 
       } catch (error) {
+        console.log(error);
         return [];
       }
     }

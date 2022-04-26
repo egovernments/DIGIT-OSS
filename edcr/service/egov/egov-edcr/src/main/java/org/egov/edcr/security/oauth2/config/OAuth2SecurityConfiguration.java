@@ -75,9 +75,6 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomAuthenticationProvider authProvider;
 
-    @Autowired
-    private RedisConnectionFactory redisConnectionFactory;
-
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -95,7 +92,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public TokenStore tokenStore() {
+    public TokenStore tokenStore(RedisConnectionFactory redisConnectionFactory) {
         return new RedisTokenStore(redisConnectionFactory);
     }
 

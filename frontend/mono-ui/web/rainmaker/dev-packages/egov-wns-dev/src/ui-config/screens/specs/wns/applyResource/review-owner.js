@@ -118,7 +118,7 @@ export const plumberDetails={
     {
       jsonPath: "WaterConnection[0].additionalDetails.detailsProvidedBy",
       callBack: value => {
-        return value ? `WS_PLUMBER_${value.toUpperCase()}` : "NA";
+        return value ? `WS_PLUMBER_${value.toUpperCase()}` : handleNA;
       }
     }, {
       labelKey: "WS_OLD_LABEL_NAME"
@@ -126,7 +126,7 @@ export const plumberDetails={
     {
       jsonPath: "WaterConnectionOld[0].additionalDetails.detailsProvidedBy",
       callBack: value => {
-        return value ? `WS_PLUMBER_${value.toUpperCase()}` : "NA";
+        return value ? `WS_PLUMBER_${value.toUpperCase()}` : handleNA;
       }
     }
   ),

@@ -469,7 +469,9 @@ public class BudgetSearchAction extends BaseFormAction {
         savedbudgetDetailList = budgetDetailService.findAllBudgetDetailsWithReAppropriation(budget, criteria);
         re = checkRe(budget);
         computeAmounts(savedbudgetDetailList);
+        if(budget!=null){
         populateActualData(budget.getFinancialYear());
+        }
         return Constants.DETAILLIST;
     }
 

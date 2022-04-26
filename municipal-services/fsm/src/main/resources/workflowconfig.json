@@ -230,8 +230,7 @@
                             "action": "DSO_REJECT",
                             "nextState": "DSO_REJECTED",
                             "roles": [
-                                "FSM_DSO",
-                                "FSM_EDITOR_EMP"
+                                "FSM_DSO"
                             ]
                         },
                         {
@@ -240,8 +239,7 @@
                             "action": "DSO_ACCEPT",
                             "nextState": "DSO_INPROGRESS",
                             "roles": [
-                                "FSM_DSO",
-                                "FSM_EDITOR_EMP"
+                                "FSM_DSO"
                             ]
                         },
                         {

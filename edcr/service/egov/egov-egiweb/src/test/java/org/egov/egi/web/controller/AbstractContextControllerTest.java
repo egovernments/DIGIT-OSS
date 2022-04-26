@@ -47,6 +47,10 @@
  */
 package org.egov.egi.web.controller;
 
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
+
+import java.io.IOException;
+
 import org.apache.tiles.request.render.StringRenderer;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -59,8 +63,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @ContextConfiguration(locations={"classpath:config/spring/test-applicationContext-hibernate.xml"})
@@ -72,7 +74,7 @@ public abstract class AbstractContextControllerTest<T> {
     @Autowired
     private LocalValidatorFactoryBean validator;
     @Before
-    public void setUpBase() throws Exception {
+    public void setUpBase() throws IOException {
         this.controller = initController();
 
         TilesViewResolver tilesViewResolver = new TilesViewResolver();

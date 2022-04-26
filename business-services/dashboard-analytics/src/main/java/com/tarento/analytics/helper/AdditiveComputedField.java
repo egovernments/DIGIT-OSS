@@ -35,7 +35,7 @@ public class AdditiveComputedField implements IComputedField<Data> {
     public void add(Data data, List<String> fields, String newField,JsonNode chartNode ) {
         String dataType = "amount";
         try {
-            Map<String, Plot> plotMap = data.getPlots().stream().collect(Collectors.toMap(Plot::getName, Function.identity()));
+            Map<String, Plot> plotMap = data.getPlots().stream().parallel().collect(Collectors.toMap(Plot::getName, Function.identity()));
 
             double total = 0.0;
             for (String field: fields){

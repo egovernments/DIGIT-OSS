@@ -110,6 +110,7 @@ export const tradeLocationDetails = getCommonCard(
               )
             );
           } catch (e) {
+            console.log(e);
           }
         }
       },

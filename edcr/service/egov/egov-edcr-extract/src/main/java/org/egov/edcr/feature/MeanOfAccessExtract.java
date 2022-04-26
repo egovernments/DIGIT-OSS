@@ -2,7 +2,8 @@ package org.egov.edcr.feature;
 
 import java.util.HashMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.utility.DcrConstants;
 import org.egov.edcr.utility.Util;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MeanOfAccessExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(MeanOfAccessExtract.class);
+    private static final Logger LOG = LogManager.getLogger(MeanOfAccessExtract.class);
 
     private static final String ACCESS_WIDTH = "Access Width";
 

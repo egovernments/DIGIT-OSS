@@ -359,15 +359,6 @@
               "roles": [
                 "BPA_APPROVER"
               ]
-            },
-            {
-              "tenantId": "pb",
-              "currentState": "PENDINGAPPROVAL",
-              "action": "SKIP_PAYMENT",
-              "nextState": "APPROVED",
-              "roles": [
-                "BPA_APPROVER"
-              ]
             }
           ]
         },

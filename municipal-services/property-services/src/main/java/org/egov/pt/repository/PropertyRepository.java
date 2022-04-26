@@ -7,9 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
@@ -28,9 +25,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
-
 import com.google.common.collect.Sets;
+import org.springframework.util.ObjectUtils;
 
 @Repository
 public class PropertyRepository {
@@ -203,18 +199,6 @@ public class PropertyRepository {
 
 		// fetching property id from owner table and enriching criteria
 		ownerIds.addAll(userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toSet()));
-		
-		if (criteria.getIsCitizen()!=null && criteria.getMobileNumber()!=null) {
-			for (OwnerInfo user : userDetailResponse.getUser()) {
-				if (user.getAlternatemobilenumber()!=null && user.getAlternatemobilenumber().equalsIgnoreCase(criteria.getMobileNumber())) {
-					ownerIds.remove(user.getUuid());
-				}
-				
-			}
-		}
-		
-
-		// only used to eliminate property-ids which does not have the owner
 		List<String> propertyIds = getPropertyIds(ownerIds, userTenant);
 
 		// returning empty list if no property id found for user criteria
@@ -239,16 +223,8 @@ public class PropertyRepository {
 
 			criteria.setPropertyIds(Sets.newHashSet(propertyIds));
 		}
-		criteria.setOwnerIds(ownerIds);
+
 		return false;
 	}
-
-	public Integer getCount(@Valid PropertyCriteria propertyCriteria, RequestInfo requestInfo) {
-		Boolean isOpenSearch = false ? false : util.isPropertySearchOpen(requestInfo.getUserInfo());
-        List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getCountQuery(propertyCriteria, preparedStmtList, isOpenSearch);
-        Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
-        return count;
-    }
 
 }

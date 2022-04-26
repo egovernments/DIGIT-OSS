@@ -89,9 +89,9 @@ public class NotificationService {
 				String OTP = getOTP(employee,requestInfo);
 				String link = envHost + "employee/user/otp";
 
-				message = message.replace("{Employee Name}",employee.getUser().getName()).replace("{Username}",employee.getCode());
-				message = message.replace("{date}",(employee.getReactivationDetails().get(0).getEffectiveFrom()).toString());
-				message = message.replace("{password}",OTP).replace("{link}",link);
+				message = message.replace("<Employee Name>",employee.getUser().getName()).replace("<Username>",employee.getCode());
+				message = message.replace("<date>",(employee.getReactivationDetails().get(0).getEffectiveFrom()).toString());
+				message = message.replace("<password>",OTP).replace("<link>",link);
 
 				SMSRequest smsRequest = SMSRequest.builder().mobileNumber(employee.getUser().getMobileNumber()).message(message).build();
 				log.info(message );
@@ -183,7 +183,7 @@ public class NotificationService {
 		} catch (Exception e) {
 			log.error("Exception while fetching from localization: " + e);
 		}
-		if (null != result) {
+		if (null != result && codes!=null && messages!= null) {
 			for (int i = 0; i < codes.size(); i++) {
 				mapOfCodesAndMessages.put(codes.get(i), messages.get(i));
 			}

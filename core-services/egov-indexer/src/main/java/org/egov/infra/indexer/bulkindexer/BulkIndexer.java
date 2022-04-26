@@ -36,7 +36,7 @@ public class BulkIndexer {
 	 * @param index
 	 * @throws Exception
 	 */
-	public void indexJsonOntoES(String url, String indexJson, Index index) throws Exception {
+	public void indexJsonOntoES(String url, String indexJson, Index index) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			log.debug("Record being indexed: " + indexJson);

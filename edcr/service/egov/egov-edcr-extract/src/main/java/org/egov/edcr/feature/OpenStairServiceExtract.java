@@ -1,7 +1,6 @@
 package org.egov.edcr.feature;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,7 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpenStairServiceExtract extends FeatureExtract {
 
-    @Override
+    private static final String REG_EXP_D = "[^\\d.]";
+
+	@Override
     public PlanDetail extract(PlanDetail pl) {
         for (Block block : pl.getBlocks())
             extractOpenStairs(pl.getDoc(), block, pl);
@@ -46,17 +47,45 @@ public class OpenStairServiceExtract extends FeatureExtract {
                     List<DXFDimension> lines = Util.getDimensionsByLayer(doc, openStairName);
                     if (lines != null && !lines.isEmpty())
                         for (Object dxfEntity : lines) {
-                            DXFDimension dimension = (DXFDimension) dxfEntity;
-                            List<BigDecimal> values = new ArrayList<>();
-                            Util.extractDimensionValue(planDetail, values, dimension, openStairName);
+                            BigDecimal value;
+                            DXFDimension line = (DXFDimension) dxfEntity;
+                            String dimensionBlock = line.getDimensionBlock();
+                            DXFBlock dxfBlock = doc.getDXFBlock(dimensionBlock);
+                            Iterator dxfEntitiesIterator = dxfBlock.getDXFEntitiesIterator();
+                            while (dxfEntitiesIterator.hasNext()) {
+                                DXFEntity e = (DXFEntity) dxfEntitiesIterator.next();
+                                if (e.getType().equals(DXFConstants.ENTITY_TYPE_MTEXT)) {
+                                    DXFMText text = (DXFMText) e;
+                                    String text2 = text.getText();
 
-                            if (!values.isEmpty()) {
-                                for (BigDecimal minDis : values) {
-                                    OpenStair openStair = new OpenStair();
-                                    openStair.setMinimumDistance(minDis);
-                                    block.getOpenStairs().add(openStair);
+                                    Iterator styledParagraphIterator = text.getTextDocument().getStyledParagraphIterator();
+
+                                    while (styledParagraphIterator.hasNext()) {
+                                        StyledTextParagraph next = (StyledTextParagraph) styledParagraphIterator.next();
+                                        text2 = next.getText();
+                                    }
+                                    if (text2.contains(";")) {
+                                        String[] textSplit = text2.split(";");
+                                        int length = textSplit.length;
+
+                                        if (length >= 1) {
+                                            int index = length - 1;
+                                            text2 = textSplit[index];
+                                            text2 = text2.replaceAll(REG_EXP_D, "");
+                                        } else
+                                            text2 = text2.replaceAll(REG_EXP_D, "");
+                                    } else
+                                        text2 = text2.replaceAll(REG_EXP_D, "");
+
+                                    if (!text2.isEmpty()) {
+                                        value = getNumericValue(text2, planDetail, openStairName);
+                                        OpenStair openStair = new OpenStair();
+                                        openStair.setMinimumDistance(value);
+                                        block.getOpenStairs().add(openStair);
+                                    }
                                 }
                             }
+
                         }
                 }
 

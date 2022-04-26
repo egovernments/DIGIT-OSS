@@ -67,6 +67,7 @@ const downloadReceipt = async item => {
       );
     receiptDetails && generateReceipt("pt-reciept-citizen", receiptDetails);
   } catch (e) {
+    console.log(e);
   }
 };
 

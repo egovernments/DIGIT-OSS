@@ -174,6 +174,7 @@ class PropertyTaxDetails extends React.Component {
                     minWidth: "inherit"
                   }}
                   onClick={
+                  //  ()=> console.log('clicked')
                     () => addRebateBox(true)
                   }
                 />

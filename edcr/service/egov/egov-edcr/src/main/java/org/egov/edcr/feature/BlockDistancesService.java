@@ -55,6 +55,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.BlockDistances;
@@ -63,7 +65,6 @@ import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
 import org.egov.common.entity.edcr.SetBack;
 import org.egov.edcr.utility.DcrConstants;
-import org.egov.infra.utils.StringUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -188,8 +189,7 @@ public class BlockDistancesService extends FeatureProcess {
 		scrutinyDetail.addColumnHeading(5, STATUS);
 		for (Block b : pl.getBlocks()) {
 			for (Block block : pl.getBlocks()) {
-				if (b.getNumber() != block.getNumber()) {
-					if (!b.getDistanceBetweenBlocks().isEmpty()) {
+				if (!Objects.equals(b.getNumber(), block.getNumber()) && !b.getDistanceBetweenBlocks().isEmpty()) {
 						for (BlockDistances distanceBetweenBlock : b.getDistanceBetweenBlocks()) {
 							// if b is source block , checking that its destination block number is same as
 							// block
@@ -207,8 +207,6 @@ public class BlockDistancesService extends FeatureProcess {
 									}
 									validateMinimumDistance(pl, minimumDistance, b, block, valid1, valid2);
 								}
-							}
-
 						}
 					}
 				}
@@ -224,7 +222,7 @@ public class BlockDistancesService extends FeatureProcess {
 	 * return str.toString(); }
 	 */
 
-	private void setReportOutputDetails(Plan pl, String ruleNo, String ruleDesc, String occupancy, String expected,
+	private void setReportOutputDetails(Plan pl, String ruleNo, String ruleDesc, String expected,
 			String actual, String status) {
 		Map<String, String> details = new HashMap<>();
 		details.put(RULE_NO, ruleNo);
@@ -252,13 +250,14 @@ public class BlockDistancesService extends FeatureProcess {
 			Boolean valid2) {
 		BigDecimal bHeight = b.getBuilding().getBuildingHeight();
 		BigDecimal blockHeight = block.getBuilding().getBuildingHeight();
-		HashMap<BigDecimal, Block> blockMap = new HashMap();
+		Map<BigDecimal, Block> blockMap = new HashMap<>();
 		blockMap.put(bHeight, b);
 		blockMap.put(blockHeight, block);
 		List<BigDecimal> blkHeights = Arrays.asList(bHeight, blockHeight);
-		BigDecimal maxHeight = blkHeights.stream().reduce(BigDecimal::max).get();
+		Optional<BigDecimal> bldgHgt = blkHeights.stream().reduce(BigDecimal::max);
+		BigDecimal maxHeight = bldgHgt.isPresent() ? bldgHgt.get() : BigDecimal.ZERO;
 
-		ArrayList<BigDecimal> setBacksValues = new ArrayList();
+		List<BigDecimal> setBacksValues = new ArrayList<>();
 		setBacksValues.add(THREE);
 		List<SetBack> setBacks = block.getSetBacks();
 		for (SetBack setback : setBacks) {
@@ -276,34 +275,36 @@ public class BlockDistancesService extends FeatureProcess {
 
 		
 		List<BigDecimal> heights = Arrays.asList(dividedHeight, BigDecimal.valueOf(18));
-		BigDecimal minHeight = heights.stream().reduce(BigDecimal::min).get();
+		Optional<BigDecimal> minimumHeight = heights.stream().reduce(BigDecimal::min);
+		BigDecimal minHeight = minimumHeight.isPresent() ? minimumHeight.get() : BigDecimal.ZERO;
 
 		if (actualDistance.compareTo(minHeight) >= 0) {
 			valid1 = true;
 		}
 
-		BigDecimal maxSetBack = setBacksValues.stream().reduce(BigDecimal::max).get();
+		Optional<BigDecimal> minSetBackvalue = setBacksValues.stream().reduce(BigDecimal::max);
+		BigDecimal maxSetBack = minSetBackvalue.isPresent() ? minSetBackvalue.get() : BigDecimal.ZERO;
 		if (actualDistance.compareTo(maxSetBack) >= 0) {
 			valid2 = true;
 		}
 
-		if (valid1) {
+		if (Boolean.TRUE.equals(valid1)) {
 			setReportOutputDetails(pl, SUBRULE_37_1, String.format(SUB_RULE_DES, b.getNumber(), block.getNumber()),
-					StringUtils.EMPTY, MINIMUM_DISTANCE_BUILDING, actualDistance.toString() + DcrConstants.IN_METER,
+					MINIMUM_DISTANCE_BUILDING, actualDistance.toString() + DcrConstants.IN_METER,
 					Result.Accepted.getResultVal());
 		} else {
 			setReportOutputDetails(pl, SUBRULE_37_1, String.format(SUB_RULE_DES, b.getNumber(), block.getNumber()),
-					StringUtils.EMPTY, MINIMUM_DISTANCE_BUILDING, actualDistance.toString() + DcrConstants.IN_METER,
+					MINIMUM_DISTANCE_BUILDING, actualDistance.toString() + DcrConstants.IN_METER,
 					Result.Not_Accepted.getResultVal());
 		}
 
-		if (valid2) {
+		if (Boolean.TRUE.equals(valid2)) {
 			setReportOutputDetails(pl, SUBRULE_37_1, String.format(SUB_RULE_DES, b.getNumber(), block.getNumber()),
-					StringUtils.EMPTY, MINIMUM_DISTANCE_SETBACK, actualDistance.toString() + DcrConstants.IN_METER,
+					MINIMUM_DISTANCE_SETBACK, actualDistance.toString() + DcrConstants.IN_METER,
 					Result.Accepted.getResultVal());
 		} else {
 			setReportOutputDetails(pl, SUBRULE_37_1, String.format(SUB_RULE_DES, b.getNumber(), block.getNumber()),
-					StringUtils.EMPTY, MINIMUM_DISTANCE_SETBACK, actualDistance.toString() + DcrConstants.IN_METER,
+					MINIMUM_DISTANCE_SETBACK, actualDistance.toString() + DcrConstants.IN_METER,
 					Result.Not_Accepted.getResultVal());
 		}
 

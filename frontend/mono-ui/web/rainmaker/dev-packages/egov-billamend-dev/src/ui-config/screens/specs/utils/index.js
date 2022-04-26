@@ -51,6 +51,7 @@ export const getMdmsData = async  requestBody=> {
    
     return response;
   } catch (error) {
+    console.log(error);
     return {};
   }
 };
@@ -274,6 +275,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
     return { payload, reqDocuments };
   } catch (e) {
+    console.log(e);
   }
 };
 const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
@@ -510,6 +512,7 @@ export const getFetchBill = async(state, dispatch, action, queryObject) => {
         "error"
       )
     );
+    console.log(error, "fetxh");
   }
 }
 
@@ -532,6 +535,7 @@ export const searchBill = async(state, dispatch, action, queryObject) => {
         "error"
       )
     );
+    console.log(error, "fetxh");
   }
 }
 

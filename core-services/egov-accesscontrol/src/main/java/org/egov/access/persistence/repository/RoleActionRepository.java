@@ -29,6 +29,8 @@ public class RoleActionRepository {
 
 	final static String CHECK_UNIQUE_VALIDATION_FOR_ROLEACTIONS = "select rolecode from eg_roleaction where actionid IN (:actionid) and tenantid =:tenantid and rolecode =:rolecode";
 
+	private final static String PARAM_NAME_ROLE_CODE = "rolecode";
+
 	public List<RoleAction> createRoleActions(final RoleActionsRequest actionRequest) {
 
 		LOGGER.info("Create Role Actions Repository::" + actionRequest);
@@ -42,7 +44,7 @@ public class RoleActionRepository {
 
 		List<Map<String, Object>> batchValues = new ArrayList<>(actionList.size());
 		for (Integer actionid : actionList) {
-			batchValues.add(new MapSqlParameterSource("rolecode", role.getCode()).addValue("actionid", actionid)
+			batchValues.add(new MapSqlParameterSource(PARAM_NAME_ROLE_CODE, role.getCode()).addValue("actionid", actionid)
 					.addValue("tenantid", actionRequest.getTenantId()).getValues());
 
 			RoleAction roleAction = new RoleAction();
@@ -96,7 +98,7 @@ public class RoleActionRepository {
 
 			parametersMap.put("sqlStringifiedCodes", sqlStringifiedCodes);
 
-			final String getActionIdsBasedOnName = "select id from eg_action where name IN (:sqlStringifiedCodes)";
+			final String getActionIdsBasedOnName = GET_ACTIONS_BASEDON_IDS;
 
 			SqlRowSet sqlrowset = namedParameterJdbcTemplate.queryForRowSet(getActionIdsBasedOnName, parametersMap);
 
@@ -125,7 +127,7 @@ public class RoleActionRepository {
 
 			final Map<String, Object> parametersMap = new HashMap<String, Object>();
 
-			parametersMap.put("rolecode", actionRequest.getRole().getCode());
+			parametersMap.put(PARAM_NAME_ROLE_CODE, actionRequest.getRole().getCode());
 			parametersMap.put("tenantid", actionRequest.getTenantId());
 			parametersMap.put("actionid", actionList);
 
@@ -134,9 +136,9 @@ public class RoleActionRepository {
 
 			if (sqlrowset != null && sqlrowset.next()) {
 
-				String rolecode = sqlrowset.getString("rolecode");
+				String rolecode = sqlrowset.getString(PARAM_NAME_ROLE_CODE);
 
-				if (rolecode != null && rolecode != "") {
+				if (rolecode != null && !rolecode.equals("")) {
 
 					return false;
 				}

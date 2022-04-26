@@ -88,6 +88,8 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 	private static RestHighLevelClient alternateClient;
 	private String indexName;
 	private String docType;
+	private static final String FOR_TYPE=" for Type ";
+	private static final String TOTAL_TIME_ELAPSED=" ,Total time elapsed = ";
 
 	public String getIndexName() {
 		return indexName;
@@ -119,7 +121,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 	public Map<String, Object> getDataByIdentifier(String index, String type, String identifier) {
 		RestHighLevelClient client = elasticSearchClient.getClient();
 		long startTime = System.currentTimeMillis();
-		logger.info("ElasticSearchUtil getDataByIdentifier method started at ==" + startTime + " for Type " + type);
+		logger.info("ElasticSearchUtil getDataByIdentifier method started at ==" + startTime + FOR_TYPE + type);
 		GetResponse response = null;
 
 		try {
@@ -137,11 +139,11 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 			}
 			long stopTime = System.currentTimeMillis();
 			long elapsedTime = stopTime - startTime;
-			logger.info("ElasticSearchUtil getDataByIdentifier method end at ==" + stopTime + " for Type " + type
-					+ " ,Total time elapsed = " + elapsedTime);
+			logger.info("ElasticSearchUtil getDataByIdentifier method end at ==" + stopTime + FOR_TYPE + type
+					+ TOTAL_TIME_ELAPSED + elapsedTime);
 			return response.getSource();
 		} catch (IOException ex) {
-
+			logger.error("Error while execution in Elasticsearch", ex);
 		} finally {
 			try {
 				client.close();
@@ -158,7 +160,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		RestHighLevelClient client = elasticSearchClient.getClient();
 
 		long startTime = System.currentTimeMillis();
-		logger.info("ElasticSearchUtil searchData method started at ==" + startTime + " for Type " + type);
+		logger.info("ElasticSearchUtil searchData method started at ==" + startTime + FOR_TYPE + type);
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 		Iterator<Entry<String, Object>> itr = searchData.entrySet().iterator();
 		while (itr.hasNext()) {
@@ -174,15 +176,15 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 			logger.error("Error while execution in Elasticsearch", ex);
 		}
 
-		if (sr.getHits() == null || sr.getHits().getTotalHits() == 0) {
+		if (sr==null || sr.getHits() == null || sr.getHits().getTotalHits() == 0) {
 			return new HashMap<>();
 		}
 		sr.getHits().getAt(0).getSourceAsMap();
 		long stopTime = System.currentTimeMillis();
 		long elapsedTime = stopTime - startTime;
 
-		logger.info("ElasticSearchUtil searchData method end at ==" + stopTime + " for Type " + type
-				+ " ,Total time elapsed = " + elapsedTime);
+		logger.info("ElasticSearchUtil searchData method end at ==" + stopTime + FOR_TYPE + type
+				+ TOTAL_TIME_ELAPSED + elapsedTime);
 		try {
 			client.close();
 		} catch (IOException e) {
@@ -242,7 +244,6 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		}
 
 		searchSourceBuilder.query(query);
-		List finalFacetList = new ArrayList();
 
 		if (null != searchDTO.getFacets() && !searchDTO.getFacets().isEmpty()) {
 			// addAggregations(searchSourceBuilder, searchDTO.getFacets());
@@ -254,11 +255,9 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 
 		try {
 			response = client.search(searchReq);
-			long count = 0;
 
 			if (response != null) {
 				SearchHits hits = response.getHits();
-				count = hits.getTotalHits();
 				for (SearchHit hit : hits) {
 					esSource.add(hit.getSourceAsMap());
 				}
@@ -278,7 +277,6 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		for (Map.Entry<String, Object> entry : aggregations.entrySet()) {
 
 			String key = entry.getKey();
-			Map<String, Object> aggregationInfo = (Map<String, Object>) entry.getValue();
 			for (Map.Entry<String, Object> en : aggregations.entrySet()) {
 				if ("DATE_HISTOGRAM".equalsIgnoreCase(en.getKey())) {
 					Map<String, String> aggsVal = (Map<String, String>) en.getValue();
@@ -316,7 +314,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		}
 		long stopTime = System.currentTimeMillis();
 		long elapsedTime = stopTime - startTime;
-		logger.info("ElasticSearchUtil addAggregations method end at ==" + stopTime + " ,Total time elapsed = "
+		logger.info("ElasticSearchUtil addAggregations method end at ==" + stopTime + TOTAL_TIME_ELAPSED
 				+ elapsedTime);
 	}
 
@@ -337,7 +335,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 		}
 		long stopTime = System.currentTimeMillis();
 		long elapsedTime = stopTime - startTime;
-		logger.info("ElasticSearchUtil addAdditionalProperties method end at ==" + stopTime + " ,Total time elapsed = "
+		logger.info("ElasticSearchUtil addAdditionalProperties method end at ==" + stopTime + TOTAL_TIME_ELAPSED
 				+ elapsedTime);
 	}
 
@@ -634,7 +632,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 				Map<String, Object> nestedMap = null;
 				if (value instanceof HashMap) {
 					nestedMap = (HashMap<String, Object>) value;
-				} else if (value instanceof LinkedHashMap) {
+				} else  {
 					nestedMap = (LinkedHashMap<String, Object>) value;
 				}
 				String aggregationName = aggregationType + "of"
@@ -646,7 +644,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 				Map<String, Object> sumMap = null;
 				if (value instanceof HashMap) {
 					sumMap = (HashMap<String, Object>) value;
-				} else if (value instanceof LinkedHashMap) {
+				} else {
 					sumMap = (LinkedHashMap<String, Object>) value;
 				}
 				String aggregationName = aggregationType + "of"
@@ -658,7 +656,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 				Map<String, Object> termMap = null;
 				if (value instanceof HashMap) {
 					termMap = (HashMap<String, Object>) value;
-				} else if (value instanceof LinkedHashMap) {
+				} else {
 					termMap = (LinkedHashMap<String, Object>) value;
 
 				}
@@ -672,7 +670,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 
 				if (value instanceof HashMap) {
 					histogramMap = (HashMap<String, Object>) value;
-				} else if (value instanceof LinkedHashMap) {
+				} else {
 					histogramMap = (LinkedHashMap<String, Object>) value;
 
 				}
@@ -689,7 +687,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 
 				if (value instanceof HashMap) {
 					countAggMap = (HashMap<String, Object>) value;
-				} else if (value instanceof LinkedHashMap) {
+				} else {
 					countAggMap = (LinkedHashMap<String, Object>) value;
 
 				}

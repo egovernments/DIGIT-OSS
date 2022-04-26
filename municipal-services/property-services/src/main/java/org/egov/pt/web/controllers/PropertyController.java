@@ -13,11 +13,13 @@ import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.oldProperty.OldPropertyCriteria;
+import org.egov.pt.repository.ElasticSearchRepository;
 import org.egov.pt.service.FuzzySearchService;
 import org.egov.pt.service.MigrationService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ResponseInfoFactory;
 import org.egov.pt.validator.PropertyValidator;
+import org.egov.pt.web.contracts.FuzzySearchCriteria;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.PropertyResponse;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
@@ -25,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -81,18 +84,16 @@ public class PropertyController {
     @PostMapping("/_search")
     public ResponseEntity<PropertyResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                    @Valid @ModelAttribute PropertyCriteria propertyCriteria) {
-
         // If inbox search has been disallowed at config level or if inbox search is allowed but the current search is NOT, from inbox service validate the search criteria.
         if(!configs.getIsInboxSearchAllowed() || !propertyCriteria.getIsInboxSearch()){
             propertyValidator.validatePropertyCriteria(propertyCriteria, requestInfoWrapper.getRequestInfo());
         }
         List<Property> properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
-        PropertyResponse response = PropertyResponse.builder().properties(properties).count(properties.size()).responseInfo(
+        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
                 responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
     @PostMapping("/_migration")
     public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
@@ -105,7 +106,6 @@ public class PropertyController {
 
         long endtime = System.nanoTime();
         long elapsetime = endtime - startTime;
-        System.out.println("Elapsed time--->"+elapsetime);
 
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
@@ -129,17 +129,8 @@ public class PropertyController {
 //				.build();
 //		return new ResponseEntity<>(response, HttpStatus.OK);
 //	}
-    
-    @PostMapping("/_addAlternateNumber")
-    public ResponseEntity<PropertyResponse> _addAlternateNumber(@Valid @RequestBody PropertyRequest propertyRequest) {    	
-        Property property = propertyService.addAlternateNumber(propertyRequest);
-        ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
-        PropertyResponse response = PropertyResponse.builder()
-                .properties(Arrays.asList(property))
-                .responseInfo(resInfo)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+
+
 
     @PostMapping("/fuzzy/_search")
     public ResponseEntity<PropertyResponse> fuzzySearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,

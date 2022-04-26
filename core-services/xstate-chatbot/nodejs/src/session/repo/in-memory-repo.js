@@ -1,16 +1,14 @@
-const uuid = require('uuid');
-
 class StateRepository {
 
     constructor() {
         this.states = {};
     }
 
-    async insertNewState(userId, active, state, session_id, time_stamp) {
+    async insertNewState(userId, active, state) {
         this.states[userId] = state;
     }
 
-    async updateState(userId, active, state, time_stamp) {
+    async updateState(userId, active, state) {
         this.states[userId] = state;
     }
 
@@ -19,19 +17,6 @@ class StateRepository {
             let state = JSON.parse(this.states[userId]);
             if(!state.done) {
                 return state;
-            }
-        }
-    }
-
-    async updateSessionId(userId, sessionTime) {
-        return;
-    }
-
-    async getSessionId(userId) {
-        if(this.states[userId]) {
-            let state = JSON.parse(this.states[userId]);
-            if(!state.done) {
-                return uuid.v4();
             }
         }
     }

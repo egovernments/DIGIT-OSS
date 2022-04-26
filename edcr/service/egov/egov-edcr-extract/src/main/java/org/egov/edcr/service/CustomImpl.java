@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -12,13 +13,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomImpl {
-    public static final String ULB_CODE = "ULB_CODE";
+    private static final String RETURNING_ULB_IMPLEMENTATION_FOR_SERVICE = "Returning ulb implementation for service ";
+	public static final String ULB_CODE = "ULB_CODE";
     public static final String ULB_NAME = "ULB_NAME";
     public static final String DISTRICT_CODE = "DISTRICT_CODE";
     public static final String DISTRICT_NAME = "DISTRICT_NAME";
     public static final String GRADE = "GRADE";
     public static final String STATE_NAME = "STATE_NAME";
-    private static final Logger LOG = Logger.getLogger(CustomImpl.class);
+    private static final Logger LOG = LogManager.getLogger(CustomImpl.class);
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -95,13 +97,13 @@ public class CustomImpl {
 
             if (ulbBean != null) {
                 bean = ulbBean;
-                LOG.debug("Returning ulb implementation for service " + parentClazz + " : " + ulbBean.getClass().getName());
+                LOG.debug(RETURNING_ULB_IMPLEMENTATION_FOR_SERVICE + parentClazz + " : " + ulbBean.getClass().getName());
             } else if (districtBean != null) {
                 bean = districtBean;
-                LOG.debug("Returning ulb implementation for service " + parentClazz + " : " + districtBean.getClass().getName());
+                LOG.debug(RETURNING_ULB_IMPLEMENTATION_FOR_SERVICE + parentClazz + " : " + districtBean.getClass().getName());
             } else if (gradeBean != null) {
                 bean = gradeBean;
-                LOG.debug("Returning ulb implementation for service " + parentClazz + " : " + districtBean.getClass().getName());
+                LOG.debug(RETURNING_ULB_IMPLEMENTATION_FOR_SERVICE + parentClazz + " : " + gradeBean.getClass().getName());
             } else if (stateBean != null)
                 bean = stateBean;
             else {

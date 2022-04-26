@@ -48,10 +48,6 @@ public class BankBranchServiceTest {
 
 	private List<BankBranch> bankBranches = new ArrayList<>();
 
-	@Before
-	public void setup() {
-
-	}
 
 	@Test
 	public final void testCreate() {

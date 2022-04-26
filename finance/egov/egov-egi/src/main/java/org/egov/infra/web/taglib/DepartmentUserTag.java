@@ -180,7 +180,7 @@ public class DepartmentUserTag extends RequestContextAwareTag {
 			out.print(this.getScript(deptUserStr));
 		} catch (final Exception ioe)
 		{
-			
+			logger.error("Exception");
 
 		}
 

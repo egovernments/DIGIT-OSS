@@ -337,6 +337,7 @@ const downloadprintMenu = (state, dispatch, applicationNumber, tenantId, status)
               try {
                 window.Android && window.Android.sendPrintData("printData", JSON.stringify(receiptData));
               } catch (e) {
+                console.log(e);
               }
 
             }
@@ -366,6 +367,7 @@ const downloadprintMenu = (state, dispatch, applicationNumber, tenantId, status)
               try {
                 window.Android && window.Android.sendPrintData("printData", JSON.stringify(challanData));
               } catch (e) {
+                console.log(e);
               }
             }
           },

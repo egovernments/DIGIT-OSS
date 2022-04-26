@@ -11,7 +11,6 @@ import "./index.css"
 import { getDomainLink } from "../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import store from "ui-redux/store";
-import { handleAddress } from "../../ui-config/screens/specs/wns/searchResource/functions";
 
 const styles = {
   card: {
@@ -56,9 +55,6 @@ class MyConnections extends React.Component {
       <div className="application-card">
         {myConnectionResults && myConnectionResults.length > 0 ? (
           myConnectionResults.map(item => {
-
-            let formatAddress =handleAddress(item);
-
             return (
               <div>
                 <Card className={classes.card}>
@@ -160,9 +156,9 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item md={8} xs={6}>
-                          {(item.property && item.property.address && formatAddress) ?
+                          {(item.property && item.property.address && item.property.address.street) ?
                             (<Label
-                              labelName={formatAddress}
+                              labelName={item.property.address.street}
                               fontSize={14}
                               style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                             />) :
@@ -181,7 +177,7 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <Label
-                            labelName={item.due ? item.due : "0"} onClick={() => item.due && this.getViewBillDetails(item)}
+                            labelName={item.due} onClick={() => this.getViewBillDetails(item)}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
@@ -195,7 +191,6 @@ class MyConnections extends React.Component {
                               labelKey="WS_COMMON_PAID_LABEL"
                               style={{ color: '#008000', textTransform: 'uppercase', fontWeight: 400 }}
                             /></div>) :
-                            !item.due ? (<div></div>) :
                             (<div className="linkStyle" onClick={() => this.getViewBillDetails(item)}>
                               <LabelContainer
                                 labelKey="CS_COMMON_PAY"

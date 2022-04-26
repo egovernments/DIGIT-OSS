@@ -66,6 +66,7 @@ const setAutopopulatedvalues = async (state, dispatch) => {
         consumptionDetails['consumption'] = ''
         consumptionDetails['lastReadingDate'] = lastReadingDate
     }catch (e) { 
+        console.log(e);         
         dispatch(
             toggleSnackbar(
                 true,

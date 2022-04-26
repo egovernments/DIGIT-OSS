@@ -31,7 +31,7 @@ public class ShortenController {
     }
 
     @RequestMapping(value = "/shortener", method=RequestMethod.POST, consumes = {"application/json"})
-    public String shortenUrl(@RequestBody @Valid final ShortenRequest shortenRequest) throws Exception {
+    public String shortenUrl(@RequestBody @Valid final ShortenRequest shortenRequest) {
         String longUrl = shortenRequest.getUrl();
         if (URLValidator.INSTANCE.validateURL(longUrl)) {
             String shortenedUrl = urlConverterService.shortenURL(shortenRequest);
@@ -41,7 +41,7 @@ public class ShortenController {
     }
 
     @RequestMapping(value = "/{id}", method=RequestMethod.GET)
-    public RedirectView redirectUrl(@PathVariable String id, HttpServletRequest request) throws IOException, URISyntaxException, Exception {
+    public RedirectView redirectUrl(@PathVariable String id, HttpServletRequest request) throws IOException, URISyntaxException {
         String redirectUrlString = urlConverterService.getLongURLFromID(id);
         RedirectView redirectView = new RedirectView();
         redirectView.setUrl(redirectUrlString);

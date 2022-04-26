@@ -346,7 +346,6 @@ export const setServiceCategory = (businessServiceData, dispatch,state,setCatego
       set(nestedServiceData, `${item.code}`, item);
     }
   });
-  console.log("nestedServiceData",nestedServiceData);
   dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.nestedServiceData",

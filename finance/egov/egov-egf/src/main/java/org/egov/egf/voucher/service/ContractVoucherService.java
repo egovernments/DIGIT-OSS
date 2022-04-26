@@ -69,7 +69,7 @@ public class ContractVoucherService {
             errorDetails.setErrorCode("EGF-VOUCHER-1");
             errorDetails.setErrorMessage("Please send valid JSON request");
             errors.add(errorDetails);
-        }
+        }else{
         
         Voucher  voucher = request.getVouchers().get(0);
         
@@ -79,13 +79,14 @@ public class ContractVoucherService {
             errors.add(errorDetails);
         }
 
-        if (request != null && voucher.getLedgers().isEmpty()) {
+        if (voucher.getLedgers().isEmpty()) {
             errorDetails.setErrorCode("EGF-VOUCHER-5");
             errorDetails.setErrorMessage("Account Details List cannot be empty");
             errors.add(errorDetails);
         }
         
         validateVoucherDate(voucher, errors, errorDetails, request);
+        }
      
         return errors;
     }
@@ -98,7 +99,7 @@ public class ContractVoucherService {
             errors.add(errorDetails);
         }
         
-        if (request != null && !request.getVoucherDate().isEmpty()) {
+        if ( !request.getVoucherDate().isEmpty()) {
             final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             Date voucherDate = null;
             try {

@@ -60,6 +60,7 @@ const getData = async (action, state, dispatch) => {
     }
 
   } catch (e) {
+    console.log(e);
   }
 
 

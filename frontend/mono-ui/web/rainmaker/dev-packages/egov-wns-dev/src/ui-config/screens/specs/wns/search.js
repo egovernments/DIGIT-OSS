@@ -26,6 +26,7 @@ const getMDMSData = (action, dispatch) => {
   try {
     getRequiredDocData(action, dispatch, moduleDetails)
   } catch (e) {
+    console.log(e);
   }
 };
 
@@ -52,9 +53,7 @@ const getMDMSAppType =async (dispatch) => {
           applicationType.forEach(type=>getBusinessService(type.businessService,dispatch))
           dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
         }
-    } catch (e) { 
-      
-     }
+    } catch (e) { console.log(e); }
   }
 
 const header = getCommonHeader({
@@ -117,6 +116,7 @@ export const getMdmsTenantsData = async (dispatch) => {
       dispatch(prepareFinalObject("applyScreenMdmsData.tenant", payload.MdmsRes.tenant));
 
   } catch (e) {
+      console.log(e);
   }
 };
 

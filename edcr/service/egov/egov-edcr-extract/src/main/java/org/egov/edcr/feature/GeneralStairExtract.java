@@ -1,5 +1,7 @@
 package org.egov.edcr.feature;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +25,9 @@ import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.DXFLWPolyline;
 import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.DXFLine;
+import org.kabeja.dxf.DXFPolyline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 public class GeneralStairExtract extends FeatureExtract {
@@ -150,7 +152,7 @@ public class GeneralStairExtract extends FeatureExtract {
 
 				List<DXFLWPolyline> stairFlightPolyLines = Util.getPolyLinesByLayer(doc, flightLayer);
 
-				boolean isClosed = stairFlightPolyLines.stream().allMatch(dxflwPolyline -> dxflwPolyline.isClosed());
+				boolean isClosed = stairFlightPolyLines.stream().allMatch(DXFPolyline::isClosed);
 
 				flight.setFlightClosed(isClosed);
 
@@ -199,7 +201,7 @@ public class GeneralStairExtract extends FeatureExtract {
 
 			List<DXFLWPolyline> landingPolyLines = Util.getPolyLinesByLayer(doc, landingLayer);
 
-			boolean isClosed = landingPolyLines.stream().allMatch(dxflwPolyline -> dxflwPolyline.isClosed());
+			boolean isClosed = landingPolyLines.stream().allMatch(DXFPolyline::isClosed);
 
 			stairLanding.setLandingClosed(isClosed);
 

@@ -1,9 +1,11 @@
 package org.egov.edcr;
 
-import org.apache.log4j.Logger;
+import java.io.IOException;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Measurement;
-import org.egov.edcr.feature.FarExtract;
 import org.egov.edcr.feature.PlantationGreenStripExtract;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,11 +16,11 @@ import org.mockito.runners.MockitoJUnit44Runner;
 
 public class GreenStripTest extends BaseTest {
 
-    private static final Logger LOG = Logger.getLogger(GreenStripTest.class);
+    private static final Logger LOG = LogManager.getLogger(GreenStripTest.class);
     PlantationGreenStripExtract feature = new PlantationGreenStripExtract();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws IOException {
         dxfFile = "medium_mumty.dxf";
         super.setUp();
     }
@@ -31,10 +33,10 @@ public class GreenStripTest extends BaseTest {
         for (Block b : pl.getBlocks()) {
 
             Measurement measurement = b.getPlantationGreenStripes().get(0);
-            System.out.println(measurement.getMinimumSide());
-            System.out.println(measurement.getLength());
-            System.out.println(measurement.getWidth());
-            System.out.println(measurement.getHeight());
+            LOG.info(measurement.getMinimumSide());
+            LOG.info(measurement.getLength());
+            LOG.info(measurement.getWidth());
+            LOG.info(measurement.getHeight());
         }
 
     }

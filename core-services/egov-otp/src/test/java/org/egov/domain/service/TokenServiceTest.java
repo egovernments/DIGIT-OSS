@@ -46,6 +46,10 @@ public class TokenServiceTest {
 
     private LocalDateTime now;
 
+    private static final String VALIDATE_REQUEST_IDENTITY = "identity";
+    private static final String VALIDATE_REQUEST_TENANT = "tenant";
+    private static final String TOKEN_NUMBER = "12345";
+
     @Before
     public void before() {
         now = LocalDateTime.now(ZoneId.of("UTC"));
@@ -84,7 +88,7 @@ public class TokenServiceTest {
 
     @Test(expected = TokenValidationFailureException.class)
     public void test_should_throw_exception_when_no_matching_non_expired_token_is_present() {
-        final ValidateRequest validateRequest = new ValidateRequest("tenant", "otpNumber", "identity");
+        final ValidateRequest validateRequest = new ValidateRequest(VALIDATE_REQUEST_TENANT, "otpNumber", VALIDATE_REQUEST_IDENTITY);
         final Tokens tokens = mock(Tokens.class);
         lenient().when(tokens.hasSingleNonExpiredToken(now)).thenReturn(false);
         when(tokenRepository.findByIdentityAndTenantId(validateRequest)).thenReturn(tokens);
@@ -95,9 +99,9 @@ public class TokenServiceTest {
 
     @Test(expected = TokenValidationFailureException.class)
     public void test_should_throw_exception_when_validatingtoken_already_validated() {
-        final ValidateRequest validateRequest = new ValidateRequest("tenant", "otpNumber", "identity");
+        final ValidateRequest validateRequest = new ValidateRequest(VALIDATE_REQUEST_TENANT, "otpNumber", VALIDATE_REQUEST_IDENTITY);
         Token token = Token.builder().uuid("").identity("test").validated(true)
-                .timeToLiveInSeconds(300l).number("12345")
+                .timeToLiveInSeconds(300l).number(TOKEN_NUMBER)
                 .tenantId("default").createdTime(new Date().getTime()).build();
         List<Token> tokenList = new ArrayList<Token>();
         tokenList.add(token);
@@ -110,9 +114,9 @@ public class TokenServiceTest {
 
     @Test
     public void test_should_return_token_when_token_is_successfully_updated_to_validated() {
-        final ValidateRequest validateRequest = new ValidateRequest("tenant", "12345", "identity");
+        final ValidateRequest validateRequest = new ValidateRequest(VALIDATE_REQUEST_TENANT, TOKEN_NUMBER, VALIDATE_REQUEST_IDENTITY);
         Token token = Token.builder().uuid("").identity("test").validated(false)
-                .timeToLiveInSeconds(300l).number(new BCryptPasswordEncoder().encode("12345"))
+                .timeToLiveInSeconds(300l).number(new BCryptPasswordEncoder().encode(TOKEN_NUMBER))
                 .tenantId("default").createdTime(new Date().getTime()).build();
         List<Token> tokenList = new ArrayList<Token>();
         tokenList.add(token);
@@ -125,7 +129,7 @@ public class TokenServiceTest {
     @Test
     public void test_should_return_otp_for_given_search_criteria() {
         final Token expectedToken = Token.builder().build();
-        final TokenSearchCriteria searchCriteria = new TokenSearchCriteria("uuid", "tenant");
+        final TokenSearchCriteria searchCriteria = new TokenSearchCriteria("uuid", VALIDATE_REQUEST_TENANT);
         when(tokenRepository.findBy(searchCriteria)).thenReturn(expectedToken);
 
         final Token actualToken = tokenService.search(searchCriteria);

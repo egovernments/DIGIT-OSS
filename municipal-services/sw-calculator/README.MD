@@ -14,7 +14,7 @@ This module created to manage the bill calculation for the registered sewerage s
 
 ### Swagger API Contract
 
-- Please refer to the [Swagger API contarct](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/water-sewerage-services.yaml#!/) to understand the structure of APIs and to have visualization of all internal APIs.
+- Please refer to the [Swagger API contarct](https://github.com/egovernments/municipal-services/blob/master/docs/water-sewerage-services.yaml) to understand the structure of APIs and to have visualization of all internal APIs.
 
 ## Service Details
 

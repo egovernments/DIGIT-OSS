@@ -20,19 +20,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MDMSValidator {
 	private Map<String, List<String>> mdmsResMap ;
-	
+
+	private static final String DATA_CONTAINS_KEY_CAPACITY = "capacity";
+
 		// TODO Auto-generated method stub
 	public void validateMdmsData(VehicleRequest vehicleRequest, Object mdmsData) {
 
 		this.mdmsResMap  = getAttributeValues(mdmsData);
-		String[] masterArray = { Constants.VEHICLE_MAKE_MODEL, Constants.VEHICLE_SUCTION_TYPE,
-				Constants.VEHICLE_DECLINE_REASON, Constants.VEHICLE_OWNER_TYPE };
+		String[] masterArray = { Constants.VEHICLE_MAKE_MODEL , Constants.VEHICLE_SUCTION_TYPE};
 
 		validateIfMasterPresent(masterArray,this.mdmsResMap);
 	
 		
 	}
-	
 	private void validateIfMasterPresent(String[] masterNames, Map<String, List<String>> codes) {
 		Map<String, String> errorMap = new HashMap<>();
 		for (String masterName : masterNames) {
@@ -43,7 +43,6 @@ public class MDMSValidator {
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 	}
-	
 	public Map<String, List<String>> getAttributeValues(Object mdmsData) {
 
 		List<String> modulepaths = Arrays.asList(Constants.VEHICLE_JSONPATH_CODE);
@@ -52,7 +51,7 @@ public class MDMSValidator {
 			try {
 				mdmsResMap.putAll(JsonPath.read(mdmsData, modulepath));
 			} catch (Exception e) {
-				log.error("Error while fetching MDMS data", e);
+				log.error("Error while fetvhing MDMS data", e);
 				throw new CustomException(VehicleErrorConstants.INVALID_TENANT_ID_MDMS_KEY,
 						VehicleErrorConstants.INVALID_TENANT_ID_MDMS_MSG);
 			}
@@ -79,8 +78,8 @@ public class MDMSValidator {
 			if (!(Data.get("code").equals(vehicleType))) {
 				errorMap.put(VehicleErrorConstants.INVALID_VEHICLE_TYPE, "Vehicle is invalid");
 			}
-			if(Data.containsKey("capacity") && !(Data.get("capacity").equals(capacity))) {
-				String tankCapacity = Data.get("capacity");
+			if(Data.containsKey(DATA_CONTAINS_KEY_CAPACITY) && !(Data.get(DATA_CONTAINS_KEY_CAPACITY).equals(capacity))) {
+				String tankCapacity = Data.get(DATA_CONTAINS_KEY_CAPACITY);
 				vehicleRequest.getVehicle().setTankCapacity(Double.parseDouble(tankCapacity));
 			}
 		} else {
@@ -103,60 +102,6 @@ public class MDMSValidator {
 		
 		if( !this.mdmsResMap.get(Constants.VEHICLE_SUCTION_TYPE).contains(suctionType) ) {
 			errorMap.put(VehicleErrorConstants.INVALID_VEHICLE_SUCTION_TYPE," Vehicle SuctionType is invalid");
-		}
-
-		if (!errorMap.isEmpty())
-			throw new CustomException(errorMap);
-	}
-	
-	/**
-	 * validate the existnance of provided property type in MDMS
-	 * @param propertyType
-	 * @throws CustomException
-	 */
-	public void validateVehicleDeclineReason(String vehicleDeclineReason ) throws CustomException{
-		
-		Map<String, String> errorMap = new HashMap<>();
-		
-		List<String> vehicleRejectionReason =  this.mdmsResMap.get(Constants.VEHICLE_DECLINE_REASON);
-		
-		@SuppressWarnings("unchecked")
-		List<Map<String, String>> vehicleRejectionReasonMap = (List<Map<String, String>>) JsonPath.parse(vehicleRejectionReason)
-				.read("$.[?(@.code=='" + vehicleDeclineReason + "')]");
-		if (vehicleRejectionReasonMap != null && vehicleRejectionReasonMap.size() > 0) {
-			Map<String, String> Data = vehicleRejectionReasonMap.get(0);
-			if (!(Data.get("code").equals(vehicleDeclineReason))) {
-				errorMap.put(VehicleErrorConstants.INVALID_VEHICLE_DECLINE_REASON, "Vehicle Decline Reason is invalid");
-			}
-			
-		} else {
-			errorMap.put(VehicleErrorConstants.INVALID_VEHICLE_DECLINE_REASON, "Vehicle Decline Reason is invalid");
-		}
-		if (!errorMap.isEmpty())
-			throw new CustomException(errorMap);
-	}
-	/**
-	 * validate the existence of provided vehicleOwner in MDMS
-	 * @param vehicleOwner
-	 * @throws CustomException
-	 */
-	public void validateVehicleOwner(String vehicleOwner) throws CustomException{
-		
-		Map<String, String> errorMap = new HashMap<>();
-		
-		List<String> vehicleOwners =  this.mdmsResMap.get(Constants.VEHICLE_OWNER_TYPE);
-		
-		@SuppressWarnings("unchecked")
-		List<Map<String, String>> vehicleOwnerMap = (List<Map<String, String>>) JsonPath.parse(vehicleOwners)
-				.read("$.[?(@.code=='" + vehicleOwner + "')]");
-		if (vehicleOwnerMap != null && vehicleOwnerMap.size() > 0) {
-			Map<String, String> Data = vehicleOwnerMap.get(0);
-			if (!(Data.get("code").equals(vehicleOwner))) {
-				errorMap.put(VehicleErrorConstants.INVALID_VEHICLE_OWNER, "Vehicle Owner is invalid");
-			}
-			
-		} else {
-			errorMap.put(VehicleErrorConstants.INVALID_VEHICLE_OWNER, "Vehicle Owner is invalid");
 		}
 
 		if (!errorMap.isEmpty())

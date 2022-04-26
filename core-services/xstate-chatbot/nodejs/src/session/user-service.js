@@ -102,9 +102,6 @@ class UserService {
       let responseBody = await response.json();
       return responseBody;
     } else {
-      let responseBody = await response.json();
-      console.error(JSON.stringify(responseBody));
-      console.error('User Create Error');
       return undefined;
     }
 

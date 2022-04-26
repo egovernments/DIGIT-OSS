@@ -169,15 +169,15 @@ public class NotificationConsumer {
 			link.append(uiHost + "/citizen").append("/otpLogin?mobileNo=").append(bill.getMobileNumber()).append("&redirectTo=")
 					.append(uiRedirectUrl).append("&params=").append(paymentdetail.getTenantId() + "," + paymentdetail.getReceiptNumber());
 
-			content = content.replaceAll("{rcpt_link}", link.toString());
+			content = content.replaceAll("<rcpt_link>", link.toString());
 			String taxName = fetchContentFromLocalization(requestInfo, paymentdetail.getTenantId(),
 					BUSINESSSERVICE_LOCALIZATION_MODULE, formatCodes(paymentdetail.getBusinessService()));
 			if(StringUtils.isEmpty(taxName))
 				taxName = "Adhoc Tax";
-			content = content.replaceAll("{tax_name}", taxName);
-			content = content.replaceAll("{fin_year}", fetchFinYear(bill.getBillDetails().get(0).getFromPeriod(), bill.getBillDetails().get(0).getToPeriod()));
-			content = content.replaceAll("{rcpt_no}",  paymentdetail.getReceiptNumber());
-			content = content.replaceAll("{amount_paid}", bill.getAmountPaid().toString());
+			content = content.replaceAll("<tax_name>", taxName);
+			content = content.replaceAll("<fin_year>", fetchFinYear(bill.getBillDetails().get(0).getFromPeriod(), bill.getBillDetails().get(0).getToPeriod()));
+			content = content.replaceAll("<rcpt_no>",  paymentdetail.getReceiptNumber());
+			content = content.replaceAll("<amount_paid>", bill.getAmountPaid().toString());
 
 			message = content;
 		}

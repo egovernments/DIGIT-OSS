@@ -23,12 +23,12 @@ import java.util.Properties;
 public class KafkaStreamsConfig {
 
     @Autowired
-    private ApplicationProperties applicationProperties;
+    private static ApplicationProperties applicationProperties;
 
     @Value("${kafka.consumer.poll.ms}")
-    private Integer kafkaConsumerPollMs;
+    private static Integer kafkaConsumerPollMs;
     @Value("${kafka.producer.linger.ms}")
-    private Integer kafkaProducerLingerMs;
+    private static Integer kafkaProducerLingerMs;
 
     private static Properties defaultStreamConfiguration;
     private static Serde<JsonNode> jsonSerde;
@@ -47,7 +47,7 @@ public class KafkaStreamsConfig {
         return (Properties) defaultStreamConfiguration.clone();
     }
 
-    private void initDefaultStreamConfiguration() {
+    private static void initDefaultStreamConfiguration() {
         defaultStreamConfiguration = new Properties();
         defaultStreamConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, applicationProperties.getKafkaHost());
         defaultStreamConfiguration.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
@@ -63,7 +63,7 @@ public class KafkaStreamsConfig {
         return jsonSerde;
     }
 
-    private void initJsonSerde() {
+    private static void initJsonSerde() {
         Serializer<JsonNode> jsonSerializer = new JsonSerializer();
         Deserializer<JsonNode> jsonDeserializer = new JsonDeserializer();
         jsonSerde = Serdes.serdeFrom(jsonSerializer, jsonDeserializer);

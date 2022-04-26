@@ -184,6 +184,7 @@ public class InboxRenderServiceDelegate<T extends StateAware> {
         List<Inbox> inboxItems = new ArrayList<>();
         for (StateAware stateAware : items) {
             WorkflowTypes workflowType = getWorkflowType(stateAware.getStateType());
+            if(workflowType!=null){
             if(WORKS_BILL.equals(stateAware.getCurrentState().getNatureOfTask())){
                 workflowType.setLink(workflowType.getLink().replace("/expensebill/", "/contractorbill/"));
                 workflowType.setLink(workflowType.getLink().replace("/supplierbill/", "/contractorbill/"));
@@ -193,6 +194,7 @@ public class InboxRenderServiceDelegate<T extends StateAware> {
             }else if(SUPPLIER_BILL.equals(stateAware.getCurrentState().getNatureOfTask())){
                 workflowType.setLink(workflowType.getLink().replace("/expensebill/", "/supplierbill/"));
                 workflowType.setLink(workflowType.getLink().replace("/contractorbill/", "/supplierbill/"));
+            }
             }
             inboxItems.add(Inbox
                     .build(stateAware,

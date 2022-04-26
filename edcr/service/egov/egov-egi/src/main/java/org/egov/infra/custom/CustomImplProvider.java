@@ -1,13 +1,19 @@
 package org.egov.infra.custom;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.infra.admin.master.entity.City;
 import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.validation.exception.ApplicationRestException;
+import org.egov.infra.validation.exception.ValidationError;
+import org.egov.infra.validation.exception.ValidationException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,14 +22,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomImplProvider {
-    private static final String COLON = " : ";
+    private static final String BEAN_NOT_FOUND = "Bean not found";
+	private static final String COLON = " : ";
     public static final String ULB_CODE = "ULB_CODE";
     public static final String ULB_NAME = "ULB_NAME";
     public static final String DISTRICT_CODE = "DISTRICT_CODE";
     public static final String DISTRICT_NAME = "DISTRICT_NAME";
     public static final String GRADE = "GRADE";
     public static final String STATE_NAME = "STATE_NAME";
-    private static final Logger LOG = Logger.getLogger(CustomImplProvider.class);
+    private static final Logger LOG = LogManager.getLogger(CustomImplProvider.class);
 
     @Value("${client.id}")
     private String clientId;
@@ -78,7 +85,7 @@ public class CustomImplProvider {
         try {
             bean = applicationContext.getBean(beanName);
         } catch (BeansException e) {
-            // Ignore error . Handle by callee
+        	LOG.debug("Ignore error. Handle by callee");
         }
         return bean;
 
@@ -123,17 +130,18 @@ public class CustomImplProvider {
                     break;
                 }
                 if (ApplicationThreadLocals.getDistrictName() == null) {
-                    throw new RuntimeException("District name is not present. Please update and try again");
+                	throw new ValidationException(
+                            Arrays.asList(new ValidationError(BEAN_NOT_FOUND, "District name is not present. Please update and try again")));
                 }
                 if (!ApplicationThreadLocals.getDistrictName().isEmpty()
-                        && serviceName.contains(ApplicationThreadLocals.getDistrictName().toLowerCase())) {
-                    if (serviceName.contains("District".toLowerCase())) {
+                        && serviceName.contains(ApplicationThreadLocals.getDistrictName().toLowerCase())
+                        && serviceName.contains("District".toLowerCase())) {
                         districtBean = c;
-                    }
                 }
 
                 if (ApplicationThreadLocals.getStateName() == null) {
-                    throw new RuntimeException("State  name is not present. Please update and try again");
+                	throw new ValidationException(
+                            Arrays.asList(new ValidationError(BEAN_NOT_FOUND, "State  name is not present. Please update and try again")));
                 }
 
                 if (!ApplicationThreadLocals.getStateName().isEmpty()
@@ -195,14 +203,16 @@ public class CustomImplProvider {
             // get City wise bean
 
             if (ApplicationThreadLocals.getCityName() == null || ApplicationThreadLocals.getCityName().isEmpty()) {
-                throw new RuntimeException("City name is not present. Please update and try again");
+            	throw new ValidationException(
+                        Arrays.asList(new ValidationError(BEAN_NOT_FOUND, "City name is not present. Please update and try again")));
             } else {
                 ulbBean = getBeanByName(beanName + "_" + ApplicationThreadLocals.getCityName());
             }
 
             // get District wise bean
             if (ApplicationThreadLocals.getDistrictName() == null) {
-                throw new RuntimeException("District name is not present. Please update and try again");
+            	throw new ValidationException(
+                        Arrays.asList(new ValidationError(BEAN_NOT_FOUND, "District name is not present. Please update and try again")));
             } else {
                 districtBean = getBeanByName(
                         beanName + "_" + ApplicationThreadLocals.getDistrictName() + "_District");
@@ -211,14 +221,16 @@ public class CustomImplProvider {
             // get State wise bean
 
             if (ApplicationThreadLocals.getStateName() == null || ApplicationThreadLocals.getStateName().isEmpty()) {
-                throw new RuntimeException("State  name is not present. Please update and try again");
+            	throw new ValidationException(
+                        Arrays.asList(new ValidationError(BEAN_NOT_FOUND, "State  name is not present. Please update and try again")));
             } else {
                 stateBean = getBeanByName(beanName + "_" + ApplicationThreadLocals.getStateName());
             }
 
             // get ULB grade wise bean
             if (ApplicationThreadLocals.getGrade().isEmpty()) {
-                throw new RuntimeException("ULB grade not defined. Please update and try again");
+            	throw new ValidationException(
+                        Arrays.asList(new ValidationError(BEAN_NOT_FOUND, "ULB grade not defined. Please update and try again")));
             } else {
                 gradeBean = getBeanByName(beanName + "_" + ApplicationThreadLocals.getGrade());
             }

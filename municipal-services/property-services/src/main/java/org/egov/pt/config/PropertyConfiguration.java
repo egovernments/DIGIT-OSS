@@ -106,9 +106,6 @@ public class PropertyConfiguration {
     @Value("${kafka.topics.notification.sms}")
     private String smsNotifTopic;
 
-    @Value("${kafka.topics.notification.email}")
-    private String emailNotifTopic;
-
     @Value("${kafka.topics.receipt.create}")
     private String receiptTopic;
 
@@ -120,9 +117,6 @@ public class PropertyConfiguration {
 
     @Value("${notif.sms.enabled}")
     private Boolean isSMSNotificationEnabled;
-
-    @Value("${notif.email.enabled}")
-    private Boolean isEmailNotificationEnabled;
     
     // Notif variables 
     
@@ -140,10 +134,7 @@ public class PropertyConfiguration {
     private String userEventViewPropertyLink;
     
     @Value("${egov.usr.events.view.mutation.history.link}")
-    private String userEventViewMutationLink;
-
-    @Value("${egov.usr.events.download.receipt.link}")
-    private String userEventReceiptDownloadLink;
+    private String userEventViewMutationLink;    
     
     //Property Search Params
     @Value("${citizen.allowed.search.params}")
@@ -174,8 +165,6 @@ public class PropertyConfiguration {
     @Value("${egov.localization.search.endpoint}")
     private String localizationSearchEndpoint;
 
-    @Value("${egov.localization.fallback.locale}")
-    private String fallBackLocale;
     //USER EVENTS
 	@Value("${egov.ui.app.host}")
 	private String uiAppHost;

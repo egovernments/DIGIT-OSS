@@ -3,6 +3,7 @@ package org.egov.egf.instrument.utils;
 import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
+import org.egov.tracer.model.CustomException;
 
 public class RequestJsonReader {
 
@@ -15,7 +16,7 @@ public class RequestJsonReader {
             return "{\n" + info + "," + data + "}";
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("IOEXCEPTION",e.getMessage());
         }
     }
 
@@ -28,7 +29,7 @@ public class RequestJsonReader {
             return "{\n" + info + "," + data + "}";
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("IOEXCEPTION",e.getMessage());
         }
     }
 
@@ -41,7 +42,7 @@ public class RequestJsonReader {
             return "{\n" + info + "," + data + "}";
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("IOEXCEPTION",e.getMessage());
         }
     }
 
@@ -53,7 +54,7 @@ public class RequestJsonReader {
             return "{\n" + info + "}";
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("IOEXCEPTION",e.getMessage());
         }
     }
 
@@ -61,7 +62,7 @@ public class RequestJsonReader {
         try {
             return IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream(fileName), "UTF-8");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException("IOEXCEPTION",e.getMessage());
         }
     }
 }

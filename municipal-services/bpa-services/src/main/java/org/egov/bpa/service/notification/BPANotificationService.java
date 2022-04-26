@@ -1,10 +1,14 @@
 package org.egov.bpa.service.notification;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.jayway.jsonpath.Filter;
-import org.apache.commons.lang3.StringUtils;
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.repository.ServiceRequestRepository;
 import org.egov.bpa.service.BPALandService;
@@ -12,30 +16,27 @@ import org.egov.bpa.service.UserService;
 import org.egov.bpa.util.BPAConstants;
 import org.egov.bpa.util.BPAUtil;
 import org.egov.bpa.util.NotificationUtil;
-import org.egov.bpa.web.model.*;
+import org.egov.bpa.web.model.Action;
+import org.egov.bpa.web.model.ActionItem;
+import org.egov.bpa.web.model.BPA;
+import org.egov.bpa.web.model.BPARequest;
+import org.egov.bpa.web.model.BPASearchCriteria;
+import org.egov.bpa.web.model.Event;
+import org.egov.bpa.web.model.EventRequest;
+import org.egov.bpa.web.model.Recepient;
+import org.egov.bpa.web.model.SMSRequest;
 import org.egov.bpa.web.model.landInfo.LandInfo;
 import org.egov.bpa.web.model.landInfo.LandSearchCriteria;
 import org.egov.bpa.web.model.landInfo.Source;
 import org.egov.bpa.web.model.user.UserDetailResponse;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.mdms.model.MasterDetail;
-import org.egov.mdms.model.MdmsCriteria;
-import org.egov.mdms.model.MdmsCriteriaReq;
-import org.egov.mdms.model.ModuleDetail;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.egov.bpa.util.BPAConstants;
 
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.client.RestTemplate;
-
-import static com.jayway.jsonpath.Criteria.where;
-import static com.jayway.jsonpath.Filter.filter;
-import static org.egov.bpa.util.BPAConstants.*;
 
 @Slf4j
 @Service
@@ -56,15 +57,6 @@ public class BPANotificationService {
 	private BPALandService bpalandService;
 
 	@Autowired
-	private RestTemplate restTemplate;
-
-	@Value("${egov.mdms.host}")
-	private String mdmsHost;
-
-	@Value("${egov.mdms.search.endpoint}")
-	private String mdmsUrl;
-
-	@Autowired
 	public BPANotificationService(BPAConfiguration config, ServiceRequestRepository serviceRequestRepository,
 			NotificationUtil util, BPAUtil bpaUtil) {
 		this.config = config;
@@ -80,19 +72,6 @@ public class BPANotificationService {
 	 *            The bpaRequest listenend on the kafka topic
 	 */
 	public void process(BPARequest bpaRequest) {
-		RequestInfo requestInfo = bpaRequest.getRequestInfo();
-		Map<String, String> mobileNumberToOwner = new HashMap<>();
-		String tenantId = bpaRequest.getBPA().getTenantId();
-		String action = bpaRequest.getBPA().getWorkflow().getAction();
-		List<String> configuredChannelNames =  fetchChannelList(new RequestInfo(), tenantId, BPA_BUSINESSSERVICE, action);
-		Set<String> mobileNumbers = new HashSet<>();
-		mobileNumberToOwner = getUserList(bpaRequest);
-
-		for (Map.Entry<String, String> entryset : mobileNumberToOwner.entrySet()) {
-			mobileNumbers.add(entryset.getKey());
-		}
-
-			if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
 		List<SMSRequest> smsRequests = new LinkedList<>();
 		if (null != config.getIsSMSEnabled()) {
 			if (config.getIsSMSEnabled()) {
@@ -101,28 +80,11 @@ public class BPANotificationService {
 					util.sendSMS(smsRequests, config.getIsSMSEnabled());
 			}
 		}
-		}
-
-		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
-			if (null != config.getIsUserEventsNotificationEnabled()) {
-				if (config.getIsUserEventsNotificationEnabled()) {
+		if (null != config.getIsUserEventsNotificationEnabled()) {
+			if (config.getIsUserEventsNotificationEnabled()) {
 				EventRequest eventRequest = getEvents(bpaRequest);
 				if (null != eventRequest)
 					util.sendEventNotification(eventRequest);
-			    }
-		    }
-		}
-
-		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
-//			EMAIL block TBD
-			if (null != config.getIsEmailNotificationEnabled()) {
-				if (config.getIsEmailNotificationEnabled()) {
-					Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
-					String localizationMessages = util.getLocalizationMessages(tenantId, bpaRequest.getRequestInfo());
-					String message = util.getEmailCustomizedMsg(bpaRequest.getRequestInfo(), bpaRequest.getBPA(), localizationMessages);
-					List<EmailRequest> emailRequests = util.createEmailRequest(bpaRequest, message, mapOfPhnoAndEmail);
-					util.sendEmail(emailRequests);
-				}
 			}
 		}
 	}
@@ -149,7 +111,7 @@ public class BPANotificationService {
 		BPA bpaApplication = bpaRequest.getBPA();
 		Map<String, String> mobileNumberToOwner = getUserList(bpaRequest);
 
-		List<SMSRequest> smsRequests = util.createSMSRequest(bpaRequest,message, mobileNumberToOwner);
+		List<SMSRequest> smsRequests = util.createSMSRequest(message, mobileNumberToOwner);
 		Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest::getMobileNumber).collect(Collectors.toSet());
 		Map<String, String> mapOfPhnoAndUUIDs = fetchUserUUIDs(mobileNumbers, bpaRequest.getRequestInfo(),
 				bpaRequest.getBPA().getTenantId());
@@ -243,8 +205,7 @@ public class BPANotificationService {
 		String localizationMessages = util.getLocalizationMessages(tenantId, bpaRequest.getRequestInfo());
 		String message = util.getCustomizedMsg(bpaRequest.getRequestInfo(), bpaRequest.getBPA(), localizationMessages);
 		Map<String, String> mobileNumberToOwner = getUserList(bpaRequest);
-		smsRequests.addAll(util.createSMSRequest(bpaRequest,message, mobileNumberToOwner));
-
+		smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
 	}
 
 	/**
@@ -264,12 +225,12 @@ public class BPANotificationService {
 		bpaSearchCriteria.setOwnerIds(ownerId);
 		bpaSearchCriteria.setTenantId(tenantId);
 		UserDetailResponse userDetailResponse = userService.getUser(bpaSearchCriteria, bpaRequest.getRequestInfo());
-
+		
 		LandSearchCriteria landcriteria = new LandSearchCriteria();
 		landcriteria.setTenantId(bpaSearchCriteria.getTenantId());
 		landcriteria.setIds(Arrays.asList(bpaRequest.getBPA().getLandId()));
 		List<LandInfo> landInfo = bpalandService.searchLandInfoToBPA(bpaRequest.getRequestInfo(), landcriteria);
-
+		
 		mobileNumberToOwner.put(userDetailResponse.getUser().get(0).getUserName(),
 				userDetailResponse.getUser().get(0).getName());
 		
@@ -293,49 +254,4 @@ public class BPANotificationService {
 		}
 		return mobileNumberToOwner;
 	}
-
-	public List<String> fetchChannelList(RequestInfo requestInfo, String tenantId, String moduleName, String action){
-		List<String> masterData = new ArrayList<>();
-		StringBuilder uri = new StringBuilder();
-		uri.append(mdmsHost).append(mdmsUrl);
-		if(StringUtils.isEmpty(tenantId))
-			return masterData;
-		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
-
-		Filter masterDataFilter = filter(
-				where(MODULE).is(moduleName).and(ACTION).is(action)
-		);
-
-		try {
-			Object response = restTemplate.postForObject(uri.toString(), mdmsCriteriaReq, Map.class);
-			masterData = JsonPath.parse(response).read("$.MdmsRes.Channel.channelList[?].channelNames[*]", masterDataFilter);
-		}catch(Exception e) {
-			log.error("Exception while fetching workflow states to ignore: ",e);
-		}
-		return masterData;
-	}
-
-	private MdmsCriteriaReq getMdmsRequestForChannelList(RequestInfo requestInfo, String tenantId){
-		MasterDetail masterDetail = new MasterDetail();
-		masterDetail.setName(CHANNEL_LIST);
-		List<MasterDetail> masterDetailList = new ArrayList<>();
-		masterDetailList.add(masterDetail);
-
-		ModuleDetail moduleDetail = new ModuleDetail();
-		moduleDetail.setMasterDetails(masterDetailList);
-		moduleDetail.setModuleName(CHANNEL);
-		List<ModuleDetail> moduleDetailList = new ArrayList<>();
-		moduleDetailList.add(moduleDetail);
-
-		MdmsCriteria mdmsCriteria = new MdmsCriteria();
-		mdmsCriteria.setTenantId(tenantId);
-		mdmsCriteria.setModuleDetails(moduleDetailList);
-
-		MdmsCriteriaReq mdmsCriteriaReq = new MdmsCriteriaReq();
-		mdmsCriteriaReq.setMdmsCriteria(mdmsCriteria);
-		mdmsCriteriaReq.setRequestInfo(requestInfo);
-
-		return mdmsCriteriaReq;
-	}
-
 }

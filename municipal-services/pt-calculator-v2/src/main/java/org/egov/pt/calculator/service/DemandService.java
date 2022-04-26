@@ -427,11 +427,16 @@ public class DemandService {
 
 		details = getAdjustedDemandDetails(tenantId,calculation,demand);
 
-		return Demand.builder().tenantId(tenantId).businessService(configs.getPtModuleCode()).consumerType(propertyType)
-				.consumerCode(consumerCode).payer(owner.toCommonUser()).taxPeriodFrom(calculation.getFromDate())
+		Demand result = Demand.builder().tenantId(tenantId).businessService(configs.getPtModuleCode()).consumerType(propertyType)
+				.consumerCode(consumerCode).taxPeriodFrom(calculation.getFromDate())
 				.taxPeriodTo(calculation.getToDate()).status(Demand.DemandStatusEnum.ACTIVE)
 				.minimumAmountPayable(BigDecimal.valueOf(configs.getPtMinAmountPayable())).demandDetails(details)
 				.build();
+		if(owner != null){
+			result.setPayer(owner.toCommonUser());
+		}
+
+		return result;
 	}
 
 	/**

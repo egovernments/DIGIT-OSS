@@ -45,7 +45,6 @@ const contract = {
       labelKey: "NOC_REFER_OPINION_BUTTON_LABEL"
     },
     callBack: () => {
-      console.log("asd");
     }
   }
 };

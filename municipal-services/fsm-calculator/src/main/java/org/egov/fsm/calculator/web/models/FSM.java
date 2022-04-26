@@ -65,9 +65,6 @@ public class FSM   {
   
   @JsonProperty("vehicleType")
   private String vehicleType = null;
-  
-  @JsonProperty("vehicleCapacity")
-  private String vehicleCapacity = null;
 
   /**
    * Gets or Sets status

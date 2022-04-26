@@ -22,6 +22,5 @@ public class CollectionsRepositoryTest {
         RestTemplate restTemplate = new RestTemplate();
         ReceiptRes receiptRes = restTemplate.postForObject(url, new RequestInfoWrapper(requestInfo), ReceiptRes
                 .class);
-        System.out.println(receiptRes);
     }
 }

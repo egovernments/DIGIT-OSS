@@ -5,13 +5,16 @@ import "./index.css";
 
 const printDiv = () => {
   let content = document.getElementById("documents-div").innerHTML;
-  let printWindow = window.open("", "");
+  let printWindow = window.open("", "Print");
 
-  printWindow.document.write(`<html><body>${content}</body></html>`);
+  printWindow.document.write("<html><body >");
+  printWindow.document.write(content);
+  printWindow.document.write("</body></html>");
 
   printWindow.document.close();
   printWindow.focus();
   printWindow.print();
+  printWindow.close();
 };
 
 const startApplyFlow = (state, dispatch) => {

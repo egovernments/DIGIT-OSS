@@ -81,16 +81,6 @@ public class Vendor {
 	@Size(max=64)
 	private String ownerId = null;
 
-	@JsonProperty("agencyType")
-	@SafeHtml
-	@Size(max=128)
-	private String agencyType = null;
-	
-	@JsonProperty("paymentPreference")
-	@SafeHtml
-	@Size(max=128)
-	private String paymentPreference = null;
-
 	/**
 	 * Inactive records will be consider as soft deleted
 	 */

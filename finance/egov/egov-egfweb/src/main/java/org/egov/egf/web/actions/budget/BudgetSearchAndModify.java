@@ -204,6 +204,7 @@ public class BudgetSearchAndModify extends BudgetSearchAction {
         super.prepare();
         if (parameters.containsKey("action") && Constants.MODIFY.equals(parameters.get("action")[0]))
             if (budgetDetail.getId() != null) {
+            	LOGGER.info("Budget detail id: "+ budgetDetail.getId());
 
             } else
                 for (int i = 0; i < savedbudgetDetailList.size(); i++)
@@ -537,8 +538,10 @@ public class BudgetSearchAndModify extends BudgetSearchAction {
         final CFinancialYear beforeLastFinancialYearByDate = null;// getFinancialYearDAO().getTwoPreviousYearByDate(financialYear.getStartingDate());
         lastYearTopBudget = budgetService.find(" from Budget where financialYear.id=? and parent is null  and isbere=?",
                 lastFinancialYearByDate.getId(), topBudget.getIsbere());
+        
         beforeLastYearTopBudget = budgetService.find("from Budget where financialYear.id=? and parent is null  and isbere=?",
-                beforeLastFinancialYearByDate.getId(), topBudget.getIsbere());
+                beforeLastFinancialYearByDate==null?null:beforeLastFinancialYearByDate.getId(), topBudget.getIsbere());
+        
 
         if (lastYearTopBudget != null)
             previousYearResult = budgetDetailService.fetchActualsForFinYear(lastFinancialYearByDate, mandatoryFields,

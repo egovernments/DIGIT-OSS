@@ -54,8 +54,6 @@ public class ElasticSearchQueryFactory {
         elasticSearchUtils.add(instrumentTypeSearchContract.getName(), "name", boolQueryBuilder);
         elasticSearchUtils.add(instrumentTypeSearchContract.getDescription(), "description", boolQueryBuilder);
         elasticSearchUtils.add(instrumentTypeSearchContract.getActive(), "active", boolQueryBuilder);
-        // elasticSearchUtils.add(instrumentTypeSearchContract.getInstrumentTypeProperties(), "instrumentTypeProperties",
-        // boolQueryBuilder);
         return boolQueryBuilder;
     }
 
@@ -79,7 +77,7 @@ public class ElasticSearchQueryFactory {
 
     public List<String> prepareOrderBys(String sortBy) {
         List<String> orderByList = new ArrayList<String>();
-        List<String> sortByList = new ArrayList<String>();
+        List<String> sortByList;
         if (sortBy.contains(","))
             sortByList = Arrays.asList(sortBy.split(","));
         else

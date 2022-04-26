@@ -140,7 +140,6 @@ $(document).ready(function () {
             dataType: "json",
             success: function (data) {
                 if (data) {
-                    console.log('OTP sent');
                     $('#activationcode').val('');
                     $('#signup-section,#otp-section').show();
                     $('#otpbtn-section').hide();

@@ -19,6 +19,8 @@ public class ChallanCountRowMapper implements ResultSetExtractor<Map<String,Stri
 	@Autowired
 	private ObjectMapper mapper;
 
+	private static final String GET_INT_COUNT = "count";
+
 	@Override
 	/**
 	 * Maps ResultSet to Employee POJO.
@@ -32,13 +34,13 @@ public class ChallanCountRowMapper implements ResultSetExtractor<Map<String,Stri
 
 		while(rs.next()) {
 			if(rs.getString("applicationstatus").equalsIgnoreCase("CANCELLED"))
-				cancelledChallan = cancelledChallan + rs.getInt("count");
+				cancelledChallan = cancelledChallan + rs.getInt(GET_INT_COUNT);
 			else if(rs.getString("applicationstatus").equalsIgnoreCase("ACTIVE"))
-				activeChallan = activeChallan + rs.getInt("count");
+				activeChallan = activeChallan + rs.getInt(GET_INT_COUNT);
 			else
-				paidChallan = paidChallan + rs.getInt("count");
+				paidChallan = paidChallan + rs.getInt(GET_INT_COUNT);
 
-			totalChallan = totalChallan + rs.getInt("count");
+			totalChallan = totalChallan + rs.getInt(GET_INT_COUNT);
 		}
 		if(totalChallan==0){
 			response.put("activeChallan","0");

@@ -29,10 +29,6 @@ const screenHoc = ({
         } else if (hasRemoteConfig) {
           // const url=`http://rawgit.com/muralim4242/mihy-repo/master/packages/ui-client-app/src/ui-config/screens/specs/${path}/${screenKey}.js`;
           // $.getScript(url, function( data, textStatus, jqxhr ) {
-          //     console.log( data ); // Data returned
-          //     console.log( textStatus ); // Success
-          //     console.log( jqxhr.status ); // 200
-          //     console.log( "Load was performed." );
           // });
           this.screenConfig = getConfig(path, screenKey);
         } else {

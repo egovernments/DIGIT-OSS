@@ -175,5 +175,6 @@ const getMdmsData = async () => {
     );
     return payload;
   } catch (e) {
+    console.log(e);
   }
 };

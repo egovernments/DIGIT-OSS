@@ -30,15 +30,19 @@ public class SpiralStairExtract extends FeatureExtract {
         for (Block block : blocks)
             if (block.getBuilding() != null && !block.getBuilding().getFloors().isEmpty())
                 outside: for (Floor floor : block.getBuilding().getFloors()) {
-                    if (!block.getTypicalFloor().isEmpty())
-                        for (TypicalFloor tp : block.getTypicalFloor())
-                            if (tp.getRepetitiveFloorNos().contains(floor.getNumber()))
-                                for (Floor allFloors : block.getBuilding().getFloors())
-                                    if (allFloors.getNumber().equals(tp.getModelFloorNo()))
-                                        if (!allFloors.getFireStairs().isEmpty()) {
-                                            floor.setFireStairs(allFloors.getFireStairs());
-                                            continue outside;
-                                        }
+                    if (!block.getTypicalFloor().isEmpty()) {
+                        for (TypicalFloor tp : block.getTypicalFloor()) {
+                            if (tp.getRepetitiveFloorNos().contains(floor.getNumber())) {
+                                for (Floor allFloors : block.getBuilding().getFloors()) {
+									if (allFloors.getNumber().equals(tp.getModelFloorNo())
+											&& !allFloors.getFireStairs().isEmpty()) {
+										floor.setFireStairs(allFloors.getFireStairs());
+										continue outside;
+									}
+                                }
+                            }
+                        }
+                    }
 
                     // Layer name convention BLK_n_FLR_i_SPIRAL_FIRE_STAIR
                     String spiralStairLayerName = "BLK_" + block.getNumber() + "_FLR_" + floor.getNumber() + "_SPIRAL_FIRE_STAIR"
@@ -57,7 +61,7 @@ public class SpiralStairExtract extends FeatureExtract {
                                 List<DXFCircle> spiralFireEscapeStairPolyLines = Util.getPolyCircleByLayer(planDetail.getDoc(),
                                         String.format(layerNames.getLayerName("LAYER_NAME_FLOOR_SPIRAL_STAIR"), block.getNumber(),
                                                 floor.getNumber(), spiralStair.getNumber()));
-                                List<Circle> circles = new ArrayList();
+                                List<Circle> circles = new ArrayList<>();
                                 for (DXFCircle dxfCircle : spiralFireEscapeStairPolyLines) {
                                     spiralStair.setNumber(array[7]);
                                     Circle circle = new Circle();

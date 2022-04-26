@@ -45,7 +45,7 @@ public class MDMSService {
 	public Map<String, List<String>> getMDMSData(RequestInfo requestInfo, String tenantId){
 		MdmsResponse response = fetchMDMSData(requestInfo, tenantId);
 		Map<String, List<String>> masterData = new HashMap<>();
-		Map<String, List<String>> eachMasterMap = new HashMap<>();
+		Map<String, List<String>> eachMasterMap;
 		if(null != response) {
 			if(!CollectionUtils.isEmpty(response.getMdmsRes().keySet())) {
 				if(null != response.getMdmsRes().get(HRMSConstants.HRMS_MDMS_COMMON_MASTERS_CODE)){

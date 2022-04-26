@@ -27,7 +27,7 @@ public class Action implements java.io.Serializable {
 
     @JsonIgnore
     public boolean hasDynamicFields() {
-        return url.contains(OPENING_BRACES) & url.contains(CLOSING_BRACES);
+        return url.contains(OPENING_BRACES) && url.contains(CLOSING_BRACES);
     }
 
     @JsonIgnore

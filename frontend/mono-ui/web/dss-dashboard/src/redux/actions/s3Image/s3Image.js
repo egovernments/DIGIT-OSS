@@ -1,7 +1,6 @@
 
 import API from '../apis/api';
 import CONFIGS from '../../config/configs'
-import { getTenantId } from '../../../utils/commons';
 
 export default class S3ImageAPI extends API {
     constructor(timeout = 2000, path, reqType, reqBody, queryParams = null) {
@@ -34,7 +33,7 @@ export default class S3ImageAPI extends API {
         return this.codeKey;
     }
     apiEndPoint() {
-        return CONFIGS.FETCH_FILE + "?tenantId="+`${getTenantId()}`+"&fileStoreIds=" + this.body
+        return CONFIGS.FETCH_FILE + "?tenantId="+`${localStorage.getItem('tenant-id')}`+"&fileStoreIds=" + this.body
     }
 
     getHeaders() {

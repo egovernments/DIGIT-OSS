@@ -42,9 +42,9 @@ public class PaymentQueryBuilder {
             "pyd.lastmodifiedtime as pyd_lastmodifiedtime,pyd.additionalDetails as pyd_additionalDetails" +
             " FROM egcl_payment py  " +
             " INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id ";
-    
+
     public static final String SELECT_COUNT_PAYMENT_SQL = "SELECT count(distinct(py.id)) FROM egcl_payment py "
-    		+ "INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id where pyd.businessservice= :businessservice and pyd.tenantid= :tenantid ";
+            + "INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id where pyd.businessservice= :businessservice and pyd.tenantid= :tenantid ";
 
     /*public static final String ID_QUERY = "SELECT DISTINCT py.id as id,py.transactiondate as date " +
             " FROM egcl_payment py  " +
@@ -135,8 +135,8 @@ public class PaymentQueryBuilder {
     public static final String COPY_PAYMENT_SQL = "INSERT INTO egcl_payment_audit SELECT * FROM egcl_payment WHERE id = :id;";
 
     public static final String COPY_PAYMENTDETAIL_SQL = "INSERT INTO egcl_paymentdetail_audit SELECT id, tenantid, paymentid, due, amountpaid, receiptnumber, "
-    		+ "businessservice, billid, additionaldetails,  createdby, createdtime, lastmodifiedby, lastmodifiedtime, manualreceiptnumber, "
-    		+ "manualreceiptdate, receiptdate, receipttype FROM egcl_paymentdetail WHERE id = :id ;";
+            + "businessservice, billid, additionaldetails,  createdby, createdtime, lastmodifiedby, lastmodifiedtime, manualreceiptnumber, "
+            + "manualreceiptdate, receiptdate, receipttype FROM egcl_paymentdetail WHERE id = :id ;";
 
     public static final String COPY_BILL_SQL = "INSERT INTO egcl_bill_audit SELECT * FROM egcl_bill WHERE id = :id;";
 
@@ -162,32 +162,32 @@ public class PaymentQueryBuilder {
     public static final String UPDATE_BILLDETAIL_SQL = "UPDATE egcl_billdetial SET additionaldetails=:additionaldetails, voucherheader=:voucherheader," +
             " manualreceiptnumber=:manualreceiptnumber, manualreceiptdate=:manualreceiptdate, billdescription=:billdescription,displaymessage=:displaymessage," +
             "createdby=:createdby, createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime WHERE id=:id ";
-    
-    
-	public static final String BILL_BASE_QUERY = "SELECT b.id AS b_id, b.tenantid AS b_tenantid, b.iscancelled AS b_iscancelled, b.businessservice AS b_businessservice, "
-			+ "b.billnumber AS b_billnumber, b.billdate AS b_billdate, b.consumercode AS b_consumercode, b.createdby AS b_createdby, b.status as b_status, b.minimumamounttobepaid AS b_minimumamounttobepaid, "
-			+ "b.totalamount AS b_totalamount, b.partpaymentallowed AS b_partpaymentallowed, b.isadvanceallowed as b_isadvanceallowed, "
-			+ "b.collectionmodesnotallowed AS b_collectionmodesnotallowed, b.createdtime AS b_createdtime, b.lastmodifiedby AS b_lastmodifiedby, "
-			+ "b.lastmodifiedtime AS b_lastmodifiedtime, bd.id AS bd_id, bd.billid AS bd_billid, bd.tenantid AS bd_tenantid, bd.demandid, "
-			+ "bd.fromperiod, bd.toperiod, bd.billdescription AS bd_billdescription, bd.displaymessage AS bd_displaymessage, bd.amount AS bd_amount, bd.amountpaid AS bd_amountpaid, "
-			+ "bd.callbackforapportioning AS bd_callbackforapportioning, bd.expirydate AS bd_expirydate, ad.id AS ad_id, ad.tenantid AS ad_tenantid, "
-			+ "ad.billdetailid AS ad_billdetailid, ad.order AS ad_order, ad.amount AS ad_amount, ad.adjustedamount AS ad_adjustedamount, "
-			+ "ad.taxheadcode AS ad_taxheadcode, ad.demanddetailid as ad_demanddetailid, ad.isactualdemand AS ad_isactualdemand, b.additionaldetails as b_additionaldetails,  "
-			+ "bd.additionaldetails as bd_additionaldetails,  ad.additionaldetails as ad_additionaldetails "
-			+ "FROM egcl_bill b LEFT OUTER JOIN egcl_billdetial bd ON b.id = bd.billid AND b.tenantid = bd.tenantid "
-			+ "LEFT OUTER JOIN egcl_billaccountdetail ad ON bd.id = ad.billdetailid AND bd.tenantid = ad.tenantid "
-			+ "WHERE b.id IN (:id);"; 
 
 
-	public static final String UPDATE_PAYMENT_BANKDETAIL_SQL = "UPDATE egcl_payment SET additionaldetails = jsonb_set(additionaldetails, '{bankDetails}', :additionaldetails, true) WHERE length(additionaldetails :: text) is not null and length(additionaldetails :: text) > 4  and jsonb_typeof( additionaldetails ::jsonb ) ='object' and ifsccode=:ifsccode ";
-	public static final String UPDATE_PAYMENT_BANKDETAIL_EMPTYADDTL_SQL = "UPDATE egcl_payment SET additionaldetails = :additionaldetails ::jsonb WHERE (length(additionaldetails :: text) is null or length(additionaldetails :: text) = 4) and ifsccode=:ifsccode ";
-	public static final String UPDATE_PAYMENT_BANKDETAIL_ARRAYADDTL_SQL = "UPDATE egcl_payment SET additionaldetails =  additionaldetails || :additionaldetails ::jsonb WHERE length(additionaldetails :: text) is not null and length(additionaldetails :: text) > 4  and jsonb_typeof(additionaldetails ::jsonb) ='array' and ifsccode=:ifsccode ";
-	
-	public static String getBillQuery() {
-		return BILL_BASE_QUERY;
-	}
-	
-	
+    public static final String BILL_BASE_QUERY = "SELECT b.id AS b_id, b.tenantid AS b_tenantid, b.iscancelled AS b_iscancelled, b.businessservice AS b_businessservice, "
+            + "b.billnumber AS b_billnumber, b.billdate AS b_billdate, b.consumercode AS b_consumercode, b.createdby AS b_createdby, b.status as b_status, b.minimumamounttobepaid AS b_minimumamounttobepaid, "
+            + "b.totalamount AS b_totalamount, b.partpaymentallowed AS b_partpaymentallowed, b.isadvanceallowed as b_isadvanceallowed, "
+            + "b.collectionmodesnotallowed AS b_collectionmodesnotallowed, b.createdtime AS b_createdtime, b.lastmodifiedby AS b_lastmodifiedby, "
+            + "b.lastmodifiedtime AS b_lastmodifiedtime, bd.id AS bd_id, bd.billid AS bd_billid, bd.tenantid AS bd_tenantid, bd.demandid, "
+            + "bd.fromperiod, bd.toperiod, bd.billdescription AS bd_billdescription, bd.displaymessage AS bd_displaymessage, bd.amount AS bd_amount, bd.amountpaid AS bd_amountpaid, "
+            + "bd.callbackforapportioning AS bd_callbackforapportioning, bd.expirydate AS bd_expirydate, ad.id AS ad_id, ad.tenantid AS ad_tenantid, "
+            + "ad.billdetailid AS ad_billdetailid, ad.order AS ad_order, ad.amount AS ad_amount, ad.adjustedamount AS ad_adjustedamount, "
+            + "ad.taxheadcode AS ad_taxheadcode, ad.demanddetailid as ad_demanddetailid, ad.isactualdemand AS ad_isactualdemand, b.additionaldetails as b_additionaldetails,  "
+            + "bd.additionaldetails as bd_additionaldetails,  ad.additionaldetails as ad_additionaldetails "
+            + "FROM egcl_bill b LEFT OUTER JOIN egcl_billdetial bd ON b.id = bd.billid AND b.tenantid = bd.tenantid "
+            + "LEFT OUTER JOIN egcl_billaccountdetail ad ON bd.id = ad.billdetailid AND bd.tenantid = ad.tenantid "
+            + "WHERE b.id IN (:id);";
+
+
+    public static final String UPDATE_PAYMENT_BANKDETAIL_SQL = "UPDATE egcl_payment SET additionaldetails = jsonb_set(additionaldetails, '{bankDetails}', :additionaldetails, true) WHERE length(additionaldetails :: text) is not null and length(additionaldetails :: text) > 4  and jsonb_typeof( additionaldetails ::jsonb ) ='object' and ifsccode=:ifsccode ";
+    public static final String UPDATE_PAYMENT_BANKDETAIL_EMPTYADDTL_SQL = "UPDATE egcl_payment SET additionaldetails = :additionaldetails ::jsonb WHERE (length(additionaldetails :: text) is null or length(additionaldetails :: text) = 4) and ifsccode=:ifsccode ";
+    public static final String UPDATE_PAYMENT_BANKDETAIL_ARRAYADDTL_SQL = "UPDATE egcl_payment SET additionaldetails =  additionaldetails || :additionaldetails ::jsonb WHERE length(additionaldetails :: text) is not null and length(additionaldetails :: text) > 4  and jsonb_typeof(additionaldetails ::jsonb) ='array' and ifsccode=:ifsccode ";
+
+    public static String getBillQuery() {
+        return BILL_BASE_QUERY;
+    }
+
+
     public static MapSqlParameterSource getParametersForPaymentCreate(Payment payment) {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
@@ -320,19 +320,19 @@ public class PaymentQueryBuilder {
 
         return sqlParameterSource;
     }
-    
+
     public String getPaymentCountQuery (String tenantId, String businessService, Map<String, Object> preparedStatementValues) {
-    	
-    	  StringBuilder selectQuery = new StringBuilder(SELECT_COUNT_PAYMENT_SQL);
-    	  preparedStatementValues.put("businessservice", businessService);
-    	  preparedStatementValues.put("tenantid", tenantId);
-    	  
-    	return selectQuery.toString();
+
+        StringBuilder selectQuery = new StringBuilder(SELECT_COUNT_PAYMENT_SQL);
+        preparedStatementValues.put("businessservice", businessService);
+        preparedStatementValues.put("tenantid", tenantId);
+
+        return selectQuery.toString();
     }
 
 
     public String getPaymentSearchQuery(List<String> ids,
-                                               Map<String, Object> preparedStatementValues) {
+                                        Map<String, Object> preparedStatementValues) {
         StringBuilder selectQuery = new StringBuilder(SELECT_PAYMENT_SQL);
         addClauseIfRequired(preparedStatementValues, selectQuery);
         selectQuery.append(" py.id IN (:id)  ");
@@ -628,7 +628,7 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("additionaldetails", getJsonb(payment.getAdditionalDetails()));
         sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
         sqlParameterSource.addValue("lastmodifiedtime", payment.getAuditDetails().getLastModifiedTime());
-        
+
         return sqlParameterSource;
 
     }
@@ -721,7 +721,7 @@ public class PaymentQueryBuilder {
     }
 
     private static void addWhereClauseForPlainSearch(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
-                                       PaymentSearchCriteria searchCriteria) {
+                                                     PaymentSearchCriteria searchCriteria) {
 
         if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
@@ -817,25 +817,25 @@ public class PaymentQueryBuilder {
     }
 
 
-	public static MapSqlParameterSource getParametersForBankDetailUpdate(JsonNode additionalDetails, String ifsccode) {
-		MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-		sqlParameterSource.addValue("additionaldetails", getJsonb(additionalDetails));
-		sqlParameterSource.addValue("ifsccode", ifsccode);
-		return sqlParameterSource;
+    public static MapSqlParameterSource getParametersForBankDetailUpdate(JsonNode additionalDetails, String ifsccode) {
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+        sqlParameterSource.addValue("additionaldetails", getJsonb(additionalDetails));
+        sqlParameterSource.addValue("ifsccode", ifsccode);
+        return sqlParameterSource;
 
-	}
+    }
 
-	public static MapSqlParameterSource getParametersEmptyDtlBankDetailUpdate(JsonNode additionalDetails,
-			String ifsccode) {
-		MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-		ObjectMapper mapper = new ObjectMapper();
-		ObjectNode objectNode = mapper.createObjectNode();
-		objectNode.set("bankDetails", additionalDetails);
-		sqlParameterSource.addValue("additionaldetails", getJsonb(objectNode));
-		sqlParameterSource.addValue("ifsccode", ifsccode);
-		return sqlParameterSource;
+    public static MapSqlParameterSource getParametersEmptyDtlBankDetailUpdate(JsonNode additionalDetails,
+                                                                              String ifsccode) {
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode objectNode = mapper.createObjectNode();
+        objectNode.set("bankDetails", additionalDetails);
+        sqlParameterSource.addValue("additionaldetails", getJsonb(objectNode));
+        sqlParameterSource.addValue("ifsccode", ifsccode);
+        return sqlParameterSource;
 
-	}
+    }
 
 
 

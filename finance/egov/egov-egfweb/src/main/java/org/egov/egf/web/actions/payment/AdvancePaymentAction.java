@@ -607,7 +607,7 @@ public class AdvancePaymentAction extends BasePaymentAction {
                         if (entity == null)
                             throw new ValidationException(Arrays.asList(new ValidationError("no.entity.for.detailkey",
                                     getText("no.entity.for.detailkey",
-                                            new String[] { entity.getCode() + "-" + entity.getName() }))));
+                                            new String[] { "Entity is null" }))));
                     } catch (final ApplicationException e) {
                         throw new ValidationException(Arrays.asList(new ValidationError(
                                 "Exception to get EntityType  ", e.getMessage())));

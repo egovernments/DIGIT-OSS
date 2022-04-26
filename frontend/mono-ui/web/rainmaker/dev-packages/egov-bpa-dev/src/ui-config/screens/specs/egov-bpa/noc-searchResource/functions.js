@@ -62,6 +62,7 @@ export const getWorkflowDataForNocs = async nocs => {
         processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
 
       } catch (error) {
+        console.log(error);
         return [];
       }
     }
@@ -159,6 +160,7 @@ export const searchApiCall = async (state, dispatch) => {
       );
       showHideTable(true, dispatch);
     } catch (error) {
+      console.log(error);
     }
   }
 };

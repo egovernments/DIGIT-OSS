@@ -145,6 +145,7 @@ public class VehicleTrip   {
   @JsonProperty("auditDetails")
   private AuditDetails auditDetails = null;
   
- 
+
+
 }
 

@@ -1,6 +1,5 @@
 package org.egov.edcr.feature;
 
-import static org.egov.edcr.constants.DxfFileConstants.COLOR_KEY_COMMON_WATER_CLOSET;
 import static org.egov.edcr.constants.DxfFileConstants.COLOR_KEY_FEMALE_WATER_CLOSET;
 import static org.egov.edcr.constants.DxfFileConstants.COLOR_KEY_MALE_WATER_CLOSET;
 
@@ -8,7 +7,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Measurement;
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SanitationExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(SanitationExtract.class);
+    private static final Logger LOG = LogManager.getLogger(SanitationExtract.class);
 
     public static final String MSG_ERROR_MANDATORY = "msg.error.mandatory.object.not.defined";
     public static final String FEMALE = "Female ";

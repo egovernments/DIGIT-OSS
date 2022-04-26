@@ -347,6 +347,7 @@ public class EGovernCommon extends AbstractTask {
            } else
                isUnique = true;
        } finally {
+    	   LOGGER.debug("finally block of uniqueVN");
        }
        return isUnique;
    }
@@ -451,7 +452,7 @@ public class EGovernCommon extends AbstractTask {
         if (list == null || list.size() == 0)
             if (LOGGER.isDebugEnabled()) LOGGER.debug("Else resultset in getAccountBalance...");
 
-        if(list!=null || list.size() > 0)
+        if(list!=null && list.size() > 0)
         {
         	opeAvailable=new BigDecimal(list.get(0).toString());
         }
@@ -484,7 +485,6 @@ public class EGovernCommon extends AbstractTask {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("total balance  " + totalAvailable);       
         
-        if (resultset1 == null || resultset1.size() == 0)
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("Else resultset in getAccountBalance...");
 

@@ -33,6 +33,9 @@ public class ApportionerService {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	private static final String APPORTIONING_FAILED_CODE ="APPORTIONING_FAILED_CODE";
+
+	private static final String MESSAGE="Apportioning of the bill Failed";
 	/**
 	 * Makes a call to apportion service and gets all the bills apportioned.
 	 * 
@@ -53,12 +56,12 @@ public class ApportionerService {
 			apportionResponse = restTemplate.postForObject(uri.toString(), apportionRequest,ApportionResponse.class);
 			if (null != apportionResponse) {
 				if(CollectionUtils.isEmpty(apportionResponse.getBills()))
-					throw new CustomException("APPORTIONING_FAILED_CODE", "Apportioning of the bill Failed");
+					throw new CustomException(APPORTIONING_FAILED_CODE, MESSAGE);
 			}else
-				throw new CustomException("APPORTIONING_FAILED_CODE", "Apportioning of the bill Failed");
+				throw new CustomException(APPORTIONING_FAILED_CODE, MESSAGE);
 		} catch (Exception e) {
 			log.error("Error while apportioning the bill: ", e);
-			throw new CustomException("APPORTIONING_FAILED_CODE", "Apportioning of the bill Failed");
+			throw new CustomException(APPORTIONING_FAILED_CODE, MESSAGE);
 		}
 
 		Map<String,Bill> billIdToBillMap = apportionResponse.getBills().stream().collect(Collectors.toMap(Bill::getId, Function.identity()));

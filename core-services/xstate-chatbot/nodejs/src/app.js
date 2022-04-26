@@ -13,14 +13,12 @@ const app = express();
         else next()
     })
     app.use(bodyParser.json({ limit: '10mb' }));
-    // app.use(logger('dev'));
     app.use(express.json());
     app.use(bodyParser.urlencoded({ limit: '10mb', extended: true, parameterLimit: 50000 }));
-    // app.use(cookieParser());
     app.use(envVariables.contextPath, require('./channel/routes'));
     module.exports = app;
     return app;
 }
 
 const app = createAppServer();
-app.listen(port, () => console.log(`XState-Chatbot-Server is running on port ${envVariables.port} with contextPath: ${envVariables.contextPath}`));
+app.listen(port);

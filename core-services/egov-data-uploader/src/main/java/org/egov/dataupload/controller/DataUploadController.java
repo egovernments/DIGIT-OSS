@@ -34,13 +34,15 @@ public class DataUploadController {
     public DataUploadUtils dataUploadUtils;
 
 	public static final Logger logger = LoggerFactory.getLogger(DataUploadController.class);
+
+	private static final String LOGGER_INSIDE_CONTROLLER = "Inside controller";
 	
 	
 	@PostMapping("jobs/_create")
 	@ResponseBody
 	public ResponseEntity<?> upload(@RequestBody @Valid UploaderRequest uploaderRequest) throws Exception {
 		try {
-				logger.info("Inside controller");
+				logger.info(LOGGER_INSIDE_CONTROLLER);
 				List<UploadJob> uploadJobs = dataUploadService.createUploadJob(uploaderRequest);
 				UploaderResponse result = UploaderResponse.builder()
 						.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(uploaderRequest.getRequestInfo(), true))
@@ -55,7 +57,7 @@ public class DataUploadController {
 	@ResponseBody
 	public ResponseEntity<?> definitionSearch(@RequestBody @Valid ModuleDefRequest moduleDefRequest) throws Exception {
 		try {
-				logger.info("Inside controller");
+				logger.info(LOGGER_INSIDE_CONTROLLER);
 				List<ModuleDefs> moduleDefs = dataUploadService.getModuleDefs();
 				ModuleDefResponse result = ModuleDefResponse.builder()
 						.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(moduleDefRequest.getRequestInfo(), true))
@@ -70,7 +72,7 @@ public class DataUploadController {
 	@ResponseBody
 	public ResponseEntity<?> jobsSearch(@RequestBody @Valid JobSearchRequest jobSearchRequest) throws Exception {
 		try {
-				logger.info("Inside controller");
+				logger.info(LOGGER_INSIDE_CONTROLLER);
 				List<UploadJob> uploadJobs = dataUploadService.getUploadJobs(jobSearchRequest);
 				UploaderResponse result = UploaderResponse.builder()
 						.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(jobSearchRequest.getRequestInfo(), true))

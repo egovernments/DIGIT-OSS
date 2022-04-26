@@ -1,8 +1,6 @@
 package org.egov.user.persistence.repository;
 
 import lombok.extern.slf4j.Slf4j;
-
-import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.user.domain.model.Address;
 import org.egov.user.domain.model.Role;
@@ -37,25 +35,31 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class UserRepository {
 
     private AddressRepository addressRepository;
-    private AuditRepository auditRepository;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
     private UserTypeQueryBuilder userTypeQueryBuilder;
     private RoleRepository roleRepository;
     private UserResultSetExtractor userResultSetExtractor;
 
+    private static final String UPDATE_PUT_BLOOD_GROUP = "BloodGroup";
+    private static final String UPDATE_PUT_GENDER = "Gender";
+    private static final String UPDATE_PUT_GUARDIAN_RELATION = "GuardianRelation";
+    private static final String PUT_USER_UUID = "user_uuid";
+    private static final String PUT_GENDER = "gender";
+    private static final String PUT_GUARDIAN_RELATION = "guardianrelation";
+    private static final String PUT_BLOOD_GROUP = "bloodgroup";
+
     @Autowired
     UserRepository(RoleRepository roleRepository, UserTypeQueryBuilder userTypeQueryBuilder,
                    AddressRepository addressRepository, UserResultSetExtractor userResultSetExtractor,
                    JdbcTemplate jdbcTemplate,
-                   NamedParameterJdbcTemplate namedParameterJdbcTemplate, AuditRepository auditRepository) {
+                   NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.addressRepository = addressRepository;
         this.roleRepository = roleRepository;
         this.userTypeQueryBuilder = userTypeQueryBuilder;
         this.userResultSetExtractor = userResultSetExtractor;
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        this.auditRepository = auditRepository;
     }
 
     /**
@@ -170,11 +174,9 @@ public class UserRepository {
      * api will update the user details.
      *
      * @param user
-     * @param uuid 
-     * @param  
      * @return
      */
-    public void update(final User user, User oldUser, long userId, String uuid) {
+    public void update(final User user, User oldUser) {
 
 
         Map<String, Object> updateuserInputs = new HashMap<>();
@@ -200,18 +202,18 @@ public class UserRepository {
         List<Enum> bloodGroupEnumValues = Arrays.asList(BloodGroup.values());
         if (user.getBloodGroup() != null) {
             if (bloodGroupEnumValues.contains(user.getBloodGroup()))
-                updateuserInputs.put("BloodGroup", user.getBloodGroup().toString());
+                updateuserInputs.put(UPDATE_PUT_BLOOD_GROUP, user.getBloodGroup().toString());
             else
-                updateuserInputs.put("BloodGroup", "");
+                updateuserInputs.put(UPDATE_PUT_BLOOD_GROUP, "");
         }
         else if (oldUser != null && oldUser.getBloodGroup() != null) {
             if (bloodGroupEnumValues.contains(oldUser.getBloodGroup()))
-                updateuserInputs.put("BloodGroup", oldUser.getBloodGroup().toString());
+                updateuserInputs.put(UPDATE_PUT_BLOOD_GROUP, oldUser.getBloodGroup().toString());
             else
-                updateuserInputs.put("BloodGroup", "");
+                updateuserInputs.put(UPDATE_PUT_BLOOD_GROUP, "");
         }
         else {
-            updateuserInputs.put("BloodGroup", "");
+            updateuserInputs.put(UPDATE_PUT_BLOOD_GROUP, "");
         }
 
         if (user.getDob() != null) {
@@ -223,31 +225,31 @@ public class UserRepository {
 
         if (user.getGender() != null) {
             if (Gender.FEMALE.toString().equals(user.getGender().toString())) {
-                updateuserInputs.put("Gender", 1);
+                updateuserInputs.put(UPDATE_PUT_GENDER, 1);
             } else if (Gender.MALE.toString().equals(user.getGender().toString())) {
-                updateuserInputs.put("Gender", 2);
+                updateuserInputs.put(UPDATE_PUT_GENDER, 2);
             } else if (Gender.OTHERS.toString().equals(user.getGender().toString())) {
-                updateuserInputs.put("Gender", 3);
+                updateuserInputs.put(UPDATE_PUT_GENDER, 3);
             } else if (Gender.TRANSGENDER.toString().equals(user.getGender().toString())) {
-                updateuserInputs.put("Gender", 4); 
+                updateuserInputs.put(UPDATE_PUT_GENDER, 4);
             } else {
-                updateuserInputs.put("Gender", 0);
+                updateuserInputs.put(UPDATE_PUT_GENDER, 0);
             }
         } else {
-            updateuserInputs.put("Gender", 0);
+            updateuserInputs.put(UPDATE_PUT_GENDER, 0);
         }
         updateuserInputs.put("Guardian", user.getGuardian());
 
         List<Enum> enumValues = Arrays.asList(GuardianRelation.values());
         if (user.getGuardianRelation() != null) {
             if(enumValues.contains(user.getGuardianRelation()))
-                updateuserInputs.put("GuardianRelation", user.getGuardianRelation().toString());
+                updateuserInputs.put(UPDATE_PUT_GUARDIAN_RELATION, user.getGuardianRelation().toString());
             else {
-                updateuserInputs.put("GuardianRelation", "");
+                updateuserInputs.put(UPDATE_PUT_GUARDIAN_RELATION, "");
             }
             
         } else {
-            updateuserInputs.put("GuardianRelation", "");
+            updateuserInputs.put(UPDATE_PUT_GUARDIAN_RELATION, "");
         }
         updateuserInputs.put("IdentificationMark", user.getIdentificationMark());
         updateuserInputs.put("Locale", user.getLocale());
@@ -289,12 +291,8 @@ public class UserRepository {
             updateuserInputs.put("Type", oldUser.getType().toString());
         }
 
-        updateuserInputs.put("alternatemobilenumber", user.getAlternateMobileNumber());
-
         updateuserInputs.put("LastModifiedDate", new Date());
-        updateuserInputs.put("LastModifiedBy", userId );
-        
-        updateAuditDetails(oldUser, userId, uuid);
+        updateuserInputs.put("LastModifiedBy", 1);
 
         namedParameterJdbcTemplate.update(userTypeQueryBuilder.getUpdateUserQuery(), updateuserInputs);
         if (user.getRoles() != null && !CollectionUtils.isEmpty(user.getRoles()) && !oldUser.getRoles().equals(user.getRoles())) {
@@ -306,13 +304,13 @@ public class UserRepository {
         }
     }
 
-	public void fetchFailedLoginAttemptsByUser(String uuid) {
+    public void fetchFailedLoginAttemptsByUser(String uuid) {
         fetchFailedAttemptsByUserAndTime(uuid, 0L);
     }
 
     public List<FailedLoginAttempt> fetchFailedAttemptsByUserAndTime(String uuid, long attemptStartDate) {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("user_uuid", uuid);
+        params.put(PUT_USER_UUID, uuid);
         params.put("attempt_date", attemptStartDate);
 
 //		RowMapper<FailedLoginAttempt> rowMapper = (rs, rowNum) -> {
@@ -330,7 +328,7 @@ public class UserRepository {
 
     public FailedLoginAttempt insertFailedLoginAttempt(FailedLoginAttempt failedLoginAttempt) {
         Map<String, Object> inputs = new HashMap<>();
-        inputs.put("user_uuid", failedLoginAttempt.getUserUuid());
+        inputs.put(PUT_USER_UUID, failedLoginAttempt.getUserUuid());
         inputs.put("ip", failedLoginAttempt.getIp());
         inputs.put("attempt_date", failedLoginAttempt.getAttemptDate());
         inputs.put("active", failedLoginAttempt.isActive());
@@ -343,7 +341,7 @@ public class UserRepository {
     public void resetFailedLoginAttemptsForUser(String uuid) {
 
         namedParameterJdbcTemplate.update(UserTypeQueryBuilder.UPDATE_FAILED_ATTEMPTS_SQL,
-                Collections.singletonMap("user_uuid", uuid));
+                Collections.singletonMap(PUT_USER_UUID, uuid));
     }
 
 
@@ -477,15 +475,15 @@ public class UserRepository {
         userInputs.put("name", entityUser.getName());
 
         if (Gender.FEMALE.equals(entityUser.getGender())) {
-            userInputs.put("gender", 1);
+            userInputs.put(PUT_GENDER, 1);
         } else if (Gender.MALE.equals(entityUser.getGender())) {
-            userInputs.put("gender", 2);
+            userInputs.put(PUT_GENDER, 2);
         } else if (Gender.OTHERS.equals(entityUser.getGender())) {
-            userInputs.put("gender", 3);
+            userInputs.put(PUT_GENDER, 3);
         } else if (Gender.TRANSGENDER.equals(entityUser.getGender())) {
-            userInputs.put("gender", 4);
+            userInputs.put(PUT_GENDER, 4);
         } else {
-            userInputs.put("gender", 0);
+            userInputs.put(PUT_GENDER, 0);
         }
 
         userInputs.put("pan", entityUser.getPan());
@@ -507,13 +505,13 @@ public class UserRepository {
         userInputs.put("guardian", entityUser.getGuardian());
         if (entityUser.getGuardianRelation() != null) {
             if (enumValues.contains(entityUser.getGuardianRelation()))
-                userInputs.put("guardianrelation", entityUser.getGuardianRelation().toString());
+                userInputs.put(PUT_GUARDIAN_RELATION, entityUser.getGuardianRelation().toString());
             else {
-                userInputs.put("guardianrelation", "");
+                userInputs.put(PUT_GUARDIAN_RELATION, "");
             }
         }
         else {
-            userInputs.put("guardianrelation", "");
+            userInputs.put(PUT_GUARDIAN_RELATION, "");
         }
         userInputs.put("signature", entityUser.getSignature());
         userInputs.put("accountlocked", entityUser.getAccountLocked());
@@ -522,13 +520,13 @@ public class UserRepository {
         List<Enum> bloodGroupEnumValues = Arrays.asList(BloodGroup.values());
         if(entityUser.getBloodGroup() != null){
             if (bloodGroupEnumValues.contains(entityUser.getBloodGroup()))
-                userInputs.put("bloodgroup", entityUser.getBloodGroup().toString());
+                userInputs.put(PUT_BLOOD_GROUP, entityUser.getBloodGroup().toString());
             else {
-                userInputs.put("bloodgroup", "");
+                userInputs.put(PUT_BLOOD_GROUP, "");
             }
         }
         else {
-            userInputs.put("bloodgroup", "");
+            userInputs.put(PUT_BLOOD_GROUP, "");
         }
 
         userInputs.put("photo", entityUser.getPhoto());
@@ -537,7 +535,6 @@ public class UserRepository {
         userInputs.put("lastmodifieddate", entityUser.getLastModifiedDate());
         userInputs.put("createdby", entityUser.getLoggedInUserId());
         userInputs.put("lastmodifiedby", entityUser.getLoggedInUserId());
-        userInputs.put("alternatemobilenumber", entityUser.getAlternateMobileNumber());
 
         namedParameterJdbcTemplate.update(userTypeQueryBuilder.getInsertUserQuery(), userInputs);
         return entityUser;
@@ -585,11 +582,5 @@ public class UserRepository {
     private String getStateLevelTenant(String tenantId) {
         return tenantId.split("\\.")[0];
     }
-
-	
-	private void updateAuditDetails(User oldUser, long userId, String uuid) {
-		auditRepository.auditUser(oldUser,userId,uuid);
-		
-	}
 
 }

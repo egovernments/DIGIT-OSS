@@ -2,7 +2,8 @@ package org.egov.edcr.feature;
 
 import java.math.BigDecimal;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Occupancy;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RecreationalSpaceExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(RecreationalSpaceExtract.class);
+    private static final Logger LOG = LogManager.getLogger(RecreationalSpaceExtract.class);
     public static final String SUB_RULE_50_DESC = "Recreational space for Residential Apartment ";
     public static final String SUB_RULE_50_DESC_CELLER = " Ground floor Recreational space ";
     public static final String SUB_RULE_50 = "50";

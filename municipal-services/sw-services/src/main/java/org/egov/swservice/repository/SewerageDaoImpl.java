@@ -122,26 +122,5 @@ public class SewerageDaoImpl implements SewerageDao {
 	public void saveFileStoreIds(SewerageConnectionRequest sewerageConnectionRequest) {
 		sewarageConnectionProducer.push(swConfiguration.getSaveFileStoreIdsTopic(), sewerageConnectionRequest);
 	}
-	
-	@Override
-	public List<SewerageConnection> getSewerageConnectionPlainSearchList(SearchCriteria criteria, RequestInfo requestInfo) {
-		List<Object> preparedStatement = new ArrayList<>();
-		String query = swQueryBuilder.getSearchQueryStringForPlainSearch(criteria, preparedStatement, requestInfo);
-		if (query == null)
-			return Collections.emptyList();
-		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
-		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
-		if(isOpenSearch)
-			sewerageConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
-					openSewerageRowMapper);
-		else
-			sewerageConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
-					sewarageRowMapper);
-
-		if (sewerageConnectionList == null) {
-			return Collections.emptyList();
-		}
-		return sewerageConnectionList;
-	}
 
 }

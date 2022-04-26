@@ -31,14 +31,6 @@ public class FixedSetValuesTest {
 
     }
 
-    @Ignore
-    @Test
-    public void testIntegerValuesForDifferentLocales() throws ParseException {
-        NumberFormat nf = NumberFormat.getInstance();
-        System.out.println(nf.parse("३३"));
-        System.out.println(Integer.parseInt("३३"));
-        System.out.println( StringUtils.isNumeric("३३ ".trim()) );
-    }
 
     @Test
     public void testFuzzySearchMatch() {
@@ -53,7 +45,6 @@ public class FixedSetValuesTest {
         String s1 = "अमृतसर";
         String s2 = "अमतसर";
         int match = FuzzySearch.ratio(s1, s2);
-        System.out.println(match);
     }
 
 }

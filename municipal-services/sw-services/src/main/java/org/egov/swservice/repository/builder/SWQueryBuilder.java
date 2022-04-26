@@ -40,7 +40,7 @@ public class SWQueryBuilder {
 			+ " conn.id as conn_id, conn.tenantid, conn.applicationNo, conn.applicationStatus, conn.status, conn.connectionNo, conn.oldConnectionNo, conn.property_id,"
 			+ " conn.roadcuttingarea, conn.action, conn.adhocpenalty, conn.adhocrebate, conn.createdBy as sw_createdBy,"
 			+ " conn.lastModifiedBy as sw_lastModifiedBy, conn.createdTime as sw_createdTime, conn.lastModifiedTime as sw_lastModifiedTime,conn.additionaldetails, "
-			+ " conn.adhocpenaltyreason, conn.adhocpenaltycomment, conn.adhocrebatereason, conn.adhocrebatecomment, conn.applicationType, conn.channel, conn.dateEffectiveFrom,"
+			+ " conn.adhocpenaltyreason, conn.adhocpenaltycomment, conn.adhocrebatereason, conn.adhocrebatecomment, conn.applicationType, conn.dateEffectiveFrom,"
 			+ " conn.locality, conn.isoldapplication, conn.roadtype, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id, plumber.name as plumber_name, plumber.licenseno,"
 			+ " roadcuttingInfo.id as roadcutting_id, roadcuttingInfo.roadtype as roadcutting_roadtype, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.active as roadcutting_active,"
 			+ " plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress, plumber.relationship, " + holderSelectValues +
@@ -260,31 +260,5 @@ public class SWQueryBuilder {
 		else {
 			queryString.append(" OR");
 		}
-	}
-	
-	public String getSearchQueryStringForPlainSearch(SearchCriteria criteria, List<Object> preparedStatement,
-			RequestInfo requestInfo) {
-		if(criteria.isEmpty())
-			return null;
-		StringBuilder query = new StringBuilder(SEWERAGE_SEARCH_QUERY);
-		
-		if (!StringUtils.isEmpty(criteria.getTenantId())) {
-			addClauseIfRequired(preparedStatement, query);
-			if(criteria.getTenantId().equalsIgnoreCase(config.getStateLevelTenantId())){
-				query.append(" conn.tenantid LIKE ? ");
-				preparedStatement.add(criteria.getTenantId() + '%');
-			}
-			else{
-				query.append(" conn.tenantid = ? ");
-				preparedStatement.add(criteria.getTenantId());
-			}
-		}
-		
-		//Add OrderBy clause
-		query.append(" ORDER BY sc.appCreatedDate DESC");
-		
-		if (query.toString().contains("WHERE"))
-			 return addPaginationWrapper(query.toString(), preparedStatement, criteria);
-		return query.toString();
 	}
 }

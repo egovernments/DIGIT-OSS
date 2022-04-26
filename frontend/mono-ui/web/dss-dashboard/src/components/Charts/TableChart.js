@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import APITransport from '../../actions/apitransport/apitransport';
 import getChartOptions from '../../actions/getChartOptions';
 import getPrevFinancialYearObj from '../../actions/getPrevFinancialYearObj';
-import { getLocaleLabels, getTenantId } from '../../utils/commons';
+import { getLocaleLabels } from '../../utils/commons';
 import Chips from '../common/Chips/Chips';
 import NFormatterFun from '../common/numberFormaterFun';
 import SwitchButton from '../common/tableswitchs/switchButtons';
@@ -152,6 +152,7 @@ class TableChart extends Component {
           this.setState(tmpState);
         })
         .catch(error => {
+          console.log(error.response)
         });
     }
   }
@@ -214,7 +215,7 @@ class TableChart extends Component {
     if (this.props.page && this.props.page.includes('ulb')) {
       if (!globalFilters['tenantId']) {
         let tenentFilter = []
-        tenentFilter.push(`${getTenantId()}`)
+        tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
         globalFilters['tenantId'] = tenentFilter
       }
     }
@@ -244,6 +245,7 @@ class TableChart extends Component {
           this.setState(tempState);
         })
         .catch(error => {
+          console.log(error.response)
         });
     }
   }

@@ -1,6 +1,7 @@
 package org.egov.report.repository.builder;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -48,7 +49,7 @@ public class ReportQueryBuilder {
     @Value("${id.timezone}")
     private String timezone;
 
-
+    private static final String REGEX_TENANT_ID = "\\$tenantid";
 
     public String buildQuery(List<SearchParam> searchParams, String tenantId, ReportDefinition reportDefinition, String authToken, Long userId) {
 
@@ -71,7 +72,7 @@ public class ReportQueryBuilder {
             e.printStackTrace();
         }
 
-        baseQuery = baseQuery.replaceAll("\\$tenantid", ":tenantId");
+        baseQuery = baseQuery.replaceAll(REGEX_TENANT_ID, ":tenantId");
 
         baseQuery = baseQuery.replaceAll("\\$userid", ":userId");
 
@@ -124,12 +125,12 @@ public class ReportQueryBuilder {
                 if (es.getStateData() && (!tenantid.equals("default"))) {
                     log.info("State Data");
                     stateid = tenantid.split("\\.");
-                    url = url.replaceAll("\\$tenantid", stateid[0]);
-                    finalJson = finalJson.replaceAll("\\$tenantid", stateid[0]);
+                    url = url.replaceAll(REGEX_TENANT_ID, stateid[0]);
+                    finalJson = finalJson.replaceAll(REGEX_TENANT_ID, stateid[0]);
                 } else {
                     log.info("Tenant Data");
                     url = url.replaceAll("\\$tenantId", tenantid);
-                    finalJson = finalJson.replaceAll("\\$tenantid", tenantid);
+                    finalJson = finalJson.replaceAll(REGEX_TENANT_ID, tenantid);
                 }
                 log.info("Mapper Converted string with replaced values " + requestInfoJson);
                 URI uri = URI.create(url);
@@ -459,7 +460,7 @@ public class ReportQueryBuilder {
     }
 
 
-    public String buildInlineQuery(Object json) throws Exception {
+    public String buildInlineQuery(Object json) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         json = mapper.writeValueAsString(json);
         StringBuilder inlineQuery = new StringBuilder();
@@ -484,10 +485,8 @@ public class ReportQueryBuilder {
                     values.append("(");
                     for (Map.Entry<String, Object> row : jsonMap.entrySet()) {
                         String value = row.getValue().toString();
-                        System.out.println("Values with single quotes without formatting" + value);
                         if (value.contains("'")) {
                             String formatted = value.replace("'", "''");
-                            System.out.println("Values with single quotes " + formatted);
                             values.append("'" + formatted + "'" + ",");
                         } else {
                             values.append("'" + row.getValue() + "'" + ",");

@@ -319,7 +319,7 @@ public class ChartOfAccountsAction extends BaseFormAction {
                 while (iterator.hasNext()) {
                     final CChartOfAccountDetail next = iterator.next();
                     accountDetail = row.getName();
-                    if (next == null || next.getDetailTypeId().getId().equals(row.getId())) {
+                    if (next.getDetailTypeId().getId().equals(row.getId())) {
                         iterator.remove();
                         chartOfAccountDetailService.delete(chartOfAccountDetailService.findById(next.getId(), false));
                         persistenceService.getSession().flush();

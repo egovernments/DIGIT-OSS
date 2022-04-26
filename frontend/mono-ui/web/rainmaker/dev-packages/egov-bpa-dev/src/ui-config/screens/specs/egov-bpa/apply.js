@@ -224,6 +224,7 @@ const getMdmsData = async (action, state, dispatch) => {
     );
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
+    console.log(e);
   }
 };
 
@@ -602,6 +603,7 @@ export const getMohallaDetails = async (state, dispatch, tenantId) => {
       )
     );
   } catch (e) {
+    console.log(e);
   }
 }
 const screenConfig = {

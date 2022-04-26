@@ -15,7 +15,6 @@ import org.egov.vendor.web.model.Vendor;
 import org.egov.vendor.web.model.VendorRequest;
 import org.egov.vendor.web.model.VendorSearchCriteria;
 import org.egov.vendor.web.model.user.UserDetailResponse;
-import org.egov.vendor.web.model.vehicle.VehicleSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -54,11 +53,9 @@ public class EnrichmentService {
 		Vendor vendor = vendorRequest.getVendor();
 		RequestInfo requestInfo = vendorRequest.getRequestInfo();
 		vendor.setStatus(Vendor.StatusEnum.ACTIVE);
-		AuditDetails auditDetails = null;
-		if (requestInfo.getUserInfo() != null && requestInfo.getUserInfo().getUuid() != null) {
-			auditDetails = vendorUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
-			vendorRequest.getVendor().setAuditDetails(auditDetails);
-		}
+		AuditDetails auditDetails = vendorUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+		vendorRequest.getVendor().setAuditDetails(auditDetails);
+
 		vendor.setId(UUID.randomUUID().toString());
 
 		if (vendorRequest.getVendor().getAddress() != null) {
@@ -75,12 +72,11 @@ public class EnrichmentService {
 		
 		
 		if(vendorRequest.getVendor().getVehicles() != null && vendorRequest.getVendor().getVehicles().size() >0) {
-			AuditDetails finalAuditDetails = auditDetails;
 			vendorRequest.getVendor().getVehicles().forEach(vehicle->{
 				if(StringUtils.isEmpty(vehicle.getId())) {
 					vehicle.setId(UUID.randomUUID().toString());
 					vehicle.setTenantId(vendorRequest.getVendor().getTenantId());
-					vehicle.setAuditDetails(finalAuditDetails);
+					vehicle.setAuditDetails(auditDetails);
 				}
 			});
 		}
@@ -121,17 +117,10 @@ public class EnrichmentService {
 	}
 	
 	private void addVehicles(RequestInfo requestInfo, Vendor vendor, String tenantId) {
+		VendorSearchCriteria vendorDriverSearchCriteria = new VendorSearchCriteria();
 		List<String> vehicleIds = vendorRepository.getVehicles(vendor.getId());
 		if(!CollectionUtils.isEmpty(vehicleIds)) {
-			
-			VehicleSearchCriteria vehicleSearchCriteria=new VehicleSearchCriteria();
-			vehicleSearchCriteria = VehicleSearchCriteria.builder()
-					.ids(vehicleIds)
-					.tenantId(tenantId).build();
-			
-			vendor.setVehicles(vehicleService.getVehicles(vehicleSearchCriteria, requestInfo));
-			
-			//vendor.setVehicles(vehicleService.getVehicles(vehicleIds, null, null, null, requestInfo, tenantId));
+			vendor.setVehicles(vehicleService.getVehicles(vehicleIds, null, null,requestInfo, tenantId));
 		}
 		
 	}

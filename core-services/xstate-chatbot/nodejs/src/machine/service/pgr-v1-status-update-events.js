@@ -22,10 +22,8 @@ class PGRV1StatusUpdateEventFormatter{
             if(message.topic === config.pgrUseCase.pgrUpdateTopic) {
                 self.templateMessgae(JSON.parse(message.value))
                 .then(() => {
-                    console.log("template message sent to citizen");        // TODO: Logs to be removed
                 })
                 .catch(error => {
-                    console.error('error while sending event message');
                     console.error(error.stack || error);
                 });
             }
@@ -389,7 +387,6 @@ class PGRV1StatusUpdateEventFormatter{
             return responseBody.user[0];
         }
         else{
-            console.error('Error in fetching the bill');
             return undefined;
         }  
 

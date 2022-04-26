@@ -81,7 +81,6 @@ function callAjaxSearch() {
 		},
 		"fnRowCallback": function (row, data, index) {
 			$(row).on('click', function() {
-				console.log(data.id);
 				if($('#mode').val() == 'edit'){
 					window.open('/common/uomcategory/'+ $('#mode').val() +'/'+data.id,'','width=800, height=600');
 				}

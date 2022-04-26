@@ -38,7 +38,7 @@ public class BankJdbcRepositoryTest {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		bankJdbcRepository = new BankJdbcRepository(namedParameterJdbcTemplate);
 	}
 

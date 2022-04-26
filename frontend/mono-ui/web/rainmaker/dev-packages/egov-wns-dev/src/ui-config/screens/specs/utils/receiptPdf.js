@@ -963,14 +963,19 @@ const generateReceipt = async (state, dispatch, type) => {
     ""
   );
   if (_.isEmpty(data1)) {
+    console.log("Error in application data");
     return;
   } else if (_.isEmpty(data2)) {
+    console.log("Error in receipt data");
     return;
   } else if (_.isEmpty(data3)) {
+    console.log("Error in mdms data");
     return;
   } else if (_.isEmpty(data4)) {
+    console.log("Error in auditor user data");
     return;
   } else if (_.isEmpty(ulbLogo)) {
+    console.log("Error in image data");
     return;
   }
   let transformedData = {

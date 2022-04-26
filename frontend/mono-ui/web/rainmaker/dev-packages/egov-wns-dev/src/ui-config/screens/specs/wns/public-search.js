@@ -44,6 +44,7 @@ const getMDMSData = async dispatch => {
         dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
         await getBusinessServiceMdmsData(dispatch, commonConfig.tenantId, "wns");
     } catch (e) {
+        console.log(e);
     }
 };
 const screenConfig = {

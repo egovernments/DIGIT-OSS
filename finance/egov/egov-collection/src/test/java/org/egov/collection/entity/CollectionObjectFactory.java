@@ -48,6 +48,7 @@
 package org.egov.collection.entity;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -119,14 +120,14 @@ public class CollectionObjectFactory {
 		this.service = service;
 	}
 
+	private static final SecureRandom secureRandom = new SecureRandom();
+
 	public int getRandomNumber() {
-		Random ran = new Random();
-		return ran.nextInt();
+		return secureRandom.nextInt();
 	}
 
 	public int getRandomNumber(int max) {
-		Random ran = new Random();
-		return ran.nextInt(max);
+		return secureRandom.nextInt(max);
 	}
 
 	public ServiceDetails createUnsavedServiceDetails() {
@@ -1800,7 +1801,7 @@ public class CollectionObjectFactory {
 
 	public ReceiptHeader createReceiptHeaderForChallan() throws NumberFormatException {
 		// ReceiptPayeeDetails payee = createReceiptPayeeDetails();
-		ReceiptHeader receiptHeader = null; // TODO: Fix the issue by getting
+		ReceiptHeader receiptHeader = new ReceiptHeader(); // TODO: Fix the issue by getting
 											// ReceiptHeader
 											// //payee.getReceiptHeaders().iterator().next();
 		// receiptHeader.setReceiptPayeeDetails(payee);

@@ -128,7 +128,8 @@ public class EGovExcelView extends BaseExportView {
 			value = removeHtmlTagsAndSpaces(value.toString());
 			// quotes around fields are needed to avoid occasional "Sylk format invalid" messages from excel
 
-			return "\"" //$NON-NLS-1$
+			if(value != null)
+				return "\"" //$NON-NLS-1$
 					+ StringUtils.replace(StringUtils.trim(value.toString()), "\"", "\"\"") //$NON-NLS-1$ //$NON-NLS-2$ 
 					+ "\""; //$NON-NLS-1$ 
 		}

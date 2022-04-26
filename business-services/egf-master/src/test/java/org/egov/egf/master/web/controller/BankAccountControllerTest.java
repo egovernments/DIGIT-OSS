@@ -53,14 +53,8 @@ public class BankAccountControllerTest {
 
 	@Captor
 	private ArgumentCaptor<List<BankAccount>> captor;
+	private static final String DEFAULT="default";
 
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
 
 	@Test
 	public void testCreate() throws IOException, Exception {
@@ -139,18 +133,18 @@ public class BankAccountControllerTest {
 		BankAccount bankAccount = BankAccount.builder().accountNumber("0004").accountType("test")
 				.description("accountNumber").active(true).payTo("tester").build();
 		BankBranch bankBranch = BankBranch.builder().id("1").build();
-		bankBranch.setTenantId("default");
+		bankBranch.setTenantId(DEFAULT);
 		Bank bank = Bank.builder().id("1").active(true).type("Bank").build();
-		bank.setTenantId("default");
+		bank.setTenantId(DEFAULT);
 		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id("1").build();
-		chartOfAccount.setTenantId("default");
+		chartOfAccount.setTenantId(DEFAULT);
 		Fund fund = Fund.builder().id("2").build();
-		fund.setTenantId("default");
+		fund.setTenantId(DEFAULT);
 		bankBranch.setBank(bank);
 		bankAccount.setBankBranch(bankBranch);
 		bankAccount.setChartOfAccount(chartOfAccount);
 		bankAccount.setFund(fund);
-		bankAccount.setTenantId("default");
+		bankAccount.setTenantId(DEFAULT);
 		bankAccounts.add(bankAccount);
 		return bankAccounts;
 	}
@@ -160,18 +154,18 @@ public class BankAccountControllerTest {
 		BankAccount bankAccount = BankAccount.builder().accountNumber("0004").accountType("testupdate")
 				.description("accountNumber").active(true).payTo("tester").build();
 		BankBranch bankBranch = BankBranch.builder().id("1").build();
-		bankBranch.setTenantId("default");
+		bankBranch.setTenantId(DEFAULT);
 		Bank bank = Bank.builder().id("1").active(true).type("Bank").build();
-		bank.setTenantId("default");
+		bank.setTenantId(DEFAULT);
 		ChartOfAccount chartOfAccount = ChartOfAccount.builder().id("1").build();
-		chartOfAccount.setTenantId("default");
+		chartOfAccount.setTenantId(DEFAULT);
 		Fund fund = Fund.builder().id("2").build();
-		fund.setTenantId("default");
+		fund.setTenantId(DEFAULT);
 		bankBranch.setBank(bank);
 		bankAccount.setBankBranch(bankBranch);
 		bankAccount.setChartOfAccount(chartOfAccount);
 		bankAccount.setFund(fund);
-		bankAccount.setTenantId("default");
+		bankAccount.setTenantId(DEFAULT);
 		bankAccounts.add(bankAccount);
 		return bankAccounts;
 	}

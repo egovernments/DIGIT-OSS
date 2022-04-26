@@ -33,6 +33,7 @@ public class AccountEntityRepositoryTest {
 
     private AccountEntityRepository accountEntityRepositoryWithKafka;
     private AccountEntityRepository accountEntityRepositoryWithOutKafka;
+    private static final String DEFAULT="default";
 
     @InjectMocks
     private AccountEntityRepository accountEntityRepository;
@@ -211,7 +212,7 @@ public class AccountEntityRepositoryTest {
         accountEntity.setName("name");
         accountEntity.setActive(true);
         accountEntity.setAccountDetailType(getAccountDetaialType());
-        accountEntity.setTenantId("default");
+        accountEntity.setTenantId(DEFAULT);
         return accountEntity;
     }
 
@@ -247,7 +248,7 @@ public class AccountEntityRepositoryTest {
     private List<AccountEntity> getAccountEntitys() {
         List<AccountEntity> accountEntities = new ArrayList<>();
         AccountEntity accountEntity = AccountEntity.builder().id("1").name("name").code("code").accountDetailType(getAccountDetaialType()).active(true).build();
-        accountEntity.setTenantId("default");
+        accountEntity.setTenantId(DEFAULT);
         accountEntities.add(accountEntity);
         return accountEntities;
     }
@@ -264,7 +265,7 @@ public class AccountEntityRepositoryTest {
 
         AccountDetailType accountDetailType = AccountDetailType.builder().id("1").name("name").tableName("table")
                 .fullyQualifiedName("abc/table").build();
-        accountDetailType.setTenantId("default");
+        accountDetailType.setTenantId(DEFAULT);
         return accountDetailType;
     }
 }

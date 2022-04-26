@@ -3,6 +3,7 @@ package com.tarento.analytics.org.service;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tarento.analytics.ConfigurationLoader;
 import com.tarento.analytics.constant.Constants;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,7 @@ public class ClientServiceFactory {
             return mdmsServiceImpl;
 
         else
-            throw new RuntimeException(clientServiceName + "not found");
+            throw new CustomException("CLIENT_NOT_FOUND",clientServiceName + "not found");
 
     }
 

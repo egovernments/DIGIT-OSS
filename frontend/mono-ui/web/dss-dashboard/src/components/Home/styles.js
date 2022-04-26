@@ -10,8 +10,8 @@ const styles = theme => ({
     },
     pageHeader: {
         fontFamily: 'Roboto',
-        fontSize: '36px',
-        fontWeight: '700',
+        fontSize: '24px',
+        fontWeight: '500',
         flex: 1,
         textAlign: 'left',
         wordBreak: "break-word"
@@ -55,8 +55,8 @@ const styles = theme => ({
     },
     cardTitle: {
         fontFamily: 'Roboto',
-        fontSize: '22px',
-        fontWeight: '600',
+        fontSize: '20px',
+        fontWeight: '500',
         margin: '10px 18px 0px 18px',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
@@ -122,7 +122,7 @@ const styles = theme => ({
             padding: '0px 12px 0px 12px !important',
         },
         paper: {
-            padding: '2px 12px 0px 12px !important',
+            padding: '18px 12px 30px 12px !important',
 
         },
         customCard: {

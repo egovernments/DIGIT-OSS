@@ -223,7 +223,7 @@ public class LoanGrantService extends PersistenceService {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting searchGC");
         List<Object> grantContribList = new ArrayList<Object>();
-        if (agencyId != null & agencyId != -1) {
+        if (agencyId != null && agencyId != -1) {
             if (subSchemeId != null)
                 grantContribList = getDataByAgency(schemeId, subSchemeId, fromDate, toDate, agencyId, pcTypeId, faTypeId, fundId);
             else

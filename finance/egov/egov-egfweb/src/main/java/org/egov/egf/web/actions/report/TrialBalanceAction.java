@@ -240,7 +240,7 @@ public class TrialBalanceAction extends BaseFormAction {
 			try {
 				dt = sdf.parse(sDate);
 			} catch (ParseException e1) {
-
+				LOGGER.error("Parse exception.");
 			}
 
 			CFinancialYear finYearByDate = financialYearDAO.getFinYearByDate(dt);
@@ -248,7 +248,7 @@ public class TrialBalanceAction extends BaseFormAction {
 			try {
 				dd = sdf.parse(eDate);
 			} catch (ParseException e1) {
-
+				LOGGER.error("Parse exception.");
 			}
 			String endFormat = formatter.format(dd);
 			String endDate1 = formatter.format(finYearByDate.getEndingDate());
@@ -624,9 +624,9 @@ public class TrialBalanceAction extends BaseFormAction {
                     totalStr = numberToString(total.toString()) + " Dr";
                 tbTotal.addToAmountMap(key, totalStr);
 
-                if (totalCreditAmount != null && totalCreditAmount.signum() == -1)
+                if (totalCreditAmount != null && totalCreditAmount.signum() == -1 && total!=null)
                     totalStr = numberToString(total.abs().toString()) + " Cr";
-                else if (totalCreditAmount != null && totalCreditAmount.signum() == 1)
+                else if (totalCreditAmount != null && totalCreditAmount.signum() == 1 && total!=null)
                     totalStr = numberToString(total.toString()) + " Dr";
                 tbTotal.setAmount1(totalStr);
             }
@@ -635,7 +635,7 @@ public class TrialBalanceAction extends BaseFormAction {
 
         } catch (final NumberFormatException e) {
 
-
+          LOGGER.error("Number format exception.");
         }
 
     }

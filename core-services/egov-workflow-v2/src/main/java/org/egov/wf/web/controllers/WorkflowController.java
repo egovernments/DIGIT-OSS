@@ -13,7 +13,6 @@ import org.egov.wf.web.models.ProcessInstanceRequest;
 import org.egov.wf.web.models.ProcessInstanceResponse;
 import org.egov.wf.web.models.ProcessInstanceSearchCriteria;
 import org.egov.wf.web.models.RequestInfoWrapper;
-import org.egov.wf.web.models.StatusCountRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,9 +65,9 @@ public class WorkflowController {
         @RequestMapping(value="/process/_search", method = RequestMethod.POST)
         public ResponseEntity<ProcessInstanceResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                               @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
-        List<ProcessInstance> processInstances = workflowService.search(requestInfoWrapper.getRequestInfo(),criteria);
-        Integer count = workflowService.getUserBasedProcessInstancesCount(requestInfoWrapper.getRequestInfo(),criteria);
-            ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances).totalCount(count).build();
+                List<ProcessInstance> processInstances = workflowService.search(requestInfoWrapper.getRequestInfo(),criteria);
+                ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances)
+                        .build();
                 return new ResponseEntity<>(response,HttpStatus.OK);
         }
 
@@ -89,8 +88,7 @@ public class WorkflowController {
     public ResponseEntity<ProcessInstanceResponse> searchEscalatedApplications(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                           @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
         List<ProcessInstance> processInstances = workflowService.escalatedApplicationsSearch(requestInfoWrapper.getRequestInfo(),criteria);
-        Integer count = workflowService.countEscalatedApplications(requestInfoWrapper.getRequestInfo(),criteria);
-        ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances).totalCount(count)
+        ProcessInstanceResponse response  = ProcessInstanceResponse.builder().processInstances(processInstances)
                 .build();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -101,15 +99,11 @@ public class WorkflowController {
      * @param criteria
      * @return
      */
-    @RequestMapping(value = "/process/_statuscount", method = RequestMethod.POST)
-    public ResponseEntity<List> StatusCount(@Valid @RequestBody StatusCountRequest statusCountRequest,
-            @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
-        ProcessInstanceSearchCriteria statusCriteria = statusCountRequest.getProcessInstanceSearchCriteria();
-        if (statusCriteria == null) {
-            statusCriteria = criteria;
+    @RequestMapping(value="/process/_statuscount", method = RequestMethod.POST)
+        public ResponseEntity<List> StatusCount(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                              @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
+            List  result = workflowService.statusCount(requestInfoWrapper.getRequestInfo(),criteria);
+            return new ResponseEntity<>(result,HttpStatus.OK);
         }
-        List result = workflowService.statusCount(statusCountRequest.getRequestInfo(), statusCriteria);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
 
 }

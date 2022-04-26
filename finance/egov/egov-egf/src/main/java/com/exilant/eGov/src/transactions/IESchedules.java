@@ -95,8 +95,6 @@ public class IESchedules extends AbstractTask {
 				.append(" then '-' else schschedule AS \"schedule\", curYearAmount AS \"curyearamount\",")
 				.append(" preyearamount AS \"preyearamount\", operation AS \"operation\", TYPE AS \"type\" FROM ")
 				.append(mainTable).append(" WHERE TYPE = 'I' OR TYPE = 'E' ORDER BY scheduleglCode, TYPE, operation");
-		PreparedStatement pst = null;
-		ResultSet rs = null;
 		final ArrayList ar = new ArrayList();
 		double curAmt = 0, preAmt = 0, sumCur = 0, sumPre = 0;
 		String operation = "", schedule = "", preSchedule = "", title = "";
@@ -108,9 +106,7 @@ public class IESchedules extends AbstractTask {
 		final String eDate = dc.getValue("eDate") == null ? "today" : dc.getValue("eDate");
 		dc.addValue("pageTitle", "Income & Expenditure Schedules For the period of " + sDate + " to " + eDate);
 
-		try {
-			pst = conn.prepareStatement(report.toString());
-			rs = pst.executeQuery();
+		try(PreparedStatement pst = conn.prepareStatement(report.toString());ResultSet rs = pst.executeQuery();) {
 
             while (rs.next()) {
                 curAmt = rs.getDouble("curyearamount");

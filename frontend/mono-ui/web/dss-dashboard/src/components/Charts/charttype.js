@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 import APITransport from '../../actions/apitransport/apitransport';
 import DonutChart from './DonutChart';
 import HorizontalBarChart from './HorizontalBarChart'
-import { getTenantId } from '../../utils/commons';
 
 class ChartType extends React.Component {
     constructor(props) {
@@ -36,7 +35,7 @@ class ChartType extends React.Component {
         if(this.props.page && this.props.page.includes('ulb')) {
             if(!filters['tenantId']) {
               let tenentFilter = []
-              tenentFilter.push(`${getTenantId()}`)
+              tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
               filters['tenantId'] = tenentFilter
             }
           }
@@ -49,6 +48,7 @@ class ChartType extends React.Component {
         let chartKey = _.chain(this.props).get('chartData').first().get('id').value();
         let chartType = _.chain(this.props).get('chartData').first().get('chartType').toUpper().value();
         let data = _.chain(this.props).get('chartsGData').get(chartKey).get('data').value();
+
         if (data) {
             switch (chartType) {
                 case 'PIE':

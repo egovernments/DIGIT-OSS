@@ -1,6 +1,5 @@
 class System {
     error(message) {
-        console.error(`System: ${message}`);
     }
 }
 

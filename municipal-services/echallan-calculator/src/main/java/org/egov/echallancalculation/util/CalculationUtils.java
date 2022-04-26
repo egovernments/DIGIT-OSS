@@ -26,6 +26,7 @@ public class CalculationUtils {
     @Autowired
     private ObjectMapper mapper;
 
+    private static final String URL_APPEND_TENANT_ID = "tenantId=";
 
     /**
      * Creates tradeLicense search url based on tenantId and applicationNumber
@@ -36,7 +37,7 @@ public class CalculationUtils {
       url.append(config.getChallanContextPath());
       url.append(config.getChallansearchEndPoint());
       url.append("?");
-      url.append("tenantId=");
+      url.append(URL_APPEND_TENANT_ID);
       url.append("{1}");
       url.append("&");
       url.append("applicationNumber=");
@@ -53,7 +54,7 @@ public class CalculationUtils {
         StringBuilder url = new StringBuilder(config.getBillingHost());
         url.append(config.getDemandSearchEndpoint());
         url.append("?");
-        url.append("tenantId=");
+        url.append(URL_APPEND_TENANT_ID);
         url.append("{1}");
         url.append("&");
         url.append("businessService=");
@@ -73,7 +74,7 @@ public class CalculationUtils {
         StringBuilder url = new StringBuilder(config.getBillingHost());
         url.append(config.getFetchBillEndpoint());
         url.append("?");
-        url.append("tenantId=");
+        url.append(URL_APPEND_TENANT_ID);
         url.append("{1}");
         url.append("&");
         url.append("consumerCode=");

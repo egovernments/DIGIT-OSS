@@ -110,11 +110,7 @@ const Notifications = ({ notifications = [], history }) => {
                     return (
                       <div
                         onClick={() => {
-                          if(button.route.includes("digit-ui")){
-                            window.location.href=`${button.route.startsWith('digit-ui')?'/':""}${button.route}`;
-                          }else{
-                            history.push(button.route);
-                          }
+                          history.push(button.route);
                         }}
                         style={{ cursor: "pointer", marginBottom: 10 }}
                       >

@@ -181,7 +181,10 @@ public class MSDGSMSServiceImpl extends BaseSMSService {
         } catch (Exception e) {
             log.error("Exception while generating the hash: ", e);
         }
-        return sb.toString();
+        if (sb != null){
+            return sb.toString();
+        }
+        else return null;
     }
 
 }

@@ -7,7 +7,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { CityPicker } from "modules/common";
 import Hidden from "@material-ui/core/Hidden";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
-import logo from "egov-ui-kit/assets/images/logo_black.png";
+import logo from "egov-ui-kit/assets/images/nugp_logo.png";
 import "./index.css";
 
 
@@ -21,11 +21,11 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsAp
       className={enableWhatsApp?"register-cardwidth user-screens-card":"col-sm-offset-4 col-sm-4 user-screens-card"}
       textChildren={
         <div>
-          <div className="rainmaker-displayInline" style={{ justifyContent: "center"  ,alignItems:"center",marginBottom: "24px"}}>
-            <div style={{  }}>
-              <Image className="mseva-logo" source={logoUrl?logoUrl:`${logo}`} />
+          <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
+            <div style={{ marginBottom: "24px" }}>
+              <Image className="mseva-logo" source={`${logo}`} />
             </div >
-          <div style={{marginLeft:"7px" }}>
+          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>

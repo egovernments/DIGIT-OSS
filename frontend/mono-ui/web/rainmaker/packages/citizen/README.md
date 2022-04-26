@@ -1,6 +1,5 @@
 ## UI Autogen
 
-
 The framework is intended to create CRUD screens with JSON configuration.
 
 An high level overview of the UI Autogen Flow.

@@ -4,7 +4,6 @@
 HOST = process.env.EGOV_HOST;
 
 if (!HOST) {
-  console.log("You need to set the HOST variable");
   process.exit(1);
 }
 

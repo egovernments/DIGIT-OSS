@@ -44,8 +44,7 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 			String description = rs.getString("description");
 			String source = rs.getString("source");
 			String status = rs.getString("status");
-			String agencytype = rs.getString("agencytype");
-			String paymentpreference = rs.getString("paymentpreference");
+
 			if (currentvendor == null) {
 				Long lastModifiedTime = rs.getLong("lastmodifiedtime");
 
@@ -53,7 +52,7 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 					lastModifiedTime = null;
 				}
 
-				currentvendor = Vendor.builder().id(id).name(name).tenantId(tenantId).agencyType(agencytype).paymentPreference(paymentpreference).additionalDetails(additionalDetail)
+				currentvendor = Vendor.builder().id(id).name(name).tenantId(tenantId).additionalDetails(additionalDetail)
 						.description(description).source(source).ownerId(owner_id).build();
 
 				vendorMap.put(id, currentvendor);

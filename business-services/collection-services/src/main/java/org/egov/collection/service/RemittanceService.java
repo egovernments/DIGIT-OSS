@@ -50,7 +50,7 @@ public class RemittanceService {
 
         Remittance remittance = request.getRemittances().get(0);
 
-        remittanceRepository.updateRemittance(remittance);
+       // remittanceRepository.updateRemittance(remittance);
 
         return remittance;
     }

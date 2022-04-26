@@ -2,6 +2,7 @@ package org.egov.encryption.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.models.Attribute;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class EncryptionPolicyConfiguration {
 
@@ -53,7 +55,9 @@ public class EncryptionPolicyConfiguration {
             ObjectReader reader = objectMapper.readerFor(objectMapper.getTypeFactory().constructCollectionType(List.class,
                     EncryptionPolicy.class));
             encryptionPolicyList = reader.readValue(policyListJSON.toString());
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
 
         initializeKeyAttributeMap(encryptionPolicyList);
     }

@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.pg.models.Transaction;
 import org.egov.pg.service.Gateway;
 import org.egov.pg.service.gateways.axis.AxisGateway;
@@ -17,6 +18,7 @@ import java.net.URI;
 import java.text.DecimalFormat;
 import java.util.Collections;
 
+@Slf4j
 @Ignore
 public class Test {
 
@@ -45,7 +47,7 @@ public class Test {
 
         Gateway gateway = new AxisGateway(restTemplate, environment, objectMapper);
         URI redirectUri = gateway.generateRedirectURI(txn);
-        System.out.println(redirectUri.toString());
+        log.info(redirectUri.toString());
 
     }
 
@@ -63,7 +65,7 @@ public class Test {
         Gateway gateway = new PhonepeGateway(restTemplate, objectMapper, environment);
 
         URI redirectUri = gateway.generateRedirectURI(txn);
-        System.out.println(redirectUri);
+        log.info(redirectUri.toString());
     }
 
     @org.junit.Test
@@ -79,7 +81,7 @@ public class Test {
         Gateway gateway = new PaytmGateway(restTemplate,  environment);
 
         URI redirectUri = gateway.generateRedirectURI(txn);
-        System.out.println(redirectUri);
+        log.info(redirectUri.toString());
     }
 
 //    @org.junit.Test
@@ -96,7 +98,6 @@ public class Test {
 //        Gateway gateway = new PayuGateway();
 //
 //        URI redirectUri = gateway.generateRedirectURI(txn);
-//        System.out.println(redirectUri);
 //    }
 
 
@@ -150,18 +151,6 @@ public class Test {
 
     }
 
-    @org.junit.Test
-    public void name1() {
-        final DecimalFormat CURRENCY_FORMATTER_RUPEE = new DecimalFormat("0.00");
-        System.out.println(Double.valueOf(CURRENCY_FORMATTER_RUPEE.format(Double.valueOf("141"))));
-        BigDecimal decimal = new BigDecimal(10488.88);
-        BigDecimal decimal1 = new BigDecimal(10488);
-        System.out.println(decimal.longValueExact());
-        System.out.println(decimal == decimal1);
-    }
 
-    @org.junit.Test
-    public void name3() {
-        System.out.println(Utils.convertPaiseToRupee("10"));
-    }
+
 }

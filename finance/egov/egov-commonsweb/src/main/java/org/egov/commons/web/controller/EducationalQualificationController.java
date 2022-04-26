@@ -104,7 +104,7 @@ public class EducationalQualificationController {
         qualificationService.create(educationalQualification);
         redirectAttrs.addFlashAttribute("message",
                 messageSource.getMessage("msg.educational.qualification.success", null, null));
-        return "redirect:/qualification/result/" + educationalQualification.getId();
+        return "redirect:/qualification/result/" + (educationalQualification==null ? null : educationalQualification.getId());
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)

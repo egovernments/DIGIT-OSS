@@ -7,7 +7,7 @@ import {
   getAccessToken,
   localStorageGet
 } from "egov-ui-kit/utils/localStorageUtils";
-import commonConfig from "config/common.js";
+
 // var store=require('../store');
 
 var common = require("../Common");
@@ -71,7 +71,7 @@ module.exports = {
           "&tenantId=" +
           (getTenantId()
             ? isStateLevel
-              ? commonConfig.tenantId
+              ? getTenantId().split(".")[0]
               : getTenantId()
             : "default");
       } else {
@@ -79,7 +79,7 @@ module.exports = {
           "?tenantId=" +
           (getTenantId()
             ? isStateLevel
-              ? commonConfig.tenantId
+              ? getTenantId().split(".")[0]
               : getTenantId()
             : "default");
       }

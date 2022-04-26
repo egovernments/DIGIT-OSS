@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.SetBack;
 import org.egov.common.entity.edcr.Yard;
@@ -34,7 +35,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlotDepthExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(PlotDepthExtract.class);
+    private static final Logger LOG = LogManager.getLogger(PlotDepthExtract.class);
     final Ray rayCasting = new Ray(new Point(-1.123456789, -1.987654321, 0d));
     @Autowired
     private static LayerNames layerNames;
@@ -69,8 +70,7 @@ public class PlotDepthExtract extends FeatureExtract {
 
         removeDuplicates(frontYardPoints, rearYardPoints);
         Set<Double> distanceList = new TreeSet<>();
-        BigDecimal distances = getDistances(pl, distanceList, frontYardPoints, rearYardPoints);
-        return distances;
+        return getDistances(pl, distanceList, frontYardPoints, rearYardPoints);
 
     }
 
@@ -99,7 +99,6 @@ public class PlotDepthExtract extends FeatureExtract {
         Iterator yardVertexIterator = yardPolyline.getVertexIterator();
         PrintUtil.print(yardPolyline, name);
         List<Point> yardPointTouchingPltBndry = new ArrayList<>();
-        new TreeSet<>();
         // Find the edges of PlotBoundary
         List<Point> plotBoundaryEdges = Util.pointsOnPolygon(plotBoundary);
         // Find the points connecting the edges of PlotBoundary
@@ -157,7 +156,6 @@ public class PlotDepthExtract extends FeatureExtract {
                     if (Util.pointsEqualsWith2PercentError(p, yardEdge)) {
                         yardPointTouchingPltBndry.add(yardEdge);
                         LOG.debug("Adding yardEdge to outside points in  pointsOnPlot pointsEqualsWith2PercentError");
-                        pointAdded = true;
                         break;
                     }
 
@@ -226,20 +224,13 @@ public class PlotDepthExtract extends FeatureExtract {
             DXFLine line = map.get(dist);
             LOG.info("the shortest Distance is " + dist);
             PrintUtil.printForDXf(line.getStartPoint(), line.getEndPoint(), "PLOT_DEPTH", pl);
-            // return
-            // BigDecimal.valueOf(dist).setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,
-            // RoundingMode.HALF_UP);
-        } /*
-           * else return BigDecimal.ZERO.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS);
-           */
+        }
 
         Double total = 0d;
         for (Map.Entry<Double, DXFLine> mapLine : map.entrySet())
             total = total + mapLine.getKey();
 
-        Double avg = 0d;
-
-        avg = total / map.size();
+        Double avg = total / map.size();
 
         LOG.info("average == " + avg);
 
@@ -291,8 +282,7 @@ public class PlotDepthExtract extends FeatureExtract {
             next = point1;
 
         }
-        if (next != null && first != null && !Util.pointsEquals(first.getPoint(), next.getPoint())) {
-            // if (next!=null && first!=null) {
+        if (next != null && !Util.pointsEquals(first.getPoint(), next.getPoint())) {
             DXFLine line = new DXFLine();
             line.setStartPoint(next.getPoint());
             line.setEndPoint(first.getPoint());

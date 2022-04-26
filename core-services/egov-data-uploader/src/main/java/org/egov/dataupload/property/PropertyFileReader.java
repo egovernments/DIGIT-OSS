@@ -45,6 +45,8 @@ public class PropertyFileReader {
 	@Autowired
 	private DataUploadUtils dataUploadUtils;
 
+	private static final String ROW_DATA_PROPERTY_KEY = "Property";
+
 	public Map<String, Sheet> readFile(String location) throws InvalidFormatException, IOException {
 		Map<String, Sheet> sheetMap = new HashMap<>();
 
@@ -55,20 +57,21 @@ public class PropertyFileReader {
 		try {
 			excelFile = new FileInputStream(new File(location));
 			workbook = new XSSFWorkbook(excelFile);
+			workbook.forEach(sheet -> {
+				log.info("=> " + sheet.getSheetName());
+				sheetMap.put(sheet.getSheetName(), sheet);
+			});
+			// Retrieving the number of sheets in the Workbook
+			log.info("Workbook has " + workbook.getNumberOfSheets() + " Sheets : ");
+
 		}catch(Exception e){
 			log.error("Error while creating workbook.");
 		}finally {
-			excelFile.close();
+			if (excelFile != null)
+				excelFile.close();
+			if(workbook != null)
+				workbook.close();
 		}
-		// Retrieving the number of sheets in the Workbook
-		log.info("Workbook has " + workbook.getNumberOfSheets() + " Sheets : ");
-
-		workbook.forEach(sheet -> {
-			log.info("=> " + sheet.getSheetName());
-			sheetMap.put(sheet.getSheetName(), sheet);
-		});
-		workbook.close();
-
 		return sheetMap;
 	}
 
@@ -118,13 +121,13 @@ public class PropertyFileReader {
 				if(null != propertyIdMap.get(property.getOldPropertyId())) {
 					StringBuilder id = new StringBuilder();
 					id.append("duplicate_").append(property.getOldPropertyId()).append("_").append(rowNumber);
-					rowData.put("Property", property);
+					rowData.put(ROW_DATA_PROPERTY_KEY, property);
 					rowData.put("_rowindex", row.getRowNum());
 					propertyIdMap.put(id.toString(), rowData);
 				}
 				else
 				{
-					rowData.put("Property", property);
+					rowData.put(ROW_DATA_PROPERTY_KEY, property);
 					rowData.put("_rowindex", row.getRowNum());
 					propertyIdMap.put(property.getOldPropertyId(), rowData);
 				}
@@ -228,7 +231,7 @@ public class PropertyFileReader {
 				break;
 		}
 
-		System.out.print("\t");
+		log.info("\t");
 	}
 
 	private void parseUnitDetail(Map<String, Sheet> sheetMap, Map<String, Map<String, Object>> propertyIdMap) throws InvalidFormatException {
@@ -255,7 +258,7 @@ public class PropertyFileReader {
 			if (propertyIdMap.get(propertyId) == null)
 				continue;
 
-			Property property = (Property) propertyIdMap.get(propertyId).get("Property");
+			Property property = (Property) propertyIdMap.get(propertyId).get(ROW_DATA_PROPERTY_KEY);
 
 			Unit unit = new Unit();
 
@@ -311,7 +314,7 @@ public class PropertyFileReader {
 				break;
 		}
 
-		System.out.print("\t");
+		log.info("\t");
 	}
 
 	private void parseOwnerDetail(Map<String, Sheet> sheetMap, Map<String, Map<String, Object>> propertyIdMap) throws InvalidFormatException {
@@ -340,7 +343,7 @@ public class PropertyFileReader {
 				continue;
 			}
 
-			Property property = (Property) propertyIdMap.get(propertyId).get("Property");
+			Property property = (Property) propertyIdMap.get(propertyId).get(ROW_DATA_PROPERTY_KEY);
 			String ownershipCategory=property.getPropertyDetails().get(0).getOwnershipCategory();
 
 			if (null == property)
@@ -424,6 +427,6 @@ public class PropertyFileReader {
 				break;
 		}
 
-		System.out.print("\t");
+		log.info("\t");
 	}
 }

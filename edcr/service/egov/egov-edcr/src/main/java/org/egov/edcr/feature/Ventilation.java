@@ -48,12 +48,15 @@
 package org.egov.edcr.feature;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Measurement;
@@ -66,7 +69,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class Ventilation extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(Ventilation.class);
+	private static final Logger LOG = LogManager.getLogger(Ventilation.class);
+
 	private static final String RULE_43 = "43";
 	public static final String LIGHT_VENTILATION_DESCRIPTION = "Light and Ventilation";
 
@@ -104,7 +108,7 @@ public class Ventilation extends FeatureProcess {
 
 						if (totalVentilationArea.compareTo(BigDecimal.ZERO) > 0) {
 							if (totalVentilationArea.compareTo(totalCarpetArea.divide(BigDecimal.valueOf(8)).setScale(2,
-									BigDecimal.ROUND_HALF_UP)) >= 0) {
+									RoundingMode.HALF_UP)) >= 0) {
 								details.put(REQUIRED, "Minimum 1/8th of the floor area ");
 								details.put(PROVIDED, "Ventilation area " + totalVentilationArea + " of Carpet Area   "
 										+ totalCarpetArea + " at floor " + f.getNumber());

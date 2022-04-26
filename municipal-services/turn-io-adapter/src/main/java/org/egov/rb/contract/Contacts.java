@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Contacts {
 
-	@Autowired
+
 	@JsonProperty("profile")
 	private Profile profile;
 	@JsonProperty("wa_id")

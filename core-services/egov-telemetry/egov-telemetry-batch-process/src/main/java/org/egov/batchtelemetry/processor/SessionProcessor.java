@@ -31,6 +31,8 @@ public class SessionProcessor {
     private static Producer producer;
     private static Configuration configuration;
 
+    private static final String READ_ETS = "$.ets";
+
     public static Integer totalSessionCounter;
 
     private static List<String> existingUserIds;
@@ -80,8 +82,8 @@ public class SessionProcessor {
         String lastRecord = new JSONObject(sessionContent.get(sessionContent.size() - 1)).toString();
         String deviceId = JsonPath.using(configuration).parse(firstRecord).read("$.context.did");
 
-        Long startTime = JsonPath.using(configuration).parse(firstRecord).read("$.ets");
-        Long endTime = JsonPath.using(configuration).parse(lastRecord).read("$.ets");
+        Long startTime = JsonPath.using(configuration).parse(firstRecord).read(READ_ETS);
+        Long endTime = JsonPath.using(configuration).parse(lastRecord).read(READ_ETS);
         String timestamp = getTimestamp(startTime);
 
         String userId = getUserId(sessionContent);
@@ -123,9 +125,9 @@ public class SessionProcessor {
     private static SessionDetails buildSessionDetails(List<Map<String, Object>> sessionContent) {
 
         Long startTime = JsonPath.using(configuration).parse(new JSONObject(sessionContent.get(0)).toString())
-                .read("$.ets");
+                .read(READ_ETS);
         Long endTime = JsonPath.using(configuration).parse(new
-                JSONObject(sessionContent.get(sessionContent.size() - 1)).toString()).read("$.ets");
+                JSONObject(sessionContent.get(sessionContent.size() - 1)).toString()).read(READ_ETS);
         Long duration = endTime - startTime;
 
         String exitPage = JsonPath.using(configuration).parse(new

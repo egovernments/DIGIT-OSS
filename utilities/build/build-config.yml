@@ -71,9 +71,3 @@ config:
     build:
       - work-dir: "certificate-verification"
         image-name: "certificate-verification"
-        
-  - name: "builds/utilities/demo-utility"
-    build:
-      - work-dir: "demo-utility"
-        image-name: "demo-utility"
-        dockerfile: "build/maven/Dockerfile"

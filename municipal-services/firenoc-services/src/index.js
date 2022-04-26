@@ -54,7 +54,6 @@ app.use("/", api({ config }));
 
 //error handler middleware
 app.use((err, req, res, next) => {
-  console.log(err);
   if (!err.errorType) {
     res.status(err.status).json(err.data);
   } else if (err.errorType == "custom") {
@@ -65,10 +64,8 @@ app.use((err, req, res, next) => {
   }
 });
 
-console.log(envVariables.SERVER_PORT);
 
 app.server.listen(envVariables.SERVER_PORT, () => {
-  console.log(`Started on port ${app.server.address().port}`);
 });
 
 export default app;

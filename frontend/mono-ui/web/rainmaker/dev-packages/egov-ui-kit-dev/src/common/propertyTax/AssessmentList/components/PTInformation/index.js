@@ -1,9 +1,7 @@
 import { Card } from "components";
 import commonConfig from "config/common.js";
-import { httpRequest } from "egov-ui-kit/utils/api";
-import { businessServiceInfo, fetchConsumerBill, searchConsumer } from "egov-ui-kit/utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
+import { businessServiceInfo, getDuesForPTMutation, searchConsumer, fetchConsumerBill } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";
 import React from "react";
 import { connect } from "react-redux";
@@ -16,6 +14,8 @@ import TotalDues from "../../../Property/components/TotalDues";
 import ApplicationHistory from "./components/ApplicationHistory";
 import AssessmentHistory from "./components/AssessmentHistory";
 import PaymentHistory from "./components/PaymentHistory";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "egov-ui-kit/utils/api";
 import "./index.css";
 
 const logoStyle = {
@@ -42,7 +42,7 @@ class PTInformation extends React.Component {
       }
     };
     const businessServiceInfoItem = businessServiceInfo(mdmsBody, "PT");
-    this.setState({ businessServiceInfoItem });
+    this.setState({businessServiceInfoItem});
     let requestObject = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -74,19 +74,19 @@ class PTInformation extends React.Component {
         { key: "propertyId", value: window.location.href.split('/')[6] },
         { key: "tenantId", value: getTenantId() }
       );
-      getDuesForPTMutation.map(async (items) => {
+      getDuesForPTMutation.map( async (items) => {
         if (items.enabled) {
           const consumerDetails = await searchConsumer(items, queryObjectForConsumer);
           if (consumerDetails && consumerDetails.length > 0) {
             let bills = [];
             consumerDetails.map(async (details) => {
               try {
-                const billDetails = await fetchConsumerBill(items,
+                const billDetails = await fetchConsumerBill(items, 
                   [{ key: "businessService", value: items.module },
-                  { key: "consumerCode", value: details.connectionNo },
-                  { key: "tenantId", value: getTenantId() }]);
+                { key: "consumerCode", value: details.connectionNo },
+                { key: "tenantId", value: getTenantId() }]);
                 billDetails && bills.push(billDetails);
-                if (bills && bills.length > 0 && items.module === "WS") {
+                if ( bills && bills.length > 0 && items.module === "WS") {
                   bills.map(bill => {
                     waterDetails.push({
                       waterDue: bill.totalAmount,
@@ -94,7 +94,7 @@ class PTInformation extends React.Component {
                       module: items.module
                     })
                   })
-                  this.setState({ waterDetails });
+                  this.setState({waterDetails});
                   waterDetails = [];
                 }
                 else if (bills && bills.length > 0 && items.module === "SW") {
@@ -105,7 +105,7 @@ class PTInformation extends React.Component {
                       module: items.module
                     })
                   })
-                  this.setState({ sewerDetails });
+                  this.setState({sewerDetails});
                   sewerDetails = [];
                 }
               } catch (error) {
@@ -114,7 +114,7 @@ class PTInformation extends React.Component {
             })
           }
         }
-      })
+      })  
     }
   }
   updateProperty = () => {
@@ -157,8 +157,7 @@ class PTInformation extends React.Component {
       documentsUploaded,
       toggleSnackbarAndSetText,
       cities,
-      propertiesAudit,
-      updateNumberConfig
+      propertiesAudit
     } = this.props;
     const { businessServiceInfoItem, waterDetails, sewerDetails } = this.state;
     let logoUrl = "";
@@ -199,12 +198,10 @@ class PTInformation extends React.Component {
                     textChildren={
                       <TotalDues
                         history
-                        properties={properties}
                         tenantId={properties.tenantId}
                         consumerCode={properties.propertyId}
                         totalBillAmountDue={totalBillAmountDue}
                         isAdvanceAllowed={businessServiceInfoItem.isAdvanceAllowed}
-                        updateNumberConfig={updateNumberConfig}
                       />
                     }
                     style={{ backgroundColor: "rgb(242,242,242)", boxShadow: "none" }}
@@ -253,12 +250,7 @@ const mapStateToProps = (state) => {
 
   const { preparedFinalObject } = screenConfiguration;
   let { propertiesAudit = [] } = preparedFinalObject;
-  const updateNumberConfig = get(
-    preparedFinalObject,
-    "updateNumberConfig",
-    []
-  );
-  return { cities, propertiesAudit, updateNumberConfig };
+  return { cities, propertiesAudit };
 }
 
 

@@ -200,7 +200,7 @@ public class SurrenderReasonRepository {
                 && financialConfigurationContractRepository.fetchDataFrom().equalsIgnoreCase("es")) {
 
             SurrenderReasonMapper mapper = new SurrenderReasonMapper();
-            SurrenderReasonSearchContract surrenderReasonSearchContract = new SurrenderReasonSearchContract();
+            SurrenderReasonSearchContract surrenderReasonSearchContract;
             surrenderReasonSearchContract = mapper.toSearchContract(domain);
 
             return surrenderReasonESRepository.search(surrenderReasonSearchContract);

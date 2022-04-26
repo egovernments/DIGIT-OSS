@@ -42,7 +42,7 @@ public class UserServiceTest {
     private UserService userServiceMock;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
        MockitoAnnotations.initMocks(this);
        ReflectionTestUtils.setField(userServiceMock, "userHost", "http://localhost:8081");
        ReflectionTestUtils.setField(userServiceMock, "userContextPath", "user/users/");
@@ -72,13 +72,15 @@ public class UserServiceTest {
 
         userDetailResponse = mapper.convertValue(responseWithUser,UserDetailResponse.class);
         User user = userDetailResponse.getUser().get(0);
-        request.getProperties().get(0).getPropertyDetails().get(0).getOwners().forEach(owner ->{
-            assertEquals(owner.getUuid(),user.getUuid());
-            assertEquals(owner.getCreatedBy(),user.getCreatedBy());
-            assertEquals(owner.getCreatedDate(),user.getCreatedDate());
-            assertEquals(owner.getLastModifiedBy(),user.getLastModifiedBy());
-            assertEquals(owner.getLastModifiedDate(),user.getLastModifiedDate());
-        });
+        if(request != null) {
+            request.getProperties().get(0).getPropertyDetails().get(0).getOwners().forEach(owner -> {
+                assertEquals(owner.getUuid(), user.getUuid());
+                assertEquals(owner.getCreatedBy(), user.getCreatedBy());
+                assertEquals(owner.getCreatedDate(), user.getCreatedDate());
+                assertEquals(owner.getLastModifiedBy(), user.getLastModifiedBy());
+                assertEquals(owner.getLastModifiedDate(), user.getLastModifiedDate());
+            });
+        }
     }
 
     public void testUserCreateIfUserNotPresent(){
@@ -115,13 +117,15 @@ public class UserServiceTest {
         parseResponse(responseWithUser,"dd-MM-yyyy");
         userDetailResponse = mapper.convertValue(responseWithUser,UserDetailResponse.class);
         User user = userDetailResponse.getUser().get(0);
-        request.getProperties().get(0).getPropertyDetails().get(0).getOwners().forEach(owner ->{
-            assertEquals(owner.getUuid(),user.getUuid());
-            assertEquals(owner.getCreatedBy(),user.getCreatedBy());
-            assertEquals(owner.getCreatedDate(),user.getCreatedDate());
-            assertEquals(owner.getLastModifiedBy(),user.getLastModifiedBy());
-            assertEquals(owner.getLastModifiedDate(),user.getLastModifiedDate());
-        });
+        if(request != null) {
+            request.getProperties().get(0).getPropertyDetails().get(0).getOwners().forEach(owner -> {
+                assertEquals(owner.getUuid(), user.getUuid());
+                assertEquals(owner.getCreatedBy(), user.getCreatedBy());
+                assertEquals(owner.getCreatedDate(), user.getCreatedDate());
+                assertEquals(owner.getLastModifiedBy(), user.getLastModifiedBy());
+                assertEquals(owner.getLastModifiedDate(), user.getLastModifiedDate());
+            });
+        }
     }
 
     public void updateUserWhenUserNotPresentTest(){
@@ -157,13 +161,15 @@ public class UserServiceTest {
         parseResponse(responseWithUser,"dd-MM-yyyy");
         userDetailResponse = mapper.convertValue(responseWithUser,UserDetailResponse.class);
         User user = userDetailResponse.getUser().get(0);
-        request.getProperties().get(0).getPropertyDetails().get(0).getOwners().forEach(owner ->{
-            assertEquals(owner.getUuid(),user.getUuid());
-            assertEquals(owner.getCreatedBy(),user.getCreatedBy());
-            assertEquals(owner.getCreatedDate(),user.getCreatedDate());
-            assertEquals(owner.getLastModifiedBy(),user.getLastModifiedBy());
-            assertEquals(owner.getLastModifiedDate(),user.getLastModifiedDate());
-        });
+        if(request != null) {
+            request.getProperties().get(0).getPropertyDetails().get(0).getOwners().forEach(owner -> {
+                assertEquals(owner.getUuid(), user.getUuid());
+                assertEquals(owner.getCreatedBy(), user.getCreatedBy());
+                assertEquals(owner.getCreatedDate(), user.getCreatedDate());
+                assertEquals(owner.getLastModifiedBy(), user.getLastModifiedBy());
+                assertEquals(owner.getLastModifiedDate(), user.getLastModifiedDate());
+            });
+        }
     }
 
     public void updateUserWhenUserPresentTest(){
@@ -185,13 +191,15 @@ public class UserServiceTest {
 
         userDetailResponse = mapper.convertValue(responseWithUser,UserDetailResponse.class);
         User user = userDetailResponse.getUser().get(0);
-        request.getProperties().get(0).getPropertyDetails().get(0).getOwners().forEach(owner ->{
-            assertEquals(owner.getUuid(),user.getUuid());
-            assertEquals(owner.getCreatedBy(),user.getCreatedBy());
-            assertEquals(owner.getCreatedDate(),user.getCreatedDate());
-            assertEquals(owner.getLastModifiedBy(),user.getLastModifiedBy());
-            assertEquals(owner.getLastModifiedDate(),user.getLastModifiedDate());
-        });
+        if(request != null) {
+            request.getProperties().get(0).getPropertyDetails().get(0).getOwners().forEach(owner -> {
+                assertEquals(owner.getUuid(), user.getUuid());
+                assertEquals(owner.getCreatedBy(), user.getCreatedBy());
+                assertEquals(owner.getCreatedDate(), user.getCreatedDate());
+                assertEquals(owner.getLastModifiedBy(), user.getLastModifiedBy());
+                assertEquals(owner.getLastModifiedDate(), user.getLastModifiedDate());
+            });
+        }
     }
 
 
@@ -231,7 +239,10 @@ public class UserServiceTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return  d.getTime();
+        if(d != null){
+            return d.getTime();
+        }
+        return null;
     }
 
     public static<K,V> Map<K,V> clone(Map<K,V> original) {

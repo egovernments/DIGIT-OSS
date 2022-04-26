@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -24,7 +25,6 @@ import org.egov.fsm.web.model.FSMAuditSearchCriteria;
 import org.egov.fsm.web.model.FSMRequest;
 import org.egov.fsm.web.model.FSMSearchCriteria;
 import org.egov.fsm.web.model.dso.Vendor;
-import org.egov.fsm.web.model.dso.VendorSearchCriteria;
 import org.egov.fsm.web.model.user.User;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.BeanUtils;
@@ -58,26 +58,24 @@ public class FSMValidator {
 	@Autowired
 	private FSMToFSMAuditUtilConverter converter;
 
-	@SuppressWarnings("deprecation")
+	private static final String ERROR_APPLICANT_NAME_MOBILE_NUMBER_MANDATORY = "Applicant Name and mobile number mandatory";
+	private static final String ERROR_TENANT_ID_MANDATORY_SEARCH = "TenantId is mandatory in search";
+	private static final String ERROR_APPLICATION_STATUS_SEARCH_NOT_ALLOWED = "Search on applicationStatus is not allowed";
+
 	public void validateCreate(FSMRequest fsmRequest, Object mdmsData) {
 		mdmsValidator.validateMdmsData(fsmRequest, mdmsData);
 		FSM fsm = fsmRequest.getFsm();
 		if( fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN)) {
 			
 			// when user is created for the citizen but name is mepty
-			if (fsm.getCitizen() != null && StringUtils.isEmpty(fsm.getCitizen().getName())
-					&& StringUtils.isEmpty(fsmRequest.getRequestInfo().getUserInfo().getName())) {
-				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,
-						"Applicant Name and mobile number mandatory");
+			if( fsm.getCitizen() != null && StringUtils.isEmpty(fsm.getCitizen().getName()) && StringUtils.isEmpty(fsmRequest.getRequestInfo().getUserInfo().getName()) ) {
+				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,ERROR_APPLICANT_NAME_MOBILE_NUMBER_MANDATORY);
 			}
 			// ui does not pass citizen in fsm but userInfo in the request is citizen
-			if (fsm.getCitizen() == null || StringUtils.isEmpty(fsm.getCitizen().getName())
-					|| StringUtils.isEmpty(fsm.getCitizen().getMobileNumber())) {
-				User citizen = new User();
-				BeanUtils.copyProperties(fsmRequest.getRequestInfo().getUserInfo(), citizen);
-				if(fsmRequest.getFsm().getCitizen()!=null)
-					citizen.setGender(fsmRequest.getFsm().getCitizen().getGender());
-					fsm.setCitizen(citizen);
+			if(fsm.getCitizen() == null || StringUtils.isEmpty(fsm.getCitizen().getName()) || StringUtils.isEmpty(fsm.getCitizen().getMobileNumber() )) {
+				User citzen = new User();
+				BeanUtils.copyProperties(fsmRequest.getRequestInfo().getUserInfo(), citzen);
+				fsm.setCitizen( citzen);
 			}
 			
 			if(!StringUtils.isEmpty(fsm.getSource())) {
@@ -91,16 +89,15 @@ public class FSMValidator {
 
 			}
 			
-		} else if (fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE)) {
+		}else if( fsmRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE)) {
 			User applicant = fsm.getCitizen();
-			if (applicant == null || StringUtils.isEmpty(applicant.getName())
-					|| StringUtils.isEmpty(applicant.getMobileNumber())) {
-				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,
-						"Applicant Name and mobile number mandatory");
+			if( applicant == null ||  StringUtils.isEmpty(applicant.getName()) || StringUtils.isEmpty(applicant.getMobileNumber())) {
+				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,ERROR_APPLICANT_NAME_MOBILE_NUMBER_MANDATORY);
 			}
 			
-			//validateVehicleType(fsmRequest);
-			validateVehicleCapacity(fsmRequest);
+			
+			
+			validateVehicleType(fsmRequest);
 			mdmsValidator.validateApplicationChannel(fsm.getSource());
 			if(!StringUtils.isEmpty(fsm.getSanitationtype())) {
 				mdmsValidator.validateOnSiteSanitationType(fsm.getSanitationtype(),fsm.getPitDetail());
@@ -109,10 +106,8 @@ public class FSMValidator {
 			validateTripAmount(fsmRequest, mdmsData);
 		}else {
 			// incase of anonymous user, citizen is mandatory
-			if (fsm.getCitizen() == null || StringUtils.isEmpty(fsm.getCitizen().getName())
-					|| StringUtils.isEmpty(fsm.getCitizen().getMobileNumber())) {
-				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,
-						"Applicant Name and mobile number mandatory");
+			if(fsm.getCitizen() == null || StringUtils.isEmpty(fsm.getCitizen().getName()) || StringUtils.isEmpty(fsm.getCitizen().getMobileNumber() )) {
+				throw new CustomException(FSMErrorConstants.INVALID_APPLICANT_ERROR,ERROR_APPLICANT_NAME_MOBILE_NUMBER_MANDATORY);
 			}
 			
 			if(!StringUtils.isEmpty(fsm.getSource())) {
@@ -127,28 +122,16 @@ public class FSMValidator {
 		validateNoOfTrips(fsmRequest, mdmsData);
 		validateSlum(fsmRequest, mdmsData);
 	}
-	
-		
 	/**
-	 * validate the vehicle capacity by using Capacity to check if vendor exists for the given vehicle capacity
+	 * validate the vehicleMakemodel in MDMS as well as existance of vehicle with given vehicleType in given tenant
 	 */
-	private void validateVehicleCapacity(FSMRequest fsmRequest) {
+	private void validateVehicleType(FSMRequest fsmRequest) {
 		FSM fsm = fsmRequest.getFsm();
 		
-		VendorSearchCriteria vendorSearchCriteria=new VendorSearchCriteria();
-		vendorSearchCriteria = VendorSearchCriteria.builder()
-				.vehicleCapacity(fsm.getVehicleCapacity())
-				.tenantId(fsm.getTenantId()).build();
-		
-		Vendor vendor = dsoService.getVendor(vendorSearchCriteria,fsmRequest.getRequestInfo());
-		/*
-		 * Vendor vendor = dsoService.getVendor(null, fsm.getTenantId(), null, null,
-		 * null,fsm.getVehicleCapacity(), fsmRequest.getRequestInfo());
-		 */
-		
-		if (vendor == null) {
-			throw new CustomException(FSMErrorConstants.NO_VEHICLE_VEHICLE_TYPE,
-					"DSO Does not exists in the ULB with vehicle of capacity " + fsm.getVehicleCapacity());
+		mdmsValidator.validateVehicleType(fsm.getVehicleType());
+		Vendor vendor = dsoService.getVendor(null, fsm.getTenantId(), null, null, fsm.getVehicleType(), fsmRequest.getRequestInfo());
+		if(vendor == null) {
+			throw new CustomException(FSMErrorConstants.NO_VEHICLE_VEHICLE_TYPE,"DSO Does not exists in the ULB with vehicle of vehicleType "+fsm.getVehicleType());
 		}
 	}
 
@@ -171,13 +154,13 @@ public class FSMValidator {
 
 		if (!requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN) && !criteria.tenantIdOnly()
 				&& criteria.getTenantId() == null)
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_TENANT_ID_MANDATORY_SEARCH);
 
 		if (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN) && !criteria.isEmpty()
 				&& !criteria.tenantIdOnly() && criteria.getTenantId() == null) 
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_TENANT_ID_MANDATORY_SEARCH);
 		if(criteria.getTenantId() == null)
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_TENANT_ID_MANDATORY_SEARCH);
 			
 		String allowedParamStr = null;
 
@@ -185,16 +168,10 @@ public class FSMValidator {
 			allowedParamStr = config.getAllowedCitizenSearchParameters();
 		else if (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE))
 			allowedParamStr = config.getAllowedEmployeeSearchParameters();
-		
-		else if (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.SYSTEM))
-			allowedParamStr = config.getAllowedEmployeeSearchParameters();
-		
 		else
-		{
-			
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH,
 					"The userType: " + requestInfo.getUserInfo().getType() + " does not have any search config");
-		}
+
 		if (StringUtils.isEmpty(allowedParamStr) && !criteria.isEmpty())
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "No search parameters are expected");
 		else {
@@ -223,7 +200,6 @@ public class FSMValidator {
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on limit is not allowed");
 
 		if (criteria.getApplicationNos() != null && !allowedParams.contains("applicationNos")) {
-			System.out.println("app..... " + criteria.getApplicationNos());
 			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationNo is not allowed");
 		}
 		if (criteria.getFromDate() != null && !allowedParams.contains("fromDate") && criteria.getToDate() != null
@@ -258,15 +234,15 @@ public class FSMValidator {
 		}
 
 		if (CollectionUtils.isEmpty(criteria.getApplicationStatus()) && !allowedParams.contains("applicationStatus")) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationStatus is not allowed");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_APPLICATION_STATUS_SEARCH_NOT_ALLOWED);
 		}
 
 		if (CollectionUtils.isEmpty(criteria.getLocality()) && !allowedParams.contains("locality")) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationStatus is not allowed");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_APPLICATION_STATUS_SEARCH_NOT_ALLOWED);
 		}
 
 		if (CollectionUtils.isEmpty(criteria.getOwnerIds()) && !allowedParams.contains("ownerIds")) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "Search on applicationStatus is not allowed");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_APPLICATION_STATUS_SEARCH_NOT_ALLOWED);
 		}
 
 	}
@@ -286,17 +262,11 @@ public class FSMValidator {
 			throw new CustomException(FSMErrorConstants.INVALID_ACTION," Workflow Action is mandatory!");
 		}
 		
-		if(fsmRequest.getFsm() !=null && !StringUtils.hasLength(fsmRequest.getFsm().getPaymentPreference())) {
-			throw new CustomException(FSMErrorConstants.INVALID_ACTION," Payment preference is mandatory!");
-		}
-		
 		validateUpdatableParams(fsmRequest, searchResult, mdmsData);
 		validateAllIds(searchResult, fsm);
 		
 		mdmsValidator.validateMdmsData(fsmRequest, mdmsData);
-		//validateVehicleType(fsmRequest);
-		validateVehicleCapacity(fsmRequest);
-		
+		validateVehicleType(fsmRequest);
 		if(!StringUtils.isEmpty(fsm.getSource())) {
 			mdmsValidator.validateApplicationChannel(fsm.getSource());
 			
@@ -309,8 +279,6 @@ public class FSMValidator {
 		validateSlum(fsmRequest, mdmsData);
 		validateNoOfTrips(fsmRequest, mdmsData);
 		validateTripAmount(fsmRequest, mdmsData);
-		
-		mdmsValidator.validatePaymentPreference(fsm.getPaymentPreference());
 
 	}
 	
@@ -346,14 +314,6 @@ public class FSMValidator {
 				});
 			}
 			
-			
-			if (listOfUpdatedParams.contains(FSMConstants.APPLICATION_STATUS)) {
-				listOfAllowedUpdatableParams.add(FSMConstants.APPLICATION_STATUS);
-			}
-			if (listOfUpdatedParams.contains(FSMConstants.NO_OF_TRIPS)) {
-				listOfAllowedUpdatableParams.add(FSMConstants.NO_OF_TRIPS);
-			}
-			
 			for(String updatedParam : listOfUpdatedParams) {
 				if (!contains(listOfAllowedUpdatableParams, updatedParam)) {
 					throw new CustomException(FSMErrorConstants.UPDATE_ERROR,
@@ -380,15 +340,12 @@ public class FSMValidator {
 	
 	private void validateTripAmount(FSMRequest fsmRequest, Object mdmsData) {
 		FSM fsm = fsmRequest.getFsm();
+
 		List<Map<String,Object>> tripAountAllowed = JsonPath.read(mdmsData, FSMConstants.FSM_TRIP_AMOUNT_OVERRIDE_ALLOWED);
-		Map<String, String> additionalDetails=null;
-		try {
 		
-			additionalDetails = fsm.getAdditionalDetails() != null ? (Map<String, String>) fsm.getAdditionalDetails()
-					: new HashMap<String, String>();
-		}catch (Exception e) {
-		log.info("format is wrong", e.getMessage());
-		}
+		
+		Map<String, String> additionalDetails = fsm.getAdditionalDetails() != null ? (Map<String,String>)fsm.getAdditionalDetails()
+				: new HashMap<String, String>();
 		if(!CollectionUtils.isEmpty(tripAountAllowed) &&  additionalDetails.get("tripAmount") == null   ) {
 			throw new CustomException(FSMErrorConstants.INVALID_TRIP_AMOUNT," tripAmount is invalid");
 		}else if(!CollectionUtils.isEmpty(tripAountAllowed)){
@@ -399,11 +356,6 @@ public class FSMValidator {
 			}
 		}
 	}
-	
-	/**
-	 * @param fsmRequest
-	 * @param mdmsData
-	 */
 	private void validateNoOfTrips(FSMRequest fsmRequest, Object mdmsData) {
 		FSM fsm = fsmRequest.getFsm();
 		Integer noOfTrips  = fsm.getNoOfTrips();
@@ -415,10 +367,6 @@ public class FSMValidator {
 			}
 		}
 	}
-	/**
-	 * @param fsmRequest
-	 * @param mdmsData
-	 */
 	private void validateSlum(FSMRequest fsmRequest, Object mdmsData) {
 		FSM fsm = fsmRequest.getFsm();
 		
@@ -481,7 +429,7 @@ public class FSMValidator {
 	
 	public void validateAudit(FSMAuditSearchCriteria criteria) {
 		if(criteria.getTenantId()==null) {
-			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
+			throw new CustomException(FSMErrorConstants.INVALID_SEARCH, ERROR_TENANT_ID_MANDATORY_SEARCH);
 		}
 		else {
 			 if(StringUtils.isEmpty(criteria.getApplicationNo()) && StringUtils.isEmpty(criteria.getId())) {
@@ -490,18 +438,13 @@ public class FSMValidator {
 		}
 	}
 	
-	/**
-	 * @param fsmRequest
-	 * @param mdmsData
-	 */
 	public void validateCheckList(FSMRequest fsmRequest, Object mdmsData) {
-		Map<String, String> errorMap = new HashMap<>();
 		FSM fsm = fsmRequest.getFsm();
 		Map additonalDetails = (Map)fsm.getAdditionalDetails();
 		List<Map<String,String>> requestCheckList = (List<Map<String, String>>) additonalDetails.get(FSMConstants.MDMS_CHECKLIST);
 		List<Map<String,Object>> mdmsCheckList = JsonPath.read(mdmsData, FSMConstants.REQ_CHECKLIST_PATH);
 		if(mdmsCheckList.size() > 0 && (requestCheckList == null || requestCheckList.size() ==0)) {
-			errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, " Mandatory checlist is not provided!");
+			throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, " Mandatory checlist is not provided!");
 		}
 		mdmsCheckList.forEach(mdmsClItem->{
 			Map<String,String> reqClItem = null;
@@ -515,37 +458,24 @@ public class FSMValidator {
 				List<String> mdmsClOptions =(List<String>) mdmsClItem.get("options");
 				if(((String) mdmsClItem.get("type")).equalsIgnoreCase(FSMConstants.CHECK_LIST_SINGLE_SELECT) ) {
 					if(reqOptions.length > 1) {
-						errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+ mdmsClItem.get("code")+" is SINGLE SELECT, cannot select multiple options.");
+						 throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+ mdmsClItem.get("code")+" is SINGLE SELECT, cannot select multiple options.");
 					}else if(!mdmsClOptions.contains(reqOptions[0])){
-						errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, " Value provided is not checklist options.");
+						 throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, " Value provided is not checklist options.");
 					}
 				}else if(((String) mdmsClItem.get("type")).equalsIgnoreCase(FSMConstants.CHECK_LIST_MULTI_SELECT)) {
 					for( int h=0;h<reqOptions.length;h++) {
 						if(!mdmsClOptions.contains(reqOptions[h])) {
-							errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+mdmsClItem.get("code")+" does not allow option "+reqOptions[h]);
+							 throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+mdmsClItem.get("code")+" does not allow option "+reqOptions[h]);
 						}
 					}
 					
-				}else if(((String) mdmsClItem.get("type")).equalsIgnoreCase(FSMConstants.CHECK_LIST_DROP_DOWN)) {
-					log.info("CHECK_LIST_DROP_DOWN ");
-					for( int h=0;h<reqOptions.length;h++) {
-						log.info("reqOptions :: "+reqOptions[h]);
-						if(!mdmsClOptions.contains(reqOptions[h])) {
-							errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, "Checklist "+mdmsClItem.get("code")+" does not allow option "+reqOptions[h]);
-						}
-					}
-					
-				}
-				else {
-					errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, " Value provided is not checklist options.");
+				}else {
+					throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, " Value provided is not checklist options.");
 				}
 			}else{
-				errorMap.put(FSMErrorConstants.INVALID_CHECKLIST, " Required CheckList "+mdmsClItem.get("code")+ " is not answered ");
+				throw new CustomException(FSMErrorConstants.INVALID_CHECKLIST, " Required CheckList "+mdmsClItem.get("code")+ " is not answered ");
 			}
 		});
-		
-		if (!errorMap.isEmpty())
-			throw new CustomException(errorMap);
 	}
 	
 

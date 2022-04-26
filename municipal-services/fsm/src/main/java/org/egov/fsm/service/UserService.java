@@ -47,6 +47,9 @@ public class UserService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	private static final String GET_LAST_MODIFIED_DATE = "lastModifiedDate";
+	private static final String GET_PWD_EXPIRY_DATE = "pwdExpiryDate";
+
 
 	public void manageApplicant(FSMRequest fsmRequest) {
 		FSM fsm = fsmRequest.getFsm();
@@ -61,7 +64,7 @@ public class UserService {
 
 				userDetailResponse = userExists(applicant, requestInfo);
 				
-				if (userDetailResponse != null || !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+				if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 					
 					if( userDetailResponse.getUser().size() > 0 ){
 						Boolean foundUser = Boolean.FALSE;
@@ -120,21 +123,6 @@ public class UserService {
 			applicant.setUserName(applicant.getMobileNumber());
 		}
 		applicant.setType(FSMConstants.CITIZEN);
-		UserDetailResponse userDetailResponse = userCall(new CreateUserRequest(requestInfo, applicant), uri);
-		log.debug("owner created --> " + userDetailResponse.getUser().get(0).getUuid());
-		return userDetailResponse;
-	}
-	
-	/**
-	 * update user gender for applicant
-	 * @param applicant
-	 * @param requestInfo
-	 * @return
-	 */
-	public UserDetailResponse updateApplicantsGender(User applicant, RequestInfo requestInfo) {
-		applicant.setActive(true);
-		StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserContextPath())
-				.append(config.getUserUpdateEndpoint());
 		UserDetailResponse userDetailResponse = userCall(new CreateUserRequest(requestInfo, applicant), uri);
 		log.debug("owner created --> " + userDetailResponse.getUser().get(0).getUuid());
 		return userDetailResponse;
@@ -226,8 +214,7 @@ public class UserService {
 		else if (uri.toString().contains(config.getUserCreateEndpoint()))
 			dobFormat = "dd/MM/yyyy";
 		try {
-//			System.out.println("user search url: " + uri + userRequest);
-			
+
 			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, userRequest);
 			parseResponse(responseMap, dobFormat);
 			UserDetailResponse userDetailResponse = mapper.convertValue(responseMap, UserDetailResponse.class);
@@ -250,12 +237,12 @@ public class UserService {
 		if (users != null) {
 			users.forEach(map -> {
 				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get("lastModifiedDate") != null)
-					map.put("lastModifiedDate", dateTolong((String) map.get("lastModifiedDate"), format1));
+				if ((String) map.get(GET_LAST_MODIFIED_DATE) != null)
+					map.put(GET_LAST_MODIFIED_DATE, dateTolong((String) map.get(GET_LAST_MODIFIED_DATE), format1));
 				if ((String) map.get("dob") != null)
 					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
-				if ((String) map.get("pwdExpiryDate") != null)
-					map.put("pwdExpiryDate", dateTolong((String) map.get("pwdExpiryDate"), format1));
+				if ((String) map.get(GET_PWD_EXPIRY_DATE) != null)
+					map.put(GET_PWD_EXPIRY_DATE, dateTolong((String) map.get(GET_PWD_EXPIRY_DATE), format1));
 			});
 		}
 	}
@@ -277,7 +264,10 @@ public class UserService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return d.getTime();
+		if(d != null)
+			return d.getTime();
+
+		return null;
 	}
 
 	/**

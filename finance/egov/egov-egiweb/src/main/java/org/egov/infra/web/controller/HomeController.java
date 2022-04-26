@@ -49,6 +49,8 @@
 package org.egov.infra.web.controller;
 
 import com.google.gson.GsonBuilder;
+
+import org.apache.log4j.Logger;
 import org.egov.infra.admin.common.entity.Favourites;
 import org.egov.infra.admin.common.service.FavouritesService;
 import org.egov.infra.admin.master.entity.User;
@@ -93,6 +95,7 @@ import static org.egov.infra.web.utils.WebUtils.setUserLocale;
 @RequestMapping(value = "/home")
 public class HomeController {
 
+	private static final Logger LOGGER = Logger.getLogger(HomeController.class);
     private static final String FEEDBACK_MSG_FORMAT = "%s\n\n%s\n%s";
     private static final String NON_EMPLOYE_PORTAL_HOME = "/portal/home";
 
@@ -147,7 +150,7 @@ public class HomeController {
     	
     	//  code change for parallel 
     	CurrentUser curuser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	System.out.println("************current user: "+curuser.getUsername());
+    	LOGGER.info("************current user: "+curuser.getUsername());
     	
     	//    	User user = userService.getCurrentUser();
     	User user =curuser.getUser();

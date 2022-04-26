@@ -12,7 +12,7 @@ import "./index.css";
 const styles = (theme) => ({
   webRoot: {
     flexGrow: 1,
-    width: "9em",
+    width: "10%",
     padding: "1%"
   },
   webRoot1: {
@@ -38,7 +38,6 @@ const styles = (theme) => ({
     justifyContent: "center",
     display: "flex",
     cursor: "pointer",
-    whiteSpace: "nowrap"
   },
   icon: {
     color: "#fe7a51",

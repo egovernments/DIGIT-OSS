@@ -82,7 +82,7 @@ public class LandBoundaryService {
 
 		List<String> boundaryObject = context.read(propertyIdToJsonPath.get(request.getLandInfo().getId()));
 
-		if (boundaryObject != null && CollectionUtils.isEmpty((boundaryObject)))
+		if (CollectionUtils.isEmpty((boundaryObject)))
 			throw new CustomException(LandConstants.BOUNDARY_MDMS_DATA_ERROR, "The boundary data was not found");
 
 		Boundary boundary = mapper.convertValue(boundaryObject.get(0), Boundary.class);

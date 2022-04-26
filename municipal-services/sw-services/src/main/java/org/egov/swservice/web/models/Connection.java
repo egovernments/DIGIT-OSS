@@ -143,10 +143,6 @@ public class Connection {
 	@JsonProperty("oldApplication")
 	private Boolean oldApplication = false;
 
-	@SafeHtml
-	@JsonProperty("channel")
-	private String channel = null;
-
 	public Connection id(String id) {
 		this.id = id;
 		return this;
@@ -605,21 +601,6 @@ public class Connection {
 		this.applicationType = applicationType;
 	}
 
-	public Connection channel(String channel) {
-		this.channel = channel;
-		return this;
-	}
-
-	@ApiModelProperty(readOnly = true, value = "")
-	@Valid
-	public String getChannel() {
-		return channel;
-	}
-
-	public void setChannel(String channel) {
-		this.channel = channel;
-	}
-
 	@Override
 	public boolean equals(java.lang.Object o) {
 		if (this == o) {
@@ -648,8 +629,7 @@ public class Connection {
 				&& Objects.equals(this.connectionHolders, connection.connectionHolders)
 				&& Objects.equals(this.applicationType, connection.applicationType)
 				&& Objects.equals(this.dateEffectiveFrom, connection.dateEffectiveFrom)
-				&& Objects.equals(this.oldApplication, connection.oldApplication)
-				&& Objects.equals(this.channel, connection.channel);
+				&& Objects.equals(this.oldApplication, connection.oldApplication);
 	}
 
 	@Override
@@ -657,7 +637,7 @@ public class Connection {
 		return Objects.hash(id, tenantId, propertyId, applicationNo, applicationStatus, status, connectionNo,
 				oldConnectionNo, documents, roadCuttingInfo, plumberInfo, roadType, roadCuttingArea, connectionExecutionDate,
 				connectionCategory, connectionType, additionalDetails, auditDetails, connectionHolders,
-				applicationType, dateEffectiveFrom, oldApplication, channel);
+				applicationType, dateEffectiveFrom, oldApplication);
 	}
 
 	@Override
@@ -687,7 +667,6 @@ public class Connection {
 		sb.append("    applicationType: ").append(toIndentedString(applicationType)).append("\n");
 		sb.append("	   dateEffectiveFrom: ").append(toIndentedString(dateEffectiveFrom)).append("\n");
 		sb.append("	   oldApplication: ").append(toIndentedString(oldApplication)).append("\n");
-		sb.append("	   channel: ").append(toIndentedString(channel)).append("\n");
 		sb.append("}");
 		return sb.toString();
 	}

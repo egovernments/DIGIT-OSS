@@ -13,7 +13,7 @@ import java.util.Map;
 @Slf4j
 public class BatchApplication {
 
-    public static void executeBatch(Long startTime, Long endTime) throws Exception {
+    public static void executeBatch(Long startTime, Long endTime) {
         ElasticsearchConnector elasticsearchConnector = new ElasticsearchConnector();
 
         JavaPairRDD<String, Map<String, Object>> esRDD = elasticsearchConnector.getTelemetryRecords(startTime, endTime);
@@ -24,7 +24,7 @@ public class BatchApplication {
 
         JavaPairRDD<Object, Iterable<Tuple2<String, Map<String, Object>>>> deviceGroup = esRDD.groupBy(new Function<Tuple2<String,Map<String,Object>>, Object>() {
             @Override
-            public Object call(Tuple2<String, Map<String, Object>> v1) throws Exception {
+            public Object call(Tuple2<String, Map<String, Object>> v1) {
                 return ( (Map<String, Object>) v1._2.get("context")).get("did");
             }
         });
@@ -33,8 +33,7 @@ public class BatchApplication {
 
         deviceGroup.foreach(new VoidFunction<Tuple2<Object, Iterable<Tuple2<String, Map<String, Object>>>>>() {
             @Override
-            public void call(Tuple2<Object, Iterable<Tuple2<String, Map<String, Object>>>> objectIterableTuple2)
-                    throws Exception {
+            public void call(Tuple2<Object, Iterable<Tuple2<String, Map<String, Object>>>> objectIterableTuple2) {
                 SessionProcessor.processRecords(objectIterableTuple2._2.iterator());
             }
         });

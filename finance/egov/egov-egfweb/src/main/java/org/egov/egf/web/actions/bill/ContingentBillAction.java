@@ -137,7 +137,7 @@ public class ContingentBillAction extends BaseBillAction {
         }
 
     }
-
+    
     private static final  String FORWARD = "Forward";
     private static final String ACCOUNT_DETAIL_TYPE_LIST = "accountDetailTypeList";
     private static final String BILL_SUB_TYPE_LIST = "billSubTypeList";
@@ -183,7 +183,7 @@ public class ContingentBillAction extends BaseBillAction {
     @Override
     public void prepare() {
         super.prepare();
-        System.out.println("*********** New ExpenseBill recieved - Prepare *********************");
+        LOGGER.info("*********** New ExpenseBill recieved - Prepare *********************");
         accountDetailTypeList = persistenceService.findAllBy("from Accountdetailtype where isactive=true order by name");
         addDropdownData(ACCOUNT_DETAIL_TYPE_LIST, accountDetailTypeList);
         addDropdownData(BILL_SUB_TYPE_LIST, getBillSubTypes());
@@ -264,7 +264,7 @@ public class ContingentBillAction extends BaseBillAction {
     @SkipValidation
     @Action(value = "/bill/contingentBill-newform")
     public String newform() {
-    	System.out.println("*********** New ExpenseBill recieved- newForm*********************");
+    	 LOGGER.info("*********** New ExpenseBill recieved- newForm*********************");
         List<AppConfigValues> cutOffDateconfigValue = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                 "DataEntryCutOffDate");
         Date date;
@@ -274,7 +274,7 @@ public class ContingentBillAction extends BaseBillAction {
                 date = df.parse(cutOffDateconfigValue.get(0).getValue());
                 cutOffDate = formatter.format(date);
             } catch (ParseException e) {
-
+            	LOGGER.error("Parse exception");
             }
         }
         reset();
@@ -360,7 +360,7 @@ public class ContingentBillAction extends BaseBillAction {
     public String create() {
         if (LOGGER.isInfoEnabled())
             LOGGER.info(billDetailsTableCreditFinal);
-        System.out.println("*********** ExpenseBill creation started*********************");
+        LOGGER.info("*********** ExpenseBill creation started*********************");
         try {
         	populateWorkflowBean();
             if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
@@ -404,7 +404,7 @@ public class ContingentBillAction extends BaseBillAction {
                     date = sdf.parse(cutOffDate);
                     cutOffDate1 = formatter1.format(date);
                 } catch (ParseException e) {
-
+                   LOGGER.error("Parse exception");
                 }
             }
             if (cutOffDate1 != null && voucherDate.compareTo(cutOffDate1) <= 0
@@ -514,10 +514,12 @@ public class ContingentBillAction extends BaseBillAction {
                  * voucherHeader.getVouchermis().setFunction(function); }
                  */
                 validateFields();
+                if(cbill!=null){
                 cbill = updateBill(cbill);
                 validateLedgerAndSubledger();
                 recreateCheckList(cbill);
                 forwardBill(cbill);
+                }
 
             } catch (final ValidationException e) {
                 LOGGER.error("Inside catch block" + e.getMessage());
@@ -538,10 +540,11 @@ public class ContingentBillAction extends BaseBillAction {
 
         EgBillregister cbill = null;
         cbill = (EgBillregister) persistenceService.find("from Cbill where id=?", billRegisterId);
-        if (cbill != null && cbill.getState() != null)
+        if(cbill!=null){
+        if ( cbill.getState() != null)
             if (!validateOwner(cbill.getState()))
                 throw new ApplicationRuntimeException("Invalid Aceess");
-        if (parameters.get(ACTION_NAME)[0].contains("reject"))
+        if (parameters.get(ACTION_NAME)[0].contains("reject") )
             cbill.getCreatedBy();
         // billRegisterWorkflowService.transition(parameters.get(ACTION_NAME)[0]+"|"+userId, cbill,parameters.get("comments")[0]);
         cbill.transition().end().withOwner(getPosition()).withComments(parameters.get("comments")[0]);
@@ -557,6 +560,7 @@ public class ContingentBillAction extends BaseBillAction {
         persistenceService.persist(cbill);
         persistenceService.getSession().flush();
         addActionMessage(getText("cbill.cancellation.succesful"));
+        }
     }
 
     private void removeEmptyRows() {
@@ -588,6 +592,7 @@ public class ContingentBillAction extends BaseBillAction {
                 else if (vd.getSubledgerCode() == null || vd.getSubledgerCode().equals(""))
                     trash.add(vd);
         for (final VoucherDetails vd : trash)
+        	if(billDetailsTableSubledger!=null)
             billDetailsTableSubledger.remove(vd);
 
     }

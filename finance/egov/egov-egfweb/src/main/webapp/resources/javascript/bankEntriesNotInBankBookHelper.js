@@ -209,9 +209,7 @@ function updateBENIBBTableIndex() {
 }
 
 function setValue(obj) {
-	console.log("inside fun");
 	if (obj.checked) {
-		console.log("true");
 		obj.value = true;
 	} else {
 		obj.value = false;

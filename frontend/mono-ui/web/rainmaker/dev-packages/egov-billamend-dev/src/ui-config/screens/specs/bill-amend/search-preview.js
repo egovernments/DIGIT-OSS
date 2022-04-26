@@ -42,12 +42,14 @@ export const downloadPrintContainer = (
     let ptMutationCertificateDownloadObject = {
         label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
         link: () => {
+            console.log("clicked");
         },
         leftIcon: "book"
     };
     let ptMutationCertificatePrintObject = {
         label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
         link: () => {
+            console.log("clicked");
         },
         leftIcon: "book"
     };

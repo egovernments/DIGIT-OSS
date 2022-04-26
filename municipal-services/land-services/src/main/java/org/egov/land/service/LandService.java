@@ -83,9 +83,6 @@ public class LandService {
 		landValidator.validateSearch(requestInfo, criteria);
 		if (criteria.getMobileNumber() != null) {
 			landInfos = getLandFromMobileNumber(criteria, requestInfo);
-			// With given mobile number if no record exists then return empty response
-			if (landInfos.isEmpty())
-	                    return Collections.emptyList();
 			List<String> landIds = new ArrayList<String>();
 			for (LandInfo li : landInfos) {
 				landIds.add(li.getId());
@@ -114,7 +111,6 @@ public class LandService {
 			for(int i=0; i<userDetailResponse.getUser().size();i++){
 				ids.add(userDetailResponse.getUser().get(i).getUuid());
 			}
-			System.out.println(ids);
 			criteria.setUserIds(ids);
 		}
 

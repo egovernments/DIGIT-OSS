@@ -1,9 +1,10 @@
+import React from "react";
+import get from "lodash/get";
+import { sortByEpoch, getEpochForDate } from "../../utils";
+import { generateSingleBill } from "../../utils/receiptPdf";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
-import React from "react";
-import { getEpochForDate, sortByEpoch } from "../../utils";
-import { billDownload } from "../billSearchResources/searchResults";
+import { download, downloadBill } from "egov-common/ui-utils/commons";
 
 
 const getConsumerDetail = propertyResponse => {
@@ -92,19 +93,19 @@ export const searchResults = {
   props: {
     columns: [
       {
-        labelKey: "ABG_COMMON_TABLE_COL_BILL_NO",
-        labelName: "Bill No.",
+        labelKey:"ABG_COMMON_TABLE_COL_BILL_NO",
+        labelName:"Bill No.",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) => (
-            <a href="javascript:void(0)" onClick={() => billDownload(tableMeta.rowData[1], tableMeta.rowData[5], tableMeta.rowData[7], tableMeta.rowData[6], tableMeta.rowData[8])}>{value}</a>
+              <a href="javascript:void(0)" onClick={() => downloadBill(tableMeta.rowData[1], tableMeta.rowData[5], tableMeta.rowData[7], tableMeta.rowData[6])}>{value}</a>
           )
         }
-      },
-      { labelName: "Consumer ID", labelKey: "ABG_COMMON_TABLE_COL_CONSUMER_ID" },
-      { labelName: "Owner Name", labelKey: "ABG_COMMON_TABLE_COL_OWN_NAME" },
-      { labelName: "Bill Date", labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE" },
-      { labelName: "Status", labelKey: "ABG_COMMON_TABLE_COL_STATUS" },
+      },  
+      {labelName: "Consumer ID", labelKey: "ABG_COMMON_TABLE_COL_CONSUMER_ID"},
+      {labelName: "Owner Name", labelKey: "ABG_COMMON_TABLE_COL_OWN_NAME"},
+      {labelName: "Bill Date", labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE"},
+      {labelName: "Status", labelKey: "ABG_COMMON_TABLE_COL_STATUS"},
       {
         labelName: "Tenant Id",
         labelKey: "TENANT_ID",
@@ -125,17 +126,10 @@ export const searchResults = {
         options: {
           display: false
         }
-      },
-      {
-        labelKey: "BUSINESS_SERVICE",
-        labelName: "Business Service",
-        options: {
-          display: false
-        }
-      },
-    ],
-    title: { labelName: "Search Results for Group Bills", labelKey: "BILL_GENIE_GROUP_SEARCH_HEADER" },
-    rows: "",
+      }
+    ], 
+    title: {labelName: "Search Results for Group Bills", labelKey: "BILL_GENIE_GROUP_SEARCH_HEADER"}, 
+    rows: "", 
     options: {
       filter: false,
       download: false,

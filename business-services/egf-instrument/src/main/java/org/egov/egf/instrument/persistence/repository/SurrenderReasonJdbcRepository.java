@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SurrenderReasonJdbcRepository extends JdbcRepository {
     private static final Logger LOG = LoggerFactory.getLogger(SurrenderReasonJdbcRepository.class);
+    private static final String AND=" and ";
 
     static {
         LOG.debug("init surrenderReason");
@@ -77,31 +78,31 @@ public class SurrenderReasonJdbcRepository extends JdbcRepository {
         // implement jdbc specfic search
         if (surrenderReasonSearchEntity.getTenantId() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(AND);
             params.append("tenantId =:tenantId");
             paramValues.put("tenantId", surrenderReasonSearchEntity.getTenantId());
         }
         if (surrenderReasonSearchEntity.getId() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(AND);
             params.append("id =:id");
             paramValues.put("id", surrenderReasonSearchEntity.getId());
         }
         if (surrenderReasonSearchEntity.getName() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(AND);
             params.append("name =:name");
             paramValues.put("name", surrenderReasonSearchEntity.getName());
         }
         if (surrenderReasonSearchEntity.getDescription() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(AND);
             params.append("description =:description");
             paramValues.put("description", surrenderReasonSearchEntity.getDescription());
         }
         if (surrenderReasonSearchEntity.getIds() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(AND);
             params.append("id in (:ids)");
             paramValues.put("ids", surrenderReasonSearchEntity.getIds());
         }

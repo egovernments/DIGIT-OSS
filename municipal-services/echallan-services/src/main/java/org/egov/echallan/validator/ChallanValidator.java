@@ -34,6 +34,7 @@ public class ChallanValidator {
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
 
+	private static final String ERROR_USER_DETAILS_NOT_MATCHING = "User Details not matching with the Search result";
 	
 	public void validateFields(ChallanRequest request, Object mdmsData) {
 		Challan challan = request.getChallan();
@@ -67,12 +68,8 @@ public class ChallanValidator {
             errorMap.put("NULL_Fromdate", " From date cannot be null");
 		if (challan.getTaxPeriodTo() == null)
             errorMap.put("NULL_Todate", " To date cannot be null");
-
-		/*This valication will be handled at Zuul level. If a employee doesn't have access to that tenant the
-		create API wont be called
-
 		if(!challan.getTenantId().equalsIgnoreCase(request.getRequestInfo().getUserInfo().getTenantId()))
-        	 errorMap.put("Invalid Tenant", "Invalid tenant id");*/
+        	 errorMap.put("Invalid Tenant", "Invalid tenant id");
 
 		Boolean validFinancialYear = false;
 		if(challan.getTaxPeriodTo() != null && challan.getTaxPeriodFrom() != null){
@@ -136,11 +133,11 @@ public class ChallanValidator {
 		if(!challan.getAddress().getId().equalsIgnoreCase(searchchallan.getAddress().getId()))
 			errorMap.put("INVALID_UPDATE_REQ_NOTMATCHED_ADDRESS", "Address is not matching with the Search result");
 		if(!challan.getCitizen().getUuid().equalsIgnoreCase(searchchallan.getCitizen().getUuid()))
-			errorMap.put("INVALID_UPDATE_REQ_NOTMATCHED_ADDRESS", "User Details not matching with the Search result");
+			errorMap.put("INVALID_UPDATE_REQ_NOTMATCHED_ADDRESS", ERROR_USER_DETAILS_NOT_MATCHING);
 		if(!challan.getCitizen().getName().equalsIgnoreCase(searchchallan.getCitizen().getName()))
-			errorMap.put("INVALID_UPDATE_REQ_NOTMATCHED_NAME", "User Details not matching with the Search result");
+			errorMap.put("INVALID_UPDATE_REQ_NOTMATCHED_NAME", ERROR_USER_DETAILS_NOT_MATCHING);
 		if(!challan.getCitizen().getMobileNumber().equalsIgnoreCase(searchchallan.getCitizen().getMobileNumber()))
-			errorMap.put("INVALID_UPDATE_REQ_NOTMATCHED_MOBILENO", "User Details not matching with the Search result");
+			errorMap.put("INVALID_UPDATE_REQ_NOTMATCHED_MOBILENO", ERROR_USER_DETAILS_NOT_MATCHING);
 		if(searchchallan.getApplicationStatus()!=StatusEnum.ACTIVE)
 			errorMap.put("INVALID_UPDATE_REQ_CHALLAN_INACTIVE", "Challan cannot be updated/cancelled");
 		if(!challan.getTenantId().equalsIgnoreCase(request.getRequestInfo().getUserInfo().getTenantId()))

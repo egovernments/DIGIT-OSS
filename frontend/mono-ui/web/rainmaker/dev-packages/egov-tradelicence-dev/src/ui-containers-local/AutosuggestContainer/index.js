@@ -140,6 +140,7 @@ const mapStateToProps = (state, ownprops) => {
   value = value
     ? value
     : get(state.screenConfiguration.preparedFinalObject, jsonPath);
+
   return { value, jsonPath, suggestions, localizationLabels, locale };
 };
 

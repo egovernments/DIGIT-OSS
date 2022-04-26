@@ -66,6 +66,7 @@ import {
       dispatch(prepareFinalObject("applyScreenMdmsData.BillingService.BusinessService",get(payload.MdmsRes ,"BillingService.BusinessService")));
       dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig" , get(payload.MdmsRes ,"common-masters.uiCommonPay")))
       } catch (e) {
+      console.log(e);
       
     }
   };

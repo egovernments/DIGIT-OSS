@@ -8,7 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.dcr.helper.ErrorDetail;
 import org.egov.edcr.contract.ComparisonDetail;
 import org.egov.edcr.contract.ComparisonRequest;
@@ -29,312 +30,316 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OcComparisonService {
-    private static final Logger LOG = Logger.getLogger(OcComparisonService.class);
-    
-    public static final String FILE_DOWNLOAD_URL = "%s/edcr/rest/dcr/downloadfile";
 
-    @Autowired
-    private CustomImplProvider specificRuleService;
-    @Autowired
-    private EdcrApplicationDetailService applicationDetailService;
-    @Autowired
-    private OcComparisonDetailService ocComparisonDetailService;
-    @Autowired
-    private FileStoreService fileStoreService;
+	private static final String AMENDMENT_SERVICE = "amendmentService";
 
-    public List<ErrorDetail> validateEdcrMandatoryFields(final ComparisonRequest comparisonRequest) {
-        List<ErrorDetail> errors = new ArrayList<>();
-        if (StringUtils.isBlank(comparisonRequest.getEdcrNumber())) {
-            errors.add(new ErrorDetail("BPA-21", "eDcr number is missing"));
-        }
+	private static final String NO_BEAN_DEFINED_FOR_THE_RULE = "No Bean Defined for the Rule ";
 
-        if (StringUtils.isBlank(comparisonRequest.getOcdcrNumber())) {
-            errors.add(new ErrorDetail("BPA-22", "OcDcr number is missing"));
-        }
+	private static final String OC_COMPARISON_REPORT_SERVICE = "OcComparisonReportService";
 
-        if (StringUtils.isBlank(comparisonRequest.getTenantId())) {
-            errors.add(new ErrorDetail("BPA-29", "tenantId is missing"));
-        }
+	private static final Logger LOG = LogManager.getLogger(OcComparisonService.class);
 
-        return errors;
-    }
+	public static final String FILE_DOWNLOAD_URL = "%s/edcr/rest/dcr/downloadfile";
 
-    public ComparisonDetail process(ComparisonRequest comparisonRequest) {
-        String ocdcrNo = comparisonRequest.getOcdcrNumber();
-        String dcrNo = comparisonRequest.getEdcrNumber();
-        String tenantId = comparisonRequest.getTenantId();
-        ComparisonDetail comparisonDetail = new ComparisonDetail();
+	@Autowired
+	private CustomImplProvider specificRuleService;
+	@Autowired
+	private EdcrApplicationDetailService applicationDetailService;
+	@Autowired
+	private OcComparisonDetailService ocComparisonDetailService;
+	@Autowired
+	private FileStoreService fileStoreService;
 
-        OcComparisonDetail ocComparisonDetail = ocComparisonDetailService.findByOcDcrNoAndDcrNumberAndTenant(ocdcrNo, dcrNo,
-                tenantId);
+	public List<ErrorDetail> validateEdcrMandatoryFields(final ComparisonRequest comparisonRequest) {
+		List<ErrorDetail> errors = new ArrayList<>();
+		if (StringUtils.isBlank(comparisonRequest.getEdcrNumber())) {
+			errors.add(new ErrorDetail("BPA-21", "eDcr number is missing"));
+		}
 
-        if (ocComparisonDetail != null) {
-            comparisonDetail.setEdcrNumber(ocComparisonDetail.getDcrNumber());
-            comparisonDetail.setOcdcrNumber(ocComparisonDetail.getOcdcrNumber());
-            comparisonDetail
-                    .setComparisonReport(format(getFileDownloadUrl(ocComparisonDetail.getOcComparisonReport().getFileStoreId(),
-                            ApplicationThreadLocals.getTenantID())));
-            comparisonDetail.setTenantId(ocComparisonDetail.getTenantId());
-            comparisonDetail.setStatus(ocComparisonDetail.getStatus());
-        } else {
-            EdcrApplicationDetail ocDcr = applicationDetailService.findByDcrNumberAndTPUserTenant(ocdcrNo, tenantId);
-            EdcrApplicationDetail permitDcr = applicationDetailService.findByDcrNumberAndTPUserTenant(dcrNo, tenantId);
+		if (StringUtils.isBlank(comparisonRequest.getOcdcrNumber())) {
+			errors.add(new ErrorDetail("BPA-22", "OcDcr number is missing"));
+		}
 
-            List<ErrorDetail> errors = validate(ocdcrNo, dcrNo, ocDcr, permitDcr);
+		if (StringUtils.isBlank(comparisonRequest.getTenantId())) {
+			errors.add(new ErrorDetail("BPA-29", "tenantId is missing"));
+		}
 
-            if (!errors.isEmpty()) {
-                comparisonDetail.setErrors(errors);
-                return comparisonDetail;
-            }
+		return errors;
+	}
 
-            EdcrApplication dcrApplication = ocDcr.getApplication();
+	@Transactional
+	public ComparisonDetail process(ComparisonRequest comparisonRequest) {
+		String ocdcrNo = comparisonRequest.getOcdcrNumber();
+		String dcrNo = comparisonRequest.getEdcrNumber();
+		String tenantId = comparisonRequest.getTenantId();
+		ComparisonDetail comparisonDetail = new ComparisonDetail();
 
-            AmendmentService repo = (AmendmentService) specificRuleService.find("amendmentService");
-            Amendment amd = repo.getAmendments();
+		OcComparisonDetail ocComparisonDetail = ocComparisonDetailService.findByOcDcrNoAndDcrNumberAndTenant(ocdcrNo,
+				dcrNo, tenantId);
 
-            Date applicationDate = dcrApplication.getApplicationDate();
+		if (ocComparisonDetail != null) {
+			comparisonDetail.setEdcrNumber(ocComparisonDetail.getDcrNumber());
+			comparisonDetail.setOcdcrNumber(ocComparisonDetail.getOcdcrNumber());
+			comparisonDetail.setComparisonReport(
+					format(getFileDownloadUrl(ocComparisonDetail.getOcComparisonReport().getFileStoreId(),
+							ApplicationThreadLocals.getTenantID())));
+			comparisonDetail.setTenantId(ocComparisonDetail.getTenantId());
+			comparisonDetail.setStatus(ocComparisonDetail.getStatus());
+		} else {
+			EdcrApplicationDetail ocDcr = applicationDetailService.findByDcrNumberAndTPUserTenant(ocdcrNo, tenantId);
+			EdcrApplicationDetail permitDcr = applicationDetailService.findByDcrNumberAndTPUserTenant(dcrNo, tenantId);
 
-            OcComparisonDetail ocComparisonDetailE = new OcComparisonDetail();
-            ocComparisonDetailE.setOcdcrNumber(ocdcrNo);
-            ocComparisonDetailE.setDcrNumber(dcrNo);
-            ocComparisonDetailE.setTenantId(tenantId);
+			List<ErrorDetail> errors = validate(ocdcrNo, dcrNo, ocDcr, permitDcr);
 
-            InputStream ocreportStream = generateOcComparisonReport(applicationDate, amd, ocDcr, permitDcr, ocComparisonDetailE);
+			if (!errors.isEmpty()) {
+				comparisonDetail.setErrors(errors);
+				return comparisonDetail;
+			}
 
-            saveComparisonReport(ocComparisonDetailE, ocreportStream);
-            // build object for response
-            comparisonDetail.setEdcrNumber(ocComparisonDetailE.getDcrNumber());
-            comparisonDetail.setOcdcrNumber(ocComparisonDetailE.getOcdcrNumber());
-            comparisonDetail
-                    .setComparisonReport(format(getFileDownloadUrl(ocComparisonDetailE.getOcComparisonReport().getFileStoreId(),
-                            ApplicationThreadLocals.getTenantID())));
-            comparisonDetail.setStatus(ocComparisonDetailE.getStatus());
-            comparisonDetail.setTenantId(ocComparisonDetailE.getTenantId());
-        }
+			EdcrApplication dcrApplication = ocDcr.getApplication();
 
-        return comparisonDetail;
-    }
+			AmendmentService repo = (AmendmentService) specificRuleService.find(AMENDMENT_SERVICE);
+			Amendment amd = repo.getAmendments();
 
-    public OcComparisonDetail processCombined(OcComparisonDetail comparisonDetail, EdcrApplicationDetail ocDcr) {
+			Date applicationDate = dcrApplication.getApplicationDate();
 
-        EdcrApplication dcrApplication = ocDcr.getApplication();
+			OcComparisonDetail ocComparisonDetailE = new OcComparisonDetail();
+			ocComparisonDetailE.setOcdcrNumber(ocdcrNo);
+			ocComparisonDetailE.setDcrNumber(dcrNo);
+			ocComparisonDetailE.setTenantId(tenantId);
 
-        AmendmentService repo = (AmendmentService) specificRuleService.find("amendmentService");
-        Amendment amd = repo.getAmendments();
+			InputStream ocreportStream = generateOcComparisonReport(applicationDate, amd, ocDcr, permitDcr,
+					ocComparisonDetailE);
 
-        Date applicationDate = dcrApplication.getApplicationDate();
+			saveComparisonReport(ocComparisonDetailE, ocreportStream);
+			// build object for response
+			comparisonDetail.setEdcrNumber(ocComparisonDetailE.getDcrNumber());
+			comparisonDetail.setOcdcrNumber(ocComparisonDetailE.getOcdcrNumber());
+			comparisonDetail.setComparisonReport(
+					format(getFileDownloadUrl(ocComparisonDetailE.getOcComparisonReport().getFileStoreId(),
+							ApplicationThreadLocals.getTenantID())));
+			comparisonDetail.setStatus(ocComparisonDetailE.getStatus());
+			comparisonDetail.setTenantId(ocComparisonDetailE.getTenantId());
+		}
 
-        InputStream ocreportStream = generatePreOcComparisonReport(applicationDate, amd, ocDcr, comparisonDetail.getPermitDcr(),
-                comparisonDetail);
+		return comparisonDetail;
+	}
 
-        comparisonDetail.setOutput(ocreportStream);
+	public OcComparisonDetail processCombined(OcComparisonDetail comparisonDetail, EdcrApplicationDetail ocDcr) {
 
-        return comparisonDetail;
-    }
-    
-    public OcComparisonDetail processCombinedStatus(ComparisonRequest comparisonRequest, EdcrApplicationDetail ocDcr) {
-        String ocdcrNo = comparisonRequest.getOcdcrNumber();
-        String dcrNo = comparisonRequest.getEdcrNumber();
-        String tenantId = comparisonRequest.getTenantId();
+		EdcrApplication dcrApplication = ocDcr.getApplication();
 
-        EdcrApplicationDetail permitDcr = applicationDetailService.findByDcrNumberAndTPUserTenant(dcrNo, tenantId);
+		AmendmentService repo = (AmendmentService) specificRuleService.find(AMENDMENT_SERVICE);
+		Amendment amd = repo.getAmendments();
 
-        EdcrApplication dcrApplication = ocDcr.getApplication();
+		Date applicationDate = dcrApplication.getApplicationDate();
 
-        AmendmentService repo = (AmendmentService) specificRuleService.find("amendmentService");
-        Amendment amd = repo.getAmendments();
+		InputStream ocreportStream = generatePreOcComparisonReport(applicationDate, amd, ocDcr,
+				comparisonDetail.getPermitDcr(), comparisonDetail);
 
-        Date applicationDate = dcrApplication.getApplicationDate();
+		comparisonDetail.setOutput(ocreportStream);
 
-        OcComparisonDetail ocComparisonDetailE = new OcComparisonDetail();
-        ocComparisonDetailE.setOcdcrNumber(ocdcrNo);
-        ocComparisonDetailE.setDcrNumber(dcrNo);
-        ocComparisonDetailE.setTenantId(tenantId);
-        ocComparisonDetailE.setPermitDcr(permitDcr);
+		return comparisonDetail;
+	}
 
-        getComparisonReportStatus(applicationDate, amd, ocDcr, permitDcr, ocComparisonDetailE);
+	public OcComparisonDetail processCombinedStatus(ComparisonRequest comparisonRequest, EdcrApplicationDetail ocDcr) {
+		String ocdcrNo = comparisonRequest.getOcdcrNumber();
+		String dcrNo = comparisonRequest.getEdcrNumber();
+		String tenantId = comparisonRequest.getTenantId();
 
-        return ocComparisonDetailE;
-    }
-    
-    private List<ErrorDetail> validate(String ocdrNo, String dcrNo, EdcrApplicationDetail ocDcr,
-            EdcrApplicationDetail permitDcr) {
-        List<ErrorDetail> errors = new ArrayList<>();
-        if (ocDcr == null) {
-            errors.add(new ErrorDetail("BPA-23", "No record found with ocdcr number " + ocdrNo));
-        }
+		EdcrApplicationDetail permitDcr = applicationDetailService.findByDcrNumberAndTPUserTenant(dcrNo, tenantId);
 
-        if (permitDcr == null) {
-            errors.add(new ErrorDetail("BPA-24", "No record found with dcr number " + dcrNo));
-        }
+		EdcrApplication dcrApplication = ocDcr.getApplication();
 
-        if (ocDcr != null && ocDcr.getApplication() != null && StringUtils.isBlank(ocDcr.getApplication().getServiceType())) {
-            errors.add(new ErrorDetail("BPA-25", "No service type found for ocdcr number " + ocdrNo));
-        }
+		AmendmentService repo = (AmendmentService) specificRuleService.find(AMENDMENT_SERVICE);
+		Amendment amd = repo.getAmendments();
 
-        if (permitDcr != null && permitDcr.getApplication() != null
-                && StringUtils.isBlank(permitDcr.getApplication().getServiceType())) {
-            errors.add(new ErrorDetail("BPA-26", "No service type found for dcr number " + dcrNo));
-        }
+		Date applicationDate = dcrApplication.getApplicationDate();
 
-        if (ocDcr != null && ocDcr.getApplication() != null
-                && permitDcr != null && permitDcr.getApplication() != null
-                && ocDcr.getApplication().getApplicationType().getApplicationType()
-                        .equalsIgnoreCase(permitDcr.getApplication().getApplicationType().getApplicationTypeVal())) {
-            errors.add(new ErrorDetail("BPA-27", "Application types are same"));
-        }
+		OcComparisonDetail ocComparisonDetailE = new OcComparisonDetail();
+		ocComparisonDetailE.setOcdcrNumber(ocdcrNo);
+		ocComparisonDetailE.setDcrNumber(dcrNo);
+		ocComparisonDetailE.setTenantId(tenantId);
+		ocComparisonDetailE.setPermitDcr(permitDcr);
 
-        if (ocDcr != null && ocDcr.getApplication() != null
-                && permitDcr != null && permitDcr.getApplication() != null
-                && !ocDcr.getApplication().getServiceType().equalsIgnoreCase(permitDcr.getApplication().getServiceType())) {
-            errors.add(new ErrorDetail("BPA-28", "Service types are not mathing"));
-        }
-        return errors;
-    }
+		getComparisonReportStatus(applicationDate, amd, ocDcr, permitDcr, ocComparisonDetailE);
 
-    private InputStream generateOcComparisonReport(Date applicationDate, Amendment amd, EdcrApplicationDetail ocDcr,
-            EdcrApplicationDetail permitDcr, OcComparisonDetail detail) {
+		return ocComparisonDetailE;
+	}
 
-        String beanName = "OcComparisonReportService";
-        OcComparisonReportService service = null;
-        int index = -1;
-        AmendmentDetails[] amdArray = null;
-        InputStream reportStream = null;
-        int length = amd.getDetails().size();
-        if (!amd.getDetails().isEmpty()) {
-            index = amd.getIndex(applicationDate);
-            amdArray = new AmendmentDetails[amd.getDetails().size()];
-            amd.getDetails().toArray(amdArray);
-        }
+	private List<ErrorDetail> validate(String ocdrNo, String dcrNo, EdcrApplicationDetail ocDcr,
+			EdcrApplicationDetail permitDcr) {
+		List<ErrorDetail> errors = new ArrayList<>();
+		if (ocDcr == null) {
+			errors.add(new ErrorDetail("BPA-23", "No record found with ocdcr number " + ocdrNo));
+		}
 
-        try {
-            beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+		if (permitDcr == null) {
+			errors.add(new ErrorDetail("BPA-24", "No record found with dcr number " + dcrNo));
+		}
 
-            if (amd.getDetails().isEmpty() || index == -1)
-                service = (OcComparisonReportService) specificRuleService.find(beanName);
-            else if (index >= 0) {
-                for (int i = index; i < length; i++) {
+		if (ocDcr != null && ocDcr.getApplication() != null
+				&& StringUtils.isBlank(ocDcr.getApplication().getServiceType())) {
+			errors.add(new ErrorDetail("BPA-25", "No service type found for ocdcr number " + ocdrNo));
+		}
 
-                    service = (OcComparisonReportService) specificRuleService
-                            .find(beanName + "_" + amdArray[i].getDateOfBylawString());
-                    if (service != null)
-                        break;
-                }
-            }
-            if (service == null) {
-                service = (OcComparisonReportService) specificRuleService.find(beanName);
-            }
+		if (permitDcr != null && permitDcr.getApplication() != null
+				&& StringUtils.isBlank(permitDcr.getApplication().getServiceType())) {
+			errors.add(new ErrorDetail("BPA-26", "No service type found for dcr number " + dcrNo));
+		}
 
-            reportStream = service.generateOcComparisonReport(ocDcr, permitDcr, detail);
+		if (ocDcr != null && ocDcr.getApplication() != null && permitDcr != null && permitDcr.getApplication() != null
+				&& ocDcr.getApplication().getApplicationType().getApplicationType()
+						.equalsIgnoreCase(permitDcr.getApplication().getApplicationType().getApplicationTypeVal())) {
+			errors.add(new ErrorDetail("BPA-27", "Application types are same"));
+		}
 
-        } catch (BeansException e) {
-            LOG.error("No Bean Defined for the Rule " + beanName);
-        }
+		if (ocDcr != null && ocDcr.getApplication() != null && permitDcr != null && permitDcr.getApplication() != null
+				&& !ocDcr.getApplication().getServiceType()
+						.equalsIgnoreCase(permitDcr.getApplication().getServiceType())) {
+			errors.add(new ErrorDetail("BPA-28", "Service types are not mathing"));
+		}
+		return errors;
+	}
 
-        return reportStream;
-    }
+	private InputStream generateOcComparisonReport(Date applicationDate, Amendment amd, EdcrApplicationDetail ocDcr,
+			EdcrApplicationDetail permitDcr, OcComparisonDetail detail) {
 
-    private InputStream generatePreOcComparisonReport(Date applicationDate, Amendment amd, EdcrApplicationDetail ocDcr,
-            EdcrApplicationDetail permitDcr, OcComparisonDetail detail) {
+		String beanName = OC_COMPARISON_REPORT_SERVICE;
+		OcComparisonReportService service = null;
+		int index = -1;
+		AmendmentDetails[] amdArray = null;
+		InputStream reportStream = null;
+		int length = amd.getDetails().size();
+		if (!amd.getDetails().isEmpty()) {
+			index = amd.getIndex(applicationDate);
+			amdArray = new AmendmentDetails[amd.getDetails().size()];
+			amd.getDetails().toArray(amdArray);
+		}
 
-        String beanName = "OcComparisonReportService";
-        OcComparisonReportService service = null;
-        int index = -1;
-        AmendmentDetails[] amdArray = null;
-        InputStream reportStream = null;
-        int length = amd.getDetails().size();
-        if (!amd.getDetails().isEmpty()) {
-            index = amd.getIndex(applicationDate);
-            amdArray = new AmendmentDetails[amd.getDetails().size()];
-            amd.getDetails().toArray(amdArray);
-        }
+		try {
+			beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
 
-        try {
-            beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+			if (amd.getDetails().isEmpty() || index == -1)
+				service = (OcComparisonReportService) specificRuleService.find(beanName);
+			else if (index >= 0 && amdArray != null) {
+				for (int i = index; i < length; i++) {
 
-            if (amd.getDetails().isEmpty() || index == -1)
-                service = (OcComparisonReportService) specificRuleService.find(beanName);
-            else if (index >= 0) {
-                for (int i = index; i < length; i++) {
+					service = (OcComparisonReportService) specificRuleService
+							.find(beanName + "_" + amdArray[i].getDateOfBylawString());
+					if (service != null)
+						break;
+				}
+			}
+			if (service == null) {
+				service = (OcComparisonReportService) specificRuleService.find(beanName);
+			}
 
-                    service = (OcComparisonReportService) specificRuleService
-                            .find(beanName + "_" + amdArray[i].getDateOfBylawString());
-                    if (service != null)
-                        break;
-                }
-            }
-            if (service == null) {
-                service = (OcComparisonReportService) specificRuleService.find(beanName);
-            }
+			reportStream = service.generateOcComparisonReport(ocDcr, permitDcr, detail);
 
-            reportStream = service.generatePreOcComparisonReport(ocDcr, permitDcr, detail);
+		} catch (BeansException e) {
+			LOG.error(NO_BEAN_DEFINED_FOR_THE_RULE + beanName);
+		}
 
-        } catch (BeansException e) {
-            LOG.error("No Bean Defined for the Rule " + beanName);
-        }
+		return reportStream;
+	}
 
-        return reportStream;
-    }
+	private InputStream generatePreOcComparisonReport(Date applicationDate, Amendment amd, EdcrApplicationDetail ocDcr,
+			EdcrApplicationDetail permitDcr, OcComparisonDetail detail) {
 
-    private OcComparisonDetail getComparisonReportStatus(Date applicationDate, Amendment amd, EdcrApplicationDetail ocDcr,
-            EdcrApplicationDetail permitDcr, OcComparisonDetail detail) {
+		String beanName = OC_COMPARISON_REPORT_SERVICE;
+		OcComparisonReportService service = null;
+		int index = -1;
+		AmendmentDetails[] amdArray = null;
+		InputStream reportStream = null;
+		int length = amd.getDetails().size();
+		if (!amd.getDetails().isEmpty()) {
+			index = amd.getIndex(applicationDate);
+			amdArray = new AmendmentDetails[amd.getDetails().size()];
+			amd.getDetails().toArray(amdArray);
+		}
 
-        String beanName = "OcComparisonReportService";
-        OcComparisonReportService service = null;
-        int index = -1;
-        AmendmentDetails[] amdArray = null;
-        Boolean comparisonReportStatus = null;
-        int length = amd.getDetails().size();
-        if (!amd.getDetails().isEmpty()) {
-            index = amd.getIndex(applicationDate);
-            amdArray = new AmendmentDetails[amd.getDetails().size()];
-            amd.getDetails().toArray(amdArray);
-        }
+		try {
+			beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
 
-        try {
-            beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+			if (amd.getDetails().isEmpty() || index == -1)
+				service = (OcComparisonReportService) specificRuleService.find(beanName);
+			else if (index >= 0 && amdArray != null) {
+				for (int i = index; i < length; i++) {
 
-            if (amd.getDetails().isEmpty() || index == -1)
-                service = (OcComparisonReportService) specificRuleService.find(beanName);
-            else if (index >= 0) {
-                for (int i = index; i < length; i++) {
+					service = (OcComparisonReportService) specificRuleService
+							.find(beanName + "_" + amdArray[i].getDateOfBylawString());
+					if (service != null)
+						break;
+				}
+			}
+			if (service == null) {
+				service = (OcComparisonReportService) specificRuleService.find(beanName);
+			}
 
-                    service = (OcComparisonReportService) specificRuleService
-                            .find(beanName + "_" + amdArray[i].getDateOfBylawString());
-                    if (service != null)
-                        break;
-                }
-            }
-            if (service == null) {
-                service = (OcComparisonReportService) specificRuleService.find(beanName);
-            }
+			reportStream = service.generatePreOcComparisonReport(ocDcr, permitDcr, detail);
 
-            service.getComparisonReportStatus(ocDcr, permitDcr, detail);
+		} catch (BeansException e) {
+			LOG.error(NO_BEAN_DEFINED_FOR_THE_RULE + beanName);
+		}
 
-        } catch (BeansException e) {
-            LOG.error("No Bean Defined for the Rule " + beanName);
-        }
+		return reportStream;
+	}
 
-        return detail;
-    }
-    
-    @Transactional
-    public void saveComparisonReport(OcComparisonDetail detail, InputStream reportOutputStream) {
-        String fileName;
-        if(StringUtils.isBlank(detail.getOcdcrNumber()))
-            fileName = detail.getDcrNumber() + "-comparison" + ".pdf";
-        else
-            fileName = detail.getOcdcrNumber() + "-" + detail.getDcrNumber() +
-                "-comparison" + ".pdf";
-        final FileStoreMapper fileStoreMapper = fileStoreService.store(reportOutputStream, fileName, "application/pdf",
-                DcrConstants.FILESTORE_MODULECODE);
-        detail.setOcComparisonReport(fileStoreMapper);
-        ocComparisonDetailService.saveAndFlush(detail);
-    }
+	private OcComparisonDetail getComparisonReportStatus(Date applicationDate, Amendment amd,
+			EdcrApplicationDetail ocDcr, EdcrApplicationDetail permitDcr, OcComparisonDetail detail) {
 
-    public String getFileDownloadUrl(final String fileStoreId, final String tenantId) {
-        return String.format(FILE_DOWNLOAD_URL, ApplicationThreadLocals.getDomainURL()) + "?tenantId="
-                + tenantId + "&fileStoreId=" + fileStoreId;
-    }
+		String beanName = OC_COMPARISON_REPORT_SERVICE;
+		OcComparisonReportService service = null;
+		int index = -1;
+		AmendmentDetails[] amdArray = null;
+		Boolean comparisonReportStatus = null;
+		int length = amd.getDetails().size();
+		if (!amd.getDetails().isEmpty()) {
+			index = amd.getIndex(applicationDate);
+			amdArray = new AmendmentDetails[amd.getDetails().size()];
+			amd.getDetails().toArray(amdArray);
+		}
+
+		try {
+			beanName = beanName.substring(0, 1).toLowerCase() + beanName.substring(1);
+
+			if (amd.getDetails().isEmpty() || index == -1)
+				service = (OcComparisonReportService) specificRuleService.find(beanName);
+			else if (index >= 0 && amdArray != null) {
+				for (int i = index; i < length; i++) {
+
+					service = (OcComparisonReportService) specificRuleService
+							.find(beanName + "_" + amdArray[i].getDateOfBylawString());
+					if (service != null)
+						break;
+				}
+			}
+			if (service == null) {
+				service = (OcComparisonReportService) specificRuleService.find(beanName);
+			}
+
+			service.getComparisonReportStatus(ocDcr, permitDcr, detail);
+
+		} catch (BeansException e) {
+			LOG.error(NO_BEAN_DEFINED_FOR_THE_RULE + beanName);
+		}
+
+		return detail;
+	}
+
+	@Transactional
+	public void saveComparisonReport(OcComparisonDetail detail, InputStream reportOutputStream) {
+		final String fileName = detail.getOcdcrNumber() + "-" + detail.getDcrNumber() + "-comparison" + ".pdf";
+		final FileStoreMapper fileStoreMapper = fileStoreService.store(reportOutputStream, fileName, "application/pdf",
+				DcrConstants.FILESTORE_MODULECODE);
+		detail.setOcComparisonReport(fileStoreMapper);
+		ocComparisonDetailService.saveAndFlush(detail);
+	}
+
+	public String getFileDownloadUrl(final String fileStoreId, final String tenantId) {
+		return String.format(FILE_DOWNLOAD_URL, ApplicationThreadLocals.getDomainURL()) + "?tenantId=" + tenantId
+				+ "&fileStoreId=" + fileStoreId;
+	}
 
 }

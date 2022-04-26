@@ -1,10 +1,13 @@
 package org.egov.edcr.entity;
-
+																																																														
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.egov.infra.exception.ApplicationRuntimeException;
 
 /**
  * 
@@ -12,20 +15,22 @@ import java.util.Map;
  *
  */
 public class AmendmentDetails implements Comparable<AmendmentDetails> {
+	private static final Logger LOG = Logger.getLogger(AmendmentDetails.class);
 	private String code;
 	private Date dateOfBylaw;
 	private Map<String, String> changes=new HashMap<>();
 	private String description;
-	public static final SimpleDateFormat amdDateFormatter = new SimpleDateFormat("dd_mm_yyyy");
+	private SimpleDateFormat amdDateFormat = new SimpleDateFormat("dd_mm_yyyy");
 
 	public String getDateOfBylawString() {
 		if (dateOfBylaw != null)
-			return amdDateFormatter.format(this.dateOfBylaw);
+			return amdDateFormat.format(this.dateOfBylaw);
 		else
 			return null;
 	}
 
 	public AmendmentDetails() {
+		// default instance
 	}
 
 	@Override
@@ -72,12 +77,12 @@ public class AmendmentDetails implements Comparable<AmendmentDetails> {
 		this.dateOfBylaw = dateOfBylaw;
 	}
 
-	public void setDateOfBylaw(String dd_mm_yyyy) {
+	public void setDateOfBylaw(String amendmentDate) {
 
 		try {
-			this.dateOfBylaw = amdDateFormatter.parse(dd_mm_yyyy);
+			this.dateOfBylaw = amdDateFormat.parse(amendmentDate);
 		} catch (ParseException e) {
-			throw new RuntimeException("Invalid date format . It should be dd_mm_yyyy");
+			throw new ApplicationRuntimeException("Invalid date format . It should be dd_mm_yyyy");
 		}
 	}
 
@@ -95,8 +100,8 @@ public class AmendmentDetails implements Comparable<AmendmentDetails> {
 	public int compareTo(AmendmentDetails o) {
 		if(o==null)
 			return -1;
-		System.out.println(this.dateOfBylaw);
-		System.out.println(o.dateOfBylaw);
+		LOG.info(this.dateOfBylaw);
+		LOG.info(o.dateOfBylaw);
 		return this.dateOfBylaw.compareTo(o.getDateOfBylaw());
 		 
 	}

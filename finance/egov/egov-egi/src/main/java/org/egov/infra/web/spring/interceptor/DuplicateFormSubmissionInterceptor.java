@@ -61,6 +61,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.web.spring.annotation.DuplicateRequestToken;
 import org.egov.infra.web.spring.annotation.ValidateToken;
@@ -77,6 +78,7 @@ public class DuplicateFormSubmissionInterceptor extends HandlerInterceptorAdapte
 	private static final String TOKEN_NAME = "tokenName";
 	private static final String ERROR_PAGE = "/error/409";
 	private String errorPage = ERROR_PAGE;
+    private static final Logger LOGGER = Logger.getLogger(DuplicateFormSubmissionInterceptor.class);
 
 	public void setErrorPage(final String errorPage) {
 		this.errorPage = errorPage;
@@ -154,6 +156,7 @@ public class DuplicateFormSubmissionInterceptor extends HandlerInterceptorAdapte
 			try {
 				session.removeAttribute(tokenName);
 			} catch (SessionException e) {
+				LOGGER.error("session exception");
 			}
 		};
 		executor.schedule(tokenRemoverTask, ORPHEN_TOKEN_REMOVAL_DELAY, TimeUnit.MILLISECONDS);

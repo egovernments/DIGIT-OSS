@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class LayerNames {
 
     private Map<String, String> layerNamesMap = new HashMap<>();
-    public LayerNameService layerNameService;
+    private LayerNameService layerNameService;
 
     @Autowired
     public LayerNames(LayerNameService layerNameService) {

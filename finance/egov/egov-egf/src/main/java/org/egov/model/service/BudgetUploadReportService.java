@@ -93,7 +93,7 @@ public class BudgetUploadReportService {
 			reMaterializedPath = reBudget.getMaterializedPath();
 		}
 
-		if (reBudget != null) {
+		if (reBudget.getId()!=null) {
 			beBudget = budgetService.getReferenceBudgetFor(reBudget);
 			beMaterializedPath = beBudget.getMaterializedPath();
 		}

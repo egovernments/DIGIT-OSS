@@ -124,7 +124,6 @@ class AllComplaints extends Component {
       if (role === "ao") {
         fetchComplaints(
           [
-            { key: "tenantId", value: getTenantId() },
             {
               key: "status",
               value: "assigned",
@@ -139,7 +138,6 @@ class AllComplaints extends Component {
               key: "status",
               value: "open,reassignrequested",
             },
-            { key: "tenantId", value: getTenantId() },
           ],
           true,
           false
@@ -147,7 +145,6 @@ class AllComplaints extends Component {
       } else {
         fetchComplaints(
           [
-            { key: "tenantId", value: getTenantId() },
             {
               key: "status",
               value:

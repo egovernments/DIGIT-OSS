@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.access.domain.criteria.RoleSearchCriteria;
 import org.egov.access.domain.model.Role;
 import org.egov.access.domain.service.RoleService;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @Validated
 @RestController
 @RequestMapping("/v1/roles")
@@ -47,6 +49,8 @@ public class RoleController {
 	private static final String[] taskAction = { "create", "update" };
 
 	private RoleService roleService;
+
+	private static final String OBJECT_KEY = " Object";
 
 	@Autowired
 	private ResponseInfoFactory responseInfoFactory;
@@ -60,8 +64,8 @@ public class RoleController {
 									 @RequestBody @Valid final RoleRequest roleRequest) throws UnsupportedEncodingException, JSONException {
 
 		RoleSearchCriteria roleSearchCriteria = RoleSearchCriteria.builder().codes(new ArrayList<String>()).tenantId(tenantId).build();
-		
-		System.out.println("Tenant id from the controller: "+tenantId);
+
+		log.info("Tenant id from the controller: "+tenantId);
 
 		if (code != null && !code.isEmpty()) {
 
@@ -184,7 +188,7 @@ public class RoleController {
 			if (roleRequest.getRoles().get(i).getName() == null || roleRequest.getRoles().get(i).getName().isEmpty()) {
 				final ErrorField errorField = ErrorField.builder().code(AccessControlConstants.ROLE_NAME_MANDATORY_CODE)
 						.message(AccessControlConstants.ROLE_NAME_MANADATORY_ERROR_MESSAGE + " in " + (i + 1)
-								+ " Object")
+								+ OBJECT_KEY)
 						.field(AccessControlConstants.ROLE_NAME_MANADATORY_FIELD_NAME).build();
 				errorFields.add(errorField);
 			}
@@ -197,7 +201,7 @@ public class RoleController {
 			if (roleService.checkRoleNameDuplicationValidationErrors(roleRequest.getRoles().get(i).getName())) {
 				final ErrorField errorField = ErrorField.builder().code(AccessControlConstants.ROLE_NAME_DUPLICATE_CODE)
 						.message(
-								AccessControlConstants.ROLE_NAME_DUPLICATE_ERROR_MESSAGE + " in " + (i + 1) + " Object")
+								AccessControlConstants.ROLE_NAME_DUPLICATE_ERROR_MESSAGE + " in " + (i + 1) + OBJECT_KEY)
 						.field(AccessControlConstants.ROLE_NAME_DUPLICATEFIELD_NAME).build();
 				errorFields.add(errorField);
 			}
@@ -212,7 +216,7 @@ public class RoleController {
 				final ErrorField errorField = ErrorField.builder()
 						.code(AccessControlConstants.ROLE_NAME_DOES_NOT_EXIT_CODE)
 						.message(AccessControlConstants.ROLE_NAME_DOES_NOT_EXIT_ERROR_MESSAGE + " in " + (i + 1)
-								+ " Object")
+								+ OBJECT_KEY)
 						.field(AccessControlConstants.ROLE_NAME_DOES_NOT_EXIT_FIELD_NAME).build();
 				errorFields.add(errorField);
 			}

@@ -83,12 +83,12 @@ public class MdmsApiMappings {
 
 
     @PostConstruct
-    public void loadMdmsService() throws Exception {
+    public void loadMdmsService()  {
 
         String REQUEST_INFO_STR = MDMS_REQUESTINFO.replace(TENANTID_PLACEHOLDER,stateLevelTenantId);
 
-        JsonNode requestInfo = mapper.readTree(REQUEST_INFO_STR);
         try {
+            JsonNode requestInfo = mapper.readTree(REQUEST_INFO_STR);
             JsonNode response = restService.post(mdmsServiceHost + mdmsSearchEndpoint, "", requestInfo);
             ArrayNode tenants = (ArrayNode) response.findValues(Constants.MDMSKeys.TENANTS).get(0);
             Map<String, String> ulbCityNamesMappings = getMappings();

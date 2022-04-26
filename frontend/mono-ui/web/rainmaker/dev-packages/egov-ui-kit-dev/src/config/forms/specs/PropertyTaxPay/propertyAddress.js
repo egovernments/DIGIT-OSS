@@ -161,6 +161,7 @@ const formConfig = {
       }
       return action;
     } catch (e) {
+      console.log(e);
       return action;
     }
   },

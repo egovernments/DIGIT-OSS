@@ -84,7 +84,7 @@ const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId,
                { key: "receiptNumbers", value: applicationNumber },
                { key: "tenantId", value: tenantId }
            ]
-           download(receiptQueryString, "download", receiptKey, state, businessService);
+           download(receiptQueryString, "download", receiptKey, state);
 
        },
        leftIcon: "receipt"
@@ -112,7 +112,7 @@ const downloadprintMenu = (action, state, dispatch, applicationNumber, tenantId,
                { key: "receiptNumbers", value: applicationNumber },
                { key: "tenantId", value: tenantId }
            ]
-           download(receiptQueryString, "print", receiptKey, state, businessService);
+           download(receiptQueryString, "print", receiptKey, state);
        },
        leftIcon: "receipt"
    };

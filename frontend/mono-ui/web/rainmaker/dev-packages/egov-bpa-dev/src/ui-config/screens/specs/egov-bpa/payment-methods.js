@@ -57,6 +57,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 //         }
 //       })
 //       .catch(error => {
+//         console.log(error);
 //         dispatch(toggleSpinner());
 //       });
 //   }

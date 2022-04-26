@@ -1,12 +1,15 @@
 package org.egov.edcr.feature;
 
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PlotAreaExtract extends FeatureExtract {
-	private static final Logger LOG = Logger.getLogger(PlotAreaExtract.class);
+
+	private static final Logger LOG = LogManager.getLogger(PlotAreaExtract.class);
 
 	@Override
 	public PlanDetail validate(PlanDetail planDetail) {

@@ -402,7 +402,7 @@ public class RtgsIssueRegisterReportAction extends ReportAction {
             queryParams.putAll(instrumentHeaderQueryParams);
             queryMap.put(queryString.toString(), queryParams);
         } catch (ParseException e) {
-
+        	LOGGER.error("Parse exception");
         }
         return queryMap;
     }

@@ -426,6 +426,7 @@ const searchApiCall = async (state, dispatch, index) => {
           "error"
         )
       );
+      console.log(error);
     }
   }
 };
@@ -476,35 +477,30 @@ export const downloadPrintContainer = (
   let ptMutationCertificatePrintObject = {
     label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
-      console.log("clicked");
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
-      console.log("clicked");
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
-      console.log("clicked");
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      console.log("clicked");
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      console.log("clicked");
 
     },
     leftIcon: "assignment"

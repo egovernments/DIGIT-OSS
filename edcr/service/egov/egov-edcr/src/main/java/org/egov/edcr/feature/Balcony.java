@@ -53,8 +53,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Plan;
@@ -66,7 +68,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Balcony extends FeatureProcess {
-    private static final Logger LOG = Logger.getLogger(Balcony.class);
+    private static final Logger LOG = LogManager.getLogger(Balcony.class);
     private static final String FLOOR = "Floor";
     private static final String RULE45_IV = "45-iv";
     private static final String WIDTH_BALCONY_DESCRIPTION = "Minimum width for balcony %s";
@@ -79,6 +81,7 @@ public class Balcony extends FeatureProcess {
 
     @Override
     public Plan process(Plan plan) {
+    	LOG.info("***Processing balcony****");
         for (Block block : plan.getBlocks()) {
             if (block.getBuilding() != null) {
 
@@ -103,7 +106,8 @@ public class Balcony extends FeatureProcess {
                         for (org.egov.common.entity.edcr.Balcony balcony : balconies) {
                             boolean isAccepted = false;
                             List<BigDecimal> widths = balcony.getWidths();
-                            BigDecimal minWidth = widths.isEmpty() ? BigDecimal.ZERO : widths.stream().reduce(BigDecimal::min).get();
+                            Optional<BigDecimal> minWidths = widths.stream().reduce(BigDecimal::min);
+							BigDecimal minWidth = minWidths.isPresent() ? minWidths.get() : BigDecimal.ZERO;
                             minWidth = minWidth.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,
                                     DcrConstants.ROUNDMODE_MEASUREMENTS);
                             if (minWidth.compareTo(ONE_POINTTWO.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,

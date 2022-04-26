@@ -347,7 +347,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
                     date = df.parse(cutOffDateconfigValue.get(0).getValue());
                     setCutOffDate(formatter.format(date));
                 } catch (final ParseException e) {
-
+                	LOGGER.error("Parse exception");
                 }
             voucherHeader.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
             if (voucherHeader.getVouchermis().getDepartmentcode() == null) {
@@ -434,7 +434,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
                     remittanceBean.getTotalAmount(), listRemitBean, recovery, remittanceBean, remittedTo, workflowBean,
                     headerDetails, commonBean);
 
-            if (!cutOffDate.isEmpty() && cutOffDate != null)
+            if (!cutOffDate.isEmpty())
                 try {
                     date = sdf1.parse(cutOffDate);
                     cutOffDate1 = formatter1.format(date);
@@ -881,7 +881,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
                 && !commonBean.getAccountNumberId().equals(""))
             bankaccount = (Bankaccount) persistenceService.find("from Bankaccount where id=?",
                     Long.valueOf(commonBean.getAccountNumberId()));
-        if (bankaccount.getBankbranch().getId() != null)
+        if (bankaccount!=null && bankaccount.getBankbranch().getId() != null)
             addDropdownData("accNumList",
                     bankAccountService.getBankAccounts(voucherHeader.getFundId().getId(),
                             bankaccount.getBankbranch().getId(), bankaccount.getBankbranch().getBank().getId(),

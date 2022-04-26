@@ -364,7 +364,7 @@ public class ElasticSearchQueryFactory {
 
 	public List<String> prepareOrderBys(String sortBy) {
 		List<String> orderByList = new ArrayList<String>();
-		List<String> sortByList = new ArrayList<String>();
+		List<String> sortByList;
 		if (sortBy.contains(",")) {
 			sortByList = Arrays.asList(sortBy.split(","));
 		} else {

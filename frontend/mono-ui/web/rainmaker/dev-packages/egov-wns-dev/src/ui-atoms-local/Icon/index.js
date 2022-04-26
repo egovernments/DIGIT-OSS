@@ -11,6 +11,7 @@ const Icon = ({ action, className, name, style = {}, color, onClick, id, ...rest
     }
     return <WrappedIcon id={id} className={className} style={{ ...style }} color={color} onClick={onClick} {...rest} />;
   } catch (error) {
+    console.log(`Icon with action ${action} and name ${name} not found`);
     const DefaultIcon = require(`material-ui/svg-icons/alert/error`).default;
     return <DefaultIcon id={id} className={className} style={{ ...style }} color="red" fill="red" onClick={onClick} />;
   }

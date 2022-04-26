@@ -14,8 +14,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.ingestpipeline.util.Constants;
-
 /**
  * This Repository Class is used to perform the transactions of storing the data into the Elastic Search Repository 
  * @author Darshan Nagesh
@@ -32,6 +30,8 @@ public class ElasticSearchRepository {
 		this.restTemplate = restTemplate;
 	}
 
+	private static final String ERROR="Error : ";
+
 	/**
 	 * Based on the Transaction Index Data Obtained and the URL with Headers, this method will put the Data obtained on the
 	 * Elastic Search Database and returns the response in the form of Positive or Negative outcome (True Or False) 
@@ -46,26 +46,17 @@ public class ElasticSearchRepository {
 			map = restTemplate.exchange(url, HttpMethod.PUT,
 					new HttpEntity<>(object, headers), Map.class);
 		} catch (final HttpClientErrorException httpClientErrorException) {
-			LOGGER.error("Error : " + httpClientErrorException);
+			LOGGER.error(ERROR + httpClientErrorException);
 		} catch (HttpServerErrorException httpServerErrorException) {
-			LOGGER.error("Error : " + httpServerErrorException);
+			LOGGER.error(ERROR + httpServerErrorException);
 		} catch (Exception e) {
-			LOGGER.error("Error : " + e);
+			LOGGER.error(ERROR + e);
 		}
-		if (map != null && map.getStatusCode() != null && (map.getStatusCode() == HttpStatus.OK) || (map.getStatusCode() == HttpStatus.CREATED)) {
-			return true;
+		if(map != null){
+			if (map.getStatusCode() != null && (map.getStatusCode() == HttpStatus.OK) || (map.getStatusCode() == HttpStatus.CREATED)) {
+				return true;
+			}
 		}
 		return false;
-	}
-	
-	public ResponseEntity<Map> fetchMDMSResponse(Object mdmsRequestObject) {
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.set(Constants.CONTENT_TYPE, Constants.JSON);
-		
-		HttpEntity<Object> httpEntity = new HttpEntity<>(mdmsRequestObject, headers);
-		ResponseEntity<Map> result  = restTemplate.exchange(Constants.MDMS_URL,  HttpMethod.POST, httpEntity, Map.class);
-		
-		return result;
 	}
 	}

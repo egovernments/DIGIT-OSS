@@ -98,23 +98,19 @@ public class TravelDistanceToExit extends FeatureProcess {
                 }
             }
             if ((pl.getVirtualBuilding().getResidentialBuilding().equals(Boolean.TRUE) &&
-                    floorsAboveGroundLessThanOrEqualTo3ForAllBlks == true) || (ProcessHelper.isSmallPlot(pl))) {
+                    floorsAboveGroundLessThanOrEqualTo3ForAllBlks) || (ProcessHelper.isSmallPlot(pl))) {
                 exemption = Boolean.TRUE;
             }
         }
-        if (!exemption) {
+        if (Boolean.FALSE.equals(exemption)) {
             HashMap<String, String> errors = new HashMap<>();
-            if (pl != null) {
-                if (pl.getTravelDistancesToExit().isEmpty()) {
-                    errors.put(DcrConstants.TRAVEL_DIST_EXIT,
-                            edcrMessageSource.getMessage(DcrConstants.OBJECTNOTDEFINED, new String[] {
-                                    DcrConstants.TRAVEL_DIST_EXIT }, LocaleContextHolder.getLocale()));
-                    pl.addErrors(errors);
-                    return pl;
-                }
-            }
+			if (pl != null && pl.getTravelDistancesToExit().isEmpty()) {
+				errors.put(DcrConstants.TRAVEL_DIST_EXIT, edcrMessageSource.getMessage(DcrConstants.OBJECTNOTDEFINED,
+						new String[] { DcrConstants.TRAVEL_DIST_EXIT }, LocaleContextHolder.getLocale()));
+				pl.addErrors(errors);
+				return pl;
+			}
             String subRule = SUBRULE_42_2;
-            String subRuleDesc = SUBRULE_42_2_DESC;
             scrutinyDetail = new ScrutinyDetail();
             scrutinyDetail.setKey("Common_Travel Distance To Emergency Exits");
             scrutinyDetail.addColumnHeading(1, RULE_NO);

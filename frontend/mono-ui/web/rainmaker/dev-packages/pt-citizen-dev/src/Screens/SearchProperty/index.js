@@ -134,6 +134,7 @@ class SearchProperty extends Component {
   };
 
   onActionClick = e => {
+    console.log(e);
   };
 
   onAddButtonClick = () => {

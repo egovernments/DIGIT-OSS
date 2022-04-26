@@ -105,9 +105,7 @@
 	var oAutoCompEntityForJV;
 	function autocompleteAccountCodes(obj)
 	{
-		console.log("autocompleteAccountCodes");
 	  	   oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common-ajaxLoadGLreportCodes.action", [ "~^"]);
-	  	 console.log("outside");
 		   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 		   oAutoCompEntityForJV = new YAHOO.widget.AutoComplete(obj.name,'codescontainer',oACDS);
 		   oAutoCompEntityForJV.doBeforeSendQuery = function(sQuery){

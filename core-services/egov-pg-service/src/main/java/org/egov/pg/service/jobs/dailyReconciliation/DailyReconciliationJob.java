@@ -14,7 +14,6 @@ import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -26,12 +25,11 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class DailyReconciliationJob implements Job {
 
-    private static RequestInfo requestInfo;
+    private static final RequestInfo requestInfo;
 
-    @PostConstruct
-    public void init() {
+    static {
         User userInfo = User.builder()
-                .uuid(appProperties.getEgovPgReconciliationSystemUserUuid())
+                .uuid("DAILY_RECONC_JOB")
                 .type("SYSTEM")
                 .roles(Collections.emptyList()).id(0L).build();
 

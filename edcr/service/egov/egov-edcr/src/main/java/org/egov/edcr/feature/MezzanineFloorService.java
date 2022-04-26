@@ -13,10 +13,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.egov.common.entity.edcr.Balcony;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
-import org.egov.common.entity.edcr.Hall;
 import org.egov.common.entity.edcr.Occupancy;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -29,10 +27,10 @@ public class MezzanineFloorService extends FeatureProcess {
     private static final String RULE46_MAXAREA_DESC = "Maximum allowed area of mezzanine floor";
     private static final String RULE46_MINAREA_DESC = "Minimum area of mezzanine floor";
     private static final String RULE46_DIM_DESC = "Minimum height of mezzanine floor";
-    public static final String SUB_RULE_55_7_DESC = "Maximum allowed area of balcony";
-    public static final String SUB_RULE_55_7 = "55-7";
+    //private static final String SUB_RULE_55_7_DESC = "Maximum allowed area of balcony";
+    //private static final String SUB_RULE_55_7 = "55-7";
     private static final String FLOOR = "Floor";
-    public static final String HALL_NUMBER = "Hall Number";
+    //private static final String HALL_NUMBER = "Hall Number";
     private static final BigDecimal AREA_9_POINT_5 = BigDecimal.valueOf(9.5);
     private static final BigDecimal HEIGHT_2_POINT_2 = BigDecimal.valueOf(2.2);
 
@@ -60,12 +58,12 @@ public class MezzanineFloorService extends FeatureProcess {
                     for (Floor floor : block.getBuilding().getFloors()) {
                         BigDecimal builtupArea = BigDecimal.ZERO;
                         for (Occupancy occ : floor.getOccupancies()) {
-                            if (!occ.getIsMezzanine() && occ.getBuiltUpArea() != null)
+                            if (Boolean.TRUE.equals(!occ.getIsMezzanine()) && occ.getBuiltUpArea() != null)
                                 builtupArea = builtupArea.add(occ.getBuiltUpArea().subtract(occ.getDeduction()));
                         }
                         totalBuiltupArea = totalBuiltupArea.add(builtupArea);
                         for (Occupancy mezzanineFloor : floor.getOccupancies()) {
-                            if (mezzanineFloor.getIsMezzanine() && floor.getNumber() != 0) {
+                            if (Boolean.TRUE.equals(mezzanineFloor.getIsMezzanine()) && floor.getNumber() != 0) {
                                 if (mezzanineFloor.getBuiltUpArea() != null && mezzanineFloor.getBuiltUpArea().doubleValue() > 0
                                         && mezzanineFloor.getTypeHelper() == null) {
                                     pl.addError(OBJECTNOTDEFINED_DESC,

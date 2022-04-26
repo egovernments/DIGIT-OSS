@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.bpa.SubOccupancy;
 import org.egov.common.entity.bpa.Usage;
 import org.egov.common.entity.edcr.Block;
@@ -48,7 +49,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class FarExtract_Client extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(FarExtract_Client.class);
+    private static final Logger LOG = LogManager.getLogger(FarExtract_Client.class);
     @Autowired
     private OccupancyService occupancyService;
     @Autowired
@@ -212,7 +213,7 @@ public class FarExtract_Client extends FeatureExtract {
                             newFloor.setNumber(no);
                             b.getBuilding().getFloors().add(newFloor);
                         } catch (Exception e) {
-
+                            LOG.error(e.getMessage());
                         }
                 }
         }

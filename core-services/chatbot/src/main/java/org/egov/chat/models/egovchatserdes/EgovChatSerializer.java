@@ -11,11 +11,6 @@ public class EgovChatSerializer implements Serializer<EgovChat> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void configure(Map<String, ?> map, boolean b) {
-
-    }
-
-    @Override
     public byte[] serialize(String s, EgovChat egovChat) {
         if (egovChat == null)
             return null;
@@ -25,10 +20,5 @@ public class EgovChatSerializer implements Serializer<EgovChat> {
         } catch (Exception e) {
             throw new SerializationException("Error serializing JSON message", e);
         }
-    }
-
-    @Override
-    public void close() {
-
     }
 }

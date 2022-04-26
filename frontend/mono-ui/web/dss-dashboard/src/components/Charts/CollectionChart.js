@@ -6,7 +6,6 @@ import CollectionChartRow from './CollectionChartRow';
 import { Grid } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 import style from './styles';
-import { Typography, Tooltip } from '@material-ui/core';
 
 class CollectionChart extends React.Component {
 	constructor(props) {
@@ -30,15 +29,13 @@ class CollectionChart extends React.Component {
 						data.map((d, i) => {
 							let precision = 100; // 2 decimals
 							let randomnum = Math.floor(Math.random() * (10 * precision - 1 * precision) + 1 * precision) / (1 * precision);
-							const tool = `TIP_DSS_${d.label}`;
+
 							return <div className={classes.collection} key={`collection-${i}`}>
 								<div className={classes.collectionRow}>
 									<Grid container direction="row" alignItems="center">
 										<Grid item xs={7} sm={7}>
 											<div className={classes.CollectionLabel}>
-											<Tooltip title={strings[tool] || tool} placement="top">
-											<span> {strings[d.label] || d.label}</span>
-                            </Tooltip>
+												<span> {strings[d.label] || d.label}</span>
 											</div>
 										</Grid>
 										<Grid item xs={5} sm={5}>

@@ -14,8 +14,6 @@ public class UserEventsQueryBuilder {
 	
 	@Autowired
 	private PropertiesManager properties;
-
-	public static final String EVENT_COUNT_WRAPPER = " SELECT COUNT(id) FROM ({INTERNAL_QUERY}) AS count ";
 	
 	public static final String EVENT_SEARCH_QUERY = "SELECT id, tenantid, source, eventtype, category, description, status, referenceid, name, postedby,"
 			+ " eventdetails, actions, recepient, createdby, createdtime, lastmodifiedby, lastmodifiedtime FROM eg_usrevents_events ";
@@ -161,13 +159,11 @@ public class UserEventsQueryBuilder {
 		}
 		
 		queryBuilder.append(" ORDER BY createdtime DESC"); //default ordering on the platform.
-		// Do NOT paginate in case of building count query
-		if(!criteria.getIsEventsCountCall()) {
-			queryBuilder.append(" OFFSET :offset");
-			preparedStatementValues.put("offset", null == criteria.getOffset() ? properties.getDefaultOffset() : criteria.getOffset());
-			queryBuilder.append(" LIMIT :limit");
-			preparedStatementValues.put("limit", null == criteria.getLimit() ? properties.getDefaultLimit() : criteria.getLimit());
-		}
+		queryBuilder.append(" OFFSET :offset");
+		preparedStatementValues.put("offset", null == criteria.getOffset() ? properties.getDefaultOffset() : criteria.getOffset());		
+		queryBuilder.append(" LIMIT :limit");
+		preparedStatementValues.put("limit", null == criteria.getLimit() ? properties.getDefaultLimit() : criteria.getLimit());
+		
 		
 		return queryBuilder.toString();
 		
@@ -181,7 +177,4 @@ public class UserEventsQueryBuilder {
         }
     }
 
-	public String addCountWrapper(String query) {
-		return EVENT_COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
-	}
 }

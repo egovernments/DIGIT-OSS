@@ -443,7 +443,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 
         if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
             final String stateValue = FinancialConstants.WORKFLOW_STATE_REJECTED;
-            paymentheader.transition().progressWithStateCopy().withSenderName(user.getName())
+            if(user!=null)
+                paymentheader.transition().progressWithStateCopy().withSenderName(user.getName())
                     .withComments(workflowBean.getApproverComments())
                     .withStateValue(stateValue).withDateInfo(currentDate.toDate())
                     .withOwner(paymentheader.getState().getInitiatorPosition())
@@ -452,8 +453,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 
             final WorkFlowMatrix wfmatrix = paymentHeaderWorkflowService.getWfMatrix(paymentheader.getStateType(), null,
                     null, null, paymentheader.getCurrentState().getValue(), null);
-
-            paymentheader.transition().end().withSenderName(user.getName())
+            if (user != null)
+                paymentheader.transition().end().withSenderName(user.getName())
                     .withComments(workflowBean.getApproverComments())
                     .withStateValue(wfmatrix.getCurrentDesignation() + " Approved").withDateInfo(currentDate.toDate())
                     .withOwner((info != null && info.getAssignments() != null && !info.getAssignments().isEmpty())
@@ -465,7 +466,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
         } else if (FinancialConstants.BUTTONCANCEL.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
 
             paymentheader.getVoucherheader().setStatus(FinancialConstants.CANCELLEDVOUCHERSTATUS);
-            paymentheader.transition().end().withStateValue(FinancialConstants.WORKFLOW_STATE_CANCELLED)
+            if(user != null)
+             paymentheader.transition().end().withStateValue(FinancialConstants.WORKFLOW_STATE_CANCELLED)
                     .withSenderName(user.getName()).withComments(workflowBean.getApproverComments())
                     .withDateInfo(currentDate.toDate());
         } else {
@@ -473,7 +475,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 
                 final WorkFlowMatrix wfmatrix = paymentHeaderWorkflowService.getWfMatrix(paymentheader.getStateType(),
                         null, null, null, workflowBean.getCurrentState(), null);
-                paymentheader.transition().start().withSenderName(user.getName())
+                if(user != null)
+                    paymentheader.transition().start().withSenderName(user.getName())
                         .withComments(workflowBean.getApproverComments()).withStateValue(wfmatrix.getNextState())
                         .withDateInfo(currentDate.toDate()).withOwner(workflowBean.getApproverPositionId())
                         .withNextAction(wfmatrix.getNextAction())
@@ -481,7 +484,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                                 ? info.getAssignments().get(0).getPosition() : null);
 
             } else if (paymentheader.getCurrentState().getNextAction().equalsIgnoreCase("END"))
-                paymentheader.transition().progressWithStateCopy().end().withSenderName(user.getName())
+                if(user != null)
+                    paymentheader.transition().progressWithStateCopy().end().withSenderName(user.getName())
                         .withComments(workflowBean.getApproverComments()).withDateInfo(currentDate.toDate());
             else {
                 if (!paymentheader.getCurrentState().getValue().equalsIgnoreCase(workflowBean.getCurrentState())) {
@@ -489,7 +493,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                 }
                 final WorkFlowMatrix wfmatrix = paymentHeaderWorkflowService.getWfMatrix(paymentheader.getStateType(),
                         null, null, null, paymentheader.getCurrentState().getValue(), null);
-                paymentheader.transition().progressWithStateCopy().withSenderName(user.getName())
+                    if(user != null)
+                        paymentheader.transition().progressWithStateCopy().withSenderName(user.getName())
                         .withComments(workflowBean.getApproverComments()).withStateValue(wfmatrix.getNextState())
                         .withDateInfo(currentDate.toDate()).withOwner(workflowBean.getApproverPositionId())
                         .withNextAction(wfmatrix.getNextAction());

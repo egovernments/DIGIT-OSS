@@ -101,7 +101,7 @@ public class CollectionNotificationConsumer{
 
             String receiptLink = getShortenedUrl(link.toString());
 
-            content = content.replaceAll("{rcpt_link}", receiptLink);
+            content = content.replaceAll("<rcpt_link>", receiptLink);
 
             String moduleName = fetchContentFromLocalization(requestInfo, paymentDetail.getTenantId(),
                     BUSINESSSERVICE_LOCALIZATION_MODULE, formatCodes(paymentDetail.getBusinessService()));
@@ -109,14 +109,14 @@ public class CollectionNotificationConsumer{
             if(StringUtils.isEmpty(moduleName))
                 moduleName = "Adhoc Tax";
 
-            content = content.replaceAll("{owner_name}", bill.getPayerName());
+            content = content.replaceAll("<owner_name>", bill.getPayerName());
 
-            if(content.contains("{amount_paid}"))
-                content = content.replaceAll("{amount_paid}", paymentDetail.getTotalAmountPaid().toString());
+            if(content.contains("<amount_paid>"))
+                content = content.replaceAll("<amount_paid>", paymentDetail.getTotalAmountPaid().toString());
 
-            content = content.replaceAll("{rcpt_no}", paymentDetail.getReceiptNumber());
-            content = content.replaceAll("{mod_name}", moduleName);
-            content = content.replaceAll("{unique_id}", bill.getConsumerCode());
+            content = content.replaceAll("<rcpt_no>", paymentDetail.getReceiptNumber());
+            content = content.replaceAll("<mod_name>", moduleName);
+            content = content.replaceAll("<unique_id>", bill.getConsumerCode());
             message = content;
         }
         return message;

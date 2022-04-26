@@ -12,5 +12,6 @@ export const getMdmsResults = async mdmsBody => {
     );
     return response;
   } catch (error) {
+    console.log(error);
   }
 };

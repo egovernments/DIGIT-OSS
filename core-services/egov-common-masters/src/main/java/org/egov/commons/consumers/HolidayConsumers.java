@@ -75,8 +75,7 @@ public class HolidayConsumers {
         LOGGER.info("record:" + record);
         if (topic.equals("egov-common-holiday")) {
             LOGGER.info("SaveHolidayConsumer egov-common-holiday holidayService:" + holidayService);
-            final HolidayRequest holidayRequest = holidayService
-                    .create(objectMapper.convertValue(record, HolidayRequest.class));
+            holidayService.create(objectMapper.convertValue(record, HolidayRequest.class));
         }
     }
 }

@@ -22,7 +22,6 @@ public class mappertest {
 		L.add(new BigDecimal(1));
 		L.add(2);
 
-		System.out.println(L.get(1).getClass());
 
 	}
 

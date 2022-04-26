@@ -14,6 +14,7 @@ import org.egov.edcr.service.LayerNames;
 import org.egov.edcr.utility.Util;
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.DXFLWPolyline;
+import org.kabeja.dxf.DXFPolyline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,15 +44,18 @@ public class LiftServiceExtract extends FeatureExtract {
     }
 
     private void setLifts(DXFDocument doc, Block block, Floor floor) {
-        if (!block.getTypicalFloor().isEmpty())
-            for (TypicalFloor tp : block.getTypicalFloor())
-                if (tp.getRepetitiveFloorNos().contains(floor.getNumber()))
-                    for (Floor allFloors : block.getBuilding().getFloors())
-                        if (allFloors.getNumber().equals(tp.getModelFloorNo()))
-                            if (!allFloors.getLifts().isEmpty()) {
-                                floor.setLifts(allFloors.getLifts());
-                                return;
-                            }
+        if (!block.getTypicalFloor().isEmpty()) {
+            for (TypicalFloor tp : block.getTypicalFloor()) {
+				if (tp.getRepetitiveFloorNos().contains(floor.getNumber())) {
+					for (Floor allFloors : block.getBuilding().getFloors()) {
+						if (allFloors.getNumber().equals(tp.getModelFloorNo()) && !allFloors.getLifts().isEmpty()) {
+							floor.setLifts(allFloors.getLifts());
+							return;
+						}
+					}
+				}
+            }
+        }
         String liftRegex = String.format(layerNames.getLayerName("LAYER_NAME_LIFT"), block.getNumber(), floor.getNumber())
                 + "_+\\d";
         List<String> liftLayer = Util.getLayerNamesLike(doc, liftRegex);
@@ -63,7 +67,7 @@ public class LiftServiceExtract extends FeatureExtract {
                         && !polylines.isEmpty()) {
                     LiftDetail lift = new LiftDetail();
                     lift.setNumber(Integer.valueOf(splitLayer[5]));
-                    boolean isClosed = polylines.stream().allMatch(dxflwPolyline -> dxflwPolyline.isClosed());
+                    boolean isClosed = polylines.stream().allMatch(DXFPolyline::isClosed);
                     lift.setLiftClosed(isClosed);
                     List<Measurement> liftPolyLine = polylines.stream()
                             .map(dxflwPolyline -> new MeasurementDetail(dxflwPolyline, true))

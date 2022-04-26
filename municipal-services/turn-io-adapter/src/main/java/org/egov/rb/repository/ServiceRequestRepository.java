@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.egov.rb.config.PropertyConfiguration;
-import org.egov.rb.pgr.v2.models.ServiceResponseV2;
 import org.egov.rb.pgrmodels.RequestInfo;
 import org.egov.rb.pgrmodels.ServiceRequest;
 import org.egov.rb.pgrmodels.ServiceResponse;
@@ -42,18 +40,12 @@ public class ServiceRequestRepository {
 
 	@Autowired
 	private ObjectMapper mapper;
-	
-	@Autowired
-	private PropertyConfiguration propertyConfiguration;
 
-	public Object fetchResult(StringBuilder uri, Object serviceRequest) {
-		Object serviceResponse=null;
+	public ServiceResponse fetchResult(StringBuilder uri, ServiceRequest serviceRequest) {
+		ServiceResponse serviceResponse=null;
 	  	try {
-	  		if(Boolean.valueOf(propertyConfiguration.getPgrv1enabled())) {
 		  serviceResponse = restTemplate.postForObject(uri.toString(), serviceRequest, ServiceResponse.class);
-	  		}else {
-	  			serviceResponse = restTemplate.postForObject(uri.toString(), serviceRequest, ServiceResponseV2.class);
-	  		}
+		  
 	  	}catch(HttpClientErrorException e) {
           log.error("External Service threw an Exception: ",e);
           throw new ServiceCallException(e.getResponseBodyAsString());

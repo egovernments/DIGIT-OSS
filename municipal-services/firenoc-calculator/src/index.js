@@ -10,20 +10,12 @@ const { Pool } = require("pg");
 import tracer from "./middleware/tracer";
 import envVariables from "./envVariables";
 
-var ssl = envVariables.DB_SSL;
-if(typeof ssl =="string")
-  ssl = (ssl.toLowerCase() == "true");
-
 const pool = new Pool({
   user: envVariables.DB_USERNAME,
   host: envVariables.DB_HOST,
   database: envVariables.DB_NAME,
   password: envVariables.DB_PASSWORD,
-  ssl: ssl,
-  port: envVariables.DB_PORT,
-  max: envVariables.DB_MAX_POOL_SIZE,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000
+  port: envVariables.DB_PORT
 });
 
 const options = {
@@ -34,6 +26,7 @@ const options = {
 let app = express();
 app.server = http.createServer(app);
 app.use(bodyParser.json());
+
 // logger
 app.use(morgan("dev"));
 
@@ -61,14 +54,12 @@ swaggerTools.initializeMiddleware(swaggerDoc, middleware => {
   app.use(middleware.swaggerUi());
   let serverPort = envVariables.SERVER_PORT;
   app.server.listen(serverPort, () => {
-    console.log("port is ", serverPort);
   });
 });
 app.use("/", api(pool));
 
 //error handler middleware
 app.use((err, req, res, next) => {
-  console.log(err);
   if (!err.errorType) {
     res.status(err.status).json(err.data);
   } else if (err.errorType == "custom") {

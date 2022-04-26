@@ -18,7 +18,7 @@ paths:
         content:
           multipart/mixed:
             schema:
-              $ref: '#/components/schemas/ScrutinizePlanReq'
+              $ref: '#/components/schemas/ScrutinizeReq'
             encoding:
               dxfFile:
                 contentType: application/dxf
@@ -77,30 +77,7 @@ paths:
           description: Service type of application .
           required: false
           schema:
-            type: string
-        - name: status
-          in: query
-          description: Status of the application .
-          required: false
-          schema:
-            type: string
-            maxLength: 16
-        - name: fromDate
-          in: query
-          description: Search from a particular date submitted applications.
-          required: false
-          schema:
-            type: integer
-            format: int64
-            x-displayformat: 'dd/MM/yyyy'
-        - name: toDateDate
-          in: query
-          description: Search till a particular date submitted applications.
-          required: false
-          schema:
-            type: integer
-            format: int64
-            x-displayformat: 'dd/MM/yyyy'                   
+            type: string                        
       responses:
         '200':
           description: Successfully list the details of the plan scrutiny if the system can identify the plan as per the details send. In case where system does not find the scrutiny details based on the input send, it will send a message back as "Invalid Input- Record not found".
@@ -338,7 +315,7 @@ components:
           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
         comparisonDetail:
           description: Used to generate or fetch comparison report
-          type: object
+          type: Object
           items:
             $ref: '#/components/schemas/ComparisonDetail'
                         

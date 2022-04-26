@@ -1,6 +1,6 @@
 import axios from "axios";
-import commonConfig from "config/common.js";
-import { getTenantId ,getAccessToken} from "egov-ui-kit/utils/localStorageUtils";
+import { fetchFromLocalStorage, addQueryArg, getDateInEpoch } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -46,12 +46,11 @@ export const prepareForm = (params) => {
 
 export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   // Bad idea to fetch from local storage, change as feasible
-  const tenantId = getTenantId() ? (ulbLevel ? commonConfig.tenantId : commonConfig.tenantId) : "";
+  const tenantId = getTenantId() ? (ulbLevel ? getTenantId().split(".")[0] : getTenantId().split(".")[0]) : "";
   const uploadInstance = axios.create({
     baseURL: window.location.origin,
     headers: {
       "Content-Type": "multipart/form-data",
-      "auth-token":getAccessToken(),
     },
   });
 

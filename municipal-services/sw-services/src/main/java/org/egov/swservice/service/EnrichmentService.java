@@ -65,17 +65,6 @@ public class EnrichmentService {
 		sewerageConnectionRequest.getSewerageConnection().setAuditDetails(auditDetails);
 		sewerageConnectionRequest.getSewerageConnection().setId(UUID.randomUUID().toString());
 		sewerageConnectionRequest.getSewerageConnection().setStatus(StatusEnum.ACTIVE);
-
-		if(sewerageConnectionRequest.getSewerageConnection().getChannel() == null){
-			if(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") )
-				sewerageConnectionRequest.getSewerageConnection().setChannel("CFC_COUNTER");
-			if(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") )
-				sewerageConnectionRequest.getSewerageConnection().setChannel("CITIZEN");
-			if(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("SYSTEM") )
-				sewerageConnectionRequest.getSewerageConnection().setChannel("SYSTEM");
-		}
-
-
 		HashMap<String, Object> additionalDetail = new HashMap<>();
 		if (sewerageConnectionRequest.getSewerageConnection().getAdditionalDetails() == null) {
 			for (String constValue : SWConstants.ADDITIONAL_OBJECT) {

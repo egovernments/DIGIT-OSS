@@ -2,7 +2,6 @@ package org.egov.wf.repository;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.egov.common.contract.request.RequestInfo;
 import org.egov.wf.repository.querybuilder.WorkflowQueryBuilder;
 import org.egov.wf.repository.rowmapper.WorkflowRowMapper;
 import org.egov.wf.web.models.ProcessInstance;
@@ -79,13 +78,6 @@ public class WorKflowRepository {
         return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
     }
 
-    public Integer getProcessInstancesForUserInboxCount(ProcessInstanceSearchCriteria criteria) {
-        List<Object> preparedStmtList = new ArrayList<>();
-        criteria.setIsAssignedToMeCount(true);
-        String query = queryBuilder.getInboxIdCount(criteria, (ArrayList<Object>) preparedStmtList);
-        Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
-        return count;
-    }
 
     /**
      * Returns the count based on the search criteria
@@ -127,7 +119,6 @@ public class WorKflowRepository {
 
     private List<String> getInboxSearchIds(ProcessInstanceSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
-        criteria.setIsAssignedToMeCount(false);
         String query = queryBuilder.getInboxIdQuery(criteria,preparedStmtList,true);
         return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
     }
@@ -141,7 +132,7 @@ public class WorKflowRepository {
     }
 
 
-    public List<String> fetchEscalatedApplicationsBusinessIdsFromDb(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria) {
+    public List<String> fetchEscalatedApplicationsBusinessIdsFromDb(ProcessInstanceSearchCriteria criteria) {
         ArrayList<Object> preparedStmtList = new ArrayList<>();
 
         // 1st step is to fetch businessIds based on the assignee and the module.
@@ -158,20 +149,12 @@ public class WorKflowRepository {
 
         criteria.setBusinessIds(inboxApplicationsBusinessIds);
          */
-        String query = queryBuilder.getAutoEscalatedApplicationsFinalQuery(requestInfo,criteria, preparedStmtList);
-        log.info(query);
+        String query = queryBuilder.getAutoEscalatedApplicationsBusinessIdsQuery(criteria, preparedStmtList);
         List<String> escalatedApplicationsBusinessIds = jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
         preparedStmtList.clear();
         log.info(escalatedApplicationsBusinessIds.toString());
         // 3rd step is to do a simple search on these business ids(DONE IN WORKFLOW SERVICE)
 
         return escalatedApplicationsBusinessIds;
-    }
-
-    public Integer getEscalatedApplicationsCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria) {
-        List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getEscalatedApplicationsCount(requestInfo,criteria, (ArrayList<Object>) preparedStmtList);
-        Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
-        return count;
     }
 }

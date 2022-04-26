@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class InstrumentAccountCodeJdbcRepository extends JdbcRepository {
     private static final Logger LOG = LoggerFactory.getLogger(InstrumentAccountCodeJdbcRepository.class);
-
+    private static final String AND=" and ";
     static {
         LOG.debug("init instrumentAccountCode");
         init(InstrumentAccountCodeEntity.class);
@@ -79,31 +79,31 @@ public class InstrumentAccountCodeJdbcRepository extends JdbcRepository {
         // implement jdbc specfic search
         if (instrumentAccountCodeSearchEntity.getTenantId() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(AND);
             params.append("tenantId =:tenantId");
             paramValues.put("tenantId", instrumentAccountCodeSearchEntity.getTenantId());
         }
         if (instrumentAccountCodeSearchEntity.getId() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(AND);
             params.append("id =:id");
             paramValues.put("id", instrumentAccountCodeSearchEntity.getId());
         }
         if (instrumentAccountCodeSearchEntity.getInstrumentTypeId() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(AND);
             params.append("instrumentTypeId =:instrumentType");
             paramValues.put("instrumentType", instrumentAccountCodeSearchEntity.getInstrumentTypeId());
         }
         if (instrumentAccountCodeSearchEntity.getAccountCodeId() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(AND);
             params.append("accountCodeId =:accountCode");
             paramValues.put("accountCode", instrumentAccountCodeSearchEntity.getAccountCodeId());
         }
         if (instrumentAccountCodeSearchEntity.getIds() != null) {
             if (params.length() > 0)
-                params.append(" and ");
+                params.append(AND);
             params.append("id in (:ids)");
             paramValues.put("ids", instrumentAccountCodeSearchEntity.getIds());
         }

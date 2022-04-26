@@ -1,7 +1,5 @@
 package org.egov.fsm.web.model;
 
-import javax.validation.constraints.DecimalMax;
-
 import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
@@ -14,6 +12,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.Max;
 
 /**
  * cature the pit details 
@@ -63,8 +64,4 @@ public class PitDetail   {
 
   @JsonProperty("auditDetails")
   private AuditDetails auditDetails = null;
-  
-  @JsonProperty("additionalDetails")
-  private Object additionalDetails ;
-  
 }

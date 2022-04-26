@@ -86,7 +86,6 @@ class PaymentHistory extends Component {
         const items = this.state.showItems ? this.state.items : [];
         const errorMessage = this.state.showItems && items.length == 0 ? this.state.errorMessage : '';
         return (<HistoryCard header={'PT_PAYMENT_HISTORY'} items={items} errorMessage={errorMessage} onHeaderClick={() => {
-            console.log("clicked");
             this.setState({ showItems: !this.state.showItems, items: paymentHistoryItem })
         }}></HistoryCard>)
     }

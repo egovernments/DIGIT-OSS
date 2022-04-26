@@ -49,6 +49,7 @@ package org.egov.eis.entity;
 
 import org.egov.commons.Bank;
 import org.egov.commons.Bankbranch;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.pims.commons.Position;
 
 import java.lang.reflect.Field;
@@ -110,7 +111,7 @@ public class DrawingOfficerBuilder {
             idField.setAccessible(true);
             idField.set(drawingOfficer, id);
         } catch (final Exception e) {
-            throw new RuntimeException(e);
+            throw new ApplicationRuntimeException(e.getMessage());
         }
         return this;
     }

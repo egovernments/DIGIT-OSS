@@ -79,7 +79,6 @@ function callAjaxViewSearch() {
 					$(row).on(
 							'click',
 							function() {
-								console.log(data.id);
 								window.open('/portal/firm/view/'
 										+ data.id, '',
 										'width=800, height=600');

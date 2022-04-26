@@ -19,7 +19,7 @@ bpa-calculator service used to generate Application Fee, Sanction Fee, Low Appli
 
 ### Swagger API Contract
 
- - [Swagger API](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/bpa/bpa-calculator.yaml#!/)
+ - [Swagger API](https://github.com/egovernments/municipal-services/blob/master/docs/bpa/bpa-calculator.yaml)
 
 ## Service Details
 

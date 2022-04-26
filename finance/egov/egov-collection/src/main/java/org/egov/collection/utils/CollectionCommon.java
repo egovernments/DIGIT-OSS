@@ -729,8 +729,8 @@ public class CollectionCommon {
                 .getInstrumentTypeByType(CollectionConstants.INSTRUMENTTYPE_BANK));
 
         instrHeaderBank.setBankAccountId(account);
-        instrHeaderBank.setBankId(account.getBankbranch().getBank());
-        instrHeaderBank.setBankBranchName(account.getBankbranch().getBranchname());
+        instrHeaderBank.setBankId(account==null ? null: account.getBankbranch().getBank());
+        instrHeaderBank.setBankBranchName(account==null ? null:account.getBankbranch().getBranchname());
         instrHeaderBank.setTransactionNumber(String.valueOf(paytInfoBank.getTransactionNumber()));
         instrHeaderBank.setInstrumentAmount(paytInfoBank.getInstrumentAmount());
         instrHeaderBank.setTransactionDate(paytInfoBank.getTransactionDate());

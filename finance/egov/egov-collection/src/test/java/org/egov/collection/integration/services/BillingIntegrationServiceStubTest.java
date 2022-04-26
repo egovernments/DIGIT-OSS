@@ -94,7 +94,7 @@ public class BillingIntegrationServiceStubTest  {
 				}
 			}
 		} catch( NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
-
+			 e.printStackTrace();
 		}
 	}
 	

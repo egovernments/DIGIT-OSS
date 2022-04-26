@@ -18,8 +18,7 @@ pdfMake.fonts = {
 let ulbLogo = {}
 
 const generateAcknowledgementForm = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt, logo) => {
-  console.log('details--' + details);
-  console.log(generalMDMSDataById);
+
 
   let data;
   let { owners, address, propertyDetails, header } = details;
@@ -41,7 +40,6 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
   };
 
   const transform = (value, masterName) => {
-    // console.log(generalMDMSDataById);
     if (value) {
       return generalMDMSDataById && generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][value].code : "NA";
     } else {
@@ -178,7 +176,6 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           ]
           : newArray;
       };
-      console.log(logo, 'ulbLogo');
       data = {
         defaultStyle: {
           font: "Camby"

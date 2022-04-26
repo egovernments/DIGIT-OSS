@@ -6,10 +6,12 @@ import "./index.css";
 
 const callDownload = (mode) => {
   const val = [
-    { key: 'connectionNumber', value: getQueryArg(window.location.href, "connectionNumber")},
-    { key: 'tenantId', value: getQueryArg(window.location.href, "tenantId") },
-    { key: "searchType", value: "CONNECTION" }
-  ]
+    {
+      key: 'connectionNumber',
+      value: getQueryArg(window.location.href, "connectionNumber")
+    },
+
+    { key: 'tenantId', value: getQueryArg(window.location.href, "tenantId") }]
   wsDownloadConnectionDetails(val, mode);
 }
 

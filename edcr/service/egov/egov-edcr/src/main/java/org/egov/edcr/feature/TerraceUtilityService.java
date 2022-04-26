@@ -49,11 +49,15 @@
 package org.egov.edcr.feature;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -66,7 +70,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class TerraceUtilityService extends FeatureProcess {
 
-    private static final Logger LOG = Logger.getLogger(TerraceUtility.class);
+    private static final Logger LOG = LogManager.getLogger(TerraceUtility.class);
+
     private static final String RULE_34 = "43-1";
     public static final String TERRACEUTILITIESDISTANCE = "TerraceUtilitiesDistance";
     public static final BigDecimal THREE = BigDecimal.valueOf(3);
@@ -74,7 +79,7 @@ public class TerraceUtilityService extends FeatureProcess {
 
     @Override
     public Map<String, Date> getAmendments() {
-        return null;
+        return Collections.emptyMap();
     }
 
     @Override
@@ -98,7 +103,8 @@ public class TerraceUtilityService extends FeatureProcess {
                 for (TerraceUtility terraceUtility : block.getTerraceUtilities()) {
                     Map<String, String> details = new HashMap<>();
                     details.put(RULE_NO, RULE_34);
-                    BigDecimal minDistance = terraceUtility.getDistances().stream().reduce(BigDecimal::min).get();
+                    Optional<BigDecimal> minDis = terraceUtility.getDistances().stream().reduce(BigDecimal::min);
+					BigDecimal minDistance = minDis.isPresent() ? minDis.get() : BigDecimal.ZERO;
                     details.put(DESCRIPTION, terraceUtility.getName());
                     if (Util.roundOffTwoDecimal(minDistance).compareTo(THREE) >= 0) {
                         details.put(PERMITTED, THREE + DcrConstants.IN_METER);

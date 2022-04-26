@@ -139,6 +139,9 @@ function validate2(isRequired, pattern, name, value, validatePropertyOwner) {
   if (!isRequired && value === "") {
     errorText = "";
   }
+
+  // var isFormValid=false;
+  // (validationData.required.required.length == validationData.required.current.length) && (validationData.pattern.required.length == validationData.pattern.current.length)
   return {
     errorText: errorText,
     validatePropertyOwner: validatePropertyOwner,
@@ -188,6 +191,10 @@ function validate3(isRequired, pattern, name, value, validatePropertyFloor, floo
   if (!isRequired && value === "") {
     errorText = "";
   }
+
+
+  // var isFormValid=false;
+  // (validationData.required.required.length == validationData.required.current.length) && (validationData.pattern.required.length == validationData.pattern.current.length)
   return {
     errorText: errorText,
     validatePropertyFloor: validatePropertyFloor,

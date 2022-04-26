@@ -42,7 +42,6 @@ router.post(
           false
         );
       } catch (ex) {
-        if (ex.response && ex.response.data) console.log(ex.response.data);
         return renderError(res, "Failed to query details of tradelicense", 500);
       }
       var tradelicenses = restradelicense.data;
@@ -63,7 +62,6 @@ router.post(
             bussinessService
           );
         } catch (ex) {
-          if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(
             res,
             `Failed to query payment for tradelicense`,
@@ -83,7 +81,6 @@ router.post(
             );
           } catch (ex) {
             
-            if (ex.response && ex.response.data) console.log(ex.response.data);
             return renderError(
               res,
               "Failed to generate PDF for tradelicense receipt",
@@ -139,7 +136,6 @@ router.post(
         );
       } catch (ex) {
         
-        if (ex.response && ex.response.data) console.log(ex.response.data);
         return renderError(res, "Failed to query details of tradelicense", 500);
       }
       var tradelicenses = restradelicense.data;
@@ -167,7 +163,6 @@ router.post(
           );
         } catch (ex) {
           
-          if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(
             res,
             "Failed to generate PDF for tradelicense",
@@ -220,7 +215,6 @@ router.post(
         );
       } catch (ex) {
         
-        if (ex.response && ex.response.data) console.log(ex.response.data);
         return renderError(res, "Failed to query details of tradelicense", 500);
       }
       var tradelicenses = restradelicense.data;
@@ -255,7 +249,6 @@ router.post(
           );
         } catch (ex) {
           
-          if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(
             res,
             "Failed to generate PDF for tradelicense",
@@ -308,7 +301,6 @@ router.post(
          );
        } catch (ex) {
          
-         if (ex.response && ex.response.data) console.log(ex.response.data);
          return renderError(res, "Failed to query details of tradelicense");
        }
        
@@ -330,7 +322,6 @@ router.post(
            );
          } catch (ex) {
            
-           if (ex.response && ex.response.data) console.log(ex.response.data);
            return renderError(res, `Failed to query bills for tradelicense`);
          }
          
@@ -348,7 +339,6 @@ router.post(
              );
            } catch (ex) {
              
-             if (ex.response && ex.response.data) console.log(ex.response.data);
              return renderError(
                res,
                "Failed to generate PDF for tradelicense bill"

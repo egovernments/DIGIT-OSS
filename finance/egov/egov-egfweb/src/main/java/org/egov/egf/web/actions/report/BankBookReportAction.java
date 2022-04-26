@@ -524,6 +524,7 @@ public class BankBookReportAction extends BaseFormAction {
 									}
 
 							} catch (final NumberFormatException ex) {
+								LOG.error("Number format exception.");
 							}
 					bankBookEntry.setChequeDetail(voucherStr);
 					entries.add(bankBookEntry);
@@ -608,7 +609,7 @@ public class BankBookReportAction extends BaseFormAction {
 			final Object[] obj = instrumentVoucherList.get(0);
 			final Long voucherId = getLongValue(obj[1]);
 			for (final Object[] instrumentVoucher : instrumentVoucherList)
-				if (voucherId != getLongValue(instrumentVoucher[1])) {
+				if (!voucherId.equals(getLongValue(instrumentVoucher[1]))) {
 					rep = true;
 					break;
 				}
