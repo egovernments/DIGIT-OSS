@@ -65,6 +65,7 @@ const FileComplaint = ({ parentRoute }) => {
   if (isLoading) {
     return <Loader />;
   }
+
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
@@ -82,6 +83,22 @@ const FileComplaint = ({ parentRoute }) => {
       "cardText": "ES_FSM_NUMBER_OF_TRIPS_TEXT",
       "submitBarLabel": "CS_COMMON_NEXT",
     },
+    "nextStep": "property-type"
+  },
+  {
+    "label": "a",
+    "isMandatory": false,
+    "type": "component",
+    "route": "select-gender",
+    "key": "selectGender",
+    "component": "SelectGender",
+    "texts": {
+      "headerCaption": "",
+      "header": "CS_COMMON_CHOOSE_GENDER",
+      "cardText": "CS_COMMON_SELECT_GENDER",
+      "submitBarLabel": "CS_COMMON_NEXT",
+      "skipText": "CORE_COMMON_SKIP_CONTINUE"
+    },
     "nextStep": "select-payment-preference"
   },
   {
@@ -98,24 +115,9 @@ const FileComplaint = ({ parentRoute }) => {
       "submitBarLabel": "CS_COMMON_NEXT",
       "skipText": "CORE_COMMON_SKIP_CONTINUE"
     },
-    "nextStep": "select-gender"
-  },
-  {
-    "label": "a",
-    "isMandatory": false,
-    "type": "component",
-    "route": "select-gender",
-    "key": "selectGender",
-    "component": "SelectGender",
-    "texts": {
-      "headerCaption": "",
-      "header": "CS_COMMON_CHOOSE_GENDER",
-      "cardText": "CS_COMMON_SELECT_GENDER",
-      "submitBarLabel": "CS_COMMON_NEXT",
-      "skipText": "CORE_COMMON_SKIP_CONTINUE"
-    },
-    "nextStep": "property-type"
-  }]
+    "nextStep": null
+  }
+  ]
 
   configs = [...additionalConfig, ...config]
   configs.indexRoute = "select-trip-number";
