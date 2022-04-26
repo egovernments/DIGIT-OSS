@@ -126,8 +126,7 @@ public class BirthRepository {
 		log.info("Size of list: " + list.size());
 		for(Map map: list) {
 			BirthCertificate birthCertificate = new BirthCertificate();
-			String birthDtlQuery = "SELECT * FROM eg_birth_dtls WHERE id = " + map.get("birthdtlid");
-			EgBirthDtl birthDtl = jdbcTemplate.query(birthDtlQuery);
+			EgBirthDtl birthDtl = getBirthDtlById((String) map.get("birthdtlid"));
 
 			birthCertificate.setId((String) map.get("id"));
 			birthCertificate.setBirthCertificateNo((String) map.get("birthcertificateno"));
@@ -137,7 +136,14 @@ public class BirthRepository {
 			birthCertificate.setAdditionalDetail(map.get("additionaldetail"));
 			birthCertificate.setEmbeddedUrl((String) map.get("embeddedurl"));
 			birthCertificate.setDateofissue(((Long) map.get("dateofissue")).longValue());
-
+			birthCertificate.setSource((String) map.get("source"));
+			birthCertificate.setBirthPlace(birthDtl.getPlaceofbirth());
+			birthCertificate.setGender(birthDtl.getGenderStr());
+			birthCertificate.setWard(birthDtl.getBirthPermaddr().getTehsil());
+			birthCertificate.setState(birthDtl.getBirthPermaddr().getState());
+			birthCertificate.setTenantId(birthDtl.getTenantid());
+			birthCertificate.setDateofbirth(birthDtl.getDateofbirth());
+			birthCertificate.setDateofreport(birthDtl.getDateofreport());
 
 			AuditDetails auditDetails = new AuditDetails();
 			auditDetails.setCreatedBy((String) map.get("createdby"));
@@ -149,6 +155,11 @@ public class BirthRepository {
 			birthCertificates.add(birthCertificate);
 		}
 		return birthCertificates;
+	}
+
+	public EgBirthDtl getBirthDtlById(String id) {
+		String birthDtlQuery = "SELECT * FROM eg_birth_dtls WHERE id = ?";
+		return (EgBirthDtl) jdbcTemplate.queryForObject(birthDtlQuery, new Object[]{id}, new BeanPropertyRowMapper(EgBirthDtl.class));
 	}
 
 	public void save(BirthCertRequest birthCertRequest) {
