@@ -87,7 +87,7 @@ public class ExternalEmailService implements EmailService {
 			for(int i=0; i<email.getFileStoreId().size(); i++) {
 				String uri = String.format(filestore_format, filestore_host, filestore_workdir, filestore_tenant_id, email.getFileStoreId().toArray()[i]);
 				URL url = new URL(uri);
-				log.info(FilenameUtils.getName(url.getPath()));
+				log.info("filename",FilenameUtils.getName(url.getPath()));
 				URLConnection con = url.openConnection();
 				String fieldValue = "Application Form " + "[" + i + "]";
 				File download = new File(System.getProperty("java.io.tmpdir"), fieldValue);
