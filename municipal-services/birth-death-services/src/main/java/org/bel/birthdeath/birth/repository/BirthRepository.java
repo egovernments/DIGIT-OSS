@@ -128,6 +128,30 @@ public class BirthRepository {
 			BirthCertificate birthCertificate = new BirthCertificate();
 			EgBirthDtl birthDtl = getBirthDtlById((String) map.get("birthdtlid"));
 
+			log.info("ID = " + (String) map.get("id"));
+			log.info("Birth Certificate No = " + (String) map.get("birthcertificateno"));
+			log.info("Birth Details ID = " + (String) map.get("birthdtlid"));
+			log.info("File Store ID = " + (String) map.get("filestoreid"));
+			log.info("Application Status = " + BirthCertificate.StatusEnum.valueOf((String) map.get("status")));
+			log.info("Additional Details = " + map.get("additionaldetail"));
+			log.info("Embedded URL = " + (String) map.get("embeddedurl"));
+			log.info("Date Of Issue = " + ((Long) map.get("dateofissue")).longValue());
+			log.info("Source = " + (String) map.get("source"));
+			log.info("Birth Place = " + birthDtl.getPlaceofbirth());
+			log.info("Gender = " + birthDtl.getGenderStr());
+
+			if(birthDtl.getBirthPermaddr() != null) {
+				log.info("Ward/Tehsil = " + birthDtl.getBirthPermaddr().getTehsil());
+				log.info("State = " + birthDtl.getBirthPermaddr().getState());
+			}
+			else {
+				log.info("Birth Permanent Address = null");
+			}
+
+			log.info("Tenant ID = " + birthDtl.getTenantid());
+			log.info("Date of Birth = " + birthDtl.getDateofbirth());
+			log.info("Date of Report = " + birthDtl.getDateofreport());
+
 			birthCertificate.setId((String) map.get("id"));
 			birthCertificate.setBirthCertificateNo((String) map.get("birthcertificateno"));
 			birthCertificate.setBirthDtlId((String) map.get("birthdtlid"));
@@ -139,8 +163,9 @@ public class BirthRepository {
 			birthCertificate.setSource((String) map.get("source"));
 			birthCertificate.setBirthPlace(birthDtl.getPlaceofbirth());
 			birthCertificate.setGender(birthDtl.getGenderStr());
-			birthCertificate.setWard(birthDtl.getBirthPermaddr().getTehsil());
-			birthCertificate.setState(birthDtl.getBirthPermaddr().getState());
+
+			birthCertificate.setWard(birthDtl.getBirthPermaddr() != null ? birthDtl.getBirthPermaddr().getTehsil() : null);
+			birthCertificate.setState(birthDtl.getBirthPermaddr() != null ? birthDtl.getBirthPermaddr().getState() : null);
 			birthCertificate.setTenantId(birthDtl.getTenantid());
 			birthCertificate.setDateofbirth(birthDtl.getDateofbirth());
 			birthCertificate.setDateofreport(birthDtl.getDateofreport());
