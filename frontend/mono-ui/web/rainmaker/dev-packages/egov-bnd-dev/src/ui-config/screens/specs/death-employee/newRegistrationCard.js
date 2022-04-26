@@ -462,6 +462,22 @@ export const getcheckboxvalue = (state, dispatch) => {
           true
         )
       );
+      dispatch(
+        handleField(
+          "newRegistration",
+          `components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.permAddressofParents.children.${key}`,
+          "props.value",
+          ""
+        )
+      );
+      dispatch(
+        handleField(
+          "newRegistration",
+          `components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.permAddressofParents.children.${key}`,
+          "props.error",
+          false
+        )
+      );
     }
     const addrConfig = get(
       state.screenConfiguration.screenConfig.newRegistration,
