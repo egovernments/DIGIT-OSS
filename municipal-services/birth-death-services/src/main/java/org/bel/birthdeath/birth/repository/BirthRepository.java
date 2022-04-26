@@ -121,15 +121,14 @@ public class BirthRepository {
 			offset = criteria.getOffset();
 
 		String query = "SELECT * FROM eg_birth_cert_request OFFSET " + offset + " LIMIT " + limit;
-		List<Map<String,String>> list =  jdbcTemplate.query(query, new BeanPropertyRowMapper(Map.class));
+		List<Map<String, Object>> list =  jdbcTemplate.queryForList(query);
 		log.info("Size of list: " + list.size());
-		for(Map<String,String> map: list) {
-			ObjectMapper mapper = new ObjectMapper();
-			BirthCertificate birthCertificate = mapper.convertValue(map, BirthCertificate.class);
-			birthCertificate.getAuditDetails().setCreatedBy(map.get("createdby"));
-			birthCertificate.getAuditDetails().setLastModifiedBy(map.get("lastmodifiedby"));
-			birthCertificate.getAuditDetails().setCreatedTime(Long.parseLong(map.get("createdtime")));
-			birthCertificate.getAuditDetails().setLastModifiedTime(Long.parseLong(map.get("lastmodifiedtime")));
+		for(Map map: list) {
+			BirthCertificate birthCertificate = new BirthCertificate();
+			birthCertificate.getAuditDetails().setCreatedBy((String) map.get("createdby"));
+			birthCertificate.getAuditDetails().setLastModifiedBy((String) map.get("lastmodifiedby"));
+			birthCertificate.getAuditDetails().setCreatedTime(((Long) map.get("createdtime")).longValue());
+			birthCertificate.getAuditDetails().setLastModifiedTime(((Long) map.get("lastmodifiedtime")).longValue());
 			log.info("Created by : " + map.get("createdby"));
 			log.info(birthCertificate.getAuditDetails().toString());
 			birthCertificates.add(birthCertificate);
