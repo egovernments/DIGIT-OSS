@@ -17,6 +17,7 @@ import org.egov.encryption.models.Attribute;
 import org.egov.encryption.util.ConvertClass;
 import org.egov.encryption.util.JSONBrowseUtil;
 import org.egov.encryption.util.JacksonUtils;
+import org.egov.encryption.util.JsonPathConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,7 @@ public class EncryptionServiceImpl implements EncryptionService {
     private JsonNode encryptJsonArray(JsonNode plaintextNode, String model, String tenantId) throws IOException {
         JsonNode encryptNode = plaintextNode.deepCopy();
         List<String> attributesToEncrypt = encryptionPolicyConfiguration.getAttributesJsonPathForModel(model);
+        attributesToEncrypt = JsonPathConverter.convertToArrayJsonPaths(attributesToEncrypt);
         JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(plaintextNode, attributesToEncrypt);
 
         if(! jsonNode.isEmpty(objectMapper.getSerializerProvider())) {
