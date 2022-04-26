@@ -126,15 +126,26 @@ public class BirthRepository {
 		log.info("Size of list: " + list.size());
 		for(Map map: list) {
 			BirthCertificate birthCertificate = new BirthCertificate();
-			log.info("Created by: " + (String) map.get("createdby"));
+			String birthDtlQuery = "SELECT * FROM eg_birth_dtls WHERE id = " + map.get("birthdtlid");
+			EgBirthDtl birthDtl = jdbcTemplate.query(birthDtlQuery);
+
+			birthCertificate.setId((String) map.get("id"));
+			birthCertificate.setBirthCertificateNo((String) map.get("birthcertificateno"));
+			birthCertificate.setBirthDtlId((String) map.get("birthdtlid"));
+			birthCertificate.setFilestoreid((String) map.get("filestoreid"));
+			birthCertificate.setApplicationStatus((BirthCertificate.StatusEnum) map.get("status"));
+			birthCertificate.setAdditionalDetail(map.get("additionaldetail"));
+			birthCertificate.setEmbeddedUrl((String) map.get("embeddedurl"));
+			birthCertificate.setDateofissue(((Long) map.get("dateofissue")).longValue());
+
+
 			AuditDetails auditDetails = new AuditDetails();
 			auditDetails.setCreatedBy((String) map.get("createdby"));
 			auditDetails.setCreatedTime(((Long) map.get("createdtime")).longValue());
 			auditDetails.setLastModifiedTime(((Long) map.get("lastmodifiedtime")).longValue());
 			auditDetails.setLastModifiedBy((String) map.get("lastmodifiedby"));
-
 			birthCertificate.setAuditDetails(auditDetails);
-			log.info(birthCertificate.getAuditDetails().toString());
+
 			birthCertificates.add(birthCertificate);
 		}
 		return birthCertificates;
