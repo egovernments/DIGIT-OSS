@@ -106,7 +106,7 @@ const EditApplication = () => {
           setTimeout(closeToastOfError, 5000);
         },
         onSuccess: (data, variables) => {
-          setShowToast({ key: false, message: "CS_PROPERTY_APPLICATION_SUCCESS" });
+          setShowToast({ key: false, message: "WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL" });
           setIsAppDetailsPage(true);
           // setTimeout(closeToast(), 5000);
         },

@@ -192,7 +192,7 @@ export const WSSearch = {
               { title: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.relationship },
               { title: "WS_CORRESPONDANCE_ADDRESS_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.correspondenceAddress },
             ]
-          : [{ title: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS", value: " " }],
+          : [{ title: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS", value: t("SCORE_YES") }],
     };
 
     const documentDetails = {
@@ -673,7 +673,7 @@ export const WSSearch = {
               { title: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.relationship },
               { title: "WS_CORRESPONDANCE_ADDRESS_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.correspondenceAddress },
             ]
-          : [{ title: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS", value: " " }],
+          : [{ title: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS", value: t("SCORE_YES") }],
     };
 
     let details = [];

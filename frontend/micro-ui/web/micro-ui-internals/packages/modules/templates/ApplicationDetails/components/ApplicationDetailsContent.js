@@ -88,6 +88,7 @@ function ApplicationDetailsContent({
     window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
   const isNocLocation = window.location.href.includes("employee/noc");
   const isBPALocation = window.location.href.includes("employee/obps");
+  const isWS = window.location.href.includes("employee/ws");
 
   const getRowStyles = () => {
     if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
@@ -196,7 +197,7 @@ function ApplicationDetailsContent({
                   return (
                     <Row
                       key={t(value.title)}
-                      label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
+                      label={isWS ? `${t(value.title)}:` : t(value.title)}
                       text={getTextValue(value)}
                       last={index === detail?.values?.length - 1}
                       caption={value.caption}

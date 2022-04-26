@@ -17,7 +17,7 @@ const WSActivationDetails = ({ t, config, userType, formData, onSelect }) => {
   return (
     <React.Fragment>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`WS_METER_ID`)}`}</CardLabel>
+        <CardLabel className="card-label-smaller" style={{fontWeight: "700"}}>{`${t(`WS_METER_ID`)}`}</CardLabel>
         <div className="field">
           <TextInput
             t={t}
@@ -32,7 +32,7 @@ const WSActivationDetails = ({ t, config, userType, formData, onSelect }) => {
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`WS_METER_INSTALLATION_DATE`)}`}</CardLabel>
+        <CardLabel className="card-label-smaller" style={{fontWeight: "700"}}>{`${t(`WS_METER_INSTALLATION_DATE`)}`}</CardLabel>
         <div className="field">
           <DatePicker
             date={activationDetails.meterInstallationDate}
@@ -43,7 +43,7 @@ const WSActivationDetails = ({ t, config, userType, formData, onSelect }) => {
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`WS_INIT_METER_READING`)}`}</CardLabel>
+        <CardLabel className="card-label-smaller" style={{fontWeight: "700"}}>{`${t(`WS_INIT_METER_READING`)}`}</CardLabel>
         <div className="field">
           <TextInput
             value={activationDetails.meterInitialReading}
@@ -54,7 +54,7 @@ const WSActivationDetails = ({ t, config, userType, formData, onSelect }) => {
         </div>
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`WS_CONN_EXEC_DATE`)}`}</CardLabel>
+        <CardLabel className="card-label-smaller" style={{fontWeight: "700"}}>{`${t(`WS_CONN_EXEC_DATE`)}`}</CardLabel>
         <div className="field">
           <DatePicker
             date={activationDetails.connectionExecutionDate}

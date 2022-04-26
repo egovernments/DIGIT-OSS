@@ -221,7 +221,7 @@ const ConnectionDetails = (_props) => {
       {!connectionHolderDetails?.[0]?.sameAsOwnerDetails ? <div>
 
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_OWN_DETAIL_NAME")}*`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_OWN_DETAIL_NAME")}:*`}</CardLabel>
           <div className="field">
             <Controller
               control={control}
@@ -247,7 +247,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.name ? errors?.name?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL")}*`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL")}:*`}</CardLabel>
           <Controller
             control={control}
             name={"gender"}
@@ -273,7 +273,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.gender ? errors?.gender?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("CORE_COMMON_MOBILE_NUMBER")}*`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("CORE_COMMON_MOBILE_NUMBER")}:*`}</CardLabel>
           <div className="field">
             <Controller
               control={control}
@@ -301,7 +301,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.mobileNumber ? errors?.mobileNumber?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_OWN_DETAIL_GUARDIAN_LABEL")}*`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_OWN_DETAIL_GUARDIAN_LABEL")}:*`}</CardLabel>
           <div className="field">
             <Controller
               control={control}
@@ -327,7 +327,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.guardian ? errors?.guardian?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}*`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}:*`}</CardLabel>
           <Controller
             control={control}
             name={"relationship"}
@@ -353,7 +353,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.relationship ? errors?.relationship?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CORRESPONDANCE_ADDRESS_LABEL")}*`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_CORRESPONDANCE_ADDRESS_LABEL")}:*`}</CardLabel>
           <div className="field">
             <Controller
               control={control}
@@ -379,7 +379,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.address ? errors?.address?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}*`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}:*`}</CardLabel>
           <Controller
             control={control}
             name={"ownerType"}

@@ -47,7 +47,7 @@ const WSResponse = (props) => {
     <div>
       <Card>
         <Banner
-          message={t("CS_PROPERTY_APPLICATION_SUCCESS")}
+          message={t("WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL")}
           applicationNumber={filters?.applicationNumber}
           applicationNumberOne={filters?.applicationNumber1}
           info={filters?.applicationNumber ? t("WS_WATER_APPLICATION_NUMBER_LABEL") : ""}
