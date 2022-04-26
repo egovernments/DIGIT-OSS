@@ -25,6 +25,7 @@ import org.bel.birthdeath.common.Idgen.IdGenerationResponse;
 import org.bel.birthdeath.common.contract.BirthPdfApplicationRequest;
 import org.bel.birthdeath.common.contract.EgovPdfResp;
 import org.bel.birthdeath.common.contract.EncryptionDecryptionUtil;
+import org.bel.birthdeath.common.model.AuditDetails;
 import org.bel.birthdeath.common.producer.BndProducer;
 import org.bel.birthdeath.common.repository.ServiceRequestRepository;
 import org.bel.birthdeath.config.BirthDeathConfiguration;
@@ -125,11 +126,14 @@ public class BirthRepository {
 		log.info("Size of list: " + list.size());
 		for(Map map: list) {
 			BirthCertificate birthCertificate = new BirthCertificate();
-			birthCertificate.getAuditDetails().setCreatedBy((String) map.get("createdby"));
-			birthCertificate.getAuditDetails().setLastModifiedBy((String) map.get("lastmodifiedby"));
-			birthCertificate.getAuditDetails().setCreatedTime(((Long) map.get("createdtime")).longValue());
-			birthCertificate.getAuditDetails().setLastModifiedTime(((Long) map.get("lastmodifiedtime")).longValue());
-			log.info("Created by : " + map.get("createdby"));
+			log.info("Created by: " + (String) map.get("createdby"));
+			AuditDetails auditDetails = new AuditDetails();
+			auditDetails.setCreatedBy((String) map.get("createdby"));
+			auditDetails.setCreatedTime(((Long) map.get("createdtime")).longValue());
+			auditDetails.setLastModifiedTime(((Long) map.get("lastmodifiedtime")).longValue());
+			auditDetails.setLastModifiedBy((String) map.get("lastmodifiedby"));
+
+			birthCertificate.setAuditDetails(auditDetails);
 			log.info(birthCertificate.getAuditDetails().toString());
 			birthCertificates.add(birthCertificate);
 		}
