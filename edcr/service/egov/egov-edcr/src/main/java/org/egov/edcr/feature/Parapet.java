@@ -54,6 +54,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -62,6 +65,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Parapet extends FeatureProcess {
+
+	private static final Logger LOG = LogManager.getLogger(Parapet.class);
 
 	private static final String RULE_41_V = "41-v";
 	public static final String PARAPET_DESCRIPTION = "Parapet";

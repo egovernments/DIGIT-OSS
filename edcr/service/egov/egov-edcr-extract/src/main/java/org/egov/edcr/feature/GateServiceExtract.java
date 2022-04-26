@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Gate;
 import org.egov.edcr.entity.blackbox.MeasurementDetail;
 import org.egov.edcr.entity.blackbox.PlanDetail;
@@ -23,6 +26,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GateServiceExtract extends FeatureExtract {
+
+    private static final Logger LOG = LogManager.getLogger(GateServiceExtract.class);
+
     private static final String GATE = "GATE";
     @Autowired
     private LayerNames layerNames;

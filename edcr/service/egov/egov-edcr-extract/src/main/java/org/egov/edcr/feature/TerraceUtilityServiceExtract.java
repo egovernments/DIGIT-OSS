@@ -56,7 +56,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.TerraceUtility;
 import org.egov.edcr.entity.blackbox.PlanDetail;
@@ -69,7 +70,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TerraceUtilityServiceExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(TerraceUtilityServiceExtract.class);
+    private static final Logger LOG = LogManager.getLogger(TerraceUtilityServiceExtract.class);
     public static final String TERRACEUTILITIESDISTANCE = "TerraceUtilitiesDistance";
     public static final String LAYER_NAME_TERRACEUTILITY = "LAYER_NAME_TERRACEUTILITY";
 

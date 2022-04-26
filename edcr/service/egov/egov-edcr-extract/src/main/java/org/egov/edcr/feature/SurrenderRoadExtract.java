@@ -4,6 +4,9 @@ package org.egov.edcr.feature;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.edcr.entity.blackbox.MeasurementDetail;
 import org.egov.edcr.entity.blackbox.PlanDetail;
@@ -15,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SurrenderRoadExtract extends FeatureExtract {
+
+    private static final Logger LOG = LogManager.getLogger(SurrenderRoadExtract.class);
+
     @Autowired
     private LayerNames layerNames;
 

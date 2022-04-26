@@ -8,7 +8,13 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+
+
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
@@ -18,7 +24,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BuildingHeightExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(BuildingHeightExtract.class);
+    private static final Logger LOG = LogManager.getLogger(BuildingHeightExtract.class);
     public static final String UPTO = "Up To";
     public static final String DECLARED = "Declared";
     @Autowired

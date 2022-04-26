@@ -55,6 +55,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Circle;
 import org.egov.common.entity.edcr.Floor;
@@ -66,6 +69,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SpiralStair extends FeatureProcess {
+
+	private static final Logger LOG = LogManager.getLogger(SpiralStair.class);
 	private static final String FLOOR = "Floor";
 	private static final String EXPECTED_DIAMETER = "1.50";
 	private static final String RULE42_5_IV = "42-5-iv";

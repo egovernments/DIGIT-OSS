@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.infra.admin.master.entity.City;
 import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
@@ -29,7 +30,7 @@ public class CustomImplProvider {
     public static final String DISTRICT_NAME = "DISTRICT_NAME";
     public static final String GRADE = "GRADE";
     public static final String STATE_NAME = "STATE_NAME";
-    private static final Logger LOG = Logger.getLogger(CustomImplProvider.class);
+    private static final Logger LOG = LogManager.getLogger(CustomImplProvider.class);
 
     @Value("${client.id}")
     private String clientId;

@@ -57,6 +57,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Occupancy;
@@ -68,7 +71,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LandUse extends FeatureProcess {
-
+	
+    private static final Logger LOG = LogManager.getLogger(LandUse.class);
     private static final String RULE_28 = "28";
     private static final BigDecimal ROAD_WIDTH_TWELVE_POINTTWO = BigDecimal.valueOf(12.2);
     private static final String ROAD_WIDTH = "Road Width";

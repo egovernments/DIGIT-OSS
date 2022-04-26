@@ -56,6 +56,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.Plan;
@@ -66,6 +70,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FireTenderMovement extends FeatureProcess {
+
+    private static final Logger LOG = LogManager.getLogger(FireTenderMovement.class);
+
     private static final BigDecimal FIFTEEN = BigDecimal.valueOf(15);
     private static final BigDecimal THREE_POINTSIXSIX = BigDecimal.valueOf(3.66);
     private static final String RULE_36_3 = "36-3";

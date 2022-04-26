@@ -25,7 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Building;
 import org.egov.common.entity.edcr.DcrReportBlockDetail;
@@ -102,7 +103,7 @@ public class PlanReportService {
 	private static final String TOTAL = "Total";
     private static final String DESCRIPTION = "description";
     private static final String RULE_NO = "RuleNo";
-    private static final Logger LOG = Logger.getLogger(PlanReportService.class);
+    private static final Logger LOG = LogManager.getLogger(PlanReportService.class);
     public static final String BLOCK = "Block";
     public static final String STATUS = "Status";
     @Value("${edcr.client.subreport}")

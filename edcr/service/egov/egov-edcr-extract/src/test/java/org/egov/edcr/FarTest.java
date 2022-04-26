@@ -1,8 +1,10 @@
 package org.egov.edcr;
 
-import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import java.io.IOException;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.egov.common.entity.edcr.Block;
 import org.egov.edcr.feature.FarExtractWithOutDBCall;
 import org.egov.edcr.feature.HeightOfRoomExtract;
@@ -16,7 +18,7 @@ import org.mockito.runners.MockitoJUnit44Runner;
 
 public class FarTest extends BaseTest {
 
-	private static final Logger LOG = Logger.getLogger(FarTest.class);
+	private static final Logger LOG = LogManager.getLogger(FarTest.class);
 	PlanInfoFeatureExtractLocalTest pi = new PlanInfoFeatureExtractLocalTest();
 	FarExtractWithOutDBCall feature = new FarExtractWithOutDBCall();
 	HeightOfRoomExtract hr = new HeightOfRoomExtract();
