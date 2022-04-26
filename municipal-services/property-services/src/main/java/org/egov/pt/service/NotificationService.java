@@ -277,14 +277,14 @@ public class NotificationService {
 	private void prepareMsgAndSend(PropertyRequest request, String msg, String state) {
 
 		Property property = request.getProperty();
-		Set<String> fileStoreIds = new HashSet<>();
+		Map<String, String> fileStoreIds= new HashMap<>();
 		RequestInfo requestInfo = request.getRequestInfo();
 		Map<String, String> mobileNumberToOwner = new HashMap<>();
 		String tenantId = request.getProperty().getTenantId();
 		String moduleName = request.getProperty().getWorkflow().getModuleName();
 		//select only application_type when testing
 		for(Document document : request.getProperty().getDocuments()) {
-			fileStoreIds.add(document.getFileStoreId());
+			fileStoreIds.put(document.getFileStoreId(), document.getDocumentType());
 		}
 
 		String action;

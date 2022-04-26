@@ -290,7 +290,7 @@ public class NotificationUtil {
     }
 
     //added fileStoreIds in the function
-    public List<EmailRequest> createEmailRequestFromSMSRequests(RequestInfo requestInfo,List<SMSRequest> smsRequests,String tenantId, Set<String> fileStoreIds) {
+    public List<EmailRequest> createEmailRequestFromSMSRequests(RequestInfo requestInfo,List<SMSRequest> smsRequests,String tenantId, Map<String, String> fileStoreIds) {
         Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
         Map<String, String> mobileNumberToEmailId = fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
         if (CollectionUtils.isEmpty(mobileNumberToEmailId.keySet())) {

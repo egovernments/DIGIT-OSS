@@ -27,6 +27,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Map;
 
 @Service
 @ConditionalOnProperty(value = "mail.enabled", havingValue = "true")
@@ -84,12 +85,11 @@ public class ExternalEmailService implements EmailService {
 			helper.setText(email.getBody(), true);
 
 
-			for(int i=0; i<email.getFileStoreId().size(); i++) {
-				String uri = String.format(filestore_format, filestore_host, filestore_workdir, filestore_tenant_id, email.getFileStoreId().toArray()[i]);
+			for(Map.Entry<String, String> entry : email.getFileStoreId().entrySet()) {
+				String uri = String.format(filestore_format, filestore_host, filestore_workdir, filestore_tenant_id, entry.getKey());
 				URL url = new URL(uri);
-				log.info("filename",FilenameUtils.getName(url.getPath()));
 				URLConnection con = url.openConnection();
-				String fieldValue = "Application Form " + "[" + i + "]";
+				String fieldValue = entry.getValue();
 				File download = new File(System.getProperty("java.io.tmpdir"), fieldValue);
 				ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
 				FileOutputStream fos = new FileOutputStream(download);
