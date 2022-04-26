@@ -126,9 +126,8 @@ public class SewerageServiceImpl implements SewerageService {
 
 			}*/
 		}
-		if(criteria.getIsPropertyDetailsRequired()){
+		if ((criteria.getIsPropertyDetailsRequired() != null) && criteria.getIsPropertyDetailsRequired()) {
 			sewerageConnectionList = enrichmentService.enrichPropertyDetails(sewerageConnectionList, criteria, requestInfo);
-
 		}
 		validateProperty.validatePropertyForConnection(sewerageConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
