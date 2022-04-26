@@ -7,8 +7,13 @@ const useWSInbox = ({ tenantId, filters, config = {} }) => {
   const { sortBy, limit, offset, sortOrder } = tableForm;
   let { moduleName, businessService, applicationStatus, locality, assignee, businessServiceArray, applicationType } = filterForm;
 
-  if (window.location.href.includes("water/inbox")) moduleName = "ws-services";
-  if (window.location.href.includes("sewerage/inbox")) moduleName = "sw-services";
+  if(!window.location.href.includes("digit-ui/employee/")) {
+    moduleName = moduleName;
+  } else {
+    if (window.location.href.includes("water/inbox")) moduleName = "ws-services";
+    if (window.location.href.includes("sewerage/inbox")) moduleName = "sw-services";
+  }
+  
 
   if (moduleName === "ws-services") {
     if (applicationType && applicationType.length > 0) {

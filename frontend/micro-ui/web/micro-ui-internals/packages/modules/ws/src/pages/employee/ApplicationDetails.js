@@ -270,7 +270,7 @@ const ApplicationDetails = () => {
           applicationData={applicationDetails?.applicationData}
           mutate={mutate}
           workflowDetails={workflowDetails}
-          businessService={applicationDetails?.processInstancesDetails?.[0]?.businessService}
+          businessService={applicationDetails?.processInstancesDetails?.[0]?.businessService?.toUpperCase()}
           moduleCode="WS"
           showToast={showToast}
           setShowToast={setShowToast}
