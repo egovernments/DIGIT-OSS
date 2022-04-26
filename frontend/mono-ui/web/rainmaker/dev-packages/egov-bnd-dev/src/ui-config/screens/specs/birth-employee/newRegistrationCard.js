@@ -1,7 +1,19 @@
 import {
-  getCommonCard, getCommonContainer, getCommonGrayCard, getCommonParagraph, getCommonSubHeader, getCommonTitle, getDateField, getPattern, getSelectField, getTextField
+  getCommonCard,
+  getCommonContainer,
+  getCommonGrayCard,
+  getCommonParagraph,
+  getCommonSubHeader,
+  getCommonTitle,
+  getDateField,
+  getPattern,
+  getSelectField,
+  getTextField,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  prepareFinalObject,
+  handleScreenConfigurationFieldChange as handleField,
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { patterns } from "../utils/constants";
@@ -35,7 +47,7 @@ export const getPersonDetailsForm = (type) => {
         labelName: "Middle Name",
         labelKey: "BND_MIDDLENAME_LABEL",
       },
-      required: true,
+      required: false,
       visible: true,
       pattern: patterns["name"],
       jsonPath: `bnd.birth.newRegistration.${type}.middlename`,
@@ -426,6 +438,74 @@ export const getcheckboxvalue = (state, dispatch) => {
           )
         )
       );
+    dispatch(
+      handleField(
+        "newRegistration",
+        "components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.permAddressofParents",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "newRegistration",
+        "components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.header",
+        "visible",
+        false
+      )
+    );
+    const presentAddrConfig = get(
+      state.screenConfiguration.screenConfig.newRegistration,
+      "components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.permAddressofParents.children"
+    );
+    for (var key in presentAddrConfig) {
+      dispatch(
+        handleField(
+          "newRegistration",
+          `components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.permAddressofParents.children.${key}`,
+          "required",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "newRegistration",
+          `components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.permAddressofParents.children.${key}`,
+          "props.required",
+          false
+        )
+      );
+    }
+    const addrConfig = get(
+      state.screenConfiguration.screenConfig.newRegistration,
+      "components.div2.children.details.children.cardContent.children.addrTimeOfBirth.children.cardContent.children.addrTimeOfBirth.children"
+    );
+    for (var key in addrConfig) {
+      dispatch(
+        handleField(
+          "newRegistration",
+          `components.div2.children.details.children.cardContent.children.addrTimeOfBirth.children.cardContent.children.addrTimeOfBirth.children.${key}`,
+          "required",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "newRegistration",
+          `components.div2.children.details.children.cardContent.children.addrTimeOfBirth.children.cardContent.children.addrTimeOfBirth.children.${key}`,
+          "props.required",
+          true
+        )
+      );
+    }
+    dispatch(
+      handleField(
+        "newRegistration",
+        "components.div2.children.details.children.cardContent.children.addrTimeOfBirth.children.cardContent.children.header.children.key",
+        "props.labelKey",
+        "BND_BIRTH_ADDR_PERM"
+      )
+    );
   } else {
     let birthpermaddr = get(
       state.screenConfiguration.preparedFinalObject,
@@ -435,6 +515,74 @@ export const getcheckboxvalue = (state, dispatch) => {
       dispatch(
         prepareFinalObject(`bnd.birth.newRegistration.birthPermaddr.${key}`, "")
       );
+    const presentAddrConfig = get(
+      state.screenConfiguration.screenConfig.newRegistration,
+      "components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.permAddressofParents.children"
+    );
+    for (var key in presentAddrConfig) {
+      dispatch(
+        handleField(
+          "newRegistration",
+          `components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.permAddressofParents.children.${key}`,
+          "required",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "newRegistration",
+          `components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.permAddressofParents.children.${key}`,
+          "props.required",
+          true
+        )
+      );
+    }
+    const addrConfig = get(
+      state.screenConfiguration.screenConfig.newRegistration,
+      "components.div2.children.details.children.cardContent.children.addrTimeOfBirth.children.cardContent.children.addrTimeOfBirth.children"
+    );
+    for (var key in addrConfig) {
+      dispatch(
+        handleField(
+          "newRegistration",
+          `components.div2.children.details.children.cardContent.children.addrTimeOfBirth.children.cardContent.children.addrTimeOfBirth.children.${key}`,
+          "required",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "newRegistration",
+          `components.div2.children.details.children.cardContent.children.addrTimeOfBirth.children.cardContent.children.addrTimeOfBirth.children.${key}`,
+          "props.required",
+          false
+        )
+      );
+    }
+    dispatch(
+      handleField(
+        "newRegistration",
+        "components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.permAddressofParents",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "newRegistration",
+        "components.div2.children.details.children.cardContent.children.permAddressofParents.children.cardContent.children.header",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "newRegistration",
+        "components.div2.children.details.children.cardContent.children.addrTimeOfBirth.children.cardContent.children.header.children.key",
+        "props.labelKey",
+        "BND_PRESENT_ADDR_DURING_BIRTH"
+      )
+    );
   }
 };
 
@@ -531,8 +679,7 @@ export const newRegistrationForm = getCommonCard({
           inputLabelProps: {
             shrink: true,
           },
-          onClickHandler: (action, state, dispatch) => {
-          },
+          onClickHandler: (action, state, dispatch) => {},
         },
         gridDefination: {
           xs: 12,

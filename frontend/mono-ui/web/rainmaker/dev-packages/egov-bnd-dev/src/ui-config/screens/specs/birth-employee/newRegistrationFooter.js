@@ -1,6 +1,10 @@
-import { convertDateToEpoch, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  toggleSnackbar, toggleSpinner
+  convertDateToEpoch,
+  getLabel,
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  toggleSnackbar,
+  toggleSpinner,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -9,7 +13,6 @@ import _ from "lodash";
 import get from "lodash/get";
 import { validateFields, validateTimeZone } from "../utils";
 import { showHideConfirmationPopup } from "./newRegistration";
-
 
 const checkIfFormIsValid = async (state, dispatch) => {
   let isFormValid = true;
@@ -55,6 +58,12 @@ const checkIfFormIsValid = async (state, dispatch) => {
     dispatch,
     "newRegistration"
   );
+  const addrField = validateFields(
+    "components.div2.children.details.children.cardContent.children.addrTimeOfBirth.children.cardContent.children.addrTimeOfBirth.children",
+    state,
+    dispatch,
+    "newRegistration"
+  );
 
   const addrTimeOfBirth = validateFields(
     "components.div2.children.details.children.cardContent.children.informantsInfo.children.cardContent.children.informantInfo.children",
@@ -75,6 +84,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
       childsInfo &&
       fathersInfo &&
       mothersInfo &&
+      addrField &&
       addrTimeOfBirth
     )
   ) {
@@ -158,8 +168,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
         {
           labelName:
             "Please enter child's name or father's name or mother's name",
-          labelKey:
-            "BND_ENTER_ANYONE_NAME",
+          labelKey: "BND_ENTER_ANYONE_NAME",
         },
         "info"
       )
@@ -188,6 +197,9 @@ export const postData = async (state, dispatch) => {
       ),
       true
     );
+    if (newRegData["checkboxforaddress"]) {
+      newRegData["birthPermaddr"] = { ...newRegData["birthPresentaddr"] };
+    }
     newRegData["tenantid"] = getTenantId();
     newRegData["excelrowindex"] = -1;
     newRegData["counter"] = newRegData["isLegacyRecord"] ? 1 : 0;
@@ -225,7 +237,7 @@ export const postData = async (state, dispatch) => {
             true,
             {
               labelName: "API Error",
-              labelKey: errorString,
+              labelKey: payload.serviceError,
             },
             "info"
           )
@@ -242,10 +254,14 @@ export const postData = async (state, dispatch) => {
           )
         );
         let userAction = getQueryArg(window.location.href, "action");
-        if(userAction=="EDIT"){
-          window.location.href='/employee/birth-common/getCertificate'
-        }else{
-          setTimeout(()=>location.reload(),2000);
+        if (userAction == "EDIT") {
+          setTimeout(
+            () =>
+              (window.location.href = "/employee/birth-common/getCertificate"),
+            2000
+          );
+        } else {
+          setTimeout(() => location.reload(), 2000);
         }
       }
     } else {

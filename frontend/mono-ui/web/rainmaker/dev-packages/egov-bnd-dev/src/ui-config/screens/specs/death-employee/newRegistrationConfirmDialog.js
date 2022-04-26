@@ -33,31 +33,6 @@ export const confirmationDialog = getCommonContainer(
             },
           },
           children: {
-            cancelButton: {
-              componentPath: "Button",
-              props: {
-                variant: "outlined",
-                color: "primary",
-                style: {
-                  minWidth: "100px",
-                  height: "20px",
-                  marginRight: "4px",
-                  marginTop: "16px",
-                },
-              },
-              children: {
-                previousButtonLabel: getLabel({
-                  labelName: "NO",
-                  labelKey: "CORE_COMMON_CANCEL",
-                }),
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  showHideConfirmationPopup(state, dispatch, "newRegistration");
-                },
-              },
-            },
             yesButton: {
               componentPath: "Button",
               props: {
@@ -84,6 +59,32 @@ export const confirmationDialog = getCommonContainer(
                 },
               },
             },
+            cancelButton: {
+              componentPath: "Button",
+              props: {
+                variant: "outlined",
+                color: "primary",
+                style: {
+                  minWidth: "100px",
+                  height: "20px",
+                  marginRight: "4px",
+                  marginTop: "16px",
+                },
+              },
+              children: {
+                previousButtonLabel: getLabel({
+                  labelName: "NO",
+                  labelKey: "CORE_COMMON_CANCEL",
+                }),
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: (state, dispatch) => {
+                  showHideConfirmationPopup(state, dispatch, "newRegistration");
+                },
+              },
+            },
+          
           },
         },
       },
