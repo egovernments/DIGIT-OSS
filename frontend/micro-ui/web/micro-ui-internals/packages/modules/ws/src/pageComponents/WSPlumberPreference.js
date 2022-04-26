@@ -78,6 +78,8 @@ const WSPlumberPreference = ({ t, config, onSelect, userType, formData }) => {
                     optionKey="i18nKey"
                     onSelect={onPlumberPreferenceSelect}
                     t={t}
+                    innerStyles={{display:"flex"}}
+                    inputStyle={{marginTop:"10px"}}
                 />
                 {plumberPreference && plumberPreference?.code === "Self" && <div
                   style={{

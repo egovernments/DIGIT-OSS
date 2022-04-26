@@ -179,7 +179,7 @@ const WSApplicationDetails = () => {
           <StatusTable>
             <Row className="border-none" label={t("WS_OWN_DETAIL_MOBILE_NO_LABEL")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.mobileNumber} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.name} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none" label={t("WS_OWN_DETAIL_GENDER_LABEL")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.gender} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_OWN_DETAIL_GENDER_LABEL")} text={t(data?.WaterConnection?.[0]?.connectionHolders?.[0]?.gender)} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.fatherOrHusbandName || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_RELATION_LABEL")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.relationship || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_OWN_DETAIL_CROSADD")} text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.correspondenceAddress || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />

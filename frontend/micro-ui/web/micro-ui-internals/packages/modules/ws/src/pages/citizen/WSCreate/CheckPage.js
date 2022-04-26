@@ -52,8 +52,8 @@ import {
         <StatusTable>
           <Row className="border-none"  label={t("WS_PROPERTY_ID_LABEL")} text={cpt?.details?.propertyId}/>
           <Row className="border-none" label={t("WS_OWNERS_NAME_LABEL")} text={t(cpt?.details?.owners[0]?.name)} />
-          <Row className="border-none" label={t("WS_COMMON_TABLE_COL_ADDRESS")} text={propAddArr} />
-          <Row className="border-none" label={t("WS_CONNECTION_DETAILS_STATUS_LABEL")} text={cpt?.details?.propertyId?.status}/>
+          <Row className="border-none" label={t("WS_COMMON_TABLE_COL_ADDRESS")} text={propAddArr.join(', ')} />
+          <Row className="border-none" label={t("WS_CONNECTION_DETAILS_STATUS_LABEL")} text={cpt?.details?.status}/>
         </StatusTable>
         <div style={{ textAlign: "left" }}>
           <Link
@@ -71,7 +71,7 @@ import {
           onClick={() => routeTo(`${routeLink}/connection-holder`)}
         />
         <StatusTable>
-          <Row className="border-none" label={t("WS_OWN_MOBILE_NO")} text={ConnectionHolderDetails?.mobileNumber}/>
+          <Row className="border-none" textStyle={{marginRight:"-10px"}} label={t("WS_OWN_MOBILE_NO")} text={ConnectionHolderDetails?.mobileNumber}/>
           <Row className="border-none" label={t("WS_OWN_DETAIL_NAME")} text={ConnectionHolderDetails?.name}/>
           <Row className="border-none" label={t("WS_OWN_DETAIL_GENDER_LABEL")} text={t(ConnectionHolderDetails?.gender?.i18nKey)}/>
           <Row className="border-none" label={t("WS_FATHERS_HUSBAND_NAME")} text={ConnectionHolderDetails?.guardian || t("CS_NA")}/>
@@ -88,11 +88,11 @@ import {
           onClick={() => routeTo(`${routeLink}/service-name`)}
         />
         <StatusTable>
-          <Row className="border-none" label={t("WS_SERVICE_NAME_LABEL")} text={t(serviceName?.i18nKey)}/>
+          <Row className="border-none" textStyle={{marginRight:"-10px"}} label={t("WS_SERVICE_NAME_LABEL")} text={t(serviceName?.i18nKey)}/>
           <Row className="border-none" label={t("WS_SERV_DETAIL_CONN_TYPE")} text={"NA"}  />
-          <Row className="border-none" label={t("WS_NO_OF_TAPS")} text={waterConectionDetails?.proposedTaps} />
+          <Row className="border-none" label={t("WS_NO_OF_TAPS_PROPOSED")} text={waterConectionDetails?.proposedTaps} />
           <Row className="border-none" label={t("WS_SERV_DETAIL_PIPE_SIZE")} text={t(waterConectionDetails?.proposedPipeSize?.i18nKey)} />
-          <Row className="border-none" label={t("WS_NO_OF_WATER_CLOSETS_LABEL")}   text={sewerageConnectionDetails?.proposedWaterClosets} />
+          <Row className="border-none" label={t("WS_NO_OF_WATER_CLOSETS")}   text={sewerageConnectionDetails?.proposedWaterClosets} />
           <Row className="border-none" label={t("WS_SERV_DETAIL_NO_OF_TOILETS")} text={sewerageConnectionDetails?.proposedToilets} />
           <Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SOURCE")}  text={"NA"} />
           <Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")} text={"NA"} />

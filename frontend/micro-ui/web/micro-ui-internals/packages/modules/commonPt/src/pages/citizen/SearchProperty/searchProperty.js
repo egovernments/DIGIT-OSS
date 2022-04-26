@@ -22,6 +22,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   const [searchData, setSearchData] = useState({});
   const [showToast, setShowToast] = useState(null);
   sessionStorage.setItem("VisitedCommonPTSearch",true);
+  sessionStorage.setItem("VisitedLightCreate",false);
   let allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   // if called from tl module get tenants from tl usetenants
   allCities = allCities ? allCities : Digit.Hooks.tl.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));  

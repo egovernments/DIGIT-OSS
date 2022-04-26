@@ -33,7 +33,7 @@ const App = ({ path }) => {
   return (
     <React.Fragment>
       <div className="ws-citizen-wrapper">
-        <BackButton style={{ border: "none" }} isCommonPTPropertyScreen={isCommonPTPropertyScreen} getBackPageNumber={getBackPageNumber}>
+        <BackButton style={{ border: "none" }} /* isCommonPTPropertyScreen={isCommonPTPropertyScreen} */ getBackPageNumber={getBackPageNumber}>
           {t("CS_COMMON_BACK")}
         </BackButton>
         <Switch>

@@ -6,16 +6,16 @@ import { Link } from "react-router-dom";
 import Timeline from "../../components/CPTTimeline";
 
 const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
-  const tenantId = (formData?.knowyourproperty?.KnowProperty?.code === "YES" ? formData?.cptSearchQuery?.city : formData?.cpt?.details?.tenantId ) || Digit.ULBService.getCitizenCurrentTenant();
+  const tenantId = (formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptSearchQuery?.city : formData?.cpt?.details?.tenantId ) || Digit.ULBService.getCitizenCurrentTenant();
   if (window.location.href.includes("/tl/tradelicence/edit-application/") || window.location.href.includes("/renew-trade/")) {
     sessionStorage.setItem("EditFormData", JSON.stringify(formData));
   }
   const { isLoading, isError, error, data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     {
-      filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId },
+      filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId },
       tenantId: tenantId,
     },
-    { filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId }, tenantId: tenantId }
+    { filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId }, tenantId: tenantId }
   );
 
   const onSkip = () => onSelect();
@@ -70,10 +70,10 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
                   <LinkButton style={{ textAlign: "left" }} label={t("PT_VIEW_MORE_DETAILS")} />
                 </Link>
                 <Link
-                  to={
-                    window.location.href.includes("/edit-application/") || window.location.href.includes("/renew-trade/")
+                  to={ window.location.href.includes("/ws/") ? `/digit-ui/citizen/ws/create-application/search-property` :
+                  (window.location.href.includes("/edit-application/") || window.location.href.includes("/renew-trade/")
                       ? `/digit-ui/citizen/tl/tradelicence/edit-application/${formData?.applicationNumber}/${formData?.tenantId}/know-your-property`
-                      : `/digit-ui/citizen/tl/tradelicence/new-application/know-your-property`
+                      : `/digit-ui/citizen/tl/tradelicence/new-application/know-your-property`)
                   }
                 >
                   <LinkButton style={{ textAlign: "left" }} label={t("PT_CHANGE_PROPERTY")} />
