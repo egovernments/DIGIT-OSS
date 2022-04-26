@@ -44,6 +44,10 @@ const PTCard = () => {
     {
       label: t("ES_COMMON_APPLICATION_SEARCH"),
       link: `/digit-ui/employee/pt/application-search`,
+    },
+    {
+      label: t("Receipt register"),
+      link:`/digit-ui/employee/reports/search/pt-reports/PTReceiptRegister`
     }
   ]
   const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
