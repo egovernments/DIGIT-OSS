@@ -78,6 +78,7 @@ public class ExternalEmailService implements EmailService {
 	private void sendHTMLEmail(Email email) {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper;
+		FileOutputStream fos = null;
 		try {
 			helper = new MimeMessageHelper(message, true);
 			helper.setTo(email.getEmailTo().toArray(new String[0]));
@@ -92,15 +93,11 @@ public class ExternalEmailService implements EmailService {
 				String fieldValue = entry.getValue();
 				File download = new File(System.getProperty("java.io.tmpdir"), fieldValue);
 				ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
-				FileOutputStream fos = new FileOutputStream(download);
+				fos = new FileOutputStream(download);
 				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-				fos.close();
 				helper.addAttachment(fieldValue, download);
 			}
 
-
-			FileUtils.cleanDirectory(new File(System.getProperty("java.io.tmpdir")));
-			FileUtils.deleteDirectory(new File(System.getProperty("java.io.tmpdir")));
 			mailSender.send(message);
 
 		} catch (MessagingException | MalformedURLException e) {
@@ -110,7 +107,15 @@ public class ExternalEmailService implements EmailService {
 		}catch (MailException e){
 			log.error(EXCEPTION_MESSAGE, e);
 		} finally {
-
+			try {
+				if(fos!=null) {
+					fos.close();
+				}
+				FileUtils.cleanDirectory(new File(System.getProperty("java.io.tmpdir")));
+				FileUtils.deleteDirectory(new File(System.getProperty("java.io.tmpdir")));
+			} catch (IOException e) {
+				log.error(EXCEPTION_MESSAGE, e);
+			}
 		}
 	}
 }
