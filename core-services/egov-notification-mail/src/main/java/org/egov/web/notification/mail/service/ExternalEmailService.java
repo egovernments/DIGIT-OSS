@@ -98,6 +98,9 @@ public class ExternalEmailService implements EmailService {
 				helper.addAttachment(fieldValue, download);
 			}
 
+
+			FileUtils.cleanDirectory(new File(System.getProperty("java.io.tmpdir")));
+			FileUtils.deleteDirectory(new File(System.getProperty("java.io.tmpdir")));
 			mailSender.send(message);
 
 		} catch (MessagingException | MalformedURLException e) {
@@ -107,12 +110,7 @@ public class ExternalEmailService implements EmailService {
 		}catch (MailException e){
 			log.error(EXCEPTION_MESSAGE, e);
 		} finally {
-			try {
-				FileUtils.cleanDirectory(new File(System.getProperty("java.io.tmpdir")));
-				FileUtils.deleteDirectory(new File(System.getProperty("java.io.tmpdir")));
-			} catch (IOException e) {
-				log.info(EXCEPTION_MESSAGE, e);
-			}
+
 		}
 	}
 }
