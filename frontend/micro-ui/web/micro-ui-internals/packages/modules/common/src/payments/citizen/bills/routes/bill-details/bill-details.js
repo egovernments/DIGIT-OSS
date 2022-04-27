@@ -53,6 +53,20 @@ const BillDetails = ({ paymentRules, businessService }) => {
       from = new Date(billDetails.fromPeriod).getFullYear().toString();
       to = new Date(billDetails.toPeriod).getFullYear().toString();
       if (from === to) {
+        if(window.location.href.includes("BPA"))
+        {
+          if(new Date(data?.Bill?.[0]?.billDate).getMonth()+1 < 4)
+          {
+            let newfrom =  (parseInt(from)-1).toString();
+            return "FY " + newfrom + "-" + to;
+          }
+          else
+          {
+            let newTo = (parseInt(to)+1).toString();
+            return "FY " + from + "-" + newTo;
+          }
+        }
+        else
         return "FY " + from;
       }
       return "FY " + from + "-" + to;
