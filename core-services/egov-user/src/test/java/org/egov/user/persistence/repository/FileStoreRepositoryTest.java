@@ -33,7 +33,7 @@ public class FileStoreRepositoryTest {
         Map<String, String> expectedFileStoreUrls = new HashMap<String, String>();
         expectedFileStoreUrls.put("key", "value");
         when(restTemplate.getForObject(any(String.class), eq(Map.class))).thenReturn(expectedFileStoreUrls);
-        Map<String, String> fileStoreUrl = null;
+        Map<String, String> fileStoreUrl = new HashMap<>();
         try {
             List<String> list = new ArrayList<String>();
             list.add("key");
