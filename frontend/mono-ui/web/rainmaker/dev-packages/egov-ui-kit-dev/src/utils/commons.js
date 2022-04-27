@@ -1084,7 +1084,13 @@ export const getModuleName = () => {
     return "rainmaker-bpa,rainmaker-bpareg";
   } else if (pathName.indexOf("noc") > -1) {
     return "rainmaker-common-noc";
-  } else {
+  } else if (
+    pathName.indexOf("birth") > -1 ||
+    pathName.indexOf("death") > -1 ||
+    pathName.indexOf("bnd") > -1 
+  ) {
+    return "rainmaker-bnd";
+  }else {
     return "rainmaker-common";
   }
 };

@@ -12,6 +12,7 @@ const nationalScreenURLs = {
   ws: { key: "national-ws", stateKey: "ws", label: "NURT_WATER_SEWERAGE", active: true, nActive: true },
   obps: { key: "nss-obps", stateKey: "obps", label: "DSS_BUILDING_PERMISSION", active: true, nActive: true },
   noc: { key: "national-firenoc", stateKey: "noc", label: "NURT_FIRENOC", active: true, nActive: true },
+  bnd: {key:"nss-bnd",stateKey:"birth-death",label:"BIRTH_AND_DEATH",active:true,nActive:true},
 };
 
 export const checkCurrentScreen = () => {
