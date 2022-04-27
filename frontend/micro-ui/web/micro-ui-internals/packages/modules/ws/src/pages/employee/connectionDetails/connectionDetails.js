@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { Header, ActionBar, MultiLink } from "@egovernments/digit-ui-react-components";
 import * as func from "../../../utils"
 import { ifUserRoleExists } from "../../../utils";
+import WSInfoLabel from "../../../pageComponents/WSInfoLabel";
 
 const GetConnectionDetails = () => {
   const { t } = useTranslation();
@@ -130,6 +131,7 @@ const GetConnectionDetails = () => {
         showToast={showToast}
         setShowToast={setShowToast}
         closeToast={closeToast}
+        labelComponent={<WSInfoLabel t={t}/>}
       />
         {ifUserRoleExists('WS_CEMP') ?
           <ActionBar>

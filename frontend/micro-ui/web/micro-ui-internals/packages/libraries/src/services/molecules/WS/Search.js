@@ -590,7 +590,7 @@ export const WSSearch = {
 
 
     const applicationHeaderDetails = {
-      title: "WS_SERVICE_DETAILS",
+      title: "WS_COMMON_SERV_DETAIL",
       asSectionHeader: true,
       values:
         serviceType == "WATER"
@@ -676,8 +676,15 @@ export const WSSearch = {
           : [{ title: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS", value: t("SCORE_YES") }],
     };
 
+    const isLabelShow = {
+      title: "",
+      asSectionHeader: true,
+      isLabelShow: true,
+      additionalDetails: { isLabelShow: true },
+    };
+
     let details = [];
-    details = [...details, applicationHeaderDetails, propertyDetails, connectionHolderDetails];
+    details = [...details, isLabelShow, applicationHeaderDetails, propertyDetails, connectionHolderDetails];
     wsDataDetails.serviceType = serviceDataType;
     wsDataDetails.property = propertyDataDetails;
     return {

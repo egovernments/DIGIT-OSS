@@ -28,6 +28,7 @@ import TLTradeAccessories from "./TLTradeAccessories";
 import TLTradeUnits from "./TLTradeUnits";
 import WSAdditonalDetails from "./WSAdditonalDetails";
 import WSFeeEstimation from "./WSFeeEstimation";
+import WSInfoLabel from "../../../ws/src/pageComponents/WSInfoLabel";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -263,7 +264,7 @@ function ApplicationDetailsContent({
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />
           )}
           {detail?.isWaterConnectionDetails && <WSAdditonalDetails wsAdditionalDetails={detail} oldValue={oldValue} />}
-
+          {detail?.isLabelShow ? <WSInfoLabel t={t}/> : null}
           {detail?.additionalDetails?.redirectUrl && (
             <div style={{ fontSize: "16px", lineHeight: "24px", fontWeight: "400", padding: "10px 0px" }}>
               <Link to={detail?.additionalDetails?.redirectUrl?.url}>

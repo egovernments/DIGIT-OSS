@@ -14,7 +14,7 @@ const WSInfoLabel = ({ t, config, onSelect, userType, formData }) => {
   return (
     <React.Fragment>
       <div style={{ width: "80%" }}>
-        <div className="info-banner-wrap" style={{ color: "#3498DB" }}>
+        <div className="info-banner-wrap" style={window.location.href.includes("/connection-details") ? { color: "#3498DB", margin: "0px" } : { color: "#3498DB" }}>
           <div>
             <InfoBannerIcon />
             <h2 style={{ color: "#3498DB" }}>{t("CS_FILE_APPLICATION_INFO_LABEL")}</h2>
