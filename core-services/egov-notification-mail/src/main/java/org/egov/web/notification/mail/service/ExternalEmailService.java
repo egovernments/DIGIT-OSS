@@ -107,11 +107,12 @@ public class ExternalEmailService implements EmailService {
 		}catch (MailException e){
 			log.error(EXCEPTION_MESSAGE, e);
 		} finally {
-//			try {
-//				FileUtils.deleteDirectory(new File(System.getProperty("java.io.tmpdir")));
-//			} catch (IOException e) {
-//				log.info(EXCEPTION_MESSAGE, e);
-//			}
+			try {
+				FileUtils.cleanDirectory(new File(System.getProperty("java.io.tmpdir")));
+				FileUtils.deleteDirectory(new File(System.getProperty("java.io.tmpdir")));
+			} catch (IOException e) {
+				log.info(EXCEPTION_MESSAGE, e);
+			}
 		}
 	}
 }
