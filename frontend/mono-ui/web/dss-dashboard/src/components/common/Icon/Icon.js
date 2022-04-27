@@ -12,6 +12,7 @@ import Propertytax from '../../../images/propertytax_nurt.svg'
 import Tradelic from '../../../images/tradeLic_nurt.svg'
 import WandS from '../../../images/w&s_nurt.svg'
 import BuildingPermission from '../../../images/building_permission.svg'
+import BirthDeathIcon from '../../../images/birth_death.svg';
 import Style from './Styles'
 import { withStyles } from '@material-ui/core/styles';
 
@@ -74,8 +75,11 @@ class Icon extends React.Component {
                 return <SVG src={FireNoc} fill="white" className={classes.icon} style={{ width: '54px', height: '54px', color: 'white' }}></SVG>
             case 'nurt_mcollect':
                 return <SVG src={Mcollect} fill="white" className={classes.icon} style={{ width: '54px', height: '54px', color: 'white' }}></SVG>
-                case 'nurt_live_active_ulbs':
+            case 'nurt_live_active_ulbs':
                 return <SVG src={DashBoardIcon} fill="white" className={classes.icon} style={{ width: '54px', height: '54px', color: 'white' }}></SVG>
+            case 'dss_birth_death':
+            case 'nurt_birth_death':
+                return <SVG src={BirthDeathIcon} fill="white" className={classes.icon} style={{ width: '54px', height: '54px', color: 'white' }}></SVG>
             default:
                 return <div></div>
 
