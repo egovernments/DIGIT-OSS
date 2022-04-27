@@ -13,6 +13,8 @@ import Login from "./Login";
 import UserProfile from "./Home/UserProfile";
 import ErrorComponent from "../../components/ErrorComponent";
 
+const sidebarHiddenFor=["digit-ui/citizen/register/name","/digit-ui/citizen/select-language","/digit-ui/citizen/select-location","/digit-ui/citizen/login","/digit-ui/citizen/register/otp"]
+
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
 };
@@ -31,7 +33,7 @@ const Home = ({
   appTenants,
   sourceUrl,
   pathname,
-  initData
+  initData,
 }) => {
   const { isLoading: islinkDataLoading, data: linkData, isFetched: isLinkDataFetched } = Digit.Hooks.useCustomMDMS(
     Digit.ULBService.getStateId(),
@@ -60,13 +62,14 @@ const Home = ({
   const { path } = useRouteMatch();
   const history = useHistory();
 
+  const hideSidebar = sidebarHiddenFor.some(e=>window.location.href.includes(e));
   const appRoutes = modules.map(({ code, tenants }, index) => {
     const Module = Digit.ComponentRegistryService.getComponent(`${code}Module`);
-    return (
-      Module?<Route key={index} path={`${path}/${code.toLowerCase()}`}>
+    return Module ? (
+      <Route key={index} path={`${path}/${code.toLowerCase()}`}>
         <Module stateCode={stateCode} moduleCode={code} userType="citizen" tenants={getTenants(tenants, appTenants)} />
-      </Route>:null
-    );
+      </Route>
+    ) : null;
   });
 
   const ModuleLevelLinkHomePages = modules.map(({ code, bannerImage }, index) => {
@@ -102,9 +105,12 @@ const Home = ({
       />
 
       <div className={`main center-container citizen-home-container mb-25`}>
-        <div className="SideBarStatic">
-          <StaticCitizenSideBar linkData={linkData} islinkDataLoading={islinkDataLoading} />
-        </div>
+        {hideSidebar ? null : (
+          <div className="SideBarStatic">
+            <StaticCitizenSideBar linkData={linkData} islinkDataLoading={islinkDataLoading} />
+          </div>
+        )}
+
         <Switch>
           <Route exact path={path}>
             <CitizenHome />
@@ -119,7 +125,7 @@ const Home = ({
           </Route>
           <Route path={`${path}/error`}>
             <ErrorComponent
-            initData={initData}
+              initData={initData}
               goToHome={() => {
                 history.push("/digit-ui/citizen");
               }}

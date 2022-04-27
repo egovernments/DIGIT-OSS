@@ -61,6 +61,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
+  let isMobile = window.Digit.Utils.browser.isMobile();
 
   const [isEmployee, setisEmployee] = useState(false);
   const [isSidebarOpen, toggleSidebar] = useState(false);
@@ -198,7 +199,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
           style={{
             display: "flex",
             flexDirection: "column",
-            height: "calc(100vh - 56px)",
+            height: isMobile?"calc(100vh - 56px)":"auto",
             zIndex: "99",
           }}
         >
