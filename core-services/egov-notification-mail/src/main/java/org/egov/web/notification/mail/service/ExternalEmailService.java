@@ -95,7 +95,7 @@ public class ExternalEmailService implements EmailService {
 				ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
 				fos = new FileOutputStream(download);
 				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-				helper.addAttachment(fieldValue, download);
+				helper.addAttachment("hello", download);
 			}
 
 			mailSender.send(message);
@@ -111,8 +111,8 @@ public class ExternalEmailService implements EmailService {
 				if(fos!=null) {
 					fos.close();
 				}
-				FileUtils.cleanDirectory(new File(System.getProperty("java.io.tmpdir")));
-				FileUtils.deleteDirectory(new File(System.getProperty("java.io.tmpdir")));
+//				FileUtils.cleanDirectory(new File(System.getProperty("java.io.tmpdir")));
+//				FileUtils.deleteDirectory(new File(System.getProperty("java.io.tmpdir")));
 			} catch (IOException e) {
 				log.error(EXCEPTION_MESSAGE, e);
 			}
