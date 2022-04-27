@@ -13,6 +13,6 @@ public class SecurityPolicyRoleBasedDecryptionPolicy {
 
     private String role = null;
 
-    private List<SecurityPolicyAttributeAccessList> attributeAccessList = null;
+    private List<SecurityPolicyAttributeAccess> attributeAccessList = null;
 
 }

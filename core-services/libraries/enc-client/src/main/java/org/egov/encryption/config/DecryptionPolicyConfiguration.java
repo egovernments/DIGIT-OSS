@@ -33,7 +33,7 @@ public class DecryptionPolicyConfiguration {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Map<String, List<SecurityPolicyAttributes>> modelAttributeAccessMap;
+    private Map<String, List<SecurityPolicyAttribute>> modelAttributeAccessMap;
 
     private Map<String, List<SecurityPolicyRoleBasedDecryptionPolicy>> modelRoleBasedDecryptionPolicyMap;
 
@@ -81,25 +81,25 @@ public class DecryptionPolicyConfiguration {
     }
 
 
-    public Map<SecurityPolicyAttributes, Visibility> getRoleAttributeAccessListForKey(String keyId, List<String> roles) {
-        Map<SecurityPolicyAttributes, Visibility> mapping = new HashMap<>();
+    public Map<SecurityPolicyAttribute, Visibility> getRoleAttributeAccessListForKey(String keyId, List<String> roles) {
+        Map<SecurityPolicyAttribute, Visibility> mapping = new HashMap<>();
 
-        List<SecurityPolicyAttributes> securityPolicyAttributesList = modelAttributeAccessMap.get(keyId);
+        List<SecurityPolicyAttribute> securityPolicyAttributesList = modelAttributeAccessMap.get(keyId);
         List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList = modelRoleBasedDecryptionPolicyMap.get(keyId);
 
-        Map<String, List<SecurityPolicyAttributeAccessList>> roleSecurityPolicyAttributeAccessmap = makeRoleAttributeAccessMapping(securityPolicyRoleBasedDecryptionPolicyList);
-        Map<String, SecurityPolicyAttributes> attributesMap = makeAttributeMap(securityPolicyAttributesList);
+        Map<String, List<SecurityPolicyAttributeAccess>> roleSecurityPolicyAttributeAccessmap = makeRoleAttributeAccessMapping(securityPolicyRoleBasedDecryptionPolicyList);
+        Map<String, SecurityPolicyAttribute> attributesMap = makeAttributeMap(securityPolicyAttributesList);
 
 
         for(String role: roles){
             if(!roleSecurityPolicyAttributeAccessmap.containsKey(role))
                 continue;
 
-            List<SecurityPolicyAttributeAccessList> attributeList = roleSecurityPolicyAttributeAccessmap.get(role);
+            List<SecurityPolicyAttributeAccess> attributeList = roleSecurityPolicyAttributeAccessmap.get(role);
 
-            for(SecurityPolicyAttributeAccessList attributeAccess: attributeList){
+            for(SecurityPolicyAttributeAccess attributeAccess: attributeList){
                 String attributeName = attributeAccess.getAttribute();
-                SecurityPolicyAttributes attribute = attributesMap.get(attributeName);
+                SecurityPolicyAttribute attribute = attributesMap.get(attributeName);
 
                 String firstLevelVisibility = String.valueOf(attributeAccess.getFirstLevelVisibility());
                 if(firstLevelVisibility==null)
@@ -121,15 +121,15 @@ public class DecryptionPolicyConfiguration {
         return mapping;
     }
 
-    private Map<String, List<SecurityPolicyAttributeAccessList>> makeRoleAttributeAccessMapping(List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList) {
+    private Map<String, List<SecurityPolicyAttributeAccess>> makeRoleAttributeAccessMapping(List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList) {
         return securityPolicyRoleBasedDecryptionPolicyList.stream().collect(Collectors.toMap(SecurityPolicyRoleBasedDecryptionPolicy::getRole,
                 SecurityPolicyRoleBasedDecryptionPolicy::getAttributeAccessList));
     }
 
-    private Map<String, SecurityPolicyAttributes> makeAttributeMap(List<SecurityPolicyAttributes> securityPolicyAttributesList) {
-        Map<String, SecurityPolicyAttributes> atrributesMap = new HashMap<>();
+    private Map<String, SecurityPolicyAttribute> makeAttributeMap(List<SecurityPolicyAttribute> securityPolicyAttributesList) {
+        Map<String, SecurityPolicyAttribute> atrributesMap = new HashMap<>();
 
-        for(SecurityPolicyAttributes securityPolicyAttribute : securityPolicyAttributesList){
+        for(SecurityPolicyAttribute securityPolicyAttribute : securityPolicyAttributesList){
             String filedName = securityPolicyAttribute.getName();
             atrributesMap.put(filedName, securityPolicyAttribute);
         }

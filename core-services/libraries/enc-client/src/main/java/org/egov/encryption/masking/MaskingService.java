@@ -10,7 +10,7 @@ import org.egov.encryption.config.EncProperties;
 import org.egov.encryption.models.Attribute;
 import org.egov.encryption.models.MaskingPatterns;
 import org.egov.encryption.models.SecurityPolicy;
-import org.egov.encryption.models.SecurityPolicyAttributes;
+import org.egov.encryption.models.SecurityPolicyAttribute;
 import org.egov.encryption.util.JSONBrowseUtil;
 import org.egov.encryption.util.JacksonUtils;
 import org.egov.mdms.model.*;
@@ -56,7 +56,7 @@ public class MaskingService {
         return masking.maskData(data);
     }
 
-    public <T> T maskedData(T data, SecurityPolicyAttributes attribute, Map<String, String> maskingPatternMap) {
+    public <T> T maskedData(T data, SecurityPolicyAttribute attribute, Map<String, String> maskingPatternMap) {
 
         //Masking masking = maskingTechniqueMap.get(attribute.getMaskingTechnique());
         String value = String.valueOf(data);
@@ -81,11 +81,11 @@ public class MaskingService {
         return maskedNode;
     }
 
-    public JsonNode maskedData(JsonNode decryptedNode, List<SecurityPolicyAttributes> attributes) {
+    public JsonNode maskedData(JsonNode decryptedNode, List<SecurityPolicyAttribute> attributes) {
         JsonNode maskedNode = decryptedNode.deepCopy();
         Map<String, String> maskingPatternMap = getMaskingPatternMap();
 
-        for(SecurityPolicyAttributes attribute : attributes) {
+        for(SecurityPolicyAttribute attribute : attributes) {
             JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(maskedNode, Arrays.asList(attribute.getJsonPath()));
 
             jsonNode = JSONBrowseUtil.mapValues(jsonNode, value -> maskedData(value, attribute, maskingPatternMap));

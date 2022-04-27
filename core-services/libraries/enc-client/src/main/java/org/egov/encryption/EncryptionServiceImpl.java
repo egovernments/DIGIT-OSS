@@ -11,7 +11,7 @@ import org.egov.encryption.config.*;
 import org.egov.encryption.masking.MaskingService;
 import org.egov.encryption.models.AccessType;
 import org.egov.encryption.models.Attribute;
-import org.egov.encryption.models.SecurityPolicyAttributes;
+import org.egov.encryption.models.SecurityPolicyAttribute;
 import org.egov.encryption.models.Visibility;
 import org.egov.encryption.util.ConvertClass;
 import org.egov.encryption.util.JSONBrowseUtil;
@@ -86,24 +86,24 @@ public class EncryptionServiceImpl implements EncryptionService {
     }
 
 
-    public JsonNode decryptedJson(Object ciphertextJson, Map<SecurityPolicyAttributes, Visibility> attributesVisibilityMap, User user)
+    public JsonNode decryptedJson(Object ciphertextJson, Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap, User user)
             throws IOException {
         JsonNode ciphertextNode = createJsonNode(ciphertextJson);
         JsonNode decryptNode = ciphertextNode.deepCopy();
 
         if(attributesVisibilityMap.containsValue(Visibility.NONE)){
-            List<SecurityPolicyAttributes> attributesToBeRemoved = attributesVisibilityMap.keySet().stream()
+            List<SecurityPolicyAttribute> attributesToBeRemoved = attributesVisibilityMap.keySet().stream()
                     .filter(attribute -> attributesVisibilityMap.get(attribute) == Visibility.NONE).collect(Collectors.toList());
-            List<String> pathToBeRemoved = attributesToBeRemoved.stream().map(SecurityPolicyAttributes::getJsonPath).collect(Collectors.toList());
+            List<String> pathToBeRemoved = attributesToBeRemoved.stream().map(SecurityPolicyAttribute::getJsonPath).collect(Collectors.toList());
             JsonNode nodeToBeEmptied = JacksonUtils.filterJsonNodeForPaths(decryptNode, pathToBeRemoved);
             JsonNode emptyNode = JSONBrowseUtil.mapValues(nodeToBeEmptied, __ -> EncClientConstants.STRING_FOR_NONE_ACCESS);
             decryptNode = JacksonUtils.merge(emptyNode, decryptNode);
         }
 
-        List<SecurityPolicyAttributes> attributesToBeDecrypted = attributesVisibilityMap.keySet().stream()
+        List<SecurityPolicyAttribute> attributesToBeDecrypted = attributesVisibilityMap.keySet().stream()
                 .filter(attribute -> attributesVisibilityMap.get(attribute) != Visibility.NONE).collect(Collectors.toList());
 
-        List<String> pathsToBeDecrypted = attributesToBeDecrypted.stream().map(SecurityPolicyAttributes::getJsonPath).collect(Collectors.toList());
+        List<String> pathsToBeDecrypted = attributesToBeDecrypted.stream().map(SecurityPolicyAttribute::getJsonPath).collect(Collectors.toList());
         JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(ciphertextNode, pathsToBeDecrypted);
 
         if(! jsonNode.isEmpty(objectMapper.getSerializerProvider())) {
@@ -112,7 +112,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         }
 
         if(attributesVisibilityMap.containsValue(Visibility.MASKED)) {
-            List<SecurityPolicyAttributes> attributesToBeMasked = attributesVisibilityMap.keySet().stream()
+            List<SecurityPolicyAttribute> attributesToBeMasked = attributesVisibilityMap.keySet().stream()
                     .filter(attribute -> attributesVisibilityMap.get(attribute) == Visibility.MASKED).collect(Collectors.toList());
             decryptNode = maskingService.maskedData(decryptNode, attributesToBeMasked);
         }
@@ -164,7 +164,7 @@ public class EncryptionServiceImpl implements EncryptionService {
 //        Map<Attribute, AccessType> attributeAccessTypeMap = abacFilter.getAttributeAccessForRoles(roles,
 //                abacConfiguration.getRoleAttributeAccessListForKey(key));
 
-        Map<SecurityPolicyAttributes, Visibility> attributesVisibilityMap = decryptionPolicyConfiguration.getRoleAttributeAccessListForKey(key, roles);
+        Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap = decryptionPolicyConfiguration.getRoleAttributeAccessListForKey(key, roles);
 
         //JsonNode decryptedNode = decryptJson(ciphertextJson, attributeAccessTypeMap, user);
 

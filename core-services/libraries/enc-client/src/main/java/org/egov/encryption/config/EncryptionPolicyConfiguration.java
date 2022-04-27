@@ -15,11 +15,7 @@ import java.util.*;
 public class EncryptionPolicyConfiguration {
 
     @Autowired
-    private EncProperties encProperties;
-    @Autowired
     private MdmsFetcher mdmsFetcher;
-    @Autowired
-    private RestTemplate restTemplate;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -38,7 +34,7 @@ public class EncryptionPolicyConfiguration {
         return objectMapper.readValue(attributesJSON.toString(), List.class);
     }
 
-    public JSONArray getAttributeDetailsFormodel(String modelName) throws IOException {
+    public JSONArray getAttributeDetailsForModel(String modelName) throws IOException {
         String filter = attributesDetailFilter.replace("${modelName}", modelName);
         JSONArray attributesDetailsJSON = mdmsFetcher.getMaskingMdmsForFilter(filter);
         return attributesDetailsJSON;
