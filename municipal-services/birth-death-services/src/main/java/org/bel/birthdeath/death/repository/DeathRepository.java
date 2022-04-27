@@ -126,6 +126,7 @@ public class DeathRepository {
 
 		for(Map map: list) {
 			DeathCertificate deathCertificate = new DeathCertificate();
+			log.info("Death Detail ID = " + map.get("deathdtlid"));
 			EgDeathDtl deathDtl = getDeathDtlById((String) map.get("deathdtlid"));
 
 			deathCertificate.setId((String) map.get("id"));
