@@ -1,4 +1,4 @@
-import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, CardSectionHeader, MultiLink, CardText, CardHeader } from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, CardSectionHeader, MultiLink, CardText, CardHeader, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
@@ -127,6 +127,7 @@ const WSApplicationDetails = () => {
   downloadOptions.sort(function (a, b) { return a.order - b.order; });
 
   //const application = data?.Properties[0];
+  sessionStorage.setItem("ApplicationNoState",applicationNobyData);
   return (
     <React.Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
@@ -241,6 +242,26 @@ const WSApplicationDetails = () => {
         <Card>
           {/* <PTWFApplicationTimeline application={application} id={acknowledgementIds} /> */}
           <WSWFApplicationTimeline application={data?.WaterConnection?.[0] || data?.SewerageConnections?.[0]} id={data?.WaterConnection?.[0]?.applicationNo || data?.SewerageConnections?.[0]?.applicationNo} />
+          {data?.WaterConnection?.[0]?.applicationStatus === "PENDING_FOR_PAYMENT" || data?.SewerageConnections?.[0]?.applicationStatus === "PENDING_FOR_PAYMENT" ? (
+                <Link
+                  to={{
+                    pathname: `/digit-ui/citizen/payment/my-bills/${data?.WaterConnection?.[0]?.applicationNo.split("/")[0] || data?.SewerageConnections?.[0]?.applicationNo.split("/")[0]}/${stringReplaceAll(data?.WaterConnection?.[0]?.applicationNo,"/","+") || stringReplaceAll(data?.SewerageConnections?.[0]?.applicationNo,"/","+")}?workflow=WNS&tenantId=${data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId}`,
+                    state: {}
+                  }}
+                >
+                  <SubmitBar label={t("MAKE_PAYMENT")} />
+                </Link>
+              ) : null}
+          {data?.WaterConnection?.[0]?.applicationStatus === "PENDING_FOR_CITIZEN_ACTION" || data?.SewerageConnections?.[0]?.applicationStatus === "PENDING_FOR_CITIZEN_ACTION" ? (
+                <Link
+                  to={{
+                    pathname: `/digit-ui/citizen/ws/edit-application/${data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId}`,
+                    state: {id:`${data?.WaterConnection?.[0]?.applicationNo || data?.SewerageConnections?.[0]?.applicationNo}`}
+                  }}
+                >
+                  <SubmitBar label={t("COMMON_EDIT")} />
+                </Link>
+              ) : null}
         </Card>
       </div>
     </React.Fragment>

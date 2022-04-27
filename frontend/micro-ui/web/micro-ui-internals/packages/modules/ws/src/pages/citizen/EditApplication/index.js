@@ -47,7 +47,7 @@ const getEditDetails = (waterResult,sewerageresult) => {
     waterResult.cpt = {details:{...waterResult?.property}}
     waterResult.cptId = {id:waterResult?.propertyId}
     waterResult.documents = {documents : waterResult?.documents}
-    waterResult.plumberPreference.plumberPreference = {code:"ULB", i18nKey:"WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE"}
+    waterResult.plumberPreference = { plumberPreference : {code:"ULB", i18nKey:"WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE"}}
     waterResult.serviceName = waterResult?.applicationType?.includes("WATER") ? {code:"WATER",i18nKey:"WS_WATER_CONNECTION_ONLY"} : {code:"SEWERAGE",i18nKey:"WS_SEWERAGE_CONNECTION_ONLY"}
     waterResult.waterConectionDetails = {
       proposedPipeSize : {code:waterResult?.proposedPipeSize, i18nKey:`${waterResult?.proposedPipeSize} WS_INCHES_LABEL`, size:waterResult?.proposedPipeSize},
@@ -87,7 +87,7 @@ const getEditDetails = (waterResult,sewerageresult) => {
     sewerageresult.cpt = {details:{...sewerageresult?.property}}
     sewerageresult.cptId = {id:sewerageresult?.propertyId}
     sewerageresult.documents = {documents : [...sewerageresult?.documents]}
-    sewerageresult.plumberPreference.plumberPreference = {code:"ULB", i18nKey:"WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE"}
+    sewerageresult.plumberPreference = {plumberPreference:{ code:"ULB", i18nKey:"WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE"}}
     sewerageresult.serviceName = sewerageresult?.applicationType.includes("WATER") ? {code:"WATER",i18nKey:"WS_WATER_CONNECTION_ONLY"} : {code:"SEWERAGE",i18nKey:"WS_SEWERAGE_CONNECTION_ONLY"}
     sewerageresult.sewerageConnectionDetails = {
       proposedToilets: sewerageresult?.proposedToilets,
@@ -130,20 +130,32 @@ const EditApplication = ({ parentRoute }) => {
   useEffect(() => {
     waterapplication = Waterresult;
     sewerageapplication = Sewarageresult;
-    if (((Waterresult && waterapplication) || (Sewarageresult && sewerageapplication )) && !(Object.keys(params).length>0)) {
+    if (((Waterresult && waterapplication) || (Sewarageresult && sewerageapplication )) && (!(Object.keys(params).length>0) || ( waterapplication && params?.applicationNo !== waterapplication?.applicationNo || sewerageapplication && params?.applicationNo !== sewerageapplication?.applicationNo) )) {
         waterapplication = Waterresult;
         sewerageapplication = Sewarageresult;
       if (window.location.href.includes("edit-application")) {
         if(waterapplication)
-        waterapplication.isEditApplication = true;
+        {
+          waterapplication.isEditApplication = true;
+          waterapplication.isModifyConnection = false;
+        }
         if(sewerageapplication)
-        sewerageapplication.isEditApplication = true;
+        {
+          sewerageapplication.isEditApplication = true;
+          sewerageapplication.isModifyConnection = false;
+        }
       }
       else if(window.location.href.includes("modify-connection")){
         if(waterapplication)
-        waterapplication.isModifyConnection = true;
+        {
+          waterapplication.isModifyConnection = true;
+          waterapplication.isEditApplication = false;
+        }
         if(sewerageapplication)
-        sewerageapplication.isModifyConnection = true;
+        {
+          sewerageapplication.isModifyConnection = true;
+          sewerageapplication.isEditApplication = false;
+        }
       }
       sessionStorage.setItem("WaterInitialObject", JSON.stringify({ ...waterapplication }));
       sessionStorage.setItem("SewerageInitialObject", JSON.stringify({ ...sewerageapplication }));
@@ -197,7 +209,7 @@ const EditApplication = ({ parentRoute }) => {
   newConfig?.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = "search-property";
+  config.indexRoute = "docsrequired";
   if ((Waterresult && Object.keys(Waterresult).length>0 || !Sewarageresult) && Waterresult?.isLoading || Sewarageresult?.isLoading) {
     return <Loader />;
   }

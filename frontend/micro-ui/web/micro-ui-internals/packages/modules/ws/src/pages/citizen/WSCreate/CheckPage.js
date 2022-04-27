@@ -53,7 +53,7 @@ import {
           <Row className="border-none"  label={t("WS_PROPERTY_ID_LABEL")} text={cpt?.details?.propertyId}/>
           <Row className="border-none" label={t("WS_OWNERS_NAME_LABEL")} text={t(cpt?.details?.owners[0]?.name)} />
           <Row className="border-none" label={t("WS_COMMON_TABLE_COL_ADDRESS")} text={propAddArr.join(', ')} />
-          <Row className="border-none" label={t("WS_CONNECTION_DETAILS_STATUS_LABEL")} text={cpt?.details?.status}/>
+          <Row className="border-none" label={t("WS_CONNECTION_DETAILS_STATUS_LABEL")} text={t(cpt?.details?.status)}/>
         </StatusTable>
         <div style={{ textAlign: "left" }}>
           <Link

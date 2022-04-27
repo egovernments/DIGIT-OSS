@@ -468,7 +468,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         cardStyle={{marginBottom:"0"}}
       ></FormComposer>
       <span className="link" style={{display:"flex", justifyContent:"center",paddingBottom:"16px"}}>
-        <Link to={"/digit-ui/citizen/commonpt/property/new-application"}>{t("CPT_REG_NEW_PROPERTY")}</Link>
+        <Link to={window.location.href.includes("/ws/")?"/digit-ui/citizen/ws/create-application/create-property" : (window.location.href.includes("/tl/tradelicence/") ? "/digit-ui/citizen/tl/tradelicence/new-application/create-property" : "/digit-ui/citizen/commonpt/property/new-application")}>{t("CPT_REG_NEW_PROPERTY")}</Link>
       </span>
       {showToast && (
         <Toast

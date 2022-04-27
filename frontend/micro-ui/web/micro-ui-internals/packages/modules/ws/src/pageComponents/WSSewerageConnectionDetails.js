@@ -29,9 +29,22 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
 
     const handleSubmit = () => {
 
-        if (!(formData?.SewerageConnectionResult && formData?.SewerageConnectionResult?.SewerageConnections?.[0]?.id) && formData?.serviceName?.code === "SEWERAGE") {
+        if ((!(formData?.SewerageConnectionResult && formData?.SewerageConnectionResult?.SewerageConnections?.[0]?.id) || formData?.isModifyConnection) && formData?.serviceName?.code === "SEWERAGE") {
             setIsDisableForNext(true);
-            let payload = {
+            let payload = {};
+            if(formData?.isModifyConnection)
+            {
+              payload = {
+                "SewerageConnection":{...formData?.SewerageConnectionResult?.SewerageConnections?.[0],
+                  "processInstance": {
+                    "action": "INITIATE"
+                },
+                "channel": "CITIZEN"
+                }
+              }
+            }
+            else{
+            payload = {
               "SewerageConnection": {
                 "water": false,
                 "sewerage": true,
@@ -55,7 +68,7 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
                 "noOfTaps": null,
                 "noOfWaterClosets": null,
                 "noOfToilets": null,
-                "propertyId": formData?.cptId?.id,
+                "propertyId": formData?.cptId?.id || formData?.cpt?.details?.propertyId,
                 "additionalDetails": {
                     "initialMeterReading": null,
                     "detailsProvidedBy": "",
@@ -68,6 +81,7 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
                 "channel": "CITIZEN"
             }
             }
+          }
       
             Digit.WSService.create(payload, "SEWERAGE")
               .then((result, err) => {
@@ -83,9 +97,22 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
                 setError(e?.response?.data?.Errors[0]?.message || null);
               });
           }
-          else if (!(formData?.SewerageConnectionResult && formData?.SewerageConnectionResult?.SewerageConnection?.id) && !(formData?.WaterConnectionResult && formData?.WaterConnectionResult?.WaterConnection?.id) && formData?.serviceName?.code === "BOTH"){
+          else if ((!(formData?.SewerageConnectionResult && formData?.SewerageConnectionResult?.SewerageConnection?.id) && !(formData?.WaterConnectionResult && formData?.WaterConnectionResult?.WaterConnection?.id) || formData?.isModifyConnection) && formData?.serviceName?.code === "BOTH"){
             setIsDisableForNext(true);
-            let payload1 = {
+            let payload1 = {};
+            if(formData?.isModifyConnection)
+            {
+              payload = {
+                "WaterConnection":{...formData?.WaterConnectionResult?.WaterConnection?.[0],
+                  "processInstance": {
+                    "action": "INITIATE"
+                },
+                "channel": "CITIZEN"
+                }
+              }
+            }
+            else{
+             payload1 = {
                 "WaterConnection": {
                   "water": true,
                   "sewerage": true,
@@ -109,7 +136,7 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
                   "noOfTaps": null,
                   "noOfWaterClosets": null,
                   "noOfToilets": null,
-                  "propertyId": formData?.cptId?.id,
+                  "propertyId": formData?.cptId?.id || formData?.cpt?.details?.propertyId,
                   "additionalDetails": {
                       "initialMeterReading": null,
                       "detailsProvidedBy": "",
@@ -122,8 +149,22 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
                   "channel": "CITIZEN"
               }
               }
-
-            let payload2 = {
+            }
+              
+            let payload2 = {};
+            if(formData?.isModifyConnection)
+              {
+                payload2 = {
+                  "SewerageConnection":{...formData?.SewerageConnectionResult?.SewerageConnections?.[0],
+                    "processInstance": {
+                      "action": "INITIATE"
+                  },
+                  "channel": "CITIZEN"
+                  }
+                }
+              }
+            else{
+            payload2 = {
               "SewerageConnection": {
                 "water": true,
                 "sewerage": true,
@@ -147,7 +188,7 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
                 "noOfTaps": null,
                 "noOfWaterClosets": null,
                 "noOfToilets": null,
-                "propertyId": formData?.cptId?.id,
+                "propertyId": formData?.cptId?.id || formData?.cpt?.details?.propertyId,
                 "additionalDetails": {
                     "initialMeterReading": null,
                     "detailsProvidedBy": "",
@@ -160,6 +201,7 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
                 "channel": "CITIZEN"
             }
             }
+          }
 
             Digit.WSService.create(payload1, "WATER")
             .then((result1, err) => {

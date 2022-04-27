@@ -109,7 +109,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
         .join(", "),
       total_due: payment[property?.propertyId]?.total_due || 0,
       bil_due__date: payment[property?.propertyId]?.bil_due__date || t("N/A"),
-      status:property.status,
+      status:t(property.status),
       owner_mobile: (property?.owners || [])[0]?.mobileNumber,
     };
   });
