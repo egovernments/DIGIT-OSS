@@ -8,10 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bel.birthdeath.birth.certmodel.BirthCertificate;
+import org.bel.birthdeath.birth.model.EgBirthDtl;
 import org.bel.birthdeath.common.contract.BirthPdfApplicationRequest;
 import org.bel.birthdeath.common.contract.DeathPdfApplicationRequest;
 import org.bel.birthdeath.common.contract.EgovPdfResp;
 import org.bel.birthdeath.common.contract.EncryptionDecryptionUtil;
+import org.bel.birthdeath.common.model.AuditDetails;
 import org.bel.birthdeath.common.producer.BndProducer;
 import org.bel.birthdeath.config.BirthDeathConfiguration;
 import org.bel.birthdeath.death.certmodel.DeathCertAppln;
@@ -105,6 +108,7 @@ public class DeathRepository {
 	}
 
 	public List<DeathCertificate> getDeathDtlsForPlainSearch(SearchCriteria criteria) {
+		List<DeathCertificate> deathCertificates = new ArrayList<>();
 		int limit = config.getDefaultBndLimit();
 		int offset = config.getDefaultOffset();
 
@@ -118,8 +122,45 @@ public class DeathRepository {
 			offset = criteria.getOffset();
 
 		String query = "SELECT * FROM eg_death_cert_request OFFSET " + offset + " LIMIT " + limit;
-		List<DeathCertificate> deathCertificates =  jdbcTemplate.query(query, new BeanPropertyRowMapper(DeathCertificate.class));
+		List<Map<String, Object>> list =  jdbcTemplate.queryForList(query);
+
+		for(Map map: list) {
+			DeathCertificate deathCertificate = new DeathCertificate();
+			EgDeathDtl deathDtl = getDeathDtlById((String) map.get("deathdtlid"));
+
+			deathCertificate.setId((String) map.get("id"));
+			deathCertificate.setDeathCertificateNo((String) map.get("deathcertificateno"));
+			deathCertificate.setDeathDtlId((String) map.get("deathdtlid"));
+			deathCertificate.setFilestoreid((String) map.get("filestoreid"));
+			deathCertificate.setApplicationStatus(DeathCertificate.StatusEnum.valueOf((String) map.get("status")));
+			deathCertificate.setAdditionalDetail(map.get("additionaldetail"));
+			deathCertificate.setEmbeddedUrl((String) map.get("embeddedurl"));
+			deathCertificate.setDateofissue(((Long) map.get("dateofissue")));
+			deathCertificate.setSource((String) map.get("source"));
+			deathCertificate.setGender(deathDtl.getGenderStr());
+			deathCertificate.setAge(deathDtl.getAge());
+
+			deathCertificate.setWard(deathDtl.getDeathPermaddr() != null ? deathDtl.getDeathPermaddr().getTehsil() : null);
+			deathCertificate.setState(deathDtl.getDeathPermaddr() != null ? deathDtl.getDeathPermaddr().getState() : null);
+			deathCertificate.setTenantId(deathDtl.getTenantid());
+			deathCertificate.setDateofdeath(deathDtl.getDateofdeath());
+			deathCertificate.setDateofreport(deathDtl.getDateofreport());
+
+			AuditDetails auditDetails = new AuditDetails();
+			auditDetails.setCreatedBy((String) map.get("createdby"));
+			auditDetails.setCreatedTime(((Long) map.get("createdtime")));
+			auditDetails.setLastModifiedTime(((Long) map.get("lastmodifiedtime")));
+			auditDetails.setLastModifiedBy((String) map.get("lastmodifiedby"));
+			deathCertificate.setAuditDetails(auditDetails);
+
+			deathCertificates.add(deathCertificate);
+		}
 		return deathCertificates;
+	}
+
+	public EgDeathDtl getDeathDtlById(String id) {
+		String deathDtlQuery = "SELECT * FROM eg_death_dtls WHERE id = ?";
+		return (EgDeathDtl) jdbcTemplate.queryForObject(deathDtlQuery, new Object[]{id}, new BeanPropertyRowMapper(EgDeathDtl.class));
 	}
 
 	public void save(DeathCertRequest deathCertRequest) {

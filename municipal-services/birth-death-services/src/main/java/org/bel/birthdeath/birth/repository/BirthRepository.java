@@ -123,7 +123,7 @@ public class BirthRepository {
 
 		String query = "SELECT * FROM eg_birth_cert_request OFFSET " + offset + " LIMIT " + limit;
 		List<Map<String, Object>> list =  jdbcTemplate.queryForList(query);
-		log.info("Size of list: " + list.size());
+
 		for(Map map: list) {
 			BirthCertificate birthCertificate = new BirthCertificate();
 			EgBirthDtl birthDtl = getBirthDtlById((String) map.get("birthdtlid"));
