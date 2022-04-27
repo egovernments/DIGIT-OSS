@@ -6,7 +6,7 @@
   "dependencies": {
     "@egovernments/digit-ui-css": "1.5.0-beta.5",
     "@egovernments/digit-ui-libraries":"1.5.0-beta.5",
-    "@egovernments/digit-ui-module-common":"1.5.0-beta.2",
+    "@egovernments/digit-ui-module-common":"1.5.0-beta.3",
     "@egovernments/digit-ui-module-core":"1.5.0-beta.2",
     "@egovernments/digit-ui-module-commonpt":"1.5.0-beta.4",
     "@egovernments/digit-ui-module-engagement":"1.5.0-beta.2",
