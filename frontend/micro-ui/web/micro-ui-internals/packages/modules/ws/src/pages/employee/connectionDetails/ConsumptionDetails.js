@@ -61,7 +61,7 @@ const ConsumptionDetails = ({ view }) => {
     setMeterDetails(response?.meterReadings[0]);
     setSelectMeterStatus({
       code: response?.meterReadings[0]?.meterStatus,
-      i18nKey: `${Digit.Utils.locale.getTransformedLocale(response?.meterReadings[0]?.meterStatus)}`
+      i18nKey: `WS_SERVICES_CALCULATION_METERSTATUS_${Digit.Utils.locale.getTransformedLocale(response?.meterReadings[0]?.meterStatus)}`
     });
     setBillingPeriod(`${getDate(meterDetails?.currentReadingDate)} - ${getDate(convertDateToEpoch(Digit.Utils.date.getDate()))}`);
   };
@@ -108,6 +108,7 @@ const ConsumptionDetails = ({ view }) => {
       await meterReadingMutation(meterReadingsPayload, {
         onError: (error, variables) => {
           setIsEnableLoader(false);
+          setOpenModal(false);
           setShowToast({ key: "error", message: error?.message ? error.message : error });
           setTimeout(closeToast, 5000);
         },
@@ -126,7 +127,7 @@ const ConsumptionDetails = ({ view }) => {
   let optionsList = 
     mdmsMeterStatus?.MdmsRes?.["ws-services-calculation"]?.MeterStatus.map((status) => ({
       code: status,
-      i18nKey: `${Digit.Utils.locale.getTransformedLocale(status)}`,
+      i18nKey: `WS_SERVICES_CALCULATION_METERSTATUS_${Digit.Utils.locale.getTransformedLocale(status)}`,
     }));
 
   const onFormValueChange = (setValue, formData, formState) => {
@@ -182,7 +183,7 @@ const ConsumptionDetails = ({ view }) => {
           {
             populators: (
               <StatusTable>
-                <Row key={t("WS_LAST_READING")} label={`${t("WS_LAST_READING")}`} text={details?.[0]?.currentReading} className="border-none" />
+                <Row key={t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")}`} text={details?.[0]?.currentReading} className="border-none" />
               </StatusTable>
             ),
           },
@@ -194,8 +195,9 @@ const ConsumptionDetails = ({ view }) => {
             ),
           },
           {
-            label: t("WS_CURRENT_READING"),
-            isMandatory: true,
+            label: t("WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"),
+            isMandatory: selectMeterStatus.code === "Working" ? true : false,
+            disable: selectMeterStatus.code === "Working" ? false : true,
             type: "number",
             populators: {
               name: "currentReading",
@@ -203,16 +205,17 @@ const ConsumptionDetails = ({ view }) => {
           },
           {
             label: t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"),
-            isMandatory: true,
+            isMandatory: selectMeterStatus.code === "Working" ? true : false,
+            disable: selectMeterStatus.code === "Working" ? false : true,
             type: "custom",
             populators: {
               name: "currentReadingDate",
               validation: {
-                required: true,
+                required: selectMeterStatus.code === "Working" ? true : false,
               },
               customProps: {},
               defaultValue: Digit.Utils.date.getDate(),
-              component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
+              component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} disabled={selectMeterStatus.code === "Working" ? false : true}/>,
             },
           },
           {
