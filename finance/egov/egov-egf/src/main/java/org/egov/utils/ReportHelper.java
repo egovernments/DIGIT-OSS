@@ -536,11 +536,11 @@ public class ReportHelper {
             LOGGER.info("  Generating Budget Approprition Report pdf/excel ");
         drb = drb.addColumn("Sl No", "slNo", Integer.class.getName(), 20, columnStyle);
 
-        if (showFundColumn == "false")
+        if (showFundColumn.equals(false))
             drb.addColumn("Fund", "fund", String.class.getName(), 60, columnStyle);
-        if (showFunctionColumn == "false")
+        if (showFunctionColumn.equals(false))
             drb.addColumn("Function Center", "function", String.class.getName(), 75, columnStyle);
-        if (showDepartmentColumn == "false")
+        if (showDepartmentColumn.equals(false))
             drb.addColumn("Department", "department", String.class.getName(), 60, columnStyle);
         drb
         .addColumn("Budget Head", "budgetHead", String.class.getName(), 130, columnStyle)
