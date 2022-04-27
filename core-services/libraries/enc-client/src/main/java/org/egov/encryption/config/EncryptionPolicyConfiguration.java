@@ -25,6 +25,8 @@ public class EncryptionPolicyConfiguration {
 
     private String attributesFilter = "$[?(@.model == \"${modelName}\")].attributes.*.jsonPath";
 
+    private String attributesDetailFilter = "$[?(@.model == \"${modelName}\")].attributes.*";
+
     @PostConstruct
     void initializeKeyAttributeMapFromMdms() {
         //TODO: Space to initialize at boot time if required after latency test
@@ -34,6 +36,12 @@ public class EncryptionPolicyConfiguration {
         String filter = attributesFilter.replace("${modelName}", modelName);
         JSONArray attributesJSON = mdmsFetcher.getSecurityMdmsForFilter(filter);
         return objectMapper.readValue(attributesJSON.toString(), List.class);
+    }
+
+    public JSONArray getAttributeDetailsFormodel(String modelName) throws IOException {
+        String filter = attributesDetailFilter.replace("${modelName}", modelName);
+        JSONArray attributesDetailsJSON = mdmsFetcher.getMaskingMdmsForFilter(filter);
+        return attributesDetailsJSON;
     }
 
 }
