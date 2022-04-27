@@ -81,9 +81,10 @@ public class BPAQueryBuilder {
 
 		String applicationNo = criteria.getApplicationNo();
 		if (applicationNo!=null) {
-			addClauseIfRequired(preparedStmtList, builder);
-			builder.append(" bpa.applicationNo =?");
-			preparedStmtList.add(criteria.getApplicationNo());
+            List<String> applicationNos = Arrays.asList(applicationNo.split(","));
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" bpa.applicationNo IN (").append(createQuery(applicationNos)).append(")");
+            addToPreparedStatement(preparedStmtList, applicationNos);
 		}
 		
 		String approvalNo = criteria.getApprovalNo();
