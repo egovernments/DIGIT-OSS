@@ -103,7 +103,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         List<SecurityPolicyAttribute> attributesToBeDecrypted = attributesVisibilityMap.keySet().stream()
                 .filter(attribute -> attributesVisibilityMap.get(attribute) != Visibility.NONE).collect(Collectors.toList());
 
-        List<String> pathsToBeDecrypted = attributesToBeDecrypted.stream().map(SecurityPolicyAttributes::getJsonPath).collect(Collectors.toList());
+        List<String> pathsToBeDecrypted = attributesToBeDecrypted.stream().map(SecurityPolicyAttribute::getJsonPath).collect(Collectors.toList());
         pathsToBeDecrypted = JsonPathConverter.convertToArrayJsonPaths(pathsToBeDecrypted);
         JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(ciphertextNode, pathsToBeDecrypted);
 

@@ -87,7 +87,7 @@ public class MaskingService {
         JsonNode maskedNode = decryptedNode.deepCopy();
         Map<String, String> maskingPatternMap = getMaskingPatternMap();
 
-        for(SecurityPolicyAttributes attribute : attributes) {
+        for(SecurityPolicyAttribute attribute : attributes) {
             List<String> filterPaths = JsonPathConverter.convertToArrayJsonPaths(Arrays.asList(attribute.getJsonPath()));
             JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(maskedNode, filterPaths);
 
