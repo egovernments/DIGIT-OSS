@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import TimePicker from "react-time-picker";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
@@ -61,6 +61,9 @@ const FstpOperatorDetails = () => {
   const [appId, setAppId] = useState();
   const [filterVehicle, setFilterVehicle] = useState();
   const [currentTrip, setCurrentTrip] = useState();
+  const wasteRecievedRef = useRef();
+  const tripStartTimeRef = useRef();
+  const tripTimeRef = useRef();
 
   const { isLoading: totalload, isSuccess: totalsuccess, data: totalvehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, totalconfig });
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
@@ -125,20 +128,24 @@ const FstpOperatorDetails = () => {
     const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
     if (!wasteCollected || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
       setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
+      wasteRecievedRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
       return;
     }
     if (tripStartTime === null) {
       setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
+      tripStartTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
       return;
     }
 
     if (tripTime === null) {
       setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
+      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
       return;
     }
 
     if (tripStartTime === tripTime || tripStartTime > tripTime) {
       setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
+      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
       return;
     }
 
@@ -271,7 +278,9 @@ const FstpOperatorDetails = () => {
           {vehicleData?.map((row, index) => (
             <Row key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
           ))}
-          <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
+          <div ref={tripStartTimeRef}>
+            <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
+          </div>
           <form>
             <Row
               key={t("ES_VEHICLE_IN_TIME")}
@@ -283,7 +292,9 @@ const FstpOperatorDetails = () => {
                 </div>
               }
             />
-            <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>
+            <div ref={wasteRecievedRef}>
+              <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>
+            </div>
             <Row
               key={t("ES_VEHICLE_SEPTAGE_DUMPED")}
               label={`${t("ES_VEHICLE_SEPTAGE_DUMPED")} * `}
@@ -299,7 +310,9 @@ const FstpOperatorDetails = () => {
                 </div>
               }
             />
-            <CardLabelError>{t(errors.tripTime)}</CardLabelError>
+            <div ref={tripTimeRef}>
+              <CardLabelError>{t(errors.tripTime)}</CardLabelError>
+            </div>
             <Row
               key={t("ES_VEHICLE_OUT_TIME")}
               label={`${t("ES_VEHICLE_OUT_TIME")} * `}
