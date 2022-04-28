@@ -27,7 +27,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @ConditionalOnProperty(value = "mail.enabled", havingValue = "true")
@@ -79,6 +84,7 @@ public class ExternalEmailService implements EmailService {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper;
 		FileOutputStream fos = null;
+		List<String> paths = new ArrayList<>();
 		try {
 			helper = new MimeMessageHelper(message, true);
 			helper.setTo(email.getEmailTo().toArray(new String[0]));
@@ -90,12 +96,14 @@ public class ExternalEmailService implements EmailService {
 				String uri = String.format(filestore_format, filestore_host, filestore_workdir, filestore_tenant_id, entry.getKey());
 				URL url = new URL(uri);
 				URLConnection con = url.openConnection();
-				String fieldValue = entry.getValue();
+				UUID uuid = UUID.randomUUID();
+				String fieldValue = uuid.toString();
 				File download = new File(System.getProperty("java.io.tmpdir"), fieldValue);
+				paths.add(download.getAbsolutePath());
 				ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
 				fos = new FileOutputStream(download);
 				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-				helper.addAttachment("hello", download);
+				helper.addAttachment(entry.getValue(), download);
 			}
 
 			mailSender.send(message);
@@ -111,8 +119,9 @@ public class ExternalEmailService implements EmailService {
 				if(fos!=null) {
 					fos.close();
 				}
-//				FileUtils.cleanDirectory(new File(System.getProperty("java.io.tmpdir")));
-//				FileUtils.deleteDirectory(new File(System.getProperty("java.io.tmpdir")));
+				for(int i=0; i<paths.size(); i++) {
+					Files.deleteIfExists(Paths.get(paths.get(i)));
+				}
 			} catch (IOException e) {
 				log.error(EXCEPTION_MESSAGE, e);
 			}
