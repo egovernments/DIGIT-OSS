@@ -62,9 +62,14 @@ const CheckPage = ({ onSubmit, value }) => {
         <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
         <CardSubHeader>{t("CS_CHECK_PROPERTY_DETAILS")}</CardSubHeader>
         <StatusTable>
-          {selectTripNo && <Row
+          {selectTripNo && selectTripNo?.tripNo && <Row
             label={t("ES_FSM_ACTION_NUMBER_OF_TRIPS")}
-            text={t(selectTripNo.i18nKey)}
+            text={t(selectTripNo?.tripNo?.i18nKey)}
+            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-trip-number" />}
+          />}
+          {selectTripNo && selectTripNo?.vehicleCapacity && <Row
+            label={t("ES_VEHICLE CAPACITY")}
+            text={t(selectTripNo?.vehicleCapacity?.capacity)}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-trip-number" />}
           />}
           {selectGender && <Row

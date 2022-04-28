@@ -126,7 +126,7 @@ const EmployeeSideBar = () => {
     return singleItem
       .sort((a, b) => a.orderNumber - b.orderNumber)
       .map((item) => {
-        const leftIconArray = item.icon.split(":")[1];
+        const leftIconArray = item?.icon?.split(":")[1];
         const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.collections;
         const getOrigin = window.location.origin;
         return (

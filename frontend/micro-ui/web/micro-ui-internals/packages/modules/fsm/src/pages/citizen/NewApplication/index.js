@@ -79,10 +79,11 @@ const FileComplaint = ({ parentRoute }) => {
     "component": "SelectTripNo",
     "texts": {
       "headerCaption": "",
-      "header": "ES_FSM_NUMBER_OF_TRIPS",
-      "cardText": "ES_FSM_NUMBER_OF_TRIPS_TEXT",
+      "header": "ES_FSM_SERVICE_REQUEST",
+      "cardText": "ES_FSM_SERVICE_REQUEST_TEXT",
       "skipText": "CORE_COMMON_SKIP_CONTINUE",
       "submitBarLabel": "CS_COMMON_NEXT",
+      "skipLabel": "CS_COMMON_SERVICE_SKIP_INFO"
     },
     "nextStep": "property-type"
   },
