@@ -2,9 +2,7 @@ import React from "react";
 import Hidden from "@material-ui/core/Hidden";
 import commonConfig from "config/common";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
-import {
-  downloadPdf
-} from "egov-ui-kit/utils/commons";
+import { downloadFromLink } from "egov-ui-kit/utils/commons";
 
 const gethelpURL = () => {
   let hostname = window.location.hostname;
@@ -41,14 +39,15 @@ const HowItWorks = (props) => {
           width="100%"
           height="90%"
         ></iframe>
-        
          <iframe
           src={helpURL}
           style={{ width: "100%", height: "90%" }}
           frameborder="0"
         ></iframe>
+        
         */}
-         <iframe
+
+        <iframe
           id="pdfviewer"
           src={`http://docs.google.com/gview?embedded=true&amp;url=${helpURL}&amp;embedded=true`}
           frameborder="0"
@@ -63,7 +62,7 @@ const HowItWorks = (props) => {
           <span
           style={{color:"blue",cursor:"pointer",textDecoration:"underline"}}
             // href={helpURL}
-            onClick={() => downloadPdf(helpURL)}
+            onClick={() => downloadFromLink(helpURL, "BDUserManual_Citizen.pdf")}
           >
             {getLocaleLabels(
               "click here to download the PDF file.",
