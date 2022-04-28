@@ -42,18 +42,20 @@ public class VehicleTripService {
 	
 	public void scheduleVehicleTrip(FSMRequest fsmRequest) {
 
-		if (FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference())
-				&& fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SCHEDULE)) {
-			List<VehicleTrip> existingVehicleTrips = getVehicleTrips(fsmRequest, "WAITING_FOR_DISPOSAL", false);
-			if (existingVehicleTrips != null) {
-				throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION,
-						"VehicleTrip Waiting for Disposal of Application No: "
-								+ existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()
-								+ ", Cannot complete this FSM Application No "
-								+ fsmRequest.getFsm().getApplicationNo());
-			}
-
-		}
+	//		SAN-1024: Commenting out this code as now a vehicle can have multiple trips assigned from different applications waiting for 
+	//		disposal at the same time	
+	//		if (FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference())
+	//				&& fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SCHEDULE)) {
+	//			List<VehicleTrip> existingVehicleTrips = getVehicleTrips(fsmRequest, "WAITING_FOR_DISPOSAL", false);
+	//			if (existingVehicleTrips != null) {
+	//				throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION,
+	//						"VehicleTrip Waiting for Disposal of Application No: "
+	//								+ existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()
+	//								+ ", Cannot complete this FSM Application No "
+	//								+ fsmRequest.getFsm().getApplicationNo());
+	//			}
+	//
+	//		}
 		FSM fsm = fsmRequest.getFsm();
 		StringBuilder createUri = new StringBuilder(config.getVehicleHost()).append(config.getVehicleTripContextPath())
 				.append(config.getVehicleTripCreateEndpoint());
@@ -119,13 +121,17 @@ public class VehicleTripService {
 	}
 	
 	public void vehicleTripReadyForDisposal(FSMRequest fsmRequest) {
-		List<VehicleTrip> existingVehicleTrips = getVehicleTrips(fsmRequest, "WAITING_FOR_DISPOSAL",false);
-		if(existingVehicleTrips != null ) {
-			throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION,
-					"VehicleTrip Waiting for Disposal of Application No "
-							+ existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()
-							+ ", Cannot complete this FSM Application No " + fsmRequest.getFsm().getApplicationNo());
-		}else {
+	
+	//		SAN-1024: Commenting out this code as now a vehicle can have multiple trips assigned from different applications waiting for 
+	//		disposal at the same time
+	//		List<VehicleTrip> existingVehicleTrips = getVehicleTrips(fsmRequest, "WAITING_FOR_DISPOSAL",false);
+	//		if(existingVehicleTrips != null ) {
+	//			throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION,
+	//					"VehicleTrip Waiting for Disposal of Application No "
+	//							+ existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()
+	//							+ ", Cannot complete this FSM Application No " + fsmRequest.getFsm().getApplicationNo());
+	//		}else {
+			
 			List<VehicleTrip> scheduledTrips = getVehicleTrips(fsmRequest,"SCHEDULED",true);
 			if(scheduledTrips == null) {
 				throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION,
@@ -157,7 +163,7 @@ public class VehicleTripService {
 				}
 			
 			}
-		}
+		//}
 	}
 	/**
 	 * returns the vehicle trips with the appplicationNo of FSM or with the status of VehicleTrip

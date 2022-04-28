@@ -18,7 +18,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.fsm.config.FSMConfiguration;
-import org.egov.fsm.producer.Producer;
 import org.egov.fsm.repository.FSMRepository;
 import org.egov.fsm.util.FSMAuditUtil;
 import org.egov.fsm.util.FSMConstants;
