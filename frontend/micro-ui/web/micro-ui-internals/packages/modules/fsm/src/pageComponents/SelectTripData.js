@@ -8,6 +8,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const state = Digit.ULBService.getStateId();
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
+  const scheduleScreen = url.includes("/schedule-application/");
 
   const [vehicle, setVehicle] = useState({ label: formData?.tripData?.vehicleCapacity });
   const [billError, setError] = useState(false);
@@ -136,7 +137,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           selected={vehicle}
           select={selectVehicle}
           t={t}
-          disable={formData?.tripData?.vehicleCapacity ? true : false}
+          disable={scheduleScreen ? true : false}
         />
       </LabelFieldPair>
       {inputs?.map((input, index) => (
