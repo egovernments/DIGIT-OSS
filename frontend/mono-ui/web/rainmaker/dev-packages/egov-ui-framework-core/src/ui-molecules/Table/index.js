@@ -64,6 +64,23 @@ class Table extends React.Component {
             fontSize: 14,
           },
         },
+        MUIDataTableSearch: {
+          main: {
+            alignItems: "center",
+          },
+        },
+        MuiIconButton: {
+          root: {
+            marginRight: "20px",
+            width: "unset",
+            height: "unset",
+          },
+        },
+        mui: {
+          tooltip: {
+            height: "10px",
+          },
+        },
         ...this.getExtraTableStyle(),
       },
     });
