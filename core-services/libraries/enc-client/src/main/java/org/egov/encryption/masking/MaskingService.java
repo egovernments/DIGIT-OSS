@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.config.EncClientConstants;
 import org.egov.encryption.config.EncProperties;
@@ -13,6 +14,7 @@ import org.egov.encryption.models.SecurityPolicy;
 import org.egov.encryption.models.SecurityPolicyAttribute;
 import org.egov.encryption.util.JSONBrowseUtil;
 import org.egov.encryption.util.JacksonUtils;
+import org.egov.encryption.util.JsonPathConverter;
 import org.egov.mdms.model.*;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,8 +87,9 @@ public class MaskingService {
         JsonNode maskedNode = decryptedNode.deepCopy();
         Map<String, String> maskingPatternMap = getMaskingPatternMap();
 
-        for(SecurityPolicyAttribute attribute : attributes) {
-            JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(maskedNode, Arrays.asList(attribute.getJsonPath()));
+        for(SecurityPolicyAttributes attribute : attributes) {
+            List<String> filterPaths = JsonPathConverter.convertToArrayJsonPaths(Arrays.asList(attribute.getJsonPath()));
+            JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(maskedNode, filterPaths);
 
             jsonNode = JSONBrowseUtil.mapValues(jsonNode, value -> maskedData(value, attribute, maskingPatternMap));
 
@@ -117,14 +120,12 @@ public class MaskingService {
             JSONArray maskingPatternListJSON = response.getBody().getMdmsRes().get(EncClientConstants.MDMS_MODULE_NAME)
                     .get(EncClientConstants.MDMS_MASKING_PATTERN_MASTER_NAME);
 
-            ObjectReader reader = objectMapper.readerFor(objectMapper.getTypeFactory().constructCollectionType(List.class,
-                    MaskingPatterns.class));
-            maskingPatternsList = reader.readValue(maskingPatternListJSON.toString());
+            for(int i =0 ;i <maskingPatternListJSON.size();i++){
+                Map<String,String> obj = objectMapper.convertValue(maskingPatternListJSON.get(i),Map.class);
+                maskingPatternMap.put(obj.get("patternId"),obj.get("pattern")) ;
+            }
 
-            maskingPatternMap = maskingPatternsList.stream()
-                    .collect(Collectors.toMap(MaskingPatterns::getId,
-                            MaskingPatterns::getPattern));
-        } catch (IOException e) {}
+        } catch (Exception e) {}
         return  maskingPatternMap;
     }
 }
