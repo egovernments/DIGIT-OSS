@@ -21,7 +21,7 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
     type: "metric",
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
-    filters: isPieClicked ? { ...value?.filters,selectedType: pieSelected } : value?.filters,
+    filters: isPieClicked ? { ...value?.filters, selectedType: pieSelected } : value?.filters,
   });
 
   const chartData = useMemo(() => {
@@ -142,10 +142,14 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
     <Fragment>
       {isPieClicked && (
         <div>
-          <div className="tag-container">
+          <div className="tag-container" style={{ marginBottom: "unset" }}>
             <span style={{ marginTop: "20px" }}>{t("DSS_FILTERS_APPLIED")}: </span>
             <RemoveableTag key={id} text={`${t("COMMON_MASTERS_" + Digit.Utils.locale.getTransformedLocale(pieSelected))}`} onClick={removeFilter} />
           </div>
+          {/* <div className="tag-container" style={{marginBottom:"unset"}}>
+            <span >{t("DSS_FILTERS_APPLIED")}: </span>
+            <RemoveableTag extraStyles={{tagStyles:{ marginTop: "unset" }}} key={id} text={`${t("COMMON_MASTERS_" + Digit.Utils.locale.getTransformedLocale(pieSelected))}`} onClick={removeFilter} />
+          </div> */}
         </div>
       )}
       {chartData?.length === 0 || !chartData ? (
@@ -157,6 +161,7 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
               data={chartData}
               dataKey={dataKey}
               cy={150}
+              style={{ cursor: response?.responseData?.drillDownChartId !== "none" ? "pointer" : "default" }}
               innerRadius={checkChartID(id) && !mobileView ? 90 : 70} ///Charts in rows(which contains 2 charts) are little bigger in size than charts in rows(which contains 3 charts) charts
               outerRadius={checkChartID(id) && !mobileView ? 110 : 90}
               margin={{ top: isPieClicked ? 0 : 5 }}
@@ -195,7 +200,14 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
         </ResponsiveContainer>
       )}
       {isPieClicked && (
-        <div style={{ marginTop: "-22%", textAlign: "center" }}>
+        <div
+          style={{
+            marginTop: "-4%",
+            position: "absolute",
+            width: "30%",
+            textAlign: "center",
+          }}
+        >
           {t(Digit.Utils.locale.getTransformedLocale(`${response?.responseData?.data?.[0]?.headerName}_${pieSelected}`))}
         </div>
       )}
