@@ -247,7 +247,12 @@ public class CommonRepository {
 			uniqueList.remove(regno);
 		}
 		modifyHospIdBirth(uniqueHospList , response.getBirthCerts().get(0).getTenantid());
-		AuditDetails auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+		AuditDetails auditDetails = new AuditDetails();
+		if(response.getBirthCerts().get(0).getIsLegacyRecord()){
+			auditDetails = commUtils.getAuditDetails("import-user", true);
+		} else {
+			auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+		}
 		int finalCount=0;
 		for (Entry<String, EgBirthDtl> entry : uniqueList.entrySet()) {
 			EgBirthDtl birthDtl = entry.getValue();
@@ -544,7 +549,12 @@ public class CommonRepository {
 			uniqueList.remove(regno);
 		}
 		modifyHospIdDeath(uniqueHospList , response.getDeathCerts().get(0).getTenantid());
-		AuditDetails auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+			AuditDetails auditDetails = new AuditDetails();
+			if(response.getDeathCerts().get(0).getIsLegacyRecord()){
+				auditDetails = commUtils.getAuditDetails("import-user", true);
+			} else {
+				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+			}
 		int finalCount=0;
 		for (Entry<String, EgDeathDtl> entry : uniqueList.entrySet()) {
 			EgDeathDtl deathDtl = entry.getValue();
