@@ -37,24 +37,29 @@ const ReportSearchApplication = ({ onSubmit, isLoading, data, tableData, isTable
 
 
     const searchFormFieldsComponentProps = { formState, Controller, register, control, t, reset, data };
-    
     const rowData = tableData?.reportData;
-    rowData?.map((row, index) => {
-        row?.unshift(index + 1)
-    })
+    if(rowData?.[0]?.[0]!=1){
+        rowData?.map((row, index) => {
+            row?.unshift(index + 1)
+        })
+    }
+    
 
     const rowHeaders = tableData?.reportHeader
     
-    rowHeaders?.unshift({
-        label: "#"
-    })
+    
+    if(rowHeaders?.[0]?.label!=="#"){
+        rowHeaders?.unshift({
+            label: "#"
+        }) 
+    }
+    
     const rowHeadersCopy = rowHeaders && JSON.parse(JSON.stringify(rowHeaders))//deep copy
     
     const headersXLS = rowHeadersCopy?.map(header => t(header.label))
     let rowDataXLS = rowData && JSON.parse(JSON.stringify(rowData))//deep copy
     rowDataXLS?.unshift(headersXLS)
-    rowDataXLS = rowDataXLS?.map(row => row.splice(1))
-
+    //rowDataXLS = rowDataXLS?.map(row => row.splice(1))
     const getCellValue = (row, header, index) => {
 
         if (header.type === "stringarray") {
@@ -216,7 +221,8 @@ const ReportSearchApplication = ({ onSubmit, isLoading, data, tableData, isTable
 
     return (
         <React.Fragment>
-            <Header>{reportName}</Header>
+            {/* <Header>{reportName}</Header> */}
+            <Header>{data?.reportDetails?.reportName}</Header>
             {isLoading ? <Loader /> :
                 <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
                     <SearchFormFieldsComponent {...searchFormFieldsComponentProps} />
@@ -266,6 +272,7 @@ const ReportSearchApplication = ({ onSubmit, isLoading, data, tableData, isTable
                     options={downloadOptions}
                     downloadBtnClassName={"reports-download-btn"}
                     downloadOptionsClassName={"reports-options-download"}
+                    reportStyles={{"position":"relative"}}
                 />}
                 isReportTable={true}
             />) : <Loader />}

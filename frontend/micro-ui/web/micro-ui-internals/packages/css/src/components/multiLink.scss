@@ -78,7 +78,11 @@
 }
 
 .reports-options-download{
-    position: unset;
+    position: absolute;
     justify-content: flex-end;
     float: right;
+    right:0%;
+    display: flex;
+    flex-direction: row;
+    top:2rem;
 }

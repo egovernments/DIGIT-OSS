@@ -7,6 +7,12 @@ const getSearchParamsObj = (field, data, key, t) => {
   if (data[key] === undefined || data[key] === '' || field === undefined || data[key] === t('ALL'))
     return
   switch (field?.type) {
+    case "string":
+      if(data[key]===undefined || data[key]==="")
+      return
+      obj["name"] = key
+      obj["input"] = data[key];
+      return obj
     case "singlevaluelist":
       var defaultValueObj = field.defaultValue
       var isLoc = field.localisationRequired;

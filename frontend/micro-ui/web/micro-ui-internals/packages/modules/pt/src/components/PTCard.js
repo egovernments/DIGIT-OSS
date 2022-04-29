@@ -44,7 +44,22 @@ const PTCard = () => {
     {
       label: t("ES_COMMON_APPLICATION_SEARCH"),
       link: `/digit-ui/employee/pt/application-search`,
-    }
+    },
+    {
+      label: t("ACTION_TEST_RECEIPTREGISTER"),
+      link: `/digit-ui/employee/reports/search/pt-reports/PTReceiptRegister`,
+      roles: [ "UC_EMP", "PT_CEMP"]
+    },
+    {
+      label: t("ACTION_TEST_COLLECTION_REGISTER"),
+      link: `/digit-ui/employee/reports/search/pt-reports/PTCollectionReport`,
+      roles: ["PT_CEMP"]
+    },
+    {
+      label: t("ACTION_TEST_DEFAULTER_REPORT"),
+      link: `/digit-ui/employee/reports/search/pt-reports/DefaulterReport`,
+      roles: ["PT_COLLECTION_EMP",]
+    },
   ]
   const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
   const propsForModuleCard = {

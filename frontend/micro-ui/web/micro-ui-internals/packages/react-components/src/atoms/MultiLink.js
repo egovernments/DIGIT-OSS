@@ -3,7 +3,7 @@ import LinkButton from "./LinkButton";
 import { PrimaryDownlaodIcon } from "./svgindex";
 import { useTranslation } from "react-i18next";
 
-const MultiLink = ({ className, onHeadClick, displayOptions = false, options, label, icon, showOptions, downloadBtnClassName, downloadOptionsClassName, optionsClassName,style,optionsStyle }) => {
+const MultiLink = ({ className, onHeadClick, displayOptions = false, options, label, icon, showOptions, downloadBtnClassName, downloadOptionsClassName, optionsClassName, style, optionsStyle, reportStyles }) => {
   const { t } = useTranslation();
   const menuRef = useRef();
   const handleOnClick = useCallback(() => {
@@ -23,7 +23,7 @@ const MultiLink = ({ className, onHeadClick, displayOptions = false, options, la
   })
 
   return (
-    <div className={className} ref={menuRef}>
+    <div className={className} ref={menuRef} style={reportStyles}>
       <div className={`multilink-labelWrap ${downloadBtnClassName}`} onClick={onHeadClick} style={style}>
         {icon ? icon : <PrimaryDownlaodIcon />}
         <LinkButton label={label || t("CS_COMMON_DOWNLOAD")} className="multilink-link-button" />

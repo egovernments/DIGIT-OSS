@@ -119,6 +119,22 @@ const WSCard = () => {
         label: t("ES_COMMON_CONNECTION_SEARCH_LABEL"),
         link: `/digit-ui/employee/ws/search`,
       },
+      {
+        label: t("ACTION_TEST_RECEIPTREGISTER"),
+        link: `/digit-ui/employee/reports/search/rainmaker-wns/WnsReceiptRegisterReport`,
+        roles: ["WS_CEMP", "WS_APPROVER", "SW_CEMP", "SW_APPROVER"]
+      },
+      // {
+      //   label: t("ACTION_TEST_DEFAULTER_REPORT"),
+      //   link: `/digit-ui/employee/reports/search/rainmaker-wns/WnsDefaultersReport`,
+      //   roles: []
+      // },
+      {
+        label: t("ACTION_TEST_COLLECTION_REGISTER"),
+        link: `/digit-ui/employee/reports/search/rainmaker-wns/WnsCollectionRegisterReport`,
+        roles: ["WS_CEMP", "WS_APPROVER", "SW_CEMP", "SW_APPROVER"]
+      },
+
     ],
   };
   return <EmployeeModuleCard {...propsForModuleCard} />;

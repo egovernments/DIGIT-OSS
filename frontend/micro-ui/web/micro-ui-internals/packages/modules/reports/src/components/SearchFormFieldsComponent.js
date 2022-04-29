@@ -7,6 +7,24 @@ const getSearchField = (field, formState, Controller, register, control, t) => {
     const formErrors = formState?.errors; 
 
     switch (field.type) {
+        case "string":
+            return (
+                <SearchField>
+                    <label>{t(`${field.label}${field.isMandatory ? "*" : ""}`)}</label>
+                    <TextInput
+                        name={field.name}
+                        type="text"
+                        inputRef={register({
+                            maxLength: {
+                                value: 60,
+                                message: t("EXCEEDS_60_CHAR_LIMIT"),
+                            },
+                            required: field.isMandatory
+                        })}
+                    />
+                </SearchField>
+            )
+
         case "singlevaluelist":
             var optionsArr = Object.values(field.defaultValue)?.map(el => t(el))
             optionsArr.unshift(t('ALL'))
