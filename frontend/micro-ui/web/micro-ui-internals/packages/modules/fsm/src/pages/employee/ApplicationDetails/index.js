@@ -102,7 +102,7 @@ const ApplicationDetails = (props) => {
       case "SUBMIT":
       case "FSM_SUBMIT":
       case !DSO && "SCHEDULE":
-        return history.push("/digit-ui/employee/fsm/schedule-application/" + applicationNumber);
+        return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
       case "PAY":
       case "FSM_PAY":
       case "ADDITIONAL_PAY_REQUEST":

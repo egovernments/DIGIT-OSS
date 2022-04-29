@@ -2,14 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
 
 const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
 
 const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitationMenu }) => {
   const { t } = useTranslation();
-  const { pathname: url } = useLocation();
-  const scheduleScreen = url.includes("/schedule-application/");
   const history = useHistory();
   const [canSubmit, setSubmitValve] = useState(false);
   const stateId = Digit.ULBService.getStateId();
@@ -174,7 +171,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     <FormComposer
       heading={t("ES_TITLE_MODIFY_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
-      label={scheduleScreen ? t("ES_FSM_APPLICATION_SCHEDULE") : t("ES_FSM_APPLICATION_UPDATE")}
+      label={applicationData?.applicationStatus != "CREATED" ? t("ES_FSM_APPLICATION_SCHEDULE") : t("ES_FSM_APPLICATION_UPDATE")}
       config={configs.filter((i) => !i.hideInEmployee).map((config) => {
         return {
           ...config,
