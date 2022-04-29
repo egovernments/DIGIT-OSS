@@ -15,7 +15,6 @@ import java.util.*;
 @Slf4j
 public class AbacFilterTest {
 
-    @Mock
     private AbacFilter abacFilter;
 
     private String role1, role2;
