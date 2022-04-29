@@ -45,6 +45,7 @@ public class BirthValidator {
 			return true;
 		birthDtl.setRejectReason(BirthDeathConstants.DUPLICATE_REG);
 		importBirthWrapper.updateMaps(BirthDeathConstants.DUPLICATE_REG, birthDtl);
+		importBirthWrapper.setServiceError(BirthDeathConstants.DUPLICATE_REG);
 		return false;
 	}
 	
