@@ -113,8 +113,8 @@ const FilterFormFieldsComponent = ({
                   isPropsNeeded={true}
                   onSelect={selectrole}
                   selected={props?.value}
-                  defaultLabel={t("ES_BPA_ALL_SELECTED")}
-                  defaultUnit={t("BPA_SELECTED_TEXT")}
+                  defaultLabel={t("ES_WS_ALL_SELECTED")}
+                  defaultUnit={t("WS_SELECTED_TEXT")}
                 />
                 <div className="tag-container">{renderRemovableTokens}</div>
               </>

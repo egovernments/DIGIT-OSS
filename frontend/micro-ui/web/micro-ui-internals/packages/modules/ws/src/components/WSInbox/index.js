@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useMemo, useReducer } from "react";
+import React, { Fragment, useCallback, useMemo, useReducer, useEffect } from "react";
 import { InboxComposer, ComplaintIcon, Header, DropIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
@@ -11,9 +11,7 @@ const WSInbox = ({ parentRoute }) => {
   const { t } = useTranslation();
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const location = useLocation();
   const getUrlPathName = window.location.pathname;
-
   const checkPathName = getUrlPathName.includes("water/inbox");
 
   const searchFormDefaultValues = {
@@ -37,22 +35,37 @@ const WSInbox = ({ parentRoute }) => {
   };
 
   function formReducer(state, payload) {
-    //check if checkPathName
-    switch (payload.action) {
-      case "mutateSearchForm":
-        Digit.SessionStorage.set("BILL.INBOX", { ...state, searchForm: payload.data });
-        return { ...state, searchForm: payload.data };
-      case "mutateFilterForm":
-        Digit.SessionStorage.set("BILL.INBOX", { ...state, filterForm: payload.data });
-        return { ...state, filterForm: payload.data };
-      case "mutateTableForm":
-        Digit.SessionStorage.set("BILL.INBOX", { ...state, tableForm: payload.data });
-        return { ...state, tableForm: payload.data };
-      default:
-        break;
+    if (checkPathName) {
+      switch (payload.action) {
+        case "mutateSearchForm":
+          Digit.SessionStorage.set("BILL.INBOX", { ...state, searchForm: payload.data });
+          return { ...state, searchForm: payload.data };
+        case "mutateFilterForm":
+          Digit.SessionStorage.set("BILL.INBOX", { ...state, filterForm: payload.data });
+          return { ...state, filterForm: payload.data };
+        case "mutateTableForm":
+          Digit.SessionStorage.set("BILL.INBOX", { ...state, tableForm: payload.data });
+          return { ...state, tableForm: payload.data };
+        default:
+          break;
+      }
+    } else {
+      switch (payload.action) {
+        case "mutateSearchForm":
+          Digit.SessionStorage.set("BILL.SW.INBOX", { ...state, searchForm: payload.data });
+          return { ...state, searchForm: payload.data };
+        case "mutateFilterForm":
+          Digit.SessionStorage.set("BILL.SW.INBOX", { ...state, filterForm: payload.data });
+          return { ...state, filterForm: payload.data };
+        case "mutateTableForm":
+          Digit.SessionStorage.set("BILL.SW.INBOX", { ...state, tableForm: payload.data });
+          return { ...state, tableForm: payload.data };
+        default:
+          break;
+      }
     }
   }
-  const InboxObjectInSessionStorage = Digit.SessionStorage.get("BILL.INBOX");
+  const InboxObjectInSessionStorage = checkPathName ? Digit.SessionStorage.get("BILL.INBOX") : Digit.SessionStorage.get("BILL.SW.INBOX");
 
   const onSearchFormReset = (setSearchFormValue) => {
     setSearchFormValue("mobileNumber", null);
@@ -61,7 +74,7 @@ const WSInbox = ({ parentRoute }) => {
   };
 
   const onFilterFormReset = (setFilterFormValue) => {
-    setFilterFormValue("moduleName", "ws-services");
+    setFilterFormValue("moduleName", checkPathName ? "ws-services" : "sw-services");
     setFilterFormValue("applicationStatus", []);
     setFilterFormValue("applicationType", []);
 
@@ -90,6 +103,7 @@ const WSInbox = ({ parentRoute }) => {
   ]);
 
   const [formState, dispatch] = useReducer(formReducer, formInitValue);
+
   const onPageSizeChange = (e) => {
     dispatch({ action: "mutateTableForm", data: { ...formState.tableForm, limit: e.target.value } });
   };

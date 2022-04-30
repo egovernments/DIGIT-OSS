@@ -13,7 +13,7 @@ const SearchFormFieldsComponents = ({ registerRef, searchFormState }) => {
       </SearchField>
       <SearchField>
         <label>{t("WS_MYCONNECTIONS_CONSUMER_NO")}</label>
-        <TextInput name="connectionNo" inputRef={registerRef({})} />
+        <TextInput name="consumerNo" inputRef={registerRef({})} />
       </SearchField>
       <SearchField>
         <label>{t("CORE_COMMON_MOBILE_NUMBER")}</label>

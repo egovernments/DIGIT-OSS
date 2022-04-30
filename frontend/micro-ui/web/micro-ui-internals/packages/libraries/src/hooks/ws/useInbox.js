@@ -1,19 +1,23 @@
 import useInbox from "../useInbox";
+import { useEffect } from "react";
 
 const useWSInbox = ({ tenantId, filters, config = {} }) => {
   const { filterForm, searchForm, tableForm } = filters;
   const user = Digit.UserService.getUser();
-  const { mobileNumber, applicationNumber, connectionNo } = searchForm;
-  const { sortBy, limit, offset, sortOrder } = tableForm;
+  let { mobileNumber, applicationNumber, consumerNo } = searchForm;
+  let { sortBy, limit, offset, sortOrder } = tableForm;
   let { moduleName, businessService, applicationStatus, locality, assignee, businessServiceArray, applicationType } = filterForm;
 
-  if(!window.location.href.includes("digit-ui/employee/")) {
+  if (mobileNumber || applicationNumber || consumerNo) {
+    offset = 0;
+  }
+
+  if (!window.location.href.includes("digit-ui/employee/")) {
     moduleName = moduleName;
   } else {
     if (window.location.href.includes("water/inbox")) moduleName = "ws-services";
     if (window.location.href.includes("sewerage/inbox")) moduleName = "sw-services";
   }
-  
 
   if (moduleName === "ws-services") {
     if (applicationType && applicationType.length > 0) {
@@ -42,9 +46,9 @@ const useWSInbox = ({ tenantId, filters, config = {} }) => {
     moduleSearchCriteria: {
       ...(mobileNumber ? { mobileNumber } : {}),
       ...(applicationNumber ? { applicationNumber } : {}),
-      ...(connectionNo ? { connectionNo } : {}),
+      ...(consumerNo ? { consumerNo } : {}),
       ...(sortOrder ? { sortOrder } : {}),
-      ...(sortBy ? { sortBy } : {}),
+      sortBy: "createdTime",
       ...(locality?.length > 0 ? { locality: locality.map((item) => item.code.split("_").pop()).join(",") } : {}),
     },
     limit,
