@@ -123,15 +123,15 @@ public class BulkDemandAndBillGenService {
 			propertyIds.add(connection.getPropertyId());
 		}
 		List<Property> properties = wsCalculationUtil.propertySearch(requestInfo, propertyIds, tenantId);
-		Map<String, Property> propertyUuidMap = properties.stream().collect(Collectors.toMap(Property::getId, Function.identity()));
-
-
+		Map<String, Property> propertyIdMap = properties.stream().collect(Collectors.toMap(Property::getPropertyId, Function.identity()));
+		
+		
 		for (Calculation calculation : calculations) {
 
 			WaterConnection connection = calculation.getWaterConnection();
 			String consumerCode = connection.getConnectionNo();
 			String propertyId = connection.getPropertyId();
-			User owner = propertyUuidMap.get(propertyId).getOwners().get(0).toCommonUser();
+			User owner = propertyIdMap.get(propertyId).getOwners().get(0).toCommonUser();
 
 			List<DemandDetail> demandDetails = new LinkedList<>();
 			calculation.getTaxHeadEstimates().forEach(taxHeadEstimate -> {
