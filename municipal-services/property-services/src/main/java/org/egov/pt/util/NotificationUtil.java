@@ -340,14 +340,12 @@ public class NotificationUtil {
     public void sendEmail(List < EmailRequest > emailRequestList) {
 
         if (config.getIsEmailNotificationEnabled()) {
-            log.info("going into for loop");
             if (CollectionUtils.isEmpty(emailRequestList))
                 log.info("Messages from localization couldn't be fetched!");
             for (EmailRequest emailRequest: emailRequestList) {
                 if (!StringUtils.isEmpty(emailRequest.getEmail().getBody())) {
                     String updatedTopic = centralInstanceUtil.getStateSpecificTopicName(emailRequest.getEmail().getTenantId(), config.getEmailNotifTopic());
                     producer.push(updatedTopic, emailRequest);
-                    log.info("updatedTopic: " + updatedTopic);
                     log.info("Sending EMAIL notification! ");
                     log.info("Email Id: " + emailRequest.getEmail().toString());
                 } else {
