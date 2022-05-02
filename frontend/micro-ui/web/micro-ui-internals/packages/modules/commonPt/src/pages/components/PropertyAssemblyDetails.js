@@ -159,9 +159,7 @@ const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, form
             defaultValue={assemblyDetails?.floorarea}
             rules={{ 
               required: t("REQUIRED_FIELD"),
-              validate: {
-                pattern: (val)=> /^([0-9]){0,8}$/i.test(val) ? true : t("PT_TOT_LAND_AREA_ERROR_MESSAGE")
-              }
+              validate: (val)=> /^([0-9]){0,8}$/i.test(val) ? true : t("PT_TOT_LAND_AREA_ERROR_MESSAGE")
             }}
             key={config?.key}
             render={(props) => (
