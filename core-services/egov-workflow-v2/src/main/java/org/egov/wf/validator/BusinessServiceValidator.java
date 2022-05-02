@@ -25,7 +25,7 @@ public class BusinessServiceValidator {
      */
     public void validateCreateRequest(BusinessServiceRequest request){
         validateIfExists(request,true);
-        validateForDuplicates(request);
+    //    validateForDuplicates(request);
     }
 
 
@@ -35,7 +35,7 @@ public class BusinessServiceValidator {
      */
     public void validateUpdate(BusinessServiceRequest request){
         validateIfExists(request,false);
-        validateForDuplicates(request);
+    //    validateForDuplicates(request);
     }
 
 
@@ -108,25 +108,16 @@ public class BusinessServiceValidator {
     private List<BusinessService> getBusinessServices(BusinessServiceRequest request){
         String tenantId = request.getBusinessServices().get(0).getTenantId();
         List<String> businessServiceCodes = new LinkedList<>();
-        List<String> stateUuids = new LinkedList<>();
-        List<String> actionUuids = new LinkedList<>();
 
-        BusinessServiceSearchCriteria criteria = new BusinessServiceSearchCriteria();
         request.getBusinessServices().forEach(businessService -> {
             businessServiceCodes.add(businessService.getBusinessService());
-            businessService.getStates().forEach(state -> {
-                stateUuids.add(state.getUuid());
-                if(!CollectionUtils.isEmpty(state.getActions())){
-                    state.getActions().forEach(action -> {
-                        actionUuids.add(action.getUuid());
-                    });
-                }
-            });
         });
+
+        BusinessServiceSearchCriteria criteria = new BusinessServiceSearchCriteria();
         criteria.setTenantId(tenantId);
         criteria.setBusinessServices(businessServiceCodes);
 
-        List<BusinessService> businessServices = repository.getBusinessServices(criteria);
+        List<BusinessService> businessServices = repository.querybusinessService(criteria, tenantId);
         return businessServices;
     }
 
@@ -166,6 +157,8 @@ public class BusinessServiceValidator {
                 if(!CollectionUtils.isEmpty(state.getActions())){
                     state.getActions().forEach(action -> {
                         ids.add(action.getUuid());
+                        ids.add(action.getCurrentState());
+                        ids.add(action.getNextState());
                     });
                 }
             });

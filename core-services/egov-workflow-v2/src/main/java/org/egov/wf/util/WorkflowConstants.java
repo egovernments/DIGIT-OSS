@@ -43,8 +43,6 @@ public class WorkflowConstants {
     public static final String RATE_ACTION = "RATE";
 
     public static final String AUTO_ESC_EMPLOYEE_ROLE_CODE = "AUTO_ESCALATE";
-    
-    public static final String  FSM_MODULE="FSM";
 
     public static String SCHEMA_REPLACE_STRING = "{SCHEMA}";
 

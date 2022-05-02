@@ -8,6 +8,8 @@ import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.repository.querybuilder.BusinessServiceQueryBuilder;
 import org.egov.wf.repository.rowmapper.BusinessServiceRowMapper;
 import org.egov.wf.service.MDMSService;
+import org.egov.wf.util.CommonUtil;
+import org.egov.wf.util.WorkflowUtil;
 import org.egov.wf.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -33,15 +35,18 @@ public class BusinessServiceRepository {
 
     private MDMSService mdmsService;
 
+    private CommonUtil util;
+
 
     @Autowired
     public BusinessServiceRepository(BusinessServiceQueryBuilder queryBuilder, JdbcTemplate jdbcTemplate,
-                                     BusinessServiceRowMapper rowMapper, WorkflowConfig config, MDMSService mdmsService) {
+                                     BusinessServiceRowMapper rowMapper, WorkflowConfig config, MDMSService mdmsService, CommonUtil util) {
         this.queryBuilder = queryBuilder;
         this.jdbcTemplate = jdbcTemplate;
         this.rowMapper = rowMapper;
         this.config = config;
         this.mdmsService = mdmsService;
+        this.util = util;
     }
 
 
@@ -50,12 +55,10 @@ public class BusinessServiceRepository {
 
 
     public List<BusinessService> getBusinessServices(BusinessServiceSearchCriteria criteria){
-        String query;
         String tenantId = criteria.getTenantId();
         criteria.setTenantId(null);
-        List<Object> preparedStmtList = new ArrayList<>();
-        query = queryBuilder.getBusinessServices(criteria, preparedStmtList);
-        List<BusinessService> searchResults = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+
+        List<BusinessService> searchResults = querybusinessService(criteria, tenantId);
 
         if(CollectionUtils.isEmpty(searchResults))
             return new LinkedList<>();
@@ -80,18 +83,26 @@ public class BusinessServiceRepository {
         return businessServices;
     }
 
+    public List<BusinessService> querybusinessService(BusinessServiceSearchCriteria criteria, String tenantId){
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getBusinessServices(criteria, preparedStmtList);
+        query = util.replaceSchemaPlaceholder(query, tenantId);
+        List<BusinessService> searchResults = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+        return searchResults;
+    }
+
 
     /**
      * Creates map of roles vs tenantId vs List of status uuids from all the avialable businessServices
      * @return
      */
     @Cacheable(value = "roleTenantAndStatusesMapping")
-    public Map<String,Map<String,List<String>>> getRoleTenantAndStatusMapping(){
+    public Map<String,Map<String,List<String>>> getRoleTenantAndStatusMapping(String tntId){
 
 
         Map<String, Map<String,List<String>>> roleTenantAndStatusMapping = new HashMap();
 
-        List<BusinessService> businessServices = getAllBusinessService();
+        List<BusinessService> businessServices = getAllBusinessService(tntId);
 
         for(BusinessService businessService : businessServices){
 
@@ -144,11 +155,11 @@ public class BusinessServiceRepository {
      * Returns all the avialable businessServices
      * @return
      */
-    private List<BusinessService> getAllBusinessService(){
+    private List<BusinessService> getAllBusinessService(String tenantId){
 
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getBusinessServices(new BusinessServiceSearchCriteria(), preparedStmtList);
-
+        query = util.replaceSchemaPlaceholder(query, tenantId);
         List<BusinessService> businessServices = jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
     //    List<BusinessService> filterBusinessServices = filterBusinessServices((businessServices));
 
