@@ -50,9 +50,6 @@ public class ExternalEmailService implements EmailService {
 	@Value("${egov.filestore.string.format}")
 	private String filestore_format;
 
-	@Value("${egov.filestore.tenant.id}")
-	private String filestore_tenant_id;
-
 	@Autowired
 	private Environment env;
 
@@ -85,6 +82,13 @@ public class ExternalEmailService implements EmailService {
 		MimeMessageHelper helper;
 		FileOutputStream fos = null;
 		List<String> paths = new ArrayList<>();
+		String tenantId;
+		String[] parts = email.getTenantId().split(".");
+		if(parts.length == 2) {
+			tenantId = parts[0];
+		} else {
+			tenantId = parts[1];
+		}
 		try {
 			helper = new MimeMessageHelper(message, true);
 			helper.setTo(email.getEmailTo().toArray(new String[0]));
@@ -93,7 +97,7 @@ public class ExternalEmailService implements EmailService {
 
 
 			for(Map.Entry<String, String> entry : email.getFileStoreId().entrySet()) {
-				String uri = String.format(filestore_format, filestore_host, filestore_workdir, filestore_tenant_id, entry.getKey());
+				String uri = String.format(filestore_format, filestore_host, filestore_workdir, tenantId, entry.getKey());
 				URL url = new URL(uri);
 				URLConnection con = url.openConnection();
 				UUID uuid = UUID.randomUUID();
