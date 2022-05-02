@@ -11,16 +11,8 @@ import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.egov.wscalculation.config.WSCalculationConfiguration;
 import org.egov.wscalculation.constants.WSCalculationConstant;
 import org.egov.wscalculation.util.WSCalculationUtil;
-import org.egov.wscalculation.web.models.BulkBillGenerator;
-import org.egov.wscalculation.web.models.Calculation;
-import org.egov.wscalculation.web.models.CalculationReq;
-import org.egov.wscalculation.web.models.Demand;
+import org.egov.wscalculation.web.models.*;
 import org.egov.wscalculation.web.models.Demand.StatusEnum;
-import org.egov.wscalculation.web.models.DemandDetail;
-import org.egov.wscalculation.web.models.GetBillCriteria;
-import org.egov.wscalculation.web.models.Property;
-import org.egov.wscalculation.web.models.RequestInfoWrapper;
-import org.egov.wscalculation.web.models.WaterConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -123,7 +115,7 @@ public class BulkDemandAndBillGenService {
 			propertyIds.add(connection.getPropertyId());
 		}
 		List<Property> properties = wsCalculationUtil.propertySearch(requestInfo, propertyIds, tenantId);
-		Map<String, Property> propertyIdMap = properties.stream().collect(Collectors.toMap(Property::getAcknowldgementNumber, Function.identity()));
+		Map<String, Property> propertyIdMap = properties.stream().filter(property -> property.getStatus() != Status.INACTIVE).collect(Collectors.toMap(Property::getPropertyId, Function.identity()));
 		
 		
 		for (Calculation calculation : calculations) {
