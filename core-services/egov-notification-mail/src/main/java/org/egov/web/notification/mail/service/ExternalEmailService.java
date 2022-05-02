@@ -82,11 +82,11 @@ public class ExternalEmailService implements EmailService {
 		MimeMessageHelper helper;
 		FileOutputStream fos = null;
 		List<String> paths = new ArrayList<>();
-		String tenantId;
+		String tenantId = email.getTenantId();
 		String[] parts = email.getTenantId().split(".");
 		if(parts.length == 2) {
 			tenantId = parts[0];
-		} else {
+		} else if(parts.length == 3){
 			tenantId = parts[1];
 		}
 		try {
