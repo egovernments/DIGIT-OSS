@@ -83,7 +83,7 @@ public class ExternalEmailService implements EmailService {
 		FileOutputStream fos = null;
 		List<String> paths = new ArrayList<>();
 		String tenantId = email.getTenantId();
-		String[] parts = email.getTenantId().split(".");
+		String[] parts = email.getTenantId().split("[.]");
 		if(parts.length == 2) {
 			tenantId = parts[0];
 		} else if(parts.length == 3){
