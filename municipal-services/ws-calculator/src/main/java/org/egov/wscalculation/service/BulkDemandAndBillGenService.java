@@ -123,7 +123,7 @@ public class BulkDemandAndBillGenService {
 			propertyIds.add(connection.getPropertyId());
 		}
 		List<Property> properties = wsCalculationUtil.propertySearch(requestInfo, propertyIds, tenantId);
-		Map<String, Property> propertyIdMap = properties.stream().collect(Collectors.toMap(Property::getPropertyId, Function.identity()));
+		Map<String, Property> propertyIdMap = properties.stream().collect(Collectors.toMap(Property::getAcknowldgementNumber, Function.identity()));
 		
 		
 		for (Calculation calculation : calculations) {
