@@ -153,7 +153,7 @@ const MyApplication = () => {
                   note={t(`WF_BPA_${application?.state}`)}
                   noteStyle={application?.status === "APPROVED" ? { color: "#00703C" } : { color: "#D4351C" }}
                 />
-                <KeyNote keyValue={t("BPA_COMMON_SLA")} note={application?.sla} />
+                <KeyNote keyValue={t("BPA_COMMON_SLA")} note={t(application?.sla)} />
                 {application.action === "SEND_TO_ARCHITECT" || application.status !== "INITIATED" ? (
                   <Link to={{ pathname: `/digit-ui/citizen/obps/bpa/${application?.applicationNo}`, state: { tenantId: "" } }}>
                     <SubmitBar label={t("TL_VIEW_DETAILS")} />

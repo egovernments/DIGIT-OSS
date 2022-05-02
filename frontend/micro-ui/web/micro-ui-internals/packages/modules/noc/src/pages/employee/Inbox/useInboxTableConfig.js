@@ -7,7 +7,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
   const { t } = useTranslation();
 
   const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
-  const GetStatusCell = (value) =>
+  const GetStatusCell = (value) => value === "CS_NA" ? t(value) : 
     value === "Active" || value > 0 ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span>;
 
   const tableColumnConfig = useMemo(() => {
