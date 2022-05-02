@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.jayway.jsonpath.Filter;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -57,6 +58,8 @@ public class NotificationUtil {
 
     private RestTemplate restTemplate;
 
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
 
     @Value("${egov.mdms.host}")
     private String mdmsHost;
@@ -341,7 +344,9 @@ public class NotificationUtil {
                 log.info("Messages from localization couldn't be fetched!");
             for (EmailRequest emailRequest: emailRequestList) {
                 if (!StringUtils.isEmpty(emailRequest.getEmail().getBody())) {
-                    producer.push(config.getEmailNotifTopic(), emailRequest);
+                    String updatedTopic = centralInstanceUtil.getStateSpecificTopicName(emailRequest.getEmail().getTenantId(), config.getEmailNotifTopic());
+                    producer.push(updatedTopic, emailRequest);
+                    log.info("updatedTopic: " + updatedTopic);
                     log.info("Sending EMAIL notification! ");
                     log.info("Email Id: " + emailRequest.getEmail().toString());
                 } else {
