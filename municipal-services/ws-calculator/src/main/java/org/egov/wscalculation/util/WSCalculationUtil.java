@@ -184,10 +184,10 @@ public class WSCalculationUtil {
 	 *            WaterConnectionRequest containing property
 	 * @return List of Property
 	 */
-	public List<Property> propertySearch(RequestInfo requestInfo, Set<String> propertyUuids, String tenantId) {
+	public List<Property> propertySearch(RequestInfo requestInfo, Set<String> propertyIds, String tenantId) {
 
 		PropertyCriteria propertyCriteria = PropertyCriteria.builder()
-				.uuids(propertyUuids)
+				.propertyIds(propertyIds)
 				.tenantId(tenantId)
 				.build();
 
