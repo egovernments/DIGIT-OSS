@@ -913,7 +913,33 @@ const getWSTaxHeadMasterCritera = (tenantId, moduleCode, type) => ({
       },
     ],
   },
-})
+});
+
+const getHowItWorksJSON = (tenantId) => ({
+      moduleDetails: [
+      {
+        moduleName: "common-masters",
+        masterDetails: [
+          {
+            name: "howItWorks",
+          },
+        ],
+      },
+    ],
+});
+
+const getFAQsJSON = (tenantId) => ({
+  moduleDetails: [
+  {
+    moduleName: "common-masters",
+    masterDetails: [
+      {
+        name: "faqs",
+      },
+    ],
+  },
+],
+});
 
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
@@ -1637,5 +1663,11 @@ export const MdmsService = {
 
   getBillingPeriod: (tenantId) => {
     return MdmsService.call(tenantId, getBillingPeriodValidation(tenantId));
-  }
+  },
+  getHowItWorksJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getHowItWorksJSON(tenantId));
+  },
+  getFAQsJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getFAQsJSON(tenantId));
+  },
 };

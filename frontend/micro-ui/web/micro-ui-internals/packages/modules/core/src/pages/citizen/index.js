@@ -1,9 +1,9 @@
-import { BackButton } from "@egovernments/digit-ui-react-components";
+import { BackButton, WhatsappIcon, Card, CitizenHomeCard, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Route, Switch, useRouteMatch, useHistory } from "react-router-dom";
+import { Route, Switch, useRouteMatch, useHistory, Link } from "react-router-dom";
 import ErrorBoundary from "../../components/ErrorBoundaries";
-import { AppHome } from "../../components/Home";
+import { AppHome, processLinkData } from "../../components/Home";
 import TopBarSideBar from "../../components/TopBarSideBar";
 import StaticCitizenSideBar from "../../components/TopBarSideBar/SideBar/StaticCitizenSideBar";
 import CitizenHome from "./Home";
@@ -12,6 +12,8 @@ import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
 import UserProfile from "./Home/UserProfile";
 import ErrorComponent from "../../components/ErrorComponent";
+import FAQsSection from "./FAQs/FAQs";
+import HowItWorks from "./HowItWorks/howItWorks";
 
 const sidebarHiddenFor=["digit-ui/citizen/register/name","/digit-ui/citizen/select-language","/digit-ui/citizen/select-location","/digit-ui/citizen/login","/digit-ui/citizen/register/otp"]
 
@@ -61,6 +63,9 @@ const Home = ({
   const { t } = useTranslation();
   const { path } = useRouteMatch();
   const history = useHistory();
+  const handleClickOnWhatsApp = (obj) => {
+    window.open(obj);
+  };
 
   const hideSidebar = sidebarHiddenFor.some(e=>window.location.href.includes(e));
   const appRoutes = modules.map(({ code, tenants }, index) => {
@@ -74,17 +79,53 @@ const Home = ({
 
   const ModuleLevelLinkHomePages = modules.map(({ code, bannerImage }, index) => {
     let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
+    let mdmsDataObj = isLinkDataFetched ? processLinkData(linkData, code, t) : undefined;
     return (
+      <React.Fragment>
       <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
         <div className="moduleLinkHomePage">
           <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
           <BackButton className="moduleLinkHomePageBackButton" />
           <h1>{t("MODULE_" + code.toUpperCase())}</h1>
           <div className="moduleLinkHomePageModuleLinks">
-            <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />
+            {mdmsDataObj && (
+              <CitizenHomeCard
+                header={t(mdmsDataObj?.header)}
+                links={mdmsDataObj?.links}
+                Icon={() => <span />}
+                Info={
+                  code === "OBPS"
+                    ? () => (
+                        <CitizenInfoLabel
+                          style={{ margin: "0px", padding: "10px" }}
+                          info={t("CS_FILE_APPLICATION_INFO_LABEL")}
+                          text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
+                        />
+                      )
+                    : null
+                }
+                isInfo={code === "OBPS" ? true : false}
+              />
+            )}
+            {/* <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} /> */}
           </div>
+          <Card>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div style={{ color: "#25D366", fontWeight: "bold", float: "left" }}>{t("PAY_VIA_WHATSAPP")}</div>
+              <div style={{ float: "right", fill: "#25D366" }}>
+                <WhatsappIcon />
+              </div>
+            </div>
+          </Card>
         </div>
       </Route>
+      <Route key={index} path={`${path}/${code.toLowerCase()}-faq`}>
+        <FAQsSection module={code?.toUpperCase()}/>
+        </Route>
+        <Route key={index} path={`${path}/${code.toLowerCase()}-how-it-works`}>
+        <HowItWorks module={code?.toUpperCase()}/>
+        </Route>
+      </React.Fragment>
     );
   });
 

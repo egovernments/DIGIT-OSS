@@ -15,7 +15,7 @@ import {
   CitizenInfoLabel,
 } from "@egovernments/digit-ui-react-components";
 
-const processLinkData = (newData, code, t) => {
+export const processLinkData = (newData, code, t) => {
   const obj = newData?.[`${code}`];
   if (obj) {
     obj.map((link) => {

@@ -39,7 +39,7 @@ const SubMenu = ({ item }) => {
     collections: <CollectionIcon />,
   };
 
-  const leftIconArray = item.icon.leftIcon.split(":")[1] || item.leftIcon.split(":")[1];
+  const leftIconArray = item?.icon?.leftIcon?.split?.(":")?.[1] || item?.leftIcon?.split?.(":")[1];
   const leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
 
   return (

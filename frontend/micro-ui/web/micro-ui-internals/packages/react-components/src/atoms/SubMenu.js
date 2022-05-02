@@ -52,7 +52,8 @@ const SubMenu = ({ item, t, isEmployee }) => {
   const leftIconCitizenArray = item.icon;
   const leftIconCitizen = IconsObject[leftIconCitizenArray] || IconsObject.BillsIcon;
 
-  const leftIconEmployeeItems = item?.icon?.split(":")[1];
+  const leftIconEmployeeItems = item?.icon?.split?.(":")?.[1] || "";
+
   const leftIconEmployee = IconsObject[leftIconEmployeeItems] || IconsObject.collections;
 
   return (

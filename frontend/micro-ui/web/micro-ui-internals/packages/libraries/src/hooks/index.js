@@ -209,6 +209,9 @@ import useGetMeterStatusList from "./ws/useGetMeterStatusList";
 import useGetBillingPeriodValidation from "./ws/useBillingPeriodValidation";
 import  useReportMeta  from "./reports/useReport";
 
+import useGetHowItWorksJSON from "./useHowItWorksJSON";
+import useGetFAQsJSON from "./useGetFAQsJSON";
+
 const pgr = {
   useComplaintDetails,
   useComplaintsList,
@@ -468,7 +471,9 @@ const Hooks = {
   noc,
   ws,
   useCustomMDMS,
-  reports
+  reports,
+  useGetHowItWorksJSON,
+  useGetFAQsJSON,
 };
 
 export default Hooks;
