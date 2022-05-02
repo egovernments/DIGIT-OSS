@@ -51,6 +51,7 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
+    moduleLevel: value?.moduleLevel
   });
 
   useEffect(() => {
