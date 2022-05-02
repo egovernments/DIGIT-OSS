@@ -115,8 +115,14 @@ public class BulkDemandAndBillGenService {
 			propertyIds.add(connection.getPropertyId());
 		}
 		List<Property> properties = wsCalculationUtil.propertySearch(requestInfo, propertyIds, tenantId);
-		Map<String, Property> propertyIdMap = properties.stream().filter(property -> property.getStatus() != Status.INACTIVE).collect(Collectors.toMap(Property::getPropertyId, Function.identity()));
+		//Map<String, Property> propertyIdMap = properties.stream().filter(property -> property.getStatus() != Status.INACTIVE).collect(Collectors.toMap(Property::getPropertyId, Function.identity()));
 		
+		Map<String, Property> propertyIdMap = new HashMap<>();
+
+		for(Property property : properties){
+		   if(property.getStatus() != Status.INACTIVE)
+		      propertyIdMap.put(property.getPropertyId(),property);
+		}
 		
 		for (Calculation calculation : calculations) {
 
