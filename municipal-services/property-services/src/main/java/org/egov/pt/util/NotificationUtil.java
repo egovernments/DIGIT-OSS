@@ -340,6 +340,7 @@ public class NotificationUtil {
     public void sendEmail(List < EmailRequest > emailRequestList) {
 
         if (config.getIsEmailNotificationEnabled()) {
+            log.info("going into for loop");
             if (CollectionUtils.isEmpty(emailRequestList))
                 log.info("Messages from localization couldn't be fetched!");
             for (EmailRequest emailRequest: emailRequestList) {
