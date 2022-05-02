@@ -120,7 +120,10 @@ const ApplicationDetails = () => {
       action.redirectionUrll = {
         action: "ACTIVATE_CONNECTION",
         pathname: `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`,
-        state: applicationDetails,
+        state: {
+          applicationDetails: applicationDetails,
+          action: "RESUBMIT_APPLICATION"
+        },
       };
     }
     if (action?.action === "SUBMIT_APPLICATION") {
@@ -144,6 +147,19 @@ const ApplicationDetails = () => {
       if (data.action == "EDIT") workflowDetails.data.actionState.nextActions.push(data);
     });
   }
+
+  workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
+    if (action?.action === "EDIT") {
+      action.redirectionUrll = {
+        action: "ACTIVATE_CONNECTION",
+        pathname: `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`,
+        state: {
+          applicationDetails: applicationDetails,
+          action: "VERIFY_AND_FORWARD"
+        },
+      };
+    }
+  });
 
   workflowDetails?.data?.nextActions?.forEach((action) => {
     if (action?.action === "PAY") {

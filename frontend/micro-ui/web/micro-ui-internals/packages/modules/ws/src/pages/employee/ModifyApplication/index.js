@@ -133,7 +133,7 @@ const ModifyApplication = () => {
             setTimeout(closeToastOfError, 5000);
           },
           onSuccess: async (data, variables) => {
-            let response = await updatePayloadOfWS(data?.WaterConnection?.[0]);
+            let response = await updatePayloadOfWS(data?.WaterConnection?.[0], "WATER");
             let waterConnectionUpdate = { WaterConnection: response };
             waterUpdateMutation(waterConnectionUpdate, {
               onError: (error, variables) => {
@@ -161,7 +161,7 @@ const ModifyApplication = () => {
             setTimeout(closeToastOfError, 5000);
           },
           onSuccess: async (data, variables) => {
-            let response = await updatePayloadOfWS(data?.SewerageConnections?.[0]);
+            let response = await updatePayloadOfWS(data?.SewerageConnections?.[0], "SEWERAGE");
             let sewerageConnectionUpdate = { SewerageConnection: response };
             await sewerageUpdateMutation(sewerageConnectionUpdate, {
               onError: (error, variables) => {
