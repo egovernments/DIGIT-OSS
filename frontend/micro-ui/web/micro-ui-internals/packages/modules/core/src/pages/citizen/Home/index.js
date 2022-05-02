@@ -22,7 +22,7 @@ import StaticCitizenSideBar from "../../../components/TopBarSideBar/SideBar/Stat
 const Home = () => {
   const { t } = useTranslation();
   const history = useHistory();
-  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  const tenantId = Digit.ULBService.getCitizenCurrentTenant(true);
   const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
   let isMobile = window.Digit.Utils.browser.isMobile();
 
@@ -146,11 +146,15 @@ const Home = () => {
           <CardBasedOptions {...allInfoAndUpdatesProps} />
         </div>
 
-       {(whatsAppBannerMobObj||whatsAppBannerWebObj)&& <div className="WhatsAppBanner">
-        {isMobile 
-        ? <img src={whatsAppBannerMobObj?.bannerUrl} onClick={() => handleClickOnWhatsAppBanner(whatsAppBannerMobObj)}/> 
-        : <img src={whatsAppBannerWebObj?.bannerUrl} onClick={() => handleClickOnWhatsAppBanner(whatsAppBannerWebObj)}/>}
-        </div>}
+        {(whatsAppBannerMobObj || whatsAppBannerWebObj) && (
+          <div className="WhatsAppBanner">
+            {isMobile ? (
+              <img src={whatsAppBannerMobObj?.bannerUrl} onClick={() => handleClickOnWhatsAppBanner(whatsAppBannerMobObj)} />
+            ) : (
+              <img src={whatsAppBannerWebObj?.bannerUrl} onClick={() => handleClickOnWhatsAppBanner(whatsAppBannerWebObj)} />
+            )}
+          </div>
+        )}
 
         {conditionsToDisableNotificationCountTrigger() ? (
           EventsDataLoading ? (

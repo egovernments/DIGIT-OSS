@@ -26,24 +26,24 @@ const getInitialRange = () => {
   const startDate = data?.range?.startDate ? new Date(data?.range?.startDate) : Digit.Utils.dss.getDefaultFinacialYear().startDate;
   const endDate = data?.range?.endDate ? new Date(data?.range?.endDate) : Digit.Utils.dss.getDefaultFinacialYear().endDate;
   const title = `${format(startDate, "MMM d, yyyy")} - ${format(endDate, "MMM d, yyyy")}`;
-  const duration = Digit.Utils.dss.getDuration(startDate, endDate);
+  const interval = Digit.Utils.dss.getDuration(startDate, endDate);
   const denomination = data?.denomination || "Lac";
   const tenantId = data?.filters?.tenantId || [];
-  return { startDate, endDate, title, duration, denomination, tenantId };
+  return { startDate, endDate, title, interval, denomination, tenantId };
 };
 
 const DashBoard = ({ stateCode }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const [filters, setFilters] = useState(() => {
-    const { startDate, endDate, title, duration, denomination, tenantId } = getInitialRange();
+    const { startDate, endDate, title, interval, denomination, tenantId } = getInitialRange();
     return {
       denomination,
-      range: { startDate, endDate, title, duration },
+      range: { startDate, endDate, title, interval },
       requestDate: {
         startDate: startDate.getTime(),
         endDate: endDate.getTime(),
-        interval: duration,
+        interval: interval,
         title: title,
       },
       filters: {
@@ -159,29 +159,31 @@ const DashBoard = ({ stateCode }) => {
     }
   }, [tabArray]);
 
-  const shareOptions = navigator.share
-    ? [
-        {
-          label: t("ES_DSS_SHARE_PDF"),
-          onClick: (e) => {
-            setShowOptions(!showOptions);
-            setTimeout(() => {
-              return Digit.ShareFiles.PDF(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
-            }, 500);
-          },
-        },
-        {
-          label: t("ES_DSS_SHARE_IMAGE"),
-          onClick: () => {
-            setShowOptions(!showOptions);
-            setTimeout(() => {
-              return Digit.ShareFiles.Image(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
-            }, 500);
-          },
-        },
-      ]
-    : [
-        /*
+  const shareOptions =
+    // navigator.share
+    //   ? [
+    //       {
+    //         label: t("ES_DSS_SHARE_PDF"),
+    //         onClick: (e) => {
+    //           setShowOptions(!showOptions);
+    //           setTimeout(() => {
+    //             return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
+    //           }, 500);
+    //         },
+    //       },
+    //       {
+    //         label: t("ES_DSS_SHARE_IMAGE"),
+    //         onClick: () => {
+    //           setShowOptions(!showOptions);
+    //           setTimeout(() => {
+    //             return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name));
+    //           }, 500);
+    //         },
+    //       },
+    //     ]
+    //   :
+    [
+      /*
         {
           icon: <EmailIcon />,
           label: t("ES_DSS_SHARE_PDF"),
@@ -203,27 +205,27 @@ const DashBoard = ({ stateCode }) => {
           },
         },
         */
-        {
-          icon: <EmailIcon />,
-          label: t("ES_DSS_SHARE_IMAGE"),
-          onClick: () => {
-            setShowOptions(!showOptions);
-            setTimeout(() => {
-              return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "mail");
-            }, 500);
-          },
+      {
+        icon: <EmailIcon />,
+        label: t("ES_DSS_SHARE_IMAGE"),
+        onClick: () => {
+          setShowOptions(!showOptions);
+          setTimeout(() => {
+            return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "mail");
+          }, 500);
         },
-        {
-          icon: <WhatsappIcon />,
-          label: t("ES_DSS_SHARE_IMAGE"),
-          onClick: () => {
-            setShowOptions(!showOptions);
-            setTimeout(() => {
-              return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "whatsapp");
-            }, 500);
-          },
+      },
+      {
+        icon: <WhatsappIcon />,
+        label: t("ES_DSS_SHARE_IMAGE"),
+        onClick: () => {
+          setShowOptions(!showOptions);
+          setTimeout(() => {
+            return Digit.ShareFiles.DownloadImage(tenantId, fullPageRef, t(dashboardConfig?.[0]?.name), "whatsapp");
+          }, 500);
         },
-      ];
+      },
+    ];
 
   if (isLoading || isUlbLoading || localizationLoading || isMdmsLoading || isLoadingNAT) {
     return <Loader />;
@@ -398,8 +400,9 @@ const DashBoard = ({ stateCode }) => {
                 className="multilink-block-wrapper"
                 label={t(`ES_DSS_SHARE`)}
                 icon={<ShareIcon className="mrsm" />}
-                showOptions={(e) => setShowOptions(e)}
-                onHeadClick={(e) => setShowOptions(e !== undefined ? e : !showOptions)}
+                onHeadClick={(e) => {
+                  setShowOptions(!showOptions);
+                }}
                 displayOptions={showOptions}
                 options={shareOptions}
               />

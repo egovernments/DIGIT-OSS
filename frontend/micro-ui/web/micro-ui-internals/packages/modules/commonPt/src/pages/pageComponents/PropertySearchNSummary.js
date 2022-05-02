@@ -99,10 +99,19 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
       propertyAddress += propertyDetails?.Properties[0]?.address?.pincode;
     }
   }
+  const getInputStyles = () => {
+    if (window.location.href.includes("/ws/")) {
+      return { fontWeight: "700" }
+    } else return {};
+  }
+
+  let clns = "";
+  if (window.location.href.includes("/ws/")) clns = ":"
+
   return (
     <React.Fragment>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ID`)} *:`}</CardLabel>
+        <CardLabel className="card-label-smaller" style={getInputStyles()}>{`${t(`PROPERTY_ID`)}*:`}</CardLabel>
         <div className="field" style={{ marginTop: "20px", display: "flex" }}>
           <TextInput
             key={config.key}
@@ -133,13 +142,13 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
           </header>
           <StatusTable>
             <div style={isMobile ? {} : {maxWidth:"60%"}}>
-                <Row className="border-none" labelStyle={isMobile ? {width:"40%"} : {}} label={t(`PROPERTY_ID`)} text={propertyDetails?.Properties[0]?.propertyId} />
-                <Row className="border-none" labelStyle={isMobile ? {width:"40%"} : {}} label={t(`OWNER_NAME`)} text={propertyDetails?.Properties[0]?.owners[0]?.name}/>
-                <Row className="border-none" labelStyle={isMobile ? {width:"40%"} : {}} textStyle={{wordBreak:"break-word"}} label={t(`PROPERTY_ADDRESS`)} text={propertyAddress} />
+                <Row className="border-none" labelStyle={isMobile ? {width:"40%"} : {}} label={`${t(`PROPERTY_ID`)}${clns}`} text={propertyDetails?.Properties[0]?.propertyId} />
+                <Row className="border-none" labelStyle={isMobile ? {width:"40%"} : {}} label={`${t(`OWNER_NAME`)}${clns}`} text={propertyDetails?.Properties[0]?.owners[0]?.name}/>
+                <Row className="border-none" labelStyle={isMobile ? {width:"40%"} : {}} textStyle={{wordBreak:"break-word"}} label={`${t(`PROPERTY_ADDRESS`)}${clns}`} text={propertyAddress} />
             </div>
           </StatusTable>
-          <Link to={`/digit-ui/employee/pt/property-details/${propertyId}`}>
-            <LinkButton label={t("CPT_COMPLETE_PROPERTY_DETAILS")} style={{ color: "#f47738" }} />
+          <Link to={`/digit-ui/employee/commonpt/view-property?propertyId=${propertyId}&tenantId=${tenantId}`}>
+            <LinkButton label={t("CPT_COMPLETE_PROPERTY_DETAILS")} style={{ color: "#f47738",textAlign:"Left" }} />
           </Link>
         </React.Fragment>
       ) : null}

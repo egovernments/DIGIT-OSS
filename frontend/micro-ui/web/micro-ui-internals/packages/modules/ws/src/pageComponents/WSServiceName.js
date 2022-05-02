@@ -60,7 +60,7 @@ const WSServiceName = ({ t, config, onSelect, userType, formData }) => {
                 isDisabled={!serviceName}
                 onAdd={onAdd}
             >
-                <CardLabel>{t("WS_SELECT_SERVICE_TYPE_WANT_TO_APPLY")}*</CardLabel>
+                <CardLabel>{t("WS_SELECT_SERVICE_TYPE_WANT_TO_APPLY")}</CardLabel>
                 <RadioOrSelect
                     name="gender"
                     options={serviceNameList}

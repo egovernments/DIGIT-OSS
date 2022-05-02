@@ -439,7 +439,7 @@
 }
 @screen dt {
   .customEmployeeCard {
-    width: 273px !important;
+    width: 230px !important;
     height: 263px !important;
   }
 }
@@ -502,4 +502,29 @@
 
 .inboxLinksFSM {
   margin: 0 !important;
+}
+
+.plumber-details-new-value-wrapper{
+  flex: 2 1 auto;
+}
+
+.connection-details-new-value-wrapper {
+  flex: 1 1 auto;
+
+}
+
+.connection-details-old-value-wrapper,
+.plumber-details-old-value-wrapper {
+  flex: 1 1 auto;
+
+  .old-value-null-wrapper {
+    visibility: hidden;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+  .row {
+    color: #b1b4b6;
+    font-weight: 700;
+    font-size: 16px;
+  }
 }

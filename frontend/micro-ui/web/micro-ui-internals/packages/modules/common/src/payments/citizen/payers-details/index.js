@@ -82,12 +82,23 @@ const SelectPaymentType = (props) => {
   };
 
   const onSubmit = () => {
+    if(wrkflow === "WNS")
+    {
+      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS`, {
+        paymentAmount: paymentAmt,
+        tenantId: billDetails.tenantId,
+        name: paymentType?.code !== optionSecound?.code ? bill?.payerName : userInfo ? payersActiveName : payersName,
+        mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber : userInfo ? payersActiveMobileNumber : payersMobileNumber,
+      });
+    }
+    else{
     history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, {
       paymentAmount: paymentAmt,
       tenantId: billDetails.tenantId,
       name: paymentType?.code !== optionSecound?.code ? bill?.payerName : userInfo ? payersActiveName : payersName,
       mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber : userInfo ? payersActiveMobileNumber : payersMobileNumber,
     });
+  }
   };
 
   /* if (isLoading || paymentLoading) {

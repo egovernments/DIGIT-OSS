@@ -166,7 +166,7 @@ public class FSM   {
   @JsonProperty("paymentPreference")
   private String paymentPreference ;
   
-  @JsonProperty("receivedPayment")
-  private String receivedPayment;
+ // @JsonProperty("receivedPayment")
+ // private String receivedPayment;
 
 }

@@ -1,4 +1,4 @@
-import { Card, Header, KeyNote, Loader, SubmitBar, Toast, ActionBar, Dropdown, Modal, FormComposer, DatePicker, TextInput } from "@egovernments/digit-ui-react-components";
+import { Card, Header, KeyNote, Loader, SubmitBar, Toast, ActionBar, Dropdown, Modal, FormComposer, DatePicker, TextInput, StatusTable, Row } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
@@ -61,7 +61,7 @@ const ConsumptionDetails = ({ view }) => {
     setMeterDetails(response?.meterReadings[0]);
     setSelectMeterStatus({
       code: response?.meterReadings[0]?.meterStatus,
-      i18nKey: `${Digit.Utils.locale.getTransformedLocale(response?.meterReadings[0]?.meterStatus)}`
+      i18nKey: `WS_SERVICES_CALCULATION_METERSTATUS_${Digit.Utils.locale.getTransformedLocale(response?.meterReadings[0]?.meterStatus)}`
     });
     setBillingPeriod(`${getDate(meterDetails?.currentReadingDate)} - ${getDate(convertDateToEpoch(Digit.Utils.date.getDate()))}`);
   };
@@ -108,6 +108,7 @@ const ConsumptionDetails = ({ view }) => {
       await meterReadingMutation(meterReadingsPayload, {
         onError: (error, variables) => {
           setIsEnableLoader(false);
+          setOpenModal(false);
           setShowToast({ key: "error", message: error?.message ? error.message : error });
           setTimeout(closeToast, 5000);
         },
@@ -126,7 +127,7 @@ const ConsumptionDetails = ({ view }) => {
   let optionsList = 
     mdmsMeterStatus?.MdmsRes?.["ws-services-calculation"]?.MeterStatus.map((status) => ({
       code: status,
-      i18nKey: `${Digit.Utils.locale.getTransformedLocale(status)}`,
+      i18nKey: `WS_SERVICES_CALCULATION_METERSTATUS_${Digit.Utils.locale.getTransformedLocale(status)}`,
     }));
 
   const onFormValueChange = (setValue, formData, formState) => {
@@ -149,24 +150,22 @@ const ConsumptionDetails = ({ view }) => {
 
   const config = {
     label: {
-      heading: `ADD_METER_READING`,
-      submit: `COMMON_SAVE`,
-      cancel: "CORE_LOGOUTPOPUP_CANCEL",
+      heading: `WS_CONSUMPTION_BUTTON_METER_READING_LABEL`,
+      submit: `CORE_COMMON_SAVE`,
+      cancel: "CORE_CHANGE_TENANT_CANCEL",
     },
     form: [
       {
         body: [
           {
             populators: (
-              <KeyNote keyValue={t("WS_BILLING_PERIOD")} note={currentBillingPeriod} />
-              // <tr >
-              //   <td style={{fontWeight: 700}}>{t("WS_BILLING_PERIOD")}</td>
-              //   <td style={{paddingLeft: "60px", textAlign: "end"}}>{details?.[0]?.billingPeriod}</td>
-              // </tr>
+              <StatusTable>
+                <Row key={t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")} label={`${t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")}`} text={currentBillingPeriod} className="border-none" />
+              </StatusTable>
             ),
           },
           {
-            label:t("WS_METER_STATUS"),
+            label:`${t("WS_SERV_DETAIL_METER_STAT")}`,
             isMandatory: true,
             type: "dropdown",
             populators: (
@@ -183,38 +182,44 @@ const ConsumptionDetails = ({ view }) => {
           },
           {
             populators: (
-              <KeyNote keyValue={t("WS_LAST_READING")} note={details?.[0]?.currentReading} />
+              <StatusTable>
+                <Row key={t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")}`} text={details?.[0]?.currentReading} className="border-none" />
+              </StatusTable>
             ),
           },
           {
             populators: (
-              <KeyNote keyValue={t("WS_LAST_READING_DATE")} note={getDate(details?.[0]?.currentReadingDate)} />
+              <StatusTable>
+                <Row key={t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")}`} text={getDate(details?.[0]?.currentReadingDate)} className="border-none" />
+              </StatusTable>
             ),
           },
           {
-            label: t("WS_CURRENT_READING"),
-            isMandatory: true,
+            label: t("WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL"),
+            isMandatory: selectMeterStatus.code === "Working" ? true : false,
+            disable: selectMeterStatus.code === "Working" ? false : true,
             type: "number",
             populators: {
               name: "currentReading",
             },
           },
           {
-            label: t("WS_CURRENT_READING_DATE"),
-            isMandatory: true,
+            label: t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"),
+            isMandatory: selectMeterStatus.code === "Working" ? true : false,
+            disable: selectMeterStatus.code === "Working" ? false : true,
             type: "custom",
             populators: {
               name: "currentReadingDate",
               validation: {
-                required: true,
+                required: selectMeterStatus.code === "Working" ? true : false,
               },
               customProps: {},
               defaultValue: Digit.Utils.date.getDate(),
-              component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
+              component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} disabled={selectMeterStatus.code === "Working" ? false : true}/>,
             },
           },
           {
-            label: t("WS_CONSUMPTION"),
+            label: t("WS_SERV_DETAIL_CONSUMP"),
             isMandatory: false,
             type: "number",
             populators: {
@@ -254,26 +259,28 @@ const ConsumptionDetails = ({ view }) => {
     <div>
     <Header>{`${t("WS_VIEW_CONSUMPTION")}`}</Header>
     <div>
-      {meterReadings?.length > 0 &&
-        meterReadings.map((application, index) => (
-          <div key={index}>
-            <Card>
-            <KeyNote keyValue={t("WS_MYCONNECTIONS_CONSUMER_NO")} note={application?.connectionNo} />
-            <KeyNote keyValue={t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")} note={application?.billingPeriod} />
-            <KeyNote keyValue={t("WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL")} note={application?.meterStatus} />
-            <KeyNote keyValue={t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")} note={application?.lastReading} />
-            <KeyNote keyValue={t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")} note={Digit.DateUtils.ConvertEpochToDate(application?.lastReadingDate)} />
-            <KeyNote keyValue={t("WS_SERV_DETAIL_CUR_METER_READ")} note={application?.currentReading} />
-            <KeyNote keyValue={t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL")} note={Digit.DateUtils.ConvertEpochToDate(application?.currentReadingDate)} />
-            <KeyNote keyValue={t("WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL")} note={application?.consumption || t("CS_NA")} />
-            </Card> 
-          </div>
-        ))}
+          {meterReadings?.length > 0 &&
+            meterReadings.map((application, index) => (
+              <div key={index}>
+                <Card>
+                      <StatusTable style={{width: "960px"}}>
+                        <Row key={t("WS_MYCONNECTIONS_CONSUMER_NO")} label={`${t("WS_MYCONNECTIONS_CONSUMER_NO")}:`} text={application?.connectionNo || t("NA")} className="border-none" />
+                        <Row key={t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")} label={`${t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")}:`} text={application?.billingPeriod || t("NA")} className="border-none" />
+                        <Row key={t("WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL")}:`} text={application?.meterStatus || t("NA")} className="border-none" />
+                        <Row key={t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")}:`} text={application?.lastReading || t("NA")} className="border-none" />
+                        <Row key={t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")}:`} text={application?.lastReadingDate ? Digit.DateUtils.ConvertEpochToDate(application?.lastReadingDate) : t("NA")} className="border-none" />
+                        <Row key={t("WS_SERV_DETAIL_CUR_METER_READ")} label={`${t("WS_SERV_DETAIL_CUR_METER_READ")}:`} text={application?.currentReading || t("NA")} className="border-none" />
+                        <Row key={t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL")}:`} text={application?.currentReadingDate ? Digit.DateUtils.ConvertEpochToDate(application?.currentReadingDate) : t("NA")} className="border-none" />
+                        <Row key={t("WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL")}:`} text={application?.consumption || t("NA")} className="border-none" />
+                      </StatusTable>
+                </Card>
+              </div>
+            ))}
       {!meterReadings?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("WS_NO_CONSUMPTION_FOUND")}</p>}
     </div>
     {isLoading || meterStatusLoading || billingPeriodLoading ? null :
         <ActionBar>
-        <SubmitBar label={t("ADD_METER_READING")} onSubmit={popUp} />
+        <SubmitBar label={t("WS_CONSUMPTION_BUTTON_METER_READING_LABEL")} onSubmit={popUp} />
         </ActionBar> }
       </div>
       {openModal && (
@@ -286,7 +293,6 @@ const ConsumptionDetails = ({ view }) => {
           actionSaveOnSubmit={() => { }}
           formId="modal-action"
           popupStyles={mobileView?{width:"720px"}:{}}
-          style={!mobileView?{minHeight: "45px", height: "auto", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{minHeight: "45px", height: "auto",width:"44%"}}
           popupModuleMianStyles={mobileView?{paddingLeft:"5px"}: {}}
         >
           {isEnableLoader ? (

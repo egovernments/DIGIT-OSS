@@ -6,27 +6,27 @@ import Background from "../../../components/Background";
 import Header from "../../../components/Header";
 
 /* set employee details to enable backward compatiable */
-const setEmployeeDetail=(userObject,token)=>{
-  let locale=JSON.parse(sessionStorage.getItem("Digit.initData"))?.value?.selectedLanguage;
-  localStorage.setItem("Employee.tenant-id",userObject?.tenantId);
-  localStorage.setItem("tenant-id",userObject?.tenantId);
-  localStorage.setItem("citizen.userRequestObject",JSON.stringify(userObject));
-  localStorage.setItem("locale",locale);
-  localStorage.setItem("Employee.locale",locale);
-  localStorage.setItem("token",token);
-  localStorage.setItem("Employee.token",token);
-  localStorage.setItem("user-info",JSON.stringify(userObject));
-  localStorage.setItem("Employee.user-info",JSON.stringify(userObject));  
-}
+const setEmployeeDetail = (userObject, token) => {
+  let locale = JSON.parse(sessionStorage.getItem("Digit.locale"))?.value || "en_IN";
+  localStorage.setItem("Employee.tenant-id", userObject?.tenantId);
+  localStorage.setItem("tenant-id", userObject?.tenantId);
+  localStorage.setItem("citizen.userRequestObject", JSON.stringify(userObject));
+  localStorage.setItem("locale", locale);
+  localStorage.setItem("Employee.locale", locale);
+  localStorage.setItem("token", token);
+  localStorage.setItem("Employee.token", token);
+  localStorage.setItem("user-info", JSON.stringify(userObject));
+  localStorage.setItem("Employee.user-info", JSON.stringify(userObject));
+};
 
-const Login = ({ config: propsConfig, t ,isDisabled}) => {
+const Login = ({ config: propsConfig, t, isDisabled }) => {
   const { data: cities, isLoading } = Digit.Hooks.useTenants();
   const { data: storeData, isLoading: isStoreLoading } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const [user, setUser] = useState(null);
   const [showToast, setShowToast] = useState(null);
-  const [disable,setDisable]=useState(false);
-  
+  const [disable, setDisable] = useState(false);
+
   const history = useHistory();
   // const getUserType = () => "EMPLOYEE" || Digit.UserService.getType();
 
@@ -35,26 +35,26 @@ const Login = ({ config: propsConfig, t ,isDisabled}) => {
       return;
     }
     Digit.SessionStorage.set("citizen.userRequestObject", user);
-    const filteredRoles = user?.info?.roles?.filter(role => role.tenantId === Digit.SessionStorage.get("Employee.tenantId"));
+    const filteredRoles = user?.info?.roles?.filter((role) => role.tenantId === Digit.SessionStorage.get("Employee.tenantId"));
     if (user?.info?.roles?.length > 0) user.info.roles = filteredRoles;
     Digit.UserService.setUser(user);
-    setEmployeeDetail(user?.info,user?.access_token);
-    let redirectPath =  "/digit-ui/employee";
+    setEmployeeDetail(user?.info, user?.access_token);
+    let redirectPath = "/digit-ui/employee";
 
     /* logic to redirect back to same screen where we left off  */
-    if(window?.location?.href?.includes("from=")){
-      redirectPath=decodeURIComponent(window?.location?.href?.split("from=")?.[1])||"/digit-ui/employee";
+    if (window?.location?.href?.includes("from=")) {
+      redirectPath = decodeURIComponent(window?.location?.href?.split("from=")?.[1]) || "/digit-ui/employee";
     }
 
     /*  RAIN-6489 Logic to navigate to National DSS home incase user has only one role [NATADMIN]*/
-    if(user?.info?.roles&&user?.info?.roles?.every(e=>e.code==="NATADMIN")){
-      redirectPath='/digit-ui/employee/dss/landing/NURT_DASHBOARD'
+    if (user?.info?.roles && user?.info?.roles?.every((e) => e.code === "NATADMIN")) {
+      redirectPath = "/digit-ui/employee/dss/landing/NURT_DASHBOARD";
     }
     /*  RAIN-6489 Logic to navigate to National DSS home incase user has only one role [NATADMIN]*/
-    if(user?.info?.roles&&user?.info?.roles?.every(e=>e.code==="STADMIN")){
-      redirectPath='/digit-ui/employee/dss/landing/home'
+    if (user?.info?.roles && user?.info?.roles?.every((e) => e.code === "STADMIN")) {
+      redirectPath = "/digit-ui/employee/dss/landing/home";
     }
-    
+
     history.replace(redirectPath);
   }, [user]);
 
@@ -63,8 +63,8 @@ const Login = ({ config: propsConfig, t ,isDisabled}) => {
       alert("Please Select City!");
       return;
     }
-    setDisable(true )
-   
+    setDisable(true);
+
     const requestData = {
       ...data,
       userType: "EMPLOYEE",
@@ -76,11 +76,10 @@ const Login = ({ config: propsConfig, t ,isDisabled}) => {
       Digit.SessionStorage.set("Employee.tenantId", info?.tenantId);
       setUser({ info, ...tokens });
     } catch (err) {
-
       setShowToast(err?.response?.data?.error_description || "Invalid login credentials!");
       setTimeout(closeToast, 5000);
     }
-    setDisable(false)
+    setDisable(false);
   };
 
   const closeToast = () => {
@@ -143,9 +142,8 @@ const Login = ({ config: propsConfig, t ,isDisabled}) => {
       <div className="employeeBackbuttonAlign">
         <BackButton variant="white" style={{ borderBottom: "none" }} />
       </div>
-      
+
       <FormComposer
-      
         onSubmit={onLogin}
         isDisabled={isDisabled}
         noBoxShadow
@@ -159,8 +157,7 @@ const Login = ({ config: propsConfig, t ,isDisabled}) => {
         headingStyle={{ textAlign: "center" }}
         cardStyle={{ margin: "auto", minWidth: "408px" }}
         className="loginFormStyleEmployee"
-        buttonStyle={{maxWidth:"100%"}}
-        
+        buttonStyle={{ maxWidth: "100%" }}
       >
         <Header />
       </FormComposer>

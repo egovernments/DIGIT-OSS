@@ -56,19 +56,24 @@ const CheckPage = ({ onSubmit, value }) => {
 
   return (
     <React.Fragment>
-      <Timeline currentStep={4} flow="APPLY" />
+      <Timeline currentStep={6} flow="APPLY" />
       <Card>
         <CardHeader>{t("CS_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
         <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
         <CardSubHeader>{t("CS_CHECK_PROPERTY_DETAILS")}</CardSubHeader>
         <StatusTable>
-          {selectTripNo && <Row
-            label={t("Number of trips")}
-            text={t(selectTripNo.i18nKey)}
+          {selectTripNo && selectTripNo?.tripNo && <Row
+            label={t("ES_FSM_ACTION_NUMBER_OF_TRIPS")}
+            text={t(selectTripNo?.tripNo?.i18nKey)}
+            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-trip-number" />}
+          />}
+          {selectTripNo && selectTripNo?.vehicleCapacity && <Row
+            label={t("ES_VEHICLE CAPACITY")}
+            text={t(selectTripNo?.vehicleCapacity?.capacity)}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-trip-number" />}
           />}
           {selectGender && <Row
-            label={t("Gender Type")}
+            label={t("ES_FSM_ACTION_GENDER_TYPE")}
             text={t(selectGender.i18nKey)}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-gender" />}
           />}
@@ -128,7 +133,7 @@ const CheckPage = ({ onSubmit, value }) => {
             />
           )}
           {selectPaymentPreference && <Row
-            label={t("Payment Preference Type")}
+            label={t("ES_FSM_ACTION_PAYMENT_PREFERENCE_TYPE")}
             text={t(selectPaymentPreference.i18nKey)}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-payment-preference" />}
           />}

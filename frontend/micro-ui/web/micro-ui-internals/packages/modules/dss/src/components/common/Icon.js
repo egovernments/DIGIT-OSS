@@ -10,6 +10,7 @@ import { ReactComponent as Mcollect } from '../../images/mcollect.svg'
 import { ReactComponent as OBPS } from '../../images/obps.svg'
 import { ReactComponent as Tradelic } from '../../images/tradeLic_nurt.svg'
 import { ReactComponent as BuildingPermission } from '../../images/building_permission.svg'
+import { ReactComponent as BirthDeath } from '../../images/birth_death.svg'
 
 //import SVG from 'react-inlinesvg';
 
@@ -56,8 +57,11 @@ export function Icon(type, iconColor)
         case 'nurt_mcollect':
         case 'dss_mcollect':
             return <div style={{background: iconColor, width: "60 px" , height: "52px"}}><Mcollect></Mcollect></div>
-            case 'nurt_live_active_ulbs':
+        case 'nurt_live_active_ulbs':
             return <DashBoardIcon></DashBoardIcon>
+        case 'dss_birth_death':
+        case 'nurt_birth_death':
+            return <div style={{background: iconColor, width: "60 px" , height: "52px"}}><BirthDeath/></div>
         default:
             return <div></div>
 

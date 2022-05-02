@@ -1,4 +1,4 @@
-import { Card, Header, KeyNote, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Card, Header, KeyNote, Loader, StatusTable, SubmitBar, Row } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
@@ -23,14 +23,16 @@ const consumptionDetails = ({ view }) => {
         meterReadings.map((application, index) => (
           <div key={index}>
             <Card>
-            <KeyNote keyValue={t("WS_MYCONNECTIONS_CONSUMER_NO")} note={application?.connectionNo} />
-            <KeyNote keyValue={t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")} note={application?.billingPeriod} />
-            <KeyNote keyValue={t("WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL")} note={application?.meterStatus} />
-            <KeyNote keyValue={t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")} note={application?.lastReading} />
-            <KeyNote keyValue={t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")} note={Digit.DateUtils.ConvertEpochToDate(application?.lastReadingDate)} />
-            <KeyNote keyValue={t("WS_SERV_DETAIL_CUR_METER_READ")} note={application?.currentReading} />
-            <KeyNote keyValue={t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL")} note={Digit.DateUtils.ConvertEpochToDate(application?.currentReadingDate)} />
-            <KeyNote keyValue={t("WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL")} note={application?.consumption || t("CS_NA")} />
+            <StatusTable>
+            <Row className="border-none" label={t("WS_MYCONNECTIONS_CONSUMER_NO")} text={application?.connectionNo || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")} text={application?.billingPeriod || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL")} text={application?.meterStatus || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")} text={application?.lastReading || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")} text={Digit.DateUtils.ConvertEpochToDate(application?.lastReadingDate) || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL")} text={application?.currentReading || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL")} text={Digit.DateUtils.ConvertEpochToDate(application?.currentReadingDate) || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL")} text={application?.consumption || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            </StatusTable>
             </Card> 
           </div>
         ))}

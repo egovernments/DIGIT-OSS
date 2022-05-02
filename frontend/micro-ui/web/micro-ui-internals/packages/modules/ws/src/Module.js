@@ -21,6 +21,7 @@ import WSPlumberDetails from "./pageComponents/WSPlumberDetails";
 import WSRoadCuttingDetails from "./pageComponents/WSRoadCuttingDetails";
 import WSPropertyDetails from "./pageComponents/WSPropertyDetails";
 import WSConnectionHolderDetails from "./pageComponents/WSConnectionHolderDetails";
+import EditApplication from "./pages/citizen/EditApplication";
 
 import SearchApplication from "./components/SearchApplication";
 import SearchWaterConnection from "./components/SearchWaterConnection";
@@ -37,9 +38,13 @@ import WSDocumentsEmployee from "./pageComponents/WSDocumentsEmployee";
 import WSAcknowledgement from "./pages/citizen/WSCreate/WSAcknowledgement";
 import WSPayments from "./pages/citizen/MyPayment/WSPayments";
 import WSEditConnectionDetails from"./pageComponents/WSEditConnectionDetails";
-import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails"
+import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails";
+import WSDisconnectionDocsRequired from "./pageComponents/WSDisconnectionDocsRequired";
+import WSInbox from "./components/WSInbox";
+
 const WSModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = "ws";
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const moduleCode = ["ws", "pt", "common", tenantId];
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({
@@ -129,8 +134,10 @@ const componentsToRegister = {
   WSAcknowledgement,
   WSPayments,
   WSEditConnectionDetails,
-  ConsumptionDetails
-
+  ConsumptionDetails,
+  EditApplication,
+  WSDisconnectionDocsRequired,
+  WSInbox
 };
 
 export const initWSComponents = () => {

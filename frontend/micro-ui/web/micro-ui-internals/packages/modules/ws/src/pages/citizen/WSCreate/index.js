@@ -29,6 +29,7 @@ const WSCreate = () => {
 
   const stateId = Digit.ULBService.getStateId();
   let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
+  let isModifyEdit = window.location.href.includes("/modify-connection/") || window.location.href.includes("/edit-application/")
 
   const goNext = (skipStep) => {
     const currentPath = pathname.split("/").pop();
@@ -43,6 +44,10 @@ const WSCreate = () => {
       }
     }
     if (routeObject[sessionStorage.getItem("serviceName")]) nextStep = routeObject[sessionStorage.getItem("serviceName")];
+    if( (params?.cptId?.id || params?.cpt?.details?.propertyId || (isModifyEdit && params?.cpt?.details?.propertyId ))  && nextStep === "know-your-property" )
+    { 
+      nextStep = "property-details";
+    }
     let redirectWithHistory = history.push;
     if (nextStep === null) {
       return redirectWithHistory(`${getPath(match.path, match.params)}/check`);
@@ -71,18 +76,18 @@ const WSCreate = () => {
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = "docs-required";
+  config.indexRoute = "search-property";
 
   // const CheckPage = Digit?.ComponentRegistryService?.getComponent('BPACheckPage') ;
   // const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('BPAAcknowledgement');
   return (
     <Switch>
       {config.map((routeObj, index) => {
-        const { component, texts, inputs, key } = routeObj;
+        const { component, texts, inputs, key, isSkipEnabled } = routeObj;
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${getPath(match.path, match.params)}/${routeObj.route}`} key={index}>
-            <Component config={{ texts, inputs, key }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} userType={"citizen"} />
+            <Component config={{ texts, inputs, key, isSkipEnabled }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} userType={"citizen"} />
           </Route>
         );
       })}

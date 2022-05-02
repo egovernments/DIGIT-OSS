@@ -71,7 +71,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 			String applicationType = rs.getString("applicationType");
 			String oldApplicationNo = rs.getString("oldApplicationNo");
 			String paymentPreference = rs.getString("paymentPreference");
-			String receivedPayment = rs.getString("receivedPayment");
+			//String receivedPayment = rs.getString("receivedPayment");
 			if (currentfsm == null) {
 				currentfsm = FSM.builder().id(id).applicationNo(applicationNo).tenantId(tenantId)
 						.description(description).accountId(accountId)
@@ -80,7 +80,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 						.vehicleId(vehicleId).applicationStatus(applicationStatus).dsoId(dsoid)
 						.possibleServiceDate(possiblesrvdate).vehicleType(vehicleType).vehicleCapacity(vehicleCapacity)
 						.completedOn(compeletedOn).applicationType(applicationType).oldApplicationNo(oldApplicationNo)
-						.paymentPreference(paymentPreference).receivedPayment(receivedPayment).build();
+						.paymentPreference(paymentPreference).build();
 
 				fmsMap.put(id, currentfsm);
 			}
@@ -120,7 +120,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 		PitDetail pitDetail = PitDetail.builder().height(rs.getDouble("height")).width(rs.getDouble("width"))
 				.diameter(rs.getDouble("diameter")).length(rs.getDouble("length"))
 				.distanceFromRoad(rs.getDouble("distanceFromRoad")).id(rs.getString("fsm_pit_id"))
-				.additionalDetails(getAdditionalDetail("fsm_pit_additionalDetails", rs)).tenantId(rs.getString("tenantid")).build();
+				.additionalDetails(getAdditionalDetail("fsm_pit_additionalDetails", rs)).tenantId(rs.getString("tenantid")).auditDetails(auditdetails).build();
 		
 		fsm.setAddress(address);
 		fsm.setPitDetail(pitDetail);

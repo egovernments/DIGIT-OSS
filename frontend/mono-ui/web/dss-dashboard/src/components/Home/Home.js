@@ -195,7 +195,11 @@ class Home extends React.Component {
                     </CardIcon>
                     <div style={{ textAlign: "left", color: "black" }}>
                       <Typography className={classes.cardTitle}>
-                        {getLocaleLabels(selectedState?`${selectedState.toUpperCase()}_${newData.name}`:newData.name)}
+                        {getLocaleLabels(
+                          selectedState
+                            ? `${selectedState.toUpperCase()}_${newData.name}`
+                            : newData.name
+                        )}
                       </Typography>
                     </div>
                   </CardHeader>
@@ -360,6 +364,7 @@ class Home extends React.Component {
                             chartData={d}
                             filters={filters}
                             type="overview"
+                            isHome={true}
                             page={window.location.pathname || ""}
                           ></CustomCard>
                         </Grid>
@@ -417,6 +422,7 @@ class Home extends React.Component {
                           chartData={d}
                           filters={filters}
                           type="module"
+                          isHome={true}
                           page={window.location.pathname || ""}
                         ></CustomCard>
                       </Grid>

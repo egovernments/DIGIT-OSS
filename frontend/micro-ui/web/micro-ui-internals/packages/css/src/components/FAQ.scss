@@ -1,0 +1,46 @@
+.searchInputFAQs {
+    @apply mr-lg;
+    input{
+      margin-bottom: 0;
+      background: border-box;
+      @apply pr-xl;
+    }
+  }
+
+.faqs{
+  cursor: pointer;
+  border-bottom: 1px solid lightgray;
+  .faq-question{
+    font-weight: 500;
+    margin: 5px;
+    background: #fff;
+    justify-content: space-between;
+    display: flex;
+  }
+
+  .faqicon{
+    float: right;
+  }
+
+  .faq-answer{
+    background: #fff;
+    overflow: hidden;
+    margin: 5px;
+    @apply text-form-field text-text-secondary mb-sm;
+
+    span {
+      display: block; 
+    }
+  }
+}
+
+.faq-list{
+  background: #fff;
+  margin: 5px 0;
+  padding: 1rem;
+}
+  
+.rotate {
+  transform: rotate(90deg);
+}
+  

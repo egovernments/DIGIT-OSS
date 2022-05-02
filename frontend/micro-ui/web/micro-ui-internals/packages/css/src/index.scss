@@ -76,6 +76,7 @@
 @import "./components/PopupHeadingLabel.scss";
 @import "./components/staticSideBar.scss";
 @import "./components/hoc/index.scss";
+@import "./components/FAQ.scss";
 
 @import "./pages/employee/index.scss";
 @import "./pages/employee/cardfix.scss";
@@ -503,6 +504,26 @@ input[type="number"] {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  .error-container{
+  display: flex;
+  width: 400px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  h1{
+    font-size: 32px;
+    font-weight: bold;
+  }
+  button{
+    height: 40px;
+width: 153px;
+border-radius: 0px;
+padding: 8px 24px;
+color: white;
+cursor: pointer;
+background-color:  #F47738;
+  }
+}
 }
 
 .error-boundary summary,
@@ -556,6 +577,8 @@ input[type="number"] {
     padding-left: 16px;
     padding-right: 16px;
   }
+  
+
 }
 @media (min-width: 780px) {
   .citizen-card-container {
@@ -574,14 +597,23 @@ input[type="number"] {
   .bill-citizen,
   .bills-citizen-wrapper,
   .payer-bills-citizen-wrapper,
-  .engagement-citizen-wrapper {
+  .engagement-citizen-wrapper,
+  .citizen-all-services-wrapper,
+  .mcollect-citizen,
+  .ws-citizen-wrapper {
     width: calc(100% - 219px);
     padding-left: 16px;
     padding-right: 16px;
     margin-top: 1rem;
   }
-}
 
+}
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .error-boundary{
+    height: 75vh;
+  }
+}
 .employee-app-wrapper {
   min-height: calc(100vh - 8em);
 }
@@ -599,5 +631,52 @@ input[type="number"] {
       width: unset;
       margin-right: 1rem;
     }
+  }
+}
+
+.plumber-details-new-value-wrapper {
+  flex: 2 1 auto;
+}
+
+.connection-details-new-value-wrapper {
+  flex: 1 1 auto;
+}
+
+.connection-details-old-value-wrapper,
+.plumber-details-old-value-wrapper {
+  flex: 1 1 auto;
+
+  .old-value-null-wrapper {
+    visibility: hidden;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+  .row {
+    color: #b1b4b6;
+    font-weight: 700;
+    font-size: 16px;
+  }
+}
+
+.plumber-details-new-value-wrapper {
+  flex: 2 1 auto;
+}
+
+.connection-details-new-value-wrapper {
+  flex: 1 1 auto;
+}
+
+.connection-details-old-value-wrapper,
+.plumber-details-old-value-wrapper {
+  flex: 1 1 auto;
+  .old-value-null-wrapper {
+    visibility: hidden;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+  .row {
+    color: #b1b4b6;
+    font-weight: 700;
+    font-size: 16px;
   }
 }

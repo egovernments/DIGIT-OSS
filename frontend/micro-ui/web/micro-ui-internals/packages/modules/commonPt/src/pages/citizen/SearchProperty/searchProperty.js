@@ -22,6 +22,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   const [searchData, setSearchData] = useState({});
   const [showToast, setShowToast] = useState(null);
   sessionStorage.setItem("VisitedCommonPTSearch",true);
+  sessionStorage.setItem("VisitedLightCreate",false);
   let allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   // if called from tl module get tenants from tl usetenants
   allCities = allCities ? allCities : Digit.Hooks.tl.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));  
@@ -416,8 +417,30 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             .join("&")}${redirectToUrl ? `&redirectToUrl=${redirectToUrl}` : ''}`
         );
       } else {
-        onSelect('cptSearchQuery', qs, null, null, null, {
-          queryParams: { ...qs },
+        let SearchParams = {};
+        if(action == 0)
+        SearchParams = {
+            city : qs?.city,
+            mobileNumber : qs?.mobileNumber || "",
+            propertyIds : qs?.propertyIds || "",
+            oldPropertyIds : qs?.oldPropertyIds || "", 
+            locality : "",
+            doorNo : "",
+            name : "",
+        }
+        else
+        SearchParams = {
+          city : qs?.city,
+          locality : qs?.locality || "",
+          doorNo : qs?.doorNumber || "",
+          name : qs?.name || "",
+          mobileNumber : "",
+          propertyIds : "",
+          oldPropertyIds : "", 
+        }
+        //onSelect('cptSearchQuery',{...SearchParams});
+        onSelect('cptSearchQuery', SearchParams, null, null, null, {
+          queryParams: { ...SearchParams },
         });
       }
     }
@@ -445,7 +468,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         cardStyle={{marginBottom:"0"}}
       ></FormComposer>
       <span className="link" style={{display:"flex", justifyContent:"center",paddingBottom:"16px"}}>
-        <Link to={"/digit-ui/citizen/commonpt/property/new-application"}>{t("CPT_REG_NEW_PROPERTY")}</Link>
+        <Link to={window.location.href.includes("/ws/")?"/digit-ui/citizen/ws/create-application/create-property" : (window.location.href.includes("/tl/tradelicence/") ? "/digit-ui/citizen/tl/tradelicence/new-application/create-property" : "/digit-ui/citizen/commonpt/property/new-application")}>{t("CPT_REG_NEW_PROPERTY")}</Link>
       </span>
       {showToast && (
         <Toast

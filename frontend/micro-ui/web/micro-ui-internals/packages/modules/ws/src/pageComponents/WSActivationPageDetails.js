@@ -17,7 +17,9 @@ const createActivationDetails = () => ({
 const WSActivationPageDetails = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
     const { t } = useTranslation();
     const filters = func.getQueryStringParams(location.search);
-    const [activationDetails, setActivationDetails] = useState(formData?.activationDetails || [createActivationDetails()]);
+    const [activationDetails, setActivationDetails] = window.location.href.includes("modify") ? useState(
+         formData?.activationDetails ? [formData?.activationDetails?.[0]] : [createActivationDetails()]
+    ) : useState(formData?.activationDetails || [createActivationDetails()]);
     const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
     const [isErrors, setIsErrors] = useState(false);
 
@@ -115,6 +117,10 @@ const ConnectionDetails = (_props) => {
         trigger();
     }, [formData?.connectionDetails?.[0]?.connectionType]);
 
+    useEffect(() => {
+        if (window.location.href.includes("modify")) trigger(); 
+     }, [activationDetails, formData?.ConnectionDetails, formData?.ConnectionHolderDetails, formData?.DocumentsRequired, formData?.connectionDetails, formData?.cpt]);
+
 
     useEffect(() => {
         if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) {
@@ -132,7 +138,7 @@ const ConnectionDetails = (_props) => {
             <div style={{ marginBottom: "16px" }}>
                 {filters?.service === "WATER" && formData?.connectionDetails?.[0]?.connectionType?.code?.toUpperCase() === "METERED" ? <div>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_METER_ID")}*:`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_METER_ID")}:*`}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}
@@ -160,7 +166,7 @@ const ConnectionDetails = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.meterId ? errors?.meterId?.message : ""}</CardLabelError>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_ADDN_DETAIL_METER_INSTALL_DATE")}*:`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_ADDN_DETAIL_METER_INSTALL_DATE")}:*`}</CardLabel>
                         <div className="field">
                             <Controller
                                 name="meterInstallationDate"
@@ -180,7 +186,7 @@ const ConnectionDetails = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.meterInstallationDate ? errors?.meterInstallationDate?.message : ""}</CardLabelError>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_INITIAL_METER_READING_LABEL")}*:`}</CardLabel>
+                        <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_INITIAL_METER_READING_LABEL")}:*`}</CardLabel>
                         <div className="field">
                             <Controller
                                 type="number"
@@ -209,7 +215,7 @@ const ConnectionDetails = (_props) => {
                     <CardLabelError style={errorStyle}>{localFormState.touched.meterInitialReading ? errors?.meterInitialReading?.message : ""}</CardLabelError>
                 </div> : null}
                 <LabelFieldPair>
-                    <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_EXECUTION_DATE")}*:`}</CardLabel>
+                    <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_EXECUTION_DATE")}:*`}</CardLabel>
                     <div className="field">
                         <Controller
                             name="connectionExecutionDate"
@@ -230,6 +236,30 @@ const ConnectionDetails = (_props) => {
                     </div>
                 </LabelFieldPair>
                 <CardLabelError style={errorStyle}>{localFormState.touched.connectionExecutionDate ? errors?.connectionExecutionDate?.message : ""}</CardLabelError>
+                {window.location.href.includes("modify") ? <div>
+                <LabelFieldPair>
+                    <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_MODIFICATIONS_EFFECTIVE_FROM")}*:`}</CardLabel>
+                    <div className="field">
+                        <Controller
+                            name="dateEffectiveFrom"
+                            rules={{ required: t("REQUIRED_FIELD") }}
+                            isMandatory={true}
+                            defaultValue={activationDetail?.dateEffectiveFrom}
+                            control={control}
+                            render={(props) => (
+                                <DatePicker
+                                    date={props.value}
+                                    name="dateEffectiveFrom"
+                                    onChange={props.onChange}
+                                    autoFocus={focusIndex.index === activationDetail?.key && focusIndex.type === "dateEffectiveFrom"}
+                                    errorStyle={(localFormState.touched.dateEffectiveFrom && errors?.dateEffectiveFrom?.message) ? true : false}
+                                />
+                            )}
+                        />
+                    </div>
+                </LabelFieldPair>
+                <CardLabelError style={errorStyle}>{localFormState.touched.dateEffectiveFrom ? errors?.dateEffectiveFrom?.message : ""}</CardLabelError>
+                </div> : null}
             </div>
         </div>
     );

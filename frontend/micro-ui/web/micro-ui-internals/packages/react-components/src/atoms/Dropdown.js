@@ -6,7 +6,11 @@ const TextField = (props) => {
   const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
 
   useEffect(() => {
-    if (!props.keepNull) props.selectedVal ? setValue(props.selectedVal) : setValue("");
+    if (!props.keepNull)
+      if( props.selectedVal)
+        setValue(props.selectedVal)
+      else
+      { setValue(""); props.setFilter("") } 
     else setValue("");
   }, [props.selectedVal, props.forceSet]);
 

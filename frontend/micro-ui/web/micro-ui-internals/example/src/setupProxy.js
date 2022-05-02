@@ -2,8 +2,8 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const createProxy = createProxyMiddleware({
   //target: process.env.REACT_APP_PROXY_API || "https://uat.digit.org",
-  target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
-  // target: process.env.REACT_APP_PROXY_API || "https://dev.digit.org",
+  // target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
+  target: process.env.REACT_APP_PROXY_API || "https://dev.digit.org",
   changeOrigin: true,
 });
 const assetsProxy = createProxyMiddleware({
@@ -57,7 +57,8 @@ module.exports = function (app) {
     "/sw-services",
     "/ws-calculator",
     "/sw-calculator/",
-    "/egov-searcher"
+    "/egov-searcher",
+    "/report"
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
 };

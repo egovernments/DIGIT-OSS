@@ -4,7 +4,6 @@ import jsPDF from "jspdf";
 import XLSX from "xlsx";
 import domtoimage from "dom-to-image";
 
-
 const changeClasses=(class1,class2)=>{
   var elements = document.getElementsByClassName(class1)
   Array.prototype.map.call(elements, function(testElement){
@@ -51,12 +50,13 @@ const Download = {
   },
 
   Excel: (data, filename) => {
+    const file = filename.substring(0,30);
     const wb = XLSX.utils.book_new();
     let ws = null;
     ws = XLSX.utils.json_to_sheet(data)
-    wb.SheetNames.push(filename);
-    wb.Sheets[filename] = ws;
-    XLSX.writeFile(wb, `${filename}.xlsx`);
+    wb.SheetNames.push(file);
+    wb.Sheets[file] = ws;
+    XLSX.writeFile(wb, `${file}.xlsx`);
   },
 
   PDF: (node, fileName, share, resolve = null) => {
@@ -64,6 +64,9 @@ const Download = {
 
 
     const saveAs = (uri, filename) => {
+      if(window.mSewaApp && window.mSewaApp.isMsewaApp()){
+        window.mSewaApp.downloadBase64File(uri, filename);
+      }
       const link = document.createElement("a");
 
       if (typeof link.download === "string") {
@@ -165,6 +168,9 @@ const Download = {
 
   IndividualChartImage: (node, fileName, share, resolve = null) => {
     const saveAs = (uri, filename) => {
+      if(window.mSewaApp && window.mSewaApp.isMsewaApp()){
+        window.mSewaApp.downloadBase64File(uri, filename);
+      }
       const link = document.createElement("a");
 
       if (typeof link.download === "string") {

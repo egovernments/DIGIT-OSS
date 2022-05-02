@@ -1,136 +1,215 @@
+import { CardLabel, CardLabelError, Dropdown, LabelFieldPair, Localities, TextInput } from "@egovernments/digit-ui-react-components";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber, Localities } from "@egovernments/digit-ui-react-components";
-import { cardBodyStyle } from "../utils";
-import { useLocation, useRouteMatch } from "react-router-dom";
-import { stringReplaceAll } from "../utils";
+import { Controller, useForm } from "react-hook-form";
 
-const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, onBlur}) => {
+const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, formState, ownerIndex, setError, clearErrors }) => {
   let validation = {};
-  let allCities = Digit.Hooks.pt.useTenants()?Digit.Hooks.pt.useTenants():Digit.Hooks.tl.useTenants();
+  let allCities = Digit.Hooks.pt.useTenants() ? Digit.Hooks.pt.useTenants() : Digit.Hooks.tl.useTenants();
   // if called from tl module get tenants from tl usetenants
   const userInfo = Digit.UserService.getUser()?.info;
-  userType=userInfo?.type=="EMPLOYEE"?"employee":"citizen";
+  userType = userInfo?.type == "EMPLOYEE" ? "employee" : "citizen";
   const cityId = userInfo?.tenantId;
-  const cityName = 'TENANT_TENANTS_' + userInfo?.tenantId.replace('.','_').toUpperCase();
+  const cityName = 'TENANT_TENANTS_' + userInfo?.tenantId.replace('.', '_').toUpperCase();
+  const cityObj = userType === 'employee' ? { code: cityId, name: t(cityName), i18nKey: cityName } : null;
 
-  const cityObj = userType === 'employee' ? {code: cityId, name: t(cityName), i18nKey: cityName} : null;
-  const [cityCode, setCityCode] = useState(cityObj);
-  const [locality, setLocality] = useState(formData?.locality);
-  const [houseDoorNo, setHouseDoorNo] = useState(formData.houseDoorNo);
-  const [buildingColonyName, setBuildingColonyName] = useState(formData.buildingColonyName);
-  const [landmarkName, setLandmarkName] = useState(formData.landmarkName);
+  const [locationDetails, setLocationDetails] = React.useState({
+    ...formData?.locationDet,
+    cityCode: cityObj,
+    locality: formData?.locality,
+    houseDoorNo: formData?.houseDoorNo,
+    buildingColonyName: formData?.buildingColonyName,
+    landmarkName: formData?.landmarkName
+  });
+  const [isErrors, setIsErrors] = React.useState(false);
 
-  let index = 0;
-  let locationDet = formData.locationDet;
-  const locationDetStep = { ...locationDet, cityCode, locality, houseDoorNo, buildingColonyName, landmarkName };
-  useEffect(() => {
-    setCityCode(cityObj);
-  }, [cityObj]);
-  useEffect(() => {
-    setCity(cityObj);
-  }, []);
+  const { control, formState: { errors, touched }, trigger, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, getValues } = useForm();
+  const formValue = watch();
 
-  function setCity(val) {
-    setCityCode(val);
-    onSelect(config.key, { ...formData[config.key], ...locationDetStep, city: val }, false, index);
-  }
+  React.useEffect(() => {
+    let hasErrors = false;
+    const part = {};
 
-  function setLocality1(value) {
-    setLocality(value);
-    onSelect(config.key, { ...formData[config.key], ...locationDetStep, locality: value }, false, index);
-  }
+    Object.keys(locationDetails).forEach((key) => {
+      part[key] = formValue?.[key];
+    });
 
-  function setHouseDoorNumb(e) {
-    setHouseDoorNo(e.target.value)
-    onSelect(config.key, { ...formData[config.key], ...locationDetStep, houseDoorNo: e.target.value }, false, index);
-  }
+    if (!_.isEqual(part, locationDetails)) {
+      Object.keys(locationDetails).forEach((key) => {
+        if (locationDetails[key]) {
+          hasErrors = false;
+          clearLocalErrors(key);
+        } else {
+          hasErrors = true;
+        }
+      });
+    }
 
-  function setBuildingColony(e) {
-    setBuildingColonyName(e.target.value)
-    onSelect(config.key, { ...formData[config.key], ...locationDetStep, buildingColonyName: e.target.value }, false, index);
-  }
+    if (hasErrors) {
+      setError(config?.key, { type: errors })
+    } else {
+      clearErrors(config?.key);
+    }
 
-  function setLandmark(e) {
-    setLandmarkName(e.target.value)
-    onSelect(config.key, { ...formData[config.key], ...locationDetStep, landmarkName: e.target.value }, false, index);
-  }
+    trigger();
+    setIsErrors(hasErrors);
+    onSelect(config?.key, locationDetails);
+  }, [locationDetails]);
+
+  React.useEffect(() => {
+    if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) {
+      setError(config.key, { type: errors });
+    } else if (!Object.keys(errors).length && formState.errors[config.key] && isErrors) {
+      clearErrors(config.key);
+    }
+  }, [errors]);
+
+  const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
+
   return (
     <div>
       <LabelFieldPair>
-        <CardLabel>{t('PT_PROP_CITY')}</CardLabel>
-        <Dropdown
-          className="form-field"
-          selected={cityCode}
-          disable={userType==="employee"}
-          option={allCities}
-          select={setCity}
-          optionKey="code"
-          // onBlur={props.onBlur}
-          t={t}
-        />
+        <CardLabel>{`${t('PT_PROP_CITY')}*`}</CardLabel>
+        <Controller
+          name=""
+          defaultValue={ locationDetails?.cityCode }
+          control={ control }
+          rules={{
+            required: t("REQUIRED_FIELD")
+          }}
+          render={({value, onBlur, onChange}) => (
+            <Dropdown
+              className="form-field"
+              selected={value}
+              disable={userType === "employee"}
+              option={allCities}
+              select={(value)=>{
+                onChange(value);
+                setLocationDetails({...locationDetails, cityCode: value})
+              }}
+              optionKey="code"
+              onBlur={onBlur}
+              t={t}
+            />
+          )} />
       </LabelFieldPair>
+      <CardLabelError style={errorStyle}>{touched?.cityCode ? errors?.cityCode?.message : ""}</CardLabelError>
 
       <LabelFieldPair>
-        <CardLabel>{t("PT_PROP_LOCALITY")}</CardLabel>
+        <CardLabel>{`${t("PT_PROP_LOCALITY")}*`}</CardLabel>
         <div className="form-field">
-          <Localities
-            selectLocality={setLocality1}
-            tenantId={cityCode?.code}
-            boundaryType="revenue"
-            keepNull={false}
-            optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10" }}
-            selected={locality}
-            disable={!cityCode?.code}
-            disableLoader={true}
-            />
+          <Controller
+            name="locality"
+            defaultValue={ locationDetails?.locality}
+            control={ control }
+            rules={{required: t("REQUIRED_FIELD")}}
+            render={({value, onBlur, onChange}) => (
+              <Localities
+                selectLocality={(value)=>{
+                  onChange(value);
+                  setLocationDetails({...locationDetails, locality: value});
+                }}
+                tenantId={locationDetails?.cityCode?.code}
+                boundaryType="revenue"
+                keepNull={false}
+                optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10" }}
+                selected={value}
+                disable={!locationDetails?.cityCode?.code}
+                disableLoader={true}
+                onBlur={onBlur}
+              />
+            )} />
         </div>
       </LabelFieldPair>
+      <CardLabelError style={errorStyle}>{touched?.locality ? errors?.locality?.message : ""}</CardLabelError>
 
       <LabelFieldPair>
-        <CardLabel>{`${t("PT_HOUSE_DOOR_NO")}`}</CardLabel>
+        <CardLabel>{`${t("PT_HOUSE_DOOR_NO")}*`}</CardLabel>
         <div className="form-field">
-          <TextInput
-            t={t}
-            type={"number"}
-            isMandatory={false}
-            optionKey="i18nKey"
+          <Controller
             name="houseDoorNo"
-            value={houseDoorNo}
-            onChange={setHouseDoorNumb}
-            {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_HOUSE_DOOR_NO_ERROR_MESSAGE") })}
-            />
+            defaultValue={locationDetails?.houseDoorNo}
+            control={ control}
+            rules={{
+              required: t("REQUIRED_FIELD"),
+              validate: (value)=> /^([0-9]){0,8}$/i.test(value) ? true: t("PT_HOUSE_DOOR_NO_ERROR_MESSAGE"),
+            }}
+            render={({value, onBlur, onChange}) => (
+              <TextInput
+                t={t}
+                type={"number"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="houseDoorNo"
+                value={value}
+                onChange={(ev)=>{
+                  onChange(ev.target.value);
+                  setLocationDetails({...locationDetails, houseDoorNo: ev.target.value})
+                }}
+                onBlur={onBlur}
+                {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_HOUSE_DOOR_NO_ERROR_MESSAGE") })}
+              />
+            )} />
         </div>
       </LabelFieldPair>
+      <CardLabelError style={errorStyle}>{touched?.houseDoorNo ? errors?.houseDoorNo?.message : ""}</CardLabelError>
 
       <LabelFieldPair>
-        <CardLabel>{`${t("PT_BUILDING_COLONY_NAME")}`}</CardLabel>
+        <CardLabel>{`${t("PT_BUILDING_COLONY_NAME")}*`}</CardLabel>
         <div className="form-field">
-          <TextInput
-            t={t}
-            type={"text"}
-            isMandatory={false}
-            optionKey="i18nKey"
+          <Controller
             name="buildingColonyName"
-            value={buildingColonyName}
-            onChange={setBuildingColony}
-            />
+            defaultValue={ locationDetails?.buildingColonyName}
+            control={control }
+            rules={{
+              required: t("REQUIRED_FIELD"),
+            }}
+            render={({value, onChange, onBlur}) => (
+              <TextInput
+                t={t}
+                type={"text"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="buildingColonyName"
+                value={value}
+                onChange={(ev)=>{
+                  onChange(ev.target.value);
+                  setLocationDetails({...locationDetails, buildingColonyName: ev.target.value})
+                }}
+                onBlur={onBlur}
+              />
+            )} />
         </div>
       </LabelFieldPair>
+      <CardLabelError style={errorStyle}>{touched?.buildingColonyName ? errors?.buildingColonyName?.message : ""}</CardLabelError>
 
       <LabelFieldPair>
         <CardLabel>{`${t("PT_LANDMARK_NAME")}`}</CardLabel>
         <div className="form-field">
-          <TextInput
-            t={t}
-            type={"text"}
-            isMandatory={false}
-            optionKey="i18nKey"
+          <Controller
             name="landmarkName"
-            value={landmarkName}
-            onChange={setLandmark}
-            />
+            defaultValue={locationDetails?.landmarkName}
+            control={ control}
+            rules={{
+            }}
+            render={({value, onChange, onBlur}) => (
+              <TextInput
+                t={t}
+                type={"text"}
+                isMandatory={false}
+                optionKey="i18nKey"
+                name="landmarkName"
+                value={value}
+                onChange={(ev)=>{
+                  onChange(ev.target.value);
+                  setLocationDetails({...locationDetails, landmarkName: ev.target.value})
+                }}
+                onBlur={onBlur}
+              />
+            )} />
         </div>
       </LabelFieldPair>
+      <CardLabelError style={errorStyle}>{touched?.landmarkName ? errors?.landmarkName?.message : ""}</CardLabelError>
     </div>
   );
 };

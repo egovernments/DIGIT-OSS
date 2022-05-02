@@ -12,7 +12,7 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
   const [mobileNumber, setMobileNumber] = useState(formData?.ConnectionHolderDetails?.mobileNumber || formData?.formData?.ConnectionHolderDetails?.mobileNumber || "");
   const [address, setaddress] = useState(formData?.ConnectionHolderDetails?.address || formData?.formData?.ConnectionHolderDetails?.address || "");
   const [documentId, setdocumentId] = useState(formData?.ConnectionHolderDetails?.documentId || formData?.formData?.ConnectionHolderDetails?.documentId || "");
-  const [isOwnerSame, setisOwnerSame] = useState(!(formData?.ConnectionHolderDetails?.isOwnerSame || formData?.formData?.ConnectionHolderDetails?.isOwnerSame) ? false : true);
+  const [isOwnerSame, setisOwnerSame] = useState((formData?.ConnectionHolderDetails?.isOwnerSame == false || formData?.formData?.ConnectionHolderDetails?.isOwnerSame == false) ? false : true);
   const [uploadedFile, setUploadedFile] = useState(formData?.[config.key]?.fileStoreId || null);
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
@@ -37,8 +37,8 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
   }
 
   const GuardianOptions = [
-    { name: "HUSBAND", code: "HUSBAND", i18nKey: "COMMON_MASTERS_OWNERTYPE_HUSBAND" },
     { name: "Father", code: "FATHER", i18nKey: "COMMON_MASTERS_OWNERTYPE_FATHER" },
+    { name: "HUSBAND", code: "HUSBAND", i18nKey: "COMMON_MASTERS_OWNERTYPE_HUSBAND" },
   ];
 
   const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
@@ -214,7 +214,7 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
               onChange={selectguardian}
               //disable={editScreen}
               {...(validation = {
-                isRequired: true,
+                isRequired: false,
                 pattern: "^[a-zA-Z-.`' ]*$",
                 type: "text",
                 title: t("WS_NAME_ERROR_MESSAGE"),

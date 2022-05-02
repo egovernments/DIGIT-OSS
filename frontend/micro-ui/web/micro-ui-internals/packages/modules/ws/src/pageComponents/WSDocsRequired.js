@@ -22,7 +22,7 @@ const WSDocsRequired = ({ onSelect, userType, onSkip, config }) => {
       <Fragment>
         <Card>
           <CardHeader>{t(`WS_COMMON_APPL_NEW_CONNECTION`)}</CardHeader>
-          <CitizenInfoLabel style={{ margin: "0px" }} textStyle={{ color: "#0B0C0C" }} text={t(`OBPS_DOCS_REQUIRED_TIME`)} showInfo={false} />
+          <CitizenInfoLabel style={{ margin: "0px" }} textStyle={{ color: "#0B0C0C" }} text={t(`WS_DOCS_REQUIRED_TIME`)} showInfo={false} />
           <CardText style={{ color: "#0B0C0C", marginTop: "12px" }}>{t(`WS_NEW_CONNECTION_TEST_1`)}</CardText>
           <CardText style={{ color: "#0B0C0C", marginTop: "12px" }}>{t(`WS_NEW_CONNECTION_TEST_2`)}</CardText>
           <CardSubHeader>{t("WS_DOC_REQ_SCREEN_LABEL")}</CardSubHeader>

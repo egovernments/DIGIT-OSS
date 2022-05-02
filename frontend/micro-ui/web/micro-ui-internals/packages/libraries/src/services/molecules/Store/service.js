@@ -56,8 +56,8 @@ export const StoreService = {
   },
   digitInitData: async (stateCode, enabledModules) => {
     const { MdmsRes } = await MdmsService.init(stateCode);
-    const stateInfo = MdmsRes["common-masters"].StateInfo[0];
-    const uiHomePage = MdmsRes["common-masters"].uiHomePage[0];
+    const stateInfo = MdmsRes["common-masters"]?.StateInfo?.[0]||{};
+    const uiHomePage = MdmsRes["common-masters"]?.uiHomePage?.[0]||{};
     const localities = {};
     const revenue_localities = {};
     const initData = {

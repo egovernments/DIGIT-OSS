@@ -109,7 +109,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
         .join(", "),
       total_due: payment[property?.propertyId]?.total_due || 0,
       bil_due__date: payment[property?.propertyId]?.bil_due__date || t("N/A"),
-      status:property.status,
+      status:t(property.status),
       owner_mobile: (property?.owners || [])[0]?.mobileNumber,
     };
   });
@@ -162,13 +162,9 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
             {t(header)} ({searchResults?.length})
           </Header>
         )}
-        <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel} 
+        <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel}
         onSubmit={sendOtpToUser} />
       </div>
-      <CitizenInfoLabel
-        info={t("CS_FILE_APPLICATION_INFO_LABEL")} 
-        text={t("CPT_SEARCH_PROPERTY_INFO")} 
-      />
       {modalData ? (
         <Modal
           hideSubmit={true}

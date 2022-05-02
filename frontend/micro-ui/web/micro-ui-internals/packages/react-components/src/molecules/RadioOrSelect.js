@@ -15,7 +15,9 @@ const RadioOrSelect = ({
   disabled = false,
   optionCardStyles,
   isPTFlow=false,
-  isDropDown = false
+  isDropDown = false,
+  innerStyles = {},
+  inputStyle = {}
 }) => {
   return (
     <React.Fragment>
@@ -30,6 +32,8 @@ const RadioOrSelect = ({
           labelKey={labelKey}
           isPTFlow={isPTFlow}
           t={t}
+          innerStyles={innerStyles}
+          inputStyle={inputStyle}
         />
       ) : (
         <Dropdown

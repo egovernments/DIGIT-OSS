@@ -10,10 +10,10 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
 
   let index = isMutation ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
   const [permanentAddress, setPermanentAddress] = useState(
-    (formData.owners && formData.owners[index] && formData.owners[index].permanentAddress) || (formData.owners[index].correspondenceAddress) || formData?.owners?.permanentAddress || ""
+    (formData.owners && formData.owners[index] && formData.owners[index]?.permanentAddress) || (formData.owners[index]?.correspondenceAddress) || formData?.owners?.permanentAddress || ""
   );
   const [isCorrespondenceAddress, setIsCorrespondenceAddress] = useState(
-    formData.owners && formData.owners[index] && formData.owners[index].isCorrespondenceAddress
+    formData.owners && formData.owners[index] && formData.owners[index]?.isCorrespondenceAddress
   );
   const isUpdateProperty = formData?.isUpdateProperty || false;
   let isEditProperty = formData?.isEditProperty || false;

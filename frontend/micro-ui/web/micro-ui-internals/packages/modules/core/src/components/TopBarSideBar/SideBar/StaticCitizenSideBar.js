@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { Phone } from "@egovernments/digit-ui-react-components";
 import CitizenSubMenuSideBar from "./CitizenSubMenuSideBar";
+import LogoutDialog from "../../Dialog/LogoutDialog";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -46,12 +47,13 @@ const Profile = ({ info, stateName, t }) => (
         <div className="label-text"> {info.emailId} </div>
       </div>
     )}
+    <div className="profile-divider"></div>
     {window.location.href.includes("/employee") &&
       !window.location.href.includes("/employee/user/login") &&
       !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true} />}
   </div>
 );
-const StaticCitizenSideBar = ({ logout }) => {
+const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation();
@@ -59,9 +61,27 @@ const StaticCitizenSideBar = ({ logout }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
-  const { isLoading, data: getCitizenMenu, isFetched: fetchedCitizen } = Digit.Hooks.useAccessControl();
+  let isMobile = window.Digit.Utils.browser.isMobile();
 
   const [isEmployee, setisEmployee] = useState(false);
+  const [isSidebarOpen, toggleSidebar] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+
+  const handleLogout = () => {
+    toggleSidebar(false);
+    setShowDialog(true);
+  };
+  const handleOnSubmit = () => {
+    Digit.UserService.logout();
+    setShowDialog(false);
+  };
+  const handleOnCancel = () => {
+    setShowDialog(false);
+  };
+
+  if (islinkDataLoading) {
+    return <Loader />;
+  }
 
   const redirectToLoginPage = () => {
     // localStorage.clear();
@@ -72,11 +92,8 @@ const StaticCitizenSideBar = ({ logout }) => {
     history.push("/digit-ui/citizen/user/profile");
   };
 
-  const handleLogout = () => {
-    Digit.UserService.logout();
-  };
-
   let menuItems = [...SideBarMenu(t, showProfilePage, redirectToLoginPage, isEmployee)];
+
   menuItems = menuItems.filter((item) => item.element !== "LANGUAGE");
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -93,6 +110,7 @@ const StaticCitizenSideBar = ({ logout }) => {
         <div className="menu-label">{itemComponent}</div>
       </span>
     );
+
     if (item.type === "external-link") {
       return (
         <Link to={item.link}>
@@ -115,22 +133,6 @@ const StaticCitizenSideBar = ({ logout }) => {
   let profileItem;
 
   if (isFetched && user && user.access_token) {
-    if (fetchedCitizen) {
-      const data = getCitizenMenu?.actions || [];
-
-      const staticModuleName = {
-        type: "dynamic",
-        moduleName: t("DASHBOARD_CITIZEN_SERVICES_LABEL"),
-        Icon: <AddressBookIcon className="icon" />,
-
-        links: [],
-      };
-      data.forEach((item) => {
-        staticModuleName.links.push(item);
-      });
-
-      menuItems = [...menuItems, staticModuleName];
-    }
     profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t} />;
     menuItems = menuItems.filter((item) => item?.id !== "login-btn");
     menuItems = [
@@ -176,9 +178,10 @@ const StaticCitizenSideBar = ({ logout }) => {
       },
     ];
   }
-  if (isLoading) {
-    return <Loader />;
-  }
+
+  Object.keys(linkData).map((key) => {
+    menuItems.splice(1, 0, { type: "dynamic", moduleName: key, links: linkData[key], icon: linkData[key][0]?.leftIcon });
+  });
 
   return (
     <React.Fragment>
@@ -196,7 +199,7 @@ const StaticCitizenSideBar = ({ logout }) => {
           style={{
             display: "flex",
             flexDirection: "column",
-            height: "calc(100vh - 56px)",
+            height: isMobile?"calc(100vh - 56px)":"auto",
             zIndex: "99",
           }}
         >
@@ -209,6 +212,7 @@ const StaticCitizenSideBar = ({ logout }) => {
             ))}
           </div>
         </div>
+        <div>{showDialog && <LogoutDialog onSelect={handleOnSubmit} onCancel={handleOnCancel} onDismiss={handleOnCancel}></LogoutDialog>}</div>
       </div>
     </React.Fragment>
   );

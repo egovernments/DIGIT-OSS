@@ -20,7 +20,7 @@ const WSActivationCommentsDetails = ({ t, config, userType, formData, onSelect }
     return (
         <React.Fragment>
             <LabelFieldPair>
-                <CardLabel className="card-label-smaller">{t("WF_COMMON_COMMENTS")}:</CardLabel>
+                <CardLabel style={{fontWeight: "700"}} className="card-label-smaller">{t("WF_COMMON_COMMENTS")}:</CardLabel>
                 <div className="field">
                     <TextInput
                         key={config.key}

@@ -124,10 +124,13 @@ public class WaterServiceImpl implements WaterService {
 		if (!StringUtils.isEmpty(criteria.getSearchType()) &&
 				criteria.getSearchType().equals(WCConstants.SEARCH_TYPE_CONNECTION)) {
 			waterConnectionList = enrichmentService.filterConnections(waterConnectionList);
-			if(criteria.getIsPropertyDetailsRequired()){
+			/*if(criteria.getIsPropertyDetailsRequired()){
 				waterConnectionList = enrichmentService.enrichPropertyDetails(waterConnectionList, criteria, requestInfo);
 
-			}
+			}*/
+		}
+		if ((criteria.getIsPropertyDetailsRequired() != null) && criteria.getIsPropertyDetailsRequired()) {
+			waterConnectionList = enrichmentService.enrichPropertyDetails(waterConnectionList, criteria, requestInfo);
 		}
 		waterConnectionValidator.validatePropertyForConnection(waterConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(waterConnectionList, criteria, requestInfo);
@@ -146,7 +149,33 @@ public class WaterServiceImpl implements WaterService {
 	public List<WaterConnection> getWaterConnectionsList(SearchCriteria criteria, RequestInfo requestInfo) {
 		return waterDao.getWaterConnectionList(criteria, requestInfo);
 	}
+	
+	/**
+	 * 
+	 * @param criteria
+	 *            WaterConnectionSearchCriteria contains search criteria on water
+	 *            connection
+	 * @param requestInfo
+	 * @return Count of List of matching water connection
+	 */
+	@Override
+	public Integer countAllWaterApplications(SearchCriteria criteria, RequestInfo requestInfo) {
+		criteria.setIsCountCall(Boolean.TRUE);
+		return getWaterConnectionsCount(criteria, requestInfo);
+	}
 
+	/**
+	 * 
+	 * @param criteria
+	 *            WaterConnectionSearchCriteria contains search criteria on water
+	 *            connection
+	 * @param requestInfo
+	 * @return count of matching water connection
+	 */
+	public Integer getWaterConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
+		return waterDao.getWaterConnectionsCount(criteria, requestInfo);
+	}
+	
 	/**
 	 * 
 	 * @param waterConnectionRequest

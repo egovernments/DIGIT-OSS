@@ -42,9 +42,22 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
 
   const handleSubmit = () => {
 
-    if (!(formData?.WaterConnectionResult && formData?.WaterConnectionResult?.WaterConnection?.id) && formData?.serviceName?.code === "WATER") {
+    if (!(formData?.WaterConnectionResult && formData?.WaterConnectionResult?.WaterConnection?.[0]?.id) && formData?.serviceName?.code === "WATER" || formData?.isModifyConnection) {
       setIsDisableForNext(true);
-      let payload = {
+      let payload = {};
+      if(formData?.isModifyConnection)
+      {
+        payload = {
+          "WaterConnection":{...formData?.WaterConnectionResult?.WaterConnection?.[0],
+            "processInstance": {
+              "action": "INITIATE"
+          },
+          "channel": "CITIZEN"
+          }
+        }
+      }
+      else{
+      payload = {
         "WaterConnection": {
           "water": true,
           "sewerage": false,
@@ -59,7 +72,7 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
             gender: formData?.ConnectionHolderDetails?.gender?.code,
             mobileNumber: formData?.ConnectionHolderDetails?.mobileNumber,
             name: formData?.ConnectionHolderDetails?.name,
-            ownerType: formData?.ConnectionHolderDetails?.specialCategoryType?.code,
+            ownerType: formData?.ConnectionHolderDetails?.specialCategoryType?.code || "NONE",
             relationship: formData?.ConnectionHolderDetails?.relationship?.code,
             sameAsPropertyAddress: false,
           }],
@@ -81,6 +94,7 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
           "channel": "CITIZEN"
       }
       }
+    }
 
       Digit.WSService.create(payload, "WATER")
         .then((result, err) => {

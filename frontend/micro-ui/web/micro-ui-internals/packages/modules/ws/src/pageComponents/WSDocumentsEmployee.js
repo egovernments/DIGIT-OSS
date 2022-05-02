@@ -16,7 +16,7 @@ const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
   const stateId = Digit.ULBService.getStateId();
   const [documents, setDocuments] = useState(formData?.DocumentsRequired?.documents || []);
   const [error, setError] = useState(null);
-
+  const wsDocsData = window.location.href.includes("modify") ? "ModifyConnectionDocuments" : "Documents";
   let action = "create";
 
   const { pathname } = useLocation();
@@ -25,7 +25,7 @@ const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
 
   if (isEditScreen) action = "update";
 
-  const { isLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateId);
+  const { isLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateId, wsDocsData);
 
 
   const goNext = () => {
@@ -40,9 +40,31 @@ const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
     return <Loader />;
   }
 
+  const applicationDetailsData = JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS"));
+
+  if (
+    (window.location.href.includes("edit") && applicationDetailsData?.applicationData?.documents?.length > 0)
+  ) {
+    const documentsData = applicationDetailsData?.applicationData?.documents || [];
+    documentsData?.map(documentData => {
+      wsDocs?.[wsDocsData]?.forEach(docData => {
+        const docType = docData?.code?.split(".")[1] ? docData?.code?.split(".")[0] + "." + docData?.code?.split(".")[1] : docData?.code?.split(".")[0]
+        const dataDocType = documentData?.documentType?.split(".")[1] ? documentData?.documentType?.split(".")[0] + "." + documentData?.documentType?.split(".")[1] : documentData?.documentType?.split(".")[0]
+        if (docType == dataDocType) {
+          docData.auditDetails = documentData.auditDetails
+          docData.documentType = docData.documentType
+          docData.documentUid = documentData.documentUid
+          docData.fileStoreId = documentData.fileStoreId
+          docData.id = documentData.id
+          docData.status = "ACTIVE"
+        }
+      })
+    })
+  }
+  
   return (
     <div>
-      {wsDocs?.Documents?.map((document, index) => {
+      {wsDocs?.[wsDocsData]?.map((document, index) => {
         return (
           <SelectDocument
             key={index}
@@ -152,9 +174,9 @@ function SelectDocument({
           {
             documentType: selectedDocument?.code,
             fileStoreId: uploadedFile,
-            documentUid: selectedDocument?.documentUid ? selectedDocument?.documentUid : uploadedFile,
+            documentUid: doc?.documentUid ? doc?.documentUid : uploadedFile,
             i18nKey: selectedDocument?.code,
-            id: selectedDocument?.id
+            id: doc?.id
           },
         ];
       });
@@ -202,7 +224,7 @@ function SelectDocument({
     <div style={{ marginBottom: "24px" }}>
       {doc?.hasDropdown ? (
         <LabelFieldPair>
-          <CardLabel>{doc?.required ? `${t(doc?.i18nKey)}*:` : `${t(doc?.i18nKey)}:`}</CardLabel>
+          <CardLabel style={{fontWeight: "700" }}>{doc?.required ? `${t(doc?.i18nKey)}:*` : `${t(doc?.i18nKey)}:`}</CardLabel>
           <Dropdown
             id={`doc-${doc?.code}`}
             key={`doc-${doc?.code}`}

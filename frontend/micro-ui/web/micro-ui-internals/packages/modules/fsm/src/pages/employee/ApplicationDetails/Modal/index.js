@@ -286,12 +286,14 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.subtype && typeof (data.subtype) === "object") applicationData.propertyUsage = data.subtype.code;
     if (data.subtype && typeof (data.subtype) === "string") applicationData.propertyUsage = data.subtype;
     if (data.noOfTrips) applicationData.noOfTrips = data.noOfTrips;
-    if (data.paymentMode) applicationData.receivedPayment = data.paymentMode.code;
+    if (data.paymentMode) applicationData.additionalDetails.receivedPayment = data.paymentMode.code;
 
     if (fileStoreId) {
-      let temp = {}
-      fileStoreId.map((i) => (temp[fileStoreId.indexOf(i) + 1] = i))
-      applicationData.pitDetail.additionalDetails = { fileStoreId: temp };
+      if (applicationData.pitDetail.additionalDetails && applicationData.pitDetail.additionalDetails.fileStoreId) {
+        applicationData.pitDetail.additionalDetails.fileStoreId = { ...applicationData.pitDetail.additionalDetails.fileStoreId, FSM_DSO: fileStoreId };
+      } else {
+        applicationData.pitDetail.additionalDetails = { fileStoreId: { FSM_DSO: fileStoreId } };
+      }
     }
     if (data.noOfTrips) applicationData.noOfTrips = Number(data.noOfTrips);
     if (action === "REASSING") applicationData.vehicleId = null;
@@ -371,7 +373,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
-        return setConfig(configCompleteApplication({ t, vehicle, vehicleCapacity: applicationData?.vehicleCapacity, noOfTrips: applicationData?.noOfTrips, applicationCreatedTime: applicationData?.auditDetails?.createdTime, receivedPaymentType, action }));
+        return setConfig(configCompleteApplication({ t, vehicle, vehicleCapacity: applicationData?.vehicleCapacity, noOfTrips: applicationData?.noOfTrips, applicationCreatedTime: applicationData?.auditDetails?.createdTime, receivedPaymentType: ReceivedPaymentTypeData, action }));
       case "SUBMIT":
       case "FSM_SUBMIT":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);

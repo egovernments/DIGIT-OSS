@@ -1,5 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import React, { useRef, useEffect } from "react";
 import SubMenu from "./SubMenu";
 import {
   Loader,
@@ -32,6 +31,7 @@ const IconsObject = {
   "insert-chart": <FinanceChartIcon />,
   edcr: <CollectionIcon />,
   collections: <CollectionIcon />,
+  "open-complaints": <ComplaintIcon />,
 };
 const EmployeeSideBar = () => {
   const sidebarRef = useRef(null);
@@ -80,7 +80,16 @@ const EmployeeSideBar = () => {
           configEmployeeSideBar[index].push(item);
         }
       } else {
-        if (item.path !== "") {
+        if (item.displayName === "Home") {
+          item.navigationURL = "/digit-ui/employee";
+          singleItem.unshift({
+            displayName: item.displayName,
+            navigationURL: item.navigationURL,
+            icon: item.leftIcon,
+            orderNumber: item.orderNumber,
+          });
+        }
+        if (item.path !== "" && item.displayName !== "Home") {
           singleItem.push({
             displayName: item.displayName,
             navigationURL: item.navigationURL,
@@ -117,16 +126,23 @@ const EmployeeSideBar = () => {
     return singleItem
       .sort((a, b) => a.orderNumber - b.orderNumber)
       .map((item) => {
-        const leftIconArray = item.icon.split(":")[1];
+        const leftIconArray = item?.icon?.split(":")[1];
         const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.collections;
+        const getOrigin = window.location.origin;
         return (
           <div className="submenu-container">
             <div className={`sidebar-link`}>
               <div className="actions">
                 {leftIcon}
-                <Link className="custom-link" to={item.navigationURL}>
-                  {item.displayName}
-                </Link>
+                {item.navigationURL.indexOf("/digit-ui") === -1 ? (
+                  <a className="custom-link" href={getOrigin + "/employee/" + item.navigationURL}>
+                    {item.displayName}
+                  </a>
+                ) : (
+                  <Link className="custom-link" to={item.navigationURL}>
+                    {item.displayName}
+                  </Link>
+                )}
               </div>
             </div>
           </div>

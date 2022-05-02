@@ -329,7 +329,13 @@ public class TLConfiguration {
 
     @Value("${egov.download.receipt.link}")
     private String receiptDownloadLink;
-
+    
+    //Application count
+    @Value("${egov.applicationcount.period}")
+    private String numberOfMonths;
+    
+    @Value("${egov.application.validity}")
+    private String applicationValidity;
 
 
 }

@@ -52,9 +52,9 @@ public class SewarageController {
 			@Valid @ModelAttribute SearchCriteria criteria) {
 		List<SewerageConnection> sewerageConnectionList = sewarageService.search(criteria,
 				requestInfoWrapper.getRequestInfo());
-
+		Integer count = sewarageService.countAllSewerageApplications(criteria,	requestInfoWrapper.getRequestInfo());
 		SewerageConnectionResponse response = SewerageConnectionResponse.builder()
-				.sewerageConnections(sewerageConnectionList).totalCount(sewerageConnectionList.size())
+				.sewerageConnections(sewerageConnectionList).totalCount(count)
 				.responseInfo(responseInfoFactory
 						.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
 				.build();

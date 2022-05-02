@@ -39,9 +39,15 @@ public class SearchCriteria {
 
 	@JsonProperty("applicationNumber")
 	private String applicationNumber;
-		
+	
+	@JsonProperty("applicationNumbers")
+	private Set<String> applicationNumbers;
+	
+//	@JsonProperty("applicationStatus")
+//	private String applicationStatus;
+	
 	@JsonProperty("applicationStatus")
-	private String applicationStatus;
+	private Set<String> applicationStatus;
 
 	@JsonProperty("connectionNumber")
 	private String connectionNumber;
@@ -91,8 +97,14 @@ public class SearchCriteria {
 	@JsonProperty("ownerName")
 	private String ownerName;
 	
+	@JsonProperty("assignee")
+	private String assignee;
+	
 	@JsonProperty("sortOrder")
 	private SortOrder sortOrder;
+
+	@JsonIgnore
+	private Boolean isCountCall = false;
 
 	public enum SortOrder {
 	    ASC,
@@ -106,14 +118,16 @@ public class SearchCriteria {
 				&& StringUtils.isEmpty(this.status) && StringUtils.isEmpty(this.applicationNumber)
 				&& StringUtils.isEmpty(this.applicationStatus) && StringUtils.isEmpty(this.fromDate)
 				&& StringUtils.isEmpty(this.toDate) && StringUtils.isEmpty(this.applicationType)
-				&& StringUtils.isEmpty(this.doorNo) && StringUtils.isEmpty(this.ownerName));
+				&& StringUtils.isEmpty(this.doorNo) && StringUtils.isEmpty(this.ownerName)
+				&& StringUtils.isEmpty(this.applicationNumbers) && StringUtils.isEmpty(this.assignee));
 	}
 
 	public boolean tenantIdOnly() {
 		return (this.tenantId != null && this.status == null && this.ids == null && this.applicationNumber == null
 				&& this.connectionNumber == null && this.oldConnectionNumber == null && this.mobileNumber == null
 				&& this.fromDate == null && this.toDate == null && this.ownerIds == null && this.propertyId == null
-				&& this.applicationType == null && this.doorNo == null && this.ownerName == null);
+				&& this.applicationType == null && this.doorNo == null && this.ownerName == null
+				&& this.applicationNumbers == null && this.assignee == null);
 	}
 
 }

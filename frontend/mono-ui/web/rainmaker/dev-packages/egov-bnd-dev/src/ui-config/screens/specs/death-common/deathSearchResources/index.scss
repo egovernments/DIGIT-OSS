@@ -1,0 +1,31 @@
+  .autocomplete-dropdown {
+    min-width: 80%;
+    position: absolute;
+    z-index: 1900;
+    max-height: 150px;
+    overflow: hidden;
+  }
+  .autocomplete-dropdown div {
+	min-width: 80%;
+	max-height: 150px;
+    overflow: auto;
+  }
+  @media only screen and (max-width: 768px) {
+
+    .bd-search-header{
+      #custom-atoms-headerDiv{
+        flex-flow:inherit;
+        }
+    }
+    .bd-btn-hiw{
+      flex-basis: unset;
+      align-self: self-end;
+      div{
+        max-width:unset;
+        flex-basis: unset;
+  button{
+  min-width: unset!important;
+  }
+      }
+    }
+  }

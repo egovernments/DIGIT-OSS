@@ -17,7 +17,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.apache.pdfbox.printing.Orientation;
 import org.egov.common.entity.dcr.helper.DxfToPdfLayerConfig;
 import org.egov.common.entity.dcr.helper.PlanPdfLayerConfig;
@@ -73,7 +74,7 @@ import com.itextpdf.text.Rectangle;
 @Service
 public class DxfToPdfConverterExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(DxfToPdfConverterExtract.class);
+    private static final Logger LOG = LogManager.getLogger(DxfToPdfConverterExtract.class);
 
     private static final String MULTIPLE_LAYER = "Multiple layers is defined with %s";
     private static final String LAYER_NOT_DEFINED = "%s is not defined.";

@@ -15,7 +15,7 @@ import {
   CitizenInfoLabel,
 } from "@egovernments/digit-ui-react-components";
 
-const processLinkData = (newData, code, t) => {
+export const processLinkData = (newData, code, t) => {
   const obj = newData?.[`${code}`];
   if (obj) {
     obj.map((link) => {
@@ -24,7 +24,7 @@ const processLinkData = (newData, code, t) => {
   }
   const newObj = {
     links: obj?.reverse(),
-    header: `${code}_HEADER`,
+    header: Digit.Utils.locale.getTransformedLocale(`ACTION_TEST_${code}`),
     iconName: `CITIZEN_${code}_ICON`,
   };
   if (code === "FSM") {
@@ -86,35 +86,37 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
 
   return (
     <React.Fragment>
-      <BackButton />
-      <div className="citizenAllServiceGrid">
-        {moduleArray
-          .filter((mod) => mod)
-          .map(({ code }, index) => {
-            let mdmsDataObj;
-            if (fetchedCitizen) mdmsDataObj = fetchedCitizen ? processLinkData(getCitizenMenu, code, t) : undefined;
-            if (mdmsDataObj?.links?.length > 0)
-              return (
-                <CitizenHomeCard
-                  header={t(mdmsDataObj?.header)}
-                  links={mdmsDataObj?.links}
-                  Icon={() => iconSelector(code)}
-                  Info={
-                    code === "OBPS"
-                      ? () => (
-                          <CitizenInfoLabel
-                            style={{ margin: "0px", padding: "10px" }}
-                            info={t("CS_FILE_APPLICATION_INFO_LABEL")}
-                            text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
-                          />
-                        )
-                      : null
-                  }
-                  isInfo={code === "OBPS" ? true : false}
-                />
-              );
-            else return <React.Fragment />;
-          })}
+      <div className="citizen-all-services-wrapper">
+        <BackButton />
+        <div className="citizenAllServiceGrid">
+          {moduleArray
+            .filter((mod) => mod)
+            .map(({ code }, index) => {
+              let mdmsDataObj;
+              if (fetchedCitizen) mdmsDataObj = fetchedCitizen ? processLinkData(getCitizenMenu, code, t) : undefined;
+              if (mdmsDataObj?.links?.length > 0)
+                return (
+                  <CitizenHomeCard
+                    header={t(mdmsDataObj?.header)}
+                    links={mdmsDataObj?.links}
+                    Icon={() => iconSelector(code)}
+                    Info={
+                      code === "OBPS"
+                        ? () => (
+                            <CitizenInfoLabel
+                              style={{ margin: "0px", padding: "10px" }}
+                              info={t("CS_FILE_APPLICATION_INFO_LABEL")}
+                              text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
+                            />
+                          )
+                        : null
+                    }
+                    isInfo={code === "OBPS" ? true : false}
+                  />
+                );
+              else return <React.Fragment />;
+            })}
+        </div>
       </div>
     </React.Fragment>
   );

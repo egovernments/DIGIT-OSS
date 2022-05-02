@@ -19,7 +19,8 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
   const location = useLocation();
 
   const user = Digit.UserService.getUser();
-  if (!user) {
+
+  if (!user || !user?.access_token || !user?.info) {
     return <Redirect to={{ pathname: "/digit-ui/employee/user/login", state: { from: location.pathname + location.search } }} />;
   }
 
@@ -29,7 +30,9 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
       <Route key={index} path={`${path}/${code.toLowerCase()}`}>
         <Module stateCode={stateCode} moduleCode={code} userType={userType} tenants={getTenants(tenants, appTenants)} />
       </Route>
-    ) : null;
+    ) :   <Route key={index} path={`${path}/${code.toLowerCase()}`}>
+    <Redirect to={{ pathname: "/digit-ui/employee/user/error?type=notfound", state: { from: location.pathname + location.search } }} />
+  </Route>;
   });
 
   return (

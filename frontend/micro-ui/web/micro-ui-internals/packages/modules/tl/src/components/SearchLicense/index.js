@@ -15,7 +15,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
             sortBy: "commencementDate",
             sortOrder: "DESC",
             status: "",
-            RenewalPending: true
+            //RenewalPending: true
         }
     })
     useEffect(() => {
@@ -24,7 +24,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
       register("sortBy", "commencementDate")
       register("sortOrder", "DESC")
       register("status", "")
-      register("RenewalPending", true)
+      //register("RenewalPending", true)
     },[register])
 
     const onSort = useCallback((args) => {
@@ -64,7 +64,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
             return (
               <div>
                 <span className="link">
-                  <a href={`/digit-ui/employee/tl/application-details/${row.original["applicationNumber"]}?renewalPending=true`}>
+                  <a href={`/digit-ui/employee/tl/application-details/${row.original["applicationNumber"]}`}>
                     {row.original["licenseNumber"]}
                   </a>
                 </span>

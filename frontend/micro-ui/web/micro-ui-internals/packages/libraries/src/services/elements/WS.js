@@ -13,7 +13,15 @@ export const WSService = {
       params: {},
       auth: true,
     }),
-  search: ({ tenantId, filters, auth, businessService }) =>
+  createBillAmendment: ({ filters }) =>
+    Request({
+      url: Urls.ws.billAmendmentCreate,
+      method: "POST",
+      auth: true,
+      userService: true,
+      data: { ...filters },
+    }),
+  search: ({ tenantId, filters, businessService }) =>
     Request({
       url: businessService === "WS" ? Urls.ws.water_search : Urls.ws.sewarage_search,
       useCache: false,

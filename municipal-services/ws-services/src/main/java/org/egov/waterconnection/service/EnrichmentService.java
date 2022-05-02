@@ -4,6 +4,7 @@ package org.egov.waterconnection.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.tracer.model.CustomException;
@@ -248,7 +249,8 @@ public class EnrichmentService {
 					equals(waterConnectionrequest.getWaterConnection().getProcessInstance().getAction())) {
 				SearchCriteria criteria = SearchCriteria.builder()
 						.tenantId(waterConnectionrequest.getWaterConnection().getTenantId())
-						.connectionNumber(waterConnectionrequest.getWaterConnection().getConnectionNo()).build();
+						.connectionNumber(waterConnectionrequest.getWaterConnection().getConnectionNo()).isCountCall(false)
+						.build();
 				List<WaterConnection> connections = waterService.search(criteria, waterConnectionrequest.getRequestInfo());
 				if (!CollectionUtils.isEmpty(connections)) {
 					WaterConnection connection = connections.get(connections.size() - 1);
@@ -475,10 +477,16 @@ public class EnrichmentService {
 			return;
 		ProcessInstance processInstance=null;
 		for (WaterConnection waterConnection : waterConnectionList) {
-			processInstance=wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(), 
+			if(criteria.getTenantId()!=null)
+				processInstance=wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(), 
 					criteria.getTenantId(), null);
-			waterConnection.getProcessInstance().setBusinessService(processInstance.getBusinessService());
-			waterConnection.getProcessInstance().setModuleName(processInstance.getModuleName());	
+			else
+				processInstance=wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(), 
+						waterConnection.getTenantId(), null);
+			if(!ObjectUtils.isEmpty(processInstance)) {
+				waterConnection.getProcessInstance().setBusinessService(processInstance.getBusinessService());
+				waterConnection.getProcessInstance().setModuleName(processInstance.getModuleName());
+			}
 		}
 	}
 }

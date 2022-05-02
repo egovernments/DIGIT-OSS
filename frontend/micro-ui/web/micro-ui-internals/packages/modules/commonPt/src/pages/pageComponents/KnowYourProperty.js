@@ -4,6 +4,11 @@ import Timeline from "../../components/CPTTimeline";
 
 const KnowYourProperty = ({ t, config, onSelect, userType, formData }) => {
   const [KnowProperty, setKnowProperty] = useState(formData?.PropDetails?.KnowProperty);
+  if(window.location.href.includes("/tl/tradelicence/edit-application/") || window.location.href.includes("/renew-trade/") )
+  {
+    let EditformData = JSON.parse(sessionStorage.getItem("EditFormData"));
+    formData = {...formData,...EditformData};
+  }
  
   const menu = [
     { i18nKey: "TL_COMMON_YES", code: "YES" },

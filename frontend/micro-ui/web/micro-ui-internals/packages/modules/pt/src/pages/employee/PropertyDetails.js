@@ -33,8 +33,9 @@ const PropertyDetails = () => {
   const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
   const [businessService, setBusinessService] = useState("PT.CREATE");
   const history = useHistory();
-  sessionStorage.setItem("propertyIdinPropertyDetail",applicationNumber);
-  const isMobile = window.Digit.Utils.browser.isMobile();
+  sessionStorage.setItem("propertyIdinPropertyDetail", applicationNumber);
+  // const isMobile = window.Digit.Utils.browser.isMobile();
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 780);
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, applicationNumber);
   const { data: fetchBillData, isLoading: fetchBillLoading, revalidate } = Digit.Hooks.useFetchBillsForBuissnessService({
@@ -62,6 +63,27 @@ const PropertyDetails = () => {
     retry: false,
     enable: false,
   });
+
+  React.useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth <= 780 && !isMobile) {
+        setIsMobile(true);
+      } else if (window.innerWidth > 780 && isMobile) {
+        setIsMobile(false);
+      }
+    }
+
+    window.addEventListener("resize", () => {
+      onResize();
+    });
+
+    return () => {
+      window.removeEventListener("resize", () => {
+        onResize()
+      });
+    };
+  });
+
 
   useEffect(() => {
     if (applicationDetails && !enableAudit) {
@@ -152,7 +174,7 @@ const PropertyDetails = () => {
         belowComponent: () => (
           <LinkLabel
             onClick={() => history.push({ pathname: `/digit-ui/employee/pt/ptsearch/payment-details/${applicationNumber}` })}
-            style={isMobile ? {marginTop: "15px", marginLeft:"0px"} : { marginTop: "15px" }}
+            style={isMobile ? { marginTop: "15px", marginLeft: "0px" } : { marginTop: "15px" }}
           >
             {t("PT_VIEW_PAYMENT")}
           </LinkLabel>
@@ -172,7 +194,7 @@ const PropertyDetails = () => {
     return () => {
       if (appDetailsToShow?.applicationDetails?.[0]?.values?.[1].title == "PT_TOTAL_DUES" && !(sessionStorage.getItem("revalidateddone") === "done")) {
         appDetailsToShow?.applicationDetails.shift();
-        sessionStorage.setItem("revalidateddone","done");
+        sessionStorage.setItem("revalidateddone", "done");
         revalidate();
       }
     };
@@ -186,31 +208,31 @@ const PropertyDetails = () => {
         actionState: {
           nextActions: PT_CEMP
             ? [
-                {
-                  action: "ASSESS_PROPERTY",
-                  forcedName: "PT_ASSESS",
-                  showFinancialYearsModal: true,
-                  customFunctionToExecute: (data) => {
-                    delete data.customFunctionToExecute;
-                    history.replace({ pathname: `/digit-ui/employee/pt/ptsearch/assessment-details/${applicationNumber}`, state: { ...data } });
-                  },
-                  tenantId: Digit.ULBService.getStateId(),
+              {
+                action: "ASSESS_PROPERTY",
+                forcedName: "PT_ASSESS",
+                showFinancialYearsModal: true,
+                customFunctionToExecute: (data) => {
+                  delete data.customFunctionToExecute;
+                  history.replace({ pathname: `/digit-ui/employee/pt/ptsearch/assessment-details/${applicationNumber}`, state: { ...data } });
                 },
-                {
-                  action: !fetchBillData?.Bill[0]?.totalAmount ? "MUTATE_PROPERTY" : "PT_TOTALDUES_PAY",
-                  forcedName: "PT_OWNERSHIP_TRANSFER",
-                  AmountDueForPay : fetchBillData?.Bill[0]?.totalAmount,
-                  isWarningPopUp : !fetchBillData?.Bill[0]?.totalAmount ? false:true,
-                  redirectionUrl: {
-                    pathname: !fetchBillData?.Bill[0]?.totalAmount
-                      ? `/digit-ui/employee/pt/property-mutate-docs-required/${applicationNumber}`
-                      : `/digit-ui/employee/payment/collect/PT/${applicationNumber}`,
-                    // state: { workflow: { action: "OPEN", moduleName: "PT", businessService } },
-                    state: null,
-                  },
-                  tenantId: Digit.ULBService.getStateId(),
+                tenantId: Digit.ULBService.getStateId(),
+              },
+              {
+                action: !fetchBillData?.Bill[0]?.totalAmount ? "MUTATE_PROPERTY" : "PT_TOTALDUES_PAY",
+                forcedName: "PT_OWNERSHIP_TRANSFER",
+                AmountDueForPay: fetchBillData?.Bill[0]?.totalAmount,
+                isWarningPopUp: !fetchBillData?.Bill[0]?.totalAmount ? false : true,
+                redirectionUrl: {
+                  pathname: !fetchBillData?.Bill[0]?.totalAmount
+                    ? `/digit-ui/employee/pt/property-mutate-docs-required/${applicationNumber}`
+                    : `/digit-ui/employee/payment/collect/PT/${applicationNumber}`,
+                  // state: { workflow: { action: "OPEN", moduleName: "PT", businessService } },
+                  state: null,
                 },
-              ]
+                tenantId: Digit.ULBService.getStateId(),
+              },
+            ]
             : [],
         },
       },
@@ -249,6 +271,7 @@ const PropertyDetails = () => {
         showToast={showToast}
         setShowToast={setShowToast}
         closeToast={closeToast}
+        showTimeLine={false}
         timelineStatusPrefix={"ES_PT_COMMON_STATUS_"}
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
       />
@@ -265,7 +288,7 @@ const PropertyDetails = () => {
           }
           hideSubmit={true}
           isDisabled={false}
-          popupStyles={showUpdateNo ? { width: "50%", marginTop: "auto" } : { width: "75%", marginTop: "75px" }}
+          popupStyles={showUpdateNo ? { width: isMobile ? "473px" : "50%"} : { width: "75%"}}
         >
           {showUpdateNo && (
             <UpdatePropertyNumberComponent

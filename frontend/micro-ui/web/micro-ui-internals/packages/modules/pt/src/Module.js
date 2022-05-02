@@ -231,6 +231,14 @@ export const PTLinks = ({ matchPath, userType }) => {
       link: `${matchPath}/property/property-mutation`,
       i18nKey: t("PT_PROPERTY_MUTATION"),
     },
+    {
+      link: `${matchPath}/howItWorks`,
+      i18nKey: t("PT_HOW_IT_WORKS"),
+    },
+    {
+      link: `${matchPath}/faqs`,
+      i18nKey: t("PT_FAQ_S"),
+    },
   ];
 
   return <CitizenHomeCard header={t("ACTION_TEST_PROPERTY_TAX")} links={links} Icon={() => <PTIcon className="fill-path-primary-main" />} />;

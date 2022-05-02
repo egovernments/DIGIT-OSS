@@ -54,6 +54,20 @@ const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
   return response
 }
 
+const getAssignerDetails = (instance, nextStep, moduleCode) => {
+  let assigner = instance?.assigner
+  if (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE") {
+    if (instance.state.applicationStatus === "CREATED") {
+      assigner = instance?.assigner
+    } else {
+      assigner = nextStep?.assigner || instance?.assigner
+    }
+  } else {
+    assigner = instance?.assigner
+  }
+  return assigner
+}
+
 export const WorkflowService = {
   init: (stateCode, businessServices) => {
     return Request({
@@ -123,7 +137,7 @@ export const WorkflowService = {
             performedAction: instance.action,
             status: instance.state.applicationStatus,
             state: instance.state.state,
-            assigner: instance?.assigner,
+            assigner: getAssignerDetails(instance, TLEnrichedWithWorflowData[ind - 1], moduleCode),
             rating: instance?.rating,
             wfComment: instance?.wfComments.map(e => e?.comment),
             wfDocuments: instance?.documents,

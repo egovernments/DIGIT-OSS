@@ -123,10 +123,13 @@ public class SewerageServiceImpl implements SewerageService {
 		if(!StringUtils.isEmpty(criteria.getSearchType()) &&
 				criteria.getSearchType().equals(SWConstants.SEARCH_TYPE_CONNECTION)){
 			sewerageConnectionList = enrichmentService.filterConnections(sewerageConnectionList);
-			if(criteria.getIsPropertyDetailsRequired()){
+			/*if(criteria.getIsPropertyDetailsRequired()){
 				sewerageConnectionList = enrichmentService.enrichPropertyDetails(sewerageConnectionList, criteria, requestInfo);
 
-			}
+			}*/
+		}
+		if ((criteria.getIsPropertyDetailsRequired() != null) && criteria.getIsPropertyDetailsRequired()) {
+			sewerageConnectionList = enrichmentService.enrichPropertyDetails(sewerageConnectionList, criteria, requestInfo);
 		}
 		validateProperty.validatePropertyForConnection(sewerageConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
@@ -140,13 +143,38 @@ public class SewerageServiceImpl implements SewerageService {
 	 *            SewerageConnectionSearchCriteria contains search criteria on
 	 *            sewerage connection
 	 * @param requestInfo - Request Info Object
-	 * @return List of matching water connection
+	 * @return List of matching sewerage connection
 	 */
 
 	public List<SewerageConnection> getSewerageConnectionsList(SearchCriteria criteria, RequestInfo requestInfo) {
 		return sewerageDao.getSewerageConnectionList(criteria, requestInfo);
 	}
 
+	/**
+	 * 
+	 * @param criteria
+	 *            SewerageConnectionSearchCriteria contains search criteria on
+	 *            sewerage connection
+	 * @param requestInfo - Request Info
+	 * @return Count of List of matching sewerage connection
+	 */
+	public Integer countAllSewerageApplications(SearchCriteria criteria, RequestInfo requestInfo) {
+		criteria.setIsCountCall(Boolean.TRUE);
+		return getSewerageConnectionsCount(criteria, requestInfo);
+	}
+
+	/**
+	 * 
+	 * @param criteria    SewerageConnectionSearchCriteria contains search criteria
+	 *                    on sewerage connection
+	 * @param requestInfo - Request Info Object
+	 * @return Count of List of matching sewerage connection
+	 */
+
+	public Integer getSewerageConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
+		return sewerageDao.getSewerageConnectionsCount(criteria, requestInfo);
+	}
+	
 	/**
 	 * 
 	 * @param sewerageConnectionRequest
@@ -215,7 +243,8 @@ public class SewerageServiceImpl implements SewerageService {
 	 */
 	private List<SewerageConnection> getAllSewerageApplications(SewerageConnectionRequest sewerageConnectionRequest) {
 		SearchCriteria criteria = SearchCriteria.builder()
-				.connectionNumber(sewerageConnectionRequest.getSewerageConnection().getConnectionNo()).build();
+				.connectionNumber(sewerageConnectionRequest.getSewerageConnection().getConnectionNo()).isCountCall(false)
+				.build();
 		return search(criteria, sewerageConnectionRequest.getRequestInfo());
 	}
 

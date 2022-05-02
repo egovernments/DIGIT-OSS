@@ -414,6 +414,10 @@ public class TLConstants {
     public static final String NOTIF_TENANT_KEY = "XYZ";
 
     public static final String PROPERTY_JSON_KEY = "Properties";
+    
+    public static final String ISSUED_COUNT = "issuedCount";
+    
+    public static final String RENEWED_COUNT = "renewedCount";
 
     public TLConstants() {}
 

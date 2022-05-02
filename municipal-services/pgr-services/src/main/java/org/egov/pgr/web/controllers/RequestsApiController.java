@@ -42,7 +42,6 @@ public class RequestsApiController{
 
     @RequestMapping(value="/request/_create", method = RequestMethod.POST)
     public ResponseEntity<ServiceResponse> requestsCreatePost(@Valid @RequestBody ServiceRequest request) throws IOException {
-
         ServiceRequest enrichedReq = pgrService.create(request);
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(request.getRequestInfo(), true);
         ServiceWrapper serviceWrapper = ServiceWrapper.builder().service(enrichedReq.getService()).workflow(enrichedReq.getWorkflow()).build();
@@ -53,7 +52,7 @@ public class RequestsApiController{
 
     @RequestMapping(value="/request/_search", method = RequestMethod.POST)
     public ResponseEntity<ServiceResponse> requestsSearchPost(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-                                                     @Valid @ModelAttribute RequestSearchCriteria criteria) {
+                                                              @Valid @ModelAttribute RequestSearchCriteria criteria) {
         List<ServiceWrapper> serviceWrappers = pgrService.search(requestInfoWrapper.getRequestInfo(), criteria);
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
         ServiceResponse response = ServiceResponse.builder().responseInfo(responseInfo).serviceWrappers(serviceWrappers).build();
@@ -81,7 +80,7 @@ public class RequestsApiController{
 
     @RequestMapping(value="/request/_count", method = RequestMethod.POST)
     public ResponseEntity<CountResponse> requestsCountPost(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-                                                              @Valid @ModelAttribute RequestSearchCriteria criteria) {
+                                                           @Valid @ModelAttribute RequestSearchCriteria criteria) {
         Integer count = pgrService.count(requestInfoWrapper.getRequestInfo(), criteria);
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
         CountResponse response = CountResponse.builder().responseInfo(responseInfo).count(count).build();

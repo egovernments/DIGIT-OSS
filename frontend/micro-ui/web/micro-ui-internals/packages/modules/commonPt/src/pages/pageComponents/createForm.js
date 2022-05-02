@@ -5,7 +5,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import { newConfig } from "../../config/Create/config";
 import _, { create, unset } from "lodash";
 
-const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
+const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const tenants = Digit.Hooks.pt.useTenants();
   const { t } = useTranslation();
@@ -14,12 +14,14 @@ const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
   const history = useHistory();
   const match = useRouteMatch();
   sessionStorage.setItem("VisitedCommonPTSearch",true);
+  sessionStorage.setItem("VisitedLightCreate",true);
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   
   const [formValue, setFormValue] = useState("");
   const [cityCode, setCityCode] = useState("");
-  
+  let enableSkip = config?.isSkipEnabled || sessionStorage.getItem("skipenabled");
   // delete
   // const [_formData, setFormData,_clear] = Digit.Hooks.useSessionStorage("store-data",null);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
@@ -55,25 +57,35 @@ const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
     }
   };
 
-  const onFormValueChange = (setValue, data, formState) => {
-    const city = data?.locationDet?.city;
-    const locality = data?.locationDet?.locality;
+  const onSkip = () => {
+    onSelect("isSkip",true);
+  }
 
-    if (city?.code !== cityCode) {
-      setCityCode(city?.code);
-    }
+  const onFormValueChange = (setValue, data, formState) => {
+    // const city = data?.locationDet?.city;
+    // const locality = data?.locationDet?.locality;
+
+    // if (city?.code !== cityCode) {
+    //   setCityCode(city?.code);
+    // }
 
     if (!_.isEqual(data, formValue)) {
       // if (data?.city.code !== formValue?.city?.code) setValue("locality", null);
       setFormValue(data);
     }
 
-    if (!locality) {
+    if(data.assemblyDet && data.locationDet && data.owners && !Object.keys(formState?.errors).length){
+      setCanSubmit(true);
+    }else{
       setCanSubmit(false);
-      return;
     }
 
-    setCanSubmit(true);
+    // if (!locality) {
+    //   setCanSubmit(false);
+    //   return;
+    // }
+
+    // setCanSubmit(true);
   };
 
   const getHeaderLabel = () => {
@@ -89,6 +101,9 @@ const CreatePropertyForm = ({ onSelect,value, userType, redirectUrl }) => {
         <Header styles={window.location.href.includes("citizen") ? {paddingLeft: "0px", marginLeft: "0px"} : {}}>{t(getHeaderLabel())}</Header>
       </div>
     <FormComposer
+      onSkip = {onSkip}
+      showSkip = {enableSkip}
+      skipStyle = {isMobile?{}:{textAlign:"right",marginRight:"55px"}}
       onSubmit={onSubmit}
       noBoxShadow
       inline

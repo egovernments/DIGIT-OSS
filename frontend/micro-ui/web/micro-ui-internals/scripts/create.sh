@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh ws bills
+./scripts/run.sh ws

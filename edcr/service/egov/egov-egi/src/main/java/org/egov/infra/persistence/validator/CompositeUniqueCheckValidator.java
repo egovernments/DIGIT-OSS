@@ -54,7 +54,8 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.infra.persistence.validator.annotation.CompositeUnique;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -64,7 +65,7 @@ import org.hibernate.criterion.Restrictions;
 
 public class CompositeUniqueCheckValidator implements ConstraintValidator<CompositeUnique, Object> {
 
-    private static final Logger LOG = Logger.getLogger(CompositeUniqueCheckValidator.class);
+    private static final Logger LOG = LogManager.getLogger(CompositeUniqueCheckValidator.class);
 
     private CompositeUnique unique;
 

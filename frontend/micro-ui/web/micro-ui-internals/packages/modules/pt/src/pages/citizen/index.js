@@ -5,6 +5,7 @@ import { shouldHideBackButton } from "../../utils";
 import Search from "../employee/Search";
 import { useTranslation } from "react-i18next";
 import { PTMyPayments } from "./MyPayments";
+
 const hideBackButtonConfig = [
   { screenPath: "property/new-application/acknowledgement" },
   { screenPath: "property/edit-application/acknowledgement" },
