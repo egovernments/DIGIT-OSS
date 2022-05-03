@@ -82,6 +82,9 @@ public class DemandService {
 	@Autowired
 	private PaymentNotificationService paymentNotificationService;
 
+	@Autowired
+	private EnrichmentService enrichmentService;
+
 	/**
 	 * Creates or updates Demand
 	 * 
@@ -714,6 +717,8 @@ public class DemandService {
 				while (batchOffset < count) {
 					List<WaterConnection> connections = waterCalculatorDao.getConnectionsNoList(tenantId,
 							WSCalculationConstant.nonMeterdConnection, batchOffset, batchsize, fromDate, toDate);
+
+					connections = enrichmentService.filterConnections(connections);
 					String assessmentYear = estimationService.getAssessmentYear();
 					log.info("Size of the connection list for batch : "+ batchOffset + " is " + connections.size());
 

@@ -305,4 +305,11 @@ public class WSCalculationConstant {
 
 	public static final String LOCALITY = "locality";
 
+	public static final String MODIFIED_FINAL_STATE = "APPROVED";
+
+	public static final String STATUS_APPROVED = "CONNECTION_ACTIVATED";
+
+	public static final List<String> FINAL_CONNECTION_STATES = Collections
+			.unmodifiableList(Arrays.asList(MODIFIED_FINAL_STATE, STATUS_APPROVED));
+
 }
