@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Card, CardHeader, SubmitBar, CitizenInfoLabel, CardText, Loader, CardSubHeader, BackButton, BreadCrumb, Header, CardLabel, CardSectionHeader, CardCaption, ActionBar } from "@egovernments/digit-ui-react-components";
+import { Card, CardHeader, SubmitBar, CitizenInfoLabel, CardText, Loader, CardSubHeader, BackButton, BreadCrumb, Header, CardLabel, CardSectionHeader, CardCaption, ActionBar, PrintBtnCommon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
@@ -51,13 +51,32 @@ const WSDocsRequired = ({ onSelect, userType, onSkip, config }) => {
     );
   }
 
+  const printDiv = () => {
+    let content = document.getElementById("documents-div").innerHTML;
+    let printWindow = window.open("", "");
+    printWindow.document.write(`<html><body>${content}</body></html>`);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+  };
+  
+
   return (
     <div style={{ margin: "16px" }}>
-      <Header styles={{fontSize: "32px", marginLeft: "18px"}}>{t("WS_WATER_AND_SEWERAGE_NEW_CONNECTION_LABEL")}</Header>
+      <div>
+        <Header styles={{ fontSize: "32px", marginLeft: "18px", display: "flex", justifyContent: "space-between", marginRight: "12px" }}>
+          <div>
+            {t("WS_WATER_AND_SEWERAGE_NEW_CONNECTION_LABEL")}
+          </div>
+          <div onClick={printDiv} style={{cursor: "pointer", display: "flex"}}>
+            <PrintBtnCommon /><div style={{fontSize: "24px", fontWeight: "400", color: "#0B0C0C"}}>{"Print"}</div>
+          </div>
+        </Header>
+      </div>
       <Card >
         {wsDocsLoading ?
           <Loader /> :
-          <Fragment>
+            <div id="documents-div">
             {wsDocs?.Documents?.map((doc, index) => (
               <div key={index} style={{ marginTop: "16px" }}>
                 <CardSectionHeader style={{ marginBottom: "16px", lineHeight: "28px", fontSize: "24px" }}>{t(doc?.code.replace('.', '_'))}</CardSectionHeader>
@@ -68,7 +87,7 @@ const WSDocsRequired = ({ onSelect, userType, onSkip, config }) => {
                 <p style={{fontSize: "16px"}}>{t(`${doc?.code.replace('.', '_')}_BELOW_DESCRIPTION`)}</p>
               </div>
             ))}
-          </Fragment>
+          </div>
         }
         <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
           {
