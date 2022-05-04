@@ -13,11 +13,18 @@
 
 @screen dt {
   .PageBasedInputWrapper {
+    text-align:-webkit-center;
     .SubmitBar {
       @apply hidden;
     }
     .SubmitBarInCardInDesktopView {
       @apply block;
+    }
+    .card {
+      max-width:960px;
+    }
+    button {
+      max-width:240px;
     }
   }
 }
