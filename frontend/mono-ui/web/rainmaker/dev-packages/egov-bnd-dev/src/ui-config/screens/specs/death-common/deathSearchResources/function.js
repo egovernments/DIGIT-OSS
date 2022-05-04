@@ -49,7 +49,7 @@ export const searchApiCall = async (state, dispatch) => {
 
   let hospitalId = get(state.screenConfiguration.preparedFinalObject,"bnd.death.hosptialId");
   if(hospitalId)
-    queryParams.push({ key: "hospitalId",value: hospitalId});
+    queryParams.push({ key: "hospitalName",value: hospitalId});
 
   let mothersName = get(state.screenConfiguration.preparedFinalObject,"bnd.death.mothersName");
   if(mothersName)

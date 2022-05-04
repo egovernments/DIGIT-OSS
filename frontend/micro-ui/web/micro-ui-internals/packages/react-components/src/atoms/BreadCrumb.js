@@ -6,15 +6,25 @@ const Breadcrumb = (props) => {
   function isLast(index) {
     return index === props.crumbs.length - 1;
   }
-
   return (
     <ol className="bread-crumb">
       {props?.crumbs?.map((crumb, ci) => {
         if (!crumb?.show) return;
-
+        if (crumb?.isBack)
+          return (
+            <li key={ci} style={{ ...props.style }} className="bread-crumb--item">
+              <span style={{ cursor: "pointer" }} onClick={() => window.history.back()}>
+                {crumb.content}
+              </span>
+            </li>
+          );
         return (
-          <li key={ci} style={{...props.style}} className="bread-crumb--item">
-            {isLast(ci) || !crumb?.path ? <span style={props?.spanStyle ? {...props?.spanStyle,color: "#0B0C0C"} : {color: "#0B0C0C"}}>{crumb.content}</span> : <Link to={crumb.path}>{crumb.content}</Link>}
+          <li key={ci} style={{ ...props.style }} className="bread-crumb--item">
+            {isLast(ci) || !crumb?.path ? (
+              <span style={props?.spanStyle ? { ...props?.spanStyle, color: "#0B0C0C" } : { color: "#0B0C0C" }}>{crumb.content}</span>
+            ) : (
+              <Link to={crumb.path}>{crumb.content}</Link>
+            )}
           </li>
         );
       })}

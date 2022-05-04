@@ -21,7 +21,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
   const mutationScreen = url.includes("/property-mutation/");
-
+  const isMobile = window.Digit.Utils.browser.isMobile();
   let index = 0; // mutationScreen ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
   const [ownershipCategory, setOwnerCategory] = React.useState("");
   let validation = {};
@@ -190,7 +190,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
           )}
         />
       </LabelFieldPair>
-      <CardLabelError style={errorStyle}>{touched?.ownershipCategory ? errors?.ownershipCategory?.message : ""}</CardLabelError>
+      {/* <CardLabelError style={errorStyle}>{touched?.ownershipCategory ? errors?.ownershipCategory?.message : ""}</CardLabelError> */}
       {ownerDetails?.map((owner, index) => {
         return (
           <div
@@ -203,17 +203,17 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
               padding: "16px 8px",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              {ismultiple && (
+            {isMobile && ismultiple && ownerDetails.length > 1 && (
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <LinkButton
                   label={<DeleteIcon style={{ bottom: "5px" }} fill={!(ownerDetails.length == 1) ? "#494848" : "#FAFAFA"} />}
-                  style={{}}
+                  style={{ margin: "0px" }}
                   onClick={(e) => {
                     setOwnerDetails([...ownerDetails.filter((own, ind) => ind != index)]);
                   }}
                 />
-              )}
-            </div>
+              </div>
+            )}
             <LabelFieldPair>
               <CardLabel>{`${t("PT_FORM3_MOBILE_NUMBER")}*`}</CardLabel>
 
@@ -244,6 +244,19 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
                   )}
                 />
               </div>
+              {!isMobile && (
+                <div style={{ display: "flex", justifyContent: "flex-end", width: "20%", alignSelf: "flex-start" }}>
+                  {ismultiple && (
+                    <LinkButton
+                      label={<DeleteIcon style={{ bottom: "0px" }} fill={!(ownerDetails.length == 1) ? "#494848" : "#FAFAFA"} />}
+                      style={{ margin: "0px" }}
+                      onClick={(e) => {
+                        setOwnerDetails([...ownerDetails.filter((own, ind) => ind != index)]);
+                      }}
+                    />
+                  )}
+                </div>
+              )}
             </LabelFieldPair>
             <CardLabelError style={errorStyle}>{touched?.["mobileNumber" + index] ? errors?.["mobileNumber" + index]?.message : ""}</CardLabelError>
 
@@ -465,38 +478,38 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
               checked={ownerDetails?.[index]?.isCoresAddr || false}
               style={{ paddingTop: "10px" }}
             />
-            {ismultiple ? (
-              <div>
-                <div style={{ display: "flex", paddingBottom: "15px", color: "#FF8C00" }}>
-                  <button
-                    type="button"
-                    style={{ paddingTop: "10px" }}
-                    onClick={() =>
-                      setOwnerDetails((prev) => [
-                        ...prev,
-                        {
-                          name: "",
-                          gender: "",
-                          mobileNumber: "",
-                          fatherOrHusbandName: "",
-                          relationship: "",
-                          ownershipCategory: ownershipCategory,
-                          ownerType: "",
-                          permanentAddress: "",
-                          email: "",
-                          isCoresAddr: false,
-                        },
-                      ])
-                    }
-                  >
-                    {t("PT_COMMON_ADD_APPLICANT_LABEL")}
-                  </button>
-                </div>
-              </div>
-            ) : null}
           </div>
         );
       })}
+      {ismultiple ? (
+        <div>
+          <div style={{ display: "flex", paddingBottom: "15px", color: "#FF8C00" }}>
+            <button
+              type="button"
+              style={{ paddingTop: "10px" }}
+              onClick={() =>
+                setOwnerDetails((prev) => [
+                  ...prev,
+                  {
+                    name: "",
+                    gender: "",
+                    mobileNumber: "",
+                    fatherOrHusbandName: "",
+                    relationship: "",
+                    ownershipCategory: ownershipCategory,
+                    ownerType: "",
+                    permanentAddress: "",
+                    email: "",
+                    isCoresAddr: false,
+                  },
+                ])
+              }
+            >
+              {t("PT_COMMON_ADD_APPLICANT_LABEL")}
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };
