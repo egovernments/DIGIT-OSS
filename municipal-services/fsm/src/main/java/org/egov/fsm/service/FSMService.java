@@ -19,6 +19,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.fsm.config.FSMConfiguration;
 import org.egov.fsm.repository.FSMRepository;
+import org.egov.fsm.service.notification.NotificationService;
 import org.egov.fsm.util.FSMAuditUtil;
 import org.egov.fsm.util.FSMConstants;
 import org.egov.fsm.util.FSMErrorConstants;
@@ -105,6 +106,9 @@ public class FSMService {
 	@Autowired
 	private FSMRepository repository;
 
+	@Autowired
+	private NotificationService notificationService;
+	
 	public FSM create(FSMRequest fsmRequest) {
 		RequestInfo requestInfo = fsmRequest.getRequestInfo();
 //		String tenantId = fsmRequest.getFsm().getTenantId().split("\\.")[0];
@@ -220,12 +224,13 @@ public class FSMService {
 		}
 
 		enrichmentService.enrichFSMUpdateRequest(fsmRequest, mdmsData, oldFSM);
-
 		wfIntegrator.callWorkFlow(fsmRequest);
-
 		enrichmentService.postStatusEnrichment(fsmRequest);
-
+		
+		notificationService.process(fsmRequest,oldFSM);
+		
 		repository.update(fsmRequest, workflowService.isStateUpdatable(fsm.getApplicationStatus(), businessService));
+
 		return fsmRequest.getFsm();
 	}
 
