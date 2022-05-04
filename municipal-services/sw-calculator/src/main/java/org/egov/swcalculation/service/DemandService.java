@@ -84,6 +84,11 @@ public class DemandService {
 
 	@Autowired
 	private PaymentNotificationService paymentNotificationService;
+	
+	@Autowired
+	private EnrichmentService enrichmentService;
+
+
 
 	/**
 	 * Creates or updates Demand
@@ -702,7 +707,8 @@ public class DemandService {
 					List<SewerageConnection> connections = sewerageCalculatorDao.getConnectionsNoList(tenantId,
 							SWCalculationConstant.nonMeterdConnection, batchOffset, batchsize, fromDate, toDate);
 					log.info("Size of the connection list for batch : "+ batchOffset + " is " + connections.size());
-
+					connections = enrichmentService.filterConnections(connections);
+					
 					if(connections.size()>0){
 						List<CalculationCriteria> calculationCriteriaList = new ArrayList<>();
 
