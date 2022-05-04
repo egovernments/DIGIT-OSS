@@ -18,6 +18,7 @@ import EditApplication from "./EditApplication";
 import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
 import ModifyApplication from "./ModifyApplication";
 import EditModifyApplication from "./EditModifyApplication";
+import WSEditApplicationByConfig from "./EditApplication/WSEditApplicationByConfig";
 
 import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
 const App = ({ path }) => {
@@ -45,6 +46,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/modify-application`} component={ModifyApplication} />
         <PrivateRoute path={`${path}/modify-application-edit`} component={EditModifyApplication} />
         <PrivateRoute path={`${path}/bill-amend/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
+        <PrivateRoute path={`${path}/edit-application-by-config`} component={WSEditApplicationByConfig} />
 
         {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}

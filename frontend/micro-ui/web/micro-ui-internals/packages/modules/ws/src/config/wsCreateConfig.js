@@ -166,6 +166,7 @@ export const newConfig = [
       isEditConnection: true,
       isCreateConnection: true,
       isModifyConnection: true,
+      isEditByConfigConnection: true,
       body: [
         {
           type: "component",
@@ -180,6 +181,7 @@ export const newConfig = [
       isEditConnection: true,
       isCreateConnection: false,
       isModifyConnection: true,
+      isEditByConfigConnection: true,
       body: [
         {
           component: "WSEditConnectionDetails",
@@ -195,6 +197,7 @@ export const newConfig = [
       isEditConnection: true,
       isCreateConnection: true,
       isModifyConnection: true,
+      isEditByConfigConnection: true,
       body: [
         {
           component: "CPTPropertySearchNSummary",
@@ -210,6 +213,7 @@ export const newConfig = [
       isEditConnection: true,
       isCreateConnection: true,
       isModifyConnection: true,
+      isEditByConfigConnection: true,
       body: [{
         type: "component",
         key: "ConnectionHolderDetails",
@@ -253,10 +257,41 @@ export const newConfig = [
       }]
     },
     {
+      head: "WS_COMMON_ACTIVATION_CONNECTION_DETAILS",
+      isEditByConfigConnection: true,
+      body: [{
+        type: "component",
+        key: "connectionDetails",
+        component: "WSActivationConnectionDetails",
+        withoutLabel: true,
+      }]
+    },
+    {
+      head: "WS_COMMON_PLUMBER_DETAILS",
+      isEditByConfigConnection: true,
+      body: [{
+        type: "component",
+        key: "PlumberDetails",
+        component: "WSPlumberPreference",
+        withoutLabel: true,
+      }]
+    },
+    {
+      head: "WS_COMMON_ROAD_CUTTING_DETAILS",
+      isEditByConfigConnection: true,
+      body: [{
+        type: "component",
+        key: "RoadCuttingDetails",
+        component: "WSRoadCuttingDetails",
+        withoutLabel: true,
+      }]
+    },
+    {
       head: "WS_COMMON_DOCS",
       isEditConnection: true,
       isCreateConnection: true,
       isModifyConnection: true,
+      isEditByConfigConnection: true,
       body: [{
         type: "component",
         key: "DocumentsRequired",

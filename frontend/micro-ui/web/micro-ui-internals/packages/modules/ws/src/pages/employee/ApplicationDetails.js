@@ -117,9 +117,16 @@ const ApplicationDetails = () => {
       };
     }
     if (action?.action === "RESUBMIT_APPLICATION") {
+      let pathName = `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+
+      const isFieldInspector = Digit?.UserService?.getUser()?.info?.roles?.some(role=>role?.code === "WS_FIELD_INSPECTOR"); 
+      if(isFieldInspector) {
+        pathName = `/digit-ui/employee/ws/edit-application-by-config?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+      }
+
       action.redirectionUrll = {
         action: "ACTIVATE_CONNECTION",
-        pathname: `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`,
+        pathname: pathName,
         state: applicationDetails,
       };
     }
