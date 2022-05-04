@@ -109,7 +109,6 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
   } = useForm();
   const formValue = watch();
 
-
   React.useEffect(() => {
     let hasErrors = false;
     const part = {};
@@ -137,7 +136,10 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
 
     trigger();
     setIsErrors(hasErrors);
-    onSelect(config?.key, ownerDetails.map(own=>({...own,ownershipCategory:ownershipCategory?.value})));
+    onSelect(
+      config?.key,
+      ownerDetails.map((own) => ({ ...own, ownershipCategory: ownershipCategory?.value }))
+    );
   }, [ownerDetails]);
 
   React.useEffect(() => {
@@ -157,7 +159,6 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
       })
     );
   };
-
 
   const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
   const ismultiple = ownershipCategory?.code?.includes("MULTIPLEOWNERS") ? true : false;
@@ -202,18 +203,20 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
               padding: "16px 8px",
             }}
           >
-            <div style={{display:"flex",justifyContent:"flex-end"}}>
-             {ismultiple && <LinkButton
-                                        label={ <DeleteIcon style={{  bottom: "5px" }} fill={!(ownerDetails.length == 1) ? "#494848" : "#FAFAFA"}/>}
-                                        style={{}}
-                                        onClick={(e) => {
-                                          setOwnerDetails([...ownerDetails.filter((own,ind)=>ind!=index))}}
-                                    />}
-                                    </div>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              {ismultiple && (
+                <LinkButton
+                  label={<DeleteIcon style={{ bottom: "5px" }} fill={!(ownerDetails.length == 1) ? "#494848" : "#FAFAFA"} />}
+                  style={{}}
+                  onClick={(e) => {
+                    setOwnerDetails([...ownerDetails.filter((own, ind) => ind != index)]);
+                  }}
+                />
+              )}
+            </div>
             <LabelFieldPair>
-            
               <CardLabel>{`${t("PT_FORM3_MOBILE_NUMBER")}*`}</CardLabel>
-              
+
               <div className="form-field">
                 <Controller
                   key={"mobileNumber" + index}
@@ -241,10 +244,9 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
                   )}
                 />
               </div>
-              
             </LabelFieldPair>
-            <CardLabelError style={errorStyle}>{touched?.['mobileNumber'+index] ? errors?.['mobileNumber'+index]?.message : ""}</CardLabelError>
-           
+            <CardLabelError style={errorStyle}>{touched?.["mobileNumber" + index] ? errors?.["mobileNumber" + index]?.message : ""}</CardLabelError>
+
             <LabelFieldPair>
               <CardLabel>{`${t("PT_OWNER_NAME")}*`}</CardLabel>
               <div className="form-field">
@@ -278,7 +280,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
                 />
               </div>
             </LabelFieldPair>
-            <CardLabelError style={errorStyle}>{touched?.['name'+index] ? errors?.['name'+index]?.message : ""}</CardLabelError>
+            <CardLabelError style={errorStyle}>{touched?.["name" + index] ? errors?.["name" + index]?.message : ""}</CardLabelError>
 
             <LabelFieldPair>
               <CardLabel>{`${t("PT_FORM3_GENDER")}*`}</CardLabel>
@@ -322,7 +324,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
       /> */}
               </div>
             </LabelFieldPair>
-            <CardLabelError style={errorStyle}>{touched?.['gender'+index] ? errors?.['gender'+index]?.message : ""}</CardLabelError>
+            <CardLabelError style={errorStyle}>{touched?.["gender" + index] ? errors?.["gender" + index]?.message : ""}</CardLabelError>
 
             <LabelFieldPair>
               <CardLabel>{`${t("PT_FORM3_GUARDIAN_NAME")}*`}</CardLabel>
@@ -345,7 +347,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
                       name={"fatherOrHusbandName" + index}
                       value={value}
                       onChange={(ev) => {
-                        onChange(ev.target.value)
+                        onChange(ev.target.value);
                         updateState("fatherOrHusbandName", index, ev.target.value);
                       }}
                       disable={isUpdateProperty || isEditProperty}
@@ -355,7 +357,9 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
                 />
               </div>
             </LabelFieldPair>
-            <CardLabelError style={errorStyle}>{touched?.['fatherOrHusbandName'+index] ? errors?.['fatherOrHusbandName'+index]?.message : ""}</CardLabelError>
+            <CardLabelError style={errorStyle}>
+              {touched?.["fatherOrHusbandName" + index] ? errors?.["fatherOrHusbandName" + index]?.message : ""}
+            </CardLabelError>
 
             <LabelFieldPair>
               <CardLabel>{`${t("PT_FORM3_RELATIONSHIP")}*`}</CardLabel>
@@ -399,7 +403,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
       /> */}
               </div>
             </LabelFieldPair>
-            <CardLabelError style={errorStyle}>{touched?.['relationship'+index] ? errors?.['relationship'+index]?.message : ""}</CardLabelError>
+            <CardLabelError style={errorStyle}>{touched?.["relationship" + index] ? errors?.["relationship" + index]?.message : ""}</CardLabelError>
 
             <LabelFieldPair>
               <CardLabel className="">{`${t("PT_SPECIAL_APPLICANT_CATEGORY")}*`}</CardLabel>
@@ -415,8 +419,8 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
                     }}
                     render={({ value, onChange, onBlur }) => (
                       <Dropdown
-                      selected={Menu1?.length === 1 ? Menu1[0] : value}
-                      disable={Menu1?.length === 1 || editScreen}
+                        selected={Menu1?.length === 1 ? Menu1[0] : value}
+                        disable={Menu1?.length === 1 || editScreen}
                         option={Menu1 ? Menu1.sort((a, b) => a.name.localeCompare(b.name)) : []}
                         select={(value) => {
                           onChange(value);
@@ -432,7 +436,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
                 </div>
               </div>
             </LabelFieldPair>
-            <CardLabelError style={errorStyle}>{touched?.['ownerType'+index] ? errors?.['ownerType'+index]?.message : ""}</CardLabelError>
+            <CardLabelError style={errorStyle}>{touched?.["ownerType" + index] ? errors?.["ownerType" + index]?.message : ""}</CardLabelError>
 
             <LabelFieldPair>
               <CardLabel>{t("PT_CORRESPONDANCE_ADDRESS")}</CardLabel>

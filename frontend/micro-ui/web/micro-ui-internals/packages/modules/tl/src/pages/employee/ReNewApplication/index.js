@@ -97,12 +97,13 @@ const ReNewApplication = (props) => {
       data.key = Date.now() + (index + 1) * 20;
     });
   }
-
+  if(applicationData?.tradeLicenseDetail){
+  applicationData.tradeLicenseDetail["address"]=applicationData?.tradeLicenseDetail?.address||{};
   applicationData.tradeLicenseDetail.address.locality = {
     ...applicationData?.tradeLicenseDetail?.address?.locality,
     ...{ i18nkey: applicationData?.tradeLicenseDetail?.address?.locality?.name },
   };
-
+  }
   const ownershipCategory = {
     code: applicationData?.tradeLicenseDetail?.subOwnerShipCategory,
     i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_INDIVIDUAL_${applicationData?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL") ? (applicationData?.tradeLicenseDetail?.subOwnerShipCategory.includes("GOVERNMENT") ?"OTHERGOVERNMENTINSTITUITION":"OTHERSPRIVATEINSTITUITION"):applicationData?.tradeLicenseDetail?.subOwnerShipCategory?.split(".")[1]}`,
@@ -120,7 +121,7 @@ const ReNewApplication = (props) => {
     });
   }
 
-  let clonedData = cloneDeep(props?.location?.state?.applicationData);
+  let clonedData = cloneDeep(props?.location?.state?.applicationData)||{};
   clonedData.checkForRenewal = false;
 
   const getOwners = (application) => {

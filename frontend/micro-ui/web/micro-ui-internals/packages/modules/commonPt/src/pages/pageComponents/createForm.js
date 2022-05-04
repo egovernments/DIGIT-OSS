@@ -1,7 +1,7 @@
 import { FormComposer, Loader, Dropdown, Localities, Header, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory, useRouteMatch,useLocation } from "react-router-dom";
 import { newConfig } from "../../config/Create/config";
 import _, { create, unset } from "lodash";
 
@@ -10,6 +10,8 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const tenants = Digit.Hooks.pt.useTenants();
   const { t } = useTranslation();
+  const location = useLocation();
+
   const [canSubmit, setCanSubmit] = useState(false);
   const defaultValues = { ...value};
   const history = useHistory();
@@ -48,6 +50,7 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
       if(userType === 'employee') {
         history.push(`${match.path}/save-property?redirectToUrl=${redirectUrl}`, {
           data: formValue,
+          prevState:{...location?.state}
         });
       } else {
         history.replace(`/digit-ui/citizen/commonPt/property/citizen-otp`,

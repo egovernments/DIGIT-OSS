@@ -85,7 +85,7 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
             setTimeout(() => {
               if (redirectUrl) {
                 history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${formdata.Property.tenantId}`, {
-                  ...location?.state,
+                  ...location?.state?.prevState,
                 });
                 return;
               }
@@ -102,7 +102,9 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
     if (mutation.isSuccess) {
       setTimeout(() => {
         if (redirectUrl) {
-          history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${tenant}`, { ...location?.state });
+          history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${tenant}`, {
+            ...location?.state?.prevState,
+          });
           return;
         }
       }, 3000);
@@ -126,7 +128,8 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
           setTimeout(() => {
             if (redirectUrl) {
               history.push(
-                `${redirectUrl}?propertyId=${mutationForUpdate?.data?.Properties[0]?.propertyId}&tenantId=${mutationForUpdate?.data?.Properties[0]?.tenantId}`
+                `${redirectUrl}?propertyId=${mutationForUpdate?.data?.Properties[0]?.propertyId}&tenantId=${mutationForUpdate?.data?.Properties[0]?.tenantId}`,
+                {             ...location?.state?.prevState                }
               );
               return;
             }
@@ -173,7 +176,7 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
             onSubmit={() => {
               if (redirectUrl) {
                 history.push(
-                  `${redirectUrl}?propertyId=${mutationForUpdate?.data?.Properties[0]?.propertyId}&tenantId=${formdata.Property.tenantId}`
+                  `${redirectUrl}?propertyId=${mutationForUpdate?.data?.Properties[0]?.propertyId}&tenantId=${mutationForUpdate?.data?.Properties[0]?.tenantId}`,{  ...location?.state?.prevState }
                 );
               }
             }}
