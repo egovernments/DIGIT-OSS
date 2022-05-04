@@ -8,11 +8,13 @@ import java.util.List;
 
 import org.egov.swcalculation.web.models.SewerageConnection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.egov.swcalculation.constants.SWCalculationConstant.*;
 
+@Service
 public class EnrichmentService {
 
 	@Autowired
