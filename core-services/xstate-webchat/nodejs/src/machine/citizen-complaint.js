@@ -410,10 +410,13 @@ const citizenComplaint = {
                         let complaintId=complaintDetails.complaintNumber;
                         let application_number='';
                         let phoneNumber=context.user.mobileNumber;
+                        let emailId = context.user.emailId;
+                        let location = context.user.permanentAddress;
                         let ComplaintComments=context.extraInfo.comments;
                         let imageFilestoreId=context.extraInfo.filestoreId;
                         //Insert the code for pushing email message to the Kafka topic here
                         //Email notification ends
+                        emailNotificationService.sendNewComplaintEmail({}, emailId, complaintId, complaintType, complaintSubType, application_number, phoneNumber, location, ComplaintComments, imageFilestoreId);
                          message = message.replace('{{complaintNumber}}', complaintDetails.complaintNumber);
                          dialog.sendMessage(context, message);
                     })
