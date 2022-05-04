@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.tracer.kafka.CustomKafkaTemplate;
+import org.egov.wscalculation.web.models.Property;
 import org.egov.swcalculation.config.SWCalculationConfiguration;
 import org.egov.swcalculation.constants.SWCalculationConstant;
 import org.egov.swcalculation.util.SWCalculationUtil;
@@ -114,15 +115,26 @@ public class BulkDemandAndBillGenService {
 			propertyIds.add(connection.getPropertyId());
 		}
 		List<Property> properties = wsCalculationUtil.propertySearch(requestInfo, propertyIds, tenantId);
-		Map<String, Property> propertyUuidMap = properties.stream().collect(Collectors.toMap(Property::getId, Function.identity()));
+		//Map<String, Property> propertyUuidMap = properties.stream().collect(Collectors.toMap(Property::getId, Function.identity()));
 
+		Map<String, Property> propertyIdMap = new HashMap<>();
 
+		for(Property property : properties){
+			if(propertyIdMap.containsKey(property.getPropertyId())){
+				Property oldProperty = propertyIdMap.get(property.getPropertyId());
+				if(oldProperty.getAuditDetails().getLastModifiedTime() < property.getAuditDetails().getLastModifiedTime())
+					propertyIdMap.put(property.getPropertyId(),property);
+			}
+			else
+				propertyIdMap.put(property.getPropertyId(),property);
+		}
+		
 		for (Calculation calculation : calculations) {
 
 			SewerageConnection connection = calculation.getSewerageConnection();
 			String consumerCode = connection.getConnectionNo();
 			String propertyId = connection.getPropertyId();
-			User owner = propertyUuidMap.get(propertyId).getOwners().get(0).toCommonUser();
+			User owner = propertyIdMap.get(propertyId).getOwners().get(0).toCommonUser();
 
 			List<DemandDetail> demandDetails = new LinkedList<>();
 			calculation.getTaxHeadEstimates().forEach(taxHeadEstimate -> {
