@@ -9,14 +9,14 @@
   <description>Shared classes among services</description>
   <distributionManagement>
     <repository>
-      <id>repo.egovernments.org</id>
+      <id>repo.digit.org</id>
       <name>eGov ERP Releases Repository</name>
-      <url>https://nexus-repo.egovernments.org/nexus/content/repositories/releases/</url>
+      <url>https://nexus-repo.digit.org/nexus/content/repositories/releases/</url>
     </repository>
     <snapshotRepository>
-      <id>repo.egovernments.org</id>
+      <id>repo.digit.org</id>
       <name>eGov ERP Snapshots Repository</name>
-      <url>https://nexus-repo.egovernments.org/nexus/content/repositories/snapshots/</url>
+      <url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
   <properties>
