@@ -148,14 +148,14 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         {
           label: "",
           labelChildren: (
-            <div className="tooltip" style={{position:"relative"}}>
-              <div style={{display: "flex", alignItems: "center", gap: "0 4px"}}>
+            <div className="tooltip" /* style={{position:"relative"}} */>
+              <div style={{display: "flex", /* alignItems: "center", */ gap: "0 4px"}}>
               <h2>{property.label}</h2>
               <InfoBannerIcon fill="#0b0c0c" />
-              </div>
-              <span className="tooltiptext" style={{ position:"absolute", whiteSpace: "nowrap" , fontSize:"medium" }}>
+              <span className="tooltiptext" style={{ position:"absolute", whiteSpace: "nowrap" ,width:"100%", marginLeft:"50%", fontSize:"medium" }}>
               {t(property.description) + " " + ptSearchConfig?.propertyIdFormat}
               </span>
+              </div>
             </div>
           ),
           type: property.type,
