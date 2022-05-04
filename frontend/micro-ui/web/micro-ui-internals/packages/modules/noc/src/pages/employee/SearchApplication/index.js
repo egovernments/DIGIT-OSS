@@ -33,7 +33,6 @@ const Search = ({ path }) => {
       }
     }
     setfilters(isFromClear == true ? details : __filters)
-    // debugger
     // setSearchData(_data);
     // var fromDate = new Date(_data?.fromDate);
     // fromDate?.setSeconds(fromDate?.getSeconds() - 19800);

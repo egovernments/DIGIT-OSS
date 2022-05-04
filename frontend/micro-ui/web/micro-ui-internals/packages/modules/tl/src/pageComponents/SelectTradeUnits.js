@@ -139,7 +139,6 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
 
   const onSkip = () => onSelect();
 
-  console.log(isLoading, Data, "sasas");
   return (
     <React.Fragment>
       {window.location.href.includes("/citizen") ? <Timeline /> : null}

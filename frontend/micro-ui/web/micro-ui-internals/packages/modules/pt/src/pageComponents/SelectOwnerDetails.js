@@ -154,7 +154,6 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
               ValidationRequired = {true}
               {...(validation = {
                 pattern: "^[a-zA-Z-.`' ]*$",
-                type: "tel",
                 title: t("PT_NAME_ERROR_MESSAGE"),
               })}
               disable={editScreen}
