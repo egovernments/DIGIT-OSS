@@ -226,7 +226,6 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   // useEffect(() => {
   //   if( institutionName && institutionType && mobilenumber && institutionName !== "" && institutionType !== "" && mobilenumber !== "" ){
   //     setCanmovenext(false)
-  //     debugger
   //   } else{
   //     setCanmovenext(true)
   //   }

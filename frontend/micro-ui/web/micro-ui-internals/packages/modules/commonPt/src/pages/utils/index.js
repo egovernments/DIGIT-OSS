@@ -112,18 +112,20 @@ export const setOwnerDetailsLW = (data) => {
     data.institution = institution;
     data.owners = owner;
   } else {
+    owners.map(own=>{
       owner.push({
-        emailId: owners?.emailId,
-        fatherOrHusbandName: owners?.fatherOrHusbandName,
-        gender: owners?.gender?.value,
-        sameAsPropertyAddress: owners?.isCorrespondenceAddress,
-        mobileNumber: owners?.mobileNumber,
-        name: owners?.name,
-        ownerType: owners?.ownerType?.code || "NONE",
-        permanentAddress: owners?.permanentAddress,
-        relationship: owners?.relationship?.code,
+        emailId: own?.emailId,
+        fatherOrHusbandName: own?.fatherOrHusbandName,
+        gender: own?.gender?.value,
+        sameAsPropertyAddress: own?.isCorrespondenceAddress,
+        mobileNumber: own?.mobileNumber,
+        name: own?.name,
+        ownerType: own?.ownerType?.code || "NONE",
+        permanentAddress: own?.permanentAddress,
+        relationship: own?.relationship?.code,
         documents: document,
       });
+    })
     data.owners = owner;
   }
   return data;
@@ -158,7 +160,7 @@ export const convertToPropertyLightWeight = (data = {}) => {
   let propertyType = data.PropertyType;
   // let subusagetype = data.subusagetype || null;
   let noOfFloors = 1; // data?.noOfFloors;
-
+  let ownershipCategory= data?.owners?.[0]?.ownershipCategory;
   data = setOwnerDetailsLW(data);
   data = setAddressDetailsLW(data);
   data = setPropertyDetailsLW(data);
@@ -169,7 +171,7 @@ export const convertToPropertyLightWeight = (data = {}) => {
       address: data.address,
       propertyType: propertyType,
       ...data.propertyDetails,
-      ownershipCategory: data?.ownershipCategory,
+      ownershipCategory: ownershipCategory,
       usageCategory: data?.assemblyDet?.usageCategoryMajor?.code,
       owners: data.owners,
       noOfFloors: noOfFloors,

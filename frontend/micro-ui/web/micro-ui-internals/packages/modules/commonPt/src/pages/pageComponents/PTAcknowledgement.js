@@ -1,7 +1,7 @@
 import { Banner, Card, CardText, LinkButton, Loader, Row, StatusTable, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation, useHistory} from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 // import getPTAcknowledgementData from "../../../getPTAcknowledgementData";
 import { convertToPropertyLightWeight, convertToUpdatePropertyLightWeight } from "../utils";
 
@@ -37,73 +37,74 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
   const location = useLocation();
   const stateId = Digit.ULBService.getStateId();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const history = useHistory();  
+  const history = useHistory();
 
   let data = location?.state?.data;
-  if(onSelect) {
+  if (onSelect) {
     data = formData?.cptNewProperty?.property;
   }
 
   let createNUpdate = false;
   let { data: mdmsConfig, isLoading } = Digit.Hooks.pt.useMDMS(stateId, "PropertyTax", "PTWorkflow");
-  (mdmsConfig?.PropertyTax?.PTWorkfow || []).forEach(data => {
-    if(data.enable) {
-      if((data.businessService).includes("WNS")){
+  (mdmsConfig?.PropertyTax?.PTWorkfow || []).forEach((data) => {
+    if (data.enable) {
+      if (data.businessService.includes("WNS")) {
         createNUpdate = true;
       }
     }
-  })
+  });
 
   const mutation = Digit.Hooks.pt.usePropertyAPI(
     data?.locationDet?.city ? data.locationDet?.city?.code : tenantId,
-    true, // create
+    true // create
   );
 
   const mutationForUpdate = Digit.Hooks.pt.usePropertyAPI(
     data?.locationDet?.city ? data.locationDet?.city?.code : tenantId,
-    false, // update
+    false // update
   );
 
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
-  
+
   useEffect(() => {
     try {
-      let tenant = userType === 'employee' ? tenantId : data?.locationDet?.cityCode?.code;
+      let tenant = userType === "employee" ? tenantId : data?.locationDet?.cityCode?.code;
       data.tenantId = tenant;
 
       let formdata = convertToPropertyLightWeight(data);
       formdata.Property.tenantId = formdata?.Property?.tenantId || tenant;
-      
+
       mutation.mutate(formdata, {
         onSuccess,
       });
 
-      if(!createNUpdate) {
-        if(!(mutation.isLoading && mutation.isIdle)){
-          if(mutation.isSuccess) {
+      if (!createNUpdate) {
+        if (!(mutation.isLoading && mutation.isIdle)) {
+          if (mutation.isSuccess) {
             setTimeout(() => {
-              if(redirectUrl) {
-                history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${formdata.Property.tenantId}`,{...location?.state});
+              if (redirectUrl) {
+                history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${formdata.Property.tenantId}`, {
+                  ...location?.state,
+                });
                 return;
               }
             }, 3000);
           }
         }
       }
-    } catch (err) {
-    }
+    } catch (err) {}
   }, []);
 
-  useEffect(()=>{
-    let tenant = userType === 'employee' ? tenantId : data?.locationDet?.city?.code;
+  useEffect(() => {
+    let tenant = userType === "employee" ? tenantId : data?.locationDet?.city?.code;
 
-    if(mutation.isSuccess) {
+    if (mutation.isSuccess) {
       setTimeout(() => {
-        if(redirectUrl) {
-          history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${tenant}`,{...location?.state});
+        if (redirectUrl) {
+          history.push(`${redirectUrl}?propertyId=${mutation?.data?.Properties[0]?.propertyId}&tenantId=${tenant}`, { ...location?.state });
           return;
-        } 
+        }
       }, 3000);
     }
   }, [mutation]);
@@ -111,37 +112,37 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
   useEffect(() => {
     if (mutation.isSuccess && createNUpdate) {
       try {
-        let tenant = userType === 'employee' ? tenantId : data?.locationDet?.city?.code;
+        let tenant = userType === "employee" ? tenantId : data?.locationDet?.city?.code;
         data.tenantId = tenant;
-        
+
         let formdata = convertToUpdatePropertyLightWeight(data);
         formdata.Property.tenantId = formdata?.Property?.tenantId || tenant;
-        
+
         mutationForUpdate.mutate(formdata, {
           onSuccess,
         });
 
-        if(mutationForUpdate.isSuccess) {
+        if (mutationForUpdate.isSuccess) {
           setTimeout(() => {
-            if(redirectUrl) {
-              history.push(`${redirectUrl}?propertyId=${mutationForUpdate?.data?.Properties[0]?.propertyId}&tenantId=${formdata.Property.tenantId}`);
+            if (redirectUrl) {
+              history.push(
+                `${redirectUrl}?propertyId=${mutationForUpdate?.data?.Properties[0]?.propertyId}&tenantId=${mutationForUpdate?.data?.Properties[0]?.tenantId}`
+              );
               return;
-            } 
+            }
           }, 3000);
         }
-      }
-      catch (er) {
-      }
+      } catch (er) {}
     }
   }, [mutation.isSuccess]);
 
   const onNext = () => {
-    if(onSelect) {
-      if(mutation.isSuccess) {
-        onSelect('cpt', {details: mutation?.data?.Properties[0]} );
+    if (onSelect) {
+      if (mutation.isSuccess) {
+        onSelect("cpt", { details: mutation?.data?.Properties[0] });
       }
     }
-  }
+  };
 
   return mutation.isLoading || mutation.isIdle ? (
     <Loader />
@@ -150,7 +151,7 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
       <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
       {mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>}
       {!mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
-     
+
       <StatusTable>
         {mutation.isSuccess && (
           <Row
@@ -163,9 +164,23 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
         )}
       </StatusTable>
       {/* {mutation.isSuccess && !onSelect && <SubmitBar label={t("PT_DOWNLOAD_ACK_FORM")} onSubmit={null} />} */}
-      {mutation.isSuccess && onSelect && <SubmitBar label={t("CS_COMMON_NEXT")} onSubmit={onNext} />}
-      <Link to={userType === 'employee' ? `/digit-ui/employee` : `/digit-ui/citizen`}>
-      <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} style={{color:"orange"}}/>
+      {mutation.isSuccess &&
+        (onSelect ? (
+          <SubmitBar label={t("CS_COMMON_NEXT")} onSubmit={onNext} />
+        ) : (
+          <SubmitBar
+            label={t("CS_COMMON_PROCEED")}
+            onSubmit={() => {
+              if (redirectUrl) {
+                history.push(
+                  `${redirectUrl}?propertyId=${mutationForUpdate?.data?.Properties[0]?.propertyId}&tenantId=${formdata.Property.tenantId}`
+                );
+              }
+            }}
+          />
+        ))}
+      <Link to={userType === "employee" ? `/digit-ui/employee` : `/digit-ui/citizen`}>
+        <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} style={{ color: "orange" }} />
       </Link>
     </Card>
   );
