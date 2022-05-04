@@ -771,10 +771,13 @@ export const postPaymentActivity = async (
         downloadReceiptFromFilestoreID(response.filestoreId, mode);
 
         store.dispatch(hideSpinner());
+        /*
+        Redirection removed
         setTimeout(() => {
           // store.dispatch(toggleSpinner());
           store.dispatch(setRoute(`/${module}-citizen/myApplications`));
         }, 5000); //Give 5 sec gap redirect to my applications page.
+        */
       }
       return response;
     }

@@ -36,14 +36,14 @@ const cardItems = [
     icon: <BirthIcon />,
     route: "../birth-citizen/myApplications"
   },
-  {
-    label: {
-      labelKey: "BND_HOW_IT_WORKS",
-      labelName: "How It Works"
-    },
-    icon: <HelpIcon />,
-    route: "how-it-works-birth"
-  }
+  // {
+  //   label: {
+  //     labelKey: "BND_HOW_IT_WORKS",
+  //     labelName: "How It Works"
+  //   },
+  //   icon: <HelpIcon />,
+  //   route: "how-it-works-birth"
+  // }
 
 
 ];

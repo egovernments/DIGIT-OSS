@@ -131,7 +131,7 @@ props:{
                 sm: 6,
                 align: "right",
               },
-              visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+              visible: false,
               props: {
                 //variant: "outlined",
                 color: "primary",
