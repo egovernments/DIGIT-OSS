@@ -22,6 +22,7 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: isPieClicked ? { ...value?.filters, selectedType: pieSelected } : value?.filters,
+    moduleLevel: value?.moduleLevel
   });
 
   const chartData = useMemo(() => {

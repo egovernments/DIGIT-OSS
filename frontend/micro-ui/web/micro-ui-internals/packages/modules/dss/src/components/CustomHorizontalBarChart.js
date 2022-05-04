@@ -52,6 +52,7 @@ const CustomHorizontalBarChart = ({
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
+    moduleLevel: value?.moduleLevel
   });
   const constructChartData = (data,denomination) => {
     let result = {};

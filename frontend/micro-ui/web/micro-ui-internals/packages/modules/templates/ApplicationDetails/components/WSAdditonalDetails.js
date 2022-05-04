@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { getQueryStringParams } from "../../../ws/src/utils";
 
 const cardSubHeaderStyles = () => {
-  return { fontSize: "24px", padding: "0px", margin: "0px", color: "#505A5F" };
+  // return { fontSize: "24px", padding: "0px", margin: "0px", color: "#505A5F" };
+  return { fontSize: "24px", marginBottom: "16px", marginTop: "32px" };
 };
 
 const cardDivStyles = () => {
@@ -202,7 +203,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         {wsAdditionalDetails?.additionalDetails?.connectionDetails && (
           <StatusTable>
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_COMMON_CONNECTION_DETAIL")}</CardSubHeader>
-            <div style={cardDivStyles()}>
+            <div>
               <div className="connection-details-new-value-wrapper">
                 {wsAdditionalDetails?.additionalDetails?.connectionDetails?.map((value, index) => {
                   return (
@@ -224,7 +225,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         {wsAdditionalDetails?.additionalDetails?.plumberDetails && (
           <StatusTable>
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_COMMON_PLUMBER_DETAILS")}</CardSubHeader>
-            <div style={cardDivStyles()}>
+            <div>
               <div className="plumber-details-new-value-wrapper">
                 {wsAdditionalDetails?.additionalDetails?.plumberDetails?.map((value, index) => {
                   return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />;
@@ -241,7 +242,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         {wsAdditionalDetails?.additionalDetails?.roadCuttingDetails && (
           <StatusTable>
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_ROAD_CUTTING_DETAILS")}</CardSubHeader>
-            <div style={cardDivStyles()}>
+            <div>
               <div className="plumber-details-new-value-wrapper">
                 {wsAdditionalDetails?.additionalDetails?.roadCuttingDetails?.map((value) => {
                   return (
@@ -281,7 +282,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         {wsAdditionalDetails?.additionalDetails?.activationDetails && (
           <StatusTable>
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_ACTIVATION_DETAILS")}</CardSubHeader>
-            <div style={cardDivStyles()}>
+            <div>
               <div className="plumber-details-new-value-wrapper">
                 {wsAdditionalDetails?.additionalDetails?.activationDetails?.map((value, index) => {
                   return (

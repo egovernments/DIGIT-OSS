@@ -230,7 +230,7 @@ export const createPayloadOfWS = async (data) => {
   return payload;
 }
 
-export const updatePayloadOfWS = async (data) => {
+export const updatePayloadOfWS = async (data, type) => {
   let payload = {
     ...data,
     processInstance: {
@@ -239,7 +239,7 @@ export const updatePayloadOfWS = async (data) => {
     },
     documents: JSON.parse(sessionStorage.getItem("WS_DOCUMENTS_INOF")),
     property: JSON.parse(sessionStorage.getItem("WS_PROPERTY_INOF")),
-    connectionType: "Non Metered"
+    connectionType: type === "WATER" ? null : "Non Metered"
   }
   return payload;
 }
@@ -837,7 +837,7 @@ export const convertApplicationData = (data, serviceType, modify = false, t) => 
   return payload;
 }
 
-export const convertEditApplicationDetails = async (data, appData) => {
+export const convertEditApplicationDetails = async (data, appData, actionData) => {
 
   data?.cpt?.details?.owners?.forEach(owner => {
     if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
@@ -861,9 +861,9 @@ export const convertEditApplicationDetails = async (data, appData) => {
     }] : null,
     property: data?.cpt?.details,
     processInstance: {
-      action: "RESUBMIT_APPLICATION"
+      action: actionData ? actionData :"RESUBMIT_APPLICATION"
     },
-    action: "RESUBMIT_APPLICATION",
+    action: actionData ? actionData : "RESUBMIT_APPLICATION",
     documents: data?.DocumentsRequired?.documents,
   }
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, CardLabel, DatePicker, CardLabelError, LabelFieldPair } from "@egovernments/digit-ui-react-components";
+import Timeline from "../../components/TLTimeline";
 
 const RegistrationDocument = (props) => {
   const { t, config, onSelect, userType, formData, setError, clearErrors, errors } = props;
@@ -73,6 +74,7 @@ const RegistrationDocument = (props) => {
 
   return (
     <React.Fragment>
+      <Timeline currentStep={2} flow="PT_MUTATE" />
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!(documentNumber && documentValue && documentDate)}>
         <CardLabel>{t("PT_MUTATION_DOCUMENT_NO")}</CardLabel>
         <TextInput type={"number"} min={0} value={documentNumber} onChange={(e) => setDocNo(e.target.value)} />

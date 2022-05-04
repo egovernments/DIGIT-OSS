@@ -174,9 +174,10 @@ function SelectDocument({
           {
             documentType: selectedDocument?.code,
             fileStoreId: uploadedFile,
-            documentUid: doc?.documentUid ? doc?.documentUid : uploadedFile,
+            // documentUid: doc?.documentUid ? doc?.documentUid : uploadedFile,
             i18nKey: selectedDocument?.code,
-            id: doc?.id
+            id: doc?.id,
+            status: "ACTIVE"
           },
         ];
       });

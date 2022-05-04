@@ -216,7 +216,7 @@ export const WSSearch = {
     };
 
     const AdditionalDetailsByWS = {
-      title: "WS_COMMON_ADDITIONAL_DETAILS_HEADER",
+      title: "",
       isWaterConnectionDetails: true,
       additionalDetails: {
         values: [],
@@ -316,7 +316,7 @@ export const WSSearch = {
     };
 
     let details = [];
-    details = [...details, applicationHeaderDetails, feeEstimation, propertyDetails, connectionHolderDetails, documentDetails, AdditionalDetailsByWS];
+    details = [...details, applicationHeaderDetails, feeEstimation, propertyDetails, connectionHolderDetails, AdditionalDetailsByWS, documentDetails];
     wsDataDetails.serviceType = serviceDataType;
     return {
       applicationData: wsDataDetails,

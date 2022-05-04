@@ -153,7 +153,8 @@ import {
   PGRIcon,
   TLIcon,
   BillsIcon,
-  ErrorIcon
+  ErrorIcon,
+  PrintBtnCommon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -410,4 +411,5 @@ export {
   BillsIcon,
   ErrorIcon,
   DownloadBtnCommon,
+  PrintBtnCommon
 };
