@@ -211,14 +211,14 @@ public class VehicleTripService {
 	
 	public void updateVehicleTrip(FSMRequest fsmRequest) {
 		
-		List<VehicleTrip> existingVehicleTrips = getVehicleTrips(fsmRequest, "WAITING_FOR_DISPOSAL",false);
+	//	List<VehicleTrip> existingVehicleTrips = getVehicleTrips(fsmRequest, "WAITING_FOR_DISPOSAL",false);
 		
-		if(existingVehicleTrips != null ) {
-			throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION,
-					"VehicleTrip Waiting for Disposal of Application No "
-							+ existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()
-							+ ", Cannot complete this FSM Application No " + fsmRequest.getFsm().getApplicationNo());
-		}else {
+//		if(existingVehicleTrips != null ) {
+//			throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION,
+//					"VehicleTrip Waiting for Disposal of Application No "
+//							+ existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()
+//							+ ", Cannot complete this FSM Application No " + fsmRequest.getFsm().getApplicationNo());
+//		}else {
 			List<VehicleTrip> vehicleTripsForApplication = getVehicleTrips(fsmRequest,null,true);
 					
 				if(!CollectionUtils.isEmpty(vehicleTripsForApplication)){
@@ -243,6 +243,6 @@ public class VehicleTripService {
 							"ObjectMapper not able to convertValue in userCall");
 				}
 			}
-		}
+		//}
 	}
 }
