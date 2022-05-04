@@ -36,14 +36,14 @@ const cardItems = [
     icon: <DeathIcon />,
     route: "../death-citizen/myApplications"
   },
-  {
-    label: {
-      labelKey: "BND_HOW_IT_WORKS",
-      labelName: "How It Works"
-    },
-    icon: <HelpIcon />,
-    route: "how-it-works-death"
-  }
+  // {
+  //   label: {
+  //     labelKey: "BND_HOW_IT_WORKS",
+  //     labelName: "How It Works"
+  //   },
+  //   icon: <HelpIcon />,
+  //   route: "how-it-works-death"
+  // }
 
 
 ];

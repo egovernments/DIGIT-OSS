@@ -27,6 +27,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const search = useLocation().search;
 
   const redirectUrl = new URLSearchParams(search).get("redirectToUrl");
+  const fromScreen = new URLSearchParams(search).get("from")||"";
 
   const crumbs = [
     {
@@ -36,10 +37,11 @@ const EmployeeApp = ({ path, url, userType }) => {
     },
     {
       path: { pathname: redirectUrl, state: { ...location.state } },
-      content: redirectUrl?.includes("employee/tl/new-application")
+      content:redirectUrl?( redirectUrl?.includes("employee/tl/new-application")
         ? t("ES_TITLE_NEW_TRADE_LICESE_APPLICATION")
-        : t("WF_EMPLOYEE_NEWTL_RENEWAL_SUBMIT_BUTTON"),
-      show: redirectUrl&&true,
+        : t("WF_EMPLOYEE_NEWTL_RENEWAL_SUBMIT_BUTTON")):(fromScreen&&t(fromScreen))||"NONE",
+      show: (redirectUrl || fromScreen) &&true,
+      isBack:fromScreen&& true
     },
     {
       path: "/digit-ui/employee/dss/drilldown",

@@ -172,7 +172,7 @@ export const TLSearch = {
         { title: "PROPERTY_ADDRESS", value: propertyAddress || "NA" },
         {
           title: "TL_VIEW_PROPERTY_DETAIL",
-          to: `/digit-ui/employee/commonpt/view-property?propertyId=${propertyDetails?.Properties?.[0]?.propertyId}&tenantId=${propertyDetails?.Properties?.[0]?.tenantId}`,
+          to: `/digit-ui/employee/commonpt/view-property?propertyId=${propertyDetails?.Properties?.[0]?.propertyId}&tenantId=${propertyDetails?.Properties?.[0]?.tenantId}&from=TL_APPLICATION_DETAILS_LABEL`,
           value: "",
           isLink: true,
         },

@@ -96,6 +96,8 @@ const newRegistration = {
     let userAction = getQueryArg(window.location.href, "action");
     let id = getQueryArg(window.location.href, "certificateId");
     let module = getQueryArg(window.location.href, "module");
+    dispatch(
+      prepareFinalObject("bnd",{}));
     loadHospitals(action, state, dispatch, "death", getTenantId()).then(
       (response) => {
         if (
