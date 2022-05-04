@@ -120,7 +120,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 		PitDetail pitDetail = PitDetail.builder().height(rs.getDouble("height")).width(rs.getDouble("width"))
 				.diameter(rs.getDouble("diameter")).length(rs.getDouble("length"))
 				.distanceFromRoad(rs.getDouble("distanceFromRoad")).id(rs.getString("fsm_pit_id"))
-				.additionalDetails(getAdditionalDetail("fsm_pit_additionalDetails", rs)).tenantId(rs.getString("tenantid")).build();
+				.additionalDetails(getAdditionalDetail("fsm_pit_additionalDetails", rs)).tenantId(rs.getString("tenantid")).auditDetails(auditdetails).build();
 		
 		fsm.setAddress(address);
 		fsm.setPitDetail(pitDetail);
