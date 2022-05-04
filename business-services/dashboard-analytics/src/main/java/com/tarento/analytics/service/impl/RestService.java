@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -47,8 +48,9 @@ public class RestService {
      * @return
      * @throws IOException
      */
+    @Cacheable(value = "tarentoResponse")
     public JsonNode search(String index, String searchQuery) {
-
+        System.out.println("INSIDE REST");
         String url =( indexServiceHost) + index + indexServiceHostSearch;
         HttpHeaders headers = getHttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
