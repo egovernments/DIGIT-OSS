@@ -5,6 +5,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.egov.tracer.model.CustomException;
 import org.egov.web.notification.mail.config.ApplicationConfiguration;
 import org.egov.web.notification.mail.consumer.contract.Email;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +84,8 @@ public class ExternalEmailService implements EmailService {
 		FileOutputStream fos = null;
 		List<String> paths = new ArrayList<>();
 		String tenantId = email.getTenantId();
-		String[] parts = email.getTenantId().split("[.]");
+		log.info("tenantId: " + tenantId);
+		String[] parts = email.getTenantId().split("\\.");
 		if(parts.length == 2) {
 			tenantId = parts[0];
 		} else if(parts.length == 3){
