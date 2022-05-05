@@ -345,7 +345,6 @@ public class NotificationUtil {
             for (EmailRequest emailRequest: emailRequestList) {
                 if (!StringUtils.isEmpty(emailRequest.getEmail().getBody())) {
                     String updatedTopic = centralInstanceUtil.getStateSpecificTopicName(emailRequest.getEmail().getTenantId(), config.getEmailNotifTopic());
-                    log.info("updatedTopic: " + updatedTopic);
                     producer.push(updatedTopic, emailRequest);
                 } else {
                     log.info("Email body is empty, hence no email notification will be sent.");

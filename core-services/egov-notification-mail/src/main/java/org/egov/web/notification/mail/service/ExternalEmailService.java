@@ -84,14 +84,11 @@ public class ExternalEmailService implements EmailService {
 		FileOutputStream fos = null;
 		List<String> paths = new ArrayList<>();
 		String tenantId = email.getTenantId();
-		log.info("tenantId: " + tenantId);
 		String[] parts = email.getTenantId().split("\\.");
 		if(parts.length == 2) {
 			tenantId = parts[0];
-			log.info("tenantID: " + tenantId);
 		} else if(parts.length == 3){
 			tenantId = parts[1];
-			log.info("tenantID: " + tenantId);
 		}
 		try {
 			helper = new MimeMessageHelper(message, true);
