@@ -1,8 +1,10 @@
 package org.egov.userevent.repository.querybuilder;
 
+import java.time.Instant;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.egov.tracer.model.CustomException;
 import org.egov.userevent.config.PropertiesManager;
 import org.egov.userevent.web.contract.EventSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +109,25 @@ public class UserEventsQueryBuilder {
             addClauseIfRequired(preparedStatementValues, queryBuilder);
 			queryBuilder.append("status IN (:status)");
 			preparedStatementValues.put("status", criteria.getStatus());
+		}
+
+		if (criteria.getFromDate() != null) {
+			addClauseIfRequired(preparedStatementValues, queryBuilder);
+
+			//If user does not specify toDate, take today's date as toDate by default.
+			if (criteria.getToDate() == null) {
+				criteria.setToDate(Instant.now().toEpochMilli());
+			}
+
+			queryBuilder.append(" createdtime BETWEEN :fromdate AND :todate");
+			preparedStatementValues.put("fromdate",criteria.getFromDate());
+			preparedStatementValues.put("todate",criteria.getToDate());
+
+		} else {
+			//if only toDate is provided as parameter without fromDate parameter, throw an exception.
+			if (criteria.getToDate() != null) {
+				throw new CustomException("INVALID_SEARCH", "Cannot specify to-Date without a from-Date");
+			}
 		}
 		if(!CollectionUtils.isEmpty(criteria.getSource())) {
             addClauseIfRequired(preparedStatementValues, queryBuilder);
