@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.tracer.model.CustomException;
 import org.egov.userevent.config.PropertiesManager;
+import org.egov.userevent.model.enums.Status;
 import org.egov.userevent.web.contract.EventSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -83,7 +84,15 @@ public class UserEventsQueryBuilder {
 		queryBuilder.append(query);
 		preparedStatementValues.put("recepients", criteria.getRecepients());
 		preparedStatementValues.put("userid", criteria.getUserids());
-		preparedStatementValues.put("status", "ACTIVE");
+		addClauseIfRequired(preparedStatementValues, queryBuilder);
+		queryBuilder.append(" status IN (:status)");
+		if(!CollectionUtils.isEmpty(criteria.getStatus()))
+			preparedStatementValues.put("status", criteria.getStatus());
+
+		else
+			preparedStatementValues.put("status", "ACTIVE");
+
+
 		if (criteria.getFromDate() != null) {
 			addClauseIfRequired(preparedStatementValues, queryBuilder);
 
