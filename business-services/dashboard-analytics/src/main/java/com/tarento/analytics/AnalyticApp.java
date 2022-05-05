@@ -41,11 +41,11 @@ public class AnalyticApp {
 	    }
 
 
-	private int workflowExpiry = 1;
+	private int workflowExpiry = 5;
 	@Bean
 	@Profile("!test")
 	public CacheManager cacheManager(){
 		return new SpringCache2kCacheManager().addCaches(b->b.name("tarentoResponse").expireAfterWrite(workflowExpiry, TimeUnit.MINUTES)
-				.entryCapacity(10));
+				.entryCapacity(120));
 	}
 }
