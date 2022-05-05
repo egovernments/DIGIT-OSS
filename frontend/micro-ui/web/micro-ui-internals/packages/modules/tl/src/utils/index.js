@@ -517,9 +517,8 @@ export const stringToBoolean = (value) => {
 
 //FinancialYear
 export const convertToEditTrade = (data, fy = []) => {
-  const currrentFYending = fy.filter(item => item.code === data?.financialYear)[0]
-    .endingDate;
-  const nextFinancialYearForRenewal = fy.filter(item => item.startingDate === currrentFYending)[0].code;
+  const currrentFYending = fy?.filter(item => item?.code === data?.financialYear)?.[0]?.endingDate;
+  const nextFinancialYearForRenewal = fy?.filter(item => item?.startingDate === currrentFYending)?.[0]?.code;
   let isDirectrenewal = stringToBoolean(sessionStorage.getItem("isDirectRenewal"));
   let formdata = {
     Licenses: [

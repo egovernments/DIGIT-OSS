@@ -145,7 +145,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   }
 
   const goNext = () => {
-    let data = formData.TradeDetails.Units;
+    let data = formData.TradeDetails;
     let formdata;
     sessionStorage.setItem("VisitedAccessoriesDetails", true);
     formdata = { ...data, accessories: fields };
@@ -215,6 +215,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                       options={sortDropdownNames(accessories.length !== 0 ? accessories : getAccessoryCategoryDropDown(), "i18nKey", t)}
                       selectedOption={field.accessory}
                       onSelect={(e) => selectAccessory(index, e)}
+                      isPTFlow={true}
                     />
                   ) : (
                     <Loader />
