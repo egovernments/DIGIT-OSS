@@ -189,7 +189,7 @@ const NewApplication = () => {
           Digit.TLService.update({ Licenses: [licenses] }, tenantId)
             .then((response) => {
               if (response?.Licenses?.length > 0) {
-                setTimeout(() => window.location.reload());
+                // setTimeout(() => window.location.reload());
                 history.replace(`/digit-ui/employee/tl/response`, { data: response?.Licenses });
                 clearSessionFormData();
               }
