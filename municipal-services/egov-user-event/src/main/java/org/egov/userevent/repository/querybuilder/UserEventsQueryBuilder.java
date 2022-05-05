@@ -84,6 +84,24 @@ public class UserEventsQueryBuilder {
 		preparedStatementValues.put("recepients", criteria.getRecepients());
 		preparedStatementValues.put("userid", criteria.getUserids());
 		preparedStatementValues.put("status", "ACTIVE");
+		if (criteria.getFromDate() != null) {
+			addClauseIfRequired(preparedStatementValues, queryBuilder);
+
+			//If user does not specify toDate, take today's date as toDate by default.
+			if (criteria.getToDate() == null) {
+				criteria.setToDate(Instant.now().toEpochMilli());
+			}
+
+			queryBuilder.append(" createdtime BETWEEN :fromdate AND :todate");
+			preparedStatementValues.put("fromdate",criteria.getFromDate());
+			preparedStatementValues.put("todate",criteria.getToDate());
+
+		} else {
+			//if only toDate is provided as parameter without fromDate parameter, throw an exception.
+			if (criteria.getToDate() != null) {
+				throw new CustomException("INVALID_SEARCH", "Cannot specify to-Date without a from-Date");
+			}
+		}
 		
 		return queryBuilder.toString();
 
