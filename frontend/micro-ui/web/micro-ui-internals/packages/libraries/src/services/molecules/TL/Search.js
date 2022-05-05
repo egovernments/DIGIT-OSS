@@ -24,7 +24,13 @@ const convertEpochToDate = (dateEpoch) => {
     return null;
   }
 };
-
+const getAddress = (address, t) => {
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+    address?.landmark ? `${address?.landmark}, ` : ""
+  }${t(Digit.Utils.pt.getMohallaLocale(address?.locality.code, address?.tenantId))}, ${t(Digit.Utils.pt.getCityLocale(address?.tenantId))}${
+    address?.pincode && t(address?.pincode) ? `, ${address.pincode}` : " "
+  }`;
+};
 export const TLSearch = {
   all: async (tenantId, filters = {}) => {
     const response = await TLService.TLsearch({ tenantId, filters });
@@ -53,40 +59,8 @@ export const TLSearch = {
       numOfApplications = await TLSearch.numberOfApplications(tenantId, filters);
     }
     let propertyAddress = "";
-    if (propertyDetails && propertyDetails?.Properties?.length) {
-      if (propertyDetails?.Properties[0]?.address?.doorNo) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.doorNo;
-        if (propertyDetails?.Properties[0]?.address?.street) {
-          propertyAddress += ", ";
-        }
-      }
-      if (propertyDetails?.Properties[0]?.address?.street) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.street;
-        if (propertyDetails?.Properties[0]?.address?.landmark) {
-          propertyAddress += ", ";
-        }
-      }
-      if (propertyDetails?.Properties[0]?.address?.landmark) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.landmark;
-        if (propertyDetails?.Properties[0]?.address?.locality?.name) {
-          propertyAddress += ", ";
-        }
-      }
-      if (propertyDetails?.Properties[0]?.address?.locality?.name) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.locality?.name;
-        if (propertyDetails?.Properties[0]?.address?.city) {
-          propertyAddress += ", ";
-        }
-      }
-      if (propertyDetails?.Properties[0]?.address?.city) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.city;
-        if (propertyDetails?.Properties[0]?.address?.pincode) {
-          propertyAddress += ", ";
-        }
-      }
-      if (propertyDetails?.Properties[0]?.address?.pincode) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.pincode;
-      }
+    if (propertyDetails && propertyDetails?.Properties.length) {
+      propertyAddress = getAddress(propertyDetails?.Properties[0]?.address, t);
     }
     let employeeResponse = [];
     const tradedetails = {
