@@ -1,11 +1,17 @@
 .searchInputFAQs {
     @apply mr-lg;
+    margin-bottom: 10px;
     input{
       margin-bottom: 0;
       background: border-box;
       @apply pr-xl;
     }
   }
+
+.faq-page{
+  width: 100%;
+  margin: 20px;
+}
 
 .faqs{
   cursor: pointer;

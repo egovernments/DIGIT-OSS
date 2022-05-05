@@ -1,4 +1,4 @@
-import { Header, TextInput, SearchIconSvg, ArrowForward, Loader} from "@egovernments/digit-ui-react-components";
+import { Header, TextInput, SearchIconSvg, ArrowForward, Loader, BackButton} from "@egovernments/digit-ui-react-components";
 import React, { useState, Fragment, useRef, useEffect}from "react";
 import { useTranslation } from "react-i18next";
 import FaqComponent from "./FaqComponent";
@@ -22,7 +22,8 @@ const FAQsSection = ({module}) => {
   }
   return (
     <Fragment>
-    <div style={{width: "100%"}}>
+    <div className="faq-page">
+      <BackButton></BackButton>
         <div style={{ marginBottom: "15px" }}>
           <Header styles={{ marginLeft: "0px", paddingTop: "10px", fontSize: "32px"}}>{t("FAQ_S")}</Header>
         </div>
