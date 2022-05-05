@@ -20,8 +20,8 @@ import { useLocation, Link, useHistory } from "react-router-dom";
 const getAddress = (address, t) => {
   return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${t(Digit.Utils.pt.getMohallaLocale(address?.locality.code, address?.tenantId))}, ${t(Digit.Utils.pt.getCityLocale(address?.tenantId))},${
-    address?.pincode && t(address?.pincode) ? `${address.pincode}` : " "
+  }${t(Digit.Utils.pt.getMohallaLocale(address?.locality.code, address?.tenantId))}, ${t(Digit.Utils.pt.getCityLocale(address?.tenantId))}${
+    address?.pincode && t(address?.pincode) ? `, ${address.pincode}` : " "
   }`;
 };
 
