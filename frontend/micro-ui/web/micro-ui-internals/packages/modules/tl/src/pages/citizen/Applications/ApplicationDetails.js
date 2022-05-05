@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../../utils/getTLAcknowledgementData";
 import TLWFApplicationTimeline from "../../../pageComponents/TLWFApplicationTimeline";
+import TLDocument from "../../../pageComponents/TLDocumets";
 
 const TLApplicationDetails = () => {
   const { t } = useTranslation();
@@ -319,6 +320,16 @@ const TLApplicationDetails = () => {
                 }`}
                 textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
               />
+              <CardSubHeader>{t("TL_COMMON_DOCS")}</CardSubHeader>
+              <div>
+                {application?.tradeLicenseDetail?.applicationDocuments?.length > 0 ? (
+                  <TLDocument value={{...application}}></TLDocument>
+                ) : (
+                  <StatusTable>
+                    <Row text={t("TL_NO_DOCUMENTS_MSG")} />
+                  </StatusTable>
+                )}
+              </div>
               <TLWFApplicationTimeline application={application} id={id} />
               {application?.status === "CITIZENACTIONREQUIRED" ? (
                 <Link
