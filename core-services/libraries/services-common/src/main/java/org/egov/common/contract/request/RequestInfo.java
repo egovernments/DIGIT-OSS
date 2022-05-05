@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -37,7 +39,7 @@ public class RequestInfo {
 
     private String correlationId;
 
-    private List<String> plainAccessRequest;
+    private List<String> plainRequestFields;
 
     private User userInfo;
 }
