@@ -143,4 +143,6 @@ public class DeathCertificate {
   private Timestamp dateofreport;
 
   private String placeofdeath;
+
+  private String year;
 }

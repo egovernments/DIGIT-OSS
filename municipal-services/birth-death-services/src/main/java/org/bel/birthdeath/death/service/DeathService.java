@@ -1,5 +1,6 @@
 package org.bel.birthdeath.death.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -100,6 +101,10 @@ public class DeathService {
 			deathCertificate.setDateofdeath(deathDtls.get(0).getDateofdeath());
 			deathCertificate.setDateofreport(deathDtls.get(0).getDateofreport());
 			deathCertificate.setPlaceofdeath(deathDtls.get(0).getPlaceofdeath());
+			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+			String date = format.format(deathDtls.get(0).getDateofreport());
+			String datestr= date.split("-")[2];
+			deathCertificate.setYear(datestr);
 		if(deathDtls.size()>1) 
 			throw new CustomException("Invalid_Input","Error in processing data");
 		enrichmentServiceDeath.enrichCreateRequest(deathCertRequest);
