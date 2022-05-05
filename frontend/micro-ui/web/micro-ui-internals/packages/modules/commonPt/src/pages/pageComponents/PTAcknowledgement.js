@@ -167,9 +167,9 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
         )}
       </StatusTable>
       {/* {mutation.isSuccess && !onSelect && <SubmitBar label={t("PT_DOWNLOAD_ACK_FORM")} onSubmit={null} />} */}
-      {mutation.isSuccess &&
+      {mutation.isSuccess && window.location.href.includes("/citizen/") &&
         (onSelect ? (
-          <SubmitBar label={t("CS_COMMON_NEXT")} onSubmit={onNext} />
+          <SubmitBar label={t("CS_COMMON_PROCEED")} onSubmit={onNext} />
         ) : (
           <SubmitBar
             label={t("CS_COMMON_PROCEED")}
@@ -182,9 +182,6 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
             }}
           />
         ))}
-      <Link to={userType === "employee" ? `/digit-ui/employee` : `/digit-ui/citizen`}>
-        <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} style={{ color: "orange" }} />
-      </Link>
     </Card>
   );
 };
