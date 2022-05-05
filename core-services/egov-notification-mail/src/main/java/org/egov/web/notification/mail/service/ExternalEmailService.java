@@ -17,6 +17,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.egov.common.utils.MultiStateInstanceUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,6 +53,9 @@ public class ExternalEmailService implements EmailService {
 	private String filestore_format;
 
 	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+
+	@Autowired
 	private Environment env;
 
 	public static final String EXCEPTION_MESSAGE = "Exception creating HTML email";
@@ -83,13 +87,7 @@ public class ExternalEmailService implements EmailService {
 		MimeMessageHelper helper;
 		FileOutputStream fos = null;
 		List<String> paths = new ArrayList<>();
-		String tenantId = email.getTenantId();
-		String[] parts = email.getTenantId().split("\\.");
-		if(parts.length == 2) {
-			tenantId = parts[0];
-		} else if(parts.length == 3){
-			tenantId = parts[1];
-		}
+		String tenantId = centralInstanceUtil.getStateLevelTenant(email.getTenantId());
 		try {
 			helper = new MimeMessageHelper(message, true);
 			helper.setTo(email.getEmailTo().toArray(new String[0]));
