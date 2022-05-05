@@ -246,7 +246,7 @@ const ApplicationDetails = () => {
 
   return (
     <div >
-      <div className="cardHeaderWithOptions" >
+      <div /* style={{marginLeft: "15px"}} */>
         <Header>{(applicationDetails?.applicationData?.workflowCode == "NewTL" && applicationDetails?.applicationData?.status !== "APPROVED") ? t("TL_TRADE_APPLICATION_DETAILS_LABEL") : t("TL_TRADE_LICENSE_DETAILS_LABEL")}</Header>
         <MultiLink
                 className="multilinkWrapper"

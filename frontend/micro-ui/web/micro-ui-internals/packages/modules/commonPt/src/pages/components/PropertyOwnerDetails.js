@@ -476,7 +476,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
               onChange={(e) => setCorrespondenceAddress(e, index)}
               value={ownerDetails?.[index]?.isCoresAddr}
               checked={ownerDetails?.[index]?.isCoresAddr || false}
-              style={{ paddingTop: "10px" }}
+              style={window.location.href.includes("/citizen/")?{ paddingTop: "10px" }:{}}
             />
           </div>
         );
