@@ -50,6 +50,8 @@ const EmployeeApp = ({ path, url, userType }) => {
     },
   ];
 
+  const locationCheck = window.location.href.includes("/employee/commonpt/new-application")
+
   return (
     <Switch>
       <React.Fragment>
@@ -60,7 +62,9 @@ const EmployeeApp = ({ path, url, userType }) => {
             </Link>{" "}
             / <span>{getBreadCrumb()}</span>
           </p> */}
+          <div style={locationCheck ? {marginLeft:"12px"} : {}}>
           <BreadCrumb crumbs={crumbs} />
+          </div>
           <PrivateRoute exact path={`${path}/`} component={() => <CommonPTLinks matchPath={path} userType={userType} />} />
           <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
           <PrivateRoute path={`${path}/search`} component={() => <Search />} />
