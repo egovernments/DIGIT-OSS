@@ -151,7 +151,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
               <div style={{display: "flex", /* alignItems: "center", */ gap: "0 4px"}}>
               <h2>{property.label}</h2>
               <InfoBannerIcon fill="#0b0c0c" />
-              <span className="tooltiptext" style={{ position:"absolute", whiteSpace: "nowrap" ,width:"100%", marginLeft:"50%", fontSize:"medium" }}>
+              <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
               {t(property.description) + " " + ptSearchConfig?.propertyIdFormat}
               </span>
               </div>
