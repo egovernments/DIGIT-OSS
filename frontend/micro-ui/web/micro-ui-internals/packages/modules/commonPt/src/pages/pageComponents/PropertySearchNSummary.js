@@ -44,7 +44,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
   );
 
   useEffect(() => {
-    if (propertyId && window.location.href.includes("/renew-application-details/")) setSearchPropertyId(propertyId);
+    if (propertyId && (window.location.href.includes("/renew-application-details/") || window.location.href.includes("/edit-application-details/"))) setSearchPropertyId(propertyId);
   }, [propertyId]);
 
   useEffect(() => {
