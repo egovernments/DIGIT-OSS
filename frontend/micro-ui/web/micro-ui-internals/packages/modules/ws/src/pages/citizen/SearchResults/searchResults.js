@@ -23,7 +23,7 @@ const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
   const Waterresult = Digit.Hooks.ws.useWaterSearch({ tenantId, filters:{...filters},BusinessService:"WS", t });
   const Sewarageresult = Digit.Hooks.ws.useSewarageSearch({ tenantId, filters:{...filters},BusinessService:"SW",t });
 
-  if (Waterresult?.isLoading || Sewarageresult?.isLoading || Waterresult == undefined || Sewarageresult == undefined) {
+  if (Waterresult == undefined && Sewarageresult == undefined) {
     return <Loader />;
   }
 
@@ -33,7 +33,19 @@ const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
 
   const payment = {};
 
-  const searchResults = Waterresult && Sewarageresult ? Waterresult.concat(Sewarageresult) : [];
+  let searchResults = []
+  if(Waterresult && Sewarageresult)
+  {
+   searchResults = Waterresult.concat(Sewarageresult);
+  }
+  else if(Waterresult)
+  {
+    searchResults = Waterresult;
+  }
+  else if(Sewarageresult)
+  {
+    searchResults = Sewarageresult;
+  }
 
   return (
     <div style={{ marginTop: "16px" }}>

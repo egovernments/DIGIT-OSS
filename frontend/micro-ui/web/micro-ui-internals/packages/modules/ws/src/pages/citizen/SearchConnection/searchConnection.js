@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FormComposer, CardLabelDesc, Loader, Menu } from "@egovernments/digit-ui-react-components";
+import { FormComposer, CardLabelDesc, Loader, Menu, InfoBannerIcon } from "@egovernments/digit-ui-react-components";
 import { FormStep, CardLabel, RadioButtons, RadioOrSelect, Localities } from "@egovernments/digit-ui-react-components";
 import { TextInput, LabelFieldPair, Dropdown, Toast } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
@@ -199,7 +199,18 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
           />
         </div>
         <CardLabel style={{textAlign:"center",color:"#505A5F"}}>{`${t("(or)")}`}</CardLabel>
+        <div style={{display:"flex"}}>
         <CardLabel>{`${t("WS_MYCONNECTIONS_CONSUMER_NO")}`}</CardLabel>
+        <div className="tooltip" style={{position:"relative"}}>
+              <div style={{display: "flex", alignItems: "center", gap: "0 4px"}}>
+              <h2>{""}</h2>
+              <InfoBannerIcon fill="#0b0c0c" />
+              </div>
+              <span className="tooltiptext" style={{ position:"absolute" , fontSize:"medium" }}>
+              {t("WS_CONSUMER_DESC") + " " + "WS_CONSUMER_FORMAT"}
+              </span>
+          </div>
+          </div>
         <TextInput
           t={t}
           type={"any"}
@@ -210,7 +221,17 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
           onChange={selectconsumerNumber}
         />
         {logginedUser && <CardLabel style={{textAlign:"center",color:"#505A5F"}}>{`${t("(or)")}`}</CardLabel>}
-        {logginedUser && <CardLabel>{`${t("WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL")}`}</CardLabel>}
+        {logginedUser && <div style={{display:"flex"}}> <CardLabel>{`${t("WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL")}`}</CardLabel>
+        <div className="tooltip" style={{position:"relative"}}>
+              <div style={{display: "flex", alignItems: "center", gap: "0 4px"}}>
+              <h2>{""}</h2>
+              <InfoBannerIcon fill="#0b0c0c" />
+              </div>
+              <span className="tooltiptext" style={{ position:"absolute" , fontSize:"medium" }}>
+              {t("WS_CONSUMER_DESC") + " " + "WS_CONSUMER_FORMAT"}
+              </span>
+          </div>
+          </div>}
         {logginedUser && <TextInput
           t={t}
           type={"any"}
