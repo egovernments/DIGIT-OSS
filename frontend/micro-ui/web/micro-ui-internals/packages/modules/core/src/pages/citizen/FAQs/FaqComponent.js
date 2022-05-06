@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { ArrowForward } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 
 const FaqComponent = props => {
   const { question, answer } = props;
   const [isOpen, toggleOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <div className="faqs" onClick={() => toggleOpen(!isOpen)}>
           <div className="faq-question" style={{justifyContent: "space-between", display: "flex"}}>
         <span>
-          {question}
+        {t(question)}
         </span>
         <span className={isOpen ? "faqicon rotate" : "faqicon"} style={{float: "right"}}>
             {isOpen ? <ArrowForward /> : <ArrowForward/>}
@@ -21,7 +23,7 @@ const FaqComponent = props => {
         style={isOpen ? { display: "block"} : { display: "none" }}
       >
         <span>
-          {answer}
+        {t(answer)}
         </span>
       </div>
         </div>

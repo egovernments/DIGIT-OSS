@@ -1,7 +1,9 @@
 package org.bel.birthdeath.birth.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -99,6 +101,10 @@ public class BirthService {
 			birthCertificate.setDistrict(birtDtls.get(0).getBirthPermaddr().getDistrict());
 			birthCertificate.setDateofbirth(birtDtls.get(0).getDateofbirth());
 			birthCertificate.setDateofreport(birtDtls.get(0).getDateofreport());
+			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+			String date = format.format(birtDtls.get(0).getDateofreport());
+			String datestr= date.split("-")[2];
+			birthCertificate.setYear(datestr);
 		if(birtDtls.size()>1) 
 			throw new CustomException("Invalid_Input","Error in processing data");
 		enrichmentService.enrichCreateRequest(birthCertRequest);

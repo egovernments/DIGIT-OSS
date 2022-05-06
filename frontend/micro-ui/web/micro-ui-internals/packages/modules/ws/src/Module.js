@@ -26,6 +26,7 @@ import EditApplication from "./pages/citizen/EditApplication";
 import SearchApplication from "./components/SearchApplication";
 import SearchWaterConnection from "./components/SearchWaterConnection";
 import WSCard from "./components/WSCard";
+import SWCard from "./components/SWCard";
 import MyConnections from "./pages/citizen/MyConnection";
 import ConnectionDetails from "./pages/citizen/MyConnection/ConnectionDetails";
 
@@ -137,7 +138,8 @@ const componentsToRegister = {
   ConsumptionDetails,
   EditApplication,
   WSDisconnectionDocsRequired,
-  WSInbox
+  WSInbox,
+  SWCard
 };
 
 export const initWSComponents = () => {

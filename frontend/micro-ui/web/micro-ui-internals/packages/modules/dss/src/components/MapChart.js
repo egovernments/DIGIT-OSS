@@ -140,20 +140,6 @@ const MapChart = ({
   if (isLoading || isLoadingNAT) {
     return <Loader />
   }
-  let data1 = response?.responseData?.data?.filter((dat) => 
-  {
-    let totalCount = dat.plots[3].value;
-    let liveCount = dat.plots[4].value;
-    let live = dat.plots[4].strValue > 0 ? true : false;
-    DataObj[dat.headerName] = {
-      ...DataObj?.[dat.headerName],
-      status: dat.plots[2].strValue,
-      value: live ? liveCount : totalCount,
-      live,
-      totalCount,
-      liveCount,
-    };
-  }); 
 
   return (
     <ResponsiveContainer

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import MobileSearchWater from "./MobileSearchWater";
 
-const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk }) => {
+const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, businessService }) => {
   const replaceUnderscore = (str) => {
     str = str.replace(/_/g, " ");
     return str;
@@ -182,7 +182,7 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk }) =>
 
   return (
     <>
-      <Header styles={{ fontSize: "32px" }}>{t("WS_SEARCH_CONNECTION_SUB_HEADER")}</Header>
+      <Header styles={{ fontSize: "32px" }}>{ businessService === "WS" ? t("WS_WATER_SEARCH_CONNECTION_SUB_HEADER") : t("WS_SEWERAGE_SEARCH_CONNECTION_SUB_HEADER") }</Header>
       <SearchForm className="ws-custom-wrapper" onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <SearchFields {...{ register, control, reset, tenantId, t }} />
       </SearchForm>

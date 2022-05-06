@@ -263,7 +263,7 @@ public class CommonRepository {
 			case "female":
 				birthDtl.setGender(2);
 				break;
-			case "transgender":
+			case "others":
 				birthDtl.setGender(3);
 				break;
 			default:
@@ -565,7 +565,7 @@ public class CommonRepository {
 			case "female":
 				deathDtl.setGender(2);
 				break;
-			case "transgender":
+			case "others":
 				deathDtl.setGender(3);
 				break;
 			default:
@@ -846,7 +846,7 @@ public class CommonRepository {
 			case "female":
 				birthDtl.setGender(2);
 				break;
-			case "transgender":
+			case "others":
 				birthDtl.setGender(3);
 				break;
 			default:
@@ -950,7 +950,7 @@ public class CommonRepository {
 			case "female":
 				deathDtl.setGender(2);
 				break;
-			case "transgender":
+			case "others":
 				deathDtl.setGender(3);
 				break;
 			default:

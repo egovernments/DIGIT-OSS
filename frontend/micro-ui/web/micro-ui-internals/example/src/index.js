@@ -57,6 +57,7 @@ const enabledModules = [
   "CommonPT",
   "NDSS",
   "Bills",
+  "SW"
 ];
 
 const initTokens = (stateCode) => {

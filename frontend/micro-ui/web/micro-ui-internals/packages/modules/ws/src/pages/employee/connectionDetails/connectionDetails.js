@@ -34,7 +34,7 @@ const GetConnectionDetails = () => {
     error: updateError,
     mutate,
   } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
-  const mobileView = Digit.Utils.browser.isMobile() ? true : false;
+  const mobileView = Digit.Utils.browser.isMobile();
 
   const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
     {
@@ -119,7 +119,7 @@ const GetConnectionDetails = () => {
         label: "WORKFLOW_IN_PROGRESS",
       });
       return;
-    } else billData?.length > 0;
+    } else billData?.length === 0;
     history.push(`${pathname}`, { data: applicationDetails });
   };
 

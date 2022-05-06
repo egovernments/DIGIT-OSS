@@ -9,8 +9,8 @@ const getAddress = (address, t) => {
   }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`;
 };
 
-const combineResponse = (WaterConnections, SewerageConnections, Properties, billData, t) => {
-  const data = WaterConnections?.concat(SewerageConnections);
+const combineResponse = (WaterConnections, SewerageConnections, businessService, Properties, billData, t) => {
+  const data = businessService ? businessService === "WS" ? WaterConnections : SewerageConnections : WaterConnections?.concat(SewerageConnections);
   if (billData) {
     data.forEach((app) => {
       const bill = billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0];
@@ -102,15 +102,43 @@ const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) =>
     }
   );
 
-  return responseWS?.isLoading || responseSW?.isLoading || properties?.isLoading || billData?.isLoading
+  if(bussinessService === "WS"){
+    return responseWS?.isLoading || properties?.isLoading || billData?.isLoading
     ? undefined
     : combineResponse(
-        responseWS?.data?.WaterConnection,
-        responseSW?.data?.SewerageConnections,
-        properties?.data?.Properties,
-        billData?.data?.Bill,
-        t
-      );
+      responseWS?.data?.WaterConnection,
+      [],
+      bussinessService,
+      properties?.data?.Properties,
+      billData?.data?.Bill,
+      t
+    );
+
+  }
+  else if(bussinessService === "SW"){
+    return responseSW?.isLoading || properties?.isLoading || billData?.isLoading
+    ? undefined
+    : combineResponse(
+      [],
+      responseSW?.data?.SewerageConnections,
+      bussinessService,
+      properties?.data?.Properties,
+      billData?.data?.Bill,
+      t
+    );
+  }
+  else{
+    return responseWS?.isLoading || responseSW?.isLoading || properties?.isLoading || billData?.isLoading
+      ? undefined
+      : combineResponse(
+          responseWS?.data?.WaterConnection,
+          responseSW?.data?.SewerageConnections,
+          bussinessService,
+          properties?.data?.Properties,
+          billData?.data?.Bill,
+          t
+        );
+  }
 };
 
 export default useSearchWS;

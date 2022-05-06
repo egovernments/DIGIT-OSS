@@ -5,7 +5,7 @@ import SearchFields from "./SearchFields";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import MobileSearchApplication from "./MobileSearchApplication";
-const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk }) => {
+const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, businessService }) => {
   const replaceUnderscore = (str) => {
     str = str.replace(/_/g, " ");
     return str;
@@ -151,7 +151,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk }) => {
 
   return (
     <>
-      <Header styles={{ fontSize: "32px" }}>{t("WS_SEARCH_APPLICATION_SUB_HEADER")}</Header>
+      <Header styles={{ fontSize: "32px" }}>{businessService === "WS" ? t("WS_WATER_SEARCH_APPLICATION_SUB_HEADER") : t("WS_SEWERAGE_SEARCH_APPLICATION_SUB_HEADER")}</Header>
       <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <SearchFields {...{ register, control, reset, tenantId, t }} />
       </SearchForm>

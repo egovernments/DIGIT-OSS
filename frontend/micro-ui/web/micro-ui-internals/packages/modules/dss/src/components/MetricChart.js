@@ -15,7 +15,7 @@ const MetricData = ({ t, data, code }) => {
         {code === "citizenAvgRating" ? (
           <Rating currentRating={Math.round(data?.headerValue * 10) / 10} styles={{ width: "unset" }} starStyles={{ width: "25px" }} />
         ) : (
-          `${Digit.Utils.dss.formatter(data?.headerValue, data?.headerSymbol, value?.denomination, true)} ${
+          `${Digit.Utils.dss.formatter(data?.headerValue, data?.headerSymbol, value?.denomination, true, t)} ${
             code === "totalSludgeTreated" ? t(`DSS_KL`) : ""
           }`
         )}

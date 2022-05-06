@@ -84,7 +84,7 @@ const WSCard = () => {
 
   const propsForModuleCard = {
     Icon: <WSICon />,
-    moduleName: t("ACTION_TEST_WATER_AND_SEWERAGE"),
+    moduleName: t("ACTION_TEST_WATER"),
     kpis: [
       {
         count: (isWSInboxLoading || isSWInboxLoading) ? "-" : totalCount,
@@ -107,17 +107,12 @@ const WSCard = () => {
         link: `/digit-ui/employee/ws/water/inbox`,
       },
       {
-        count: isSWInboxLoading ? "-" : swData?.totalCount ,
-        label: t("WS_SEWERAGE_INBOX"),
-        link: `/digit-ui/employee/ws/sewerage/inbox`,
+        label: t("WS_WATER_APPLICATION_SEARCH"),
+        link: `/digit-ui/employee/ws/water/search-application`,
       },
       {
-        label: t("ES_COMMON_APPLICATION_SEARCH"),
-        link: `/digit-ui/employee/ws/search-application`,
-      },
-      {
-        label: t("ES_COMMON_CONNECTION_SEARCH_LABEL"),
-        link: `/digit-ui/employee/ws/search`,
+        label: t("WS_WATER_CONNECTION_SEARCH_LABEL"),
+        link: `/digit-ui/employee/ws/water/search`,
       },
       {
         label: t("ACTION_TEST_RECEIPTREGISTER"),
