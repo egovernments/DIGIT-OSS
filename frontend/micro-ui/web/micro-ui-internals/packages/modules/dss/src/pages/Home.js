@@ -75,7 +75,7 @@ const Chart = ({ data , moduleLevel}) => {
   return (
     <div className="dss-insight-card">
       <p className="p1">{t(data?.name)}</p>
-      <p className="p2">{Digit.Utils.dss.formatter(response?.responseData?.data?.[0]?.headerValue, response?.responseData?.data?.[0]?.headerSymbol, 'Lac', true)}</p>
+      <p className="p2">{Digit.Utils.dss.formatter(response?.responseData?.data?.[0]?.headerValue, response?.responseData?.data?.[0]?.headerSymbol, 'Lac', true,t)}</p>
       {response?.responseData?.data?.[0]?.insight?.value ? (
         <p className={`p3 ${response?.responseData?.data?.[0]?.insight?.indicator === "upper_green" ? "color-green" : "color-red"}`}>
           {response?.responseData?.data?.[0]?.insight?.indicator === "upper_green" ? ArrowUpwardElement("10px") : ArrowDownwardElement("10px")}

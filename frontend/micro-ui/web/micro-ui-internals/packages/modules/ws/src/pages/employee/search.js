@@ -8,7 +8,10 @@ const Search = ({ path }) => {
   const [payload, setPayload] = useState({});
   const Search = Digit.ComponentRegistryService.getComponent("WSSearchApplication");
   const applicationTypes = ["NEW_WATER_CONNECTION", "NEW_SEWERAGE_CONNECTION", "MODIFY_WATER_CONNECTION", "MODIFY_SEWERAGE_CONNECTION"];
-  const [businessServ, setBusinessServ] = useState("");
+  // const [businessServ, setBusinessServ] = useState("");
+  const getUrlPathName = window.location.pathname;
+  const checkPathName = getUrlPathName.includes("water/search-application");
+  const businessServ = checkPathName ? "WS" : "SW";
 
   function onSubmit(_data) {
     const index = applicationTypes.indexOf(_data.applicationType?.code);
@@ -43,6 +46,7 @@ const Search = ({ path }) => {
         data={result ? result : { display: "ES_COMMON_NO_DATA" }}
         count={result?.count}
         resultOk={isBothCallsFinished}
+        businessService={businessServ}
       />
     </Fragment>
   );

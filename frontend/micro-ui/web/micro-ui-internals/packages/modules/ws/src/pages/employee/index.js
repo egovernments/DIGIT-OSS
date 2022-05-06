@@ -65,9 +65,11 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/response`} component={() => <Response {...{ path }} />} />
         <PrivateRoute path={`${path}/required-documents`} component={() => <RequiredDocuments {...{ path }} />} />
         <PrivateRoute path={`${path}/activate-connection`} component={ActivateConnection} />
-        <PrivateRoute path={`${path}/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
+        <PrivateRoute path={`${path}/water/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
+        <PrivateRoute path={`${path}/sewerage/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/ws-response`} component={WSResponse} />
-        <PrivateRoute path={`${path}/search`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
+        <PrivateRoute path={`${path}/water/search`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
+        <PrivateRoute path={`${path}/sewerage/search`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
         {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
         <PrivateRoute path={`${path}/consumption-details`} component={ConsumptionDetails} />

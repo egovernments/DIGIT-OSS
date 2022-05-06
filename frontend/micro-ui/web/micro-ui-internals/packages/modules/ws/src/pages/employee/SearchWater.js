@@ -9,7 +9,11 @@ const SearchWater = ({ path }) => {
   const [payload, setPayload] = useState({});
   const [setLoading, setLoadingState] = useState(false);
   const SWater = Digit.ComponentRegistryService.getComponent("WSSearchWaterConnection");
-  const [businessServ, setBusinessServ] = useState([]);
+  // const [businessServ, setBusinessServ] = useState([]);
+  const getUrlPathName = window.location.pathname;
+  const checkPathName = getUrlPathName.includes("water/search");
+  const businessServ = checkPathName ? "WS" : "SW";
+
   const [showToast, setShowToast] = useState(null);
   const serviceConfig = {
     WATER: "WATER",
@@ -56,6 +60,7 @@ const SearchWater = ({ path }) => {
         data={result ? result : { display: "ES_COMMON_NO_DATA" }}
         count={result?.TotalCount}
         resultOk={isBothCallsFinished}
+        businessService={businessServ}
       />
 
       {showToast && (
