@@ -4,7 +4,7 @@
     <ear-subdeployments-isolated>true</ear-subdeployments-isolated>
     <deployment>
         <dependencies>
-            <module name="org.apache.logging.log4j" export="true"/>
+           
             <module name="org.slf4j" export="true"/>
             <module name="org.javassist" export="true"/>
             <!--<module name="javax.jcr" export="true"/>-->
