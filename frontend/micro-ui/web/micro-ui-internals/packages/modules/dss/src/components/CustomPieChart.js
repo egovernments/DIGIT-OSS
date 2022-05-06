@@ -153,6 +153,11 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
           )}
       {isPieClicked && (
         <div>
+          { (drillDownId === "deathByCategoryDrilldownAge") && ( 
+            <span className={"dss-pie-subheader" } style={{position:"sticky" ,left:0}}>
+              {t('DSS_CMN_PIE_INFO')}
+            </span>
+          )}
           <div className="tag-container" style={{ marginBottom: "unset" }}>
             <span style={{ marginTop: "20px" }}>{t("DSS_FILTERS_APPLIED")}: </span>
             <RemoveableTag key={id} text={`${t("COMMON_MASTERS_" + Digit.Utils.locale.getTransformedLocale(pieSelected))}`} onClick={removeFilter} />
