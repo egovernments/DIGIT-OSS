@@ -148,7 +148,7 @@ public class UserEventsQueryBuilder {
 				criteria.setToDate(Instant.now().toEpochMilli());
 			}
 
-			queryBuilder.append(" createdtime BETWEEN :fromdate AND :todate");
+			queryBuilder.append(" lastmodifiedtime BETWEEN :fromdate AND :todate");
 			preparedStatementValues.put("fromdate",criteria.getFromDate());
 			preparedStatementValues.put("todate",criteria.getToDate());
 
