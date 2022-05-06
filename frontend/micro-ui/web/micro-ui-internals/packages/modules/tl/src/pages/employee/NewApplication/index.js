@@ -56,16 +56,23 @@ const NewApplication = () => {
     }
   };
   const onSubmit = (data) => {
-    if (!data?.cpt?.details || !propertyDetails) {
-      setShowToast({ key: "error" });
-      setError(t("TL_PROPERTY_ID_REQUIRED"));
-      return;
+    if(data?.cpt?.id){
+      if (!data?.cpt?.details || !propertyDetails) {
+          setShowToast({ key: "error" });
+          setError(t("ERR_INVALID_PROPERTY_ID"));
+          return;
+        }
     }
-    if (propertyId == null) {
-      setShowToast({ key: "error" });
-      setError(t("TL_PROPERTY_ID_REQUIRED"));
-      return;
-    }
+    // if (!data?.cpt?.details || !propertyDetails) {
+    //   setShowToast({ key: "error" });
+    //   setError(t("TL_PROPERTY_ID_REQUIRED"));
+    //   return;
+    // }
+    // if (propertyId == null) {
+    //   setShowToast({ key: "error" });
+    //   setError(t("TL_PROPERTY_ID_REQUIRED"));
+    //   return;
+    // }
 
     let accessories = [];
     if (data?.accessories?.length > 0) {
