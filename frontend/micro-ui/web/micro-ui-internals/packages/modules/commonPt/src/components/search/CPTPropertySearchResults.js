@@ -28,7 +28,9 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
           return (
             <div>
               <span className="link">
-              <Link to={`/digit-ui/employee/pt/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
+              <span onClick={()=>{
+                    history.push(`/digit-ui/employee/commonpt/view-property?propertyId=${row.original["propertyId"]}&tenantId=${tenantId}&redirectToUrl=${redirectToUrl}`,{...state}) } }>{row.original["propertyId"]}
+              </span>
               </span>
             </div>
           );

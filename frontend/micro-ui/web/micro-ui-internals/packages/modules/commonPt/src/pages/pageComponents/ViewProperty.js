@@ -1,6 +1,8 @@
-import { Header } from "@egovernments/digit-ui-react-components";
+import { Header, ActionBar, SubmitBar } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import ApplicationDetails from "../../../../templates/ApplicationDetails";
 
 /**
@@ -20,8 +22,15 @@ import ApplicationDetails from "../../../../templates/ApplicationDetails";
  */
 const ViewProperty = () => {
   const { t } = useTranslation();
-  const { propertyId, tenantId } = Digit.Hooks.useQueryParams();
+  const { propertyId, tenantId, redirectToUrl } = Digit.Hooks.useQueryParams();
   const { isLoading, data: applicationDetails } = Digit.Hooks.pt.useGenericViewProperty(t, tenantId, propertyId, {});
+  const { state } = useLocation();
+  const history = useHistory();
+  let workflowDetails = {};
+
+  const onSubmit = () => {
+    return history.push(`${redirectToUrl}?propertyId=${propertyId}&tenantId=${applicationDetails?.tenantId || tenantId}`,{...state});
+  }
 
   return (
     <div>
@@ -32,9 +41,15 @@ const ViewProperty = () => {
         applicationDetails={applicationDetails}
         isLoading={isLoading}
         isDataLoading={isLoading}
+        workflowDetails={workflowDetails}
         applicationData={applicationDetails?.applicationData}
         moduleCode="PT"
       />
+      {window.location.href.includes("redirectToUrl") && <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
+        <div>
+          <SubmitBar label={t("PT_ADD_PROPERTY_TO_APP")} onSubmit={() => onSubmit()} />
+        </div>
+      </ActionBar>}
     </div>
   );
 };
