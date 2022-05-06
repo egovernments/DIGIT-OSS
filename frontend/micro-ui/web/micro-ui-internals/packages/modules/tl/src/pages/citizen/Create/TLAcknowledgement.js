@@ -133,7 +133,7 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
   let enableLoader = !resubmit ? (!isEdit ? mutation.isIdle || mutation.isLoading : isDirectRenewal ? false : mutation1.isIdle || mutation1.isLoading):false;
   if(enableLoader)
   {return (<Loader />)}
-  else if( (mutation?.isSuccess == false || mutation1?.isSuccess == false) && !isDirectRenewal && !resubmit)
+  else if( ((mutation?.isSuccess == false && mutation?.isIdle == false) || (mutation1?.isSuccess == false && mutation1?.isIdle == false )) && !isDirectRenewal && !resubmit)
   {
     return (
     <Card>
