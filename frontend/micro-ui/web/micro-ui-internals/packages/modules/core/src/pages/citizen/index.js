@@ -119,10 +119,10 @@ const Home = ({
           </Card>
         </div>
       </Route>
-      <Route key={index} path={`${path}/${code.toLowerCase()}-faq`}>
+      <Route key={"faq" + index} path={`${path}/${code.toLowerCase()}-faq`}>
         <FAQsSection module={code?.toUpperCase()}/>
         </Route>
-        <Route key={index} path={`${path}/${code.toLowerCase()}-how-it-works`}>
+        <Route key={"hiw" + index} path={`${path}/${code.toLowerCase()}-how-it-works`}>
         <HowItWorks module={code?.toUpperCase()}/>
         </Route>
       </React.Fragment>

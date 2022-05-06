@@ -1,6 +1,6 @@
 .how-it-works-page{
-    width: 100%;
-    margin: 20px;
+    width: 92%;
+    margin: 16px;
     .how-it-works-page-header{
         margin-bottom: 15px;
     }
@@ -22,6 +22,15 @@
 
 .how-it-works-header-description{
     padding: 5px;
+    overflow-wrap: break-word;
+    h2{
+        font-size: 16px;
+        font-weight: 400;
+    }
+    p{
+        font-size: 12px;
+        font-weight: 400;
+    }
 }
 
 .how-it-works-pdf-section{
@@ -36,6 +45,15 @@
             display: inline-block;
             position: absolute;
             padding: 5px;
+            overflow-wrap: break-word;
+            h2{
+                font-size: 16px;
+                font-weight: 400;
+            }
+            p{
+                font-size: 12px;
+                font-weight: 400;
+            }
         }
     }
     .download-icon{
