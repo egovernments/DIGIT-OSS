@@ -78,6 +78,7 @@ const OwnerForm = (_props) => {
       mdmsData?.PropertyTax?.OwnerType?.map?.((e) => ({
         i18nKey: `${e.code.replaceAll("PROPERTY", "COMMON_MASTERS").replaceAll(".", "_")}`,
         code: e.code,
+        name:e.name
       })) || [],
     [mdmsData]
   );
@@ -556,7 +557,8 @@ const OwnerForm = (_props) => {
                           props.onChange(e);
                         }}
                         onBlur={props.onBlur}
-                        option={ownerTypesMenu}
+                        option={ownerTypesMenu ? ownerTypesMenu.sort((a, b) => a.name.localeCompare(b.name)) : []}
+
                         optionKey="i18nKey"
                         t={t}
                       />

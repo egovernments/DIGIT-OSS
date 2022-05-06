@@ -16,6 +16,11 @@ import _ from "lodash";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
+const getAddress = (address, t) => {
+  return `${address?.houseDoorNo ? `${address?.houseDoorNo}, ` : ""} ${address?.buildingColonyName ? `${address?.buildingColonyName}, ` : ""}${
+    address?.landmarkName ? `${address?.landmarkName}, ` : ""
+  }${t(address?.locality.i18nkey)}, ${t(address?.cityCode.i18nKey)},${t(address?.pincode) ? `${address.pincode}` : " "}`
+} 
 
 const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formState, ownerIndex, setError, clearErrors }) => {
   const { pathname: url } = useLocation();
@@ -67,14 +72,9 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
     let address = "";
 
     if (e.target.checked === true) {
-      const locationDet = mutationScreen ? formData?.searchResult?.property?.locationDet : formData?.locationDet;
-      const doorNo = locationDet?.houseDoorNo ? locationDet?.houseDoorNo + ", " : "";
-      const street = locationDet?.buildingColonyName ? locationDet?.buildingColonyName + ", " : "";
-      const landMark = locationDet?.landmarkName ? locationDet?.landmarkName + ", " : "";
-      const locality = locationDet?.locality?.i18nKey ? locationDet?.locality?.i18nKey + ", " : "";
-      const cityCode = locationDet?.locality?.pincode?.[0] ? locationDet?.locality?.pincode?.[0] : "";
+      const locationDet = mutationScreen ? formData?.searchResult?.property?.locationDet : formData?.locationDet;   
+      address =  getAddress(locationDet,t);
 
-      address = `${doorNo}${street}${landMark}${locality}${cityCode}`;
     }
 
     updateState("permanentAddress", ind, address);
