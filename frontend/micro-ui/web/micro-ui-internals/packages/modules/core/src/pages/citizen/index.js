@@ -76,7 +76,7 @@ const Home = ({
       <div className={`main center-container mb-25`}>
         <Switch>
           <Route exact path={path}>
-            <CitizenHome />
+            <AppHome userType="citizen" modules={modules} />
           </Route>
 
           <Route exact path={`${path}/select-language`}>

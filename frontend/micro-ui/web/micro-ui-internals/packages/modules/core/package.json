@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-core",
-  "version": "1.5.3",
+  "version": "1.5.3-alpha.1",
   "license": "MIT",
   "description": "Digit App Core Module contains all core components",
   "main": "dist/index.js",
