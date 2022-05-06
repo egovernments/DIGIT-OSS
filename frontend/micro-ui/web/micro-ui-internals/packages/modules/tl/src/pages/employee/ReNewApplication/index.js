@@ -174,13 +174,20 @@ const ReNewApplication = (props) => {
   };
 
   const onSubmit = (data) => {
-    if (!(data?.cpt?.details || propertyDetails)){
-      if(!data?.address){
-        setShowToast({ key: "error" });
-        setError("TL_PROPERTY_ID_REQUIRED");
-        return;
-      }
-    };
+    // if (!(data?.cpt?.details || propertyDetails)){
+    //   if(!data?.address){
+    //     setShowToast({ key: "error" });
+    //     setError("TL_PROPERTY_ID_REQUIRED");
+    //     return;
+    //   }
+    // };
+    if(data?.cpt?.id){
+      if (!data?.cpt?.details || !propertyDetails) {
+          setShowToast({ key: "error" });
+          setError(t("ERR_INVALID_PROPERTY_ID"));
+          return;
+        }
+    }
 
     let EDITRENEWAL = data?.tradedetils1?.checkForRenewal;
     let sendBackToCitizen = false;
