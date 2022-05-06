@@ -12,9 +12,8 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
   const editScreen = url.includes("/modify-application/");
   let ismultiple = formData?.ownershipCategory?.code.includes("SINGLEOWNER") ? false : true;
 
-  useEffect(() =>{
-    if(formData?.owners?.permanentAddress == null && isrenewtrade && permanentAddress === "")
-    {
+  useEffect(() => {
+    if (formData?.owners?.permanentAddress == null && isrenewtrade && permanentAddress === "") {
       let obj = {
         doorNo: formData?.address?.doorNo,
         street: formData?.address?.street,
@@ -30,14 +29,12 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
       }
       setPermanentAddress(addressDetails);
     }
-  },[formData])
+  }, [formData]);
   function setOwnerPermanentAddress(e) {
     setPermanentAddress(e.target.value);
   }
   function setCorrespondenceAddress(e) {
-    
-    if(formData?.cpt?.details && Object.keys(formData?.cpt?.details).length>0 && e.target.checked == true)
-    {
+    if (formData?.cpt?.details && Object.keys(formData?.cpt?.details).length > 0 && e.target.checked == true) {
       let obj = {
         doorNo: formData?.cpt?.details?.address?.doorNo,
         street: formData?.cpt?.details?.address?.street,
@@ -52,8 +49,7 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
         else addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
       }
       setPermanentAddress(addressDetails);
-    }
-    else if (e.target.checked == true) {
+    } else if (e.target.checked == true) {
       let obj = {
         doorNo: formData?.address?.doorNo,
         street: formData?.address?.street,
@@ -106,8 +102,8 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
 
   return (
     <React.Fragment>
-    {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
-      <FormStep config={config} t={t} onSelect={goNext} isDisabled={(isedittrade || isrenewtrade)?false:!permanentAddress}>
+      {window.location.href.includes("/citizen") ? <Timeline currentStep={2} /> : null}
+      <FormStep config={config} t={t} onSelect={goNext} isDisabled={isedittrade || isrenewtrade ? false : !permanentAddress}>
         <TextArea
           isMandatory={false}
           optionKey="i18nKey"
