@@ -18,7 +18,7 @@
   border-bottom: 1px solid lightgray;
   .faq-question{
     font-weight: 400;
-    margin: 5px;
+    margin: 16px;
     background: #fff;
     justify-content: space-between;
     display: flex;
@@ -33,12 +33,13 @@
     background: #fff;
     overflow: hidden;
     margin: 5px;
-    font-size: 12px;
-    font-weight: 400;
     @apply text-form-field text-text-secondary mb-sm;
 
     span {
       display: block; 
+      font-size: 12px;
+      font-weight: 400;
+      margin: 0px 12px 5px
     }
   }
 }
