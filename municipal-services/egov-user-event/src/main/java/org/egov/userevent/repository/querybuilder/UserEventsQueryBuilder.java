@@ -101,14 +101,16 @@ public class UserEventsQueryBuilder {
 				criteria.setToDate(Instant.now().toEpochMilli());
 			}
 
-			queryBuilder.append(" createdtime BETWEEN :fromdate AND :todate");
+			queryBuilder.append(" lastmodifiedtime BETWEEN :fromdate AND :todate");
 			preparedStatementValues.put("fromdate",criteria.getFromDate());
 			preparedStatementValues.put("todate",criteria.getToDate());
 
 		} else {
-			//if only toDate is provided as parameter without fromDate parameter, throw an exception.
+			//if only toDate is provided as parameter without fromDate parameter
 			if (criteria.getToDate() != null) {
-				throw new CustomException("INVALID_SEARCH", "Cannot specify to-Date without a from-Date");
+				addClauseIfRequired(preparedStatementValues, queryBuilder);
+				queryBuilder.append(" lastmodifiedtime <= :todate");
+				preparedStatementValues.put("todate",criteria.getToDate());
 			}
 		}
 		
@@ -153,7 +155,9 @@ public class UserEventsQueryBuilder {
 		} else {
 			//if only toDate is provided as parameter without fromDate parameter, throw an exception.
 			if (criteria.getToDate() != null) {
-				throw new CustomException("INVALID_SEARCH", "Cannot specify to-Date without a from-Date");
+				addClauseIfRequired(preparedStatementValues, queryBuilder);
+				queryBuilder.append(" lastmodifiedtime <= :todate");
+				preparedStatementValues.put("todate",criteria.getToDate());
 			}
 		}
 		if(!CollectionUtils.isEmpty(criteria.getSource())) {
