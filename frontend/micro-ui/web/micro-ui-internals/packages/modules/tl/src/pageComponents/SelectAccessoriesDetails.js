@@ -153,7 +153,6 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   };
 
   const onSkip = () => onSelect();
-
   return (
     <React.Fragment>
       {window.location.href.includes("/citizen") ? <Timeline /> : null}
@@ -182,7 +181,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                     background: "#FAFAFA",
                   }}
                 >
-                  <CardLabel>{`${t("TL_ACCESSORY_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_ACCESSORY_LABEL")}*`}</CardLabel>
                   <LinkButton
                     label={
                       <div>
@@ -220,7 +219,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                   ) : (
                     <Loader />
                   )}
-                  <CardLabel>{`${t("TL_ACCESSORY_COUNT_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_ACCESSORY_COUNT_LABEL")}*`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
                     t={t}
@@ -256,7 +255,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
             title: t("PT_NAME_ERROR_MESSAGE"),
           })} */
                   />
-                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}*`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
                     t={t}

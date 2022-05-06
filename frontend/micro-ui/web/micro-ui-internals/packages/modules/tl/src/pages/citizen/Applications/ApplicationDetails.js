@@ -10,6 +10,7 @@ import {
   CardSectionHeader,
   LinkLabel,
   LinkButton,
+  StatusTable,
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -17,6 +18,13 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import getPDFData from "../../../utils/getTLAcknowledgementData";
 import TLWFApplicationTimeline from "../../../pageComponents/TLWFApplicationTimeline";
 import TLDocument from "../../../pageComponents/TLDocumets";
+
+const getAddress = (address, t) => {
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+    address?.landmark ? `${address?.landmark}, ` : ""
+  }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`
+} 
+
 
 const TLApplicationDetails = () => {
   const { t } = useTranslation();
@@ -106,39 +114,7 @@ const TLApplicationDetails = () => {
 
   let propertyAddress = "";
   if (PTData && PTData?.Properties?.length) {
-    if (PTData?.data?.Properties[0]?.address?.doorNo) {
-      propertyAddress += PTData?.Properties[0]?.address?.doorNo;
-      if (PTData?.Properties[0]?.address?.street) {
-        propertyAddress += ", ";
-      }
-    }
-    if (PTData?.Properties[0]?.address?.street) {
-      propertyAddress += PTData?.Properties[0]?.address?.street;
-      if (PTData?.Properties[0]?.address?.landmark) {
-        propertyAddress += ", ";
-      }
-    }
-    if (PTData?.Properties[0]?.address?.landmark) {
-      propertyAddress += PTData?.Properties[0]?.address?.landmark;
-      if (PTData?.Properties[0]?.address?.locality?.name) {
-        propertyAddress += ", ";
-      }
-    }
-    if (PTData?.Properties[0]?.address?.locality?.name) {
-      propertyAddress += PTData?.Properties[0]?.address?.locality?.name;
-      if (PTData?.Properties[0]?.address?.city) {
-        propertyAddress += ", ";
-      }
-    }
-    if (PTData?.Properties[0]?.address?.city) {
-      propertyAddress += PTData?.Properties[0]?.address?.city;
-      if (PTData?.Properties[0]?.address?.pincode) {
-        propertyAddress += ", ";
-      }
-    }
-    if (PTData?.Properties[0]?.address?.pincode) {
-      propertyAddress += PTData?.Properties[0]?.address?.pincode;
-    }
+    propertyAddress=getAddress(PTData?.Properties[0]?.address,t);
   }
 
   const dowloadOptions =
@@ -186,6 +162,24 @@ const TLApplicationDetails = () => {
                 textStyle={{ whiteSpace: "pre", border: "none" }}
               />
               <Row label={t("TL_APPLICATION_CATEGORY")} text={t("ACTION_TEST_TRADE_LICENSE")} textStyle={{ whiteSpace: "pre" }} />
+              <Row
+                style={{ border: "none" }}
+                label={t("TL_COMMON_TABLE_COL_STATUS")}
+                text={t(`WF_NEWTL_${application?.status}`)}
+                textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
+              />
+              <Row
+                style={{ border: "none" }}
+                label={t("TL_COMMON_TABLE_COL_SLA_NAME")}
+                text={`${Math.round(application?.SLA / (1000 * 60 * 60 * 24))} ${t("TL_SLA_DAYS")}`}
+                textStyle={{ whiteSpace: "pre" }}
+              />
+              <Row
+                style={{ border: "none" }}
+                label={t("TL_COMMON_TABLE_COL_TRD_NAME")}
+                text={application?.tradeName}
+                textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
+              />
               <CardSectionHeader>{t("TL_OWNERSHIP_DETAILS_HEADER")}</CardSectionHeader>
               {application?.tradeLicenseDetail.owners.map((ele, index) => {
                 return application?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL") ? (
@@ -225,24 +219,6 @@ const TLApplicationDetails = () => {
                   </div>
                 );
               })}
-              <Row
-                style={{ border: "none" }}
-                label={t("TL_COMMON_TABLE_COL_STATUS")}
-                text={t(`WF_NEWTL_${application?.status}`)}
-                textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
-              />
-              <Row
-                style={{ border: "none" }}
-                label={t("TL_COMMON_TABLE_COL_SLA_NAME")}
-                text={`${Math.round(application?.SLA / (1000 * 60 * 60 * 24))} ${t("TL_SLA_DAYS")}`}
-                textStyle={{ whiteSpace: "pre" }}
-              />
-              <Row
-                style={{ border: "none" }}
-                label={t("TL_COMMON_TABLE_COL_TRD_NAME")}
-                text={application?.tradeName}
-                textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
-              />
               <CardSubHeader>{t("TL_TRADE_UNITS_HEADER")}</CardSubHeader>
               {application?.tradeLicenseDetail?.tradeUnits?.map((ele, index) => {
                 return (
@@ -298,21 +274,25 @@ const TLApplicationDetails = () => {
                     </div>
                   );
                 })}
-              {PTData?.Properties && PTData?.Properties.length>0 && <div><CardSubHeader>{t("PT_DETAILS")}</CardSubHeader>
-              <Row label={t("TL_PROPERTY_ID")} text={PTData?.Properties?.[0]?.propertyId} textStyle={{ whiteSpace: "pre" }} />
-              <Row label={t("PT_OWNER_NAME")} text={PTData?.Properties?.[0]?.owners[0]?.name} textStyle={{ whiteSpace: "pre" }} />
-              <Row label={t("PROPERTY_ADDRESS")} text={propertyAddress} />
-              <LinkButton
-                style={{ textAlign: "left" }}
-                label={t("TL_VIEW_PROPERTY_DETAIL")}
-                onClick={() => {
-                  history.push(
-                    `/digit-ui/citizen/commonpt/view-property?propertyId=${PTData?.Properties?.[0]?.propertyId}&tenantId=${PTData?.Properties?.[0]?.tenantId}`
-                  );
-                }}
-              ></LinkButton></div>}
+              {PTData?.Properties && PTData?.Properties.length > 0 && (
+                <div>
+                  <CardSubHeader>{t("PT_DETAILS")}</CardSubHeader>
+                  <Row label={t("TL_PROPERTY_ID")} text={PTData?.Properties?.[0]?.propertyId} textStyle={{ whiteSpace: "pre" }} />
+                  <Row label={t("PT_OWNER_NAME")} text={PTData?.Properties?.[0]?.owners[0]?.name} textStyle={{ whiteSpace: "pre" }} />
+                  <Row label={t("PROPERTY_ADDRESS")} text={propertyAddress} />
+                  <LinkButton
+                    style={{ textAlign: "left" }}
+                    label={t("TL_VIEW_PROPERTY_DETAIL")}
+                    onClick={() => {
+                      history.push(
+                        `/digit-ui/citizen/commonpt/view-property?propertyId=${PTData?.Properties?.[0]?.propertyId}&tenantId=${PTData?.Properties?.[0]?.tenantId}`
+                      );
+                    }}
+                  ></LinkButton>
+                </div>
+              )}
               <Row label="" />
-              <Row
+             { !(PTData?.Properties && PTData?.Properties.length > 0 )&&<Row
                 style={{ border: "none" }}
                 label={t("TL_NEW_TRADE_ADDRESS_LABEL")}
                 text={`${
@@ -323,7 +303,7 @@ const TLApplicationDetails = () => {
                   application?.tradeLicenseDetail?.address?.pincode?.trim() ? `,${application?.tradeLicenseDetail?.address?.pincode?.trim()}` : ""
                 }`}
                 textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
-              />
+              />}
               <CardSubHeader>{t("TL_COMMON_DOCS")}</CardSubHeader>
               <div>
                 {application?.tradeLicenseDetail?.applicationDocuments?.length > 0 ? (
