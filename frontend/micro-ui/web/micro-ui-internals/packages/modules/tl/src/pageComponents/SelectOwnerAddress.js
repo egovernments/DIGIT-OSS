@@ -16,7 +16,7 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
     if (formData?.owners?.permanentAddress == null && isrenewtrade && permanentAddress === "") {
       let obj = {
         doorNo: formData?.address?.doorNo,
-        street: formData?.address?.street,
+        street: formData?.address?.street || formData?.address?.buildingName,
         landmark: formData?.address?.landmark,
         locality: formData?.address?.locality?.name,
         city: formData?.address?.city?.code?.split(".")[1],
@@ -24,8 +24,8 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
       };
       let addressDetails = "";
       for (const key in obj) {
-        if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
-        else addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
+        if (key == "pincode" || (!obj["pincode"] && key =="city")) addressDetails += obj[key] ? obj[key] : "";
+        else if(obj[key]) addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
       }
       setPermanentAddress(addressDetails);
     }
@@ -37,7 +37,7 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
     if (formData?.cpt?.details && Object.keys(formData?.cpt?.details).length > 0 && e.target.checked == true) {
       let obj = {
         doorNo: formData?.cpt?.details?.address?.doorNo,
-        street: formData?.cpt?.details?.address?.street,
+        street: formData?.cpt?.details?.address?.street || formData?.cpt?.details?.address?.buildingName,
         landmark: formData?.cpt?.details?.address?.landmark,
         locality: formData?.cpt?.details?.address?.locality?.name,
         city: formData?.cpt?.details?.address?.city,
@@ -45,23 +45,23 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
       };
       let addressDetails = "";
       for (const key in obj) {
-        if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
-        else addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
+        if (key == "pincode" || (!obj["pincode"] && key =="city")) addressDetails += obj[key] ? obj[key] : "";
+        else if(obj[key]) addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
       }
       setPermanentAddress(addressDetails);
     } else if (e.target.checked == true) {
       let obj = {
         doorNo: formData?.address?.doorNo,
-        street: formData?.address?.street,
+        street: formData?.address?.street || formData?.address?.buildingName,
         landmark: formData?.address?.landmark,
         locality: formData?.address?.locality?.i18nkey,
-        city: formData?.address?.city?.code,
+        city: formData?.address?.city?.name,
         pincode: formData?.address?.pincode,
       };
       let addressDetails = "";
       for (const key in obj) {
-        if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
-        else addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
+        if (key == "pincode" || (!obj["pincode"] && key =="city")) addressDetails += obj[key] ? obj[key] : "";
+        else if(obj[key]) addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
       }
       setPermanentAddress(addressDetails);
     } else {

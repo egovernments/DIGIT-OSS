@@ -111,6 +111,7 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
       onSkip = {onSkip}
       showSkip = {enableSkip}
       skipStyle = {isMobile?{}:{textAlign:"right",marginRight:"55px"}}
+      sectionHeadStyle = {{marginBottom:"16px"}}
       onSubmit={onSubmit}
       noBoxShadow
       inline

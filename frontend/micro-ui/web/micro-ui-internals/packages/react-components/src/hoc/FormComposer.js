@@ -159,7 +159,7 @@ export const FormComposer = (props) => {
       props.config?.map((section, index, array) => {
         return (
           <React.Fragment key={index}>
-            {section.head && <CardSectionHeader id={section.headId}>{t(section.head)}</CardSectionHeader>}
+            {section.head && <CardSectionHeader style={props?.sectionHeadStyle ? props?.sectionHeadStyle:{}} id={section.headId}>{t(section.head)}</CardSectionHeader>}
             {section.body.map((field, index) => {
               if (props.inline)
                 return (
