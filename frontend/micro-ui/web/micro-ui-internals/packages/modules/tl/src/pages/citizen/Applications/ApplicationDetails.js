@@ -236,12 +236,7 @@ const TLApplicationDetails = () => {
                     <Row
                       style={{ border: "none" }}
                       label={t("TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL")}
-                      text={t(
-                        `TRADELICENSE_TRADETYPE_${ele?.tradeType.split(".")[0]}_${ele?.tradeType.split(".")[1]}_${ele?.tradeType
-                          .split(".")[2]
-                          .split("-")
-                          .join("_")}`
-                      )}
+                      text={t(`TL_${ele?.tradeType}`)}
                       textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
                     />
                   </div>
