@@ -215,6 +215,11 @@ const CheckPage = ({ onSubmit, value }) => {
                 />
               </div>
             ))}
+            <Row
+                  label={t("TL_CORRESPONDENCE_ADDRESS")}
+                  text={t(owners?.permanentAddress)}
+                  actionButton={<ActionButton jumpTo={`${routeLink}/owner-address`} />}
+            />
           <CardSubHeader>{t("TL_COMMON_DOCS")}</CardSubHeader>
           <ActionButton jumpTo={`${routeLink}/proof-of-identity`} />
           <div>

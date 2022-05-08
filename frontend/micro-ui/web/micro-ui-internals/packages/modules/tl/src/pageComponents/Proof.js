@@ -52,10 +52,9 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
   }
 
   useEffect(() => {
-    acceptFormat = ".jpg,.png,.pdf,.jpeg"
     (async () => {
       setError(null);
-      if (file) {
+      if (file&& file?.type) {
         if(!(acceptFormat?.split(",")?.includes(`.${file?.type?.split("/")?.pop()}`)))
         {
           setError(t("PT_UPLOAD_FORMAT_NOT_SUPPORTED"));

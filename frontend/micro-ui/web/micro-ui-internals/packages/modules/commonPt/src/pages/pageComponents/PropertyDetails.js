@@ -30,8 +30,8 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
     if (propertyDetails?.Properties[0]?.address?.doorNo) {
       propAddArr.push(propertyDetails?.Properties[0]?.address?.doorNo);
     }
-    if (propertyDetails?.Properties[0]?.address?.street) {
-      propAddArr.push(propertyDetails?.Properties[0]?.address?.street);
+    if (propertyDetails?.Properties[0]?.address?.street || propertyDetails?.Properties[0]?.address?.buildingName) {
+      propAddArr.push(propertyDetails?.Properties[0]?.address?.street || propertyDetails?.Properties[0]?.address?.buildingName);
     }
     if (propertyDetails?.Properties[0]?.address?.landmark) {
       propAddArr.push(propertyDetails?.Properties[0]?.address?.landmark);

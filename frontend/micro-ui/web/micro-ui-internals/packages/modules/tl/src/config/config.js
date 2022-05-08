@@ -449,7 +449,7 @@ export const newConfig = [
         },
         key: "owners",
         withoutLabel: true,
-        nextStep: null,
+        nextStep: "proof",
         hideInEmployee: true,
       },
       {
