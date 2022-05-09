@@ -2,6 +2,7 @@
     "name": "@egovernments/digit-ui-module-engagement",
     "version": "1.5.0-beta.6",
     "license": "MIT",
+    "description": "Digit App Core Enagagement Module contains Notification survey documents",
     "main": "dist/index.js",
     "module": "dist/index.modern.js",
     "source": "src/Module.js",
