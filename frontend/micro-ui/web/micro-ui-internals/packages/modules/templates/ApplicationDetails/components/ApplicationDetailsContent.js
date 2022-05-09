@@ -18,6 +18,7 @@ import SubOccupancyTable from "./SubOccupancyTable";
 import TLCaption from "./TLCaption";
 import TLTradeAccessories from "./TLTradeAccessories";
 import TLTradeUnits from "./TLTradeUnits";
+import DocumentsPreview from "./DocumentsPreview";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -223,6 +224,7 @@ function ApplicationDetailsContent({
           {detail?.additionalDetails?.subOccupancyTableDetails && (
             <SubOccupancyTable edcrDetails={detail?.additionalDetails} applicationData={applicationDetails?.applicationData} />
           )}
+          {detail?.additionalDetails?.documentsWithUrl && <DocumentsPreview documents={detail?.additionalDetails?.documentsWithUrl} />}
           {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
           {detail?.additionalDetails?.taxHeadEstimatesCalculation && (
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />
