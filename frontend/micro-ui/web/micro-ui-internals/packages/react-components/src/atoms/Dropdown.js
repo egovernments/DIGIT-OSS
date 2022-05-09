@@ -227,12 +227,9 @@ const Dropdown = (props) => {
                 );
               })}
             {filteredOption && filteredOption.length === 0 && (
-              <div className={`cp profile-dropdown--item display: flex `} key={"-1"} onClick={() => onSelect({
-                "code": "NOOPTION",
-                "active": true,
-                "i18nKey": "CMN_NOOPTION",
-                "label": "No Options Available",
-              })}>
+              <div className={`cp profile-dropdown--item display: flex `} key={"-1"} onClick={()=>{
+                
+              }}>
                 {<span> {props.t ? props.t("CMN_NOOPTION") : "CMN_NOOPTION"}</span>}
               </div>
             )}
