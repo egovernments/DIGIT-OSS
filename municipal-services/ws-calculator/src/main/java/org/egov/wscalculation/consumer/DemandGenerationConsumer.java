@@ -78,12 +78,16 @@ public class DemandGenerationConsumer {
 		 * this topic will be used by billing service to post message
 		 */
 		request.getMigrationCount().setAuditTopic(bulkBillGenAuditTopic);
+		request.getMigrationCount().setAuditTime(System.currentTimeMillis());
 		try {
 			bulkDemandAndBillGenService.bulkDemandGeneration(request);
 		} catch (Exception ex) {
 			/*
 			 * Error with message goes to audit topic
 			 */
+			log.error("Failed in DemandGenerationConsumer with error : " + ex.getMessage());
+			log.info("Bulk bill Errorbatch records log for batch : " + request.getMigrationCount().getOffset()
+					+ "Count is : " + request.getMigrationCount().getLimit());
 			request.getMigrationCount().setMessage("Failed in DemandGenerationConsumer with error : " + ex.getMessage());
 			producer.push(bulkBillGenAuditTopic, request.getMigrationCount());
 		}
