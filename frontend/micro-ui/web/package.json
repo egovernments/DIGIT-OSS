@@ -10,7 +10,7 @@
     "@egovernments/digit-ui-module-core":"1.5.0-beta.5",
     "@egovernments/digit-ui-module-commonpt":"1.5.0-beta.18",
     "@egovernments/digit-ui-module-engagement":"1.5.0-beta.5",
-    "@egovernments/digit-ui-module-dss":"1.5.0-beta.14",
+    "@egovernments/digit-ui-module-dss":"1.5.0-beta.15",
     "@egovernments/digit-ui-module-fsm":"1.5.0-beta.5",
     "@egovernments/digit-ui-module-hrms":"1.5.0-beta.5",
     "@egovernments/digit-ui-module-mcollect":"1.5.0-beta.6",
