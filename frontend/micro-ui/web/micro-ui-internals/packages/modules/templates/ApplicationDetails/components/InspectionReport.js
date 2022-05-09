@@ -1,7 +1,7 @@
 import { StatusTable, Row, CardHeader, CardSectionHeader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import PropertyDocuments from "./PropertyDocuments";
+import DocumentsPreview from "./DocumentsPreview";
 
 const getDocuments = (fiDocuments) => {
     const returnDocuments = [{
@@ -11,7 +11,8 @@ const getDocuments = (fiDocuments) => {
             documentType: doc?.documentType,
             documentUid: doc?.documentUid,
             fileStoreId: doc?.fileStoreId,
-            id: doc?.id
+            id: doc?.id,
+            url: doc?.url
         }))
     }];
     return returnDocuments;
@@ -37,7 +38,7 @@ function InspectionReport({ fiReport, isCitizen=false }) {
                                         <Row className="border-none" label={`${t(`${qstn.question}`)}`} text={qstn?.value ? qstn?.value : "NA"} />
                                         <Row className="border-none" label={`${t(`BPA_ENTER_REMARKS`)}`} text={qstn.remarks ? qstn.remarks : "NA"} />
                                     </div>)}
-                            <PropertyDocuments documents={getDocuments(fiData?.docs)} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />
+                            <DocumentsPreview documents={getDocuments(fiData?.docs)} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />
                         </StatusTable>
                     </div>)}
             </div>
