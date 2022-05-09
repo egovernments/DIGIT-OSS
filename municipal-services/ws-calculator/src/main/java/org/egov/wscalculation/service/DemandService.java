@@ -724,10 +724,10 @@ public class DemandService {
 
 					if (connections.size() > 0) {
 						List<CalculationCriteria> calculationCriteriaList = new ArrayList<>();
-						for (WaterConnection connectionNo : connections) {
+						for (WaterConnection connection : connections) {
 							CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
-									.assessmentYear(assessmentYear).connectionNo(connectionNo.getConnectionNo())
-									.waterConnection(connectionNo).build();
+									.assessmentYear(assessmentYear).connectionNo(connection.getConnectionNo())
+									.waterConnection(connection).build();
 							calculationCriteriaList.add(calculationCriteria);
 						}
 						MigrationCount migrationCount = MigrationCount.builder()
