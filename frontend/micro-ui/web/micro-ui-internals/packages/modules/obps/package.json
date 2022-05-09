@@ -1,7 +1,7 @@
 {
   "name": "@egovernments/digit-ui-module-obps",
   "version": "1.5.0-beta.9",
-  "description": "",
+  "description": "Digit OBPS Module",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/Module.js",
