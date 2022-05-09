@@ -323,7 +323,7 @@ public class UserEventsService {
 		events.forEach(event -> {
 			Boolean tobeAdded = false;
 			if(null != event.getEventDetails()) {
-				if(event.getEventType().equals(UserEventsConstants.MEN_MDMS_BROADCAST_CODE)) {				
+				if(event.getEventType().equals(UserEventsConstants.MEN_MDMS_BROADCAST_CODE) && !event.getStatus().equals(Status.CANCELLED)) {
 					if(null != event.getEventDetails().getFromDate()) {
 						if((event.getEventDetails().getFromDate() <= utils.getTomorrowsEpoch()) && event.getStatus().equals(Status.INACTIVE)) {
 							event.setStatus(Status.ACTIVE);
@@ -356,7 +356,7 @@ public class UserEventsService {
 				
 				else {
 					if(null != event.getEventDetails().getToDate()) {
-						if((event.getEventDetails().getToDate() < new Date().getTime())) {
+						if((event.getEventDetails().getToDate() < new Date().getTime()) && !event.getStatus().equals(Status.CANCELLED)) {
 							event.setStatus(Status.INACTIVE);
 							tobeAdded = true;
 						}
