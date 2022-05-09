@@ -712,10 +712,10 @@ public class DemandService {
 					if(connections.size()>0){
 						List<CalculationCriteria> calculationCriteriaList = new ArrayList<>();
 
-						for (SewerageConnection connectionNo : connections) {
+						for (SewerageConnection connection : connections) {
 							CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
-									.assessmentYear(estimationService.getAssessmentYear()).connectionNo(connectionNo.getConnectionNo())
-									.sewerageConnection(connectionNo).build();
+									.assessmentYear(estimationService.getAssessmentYear()).connectionNo(connection.getConnectionNo())
+									.sewerageConnection(connection).build();
 							calculationCriteriaList.add(calculationCriteria);
 						}
 
