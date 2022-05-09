@@ -29,7 +29,12 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
     if (!response) return null;
     setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     const compareFn = (a, b) => b.value - a.value;
-    return response?.responseData?.data?.[0]?.plots.sort(compareFn).reduce((acc, plot, index) => {
+    return (drillDownId === "deathByCategoryDrilldownAge") 
+    ? response?.responseData?.data?.[0]?.plots.reduce((acc, plot, index) => {
+      acc = acc.concat(plot);
+      return acc;
+    }, []) 
+    : response?.responseData?.data?.[0]?.plots.sort(compareFn).reduce((acc, plot, index) => {
       // if (index < 4) acc = acc.concat(plot);
       //else if (index === 4) acc = acc.concat({ label: null, name: "DSS.OTHERS", value: plot?.value, symbol: "amount" });
       // else acc[3].value += plot?.value;
@@ -141,6 +146,11 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
   }
   return (
     <Fragment>
+      { (id === "deathByCategory") && ( 
+            <span className={"dss-pie-subheader" } style={{position:"sticky" ,left:0}}>
+              {t('DSS_CMN_PIE_INFO')}
+            </span>
+          )}
       {isPieClicked && (
         <div>
           <div className="tag-container" style={{ marginBottom: "unset" }}>
