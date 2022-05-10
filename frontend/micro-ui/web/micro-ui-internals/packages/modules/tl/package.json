@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-tl",
-  "version": "1.5.0-beta.16",
+  "version": "1.5.0-beta.25",
   "license": "MIT",
   "description": "Digit Tradelicence Module",
   "main": "dist/index.js",

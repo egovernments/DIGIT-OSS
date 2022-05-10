@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-dss",
-  "version": "1.5.0-beta.18",
+  "version": "1.5.0-beta.25",
   "license": "MIT",
   "description": "Digit Dashboard Module",
   "main": "dist/index.js",
