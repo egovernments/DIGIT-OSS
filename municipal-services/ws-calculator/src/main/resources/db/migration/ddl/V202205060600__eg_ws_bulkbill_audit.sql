@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS eg_ws_bulkbill_audit (
   tenantid CHARACTER VARYING (256) NOT NULL,
   businessservice CHARACTER VARYING (256) NOT NULL,
   CONSTRAINT pk_eg_ws_bulkbill_audit_id PRIMARY KEY (id)
-);
+); 
