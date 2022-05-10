@@ -8,6 +8,7 @@ import { convertDateToEpoch } from "../../../utils";
 
 const NewApplication = () => {
   let tenantId = Digit.ULBService.getCurrentTenantId() || Digit.ULBService.getCitizenCurrentTenant();
+  const tenants = Digit.Hooks.tl.useTenants();
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
   const history = useHistory();
@@ -62,6 +63,13 @@ const NewApplication = () => {
           setError(t("ERR_INVALID_PROPERTY_ID"));
           return;
         }
+    }
+    const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item.toString() === data?.address?.pincode));
+    if(!foundValue && data?.address?.pincode)
+    {
+      setShowToast({ key: "error" });
+      setError(t("TL_COMMON_PINCODE_NOT_SERVICABLE"));
+      return;
     }
     // if (!data?.cpt?.details || !propertyDetails) {
     //   setShowToast({ key: "error" });
