@@ -286,7 +286,11 @@ export const OBPSService = {
       })
     });
 
-    const fileDetails =  await UploadServices.Filefetch(appDocumentFileStoreIds, Digit.ULBService.getStateId());
+    let fileDetails = {};
+    if (appDocumentFileStoreIds?.length > 0) {
+      fileDetails =  await UploadServices.Filefetch(appDocumentFileStoreIds, Digit.ULBService.getStateId());
+    }
+
 
     BPA?.additionalDetails?.fieldinspection_pending?.forEach(fiData => {
       fiData?.docs?.forEach(fiDoc => {
