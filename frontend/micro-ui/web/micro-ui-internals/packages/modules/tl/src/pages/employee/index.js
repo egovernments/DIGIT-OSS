@@ -150,7 +150,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const location = useLocation();
   const mobileView = innerWidth <= 640;
 
-  const locationCheck = window.location.href.includes("employee/tl/new-application") || window.location.href.includes("employee/tl/response") || window.location.href.includes("employee/tl/application-details") || window.location.href.includes("employee/tl/edit-application-details") || window.location.href.includes("employee/tl/renew-application-details");
+  const locationCheck = window.location.href.includes("employee/tl/new-application") || window.location.href.includes("employee/tl/response") || window.location.href.includes("employee/tl/edit-application-details") || window.location.href.includes("employee/tl/renew-application-details");
 
   const NewApplication = Digit?.ComponentRegistryService?.getComponent('TLNewApplication');
   const ReNewApplication = Digit?.ComponentRegistryService?.getComponent('TLReNewApplication');

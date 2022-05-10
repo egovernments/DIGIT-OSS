@@ -771,7 +771,7 @@ export const newRegistrationForm = getCommonCard({
         },
         required: true,
         localePrefix: {
-          moduleName: "COMMON",
+          moduleName: "BIRTH",
           masterName: "GENDER",
         },
         data: [
@@ -784,8 +784,8 @@ export const newRegistrationForm = getCommonCard({
             label: "Female",
           },
           {
-            code: "Transgender",
-            label: "Transgender",
+            code: "Others",
+            label: "Others",
           },
         ],
         props: {

@@ -28,7 +28,16 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
           return (
             <div>
               <span className="link">
-              <Link to={`/digit-ui/employee/pt/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
+                <span
+                  onClick={() => {
+                    history.push(
+                      `/digit-ui/employee/commonpt/view-property?propertyId=${row.original["propertyId"]}&tenantId=${tenantId}&redirectToUrl=${redirectToUrl}`,
+                      { ...state }
+                    );
+                  }}
+                >
+                  {row.original["propertyId"]}
+                </span>
               </span>
             </div>
           );
@@ -44,7 +53,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
         Header: t("ES_INBOX_LOCALITY"),
         disableSortBy: true,
         Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
-   },
+      },
       {
         Header: t("PT_COMMON_TABLE_COL_STATUS_LABEL"),
         Cell: ({ row }) => GetCell(t(row?.original?.status || "NA")),
@@ -52,7 +61,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
       },
       {
         Header: t("PT_AMOUNT_DUE"),
-        Cell: ({ row }) => GetCell(row?.original?.due?`₹ ${row?.original?.due}`:t("PT_NA")),
+        Cell: ({ row }) => GetCell(row?.original?.due ? `₹ ${row?.original?.due}` : t("PT_NA")),
         disableSortBy: true,
       },
       {
@@ -61,14 +70,22 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
         Cell: ({ row }) => {
           return (
             <div>
-              <span className="link">
-                { redirectToUrl
-                  ?  <span onClick={()=>{
-                    history.push(`${redirectToUrl}?propertyId=${row.original["propertyId"]}&tenantId=${tenantId}`,{...state}) } }>{t('CPT_SELECT_PROPERTY')}
+              {row?.original?.status !== "INACTIVE" ? (
+                <span className="link">
+                  {redirectToUrl ? (
+                    <span
+                      onClick={() => {
+                        history.push(`${redirectToUrl}?propertyId=${row.original["propertyId"]}&tenantId=${tenantId}`, { ...state });
+                        setTimeout(() => window.scrollTo(0, 1600), 400);
+                      }}
+                    >
+                      {t("CPT_SELECT_PROPERTY")}
                     </span>
-                  : null
-                }
-              </span>
+                  ) : null}
+                </span>
+              ) : (
+                t("PT_NA")
+              )}
             </div>
           );
         },
@@ -91,15 +108,15 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
     return tableData?.map((dataObj) => {
       const obj = {};
       columns.forEach((el) => {
-        if (el.Cell) obj[el.Header] = el.Cell({row:{original:dataObj}});
+        if (el.Cell) obj[el.Header] = el.Cell({ row: { original: dataObj } });
       });
       return obj;
     });
   };
 
   const tableData = Object.values(data?.FormattedData || {}) || [];
-  if(ptSearchConfig?.ptSearchCount&&payload.locality&&tableData&&tableData.length>ptSearchConfig.ptSearchCount){
-    !showToast &&setShowToast({ error: true, label: "PT_MODIFY_SEARCH_CRITERIA" });
+  if (ptSearchConfig?.ptSearchCount && payload.locality && tableData && tableData.length > ptSearchConfig.ptSearchCount) {
+    !showToast && setShowToast({ error: true, label: "PT_MODIFY_SEARCH_CRITERIA" });
     return null;
   }
   return (

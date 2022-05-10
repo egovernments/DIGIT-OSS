@@ -1,7 +1,9 @@
-import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions"; //returns action object
+  getBreak,
+  getCommonHeader,
+  getLabel,
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions"; //returns action object
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import { get, set } from "lodash";
@@ -45,21 +47,36 @@ const getCertificate = {
           "components.div.children.deathSearchCard.children.cardContent.children.searchContainerCommon.children.gender.required",
           false
         );
-        loadHospitals(action, state, dispatch, "death", tenantId).then((response) => {
-          if(response && response.MdmsRes && response.MdmsRes["birth-death-service"] && response.MdmsRes["birth-death-service"].hospitalList)
-          {
-           const hptList= response.MdmsRes["birth-death-service"].hospitalList;
-           const newList=[...hptList.filter(hos=>hos.active), {
-            hospitalName : "Others"      }]
-            for (let hospital of newList) {
-              hospital.code = hospital.hospitalName;
-              hospital.name = hospital.hospitalName;
+        loadHospitals(action, state, dispatch, "death", tenantId).then(
+          (response) => {
+            if (
+              response &&
+              response.MdmsRes &&
+              response.MdmsRes["birth-death-service"] &&
+              response.MdmsRes["birth-death-service"].hospitalList
+            ) {
+              const hptList =
+                response.MdmsRes["birth-death-service"].hospitalList;
+              const newList = [
+                ...hptList.filter((hos) => hos.active),
+                {
+                  hospitalName: "Others",
+                },
+              ];
+              for (let hospital of newList) {
+                hospital.code = hospital.hospitalName;
+                hospital.name = hospital.hospitalName;
+              }
+              dispatch(prepareFinalObject("bnd.allHospitals", newList));
+            } else {
+              dispatch(
+                prepareFinalObject("bnd.allHospitals", [
+                  { code: "Others", name: "Others" },
+                ])
+              );
             }
-            dispatch(prepareFinalObject("bnd.allHospitals", newList));
-          }else{
-            dispatch(prepareFinalObject("bnd.allHospitals", [{code:"Others",name:"Others"}]));
           }
-        });
+        );
       }
       onlyCBs.sort((a, b) => (a.code > b.code ? 1 : -1));
       dispatch(prepareFinalObject("bnd.allTenants", onlyCBs));
@@ -79,9 +96,9 @@ const getCertificate = {
         headerDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Container",
-props:{
-  className:"bd-btn-hiw",
-},
+          props: {
+            className: "bd-btn-hiw",
+          },
 
           children: {
             header: {
@@ -91,39 +108,38 @@ props:{
               },
               ...header,
             },
-            // groupBillButton: {
-            //   componentPath: "Button",
-            //   gridDefination: {
-            //     xs: 12,
-            //     sm: 6,
-            //     align: "right"
-            //   },
-            //   visible: enableButton,
-            //   props: {
-            //     variant: "contained",
-            //     color: "primary",
-            //     style: {
-            //       color: "white",
-            //       borderRadius: "2px",
-            //       width: "250px",
-            //       height: "48px"
-            //     }
-            //   },
-            //   children: {
-            //     ButtonLabel: getLabel({
-            //       labelName: "Group Bills",
-            //       labelKey: "ABG_COMMON_HEADER"
-            //     })
-            //   },
-            //   onClickDefination: {
-            //     action: "page_change",
-            //     path:
-            //       process.env.REACT_APP_SELF_RUNNING === "true"
-            //         ? `/egov-ui-framework/abg/groupBills`
-            //         : `/abg/groupBills`
-            //   },
-            //   visible: false
-            // },
+            groupBillButton: {
+              componentPath: "Button",
+              gridDefination: {
+                xs: 12,
+                sm: 6,
+                align: "right",
+              },
+              visible: process.env.REACT_APP_NAME !== "Citizen",
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  color: "white",
+                  borderRadius: "2px",
+                  width: "250px",
+                  height: "48px",
+                },
+              },
+              children: {
+                ButtonLabel: getLabel({
+                  labelName: "Group Bills",
+                  labelKey: "ACTION_TEST_DEATH_NEW_REGISTRATION",
+                }),
+              },
+              onClickDefination: {
+                action: "page_change",
+                path:
+                  process.env.REACT_APP_SELF_RUNNING === "true"
+                    ? `/egov-ui-framework/death-employee/newRegistration`
+                    : `/death-employee/newRegistration`,
+              },
+            },
             howitWorksButton: {
               componentPath: "Button",
               gridDefination: {
@@ -131,7 +147,7 @@ props:{
                 sm: 6,
                 align: "right",
               },
-              visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+              visible: false,
               props: {
                 //variant: "outlined",
                 color: "primary",

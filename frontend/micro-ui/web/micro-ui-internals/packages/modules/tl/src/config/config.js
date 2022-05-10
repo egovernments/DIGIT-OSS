@@ -125,20 +125,20 @@ export const newConfig = [
                     "type": "text",
                     "name": "street",
                     "disable": "window.location.href.includes(`edit-application`)||window.location.href.includes(`renew-trade`)",
-                    "validation": {
-                        "maxlength": 256,
-                        "title": "CORE_COMMON_STREET_INVALID"
-                    }
+                    // "validation": {
+                    //     "maxlength": 256,
+                    //     "title": "CORE_COMMON_STREET_INVALID"
+                    // }
                 },
                 {
                     "label": "TL_LOCALIZATION_BUILDING_NO",
                     "type": "text",
                     "name": "doorNo",
                     "disable": "window.location.href.includes(`edit-application`)||window.location.href.includes(`renew-trade`)",
-                    "validation": {
-                        "maxlength": 256,
-                        "title": "CORE_COMMON_DOOR_INVALID"
-                    }
+                    // "validation": {
+                    //     "maxlength": 256,
+                    //     "title": "CORE_COMMON_DOOR_INVALID"
+                    // }
                 }
             ],
             "nextStep": "landmark"
@@ -160,19 +160,19 @@ export const newConfig = [
                     "label": "TL_LOCALIZATION_BUILDING_NO",
                     "type": "text",
                     "name": "doorNo",
-                    "validation": {
-                        "maxlength": 256,
-                        "title": "CORE_COMMON_DOOR_INVALID"
-                    }
+                    // "validation": {
+                    //     "maxlength": 256,
+                    //     "title": "CORE_COMMON_DOOR_INVALID"
+                    // }
                 },
                 {
                     "label": "TL_LOCALIZATION_STREET_NAME",
                     "type": "text",
                     "name": "street",
-                    "validation": {
-                        "maxlength": 256,
-                        "title": "CORE_COMMON_STREET_INVALID"
-                    }
+                    // "validation": {
+                    //     "maxlength": 256,
+                    //     "title": "CORE_COMMON_STREET_INVALID"
+                    // }
                 }
             ]
         },
@@ -449,7 +449,7 @@ export const newConfig = [
         },
         key: "owners",
         withoutLabel: true,
-        nextStep: null,
+        nextStep: "proof",
         hideInEmployee: true,
       },
       {

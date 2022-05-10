@@ -19,6 +19,7 @@ const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, form
   const [focusField, setFocusField] = React.useState("");
   const stateId = Digit.ULBService.getStateId();
   const [isErrors, setIsErrors] = useState(false);
+  const isMobile = window.Digit.Utils.browser.isMobile();
   
   let proptype = [];
 
@@ -159,9 +160,7 @@ const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, form
             defaultValue={assemblyDetails?.floorarea}
             rules={{ 
               required: t("REQUIRED_FIELD"),
-              validate: {
-                pattern: (val)=> /^([0-9]){0,8}$/i.test(val) ? true : t("PT_TOT_LAND_AREA_ERROR_MESSAGE")
-              }
+              validate: (val)=> /^([0-9]){0,8}$/i.test(val) ? true : t("PT_TOT_LAND_AREA_ERROR_MESSAGE")
             }}
             key={config?.key}
             render={(props) => (
@@ -196,7 +195,7 @@ const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, form
             key={config?.key}
             rules={{ 
               required: t("REQUIRED_FIELD"),
-              validate: (val) => /^([0-9]){0,8}$/i.test(val) ? true: t("PT_TOT_CONSTRUCTION_AREA_ERROR_MESSAGE")
+              validate: (val) => /^([0-9]){0,8}$/i.test(val) && assemblyDetails?.floorarea && parseInt(val) < parseInt(assemblyDetails?.floorarea) ? true: t("PT_TOT_CONSTRUCTION_AREA_ERROR_MESSAGE")
              }}
             render={(props) => (
               <TextInput
@@ -218,7 +217,7 @@ const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, form
           />
         </div>
       </LabelFieldPair>
-      <CardLabelError style={errorStyle}>{touched?.constructionArea ? errors?.constructionArea?.message : ""}</CardLabelError>
+      <CardLabelError style={isMobile ? {...errorStyle,marginLeft:"0px"} : {...errorStyle}}>{touched?.constructionArea ? errors?.constructionArea?.message : ""}</CardLabelError>
 
       <LabelFieldPair>
         <CardLabel>{`${t("PT_ASSESMENT_INFO_USAGE_TYPE")}*`}</CardLabel>

@@ -1,14 +1,17 @@
-import { FormComposer, Loader, Dropdown, Localities, Header } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Loader, Dropdown, Localities, Header, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory, useRouteMatch,useLocation } from "react-router-dom";
 import { newConfig } from "../../config/Create/config";
 import _, { create, unset } from "lodash";
 
 const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) => {
+  const [showToast, setShowToast] = useState(null);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const tenants = Digit.Hooks.pt.useTenants();
   const { t } = useTranslation();
+  const location = useLocation();
+
   const [canSubmit, setCanSubmit] = useState(false);
   const defaultValues = { ...value};
   const history = useHistory();
@@ -20,7 +23,7 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
   
   const [formValue, setFormValue] = useState("");
   const [cityCode, setCityCode] = useState("");
-  let enableSkip = config?.isSkipEnabled || sessionStorage.getItem("skipenabled");
+  let enableSkip = userType=="employee"?false :config?.isSkipEnabled || sessionStorage.getItem("skipenabled");
   // delete
   // const [_formData, setFormData,_clear] = Digit.Hooks.useSessionStorage("store-data",null);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
@@ -36,24 +39,30 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
   }
 
   const onSubmit = async () => {
+    if(formValue?.owners?.[0]?.ownershipCategory?.includes("MULTIPLEOWNERS") && formValue?.owners?.length==1){
+      setShowToast({ key: true, label: "PT_COMMON_ONE_MORE_OWNER_INFROMATION_REQUIRED" });
+    }else{
+
     if(onSelect) {
       onSelect('cptNewProperty', { property: formValue });
     } else {
       if(userType === 'employee') {
         history.push(`${match.path}/save-property?redirectToUrl=${redirectUrl}`, {
           data: formValue,
+          prevState:{...location?.state}
         });
       } else {
         history.replace(`/digit-ui/citizen/commonPt/property/citizen-otp`,
           {
             // from: getFromLocation(location.state, searchParams),
-            mobileNumber: formValue?.owners?.mobileNumber,
+            mobileNumber: formValue?.owners?.[0]?.mobileNumber,
             redirectBackTo: '/digit-ui/citizen/commonPt/property/new-application/save-property',
             redirectData: formValue,
           }
         );
       }
     }
+  }
   };
 
   const onSkip = () => {
@@ -67,7 +76,6 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
     // if (city?.code !== cityCode) {
     //   setCityCode(city?.code);
     // }
-
     if (!_.isEqual(data, formValue)) {
       // if (data?.city.code !== formValue?.city?.code) setValue("locality", null);
       setFormValue(data);
@@ -103,6 +111,7 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
       onSkip = {onSkip}
       showSkip = {enableSkip}
       skipStyle = {isMobile?{}:{textAlign:"right",marginRight:"55px"}}
+      sectionHeadStyle = {{marginBottom:"16px"}}
       onSubmit={onSubmit}
       noBoxShadow
       inline
@@ -112,6 +121,15 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
       defaultValues={defaultValues}
       onFormValueChange={onFormValueChange}
     />
+     {showToast && (
+        <Toast
+          error={showToast.key}
+          label={t(showToast.label)}
+          onClose={() => {
+            setShowToast(null);
+          }}
+        />
+      )}
     </React.Fragment>
   );
 };

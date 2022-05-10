@@ -1,7 +1,4 @@
-import {
-  CardLabel, Dropdown, FormStep, LinkButton,
-  Loader, RadioButtons, TextInput
-} from "@egovernments/digit-ui-react-components";
+import { CardLabel, Dropdown, FormStep, LinkButton, Loader, RadioButtons, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/TLTimeline";
@@ -138,8 +135,6 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   };
 
   const onSkip = () => onSelect();
-
-  console.log(isLoading, Data, "sasas");
   return (
     <React.Fragment>
       {window.location.href.includes("/citizen") ? <Timeline /> : null}
@@ -167,7 +162,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                     background: "#FAFAFA",
                   }}
                 >
-                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL")}*`}</CardLabel>
                   <LinkButton
                     label={
                       <div>
@@ -206,32 +201,25 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                   ) : (
                     <Loader />
                   )}
-                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL")}*`}</CardLabel>
                   <Dropdown
                     t={t}
                     optionKey="i18nKey"
                     isMandatory={config.isMandatory}
-                    //options={[{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"}]}
-                    //option={TradeTypeMenu}
                     option={getTradeTypeMenu(field?.tradecategory)}
-                    //selected={TradeType}
                     selected={field?.tradetype}
                     select={(e) => selectTradeType(index, e)}
                   />
-                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL")}`}</CardLabel>
-                  <div className={"form-pt-dropdown-only"}>
+                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL")}*`}</CardLabel>
                     <Dropdown
                       t={t}
                       optionKey="i18nKey"
                       isMandatory={config.isMandatory}
-                      //option={[{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"}]}
-                      //option={TradeSubTypeMenu}
                       option={sortDropdownNames(getTradeSubTypeMenu(field?.tradetype), "i18nKey", t)}
-                      //selected={TradeSubType}
                       selected={field?.tradesubtype}
+                      optionCardStyles={{maxHeight:"125px",overflow:"scroll"}}
                       select={(e) => selectTradeSubType(index, e)}
                     />
-                  </div>
                   <CardLabel>{`${t("TL_UNIT_OF_MEASURE_LABEL")}`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
@@ -244,14 +232,8 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                     value={field?.unit}
                     onChange={(e) => selectUnitOfMeasure(index, e)}
                     disable={true}
-                    /* {...(validation = {
-            isRequired: true,
-            pattern: "^[a-zA-Z-.`' ]*$",
-            type: "text",
-            title: t("PT_NAME_ERROR_MESSAGE"),
-          })} */
                   />
-                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}${!field.unit ? "" : "*"}`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
                     t={t}

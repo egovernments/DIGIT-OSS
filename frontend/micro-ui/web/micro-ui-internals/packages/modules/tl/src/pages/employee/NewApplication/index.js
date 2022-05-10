@@ -56,16 +56,23 @@ const NewApplication = () => {
     }
   };
   const onSubmit = (data) => {
-    if (!data?.cpt?.details || !propertyDetails) {
-      setShowToast({ key: "error" });
-      setError(t("TL_PROPERTY_ID_REQUIRED"));
-      return;
+    if(data?.cpt?.id){
+      if (!data?.cpt?.details || !propertyDetails) {
+          setShowToast({ key: "error" });
+          setError(t("ERR_INVALID_PROPERTY_ID"));
+          return;
+        }
     }
-    if (propertyId == null) {
-      setShowToast({ key: "error" });
-      setError(t("TL_PROPERTY_ID_REQUIRED"));
-      return;
-    }
+    // if (!data?.cpt?.details || !propertyDetails) {
+    //   setShowToast({ key: "error" });
+    //   setError(t("TL_PROPERTY_ID_REQUIRED"));
+    //   return;
+    // }
+    // if (propertyId == null) {
+    //   setShowToast({ key: "error" });
+    //   setError(t("TL_PROPERTY_ID_REQUIRED"));
+    //   return;
+    // }
 
     let accessories = [];
     if (data?.accessories?.length > 0) {
@@ -189,7 +196,7 @@ const NewApplication = () => {
           Digit.TLService.update({ Licenses: [licenses] }, tenantId)
             .then((response) => {
               if (response?.Licenses?.length > 0) {
-                setTimeout(() => window.location.reload());
+                // setTimeout(() => window.location.reload());
                 history.replace(`/digit-ui/employee/tl/response`, { data: response?.Licenses });
                 clearSessionFormData();
               }

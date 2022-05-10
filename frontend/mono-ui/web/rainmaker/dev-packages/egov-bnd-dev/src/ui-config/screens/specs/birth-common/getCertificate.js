@@ -1,7 +1,9 @@
-import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions"; //returns action object
+  getBreak,
+  getCommonHeader,
+  getLabel,
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions"; //returns action object
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import { get, set } from "lodash";
@@ -30,21 +32,36 @@ const getCertificate = {
         onlyCBs = jp.query(onlyCBs, currentCbFilter);
 
         dispatch(prepareFinalObject("bnd.birth.tenantId", tenantId));
-        loadHospitals(action, state, dispatch, "death", tenantId).then((response) => {
-          if(response && response.MdmsRes && response.MdmsRes["birth-death-service"] && response.MdmsRes["birth-death-service"].hospitalList)
-          {
-           const hptList= response.MdmsRes["birth-death-service"].hospitalList;
-           const newList=[...hptList.filter(hos=>hos.active), {
-            hospitalName : "Others"      }]
-            for (let hospital of newList) {
-              hospital.code = hospital.hospitalName;
-              hospital.name = hospital.hospitalName;
+        loadHospitals(action, state, dispatch, "death", tenantId).then(
+          (response) => {
+            if (
+              response &&
+              response.MdmsRes &&
+              response.MdmsRes["birth-death-service"] &&
+              response.MdmsRes["birth-death-service"].hospitalList
+            ) {
+              const hptList =
+                response.MdmsRes["birth-death-service"].hospitalList;
+              const newList = [
+                ...hptList.filter((hos) => hos.active),
+                {
+                  hospitalName: "Others",
+                },
+              ];
+              for (let hospital of newList) {
+                hospital.code = hospital.hospitalName;
+                hospital.name = hospital.hospitalName;
+              }
+              dispatch(prepareFinalObject("bnd.allHospitals", newList));
+            } else {
+              dispatch(
+                prepareFinalObject("bnd.allHospitals", [
+                  { code: "Others", name: "Others" },
+                ])
+              );
             }
-            dispatch(prepareFinalObject("bnd.allHospitals", newList));
-          }else{
-            dispatch(prepareFinalObject("bnd.allHospitals", [{code:"Others",name:"Others"}]));
           }
-        });
+        );
         set(
           action.screenConfig,
           "components.div.children.birthSearchCard.children.cardContent.children.searchContainerCommon.children.cantonmentSelect.props.isDisabled",
@@ -79,8 +96,8 @@ const getCertificate = {
         headerDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Container",
-          props:{
-            className:"bd-btn-hiw",
+          props: {
+            className: "bd-btn-hiw",
           },
           children: {
             header: {
@@ -90,39 +107,38 @@ const getCertificate = {
               },
               ...header,
             },
-            // groupBillButton: {
-            //   componentPath: "Button",
-            //   gridDefination: {
-            //     xs: 12,
-            //     sm: 6,
-            //     align: "right"
-            //   },
-            //   visible: enableButton,
-            //   props: {
-            //     variant: "contained",
-            //     color: "primary",
-            //     style: {
-            //       color: "white",
-            //       borderRadius: "2px",
-            //       width: "250px",
-            //       height: "48px"
-            //     }
-            //   },
-            //   children: {
-            //     ButtonLabel: getLabel({
-            //       labelName: "Group Bills",
-            //       labelKey: "ABG_COMMON_HEADER"
-            //     })
-            //   },
-            //   onClickDefination: {
-            //     action: "page_change",
-            //     path:
-            //       process.env.REACT_APP_SELF_RUNNING === "true"
-            //         ? `/egov-ui-framework/abg/groupBills`
-            //         : `/abg/groupBills`
-            //   },
-            //   visible: false
-            // },
+            groupBillButton: {
+              componentPath: "Button",
+              gridDefination: {
+                xs: 12,
+                sm: 6,
+                align: "right",
+              },
+              visible: process.env.REACT_APP_NAME !== "Citizen",
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  color: "white",
+                  borderRadius: "2px",
+                  width: "250px",
+                  height: "48px",
+                },
+              },
+              children: {
+                ButtonLabel: getLabel({
+                  labelName: "Group Bills",
+                  labelKey: "ACTION_TEST_BIRTH_NEW_REGISTRATION",
+                }),
+              },
+              onClickDefination: {
+                action: "page_change",
+                path:
+                  process.env.REACT_APP_SELF_RUNNING === "true"
+                    ? `/egov-ui-framework/birth-employee/newRegistration`
+                    : `/birth-employee/newRegistration`,
+              },
+            },
             howitWorksButton: {
               componentPath: "Button",
               gridDefination: {
@@ -130,11 +146,11 @@ const getCertificate = {
                 sm: 6,
                 align: "right",
               },
-              visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+              visible: false,
               props: {
                 //variant: "outlined",
                 color: "primary",
-                className:"bd-btn-hiw",
+                className: "bd-btn-hiw",
                 style: {
                   minWidth: "180px",
                   height: "48px",

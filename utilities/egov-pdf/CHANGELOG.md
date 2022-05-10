@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.3 - 2022-04-28
+
+- Added new api for birth and death download certificate
+
 ## 1.1.2 - 2021-12-14
 
 - Added support for download receipt by receipt number 

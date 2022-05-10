@@ -267,7 +267,7 @@ export const searchSetCommon = getCommonContainer({
     },
     required: true,
     localePrefix: {
-      moduleName: "BND",
+      moduleName: "BIRTH",
       masterName: "GENDER",
     },
     data: [

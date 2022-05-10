@@ -188,13 +188,19 @@ public class BirthRepository {
 		log.info(new Gson().toJson(pdfApplicationRequest));
 
 			BirthPdfApplicationRequest req = BirthPdfApplicationRequest.builder().birthCertificate(pdfApplicationRequest.getBirthCertificate()).requestInfo(pdfApplicationRequest.getRequestInfo()).build();
-			EgovPdfResp response = null;
-			response = restTemplate.postForObject( config.getEgovPdfHost()+ config.getEgovPdfBirthEndPoint(), req, EgovPdfResp.class);
-			if (response != null && CollectionUtils.isEmpty(response.getFilestoreIds())) {
-				throw new CustomException("EMPTY_FILESTORE_IDS_FROM_PDF_SERVICE",
-						"No file store id found from pdf service");
-			}
-			result.setFilestoreIds(response.getFilestoreIds());
+			pdfApplicationRequest.getBirthCertificate().forEach(cert-> {
+				String uiHost = config.getEgovPdfHost();
+				String birthCertPath = config.getEgovPdfBirthEndPoint();
+				String tenantId = cert.getTenantid().split("\\.")[0];
+				birthCertPath = birthCertPath.replace("$tenantId",tenantId);
+				String pdfFinalPath = uiHost + birthCertPath;
+				EgovPdfResp response = restTemplate.postForObject(pdfFinalPath, req, EgovPdfResp.class);
+				if (response != null && CollectionUtils.isEmpty(response.getFilestoreIds())) {
+					throw new CustomException("EMPTY_FILESTORE_IDS_FROM_PDF_SERVICE",
+							"No file store id found from pdf service");
+				}
+				result.setFilestoreIds(response.getFilestoreIds());
+			});
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new CustomException("PDF_ERROR","Error in generating PDF");

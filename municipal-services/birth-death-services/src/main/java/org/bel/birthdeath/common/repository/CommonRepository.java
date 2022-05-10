@@ -219,6 +219,7 @@ public class CommonRepository {
 						{
 							if(bdtl.getHospitalname().length() >500) {
 								importBirthWrapper.updateMaps(BirthDeathConstants.HOSPNAME_LARGE, bdtl);
+								importBirthWrapper.setServiceError(BirthDeathConstants.HOSPNAME_LARGE);
 								uniqueList.remove(bdtl.getRegistrationno());
 							}
 							else {
@@ -233,17 +234,20 @@ public class CommonRepository {
 					}
 					else {
 						importBirthWrapper.updateMaps(BirthDeathConstants.DUPLICATE_REG_EXCEL, bdtl);
+						importBirthWrapper.setServiceError(BirthDeathConstants.DUPLICATE_REG_EXCEL);
 						duplicates.add(bdtl.getRegistrationno());
 					}
 				}
 				else
 				{
 					importBirthWrapper.updateMaps(BirthDeathConstants.REG_EMPTY, bdtl);
+					importBirthWrapper.setServiceError(BirthDeathConstants.REG_EMPTY);
 				}
 			}
 		});
 		for (String regno : duplicates) {
 			importBirthWrapper.updateMaps(BirthDeathConstants.DUPLICATE_REG_EXCEL, uniqueList.get(regno));
+			importBirthWrapper.setServiceError(BirthDeathConstants.DUPLICATE_REG_EXCEL);
 			uniqueList.remove(regno);
 		}
 		modifyHospIdBirth(uniqueHospList , response.getBirthCerts().get(0).getTenantid());
@@ -512,6 +516,7 @@ public class CommonRepository {
 		response.getDeathCerts().forEach(deathtl -> {
 			if (null != deathtl.getRejectReason()) {
 				importDeathWrapper.updateMaps(BirthDeathConstants.EXCEL_DATA_ERROR, deathtl);
+				importDeathWrapper.setServiceError(BirthDeathConstants.EXCEL_DATA_ERROR);
 			} else {
 				if (deathtl.getRegistrationno() != null) {
 					if (uniqueList.get(deathtl.getRegistrationno()) == null) {
@@ -520,6 +525,7 @@ public class CommonRepository {
 						if (null != deathtl.getHospitalname() && !deathtl.getHospitalname().trim().isEmpty()) {
 							if (deathtl.getHospitalname().length() > 500) {
 								importDeathWrapper.updateMaps(BirthDeathConstants.HOSPNAME_LARGE, deathtl);
+								importDeathWrapper.setServiceError(BirthDeathConstants.HOSPNAME_LARGE);
 								uniqueList.remove(deathtl.getRegistrationno());
 							} else {
 								deathtl.setHospitalname(deathtl.getHospitalname().trim());
@@ -532,15 +538,18 @@ public class CommonRepository {
 
 					} else {
 						importDeathWrapper.updateMaps(BirthDeathConstants.DUPLICATE_REG_EXCEL, deathtl);
+						importDeathWrapper.setServiceError(BirthDeathConstants.DUPLICATE_REG_EXCEL);
 						duplicates.add(deathtl.getRegistrationno());
 					}
 				} else {
 					importDeathWrapper.updateMaps(BirthDeathConstants.REG_EMPTY, deathtl);
+					importDeathWrapper.setServiceError(BirthDeathConstants.REG_EMPTY);
 				}
 			}
 		});
 		for (String regno : duplicates) {
 			importDeathWrapper.updateMaps(BirthDeathConstants.DUPLICATE_REG_EXCEL, uniqueList.get(regno));
+			importDeathWrapper.setServiceError(BirthDeathConstants.DUPLICATE_REG_EXCEL);
 			uniqueList.remove(regno);
 		}
 		modifyHospIdDeath(uniqueHospList , response.getDeathCerts().get(0).getTenantid());
@@ -784,6 +793,7 @@ public class CommonRepository {
 		response.getBirthCerts().forEach(bdtl -> {
 			if (null != bdtl.getRejectReason()) {
 				importBirthWrapper.updateMaps(BirthDeathConstants.EXCEL_DATA_ERROR, bdtl);
+				importBirthWrapper.setServiceError(BirthDeathConstants.EXCEL_DATA_ERROR);
 			} else {
 				if (bdtl.getId() != null) {
 					if (bdtl.getRegistrationno() != null) {
@@ -793,6 +803,7 @@ public class CommonRepository {
 							if (null != bdtl.getHospitalname() && !bdtl.getHospitalname().trim().isEmpty()) {
 								if (bdtl.getHospitalname().length() > 500) {
 									importBirthWrapper.updateMaps(BirthDeathConstants.HOSPNAME_LARGE, bdtl);
+									importBirthWrapper.setServiceError(BirthDeathConstants.EXCEL_DATA_ERROR);
 									uniqueList.remove(bdtl.getRegistrationno());
 								} else {
 									bdtl.setHospitalname(bdtl.getHospitalname().trim());
@@ -804,13 +815,16 @@ public class CommonRepository {
 							}
 						} else {
 							importBirthWrapper.updateMaps(BirthDeathConstants.DUPLICATE_REG_EXCEL, bdtl);
+							importBirthWrapper.setServiceError(BirthDeathConstants.EXCEL_DATA_ERROR);
 							duplicates.add(bdtl.getRegistrationno());
 						}
 					} else {
 						importBirthWrapper.updateMaps(BirthDeathConstants.REG_EMPTY, bdtl);
+						importBirthWrapper.setServiceError(BirthDeathConstants.EXCEL_DATA_ERROR);
 					}
 				} else {
 					importBirthWrapper.updateMaps(BirthDeathConstants.UPDATE_ERROR, bdtl);
+					importBirthWrapper.setServiceError(BirthDeathConstants.EXCEL_DATA_ERROR);
 				}
 			}
 			
@@ -851,6 +865,7 @@ public class CommonRepository {
 				catch (Exception e) {
 					birthDtl.setRejectReason(BirthDeathConstants.DATA_ERROR);
 					importBirthWrapper.updateMaps(BirthDeathConstants.DATA_ERROR, birthDtl);
+					importBirthWrapper.setServiceError(BirthDeathConstants.DATA_ERROR);
 					e.printStackTrace();
 				}
 			}
@@ -891,6 +906,7 @@ public class CommonRepository {
 							if (null != deathtl.getHospitalname() && !deathtl.getHospitalname().trim().isEmpty()) {
 								if (deathtl.getHospitalname().length() > 500) {
 									importDeathWrapper.updateMaps(BirthDeathConstants.HOSPNAME_LARGE, deathtl);
+									importDeathWrapper.setServiceError(BirthDeathConstants.HOSPNAME_LARGE);
 									uniqueList.remove(deathtl.getRegistrationno());
 								} else {
 									deathtl.setHospitalname(deathtl.getHospitalname().trim());
@@ -903,18 +919,22 @@ public class CommonRepository {
 
 						} else {
 							importDeathWrapper.updateMaps(BirthDeathConstants.DUPLICATE_REG_EXCEL, deathtl);
+							importDeathWrapper.setServiceError(BirthDeathConstants.DUPLICATE_REG_EXCEL);
 							duplicates.add(deathtl.getRegistrationno());
 						}
 					} else {
 						importDeathWrapper.updateMaps(BirthDeathConstants.REG_EMPTY, deathtl);
+						importDeathWrapper.setServiceError(BirthDeathConstants.REG_EMPTY);
 					}
 				} else {
 					importDeathWrapper.updateMaps(BirthDeathConstants.UPDATE_ERROR, deathtl);
+					importDeathWrapper.setServiceError(BirthDeathConstants.UPDATE_ERROR);
 				}
 			}
 		});
 		for (String regno : duplicates) {
 			importDeathWrapper.updateMaps(BirthDeathConstants.DUPLICATE_REG_EXCEL, uniqueList.get(regno));
+			importDeathWrapper.setServiceError(BirthDeathConstants.DUPLICATE_REG_EXCEL);
 			uniqueList.remove(regno);
 		}
 		modifyHospIdDeath(uniqueHospList , response.getDeathCerts().get(0).getTenantid());
@@ -950,6 +970,7 @@ public class CommonRepository {
 				catch (Exception e) {
 					deathDtl.setRejectReason(BirthDeathConstants.DATA_ERROR);
 					importDeathWrapper.updateMaps(BirthDeathConstants.DATA_ERROR, deathDtl);
+					importDeathWrapper.setServiceError(BirthDeathConstants.DATA_ERROR);
 					e.printStackTrace();
 				}
 			}

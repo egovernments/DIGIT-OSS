@@ -247,6 +247,11 @@ config:
     build:
       - work-dir: "libraries/tracer"
         image-name: "tracer"
+  
+  - name: "builds/core-services/libraries/services-common"
+    build:
+      - work-dir: "libraries/services-common"
+        image-name: "services-common"
 
   - name: "builds/core-services/nlp-engine"
     build:

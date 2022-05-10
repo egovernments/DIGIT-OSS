@@ -147,14 +147,14 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         {
           label: "",
           labelChildren: (
-            <div className="tooltip" style={{position:"relative"}}>
-              <div style={{display: "flex", alignItems: "center", gap: "0 4px"}}>
+            <div className="tooltip" /* style={{position:"relative"}} */>
+              <div style={{display: "flex", /* alignItems: "center", */ gap: "0 4px"}}>
               <h2>{property.label}</h2>
               <InfoBannerIcon fill="#0b0c0c" />
-              </div>
-              <span className="tooltiptext" style={{ position:"absolute", whiteSpace: "nowrap" , fontSize:"medium" }}>
+              <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
               {t(property.description) + " " + ptSearchConfig?.propertyIdFormat}
               </span>
+              </div>
             </div>
           ),
           type: property.type,
@@ -467,7 +467,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         cardStyle={{marginBottom:"0"}}
       ></FormComposer>
       <span className="link" style={{display:"flex", justifyContent:"center",paddingBottom:"16px"}}>
-        <Link to={"/digit-ui/citizen/commonpt/property/new-application"}>{t("CPT_REG_NEW_PROPERTY")}</Link>
+        <Link to={window.location.href.includes("/tl/tradelicence/") ? "/digit-ui/citizen/tl/tradelicence/new-application/create-property" : "/digit-ui/citizen/commonpt/property/new-application"}>{t("CPT_REG_NEW_PROPERTY")}</Link>
       </span>
       {showToast && (
         <Toast

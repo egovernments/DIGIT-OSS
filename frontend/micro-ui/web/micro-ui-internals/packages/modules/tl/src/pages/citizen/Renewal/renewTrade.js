@@ -15,13 +15,13 @@ const getPath = (path, params) => {
   return path;
 };
 
-const getTradeEditDetails = (data) => {
-  const gettradeaccessories = (tradeacceserioies) => {
+const getTradeEditDetails = (data,t) => {
+  const gettradeaccessories = (tradeacceserioies, t) => {
     let acc = [];
     tradeacceserioies &&
       tradeacceserioies.map((ob) => {
         acc.push({
-          accessory: { code: `${ob.accessoryCategory}`, i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${ob.accessoryCategory.replaceAll("-", "_")}` },
+          accessory: { code: `${ob.accessoryCategory}`, i18nKey: t(`TRADELICENSE_ACCESSORIESCATEGORY_${ob.accessoryCategory.replaceAll("-", "_")}`) },
           accessorycount: ob.count,
           unit: `${ob.uom}`,
           uom: `${ob.uomValue}`,
@@ -120,9 +120,9 @@ const getTradeEditDetails = (data) => {
       i18nKey: `${data.tradeLicenseDetail?.structureType.includes("IMMOVABLE") ? "TL_COMMON_YES" : "TL_COMMON_NO"}`,
     },
     TradeName: data?.tradeName,
-    accessories: gettradeaccessories(data?.tradeLicenseDetail?.accessories),
+    accessories: gettradeaccessories(data?.tradeLicenseDetail?.accessories,t),
     isAccessories:
-      gettradeaccessories(data?.tradeLicenseDetail?.accessories).length > 0
+      gettradeaccessories(data?.tradeLicenseDetail?.accessories,t).length > 0
         ? { code: `ACCESSORY`, i18nKey: "TL_COMMON_YES" }
         : { code: `NONACCESSORY`, i18nKey: "TL_COMMON_NO" },
     units: gettradeunits(data?.tradeLicenseDetail?.tradeUnits),
@@ -188,7 +188,7 @@ const RenewTrade = ({ parentRoute }) => {
         application.isEditProperty = true;
       }
       sessionStorage.setItem("tradeInitialObject", JSON.stringify({ ...application }));
-      let tradeEditDetails = getTradeEditDetails(application);
+      let tradeEditDetails = getTradeEditDetails(application,t);
       setParams({ ...params, ...tradeEditDetails });
     }
   }, [data]);

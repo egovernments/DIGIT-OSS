@@ -1,13 +1,16 @@
+import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  getCommonHeader
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  handleScreenConfigurationFieldChange as handleField, prepareFinalObject
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions"; //returns action object
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { convertEpochToDateCustom, loadFullCertDetails, loadHospitals } from "../utils";
+import {
+  convertEpochToDateCustom,
+  loadFullCertDetails,
+  loadHospitals,
+} from "../utils";
 import { addHospitalDialog } from "./addHospitalDialog";
 import { newRegistrationForm } from "./newRegistrationCard";
 import { confirmationDialog } from "./newRegistrationConfirmDialog";
@@ -94,6 +97,8 @@ const newRegistration = {
     let userAction = getQueryArg(window.location.href, "action");
     let id = getQueryArg(window.location.href, "certificateId");
     let module = getQueryArg(window.location.href, "module");
+    dispatch(
+      prepareFinalObject("bnd",{}));
     loadHospitals(action, state, dispatch, "birth", getTenantId()).then(
       (response) => {
         if (
@@ -114,8 +119,12 @@ const newRegistration = {
             hospital.name = hospital.hospitalName;
           }
           dispatch(prepareFinalObject("bnd.allHospitals", newList));
-        }else{
-          dispatch(prepareFinalObject("bnd.allHospitals", [{code:"Others",name:"Others"}]));
+        } else {
+          dispatch(
+            prepareFinalObject("bnd.allHospitals", [
+              { code: "Others", name: "Others" },
+            ])
+          );
         }
 
         if (userAction == "EDIT" && id && module) {
@@ -124,7 +133,12 @@ const newRegistration = {
             "components.div2.children.details.children.cardContent.children.registrationInfo.children.cardContent.children.registrationInfoCont.children.hospitalName.props.isDisabled",
             true
           );
-                    loadFullCertDetails(action, state, dispatch, {
+          set(
+            action.screenConfig,
+            "components.div2.children.details.children.cardContent.children.registrationInfo.children.cardContent.children.registrationInfoCont.children.registrationNo.props.disabled",
+            true
+          );
+          loadFullCertDetails(action, state, dispatch, {
             tenantId: getTenantId(),
             id: id,
             module: module,
@@ -143,7 +157,7 @@ const newRegistration = {
               dispatch(
                 prepareFinalObject(
                   "bnd.birth.newRegistration.isLegacyRecord",
-                  response.BirthCertificate[0].counter==1
+                  response.BirthCertificate[0].counter == 1
                 )
               );
               prepareEditScreenData(action, state, dispatch, response);

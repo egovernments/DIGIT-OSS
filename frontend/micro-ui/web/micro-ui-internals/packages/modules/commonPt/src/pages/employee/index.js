@@ -1,4 +1,4 @@
-import { PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { BreadCrumb, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Switch, useLocation } from "react-router-dom";
@@ -20,26 +20,51 @@ const EmployeeApp = ({ path, url, userType }) => {
   };
 
   const getBreadCrumb = () => {
-    if (breadcrumbObj[location.pathname]) return t(breadcrumbObj[location.pathname]);
-    else if (location.pathname.includes("/digit-ui/employee/pt/application-details/")) return t("PT_APPLICATION_TITLE");
-    else if (location.pathname.includes("/digit-ui/employee/pt/property-details/")) return t("PT_PROPERTY_INFORMATION");
-    else if (location.pathname.includes("/digit-ui/employee/pt/assessment-details/")) return t("PT_ASSESS_PROPERTY");
-    else if (location.pathname.includes("digit-ui/employee/pt/property-mutate-docs-required")) return t("PT_REQIURED_DOC_TRANSFER_OWNERSHIP");
-    else if (location.pathname.includes("/digit-ui/employee/pt/property-mutate/")) return t("ES_TITLE_MUTATE_PROPERTY");
-    else if (location.pathname.includes("/digit-ui/employee/pt/modify-application/")) return t("PT_UPDATE_PROPERTY");
+    if (location.pathname.includes("/commonpt/search")) return t("SEARCH_PROPERTY");
     else if (location.pathname.includes("/view-property")) return t("PT_PROPERTY_INFORMATION");
+    else return t("PT_NEW_PROPERTY");
   };
+  const search = useLocation().search;
+
+  const redirectUrl = new URLSearchParams(search).get("redirectToUrl");
+  const fromScreen = new URLSearchParams(search).get("from")||"";
+
+  const crumbs = [
+    {
+      path: "/digit-ui/employee",
+      content: t("ES_COMMON_HOME"),
+      show: true,
+    },
+    {
+      path: { pathname: redirectUrl, state: { ...location.state } },
+      content:redirectUrl?( redirectUrl?.includes("employee/tl/new-application")
+        ? t("ES_TITLE_NEW_TRADE_LICESE_APPLICATION")
+        : t("WF_EMPLOYEE_NEWTL_RENEWAL_SUBMIT_BUTTON")):(fromScreen&&t(fromScreen))||"NONE",
+      show: (redirectUrl || fromScreen) &&true,
+      isBack:fromScreen&& true
+    },
+    {
+      path: "/digit-ui/employee/dss/drilldown",
+      content: getBreadCrumb(),
+      show: true,
+    },
+  ];
+
+  const locationCheck = window.location.href.includes("/employee/commonpt/new-application")
 
   return (
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-          <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "12px" }}>
+          {/* <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "12px" }}>
             <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
               {t("ES_COMMON_HOME")}
             </Link>{" "}
             / <span>{getBreadCrumb()}</span>
-          </p>
+          </p> */}
+          <div style={locationCheck ? {marginLeft:"12px"} : {}}>
+          <BreadCrumb crumbs={crumbs} />
+          </div>
           <PrivateRoute exact path={`${path}/`} component={() => <CommonPTLinks matchPath={path} userType={userType} />} />
           <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
           <PrivateRoute path={`${path}/search`} component={() => <Search />} />
