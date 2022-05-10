@@ -1,8 +1,11 @@
 package org.egov.filters.pre;
 
 import com.netflix.zuul.context.RequestContext;
+import org.egov.Utils.UserUtils;
+import org.egov.Utils.Utils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.HashSet;
@@ -24,7 +27,8 @@ public class RbacPreCheckFilterTest {
         openEndpointsWhitelist.add("open-endpoint2");
         anonymousEndpointsWhitelist.add("/pgr/complaintTypeCategories");
         anonymousEndpointsWhitelist.add("anonymous-endpoint2");
-        rbacPreCheckFilter = new RbacPreCheckFilter(openEndpointsWhitelist, anonymousEndpointsWhitelist);
+        Utils utils = Mockito.mock(Utils.class);
+        rbacPreCheckFilter = new RbacPreCheckFilter(openEndpointsWhitelist, anonymousEndpointsWhitelist, utils);
         RequestContext ctx = RequestContext.getCurrentContext();
         ctx.clear();
         ctx.setRequest(request);
