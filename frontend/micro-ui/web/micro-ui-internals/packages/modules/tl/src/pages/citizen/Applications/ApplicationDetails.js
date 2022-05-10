@@ -75,7 +75,22 @@ const TLApplicationDetails = () => {
   const [showOptions, setShowOptions] = useState(false);
   useEffect(() => {}, [application, errorApplication]);
 
-  if (isLoading) {
+  const businessService= application?.[0]?.businessService;
+  const { isLoading : iswfLoading, data : wfdata } = Digit.Hooks.useWorkflowDetails({
+    tenantId: application?.[0]?.tenantId,
+    id: id,
+    moduleCode: businessService,
+  });
+
+let workflowDocs = [];
+if(wfdata)
+{
+  wfdata?.timeline?.map((ob) => {
+    if(ob?.wfDocuments?.length>0) workflowDocs.push(ob?.wfDocuments?.[0])
+  })
+}
+
+  if (isLoading || iswfLoading) {
     return <Loader />;
   }
 
@@ -305,6 +320,18 @@ const TLApplicationDetails = () => {
                   </StatusTable>
                 )}
               </div>
+              {workflowDocs?.length > 0 && <div>
+              <CardSubHeader>{t("TL_TIMELINE_DOCS")}</CardSubHeader>
+              <div>
+                {workflowDocs?.length > 0 ? (
+                  <TLDocument value={{"workflowDocs":workflowDocs}}></TLDocument>
+                ) : (
+                  <StatusTable>
+                    <Row text={t("TL_NO_DOCUMENTS_MSG")} />
+                  </StatusTable>
+                )}
+              </div>
+              </div>}
               <TLWFApplicationTimeline application={application} id={id} />
               {application?.status === "CITIZENACTIONREQUIRED" ? (
                 <Link
