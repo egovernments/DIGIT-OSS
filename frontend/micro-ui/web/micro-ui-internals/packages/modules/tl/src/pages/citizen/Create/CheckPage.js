@@ -109,11 +109,13 @@ const CheckPage = ({ onSubmit, value }) => {
               />
               <Row
                 label={t("TL_UNIT_OF_MEASURE_LABEL")}
+                labelStyle={{marginRight:"2px"}}
                 text={`${unit?.unit ? t(unit?.unit) : t("CS_NA")}`}
                 actionButton={<ActionButton jumpTo={`${routeLink}/units-details`} />}
               />
               <Row
                 label={t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}
+                labelStyle={{marginRight:"2px"}}
                 text={`${unit?.uom ? t(unit?.uom) : t("CS_NA")}`}
                 actionButton={<ActionButton jumpTo={`${routeLink}/units-details`} />}
               />
@@ -137,11 +139,13 @@ const CheckPage = ({ onSubmit, value }) => {
                 />
                 <Row
                   label={t("TL_ACC_UOM_LABEL")}
+                  labelStyle={{marginRight:"2px"}}
                   text={`${acc?.unit ? t(acc?.unit) : t("CS_NA")}`}
                   actionButton={<ActionButton jumpTo={`${routeLink}/accessories-details`} />}
                 />
                 <Row
                   label={t("TL_ACC_UOM_VALUE_LABEL")}
+                  labelStyle={{marginRight:"2px"}}
                   text={`${acc?.unit ? t(acc?.uom) : t("CS_NA")}`}
                   actionButton={<ActionButton jumpTo={`${routeLink}/accessories-details`} />}
                 />
@@ -217,6 +221,7 @@ const CheckPage = ({ onSubmit, value }) => {
             ))}
             <Row
                   label={t("TL_CORRESPONDENCE_ADDRESS")}
+                  labelStyle={{marginRight:"2px"}}
                   text={t(owners?.permanentAddress)}
                   actionButton={<ActionButton jumpTo={`${routeLink}/owner-address`} />}
             />
