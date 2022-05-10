@@ -2,6 +2,7 @@ package org.egov.filters.pre;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import org.egov.Utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,20 @@ import static org.egov.constants.RequestContextConstants.SKIP_RBAC;
  *  3rd pre filter to get executed.
  *  If the URI is part of open or mixed endpoint list then RBAC check is marked as false
  */
-public class RbacPreCheckFilter extends ZuulFilter {
+public class    RbacPreCheckFilter extends ZuulFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private HashSet<String> openEndpointsWhitelist;
     private HashSet<String> anonymousEndpointsWhitelist;
+    private Utils utils;
 
     @Autowired
     public RbacPreCheckFilter(HashSet<String> openEndpointsWhitelist,
-                              HashSet<String> anonymousEndpointsWhitelist) {
+                              HashSet<String> anonymousEndpointsWhitelist,
+                              Utils utils) {
         this.openEndpointsWhitelist = openEndpointsWhitelist;
         this.anonymousEndpointsWhitelist = anonymousEndpointsWhitelist;
+        this.utils = utils;
     }
 
     @Override
@@ -45,7 +49,7 @@ public class RbacPreCheckFilter extends ZuulFilter {
 
     @Override
     public Object run() {
-        if ((openEndpointsWhitelist.contains(getRequestURI())
+        if ((openEndpointsWhitelist.contains(getRequestURI()) || utils.isWhitelistingPatternMatching(getRequestURI())
             || anonymousEndpointsWhitelist.contains(getRequestURI()))) {
             setShouldDoRbac(false);
             logger.info(SKIP_RBAC, getRequestURI());
