@@ -28,7 +28,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const history = useHistory();
   const match = useRouteMatch();
   let user = Digit.UserService.getUser(), BusinessService;
-  const tenantId = user.info.permanentCity;
+  const tenantId = user?.info?.permanentCity;
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
