@@ -190,8 +190,10 @@ public class FSMConstants {
 	public static final String UPDATE_ONLY_VEHICLE_TRIP_RECORD = "UPDATE_ONLY_VEHICLE_TRIP_RECORD";
 	
 	public static final String WF_DISPOSAL_IN_PROGRESS = "DISPOSAL_IN_PROGRESS";
-
 	
+	public static final String VEHICLE_CAPACITY = "vehicleCapacity";
+
+	public static final String FSM_SMS_CITIZEN_NO_OF_TRIPS_VEHICLE_CAPACITY_CHANGE="FSM_SMS_CITIZEN_NO_OF_TRIPS_VEHICLE_CAPACITY_CHANGE";
 
 
 }
