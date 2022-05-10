@@ -721,10 +721,11 @@ export const getOrderedDocs = (docs) => {
 };
 
 export const showHidingLinksForStakeholder = (roles = []) => {
-  const userInfo = Digit.UserService.getUser();
+  let userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+  const userInfo = userInfos ? JSON.parse(userInfos) : {};
   let checkedRoles = [];
   const rolearray = roles?.map((role) => {
-    userInfo?.info?.roles?.map((item) => {
+    userInfo?.value?.info?.roles?.map((item) => {
       if (item.code == role.code && item.tenantId === role.tenantId) {
         checkedRoles.push(item);
       }

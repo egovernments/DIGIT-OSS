@@ -76,7 +76,7 @@ const BpaApplicationDetail = () => {
                 RealignedDocument.push(doc);
             })
         })
-        const newApplicationDetails = data.applicationDetails.map((obj) => {
+        const newApplicationDetails = data?.applicationDetails.map((obj) => {
           if(obj.title === "BPA_DOCUMENT_DETAILS_LABEL")
           {
             return {...obj, additionalDetails:{obpsDocuments:[{title:"",values:RealignedDocument}]}}
@@ -130,7 +130,7 @@ const BpaApplicationDetail = () => {
       } 
     })
    total > 0 && payval.push({title:"BPA_TOT_AMT_PAID", value:`₹${total}`});
-    payments.length > 0 && (!(data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0))&& data.applicationDetails.push({
+    payments.length > 0 && (!(data?.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0))&& data.applicationDetails.push({
         title:"BPA_FEE_DETAILS_LABEL",
       additionalDetails:{
         inspectionReport:[],
@@ -138,11 +138,11 @@ const BpaApplicationDetail = () => {
         values:[...payval]
       }
     })
-    if(data && data?.applicationData?.businessService && (data.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL")?.[0]?.additionalDetails?.values.length < payval.length ))
+    if(data && data?.applicationData?.businessService && (data?.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL")?.[0]?.additionalDetails?.values.length < payval.length ))
     {
       var foundIndex = data?.applicationDetails.findIndex(x => x.title === "BPA_FEE_DETAILS_LABEL");
       data?.applicationDetails.splice(foundIndex,1);
-      data.applicationDetails.push({
+      data?.applicationDetails.push({
         title:"BPA_FEE_DETAILS_LABEL",
         additionalDetails:{
           inspectionReport:[],
@@ -426,7 +426,10 @@ const BpaApplicationDetail = () => {
     workflowDetails.data.nextActions = workflowDetails?.data?.nextActions?.filter(actn => actn.action !== "SKIP_PAYMENT");
   };
 
-  data.applicationDetails = data?.applicationDetails?.length > 0 && data?.applicationDetails?.filter(bpaData => Object.keys(bpaData).length !== 0);
+  if (data?.applicationDetails?.length > 0) {
+    data.applicationDetails = data?.applicationDetails?.length > 0 && data?.applicationDetails?.filter(bpaData => Object.keys(bpaData).length !== 0);
+  }
+
 
   const getCheckBoxLable = () => {
     return (
@@ -444,7 +447,10 @@ const BpaApplicationDetail = () => {
     return false;
   });
 
-  data.applicationDetails = results;
+  if (results?.length > 0) {
+    data.applicationDetails = results;
+  }
+  
 
   return (
     <Fragment>
