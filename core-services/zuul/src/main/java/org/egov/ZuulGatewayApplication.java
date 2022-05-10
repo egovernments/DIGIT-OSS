@@ -7,6 +7,7 @@ import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.properties.Ra
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.support.SecuredRateLimitUtils;
 import org.egov.Utils.CustomRateLimitUtils;
 import org.egov.Utils.UserUtils;
+import org.egov.Utils.Utils;
 import org.egov.filters.pre.AuthFilter;
 import org.egov.filters.pre.AuthPreCheckFilter;
 import org.egov.filters.pre.RbacFilter;
@@ -76,12 +77,15 @@ public class ZuulGatewayApplication {
     private UserUtils userUtils;
 
     @Autowired
+    private Utils utils;
+
+    @Autowired
     private CustomRateLimitUtils customRateLimitUtils;
 
     @Bean
     public AuthPreCheckFilter authCheckFilter() {
         return new AuthPreCheckFilter(new HashSet<>(Arrays.asList(openEndpointsWhitelist)),
-            new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist)),userUtils);
+            new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist)),userUtils, utils);
     }
 
     @Bean
@@ -98,7 +102,7 @@ public class ZuulGatewayApplication {
     @Bean
     public RbacPreCheckFilter rbacCheckFilter() {
         return new RbacPreCheckFilter(new HashSet<>(Arrays.asList(openEndpointsWhitelist)),
-            new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist))
+            new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist)), utils
         );
     }
 

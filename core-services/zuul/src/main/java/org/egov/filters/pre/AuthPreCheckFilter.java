@@ -47,14 +47,17 @@ public class AuthPreCheckFilter extends ZuulFilter {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ObjectMapper objectMapper;
     private UserUtils userUtils;
+    private Utils utils;
 
 
     public AuthPreCheckFilter(HashSet<String> openEndpointsWhitelist,
                               HashSet<String> mixedModeEndpointsWhitelist,
-                              UserUtils userUtils) {
+                              UserUtils userUtils,
+                              Utils utils) {
         this.openEndpointsWhitelist = openEndpointsWhitelist;
         this.mixedModeEndpointsWhitelist = mixedModeEndpointsWhitelist;
         this.userUtils = userUtils;
+        this.utils = utils;
         objectMapper = new ObjectMapper();
     }
 
@@ -76,7 +79,7 @@ public class AuthPreCheckFilter extends ZuulFilter {
     @Override
     public Object run() {
         String authToken;
-        if (openEndpointsWhitelist.contains(getRequestURI())) {
+        if (openEndpointsWhitelist.contains(getRequestURI()) || utils.isWhitelistingPatternMatching(getRequestURI())) {
             setShouldDoAuth(false);
             logger.info(OPEN_ENDPOINT_MESSAGE, getRequestURI());
             return null;
