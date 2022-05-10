@@ -141,4 +141,6 @@ public class BirthCertificate {
   private Timestamp dateofbirth;
 
   private Timestamp dateofreport;
+
+  private String year;
 }
