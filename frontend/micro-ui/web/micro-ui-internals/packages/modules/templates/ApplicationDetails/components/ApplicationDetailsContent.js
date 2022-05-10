@@ -29,6 +29,7 @@ import TLTradeUnits from "./TLTradeUnits";
 import WSAdditonalDetails from "./WSAdditonalDetails";
 import WSFeeEstimation from "./WSFeeEstimation";
 import WSInfoLabel from "../../../ws/src/pageComponents/WSInfoLabel";
+import DocumentsPreview from "./DocumentsPreview";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -259,6 +260,7 @@ function ApplicationDetailsContent({
           {detail?.additionalDetails?.subOccupancyTableDetails && (
             <SubOccupancyTable edcrDetails={detail?.additionalDetails} applicationData={applicationDetails?.applicationData} />
           )}
+          {detail?.additionalDetails?.documentsWithUrl && <DocumentsPreview documents={detail?.additionalDetails?.documentsWithUrl} />}
           {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
           {detail?.additionalDetails?.taxHeadEstimatesCalculation && (
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />

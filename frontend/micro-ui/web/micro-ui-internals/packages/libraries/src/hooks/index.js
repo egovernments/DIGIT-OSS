@@ -192,6 +192,7 @@ import useSearchWS from "./ws/useSearchWS";
 import useMypaymentWS from "./ws/useMypaymentWS";
 import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions";
+import useApplicationActionsBillAmendUpdate from './ws/useApplicationActionsBillAmendUpdate'
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
 import useWSMDMS from "./ws/useWSMDMS";
 import useAccessControl from "./useAccessControl";
@@ -404,6 +405,7 @@ const ws = {
   useSearchWS,
   useWSDetailsPage,
   useWSApplicationActions,
+  useApplicationActionsBillAmendUpdate,
   useWSConsumptionSearch,
   useConnectionDetail,
   useMDMS: useWSMDMS,

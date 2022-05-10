@@ -60,6 +60,18 @@ export const WSService = {
       params: {},
       auth: true,
     }),
+    updateBillAmend:(details) => {
+      return Request({
+        url: Urls.ws.billAmendmentUpdate,
+        data: details,
+        useCache: false,
+        setTimeParam: false,
+        userService: true,
+        method: "POST",
+        params: {},
+        auth: true,
+      })
+    },
   wsCalculationEstimate: (details, businessService) =>
     Request({
       url: businessService === "WS" ? Urls.ws.ws_calculation_estimate : Urls.ws.sw_calculation_estimate,

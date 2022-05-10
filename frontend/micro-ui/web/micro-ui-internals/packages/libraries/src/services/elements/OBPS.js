@@ -3,6 +3,7 @@ import Urls from "../atoms/urls";
 import { format } from "date-fns";
 import { MdmsService } from "./MDMS";
 import React from "react";
+import { UploadServices } from "../atoms/UploadServices";
 
 export const OBPSService = {
   scrutinyDetails: (tenantId, params) =>
@@ -165,7 +166,11 @@ export const OBPSService = {
           })
         }
       })
-    }
+    };
+
+    const appDocumentFileStoreIds = License?.tradeLicenseDetail?.applicationDocuments?.map(appDoc => appDoc?.fileStoreId)
+
+    const fileDetails =  await UploadServices.Filefetch(appDocumentFileStoreIds, Digit.ULBService.getStateId());
 
     const details = [
       {
@@ -213,7 +218,7 @@ export const OBPSService = {
       title: "BPA_DOCUMENT_DETAILS_LABEL",
       asSectionHeader: true,
       additionalDetails: {
-        documents: [{
+        documentsWithUrl: [{
           title: "",
           values: License?.tradeLicenseDetail?.applicationDocuments?.map(doc => ({
             title: `BPAREG_HEADER_${doc?.documentType?.replaceAll('.', '_')}`,
@@ -221,7 +226,8 @@ export const OBPSService = {
             documentUid: doc?.documentUid,
             fileStoreId: doc?.fileStoreId,
             id: doc?.id,
-            docInfo: doc?.info
+            docInfo: doc?.info,
+            url: fileDetails?.data[doc?.fileStoreId] ? fileDetails?.data[doc?.fileStoreId]?.split(',')[0] : ""
           }))
         }]
       },
@@ -247,6 +253,13 @@ export const OBPSService = {
   },
   BPADetailsPage: async (tenantId, filters) => {
     const response = await OBPSService.BPASearch(tenantId, filters);
+    const appDocumentFileStoreIds = response?.BPA?.[0]?.documents?.map(docId => docId.fileStoreId);
+    response?.BPA?.[0]?.additionalDetails?.fieldinspection_pending?.map(fiData => {
+      fiData?.docs?.map(fiDoc => {
+        appDocumentFileStoreIds.push(fiDoc?.fileStoreId)
+      })
+    });
+    
     if (!response?.BPA?.length) {
       return;
     }
@@ -267,6 +280,21 @@ export const OBPSService = {
       }
     const comparisionReport = await OBPSService.comparisionReport(BPA?.tenantId, { ...comparisionRep });
 
+    noc?.map(nocDetails => {
+      nocDetails?.documents?.map(nocDoc => {
+        appDocumentFileStoreIds.push(nocDoc?.fileStoreId)
+      })
+    });
+
+    const fileDetails =  await UploadServices.Filefetch(appDocumentFileStoreIds, Digit.ULBService.getStateId());
+
+    BPA?.additionalDetails?.fieldinspection_pending?.forEach(fiData => {
+      fiData?.docs?.forEach(fiDoc => {
+        if(fileDetails?.data[fiDoc?.fileStoreId]) fiDoc.url = fileDetails?.data[fiDoc?.fileStoreId]?.split(',')[0]
+      })
+    });
+
+    
     function ConvertEpochToValidityDate (dateEpoch){
       if(dateEpoch == null || dateEpoch == undefined || dateEpoch == ''){
         return "NA" ;
@@ -320,7 +348,8 @@ export const OBPSService = {
                 documentType: doc?.documentType,
                 documentUid: doc?.documentUid,
                 fileStoreId: doc?.fileStoreId,
-                id: doc?.id
+                id: doc?.id,
+                url: fileDetails?.data?.[doc?.fileStoreId] ? fileDetails?.data?.[doc?.fileStoreId]?.split(',')[0] : ""
               })),
             },
           ],
@@ -359,7 +388,8 @@ export const OBPSService = {
               documentType: doc?.documentType,
               documentUid: doc?.fileStore,
               fileStoreId: doc?.fileStoreId,
-              id: doc?.id
+              id: doc?.id,
+              url: fileDetails?.data?.[doc?.fileStoreId] ? fileDetails?.data?.[doc?.fileStoreId]?.split(',')[0] : ""
             }))
           }]
         }})
@@ -542,7 +572,8 @@ export const OBPSService = {
             documentType: doc?.documentType,
             documentUid: doc?.documentUid,
             fileStoreId: doc?.fileStoreId,
-            id: doc?.id
+            id: doc?.id,
+            url: fileDetails?.data?.[doc?.fileStoreId] ? fileDetails?.data?.[doc?.fileStoreId]?.split(',')[0] : ""
           }))
         }]
       },
