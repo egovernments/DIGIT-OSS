@@ -184,8 +184,8 @@
       display: block;
       color: rgb(117, 117, 117);
       fill: rgb(117, 117, 117);
-      height: 21px;
-      width: 21px;
+      height: 21px !important;
+      width: 21px !important;
       float: left;
       margin-top: 12px;
     }
@@ -204,6 +204,7 @@
       padding-left: 16px;
       &.active {
         border-left: 5px solid #f47738;
+        padding-left: 11px;
         .menu-label {
           color: #f47738;
         }

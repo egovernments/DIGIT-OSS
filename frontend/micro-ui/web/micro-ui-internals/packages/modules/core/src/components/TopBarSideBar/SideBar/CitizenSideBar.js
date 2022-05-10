@@ -15,12 +15,13 @@ import {
   CollectionsBookmarIcons,
   FinanceChartIcon,
   CollectionIcon,
+  Phone,
+  LanguageIcon,
 } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
-import { Phone } from "@egovernments/digit-ui-react-components";
 import ChangeCity from "../../ChangeCity";
 import StaticCitizenSideBar from "./StaticCitizenSideBar";
 
@@ -39,6 +40,11 @@ const IconsObject = {
   edcr: <CollectionIcon className="icon" />,
   collections: <CollectionIcon className="icon" />,
   "open-complaints": <ComplaintIcon className="icon" />,
+  HomeIcon: <HomeIcon className="icon" />,
+  EditPencilIcon: <EditPencilIcon className="icon" />,
+  LogoutIcon: <LogoutIcon className="icon" />,
+  Phone: <Phone className="icon" />,
+  LanguageIcon: <Phone className="icon" />,
 };
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -154,7 +160,7 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
       {
         text: t("EDIT_PROFILE"),
         element: "PROFILE",
-        icon: <EditPencilIcon className="icon edit-btn-ico" width="16" height="16" />,
+        icon: "EditPencilIcon",
         populators: {
           onClick: showProfilePage,
         },
@@ -162,7 +168,7 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
       {
         text: t("CORE_COMMON_LOGOUT"),
         element: "LOGOUT",
-        icon: <LogoutIcon className="icon" />,
+        icon: "LogoutIcon",
         populators: {
           onClick: onLogout,
         },
@@ -190,7 +196,7 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
           </React.Fragment>
         ),
         element: "Helpline",
-        icon: <Phone className="icon" />,
+        icon: "Phone",
       },
     ];
   }
@@ -198,8 +204,15 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
   let singleItem = [];
 
   if (!isEmployee) {
-    Object.keys(linkData).map((key) => {
-      menuItems.splice(1, 0, { type: "dynamic", moduleName: key, links: linkData[key], icon: linkData[key][0]?.leftIcon });
+    Object.keys(linkData)?.map((key) => {
+      if (linkData[key][0]?.sidebar === "digit-ui-links")
+        menuItems.splice(1, 0, {
+          type: "link",
+          text: key,
+          links: linkData[key],
+          icon: linkData[key][0]?.leftIcon,
+          link: linkData[key][0]?.sidebarURL,
+        });
     });
   } else {
     const configEmployeeSideBar = {};

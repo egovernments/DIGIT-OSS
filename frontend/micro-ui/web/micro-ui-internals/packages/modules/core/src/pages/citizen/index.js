@@ -15,7 +15,13 @@ import ErrorComponent from "../../components/ErrorComponent";
 import FAQsSection from "./FAQs/FAQs";
 import HowItWorks from "./HowItWorks/howItWorks";
 
-const sidebarHiddenFor=["digit-ui/citizen/register/name","/digit-ui/citizen/select-language","/digit-ui/citizen/select-location","/digit-ui/citizen/login","/digit-ui/citizen/register/otp"]
+const sidebarHiddenFor = [
+  "digit-ui/citizen/register/name",
+  "/digit-ui/citizen/select-language",
+  "/digit-ui/citizen/select-location",
+  "/digit-ui/citizen/login",
+  "/digit-ui/citizen/register/otp",
+];
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -59,6 +65,8 @@ const Home = ({
     }
   );
 
+  console.log("linkData", linkData);
+
   const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
   const { t } = useTranslation();
   const { path } = useRouteMatch();
@@ -67,7 +75,7 @@ const Home = ({
     window.open(obj);
   };
 
-  const hideSidebar = sidebarHiddenFor.some(e=>window.location.href.includes(e));
+  const hideSidebar = sidebarHiddenFor.some((e) => window.location.href.includes(e));
   const appRoutes = modules.map(({ code, tenants }, index) => {
     const Module = Digit.ComponentRegistryService.getComponent(`${code}Module`);
     return Module ? (
@@ -82,48 +90,48 @@ const Home = ({
     let mdmsDataObj = isLinkDataFetched ? processLinkData(linkData, code, t) : undefined;
     return (
       <React.Fragment>
-      <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
-        <div className="moduleLinkHomePage">
-          <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
-          <BackButton className="moduleLinkHomePageBackButton" />
-          <h1>{t("MODULE_" + code.toUpperCase())}</h1>
-          <div className="moduleLinkHomePageModuleLinks">
-            {mdmsDataObj && (
-              <CitizenHomeCard
-                header={t(mdmsDataObj?.header)}
-                links={mdmsDataObj?.links}
-                Icon={() => <span />}
-                Info={
-                  code === "OBPS"
-                    ? () => (
-                        <CitizenInfoLabel
-                          style={{ margin: "0px", padding: "10px" }}
-                          info={t("CS_FILE_APPLICATION_INFO_LABEL")}
-                          text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
-                        />
-                      )
-                    : null
-                }
-                isInfo={code === "OBPS" ? true : false}
-              />
-            )}
-            {/* <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} /> */}
-          </div>
-          <Card>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div style={{ color: "#25D366", fontWeight: "bold", float: "left" }}>{t("PAY_VIA_WHATSAPP")}</div>
-              <div style={{ float: "right", fill: "#25D366" }}>
-                <WhatsappIcon />
-              </div>
+        <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
+          <div className="moduleLinkHomePage">
+            <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
+            <BackButton className="moduleLinkHomePageBackButton" />
+            <h1>{t("MODULE_" + code.toUpperCase())}</h1>
+            <div className="moduleLinkHomePageModuleLinks">
+              {mdmsDataObj && (
+                <CitizenHomeCard
+                  header={t(mdmsDataObj?.header)}
+                  links={mdmsDataObj?.links}
+                  Icon={() => <span />}
+                  Info={
+                    code === "OBPS"
+                      ? () => (
+                          <CitizenInfoLabel
+                            style={{ margin: "0px", padding: "10px" }}
+                            info={t("CS_FILE_APPLICATION_INFO_LABEL")}
+                            text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
+                          />
+                        )
+                      : null
+                  }
+                  isInfo={code === "OBPS" ? true : false}
+                />
+              )}
+              {/* <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} /> */}
             </div>
-          </Card>
-        </div>
-      </Route>
-      <Route key={"faq" + index} path={`${path}/${code.toLowerCase()}-faq`}>
-        <FAQsSection module={code?.toUpperCase()}/>
+            <Card>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ color: "#25D366", fontWeight: "bold", float: "left" }}>{t("PAY_VIA_WHATSAPP")}</div>
+                <div style={{ float: "right", fill: "#25D366" }}>
+                  <WhatsappIcon />
+                </div>
+              </div>
+            </Card>
+          </div>
+        </Route>
+        <Route key={"faq" + index} path={`${path}/${code.toLowerCase()}-faq`}>
+          <FAQsSection module={code?.toUpperCase()} />
         </Route>
         <Route key={"hiw" + index} path={`${path}/${code.toLowerCase()}-how-it-works`}>
-        <HowItWorks module={code?.toUpperCase()}/>
+          <HowItWorks module={code?.toUpperCase()} />
         </Route>
       </React.Fragment>
     );
