@@ -79,7 +79,7 @@ export const TLSearch = {
         {
           title: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL",
           value: response?.tradeLicenseDetail?.structureType
-            ? `COMMON_MASTERS_STRUCTURETYPE_${stringReplaceAll(response?.tradeLicenseDetail?.structureType, ".", "_")}`
+            ? `TL_${response?.tradeLicenseDetail?.tradeType}`
             : "NA",
         },
         {
