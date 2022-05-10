@@ -23,7 +23,7 @@ public class BirthDtlAllQueryBuilder {
 
 	private static String QUERY_MASTER_FULL_ALL = "SELECT bdtl.id birthdtlid,bfat.id bfatid,bmot.id bmotid,bpmad.id bpmadid,bpsad.id bpsadid," +
 			"bdtl.tenantid tenantid, registrationno, dateofbirth, counter, gender , " + 
-			"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Transgender'  END AS genderstr ," + 
+			"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Others'  END AS genderstr ," +
 			"(select bh.hospitalname from eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname, placeofbirth, dateofreport, remarks," + 
 			"hospitalid , informantsname , informantsaddress ," + 
 			"bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn ," + 
@@ -47,7 +47,7 @@ public class BirthDtlAllQueryBuilder {
 			"left join eg_birth_presentaddr bpsad on bpsad.birthdtlid = bdtl.id";
 	
     private static String QUERY_MASTER_ALL = "SELECT bdtl.id birthdtlid, bdtl.tenantid tenantid, registrationno, dateofbirth, counter, gender , "
-    		+ "CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Transgender'  END AS genderstr ,"
+    		+ "CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Others'  END AS genderstr ,"
     		+ " (select bh.hospitalname from eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname, placeofbirth, dateofreport, remarks, "
     		+ "bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn ,"
     		+ "bfat.middlename bfatmn ,bmot.middlename bmotmn , bdtl.middlename bdtlmn ,"
@@ -63,8 +63,8 @@ public class BirthDtlAllQueryBuilder {
     		"left join eg_birth_permaddr bpmad on bpmad.birthdtlid = bdtl.id " + 
     		"left join eg_birth_presentaddr bpsad on bpsad.birthdtlid = bdtl.id ";
     
-    private static final String QUERY_MASTER = "SELECT bdtl.id birthdtlid, tenantid, registrationno, dateofbirth, counter, gender , "+
-    		"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Transgender'  END AS genderstr ," + 
+    private static final String QUERY_MASTER = "SELECT bdtl.id birthdtlid, tenantid, registrationno, dateofbirth, counter, gender ,hospitalname, "+
+    		"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Others'  END AS genderstr ," +
     		" (select bh.hospitalname from eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname ,"+
     		"bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn ,"+
     		"bfat.middlename bfatmn ,bmot.middlename bmotmn , bdtl.middlename bdtlmn ,"+
@@ -152,15 +152,9 @@ public class BirthDtlAllQueryBuilder {
 			preparedStmtList.add(criteria.getGender());
 		}
 		if (criteria.getHospitalId() != null) {
-			if(criteria.getHospitalId().equalsIgnoreCase("0")) {
-				addClauseIfRequired(preparedStmtList, builder);
-				builder.append(" bdtl.hospitalid is null ");
-			}
-			else {
-				addClauseIfRequired(preparedStmtList, builder);
-				builder.append(" bdtl.hospitalid=? ");
-				preparedStmtList.add(criteria.getHospitalId());
-			}
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" hospitalname=? ");
+			preparedStmtList.add(criteria.getHospitalId());
 		}
 		if (criteria.getMotherName() != null) {
 			addClauseIfRequired(preparedStmtList, builder);
