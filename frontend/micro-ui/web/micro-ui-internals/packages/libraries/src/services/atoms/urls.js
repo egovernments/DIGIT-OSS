@@ -149,6 +149,7 @@ const Urls = {
     sw_payment_search: "/collection-services/payments/SW/_search",
     ws_payment_search: "/collection-services/payments/WS/_search",
     billAmendmentCreate: "/billing-service/amendment/_create",
+    billAmendmentUpdate: "/billing-service/amendment/_update",
     ws_meter_conncetion_create: "/ws-calculator/meterConnection/_create",
     sw_meter_conncetion_create: "/sw-calculator/meterConnection/_create",
   },

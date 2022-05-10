@@ -18,7 +18,7 @@ import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
 import ModifyApplication from "./ModifyApplication";
 import EditModifyApplication from "./EditModifyApplication";
 import WSDisconnectionDocsRequired from "../../pageComponents/WSDisconnectionDocsRequired";
-
+import ResponseBillAmend from "./ResponseBillAmend"
 import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
 
 const BILLSBreadCrumbs = ({ location }) => {
@@ -63,6 +63,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/bill-amendment`} component={() => <ApplicationBillAmendment {...{ path }} />} />
         <PrivateRoute path={`${path}/application-details-bill-amendment`} component={() => <ApplicationDetailsBillAmendment {...{ path }} />} />
         <PrivateRoute path={`${path}/response`} component={() => <Response {...{ path }} />} />
+        <PrivateRoute path={`${path}/response-bill-amend`} component={() => <ResponseBillAmend {...{ path }} />} />
         <PrivateRoute path={`${path}/required-documents`} component={() => <RequiredDocuments {...{ path }} />} />
         <PrivateRoute path={`${path}/activate-connection`} component={ActivateConnection} />
         <PrivateRoute path={`${path}/water/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />

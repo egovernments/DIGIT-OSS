@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { configWSApproverApplication } from "../config";
 import * as predefinedConfig from "../config";
 
+
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
 };
@@ -72,6 +73,20 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }, [file]);
 
   function submit(data) {
+    if(applicationData.amendmentId){
+      applicationData = {
+        ...applicationData,
+        workflow:{
+          businessId:applicationData.amendmentId,
+          action:action?.action,
+          tenantId:tenantId,
+          businessService:"BS.AMENDMENT",
+          moduleName:"BS"
+        }
+      }
+      submitAction({AmendmentUpdate:applicationData})
+      return
+    }
     let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
     applicationData = {
       ...applicationData,
@@ -103,6 +118,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           : []
       }
     };
+    
 
     applicationData?.serviceType == "WATER" ?
       submitAction({ WaterConnection: applicationData }) :

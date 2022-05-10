@@ -138,10 +138,16 @@ const ApplicationDetails = (props) => {
           if (isOBPS?.isNoc) {
             history.push(`/digit-ui/employee/noc/response`, { data: data });
           }
+          
+
+          history.push("/digit-ui/employee/ws/response-bill-amend", { status: true, state: data })
+      
           setShowToast({ key: "success", action: selectedAction });
           setTimeout(closeToast, 5000);
           queryClient.clear();
           queryClient.refetchQueries("APPLICATION_SEARCH");
+          //push false status when reject
+          
         },
       });
     }
@@ -177,7 +183,7 @@ const ApplicationDetails = (props) => {
               state={state}
               id={applicationNumber}
               applicationDetails={applicationDetails}
-              applicationData={applicationDetails?.applicationData}
+              applicationData={applicationDetails?.amendment}
               closeModal={closeModal}
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}

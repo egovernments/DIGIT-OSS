@@ -3,6 +3,7 @@ import { PTService } from "../../elements/PT";
 import cloneDeep from "lodash/cloneDeep";
 import { PaymentService } from "../../elements/Payment";
 import { MdmsService } from "../../elements/MDMS";
+import { WorkflowService } from "../../elements/WorkFlow";
 
 const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   if (searcher == "") return str;
@@ -43,7 +44,7 @@ export const WSSearch = {
   },
 
   searchAmendment: async (tenantId, consumercodes, businessService="WS") => {
-    const response = await Digit.PaymentService.searchAmendment(tenantId, { consumerCode: consumercodes, businessService });
+    const response = await Digit.PaymentService.searchAmendment(tenantId, { amendmentId: consumercodes, businessService });
     return response;
   },
 
@@ -330,8 +331,53 @@ export const WSSearch = {
     };
   },
 
-  applicationDetailsBillAmendment: async (t, tenantId, applicationNumber, serviceType = "WATER", config = {}) => {
-    const filtersForWSSearch = { connectionNumber: applicationNumber };
+  applicationDetailsBillAmendment: async (t, tenantId, applicationNumber, serviceType = "WATER", config = {}, businessService="BS.AMENDMENT") => {
+    // Call the apis here referring old ui and return the result
+    
+    // // get the business service egov-workflow-v2/egov-wf/businessservice/_search?tenantId=pb.amritsar&businessServices=BS.AMENDMENT
+    const businessServiceWf = await WorkflowService.init(tenantId,businessService)
+    // //get the amendment from billing-service/amendment/_search?tenantId=pb.amritsar&amendmentId=DN-WS/107/2021-22/223303-000180&businessService=WS
+    // const bServ = serviceType=="WATER" ? "WS":"SW"
+    // const amendment = await PaymentService.searchAmendment(tenantId, { businessService: bServ, amendmentId:applicationNumber})
+    // //get process instance from workflow /egov-workflow-v2/egov-wf/process/_search?businessIds=DN-WS/107/2021-22/223303-000180&history=true&tenantId=pb.amritsar
+    // const wfDetails = await WSSearch.workflowDataDetails(tenantId, applicationNumber);
+
+    // // get connection details from ws/sw ws-services/wc/_search?tenantId=pb.amritsar&businessService=WS&connectionNumber=WS/107/2021-22/223303&searchType=CONNECTION&isPropertyDetailsRequired=true
+    // const filtersWS = { 
+    //   connectionNumber: amendment.Amendments[0].consumerCode,
+    //   searchType:"CONNECTION",
+    //   bServ,
+    //   isPropertyDetailsRequired:true
+    // }
+    // const connDetails = await WSSearch.application(tenantId,filtersWS,serviceType)
+    // //get document details from amnedment and call filestore api to fetch those
+
+    // const fileStoreIds = amendment.Amendments[0].documents.map(document => document.fileStoreId)
+    // const documents = await Digit.UploadServices.Filefetch(fileStoreIds, "pb")
+    // const connectionDetails = cloneDeep(connDetails?.WaterConnection?.[0] || connDetails?.SewerageConnections?.[0]);
+    // const detailsv1 = []
+    // return {
+    //   applicationData: connectionDetails,
+    //   applicationDetails: detailsv1,
+    //   businessService:bs,
+    //   workFlowDetails:wfDetails,
+    //   amendment,
+    //   documents
+    // }
+
+    //----------------------------------Below is saurabh's code
+    let billAmendSearchService="WS";
+    if(serviceType!="WATER"){
+     billAmendSearchService="SW"
+    }
+    const billAmendmentSearch = await WSSearch.searchAmendment(tenantId, applicationNumber,billAmendSearchService)
+
+    const filtersForWSSearch = {
+      connectionNumber: billAmendmentSearch.Amendments[0].consumerCode,
+      searchType: "CONNECTION",
+      billAmendSearchService,
+      isPropertyDetailsRequired: true
+    }
     // 1. sewarage or water search thru connection number
     // 2. property search thru propertyId from search swc or ws
     // 3. billing service demand search thru consumer code === connection number
@@ -358,12 +404,11 @@ export const WSSearch = {
 
     const properties = await WSSearch.property(tenantId, propertyfilter);
 
-    const {Demands: BillDemandDetails} = await PaymentService.demandSearch(tenantId, filtersForWSSearch?.connectionNumber, "WS")
+    const {Demands: BillDemandDetails} = await PaymentService.demandSearch(tenantId, filtersForWSSearch?.connectionNumber, billAmendSearchService)
     const billServiceTaxHeadMaster = await MdmsService.getWSTaxHeadMaster(tenantId, "WS")
     const billServiceTaxHeadMasterForBillAmendment = billServiceTaxHeadMaster?.BillingService?.TaxHeadMaster?.filter(w=>w.IsBillamend)
     const actualFieldsAndAmountOfBillDetails = BillDemandDetails?.[0]?.demandDetails.filter( e => billServiceTaxHeadMasterForBillAmendment.find(taxHeadMaster => taxHeadMaster.code === e.taxHeadMasterCode))
     const billData = await WSSearch.searchBills(tenantId, consumercodes);
-    const billAmendmentSearch = await WSSearch.searchAmendment(tenantId, applicationNumber)
 
     if (filters?.applicationNumber) businessIds = filters?.applicationNumber;
 
@@ -406,124 +451,13 @@ export const WSSearch = {
         { title: "WS_DATE_EFFECT_TO", value: Digit.DateUtils.ConvertTimestampToDate(billAmendmentSearch?.Amendments?.[0]?.effectiveTill) },
       ]
     };
-
     const documentDetails = {
       title: "",
       asSectionHeader: true,
       additionalDetails: {
         documents: [{
           title: "WS_COMMON_DOCS",
-          values: wsDataDetails?.documents?.map((document) => {
-            return {
-              title: `WS_${document?.documentType}`,
-              documentType: document?.documentType,
-              documentUid: document?.documentUid,
-              fileStoreId: document?.fileStoreId,
-            };
-          }),
-        },
-        ]
-      }
-    };
-
-    const details = [applicationHeaderDetails, propertyDetails, connectionHolderDetails, documentDetails]
-    wsDataDetails.serviceType = serviceDataType;
-    return {
-      applicationData: wsDataDetails,
-      applicationDetails: details,
-      tenantId: wsDataDetails?.tenantId,
-      applicationNo: wsDataDetails?.applicationNo,
-      applicationStatus: wsDataDetails?.applicationStatus,
-      propertyDetails: propertyDataDetails,
-      billDetails: billDetails?.Bill,
-      processInstancesDetails: workFlowDataDetails?.ProcessInstances
-    };
-  },
-
-  applicationDetailsBillAmendment: async (t, tenantId, applicationNumber, serviceType = "WATER", config = {}) => {
-    const filtersForWSSearch = { connectionNumber: applicationNumber };
-    // 1. sewarage or water search thru connection number
-    // 2. property search thru propertyId from search swc or ws
-    // 3. billing service demand search thru consumer code === connection number
-    // 4. billing servic amendment search thru consumer code === connection number
-
-    let propertyids = "", consumercodes = "", businessIds = "";
-
-    const response = await WSSearch.application(tenantId, filtersForWSSearch, serviceType);
-    
-    const wsData = cloneDeep(response?.WaterConnection || response?.SewerageConnections)
-
-    const filters = { applicationNumber: wsData?.[0]?.applicationNo };
-
-    wsData?.forEach(item => {
-      propertyids = propertyids + item?.propertyId + (",");
-      consumercodes = consumercodes + item?.applicationNo + ",";
-    });
-
-    let propertyfilter = { propertyIds: propertyids.substring(0, propertyids.length - 1), }
-
-    if (propertyids !== "" && filters?.locality) propertyfilter.locality = filters?.locality;
-
-    config = { enabled: propertyids !== "" ? true : false }
-
-    const properties = await WSSearch.property(tenantId, propertyfilter);
-
-    const {Demands: BillDemandDetails} = await PaymentService.demandSearch(tenantId, filtersForWSSearch?.connectionNumber, "WS")
-    const billServiceTaxHeadMaster = await MdmsService.getWSTaxHeadMaster(tenantId, "WS")
-    const billServiceTaxHeadMasterForBillAmendment = billServiceTaxHeadMaster?.BillingService?.TaxHeadMaster?.filter(w=>w.IsBillamend)
-    const actualFieldsAndAmountOfBillDetails = BillDemandDetails?.[0]?.demandDetails.filter( e => billServiceTaxHeadMasterForBillAmendment.find(taxHeadMaster => taxHeadMaster.code === e.taxHeadMasterCode))
-    const billData = await WSSearch.searchBills(tenantId, consumercodes);
-    const billAmendmentSearch = await WSSearch.searchAmendment(tenantId, applicationNumber)
-
-    if (filters?.applicationNumber) businessIds = filters?.applicationNumber;
-
-    const workflowDetails = await WSSearch.workflowDataDetails(tenantId, businessIds);
-
-    const wsDataDetails = cloneDeep(response?.WaterConnection?.[0] || response?.SewerageConnections?.[0]);
-    const propertyDataDetails = cloneDeep(properties?.Properties?.[0]);
-    const billDetails = cloneDeep(billData);
-    const workFlowDataDetails = cloneDeep(workflowDetails);
-    const serviceDataType = cloneDeep(serviceType);
-
-    const applicationHeaderDetails = {
-      title: " ",
-      asSectionHeader: true,
-      values: [
-        { title: "PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL", value: wsDataDetails?.applicationNo || t("NA") },
-        { title: "WS_MOBILE_NUMBER", value: propertyDataDetails?.owners?.[0]?.mobileNumber|| t("NA") },
-        { title: "WS_CONSUMER_ID", value: wsDataDetails?.connectionNo || t("NA") },
-        { title: "WS_APPLICANT_NAME", value: propertyDataDetails?.owners?.[0]?.name || t("NA") },
-        { title: "WS_APPLICANT_ADDRESS", value: propertyDataDetails?.owners?.[0]?.name || t("NA") },
-        { title: "WS_NOTE_TYPE", value: t("NA") },
-      ]
-    };
-
-    const propertyDetails = {
-      title: "WS_AMOUNT_DETAILS",
-      asSectionHeader: true,
-      values: [...actualFieldsAndAmountOfBillDetails.map( e => ({
-        title: e?.taxHeadMasterCode, value: `₹ ${e?.taxAmount}`
-      })), { title: "WS_TOTAL_TAX", value: `₹ ${Math.round(actualFieldsAndAmountOfBillDetails.reduce((acc, curr) => curr.taxAmount + acc, 0))}` }]
-    };
-
-    const connectionHolderDetails = {
-      title: " ",
-      asSectionHeader: true,
-      values: [
-        { title: "WS_DEMAND_REVISION_REASON", value: billAmendmentSearch?.Amendments?.[0]?.amendmentReason },
-        { title: "WS_DEMAND_REASON_DOCUMENT", value: billAmendmentSearch?.Amendments?.[0]?.reasonDocumentNumber },
-        { title: "WS_DATE_EFFECT_FROM", value: Digit.DateUtils.ConvertTimestampToDate(billAmendmentSearch?.Amendments?.[0]?.effectiveFrom) },
-        { title: "WS_DATE_EFFECT_TO", value: Digit.DateUtils.ConvertTimestampToDate(billAmendmentSearch?.Amendments?.[0]?.effectiveTill) },
-      ]
-    };
-
-    const documentDetails = {
-      title: "",
-      asSectionHeader: true,
-      additionalDetails: {
-        documents: [{
-          title: "WS_COMMON_DOCS",
-          values: wsDataDetails?.documents?.map((document) => {
+          values: billAmendmentSearch.Amendments[0]?.documents?.map((document) => {
             return {
               title: `WS_${document?.documentType}`,
               documentType: document?.documentType,
@@ -547,10 +481,14 @@ export const WSSearch = {
       propertyDetails: propertyDataDetails,
       billDetails: billDetails?.Bill,
       processInstancesDetails: workFlowDataDetails?.ProcessInstances,
-      billAmendmentSearch,
+      amendment: billAmendmentSearch.Amendments[0], 
+      businessServiceWf
     };
   },
+  applicationDetailsBillAmendmentv2: async() => {
 
+  }
+  , 
   connectionDetails: async (t, tenantId, connectionNumber, serviceType = "WATER", config = {}) => {
     const filters = { connectionNumber, searchType: "CONNECTION" };
 
