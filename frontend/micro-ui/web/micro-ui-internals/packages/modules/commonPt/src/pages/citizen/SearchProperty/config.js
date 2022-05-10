@@ -3,7 +3,7 @@ export const config = [
     texts: {
       header: "SEARCH_PROPERTY",
       submitButtonLabel: "PT_HOME_SEARCH_RESULTS_BUTTON_SEARCH",
-      text: "Provide atleast one search parameter",
+      text: "",
     },
     inputs: [
       {
