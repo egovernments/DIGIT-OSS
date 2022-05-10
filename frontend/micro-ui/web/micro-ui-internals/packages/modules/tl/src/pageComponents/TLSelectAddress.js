@@ -234,6 +234,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
             optionKey="i18nkey"
             onSelect={selectLocality}
             t={t}
+            optionCardStyles={{maxHeight:"210px",overflow:"scroll"}}
             //isDependent={true}
             labelKey=""
             disabled={isEdit}
