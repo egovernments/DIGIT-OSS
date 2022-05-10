@@ -367,7 +367,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                                     />}
                                     <div style={{ marginTop: "30px" }}>
                                         <div className="field-container">
-                                            <div style={{ position: "relative", zIndex: "100", left: "35px", marginTop: "-23px",marginLeft:Webview?"-25px":"-25px" }}>+91</div>
+                                            <div style={{ position: "relative", zIndex: "100", left: "35px", marginTop: "-24.5px",marginLeft:Webview?"-25px":"-25px" }}>+91</div>
                                             <TextInput
                                                 style={{ background: "#FAFAFA", padding: "0px 35px" }}
                                                 type={"text"}
@@ -384,7 +384,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                                                     title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
                                                 })}
                                             />
-                                            <div style={{ position: "relative", zIndex: "100", right: "35px", marginTop: "-23px", marginRight:Webview?"-20px":"-20px" }} onClick={(e) => getOwnerDetails(index, e)}> <SearchIcon /> </div>
+                                            <div style={{ position: "relative", zIndex: "100", right: "35px", marginTop: "-24px", marginRight:Webview?"-20px":"-20px" }} onClick={(e) => getOwnerDetails(index, e)}> <SearchIcon /> </div>
                                         </div>
                                     </div>
                                     <CardLabel>{`${t("CORE_COMMON_NAME")} *`}</CardLabel>

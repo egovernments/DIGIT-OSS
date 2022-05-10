@@ -13,6 +13,7 @@ const MyApplication = () => {
   const { t } = useTranslation();
   const history = useHistory();
   const [finalData, setFinalData] = useState([]);
+  const [labelMessage, setLableMessage] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userInfo = Digit.UserService.getUser();
   const requestor = userInfo?.info?.mobileNumber;
@@ -101,6 +102,9 @@ const MyApplication = () => {
         return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;
       });
       setFinalData(sortConvertedArray);
+      let userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+      const userInfoDetails = userInfos ? JSON.parse(userInfos) : {};
+      if (userInfoDetails?.value?.info?.roles?.length == 1 && userInfoDetails?.value?.info?.roles?.[0]?.code == "CITIZEN") setLableMessage(true);
     }
   }, [isLoading, isBpaSearchLoading, bpaData, data]);
 
@@ -159,7 +163,12 @@ const MyApplication = () => {
                     <SubmitBar label={t("TL_VIEW_DETAILS")} />
                   </Link>
                 ) : (
-                  <SubmitBar label={t("BPA_COMP_WORKFLOW")} onSubmit={() => getBPAFormData(application, mdmsData, history, t)} />
+                    <div>
+                      {labelMessage ?
+                        <Link to={{ pathname: `/digit-ui/citizen/obps/bpa/${application?.applicationNo}`, state: { tenantId: '' } }}>
+                          <SubmitBar label={t("TL_VIEW_DETAILS")} />
+                        </Link> : <SubmitBar label={t("BPA_COMP_WORKFLOW")} onSubmit={() => getBPAFormData(application, mdmsData, history, t)} />}
+                    </div>
                 )}
               </Card>
             );
