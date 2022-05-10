@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 const BPACitizenHomeScreen = ({ parentRoute }) => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info?.roles?.map((roleData) => roleData.code);
   const stateCode = Digit.ULBService.getStateId();
   const [stakeHolderRoles, setStakeholderRoles] = useState(false);
   const { data: stakeHolderDetails, isLoading: stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(
@@ -82,10 +82,10 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
           roles.push(role);
         });
       });
-      const uniqueRoles = roles.filter((item, i, ar) => ar.indexOf(item) === i);
+      const uniqueRoles = roles?.filter((item, i, ar) => ar.indexOf(item) === i);
       let isRoute = false;
       uniqueRoles?.map((unRole) => {
-        if (userRoles.includes(unRole) && !isRoute) {
+        if (userRoles?.includes(unRole) && !isRoute) {
           isRoute = true;
         }
       });

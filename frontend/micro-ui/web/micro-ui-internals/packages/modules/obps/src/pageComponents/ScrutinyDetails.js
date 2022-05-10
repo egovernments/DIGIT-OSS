@@ -27,7 +27,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   const [floorData, setfloorData] = useState([]);
   let scrutinyNumber = `DCR82021WY7QW`;
   let user = Digit.UserService.getUser();
-  const tenantId = user.info.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   const checkingFlow = formData?.uiFlow?.flow;
   const [showToast, setShowToast] = useState(null);
   const stateCode = Digit.ULBService.getStateId();
