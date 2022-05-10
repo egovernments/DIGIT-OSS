@@ -6,7 +6,7 @@ import {
   Row,
   LabelFieldPair
 } from "@egovernments/digit-ui-react-components";
-import PropertyDocuments from "./PropertyDocuments";
+import DocumentsPreview from "./DocumentsPreview";
 
 function SelectDocument({
   t,
@@ -174,7 +174,7 @@ const NOCDocuments = ({ t, noc, docs, isNoc, applicationData,NOCdata, bpaActions
         }
       })}
       </StatusTable>
-      <PropertyDocuments documents={docs} svgStyles={{ width: "80px", height: "100px", viewBox: "0 0 25 25", minWidth: "80px" }}/>
+      <DocumentsPreview documents={docs} svgStyles={{ width: "80px", height: "100px", viewBox: "0 0 25 25", minWidth: "80px" }}/>
       {checkEnablingDocs && nocTaxDocuments?.map((document, index) => {
         return (
           <SelectDocument
