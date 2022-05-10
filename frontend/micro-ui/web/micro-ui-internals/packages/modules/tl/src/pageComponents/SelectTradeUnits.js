@@ -211,16 +211,15 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                     select={(e) => selectTradeType(index, e)}
                   />
                   <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL")}*`}</CardLabel>
-                  <div className={"form-pt-dropdown-only"}>
                     <Dropdown
                       t={t}
                       optionKey="i18nKey"
                       isMandatory={config.isMandatory}
                       option={sortDropdownNames(getTradeSubTypeMenu(field?.tradetype), "i18nKey", t)}
                       selected={field?.tradesubtype}
+                      optionCardStyles={{maxHeight:"125px",overflow:"scroll"}}
                       select={(e) => selectTradeSubType(index, e)}
                     />
-                  </div>
                   <CardLabel>{`${t("TL_UNIT_OF_MEASURE_LABEL")}`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
