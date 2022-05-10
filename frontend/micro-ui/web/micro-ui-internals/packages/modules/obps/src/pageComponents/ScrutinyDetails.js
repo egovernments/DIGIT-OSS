@@ -293,6 +293,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
                 onSelect={(e) => selectOccupancy(e, data, block.number)}
                 isOBPSMultiple={true}
                 optionsKey="i18nKey"
+                ServerStyle={{ width: "100%", overflowX: "hidden"}}
                 t={t}
               />
             ) : null}

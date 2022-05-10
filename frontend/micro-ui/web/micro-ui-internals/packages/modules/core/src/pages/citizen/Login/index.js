@@ -64,6 +64,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
     if (!user) {
       return;
     }
+    Digit.SessionStorage.set("citizen.userRequestObject", user);
     Digit.UserService.setUser(user);
     setCitizenDetail(user?.info,user?.access_token,stateCode)
     const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
