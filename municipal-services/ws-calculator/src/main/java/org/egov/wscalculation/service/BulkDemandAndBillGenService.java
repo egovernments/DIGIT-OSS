@@ -59,6 +59,7 @@ public class BulkDemandAndBillGenService {
 		BulkBillGenerator bulkBillGenerator = generateDemandInBulk(request.getRequestInfo(), calculations, masterMap,
 				true);
 		bulkBillGenerator.setMigrationCount(request.getMigrationCount());
+		bulkBillGenerator.getMigrationCount().setMessage("process succeded in billing service");
 		kafkaTemplate.send(bulkBillGenTopic, bulkBillGenerator);
 	}
 
