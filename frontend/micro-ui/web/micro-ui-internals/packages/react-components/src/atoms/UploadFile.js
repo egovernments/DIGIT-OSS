@@ -95,7 +95,7 @@ const getCitizenStyles = (value) => {
         height: "auto",
         lineHeight: "16px",
         overflow: "hidden",
-        minHeight: "35px",
+        // minHeight: "35px",
         maxHeight: "35px"
       },   
       inputStyles: {
@@ -110,7 +110,8 @@ const getCitizenStyles = (value) => {
         minHeight: "40px",
         width: "43%",
         maxHeight: "40px",
-        margin: "5px"
+        margin: "5px",
+        padding: "0px"
       },
       closeIconStyles: {
         width : "20px"
