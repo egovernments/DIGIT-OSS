@@ -169,7 +169,7 @@ export const OBPSService = {
     };
 
     const appDocumentFileStoreIds = License?.tradeLicenseDetail?.applicationDocuments?.map(appDoc => appDoc?.fileStoreId)
-    const fileDetails = {};
+    let fileDetails = {};
     if (appDocumentFileStoreIds?.length > 0) {
        fileDetails =  await UploadServices.Filefetch(appDocumentFileStoreIds, Digit.ULBService.getStateId());
     }
