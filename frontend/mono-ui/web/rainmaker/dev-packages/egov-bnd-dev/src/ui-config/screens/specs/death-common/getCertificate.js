@@ -7,7 +7,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import { get, set } from "lodash";
-import { loadHospitals, loadMdmsData } from "./../utils";
+import { ifUserRoleExists, loadHospitals, loadMdmsData } from "./../utils";
 import { deathSearchCard } from "./deathSearchResources/deathSearchCard";
 import { searchResults } from "./deathSearchResources/searchResults";
 import "./deathSearchResources/index.css";
@@ -115,7 +115,7 @@ const getCertificate = {
                 sm: 6,
                 align: "right",
               },
-              visible: process.env.REACT_APP_NAME !== "Citizen",
+              visible: process.env.REACT_APP_NAME !== "Citizen" && ifUserRoleExists("DEATH_APPLICATION_CREATOR"),
               props: {
                 variant: "contained",
                 color: "primary",
