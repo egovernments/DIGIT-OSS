@@ -552,8 +552,8 @@ export const loadCertDetails = async (action, state, dispatch, data) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      `/birth-death-services/${data.module}/_viewCertData`,
-      "_viewCertData",
+      `/birth-death-services/${data.module}/_viewcertdata`,
+      "_viewcertdata",
       queryParams,
       requestBody
     );
@@ -582,8 +582,8 @@ export const loadFullCertDetails = async (action, state, dispatch, data) => {
   try {
     payload = await httpRequest(
       "post",
-      `/birth-death-services/${data.module}/_viewfullCertData`,
-      "_viewCertData",
+      `/birth-death-services/${data.module}/_viewfullcertdata`,
+      "_viewcertdata",
       queryParams,
       requestBody
     );

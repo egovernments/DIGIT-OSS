@@ -243,8 +243,8 @@ export const postData = async (state, dispatch) => {
     };
     let actionmode =
       getQueryArg(window.location.href, "action") == "EDIT"
-        ? "updateDeathImport"
-        : "saveDeathImport";
+        ? "updatedeathimport"
+        : "savedeathimport";
     payload = await httpRequest(
       "post",
       `birth-death-services/common/${actionmode}`,
