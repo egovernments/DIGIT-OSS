@@ -48,14 +48,14 @@ public class RestService {
      * @return
      * @throws IOException
      */
-    @Cacheable(value = "tarentoResponse")
+
     public JsonNode search(String index, String searchQuery) {
-        System.out.println("INSIDE REST");
+        //System.out.println("INSIDE REST");
         String url =( indexServiceHost) + index + indexServiceHostSearch;
         HttpHeaders headers = getHttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        LOGGER.info("Index Name : " + index); 
-        LOGGER.info("Searching ES for Query: " + searchQuery); 
+        //LOGGER.info("Index Name : " + index);
+        //LOGGER.info("Searching ES for Query: " + searchQuery);
         HttpEntity<String> requestEntity = new HttpEntity<>(searchQuery, headers);
         String reqBody = requestEntity.getBody();
         JsonNode responseNode = null;
@@ -63,7 +63,7 @@ public class RestService {
         try {
             ResponseEntity<Object> response = retryTemplate.postForEntity(url, requestEntity);
             responseNode = new ObjectMapper().convertValue(response.getBody(), JsonNode.class);
-            LOGGER.info("RestTemplate response :- "+responseNode);
+            //LOGGER.info("RestTemplate response :- "+responseNode);
 
         } catch (HttpClientErrorException e) {
             e.printStackTrace();

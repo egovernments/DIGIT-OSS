@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -64,8 +65,11 @@ public class TarentoServiceImpl implements ClientService {
 	@Autowired
 	private MdmsApiMappings mdmsApiMappings;
 
+
 	@Override
+	@Cacheable(value="versions", key="#request.hashKey")
 	public AggregateDto getAggregatedData(AggregateRequestDto request, List<RoleDto> roles) throws AINException, IOException {
+		//System.out.println("TARENTO SERVICE IMPL");
 		// Read visualization Code
 		String internalChartId = request.getVisualizationCode();
 		ObjectNode aggrObjectNode = JsonNodeFactory.instance.objectNode();
