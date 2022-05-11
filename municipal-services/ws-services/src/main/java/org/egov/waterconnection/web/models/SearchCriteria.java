@@ -52,6 +52,9 @@ public class SearchCriteria {
 	@JsonProperty("connectionNumber")
 	private String connectionNumber;
 
+	@JsonProperty("connectionNumbers")
+	private Set<String> connectionNumbers;
+
 	@JsonProperty("oldConnectionNumber")
 	private String oldConnectionNumber;
 
