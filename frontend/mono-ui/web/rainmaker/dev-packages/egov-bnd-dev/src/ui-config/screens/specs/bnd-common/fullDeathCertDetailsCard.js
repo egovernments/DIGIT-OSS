@@ -11,7 +11,7 @@ import get from "lodash/get";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { checkValueForNA,getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {genderValues} from "./../../../../ui-utils/constants";
-import {convertEpochToDateWithTimeIST} from "../utils";
+import {convertEpochToDateWithTimeIST, ifUserRoleExists} from "../utils";
 
 const addSpace = data => {
   return ""+checkValueForNA(data);;
@@ -227,8 +227,10 @@ export const getFullDeathCertDetailsCard = (inJsonPath) =>
           height: "30px",
           float: "right",
           borderRadius: "inherit"
-        }
+        },
+        
       },
+      visible:ifUserRoleExists("DEATH_APPLICATION_EDITOR"),
       children: {
         previousButtonLabel: getLabel({
           labelName: "Previous Step",
