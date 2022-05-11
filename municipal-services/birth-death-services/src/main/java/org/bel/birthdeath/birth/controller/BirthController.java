@@ -106,7 +106,7 @@ public class BirthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 	
-	@PostMapping(value = { "/_searchApplications"})
+	@PostMapping(value = { "/_searchapplications"})
     public ResponseEntity<BirthCertApplnResponse> searchApplications(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                         @ModelAttribute SearchCriteria criteria ) {
         List<BirthCertAppln> applications = birthService.searchApplications(requestInfoWrapper);
@@ -116,7 +116,7 @@ public class BirthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 	
-	@PostMapping(value = { "/_viewCertData"})
+	@PostMapping(value = { "/_viewcertdata"})
     public ResponseEntity<BirthPdfApplicationRequest> viewCertificateData(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                         @ModelAttribute SearchCriteria criteria ) {
         List<EgBirthDtl> certData = birthService.viewCertificateData(criteria);
@@ -125,7 +125,7 @@ public class BirthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 	
-	@PostMapping(value = { "/_viewfullCertData"})
+	@PostMapping(value = { "/_viewfullcertdata"})
     public ResponseEntity<BirthPdfApplicationRequest> viewfullCertMasterData(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                         @ModelAttribute SearchCriteria criteria ) {
         List<EgBirthDtl> certData = birthService.viewfullCertMasterData(criteria,requestInfoWrapper.getRequestInfo());

@@ -31,7 +31,7 @@ public class CommonController {
 	private ResponseInfoFactory responseInfoFactory;
 	
 	
-	@PostMapping(value = { "/getHospitals"})
+	@PostMapping(value = { "/gethospitals"})
     public ResponseEntity<HospitalResponse> search(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                        @Valid @ModelAttribute SearchCriteria criteria) {
         List<EgHospitalDtl> hospitalDtls = commonService.search(criteria.getTenantId());
@@ -42,7 +42,7 @@ public class CommonController {
     }
 	
 	
-	@PostMapping(value = { "/saveBirthImport"})
+	@PostMapping(value = { "/savebirthimport"})
     public ResponseEntity<ImportBirthWrapper> saveBirthImport(
     		@RequestBody BirthResponse importJSon) {
         ImportBirthWrapper importBirthWrapper = commonService.saveBirthImport(importJSon,importJSon.getRequestInfo());
@@ -50,14 +50,14 @@ public class CommonController {
         return new ResponseEntity<>(importBirthWrapper, HttpStatus.OK);
     }
 	
-	@PostMapping(value = { "/saveDeathImport"})
+	@PostMapping(value = { "/savedeathimport"})
     public ResponseEntity<ImportDeathWrapper> saveDeathImport(	@RequestBody DeathResponse importJSon) {
 		ImportDeathWrapper importDeathWrapper = commonService.saveDeathImport(importJSon,importJSon.getRequestInfo());
 		importDeathWrapper.setResponseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(importJSon.getRequestInfo(), true));
         return new ResponseEntity<>(importDeathWrapper, HttpStatus.OK);
     }
 	
-	@PostMapping(value = { "/updateBirthImport"})
+	@PostMapping(value = { "/updatebirthimport"})
     public ResponseEntity<ImportBirthWrapper> updateBirthImport(
     		@RequestBody BirthResponse importJSon) {
         ImportBirthWrapper importBirthWrapper = commonService.updateBirthImport(importJSon,importJSon.getRequestInfo());
@@ -65,7 +65,7 @@ public class CommonController {
         return new ResponseEntity<>(importBirthWrapper, HttpStatus.OK);
     }
 	
-	@PostMapping(value = { "/updateDeathImport"})
+	@PostMapping(value = { "/updatedeathimport"})
     public ResponseEntity<ImportDeathWrapper> updateDeathImport(
     		@RequestBody DeathResponse importJSon) {
 		ImportDeathWrapper importDeathWrapper = commonService.updateDeathImport(importJSon,importJSon.getRequestInfo());

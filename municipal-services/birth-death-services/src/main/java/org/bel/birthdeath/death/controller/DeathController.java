@@ -105,7 +105,7 @@ public class DeathController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 	
-	@PostMapping(value = { "/_searchApplications"})
+	@PostMapping(value = { "/_searchapplications"})
     public ResponseEntity<DeathCertApplnResponse> searchApplications(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                         @ModelAttribute SearchCriteria criteria ) {
         List<DeathCertAppln> applications = deathService.searchApplications(requestInfoWrapper);
@@ -115,7 +115,7 @@ public class DeathController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 	
-	@PostMapping(value = { "/_viewCertData"})
+	@PostMapping(value = { "/_viewcertdata"})
     public ResponseEntity<DeathPdfApplicationRequest> viewCertificateData(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                         @ModelAttribute SearchCriteria criteria ) {
         List<EgDeathDtl> certData = deathService.viewCertificateData(criteria);
@@ -124,7 +124,7 @@ public class DeathController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 	
-	@PostMapping(value = { "/_viewfullCertData"})
+	@PostMapping(value = { "/_viewfullcertdata"})
     public ResponseEntity<DeathPdfApplicationRequest> viewfullCertMasterData(@RequestBody RequestInfoWrapper requestInfoWrapper,
                                                         @ModelAttribute SearchCriteria criteria ) {
         List<EgDeathDtl> certData = deathService.viewfullCertMasterData(criteria,requestInfoWrapper.getRequestInfo());
