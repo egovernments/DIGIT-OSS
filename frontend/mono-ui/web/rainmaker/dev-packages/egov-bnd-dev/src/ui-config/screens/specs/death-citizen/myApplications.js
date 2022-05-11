@@ -18,7 +18,7 @@ const getMyApplications = async (action, state, dispatch) => {
     let payload = null;
       payload = await httpRequest(
         "post",
-        "birth-death-services/death/_searchApplications",
+        "birth-death-services/death/_searchapplications",
         "_search",
         queryParams,
         {}
