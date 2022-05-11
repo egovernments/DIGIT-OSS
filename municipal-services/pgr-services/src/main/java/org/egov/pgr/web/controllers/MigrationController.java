@@ -1,9 +1,7 @@
 package org.egov.pgr.web.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import org.egov.pgr.service.MigrationService;
 import org.egov.pgr.web.models.pgrV1.ServiceResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -21,16 +20,16 @@ import java.util.Map;
 public class MigrationController {
 
 
-    @Autowired
-    private MigrationService migrationService;
+//    @Autowired
+//    private MigrationService migrationService;
 
 
     @RequestMapping(value="/_transform", method = RequestMethod.POST)
     public ResponseEntity<Map> requestsCreatePost(@Valid @RequestBody ServiceResponse request) throws IOException {
 
-        Map<String, Object> response = migrationService.migrate(request);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+//        Map<String, Object> response = migrationService.migrate(request);
+       Map<String, Object> response = new HashMap<>();
+      return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 }
