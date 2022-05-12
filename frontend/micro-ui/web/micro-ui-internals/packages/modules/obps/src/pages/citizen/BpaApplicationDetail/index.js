@@ -241,8 +241,11 @@ const BpaApplicationDetail = () => {
       window.location.assign(`${window.location.origin}/digit-ui/citizen/payment/collect/${`${getBusinessServices(data?.businessService, data?.applicationStatus)}/${id}/${data?.tenantId}?tenantId=${data?.tenantId}`}`);
     }
     if (action === "SEND_TO_CITIZEN"){
-      getBPAFormData(data?.applicationData, mdmsData, history, t)
-      // window.location.replace(`/digit-ui/citizen/obps/editApplication/${path}/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}`)
+      if (workflowDetails?.data?.processInstances?.length > 2) {
+        window.location.replace(`/digit-ui/citizen/obps/editApplication/${path}/${data?.applicationData?.tenantId}/${data?.applicationData?.applicationNo}`)
+      } else {
+        getBPAFormData(data?.applicationData, mdmsData, history, t)
+      }
     }
     setSelectedAction(action);
     setDisplayMenu(false);
