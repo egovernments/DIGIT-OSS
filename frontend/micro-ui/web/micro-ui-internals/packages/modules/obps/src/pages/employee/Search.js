@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const Search = ({ path }) => {
+  const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+  const userInfo = userInfos ? JSON.parse(userInfos) : {};
+  const userInformation = userInfo?.value?.info;
+
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const [selectedType, setSelectedType] = useState();
+  const [selectedType, setSelectedType] = useState((userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_") ).length>0 &&  userInformation?.roles?.filter((ob) => ob.code.includes("BPA_") ).length<=0 ?"BPA_STAKEHOLDER_REGISTRATION" :"BUILDING_PLAN_SCRUTINY"));
   const [payload, setPayload] = useState({});
   const [searchData, setSearchData] = useState({});
 

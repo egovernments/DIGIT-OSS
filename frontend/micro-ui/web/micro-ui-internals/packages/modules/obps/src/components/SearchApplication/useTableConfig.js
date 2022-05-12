@@ -56,7 +56,8 @@ const useSearchApplicationTableConfig = ({t}) => {
         },
         {
           Header: t("BPA_CURRENT_OWNER_HEAD"),
-          accessor: (row) => GetCell(row.businessService === "BPAREG"?row?.tradeLicenseDetail?.owners.map( o => o.name ). join(",") || "-" : row?.landInfo?.owners.map( o => o.name ). join(",") || "-"),
+          accessor: (row) => GetCell(row?.assignee || "-"),
+          // accessor: (row) => GetCell(row.businessService === "BPAREG"?row?.tradeLicenseDetail?.owners.map( o => o.name ). join(",") || "-" : row?.landInfo?.owners.map( o => o.name ). join(",") || "-"),
           disableSortBy: true,
         },
         {

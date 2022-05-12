@@ -17,8 +17,13 @@ import useSearchApplicationTableConfig from "./useTableConfig";
 
 const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData, isLoading, Count }) => {
   const [showToast, setShowToast] = useState(null);
-  const currentUserPhoneNumber = Digit.UserService.getUser().info.mobileNumber;
-  const userInformation = Digit.UserService.getUser()?.info;
+  // const currentUserPhoneNumber = Digit.UserService.getUser().info.mobileNumber;
+  // const userInformation = Digit.UserService.getUser()?.info;
+
+  const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+  const userInfo = userInfos ? JSON.parse(userInfos) : {};
+  const userInformation = userInfo?.value?.info;
+  const currentUserPhoneNumber = userInfo?.value?.info?.mobileNumber;
 
   const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
     defaultValues: {

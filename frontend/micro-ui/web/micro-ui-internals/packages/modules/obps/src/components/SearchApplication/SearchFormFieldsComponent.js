@@ -5,7 +5,10 @@ import { useWatch } from "react-hook-form";
 const SearchFormFieldsComponent = ({ formState, Controller, register, control, t, reset, previousPage }) => {
   const stateTenantId = Digit.ULBService.getStateId();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const userInformation = Digit.UserService.getUser()?.info;
+  // const userInformation = Digit.UserService.getUser()?.info;
+  const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+  const userInfo = userInfos ? JSON.parse(userInfos) : {};
+  const userInformation = userInfo?.value?.info;
   const applicationType = useWatch({ control, name: "applicationType" });
   const oldApplicationType = sessionStorage.getItem("search_application") || "";
   if (oldApplicationType && oldApplicationType != "undefined" && JSON.parse(oldApplicationType)?.code !== applicationType?.code)
