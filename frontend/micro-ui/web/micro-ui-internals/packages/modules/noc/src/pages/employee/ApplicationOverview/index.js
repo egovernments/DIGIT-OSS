@@ -52,6 +52,11 @@ const ApplicationOverview = () => {
   if (workflowDetails?.data?.actionState?.nextActions && !workflowDetails.isLoading)
     workflowDetails.data.actionState.nextActions = [...workflowDetails?.data?.nextActions];
 
+  if (workflowDetails && workflowDetails.data && !workflowDetails.isLoading){
+      workflowDetails.data.initialActionState=workflowDetails?.data?.initialActionState||{...workflowDetails?.data?.actionState}||{} ;
+      workflowDetails.data.actionState = { ...workflowDetails.data };
+  }
+  
   const closeToast = () => {
     setShowToast(null);
   };
