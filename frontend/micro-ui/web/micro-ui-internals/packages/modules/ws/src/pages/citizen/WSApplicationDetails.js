@@ -227,7 +227,6 @@ const WSApplicationDetails = () => {
               className="border-none"
               label={t("WS_PROPERTY_ID_LABEL")}
               text={data?.WaterConnection?.[0]?.propertyId || data?.SewerageConnections?.[0]?.propertyId}
-              textStyle={{ whiteSpace: "pre" }}
             />
             <Row
               className="border-none"

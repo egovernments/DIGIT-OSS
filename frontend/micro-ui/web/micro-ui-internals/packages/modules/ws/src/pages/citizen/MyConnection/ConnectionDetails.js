@@ -221,7 +221,7 @@ const ConnectionDetails = () => {
       <div className="hide-seperator">
         <Card>
           <StatusTable>
-            <Row className="border-none" label={t("WS_MYCONNECTIONS_CONSUMER_NO")} text={state?.connectionNo} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_MYCONNECTIONS_CONSUMER_NO")} text={state?.connectionNo} />
             <Row
               className="border-none"
               label={t("WS_SERVICE_NAME_LABEL")}
@@ -286,7 +286,7 @@ const ConnectionDetails = () => {
           </StatusTable>
           <CardHeader styles={{ fontSize: "28px" }}>{t("WS_COMMON_PROPERTY_DETAILS")}</CardHeader>
           <StatusTable>
-            <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={state?.propertyId} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={state?.propertyId} />
             <Row
               className="border-none"
               label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")}
@@ -366,7 +366,7 @@ const ConnectionDetails = () => {
               </div>
             ))}
           {state?.status !== "inactive" ? (
-            <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}>
+            <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px", marginTop: "25px" }}>
               <div style={{ width: "100%" }}>
                 {displayMenu ? (
                   <Menu
