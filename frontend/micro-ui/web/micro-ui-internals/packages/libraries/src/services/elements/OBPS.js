@@ -255,10 +255,11 @@ export const OBPSService = {
   },
   BPADetailsPage: async (tenantId, filters) => {
     const response = await OBPSService.BPASearch(tenantId, filters);
-    const appDocumentFileStoreIds = response?.BPA?.[0]?.documents?.map(docId => docId.fileStoreId);
+    let appDocumentFileStoreIds = response?.BPA?.[0]?.documents?.map(docId => docId.fileStoreId);
+    if(!appDocumentFileStoreIds) appDocumentFileStoreIds = [];
     response?.BPA?.[0]?.additionalDetails?.fieldinspection_pending?.map(fiData => {
       fiData?.docs?.map(fiDoc => {
-        appDocumentFileStoreIds.push(fiDoc?.fileStoreId)
+        if(fiDoc?.fileStoreId)  appDocumentFileStoreIds.push(fiDoc?.fileStoreId)
       })
     });
     
@@ -284,7 +285,7 @@ export const OBPSService = {
 
     noc?.map(nocDetails => {
       nocDetails?.documents?.map(nocDoc => {
-        appDocumentFileStoreIds.push(nocDoc?.fileStoreId)
+        if(nocDoc?.fileStoreId) appDocumentFileStoreIds.push(nocDoc?.fileStoreId)
       })
     });
 
