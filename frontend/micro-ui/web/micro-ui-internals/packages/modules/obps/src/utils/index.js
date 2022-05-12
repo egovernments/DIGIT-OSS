@@ -89,7 +89,7 @@ export const getBPAFormData = async (data, mdmsData, history, t) => {
       unit.map((un, index) => {
         arr = un?.usageCategory?.split(",");
         subBlocks = [];
-        arr &&
+        arr && arr?.length > 0 && arr != "" &&
           arr.map((ob, ind) => {
             subBlocks.push({
               code: ob,
