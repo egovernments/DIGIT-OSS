@@ -1,5 +1,6 @@
 package com.tarento.analytics;
 
+import org.cache2k.extra.spring.SpringCache2kCacheManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.CacheManager;
@@ -23,6 +24,8 @@ public class AnalyticApp {
 	        SpringApplication.run(AnalyticApp.class, args);
 	    }
 
+		private int workflowExpiry = 10;
+
 	    @Bean
 	    public RestTemplate restTemplate() {
 	        return new RestTemplate();
@@ -38,4 +41,11 @@ public class AnalyticApp {
 	            }
 	        };
 	    }
+
+		@Bean
+		@Profile("!test")
+		public CacheManager cacheManager(){
+			return new SpringCache2kCacheManager().addCaches(b->b.name("versions").expireAfterWrite(workflowExpiry, TimeUnit.MINUTES)
+					.entryCapacity(10));
+		}
 }
