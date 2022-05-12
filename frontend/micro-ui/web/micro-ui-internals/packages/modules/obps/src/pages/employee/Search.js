@@ -8,7 +8,12 @@ const Search = ({ path }) => {
 
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const [selectedType, setSelectedType] = useState((userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_") ).length>0 &&  userInformation?.roles?.filter((ob) => ob.code.includes("BPA_") ).length<=0 ?"BPA_STAKEHOLDER_REGISTRATION" :"BUILDING_PLAN_SCRUTINY"));
+  const details = () => {
+    if (userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length > 0) return "BUILDING_PLAN_SCRUTINY";
+    if (userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0) return "BPA_STAKEHOLDER_REGISTRATION";
+    else return "BUILDING_PLAN_SCRUTINY"
+  }
+  const [selectedType, setSelectedType] = useState(details());
   const [payload, setPayload] = useState({});
   const [searchData, setSearchData] = useState({});
 
@@ -19,7 +24,7 @@ const Search = ({ path }) => {
     var fromDate = new Date(_data?.fromDate);
     fromDate?.setSeconds(fromDate?.getSeconds() - 19800);
     var toDate = new Date(_data?.toDate);
-    setSelectedType(_data?.applicationType?.code);
+    setSelectedType(_data?.applicationType?.code ? _data?.applicationType?.code : selectedType);
     toDate?.setSeconds(toDate?.getSeconds() + 86399 - 19800);
     const data = {
       ..._data,
