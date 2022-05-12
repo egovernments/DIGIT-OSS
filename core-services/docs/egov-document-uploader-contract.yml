@@ -108,6 +108,24 @@ paths:
           style: form
           schema:
             type: string
+        - name: fromDate
+          in: query
+          required: false
+          style: form
+          schema:
+            type: integer
+        - name: toDate
+          in: query
+          required: false
+          style: form
+          schema:
+            type: integer
+        - name: viewDeletedDocuments
+          in: query
+          required: false
+          style: form
+          schema:
+            type: boolean
       requestBody:
         content:
           application/json:
