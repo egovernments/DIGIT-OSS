@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-noc",
-  "version": "1.5.0-beta.25",
+  "version": "1.5.0-beta.26",
   "description": "Digit NOC Module",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -18,8 +18,8 @@
     "react-router-dom": "5.3.0"
   },
   "dependencies": {
-    "@egovernments/digit-ui-libraries": "1.5.0-beta.12",
-    "@egovernments/digit-ui-react-components": "1.5.0-beta.9",
+    "@egovernments/digit-ui-libraries": "1.5.0-beta.26",
+    "@egovernments/digit-ui-react-components": "1.5.0-beta.26",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "6.15.8",
