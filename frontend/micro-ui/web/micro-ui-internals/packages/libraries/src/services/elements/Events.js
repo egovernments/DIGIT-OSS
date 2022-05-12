@@ -3,9 +3,10 @@ import { Request } from "../atoms/Utils/Request";
 
 const Events = {
     Search: ({tenantId, data, filter= {}, auth = false}) => {
-      const userType = Digit.UserService.getType();
-      if(userType==="employee") auth = true 
-      else auth = false 
+      // const userType = Digit.UserService.getType();
+      // if(userType==="employee") auth = true 
+      // else auth = false 
+      //reverting these changes as it is working fine without sending authToken
       return Request({
             url: Urls.events.search,
             useCache: false,
