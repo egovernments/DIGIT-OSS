@@ -4,7 +4,12 @@ import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-compone
 
 function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={},MenuStyle={} }) {
   const { t } = useTranslation();
-  const user = Digit.UserService.getUser();
+  let user = Digit.UserService.getUser();
+  if (window.location.href.includes("/obps") || window.location.href.includes("/noc")) {
+    const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+    const userInfo = userInfos ? JSON.parse(userInfos) : {};
+    user = userInfo?.value;
+  }
   const userRoles = user?.info?.roles?.map((e) => e.code);
   let isSingleButton = false;
   let isMenuBotton = false;
