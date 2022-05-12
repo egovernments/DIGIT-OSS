@@ -46,6 +46,20 @@ paths:
           in: query
           maxItems: 50
           description: Array of roles for which the events are being searched.
+        - name: name
+          type: array
+          items:
+            type: string
+          in: query
+          maxItems: 50
+          description: Array of event name for which the events are being searched.
+        - name: eventTypes
+          type: array
+          items:
+            type: string
+          in: query
+          maxItems: 50
+          description: Array of event types for which the events are being searched.
         - name: userIds
           type: array
           items:
@@ -60,11 +74,16 @@ paths:
           in: query
           maxItems: 50
           description: unique identifier (uuid) of the employees posting the event.
-        - name: date
+        - name: fromDate
           type: integer
           in: query
           maxItems: 50
-          description: epoch date of posting the event.
+          description: epoch date.
+        - name: toDate
+          type: integer
+          in: query
+          maxItems: 50
+          description: epoch date.
         - name: tenantId
           in: query
           description: unique identifier of the ULB.
