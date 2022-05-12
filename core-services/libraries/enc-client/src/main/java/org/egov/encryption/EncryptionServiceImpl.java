@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.encryption.accesscontrol.AbacFilter;
@@ -158,14 +159,14 @@ public class EncryptionServiceImpl implements EncryptionService {
     }
 
 
-    public JsonNode decryptJson(Object ciphertextJson, String key, User user) throws IOException {
+    public JsonNode decryptJson(RequestInfo requestInfo,Object ciphertextJson, String key, User user) throws IOException {
 
         List<String> roles = user.getRoles().stream().map(Role::getCode).collect(Collectors.toList());
 
 //        Map<Attribute, AccessType> attributeAccessTypeMap = abacFilter.getAttributeAccessForRoles(roles,
 //                abacConfiguration.getRoleAttributeAccessListForKey(key));
 
-        Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap = decryptionPolicyConfiguration.getRoleAttributeAccessListForKey(key, roles);
+        Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap = decryptionPolicyConfiguration.getRoleAttributeAccessListForKey(requestInfo,key, roles);
 
         //JsonNode decryptedNode = decryptJson(ciphertextJson, attributeAccessTypeMap, user);
 
@@ -174,8 +175,8 @@ public class EncryptionServiceImpl implements EncryptionService {
         return decryptedNode;
     }
 
-    public <E,P> P decryptJson(Object ciphertextJson, String key, User user, Class<E> valueType) throws IOException {
-        return ConvertClass.convertTo(decryptJson(ciphertextJson, key, user), valueType);
+    public <E,P> P decryptJson(RequestInfo requestInfo, Object ciphertextJson, String key, User user, Class<E> valueType) throws IOException {
+        return ConvertClass.convertTo(decryptJson(requestInfo,ciphertextJson, key, user), valueType);
     }
 
 

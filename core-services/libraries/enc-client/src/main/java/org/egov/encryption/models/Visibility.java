@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 public enum Visibility {
-    NONE("NONE"),
+    PLAIN("PLAIN"),
     MASKED("MASKED"),
-    PLAIN("PLAIN");
+    NONE("NONE");
 
     private final String value;
 

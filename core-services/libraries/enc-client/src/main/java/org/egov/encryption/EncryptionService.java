@@ -1,6 +1,7 @@
 package org.egov.encryption;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 
 import java.io.IOException;
@@ -12,9 +13,9 @@ public interface EncryptionService {
 
     public <E,P> P encryptJson(Object plaintextJson, String model, String tenantId, Class<E> valueType) throws IOException;
 
-    public JsonNode decryptJson(Object ciphertextJson, String model, User user) throws IOException;
+    public JsonNode decryptJson(RequestInfo requestInfo, Object ciphertextJson, String model, User user) throws IOException;
 
-    public <E,P> P decryptJson(Object ciphertextJson, String model, User user, Class<E> valueType) throws IOException;
+    public <E,P> P decryptJson(RequestInfo requestInfo,Object ciphertextJson, String model, User user, Class<E> valueType) throws IOException;
 
     public String encryptValue(Object plaintext, String tenantId) throws IOException;
 

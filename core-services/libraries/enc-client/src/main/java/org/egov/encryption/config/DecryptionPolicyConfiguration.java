@@ -10,6 +10,7 @@ import org.egov.mdms.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
@@ -81,8 +82,9 @@ public class DecryptionPolicyConfiguration {
     }
 
 
-    public Map<SecurityPolicyAttribute, Visibility> getRoleAttributeAccessListForKey(String keyId, List<String> roles) {
+    public Map<SecurityPolicyAttribute, Visibility> getRoleAttributeAccessListForKey(RequestInfo requestInfo,String keyId, List<String> roles) {
         Map<SecurityPolicyAttribute, Visibility> mapping = new HashMap<>();
+        List<String> plainRequestFields = requestInfo.getPlainRequestFields();
 
         List<SecurityPolicyAttribute> securityPolicyAttributesList = modelAttributeAccessMap.get(keyId);
         List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList = modelRoleBasedDecryptionPolicyMap.get(keyId);
@@ -100,12 +102,17 @@ public class DecryptionPolicyConfiguration {
             for(SecurityPolicyAttributeAccess attributeAccess: attributeList){
                 String attributeName = attributeAccess.getAttribute();
                 SecurityPolicyAttribute attribute = attributesMap.get(attributeName);
-
-                String firstLevelVisibility = String.valueOf(attributeAccess.getFirstLevelVisibility());
-                if(firstLevelVisibility==null)
-                    firstLevelVisibility = String.valueOf(attribute.getDefaultVisibility());
-
-                Visibility visibility = Visibility.valueOf(firstLevelVisibility);
+                Visibility visibility;
+              if(!CollectionUtils.isEmpty(plainRequestFields) && plainRequestFields.contains(attributeName)
+                      && attributeAccess.getSecondLevelVisibility() != null){
+                  String secondLevelVisibility = String.valueOf(attributeAccess.getSecondLevelVisibility());
+                  visibility= Visibility.valueOf(secondLevelVisibility);
+              }
+              else {
+                  String firstLevelVisibility = attributeAccess.getFirstLevelVisibility() != null ?
+                          String.valueOf(attributeAccess.getFirstLevelVisibility()) : String.valueOf(attribute.getDefaultVisibility());
+                  visibility = Visibility.valueOf(firstLevelVisibility);
+              }
                 if(mapping.containsKey(attribute)){
                     if(mapping.get(attribute).ordinal() > visibility.ordinal()){
                         mapping.remove(attribute);
