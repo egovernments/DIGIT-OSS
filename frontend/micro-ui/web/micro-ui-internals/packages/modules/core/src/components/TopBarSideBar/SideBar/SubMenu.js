@@ -17,11 +17,13 @@ import {
   FinanceChartIcon,
   CollectionIcon,
 } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 
 const SubMenu = ({ item }) => {
   const [subnav, setSubnav] = useState(false);
   const location = useLocation();
   const { pathname } = location;
+  const { t } = useTranslation();
   const showSubnav = () => setSubnav(!subnav);
   const IconsObject = {
     home: <HomeIcon />,
@@ -38,48 +40,79 @@ const SubMenu = ({ item }) => {
     edcr: <CollectionIcon />,
     collections: <CollectionIcon />,
   };
-
   const leftIconArray = item?.icon?.leftIcon?.split?.(":")?.[1] || item?.leftIcon?.split?.(":")[1];
   const leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
+  const getModuleName = item?.moduleName?.replace(/[ -]/g, "_");
 
-  return (
-    <React.Fragment>
+  if (item.type === "single") {
+    const getOrigin = window.location.origin;
+    return (
       <div className="submenu-container">
-        <div onClick={item.links && showSubnav} className={`sidebar-link ${subnav === true ? "active" : ""}`}>
+        <div className={`sidebar-link`}>
           <div className="actions">
             {leftIcon}
-            <span>{item.moduleName || item.displayName}</span>
+            {item.navigationURL?.indexOf("/digit-ui") === -1 ? (
+              <a className="custom-link" href={getOrigin + "/employee/" + item.navigationURL}>
+                {t(`ACTION_TEST_${getModuleName}`)}
+              </a>
+            ) : (
+              <Link className="custom-link" to={item.navigationURL}>
+                {t(`ACTION_TEST_${getModuleName}`)}
+              </Link>
+            )}
           </div>
-          <div> {item.links && subnav ? <ArrowVectorDown /> : item.links ? <ArrowForward /> : null} </div>
         </div>
       </div>
+    );
+  } else {
+    return (
+      <React.Fragment>
+        <div className="submenu-container">
+          <div onClick={item.links && showSubnav} className={`sidebar-link ${subnav === true ? "active" : ""}`}>
+            <div className="actions">
+              {leftIcon}
+              <span>{t(`ACTION_TEST_${getModuleName}`)}</span>
+            </div>
+            <div> {item.links && subnav ? <ArrowVectorDown /> : item.links ? <ArrowForward /> : null} </div>
+          </div>
+        </div>
 
-      {subnav &&
-        item.links
-          .filter((item) => item.url === "url" || item.url !== "")
-          .map((item, index) => {
-            if (item.navigationURL.indexOf("/digit-ui") === -1) {
-              const getOrigin = window.location.origin;
+        {subnav &&
+          item.links
+            .filter((item) => item.url === "url" || item.url !== "")
+            .map((item, index) => {
+              const getChildName = item?.displayName?.toUpperCase()?.replace(/[ -]/g, "_");
+              if (item.navigationURL.indexOf("/digit-ui") === -1) {
+                const getOrigin = window.location.origin;
+                return (
+                  <a
+                    key={index}
+                    className={`dropdown-link ${pathname === item.link ? "active" : ""}`}
+                    href={getOrigin + "/employee/" + item.navigationURL}
+                  >
+                    <div className="actions">
+                      <ArrowDirection className="icon" />
+                      <span>{t(`ACTION_TEST_${getChildName}`)}</span>
+                    </div>
+                  </a>
+                );
+              }
               return (
-                <a className={`dropdown-link ${pathname === item.link ? "active" : ""}`} href={getOrigin + "/employee/" + item.navigationURL}>
+                <Link
+                  to={item?.link || item.navigationURL}
+                  key={index}
+                  className={`dropdown-link ${pathname === item?.link || pathname === item?.navigationURL ? "active" : ""}`}
+                >
                   <div className="actions">
                     <ArrowDirection className="icon" />
-                    <span>{item.label || item.displayName}</span>
+                    <span>{t(`ACTION_TEST_${getChildName}`)}</span>
                   </div>
-                </a>
+                </Link>
               );
-            }
-            return (
-              <Link to={item.link} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
-                <div className="actions">
-                  <ArrowDirection className="icon" />
-                  <span>{item.label || item.displayName}</span>
-                </div>
-              </Link>
-            );
-          })}
-    </React.Fragment>
-  );
+            })}
+      </React.Fragment>
+    );
+  }
 };
 
 export default SubMenu;

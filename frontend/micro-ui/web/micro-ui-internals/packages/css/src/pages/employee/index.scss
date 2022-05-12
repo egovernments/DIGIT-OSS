@@ -149,6 +149,12 @@
           fill: #f47738 !important;
         }
       }
+      .employee-search-input {
+        border: none;
+        outline: none;
+        background-color: rgba(0, 0, 0, 0);
+        margin-left: 13px;
+      }
       .custom-link {
         margin-left: 13px;
         white-space: nowrap;

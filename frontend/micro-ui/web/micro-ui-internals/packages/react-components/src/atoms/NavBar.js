@@ -11,6 +11,7 @@ import {
   CollectionsBookmarIcons,
   FinanceChartIcon,
   ComplaintIcon,
+  SearchIcon,
   CollectionIcon,
   PropertyHouse,
   CaseIcon,
@@ -43,7 +44,7 @@ const IconsObject = {
   assignment: <CaseIcon className="icon" />,
   receipt: <CollectionIcon className="icon" />,
   "business-center": <PersonIcon className="icon" />,
-  description: <DocumentIconSolid className="icon" />,
+  description: <CollectionIcon className="icon" />,
   "water-tap": <DropIcon className="icon" />,
   "collections-bookmark": <CollectionsBookmarIcons className="icon" />,
   "insert-chart": <FinanceChartIcon className="icon" />,
@@ -56,7 +57,7 @@ const IconsObject = {
   Phone: <Phone className="icon" />,
   LanguageIcon: <LanguageIcon className="icon" />,
 };
-const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, isEmployee }) => {
+const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, isEmployee, search, setSearch }) => {
   const node = useRef();
   const location = useLocation();
   const { pathname } = location;
@@ -110,6 +111,27 @@ const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, 
     return <Item />;
   };
 
+  const renderSearch = () => {
+    return (
+      <div className="sidebar-list">
+        <div className="submenu-container">
+          <div className="sidebar-link">
+            <div className="actions">
+              <SearchIcon className="icon" />
+              <input
+                className="employee-search-input"
+                type="text"
+                placeholder={t(`ACTION_TEST_SEARCH`)}
+                name="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <React.Fragment>
       <div>
@@ -149,6 +171,7 @@ const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, 
         >
           {profileItem}
           <div className="drawer-list">
+            {isEmployee ? renderSearch() : null}
             {menuItems?.map((item, index) => (
               <div className={`sidebar-list ${pathname === item.link ? "active" : ""}`} key={index}>
                 <MenuItem item={item} />

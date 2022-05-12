@@ -18,13 +18,12 @@ import {
   Phone,
   LanguageIcon,
 } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
 import ChangeCity from "../../ChangeCity";
 import StaticCitizenSideBar from "./StaticCitizenSideBar";
-
 const IconsObject = {
   home: <HomeIcon className="icon" />,
   announcement: <ComplaintIcon className="icon" />,
@@ -126,6 +125,8 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
+  const [search, setSearch] = useState("");
+
   const { t } = useTranslation();
   const history = useHistory();
   const closeSidebar = () => {
@@ -201,7 +202,7 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     ];
   }
 
-  let singleItem = [];
+  let configEmployeeSideBar = {};
 
   if (!isEmployee) {
     Object.keys(linkData)?.map((key) => {
@@ -215,12 +216,10 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
         });
     });
   } else {
-    const configEmployeeSideBar = {};
     data?.actions
-      .filter((e) => e.url === "url")
-      .sort((a, b) => a.orderNumber - b.orderNumber)
+      .filter((e) => e.url === "url" && e.displayName !== "Home")
       .forEach((item) => {
-        if (item.path !== "" && item.path.indexOf(".") !== -1) {
+        if (search == "" && item.path !== "") {
           let index = item.path.split(".")[0];
           if (index === "TradeLicense") index = "Trade License";
           if (!configEmployeeSideBar[index]) {
@@ -228,49 +227,45 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
           } else {
             configEmployeeSideBar[index].push(item);
           }
-        } else {
-          if (item.displayName === "Home") {
-            item.navigationURL = "/digit-ui/employee";
-            singleItem.unshift({
-              displayName: item.displayName,
-              navigationURL: item.navigationURL,
-              icon: item.leftIcon,
-              orderNumber: item.orderNumber,
-            });
-          }
-          if (item.path !== "" && item.displayName !== "Home") {
-            singleItem.push({
-              displayName: item.displayName,
-              navigationURL: item.navigationURL,
-              icon: item.leftIcon,
-              orderNumber: item.orderNumber,
-            });
+        } else if (item.path !== "" && item?.displayName?.toLowerCase().includes(search.toLowerCase())) {
+          let index = item.path.split(".")[0];
+          if (index === "TradeLicense") index = "Trade License";
+          if (!configEmployeeSideBar[index]) {
+            configEmployeeSideBar[index] = [item];
+          } else {
+            configEmployeeSideBar[index].push(item);
           }
         }
       });
-    Object.keys(configEmployeeSideBar).map((key) => {
-      menuItems.splice(1, 0, { type: "dynamic", moduleName: key, links: configEmployeeSideBar[key], icon: configEmployeeSideBar[key][0]?.leftIcon });
-    });
-  }
-  singleItem
-    .filter((ele) => ele.displayName !== "Home")
-    .map((item) => {
-      const leftIconArray = item.icon.split(":")[1];
-      const leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
+    const keys = Object.keys(configEmployeeSideBar);
+    for (let i = 0; i < keys.length; i++) {
+      const getSingleDisplayName = configEmployeeSideBar[keys[i]][0]?.displayName?.toUpperCase()?.replace(/[ -]/g, "_");
+      const getParentDisplayName = keys[i]?.toUpperCase()?.replace(/[ -]/g, "_");
 
-      menuItems.splice(1, 0, {
-        type: "link",
-        text: item.displayName,
-        link: item.navigationURL,
-        icon: leftIcon,
-        populators: {
-          onClick: () => {
-            history.push(item.navigationURL);
-            closeSidebar();
+      if (configEmployeeSideBar[keys[i]][0].path.indexOf(".") === -1) {
+        menuItems.splice(1, 0, {
+          type: "link",
+          text: t(`ACTION_TEST_${getSingleDisplayName}`),
+          link: configEmployeeSideBar[keys[i]][0]?.navigationURL,
+          icon: configEmployeeSideBar[keys[i]][0]?.leftIcon?.split?.(":")[1],
+          populators: {
+            onClick: () => {
+              history.push(configEmployeeSideBar[keys[i]][0]?.navigationURL);
+              closeSidebar();
+            },
           },
-        },
-      });
-    });
+        });
+      } else {
+        menuItems.splice(1, 0, {
+          type: "dynamic",
+          moduleName: t(`ACTION_TEST_${getParentDisplayName}`),
+          links: configEmployeeSideBar[keys[i]],
+          icon: configEmployeeSideBar[keys[i]][1]?.leftIcon,
+        });
+      }
+    }
+  }
+
   /*  URL with openlink wont have sidebar and actions    */
   if (history.location.pathname.includes("/openlink")) {
     profileItem = <span></span>;
@@ -285,6 +280,8 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
       menuItems={menuItems}
       Footer={<PoweredBy />}
       isEmployee={isEmployee}
+      search={search}
+      setSearch={setSearch}
     />
   ) : (
     <StaticCitizenSideBar logout={onLogout} />
