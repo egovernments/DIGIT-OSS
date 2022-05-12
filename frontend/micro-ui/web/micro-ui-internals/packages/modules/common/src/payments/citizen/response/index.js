@@ -4,7 +4,16 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
 
-export const SuccessfulPayment = (props) => {
+export const SuccessfulPayment = (props)=>{
+  if(localStorage.getItem("BillPaymentEnabled")!=="true"){
+    window.history.forward();
+   return null;
+ }
+ return <WrapPaymentComponent {...props}/>
+}
+
+
+ const WrapPaymentComponent = (props) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { eg_pg_txnid: egId, workflow: workflw } = Digit.Hooks.useQueryParams();
@@ -61,6 +70,7 @@ export const SuccessfulPayment = (props) => {
 
   useEffect(() => {
     return () => {
+      localStorage.setItem("BillPaymentEnabled","false")
       queryClient.clear();
     };
   }, []);
