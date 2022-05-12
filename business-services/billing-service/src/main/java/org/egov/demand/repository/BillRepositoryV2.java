@@ -3,6 +3,7 @@ package org.egov.demand.repository;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.egov.demand.repository.querybuilder.BillQueryBuilder;
 import org.egov.demand.repository.rowmapper.BillRowMapperV2;
 import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.BillRequestV2;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -59,7 +61,7 @@ public class BillRepositoryV2 {
 		
 		List<BillV2> bills = billRequest.getBills();
 		
-		jdbcTemplate.batchUpdate(BillQueryBuilder.INSERT_BILL_QUERY, new BatchPreparedStatementSetter() {
+		int[] saveBill = jdbcTemplate.batchUpdate(BillQueryBuilder.INSERT_BILL_QUERY, new BatchPreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
@@ -81,6 +83,7 @@ public class BillRepositoryV2 {
 				ps.setString(12, bill.getMobileNumber());
 				ps.setString(13, bill.getStatus().toString());
 				ps.setObject(14, util.getPGObject(bill.getAdditionalDetails()));
+				ps.setString(15, bill.getConsumerCode());
 			}
 			
 			@Override
@@ -88,6 +91,13 @@ public class BillRepositoryV2 {
 				return bills.size();
 			}
 		});
+		
+		for (int i = 0; i < saveBill.length; i++) {
+			if(0 == saveBill[i])
+				throw new CustomException("EG_BS_DUPLICATE_ACTIVE_BILL_INSERTION_ERROR",
+						"Insertion failed due to presence of ACTIVE bill in DB for consumer-code : "
+								+ bills.get(i).getConsumerCode());
+		}
 		saveBillDetails(billRequest);
 	}
 	
@@ -187,7 +197,7 @@ public class BillRepositoryV2 {
 		});
 	}
 
-		/**
+	/**
 	 * executes query to update bill status to expired 
 	 * @param billIds
 	 */
