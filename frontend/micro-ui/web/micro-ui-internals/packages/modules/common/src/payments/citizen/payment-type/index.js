@@ -39,7 +39,10 @@ export const SelectPaymentType = (props) => {
     if (paymentdetails?.Bill && paymentdetails.Bill.length == 0) {
       setShowToast({ key: true, label: "CS_BILL_NOT_FOUND" });
     }
-  }, [paymentdetails])
+  }, [paymentdetails]);
+  useEffect(()=>{
+    localStorage.setItem("BillPaymentEnabled","true") 
+   },[])
   const { name, mobileNumber } = state;
 
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
@@ -83,11 +86,9 @@ export const SelectPaymentType = (props) => {
       let messageToShow = "CS_PAYMENT_UNKNOWN_ERROR_ON_SERVER";
       if (error.response?.data?.Errors?.[0]) {
         const { code, message } = error.response?.data?.Errors?.[0];
-        messageToShow = t(message);
+        messageToShow = code;
       }
-      window.alert(messageToShow);
-
-      // TODO: add error toast for error.response.data.Errors[0].message
+      setShowToast({ key: true, label: t(messageToShow) });
     }
   };
 
