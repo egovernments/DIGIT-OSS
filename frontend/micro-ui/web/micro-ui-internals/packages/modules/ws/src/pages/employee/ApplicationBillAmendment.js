@@ -16,29 +16,34 @@ import {
   ActionBar,
   SubmitBar,
   CardLabelError,
+  InfoBannerIcon
 } from "@egovernments/digit-ui-react-components";
-import React, { Fragment, useEffect, useMemo, useReducer } from "react";
+import React, { Fragment, useEffect, useMemo, useReducer,useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
+
 
 const ApplicationBillAmendment = () => {
   //connectionNumber=WS/107/2021-22/227166&tenantId=pb.amritsar&service=WATER&connectionType=Metered
   const { t } = useTranslation();
   const { connectionNumber, tenantId, service, connectionType } = Digit.Hooks.useQueryParams();
   const stateId = Digit.ULBService.getStateId();
+
   const { isLoading: BillAmendmentMDMSLoading, data: BillAmendmentMDMS } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSMDMSBillAmendment({
     tenantId: stateId,
   });
   const servicev1 = connectionNumber.includes("WS") ? "WS" : "SW";
   const billSearchFilters = { tenantId, consumerCode: connectionNumber, service: servicev1 };
   const { data: preBillSearchData, isLoading: isBillSearchLoading } = Digit.Hooks.usePaymentSearch(tenantId, billSearchFilters);
+  
   const { data, isFetched } = Digit.Hooks.fsm.useMDMS(stateId, "DIGIT-UI", "WSTaxHeadMaster");
   const availableBillAmendmentTaxHeads = data?.BillingService?.TaxHeadMaster?.filter((w) => w.IsBillamend);
+  
   const billSearchData = preBillSearchData?.filter((e) =>
     availableBillAmendmentTaxHeads?.find((taxHeadMaster) => taxHeadMaster.code === e.taxHeadCode)
   );
-
+  const rebateAndPenaltyTaxHeads = data?.BillingService?.TaxHeadMaster?.filter(e=> e.code.includes("ADHOC") && e.IsBillamend && e.service===servicev1)
   const {
     register,
     control,
@@ -49,6 +54,7 @@ const ApplicationBillAmendment = () => {
     formState: { errors },
     ...methods
   } = useForm();
+  
   const amendmentReason = watch("amendmentReason");
   const WS_REDUCED_AMOUNT = watch("WS_REDUCED_AMOUNT");
   const WS_ADDITIONAL_AMOUNT = watch("WS_ADDITIONAL_AMOUNT");
@@ -119,18 +125,26 @@ const ApplicationBillAmendment = () => {
 
   const getDemandDetailsComparingUpdates = (d) => {
     let actionPerformed;
+    const action = d?.WS_REDUCED_AMOUNT?.VALUE ? "rebate":"penalty";
     if (servicev1 === "WS")
       actionPerformed = JSON.parse(JSON.stringify(d?.WS_REDUCED_AMOUNT?.VALUE ? d?.WS_REDUCED_AMOUNT : d?.WS_ADDITIONAL_AMOUNT));
     else actionPerformed = JSON.parse(JSON.stringify(d?.SW_REDUCED_AMOUNT?.VALUE ? d?.SW_REDUCED_AMOUNT : d?.SW_ADDITIONAL_AMOUNT));
     delete actionPerformed?.VALUE;
     const actionPerformedInArray = Object.entries(actionPerformed);
+    if (d?.[`${servicev1}_REBATE`]) {
+      actionPerformedInArray.push([`${servicev1}_TIME_ADHOC_REBATE`, d?.[`${servicev1}_REBATE`]])
+    } else if (d?.[`${servicev1}_PENALTY`]) {
+      actionPerformedInArray.push([`${servicev1}_TIME_ADHOC_PENALTY`, d?.[`${servicev1}_PENALTY`]])
+    }
     return actionPerformedInArray.map((e) => {
       const preUpdateDataAmount = billSearchData.find((a) => a.taxHeadCode === e[0])?.amount;
       return {
         taxHeadMasterCode: e[0],
-        taxAmount: e[1] - preUpdateDataAmount,
+        //taxAmount: e[1] - preUpdateDataAmount,
+        taxAmount:action==="rebate"? -e[1] : e[1]
       };
     });
+    
   };
 
   const getTotalDetailsOfUpdatedData = (d) => {
@@ -260,7 +274,7 @@ const ApplicationBillAmendment = () => {
                   <>
                     <TextInput
                       disabled={servicev1 === "WS" ? !WS_REDUCED_AMOUNT?.VALUE : !SW_REDUCED_AMOUNT}
-                      name={`${servicev1}_REDUCED_AMOUNT.${servicev1}_CHARGE`}
+                      name={`${servicev1}_REDUCED_AMOUNT.${node.taxHeadCode}`}
                       inputRef={register({
                         max: {
                           value: node.amount,
@@ -269,31 +283,66 @@ const ApplicationBillAmendment = () => {
                       })}
                     />
                     {servicev1 === "WS"
-                      ? errors?.WS_REDUCED_AMOUNT?.WS_CHARGE && <CardLabelError>{errors?.WS_REDUCED_AMOUNT?.WS_CHARGE?.message}</CardLabelError>
-                      : errors?.SW_REDUCED_AMOUNT?.SW_CHARGE && <CardLabelError>{errors?.SW_REDUCED_AMOUNT?.SW_CHARGE?.message}</CardLabelError>}
+                      ? errors?.WS_REDUCED_AMOUNT?.[node.taxHeadCode] && <CardLabelError>{errors?.WS_REDUCED_AMOUNT?.[node.taxHeadCode]?.message}</CardLabelError>
+                      : errors?.SW_REDUCED_AMOUNT?.[node.taxHeadCode] && <CardLabelError>{errors?.SW_REDUCED_AMOUNT?.[node.taxHeadCode].message}</CardLabelError>}
                   </>
                 </td>
                 <td style={{ paddingRight: "60px" }}>
                   <>
                     <TextInput
                       disabled={servicev1 === "WS" ? !WS_ADDITIONAL_AMOUNT?.VALUE : !SW_ADDITIONAL_AMOUNT?.VALUE}
-                      name={`${servicev1}_ADDITIONAL_AMOUNT.${servicev1}_CHARGE`}
-                      inputRef={register({
-                        min: {
-                          value: node.amount,
-                          message: t(`${servicev1}_ERROR_ENTER_MORE_THAN_MIN_VALUE`),
-                        },
-                      })}
+                      name={`${servicev1}_ADDITIONAL_AMOUNT.${node.taxHeadCode}`}
+                      inputRef={register()}
+                      // inputRef={register({
+                      //   min: {
+                      //     value: node.amount,
+                      //     message: t(`${servicev1}_ERROR_ENTER_MORE_THAN_MIN_VALUE`),
+                      //   },
+                      // })}
                     />
-                    {servicev1 === "WS"
+                    {/* {servicev1 === "WS"
                       ? errors?.WS_ADDITIONAL_AMOUNT?.WS_CHARGE && <CardLabelError>{errors?.WS_ADDITIONAL_AMOUNT?.WS_CHARGE?.message}</CardLabelError>
                       : errors?.SW_ADDITIONAL_AMOUNT?.SW_CHARGE && (
                           <CardLabelError>{errors?.SW_ADDITIONAL_AMOUNT?.SW_CHARGE?.message}</CardLabelError>
-                        )}
+                        )} */}
                   </>
                 </td>
               </tr>
             ))}
+            {<tr>
+              <td colSpan={2} style={{ paddingRight: "60px" }}>{t("WS_REBATE_PENALTY  ")}
+                <div className="tooltip">
+                  <InfoBannerIcon fill="#0b0c0c" style/>
+                  <span className="tooltiptext" style={{
+                    whiteSpace: "nowrap",
+                    fontSize: "medium"
+                  }}>
+                    {`${t(`WS_ADHOC_REBATE_TOOLTIP`)}`}
+                    <br/><br/>
+                    {`${t(`WS_ADHOC_PENALTY_TOOLTIP`)}`}
+                  </span>
+                </div>
+              </td>
+              
+              <td style={{ paddingRight: "60px" }}>
+                <>
+                  <TextInput
+                    disabled={servicev1 === "WS" ? !WS_REDUCED_AMOUNT?.VALUE : !SW_REDUCED_AMOUNT?.VALUE}
+                    name={`${servicev1}_REBATE`}
+                    inputRef={register()}
+                  />
+                </>
+              </td>
+              <td style={{ paddingRight: "60px" }}>
+                <>
+                  <TextInput
+                    disabled={servicev1 === "WS" ? !WS_ADDITIONAL_AMOUNT?.VALUE : !SW_REDUCED_AMOUNT?.VALUE}
+                    name={`${servicev1}_PENALTY`}
+                    inputRef={register()}
+                  />
+                </>
+              </td>
+            </tr>}
           </table>
         ) : (
           <Loader />
@@ -334,9 +383,6 @@ const ApplicationBillAmendment = () => {
             </LabelFieldPair>
             <LabelFieldPair>
               <CardLabel style={{ fontWeight: "500" }}>{t("WS_GOVERNMENT_NOTIFICATION_NUMBER")}</CardLabel>
-              {/* <div className="field"> */}
-              {/* <TextInput style={{width: "640px"}}  inputRef={register({})} /> */}
-              {/* </div> */}
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveFrom"
@@ -347,9 +393,6 @@ const ApplicationBillAmendment = () => {
             </LabelFieldPair>
             <LabelFieldPair>
               <CardLabel style={{ fontWeight: "500" }}>{t("WS_GOVERNMENT_NOTIFICATION_NUMBER")}</CardLabel>
-              {/* <div className="field">
-						<TextInput style={{width: "640px"}} name="effectiveTill" inputRef={register({})} />
-					</div> */}
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveTill"
@@ -387,8 +430,6 @@ const ApplicationBillAmendment = () => {
                   />
                 )}
               />
-              {/* {fileSize ? `${getFileSize(fileSize)}` : null}
-					{imageUploadError ? <CardLabelError>{t(imageUploadError)}</CardLabelError> : null} */}
               {errors?.[e?.documentType] ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </div>
           </LabelFieldPair>
