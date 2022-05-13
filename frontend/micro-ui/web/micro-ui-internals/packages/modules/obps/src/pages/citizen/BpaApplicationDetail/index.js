@@ -31,6 +31,7 @@ const BpaApplicationDetail = () => {
   const [checkBoxVisible, setCheckBoxVisible] = useState(false);
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   sessionStorage.removeItem("BPA_SUBMIT_APP");
+  sessionStorage.setItem("isEDCRDisable", JSON.stringify(true));
 
   const history = useHistory();
   sessionStorage.setItem("bpaApplicationDetails", false);

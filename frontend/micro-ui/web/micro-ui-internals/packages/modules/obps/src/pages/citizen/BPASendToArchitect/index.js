@@ -26,7 +26,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
     let subBlocks = [];
     let subOcc = {};
     unit && unit.map((un, index) => {
-      arr = un?.usageCategory.split(",");
+      arr = un?.usageCategory?.split(",");
       subBlocks=[];
       arr && arr.map((ob, ind) => {
         subBlocks.push({
@@ -44,7 +44,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
 
   data.BlockIds=getBlockIds(data?.landInfo?.unit);
   data.address = data?.landInfo?.address;
-  data.address.city = { code:data?.landInfo?.address?.city, name:data?.landInfo?.address?.city.split(".")[1]}
+  data.address.city = { code:data?.landInfo?.address?.city, name:data?.landInfo?.address?.city?.split(".")[1]}
   data.address.locality = {...data?.landInfo?.address?.locality, "i18nkey":data?.landInfo?.address?.locality?.name}
   data.data = {
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
@@ -97,7 +97,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
   data.riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks)
   data.subOccupancy = getBlocksforFlow(data?.landInfo?.unit);
   data.uiFlow = {
-    flow:data?.businessService.split(".")[0],
+    flow:data?.businessService?.split(".")?.[0],
     applicationType:data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
     serviceType:data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType
   }
@@ -156,7 +156,7 @@ const BPASendToArchitect = ({ parentRoute }) => {
 
 
   const goNext = (skipStep) => {
-    const currentPath = pathname.split("/").pop();
+    const currentPath = pathname?.split("/")?.pop();
     const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
     let redirectWithHistory = history.push;
     if (nextStep === null) {
