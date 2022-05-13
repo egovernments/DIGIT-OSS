@@ -42,6 +42,8 @@ import WSEditConnectionDetails from"./pageComponents/WSEditConnectionDetails";
 import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails";
 import WSDisconnectionDocsRequired from "./pageComponents/WSDisconnectionDocsRequired";
 import WSDisConnectionForm from "./pageComponents/WSDisConnectionForm";
+import WSDisconnectionDocumentsForm from "./pageComponents/WSDisconnectionDocumentsForm";
+
 import WSInbox from "./components/WSInbox";
 
 const WSModule = ({ stateCode, userType, tenants }) => {
@@ -141,7 +143,8 @@ const componentsToRegister = {
   WSDisconnectionDocsRequired,
   WSInbox,
   SWCard,
-  WSDisConnectionForm
+  WSDisConnectionForm,
+  WSDisconnectionDocumentsForm
 };
 
 export const initWSComponents = () => {

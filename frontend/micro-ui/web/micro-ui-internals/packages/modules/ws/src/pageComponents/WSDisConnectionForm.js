@@ -1,4 +1,4 @@
-import { CardLabel, CheckBox, Dropdown, FormStep, Loader, MobileNumber, RadioButtons, TextInput, UploadFile } from "@egovernments/digit-ui-react-components";
+import { CardLabel, CheckBox, Dropdown, FormStep, Loader, MobileNumber, RadioButtons, TextInput, UploadFile,LabelFieldPair,TextArea,SubmitBar } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import Timeline from "../components/Timeline";
 import { stringReplaceAll } from "../utils";
@@ -96,9 +96,10 @@ const WSDisConnectionForm = ({ t, config, onSelect, userType, formData, ownerInd
 
 
 
-  const goNext = () => {
- 
-  };
+const goNext = () => {
+  onSelect("DocsReq", "");
+}
+
 
   const onSkip = () => onSelect();
   const filedChange = () => {
@@ -111,16 +112,20 @@ const WSDisConnectionForm = ({ t, config, onSelect, userType, formData, ownerInd
         {/* {!isLoading ?  */}
         <FormStep
           config={config}
-          onSelect={goNext}
+          // onSelect={goNext}
           onSkip={onSkip}
-          t={t}
-       
+          t={t}       
         >
          
-        <div style={{border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA"}}>
-
-            <CardLabel>{`${t("WS_DISCONNECTION_TYPE")}*`}</CardLabel>
-            <RadioButtons
+        <div style={{padding:"10px",paddingTop:"20px",marginTop:"10px"}}>
+        <CardLabel>{t("WS_APPLICATION_FORM")}</CardLabel>
+        <CardLabel>
+          {t('WS_CUSTOMER_NUMBER')}
+          <span style={{float:'right'}}>PG-WS-2021-09-29-006024</span>
+        </CardLabel>
+        
+        <CardLabel>{`${t("WS_DISCONNECTION_TYPE")}*`}</CardLabel>
+          <RadioButtons
               t={t}
               options={menu}
               optionsKey="code"
@@ -130,10 +135,9 @@ const WSDisConnectionForm = ({ t, config, onSelect, userType, formData, ownerInd
               onSelect={filedChange}
               isDependent={true}
               labelKey="WS_DISCONNECTION_TYPE"
-            />
-
-
-            <CardLabel>{`${t("WS_DISCONEECTION_DATE")}*`}</CardLabel>
+          />
+          
+        <CardLabel>{`${t("WS_DISCONEECTION_DATE")}*`}</CardLabel>
             <TextInput
               t={t}
               type={"text"}
@@ -142,36 +146,28 @@ const WSDisConnectionForm = ({ t, config, onSelect, userType, formData, ownerInd
               optionKey="i18nKey"
               name="date"
               value={disconnectionData.date}
-              onChange={filedChange}              
-            //   {...(validation = {
-            //     isRequired: true,
-            //     pattern: "^[a-zA-Z-.`' ]*$",
-            //     type: "text",
-            //     title: t("WS_DATE_ERROR_MESSAGE"),
-            //   })}
+              onChange={filedChange}
             />
-            
-             
-            {/* <CardLabel>{t("WS_OWN_DETAIL_GUARDIAN_LABEL")}</CardLabel>
-            <TextInput
-              t={t}
-              type={"text"}
-              isMandatory={false}
-              optionKey="i18nKey"
-              name="guardian"
-              value={guardian}
-              style={{background:"#FAFAFA"}}
-              onChange={selectguardian}
-              //disable={editScreen}
-              {...(validation = {
-                isRequired: false,
-                pattern: "^[a-zA-Z-.`' ]*$",
-                type: "text",
-                title: t("WS_NAME_ERROR_MESSAGE"),
-              })}
-            /> */}
-            
-             
+
+
+          <LabelFieldPair>
+              <CardLabel>{t("WS_DISCONNECTION_REASON")}</CardLabel>              
+                <TextArea
+                  isMandatory={false}
+                  optionKey="i18nKey"
+                  t={t}
+                  name={"reason"}
+                  onChange={filedChange}
+                  value={disconnectionData.reason}
+                  // onChange={(e) => {
+                  //   if (!(ownerDetails?.[index]?.isCoresAddr === true)) {
+                  //     updateState("permanentAddress", index, e.target.value);
+                  //   }
+                  // }}
+                />              
+          </LabelFieldPair>
+          <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
+
           </div>
         </FormStep>
         

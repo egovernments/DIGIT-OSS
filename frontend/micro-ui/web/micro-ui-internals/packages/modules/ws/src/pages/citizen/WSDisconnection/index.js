@@ -78,7 +78,6 @@ const WSDisconnection = () => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "docsrequired";
-  console.log("config========",config)
 
   // const CheckPage = Digit?.ComponentRegistryService?.getComponent('BPACheckPage') ;
   // const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('BPAAcknowledgement');
