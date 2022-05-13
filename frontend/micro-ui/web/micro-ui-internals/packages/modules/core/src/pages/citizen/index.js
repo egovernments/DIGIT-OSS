@@ -88,7 +88,7 @@ const Home = ({
     let mdmsDataObj = isLinkDataFetched ? processLinkData(linkData, code, t) : undefined;
 
     if (mdmsDataObj?.header === "ACTION_TEST_WS") {
-      mdmsDataObj?.links = mdmsDataObj?.links.sort((a, b) => {
+      mdmsDataObj?.links.sort((a, b) => {
         return b.orderNumber - a.orderNumber;
       });
     }
