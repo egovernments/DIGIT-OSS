@@ -34,12 +34,9 @@ const ConnectionDetails = () => {
   const [showOptions, setShowOptions] = useState(false);
   const applicationNobyData = window.location.href.substring(window.location.href.indexOf("WS_"));
   const { state = {} } = useLocation();
-  const [displayMenu, setDisplayMenu] = useState(false);
   const [showModal, setshowModal] = useState(false);
   const [showActionToast, setshowActionToast] = useState(null);
   const mobileView = Digit.Utils.browser.isMobile();
-
-  const actionConfig = ["MODIFY_CONNECTION_BUTTON", "DISCONNECTION_BUTTON"];
 
   let filter1 = { tenantId: tenantId, applicationNumber: applicationNobyData };
   const { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1 }, { filters: filter1 });
@@ -146,12 +143,6 @@ const ConnectionDetails = () => {
     }
   );
 
-  const getModifyConnectionButton = () => {
-    let pathname = `/digit-ui/citizen/ws/modify-connection/${state?.tenantId}`;
-
-    history.push(`${pathname}`, { id: `${state?.applicationNo}` });
-  };
-
   const getDisconnectionButton = () => {
     if (state?.applicationStatus === "INPROGRESS") {
       setshowActionToast({
@@ -167,15 +158,8 @@ const ConnectionDetails = () => {
     }
   };
 
-  const showAction =
-    state?.applicationStatus === "CONNECTION_ACTIVATED" ? actionConfig : actionConfig.filter((action) => action !== "MODIFY_CONNECTION_BUTTON");
-
-  function onActionSelect(action) {
-    if (action === "MODIFY_CONNECTION_BUTTON") {
-      getModifyConnectionButton();
-    } else if (action === "DISCONNECTION_BUTTON") {
-      getDisconnectionButton();
-    }
+  function onActionSelect() {
+    getDisconnectionButton();
   }
   const Close = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF">
@@ -221,7 +205,7 @@ const ConnectionDetails = () => {
       <div className="hide-seperator">
         <Card>
           <StatusTable>
-            <Row className="border-none" label={t("WS_MYCONNECTIONS_CONSUMER_NO")} text={state?.connectionNo} />
+            <Row className="border-none" label={t("WS_MYCONNECTIONS_CONSUMER_NO")} text={state?.connectionNo} textStyle={{ whiteSpace: "pre" }} />
             <Row
               className="border-none"
               label={t("WS_SERVICE_NAME_LABEL")}
@@ -286,7 +270,7 @@ const ConnectionDetails = () => {
           </StatusTable>
           <CardHeader styles={{ fontSize: "28px" }}>{t("WS_COMMON_PROPERTY_DETAILS")}</CardHeader>
           <StatusTable>
-            <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={state?.propertyId} />
+            <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={state?.propertyId} textStyle={{ whiteSpace: "pre" }} />
             <Row
               className="border-none"
               label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")}
@@ -366,19 +350,9 @@ const ConnectionDetails = () => {
               </div>
             ))}
           {state?.status !== "inactive" ? (
-            <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px", marginTop: "25px" }}>
+            <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px", marginTop: "15px" }}>
               <div style={{ width: "100%" }}>
-                {displayMenu ? (
-                  <Menu
-                    style={{ bottom: "37px", minWidth: "240px", maxWidth: "310px", width: "100%", right: "0px" }}
-                    options={showAction}
-                    localeKeyPrefix={"WS"}
-                    t={t}
-                    onSelect={onActionSelect}
-                  />
-                ) : null}
-
-                <SubmitBar style={{ width: "100%" }} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+                <SubmitBar style={{ width: "100%" }} label={t("WS_DISCONNECTION_BUTTON")} onSubmit={onActionSelect} />
               </div>
             </ActionBar>
           ) : null}
