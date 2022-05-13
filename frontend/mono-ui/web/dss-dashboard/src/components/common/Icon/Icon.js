@@ -213,6 +213,7 @@ class Icon extends React.Component {
       case "nss_birth_death":
       case "nurt_birth":
       case "nurt_death":
+      case "nurt_bnd":
         return (
           <SVG
             src={BirthDeathIcon}

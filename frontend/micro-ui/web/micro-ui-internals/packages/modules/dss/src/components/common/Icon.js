@@ -63,6 +63,7 @@ export function Icon(type, iconColor)
         case 'nss_birth_death':
         case "nurt_birth":
         case "nurt_death":
+        case "nurt_bnd":
             return <div style={{background: iconColor, width: "60 px" , height: "52px"}}><BirthDeath/></div>
         default:
             return <div></div>
