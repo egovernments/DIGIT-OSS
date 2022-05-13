@@ -213,6 +213,17 @@ const SelectDocument = React.memo(function MyComponent({
                 //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
 
                 if (uploadedFile === null|| uploadedFile?.fileStoreId === undefined || uploadedFile?.fileStoreId === null) {
+                    if (prev?.length > 0) {
+                        prev?.forEach(data => {
+                            const normalDocumentType = `${data?.documentType?.split('.')[0]}.${data?.documentType?.split('.')[1]}`;
+                            const selectedDocumentType = `${selectedDocument?.code?.split('.')[0]}.${selectedDocument?.code?.split('.')[1]}`;
+                            if (normalDocumentType == selectedDocumentType) {
+                                if (data?.documentType) data.documentType = selectedDocument?.code;
+                                if (data?.file?.documentType) data.file.documentType = selectedDocument?.code;
+                                
+                            }
+                        });
+                    }
                     return prev;
                 }
                 const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile.fileStoreId);

@@ -21,7 +21,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t,OCData) =
     let subBlocks = [];
     let subOcc = {};
     unit && unit.map((un, index) => {
-      arr = un?.usageCategory.split(",");
+      arr = un?.usageCategory?.split(",");
       subBlocks=[];
       arr && arr.map((ob, ind) => {
         subBlocks.push({
@@ -152,7 +152,7 @@ const OCSendToArchitect = ({ parentRoute }) => {
 
 
   const goNext = (skipStep) => {
-    const currentPath = pathname.split("/").pop();
+    const currentPath = pathname?.split("/")?.pop();
     const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
     let redirectWithHistory = history.push;
     if (nextStep === null) {
