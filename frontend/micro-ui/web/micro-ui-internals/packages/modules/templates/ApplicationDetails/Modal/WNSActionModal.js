@@ -73,7 +73,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }, [file]);
 
   function submit(data) {
-    if(applicationData.amendmentId){
+    if(applicationData?.amendmentId){
       applicationData = {
         ...applicationData,
         workflow:{

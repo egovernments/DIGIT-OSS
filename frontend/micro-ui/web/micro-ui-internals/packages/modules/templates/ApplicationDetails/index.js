@@ -139,8 +139,7 @@ const ApplicationDetails = (props) => {
             history.push(`/digit-ui/employee/noc/response`, { data: data });
           }
           
-
-          history.push("/digit-ui/employee/ws/response-bill-amend", { status: true, state: data })
+          // history.push("/digit-ui/employee/ws/response-bill-amend", { status: true, state: data })
       
           setShowToast({ key: "success", action: selectedAction });
           setTimeout(closeToast, 5000);
@@ -183,7 +182,7 @@ const ApplicationDetails = (props) => {
               state={state}
               id={applicationNumber}
               applicationDetails={applicationDetails}
-              applicationData={applicationDetails?.amendment}
+              applicationData={applicationDetails?.applicationData}
               closeModal={closeModal}
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}
