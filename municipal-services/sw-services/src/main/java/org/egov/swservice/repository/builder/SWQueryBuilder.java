@@ -205,6 +205,14 @@ public class SWQueryBuilder {
 			query.append(" conn.connectionno = ? ");
 			preparedStatement.add(criteria.getConnectionNumber());
 		}
+
+		// Added clause to support multiple connectionNumbers search
+		if (!CollectionUtils.isEmpty(criteria.getConnectionNumbers())) {
+			addClauseIfRequired(preparedStatement, query);
+			query.append("  conn.connectionno IN (").append(createQuery(criteria.getConnectionNumbers())).append(")");
+			addToPreparedStatement(preparedStatement, criteria.getConnectionNumbers());
+		}
+
 		if (!StringUtils.isEmpty(criteria.getStatus())) {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.status = ? ");
