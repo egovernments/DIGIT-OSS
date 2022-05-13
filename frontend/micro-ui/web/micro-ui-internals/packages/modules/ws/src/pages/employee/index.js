@@ -39,9 +39,24 @@ const BILLSBreadCrumbs = ({ location }) => {
       content: t("ES_COMMON_BILLS_SEWERAGE_INBOX_LABEL"),
       show: location.pathname.includes("/sewerage/inbox") ? true : false,
     },
+    {
+      path: "/digit-ui/employee/ws/create-application",
+      content:t("ES_COMMON_WS_DOCUMENTS_REQUIRED"),
+      show:location.pathname.includes("/create-application") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/ws/new-application",
+      content: t("ES_COMMON_WS_NEW_CONNECTION"),
+      show:location.pathname.includes("/new-application") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/ws/ws-response",
+      content: t("ACTION_TEST_RESPONSE"),
+      show: location.pathname.includes("/ws-response") ? true : false,
+    }
   ];
 
-  return <BreadCrumb crumbs={crumbs} />;
+  return <BreadCrumb crumbs={crumbs} spanStyle={{ maxWidth: "min-content" }} />;
 };
 const App = ({ path }) => {
   const location = useLocation();
@@ -51,10 +66,17 @@ const App = ({ path }) => {
   const WSDocsRequired = Digit?.ComponentRegistryService?.getComponent('WSDocsRequired');
   const WSInbox = Digit?.ComponentRegistryService?.getComponent('WSInbox');
   
+  const locationCheck = window.location.href.includes("/employee/ws/new-application") || window.location.href.includes("/employee/ws/create-application")
+
+
   return (
+    <Switch>
     <React.Fragment>
-      <BILLSBreadCrumbs location={location} />
-      <Switch>
+      <div className="ground-container">
+        <div style={locationCheck ? { marginLeft: "12px" } : {marginLeft:"10px"} } >
+          <BILLSBreadCrumbs location={location} />
+        </div>
+      
         <PrivateRoute path={`${path}/create-application`} component={WSDocsRequired} />
         <PrivateRoute path={`${path}/new-application`} component={NewApplication} />
         <PrivateRoute path={`${path}/edit-application`} component={EditApplication} />
@@ -82,8 +104,9 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/sewerage/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
         {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
-      </Switch>
+      </div>
     </React.Fragment>
+    </Switch>
   );
 };
 
