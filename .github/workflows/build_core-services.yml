@@ -46,7 +46,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: deploy
-      uses: egovernments/DIGIT-DevOps@gitactions_deploy
-    - uses: ./.github/workflows/deploy-test
+      with: 
+        repository: egovernments/DIGIT-DevOps@master
+        path: DIGIT-DevOps
+
 
