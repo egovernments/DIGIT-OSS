@@ -48,5 +48,5 @@ jobs:
       uses: actions/checkout@v2
     - name: deploy
       uses: egovernments/DIGIT-DevOps@gitactions_deploy
-      uses: ./.github/actions/deploy-test
+    - uses: ./.github/actions/deploy-test
 
