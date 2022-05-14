@@ -48,7 +48,12 @@ jobs:
       uses: actions/checkout@v2
       with: 
         fetch-depth: 0
-        repository: egovernments/DIGIT-DevOps@master
+        repository: egovernments/DIGIT-DevOps
+        ref: master
         path: DIGIT-DevOps
+    run: |
+    ls
+    cd /home/runner/work/DIGIT-Dev/DIGIT-Dev/DIGIT-DevOps
+    ls
 
 
