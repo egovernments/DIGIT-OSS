@@ -47,6 +47,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with: 
+        fetch-depth: 0
         repository: egovernments/DIGIT-DevOps@master
         path: DIGIT-DevOps
 
