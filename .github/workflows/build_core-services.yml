@@ -41,7 +41,7 @@ jobs:
          mv build_utilities/build_setup.go .
          go run build_setup.go
     - name: deploy
-      uses: egovernments/DIGIT-DevOps
+      uses: egovernments/DIGIT-DevOps@master
       with:
         ref: gitactions_deploy
 
