@@ -51,9 +51,9 @@ jobs:
         repository: egovernments/DIGIT-DevOps
         ref: master
         path: DIGIT-DevOps
-    run: |
-      ls
-      cd /home/runner/work/DIGIT-Dev/DIGIT-Dev/DIGIT-DevOps
-      ls
+      run: |
+         ls
+         cd /home/runner/work/DIGIT-Dev/DIGIT-Dev/DIGIT-DevOps
+         ls
 
 
