@@ -55,4 +55,6 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: '1.13.3'
+    - name: cd into egov-deployer
+      run: cd DIGIT-DevOps/deploy-as-code/egov-deployer
 
