@@ -45,7 +45,5 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
     - name: deploy
-      uses: egovernments/DIGIT-DevOps@master
-      with:
-        ref: gitactions_deploy
+      uses: egovernments/DIGIT-DevOps@gitactions_deploy
 
