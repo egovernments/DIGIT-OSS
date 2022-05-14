@@ -52,8 +52,8 @@ jobs:
         ref: master
         path: DIGIT-DevOps
     run: |
-    ls
-    cd /home/runner/work/DIGIT-Dev/DIGIT-Dev/DIGIT-DevOps
-    ls
+      ls
+      cd /home/runner/work/DIGIT-Dev/DIGIT-Dev/DIGIT-DevOps
+      ls
 
 
