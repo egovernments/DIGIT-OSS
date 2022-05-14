@@ -46,11 +46,7 @@ jobs:
 
     steps:
     - name: Repo Checkout
-      uses: actions/checkout@master
-      with:
-        repository: egovernments/DIGIT-DevOps
-        path: ./
-        ref: master
+      uses: egovernments/DIGIT-DevOps@master
     - name: Setup Go
       uses: actions/setup-go@v2
       with:
