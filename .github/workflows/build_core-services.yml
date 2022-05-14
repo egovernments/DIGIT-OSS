@@ -42,4 +42,6 @@ jobs:
          go run build_setup.go
     - name: deploy
       uses: egovernments/DIGIT-DevOps
+      with:
+        ref: gitactions_deploy
 
