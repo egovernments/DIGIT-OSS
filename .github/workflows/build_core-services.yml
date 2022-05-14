@@ -40,6 +40,10 @@ jobs:
          ./build_utilities/build_svc.sh
          mv build_utilities/build_setup.go .
          go run build_setup.go
+
+  deploy:
+    runs-on: 'ubuntu-latest'
+    steps:
     - name: deploy
       uses: egovernments/DIGIT-DevOps@master
       with:
