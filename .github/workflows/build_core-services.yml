@@ -40,19 +40,3 @@ jobs:
          ./build_utilities/build_svc.sh
          mv build_utilities/build_setup.go .
          go run build_setup.go
-         
-  deploy:
-    runs-on: 'ubuntu-latest'
-
-    steps:
-    - name: Repo Checkout
-      uses: actions/checkout@master
-      with:
-        repository: egovernments/DIGIT-DevOps
-        path: ./
-        ref: master
-    - name: Setup Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: '1.13.3'
-
