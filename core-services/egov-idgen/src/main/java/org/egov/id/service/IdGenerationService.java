@@ -1,31 +1,35 @@
 package org.egov.id.service;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
-import lombok.extern.slf4j.Slf4j;
 import org.egov.id.config.PropertiesManager;
-import org.egov.id.model.IDSeqOverflowException;
 import org.egov.id.model.IdGenerationRequest;
 import org.egov.id.model.IdGenerationResponse;
 import org.egov.id.model.IdRequest;
 import org.egov.id.model.IdResponse;
-import org.egov.id.model.InvalidIDFormatException;
 import org.egov.id.model.RequestInfo;
 import org.egov.id.model.ResponseInfoFactory;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
-import sun.util.resources.cldr.chr.CalendarData_chr_US;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Description : IdGenerationService have methods related to the IdGeneration
@@ -74,6 +78,8 @@ public class IdGenerationService {
      */
 
     public IdGenerationResponse generateIdResponse(IdGenerationRequest idGenerationRequest) throws Exception {
+    	
+    	log.info("Entered the method generateIdResponse in igdgen service:: @@");
 
         RequestInfo requestInfo = idGenerationRequest.getRequestInfo();
         List<IdRequest> idRequests = idGenerationRequest.getIdRequests();
@@ -82,6 +88,8 @@ public class IdGenerationService {
         IdGenerationResponse idGenerationResponse = new IdGenerationResponse();
 
         for (IdRequest idRequest : idRequests) {
+        	log.info("Entered the method generateIdResponse for lopp :: @@" + idRequest);
+        	
             List<String> generatedId = generateIdFromIdRequest(idRequest, requestInfo);
             for (String ListOfIds : generatedId) {
                 IdResponse idResponse = new IdResponse();
@@ -108,13 +116,17 @@ public class IdGenerationService {
      */
     private List generateIdFromIdRequest(IdRequest idRequest, RequestInfo requestInfo) throws Exception {
 
-        List<String> generatedId = new LinkedList<>();
+    	log.info("Entered the method generateIdFromIdRequest  :: @@" + idRequest);
+    	List<String> generatedId = new LinkedList<>();
         boolean autoCreateNewSeqFlag = false;
         if (!StringUtils.isEmpty(idRequest.getIdName()))
         {
-            // If IDName is specified then check if it is defined in MDMS
+        	log.info("Entered !StringUtils.isEmpty(idRequest.getIdName() condition  :: @@");
+        	// If IDName is specified then check if it is defined in MDMS
             String idFormat = getIdFormatFinal(idRequest, requestInfo);
-
+            
+            log.info("Printing the value of idFormat:: @@ " + idFormat);
+            
             // If the idname is defined then the format should be used
             // else fallback to the format in the request itself
             if (!StringUtils.isEmpty(idFormat)){
@@ -208,7 +220,9 @@ public class IdGenerationService {
     private List getFormattedId(IdRequest idRequest, RequestInfo requestInfo, boolean autoCreateNewSeqFlag) throws Exception {
         List<String> idFormatList = new LinkedList();
         String idFormat = idRequest.getFormat();
-
+        
+        log.info("Entered the method getFormattedId:: @@ ");
+        
         try{
             if (!StringUtils.isEmpty(idFormat.trim()) && !StringUtils.isEmpty(idRequest.getTenantId())) {
                 idFormat = idFormat.replace("[tenantid]", idRequest.getTenantId());
@@ -227,6 +241,8 @@ public class IdGenerationService {
         Matcher regExpMatcher = regExpPattern.matcher(idFormat);
 
         Integer count = getCount(idRequest);
+        
+        log.info("Printing the value of count :: @@ " + count);
 
         while (regExpMatcher.find()) {// Finds Matching Pattern in String
             matchList.add(regExpMatcher.group(1));// Fetching Group from String
@@ -238,9 +254,11 @@ public class IdGenerationService {
 
         for (int i = 0; i < count; i++) {
             idFormat = idFormatTemplate;
-
+            log.info("Printing the value of count :: @@ " + count);
+            log.info("Printing the value of matchList :: @@ " + matchList);
             for (String attributeName : matchList) {
-
+            	
+            	log.info("Printing the value of attributeName :: @@ " + attributeName);
                 if (attributeName.substring(0, 3).equalsIgnoreCase("seq")) {
                     if (!sequences.containsKey(attributeName)) {
                         sequences.put(attributeName, generateSequenceNumber(attributeName, requestInfo, idRequest,autoCreateNewSeqFlag));
@@ -261,6 +279,7 @@ public class IdGenerationService {
                     idFormat = idFormat.replace("[" + attributeName + "]", generateRandomText(attributeName, requestInfo));
                 }
             }
+            log.info("Printing the value of final idFormat to be returned to PGR :: @@ " + idFormat);
             idFormatList.add(idFormat);
         }
 
