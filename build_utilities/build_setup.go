@@ -25,6 +25,7 @@ type BuildConfig struct {
 	} `yaml:"config"`
 }
 
+
 func main() {
 	//var job string = "pt-calculator-v2"
 	//var jobs []string
@@ -35,6 +36,7 @@ func main() {
 	argFile := ("./build/build-config.yml")
 	var dockerBuildCmd string
 	var dockerPushCmd string
+	var buildname string
 	// Decode the yaml file and assigning the values to a map
 	buildFile, err := ioutil.ReadFile(argFile)
 	if err != nil {
@@ -75,11 +77,21 @@ func main() {
 							fmt.Println("\nBuiling the", img.Imagename)
 							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/egovernments/%s:v2-%s -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), dockerfile, buildContext)
 							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/egovernments/%s:v2-%s", img.Imagename, os.Getenv("COMMIT-SHA"))
+							buildname = fmt.Sprintf("ghcr.io/egovernments/%s:v2-%s,", img.Imagename, os.Getenv("COMMIT-SHA"))
 						} else {
 							fmt.Println("\nBuiling the", img.Imagename)
 							dockerBuildCmd = fmt.Sprintf("docker build -t ghcr.io/egovernments/%s:v2-%s --build-arg WORK_DIR=%s -f %s %s", img.Imagename, os.Getenv("COMMIT-SHA"), workdir, dockerFile, buildContext)
 							dockerPushCmd = fmt.Sprintf("docker push ghcr.io/egovernments/%s:v2-%s", img.Imagename, os.Getenv("COMMIT-SHA"))
-
+							buildname = fmt.Sprintf("ghcr.io/egovernments/%s:v2-%s,", img.Imagename, os.Getenv("COMMIT-SHA"))
+						}
+						Imagename,err := os.Create("Imagename.txt")
+						if err != nil{
+						log.Fatal(err)
+						}
+						defer Imagename.Close()
+						_,err1 := Imagename.WriteString(buildname)
+						if err1 != nil{
+						log.Fatal(err1)
 						}
 						//fmt.Printf(buildContext)
 						//fmt.Println("docker", img.Dockerfile)
