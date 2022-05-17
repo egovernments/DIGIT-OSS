@@ -13,7 +13,6 @@ const WSCard = () => {
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
 
-
   const filterFormDefaultValues = {
     businessService: ["NewWS1", "ModifyWSConnection"],
     moduleName: "ws-services",
@@ -44,13 +43,13 @@ const WSCard = () => {
   const formInitValue = {
     filterForm: filterFormDefaultValues,
     searchForm: searchFormDefaultValues,
-    tableForm: tableOrderFormDefaultValues
+    tableForm: tableOrderFormDefaultValues,
   };
 
   const formInitValue1 = {
     filterForm: filterFormDefaultValues1,
     searchForm: searchFormDefaultValues,
-    tableForm: tableOrderFormDefaultValues
+    tableForm: tableOrderFormDefaultValues,
   };
 
   const { isLoading: isWSInboxLoading, data: wsData } = Digit.Hooks.ws.useInbox({
@@ -71,7 +70,6 @@ const WSCard = () => {
     }
   }, [wsData, swData]);
 
-
   let links = [
     {
       label: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
@@ -87,8 +85,8 @@ const WSCard = () => {
     moduleName: t("ACTION_TEST_WATER"),
     kpis: [
       {
-        count: (isWSInboxLoading || isSWInboxLoading) ? "-" : totalCount,
-        label: t("TOTAL_FSM")
+        count: isWSInboxLoading || isSWInboxLoading ? "-" : totalCount,
+        label: t("TOTAL_FSM"),
       },
       // {
       //     label: t(""),
@@ -105,14 +103,17 @@ const WSCard = () => {
         count: isWSInboxLoading ? "-" : wsData?.totalCount,
         label: t("WS_WATER_INBOX"),
         link: `/digit-ui/employee/ws/water/inbox`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
       {
         label: t("WS_WATER_APPLICATION_SEARCH"),
         link: `/digit-ui/employee/ws/water/search-application`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
       {
         label: t("WS_WATER_CONNECTION_SEARCH_LABEL"),
         link: `/digit-ui/employee/ws/water/search`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
     ],
   };

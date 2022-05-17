@@ -31,11 +31,10 @@ const SWCard = () => {
 
   const searchFormDefaultValues = {};
 
-
   const formInitValue1 = {
     filterForm: filterFormDefaultValues1,
     searchForm: searchFormDefaultValues,
-    tableForm: tableOrderFormDefaultValues
+    tableForm: tableOrderFormDefaultValues,
   };
 
   const { isLoading: isSWInboxLoading, data: swData } = Digit.Hooks.ws.useInbox({
@@ -49,7 +48,6 @@ const SWCard = () => {
       setTotalCount(sewerageCount);
     }
   }, [swData]);
-
 
   let links = [
     {
@@ -66,24 +64,27 @@ const SWCard = () => {
     moduleName: t("ACTION_TEST_SEWERAGE"),
     kpis: [
       {
-        count: (isSWInboxLoading) ? "-" : totalCount,
-        label: t("TOTAL_FSM")
+        count: isSWInboxLoading ? "-" : totalCount,
+        label: t("TOTAL_FSM"),
       },
     ],
     links: [
       ...links,
       {
-        count: isSWInboxLoading ? "-" : swData?.totalCount ,
+        count: isSWInboxLoading ? "-" : swData?.totalCount,
         label: t("WS_SEWERAGE_INBOX"),
         link: `/digit-ui/employee/ws/sewerage/inbox`,
+        roles: ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
       },
       {
         label: t("WS_SEWERAGE_APPLICATION_SEARCH"),
         link: `/digit-ui/employee/ws/sewerage/search-application`,
+        roles: ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
       },
       {
         label: t("WS_SEWERAGE_CONNECTION_SEARCH_LABEL"),
         link: `/digit-ui/employee/ws/sewerage/search`,
+        roles: ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
       },
     ],
   };

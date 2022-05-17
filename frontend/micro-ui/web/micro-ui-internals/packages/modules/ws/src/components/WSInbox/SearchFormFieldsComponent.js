@@ -4,7 +4,12 @@ import { useTranslation } from "react-i18next";
 
 const SearchFormFieldsComponents = ({ registerRef, searchFormState }) => {
   const { t } = useTranslation();
-
+  const propsForMobileNumber = {
+    maxlength: 10,
+    pattern: "[6-9][0-9]{9}",
+    title: t("ES_SEARCH_APPLICATION_MOBILE_INVALID"),
+    componentInFront: "+91",
+  };
   return (
     <>
       <SearchField>
@@ -17,24 +22,7 @@ const SearchFormFieldsComponents = ({ registerRef, searchFormState }) => {
       </SearchField>
       <SearchField>
         <label>{t("CORE_COMMON_MOBILE_NUMBER")}</label>
-        <MobileNumber
-          name="mobileNumber"
-          type="number"
-          inputRef={registerRef({
-            minLength: {
-              value: 10,
-              message: t("CORE_COMMON_MOBILE_ERROR"),
-            },
-            maxLength: {
-              value: 10,
-              message: t("CORE_COMMON_MOBILE_ERROR"),
-            },
-            pattern: {
-              value: /[6789][0-9]{9}/,
-              message: t("CORE_COMMON_MOBILE_ERROR"),
-            },
-          })}
-        />
+        <MobileNumber name="mobileNumber" type="number" inputRef={registerRef({})} {...propsForMobileNumber} />
         {searchFormState?.errors?.["mobileNumber"]?.message ? (
           <CardLabelError>{searchFormState?.errors?.["mobileNumber"]?.message}</CardLabelError>
         ) : null}
