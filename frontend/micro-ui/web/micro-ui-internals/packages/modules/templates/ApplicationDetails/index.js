@@ -138,9 +138,9 @@ const ApplicationDetails = (props) => {
           if (isOBPS?.isNoc) {
             history.push(`/digit-ui/employee/noc/response`, { data: data });
           }
-          
-          // history.push("/digit-ui/employee/ws/response-bill-amend", { status: true, state: data })
-      
+          if (data?.Amendments?.length > 0 ){
+          history.push("/digit-ui/employee/ws/response-bill-amend", { status: true, state: data?.Amendments?.[0] })
+          }
           setShowToast({ key: "success", action: selectedAction });
           setTimeout(closeToast, 5000);
           queryClient.clear();

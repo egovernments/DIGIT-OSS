@@ -472,6 +472,14 @@ export const WSSearch = {
 
     const details = [applicationHeaderDetails, propertyDetails, connectionHolderDetails, documentDetails]
     wsDataDetails.serviceType = serviceDataType;
+
+
+    if (billAmendmentSearch?.Amendments?.[0]) {
+      wsDataDetails.billAmendmentDetails = billAmendmentSearch.Amendments[0]
+      wsDataDetails.isBillAmend = true
+    }
+
+    
     return {
       applicationData: wsDataDetails,
       applicationDetails: details,
