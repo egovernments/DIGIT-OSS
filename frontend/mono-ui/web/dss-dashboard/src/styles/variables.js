@@ -134,6 +134,10 @@ const variables = {
         {'dark': '#FF7245','light': 'rgba(255, 114, 69, 0.24)'},
         {'dark': '#53FFEA','light': 'rgba(83, 255, 234, 0.14)'},
         {'dark': '#DEBC0B','light': 'rgba(222, 188, 11, 0.24)'},
+        { 'dark': '#9FFF53', 'light': 'rgba(159, 255, 83, 0.24)' },
+        { 'dark': '#787878', 'light': 'rgb(120,120,120,0.35)' },
+        { 'dark': '#DEBC0B', 'light': 'rgba(222, 188, 11, 0.24)' },
+        { 'dark': '#DEBC0B', 'light': 'rgba(222, 188, 11, 0.24)' }
     
     ],
     iconColors: [
@@ -144,7 +148,11 @@ const variables = {
         {'dark': '#EF7C5B','light': 'rgba(239, 124, 91, 0.85)'},
         {'dark': '#51D2C6','light': 'rgba(81, 210, 198, 0.85)'},
         {'dark': '#B7A545','light': 'rgba(183, 165, 69, 0.85)'},
-    
+        {'dark': '#6E8459','light': 'rgba(110, 132, 89, 1)'},
+        {'dark': '#787878','light': 'rgba(120, 120, 120, 0.85)'},
+        {'dark': '#B7A545','light': 'rgba(183, 165, 69, 0.85)'},
+        {'dark': '#B7A545','light': 'rgba(183, 165, 69, 0.85)'},
+        
     ]
     
 }
