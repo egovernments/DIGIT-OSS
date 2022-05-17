@@ -22,8 +22,7 @@ import { CitizenHomeCard, CollectionIcon } from "@egovernments/digit-ui-react-co
 export const BillsModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "abg";
 
-  const state = useSelector((state) => state);
-  const language = state?.common?.selectedLanguage;
+  const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
   const { path, url } = useRouteMatch();
 
