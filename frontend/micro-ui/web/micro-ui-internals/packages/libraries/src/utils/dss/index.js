@@ -22,7 +22,6 @@ export const formatter = (value, symbol, unit, commaSeparated = false, t) => {
       return amountFormatter(value, unit, t);
     //this case needs to be removed as backend should handle case sensitiviy from their end
     case "Amount":
-      console.log("Amount ");
       return amountFormatter(value, unit, t);
     case "number":
       if (!commaSeparated) {
