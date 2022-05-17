@@ -119,6 +119,19 @@ const ModifyApplication = () => {
   };
 
   const onSubmit = async (data) => {
+    if(!data?.cpt?.id && !propertyDetails?.Properties?.[0]){
+      if (!data?.cpt?.details || !propertyDetails) {
+          setShowToast({ key: "error", message: "ERR_INVALID_PROPERTY_ID" });
+          return;
+        }
+    }
+
+    if (!data?.cpt?.details) {
+      data.cpt = {
+        details: propertyDetails?.Properties?.[0]
+      };
+    }
+
     const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
     let convertAppData = await convertModifyApplicationDetails(data, details);
     const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
@@ -129,7 +142,7 @@ const ModifyApplication = () => {
         await waterMutation(reqDetails, {
           onError: (error, variables) => {
             setIsEnableLoader(false);
-            setShowToast({ key: "error", message: error?.message ? error.message : error });
+            setShowToast({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
             setTimeout(closeToastOfError, 5000);
           },
           onSuccess: async (data, variables) => {
@@ -138,12 +151,13 @@ const ModifyApplication = () => {
             waterUpdateMutation(waterConnectionUpdate, {
               onError: (error, variables) => {
                 setIsEnableLoader(false);
-                setShowToast({ key: "error", message: error?.message ? error.message : error });
+                setShowToast({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
                 setTimeout(closeToastOfError, 5000);
               },
               onSuccess: (data, variables) => {
                 clearSessionFormData();
-                window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
+                history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`);
+                // window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
               },
             })
           },
@@ -171,7 +185,8 @@ const ModifyApplication = () => {
               },
               onSuccess: (data, variables) => {
                 clearSessionFormData();
-                window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
+                history.push(`/digit-ui/employee/ws/ws-response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`);
+                // window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
               }
             });
           },
@@ -204,7 +219,8 @@ const ModifyApplication = () => {
         defaultValues={sessionFormData}
       // noBreakLine={true}
       ></FormComposer>
-      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />}
+      {showToast && <Toast isDleteBtn={true} error={showToast?.key === "error" ? true : false} label={t(showToast?.message)} onClose={closeToast} />}
+      {/* {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />} */}
     </React.Fragment>
   );
 };

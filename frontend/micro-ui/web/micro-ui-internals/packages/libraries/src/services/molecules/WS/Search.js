@@ -130,6 +130,14 @@ export const WSSearch = {
     const workFlowDataDetails = cloneDeep(workflowDetails);
     const serviceDataType = cloneDeep(serviceType);
 
+    const getAddress = (address, t) => {
+      return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+        address?.landmark ? `${address?.landmark}, ` : ""
+      }${t(Digit.Utils.pt.getMohallaLocale(address?.locality.code, address?.tenantId))}, ${t(Digit.Utils.pt.getCityLocale(address?.tenantId))}${
+        address?.pincode && t(address?.pincode) ? `, ${address.pincode}` : " "
+      }`;
+    };
+
     const applicationHeaderDetails = {
       title: " ",
       asSectionHeader: true,
@@ -170,7 +178,7 @@ export const WSSearch = {
       values: [
         { title: "WS_PROPERTY_ID_LABEL", value: propertyDataDetails?.propertyId },
         { title: "WS_COMMON_OWNER_NAME_LABEL", value: propertyDataDetails?.owners?.[0]?.name },
-        { title: "WS_PROPERTY_ADDRESS_LABEL", value: propertyDataDetails?.address?.locality?.name },
+        { title: "WS_PROPERTY_ADDRESS_LABEL", value: getAddress(propertyDataDetails?.address, t)},
       ],
       additionalDetails: {
         redirectUrl: {
