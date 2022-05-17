@@ -108,7 +108,6 @@ public class URLConverterService {
         	shortenedUrl.append("/");
         }
     	shortenedUrl.append(uniqueID);
-        log.info("shortened url: " + shortenedUrl.toString());
     	
         return shortenedUrl.toString();
     }
