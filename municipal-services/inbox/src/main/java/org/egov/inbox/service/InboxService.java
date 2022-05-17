@@ -395,24 +395,26 @@ public class InboxService {
              * In BPA, the stakeholder can able to submit applications for multiple cities
              * and in the single inbox all cities submitted applications need to show
              */
-            if(processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName())
-                    && processCriteria.getModuleName().equals(BPA) && roles.contains(BpaConstants.CITIZEN)) {
-                Map<String, List<String>> tenantAndApplnNoForProcessInstance = new HashMap<>();
-                for(Object businessId : businessIds) {
-                    for (Map.Entry<String, List<String>> tenantAppln : tenantAndApplnNumbersMap.entrySet()) {
-                        String tenantId = tenantAppln.getKey();
-                        if (tenantAppln.getValue().contains(businessId)
-                                && tenantAndApplnNoForProcessInstance.containsKey(tenantId)) {
-                              List<String> applnNos = tenantAndApplnNoForProcessInstance.get(tenantId);
-                              applnNos.add(String.valueOf(businessId));
-                              tenantAndApplnNoForProcessInstance.put(tenantId, applnNos);
-                          } else {
-                              List<String> businesIds = new ArrayList<>();
-                              businesIds.add(String.valueOf(businessId));
-                              tenantAndApplnNoForProcessInstance.put(tenantId, businesIds);
-                          }
-                      }
-                }
+			if (processCriteria != null && !ObjectUtils.isEmpty(processCriteria.getModuleName())
+					&& processCriteria.getModuleName().equals(BPA) && roles.contains(BpaConstants.CITIZEN)) {
+				Map<String, List<String>> tenantAndApplnNoForProcessInstance = new HashMap<>();
+				for (Object businessId : businessIds) {
+					for (Map.Entry<String, List<String>> tenantAppln : tenantAndApplnNumbersMap.entrySet()) {
+						String tenantId = tenantAppln.getKey();
+						if (tenantAppln.getValue().contains(businessId)) {
+							if (tenantAndApplnNoForProcessInstance.containsKey(tenantId)) {
+								List<String> applnNos = tenantAndApplnNoForProcessInstance.get(tenantId);
+								applnNos.add(String.valueOf(businessId));
+								tenantAndApplnNoForProcessInstance.put(tenantId, applnNos);
+							} else {
+								List<String> businesIdss = new ArrayList<>();
+								businesIdss.add(String.valueOf(businessId));
+								tenantAndApplnNoForProcessInstance.put(tenantId, businesIdss);
+							}
+						}
+					}
+					log.info("tenantAndApplnNoForProcessInstance ::: " + tenantAndApplnNoForProcessInstance);
+				}
                 ProcessInstanceResponse processInstanceRes = new ProcessInstanceResponse();
                 for(Map.Entry<String, List<String>> appln : tenantAndApplnNoForProcessInstance.entrySet()) {
                     processCriteria.setTenantId(appln.getKey());
