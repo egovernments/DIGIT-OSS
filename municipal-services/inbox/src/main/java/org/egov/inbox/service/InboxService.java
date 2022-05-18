@@ -41,13 +41,6 @@ import static org.egov.inbox.util.SWConstants.SW_REQUESTINFO_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_SEARCH_CRITERIA_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_BUSINESS_SERVICE_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_BUSINESS_IDS_PARAM;
-import static org.egov.inbox.util.BSConstants.BS_WS;
-import static org.egov.inbox.util.BSConstants.BS_SW;
-import static org.egov.inbox.util.BSConstants.BS_SERVICE;
-import static org.egov.inbox.util.BSConstants.BS;
-import static org.egov.inbox.util.BSConstants.BS_CONSUMER_NO_PARAM;
-import static org.egov.inbox.util.BSConstants.BS_BUSINESS_SERVICE_PARAM;
-import static org.egov.inbox.util.BSConstants.BS_APPLICATION_NUMBER_PARAM;
 import static org.egov.inbox.util.BSConstants.*;
 
 import java.util.ArrayList;
@@ -166,6 +159,7 @@ public class InboxService {
         	flag=2;
         	processCriteria.setModuleName(BS);
         }
+
         Integer totalCount = workflowService.getProcessCount(criteria.getTenantId(), requestInfo, processCriteria);
         Integer nearingSlaProcessCount = workflowService.getNearingSlaProcessCount(criteria.getTenantId(), requestInfo, processCriteria);
         List<String> inputStatuses = new ArrayList<>();
@@ -456,10 +450,6 @@ public class InboxService {
                         StatusIdNameMap, requestInfo);
                 List<String> consumerCodes = map.get("consumerCodes");
                 List<String> amendmentIds = map.get("amendmentIds");
-//                List<String> consumerCodes = billInboxFilterService.fetchConsumerNumbersFromSearcher(criteria,
-//                        StatusIdNameMap, requestInfo);
-//                List<String> amendmentIds = billInboxFilterService.fetchAmendmentIdsFromSearcher(criteria, StatusIdNameMap, 
-//                		requestInfo);
                 if (!CollectionUtils.isEmpty(consumerCodes)) {
                 	moduleSearchCriteria.put(BS_CONSUMER_NO_PARAM, consumerCodes);
                 	businessKeys.addAll(amendmentIds);
@@ -474,6 +464,7 @@ public class InboxService {
                 moduleSearchCriteria.put("isPropertyDetailsRequired", true);
                 processCriteria.setModuleName(BS);
             }
+
             // Redirect request to searcher in case of SW to fetch acknowledgement IDS
             if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(BS) 
             		&& flag==2) {
@@ -543,10 +534,6 @@ public class InboxService {
             // processCriteria.setLimit(criteria.getLimit());
             processCriteria.setIsProcessCountCall(false);
 
-			System.out.println("\n\n1: " + (businessObjects != null));
-			System.out.println("\n\n1: " + businessObjects.getClass());
-			System.out.println("\n\n1: " + businessObjects.length());
-			System.out.println("\n2: " + (businessServiceName.get(0).equalsIgnoreCase(BS_SERVICE)));
 			String businessService;
 			Map<String, String> srvSearchMap;
 			JSONArray serviceSearchObject = new JSONArray();
@@ -562,7 +549,7 @@ public class InboxService {
 					moduleSearchCriteria.remove(BS_BUSINESS_SERVICE_PARAM);
 					moduleSearchCriteria.remove(BS_APPLICATION_NUMBER_PARAM);
 					moduleSearchCriteria.remove("status");
-					if(businessService.equalsIgnoreCase(BS_WS) )
+					if(businessService.equalsIgnoreCase(BS_WS) || businessService.equalsIgnoreCase(BS_SW))
 						moduleSearchCriteria.put("searchType", "CONNECTION");
 					serviceSearchObject = fetchModuleSearchObjects(moduleSearchCriteria, businessServiceName,
 							criteria.getTenantId(), requestInfo, srvSearchMap);
@@ -571,11 +558,10 @@ public class InboxService {
 		            }
 				
 			}
-			 serviceSearchMap = StreamSupport.stream(serviceSearchObject.spliterator(), false)
+			serviceSearchMap = StreamSupport.stream(serviceSearchObject.spliterator(), false)
 	                    .collect(Collectors.toMap(s1 -> ((JSONObject) s1).get("connectionNo").toString(),
 	                            s1 -> s1, (e1, e2) -> e1, LinkedHashMap::new));
-			 System.out.println("Inside::\n\n"+serviceSearchMap.toString());
-			 System.out.println("Outside::\n\n"+serviceSearchMap.toString());
+			 
 			ProcessInstanceResponse processInstanceResponse;
             /*
              * In BPA, the stakeholder can able to submit applications for multiple cities
@@ -623,13 +609,27 @@ public class InboxService {
                 if (CollectionUtils.isEmpty(businessKeys)) {
                     businessMap.keySet().forEach(busiessKey -> {
                         if(null != processInstanceMap.get(busiessKey)) {
-                        	Inbox inbox = new Inbox();
-                        	inbox.setProcessInstance(processInstanceMap.get(busiessKey));
-                            inbox.setBusinessObject(toMap((JSONObject) businessMap.get(busiessKey)));
-                            inboxes.add(inbox);
+                            if (!businessServiceName.get(0).equalsIgnoreCase(BS_SERVICE)) {
+                            	//For non- Bill Amendment Inbox search
+	                        	Inbox inbox = new Inbox();
+	                        	inbox.setProcessInstance(processInstanceMap.get(busiessKey));
+	                            inbox.setBusinessObject(toMap((JSONObject) businessMap.get(busiessKey)));
+	                            inboxes.add(inbox);
+                            } else {
+                                //When Bill Amendment objects are searched
+                                Inbox inbox = new Inbox();
+                                inbox.setProcessInstance(processInstanceMap.get(busiessKey));
+                                inbox.setBusinessObject(toMap((JSONObject) businessMap.get(busiessKey)));
+                                inbox.setServiceObject(toMap(
+                                        (JSONObject) serviceSearchMap.get(inbox.getBusinessObject().get("consumerCode"))));
+                                inboxes.add(inbox);
+                            }
                         }
                     });
+                    if (businessServiceName.get(0).equalsIgnoreCase(BS_SERVICE))
+                        totalCount = processInstanceMap.size();
                 } else {
+                	//For non- Bill Amendment Inbox search
 					if (!businessServiceName.get(0).equalsIgnoreCase(BS_SERVICE)) {
 						businessKeys.forEach(busiessKey -> {
 							Inbox inbox = new Inbox();
@@ -639,6 +639,7 @@ public class InboxService {
 						});
 					}
 					else {
+					//When Bill Amendment objects are searched
 						for (String busiessKey : businessKeys) {
 
 							Inbox inbox = new Inbox();
@@ -1092,19 +1093,19 @@ public class InboxService {
 		return config.getBsServiceSearchMapping().get(appropriateKey.toString());
 	}
 
-    private JSONArray fetchModuleSearchObjects(HashMap moduleSearchCriteria, List<String> businessServiceName, String tenantId,
-            RequestInfo requestInfo, Map<String, String> srvMap) {
-        JSONArray results = null;
-        
-        if (CollectionUtils.isEmpty(srvMap) || StringUtils.isEmpty(srvMap.get("searchPath"))) {
-            throw new CustomException(ErrorConstants.INVALID_MODULE_SEARCH_PATH,
-                    "search path not configured for the businessService : " + businessServiceName);
-        }
-        StringBuilder url = new StringBuilder(srvMap.get("searchPath"));
-        url.append("?tenantId=").append(tenantId);
-       
-        Set<String> searchParams = moduleSearchCriteria.keySet();
-        
+	private JSONArray fetchModuleSearchObjects(HashMap moduleSearchCriteria, List<String> businessServiceName,
+			String tenantId, RequestInfo requestInfo, Map<String, String> srvMap) {
+		JSONArray results = null;
+
+		if (CollectionUtils.isEmpty(srvMap) || StringUtils.isEmpty(srvMap.get("searchPath"))) {
+			throw new CustomException(ErrorConstants.INVALID_MODULE_SEARCH_PATH,
+					"search path not configured for the businessService : " + businessServiceName);
+		}
+		StringBuilder url = new StringBuilder(srvMap.get("searchPath"));
+		url.append("?tenantId=").append(tenantId);
+
+		Set<String> searchParams = moduleSearchCriteria.keySet();
+
 		searchParams.forEach((param) -> {
 
 			if (!param.equalsIgnoreCase("tenantId")) {
@@ -1113,36 +1114,33 @@ public class InboxService {
 					url.append("&").append(param).append("=");
 					url.append(StringUtils
 							.arrayToDelimitedString(((Collection<?>) moduleSearchCriteria.get(param)).toArray(), ","));
-				} else if(null != moduleSearchCriteria.get(param)) {
+				} else if (null != moduleSearchCriteria.get(param)) {
 					url.append("&").append(param).append("=").append(moduleSearchCriteria.get(param).toString());
 				}
 			}
 		});
-		
+
 		log.info("\nfetchModulSearcheObjects URL :::: " + url.toString());
-		
-        RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
-        Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
-        
-        LinkedHashMap responseMap;
-        try {
-            responseMap = mapper.convertValue(result, LinkedHashMap.class);
-        } catch (IllegalArgumentException e) {
-            throw new CustomException(ErrorConstants.PARSING_ERROR, "Failed to parse response of ProcessInstance Count");
-        }
-        
-        
-        JSONObject jsonObject = new JSONObject(responseMap);
-        
-        try {
-            results = (JSONArray) jsonObject.getJSONArray(srvMap.get("dataRoot"));
-        } catch (Exception e) {
-            throw new CustomException(ErrorConstants.INVALID_MODULE_DATA,
-                    " search api could not find data in serviceMap " + srvMap.get("dataRoot"));
-        }
-        
-        
-        return results;
-    }
+
+		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+
+		LinkedHashMap responseMap;
+		try {
+			responseMap = mapper.convertValue(result, LinkedHashMap.class);
+		} catch (IllegalArgumentException e) {
+			throw new CustomException(ErrorConstants.PARSING_ERROR, "Failed to parse response of ProcessInstance Count");
+		}
+
+		JSONObject jsonObject = new JSONObject(responseMap);
+
+		try {
+			results = (JSONArray) jsonObject.getJSONArray(srvMap.get("dataRoot"));
+		} catch (Exception e) {
+			throw new CustomException(ErrorConstants.INVALID_MODULE_DATA, " search api could not find data in serviceMap " + srvMap.get("dataRoot"));
+		}
+
+		return results;
+	}
     
 }
