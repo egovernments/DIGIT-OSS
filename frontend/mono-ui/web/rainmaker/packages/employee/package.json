@@ -13,7 +13,7 @@
     "axios": "0.17.1",
     "babel-polyfill": "6.26.0",
     "babel-runtime": "6.26.0",
-    "datatables": "1.11.15",
+    "datatables": "1.10.18",
     "datatables-buttons": "1.0.3",
     "datatables.net-buttons": "2.1.0",
     "datatables.net-buttons-bs": "2.1.0",
