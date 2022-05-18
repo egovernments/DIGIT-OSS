@@ -6,7 +6,7 @@ import { PTService } from "../../services/elements/PT";
 const getAddress = (address, t) => {
   return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`;
+  }${t(address?.locality?.code)}, ${t(address?.city)},${t(address?.pincode) ? `${address?.pincode}` : " "}`;
 };
 
 const combineResponse = (WaterConnections, SewerageConnections, businessService, Properties, billData, t) => {
