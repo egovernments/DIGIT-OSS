@@ -1,15 +1,15 @@
 import commonConfig from "config/common.js";
 // import "datatables";
-// import "datatables-buttons";
-// import "datatables.net";
-// import "datatables.net-buttons";
-// import "datatables.net-buttons-bs";
-// import "datatables.net-buttons/js/buttons.colVis.min.js";
-// import "datatables.net-buttons/js/buttons.flash.js"; // Flash file export
-// import "datatables.net-buttons/js/buttons.html5.js"; // HTML 5 file export
-// import "datatables.net-dt";
-// import "datatables.net-responsive";
-// import "datatables.net-responsive-dt";
+import "datatables-buttons";
+import "datatables.net";
+import "datatables.net-buttons";
+import "datatables.net-buttons-bs";
+import "datatables.net-buttons/js/buttons.colVis.min.js";
+import "datatables.net-buttons/js/buttons.flash.js"; // Flash file export
+import "datatables.net-buttons/js/buttons.html5.js"; // HTML 5 file export
+import "datatables.net-dt";
+import "datatables.net-responsive";
+import "datatables.net-responsive-dt";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import { commonApiPost } from "egov-ui-kit/utils/api";
 import { getTenantId, localStorageSet, setReturnUrl } from "egov-ui-kit/utils/localStorageUtils";
