@@ -25,6 +25,7 @@ import { useHistory } from "react-router-dom";
 
 
 const ApplicationBillAmendment = () => {
+  
   //connectionNumber=WS/107/2021-22/227166&tenantId=pb.amritsar&service=WATER&connectionType=Metered
   const { t } = useTranslation();
   const { connectionNumber, tenantId, service, connectionType } = Digit.Hooks.useQueryParams();
@@ -184,7 +185,7 @@ const ApplicationBillAmendment = () => {
     };
     history.push("/digit-ui/employee/ws/response", data);
   };
-
+  
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
       <Header>{t("WS_BILL_AMENDMENT_BUTTON")}</Header>
@@ -204,23 +205,23 @@ const ApplicationBillAmendment = () => {
               <th>
                 <>
                   <Controller
-                    name="WS_REDUCED_AMOUNT.VALUE"
-                    key="WS_REDUCED_AMOUNT.VALUE"
+                    name={`${servicev1}_REDUCED_AMOUNT.VALUE`}
+                    key={`${servicev1}_REDUCED_AMOUNT.VALUE`}
                     control={control}
                     rules={{
                       validate: (value) => {
-                        return !!value || !!WS_ADDITIONAL_AMOUNT?.VALUE;
+                        return !!value || (servicev1 === "WS" ? !!WS_ADDITIONAL_AMOUNT?.VALUE : !!SW_ADDITIONAL_AMOUNT?.VALUE);
                       },
                     }}
                     render={(props) => {
                       return (
                         <CheckBox
                           // className="form-field"
-                          label={t("WS_REDUCED_AMOUNT")}
+                          label={t(`${servicev1}_REDUCED_AMOUNT`)}
                           onChange={(e) => {
                             if (e.target.checked) {
                               props.onChange(true);
-                              setOtherTextFieldsAndActionToNull("WS_ADDITIONAL_AMOUNT", false);
+                              setOtherTextFieldsAndActionToNull(`${servicev1}_ADDITIONAL_AMOUNT`, false);
                             } else {
                               props.onChange(false);
                             }
@@ -236,23 +237,23 @@ const ApplicationBillAmendment = () => {
               <th>
                 <>
                   <Controller
-                    name="WS_ADDITIONAL_AMOUNT.VALUE"
-                    key="WS_ADDITIONAL_AMOUNT.VALUE"
+                    name={`${servicev1}_ADDITIONAL_AMOUNT.VALUE`}
+                    key={`${servicev1}_ADDITIONAL_AMOUNT.VALUE`}
                     control={control}
                     rules={{
                       validate: (value) => {
-                        return !!value || !!WS_REDUCED_AMOUNT?.VALUE;
+                        return !!value || (servicev1 === "WS" ? !!WS_REDUCED_AMOUNT?.VALUE : !!SW_REDUCED_AMOUNT?.VALUE);
                       },
                     }}
                     render={(props) => {
                       return (
                         <CheckBox
                           // className="form-field"
-                          label={t("WS_ADDITIONAL_AMOUNT")}
+                          label={t(`${servicev1}_ADDITIONAL_AMOUNT`)}
                           onChange={(e) => {
                             if (e.target.checked) {
                               props.onChange(true);
-                              setOtherTextFieldsAndActionToNull("WS_REDUCED_AMOUNT", false);
+                              setOtherTextFieldsAndActionToNull(`${servicev1}_REDUCED_AMOUNT`, false);
                             } else {
                               props.onChange(false);
                             }
@@ -273,7 +274,7 @@ const ApplicationBillAmendment = () => {
                 <td style={{ paddingRight: "60px" }}>
                   <>
                     <TextInput
-                      disabled={servicev1 === "WS" ? !WS_REDUCED_AMOUNT?.VALUE : !SW_REDUCED_AMOUNT}
+                      disabled={servicev1 === "WS" ? !WS_REDUCED_AMOUNT?.VALUE : !SW_REDUCED_AMOUNT?.VALUE}
                       name={`${servicev1}_REDUCED_AMOUNT.${node.taxHeadCode}`}
                       inputRef={register({
                         max: {
@@ -336,7 +337,7 @@ const ApplicationBillAmendment = () => {
               <td style={{ paddingRight: "60px" }}>
                 <>
                   <TextInput
-                    disabled={servicev1 === "WS" ? !WS_ADDITIONAL_AMOUNT?.VALUE : !SW_REDUCED_AMOUNT?.VALUE}
+                    disabled={servicev1 === "WS" ? !WS_ADDITIONAL_AMOUNT?.VALUE : !SW_ADDITIONAL_AMOUNT?.VALUE}
                     name={`${servicev1}_PENALTY`}
                     inputRef={register()}
                   />
