@@ -86,7 +86,13 @@ const WSCard = () => {
     kpis: [
       {
         count: isWSInboxLoading || isSWInboxLoading ? "-" : totalCount,
-        label: t("TOTAL_FSM"),
+        label: t("TOTAL_WS"),
+        link: `/digit-ui/employee/ws/water/inbox`,
+      },
+      {
+        count: "-",
+        label: t("TOTAL_NEARING_SLA"),
+        link: `/digit-ui/employee/ws/water/inbox`,
       },
       // {
       //     label: t(""),
@@ -98,21 +104,21 @@ const WSCard = () => {
       //   label: t("ES_COMMON_INBOX"),
       //   link: `/digit-ui/employee/ws/bill-amend/inbox`,
       // },
-      ...links,
       {
         count: isWSInboxLoading ? "-" : wsData?.totalCount,
         label: t("WS_WATER_INBOX"),
         link: `/digit-ui/employee/ws/water/inbox`,
         roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
-      {
-        label: t("WS_WATER_APPLICATION_SEARCH"),
-        link: `/digit-ui/employee/ws/water/search-application`,
-        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
-      },
+      ...links,
       {
         label: t("WS_WATER_CONNECTION_SEARCH_LABEL"),
         link: `/digit-ui/employee/ws/water/search`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
+      },
+      {
+        label: t("WS_WATER_APPLICATION_SEARCH"),
+        link: `/digit-ui/employee/ws/water/search-application`,
         roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
     ],
