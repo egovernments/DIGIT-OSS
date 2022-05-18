@@ -22,15 +22,6 @@ const WSCard = () => {
     applicationType: [],
   };
 
-  const filterFormDefaultValues1 = {
-    businessService: ["NewSW1", "ModifySWConnection"],
-    moduleName: "sw-services",
-    locality: [],
-    assignee: "ASSIGNED_TO_ALL",
-    applicationStatus: [],
-    applicationType: [],
-  };
-
   const tableOrderFormDefaultValues = {
     sortBy: "",
     limit: 10,
@@ -46,29 +37,17 @@ const WSCard = () => {
     tableForm: tableOrderFormDefaultValues,
   };
 
-  const formInitValue1 = {
-    filterForm: filterFormDefaultValues1,
-    searchForm: searchFormDefaultValues,
-    tableForm: tableOrderFormDefaultValues,
-  };
-
   const { isLoading: isWSInboxLoading, data: wsData } = Digit.Hooks.ws.useInbox({
     tenantId,
     filters: { ...formInitValue },
   });
 
-  const { isLoading: isSWInboxLoading, data: swData } = Digit.Hooks.ws.useInbox({
-    tenantId,
-    filters: { ...formInitValue1 },
-  });
-
   useEffect(() => {
-    if (!isWSInboxLoading || !isSWInboxLoading) {
+    if (!isWSInboxLoading) {
       const waterCount = wsData?.totalCount ? wsData?.totalCount : 0;
-      const sewerageCount = swData?.totalCount ? swData?.totalCount : 0;
-      setTotalCount(waterCount + sewerageCount);
+      setTotalCount(waterCount);
     }
-  }, [wsData, swData]);
+  }, [wsData]);
 
   let links = [
     {
@@ -85,7 +64,7 @@ const WSCard = () => {
     moduleName: t("ACTION_TEST_WATER"),
     kpis: [
       {
-        count: isWSInboxLoading || isSWInboxLoading ? "-" : totalCount,
+        count: isWSInboxLoading ? "-" : totalCount,
         label: t("TOTAL_WS"),
         link: `/digit-ui/employee/ws/water/inbox`,
       },

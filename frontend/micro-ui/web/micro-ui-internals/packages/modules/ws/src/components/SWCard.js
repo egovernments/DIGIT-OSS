@@ -31,7 +31,7 @@ const SWCard = () => {
 
   const searchFormDefaultValues = {};
 
-  const formInitValue1 = {
+  const formInitValue = {
     filterForm: filterFormDefaultValues1,
     searchForm: searchFormDefaultValues,
     tableForm: tableOrderFormDefaultValues,
@@ -39,7 +39,7 @@ const SWCard = () => {
 
   const { isLoading: isSWInboxLoading, data: swData } = Digit.Hooks.ws.useInbox({
     tenantId,
-    filters: { ...formInitValue1 },
+    filters: { ...formInitValue },
   });
 
   useEffect(() => {
