@@ -1,60 +1,268 @@
-import { CardText, Loader, PDFSvg } from "@egovernments/digit-ui-react-components";
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { pdfDocumentName, pdfDownloadLink, getDocumentsName,stringReplaceAll } from "../utils";
+import React, { useEffect, useState } from "react";
+// import { pdfDocumentName, pdfDownloadLink, getDocumentsName,stringReplaceAll } from "../utils";
+import Timeline from "../components/Timeline";
+import {
+  CardLabel,
+  Dropdown,
+  UploadFile,
+  Toast,
+  Loader,
+  FormStep,
+  CardHeader,
+  SubmitBar
+} from "@egovernments/digit-ui-react-components";
 
-function WSDisconnectionDocumentsForm({ value = {}, Code, index, isNOC = false, svgStyles = { width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }, isStakeHolder = false }) {
-  const { t } = useTranslation();
-//   const { isLoading, isError, error, data } = Digit.Hooks.obps.useOBPSDocumentSearch(
-//     {
-//       value,
-//     },
-//     { value }, Code, index, isNOC
-//   );
-//   let documents = [];
 
-//   if (isNOC) {
-//     value?.nocDocuments ? value?.nocDocuments?.nocDocuments.length > 0 && value?.nocDocuments?.nocDocuments.filter((ob) => ob?.documentType?.includes(Code)).map((ob) => {
-//       documents.push(ob);
-//     }) : value?.length > 0 && value?.filter((ob) => ob?.documentType?.includes(Code)).map((ob) => {
-//       documents.push(ob);
-//     });
-//   }
-//   else{
-//   value?.documents ? value?.documents?.documents.filter(doc => doc?.documentType === Code /* || doc?.documentType?.includes(Code.split(".")[1]) */).map((ob)=>{
-//     documents.push(ob);
-//   }) : value.filter(doc => doc?.documentType === Code /* || doc?.documentType.includes(Code.split(".")[1]) */).map((ob)=>{
-//     documents.push(ob);
-//   })
-// }
-  
-  if (isLoading) {
-    return <Loader />;
+function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData, onSelect  }) { 
+  const tenantId = Digit.ULBService.getStateId();
+  const [documents, setDocuments] = useState(formData?.documents?.documents || []);
+  const [error, setError] = useState(null);
+  const [enableSubmit, setEnableSubmit] = useState(true)
+  const [checkRequiredFields, setCheckRequiredFields] = useState(false);
+
+  // const { isLoading: wsDocsLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId);
+  const goNext = () => {
+    onSelect("DocsReq", "");
   }
+  const handleSubmit = () => {
+      // let document = formData.documents;
+      // let documentStep;
+      // documentStep = { ...document, documents: documents };
+      // onSelect(config.key, documentStep);
+  };
+  const onSkip = () => onSelect();
 
+
+  // useEffect(() => {
+  //     let count = 0;
+  //     wsDocs?.Documents.map(doc => {
+  //         let isRequired = false;
+  //         documents.map(data => {
+  //             if (doc.required && data?.documentType.includes(doc.code)) isRequired = true;
+  //         });
+  //         if (!isRequired && doc.required) count = count + 1;
+  //     });
+  //     if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
+  //     else setEnableSubmit(true);
+  // }, [documents, checkRequiredFields])
+
+  // console.log(wsDocs,"PROOOFFFFF");
+
+  const wsDocs={Documents: [
+    {
+      "code": "OWNER.IDENTITYPROOF",
+      "documentType": "OWNER",
+      "required": true,
+      "active": true,
+      "hasDropdown": true,
+      "dropdownData": [
+          {
+              "code": "OWNER.IDENTITYPROOF.AADHAAR",
+              "active": true,
+              "i18nKey": "OWNER_IDENTITYPROOF_AADHAAR"
+          },
+          {
+              "code": "OWNER.IDENTITYPROOF.VOTERID",
+              "active": true,
+              "i18nKey": "OWNER_IDENTITYPROOF_VOTERID"
+          },
+          {
+              "code": "OWNER.IDENTITYPROOF.DRIVING",
+              "active": true,
+              "i18nKey": "OWNER_IDENTITYPROOF_DRIVING"
+          },
+          {
+              "code": "OWNER.IDENTITYPROOF.PAN",
+              "active": true,
+              "i18nKey": "OWNER_IDENTITYPROOF_PAN"
+          },
+          {
+              "code": "OWNER.IDENTITYPROOF.PASSPORT",
+              "active": true,
+              "i18nKey": "OWNER_IDENTITYPROOF_PASSPORT"
+          }
+      ],
+      "description": "OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION",
+      "i18nKey": "OWNER_IDENTITYPROOF"
+  },
+  {
+    "code": "OWNER.ADDRESSPROOF",
+    "documentType": "OWNER",
+    "required": true,
+    "active": true,
+    "hasDropdown": true,
+    "dropdownData": [
+        {
+            "code": "OWNER.ADDRESSPROOF.ELECTRICITYBILL",
+            "active": true,
+            "i18nKey": "OWNER_ADDRESSPROOF_ELECTRICITYBILL"
+        },
+        {
+            "code": "OWNER.ADDRESSPROOF.DL",
+            "active": true,
+            "i18nKey": "OWNER_ADDRESSPROOF_DL"
+        },
+        {
+            "code": "OWNER.ADDRESSPROOF.VOTERID",
+            "active": true,
+            "i18nKey": "OWNER_ADDRESSPROOF_VOTERID"
+        },
+        {
+            "code": "OWNER.ADDRESSPROOF.AADHAAR",
+            "active": true,
+            "i18nKey": "OWNER_ADDRESSPROOF_AADHAAR"
+        },
+        {
+            "code": "OWNER.ADDRESSPROOF.PAN",
+            "active": true,
+            "i18nKey": "OWNER_ADDRESSPROOF_PAN"
+        },
+        {
+            "code": "OWNER.ADDRESSPROOF.PASSPORT",
+            "active": true,
+            "i18nKey": "OWNER_ADDRESSPROOF_PASSPORT"
+        }
+    ],
+    "description": "OWNER.ADDRESSPROOF.ADDRESSPROOF_DESCRIPTION",
+    "i18nKey": "OWNER_ADDRESSPROOF"
+}
+]}
+ 
   return (
     <div style={{ marginTop: "19px" }}>
-      <React.Fragment>
-        {/* <div style={{ display: "flex", flexWrap: "wrap"}}>
-          {documents.length > 0 ?
-            <div style={{ display: "flex", justifyContent: "flex-start", flexWrap: "wrap" }}>
-              {documents?.map((document, index) => {
-                let documentLink = pdfDownloadLink(data.pdfFiles, document?.fileStoreId);
-                return (
-                  <a target="_blank" href={documentLink} style={{ minWidth: "80px", marginRight: "10px", maxWidth: "100px", height: "auto" }} key={index}>
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                      <PDFSvg />
-                    </div>
-                    {isStakeHolder ? <p style={{ marginTop: "8px", textAlign: "center", color: "#505A5F" }}>{t(`BPAREG_HEADER_${stringReplaceAll(Code?.toUpperCase(), ".", "_")}`)}</p> : null}  document?.fileName ? `${document?.fileName}` : `${t(`ES_COMMON_DOC_DOCUMENT`)} - ${index + 1}`
-                    {!isStakeHolder ? <p style={{ marginTop: "8px", textAlign: "center", color: "#505A5F"  }}>{`${t(Code)}`}</p> : null}
-                  </a>
-                );
-              })}
-            </div> : <CardText>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</CardText>}
-        </div> */}
-      </React.Fragment>
+      {userType === "citizen" && (<Timeline currentStep={3} />)}
+      {/* {!wsDocsLoading ?  */}
+      <FormStep
+        t={t}
+        config={config}
+        // onSelect={handleSubmit}
+        // onSkip={onSkip}
+        isDisabled={enableSubmit}
+        // onAdd={onAdd}
+      >
+        <CardHeader>{t(`WS_DISCONNECTION_UPLOAD_DOCUMENTS`)}</CardHeader>
+        {wsDocs?.Documents?.map((document, index) => { 
+          return (
+            <SelectDocument
+              key={index}
+              document={document}
+              t={t}
+              error={error}
+              setError={setError}
+              setDocuments={setDocuments}
+              documents={documents}
+              setCheckRequiredFields={setCheckRequiredFields}
+            />
+          );
+          })}
+          {error && <Toast label={error} onClose={() => setError(null)} error />}
+      </FormStep> 
+      {/* : <Loader />} */}
+      <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
+
     </div>
   );
+}
+
+function SelectDocument({
+  t,
+  key,
+  document: doc,
+  setDocuments,
+  error,
+  setError,
+  documents,
+  setCheckRequiredFields
+}) {
+
+  const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const [selectedDocument, setSelectedDocument] = useState(
+      filteredDocument
+          ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
+          : doc?.dropdownData?.length === 1
+              ? doc?.dropdownData[0]
+              : {}
+  );
+  const [file, setFile] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
+
+  const handleSelectDocument = (value) => setSelectedDocument(value);
+
+  function selectfile(e) {
+      setFile(e.target.files[0]);
+  }
+
+  useEffect(() => {
+      if (selectedDocument?.code) {
+          setDocuments((prev) => {
+              const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
+              if (uploadedFile?.length === 0 || uploadedFile === null) return filteredDocumentsByDocumentType;
+              const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
+              return [
+                  ...filteredDocumentsByFileStoreId,
+                  {
+                      documentType: selectedDocument?.code,
+                      fileStoreId: uploadedFile,
+                      documentUid: uploadedFile,
+                      fileName: file?.name || "",
+                  },
+              ];
+          });
+      }
+  }, [uploadedFile, selectedDocument]);
+
+
+  useEffect(() => {
+      (async () => {
+          setError(null);
+          if (file) {
+              if (file.size >= 5242880) {
+                  setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+              } else {
+                  try {
+                      setUploadedFile(null);
+                      const response = await Digit.UploadServices.Filestorage("WS", file, tenantId?.split(".")[0]);
+                      if (response?.data?.files?.length > 0) {
+                          setUploadedFile(response?.data?.files[0]?.fileStoreId);
+                      } else {
+                          setError(t("CS_FILE_UPLOAD_ERROR"));
+                      }
+                  } catch (err) {
+                      // console.error("Modal -> err ", err);
+                      setError(t("CS_FILE_UPLOAD_ERROR"));
+                  }
+              }
+          }
+      })();
+  }, [file]);
+
+  return (
+      <div style={{ marginBottom: "24px" }}>
+          <CardLabel>{t(doc?.i18nKey)}</CardLabel>
+          <Dropdown
+              t={t}
+              isMandatory={false}
+              option={doc?.dropdownData}
+              selected={selectedDocument}
+              optionKey="i18nKey"
+              select={handleSelectDocument}
+          />
+          <UploadFile
+              id={`noc-doc-${key}`}
+              extraStyleName={"propertyCreate"}
+              accept=".jpg,.png,.pdf"
+              onUpload={selectfile}
+              onDelete={() => {
+                  setUploadedFile(null);
+                  setCheckRequiredFields(true);
+              }}
+              message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
+              error={error}
+          />
+      </div>
+  );
+
 }
 
 export default WSDisconnectionDocumentsForm;

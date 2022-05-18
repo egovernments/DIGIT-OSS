@@ -9,7 +9,7 @@
           type: "component",
           isMandatory: true,
           withoutLabel: true,
-          nextStep: null,
+          // nextStep: null,
           hideInEmployee: true,
           nextStep: "application-form"
         },
@@ -20,7 +20,7 @@
           type: "component",
           isMandatory: true,
           withoutLabel: true,
-          nextStep: null,
+          // nextStep: null,
           hideInEmployee: true,
           nextStep: "documents-upload"
         },
@@ -28,6 +28,18 @@
           route: "documents-upload",
           component: "WSDisconnectionDocumentsForm",
           key: "WSDisconnectionDocumentsForm",
+          type: "component",
+          isMandatory: true,
+          withoutLabel: true,
+          nextStep: null,
+          hideInEmployee: true,
+          // nextStep: "application-form"
+        }
+        ,
+        {         
+          route: "disconnection-summary",
+          component: "WSDisconnectionSummary",
+          key: "WSDisconnectionSummary",
           type: "component",
           isMandatory: true,
           withoutLabel: true,
