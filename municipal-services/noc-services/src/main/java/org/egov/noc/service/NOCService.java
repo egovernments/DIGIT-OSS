@@ -156,6 +156,9 @@ public class NOCService {
 			if (!sourceRef.isEmpty()) {
 				criteria.setSourceRefId(sourceRef.toString());
 			}
+			if(criteria.getMobileNumber() != null && CollectionUtils.isEmpty(bpas)){
+				return nocs;
+			}
 			log.info("NOC CALL STARTED" + criteria.getSourceRefId());
 			nocs = nocRepository.getNocData(criteria);
 			nocs.forEach(noc -> {
