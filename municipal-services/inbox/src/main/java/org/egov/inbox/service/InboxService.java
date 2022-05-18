@@ -451,9 +451,9 @@ public class InboxService {
                 List<String> consumerCodes = map.get("consumerCodes");
                 List<String> amendmentIds = map.get("amendmentIds");
                 if (!CollectionUtils.isEmpty(consumerCodes)) {
-                	moduleSearchCriteria.put(BS_CONSUMER_NO_PARAM, consumerCodes);
-                	businessKeys.addAll(amendmentIds);
-                	moduleSearchCriteria.put(BS_BUSINESS_SERVICE_PARAM, "WS");
+                    moduleSearchCriteria.put(BS_CONSUMER_NO_PARAM, consumerCodes);
+                    businessKeys.addAll(amendmentIds);
+                    moduleSearchCriteria.put(BS_BUSINESS_SERVICE_PARAM, "WS");
                     moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
                     moduleSearchCriteria.remove(ASSIGNEE_PARAM);
                     moduleSearchCriteria.remove(LOCALITY_PARAM);
@@ -476,9 +476,9 @@ public class InboxService {
                 List<String> consumerCodes = map.get("consumerCodes");
                 List<String> amendmentIds = map.get("amendmentIds");
                 if (!CollectionUtils.isEmpty(consumerCodes)) {
-                	moduleSearchCriteria.put(BS_CONSUMER_NO_PARAM, consumerCodes);
-                	businessKeys.addAll(amendmentIds);
-                	moduleSearchCriteria.put(BS_BUSINESS_SERVICE_PARAM, "SW");
+                    moduleSearchCriteria.put(BS_CONSUMER_NO_PARAM, consumerCodes);
+                    businessKeys.addAll(amendmentIds);
+                    moduleSearchCriteria.put(BS_BUSINESS_SERVICE_PARAM, "SW");
                     moduleSearchCriteria.remove(MOBILE_NUMBER_PARAM);
                     moduleSearchCriteria.remove(ASSIGNEE_PARAM);
                     moduleSearchCriteria.remove(LOCALITY_PARAM);
@@ -611,8 +611,8 @@ public class InboxService {
                         if(null != processInstanceMap.get(busiessKey)) {
                             if (!businessServiceName.get(0).equalsIgnoreCase(BS_SERVICE)) {
                             	//For non- Bill Amendment Inbox search
-	                        	Inbox inbox = new Inbox();
-	                        	inbox.setProcessInstance(processInstanceMap.get(busiessKey));
+	                            Inbox inbox = new Inbox();
+	                            inbox.setProcessInstance(processInstanceMap.get(busiessKey));
 	                            inbox.setBusinessObject(toMap((JSONObject) businessMap.get(busiessKey)));
 	                            inboxes.add(inbox);
                             } else {
