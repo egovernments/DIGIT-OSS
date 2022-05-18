@@ -7,14 +7,14 @@ const BillsCard = () => {
 
   const propsForModuleCard = {
     Icon: <CollectionIcon />,
-    moduleName: "Bills",
+    moduleName: t("ACTION_TEST_BILLGENIE"),
     links: [
       {
-        label: "Inbox",
+        label: t("ABG_SEARCH_BILL_COMMON_HEADER"),
         link: `/digit-ui/employee/bills/inbox`,
       },
       {
-        label: "Group Bills",
+        label: t("ACTION_TEST_GROUP_BILLS"),
         link: `/digit-ui/employee/bills/group-bill`,
       },
     ],

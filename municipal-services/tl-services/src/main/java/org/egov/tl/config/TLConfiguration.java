@@ -216,6 +216,9 @@ public class TLConfiguration {
 
     @Value("${employee.allowed.search.params}")
     private String allowedEmployeeSearchParameters;
+    
+    @Value("${system.allowed.search.params}")
+    private String allowedSystemSearchParameters;
 
 
 

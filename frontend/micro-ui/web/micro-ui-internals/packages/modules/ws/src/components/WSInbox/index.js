@@ -5,7 +5,7 @@ import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
 import useInboxTableConfig from "./useInboxTableConfig";
 import useInboxMobileCardsData from "./useInboxMobileCardsData";
-import { useLocation } from "react-router-dom";
+import { checkForEmployee } from "../../utils";
 
 const WSInbox = ({ parentRoute }) => {
   const { t } = useTranslation();
@@ -134,14 +134,34 @@ const WSInbox = ({ parentRoute }) => {
     tenantId,
     filters: { ...formState },
   });
+  let links = [
+    {
+      label: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
+      link: `/digit-ui/employee/ws/create-application`,
+      roles: ["WS_CEMP", "SW_CEMP"],
+    },
+  ];
+
+  links = links.filter((link) => (link.roles ? checkForEmployee(link.roles) : true));
 
   const PropsForInboxLinks = {
     logoIcon: <DropIcon />,
     headerText: checkPathName ? "MODULE_WS" : "MODULE_SW",
     links: [
+      { ...links },
       {
-        text: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
-        link: "/digit-ui/employee/ws/create-application",
+        text: t("WS_SEWERAGE_APPLICATION_SEARCH"),
+        link: checkPathName ? `/digit-ui/employee/ws/water/search-application` : `/digit-ui/employee/ws/sewerage/search-application`,
+        roles: checkPathName
+          ? ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"]
+          : ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
+      },
+      {
+        text: t("WS_SEWERAGE_CONNECTION_SEARCH_LABEL"),
+        link: checkPathName ? `/digit-ui/employee/ws/water/search` : `/digit-ui/employee/ws/sewerage/search`,
+        roles: checkPathName
+          ? ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"]
+          : ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
       },
     ],
   };

@@ -48,10 +48,23 @@ function ApplicationDetailsContent({
   function OpenImage(imageSource, index, thumbnailsToShow) {
     window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
   }
+
+  const convertEpochToDateDMY = (dateEpoch) => {
+    if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
+      return "NA";
+    }
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${day}/${month}/${year}`;
+  };
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
+        date: convertEpochToDateDMY(applicationData?.auditDetails?.createdTime),
         source: applicationData?.channel || "",
       };
       return <TLCaption data={caption} />;

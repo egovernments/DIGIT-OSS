@@ -66,7 +66,7 @@ const CheckPage = ({ onSubmit, value }) => {
 
 
   const { data: paymentDetails } = Digit.Hooks.useFetchBillsForBuissnessService(
-    { businessService: BusinessService, ...fetchBillParams, tenantId: tenantId },
+    { businessService: BusinessService, ...fetchBillParams, tenantId: tenantId || value?.tenantId},
     {
       enabled: consumerCode ? true : false,
       retry: false,

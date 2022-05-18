@@ -98,6 +98,9 @@
     }
     .icon + .menu-label {
       margin-left: 36px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   .sidebar-list {
@@ -140,6 +143,13 @@
           color: #5f5c62;
           overflow: hidden;
           text-overflow: ellipsis;
+        }
+        input {
+          border: none;
+          outline: none;
+          margin-left: 16px;
+          padding: 0.5em;
+          color: #5f5c62;
         }
       }
     }
@@ -196,6 +206,9 @@
     }
     .icon + .menu-label {
       margin-left: 36px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   @media (min-width: 780px) {

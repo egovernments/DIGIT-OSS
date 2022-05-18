@@ -60,7 +60,10 @@ export function Icon(type, iconColor)
         case 'nurt_live_active_ulbs':
             return <DashBoardIcon></DashBoardIcon>
         case 'dss_birth_death':
-        case 'nurt_birth_death':
+        case 'nss_birth_death':
+        case "nurt_birth":
+        case "nurt_death":
+        case "nurt_bnd":
             return <div style={{background: iconColor, width: "60 px" , height: "52px"}}><BirthDeath/></div>
         default:
             return <div></div>

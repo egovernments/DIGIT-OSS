@@ -122,6 +122,10 @@ export const usePaymentSearch = (tenantId, filters, config={}) => {
           case "SW_TIME_PENALTY":
           case "SW_CHARGE":
           case "WS_WATER_CESS":
+          case "WS_TIME_ADHOC_PENALTY":
+          case "WS_TIME_ADHOC_REBATE":
+          case "SW_TIME_ADHOC_PENALTY":
+          case "SW_TIME_ADHOC_REBATE":
             return true
           default :
             return false

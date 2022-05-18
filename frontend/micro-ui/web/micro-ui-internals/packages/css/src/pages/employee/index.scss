@@ -15,6 +15,10 @@
     display: inline-block;
     margin: 8px auto;
   }
+  .home-action-cards{
+    height: auto  !important;
+    min-height: 263px;
+  }
   .topbar {
     position: fixed;
     top: 0;
@@ -148,6 +152,12 @@
         svg {
           fill: #f47738 !important;
         }
+      }
+      .employee-search-input {
+        border: none;
+        outline: none;
+        background-color: rgba(0, 0, 0, 0);
+        margin-left: 13px;
       }
       .custom-link {
         margin-left: 13px;

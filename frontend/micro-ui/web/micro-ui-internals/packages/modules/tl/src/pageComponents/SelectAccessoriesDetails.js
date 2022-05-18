@@ -111,6 +111,8 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     acc[i].accessory = value;
     setAccessory(value);
     setFeilds(acc);
+    acc[i].accessorycount = "";
+    acc[i].uom = "";
     acc[i].unit = null;
     Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
     setUnitOfMeasure(null);
@@ -152,6 +154,13 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     onSelect(config.key, formdata);
   };
 
+  function canMoveNext(){
+    if(!fields?.[0]?.accessory || !fields?.[0]?.accessorycount || (fields?.[0]?.unit && !fields?.[0]?.uom) || AccCountError || AccUOMError)
+    return true
+    else 
+    return false
+  }
+
   const onSkip = () => onSelect();
   return (
     <React.Fragment>
@@ -165,7 +174,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
           onSkip={onSkip}
           t={t}
           forcedError={t(AccCountError) || t(AccUOMError)}
-          isDisabled={!fields?.[0]?.accessory || !fields?.[0]?.accessorycount || !fields?.[0]?.uom || AccCountError || AccUOMError}
+          isDisabled={canMoveNext()}
         >
           {fields.map((field, index) => {
             return (

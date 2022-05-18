@@ -29,7 +29,7 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
     if (!response) return null;
     setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     const compareFn = (a, b) => b.value - a.value;
-    return (drillDownId === "deathByCategoryDrilldownAge") 
+    return (drillDownId === "deathByCategoryDrilldownAge" || response?.responseData?.visualizationCode === "nssNumberOfDeathsByAge"    )// || drillDownId === "nssDeathByCategoryDrillDownAge") 
     ? response?.responseData?.data?.[0]?.plots.reduce((acc, plot, index) => {
       acc = acc.concat(plot);
       return acc;
@@ -146,7 +146,7 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
   }
   return (
     <Fragment>
-      { (id === "deathByCategory") && ( 
+      { (id === "deathByCategory" ) && (  //|| id === "nssNumberOfDeathsByCategory") && ( 
             <span className={"dss-pie-subheader" } style={{position:"sticky" ,left:0}}>
               {t('DSS_CMN_PIE_INFO')}
             </span>

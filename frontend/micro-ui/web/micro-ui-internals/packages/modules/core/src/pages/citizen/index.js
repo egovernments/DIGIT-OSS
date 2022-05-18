@@ -65,8 +65,6 @@ const Home = ({
     }
   );
 
-  console.log("linkData", linkData);
-
   const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
   const { t } = useTranslation();
   const { path } = useRouteMatch();
@@ -88,6 +86,12 @@ const Home = ({
   const ModuleLevelLinkHomePages = modules.map(({ code, bannerImage }, index) => {
     let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
     let mdmsDataObj = isLinkDataFetched ? processLinkData(linkData, code, t) : undefined;
+
+    if (mdmsDataObj?.header === "ACTION_TEST_WS") {
+      mdmsDataObj?.links.sort((a, b) => {
+        return b.orderNumber - a.orderNumber;
+      });
+    }
     return (
       <React.Fragment>
         <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
