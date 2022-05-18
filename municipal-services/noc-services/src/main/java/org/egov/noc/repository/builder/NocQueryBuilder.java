@@ -100,6 +100,8 @@ public class NocQueryBuilder {
 		
 		String sourceRefId = criteria.getSourceRefId();
                 if (sourceRefId != null) {
+					sourceRefId.replace("[","");
+					sourceRefId.replace("]","");
                     List<String> sourceRefIds = Arrays.asList(sourceRefId.split(","));
                     addClauseIfRequired(builder);
                     if (isFuzzyEnabled) {
@@ -187,7 +189,7 @@ public class NocQueryBuilder {
 	}
 	
 	private void addToPreparedStatementForFuzzySearch(List<Object> preparedStmtList, List<String> ids) {
-	    ids.forEach(id -> preparedStmtList.add("%"+id+"%"));
+		ids.forEach(id -> preparedStmtList.add("%"+id.trim()+"%"));
 	}
 
 	private Object createQuery(List<String> ids) {
