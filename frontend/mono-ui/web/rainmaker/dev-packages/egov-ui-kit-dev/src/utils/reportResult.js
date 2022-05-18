@@ -1,5 +1,5 @@
 import commonConfig from "config/common.js";
-import "datatables";
+// import "datatables";
 import "datatables-buttons";
 import "datatables.net";
 import "datatables.net-buttons";
