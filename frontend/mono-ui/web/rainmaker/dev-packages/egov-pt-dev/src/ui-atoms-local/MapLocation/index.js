@@ -4,8 +4,9 @@ import SearchBox from "react-google-maps/lib/components/places/SearchBox";
 import "./index.scss";
 // import Icon from "../Icon";
 // import commonConfig from "config/common";
-import { MAP_API_KEY } from "../../ui-config/pt-app-config";
 import { Icon } from "egov-ui-framework/ui-atoms";
+import commonConfig from "config/common.js";
+
 
 const {
   compose,
@@ -22,7 +23,7 @@ const {
 
 const MapLocation = compose(
   withProps({
-    googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${MAP_API_KEY}&v=3.exp&libraries=geometry,drawing,places`,
+    googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${commonConfig.MAP_API_KEY}&v=3.exp&libraries=geometry,drawing,places`,
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div className="map-container" />,
     mapElement: <div style={{ height: `100%` }} />
