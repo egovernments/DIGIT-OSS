@@ -239,7 +239,7 @@ export const gettradeupdateunits = (data) => {
 export const getaccessories = (data) => {
   let tradeaccessories = [];
   data?.TradeDetails?.accessories.map((ob) => {
-    tradeaccessories.push({ uom: ob.unit, accessoryCategory: ob.accessory.code, uomValue: ob.uom, count: ob.accessorycount });
+    tradeaccessories.push({ uom: ob.unit, accessoryCategory: ob.accessory.code, uomValue: ob.uom ? ob.uom : null, count: ob.accessorycount });
   });
   return tradeaccessories;
 };
@@ -283,7 +283,7 @@ export const gettradeupdateaccessories = (data) => {
   data.TradeDetails.accessories.map((ob) => {
     if(!ob.id)
     {
-      TLaccessories.push({ uom: ob.unit, accessoryCategory: ob.accessory.code, uomValue: ob.uom, count: ob.accessorycount });
+      TLaccessories.push({ uom: ob.unit, accessoryCategory: ob.accessory.code, uomValue: ob.uom ? ob.uom : null, count: ob.accessorycount });
     }
   })
 }
