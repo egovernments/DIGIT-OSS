@@ -3,6 +3,8 @@ package org.egov.encryption.models;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -15,6 +17,14 @@ public class AuditObject {
     private String userId;
 
     private Long timestamp;
+
+    private String purpose;
+
+    private String model;
+
+    private List<String> entityIds;
+
+    private JsonNode additionalInfo;
 
     private JsonNode data;
 

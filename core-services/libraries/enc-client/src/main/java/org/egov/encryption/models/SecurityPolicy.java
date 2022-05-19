@@ -13,6 +13,8 @@ public class SecurityPolicy {
 
     private String model = null;
 
+    private SecurityPolicyUniqueIdentifier uniqueIdentifier = null;
+
     private List<SecurityPolicyAttribute> attributes = null;
 
     private List<SecurityPolicyRoleBasedDecryptionPolicy> roleBasedDecryptionPolicy = null;

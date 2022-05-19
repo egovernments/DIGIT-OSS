@@ -38,6 +38,8 @@ public class DecryptionPolicyConfiguration {
 
     private Map<String, List<SecurityPolicyRoleBasedDecryptionPolicy>> modelRoleBasedDecryptionPolicyMap;
 
+    private Map<String, SecurityPolicyUniqueIdentifier> uniqueIdentifierMap;
+
 
     void initializeModelAttributeAccessMap(List<SecurityPolicy> modelRoleAttributeAccessList) {
         modelAttributeAccessMap = modelRoleAttributeAccessList.stream()
@@ -51,9 +53,15 @@ public class DecryptionPolicyConfiguration {
                         SecurityPolicy::getRoleBasedDecryptionPolicy));
     }
 
+    void initializeUniqueIdentifierMap(List<SecurityPolicy> modelRoleAttributeAccessList) {
+        uniqueIdentifierMap = modelRoleAttributeAccessList.stream()
+                .collect(Collectors.toMap(SecurityPolicy::getModel,
+                        SecurityPolicy::getUniqueIdentifier));
+    }
+
     @PostConstruct
     void initializeModelAttributeAccessMapFromMdms() {
-        List<SecurityPolicy> modelRoleAttributeAccessList = null;
+        List<SecurityPolicy> securityPolicyList = null;
         try {
             MasterDetail masterDetail = MasterDetail.builder().name(EncClientConstants.MDMS_SECURITY_POLICY_MASTER_NAME).build();
             ModuleDetail moduleDetail = ModuleDetail.builder().moduleName(EncClientConstants.MDMS_MODULE_NAME)
@@ -69,18 +77,22 @@ public class DecryptionPolicyConfiguration {
                     restTemplate.postForEntity(encProperties.getEgovMdmsHost() + encProperties.getEgovMdmsSearchEndpoint(),
                             mdmsCriteriaReq, MdmsResponse.class);
 
-            JSONArray modelRoleAttributeAccessListJSON = response.getBody().getMdmsRes().get(EncClientConstants.MDMS_MODULE_NAME)
+            JSONArray securityPolicyJson = response.getBody().getMdmsRes().get(EncClientConstants.MDMS_MODULE_NAME)
                     .get(EncClientConstants.MDMS_SECURITY_POLICY_MASTER_NAME);
 
             ObjectReader reader = objectMapper.readerFor(objectMapper.getTypeFactory().constructCollectionType(List.class,
                     SecurityPolicy.class));
-            modelRoleAttributeAccessList = reader.readValue(modelRoleAttributeAccessListJSON.toString());
+            securityPolicyList = reader.readValue(securityPolicyJson.toString());
         } catch (IOException e) {}
 
-        initializeModelAttributeAccessMap(modelRoleAttributeAccessList);
-        initializeRoleBasedDecryptionPolicyMap(modelRoleAttributeAccessList);
+        initializeModelAttributeAccessMap(securityPolicyList);
+        initializeRoleBasedDecryptionPolicyMap(securityPolicyList);
+        initializeUniqueIdentifierMap(securityPolicyList);
     }
 
+    public SecurityPolicyUniqueIdentifier getUniqueIdentifierForKey(String key) {
+        return uniqueIdentifierMap.get(key);
+    }
 
     public Map<SecurityPolicyAttribute, Visibility> getRoleAttributeAccessListForKey(RequestInfo requestInfo,String keyId, List<String> roles) {
         Map<SecurityPolicyAttribute, Visibility> mapping = new HashMap<>();

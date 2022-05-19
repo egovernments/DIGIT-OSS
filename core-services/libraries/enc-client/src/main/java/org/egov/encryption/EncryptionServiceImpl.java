@@ -8,6 +8,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.encryption.accesscontrol.AbacFilter;
+import org.egov.encryption.audit.AuditService;
 import org.egov.encryption.config.*;
 import org.egov.encryption.masking.MaskingService;
 import org.egov.encryption.models.AccessType;
@@ -44,6 +45,8 @@ public class EncryptionServiceImpl implements EncryptionService {
     private AbacFilter abacFilter;
     @Autowired
     private MaskingService maskingService;
+    @Autowired
+    private AuditService auditService;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
@@ -87,7 +90,8 @@ public class EncryptionServiceImpl implements EncryptionService {
     }
 
 
-    public JsonNode decryptedJson(Object ciphertextJson, Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap, User user)
+    public JsonNode decryptedJson(Object ciphertextJson, Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap,
+                                  String key, String purpose, User user)
             throws IOException {
         JsonNode ciphertextNode = createJsonNode(ciphertextJson);
         JsonNode decryptNode = ciphertextNode.deepCopy();
@@ -118,6 +122,8 @@ public class EncryptionServiceImpl implements EncryptionService {
                     .filter(attribute -> attributesVisibilityMap.get(attribute) == Visibility.MASKED).collect(Collectors.toList());
             decryptNode = maskingService.maskedData(decryptNode, attributesToBeMasked);
         }
+
+        auditService.audit(decryptNode, key, purpose, user);
 
         return  decryptNode;
     }
@@ -158,9 +164,8 @@ public class EncryptionServiceImpl implements EncryptionService {
         return decryptNode;
     }
 
-
-    public JsonNode decryptJson(RequestInfo requestInfo,Object ciphertextJson, String key, User user) throws IOException {
-
+    @Override
+    public JsonNode decryptJson(RequestInfo requestInfo, Object ciphertextJson, String key, String purpose, User user) throws IOException {
         List<String> roles = user.getRoles().stream().map(Role::getCode).collect(Collectors.toList());
 
 //        Map<Attribute, AccessType> attributeAccessTypeMap = abacFilter.getAttributeAccessForRoles(roles,
@@ -170,13 +175,14 @@ public class EncryptionServiceImpl implements EncryptionService {
 
         //JsonNode decryptedNode = decryptJson(ciphertextJson, attributeAccessTypeMap, user);
 
-        JsonNode decryptedNode = decryptedJson(ciphertextJson, attributesVisibilityMap, user);
+        JsonNode decryptedNode = decryptedJson(ciphertextJson, attributesVisibilityMap, key, purpose, user);
 
         return decryptedNode;
     }
 
-    public <E,P> P decryptJson(RequestInfo requestInfo, Object ciphertextJson, String key, User user, Class<E> valueType) throws IOException {
-        return ConvertClass.convertTo(decryptJson(requestInfo,ciphertextJson, key, user), valueType);
+    public <E,P> P decryptJson(RequestInfo requestInfo, Object ciphertextJson, String key, String purpose,
+                               User user, Class<E> valueType) throws IOException {
+        return ConvertClass.convertTo(decryptJson(requestInfo, ciphertextJson, key, purpose, user), valueType);
     }
 
 

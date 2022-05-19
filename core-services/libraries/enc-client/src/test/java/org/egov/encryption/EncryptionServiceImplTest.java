@@ -68,7 +68,8 @@ public class EncryptionServiceImplTest {
                 "\"userName\":\"341642|Ca5NbGHu3aB2ufjrNfZarW1VGBA=\",\"gender\":\"male\",\"active\":true," +
                 "\"type\":\"CITIZEN\",\"password\":\"password\"}}]");
         User user = User.builder().roles(Arrays.asList(Role.builder().code("GRO").build())).build();
-        JsonNode plaintext = encryptionServiceImpl.decryptJson(requestInfo,ciphertext, "PGR-Complaints-Report", user);
+        JsonNode plaintext = encryptionServiceImpl.decryptJson(requestInfo, ciphertext, "PGR-Complaints-Report",
+                "Report", user);
         log.info(plaintext.toString());
     }
 
@@ -81,7 +82,8 @@ public class EncryptionServiceImplTest {
                 "\"userName\":\"341642|Ca5NbGHu3aB2ufjrNfZarW1VGBA=\",\"gender\":\"male\",\"active\":true," +
                 "\"type\":\"CITIZEN\",\"password\":\"password\"}}");
         User user = User.builder().roles(Arrays.asList(Role.builder().code("GRO").build())).build();
-        JsonNode plaintext = encryptionServiceImpl.decryptJson(requestInfo,ciphertext, "PGR-Complaints-Report", user, JsonNode.class);
+        JsonNode plaintext = encryptionServiceImpl.decryptJson(requestInfo,ciphertext, "PGR-Complaints-Report",
+                "Report", user, JsonNode.class);
         log.info(plaintext.toString());
     }
 
@@ -94,7 +96,7 @@ public class EncryptionServiceImplTest {
         data.put("mobileNumber", "341642|WfYfJPRug15R2wFh17PlQr5d9YhNkFk1");
         user.setRoles(Arrays.asList(Role.builder().code("CITIZEN").build()));
 
-        data = encryptionServiceImpl.decryptJson(requestInfo,data, "User", user, Map.class);
+        data = encryptionServiceImpl.decryptJson(requestInfo,data, "User", "UserSearch", user, Map.class);
         log.info(String.valueOf(data));
     }
 
