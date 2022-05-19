@@ -96,7 +96,7 @@ const getCitizenStyles = (value) => {
         lineHeight: "16px",
         overflow: "hidden",
         // minHeight: "35px",
-        maxHeight: "35px"
+        maxHeight: "34px"
       },   
       inputStyles: {
         width: "43%",
