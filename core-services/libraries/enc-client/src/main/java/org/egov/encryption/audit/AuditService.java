@@ -42,7 +42,7 @@ public class AuditService {
                 decryptionPolicyConfiguration.getUniqueIdentifierForKey(model);
         List<String> entityIds = new ArrayList<>();
         for(JsonNode node : json) {
-            entityIds.add(node.at(uniqueIdentifier.getJsonPath()).asText());
+            entityIds.add(node.get(uniqueIdentifier.getJsonPath()).asText());
         }
         auditObject.setEntityIds(entityIds);
 

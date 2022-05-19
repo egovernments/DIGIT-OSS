@@ -2,16 +2,13 @@ package org.egov.encryption.masking;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
+import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.config.EncClientConstants;
 import org.egov.encryption.config.EncProperties;
-import org.egov.encryption.models.Attribute;
-import org.egov.encryption.models.MaskingPatterns;
-import org.egov.encryption.models.SecurityPolicy;
-import org.egov.encryption.models.SecurityPolicyAttribute;
+import org.egov.encryption.models.*;
 import org.egov.encryption.util.JSONBrowseUtil;
 import org.egov.encryption.util.JacksonUtils;
 import org.egov.encryption.util.JsonPathConverter;
@@ -20,12 +17,11 @@ import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class MaskingService {
@@ -38,6 +34,8 @@ public class MaskingService {
     private ObjectMapper objectMapper;
 
     Map<String, Masking> maskingTechniqueMap;
+
+    private String uniqueIdentifierJsonpathTemplate = "$[?(@.${identifierField} != \"${identifierFieldValue}\")]";
 
 
     @PostConstruct
@@ -69,31 +67,35 @@ public class MaskingService {
         return (T) value;
     }
 
-    public JsonNode maskData(JsonNode decryptedNode, List<Attribute> attributes) {
-        JsonNode maskedNode = decryptedNode.deepCopy();
-
-        for(Attribute attribute : attributes) {
-            JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(maskedNode, Arrays.asList(attribute.getJsonPath()));
-
-            jsonNode = JSONBrowseUtil.mapValues(jsonNode, value -> maskData(value, attribute));
-
-            maskedNode = JacksonUtils.merge(jsonNode, maskedNode);
-        }
-
-        return maskedNode;
-    }
-
-    public JsonNode maskedData(JsonNode decryptedNode, List<SecurityPolicyAttribute> attributes) {
+    public JsonNode maskedData(JsonNode decryptedNode, List<SecurityPolicyAttribute> attributes, SecurityPolicyUniqueIdentifier uniqueIdentifier, RequestInfo requestInfo) {
+        ObjectMapper mapper = new ObjectMapper();
         JsonNode maskedNode = decryptedNode.deepCopy();
         Map<String, String> maskingPatternMap = getMaskingPatternMap();
+        String recordId = null;
+        List<String> plainRequestAttribute = new ArrayList<>();
+        if(requestInfo.getPlainRequestAccesses() != null){
+            recordId = requestInfo.getPlainRequestAccesses().getRecordId();
+            plainRequestAttribute = requestInfo.getPlainRequestAccesses().getPlainRequestFields();
+        }
 
         for(SecurityPolicyAttribute attribute : attributes) {
-            List<String> filterPaths = JsonPathConverter.convertToArrayJsonPaths(Arrays.asList(attribute.getJsonPath()));
-            JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(maskedNode, filterPaths);
-
-            jsonNode = JSONBrowseUtil.mapValues(jsonNode, value -> maskedData(value, attribute, maskingPatternMap));
-
-            maskedNode = JacksonUtils.merge(jsonNode, maskedNode);
+            JSONArray jsonArrayNode = mapper.convertValue(maskedNode,JSONArray.class);
+            JSONArray maskedJsonArray= new JSONArray();;
+            for(int i=0;i<jsonArrayNode.size();i++){
+                JSONObject obj = mapper.convertValue(jsonArrayNode.get(i), JSONObject.class);
+                String id = (String) obj.get(uniqueIdentifier.getJsonPath());
+                if( recordId != null && !CollectionUtils.isEmpty(plainRequestAttribute) && id.equalsIgnoreCase(recordId)
+                        && plainRequestAttribute.contains(attribute.getName())){
+                    maskedJsonArray.add(obj);
+                }
+                else{
+                    String data = (String) obj.get(attribute.getJsonPath());
+                    data = maskedData(data, attribute, maskingPatternMap);
+                    obj.put(attribute.getJsonPath(),data);
+                    maskedJsonArray.add(obj);
+                }
+            }
+            maskedNode = mapper.convertValue(maskedJsonArray,JsonNode.class);
         }
 
         return maskedNode;

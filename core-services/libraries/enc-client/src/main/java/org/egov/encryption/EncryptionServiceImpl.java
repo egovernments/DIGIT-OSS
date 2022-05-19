@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.PlainRequestAccess;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
@@ -11,22 +12,17 @@ import org.egov.encryption.accesscontrol.AbacFilter;
 import org.egov.encryption.audit.AuditService;
 import org.egov.encryption.config.*;
 import org.egov.encryption.masking.MaskingService;
-import org.egov.encryption.models.AccessType;
-import org.egov.encryption.models.Attribute;
-import org.egov.encryption.models.SecurityPolicyAttribute;
-import org.egov.encryption.models.Visibility;
+import org.egov.encryption.models.*;
 import org.egov.encryption.util.ConvertClass;
 import org.egov.encryption.util.JSONBrowseUtil;
 import org.egov.encryption.util.JacksonUtils;
 import org.egov.encryption.util.JsonPathConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -90,11 +86,17 @@ public class EncryptionServiceImpl implements EncryptionService {
     }
 
 
-    public JsonNode decryptedJson(Object ciphertextJson, Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap,
-                                  String key, String purpose, User user)
-            throws IOException {
+    public JsonNode decryptedJson(RequestInfo requestInfo ,Object ciphertextJson, Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap,
+                                  String key, String purpose, User user, SecurityPolicyUniqueIdentifier uniqueIdentifier)throws IOException {
         JsonNode ciphertextNode = createJsonNode(ciphertextJson);
         JsonNode decryptNode = ciphertextNode.deepCopy();
+
+        // Convert input to array if it isn't already
+        if(!decryptNode.isArray()) {
+            ArrayNode arrayNode = objectMapper.createArrayNode();
+            arrayNode.add(decryptNode);
+            decryptNode = arrayNode;
+        }
 
         if(attributesVisibilityMap.containsValue(Visibility.NONE)){
             List<SecurityPolicyAttribute> attributesToBeRemoved = attributesVisibilityMap.keySet().stream()
@@ -120,7 +122,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         if(attributesVisibilityMap.containsValue(Visibility.MASKED)) {
             List<SecurityPolicyAttribute> attributesToBeMasked = attributesVisibilityMap.keySet().stream()
                     .filter(attribute -> attributesVisibilityMap.get(attribute) == Visibility.MASKED).collect(Collectors.toList());
-            decryptNode = maskingService.maskedData(decryptNode, attributesToBeMasked);
+            decryptNode = maskingService.maskedData(decryptNode, attributesToBeMasked, uniqueIdentifier, requestInfo);
         }
 
         auditService.audit(decryptNode, key, purpose, user);
@@ -128,54 +130,13 @@ public class EncryptionServiceImpl implements EncryptionService {
         return  decryptNode;
     }
 
-
-    public JsonNode decryptJson(Object ciphertextJson, Map<Attribute, AccessType> attributeAccessTypeMap, User user)
-            throws IOException {
-        JsonNode ciphertextNode = createJsonNode(ciphertextJson);
-        JsonNode decryptNode = ciphertextNode.deepCopy();
-
-        if(attributeAccessTypeMap.containsValue(AccessType.NONE)) {
-            List<Attribute> attributesToBeRemoved = attributeAccessTypeMap.keySet().stream()
-                    .filter(attribute -> attributeAccessTypeMap.get(attribute) == AccessType.NONE).collect(Collectors.toList());
-            List<String> pathsToBeRemoved = attributesToBeRemoved.stream().map(Attribute::getJsonPath).collect(Collectors.toList());
-            JsonNode nodeToBeEmptied = JacksonUtils.filterJsonNodeForPaths(decryptNode, pathsToBeRemoved);
-            JsonNode emptyNode = JSONBrowseUtil.mapValues(nodeToBeEmptied, __ -> EncClientConstants.STRING_FOR_NONE_ACCESS);
-            decryptNode = JacksonUtils.merge(emptyNode, decryptNode);
-        }
-
-        List<Attribute> attributesToBeDecrypted = attributeAccessTypeMap.keySet().stream()
-                .filter(attribute -> attributeAccessTypeMap.get(attribute) != AccessType.NONE).collect(Collectors.toList());
-
-        List<String> pathsToBeDecrypted = attributesToBeDecrypted.stream().map(Attribute::getJsonPath).collect(Collectors.toList());
-
-        JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(ciphertextNode, pathsToBeDecrypted);
-
-        if(! jsonNode.isEmpty(objectMapper.getSerializerProvider())) {
-            JsonNode returnedDecryptedNode = encryptionServiceRestConnection.callDecrypt(jsonNode);
-            decryptNode = JacksonUtils.merge(returnedDecryptedNode, decryptNode);
-        }
-
-        if(attributeAccessTypeMap.containsValue(AccessType.MASK)) {
-            List<Attribute> attributesToBeMasked = attributeAccessTypeMap.keySet().stream()
-                    .filter(attribute -> attributeAccessTypeMap.get(attribute) == AccessType.MASK).collect(Collectors.toList());
-            decryptNode = maskingService.maskData(decryptNode, attributesToBeMasked);
-        }
-
-        return decryptNode;
-    }
-
     @Override
     public JsonNode decryptJson(RequestInfo requestInfo, Object ciphertextJson, String key, String purpose, User user) throws IOException {
         List<String> roles = user.getRoles().stream().map(Role::getCode).collect(Collectors.toList());
-
-//        Map<Attribute, AccessType> attributeAccessTypeMap = abacFilter.getAttributeAccessForRoles(roles,
-//                abacConfiguration.getRoleAttributeAccessListForKey(key));
-
         Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap = decryptionPolicyConfiguration.getRoleAttributeAccessListForKey(requestInfo,key, roles);
-
-        //JsonNode decryptedNode = decryptJson(ciphertextJson, attributeAccessTypeMap, user);
-
-        JsonNode decryptedNode = decryptedJson(ciphertextJson, attributesVisibilityMap, key, purpose, user);
+        
+        SecurityPolicyUniqueIdentifier uniqueIdentifier = decryptionPolicyConfiguration.getSecurityPolicyUniqueIdentifier(key);
+        JsonNode decryptedNode = decryptedJson(requestInfo,ciphertextJson, attributesVisibilityMap, key, purpose, user, uniqueIdentifier);
 
         return decryptedNode;
     }

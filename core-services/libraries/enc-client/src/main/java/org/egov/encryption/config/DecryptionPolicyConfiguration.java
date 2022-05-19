@@ -3,7 +3,7 @@ package org.egov.encryption.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import net.minidev.json.JSONArray;
-import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.*;
 import org.egov.encryption.models.*;
 import org.egov.encryption.util.MdmsFetcher;
 import org.egov.mdms.model.*;
@@ -15,10 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -94,9 +91,8 @@ public class DecryptionPolicyConfiguration {
         return uniqueIdentifierMap.get(key);
     }
 
-    public Map<SecurityPolicyAttribute, Visibility> getRoleAttributeAccessListForKey(RequestInfo requestInfo,String keyId, List<String> roles) {
+    public Map<SecurityPolicyAttribute, Visibility> getRoleAttributeAccessListForKey(RequestInfo requestInfo, String keyId, List<String> roles) {
         Map<SecurityPolicyAttribute, Visibility> mapping = new HashMap<>();
-        List<String> plainRequestFields = requestInfo.getPlainRequestFields();
 
         List<SecurityPolicyAttribute> securityPolicyAttributesList = modelAttributeAccessMap.get(keyId);
         List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList = modelRoleBasedDecryptionPolicyMap.get(keyId);
@@ -104,6 +100,7 @@ public class DecryptionPolicyConfiguration {
         Map<String, List<SecurityPolicyAttributeAccess>> roleSecurityPolicyAttributeAccessmap = makeRoleAttributeAccessMapping(securityPolicyRoleBasedDecryptionPolicyList);
         Map<String, SecurityPolicyAttribute> attributesMap = makeAttributeMap(securityPolicyAttributesList);
 
+        List<String> secondLevelVisibility = new ArrayList<>();
 
         for(String role: roles){
             if(!roleSecurityPolicyAttributeAccessmap.containsKey(role))
@@ -114,17 +111,14 @@ public class DecryptionPolicyConfiguration {
             for(SecurityPolicyAttributeAccess attributeAccess: attributeList){
                 String attributeName = attributeAccess.getAttribute();
                 SecurityPolicyAttribute attribute = attributesMap.get(attributeName);
-                Visibility visibility;
-              if(!CollectionUtils.isEmpty(plainRequestFields) && plainRequestFields.contains(attributeName)
-                      && attributeAccess.getSecondLevelVisibility() != null){
-                  String secondLevelVisibility = String.valueOf(attributeAccess.getSecondLevelVisibility());
-                  visibility= Visibility.valueOf(secondLevelVisibility);
-              }
-              else {
-                  String firstLevelVisibility = attributeAccess.getFirstLevelVisibility() != null ?
+                if(requestInfo.getPlainRequestAccesses() !=null && !CollectionUtils.isEmpty(requestInfo.getPlainRequestAccesses().getPlainRequestFields())
+                        && requestInfo.getPlainRequestAccesses().getPlainRequestFields().contains(attributeName)
+                        && attributeAccess.getSecondLevelVisibility() != null){
+                    secondLevelVisibility.add(attributeName);
+                }
+                String firstLevelVisibility = attributeAccess.getFirstLevelVisibility() != null ?
                           String.valueOf(attributeAccess.getFirstLevelVisibility()) : String.valueOf(attribute.getDefaultVisibility());
-                  visibility = Visibility.valueOf(firstLevelVisibility);
-              }
+                Visibility visibility = Visibility.valueOf(firstLevelVisibility);
                 if(mapping.containsKey(attribute)){
                     if(mapping.get(attribute).ordinal() > visibility.ordinal()){
                         mapping.remove(attribute);
@@ -136,6 +130,9 @@ public class DecryptionPolicyConfiguration {
                 }
             }
         }
+
+        if(requestInfo.getPlainRequestAccesses() != null)
+            requestInfo.getPlainRequestAccesses().setPlainRequestFields(secondLevelVisibility);
 
         return mapping;
     }
@@ -153,6 +150,10 @@ public class DecryptionPolicyConfiguration {
             atrributesMap.put(filedName, securityPolicyAttribute);
         }
         return atrributesMap;
+    }
+
+    public SecurityPolicyUniqueIdentifier getSecurityPolicyUniqueIdentifier(String model){
+        return uniqueIdentifierMap.get(model);
     }
 
 }
