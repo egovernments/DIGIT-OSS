@@ -1,31 +1,21 @@
 package org.egov.id.service;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.sql.DataSource;
-
 import lombok.extern.slf4j.Slf4j;
 import org.egov.id.config.PropertiesManager;
-import org.egov.id.model.IDSeqOverflowException;
-import org.egov.id.model.IdGenerationRequest;
-import org.egov.id.model.IdGenerationResponse;
-import org.egov.id.model.IdRequest;
-import org.egov.id.model.IdResponse;
-import org.egov.id.model.InvalidIDFormatException;
-import org.egov.id.model.RequestInfo;
-import org.egov.id.model.ResponseInfoFactory;
+import org.egov.id.model.*;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
-import sun.util.resources.cldr.chr.CalendarData_chr_US;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import javax.sql.DataSource;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Description : IdGenerationService have methods related to the IdGeneration
