@@ -138,6 +138,10 @@ public class PGRConstants {
     public static final String MDMS_DATA_SERVICE_CODE_KEYWORD = "serviceCode";
 
     public static final String MDMS_DATA_SLA_KEYWORD = "slaHours";
+    
+    public static final String COMPLAINTS_RESOLVED = "complaintsResolved";
+    
+    public static final String AVERAGE_RESOLUTION_TIME = "averageResolutionTime";
 
 
 }
