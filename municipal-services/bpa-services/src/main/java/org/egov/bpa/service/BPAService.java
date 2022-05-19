@@ -596,26 +596,16 @@ public class BPAService {
 	private void createTempReport(BPARequest bpaRequest,String fileName,PDDocument document) throws Exception {
 		URL downloadUrl = this.getEdcrReportDownloaUrl(bpaRequest);
 		// Read the PDF from the URL and save to a local file
-		FileOutputStream writeStream = null;
-		InputStream readStream = null;
-		try {
-			writeStream = new FileOutputStream(fileName);
+
+		try(FileOutputStream writeStream = new FileOutputStream(fileName); InputStream readStream = downloadUrl.openStream()) {
+
 			byte[] byteChunck = new byte[1024];
 			int baLength;
-			readStream = downloadUrl.openStream();
 			while ((baLength = readStream.read(byteChunck, 0 , byteChunck.length)) != -1) {
 				writeStream.write(byteChunck, 0, baLength);
 			}
 		}catch (Exception e){
 			log.error("Error while creating temp report.");
-		}finally {
-			if(writeStream != null) {
-				writeStream.flush();
-				writeStream.close();
-			}
-			if(readStream != null) {
-				readStream.close();
-			}
 		}
 
 		document = PDDocument.load(new File(fileName));

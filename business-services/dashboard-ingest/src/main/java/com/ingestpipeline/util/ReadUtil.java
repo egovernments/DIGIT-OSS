@@ -380,17 +380,12 @@ public class ReadUtil {
 		String currentWorkingFolder = System.getProperty("user.dir"),
 				filePathSeperator = System.getProperty(SEPARATOR),
 				filePath = currentWorkingFolder + filePathSeperator + fileName;
-		BufferedWriter bufferedWriter = null;
-		try {
-			bufferedWriter = new BufferedWriter(new FileWriter(new File(filePath)));
+
+		try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(filePath)))) {
+
 			bufferedWriter.write(data.toString());
 		}catch (Exception e){
 			LOGGER.error("Error while writing to file. ");
-		}finally {
-			if(bufferedWriter != null){
-				bufferedWriter.flush();
-				bufferedWriter.close();
-			}
 		}
 	}
 }

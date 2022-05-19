@@ -1504,10 +1504,11 @@ public class MicroserviceUtils {
             }
             Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
             if (postForObject != null) {
-                return list = mapper.convertValue(
+                list = mapper.convertValue(
                         JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService"),
                         new TypeReference<List<BusinessService>>() {
                         });
+                return list;
             }
         } catch (RestClientException e) {
             LOGGER.error("ERROR occurred while fetching business service details in getBusinessServiceByCodes method: ",
