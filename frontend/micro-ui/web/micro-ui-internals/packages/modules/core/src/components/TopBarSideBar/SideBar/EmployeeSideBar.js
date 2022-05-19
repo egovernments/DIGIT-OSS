@@ -24,6 +24,15 @@ const EmployeeSideBar = () => {
     key = "ACTION_TEST_NATDASHBOARD";
   }
 
+  function getRedirectionUrl(){
+    if (NATADMIN)
+      return "/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD";
+    else if(STADMIN)
+      return "/employee/integration/dss/home";
+    else
+      return "/employee";
+  }
+
   const { t } = useTranslation();
   return (
     <div className="sidebar">
@@ -41,7 +50,7 @@ const EmployeeSideBar = () => {
           />
         </div>
       </Link>
-      <a href="/employee">
+      <a href={getRedirectionUrl()}>
         <div className="actions">
           <ToolTipWrapper
             child={
