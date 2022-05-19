@@ -57,6 +57,9 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
   }, [propertyDetails, pathname]);
 
   const searchProperty = () => {
+    if (!propertyId) {
+      setShowToast({ error: true, label: "PT_ENTER_PROPERTY_ID_AND_SEARCH" });
+    }
     setSearchPropertyId(propertyId);
   };
 
