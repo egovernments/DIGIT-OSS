@@ -79,6 +79,10 @@ public class VehicleTrip   {
   @JsonProperty("applicationNo")
   private String applicationNo = null;
   
+  @SafeHtml
+  @JsonProperty("registrationNumber")
+  private String registrationNumber = null;
+  
   /**
    * Gets or Sets status
    */

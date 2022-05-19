@@ -48,7 +48,10 @@ public class VehicleTripSearchCriteria {
     private List<String> applicationStatus;   
     
     @JsonProperty("refernceNos")
-    private List<String> refernceNos;   
+    private List<String> refernceNos;  
+    
+    @JsonProperty("registrationNumber")
+	private List<String> registrationNumber;
     
     @JsonProperty("applicationNos")
     private List<String> applicationNos;   

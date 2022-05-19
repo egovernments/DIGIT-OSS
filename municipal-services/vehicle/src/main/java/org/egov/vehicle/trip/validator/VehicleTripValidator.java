@@ -74,52 +74,64 @@ public class VehicleTripValidator {
 	 @Autowired
 	private MDMSValidator mdmsValidator;
 
+	 private boolean isFSMRequest=false;
 	 
-	public void validateCreateOrUpdateRequest(VehicleTripRequest request) {
-		
-		request.getVehicleTrip().forEach(vehicleTrip->{
+		public void validateCreateOrUpdateRequest(VehicleTripRequest request) {
 			
-			if (StringUtils.isEmpty(vehicleTrip.getTenantId())) {
-				throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "TenantId is mandatory");
-			}
-			if (vehicleTrip.getTenantId().split("\\.").length == 1) {
-				throw new CustomException(VehicleTripConstants.INVALID_TENANT, " Invalid TenantId");
-			}
+			request.getVehicleTrip().forEach(vehicleTrip->{
 			
-			if (vehicleTrip.getVehicle() == null  || StringUtils.isEmpty(vehicleTrip.getVehicle().getId())) {
-				throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "vehicleId is mandatory");
-			}else {
-				List<Vehicle> vehicles = vehicleService.search(VehicleSearchCriteria.builder()
-								.ids(Arrays.asList(vehicleTrip.getVehicle().getId()))
-								.tenantId(vehicleTrip.getTenantId()).build(), request.getRequestInfo()).getVehicle();
-				if(CollectionUtils.isEmpty(vehicles)) {
-					throw new CustomException(VehicleTripConstants.INVALID_VEHICLE,
-							"vehicle does not exists with id " + vehicleTrip.getVehicle().getId());
-				}else {
-					vehicleTrip.setVehicle(vehicles.get(0));
+				vehicleTrip.getTripDetails().forEach(tripDetail ->{
+					
+					if(tripDetail.getReferenceNo().isEmpty()) {
+						 isFSMRequest=true;
+					}
+					
+				});
+				if(isFSMRequest) {
+				if (StringUtils.isEmpty(vehicleTrip.getTenantId())) {
+					throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "TenantId is mandatory");
 				}
-			}
+				if (vehicleTrip.getTenantId().split("\\.").length == 1) {
+					throw new CustomException(VehicleTripConstants.INVALID_TENANT, " Invalid TenantId");
+				}
+				
+				if (vehicleTrip.getVehicle() == null  || StringUtils.isEmpty(vehicleTrip.getVehicle().getId())) {
+					throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "vehicleId is mandatory");
+				}else {
+					List<Vehicle> vehicles = vehicleService.search(VehicleSearchCriteria.builder()
+									.ids(Arrays.asList(vehicleTrip.getVehicle().getId()))
+									.tenantId(vehicleTrip.getTenantId()).build(), request.getRequestInfo()).getVehicle();
+					if(CollectionUtils.isEmpty(vehicles)) {
+						throw new CustomException(VehicleTripConstants.INVALID_VEHICLE,
+								"vehicle does not exists with id " + vehicleTrip.getVehicle().getId());
+					}else {
+						vehicleTrip.setVehicle(vehicles.get(0));
+					}
+				}
+				
+				if (StringUtils.isEmpty(vehicleTrip.getBusinessService())) {
+					throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "bussinessService is mandaotry");
+				}
+				if(vehicleTrip.getTripOwner() != null) {
+					ownerExists(vehicleTrip,request.getRequestInfo());
+				}
+				
+				if(vehicleTrip.getDriver() != null) {
+					driverExists(vehicleTrip, request.getRequestInfo());
+				}
+				
+				if(vehicleTrip.getTripDetails() ==null || CollectionUtils.isEmpty(vehicleTrip.getTripDetails())) {
+					throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR, "atleast one trip detail is mandatory");
+				}
+				}
+				else {
+					
+				}
+			});
 			
-			if (StringUtils.isEmpty(vehicleTrip.getBusinessService())) {
-				throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "bussinessService is mandaotry");
-			}
-			if(vehicleTrip.getTripOwner() != null) {
-				ownerExists(vehicleTrip,request.getRequestInfo());
-			}
 			
-			if(vehicleTrip.getDriver() != null) {
-				driverExists(vehicleTrip, request.getRequestInfo());
-			}
 			
-			if(vehicleTrip.getTripDetails() ==null || CollectionUtils.isEmpty(vehicleTrip.getTripDetails())) {
-				throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR, "atleast one trip detail is mandatory");
-			}
-		
-		});
-		
-		
-		
-	}
+		}
 
 	public void ownerExists(VehicleTrip vehicleTrip, RequestInfo requestInfo) {
 		User owner = vehicleTrip.getTripOwner();

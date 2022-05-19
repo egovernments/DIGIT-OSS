@@ -1,5 +1,6 @@
 package org.egov.vehicle.trip.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.validation.Valid;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.vehicle.config.VehicleConfiguration;
+import org.egov.vehicle.service.VehicleService;
 import org.egov.vehicle.service.notification.NotificationService;
 import org.egov.vehicle.trip.repository.VehicleTripRepository;
 import org.egov.vehicle.trip.util.VehicleTripConstants;
@@ -20,6 +22,9 @@ import org.egov.vehicle.trip.web.model.workflow.BusinessService;
 import org.egov.vehicle.trip.workflow.ActionValidator;
 import org.egov.vehicle.trip.workflow.WorkflowIntegrator;
 import org.egov.vehicle.trip.workflow.WorkflowService;
+import org.egov.vehicle.web.model.Vehicle;
+import org.egov.vehicle.web.model.VehicleResponse;
+import org.egov.vehicle.web.model.VehicleSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -120,6 +125,19 @@ public class VehicleTripService {
 					criteria.getIds().addAll(tripIds);
 				}					
 			}
+		}
+		
+		if(criteria.getRegistrationNumber() !=null && !CollectionUtils.isEmpty(criteria.getRegistrationNumber())) {
+			List<String> regNo = criteria.getRegistrationNumber();
+			VehicleSearchCriteria cri = new VehicleSearchCriteria();
+			cri.setRegistrationNumber(regNo);
+			VehicleService vhs = new VehicleService();
+			VehicleResponse vr =  vhs.search(cri, requestInfo);
+			List<String> idList = new ArrayList<String>();
+			for(Vehicle v : vr.getVehicle()) {
+				idList.add(v.getId());
+			}
+             criteria.setIds(idList); 			
 		}
 		
 		VehicleTripResponse response = vehicleLogRepository.getVehicleLogData(criteria);
