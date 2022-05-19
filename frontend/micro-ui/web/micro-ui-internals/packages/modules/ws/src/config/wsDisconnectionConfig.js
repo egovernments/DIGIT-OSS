@@ -31,22 +31,9 @@
           type: "component",
           isMandatory: true,
           withoutLabel: true,
-          nextStep: null,
           hideInEmployee: true,
-          // nextStep: "application-form"
-        }
-        ,
-        {         
-          route: "disconnection-summary",
-          component: "WSDisconnectionSummary",
-          key: "WSDisconnectionSummary",
-          type: "component",
-          isMandatory: true,
-          withoutLabel: true,
-          nextStep: null,
-          hideInEmployee: true,
-          // nextStep: "application-form"
-        }
+          nextStep: "check"
+        }        
     ]
 }
 ]

@@ -24,7 +24,7 @@ const WSDisconnection = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("WS_CREATE", state?.edcrNumber ? { data: { scrutinyNumber: { edcrNumber: state?.edcrNumber } } } : {});
 
-  const CheckPage = Digit?.ComponentRegistryService?.getComponent('WSCheckPage') ;
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('WSDisconnectionCheckPage') ;
   const Acknowledgement = Digit?.ComponentRegistryService?.getComponent('WSAcknowledgement') ;
 
   const stateId = Digit.ULBService.getStateId();

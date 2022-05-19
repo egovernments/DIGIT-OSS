@@ -13,7 +13,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 
 
-function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData, onSelect  }) { 
+function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData  }) { 
   const tenantId = Digit.ULBService.getStateId();
   const [documents, setDocuments] = useState(formData?.documents?.documents || []);
   const [error, setError] = useState(null);
