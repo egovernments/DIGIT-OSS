@@ -10,6 +10,7 @@ const SWCard = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [totalCount, setTotalCount] = useState(0);
+
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
 
@@ -41,7 +42,6 @@ const SWCard = () => {
     tenantId,
     filters: { ...formInitValue },
   });
-
   useEffect(() => {
     if (!isSWInboxLoading) {
       const sewerageCount = swData?.totalCount ? swData?.totalCount : 0;
@@ -69,7 +69,7 @@ const SWCard = () => {
         link: `/digit-ui/employee/ws/sewerage/inbox`,
       },
       {
-        count: "-",
+        count: isSWInboxLoading ? "-" : swData?.slaCount,
         label: t("TOTAL_NEARING_SLA"),
         link: `/digit-ui/employee/ws/sewerage/inbox`,
       },

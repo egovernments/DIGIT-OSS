@@ -69,7 +69,7 @@ const WSCard = () => {
         link: `/digit-ui/employee/ws/water/inbox`,
       },
       {
-        count: "-",
+        count: isWSInboxLoading ? "-" : wsData?.slaCount,
         label: t("TOTAL_NEARING_SLA"),
         link: `/digit-ui/employee/ws/water/inbox`,
       },
