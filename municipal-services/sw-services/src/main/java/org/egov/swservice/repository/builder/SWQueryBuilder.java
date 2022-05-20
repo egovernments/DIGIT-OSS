@@ -161,8 +161,8 @@ public class SWQueryBuilder {
 		if (!StringUtils.isEmpty(criteria.getMobileNumber())  
 				&& !StringUtils.isEmpty(criteria.getDoorNo()) && !StringUtils.isEmpty(criteria.getOwnerName()) && 
 				CollectionUtils.isEmpty(criteria.getPropertyIds()) && CollectionUtils.isEmpty(criteria.getUserIds())
-				&& StringUtils.isEmpty(criteria.getApplicationNumber()) && StringUtils.isEmpty(criteria.getPropertyId())
-				&& StringUtils.isEmpty(criteria.getConnectionNumber()) && CollectionUtils.isEmpty(criteria.getIds())) {
+				&& CollectionUtils.isEmpty(criteria.getApplicationNumber()) && StringUtils.isEmpty(criteria.getPropertyId())
+				&& CollectionUtils.isEmpty(criteria.getConnectionNumber()) && CollectionUtils.isEmpty(criteria.getIds())) {
 			return null;
 		}
 		
@@ -200,26 +200,24 @@ public class SWQueryBuilder {
 			preparedStatement.add(criteria.getOldConnectionNumber());
 		}
 
-		if (!StringUtils.isEmpty(criteria.getConnectionNumber())) {
+		// Added clause to support multiple connectionNumbers search
+		if (!CollectionUtils.isEmpty(criteria.getConnectionNumber())) {
 			addClauseIfRequired(preparedStatement, query);
-			query.append(" conn.connectionno = ? ");
-			preparedStatement.add(criteria.getConnectionNumber());
+			query.append("  conn.connectionno IN (").append(createQuery(criteria.getConnectionNumber())).append(")");
+			addToPreparedStatement(preparedStatement, criteria.getConnectionNumber());
 		}
+		
 		if (!StringUtils.isEmpty(criteria.getStatus())) {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.status = ? ");
 			preparedStatement.add(criteria.getStatus());
 		}
-		if (!StringUtils.isEmpty(criteria.getApplicationNumber())) {
-			addClauseIfRequired(preparedStatement, query);
-			query.append(" conn.applicationno = ? ");
-			preparedStatement.add(criteria.getApplicationNumber());
-		}
+		
 		// Added clause to support multiple applicationNumbers search
-		if (!CollectionUtils.isEmpty(criteria.getApplicationNumbers())) {
+		if (!CollectionUtils.isEmpty(criteria.getApplicationNumber())) {
 			addClauseIfRequired(preparedStatement, query);
-			query.append("  conn.applicationno IN (").append(createQuery(criteria.getApplicationNumbers())).append(")");
-			addToPreparedStatement(preparedStatement, criteria.getApplicationNumbers());
+			query.append("  conn.applicationno IN (").append(createQuery(criteria.getApplicationNumber())).append(")");
+			addToPreparedStatement(preparedStatement, criteria.getApplicationNumber());
 		}
 		// Added clause to support multiple applicationStatuses search
 		if (!CollectionUtils.isEmpty(criteria.getApplicationStatus())) {

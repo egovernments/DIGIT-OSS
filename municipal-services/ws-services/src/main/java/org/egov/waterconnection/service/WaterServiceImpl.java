@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
@@ -241,7 +243,7 @@ public class WaterServiceImpl implements WaterService {
 
 	private List<WaterConnection> getAllWaterApplications(WaterConnectionRequest waterConnectionRequest) {
 		SearchCriteria criteria = SearchCriteria.builder()
-				.connectionNumber(waterConnectionRequest.getWaterConnection().getConnectionNo()).build();
+				.connectionNumber(Stream.of(waterConnectionRequest.getWaterConnection().getConnectionNo().toString()).collect(Collectors.toSet())).build();
 		return search(criteria, waterConnectionRequest.getRequestInfo());
 	}
 

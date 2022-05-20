@@ -30,6 +30,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -249,7 +250,7 @@ public class EnrichmentService {
 					equals(waterConnectionrequest.getWaterConnection().getProcessInstance().getAction())) {
 				SearchCriteria criteria = SearchCriteria.builder()
 						.tenantId(waterConnectionrequest.getWaterConnection().getTenantId())
-						.connectionNumber(waterConnectionrequest.getWaterConnection().getConnectionNo()).isCountCall(false)
+						.connectionNumber(Stream.of(waterConnectionrequest.getWaterConnection().getConnectionNo().toString()).collect(Collectors.toSet())).isCountCall(false)
 						.build();
 				List<WaterConnection> connections = waterService.search(criteria, waterConnectionrequest.getRequestInfo());
 				if (!CollectionUtils.isEmpty(connections)) {
