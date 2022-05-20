@@ -2,6 +2,7 @@ import { useInitStore } from "./store";
 import useWorkflowDetails from "./workflow";
 import useSessionStorage from "./useSessionStorage";
 import useQueryParams from "./useQueryParams";
+import useDocumentSearch from "./useDocumentSearch";
 import useClickOutside from "./useClickOutside";
 import {
   useFetchPayment,
@@ -389,6 +390,7 @@ const Hooks = {
   useClearNotifications,
   useNotificationCount,
   useStore,
+  useDocumentSearch,
   useTenants,
   useInbox: useTLInbox,
   pgr,
