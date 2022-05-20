@@ -73,8 +73,9 @@ public class LandService {
 		landValidator.validateLandInfo(landRequest, mdmsData);
 		userService.manageUser(landRequest);
 		enrichmentService.enrichLandInfoRequest(landRequest, true);
+		log.info("land request updated "+ landRequest);
 		repository.update(landRequest);
-
+		log.info("land request updated return "+ landRequest);
 		return landRequest.getLandInfo();
 	}
 	
