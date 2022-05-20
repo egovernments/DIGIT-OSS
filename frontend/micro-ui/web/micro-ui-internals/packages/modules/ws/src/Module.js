@@ -44,6 +44,7 @@ import WSDisconnectionDocsRequired from "./pageComponents/WSDisconnectionDocsReq
 import WSDisConnectionForm from "./pageComponents/WSDisConnectionForm";
 import WSDisconnectionDocumentsForm from "./pageComponents/WSDisconnectionDocumentsForm";
 import WSDisconnectionCheckPage from "./pages/citizen/WSDisconnection/CheckPage";
+import WSDisconnectAcknowledgement from "./pageComponents/WSDisconnectAcknowledgement";
 
 import WSInbox from "./components/WSInbox";
 
@@ -146,7 +147,8 @@ const componentsToRegister = {
   SWCard,
   WSDisConnectionForm,
   WSDisconnectionDocumentsForm,
-  WSDisconnectionCheckPage
+  WSDisconnectionCheckPage,
+  WSDisconnectAcknowledgement
 };
 
 export const initWSComponents = () => {
