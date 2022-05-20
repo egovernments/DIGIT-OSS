@@ -11,7 +11,7 @@ const SearchWater = ({ path }) => {
   const SWater = Digit.ComponentRegistryService.getComponent("WSSearchWaterConnection");
   // const [businessServ, setBusinessServ] = useState([]);
   const getUrlPathName = window.location.pathname;
-  const checkPathName = getUrlPathName.includes("water/search");
+  const checkPathName = getUrlPathName.includes("water/search-connection");
   const businessServ = checkPathName ? "WS" : "SW";
 
   const [showToast, setShowToast] = useState(null);

@@ -151,14 +151,14 @@ const WSInbox = ({ parentRoute }) => {
       { ...links },
       {
         text: t("WS_SEWERAGE_APPLICATION_SEARCH"),
-        link: checkPathName ? `/digit-ui/employee/ws/water/search-application` : `/digit-ui/employee/ws/sewerage/search-application`,
+        link: checkPathName ? `/digit-ui/employee/ws/water/search-application?from=WS_SEWERAGE_INBOX` : `/digit-ui/employee/ws/sewerage/search-application?from=WS_SEWERAGE_INBOX`,
         roles: checkPathName
           ? ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"]
           : ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
       },
       {
         text: t("WS_SEWERAGE_CONNECTION_SEARCH_LABEL"),
-        link: checkPathName ? `/digit-ui/employee/ws/water/search` : `/digit-ui/employee/ws/sewerage/search`,
+        link: checkPathName ? `/digit-ui/employee/ws/water/search-connection?from=WS_SEWERAGE_INBOX` : `/digit-ui/employee/ws/sewerage/search-connection?from=WS_SEWERAGE_INBOX`,
         roles: checkPathName
           ? ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"]
           : ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],

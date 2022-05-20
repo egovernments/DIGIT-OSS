@@ -22,7 +22,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
           return (
             <div>
               <Link
-                to={`/digit-ui/employee/ws/application-details?applicationNumber=${row.original["applicationNo"]}&tenantId=${tenantId}&service=${service}`}
+                to={`/digit-ui/employee/ws/application-details?applicationNumber=${row.original["applicationNo"]}&tenantId=${tenantId}&service=${service}&from=WS_SEWERAGE_INBOX`}
               >
                 {" "}
                 <span className="link">{row.original["applicationNo"]}</span>

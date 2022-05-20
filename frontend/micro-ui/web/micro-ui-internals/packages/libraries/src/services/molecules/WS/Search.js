@@ -183,7 +183,7 @@ export const WSSearch = {
       additionalDetails: {
         redirectUrl: {
           title: "View Complete Property details",
-          url: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}`,
+          url: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=WS_APPLICATION_DETAILS_HEADER`,
         },
       },
     };
@@ -581,7 +581,7 @@ export const WSSearch = {
               { title: "WS_INITIAL_METER_READING_LABEL", value: wsDataDetails?.additionalDetails?.initialMeterReading || t("NA") },
               {
                 title: "WS_VIEW_CONSUMPTION_DETAIL",
-                to: `/digit-ui/employee/ws/consumption-details?applicationNo=${wsDataDetails?.connectionNo}&tenantId=${wsDataDetails?.tenantId}&service=${serviceType}`,
+                to: `/digit-ui/employee/ws/consumption-details?applicationNo=${wsDataDetails?.connectionNo}&tenantId=${wsDataDetails?.tenantId}&service=${serviceType}&from=WS_COMMON_CONNECTION_DETAIL`,
                 value: "",
                 isLink: true,
               },
@@ -607,7 +607,7 @@ export const WSSearch = {
         { title: "WS_PROPERTY_ADDRESS_LABEL", value: propertyDataDetails?.address?.locality?.name },
         {
           title: "WS_VIEW_PROPERTY_DETAIL",
-          to: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}`,
+          to: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=WS_COMMON_CONNECTION_DETAIL`,
           value: "",
           isLink: true,
         },

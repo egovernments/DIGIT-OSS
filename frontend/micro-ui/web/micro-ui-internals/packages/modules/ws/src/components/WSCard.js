@@ -92,7 +92,7 @@ const WSCard = () => {
       ...links,
       {
         label: t("WS_WATER_CONNECTION_SEARCH_LABEL"),
-        link: `/digit-ui/employee/ws/water/search`,
+        link: `/digit-ui/employee/ws/water/search-connection`,
         roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
       {

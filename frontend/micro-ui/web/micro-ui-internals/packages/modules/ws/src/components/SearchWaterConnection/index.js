@@ -85,7 +85,7 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
                   <Link
                     to={`/digit-ui/employee/ws/connection-details?applicationNumber=${row.original["connectionNo"]}&tenantId=${tenantId}&service=${
                       row.original?.["service"]
-                    }&connectionType=${row.original?.["connectionType"]}&due=${row.original?.due || 0}`}
+                      }&connectionType=${row.original?.["connectionType"]}&due=${row.original?.due || 0}&from=WS_SEWERAGE_CONNECTION_SEARCH_LABEL`}
                   >
                     {row.original["connectionNo"] || "NA"}
                   </Link>

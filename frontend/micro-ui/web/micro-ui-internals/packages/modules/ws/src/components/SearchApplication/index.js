@@ -75,7 +75,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
                   <Link
                     to={`/digit-ui/employee/ws/connection-details?applicationNumber=${
                       row.original["connectionNo"]
-                    }&tenantId=${tenantId}&service=${service}&due=${row.original?.due || 0}`}
+                      }&tenantId=${tenantId}&service=${service}&due=${row.original?.due || 0}&from=WS_SEWERAGE_APPLICATION_SEARCH`}
                   >
                     {row.original["connectionNo"] || "NA"}
                   </Link>
@@ -101,7 +101,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
                   <Link
                     to={`/digit-ui/employee/ws/application-details?applicationNumber=${
                       row.original["applicationNo"]
-                    }&tenantId=${tenantId}&service=${service}&mode=${"MODIFY"} `}
+                      }&tenantId=${tenantId}&service=${service}&mode=${"MODIFY"}&from=WS_SEWERAGE_APPLICATION_SEARCH`}
                   >
                     {row.original["applicationNo"]}
                   </Link>
@@ -113,7 +113,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
               <div>
                 <span className="link">
                   <Link
-                    to={`/digit-ui/employee/ws/application-details?applicationNumber=${row.original["applicationNo"]}&tenantId=${tenantId}&service=${service}`}
+                    to={`/digit-ui/employee/ws/application-details?applicationNumber=${row.original["applicationNo"]}&tenantId=${tenantId}&service=${service}&from=WS_SEWERAGE_APPLICATION_SEARCH`}
                   >
                     {row.original["applicationNo"]}
                   </Link>
