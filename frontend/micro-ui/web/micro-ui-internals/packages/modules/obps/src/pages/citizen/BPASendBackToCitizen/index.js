@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
@@ -7,6 +7,7 @@ import { newConfig as newConfigBPA } from "../../../config/buildingPermitConfig"
 //import Acknowledgement from "../OCSendBackToCitizen";
 //import OBPSAcknowledgement from "../OCBuildingPermit/OBPSAcknowledgement";
 import { getBPAEditDetails, getPath } from "../../../utils";
+import { Loader } from "@egovernments/digit-ui-react-components";
 
 const BPASendBackToCitizen = ({ parentRoute }) => {
   const { t } = useTranslation();
@@ -40,7 +41,9 @@ const BPASendBackToCitizen = ({ parentRoute }) => {
   const editApplication = window.location.href.includes("editApplication");
 
   useEffect(async () => {
-    if (!isLoading) {
+    let isAlready = sessionStorage.getItem("BPA_IS_ALREADY_WENT_OFF_DETAILS");
+    isAlready = isAlready ? JSON.parse(isAlready) : true;
+    if (!isAlready && !isNocLoading && !isBpaSearchLoading && !isLoading) {
       application = bpaData ? bpaData[0] : {};
       if (bpaData && application && edcrDetails && mdmsData && nocdata) {
         application = bpaData[0];
@@ -96,6 +99,9 @@ const BPASendBackToCitizen = ({ parentRoute }) => {
   const CheckPage = Digit?.ComponentRegistryService?.getComponent('OCBPASendBackCheckPage') ;
   const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('OCSendBackAcknowledgement');
 
+  if (isNocLoading || isBpaSearchLoading || isLoading) {
+    return <Loader />
+  }
 
   return (
     <Switch>
