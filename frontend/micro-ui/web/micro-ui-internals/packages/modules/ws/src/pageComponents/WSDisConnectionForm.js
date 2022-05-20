@@ -1,10 +1,9 @@
-import { CardLabel, CheckBox, Dropdown, FormStep, Loader, MobileNumber, RadioButtons, TextInput, UploadFile,LabelFieldPair,TextArea,SubmitBar } from "@egovernments/digit-ui-react-components";
+import { CardLabel, CheckBox, Dropdown, FormStep, Loader, MobileNumber, RadioButtons, TextInput, UploadFile,LabelFieldPair,TextArea,SubmitBar, CitizenInfoLabel, CardHeader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import Timeline from "../components/Timeline";
 import { stringReplaceAll } from "../utils";
 
 const WSDisConnectionForm = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
-    console.log(config,"config2222222222222222222222")
   let validation = {};
   
   const [disconnectionData, setDisconnectionData] = useState({
@@ -59,8 +58,8 @@ const WSDisConnectionForm = ({ t, config, onSelect, userType, formData, ownerInd
 //   Menu ? Menu.sort((a, b) => a.name.localeCompare(b.name)) : "";
 
   let menu = [
-    { i18nKey: 'WS_PERMANENT', code: `permanent`, value: `permanent` },
-    { i18nKey: 'WS_TEMPORARY', code: `temporary`, value: `temporary` }
+    { i18nKey: 'WS_PERMANENT', code: `PERMANENT`, value: `PERMANENT` },
+    { i18nKey: 'WS_TEMPORARY', code: `TEMPORARY`, value: `TEMPORARY` }
   ];
 //   genderTypeData &&
 //     genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
@@ -112,15 +111,15 @@ const goNext = () => {
         {/* {!isLoading ?  */}
         <FormStep
           config={config}
-          // onSelect={goNext}
+          onSelect={goNext}
           onSkip={onSkip}
           t={t}       
         >
          
         <div style={{padding:"10px",paddingTop:"20px",marginTop:"10px"}}>
-        <CardLabel>{t("WS_APPLICATION_FORM")}</CardLabel>
+        <CardHeader>{t("WS_APPLICATION_FORM")}</CardHeader>
         <CardLabel>
-          {t('WS_CUSTOMER_NUMBER')}
+          {t('WS_CONSUMER_NUMBER')} 
           <span style={{float:'right'}}>PG-WS-2021-09-29-006024</span>
         </CardLabel>
         
@@ -167,8 +166,8 @@ const goNext = () => {
                 />              
           </LabelFieldPair>
           <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
-
-          </div>
+        </div>
+        <CitizenInfoLabel style={{ margin: "0px" }} textStyle={{ color: "#0B0C0C" }} text={t(`WS_DISONNECT_APPL_INFO`)} />
         </FormStep>
         
          {/* : <Loader /> } */}
