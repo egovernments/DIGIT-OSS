@@ -251,11 +251,16 @@ public class CommonRepository {
 			uniqueList.remove(regno);
 		}
 		modifyHospIdBirth(uniqueHospList , response.getBirthCerts().get(0).getTenantid());
-		AuditDetails auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
 		int finalCount=0;
+			AuditDetails auditDetails;
 		for (Entry<String, EgBirthDtl> entry : uniqueList.entrySet()) {
 			EgBirthDtl birthDtl = entry.getValue();
 			birthDtl.setGenderStr(birthDtl.getGenderStr()==null?"":birthDtl.getGenderStr().trim().toLowerCase());
+			if(birthDtl.getIsLegacyRecord()) {
+				auditDetails = commUtils.getAuditDetails("import-user", true);
+			} else {
+				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+			}
 			switch (birthDtl.getGenderStr()) {
 			case "male":
 				birthDtl.setGender(1);
@@ -553,10 +558,15 @@ public class CommonRepository {
 			uniqueList.remove(regno);
 		}
 		modifyHospIdDeath(uniqueHospList , response.getDeathCerts().get(0).getTenantid());
-		AuditDetails auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
 		int finalCount=0;
+			AuditDetails auditDetails;
 		for (Entry<String, EgDeathDtl> entry : uniqueList.entrySet()) {
 			EgDeathDtl deathDtl = entry.getValue();
+			if(deathDtl.getIsLegacyRecord()) {
+				auditDetails = commUtils.getAuditDetails("import-user", true);
+			} else {
+				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+			}
 			deathDtl.setGenderStr(deathDtl.getGenderStr()==null?"":deathDtl.getGenderStr().trim().toLowerCase());
 			switch (deathDtl.getGenderStr()) {
 			case "male":
@@ -834,10 +844,15 @@ public class CommonRepository {
 			uniqueList.remove(regno);
 		}
 		modifyHospIdBirth(uniqueHospList , response.getBirthCerts().get(0).getTenantid());
-		AuditDetails auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), false);
+		AuditDetails auditDetails;
 		int finalCount=0;
 		for (Entry<String, EgBirthDtl> entry : uniqueList.entrySet()) {
 			EgBirthDtl birthDtl = entry.getValue();
+			if(birthDtl.getIsLegacyRecord()) {
+				auditDetails = commUtils.getAuditDetails("import-user", true);
+			} else {
+				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+			}
 			birthDtl.setGenderStr(birthDtl.getGenderStr()==null?"":birthDtl.getGenderStr().trim().toLowerCase());
 			switch (birthDtl.getGenderStr()) {
 			case "male":
@@ -938,10 +953,15 @@ public class CommonRepository {
 			uniqueList.remove(regno);
 		}
 		modifyHospIdDeath(uniqueHospList , response.getDeathCerts().get(0).getTenantid());
-		AuditDetails auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+		AuditDetails auditDetails;
 		int finalCount=0;
 		for (Entry<String, EgDeathDtl> entry : uniqueList.entrySet()) {
 			EgDeathDtl deathDtl = entry.getValue();
+			if(deathDtl.getIsLegacyRecord()) {
+				auditDetails = commUtils.getAuditDetails("import-user", true);
+			} else {
+				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+			}
 			deathDtl.setGenderStr(deathDtl.getGenderStr()==null?"":deathDtl.getGenderStr().trim().toLowerCase());
 			switch (deathDtl.getGenderStr()) {
 			case "male":
