@@ -127,6 +127,12 @@ definitions:
         description: Unique Identifier of ULB
         maxLength: 128
         minLength: 2
+      applicationNumber:
+        type: string
+        description: Unique application number
+        maxLength: 128
+        minLength: 2
+        readOnly: true
       assemblyConstituency:
         type: string
         description: Code of the Assembly.
