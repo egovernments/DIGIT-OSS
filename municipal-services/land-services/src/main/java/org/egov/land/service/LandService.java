@@ -15,6 +15,7 @@ import org.egov.land.validator.LandValidator;
 import org.egov.land.web.models.LandInfo;
 import org.egov.land.web.models.LandInfoRequest;
 import org.egov.land.web.models.LandSearchCriteria;
+import org.egov.land.web.models.OwnerInfo;
 import org.egov.land.web.models.UserDetailResponse;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,14 @@ public class LandService {
 		userService.manageUser(landRequest);
 		enrichmentService.enrichLandInfoRequest(landRequest, true);
 		log.info("land request updated "+ landRequest);
+		List<OwnerInfo> activeOwnerList = new ArrayList<OwnerInfo>();
+		landInfo.getOwners().forEach(owner -> {
+			if(landInfo.getOwners().size()>1)
+			if (owner.getActive()) {
+				activeOwnerList.add(owner);
+			}
+		});
+		landRequest.getLandInfo().setOwners(activeOwnerList);
 		repository.update(landRequest);
 		log.info("land request updated return "+ landRequest);
 		return landRequest.getLandInfo();
