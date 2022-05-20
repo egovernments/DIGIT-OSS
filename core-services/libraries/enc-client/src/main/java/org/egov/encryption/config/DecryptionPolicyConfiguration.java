@@ -111,8 +111,8 @@ public class DecryptionPolicyConfiguration {
             for(SecurityPolicyAttributeAccess attributeAccess: attributeList){
                 String attributeName = attributeAccess.getAttribute();
                 SecurityPolicyAttribute attribute = attributesMap.get(attributeName);
-                if(requestInfo.getPlainRequestAccesses() !=null && !CollectionUtils.isEmpty(requestInfo.getPlainRequestAccesses().getPlainRequestFields())
-                        && requestInfo.getPlainRequestAccesses().getPlainRequestFields().contains(attributeName)
+                if(requestInfo.getPlainRequestAccess() !=null && !CollectionUtils.isEmpty(requestInfo.getPlainRequestAccess().getPlainRequestFields())
+                        && requestInfo.getPlainRequestAccess().getPlainRequestFields().contains(attributeName)
                         && attributeAccess.getSecondLevelVisibility() != null){
                     secondLevelVisibility.add(attributeName);
                 }
@@ -131,8 +131,8 @@ public class DecryptionPolicyConfiguration {
             }
         }
 
-        if(requestInfo.getPlainRequestAccesses() != null)
-            requestInfo.getPlainRequestAccesses().setPlainRequestFields(secondLevelVisibility);
+        if(requestInfo.getPlainRequestAccess() != null)
+            requestInfo.getPlainRequestAccess().setPlainRequestFields(secondLevelVisibility);
 
         return mapping;
     }

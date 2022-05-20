@@ -2,16 +2,12 @@ package org.egov.encryption.masking;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.config.EncClientConstants;
 import org.egov.encryption.config.EncProperties;
 import org.egov.encryption.models.*;
-import org.egov.encryption.util.JSONBrowseUtil;
-import org.egov.encryption.util.JacksonUtils;
-import org.egov.encryption.util.JsonPathConverter;
 import org.egov.mdms.model.*;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,9 +69,9 @@ public class MaskingService {
         Map<String, String> maskingPatternMap = getMaskingPatternMap();
         String recordId = null;
         List<String> plainRequestAttribute = new ArrayList<>();
-        if(requestInfo.getPlainRequestAccesses() != null){
-            recordId = requestInfo.getPlainRequestAccesses().getRecordId();
-            plainRequestAttribute = requestInfo.getPlainRequestAccesses().getPlainRequestFields();
+        if(requestInfo.getPlainRequestAccess() != null){
+            recordId = requestInfo.getPlainRequestAccess().getRecordId();
+            plainRequestAttribute = requestInfo.getPlainRequestAccess().getPlainRequestFields();
         }
 
         for(SecurityPolicyAttribute attribute : attributes) {
