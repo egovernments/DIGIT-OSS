@@ -9,8 +9,9 @@ import ActionModal from "./Modal";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import SubOccupancyTable from "../../../../../templates/ApplicationDetails/components/SubOccupancyTable";
 import InspectionReport from "../../../../../templates/ApplicationDetails/components/InspectionReport";
-import { getBusinessServices, getOrderedDocs, getCheckBoxLabelData, getBPAFormData, convertDateToEpoch, printPdf,downloadPdf  } from "../../../utils";
+import { getBusinessServices, getCheckBoxLabelData, getBPAFormData, convertDateToEpoch, printPdf, downloadPdf, getOrderDocuments  } from "../../../utils";
 import cloneDeep from "lodash/cloneDeep";
+import DocumentsPreview from "../../../../../templates/ApplicationDetails/components/DocumentsPreview";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -32,6 +33,7 @@ const BpaApplicationDetail = () => {
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   sessionStorage.removeItem("BPA_SUBMIT_APP");
   sessionStorage.setItem("isEDCRDisable", JSON.stringify(true));
+  sessionStorage.setItem("BPA_IS_ALREADY_WENT_OFF_DETAILS", JSON.stringify(false));
 
   const history = useHistory();
   sessionStorage.setItem("bpaApplicationDetails", false);
@@ -523,8 +525,7 @@ const BpaApplicationDetail = () => {
                 {/* to get Document values */}
                 {(detail?.isDocumentDetails && detail?.additionalDetails?.obpsDocuments?.[0]?.values) && (
                   <div style={{marginTop: "-8px"}}>
-                    {/* <Row className="border-none" label={t(detail?.additionalDetails?.obpsDocuments?.[0].title)} /> */}
-                    <DocumentDetails documents={getOrderedDocs(detail?.additionalDetails?.obpsDocuments?.[0]?.values)} />
+                    {<DocumentsPreview documents={getOrderDocuments(detail?.additionalDetails?.obpsDocuments?.[0]?.values)} svgStyles = {{}} isSendBackFlow = {false} isHrLine = {true} titleStyles ={{fontSize: "20px", lineHeight: "24px", "fontWeight": 700, marginBottom: "10px"}}/>}
                   </div>
                 )}
 
@@ -544,10 +545,9 @@ const BpaApplicationDetail = () => {
                       <Row className="border-none" label={t(`${nocob?.title}`)}></Row>
                     </StatusTable>
                     <StatusTable>
-                      {nocob?.values ? <OBPSDocument value={nocob?.values} Code={nocob?.values?.[0]?.documentType?.split("_")[0]} index={ind} isNOC={true} /> :
+                      {nocob?.values ? <DocumentsPreview documents={getOrderDocuments(nocob?.values, true)} svgStyles = {{}} isSendBackFlow = {false} isHrLine = {true} titleStyles ={{fontSize: "18px", lineHeight: "24px", "fontWeight": 700, marginBottom: "10px"}}/> :
                         <div><CardText>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</CardText></div>}
                     </StatusTable>
-                    {/* {detail?.title ? <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} /> : null } */}
                   </div>
                 )) : null}
 

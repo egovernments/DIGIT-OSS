@@ -6,7 +6,7 @@ import DashBoard from "./pages";
 import Home from "./pages/Home";
 import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom";
 import Overview from "./pages/Overview";
-import {DSSCard,NDSSCard} from "./components/DSSCard";
+import {checkCurrentScreen, DSSCard,NDSSCard} from "./components/DSSCard";
 import DrillDown from "./pages/DrillDown";
 
 const DssBreadCrumb = ({ location }) => {
@@ -18,6 +18,11 @@ const DssBreadCrumb = ({ location }) => {
     {
       path: "/digit-ui/employee",
       content: t("ES_COMMON_HOME"),
+      show: true,
+    },
+    {
+      path: checkCurrentScreen() || window.location.href.includes("NURT_DASHBOARD") ? "/digit-ui/employee/dss/landing/NURT_DASHBOARD" : "/digit-ui/employee/dss/landing/home",
+      content: t("ES_LANDING_PAGE"),
       show: true,
     },
     {

@@ -16,7 +16,7 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
       businessService = "BPA_OC"
     }
 
-    const _filters = {
+    let _filters = {
         tenantId,
         processSearchCriteria: {
           assignee : assignee === "ASSIGNED_TO_ME"?user?.info?.uuid:"",
@@ -34,8 +34,11 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
           ...(applicationType && applicationType?.length > 0 ? {applicationType} : {}),
           ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
         },
-        limit,
-        offset,
+        limit
+    }
+
+    if (!applicationNo) {
+      _filters = { ..._filters, offset}
     }
 
     return useInbox({tenantId, filters: _filters, config:{
