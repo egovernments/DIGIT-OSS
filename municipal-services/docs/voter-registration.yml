@@ -1,0 +1,231 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title:  Voter Registration Service.
+  description: |
+    This service provides APIs to register new voters in the system.
+  contact:
+    name: eGovernments Foundation
+    email: contacts@egovernments.org
+schemes:
+  - https
+basePath: /voter-services
+x-api-id: org.egov.voter.services
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml'
+paths:
+  /v1/registration/_search:
+    post:
+      summary: Get the list of voter registration applications
+      description: 
+        1. Search and get voter registration applications(s) based on defined search criteria.
+        2. In case multiple parameters are passed voter registration applications will be searched as an AND combination of all the parameters.
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/requestInfo'
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId'
+        - name: status
+          in: query
+          description: Search based on status.
+          type: string
+          allowEmptyValue: true
+        - name: ids
+          type: array
+          items:
+            type: integer
+            format: int64
+          in: query
+          maxItems: 50
+          description: unique identifier of voter registration 
+        - name: applicationNumber
+          in: query
+          description:  Unique application number for the Voter Registration Application
+          type: string
+          minLength: 2
+          maxLength: 64
+      responses:
+        '200':
+          description: Voter registration applications(s) Retrived Successfully
+          schema:
+            $ref: '#/definitions/VoterRegistrationRequest'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes'
+      tags:
+        - Voter Registration Application
+  /v1/registration/_create:
+    post:
+      summary: Create new Voter Registration Application
+      description: |
+        To create new voter registration applications in the system. API supports bulk creation with max limit as defined in the Voter Registration Request. Please note that either whole batch succeeds or fails, there's no partial batch success. 
+          
+      parameters:
+        - name: VoterRegistrationRequest
+          in: body
+          description: Details for the new Voter Registration Application(s) + RequestInfo meta data.
+          required: true
+          schema:
+            $ref: '#/definitions/VoterRegistrationRequest'
+      responses:
+        '201':
+          description: ReponseInfo with Voter Registration Application(s) created successfully
+          schema:
+            $ref: '#/definitions/VoterRegistrationResponse'
+        '400':
+          description: Voter Registration Application(s) creation failed
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      tags:
+        - Voter Registration Application
+  /v1/registration/_update:
+    post:
+      summary: update existing Voter Registration Applications.
+      description: |
+        To update existing voter registration applications in the system. API supports bulk updation with max limit as defined in the voter registration Request. Please note that either whole batch succeeds or fails, there's no partial batch success.
+      parameters:
+        - name: VoterRegistrationRequest
+          in: body
+          description: Details for the new (s) + RequestInfo meta data.
+          required: true
+          schema:
+            $ref: '#/definitions/VoterRegistrationRequest'
+      responses:
+        '201':
+          description: ReponseInfo with Voter Registration Application(s) updated sudcessfully
+          schema:
+            $ref: '#/definitions/VoterRegistrationResponse'
+        '400':
+          description: (s) updation failed
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      tags:
+        - Voter Registration Application
+        
+definitions:
+##############################################      
+  
+  Applicant:
+      description: Details of the user applying for voter registration
+      allOf:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-0-0.yml#/definitions/User'
+
+
+##############################################
+
+  Document:
+    type: object
+    description: Object holds document details
+    properties:
+      tenantId:
+        type: string
+        description: Unique Identifier of ULB
+        maxLength: 128
+        minLength: 2
+      documentType:
+        type: string
+        minLength: 2
+        maxLength: 64
+        description: Type of document like pancard, Driver License etc.
+      fileStoreId:
+        type: string
+        minLength: 2
+        maxLength: 64
+        description: Unique file store id of uploaded document.
+      documentUid:
+        type: string
+        minLength: 2
+        maxLength: 64
+        description: document number(eg.Pan number, aadhar number).
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+    required:
+      - tenantId
+      - documentType
+      - fileStoreId
+
+
+##############################################
+  
+  VoterRegistrationApplication:
+    type: object
+    description: A Object holds the basic data for a Voter Registration Application
+    properties:
+      id:
+        type: string
+        minLength: 2
+        maxLength: 64
+        description: Unique Identifier of the Voter Registration Application (UUID)
+        readOnly: true
+      tenantId:
+        type: string
+        description: Unique Identifier of ULB
+        maxLength: 128
+        minLength: 2
+      assemblyConstituency:
+        type: string
+        description: Code of the Assembly.
+        maxLength: 256
+        minLength: 2
+      dateSinceResidence:
+        type: integer
+        description: Date since residence
+      address:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/Address' 
+      applicant:
+        $ref: '#/definitions/Applicant'
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+    required:
+      - tenantId
+      - assemblyConstituency
+      - applicant
+      - address
+      - document
+      - dateSinceResidence
+      
+  Workflow:
+      type: object
+      description: 'Fields related to workflow service'
+      properties:
+        action:
+          type: string
+          description: Action on the application in certain
+          minLength: 1
+          maxLength: 64
+        status:
+          type: string
+          description: status of the application          
+        comments:
+          type: string
+          description: Unique Identifier scrutinized number
+          minLength: 1
+          maxLength: 64
+        documents:
+          description: Attach the workflow varification documents.
+          type: array
+          items:
+            $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/Document'
+      
+  VoterRegistrationRequest:
+    description: 'Contract class to receive request. Array of  items are used in case of create, whereas single  item is used for update'
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo'
+      VoterRegistrationApplications:
+        description: Used for search result and create only
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+          $ref: '#/definitions/VoterRegistrationApplication'
+          
+  VoterRegistrationResponse:
+    description: 'Contract class to send response. Array of  items are used in case of search results or response for create, whereas single  item is used for update'
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      VoterRegistrationApplications:
+        description: Used for search result and create only
+        type: array
+        maximum: 500
+        items:
+          $ref: '#/definitions/VoterRegistrationApplication'
