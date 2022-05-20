@@ -100,8 +100,8 @@ public class NocQueryBuilder {
 
 		String sourceRefId = criteria.getSourceRefId();
                 if (sourceRefId != null) {
-					sourceRefId.replace("[","");
-					sourceRefId.replace("]","");
+					sourceRefId = sourceRefId.replace("[","");
+					sourceRefId = sourceRefId.replace("]","");
 					List<String> sourceRefIds = Arrays.asList(sourceRefId.split(","));
 					addClauseIfRequired(builder);
                     if (isFuzzyEnabled) {
