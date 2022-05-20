@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.LongNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import org.egov.common.contract.request.PlainRequestAccess;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.encryption.config.DecryptionPolicyConfiguration;
 import org.egov.encryption.config.EncProperties;
@@ -30,13 +32,19 @@ public class AuditService {
     @Autowired
     private DecryptionPolicyConfiguration decryptionPolicyConfiguration;
 
-    public void audit(JsonNode json, String model, String purpose, User user) {
+    public void audit(JsonNode json, String model, String purpose, RequestInfo requestInfo) {
+        User user = requestInfo.getUserInfo();
+
         AuditObject auditObject = AuditObject.builder().build();
         auditObject.setId(UUID.randomUUID().toString());
         auditObject.setTimestamp(System.currentTimeMillis());
         auditObject.setUserId(user.getUuid());
         auditObject.setModel(model);
         auditObject.setPurpose(purpose);
+
+        if(requestInfo.getPlainRequestAccess() != null) {
+            auditObject.setPlainRequestAccess(requestInfo.getPlainRequestAccess());
+        }
 
         SecurityPolicyUniqueIdentifier uniqueIdentifier =
                 decryptionPolicyConfiguration.getUniqueIdentifierForKey(model);
