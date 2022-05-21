@@ -154,7 +154,13 @@ import {
   TLIcon,
   BillsIcon,
   ErrorIcon,
-  PrintBtnCommon
+  PrintBtnCommon,
+  WhatsappIconGreen,
+  HelpLineIcon,
+  ServiceCenterIcon,
+  TimerIcon,
+  RupeeSymbol,
+  ValidityTimeIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -411,5 +417,11 @@ export {
   BillsIcon,
   ErrorIcon,
   DownloadBtnCommon,
-  PrintBtnCommon
+  PrintBtnCommon,
+  WhatsappIconGreen,
+  HelpLineIcon,
+  ServiceCenterIcon,
+  TimerIcon,
+  RupeeSymbol,
+  ValidityTimeIcon
 };

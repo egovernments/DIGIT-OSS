@@ -29,6 +29,7 @@ import { useEvents, useClearNotifications, useNotificationCount } from "./events
 import useCreateEvent from "./events/useCreateEvent";
 import useUpdateEvent from "./events/useUpdateEvent";
 import useNewInboxGeneral from "./useInboxGeneral/useNewInbox";
+import useDynamicData from "./useDynamicData";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
@@ -213,6 +214,7 @@ import  useReportMeta  from "./reports/useReport";
 
 import useGetHowItWorksJSON from "./useHowItWorksJSON";
 import useGetFAQsJSON from "./useGetFAQsJSON";
+import useStaticData from "./useStaticData";
 
 const pgr = {
   useComplaintDetails,
@@ -478,6 +480,8 @@ const Hooks = {
   reports,
   useGetHowItWorksJSON,
   useGetFAQsJSON,
+  useStaticData,
+  useDynamicData,
 };
 
 export default Hooks;

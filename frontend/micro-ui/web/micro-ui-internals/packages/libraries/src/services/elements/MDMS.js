@@ -941,6 +941,19 @@ const getFAQsJSON = (tenantId) => ({
 ],
 });
 
+const getStaticData = () => ({
+  moduleDetails: [
+    {
+      moduleName: "common-masters",
+      masterDetails: [
+        {
+          name: "StaticData",
+        },
+      ],
+    },
+  ],
+});
+
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
     name: obj.localname,
@@ -1670,4 +1683,7 @@ export const MdmsService = {
   getFAQsJSONData: (tenantId) => {
     return MdmsService.call(tenantId, getFAQsJSON(tenantId));
   },
+  getStaticDataJSON: (tenantId) => {
+    return MdmsService.call(tenantId, getStaticData());
+  }
 };
