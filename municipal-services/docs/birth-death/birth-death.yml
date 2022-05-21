@@ -10,7 +10,7 @@ servers:
   - url: "https://virtserver.swaggerhub.com/egov-foundation/BND/1.0.0"
     description: SwaggerHub API Auto Mocking
     variables: {}
-  - url: https://egov-micro-dev.egovernments.org
+  - url: https://dev.digit.org
     variables: {}
 paths:
   /birth/_download:
