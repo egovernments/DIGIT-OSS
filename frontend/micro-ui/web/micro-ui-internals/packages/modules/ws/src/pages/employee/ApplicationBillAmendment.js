@@ -126,7 +126,7 @@ const ApplicationBillAmendment = () => {
 
   const getDemandDetailsComparingUpdates = (d) => {
     let actionPerformed;
-    const action = d?.WS_REDUCED_AMOUNT?.VALUE ? "rebate":"penalty";
+    const action = d?.[`${servicev1}_REDUCED_AMOUNT?`]?.VALUE ? "rebate":"penalty";
     if (servicev1 === "WS")
       actionPerformed = JSON.parse(JSON.stringify(d?.WS_REDUCED_AMOUNT?.VALUE ? d?.WS_REDUCED_AMOUNT : d?.WS_ADDITIONAL_AMOUNT));
     else actionPerformed = JSON.parse(JSON.stringify(d?.SW_REDUCED_AMOUNT?.VALUE ? d?.SW_REDUCED_AMOUNT : d?.SW_ADDITIONAL_AMOUNT));
@@ -149,12 +149,20 @@ const ApplicationBillAmendment = () => {
   };
 
   const getTotalDetailsOfUpdatedData = (d) => {
+    const action = d?.[`${servicev1}_REDUCED_AMOUNT`]?.VALUE ? "REBATE" : "PENALTY";
+    const originalDemand = {}
+     billSearchData.map(el => {
+      originalDemand[el.taxHeadCode] = el.amount
+    })
+
     let actionPerformed;
     if (servicev1 === "WS")
       actionPerformed = JSON.parse(JSON.stringify(d?.WS_REDUCED_AMOUNT?.VALUE ? d?.WS_REDUCED_AMOUNT : d?.WS_ADDITIONAL_AMOUNT));
     else actionPerformed = JSON.parse(JSON.stringify(d?.SW_REDUCED_AMOUNT?.VALUE ? d?.SW_REDUCED_AMOUNT : d?.SW_ADDITIONAL_AMOUNT));
     delete actionPerformed?.VALUE;
-    return { ...actionPerformed, TOTAL: Object.values(actionPerformed).reduce((a, b) => parseInt(a) + parseInt(b), 0) };
+    actionPerformed[`${servicev1}_${action}`] = d?.[`${servicev1}_${action}`] ? d?.[`${servicev1}_${action}`]: 0;
+   
+    return { ...actionPerformed,actionPerformed, TOTAL: Object.values(actionPerformed).reduce((a, b) => parseInt(a) + parseInt(b), 0),originalDemand,action };
   };
 
   const onFormSubmit = (d) => {

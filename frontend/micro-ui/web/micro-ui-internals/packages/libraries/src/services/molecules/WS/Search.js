@@ -446,11 +446,45 @@ export const WSSearch = {
       asSectionHeader: true,
       values: [...actualFieldsAndAmountOfBillDetails.map( e => ({
         title: e?.taxHeadMasterCode, value: `₹ ${e?.taxAmount}`
-      })), { title: "WS_TOTAL_TAX", value: `₹ ${Math.round(actualFieldsAndAmountOfBillDetails.reduce((acc, curr) => curr.taxAmount + acc, 0))}` }]
+      })), { title: "WS_REVISED_DEMAND", value: `₹ ${Math.round(actualFieldsAndAmountOfBillDetails.reduce((acc, curr) => curr.taxAmount + acc, 0))}` }]
     };
+    
+    const tableData = billAmendmentSearch?.Amendments?.[0]?.additionalDetails?.searchBillDetails;
+    const action = tableData?.action;
+    const tableHeader = ["WS_TAX_HEAD","WS_CURRENT_DEMAND",action,"WS_REVISED_DEMAND"]
+    const tableRows = []
+    const taxHeads = Object.keys(tableData?.actionPerformed)
+    const actionPerformed = tableData?.actionPerformed
+    const originalDemand = tableData?.originalDemand
+    const getTaxHeadAmount = (obj,taxHead) => {
+      return parseInt(obj[taxHead] ? obj[taxHead] : 0)
+    }
+    
+    let sumCurrent=0;
+    let sumApplied=0;
+    let sumRevised=0;
+    taxHeads.map(taxHead => {
+      const currentDemand = getTaxHeadAmount(originalDemand, taxHead)
+      const appliedDemand = getTaxHeadAmount(actionPerformed, taxHead)
+      const revisedDemand = action==="REBATE"?currentDemand-appliedDemand:currentDemand+appliedDemand
+      sumCurrent += currentDemand
+      sumApplied += appliedDemand
+      sumRevised += revisedDemand
+      tableRows.push([taxHead,currentDemand,appliedDemand,revisedDemand])
+    })
+    tableRows.push(["WS_TOTAL_DUE",sumCurrent,sumApplied,sumRevised])
+    
+    const tableDetails = {
+      title: "WS_AMOUNT_DETAILS",
+      asSectionHeader: true,
+      isTable:true,
+      headers:tableHeader,
+      action,
+      tableRows
+    }
 
     const connectionHolderDetails = {
-      title: " ",
+      title: "WS_DEMAND_REVISION_BASIS",
       asSectionHeader: true,
       values: [
         { title: "WS_DEMAND_REVISION_REASON", value: billAmendmentSearch?.Amendments?.[0]?.amendmentReason },
@@ -478,7 +512,7 @@ export const WSSearch = {
       }
     };
 
-    const details = [applicationHeaderDetails, propertyDetails, connectionHolderDetails, documentDetails]
+    const details = [applicationHeaderDetails, tableDetails , connectionHolderDetails, documentDetails]
     wsDataDetails.serviceType = serviceDataType;
 
 

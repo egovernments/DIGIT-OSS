@@ -167,6 +167,17 @@ function ApplicationDetailsContent({
               </React.Fragment>
             )}
             {/* TODO, Later will move to classes */}
+            {/* Here Render the table for adjustment amount details detail.isTable is true for that table*/}
+            {detail?.isTable && (
+              <table style={{tableLayout:"fixed",width:"100%",borderCollapse:"collapse"}}>
+                <tr style={{ textAlign: "left" }}>
+                  {detail?.headers.map(header =><th style={{padding:"10px"}}>{t(header)}</th>)}
+                </tr>
+                {detail?.tableRows.map(row=><tr>
+                  {row.map(element => <td style={{ paddingRight: "60px",paddingTop:"20px",textAlign:"center" }}>{t(element)}</td>)}
+                </tr>)}
+              </table>
+            )}
             <StatusTable style={getTableStyles()}>
               {detail?.title &&
                 !detail?.title.includes("NOC") &&
