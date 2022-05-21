@@ -35,17 +35,17 @@ const BillDetails = ({ paymentRules, businessService }) => {
     const { fromPeriod, toPeriod } = billDetails;
     if (fromPeriod && toPeriod) {
       let from, to;
-      if (wrkflow === "mcollect") {
+      if (wrkflow === "mcollect" || wrkflow === "WNS") {
         from =
           new Date(fromPeriod).getDate().toString() +
           " " +
-          Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth() + 1].toString() +
+          Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth()]?.toString() +
           " " +
           new Date(fromPeriod).getFullYear().toString();
         to =
           new Date(toPeriod).getDate() +
           " " +
-          Digit.Utils.date.monthNames[new Date(toPeriod).getMonth() + 1] +
+          Digit.Utils.date.monthNames[new Date(toPeriod).getMonth()] +
           " " +
           new Date(toPeriod).getFullYear();
         return from + " - " + to;

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory ,Link} from "react-router-dom";
 
 const description = {
-  description: "(or)",
+  description: "PT_SEARCH_OR_DESC",
   descriptionStyles: {
     fontWeight: "300",
     color: "#505A5F",
@@ -28,6 +28,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   allCities = allCities ? allCities : Digit.Hooks.tl.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));  
   const [cityCode, setCityCode] = useState();
   const [formValue, setFormValue] = useState();
+  const [errorShown, seterrorShown] = useState(false);
   const { data: propertyData, isLoading: propertyDataLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId: searchData?.city,
     filters: searchData?.filters,
@@ -36,7 +37,18 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   });
 
   useEffect(() => {
-    showToast && setShowToast(null);
+    if ( !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1) && 
+      propertyData?.Properties.length > 0 &&
+      ptSearchConfig.maxResultValidation &&
+      propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
+      !errorShown
+    ) {
+      setShowToast({ error: true, warning: true, label: "ERR_PLEASE_REFINED_UR_SEARCH" });
+    }
+  }, [propertyData]);
+
+  useEffect(() => {
+    showToast && showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH" && setShowToast(null);
   }, [action, propertyDataLoading]);
 
   useLayoutEffect(() => {
@@ -301,6 +313,15 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   ];
 
   const onPropertySearch = async (data) => {
+    if (
+      ptSearchConfig.maxResultValidation &&
+      propertyData?.Properties.length > 0 &&
+      propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
+      errorShown
+    ) {
+      seterrorShown(true);
+      return;
+    }
     if (!data?.city?.code) {
       setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
       return;
@@ -343,12 +364,16 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
       }
     }
 
-    setShowToast(null);
+    if (showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH") setShowToast(null);
+    if (data?.doorNumber && data?.doorNumber !== "" && data?.propertyIds !== "") {
+      data["propertyIds"] = "";
+    }
 
     let tempObject = Object.keys(data)
       .filter((k) => data[k])
       .reduce((acc, key) => ({ ...acc, [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {});
     let city = tempObject.city;
+    tempObject.doorNo = tempObject.doorNumber;
     delete tempObject.addParam;
     delete tempObject.addParam1;
     delete tempObject.city;
@@ -390,11 +415,13 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
     return <Loader />;
   }
 
-  if (propertyData && !propertyDataLoading && !error) {
+  let validation = ptSearchConfig.maxResultValidation && !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1)   ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
+
+  if (propertyData && !propertyDataLoading && !error && validation) {
     let qs = {};
     qs = { ...searchData.filters, city: searchData.city };
 
-    if (
+    if ( !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1) && 
       ptSearchConfig?.ptSearchCount &&
       searchData?.filters?.locality &&
       propertyDataLoading &&

@@ -27,21 +27,25 @@ const WSMyPayments = () => {
 
 
   const { isLoading: isSWLoading, isError : isSWError, error : SWerror, data: SWdata } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1,BusinessService:"SW"}, { filters: filter1 });
+  let totalApaplications = data?.WaterConnection?.concat(SWdata?.SewerageConnections);
  
   let connectionNoWS =  data && data?.WaterConnection?.length>0? data?.WaterConnection?.map((ob) => ob.connectionNo).join(",") : null;
-  let connectionNoSW =  data && data?.SewerageConnections?.length>0? data?.SewerageConnections?.map((ob)=>ob.connectionNo).join(",") : null;
-
+  let connectionNoSW =  SWdata && SWdata?.SewerageConnections?.length>0? SWdata?.SewerageConnections?.map((ob)=>ob.connectionNo).join(",") : null;
+  let propertyIdWS =  data && data?.WaterConnection?.length>0? data?.WaterConnection?.map((ob) => ob.propertyId).join(",") : null;
+  let propertyIdSW =  SWdata && SWdata?.SewerageConnections?.length>0? SWdata?.SewerageConnections?.map((ob)=>ob.propertyId).join(",") : null;
+  let totalPropertyIds = propertyIdWS ? propertyIdWS?.concat(",",propertyIdSW) : propertyIdSW?.concat(",",propertyIdWS);
   const {data:wspayments, isLoading:iswsLoading} = Digit.Hooks.ws.useMypaymentWS({tenantId : tenantId,filters: {consumerCodes:connectionNoWS},BusinessService:"WS"},{enabled:connectionNoWS!==null?true:false});
   const {data:swpayments, isLoading:isswLoading} = Digit.Hooks.ws.useMypaymentWS({tenantId : tenantId,filters: {consumerCodes:connectionNoSW},BusinessService:"SW"},{enabled:connectionNoSW!==null?true:false});
+  const {data:properties, isLoading:isPropertyLoading} = Digit.Hooks.ws.useWaterPropertySearch({tenantId : tenantId,filters: {propertyids:totalPropertyIds}},{enabled:connectionNoSW!==null?true:false})
 
-  if (isLoading || iswsLoading||isswLoading||isSWLoading) {
+  if (isLoading || iswsLoading||isswLoading||isSWLoading || isPropertyLoading) {
     return <Loader />;
   }
   const wspayment = wspayments && wspayments?.Payments || [];
   const swpayment = swpayments && swpayments?.Payments || [];
 
   let applicationsList = wspayment.concat(swpayment);
-
+  applicationsList = applicationsList?.map(ob => ({...ob, property:totalApaplications?.filter(ob1 => properties?.Properties?.filter(prop => prop?.propertyId === ( ob1?.connectionNo === ob?.paymentDetails?.[0]?.bill?.consumerCode)?.[0]?.propertyId))?.[0]}))
   return (
     <React.Fragment>
       <Header>{`${t("WS_MY_PAYMENTS_HEADER")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
