@@ -138,33 +138,32 @@ const WSInbox = ({ parentRoute }) => {
   });
   let links = [
     {
-      label: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
+      text: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
       link: `/digit-ui/employee/ws/create-application`,
       roles: ["WS_CEMP", "SW_CEMP"],
     },
   ];
 
   links = links.filter((link) => (link.roles ? checkForEmployee(link.roles) : true));
-
   const PropsForInboxLinks = {
     logoIcon: <DropIcon />,
     headerText: checkPathName ? "MODULE_WS" : "MODULE_SW",
     links: [
-      { ...links },
-      {
-        text: t("WS_SEWERAGE_APPLICATION_SEARCH"),
-        link: checkPathName
-          ? `/digit-ui/employee/ws/water/search-application?from=WS_SEWERAGE_INBOX`
-          : `/digit-ui/employee/ws/sewerage/search-application?from=WS_SEWERAGE_INBOX`,
-        roles: checkPathName
-          ? ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"]
-          : ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
-      },
+      ...links,
       {
         text: t("WS_SEWERAGE_CONNECTION_SEARCH_LABEL"),
         link: checkPathName
           ? `/digit-ui/employee/ws/water/search-connection?from=WS_SEWERAGE_INBOX`
           : `/digit-ui/employee/ws/sewerage/search-connection?from=WS_SEWERAGE_INBOX`,
+        roles: checkPathName
+          ? ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"]
+          : ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
+      },
+      {
+        text: t("WS_SEWERAGE_APPLICATION_SEARCH"),
+        link: checkPathName
+          ? `/digit-ui/employee/ws/water/search-application?from=WS_SEWERAGE_INBOX`
+          : `/digit-ui/employee/ws/sewerage/search-application?from=WS_SEWERAGE_INBOX`,
         roles: checkPathName
           ? ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"]
           : ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
@@ -248,6 +247,7 @@ const WSInbox = ({ parentRoute }) => {
           propsForInboxMobileCards,
           formState,
         }}
+        className="wns-inbox-composer"
       ></InboxComposer>
     </>
   );
