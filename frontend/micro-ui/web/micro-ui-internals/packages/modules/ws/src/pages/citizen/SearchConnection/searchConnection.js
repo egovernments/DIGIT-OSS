@@ -124,7 +124,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
         label={propsConfig.texts.submitButtonLabel}
         heading={propsConfig.texts.header}
         text={propsConfig.texts.text}
-        cardStyle={{ margin: "auto" }}
+        cardStyle={{ margin: "auto", maxWidth:"960px" }}
         headingStyle={{ fontSize: "32px", marginBottom: "16px" }}
         onSelect={onConnectionSearch}
         componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>}
@@ -183,7 +183,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
           </span>
           <TextInput
             type={"mobileNumber"}
-            style={{background:"#FAFAFA"}}
+            style={{background:"#FAFAFA",maxWidth:"500px"}}
             t={t}
             isMandatory={false}
             optionKey="i18nKey"

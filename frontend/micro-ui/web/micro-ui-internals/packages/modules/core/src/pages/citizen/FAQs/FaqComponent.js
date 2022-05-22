@@ -8,7 +8,7 @@ const FaqComponent = props => {
   const { t } = useTranslation();
 
   return (
-    <div className="faqs" onClick={() => toggleOpen(!isOpen)}>
+    <div className="faqs border-none" onClick={() => toggleOpen(!isOpen)}>
           <div className="faq-question" style={{justifyContent: "space-between", display: "flex"}}>
         <span>
         {t(question)}

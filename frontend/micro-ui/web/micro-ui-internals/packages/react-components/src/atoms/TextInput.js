@@ -18,7 +18,7 @@ const TextInput = (props) => {
 
   return (
     <React.Fragment>
-      <div className={`text-input ${props.className}`} style={props?.textInputStyle ? { ...props.textInputStyle} : {}}>
+      <div className={`text-input ${user_type === "employee" ? "" :"text-input-width"} ${props.className}`} style={props?.textInputStyle ? { ...props.textInputStyle} : {}}>
         {props.isMandatory ? (
           <input
             type={props?.validation && props.ValidationRequired ? props?.validation?.type : (props.type || "text")}

@@ -12,6 +12,8 @@ const description = {
     color: "#505A5F",
     marginTop: "0px",
     textAlign: "center",
+    marginBottom: "20px",
+    maxWidth: "540px",
   },
 };
 
@@ -60,6 +62,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         el.style.padding = "8px 0";
         el.style.boxShadow = "none";
         el.style.marginBottom = "16px";
+        el.style.textAlign = "center";
       } else {
         setTimeout(() => {
           getActionBar();
@@ -481,7 +484,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   }
 
   return (
-    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white"}}>
+    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white", maxWidth:"960px"}}>
       <FormComposer
         onSubmit={onPropertySearch}
         noBoxShadow
@@ -492,7 +495,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         text={t(propsConfig.texts.text)}
         headingStyle={{ fontSize: "32px", marginBottom: "16px", fontFamily: "Roboto Condensed,sans-serif" }}
         onFormValueChange={onFormValueChange}
-        cardStyle={{marginBottom:"0"}}
+        cardStyle={{marginBottom:"0",maxWidth:"960px"}}
       ></FormComposer>
       <span className="link" style={{display:"flex", justifyContent:"center",paddingBottom:"16px"}}>
         <Link to={window.location.href.includes("/ws/")?"/digit-ui/citizen/ws/create-application/create-property" : (window.location.href.includes("/tl/tradelicence/") ? "/digit-ui/citizen/tl/tradelicence/new-application/create-property" : "/digit-ui/citizen/commonpt/property/new-application")}>{t("CPT_REG_NEW_PROPERTY")}</Link>

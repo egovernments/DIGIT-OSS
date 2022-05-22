@@ -12,6 +12,8 @@ const description = {
     color: "#505A5F",
     marginTop: "0px",
     textAlign: "center",
+    marginBottom: "20px",
+    maxWidth: "540px",
   },
 };
 
@@ -57,6 +59,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
         el.style.padding = "8px 0";
         el.style.boxShadow = "none";
         el.style.marginBottom = "16px";
+        el.style.textAlign = "center";
       } else {
         setTimeout(() => {
           getActionBar();
@@ -437,7 +440,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   }
 
   return (
-    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white"}}>
+    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white", maxWidth:"960px"}}>
       <FormComposer
         onSubmit={onPropertySearch}
         noBoxShadow
