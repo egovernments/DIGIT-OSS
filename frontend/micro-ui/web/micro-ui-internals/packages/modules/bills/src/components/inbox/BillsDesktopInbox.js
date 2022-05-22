@@ -120,7 +120,7 @@ const BillsDesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
         },
       },
       {
-        Header: "Action",
+        Header: t("ABG_COMMON_TABLE_COL_ACTION"),
         Cell: ({ row }) => {
           const amount = row.original?.totalAmount;
           if (amount > 0) {
