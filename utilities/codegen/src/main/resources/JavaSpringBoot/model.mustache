@@ -1,0 +1,40 @@
+package {{package}};
+
+import java.util.Objects;
+{{#imports}}import {{import}};
+{{/imports}}
+{{#serializableModel}}
+import java.io.Serializable;
+{{/serializableModel}}
+{{#useBeanValidation}}
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+{{/useBeanValidation}}
+{{#useLombok}}
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Builder;
+{{/useLombok}}
+{{#jackson}}
+{{#withXml}}
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+{{/withXml}}
+{{/jackson}}
+{{#withXml}}
+import javax.xml.bind.annotation.*;
+{{/withXml}}
+
+{{#models}}
+{{#model}}
+{{#isEnum}}
+{{>enumOuterClass}}
+{{/isEnum}}
+{{^isEnum}}
+{{>pojo}}
+{{/isEnum}}
+{{/model}}
+{{/models}}

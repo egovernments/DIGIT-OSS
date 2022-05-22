@@ -1,0 +1,59 @@
+package {{package}};
+
+{{#imports}}import {{import}};
+{{/imports}}
+import org.junit.Test;
+import org.junit.Ignore;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+{{#useTracer}}import {{basePackage}}.TestConfiguration;{{/useTracer}}
+
+{{^fullJavaUtil}}
+    import java.util.ArrayList;
+    import java.util.HashMap;
+    import java.util.List;
+    import java.util.Map;
+{{/fullJavaUtil}}
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+/**
+* API tests for {{classname}}Controller
+*/
+@Ignore
+@RunWith(SpringRunner.class)
+@WebMvcTest({{classname}}Controller.class)
+{{#useTracer}}@Import(TestConfiguration.class){{/useTracer}}
+{{#operations}}
+public class {{classname}}ControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+{{#operation}}
+    @Test
+    public void {{operationId}}Success() throws Exception {
+        mockMvc.perform(post("{{basePathWithoutHost}}{{path}}").contentType(MediaType
+        .APPLICATION_JSON_UTF8))
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    public void {{operationId}}Failure() throws Exception {
+        mockMvc.perform(post("{{basePathWithoutHost}}{{path}}").contentType(MediaType
+        .APPLICATION_JSON_UTF8))
+        .andExpect(status().isBadRequest());
+    }
+
+{{/operation}}
+}
+{{/operations}}
