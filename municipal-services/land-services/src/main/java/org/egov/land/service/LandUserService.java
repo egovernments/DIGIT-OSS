@@ -55,6 +55,7 @@ public class LandUserService {
 		landInfo.getOwners().forEach(owner -> {
 			UserDetailResponse userDetailResponse = null;
 			if (owner.getMobileNumber() != null) {
+				if(owner.getActive()) {
 				if (owner.getTenantId() == null) {
 					owner.setTenantId(landInfo.getTenantId().split("\\.")[0]);
 				}
@@ -76,6 +77,7 @@ public class LandUserService {
 				}
 				if (userDetailResponse != null)
 					setOwnerFields(owner, userDetailResponse, requestInfo);
+				}
 			} else {
 				log.debug("MobileNo is not existed in ownerInfo.");
 				throw new CustomException(LandConstants.INVALID_ONWER_ERROR, "MobileNo is mandatory for ownerInfo");
