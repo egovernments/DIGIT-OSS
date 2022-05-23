@@ -9,6 +9,12 @@ const getAddress = (address, t) => {
   }${t(address?.locality?.code)}, ${t(address?.city)},${t(address?.pincode) ? `${address?.pincode}` : " "}`;
 };
 
+const getOwnerNames = (propertyData) => {
+  const getActiveOwners = propertyData?.owners?.filter(owner => owner?.active);
+  const getOwnersList = getActiveOwners?.map(activeOwner => activeOwner?.name)?.join(",");
+  return getOwnersList ? getOwnersList : t("NA");
+}
+
 const combineResponse = (WaterConnections, SewerageConnections, businessService, Properties, billData, t) => {
   const data = businessService ? businessService === "WS" ? WaterConnections : SewerageConnections : WaterConnections?.concat(SewerageConnections);
   if (billData) {
@@ -26,6 +32,7 @@ const combineResponse = (WaterConnections, SewerageConnections, businessService,
       if (row?.propertyId === property?.propertyId) {
         row["owner"] = property?.owners[0]?.name;
         row["address"] = getAddress(property?.address, t);
+        row["ownerNames"] = getOwnerNames(property);
       }
     });
   });

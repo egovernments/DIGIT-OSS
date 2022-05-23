@@ -379,7 +379,7 @@ const ConnectionDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.address ? errors?.address?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")}:*`}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_OWNER_SPECIAL_CATEGORY")}:*`}</CardLabel>
           <Controller
             control={control}
             name={"ownerType"}

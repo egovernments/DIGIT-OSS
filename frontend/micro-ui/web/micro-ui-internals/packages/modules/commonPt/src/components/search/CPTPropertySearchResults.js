@@ -46,7 +46,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
       {
         Header: t("PT_COMMON_TABLE_COL_OWNER_NAME"),
         disableSortBy: true,
-        Cell: ({ row }) => GetCell(row.original.name || ""),
+        Cell: ({ row }) => GetCell(row.original.ownerNames || ""),
       },
 
       {

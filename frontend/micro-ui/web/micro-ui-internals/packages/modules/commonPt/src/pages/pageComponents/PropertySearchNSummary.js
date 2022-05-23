@@ -80,6 +80,12 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
     } else return {};
   }
 
+  const getOwnerNames = (propertyData) => {
+    const getActiveOwners = propertyData?.owners?.filter(owner => owner?.active);
+    const getOwnersList = getActiveOwners?.map(activeOwner => activeOwner?.name)?.join(",");
+    return getOwnersList ? getOwnersList : t("NA");
+  }
+
   let clns = "";
   if (window.location.href.includes("/ws/")) clns = ":"
 
@@ -127,7 +133,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                 className="border-none"
                 labelStyle={isMobile ? { width: "40%" } : {}}
                 label={t(`OWNER_NAME`)}
-                text={propertyDetails?.Properties[0]?.owners[0]?.name}
+                text={getOwnerNames(propertyDetails?.Properties[0])}
               />
               <Row
                 className="border-none"
