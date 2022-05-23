@@ -20,6 +20,7 @@ import EditModifyApplication from "./EditModifyApplication";
 import WSDisconnectionDocsRequired from "../../pageComponents/WSDisconnectionDocsRequired";
 import ResponseBillAmend from "./ResponseBillAmend";
 import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
+import GetDisconnectionDetails from "./DisconnectionDetails";
 
 const BILLSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
@@ -152,6 +153,7 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/bill-amend/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/water/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/sewerage/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/disconnection-details`} component={GetDisconnectionDetails} />
           {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
         </div>
