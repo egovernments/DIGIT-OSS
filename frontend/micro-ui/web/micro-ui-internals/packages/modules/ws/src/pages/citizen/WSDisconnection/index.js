@@ -32,7 +32,6 @@ const WSDisconnection = () => {
   let isModifyEdit = window.location.href.includes("/modify-connection/") || window.location.href.includes("/edit-application/")
 
   const goNext = (skipStep) => {
-    console.log(skipStep)
     const currentPath = pathname.split("/").pop();
     let { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
     let routeObject = config.find((routeObj) => routeObj.route === currentPath && routeObj);
@@ -85,7 +84,6 @@ const WSDisconnection = () => {
     <Switch>
       {config.map((routeObj, index) => {
         const { component, texts, inputs, key, isSkipEnabled } = routeObj;
-        console.log(routeObj,"routeobj")
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${getPath(match.path, match.params)}/${routeObj.route}`} key={index}>

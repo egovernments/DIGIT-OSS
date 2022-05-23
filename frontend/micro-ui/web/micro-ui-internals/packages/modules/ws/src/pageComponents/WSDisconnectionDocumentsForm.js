@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { pdfDocumentName, pdfDownloadLink, getDocumentsName,stringReplaceAll } from "../utils";
-import Timeline from "../components/Timeline";
+import DisconnectTimeline from "../components/DisconnectTimeline";
 import {
   CardLabel,
   Dropdown,
@@ -135,7 +135,7 @@ useEffect(() =>{
  
   return (
     <div style={{ marginTop: "19px" }}>
-      {userType === "citizen" && (<Timeline currentStep={3} />)}
+      {userType === "citizen" && (<DisconnectTimeline currentStep={2} />)}
       {/* {!wsDocsLoading ?  */}
       <FormStep
         t={t}
@@ -158,9 +158,8 @@ useEffect(() =>{
             />
           );
           })}
-          {error && <Toast label={error} onClose={() => setError(null)} error />}
-      <SubmitBar label={t(`CS_COMMON_NEXT`)} submit={true} />
-
+        <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
+        {error && <Toast label={error} onClose={() => setError(null)} error />}
       </FormStep> 
       {/* : <Loader />} */}
 

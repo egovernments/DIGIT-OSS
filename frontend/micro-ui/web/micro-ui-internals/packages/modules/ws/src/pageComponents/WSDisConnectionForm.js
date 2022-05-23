@@ -1,6 +1,6 @@
 import { CardLabel, CheckBox, Dropdown, FormStep, Loader, MobileNumber, RadioButtons, TextInput, UploadFile,LabelFieldPair,TextArea,SubmitBar, CitizenInfoLabel, CardHeader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
-import Timeline from "../components/Timeline";
+import DisconnectTimeline from "../components/DisconnectTimeline";
 import { stringReplaceAll } from "../utils";
 
 const WSDisConnectionForm = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
@@ -119,7 +119,7 @@ const handleSubmit = () => onSelect(config.key, { WSDisConnectionForm: disconnec
 
   return (
     <div>
-       {userType === "citizen" && (<Timeline currentStep={2} />)}
+       {userType === "citizen" && (<DisconnectTimeline currentStep={1} />)}
         {/* {!isLoading ?  */}
         <FormStep
           config={config}
@@ -147,7 +147,7 @@ const handleSubmit = () => onSelect(config.key, { WSDisConnectionForm: disconnec
               labelKey="WS_DISCONNECTION_TYPE"
           />
           
-        <CardLabel>{t("WS_DISCONEECTION_DATE")}</CardLabel>
+        <CardLabel>{t("WS_DISCONNECTION_DATE")}</CardLabel>
             <TextInput
               t={t}
               type={"text"}

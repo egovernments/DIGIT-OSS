@@ -5,7 +5,7 @@ import {
   import React from "react";
   import { useTranslation } from "react-i18next";
   import { useHistory, useRouteMatch, Link } from "react-router-dom";
-  import Timeline from "../../../components/Timeline";
+  import DisconnectTimeline from "../../../components/DisconnectTimeline";
   import WSDocument from "../../../pageComponents/WSDocument";
   
   const CheckPage = ({ onSubmit, value }) => {
@@ -46,7 +46,7 @@ import {
   return(
     <React.Fragment>
     <Header styles={{fontSize:"32px"}}>{t("WS_COMMON_SUMMARY")}</Header>
-    <Timeline currentStep={4} />
+    <DisconnectTimeline currentStep={3} />
   
     <Card style={{paddingRight:"16px"}}>
     <CardHeader styles={{fontSize:"28px"}}>{t("WS_DISCONNECTION_APPLICATION_DETAILS")}</CardHeader>
@@ -81,8 +81,8 @@ import {
           </div>}
           </div>
         ))}
+        <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
       </Card>
-      <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
     </React.Fragment>
     )
   }
