@@ -21,18 +21,18 @@ const SearchWater = ({ path }) => {
   };
 
   const onSubmit = useCallback((_data) => {
-    if (Object.keys(_data).filter((k) => _data[k] && typeof _data[k] !== "object").length > 4) {
+    const { connectionNumber, oldConnectionNumber, mobileNumber, propertyId } = _data;
+    if (!connectionNumber && !oldConnectionNumber && !mobileNumber && !propertyId) {
+      setShowToast({ error: true, label: "WS_HOME_SEARCH_CONN_RESULTS_DESC" });
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    } else {
       setPayload(
         Object.keys(_data)
           .filter((k) => _data[k])
           .reduce((acc, key) => ({ ...acc, [key]: typeof _data[key] === "object" ? _data[key].code : _data[key] }), {})
       );
-      setShowToast(null);
-    } else {
-      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
     }
   });
 

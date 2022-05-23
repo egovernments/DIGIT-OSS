@@ -165,15 +165,27 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
         return (
           <div>
             <span className="link">
-              <Link
-                to={{
-                  pathname: `/digit-ui/employee/payment/collect/${row.original?.["service"] == "WATER" ? "WS" : "SW"}/${encodeURIComponent(
-                    row.original?.["connectionNo"]
-                  )}/${row.original?.["tenantId"]}?tenantId=${row.original?.["tenantId"]}&ISWSCON`,
-                }}
-              >
-                {t(`${"WS_COMMON_COLLECT_LABEL"}`)}{" "}
-              </Link>
+              {row.original?.service === "WATER" ? (
+                <Link
+                  to={{
+                    pathname: `/digit-ui/employee/payment/collect/${row.original?.["service"] === "WATER" ? "WS" : "SW"}/${encodeURIComponent(
+                      row.original?.["connectionNo"]
+                    )}/${row.original?.["tenantId"]}?tenantId=${row.original?.["tenantId"]}?workflow=WS&ISWSCON`,
+                  }}
+                >
+                  {t(`${"WS_COMMON_COLLECT_LABEL"}`)}{" "}
+                </Link>
+              ) : (
+                <Link
+                  to={{
+                    pathname: `/digit-ui/employee/payment/collect/${row.original?.["service"] === "WATER" ? "WS" : "SW"}/${encodeURIComponent(
+                      row.original?.["connectionNo"]
+                    )}/${row.original?.["tenantId"]}?tenantId=${row.original?.["tenantId"]}?workflow=SW&ISWSCON`,
+                  }}
+                >
+                  {t(`${"WS_COMMON_COLLECT_LABEL"}`)}{" "}
+                </Link>
+              )}
             </span>
           </div>
         );
@@ -182,20 +194,23 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
 
   return (
     <>
-      <Header styles={{ fontSize: "32px" }}>{ businessService === "WS" ? t("WS_WATER_SEARCH_CONNECTION_SUB_HEADER") : t("WS_SEWERAGE_SEARCH_CONNECTION_SUB_HEADER") }</Header>
+      <Header styles={{ fontSize: "32px" }}>
+        {businessService === "WS" ? t("WS_WATER_SEARCH_CONNECTION_SUB_HEADER") : t("WS_SEWERAGE_SEARCH_CONNECTION_SUB_HEADER")}
+      </Header>
       <SearchForm className="ws-custom-wrapper" onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <SearchFields {...{ register, control, reset, tenantId, t }} />
       </SearchForm>
       {data?.display ? (
-        <Card style={{ marginTop: 20 }}>
-          {t(data?.display)
-            .split("\\n")
-            .map((text, index) => (
-              <p key={index} style={{ textAlign: "center" }}>
-                {text}
-              </p>
-            ))}
-        </Card>
+        // <Card style={{ marginTop: 20 }}>
+        //   {t(data?.display)
+        //     .split("\\n")
+        //     .map((text, index) => (
+        //       <p key={index} style={{ textAlign: "center" }}>
+        //         {text}
+        //       </p>
+        //     ))}
+        // </Card>
+        <></>
       ) : resultOk ? (
         <Table
           t={t}

@@ -16,7 +16,7 @@ const getOwnerNames = (propertyData) => {
 }
 
 const combineResponse = (WaterConnections, SewerageConnections, businessService, Properties, billData, t) => {
-  const data = businessService ? businessService === "WS" ? WaterConnections : SewerageConnections : WaterConnections?.concat(SewerageConnections);
+  const data = businessService ? (businessService === "WS" ? WaterConnections : SewerageConnections) : WaterConnections?.concat(SewerageConnections);
   if (billData) {
     data.forEach((app) => {
       const bill = billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0];
@@ -94,7 +94,7 @@ const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) =>
     ["BILL_SEARCH", tenantId, consumercodes.join(","), bussinessService],
     async () =>
       await Digit.PaymentService.fetchBill(tenantId, {
-        businessService: "WS",
+        businessService: bussinessService,
         consumerCode: consumercodes.join(","),
       }),
     { ...config, enabled: consumercodes.length > 0 }
@@ -109,32 +109,15 @@ const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) =>
     }
   );
 
-  if(bussinessService === "WS"){
+  if (bussinessService === "WS") {
     return responseWS?.isLoading || properties?.isLoading || billData?.isLoading
-    ? undefined
-    : combineResponse(
-      responseWS?.data?.WaterConnection,
-      [],
-      bussinessService,
-      properties?.data?.Properties,
-      billData?.data?.Bill,
-      t
-    );
-
-  }
-  else if(bussinessService === "SW"){
+      ? undefined
+      : combineResponse(responseWS?.data?.WaterConnection, [], bussinessService, properties?.data?.Properties, billData?.data?.Bill, t);
+  } else if (bussinessService === "SW") {
     return responseSW?.isLoading || properties?.isLoading || billData?.isLoading
-    ? undefined
-    : combineResponse(
-      [],
-      responseSW?.data?.SewerageConnections,
-      bussinessService,
-      properties?.data?.Properties,
-      billData?.data?.Bill,
-      t
-    );
-  }
-  else{
+      ? undefined
+      : combineResponse([], responseSW?.data?.SewerageConnections, bussinessService, properties?.data?.Properties, billData?.data?.Bill, t);
+  } else {
     return responseWS?.isLoading || responseSW?.isLoading || properties?.isLoading || billData?.isLoading
       ? undefined
       : combineResponse(

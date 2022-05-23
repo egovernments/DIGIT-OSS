@@ -20,6 +20,7 @@ import WSWFApplicationTimeline from "../../pageComponents/WSWFApplicationTimelin
 import WSDocument from "../../pageComponents/WSDocument";
 import getPDFData from "../../utils/getWSAcknowledgementData";
 import { getFiles } from "../../utils";
+import { stringReplaceAll } from "../../utils";
 
 const WSApplicationDetails = () => {
   const { t } = useTranslation();
@@ -409,7 +410,7 @@ const WSApplicationDetails = () => {
             <Link
               to={{
                 pathname: `/digit-ui/citizen/payment/my-bills/${
-                  data?.WaterConnection?.[0]?.applicationNo.split("/")[0] || data?.SewerageConnections?.[0]?.applicationNo.split("/")[0]
+                  paymentDetails?.data?.Bill?.[0]?.businessService
                 }/${
                   stringReplaceAll(data?.WaterConnection?.[0]?.applicationNo, "/", "+") ||
                   stringReplaceAll(data?.SewerageConnections?.[0]?.applicationNo, "/", "+")

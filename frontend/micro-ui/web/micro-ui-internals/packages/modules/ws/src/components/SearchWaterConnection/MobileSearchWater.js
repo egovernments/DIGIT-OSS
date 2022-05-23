@@ -75,7 +75,10 @@ const MobileSearchWater = ({ Controller, register, control, t, reset, previousPa
             <span className="link">
               <Link
                 to={{
-                  pathname: `/digit-ui/employee/payment/collect/${data?.["service"]=="WATER"?"WS":"SW"}/${encodeURIComponent(data?.["connectionNo"])}/${data?.["tenantId"]}?tenantId=${data?.["tenantId"]}&ISWSCON`,                }}
+                  pathname: `/digit-ui/employee/payment/collect/${data?.["service"] == "WATER" ? "WS" : "SW"}/${encodeURIComponent(
+                    data?.["connectionNo"]
+                  )}/${data?.["tenantId"]}?tenantId=${data?.["tenantId"]}&ISWSCON`,
+                }}
               >
                 {t(`${"WS_COMMON_COLLECT_LABEL"}`)}{" "}
               </Link>
@@ -84,15 +87,32 @@ const MobileSearchWater = ({ Controller, register, control, t, reset, previousPa
         );
     }
   };
+  const GetStatusLinkCell = (value) => {
+    let service = "WATER";
+    return (
+      <div>
+        <span className="link">
+          <Link
+            to={`/digit-ui/employee/ws/connection-details?applicationNumber=${value?.connectionNo}&tenantId=${
+              value?.tenantId
+            }&service=${service}&connectionType=${value?.connectionType}&due=${value?.due || 0}`}
+          >
+            {value?.connectionNo || "NA"}
+          </Link>
+        </span>
+      </div>
+    );
+  };
+
   const propsMobileInboxCards = useMemo(() => {
     if (data?.display) {
       return [];
     }
     return data?.map((data) => ({
-      [t("WS_MYCONNECTIONS_CONSUMER_NO")]: data?.connectionNo || "NA",
+      [t("WS_MYCONNECTIONS_CONSUMER_NO")]: GetStatusLinkCell(data) || "NA",
       [t("WS_COMMON_TABLE_COL_SERVICE_LABEL")]: t(`WS_${data?.service}`),
       [t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL")]: data?.owner || "NA",
-      [t("WS_COMMON_TABLE_COL_STATUS_LABEL")]: t(`WS_${data?.status}`),
+      [t("WS_COMMON_TABLE_COL_STATUS_LABEL")]: t(`WS_${data?.status?.toUpperCase()}`),
       [t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")]: data?.due || "NA",
       [t("WS_COMMON_TABLE_COL_ADDRESS")]: data?.address || "NA",
       [t("WS_COMMON_TABLE_COL_DUE_DATE_LABEL")]: convertEpochToDate(data?.dueDate) || "NA",
@@ -137,7 +157,6 @@ const MobileSearchWater = ({ Controller, register, control, t, reset, previousPa
         <DetailsCard
           {...{
             data: propsMobileInboxCards,
-            linkPrefix: `/digit-ui/employee/ws/application-details/`,
             serviceRequestIdKey: t("WS_COMMON_TABLE_COL_APP_NO"),
           }}
         />

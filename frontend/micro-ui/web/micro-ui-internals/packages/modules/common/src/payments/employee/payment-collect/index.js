@@ -286,7 +286,7 @@ export const CollectPayment = (props) => {
     if (
       BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService] ||
       ModuleWorkflow ||
-      businessService === "TL"
+      businessService === "TL" || businessService.includes("ONE_TIME_FEE")
     ) {
       config.splice(0, 1);
     }
