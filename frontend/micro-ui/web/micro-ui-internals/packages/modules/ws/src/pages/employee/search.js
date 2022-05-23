@@ -1,5 +1,6 @@
 import React, { useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
+import { Toast } from "@egovernments/digit-ui-react-components";
 
 const Search = ({ path }) => {
   const [isBothCallsFinished, setIsBothCallFinished] = useState(true);
@@ -12,8 +13,16 @@ const Search = ({ path }) => {
   const getUrlPathName = window.location.pathname;
   const checkPathName = getUrlPathName.includes("water/search-application");
   const businessServ = checkPathName ? "WS" : "SW";
+  const [showToast, setShowToast] = useState(null);
 
   function onSubmit(_data) {
+    if(_data.applicationNumber==="" && _data.connectionNumber==="" && _data.mobileNumber==="" && !_data.applicationType && !_data.applicationStatus && !_data.fromDate && !_data.toDate ){
+      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+      return
+    }
     const index = applicationTypes.indexOf(_data.applicationType?.code);
     var fromDate = new Date(_data?.fromDate);
     fromDate?.setSeconds(fromDate?.getSeconds() - 19800);
@@ -48,6 +57,16 @@ const Search = ({ path }) => {
         resultOk={isBothCallsFinished}
         businessService={businessServ}
       />
+      {showToast && (
+        <Toast
+          error={showToast.error}
+          warning={showToast.warning}
+          label={t(showToast.label)}
+          onClose={() => {
+            setShowToast(null);
+          }}
+        />
+      )}
     </Fragment>
   );
 };

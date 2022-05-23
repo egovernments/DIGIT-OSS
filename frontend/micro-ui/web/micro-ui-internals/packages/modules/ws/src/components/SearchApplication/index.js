@@ -152,6 +152,9 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
   return (
     <>
       <Header styles={{ fontSize: "32px" }}>{businessService === "WS" ? t("WS_WATER_SEARCH_APPLICATION_SUB_HEADER") : t("WS_SEWERAGE_SEARCH_APPLICATION_SUB_HEADER")}</Header>
+      < Card className={"card-search-heading"}>
+        <span style={{ color: "#505A5F" }}>{t("WS_INFO_VALIDATION")}</span>
+      </Card>
       <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <SearchFields {...{ register, control, reset, tenantId, t }} />
       </SearchForm>
