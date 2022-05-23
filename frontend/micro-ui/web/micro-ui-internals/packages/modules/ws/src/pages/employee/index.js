@@ -56,6 +56,18 @@ const BILLSBreadCrumbs = ({ location }) => {
       isBack: fromScreen && true,
     },
     {
+      path: "/digit-ui/employee/ws/sewerage/search-application",
+      content: fromScreen ? `${t(fromScreen)} / ${t("WS_SEARCH_APPLICATIONS")}` : t("WS_SEARCH_APPLICATIONS"),
+      show: location.pathname.includes("/sewerage/search-application") ? true : false,
+      isBack: fromScreen && true,
+    },
+    {
+      path: "/digit-ui/employee/ws/sewerage/search-connection",
+      content: fromScreen ? `${t(fromScreen)} / ${t("WS_SEARCH_CONNECTION")}` : t("WS_SEARCH_CONNECTION"),
+      show: location.pathname.includes("/sewerage/search-connection") ? true : false,
+      isBack: fromScreen && true,
+    },
+    {
       path: "/digit-ui/employee/sewerage/inbox",
       content: t("ES_COMMON_BILLS_SEWERAGE_INBOX_LABEL"),
       show: location.pathname.includes("/sewerage/inbox") ? true : false,
@@ -130,7 +142,7 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/sewerage/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/ws-response`} component={WSResponse} />
           <PrivateRoute path={`${path}/water/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
-          <PrivateRoute path={`${path}/sewerage/search`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/sewerage/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
           {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
         <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
           <PrivateRoute path={`${path}/consumption-details`} component={ConsumptionDetails} />
