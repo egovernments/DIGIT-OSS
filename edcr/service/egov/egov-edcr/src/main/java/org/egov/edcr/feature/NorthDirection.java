@@ -52,7 +52,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
 import org.egov.common.entity.edcr.ScrutinyDetail;
@@ -62,7 +63,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class NorthDirection extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(NorthDirection.class);
+	private static final Logger LOG = LogManager.getLogger(NorthDirection.class);
 	private static final String RULE_5_4_I_I = "5-4-i-i";
 	public static final String NORTH_DIRECTION_DESCRIPTION = "North Direction";
 

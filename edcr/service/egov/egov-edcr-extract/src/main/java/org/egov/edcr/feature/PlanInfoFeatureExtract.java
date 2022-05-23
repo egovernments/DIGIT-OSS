@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.PlanInformation;
@@ -29,7 +30,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PlanInfoFeatureExtract extends FeatureExtract {
-	private static final Logger LOG = Logger.getLogger(PlanInfoFeatureExtract.class);
+	private static final Logger LOG = LogManager.getLogger(PlanInfoFeatureExtract.class);
 	public static final String MSG_ERROR_MANDATORY = "msg.error.mandatory.object.not.defined";
 	private String digitsRegex = "[^\\d.]";
 	private static final BigDecimal ONEHUDREDTWENTYFIVE = BigDecimal.valueOf(125);

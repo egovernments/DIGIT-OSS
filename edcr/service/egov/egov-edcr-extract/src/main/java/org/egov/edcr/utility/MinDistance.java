@@ -11,7 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.SetBack;
 import org.egov.common.entity.edcr.Yard;
@@ -36,7 +37,7 @@ public class MinDistance {
 
     @Autowired
     private LayerNames layerNames;
-    private static final Logger LOG = Logger.getLogger(MinDistance.class);
+    private static final Logger LOG = LogManager.getLogger(MinDistance.class);
 
     public BigDecimal getYardMinDistance(PlanDetail pl, String name, String level, DXFDocument doc) {
         DXFLWPolyline plotBoundary = ((PlotDetail) pl.getPlot()).getPolyLine();
