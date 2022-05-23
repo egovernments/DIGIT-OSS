@@ -240,7 +240,7 @@ public class WorkflowUtil {
      */
     public void enrichStatusesInSearchCriteria(RequestInfo requestInfo, ProcessInstanceSearchCriteria criteria){
 
-        Map<String, Map<String,List<String>>> roleTenantAndStatusMapping = businessServiceRepository.getRoleTenantAndStatusMapping();
+        Map<String, Map<String,List<String>>> roleTenantAndStatusMapping = businessServiceRepository.getRoleTenantAndStatusMapping(criteria.getTenantId());
         Map<String,List<String>> roleToTenantIdMap = getRoleToTenantId(requestInfo);
 
         List<String> tenantSpecificStatuses = new LinkedList<>();
@@ -317,10 +317,8 @@ public class WorkflowUtil {
         if(!CollectionUtils.isEmpty(tenantSpecificStatuses))
             criteria.setTenantSpecifiStatus(tenantSpecificStatuses);
 
-        if(!CollectionUtils.isEmpty(statusIrrespectiveOfTenant)) {
+        if(!CollectionUtils.isEmpty(statusIrrespectiveOfTenant))
             criteria.setStatus(statusIrrespectiveOfTenant);
-            criteria.setStatusesIrrespectiveOfTenant(statusIrrespectiveOfTenant);
-        }
 
 
     }
@@ -476,35 +474,5 @@ public class WorkflowUtil {
         else return false;
 
     }
-
-
-
-
-    /**
-     * Method to fetch the state name from the tenantId
-     *
-     * @param query
-     * @param tenantId
-     * @return
-     */
-    public String replaceSchemaPlaceholder(String query, String tenantId) {
-
-        String finalQuery = null;
-        if (tenantId.contains(".")) {
-            String schemaName = tenantId.split("\\.")[1];
-            finalQuery = query.replace(SCHEMA_REPLACE_STRING, schemaName);
-        } else {
-            finalQuery = query.replace(SCHEMA_REPLACE_STRING.concat("."), "");
-        }
-        return finalQuery;
-    }
-
-
-
-
-
-
-
-
 
 }
