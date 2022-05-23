@@ -169,7 +169,7 @@ public class UserServiceTest {
 
     private org.egov.user.web.contract.OtpValidateRequest buildOtpValidationRequest() {
         // TODO Auto-generated method stub
-        RequestInfo requestInfo = RequestInfo.builder().action("validate").ts(new Date()).build();
+        RequestInfo requestInfo = RequestInfo.builder().action("validate").ts(Long.valueOf(new Date().toString())).build();
         Otp otp = Otp.builder().build();
         org.egov.user.web.contract.OtpValidateRequest otpValidationRequest = org.egov.user.web.contract.OtpValidateRequest
                 .builder().requestInfo(requestInfo).otp(otp).build();

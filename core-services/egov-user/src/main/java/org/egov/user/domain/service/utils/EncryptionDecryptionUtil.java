@@ -19,9 +19,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -78,8 +76,18 @@ public class EncryptionDecryptionUtil {
                 objectToDecrypt = Collections.singletonList(objectToDecrypt);
             }
             final User encrichedUserInfo = getEncrichedandCopiedUserInfo(requestInfo.getUserInfo());
-            key = getKeyToDecrypt(objectToDecrypt, encrichedUserInfo);
-            P decryptedObject = (P) encryptionService.decryptJson(objectToDecrypt, key, encrichedUserInfo, classType);
+            requestInfo.setUserInfo(encrichedUserInfo);
+
+            Map<String,String> keyPurposeMap = getKeyToDecrypt(objectToDecrypt, encrichedUserInfo);
+            String purpose = keyPurposeMap.get("purpose");
+
+            if(key == null)
+                key = keyPurposeMap.get("key");
+
+            if(key.equalsIgnoreCase("UserListSelf"))
+                enrichRoleforPlainAccess(requestInfo, encrichedUserInfo.getTenantId());
+
+            P decryptedObject = (P) encryptionService.decryptJson(requestInfo,objectToDecrypt, key, purpose, classType);
             if (decryptedObject == null) {
                 throw new CustomException("DECRYPTION_NULL_ERROR", "Null object found on performing decryption");
             }
@@ -122,15 +130,32 @@ public class EncryptionDecryptionUtil {
             return false;
     }
 
-    public String getKeyToDecrypt(Object objectToDecrypt, User userInfo) {
-        if (!abacEnabled)
-            return "ALL_ACCESS";
-        else if (isUserDecryptingForSelf(objectToDecrypt, userInfo))
-            return "UserListSelf";
-        else if (isDecryptionForIndividualUser(objectToDecrypt))
-            return "UserListOtherIndividual";
-        else
-            return "UserListOtherBulk";
+    public Map<String,String> getKeyToDecrypt(Object objectToDecrypt, User userInfo) {
+        Map<String,String> keyPurposeMap = new HashMap<>();
+
+        if (!abacEnabled){
+            keyPurposeMap.put("key","UserListSelf");
+            keyPurposeMap.put("purpose","AbacDisabled");
+        }
+
+
+        else if (isUserDecryptingForSelf(objectToDecrypt, userInfo)){
+            keyPurposeMap.put("key","UserListSelf");
+            keyPurposeMap.put("purpose","Self");
+        }
+
+
+        else if (isDecryptionForIndividualUser(objectToDecrypt)){
+            keyPurposeMap.put("key","User");
+            keyPurposeMap.put("purpose","SingleSearchResult");
+        }
+
+        else{
+            keyPurposeMap.put("key","User");
+            keyPurposeMap.put("purpose","BulkSearchResult");
+        }
+
+        return keyPurposeMap;
     }
 
     public void auditTheDecryptRequest(Object objectToDecrypt, String key, User userInfo) {
@@ -175,4 +200,15 @@ public class EncryptionDecryptionUtil {
                 .roles(newRoleList).tenantId(userInfo.getTenantId()).uuid(userInfo.getUuid()).build();
         return newuserInfo;
     }
+
+    public RequestInfo enrichRoleforPlainAccess(RequestInfo requestInfo, String tenantId){
+        try {
+            return encryptionService.enrichRoleforPlainAccess(requestInfo,tenantId);
+        } catch (IOException e) {
+            log.error("Error occurred while decrypting", e);
+            throw new CustomException("DECRYPTION_SERVICE_ERROR", "Error occurred in decryption process");
+        }
+    }
+
+
 }

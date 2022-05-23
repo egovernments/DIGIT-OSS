@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.egov.encryption.config.EncClientConstants.*;
+
 @Slf4j
 @Service
 public class EncryptionServiceImpl implements EncryptionService {
@@ -87,7 +89,7 @@ public class EncryptionServiceImpl implements EncryptionService {
 
 
     public JsonNode decryptedJson(RequestInfo requestInfo ,Object ciphertextJson, Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap,
-                                  String key, String purpose, User user, SecurityPolicyUniqueIdentifier uniqueIdentifier)throws IOException {
+                                  String key, String purpose, SecurityPolicyUniqueIdentifier uniqueIdentifier)throws IOException {
         JsonNode ciphertextNode = createJsonNode(ciphertextJson);
         JsonNode decryptNode = ciphertextNode.deepCopy();
 
@@ -131,19 +133,19 @@ public class EncryptionServiceImpl implements EncryptionService {
     }
 
     @Override
-    public JsonNode decryptJson(RequestInfo requestInfo, Object ciphertextJson, String key, String purpose, User user) throws IOException {
-        List<String> roles = user.getRoles().stream().map(Role::getCode).collect(Collectors.toList());
-        Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap = decryptionPolicyConfiguration.getRoleAttributeAccessListForKey(requestInfo,key, roles);
+    public JsonNode decryptJson(RequestInfo requestInfo, Object ciphertextJson, String key, String purpose) throws IOException {
+        List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
+        Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap = decryptionPolicyConfiguration.getRoleAttributeAccessListForKey(requestInfo, key, roles);
         
         SecurityPolicyUniqueIdentifier uniqueIdentifier = decryptionPolicyConfiguration.getSecurityPolicyUniqueIdentifier(key);
-        JsonNode decryptedNode = decryptedJson(requestInfo,ciphertextJson, attributesVisibilityMap, key, purpose, user, uniqueIdentifier);
+        JsonNode decryptedNode = decryptedJson(requestInfo,ciphertextJson, attributesVisibilityMap, key, purpose, uniqueIdentifier);
 
         return decryptedNode;
     }
 
-    public <E,P> P decryptJson(RequestInfo requestInfo, Object ciphertextJson, String key, String purpose,
-                               User user, Class<E> valueType) throws IOException {
-        return ConvertClass.convertTo(decryptJson(requestInfo, ciphertextJson, key, purpose, user), valueType);
+    public <E,P> P decryptJson(RequestInfo requestInfo, Object ciphertextJson, String key, String purpose
+                              , Class<E> valueType) throws IOException {
+        return ConvertClass.convertTo(decryptJson(requestInfo, ciphertextJson, key, purpose), valueType);
     }
 
 
@@ -170,6 +172,13 @@ public class EncryptionServiceImpl implements EncryptionService {
     public List<String> encryptValue(List<Object> plaintext, String tenantId, String type) throws IOException {
         Object encryptionResponse = encryptionServiceRestConnection.callEncrypt(tenantId, type, plaintext);
         return ConvertClass.convertTo(objectMapper.valueToTree(encryptionResponse), List.class);
+    }
+
+    public RequestInfo enrichRoleforPlainAccess(RequestInfo requestInfo, String tenantId) throws IOException{
+        Role role = Role.builder().code(PLAIN_ACCESS_DUMMY_ROLE_CODE)
+                .name(PLAIN_ACCESS_DUMMY_ROLE_NAME).tenantId(tenantId).build();
+        requestInfo.getUserInfo().getRoles().add(role);
+        return requestInfo;
     }
 
 

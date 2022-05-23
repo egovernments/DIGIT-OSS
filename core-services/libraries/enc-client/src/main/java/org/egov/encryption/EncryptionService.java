@@ -14,15 +14,17 @@ public interface EncryptionService {
     public <E,P> P encryptJson(Object plaintextJson, String model, String tenantId, Class<E> valueType) throws IOException;
 
     public JsonNode decryptJson(RequestInfo requestInfo, Object ciphertextJson, String model,
-                                String purpose, User user) throws IOException;
+                                String purpose) throws IOException;
 
     public <E,P> P decryptJson(RequestInfo requestInfo, Object ciphertextJson, String model, String purpose,
-                               User user, Class<E> valueType) throws IOException;
+                               Class<E> valueType) throws IOException;
 
     public String encryptValue(Object plaintext, String tenantId) throws IOException;
 
     public String encryptValue(Object plaintext, String tenantId, String type) throws IOException;
 
     public List<String> encryptValue(List<Object> plaintext, String tenantId, String type) throws IOException;
+
+    public RequestInfo enrichRoleforPlainAccess(RequestInfo requestInfo, String tenantId) throws IOException;
 
 }
