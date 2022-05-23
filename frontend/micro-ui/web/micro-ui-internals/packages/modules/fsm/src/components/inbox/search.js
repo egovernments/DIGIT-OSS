@@ -16,7 +16,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   const [error, setError] = useState(false);
   const mobileView = innerWidth <= 640;
   const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
-  const watchSearch = watch(["applicationNos", "mobileNumber"]);
+  const watchSearch = watch(["applicationNos", "mobileNumber", "fromDate", "toDate"]);
 
   const onSubmitInput = (data) => {
     if (!data.mobileNumber) {
@@ -51,8 +51,8 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   const searchValidation = (data) => {
     if (FSTP) return null;
 
-    watchSearch.applicationNos || watchSearch.mobileNumber ? setError(false) : setError(true);
-    return watchSearch.applicationNos || watchSearch.mobileNumber ? true : false;
+    watchSearch.applicationNos || watchSearch.mobileNumber || (watchSearch.fromDate && watchSearch.toDate) ? setError(false) : setError(true);
+    return watchSearch.applicationNos || watchSearch.mobileNumber || (watchSearch.fromDate && watchSearch.toDate) ? true : false;
   };
 
   const getFields = (input) => {
@@ -114,7 +114,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
                 </span>
               </div>
             )}
-            <div className={FSTP? "complaint-input-container for-pt for-search" : "complaint-input-container" } style={{ width: "100%" }}>
+            <div className={FSTP ? "complaint-input-container for-pt for-search" : "complaint-input-container"} style={{ width: "100%" }}>
               {searchFields?.map((input, index) => (
                 <span key={index} className={index === 0 ? "complaint-input" : "mobile-input"}>
                   <Label>{input.label}</Label>

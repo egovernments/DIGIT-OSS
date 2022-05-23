@@ -13,8 +13,9 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
   const userRoles = user?.info?.roles?.map((e) => e.code);
   let isSingleButton = false;
   let isMenuBotton = false;
-
   let actions = workflowDetails?.data?.actionState?.nextActions?.filter((e) => {
+    return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
+  }) || workflowDetails?.data?.nextActions?.filter((e) => {
     return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
   });
 
@@ -30,7 +31,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     <React.Fragment>
       {!workflowDetails?.isLoading && isMenuBotton && !isSingleButton && (
         <ActionBar style={{...ActionBarStyle}}>
-          {displayMenu && workflowDetails?.data?.actionState?.nextActions ? (
+          {displayMenu && (workflowDetails?.data?.actionState?.nextActions || workflowDetails?.data?.nextActions) ? (
             <Menu
               localeKeyPrefix={forcedActionPrefix || `WF_EMPLOYEE_${businessService?.toUpperCase()}`}
               options={actions}

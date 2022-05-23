@@ -10,8 +10,8 @@
 .heading-m {
   @apply font-bold text-text-primary text-heading-m ml-md pt-sm;
 }
-.BPAheading-m{
-  margin-left:22px;
+.BPAheading-m {
+  margin-left: 22px;
 }
 
 .break-line {
@@ -34,14 +34,14 @@
   border: 1px solid #d6d5d4;
   padding: 16px;
   margin-top: 8px;
-  background: #FAFAFA;
+  background: #fafafa;
 }
 
-.fieldInsepctionInsideWrapper{
-  border: 1px solid #D6D5D4;
+.fieldInsepctionInsideWrapper {
+  border: 1px solid #d6d5d4;
   padding: 16px;
   margin-top: 8px;
-  background: #FFFFFF;
+  background: #ffffff;
   max-width: 70%;
   min-width: 280px;
 }
@@ -54,20 +54,19 @@
   .heading-m {
     @apply text-heading-m-dt;
   }
-  .BPAheading-m{
-    margin-left:22px;
+  .BPAheading-m {
+    margin-left: 22px;
   }
   .break-line {
     margin-top: 40px;
     margin-bottom: 40px;
   }
-  .employee-home-footer{
-    
+  .employee-home-footer {
   }
-  .moduleCardWrapper{
+  .moduleCardWrapper {
     @apply flex flex-row flex-wrap !important;
   }
-  .gridModuleWrapper{
+  .gridModuleWrapper {
     @apply grid grid-cols-4 gap-4;
   }
 }

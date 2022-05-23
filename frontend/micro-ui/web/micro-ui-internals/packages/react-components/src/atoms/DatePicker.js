@@ -25,7 +25,7 @@ const DatePicker = (props) => {
   };
 
   return (
-    <div style={{ position: "relative", width: "100%" }}>
+    <div style={{ position: "relative", width: "100%", ...props?.style ? props.style : {} }}>
       <React.Fragment>
         <input
           type="text"
@@ -33,7 +33,7 @@ const DatePicker = (props) => {
           value={getDatePrint() ? getDatePrint() : "DD/MM/YYYY"}
           readOnly
           className={`employee-card-input ${props.disabled ? "disabled" : ""}`}
-          style={{ width: "calc(100%-62px)" }}
+          style={{ width: "calc(100%-62px)"}}
         />
         <CalendarIcon isdisabled={props.disabled ? true : false} style={{ right: "6px", zIndex: "10", top: 6, position: "absolute" }} />
         <input

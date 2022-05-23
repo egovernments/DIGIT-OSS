@@ -1,6 +1,6 @@
 {
   "name": "egovernments",
-  "version": "1.5.2",
+  "version": "1.5.0",
   "main": "index.js",
   "workspaces": [
     "example",
@@ -37,6 +37,8 @@
     "dev:engagement": "cd packages/modules/engagement && yarn start",
     "dev:noc": "cd packages/modules/noc && yarn start",
     "dev:ws": "cd packages/modules/ws && yarn start",
+    "dev:bills": "cd packages/modules/bills && yarn start",
+    "dev:reports": "cd packages/modules/reports && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-p build:**",
     "build:libraries": "cd packages/libraries && yarn build",
@@ -55,7 +57,9 @@
     "build:obps": "cd packages/modules/obps && yarn build",
     "build:engagement": "cd packages/modules/engagement && yarn build",
     "build:noc": "cd packages/modules/noc && yarn build",
-    "buildWS:ws": "cd packages/modules/ws && yarn build",
+    "build:ws": "cd packages/modules/ws && yarn build",
+    "build:bills": "cd packages/modules/bills && yarn build",
+    "build:reports": "cd packages/modules/reports && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
   "devDependencies": {

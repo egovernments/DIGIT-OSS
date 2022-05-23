@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { Card, Banner, CardText, SubmitBar, Loader, LinkButton } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Card, Banner, CardText, SubmitBar, Loader, LinkButton, Toast } from "@egovernments/digit-ui-react-components";
+import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import getPDFData from "../getPDFData";
@@ -23,13 +23,17 @@ const DisplayText = (action, isSuccess, isEmployee, t, paymentPreference) => {
 };
 
 const BannerPicker = (props) => {
+  let actionMessage = props.data?.fsm?.[0].applicationStatus
+  if (props.data?.fsm?.[0].applicationStatus === 'ASSIGN_DSO') {
+    actionMessage = props.action === 'SUBMIT' ? props.action : props.data?.fsm?.[0].applicationStatus
+  }
   let labelMessage = GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)
   if (props.errorInfo && props.errorInfo !== null && props.errorInfo !== '' && typeof props.errorInfo === 'string') {
     labelMessage = props.errorInfo
   }
   return (
     <Banner
-      message={GetActionMessage(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
+      message={GetActionMessage(actionMessage || props.action, props.isSuccess, props.isEmployee, props.t)}
       applicationNumber={props.data?.fsm?.[0].applicationNo}
       info={labelMessage}
       successful={props.isSuccess}
@@ -38,6 +42,8 @@ const BannerPicker = (props) => {
 };
 
 const Response = (props) => {
+  const history = useHistory()
+  const [showToast, setShowToast] = useState(null);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
@@ -79,6 +85,21 @@ const Response = (props) => {
 
     const data = getPDFData({ ...applicationDetails, slum, pdfVehicleType }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
+  };
+
+  const handleResponse = () => {
+    if (Data?.fsm?.[0].paymentPreference === "POST_PAY") {
+      setShowToast({ key: "error", action: `ES_FSM_PAYMENT_BEFORE_SCHEDULE_FAILURE` });
+      setTimeout(() => {
+        closeToast();
+      }, 5000);
+    } else {
+      history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`);
+    }
+  }
+
+  const closeToast = () => {
+    setShowToast(null);
   };
 
   useEffect(() => {
@@ -151,13 +172,20 @@ const Response = (props) => {
         paymentAccess &&
         isSuccess ? (
         <div className="secondary-action">
-          <Link
+          {/* <Link
             to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`}
-          >
-            <SubmitBar label={t("ES_COMMON_PAY")} />
-          </Link>
+          > */}
+          <SubmitBar onSubmit={handleResponse} label={t("ES_COMMON_PAY")} />
+          {/* </Link> */}
         </div>
       ) : null}
+      {showToast && (
+        <Toast
+          error={showToast.key === "error" ? true : false}
+          label={t(showToast.key === "success" ? showToast.action : `ES_FSM_PAYMENT_BEFORE_SCHEDULE_FAILURE`)}
+          onClose={closeToast}
+        />
+      )}
     </Card>
   );
 };

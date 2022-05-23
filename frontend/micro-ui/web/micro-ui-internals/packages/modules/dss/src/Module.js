@@ -6,7 +6,7 @@ import DashBoard from "./pages";
 import Home from "./pages/Home";
 import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom";
 import Overview from "./pages/Overview";
-import {DSSCard,NDSSCard} from "./components/DSSCard";
+import {checkCurrentScreen, DSSCard,NDSSCard} from "./components/DSSCard";
 import DrillDown from "./pages/DrillDown";
 
 const DssBreadCrumb = ({ location }) => {
@@ -21,9 +21,14 @@ const DssBreadCrumb = ({ location }) => {
       show: true,
     },
     {
+      path: checkCurrentScreen() || window.location.href.includes("NURT_DASHBOARD") ? "/digit-ui/employee/dss/landing/NURT_DASHBOARD" : "/digit-ui/employee/dss/landing/home",
+      content: t("ES_LANDING_PAGE"),
+      show: true,
+    },
+    {
       path: fromModule?`/digit-ui/employee/dss/dashboard/${fromModule}`:`/digit-ui/employee/dss/dashboard/${Digit.Utils.dss.getCurrentModuleName()}`,
       content: t(`ES_COMMON_DSS_${Digit.Utils.locale.getTransformedLocale(fromModule?fromModule:moduleName)}`),
-      show: true,
+      show: location.pathname.includes("dashboard") ? true : false,
     },
     {
       path: "/digit-ui/employee/dss/drilldown",
@@ -41,7 +46,7 @@ const Routes = ({ path, stateCode }) => {
     <div className="chart-wrapper">
       <DssBreadCrumb location={location} />
       <Switch>
-         <PrivateRoute path={`${path}/home/:moduleCode`} component={() => <Home stateCode={stateCode} />} />
+        <PrivateRoute path={`${path}/landing/:moduleCode`} component={() => <Home stateCode={stateCode} />} />
         <PrivateRoute path={`${path}/dashboard/:moduleCode`} component={() => <DashBoard stateCode={stateCode} />} />
         <PrivateRoute path={`${path}/drilldown`} component={() => <DrillDown  stateCode={stateCode}  />} />
       </Switch>

@@ -47,6 +47,7 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
     requestDate: { ...lastYearDate },
     filters:
       id === chartKey ? value?.filters : {...value?.filters, [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
+    moduleLevel: value?.moduleLevel
   });
   const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
     key: chartKey,

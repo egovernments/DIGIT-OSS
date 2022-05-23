@@ -6,7 +6,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 
-const WSServiceName = ({ t, config, onSelect, formData }) => {
+const WSServiceName = ({ t, config, onSelect, userType, formData }) => {
     const [serviceName, setServiceName] = useState(formData?.serviceName || "");
     const [formDetails, setFormDetails] = useState(formData || {});
 
@@ -51,7 +51,7 @@ const WSServiceName = ({ t, config, onSelect, formData }) => {
 
     return (
         <div>
-            <Timeline currentStep={2} />
+            {userType === "citizen" && (<Timeline currentStep={2} />)}
             <FormStep
                 t={t}
                 config={config}
@@ -60,7 +60,7 @@ const WSServiceName = ({ t, config, onSelect, formData }) => {
                 isDisabled={!serviceName}
                 onAdd={onAdd}
             >
-                <CardLabel>{t("WS_SELECT_SERVICE_TYPE_WANT_TO_APPLY")}*</CardLabel>
+                <CardLabel>{t("WS_SELECT_SERVICE_TYPE_WANT_TO_APPLY")}</CardLabel>
                 <RadioOrSelect
                     name="gender"
                     options={serviceNameList}

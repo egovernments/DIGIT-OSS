@@ -49,8 +49,8 @@ const App = () => {
           <PrivateRoute path={`${path}/tradelicence/application/:id/:tenantId`} component={ApplicationDetails} />
           <PrivateRoute path={`${path}/tradelicence/renewal-list`} component={TLList} />
           <PrivateRoute path={`${path}/tradelicence/trade-search`} component={SearchTradeComponent} />
-        </AppContainer>
-      </Switch>
+      </AppContainer>
+    </Switch>
     </span>
   );
 };

@@ -17,10 +17,11 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
     }
     return userUlbs?.length === 1 ? userUlbs?.[0] : null
   }, [tenantId, ulbs])
-
-  const userInfo = Digit.UserService.getUser().info;
-  const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(alphabeticalSortFunctionForTenantsBasedOnName);
-  const dropDownData = Digit.ULBService.getUserUlbs("SUPERUSER").sort(alphabeticalSortFunctionForTenantsBasedOnName);
+  
+    const userInfo = Digit.SessionStorage.get("citizen.userRequestObject")
+    const userUlbs = ulbs.filter(ulb => userInfo?.info?.roles?.some(role => role?.tenantId === ulb?.code)).sort(alphabeticalSortFunctionForTenantsBasedOnName)
+    
+    const dropDownData = Digit.ULBService.getUserUlbs("SUPERUSER").sort(alphabeticalSortFunctionForTenantsBasedOnName);
   return (
     <React.Fragment>
       <LabelFieldPair
@@ -37,7 +38,7 @@ const SelectULB = ({ userType, t, setValue, onSelect, config, data, formData, re
               <Dropdown
                 allowMultiselect={true}
                 optionKey={"i18nKey"}
-                // option={userUlbs}
+                //option={userUlbs}
                 option={dropDownData}
                 select={(e) => {
                   props.onChange([...(formData?.[config?.key]?.filter?.((f) => e.code != f?.code) || []), e]);

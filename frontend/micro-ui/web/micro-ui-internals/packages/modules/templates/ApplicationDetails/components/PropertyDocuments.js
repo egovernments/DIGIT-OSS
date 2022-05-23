@@ -31,7 +31,7 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow=false }) 
     }
   }, [filesArray]);
 
-  const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("/obps");
+  const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("/obps") || window.location.href.includes("employee/ws");
   const isStakeholderApplication = window.location.href.includes("stakeholder");
 
   return (

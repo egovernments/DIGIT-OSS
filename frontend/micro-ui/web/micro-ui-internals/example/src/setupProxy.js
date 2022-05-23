@@ -3,15 +3,16 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const createProxy = createProxyMiddleware({
   //target: process.env.REACT_APP_PROXY_API || "https://uat.digit.org",
   // target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
-  target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
+  target: process.env.REACT_APP_PROXY_API || "https://dev.digit.org",
   changeOrigin: true,
 });
 const assetsProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_ASSETS || "https://qa.digit.org",
+  target: process.env.REACT_APP_PROXY_ASSETS || "https://dev.digit.org",
   changeOrigin: true,
 });
 module.exports = function (app) {
   [
+    "/access/v1/actions/mdms",
     "/egov-mdms-service",
     "/egov-location",
     "/localization",
@@ -35,6 +36,8 @@ module.exports = function (app) {
     "/echallan-services",
     "/egov-searcher/bill-genie/mcollectbills/_get",
     "/egov-searcher/bill-genie/billswithaddranduser/_get",
+    "/egov-searcher/bill-genie/waterbills/_get",
+    "/egov-searcher/bill-genie/seweragebills/_get",
     "/egov-pdf/download/UC/mcollect-challan",
     "/egov-hrms/employees/_count",
     "/tl-services/v1/_create",
@@ -52,6 +55,10 @@ module.exports = function (app) {
     "/egov-survey-services",
     "/ws-services",
     "/sw-services",
+    "/ws-calculator",
+    "/sw-calculator/",
+    "/egov-searcher",
+    "/report"
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
 };

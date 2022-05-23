@@ -39,10 +39,10 @@ import SearchPropertyCitizen from "./pages/citizen/SearchProperty/searchProperty
 import SearchResultCitizen from "./pages/citizen/SearchResults";
 import PTCheckPage from "./pages/citizen/Create/CheckPage";
 import PTAcknowledgement from "./pages/citizen/Create/PTAcknowledgement";
-import PropertySearchForm from './components/search/PropertySearchForm';
-import PropertySearchResults from './components/search/PropertySearchResults';
+import PropertySearchForm from "./components/search/PropertySearchForm";
+import PropertySearchResults from "./components/search/PropertySearchResults";
 import { PTMyPayments } from "./pages/citizen/MyPayments";
-import SelectPTUnits from './pageComponents/SelectPTUnits';
+import SelectPTUnits from "./pageComponents/SelectPTUnits";
 import CreateProperty from "./pages/citizen/Create";
 import { PTMyApplications } from "./pages/citizen/PTMyApplications";
 import { MyProperties } from "./pages/citizen/MyProperties";
@@ -143,22 +143,22 @@ const componentsToRegister = {
   PropertySearchResults,
   PTMyPayments,
   SelectPTUnits,
-  PTNewApplication : NewApplication,
-  ApplicationDetails : ApplicationDetails,
-  PTPropertyDetails : PropertyDetails,
-  PTAssessmentDetails : AssessmentDetails,
-  PTEditApplication : EditApplication,
-  PTResponse : Response,
-  PTTransferOwnership : TransferOwnership,
-  PTDocsRequired : DocsRequired,
-  PTCreateProperty : CreateProperty,
-  PTMyApplications : PTMyApplications,
-  PTMyProperties : MyProperties,
-  PTApplicationDetails : PTApplicationDetails,
-  PTSearchPropertyComponent : SearchPropertyComponent,
-  PTSearchResultsComponent : SearchResultsComponent,
-  PTEditProperty : EditProperty,
-  PTMutateProperty : MutateProperty,
+  PTNewApplication: NewApplication,
+  ApplicationDetails: ApplicationDetails,
+  PTPropertyDetails: PropertyDetails,
+  PTAssessmentDetails: AssessmentDetails,
+  PTEditApplication: EditApplication,
+  PTResponse: Response,
+  PTTransferOwnership: TransferOwnership,
+  PTDocsRequired: DocsRequired,
+  PTCreateProperty: CreateProperty,
+  PTMyApplications: PTMyApplications,
+  PTMyProperties: MyProperties,
+  PTApplicationDetails: PTApplicationDetails,
+  PTSearchPropertyComponent: SearchPropertyComponent,
+  PTSearchResultsComponent: SearchResultsComponent,
+  PTEditProperty: EditProperty,
+  PTMutateProperty: MutateProperty,
   SelectOtp, // To-do: Temp fix, Need to check why not working if selectOtp module is already imported from core module
 };
 
@@ -178,12 +178,16 @@ export const PTModule = ({ stateCode, userType, tenants }) => {
   addComponentsToRegistry();
 
   Digit.SessionStorage.set("PT_TENANTS", tenants);
-  useEffect(()=>userType === "employee"&&Digit.LocalizationService.getLocale({ 
-    modules: [`rainmaker-${Digit.ULBService.getCurrentTenantId()}`],
-     locale: Digit.StoreData.getCurrentLanguage(), 
-     tenantId: Digit.ULBService.getCurrentTenantId()
-    }),
-   []);
+  useEffect(
+    () =>
+      userType === "employee" &&
+      Digit.LocalizationService.getLocale({
+        modules: [`rainmaker-${Digit.ULBService.getCurrentTenantId()}`],
+        locale: Digit.StoreData.getCurrentLanguage(),
+        tenantId: Digit.ULBService.getCurrentTenantId(),
+      }),
+    []
+  );
 
   if (userType === "employee") {
     return <EmployeeApp path={path} url={url} userType={userType} />;
@@ -226,6 +230,14 @@ export const PTLinks = ({ matchPath, userType }) => {
     {
       link: `${matchPath}/property/property-mutation`,
       i18nKey: t("PT_PROPERTY_MUTATION"),
+    },
+    {
+      link: `${matchPath}/howItWorks`,
+      i18nKey: t("PT_HOW_IT_WORKS"),
+    },
+    {
+      link: `${matchPath}/faqs`,
+      i18nKey: t("PT_FAQ_S"),
     },
   ];
 

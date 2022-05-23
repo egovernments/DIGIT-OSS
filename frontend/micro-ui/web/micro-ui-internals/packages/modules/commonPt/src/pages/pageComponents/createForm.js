@@ -17,6 +17,7 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
   const history = useHistory();
   const match = useRouteMatch();
   sessionStorage.setItem("VisitedCommonPTSearch",true);
+  sessionStorage.setItem("VisitedLightCreate",true);
   const isMobile = window.Digit.Utils.browser.isMobile();
 
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));

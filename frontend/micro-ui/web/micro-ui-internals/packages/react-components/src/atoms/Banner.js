@@ -14,8 +14,10 @@ const Successful = (props) => {
       <div>
         {props.props.whichSvg==="tick"? <div><TickMark fillColor="green" /><br /><br /> </div>: (props?.props?.svg || <SuccessSvg />) } 
         {/* {props?.props?.svg || <SuccessSvg />} */}
-        <h2 style={props?.props?.infoStyles ? props?.props?.infoStyles : {}}>{props?.props?.complaintNumber ? t("CS_PGR_COMPLAINT_NUMBER") : props.props.info}</h2>
-        <p style={props?.props?.applicationNumberStyles ? props?.props?.applicationNumberStyles : {}}>{props?.props?.complaintNumber ? props?.props?.complaintNumber : props?.props?.applicationNumber}</p>
+        {(props?.props?.complaintNumber || props.props.info) && <h2 style={props?.props?.infoStyles ? props?.props?.infoStyles : {}}>{props?.props?.complaintNumber ? t("CS_PGR_COMPLAINT_NUMBER") : props.props.info}</h2>}
+        {(props?.props?.complaintNumber || props?.props?.applicationNumber) &&<p style={props?.props?.applicationNumberStyles ? props?.props?.applicationNumberStyles : {}}>{props?.props?.complaintNumber ? props?.props?.complaintNumber : props?.props?.applicationNumber}</p>}
+        {props?.props?.applicationNumberOne ? <h2 style={props?.props?.infoOneStyles ? props?.props?.infoOneStyles : {}}>{props.props.infoOne}</h2> : null}
+        {props?.props?.applicationNumberOne ? <p style={props?.props?.applicationNumberStyles ? props?.props?.applicationNumberStyles : {}}>{props?.props?.applicationNumberOne}</p> : null}
       </div>
     </div>
   );

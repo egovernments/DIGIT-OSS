@@ -1,20 +1,30 @@
 import commonConfig from "config/common.js";
 import {
-  getCommonCaption, getCommonCard
+  getCommonCaption,
+  getCommonCard,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
-  handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, toggleSnackbar, toggleSpinner
+  handleScreenConfigurationFieldChange as handleField,
+  hideSpinner,
+  prepareFinalObject,
+  toggleSnackbar,
+  toggleSpinner,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import {
-  captureSource, getFileUrlFromAPI, getLocaleLabels, getQueryArg,
-  getTransformedLocalStorgaeLabels
+  captureSource,
+  getFileUrlFromAPI,
+  getLocaleLabels,
+  getQueryArg,
+  getTransformedLocalStorgaeLabels,
 } from "egov-ui-framework/ui-utils/commons";
 import { openPdf, printPdf } from "egov-ui-kit/utils/commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import store from "ui-redux/store";
+import { downloadConReceipt } from "egov-common/ui-utils/commons";
+
 import { httpRequest } from "../../../../ui-utils";
 
 // sms("sms"),
@@ -45,7 +55,7 @@ export const downloadPdf = (link, openIn = "_blank") => {
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
     if (mode === "download") {
-      downloadPdf(fileRes[fileStoreId],"_blank");
+      downloadPdf(fileRes[fileStoreId], "_blank");
     } else if (mode === "open") {
       openPdf(fileRes[fileStoreId], "_self");
     } else {
@@ -646,8 +656,7 @@ export const loadMdmsData = async (action, state, dispatch) => {
       );
     }
     return payload;
-  } catch (e) {
-  }
+  } catch (e) {}
 };
 
 export const loadHospitals = async (
@@ -657,19 +666,21 @@ export const loadHospitals = async (
   module,
   tenantId
 ) => {
-  let requestBody = {"MdmsCriteria": {
-    "tenantId": tenantId,
-    "moduleDetails": [
+  let requestBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
         {
-            "moduleName": "birth-death-service",
-            "masterDetails": [
-                {
-                    "name": "hospitalList"
-                }
-            ]
-        }
-    ]
-}};
+          moduleName: "birth-death-service",
+          masterDetails: [
+            {
+              name: "hospitalList",
+            },
+          ],
+        },
+      ],
+    },
+  };
   let payload = null;
 
   const queryParams = [{ key: "tenantId", value: tenantId }];
@@ -841,14 +852,26 @@ export const downloadReceipt = async (consumerCode, tenantId) => {
     {} //{ searchCriteria: queryObject }
   );
   store.dispatch(toggleSpinner());
-  if (
-    response &&
-    response.Payments &&
-    response.Payments.length > 0 &&
-    response.Payments[0].fileStoreId
-  ) {
-    let mode = "download";
-    downloadReceiptFromFilestoreID(response.Payments[0].fileStoreId, mode);
+  if (response && response.Payments && response.Payments.length > 0) {
+    if (response.Payments[0].fileStoreId) {
+      let mode = "download";
+      downloadReceiptFromFilestoreID(response.Payments[0].fileStoreId, mode);
+    } else {
+      const receiptQueryString = [
+        { key: "consumerCode", value: consumerCode },
+        { key: "tenantId", value: tenantId },
+        {
+          key: "bussinessService",
+          value: response.Payments[0].paymentDetails[0].businessService,
+        },
+      ];
+      downloadConReceipt(
+        receiptQueryString,
+        "consolidatedreceipt",
+        "PAYMENT",
+        `RECEIPT-${consumerCode}.pdf`
+      );
+    }
   } else {
     store.dispatch(setRoute(`/uc-citizen/search`));
   }

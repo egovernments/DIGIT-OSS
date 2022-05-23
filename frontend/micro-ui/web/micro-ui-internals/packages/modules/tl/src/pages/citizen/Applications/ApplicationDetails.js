@@ -135,15 +135,19 @@ if(wfdata)
   const dowloadOptions =
     paymentsHistory?.Payments?.length > 0
       ? [
-          {
-            label: t("TL_CERTIFICATE"),
-            onClick: downloadTLcertificate,
-          },
-          {
-            label: t("CS_COMMON_PAYMENT_RECEIPT"),
-            onClick: downloadPaymentReceipt,
-          },
-        ]
+        {
+          label: t("TL_CERTIFICATE"),
+          onClick: downloadTLcertificate,
+        },
+        {
+          label: t("CS_COMMON_PAYMENT_RECEIPT"),
+          onClick: downloadPaymentReceipt,
+        },
+        {
+          label: t("CS_COMMON_APPLICATION_ACKNOWLEDGEMENT"),
+          onClick: handleDownloadPdf,
+        }
+      ]
       : [
           {
             label: t("CS_COMMON_APPLICATION_ACKNOWLEDGEMENT"),

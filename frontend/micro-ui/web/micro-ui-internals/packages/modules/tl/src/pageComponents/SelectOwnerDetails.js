@@ -441,7 +441,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     +91
                   </span>
                   <TextInput
-                    style={typeOfOwner === "MULTIOWNER" ? { background: "#FAFAFA" } : {}}
+                    style={typeOfOwner === "MULTIOWNER" ? { background: "#FAFAFA",maxWidth:"500px" } : {maxWidth:"500px"}}
                     type={"text"}
                     t={t}
                     isMandatory={false}

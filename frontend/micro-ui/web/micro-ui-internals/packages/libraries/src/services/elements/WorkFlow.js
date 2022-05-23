@@ -4,12 +4,13 @@ import cloneDeep from "lodash/cloneDeep";
 
 const getThumbnails = async (ids, tenantId, documents = []) => {
   tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : tenantId;
+  
   if (window.location.href.includes("/obps/")) {
     if (documents?.length > 0) {
       let workflowsDocs = [];
       documents?.map(doc => {
         if (doc?.url) {
-          const thumbs = doc.url.split(",")[3] || doc.url.split(",")[0]
+          const thumbs = doc?.url?.split(",")?.[3] || doc?.url?.split(",")?.[0]
           workflowsDocs.push({
             thumbs: [thumbs],
             images: [Digit.Utils.getFileUrl(doc.url)]
@@ -53,7 +54,6 @@ const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
       })
     });
   }
-
   for (const eventHappened of wf) {
     if (eventHappened?.documents) {
       eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId, eventHappened?.documents)
@@ -70,9 +70,22 @@ const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
       TimelineMap.delete("tlCommentStack")
     }
   }
-  // }
   const response = TimelineMap.get("tlActions")
   return response
+}
+
+const getAssignerDetails = (instance, nextStep, moduleCode) => {
+  let assigner = instance?.assigner
+  if (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE") {
+    if (instance.state.applicationStatus === "CREATED") {
+      assigner = instance?.assigner
+    } else {
+      assigner = nextStep?.assigner || instance?.assigner
+    }
+  } else {
+    assigner = instance?.assigner
+  }
+  return assigner
 }
 
 export const WorkflowService = {
@@ -144,7 +157,7 @@ export const WorkflowService = {
             performedAction: instance.action,
             status: instance.state.applicationStatus,
             state: instance.state.state,
-            assigner: instance?.assigner,
+            assigner: getAssignerDetails(instance, TLEnrichedWithWorflowData[ind - 1], moduleCode),
             rating: instance?.rating,
             wfComment: instance?.wfComments.map(e => e?.comment),
             wfDocuments: instance?.documents,

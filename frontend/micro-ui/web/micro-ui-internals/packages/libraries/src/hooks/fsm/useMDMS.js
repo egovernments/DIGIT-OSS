@@ -83,6 +83,15 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
     return useQuery("FSM_TRIP_NUMBER", () => MdmsService.getFSMTripNumber(tenantId, moduleCode, type), queryConfig);
   };
 
+  const useReceivedPaymentType = () => {
+    return useQuery("FSM_RECEIVED_PAYMENT_TYPE", () => MdmsService.getFSMReceivedPaymentType(tenantId, moduleCode, type), queryConfig);
+  };
+
+  const useWSTaxHeadMaster = () => {
+    return useQuery("FSM_RECEIVED_PAYMENT_TYPE", () => MdmsService.getWSTaxHeadMaster(tenantId, moduleCode, type), queryConfig);
+  };
+
+
   switch (type) {
     case "SanitationType":
       return useSanitationType();
@@ -131,6 +140,10 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
       return usePaymentType();
     case "TripNumber":
       return useTripNumber();
+    case "ReceivedPaymentType":
+      return useReceivedPaymentType();
+    case "WSTaxHeadMaster":
+      return useWSTaxHeadMaster()
     default:
       return null;
   }

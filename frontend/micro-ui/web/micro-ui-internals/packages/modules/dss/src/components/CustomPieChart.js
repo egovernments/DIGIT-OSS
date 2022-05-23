@@ -22,6 +22,7 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: isPieClicked ? { ...value?.filters, selectedType: pieSelected } : value?.filters,
+    moduleLevel: value?.moduleLevel
   });
 
   const chartData = useMemo(() => {
@@ -103,7 +104,7 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
       >
         <p className="recharts-tooltip-label">{`${t(
           `COMMON_MASTERS_${payload?.[0]?.name && Digit.Utils.locale.getTransformedLocale(payload?.[0]?.name)}`
-        )}: ${Digit.Utils.dss.formatter(payload?.[0]?.value, payload?.[0]?.payload?.payload?.symbol, value?.denomination, false)}`}</p>
+        )}: ${Digit.Utils.dss.formatter(payload?.[0]?.value, payload?.[0]?.payload?.payload?.symbol, value?.denomination, false, t)}`}</p>
         <p>{`(${Number((payload?.[0]?.value / response?.responseData?.data?.[0]?.headerValue) * 100).toFixed(1)}%)`}</p>
       </div>
     );

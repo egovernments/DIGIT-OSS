@@ -15,6 +15,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Timeline from "../../../components/TLTimelineInFSM";
 
 const ActionButton = ({ jumpTo }) => {
   const { t } = useTranslation();
@@ -55,14 +56,20 @@ const CheckPage = ({ onSubmit, value }) => {
 
   return (
     <React.Fragment>
+      <Timeline currentStep={6} flow="APPLY" />
       <Card>
         <CardHeader>{t("CS_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
         <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
         <CardSubHeader>{t("CS_CHECK_PROPERTY_DETAILS")}</CardSubHeader>
         <StatusTable>
-          {selectTripNo && <Row
+          {selectTripNo && selectTripNo?.tripNo && <Row
             label={t("ES_FSM_ACTION_NUMBER_OF_TRIPS")}
-            text={t(selectTripNo.i18nKey)}
+            text={t(selectTripNo?.tripNo?.i18nKey)}
+            actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-trip-number" />}
+          />}
+          {selectTripNo && selectTripNo?.vehicleCapacity && <Row
+            label={t("ES_VEHICLE CAPACITY")}
+            text={t(selectTripNo?.vehicleCapacity?.capacity)}
             actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-trip-number" />}
           />}
           {selectGender && <Row
@@ -112,15 +119,7 @@ const CheckPage = ({ onSubmit, value }) => {
             <Row
               label={t("CS_CHECK_SIZE")}
               text={[
-                pitMeasurement,
-                {
-                  value:
-                    pitDetailValues?.length === 3
-                      ? `${t(`CS_COMMON_LENGTH`)} x ${t(`CS_COMMON_BREADTH`)} x ${t(`CS_COMMON_DEPTH`)}`
-                      : `${t(`CS_COMMON_DIAMETER`)} x ${t(`CS_COMMON_DEPTH`)}`,
-                  className: "card-text",
-                  style: { fontSize: "16px" },
-                },
+                pitMeasurement
               ]}
               actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
             />

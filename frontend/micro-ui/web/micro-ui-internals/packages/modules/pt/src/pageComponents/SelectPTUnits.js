@@ -1,5 +1,6 @@
 import { CardLabel, Dropdown, FormStep, LinkButton, Loader, TextInput, DeleteIcon } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState ,Fragment} from "react";
+import Timeline from "../components/TLTimeline";
 
 
 const getUsageCategory = (usageCategory = "") => {
@@ -214,6 +215,8 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
     return <Loader />;
   }
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
     <FormStep
     config={((config.texts.header = getheader()), config)}
       onSelect={goNext}
@@ -342,6 +345,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
         </button>
       </div>
     </FormStep>
+    </React.Fragment>
   );
 });
 export default SelectPTUnits;

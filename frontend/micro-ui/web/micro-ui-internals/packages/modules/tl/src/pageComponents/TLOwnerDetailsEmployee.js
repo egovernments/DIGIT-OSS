@@ -68,8 +68,8 @@ const OwnerForm = (_props) => {
   });
 
   const typeOfOwner = useMemo(() => {
-    if (formData?.ownershipCategory?.code.includes("SINGLEOWNER")) return "SINGLEOWNER";
-    if (formData?.ownershipCategory?.code.includes("INSTITUTIONAL")) return "INSTITUTIONAL";
+    if (formData?.ownershipCategory?.code?.includes("SINGLEOWNER")) return "SINGLEOWNER";
+    if (formData?.ownershipCategory?.code?.includes("INSTITUTIONAL")) return "INSTITUTIONAL";
     else return "MULTIOWNER";
   }, [formData?.ownershipCategory]);
 

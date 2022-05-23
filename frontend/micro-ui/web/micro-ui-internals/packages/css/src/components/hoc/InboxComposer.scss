@@ -1,28 +1,54 @@
-.InboxComposerWrapper{
-    .form-field-flex-one{
-        .form-field{
-            @apply flex-1;
+.InboxComposerWrapper {
+  .form-field-flex-one {
+    .form-field {
+      @apply flex-1;
+    }
+  }
+}
+
+.inboxPopupMobileWrapper {
+  @apply block p-md w-full overflow-scroll;
+  .submit {
+    @apply flex left-0 w-full px-xl items-center flex-row-reverse !important;
+  }
+  .form-field {
+    margin: 0 !important;
+    @apply w-full;
+  }
+  .InboxMobilePopupCloseButtonWrapper {
+    @apply flex flex-row-reverse;
+  }
+}
+
+@screen dt {
+  .InboxComposerWrapper {
+    grid-template-columns: calc(25% - 32px) 75%;
+    @apply grid gap-x-8 gap-y-6;
+  }
+  .wns-inbox-composer {
+    .inboxLinks {
+      width: 280px;
+    }
+    .filter-form {
+      width: 280px;
+      height: fit-content;
+    }
+    .SubmitAndClearAllContainer {
+      .submit {
+        margin-top: unset;
+        button {
+          width: 301px !important;
         }
+        p {
+          width: 18% !important;
+        }
+      }
     }
-}
-
-.inboxPopupMobileWrapper{
-    @apply block p-md w-full overflow-scroll;
-    .submit{
-        @apply flex left-0 w-full px-xl items-center flex-row-reverse !important;
+    .wns-search-field {
+      width: 301px;
+      .field-container {
+        width: 301px !important;
+      }
     }
-    .form-field{
-        margin: 0 !important;
-        @apply w-full;
-    }
-    .InboxMobilePopupCloseButtonWrapper{
-        @apply flex flex-row-reverse;
-    }
-}
-
-@screen dt{
-    .InboxComposerWrapper{
-        grid-template-columns: calc( 25% - 32px ) 75%;
-        @apply grid gap-x-8 gap-y-6;
-    }
+  }
 }

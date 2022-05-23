@@ -57,6 +57,9 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
   }, [propertyDetails, pathname]);
 
   const searchProperty = () => {
+    if (!propertyId) {
+      setShowToast({ error: true, label: "PT_ENTER_PROPERTY_ID_AND_SEARCH" });
+    }
     setSearchPropertyId(propertyId);
   };
 
@@ -71,10 +74,25 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
   if (propertyDetails && propertyDetails?.Properties.length) {
     propertyAddress = getAddress(propertyDetails?.Properties[0]?.address, t);
   }
+  const getInputStyles = () => {
+    if (window.location.href.includes("/ws/")) {
+      return { fontWeight: "700" }
+    } else return {};
+  }
+
+  const getOwnerNames = (propertyData) => {
+    const getActiveOwners = propertyData?.owners?.filter(owner => owner?.active);
+    const getOwnersList = getActiveOwners?.map(activeOwner => activeOwner?.name)?.join(",");
+    return getOwnersList ? getOwnersList : t("NA");
+  }
+
+  let clns = "";
+  if (window.location.href.includes("/ws/")) clns = ":"
+
   return (
     <React.Fragment>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">{`${t(`PROPERTY_ID`)}`}</CardLabel>
+        <CardLabel className="card-label-smaller" style={getInputStyles()}>{`${t(`PROPERTY_ID`)}`}</CardLabel>
         <div className="field" style={{ marginTop: "20px", display: "flex" }}>
           <TextInput
             key={config.key}
@@ -115,7 +133,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                 className="border-none"
                 labelStyle={isMobile ? { width: "40%" } : {}}
                 label={t(`OWNER_NAME`)}
-                text={propertyDetails?.Properties[0]?.owners[0]?.name}
+                text={getOwnerNames(propertyDetails?.Properties[0])}
               />
               <Row
                 className="border-none"
@@ -126,7 +144,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
               />
             </div>
           </StatusTable>
-          <Link to={`/digit-ui/employee/commonpt/view-property?propertyId=${propertyId}&tenantId=${tenantId}&from=${window.location.pathname?.includes("employee/tl/new-application")
+          <Link to={`/digit-ui/employee/commonpt/view-property?propertyId=${propertyId}&tenantId=${tenantId}&from=${window.location.pathname?.includes("employee/ws/new-application") ? "ES_COMMON_WS_NEW_CONNECTION" : window.location.pathname?.includes("employee/tl/new-application")
         ?"ES_TITLE_NEW_TRADE_LICESE_APPLICATION"
         :"WF_EMPLOYEE_NEWTL_RENEWAL_SUBMIT_BUTTON"}`}>
             <LinkButton label={t("CPT_COMPLETE_PROPERTY_DETAILS")} style={{ color: "#f47738", textAlign: "Left" }} />
