@@ -113,7 +113,7 @@ export const convertEpochToDates = (dateEpoch) => {
 export const getPattern = (type) => {
   switch (type) {
     case "WSOnlyNumbers":
-      return /^[1-9]*$/i;
+      return /^[0-9]*$/i;
     case "Name":
       return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i;
     case "MobileNo":
