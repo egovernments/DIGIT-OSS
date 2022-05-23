@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.egov.encryption.config.EncClientConstants.*;
-
 @Slf4j
 @Service
 public class EncryptionServiceImpl implements EncryptionService {
@@ -173,13 +171,5 @@ public class EncryptionServiceImpl implements EncryptionService {
         Object encryptionResponse = encryptionServiceRestConnection.callEncrypt(tenantId, type, plaintext);
         return ConvertClass.convertTo(objectMapper.valueToTree(encryptionResponse), List.class);
     }
-
-    public RequestInfo enrichRoleforPlainAccess(RequestInfo requestInfo, String tenantId) throws IOException{
-        Role role = Role.builder().code(PLAIN_ACCESS_DUMMY_ROLE_CODE)
-                .name(PLAIN_ACCESS_DUMMY_ROLE_NAME).tenantId(tenantId).build();
-        requestInfo.getUserInfo().getRoles().add(role);
-        return requestInfo;
-    }
-
 
 }

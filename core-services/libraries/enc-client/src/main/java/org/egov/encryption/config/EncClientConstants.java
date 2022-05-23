@@ -14,9 +14,4 @@ public class EncClientConstants {
 
     public static final String STRING_FOR_NONE_ACCESS = "Confidential Information";
 
-    public static final String PLAIN_ACCESS_DUMMY_ROLE_CODE = "DUMMY_LIST_SELF";
-
-    public static final String PLAIN_ACCESS_DUMMY_ROLE_NAME = "Dummy List Self";
-
-
 }

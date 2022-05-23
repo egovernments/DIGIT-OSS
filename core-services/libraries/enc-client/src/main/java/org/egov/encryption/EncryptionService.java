@@ -25,6 +25,4 @@ public interface EncryptionService {
 
     public List<String> encryptValue(List<Object> plaintext, String tenantId, String type) throws IOException;
 
-    public RequestInfo enrichRoleforPlainAccess(RequestInfo requestInfo, String tenantId) throws IOException;
-
 }

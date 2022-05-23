@@ -7,6 +7,7 @@ import org.egov.common.contract.request.*;
 import org.egov.encryption.models.*;
 import org.egov.encryption.util.MdmsFetcher;
 import org.egov.mdms.model.*;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -93,48 +94,77 @@ public class DecryptionPolicyConfiguration {
 
     public Map<SecurityPolicyAttribute, Visibility> getRoleAttributeAccessListForKey(RequestInfo requestInfo, String keyId, List<String> roles) {
         Map<SecurityPolicyAttribute, Visibility> mapping = new HashMap<>();
+        try{
+            List<SecurityPolicyAttribute> securityPolicyAttributesList = modelAttributeAccessMap.get(keyId);
+            List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList = modelRoleBasedDecryptionPolicyMap.get(keyId);
 
-        List<SecurityPolicyAttribute> securityPolicyAttributesList = modelAttributeAccessMap.get(keyId);
-        List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList = modelRoleBasedDecryptionPolicyMap.get(keyId);
+            boolean isAttributeListEmpty = CollectionUtils.isEmpty(securityPolicyAttributesList);
+            boolean isroleBasedDecryptionPolicyListEmpty = CollectionUtils.isEmpty(securityPolicyRoleBasedDecryptionPolicyList);
 
-        Map<String, List<SecurityPolicyAttributeAccess>> roleSecurityPolicyAttributeAccessmap = makeRoleAttributeAccessMapping(securityPolicyRoleBasedDecryptionPolicyList);
-        Map<String, SecurityPolicyAttribute> attributesMap = makeAttributeMap(securityPolicyAttributesList);
+            if(isAttributeListEmpty){
+                throw new CustomException("DECRYPTION_NULL_ERROR", "Attribute list is empty");
+            }
 
-        List<String> secondLevelVisibility = new ArrayList<>();
-
-        for(String role: roles){
-            if(!roleSecurityPolicyAttributeAccessmap.containsKey(role))
-                continue;
-
-            List<SecurityPolicyAttributeAccess> attributeList = roleSecurityPolicyAttributeAccessmap.get(role);
-
-            for(SecurityPolicyAttributeAccess attributeAccess: attributeList){
-                String attributeName = attributeAccess.getAttribute();
-                SecurityPolicyAttribute attribute = attributesMap.get(attributeName);
-                if(requestInfo.getPlainRequestAccess() !=null && !CollectionUtils.isEmpty(requestInfo.getPlainRequestAccess().getPlainRequestFields())
-                        && requestInfo.getPlainRequestAccess().getPlainRequestFields().contains(attributeName)
-                        && attributeAccess.getSecondLevelVisibility() != null){
-                    secondLevelVisibility.add(attributeName);
-                }
-                String firstLevelVisibility = attributeAccess.getFirstLevelVisibility() != null ?
-                          String.valueOf(attributeAccess.getFirstLevelVisibility()) : String.valueOf(attribute.getDefaultVisibility());
-                Visibility visibility = Visibility.valueOf(firstLevelVisibility);
-                if(mapping.containsKey(attribute)){
-                    if(mapping.get(attribute).ordinal() > visibility.ordinal()){
-                        mapping.remove(attribute);
+            if(!isAttributeListEmpty && isroleBasedDecryptionPolicyListEmpty){
+                for(SecurityPolicyAttribute attribute : securityPolicyAttributesList){
+                    String defaultVisibility = String.valueOf(attribute.getDefaultVisibility());
+                    Visibility visibility = Visibility.valueOf(defaultVisibility);
+                    if(mapping.containsKey(attribute)){
+                        if(mapping.get(attribute).ordinal() > visibility.ordinal()){
+                            mapping.remove(attribute);
+                            mapping.put(attribute, visibility);
+                        }
+                    }
+                    else{
                         mapping.put(attribute, visibility);
                     }
                 }
-                else{
-                    mapping.put(attribute, visibility);
-                }
+
             }
+
+            if(!isAttributeListEmpty && !isroleBasedDecryptionPolicyListEmpty){
+                Map<String, List<SecurityPolicyAttributeAccess>> roleSecurityPolicyAttributeAccessmap = makeRoleAttributeAccessMapping(securityPolicyRoleBasedDecryptionPolicyList);
+                Map<String, SecurityPolicyAttribute> attributesMap = makeAttributeMap(securityPolicyAttributesList);
+
+                List<String> secondLevelVisibility = new ArrayList<>();
+
+                for(String role: roles){
+                    if(!roleSecurityPolicyAttributeAccessmap.containsKey(role))
+                        continue;
+
+                    List<SecurityPolicyAttributeAccess> attributeList = roleSecurityPolicyAttributeAccessmap.get(role);
+
+                    for(SecurityPolicyAttributeAccess attributeAccess: attributeList){
+                        String attributeName = attributeAccess.getAttribute();
+                        SecurityPolicyAttribute attribute = attributesMap.get(attributeName);
+                        if(requestInfo.getPlainRequestAccess() !=null && !CollectionUtils.isEmpty(requestInfo.getPlainRequestAccess().getPlainRequestFields())
+                                && requestInfo.getPlainRequestAccess().getPlainRequestFields().contains(attributeName)
+                                && attributeAccess.getSecondLevelVisibility() != null){
+                            secondLevelVisibility.add(attributeName);
+                        }
+                        String firstLevelVisibility = attributeAccess.getFirstLevelVisibility() != null ?
+                                String.valueOf(attributeAccess.getFirstLevelVisibility()) : String.valueOf(attribute.getDefaultVisibility());
+                        Visibility visibility = Visibility.valueOf(firstLevelVisibility);
+                        if(mapping.containsKey(attribute)){
+                            if(mapping.get(attribute).ordinal() > visibility.ordinal()){
+                                mapping.remove(attribute);
+                                mapping.put(attribute, visibility);
+                            }
+                        }
+                        else{
+                            mapping.put(attribute, visibility);
+                        }
+                    }
+                }
+
+                if(requestInfo.getPlainRequestAccess() != null)
+                    requestInfo.getPlainRequestAccess().setPlainRequestFields(secondLevelVisibility);
+            }
+
+            return mapping;
+        }catch (Exception e){
+            throw new CustomException("DECRYPTION_NULL_ERROR", "Error in decryption process");
         }
-
-        if(requestInfo.getPlainRequestAccess() != null)
-            requestInfo.getPlainRequestAccess().setPlainRequestFields(secondLevelVisibility);
-
-        return mapping;
     }
 
     private Map<String, List<SecurityPolicyAttributeAccess>> makeRoleAttributeAccessMapping(List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList) {

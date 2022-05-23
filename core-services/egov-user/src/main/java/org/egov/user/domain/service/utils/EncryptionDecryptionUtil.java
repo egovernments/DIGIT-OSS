@@ -83,10 +83,7 @@ public class EncryptionDecryptionUtil {
 
             if(key == null)
                 key = keyPurposeMap.get("key");
-
-            if(key.equalsIgnoreCase("UserListSelf"))
-                enrichRoleforPlainAccess(requestInfo, encrichedUserInfo.getTenantId());
-
+            
             P decryptedObject = (P) encryptionService.decryptJson(requestInfo,objectToDecrypt, key, purpose, classType);
             if (decryptedObject == null) {
                 throw new CustomException("DECRYPTION_NULL_ERROR", "Null object found on performing decryption");
@@ -134,13 +131,13 @@ public class EncryptionDecryptionUtil {
         Map<String,String> keyPurposeMap = new HashMap<>();
 
         if (!abacEnabled){
-            keyPurposeMap.put("key","UserListSelf");
+            keyPurposeMap.put("key","UserSelf");
             keyPurposeMap.put("purpose","AbacDisabled");
         }
 
 
         else if (isUserDecryptingForSelf(objectToDecrypt, userInfo)){
-            keyPurposeMap.put("key","UserListSelf");
+            keyPurposeMap.put("key","UserSelf");
             keyPurposeMap.put("purpose","Self");
         }
 
@@ -200,15 +197,5 @@ public class EncryptionDecryptionUtil {
                 .roles(newRoleList).tenantId(userInfo.getTenantId()).uuid(userInfo.getUuid()).build();
         return newuserInfo;
     }
-
-    public RequestInfo enrichRoleforPlainAccess(RequestInfo requestInfo, String tenantId){
-        try {
-            return encryptionService.enrichRoleforPlainAccess(requestInfo,tenantId);
-        } catch (IOException e) {
-            log.error("Error occurred while decrypting", e);
-            throw new CustomException("DECRYPTION_SERVICE_ERROR", "Error occurred in decryption process");
-        }
-    }
-
 
 }
