@@ -15,24 +15,29 @@ import {
 
 function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData  }) { 
   const tenantId = Digit.ULBService.getStateId();
-  const [documents, setDocuments] = useState(formData?.documents?.documents || []);
+  const storedData = formData?.WSDisconnectionDocumentsForm?.WSDisconnectionDocumentsForm||formData?.WSDisconnectionDocumentsForm
+
+  const [documents, setDocuments] = useState(storedData || []);
   const [error, setError] = useState(null);
   const [enableSubmit, setEnableSubmit] = useState(true)
   const [checkRequiredFields, setCheckRequiredFields] = useState(false);
-
   // const { isLoading: wsDocsLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId);
-  const goNext = () => {
-    onSelect("DocsReq", "");
-  }
+//   const goNext = () => {
+//     onSelect("DocsReq", "");
+//   }
+
+useEffect(() =>{
+    setDocuments(storedData||[])
+},[]);
+
   const handleSubmit = () => {
-      // let document = formData.documents;
-      // let documentStep;
-      // documentStep = { ...document, documents: documents };
-      // onSelect(config.key, documentStep);
+      console.log("trigered",formData,documents)
+    //   let document = formData.documents;
+    //   let documentStep;
+    //   documentStep = { ...document, WSDisconnectionDocumentsForm: documents };
+      onSelect(config.key, {WSDisconnectionDocumentsForm: documents});
   };
-  const onSkip = () => onSelect();
-
-
+ 
   // useEffect(() => {
   //     let count = 0;
   //     wsDocs?.Documents.map(doc => {
@@ -135,10 +140,8 @@ function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData 
       <FormStep
         t={t}
         config={config}
-        // onSelect={handleSubmit}
-        // onSkip={onSkip}
-        isDisabled={enableSubmit}
-        // onAdd={onAdd}
+        onSelect={handleSubmit}       
+        // isDisabled={enableSubmit}
       >
         <CardHeader>{t(`WS_DISCONNECTION_UPLOAD_DOCUMENTS`)}</CardHeader>
         {wsDocs?.Documents?.map((document, index) => { 
@@ -151,14 +154,15 @@ function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData 
               setError={setError}
               setDocuments={setDocuments}
               documents={documents}
-              setCheckRequiredFields={setCheckRequiredFields}
+            //   setCheckRequiredFields={setCheckRequiredFields}
             />
           );
           })}
           {error && <Toast label={error} onClose={() => setError(null)} error />}
+      <SubmitBar label={t(`CS_COMMON_NEXT`)} submit={true} />
+
       </FormStep> 
       {/* : <Loader />} */}
-      <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
 
     </div>
   );

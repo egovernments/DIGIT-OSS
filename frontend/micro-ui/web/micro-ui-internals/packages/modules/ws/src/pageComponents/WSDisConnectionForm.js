@@ -5,12 +5,22 @@ import { stringReplaceAll } from "../utils";
 
 const WSDisConnectionForm = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
+  const storedData = formData?.WSDisConnectionForm?.WSDisConnectionForm||formData?.WSDisConnectionForm
   
   const [disconnectionData, setDisconnectionData] = useState({
-      type: formData?.WSDisConnectionForm?.type || "",
-      date: formData?.WSDisConnectionForm?.date || "",
-      reason: formData?.WSDisConnectionForm?.reason || "",
+      type: storedData.type || "",
+      date: storedData.date || "",
+      reason: storedData.reason || "",
   })
+
+  useEffect(() =>{
+    setDisconnectionData({
+      type:storedData.type||"",
+      date: storedData.date || "",
+      reason: storedData.reason || "",
+    });
+  },[]);
+
 
 
 
@@ -58,8 +68,8 @@ const WSDisConnectionForm = ({ t, config, onSelect, userType, formData, ownerInd
 //   Menu ? Menu.sort((a, b) => a.name.localeCompare(b.name)) : "";
 
   let menu = [
-    { i18nKey: 'WS_PERMANENT', code: `PERMANENT`, value: `PERMANENT` },
-    { i18nKey: 'WS_TEMPORARY', code: `TEMPORARY`, value: `TEMPORARY` }
+    { i18nKey: 'WS_PERMANENT', code: `type`, value: `PERMANENT` },
+    { i18nKey: 'WS_TEMPORARY', code: `type`, value: `TEMPORARY` }
   ];
 //   genderTypeData &&
 //     genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
@@ -95,14 +105,16 @@ const WSDisConnectionForm = ({ t, config, onSelect, userType, formData, ownerInd
 
 
 
-const goNext = () => {
-  onSelect("DocsReq", "");
-}
-
+// const goNext = () => {
+//   onSelect("DocsReq", "");
+// }
+const handleSubmit = () => onSelect(config.key, { WSDisConnectionForm: disconnectionData });
 
   const onSkip = () => onSelect();
-  const filedChange = () => {
-
+  const filedChange = (val) => {
+    const oldData = {...disconnectionData};
+    oldData[val.code]=val;
+    setDisconnectionData(oldData);
   }
 
   return (
@@ -111,7 +123,7 @@ const goNext = () => {
         {/* {!isLoading ?  */}
         <FormStep
           config={config}
-          onSelect={goNext}
+          onSelect={handleSubmit}
           onSkip={onSkip}
           t={t}       
         >
@@ -123,20 +135,19 @@ const goNext = () => {
           <span style={{float:'right'}}>PG-WS-2021-09-29-006024</span>
         </CardLabel>
         
-        <CardLabel>{`${t("WS_DISCONNECTION_TYPE")}*`}</CardLabel>
+        <CardLabel>{t("WS_DISCONNECTION_TYPE")}</CardLabel>
           <RadioButtons
               t={t}
               options={menu}
-              optionsKey="code"
-              name="type"
-              value={disconnectionData.type}
-            //   selectedOption={disconnectionData.type}
+              optionsKey="i18nKey"
+              value={disconnectionData.type?.value}
+              selectedOption={disconnectionData.type}
+              isMandatory={false}
               onSelect={filedChange}
-              isDependent={true}
               labelKey="WS_DISCONNECTION_TYPE"
           />
           
-        <CardLabel>{`${t("WS_DISCONEECTION_DATE")}*`}</CardLabel>
+        <CardLabel>{t("WS_DISCONEECTION_DATE")}</CardLabel>
             <TextInput
               t={t}
               type={"text"}
@@ -144,8 +155,9 @@ const goNext = () => {
               isMandatory={false}
               optionKey="i18nKey"
               name="date"
-              value={disconnectionData.date}
-              onChange={filedChange}
+              value={disconnectionData?.date?.value}
+              onChange={(e) => filedChange({code:"date" , value:e.target.value})}
+
             />
 
 
@@ -156,19 +168,14 @@ const goNext = () => {
                   optionKey="i18nKey"
                   t={t}
                   name={"reason"}
-                  onChange={filedChange}
-                  value={disconnectionData.reason}
-                  // onChange={(e) => {
-                  //   if (!(ownerDetails?.[index]?.isCoresAddr === true)) {
-                  //     updateState("permanentAddress", index, e.target.value);
-                  //   }
-                  // }}
+                  value={disconnectionData.reason?.value}
+                  onChange={(e) => filedChange({code:"reason" , value:e.target.value})}
                 />              
           </LabelFieldPair>
-          <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
+          <SubmitBar label={t(`CS_COMMON_NEXT`)} submit={true} />
         </div>
-        <CitizenInfoLabel style={{ margin: "0px" }} textStyle={{ color: "#0B0C0C" }} text={t(`WS_DISONNECT_APPL_INFO`)} />
         </FormStep>
+        <CitizenInfoLabel style={{ margin: "0px" }} textStyle={{ color: "#0B0C0C" }} text={t(`WS_DISONNECT_APPL_INFO`)} />
         
          {/* : <Loader /> } */}
     </div>
