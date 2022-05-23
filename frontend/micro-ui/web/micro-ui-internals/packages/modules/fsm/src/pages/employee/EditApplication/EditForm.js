@@ -1,8 +1,7 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { getVehicleType } from "../../../utils";
 
 const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
 
@@ -28,14 +27,13 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     applicationData: {
       applicantName: applicationData.citizen.name,
       mobileNumber: applicationData.citizen.mobileNumber,
+      applicantGender: applicationData.citizen.gender
     },
     tripData: {
       noOfTrips: applicationData.noOfTrips,
       amountPerTrip: applicationData.additionalDetails.tripAmount,
       amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || undefined,
-      vehicleType: vehicleMenu
-        .filter((vehicle) => vehicle?.code === applicationData?.vehicleType)
-        .map((vehicle) => ({ ...vehicle, label: getVehicleType(vehicle, t) }))[0],
+      vehicleType: { capacity : applicationData?.vehicleCapacity },
       vehicleCapacity: applicationData?.vehicleCapacity,
     },
     propertyType: applicationData.propertyUsage.split(".")[0],
@@ -53,10 +51,11 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     },
     pitType: sanitationMenu.filter((type) => type.code === applicationData.sanitationtype)[0],
     pitDetail: applicationData.pitDetail,
+    paymentPreference: applicationData.paymentPreference,
   };
 
   const onFormValueChange = (setValue, formData) => {
-   
+
     if (
       formData?.propertyType &&
       formData?.subtype &&
@@ -158,7 +157,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     history.replace("/digit-ui/employee/fsm/response", {
       applicationData: formData,
       key: "update",
-      action: "SUBMIT",
+      action: applicationData?.applicationStatus === "CREATED" ? "SUBMIT" : "SCHEDULE",
     });
   };
 
@@ -172,7 +171,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     <FormComposer
       heading={t("ES_TITLE_MODIFY_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
-      label={t("ES_FSM_APPLICATION_UPDATE")}
+      label={defaultValues?.tripData?.vehicleCapacity ? t("ES_FSM_APPLICATION_SCHEDULE") : t("ES_FSM_APPLICATION_UPDATE")}
       config={configs.map((config) => {
         return {
           ...config,

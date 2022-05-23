@@ -1,6 +1,7 @@
 /**
  * Dashboard API
  */
+import { getToken } from '../../../utils/commons';
 import API from '../apis/api';
 import C from '../constants';
 
@@ -51,7 +52,7 @@ export default class AllChartsAPI extends API {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'auth-token': `${localStorage.getItem('Employee.token')}`
+                'auth-token': `${getToken()}`
             }
         }
     }

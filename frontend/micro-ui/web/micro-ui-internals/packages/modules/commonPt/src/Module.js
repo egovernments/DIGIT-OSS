@@ -1,24 +1,39 @@
 import { CitizenHomeCard, PTIcon } from "@egovernments/digit-ui-react-components";
-import  React,{ useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
+
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
 
-import PropertyAssemblyDetails from './pages/components/PropertyAssemblyDetails';
-import PropertyLocationDetails from "./pages/components/PropertyLocationDetails";
-import PropertyOwnerDetails from "./pages/components/PropertyOwnerDetails";
-
-import CPTPropertySearchForm from './components/search/CPTPropertySearchForm';
-import CPTPropertySearchResults from './components/search/CPTPropertySearchResults';
+import CPTPropertyAssemblyDetails from "./pages/components/PropertyAssemblyDetails";
+import CPTPropertyLocationDetails from "./pages/components/PropertyLocationDetails";
+import CPTPropertyOwnerDetails from "./pages/components/PropertyOwnerDetails";
+import CPTSearchProperty from "./pages/citizen/SearchProperty";
+import CPTPropertySearchForm from "./components/search/CPTPropertySearchForm";
+import CPTPropertySearchResults from "./components/search/CPTPropertySearchResults";
+import CPTKnowYourProperty from "./pages/pageComponents/KnowYourProperty";
+import CPTPropertyDetails from "./pages/pageComponents/PropertyDetails";
+import CPTPropertySearchNSummary from "./pages/pageComponents/PropertySearchNSummary";
+import CPTSearchResults from "./pages/citizen/SearchResults";
+import CPTCreateProperty from "./pages/pageComponents/createForm";
+import CPTAcknowledgement from "./pages/pageComponents/PTAcknowledgement";
+import CommonPTCard from "./components/CommonPTCard";
 
 const componentsToRegister = {
   CPTPropertySearchForm,
   CPTPropertySearchResults,
-  PropertyAssemblyDetails,
-  PropertyLocationDetails,
-  PropertyOwnerDetails,
-}
+  CPTSearchProperty,
+  CPTPropertyAssemblyDetails,
+  CPTPropertyLocationDetails,
+  CPTPropertyOwnerDetails,
+  CPTKnowYourProperty,
+  CPTPropertyDetails,
+  CPTPropertySearchNSummary,
+  CPTSearchResults,
+  CPTCreateProperty,
+  CPTAcknowledgement,
+};
 
 const addComponentsToRegistry = () => {
   Object.entries(componentsToRegister).forEach(([key, value]) => {
@@ -65,9 +80,15 @@ export const CommonPTLinks = ({ matchPath, userType }) => {
   return <CitizenHomeCard header={t("ACTION_TEST_COMMON_PROPERTY_TAX")} links={links} Icon={() => <PTIcon className="fill-path-primary-main" />} />;
 };
 
+/* 
+  CommonPTCardTemp name should be updated without temp keyword to see a card in employee home screen
+  CommonPTLinksTemp name should be updated without temp keyword to see a card in citizen home screen
+*/
 export const CommonPTComponents = {
+  CommonPTCardTemp: CommonPTCard,
   CommonPTModule,
-  CommonPTLinks,
+  CommonPTLinksTemp: CommonPTLinks,
+  ...componentsToRegister,
 };
 
 export const initCommonPTComponents = () => {

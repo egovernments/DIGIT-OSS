@@ -8,6 +8,8 @@ const NOCEmployeeHomeCard = () => {
     const { t } = useTranslation();
     const location = useLocation()
     const tenantId = Digit.ULBService.getCurrentTenantId();
+
+    if (!Digit.Utils.NOCAccess()) return null;
        
     const searchFormDefaultValues = {}
   
@@ -69,7 +71,7 @@ const NOCEmployeeHomeCard = () => {
           link: `/digit-ui/employee/noc/inbox`
         },
         {
-          label: t("ES_COMMON_SEARCH"),
+          label: t("ES_COMMON_APPLICATION_SEARCH"),
           link: `/digit-ui/employee/noc/search`
         }
       ]

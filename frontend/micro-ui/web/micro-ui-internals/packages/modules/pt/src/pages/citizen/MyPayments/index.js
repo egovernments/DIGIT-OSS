@@ -12,7 +12,7 @@ export const PTMyPayments = () => {
   const result = Digit.Hooks.pt.usePropertySearch({});
   const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
 
-  const {data, isLoading, error} = Digit.Hooks.pt.useMyPropertyPayments({tenantId : tenantId,filters: {consumerCodes:consumerCode}},{enabled:result?.data?.Properties.length>0?true:false});
+  const {data, isLoading, error} = Digit.Hooks.pt.useMyPropertyPayments({tenantId : tenantId,filters: {consumerCodes:consumerCode}},{enabled:result?.data?.Properties.length>0?true:false, propertyData:result?.data?.Properties});
   
   if (isLoading || result?.isLoading) {
     return <Loader />;
@@ -31,6 +31,12 @@ export const PTMyPayments = () => {
           ))}
         {!applicationsList?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("PT_NO_APPLICATION_FOUND_MSG")}</p>}
       </div>
+     {/*  <p style={{ marginLeft: "16px", marginTop: "16px" }}>
+        {t("PT_TEXT_NOT_ABLE_TO_FIND_THE_PROPERTY")}{" "}
+        <span className="link" style={{ display: "block" }}>
+          <Link to="/digit-ui/citizen/pt/property/citizen-search">{t("PT_COMMON_CLICK_HERE_TO_SEARCH_THE_PROPERTY")}</Link>
+        </span>
+      </p> */}
     </React.Fragment>
   );
 };

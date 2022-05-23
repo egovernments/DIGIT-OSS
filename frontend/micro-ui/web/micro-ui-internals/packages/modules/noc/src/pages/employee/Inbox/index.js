@@ -45,8 +45,8 @@ const Inbox = ({parentRoute}) => {
           Digit.SessionStorage.set("NOC.INBOX", {...state, tableForm: payload.data})
           return {...state, tableForm: payload.data};
         default:
-          console.warn("dispatched action has nothing to reduce")
-      }
+          break;      
+        }
     }
     const InboxObjectInSessionStorage = Digit.SessionStorage.get("NOC.INBOX")
     
@@ -108,7 +108,10 @@ const Inbox = ({parentRoute}) => {
     const PropsForInboxLinks = {
         logoIcon: <ComplaintIcon />,
         headerText: "ACTION_TEST_NOC",
-        links: []
+        links: [{
+          text: t("ES_COMMON_APPLICATION_SEARCH"),
+          link: "/digit-ui/employee/noc/search",
+        }]
     }
 
     const SearchFormFields = useCallback(({registerRef, searchFormState}) => <SearchFormFieldsComponents {...{registerRef, searchFormState}} />,[])

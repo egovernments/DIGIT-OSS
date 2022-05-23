@@ -22,8 +22,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
       case "remove":
         return false;
       default:
-        console.warn("no such action defined");
-    }
+        break;    }
   }
 
   const [currentlyActiveMobileModal, setActiveMobileModal] = useReducer(activateModal, false);
@@ -72,6 +71,10 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
     () => {
       if (data?.display){
         return []
+      }
+      if(data === "")
+      {
+      return [];
       }
       return data?.map((data) => ({
         [t("TL_COMMON_TABLE_COL_APP_NO")]: data.applicationNumber,

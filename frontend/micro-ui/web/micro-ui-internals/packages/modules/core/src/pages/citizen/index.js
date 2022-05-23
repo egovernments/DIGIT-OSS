@@ -9,6 +9,7 @@ import CitizenHome from "./Home";
 import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
+import UserProfile from "./Home/UserProfile";
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -47,7 +48,7 @@ const Home = ({
     return (
       <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
         <div className="moduleLinkHomePage">
-          <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound"/>
+          <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
           <BackButton className="moduleLinkHomePageBackButton" />
           <h1>{t("MODULE_" + code.toUpperCase())}</h1>
         </div>
@@ -69,7 +70,9 @@ const Home = ({
         mobileView={mobileView}
         handleUserDropdownSelection={handleUserDropdownSelection}
         logoUrl={logoUrl}
+        showSidebar={true}
       />
+
       <div className={`main center-container mb-25`}>
         <Switch>
           <Route exact path={path}>
@@ -89,13 +92,17 @@ const Home = ({
           </Route>
 
           <Route path={`${path}/login`}>
-            {" "}
             <Login stateCode={stateCode} />
           </Route>
 
           <Route path={`${path}/register`}>
             <Login stateCode={stateCode} isUserRegistered={false} />
           </Route>
+
+          <Route path={`${path}/user/profile`}>
+            <UserProfile stateCode={stateCode} userType={"citizen"} cityDetails={cityDetails} />
+          </Route>
+
           <ErrorBoundary>
             {appRoutes}
             {ModuleLevelLinkHomePages}

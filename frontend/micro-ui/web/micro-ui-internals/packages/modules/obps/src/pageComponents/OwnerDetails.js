@@ -20,6 +20,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     const [gender, setGender] = useState(formData?.owners?.gender);
     const [mobileNumber, setMobileNumber] = useState(formData?.owners?.mobileNumber || "");
     const [showToast, setShowToast] = useState(null);
+    const [isDisable, setIsDisable] = useState(false);
     let Webview = !Digit.Utils.browser.isMobile();
     const ismultiple = ownershipCategory?.code.includes("MULTIPLEOWNERS") ? true : false;
     const [fields, setFeilds] = useState(
@@ -157,7 +158,9 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
         return usageCat;
     }
 
-    function getUnitsForAPI(ob){
+    function getUnitsForAPI(subOccupancyData){
+        const ob = subOccupancyData?.subOccupancy;
+        const blocksDetails = subOccupancyData?.data?.edcrDetails?.planDetail?.blocks || [];
         let units=[];
         if(ob) {
             let result = Object.entries(ob);
@@ -166,6 +169,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     blockIndex:index,
                     floorNo:unit[0].split("_")[1],
                     unitType:"Block",
+                    occupancyType: blocksDetails?.[index]?.building?.occupancies?.[0]?.typeHelper?.type?.code || "A", 
                     usageCategory:getusageCategoryAPI(unit[1]),
                 });
             })
@@ -242,6 +246,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
             ownerStep = { ...owner, owners: fields, ownershipCategory: ownershipCategory };
 
             if (!formData?.id) {
+                setIsDisable(true);
                 //for owners conversion
                 let conversionOwners = [];
                 ownerStep?.owners?.map(owner => {
@@ -289,7 +294,8 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 payload.landInfo.tenantId = formData?.address?.city?.code;
 
                 //for units
-                payload.landInfo.unit = getUnitsForAPI(formData?.subOccupancy);
+                const blockOccupancyDetails = formData;
+                payload.landInfo.unit = getUnitsForAPI(blockOccupancyDetails);
 
                 let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
                 let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
@@ -309,11 +315,13 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                             result.BPA[0].data = formData.data;
                             result.BPA[0].BlockIds = getBlockIds(result.BPA[0].landInfo.unit);
                             result.BPA[0].subOccupancy= formData?.subOccupancy;
-                            result.BPA[0].uiFlow = formData?.uiFlow
+                            result.BPA[0].uiFlow = formData?.uiFlow;
+                            setIsDisable(false);
                             onSelect("", result.BPA[0], "", true);
                         }
                     })
                     .catch((e) => {
+                        setIsDisable(false);
                         setShowToast({ key: "true", error: true, message: e?.response?.data?.Errors[0]?.message });
                     });
             } else {
@@ -331,7 +339,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     return (
         <div>
         <Timeline currentStep={2} />
-        <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext || !ownershipCategory} forcedError={t(error)}>   
+        <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext || !ownershipCategory || isDisable} forcedError={t(error)}>   
             {!isLoading ?
                 <div style={{marginBottom: "10px"}}>
                     <div>
@@ -359,7 +367,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                                     />}
                                     <div style={{ marginTop: "30px" }}>
                                         <div className="field-container">
-                                            <div style={{ position: "relative", zIndex: "100", left: "35px", marginTop: "-23px",marginLeft:Webview?"-25px":"-25px" }}>+91</div>
+                                            <div style={{ position: "relative", zIndex: "100", left: "35px", marginTop: "-24.5px",marginLeft:Webview?"-25px":"-25px" }}>+91</div>
                                             <TextInput
                                                 style={{ background: "#FAFAFA", padding: "0px 35px" }}
                                                 type={"text"}
@@ -376,7 +384,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                                                     title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
                                                 })}
                                             />
-                                            <div style={{ position: "relative", zIndex: "100", right: "35px", marginTop: "-23px", marginRight:Webview?"-20px":"-20px" }} onClick={(e) => getOwnerDetails(index, e)}> <SearchIcon /> </div>
+                                            <div style={{ position: "relative", zIndex: "100", right: "35px", marginTop: "-24px", marginRight:Webview?"-20px":"-20px" }} onClick={(e) => getOwnerDetails(index, e)}> <SearchIcon /> </div>
                                         </div>
                                     </div>
                                     <CardLabel>{`${t("CORE_COMMON_NAME")} *`}</CardLabel>

@@ -88,7 +88,7 @@
 @import "./pages/employee/updateNumber.scss";
 @import "./pages/employee/oldMobileInbox.scss";
 @import "./pages/employee/dss.scss";
-
+@import "./pages/employee/iframe.scss";
 
 @import "./pages/citizen/payment/payment-type.scss";
 @import "./pages/citizen/container.scss";
@@ -514,4 +514,31 @@ input[type="number"] {
   border: 2px solid #222;
   border-radius: 3px;
   padding: 3px;
+}
+
+.full-width-card{
+  width : 92vw !important;
+}
+.full-employee-card-link{
+  width: 100%!important;
+  margin: 7px 0px;
+}
+.full-employee-card-height{
+ height: unset !important;
+}
+
+@media (min-width: 640px) {
+  .full-employee-card-height{
+    height: 196px !important;
+  }
+  .full-employee-card-link{
+    width: 30%!important;
+  }
+  .full-width-card{
+    @apply w-full !important;
+  }
+}
+
+.employee-app-wrapper{
+min-height: calc(100vh - 8em);
 }

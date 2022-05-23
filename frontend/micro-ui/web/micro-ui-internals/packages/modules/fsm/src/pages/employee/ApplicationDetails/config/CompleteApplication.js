@@ -1,7 +1,9 @@
 import React from "react";
 import { DatePicker } from "@egovernments/digit-ui-react-components";
 
-export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, applicationCreatedTime = 0, action }) => ({
+
+export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTrips, applicationCreatedTime = 0, action }) => ({
+
   label: {
     heading: `ES_FSM_ACTION_TITLE_${action}`,
     submit: `CS_COMMON_${action}`,
@@ -86,19 +88,34 @@ export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, applica
           nextStep: "tank-size",
         },
         {
-          route: "tank-size",
-          component: "SelectTankSize",
+          label: "ES_NEW_APPLICATION_PIT_DIMENSION",
           isMandatory: false,
+          type: "component",
+          route: "tank-size",
+          key: "pitDetail",
+          component: "SelectTankSize",
           texts: {
             headerCaption: "",
             header: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TITLE",
             cardText: "CS_FILE_APPLICATION_PIT_SEPTIC_TANK_SIZE_TEXT",
             submitBarLabel: "CS_COMMON_NEXT",
           },
-          type: "component",
-          key: "pitDetail",
           nextStep: null,
-          label: "ES_NEW_APPLICATION_PIT_DIMENSION",
+        },
+        {
+          label: `${t("ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS")} *`,
+          type: "number",
+          populators: {
+            name: "noOfTrips",
+            error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
+            validation: {
+              required: true,
+            },
+            defaultValue: noOfTrips
+            // defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
+          },
+          disable: true,
+          // disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
         },
       ],
     },

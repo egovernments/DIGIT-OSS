@@ -153,7 +153,6 @@ export default withStyles(styles)(
 //     //   destinationJsonPaths[index],
 //     //   get(preparedFinalObject, sourceJSonPath)
 //     // );
-//     console.log("===sourcevalue",get(preparedFinalObject, sourceJSonPath))
 //     onFieldChange(
 //       screenKey,
 //       disbaleComponentJsonPaths[index],

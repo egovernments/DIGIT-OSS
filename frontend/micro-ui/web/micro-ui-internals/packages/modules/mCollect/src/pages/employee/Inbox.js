@@ -116,6 +116,7 @@ const Inbox = ({
       totalAmount: businessIdToOwnerMappings[data.challanNo]?.totalAmount || 0,
       dueDate: businessIdToOwnerMappings[data.challanNo]?.dueDate || "NA",
       tenantId: data?.tenantId,
+      receiptNumber:data?.receiptNumber
     });
   });
 
@@ -182,6 +183,10 @@ const Inbox = ({
         pattern: "[6-9][0-9]{9}",
         title: t("ES_SEARCH_APPLICATION_MOBILE_INVALID"),
         componentInFront: "+91",
+      },
+      {
+        label: t("UC_RECIEPT_NUMBER_LABEL"),
+        name: "receiptNumber",
       },
     ];
   };

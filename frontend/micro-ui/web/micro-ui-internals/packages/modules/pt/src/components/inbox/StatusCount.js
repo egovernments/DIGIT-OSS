@@ -6,7 +6,6 @@ const StatusCount = ({ status, searchParams, onAssignmentChange, statusMap, busi
   const { t } = useTranslation();
 
 
-
   return (
     <CheckBox
       styles={{ height: "unset" }}

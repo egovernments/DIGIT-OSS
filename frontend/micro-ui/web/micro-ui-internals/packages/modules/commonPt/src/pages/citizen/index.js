@@ -6,6 +6,7 @@ import SearchPropertyComponent from "./SearchProperty";
 import SearchResultsComponent from "./SearchResults";
 import PropertyLinkSuccess from './LinkSuccess';
 import CitizenOtp from "./Otp";
+import ViewProperty from "../pageComponents/ViewProperty";
 
 const App = ({stateCode}) => {
   const { path, url, ...match } = useRouteMatch();
@@ -19,6 +20,7 @@ const App = ({stateCode}) => {
           <Route path={`${path}/property/citizen-otp`}> <CitizenOtp stateCode={stateCode} /> </Route>
           <PrivateRoute path={`${path}/property/link-success/:propertyIds`} component={PropertyLinkSuccess}></PrivateRoute>
           <PrivateRoute path={`${path}/property/new-application`} component={CreateProperty} />
+          <PrivateRoute path={`${path}/view-property`} component={() => <ViewProperty />} />
         </AppContainer>
       </Switch>
     </span>

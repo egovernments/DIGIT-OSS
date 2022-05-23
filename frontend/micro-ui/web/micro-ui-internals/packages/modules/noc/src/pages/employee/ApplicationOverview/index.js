@@ -25,6 +25,7 @@ const ApplicationOverview = () => {
   const [nocDocuments, setNocDocuments] = useState([]);
   const [pdfFiles, setPdfFiles] = useState({});
   const [filesArray, setFilesArray] = useState(() => []);
+  const [isDetailsLoading, setIsDetailsLoading] = useState(false);
   const isMobile = window.Digit.Utils.browser.isMobile();
 
 
@@ -51,6 +52,11 @@ const ApplicationOverview = () => {
   if (workflowDetails?.data?.actionState?.nextActions && !workflowDetails.isLoading)
     workflowDetails.data.actionState.nextActions = [...workflowDetails?.data?.nextActions];
 
+  if (workflowDetails && workflowDetails.data && !workflowDetails.isLoading){
+      workflowDetails.data.initialActionState=workflowDetails?.data?.initialActionState||{...workflowDetails?.data?.actionState}||{} ;
+      workflowDetails.data.actionState = { ...workflowDetails.data };
+  }
+  
   const closeToast = () => {
     setShowToast(null);
   };
@@ -198,8 +204,10 @@ const ApplicationOverview = () => {
 
   useEffect(() => {
     if (applicationDetails) {
+      setIsDetailsLoading(true);
       const { applicationDetails: details } = applicationDetails;
       setAppDetails({ ...applicationDetails, applicationDetails: [getBuldingComponent(details)?.[0], { title: "NOC_DETAILS_SUMMARY_LABEL", belowComponent: () => <DocumentDetails t={t} data={applicationDetails} nocDataDetails={nocDatils} nocDocumentsList={nocTaxDocuments} /> }] })
+      setIsDetailsLoading(false);
     }
   }, [applicationDetails, nocTaxDocuments, nocDatils, uploadedFile, filesArray, pdfFiles]);
 
@@ -210,7 +218,7 @@ const ApplicationOverview = () => {
       </div>
       <ApplicationDetailsTemplate
         applicationDetails={appDetails}
-        isLoading={isLoading}
+        isLoading={isLoading || isDetailsLoading}
         isDataLoading={isLoading}
         applicationData={applicationDetails?.applicationData}
         mutate={mutate}
@@ -289,7 +297,6 @@ function SelectDocument({
               setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
             setError(t("CS_FILE_UPLOAD_ERROR"));
           }
         }

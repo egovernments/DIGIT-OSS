@@ -515,7 +515,6 @@ const getMDMSData = async (action, state, dispatch) => {
     payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.isBillAmendmentEnabled)
     dispatch(prepareFinalObject("connectDetailsData", payload.MdmsRes));
   } catch (e) {
-    console.log(e);
   }
 };
 const getDataForBillAmendment = async (action, state, dispatch) => {

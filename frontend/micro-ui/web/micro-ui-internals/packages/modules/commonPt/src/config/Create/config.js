@@ -6,7 +6,7 @@ export const newConfig =[
                 "type": "component",
                 "route": "property-type",
                 "isMandatory": true,
-                "component": "PropertyAssemblyDetails",
+                "component": "CPTPropertyAssemblyDetails",
                 "texts": {
                     "headerCaption": "",
                     "header": "PT_ASSEMBLY_DET",
@@ -30,7 +30,7 @@ export const newConfig =[
                 "type": "component",
                 "route": "property-type",
                 "isMandatory": true,
-                "component": "PropertyLocationDetails",
+                "component": "CPTPropertyLocationDetails",
                 "texts": {
                     "headerCaption": "",
                     "header": "PT_LOCATION_DETAILS",
@@ -55,7 +55,7 @@ export const newConfig =[
                 "type": "component",
                 "route": "institutional-owner-address",
                 "isMandatory": true,
-                "component": "PropertyOwnerDetails",
+                "component": "CPTPropertyOwnerDetails",
                 "texts": {
                     "headerCaption": "PT_OWNERS_DETAILS",
                     "header": "PT_OWNERS_ADDRESS",

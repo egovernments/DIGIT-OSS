@@ -39,7 +39,6 @@ window.initAutocomplete = function () {
     const bounds = new google.maps.LatLngBounds();
     places.forEach((place) => {
       if (!place.geometry) {
-        console.error("Returned place contains no geometry");
         return;
       }
 

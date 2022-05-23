@@ -87,14 +87,13 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {
           try {
-            const response = await Digit.UploadServices.Filestorage("PT", file, tenantId?.split(".")[0]);
+            const response = await Digit.UploadServices.Filestorage("NOC", file, tenantId);
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {
               setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
             setError(t("CS_FILE_UPLOAD_ERROR"));
           }
         }
@@ -190,14 +189,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       documents: newDocs,
     };
 
-    // try{
-    //   mutation.mutate({Noc:applicationData}, {
-    //     onSuccess,
-    //   });
-    // }
-    // catch (err) {
-    //   console.error(err, "inside ack");
-    // }
+
     submitAction({
       Noc: applicationData,
     }, false, {isNoc: true});

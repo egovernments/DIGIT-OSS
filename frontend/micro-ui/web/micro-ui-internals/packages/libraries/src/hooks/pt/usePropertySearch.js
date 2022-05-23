@@ -6,9 +6,9 @@ const usePropertySearch = ({ tenantId, filters, auth,searchedFrom="" }, config =
   const args = tenantId ? { tenantId, filters, auth } : { filters, auth };
 
   const defaultSelect = (data) => {
-    data.Properties[0].units = data.Properties[0].units || [];
-    data.Properties[0].units = data.Properties[0].units.filter((unit) => unit.active);
-    data.Properties[0].owners = data.Properties[0].owners || [];
+    if(data.Properties.length > 0)  data.Properties[0].units = data.Properties[0].units || [];
+    if(data.Properties.length > 0)  data.Properties[0].units = data.Properties[0].units.filter((unit) => unit.active);
+    if(data.Properties.length > 0)  data.Properties[0].owners = data.Properties[0].owners || [];
     if(searchedFrom=="myPropertyCitizen"){
       data.Properties.map(property=>{
         property.owners =property.owners.filter((owner) => owner.status ===(property.creationReason=="MUTATION" ?"INACTIVE": "ACTIVE"));

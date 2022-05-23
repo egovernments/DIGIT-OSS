@@ -1,4 +1,4 @@
-import { Card, Header, LinkLabel, Loader, Row, StatusTable } from "@egovernments/digit-ui-react-components";
+import { Card, CardText, Header, LinkLabel, Loader, Row, StatusTable } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -25,6 +25,7 @@ const PaymentDetails = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { id: applicationNumber } = useParams();
   const [paymentObject, setPaymentObject] = useState([]);
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const { isLoading, isError, error, data } = Digit.Hooks.receipts.useReceiptsSearch(
     { businessServices: "PT", consumerCodes: applicationNumber },
@@ -56,24 +57,26 @@ const PaymentDetails = () => {
     <React.Fragment>
       <Header>{t("PT_PAYMENT_HISTORY")}</Header>
       <div style={{ display: "flex", paddingBottom: "8px", marginBottom: "8px" }}>
-        <h2 style={{ fontSize: "16px", lineHeight: "24px", width: "30%", fontWeight: "700" }}>{t("PT_PROPERTY_PTUID")}</h2>
+        <h2 style={isMobile ? {marginLeft:"15px", fontSize: "16px", lineHeight: "24px", width: "30%", fontWeight: "700" } : { fontSize: "16px", lineHeight: "24px", width: "30%", fontWeight: "700" }}>{t("PT_PROPERTY_PTUID")}</h2>
         <div style={{ whiteSpace: "pre", width: "50%", fontSize: "16px", lineHeight: "24px" }}>{applicationNumber}</div>
       </div>
-      {paymentObject?.map((payment) => (
-        <div style={{ marginLeft: "-16px" }}>
-          <Card>
+      {paymentObject.length>0 ? paymentObject?.map((payment) => (
+        <div style={isMobile ? {} : { marginLeft: "-16px" }}>
+          <Card style={isMobile ? {marginBottom:"10px"} : {}}>
             <StatusTable>
-              <Row label={t("PT_HISTORY_BILL_NO")} text={payment?.billNo} textStyle={{ whiteSpace: "pre" }} />
               <Row label={t("PT_HISTORY_BILL_PERIOD")} text={payment?.billPeriod} textStyle={{ whiteSpace: "pre" }} />
+              <Row label={t("PT_HISTORY_BILL_NO")} text={payment?.billNo} textStyle={{ whiteSpace: "pre" }} />
               <Row label={t("PT_HISTORY_RECEIPT_NO")} text={payment?.receiptNumber} textStyle={{ whiteSpace: "pre" }} />
               <Row label={t("PT_HISTORY_PAYMENT_DATE")} text={payment?.transactionDate} textStyle={{ whiteSpace: "pre" }} />
-              <Row label={t("PT_HISTORY_PAYMENT_STATUS")} text={t(payment?.paymentStatus)} textStyle={{ whiteSpace: "pre" }} />
               <Row label={t("PT_HISTORY_AMOUNT_PAID")} text={payment?.amountPaid} />
-              <LinkLabel onClick={() => printReciept("PT", payment?.receiptNumber)}>{t("PT_DOWNLOAD_RECEIPT")}</LinkLabel>
+              <Row label={t("PT_HISTORY_PAYMENT_STATUS")} text={t(payment?.paymentStatus)} textStyle={{ whiteSpace: "pre" }} />
+              <LinkLabel style={isMobile ? {marginLeft:"0px"} : {}} onClick={() => printReciept("PT", payment?.receiptNumber)}>{t("PT_DOWNLOAD_RECEIPT")}</LinkLabel>
             </StatusTable>
           </Card>
         </div>
-      ))}
+      )):<div>
+        <CardText>{t("PT_NO_PAYMENTS_HISTORY")}</CardText>
+        </div>}
     </React.Fragment>
   );
 };

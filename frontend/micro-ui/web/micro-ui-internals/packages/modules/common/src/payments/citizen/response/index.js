@@ -4,14 +4,23 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
 
-export const SuccessfulPayment = (props) => {
+export const SuccessfulPayment = (props)=>{
+  if(localStorage.getItem("BillPaymentEnabled")!=="true"){
+    window.history.forward();
+   return null;
+ }
+ return <WrapPaymentComponent {...props}/>
+}
+
+
+ const WrapPaymentComponent = (props) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { eg_pg_txnid: egId, workflow: workflw } = Digit.Hooks.useQueryParams();
   const [printing, setPrinting] = useState(false);
   const [allowFetchBill, setallowFetchBill] = useState(false);
   const { businessService: business_service, consumerCode, tenantId } = useParams();
-  const { data:bpaData = {} } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: consumerCode });
+  const { data:bpaData = {} } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: consumerCode },{enabled:(window.location.href.includes("bpa") || window.location.href.includes("BPA"))});
 
 
   const { isLoading, data, isError } = Digit.Hooks.usePaymentUpdate({ egId }, business_service, {
@@ -61,6 +70,7 @@ export const SuccessfulPayment = (props) => {
 
   useEffect(() => {
     return () => {
+      localStorage.setItem("BillPaymentEnabled","false")
       queryClient.clear();
     };
   }, []);

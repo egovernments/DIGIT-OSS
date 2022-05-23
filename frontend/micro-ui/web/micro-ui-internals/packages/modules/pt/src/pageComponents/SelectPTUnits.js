@@ -26,21 +26,21 @@ const formatUnits = (units = [], currentFloor, isFloor) => {
     ];
   }
   return units.map((unit) => {
-    let usageCategory = unit?.usageCategory?.includes("RESIDENTIAL") ? "RESIDENTIAL" : getUsageCategory(unit?.usageCategory)?.usageCategoryMinor;
+    let usageCategory = !(unit?.usageCategory?.includes("NONRESIDENTIAL")) ? "RESIDENTIAL" : getUsageCategory(unit?.usageCategory)?.usageCategoryMinor;
     return {
       ...unit,
       builtUpArea: unit?.constructionDetail?.builtUpArea,
       usageCategory: { code: usageCategory, i18nKey: `PROPERTYTAX_BILLING_SLAB_${usageCategory}` },
-      occupancyType: { code: unit.occupancyType, i18nKey: `PROPERTYTAX_OCCUPANCYTYPE_${unit?.occupancyType}` },
+      occupancyType: unit?.occupancyType ? { code: unit.occupancyType, i18nKey: `PROPERTYTAX_OCCUPANCYTYPE_${unit?.occupancyType}` } : "",
       floorNo: { code: unit.floorNo, i18nKey: `PROPERTYTAX_FLOOR_${unit?.floorNo}` },
-      unitType: { code: unit.unitType, i18nKey: `PROPERTYTAX_BILLING_SLAB_${unit?.unitType}` },
+      unitType: unit?.unitType ? { code: unit.unitType, i18nKey: `PROPERTYTAX_BILLING_SLAB_${unit?.unitType}` } : "",
     };
   });
 };
 const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) => {
   let path = window.location.pathname.split("/");
   let currentFloor = Number(path[path.length - 1]);
-  let isFloor = window.location.pathname.includes("new-application/units");
+  let isFloor = window.location.pathname.includes("new-application/units") || window.location.pathname.includes("/edit-application/units");
   const [fields, setFields] = useState(
     formatUnits(isFloor ? formData?.units?.filter((ee) => ee.floorNo == currentFloor) : formData?.units, currentFloor, isFloor)
   );
@@ -51,6 +51,14 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
       setFields(null);
     };
   }, [currentFloor, formData, isFloor]);
+
+  const getheader = () => {
+    if (formData?.PropertyType?.i18nKey === "COMMON_PROPTYPE_BUILTUP_SHAREDPROPERTY") {
+      return "PT_FLAT_DETAILS_HEADER";
+    } else {
+      return `PROPERTYTAX_FLOOR_${currentFloor}_DETAILS`;
+    }
+  };
 
   const { data: mdmsData, isLoading } = Digit.Hooks.useCommonMDMS(
     Digit.ULBService.getStateId(),
@@ -158,6 +166,10 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
       Object.keys(field)
         .filter((key) => field[key])
         .map((key) => {
+          if(typeof field["unitType"] == "object" && field["unitType"].code == undefined)
+          {
+            field["unitType"] = "";
+          }
           if (key === "usageCategory") {
             unit["usageCategory"] = mdmsData?.usageDetails.find(
               (e) =>
@@ -203,7 +215,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
   }
   return (
     <FormStep
-      config={config}
+    config={((config.texts.header = getheader()), config)}
       onSelect={goNext}
       onSkip={onSkip}
       t={t}
@@ -224,7 +236,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
               }}
             >
               <LinkButton
-                label={<DeleteIcon   style={{ float: "right", position: "relative", bottom: "32px" }}
+                label={<DeleteIcon   style={{ float: "right", position: "relative" }}
                 fill={!(fields.length === 1) ? "#494848" : "#FAFAFA"} />}
                 style={{ width: "100px", display: "inline" }}
                 onClick={(e) => handleRemove(index)}
@@ -324,7 +336,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
           </div>
         );
       })}
-      <div style={{ justifyContent: "center", display: "flex", paddingBottom: "15px", color: "#FF8C00" }}>
+      <div style={{ justifyContent: "left", display: "flex", paddingBottom: "15px", color: "#FF8C00" }}>
         <button type="button" style={{ paddingTop: "10px" }} onClick={() => handleAdd()}>
           {`${t("PT_ADD_UNIT")}`}
         </button>

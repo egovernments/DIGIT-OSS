@@ -30,7 +30,7 @@ import DisplayPhotos from "./atoms/DisplayPhotos";
 import Dropdown from "./atoms/Dropdown";
 import EllipsisMenu from "./atoms/EllipsisMenu";
 import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
-import EmployeeModuleCard from "./atoms/EmployeeModuleCard";
+import {EmployeeModuleCard,ModuleCardFullWidth} from "./atoms/EmployeeModuleCard";
 import GreyOutText from "./atoms/GreyOutText";
 import Hamburger from "./atoms/Hamburger";
 import Header from "./atoms/Header";
@@ -65,6 +65,7 @@ import {
   AnnouncementIcon,
   ArrowDown,
   ArrowLeft,
+  ArrowForward,
   ArrowRightInbox,
   Calender,
   CaseIcon,
@@ -133,7 +134,13 @@ import {
   SurveyIconSolid,
   DustbinIcon,
   InfoBannerIcon,
-  WSICon
+  WSICon,
+  CameraIcon,
+  EditPencilIcon,
+  GalleryIcon,
+  RemoveIcon,
+  CheckSvg,
+  ErrorIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -366,6 +373,14 @@ export {
   SearchIcon,
   DeleteIcon,
   WSICon,
-  UploadPitPhoto
+  CameraIcon,
+  EditPencilIcon,
+  GalleryIcon,
+  RemoveIcon,
+  UploadPitPhoto,
+  CheckSvg,
+  ModuleCardFullWidth,
+  ArrowForward,
+  ErrorIcon
 };
 

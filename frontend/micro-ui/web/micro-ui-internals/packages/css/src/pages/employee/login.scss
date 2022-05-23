@@ -77,7 +77,9 @@
   font-size: 16px;
   line-height: 19px;
   color: #0B0C0C;
-  margin-top: 20px;
+}
+.profile-label-margin{
+   margin-top: 10px;
 }
 
 .employeeForgotPassword .employeeCard .card-label-desc {
@@ -108,10 +110,10 @@
   margin-bottom: 10px;
 }
 .employee .loginContainer {
-  padding-top: 57px !important;
+  padding-top: 0px !important;
 }
 .banner {
-  height: calc(100vh - 57px) !important;
+  height: calc(100vh ) !important;
 }
 
 .employeeChangePassword .employeeCard .field .field-container{

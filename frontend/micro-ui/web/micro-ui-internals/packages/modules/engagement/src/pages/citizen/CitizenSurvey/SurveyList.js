@@ -1,4 +1,4 @@
-import { Clock, Header, Loader, WhatsNewCard } from "@egovernments/digit-ui-react-components";
+import { Header, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -14,12 +14,23 @@ const isActive = (startDate, endDate) => {
 const SurveyList = () => {
   const { t } = useTranslation();
   const history = useHistory();
-  const tenantIds = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  const tenantIds = Digit.ULBService.getCitizenCurrentTenant();
+
   const { data, isLoading: isLoadingSurveys } = Digit.Hooks.survey.useSearch(
     { tenantIds },
     {
       select: ({ Surveys }) => {
-        const allSurveys = Surveys.map((survey) => ({ hasResponded: false, responseStatus: "CS_SURVEY_YT_TO_RESPOND", ...survey }));
+        // const allSurveys = Surveys.map((survey) => ({ hasResponded: false, responseStatus: "CS_SURVEY_YT_TO_RESPOND", ...survey }));
+
+        const allSurveys = Surveys.map((survey) => {
+          const isSurveyActive = isActive(survey.startDate, survey.endDate);
+          let resStatus = "";
+          if (isSurveyActive && survey.hasResponded) resStatus = "CS_SURVEY_RESPONDED";
+          else if (isSurveyActive) resStatus = "CS_SURVEY_YT_TO_RESPOND";
+          else resStatus = "CANNOT_RESPOND_MSG";
+          return { hasResponded: false, responseStatus: resStatus, ...survey };
+        });
+        //why hasResoponded always set to false here
         const activeSurveysList = [];
         const inactiveSurveysList = [];
         for (let survey of allSurveys) {
@@ -37,8 +48,17 @@ const SurveyList = () => {
     }
   );
 
+  // const handleCardClick = (details) => {
+  //     history.push("/digit-ui/citizen/engagement/surveys/fill-survey", details);
+  // };
+
+  //trying to implement like this-> If user already responded then open ShowSurvey
   const handleCardClick = (details) => {
-    history.push("/digit-ui/citizen/engagement/surveys/fill-survey", details);
+    if (!details.hasResponded) {
+      history.push("/digit-ui/citizen/engagement/surveys/fill-survey", details);
+    } else {
+      history.push("/digit-ui/citizen/engagement/surveys/show-survey", details);
+    }
   };
 
   if (isLoadingSurveys) {

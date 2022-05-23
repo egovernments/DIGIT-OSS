@@ -33,14 +33,14 @@ const propertyOwnerHistory = ({ userType, propertyId: propertyIdFromProp }) => {
       let owner = {};
       if (institution) {
         owner = {
-          PT_COMMON_INSTITUTION_NAME: institution.name || t("CS_NA"),
+          PT_COMMON_INSTITUTION_NAME: institution?.name || t("CS_NA"),
           PT_TYPE_OF_INSTITUTION: t(institution.type) || t("CS_NA"),
           PT_OWNER_NAME: institution.nameOfAuthorizedPerson || t("CS_NA"),
           PT_COMMON_AUTHORISED_PERSON_DESIGNATION: t(institution.designation) || t("CS_NA"),
           PT_FORM3_MOBILE_NUMBER: item.mobileNumber || t("CS_NA"),
           PT_OWNERSHIP_INFO_TEL_PHONE_NO: item.altContactNumber || t("CS_NA"),
           PT_FORM3_EMAIL_ID: item.emailId || t("CS_NA"),
-          PT_OWNERSHIP_INFO_CORR_ADDR: item.correspondenceAddress || t("CS_NA"),
+          PT_OWNERSHIP_INFO_CORR_ADDR: item?.correspondenceAddress || t("CS_NA"),
           PT_FORM3_OWNERSHIP_TYPE: t(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory.split(".")[0]}`) || t("CS_NA"),
         };
       } else {

@@ -61,9 +61,10 @@ const ApplicationDetails = (props) => {
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationNumber,
-    moduleCode: "FSM",
-    role: "FSM_EMPLOYEE",
+    moduleCode: DSO || applicationData?.paymentPreference === "POST_PAY" ? "FSM_POST_PAY_SERVICE" : "FSM",
+    role: DSO ? "FSM_DSO" : "FSM_EMPLOYEE",
     serviceData: applicationDetails,
+    getTripData: DSO ? false : true
   });
 
   useEffect(() => {
@@ -79,6 +80,7 @@ const ApplicationDetails = (props) => {
 
   useEffect(() => {
     switch (selectedAction) {
+      case DSO && "SCHEDULE":
       case "DSO_ACCEPT":
       case "ACCEPT":
       case "ASSIGN":
@@ -96,13 +98,13 @@ const ApplicationDetails = (props) => {
         return setShowModal(true);
       case "SUBMIT":
       case "FSM_SUBMIT":
+      case !DSO && "SCHEDULE":
         return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
       case "PAY":
       case "FSM_PAY":
       case "ADDITIONAL_PAY_REQUEST":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
-        console.debug("default case");
         break;
     }
   }, [selectedAction]);
@@ -142,7 +144,7 @@ const ApplicationDetails = (props) => {
       const caption = {
         date: checkpoint?.auditDetails?.created,
         name: checkpoint?.assigner,
-        mobileNumber: applicationData?.citizen.mobileNumber,
+        mobileNumber: applicationData?.citizen?.mobileNumber,
         source: applicationData?.source || "",
       };
       return <TLCaption data={caption} />;
@@ -177,6 +179,14 @@ const ApplicationDetails = (props) => {
           </Link>
         </div>
       );
+    } else if (checkpoint.status === "WAITING_FOR_DISPOSAL" || checkpoint.status === "DISPOSED" || checkpoint.status === "DISPOSAL_IN_PROGRESS") {
+      const caption = {
+        date: checkpoint?.auditDetails?.created,
+        name: checkpoint?.assigner,
+        mobileNumber: checkpoint?.assigner?.mobileNumber
+      };
+      if (checkpoint?.numberOfTrips) caption.comment= `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`
+      return <TLCaption data={caption} />;
     }
   };
 
@@ -188,7 +198,7 @@ const ApplicationDetails = (props) => {
     <React.Fragment>
       {!isLoading ? (
         <React.Fragment>
-          <Header style={{ marginBottom: "16px" }}>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
+          {/* <Header style={{ marginBottom: "16px" }}>{t("ES_TITLE_APPLICATION_DETAILS")}</Header> */}
           <Card style={{ position: "relative" }}>
             {/* {!DSO && (
               <LinkButton
@@ -201,11 +211,11 @@ const ApplicationDetails = (props) => {
             )} */}
             {applicationDetails?.applicationDetails.map((detail, index) => (
               <React.Fragment key={index}>
-                {/* {index === 0 ? (
-                  <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title) }</CardSubHeader>
+                {index === 0 ? (
+                  <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
                 ) : (
                   <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>
-                )} */}
+                )}
                 <StatusTable>
                   {detail?.values?.map((value, index) => {
                     if (value.map === true && value.value !== "N/A") {
@@ -259,7 +269,6 @@ const ApplicationDetails = (props) => {
               </Fragment>
             )}
           </Card>
-          
           {showModal ? (
             <ActionModal
               t={t}

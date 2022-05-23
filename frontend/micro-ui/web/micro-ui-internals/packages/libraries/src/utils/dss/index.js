@@ -1,12 +1,14 @@
-import { startOfYear, endOfYear, getTime, format, addMonths } from "date-fns";
+import { addMonths, endOfYear, format, startOfYear, subYears,subSeconds,endOfToday } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 const amountFormatter = (value, denomination) => {
   const currencyFormatter = new Intl.NumberFormat("en-IN", { currency: "INR" });
+  const { t } = useTranslation();
   switch (denomination) {
     case "Lac":
-      return `₹ ${currencyFormatter.format((value / 100000).toFixed(2) || 0)} Lac`;
+      return `₹ ${currencyFormatter.format((value / 100000).toFixed(2) || 0)} ${t("ES_DSS_LAC")}`;
     case "Cr":
-      return `₹ ${currencyFormatter.format((value / 10000000).toFixed(2) || 0)} Cr`;
+      return `₹ ${currencyFormatter.format((value / 10000000).toFixed(2) || 0)} ${t("ES_DSS_CR")}`;
     case "Unit":
       return `₹ ${currencyFormatter.format(value?.toFixed(2) || 0)}`;
     default:
@@ -55,4 +57,52 @@ export const getInitialRange = () => {
   const title = `${format(startDate, "MMM d, yy")} - ${format(endDate, "MMM d, yy")}`;
   const duration = Digit.Utils.dss.getDuration(startDate, endDate);
   return { startDate, endDate, title, duration };
+};
+
+export const getDefaultFinacialYear = () => {
+  const currDate = new Date().getMonth();
+  if (currDate < 3) {
+    return {
+      startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
+      endDate: endOfToday(new Date()),
+        //    endDate: subYears(addMonths(endOfYear(new Date()), 3), 1), RAIN-5752 : to keep date till current date and not a financial year
+
+    };
+  } else {
+    return {
+      startDate: addMonths(startOfYear(new Date()), 3),
+      endDate: endOfToday(new Date()),
+//            endDate: addMonths(endOfYear(new Date()), 3),
+
+    };
+  }
+};
+
+/* Used in DSS to get the current module id */
+export const getCurrentModuleName=()=>{
+ const allPaths= window.location.pathname.split('/');
+ return allPaths[allPaths.length-1];
+}
+
+/* Used in DSS to get the filtered ulbs for selected city */
+export const checkSelected = (e, selectedDDRs) => {
+  if (!selectedDDRs || selectedDDRs?.length == 0) {
+    return true;
+  } else if (selectedDDRs.find((ddr) => ddr.ddrKey == e.ddrKey)) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+
+/* Used in DSS to get the filtered ulbs for selected city for global filter*/
+export const getCitiesAvailable = (e, selectedDDRs) => {
+  if (!selectedDDRs || selectedDDRs?.length == 0) {
+    return true;
+  } else if (selectedDDRs.find((ddr) => ddr == e.ddrKey)) {
+    return true;
+  } else {
+    return false;
+  }
 };

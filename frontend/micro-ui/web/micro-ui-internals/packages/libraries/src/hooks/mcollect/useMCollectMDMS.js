@@ -14,6 +14,8 @@ const useMCollectMDMS = (tenantId, moduleCode, type, filter, config = {}) => {
       return useMCollectBillingService();
     case "applicationStatus":
       return useMCollectApplcationStatus();
+    default:
+      return null;
   }
 };
 

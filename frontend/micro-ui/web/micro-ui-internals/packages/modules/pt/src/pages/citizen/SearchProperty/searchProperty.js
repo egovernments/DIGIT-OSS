@@ -3,12 +3,12 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory ,Link } from "react-router-dom";
 
 const description = {
   description: "PT_SEARCH_OR_DESC",
   descriptionStyles: {
-    fontWeight: "300",
+    fontWeight: "300  ",
     color: "#505A5F",
     marginTop: "0px",
     textAlign: "center",
@@ -24,6 +24,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   const [cityCode, setCityCode] = useState();
   const [formValue, setFormValue] = useState();
+  const [errorShown, seterrorShown] = useState(false);
   const { data: propertyData, isLoading: propertyDataLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId: searchData?.city,
     filters: searchData?.filters,
@@ -31,8 +32,20 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     configs: { enabled: Object.keys(searchData).length > 0, retry: false, retryOnMount: false, staleTime: Infinity },
   });
 
+
   useEffect(() => {
-    showToast && setShowToast(null);
+    if ( !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1) && 
+      propertyData?.Properties.length > 0 &&
+      ptSearchConfig.maxResultValidation &&
+      propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
+      !errorShown
+    ) {
+      setShowToast({ error: true, warning: true, label: "ERR_PLEASE_REFINED_UR_SEARCH" });
+    }
+  }, [propertyData]);
+
+  useEffect(() => {
+    showToast && showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH" && setShowToast(null);
   }, [action, propertyDataLoading]);
 
   useLayoutEffect(() => {
@@ -123,6 +136,12 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
         },
         {
+          label: t("PT_PROVIDE_ONE_MORE_PARAM"),
+          isInsideBox: true,
+          placementinbox: 0,
+          isSectionText : true,
+        },
+        {
           label: mobileNumber.label,
           type: mobileNumber.type,
           populators: {
@@ -132,15 +151,17 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
           ...description,
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 1,
         },
         {
           label: property.label,
           labelChildren: (
-            <div className="tooltip">
+            <div className="tooltip" style={{ paddingLeft: "10px", marginBottom: "-3px" }}>
               {"  "}
               <InfoBannerIcon fill="#0b0c0c" />
-              <span className="tooltiptext" style={{ whiteSpace: "nowrap" }}>
-                {t(property.description) + "<br />" + ptSearchConfig?.propertyIdFormat}
+              <span className="tooltiptext" style={{ width: "150px", left: "230%", fontSize:"14px" }}>
+                {t(property.description) + " " + ptSearchConfig?.propertyIdFormat}
               </span>
             </div>
           ),
@@ -152,6 +173,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
           ...description,
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 1,
         },
         {
           label: oldProperty.label,
@@ -162,6 +185,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             validation: oldProperty?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 2,
         },
       ],
       body1: [
@@ -249,6 +274,12 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
           },
         },
         {
+          label: t("PT_PROVIDE_ONE_MORE_PARAM"),
+          isInsideBox: true,
+          placementinbox: 0,
+          isSectionText : true,
+        },
+        {
           label: doorNo.label,
           type: doorNo.type,
           populators: {
@@ -257,6 +288,8 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             validation: doorNo?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 1,
         },
         {
           label: name.label,
@@ -267,14 +300,25 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
             validation: name?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 2,
         },
       ],
     },
   ];
 
   const onPropertySearch = async (data) => {
+    if (
+      ptSearchConfig.maxResultValidation &&
+      propertyData?.Properties.length > 0 &&
+      propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
+      errorShown
+    ) {
+      seterrorShown(true);
+      return;
+    }
     if (!data?.city?.code) {
-      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS"});
       return;
     }
     if (action == 0) {
@@ -314,25 +358,33 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
       }
     }
 
-    setShowToast(null);
+    if (showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH") setShowToast(null);
+    if (data?.doorNo && data?.doorNo !== "" && data?.propertyIds !== "") {
+      data["propertyIds"] = "";
+    }
 
     let tempObject = Object.keys(data)
       .filter((k) => data[k])
       .reduce((acc, key) => ({ ...acc, [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {});
     let city = tempObject.city;
+    
     delete tempObject.addParam;
     delete tempObject.addParam1;
     delete tempObject.city;
     setSearchData({ city: city, filters: tempObject });
-
     return;
   };
+  
   const onFormValueChange = (setValue, data, formState) => {
+    if (data?.doorNo && data?.doorNo !== "" && data?.propertyIds !== "") {
+      data["propertyIds"] = "";
+    }
     const mobileNumberLength = data?.[mobileNumber.name]?.length;
     const oldPropId = data?.[oldProperty.name];
     const propId = data?.[property.name];
     const city = data?.city;
     const locality = data?.locality;
+
     if (city?.code !== cityCode) {
       setCityCode(city?.code);
     }
@@ -350,11 +402,13 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     return <Loader />;
   }
 
-  if (propertyData && !propertyDataLoading && !error) {
+  let validation = ptSearchConfig.maxResultValidation && !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1)   ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
+
+  if (propertyData && !propertyDataLoading && !error && validation ) {
     let qs = {};
     qs = { ...searchData.filters, city: searchData.city };
 
-    if (
+    if ( !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1) && 
       ptSearchConfig?.ptSearchCount &&
       searchData?.filters?.locality &&
       propertyDataLoading &&
@@ -383,7 +437,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   }
 
   return (
-    <div style={{ marginTop: "16px", marginBottom: "16px" }}>
+    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white"}}>
       <FormComposer
         onSubmit={onPropertySearch}
         noBoxShadow
@@ -394,14 +448,20 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
         text={t(propsConfig.texts.text)}
         headingStyle={{ fontSize: "32px", marginBottom: "16px", fontFamily: "Roboto Condensed,sans-serif" }}
         onFormValueChange={onFormValueChange}
+        cardStyle={{marginBottom:"0"}}
       ></FormComposer>
+      <span className="link" style={{display:"flex", justifyContent:"center",paddingBottom:"16px"}}>
+        <Link to={"/digit-ui/citizen/pt/property/new-application"}>{t("CPT_REG_NEW_PROPERTY")}</Link>
+      </span>
       {showToast && (
         <Toast
           error={showToast.error}
+          isDleteBtn={true}
           warning={showToast.warning}
           label={t(showToast.label)}
           onClose={() => {
             setShowToast(null);
+            seterrorShown(false);
           }}
         />
       )}

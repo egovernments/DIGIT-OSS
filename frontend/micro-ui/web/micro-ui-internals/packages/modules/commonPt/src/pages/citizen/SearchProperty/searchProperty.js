@@ -3,7 +3,7 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory ,Link} from "react-router-dom";
 
 const description = {
   description: "(or)",
@@ -21,7 +21,10 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   const { action = 0 } = Digit.Hooks.useQueryParams();
   const [searchData, setSearchData] = useState({});
   const [showToast, setShowToast] = useState(null);
-  const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
+  sessionStorage.setItem("VisitedCommonPTSearch",true);
+  let allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
+  // if called from tl module get tenants from tl usetenants
+  allCities = allCities ? allCities : Digit.Hooks.tl.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));  
   const [cityCode, setCityCode] = useState();
   const [formValue, setFormValue] = useState();
   const { data: propertyData, isLoading: propertyDataLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
@@ -123,6 +126,12 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           },
         },
         {
+          label: t("PT_PROVIDE_ONE_MORE_PARAM"),
+          isInsideBox: true,
+          placementinbox: 0,
+          isSectionText : true,
+        },
+        {
           label: mobileNumber.label,
           type: mobileNumber.type,
           populators: {
@@ -132,16 +141,20 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           },
           ...description,
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 1
         },
         {
-          label: property.label,
+          label: "",
           labelChildren: (
-            <div className="tooltip">
-              {"  "}
+            <div className="tooltip" /* style={{position:"relative"}} */>
+              <div style={{display: "flex", /* alignItems: "center", */ gap: "0 4px"}}>
+              <h2>{property.label}</h2>
               <InfoBannerIcon fill="#0b0c0c" />
-              <span className="tooltiptext" style={{ whiteSpace: "nowrap" }}>
-                {t(property.description) + "<br />" + ptSearchConfig?.propertyIdFormat}
+              <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
+              {t(property.description) + " " + ptSearchConfig?.propertyIdFormat}
               </span>
+              </div>
             </div>
           ),
           type: property.type,
@@ -152,6 +165,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           },
           ...description,
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 1
         },
         {
           label: oldProperty.label,
@@ -162,6 +177,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             validation: oldProperty?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 2
         },
       ],
       body1: [
@@ -249,6 +266,12 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           },
         },
         {
+          label: t("PT_PROVIDE_ONE_MORE_PARAM"),
+          isInsideBox: true,
+          placementinbox: 0,
+          isSectionText : true,
+        },
+        {
           label: doorNumber.label,
           type: doorNumber.type,
           populators: {
@@ -257,6 +280,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             validation: doorNumber?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 1,
         },
         {
           label: name.label,
@@ -267,6 +292,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             validation: name?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 2,
         },
       ],
     },
@@ -274,42 +301,43 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
 
   const onPropertySearch = async (data) => {
     if (!data?.city?.code) {
-      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+      setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
       return;
     }
+   
     if (action == 0) {
       if (!(data?.mobileNumber || data?.propertyIds || data?.oldPropertyId)) {
-        setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+        setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
         return;
       }
       if (data?.mobileNumber && !data.mobileNumber?.match(mobileNumber?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: mobileNumber?.validation?.pattern?.message });
+        setShowToast({ error: true, label: mobileNumber?.validation?.pattern?.message });
         return;
       }
       if (data?.propertyIds && !data.propertyIds?.match(property?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: property?.validation?.pattern?.message });
+        setShowToast({ error: true, label: property?.validation?.pattern?.message });
         return;
       }
       if (data?.oldPropertyId && !data.oldPropertyId?.match(oldProperty?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: oldProperty?.validation?.pattern?.message });
+        setShowToast({ error: true, label: oldProperty?.validation?.pattern?.message });
         return;
       }
     } else {
       if (!data?.locality?.code) {
-        setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+        setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
         return;
       }
       if (!(data?.doorNumber || data?.name)) {
-        setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+        setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
         return;
       }
 
       if (data?.name && !data.name?.match(name?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: name?.validation?.pattern?.message });
+        setShowToast({ error: true, label: name?.validation?.pattern?.message });
         return;
       }
       if (data?.doorNumber && !data.doorNumber?.match(doorNumber?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: doorNumber?.validation?.pattern?.message });
+        setShowToast({ error: true, label: doorNumber?.validation?.pattern?.message });
         return;
       }
     }
@@ -327,11 +355,22 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
 
     return;
   };
-  const onFormValueChange = (setValue, data, formState) => {
+ const onFormValueChange = (setValue, data, formState) => {
     const mobileNumberLength = data?.[mobileNumber.name]?.length;
     const oldPropId = data?.[oldProperty.name];
     const propId = data?.[property.name];
     const city = data?.city;
+
+    // if ((city!=null && Object.keys(city).length !=0) && !(mobileNumberLength > 0 || oldPropId!="" || propId!="")){
+    //   setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+    // }
+
+    // if (mobileNumberLength > 0 || oldPropId!="" || propId!="") {
+    // setShowToast(null);
+    // }
+    // if (city!=null && Object.keys(city).length !=0 && (mobileNumberLength > 0 || oldPropId!="" || propId!="")){
+    //   setShowToast(null)
+    // }
     const locality = data?.locality;
     if (city?.code !== cityCode) {
       setCityCode(city?.code);
@@ -367,11 +406,42 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         queryParams: { ...qs },
       });
     } else {
-      history.push(
-        `/digit-ui/citizen/commonPt/property/search-results?${Object.keys(qs)
-          .map((key) => `${key}=${qs[key]}`)
-          .join("&")}${redirectToUrl ? `&redirectToUrl=${redirectToUrl}` : ''}`
-      );
+      // beacuse of this commit 
+      // https://github.com/egovernments/DIGIT-Dev/commit/2bae1c36dd1f8242bca30366da80c88d46b6aaaa#diff-3c34510e8b422f53eb9633d014f50024496ad79f952849e1b42fd61877562c4cR385
+      // am adding one more condtion for this. 
+      if(redirectToUrl || window.location.href.includes("digit-ui/citizen/commonpt/property/citizen-search")) {
+        history.push(
+          `/digit-ui/citizen/commonPt/property/search-results?${Object.keys(qs)
+            .map((key) => `${key}=${qs[key]}`)
+            .join("&")}${redirectToUrl ? `&redirectToUrl=${redirectToUrl}` : ''}`
+        );
+      } else {
+        let SearchParams = {};
+        if(action == 0)
+        SearchParams = {
+            city : qs?.city,
+            mobileNumber : qs?.mobileNumber || "",
+            propertyIds : qs?.propertyIds || "",
+            oldPropertyIds : qs?.oldPropertyIds || "", 
+            locality : "",
+            doorNo : "",
+            name : "",
+        }
+        else
+        SearchParams = {
+          city : qs?.city,
+          locality : qs?.locality || "",
+          doorNo : qs?.doorNumber || "",
+          name : qs?.name || "",
+          mobileNumber : "",
+          propertyIds : "",
+          oldPropertyIds : "", 
+        }
+        //onSelect('cptSearchQuery',{...SearchParams});
+        onSelect('cptSearchQuery', SearchParams, null, null, null, {
+          queryParams: { ...SearchParams },
+        });
+      }
     }
   }
 
@@ -383,7 +453,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   }
 
   return (
-    <div style={{ marginTop: "16px", marginBottom: "16px" }}>
+    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white"}}>
       <FormComposer
         onSubmit={onPropertySearch}
         noBoxShadow
@@ -394,9 +464,14 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         text={t(propsConfig.texts.text)}
         headingStyle={{ fontSize: "32px", marginBottom: "16px", fontFamily: "Roboto Condensed,sans-serif" }}
         onFormValueChange={onFormValueChange}
+        cardStyle={{marginBottom:"0"}}
       ></FormComposer>
+      <span className="link" style={{display:"flex", justifyContent:"center",paddingBottom:"16px"}}>
+        <Link to={window.location.href.includes("/tl/tradelicence/") ? "/digit-ui/citizen/tl/tradelicence/new-application/create-property" : "/digit-ui/citizen/commonpt/property/new-application"}>{t("CPT_REG_NEW_PROPERTY")}</Link>
+      </span>
       {showToast && (
         <Toast
+          isDleteBtn={true}
           error={showToast.error}
           warning={showToast.warning}
           label={t(showToast.label)}

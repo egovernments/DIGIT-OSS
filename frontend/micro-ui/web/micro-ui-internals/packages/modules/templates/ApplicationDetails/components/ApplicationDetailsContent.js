@@ -4,6 +4,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import BPADocuments from "./BPADocuments";
 import InspectionReport from "./InspectionReport";
 import NOCDocuments from "./NOCDocuments";
@@ -17,6 +18,7 @@ import SubOccupancyTable from "./SubOccupancyTable";
 import TLCaption from "./TLCaption";
 import TLTradeAccessories from "./TLTradeAccessories";
 import TLTradeUnits from "./TLTradeUnits";
+import DocumentsPreview from "./DocumentsPreview";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -25,7 +27,9 @@ function ApplicationDetailsContent({
   applicationData,
   businessService,
   timelineStatusPrefix,
+  showTimeLine=true,
   statusAttribute = "status",
+  paymentsList
 }) {
   const { t } = useTranslation();
 
@@ -41,7 +45,7 @@ function ApplicationDetailsContent({
       };
       return <TLCaption data={caption} />;
     } 
-    else if(window.location.href.includes("/obps/"))
+    else if(window.location.href.includes("/obps/") || window.location.href.includes("/noc/"))
     {
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,
@@ -59,6 +63,7 @@ function ApplicationDetailsContent({
         // name: checkpoint?.assigner?.name,
         name: checkpoint?.assignes?.[0]?.name,
         // mobileNumber: checkpoint?.assigner?.mobileNumber,
+        wfComment : checkpoint?.wfComment,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
       };
       return <TLCaption data={caption} />;
@@ -123,7 +128,13 @@ function ApplicationDetailsContent({
               <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t(detail.title)}</CardSubHeader>
             ) : (
               <React.Fragment>
-                <CardSectionHeader style={index == 0 && checkLocation ? { marginBottom: "16px",fontSize: "24px" } : { marginBottom: "16px", marginTop: "32px", fontSize: "24px" }}>
+                <CardSectionHeader
+                  style={
+                    index == 0 && checkLocation
+                      ? { marginBottom: "16px", fontSize: "24px" }
+                      : { marginBottom: "16px", marginTop: "32px", fontSize: "24px" }
+                  }
+                >
                   {isNocLocation ? `${t(detail.title)}` : t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>
@@ -136,6 +147,20 @@ function ApplicationDetailsContent({
                 detail?.values?.map((value, index) => {
                   if (value.map === true && value.value !== "N/A") {
                     return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
+                  }
+                  if (value?.isLink == true)
+                  {
+                    return (
+                      <Row
+                        key={t(value.title)}
+                        label={window.location.href.includes("tl") ? <div style={{width:"200%"}}><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{t(value?.title)}</span></Link></div> : isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
+                        text={<div><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{value?.value}</span></Link></div>}
+                        last={index === detail?.values?.length - 1}
+                        caption={value.caption}
+                        className="border-none"
+                        rowContainerStyle={getRowStyles()}
+                      />
+                    );
                   }
                   return (
                     <Row
@@ -153,7 +178,7 @@ function ApplicationDetailsContent({
             </StatusTable>
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
-          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} />}
+          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} paymentsList={paymentsList}/>}
           {applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0 && detail?.additionalDetails?.fiReport && (
             <InspectionReport fiReport={applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending} />
           )}
@@ -199,13 +224,14 @@ function ApplicationDetailsContent({
           {detail?.additionalDetails?.subOccupancyTableDetails && (
             <SubOccupancyTable edcrDetails={detail?.additionalDetails} applicationData={applicationDetails?.applicationData} />
           )}
+          {detail?.additionalDetails?.documentsWithUrl && <DocumentsPreview documents={detail?.additionalDetails?.documentsWithUrl} />}
           {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
           {detail?.additionalDetails?.taxHeadEstimatesCalculation && (
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />
           )}
         </React.Fragment>
       ))}
-      {workflowDetails?.data?.timeline?.length > 0 && (
+      {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
         <React.Fragment>
           <BreakLine />
           {(workflowDetails?.isLoading || isDataLoading) && <Loader />}

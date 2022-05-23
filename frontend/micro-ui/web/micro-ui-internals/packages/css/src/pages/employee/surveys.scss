@@ -93,9 +93,93 @@
   font-weight: 700;
 }
 
+.responses-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px 4px; 
+  background-color: #FAFAFA;
+  border: 1px solid #D6D5D4;
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.responses-container-date {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 8px 0px 8px;
+  position: static;
+  left: 0px;
+  top: 41px;
+  background: #FAFAFA;
+  border: 1px solid #D6D5D4;
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.responses-container-line {
+  width: 100%;
+  margin-bottom: -12px;
+}
+
+.date-time{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.response-result {
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  margin: 0px 0px -20px;
+  display: inline-block;
+}
+
+.date-container {
+  display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 16px 8px;
+background: #FAFAFA;
+border: 1px solid #D6D5D4;
+box-sizing: border-box;
+border-radius: 4px;
+@apply gap-y-6;
+}
+
+.date-response {
+display: flex;
+flex-direction: row;
+font-weight: bold;
+@apply gap-10 ;
+}
+.divide {
+  --tw-divide-x-reverse: 0;
+border-right-width: calc(2px * var(--tw-divide-x-reverse));
+border-left-width: calc(2px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.circle {
+    background-color:red;
+    height:40px;
+    border-radius:50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    width:40px;
+}
+
 .align-columns{
   @apply grid gap-4;
 }
+
 
 @screen dt {
   .surveydetailsform-wrapper {

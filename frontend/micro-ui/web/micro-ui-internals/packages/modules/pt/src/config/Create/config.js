@@ -212,8 +212,8 @@ export const newConfig =[
                     "component": "PTLandArea",
                     "texts": {
                         "headerCaption": "",
-                        "header": "PT_FLAT_DETAILS",
-                        "cardText": "PT_FLAT_DETAILS_DESC",
+                        "header": "PT_PLOT_SIZE_HEADER",
+                        "cardText": "",
                         "submitBarLabel": "PT_COMMON_NEXT"
                     },
                     "key": "units",
@@ -228,8 +228,8 @@ export const newConfig =[
                     "component": "Area",
                     "texts": {
                         "headerCaption": "",
-                        "header": "PT_FLAT_DETAILS",
-                        "cardText": "PT_FLAT_DETAILS_DESC",
+                        "header": "PT_PLOT_SIZE_HEADER",
+                        "cardText": "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
                         "submitBarLabel": "PT_COMMON_NEXT"
                     },
                     "key": "units",
@@ -241,15 +241,15 @@ export const newConfig =[
                     "type": "component",
                     "route": "number-of-floors",
                     "isMandatory": true,
-                    "component": "PropertyFloorDetails",
+                    "component": "PropertyBasementDetails",
                     "texts": {
                         "headerCaption": "",
-                        "header": "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL",
-                        "cardText": "PT_PROPERTY_DETAILS_NO_OF_FLOORS_TEXT",
+                        "header": "PT_PROPERTY_DETAILS_NO_OF_BASEMENTS_HEADER",
+                        "cardText": "",
                         "submitBarLabel": "PT_COMMONS_NEXT"
                     },
                     "nextStep": "number-of-basements@0",
-                    "key": "noOfFloors",
+                    "key": "noOofBasements",
                     "withoutLabel": true
                 },
                 {
@@ -301,11 +301,11 @@ export const newConfig =[
                     "type": "component",
                     "route": "number-of-basements@0",
                     "isMandatory": true,
-                    "component": "PropertyBasementDetails",
+                    "component": "PropertyFloorDetails",
                     "texts": {
                         "headerCaption": "",
-                        "header": "PT_PROPERTY_DETAILS_NO_OF_BASEMENTS_HEADER",
-                        "cardText": "",
+                        "header": "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL",
+                        "cardText": "PT_PROPERTY_DETAILS_NO_OF_FLOORS_TEXT",
                         "submitBarLabel": "PT_COMMONS_NEXT"
                     },
                     "nextStep": {
@@ -313,7 +313,7 @@ export const newConfig =[
                         "PT_ONE_BASEMENT_OPTION": "units",
                         "PT_TWO_BASEMENT_OPTION": "units"
                     },
-                    "key": "noOofBasements",
+                    "key": "noOfFloors",
                     "withoutLabel": true,
                     "hideInEmployee": true
                 },

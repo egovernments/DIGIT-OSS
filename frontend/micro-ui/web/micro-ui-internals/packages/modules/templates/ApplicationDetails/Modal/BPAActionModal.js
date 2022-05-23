@@ -37,18 +37,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     },
     { enabled: !action?.isTerminateState }
   );
-  const { isLoading: financialYearsLoading, data: financialYearsData } = Digit.Hooks.pt.useMDMS(
-    tenantId,
-    businessService,
-    "FINANCIAL_YEARLS",
-    {},
-    {
-      details: {
-        tenantId: Digit.ULBService.getStateId(),
-        moduleDetails: [{ moduleName: "egf-master", masterDetails: [{ name: "FinancialYear", filter: "[?(@.module == 'TL')]" }] }],
-      },
-    }
-  );
 
   const queryClient = useQueryClient();
   const [config, setConfig] = useState({});
@@ -58,15 +46,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
-  const [financialYears, setFinancialYears] = useState([]);
   const [selectedFinancialYear, setSelectedFinancialYear] = useState(null);
   const mobileView = Digit.Utils.browser.isMobile() ? true : false;
-
-  useEffect(() => {
-    if (financialYearsData && financialYearsData["egf-master"]) {
-      setFinancialYears(financialYearsData["egf-master"]?.["FinancialYear"]);
-    }
-  }, [financialYearsData]);
 
   useEffect(() => {
     setApprovers(approverData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })));
@@ -84,14 +65,13 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {
           try {
-            const response = await Digit.UploadServices.Filestorage("PT", file, tenantId?.split(".")[0]);
+            const response = await Digit.UploadServices.Filestorage("OBPS", file, Digit.ULBService.getStateId() || tenantId?.split(".")[0]);
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {
               setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
             setError(t("CS_FILE_UPLOAD_ERROR"));
           }
         }
@@ -228,14 +208,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         }
       }
     })
-    // try{
-    //   mutation1.mutate({BPA:applicationData}, {
-    //     onSuccess,
-    //   });
-    // }
-    // catch (err) {
-    //   console.error(err, "inside ack");
-    // }
+
     submitAction({
       BPA:applicationData
     }, nocDetails, {isStakeholder: false, bpa: true});
@@ -259,7 +232,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         })
       );
     }
-  }, [action, approvers, financialYears, selectedFinancialYear, uploadedFile]);
+  }, [action, approvers, selectedFinancialYear, uploadedFile]);
 
   return action && config.form ? (
     <Modal
@@ -272,10 +245,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       formId="modal-action"
       isOBPSFlow={true}
       popupStyles={mobileView?{width:"720px"}:{}}
-      style={!mobileView?{height: "45px", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{height:"45px",width:"44%"}}
+      style={!mobileView?{minHeight: "45px", height: "auto", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{minHeight: "45px", height: "auto",width:"44%"}}
       popupModuleMianStyles={mobileView?{paddingLeft:"5px"}: {}}
     >
-      {financialYearsLoading ? (
+      {PTALoading ? (
         <Loader />
       ) : (
         <FormComposer

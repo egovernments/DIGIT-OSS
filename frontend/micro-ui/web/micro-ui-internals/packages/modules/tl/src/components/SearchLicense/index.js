@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, Header, SearchField, Dropdown, Table, Card } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY, stringReplaceAll } from "../../utils";
 import SearchFields from "./SearchFields";
@@ -64,9 +64,9 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
             return (
               <div>
                 <span className="link">
-                  <Link to={`/digit-ui/employee/tl/application-details/${row.original["applicationNumber"]}?renewalPending=true`}>
+                  <a href={`/digit-ui/employee/tl/application-details/${row.original["applicationNumber"]}?renewalPending=true`}>
                     {row.original["licenseNumber"]}
-                  </Link>
+                  </a>
                 </span>
               </div>
             );
@@ -101,6 +101,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
       ]), [] )
 
     return <React.Fragment>
+        <Header>{t("TL_SEARCH_LICENSE")}</Header>
         <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
           <SearchFields {...{register, control, reset, tenantId, t}} />
         </SearchForm>
@@ -115,7 +116,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
                 ))
             }
         </Card>
-        : <Table
+        : data !== "" && <Table
             t={t}
             data={data} 
             totalRecords={count}

@@ -30,7 +30,6 @@ export const getFileUrl = async (fileStoreId) => {
       return response.data.fileStoreIds[0]?.url;
     }
   } catch (err) {
-    console.error("Failed to Fetch from filestore", err);
   }
 };
 
@@ -79,7 +78,6 @@ export const downloadDocument = async (filestoreId, title) => {
   if (fileUrl) {
     Digit.Utils.downloadPDFFromLink(fileUrl);
   } else {
-    console.error("Invalid Filestoreid or no file found to download");
   }
 };
 

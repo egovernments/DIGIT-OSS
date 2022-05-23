@@ -29,7 +29,7 @@ function PropertyDocument({ property = {} }) {
             return (
               <a target="_" href={documentLink} style={{ minWidth: "160px" }} key={index}>
                 <PDFSvg width={85} height={100} style={{ background: "#f6f6f6", padding: "8px" }} />
-                <p style={{ marginTop: "8px" }}>{pdfDocumentName(documentLink, index)}</p>
+                <p style={{ marginTop: "8px" }}>{t(`PT_${document?.documentType.replace(".","_")}`)}</p>
               </a>
             );
           })}

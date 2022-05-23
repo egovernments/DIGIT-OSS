@@ -90,6 +90,11 @@
   .select-wrap,
   .employee-select-wrap {
     margin-bottom: 0px;
+    .profile-dropdown--item{
+      span{
+        white-space: pre;
+      }
+    }
   }
 }
 

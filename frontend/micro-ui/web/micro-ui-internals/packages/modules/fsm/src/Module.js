@@ -7,6 +7,7 @@ import CheckSlum from "./pageComponents/CheckSlum";
 import SelectAddress from "./pageComponents/SelectAddress";
 import SelectChannel from "./pageComponents/SelectChannel";
 import SelectGender from "./pageComponents/SelectGender";
+import SelectPaymentType from "./pageComponents/SelectPaymentType";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectLandmark from "./pageComponents/SelectLandmark";
 import SelectName from "./pageComponents/SelectName";
@@ -18,6 +19,8 @@ import SelectSlumName from "./pageComponents/SelectSlumName";
 import SelectStreet from "./pageComponents/SelectStreet";
 import SelectTankSize from "./pageComponents/SelectTankSize";
 import SelectTripData from "./pageComponents/SelectTripData";
+import SelectTripNo from "./pageComponents/SelectTripNo";
+import SelectPaymentPreference from "./pageComponents/SelectPaymentPreference";
 import CitizenApp from "./pages/citizen";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import { MyApplications } from "./pages/citizen/MyApplications";
@@ -140,6 +143,7 @@ const componentsToRegister = {
   SelectPincode,
   SelectTankSize,
   SelectPitType,
+  SelectTripNo,
   SelectGeolocation,
   SelectSlumName,
   CheckSlum,
@@ -150,6 +154,8 @@ const componentsToRegister = {
   SelectName,
   SelectTripData,
   SelectGender,
+  SelectPaymentType,
+  SelectPaymentPreference,
   FSMEmpInbox: Inbox,
   FSMFstpInbox: FstpInbox,
   FSMNewApplicationEmp: NewApplication,
@@ -164,6 +170,7 @@ const componentsToRegister = {
   FSMCitizenApplicationDetails: ApplicationDetails,
   FSMSelectRating: SelectRating,
   FSMDsoDashboard: DsoDashboard,
+  SelectPaymentPreference,
 };
 
 export const initFSMComponents = () => {

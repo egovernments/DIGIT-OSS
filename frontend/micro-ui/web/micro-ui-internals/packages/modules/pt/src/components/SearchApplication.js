@@ -1,13 +1,15 @@
 import React, { useCallback, useMemo, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, MobileNumber, Loader } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, MobileNumber, Loader, CardText, Header } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
+import MobileSearchApplication from "./MobileSearchApplication";
 
-const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) => {
+const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count, setShowToast }) => {
+    const isMobile = window.Digit.Utils.browser.isMobile();
     const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
         defaultValues: {
             offset: 0,
-            limit: 10,
+            limit: !isMobile && 10,
             sortBy: "commencementDate",
             sortOrder: "DESC"
         }
@@ -57,6 +59,11 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
     const GetCell = (value) => <span className="cell-text">{value}</span>;
     const columns = useMemo( () => ([
         {
+            Header: t("PT_SEARCHPROPERTY_TABEL_PID"),
+            disableSortBy: true,
+            accessor: (row) => GetCell(row.propertyId || ""),
+        },
+        {
             Header: t("PT_APPLICATION_NO_LABEL"),
             accessor: "acknowldgementNumber",
             disableSortBy: true,
@@ -64,18 +71,13 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
               return (
                 <div>
                   <span className="link">
-                    <Link to={`/digit-ui/employee/pt/application-details/${row.original["propertyId"]}`}>
+                    <Link to={`/digit-ui/employee/pt/applicationsearch/application-details/${row.original["propertyId"]}`}>
                       {row.original["acknowldgementNumber"]}
                     </Link>
                   </span>
                 </div>
               );
             },
-          },
-          {
-            Header: t("PT_SEARCHPROPERTY_TABEL_PID"),
-            disableSortBy: true,
-            accessor: (row) => GetCell(row.propertyId || ""),
           },
           {
             Header: t("PT_SEARCHPROPERTY_TABEL_APPLICATIONTYPE"),
@@ -88,14 +90,14 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
             disableSortBy: true,
           },
           {
-            Header: t("PT_ADDRESS_LABEL"),
-            disableSortBy: true,
-            accessor: (row) => GetCell(getaddress(row.address) || ""),
-          },
-          {
             Header: t("ES_SEARCH_PROPERTY_STATUS"),
             accessor: (row) =>GetCell(t( row?.status &&`WF_PT_${row.status}`|| "NA") ),
             disableSortBy: true,
+          },
+          {
+            Header: t("PT_ADDRESS_LABEL"),
+            disableSortBy: true,
+            accessor: (row) => GetCell(getaddress(row.address) || ""),
           },
       ]), [] )
 
@@ -121,6 +123,14 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
     let validation={}
 
     return <React.Fragment>
+                {isMobile ?
+                <MobileSearchApplication {...{ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit, formState, setShowToast }}/>
+                 :
+                <div>
+                <Header>{t("PT_SEARCH_PROP_APP")}</Header>
+                < Card className={"card-search-heading"}>
+                    <span style={{color:"#505A5F"}}>{t("Provide at least one parameter to search for an application")}</span>
+                </Card>
                 <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
                 <SearchField>
                     <label>{t("PT_APPLICATION_NO_LABEL")}</label>
@@ -144,7 +154,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                         message: t("CORE_COMMON_MOBILE_ERROR"),
                     },
                     pattern: {
-                    value: /[789][0-9]{9}/,
+                    value: /[6789][0-9]{9}/,
                     //type: "tel",
                     message: t("CORE_COMMON_MOBILE_ERROR"),
                     },
@@ -168,7 +178,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                                 option={applicationTypes}
                                 optionKey="i18nKey"
                                 t={t}
-                                disable={true}
+                                disable={false}
                                 />
                             )}
                             />
@@ -186,7 +196,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                                 option={applicationStatuses}
                                 optionKey="i18nKey"
                                 t={t}
-                                disable={true}
+                                disable={false}
                                 />
                             )}
                             />
@@ -194,7 +204,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                 <SearchField>
                     <label>{t("PT_FROM_DATE")}</label>
                     <Controller
-                        render={(props) => <DatePicker date={props.value} disabled={true} onChange={props.onChange} />}
+                        render={(props) => <DatePicker date={props.value} disabled={false} onChange={props.onChange} />}
                         name="fromDate"
                         control={control}
                         />
@@ -202,14 +212,15 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                 <SearchField>
                     <label>{t("PT_TO_DATE")}</label>
                     <Controller
-                        render={(props) => <DatePicker date={props.value} disabled={true} onChange={props.onChange} />}
+                        render={(props) => <DatePicker date={props.value} disabled={false} onChange={props.onChange} />}
                         name="toDate"
                         control={control}
                         />
                 </SearchField>
                 <SearchField className="submit">
                     <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
-                    <p onClick={() => {
+                    <p style={{marginTop:"10px"}}
+                     onClick={() => {
                         reset({ 
                             acknowledgementIds: "", 
                             fromDate: "", 
@@ -223,6 +234,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                             sortBy: "commencementDate",
                             sortOrder: "DESC"
                         });
+                        setShowToast(null);
                         previousPage();
                     }}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
                 </SearchField>
@@ -238,7 +250,7 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                     ))
                 }
             </Card>
-            :(!isLoading ? <Table
+            :(!isLoading && data !== ""? <Table
                 t={t}
                 data={data}
                 totalRecords={count}
@@ -260,7 +272,8 @@ const PTSearchApplication = ({tenantId, isLoading, t, onSubmit, data, count }) =
                 onSort={onSort}
                 disableSort={false}
                 sortParams={[{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}]}
-            />:<Loader/>)}
+            />: data !== "" || isLoading && <Loader/>)}
+            </div>}
         </React.Fragment>
 }
 

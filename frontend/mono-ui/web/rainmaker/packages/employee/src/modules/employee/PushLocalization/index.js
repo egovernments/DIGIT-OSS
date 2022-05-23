@@ -76,7 +76,6 @@ class PushLocalization extends Component {
 
       }
       catch (e) {
-        console.log(e.message)
       }
     } else {
       toggleSnackbarAndSetText(

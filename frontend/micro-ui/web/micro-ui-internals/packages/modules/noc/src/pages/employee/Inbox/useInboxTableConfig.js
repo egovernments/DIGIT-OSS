@@ -38,7 +38,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
             // },
             {
               Header: t("NOC_MODULE_SOURCE_LABEL"),
-              accessor: row => t(`${row?.source}`),
+              accessor: row => t(`MODULE_${row?.source}`),
             disableSortBy: true,
 
             },

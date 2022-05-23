@@ -71,7 +71,6 @@ export const getMDMSData = async (action, state, dispatch) => {
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
     return payload.MdmsRes
   } catch (e) {
-    console.log(e);
   }
 };
 

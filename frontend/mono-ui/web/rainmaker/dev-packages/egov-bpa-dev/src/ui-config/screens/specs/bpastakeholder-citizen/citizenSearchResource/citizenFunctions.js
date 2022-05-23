@@ -37,7 +37,6 @@ export const getMdmsData = async () => {
     );
     return payload;
   } catch (e) {
-    console.log(e);
   }
 };
 export const fetchData = async (
@@ -206,7 +205,6 @@ export const fetchData = async (
       storeData(sortConvertedArray, dispatch, fromMyApplicationPage, fromStakeHolderPage);
     }
   } catch (error) {
-    console.log(error);
   }
 };
 

@@ -62,7 +62,6 @@ function getBase64Image(tenantId) {
     ctx.drawImage(img, 0, 0);
     return canvas.toDataURL("image/png");
   } catch (e) {
-    console.error("asd", e);
     return "";
   }
 }
@@ -442,6 +441,21 @@ export const downloadReceipt = async (
   const responseStatus = parseInt(response.status, 10);
   if (responseStatus === 201 || responseStatus === 200) {
     let filename = receiptNumber ? `receiptNumber-${receiptNumber}.pdf` : `consumer-${consumerCode}.pdf`;
+    downloadPdf(new Blob([response.data], { type: "application/pdf" }), filename);
+  }
+};
+/* Download Bills */
+
+export const downloadBill = async (
+  consumerCode,
+  businessService,
+  pdfKey = "consolidatedbill",
+  tenantId = Digit.ULBService.getCurrentTenantId(),
+) => {
+  const response = await Digit.ReceiptsService.bill_download(businessService, consumerCode, tenantId, pdfKey);
+  const responseStatus = parseInt(response.status, 10);
+  if (responseStatus === 201 || responseStatus === 200) {
+    let filename = consumerCode ? `consumerCode-${consumerCode}.pdf` : `consumer-${consumerCode}.pdf`;
     downloadPdf(new Blob([response.data], { type: "application/pdf" }), filename);
   }
 };

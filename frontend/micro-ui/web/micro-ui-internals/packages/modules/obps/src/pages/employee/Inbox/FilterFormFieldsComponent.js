@@ -73,7 +73,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
                 );
               }),[props?.value])
             return loadingLocalitiesForEmployeesCurrentTenant ? <Loader/> : <>
-              <div className="filter-label sub-filter-label">{t("ES_INBOX_LOCALITY")}</div>
+              <div className="filter-label sub-filter-label" style={{fontSize: "18px", fontWeight: "600"}}>{t("ES_INBOX_LOCALITY")}</div>
               <MultiSelectDropdown
               options={localitiesForEmployeesCurrentTenant ? localitiesForEmployeesCurrentTenant : []}
               optionsKey="i18nkey"
@@ -98,7 +98,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
         control={controlFilterForm}
         render={(props) => {
           return loadingApplicationTypesOfBPA ? <Loader /> : <>
-            <div className="filter-label sub-filter-label">{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</div>
+            <div className="filter-label sub-filter-label" style={{fontSize: "18px", fontWeight: "600"}}>{t("BPA_SEARCH_APPLICATION_TYPE_LABEL")}</div>
             <RadioButtons
               onSelect={(e) => {
                 props.onChange(e.code);
@@ -121,7 +121,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           control={controlFilterForm}
           render={(props) => {
             return <>
-              <div className="filter-label sub-filter-label">{t("ES_INBOX_RISK_TYPE")}</div>
+              <div className="filter-label sub-filter-label" style={{fontSize: "18px", fontWeight: "600"}}>{t("ES_INBOX_RISK_TYPE")}</div>
               <RadioButtons
                 onSelect={(e) => {props.onChange(e.code);
                 setFilterFormValue("applicationStatus",[])}}
@@ -136,7 +136,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
         />
     </FilterFormField> : null}
     {selectedApplicationType?.length > 0 && selectedBusinessService?.length > 0 ? <FilterFormField>
-      <div className="filter-label sub-filter-label">{t("ACTION_TEST_APPLICATION_STATUS")}</div>
+      <div className="filter-label sub-filter-label" style={{fontSize: "18px", fontWeight: "600"}}>{t("ACTION_TEST_APPLICATION_STATUS")}</div>
       <Controller
         name="applicationStatus"
         control={controlFilterForm}
@@ -153,7 +153,9 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               key={index}
               onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
               checked={props.value?.includes(status?.statusid)}
-              label={`${t(`WF_STATE_${status.businessservice}_${status.applicationstatus}`)} (${status.count})`}
+              label={`${t(`WF_STATE_${status.businessservice}_${status.applicationstatus}`)}`}
+              //Hidden due to RAIN-5010 percieved as wrong count here
+              // (${status.count})`}
             />}),[props.value, statuses, selectedBusinessService])
           return <>
             {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}
