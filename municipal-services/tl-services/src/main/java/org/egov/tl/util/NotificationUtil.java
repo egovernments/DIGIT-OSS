@@ -1,50 +1,30 @@
 package org.egov.tl.util;
 
-import static org.egov.tl.util.TLConstants.ACTION_CANCEL_CANCELLED;
-import static org.egov.tl.util.TLConstants.ACTION_FORWARD_CITIZENACTIONREQUIRED;
-import static org.egov.tl.util.TLConstants.ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION;
-import static org.egov.tl.util.TLConstants.ACTION_STATUS_APPLIED;
-import static org.egov.tl.util.TLConstants.ACTION_STATUS_APPROVED;
-import static org.egov.tl.util.TLConstants.ACTION_STATUS_FIELDINSPECTION;
-import static org.egov.tl.util.TLConstants.ACTION_STATUS_INITIATED;
-import static org.egov.tl.util.TLConstants.ACTION_STATUS_REJECTED;
-import static org.egov.tl.util.TLConstants.APPLICATION_TYPE_RENEWAL;
-import static org.egov.tl.util.TLConstants.BILL_AMOUNT_JSONPATH;
-import static org.egov.tl.util.TLConstants.DEFAULT_OBJECT_MODIFIED_MSG;
-import static org.egov.tl.util.TLConstants.DEFAULT_OBJECT_RENEWAL_MODIFIED_MSG;
-import static org.egov.tl.util.TLConstants.NOTIFICATION_CODES;
-import static org.egov.tl.util.TLConstants.NOTIFICATION_LOCALE;
-import static org.egov.tl.util.TLConstants.NOTIF_EXPIRY_DATE_KEY;
-import static org.egov.tl.util.TLConstants.NOTIF_OWNER_NAME_KEY;
-import static org.egov.tl.util.TLConstants.NOTIF_TRADE_LICENSENUMBER_KEY;
-import static org.egov.tl.util.TLConstants.NOTIF_TRADE_NAME_KEY;
-import static org.egov.tl.util.TLConstants.PAYMENT_LINK_PLACEHOLDER;
-import static org.egov.tl.util.TLConstants.TRADE_LICENSE_MODULE_CODE;
-import static org.egov.tl.util.TLConstants.businessService_TL;
-
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.ServiceRequestRepository;
+import org.egov.tl.service.CalculationService;
 import org.egov.tl.web.models.*;
+import org.egov.tl.web.models.calculation.CalculationRes;
+import org.egov.tl.web.models.calculation.TaxHeadEstimate;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.jayway.jsonpath.JsonPath;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.egov.tl.util.TLConstants.*;
 import static org.springframework.util.StringUtils.capitalize;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -58,12 +38,15 @@ public class NotificationUtil {
 
 	private RestTemplate restTemplate;
 
+	private CalculationService calculationService;
+
 	@Autowired
-	public NotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, RestTemplate restTemplate) {
+	public NotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, RestTemplate restTemplate,CalculationService calculationService) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.producer = producer;
 		this.restTemplate = restTemplate;
+		this.calculationService = calculationService;
 	}
 
 
@@ -117,6 +100,11 @@ public class NotificationUtil {
 			message = getFieldInspectionMsg(license, messageTemplate);
 			break;
 
+		case ACTION_STATUS_PENDINGAPPROVAL:
+			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_PENDING_APPROVAL, localizationMessage);
+			message = getPendingApprovalMsg(license, messageTemplate);
+			break;
+
 		case ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION:
 			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_SENDBACK_CITIZEN, localizationMessage);
 			message = getCitizenSendBack(license, messageTemplate);
@@ -131,6 +119,17 @@ public class NotificationUtil {
 			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED, localizationMessage);
 			message = getCancelledMsg(license, messageTemplate);
 			break;
+
+		case ACTION_STATUS_EXPIRED:
+			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_EXPIRED, localizationMessage);
+			message = getExpiredMsg(requestInfo,license, messageTemplate);
+			break;
+
+		case ACTION_STATUS_MANUAL_EXPIRED:
+			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_MANUAL_EXPIRED, localizationMessage);
+			message = getExpiredMsg(requestInfo,license, messageTemplate);
+			break;
+
 		}
 
 		return message;
@@ -173,6 +172,11 @@ public class NotificationUtil {
 				message = getReplacedMessage(license, messageTemplate);
 				break;
 
+			case ACTION_STATUS_PENDINGAPPROVAL:
+				messageTemplate = getMessageTemplate(NOTIFICATION_PENDING_APPROVAL+ "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
 			case ACTION_STATUS_FIELDINSPECTION:
 				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_FIELD_INSPECTION + "." + "email", localizationMessage);
 				message = getReplacedMessage(license, messageTemplate);
@@ -192,6 +196,16 @@ public class NotificationUtil {
 				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED + "." + "email", localizationMessage);
 				message = getReplacedMessage(license, messageTemplate);
 				break;
+
+			case ACTION_STATUS_EXPIRED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_EXPIRED + "." + "email", localizationMessage);
+				message = getExpiredMsg(requestInfo,license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_MANUAL_EXPIRED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_MANUAL_EXPIRED + "." + "email", localizationMessage);
+				message = getExpiredMsg(requestInfo,license, messageTemplate);
+				break;
 		}
 
 		return message;
@@ -207,7 +221,6 @@ public class NotificationUtil {
 	 * @return customized message with replaced placeholders
 	 * */
 	private String getReplacedMessage(TradeLicense license, String messageTemplate) {
-		String UIHost = getHost(license.getTenantId());
 		String message = messageTemplate.replace("YYYY", license.getBusinessService());
 		message = message.replace("ZZZZ", license.getApplicationNumber());
 
@@ -215,8 +228,8 @@ public class NotificationUtil {
 			message = message.replace("RRRR", license.getLicenseNumber());
 		}
 		message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
+		message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
 
-		message = message.replace("{PORTAL_LINK}",UIHost);
 		//CCC - Designaion configurable according to ULB
 		// message = message.replace("CCC","");
 		return message;
@@ -231,7 +244,7 @@ public class NotificationUtil {
 	 *            The localization messages
 	 * @return message for the specific code
 	 */
-	private String getMessageTemplate(String notificationCode, String localizationMessage) {
+	String getMessageTemplate(String notificationCode, String localizationMessage) {
 		String path = "$..messages[?(@.code==\"{}\")].message";
 		path = path.replace("{}", notificationCode);
 		String message = null;
@@ -254,7 +267,7 @@ public class NotificationUtil {
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
+			tenantId = tenantId.split("\\.")[0];
 
 		String locale = NOTIFICATION_LOCALE;
 		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -295,7 +308,7 @@ public class NotificationUtil {
 	 * @return customized message for initiate
 	 */
 	private String getInitiatedMsg(TradeLicense license, String message) {
-		// message = message.replace("<1>",license.);
+		// message = message.replace("{1}",license.);
 		message = message.replace("{2}", license.getTradeName());
 		message = message.replace("{3}", license.getApplicationNumber());
 
@@ -312,7 +325,7 @@ public class NotificationUtil {
 	 * @return customized message for apply
 	 */
 	private String getAppliedMsg(TradeLicense license, String message) {
-		// message = message.replace("<1>",);
+		// message = message.replace("{1}",);
 		message = message.replace("{2}", license.getTradeName());
 		message = message.replace("{3}", license.getApplicationNumber());
 
@@ -329,9 +342,24 @@ public class NotificationUtil {
 	 * @return customized message for submitted
 	 */
 	private String getApprovalPendingMsg(TradeLicense license, String message) {
-		// message = message.replace("<1>",);
+		// message = message.replace("{1}",);
 		message = message.replace("{2}", license.getTradeName());
 
+		return message;
+	}
+
+	/**
+	 * Creates customized message for rejected
+	 *
+	 * @param license
+	 *            tenantId of the tradeLicense
+	 * @param message
+	 *            Message from localization for rejected
+	 * @return customized message for rejected
+	 */
+	private String getPendingApprovalMsg(TradeLicense license, String message) {
+		message = message.replace("{2}", license.getApplicationNumber());
+		message = message.replace("{3}", license.getTradeName());
 		return message;
 	}
 
@@ -349,7 +377,7 @@ public class NotificationUtil {
 		message = message.replace("{3}", amountToBePaid.toString());
 
 
-		String UIHost = getHost(license.getTenantId());
+		String UIHost = config.getUiAppHost();
 
 		String paymentPath = config.getPayLinkSMS();
 		paymentPath = paymentPath.replace("$consumercode",license.getApplicationNumber());
@@ -372,7 +400,7 @@ public class NotificationUtil {
 	 * @return customized message for rejected
 	 */
 	private String getRejectedMsg(TradeLicense license, String message) {
-		// message = message.replace("<1>",);
+		// message = message.replace("{1}",);
 		message = message.replace("{2}", license.getTradeName());
 
 		return message;
@@ -436,9 +464,29 @@ public class NotificationUtil {
 	private String getCancelledMsg(TradeLicense license, String message) {
 		message = message.replace("{2}", license.getTradeName());
 		message = message.replace("{3}", license.getLicenseNumber());
-
 		return message;
 	}
+
+
+	private String getExpiredMsg(RequestInfo requestInfo,TradeLicense license, String message) {
+		message = message.replace("{2}", license.getLicenseNumber());
+		String expiryDate = new SimpleDateFormat("dd/MM/yyyy").format(license.getValidTo());
+		message = message.replace("{3}", expiryDate);
+
+		license.setApplicationType(TradeLicense.ApplicationTypeEnum.valueOf(APPLICATION_TYPE_RENEWAL));
+		List<TradeLicense> tradeLicenseList = new ArrayList<>();
+		tradeLicenseList.add(license);
+		CalculationRes calculationRes = calculationService.getEstimation(requestInfo, tradeLicenseList );
+		BigDecimal amountToBePaid = (BigDecimal) calculationRes.getCalculations().get(0).getTaxHeadEstimates().stream().map(TaxHeadEstimate::getEstimateAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
+		message = message.replace("{AMOUNT_PAID}", amountToBePaid.toString());
+
+		message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
+
+		//CCC - Designaion configurable according to ULB
+		// message = message.replace("CCC","");
+		return message;
+	}
+
 
 	/**
 	 * Creates message for completed payment for owners
@@ -498,12 +546,12 @@ public class NotificationUtil {
 	 * @param smsRequestList
 	 *            The list of SMSRequest to be sent
 	 */
-	public void sendSMS(List<SMSRequest> smsRequestList, boolean isSMSEnabled, String tenantId) {
+	public void sendSMS(List<SMSRequest> smsRequestList, boolean isSMSEnabled) {
 		if (isSMSEnabled) {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
+				producer.push(config.getSmsNotifTopic(), smsRequest);
 				log.info("SMS SENT!");
 			}
 		}
@@ -520,6 +568,7 @@ public class NotificationUtil {
 	 */
 	public List<EmailRequest> createEmailRequest(RequestInfo requestInfo,String message, Map<String, String> mobileNumberToEmailId) {
 
+		log.info("Map of mobileNumberToEmailId ->  "+mobileNumberToEmailId.toString());
 		List<EmailRequest> emailRequest = new LinkedList<>();
 		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
 			String customizedMsg = message.replace("XXXX",entryset.getValue());
@@ -542,12 +591,12 @@ public class NotificationUtil {
 	 * @param emailRequestList
 	 *            The list of EmailRequest to be sent
 	 */
-	public void sendEmail(List<EmailRequest> emailRequestList, boolean isEmailEnabled, String tenantId) {
+	public void sendEmail(List<EmailRequest> emailRequestList, boolean isEmailEnabled) {
 		if (isEmailEnabled) {
 			if (CollectionUtils.isEmpty(emailRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (EmailRequest emailRequest : emailRequestList) {
-				producer.push(tenantId ,config.getEmailNotifTopic(), emailRequest);
+				producer.push(config.getEmailNotifTopic(), emailRequest);
 				log.info("EMAIL notification sent!");
 			}
 		}
@@ -688,7 +737,7 @@ public class NotificationUtil {
 	 * @param request
 	 */
 	public void sendEventNotification(EventRequest request) {
-		producer.push("", config.getSaveUserEventsTopic(), request);
+		producer.push(config.getSaveUserEventsTopic(), request);
 	}
 
 
@@ -749,21 +798,6 @@ public class NotificationUtil {
 		return mapOfPhnoAndEmailIds;
 	}
 
-	public String getHost(String tenantId){
-		log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
-		Integer tenantLength = tenantId.split("\\.").length;
-		String topLevelTenant = tenantId;
-		if(tenantLength == 3){
-			topLevelTenant = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
-		}
-		log.info(config.getUiAppHostMap().toString());
-		log.info(topLevelTenant);
-		String host = config.getUiAppHostMap().get(topLevelTenant);
-		if(ObjectUtils.isEmpty(host)){
-			throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + topLevelTenant);
-		}
-		return host;
-	}
 
 	/**
 	 * Fetches UUIDs of CITIZENs based on the phone number.

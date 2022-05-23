@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Map;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,43 +25,43 @@ public class SWConfiguration {
 	private Integer defaultOffset;
 	
 
-	@Value("${egov.idgen.scid.name}")
-	private String sewerageIdGenName;
+    	@Value("${egov.idgen.scid.name}")
+    	private String sewerageIdGenName;
 
-	@Value("${egov.idgen.scid.format}")
-	private String sewerageIdGenFormat;
+    	@Value("${egov.idgen.scid.format}")
+    	private String sewerageIdGenFormat;
     
-	@Value("${egov.idgen.scapid.name}")
-	private String sewerageApplicationIdGenName;
+    	@Value("${egov.idgen.scapid.name}")
+    	private String sewerageApplicationIdGenName;
 
-	@Value("${egov.idgen.scapid.format}")
-	private String sewerageApplicationIdGenFormat;
+    	@Value("${egov.idgen.scapid.format}")
+    	private String sewerageApplicationIdGenFormat;
     
-	//Idgen Config
-	@Value("${egov.idgen.host}")
-	private String idGenHost;
+    	//Idgen Config
+    	@Value("${egov.idgen.host}")
+    	private String idGenHost;
 
-	@Value("${egov.idgen.path}")
-	private String idGenPath;
+    	@Value("${egov.idgen.path}")
+    	private String idGenPath;
     
-	// Workflow
-	@Value("${create.sw.workflow.name}")
-	private String businessServiceValue;
+    	// Workflow
+    	@Value("${create.sw.workflow.name}")
+    	private String businessServiceValue;
 
-	@Value("${workflow.context.path}")
-	private String wfHost;
+    	@Value("${workflow.context.path}")
+    	private String wfHost;
 
-	@Value("${workflow.transition.path}")
-	private String wfTransitionPath;
+    	@Value("${workflow.transition.path}")
+    	private String wfTransitionPath;
 
-	@Value("${workflow.businessservice.search.path}")
-	private String wfBusinessServiceSearchPath;
+    	@Value("${workflow.businessservice.search.path}")
+    	private String wfBusinessServiceSearchPath;
 
-	@Value("${is.external.workflow.enabled}")
-	private Boolean isExternalWorkFlowEnabled;
+    	@Value("${is.external.workflow.enabled}")
+    	private Boolean isExternalWorkFlowEnabled;
     
-	@Value("${egov.sewerageservice.updatesewerageconnection.workflow.topic}")
-	private String workFlowUpdateTopic;
+    	@Value("${egov.sewerageservice.updatesewerageconnection.workflow.topic}")
+    	private String workFlowUpdateTopic;
     
 
 	// Localization
@@ -105,25 +103,25 @@ public class SWConfiguration {
 	@Value("${notification.email.enabled}")
 	private Boolean isEmailNotificationEnabled;
 
-	//User Configuration
-	@Value("${egov.user.host}")
-	private String userHost;
+    	//User Configuration
+    	@Value("${egov.user.host}")
+    	private String userHost;
 
-	@Value("${egov.user.context.path}")
-	private String userContextPath;
+    	@Value("${egov.user.context.path}")
+    	private String userContextPath;
 
-	@Value("${egov.user.search.path}")
-	private String userSearchEndpoint;
+    	@Value("${egov.user.search.path}")
+    	private String userSearchEndpoint;
     
-	// sewerage connection Calculator
-	@Value("${egov.sw.calculation.host}")
-	private String calculatorHost;
+    	// sewerage connection Calculator
+    	@Value("${egov.sw.calculation.host}")
+    	private String calculatorHost;
 
-	@Value("${egov.sw.calculation.endpoint}")
-	private String calculateEndpoint;
+    	@Value("${egov.sw.calculation.endpoint}")
+    	private String calculateEndpoint;
     
-	@Value("${egov.receipt.businessservice}")
-	private String receiptBusinessservice;
+    	@Value("${egov.receipt.businessservice}")
+    	private String receiptBusinessservice;
     
 	// sewerage notification links configuration
 
@@ -152,15 +150,15 @@ public class SWConfiguration {
 	private String shortenerURL;
 	
 	@Value("${egov.pdfservice.host}")
-	private String pdfServiceHost;
+    	private String pdfServiceHost;
     
-	@Value("${egov.filestore.host}")
-	private String fileStoreHost;
+    	@Value("${egov.filestore.host}")
+    	private String fileStoreHost;
     
-	@Value("${sw.editnotification.topic}")
-	private String editNotificationTopic;
+    	@Value("${sw.editnotification.topic}")
+    	private String editNotificationTopic;
     
-	@Value("${sw.consume.filestoreids.topic}")
+    	@Value("${sw.consume.filestoreids.topic}")
 	private String fileStoreIdsTopic;
 
 	@Value("${egov.sewerageservice.savefilestoreIds}")
@@ -193,8 +191,8 @@ public class SWConfiguration {
 	@Value("${egov.usr.events.pay.link}")
 	private String userEventApplicationPayLink;
 
-	/*@Value("${state.level.tenant.id}")
-	private String stateLevelTenantId;*/
+	@Value("${state.level.tenant.id}")
+	private String stateLevelTenantId;
 
 	//mdms
 	@Value("${egov.mdms.host}")
@@ -202,11 +200,4 @@ public class SWConfiguration {
 
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsUrl;
-	// central-instance configs
-
-	@Value("#{${egov.ui.app.host.map}}")
-	private Map<String, String> uiAppHostMap;
-
-	@Value("${egov.url.shortner.host}")
-	private String urlShortnerHost;
 }

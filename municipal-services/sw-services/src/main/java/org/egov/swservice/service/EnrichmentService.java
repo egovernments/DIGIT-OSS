@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.swservice.config.SWConfiguration;
@@ -18,6 +19,8 @@ import org.egov.swservice.web.models.Idgen.IdResponse;
 import org.egov.swservice.web.models.users.User;
 import org.egov.swservice.web.models.users.UserDetailResponse;
 import org.egov.swservice.web.models.users.UserSearchRequest;
+import org.egov.swservice.web.models.workflow.ProcessInstance;
+import org.egov.swservice.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +56,8 @@ public class EnrichmentService {
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
 
+	@Autowired
+	private WorkflowService wfService;
 	/**
 	 * 
 	 * @param sewerageConnectionRequest
@@ -65,6 +70,17 @@ public class EnrichmentService {
 		sewerageConnectionRequest.getSewerageConnection().setAuditDetails(auditDetails);
 		sewerageConnectionRequest.getSewerageConnection().setId(UUID.randomUUID().toString());
 		sewerageConnectionRequest.getSewerageConnection().setStatus(StatusEnum.ACTIVE);
+
+		if(sewerageConnectionRequest.getSewerageConnection().getChannel() == null){
+			if(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") )
+				sewerageConnectionRequest.getSewerageConnection().setChannel("CFC_COUNTER");
+			if(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") )
+				sewerageConnectionRequest.getSewerageConnection().setChannel("CITIZEN");
+			if(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("SYSTEM") )
+				sewerageConnectionRequest.getSewerageConnection().setChannel("SYSTEM");
+		}
+
+
 		HashMap<String, Object> additionalDetail = new HashMap<>();
 		if (sewerageConnectionRequest.getSewerageConnection().getAdditionalDetails() == null) {
 			for (String constValue : SWConstants.ADDITIONAL_OBJECT) {
@@ -434,4 +450,24 @@ public class EnrichmentService {
 		}
 		return finalConnectionList;
 	}
+
+	public void enrichProcessInstance(List<SewerageConnection> sewerageConnectionList, SearchCriteria criteria,
+			RequestInfo requestInfo) {
+		if (CollectionUtils.isEmpty(sewerageConnectionList))
+			return;
+		List<ProcessInstance> processInstance=null;
+		for (SewerageConnection sewerageConnection : sewerageConnectionList) {
+			if(criteria.getTenantId()!=null)
+				processInstance=wfService.getProcessInstance(requestInfo, sewerageConnection.getApplicationNo(),
+					criteria.getTenantId(), null);
+			else
+				processInstance=wfService.getProcessInstance(requestInfo, sewerageConnection.getApplicationNo(),
+						sewerageConnection.getTenantId(), null);
+			if(!ObjectUtils.isEmpty(processInstance)) {
+				sewerageConnection.getProcessInstance().setBusinessService(processInstance.get(0).getBusinessService());
+				sewerageConnection.getProcessInstance().setModuleName(processInstance.get(0).getModuleName());
+			}
+		}
+	}
+
 }

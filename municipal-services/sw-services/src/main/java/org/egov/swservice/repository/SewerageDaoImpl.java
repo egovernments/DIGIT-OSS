@@ -8,11 +8,8 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
-import org.egov.common.exception.InvalidTenantIdException;
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.repository.rowmapper.OpenSewerageRowMapper;
-import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.web.models.SearchCriteria;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
@@ -20,7 +17,6 @@ import org.egov.swservice.producer.SewarageConnectionProducer;
 import org.egov.swservice.repository.builder.SWQueryBuilder;
 import org.egov.swservice.repository.rowmapper.SewerageRowMapper;
 import org.egov.swservice.util.SWConstants;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -50,9 +46,6 @@ public class SewerageDaoImpl implements SewerageDao {
 	@Autowired
 	private SWConfiguration swConfiguration;
 
-	@Autowired
-	private MultiStateInstanceUtil centralInstanceutil;
-
 	@Value("${egov.sewarageservice.createconnection.topic}")
 	private String createSewarageConnection;
 
@@ -61,7 +54,7 @@ public class SewerageDaoImpl implements SewerageDao {
 
 	@Override
 	public void saveSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {
-		sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),createSewarageConnection, sewerageConnectionRequest);
+		sewarageConnectionProducer.push(createSewarageConnection, sewerageConnectionRequest);
 	}
 
 	@Override
@@ -70,14 +63,6 @@ public class SewerageDaoImpl implements SewerageDao {
 		String query = swQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
 		if (query == null)
 			return Collections.emptyList();
-
-		try {
-			query = centralInstanceutil.replaceSchemaPlaceholder(query, criteria.getTenantId());
-		} catch (InvalidTenantIdException e) {
-			throw new CustomException("SW_AS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
-
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
 		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
 		if(isOpenSearch)
@@ -93,6 +78,16 @@ public class SewerageDaoImpl implements SewerageDao {
 		return sewerageConnectionList;
 	}
 
+	public Integer getSewerageConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = swQueryBuilder.getSearchCountQueryString(criteria, preparedStatement, requestInfo);
+		if (query == null)
+			return 0;
+
+		Integer count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
+		return count;
+	}
+	
 	public Boolean isSearchOpen(User userInfo) {
 
 		return userInfo.getType().equalsIgnoreCase("SYSTEM")
@@ -102,9 +97,9 @@ public class SewerageDaoImpl implements SewerageDao {
 	public void updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest,
 			boolean isStateUpdatable) {
 		if (isStateUpdatable) {
-			sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),updateSewarageConnection, sewerageConnectionRequest);
+			sewarageConnectionProducer.push(updateSewarageConnection, sewerageConnectionRequest);
 		} else {
-			sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getWorkFlowUpdateTopic(), sewerageConnectionRequest);
+			sewarageConnectionProducer.push(swConfiguration.getWorkFlowUpdateTopic(), sewerageConnectionRequest);
 		}
 	}
 
@@ -116,7 +111,7 @@ public class SewerageDaoImpl implements SewerageDao {
 	public void pushForEditNotification(SewerageConnectionRequest sewerageConnectionRequest) {
 		if (!SWConstants.EDIT_NOTIFICATION_STATE
 				.contains(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
-			sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getEditNotificationTopic(), sewerageConnectionRequest);
+			sewarageConnectionProducer.push(swConfiguration.getEditNotificationTopic(), sewerageConnectionRequest);
 		}
 	}
 
@@ -126,7 +121,7 @@ public class SewerageDaoImpl implements SewerageDao {
 	 * @param sewerageConnectionRequest - Sewerage Connection Request Object
 	 */
 	public void enrichFileStoreIds(SewerageConnectionRequest sewerageConnectionRequest) {
-		sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getFileStoreIdsTopic(), sewerageConnectionRequest);
+		sewarageConnectionProducer.push(swConfiguration.getFileStoreIdsTopic(), sewerageConnectionRequest);
 	}
 
 	/**
@@ -135,7 +130,27 @@ public class SewerageDaoImpl implements SewerageDao {
 	 * @param sewerageConnectionRequest - Sewerage Connection Request Object
 	 */
 	public void saveFileStoreIds(SewerageConnectionRequest sewerageConnectionRequest) {
-		sewarageConnectionProducer.push(sewerageConnectionRequest.getSewerageConnection().getTenantId(),swConfiguration.getSaveFileStoreIdsTopic(), sewerageConnectionRequest);
+		sewarageConnectionProducer.push(swConfiguration.getSaveFileStoreIdsTopic(), sewerageConnectionRequest);
 	}
+	
+	@Override
+	public List<SewerageConnection> getSewerageConnectionPlainSearchList(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = swQueryBuilder.getSearchQueryStringForPlainSearch(criteria, preparedStatement, requestInfo);
+		if (query == null)
+			return Collections.emptyList();
+		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
+		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
+		if(isOpenSearch)
+			sewerageConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
+					openSewerageRowMapper);
+		else
+			sewerageConnectionList = jdbcTemplate.query(query, preparedStatement.toArray(),
+					sewarageRowMapper);
 
+		if (sewerageConnectionList == null) {
+			return Collections.emptyList();
+		}
+		return sewerageConnectionList;
+	}
 }

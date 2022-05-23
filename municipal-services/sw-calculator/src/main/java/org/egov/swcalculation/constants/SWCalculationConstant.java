@@ -317,7 +317,4 @@ public class SWCalculationConstant {
 	public static final String ACTION_FOR_BILL = "BILL";
 
 	public static String Billing_Cycle_String = "billingCycle";
-
-	public static final String TENANTID_MDC_STRING = "TENANTID";
-
 }

@@ -21,11 +21,11 @@ public class CancelReceiptConsumer {
 
 	@Autowired
 	private ChallanConfiguration config;
- 
-	@KafkaListener(topicPattern = "${kafka.topics.receipt.cancel.pattern}")
+	
+	@KafkaListener(topics = {"${kafka.topics.receipt.cancel.name}"})
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
-			if (topic.contains(config.getReceiptCancelTopic())) {
+			if (config.getReceiptCancelTopic().equalsIgnoreCase(topic)) {
 				log.info("received cancel receipt request--");
 				challanRepository.updateChallanOnCancelReceipt(record);
 			}

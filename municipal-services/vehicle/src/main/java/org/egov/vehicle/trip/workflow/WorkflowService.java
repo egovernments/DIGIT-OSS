@@ -41,8 +41,8 @@ public class WorkflowService {
 	 *            The RequestInfo object of the request
 	 * @return BusinessService for the the given tenantId
 	 */
-	public BusinessService getBusinessService(VehicleTrip trip, RequestInfo requestInfo, String businessServceName, String applicationNo) {
-		StringBuilder url = getSearchURLWithParams(trip, businessServceName, applicationNo);
+	public BusinessService getBusinessService(String tenantId, RequestInfo requestInfo, String businessServceName, String applicationNo) {
+		StringBuilder url = getSearchURLWithParams(tenantId, businessServceName, applicationNo);
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
 		BusinessServiceResponse response = null;
@@ -61,7 +61,7 @@ public class WorkflowService {
 	 *            The tenantId for which url is generated
 	 * @return The search url
 	 */
-	private StringBuilder getSearchURLWithParams(VehicleTrip trip, String businessService, String applicationNo) {
+	private StringBuilder getSearchURLWithParams(String tenantId, String businessService, String applicationNo) {
 		StringBuilder url = new StringBuilder(config.getWfHost());
 		
 		
@@ -77,7 +77,7 @@ public class WorkflowService {
 		}
 		
 		url.append("&tenantId=");
-		url.append(trip.getTenantId());
+		url.append(tenantId);
 		
 		return url;
 	}

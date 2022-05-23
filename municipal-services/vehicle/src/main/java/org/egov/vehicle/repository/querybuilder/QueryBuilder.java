@@ -178,6 +178,12 @@ public class QueryBuilder {
 			builder.append(" suctionType IN (").append(createQuery(suctionTypes)).append(")");
 			addToPreparedStatement(preparedStmtList, suctionTypes);
 		}
+		List<String> vehicleOwners = criteria.getVehicleOwner();
+		if (!CollectionUtils.isEmpty(vehicleOwners)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" vehicleOwner IN (").append(createQuery(vehicleOwners)).append(")");
+			addToPreparedStatement(preparedStmtList, vehicleOwners);
+		}
 		
 		List<String> model = criteria.getModel();
 		if (!CollectionUtils.isEmpty(model)) {

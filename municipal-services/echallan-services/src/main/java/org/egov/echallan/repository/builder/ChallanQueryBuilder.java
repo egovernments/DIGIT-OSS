@@ -2,7 +2,6 @@ package org.egov.echallan.repository.builder;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.echallan.config.ChallanConfiguration;
 import org.egov.echallan.model.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +21,14 @@ public class ChallanQueryBuilder {
         this.config = config;
     }
 
-    @Autowired
-    private MultiStateInstanceUtil centralInstanceUtil;
-
     private static final String INNER_JOIN_STRING = " INNER JOIN ";
 
     private static final String QUERY = "SELECT challan.*,chaladdr.*,challan.id as challan_id,challan.tenantid as challan_tenantId,challan.lastModifiedTime as " +
             "challan_lastModifiedTime,challan.createdBy as challan_createdBy,challan.lastModifiedBy as challan_lastModifiedBy,challan.createdTime as " +
             "challan_createdTime,chaladdr.id as chaladdr_id," +
-            "challan.accountId as uuid,challan.description as description  FROM {schema}.eg_echallan challan"
+            "challan.accountId as uuid,challan.description as description  FROM eg_echallan challan"
             +INNER_JOIN_STRING
-            +"{schema}.eg_challan_address chaladdr ON chaladdr.echallanid = challan.id";
+            +"eg_challan_address chaladdr ON chaladdr.echallanid = challan.id";
 
 
       private final String paginationWrapper = "SELECT * FROM " +
@@ -41,11 +37,15 @@ public class ChallanQueryBuilder {
               " result) result_offset " +
               "WHERE offset_ > ? AND offset_ <= ?";
 
-      public static final String FILESTOREID_UPDATE_SQL = "UPDATE {schema}.eg_echallan SET filestoreid=? WHERE id=?";
+      public static final String FILESTOREID_UPDATE_SQL = "UPDATE eg_echallan SET filestoreid=? WHERE id=?";
       
-      public static final String CANCEL_RECEIPT_UPDATE_SQL = "UPDATE {schema}.eg_echallan SET applicationStatus='ACTIVE' WHERE challanNo=? and businessService=?";
+      public static final String CANCEL_RECEIPT_UPDATE_SQL = "UPDATE eg_echallan SET applicationStatus='ACTIVE' WHERE challanNo=? and businessService=?";
 
-      public static final String CHALLAN_COUNT_QUERY = "SELECT applicationstatus, count(*)  FROM {schema}.eg_echallan WHERE tenantid ";
+      public static final String CHALLAN_COUNT_QUERY = "SELECT applicationstatus, count(*)  FROM eg_echallan WHERE tenantid ";
+      
+      public static final String TOTAL_COLLECTION_QUERY = "SELECT sum(amountpaid) FROM egbs_billdetail_v1 INNER JOIN egcl_paymentdetail ON egbs_billdetail_v1.billid=egcl_paymentdetail.billid INNER JOIN eg_echallan ON consumercode=challanno WHERE eg_echallan.tenantid=? AND eg_echallan.applicationstatus='PAID' AND egcl_paymentdetail.createdtime>? ";
+      
+      public static final String TOTAL_SERVICES_QUERY = "SELECT count(distinct(businessservice)) FROM eg_echallan WHERE tenantid=? AND createdtime>? ";
 
 
 
@@ -71,18 +71,9 @@ public class ChallanQueryBuilder {
         else {
 
             if (criteria.getTenantId() != null) {
-                String tenantId = criteria.getTenantId();
                 addClauseIfRequired(preparedStmtList, builder);
-
-                if(centralInstanceUtil.isTenantIdStateLevel(tenantId)){
-                    builder.append(" challan.tenantid LIKE ? ");
-                    preparedStmtList.add(criteria.getTenantId() + '%');
-                }
-                else{
-                    builder.append(" challan.tenantid=? ");
-                    preparedStmtList.add(criteria.getTenantId());
-                }
-
+                builder.append(" challan.tenantid=? ");
+                preparedStmtList.add(criteria.getTenantId());
             }
             List<String> ids = criteria.getIds();
             if (!CollectionUtils.isEmpty(ids)) {
@@ -109,13 +100,6 @@ public class ChallanQueryBuilder {
                 addClauseIfRequired(preparedStmtList, builder);
                 builder.append(" challan.applicationstatus IN (").append(createQuery(status)).append(")");
                 addToPreparedStatement(preparedStmtList, status);
-            }
-
-            if (criteria.getReceiptNumber() != null) {
-                List<String> receiptNumbers = Arrays.asList(criteria.getReceiptNumber().split(","));
-                addClauseIfRequired(preparedStmtList, builder);
-                builder.append(" challan.receiptnumber IN (").append(createQuery(receiptNumbers)).append(")");
-                addToPreparedStatement(preparedStmtList, receiptNumbers);
             }
 
 
@@ -182,7 +166,7 @@ public class ChallanQueryBuilder {
 
     public String getChallanCountQuery(String tenantId, List <Object> preparedStmtList ) {
         StringBuilder builder = new StringBuilder(CHALLAN_COUNT_QUERY);
-        if(centralInstanceUtil.isTenantIdStateLevel(tenantId)){
+        if(tenantId.equalsIgnoreCase(config.stateLevelTenantId)){
             builder.append("LIKE ? ");
             preparedStmtList.add(tenantId+"%");
         }
@@ -193,6 +177,51 @@ public class ChallanQueryBuilder {
         builder.append("GROUP BY applicationstatus");
         return builder.toString();
     }
+
+
+	public String getTotalCollectionQuery(String tenantId, List<Object> preparedStmtListTotalCollection) {
+		
+		StringBuilder query = new StringBuilder("");
+		query.append(TOTAL_COLLECTION_QUERY);
+		
+		preparedStmtListTotalCollection.add(tenantId);
+		
+		// In order to get data of last 12 months, the months variables is pre-configured in application properties
+    	int months = Integer.valueOf(config.getNumberOfMonths()) ;
+
+    	Calendar calendar = Calendar.getInstance();
+
+    	// To subtract 12 months from current time, we are adding -12 to the calendar instance, as subtract function is not in-built
+    	calendar.add(Calendar.MONTH, -1*months);
+
+    	// Converting the timestamp to milliseconds and adding it to prepared statement list
+    	preparedStmtListTotalCollection.add(calendar.getTimeInMillis());
+		
+		return query.toString();
+	}
+
+
+	public String getTotalServicesQuery(String tenantId, List<Object> preparedStmtListTotalServices) {
+		
+		StringBuilder query = new StringBuilder("");
+		query.append(TOTAL_SERVICES_QUERY);
+		
+		preparedStmtListTotalServices.add(tenantId);
+		
+		// In order to get data of last 12 months, the months variables is pre-configured in application properties
+    	int months = Integer.valueOf(config.getNumberOfMonths()) ;
+
+    	Calendar calendar = Calendar.getInstance();
+
+    	// To subtract 12 months from current time, we are adding -12 to the calendar instance, as subtract function is not in-built
+    	calendar.add(Calendar.MONTH, -1*months);
+
+    	// Converting the timestamp to milliseconds and adding it to prepared statement list
+    	preparedStmtListTotalServices.add(calendar.getTimeInMillis());
+		
+		return query.toString();
+		
+	}
 
 
 

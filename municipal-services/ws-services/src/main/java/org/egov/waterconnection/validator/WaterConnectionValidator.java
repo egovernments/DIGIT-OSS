@@ -5,14 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
-import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.service.MeterInfoValidator;
 import org.egov.waterconnection.service.PropertyValidator;
 import org.egov.waterconnection.service.WaterFieldValidator;
-import org.egov.waterconnection.web.models.SearchCriteria;
 import org.egov.waterconnection.web.models.ValidatorResult;
 import org.egov.waterconnection.web.models.WaterConnection;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
@@ -36,12 +33,6 @@ public class WaterConnectionValidator {
 	
 	@Autowired
 	private MeterInfoValidator meterInfoValidator;
-
-	@Autowired
-	private WSConfiguration configs;
-
-	@Autowired
-	private MultiStateInstanceUtil centralInstanceUtil;
 
 
 	/**Used strategy pattern for avoiding multiple if else condition
@@ -67,6 +58,16 @@ public class WaterConnectionValidator {
 			errorMap.putAll(isMeterInfoValidated.getErrorMessage());
 		if(waterConnectionRequest.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase("PAY"))
 			errorMap.put("INVALID_ACTION","Pay action cannot be perform directly");
+
+		String channel = waterConnectionRequest.getWaterConnection().getChannel();
+		if(channel != null){
+			if(!WCConstants.CHANNEL_VALUES.contains(channel))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid");
+			if( reqType == WCConstants.CREATE_APPLICATION && waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") && channel.equalsIgnoreCase("CITIZEN"))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for employee role");
+			if( reqType == WCConstants.CREATE_APPLICATION && waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && !channel.equalsIgnoreCase("CITIZEN"))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for citizen role");
+		}
 
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
@@ -139,13 +140,5 @@ public class WaterConnectionValidator {
 		if (reqType == WCConstants.UPDATE_APPLICATION) {
 			request.getWaterConnection().setConnectionNo(searchResult.getConnectionNo());
 		}
-	}
-
-	public void validateSearch(SearchCriteria criteria){
-		if(centralInstanceUtil.getIsEnvironmentCentralInstance() && criteria.getTenantId() == null)
-			throw new CustomException("EG_WS_INVALID_SEARCH"," TenantId is mandatory for search ");
-		else if(centralInstanceUtil.getIsEnvironmentCentralInstance() && criteria.getTenantId().split("\\.").length < centralInstanceUtil.getStateLevelTenantIdLength())
-			throw new CustomException("EG_WS_INVALID_SEARCH"," TenantId should be mandatorily " + centralInstanceUtil.getStateLevelTenantIdLength() + " levels for search");
-
 	}
 }

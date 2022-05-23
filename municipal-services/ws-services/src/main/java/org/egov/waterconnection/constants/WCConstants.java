@@ -120,6 +120,8 @@ public class WCConstants {
 					EDIT_PENDING_FOR_DOCUMENT_VERIFICATION, EDIT_PENDING_FOR_FIELD_INSPECTION,
 					SUBMIT_APPLICATION_STATUS_CODE, APPROVE_CONNECTION_STATUS_CODE,SEND_BACK_TO_CITIZEN_INITIATED));
 
+	public static final List<String> CHANNEL_VALUES = Collections.unmodifiableList(Arrays.asList("CITIZEN", "CFC_COUNTER", "MIGRATION", "DATA_ENTRY", "SYSTEM"));
+
 	public static final String USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
 
 	public static final String USREVENTS_EVENT_NAME = "WATER CONNECTION";
@@ -239,6 +241,8 @@ public class WCConstants {
 
 	public static final String PAYMENT_NOTIFICATION_SMS = "WS_PAYMENT_NOTIFICATION_SMS";
 
+	public static final String PAYMENT_NOTIFICATION_EMAIL = "WS_PAYMENT_NOTIFICATION_EMAIL";
+
 	public static final String MODIFIED_FINAL_STATE = "APPROVED";
 
 	public static final List<String> FINAL_CONNECTION_STATES = Collections
@@ -264,11 +268,5 @@ public class WCConstants {
 	public static final String CHANNEL_LIST = "channelList";
 
 	public static final String CHANNEL = "Channel";
-
-	public static String SCHEMA_REPLACE_STRING = "{schema}";
-
-	public static final String TENANTID_MDC_STRING = "TENANTID";
-
-	public static final List<String> TOPICS_TO_AVOID = Collections.unmodifiableList(Arrays.asList("create-meter-reading","editnotification", "ws-filestoreids-process"));
 
 }

@@ -15,6 +15,7 @@ import org.egov.vendor.web.model.Vendor;
 import org.egov.vendor.web.model.VendorRequest;
 import org.egov.vendor.web.model.VendorSearchCriteria;
 import org.egov.vendor.web.model.user.UserDetailResponse;
+import org.egov.vendor.web.model.vehicle.VehicleSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -120,10 +121,17 @@ public class EnrichmentService {
 	}
 	
 	private void addVehicles(RequestInfo requestInfo, Vendor vendor, String tenantId) {
-		VendorSearchCriteria vendorDriverSearchCriteria = new VendorSearchCriteria();
 		List<String> vehicleIds = vendorRepository.getVehicles(vendor.getId());
 		if(!CollectionUtils.isEmpty(vehicleIds)) {
-			vendor.setVehicles(vehicleService.getVehicles(vehicleIds, null, null,requestInfo, tenantId));
+			
+			VehicleSearchCriteria vehicleSearchCriteria=new VehicleSearchCriteria();
+			vehicleSearchCriteria = VehicleSearchCriteria.builder()
+					.ids(vehicleIds)
+					.tenantId(tenantId).build();
+			
+			vendor.setVehicles(vehicleService.getVehicles(vehicleSearchCriteria, requestInfo));
+			
+			//vendor.setVehicles(vehicleService.getVehicles(vehicleIds, null, null, null, requestInfo, tenantId));
 		}
 		
 	}

@@ -276,6 +276,4 @@ public class WSCalculationConstant {
 
 	public static final String ACTION_FOR_BILL = "BILL";
 
-	public static final String TENANTID_MDC_STRING = "TENANTID";
-
 }

@@ -31,6 +31,14 @@ const FireNOCSearchRequest = {
     },
     fireNOCType: {
       type: "string"
+    },
+    offset: {
+      type: "string",
+      pattern: "[0-9]"
+    },
+    limit: {
+      type: "string",
+      pattern: "[0-9]"
     }
   },
   // required: ["tenantId"]

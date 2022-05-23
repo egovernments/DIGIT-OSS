@@ -27,11 +27,11 @@ public class WSCalculatorQueryBuilder {
 	
 	private final static String tenantIdWaterConnectionSearchQuery ="select DISTINCT tenantid from eg_ws_connection";
 	
-	private final static String connectionNoWaterConnectionSearchQuery = "SELECT conn.connectionNo as conn_no FROM {schema}.eg_ws_service wc INNER JOIN {schema}.eg_ws_connection conn ON wc.connection_id = conn.id";
+	private final static String connectionNoWaterConnectionSearchQuery = "SELECT conn.connectionNo as conn_no FROM eg_ws_service wc INNER JOIN eg_ws_connection conn ON wc.connection_id = conn.id";
 	
-	private static final String connectionNoListQuery = "SELECT distinct(conn.connectionno) FROM {schema}.eg_ws_connection conn INNER JOIN {schema}.eg_ws_service ws ON conn.id = ws.connection_id";
+	private static final String connectionNoListQuery = "SELECT distinct(conn.connectionno) FROM eg_ws_connection conn INNER JOIN eg_ws_service ws ON conn.id = ws.connection_id";
 
-	private static final String distinctTenantIdsCriteria = "SELECT distinct(tenantid) FROM {schema}.eg_ws_connection ws";
+	private static final String distinctTenantIdsCriteria = "SELECT distinct(tenantid) FROM eg_ws_connection ws";
 
 
 	public String getDistinctTenantIds() {

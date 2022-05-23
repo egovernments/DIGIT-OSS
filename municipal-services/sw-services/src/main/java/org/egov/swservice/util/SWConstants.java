@@ -99,6 +99,9 @@ public class SWConstants {
 					EDIT_PENDING_FOR_DOCUMENT_VERIFICATION, EDIT_PENDING_FOR_FIELD_INSPECTION,
 					SUBMIT_APPLICATION_STATUS_CODE, APPROVE_CONNECTION_STATUS_CODE));
 
+	public static final List<String> CHANNEL_VALUES = Collections.unmodifiableList(Arrays.asList("CITIZEN", "CFC_COUNTER", "MIGRATION", "DATA_ENTRY", "SYSTEM"));
+
+
 	public static final String USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
 
 	public static final String USREVENTS_EVENT_NAME = "SEWERAGE CONNECTION";
@@ -209,6 +212,7 @@ public class SWConstants {
 	public static final String PAYMENT_NOTIFICATION_APP = "SW_PAYMENT_NOTIFICATION_APP";
 
 	public static final String PAYMENT_NOTIFICATION_SMS = "SW_PAYMENT_NOTIFICATION_SMS";
+	public static final String PAYMENT_NOTIFICATION_EMAIL = "SW_PAYMENT_NOTIFICATION_EMAIL";
 
 	public static final String NEW_SEWERAGE_APP_STATUS ="NEW_SEWERAGE_APPLICATION";
 
@@ -237,12 +241,4 @@ public class SWConstants {
 	public static final String CHANNEL_LIST = "channelList";
 
 	public static final String CHANNEL = "Channel";
-
-	public static String SCHEMA_REPLACE_STRING = "{schema}";
-
-	public static final String TENANTID_MDC_STRING = "TENANTID";
-
-	public static final List<String> TOPICS_TO_AVOID = Collections.unmodifiableList(Arrays.asList("editnotificationsewerage", "sw-filestoreids-process"));
-
-
 }

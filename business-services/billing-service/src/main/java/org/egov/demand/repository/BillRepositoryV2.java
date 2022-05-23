@@ -10,8 +10,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.egov.common.exception.InvalidTenantIdException;
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.demand.model.AuditDetails;
 import org.egov.demand.model.BillAccountDetailV2;
 import org.egov.demand.model.BillDetailV2;
@@ -23,7 +21,6 @@ import org.egov.demand.repository.querybuilder.BillQueryBuilder;
 import org.egov.demand.repository.rowmapper.BillRowMapperV2;
 import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.BillRequestV2;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -47,22 +44,13 @@ public class BillRepositoryV2 {
 	private Util util;
 	
 	@Autowired
-	private MultiStateInstanceUtil centralInstanceUtil;
-	
-	@Autowired
 	private BillRowMapperV2 searchBillRowMapper;
 	
 	public List<BillV2> findBill(BillSearchCriteria billCriteria){
 		
 		List<Object> preparedStatementValues = new ArrayList<>();
 		String queryStr = billQueryBuilder.getBillQuery(billCriteria, preparedStatementValues);
-		try {
-			queryStr = centralInstanceUtil.replaceSchemaPlaceholder(queryStr, billCriteria.getTenantId());
-		} catch (InvalidTenantIdException e) {
-			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
-		log.debug("query:::" + queryStr + "  preparedStatementValues::" + preparedStatementValues);
+		log.debug("query:::"+queryStr+"  preparedStatementValues::"+preparedStatementValues);
 		return jdbcTemplate.query(queryStr, preparedStatementValues.toArray(), searchBillRowMapper);
 	}
 	
@@ -70,16 +58,8 @@ public class BillRepositoryV2 {
 	public void saveBill(BillRequestV2 billRequest){
 		
 		List<BillV2> bills = billRequest.getBills();
-
-		String sqlBill;
-		try {
-			sqlBill = centralInstanceUtil.replaceSchemaPlaceholder(BillQueryBuilder.INSERT_BILL_QUERY,
-					billRequest.getBills().get(0).getTenantId());
-		} catch (InvalidTenantIdException e) {
-			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
-		jdbcTemplate.batchUpdate(sqlBill, new BatchPreparedStatementSetter() {
+		
+		jdbcTemplate.batchUpdate(BillQueryBuilder.INSERT_BILL_QUERY, new BatchPreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
@@ -131,17 +111,8 @@ public class BillRepositoryV2 {
 				billAccountDetails.addAll(billDetail.getBillAccountDetails());
 			}
 		}
-		
-		String sqlBillDetails;
-		try {
-			sqlBillDetails = centralInstanceUtil.replaceSchemaPlaceholder(BillQueryBuilder.INSERT_BILLDETAILS_QUERY,
-					billRequest.getBills().get(0).getTenantId());
-		} catch (InvalidTenantIdException e) {
-			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
-		
-		jdbcTemplate.batchUpdate(sqlBillDetails, new BatchPreparedStatementSetter(){
+
+		jdbcTemplate.batchUpdate(BillQueryBuilder.INSERT_BILLDETAILS_QUERY, new BatchPreparedStatementSetter() {
 
 			@Override
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
@@ -186,17 +157,8 @@ public class BillRepositoryV2 {
 	}
 
 	public void saveBillAccountDetail(List<BillAccountDetailV2> billAccountDetails, AuditDetails auditDetails) {
-		
-		String sqlBillAccount;
-		try {
-			 sqlBillAccount = centralInstanceUtil.replaceSchemaPlaceholder(
-					BillQueryBuilder.INSERT_BILLACCOUNTDETAILS_QUERY, billAccountDetails.get(0).getTenantId());
-		} catch (InvalidTenantIdException e) {
-			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
-		
-		jdbcTemplate.batchUpdate(sqlBillAccount, new BatchPreparedStatementSetter() {
+
+		jdbcTemplate.batchUpdate(BillQueryBuilder.INSERT_BILLACCOUNTDETAILS_QUERY, new BatchPreparedStatementSetter() {
 
 			@Override
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
@@ -265,12 +227,6 @@ public class BillRepositoryV2 {
 		
 		List<Object> preparedStmtList = new ArrayList<>();
 		String queryStr = billQueryBuilder.getBillStatusUpdateQuery(updateBillCriteria, preparedStmtList);
-		try {
-			queryStr = centralInstanceUtil.replaceSchemaPlaceholder(queryStr, updateBillCriteria.getTenantId());
-		} catch (InvalidTenantIdException e) {
-			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
 		return jdbcTemplate.update(queryStr, preparedStmtList.toArray());
 	}
 	

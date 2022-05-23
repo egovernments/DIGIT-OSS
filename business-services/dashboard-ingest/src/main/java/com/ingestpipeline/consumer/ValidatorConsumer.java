@@ -5,7 +5,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -30,12 +29,9 @@ public class ValidatorConsumer implements KafkaConsumer {
 	private IngestProducer ingestProducer;
 	
 	@Autowired
-	private ApplicationProperties applicationProperties;
-
-	@Value("${kafka.topic.error.data}")
-	String errorTopic;
+	private ApplicationProperties applicationProperties; 
     
-    @KafkaListener(id = INTENT, groupId = INTENT, topics = "${kafka.transaction.ingest.topic}", containerFactory = Constants.BeanContainerFactory.INCOMING_KAFKA_LISTENER)
+    @KafkaListener(id = INTENT, groupId = INTENT, topics = {Constants.KafkaTopics.INGEST_DATA} , containerFactory = Constants.BeanContainerFactory.INCOMING_KAFKA_LISTENER)
     public void processMessage(Map consumerRecord,
 							   @Header(KafkaHeaders.RECEIVED_TOPIC) final String topic) {
     	LOGGER.info("##KafkaMessageAlert## Message Received at Validator Consumer : key:" + topic + ":" + "value:" + consumerRecord.size());
@@ -53,14 +49,13 @@ public class ValidatorConsumer implements KafkaConsumer {
 				}
 				ingestProducer.pushToPipeline(consumerRecord, nextTopic, null);
 			} else {
-				ingestProducer.pushToPipeline(consumerRecord, errorTopic, null);
+				ingestProducer.pushToPipeline(consumerRecord, Constants.KafkaTopics.ERROR_INTENT, null);
 			}
 			LOGGER.info("Next Topic: " + nextTopic);
 			LOGGER.info("Next Key: " + nextKey);
 
 		} catch (final Exception e) {
-    		e.printStackTrace();
-			LOGGER.error("Exception Encountered while processing the received message in validator consumer : " + e.getMessage());
+			LOGGER.error("Exception Encountered while processing the received message : " + e.getMessage());
 		}
     	
 		
