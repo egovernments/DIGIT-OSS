@@ -17,7 +17,7 @@ import { initEngagementComponents } from "@egovernments/digit-ui-module-engageme
 import { initWSComponents } from "@egovernments/digit-ui-module-ws"; 
 import {initCustomisationComponents} from "./Customisations";
 import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonPt";
-import { initBillsComponents, BillsModule } from "@egovernments/digit-ui-module-bills";
+import { initBillsComponents } from "@egovernments/digit-ui-module-bills";
 import { initReportsComponents } from "@egovernments/digit-ui-module-reports";
 
 initLibraries();
@@ -35,8 +35,7 @@ window.Digit.ComponentRegistryService.setupRegistry({
   HRMSModule,
   TLModule,
   TLLinks,
-  ReceiptsModule,
-  BillsModule
+  ReceiptsModule
 });
 
 
