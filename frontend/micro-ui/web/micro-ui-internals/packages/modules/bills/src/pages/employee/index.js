@@ -36,7 +36,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             </Link>{" "}
             /{" "}
             <span>
-              {location.pathname === "/digit-ui/employee/bills/inbox" ? t("ABG_SEARCH_BILL_COMMON_HEADER") : t("ABG_SEARCH_BILL_COMMON_HEADER")}
+              {/* {location?.pathname === "/digit-ui/employee/bills/inbox" ? t("ABG_SEARCH_BILL_COMMON_HEADER") : t("ABG_SEARCH_BILL_COMMON_HEADER")} */}
             </span>
           </p>
           <PrivateRoute
