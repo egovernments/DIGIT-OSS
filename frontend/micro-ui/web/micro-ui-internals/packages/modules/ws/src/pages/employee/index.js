@@ -17,9 +17,10 @@ import EditApplication from "./EditApplication";
 import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
 import ModifyApplication from "./ModifyApplication";
 import EditModifyApplication from "./EditModifyApplication";
-import WSDisconnectionDocsRequired from "../../pageComponents/WSDisconnectionDocsRequired";
+// import WSDisconnectionDocsRequired from "../../pageComponents/WSDisconnectionDocsRequired";
 import ResponseBillAmend from "./ResponseBillAmend"
 import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
+import WSDisconnectionDocsRequired from "./Wsdisconnection/index";
 
 const BILLSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();

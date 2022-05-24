@@ -74,11 +74,9 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
           {
             <SubmitBar
               label={t("ACTION_TEST_APPLY")}
-              onSubmit={() => {
-                history.push(match.path.replace("create-application", "new-application"));
-              }}
+              onSubmit={goNext}
               style={{ margin: "10px 10px 0px 0px" }}
-              disabled={wsDocsLoading ? true : false}
+              // disabled={wsDocsLoading ? true : false}
             />}
         </ActionBar>
       </Card>
