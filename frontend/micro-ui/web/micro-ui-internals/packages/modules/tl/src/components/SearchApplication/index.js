@@ -7,13 +7,15 @@ import SearchFields from "./SearchFields";
 import MobileSearchApplication from "./MobileSearchApplication";
 
 const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
+
+  const initialValues = JSON.parse(sessionStorage.getItem("SEARCH_APPLICATION_DETAIL")) || {
+    offset: 0,
+    limit: 10,
+    sortBy: "commencementDate",
+    sortOrder: "DESC"
+};
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
-        defaultValues: {
-            offset: 0,
-            limit: 10,
-            sortBy: "commencementDate",
-            sortOrder: "DESC"
-        }
+        defaultValues: initialValues
     })
 
     useEffect(() => {
