@@ -10,7 +10,6 @@ const EmployeeApp = ({ path, url, userType }) => {
   const mobileView = innerWidth <= 640;
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
-  const BillInbox = Digit.ComponentRegistryService.getComponent("BillInbox");
 
   const inboxInitialState = {
     searchParams: {},
@@ -25,6 +24,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   filterServiceType?.forEach((element) => {
     businessServiceList.push(element.code);
   });
+  const BillInbox = Digit.ComponentRegistryService.getComponent("BillInbox");
 
   return (
     <Switch>
@@ -41,7 +41,9 @@ const EmployeeApp = ({ path, url, userType }) => {
           </p>
           <PrivateRoute
             path={`${path}/inbox`}
-            component={() => <BillInbox parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
+            component={() =><div>
+              EMPTY COMPONENT
+              </div>}
           />
           <PrivateRoute
             path={`${path}/group-bill`}

@@ -27,16 +27,16 @@ export const BillsModule = ({ stateCode, userType, tenants }) => {
   const { path, url } = useRouteMatch();
 
   Digit.SessionStorage.set("BILLS_TENANTS", tenants);
-  useEffect(
-    () =>
-      userType === "employee" &&
-      Digit.LocalizationService.getLocale({
-        modules: [`rainmaker-${Digit.ULBService.getCurrentTenantId()}`],
-        locale: Digit.StoreData.getCurrentLanguage(),
-        tenantId: Digit.ULBService.getCurrentTenantId(),
-      }),
-    []
-  );
+  // useEffect(
+  //   () =>
+  //     userType === "employee" &&
+  //     Digit.LocalizationService.getLocale({
+  //       modules: [`rainmaker-${Digit.ULBService.getCurrentTenantId()}`],
+  //       locale: Digit.StoreData.getCurrentLanguage(),
+  //       tenantId: Digit.ULBService.getCurrentTenantId(),
+  //     }),
+  //   []
+  // );
 
   if (userType === "employee") {
     return <EmployeeApp path={path} url={url} userType={"employee"} />;
@@ -56,7 +56,6 @@ export const BillsLinks = ({ matchPath }) => {
 };
 
 const componentsToRegister = {
-  Inbox,
   BillsModule,
   BillsCard,
   BillInbox: BillInbox,
@@ -73,6 +72,7 @@ const componentsToRegister = {
   BILLS_GROUP_FILTER: (props) => <GroupFilter {...props} />,
   CITIZEN_SEARCH_FILTER: (props) => <SearchCitizenFilter {...props} />,
 };
+
 export const initBillsComponents = () => {
   Object.entries(componentsToRegister).forEach(([key, value]) => {
     Digit.ComponentRegistryService.setComponent(key, value);
