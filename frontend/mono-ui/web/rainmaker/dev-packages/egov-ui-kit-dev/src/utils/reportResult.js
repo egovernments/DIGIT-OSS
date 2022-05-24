@@ -474,13 +474,14 @@ class ShowField extends Component {
           doc.content[0].text = [];
           doc.content[0].text.push({ text: "mSeva System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
+          if (doc.content[1]) {
+            doc.content[1].margin = reportHeader.length > 6 ? null : [60, 10, 10, 12];
+          }
           if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
             const pdfData = pdfMake.createPdf(doc);
             downloadPDFFileUsingBase64(pdfData, `${_this.state.reportName}.pdf`);
             return;
-
           }
-          
         },
         className: "report-pdf-button",
       },
@@ -500,7 +501,7 @@ class ShowField extends Component {
             };
             _addToZip(zip, doc);
             zip.generateAsync(zipConfig).then(function (blob) {
-              downloadPDFFileUsingBase64(blob,`${_this.state.reportName}.xlsx`);
+              downloadPDFFileUsingBase64(blob, `${_this.state.reportName}.xlsx`);
             });
             return;
           }
@@ -628,8 +629,7 @@ class ShowField extends Component {
             setFlag(1);
           }
         },
-        function (err) {
-        }
+        function (err) {}
       );
     } else if (object.defaultValue && object.defaultValue.search("_url") > -1) {
       let afterURL = object.defaultValue.split("?")[1];
@@ -843,8 +843,7 @@ class ShowField extends Component {
               setRoute("/print/report/" + response.viewPath);
             }
           },
-          function (err) {
-          }
+          function (err) {}
         );
     }
   }
