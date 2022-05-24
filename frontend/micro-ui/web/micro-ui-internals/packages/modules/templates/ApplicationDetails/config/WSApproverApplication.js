@@ -54,11 +54,13 @@ export const configWSApproverApplication = ({
             populators: (
               <UploadFile
                 id={"workflow-doc"}
-                // accept=".jpg"
+                accept=".jpg,.pdf"
                 onUpload={selectFile}
                 onDelete={() => {
                   setUploadedFile(null);
                 }}
+                showHint={true}
+                hintText={t("WS_DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
                 message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
               />
             )

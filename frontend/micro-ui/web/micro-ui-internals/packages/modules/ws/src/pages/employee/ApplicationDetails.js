@@ -79,7 +79,9 @@ const ApplicationDetails = () => {
   const { data: oldData } = Digit.Hooks.ws.useOldValue({
     tenantId,
     filters: { connectionNumber: applicationDetails?.applicationData?.connectionNo, isConnectionSearch: true },
-    businessService: serviceType,
+    businessService: serviceType
+  },{
+    enabled: applicationDetails?.applicationData?.applicationType?.includes("MODIFY_") ? true : false
   });
 
   const oldValueWC = oldData?.WaterConnection;
