@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Switch, useLocation, Route } from "react-router-dom";
 import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-components";
 import WSCreate from "./WSCreate/index";
+import WSDisconnection from "./WSDisconnection/index";
 import SearchConnectionComponent from "./SearchConnection";
 import SearchResultsComponent from "./SearchResults";
 import TestAcknowledgment from "./TestAcknowledgment";
@@ -38,6 +39,7 @@ const App = ({ path }) => {
         </BackButton>
         <Switch>
           <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
+          <PrivateRoute path={`${path}/disconnect-application`} component={WSDisconnection} />
           <Route path={`${path}/search`} component={SearchConnectionComponent} />
           <Route path={`${path}/my-bills`} component={WNSMyBillsComponent} />
           <Route path={`${path}/search-results`} component={SearchResultsComponent} />
