@@ -128,7 +128,7 @@ const Inbox = ({ parentRoute, businessService = "TL", initialStates = {}, filter
   } else {
     return (
       <div>
-        {isInbox && <Header>{t("ES_COMMON_INBOX")}</Header>}
+        {isInbox && <Header>{t("ES_COMMON_INBOX")}{data?.totalCount ? <p className="inbox-count">{data?.totalCount}</p> : null}</Header>}
         <DesktopInbox
           businessService={businessService}
           data={data}
