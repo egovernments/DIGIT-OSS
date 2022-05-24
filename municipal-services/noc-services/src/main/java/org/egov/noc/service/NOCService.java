@@ -142,7 +142,12 @@ public class NOCService {
 			StringBuilder uri = new StringBuilder(config.getBpaHost()).append(config.getBpaContextPath())
 					.append(config.getBpaSearchEndpoint());
 			uri.append("?tenantId=").append(criteria.getTenantId());
-			uri.append("&mobileNumber=").append(criteria.getMobileNumber());
+
+			if (criteria.getSourceRefId() != null)
+			{   uri.append("&applicationNo=").append(criteria.getSourceRefId());
+				uri.append("&mobileNumber=").append(criteria.getMobileNumber());
+			}else
+			{   uri.append("&mobileNumber=").append(criteria.getMobileNumber());}
 			log.info("BPA CALL STARTED");
 			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, requestInfoWrapper);
 			BPAResponse bpaResponse = mapper.convertValue(responseMap, BPAResponse.class);
