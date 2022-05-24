@@ -60,7 +60,10 @@ public class VehicleTripService {
     @Autowired
 	private NotificationService notificationService;
 
-	
+    @Autowired
+	private VehicleService vehicleService;
+
+    
 	public List<VehicleTrip> create(VehicleTripRequest request) {
 		
 		if (CollectionUtils.isEmpty(request.getVehicleTrip())) {
@@ -128,16 +131,28 @@ public class VehicleTripService {
 		}
 		
 		if(criteria.getRegistrationNumber() !=null && !CollectionUtils.isEmpty(criteria.getRegistrationNumber())) {
+			
 			List<String> regNo = criteria.getRegistrationNumber();
-			VehicleSearchCriteria cri = new VehicleSearchCriteria();
-			cri.setRegistrationNumber(regNo);
-			VehicleService vhs = new VehicleService();
-			VehicleResponse vr =  vhs.search(cri, requestInfo);
-			List<String> idList = new ArrayList<String>();
-			for(Vehicle v : vr.getVehicle()) {
-				idList.add(v.getId());
+			VehicleSearchCriteria vehicleSearchCriteria = new VehicleSearchCriteria();
+			vehicleSearchCriteria.setTenantId(criteria.getTenantId());		
+			vehicleSearchCriteria.setRegistrationNumber(regNo);
+			
+			VehicleResponse vehicleResponse =  vehicleService.search(vehicleSearchCriteria, requestInfo);
+			if(vehicleResponse!=null && !CollectionUtils.isEmpty(vehicleResponse.getVehicle())){
+				List<String> vehicleIdsList = new ArrayList<String>();
+				vehicleResponse.getVehicle().forEach(vehicle->{
+					vehicleIdsList.add(vehicle.getId());
+				});
+				
+				if(CollectionUtils.isEmpty(criteria.getVehicleIds())) {
+					criteria.setVehicleIds(vehicleIdsList);;
+				}else {
+					criteria.getVehicleIds().addAll(vehicleIdsList);
+				}
+				
 			}
-             criteria.setIds(idList); 			
+
+								
 		}
 		
 		VehicleTripResponse response = vehicleLogRepository.getVehicleLogData(criteria);
