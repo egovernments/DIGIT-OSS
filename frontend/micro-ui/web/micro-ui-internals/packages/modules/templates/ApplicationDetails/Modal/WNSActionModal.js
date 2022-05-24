@@ -138,10 +138,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           uploadedFile,
           setUploadedFile,
           businessService,
+          error
         })
       );
     }
-  }, [action, approvers, uploadedFile]);
+  }, [action, approvers, uploadedFile, error]);
 
   return action && config.form ? (
     <Modal
