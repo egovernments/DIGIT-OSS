@@ -144,7 +144,7 @@ const BillsDesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
             <span className="link">
               <Link
                 to={{
-                  pathname: `/digit-ui/employee/payment/collect/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}`,
+                  pathname: `/digit-ui/employee/payment/collect/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}?workflow=mcollect`,
                 }}
               >
                 {t(`${"ABG_PAY"}`)}{" "}
@@ -159,10 +159,10 @@ const BillsDesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
             <span className="link">
               <Link
                 to={{
-                  pathname: `/digit-ui/employee/payment/collect/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}`,
+                  pathname: `/digit-ui/employee/payment/collect/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}?workflow=mcollect`,
                 }}
               >
-                {t(`${"ABG_GENERATE_NEW_BILL"}`)}{" "}
+                {t(`${"ABG_GENERATE_NEW_BILL"}`)}
               </Link>
             </span>
           </div>

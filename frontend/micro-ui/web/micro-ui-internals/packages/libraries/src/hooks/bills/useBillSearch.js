@@ -12,7 +12,9 @@ const useBillSearch = ({ filters }) => {
 
   const args = tenantId ? { tenantId, filters } : { filters };
 
-  const { isLoading, error, data } = useQuery(["BILL_INBOX", tenantId, filters], async () => await BillingService.search_bill(args));
+  const { isLoading, error, data } = useQuery(["BILL_INBOX", tenantId, filters], async () => await BillingService.search_bill(args), {
+    enabled: filters?.businesService ? true : false,
+  });
   return { isLoading, error, data, revalidate: () => client.invalidateQueries(["BILL_INBOX", tenantId, filters]) };
 };
 

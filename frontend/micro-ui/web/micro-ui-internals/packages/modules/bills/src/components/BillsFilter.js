@@ -34,7 +34,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
   if (filterServiceType) {
     serviceTypeList = filterServiceType.map((element) => {
       return {
-        name: element.businessService,
+        name: Digit.Utils.locale.getTransformedLocale(`BILLINGSERVICE_BUSINESSSERVICE_${element.code}`),
         url: element.billGineiURL,
         businesService: element.code,
       };
