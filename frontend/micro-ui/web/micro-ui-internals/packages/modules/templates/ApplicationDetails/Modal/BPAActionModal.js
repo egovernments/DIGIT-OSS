@@ -61,8 +61,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     (async () => {
       setError(null);
       if (file) {
+        const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
         if (file.size >= 5242880) {
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
+          setError(t(`NOT_SUPPORTED_FILE_TYPE`))
         } else {
           try {
             const response = await Digit.UploadServices.Filestorage("OBPS", file, Digit.ULBService.getStateId() || tenantId?.split(".")[0]);
@@ -228,11 +231,12 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           uploadedFile,
           setUploadedFile,
           businessService,
-          assigneeLabel: "WF_ASSIGNEE_NAME_LABEL"
+          assigneeLabel: "WF_ASSIGNEE_NAME_LABEL",
+          error
         })
       );
     }
-  }, [action, approvers, selectedFinancialYear, uploadedFile]);
+  }, [action, approvers, selectedFinancialYear, uploadedFile, error]);
 
   return action && config.form ? (
     <Modal

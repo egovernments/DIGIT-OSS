@@ -130,6 +130,7 @@ function SelectDocument({
     const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
     const [selectArrayFiles, SetSelectArrayFiles] = useState([]);
     const handleSelectDocument = (value) => setSelectedDocument(value);
+    const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf)$/i;
 
     function selectfiles(e) {
         e && setFile(e.file);
@@ -218,6 +219,9 @@ function SelectDocument({
                                     tenantId={tenantId}
                                     getFormState={e => getData(index, e)}
                                     t={t}
+                                    allowedFileTypesRegex={allowedFileTypes}
+                                    allowedMaxSizeInMB={5}
+                                    acceptFiles= "image/*, .pdf, .png, .jpeg, .jpg"
                                 />
                             </div>
                         </LabelFieldPair>

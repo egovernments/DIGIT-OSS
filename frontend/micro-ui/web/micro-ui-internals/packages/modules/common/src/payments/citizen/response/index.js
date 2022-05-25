@@ -20,9 +20,10 @@ export const SuccessfulPayment = (props)=>{
   const [printing, setPrinting] = useState(false);
   const [allowFetchBill, setallowFetchBill] = useState(false);
   const { businessService: business_service, consumerCode, tenantId } = useParams();
-  const { data:bpaData = {} } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: consumerCode },{enabled:(window.location.href.includes("bpa") || window.location.href.includes("BPA"))});
-
-
+  const { data: bpaData = {}, isLoading: isBpaSearchLoading, isSuccess: isBpaSuccess, error: bpaerror } = Digit.Hooks.obps.useOBPSSearch(
+    "", {}, tenantId, { applicationNo: consumerCode }, {}, {enabled:(window.location.href.includes("bpa") || window.location.href.includes("BPA"))}
+  );
+  
   const { isLoading, data, isError } = Digit.Hooks.usePaymentUpdate({ egId }, business_service, {
     retry: false,
     staleTime: Infinity,
@@ -200,14 +201,9 @@ export const SuccessfulPayment = (props)=>{
   
 
   const getPermitOccupancyOrderSearch = async(order, mode="download") => {
-    // let requestData = {...bpaData?.applicationData, edcrDetail:[{...bpaData?.edcrDetails}]}
-    // let response = await Digit.PaymentService.generatePdf(bpaData?.applicationData?.tenantId, { Bpa: [requestData] }, order);
-    // const fileStore = await Digit.PaymentService.printReciept(bpaData?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
-    // window.open(fileStore[response?.filestoreIds[0]], "_blank");
-
-    let queryObj = { applicationNo: bpaData?.applicationData?.applicationNo };
-    let bpaResponse = await Digit.OBPSService.BPASearch(bpaData?.applicationData?.tenantId, queryObj);
-    const edcrResponse = await Digit.OBPSService.scrutinyDetails(bpaData?.applicationData?.tenantId, { edcrNumber: bpaData?.applicationData?.edcrNumber });
+    let queryObj = { applicationNo: bpaData?.[0]?.applicationNo };
+    let bpaResponse = await Digit.OBPSService.BPASearch(bpaData?.[0]?.tenantId, queryObj);
+    const edcrResponse = await Digit.OBPSService.scrutinyDetails(bpaData?.[0]?.tenantId, { edcrNumber: bpaData?.[0]?.edcrNumber });
     let bpaDataDetails = bpaResponse?.BPA?.[0], edcrData = edcrResponse?.edcrDetail?.[0];
     let currentDate = new Date();
     bpaDataDetails.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
@@ -278,6 +274,8 @@ export const SuccessfulPayment = (props)=>{
   };
 
   const ommitRupeeSymbol = ["PT"].includes(business_service);
+
+  if ((window.location.href.includes("bpa") || window.location.href.includes("BPA")) && isBpaSearchLoading) return <Loader />
 
   return (
     <Card>
@@ -352,19 +350,19 @@ export const SuccessfulPayment = (props)=>{
           {t("TL_CERTIFICATE")}
         </div>
       ) : null}
-      {bpaData?.applicationData?.businessService === "BPA_OC" && bpaData?.applicationData?.status==="APPROVED" ? (
+      {bpaData?.[0]?.businessService === "BPA_OC" && bpaData?.[0]?.status==="APPROVED" ? (
         <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={e => getPermitOccupancyOrderSearch("occupancy-certificate")}>
           <DownloadPrefixIcon />
             {t("BPA_OC_CERTIFICATE")}
           </div>
       ) : null}
-      {bpaData?.applicationData?.businessService === "BPA_LOW" ? (
+      {bpaData?.[0]?.businessService === "BPA_LOW" ? (
         <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit-low")}>
           <DownloadPrefixIcon />
             {t("BPA_PERMIT_ORDER")}
           </div>
       ) : null}
-      {bpaData?.applicationData?.businessService === "BPA" && (bpaData?.applicationData?.businessService !== "BPA_LOW") && (bpaData?.applicationData?.businessService !== "BPA_OC") && bpaData?.applicationData?.status==="PENDING_SANC_FEE_PAYMENT"? (
+      {bpaData?.[0]?.businessService === "BPA" && (bpaData?.[0]?.businessService !== "BPA_LOW") && (bpaData?.[0]?.businessService !== "BPA_OC") && (bpaData?.[0]?.status==="PENDING_SANC_FEE_PAYMENT" || bpaData?.[0]?.status==="APPROVED")? (
         <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit")}>
           <DownloadPrefixIcon />
             {t("BPA_PERMIT_ORDER")}

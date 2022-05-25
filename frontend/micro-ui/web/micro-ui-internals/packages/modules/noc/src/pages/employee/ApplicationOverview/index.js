@@ -1,5 +1,5 @@
 import {
-  CardSectionHeader, Header, MultiUploadWrapper, PDFSvg, Row, StatusTable, LabelFieldPair, CardLabel
+  CardSectionHeader, Header, MultiUploadWrapper, PDFSvg, Row, StatusTable, LabelFieldPair, CardLabel, Loader
 } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -188,7 +188,7 @@ const ApplicationOverview = () => {
           </div>
         </Fragment>
       );
-    } else return <div></div>
+    } else return <Loader />
   }
   const getBuldingComponent = (details = []) => details.map(detail => ({
     title: detail.title, belowComponent: () => <Fragment>
@@ -253,6 +253,8 @@ function SelectDocument({
 
   const handleSelectDocument = (value) => setSelectedDocument(value);
 
+  const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf)$/i;
+
   function selectfile(e) {
     e && setFile(e.file);
   }
@@ -312,12 +314,6 @@ function SelectDocument({
 
   return (
     <div >
-      {/* <UploadFile
-            onUpload={(e) => onUploadMultipleFiles(e)}
-            removeTargetedFile={(fileDetailsData) => dispatch({type: TARGET_FILE_REMOVAL ,payload: fileDetailsData})} 
-            uploadedFiles={state}
-            multiple={true}
-        /> */}
       <LabelFieldPair>
         <CardLabel className="card-label-smaller" style={{fontWeight: "700", width: "50%"}}>{`${t("NOC_UPLOAD_FILE_LABEL")}`}</CardLabel>
         <div className="field">
@@ -326,6 +322,9 @@ function SelectDocument({
             tenantId={tenantId}
             getFormState={e => getData(e)}
             t={t}
+            allowedFileTypesRegex={allowedFileTypes}
+            allowedMaxSizeInMB={5}
+            acceptFiles= "image/*, .pdf, .png, .jpeg, .jpg"
           />
         </div>
       </LabelFieldPair>
