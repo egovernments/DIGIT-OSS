@@ -18,6 +18,7 @@ import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
 import ModifyApplication from "./ModifyApplication";
 import EditModifyApplication from "./EditModifyApplication";
 import WSDisconnectionDocsRequired from "../../pageComponents/WSDisconnectionDocsRequired";
+import WSEditApplicationByConfig from "./EditApplication/WSEditApplicationByConfig";
 import ResponseBillAmend from "./ResponseBillAmend";
 import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
 import GetDisconnectionDetails from "./DisconnectionDetails";
@@ -144,8 +145,7 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/ws-response`} component={WSResponse} />
           <PrivateRoute path={`${path}/water/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/sewerage/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
-          {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
-        <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
+        
           <PrivateRoute path={`${path}/consumption-details`} component={ConsumptionDetails} />
           <PrivateRoute path={`${path}/modify-application`} component={ModifyApplication} />
           <PrivateRoute path={`${path}/modify-application-edit`} component={EditModifyApplication} />
@@ -153,9 +153,10 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/bill-amend/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/water/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/sewerage/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/edit-application-by-config`} component={WSEditApplicationByConfig} />
           <PrivateRoute path={`${path}/disconnection-details`} component={GetDisconnectionDetails} />
           {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
-        <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
+          <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
         </div>
       </React.Fragment>
     </Switch>

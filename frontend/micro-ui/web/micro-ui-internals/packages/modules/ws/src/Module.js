@@ -47,6 +47,7 @@ import WSDisconnectionCheckPage from "./pages/citizen/WSDisconnection/CheckPage"
 import WSDisconnectAcknowledgement from "./pageComponents/WSDisconnectAcknowledgement";
 
 import WSInbox from "./components/WSInbox";
+import WSEditApplicationByConfig from './pages/employee/EditApplication/WSEditApplicationByConfig';
 
 const WSModule = ({ stateCode, userType, tenants }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -144,6 +145,7 @@ const componentsToRegister = {
   EditApplication,
   WSDisconnectionDocsRequired,
   WSInbox,
+  WSEditApplicationByConfig,
   SWCard,
   WSDisconnectionForm,
   WSDisconnectionDocumentsForm,
