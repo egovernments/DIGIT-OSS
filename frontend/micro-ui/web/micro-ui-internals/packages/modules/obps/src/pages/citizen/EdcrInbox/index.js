@@ -122,7 +122,7 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const SearchFormFields = useCallback(
-    ({ registerRef, searchFormState }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState }} />,
+    ({ registerRef, searchFormState, searchFieldComponents }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState, searchFieldComponents }} />,
     []
   );
 

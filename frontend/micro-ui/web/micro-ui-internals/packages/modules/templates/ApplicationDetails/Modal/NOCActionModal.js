@@ -26,10 +26,7 @@ const CloseBtn = (props) => {
 };
 
 const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationData, businessService, moduleCode }) => {
-    const mutation = Digit.Hooks.obps.useObpsAPI(
-        applicationData?.landInfo?.address?.city ? applicationData?.landInfo?.address?.city : tenantId,
-        true
-      ); 
+ 
   const { data: approverData, isLoading: PTALoading } = Digit.Hooks.useEmployeeSearch(
     tenantId,
     {
@@ -37,18 +34,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       isActive: true,
     },
     { enabled: !action?.isTerminateState }
-  );
-  const { isLoading: financialYearsLoading, data: financialYearsData } = Digit.Hooks.pt.useMDMS(
-    tenantId,
-    businessService,
-    "FINANCIAL_YEARLS",
-    {},
-    {
-      details: {
-        tenantId: Digit.ULBService.getStateId(),
-        moduleDetails: [{ moduleName: "egf-master", masterDetails: [{ name: "FinancialYear", filter: "[?(@.module == 'TL')]" }] }],
-      },
-    }
   );
 
   const queryClient = useQueryClient();
@@ -59,17 +44,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
-  const [financialYears, setFinancialYears] = useState([]);
-  const [selectedFinancialYear, setSelectedFinancialYear] = useState(null);
   const mobileView = Digit.Utils.browser.isMobile() ? true : false;
   const history = useHistory();
-
-
-  useEffect(() => {
-    if (financialYearsData && financialYearsData["egf-master"]) {
-      setFinancialYears(financialYearsData["egf-master"]?.["FinancialYear"]);
-    }
-  }, [financialYearsData]);
 
   useEffect(() => {
     setApprovers(approverData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })));
@@ -83,8 +59,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     (async () => {
       setError(null);
       if (file) {
+        const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
         if (file.size >= 5242880) {
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
+          setError(t(`NOT_SUPPORTED_FILE_TYPE`))
         } else {
           try {
             const response = await Digit.UploadServices.Filestorage("NOC", file, tenantId);
@@ -101,67 +80,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     })();
   }, [file]);
 
-  const getInspectionDocs = (docs) => {
-    let refinedDocs = [];
-    docs && docs.map((doc,ind) => {
-      refinedDocs.push({
-        "documentType":(doc.documentType+"_"+doc.documentType.split("_")[1]).replaceAll("_","."),
-        "fileStoreId":doc.fileStoreId,
-        "fileStore":doc.fileStoreId,
-        "fileName":"",
-        "dropDownValues": {
-          "value": (doc.documentType+"_"+doc.documentType.split("_")[1]).replaceAll("_","."),
-      }
-      })
-    })
-    return refinedDocs;
-  }
-
-  const getQuestion = (data) => {
-    let refinedQues = [];
-    var i;
-    for(i=0; i<data?.questionLength; i++)
-    {
-      refinedQues.push({
-        "remarks": data[`Remarks_${i}`],
-        "question": data?.questionList[i].question,
-        "value": data[`question_${i}`].code,
-      })
-    }
-    return refinedQues;
-  }
-
-  const getfeildInspection = () => {
-    let formdata = JSON.parse(sessionStorage.getItem("INSPECTION_DATA"));
-    let inspectionOb = [];
-    formdata && formdata.map((ob,ind) => {
-      inspectionOb.push({
-        docs: getInspectionDocs(ob.Documents),
-        date: ob.InspectionDate,
-        questions: getQuestion(ob),
-        time: "10:00",
-      })
-    })
-    let fieldinspection_pending = [ ...inspectionOb];
-    return fieldinspection_pending;
-  }
-
-  // useEffect(() => {
-
-  //   if(mutation.isSuccess && !mutation.isLoading)
-  //   {
-  //       history.replace(`/digit-ui/employee/noc/response`, { data: mutation?.data?.Noc[0] });
-
-  //   }
-  // },[mutation.isSuccess])
-
-
-  const onSuccess = () => {
-    //clearParams();
-    //history.replace(`/digit-ui/employee/noc/response`, { data: applicationData });
-    queryClient.invalidateQueries("PT_CREATE_PROPERTY");
-  };
-
 
   function submit(data) {
       let enteredDocs = JSON.parse(sessionStorage.getItem("NewNOCDocs"));
@@ -169,7 +87,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         enteredDocs.map((d,index) => {
             newDocs.push(d);
         })
-    let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
     applicationData = {
       ...applicationData,
        workflow:{
@@ -208,11 +125,12 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           uploadedFile,
           setUploadedFile,
           businessService,
-          assigneeLabel: "WF_ASSIGNEE_NAME_LABEL"
+          assigneeLabel: "WF_ASSIGNEE_NAME_LABEL",
+          error
         })
       );
     }
-  }, [action, approvers, financialYears, selectedFinancialYear, uploadedFile]);
+  }, [action, approvers, uploadedFile, error]);
 
   return action && config.form ? (
     <Modal
@@ -228,7 +146,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       style={!mobileView?{height: "45px", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{height:"45px",width:"44%"}}
       popupModuleMianStyles={mobileView?{paddingLeft:"5px"}: {}}
     >
-      {financialYearsLoading ? (
+      {PTALoading ? (
         <Loader />
       ) : (
         <FormComposer

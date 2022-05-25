@@ -247,7 +247,7 @@ const SelectDocument = React.memo(function MyComponent({
         setuploadedfileArray([...uploadedfileArray,uploadedFile])
     },[uploadedFile]);
 
-    const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf|msword|openxmlformats)$/i;
+    const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf)$/i;
 
     const uploadedFilesPreFill = useMemo(()=>{
         let selectedUplDocs=[];
@@ -272,11 +272,12 @@ const SelectDocument = React.memo(function MyComponent({
                 module="BPA"
                 tenantId={tenantId}
                 getFormState={getData}
-                allowedFileTypesRegex={allowedFileTypes}
-                allowedMaxSizeInMB={5}
                 setuploadedstate={uploadedFilesPreFill}
                 t={t}
                 extraStyleName={"OBPS"}
+                allowedFileTypesRegex={allowedFileTypes}
+                allowedMaxSizeInMB={5}
+                acceptFiles= "image/*, .pdf, .png, .jpeg, .jpg"
             /> 
         {doc?.uploadedDocuments?.length && <DocumentsPreview isSendBackFlow={true} documents={doc?.uploadedDocuments} />}
         </div>

@@ -34,22 +34,11 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     useEffect(() => {
         let filtredBpaDocs = [];
         if (data?.StakeholderRegistraition?.TradeTypetoRoleMapping) {
-            //filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(data => (data.WFState == "INITIATED" && data.RiskType == "LOW" && data.ServiceType == "NEW_CONSTRUCTION" && data.applicationType == "BUILDING_PLAN_SCRUTINY"))
-        //    let  formData = {formdata:{LicenseType:{LicenseType:{tradeType : "ENGINEER.CLASSA",}}}}
             filtredBpaDocs = data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.filter(ob => (ob.tradeType === formData?.formData?.LicneseType?.LicenseType?.tradeType))
         }
 
         let documentsList = [];
         filtredBpaDocs?.[0]?.docTypes?.forEach(doc => {
-            let code = doc.code; doc.dropdownData = [];
-            // commonDocs?.["common-masters"]?.DocumentType?.forEach(value => {
-            //     let values = value.code.slice(0, code.length);
-            //     if (code === values) {
-            //         doc.hasDropdown = true;
-            //         value.i18nKey = value.code;
-            //         doc.dropdownData.push(value);
-            //     }
-            // });
             documentsList.push(doc);
         });
         setBpaTaxDocuments(documentsList);
@@ -84,20 +73,14 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                 count = count + 1;
             }
         });
-        //if(bpaTaxDocuments.length == documents.length+1 && bpaTaxDocuments.length!==0) setEnableSubmit(false);
         if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
         else setEnableSubmit(true);
     }, [documents, checkRequiredFields])
 
-    // if (bpaDocsLoading) {
-    //     return <Loader />;
-    // }
 
     return (
         <div>
             <div className={isopenlink? "OpenlinkContainer":""}>
-            {/* {isopenlink &&<OpenLinkContainer />} */}
-            {/* <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
             {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
             <Timeline currentStep={3} flow="STAKEHOLDER" />
             {!isLoading ?
@@ -191,8 +174,11 @@ function SelectDocument({
         (async () => {
             setError(null);
             if (file) {
+                const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
                 if (file.size >= 5242880) {
                     setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+                } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
+                    setError(t(`NOT_SUPPORTED_FILE_TYPE`))
                 } else {
                     try {
                         setUploadedFile(null);
@@ -216,16 +202,14 @@ function SelectDocument({
             {doc?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", marginBottom: "10px"}}>{`${t(doc?.info)}`}</div> : null}
             <UploadFile
                 extraStyleName={"OBPS"}
-                accept=".jpg,.png,.pdf"
+                accept="image/*, .pdf, .png, .jpeg, .jpg"
                 onUpload={selectfile}
                 onDelete={() => {
                     setUploadedFile(null);
                     setCheckRequiredFields(true);
                 }}
                 message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
-                error={error}
-                // inputStyles={{top:"0%",maxHeight:""}}
-                // Multistyle={isCitizenUrl?{marginTop:"-15px",position:"absolute"}:{marginTop:"-11px",position:"absolute"}}
+                iserror={error}
             />
         </div>
     );

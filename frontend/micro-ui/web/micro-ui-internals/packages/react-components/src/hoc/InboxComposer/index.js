@@ -123,6 +123,54 @@ const InboxComposer = ({
         {isInboxLoading ? <Loader /> : <DetailsCard {...propsForInboxMobileCards} />}
     </div>
     }
+
+    const isEnabledCommonModules = window.location.href.includes("/obps/") || window.location.href.includes("/noc/");
+
+    if (isEnabledCommonModules) {
+        return <div className="inbox-container">
+            <div className="filters-container">
+                <InboxLinks {...PropsForInboxLinks} />
+                <div>
+                    <FilterForm onSubmit={onFilterFormSubmit} handleSubmit={handleFilterFormSubmit} id="filter-form" onResetFilterForm={onResetFilterForm}>
+                        <FilterFormFields registerRef={registerFilterFormField} {...{ controlFilterForm, handleFilterFormSubmit, setFilterFormValue, getFilterFormValue }} />
+                    </FilterForm>
+                </div>
+            </div>
+            <div style={{ flex: 1 }}>
+                <SearchForm onSubmit={onSearchFormSubmit} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb form-field-flex-one" >
+                    <SearchFormFields registerRef={registerSearchFormField} searchFormState={searchFormState} {...{ controlSearchForm }}
+                        searchFieldComponents={
+                            <div>
+                                <SubmitBar
+                                    label={t("ES_COMMON_SEARCH")}
+                                    submit form="search-form"
+                                    className="submit-bar-search"
+                                />
+                                <p
+                                    onClick={onResetSearchForm}
+                                    className="clear-search"
+                                    style={{ paddingTop: "9px" }}
+                                >{t(`ES_COMMON_CLEAR_SEARCH`)}</p>
+                            </div>
+                        }
+                    />
+                </SearchForm>
+                <div className="result" style={{ marginLeft: "24px", flex: 1 }}>
+                    {isInboxLoading ? <Loader /> : <div>
+                        {propsForInboxTable?.data?.length < 1 ? <Card className="margin-unset text-align-center">
+                            {propsForInboxTable.noResultsMessage ? t(propsForInboxTable.noResultsMessage) : t("CS_MYAPPLICATIONS_NO_APPLICATION")}
+                        </Card>
+                            : <Table
+                                t={t}
+                                {...propsForInboxTable}
+                            />}
+                    </div>}
+                </div>
+
+            </div>
+        </div>
+    }
+
     return <div className="InboxComposerWrapper">
         <InboxLinks {...PropsForInboxLinks} />
         <SearchForm onSubmit={onSearchFormSubmit} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb form-field-flex-one" >

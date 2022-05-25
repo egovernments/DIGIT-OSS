@@ -12,6 +12,7 @@ export const configBPAApproverApplication = ({
   setUploadedFile,
   assigneeLabel,
   businessService,
+  error
 }) => {
   let isRejectOrRevocate = false;
   if(action?.action == "REVOCATE" || action?.action == "REJECT" || action.action == "SKIP_PAYMENT" || action?.action == "SEND_BACK_TO_CITIZEN" || action?.action == "APPROVE") {
@@ -34,7 +35,6 @@ export const configBPAApproverApplication = ({
         body: [
           {
             label: action.isTerminateState || isRejectOrRevocate ? null : t(assigneeLabel || `WF_ROLE_${action.assigneeRoles?.[0]}`),
-            // isMandatory: !action.isTerminateState,
             type: "dropdown",
             populators: action.isTerminateState || isRejectOrRevocate ? null : (
               <Dropdown
@@ -64,9 +64,9 @@ export const configBPAApproverApplication = ({
                 onDelete={() => {
                   setUploadedFile(null);
                 }}
-                // showHint={true}
-                // hintText={t("BPA_ATTACH_RESTRICTIONS_SIZE")}
                 message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+                accept= "image/*, .pdf, .png, .jpeg, .jpg"
+                iserror={error}
               />
             ),
           },
