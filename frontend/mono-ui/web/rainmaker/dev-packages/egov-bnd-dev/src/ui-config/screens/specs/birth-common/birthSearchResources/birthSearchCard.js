@@ -193,6 +193,54 @@ export const showHideConfirmationPopup = (state, dispatch) => {
 };
 
 export const searchSetCommon = getCommonContainer({
+  cantonmentSelect: {
+    uiFramework: "custom-containers-local",
+            moduleName: "egov-bnd",
+    componentPath: "AutosuggestContainer",
+    jsonPath: "bnd.birth.tenantId",
+    sourceJsonPath: "bnd.allTenants",
+    visible: true,
+    autoSelect: true,
+    props: {
+      autoSelect: true,
+      isDisabled: false,
+      //isClearable:true,
+      className: "autocomplete-dropdown",
+      suggestions: [],
+      disabled: false, //getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+      label: {
+        labelName: "Select Cantonment",
+        labelKey: "BND_APPL_CANT",
+      },
+      placeholder: {
+        labelName: "Select Cantonment",
+        labelKey: "BND_APPL_CANT_PLACEHOLDER",
+      },
+      localePrefix: {
+        moduleName: "TENANT",
+        masterName: "TENANTS",
+      },
+      labelsFromLocalisation: true,
+      required: true,
+      errorText:"Required",
+      jsonPath: "bnd.birth.tenantId",
+      sourceJsonPath: "bnd.allTenants",
+      inputLabelProps: {
+        shrink: true,
+      },
+      onClickHandler: (action, state, dispatch) => {
+      },
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 4,
+    },
+    required: true,
+    beforeFieldChange: (action, state, dispatch) => {},
+    afterFieldChange: (action, state, dispatch) => {
+      cbChanged(action, state, dispatch);
+    },
+  },
   dob: getDateField({
     label: { labelName: "DOB", labelKey: "BND_BIRTH_DOB" },
     placeholder: {
@@ -296,55 +344,7 @@ export const searchSetCommon = getCommonContainer({
     visible: true,
     beforeFieldChange: (action, state, dispatch) => {},
     afterFieldChange: (action, state, dispatch) => {},
-  }),
-  cantonmentSelect: {
-    uiFramework: "custom-containers-local",
-            moduleName: "egov-bnd",
-    componentPath: "AutosuggestContainer",
-    jsonPath: "bnd.birth.tenantId",
-    sourceJsonPath: "bnd.allTenants",
-    visible: true,
-    autoSelect: true,
-    props: {
-      autoSelect: true,
-      isDisabled: false,
-      //isClearable:true,
-      className: "autocomplete-dropdown",
-      suggestions: [],
-      disabled: false, //getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-      label: {
-        labelName: "Select Cantonment",
-        labelKey: "BND_APPL_CANT",
-      },
-      placeholder: {
-        labelName: "Select Cantonment",
-        labelKey: "BND_APPL_CANT_PLACEHOLDER",
-      },
-      localePrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS",
-      },
-      labelsFromLocalisation: true,
-      required: true,
-      errorText:"Required",
-      jsonPath: "bnd.birth.tenantId",
-      sourceJsonPath: "bnd.allTenants",
-      inputLabelProps: {
-        shrink: true,
-      },
-      onClickHandler: (action, state, dispatch) => {
-      },
-    },
-    gridDefination: {
-      xs: 12,
-      sm: 4,
-    },
-    required: true,
-    beforeFieldChange: (action, state, dispatch) => {},
-    afterFieldChange: (action, state, dispatch) => {
-      cbChanged(action, state, dispatch);
-    },
-  },
+  })
 });
 
 export const searchSet1 = getCommonContainer({
@@ -507,6 +507,35 @@ export const buttonContainer = getCommonContainer({
       sm: 3,
     },
   },
+   resetButton: {
+    componentPath: "Button",
+    gridDefination: {
+      xs: 12,
+      sm: 3,
+      // align: "center"
+    },
+    props: {
+      variant: "outlined",
+      style: {
+        color: "#696969",
+        // backgroundColor: "#FE7A51",
+        border: "#696969 solid 1px",
+        borderRadius: "2px",
+        width: window.innerWidth > 480 ? "80%" : "100%",
+        height: "48px",
+      },
+    },
+    children: {
+      buttonLabel: getLabel({
+        labelName: "RESET",
+        labelKey: "BND_RESET_BUTTON",
+      }),
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: resetFields,
+    },
+  },
   searchButton: {
     componentPath: "Button",
     gridDefination: {
@@ -535,35 +564,6 @@ export const buttonContainer = getCommonContainer({
       callBack: (state, dispatch) => {
         searchApiCall(state, dispatch);
       },
-    },
-  },
-  resetButton: {
-    componentPath: "Button",
-    gridDefination: {
-      xs: 12,
-      sm: 3,
-      // align: "center"
-    },
-    props: {
-      variant: "outlined",
-      style: {
-        color: "#FE7A51",
-        // backgroundColor: "#FE7A51",
-        border: "#FE7A51 solid 1px",
-        borderRadius: "2px",
-        width: window.innerWidth > 480 ? "80%" : "100%",
-        height: "48px",
-      },
-    },
-    children: {
-      buttonLabel: getLabel({
-        labelName: "RESET",
-        labelKey: "BND_RESET_BUTTON",
-      }),
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: resetFields,
     },
   },
 

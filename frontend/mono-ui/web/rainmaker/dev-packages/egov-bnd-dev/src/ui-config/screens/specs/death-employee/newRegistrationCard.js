@@ -532,7 +532,10 @@ export const newRegistrationForm = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "New Registration",
-      labelKey: "BND_NEW_REGISTRATION",
+      labelKey:
+        getQueryArg(window.location.href, "action") === "EDIT"
+          ? "BND_EDIT_REGISTRATION"
+          : "BND_NEW_REGISTRATION",
     },
     {
       style: {

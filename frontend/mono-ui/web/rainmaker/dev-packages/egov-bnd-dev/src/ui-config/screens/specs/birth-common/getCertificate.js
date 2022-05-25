@@ -114,7 +114,9 @@ const getCertificate = {
                 sm: 6,
                 align: "right",
               },
-              visible: process.env.REACT_APP_NAME !== "Citizen" && ifUserRoleExists("BIRTH_APPLICATION_CREATOR"),
+              visible:
+                process.env.REACT_APP_NAME !== "Citizen" &&
+                ifUserRoleExists("BIRTH_APPLICATION_CREATOR"),
               props: {
                 variant: "contained",
                 color: "primary",
@@ -126,6 +128,16 @@ const getCertificate = {
                 },
               },
               children: {
+                plusIconInsideButton: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "add",
+                    style: {
+                      fontSize: "24px",
+                    },
+                  },
+                },
                 ButtonLabel: getLabel({
                   labelName: "Group Bills",
                   labelKey: "ACTION_TEST_BIRTH_NEW_REGISTRATION",
