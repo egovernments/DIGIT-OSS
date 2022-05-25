@@ -295,6 +295,62 @@ export const OBPSService = {
     }
 
 
+    let appBusinessService = [], collectionBillDetails = [], collectionBillArray = [], totalAmount = 0, collectionBillRes = [];
+
+    if (BPA?.businessService === "BPA_LOW") appBusinessService = ["BPA.LOW_RISK_PERMIT_FEE"]
+    else if (BPA?.businessService === "BPA") appBusinessService = ["BPA.NC_APP_FEE", "BPA.NC_SAN_FEE"];
+    else if (BPA?.businessService === "BPA_OC") appBusinessService = ["BPA.NC_OC_APP_FEE", "BPA.NC_OC_SAN_FEE"];
+
+    let fetchBillRes = {};
+
+    if (appBusinessService?.[1]) {
+      fetchBillRes = await Digit.PaymentService.fetchBill(BPA?.tenantId, { consumerCode: BPA?.applicationNo, businessService: appBusinessService[1] });
+    }
+
+    for (let i = 0; i < appBusinessService?.length; i++) {
+      let collectionres = await Digit.PaymentService.recieptSearch(BPA?.tenantId, appBusinessService[i], { consumerCodes: BPA?.applicationNo, isEmployee: true });
+      if (collectionres?.Payments?.length > 0) {
+        collectionres?.Payments?.map(res => {
+          res?.paymentDetails?.map(resData => {
+            if (resData?.businessService == appBusinessService[i]) {
+              collectionBillRes.push(res);
+            }
+          })
+        })
+      }
+      if (collectionres?.Payments?.length > 0) collectionBillDetails.push(...collectionres?.Payments);
+    }
+
+    if (collectionBillRes?.length > 0) {
+      collectionBillRes?.map(ob => {
+        ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill, index) => {
+          collectionBillArray.push(
+            { title: `${bill?.taxHeadCode}_DETAILS`, value: "", isSubTitle: true },
+            { title: bill?.taxHeadCode, value: `₹${bill?.amount}` },
+            { title: "BPA_STATUS_LABEL", value: "Paid" }
+          );
+          totalAmount = totalAmount + parseInt(bill?.amount);
+        })
+      })
+    }
+    if (fetchBillRes?.Bill?.length > 0) {
+      collectionBillArray.push(
+        { title: `${fetchBillRes?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails?.[0]?.taxHeadCode}_DETAILS` || `BPA_SANC_FEE_DETAILS`, value: "", isSubTitle: true},
+        { title: `BPA_SANC_FEE_LABEL`, value: `₹${fetchBillRes?.Bill?.[0]?.totalAmount}` },
+        { title: "BPA_STATUS_LABEL", value: "Unpaid" }
+      )
+    }
+    totalAmount > 0 && collectionBillArray.push({ title: "BPA_TOT_AMT_PAID", value: `₹${totalAmount}` });
+    
+    const billDetails = {
+      title: "BPA_FEE_DETAILS_LABEL",
+      isFeeDetails: true,
+      additionalDetails: {
+        inspectionReport:[],
+        values: [...collectionBillArray]
+      }
+    };
+
     BPA?.additionalDetails?.fieldinspection_pending?.forEach(fiData => {
       fiData?.docs?.forEach(fiDoc => {
         if(fileDetails?.data[fiDoc?.fileStoreId]) fiDoc.url = fileDetails?.data[fiDoc?.fileStoreId]?.split(',')[0]
@@ -646,9 +702,13 @@ export const OBPSService = {
     }
 
     if(BPA?.businessService !== "BPA_OC") {
-      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, fiReports, ...nocDetails, approvalChecksDetails,PermitConditions]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails,addressDetails, ownerDetails, documentDetails, fiReports, ...nocDetails, approvalChecksDetails, PermitConditions]
     } else {
-      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails, fiReports, ...nocDetails,PermitConditions ]
+      details = [...details, applicationDetailsInfo, basicDetails, plotDetails, scrutinyDetails, buildingExtractionDetails, subOccupancyTableDetails, demolitionAreaDetails, documentDetails, fiReports, ...nocDetails, PermitConditions]
+    }
+
+    if (billDetails?.additionalDetails?.values?.length) {
+      details.push(billDetails)
     }
     
 
@@ -664,7 +724,8 @@ export const OBPSService = {
       comparisionReport: comparisionReport?.comparisonDetail,
       businessService: BPA?.businessService,
       applicationNo: BPA?.applicationNo,
-      applicationStatus : BPA?.status
+      applicationStatus : BPA?.status,
+      collectionBillDetails: collectionBillDetails
     }
   }
 }
