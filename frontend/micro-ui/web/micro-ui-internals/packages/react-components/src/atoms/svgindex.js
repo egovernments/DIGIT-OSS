@@ -976,6 +976,12 @@ const ValidityTimeIcon = ({ className, styles }) => (
   </svg>
 );
 
+const AddIcon = ({ styles, className, fill = "white" }) => (
+  <svg width="12" height="14" className={className} style={{ ...styles }} viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11.8125 5.49609V8.4375H0.117188V5.49609H11.8125ZM7.57031 0.867188V13.2891H4.37109V0.867188H7.57031Z" fill={fill}/>
+  </svg>
+)
+
 export {
   AnnouncementIcon,
   ReceiptIcon,
@@ -1088,5 +1094,6 @@ export {
   ServiceCenterIcon,
   TimerIcon,
   RupeeSymbol,
-  ValidityTimeIcon
+  ValidityTimeIcon,
+  AddIcon
 };

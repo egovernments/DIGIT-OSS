@@ -69,6 +69,9 @@ import useConfig from "./fsm/useConfig";
 import useVendorDetail from "./fsm/useVendorDetail";
 import useSlum from "./fsm/useSlum";
 import usePaymentHistory from "./fsm/usePaymentHistory";
+import useVendorCreate from "./fsm/useVendorCreate";
+import useVendorUpdate from "./fsm/useVendorUpdate";
+import useVehicleDetails from "./fsm/useVehicleDetails";
 
 import useEmployeeSearch from "./useEmployeeSearch";
 
@@ -258,6 +261,9 @@ const fsm = {
   useConfig,
   useSlum,
   usePaymentHistory,
+  useVendorCreate,
+  useVendorUpdate,
+  useVehicleDetails
 };
 
 const pt = {
