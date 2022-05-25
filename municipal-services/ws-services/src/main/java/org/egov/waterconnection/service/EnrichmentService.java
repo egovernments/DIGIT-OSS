@@ -487,6 +487,8 @@ public class EnrichmentService {
 			if(!ObjectUtils.isEmpty(processInstance)) {
 				waterConnection.getProcessInstance().setBusinessService(processInstance.getBusinessService());
 				waterConnection.getProcessInstance().setModuleName(processInstance.getModuleName());
+				if(!ObjectUtils.isEmpty(processInstance.getAssignes()))
+					waterConnection.getProcessInstance().setAssignes(processInstance.getAssignes());
 			}
 		}
 	}
