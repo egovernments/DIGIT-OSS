@@ -39,7 +39,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   });
 
   useEffect(() => {
-    if ( !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1) && 
+    if ( !(searchData?.filters?.mobileNumber && Object.values(searchData?.filters)?.filter(ob => ob !== undefined)?.length == 1) && 
       propertyData?.Properties.length > 0 &&
       ptSearchConfig.maxResultValidation &&
       propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
@@ -62,7 +62,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         el.style.padding = "8px 0";
         el.style.boxShadow = "none";
         el.style.marginBottom = "16px";
-        el.style.textAlign = "center";
+        el.style.textAlign = "left";
+        el.style.zIndex = "0";
       } else {
         setTimeout(() => {
           getActionBar();
@@ -273,7 +274,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
                 tenantId={cityCode}
                 boundaryType="revenue"
                 keepNull={false}
-                optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10" }}
+                optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10", maxHeight: "300px" }}
                 selected={formValue?.locality}
                 disable={!cityCode}
                 disableLoader={true}
@@ -418,13 +419,13 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
     return <Loader />;
   }
 
-  let validation = ptSearchConfig.maxResultValidation && !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1)   ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
+  let validation = ptSearchConfig.maxResultValidation && !(searchData?.filters?.mobileNumber && Object.values(searchData?.filters)?.filter(ob => ob !== undefined)?.length == 1)   ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
 
   if (propertyData && !propertyDataLoading && !error && validation) {
     let qs = {};
     qs = { ...searchData.filters, city: searchData.city };
 
-    if ( !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1) && 
+    if ( !(searchData?.filters?.mobileNumber && Object.values(searchData?.filters)?.filter(ob => ob !== undefined)?.length == 1) && 
       ptSearchConfig?.ptSearchCount &&
       searchData?.filters?.locality &&
       propertyDataLoading &&
@@ -497,7 +498,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         onFormValueChange={onFormValueChange}
         cardStyle={{marginBottom:"0",maxWidth:"960px"}}
       ></FormComposer>
-      <span className="link" style={{display:"flex", justifyContent:"center",paddingBottom:"16px"}}>
+      <span className="link" style={{display:"flex", justifyContent:"left",paddingBottom:"16px", marginLeft: "45px"}}>
         <Link to={window.location.href.includes("/ws/")?"/digit-ui/citizen/ws/create-application/create-property" : (window.location.href.includes("/tl/tradelicence/") ? "/digit-ui/citizen/tl/tradelicence/new-application/create-property" : "/digit-ui/citizen/commonpt/property/new-application")}>{t("CPT_REG_NEW_PROPERTY")}</Link>
       </span>
       {showToast && (
