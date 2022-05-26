@@ -67,6 +67,7 @@ public class PaymentUpdateService {
 	public void process(HashMap<String, Object> record) {
 
 		try {
+			log.info("Reached the method process for updating the status from payment pending to Assign DSO::@@@");
 			PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
 			RequestInfo requestInfo = paymentRequest.getRequestInfo();
 			List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
@@ -76,7 +77,7 @@ public class PaymentUpdateService {
 
 				if(paymentDetail.getBusinessService().equalsIgnoreCase(FSMConstants.FSM_PAY_BUSINESS_SERVICE)) {
 					
-				
+					log.info("Reached the method process if condition for updating the status from payment pending to Assign DSO::@@@");
 					FSMSearchCriteria searchCriteria = new FSMSearchCriteria();
 					searchCriteria.setTenantId(tenantId);
 					List<String> applNos = Arrays.asList(paymentDetail.getBill().getConsumerCode());
@@ -104,9 +105,10 @@ public class PaymentUpdateService {
 						/*
 						 * calling workflow to update status
 						 */
+						log.info("Reached the method process code calling the workflow::@@@");
 						wfIntegrator.callWorkFlow(updateRequest);
 
-						log.debug(" the status of the application is : " + updateRequest.getFsm().getStatus());
+						log.info(" the status of the application is : " + updateRequest.getFsm().getStatus());
 
 						/*
 						 * calling repository to update the object in eg_bpa_buildingpaln tables
