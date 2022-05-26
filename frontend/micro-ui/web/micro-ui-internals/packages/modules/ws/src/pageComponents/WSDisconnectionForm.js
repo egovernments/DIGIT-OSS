@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import DisconnectTimeline from "../components/DisconnectTimeline";
 import { stringReplaceAll } from "../utils";
 
-const WSDisConnectionForm = ({ t, config, onSelect, userType, formData }) => {
+const WSDisconnectionForm = ({ t, config, onSelect, userType, formData }) => {
   let validation = {};
   const stateCode = Digit.ULBService.getStateId();
 
@@ -45,64 +45,104 @@ const WSDisConnectionForm = ({ t, config, onSelect, userType, formData }) => {
 
   if (isMdmsLoading) return <Loader />
 
+  if(userType === 'citizen') {
+    return (
+      <div>
+        {userType === "citizen" && (<DisconnectTimeline currentStep={1} />)}
+        <FormStep
+          config={config}
+          onSelect={handleSubmit}
+          onSkip={onSkip}
+          t={t}       
+        >
+          
+          <div style={{padding:"10px",paddingTop:"20px",marginTop:"10px"}}>
+          <CardHeader>{t("WS_APPLICATION_FORM")}</CardHeader>
+          <CardLabel>
+            {t('WS_CONSUMER_NUMBER')} 
+            <span style={{float:'right'}}>PG-WS-2021-09-29-006024</span>
+          </CardLabel>
+          
+          <CardLabel>{t("WS_DISCONNECTION_TYPE")}</CardLabel>
+            <RadioButtons
+                t={t}
+                options={disconnectionTypeList}
+                optionsKey="i18nKey"
+                value={disconnectionData.type?.value}
+                selectedOption={disconnectionData.type}
+                isMandatory={false}
+                onSelect={filedChange}
+                labelKey="WS_DISCONNECTION_TYPE"
+            />
+            
+          <CardLabel>{t("WS_DISCONNECTION_DATE")}</CardLabel>
+            <TextInput
+              t={t}
+              type={"text"}
+              style={{background:"#FAFAFA"}}
+              isMandatory={false}
+              optionKey="i18nKey"
+              name="date"
+              value={disconnectionData?.date?.value}
+              onChange={(e) => filedChange({code:"date" , value:e.target.value})}
+            />
+
+            <LabelFieldPair>
+              <CardLabel>{t("WS_DISCONNECTION_REASON")}</CardLabel>              
+                <TextArea
+                  isMandatory={false}
+                  optionKey="i18nKey"
+                  t={t}
+                  name={"reason"}
+                  value={disconnectionData.reason?.value}
+                  onChange={(e) => filedChange({code:"reason" , value:e.target.value})}
+                />              
+            </LabelFieldPair>
+            <SubmitBar label={t(`CS_COMMON_NEXT`)} submit={true} />
+          </div>
+        </FormStep>
+        <CitizenInfoLabel style={{ margin: "0px" }} textStyle={{ color: "#0B0C0C" }} text={t(`WS_DISONNECT_APPL_INFO`)} />
+      </div>
+    );
+  }
+
   return (
     <div>
-      {userType === "citizen" && (<DisconnectTimeline currentStep={1} />)}
-      <FormStep
-        config={config}
-        onSelect={handleSubmit}
-        onSkip={onSkip}
-        t={t}       
-      >
-         
-        <div style={{padding:"10px",paddingTop:"20px",marginTop:"10px"}}>
-        <CardHeader>{t("WS_APPLICATION_FORM")}</CardHeader>
-        <CardLabel>
-          {t('WS_CONSUMER_NUMBER')} 
-          <span style={{float:'right'}}>PG-WS-2021-09-29-006024</span>
-        </CardLabel>
-        
-        <CardLabel>{t("WS_DISCONNECTION_TYPE")}</CardLabel>
-          <RadioButtons
-              t={t}
-              options={disconnectionTypeList}
-              optionsKey="i18nKey"
-              value={disconnectionData.type?.value}
-              selectedOption={disconnectionData.type}
-              isMandatory={false}
-              onSelect={filedChange}
-              labelKey="WS_DISCONNECTION_TYPE"
-          />
-          
-        <CardLabel>{t("WS_DISCONNECTION_DATE")}</CardLabel>
-          <TextInput
-            t={t}
-            type={"text"}
-            style={{background:"#FAFAFA"}}
+      <RadioButtons
+        t={t}
+        options={disconnectionTypeList}
+        optionsKey="i18nKey"
+        value={disconnectionData.type?.value}
+        selectedOption={disconnectionData.type}
+        isMandatory={false}
+        onSelect={filedChange}
+        labelKey="WS_DISCONNECTION_TYPE"
+      />
+      <CardLabel>{t("WS_DISCONNECTION_DATE")}</CardLabel>
+      <TextInput
+        t={t}
+        type={"text"}
+        style={{background:"#FAFAFA"}}
+        isMandatory={false}
+        optionKey="i18nKey"
+        name="date"
+        value={disconnectionData?.date?.value}
+        onChange={(e) => filedChange({code:"date" , value:e.target.value})}
+      />
+      <LabelFieldPair>
+        <CardLabel>{t("WS_DISCONNECTION_REASON")}</CardLabel>              
+          <TextArea
             isMandatory={false}
             optionKey="i18nKey"
-            name="date"
-            value={disconnectionData?.date?.value}
-            onChange={(e) => filedChange({code:"date" , value:e.target.value})}
-          />
-
-          <LabelFieldPair>
-            <CardLabel>{t("WS_DISCONNECTION_REASON")}</CardLabel>              
-              <TextArea
-                isMandatory={false}
-                optionKey="i18nKey"
-                t={t}
-                name={"reason"}
-                value={disconnectionData.reason?.value}
-                onChange={(e) => filedChange({code:"reason" , value:e.target.value})}
-              />              
-          </LabelFieldPair>
-          <SubmitBar label={t(`CS_COMMON_NEXT`)} submit={true} />
-        </div>
-      </FormStep>
-      <CitizenInfoLabel style={{ margin: "0px" }} textStyle={{ color: "#0B0C0C" }} text={t(`WS_DISONNECT_APPL_INFO`)} />
+            t={t}
+            name={"reason"}
+            value={disconnectionData.reason?.value}
+            onChange={(e) => filedChange({code:"reason" , value:e.target.value})}
+          />              
+      </LabelFieldPair>
     </div>
   );
+
 };
 
-export default WSDisConnectionForm;
+export default WSDisconnectionForm;

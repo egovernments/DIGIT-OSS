@@ -14,8 +14,8 @@ export const newConfig = [
       },
       {         
         route: "application-form",
-        component: "WSDisConnectionForm",
-        key: "WSDisConnectionForm",
+        component: "WSDisconnectionForm",
+        key: "WSDisconnectionForm",
         type: "component",
         isMandatory: true,
         withoutLabel: true,
@@ -57,7 +57,7 @@ export const newConfig = [
     body: [{
       type: "component",
       key: "DisconnectionDetails",
-      component: "WSDisConnectionForm",
+      component: "WSDisconnectionForm",
       withoutLabel: true
     }]
   },
