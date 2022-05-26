@@ -1,0 +1,17 @@
+on:
+  workflow_dispatch:
+    inputs:
+      images:
+        description: 'image name'
+        required: true
+        default: 'comma seprated image names'
+        type: string
+       environment:
+        description: 'environment to deploy'
+        type: choice
+        options:
+        - Dev
+        - Qa
+        - uat
+jobs:
+  
