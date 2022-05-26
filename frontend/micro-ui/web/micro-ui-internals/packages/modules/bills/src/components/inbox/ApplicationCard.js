@@ -24,6 +24,10 @@ export const ApplicationCard = ({
   const [params, setParams] = useState(searchParams);
   const [_sortparams, setSortParams] = useState(sortParams);
 
+  const onSearchFilter = (params) => {
+    onFilterChange(params, true);
+    setPopup(false);
+  };
   useEffect(() => {
     if (type) setPopup(true);
   }, [type]);
@@ -92,7 +96,7 @@ export const ApplicationCard = ({
               {
                 <BillsFilter
                   defaultSearchParams={defaultSearchParams}
-                  onFilterChange={onFilterChange}
+                  onFilterChange={onSearchFilter}
                   searchParams={searchParams}
                   type="mobile"
                   onClose={handlePopupClose}

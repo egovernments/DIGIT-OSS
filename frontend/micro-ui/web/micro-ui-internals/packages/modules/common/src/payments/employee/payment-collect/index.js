@@ -39,6 +39,12 @@ export const CollectPayment = (props) => {
   const [formState, setFormState] = useState({});
   const [toast, setToast] = useState(null);
 
+  useEffect(() => {
+    if (paymentdetails?.Bill && paymentdetails.Bill.length === 0) {
+      setToast({ key: "error", action: "CS_BILL_NOT_FOUND" });
+    }
+  }, [paymentdetails]);
+
   const defaultPaymentModes = [
     { code: "CASH", label: t("COMMON_MASTERS_PAYMENTMODE_CASH") },
     { code: "CHEQUE", label: t("COMMON_MASTERS_PAYMENTMODE_CHEQUE") },
@@ -286,7 +292,8 @@ export const CollectPayment = (props) => {
     if (
       BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService] ||
       ModuleWorkflow ||
-      businessService === "TL" || businessService.includes("ONE_TIME_FEE")
+      businessService === "TL" ||
+      businessService.includes("ONE_TIME_FEE")
     ) {
       config.splice(0, 1);
     }
@@ -303,7 +310,7 @@ export const CollectPayment = (props) => {
 
   return (
     <React.Fragment>
-      <Header styles={{marginLeft:"15px"}}>{t("PAYMENT_COLLECT")}</Header>
+      <Header styles={{ marginLeft: "15px" }}>{t("PAYMENT_COLLECT")}</Header>
       <FormComposer
         cardStyle={{ paddingBottom: "100px" }}
         label={t("PAYMENT_COLLECT_LABEL")}
