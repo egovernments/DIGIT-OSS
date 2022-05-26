@@ -111,11 +111,11 @@ const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) =>
 
   if (bussinessService === "WS") {
     return responseWS?.isLoading || properties?.isLoading || billData?.isLoading
-      ? undefined
+      ? {isLoading:true}
       : combineResponse(responseWS?.data?.WaterConnection, [], bussinessService, properties?.data?.Properties, billData?.data?.Bill, t);
   } else if (bussinessService === "SW") {
     return responseSW?.isLoading || properties?.isLoading || billData?.isLoading
-      ? undefined
+      ? { isLoading: true }
       : combineResponse([], responseSW?.data?.SewerageConnections, bussinessService, properties?.data?.Properties, billData?.data?.Bill, t);
   } else {
     return responseWS?.isLoading || responseSW?.isLoading || properties?.isLoading || billData?.isLoading
