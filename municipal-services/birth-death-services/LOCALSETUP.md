@@ -1,6 +1,6 @@
 # Local Setup
 
-To setup the birth-death-services in your local system, clone the git repo (https://github.com/egovernments/DIGIT-Dev/tree/master/municipal-services).
+To setup the birth-death-services in your local system, clone the [Core Service repository](https://github.com/egovernments/core-services).
 
 ## Dependencies
 
