@@ -21,36 +21,95 @@
 }
 
 @screen dt {
-  
-  .InboxComposerWrapper{
-        grid-template-columns: calc( 25% - 32px ) 75%;
-        @apply grid gap-x-8 gap-y-6;
-    }
-  
+  .InboxComposerWrapper {
+    grid-template-columns: calc(25% - 32px) 75%;
+    @apply grid gap-x-8 gap-y-6;
+  }
+
   .wns-inbox-composer {
-    .inboxLinks {
-      width: 280px;
-    }
     .filter-form {
-      width: 280px;
       height: fit-content;
     }
+
+    .wns-search-field {
+      width: 30% !important;
+      .field-container {
+      }
+    }
+    .form-field {
+      width: 100% !important;
+    }
+
     .SubmitAndClearAllContainer {
-      .submit {
-        margin-top: unset;
-        button {
-          width: 301px !important;
-        }
+      width: 100%;
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      .clear-search {
+        width: 30%;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: right;
+        cursor: pointer;
         p {
-          width: 18% !important;
+          padding: 1rem;
+          color: rgb(244, 119, 56);
+          text-align: end;
+        }
+      }
+      .submit {
+        width: 30% !important;
+        margin-left: unset !important;
+        button {
+          width: 100% !important;
         }
       }
     }
-    .wns-search-field {
-      width: 301px;
-      .field-container {
-        width: 301px !important;
+  }
+
+  .search-form-wns-inbox {
+    .clear-search-container {
+      grid-column: 2/3;
+      text-align: right;
+      .clear-search {
+        width: 100%;
+        color: rgb(244, 119, 56);
       }
+    }
+    button {
+      width: 100%;
+    }
+
+    .filter-form {
+      height: fit-content;
+    }
+
+    .search-complaint-container {
+      flex-direction: column;
+      align-items: flex-start;
+      --bg-opacity: 1;
+      background-color: #fff;
+      background-color: rgba(255, 255, 255, var(--bg-opacity));
+      padding: 16px;
+      display: unset;
+      flex-wrap: unset;
+      justify-content: unset;
+      margin-bottom: 0;
+      .complaint-input-container {
+        display: grid;
+        grid-template-columns: 33.33% 33.33% 33.33%;
+      }
+      .form-field {
+        width: 100%;
+        padding-right: 15px;
+        .clear-search {
+          padding-top: 10px;
+        }
+      }
+    }
+    .submit {
+      margin-top: 0;
+      right: 0;
     }
   }
 }

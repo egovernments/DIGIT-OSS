@@ -152,7 +152,7 @@ const FilterFormFieldsComponent = ({
             return (
               <>
                 <div className="filter-label sub-filter-label">{t("WS_COMMON_TABLE_COL_APP_TYPE_LABEL")}</div>
-                {renderStatusCheckBoxess}
+                {isInboxLoading ? <Loader /> : <> {renderStatusCheckBoxess}</>}
               </>
             );
           }}
@@ -193,7 +193,7 @@ const FilterFormFieldsComponent = ({
               return (
                 <>
                   <div className="filter-label sub-filter-label">{t("WS_MYCONNECTIONS_STATUS")}</div>
-                  {renderStatusCheckBoxes}
+                  {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}
                 </>
               );
             }}
