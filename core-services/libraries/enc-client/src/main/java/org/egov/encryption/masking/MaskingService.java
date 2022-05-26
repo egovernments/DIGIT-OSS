@@ -12,6 +12,7 @@ import org.egov.encryption.config.EncProperties;
 import org.egov.encryption.models.*;
 import org.egov.encryption.util.JSONBrowseUtil;
 import org.egov.encryption.util.JacksonUtils;
+import org.egov.encryption.util.JsonPathConverter;
 import org.egov.mdms.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,8 @@ public class MaskingService {
     public JsonNode maskedData(JsonNode decryptedNode, List<SecurityPolicyAttribute> attributes, SecurityPolicyUniqueIdentifier uniqueIdentifier, RequestInfo requestInfo) {
         JsonNode maskedNode = decryptedNode.deepCopy();
         for(SecurityPolicyAttribute attribute : attributes) {
-            JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(maskedNode, Arrays.asList(attribute.getJsonPath()));
+            JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(maskedNode,
+                    JsonPathConverter.convertToArrayJsonPaths(Arrays.asList(attribute.getJsonPath())));
             jsonNode = JSONBrowseUtil.mapValues(jsonNode, value -> maskedData(value, attribute));
             maskedNode = JacksonUtils.merge(jsonNode, maskedNode);
         }
