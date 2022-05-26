@@ -121,6 +121,7 @@ import useTLInbox from "./tl/useInbox";
 import useTradeLicenseBillingslab from "./tl/useTradeLicenseBillingslab";
 import useTLMDMS from "./tl/useMDMS";
 import useTLSearch from "./tl/useSearch";
+import useTLWorkflowData from "./tl/useTLWorkflowData";
 
 import useHRMSSearch from "./hrms/useHRMSsearch";
 import useHrmsMDMS from "./hrms/useHRMSMDMS";
@@ -331,6 +332,7 @@ const tl = {
   useApplicationActions: useTLApplicationActions,
   useFetchBill: useTLFetchBill,
   useTLApplicationDetails,
+  useTLWorkflowData
 };
 
 const receipts = {

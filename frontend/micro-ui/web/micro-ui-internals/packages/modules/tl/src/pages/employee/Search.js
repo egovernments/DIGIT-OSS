@@ -83,12 +83,31 @@ const Search = ({ path }) => {
     config,
   });
 
+  const workFlowConfig = {
+    enabled: (payload && Object.keys(payload).length > 0 && !isLoading && isSuccess),
+  };
+
+  const { data: { ProcessInstances: assigneeResults } = {} , isLoading: isWorkflowLoading, isSuccess: isWorkflowSuccess } = Digit.Hooks.tl.useTLWorkflowData({
+    tenantId,
+    filters: { businessIds: searchReult?.map((license) => license?.applicationNumber).join(",")},
+    config: { ...workFlowConfig }
+  });
+
   return (
     <Search
       t={t}
       tenantId={tenantId}
       onSubmit={onSubmit}
-      data={!isLoading && isSuccess ? (searchReult?.length > 0 ? searchReult : { display: "ES_COMMON_NO_DATA" }) : ""}
+      data={!isLoading && isSuccess && !isWorkflowLoading && isWorkflowSuccess ? (searchReult?.length > 0
+         ? searchReult.map((obj) => ({
+        ...obj,
+        CurrentOwners: assigneeResults?.length > 0 ? assigneeResults.filter((elem) => elem.businessId === obj.applicationNumber).map((item) => ({
+          currentOwner: item.assignes !== null && item.assignes[0].name !== null ?  item.assignes[0].name : "NA"
+        }))
+        : {
+            currentOwner: "NA"
+          }
+      })) : { display: "ES_COMMON_NO_DATA" }) : ""}
       count={count}
     />
   );

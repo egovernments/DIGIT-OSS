@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { Controller, useWatch } from "react-hook-form";
 import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
 
-const SearchFields = ({ register, control, reset, tenantId, t }) => {
+const SearchFields = ({ register, control, reset, tenantId, t, previousPage }) => {
   const { data: applicationTypes, isLoading: applicationTypesLoading } = Digit.Hooks.tl.useMDMS.applicationTypes(tenantId);
 
   const applicationType = useWatch({ control, name: "applicationType" });
@@ -48,11 +48,11 @@ const SearchFields = ({ register, control, reset, tenantId, t }) => {
         </SearchField>
       )}
       <SearchField>
-        <label>{t("TL_TRADE_LICENCE_FROM_DATE")}</label>
+        <label>{t("TL_APPLICATION_FROM_DATE")}</label>
         <Controller render={(props) => <DatePicker date={props.value} onChange={props.onChange} />} name="fromDate" control={control} />
       </SearchField>
       <SearchField>
-        <label>{t("TL_TRADE_LICENCE_TO_DATE")}</label>
+        <label>{t("TL_APPLICATION_TO_DATE")}</label>
         <Controller render={(props) => <DatePicker date={props.value} onChange={props.onChange} />} name="toDate" control={control} />
       </SearchField>
       <SearchField>

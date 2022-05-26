@@ -102,7 +102,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
     return <React.Fragment>
         <Header>{t("TL_SEARCH_LICENSE")}</Header>
         <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-          <SearchFields {...{register, control, reset, tenantId, t}} />
+          <SearchFields {...{register, control, reset, tenantId, t, previousPage}} />
         </SearchForm>
         {data?.display ?<Card style={{ marginTop: 20 }}>
             {

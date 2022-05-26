@@ -100,6 +100,11 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
           disableSortBy: true,
         },
         {
+          Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
+          accessor: (row) => GetCell(row.CurrentOwners[0].currentOwner || ""),
+          disableSortBy: true,
+        },
+        {
           Header: t("TL_COMMON_TABLE_COL_STATUS"),
           accessor: (row) =>GetCell(t( row?.workflowCode&&row?.status&&`WF_${row?.workflowCode?.toUpperCase()}_${row.status}`|| "NA") ),
           disableSortBy: true,
@@ -109,7 +114,7 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
     return <React.Fragment>
                 <Header>{t("TL_SEARCH_APPLICATIONS")}</Header>
                 <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-                  <SearchFields {...{register, control, reset, tenantId, t}} />
+                  <SearchFields {...{register, control, reset, tenantId, t, previousPage}} />
                 </SearchForm>
             {data?.display ? <Card style={{ marginTop: 20 }}>
                 {
