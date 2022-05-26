@@ -134,7 +134,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
         Header: t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL"),
         disableSortBy: true,
         accessor: (row) => {
-          return GetCell(row?.ownerNames || "-");
+          return GetCell(row?.connectionHolders?.[0]?.name ? row?.connectionHolders?.[0]?.name : row?.ownerNames || "-");
         },
       },
       {
@@ -160,7 +160,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
       <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} >
         <SearchFields {...{ register, control, reset, tenantId, t }} />
       </SearchForm>
-      {data?.display ? (
+      {data?.display && resultOk ? (
         <Card style={{ marginTop: 20 }}>
           {t(data?.display)
             .split("\\n")

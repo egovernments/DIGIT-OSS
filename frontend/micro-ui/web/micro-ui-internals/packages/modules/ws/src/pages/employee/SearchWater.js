@@ -42,14 +42,15 @@ const SearchWater = ({ path }) => {
 
   let result = Digit.Hooks.ws.useSearchWS({ tenantId, filters: payload, config, bussinessService: businessServ, t });
 
-  result = result?.map((item) => {
-    if (item?.connectionNo?.includes("WS")) {
-      item.service = serviceConfig.WATER;
-    } else if (item?.connectionNo?.includes("SW")) {
-      item.service = serviceConfig.SEWERAGE;
-    }
-    return item;
-  });
+  if(!result?.isLoading)
+    result = result?.map((item) => {
+      if (item?.connectionNo?.includes("WS")) {
+        item.service = serviceConfig.WATER;
+      } else if (item?.connectionNo?.includes("SW")) {
+        item.service = serviceConfig.SEWERAGE;
+      }
+      return item;
+    });
 
   return (
     <Fragment>
@@ -59,7 +60,7 @@ const SearchWater = ({ path }) => {
         onSubmit={onSubmit}
         data={result ? result : { display: "ES_COMMON_NO_DATA" }}
         count={result?.TotalCount}
-        resultOk={isBothCallsFinished}
+        resultOk={!result?.isLoading}
         businessService={businessServ}
       />
 

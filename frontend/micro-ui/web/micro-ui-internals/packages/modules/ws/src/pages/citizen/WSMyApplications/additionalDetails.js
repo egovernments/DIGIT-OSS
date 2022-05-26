@@ -2,6 +2,7 @@ import { Card, CardSubHeader, Header, LinkButton, Loader, Row, StatusTable, Card
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation} from "react-router-dom";
+import { stringReplaceAll } from "../../../utils";
 //import PropertyDocument from "../../pageComponents/PropertyDocument";
 
 const WSAdditionalDetails = () => {
@@ -26,36 +27,36 @@ if (isLoading) {
         <Card>
           <CardSubHeader>{t("WS_COMMON_CONNECTION_DETAIL")}</CardSubHeader>
           <StatusTable>
-            <Row className="border-none"  label={t("WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL")} text={data?.WaterConnection?.[0]?.connectionType || t("NA")} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none"  label={t("WS_SERV_DETAIL_NO_OF_TAPS")} text={data?.WaterConnection?.[0]?.noOfTaps} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none"  label={t("WS_SERV_DETAIL_PIPE_SIZE")} text={data?.WaterConnection?.[0]?.pipeSize || "NA"} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none"  label={t("WS_SERV_DETAIL_WATER_SOURCE")} text={data?.WaterConnection?.[0]?.waterSource || "NA"} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none"  label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")} text={data?.WaterConnection?.[0]?.waterSource || "NA"} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL")} text={data?.WaterConnection?.[0]?.connectionType || data?.SewerageConnections?.[0]?.connectionType || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_SERV_DETAIL_NO_OF_TAPS")} text={data?.WaterConnection?.[0]?.noOfTaps || data?.SewerageConnections?.[0]?.noOfTaps || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_SERV_DETAIL_PIPE_SIZE")} text={data?.WaterConnection?.[0]?.pipeSize || data?.SewerageConnections?.[0]?.pipeSize || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_SERV_DETAIL_WATER_SOURCE")} text={t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.WaterConnection?.[0]?.waterSource,".","_")}`) || t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.SewerageConnections?.[0]?.waterSource,".","_")}`) || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")} text={data?.WaterConnection?.[0]?.waterSubSource || data?.SewerageConnections?.[0]?.waterSubSource || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
         </Card>
-        {data?.WaterConnection?.[0]?.plumberInfo && <Card>
+        {<Card>
           <CardSubHeader>{t("WS_COMMON_PLUMBER_DETAILS")}</CardSubHeader>
           <StatusTable>
-            <Row className="border-none"  label={t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")} text={data?.WaterConnection?.[0]?.plumberInfo || t("NA")} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none"  label={t("WS_PLUMBER_LIC_NO")} text={data?.WaterConnection?.[0]?.plumberInfo?.licenseNo} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none"  label={t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL")} text={data?.WaterConnection?.[0]?.plumberInfo?.name || "NA"} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none"  label={t("WS_PLUMBER_MOB_NO")} text={data?.WaterConnection?.[0]?.plumberInfo?.mobileNumber || "NA"} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")} text={data?.WaterConnection?.[0]?.plumberInfo || data?.SewerageConnections?.[0]?.plumberInfo || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_PLUMBER_LIC_NO")} text={data?.WaterConnection?.[0]?.plumberInfo?.licenseNo || data?.SewerageConnections?.[0]?.plumberInfo?.licenseNo || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL")} text={data?.WaterConnection?.[0]?.plumberInfo?.name || data?.SewerageConnections?.[0]?.plumberInfo?.name || "NA"} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_PLUMBER_MOB_NO")} text={data?.WaterConnection?.[0]?.plumberInfo?.mobileNumber || data?.SewerageConnections?.[0]?.plumberInfo?.mobileNumber || "NA"} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
         </Card>}
         <Card>
           <CardSubHeader>{t("WS_ROAD_CUTTING_DETAILS")}</CardSubHeader>
           <StatusTable>
-            <Row className="border-none"  label={t("WS_ADDN_DETAIL_ROAD_TYPE")} text={data?.WaterConnection?.[0]?.roadType || t("NA")} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none"  label={t("WS_ADDN_DETAILS_AREA_LABEL")} text={data?.WaterConnection?.[0]?.roadCuttingArea} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_ADDN_DETAIL_ROAD_TYPE")} text={data?.WaterConnection?.[0]?.roadType || data?.SewerageConnections?.[0]?.roadType || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_ADDN_DETAILS_AREA_LABEL")} text={data?.WaterConnection?.[0]?.roadCuttingArea || data?.SewerageConnections?.[0]?.roadCuttingArea || t("NA")} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
         </Card>
         <Card>
           <CardSubHeader>{t("WS_ACTIVATION_DETAILS")}</CardSubHeader>
           <StatusTable>
-            <Row className="border-none"  label={t("WS_SERV_DETAIL_CONN_EXECUTION_DATE")} text={data?.WaterConnection?.[0]?.dateEffectiveFrom || t("NA")} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none"  label={t("WS_SERV_DETAIL_METER_ID")} text={data?.WaterConnection?.[0]?.meterId} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none"  label={t("WS_ADDN_DETAIL_METER_INSTALL_DATE")} text={data?.WaterConnection?.[0]?.meterInstallationDate || "NA"} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none"  label={t("WS_ADDN_DETAILS_INITIAL_METER_READING")} text={data?.WaterConnection?.[0]?.additionalDetails?.initialMeterReading || "NA"} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_SERV_DETAIL_CONN_EXECUTION_DATE")} text={data?.WaterConnection?.[0]?.dateEffectiveFrom || data?.SewerageConnections?.[0]?.dateEffectiveFrom || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_SERV_DETAIL_METER_ID")} text={data?.WaterConnection?.[0]?.meterId || data?.SewerageConnections?.[0]?.meterId || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_ADDN_DETAIL_METER_INSTALL_DATE")} text={data?.WaterConnection?.[0]?.meterInstallationDate || data?.SewerageConnections?.[0]?.meterInstallationDate || "NA"} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_ADDN_DETAILS_INITIAL_METER_READING")} text={data?.WaterConnection?.[0]?.additionalDetails?.initialMeterReading || data?.SewerageConnections?.[0]?.additionalDetails?.initialMeterReading || "NA"} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
         </Card>
       </div>

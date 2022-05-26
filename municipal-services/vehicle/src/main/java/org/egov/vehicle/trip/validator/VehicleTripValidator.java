@@ -79,6 +79,8 @@ public class VehicleTripValidator {
 		
 		request.getVehicleTrip().forEach(vehicleTrip->{
 			
+			
+				
 			if (StringUtils.isEmpty(vehicleTrip.getTenantId())) {
 				throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "TenantId is mandatory");
 			}

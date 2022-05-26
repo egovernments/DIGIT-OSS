@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Banner, Card, CardText, SubmitBar, ActionBar, DownloadPrefixIcon } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
+import { Banner, Card, CardText, SubmitBar, ActionBar, DownloadPrefixIcon, Loader } from "@egovernments/digit-ui-react-components";
 import { useHistory, useParams, Link, LinkLabel } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
@@ -12,7 +12,9 @@ export const SuccessfulPayment = (props) => {
   let { consumerCode, receiptNumber, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   receiptNumber = receiptNumber.replace(/%2F/g, "/");
-  const { data = {}, isLoading } = Digit.Hooks.obps.useBPADetailsPage(tenantId, { applicationNo: consumerCode });
+  const { data = {}, isLoading: isBpaSearchLoading, isSuccess: isBpaSuccess, error: bpaerror } = Digit.Hooks.obps.useOBPSSearch(
+    "", {}, tenantId, { applicationNo: consumerCode }, {}, {enabled : businessService?.includes("BPA") ? true : false}
+  );
 
   useEffect(() => {
     return () => {
@@ -65,15 +67,43 @@ export const SuccessfulPayment = (props) => {
     }
   };
 
-  const getPermitOccupancyOrderSearch = async(order) => {
-    // let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
-    // let response = await Digit.PaymentService.generatePdf(data?.applicationData?.tenantId, { Bpa: [requestData] }, order);
-    // const fileStore = await Digit.PaymentService.printReciept(data?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
-    // window.open(fileStore[response?.filestoreIds[0]], "_blank");
+  const downloadPdf = (blob, fileName) => {
+    if (window.mSewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
+      var reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = function () {
+        var base64data = reader.result;
+        mSewaApp.downloadBase64File(base64data, fileName);
+      };
+    } else {
+      const link = document.createElement("a");
+      // create a blobURI pointing to our Blob
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      // some browser needs the anchor to be in the doc
+      document.body.append(link);
+      link.click();
+      link.remove();
+      // in case the Blob uses a lot of memory
+      setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+    }
+  };
+  
+  const printPdf = (blob) => {
+    const fileURL = URL.createObjectURL(blob);
+    var myWindow = window.open(fileURL);
+    if (myWindow != undefined) {
+      myWindow.addEventListener("load", (event) => {
+        myWindow.focus();
+        myWindow.print();
+      });
+    }
+  };
 
-    let queryObj = { applicationNo: data?.applicationData?.applicationNo };
-    let bpaResponse = await Digit.OBPSService.BPASearch(data?.applicationData?.tenantId, queryObj);
-    const edcrResponse = await Digit.OBPSService.scrutinyDetails(data?.applicationData?.tenantId, { edcrNumber: data?.applicationData?.edcrNumber });
+  const getPermitOccupancyOrderSearch = async(order, mode="download") => {
+    let queryObj = { applicationNo: data?.[0]?.applicationNo };
+    let bpaResponse = await Digit.OBPSService.BPASearch(data?.[0]?.tenantId, queryObj);
+    const edcrResponse = await Digit.OBPSService.scrutinyDetails(data?.[0]?.tenantId, { edcrNumber: data?.[0]?.edcrNumber });
     let bpaData = bpaResponse?.BPA?.[0], edcrData = edcrResponse?.edcrDetail?.[0];
     let currentDate = new Date();
     bpaData.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
@@ -81,6 +111,15 @@ export const SuccessfulPayment = (props) => {
     let response = await Digit.PaymentService.generatePdf(bpaData?.tenantId, { Bpa: [reqData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(bpaData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
+    reqData["applicationType"] = data?.[0]?.additionalDetails?.applicationType;
+    let edcrResponseData = await Digit.OBPSService.edcr_report_download({BPA: {...reqData}});
+    const responseStatus = parseInt(edcrResponseData.status, 10);
+    if (responseStatus === 201 || responseStatus === 200) {
+      mode == "print"
+        ? printPdf(new Blob([edcrResponseData.data], { type: "application/pdf" }))
+        : downloadPdf(new Blob([edcrResponseData.data], { type: "application/pdf" }), `edcrReport.pdf`);
+    }
+
   }
 
 
@@ -96,6 +135,9 @@ export const SuccessfulPayment = (props) => {
     const fileStore = await Digit.PaymentService.printReciept(state, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response.filestoreIds[0]], "_blank");
   };
+
+
+  if (businessService?.includes("BPA") && isBpaSearchLoading) return <Loader />
 
   return (
     <React.Fragment>
@@ -120,19 +162,19 @@ export const SuccessfulPayment = (props) => {
                 {t("CS_COMMON_PRINT_CERTIFICATE")}
               </div>
             ) : null}
-            {data?.applicationData?.businessService === "BPA_OC" && data?.applicationData?.status==="APPROVED" ? (
+            {data?.[0]?.businessService === "BPA_OC" && data?.[0]?.status==="APPROVED" ? (
               <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={e => getPermitOccupancyOrderSearch("occupancy-certificate")}>
                 <DownloadPrefixIcon />
                 {t("BPA_OC_CERTIFICATE")}
               </div>
             ) : null}
-            {data?.applicationData?.businessService === "BPA_LOW" ? (
+            {data?.[0]?.businessService === "BPA_LOW" ? (
               <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit-low")}>
                 <DownloadPrefixIcon />
                 {t("BPA_PERMIT_ORDER")}
               </div>
             ) : null}
-            {data?.applicationData?.businessService === "BPA" && (data?.applicationData?.businessService !== "BPA_LOW") && (data?.applicationData?.businessService !== "BPA_OC") && data?.applicationData?.status==="PENDING_SANC_FEE_PAYMENT"? (
+            {data?.[0]?.businessService === "BPA" && (data?.[0]?.businessService !== "BPA_LOW") && (data?.[0]?.businessService !== "BPA_OC") && (data?.[0]?.status==="PENDING_SANC_FEE_PAYMENT" || data?.[0]?.status === "APPROVED") ? (
               <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={r => getPermitOccupancyOrderSearch("buildingpermit")}>
                 <DownloadPrefixIcon />
                 {t("BPA_PERMIT_ORDER")}

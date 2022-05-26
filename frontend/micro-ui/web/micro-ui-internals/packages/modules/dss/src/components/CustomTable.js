@@ -9,14 +9,14 @@ import { ArrowUpwardElement } from "./ArrowUpward";
 
 const rowNamesToBeLocalised = ["Department","", "Usage Type","Ward","Wards"]
 
-const InsightView = ({ rowValue, insight }) => {
+const InsightView = ({ rowValue, insight, t }) => {
   return (
     <span>
       {rowValue}
       {` `}
       {insight >= 0 ? ArrowUpwardElement() : ArrowDownwardElement()}
       {` `}
-      { isNaN(insight) ? `0%` : `${Math.abs(insight)}%`}
+      { isNaN(insight) ? `0%` : `${Digit.Utils.dss.formatter(Math.abs(insight), 'number', 'Lac', true, t)}%`}
     </span>
   );
 };
@@ -216,11 +216,12 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
     const name = t(`DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`);
     return (originalRow, rowIndex, columns) => {
       const cellValue = originalRow?.[name];
-      if (plot?.symbol === "amount") {
+      if (plot?.symbol === "amount" || plot?.symbol === "number" || plot?.symbol === "percentage") {
         return typeof cellValue === "object"
-          ? { value: convertDenomination(cellValue?.value), insight: cellValue?.insight }
-          : String(convertDenomination(cellValue));
+          ? { value: Digit.Utils.dss.formatter(convertDenomination(cellValue?.value), 'number', 'Lac', true, t), insight: cellValue?.insight }
+          : String(Digit.Utils.dss.formatter(convertDenomination(cellValue), 'number', 'Lac', true, t));
       }
+      
       return originalRow[name];
     };
   };
@@ -249,7 +250,7 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
         Cell: (args) => {
           const { value: cellValue, column, row } = args;
           if (typeof cellValue === "object") {
-            return <InsightView insight={cellValue?.insight} rowValue={cellValue?.value} />;
+            return <InsightView insight={cellValue?.insight} rowValue={cellValue?.value} t={t}/>;
           }
           const filter = response?.responseData?.filter?.find((elem) => elem?.column === column?.id);
           if (response?.responseData?.drillDownChartId !== "none" && filter !== undefined) {

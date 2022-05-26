@@ -21,6 +21,7 @@ import WSDocument from "../../pageComponents/WSDocument";
 import getPDFData from "../../utils/getWSAcknowledgementData";
 import { getFiles } from "../../utils";
 import { stringReplaceAll } from "../../utils";
+import WSInfoLabel from "../../pageComponents/WSInfoLabel";
 
 const WSApplicationDetails = () => {
   const { t } = useTranslation();
@@ -166,6 +167,7 @@ const WSApplicationDetails = () => {
           />
         )}
       </div>
+      <WSInfoLabel t={t} />
       <div className="hide-seperator">
         <Card>
           <StatusTable>
@@ -194,13 +196,13 @@ const WSApplicationDetails = () => {
             <CardHeader styles={{ fontSize: "28px" }}>{t("WS_FEE_DEATAILS_HEADER")}</CardHeader>
             <StatusTable>
               {paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.map((bill) => (
-                <Row className="border-none" label={t(bill?.taxHeadCode)} text={bill?.amount} textStyle={{ textAlign: "right" }} />
+                <Row className="border-none" label={t(bill?.taxHeadCode)} text={`₹${bill?.amount}`} textStyle={{ textAlign: "right" }} />
               ))}
               <Row
                 className="border-none"
                 label={t("WS_TOTAL_AMOUNT_DUE")}
-                text={paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount}
-                textStyle={{ textAlign: "right" }}
+                text={`₹${paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount}`}
+                textStyle={{ textAlign: "right", fontSize:"18px", fontWeight: "700" }}
               />
               <Row
                 className="border-none"

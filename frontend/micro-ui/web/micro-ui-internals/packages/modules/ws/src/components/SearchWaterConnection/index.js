@@ -109,7 +109,7 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
         Header: t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL"),
         disableSortBy: true,
         Cell: ({ row }) => {
-          return GetCell(`${row.original?.["owner"] || "NA"}`);
+          return GetCell(row?.original?.connectionHolders?.[0]?.name ? row?.original?.connectionHolders?.[0]?.name : `${row.original?.["owner"] || "NA"}`);
         },
       },
       {
@@ -200,7 +200,7 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
       <SearchForm className="ws-custom-wrapper" onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <SearchFields {...{ register, control, reset, tenantId, t }} />
       </SearchForm>
-      {data?.display ? (
+      {data?.display && resultOk ? (
         // <Card style={{ marginTop: 20 }}>
         //   {t(data?.display)
         //     .split("\\n")

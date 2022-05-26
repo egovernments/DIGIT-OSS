@@ -15,6 +15,8 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   const filters = {};
   const [modalData, setShowModal] = useState(false);
 
+  const PrivacyInfoLabel = Digit.ComponentRegistryService.getComponent("WSInfoLabel");
+
   let OfsetForSearch = PToffset;
   let t1;
   let off;
@@ -181,6 +183,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
             {t(header)} ({searchResults?.length})
           </Header>
         )}
+        <PrivacyInfoLabel t={t} />
         <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel}
         onSubmit={sendOtpToUser} />
       </div>

@@ -8,15 +8,14 @@ import MobileSearchApplication from "./MobileSearchApplication";
 
 const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
 
+  const initialValues = Digit.SessionStorage.get("SEARCH_APPLICATION_DETAIL")|| {
+    offset: 0,
+    limit: 10,
+    sortBy: "commencementDate",
+    sortOrder: "DESC"
+};
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
-        defaultValues: {
-            offset: 0,
-            limit: 10,
-            sortBy: "commencementDate",
-            sortOrder: "DESC",
-            status: "",
-            //RenewalPending: true
-        }
+        defaultValues: initialValues
     })
     useEffect(() => {
       register("offset", 0)
@@ -103,7 +102,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
     return <React.Fragment>
         <Header>{t("TL_SEARCH_LICENSE")}</Header>
         <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-          <SearchFields {...{register, control, reset, tenantId, t}} />
+          <SearchFields {...{register, control, reset, tenantId, t, previousPage}} />
         </SearchForm>
         {data?.display ?<Card style={{ marginTop: 20 }}>
             {

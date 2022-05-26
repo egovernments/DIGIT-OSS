@@ -186,6 +186,7 @@ public class SewerageServiceImpl implements SewerageService {
 	 */
 	@Override
 	public List<SewerageConnection> updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {
+		SearchCriteria criteria = new SearchCriteria();
 		if(sewerageServicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)){
 			return modifySewerageConnection(sewerageConnectionRequest);
 		}
@@ -215,6 +216,9 @@ public class SewerageServiceImpl implements SewerageService {
 		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);
 		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
 				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
+		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getTenantId()))
+			criteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
+		enrichmentService.enrichProcessInstance(Arrays.asList(sewerageConnectionRequest.getSewerageConnection()), criteria, sewerageConnectionRequest.getRequestInfo());
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
 	}
 

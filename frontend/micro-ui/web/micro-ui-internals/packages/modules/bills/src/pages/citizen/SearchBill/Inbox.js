@@ -93,8 +93,8 @@ const Inbox = ({ parentRoute, initialStates, businessService, filterComponent, i
         name: "billNo",
       },
       {
-        label: t("ABG_PROPERTY_UNIQUE_ID"),
-        name: "propertyId",
+        label: t("ABG_CONSUMER_ID_LABEL"),
+        name: "consumerCode",
       },
       {
         label: t("ABG_MOBILE_NO_LABEL"),

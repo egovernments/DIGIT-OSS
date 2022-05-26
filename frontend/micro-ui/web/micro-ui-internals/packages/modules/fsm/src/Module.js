@@ -38,6 +38,12 @@ import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import Inbox from "./pages/employee/Inbox";
 import { NewApplication } from "./pages/employee/NewApplication";
 import Response from "./pages/Response";
+import FSMRegistry from "./pages/employee/FSMRegistry";
+import VendorDetails from "./pages/employee/FSMRegistry/VendorDetails";
+import AddVendor from "./pages/employee/FSMRegistry/AddVendor";
+import EditVendor from "./pages/employee/FSMRegistry/EditVendor";
+import VehicleDetails from "./pages/employee/FSMRegistry/VehicleDetails";
+import AddVehicle from "./pages/employee/FSMRegistry/AddVehicle";
 
 const FSMModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "FSM";
@@ -172,6 +178,12 @@ const componentsToRegister = {
   FSMSelectRating: SelectRating,
   FSMDsoDashboard: DsoDashboard,
   SelectPaymentPreference,
+  FSMRegistry,
+  VendorDetails,
+  AddVendor,
+  EditVendor,
+  VehicleDetails,
+  AddVehicle
 };
 
 export const initFSMComponents = () => {

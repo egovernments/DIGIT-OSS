@@ -528,3 +528,58 @@
     font-size: 16px;
   }
 }
+
+.search-tabs-container {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  margin-bottom: 35px;
+  display: flex;
+  justify-content: space-between;
+
+  .search-tab-head {
+    padding: 10px 35px;
+  }
+
+  .search-tab-head-selected {
+    padding: 10px 35px;
+    color: rgb(244, 119, 56);
+    border-bottom: 4px solid rgb(244, 119, 56);
+    font-weight: bold;
+  }
+
+  .search-tab-head-selected:focus {
+    outline: 0;
+  }
+}
+
+.card-with-background {
+  background: rgb(250, 250, 250);
+  border: 1px solid rgb(214, 213, 212);
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+
+  h2 {
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
+
+.registryTable {
+  tHead {
+    tr {
+      th {
+        text-align: center;
+      }
+    }
+  }
+  tBody {
+    tr {
+      td {
+        text-align: center;
+      }
+    }
+  }
+}

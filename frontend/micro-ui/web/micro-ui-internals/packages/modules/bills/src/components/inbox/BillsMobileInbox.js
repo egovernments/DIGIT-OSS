@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ApplicationCard } from "./ApplicationCard";
+import { Link } from "react-router-dom";
 
 const GetDateCell = (value) => {
   const date = new Date(value);
@@ -33,7 +34,66 @@ const BillsMobileInbox = ({
       [t("ABG_COMMON_TABLE_COL_BILL_EXP_DATE")]: GetDateCell(original?.billDate),
       [t("ABG_COMMON_TABLE_COL_BILL_AMOUNT")]: GetCell(original?.totalAmount),
       [t("ABG_COMMON_TABLE_COL_STATUS")]: GetCell(original?.status),
+      [t("ABG_COMMON_TABLE_COL_ACTION")]: GetActioncell(original),
     }));
+  };
+
+  const GetActioncell = (original) => {
+    if (original?.totalAmount > 0) {
+      if (original?.status === "ACTIVE") {
+        return (
+          <div>
+            <span className="link">
+              <Link
+                to={{
+                  pathname: `/digit-ui/citizen/payment/collect/${original?.["businessService"]}/${original?.["consumerCode"]}/tenantId=${original?.["tenantId"]}?workflow=mcollect`,
+                }}
+              >
+                {t(`${"ABG_COLLECT"}`)}
+              </Link>
+            </span>
+          </div>
+        );
+      } else if (original?.status === "CANCELLED" || original?.status === "EXPIRED") {
+        return (
+          <div>
+            <span className="link">
+              <Link
+                to={{
+                  pathname: `/digit-ui/employee/payment/collect/${original?.["businessService"]}/${original?.["consumerCode"]}/tenantId=${original?.["tenantId"]}?workflow=mcollect`,
+                }}
+              >
+                {t(`${"ABG_GENERATE_NEW_BILL"}`)}
+              </Link>
+            </span>
+          </div>
+        );
+      } else if (original?.status === "PAID") {
+        return (
+          <div>
+            <span className="link">
+              <Link>
+                <a
+                  href="javascript:void(0)"
+                  style={{
+                    color: "#FE7A51",
+                    cursor: "pointer",
+                  }}
+                  onClick={(value) => {
+                    printRecieptMobile(original?.["businessService"], original?.["consumerCode"]);
+                  }}
+                >
+                  {" "}
+                  {t(`${"ABG_DOWNLOAD_RECEIPT"}`)}{" "}
+                </a>
+              </Link>
+            </span>
+          </div>
+        );
+      }
+    } else {
+      return GetCell(t(`${"CS_NA"}`));
+    }
   };
   const serviceRequestIdKey = (original) => {
     return `${searchParams?.businessServices}/${encodeURIComponent(original?.[t("CR_COMMON_TABLE_COL_RECEIPT_NO")])}`;

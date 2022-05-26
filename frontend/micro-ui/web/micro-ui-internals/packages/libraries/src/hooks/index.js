@@ -69,6 +69,9 @@ import useConfig from "./fsm/useConfig";
 import useVendorDetail from "./fsm/useVendorDetail";
 import useSlum from "./fsm/useSlum";
 import usePaymentHistory from "./fsm/usePaymentHistory";
+import useVendorCreate from "./fsm/useVendorCreate";
+import useVendorUpdate from "./fsm/useVendorUpdate";
+import useVehicleDetails from "./fsm/useVehicleDetails";
 
 import useEmployeeSearch from "./useEmployeeSearch";
 
@@ -118,6 +121,7 @@ import useTLInbox from "./tl/useInbox";
 import useTradeLicenseBillingslab from "./tl/useTradeLicenseBillingslab";
 import useTLMDMS from "./tl/useMDMS";
 import useTLSearch from "./tl/useSearch";
+import useTLWorkflowData from "./tl/useTLWorkflowData";
 
 import useHRMSSearch from "./hrms/useHRMSsearch";
 import useHrmsMDMS from "./hrms/useHRMSMDMS";
@@ -258,6 +262,9 @@ const fsm = {
   useConfig,
   useSlum,
   usePaymentHistory,
+  useVendorCreate,
+  useVendorUpdate,
+  useVehicleDetails
 };
 
 const pt = {
@@ -325,6 +332,7 @@ const tl = {
   useApplicationActions: useTLApplicationActions,
   useFetchBill: useTLFetchBill,
   useTLApplicationDetails,
+  useTLWorkflowData
 };
 
 const receipts = {

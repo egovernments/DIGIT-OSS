@@ -45,7 +45,6 @@ const Search = ({ path }) => {
   };
 
   const result = Digit.Hooks.ws.useSearchWS({ tenantId, filters: payload, config, bussinessService: businessServ, t });
-
   return (
     <Fragment>
       <Search
@@ -54,7 +53,7 @@ const Search = ({ path }) => {
         onSubmit={onSubmit}
         data={result ? result : { display: "ES_COMMON_NO_DATA" }}
         count={result?.count}
-        resultOk={isBothCallsFinished}
+        resultOk={!result?.isLoading}
         businessService={businessServ}
       />
       {showToast && (

@@ -42,7 +42,10 @@ const FstpInbox = () => {
 
   const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(
     tenantId,
-    { name: searchParams?.name },
+    {
+      name: searchParams?.name,
+      status: 'ACTIVE'
+    },
     { enabled: searchParams?.name?.length > 1 }
   );
   let filters = {

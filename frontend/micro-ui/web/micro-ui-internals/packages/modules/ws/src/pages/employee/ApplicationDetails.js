@@ -22,6 +22,7 @@ import * as func from "../../utils";
 import getPDFData from "../../utils/getWSAcknowledgementData";
 import { getFiles, getBusinessService } from "../../utils";
 import _ from "lodash";
+import { ifUserRoleExists } from "../../utils";
 
 const ApplicationDetails = () => {
   const { id } = useParams();
@@ -46,6 +47,7 @@ const ApplicationDetails = () => {
   //for common receipt key.
   const { isBillingServiceLoading, data: mdmsBillingServiceData } = Digit.Hooks.obps.useMDMS(stateCode, "BillingService", ["BusinessService"]);
   const { isCommonmastersLoading, data: mdmsCommonmastersData } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["uiCommonPay"]);
+  const { isServicesMasterLoading, data: servicesMasterData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["WSEditApplicationByConfigUser"]);
   const commonPayDetails = mdmsCommonmastersData?.["common-masters"]?.uiCommonPay || [];
   const index = commonPayDetails && commonPayDetails.findIndex((item) => { return item.code == "WS.ONE_TIME_FEE"; });
   let commonPayInfo = "";
@@ -110,6 +112,9 @@ const ApplicationDetails = () => {
     // setError(null);
   };
 
+  let dowloadOptions = [],
+  appStatus = applicationDetails?.applicationData?.applicationStatus || "";
+
   workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
     if (action?.action === "ACTIVATE_CONNECTION") {
       action.redirectionUrll = {
@@ -119,9 +124,26 @@ const ApplicationDetails = () => {
       };
     }
     if (action?.action === "RESUBMIT_APPLICATION") {
+      let pathName = `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+
+      const userConfig = servicesMasterData?.["ws-services-masters"]?.WSEditApplicationByConfigUser || [];
+      const editApplicationUserRole = userConfig?.[0]?.roles || [];
+      const mdmsApplicationStatus = userConfig?.[0]?.status;
+
+      let isFieldInspector = false;
+      editApplicationUserRole.every((role, index) => {
+        isFieldInspector = ifUserRoleExists(role);
+        if(isFieldInspector) return false;
+        else return true;
+      })
+
+      if(isFieldInspector && appStatus === mdmsApplicationStatus) {
+        pathName = `/digit-ui/employee/ws/edit-application-by-config?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+      }
+
       action.redirectionUrll = {
         action: "ACTIVATE_CONNECTION",
-        pathname: `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`,
+        pathname: pathName,
         state: {
           applicationDetails: applicationDetails,
           action: "RESUBMIT_APPLICATION"
@@ -152,9 +174,26 @@ const ApplicationDetails = () => {
 
   workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
     if (action?.action === "EDIT") {
+      let pathName = `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+
+      const userConfig = servicesMasterData?.["ws-services-masters"]?.WSEditApplicationByConfigUser || [];
+      const editApplicationUserRole = userConfig?.[0]?.roles || [];
+      const mdmsApplicationStatus = userConfig?.[0]?.status;
+
+      let isFieldInspector = false;
+      editApplicationUserRole.every((role, index) => {
+        isFieldInspector = ifUserRoleExists(role);
+        if(isFieldInspector) return false;
+        else return true;
+      })
+
+      if(isFieldInspector && appStatus === mdmsApplicationStatus) {
+        pathName = `/digit-ui/employee/ws/edit-application-by-config?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+      }
+
       action.redirectionUrll = {
         action: "ACTIVATE_CONNECTION",
-        pathname: `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`,
+        pathname: pathName,
         state: {
           applicationDetails: applicationDetails,
           action: "VERIFY_AND_FORWARD"
@@ -197,10 +236,6 @@ const ApplicationDetails = () => {
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
-
-
-  let dowloadOptions = [],
-    appStatus = applicationDetails?.applicationData?.applicationStatus || "";
 
   const wsEstimateDownloadObject = {
     order: 1,
@@ -283,8 +318,8 @@ const ApplicationDetails = () => {
         </div>
         <ApplicationDetailsTemplate
           applicationDetails={applicationDetails}
-          isLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading}
-          isDataLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading}
+          isLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading || isServicesMasterLoading }
+          isDataLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading || isServicesMasterLoading }
           applicationData={applicationDetails?.applicationData}
           mutate={mutate}
           workflowDetails={workflowDetails}
