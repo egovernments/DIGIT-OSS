@@ -20,7 +20,8 @@ import EditModifyApplication from "./EditModifyApplication";
 // import WSDisconnectionDocsRequired from "../../pageComponents/WSDisconnectionDocsRequired";
 import ResponseBillAmend from "./ResponseBillAmend"
 import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
-import WSDisconnectionDocsRequired from "./Wsdisconnection/index";
+import WSDisconnectionDocsRequired from "./DisconnectionApplication/index";
+import DisconnectionApplication from './DisconnectionApplication/'
 
 const BILLSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
@@ -51,6 +52,7 @@ const App = ({ path }) => {
   /* Update Other imports to similar way  */
   const WSDocsRequired = Digit?.ComponentRegistryService?.getComponent('WSDocsRequired');
   const WSInbox = Digit?.ComponentRegistryService?.getComponent('WSInbox');
+  const WSDisconnectionDocsRequired = Digit?.ComponentRegistryService?.getComponent('WSDisconnectionDocsRequired');
   
   return (
     <React.Fragment>
@@ -78,6 +80,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/modify-application`} component={ModifyApplication} />
         <PrivateRoute path={`${path}/modify-application-edit`} component={EditModifyApplication} />
         <PrivateRoute path={`${path}/disconnection-application`} component={WSDisconnectionDocsRequired} />
+        <PrivateRoute path={`${path}/new-disconnection`} component={DisconnectionApplication} />
         <PrivateRoute path={`${path}/bill-amend/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/water/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/sewerage/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />

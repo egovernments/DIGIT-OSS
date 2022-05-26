@@ -22,9 +22,9 @@ function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData 
   const [enableSubmit, setEnableSubmit] = useState(true)
   const [checkRequiredFields, setCheckRequiredFields] = useState(false);
   // const { isLoading: wsDocsLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId);
-//   const goNext = () => {
-//     onSelect("DocsReq", "");
-//   }
+  const goNext = () => {
+    onSelect("DocsReq", "");
+  }
 
 useEffect(() =>{
     setDocuments(storedData||[])

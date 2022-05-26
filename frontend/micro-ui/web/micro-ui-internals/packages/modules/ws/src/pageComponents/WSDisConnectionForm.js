@@ -195,7 +195,7 @@ const handleSubmit = () => onSelect(config.key, { WSDisConnectionForm: {...disco
                 />              
           </LabelFieldPair>
 
-          {userType !== "citizen" && (
+          {/* {userType !== "citizen" && (
               <React.Fragment>
               <CardHeader>{t(`WS_DISCONNECTION_DOCUMENTS`)}</CardHeader>
                 {wsDocs?.Documents?.map((document, index) => { 
@@ -215,7 +215,7 @@ const handleSubmit = () => onSelect(config.key, { WSDisConnectionForm: {...disco
                   {error && <Toast label={error} onClose={() => setError(null)} error />}
               </React.Fragment>
             )
-          }
+          } */}
           <SubmitBar label={t(`CS_COMMON_NEXT`)} submit={true} />
         </div>
         </FormStep>

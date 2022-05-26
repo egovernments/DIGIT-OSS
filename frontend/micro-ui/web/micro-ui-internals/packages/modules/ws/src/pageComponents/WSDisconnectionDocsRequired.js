@@ -74,7 +74,9 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
           {
             <SubmitBar
               label={t("ACTION_TEST_APPLY")}
-              onSubmit={goNext}
+              onSubmit={() => {
+                history.push(match.path.replace("disconnection-application", "new-disconnection"));
+              }}
               style={{ margin: "10px 10px 0px 0px" }}
               // disabled={wsDocsLoading ? true : false}
             />}
