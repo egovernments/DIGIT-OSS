@@ -1,0 +1,55 @@
+name: deployment
+on:
+  workflow_dispatch:
+    inputs:
+#       images:
+#         description: 'image name'
+#         required: true
+#         default: 'comma seprated image names'
+#         type: string
+      environment:
+        description: 'environment to deploy'
+        type: choice
+        options:
+        - Dev
+        - Qa
+        - Uat
+jobs:
+  deploy:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+#       with: 
+#         fetch-depth: 0
+#         repository: egovernments/DIGIT-DevOps
+#         ref: master
+#         path: DIGIT-DevOps
+#     - name: Setup Go
+#       uses: actions/setup-go@v2
+#       with:
+#         go-version: '1.13.3'
+#     - name: Setup Helm
+#       uses: azure/setup-helm@v1 
+#     - name: kubectl setup
+#       uses: azure/setup-kubectl@v2.0
+#       with:
+#         version: '1.22.0'
+    - name: create kube_config
+      run: |
+        mkdir ${HOME}/.kube
+        if: ${{ github.event.inputs.environment == 'Dev' }}
+        echo ${{ secrets.KUBE_CONFIG_DEV }} | base64 --decode > {HOME}/.kube/config
+        if: ${{ github.event.inputs.environment == 'Qa' }}
+        echo ${{ secrets.KUBE_CONFIG_QA }} | base64 --decode > {HOME}/.kube/config
+        if: ${{ github.event.inputs.environment == 'Uat' }}
+        echo ${{ secrets.KUBE_CONFIG_UAT }} | base64 --decode > {HOME}/.kube/config
+        cat ${HOME}/.kube/config
+#     - name: Setup aws-iam-authenticator
+#       uses: prepor/action-aws-iam-authenticator@master
+#     - name: deploy to cluster
+#       run: |
+#          cd /home/runner/work/DIGIT-Dev/DIGIT-Dev/DIGIT-DevOps/deploy-as-code/egov-deployer
+#          go run main.go deploy -c -e ${{github.event.inputs.environment}} ${{github.event.inputs.images}}
+
+  
