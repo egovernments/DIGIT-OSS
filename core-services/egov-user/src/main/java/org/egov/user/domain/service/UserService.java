@@ -18,6 +18,7 @@ import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.UserSearchCriteria;
 import org.egov.user.domain.model.enums.UserType;
 import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
+import org.egov.user.domain.service.utils.NotificationUtil;
 import org.egov.user.persistence.dto.FailedLoginAttempt;
 import org.egov.user.persistence.repository.FileStoreRepository;
 import org.egov.user.persistence.repository.OtpRepository;
@@ -92,6 +93,9 @@ public class UserService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private NotificationUtil notificationUtil;
 
     public UserService(UserRepository userRepository, OtpRepository otpRepository, FileStoreRepository fileRepository,
                        PasswordEncoder passwordEncoder, EncryptionDecryptionUtil encryptionDecryptionUtil, TokenStore tokenStore,
@@ -182,9 +186,19 @@ public class UserService {
 
         searchCriteria.setTenantId(getStateLevelTenantForCitizen(searchCriteria.getTenantId(), searchCriteria.getType()));
         /* encrypt here / encrypted searchcriteria will be used for search*/
-
+        
+        String altmobnumber=null;
+        
+        if(searchCriteria.getMobileNumber()!=null) {
+        	altmobnumber = searchCriteria.getMobileNumber();
+        }
 
         searchCriteria = encryptionDecryptionUtil.encryptObject(searchCriteria, "UserSearchCriteria", UserSearchCriteria.class);
+        
+        if(altmobnumber!=null) {
+        	searchCriteria.setAlternatemobilenumber(altmobnumber);
+        }
+        
         List<org.egov.user.domain.model.User> list = userRepository.findAll(searchCriteria);
 
         /* decrypt here / final reponse decrypted*/
@@ -346,7 +360,7 @@ public class UserService {
         user.setPassword(encryptPwd(user.getPassword()));
         /* encrypt */
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
-        userRepository.update(user, existingUser);
+        userRepository.update(user, existingUser,requestInfo.getUserInfo().getId(), requestInfo.getUserInfo().getUuid() );
 
         // If user is being unlocked via update, reset failed login attempts
         if (user.getAccountLocked() != null && !user.getAccountLocked() && existingUser.getAccountLocked())
@@ -398,17 +412,21 @@ public class UserService {
         /* encrypt here */
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
 
-        final User existingUser = getUserByUuid(user.getUuid());
+        User existingUser = getUserByUuid(user.getUuid());
         validateProfileUpdateIsDoneByTheSameLoggedInUser(user);
         user.nullifySensitiveFields();
         validatePassword(user.getPassword());
-        userRepository.update(user, existingUser);
+        userRepository.update(user, existingUser,requestInfo.getUserInfo().getId(), requestInfo.getUserInfo().getUuid() );
         User updatedUser = getUserByUuid(user.getUuid());
+        
         /* decrypt here */
-
+        existingUser = encryptionDecryptionUtil.decryptObject(existingUser, "User", User.class, requestInfo);
         updatedUser = encryptionDecryptionUtil.decryptObject(updatedUser, "User", User.class, requestInfo);
 
         setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
+        if(!(updatedUser.getEmailId().equalsIgnoreCase(existingUser.getEmailId()))){
+            notificationUtil.sendEmail(requestInfo, existingUser.getEmailId(), updatedUser.getEmailId(),updatedUser.getMobileNumber());
+        }
         return updatedUser;
     }
 
@@ -430,7 +448,7 @@ public class UserService {
         validateExistingPassword(user, updatePasswordRequest.getExistingPassword());
         validatePassword(updatePasswordRequest.getNewPassword());
         user.updatePassword(encryptPwd(updatePasswordRequest.getNewPassword()));
-        userRepository.update(user, user);
+        userRepository.update(user, user, user.getId() , user.getUuid());
     }
 
     /**
@@ -460,7 +478,7 @@ public class UserService {
         /* encrypt here */
         /* encrypted value is stored in DB*/
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
-        userRepository.update(user, user);
+        userRepository.update(user, user,requestInfo.getUserInfo().getId() , requestInfo.getUserInfo().getUuid());
     }
 
 
@@ -543,7 +561,7 @@ public class UserService {
      */
     private void validateExistingPassword(User user, String existingRawPassword) {
         if (!passwordEncoder.matches(existingRawPassword, user.getPassword())) {
-            throw new PasswordMismatchException();
+            throw new PasswordMismatchException("Invalid username or password");
         }
     }
 

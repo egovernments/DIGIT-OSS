@@ -90,7 +90,17 @@ export const transferorSummary = getCommonCard({
               "Property.ownersInit[0].mobileNumber" ,
               callBack: checkValueForNA
             }
-          ),  ownerEmail: getLabelWithValue(
+          ), alterMobileNo: getLabelWithValue(
+            {
+              labelName: "Mobile No.",
+              labelKey: "PT_FORM3_ALT_MOBILE_NO" 
+            },
+            {
+              jsonPath:
+              "Property.ownersInit[0].alternatemobilenumber" ,
+              callBack: checkValueForNA
+            }
+          ), ownerEmail: getLabelWithValue(
             {
               labelName: "Email",
               labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
@@ -299,6 +309,17 @@ export const transferorInstitutionSummary = getCommonCard({
         jsonPath:
           "Property.ownersInit[0].mobileNumber",
           callBack: checkValueForNA
+      }
+    ),
+    alterMobileNo: getLabelWithValue(
+      {
+        labelName: "Mobile No.",
+        labelKey: "PT_FORM3_ALT_MOBILE_NO" 
+      },
+      {
+        jsonPath:
+        "Property.ownersInit[0].alternatemobilenumber" ,
+        callBack: checkValueForNA
       }
     ),
     officialAddress: getLabelWithValue(

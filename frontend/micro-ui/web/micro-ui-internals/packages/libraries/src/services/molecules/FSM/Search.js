@@ -57,7 +57,8 @@ export const Search = {
       }
     }
 
-    const stateId = tenantId?.split(".")[0];
+    let paymentPreference = response?.paymentPreference;
+
     let slumLabel = "";
     if (response?.address?.slumName && response?.address?.locality?.code && response?.tenantId) {
       const slumData = await MdmsService.getSlumLocalityMapping(response?.tenantId, "FSM", "Slum");
@@ -75,15 +76,14 @@ export const Search = {
     }
     const slumName = slumLabel ? slumLabel.i18nKey : "N/A";
 
-    const state = tenantId.split(".")[0];
+    const state = Digit.ULBService.getStateId();
     const vehicleMenu = await MdmsService.getVehicleType(state, "Vehicle", "VehicleType");
     const _vehicle = vehicleMenu?.find((vehicle) => response?.vehicleType === vehicle?.code);
-
+    
     const vehicleMake = _vehicle?.i18nKey;
     const vehicleCapacity = _vehicle?.capacity;
 
     const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
-    // console.log("find demand detail here", demandDetails)
     const amountPerTrip =
       response?.additionalDetails && response?.additionalDetails.tripAmount
         ? response.additionalDetails.tripAmount
@@ -104,6 +104,7 @@ export const Search = {
         values: [
           { title: "ES_APPLICATION_DETAILS_APPLICANT_NAME", value: response?.citizen?.name },
           { title: "ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO", value: response?.citizen?.mobileNumber },
+          { title: "ES_FSM_PAYMENT_PREFERENCE", value: `ES_ACTION_${response?.paymentPreference}` },
         ],
       },
       {
@@ -136,9 +137,9 @@ export const Search = {
             child:
               response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude
                 ? {
-                    element: "img",
-                    src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
-                  }
+                  element: "img",
+                  src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
+                }
                 : null,
           },
         ],
@@ -176,13 +177,21 @@ export const Search = {
         title: "ES_APPLICATION_DETAILS_DSO_DETAILS",
         values: [
           { title: "ES_APPLICATION_DETAILS_ASSIGNED_DSO", value: dsoDetails?.displayName || "N/A" },
-          { title: "ES_APPLICATION_DETAILS_VEHICLE_MAKE", value: vehicleMake || "N/A" },
+          // { title: "ES_APPLICATION_DETAILS_VEHICLE_MAKE", value: vehicleMake || "N/A" },
           { title: "ES_APPLICATION_DETAILS_VEHICLE_NO", value: vehicle?.registrationNumber || "N/A" },
-          { title: "ES_APPLICATION_DETAILS_VEHICLE_CAPACITY", value: vehicleCapacity || "N/A" },
+          { title: "ES_APPLICATION_DETAILS_VEHICLE_CAPACITY", value: response?.vehicleCapacity || "N/A" },
           { title: "ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE", value: displayServiceDate(response?.possibleServiceDate) || "N/A" },
         ],
       },
     ];
+
+    if (userType !== "CITIZEN" && userType !== "DSO") {
+      employeeResponse.map((data) => {
+        if (data.title === "ES_TITLE_APPLICANT_DETAILS" || data.title === "Applicant Details") {
+          data.values.push({ title: "COMMON_APPLICANT_GENDER", value: response?.citizen?.gender })
+        }
+      })
+    }
 
     if (userType !== "CITIZEN")
       return {
@@ -232,8 +241,11 @@ export const Search = {
 
   combineResponse: (vehicleTrip, vendorOwnerKey) => {
     return vehicleTrip.map((trip) => {
-      return { ...trip, dsoName: vendorOwnerKey[trip.tripOwnerId].name };
-    });
+      if (vendorOwnerKey[trip.tripOwnerId]) {
+        return { ...trip, dsoName: vendorOwnerKey[trip.tripOwnerId].name };
+      } else return {}
+    }).filter(e => e.tripOwnerId);
+
   },
 
   applicationWithBillSlab: async (t, tenantId, applicationNos) => {

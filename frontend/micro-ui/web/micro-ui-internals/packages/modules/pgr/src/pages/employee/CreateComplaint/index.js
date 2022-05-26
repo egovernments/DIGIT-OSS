@@ -32,6 +32,8 @@ export const CreateComplaint = ({ parentUrl }) => {
   const [localities, setLocalities] = useState(fetchedLocalities);
   const [selectedLocality, setSelectedLocality] = useState(null);
   const [canSubmit, setSubmitValve] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
   const [pincodeNotValid, setPincodeNotValid] = useState(false);
   const [params, setParams] = useState({});
   const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
@@ -74,7 +76,6 @@ export const CreateComplaint = ({ parentUrl }) => {
   async function selectedType(value) {
     if (value.key !== complaintType.key) {
       if (value.key === "Others") {
-        // console.log("let me know if others is selected");
         setSubType({ name: "" });
         setComplaintType(value);
         setSubTypeMenu([{ key: "Others", name: t("SERVICEDEFS.OTHERS") }]);
@@ -100,10 +101,15 @@ export const CreateComplaint = ({ parentUrl }) => {
     setSelectedLocality(locality);
   }
 
+  const wrapperSubmit = (data) => {
+    if (!canSubmit) return;
+    setSubmitted(true);
+    !submitted && onSubmit(data);
+  };
+
   //On SUbmit
   const onSubmit = async (data) => {
     if (!canSubmit) return;
-    console.log("submit data", data, subType, selectedCity, selectedLocality);
     const cityCode = selectedCity.code;
     const city = selectedCity.city.name;
     const district = selectedCity.city.name;
@@ -243,13 +249,12 @@ export const CreateComplaint = ({ parentUrl }) => {
       ],
     },
   ];
-
   return (
     <FormComposer
       heading={t("ES_CREATECOMPLAINT_NEW_COMPLAINT")}
       config={config}
-      onSubmit={onSubmit}
-      isDisabled={!canSubmit}
+      onSubmit={wrapperSubmit}
+      isDisabled={!canSubmit && !submitted}
       label={t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT")}
     />
   );

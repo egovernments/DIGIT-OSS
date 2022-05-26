@@ -1,0 +1,22 @@
+.InboxComposerWrapper{
+    .form-field-flex-one{
+        .form-field{
+            @apply flex-1;
+        }
+    }
+}
+
+.inboxPopupMobileWrapper{
+    @apply block p-md w-full overflow-scroll;
+    .submit{
+        @apply flex left-0 w-full px-xl items-center flex-row-reverse !important;
+    }
+    .form-field{
+        margin: 0 !important;
+        @apply w-full;
+    }
+    .InboxMobilePopupCloseButtonWrapper{
+        @apply flex flex-row-reverse;
+    }
+}
+

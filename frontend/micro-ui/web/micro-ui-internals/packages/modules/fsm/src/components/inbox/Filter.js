@@ -14,7 +14,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
   // const hideLocalityFilter = Digit.UserService.hasAccess(["FSM_CREATOR_EMP", "FSM_VIEW_EMP"]);
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId.split(".")[0];
+  const state = Digit.ULBService.getStateId();
 
   const { data: roleStatuses, isFetched: isRoleStatusFetched } = Digit.Hooks.fsm.useMDMS(state, "DIGIT-UI", "RoleStatusMapping");
 
@@ -32,7 +32,6 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
     { statuses: [] }
   );
 
-  // console.log("find use query localities here", localities)
   const selectLocality = (d) => {
     onFilterChange({ locality: [...searchParams?.locality, d] });
   };
@@ -98,7 +97,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
             </div>
           ) : null}
           <div>
-            {isRoleStatusFetched && mergedRoleDetails ? (
+            {isRoleStatusFetched && mergedRoleDetails && props?.applications?.statuses ? (
               <Status onAssignmentChange={onStatusChange} fsmfilters={searchParams} mergedRoleDetails={mergedRoleDetails} statusMap={props?.applications?.statuses} />
             ) : (
               <Loader />
@@ -107,7 +106,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
         </div>
       </div>
       }
-      {props.type === "mobile" && (
+      {props.type === "mobile" && props.onClose && (
         <ActionBar>
           <ApplyFilterBar
             submit={false}

@@ -71,11 +71,11 @@
 }
 
 .upload-file {
-  height: 56px;
+  min-height: 56px;
   @apply relative border border-input-border w-full;
 
   div {
-    @apply flex flex-row h-full items-center pl-md;
+    @apply flex flex-row h-full items-center pl-md mt-sm flex-wrap;
 
     .file-upload-status {
       @apply text-body-s-dt ml-sm;

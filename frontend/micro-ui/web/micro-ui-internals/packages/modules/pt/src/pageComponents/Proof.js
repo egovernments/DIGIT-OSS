@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { FormStep, UploadFile, CardLabelDesc, Dropdown, CardLabel } from "@egovernments/digit-ui-react-components";
-import { stringReplaceAll } from "../utils";
+import { CardLabel, CardLabelDesc, Dropdown, FormStep, UploadFile } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { stringReplaceAll } from "../utils";
 
 const Proof = ({ t, config, onSelect, userType, formData }) => {
   //let index = window.location.href.charAt(window.location.href.length - 1);
@@ -15,14 +15,16 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
   const [file, setFile] = useState(formData?.address?.documents?.ProofOfAddress);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
+  const isUpdateProperty = formData?.isUpdateProperty || false;
+  const isEditProperty = formData?.isEditProperty || false;
 
   const [dropdownValue, setDropdownValue] = useState(
     !isMutation ? formData?.address?.documents?.ProofOfAddress?.documentType || null : formData?.[config.key]?.documentType
   );
   let dropdownData = [];
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
-  const { data: Documentsob = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
+  const stateId = Digit.ULBService.getStateId();
+  const { data: Documentsob = { } } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
   const docs = Documentsob?.PropertyTax?.Documents;
   const proofOfAddress = Array.isArray(docs) && docs.filter((doc) => doc.code.includes("ADDRESSPROOF"));
   if (proofOfAddress.length > 0) {
@@ -41,7 +43,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
     let fileDetails = file;
     if (fileDetails) fileDetails.documentType = dropdownValue;
     if (fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
-    let address = !isMutation ? formData?.address : {};
+    let address = !isMutation ? formData?.address : { };
     if (address && address.documents) {
       address.documents["ProofOfAddress"] = fileDetails;
     } else {
@@ -72,8 +74,6 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
               setError(t("PT_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
-            // setError(t("PT_FILE_UPLOAD_ERROR"));
           }
         }
       }
@@ -81,7 +81,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
   }, [file]);
 
   return (
-    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={!uploadedFile || !dropdownValue || error}>
+    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={isUpdateProperty || isEditProperty ? false: (!uploadedFile || !dropdownValue || error )}>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <CardLabel>{`${t("PT_CATEGORY_DOCUMENT_TYPE")}`}</CardLabel>
@@ -95,6 +95,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
         placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
       />
       <UploadFile
+        id={"pt-doc"}
         extraStyleName={"propertyCreate"}
         accept=".jpg,.png,.pdf"
         onUpload={selectfile}

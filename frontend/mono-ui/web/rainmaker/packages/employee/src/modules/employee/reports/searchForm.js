@@ -192,7 +192,6 @@ class ShowForm extends Component {
           this.props.handleChange(e, name, required, pattern);
           this.validateDate(startDate, endDate, required, "fromDate"); //3rd param to denote whether field fails
         } catch (e) {
-          console.log(e);
         }
       } else {
         this.props.handleChange(e, name, required, pattern);
@@ -205,7 +204,6 @@ class ShowForm extends Component {
           this.props.handleChange(e, name, required, pattern);
           this.validateDate(startDate, endDate, required, "toDate"); //3rd param to denote whether field fails
         } catch (e) {
-          console.log(e);
         }
       }
     }
@@ -469,7 +467,6 @@ class ShowForm extends Component {
               input = searchForm[variable].setMinutes(0);
               input = searchForm[variable].setSeconds(0);
             } catch (e) {
-              console.log(e);
             }
           } else if (variable == "toDate") {
             try {
@@ -477,7 +474,6 @@ class ShowForm extends Component {
               input = searchForm[variable].setMinutes(59);
               input = searchForm[variable].setSeconds(59);
             } catch (e) {
-              console.log(e);
             }
           } else {
             input = searchForm[variable];

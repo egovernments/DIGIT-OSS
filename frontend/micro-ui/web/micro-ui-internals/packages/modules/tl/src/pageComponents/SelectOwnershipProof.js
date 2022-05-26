@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { FormStep, UploadFile, CardLabelDesc, Dropdown, CardLabel } from "@egovernments/digit-ui-react-components";
-import { stringReplaceAll } from "../utils";
+import { CardLabel, CardLabelDesc, FormStep, UploadFile } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
+import Timeline from "../components/TLTimeline";
 
 const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
   const [uploadedFile, setUploadedFile] = useState(formData?.owners?.documents?.ProofOfOwnership?.fileStoreId || null);
   const [file, setFile] = useState(formData?.owners?.documents?.ProofOfOwnership);
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
+  let acceptFormat = ".jpg,.png,.pdf,.jpeg"
 
   const [dropdownValue, setDropdownValue] = useState(formData?.owners?.documents?.ProofOfOwnership?.documentType || null);
   //let dropdownData = [];
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
-  const { data: Documentsob = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
+  const stateId = Digit.ULBService.getStateId();
+  const { data: Documentsob = { } } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
   const docs = Documentsob?.PropertyTax?.Documents;
   const proofOfOwnership = Array.isArray(docs) && docs.filter((doc) => doc.code.includes("ADDRESSPROOF"));
   // if (proofOfOwnership.length > 0) {
@@ -50,8 +51,12 @@ const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
   useEffect(() => {
     (async () => {
       setError(null);
-      if (file) {
-        if (file.size >= 2000000) {
+      if (file&& file?.type) {
+        if(!(acceptFormat?.split(",")?.includes(`.${file?.type?.split("/")?.pop()}`)))
+        {
+          setError(t("PT_UPLOAD_FORMAT_NOT_SUPPORTED"));
+        }
+        else if (file.size >= 2000000) {
           setError(t("PT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else {
           try {
@@ -62,8 +67,6 @@ const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
               setError(t("PT_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
-            // setError(t("PT_FILE_UPLOAD_ERROR"));
           }
         }
       }
@@ -71,9 +74,11 @@ const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
   }, [file]);
 
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={3}/> : null}
     <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={!uploadedFile || error}>
-      <CardLabelDesc style={{fontWeight:"unset"}}>{t(`TL_UPLOAD_OWNERSHIP_RESTRICTIONS_TYPES`)}</CardLabelDesc>
-      <CardLabelDesc style={{fontWeight:"unset"}}>{t(`TL_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
+      <CardLabelDesc style={{ fontWeight: "unset" }}>{t(`TL_UPLOAD_OWNERSHIP_RESTRICTIONS_TYPES`)}</CardLabelDesc>
+      <CardLabelDesc style={{ fontWeight: "unset" }}>{t(`TL_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <CardLabel>{`${t("TL_CATEGORY_DOCUMENT_TYPE")}`}</CardLabel>
       {/* <Dropdown
         t={t}
@@ -85,6 +90,7 @@ const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
         //placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
       /> */}
       <UploadFile
+        id={"tl-doc"}
         extraStyleName={"propertyCreate"}
         accept=".jpg,.png,.pdf"
         onUpload={selectfile}
@@ -97,6 +103,7 @@ const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
       {error ? <div style={{ height: "20px", width: "100%", fontSize: "20px", color: "red", marginTop: "5px" }}>{error}</div> : ""}
       <div style={{ disabled: "true", height: "20px", width: "100%" }}></div>
     </FormStep>
+    </React.Fragment>
   );
 };
 

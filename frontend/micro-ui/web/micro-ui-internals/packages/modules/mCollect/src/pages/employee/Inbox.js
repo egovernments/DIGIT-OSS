@@ -26,6 +26,7 @@ const Inbox = ({
   const [pageOffset, setPageOffset] = useState(initialStates.pageOffset || 0);
   const [pageSize, setPageSize] = useState(initialStates.pageSize || 10);
   const [sortParams, setSortParams] = useState(initialStates.sortParams || [{ id: "createdTime", desc: false }]);
+  const { isLoading, isError: isCountError, error : counterror, data: countData } = Digit.Hooks.mcollect.useMCollectCount(tenantId);
 
   const [searchParams, setSearchParams] = useState(() => {
     return initialStates.searchParams || {};
@@ -115,6 +116,7 @@ const Inbox = ({
       totalAmount: businessIdToOwnerMappings[data.challanNo]?.totalAmount || 0,
       dueDate: businessIdToOwnerMappings[data.challanNo]?.dueDate || "NA",
       tenantId: data?.tenantId,
+      receiptNumber:data?.receiptNumber
     });
   });
 
@@ -128,6 +130,14 @@ const Inbox = ({
 
   const fetchPrevPage = () => {
     setPageOffset((prevState) => prevState - pageSize);
+  };
+
+  const fetchLastPage = () => {
+    setPageOffset(countData?.ChallanCount?.totalChallan && Math.ceil(countData?.ChallanCount?.totalChallan / 10) * 10 - pageSize);
+  };
+
+  const fetchFirstPage = () => {
+    setPageOffset((prevState) => 0);
   };
 
   const handleFilterChange = (filterParam) => {
@@ -174,6 +184,10 @@ const Inbox = ({
         title: t("ES_SEARCH_APPLICATION_MOBILE_INVALID"),
         componentInFront: "+91",
       },
+      {
+        label: t("UC_RECIEPT_NUMBER_LABEL"),
+        name: "receiptNumber",
+      },
     ];
   };
 
@@ -182,6 +196,7 @@ const Inbox = ({
       return (
         <MobileInbox
           data={formedData}
+          defaultSearchParams={initialStates.searchParams}
           isLoading={hookLoading}
           isSearch={!isInbox}
           searchFields={getSearchFields()}
@@ -214,6 +229,8 @@ const Inbox = ({
             onSort={handleSort}
             onNextPage={fetchNextPage}
             onPrevPage={fetchPrevPage}
+            onLastPage={fetchLastPage}
+            onFirstPage={fetchFirstPage}
             currentPage={Math.floor(pageOffset / pageSize)}
             pageSizeLimit={pageSize}
             disableSort={false}
@@ -221,7 +238,7 @@ const Inbox = ({
             parentRoute={parentRoute}
             searchParams={searchParams}
             sortParams={sortParams}
-            totalRecords={Number(data?.[0]?.totalCount)}
+            totalRecords={countData?.ChallanCount?.totalChallan}
             filterComponent={filterComponent}
             isLoader={isLoader}
           />

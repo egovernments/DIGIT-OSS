@@ -22,6 +22,32 @@ export const BillDetailsKeyNoteConfig = () => ({
         ],
         fallback: "N/A",
       },
+      {
+        keyValue: "CS_BILL_NO",
+        keyPath: [
+          "billDetails",
+          (d) => {
+            const { currentBillNo } = d[0];
+            if (currentBillNo) {
+              return currentBillNo;
+            } else return "N/A";
+          },
+        ],
+        fallback: "N/A",
+      },
+      {
+        keyValue: "CS_BILL_DUEDATE",
+        keyPath: [
+          "billDetails",
+          (d) => {
+            const { currentExpiryDate } = d[0];
+            if (currentExpiryDate) {
+              return new Date(currentExpiryDate).toLocaleDateString();
+            } else return "N/A";
+          },
+        ],
+        fallback: "N/A",
+      },
     ],
   },
   mcollect: {
@@ -31,6 +57,41 @@ export const BillDetailsKeyNoteConfig = () => ({
         keyValue: "UC_CHALLAN_NO",
         keyPath: ["consumerCode"],
         fallback: "",
+      },
+    ],
+  },
+  "PT.MUTATION": {
+    heading: "COMMON_PAY_SCREEN_HEADER",
+    details: [
+      {
+        keyValue: "PDF_STATIC_LABEL_MUATATION_NUMBER_LABEL",
+        keyPath: ["consumerCode"],
+        fallback: "",
+      }, {
+        keyValue: "CS_BILL_NO",
+        keyPath: [
+          "billDetails",
+          (d) => {
+            const { currentBillNo } = d[0];
+            if (currentBillNo) {
+              return currentBillNo;
+            } else return "N/A";
+          },
+        ],
+        fallback: "N/A",
+      },
+      {
+        keyValue: "CS_BILL_DUEDATE",
+        keyPath: [
+          "billDetails",
+          (d) => {
+            const { currentExpiryDate } = d[0];
+            if (currentExpiryDate) {
+              return new Date(currentExpiryDate).toLocaleDateString();
+            } else return "N/A";
+          },
+        ],
+        fallback: "N/A",
       },
     ],
   },

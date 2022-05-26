@@ -14,13 +14,27 @@ const FileComplaint = ({ parentRoute }) => {
   const { pathname } = useLocation();
   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   let config = [];
+  let configs = []
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("FSM_CITIZEN_FILE_PROPERTY", {});
   const { data: commonFields, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "CommonFieldsConfig");
+
+  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
+  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
+
+  useEffect(() => {
+    if (!pathname?.includes('new-application/response')) {
+      setMutationHappened(false);
+      clearSuccessData();
+      clearError();
+    }
+  }, []);
+
   const goNext = (skipStep) => {
     const currentPath = pathname.split("/").pop();
-    const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
+    const { nextStep } = configs.find((routeObj) => routeObj.route === currentPath);
     let redirectWithHistory = history.push;
     if (skipStep) {
       redirectWithHistory = history.replace;
@@ -40,11 +54,12 @@ const FileComplaint = ({ parentRoute }) => {
     goNext(skipStep);
   }
 
-  const handleSkip = () => {};
+  const handleSkip = () => { };
 
   const handleSUccess = () => {
     clearParams();
     queryClient.invalidateQueries("FSM_CITIZEN_SEARCH");
+    setMutationHappened(true);
   };
 
   if (isLoading) {
@@ -53,10 +68,61 @@ const FileComplaint = ({ parentRoute }) => {
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = "property-type";
+
+  const additionalConfig = [{
+    "label": "a",
+    "isMandatory": true,
+    "type": "component",
+    "route": "select-trip-number",
+    "key": "selectTripNo",
+    "component": "SelectTripNo",
+    "texts": {
+      "headerCaption": "",
+      "header": "ES_FSM_NUMBER_OF_TRIPS",
+      "cardText": "ES_FSM_NUMBER_OF_TRIPS_TEXT",
+      "submitBarLabel": "CS_COMMON_NEXT",
+    },
+    "nextStep": "select-payment-preference"
+  },
+  {
+    "label": "a",
+    "isMandatory": false,
+    "type": "component",
+    "route": "select-payment-preference",
+    "key": "selectPaymentPreference",
+    "component": "SelectPaymentPreference",
+    "texts": {
+      "headerCaption": "",
+      "header": "ES_FSM_PAYMENT_PREFERENCE_LABEL",
+      "cardText": "ES_FSM_PAYMENT_PREFERENCE_TEXT",
+      "submitBarLabel": "CS_COMMON_NEXT",
+      "skipText": "CORE_COMMON_SKIP_CONTINUE"
+    },
+    "nextStep": "select-gender"
+  },
+  {
+    "label": "a",
+    "isMandatory": false,
+    "type": "component",
+    "route": "select-gender",
+    "key": "selectGender",
+    "component": "SelectGender",
+    "texts": {
+      "headerCaption": "",
+      "header": "CS_COMMON_CHOOSE_GENDER",
+      "cardText": "CS_COMMON_SELECT_GENDER",
+      "submitBarLabel": "CS_COMMON_NEXT",
+      "skipText": "CORE_COMMON_SKIP_CONTINUE"
+    },
+    "nextStep": "property-type"
+  }]
+
+  configs = [...additionalConfig, ...config]
+  configs.indexRoute = "select-trip-number";
+
   return (
     <Switch>
-      {config.map((routeObj, index) => {
+      {configs.map((routeObj, index) => {
         const { component, texts, inputs, key } = routeObj;
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
@@ -72,7 +138,7 @@ const FileComplaint = ({ parentRoute }) => {
         <Response data={params} onSuccess={handleSUccess} />
       </Route>
       <Route>
-        <Redirect to={`${match.path}/${config.indexRoute}`} />
+        <Redirect to={`${match.path}/${configs.indexRoute}`} />
       </Route>
     </Switch>
   );

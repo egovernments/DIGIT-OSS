@@ -11,11 +11,16 @@ import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { HRMSModule ,initHRMSComponents  } from "@egovernments/digit-ui-module-hrms";
 import { TLModule, TLLinks,initTLComponents } from "@egovernments/digit-ui-module-tl";
 import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-module-receipts";
+import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
+import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
+import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
+// import { initWSComponents } from "@egovernments/digit-ui-module-ws"; 
 import {initCustomisationComponents} from "./Customisations";
+import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonpt";
 
 initLibraries();
-
-const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect","HRMS", "TL","Receipts"];
+//"WS" removed the ws enabledModules ;
+const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "NDSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS","NOC","Engagement", "CommonPT"];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PTModule,
@@ -39,7 +44,11 @@ initMCollectComponents();
 initHRMSComponents()
 initTLComponents();
 initReceiptsComponents();
-
+initOBPSComponents();
+initNOCComponents();
+initEngagementComponents();
+// initWSComponents();
+initCommonPTComponents();
 initCustomisationComponents();
 
 const moduleReducers = (initData) => ({

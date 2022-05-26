@@ -17,7 +17,6 @@ const i18nextConfig = () => ({
   },
   postProcess: [`reactPostprocessor`, "templatePostprocessor"],
   react: {
-    wait: true,
     useSuspense: true,
     bindI18n: "loaded",
     bindI18nStore: "added",

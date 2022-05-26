@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import CONFIG from '../config/configs';
+import { stateTenant } from '../utils/commons';
+
 export default function getFilterObj(GFilterData, mdmsData, page) {
     let newGFilterData = _.cloneDeep(GFilterData);
 let MODULE_LEVEL=JSON.parse(sessionStorage.getItem('MODULE_LEVEL'))
@@ -26,8 +28,8 @@ let MODULE_LEVEL=JSON.parse(sessionStorage.getItem('MODULE_LEVEL'))
     if (newGFilterData && newGFilterData['ULBS'] && newGFilterData['ULBS'].length > 0) {
 
         for (var i = 0; i < newGFilterData['ULBS'].length; i++) {
-            let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
-            tempValue.push(tenent + '.' + newGFilterData['ULBS'][i].toLowerCase());
+            let tenent = stateTenant() || "";
+            tempValue.push( newGFilterData['ULBS'][i].toLowerCase());
         }
         filters['tenantId'] = tempValue;
     }

@@ -59,7 +59,6 @@ const getMDMSData = async (action, state, dispatch) => {
     dispatch(prepareFinalObject("applyScreenMdmsData.businessServices",uiCommonPay&&uiCommonPay.filter(config=>config.cancelReceipt)))
     dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig", get(payload.MdmsRes, "common-masters.uiCommonPay")))
   } catch (e) {
-    console.log(e);
     alert("Billing service data fetch failed");
   }
 };

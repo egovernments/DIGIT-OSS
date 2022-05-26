@@ -26,6 +26,7 @@ import getFinancialYearObj from '../../../actions/getFinancialYearObj';
 import TenentAPI from '../../../actions/tenent/tenent'
 import Constant from '../../../actions/constants'
 import CONFIG from '../../../config/configs'
+import { getTenantId, stateTenant } from '../../../utils/commons';
 
 class GlobalFilter extends Component {
     constructor(props) {
@@ -63,7 +64,7 @@ class GlobalFilter extends Component {
     }
 
     componentDidMount() {
-        let tenentCode = `${localStorage.getItem('tenant-id')}` ? `${localStorage.getItem('tenant-id')}` : ''
+        let tenentCode = `${getTenantId()}` ? `${getTenantId()}` : ''
         let userInfo = JSON.parse(`${localStorage.getItem('user-info')}` ? `${localStorage.getItem('user-info')}` : '');
         let tenentList = []
         if (userInfo && userInfo['roles'] && Array.isArray(userInfo['roles']) && userInfo['roles'].length > 0) {
@@ -79,7 +80,7 @@ class GlobalFilter extends Component {
         }
 
 
-        let tenent = `${localStorage.getItem('tenant-id')}` ? (`${localStorage.getItem('tenant-id')}`).split('.')[0] : ''
+        let tenent = stateTenant() ||  '';
         let req = {
             "RequestInfo": {
                 "authToken": ""

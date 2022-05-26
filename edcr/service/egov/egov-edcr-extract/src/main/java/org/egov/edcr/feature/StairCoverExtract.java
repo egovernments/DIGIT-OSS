@@ -2,7 +2,8 @@ package org.egov.edcr.feature;
 
 import java.math.BigDecimal;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StairCoverExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(StairCoverExtract.class);
+    private static final Logger LOG = LogManager.getLogger(StairCoverExtract.class);
     @Autowired
     private LayerNames layerNames;
 

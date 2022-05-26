@@ -49,7 +49,6 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   };
 
   const searchValidation = (data) => {
-    // console.log("find input", watchSearch, data);
     if (FSTP) return null;
 
     watchSearch.applicationNos || watchSearch.mobileNumber ? setError(false) : setError(true);
@@ -106,12 +105,16 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
             {(type === "mobile" || mobileView) && (
               <div className="complaint-header">
                 <h2>{t("ES_COMMON_SEARCH_BY")}</h2>
-                <span onClick={onClose}>
+                <span style={{
+                  position: "absolute",
+                  top: "2%",
+                  right: "8px",
+                }} onClick={onClose}>
                   <CloseSvg />
                 </span>
               </div>
             )}
-            <div className="complaint-input-container" style={{ width: "100%" }}>
+            <div className={FSTP? "complaint-input-container for-pt for-search" : "complaint-input-container" } style={{ width: "100%" }}>
               {searchFields?.map((input, index) => (
                 <span key={index} className={index === 0 ? "complaint-input" : "mobile-input"}>
                   <Label>{input.label}</Label>

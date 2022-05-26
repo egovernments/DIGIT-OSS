@@ -45,6 +45,7 @@ export const configEmployeeApplication = ({ t, action, selectFile, uploadedFile,
               <div style={{ marginBottom: "2rem" }}>
                 <span>{t("TL_APPROVAL_UPLOAD_SUBHEAD")}</span>
                 <UploadFile
+                id={"hrms-deactivation-doc"}
                   accept="image/*, .pdf, .png, .jpeg"
                   onUpload={selectFile}
                   onDelete={() => {

@@ -12,7 +12,6 @@ import { BillDetailsFormConfig } from "./Bill-details/billDetails";
 export const CollectPayment = (props) => {
   // const { formData, addParams } = props;
   const { workflow: ModuleWorkflow } = Digit.Hooks.useQueryParams();
-  console.log(ModuleWorkflow);
   const { t } = useTranslation();
   const history = useHistory();
   const queryClient = useQueryClient();
@@ -154,7 +153,6 @@ export const CollectPayment = (props) => {
     }
 
     try {
-      // console.log(recieptRequest);
       const resposne = await Digit.PaymentService.createReciept(tenantId, recieptRequest);
       queryClient.invalidateQueries();
       history.push(
@@ -301,10 +299,9 @@ export const CollectPayment = (props) => {
 
   return (
     <React.Fragment>
-      <Header>{t("PAYMENT_COLLECT")}</Header>
+      <Header styles={{marginLeft:"15px"}}>{t("PAYMENT_COLLECT")}</Header>
       <FormComposer
         cardStyle={{ paddingBottom: "100px" }}
-        //heading={t("PAYMENT_COLLECT")}
         label={t("PAYMENT_COLLECT_LABEL")}
         config={getFormConfig()}
         onSubmit={onSubmit}
@@ -319,7 +316,6 @@ export const CollectPayment = (props) => {
           }
         }}
       ></FormComposer>
-
       {toast && (
         <Toast
           error={toast.key === "error"}

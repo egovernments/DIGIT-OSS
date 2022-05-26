@@ -8,6 +8,10 @@
     min-width: 78px;
     height: 24px;
   }
+
+  h3{
+    @apply inline-block border-l border-solid border-white pl-sm ml-sm;
+  }
 }
 
 .img-circle {
@@ -72,6 +76,11 @@
       width: 21px;
       float: left;
       margin-top: 12px;
+    }
+    .edit-btn-ico{
+      height: 17px;
+      width: 17px;
+      margin-top: 16px;
     }
     .icon + .menu-label {
       margin-left: 36px;

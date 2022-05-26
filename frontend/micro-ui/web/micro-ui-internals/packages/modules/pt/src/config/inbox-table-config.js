@@ -56,7 +56,6 @@ export const TableConfig = (t) => ({
       {
         Header: t("ES_SEARCH_PROPERTY_STATUS"),
         Cell: ({ row }) => {
-          // console.log(row.original?.searchData?.status,">>>>>>>>>")
           return GetCell(t(row.original?.searchData?.status));
         },
         disableSortBy: true,
@@ -75,7 +74,7 @@ export const TableConfig = (t) => ({
         Cell: ({ row }) => {
           return (
             <div>
-              {row.original?.searchData?.due_tax > 0 ? (
+              {row.original?.searchData?.due_tax > 0 && Digit.Utils.didEmployeeHasRole("PT_CEMP") ? (
                 <span className="link">
                   <Link to={`/digit-ui/employee/payment/collect/PT/` + row.original?.searchData?.["propertyId"]}>{t("ES_PT_COLLECT_TAX")}</Link>
                 </span>
@@ -106,7 +105,6 @@ export const TableConfig = (t) => ({
       {
         Header: t("ES_INBOX_OWNER"),
         Cell: ({ row }) => {
-          // console.log(row.original?.searchData["owner"]);
           return GetCell(`${row.original?.searchData?.["owners"]?.[0].name}`);
         },
         mobileCell: (original) => GetMobCell(original?.searchData?.["owners"]?.[0].name),

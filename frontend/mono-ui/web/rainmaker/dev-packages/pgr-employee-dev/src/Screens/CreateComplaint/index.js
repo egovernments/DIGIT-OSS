@@ -7,7 +7,7 @@ import { handleFieldChange,setFieldProperty } from "egov-ui-kit/redux/form/actio
 import isEqual from "lodash/isEqual";
 import "./index.css";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { fetchComplaintCategories } from "egov-ui-kit/redux/complaints/actions";
 
 const ComplaintFormHOC = formHoc({
   formKey: "complaint",
@@ -29,9 +29,11 @@ class AddComplaints extends Component {
   //handleFieldChange("complaint", "city", tenantId);
   //}
   //};
-  componentDidMount(){
-    this.props.resetForm()
-    this.props.resetFieldValue()
+  componentDidMount() {
+    this.props.resetForm();
+    this.props.resetFieldValue();
+    const { fetchComplaintCategories } = this.props;
+    fetchComplaintCategories();
   }
   componentWillReceiveProps = nextprops => {
     if (!isEqual(nextprops, this.props)) {
@@ -69,6 +71,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    fetchComplaintCategories: () => dispatch(fetchComplaintCategories()),
     handleFieldChange: (formKey, fieldKey, value) =>
       dispatch(handleFieldChange(formKey, fieldKey, value)),
     resetForm:()=>dispatch(prepareFinalObject("services",[{}])),

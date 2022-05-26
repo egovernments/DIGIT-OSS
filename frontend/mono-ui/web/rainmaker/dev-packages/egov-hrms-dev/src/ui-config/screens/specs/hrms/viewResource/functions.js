@@ -95,7 +95,7 @@ export const setRolesList = (state, dispatch) => {
 
   jurisdictions.map((judis, ind) => {
     let furnishedRolesList = judis && judis.roles && Array.isArray(judis.roles) && judis.roles.map(role => {
-      return ` ${getLocaleLabels("NA", `ACCESSCONTROL_ROLES_ROLES_${getTransformedLocale(role.code)}`)}`;
+      return ` ${getLocaleLabels("NA", `ACCESSCONTROL_ROLES_ROLES_${getTransformedLocale(role.code||role.value)}`)}`;
     }) || [];
     dispatch(
       prepareFinalObject(

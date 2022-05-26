@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
@@ -48,7 +49,12 @@ public class EventSearchCriteria {
 	private Integer limit;
 	
 	private Boolean isCitizenSearch;
-	
+
+	private Boolean isEventsCountCall = false;
+
+	private Long fromDate;
+
+	private Long toDate;
 	
 	public Boolean isEmpty(EventSearchCriteria eventSearchCriteria) {
 		if(CollectionUtils.isEmpty(eventSearchCriteria.getIds()) && CollectionUtils.isEmpty(eventSearchCriteria.getPostedBy())

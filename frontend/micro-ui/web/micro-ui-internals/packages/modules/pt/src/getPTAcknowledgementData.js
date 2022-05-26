@@ -15,9 +15,8 @@ const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
 const ulbCamel = (ulb) => ulb.toLowerCase().split(" ").map(capitalize).join(" ");
 
 const getOwner = (application, t, customTitle) => {
-  console.log(customTitle, application, "inside owner details");
   let owners = [];
-  if(customTitle&&customTitle.includes("TRANSFEROR"))
+  if(customTitle && customTitle.includes("TRANSFEROR"))
   owners = [...(application?.owners.filter((owner) => owner.status == "INACTIVE") || [])];
   else
   owners = [...(application?.owners.filter((owner) => owner.status == "ACTIVE") || [])];
@@ -188,9 +187,8 @@ const mutationRegistrationDetails = (application, t) => {
 };
 
 const getPTAcknowledgementData = async (application, tenantInfo, t) => {
-  console.log(application, "inside acknowledgement data");
   const filesArray = application?.documents?.map((value) => value?.fileStoreId);
-  const res = await Digit.UploadServices.Filefetch(filesArray, application?.tenantId.split(".")[0]);
+  const res = filesArray?.length>0 && await Digit.UploadServices.Filefetch(filesArray, Digit.ULBService.getStateId());
 
   if (application.creationReason === "MUTATION") {
     return {
@@ -272,7 +270,7 @@ const getPTAcknowledgementData = async (application, tenantInfo, t) => {
       {
         title: t("PT_COMMON_DOCS"),
         values:
-          application.documents.length > 0
+        application.documents && application.documents.length > 0
             ? application.documents.map((document, index) => {
                 let documentLink = pdfDownloadLink(res?.data, document?.fileStoreId);
                 return {
@@ -280,7 +278,10 @@ const getPTAcknowledgementData = async (application, tenantInfo, t) => {
                   value: pdfDocumentName(documentLink, index) || t("CS_NA"),
                 };
               })
-            : "NA",
+            : {
+              title: t("PT_NO_DOCUMENTS"),
+              value: " ",
+            },
       },
     ],
   };

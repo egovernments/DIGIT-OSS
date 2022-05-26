@@ -20,7 +20,7 @@ import {
 
 import TimeLine from "../../components/TimeLine";
 
-const WorkflowComponent = ({ complaintDetails, id, getWorkFlow }) => {
+const WorkflowComponent = ({ complaintDetails, id, getWorkFlow, zoomImage }) => {
   const tenantId = complaintDetails.service.tenantId;
   const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: tenantId, id, moduleCode: "PGR" });
   useEffect(() => {
@@ -39,6 +39,8 @@ const WorkflowComponent = ({ complaintDetails, id, getWorkFlow }) => {
         serviceRequestId={id}
         complaintWorkflow={complaintDetails.workflow}
         rating={complaintDetails.audit.rating}
+        zoomImage={zoomImage}
+        complaintDetails={complaintDetails}
       />
     )
   );
@@ -50,7 +52,8 @@ const ComplaintDetailsPage = (props) => {
 
   let tenantId = Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
   const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
-  // console.log("find complaint details here", complaintDetails);
+
+  const [imageShownBelowComplaintDetails, setImageToShowBelowComplaintDetails] = useState({});
 
   const [imageZoom, setImageZoom] = useState(null);
 
@@ -75,8 +78,10 @@ const ComplaintDetailsPage = (props) => {
   }, []);
 
   function zoomImage(imageSource, index) {
-    // console.log("index", index, imageSource,complaintDetails.images[index-1],"|||", complaintDetails.images )
-    setImageZoom(complaintDetails.images[index - 1]);
+    setImageZoom(imageSource);
+  }
+  function zoomImageWrapper(imageSource, index) {
+    zoomImage(imageShownBelowComplaintDetails?.fullImage[index]);
   }
 
   function onCloseImageZoom() {
@@ -84,9 +89,13 @@ const ComplaintDetailsPage = (props) => {
   }
 
   const onWorkFlowChange = (data) => {
-    // console.log("ssdsodososooo ==== ", data);
     let timeline = data?.timeline;
     timeline && timeline[0].timeLineActions?.filter((e) => e === "COMMENT").length ? setDisableComment(false) : setDisableComment(true);
+    if (timeline) {
+      const actionByCitizenOnComplaintCreation = timeline.find((e) => e?.performedAction === "APPLY");
+      const { thumbnailsToShow } = actionByCitizenOnComplaintCreation;
+      setImageToShowBelowComplaintDetails(thumbnailsToShow);
+    }
   };
 
   const submitComment = async () => {
@@ -119,48 +128,54 @@ const ComplaintDetailsPage = (props) => {
 
   return (
     <React.Fragment>
-      <Header>{t(`${LOCALIZATION_KEY.CS_HEADER}_COMPLAINT_SUMMARY`)}</Header>
+      <div className="complaint-summary">
+        <Header>{t(`${LOCALIZATION_KEY.CS_HEADER}_COMPLAINT_SUMMARY`)}</Header>
 
-      {Object.keys(complaintDetails).length > 0 ? (
-        <React.Fragment>
-          <Card>
-            <CardSubHeader>{t(`SERVICEDEFS.${complaintDetails.audit.serviceCode.toUpperCase()}`)}</CardSubHeader>
-            <StatusTable>
-              {Object.keys(complaintDetails.details).map((flag, index, arr) => (
-                <Row
-                  key={index}
-                  label={t(flag)}
-                  text={
-                    Array.isArray(complaintDetails.details[flag])
-                      ? complaintDetails.details[flag].map((val) => (typeof val === "object" ? t(val?.code) : t(val)))
-                      : t(complaintDetails.details[flag]) || "N/A"
-                  }
-                  last={index === arr.length - 1}
-                />
-              ))}
-            </StatusTable>
-            {complaintDetails.thumbnails && complaintDetails.thumbnails.length !== 0 ? (
-              <DisplayPhotos srcs={complaintDetails.thumbnails} onClick={(source, index) => zoomImage(source, index)} />
-            ) : null}
-            {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
-          </Card>
-          <Card>{complaintDetails?.service && <WorkflowComponent getWorkFlow={onWorkFlowChange} complaintDetails={complaintDetails} id={id} />}</Card>
-          <Card>
-            <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
-            <TextArea value={comment} onChange={(e) => setComment(e.target.value)} name="" />
-            <SubmitBar disabled={disableComment || comment.length < 1} onSubmit={submitComment} label={t("CS_PGR_SEND_COMMENT")} />
-          </Card>
-          {toast && (
-            <Toast
-              error={commentError}
-              label={!commentError ? t(`CS_COMPLAINT_COMMENT_SUCCESS`) : t(`CS_COMPLAINT_COMMENT_ERROR`)}
-              onClose={() => setToast(false)}
-            />
-          )}{" "}
-        </React.Fragment>
-      ) : (
-        <Loader />
-      )}
+        {Object.keys(complaintDetails).length > 0 ? (
+          <React.Fragment>
+            <Card>
+              <CardSubHeader>{t(`SERVICEDEFS.${complaintDetails.audit.serviceCode.toUpperCase()}`)}</CardSubHeader>
+              <StatusTable>
+                {Object.keys(complaintDetails.details).map((flag, index, arr) => (
+                  <Row
+                    key={index}
+                    label={t(flag)}
+                    text={
+                      Array.isArray(complaintDetails.details[flag])
+                        ? complaintDetails.details[flag].map((val) => (typeof val === "object" ? t(val?.code) : t(val)))
+                        : t(complaintDetails.details[flag]) || "N/A"
+                    }
+                    last={index === arr.length - 1}
+                  />
+                ))}
+              </StatusTable>
+              {imageShownBelowComplaintDetails?.thumbs ? (
+                <DisplayPhotos srcs={imageShownBelowComplaintDetails?.thumbs} onClick={(source, index) => zoomImageWrapper(source, index)} />
+              ) : null}
+              {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
+            </Card>
+            <Card>
+              {complaintDetails?.service && (
+                <WorkflowComponent getWorkFlow={onWorkFlowChange} complaintDetails={complaintDetails} id={id} zoomImage={zoomImage} />
+              )}
+            </Card>
+            {/* <Card>
+      <CardSubHeader>{t(`${LOCALIZATION_KEY.CS_COMMON}_COMMENTS`)}</CardSubHeader>
+      <TextArea value={comment} onChange={(e) => setComment(e.target.value)} name="" />
+      <SubmitBar disabled={disableComment || comment.length < 1} onSubmit={submitComment} label={t("CS_PGR_SEND_COMMENT")} />
+    </Card> */}
+            {toast && (
+              <Toast
+                error={commentError}
+                label={!commentError ? t(`CS_COMPLAINT_COMMENT_SUCCESS`) : t(`CS_COMPLAINT_COMMENT_ERROR`)}
+                onClose={() => setToast(false)}
+              />
+            )}{" "}
+          </React.Fragment>
+        ) : (
+          <Loader />
+        )}
+      </div>
     </React.Fragment>
   );
 };

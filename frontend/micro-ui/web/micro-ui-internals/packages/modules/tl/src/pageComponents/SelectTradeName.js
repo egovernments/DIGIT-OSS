@@ -1,12 +1,13 @@
 import { CardLabel, CitizenInfoLabel, FormStep, Loader, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
+import Timeline from "../components/TLTimeline";
 
 const SelectTradeName = ({ t, config, onSelect, value, userType, formData }) => {
   let validation = {};
   const onSkip = () => onSelect();
   const [TradeName, setTradeName] = useState(formData.TradeDetails?.TradeName);
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const isEdit = window.location.href.includes("/edit-application/") || window.location.href.includes("renew-trade");
   const { isLoading, data: fydata = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "egf-master", "FinancialYear");
 
@@ -26,6 +27,7 @@ const SelectTradeName = ({ t, config, onSelect, value, userType, formData }) => 
 
   return (
     <React.Fragment>
+      {window.location.href.includes("/citizen") ? <Timeline /> : null}
       <FormStep
         config={config}
         onSelect={goNext}

@@ -29,7 +29,6 @@ const mobileCheck = () => {
     )
       check = true;
   })(navigator.userAgent || navigator.vendor || window.opera);
-  console.log("check", check);
   return check;
 };
 

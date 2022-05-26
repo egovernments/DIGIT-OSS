@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 const { forwardRef, useRef, useImperativeHandle } = React;
 import {
@@ -18,16 +18,18 @@ import {
 import { useTranslation } from "react-i18next";
 
 export const FormComposer = forwardRef((props, ref) => {
+
+  //TODO: @naveen @vamshi please migrate to HOC/FormComposer
   let setFormData = props.setFormData;
   const { register, handleSubmit, errors, setValue } = useForm();
   const { t } = useTranslation();
+  // const [isDisabled, setIsDisabled] = useState(false);
 
   function onSubmit(data) {
     props.onSubmit(data);
   }
 
   /*  {
-    debugger;
     setValue("ADVT_HOARDINGS_CGST", `10`);
   }
 
@@ -54,7 +56,6 @@ export const FormComposer = forwardRef((props, ref) => {
   }
   /* useImperativeHandle(ref, () => ({
     setValues() {
-      //debugger;
       if (setFormData) {
         setValue("name", `${setFormData["name"]}`);
         setValue("mobileNumber", `${setFormData["mobileNumber"]}`);
@@ -89,9 +90,9 @@ export const FormComposer = forwardRef((props, ref) => {
             {section.body.map((field, index) => {
               return (
                 <React.Fragment key={index}>
-                  {errors[field.populators.name] && (field.populators?.validate ? errors[field.populators.validate] : true) && (
+                  {/* {errors[field.populators.name] && (field.populators?.validate ? errors[field.populators.validate] : true) && (
                     <CardLabelError>{field.populators.error}</CardLabelError>
-                  )}
+                  )} */}
                   {field.label ? (
                     <LabelFieldPair>
                       <CardLabel>
@@ -102,6 +103,9 @@ export const FormComposer = forwardRef((props, ref) => {
                     </LabelFieldPair>
                   ) : (
                     <div className="field">{fieldSelector(field.type, field.populators)}</div>
+                  )}
+                   {props.errors[field.populators.name] && (field.populators?.validate ? errors[field.populators.validate] : true) && (
+                    <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>{field.populators.error}</CardLabelError>
                   )}
                 </React.Fragment>
               );

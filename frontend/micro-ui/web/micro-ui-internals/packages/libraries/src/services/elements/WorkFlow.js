@@ -2,6 +2,79 @@ import Urls from "../atoms/urls";
 import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
+const getThumbnails = async (ids, tenantId, documents = []) => {
+  tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : tenantId;
+  if (window.location.href.includes("/obps/")) {
+    if (documents?.length > 0) {
+      let workflowsDocs = [];
+      documents?.map(doc => {
+        if (doc?.url) {
+          const thumbs = doc.url.split(",")[3] || doc.url.split(",")[0]
+          workflowsDocs.push({
+            thumbs: [thumbs],
+            images: [Digit.Utils.getFileUrl(doc.url)]
+          }) 
+        }
+      })
+      return workflowsDocs?.[0];
+    } else {
+      return null;
+    }
+  } else {
+    const res = await Digit.UploadServices.Filefetch(ids, tenantId);
+    if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
+      return { 
+        thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]), 
+        images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };
+    } else {
+      return null;
+    }
+  }
+};
+
+const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
+  const TimelineMap = new Map();
+  const tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : wf?.[0]?.tenantId;
+  let fileStoreIdsList = [];
+  let res = {};
+
+  if (window.location.href.includes("/obps/")) {
+    wf?.map(wfData => {
+      wfData?.documents?.map(wfDoc => {
+        if (wfDoc?.fileStoreId) fileStoreIdsList.push(wfDoc?.fileStoreId);
+      })
+    })
+    if (fileStoreIdsList?.length > 0) {
+      res = await Digit.UploadServices.Filefetch(fileStoreIdsList, tenantId);
+    }
+    wf?.forEach(wfData => {
+      wfData?.documents?.forEach(wfDoc => {
+        if (wfDoc?.fileStoreId) wfDoc.url = res.data[wfDoc?.fileStoreId];
+      })
+    });
+  }
+
+  for (const eventHappened of wf) {
+    if (eventHappened?.documents) {
+      eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId, eventHappened?.documents)
+    }
+    if (eventHappened.action === "COMMENT") {
+      const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+      TimelineMap.set("tlCommentStack", [...commentAccumulator, eventHappened])
+    }
+    else {
+      const eventAccumulator = TimelineMap.get("tlActions") || []
+      const commentAccumulator = TimelineMap.get("tlCommentStack") || []
+      eventHappened.wfComments = [...commentAccumulator, ...eventHappened.comment ? [eventHappened] : []]
+      TimelineMap.set("tlActions", [...eventAccumulator, eventHappened])
+      TimelineMap.delete("tlCommentStack")
+    }
+  }
+  // }
+  const response = TimelineMap.get("tlActions")
+  return response
+}
+
 export const WorkflowService = {
   init: (stateCode, businessServices) => {
     return Request({
@@ -23,15 +96,15 @@ export const WorkflowService = {
     });
   },
 
-  getDetailsById: async ({ tenantId, id, moduleCode, role }) => {
-    // console.log("getWorkflowDetails", tenantId, id, moduleCode, role);
-    // console.log(Digit);
+  getDetailsById: async ({ tenantId, id, moduleCode, role, getTripData }) => {
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
-    const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCode))?.BusinessServices[0]?.states;
+    const getLocationDetails = window.location.href.includes("/obps/") || window.location.href.includes("noc/inbox");
+    const moduleCodeData = getLocationDetails ? applicationProcessInstance?.[0]?.businessService : moduleCode;
+    const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCodeData))?.BusinessServices[0]?.states;
     if (workflow && workflow.ProcessInstances) {
       const processInstances = workflow.ProcessInstances;
-      const nextStates = processInstances[0]?.nextActions.map((action) => ({ action: action?.action, nextState: action.nextState }));
+      const nextStates = processInstances[0]?.nextActions.map((action) => ({ action: action?.action, nextState: processInstances[0]?.state.uuid }));
       const nextActions = nextStates.map((id) => ({
         action: id.action,
         state: businessServiceResponse?.find((state) => state.uuid === id.nextState),
@@ -40,7 +113,7 @@ export const WorkflowService = {
       /* To check state is updatable and provide edit option*/
       const currentState = businessServiceResponse?.find((state) => state.uuid === processInstances[0]?.state.uuid);
       if (currentState && currentState?.isStateUpdatable) {
-        if (moduleCode === "FSM" || moduleCode === "FSM_VEHICLE_TRIP" || moduleCode === "PGR") null;
+        if (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE" || moduleCode === "FSM_VEHICLE_TRIP" || moduleCode === "PGR" || moduleCode === "OBPS") null;
         else nextActions.push({ action: "EDIT", state: currentState });
       }
 
@@ -65,38 +138,123 @@ export const WorkflowService = {
       }));
 
       if (processInstances.length > 0) {
-        const timeline = processInstances
-          .filter((e) => e.action !== "COMMENT")
-          .map((instance, ind) => {
-            const checkPoint = {
-              performedAction: instance.action,
-              status: instance.state.applicationStatus,
-              state: instance.state.state,
-              assigner: instance?.assigner,
-              rating: instance?.rating,
-              comment: instance?.comment,
-              documents: instance?.documents,
-              caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
-              auditDetails: {
-                created: Digit.DateUtils.ConvertTimestampToDate(instance.auditDetails.createdTime),
-                lastModified: Digit.DateUtils.ConvertTimestampToDate(instance.auditDetails.lastModifiedTime),
-              },
-              timeLineActions: instance.nextActions
-                ? instance.nextActions.filter((action) => action.roles.includes(role)).map((action) => action?.action)
-                : null,
+        const TLEnrichedWithWorflowData = await makeCommentsSubsidariesOfPreviousActions(processInstances)
+        let timeline = TLEnrichedWithWorflowData.map((instance, ind) => {
+          let checkPoint = {
+            performedAction: instance.action,
+            status: instance.state.applicationStatus,
+            state: instance.state.state,
+            assigner: instance?.assigner,
+            rating: instance?.rating,
+            wfComment: instance?.wfComments.map(e => e?.comment),
+            wfDocuments: instance?.documents,
+            thumbnailsToShow: { thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images },
+            assignes: instance.assignes,
+            caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
+            auditDetails: {
+              created: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime),
+              lastModified: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime),
+            },
+            timeLineActions: instance.nextActions
+              ? instance.nextActions.filter((action) => action.roles.includes(role)).map((action) => action?.action)
+              : null,
+          };
+          return checkPoint;
+        });
+
+        if (getTripData) {
+          try {
+            const filters = {
+              businessService: 'FSM_VEHICLE_TRIP',
+              refernceNos: id
             };
-            return checkPoint;
-          });
+            const tripSearchResp = await Digit.FSMService.vehicleSearch(tenantId, filters)
+            if (tripSearchResp && tripSearchResp.vehicleTrip && tripSearchResp.vehicleTrip.length) {
+              const numberOfTrips = tripSearchResp.vehicleTrip.length
+              let cretaedTime = 0
+              let lastModifiedTime = 0
+              let waitingForDisposedCount = 0
+              let disposedCount = 0
+              let waitingForDisposedAction = []
+              let disposedAction = []
+              for (const data of tripSearchResp.vehicleTrip) {
+                const resp = await Digit.WorkflowService.getByBusinessId(tenantId, data.applicationNo)
+                resp?.ProcessInstances?.map((instance, ind) => {
+                  if (instance.state.applicationStatus === "WAITING_FOR_DISPOSAL") {
+                    waitingForDisposedCount++
+                    cretaedTime = Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime)
+                    lastModifiedTime = Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime)
+                    waitingForDisposedAction = [{
+                      performedAction: instance.action,
+                      status: instance.state.applicationStatus,
+                      state: instance.state.state,
+                      assigner: instance?.assigner,
+                      rating: instance?.rating,
+                      thumbnailsToShow: { thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images },
+                      assignes: instance.assignes,
+                      caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
+                      auditDetails: {
+                        created: cretaedTime,
+                        lastModified: lastModifiedTime,
+                      },
+                      numberOfTrips: numberOfTrips
+                    }]
+                  }
+                  if (instance.state.applicationStatus === "DISPOSED") {
+                    disposedCount++
+                    cretaedTime = instance.auditDetails.createdTime > cretaedTime ? Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime) : cretaedTime
+                    lastModifiedTime = instance.auditDetails.lastModifiedTime > lastModifiedTime ? Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime) : lastModifiedTime
+                    disposedAction = [{
+                      performedAction: instance.action,
+                      status: instance.state.applicationStatus,
+                      state: instance.state.state,
+                      assigner: instance?.assigner,
+                      rating: instance?.rating,
+                      thumbnailsToShow: { thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images },
+                      assignes: instance.assignes,
+                      caption: instance.assignes ? instance.assignes.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
+                      auditDetails: {
+                        created: cretaedTime,
+                        lastModified: lastModifiedTime,
+                      },
+                      numberOfTrips: disposedCount
+                    }]
+                  }
+                })
+              }
+
+              let tripTimeline = []
+              const disposalInProgressPosition = timeline.findIndex((data) => data.status === "DISPOSAL_IN_PROGRESS")
+              if (disposalInProgressPosition !== -1) {
+                timeline[disposalInProgressPosition].numberOfTrips = numberOfTrips
+                timeline.splice(disposalInProgressPosition + 1, 0, ...waitingForDisposedAction)
+                tripTimeline = disposedAction
+              } else {
+                tripTimeline = disposedAction.concat(waitingForDisposedAction)
+              }
+              const feedbackPosition = timeline.findIndex((data) => data.status === "CITIZEN_FEEDBACK_PENDING")
+              if (feedbackPosition !== -1) {
+                timeline.splice(feedbackPosition + 1, 0, ...tripTimeline)
+              } else {
+                timeline = tripTimeline.concat(timeline)
+              }
+            }
+          } catch (err) { }
+        }
 
         const nextActions = actionRolePair;
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
+          const onlyPendingForAssignmentStatusArray = timeline?.filter(e => e?.status === "PENDINGFORASSIGNMENT")
+          const duplicateCheckpointOfPendingForAssignment = onlyPendingForAssignmentStatusArray.at(-1)
+          // const duplicateCheckpointOfPendingForAssignment = timeline?.find( e => e?.status === "PENDINGFORASSIGNMENT")
           timeline.push({
+            ...duplicateCheckpointOfPendingForAssignment,
             status: "COMPLAINT_FILED",
           });
         }
 
-        if (timeline[timeline.length - 1].status !== "CREATED" && moduleCode === "FSM")
+        if (timeline[timeline.length - 1].status !== "CREATED" && (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE"))
           timeline.push({
             status: "CREATED",
           });
@@ -111,7 +269,6 @@ export const WorkflowService = {
         return details;
       }
     } else {
-      console.warn("error fetching workflow services");
       throw new Error("error fetching workflow services");
     }
     return {};

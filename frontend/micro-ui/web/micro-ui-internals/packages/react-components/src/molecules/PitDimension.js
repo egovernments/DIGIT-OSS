@@ -7,7 +7,6 @@ const DimentionInput = ({ name, value, onChange, disable }) => (
 );
 
 const PitDimension = ({ sanitationType, t, size = {}, handleChange, disable = false }) => {
-  // console.log("find sanitationType in pitDimensions here",sanitationType.dimension, size)
   return sanitationType?.dimension === "dd" ? (
     <div className="inputWrapper">
       <div>

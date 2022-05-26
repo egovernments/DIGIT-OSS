@@ -22,9 +22,10 @@ export const handlePdfShareEmail = (pdf2) => {
                 .uploadFile(blobData, config)
                 .then(data => {
                     shortenAPI(data.location,function(err,data){
-                        var fakeLink = document.createElement('a');
-                        fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(data.data));
-                        fakeLink.click();
+                        // var fakeLink = document.createElement('a');
+                        // fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(data.data));
+                        // fakeLink.click();
+                        window.open(`mailto:?body=${encodeURIComponent(data.data)}`, "_blank");
                     });
                 })
                 .catch(err => console.error(err))
@@ -49,6 +50,7 @@ export const handleImageShareEmail = (blobData) => {
                     shortenAPI(data.location,function(err,data){
                         var fakeLink = document.createElement('a');
                         fakeLink.setAttribute('href', 'mailto:?body=' + encodeURIComponent(data.data));
+                        fakeLink.setAttribute('target', '_blank');
                         fakeLink.click();
                     })
                 })

@@ -19,12 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.security.web.savedrequest.Enumerator;
 
 public class MultiReadRequestWrapper extends HttpServletRequestWrapper {
     
-    private static final Logger LOG = Logger.getLogger(MultiReadRequestWrapper.class);
+    private static final Logger LOG = LogManager.getLogger(MultiReadRequestWrapper.class);
     
     private ByteArrayOutputStream cachedBytes;
     private final Map<String, String> customHeaders;

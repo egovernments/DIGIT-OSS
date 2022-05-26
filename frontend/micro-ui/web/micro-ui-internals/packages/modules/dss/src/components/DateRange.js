@@ -1,7 +1,28 @@
-import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowDown, Modal, ButtonSelector, Calender } from "@egovernments/digit-ui-react-components";
-import { DateRangePicker, defaultStaticRanges, createStaticRanges } from "react-date-range";
-import { format, addMonths, addHours, startOfToday, endOfToday, endOfYesterday, addMinutes, addSeconds, isEqual, subYears, startOfYesterday, startOfWeek, endOfWeek, startOfYear, endOfYear, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter } from "date-fns";
+import { Calender } from "@egovernments/digit-ui-react-components";
+import {
+  addHours,
+  addMinutes,
+  addMonths,
+  addSeconds,
+  differenceInDays,
+  endOfMonth,
+  endOfQuarter,
+  endOfToday,
+  endOfWeek,
+  endOfYear,
+  endOfYesterday,
+  format,
+  startOfMonth,
+  startOfQuarter,
+  startOfToday,
+  startOfWeek,
+  startOfYear,
+  startOfYesterday,
+  subSeconds,
+  subYears,
+} from "date-fns";
+import React, { useEffect, Fragment, useMemo, useRef, useState } from "react";
+import { createStaticRanges, DateRangePicker } from "react-date-range";
 
 function isEndDateFocused(focusNumber) {
   return focusNumber === 1;
@@ -32,10 +53,10 @@ const DateRange = ({ values, onFilterChange, t }) => {
   useEffect(() => {
     if (!isModalOpen) {
       const startDate = selectionRange?.startDate;
-      const endDate =  selectionRange?.endDate;
-      const duration = getDuration(selectionRange?.startDate, selectionRange?.endDate);
+      const endDate = selectionRange?.endDate;
+      const interval = getDuration(selectionRange?.startDate, selectionRange?.endDate);
       const title = `${format(selectionRange?.startDate, "MMM d, yyyy")} - ${format(selectionRange?.endDate, "MMM d, yyyy")}`;
-      onFilterChange({ range: { startDate, endDate, duration, title }, requestDate: { startDate, endDate, duration, title } });
+      onFilterChange({ range: { startDate, endDate, interval, title }, requestDate: { startDate, endDate, interval, title } });
     }
   }, [selectionRange, isModalOpen]);
 
@@ -46,53 +67,80 @@ const DateRange = ({ values, onFilterChange, t }) => {
         range: () => ({
           startDate: startOfToday(new Date()),
           endDate: endOfToday(new Date()),
-        })
+        }),
       },
       {
         label: t("DSS_YESTERDAY"),
         range: () => ({
           startDate: startOfYesterday(new Date()),
-          endDate: endOfYesterday(new Date()),
-        })
+          endDate: subSeconds(endOfYesterday(new Date()), 1),
+        }),
       },
       {
         label: t("DSS_THIS_WEEK"),
         range: () => ({
           startDate: startOfWeek(new Date()),
-          endDate: endOfWeek(new Date()),
-        })
+          endDate: endOfToday(new Date()),
+        }),
       },
       {
-        label: t('DSS_THIS_MONTH'),
+        label: t("DSS_THIS_MONTH"),
         range: () => ({
           startDate: startOfMonth(new Date()),
-          endDate: endOfMonth(new Date()),
-        })
+          endDate: endOfToday(new Date()),
+          // endDate: subSeconds(endOfMonth(new Date()), 1),
+        }),
       },
       {
-        label: t('DSS_THIS_QUARTER'),
+        label: t("DSS_THIS_QUARTER"),
         range: () => ({
           startDate: startOfQuarter(new Date()),
-          endDate: endOfQuarter(new Date()),
-        })
+          endDate: subSeconds(endOfToday(new Date()), 1),
+          // endDate: subSeconds(endOfQuarter(new Date()), 1),
+        }),
       },
       {
-        label: t('DSS_PREVIOUS_YEAR'),
-        range: () => ({
-          startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
-          endDate: subYears(addMonths(endOfYear(new Date()), 3), 1)
-        })
+        label: t("DSS_PREVIOUS_YEAR"),
+        range: () => {
+          if (new Date().getMonth() < 3) {
+            return {
+              startDate: subYears(addMonths(startOfYear(new Date()), 3), 2),
+              endDate: subSeconds(subYears(addMonths(endOfYear(new Date()), 3), 2), 1),
+            };
+          } else {
+            return {
+              startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
+              endDate: subSeconds(subYears(addMonths(endOfYear(new Date()), 3), 1), 1),
+            };
+          }
+        },
       },
       {
-        label: t('DSS_THIS_YEAR'),
-        range: () => ({
-          startDate: addMonths(startOfYear(new Date()), 3),
-          endDate: addMonths(endOfYear(new Date()), 3)
-        })
-      }
-    ])
-  }, [])
-
+        label: t("DSS_THIS_YEAR"),
+        range: () => {
+          return {
+            startDate: Digit.Utils.dss.getDefaultFinacialYear().startDate,
+            endDate: Digit.Utils.dss.getDefaultFinacialYear().endDate,
+          };
+          /*
+          Removed Current financial thing
+          const currDate = new Date().getMonth();
+          if (currDate < 3) {
+            return {
+              startDate: subYears(addMonths(startOfYear(new Date()), 3), 1),
+              endDate: subSeconds(subYears(addMonths(endOfYear(new Date()), 3), 1), 1),
+            };
+          } else {
+            return {
+              startDate: addMonths(startOfYear(new Date()), 3),
+              endDate: subSeconds(addMonths(endOfYear(new Date()), 3), 1),
+            };
+          }
+          */
+        },
+      },
+    ]);
+  }, []);
   const getDuration = (startDate, endDate) => {
     let noOfDays = (new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 3600 * 24);
     if (noOfDays > 91) {
@@ -106,14 +154,21 @@ const DateRange = ({ values, onFilterChange, t }) => {
     }
   };
 
-  const handleSelect = (ranges) => {
+  const handleSelect = (ranges, e) => {
     const { range1: selection } = ranges;
-    const { startDate, endDate, title, duration } = selection;
-    if (isStartDateFocused(focusedRange[1])) {
+    const { startDate, endDate, title, interval } = selection;
+    if (
+      staticRanges.some((range) => {
+        let newRange = range.range();
+        return differenceInDays(newRange.startDate, startDate) === 0 && differenceInDays(newRange.endDate, endDate) === 0;
+      })
+    ) {
       setSelectionRange(selection);
-    }
-    if (isEndDateFocused(focusedRange[1])) {
-      setSelectionRange({ title, duration, startDate, endDate: addSeconds(addMinutes(addHours(endDate, 23), 59), 59) });
+      setIsModalOpen(false);
+    } else if (isStartDateFocused(focusedRange[1])) {
+      setSelectionRange(selection);
+    } else if (isEndDateFocused(focusedRange[1])) {
+      setSelectionRange({ title, interval, startDate, endDate: addSeconds(addMinutes(addHours(endDate, 23), 59), 59) });
       setIsModalOpen(false);
     }
   };
@@ -129,10 +184,16 @@ const DateRange = ({ values, onFilterChange, t }) => {
 
   return (
     <>
-      <div>{t(`ES_DSS_DATE_RANGE`)}</div>
+      <div className="mbsm">{t(`ES_DSS_DATE_RANGE`)}</div>
       <div className="employee-select-wrap" ref={wrapperRef}>
-        <div className="select">
-          <input className="employee-select-wrap--elipses" type="text" value={values?.title ? `${values?.title}` : ""} readOnly />
+        <div className={`select ${isModalOpen ? "dss-input-active-border" : ""}`}>
+          <input
+            className={`employee-select-wrap--elipses`}
+            type="text"
+            value={values?.title ? `${values?.title}` : ""}
+            readOnly
+            onClick={() => setIsModalOpen((prevState) => !prevState)}
+          />
           <Calender className="cursorPointer" onClick={() => setIsModalOpen((prevState) => !prevState)} />
         </div>
         {isModalOpen && (

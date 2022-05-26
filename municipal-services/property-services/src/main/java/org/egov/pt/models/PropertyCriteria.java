@@ -60,6 +60,7 @@ public class PropertyCriteria {
 	@Builder.Default
 	private Boolean isInboxSearch = false;
 	
+	private Boolean isCitizen;
 	
 	
 }

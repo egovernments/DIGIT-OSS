@@ -8,7 +8,10 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.ServiceRequestRepository;
+import org.egov.tl.service.CalculationService;
 import org.egov.tl.web.models.*;
+import org.egov.tl.web.models.calculation.CalculationRes;
+import org.egov.tl.web.models.calculation.TaxHeadEstimate;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.egov.tl.util.TLConstants.*;
+import static org.springframework.util.StringUtils.capitalize;
 
 @Component
 @Slf4j
@@ -34,12 +38,15 @@ public class NotificationUtil {
 
 	private RestTemplate restTemplate;
 
+	private CalculationService calculationService;
+
 	@Autowired
-	public NotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, RestTemplate restTemplate) {
+	public NotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, RestTemplate restTemplate,CalculationService calculationService) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.producer = producer;
 		this.restTemplate = restTemplate;
+		this.calculationService = calculationService;
 	}
 
 
@@ -93,6 +100,11 @@ public class NotificationUtil {
 			message = getFieldInspectionMsg(license, messageTemplate);
 			break;
 
+		case ACTION_STATUS_PENDINGAPPROVAL:
+			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_PENDING_APPROVAL, localizationMessage);
+			message = getPendingApprovalMsg(license, messageTemplate);
+			break;
+
 		case ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION:
 			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_SENDBACK_CITIZEN, localizationMessage);
 			message = getCitizenSendBack(license, messageTemplate);
@@ -107,8 +119,119 @@ public class NotificationUtil {
 			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED, localizationMessage);
 			message = getCancelledMsg(license, messageTemplate);
 			break;
+
+		case ACTION_STATUS_EXPIRED:
+			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_EXPIRED, localizationMessage);
+			message = getExpiredMsg(requestInfo,license, messageTemplate);
+			break;
+
+		case ACTION_STATUS_MANUAL_EXPIRED:
+			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_MANUAL_EXPIRED, localizationMessage);
+			message = getExpiredMsg(requestInfo,license, messageTemplate);
+			break;
+
 		}
 
+		return message;
+	}
+
+	/**
+	 * Creates customized email message based on tradelicense
+	 *
+	 * @param license
+	 *            The tradeLicense for which message is to be sent
+	 * @param localizationMessage
+	 *            The messages from localization
+	 * @return customized message based on tradelicense
+	 */
+	public String getEmailCustomizedMsg(RequestInfo requestInfo, TradeLicense license, String localizationMessage) {
+		String message = "", messageTemplate;
+		String ACTION_STATUS = license.getAction() + "_" + license.getStatus();
+		switch (ACTION_STATUS) {
+			case ACTION_STATUS_INITIATED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_INITIATED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_APPLIED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_APPLIED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_APPROVED:
+				BigDecimal amountToBePaid = getAmountToBePaid(requestInfo, license);
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_APPROVED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				if (message.contains("{AMOUNT_TO_BE_PAID}")) {
+					message = message.replace("{AMOUNT_TO_BE_PAID}", amountToBePaid.toString());
+				}
+				break;
+
+			case ACTION_STATUS_REJECTED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_REJECTED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_PENDINGAPPROVAL:
+				messageTemplate = getMessageTemplate(NOTIFICATION_PENDING_APPROVAL+ "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_FIELDINSPECTION:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_FIELD_INSPECTION + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_SENDBACK_CITIZEN + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_FORWARD_CITIZENACTIONREQUIRED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_FORWARD_CITIZEN + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_CANCEL_CANCELLED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED + "." + "email", localizationMessage);
+				message = getReplacedMessage(license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_EXPIRED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_EXPIRED + "." + "email", localizationMessage);
+				message = getExpiredMsg(requestInfo,license, messageTemplate);
+				break;
+
+			case ACTION_STATUS_MANUAL_EXPIRED:
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_MANUAL_EXPIRED + "." + "email", localizationMessage);
+				message = getExpiredMsg(requestInfo,license, messageTemplate);
+				break;
+		}
+
+		return message;
+	}
+
+	/**
+	 * Replaces placeholders from message template
+	 * *
+	 * @param license
+	 *            The tradeLicense for which message is to be sent
+	 * @param messageTemplate
+	 *            The messages from localization
+	 * @return customized message with replaced placeholders
+	 * */
+	private String getReplacedMessage(TradeLicense license, String messageTemplate) {
+		String message = messageTemplate.replace("YYYY", license.getBusinessService());
+		message = message.replace("ZZZZ", license.getApplicationNumber());
+
+		if (message.contains("RRRR")) {
+			message = message.replace("RRRR", license.getLicenseNumber());
+		}
+		message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
+		message = message.replace("{PORTAL_LINK}",config.getUiAppHost());
+
+		//CCC - Designaion configurable according to ULB
+		// message = message.replace("CCC","");
 		return message;
 	}
 
@@ -185,9 +308,9 @@ public class NotificationUtil {
 	 * @return customized message for initiate
 	 */
 	private String getInitiatedMsg(TradeLicense license, String message) {
-		// message = message.replace("<1>",license.);
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", license.getApplicationNumber());
+		// message = message.replace("{1}",license.);
+		message = message.replace("{2}", license.getTradeName());
+		message = message.replace("{3}", license.getApplicationNumber());
 
 		return message;
 	}
@@ -202,9 +325,9 @@ public class NotificationUtil {
 	 * @return customized message for apply
 	 */
 	private String getAppliedMsg(TradeLicense license, String message) {
-		// message = message.replace("<1>",);
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", license.getApplicationNumber());
+		// message = message.replace("{1}",);
+		message = message.replace("{2}", license.getTradeName());
+		message = message.replace("{3}", license.getApplicationNumber());
 
 		return message;
 	}
@@ -219,9 +342,24 @@ public class NotificationUtil {
 	 * @return customized message for submitted
 	 */
 	private String getApprovalPendingMsg(TradeLicense license, String message) {
-		// message = message.replace("<1>",);
-		message = message.replace("<2>", license.getTradeName());
+		// message = message.replace("{1}",);
+		message = message.replace("{2}", license.getTradeName());
 
+		return message;
+	}
+
+	/**
+	 * Creates customized message for rejected
+	 *
+	 * @param license
+	 *            tenantId of the tradeLicense
+	 * @param message
+	 *            Message from localization for rejected
+	 * @return customized message for rejected
+	 */
+	private String getPendingApprovalMsg(TradeLicense license, String message) {
+		message = message.replace("{2}", license.getApplicationNumber());
+		message = message.replace("{3}", license.getTradeName());
 		return message;
 	}
 
@@ -235,8 +373,8 @@ public class NotificationUtil {
 	 * @return customized message for approved
 	 */
 	private String getApprovedMsg(TradeLicense license, BigDecimal amountToBePaid, String message) {
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", amountToBePaid.toString());
+		message = message.replace("{2}", license.getTradeName());
+		message = message.replace("{3}", amountToBePaid.toString());
 
 
 		String UIHost = config.getUiAppHost();
@@ -262,8 +400,8 @@ public class NotificationUtil {
 	 * @return customized message for rejected
 	 */
 	private String getRejectedMsg(TradeLicense license, String message) {
-		// message = message.replace("<1>",);
-		message = message.replace("<2>", license.getTradeName());
+		// message = message.replace("{1}",);
+		message = message.replace("{2}", license.getTradeName());
 
 		return message;
 	}
@@ -278,7 +416,7 @@ public class NotificationUtil {
 	 * @return customized message for rejected
 	 */
 	private String getFieldInspectionMsg(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getTradeName());
+		message = message.replace("{2}", license.getTradeName());
 		return message;
 	}
 
@@ -292,8 +430,8 @@ public class NotificationUtil {
 	 * @return customized message for cancelled
 	 */
 	private String getCitizenSendBack(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getApplicationNumber());
-		message = message.replace("<3>", license.getTradeName());
+		message = message.replace("{2}", license.getApplicationNumber());
+		message = message.replace("{3}", license.getTradeName());
 
 		return message;
 	}
@@ -308,8 +446,8 @@ public class NotificationUtil {
 	 * @return customized message for cancelled
 	 */
 	private String getCitizenForward(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getApplicationNumber());
-		message = message.replace("<3>", license.getTradeName());
+		message = message.replace("{2}", license.getApplicationNumber());
+		message = message.replace("{3}", license.getTradeName());
 
 		return message;
 	}
@@ -324,11 +462,31 @@ public class NotificationUtil {
 	 * @return customized message for cancelled
 	 */
 	private String getCancelledMsg(TradeLicense license, String message) {
-		message = message.replace("<2>", license.getTradeName());
-		message = message.replace("<3>", license.getLicenseNumber());
-
+		message = message.replace("{2}", license.getTradeName());
+		message = message.replace("{3}", license.getLicenseNumber());
 		return message;
 	}
+
+
+	private String getExpiredMsg(RequestInfo requestInfo,TradeLicense license, String message) {
+		message = message.replace("{2}", license.getLicenseNumber());
+		String expiryDate = new SimpleDateFormat("dd/MM/yyyy").format(license.getValidTo());
+		message = message.replace("{3}", expiryDate);
+
+		license.setApplicationType(TradeLicense.ApplicationTypeEnum.valueOf(APPLICATION_TYPE_RENEWAL));
+		List<TradeLicense> tradeLicenseList = new ArrayList<>();
+		tradeLicenseList.add(license);
+		CalculationRes calculationRes = calculationService.getEstimation(requestInfo, tradeLicenseList );
+		BigDecimal amountToBePaid = (BigDecimal) calculationRes.getCalculations().get(0).getTaxHeadEstimates().stream().map(TaxHeadEstimate::getEstimateAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
+		message = message.replace("{AMOUNT_PAID}", amountToBePaid.toString());
+
+		message = message.replace("XYZ", capitalize(license.getTenantId().split("\\.")[1]));
+
+		//CCC - Designaion configurable according to ULB
+		// message = message.replace("CCC","");
+		return message;
+	}
+
 
 	/**
 	 * Creates message for completed payment for owners
@@ -341,9 +499,9 @@ public class NotificationUtil {
 	 */
 	public String getOwnerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
 		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_PAYMENT_OWNER, localizationMessages);
-		messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-		messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
-		messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		messageTemplate = messageTemplate.replace("{2}", valMap.get(amountPaidKey));
+		messageTemplate = messageTemplate.replace("{3}", license.getTradeName());
+		messageTemplate = messageTemplate.replace("{4}", valMap.get(receiptNumberKey));
 		return messageTemplate;
 	}
 
@@ -358,9 +516,9 @@ public class NotificationUtil {
 	 */
 	public String getPayerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
 		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_PAYMENT_PAYER, localizationMessages);
-		messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-		messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
-		messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		messageTemplate = messageTemplate.replace("{2}", valMap.get(amountPaidKey));
+		messageTemplate = messageTemplate.replace("{3}", license.getTradeName());
+		messageTemplate = messageTemplate.replace("{4}", valMap.get(receiptNumberKey));
 		return messageTemplate;
 	}
 
@@ -394,7 +552,51 @@ public class NotificationUtil {
 				log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
 				producer.push(config.getSmsNotifTopic(), smsRequest);
-				log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
+				log.info("SMS SENT!");
+			}
+		}
+	}
+
+	/**
+	 * Creates email request for the each owners
+	 *
+	 * @param message
+	 *            The message for the specific tradeLicense
+	 * @param mobileNumberToEmailId
+	 *            Map of mobileNumber to Email Ids
+	 * @return List of EmailRequest
+	 */
+	public List<EmailRequest> createEmailRequest(RequestInfo requestInfo,String message, Map<String, String> mobileNumberToEmailId) {
+
+		List<EmailRequest> emailRequest = new LinkedList<>();
+		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
+			String customizedMsg = message.replace("XXXX",entryset.getValue());
+			customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
+
+			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
+			EmailRequest email = new EmailRequest(requestInfo,emailobj);
+			emailRequest.add(email);
+		}
+		return emailRequest;
+	}
+
+
+
+	/**
+	 * Send the EmailRequest on the EmailNotification kafka topic
+	 *
+	 * @param emailRequestList
+	 *            The list of EmailRequest to be sent
+	 */
+	public void sendEmail(List<EmailRequest> emailRequestList, boolean isEmailEnabled) {
+		if (isEmailEnabled) {
+			if (CollectionUtils.isEmpty(emailRequestList))
+				log.info("Messages from localization couldn't be fetched!");
+			for (EmailRequest emailRequest : emailRequestList) {
+				producer.push(config.getEmailNotifTopic(), emailRequest);
+				log.info("EMAIL notification sent!");
 			}
 		}
 	}
@@ -408,7 +610,7 @@ public class NotificationUtil {
 	 *            The TradeLicense object for which
 	 * @return
 	 */
-	private BigDecimal getAmountToBePaid(RequestInfo requestInfo, TradeLicense license) {
+	BigDecimal getAmountToBePaid(RequestInfo requestInfo, TradeLicense license) {
 
 		LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(getBillUri(license),
 				new RequestInfoWrapper(requestInfo));
@@ -440,7 +642,7 @@ public class NotificationUtil {
 		builder.append("&consumerCode=");
 		builder.append(license.getApplicationNumber());
 		builder.append("&businessService=");
-		builder.append(TRADE_LICENSE_MODULE_CODE);
+		builder.append(license.getBusinessService());
 		return builder;
 	}
 
@@ -456,7 +658,7 @@ public class NotificationUtil {
 	public List<SMSRequest> createSMSRequest(String message, Map<String, String> mobileNumberToOwnerName) {
 		List<SMSRequest> smsRequest = new LinkedList<>();
 		for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
-			String customizedMsg = message.replace("<1>", entryset.getValue());
+			String customizedMsg = message.replace("{1}", entryset.getValue());
 			customizedMsg = customizedMsg.replace(NOTIF_OWNER_NAME_KEY, entryset.getValue());
 			smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
 		}
@@ -518,13 +720,13 @@ public class NotificationUtil {
 	 * @return customized message for field change
 	 */
 	private String getEditMsg(TradeLicense license, List<String> list, String message) {
-		message = message.replace("<APPLICATION_NUMBER>", license.getApplicationNumber());
-		message = message.replace("<FIELDS>", StringUtils.join(list, ","));
+		message = message.replace("{APPLICATION_NUMBER}", license.getApplicationNumber());
+		message = message.replace("{FIELDS}", StringUtils.join(list, ","));
 		return message;
 	}
 
 	private String getEditMsg(TradeLicense license, String message) {
-		message = message.replace("<APPLICATION_NUMBER>", license.getApplicationNumber());
+		message = message.replace("{APPLICATION_NUMBER}", license.getApplicationNumber());
 		return message;
 	}
 
@@ -556,6 +758,79 @@ public class NotificationUtil {
 			return url;
 		}
 		else return res;
+	}
+
+	/**
+	 * Fetches Email Ids of CITIZENs based on the phone number.
+	 *
+	 * @param mobileNumbers
+	 * @param requestInfo
+	 * @param tenantId
+	 * @return  Map of mobileNumber to Email Ids
+	 */
+	public Map<String, String> fetchUserEmailIds(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+		Map<String, String> mapOfPhnoAndEmailIds = new HashMap<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("userType", "CITIZEN");
+		for(String mobileNo: mobileNumbers) {
+			userSearchRequest.put("userName", mobileNo);
+			try {
+				Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
+				if(null != user) {
+					if(JsonPath.read(user, "$.user[0].emailId")!=null) {
+						String email = JsonPath.read(user, "$.user[0].emailId");
+						mapOfPhnoAndEmailIds.put(mobileNo, email);
+					}
+				}else {
+					log.error("Service returned null while fetching user for username - "+mobileNo);
+				}
+			}catch(Exception e) {
+				log.error("Exception while fetching user for username - "+mobileNo);
+				log.error("Exception trace: ",e);
+				continue;
+			}
+		}
+		return mapOfPhnoAndEmailIds;
+	}
+
+
+	/**
+	 * Fetches UUIDs of CITIZENs based on the phone number.
+	 *
+	 * @param mobileNumbers
+	 * @param requestInfo
+	 * @param tenantId
+	 * @return
+	 */
+	public Map<String, String> fetchUserUUIDs(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+		Map<String, String> mapOfPhnoAndUUIDs = new HashMap<>();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("userType", "CITIZEN");
+		for(String mobileNo: mobileNumbers) {
+			userSearchRequest.put("userName", mobileNo);
+			try {
+				Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
+				if(null != user) {
+					String uuid = JsonPath.read(user, "$.user[0].uuid");
+					mapOfPhnoAndUUIDs.put(mobileNo, uuid);
+				}else {
+					log.error("Service returned null while fetching user for username - "+mobileNo);
+				}
+			}catch(Exception e) {
+				log.error("Exception while fetching user for username - "+mobileNo);
+				log.error("Exception trace: ",e);
+				continue;
+			}
+		}
+		return mapOfPhnoAndUUIDs;
 	}
 
 }

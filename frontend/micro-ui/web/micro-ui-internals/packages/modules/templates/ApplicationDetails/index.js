@@ -10,16 +10,19 @@ import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsContent from "./components/ApplicationDetailsContent";
 import ApplicationDetailsToast from "./components/ApplicationDetailsToast";
 import ApplicationDetailsActionBar from "./components/ApplicationDetailsActionBar";
+import ApplicationDetailsWarningPopup from "./components/ApplicationDetailsWarningPopup";
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = tenantId.split(".")[0];
+  const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
   let { id: applicationNumber } = useParams();
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [isEnableLoader, setIsEnableLoader] = useState(false);
+  const [isWarningPop, setWarningPopUp ] = useState(false);
 
   const {
     applicationDetails,
@@ -29,12 +32,18 @@ const ApplicationDetails = (props) => {
     isDataLoading,
     applicationData,
     mutate,
+    nocMutation,
     workflowDetails,
     businessService,
     closeToast,
     moduleCode,
     timelineStatusPrefix,
     forcedActionPrefix,
+    statusAttribute,
+    ActionBarStyle,
+    MenuStyle,
+    paymentsList,
+    showTimeLine=true,
   } = props;
   useEffect(() => {
     if (showToast) {
@@ -44,7 +53,10 @@ const ApplicationDetails = (props) => {
 
   function onActionSelect(action) {
     if (action) {
-      if (action?.redirectionUrll) {
+      if(action?.isWarningPopUp){
+        setWarningPopUp(true);
+      }
+      else if (action?.redirectionUrll) {
         window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/${action?.redirectionUrll?.pathname}`);
       } else if (!action?.redirectionUrl) {
         setShowModal(true);
@@ -54,8 +66,7 @@ const ApplicationDetails = (props) => {
           state: { ...action.redirectionUrl?.state },
         });
       }
-    } else console.log("no action found");
-
+    } 
     setSelectedAction(action);
     setDisplayMenu(false);
   }
@@ -67,18 +78,56 @@ const ApplicationDetails = (props) => {
     setShowModal(false);
   };
 
-  const submitAction = (data) => {
+  const closeWarningPopup = () => {
+    setWarningPopUp(false);
+  }
+
+  const submitAction = async (data, nocData = false, isOBPS = {}) => {
+    setIsEnableLoader(true);
     if (typeof data?.customFunctionToExecute === "function") {
       data?.customFunctionToExecute({ ...data });
     }
-
+    if (nocData !== false && nocMutation) {
+      const nocPrmomises = nocData?.map(noc => {
+        return nocMutation?.mutateAsync(noc)
+      })
+      try {
+        setIsEnableLoader(true);
+        const values = await Promise.all(nocPrmomises);
+        values && values.map((ob) => {
+          Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
+        })
+      }
+      catch (err) {
+        setIsEnableLoader(false);
+        let errorValue = err?.response?.data?.Errors?.[0]?.code ? t(err?.response?.data?.Errors?.[0]?.code) : err?.response?.data?.Errors?.[0]?.message || err;
+        closeModal();
+        setShowToast({ key: "error", error: {message: errorValue}});
+        setTimeout(closeToast, 5000);
+        return;
+      }
+    }
     if (mutate) {
+      setIsEnableLoader(true);
       mutate(data, {
         onError: (error, variables) => {
+          setIsEnableLoader(false);
           setShowToast({ key: "error", error });
           setTimeout(closeToast, 5000);
         },
         onSuccess: (data, variables) => {
+          setIsEnableLoader(false);
+          if (isOBPS?.bpa) {
+            data.selectedAction = selectedAction;
+            history.replace(`/digit-ui/employee/obps/response`, { data: data });
+          }
+          if (isOBPS?.isStakeholder) {
+            data.selectedAction = selectedAction;
+            history.push(`/digit-ui/employee/obps/stakeholder-response`, { data: data });
+          }
+          if (isOBPS?.isNoc) {
+            history.push(`/digit-ui/employee/noc/response`, { data: data });
+          }
           setShowToast({ key: "success", action: selectedAction });
           setTimeout(closeToast, 5000);
           queryClient.clear();
@@ -90,7 +139,7 @@ const ApplicationDetails = (props) => {
     closeModal();
   };
 
-  if (isLoading) {
+  if (isLoading || isEnableLoader) {
     return <Loader />;
   }
 
@@ -105,6 +154,9 @@ const ApplicationDetails = (props) => {
             applicationData={applicationData}
             businessService={businessService}
             timelineStatusPrefix={timelineStatusPrefix}
+            statusAttribute={statusAttribute}
+            paymentsList={paymentsList}
+            showTimeLine={showTimeLine}
           />
           {showModal ? (
             <ActionModal
@@ -113,6 +165,7 @@ const ApplicationDetails = (props) => {
               tenantId={tenantId}
               state={state}
               id={applicationNumber}
+              applicationDetails={applicationDetails}
               applicationData={applicationDetails?.applicationData}
               closeModal={closeModal}
               submitAction={submitAction}
@@ -120,6 +173,15 @@ const ApplicationDetails = (props) => {
               businessService={businessService}
               workflowDetails={workflowDetails}
               moduleCode={moduleCode}
+            />
+          ) : null}
+          {isWarningPop ? (
+            <ApplicationDetailsWarningPopup 
+            action={selectedAction}
+            workflowDetails={workflowDetails}
+            businessService={businessService}
+            isWarningPop={isWarningPop}
+            closeWarningPopup={closeWarningPopup}
             />
           ) : null}
           <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} />
@@ -130,6 +192,8 @@ const ApplicationDetails = (props) => {
             setDisplayMenu={setDisplayMenu}
             businessService={businessService}
             forcedActionPrefix={forcedActionPrefix}
+            ActionBarStyle={ActionBarStyle}
+            MenuStyle={MenuStyle}
           />
         </React.Fragment>
       ) : (

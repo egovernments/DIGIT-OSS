@@ -231,6 +231,20 @@ config:
       - work-dir: "core-services/egov-document-uploader/src/main/resources/db"
         image-name: "egov-document-uploader-db"
 
+  - name: "builds/digit-dev/core-services/national-dashboard-ingest"
+    build:
+      - work-dir: "core-services/national-dashboard-ingest"
+        image-name: "national-dashboard-ingest"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "core-services/national-dashboard-ingest/src/main/resources/db"
+        image-name: "national-dashboard-ingest-db"
+
+  - name: "builds/digit-dev/core-services/national-dashboard-kafka-pipeline"
+    build:
+      - work-dir: "core-services/national-dashboard-kafka-pipeline"
+        image-name: "national-dashboard-kafka-pipeline"
+        dockerfile: "build/maven/Dockerfile"
+
   - name: "builds/digit-dev/core-services/egov-survey-services"
     build:
       - work-dir: "core-services/egov-survey-services"
@@ -238,6 +252,7 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "core-services/egov-survey-services/src/main/resources/db"
         image-name: "egov-survey-services-db"
+
 
   - name: "builds/digit-dev/core-services/report"
     build:
@@ -277,8 +292,7 @@ config:
         image-name: "egov-user-event"
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "core-services/egov-user-event/src/main/resources/db"
-        image-name: "egov-user-event-db"
-        dockerfile: "build/maven/Dockerfile"       
+        image-name: "egov-user-event-db"       
 
   - name: "builds/digit-dev/core-services/pdf-service"
     build:
@@ -335,6 +349,11 @@ config:
     build:
       - work-dir: "core-services/libraries/enc-client"
         image-name: "enc-client"
+
+  - name: "builds/digit-dev/core-services/libraries/services-common"
+    build:
+      - work-dir: "core-services/libraries/services-common"
+        image-name: "services-common"
         
   - name: "builds/digit-dev/core-services/libraries/tracer"
     build:
@@ -353,6 +372,14 @@ config:
         image-name: "xstate-chatbot"
       - work-dir: "core-services/xstate-chatbot/nodejs/db"
         image-name: "xstate-chatbot-db"
+
+  - name: "builds/digit-dev/core-services/xstate-webchat"
+    build:
+      - work-dir: "core-services/xstate-webchat/nodejs"
+        image-name: "xstate-webchat"
+      - work-dir: "core-services/xstate-webchat/nodejs/db"
+        image-name: "xstate-webchat-db"
+
         
 #Municipal Services
 
@@ -554,6 +581,14 @@ config:
       - work-dir: "municipal-services/inbox"
         image-name: "inbox"
         dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/digit-dev/municipal-services/birth-death-services"
+    build:
+      - work-dir: "municipal-services/birth-death-services"
+        image-name: "birth-death-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "municipal-services/birth-death-services/src/main/resources/db"
+        image-name: "birth-death-services-db"
  
  # Utilities
  
@@ -670,7 +705,7 @@ config:
 
   - name: builds/digit-dev/frontend/micro-ui/digit-ui
     build:
-      - work-dir: .
+      - work-dir: frontend/micro-ui/
         dockerfile: frontend/micro-ui/web/docker/Dockerfile
         image-name: digit-ui
 
@@ -695,4 +730,11 @@ config:
         dockerfile: edcr/service/Dockerfile
         image-name: egov-edcr
               
+  #Finance
+   
+  - name: builds/digit-dev/finance/egov-finance
+    build:
+      - work-dir: finance/egov
+        image-name: egov-finance
+        dockerfile: finance/Dockerfile
 

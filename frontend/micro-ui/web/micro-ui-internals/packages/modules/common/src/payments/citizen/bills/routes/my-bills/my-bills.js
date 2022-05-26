@@ -42,15 +42,12 @@ export const BillList = ({ billsList, currentPath, businessService }) => {
         billableApplicationsObj[app[keyForConsumerCode]] = app;
       });
 
-      //console.log("from PT", billableProps);
 
       billsList.forEach((bill) => {
         billsListObj[bill.consumerCode] = bill;
       });
-      //console.log("from PT", billsListObj);
 
       const newBillsList = billableIDs.map((e) => ({ ...billsListObj[e], ...billableApplicationsObj[e] }));
-      //console.log(newBillsList);
       setApplicationList(newBillsList);
     }
   }, [searchResult.data, getKeyNotesConfig]);
@@ -62,7 +59,7 @@ export const BillList = ({ billsList, currentPath, businessService }) => {
   return (
     <React.Fragment>
       <div className="static">
-        <div className="static-wrapper">
+        {/* <div className="static-wrapper"> */}
           <Header>{t("CS_TITLE_MY_BILLS") + ` (${applicationList.length})`}</Header>
           {applicationList?.length > 0 &&
             getKeyNotesConfig &&
@@ -72,17 +69,17 @@ export const BillList = ({ billsList, currentPath, businessService }) => {
               </div>
             ))}
           {!applicationList?.length > 0 && <p style={{ paddingLeft: "16px" }}>{t("CS_BILLS_TEXT_NO_BILLS_FOUND")}</p>}
-        </div>
+        {/* </div> */}
         {businessService === "PT" && (
           <p
             style={{
               paddingLeft: "16px",
               paddingTop: "16px",
-              position: "fixed",
-              bottom: "40px",
-              backgroundColor: "#e3e3e3",
-              textAlign: "left",
-              width: "100%",
+              // position: "fixed",
+              // bottom: "40px",
+              // backgroundColor: "#e3e3e3",
+              // textAlign: "left",
+              // width: "100%",
             }}
           >
             {t("PT_TEXT_NOT_ABLE_TO_FIND_THE_PROPERTY")}

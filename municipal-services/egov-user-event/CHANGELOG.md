@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.0 - 2022-05-12
+
+- Enhanced the search API to support date filter
+
+## 1.1.4 - 2022-01-13
+
+- Updated to log4j2 version 2.17.1
+
+## 1.1.4 - 2021-12-15
+
+- Enchance the search API to give filtered result for open search request.
+
+
 ## 1.1.3 - 2021-05-11
 
 - Fixed security issue of untrusted data pass as user input.

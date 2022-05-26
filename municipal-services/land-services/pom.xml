@@ -9,9 +9,10 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>land-services</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<name>land-services</name>
 	<properties>
+		<log4j2.version>2.17.1</log4j2.version>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>

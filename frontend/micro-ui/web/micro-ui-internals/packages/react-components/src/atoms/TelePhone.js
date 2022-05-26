@@ -7,8 +7,8 @@ const TelePhone = ({ mobile, text }) => (
     {text}
     <div className="telephone">
       <div className="call">
-        <a href={`tel:${mobile}`}>{mobile}</a>
-        <Phone />
+        <Phone fillcolor={"FFFFFF"} style={{marginLeft:"0px"}} />
+        <a href={`tel:${mobile}`}>{"+91"} {mobile}</a>
       </div>
     </div>
   </React.Fragment>

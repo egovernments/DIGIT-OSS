@@ -23,10 +23,13 @@ import org.egov.swcalculation.web.models.TaxHeadEstimate;
 import org.egov.swcalculation.web.models.TaxHeadMaster;
 import org.egov.swcalculation.repository.SewerageCalculatorDao;
 import org.egov.swcalculation.util.SWCalculationUtil;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.swcalculation.constants.SWCalculationConstant.*;
 
 @Service
 @Slf4j
@@ -258,17 +261,26 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 	 */
 	public List<Calculation> applyAdhocTax(AdhocTaxReq adhocTaxReq) {
 		List<TaxHeadEstimate> estimates = new ArrayList<>();
-		if (!(adhocTaxReq.getAdhocpenalty().compareTo(BigDecimal.ZERO) == 0))
-			estimates.add(TaxHeadEstimate.builder().taxHeadCode(SWCalculationConstant.SW_TIME_ADHOC_PENALTY)
+		String businessService = adhocTaxReq.getBusinessService();
+		if(!businessService.equalsIgnoreCase(SERVICE_FIELD_VALUE_SW) && !businessService.equalsIgnoreCase(ONE_TIME_FEE_SERVICE_FIELD))
+			throw new CustomException("INVALID_BUSINESSSERVICE", "Provide businessService is invalid");
+
+		if (!(adhocTaxReq.getAdhocpenalty().compareTo(BigDecimal.ZERO) == 0)){
+			String penaltyTaxhead = businessService.equals(SERVICE_FIELD_VALUE_SW) ? SW_TIME_ADHOC_PENALTY : SW_ADHOC_PENALTY;
+			estimates.add(TaxHeadEstimate.builder().taxHeadCode(penaltyTaxhead)
 					.estimateAmount(adhocTaxReq.getAdhocpenalty().setScale(2, 2)).build());
-		if (!(adhocTaxReq.getAdhocrebate().compareTo(BigDecimal.ZERO) == 0))
-			estimates.add(TaxHeadEstimate.builder().taxHeadCode(SWCalculationConstant.SW_TIME_ADHOC_REBATE)
+		}
+		if (!(adhocTaxReq.getAdhocrebate().compareTo(BigDecimal.ZERO) == 0)){
+			String rebateTaxhead = businessService.equals(SERVICE_FIELD_VALUE_SW) ? SW_TIME_ADHOC_REBATE : SW_ADHOC_REBATE;
+			estimates.add(TaxHeadEstimate.builder().taxHeadCode(rebateTaxhead)
 					.estimateAmount(adhocTaxReq.getAdhocrebate().setScale(2, 2).negate()).build());
+		}
+
 		Calculation calculation = Calculation.builder()
 				.tenantId(adhocTaxReq.getRequestInfo().getUserInfo().getTenantId())
 				.connectionNo(adhocTaxReq.getConsumerCode()).taxHeadEstimates(estimates).build();
 		List<Calculation> calculations = Collections.singletonList(calculation);
-		return demandService.updateDemandForAdhocTax(adhocTaxReq.getRequestInfo(), calculations);
+		return demandService.updateDemandForAdhocTax(adhocTaxReq.getRequestInfo(), calculations, businessService);
 	}
 
 }

@@ -64,14 +64,13 @@ const renderSearchConnectionTable = async (state, dispatch) => {
         }
         //Read metered & non-metered demand expiry date and assign value.
         payloadbillingPeriod = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
-        console.log(payloadbillingPeriod);
-      } catch (err) { console.log(err) }
+      } catch (err) {  }
       let getSearchResult = getSearchResults(queryObject)
       let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;
-      try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }
-      try { searcSewerageConnectionResults = await getSearchResultForSewerage } catch (error) { finalArray = []; console.log(error) }
+      try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = [];  }
+      try { searcSewerageConnectionResults = await getSearchResultForSewerage } catch (error) { finalArray = [];  }
       const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = serviceConst.WATER; return e }) : []
       const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = serviceConst.SEWERAGE; return e }) : [];
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
@@ -177,7 +176,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
 
       }
       showConnectionResults(finalArray, dispatch)
-    } catch (err) { console.log(err) }
+    } catch (err) { }
   }
 }
 
@@ -235,8 +234,8 @@ const renderSearchApplicationTable = async (state, dispatch) => {
       }
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;
-      try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }
-      try { searcSewerageConnectionResults = await getSearchResultForSewerage } catch (error) { finalArray = []; console.log(error) }
+      try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = [];  }
+      try { searcSewerageConnectionResults = await getSearchResultForSewerage } catch (error) { finalArray = [];  }
       const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = serviceConst.WATER; return e }) : []
       const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = serviceConst.SEWERAGE; return e }) : [];
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
@@ -313,14 +312,14 @@ const renderSearchApplicationTable = async (state, dispatch) => {
         }
       }
       showApplicationResults(finalArray, dispatch)
-    } catch (err) { console.log(err) }
+    } catch (err) { }
   }
 }
 
 
 
 
-const handleAddress = (element) => {
+export const handleAddress = (element) => {
   let city = (
     element.property &&
     element.property !== "NA" &&

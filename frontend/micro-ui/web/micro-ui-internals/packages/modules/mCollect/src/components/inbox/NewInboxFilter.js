@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Dropdown, RadioButtons, ActionBar, RemoveableTag, CloseSvg, CheckBox, Localities, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Dropdown, RadioButtons, ActionBar, RemoveableTag, CloseSvg, CheckBox, Localities, SubmitBar, RefreshSVG } from "@egovernments/digit-ui-react-components";
 
 import { useTranslation } from "react-i18next";
 
 import Status from "./Status";
 import ServiceCategory from "./ServiceCategory";
 import _ from "lodash";
+import { stringReplaceAll } from "../../utils";
 
-const Filter = ({ searchParams, onFilterChange, defaultSearchParams, ...props }) => {
+const Filter = ({ searchParams, onFilterChange,onRefresh, defaultSearchParams, ...props }) => {
   const { t } = useTranslation();
 
   const [_searchParams, setSearchParams] = useState(() => searchParams);
   const [ clearCheck, setclearCheck] = useState(false);
+  const [selectedCategories, setselectedCategories] = useState([]);
 
   const localParamChange = (filterParam) => {
     setclearCheck(false);
@@ -28,12 +30,17 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, ...props })
     setclearCheck(true);
   };
 
+  const Refresh = () => {
+    onRefresh(defaultSearchParams,true);
+    setclearCheck(true);
+  }
+
   return (
     <React.Fragment>
       <div className="filter">
         <div className="filter-card">
           <div className="heading" style={{ alignItems: "center" }}>
-            <div className="filter-label" style={{ display: "flex", alignItems: "center" }}>
+            <div className="filter-label" style={{ display: "flex", alignItems: "center", marginTop:"auto"}}>
               <span>
                 <svg width="17" height="17" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -59,9 +66,14 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, ...props })
               </span>
             )}
             {props.type === "mobile" && (
-              <span onClick={props.onClose}>
+            <div>
+              <span onClick={props.Close}>
                 <CloseSvg />
               </span>
+              <span className="clear-search" onClick={Refresh} style={{ border: "1px solid #e0e0e0", padding: "6px", marginTop:"5px" }}>
+                <RefreshSVG />
+              </span>
+            </div>
             )}
           </div>
           <div>
@@ -79,13 +91,26 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, ...props })
             </div>
             <div>
               <ServiceCategory
-                _searchParams={_searchParams}
+                searchParams={_searchParams}
                 setclearCheck={setclearCheck}
+                selectedCategory={selectedCategories}
                 businessServices={_searchParams.services}
                 clearCheck={clearCheck}
+                setSearchParams={setSearchParams}
+                setselectedCategories={setselectedCategories}
                 onAssignmentChange={(e, businessService) => {
-                  if (e.target.checked) localParamChange({ businessService: [..._searchParams?.businessService, businessService?.code] });
-                  else localParamChange({ businessService: _searchParams?.businessService.filter((e) => e !== businessService?.code) });
+                  let filterParam = [];
+                  let selectedCategory = [];
+                  _searchParams["businessService"] = [];
+                  e && e.map((ob) => {
+                    filterParam.push(ob?.[1]?.code);
+                    selectedCategory.push({"code":ob?.[1]?.code, "i18nKey":`BILLINGSERVICE_BUSINESSSERVICE_${stringReplaceAll(ob?.[1]?.code,".","_").toUpperCase()}`});
+                  })
+                  let _new = { ..._searchParams, businessService: [...filterParam] };
+                  setSearchParams({..._new})
+                  setselectedCategories([...selectedCategory])
+                  // if (e.target.checked) localParamChange({ businessService: [..._searchParams?.businessService, businessService?.code] });
+                  // else localParamChange({ businessService: _searchParams?.businessService.filter((e) => e !== businessService?.code) });
                 }}
               />
             </div>

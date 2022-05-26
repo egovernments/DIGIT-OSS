@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.repository.ServiceRequestRepository;
@@ -187,8 +188,8 @@ public class UserService {
     public Set<String> getUUidFromUserName(BPA bpa){
 
         String tenantId = bpa.getTenantId();
-        List<OwnerInfo> ownerInfos = bpa.getLandInfo().getOwners();
-
+      //  List<OwnerInfo> ownerInfos = bpa.getLandInfo().getOwners();
+        List<OwnerInfo> ownerInfos = bpa.getLandInfo().getOwners().stream().filter(ow -> ow.getActive()).collect(Collectors.toList());
         Set<String> mobileNumbers = new HashSet<>();
 
         // Get all unique mobileNumbers in the license

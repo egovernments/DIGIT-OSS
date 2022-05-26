@@ -12,6 +12,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.vendor.config.VendorConfiguration;
 import org.egov.vendor.repository.VendorRepository;
+import org.egov.vendor.util.VendorUtil;
 import org.egov.vendor.validator.VendorValidator;
 import org.egov.vendor.web.model.Vendor;
 import org.egov.vendor.web.model.VendorRequest;
@@ -19,6 +20,7 @@ import org.egov.vendor.web.model.VendorSearchCriteria;
 import org.egov.vendor.web.model.user.User;
 import org.egov.vendor.web.model.user.UserDetailResponse;
 import org.egov.vendor.web.model.vehicle.Vehicle;
+import org.egov.vendor.web.model.vehicle.VehicleSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -29,6 +31,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class VendorService {
+
+	@Autowired
+    private VendorUtil util;
 
 	@Autowired
 	private VendorRepository vendorRepository;
@@ -59,8 +64,8 @@ public class VendorService {
 		if (vendorRequest.getVendor().getTenantId().split("\\.").length == 1) {
 			throw new CustomException("Invalid TenantId", " Application cannot be create at StateLevel");
 		}
-
-		vendorValidator.validateCreate(vendorRequest);
+		Object mdmsData = util.mDMSCall(requestInfo, tenantId);
+		vendorValidator.validateCreate(vendorRequest, mdmsData);
 		enrichmentService.enrichCreate(vendorRequest);
 		vendorRepository.save(vendorRequest);
 		return vendorRequest.getVendor();
@@ -87,8 +92,25 @@ public class VendorService {
 			}
 		}
 		
-		if(!CollectionUtils.isEmpty(criteria.getVehicleRegistrationNumber()) || StringUtils.hasLength(criteria.getVehicleType())) {
-			List<Vehicle> vehicles = vehicleService.getVehicles(null, criteria.getVehicleRegistrationNumber(), criteria.getVehicleType(), requestInfo, criteria.getTenantId());
+		if (!CollectionUtils.isEmpty(criteria.getVehicleRegistrationNumber())
+				|| StringUtils.hasLength(criteria.getVehicleType())
+				|| StringUtils.hasLength(criteria.getVehicleCapacity())) {
+			
+			VehicleSearchCriteria vehicleSearchCriteria=new VehicleSearchCriteria();
+			vehicleSearchCriteria = VehicleSearchCriteria.builder()
+					.registrationNumber(criteria.getVehicleRegistrationNumber())
+					.vehicleType(criteria.getVehicleType())
+					.vehicleCapacity(criteria.getVehicleCapacity())
+					.tenantId(criteria.getTenantId()).build();
+			
+			List<Vehicle> vehicles = vehicleService.getVehicles(vehicleSearchCriteria,requestInfo);
+			
+			/*
+			 * List<Vehicle> vehicles = vehicleService.getVehicles(null,
+			 * criteria.getVehicleRegistrationNumber(), criteria.getVehicleType(),
+			 * criteria.getVehicleCapacity(), requestInfo, criteria.getTenantId());
+			 */	
+			
 			if(CollectionUtils.isEmpty(vehicles)) {
 				return new ArrayList<Vendor>();
 			}
@@ -97,7 +119,6 @@ public class VendorService {
 			}else {
 				criteria.getVehicleIds().addAll(vehicles.stream().map(Vehicle::getId).collect(Collectors.toList()));
 			}
-			
 			
 		}
 		

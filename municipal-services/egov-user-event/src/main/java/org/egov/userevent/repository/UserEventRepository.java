@@ -43,6 +43,7 @@ public class UserEventRepository {
 		Map<String, Object> preparedStatementValues = new HashMap<>();
 		String query = queryBuilder.getSearchQuery(criteria, preparedStatementValues);
 		log.info("Query: "+query);
+		log.info("Search preparedStatementValues: "+preparedStatementValues.toString());
 		List<Event> events = new ArrayList<>();
 		try {
 			events = namedParameterJdbcTemplate.query(query, preparedStatementValues, rowMapper);
@@ -64,6 +65,7 @@ public class UserEventRepository {
 		String insertQuery = queryBuilder.getInserIfNotExistsQuery(criteria, preparedStatementValues);
 		String query = queryBuilder.getCountQuery(criteria, preparedStatementValues);
 		log.info("Query: "+query);
+		log.info("Notification count preparedStatementValues: "+preparedStatementValues.toString());
 		NotificationCountResponse response = null;
 		try {
 			namedParameterJdbcTemplate.update(insertQuery, preparedStatementValues);
@@ -73,7 +75,23 @@ public class UserEventRepository {
 		}
 		return response;
 	}
-	
-	
 
+
+	public Integer fetchTotalEventCount(EventSearchCriteria criteria) {
+		Map<String, Object> preparedStatementValues = new HashMap<>();
+		criteria.setIsEventsCountCall(Boolean.TRUE);
+		String query = queryBuilder.getSearchQuery(criteria, preparedStatementValues);
+		query = queryBuilder.addCountWrapper(query);
+		criteria.setIsEventsCountCall(Boolean.FALSE);
+		log.info("Count Query: " + query);
+		log.info("Count preparedStatementValues: "+preparedStatementValues.toString());
+		Integer totalCount = 0;
+		try {
+			totalCount = namedParameterJdbcTemplate.queryForObject(query, preparedStatementValues, Integer.class);
+		}catch(Exception e) {
+			log.error("Error while fetching total event count from db: ", e);
+		}
+
+		return totalCount;
+	}
 }

@@ -13,7 +13,6 @@ const useServiceDefs = (tenantId, moduleCode) => {
       SessionStorage.set("serviceDefs", serviceDefs);
 
       const serviceDefsWithKeys = serviceDefs.map((def) => ({ ...def, i18nKey: t("SERVICEDEFS." + def.serviceCode.toUpperCase()) }));
-      // console.log("find serviceDefs here", serviceDefsWithKeys);
       setLocalMenu(serviceDefsWithKeys);
     })();
   }, [t, tenantId, moduleCode]);

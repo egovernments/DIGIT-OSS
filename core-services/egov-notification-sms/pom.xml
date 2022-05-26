@@ -4,7 +4,7 @@
 
     <groupId>org.egov</groupId>
     <artifactId>egov-notification-sms</artifactId>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.1.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>egov-notification-sms</name>
@@ -17,6 +17,7 @@
     </parent>
 
     <properties>
+        <log4j2.version>2.17.1</log4j2.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>

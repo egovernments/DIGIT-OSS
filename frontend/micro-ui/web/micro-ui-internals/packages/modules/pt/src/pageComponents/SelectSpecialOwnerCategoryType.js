@@ -10,7 +10,7 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
 
   let index = isMutation ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const isUpdateProperty = formData?.isUpdateProperty || false;
   let isEditProperty = formData?.isEditProperty || false;
   const [ownerType, setOwnerType] = useState(
@@ -18,6 +18,13 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
   );
   const { data: Menu, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType");
   Menu ? Menu.sort((a, b) => a.name.localeCompare(b.name)) : "";
+  if (Menu?.length > 0) {
+    Menu?.forEach((data, index) => {
+      if (data.code == "NONE") data.order = 0
+      else data.order = index + 1
+    });
+    Menu.sort(function (a, b) { return a.order - b.order; });
+  }
 
   const onSkip = () => onSelect();
 

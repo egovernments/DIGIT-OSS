@@ -1,6 +1,9 @@
 package org.egov.vehicle.trip.web.model;
 
+import java.util.List;
+
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -27,13 +30,21 @@ public class VehicleTripRequest {
 	@JsonProperty("RequestInfo")
 	private RequestInfo requestInfo;
 	
+	//	@NotNull
+	//	@Valid
+	//	@JsonProperty("vehicleTrip")
+	//	private VehicleTrip vehicleTrip;
+	
 	@NotNull
+	@NotEmpty
 	@Valid
 	@JsonProperty("vehicleTrip")
-	private VehicleTrip vehicleTrip;
+	private List<VehicleTrip> vehicleTrip;
 
 	
-	@JsonProperty("workflow")
+	
+	@JsonProperty("workflow") 
 	private Workflow workflow;
+	 
 
 }

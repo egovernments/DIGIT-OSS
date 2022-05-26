@@ -9,6 +9,18 @@ import { ComplaintIcon, CitizenHomeCard, Loader } from "@egovernments/digit-ui-r
 import { PGR_CITIZEN_CREATE_COMPLAINT } from "./constants/Citizen";
 import { useTranslation } from "react-i18next";
 import { LOCALE } from "./constants/Localization";
+import { ComplaintDetails } from "./pages/employee/ComplaintDetails";
+import { CreateComplaint as CreateComplaintEmp } from "./pages/employee/CreateComplaint";
+import Inbox from "./pages/employee/Inbox";
+import ResponseEmp from "./pages/employee/Response";
+
+import { CreateComplaint as CreateComplaintCitizen } from "./pages/citizen/Create";
+import { ComplaintsList } from "./pages/citizen/ComplaintsList";
+import ComplaintDetailsPage from "./pages/citizen/ComplaintDetails";
+import SelectRating from "./pages/citizen/Rating/SelectRating";
+import ResponseCitizen from "./pages/citizen/Response";
+
+
 export const PGRReducers = getRootReducer;
 
 const PGRModule = ({ stateCode, userType, tenants }) => {
@@ -55,6 +67,15 @@ const componentsToRegister = {
   PGRModule,
   PGRLinks,
   PGRCard,
+  PGRComplaintDetails : ComplaintDetails,
+  PGRCreateComplaintEmp : CreateComplaintEmp,
+  PGRInbox : Inbox,
+  PGRResponseEmp : ResponseEmp,
+  PGRCreateComplaintCitizen : CreateComplaintCitizen,
+  PGRComplaintsList : ComplaintsList,
+  PGRComplaintDetailsPage : ComplaintDetailsPage,
+  PGRSelectRating : SelectRating,
+  PGRResponseCitzen : ResponseCitizen
 };
 
 export const initPGRComponents = () => {

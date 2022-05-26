@@ -126,7 +126,34 @@ const variables = {
     pdf: '#ff0000',
     email: '#ff0000',
 
-    colors: [{'dark': '#9C27B0','light': 'rgba(156, 39, 176, 0.24)'},{'dark':'#F44336','light': 'rgba(244, 67, 54, 0.24)'},{'dark':'#4CAF50','light': 'rgba(76, 175, 80, 0.24)'},{'dark':'#FFC107','light': 'rgba(255, 193, 7, 0.24)'},{'dark':'#009688','light': 'rgba(0, 150, 136, 0.24)'},{'dark': '#2196F3','light': 'rgba(33, 150, 243, 0.24)'}]
+    colors: [
+        {'dark': '#0BDE85','light': 'rgba(11, 222, 133, 0.14)'},
+        {'dark':'#FFCA45','light': 'rgba(255, 202, 69, 0.24)'},
+        {'dark':'#8A53FF','light': 'rgba(138, 83, 255, 0.24)'},
+        {'dark':'#048BD0','light': 'rgba(4, 139, 208, 0.24)'},
+        {'dark': '#FF7245','light': 'rgba(255, 114, 69, 0.24)'},
+        {'dark': '#53FFEA','light': 'rgba(83, 255, 234, 0.14)'},
+        {'dark': '#DEBC0B','light': 'rgba(222, 188, 11, 0.24)'},
+        { 'dark': '#9FFF53', 'light': 'rgba(159, 255, 83, 0.24)' },
+        { 'dark': '#787878', 'light': 'rgb(120,120,120,0.35)' },
+        { 'dark': '#DEBC0B', 'light': 'rgba(222, 188, 11, 0.24)' },
+        { 'dark': '#DEBC0B', 'light': 'rgba(222, 188, 11, 0.24)' }
+    
+    ],
+    iconColors: [
+        {'dark': '#0C9D95','light': 'rgba(12, 157, 149, 0.85)'},
+        {'dark':'#FBC02D','light': 'rgba(251, 192, 45, 0.85)'},
+        {'dark':'#4B1FA5','light': 'rgba(75, 31, 165, 0.85)'},
+        {'dark':'#048BD0','light': 'rgba(4, 139, 208, 0.85)'},
+        {'dark': '#EF7C5B','light': 'rgba(239, 124, 91, 0.85)'},
+        {'dark': '#51D2C6','light': 'rgba(81, 210, 198, 0.85)'},
+        {'dark': '#B7A545','light': 'rgba(183, 165, 69, 0.85)'},
+        {'dark': '#6E8459','light': 'rgba(110, 132, 89, 1)'},
+        {'dark': '#787878','light': 'rgba(120, 120, 120, 0.85)'},
+        {'dark': '#B7A545','light': 'rgba(183, 165, 69, 0.85)'},
+        {'dark': '#B7A545','light': 'rgba(183, 165, 69, 0.85)'},
+        
+    ]
     
 }
 

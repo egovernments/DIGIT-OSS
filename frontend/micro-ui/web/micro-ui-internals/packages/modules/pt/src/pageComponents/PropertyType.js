@@ -15,7 +15,7 @@ import { stringReplaceAll } from "../utils";
 const PropertyType = ({ t, config, onSelect, userType, formData, setError, clearErrors, formState, onBlur }) => {
   const [BuildingType, setBuildingType] = useState(formData?.PropertyType);
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = tenantId.split(".")[0];
+  const stateId = Digit.ULBService.getStateId();
   const { data: Menu = {}, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "PTPropertyType") || {};
   let proptype = [];
   proptype = Menu?.PropertyTax?.PropertyType;
@@ -35,7 +35,6 @@ const PropertyType = ({ t, config, onSelect, userType, formData, setError, clear
         }
       }
       menu.sort((a, b) => a.i18nKey.split("_").pop().localeCompare(b.i18nKey.split("_").pop()));
-      //console.log(menu);
       return menu;
     }
   }
@@ -45,7 +44,6 @@ const PropertyType = ({ t, config, onSelect, userType, formData, setError, clear
 
   const onSkip = () => onSelect();
 
-  // const propertyOwnerShipCategory = Digit.Hooks.pt.useMDMS("pb", "PropertyTax", "OwnerShipCategory", {});
   function selectBuildingType(value) {
     setBuildingType(value);
   }

@@ -1,15 +1,7 @@
 package com.tarento.analytics.handler;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -18,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tarento.analytics.helper.ComputedFieldFactory;
 import com.tarento.analytics.helper.IComputedField;
 import com.tarento.analytics.model.ComputedFields;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +57,10 @@ public class LineChartResponseHandler implements IResponseHandler {
         }
 
         String symbol = chartNode.get(IResponseHandler.VALUE_TYPE).asText();
+        String symbolFromPathDataTypeMap = symbol;
         ArrayNode aggrsPaths = (ArrayNode) chartNode.get(IResponseHandler.AGGS_PATH);
+        ArrayNode pathDataTypeMap = (ArrayNode) chartNode.get(TYPE_MAPPING);
+        
         Set<String> plotKeys = new LinkedHashSet<>();
         boolean isCumulative = chartNode.get("isCumulative").asBoolean();
 
@@ -72,78 +68,185 @@ public class LineChartResponseHandler implements IResponseHandler {
         boolean executeComputedFields = computedFields !=null && computedFields.isArray();
 
 
-        aggrsPaths.forEach(headerPath -> {
+        //aggrsPaths.forEach(headerPath -> {
+        for(JsonNode headerPath : aggrsPaths){
             List<JsonNode> aggrNodes = aggregationNode.findValues(headerPath.asText());
+            
+            
+            
+            JsonNode datatype = null;
+            if(pathDataTypeMap!=null) {
+            	datatype = pathDataTypeMap.findValue(headerPath.asText());
+            	
+            }
+            
+            if(datatype!=null) {
+            	symbolFromPathDataTypeMap=datatype.asText();
+            }
+            else {
+            	symbolFromPathDataTypeMap=symbol;
+            }
 
             Map<String, Double> plotMap = new LinkedHashMap<>();
+            Map<String, Double> multiAggrPlotMap = new LinkedHashMap<>();
             List<Double> totalValues = new ArrayList<>();
-            aggrNodes.stream().forEach(aggrNode -> {
+            Set<String> finalBucketKeys = new LinkedHashSet<>();
+
+            // For multi aggr, find all plot keys first
+            enrichBucketKeys(aggrNodes, finalBucketKeys, interval);
+            initializeMultiAggrPlotMap(multiAggrPlotMap, finalBucketKeys);
+
+            for(JsonNode aggrNode : aggrNodes) {
                 if (aggrNode.findValues(IResponseHandler.BUCKETS).size() > 0) {
-
                     ArrayNode buckets = (ArrayNode) aggrNode.findValues(IResponseHandler.BUCKETS).get(0);
-                    buckets.forEach(bucket -> {
-                        String bkey = bucket.findValue(IResponseHandler.KEY).asText();
-                        String key = getIntervalKey(bkey, Constants.Interval.valueOf(interval));
+                    for(JsonNode bucket : buckets){
+                            String bkey = bucket.findValue(IResponseHandler.KEY).asText();
+                            String key = getIntervalKey(bkey, Constants.Interval.valueOf(interval));
 
-                        plotKeys.add(key);
-                        double previousVal = !isCumulative ? 0.0 : (totalValues.size()>0 ? totalValues.get(totalValues.size()-1):0.0);
+                            plotKeys.add(key);
+                            double previousVal = !isCumulative ? 0.0 : (totalValues.size() > 0 ? totalValues.get(totalValues.size() - 1) : 0.0);
 
-                        double value = 0.0;
-                        if(executeComputedFields){
-                            try {
+                            double value = 0.0;
+                            if (executeComputedFields) {
+                                try {
 
-                                List<ComputedFields> computedFieldsList = mapper.readValue(computedFields.toString(), new TypeReference<List<ComputedFields>>(){});
+                                    List<ComputedFields> computedFieldsList = mapper.readValue(computedFields.toString(), new TypeReference<List<ComputedFields>>() {
+                                    });
 
-                                for(ComputedFields cfs :computedFieldsList){
-                                    IComputedField computedFieldObject = computedFieldFactory.getInstance(cfs.getActionName());
-                                    computedFieldObject.set(requestDto, cfs.getPostAggregationTheory());
-                                    computedFieldObject.add(bucket, cfs.getFields(), cfs.getNewField(),chartNode);
+                                    for (ComputedFields cfs : computedFieldsList) {
+                                        IComputedField computedFieldObject = computedFieldFactory.getInstance(cfs.getActionName());
+                                        computedFieldObject.set(requestDto, cfs.getPostAggregationTheory());
+                                        computedFieldObject.add(bucket, cfs.getFields(), cfs.getNewField(), chartNode);
 
-                                    if(symbol.equals(DAYS)){
+                                        if (symbolFromPathDataTypeMap.equals(DAYS)) {
 
-                                        long milidiff = bucket.findValue(cfs.getNewField()).get(IResponseHandler.VALUE).asLong();
-                                        long days = TimeUnit.MILLISECONDS.toDays(milidiff);
-                                        value = previousVal + (days);
+                                            long milidiff = bucket.findValue(cfs.getNewField()).get(IResponseHandler.VALUE).asLong();
+                                            long days = TimeUnit.MILLISECONDS.toDays(milidiff);
+                                            value = previousVal + (days);
 
-                                    } else {
-                                        value = previousVal + (bucket.findValue(cfs.getNewField()).get(IResponseHandler.VALUE).asLong());
+                                        } else {
+                                            value = previousVal + (bucket.findValue(cfs.getNewField()).get(IResponseHandler.VALUE).asLong());
+
+                                        }
+                                    }
+
+                                } catch (Exception e) {
+                                    logger.error("execution of computed field :" + e.getMessage());
+                                }
+
+                            } else {
+                                String jsonStr = bucket.toString();
+                                JSONObject currObj = new JSONObject(jsonStr);
+                                for (Iterator<String> it = bucket.fieldNames(); it.hasNext(); ) {
+                                    String fieldName = it.next();
+                                    if (currObj.get(fieldName) instanceof JSONObject) {
+                                        if (bucket.get(fieldName).findValue("buckets") == null) {
+                                            value = previousVal + ((bucket.get(fieldName).findValue(IResponseHandler.VALUE) != null) ? bucket.get(fieldName).findValue(IResponseHandler.VALUE).asDouble() : bucket.get(fieldName).findValue(IResponseHandler.DOC_COUNT).asDouble());
+                                        }
 
                                     }
                                 }
 
-                            } catch (Exception e){
-                                logger.error("execution of computed field :"+e.getMessage());
-                            }
+                                //value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
 
-                        } else {
-                            value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
-
-                            if(chartNode.get(IS_ROUND_OFF)!=null && chartNode.get(IS_ROUND_OFF).asBoolean()) {
-                            	value =  (double) Math.round(value);
+                                if (chartNode.get(IS_ROUND_OFF) != null && chartNode.get(IS_ROUND_OFF).asBoolean()) {
+                                    value = (double) Math.round(value);
+                                }
                             }
+                            //double value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
+
+                            plotMap.put(key, new Double("0") + value);
+                            totalValues.add(value);
                         }
-                        //double value = previousVal + ((bucket.findValue(IResponseHandler.VALUE) != null) ? bucket.findValue(IResponseHandler.VALUE).asDouble():bucket.findValue(IResponseHandler.DOC_COUNT).asDouble());
-
-                        plotMap.put(key, plotMap.get(key) == null ? new Double("0") + value : plotMap.get(key) + value);
-                        totalValues.add(value);
-                    });
                 }
-            });
-            List<Plot> plots = plotMap.entrySet().stream().map(e -> new Plot(e.getKey(), e.getValue(), symbol)).collect(Collectors.toList());
+                addIterationResultsToMultiAggrMap(plotMap, multiAggrPlotMap, isCumulative);
+                plotMap.clear();
+                totalValues.clear();
+            }
+
+            plotMap = multiAggrPlotMap;
+
+            totalValues = new ArrayList<>(plotMap.values());
+            String finalSymbolForPlots= symbolFromPathDataTypeMap;
+            List<Plot> plots = plotMap.entrySet().stream().map(e -> new Plot(e.getKey(), e.getValue(), finalSymbolForPlots)).collect(Collectors.toList());
             try{
-                Data data = new Data(headerPath.asText(), (totalValues==null || totalValues.isEmpty()) ? 0.0 : totalValues.stream().reduce(0.0, Double::sum), symbol);
+                Data data = new Data(headerPath.asText(), (totalValues==null || totalValues.isEmpty()) ? 0.0 : totalValues.stream().reduce(0.0, Double::sum),finalSymbolForPlots );
                 data.setPlots(plots);
                 dataList.add(data);
             } catch (Exception e) {
                 logger.error(" Legend/Header "+headerPath.asText() +" exception occurred "+e.getMessage());
             }
-        });
+       // });
+    }
 
         dataList.forEach(data -> {
             appendMissingPlot(plotKeys, data, symbol, isCumulative);
         });
         return getAggregatedDto(chartNode, dataList, requestDto.getVisualizationCode());
     }
+
+    private void addIterationResultsToMultiAggrMap(Map<String, Double> plotMap, Map<String, Double> multiAggrPlotMap, Boolean isCumulative) {
+    	
+    	Map<String, Double> finalPlotMap = new LinkedHashMap<>();
+
+        multiAggrPlotMap.keySet().forEach(key -> {
+            finalPlotMap.put(key, 0.0);
+        });
+
+        plotMap.keySet().forEach(key -> {
+            finalPlotMap.put(key, plotMap.get(key));
+        });
+    	
+    	if(isCumulative) {
+             Double previousValue = 0.0;
+             for (String key : finalPlotMap.keySet()) {
+                 if (finalPlotMap.get(key) == 0.0)
+                     finalPlotMap.put(key, previousValue);
+                 previousValue = finalPlotMap.get(key);
+             }
+         }
+    	
+    	finalPlotMap.keySet().forEach(key->{
+            Double previousValue = multiAggrPlotMap.get(key);
+            Double currentValue = finalPlotMap.get(key);
+            multiAggrPlotMap.put(key, previousValue + currentValue);
+        });
+        if(isCumulative) {
+            Double previousValue = 0.0;
+            for (String key : multiAggrPlotMap.keySet()) {
+                if (multiAggrPlotMap.get(key) == 0.0)
+                    multiAggrPlotMap.put(key, previousValue);
+                previousValue = multiAggrPlotMap.get(key);
+            }
+        }
+    }
+
+    private void initializeMultiAggrPlotMap(Map<String, Double> multiAggrPlotMap, Set<String> finalBucketKeys) {
+        finalBucketKeys.forEach(keyName -> {
+            multiAggrPlotMap.put(keyName, 0.0);
+        });
+    }
+
+    private void enrichBucketKeys(List<JsonNode> aggrNodes, Set<String> finalBucketKeys, String interval) {
+        List<String> bkeyList = new ArrayList<>();
+        for(JsonNode aggrNode : aggrNodes) {
+            if (aggrNode.findValues(IResponseHandler.BUCKETS).size() > 0) {
+                ArrayNode buckets = (ArrayNode) aggrNode.findValues(IResponseHandler.BUCKETS).get(0);
+                for(JsonNode bucket : buckets){
+                    String bkey = bucket.findValue(IResponseHandler.KEY).asText();
+                    bkeyList.add(bkey);
+                }
+            }
+        }
+        Collections.sort(bkeyList);
+        for(String bkey : bkeyList){
+            String key = getIntervalKey(bkey, Constants.Interval.valueOf(interval));
+            if(!finalBucketKeys.contains(key))
+                finalBucketKeys.add(key);
+        }
+
+    }
+
 
     private String getIntervalKey(String epocString, Constants.Interval interval) {
         try {

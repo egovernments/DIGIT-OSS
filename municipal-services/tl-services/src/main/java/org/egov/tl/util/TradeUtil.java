@@ -81,6 +81,22 @@ public class TradeUtil {
         return uri;
     }
 
+    /**
+     * Creates url for tl-calculator service
+     * @return url for tl-calculator service
+     */
+    public StringBuilder getEstimationURI(String businessService) {
+        StringBuilder uri = new StringBuilder();
+        uri.append(config.getCalculatorHost());
+        if (businessService == null)
+            businessService = businessService_TL;
+        switch (businessService) {
+            case businessService_TL:
+                uri.append(config.getEstimateEndpointTL());
+                break;
+        }
+        return uri;
+    }
 
     /**
      * Creates search url for pt-services-v2 service
@@ -114,6 +130,7 @@ public class TradeUtil {
 
         tlMasterDetails.add(MasterDetail.builder().name(TRADE_TYPE).build());
         tlMasterDetails.add(MasterDetail.builder().name(ACCESSORIES_CATEGORY).build());
+        tlMasterDetails.add(MasterDetail.builder().name(REMINDER_PERIODS).build());
 
         ModuleDetail tlModuleDtls = ModuleDetail.builder().masterDetails(tlMasterDetails)
                 .moduleName(TRADE_LICENSE_MODULE).build();
@@ -279,10 +296,8 @@ public class TradeUtil {
         return  res.get(0);
     }
 
-    public Object mDMSCall(TradeLicenseRequest tradeLicenseRequest){
-        RequestInfo requestInfo = tradeLicenseRequest.getRequestInfo();
-        String tenantId = tradeLicenseRequest.getLicenses().get(0).getTenantId();
-        MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo,tenantId);
+    public Object mDMSCall(RequestInfo requestInfo, String tenantId) {
+    	MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo,tenantId);
         Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
         return result;
     }
@@ -334,4 +349,20 @@ public class TradeUtil {
         });
         return idToIsStateUpdatableMap;
     }
+
+
+
+	public Map<String, Long> getTenantIdToReminderPeriod(RequestInfo requestInfo) {
+		Object mdmsData = mDMSCall(requestInfo, requestInfo.getUserInfo().getTenantId());
+		String jsonPath = REMINDER_JSONPATH;
+		List<Map<String,Object>> jsonOutput = JsonPath.read(mdmsData, jsonPath);
+		Map<String,Long>tenantIdToReminderPeriod = new HashMap <String,Long>();
+		
+		for (int i=0; i<jsonOutput.size();i++) {
+	        tenantIdToReminderPeriod.put((String) jsonOutput.get(i).get(TENANT_ID),((Number)jsonOutput.get(i).get(REMINDER_INTERVAL)).longValue());
+	        }
+		
+		return tenantIdToReminderPeriod;
+		
+	}
 }

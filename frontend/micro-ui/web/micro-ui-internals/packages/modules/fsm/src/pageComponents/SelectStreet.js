@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import _ from "lodash";
+import Timeline from "../components/TLTimelineInFSM";
 
 const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors }) => {
   const onSkip = () => onSelect();
@@ -19,6 +20,8 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
     inputs = config.inputs;
     config.inputs[0].disable = window.location.href.includes("edit-application");
     config.inputs[1].disable = window.location.href.includes("edit-application");
+    inputs[0].validation = { minLength : 0, maxLength:256};
+    inputs[1].validation = { minLength : 0, maxLength:256};
   } else {
     inputs = [
       {
@@ -70,7 +73,6 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
 
   useEffect(() => {
     if (userType === "employee") {
-      //   console.log(formState.errors[config.key]?.type, "inside form errors");
       if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) setError(config.key, { type: errors });
       else if (!Object.keys(errors).length && formState.errors[config.key]) clearErrors(config.key);
     }
@@ -81,7 +83,6 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
     const part = {};
     keys.forEach((key) => (part[key] = formData[config.key]?.[key]));
 
-    // console.log(formValue, part, formData[config.key], errors, "inside form value change");
     if (!_.isEqual(formValue, part)) {
       onSelect(config.key, { ...formData[config.key], ...formValue });
       trigger();
@@ -114,7 +115,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
                   onBlur={_props.onBlur}
                   // disable={isRenewal}
                   autoFocus={focusIndex?.index == index}
-                  {...input.validation}
+                  {...input?.validation}
                 />
               )}
             />
@@ -124,6 +125,8 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
     });
   }
   return (
+    <React.Fragment>
+    {window.location.href.includes("/tl") ? <Timeline currentStep={2}/> : null}
     <FormStep
       config={{ ...config, inputs }}
       _defaultValues={{ street: formData?.address.street, doorNo: formData?.address.doorNo }}
@@ -131,6 +134,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
       onSkip={onSkip}
       t={t}
     />
+    </React.Fragment>
   );
 };
 

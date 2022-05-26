@@ -65,12 +65,15 @@ export const StoreService = {
         code: stateInfo.code,
         name: stateInfo.name,
         logoUrl: stateInfo.logoUrl,
+        statelogo: stateInfo.statelogo,
         logoUrlWhite: stateInfo.logoUrlWhite,
         bannerUrl: stateInfo.bannerUrl,
       },
       localizationModules: stateInfo.localizationModules,
-      modules: MdmsRes?.tenant?.citymodule.filter((module) => module.active).filter((module) => enabledModules.includes(module.code)),
+      modules: MdmsRes?.tenant?.citymodule.filter((module) => module?.active).filter((module) => enabledModules?.includes(module?.code))?.sort((x,y)=>x?.order-y?.order),
     };
+
+  
     initData.selectedLanguage = Digit.SessionStorage.get("locale") || initData.languages[0].value;
 
     ApiCacheService.saveSetting(MdmsRes["DIGIT-UI"]?.ApiCachingSettings);
@@ -80,53 +83,14 @@ export const StoreService = {
       .flat()
       .reduce((unique, ele) => (unique.find((item) => item.code === ele.code) ? unique : [...unique, ele]), []);
     initData.tenants = MdmsRes?.tenant?.tenants
-      .filter((item) => !!moduleTenants.find((mt) => mt.code === item.code))
-      .map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant }));
-
-    // TODO: remove the FSM & Payment temp data once added in mdms master
-    initData.modules.push({
-      module: "Payment",
-      code: "Payment",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
-    initData.modules.push({
-      module: "MCollect",
-      code: "MCollect",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
-    initData.modules.push({
-      module: "HRMS",
-      code: "HRMS",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
-    initData.modules.push({
-      module: "TL",
-      code: "TL",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
-    initData.modules.push({
-      module: "Receipts",
-      code: "Receipts",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
-
-    initData.modules.push({
-      module: "DSS",
-      code: "DSS",
-      tenants: initData.tenants.map((tenant) => ({ code: tenant.code })),
-    });
-
+         .map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant }));
+      // .filter((item) => !!moduleTenants.find((mt) => mt.code === item.code))
+      // .map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant }));
 
     await LocalizationService.getLocale({
       modules: [
         `rainmaker-common`,
         `rainmaker-${stateCode.toLowerCase()}`,
-        // ...initData.tenants.map((tenant) => `rainmaker-${tenant.code.toLowerCase()}`),
       ],
       locale: initData.selectedLanguage,
       tenantId: stateCode,
@@ -140,9 +104,10 @@ export const StoreService = {
     return initData;
   },
   defaultData: async (stateCode, moduleCode, language) => {
-    console.log(moduleCode, stateCode);
+    let moduleCodes = [];
+    if(typeof moduleCode !== "string") moduleCode.forEach(code => { moduleCodes.push(`rainmaker-${code.toLowerCase()}`) });
     const LocalePromise = LocalizationService.getLocale({
-      modules: [`rainmaker-${moduleCode.toLowerCase()}`],
+      modules: typeof moduleCode == "string" ? [`rainmaker-${moduleCode.toLowerCase()}`] : moduleCodes,
       locale: language,
       tenantId: stateCode,
     });

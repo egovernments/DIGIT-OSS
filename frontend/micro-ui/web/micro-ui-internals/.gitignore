@@ -1,4 +1,3 @@
-
 # Created by https://www.toptal.com/developers/gitignore/api/node,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,react
 
@@ -7,6 +6,11 @@ packages/css/example/index.css
 package-lock.json
 locales/
 build/
+packages/**/dist/
+
+# yarn #
+.yarn
+.yarnrc.yml
 
 ### Node ###
 # Logs

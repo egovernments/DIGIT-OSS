@@ -24,11 +24,9 @@ const EmployeeChangePassword = () => {
 
   return (
     <Switch>
-      <AppContainer>
-        <Route path={`${path}`} exact>
-          <ChangePasswordComponent config={params[0]} t={t} />
-        </Route>
-      </AppContainer>
+      <Route path={`${path}`} exact>
+        <ChangePasswordComponent config={params[0]} t={t} />
+      </Route>
     </Switch>
   );
 };

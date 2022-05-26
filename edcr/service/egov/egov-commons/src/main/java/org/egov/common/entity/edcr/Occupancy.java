@@ -196,8 +196,8 @@ public class Occupancy extends Measurement {
         if (getClass() != obj.getClass())
             return false;
         Occupancy other = (Occupancy) obj;
-        return !typeHelper.equals(other.typeHelper);
-    }
+       return typeHelper.equals(other.typeHelper);
+        }
 
     @Override
     public Object clone() throws CloneNotSupportedException {

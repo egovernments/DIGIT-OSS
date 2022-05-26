@@ -55,7 +55,6 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 			String tenantId = rs.getString("tenantid");
 			String accountId = rs.getString("accountId");
 			String description = rs.getString("description");
-			String additionalDetails = rs.getString("additionalDetails");
 			String source = rs.getString("source");
 			String sanitationtype = rs.getString("sanitationtype");
 			String propertyUsage = rs.getString("propertyUsage");
@@ -64,21 +63,23 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 			String status = rs.getString("status");
 			String vehicleId = rs.getString("vehicle_id");
 			String vehicleType = rs.getString("vehicletype");
+			String vehicleCapacity = rs.getString("vehiclecapacity");
 			String dsoid = rs.getString("dso_id");
 			Long possiblesrvdate = rs.getLong("possible_srv_date");
 			this.setFull_count(rs.getInt("full_count"));
 			Long compeletedOn = rs.getLong("completed_on");
+			String applicationType = rs.getString("applicationType");
+			String oldApplicationNo = rs.getString("oldApplicationNo");
+			String paymentPreference = rs.getString("paymentPreference");
 			if (currentfsm == null) {
-				Long lastModifiedTime = rs.getLong("lastmodifiedtime");
-
-				if (rs.wasNull()) {
-					lastModifiedTime = null;
-				}
 				currentfsm = FSM.builder().id(id).applicationNo(applicationNo).tenantId(tenantId)
-						.description(description).accountId(accountId).additionalDetails(getAdditionalDetail("additionalDetails",rs))
-						.source(source).sanitationtype(sanitationtype).propertyUsage(propertyUsage).noOfTrips(noOfTrips)
-						.vehicleId(vehicleId).applicationStatus(applicationStatus).dsoId(dsoid).possibleServiceDate(possiblesrvdate).vehicleType(vehicleType).completedOn(compeletedOn)
-						.build();
+						.description(description).accountId(accountId)
+						.additionalDetails(getAdditionalDetail("additionalDetails", rs)).source(source)
+						.sanitationtype(sanitationtype).propertyUsage(propertyUsage).noOfTrips(noOfTrips)
+						.vehicleId(vehicleId).applicationStatus(applicationStatus).dsoId(dsoid)
+						.possibleServiceDate(possiblesrvdate).vehicleType(vehicleType).vehicleCapacity(vehicleCapacity)
+						.completedOn(compeletedOn).applicationType(applicationType).oldApplicationNo(oldApplicationNo)
+						.paymentPreference(paymentPreference).build();
 
 				fmsMap.put(id, currentfsm);
 			}
@@ -102,6 +103,7 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 
 		Double latitude =  rs.getDouble("latitude");
 		Double longitude =  rs.getDouble("longitude");
+		
 
 		Boundary locality = Boundary.builder().code(rs.getString("locality")).build();
 
@@ -115,11 +117,12 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 				.additionalDetails(rs.getString("additionalDetails")).street(rs.getString("street")).slumName(rs.getString("slumname")).tenantId(rs.getString("tenantid")).locality(locality).auditDetails(auditdetails)
 				.build();
 
-		PitDetail pitDetail = PitDetail.builder().height(rs.getDouble("height")).width(rs.getDouble("width")).diameter(rs.getDouble("diameter"))
-				.length(rs.getDouble("length")).distanceFromRoad(rs.getDouble("distanceFromRoad")).id(rs.getString("fsm_pit_id")).tenantId(rs.getString("tenantid")).build();
+		PitDetail pitDetail = PitDetail.builder().height(rs.getDouble("height")).width(rs.getDouble("width"))
+				.diameter(rs.getDouble("diameter")).length(rs.getDouble("length"))
+				.distanceFromRoad(rs.getDouble("distanceFromRoad")).id(rs.getString("fsm_pit_id"))
+				.additionalDetails(rs.getString("additionalDetails")).tenantId(rs.getString("tenantid")).build();
 		
-		
-		
+			
 		fsm.setAddress(address);
 		fsm.setPitDetail(pitDetail);
 		fsm.setAuditDetails(auditdetails);

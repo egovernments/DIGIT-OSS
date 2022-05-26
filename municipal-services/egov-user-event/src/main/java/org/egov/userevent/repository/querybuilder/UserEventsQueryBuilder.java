@@ -1,19 +1,24 @@
 package org.egov.userevent.repository.querybuilder;
 
+import java.time.Instant;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.egov.tracer.model.CustomException;
 import org.egov.userevent.config.PropertiesManager;
 import org.egov.userevent.web.contract.EventSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.egov.userevent.model.enums.Status;
 
 @Component
 public class UserEventsQueryBuilder {
 	
 	@Autowired
 	private PropertiesManager properties;
+
+	public static final String EVENT_COUNT_WRAPPER = " SELECT COUNT(id) FROM ({INTERNAL_QUERY}) AS count ";
 	
 	public static final String EVENT_SEARCH_QUERY = "SELECT id, tenantid, source, eventtype, category, description, status, referenceid, name, postedby,"
 			+ " eventdetails, actions, recepient, createdby, createdtime, lastmodifiedby, lastmodifiedtime FROM eg_usrevents_events ";
@@ -25,7 +30,7 @@ public class UserEventsQueryBuilder {
 	public static final String COUNT_OF_NOTIFICATION_QUERY = "SELECT (SELECT COUNT(*) as total FROM eg_usrevents_events WHERE id IN (SELECT eventid FROM eg_usrevents_recepnt_event_registry WHERE recepient IN (:recepients))), "
 			+ "COUNT(*) as unread FROM eg_usrevents_events WHERE id IN (SELECT eventid FROM eg_usrevents_recepnt_event_registry WHERE recepient IN (:recepients)) "
 			+ "AND id NOT IN (SELECT referenceid FROM eg_usrevents_events WHERE referenceid NOTNULL) AND "
-			+ "lastmodifiedtime > (SELECT lastaccesstime FROM eg_usrevents_user_lat WHERE userid IN (:userid)) AND status = :status";
+			+ "lastmodifiedtime > (SELECT lastaccesstime FROM eg_usrevents_user_lat WHERE userid IN (:userid))";
 	
 	/**
 	 * Returns query for search events
@@ -79,7 +84,35 @@ public class UserEventsQueryBuilder {
 		queryBuilder.append(query);
 		preparedStatementValues.put("recepients", criteria.getRecepients());
 		preparedStatementValues.put("userid", criteria.getUserids());
-		preparedStatementValues.put("status", "ACTIVE");
+		addClauseIfRequired(preparedStatementValues, queryBuilder);
+		queryBuilder.append(" status IN (:status)");
+		if(!CollectionUtils.isEmpty(criteria.getStatus()))
+			preparedStatementValues.put("status", criteria.getStatus());
+
+		else
+			preparedStatementValues.put("status", "ACTIVE");
+
+
+		if (criteria.getFromDate() != null) {
+			addClauseIfRequired(preparedStatementValues, queryBuilder);
+
+			//If user does not specify toDate, take today's date as toDate by default.
+			if (criteria.getToDate() == null) {
+				criteria.setToDate(Instant.now().toEpochMilli());
+			}
+
+			queryBuilder.append(" lastmodifiedtime BETWEEN :fromdate AND :todate");
+			preparedStatementValues.put("fromdate",criteria.getFromDate());
+			preparedStatementValues.put("todate",criteria.getToDate());
+
+		} else {
+			//if only toDate is provided as parameter without fromDate parameter
+			if (criteria.getToDate() != null) {
+				addClauseIfRequired(preparedStatementValues, queryBuilder);
+				queryBuilder.append(" lastmodifiedtime <= :todate");
+				preparedStatementValues.put("todate",criteria.getToDate());
+			}
+		}
 		
 		return queryBuilder.toString();
 
@@ -105,6 +138,27 @@ public class UserEventsQueryBuilder {
             addClauseIfRequired(preparedStatementValues, queryBuilder);
 			queryBuilder.append("status IN (:status)");
 			preparedStatementValues.put("status", criteria.getStatus());
+		}
+
+		if (criteria.getFromDate() != null) {
+			addClauseIfRequired(preparedStatementValues, queryBuilder);
+
+			//If user does not specify toDate, take today's date as toDate by default.
+			if (criteria.getToDate() == null) {
+				criteria.setToDate(Instant.now().toEpochMilli());
+			}
+
+			queryBuilder.append(" lastmodifiedtime BETWEEN :fromdate AND :todate");
+			preparedStatementValues.put("fromdate",criteria.getFromDate());
+			preparedStatementValues.put("todate",criteria.getToDate());
+
+		} else {
+			//if only toDate is provided as parameter without fromDate parameter, throw an exception.
+			if (criteria.getToDate() != null) {
+				addClauseIfRequired(preparedStatementValues, queryBuilder);
+				queryBuilder.append(" lastmodifiedtime <= :todate");
+				preparedStatementValues.put("todate",criteria.getToDate());
+			}
 		}
 		if(!CollectionUtils.isEmpty(criteria.getSource())) {
             addClauseIfRequired(preparedStatementValues, queryBuilder);
@@ -159,11 +213,13 @@ public class UserEventsQueryBuilder {
 		}
 		
 		queryBuilder.append(" ORDER BY createdtime DESC"); //default ordering on the platform.
-		queryBuilder.append(" OFFSET :offset");
-		preparedStatementValues.put("offset", null == criteria.getOffset() ? properties.getDefaultOffset() : criteria.getOffset());		
-		queryBuilder.append(" LIMIT :limit");
-		preparedStatementValues.put("limit", null == criteria.getLimit() ? properties.getDefaultLimit() : criteria.getLimit());
-		
+		// Do NOT paginate in case of building count query
+		if(!criteria.getIsEventsCountCall()) {
+			queryBuilder.append(" OFFSET :offset");
+			preparedStatementValues.put("offset", null == criteria.getOffset() ? properties.getDefaultOffset() : criteria.getOffset());
+			queryBuilder.append(" LIMIT :limit");
+			preparedStatementValues.put("limit", null == criteria.getLimit() ? properties.getDefaultLimit() : criteria.getLimit());
+		}
 		
 		return queryBuilder.toString();
 		
@@ -177,4 +233,7 @@ public class UserEventsQueryBuilder {
         }
     }
 
+	public String addCountWrapper(String query) {
+		return EVENT_COUNT_WRAPPER.replace("{INTERNAL_QUERY}", query);
+	}
 }
