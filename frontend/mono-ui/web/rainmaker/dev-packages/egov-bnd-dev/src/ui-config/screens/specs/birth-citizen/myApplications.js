@@ -98,10 +98,6 @@ const myApplications = {
           props: {
             contents: [
               {
-                label: "BND_APPL_NO",
-                jsonPath: "applicationNumber",
-              },
-              {
                 label: "BND_APPL_DATE",
                 jsonPath: "applicationDate",
                 isDate: true,
