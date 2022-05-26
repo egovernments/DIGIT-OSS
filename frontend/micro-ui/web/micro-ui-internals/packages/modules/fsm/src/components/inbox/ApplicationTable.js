@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "@egovernments/digit-ui-react-components";
 
 const ApplicationTable = ({
+  className = "table",
   t,
   currentPage,
   columns,
@@ -18,6 +19,7 @@ const ApplicationTable = ({
 }) => {
   return (
     <Table
+      className={className}
       t={t}
       data={data}
       currentPage={currentPage}

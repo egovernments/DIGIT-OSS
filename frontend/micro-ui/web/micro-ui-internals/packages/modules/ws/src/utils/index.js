@@ -1,12 +1,12 @@
 export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
-    if (searcher == "") return str;
-    while (str.includes(searcher)) {
-      str = str.replace(searcher, replaceWith);
-    }
-    return str;
-  };
+  if (searcher == "") return str;
+  while (str.includes(searcher)) {
+    str = str.replace(searcher, replaceWith);
+  }
+  return str;
+};
 
-  export const convertEpochToDateDMY = (dateEpoch) => {
+export const convertEpochToDateDMY = (dateEpoch) => {
   if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
     return "NA";
   }
@@ -19,65 +19,66 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   return `${day}/${month}/${year}`;
 };
 
-
-  export const convertEpochToDate = (dateEpoch) => {
-    if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
-      return "NA";
-    }
-    const dateFromApi = new Date(dateEpoch);
-    let month = dateFromApi.getMonth() + 1;
-    let day = dateFromApi.getDate();
-    let year = dateFromApi.getFullYear();
-    month = (month > 9 ? "" : "0") + month;
-    day = (day > 9 ? "" : "0") + day;
-    return `${day}/${month}/${year}`;
-  };
-
-  export const pdfDownloadLink = (documents = {}, fileStoreId = "", format = "") => {
-    /* Need to enhance this util to return required format*/
-  
-    let downloadLink = documents[fileStoreId] || "";
-    let differentFormats = downloadLink?.split(",") || [];
-    let fileURL = "";
-    differentFormats.length > 0 &&
-      differentFormats.map((link) => {
-        if (!link.includes("large") && !link.includes("medium") && !link.includes("small")) {
-          fileURL = link;
-        }
-      });
-    return fileURL;
-  };
-  
-  /*   method to get filename  from fielstore url*/
-  export const DownloadReceipt = async (consumerCode, tenantId, businessService, pdfKey = "consolidatedreceipt") => {
-    tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
-    await Digit.Utils.downloadReceipt(consumerCode, businessService, "consolidatedreceipt", tenantId);
-  };
-  export const pdfDocumentName = (documentLink = "", index = 0) => {
-    let documentName = decodeURIComponent(documentLink.split("?")[0].split("/").pop().slice(13)) || `Document - ${index + 1}`;
-    return documentName;
-  };
-  
-  export const getTransaltedLocality = (data) => {
-    let localityVariable = data?.tenantId?.replaceAll(".","_") || stringReplaceAll(data?.tenantId,".","_");
-    return (localityVariable.toUpperCase()+"_REVENUE_"+data?.locality?.code);
+export const convertEpochToDate = (dateEpoch) => {
+  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
+    return "NA";
   }
+  const dateFromApi = new Date(dateEpoch);
+  let month = dateFromApi.getMonth() + 1;
+  let day = dateFromApi.getDate();
+  let year = dateFromApi.getFullYear();
+  month = (month > 9 ? "" : "0") + month;
+  day = (day > 9 ? "" : "0") + day;
+  return `${day}/${month}/${year}`;
+};
 
-  export const getQueryStringParams = (query) => {
-    return query
-      ? (/^[?#]/.test(query) ? query.slice(1) : query).split("&").reduce((params, param) => {
+export const pdfDownloadLink = (documents = {}, fileStoreId = "", format = "") => {
+  /* Need to enhance this util to return required format*/
+
+  let downloadLink = documents[fileStoreId] || "";
+  let differentFormats = downloadLink?.split(",") || [];
+  let fileURL = "";
+  differentFormats.length > 0 &&
+    differentFormats.map((link) => {
+      if (!link.includes("large") && !link.includes("medium") && !link.includes("small")) {
+        fileURL = link;
+      }
+    });
+  return fileURL;
+};
+
+/*   method to get filename  from fielstore url*/
+export const DownloadReceipt = async (consumerCode, tenantId, businessService, pdfKey = "consolidatedreceipt") => {
+  tenantId = tenantId ? tenantId : Digit.ULBService.getCurrentTenantId();
+  await Digit.Utils.downloadReceipt(consumerCode, businessService, "consolidatedreceipt", tenantId);
+};
+export const pdfDocumentName = (documentLink = "", index = 0) => {
+  let documentName = decodeURIComponent(documentLink.split("?")[0].split("/").pop().slice(13)) || `Document - ${index + 1}`;
+  return documentName;
+};
+
+export const getTransaltedLocality = (data) => {
+  let localityVariable = data?.tenantId?.replaceAll(".", "_") || stringReplaceAll(data?.tenantId, ".", "_");
+  return localityVariable.toUpperCase() + "_REVENUE_" + data?.locality?.code;
+};
+
+export const getQueryStringParams = (query) => {
+  return query
+    ? (/^[?#]/.test(query) ? query.slice(1) : query).split("&").reduce((params, param) => {
         let [key, value] = param.split("=");
         params[key] = value ? decodeURIComponent(value.replace(/\+/g, " ")) : "";
         return params;
       }, {})
-      : {};
-  };
+    : {};
+};
 
-export  const getAddress = (address, t) => {
-    return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
-      address?.landmark ? `${address?.landmark}, ` : ""
-    }${ address.locality.code ?  t(address?.locality.code) : ""}, ${ address.city.code ?  t(address?.city.code) : ""},${address?.pincode ? `${address.pincode}` : " "}`
-} 
+export const getAddress = (address, t) => {
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+    address?.landmark ? `${address?.landmark}, ` : ""
+  }${address?.locality?.code ? t(address?.locality?.code) : ""}, ${address?.city?.code ? t(address?.city.code) : ""},${
+    address?.pincode ? `${address.pincode}` : " "
+  }`;
+};
 
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"
@@ -109,10 +110,10 @@ export const convertEpochToDates = (dateEpoch) => {
   }
 };
 
-export const getPattern = type => {
+export const getPattern = (type) => {
   switch (type) {
     case "WSOnlyNumbers":
-    return /^[0-9]*$/i;
+      return /^[0-9]*$/i;
     case "Name":
       return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i;
     case "MobileNo":
@@ -131,7 +132,7 @@ export const getPattern = type => {
     case "PAN":
       return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
     case "TradeName":
-      return /^[-@.\/#&+\w\s]*$/
+      return /^[-@.\/#&+\w\s]*$/;
     //return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,100}$/i;
     case "Date":
       return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i;
@@ -182,13 +183,12 @@ export const getPattern = type => {
 export const getFiles = async (filesArray, tenant) => {
   const response = await Digit.UploadServices.Filefetch(filesArray, tenant);
   response?.data?.fileStoreIds?.[0]?.url ? window.open(response?.data?.fileStoreIds?.[0]?.url) : null;
-}
+};
 
 export const createPayloadOfWS = async (data) => {
-
-  data?.cpt?.details?.owners?.forEach(owner => {
-    if(owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
-  })
+  data?.cpt?.details?.owners?.forEach((owner) => {
+    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress;
+  });
 
   let payload = {
     water: data?.ConnectionDetails?.[0]?.water,
@@ -197,17 +197,26 @@ export const createPayloadOfWS = async (data) => {
     proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
     proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
     proposedToilets: data?.ConnectionDetails?.[0]?.proposedToilets && Number(data?.ConnectionDetails?.[0]?.proposedToilets),
-    connectionHolders: !data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
-      correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
-      fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
-      gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
-      mobileNumber: data?.ConnectionHolderDetails?.[0]?.mobileNumber || "",
-      name: data?.ConnectionHolderDetails?.[0]?.name || "",
-      ownerType: data?.ConnectionHolderDetails?.[0]?.ownerType?.code || "",
-      relationship: data?.ConnectionHolderDetails?.[0]?.relationship?.code || "",
-      sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
-    }] : null,
-    service: (data?.ConnectionDetails?.[0]?.water && !data?.ConnectionDetails?.[0]?.sewerage) ? "Water" : (!data?.ConnectionDetails?.[0]?.water && data?.ConnectionDetails?.[0]?.sewerage) ? "Sewerage" : "Water And Sewerage",
+    connectionHolders: !data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
+      ? [
+          {
+            correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
+            fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
+            gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
+            mobileNumber: data?.ConnectionHolderDetails?.[0]?.mobileNumber || "",
+            name: data?.ConnectionHolderDetails?.[0]?.name || "",
+            ownerType: data?.ConnectionHolderDetails?.[0]?.ownerType?.code || "",
+            relationship: data?.ConnectionHolderDetails?.[0]?.relationship?.code || "",
+            sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails,
+          },
+        ]
+      : null,
+    service:
+      data?.ConnectionDetails?.[0]?.water && !data?.ConnectionDetails?.[0]?.sewerage
+        ? "Water"
+        : !data?.ConnectionDetails?.[0]?.water && data?.ConnectionDetails?.[0]?.sewerage
+        ? "Sewerage"
+        : "Water And Sewerage",
     property: data?.cpt?.details,
     propertyId: data?.cpt?.details?.propertyId,
     roadCuttingArea: null,
@@ -221,294 +230,293 @@ export const createPayloadOfWS = async (data) => {
     },
     tenantId: data?.cpt?.details?.address?.tenantId,
     processInstance: {
-      action: "INITIATE"
+      action: "INITIATE",
     },
-    channel: "CFC_COUNTER"
-  }
+    channel: "CFC_COUNTER",
+  };
   sessionStorage.setItem("WS_DOCUMENTS_INOF", JSON.stringify(data?.DocumentsRequired?.documents));
   sessionStorage.setItem("WS_PROPERTY_INOF", JSON.stringify(data?.cpt?.details));
   return payload;
-}
+};
 
 export const updatePayloadOfWS = async (data, type) => {
   let payload = {
     ...data,
     processInstance: {
       ...data?.processInstance,
-      action: "SUBMIT_APPLICATION"
+      action: "SUBMIT_APPLICATION",
     },
     documents: JSON.parse(sessionStorage.getItem("WS_DOCUMENTS_INOF")),
     property: JSON.parse(sessionStorage.getItem("WS_PROPERTY_INOF")),
-    connectionType: type === "WATER" ? null : "Non Metered"
-  }
+    connectionType: type === "WATER" ? null : "Non Metered",
+  };
   return payload;
-}
-
+};
 
 export const convertToWSUpdate = (data) => {
-
   let formdata = {
-    "WaterConnection": {
+    WaterConnection: {
       ...data?.WaterConnectionResult?.WaterConnection?.[0],
-       "documents": [...data?.documents?.documents],
-      "processInstance": {
-          "action": "SUBMIT_APPLICATION",
-      }
-      
-  }
-  }
+      documents: [...data?.documents?.documents],
+      processInstance: {
+        action: "SUBMIT_APPLICATION",
+      },
+    },
+  };
   return formdata;
-}
+};
 
 export const convertToEditWSUpdate = (data) => {
   let waterResult = data?.WaterConnectionResult?.WaterConnection?.[0];
   let formdata = {
-    "WaterConnection": {
-      "id": data?.isEditApplication ? data?.id : waterResult?.id,
-      "tenantId": data?.isEditApplication ? data?.tenantId :  waterResult?.tenantId,
-      "propertyId": data?.isEditApplication ? data?.propertyId : waterResult?.propertyId,
-      "applicationNo": data?.isEditApplication ? data?.applicationNo :  waterResult?.applicationNo,
-      "applicationStatus": data?.isEditApplication ? data?.applicationStatus :  waterResult?.applicationStatus,
-      "status": data?.isEditApplication ? data?.status : waterResult?.status,
-      "connectionNo": (data?.isEditApplication ? data?.connectionNo : waterResult?.connectionNo)|| null,
-      "oldConnectionNo": null,
-      "documents": [...data?.documents?.documents],
-      "plumberInfo": data?.isEditApplication ? data?.plumberInfo : waterResult?.plumberInfo || [],
-      "roadType": null,
-      "roadCuttingArea": null,
-      "roadCuttingInfo": [],
-      "connectionExecutionDate": (data?.isEditApplication ? data?.connectionExecutionDate : waterResult?.connectionExecutionDate) || null,
-      "connectionCategory": null,
-      "connectionType": (data?.isEditApplication ? data?.connectionType : waterResult?.connectionType)|| null,
-      "additionalDetails": data?.isEditApplication ? {...data?.additionalDetails} : {...waterResult?.additionalDetails} ,
-      "auditDetails": data?.isEditApplication ? data?.auditDetails : waterResult?.auditDetails,
-      "processInstance": data?.isEditApplication ? {
-          ...data?.processInstance,
-          "action": "RESUBMIT_APPLICATION"
-      } : {
-        ...waterResult?.processInstance, "action" : "SUBMIT_APPLICATION"
-      },
-      "applicationType": data?.isEditApplication ? data?.applicationType : "MODIFY_WATER_CONNECTION",
-      "dateEffectiveFrom":  convertDateToEpoch(Date.now() + 86400000) ,
-      "connectionHolders": data?.isEditApplication ? data?.connectionHolders : waterResult?.connectionHolders ,
-      "oldApplication": false,
-      "channel": "CITIZEN",
-      "waterSource": (data?.isEditApplication ? data?.waterSource : waterResult?.waterSource) || null,
-      "meterId": (data?.isEditApplication ? data?.meterId : waterResult?.meterId ) || null,
-      "meterInstallationDate": (data?.isEditApplication ? data?.meterInstallationDate : waterResult?.meterInstallationDate) || null,
-      "proposedPipeSize": data?.waterConectionDetails?.proposedPipeSize?.code,
-      "proposedTaps": data?.waterConectionDetails?.proposedTaps,
-      "pipeSize": (data?.isEditApplication ? data?.pipeSize : waterResult?.pipeSize) || null,
-      "noOfTaps": (data?.isEditApplication ? data?.noOfTaps : waterResult?.noOfTaps) || null,
-      "waterSourceSubSource": null,
-      "waterSubSource" : (data?.isEditApplication ? data?.waterSubSource : waterResult?.waterSubSource )|| null,
-      "property": data?.isEditApplication ? {...data?.property}: {...waterResult?.property} ,
-      "water":  data?.applicationType?.includes("WATER")?true:false,
-      "sewerage": data?.applicationType?.includes("WATER")?true:false,
-      "service": data?.isEditApplication ? data?.serviceName?.code : waterResult?.serviceName?.code,
-      "reviewDocData": [
-          // {
-          //     "title": "WS_OWNER.IDENTITYPROOF.AADHAAR",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486955487fBbBCkGcdp.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=935dfb4f76083dc3ab7cf0f50aaa0c1c52731e535cf662473118a4118dcc8d87",
-          //     "linkText": "View",
-          //     "name": "fBbBCkGcdp.png"
-          // },
-          // {
-          //     "title": "WS_OWNER.ADDRESSPROOF.ELECTRICITYBILL",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486960218pBQoKhcLup.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=ed55fd96ec6d54421a6ed4b1734f9a951c54061cbd8bdd4bf3ed676935fc6b2f",
-          //     "linkText": "View",
-          //     "name": "pBQoKhcLup.png"
-          // },
-          // {
-          //     "title": "WS_ELECTRICITY_BILL",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486965232AirZwKrIUG.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=db098ee216984d9f413eed0bdb42d8b7a3b61794bc9261d92db2476300064323",
-          //     "linkText": "View",
-          //     "name": "AirZwKrIUG.png"
-          // },
-          // {
-          //     "title": "WS_PLUMBER_REPORT_DRAWING",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486969233XZrstDVnbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6a21266b1aa4352113b115e41dd075b47e20e7989e8b8fee7114957ee26193eb",
-          //     "linkText": "View",
-          //     "name": "XZrstDVnbf.png"
-          // },
-          // {
-          //     "title": "WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486973093GAbDOLwmFf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6c6eff841623980714ddb4db3bd69219ae0398675f563c5bc73ed799763d2785",
-          //     "linkText": "View",
-          //     "name": "GAbDOLwmFf.png"
-          // },
-          // {
-          //     "title": "WS_PROPERTY_TAX_RECIEPT",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486975966JOdiYvhKXM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=00c949dbb7c66fe67ecee67de401202011ed2fc8c66ec5677230b1a1aa389f9e",
-          //     "linkText": "View",
-          //     "name": "JOdiYvhKXM.png"
-          // }
-          ...data?.documents?.documents
+    WaterConnection: {
+      id: data?.isEditApplication ? data?.id : waterResult?.id,
+      tenantId: data?.isEditApplication ? data?.tenantId : waterResult?.tenantId,
+      propertyId: data?.isEditApplication ? data?.propertyId : waterResult?.propertyId,
+      applicationNo: data?.isEditApplication ? data?.applicationNo : waterResult?.applicationNo,
+      applicationStatus: data?.isEditApplication ? data?.applicationStatus : waterResult?.applicationStatus,
+      status: data?.isEditApplication ? data?.status : waterResult?.status,
+      connectionNo: (data?.isEditApplication ? data?.connectionNo : waterResult?.connectionNo) || null,
+      oldConnectionNo: null,
+      documents: [...data?.documents?.documents],
+      plumberInfo: data?.isEditApplication ? data?.plumberInfo : waterResult?.plumberInfo || [],
+      roadType: null,
+      roadCuttingArea: null,
+      roadCuttingInfo: [],
+      connectionExecutionDate: (data?.isEditApplication ? data?.connectionExecutionDate : waterResult?.connectionExecutionDate) || null,
+      connectionCategory: null,
+      connectionType: (data?.isEditApplication ? data?.connectionType : waterResult?.connectionType) || null,
+      additionalDetails: data?.isEditApplication ? { ...data?.additionalDetails } : { ...waterResult?.additionalDetails },
+      auditDetails: data?.isEditApplication ? data?.auditDetails : waterResult?.auditDetails,
+      processInstance: data?.isEditApplication
+        ? {
+            ...data?.processInstance,
+            action: "RESUBMIT_APPLICATION",
+          }
+        : {
+            ...waterResult?.processInstance,
+            action: "SUBMIT_APPLICATION",
+          },
+      applicationType: data?.isEditApplication ? data?.applicationType : "MODIFY_WATER_CONNECTION",
+      dateEffectiveFrom: convertDateToEpoch(Date.now() + 86400000),
+      connectionHolders: data?.isEditApplication ? data?.connectionHolders : waterResult?.connectionHolders,
+      oldApplication: false,
+      channel: "CITIZEN",
+      waterSource: (data?.isEditApplication ? data?.waterSource : waterResult?.waterSource) || null,
+      meterId: (data?.isEditApplication ? data?.meterId : waterResult?.meterId) || null,
+      meterInstallationDate: (data?.isEditApplication ? data?.meterInstallationDate : waterResult?.meterInstallationDate) || null,
+      proposedPipeSize: data?.waterConectionDetails?.proposedPipeSize?.code,
+      proposedTaps: data?.waterConectionDetails?.proposedTaps,
+      pipeSize: (data?.isEditApplication ? data?.pipeSize : waterResult?.pipeSize) || null,
+      noOfTaps: (data?.isEditApplication ? data?.noOfTaps : waterResult?.noOfTaps) || null,
+      waterSourceSubSource: null,
+      waterSubSource: (data?.isEditApplication ? data?.waterSubSource : waterResult?.waterSubSource) || null,
+      property: data?.isEditApplication ? { ...data?.property } : { ...waterResult?.property },
+      water: data?.applicationType?.includes("WATER") ? true : false,
+      sewerage: data?.applicationType?.includes("WATER") ? true : false,
+      service: data?.isEditApplication ? data?.serviceName?.code : waterResult?.serviceName?.code,
+      reviewDocData: [
+        // {
+        //     "title": "WS_OWNER.IDENTITYPROOF.AADHAAR",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486955487fBbBCkGcdp.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=935dfb4f76083dc3ab7cf0f50aaa0c1c52731e535cf662473118a4118dcc8d87",
+        //     "linkText": "View",
+        //     "name": "fBbBCkGcdp.png"
+        // },
+        // {
+        //     "title": "WS_OWNER.ADDRESSPROOF.ELECTRICITYBILL",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486960218pBQoKhcLup.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=ed55fd96ec6d54421a6ed4b1734f9a951c54061cbd8bdd4bf3ed676935fc6b2f",
+        //     "linkText": "View",
+        //     "name": "pBQoKhcLup.png"
+        // },
+        // {
+        //     "title": "WS_ELECTRICITY_BILL",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486965232AirZwKrIUG.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=db098ee216984d9f413eed0bdb42d8b7a3b61794bc9261d92db2476300064323",
+        //     "linkText": "View",
+        //     "name": "AirZwKrIUG.png"
+        // },
+        // {
+        //     "title": "WS_PLUMBER_REPORT_DRAWING",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486969233XZrstDVnbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6a21266b1aa4352113b115e41dd075b47e20e7989e8b8fee7114957ee26193eb",
+        //     "linkText": "View",
+        //     "name": "XZrstDVnbf.png"
+        // },
+        // {
+        //     "title": "WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486973093GAbDOLwmFf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6c6eff841623980714ddb4db3bd69219ae0398675f563c5bc73ed799763d2785",
+        //     "linkText": "View",
+        //     "name": "GAbDOLwmFf.png"
+        // },
+        // {
+        //     "title": "WS_PROPERTY_TAX_RECIEPT",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486975966JOdiYvhKXM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=00c949dbb7c66fe67ecee67de401202011ed2fc8c66ec5677230b1a1aa389f9e",
+        //     "linkText": "View",
+        //     "name": "JOdiYvhKXM.png"
+        // }
+        ...data?.documents?.documents,
       ],
-      "proposedWaterClosets": data?.sewerageConnectionDetails?.proposedWaterClosets,
-      "proposedToilets": data?.sewerageConnectionDetails?.proposedToilets,
-      "comment": "",
-      "wfDocuments": [],
-      "assignee": [],
-      "action": data?.isEditApplication ? "RESUBMIT_APPLICATION" : "SUBMIT_APPLICATION",
-      "assignees": []
-  }
-  }
+      proposedWaterClosets: data?.sewerageConnectionDetails?.proposedWaterClosets,
+      proposedToilets: data?.sewerageConnectionDetails?.proposedToilets,
+      comment: "",
+      wfDocuments: [],
+      assignee: [],
+      action: data?.isEditApplication ? "RESUBMIT_APPLICATION" : "SUBMIT_APPLICATION",
+      assignees: [],
+    },
+  };
   return formdata;
-}
+};
 
 export const convertToEditSWUpdate = (data) => {
-  let SewerageResult = data?.SewerageConnectionResult?.SewerageConnections?.[0]; 
+  let SewerageResult = data?.SewerageConnectionResult?.SewerageConnections?.[0];
   let formdata = {
-    "SewerageConnection": {
-      "id": data?.isEditApplication ? data?.id : SewerageResult?.id,
-      "tenantId": data?.isEditApplication ? data?.tenantId :  SewerageResult?.tenantId,
-      "propertyId": data?.isEditApplication ? data?.propertyId : SewerageResult?.propertyId,
-      "applicationNo": data?.isEditApplication ? data?.applicationNo :  SewerageResult?.applicationNo,
-      "applicationStatus": data?.isEditApplication ? data?.applicationStatus :  SewerageResult?.applicationStatus,
-      "status": data?.isEditApplication ? data?.status : SewerageResult?.status,
-      "connectionNo": (data?.isEditApplication ? data?.connectionNo : SewerageResult?.connectionNo)|| null,
-      "oldConnectionNo": null,
-      "documents": [...data?.documents?.documents],
-      "plumberInfo": data?.isEditApplication ? data?.plumberInfo : SewerageResult?.plumberInfo || [],
-      "roadType": null,
-      "roadCuttingArea": null,
-      "roadCuttingInfo": [],
-      "connectionExecutionDate": (data?.isEditApplication ? data?.connectionExecutionDate : SewerageResult?.connectionExecutionDate) || null,
-      "connectionCategory": null,
-      "connectionType": (data?.isEditApplication ? data?.connectionType : SewerageResult?.connectionType)|| null,
-      "additionalDetails": data?.isEditApplication ? {...data?.additionalDetails} : {...SewerageResult?.additionalDetails} ,
-      "auditDetails": data?.isEditApplication ? data?.auditDetails : SewerageResult?.auditDetails,
-      "processInstance": data?.isEditApplication ? {
-          ...data?.processInstance,
-          "action": "RESUBMIT_APPLICATION"
-      } : {
-        ...SewerageResult?.processInstance, "action" : "SUBMIT_APPLICATION"
-      },
-      "applicationType": data?.isEditApplication ? data?.applicationType : "MODIFY_WATER_CONNECTION",
-      "dateEffectiveFrom":  convertDateToEpoch(Date.now() + 86400000) ,
-      "connectionHolders": data?.isEditApplication ? data?.connectionHolders : SewerageResult?.connectionHolders ,
-      "oldApplication": false,
-      "channel": "CITIZEN",
-      "waterSource": (data?.isEditApplication ? data?.waterSource : SewerageResult?.waterSource) || null,
-      "meterId": (data?.isEditApplication ? data?.meterId : SewerageResult?.meterId ) || null,
-      "meterInstallationDate": (data?.isEditApplication ? data?.meterInstallationDate : SewerageResult?.meterInstallationDate) || null,
-      "proposedPipeSize": data?.waterConectionDetails?.proposedPipeSize?.code,
-      "proposedTaps": data?.waterConectionDetails?.proposedTaps,
-      "pipeSize": (data?.isEditApplication ? data?.pipeSize : SewerageResult?.pipeSize) || null,
-      "noOfTaps": (data?.isEditApplication ? data?.noOfTaps : SewerageResult?.noOfTaps) || null,
-      "waterSourceSubSource": null,
-      "waterSubSource" : (data?.isEditApplication ? data?.waterSubSource : SewerageResult?.waterSubSource )|| null,
-      "property": data?.isEditApplication ? {...data?.property}: {...SewerageResult?.property} ,
-      "water":  data?.applicationType?.includes("WATER")?true:false,
-      "sewerage": data?.applicationType?.includes("WATER")?true:false,
-      "service": data?.isEditApplication ? data?.serviceName?.code : SewerageResult?.serviceName?.code,
-      "reviewDocData": [
-          // {
-          //     "title": "WS_OWNER.IDENTITYPROOF.AADHAAR",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486955487fBbBCkGcdp.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=935dfb4f76083dc3ab7cf0f50aaa0c1c52731e535cf662473118a4118dcc8d87",
-          //     "linkText": "View",
-          //     "name": "fBbBCkGcdp.png"
-          // },
-          // {
-          //     "title": "WS_OWNER.ADDRESSPROOF.ELECTRICITYBILL",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486960218pBQoKhcLup.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=ed55fd96ec6d54421a6ed4b1734f9a951c54061cbd8bdd4bf3ed676935fc6b2f",
-          //     "linkText": "View",
-          //     "name": "pBQoKhcLup.png"
-          // },
-          // {
-          //     "title": "WS_ELECTRICITY_BILL",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486965232AirZwKrIUG.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=db098ee216984d9f413eed0bdb42d8b7a3b61794bc9261d92db2476300064323",
-          //     "linkText": "View",
-          //     "name": "AirZwKrIUG.png"
-          // },
-          // {
-          //     "title": "WS_PLUMBER_REPORT_DRAWING",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486969233XZrstDVnbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6a21266b1aa4352113b115e41dd075b47e20e7989e8b8fee7114957ee26193eb",
-          //     "linkText": "View",
-          //     "name": "XZrstDVnbf.png"
-          // },
-          // {
-          //     "title": "WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486973093GAbDOLwmFf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6c6eff841623980714ddb4db3bd69219ae0398675f563c5bc73ed799763d2785",
-          //     "linkText": "View",
-          //     "name": "GAbDOLwmFf.png"
-          // },
-          // {
-          //     "title": "WS_PROPERTY_TAX_RECIEPT",
-          //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486975966JOdiYvhKXM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=00c949dbb7c66fe67ecee67de401202011ed2fc8c66ec5677230b1a1aa389f9e",
-          //     "linkText": "View",
-          //     "name": "JOdiYvhKXM.png"
-          // }
-          ...data?.documents?.documents
+    SewerageConnection: {
+      id: data?.isEditApplication ? data?.id : SewerageResult?.id,
+      tenantId: data?.isEditApplication ? data?.tenantId : SewerageResult?.tenantId,
+      propertyId: data?.isEditApplication ? data?.propertyId : SewerageResult?.propertyId,
+      applicationNo: data?.isEditApplication ? data?.applicationNo : SewerageResult?.applicationNo,
+      applicationStatus: data?.isEditApplication ? data?.applicationStatus : SewerageResult?.applicationStatus,
+      status: data?.isEditApplication ? data?.status : SewerageResult?.status,
+      connectionNo: (data?.isEditApplication ? data?.connectionNo : SewerageResult?.connectionNo) || null,
+      oldConnectionNo: null,
+      documents: [...data?.documents?.documents],
+      plumberInfo: data?.isEditApplication ? data?.plumberInfo : SewerageResult?.plumberInfo || [],
+      roadType: null,
+      roadCuttingArea: null,
+      roadCuttingInfo: [],
+      connectionExecutionDate: (data?.isEditApplication ? data?.connectionExecutionDate : SewerageResult?.connectionExecutionDate) || null,
+      connectionCategory: null,
+      connectionType: (data?.isEditApplication ? data?.connectionType : SewerageResult?.connectionType) || null,
+      additionalDetails: data?.isEditApplication ? { ...data?.additionalDetails } : { ...SewerageResult?.additionalDetails },
+      auditDetails: data?.isEditApplication ? data?.auditDetails : SewerageResult?.auditDetails,
+      processInstance: data?.isEditApplication
+        ? {
+            ...data?.processInstance,
+            action: "RESUBMIT_APPLICATION",
+          }
+        : {
+            ...SewerageResult?.processInstance,
+            action: "SUBMIT_APPLICATION",
+          },
+      applicationType: data?.isEditApplication ? data?.applicationType : "MODIFY_WATER_CONNECTION",
+      dateEffectiveFrom: convertDateToEpoch(Date.now() + 86400000),
+      connectionHolders: data?.isEditApplication ? data?.connectionHolders : SewerageResult?.connectionHolders,
+      oldApplication: false,
+      channel: "CITIZEN",
+      waterSource: (data?.isEditApplication ? data?.waterSource : SewerageResult?.waterSource) || null,
+      meterId: (data?.isEditApplication ? data?.meterId : SewerageResult?.meterId) || null,
+      meterInstallationDate: (data?.isEditApplication ? data?.meterInstallationDate : SewerageResult?.meterInstallationDate) || null,
+      proposedPipeSize: data?.waterConectionDetails?.proposedPipeSize?.code,
+      proposedTaps: data?.waterConectionDetails?.proposedTaps,
+      pipeSize: (data?.isEditApplication ? data?.pipeSize : SewerageResult?.pipeSize) || null,
+      noOfTaps: (data?.isEditApplication ? data?.noOfTaps : SewerageResult?.noOfTaps) || null,
+      waterSourceSubSource: null,
+      waterSubSource: (data?.isEditApplication ? data?.waterSubSource : SewerageResult?.waterSubSource) || null,
+      property: data?.isEditApplication ? { ...data?.property } : { ...SewerageResult?.property },
+      water: data?.applicationType?.includes("WATER") ? true : false,
+      sewerage: data?.applicationType?.includes("WATER") ? true : false,
+      service: data?.isEditApplication ? data?.serviceName?.code : SewerageResult?.serviceName?.code,
+      reviewDocData: [
+        // {
+        //     "title": "WS_OWNER.IDENTITYPROOF.AADHAAR",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486955487fBbBCkGcdp.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=935dfb4f76083dc3ab7cf0f50aaa0c1c52731e535cf662473118a4118dcc8d87",
+        //     "linkText": "View",
+        //     "name": "fBbBCkGcdp.png"
+        // },
+        // {
+        //     "title": "WS_OWNER.ADDRESSPROOF.ELECTRICITYBILL",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486960218pBQoKhcLup.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=ed55fd96ec6d54421a6ed4b1734f9a951c54061cbd8bdd4bf3ed676935fc6b2f",
+        //     "linkText": "View",
+        //     "name": "pBQoKhcLup.png"
+        // },
+        // {
+        //     "title": "WS_ELECTRICITY_BILL",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486965232AirZwKrIUG.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=db098ee216984d9f413eed0bdb42d8b7a3b61794bc9261d92db2476300064323",
+        //     "linkText": "View",
+        //     "name": "AirZwKrIUG.png"
+        // },
+        // {
+        //     "title": "WS_PLUMBER_REPORT_DRAWING",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486969233XZrstDVnbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6a21266b1aa4352113b115e41dd075b47e20e7989e8b8fee7114957ee26193eb",
+        //     "linkText": "View",
+        //     "name": "XZrstDVnbf.png"
+        // },
+        // {
+        //     "title": "WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486973093GAbDOLwmFf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=6c6eff841623980714ddb4db3bd69219ae0398675f563c5bc73ed799763d2785",
+        //     "linkText": "View",
+        //     "name": "GAbDOLwmFf.png"
+        // },
+        // {
+        //     "title": "WS_PROPERTY_TAX_RECIEPT",
+        //     "link": "https://egov-rainmaker.s3-ap-south-1.amazonaws.com/pb/WS/April/9/1649486975966JOdiYvhKXM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA42DEGMQ2NZVNTLNI%2F20220409%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220409T070847Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=00c949dbb7c66fe67ecee67de401202011ed2fc8c66ec5677230b1a1aa389f9e",
+        //     "linkText": "View",
+        //     "name": "JOdiYvhKXM.png"
+        // }
+        ...data?.documents?.documents,
       ],
-      "proposedWaterClosets": data?.sewerageConnectionDetails?.proposedWaterClosets,
-      "proposedToilets": data?.sewerageConnectionDetails?.proposedToilets,
-      "comment": "",
-      "wfDocuments": [],
-      "assignee": [],
-      "action": data?.isEditApplication ? "RESUBMIT_APPLICATION" : "SUBMIT_APPLICATION",
-      "assignees": []
-  }
-  }
+      proposedWaterClosets: data?.sewerageConnectionDetails?.proposedWaterClosets,
+      proposedToilets: data?.sewerageConnectionDetails?.proposedToilets,
+      comment: "",
+      wfDocuments: [],
+      assignee: [],
+      action: data?.isEditApplication ? "RESUBMIT_APPLICATION" : "SUBMIT_APPLICATION",
+      assignees: [],
+    },
+  };
   return formdata;
-}
+};
 
 export const convertToSWUpdate = (data) => {
-
   let formdata = {
-    "SewerageConnection": {
+    SewerageConnection: {
       ...data?.SewerageConnectionResult?.SewerageConnections?.[0],
-       "documents": [...data?.documents?.documents],
-      "processInstance": {
-          "action": "SUBMIT_APPLICATION",
+      documents: [...data?.documents?.documents],
+      processInstance: {
+        action: "SUBMIT_APPLICATION",
       },
-      
-  }
-  }
+    },
+  };
   return formdata;
-}
+};
 
-export const getOwnersforPDF = (property,t) => {
+export const getOwnersforPDF = (property, t) => {
   let interarray = [];
   let finalarray = [];
-  property?.owners?.map((ob,index) => {
-  interarray =   [
-          { title: t(`WS_OWNER - ${index}`), value: "" },
-          { title: t("WS_CONN_HOLDER_OWN_DETAIL_MOBILE_NO_LABEL"), value: ob?.mobileNumber || "N/A" },
-          { title: t("WS_MYCONNECTIONS_OWNER_NAME"), value: ob?.name || "N/A" },
-          {
-            title: t("WS_OWNER_DETAILS_EMAIL_LABEL"),
-            value: ob?.emailId || "N/A",
-          },
-          {
-            title: t("WS_OWN_DETAIL_GENDER_LABEL"),
-            value: ob?.gender || "N/A",
-          },
-          { title: t("WS_OWN_DETAIL_DOB_LABEL"), value: "N/A" },
-          { title: t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"), value: ob?.fatherOrHusbandName || "N/A" },
-          { title: t("WS_OWN_DETAIL_RELATION_LABEL"), value: ob?.relationship || "N/A" },
-          { title: t("WS_CONN_HOLDER_OWN_DETAIL_CROSADD"), value: ob?.correspondenceAddress || "N/A" },
-          { title: t("WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"), value: "none" },
-        ]
-      finalarray = finalarray.concat(interarray);
-      })
-    return finalarray;
-}
-
-export const getDocumentsForPDF = (app,t) => {
-let finaldocarray=[];
-  app?.documents?.map((doc) => {
-    finaldocarray.push(
+  property?.owners?.map((ob, index) => {
+    interarray = [
+      { title: t(`WS_OWNER - ${index}`), value: "" },
+      { title: t("WS_CONN_HOLDER_OWN_DETAIL_MOBILE_NO_LABEL"), value: ob?.mobileNumber || "N/A" },
+      { title: t("WS_MYCONNECTIONS_OWNER_NAME"), value: ob?.name || "N/A" },
       {
+        title: t("WS_OWNER_DETAILS_EMAIL_LABEL"),
+        value: ob?.emailId || "N/A",
+      },
+      {
+        title: t("WS_OWN_DETAIL_GENDER_LABEL"),
+        value: ob?.gender || "N/A",
+      },
+      { title: t("WS_OWN_DETAIL_DOB_LABEL"), value: "N/A" },
+      { title: t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"), value: ob?.fatherOrHusbandName || "N/A" },
+      { title: t("WS_OWN_DETAIL_RELATION_LABEL"), value: ob?.relationship || "N/A" },
+      { title: t("WS_CONN_HOLDER_OWN_DETAIL_CROSADD"), value: ob?.correspondenceAddress || "N/A" },
+      { title: t("WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"), value: "none" },
+    ];
+    finalarray = finalarray.concat(interarray);
+  });
+  return finalarray;
+};
+
+export const getDocumentsForPDF = (app, t) => {
+  let finaldocarray = [];
+  app?.documents?.map((doc) => {
+    finaldocarray.push({
       title: t(doc?.documentType),
       value: doc?.fileName,
-    })
-  })
-}
+    });
+  });
+};
 
-export  const getPDFData = (application,data,tenantInfo, t) => {
-
+export const getPDFData = (application, data, tenantInfo, t) => {
   return {
     t: t,
     tenantId: tenantInfo?.code,
@@ -520,9 +528,7 @@ export  const getPDFData = (application,data,tenantInfo, t) => {
     details: [
       {
         title: t("CS_TITLE_APPLICATION_DETAILS"),
-        values: [
-          { title: t("WS_COMMON_APPLICATION_NO_LABEL"), value: application?.applicationNo },
-        ],
+        values: [{ title: t("WS_COMMON_APPLICATION_NO_LABEL"), value: application?.applicationNo }],
       },
       {
         title: t("WS_COMMON_PROPERTY_DETAILS"),
@@ -548,53 +554,57 @@ export  const getPDFData = (application,data,tenantInfo, t) => {
       },
       {
         title: t("WS_TASK_PROP_OWN_HEADER"),
-        values: getOwnersforPDF(data?.cpt?.details,t),
+        values: getOwnersforPDF(data?.cpt?.details, t),
       },
-      {...application?.applicationType.includes("WATER")?{
-        title: t("WS_COMMON_CONNECTION_DETAILS"),
-        values: [
-          {
-            title: t("WS_APPLY_FOR"),
-            value: application?.applicationType.includes("WATER")?t("WS_WATER"):t("WS_SEWERAGE"),
-          },
-          {
-            title: t("WS_CONN_DETAIL_NO_OF_TAPS"),
-            value: application?.proposedTaps,
-          },
-          {
-            title: t("WS_CONN_DETAIL_PIPE_SIZE"),
-            value: application?.proposedPipeSize,
-          }
-        ],
-      }:{
-        title: t("WS_COMMON_CONNECTION_DETAILS"),
-        values: [
-          {
-            title: t("WS_APPLY_FOR"),
-            value: application?.applicationType.includes("WATER")?t("WS_WATER"):t("WS_SEWERAGE"),
-          },
-          {
-            title: t("WS_CONN_DETAIL_NO_OF_TOILETS"),
-            value: application?.proposedToilets,
-          },
-          {
-            title: t("WS_CONN_DETAIL_WATER_CLOSETS"),
-            value: application?.proposedWaterClosets,
-          }
-        ],
-      }},
+      {
+        ...(application?.applicationType.includes("WATER")
+          ? {
+              title: t("WS_COMMON_CONNECTION_DETAILS"),
+              values: [
+                {
+                  title: t("WS_APPLY_FOR"),
+                  value: application?.applicationType.includes("WATER") ? t("WS_WATER") : t("WS_SEWERAGE"),
+                },
+                {
+                  title: t("WS_CONN_DETAIL_NO_OF_TAPS"),
+                  value: application?.proposedTaps,
+                },
+                {
+                  title: t("WS_CONN_DETAIL_PIPE_SIZE"),
+                  value: application?.proposedPipeSize,
+                },
+              ],
+            }
+          : {
+              title: t("WS_COMMON_CONNECTION_DETAILS"),
+              values: [
+                {
+                  title: t("WS_APPLY_FOR"),
+                  value: application?.applicationType.includes("WATER") ? t("WS_WATER") : t("WS_SEWERAGE"),
+                },
+                {
+                  title: t("WS_CONN_DETAIL_NO_OF_TOILETS"),
+                  value: application?.proposedToilets,
+                },
+                {
+                  title: t("WS_CONN_DETAIL_WATER_CLOSETS"),
+                  value: application?.proposedWaterClosets,
+                },
+              ],
+            }),
+      },
       {
         title: t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER"),
         values: [
           {
             title: t("WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS"),
             value: application?.connectionHolders == null ? t("CS_YES") : t("CS_NO"),
-          }
+          },
         ],
       },
       {
         title: t("WS_COMMON_DOCS"),
-        values: getDocumentsForPDF(data?.documents,t),
+        values: getDocumentsForPDF(data?.documents, t),
       },
       {
         title: t("WS_COMMON_ADDN_DETAILS"),
@@ -652,7 +662,7 @@ export  const getPDFData = (application,data,tenantInfo, t) => {
           {
             title: t("WS_ADDN_DETAILS_AREA_LABEL"),
             value: application?.roadCuttingArea || "NA",
-          }
+          },
         ],
       },
       {
@@ -680,137 +690,204 @@ export const checkForEmployee = (roles) => {
   const userInfo = Digit.UserService.getUser();
   let rolesArray = [];
 
-  const rolearray = userInfo?.info?.roles.filter(item => {
+  const rolearray = userInfo?.info?.roles.filter((item) => {
     for (let i = 0; i < roles.length; i++) {
       if (item.code == roles[i] && item.tenantId === tenantId) rolesArray.push(true);
     }
   });
 
   return rolesArray?.length;
-}
+};
 
 export const getBusinessService = (data) => {
-  if (data?.service == "WATER") return "WS.ONE_TIME_FEE"
-  else return "SW.ONE_TIME_FEE"
-}
+  if (data?.service == "WATER") return "WS.ONE_TIME_FEE";
+  else return "SW.ONE_TIME_FEE";
+};
 
-export const convertApplicationData = (data, serviceType, modify = false, t) => {
-  data?.propertyDetails?.owners?.forEach(owner => {
-    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
-  })
+export const convertApplicationData = (data, serviceType, modify = false, editByConfig = false, t) => {
+  data?.propertyDetails?.owners?.forEach((owner) => {
+    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress;
+  });
 
-  let ConnectionDetails = [{
-    water: serviceType === "WATER" ? true : false,
-    sewerage: serviceType === "WATER" ? false : true,
-    applicationNo: data?.applicationData?.applicationNo,
-    serviceName: serviceType,
-    proposedTaps: Number(data?.applicationData?.proposedTaps) || "",
-    proposedPipeSize: data?.applicationData?.proposedPipeSize ? {
-      i18nKey : data?.applicationData?.proposedPipeSize,
-      code: data?.applicationData?.proposedPipeSize,
-      size: data?.applicationData?.proposedPipeSize
-    } : "",
-    proposedToilets: data?.applicationData?.proposedToilets || "",
-    proposedWaterClosets: data?.applicationData?.proposedWaterClosets || ""
-  }];
+  let ConnectionDetails = [
+    {
+      water: serviceType === "WATER" ? true : false,
+      sewerage: serviceType === "WATER" ? false : true,
+      applicationNo: data?.applicationData?.applicationNo,
+      serviceName: serviceType,
+      proposedTaps: Number(data?.applicationData?.proposedTaps) || "",
+      proposedPipeSize: data?.applicationData?.proposedPipeSize
+        ? {
+            i18nKey: data?.applicationData?.proposedPipeSize,
+            code: data?.applicationData?.proposedPipeSize,
+            size: data?.applicationData?.proposedPipeSize,
+          }
+        : "",
+      proposedToilets: data?.applicationData?.proposedToilets || "",
+      proposedWaterClosets: data?.applicationData?.proposedWaterClosets || "",
+    },
+  ];
 
 
-  const ConnectionHolderDetails = data?.applicationData?.connectionHolders?.length > 0 ? [{
-    sameAsOwnerDetails: false,
-    name: data?.applicationData?.connectionHolders?.[0]?.name || "",
-    mobileNumber: data?.applicationData?.connectionHolders?.[0]?.mobileNumber || "",
-    guardian: data?.applicationData?.connectionHolders?.[0]?.fatherOrHusbandName || "",
-    address: data?.applicationData?.connectionHolders?.[0]?.correspondenceAddress || "",
-    gender: data?.applicationData?.connectionHolders?.[0]?.gender ? {
-      code: data?.applicationData?.connectionHolders?.[0]?.gender,
-      i18nKey : data?.applicationData?.connectionHolders?.[0]?.gender,
-    } : "",
-    relationship: data?.applicationData?.connectionHolders?.[0]?.relationship ?  {
-      code: data?.applicationData?.connectionHolders?.[0]?.relationship,
-      i18nKey: data?.applicationData?.connectionHolders?.[0]?.relationship
-    } : "",
-    ownerType: data?.applicationData?.connectionHolders?.[0]?.ownerType ? {
-      code: data?.applicationData?.connectionHolders?.[0]?.ownerType,
-      i18nKey: data?.applicationData?.connectionHolders?.[0]?.ownerType
-    } : "",
+  const ConnectionHolderDetails =
+  data?.applicationData?.connectionHolders?.length > 0
+    ? [
+        {
+          sameAsOwnerDetails: false,
+          name: data?.applicationData?.connectionHolders?.[0]?.name || "",
+          mobileNumber: data?.applicationData?.connectionHolders?.[0]?.mobileNumber || "",
+          guardian: data?.applicationData?.connectionHolders?.[0]?.fatherOrHusbandName || "",
+          address: data?.applicationData?.connectionHolders?.[0]?.correspondenceAddress || "",
+          gender: data?.applicationData?.connectionHolders?.[0]?.gender
+            ? {
+                code: data?.applicationData?.connectionHolders?.[0]?.gender,
+                i18nKey: data?.applicationData?.connectionHolders?.[0]?.gender,
+              }
+            : "",
+          relationship: data?.applicationData?.connectionHolders?.[0]?.relationship
+            ? {
+                code: data?.applicationData?.connectionHolders?.[0]?.relationship,
+                i18nKey: data?.applicationData?.connectionHolders?.[0]?.relationship,
+              }
+            : "",
+          ownerType: data?.applicationData?.connectionHolders?.[0]?.ownerType
+            ? {
+                code: data?.applicationData?.connectionHolders?.[0]?.ownerType,
+                i18nKey: data?.applicationData?.connectionHolders?.[0]?.ownerType,
+              }
+            : "",
 
-    documentId: "",
-    documentType: "",
-    file: "",
-  }] : [{
-    sameAsOwnerDetails: true,
-    name: "",
-    gender: "",
-    mobileNumber: "",
-    guardian: "",
-    relationship: "",
-    address: "",
-    ownerType: "",
-    documentId: "",
-    documentType: "",
-    file: "",
-  }];
-
+          documentId: "",
+          documentType: "",
+          file: "",
+        },
+      ]
+    : [
+        {
+          sameAsOwnerDetails: true,
+          name: "",
+          gender: "",
+          mobileNumber: "",
+          guardian: "",
+          relationship: "",
+          address: "",
+          ownerType: "",
+          documentId: "",
+          documentType: "",
+          file: "",
+        },
+      ];
+      
   let documents = [];
   if (data?.applicationData?.documents) {
-    data.applicationData.documents.forEach(data => {
+    data.applicationData.documents.forEach((data) => {
       documents.push({
         active: true,
         code: data?.documentType,
-        i18nKey: data?.documentType?.replaceAll('.', '_'),
+        i18nKey: data?.documentType?.replaceAll(".", "_"),
         documentType: data?.documentType,
         id: data.id,
         documentUid: data?.documentUid,
-        fileStoreId: data?.fileStoreId
-      })
-    })
+        fileStoreId: data?.fileStoreId,
+      });
+    });
   }
-  let DocumentsRequired = {
-    documents : documents
-  } || [];
+  let DocumentsRequired =
+    {
+      documents: documents,
+    } || [];
 
   let cpt = {};
   cpt["details"] = data?.propertyDetails || {};
 
-  let payload = {}
+  let payload = {};
+
+  const sourceSubDataValue = data?.applicationData?.waterSource ? stringReplaceAll(data?.applicationData?.waterSource?.toUpperCase(), " ", "_") : "";
+  const sourceSubDataFilter = sourceSubDataValue ? stringReplaceAll(sourceSubDataValue?.toUpperCase(), ".", "_") : "";
+
+  const connectionDetails = serviceType === "WATER" ? {
+    connectionType: data?.applicationData?.connectionType ? {
+        code: data?.applicationData?.connectionType, i18nKey: t(`WS_CONNECTIONTYPE_${stringReplaceAll(data?.applicationData?.connectionType?.toUpperCase(), " ", "_")}`)
+    } : "",
+    waterSource: data?.applicationData?.waterSource ? {
+        code: data?.applicationData?.waterSource, i18nKey: t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.applicationData?.waterSource?.split('.')[0]?.toUpperCase(), " ", "_")}`)
+    } : "",
+    sourceSubData: data?.applicationData?.waterSource ? {
+        code: data?.applicationData?.waterSource, i18nKey: t(`WS_SERVICES_MASTERS_WATERSOURCE_${sourceSubDataFilter}`)
+    } : "",
+    pipeSize: data?.applicationData?.pipeSize ? {
+        code: data?.applicationData?.pipeSize, i18nKey: data?.applicationData?.pipeSize
+    } : "",
+    noOfTaps: data?.applicationData?.noOfTaps || ""
+} : {
+    noOfWaterClosets: data?.applicationData?.noOfWaterClosets || "",
+    noOfToilets: data?.applicationData?.noOfToilets || ""
+};
 
   if (modify) {
-    const activationDetails = [{
-      meterId: data?.applicationData?.meterId || "",
-      meterInstallationDate: data?.applicationData?.meterInstallationDate ? convertEpochToDateDMY(data?.applicationData?.meterInstallationDate) : null,
-      meterInitialReading: data?.applicationData?.additionalDetails?.initialMeterReading || "",
-      connectionExecutionDate: data?.applicationData?.connectionExecutionDate ? convertEpochToDateDMY(data?.applicationData?.connectionExecutionDate) : null,
-    }];
+    const activationDetails = [
+      {
+        meterId: data?.applicationData?.meterId || "",
+        meterInstallationDate: data?.applicationData?.meterInstallationDate
+          ? convertEpochToDateDMY(data?.applicationData?.meterInstallationDate)
+          : null,
+        meterInitialReading: data?.applicationData?.additionalDetails?.initialMeterReading || "",
+        connectionExecutionDate: data?.applicationData?.connectionExecutionDate
+          ? convertEpochToDateDMY(data?.applicationData?.connectionExecutionDate)
+          : null,
+      },
+    ];
 
-    if (window.location.href.includes("modify-application-edit")) activationDetails[0].dateEffectiveFrom = data?.applicationData?.dateEffectiveFrom ? convertEpochToDateDMY(data?.applicationData?.dateEffectiveFrom) : null;
+    if (window.location.href.includes("modify-application-edit"))
+      activationDetails[0].dateEffectiveFrom = data?.applicationData?.dateEffectiveFrom
+        ? convertEpochToDateDMY(data?.applicationData?.dateEffectiveFrom)
+        : null;
 
-    const sourceSubDataValue = data?.applicationData?.waterSource ? stringReplaceAll(data?.applicationData?.waterSource?.toUpperCase(), " ", "_") : "";
+    const sourceSubDataValue = data?.applicationData?.waterSource
+      ? stringReplaceAll(data?.applicationData?.waterSource?.toUpperCase(), " ", "_")
+      : "";
     const sourceSubDataFilter = sourceSubDataValue ? stringReplaceAll(sourceSubDataValue?.toUpperCase(), ".", "_") : "";
 
-    const connectionDetails = serviceType === "WATER" ? {
-      connectionType: data?.applicationData?.connectionType ? {
-          code: data?.applicationData?.connectionType, i18nKey: t(`WS_CONNECTIONTYPE_${stringReplaceAll(data?.applicationData?.connectionType?.toUpperCase(), " ", "_")}`)
-      } : "",
-      waterSource: data?.applicationData?.waterSource ? {
-          code: data?.applicationData?.waterSource, i18nKey: t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.applicationData?.waterSource?.split('.')[0]?.toUpperCase(), " ", "_")}`)
-      } : "",
-      sourceSubData: data?.applicationData?.waterSource ? {
-          code: data?.applicationData?.waterSource, i18nKey: t(`WS_SERVICES_MASTERS_WATERSOURCE_${sourceSubDataFilter}`)
-      } : "",
-      pipeSize: data?.applicationData?.pipeSize ? {
-          code: data?.applicationData?.pipeSize, i18nKey: data?.applicationData?.pipeSize
-      } : "",
-      noOfTaps: data?.applicationData?.noOfTaps || ""
-  } : {
-      noOfWaterClosets: data?.applicationData?.noOfWaterClosets || "",
-      noOfToilets: data?.applicationData?.noOfToilets || ""
-  };
-  if (window.location.href.includes("modify-application-edit")) {
-    DocumentsRequired = { documents : documents };
-  } else {
-    DocumentsRequired = { documents : [] };
-  }
-  
+    const connectionDetails =
+      serviceType === "WATER"
+        ? {
+            connectionType: data?.applicationData?.connectionType
+              ? {
+                  code: data?.applicationData?.connectionType,
+                  i18nKey: t(`WS_CONNECTIONTYPE_${stringReplaceAll(data?.applicationData?.connectionType?.toUpperCase(), " ", "_")}`),
+                }
+              : "",
+            waterSource: data?.applicationData?.waterSource
+              ? {
+                  code: data?.applicationData?.waterSource,
+                  i18nKey: t(
+                    `WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.applicationData?.waterSource?.split(".")[0]?.toUpperCase(), " ", "_")}`
+                  ),
+                }
+              : "",
+            sourceSubData: data?.applicationData?.waterSource
+              ? {
+                  code: data?.applicationData?.waterSource,
+                  i18nKey: t(`WS_SERVICES_MASTERS_WATERSOURCE_${sourceSubDataFilter}`),
+                }
+              : "",
+            pipeSize: data?.applicationData?.pipeSize
+              ? {
+                  code: data?.applicationData?.pipeSize,
+                  i18nKey: data?.applicationData?.pipeSize,
+                }
+              : "",
+            noOfTaps: data?.applicationData?.noOfTaps || "",
+          }
+        : {
+            noOfWaterClosets: data?.applicationData?.noOfWaterClosets || "",
+            noOfToilets: data?.applicationData?.noOfToilets || "",
+          };
+    if (window.location.href.includes("modify-application-edit")) {
+      DocumentsRequired = { documents: documents };
+    } else {
+      DocumentsRequired = { documents: [] };
+    }
 
     payload = {
       ConnectionDetails: ConnectionDetails,
@@ -819,8 +896,8 @@ export const convertApplicationData = (data, serviceType, modify = false, t) => 
       activationDetails: activationDetails,
       DocumentsRequired: DocumentsRequired,
       cpt: cpt,
-      InfoLabel: "InfoLabel"
-    }
+      InfoLabel: "InfoLabel",
+    };
   } else {
     payload = {
       ConnectionDetails: ConnectionDetails,
@@ -829,18 +906,21 @@ export const convertApplicationData = (data, serviceType, modify = false, t) => 
       cpt: cpt,
       InfoLabel: "InfoLabel"
     }
+
+    if(editByConfig) { 
+      payload.connectionDetails = [connectionDetails];
+    }
   }
 
   sessionStorage.setItem("Digit.PT_CREATE_EMP_WS_NEW_FORM", JSON.stringify(payload));
   sessionStorage.setItem("WS_EDIT_APPLICATION_DETAILS", JSON.stringify(data));
 
   return payload;
-}
+};
 
 export const convertEditApplicationDetails = async (data, appData, actionData) => {
-
-  data?.cpt?.details?.owners?.forEach(owner => {
-    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
+  data?.cpt?.details?.owners?.forEach((owner) => {
+    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress;
   });
 
   let payload = {
@@ -849,26 +929,30 @@ export const convertEditApplicationDetails = async (data, appData, actionData) =
     proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
     proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
     proposedToilets: data?.ConnectionDetails?.[0]?.proposedToilets && Number(data?.ConnectionDetails?.[0]?.proposedToilets),
-    connectionHolders: !data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
-      correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
-      fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
-      gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
-      mobileNumber: data?.ConnectionHolderDetails?.[0]?.mobileNumber || "",
-      name: data?.ConnectionHolderDetails?.[0]?.name || "",
-      ownerType: data?.ConnectionHolderDetails?.[0]?.ownerType?.code || "",
-      relationship: data?.ConnectionHolderDetails?.[0]?.relationship?.code || "",
-      sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
-    }] : null,
+    connectionHolders: !data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
+      ? [
+          {
+            correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
+            fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
+            gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
+            mobileNumber: data?.ConnectionHolderDetails?.[0]?.mobileNumber || "",
+            name: data?.ConnectionHolderDetails?.[0]?.name || "",
+            ownerType: data?.ConnectionHolderDetails?.[0]?.ownerType?.code || "",
+            relationship: data?.ConnectionHolderDetails?.[0]?.relationship?.code || "",
+            sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails,
+          },
+        ]
+      : null,
     property: data?.cpt?.details,
     processInstance: {
-      action: actionData ? actionData :"RESUBMIT_APPLICATION"
+      action: actionData ? actionData : "RESUBMIT_APPLICATION",
     },
     action: actionData ? actionData : "RESUBMIT_APPLICATION",
     documents: data?.DocumentsRequired?.documents,
-  }
+  };
 
   return payload;
-}
+};
 
 export const getConvertedDate = async (dateOfTime) => {
   let dateOfReplace = stringReplaceAll(dateOfTime, "/", "-");
@@ -880,15 +964,14 @@ export const getConvertedDate = async (dateOfTime) => {
   }
   const convertedDate = await convertDateToEpoch(formattedDate);
   return convertedDate;
-}
+};
 
 export const convertModifyApplicationDetails = async (data, appData, actionData = "INITIATE") => {
-
-  data?.cpt?.details?.owners?.forEach(owner => {
-    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
+  data?.cpt?.details?.owners?.forEach((owner) => {
+    if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress;
   });
 
-  let formData = { ...appData.applicationData }
+  let formData = { ...appData.applicationData };
 
   if (data?.connectionDetails?.[0]?.connectionType?.code) formData.connectionType = data?.connectionDetails?.[0]?.connectionType?.code;
   if (data?.connectionDetails?.[0]?.waterSource?.code) formData.waterSource = data?.connectionDetails?.[0]?.waterSource?.code;
@@ -899,40 +982,46 @@ export const convertModifyApplicationDetails = async (data, appData, actionData 
   if (data?.connectionDetails?.[0]?.noOfToilets) formData.noOfToilets = data?.connectionDetails?.[0]?.noOfToilets;
 
   if (data?.activationDetails?.[0]?.meterId) formData.meterId = data?.activationDetails?.[0]?.meterId;
-  if (data?.activationDetails?.[0]?.meterInstallationDate) formData.meterInstallationDate = await getConvertedDate(data?.activationDetails?.[0]?.meterInstallationDate);
-  if (data?.activationDetails?.[0]?.meterInitialReading) formData.additionalDetails.initialMeterReading = data?.activationDetails?.[0]?.meterInitialReading;
-  if (data?.activationDetails?.[0]?.connectionExecutionDate) formData.connectionExecutionDate = await getConvertedDate(data?.activationDetails?.[0]?.connectionExecutionDate);
-  if (data?.activationDetails?.[0]?.dateEffectiveFrom) formData.dateEffectiveFrom = await getConvertedDate(data?.activationDetails?.[0]?.dateEffectiveFrom);
+  if (data?.activationDetails?.[0]?.meterInstallationDate)
+    formData.meterInstallationDate = await getConvertedDate(data?.activationDetails?.[0]?.meterInstallationDate);
+  if (data?.activationDetails?.[0]?.meterInitialReading)
+    formData.additionalDetails.initialMeterReading = data?.activationDetails?.[0]?.meterInitialReading;
+  if (data?.activationDetails?.[0]?.connectionExecutionDate)
+    formData.connectionExecutionDate = await getConvertedDate(data?.activationDetails?.[0]?.connectionExecutionDate);
+  if (data?.activationDetails?.[0]?.dateEffectiveFrom)
+    formData.dateEffectiveFrom = await getConvertedDate(data?.activationDetails?.[0]?.dateEffectiveFrom);
 
   if (data?.DocumentsRequired?.documents?.length) formData.documents = data?.DocumentsRequired?.documents;
   else formData.documents = null;
 
   if (!data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails) {
-    formData.connectionHolders = [{
-      ...appData?.applicationData?.connectionHolders,
-      correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
-      fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
-      gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
-      mobileNumber: data?.ConnectionHolderDetails?.[0]?.mobileNumber || "",
-      name: data?.ConnectionHolderDetails?.[0]?.name || "",
-      ownerType: data?.ConnectionHolderDetails?.[0]?.ownerType?.code || "",
-      relationship: data?.ConnectionHolderDetails?.[0]?.relationship?.code || "",
-      sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
-    }]
+    formData.connectionHolders = [
+      {
+        ...appData?.applicationData?.connectionHolders,
+        correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
+        fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
+        gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
+        mobileNumber: data?.ConnectionHolderDetails?.[0]?.mobileNumber || "",
+        name: data?.ConnectionHolderDetails?.[0]?.name || "",
+        ownerType: data?.ConnectionHolderDetails?.[0]?.ownerType?.code || "",
+        relationship: data?.ConnectionHolderDetails?.[0]?.relationship?.code || "",
+        sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails,
+      },
+    ];
   }
   formData.processInstance = { action: actionData };
   formData.action = actionData;
-  formData.channel = "CFC_COUNTER"
+  formData.channel = "CFC_COUNTER";
 
   sessionStorage.setItem("WS_DOCUMENTS_INOF", JSON.stringify(data?.DocumentsRequired?.documents || []));
   sessionStorage.setItem("WS_PROPERTY_INOF", JSON.stringify(data?.cpt?.details));
 
   return formData;
-}
+};
 
 export const ifUserRoleExists = (role) => {
   const userInfo = Digit.UserService.getUser();
-  const roleCodes = userInfo?.info?.roles ? userInfo?.info?.roles.map(role => role.code) : [];
+  const roleCodes = userInfo?.info?.roles ? userInfo?.info?.roles.map((role) => role.code) : [];
   if (roleCodes.indexOf(role) > -1) {
     return true;
   } else return false;

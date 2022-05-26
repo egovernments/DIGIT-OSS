@@ -243,7 +243,7 @@ const ConnectionDetails = (_props) => {
                   control={control}
                   name="proposedTaps"
                   defaultValue={connectionDetail?.proposedTaps}
-                  rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                  rules={{ validate: (e) => ((parseInt(e)>0 && e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                   type="number"
                   isMandatory={true}
                   render={(props) => (
@@ -301,7 +301,7 @@ const ConnectionDetails = (_props) => {
                   control={control}
                   name="proposedWaterClosets"
                   defaultValue={connectionDetail?.proposedWaterClosets}
-                  rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                  rules={{ validate: (e) => ((parseInt(e)>0 && e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                   type="number"
                   isMandatory={true}
                   render={(props) => (
@@ -329,7 +329,7 @@ const ConnectionDetails = (_props) => {
                   control={control}
                   name="proposedToilets"
                   defaultValue={connectionDetail?.proposedToilets}
-                  rules={{ validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                  rules={{ validate: (e) => ((parseInt(e)>0 && e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                   type="number"
                   isMandatory={true}
                   render={(props) => (

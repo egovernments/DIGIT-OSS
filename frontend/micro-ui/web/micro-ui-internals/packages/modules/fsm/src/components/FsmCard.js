@@ -95,6 +95,13 @@ const FSMCard = () => {
     return  <EmployeeModuleCard {...propsForFSTPO} />
   }
 
+  const linksForSomeFSMAdmin = FSM_ADMIN ? [
+    {
+      label: t("ES_TITLE_FSM_REGISTRY"),
+      link: `/digit-ui/employee/fsm/registry`
+    }
+  ] : []
+
   const linksForSomeFSMEmployees = !DSO && !COLLECTOR && !FSM_EDITOR ? [
     {
       label: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
@@ -122,7 +129,8 @@ const FSMCard = () => {
         label: t("ES_COMMON_INBOX"),
         link: `/digit-ui/employee/fsm/inbox`
       },
-      ...linksForSomeFSMEmployees
+      ...linksForSomeFSMEmployees,
+      ...linksForSomeFSMAdmin
     ]
   }
 

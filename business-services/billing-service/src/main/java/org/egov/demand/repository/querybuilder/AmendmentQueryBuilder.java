@@ -63,11 +63,11 @@ public class AmendmentQueryBuilder {
 			searchParamMap.addValue("amendmentid", amendmentCriteria.getAmendmentId());
 		}
 		
-		if (amendmentCriteria.getStatus() != null) {
+		if (!CollectionUtils.isEmpty(amendmentCriteria.getStatus())) {
 
 			addAndClause(queryBuilder);
-			queryBuilder.append(" amendment.status=:status ");
-			searchParamMap.addValue("status", amendmentCriteria.getStatus().toString());
+			queryBuilder.append(" amendment.status IN ( :status )");
+			searchParamMap.addValue("status", amendmentCriteria.getStatus());
 		}
 		
 		addPagingClause(queryBuilder, searchParamMap);

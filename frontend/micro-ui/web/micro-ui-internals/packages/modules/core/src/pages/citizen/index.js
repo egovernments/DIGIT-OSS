@@ -14,6 +14,7 @@ import UserProfile from "./Home/UserProfile";
 import ErrorComponent from "../../components/ErrorComponent";
 import FAQsSection from "./FAQs/FAQs";
 import HowItWorks from "./HowItWorks/howItWorks";
+import StaticDynamicCard from "./StaticDynamicComponent/StaticDynamicCard";
 
 const sidebarHiddenFor = [
   "digit-ui/citizen/register/name",
@@ -86,6 +87,12 @@ const Home = ({
   const ModuleLevelLinkHomePages = modules.map(({ code, bannerImage }, index) => {
     let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
     let mdmsDataObj = isLinkDataFetched ? processLinkData(linkData, code, t) : undefined;
+
+    if (mdmsDataObj?.header === "ACTION_TEST_WS") {
+      mdmsDataObj?.links.sort((a, b) => {
+        return b.orderNumber - a.orderNumber;
+      });
+    }
     return (
       <React.Fragment>
         <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
@@ -115,14 +122,7 @@ const Home = ({
               )}
               {/* <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} /> */}
             </div>
-            <Card>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ color: "#25D366", fontWeight: "bold", float: "left" }}>{t("PAY_VIA_WHATSAPP")}</div>
-                <div style={{ float: "right", fill: "#25D366" }}>
-                  <WhatsappIcon />
-                </div>
-              </div>
-            </Card>
+            <StaticDynamicCard moduleCode={code?.toUpperCase()}/>
           </div>
         </Route>
         <Route key={"faq" + index} path={`${path}/${code.toLowerCase()}-faq`}>

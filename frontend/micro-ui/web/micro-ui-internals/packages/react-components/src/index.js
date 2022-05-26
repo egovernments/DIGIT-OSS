@@ -154,7 +154,14 @@ import {
   TLIcon,
   BillsIcon,
   ErrorIcon,
-  PrintBtnCommon
+  PrintBtnCommon,
+  WhatsappIconGreen,
+  HelpLineIcon,
+  ServiceCenterIcon,
+  TimerIcon,
+  RupeeSymbol,
+  ValidityTimeIcon,
+  AddIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -201,6 +208,7 @@ import { FilterForm, FilterFormField } from "./molecules/FilterForm";
 import OpenLinkContainer from "./atoms/OpenLinkContainer";
 import UploadPitPhoto from "./molecules/UploadPitPhoto";
 import { DownloadBtnCommon } from "./atoms/svgindex";
+import ToggleSwitch from "./atoms/ToggleSwitch";
 export {
   Phone,
   Body,
@@ -283,6 +291,7 @@ export {
   EventCalendarView,
   InboxLinks,
   PopupHeadingLabel,
+  ToggleSwitch,
   // Icons
   GetApp,
   ArrowLeft,
@@ -411,5 +420,12 @@ export {
   BillsIcon,
   ErrorIcon,
   DownloadBtnCommon,
-  PrintBtnCommon
+  PrintBtnCommon,
+  WhatsappIconGreen,
+  HelpLineIcon,
+  ServiceCenterIcon,
+  TimerIcon,
+  RupeeSymbol,
+  ValidityTimeIcon,
+  AddIcon
 };

@@ -48,10 +48,23 @@ function ApplicationDetailsContent({
   function OpenImage(imageSource, index, thumbnailsToShow) {
     window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
   }
+
+  const convertEpochToDateDMY = (dateEpoch) => {
+    if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
+      return "NA";
+    }
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${day}/${month}/${year}`;
+  };
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
+        date: convertEpochToDateDMY(applicationData?.auditDetails?.createdTime),
         source: applicationData?.channel || "",
       };
       return <TLCaption data={caption} />;
@@ -154,6 +167,17 @@ function ApplicationDetailsContent({
               </React.Fragment>
             )}
             {/* TODO, Later will move to classes */}
+            {/* Here Render the table for adjustment amount details detail.isTable is true for that table*/}
+            {detail?.isTable && (
+              <table style={{tableLayout:"fixed",width:"100%",borderCollapse:"collapse"}}>
+                <tr style={{ textAlign: "left" }}>
+                  {detail?.headers.map(header =><th style={{padding:"10px"}}>{t(header)}</th>)}
+                </tr>
+                {detail?.tableRows.map(row=><tr>
+                  {row.map(element => <td style={{ paddingRight: "60px",paddingTop:"20px",textAlign:"center" }}>{t(element)}</td>)}
+                </tr>)}
+              </table>
+            )}
             <StatusTable style={getTableStyles()}>
               {detail?.title &&
                 !detail?.title.includes("NOC") &&

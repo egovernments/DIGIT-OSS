@@ -49,6 +49,7 @@ import WSDisconnectionDetails from './pageComponents/WSDisconnectionDetails';
 import WSDisconnectionDocumentsEmployee from "./pageComponents/WSDisconnectionDocumentsEmployee";
 
 import WSInbox from "./components/WSInbox";
+import WSEditApplicationByConfig from './pages/employee/EditApplication/WSEditApplicationByConfig';
 
 const WSModule = ({ stateCode, userType, tenants }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();

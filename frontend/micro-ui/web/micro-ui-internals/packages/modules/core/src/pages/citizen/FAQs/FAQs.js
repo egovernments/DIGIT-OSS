@@ -28,7 +28,7 @@ const FAQsSection = ({module}) => {
           <Header styles={{ marginLeft: "0px", paddingTop: "10px", fontSize: "32px"}}>{t("FAQ_S")}</Header>
         </div>
 
-        <TextInput className="searchInputFAQs" placeholder={t("SEARCH_FAQ_S")} signature={true} signatureImg={<SearchImg />}/>
+        <TextInput textInputStyle={{maxWidth:"960px"}} className="searchInputFAQs" placeholder={t("SEARCH_FAQ_S")} signature={true} signatureImg={<SearchImg />}/>
         <div className="faq-list">
         {moduleFaqs.map((faq, i) => (
           <FaqComponent key={"faq_" + i} question={faq.question} answer={faq.answer}/>

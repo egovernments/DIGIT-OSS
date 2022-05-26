@@ -13,9 +13,9 @@ import {
     const history = useHistory();
     const match = useRouteMatch();
     const { ConnectionHolderDetails, plumberPreference, serviceName, waterConectionDetails, sewerageConnectionDetails, documents, cpt } = value;
-    let routeLink = `/digit-ui/citizen/ws/create-application`;
+    let routeLink = `/digit-ui/citizen/ws/disconnect-application`;
     if(window.location.href.includes("/edit-application/"))
-    routeLink=`/digit-ui/citizen/ws/edit-application`
+    routeLink=`/digit-ui/citizen/ws/edit-disconnect-application`
 
     function routeTo(jumpTo) {
         location.href=jumpTo;
@@ -49,18 +49,18 @@ import {
     <DisconnectTimeline currentStep={3} />
   
     <Card style={{paddingRight:"16px"}}>
-    <CardHeader styles={{fontSize:"28px"}}>{t("WS_DISCONNECTION_APPLICATION_DETAILS")}</CardHeader>
-    <LinkButton
-          label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
-          style={{ width: "100px", display:"inline" }}
-          onClick={() => routeTo(`${routeLink}/connection-holder`)}
-        />
-        <StatusTable>
-          <Row className="border-none" textStyle={{marginRight:"-10px"}} label={t("WS_DISCONNECTION_CONSUMER_NUMBER")} text={ConnectionHolderDetails?.consumerNumber}/>
-          <Row className="border-none" label={t("WS_DISCONNECTION_DISCONNECTION_TYPE")} text={ConnectionHolderDetails?.name}/>
-          <Row className="border-none" label={t("WS_DISCONNECTION_PROPOSED_DATE")} text={t(ConnectionHolderDetails?.gender?.i18nKey)}/>
-          <Row className="border-none" label={t("WS_DISCONNECTION_REASON_FOR_DISCONNECTION")} text={ConnectionHolderDetails?.guardian}/>         
-        </StatusTable>
+      <CardHeader styles={{fontSize:"28px"}}>{t("WS_DISCONNECTION_APPLICATION_DETAILS")}</CardHeader>
+      <LinkButton
+        label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+        style={{ width: "100px", display:"inline" }}
+        onClick={() => routeTo(`${routeLink}/application-form`)}
+      />
+      <StatusTable>
+        <Row className="border-none" textStyle={{marginRight:"-10px"}} label={t("WS_DISCONNECTION_CONSUMER_NUMBER")} text={ConnectionHolderDetails?.consumerNumber}/>
+        <Row className="border-none" label={t("WS_DISCONNECTION_TYPE")} text={ConnectionHolderDetails?.name}/>
+        <Row className="border-none" label={t("WS_DISCONNECTION_PROPOSED_DATE")} text={t(ConnectionHolderDetails?.gender?.i18nKey)}/>
+        <Row className="border-none" label={t("WS_DISCONNECTION_REASON")} text={ConnectionHolderDetails?.guardian}/>         
+      </StatusTable>
     </Card>
  
     <Card style={{paddingRight:"16px"}}>
@@ -68,7 +68,7 @@ import {
           <LinkButton
             label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
             style={{ width: "100px", display: "inline" }}
-            onClick={() => routeTo(`${routeLink}/document-details`)}
+            onClick={() => routeTo(`${routeLink}/documents-upload`)}
           />
         {documents && documents?.documents.map((doc, index) => (
           <div key={`doc-${index}`}>

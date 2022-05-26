@@ -10,6 +10,7 @@ const SWCard = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [totalCount, setTotalCount] = useState(0);
+
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
 
@@ -31,25 +32,22 @@ const SWCard = () => {
 
   const searchFormDefaultValues = {};
 
-
-  const formInitValue1 = {
+  const formInitValue = {
     filterForm: filterFormDefaultValues1,
     searchForm: searchFormDefaultValues,
-    tableForm: tableOrderFormDefaultValues
+    tableForm: tableOrderFormDefaultValues,
   };
 
   const { isLoading: isSWInboxLoading, data: swData } = Digit.Hooks.ws.useInbox({
     tenantId,
-    filters: { ...formInitValue1 },
+    filters: { ...formInitValue },
   });
-
   useEffect(() => {
     if (!isSWInboxLoading) {
       const sewerageCount = swData?.totalCount ? swData?.totalCount : 0;
       setTotalCount(sewerageCount);
     }
   }, [swData]);
-
 
   let links = [
     {
@@ -66,24 +64,33 @@ const SWCard = () => {
     moduleName: t("ACTION_TEST_SEWERAGE"),
     kpis: [
       {
-        count: (isSWInboxLoading) ? "-" : totalCount,
-        label: t("TOTAL_FSM")
+        count: isSWInboxLoading ? "-" : totalCount,
+        label: t("TOTAL_SW"),
+        link: `/digit-ui/employee/ws/sewerage/inbox`,
+      },
+      {
+        count: isSWInboxLoading ? "-" : swData?.slaCount,
+        label: t("TOTAL_NEARING_SLA"),
+        link: `/digit-ui/employee/ws/sewerage/inbox`,
       },
     ],
     links: [
-      ...links,
       {
-        count: isSWInboxLoading ? "-" : swData?.totalCount ,
+        count: isSWInboxLoading ? "-" : swData?.totalCount,
         label: t("WS_SEWERAGE_INBOX"),
         link: `/digit-ui/employee/ws/sewerage/inbox`,
+        roles: ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
+      },
+      ...links,
+      {
+        label: t("WS_SEWERAGE_CONNECTION_SEARCH_LABEL"),
+        link: `/digit-ui/employee/ws/sewerage/search-connection`,
+        roles: ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
       },
       {
         label: t("WS_SEWERAGE_APPLICATION_SEARCH"),
         link: `/digit-ui/employee/ws/sewerage/search-application`,
-      },
-      {
-        label: t("WS_SEWERAGE_CONNECTION_SEARCH_LABEL"),
-        link: `/digit-ui/employee/ws/sewerage/search`,
+        roles: ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
       },
     ],
   };

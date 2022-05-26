@@ -91,7 +91,7 @@ const DocumentDetails = ({ location, match, history, }) => {
                     <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('DOCUMENT_NAME')}:`}</p> <p>{details?.name}</p> </div>
                     <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('DOCUMENT_CATEGORY')}:`}</p> <p>{t(details?.category)}</p> </div>
                     <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('DCOUMENT_DESCRIPTION')}:`}</p> <p className="documentDetails__description">{details?.description?.length ? details?.description : 'NA'}</p> </div>
-                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('ES_COMMON_LINK_LABEL')}:`}</p>
+                    {/* <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('ES_COMMON_LINK_LABEL')}:`}</p>
                         {details?.documentLink ? <LinkButton
                             label={
                                 <div className="link" onClick={() => openDocumentLink(details?.documentLink, details?.name)}>
@@ -99,7 +99,7 @@ const DocumentDetails = ({ location, match, history, }) => {
                                 </div>
                             }
                         /> : 'NA'}
-                    </div>
+                    </div> */}
                     {details?.filestoreId ? <div className="documentDetails_pdf">
                         <span className="documentDetails_subheader">{`${t('Document')}`}</span>
                         <div style={{ width: '100px' }} onClick={() => openUploadedDocument(details?.filestoreId, details?.name)}>

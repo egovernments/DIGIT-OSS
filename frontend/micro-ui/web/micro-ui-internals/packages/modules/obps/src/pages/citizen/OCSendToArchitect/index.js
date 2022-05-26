@@ -4,8 +4,6 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { newConfig as newConfigOCBPA } from "../../../config/ocbuildingPermitConfig";
-// import CheckPage from "../OCBuildingPermit/CheckPage";
-// import OBPSAcknowledgement from "../OCBuildingPermit/OBPSAcknowledgement";
 
 const getPath = (path, params) => {
   params && Object.keys(params).map(key => {
@@ -14,14 +12,14 @@ const getPath = (path, params) => {
   return path;
 }
 
-const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t,OCData) => {
+const getBPAEditDetails = async (data, APIScrutinyDetails,mdmsData,nocdata,t,OCData) => {
 
   const getBlocksforFlow = (unit) => {
     let arr=[];
     let subBlocks = [];
     let subOcc = {};
     unit && unit.map((un, index) => {
-      arr = un?.usageCategory.split(",");
+      arr = un?.usageCategory?.split(",");
       subBlocks=[];
       arr && arr.map((ob, ind) => {
         subBlocks.push({
@@ -88,7 +86,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t,OCData) =
     serviceType:data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType
   }
 
-
+  sessionStorage.setItem("BPA_IS_ALREADY_WENT_OFF_DETAILS", JSON.stringify(true));
   return data;
 }
 
@@ -108,15 +106,12 @@ const OCSendToArchitect = ({ parentRoute }) => {
   let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
 
   let filter1 = {};
-  //let applicationNumber = "PB-BP-2021-09-15-002776";
 
-  //if (licenseNo) filter1.applicationNumber = licenseNo;
   if (tenantId) filter1.tenantId = tenantId;
   if(applicationNo) filter1.applicationNo=applicationNo;
 
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(Digit.ULBService.getStateId(), "BPA", ["RiskTypeComputation"]);
 
-  //const { isLoading, isError, error, data } = Digit.Hooks.tl.useTradeLicenseSearch({ filters: filter1 }, { filters: filter1 });
   const { data: bpaData, isLoading: isBpaSearchLoading } = Digit.Hooks.obps.useBPASearch(tenantId, {applicationNo:applicationNo});
 
   let scrutinyNumber = {edcrNumber:bpaData?.[0]?.edcrNumber};
@@ -137,22 +132,27 @@ const OCSendToArchitect = ({ parentRoute }) => {
   const editApplication = window.location.href.includes("editApplication");
   const tlTrade = JSON.parse(sessionStorage.getItem("tl-trade")) || {};
 
-  useEffect(() => {
-     application = bpaData ? bpaData[0]:{};
-     if (data1 && OCData) {
-      application = bpaData[0];
-       if (editApplication) {
-         application.isEditApplication = true;
-       }
-       sessionStorage.setItem("bpaInitialObject", JSON.stringify({ ...application }));
-       let bpaEditDetails = getBPAEditDetails(application,data1,mdmsData,nocdata,t,OCData);
-       setParams({ ...params, ...bpaEditDetails });
-     }
+  useEffect(async () => {
+    let isAlready = sessionStorage.getItem("BPA_IS_ALREADY_WENT_OFF_DETAILS");
+    isAlready = isAlready ? JSON.parse(isAlready) : true;
+    if (!isAlready && !isNocLoading && !isBpaSearchLoading && !isLoading) {
+      application = bpaData ? bpaData[0]:{};
+      if (data1 && OCData) {
+       application = bpaData[0];
+        if (editApplication) {
+          application.isEditApplication = true;
+        }
+        sessionStorage.setItem("bpaInitialObject", JSON.stringify({ ...application }));
+        let bpaEditDetails = await getBPAEditDetails(application,data1,mdmsData,nocdata,t,OCData);
+        setParams({ ...params, ...bpaEditDetails });
+      }
+    }
+    
   }, [bpaData,data1,mdmsData,nocdata,OCData]);
 
 
   const goNext = (skipStep) => {
-    const currentPath = pathname.split("/").pop();
+    const currentPath = pathname?.split("/")?.pop();
     const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
     let redirectWithHistory = history.push;
     if (nextStep === null) {
@@ -163,7 +163,6 @@ const OCSendToArchitect = ({ parentRoute }) => {
   }
 
   const onSuccess = () => {
-    //clearParams();
     queryClient.invalidateQueries("PT_CREATE_PROPERTY");
   };
   const createApplication = async () => {
@@ -178,7 +177,6 @@ const OCSendToArchitect = ({ parentRoute }) => {
   const handleSkip = () => {};
 
   newConfig = newConfig?.OCBuildingPermitConfig ? newConfig?.OCBuildingPermitConfig : newConfigOCBPA;
-  // const state = tenantId.split(".")[0];
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
@@ -193,6 +191,10 @@ const OCSendToArchitect = ({ parentRoute }) => {
 
   const CheckPage = Digit?.ComponentRegistryService?.getComponent('OCBPACheckPage') ;
   const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('OCBPAAcknowledgement');
+
+  if (isNocLoading || isBpaSearchLoading || isLoading) {
+    return <Loader />
+  }
 
   return (
     <Switch>

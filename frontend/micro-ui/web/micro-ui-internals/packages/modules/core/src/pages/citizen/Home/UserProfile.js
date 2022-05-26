@@ -63,6 +63,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const [loading, setLoading] = useState(false);
   const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
   const [errors, setErrors] = React.useState({});
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const getUserInfo = async () => {
     const uuid = userInfo?.uuid;
@@ -334,6 +335,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
           boxShadow: userType === "citizen" ? "1px 1px 4px 0px rgba(0,0,0,0.2)" : "",
           background: userType === "citizen" ? "white" : "",
           borderRadius: userType === "citizen" ? "4px" : "",
+          maxWidth: userType === "citizen" ? "960px" : "",
         }}
       >
         <section
@@ -393,7 +395,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
             <React.Fragment>
               <LabelFieldPair>
                 <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_NAME")}`}*</CardLabel>
-                <div style={{ width: "100%" }}>
+                <div style={{ width: "100%", maxWidth:"960px" }}>
                   <TextInput
                     t={t}
                     style={{ width: "100%" }}
@@ -457,6 +459,8 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                   width: "100%",
                   height: "40px",
                   color: "white",
+                  
+                  maxWidth : isMobile? "100%":"240px",
                   borderBottom: "1px solid black",
                 }}
               >

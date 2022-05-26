@@ -97,6 +97,7 @@ function SelectDocument({
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
   const [isHidden, setHidden] = useState(false);
   const [newArray, setnewArray] = useState([]);
+  const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf)$/i;
 
   function selectfile(e, key) {
     e && setSelectedDocument({ documentType: key });
@@ -190,29 +191,6 @@ function SelectDocument({
     }
   }, [uploadedFile, selectedDocument, isHidden]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     setError(null);
-  //     if (file) {
-  //       if (file.size >= 5242880) {
-  //         setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
-  //       } else {
-  //         try {
-  //           setUploadedFile(null);
-  //           const response = await Digit.UploadServices.Filestorage("TL", file, Digit.ULBService.getStateId());
-  //           if (response?.data?.files?.length > 0) {
-  //             setUploadedFile(response?.data?.files[0]?.fileStoreId);
-  //           } else {
-  //             setError(t("CS_FILE_UPLOAD_ERROR"));
-  //           }
-  //         } catch (err) {
-  //           setError(t("CS_FILE_UPLOAD_ERROR"));
-  //         }
-  //       }
-  //     }
-  //   })();
-  // }, [file]);
-
   useEffect(() => {
     if (doc && formData?.documents?.documents?.length > 0) {
       for (let i = 0; i < formData?.documents?.documents?.length; i++) {
@@ -237,6 +215,9 @@ function SelectDocument({
             tenantId={stateId}
             getFormState={e => getData(e, doc?.documentType.replaceAll(".", "_"))}
             t={t}
+            allowedFileTypesRegex={allowedFileTypes}
+            allowedMaxSizeInMB={5}
+            acceptFiles= "image/*, .pdf, .png, .jpeg, .jpg"
           />
         </div>
       </LabelFieldPair>

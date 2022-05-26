@@ -13,19 +13,9 @@ const WSCard = () => {
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
 
-
   const filterFormDefaultValues = {
     businessService: ["NewWS1", "ModifyWSConnection"],
     moduleName: "ws-services",
-    locality: [],
-    assignee: "ASSIGNED_TO_ALL",
-    applicationStatus: [],
-    applicationType: [],
-  };
-
-  const filterFormDefaultValues1 = {
-    businessService: ["NewSW1", "ModifySWConnection"],
-    moduleName: "sw-services",
     locality: [],
     assignee: "ASSIGNED_TO_ALL",
     applicationStatus: [],
@@ -44,13 +34,7 @@ const WSCard = () => {
   const formInitValue = {
     filterForm: filterFormDefaultValues,
     searchForm: searchFormDefaultValues,
-    tableForm: tableOrderFormDefaultValues
-  };
-
-  const formInitValue1 = {
-    filterForm: filterFormDefaultValues1,
-    searchForm: searchFormDefaultValues,
-    tableForm: tableOrderFormDefaultValues
+    tableForm: tableOrderFormDefaultValues,
   };
 
   const { isLoading: isWSInboxLoading, data: wsData } = Digit.Hooks.ws.useInbox({
@@ -58,19 +42,12 @@ const WSCard = () => {
     filters: { ...formInitValue },
   });
 
-  const { isLoading: isSWInboxLoading, data: swData } = Digit.Hooks.ws.useInbox({
-    tenantId,
-    filters: { ...formInitValue1 },
-  });
-
   useEffect(() => {
-    if (!isWSInboxLoading || !isSWInboxLoading) {
+    if (!isWSInboxLoading) {
       const waterCount = wsData?.totalCount ? wsData?.totalCount : 0;
-      const sewerageCount = swData?.totalCount ? swData?.totalCount : 0;
-      setTotalCount(waterCount + sewerageCount);
+      setTotalCount(waterCount);
     }
-  }, [wsData, swData]);
-
+  }, [wsData]);
 
   let links = [
     {
@@ -87,8 +64,14 @@ const WSCard = () => {
     moduleName: t("ACTION_TEST_WATER"),
     kpis: [
       {
-        count: (isWSInboxLoading || isSWInboxLoading) ? "-" : totalCount,
-        label: t("TOTAL_FSM")
+        count: isWSInboxLoading ? "-" : totalCount,
+        label: t("TOTAL_WS"),
+        link: `/digit-ui/employee/ws/water/inbox`,
+      },
+      {
+        count: isWSInboxLoading ? "-" : wsData?.slaCount,
+        label: t("TOTAL_NEARING_SLA"),
+        link: `/digit-ui/employee/ws/water/inbox`,
       },
       // {
       //     label: t(""),
@@ -100,19 +83,22 @@ const WSCard = () => {
       //   label: t("ES_COMMON_INBOX"),
       //   link: `/digit-ui/employee/ws/bill-amend/inbox`,
       // },
-      ...links,
       {
         count: isWSInboxLoading ? "-" : wsData?.totalCount,
         label: t("WS_WATER_INBOX"),
         link: `/digit-ui/employee/ws/water/inbox`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
+      },
+      ...links,
+      {
+        label: t("WS_WATER_CONNECTION_SEARCH_LABEL"),
+        link: `/digit-ui/employee/ws/water/search-connection`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
       {
         label: t("WS_WATER_APPLICATION_SEARCH"),
         link: `/digit-ui/employee/ws/water/search-application`,
-      },
-      {
-        label: t("WS_WATER_CONNECTION_SEARCH_LABEL"),
-        link: `/digit-ui/employee/ws/water/search`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
     ],
   };

@@ -109,7 +109,7 @@ const EngagementDocUploadDocument = ({ userType, t, onSelect, setValue, config, 
         </div>
       </LabelFieldPair>
 
-      <LabelFieldPair style={{ margin: "25px" }}>
+      {/* <LabelFieldPair style={{ margin: "25px" }}>
         <CardLabel></CardLabel>
         <div style={{ textAlign: "center" }} className="field links-wrapper">
           <span style={{ color: "#505a5f", fontWeight: "bold" }} className="cell-text">
@@ -123,7 +123,7 @@ const EngagementDocUploadDocument = ({ userType, t, onSelect, setValue, config, 
         <div className="field">
           <TextInput name={config.key + ".documentLink"} inputRef={register()} disable={urlDisabled} />
         </div>
-      </LabelFieldPair>
+      </LabelFieldPair> */}
     </React.Fragment>
   );
 };

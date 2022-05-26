@@ -296,6 +296,30 @@ public class SWCalculationConstant {
 
 	public static final String PROPERTY_MASTER_MODULE = "PropertyTax";
 
+	public static final String ADHOC_PENALTY_REASON = "adhocPenaltyReason";
+
+	public static final String ADHOC_PENALTY_COMMENT = "adhocPenaltyComment";
+
+	public static final String ADHOC_REBATE_REASON = "adhocRebateReason";
+
+	public static final String ADHOC_REBATE_COMMENT = "adhocRebateComment";
+
+	public static final String DETAILS_PROVIDED_BY = "detailsProvidedBy";
+
+	public static final String APP_CREATED_DATE = "appCreatedDate";
+
+	public static final String ESTIMATION_FILESTORE_ID = "estimationFileStoreId";
+
+	public static final String SANCTION_LETTER_FILESTORE_ID = "sanctionFileStoreId";
+
+	public static final String ESTIMATION_DATE_CONST = "estimationLetterDate";
+
+	public static final String LOCALITY = "locality";
+	
+	public static final String PAYMENT_COMPLETED_SEARCH_FIELD_NAME = "isPaymentCompleted=";
+
+	public static final String MDMS_CACHE_KEY = "WSMasterData";
+
 	//Notification
 	public static final String CHANNEL_NAME_SMS = "SMS";
 
@@ -317,4 +341,12 @@ public class SWCalculationConstant {
 	public static final String ACTION_FOR_BILL = "BILL";
 
 	public static String Billing_Cycle_String = "billingCycle";
+	
+	public static final String MODIFIED_FINAL_STATE = "APPROVED";
+
+	public static final String STATUS_APPROVED = "CONNECTION_ACTIVATED";
+
+	public static final List<String> FINAL_CONNECTION_STATES = Collections
+			.unmodifiableList(Arrays.asList(MODIFIED_FINAL_STATE, STATUS_APPROVED));
+
 }

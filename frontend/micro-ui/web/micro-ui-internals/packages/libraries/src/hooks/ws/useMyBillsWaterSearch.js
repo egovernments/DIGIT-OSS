@@ -27,7 +27,7 @@ const combineResponse = (WaterConnections, properties, billData, t) => {
     AmountDue : billData ? (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.amount ? billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.amount : "NA")  : "NA",
     DueDate : billData ? getDate(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.expiryDate) : "NA",
     BillingPeriod : billData ?  getBillingPeriod(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.fromPeriod , billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.toPeriod) : "NA",
-    ServiceName: billData ?  (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.businessService) : "NA",
+    ServiceName: billData ?  (t(`WS_SERVICE_TYPE_${billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.businessService}`)) : "NA",
     }))
   else
   return [];

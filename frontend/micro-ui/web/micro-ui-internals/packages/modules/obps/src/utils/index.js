@@ -89,7 +89,7 @@ export const getBPAFormData = async (data, mdmsData, history, t) => {
       unit.map((un, index) => {
         arr = un?.usageCategory?.split(",");
         subBlocks = [];
-        arr &&
+        arr && arr?.length > 0 && arr != "" &&
           arr.map((ob, ind) => {
             subBlocks.push({
               code: ob,
@@ -503,7 +503,7 @@ export const convertEpochToDateDMY = (dateEpoch) => {
   return `${day}/${month}/${year}`;
 };
 
-export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t) => {
+export const getBPAEditDetails = async (data, APIScrutinyDetails, mdmsData, nocdata, t) => {
   const getBlockIds = (unit) => {
     let blocks = {};
     unit &&
@@ -613,6 +613,8 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
     applicationType: data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
     serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
   };
+
+  sessionStorage.setItem("BPA_IS_ALREADY_WENT_OFF_DETAILS", JSON.stringify(true));
   return data;
 };
 
@@ -805,4 +807,20 @@ export const ocScrutinyDetailsData = async (edcrNumber, tenantId) => {
   } else {
     return {type: "ERROR", message: "BPA_NO_RECORD_FOUND"}
   }
+}
+
+export const getOrderDocuments = (appUploadedDocumnets, isNoc = false) => {
+  let finalDocs = [];
+  if (appUploadedDocumnets?.length > 0) {
+    let uniqueDocmnts = appUploadedDocumnets.filter((elem, index) => appUploadedDocumnets.findIndex((obj) => obj?.documentType?.split(".")?.slice(0, 2)?.join("_") === elem?.documentType?.split(".")?.slice(0, 2)?.join("_")) === index);
+    uniqueDocmnts?.map(uniDoc => {
+      const resultsDocs = appUploadedDocumnets?.filter(appDoc => uniDoc?.documentType?.split(".")?.slice(0, 2)?.join("_") == appDoc?.documentType?.split(".")?.slice(0, 2)?.join("_"));
+      resultsDocs?.forEach(resDoc => resDoc.title = resDoc.documentType);
+      finalDocs.push({
+        title: !isNoc ? resultsDocs?.[0]?.documentType?.split(".")?.slice(0, 2)?.join("_") : "",
+        values: resultsDocs
+      })
+    });
+  }
+  return finalDocs;
 }

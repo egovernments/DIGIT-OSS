@@ -69,6 +69,7 @@ const useWSInbox = ({ tenantId, filters, config = {} }) => {
           sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000)),
           connectionNo: application.businessObject.connectionNo || "NA",
         })),
+        slaCount: data.nearingSlaCount,
         totalCount: data.totalCount,
       }),
       ...config,

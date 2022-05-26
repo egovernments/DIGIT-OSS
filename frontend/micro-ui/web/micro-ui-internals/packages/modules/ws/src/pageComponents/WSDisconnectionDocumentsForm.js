@@ -21,122 +21,24 @@ function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData 
   const [error, setError] = useState(null);
   const [enableSubmit, setEnableSubmit] = useState(true)
   const [checkRequiredFields, setCheckRequiredFields] = useState(false);
-  // const { isLoading: wsDocsLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId);
-  const goNext = () => {
-    onSelect("DocsReq", "");
-  }
 
-useEffect(() =>{
-    setDocuments(storedData||[])
-},[]);
+  useEffect(() =>{
+      setDocuments(storedData||[])
+  },[]);
 
   const handleSubmit = () => {
-      console.log("trigered",formData,documents)
-    //   let document = formData.documents;
-    //   let documentStep;
-    //   documentStep = { ...document, WSDisconnectionDocumentsForm: documents };
       onSelect(config.key, {WSDisconnectionDocumentsForm: documents});
   };
  
-  // useEffect(() => {
-  //     let count = 0;
-  //     wsDocs?.Documents.map(doc => {
-  //         let isRequired = false;
-  //         documents.map(data => {
-  //             if (doc.required && data?.documentType.includes(doc.code)) isRequired = true;
-  //         });
-  //         if (!isRequired && doc.required) count = count + 1;
-  //     });
-  //     if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
-  //     else setEnableSubmit(true);
-  // }, [documents, checkRequiredFields])
-
-  // console.log(wsDocs,"PROOOFFFFF");
-
-  const wsDocs={Documents: [
-    {
-      "code": "OWNER.IDENTITYPROOF",
-      "documentType": "OWNER",
-      "required": true,
-      "active": true,
-      "hasDropdown": true,
-      "dropdownData": [
-          {
-              "code": "OWNER.IDENTITYPROOF.AADHAAR",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_AADHAAR"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.VOTERID",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_VOTERID"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.DRIVING",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_DRIVING"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.PAN",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_PAN"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.PASSPORT",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_PASSPORT"
-          }
-      ],
-      "description": "OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION",
-      "i18nKey": "OWNER_IDENTITYPROOF"
-  },
-  {
-    "code": "OWNER.ADDRESSPROOF",
-    "documentType": "OWNER",
-    "required": true,
-    "active": true,
-    "hasDropdown": true,
-    "dropdownData": [
-        {
-            "code": "OWNER.ADDRESSPROOF.ELECTRICITYBILL",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_ELECTRICITYBILL"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.DL",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_DL"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.VOTERID",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_VOTERID"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.AADHAAR",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_AADHAAR"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.PAN",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_PAN"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.PASSPORT",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_PASSPORT"
-        }
-    ],
-    "description": "OWNER.ADDRESSPROOF.ADDRESSPROOF_DESCRIPTION",
-    "i18nKey": "OWNER_ADDRESSPROOF"
-}
-]}
+  const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId, 'DisconnectionDocuments');
  
+  if(wsDocsLoading) {
+    return <Loader />;
+  }
+
   return (
     <div style={{ marginTop: "19px" }}>
       {userType === "citizen" && (<DisconnectTimeline currentStep={2} />)}
-      {/* {!wsDocsLoading ?  */}
       <FormStep
         t={t}
         config={config}
@@ -157,12 +59,10 @@ useEffect(() =>{
             //   setCheckRequiredFields={setCheckRequiredFields}
             />
           );
-          })}
-        <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
+        })}
+        <SubmitBar label={t(`CS_COMMON_NEXT`)} submit={true} />
         {error && <Toast label={error} onClose={() => setError(null)} error />}
       </FormStep> 
-      {/* : <Loader />} */}
-
     </div>
   );
 }

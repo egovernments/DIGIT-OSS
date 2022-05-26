@@ -86,4 +86,24 @@ export const FSMService = {
       auth: true,
     });
   },
+  createVendor: (details, tenantId) =>
+    Request({
+      url: Urls.fsm.createVendor,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
+  updateVendor: (details, tenantId) =>
+    Request({
+      url: Urls.fsm.updateVendor,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
 };

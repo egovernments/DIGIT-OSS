@@ -42,7 +42,7 @@ const NDSSCard = () => {
     subHeader: t("ACTION_TEST_NATDASHBOARD"),
     // subHeaderLink: `/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD`,
     subHeaderLink: `/digit-ui/employee/dss/landing/NURT_DASHBOARD`,
-    className: "employeeCard card-home customEmployeeCard full-width-card full-employee-card-height",
+    className: "employeeCard customEmployeeCard card-home full-width-card full-employee-card-height",
     links: [...links],
   };
   return <ModuleCardFullWidth {...propsForModuleCard} />;

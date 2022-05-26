@@ -12,6 +12,8 @@ const FsmBreadCrumb = ({ location }) => {
   const isInbox = location?.pathname?.includes("inbox");
   const isFsm = location?.pathname?.includes("fsm");
   const isSearch = location?.pathname?.includes("search");
+  const isRegistry = location?.pathname?.includes("registry");
+  const isVendorDetails = location?.pathname?.includes("vendor-details");
   const [search, setSearch] = useState(false);
 
   useEffect(() => {
@@ -29,7 +31,7 @@ const FsmBreadCrumb = ({ location }) => {
       show: isFsm,
     },
     {
-      path: FSTPO ? "/digit-ui/employee/fsm/fstp-inbox" : "/digit-ui/employee/fsm/inbox",
+      path: isRegistry ? "/digit-ui/employee/fsm/registry" : FSTPO ? "/digit-ui/employee/fsm/fstp-inbox" : "/digit-ui/employee/fsm/inbox",
       content: isInbox || isApplicationDetails || search || isVehicleLog ? t("ES_TITLE_INBOX") : "FSM",
       show: isFsm,
     },
@@ -40,6 +42,7 @@ const FsmBreadCrumb = ({ location }) => {
     },
     { content: t("ES_TITLE_APPLICATION_DETAILS"), show: isApplicationDetails },
     { content: t("ES_TITLE_VEHICLE_LOG"), show: isVehicleLog },
+    { content: t("ES_TITLE_VENDOR_DETAILS"), show: isRegistry && isVendorDetails },
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
@@ -68,6 +71,12 @@ const EmployeeApp = ({ path, url, userType }) => {
   const ApplicationAudit = Digit.ComponentRegistryService.getComponent("FSMApplicationAudit");
   const RateView = Digit.ComponentRegistryService.getComponent("FSMRateView");
   const FSMLinks = Digit.ComponentRegistryService.getComponent("FSMLinks");
+  const FSMRegistry = Digit.ComponentRegistryService.getComponent("FSMRegistry");
+  const VendorDetails = Digit.ComponentRegistryService.getComponent("VendorDetails");
+  const AddVendor = Digit.ComponentRegistryService.getComponent("AddVendor");
+  const EditVendor = Digit.ComponentRegistryService.getComponent("EditVendor");
+  const VehicleDetails = Digit.ComponentRegistryService.getComponent("VehicleDetails");
+  const AddVehicle = Digit.ComponentRegistryService.getComponent("AddVehicle");
 
   return (
     <Switch>
@@ -86,6 +95,12 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/search`} component={() => <Inbox parentRoute={path} isSearch={true} />} />
           <PrivateRoute path={`${path}/rate-view/:id`} component={() => <RateView parentRoute={path} />} />
           <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <div />} />
+          <PrivateRoute exact path={`${path}/registry`} component={() => <FSMRegistry parentRoute={path} />} />
+          <PrivateRoute path={`${path}/registry/vendor-details/:id`} component={() => <VendorDetails parentRoute={path} />} />
+          <PrivateRoute path={`${path}/registry/new-vendor`} component={() => <AddVendor parentRoute={path} />} />
+          <PrivateRoute path={`${path}/registry/modify-vendor/:id`} component={() => <EditVendor parentRoute={path} />} />
+          <PrivateRoute path={`${path}/registry/vehicle-details/:id`} component={() => <VehicleDetails parentRoute={path} />} />
+          <PrivateRoute path={`${path}/registry/new-vehicle`} component={() => <AddVehicle parentRoute={path} />} />
         </div>
       </React.Fragment>
     </Switch>

@@ -466,6 +466,8 @@ public class EnrichmentService {
 			if(!ObjectUtils.isEmpty(processInstance)) {
 				sewerageConnection.getProcessInstance().setBusinessService(processInstance.get(0).getBusinessService());
 				sewerageConnection.getProcessInstance().setModuleName(processInstance.get(0).getModuleName());
+				if(!ObjectUtils.isEmpty(processInstance.get(0).getAssignes()))
+					sewerageConnection.getProcessInstance().setAssignes(processInstance.get(0).getAssignes());
 			}
 		}
 	}

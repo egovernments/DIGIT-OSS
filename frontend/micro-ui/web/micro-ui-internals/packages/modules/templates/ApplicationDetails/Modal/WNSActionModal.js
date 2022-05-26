@@ -73,18 +73,18 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }, [file]);
 
   function submit(data) {
-    if(applicationData.amendmentId){
-      applicationData = {
-        ...applicationData,
+    if(applicationData?.isBillAmend){
+     const amendment = {
+       ...applicationData?.billAmendmentDetails,
         workflow:{
-          businessId:applicationData.amendmentId,
+          businessId:applicationData?.billAmendmentDetails?.amendmentId,
           action:action?.action,
           tenantId:tenantId,
           businessService:"BS.AMENDMENT",
           moduleName:"BS"
-        }
+        },
       }
-      submitAction({AmendmentUpdate:applicationData})
+      submitAction({AmendmentUpdate:amendment})
       return
     }
     let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
@@ -138,10 +138,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           uploadedFile,
           setUploadedFile,
           businessService,
+          error
         })
       );
     }
-  }, [action, approvers, uploadedFile]);
+  }, [action, approvers, uploadedFile, error]);
 
   return action && config.form ? (
     <Modal

@@ -18,6 +18,7 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
   const [error, setError] = useState(null);
   const [dropdownValue, setDropdownValue] = useState(formData?.ConnectionHolderDetails?.documentType || "");
   const [ownerType, setOwnerType] = useState( formData?.ConnectionHolderDetails?.specialCategoryType || {});
+  let isMobile = window.Digit.Utils.browser.isMobile();
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
@@ -247,6 +248,7 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
             <Dropdown
                 className="form-field"
                 selected={ownerType}
+                style={isMobile ? {} : {width:"540px"}}
                 //disable={Menu?.length === 1 || editScreen}
                 option={Menu}
                 select={setTypeOfOwner}
@@ -273,6 +275,7 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
                     selected={dropdownValue}
                     optionKey="i18nKey"
                     select={setTypeOfDropdownValue}
+                    style={isMobile ? {} : {width:"540px"}}
                     //placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
                     //disable={isUpdateProperty || isEditProperty}
                 />

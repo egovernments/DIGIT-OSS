@@ -29,6 +29,9 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl ,initData}) =
     if (!pathname?.includes("dss")) {
       Digit.SessionStorage.del("DSS_FILTERS");
     }
+    if( pathname?.toString() === "/digit-ui/employee"){
+      Digit.SessionStorage.del("SEARCH_APPLICATION_DETAIL");
+    }
   }, [pathname]);
 
   history.listen(() => {

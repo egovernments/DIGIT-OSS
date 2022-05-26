@@ -13,11 +13,6 @@ const GetActionMessage = (props) => {
   }
 };
 
-// const rowContainerStyle = {
-// padding: "4px 0px",
-// justifyContent: "space-between",
-// };
-
 const BannerPicker = (props) => {
   return <Banner message={GetActionMessage(props)} successful={props.isSuccess} />;
 };
@@ -40,28 +35,7 @@ const WSDisconnectAcknowledgement = ({ data, t, onSuccess, clearParams}) => {
     } catch (err) {}
   }, [data]);
 
-  const handleDownloadPdf = () => {
-    // const WSmutationdata = WSmutation?.data?.WaterDisconnection?.[0];
-    // const SWmutationdata = SWmutation?.data?.SewerageDisconnections?.[0];
-    // const tenantInfo = tenants.find((tenant) => tenant.code === data?.cpt?.details?.tenantId);
-    // if(data?.serviceName?.code === "WATER")
-    // {
-    // const data1 = getPDFData({...WSmutationdata},data,tenantInfo, t);
-    // Digit.Utils.pdf.generate(data1);
-    // }
-    // else if(data?.serviceName?.code === "SEWERAGE")
-    // {
-    // const data2 = getPDFData({...SWmutationdata},data,tenantInfo, t);
-    // Digit.Utils.pdf.generate(data2);
-    // }
-    // else
-    // {
-    // const data1 = getPDFData({...WSmutationdata},data,tenantInfo, t);
-    // const data2 = getPDFData({...SWmutationdata},data,tenantInfo, t);
-    // Digit.Utils.pdf.generate(data1);
-    // Digit.Utils.pdf.generate(data2);
-    // }
-  };
+  const handleDownloadPdf = () => {};
 
   return (
     <Card style={{ padding: "10px" }}>
@@ -70,10 +44,8 @@ const WSDisconnectAcknowledgement = ({ data, t, onSuccess, clearParams}) => {
         <BannerPicker t={t} /> <successSvg />
       </CardSectionHeader>
       <CardText>
-        The Notification number along with the application number is sent to your registered mobile number. you can make payment later using Track
-        application Link from Home page once you recieve the message you make payement in your mobile phone.
+        {t('WS_DISCONNECTION_APPLICATION_SUCC_MSG')}
       </CardText>
-
       {<SubmitBar label={t("WS_DOWNLOAD_ACK_FORM")} onSubmit={handleDownloadPdf} />}
       <Link to={`/digit-ui/citizen`}>
         <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />

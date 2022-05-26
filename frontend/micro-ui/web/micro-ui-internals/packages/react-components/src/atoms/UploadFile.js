@@ -96,7 +96,7 @@ const getCitizenStyles = (value) => {
         lineHeight: "16px",
         overflow: "hidden",
         // minHeight: "35px",
-        maxHeight: "35px"
+        maxHeight: "34px"
       },   
       inputStyles: {
         width: "43%",
@@ -138,6 +138,7 @@ const UploadFile = (props) => {
   const inpRef = useRef();
   const [hasFile, setHasFile] = useState(false);
   const [prevSate, setprevSate] = useState(null);
+  const user_type = Digit.SessionStorage.get("userType");
   let extraStyles = {};
   const handleChange = () => {
     if (inpRef.current.files[0])
@@ -193,7 +194,7 @@ const UploadFile = (props) => {
   return (
     <Fragment>
       {showHint && <p className="cell-text">{t(props?.hintText)}</p>}
-      <div className={`upload-file ${props.disabled ? " disabled" : ""}`} style={extraStyles?.uploadFile ? extraStyles?.uploadFile : {}}>
+      <div className={`upload-file ${user_type === "employee" ? "":"upload-file-max-width"} ${props.disabled ? " disabled" : ""}`} style={extraStyles?.uploadFile ? extraStyles?.uploadFile : {}}>
         <div style= {extraStyles ? extraStyles?.containerStyles : null}>
           <ButtonSelector
             theme="border"
@@ -240,6 +241,7 @@ const UploadFile = (props) => {
           }}
         />
       </div>
+      {props.iserror && <p style={{color: "red"}}>{props.iserror}</p>}
       {props?.showHintBelow && <p className="cell-text">{t(props?.hintText)}</p>}
     </Fragment>
   );

@@ -27,6 +27,20 @@ const convertEpochToDate = (dateEpoch) => {
   }
 };
 
+const getAddress = (address, t) => {
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+    address?.landmark ? `${address?.landmark}, ` : ""
+  }${t(Digit.Utils.pt.getMohallaLocale(address?.locality.code, address?.tenantId))}, ${t(Digit.Utils.pt.getCityLocale(address?.tenantId))}${
+    address?.pincode && t(address?.pincode) ? `, ${address.pincode}` : " "
+  }`;
+};
+
+const getOwnerNames = (propertyData) => {
+  const getActiveOwners = propertyData?.owners?.filter(owner => owner?.active);
+  const getOwnersList = getActiveOwners?.map(activeOwner => activeOwner?.name)?.join(",");
+  return getOwnersList ? getOwnersList : t("NA");
+}
+
 export const WSSearch = {
   application: async (tenantId, filters = {}, serviceType) => {
     const response = await WSService.search({ tenantId, filters: { ...filters }, businessService: serviceType === "WATER" ? "WS" : "SW" });
@@ -130,6 +144,7 @@ export const WSSearch = {
     const workFlowDataDetails = cloneDeep(workflowDetails);
     const serviceDataType = cloneDeep(serviceType);
 
+
     const applicationHeaderDetails = {
       title: " ",
       asSectionHeader: true,
@@ -169,13 +184,13 @@ export const WSSearch = {
       asSectionHeader: true,
       values: [
         { title: "WS_PROPERTY_ID_LABEL", value: propertyDataDetails?.propertyId },
-        { title: "WS_COMMON_OWNER_NAME_LABEL", value: propertyDataDetails?.owners?.[0]?.name },
-        { title: "WS_PROPERTY_ADDRESS_LABEL", value: propertyDataDetails?.address?.locality?.name },
+        { title: "WS_COMMON_OWNER_NAME_LABEL", value: getOwnerNames(propertyDataDetails) },
+        { title: "WS_PROPERTY_ADDRESS_LABEL", value: getAddress(propertyDataDetails?.address, t)},
       ],
       additionalDetails: {
         redirectUrl: {
           title: "View Complete Property details",
-          url: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}`,
+          url: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=WS_APPLICATION_DETAILS_HEADER`,
         },
       },
     };
@@ -192,6 +207,7 @@ export const WSSearch = {
               { title: "WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME", value: wsDataDetails?.connectionHolders?.[0]?.fatherOrHusbandName },
               { title: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.relationship },
               { title: "WS_CORRESPONDANCE_ADDRESS_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.correspondenceAddress },
+              { title: "WS_OWNER_SPECIAL_CATEGORY", value: wsDataDetails?.connectionHolders?.[0]?.ownerType ? `PROPERTYTAX_OWNERTYPE_${wsDataDetails?.connectionHolders?.[0]?.ownerType?.toUpperCase()}` : "NA"},
             ]
           : [{ title: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS", value: t("SCORE_YES") }],
     };
@@ -438,11 +454,45 @@ export const WSSearch = {
       asSectionHeader: true,
       values: [...actualFieldsAndAmountOfBillDetails.map( e => ({
         title: e?.taxHeadMasterCode, value: `₹ ${e?.taxAmount}`
-      })), { title: "WS_TOTAL_TAX", value: `₹ ${Math.round(actualFieldsAndAmountOfBillDetails.reduce((acc, curr) => curr.taxAmount + acc, 0))}` }]
+      })), { title: "WS_REVISED_DEMAND", value: `₹ ${Math.round(actualFieldsAndAmountOfBillDetails.reduce((acc, curr) => curr.taxAmount + acc, 0))}` }]
     };
+    
+    const tableData = billAmendmentSearch?.Amendments?.[0]?.additionalDetails?.searchBillDetails;
+    const action = tableData?.action;
+    const tableHeader = ["WS_TAX_HEAD","WS_CURRENT_DEMAND",action,"WS_REVISED_DEMAND"]
+    const tableRows = []
+    const taxHeads = Object.keys(tableData?.actionPerformed)
+    const actionPerformed = tableData?.actionPerformed
+    const originalDemand = tableData?.originalDemand
+    const getTaxHeadAmount = (obj,taxHead) => {
+      return parseInt(obj[taxHead] ? obj[taxHead] : 0)
+    }
+    
+    let sumCurrent=0;
+    let sumApplied=0;
+    let sumRevised=0;
+    taxHeads.map(taxHead => {
+      const currentDemand = getTaxHeadAmount(originalDemand, taxHead)
+      const appliedDemand = getTaxHeadAmount(actionPerformed, taxHead)
+      const revisedDemand = action==="REBATE"?currentDemand-appliedDemand:currentDemand+appliedDemand
+      sumCurrent += currentDemand
+      sumApplied += appliedDemand
+      sumRevised += revisedDemand
+      tableRows.push([taxHead,currentDemand,appliedDemand,revisedDemand])
+    })
+    tableRows.push(["WS_TOTAL_DUE",sumCurrent,sumApplied,sumRevised])
+    
+    const tableDetails = {
+      title: "WS_AMOUNT_DETAILS",
+      asSectionHeader: true,
+      isTable:true,
+      headers:tableHeader,
+      action,
+      tableRows
+    }
 
     const connectionHolderDetails = {
-      title: " ",
+      title: "WS_DEMAND_REVISION_BASIS",
       asSectionHeader: true,
       values: [
         { title: "WS_DEMAND_REVISION_REASON", value: billAmendmentSearch?.Amendments?.[0]?.amendmentReason },
@@ -470,8 +520,16 @@ export const WSSearch = {
       }
     };
 
-    const details = [applicationHeaderDetails, propertyDetails, connectionHolderDetails, documentDetails]
+    const details = [applicationHeaderDetails, tableDetails , connectionHolderDetails, documentDetails]
     wsDataDetails.serviceType = serviceDataType;
+
+
+    if (billAmendmentSearch?.Amendments?.[0]) {
+      wsDataDetails.billAmendmentDetails = billAmendmentSearch.Amendments[0]
+      wsDataDetails.isBillAmend = true
+    }
+
+    
     return {
       applicationData: wsDataDetails,
       applicationDetails: details,
@@ -565,7 +623,7 @@ export const WSSearch = {
               { title: "WS_INITIAL_METER_READING_LABEL", value: wsDataDetails?.additionalDetails?.initialMeterReading || t("NA") },
               {
                 title: "WS_VIEW_CONSUMPTION_DETAIL",
-                to: `/digit-ui/employee/ws/consumption-details?applicationNo=${wsDataDetails?.connectionNo}&tenantId=${wsDataDetails?.tenantId}&service=${serviceType}`,
+                to: `/digit-ui/employee/ws/consumption-details?applicationNo=${wsDataDetails?.connectionNo}&tenantId=${wsDataDetails?.tenantId}&service=${serviceType}&from=WS_COMMON_CONNECTION_DETAIL`,
                 value: "",
                 isLink: true,
               },
@@ -587,11 +645,11 @@ export const WSSearch = {
       asSectionHeader: true,
       values: [
         { title: "WS_PROPERTY_ID_LABEL", value: propertyDataDetails?.propertyId },
-        { title: "WS_COMMON_OWNER_NAME_LABEL", value: propertyDataDetails?.owners?.[0]?.name },
-        { title: "WS_PROPERTY_ADDRESS_LABEL", value: propertyDataDetails?.address?.locality?.name },
+        { title: "WS_COMMON_OWNER_NAME_LABEL", value: getOwnerNames(propertyDataDetails) },
+        { title: "WS_PROPERTY_ADDRESS_LABEL", value: getAddress(propertyDataDetails?.address, t)},
         {
           title: "WS_VIEW_PROPERTY_DETAIL",
-          to: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}`,
+          to: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=WS_COMMON_CONNECTION_DETAIL`,
           value: "",
           isLink: true,
         },

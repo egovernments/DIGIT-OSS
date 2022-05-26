@@ -5,7 +5,7 @@ import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
 import useInboxTableConfig from "./useInboxTableConfig";
 import useInboxMobileCardsData from "./useInboxMobileCardsData";
-import { useLocation } from "react-router-dom";
+import { checkForEmployee } from "../../utils";
 
 const WSInbox = ({ parentRoute }) => {
   const { t } = useTranslation();
@@ -18,7 +18,6 @@ const WSInbox = ({ parentRoute }) => {
     mobileNumber: "",
     applicationNumber: "",
   };
-
   const filterFormDefaultValues = {
     businessService: checkPathName ? ["NewWS1", "ModifyWSConnection"] : ["NewSW1", "ModifySWConnection"],
     moduleName: checkPathName ? "ws-services" : "sw-services",
@@ -33,6 +32,8 @@ const WSInbox = ({ parentRoute }) => {
     offset: 0,
     sortOrder: "ASC",
   };
+  sessionStorage.removeItem("Digit.BILL.INBOX");
+  sessionStorage.removeItem("Digit.SW.INBOX");
 
   function formReducer(state, payload) {
     if (checkPathName) {
@@ -65,7 +66,8 @@ const WSInbox = ({ parentRoute }) => {
       }
     }
   }
-  const InboxObjectInSessionStorage = checkPathName ? Digit.SessionStorage.get("BILL.INBOX") : Digit.SessionStorage.get("BILL.SW.INBOX");
+
+  const InboxObjectInSessionStorage = Digit.SessionStorage.get("BILL.INBOX");
 
   const onSearchFormReset = (setSearchFormValue) => {
     setSearchFormValue("mobileNumber", null);
@@ -134,20 +136,43 @@ const WSInbox = ({ parentRoute }) => {
     tenantId,
     filters: { ...formState },
   });
+  let links = [
+    {
+      text: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
+      link: `/digit-ui/employee/ws/create-application`,
+      roles: ["WS_CEMP", "SW_CEMP"],
+    },
+  ];
 
+  links = links.filter((link) => (link.roles ? checkForEmployee(link.roles) : true));
   const PropsForInboxLinks = {
     logoIcon: <DropIcon />,
     headerText: checkPathName ? "MODULE_WS" : "MODULE_SW",
     links: [
+      ...links,
       {
-        text: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
-        link: "/digit-ui/employee/ws/create-application",
+        text: t("WS_SEWERAGE_CONNECTION_SEARCH_LABEL"),
+        link: checkPathName
+          ? `/digit-ui/employee/ws/water/search-connection?from=WS_SEWERAGE_INBOX`
+          : `/digit-ui/employee/ws/sewerage/search-connection?from=WS_SEWERAGE_INBOX`,
+        roles: checkPathName
+          ? ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"]
+          : ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
+      },
+      {
+        text: t("WS_SEWERAGE_APPLICATION_SEARCH"),
+        link: checkPathName
+          ? `/digit-ui/employee/ws/water/search-application?from=WS_SEWERAGE_INBOX`
+          : `/digit-ui/employee/ws/sewerage/search-application?from=WS_SEWERAGE_INBOX`,
+        roles: checkPathName
+          ? ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"]
+          : ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
       },
     ],
   };
 
   const SearchFormFields = useCallback(
-    ({ registerRef, searchFormState }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState }} />,
+    ({ registerRef, searchFormState }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState }} className="search" />,
     []
   );
 
@@ -187,6 +212,7 @@ const WSInbox = ({ parentRoute }) => {
     searchFormDefaultValues: formState?.searchForm,
     resetSearchFormDefaultValues: searchFormDefaultValues,
     onSearchFormReset,
+    className: "search-form-wns-inbox",
   };
 
   const propsForFilterForm = {

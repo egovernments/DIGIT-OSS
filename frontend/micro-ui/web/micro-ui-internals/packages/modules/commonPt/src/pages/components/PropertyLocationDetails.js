@@ -132,12 +132,12 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, form
             control={ control}
             rules={{
               required: t("REQUIRED_FIELD"),
-              validate: (value)=> /^([0-9]){0,8}$/i.test(value) ? true: t("PT_HOUSE_DOOR_NO_ERROR_MESSAGE"),
+              validate: (value)=> /^([a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]){1,64}$/i.test(value) ? true: t("PT_HOUSE_DOOR_NO_ERROR_MESSAGE"),
             }}
             render={({value, onBlur, onChange}) => (
               <TextInput
                 t={t}
-                type={"number"}
+                type={"text"}
                 isMandatory={false}
                 optionKey="i18nKey"
                 name="houseDoorNo"
@@ -147,7 +147,7 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, form
                   setLocationDetails({...locationDetails, houseDoorNo: ev.target.value})
                 }}
                 onBlur={onBlur}
-                {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_HOUSE_DOOR_NO_ERROR_MESSAGE") })}
+                {...(validation = { pattern: "^([a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]){1,64}$", title: t("PT_HOUSE_DOOR_NO_ERROR_MESSAGE") })}
               />
             )} />
         </div>

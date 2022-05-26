@@ -64,12 +64,14 @@ import {
         </div>
     </Card>
     <Card style={{paddingRight:"16px"}}>
+    <div style={{position:"relative"}}>
     <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER")}</CardHeader>
     <LinkButton
-          label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+          label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px", marginRight: "-10px" }} />}
           style={{ width: "100px", display:"inline" }}
           onClick={() => routeTo(`${routeLink}/connection-holder`)}
         />
+      </div>
         <StatusTable>
           <Row className="border-none" textStyle={{marginRight:"-10px"}} label={t("WS_OWN_MOBILE_NO")} text={ConnectionHolderDetails?.mobileNumber}/>
           <Row className="border-none" label={t("WS_OWN_DETAIL_NAME")} text={ConnectionHolderDetails?.name}/>
@@ -81,12 +83,14 @@ import {
     </StatusTable>
     </Card>
     <Card style={{paddingRight:"16px"}}>
+    <div style={{position:"relative"}}>
     <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_CONNECTION_DETAIL")}</CardHeader>
     <LinkButton
           label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
           style={{ width: "100px", display:"inline" }}
           onClick={() => routeTo(`${routeLink}/service-name`)}
         />
+      </div>
         <StatusTable>
           <Row className="border-none" textStyle={{marginRight:"-10px"}} label={t("WS_SERVICE_NAME_LABEL")} text={t(serviceName?.i18nKey)}/>
           <Row className="border-none" label={t("WS_SERV_DETAIL_CONN_TYPE")} text={"NA"}  />
@@ -99,12 +103,14 @@ import {
         </StatusTable>
     </Card>
     <Card style={{paddingRight:"16px"}}>
+      <div style={{position:"relative"}}>
         <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_DOCUMENT_DETAILS")}</CardHeader>
           <LinkButton
             label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
             style={{ width: "100px", display: "inline" }}
             onClick={() => routeTo(`${routeLink}/document-details`)}
           />
+        </div>
         {documents && documents?.documents.map((doc, index) => (
           <div key={`doc-${index}`}>
          {<div><CardSectionHeader>{t(doc?.documentType?.split('.').slice(0,2).join('_'))}</CardSectionHeader>

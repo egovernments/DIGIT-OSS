@@ -2,6 +2,7 @@ import { useInitStore } from "./store";
 import useWorkflowDetails from "./workflow";
 import useSessionStorage from "./useSessionStorage";
 import useQueryParams from "./useQueryParams";
+import useDocumentSearch from "./useDocumentSearch";
 import useClickOutside from "./useClickOutside";
 import {
   useFetchPayment,
@@ -28,6 +29,7 @@ import { useEvents, useClearNotifications, useNotificationCount } from "./events
 import useCreateEvent from "./events/useCreateEvent";
 import useUpdateEvent from "./events/useUpdateEvent";
 import useNewInboxGeneral from "./useInboxGeneral/useNewInbox";
+import useDynamicData from "./useDynamicData";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
@@ -67,6 +69,9 @@ import useConfig from "./fsm/useConfig";
 import useVendorDetail from "./fsm/useVendorDetail";
 import useSlum from "./fsm/useSlum";
 import usePaymentHistory from "./fsm/usePaymentHistory";
+import useVendorCreate from "./fsm/useVendorCreate";
+import useVendorUpdate from "./fsm/useVendorUpdate";
+import useVehicleDetails from "./fsm/useVehicleDetails";
 
 import useEmployeeSearch from "./useEmployeeSearch";
 
@@ -116,6 +121,7 @@ import useTLInbox from "./tl/useInbox";
 import useTradeLicenseBillingslab from "./tl/useTradeLicenseBillingslab";
 import useTLMDMS from "./tl/useMDMS";
 import useTLSearch from "./tl/useSearch";
+import useTLWorkflowData from "./tl/useTLWorkflowData";
 
 import useHRMSSearch from "./hrms/useHRMSsearch";
 import useHrmsMDMS from "./hrms/useHRMSMDMS";
@@ -209,9 +215,11 @@ import useMeterReadingCreateAPI from "./ws/useMeterConnectionCreateAPI";
 import useGetMeterStatusList from "./ws/useGetMeterStatusList";
 import useGetBillingPeriodValidation from "./ws/useBillingPeriodValidation";
 import  useReportMeta  from "./reports/useReport";
+import useWaterPropertySearch from "./ws/useWaterPropertySearch";
 
 import useGetHowItWorksJSON from "./useHowItWorksJSON";
 import useGetFAQsJSON from "./useGetFAQsJSON";
+import useStaticData from "./useStaticData";
 
 const pgr = {
   useComplaintDetails,
@@ -254,6 +262,9 @@ const fsm = {
   useConfig,
   useSlum,
   usePaymentHistory,
+  useVendorCreate,
+  useVendorUpdate,
+  useVehicleDetails
 };
 
 const pt = {
@@ -321,6 +332,7 @@ const tl = {
   useApplicationActions: useTLApplicationActions,
   useFetchBill: useTLFetchBill,
   useTLApplicationDetails,
+  useTLWorkflowData
 };
 
 const receipts = {
@@ -420,6 +432,7 @@ const ws = {
   useMeterReadingCreateAPI,
   useGetMeterStatusList,
   useGetBillingPeriodValidation,
+  useWaterPropertySearch,
 };
 
 const reports = {
@@ -453,6 +466,7 @@ const Hooks = {
   useClearNotifications,
   useNotificationCount,
   useStore,
+  useDocumentSearch,
   useTenants,
   useInbox: useTLInbox,
   useAccessControl,
@@ -476,6 +490,8 @@ const Hooks = {
   reports,
   useGetHowItWorksJSON,
   useGetFAQsJSON,
+  useStaticData,
+  useDynamicData,
 };
 
 export default Hooks;

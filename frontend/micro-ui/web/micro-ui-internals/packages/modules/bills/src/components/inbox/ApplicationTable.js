@@ -18,7 +18,7 @@ const ApplicationTable = ({
   <Table
     t={t}
     data={data}
-    manualPagination={true}
+    manualPagination={false}
     columns={columns}
     getCellProps={getCellProps}
     onNextPage={onNextPage}

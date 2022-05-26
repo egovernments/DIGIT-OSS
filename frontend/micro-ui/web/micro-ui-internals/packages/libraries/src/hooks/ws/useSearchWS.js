@@ -6,11 +6,17 @@ import { PTService } from "../../services/elements/PT";
 const getAddress = (address, t) => {
   return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`;
+  }${t(address?.locality?.code)}, ${t(address?.city)},${t(address?.pincode) ? `${address?.pincode}` : " "}`;
 };
 
+const getOwnerNames = (propertyData) => {
+  const getActiveOwners = propertyData?.owners?.filter(owner => owner?.active);
+  const getOwnersList = getActiveOwners?.map(activeOwner => activeOwner?.name)?.join(",");
+  return getOwnersList ? getOwnersList : t("NA");
+}
+
 const combineResponse = (WaterConnections, SewerageConnections, businessService, Properties, billData, t) => {
-  const data = businessService ? businessService === "WS" ? WaterConnections : SewerageConnections : WaterConnections?.concat(SewerageConnections);
+  const data = businessService ? (businessService === "WS" ? WaterConnections : SewerageConnections) : WaterConnections?.concat(SewerageConnections);
   if (billData) {
     data.forEach((app) => {
       const bill = billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0];
@@ -26,6 +32,7 @@ const combineResponse = (WaterConnections, SewerageConnections, businessService,
       if (row?.propertyId === property?.propertyId) {
         row["owner"] = property?.owners[0]?.name;
         row["address"] = getAddress(property?.address, t);
+        row["ownerNames"] = getOwnerNames(property);
       }
     });
   });
@@ -87,7 +94,7 @@ const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) =>
     ["BILL_SEARCH", tenantId, consumercodes.join(","), bussinessService],
     async () =>
       await Digit.PaymentService.fetchBill(tenantId, {
-        businessService: "WS",
+        businessService: bussinessService,
         consumerCode: consumercodes.join(","),
       }),
     { ...config, enabled: consumercodes.length > 0 }
@@ -102,32 +109,15 @@ const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) =>
     }
   );
 
-  if(bussinessService === "WS"){
+  if (bussinessService === "WS") {
     return responseWS?.isLoading || properties?.isLoading || billData?.isLoading
-    ? undefined
-    : combineResponse(
-      responseWS?.data?.WaterConnection,
-      [],
-      bussinessService,
-      properties?.data?.Properties,
-      billData?.data?.Bill,
-      t
-    );
-
-  }
-  else if(bussinessService === "SW"){
+      ? {isLoading:true}
+      : combineResponse(responseWS?.data?.WaterConnection, [], bussinessService, properties?.data?.Properties, billData?.data?.Bill, t);
+  } else if (bussinessService === "SW") {
     return responseSW?.isLoading || properties?.isLoading || billData?.isLoading
-    ? undefined
-    : combineResponse(
-      [],
-      responseSW?.data?.SewerageConnections,
-      bussinessService,
-      properties?.data?.Properties,
-      billData?.data?.Bill,
-      t
-    );
-  }
-  else{
+      ? { isLoading: true }
+      : combineResponse([], responseSW?.data?.SewerageConnections, bussinessService, properties?.data?.Properties, billData?.data?.Bill, t);
+  } else {
     return responseWS?.isLoading || responseSW?.isLoading || properties?.isLoading || billData?.isLoading
       ? undefined
       : combineResponse(

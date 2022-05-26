@@ -23,6 +23,10 @@ public class VendorConfiguration {
 	@Value("${persister.save.vendor.topic}")
 	private String saveTopic;
 
+	// Persister Config
+	@Value("${persister.update.vendor.topic}")
+	private String updateTopic;
+		
 	// MDMS
 	@Value("${egov.mdms.host}")
 	private String mdmsHost;

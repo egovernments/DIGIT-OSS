@@ -132,7 +132,7 @@ const FilterFormFieldsComponent = ({
             }
             const renderStatusCheckBoxess = useMemo(
               () =>
-                applicationTypeStatuses?.map((status) => {
+                applicationTypeStatuses?.map((status, index) => {
                   return (
                     <CheckBox
                       onChange={(e) =>
@@ -143,6 +143,7 @@ const FilterFormFieldsComponent = ({
                       checked={props.value?.includes(status?.code)}
                       label={status?.name}
                       value={status.name}
+                      key={index + 1}
                     />
                   );
                 }),
@@ -176,7 +177,7 @@ const FilterFormFieldsComponent = ({
                     ?.map((status, index) => {
                       return (
                         <CheckBox
-                          key={index}
+                          key={index + 1}
                           onChange={(e) =>
                             e.target.checked
                               ? changeItemCheckStatus([...props.value, status?.statusid])

@@ -236,7 +236,7 @@ public class ServiceRequestValidator {
 
         if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" ))
             allowedParamStr = config.getAllowedCitizenSearchParameters();
-        else if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE" ))
+        else if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE" ) || requestInfo.getUserInfo().getType().equalsIgnoreCase("SYSTEM") )
             allowedParamStr = config.getAllowedEmployeeSearchParameters();
         else throw new CustomException("INVALID SEARCH","The userType: "+requestInfo.getUserInfo().getType()+
                     " does not have any search config");
