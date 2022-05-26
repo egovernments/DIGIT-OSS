@@ -10,15 +10,33 @@ const SearchFormFieldsComponents = ({ registerRef, searchFormState }) => {
     title: t("ES_SEARCH_APPLICATION_MOBILE_INVALID"),
     componentInFront: "+91",
   };
+  let validation = {}
   return (
     <>
       <SearchField className="wns-search-field">
         <label>{t("WS_ACK_COMMON_APP_NO_LABEL")}</label>
-        <TextInput name="applicationNumber" inputRef={registerRef({})} />
+        <TextInput 
+          name="applicationNumber" 
+          inputRef={registerRef({})} 
+          {...(validation = {
+            isRequired: false,
+            pattern: "^[a-zA-Z0-9-_\/]*$",
+            type: "text",
+            title: t("ERR_INVALID_APPLICATION_NO"),
+          })}/>
       </SearchField>
       <SearchField className="wns-search-field">
         <label>{t("WS_MYCONNECTIONS_CONSUMER_NO")}</label>
-        <TextInput name="consumerNo" inputRef={registerRef({})} />
+        <TextInput 
+          name="consumerNo" 
+          inputRef={registerRef({})} 
+          {...(validation = {
+            isRequired: false,
+            pattern: "^[a-zA-Z0-9\/-]*$",
+            type: "text",
+            title: t("ERR_INVALID_CONSUMER_NO"),
+          })}
+          />
       </SearchField>
       <SearchField className="wns-search-field">
         <label>{t("CORE_COMMON_MOBILE_NUMBER")}</label>

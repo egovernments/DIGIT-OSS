@@ -14,12 +14,21 @@ const SearchFields = ({ register, control, reset, tenantId, t }) => {
     pattern: /^[a-zA-Z0-9-]*$/i,
     title: t("ERR_DEFAULT_INPUT_FIELD_MSG"),
   };
-
+  let validation = {}
   return (
     <>
       <SearchField>
         <label>{t("WS_MYCONNECTIONS_CONSUMER_NO")}</label>
-        <TextInput name="connectionNumber" inputRef={register({})} />
+        <TextInput 
+          name="connectionNumber" 
+          inputRef={register({})} 
+          {...(validation = {
+            isRequired: false,
+            pattern: "^[a-zA-Z0-9\/-]*$",
+            type: "text",
+            title: t("ERR_INVALID_CONSUMER_NO"),
+          })}
+          />
       </SearchField>
       <SearchField>
         <label>{t("WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL")}</label>
