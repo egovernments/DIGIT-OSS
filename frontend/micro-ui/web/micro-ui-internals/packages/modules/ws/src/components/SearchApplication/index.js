@@ -134,7 +134,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
         Header: t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL"),
         disableSortBy: true,
         accessor: (row) => {
-          return GetCell(row?.ownerNames || "-");
+          return GetCell(row?.connectionHolders?.[0]?.name ? row?.connectionHolders?.[0]?.name : row?.ownerNames || "-");
         },
       },
       {
