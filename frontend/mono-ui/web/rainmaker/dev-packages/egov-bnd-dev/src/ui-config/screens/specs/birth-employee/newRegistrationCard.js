@@ -17,6 +17,7 @@ import {
 import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { patterns } from "../utils/constants";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const getPersonDetailsForm = (type) => {
   return getCommonContainer({
@@ -606,7 +607,10 @@ export const newRegistrationForm = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "New Registration",
-      labelKey: "BND_NEW_REGISTRATION",
+      labelKey:
+        getQueryArg(window.location.href, "action") === "EDIT"
+          ? "BND_EDIT_REGISTRATION"
+          : "BND_NEW_REGISTRATION",
     },
     {
       style: {
