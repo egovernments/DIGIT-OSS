@@ -1,15 +1,18 @@
 package org.egov.encryption.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONArray;
+import org.egov.encryption.models.SecurityPolicy;
+import org.egov.encryption.models.SecurityPolicyAttribute;
 import org.egov.encryption.util.MdmsFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class EncryptionPolicyConfiguration {
@@ -19,25 +22,18 @@ public class EncryptionPolicyConfiguration {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private String attributesFilter = "$[?(@.model == \"${modelName}\")].attributes.*.jsonPath";
-
-    private String attributesDetailFilter = "$[?(@.model == \"${modelName}\")].attributes.*";
+    private Map<String, List<SecurityPolicyAttribute>> encryptionPolicyAttributesMap;
 
     @PostConstruct
-    void initializeKeyAttributeMapFromMdms() {
-        //TODO: Space to initialize at boot time if required after latency test
+    void initializeEncryptionPolicyAttributesMapFromMdms() throws JsonProcessingException {
+        JSONArray attributesDetailsJSON = mdmsFetcher.getSecurityMdmsForFilter(null);
+        List<SecurityPolicy> securityPolicies = objectMapper.readValue(attributesDetailsJSON.toString(), List.class);
+        encryptionPolicyAttributesMap = securityPolicies.stream()
+                .collect(Collectors.toMap(SecurityPolicy::getModel, SecurityPolicy::getAttributes));
     }
 
-    public List<String> getAttributesJsonPathForModel(String modelName) throws IOException {
-        String filter = attributesFilter.replace("${modelName}", modelName);
-        JSONArray attributesJSON = mdmsFetcher.getSecurityMdmsForFilter(filter);
-        return objectMapper.readValue(attributesJSON.toString(), List.class);
-    }
-
-    public JSONArray getAttributeDetailsForModel(String modelName) throws IOException {
-        String filter = attributesDetailFilter.replace("${modelName}", modelName);
-        JSONArray attributesDetailsJSON = mdmsFetcher.getMaskingMdmsForFilter(filter);
-        return attributesDetailsJSON;
+    public List<SecurityPolicyAttribute> getAttributeDetailsForModel(String modelName) throws IOException {
+        return encryptionPolicyAttributesMap.get(modelName);
     }
 
 }

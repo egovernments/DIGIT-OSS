@@ -50,7 +50,8 @@ public class EncryptionServiceImpl implements EncryptionService {
 
     private JsonNode encryptJsonArray(JsonNode plaintextNode, String model, String tenantId) throws IOException {
         JsonNode encryptNode = plaintextNode.deepCopy();
-        List<String> attributesToEncrypt = encryptionPolicyConfiguration.getAttributesJsonPathForModel(model);
+        List<SecurityPolicyAttribute> securityPolicyAttributes = encryptionPolicyConfiguration.getAttributeDetailsForModel(model);
+        List<String> attributesToEncrypt = securityPolicyAttributes.stream().map(SecurityPolicyAttribute::getJsonPath).collect(Collectors.toList());
         attributesToEncrypt = JsonPathConverter.convertToArrayJsonPaths(attributesToEncrypt);
         JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(plaintextNode, attributesToEncrypt);
 
