@@ -49,7 +49,6 @@ const AddVendor = ({ parentUrl, heading }) => {
       formData?.vendorName &&
       formData?.phone &&
       formData?.address?.locality &&
-      formData?.ownerName &&
       formData?.selectGender
     ) {
       setSubmitValve(true);
@@ -77,14 +76,10 @@ const AddVendor = ({ parentUrl, heading }) => {
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const localityArea = data?.address?.locality?.area;
-    const ownerName = data?.ownerName;
-    const fatherOrHusbandName = data?.fatherOrHusbandName;
-    const relationship = data?.relationship;
     const gender = data?.selectGender?.code;
     const emailId = data?.emailId;
-    const correspondenceAddress = data?.correspondenceAddress;
     const phone = data?.phone;
-    const dob = new Date(`${data.dob}`).getTime();
+    const dob = new Date(`${data.dob}`).getTime() || new Date(`1/1/1970`).getTime();
     const additionalDetails = data?.additionalDetails;
     const formData = {
       vendor: {
@@ -117,15 +112,14 @@ const AddVendor = ({ parentUrl, heading }) => {
           },
         },
         owner: {
-          tenantId: stateId || '',
-          name: ownerName || '',
-          fatherOrHusbandName: fatherOrHusbandName || '',
-          relationship: relationship || '',
-          gender: gender || '',
+          tenantId: stateId,
+          name: name,
+          fatherOrHusbandName: name,
+          relationship: 'OTHER',
+          gender: gender,
           dob: dob,
-          emailId: emailId || '',
-          correspondenceAddress: correspondenceAddress || '',
-          mobileNumber: phone || ''
+          emailId: emailId || 'abc@eGov.com',
+          mobileNumber: phone
       },
       additionalDetails: {
         description: additionalDetails,

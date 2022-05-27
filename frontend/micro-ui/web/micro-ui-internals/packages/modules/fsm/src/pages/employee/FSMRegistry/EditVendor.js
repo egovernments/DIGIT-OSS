@@ -82,7 +82,6 @@ const EditVendor = ({ parentUrl, heading }) => {
       formData?.vendorName &&
       formData?.phone &&
       formData?.address?.locality &&
-      formData?.ownerName &&
       formData?.selectGender
     ) {
       setSubmitValve(true);
@@ -110,14 +109,6 @@ const EditVendor = ({ parentUrl, heading }) => {
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const localityArea = data?.address?.locality?.area;
-    const ownerName = data?.ownerName;
-    const fatherOrHusbandName = data?.fatherOrHusbandName;
-    const relationship = data?.relationship;
-    const gender = data?.selectGender?.code;
-    const emailId = data?.emailId;
-    const correspondenceAddress = data?.correspondenceAddress;
-    const phone = data?.phone;
-    const dob = new Date(`${data.dob}`).getTime();
     const additionalDetails = data?.additionalDetails;
     const formData = {
       vendor: {

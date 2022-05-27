@@ -14,6 +14,7 @@ const FsmBreadCrumb = ({ location }) => {
   const isSearch = location?.pathname?.includes("search");
   const isRegistry = location?.pathname?.includes("registry");
   const isVendorDetails = location?.pathname?.includes("vendor-details");
+  const isVendorEdit = location?.pathname?.includes("modify-vendor");
   const [search, setSearch] = useState(false);
 
   useEffect(() => {
@@ -42,7 +43,8 @@ const FsmBreadCrumb = ({ location }) => {
     },
     { content: t("ES_TITLE_APPLICATION_DETAILS"), show: isApplicationDetails },
     { content: t("ES_TITLE_VEHICLE_LOG"), show: isVehicleLog },
-    { content: t("ES_TITLE_VENDOR_DETAILS"), show: isRegistry && isVendorDetails },
+    { content: t("ES_TITLE_VENDOR_DETAILS"), show: isRegistry && (isVendorDetails || isVendorEdit) },
+    { content: t("ES_TITLE_VENDOR_EDIT"), show: isRegistry && isVendorEdit },
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
