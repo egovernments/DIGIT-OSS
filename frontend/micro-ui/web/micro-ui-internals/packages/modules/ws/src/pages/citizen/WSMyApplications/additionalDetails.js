@@ -37,7 +37,7 @@ if (isLoading) {
         {<Card>
           <CardSubHeader>{t("WS_COMMON_PLUMBER_DETAILS")}</CardSubHeader>
           <StatusTable>
-            <Row className="border-none"  label={t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")} text={data?.WaterConnection?.[0]?.plumberInfo || data?.SewerageConnections?.[0]?.plumberInfo || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none"  label={t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")} text={(data?.WaterConnection?.[0]?.plumberInfo ? t("WS_PLUMBER_ULB") : t("WS_PLUMBER_SELF")) || (data?.SewerageConnections?.[0]?.plumberInfo? t("WS_PLUMBER_ULB") : t("WS_PLUMBER_SELF")) || t("NA")} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none"  label={t("WS_PLUMBER_LIC_NO")} text={data?.WaterConnection?.[0]?.plumberInfo?.licenseNo || data?.SewerageConnections?.[0]?.plumberInfo?.licenseNo || t("NA")} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none"  label={t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL")} text={data?.WaterConnection?.[0]?.plumberInfo?.name || data?.SewerageConnections?.[0]?.plumberInfo?.name || "NA"} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none"  label={t("WS_PLUMBER_MOB_NO")} text={data?.WaterConnection?.[0]?.plumberInfo?.mobileNumber || data?.SewerageConnections?.[0]?.plumberInfo?.mobileNumber || "NA"} textStyle={{ whiteSpace: "pre" }} />

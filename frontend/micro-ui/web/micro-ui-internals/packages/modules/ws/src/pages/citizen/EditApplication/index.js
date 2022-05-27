@@ -14,7 +14,7 @@ const getPath = (path, params) => {
   return path;
 };
 
-const getEditDetails = (waterResult,sewerageresult) => {
+const getEditDetails = (waterResult,sewerageresult,t) => {
     if(waterResult)
     {
     waterResult["ConnectionHolderDetails"] = waterResult?.connectionHolders ? {
@@ -50,7 +50,7 @@ const getEditDetails = (waterResult,sewerageresult) => {
     waterResult.plumberPreference = { plumberPreference : {code:"ULB", i18nKey:"WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE"}}
     waterResult.serviceName = waterResult?.applicationType?.includes("WATER") ? {code:"WATER",i18nKey:"WS_WATER_CONNECTION_ONLY"} : {code:"SEWERAGE",i18nKey:"WS_SEWERAGE_CONNECTION_ONLY"}
     waterResult.waterConectionDetails = {
-      proposedPipeSize : {code:waterResult?.proposedPipeSize, i18nKey:`${waterResult?.proposedPipeSize} WS_INCHES_LABEL`, size:waterResult?.proposedPipeSize},
+      proposedPipeSize : {code:waterResult?.proposedPipeSize, i18nKey:`${waterResult?.proposedPipeSize} ${t("WS_INCHES_LABEL")}`, size:waterResult?.proposedPipeSize},
       proposedTaps : waterResult?.proposedTaps,
     }
     }
@@ -159,7 +159,7 @@ const EditApplication = ({ parentRoute }) => {
       }
       sessionStorage.setItem("WaterInitialObject", JSON.stringify({ ...waterapplication }));
       sessionStorage.setItem("SewerageInitialObject", JSON.stringify({ ...sewerageapplication }));
-      let EditDetails = getEditDetails(waterapplication,sewerageapplication);
+      let EditDetails = getEditDetails(waterapplication,sewerageapplication,t);
       setParams({ ...params, ...EditDetails });
     }
 

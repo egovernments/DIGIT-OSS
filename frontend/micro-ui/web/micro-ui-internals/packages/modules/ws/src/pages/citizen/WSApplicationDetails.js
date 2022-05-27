@@ -423,8 +423,8 @@ const WSApplicationDetails = () => {
               <SubmitBar label={t("MAKE_PAYMENT")} />
             </Link>
           ) : null}
-          {data?.WaterConnection?.[0]?.applicationStatus === "PENDING_FOR_CITIZEN_ACTION" ||
-          data?.SewerageConnections?.[0]?.applicationStatus === "PENDING_FOR_CITIZEN_ACTION" ? (
+          {data?.WaterConnection?.[0]?.applicationStatus.includes("PENDING_FOR_CITIZEN_ACTION") ||
+          data?.SewerageConnections?.[0]?.applicationStatus.includes("PENDING_FOR_CITIZEN_ACTION") ? (
             <Link
               to={{
                 pathname: `/digit-ui/citizen/ws/edit-application/${data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId}`,

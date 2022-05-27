@@ -354,7 +354,14 @@ const getPropertyEditDetails = (data = { }) => {
           ? { i18nKey: "PT_ONE_BASEMENT_OPTION",code:1 }
           : { i18nKey: "PT_NO_BASEMENT_OPTION",code:0 };
 
-      data.units = data?.units;
+      data.units = data?.units.map(ob => {
+        return{...ob, unitType:{
+          code: ob?.usageCategory?.split(".")[3],
+          i18nKey: `PROPERTYTAX_BILLING_SLAB_${ob?.usageCategory?.split(".")[3]}`,
+          usageCategoryMinor: ob?.usageCategory?.split(".")[1],
+          usageCategorySubMinor: ob?.usageCategory?.split(".")[2],
+        }
+      }});
       //data.units = data?.units.concat(extraunits);
       //unitedit["-1"] ? (data.units["-1"] = unitedit["-1"]) : "";
       //unitedit["-2"] ? (data.units["-2"] = unitedit["-2"]) : "";
