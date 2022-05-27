@@ -8,7 +8,7 @@ import { Route, Switch, useRouteMatch, useLocation } from "react-router-dom";
 import Overview from "./pages/Overview";
 import {checkCurrentScreen, DSSCard,NDSSCard} from "./components/DSSCard";
 import DrillDown from "./pages/DrillDown";
-
+import FAQsSection from "./pages/FAQs/FAQs";
 const DssBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
   const {fromModule=false,title}= Digit.Hooks.useQueryParams();
@@ -35,6 +35,11 @@ const DssBreadCrumb = ({ location }) => {
       content:location.pathname.includes("drilldown")?t(title): t("ES_COMMON_DSS_DRILL"),
       show: location.pathname.includes("drilldown") ? true : false,
     },
+    {
+      path: "/digit-ui/employee/dss/national-faqs",
+      content: t("ES_COMMON_DSS_FAQS"),
+      show: location.pathname.includes("national-faqs") ? true : false,
+    } 
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
@@ -49,6 +54,9 @@ const Routes = ({ path, stateCode }) => {
         <PrivateRoute path={`${path}/landing/:moduleCode`} component={() => <Home stateCode={stateCode} />} />
         <PrivateRoute path={`${path}/dashboard/:moduleCode`} component={() => <DashBoard stateCode={stateCode} />} />
         <PrivateRoute path={`${path}/drilldown`} component={() => <DrillDown  stateCode={stateCode}  />} />
+        <Route key={"national-faq"} path={`${path}/national-faqs`}>
+          <FAQsSection/>
+        </Route>
       </Switch>
     </div>
   );

@@ -219,6 +219,7 @@ import useWaterPropertySearch from "./ws/useWaterPropertySearch";
 
 import useGetHowItWorksJSON from "./useHowItWorksJSON";
 import useGetFAQsJSON from "./useGetFAQsJSON";
+import useGetDSSFAQsJSON from "./useGetDSSFAQsJSON"
 import useStaticData from "./useStaticData";
 
 const pgr = {
@@ -490,6 +491,7 @@ const Hooks = {
   reports,
   useGetHowItWorksJSON,
   useGetFAQsJSON,
+  useGetDSSFAQsJSON,
   useStaticData,
   useDynamicData,
 };

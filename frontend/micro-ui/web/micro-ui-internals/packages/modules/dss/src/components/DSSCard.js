@@ -13,6 +13,8 @@ const nationalScreenURLs = {
   obps: { key: "nss-obps", stateKey: "obps", label: "DSS_BUILDING_PERMISSION", active: true, nActive: true },
   noc: { key: "national-firenoc", stateKey: "noc", label: "NURT_FIRENOC", active: true, nActive: true },
   bnd: {key:"nss-birth-death",stateKey:"birth-death",label:"BIRTH_AND_DEATH",active:true,nActive:true},
+  faqs: {key:"national-faqs",stateKey:"national-faqs",label:"DSS_FAQS",active:false,nActive:true},
+  about: {key:"national-about",stateKey:"national-about",label:"DSS_ABOUT_DASHBOARD",active:false,nActive:true},
 };
 
 export const checkCurrentScreen = () => {
