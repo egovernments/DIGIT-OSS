@@ -34,6 +34,11 @@ public class Driver {
 	@SafeHtml
 	@JsonProperty("id")
 	private String id = null;
+	
+	@JsonProperty("tenantId")
+	@SafeHtml
+	@Size(max=64)
+	private String tenantId = null;
 
 	@JsonProperty("diverName")
 	@SafeHtml
@@ -45,20 +50,16 @@ public class Driver {
 	@Size(max = 128)
 	private String driverLicenseNumber = null;
 
-	@JsonProperty("venderName")
+	@JsonProperty("vendorName")
 	@SafeHtml
 	@Size(max = 64)
-	private String venderName = null;
+	private String vendrName = null;
 
-//	@JsonProperty("drivers")
-//	@Valid
-//	//private List<driver> drivers = new ArrayList<driver>();
-//
-//	@JsonProperty("vendors")
-//	@Valid
-//	//private List<vendor> vendors = new ArrayList<vendor>();
+	@JsonProperty("drivers")
+	@Valid
+	private List<Driver> drivers = new ArrayList<Driver>();
 
-	// dateOfCreation
+	//dateOfCreation
 
 	/**
 	 * Inactive records will be consider as soft deleted
@@ -97,5 +98,8 @@ public class Driver {
 
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails = null;
+
+	
+	
 
 }

@@ -5,7 +5,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.egov.vendor.driver.service.DriverService;
 import org.egov.vendor.driver.web.model.Driver;
+import org.egov.vendor.driver.web.model.DriverRequest;
+import org.egov.vendor.driver.web.model.DriverResponse;
 import org.egov.vendor.driver.web.util.DriverUtil;
 import org.egov.vendor.util.ResponseInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,27 +22,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/driver/")
 public class DriverController {
-//	@Autowired
-//	private DriverService driverService;
-//	
-//	@Autowired
-//	private DriverUtil driverUtil;
-//	
-//	@Autowired
-//	private ResponseInfoFactory responseInfoFactory;
-//
-//	
-//	@PostMapping(value = "/_create")
-//	public ResponseEntity<DriverResponse> create(@Valid @RequestBody DriverRequest driverRequest){
-//		driverUtil.defaultJsonPathConfig();		
-//		Driver driver =  driverService.create(diverRequest);
-//		List<Driver> driverList = new ArrayList<Driver>();
-//		driverList.add(Driver);
-//		DriverResponse response = DriverResponse.builder().diver(driverList)
-//				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(driverRequest.getRequestInfo(), true))
-//				.build();
+	@Autowired
+	private DriverService driverService;
+	
+	@Autowired
+	private DriverUtil driverUtil;
+	
+	@Autowired
+	private ResponseInfoFactory responseInfoFactory;
+
+	
+	@PostMapping(value = "/_create")
+	public ResponseEntity<DriverResponse> create(@Valid @RequestBody DriverRequest driverRequest){
+		driverUtil.defaultJsonPathConfig();		
+		Driver driver =  driverService.create(driverRequest);
+		List<Driver> driverList = new ArrayList<Driver>();
+		driverList.add(driver);
+		DriverResponse response = DriverResponse.builder().driver(driverList)
+				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(driverRequest.getRequestInfo(), true))
+				.build();
 		
-//		return new ResponseEntity<>(response,HttpStatus.OK);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 		
-//	}
+	}
 }
