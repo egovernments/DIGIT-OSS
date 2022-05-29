@@ -28,7 +28,7 @@ import com.jayway.jsonpath.spi.mapper.MappingProvider;
 public class DriverUtil {
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
-	
+
 	@Autowired
 	private VendorConfiguration vendorConfiguration;
 
@@ -62,7 +62,8 @@ public class DriverUtil {
 	}
 
 	public StringBuilder getMdmsSearchUrl() {
-		return new StringBuilder().append(vendorConfiguration.getMdmsHost()).append(vendorConfiguration.getMdmsEndPoint());
+		return new StringBuilder().append(vendorConfiguration.getMdmsHost())
+				.append(vendorConfiguration.getMdmsEndPoint());
 	}
 
 	public MdmsCriteriaReq getMDMSRequest(RequestInfo requestInfo, String tenantId) {
@@ -83,17 +84,17 @@ public class DriverUtil {
 		// master details for Vendor module
 		List<MasterDetail> masterDtls = new ArrayList<>();
 		List<ModuleDetail> moduleDtls = new ArrayList<>();
-			
+
 		masterDtls = new ArrayList<>();
 //		masterDtls.add(MasterDetail.builder().name(VendorConstants.VENDOR_AGENCY_TYPE).filter(activeFilter).build());
 //		masterDtls.add(MasterDetail.builder().name(VendorConstants.VENDOR_PAYMENT_PREFERENCE).filter(activeFilter).build());
 //		moduleDtls.add(ModuleDetail.builder().masterDetails(masterDtls)
 //				.moduleName(VendorConstants.VENDOR_MODULE).build());
-		
+
 		return moduleDtls;
 
 	}
-	
+
 	public AuditDetails getAuditDetails(String by, Boolean isCreate) {
 		Long time = System.currentTimeMillis();
 		if (isCreate)

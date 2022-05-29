@@ -42,11 +42,11 @@ public class VendorRepository {
 	public void save(VendorRequest vendorRequest) {
 		producer.push(configuration.getSaveTopic(), vendorRequest);
 	}
-	
+
 	public void update(VendorRequest vendorRequest) {
 		producer.push(configuration.getUpdateTopic(), vendorRequest);
 	}
-	
+
 	public List<Vendor> getVendorData(VendorSearchCriteria vendorSearchCriteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = vendorQueryBuilder.getVendorSearchQuery(vendorSearchCriteria, preparedStmtList);
@@ -78,7 +78,8 @@ public class VendorRepository {
 	public List<String> getVendorWithVehicles(VendorSearchCriteria vendorSearchCriteria) {
 		List<String> vendorIds = null;
 		List<Object> preparedStmtList = new ArrayList<>();
-		vendorIds = jdbcTemplate.queryForList(vendorQueryBuilder.vendorsForVehicles(vendorSearchCriteria, preparedStmtList),
+		vendorIds = jdbcTemplate.queryForList(
+				vendorQueryBuilder.vendorsForVehicles(vendorSearchCriteria, preparedStmtList),
 				preparedStmtList.toArray(), String.class);
 		return vendorIds;
 	}

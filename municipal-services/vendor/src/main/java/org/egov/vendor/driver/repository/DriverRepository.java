@@ -1,9 +1,14 @@
 package org.egov.vendor.driver.repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.egov.vendor.config.VendorConfiguration;
 import org.egov.vendor.driver.repository.querybuilder.DriverQueryBuilder;
 import org.egov.vendor.driver.repository.rowmapper.DriverRowMapper;
+import org.egov.vendor.driver.web.model.Driver;
 import org.egov.vendor.driver.web.model.DriverRequest;
+import org.egov.vendor.driver.web.model.DriverSearchCriteria;
 import org.egov.vendor.producer.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,8 +37,16 @@ public class DriverRepository {
 	public void save(DriverRequest driverRequest) {
 		producer.push(configuration.getSaveTopic(), driverRequest);
 	}
-	
+
 	public void update(DriverRequest driverRequest) {
 		producer.push(configuration.getUpdateTopic(), driverRequest);
+	}
+
+	public List<Driver> getDriverData(DriverSearchCriteria driverSearchCriteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		String query = driverQueryBuilder.getDriverSearchQuery(driverSearchCriteria, preparedStmtList);
+		List<Driver> driverData = jdbcTemplate.query(query, preparedStmtList.toArray(), driverrowMapper);
+		System.out.println("query is " + query);
+		return driverData;
 	}
 }

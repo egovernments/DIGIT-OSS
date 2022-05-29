@@ -31,11 +31,11 @@ public class DriverResponse {
 	@JsonProperty("responseInfo")
 	private ResponseInfo responseInfo = null;
 
-	//@JsonProperty("driver")
-	//private Driver driver = null;
-	
-	 @JsonProperty("driver")
-	 @Valid
-	 private List<Driver> driver = null;
-	 
+	// @JsonProperty("driver")
+	// private Driver driver = null;
+
+	@JsonProperty("driver")
+	@Valid
+	private List<Driver> driver = null;
+
 }

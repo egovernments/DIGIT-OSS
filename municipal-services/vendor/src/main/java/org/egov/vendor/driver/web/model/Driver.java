@@ -40,10 +40,15 @@ public class Driver {
 	@Size(max=64)
 	private String tenantId = null;
 
-	@JsonProperty("diverName")
+	@JsonProperty("ownerId")
+	@SafeHtml
+	@Size(max=64)
+	private String ownerId = null;
+	
+	@JsonProperty("name")
 	@SafeHtml
 	@Size(max = 128)
-	private String diverName = null;
+	private String name = null;
 
 	@JsonProperty("driverLicenseNumber")
 	@SafeHtml

@@ -28,5 +28,6 @@ public class DriverRequest {
 	@Valid
 	@JsonProperty("driver")
 	private Driver driver = null;
+
 	
 }
