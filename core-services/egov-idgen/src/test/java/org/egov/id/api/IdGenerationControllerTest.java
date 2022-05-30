@@ -20,11 +20,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-/*@AutoConfigureDataMongo
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(testGenerateIdResponse.class)*/
-
 @ContextConfiguration(classes = {IdGenerationController.class})
 @ExtendWith(SpringExtension.class)
 class IdGenerationControllerTest {
@@ -34,9 +29,6 @@ class IdGenerationControllerTest {
     @MockBean
     private IdGenerationService idGenerationService;
 
-    /**
-     * Method under test: {@link IdGenerationController#generateIdResponse(IdGenerationRequest)}
-     */
     @Test
     void testGenerateIdResponse() throws Exception {
         IdGenerationRequest idGenerationRequest = new IdGenerationRequest();
@@ -51,13 +43,5 @@ class IdGenerationControllerTest {
                 .perform(requestBuilder);
         actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
-
-/*@Test
-    public void testGenerateIdResponsePost() throws Exception {
-        mockMvc.perform(post("/_generate")
-                        .accept(MediaType.APPLICATION_JSON_UTF8).content("")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(status().isNotFound());
-    }*/
 }
 
