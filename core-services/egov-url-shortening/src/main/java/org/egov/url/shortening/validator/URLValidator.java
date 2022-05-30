@@ -10,7 +10,7 @@ public class URLValidator {
 
     private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);
 
-    URLValidator() {
+    private URLValidator() {
     }
 
     public boolean validateURL(String url) {
