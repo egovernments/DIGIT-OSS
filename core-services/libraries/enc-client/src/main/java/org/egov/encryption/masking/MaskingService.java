@@ -3,13 +3,12 @@ package org.egov.encryption.masking;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.config.EncClientConstants;
 import org.egov.encryption.config.EncProperties;
-import org.egov.encryption.models.*;
+import org.egov.encryption.models.SecurityPolicyAttribute;
+import org.egov.encryption.models.SecurityPolicyUniqueIdentifier;
 import org.egov.encryption.util.JSONBrowseUtil;
 import org.egov.encryption.util.JacksonUtils;
 import org.egov.encryption.util.JsonPathConverter;
@@ -35,11 +34,11 @@ public class MaskingService {
     Map<String, String> maskingPatternMap;
 
     @PostConstruct
-    private void init() throws IllegalAccessException, InstantiationException {
+    private void init() {
         maskingPatternMap = getMaskingPatternMap();
     }
 
-    public <T> T maskedData(T data, SecurityPolicyAttribute attribute) {
+    public <T> T maskData(T data, SecurityPolicyAttribute attribute) {
         String value = String.valueOf(data);
         String patternId = attribute.getPatternId();
         String maskingRegex = maskingPatternMap.get(patternId);
@@ -48,15 +47,15 @@ public class MaskingService {
         return (T) value;
     }
 
-    public JsonNode maskedData(JsonNode decryptedNode, List<SecurityPolicyAttribute> attributes, SecurityPolicyUniqueIdentifier uniqueIdentifier, RequestInfo requestInfo) {
+    public JsonNode maskData(JsonNode decryptedNode, List<SecurityPolicyAttribute> attributes, SecurityPolicyUniqueIdentifier uniqueIdentifier, RequestInfo requestInfo) {
         JsonNode maskedNode = decryptedNode.deepCopy();
-        for(SecurityPolicyAttribute attribute : attributes) {
+        for (SecurityPolicyAttribute attribute : attributes) {
             JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(maskedNode,
                     JsonPathConverter.convertToArrayJsonPaths(Arrays.asList(attribute.getJsonPath())));
-            jsonNode = JSONBrowseUtil.mapValues(jsonNode, value -> maskedData(value, attribute));
+            jsonNode = JSONBrowseUtil.mapValues(jsonNode, value -> maskData(value, attribute));
             maskedNode = JacksonUtils.merge(jsonNode, maskedNode);
         }
-        if(requestInfo.getPlainRequestAccess() != null && requestInfo.getPlainRequestAccess().getRecordId() != null) {
+        if (requestInfo.getPlainRequestAccess() != null && requestInfo.getPlainRequestAccess().getRecordId() != null) {
             maskedNode = addPlainRequestAccessValues((ArrayNode) maskedNode, (ArrayNode) decryptedNode, attributes, uniqueIdentifier, requestInfo);
         }
         return maskedNode;
@@ -96,7 +95,6 @@ public class MaskingService {
 
     public Map<String, String> getMaskingPatternMap(){
         Map<String, String> maskingPatternMap = new HashMap<>();
-        List<MaskingPatterns> maskingPatternsList = null;
         try {
             MasterDetail masterDetail = MasterDetail.builder().name(EncClientConstants.MDMS_MASKING_PATTERN_MASTER_NAME).build();
             ModuleDetail moduleDetail = ModuleDetail.builder().moduleName(EncClientConstants.MDMS_MODULE_NAME)

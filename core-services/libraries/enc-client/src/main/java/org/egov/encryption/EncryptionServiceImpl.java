@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
-import org.egov.encryption.accesscontrol.AbacFilter;
 import org.egov.encryption.audit.AuditService;
-import org.egov.encryption.config.*;
+import org.egov.encryption.config.DecryptionPolicyConfiguration;
+import org.egov.encryption.config.EncClientConstants;
+import org.egov.encryption.config.EncProperties;
+import org.egov.encryption.config.EncryptionPolicyConfiguration;
 import org.egov.encryption.masking.MaskingService;
 import org.egov.encryption.models.SecurityPolicyAttribute;
 import org.egov.encryption.models.SecurityPolicyUniqueIdentifier;
@@ -38,17 +40,13 @@ public class EncryptionServiceImpl implements EncryptionService {
     @Autowired
     private EncryptionPolicyConfiguration encryptionPolicyConfiguration;
     @Autowired
-    private AbacConfiguration abacConfiguration;
-    @Autowired
-    private AbacFilter abacFilter;
+    private DecryptionPolicyConfiguration decryptionPolicyConfiguration;
     @Autowired
     private MaskingService maskingService;
     @Autowired
     private AuditService auditService;
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private DecryptionPolicyConfiguration decryptionPolicyConfiguration;
 
     private JsonNode encryptJsonArray(JsonNode plaintextNode, String model, String tenantId) throws IOException {
         JsonNode encryptNode = plaintextNode.deepCopy();
@@ -125,7 +123,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         if(attributesVisibilityMap.containsValue(Visibility.MASKED)) {
             List<SecurityPolicyAttribute> attributesToBeMasked = attributesVisibilityMap.keySet().stream()
                     .filter(attribute -> attributesVisibilityMap.get(attribute) == Visibility.MASKED).collect(Collectors.toList());
-            decryptNode = maskingService.maskedData(decryptNode, attributesToBeMasked, uniqueIdentifier, requestInfo);
+            decryptNode = maskingService.maskData(decryptNode, attributesToBeMasked, uniqueIdentifier, requestInfo);
         }
 
         auditService.audit(decryptNode, model, purpose, requestInfo);
