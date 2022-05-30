@@ -78,7 +78,19 @@ const Chart = ({ data , moduleLevel}) => {
   const insight=response?.responseData?.data?.[0]?.insight?.value?.replace(/[+-]/g, "")?.split('%');
   return (
     <div className="dss-insight-card">
+      <div className={`tooltip`} >
       <p className="p1">{t(data?.name)}</p>
+        <span
+          className="tooltiptext"
+          style={{
+            width: t(`TIP_${data.name}`).length < 40 ? "max-content" : "fit-content",
+            height: t(`TIP_${data.name}`).length < 40 ? "fit-content" : "max-content",
+            whiteSpace: "normal",
+          }}
+        >
+          <span style={{ fontSize: "14px",fontWeight: "400px", color: "white" }}>{t(`TIP_${data.name}`)}</span>
+        </span>
+      </div>
       <p className="p2">{Digit.Utils.dss.formatter(response?.responseData?.data?.[0]?.headerValue, response?.responseData?.data?.[0]?.headerSymbol, 'Lac', true,t)}</p>
       {response?.responseData?.data?.[0]?.insight?.value ? (
         <p className={`p3 ${response?.responseData?.data?.[0]?.insight?.indicator === "upper_green" ? "color-green" : "color-red"}`}>
