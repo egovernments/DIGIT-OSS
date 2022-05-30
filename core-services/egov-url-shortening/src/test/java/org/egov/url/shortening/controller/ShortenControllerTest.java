@@ -90,16 +90,6 @@ public class ShortenControllerTest {
                 .andExpect(status().isOk());
     }
 
-  /*  @Test
-    public void ShortenUrlGetFailed() throws Exception {
-
-        mockMvc.perform(get("/2")
-                        .accept(MediaType.parseMediaType("application/json")))
-                .andExpect(status().is(400))
-                .andExpect(content().contentType("application/json"));
-
-    }
-*/
     @Test
     void ShortenUrlSetUrl() throws Exception {
         ArrayList<URLRepository> urlRepositories = new ArrayList<>();

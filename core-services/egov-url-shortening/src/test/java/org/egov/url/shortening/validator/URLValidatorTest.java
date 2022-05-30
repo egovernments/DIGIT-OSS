@@ -1,7 +1,6 @@
 package org.egov.url.shortening.validator;
 
 import org.egov.url.shortening.model.ShortenRequest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.boot.test.context.SpringBootTest;
