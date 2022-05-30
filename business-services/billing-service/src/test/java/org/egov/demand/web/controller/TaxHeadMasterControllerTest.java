@@ -29,9 +29,7 @@ class TaxHeadMasterControllerTest {
     @MockBean
     private TaxHeadMasterService taxHeadMasterService;
 
-    /**
-     * Method under test: {@link TaxHeadMasterController#search(RequestInfoWrapper, org.egov.demand.model.TaxHeadMasterCriteria, org.springframework.validation.BindingResult)}
-     */
+
     @Test
     void testSearch() throws Exception {
         when(

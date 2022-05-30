@@ -11,24 +11,59 @@ import org.egov.demand.web.contract.factory.ResponseFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@ContextConfiguration(classes = {BillController.class, ResponseFactory.class})
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest
+@AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 class BillControllerTest {
     @Autowired
     private BillController billController;
 
-    /**
-     * Method under test: {@link BillController#create(BillRequest, org.springframework.validation.BindingResult)}
-     */
+    @Autowired
+    private MockMvc mockMvc;
+
+
+
+
+    @Test
+    public void BillPostFailure() throws Exception {
+        mockMvc.perform(post("/bill/_create").contentType(MediaType
+                        .APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    public void FetchBillPostFailure() throws Exception {
+        mockMvc.perform(post("/bill/_fetchbill").contentType(MediaType
+                        .APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    public void GenerateBillPostFailure() throws Exception {
+        mockMvc.perform(post("/amendment/_create").contentType(MediaType
+                        .APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    public void SearchBillPostFailure() throws Exception {
+        mockMvc.perform(post("/bill/_search").contentType(MediaType
+                        .APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest());
+    }
+
     @Test
     void testCreate() throws Exception {
         BillRequest billRequest = new BillRequest();
@@ -38,6 +73,7 @@ class BillControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/bill/_create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
+
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.billController)
                 .build()
                 .perform(requestBuilder);
@@ -50,11 +86,9 @@ class BillControllerTest {
                                         + " to access has been depricated, Access the V2 API's\",\"fields\":null}}"));
     }
 
-    /**
-     * Method under test: {@link BillController#create(BillRequest, org.springframework.validation.BindingResult)}
-     */
+
     @Test
-    void testCreate2() throws Exception {
+    void testCreateWithError400() throws Exception {
         BillRequest billRequest = new BillRequest();
         billRequest.setBills(new ArrayList<>());
         billRequest.setRequestInfo(new RequestInfo());
@@ -74,11 +108,9 @@ class BillControllerTest {
                                         + " to access has been depricated, Access the V2 API's\",\"fields\":null}}"));
     }
 
-    /**
-     * Method under test: {@link BillController#create(BillRequest, org.springframework.validation.BindingResult)}
-     */
+
     @Test
-    void testCreate3() throws Exception {
+    void testCreateWithNull() throws Exception {
         BillRequest billRequest = new BillRequest();
         billRequest.setBills(new ArrayList<>());
         billRequest.setRequestInfo(null);
@@ -98,9 +130,7 @@ class BillControllerTest {
                                         + " depricated, Access the V2 API's\",\"fields\":null}}"));
     }
 
-    /**
-     * Method under test: {@link BillController#create(BillRequest, org.springframework.validation.BindingResult)}
-     */
+
     @Test
     void testCreate4() throws Exception {
         BillRequest billRequest = new BillRequest();
@@ -122,9 +152,7 @@ class BillControllerTest {
                                         + " to access has been depricated, Access the V2 API's\",\"fields\":null}}"));
     }
 
-    /**
-     * Method under test: {@link BillController#create(BillRequest, org.springframework.validation.BindingResult)}
-     */
+
     @Test
     void testCreate5() throws Exception {
         BillRequest billRequest = new BillRequest();
@@ -146,9 +174,7 @@ class BillControllerTest {
                                         + " to access has been depricated, Access the V2 API's\",\"fields\":null}}"));
     }
 
-    /**
-     * Method under test: {@link BillController#create(BillRequest, org.springframework.validation.BindingResult)}
-     */
+
     @Test
     void testCreate6() throws Exception {
         BillRequest billRequest = new BillRequest();
@@ -170,9 +196,7 @@ class BillControllerTest {
                                         + " depricated, Access the V2 API's\",\"fields\":null}}"));
     }
 
-    /**
-     * Method under test: {@link BillController#fetchBill(RequestInfoWrapper, org.egov.demand.model.GenerateBillCriteria)}
-     */
+
     @Test
     void testFetchBill() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
@@ -187,9 +211,7 @@ class BillControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link BillController#fetchBill(RequestInfoWrapper, org.egov.demand.model.GenerateBillCriteria)}
-     */
+
     @Test
     void testFetchBill2() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
@@ -204,9 +226,7 @@ class BillControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link BillController#genrateBill(RequestInfoWrapper, org.egov.demand.model.GenerateBillCriteria)}
-     */
+
     @Test
     void testGenrateBill() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
@@ -221,9 +241,7 @@ class BillControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link BillController#genrateBill(RequestInfoWrapper, org.egov.demand.model.GenerateBillCriteria)}
-     */
+
     @Test
     void testGenrateBill2() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
@@ -238,9 +256,6 @@ class BillControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link BillController#search(RequestInfoWrapper, org.egov.demand.model.BillSearchCriteria, org.springframework.validation.BindingResult)}
-     */
     @Test
     void testSearch() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
@@ -261,9 +276,6 @@ class BillControllerTest {
                                         + " to access has been depricated, Access the V2 API's\",\"fields\":null}}"));
     }
 
-    /**
-     * Method under test: {@link BillController#search(RequestInfoWrapper, org.egov.demand.model.BillSearchCriteria, org.springframework.validation.BindingResult)}
-     */
     @Test
     void testSearch2() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
@@ -284,9 +296,6 @@ class BillControllerTest {
                                         + " depricated, Access the V2 API's\",\"fields\":null}}"));
     }
 
-    /**
-     * Method under test: {@link BillController#search(RequestInfoWrapper, org.egov.demand.model.BillSearchCriteria, org.springframework.validation.BindingResult)}
-     */
     @Test
     void testSearch3() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
@@ -307,9 +316,6 @@ class BillControllerTest {
                                         + " to access has been depricated, Access the V2 API's\",\"fields\":null}}"));
     }
 
-    /**
-     * Method under test: {@link BillController#search(RequestInfoWrapper, org.egov.demand.model.BillSearchCriteria, org.springframework.validation.BindingResult)}
-     */
     @Test
     void testSearch4() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();

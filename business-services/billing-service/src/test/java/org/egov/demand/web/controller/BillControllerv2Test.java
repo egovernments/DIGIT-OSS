@@ -50,11 +50,8 @@ class BillControllerv2Test {
     @MockBean
     private BillValidator billValidator;
 
-    /**
-     * Method under test: {@link BillControllerv2#cancelBill(UpdateBillRequest)}
-     */
     @Test
-    void testCancelBill() throws Exception {
+    void testCancelBillFail() throws Exception {
         UpdateBillRequest updateBillRequest = new UpdateBillRequest();
         updateBillRequest.setRequestInfo(new RequestInfo());
         updateBillRequest.setUpdateBillCriteria(new UpdateBillCriteria());
@@ -68,11 +65,8 @@ class BillControllerv2Test {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link BillControllerv2#cancelBill(UpdateBillRequest)}
-     */
     @Test
-    void testCancelBill3() throws Exception {
+    void testCancelBillSucessfullyCancleActiveBill() throws Exception {
         when(this.billServicev2.cancelBill((UpdateBillRequest) any())).thenReturn(1);
 
         UpdateBillRequest updateBillRequest = new UpdateBillRequest();
@@ -96,11 +90,9 @@ class BillControllerv2Test {
                                         + " OK\"},\"Message\":\"Successfully cancelled 1 Active bills for given consumer codes\"}"));
     }
 
-    /**
-     * Method under test: {@link BillControllerv2#cancelBill(UpdateBillRequest)}
-     */
+
     @Test
-    void testCancelBill4() throws Exception {
+    void testCancelBillwithNoActiveBillFound() throws Exception {
         when(this.billServicev2.cancelBill((UpdateBillRequest) any())).thenReturn(0);
 
         UpdateBillRequest updateBillRequest = new UpdateBillRequest();
@@ -124,11 +116,8 @@ class BillControllerv2Test {
                                         + " BAD_REQUEST\"},\"Message\":\"No Active bills found for cancellation for the given criteria\"}"));
     }
 
-    /**
-     * Method under test: {@link BillControllerv2#cancelBill(UpdateBillRequest)}
-     */
     @Test
-    void testCancelBill5() throws Exception {
+    void testCancelBillWithNotCancelduringWorkflow() throws Exception {
         when(this.billServicev2.cancelBill((UpdateBillRequest) any())).thenReturn(-1);
 
         UpdateBillRequest updateBillRequest = new UpdateBillRequest();
@@ -152,11 +141,9 @@ class BillControllerv2Test {
                                         + " BAD_REQUEST\"},\"Message\":\"You cannot cancel the bill in the workflow\"}"));
     }
 
-    /**
-     * Method under test: {@link BillControllerv2#cancelBill(UpdateBillRequest)}
-     */
+
     @Test
-    void testCancelBill2() throws Exception {
+    void testCancelBillNotFound() throws Exception {
         UpdateBillRequest updateBillRequest = new UpdateBillRequest();
         updateBillRequest.setRequestInfo(new RequestInfo());
         updateBillRequest.setUpdateBillCriteria(new UpdateBillCriteria());
@@ -170,11 +157,9 @@ class BillControllerv2Test {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link BillControllerv2#create(BillRequestV2, org.springframework.validation.BindingResult)}
-     */
+
     @Test
-    void testCreate() throws Exception {
+    void testCreateWithNull() throws Exception {
         when(this.billServicev2.sendBillToKafka((BillRequestV2) any())).thenReturn(new BillResponseV2());
         doNothing().when(this.billHelperV2).getBillRequestWithIds((BillRequestV2) any());
 
@@ -193,17 +178,13 @@ class BillControllerv2Test {
                 .andExpect(MockMvcResultMatchers.content().string("{\"ResposneInfo\":null,\"Bill\":[]}"));
     }
 
-    /**
-     * Method under test: {@link BillControllerv2#create(BillRequestV2, org.springframework.validation.BindingResult)}
-     */
     @Test
-    void testCreate2() throws Exception {
+    void testpostSucess() throws Exception {
         when(this.billServicev2.sendBillToKafka((BillRequestV2) any())).thenReturn(new BillResponseV2());
         doNothing().when(this.billHelperV2).getBillRequestWithIds((BillRequestV2) any());
 
         ArrayList<BillV2> billV2List = new ArrayList<>();
         billV2List.add(new BillV2());
-
         BillRequestV2 billRequestV2 = new BillRequestV2();
         billRequestV2.setBills(billV2List);
         billRequestV2.setRequestInfo(new RequestInfo());
@@ -219,11 +200,9 @@ class BillControllerv2Test {
                 .andExpect(MockMvcResultMatchers.content().string("{\"ResposneInfo\":null,\"Bill\":[]}"));
     }
 
-    /**
-     * Method under test: {@link BillControllerv2#fetchBill(RequestInfoWrapper, org.egov.demand.model.GenerateBillCriteria)}
-     */
+
     @Test
-    void testFetchBill() throws Exception {
+    void testFetchBillWithError() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
         requestInfoWrapper.setRequestInfo(new RequestInfo());
         String content = (new ObjectMapper()).writeValueAsString(requestInfoWrapper);
@@ -236,11 +215,8 @@ class BillControllerv2Test {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link BillControllerv2#genrateBill(RequestInfoWrapper, org.egov.demand.model.GenerateBillCriteria)}
-     */
     @Test
-    void testGenrateBill() throws Exception {
+    void testGenrateWithError() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
         requestInfoWrapper.setRequestInfo(new RequestInfo());
         String content = (new ObjectMapper()).writeValueAsString(requestInfoWrapper);
@@ -253,9 +229,7 @@ class BillControllerv2Test {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link BillControllerv2#search(RequestInfoWrapper, org.egov.demand.model.BillSearchCriteria)}
-     */
+
     @Test
     void testSearch() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();

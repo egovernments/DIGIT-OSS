@@ -43,10 +43,7 @@ class TaxHeadMasterRepositoryTest {
     @MockBean
     private Util util;
 
-    /**
-     * Method under test: {@link TaxHeadMasterRepository#getTaxHeadMaster(RequestInfo, TaxHeadMasterCriteria)}
-     */
-    @Test
+  /*  @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxHeadMaster() {
         // TODO: Complete this test.
@@ -68,9 +65,9 @@ class TaxHeadMasterRepositoryTest {
         this.taxHeadMasterRepository.getTaxHeadMaster(requestInfo, new TaxHeadMasterCriteria());
     }
 
-    /**
+    *//**
      * Method under test: {@link TaxHeadMasterRepository#getTaxHeadMaster(RequestInfo, TaxHeadMasterCriteria)}
-     */
+     *//*
     @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxHeadMaster2() {
@@ -92,9 +89,9 @@ class TaxHeadMasterRepositoryTest {
         this.taxHeadMasterRepository.getTaxHeadMaster(new RequestInfo(), null);
     }
 
-    /**
+    *//**
      * Method under test: {@link TaxHeadMasterRepository#getTaxHeadMaster(RequestInfo, TaxHeadMasterCriteria)}
-     */
+     *//*
     @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxHeadMaster3() {
@@ -119,9 +116,9 @@ class TaxHeadMasterRepositoryTest {
                 "BillingService", "BillingService", code, true, true, new HashSet<>()));
     }
 
-    /**
+    *//**
      * Method under test: {@link TaxHeadMasterRepository#getTaxHeadMaster(RequestInfo, TaxHeadMasterCriteria)}
-     */
+     *//*
     @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxHeadMaster4() {
@@ -157,9 +154,9 @@ class TaxHeadMasterRepositoryTest {
         this.taxHeadMasterRepository.getTaxHeadMaster(requestInfo, taxHeadMasterCriteria);
     }
 
-    /**
+    *//**
      * Method under test: {@link TaxHeadMasterRepository#getTaxHeadMaster(RequestInfo, TaxHeadMasterCriteria)}
-     */
+     *//*
     @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxHeadMaster5() {
@@ -198,9 +195,9 @@ class TaxHeadMasterRepositoryTest {
         this.taxHeadMasterRepository.getTaxHeadMaster(requestInfo, taxHeadMasterCriteria);
     }
 
-    /**
+    *//**
      * Method under test: {@link TaxHeadMasterRepository#getTaxHeadMaster(RequestInfo, TaxHeadMasterCriteria)}
-     */
+     *//*
     @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxHeadMaster6() {
@@ -237,9 +234,9 @@ class TaxHeadMasterRepositoryTest {
         this.taxHeadMasterRepository.getTaxHeadMaster(requestInfo, taxHeadMasterCriteria);
     }
 
-    /**
+    *//**
      * Method under test: {@link TaxHeadMasterRepository#getTaxHeadMaster(RequestInfo, TaxHeadMasterCriteria)}
-     */
+     *//*
     @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxHeadMaster7() {
@@ -276,10 +273,8 @@ class TaxHeadMasterRepositoryTest {
         when(taxHeadMasterCriteria.getId()).thenReturn(stringSet1);
         this.taxHeadMasterRepository.getTaxHeadMaster(requestInfo, taxHeadMasterCriteria);
     }
+*/
 
-    /**
-     * Method under test: {@link TaxHeadMasterRepository#getTaxHeadMaster(RequestInfo, TaxHeadMasterCriteria)}
-     */
     @Test
     void testGetTaxHeadMaster8() throws IllegalArgumentException {
         DocumentContext documentContext = mock(DocumentContext.class);

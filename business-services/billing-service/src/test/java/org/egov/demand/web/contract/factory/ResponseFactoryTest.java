@@ -24,9 +24,6 @@ class ResponseFactoryTest {
     @Autowired
     private ResponseFactory responseFactory;
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
     @Test
     void testGetResponseInfo() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -38,9 +35,7 @@ class ResponseFactoryTest {
         assertNull(actualResponseInfo.getMsgId());
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo2() {
         // TODO: Complete this test.

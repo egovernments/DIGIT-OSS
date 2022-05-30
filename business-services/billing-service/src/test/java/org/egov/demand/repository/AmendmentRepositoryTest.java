@@ -59,53 +59,6 @@ class AmendmentRepositoryTest {
 
 
     @Test
-
-    void testSaveAmendment() {
-
-        this.amendmentRepository.saveAmendment(new AmendmentRequest());
-    }
-
-
-    @Test
-
-    void testSaveAmendment2() {
-
-
-        AmendmentRequest amendmentRequest = new AmendmentRequest();
-        amendmentRequest.setAmendment(new Amendment());
-        this.amendmentRepository.saveAmendment(amendmentRequest);
-    }
-
-
-    @Test
-
-    void testSaveAmendment3() {
-
-
-        Amendment amendment = new Amendment();
-        amendment.setAmendmentReason(AmendmentReason.COURT_CASE_SETTLEMENT);
-
-        AmendmentRequest amendmentRequest = new AmendmentRequest();
-        amendmentRequest.setAmendment(amendment);
-        this.amendmentRepository.saveAmendment(amendmentRequest);
-    }
-
-
-    @Test
-
-    void testSaveAmendment4() {
-
-        Amendment amendment = new Amendment();
-        amendment.setAmendmentReason(AmendmentReason.COURT_CASE_SETTLEMENT);
-        AmendmentRequest amendmentRequest = mock(AmendmentRequest.class);
-        when(amendmentRequest.getAmendment()).thenReturn(new Amendment());
-        doNothing().when(amendmentRequest).setAmendment((Amendment) any());
-        amendmentRequest.setAmendment(amendment);
-        this.amendmentRepository.saveAmendment(amendmentRequest);
-    }
-
-
-    @Test
     void testSaveAmendment5() throws DataAccessException {
         when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
         when(this.namedParameterJdbcTemplate.update((String) any(),
@@ -242,42 +195,6 @@ class AmendmentRepositoryTest {
 
 
     @Test
-       void testSaveAmendment8() throws DataAccessException {
-
-        when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
-        when(this.namedParameterJdbcTemplate.update((String) any(),
-                (org.springframework.jdbc.core.namedparam.SqlParameterSource) any())).thenReturn(1);
-        when(this.namedParameterJdbcTemplate.batchUpdate((String) any(),
-                (org.springframework.jdbc.core.namedparam.SqlParameterSource[]) any())).thenReturn(new int[]{1, 1, 1, 1});
-
-        Amendment amendment = new Amendment();
-        amendment.setAmendmentReason(AmendmentReason.COURT_CASE_SETTLEMENT);
-        AmendmentRequest amendmentRequest = mock(AmendmentRequest.class);
-        ProcessInstance workflow = new ProcessInstance();
-        ArrayList<DemandDetail> demandDetails = new ArrayList<>();
-        ArrayList<Document> documents = new ArrayList<>();
-        when(amendmentRequest.getAmendment()).thenReturn(new Amendment("42", "42", "42",
-                "INSERT INTO egbs_amendment (id, tenantid, amendmentid, businessservice, consumercode, amendmentreason,"
-                        + " reasondocumentnumber, status, effectivetill, effectivefrom, amendeddemandid, createdby, createdtime,"
-                        + " lastmodifiedby, lastmodifiedtime, additionaldetails) \tVALUES (:id, :tenantid, :amendmentid,"
-                        + " :businessservice, :consumercode, :amendmentreason, :reasondocumentnumber, :status, :effectivetill,"
-                        + " :effectivefrom, :amendeddemandid, :createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime,"
-                        + " :additionaldetails);",
-                "42",
-                "INSERT INTO egbs_amendment (id, tenantid, amendmentid, businessservice, consumercode, amendmentreason,"
-                        + " reasondocumentnumber, status, effectivetill, effectivefrom, amendeddemandid, createdby, createdtime,"
-                        + " lastmodifiedby, lastmodifiedtime, additionaldetails) \tVALUES (:id, :tenantid, :amendmentid,"
-                        + " :businessservice, :consumercode, :amendmentreason, :reasondocumentnumber, :status, :effectivetill,"
-                        + " :effectivefrom, :amendeddemandid, :createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime,"
-                        + " :additionaldetails);",
-                AmendmentReason.COURT_CASE_SETTLEMENT, "Just cause", AmendmentStatus.ACTIVE, workflow, demandDetails, documents,
-                1L, 1L, null, MissingNode.getInstance()));
-        doNothing().when(amendmentRequest).setAmendment((Amendment) any());
-        amendmentRequest.setAmendment(amendment);
-        this.amendmentRepository.saveAmendment(amendmentRequest);
-    }
-
-    @Test
     void testSaveAmendment9() throws DataAccessException {
         when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
         when(this.namedParameterJdbcTemplate.update((String) any(),
@@ -358,32 +275,6 @@ class AmendmentRepositoryTest {
     }
 
 
-    @Test
-
-    void testUpdateAmendment2() {
-
-        when(this.namedParameterJdbcTemplate.batchUpdate((String) any(),
-                (org.springframework.jdbc.core.namedparam.SqlParameterSource[]) any())).thenReturn(new int[]{1, 1, 1, 1});
-
-        ArrayList<AmendmentUpdate> amendmentUpdateList = new ArrayList<>();
-        amendmentUpdateList.add(new AmendmentUpdate());
-        this.amendmentRepository.updateAmendment(amendmentUpdateList);
-    }
-
-
-    @Test
-    void testUpdateAmendment3() {
-
-        when(this.namedParameterJdbcTemplate.batchUpdate((String) any(),
-                (org.springframework.jdbc.core.namedparam.SqlParameterSource[]) any())).thenReturn(new int[]{1, 1, 1, 1});
-
-        AmendmentUpdate amendmentUpdate = new AmendmentUpdate();
-        amendmentUpdate.setStatus(AmendmentStatus.ACTIVE);
-
-        ArrayList<AmendmentUpdate> amendmentUpdateList = new ArrayList<>();
-        amendmentUpdateList.add(amendmentUpdate);
-        this.amendmentRepository.updateAmendment(amendmentUpdateList);
-    }
 
 
     @Test
@@ -394,11 +285,9 @@ class AmendmentRepositoryTest {
         AuditDetails auditDetails = new AuditDetails();
         MissingNode additionalDetails = MissingNode.getInstance();
         ProcessInstance workflow = new ProcessInstance();
-
         AmendmentUpdate amendmentUpdate = new AmendmentUpdate("42", "42", "42", auditDetails, additionalDetails, workflow,
                 AmendmentStatus.ACTIVE, new ArrayList<>());
         amendmentUpdate.setStatus(AmendmentStatus.ACTIVE);
-
         ArrayList<AmendmentUpdate> amendmentUpdateList = new ArrayList<>();
         amendmentUpdateList.add(amendmentUpdate);
         this.amendmentRepository.updateAmendment(amendmentUpdateList);
@@ -435,47 +324,6 @@ class AmendmentRepositoryTest {
 
 
     @Test
-     void testGetAmendmentSqlParameter() {
-
-        this.amendmentRepository.getAmendmentSqlParameter(new AmendmentRequest());
-    }
-
-
-    @Test
-      void testGetAmendmentSqlParameter2() {
-
-        AmendmentRequest amendmentRequest = new AmendmentRequest();
-        amendmentRequest.setAmendment(new Amendment());
-        this.amendmentRepository.getAmendmentSqlParameter(amendmentRequest);
-    }
-
-
-    @Test
-     void testGetAmendmentSqlParameter3() {
-
-        Amendment amendment = new Amendment();
-        amendment.setAmendmentReason(AmendmentReason.COURT_CASE_SETTLEMENT);
-
-        AmendmentRequest amendmentRequest = new AmendmentRequest();
-        amendmentRequest.setAmendment(amendment);
-        this.amendmentRepository.getAmendmentSqlParameter(amendmentRequest);
-    }
-
-
-    @Test
-
-    void testGetAmendmentSqlParameter4() {
-
-        Amendment amendment = new Amendment();
-        amendment.setAmendmentReason(AmendmentReason.COURT_CASE_SETTLEMENT);
-        AmendmentRequest amendmentRequest = mock(AmendmentRequest.class);
-        when(amendmentRequest.getAmendment()).thenReturn(new Amendment());
-        doNothing().when(amendmentRequest).setAmendment((Amendment) any());
-        amendmentRequest.setAmendment(amendment);
-        this.amendmentRepository.getAmendmentSqlParameter(amendmentRequest);
-    }
-
-    @Test
     void testGetAmendmentSqlParameter5() {
         when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
 
@@ -496,25 +344,6 @@ class AmendmentRepositoryTest {
         verify(this.util).getPGObject((Object) any());
         verify(amendmentRequest).getAmendment();
         verify(amendmentRequest).setAmendment((Amendment) any());
-    }
-
-    @Test
-       void testGetAmendmentSqlParameter6() {
-
-        when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
-
-        Amendment amendment = new Amendment();
-        amendment.setAmendmentReason(AmendmentReason.COURT_CASE_SETTLEMENT);
-        AmendmentRequest amendmentRequest = mock(AmendmentRequest.class);
-        ProcessInstance workflow = new ProcessInstance();
-        ArrayList<DemandDetail> demandDetails = new ArrayList<>();
-        ArrayList<Document> documents = new ArrayList<>();
-        when(amendmentRequest.getAmendment()).thenReturn(
-                new Amendment("42", "42", "42", "id", "42", "id", AmendmentReason.COURT_CASE_SETTLEMENT, "Just cause",
-                        AmendmentStatus.ACTIVE, workflow, demandDetails, documents, 1L, 1L, null, MissingNode.getInstance()));
-        doNothing().when(amendmentRequest).setAmendment((Amendment) any());
-        amendmentRequest.setAmendment(amendment);
-        this.amendmentRepository.getAmendmentSqlParameter(amendmentRequest);
     }
 
 

@@ -29,9 +29,7 @@ class BusinessServiceDetailControllerTest {
     @Autowired
     private BusinessServiceDetailController businessServiceDetailController;
 
-    /**
-     * Method under test: {@link BusinessServiceDetailController#search(RequestInfoWrapper, org.egov.demand.web.contract.BusinessServiceDetailCriteria, org.springframework.validation.BindingResult)}
-     */
+
     @Test
     void testSearch() throws Exception {
         when(this.businessServDetailService.searchBusinessServiceDetails(

@@ -40,9 +40,7 @@ class DemandControllerTest {
     @MockBean
     private DemandService demandService;
 
-    /**
-     * Method under test: {@link DemandController#create(org.springframework.http.HttpHeaders, DemandRequest)}
-     */
+
     @Test
     void testCreate() throws Exception {
         when(this.demandService.create((DemandRequest) any())).thenReturn(new DemandResponse());
@@ -63,9 +61,7 @@ class DemandControllerTest {
                         MockMvcResultMatchers.content().string("{\"ResponseInfo\":null,\"Demands\":[],\"CollectedReceipt\":null}"));
     }
 
-    /**
-     * Method under test: {@link DemandController#migrate(RequestInfoWrapper, Integer, Integer)}
-     */
+
     @Test
     void testMigrate() throws Exception {
         when(this.demandMigration.migrateToV1((Integer) any(), (Integer) any())).thenReturn(new HashMap<>());
@@ -85,9 +81,7 @@ class DemandControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("{}"));
     }
 
-    /**
-     * Method under test: {@link DemandController#search(RequestInfoWrapper, org.egov.demand.model.DemandCriteria)}
-     */
+
     @Test
     void testSearch() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
@@ -102,9 +96,7 @@ class DemandControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link DemandController#update(org.springframework.http.HttpHeaders, DemandRequest)}
-     */
+
     @Test
     void testUpdate() throws Exception {
         when(this.demandService.updateAsync((DemandRequest) any(), (org.egov.demand.model.PaymentBackUpdateAudit) any()))

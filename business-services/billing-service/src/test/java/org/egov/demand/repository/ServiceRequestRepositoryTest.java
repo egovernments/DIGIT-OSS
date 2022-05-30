@@ -38,9 +38,7 @@ class ServiceRequestRepositoryTest {
     @Autowired
     private ServiceRequestRepository serviceRequestRepository;
 
-    /**
-     * Method under test: {@link ServiceRequestRepository#fetchResult(String, Object)}
-     */
+
     @Test
     void testFetchResult() throws JsonProcessingException, RestClientException {
         HashMap<Object, Object> objectObjectMap = new HashMap<>();
@@ -58,21 +56,7 @@ class ServiceRequestRepositoryTest {
         verify(this.objectMapper).writeValueAsString((Object) any());
     }
 
-    /**
-     * Method under test: {@link ServiceRequestRepository#fetchResult(String, Object)}
-     */
-    @Test
-    void testFetchResult2() throws JsonProcessingException, RestClientException {
-        when(this.restTemplate.postForObject((String) any(), (Object) any(), (Class<Object>) any(), (Object[]) any()))
-                .thenReturn("Post For Object");
-        when(this.restTemplate.postForObject((String) any(), (Object) any(), (Class<Map<Object, Object>>) any(),
-                (Object[]) any())).thenReturn(new HashMap<>());
-        when(this.objectMapper.configure((com.fasterxml.jackson.databind.SerializationFeature) any(), anyBoolean()))
-                .thenThrow(new ServiceCallException("An error occurred"));
-        when(this.objectMapper.writeValueAsString((Object) any())).thenThrow(mock(JsonProcessingException.class));
-        assertThrows(ServiceCallException.class, () -> this.serviceRequestRepository.fetchResult("Uri", "Request"));
-        verify(this.restTemplate).postForObject((String) any(), (Object) any(), (Class<Object>) any(), (Object[]) any());
-        verify(this.objectMapper).configure((com.fasterxml.jackson.databind.SerializationFeature) any(), anyBoolean());
-    }
+
+
 }
 

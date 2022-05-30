@@ -29,9 +29,7 @@ class TaxPeriodControllerTest {
     @MockBean
     private TaxPeriodService taxPeriodService;
 
-    /**
-     * Method under test: {@link TaxPeriodController#search(RequestInfoWrapper, org.egov.demand.web.contract.TaxPeriodCriteria, org.springframework.validation.BindingResult)}
-     */
+
     @Test
     void testSearch() throws Exception {
         when(this.taxPeriodService.searchTaxPeriods((org.egov.demand.web.contract.TaxPeriodCriteria) any(),

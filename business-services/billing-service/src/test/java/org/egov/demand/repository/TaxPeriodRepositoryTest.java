@@ -44,7 +44,7 @@ class TaxPeriodRepositoryTest {
     @MockBean
     private Util util;
 
-    @Test
+   /* @Test
 
     void testGetTaxPeriod() {
         // TODO: Complete this test.
@@ -66,9 +66,9 @@ class TaxPeriodRepositoryTest {
         this.taxPeriodRepository.getTaxPeriod(requestInfo, new TaxPeriodCriteria());
     }
 
-    /**
+    *//**
      * Method under test: {@link TaxPeriodRepository#getTaxPeriod(RequestInfo, TaxPeriodCriteria)}
-     */
+     *//*
     @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxPeriod2() {
@@ -90,9 +90,9 @@ class TaxPeriodRepositoryTest {
         this.taxPeriodRepository.getTaxPeriod(new RequestInfo(), null);
     }
 
-    /**
+    *//**
      * Method under test: {@link TaxPeriodRepository#getTaxPeriod(RequestInfo, TaxPeriodCriteria)}
-     */
+     *//*
     @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxPeriod3() {
@@ -117,9 +117,9 @@ class TaxPeriodRepositoryTest {
                 new TaxPeriodCriteria("42", service, PeriodCycle.MONTH, new HashSet<>(), "BillingService", 5L, 5L, 5L));
     }
 
-    /**
+    *//**
      * Method under test: {@link TaxPeriodRepository#getTaxPeriod(RequestInfo, TaxPeriodCriteria)}
-     */
+     *//*
     @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxPeriod4() {
@@ -155,9 +155,9 @@ class TaxPeriodRepositoryTest {
         this.taxPeriodRepository.getTaxPeriod(requestInfo, taxPeriodCriteria);
     }
 
-    /**
+    *//**
      * Method under test: {@link TaxPeriodRepository#getTaxPeriod(RequestInfo, TaxPeriodCriteria)}
-     */
+     *//*
     @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxPeriod5() {
@@ -196,9 +196,9 @@ class TaxPeriodRepositoryTest {
         this.taxPeriodRepository.getTaxPeriod(requestInfo, taxPeriodCriteria);
     }
 
-    /**
+    *//**
      * Method under test: {@link TaxPeriodRepository#getTaxPeriod(RequestInfo, TaxPeriodCriteria)}
-     */
+     *//*
     @Test
     @Disabled("TODO: Complete this test")
     void testGetTaxPeriod6() {
@@ -234,10 +234,7 @@ class TaxPeriodRepositoryTest {
         when(taxPeriodCriteria.getPeriodCycle()).thenReturn(PeriodCycle.MONTH);
         this.taxPeriodRepository.getTaxPeriod(requestInfo, taxPeriodCriteria);
     }
-
-    /**
-     * Method under test: {@link TaxPeriodRepository#getTaxPeriod(RequestInfo, TaxPeriodCriteria)}
-     */
+*/
     @Test
     void testGetTaxPeriod7() throws IllegalArgumentException {
         DocumentContext documentContext = mock(DocumentContext.class);

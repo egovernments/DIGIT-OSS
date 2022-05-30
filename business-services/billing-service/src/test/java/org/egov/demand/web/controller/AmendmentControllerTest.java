@@ -2,6 +2,8 @@ package org.egov.demand.web.controller;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.MissingNode;
@@ -25,17 +27,21 @@ import org.egov.demand.web.contract.factory.ResponseFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@ContextConfiguration(classes = {AmendmentController.class, ResponseFactory.class})
+@SpringBootTest
+@AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 class AmendmentControllerTest {
     @Autowired
@@ -44,11 +50,82 @@ class AmendmentControllerTest {
     @MockBean
     private AmendmentService amendmentService;
 
-    /**
-     * Method under test: {@link AmendmentController#create(AmendmentRequest)}
-     */
+
+    @Autowired
+    private MockMvc mockMvc;
+
+
     @Test
-    void testCreate() throws Exception {
+    public void AmendmentPostSuccess() throws Exception {
+        AmendmentRequest amendmentRequest = new AmendmentRequest();
+        ProcessInstance workflow = new ProcessInstance();
+        ArrayList<DemandDetail> demandDetails = new ArrayList<>();
+        ArrayList<Document> documents = new ArrayList<>();
+        AuditDetails auditDetails = new AuditDetails();
+        amendmentRequest.setAmendment(new Amendment("42", "42", "42", "?", "42", "?", AmendmentReason.COURT_CASE_SETTLEMENT,
+                "Just cause", AmendmentStatus.ACTIVE, workflow, demandDetails, documents, 1L, 1L, auditDetails,
+                MissingNode.getInstance()));
+        ObjectMapper objectMapper = new ObjectMapper();
+        String Json = objectMapper.writeValueAsString(amendmentRequest);
+
+        mockMvc.perform(post("/amendment/_create")
+                        .accept(MediaType.APPLICATION_JSON).content(Json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    public void AmendmentPostFailure() throws Exception {
+        mockMvc.perform(post("/amendment/_create").contentType(MediaType
+                        .APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    public void AmendmentSearchSuccess() throws Exception {
+        RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
+        requestInfoWrapper.setRequestInfo(new RequestInfo());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String Json = objectMapper.writeValueAsString(requestInfoWrapper);
+        mockMvc.perform(post("/amendment/_search")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Json));
+    }
+    @Test
+    public void amendmentSearchFailure() throws Exception {
+        mockMvc.perform(post("/amendment/_search").contentType(MediaType
+                        .APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void AmendmentUpdateSuccess() throws Exception {
+        AmendmentUpdateRequest amendmentUpdateRequest = new AmendmentUpdateRequest();
+        AuditDetails auditDetails = new AuditDetails();
+        MissingNode additionalDetails = MissingNode.getInstance();
+        ProcessInstance workflow = new ProcessInstance();
+        amendmentUpdateRequest.setAmendmentUpdate(new AmendmentUpdate("42", "42", "42", auditDetails, additionalDetails,
+                workflow, AmendmentStatus.ACTIVE, new ArrayList<>()));
+        amendmentUpdateRequest.setRequestInfo(new RequestInfo());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String Json = objectMapper.writeValueAsString(amendmentUpdateRequest);
+
+        mockMvc.perform(post("/amendment/_update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Json));
+    }
+
+    @Test
+    public void amendmentUpdateFailure() throws Exception {
+        mockMvc.perform(post("/amendment/_update").contentType(MediaType
+                        .APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    void testCreateWith400Code() throws Exception {
         AmendmentRequest amendmentRequest = new AmendmentRequest();
         amendmentRequest.setAmendment(new Amendment());
         amendmentRequest.setRequestInfo(new RequestInfo());
@@ -62,11 +139,10 @@ class AmendmentControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link AmendmentController#create(AmendmentRequest)}
-     */
+
+
     @Test
-    void testCreate2() throws Exception {
+    void testCreateWithSucess() throws Exception {
         when(this.amendmentService.create((AmendmentRequest) any())).thenReturn(new Amendment());
 
         AmendmentRequest amendmentRequest = new AmendmentRequest();
@@ -96,11 +172,8 @@ class AmendmentControllerTest {
                                         + ",\"auditDetails\":null,\"additionalDetails\":null}]}"));
     }
 
-    /**
-     * Method under test: {@link AmendmentController#create(AmendmentRequest)}
-     */
     @Test
-    void testCreate3() throws Exception {
+    void testCreateSuccessWithRequestInfo() throws Exception {
         ProcessInstance workflow = new ProcessInstance();
         ArrayList<DemandDetail> demandDetails = new ArrayList<>();
         ArrayList<Document> documents = new ArrayList<>();
@@ -140,11 +213,9 @@ class AmendmentControllerTest {
                                         + "},\"additionalDetails\":null}]}"));
     }
 
-    /**
-     * Method under test: {@link AmendmentController#search(RequestInfoWrapper, org.egov.demand.amendment.model.AmendmentCriteria)}
-     */
+
     @Test
-    void testSearch() throws Exception {
+    void testSearchWith400Code() throws Exception {
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
         requestInfoWrapper.setRequestInfo(new RequestInfo());
         String content = (new ObjectMapper()).writeValueAsString(requestInfoWrapper);
@@ -157,11 +228,8 @@ class AmendmentControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link AmendmentController#update(AmendmentUpdateRequest)}
-     */
     @Test
-    void testUpdate() throws Exception {
+    void testUpdateWith400Code() throws Exception {
         AmendmentUpdateRequest amendmentUpdateRequest = new AmendmentUpdateRequest();
         amendmentUpdateRequest.setAmendmentUpdate(new AmendmentUpdate());
         amendmentUpdateRequest.setRequestInfo(new RequestInfo());
@@ -175,11 +243,8 @@ class AmendmentControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
     }
 
-    /**
-     * Method under test: {@link AmendmentController#update(AmendmentUpdateRequest)}
-     */
     @Test
-    void testUpdate2() throws Exception {
+    void testUpdateSucess() throws Exception {
         when(this.amendmentService.updateAmendment((AmendmentUpdateRequest) any())).thenReturn(new Amendment());
 
         AmendmentUpdateRequest amendmentUpdateRequest = new AmendmentUpdateRequest();
@@ -207,11 +272,9 @@ class AmendmentControllerTest {
                                         + "\":null,\"additionalDetails\":null}]}"));
     }
 
-    /**
-     * Method under test: {@link AmendmentController#update(AmendmentUpdateRequest)}
-     */
+
     @Test
-    void testUpdate3() throws Exception {
+    void testUpdateSucesswithExpectdString() throws Exception {
         ProcessInstance workflow = new ProcessInstance();
         ArrayList<DemandDetail> demandDetails = new ArrayList<>();
         ArrayList<Document> documents = new ArrayList<>();
@@ -249,11 +312,9 @@ class AmendmentControllerTest {
                                         + "},\"additionalDetails\":null}]}"));
     }
 
-    /**
-     * Method under test: {@link AmendmentController#update(AmendmentUpdateRequest)}
-     */
+
     @Test
-    void testUpdate4() throws Exception {
+    void testUpdateSucessWithRequestInfo() throws Exception {
         when(this.amendmentService.updateAmendment((AmendmentUpdateRequest) any())).thenReturn(new Amendment());
 
         AmendmentUpdateRequest amendmentUpdateRequest = new AmendmentUpdateRequest();
@@ -281,11 +342,9 @@ class AmendmentControllerTest {
                                         + "\":null,\"additionalDetails\":null}]}"));
     }
 
-    /**
-     * Method under test: {@link AmendmentController#update(AmendmentUpdateRequest)}
-     */
+
     @Test
-    void testUpdate5() throws Exception {
+    void testUpdateError() throws Exception {
         when(this.amendmentService.updateAmendment((AmendmentUpdateRequest) any())).thenReturn(new Amendment());
 
         ArrayList<Document> documentList = new ArrayList<>();
