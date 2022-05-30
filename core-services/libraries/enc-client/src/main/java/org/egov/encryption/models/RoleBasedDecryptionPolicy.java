@@ -9,10 +9,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SecurityPolicyRoleBasedDecryptionPolicy {
+public class RoleBasedDecryptionPolicy {
 
     private String role = null;
 
-    private List<SecurityPolicyAttributeAccess> attributeAccessList = null;
+    private List<AttributeAccess> attributeAccessList = null;
 
 }

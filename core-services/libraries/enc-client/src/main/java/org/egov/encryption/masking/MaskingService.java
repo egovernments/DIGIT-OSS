@@ -7,8 +7,8 @@ import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.config.EncClientConstants;
 import org.egov.encryption.config.EncProperties;
-import org.egov.encryption.models.SecurityPolicyAttribute;
-import org.egov.encryption.models.SecurityPolicyUniqueIdentifier;
+import org.egov.encryption.models.Attribute;
+import org.egov.encryption.models.UniqueIdentifier;
 import org.egov.encryption.util.JSONBrowseUtil;
 import org.egov.encryption.util.JacksonUtils;
 import org.egov.encryption.util.JsonPathConverter;
@@ -38,7 +38,7 @@ public class MaskingService {
         maskingPatternMap = getMaskingPatternMap();
     }
 
-    public <T> T maskData(T data, SecurityPolicyAttribute attribute) {
+    public <T> T maskData(T data, Attribute attribute) {
         String value = String.valueOf(data);
         String patternId = attribute.getPatternId();
         String maskingRegex = maskingPatternMap.get(patternId);
@@ -47,9 +47,9 @@ public class MaskingService {
         return (T) value;
     }
 
-    public JsonNode maskData(JsonNode decryptedNode, List<SecurityPolicyAttribute> attributes, SecurityPolicyUniqueIdentifier uniqueIdentifier, RequestInfo requestInfo) {
+    public JsonNode maskData(JsonNode decryptedNode, List<Attribute> attributes, UniqueIdentifier uniqueIdentifier, RequestInfo requestInfo) {
         JsonNode maskedNode = decryptedNode.deepCopy();
-        for (SecurityPolicyAttribute attribute : attributes) {
+        for (Attribute attribute : attributes) {
             JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(maskedNode,
                     JsonPathConverter.convertToArrayJsonPaths(Arrays.asList(attribute.getJsonPath())));
             jsonNode = JSONBrowseUtil.mapValues(jsonNode, value -> maskData(value, attribute));
@@ -62,8 +62,8 @@ public class MaskingService {
     }
 
     private JsonNode addPlainRequestAccessValues(ArrayNode maskedArray, ArrayNode decryptedArray,
-                                                 List<SecurityPolicyAttribute> securityPolicyAttributes,
-                                                 SecurityPolicyUniqueIdentifier uniqueIdentifier,
+                                                 List<Attribute> attributes,
+                                                 UniqueIdentifier uniqueIdentifier,
                                                  RequestInfo requestInfo) {
         String recordId = requestInfo.getPlainRequestAccess().getRecordId();
         List<String> plainRequestFields = requestInfo.getPlainRequestAccess().getPlainRequestFields();
@@ -71,7 +71,7 @@ public class MaskingService {
             JsonNode maskedNode = maskedArray.get(i);
             JsonNode decryptedNode = decryptedArray.get(i);
             if(recordId.equals(maskedNode.get(uniqueIdentifier.getJsonPath()).asText())) {
-                JsonNode plainNode = createPlainNode(decryptedNode, plainRequestFields, securityPolicyAttributes);
+                JsonNode plainNode = createPlainNode(decryptedNode, plainRequestFields, attributes);
                 plainNode = JacksonUtils.merge(plainNode, maskedNode);
                 maskedArray.remove(i);
                 maskedArray.insert(i, plainNode);
@@ -81,11 +81,11 @@ public class MaskingService {
     }
 
     private JsonNode createPlainNode(JsonNode decryptedNode, List<String> plainRequestFields,
-                                     List<SecurityPolicyAttribute> attributes) {
+                                     List<Attribute> attributes) {
         JsonNode plainNode = decryptedNode.deepCopy();
         List<String> plainPaths = new ArrayList<>();
-        for(SecurityPolicyAttribute attribute : attributes) {
-            if(plainRequestFields.contains(attribute.getName())) {
+        for (Attribute attribute : attributes) {
+            if (plainRequestFields.contains(attribute.getName())) {
                 plainPaths.add(attribute.getJsonPath());
             }
         }

@@ -7,9 +7,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SecurityPolicyAttributeVisibility {
+public class AttributeVisibility {
 
-    private SecurityPolicyAttribute attribute;
+    private Attribute attribute;
     private Visibility visibility;
 
 }

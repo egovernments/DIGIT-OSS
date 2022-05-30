@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SecurityPolicyUniqueIdentifier {
+public class UniqueIdentifier {
 
   private String name = null;
 

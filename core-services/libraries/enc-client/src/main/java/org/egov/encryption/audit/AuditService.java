@@ -10,7 +10,7 @@ import org.egov.common.contract.request.User;
 import org.egov.encryption.config.DecryptionPolicyConfiguration;
 import org.egov.encryption.config.EncProperties;
 import org.egov.encryption.models.AuditObject;
-import org.egov.encryption.models.SecurityPolicyUniqueIdentifier;
+import org.egov.encryption.models.UniqueIdentifier;
 import org.egov.encryption.producer.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ public class AuditService {
             auditObject.setPlainRequestAccess(requestInfo.getPlainRequestAccess());
         }
 
-        SecurityPolicyUniqueIdentifier uniqueIdentifier =
+        UniqueIdentifier uniqueIdentifier =
                 decryptionPolicyConfiguration.getUniqueIdentifierForModel(model);
         List<String> entityIds = new ArrayList<>();
         for(JsonNode node : json) {

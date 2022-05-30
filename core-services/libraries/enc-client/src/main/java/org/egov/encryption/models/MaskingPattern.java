@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MaskingPatterns {
+public class MaskingPattern {
 
   private String id = null;
 

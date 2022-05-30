@@ -32,11 +32,11 @@ public class DecryptionPolicyConfiguration {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Map<String, List<SecurityPolicyAttribute>> modelAttributeAccessMap;
+    private Map<String, List<Attribute>> modelAttributeAccessMap;
 
-    private Map<String, List<SecurityPolicyRoleBasedDecryptionPolicy>> modelRoleBasedDecryptionPolicyMap;
+    private Map<String, List<RoleBasedDecryptionPolicy>> modelRoleBasedDecryptionPolicyMap;
 
-    private Map<String, SecurityPolicyUniqueIdentifier> uniqueIdentifierMap;
+    private Map<String, UniqueIdentifier> uniqueIdentifierMap;
 
 
     void initializeModelAttributeAccessMap(List<SecurityPolicy> modelRoleAttributeAccessList) {
@@ -89,58 +89,57 @@ public class DecryptionPolicyConfiguration {
         initializeUniqueIdentifierMap(securityPolicyList);
     }
 
-    public SecurityPolicyUniqueIdentifier getUniqueIdentifierForModel(String model) {
+    public UniqueIdentifier getUniqueIdentifierForModel(String model) {
         return uniqueIdentifierMap.get(model);
     }
 
-    public Map<SecurityPolicyAttribute, Visibility> getRoleAttributeAccessListForModel(RequestInfo requestInfo, String model, List<String> roles) {
-        Map<SecurityPolicyAttribute, Visibility> mapping = new HashMap<>();
+    public Map<Attribute, Visibility> getRoleAttributeAccessListForModel(RequestInfo requestInfo, String model, List<String> roles) {
+        Map<Attribute, Visibility> mapping = new HashMap<>();
         try {
-            List<SecurityPolicyAttribute> securityPolicyAttributesList = modelAttributeAccessMap.get(model);
-            List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList = modelRoleBasedDecryptionPolicyMap.get(model);
+            List<Attribute> attributesList = modelAttributeAccessMap.get(model);
+            List<RoleBasedDecryptionPolicy> roleBasedDecryptionPolicyList = modelRoleBasedDecryptionPolicyMap.get(model);
 
-            boolean isAttributeListEmpty = CollectionUtils.isEmpty(securityPolicyAttributesList);
-            boolean isroleBasedDecryptionPolicyListEmpty = CollectionUtils.isEmpty(securityPolicyRoleBasedDecryptionPolicyList);
+            boolean isAttributeListEmpty = CollectionUtils.isEmpty(attributesList);
+            boolean isroleBasedDecryptionPolicyListEmpty = CollectionUtils.isEmpty(roleBasedDecryptionPolicyList);
 
             if (isAttributeListEmpty) {
                 throw new CustomException("DECRYPTION_NULL_ERROR", "Attribute list is empty");
             }
 
             if (!isAttributeListEmpty && isroleBasedDecryptionPolicyListEmpty) {
-                for (SecurityPolicyAttribute attribute : securityPolicyAttributesList) {
+                for (Attribute attribute : attributesList) {
                     String defaultVisibility = String.valueOf(attribute.getDefaultVisibility());
                     Visibility visibility = Visibility.valueOf(defaultVisibility);
-                    if(mapping.containsKey(attribute)){
-                        if(mapping.get(attribute).ordinal() > visibility.ordinal()){
+                    if (mapping.containsKey(attribute)) {
+                        if (mapping.get(attribute).ordinal() > visibility.ordinal()) {
                             mapping.remove(attribute);
                             mapping.put(attribute, visibility);
                         }
-                    }
-                    else{
+                    } else {
                         mapping.put(attribute, visibility);
                     }
                 }
 
             }
 
-            if(!isAttributeListEmpty && !isroleBasedDecryptionPolicyListEmpty){
-                Map<String, List<SecurityPolicyAttributeAccess>> roleSecurityPolicyAttributeAccessmap = makeRoleAttributeAccessMapping(securityPolicyRoleBasedDecryptionPolicyList);
-                Map<String, SecurityPolicyAttribute> attributesMap = makeAttributeMap(securityPolicyAttributesList);
+            if(!isAttributeListEmpty && !isroleBasedDecryptionPolicyListEmpty) {
+                Map<String, List<AttributeAccess>> roleSecurityPolicyAttributeAccessmap = makeRoleAttributeAccessMapping(roleBasedDecryptionPolicyList);
+                Map<String, Attribute> attributesMap = makeAttributeMap(attributesList);
 
                 List<String> secondLevelVisibility = new ArrayList<>();
 
-                for(String role: roles){
-                    if(!roleSecurityPolicyAttributeAccessmap.containsKey(role))
+                for (String role : roles) {
+                    if (!roleSecurityPolicyAttributeAccessmap.containsKey(role))
                         continue;
 
-                    List<SecurityPolicyAttributeAccess> attributeList = roleSecurityPolicyAttributeAccessmap.get(role);
+                    List<AttributeAccess> attributeList = roleSecurityPolicyAttributeAccessmap.get(role);
 
-                    for(SecurityPolicyAttributeAccess attributeAccess: attributeList){
+                    for (AttributeAccess attributeAccess : attributeList) {
                         String attributeName = attributeAccess.getAttribute();
-                        SecurityPolicyAttribute attribute = attributesMap.get(attributeName);
-                        if(requestInfo.getPlainRequestAccess() !=null && !CollectionUtils.isEmpty(requestInfo.getPlainRequestAccess().getPlainRequestFields())
+                        Attribute attribute = attributesMap.get(attributeName);
+                        if (requestInfo.getPlainRequestAccess() != null && !CollectionUtils.isEmpty(requestInfo.getPlainRequestAccess().getPlainRequestFields())
                                 && requestInfo.getPlainRequestAccess().getPlainRequestFields().contains(attributeName)
-                                && attributeAccess.getSecondLevelVisibility() != null){
+                                && attributeAccess.getSecondLevelVisibility() != null) {
                             secondLevelVisibility.add(attributeName);
                         }
                         String firstLevelVisibility = attributeAccess.getFirstLevelVisibility() != null ?
@@ -158,32 +157,32 @@ public class DecryptionPolicyConfiguration {
                     }
                 }
 
-                if(requestInfo.getPlainRequestAccess() != null)
+                if (requestInfo.getPlainRequestAccess() != null)
                     requestInfo.getPlainRequestAccess().setPlainRequestFields(secondLevelVisibility);
             }
 
             return mapping;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CustomException("DECRYPTION_NULL_ERROR", "Error in decryption process");
         }
     }
 
-    private Map<String, List<SecurityPolicyAttributeAccess>> makeRoleAttributeAccessMapping(List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList) {
-        return securityPolicyRoleBasedDecryptionPolicyList.stream().collect(Collectors.toMap(SecurityPolicyRoleBasedDecryptionPolicy::getRole,
-                SecurityPolicyRoleBasedDecryptionPolicy::getAttributeAccessList));
+    private Map<String, List<AttributeAccess>> makeRoleAttributeAccessMapping(List<RoleBasedDecryptionPolicy> roleBasedDecryptionPolicyList) {
+        return roleBasedDecryptionPolicyList.stream().collect(Collectors.toMap(RoleBasedDecryptionPolicy::getRole,
+                RoleBasedDecryptionPolicy::getAttributeAccessList));
     }
 
-    private Map<String, SecurityPolicyAttribute> makeAttributeMap(List<SecurityPolicyAttribute> securityPolicyAttributesList) {
-        Map<String, SecurityPolicyAttribute> atrributesMap = new HashMap<>();
+    private Map<String, Attribute> makeAttributeMap(List<Attribute> attributesList) {
+        Map<String, Attribute> atrributesMap = new HashMap<>();
 
-        for(SecurityPolicyAttribute securityPolicyAttribute : securityPolicyAttributesList){
-            String filedName = securityPolicyAttribute.getName();
-            atrributesMap.put(filedName, securityPolicyAttribute);
+        for (Attribute attribute : attributesList) {
+            String filedName = attribute.getName();
+            atrributesMap.put(filedName, attribute);
         }
         return atrributesMap;
     }
 
-    public SecurityPolicyUniqueIdentifier getSecurityPolicyUniqueIdentifier(String model){
+    public UniqueIdentifier getSecurityPolicyUniqueIdentifier(String model) {
         return uniqueIdentifierMap.get(model);
     }
 

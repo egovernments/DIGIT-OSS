@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SecurityPolicyAttributeAccess {
+public class AttributeAccess {
 
     private String attribute = null;
 

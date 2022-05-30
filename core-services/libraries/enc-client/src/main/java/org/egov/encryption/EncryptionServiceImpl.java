@@ -12,8 +12,8 @@ import org.egov.encryption.config.EncClientConstants;
 import org.egov.encryption.config.EncProperties;
 import org.egov.encryption.config.EncryptionPolicyConfiguration;
 import org.egov.encryption.masking.MaskingService;
-import org.egov.encryption.models.SecurityPolicyAttribute;
-import org.egov.encryption.models.SecurityPolicyUniqueIdentifier;
+import org.egov.encryption.models.Attribute;
+import org.egov.encryption.models.UniqueIdentifier;
 import org.egov.encryption.models.Visibility;
 import org.egov.encryption.util.ConvertClass;
 import org.egov.encryption.util.JSONBrowseUtil;
@@ -50,12 +50,12 @@ public class EncryptionServiceImpl implements EncryptionService {
 
     private JsonNode encryptJsonArray(JsonNode plaintextNode, String model, String tenantId) throws IOException {
         JsonNode encryptNode = plaintextNode.deepCopy();
-        List<SecurityPolicyAttribute> securityPolicyAttributes = encryptionPolicyConfiguration.getAttributeDetailsForModel(model);
-        List<String> attributesToEncrypt = securityPolicyAttributes.stream().map(SecurityPolicyAttribute::getJsonPath).collect(Collectors.toList());
+        List<Attribute> attributes = encryptionPolicyConfiguration.getAttributeDetailsForModel(model);
+        List<String> attributesToEncrypt = attributes.stream().map(Attribute::getJsonPath).collect(Collectors.toList());
         attributesToEncrypt = JsonPathConverter.convertToArrayJsonPaths(attributesToEncrypt);
         JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(plaintextNode, attributesToEncrypt);
 
-        if(! jsonNode.isEmpty(objectMapper.getSerializerProvider())) {
+        if (!jsonNode.isEmpty(objectMapper.getSerializerProvider())) {
             JsonNode returnedEncryptedNode = objectMapper.valueToTree(encryptionServiceRestConnection.callEncrypt(tenantId,
                     encProperties.getDefaultEncryptDataType(), jsonNode));
             encryptNode = JacksonUtils.merge(returnedEncryptedNode, encryptNode);
@@ -87,8 +87,8 @@ public class EncryptionServiceImpl implements EncryptionService {
     }
 
     private JsonNode decryptJson(RequestInfo requestInfo, Object ciphertextJson,
-                                 Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap,
-                                 String model, String purpose, SecurityPolicyUniqueIdentifier uniqueIdentifier) throws IOException {
+                                 Map<Attribute, Visibility> attributesVisibilityMap,
+                                 String model, String purpose, UniqueIdentifier uniqueIdentifier) throws IOException {
         JsonNode ciphertextNode = createJsonNode(ciphertextJson);
         JsonNode decryptNode = ciphertextNode.deepCopy();
 
@@ -100,18 +100,18 @@ public class EncryptionServiceImpl implements EncryptionService {
         }
 
         if(attributesVisibilityMap.containsValue(Visibility.NONE)){
-            List<SecurityPolicyAttribute> attributesToBeRemoved = attributesVisibilityMap.keySet().stream()
+            List<Attribute> attributesToBeRemoved = attributesVisibilityMap.keySet().stream()
                     .filter(attribute -> attributesVisibilityMap.get(attribute) == Visibility.NONE).collect(Collectors.toList());
-            List<String> pathToBeRemoved = attributesToBeRemoved.stream().map(SecurityPolicyAttribute::getJsonPath).collect(Collectors.toList());
+            List<String> pathToBeRemoved = attributesToBeRemoved.stream().map(Attribute::getJsonPath).collect(Collectors.toList());
             JsonNode nodeToBeEmptied = JacksonUtils.filterJsonNodeForPaths(decryptNode, pathToBeRemoved);
             JsonNode emptyNode = JSONBrowseUtil.mapValues(nodeToBeEmptied, __ -> EncClientConstants.STRING_FOR_NONE_ACCESS);
             decryptNode = JacksonUtils.merge(emptyNode, decryptNode);
         }
 
-        List<SecurityPolicyAttribute> attributesToBeDecrypted = attributesVisibilityMap.keySet().stream()
+        List<Attribute> attributesToBeDecrypted = attributesVisibilityMap.keySet().stream()
                 .filter(attribute -> attributesVisibilityMap.get(attribute) != Visibility.NONE).collect(Collectors.toList());
 
-        List<String> pathsToBeDecrypted = attributesToBeDecrypted.stream().map(SecurityPolicyAttribute::getJsonPath).collect(Collectors.toList());
+        List<String> pathsToBeDecrypted = attributesToBeDecrypted.stream().map(Attribute::getJsonPath).collect(Collectors.toList());
         pathsToBeDecrypted = JsonPathConverter.convertToArrayJsonPaths(pathsToBeDecrypted);
         JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(ciphertextNode, pathsToBeDecrypted);
 
@@ -121,7 +121,7 @@ public class EncryptionServiceImpl implements EncryptionService {
         }
 
         if(attributesVisibilityMap.containsValue(Visibility.MASKED)) {
-            List<SecurityPolicyAttribute> attributesToBeMasked = attributesVisibilityMap.keySet().stream()
+            List<Attribute> attributesToBeMasked = attributesVisibilityMap.keySet().stream()
                     .filter(attribute -> attributesVisibilityMap.get(attribute) == Visibility.MASKED).collect(Collectors.toList());
             decryptNode = maskingService.maskData(decryptNode, attributesToBeMasked, uniqueIdentifier, requestInfo);
         }
@@ -134,9 +134,9 @@ public class EncryptionServiceImpl implements EncryptionService {
     @Override
     public JsonNode decryptJson(RequestInfo requestInfo, Object ciphertextJson, String model, String purpose) throws IOException {
         List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
-        Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap = decryptionPolicyConfiguration.getRoleAttributeAccessListForModel(requestInfo, model, roles);
+        Map<Attribute, Visibility> attributesVisibilityMap = decryptionPolicyConfiguration.getRoleAttributeAccessListForModel(requestInfo, model, roles);
 
-        SecurityPolicyUniqueIdentifier uniqueIdentifier = decryptionPolicyConfiguration.getSecurityPolicyUniqueIdentifier(model);
+        UniqueIdentifier uniqueIdentifier = decryptionPolicyConfiguration.getSecurityPolicyUniqueIdentifier(model);
         JsonNode decryptedNode = decryptJson(requestInfo, ciphertextJson, attributesVisibilityMap, model, purpose, uniqueIdentifier);
 
         return decryptedNode;
