@@ -18,7 +18,6 @@ import org.egov.id.model.InvalidIDFormatException;
 import org.egov.id.model.RequestInfo;
 import org.egov.id.model.ResponseInfoFactory;
 import org.egov.tracer.model.CustomException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.BadSqlGrammarException;
@@ -26,7 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
-
+import sun.util.resources.cldr.chr.CalendarData_chr_US;
 
 /**
  * Description : IdGenerationService have methods related to the IdGeneration
@@ -74,7 +73,7 @@ public class IdGenerationService {
      * @throws Exception
      */
 
-    public IdGenerationResponse generateIdResponse( IdGenerationRequest idGenerationRequest) throws Exception {
+    public IdGenerationResponse generateIdResponse(IdGenerationRequest idGenerationRequest) throws Exception {
 
         RequestInfo requestInfo = idGenerationRequest.getRequestInfo();
         List<IdRequest> idRequests = idGenerationRequest.getIdRequests();
@@ -326,7 +325,6 @@ public class IdGenerationService {
      * @param requestInfo
      * @return formattedDate
      */
-
     private String generateCurrentYearDateFormat(String dateFormat, RequestInfo requestInfo) {
         try {
 
