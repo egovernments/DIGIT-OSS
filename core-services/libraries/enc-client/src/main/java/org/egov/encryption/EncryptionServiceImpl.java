@@ -4,25 +4,27 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.extern.slf4j.Slf4j;
-import org.egov.common.contract.request.PlainRequestAccess;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
-import org.egov.common.contract.request.User;
 import org.egov.encryption.accesscontrol.AbacFilter;
 import org.egov.encryption.audit.AuditService;
 import org.egov.encryption.config.*;
 import org.egov.encryption.masking.MaskingService;
-import org.egov.encryption.models.*;
+import org.egov.encryption.models.SecurityPolicyAttribute;
+import org.egov.encryption.models.SecurityPolicyUniqueIdentifier;
+import org.egov.encryption.models.Visibility;
 import org.egov.encryption.util.ConvertClass;
 import org.egov.encryption.util.JSONBrowseUtil;
 import org.egov.encryption.util.JacksonUtils;
 import org.egov.encryption.util.JsonPathConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -64,36 +66,36 @@ public class EncryptionServiceImpl implements EncryptionService {
         return encryptNode;
     }
 
-    public JsonNode encryptJson(Object plaintextJson, String key, String tenantId) throws IOException {
+    public JsonNode encryptJson(Object plaintextJson, String model, String tenantId) throws IOException {
         JsonNode plaintextNode = createJsonNode(plaintextJson);
         JsonNode plaintextNodeCopy = plaintextNode.deepCopy();
 
         // Convert input to array if it isn't already
-        if(!plaintextNodeCopy.isArray()) {
+        if (!plaintextNodeCopy.isArray()) {
             ArrayNode arrayNode = objectMapper.createArrayNode();
             arrayNode.add(plaintextNodeCopy);
             plaintextNodeCopy = arrayNode;
         }
-        JsonNode encryptedNode = encryptJsonArray(plaintextNodeCopy, key, tenantId);
+        JsonNode encryptedNode = encryptJsonArray(plaintextNodeCopy, model, tenantId);
 
-        if(!plaintextNode.isArray()) {
+        if (!plaintextNode.isArray()) {
             return encryptedNode.get(0);
         }
         return encryptedNode;
     }
 
-    public <E,P> P encryptJson(Object plaintextJson, String key, String tenantId, Class<E> valueType) throws IOException {
-        return ConvertClass.convertTo(encryptJson(plaintextJson, key, tenantId), valueType);
+    public <E, P> P encryptJson(Object plaintextJson, String model, String tenantId, Class<E> valueType) throws IOException {
+        return ConvertClass.convertTo(encryptJson(plaintextJson, model, tenantId), valueType);
     }
 
-
-    public JsonNode decryptedJson(RequestInfo requestInfo ,Object ciphertextJson, Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap,
-                                  String key, String purpose, SecurityPolicyUniqueIdentifier uniqueIdentifier)throws IOException {
+    private JsonNode decryptJson(RequestInfo requestInfo, Object ciphertextJson,
+                                 Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap,
+                                 String model, String purpose, SecurityPolicyUniqueIdentifier uniqueIdentifier) throws IOException {
         JsonNode ciphertextNode = createJsonNode(ciphertextJson);
         JsonNode decryptNode = ciphertextNode.deepCopy();
 
         // Convert input to array if it isn't already
-        if(!decryptNode.isArray()) {
+        if (!decryptNode.isArray()) {
             ArrayNode arrayNode = objectMapper.createArrayNode();
             arrayNode.add(decryptNode);
             decryptNode = arrayNode;
@@ -126,33 +128,33 @@ public class EncryptionServiceImpl implements EncryptionService {
             decryptNode = maskingService.maskedData(decryptNode, attributesToBeMasked, uniqueIdentifier, requestInfo);
         }
 
-        auditService.audit(decryptNode, key, purpose, requestInfo);
+        auditService.audit(decryptNode, model, purpose, requestInfo);
 
         return  decryptNode;
     }
 
     @Override
-    public JsonNode decryptJson(RequestInfo requestInfo, Object ciphertextJson, String key, String purpose) throws IOException {
+    public JsonNode decryptJson(RequestInfo requestInfo, Object ciphertextJson, String model, String purpose) throws IOException {
         List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode).collect(Collectors.toList());
-        Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap = decryptionPolicyConfiguration.getRoleAttributeAccessListForKey(requestInfo, key, roles);
-        
-        SecurityPolicyUniqueIdentifier uniqueIdentifier = decryptionPolicyConfiguration.getSecurityPolicyUniqueIdentifier(key);
-        JsonNode decryptedNode = decryptedJson(requestInfo,ciphertextJson, attributesVisibilityMap, key, purpose, uniqueIdentifier);
+        Map<SecurityPolicyAttribute, Visibility> attributesVisibilityMap = decryptionPolicyConfiguration.getRoleAttributeAccessListForModel(requestInfo, model, roles);
+
+        SecurityPolicyUniqueIdentifier uniqueIdentifier = decryptionPolicyConfiguration.getSecurityPolicyUniqueIdentifier(model);
+        JsonNode decryptedNode = decryptJson(requestInfo, ciphertextJson, attributesVisibilityMap, model, purpose, uniqueIdentifier);
 
         return decryptedNode;
     }
 
-    public <E,P> P decryptJson(RequestInfo requestInfo, Object ciphertextJson, String key, String purpose
-                              , Class<E> valueType) throws IOException {
-        return ConvertClass.convertTo(decryptJson(requestInfo, ciphertextJson, key, purpose), valueType);
+    public <E, P> P decryptJson(RequestInfo requestInfo, Object ciphertextJson, String model, String purpose
+            , Class<E> valueType) throws IOException {
+        return ConvertClass.convertTo(decryptJson(requestInfo, ciphertextJson, model, purpose), valueType);
     }
 
 
     JsonNode createJsonNode(Object json) throws IOException {
         JsonNode jsonNode;
-        if(json instanceof JsonNode)
+        if (json instanceof JsonNode)
             jsonNode = (JsonNode) json;
-        else if(json instanceof String)
+        else if (json instanceof String)
             jsonNode = objectMapper.readTree((String) json);           //JsonNode from JSON String
         else
             jsonNode = objectMapper.valueToTree(json);                 //JsonNode from POJO or Map

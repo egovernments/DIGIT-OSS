@@ -3,7 +3,7 @@ package org.egov.encryption.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import net.minidev.json.JSONArray;
-import org.egov.common.contract.request.*;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.models.*;
 import org.egov.encryption.util.MdmsFetcher;
 import org.egov.mdms.model.*;
@@ -81,32 +81,33 @@ public class DecryptionPolicyConfiguration {
             ObjectReader reader = objectMapper.readerFor(objectMapper.getTypeFactory().constructCollectionType(List.class,
                     SecurityPolicy.class));
             securityPolicyList = reader.readValue(securityPolicyJson.toString());
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
 
         initializeModelAttributeAccessMap(securityPolicyList);
         initializeRoleBasedDecryptionPolicyMap(securityPolicyList);
         initializeUniqueIdentifierMap(securityPolicyList);
     }
 
-    public SecurityPolicyUniqueIdentifier getUniqueIdentifierForKey(String key) {
-        return uniqueIdentifierMap.get(key);
+    public SecurityPolicyUniqueIdentifier getUniqueIdentifierForModel(String model) {
+        return uniqueIdentifierMap.get(model);
     }
 
-    public Map<SecurityPolicyAttribute, Visibility> getRoleAttributeAccessListForKey(RequestInfo requestInfo, String keyId, List<String> roles) {
+    public Map<SecurityPolicyAttribute, Visibility> getRoleAttributeAccessListForModel(RequestInfo requestInfo, String model, List<String> roles) {
         Map<SecurityPolicyAttribute, Visibility> mapping = new HashMap<>();
-        try{
-            List<SecurityPolicyAttribute> securityPolicyAttributesList = modelAttributeAccessMap.get(keyId);
-            List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList = modelRoleBasedDecryptionPolicyMap.get(keyId);
+        try {
+            List<SecurityPolicyAttribute> securityPolicyAttributesList = modelAttributeAccessMap.get(model);
+            List<SecurityPolicyRoleBasedDecryptionPolicy> securityPolicyRoleBasedDecryptionPolicyList = modelRoleBasedDecryptionPolicyMap.get(model);
 
             boolean isAttributeListEmpty = CollectionUtils.isEmpty(securityPolicyAttributesList);
             boolean isroleBasedDecryptionPolicyListEmpty = CollectionUtils.isEmpty(securityPolicyRoleBasedDecryptionPolicyList);
 
-            if(isAttributeListEmpty){
+            if (isAttributeListEmpty) {
                 throw new CustomException("DECRYPTION_NULL_ERROR", "Attribute list is empty");
             }
 
-            if(!isAttributeListEmpty && isroleBasedDecryptionPolicyListEmpty){
-                for(SecurityPolicyAttribute attribute : securityPolicyAttributesList){
+            if (!isAttributeListEmpty && isroleBasedDecryptionPolicyListEmpty) {
+                for (SecurityPolicyAttribute attribute : securityPolicyAttributesList) {
                     String defaultVisibility = String.valueOf(attribute.getDefaultVisibility());
                     Visibility visibility = Visibility.valueOf(defaultVisibility);
                     if(mapping.containsKey(attribute)){

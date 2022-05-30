@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.LongNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import org.egov.common.contract.request.PlainRequestAccess;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.encryption.config.DecryptionPolicyConfiguration;
@@ -47,7 +46,7 @@ public class AuditService {
         }
 
         SecurityPolicyUniqueIdentifier uniqueIdentifier =
-                decryptionPolicyConfiguration.getUniqueIdentifierForKey(model);
+                decryptionPolicyConfiguration.getUniqueIdentifierForModel(model);
         List<String> entityIds = new ArrayList<>();
         for(JsonNode node : json) {
             entityIds.add(node.get(uniqueIdentifier.getJsonPath()).asText());
