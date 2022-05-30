@@ -2,9 +2,10 @@ import React, { Fragment } from "react"
 import { Controller, useWatch } from "react-hook-form";
 import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
 
-const SearchFields = ({ register, control, reset, tenantId, t }) => {
+const SearchFields = ({ register, control, reset, tenantId, t,businessService }) => {
     const { isLoading: applicationTypesLoading, data: applicationTypes } = Digit.Hooks.ws.useWSMDMSWS.applicationTypes(Digit.ULBService.getStateId());
-
+    const filterString = businessService==="WS" ? "WATER" : "SEWERAGE";
+    const filteredApplicationTypes = applicationTypes?.filter(e => e?.code?.includes(filterString))
     const applicationType = useWatch({ control, name: "applicationType" });
     let businessServices = [];
 
@@ -79,7 +80,7 @@ const SearchFields = ({ register, control, reset, tenantId, t }) => {
                         selected={props.value}
                         select={props.onChange}
                         onBlur={props.onBlur}
-                        option={applicationTypes}
+                        option={filteredApplicationTypes}
                         optionKey="i18nKey"
                         t={t}
                     />
