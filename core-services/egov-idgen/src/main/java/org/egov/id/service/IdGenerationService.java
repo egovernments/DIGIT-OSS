@@ -1,21 +1,32 @@
 package org.egov.id.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.egov.id.config.PropertiesManager;
-import org.egov.id.model.*;
-import org.egov.tracer.model.CustomException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import javax.sql.DataSource;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.sql.DataSource;
+
+import lombok.extern.slf4j.Slf4j;
+import org.egov.id.config.PropertiesManager;
+import org.egov.id.model.IDSeqOverflowException;
+import org.egov.id.model.IdGenerationRequest;
+import org.egov.id.model.IdGenerationResponse;
+import org.egov.id.model.IdRequest;
+import org.egov.id.model.IdResponse;
+import org.egov.id.model.InvalidIDFormatException;
+import org.egov.id.model.RequestInfo;
+import org.egov.id.model.ResponseInfoFactory;
+import org.egov.tracer.model.CustomException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 
 /**
  * Description : IdGenerationService have methods related to the IdGeneration
@@ -63,7 +74,7 @@ public class IdGenerationService {
      * @throws Exception
      */
 
-    public IdGenerationResponse generateIdResponse(IdGenerationRequest idGenerationRequest) throws Exception {
+    public IdGenerationResponse generateIdResponse( IdGenerationRequest idGenerationRequest) throws Exception {
 
         RequestInfo requestInfo = idGenerationRequest.getRequestInfo();
         List<IdRequest> idRequests = idGenerationRequest.getIdRequests();
@@ -169,14 +180,14 @@ public class IdGenerationService {
             StringBuffer idSelectQuery = new StringBuffer();
             idSelectQuery.append("SELECT format FROM id_generator ").append(" WHERE idname=? and tenantid=?");
 
-           String rs = jdbcTemplate.queryForObject(idSelectQuery.toString(),new Object[]{idName,tenantId}, String.class);
+            String rs = jdbcTemplate.queryForObject(idSelectQuery.toString(),new Object[]{idName,tenantId}, String.class);
             if (!StringUtils.isEmpty(rs)) {
                 idFormat = rs;
             } else {
                 // querying for the id format with idname
                 StringBuffer idNameQuery = new StringBuffer();
                 idNameQuery.append("SELECT format FROM id_generator ").append(" WHERE idname=?");
-                 rs = jdbcTemplate.queryForObject(idSelectQuery.toString(),new Object[]{idName}, String.class);
+                rs = jdbcTemplate.queryForObject(idSelectQuery.toString(),new Object[]{idName}, String.class);
                 if (!StringUtils.isEmpty(rs))
                     idFormat = rs;
             }
@@ -235,7 +246,7 @@ public class IdGenerationService {
                     if (!sequences.containsKey(attributeName)) {
                         sequences.put(attributeName, generateSequenceNumber(attributeName, requestInfo, idRequest,autoCreateNewSeqFlag));
                     }
-					idFormat = idFormat.replace("[" + attributeName + "]", sequences.get(attributeName).get(i));
+                    idFormat = idFormat.replace("[" + attributeName + "]", sequences.get(attributeName).get(i));
                 } else if (attributeName.substring(0, 2).equalsIgnoreCase("fy")) {
                     idFormat = idFormat.replace("[" + attributeName + "]",
                             generateFinancialYearDateFormat(attributeName, requestInfo));
@@ -315,6 +326,7 @@ public class IdGenerationService {
      * @param requestInfo
      * @return formattedDate
      */
+
     private String generateCurrentYearDateFormat(String dateFormat, RequestInfo requestInfo) {
         try {
 
