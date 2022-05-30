@@ -84,6 +84,56 @@ const DesktopInbox = (props) => {
       ];
     }
     switch (props.userRole) {
+      case "FSM_EMP_FSTPO_REQUEST":
+        return [
+          {
+            Header: t("CS_COMMON_CITIZEN_NAME"),
+            accessor: "applicationNo",
+            disableSortBy: true,
+            Cell: ({ row }) => {
+              // fetching out citizen info
+              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo)
+              return (
+                <div>
+                  <span className="link">
+                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}>{citizen_info?.citizen?.name}</Link>
+                  </span>
+                </div>
+              );
+            },
+          },
+
+          {
+            Header: t("CS_COMMON_CITIZEN_NUMBER"),
+            disableSortBy: true,
+            accessor: "number",
+            Cell: ({ row }) => {
+              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo)
+              return (
+                <div>
+                  <span>
+                    {citizen_info?.citizen?.mobileNumber}
+                  </span>
+                </div>
+              );
+            },
+          },
+          {
+            Header: t("ES_INBOX_LOCALITY"),
+            disableSortBy: true,
+            accessor: "locality",
+            Cell: ({ row }) => {
+              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo)
+              return (
+                <div>
+                  <span>
+                    {t(`PB_AMRITSAR_REVENUE_${citizen_info?.address?.locality?.code}`)}
+                  </span>
+                </div>
+              );
+            },
+          },
+        ];
       case "FSM_EMP_FSTPO":
         return [
           {
@@ -200,7 +250,7 @@ const DesktopInbox = (props) => {
           },
         ];
     }
-  }, []);
+  }, [props.fstprequest, props.data]);
 
   let result;
   if (props.isLoading) {
@@ -248,6 +298,7 @@ const DesktopInbox = (props) => {
         disableSort={props.disableSort}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
+        isPaginationRequired={props.isPaginationRequired}
       />
     );
   }
@@ -256,8 +307,8 @@ const DesktopInbox = (props) => {
     <div className="inbox-container">
       {props.userRole !== "FSM_EMP_FSTPO" && !props.isSearch && (
         <div className="filters-container">
-          <FSMLink parentRoute={props.parentRoute} />
-          <div style={{ marginTop: "24px" }}>
+          {props.userRole !== "FSM_EMP_FSTPO_REQUEST" ? <FSMLink parentRoute={props.parentRoute} /> : null}
+          <div style={props.userRole !== "FSM_EMP_FSTPO_REQUEST" ? { marginTop: "24px" } : {}}>
             <Filter searchParams={props.searchParams} paginationParms={props.paginationParms} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
           </div>
         </div>

@@ -52,6 +52,7 @@ import useSearch from "./fsm/useSearch";
 import useSearchAll from "./fsm/useSearchAll";
 import useVehicleSearch from "./fsm/useVehicleSearch";
 import useVehicleUpdate from "./fsm/useVehicleUpdate";
+import useVehicleCreate from "./fsm/useVehicleCreate";
 import useFSMInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
@@ -265,7 +266,8 @@ const fsm = {
   usePaymentHistory,
   useVendorCreate,
   useVendorUpdate,
-  useVehicleDetails
+  useVehicleDetails,
+  useVehicleCreate,
 };
 
 const pt = {

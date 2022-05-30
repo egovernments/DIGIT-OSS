@@ -86,6 +86,16 @@ export const FSMService = {
       auth: true,
     });
   },
+  vehicleCreate: (details) => {
+    return Request({
+      url: Urls.fsm.vehicleCreate,
+      data: details,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      auth: true,
+    });
+  },
   createVendor: (details, tenantId) =>
     Request({
       url: Urls.fsm.createVendor,
