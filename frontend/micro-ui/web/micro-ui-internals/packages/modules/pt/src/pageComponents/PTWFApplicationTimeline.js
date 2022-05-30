@@ -18,9 +18,16 @@ const PTWFApplicationTimeline = (props) => {
   }
 
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state) {
+    if (checkpoint.state === "OPEN")
+    {
       const caption = {
+        date: checkpoint?.auditDetails?.lastModified,
         source: props.application?.channel || "",
+      };
+      return <PTWFCaption data={caption} />;
+    }
+    else if (checkpoint.state) {
+      const caption = {
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,

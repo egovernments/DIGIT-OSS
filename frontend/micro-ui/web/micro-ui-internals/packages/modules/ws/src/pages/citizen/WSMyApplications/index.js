@@ -37,14 +37,26 @@ export const WSMyApplications = () => {
       enabled: !!applicationNos
     }
   });
-  if (isLoading || isSWLoading) {
+  let propertyWS = (data && data?.WaterConnection?.map((ob) => ob?.propertyId).join(",")) || "";
+  let propertySW = (SWdata && SWdata?.SewerageConnections?.map((ob) => ob?.propertyId).join(",")) || "";
+  let propertyNos = propertyWS.concat(propertySW);
+  const { isLoading: PTisLoading, isError: PTisError, error: PTerror, data: PTdata } = Digit.Hooks.pt.usePropertySearch(
+    { filters: { propertyIds: propertyNos } },
+    { filters: { propertyIds: propertyNos }, enabled: propertyNos ? true : false }
+  );
+  if (isLoading || isSWLoading || PTisLoading) {
     return <Loader />;
   }
   let { WaterConnection: WSapplicationsList } = data || {};
   let { SewerageConnections: SWapplicationsList } = SWdata || {};
   WSapplicationsList = WSapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0]?.businesssServiceSla})})
   SWapplicationsList = SWapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0]?.businesssServiceSla})})
-  const applicationsList =WSapplicationsList.concat(SWapplicationsList)
+  let applicationsList =WSapplicationsList.concat(SWapplicationsList)
+  applicationsList =
+  applicationsList &&
+  applicationsList.map((ob) => {
+      return { ...ob, property: PTdata?.Properties?.filter((pt) => pt?.propertyId === ob?.propertyId)[0] };
+    });
   return (
     <React.Fragment>
       <Header>{`${t("CS_HOME_MY_APPLICATIONS")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>

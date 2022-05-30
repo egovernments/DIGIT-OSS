@@ -13,6 +13,10 @@ const WSWFApplicationTimeline = (props) => {
     moduleCode: businessService,
   });
 
+  function OpenImage(imageSource, index, thumbnailsToShow) {
+    window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
+  }
+
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "OPEN") {
       const caption = {
@@ -40,11 +44,15 @@ const WSWFApplicationTimeline = (props) => {
     // }
     else {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.lastModified),
-        name: checkpoint?.assigner?.name,
+        source: props.application?.channel || "",
+        date: checkpoint?.auditDetails?.lastModified,
+        name: checkpoint?.assignes?.[0]?.name,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
+        wfComment: checkpoint.wfComment,
+        thumbnailsToShow: checkpoint?.thumbnailsToShow,
       };
-      return <WSWFCaption data={caption} />;
+      return <WSWFCaption data={caption} OpenImage={OpenImage} />;
     }
   };
 

@@ -185,6 +185,10 @@ const EditApplication = ({ parentRoute }) => {
     { 
       nextStep = "property-details";
     }
+    if(nextStep === "docsrequired" && sessionStorage.getItem("changePropertySelected") === "yes")
+    {
+      nextStep = "property-details";
+    }
     let redirectWithHistory = history.push;
     if (nextStep === null) {
       return redirectWithHistory(`${getPath(match.path, match.params)}/check`);
