@@ -65,11 +65,6 @@
 			<version>2.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.egov.services</groupId>
-			<artifactId>services-common</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
