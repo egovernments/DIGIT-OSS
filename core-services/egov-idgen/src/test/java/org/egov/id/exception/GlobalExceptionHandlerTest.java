@@ -89,7 +89,5 @@ class GlobalExceptionHandlerTest {
         assertEquals("400 BAD_REQUEST", getResult.getCode());
         assertNull(getResult.getDescription());
     }
-
-
 }
 

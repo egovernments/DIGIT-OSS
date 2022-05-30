@@ -1,7 +1,6 @@
 package org.egov.id.service;
 
 import org.egov.id.model.IdRequest;
-import org.egov.id.model.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsResponse;
 import org.egov.mdms.service.MdmsClientService;
