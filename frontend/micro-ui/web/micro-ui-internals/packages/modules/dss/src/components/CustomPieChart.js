@@ -1,5 +1,5 @@
 import { Loader, RemoveableTag } from "@egovernments/digit-ui-react-components";
-import React, { useContext, useMemo, useState, Fragment } from "react";
+import React, { useContext, useMemo, useState, Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import FilterContext from "./FilterContext";
@@ -140,6 +140,12 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
   const removeFilter = () => {
     setIsPieClicked(false);
   };
+
+  useEffect(() => {
+    setIsPieClicked(false);
+    setdrillDownId(null);
+    setPieSelected(null);
+  }, [id]);
 
   if (isLoading) {
     return <Loader />;
