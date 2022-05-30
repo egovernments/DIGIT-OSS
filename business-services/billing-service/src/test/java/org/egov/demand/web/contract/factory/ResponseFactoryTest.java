@@ -71,36 +71,8 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testGetResponseInfo4() {
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.egov.demand.web.contract.factory.ResponseFactory.getResponseInfo(ResponseFactory.java:59)
-        //   In order to prevent getResponseInfo(RequestInfo, HttpStatus)
-        //   from throwing NullPointerException, add constructors or factory
-        //   methods that make it easier to construct fully initialized objects used in
-        //   getResponseInfo(RequestInfo, HttpStatus).
-        //   See https://diff.blue/R013 to resolve this issue.
 
-        ResponseFactory responseFactory = new ResponseFactory();
-        RequestInfo requestInfo = mock(RequestInfo.class);
-        when(requestInfo.getTs()).thenReturn(1L);
-        when(requestInfo.getApiId()).thenReturn("42");
-        when(requestInfo.getMsgId()).thenReturn("42");
-        when(requestInfo.getVer()).thenReturn("Ver");
-        responseFactory.getResponseInfo(requestInfo, null);
-    }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
     @Test
     void testGetResponseInfo5() {
         ResponseFactory responseFactory = new ResponseFactory();

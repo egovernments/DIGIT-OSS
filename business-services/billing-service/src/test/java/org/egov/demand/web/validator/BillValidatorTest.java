@@ -36,9 +36,6 @@ class BillValidatorTest {
     @MockBean
     private Util util;
 
-    /**
-     * Method under test: {@link BillValidator#validateBillGenRequest(GenerateBillCriteria, RequestInfo)}
-     */
     @Test
     void testValidateBillGenRequest() {
         doNothing().when(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
@@ -48,31 +45,8 @@ class BillValidatorTest {
         verify(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillGenRequest(GenerateBillCriteria, RequestInfo)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testValidateBillGenRequest2() {
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.egov.demand.web.validator.BillValidator.validateBillGenRequest(BillValidator.java:37)
-        //   In order to prevent validateBillGenRequest(GenerateBillCriteria, RequestInfo)
-        //   from throwing NullPointerException, add constructors or factory
-        //   methods that make it easier to construct fully initialized objects used in
-        //   validateBillGenRequest(GenerateBillCriteria, RequestInfo).
-        //   See https://diff.blue/R013 to resolve this issue.
 
-        doNothing().when(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
-        this.billValidator.validateBillGenRequest(null, new RequestInfo());
-    }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillGenRequest(GenerateBillCriteria, RequestInfo)}
-     */
     @Test
     void testValidateBillGenRequest3() {
         doNothing().when(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
@@ -83,9 +57,7 @@ class BillValidatorTest {
         verify(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillGenRequest(GenerateBillCriteria, RequestInfo)}
-     */
+
     @Test
     void testValidateBillGenRequest4() {
         doNothing().when(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
@@ -96,9 +68,7 @@ class BillValidatorTest {
         verify(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillGenRequest(GenerateBillCriteria, RequestInfo)}
-     */
+
     @Test
     void testValidateBillGenRequest5() {
         doThrow(new CustomException("BILL_GEN_MANDATORY_FIELDS_MISSING", "An error occurred")).when(this.util)
@@ -109,9 +79,7 @@ class BillValidatorTest {
         verify(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillGenRequest(GenerateBillCriteria, RequestInfo)}
-     */
+
     @Test
     void testValidateBillGenRequest6() {
         doNothing().when(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
@@ -125,9 +93,7 @@ class BillValidatorTest {
         verify(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillSearchCriteria(BillSearchCriteria, RequestInfo)}
-     */
+
     @Test
     void testValidateBillSearchCriteria() {
         doNothing().when(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
@@ -137,31 +103,7 @@ class BillValidatorTest {
         verify(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillSearchCriteria(BillSearchCriteria, RequestInfo)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testValidateBillSearchCriteria2() {
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.egov.demand.web.validator.BillValidator.validateBillSearchCriteria(BillValidator.java:54)
-        //   In order to prevent validateBillSearchCriteria(BillSearchCriteria, RequestInfo)
-        //   from throwing NullPointerException, add constructors or factory
-        //   methods that make it easier to construct fully initialized objects used in
-        //   validateBillSearchCriteria(BillSearchCriteria, RequestInfo).
-        //   See https://diff.blue/R013 to resolve this issue.
 
-        doNothing().when(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
-        this.billValidator.validateBillSearchCriteria(null, new RequestInfo());
-    }
-
-    /**
-     * Method under test: {@link BillValidator#validateBillSearchCriteria(BillSearchCriteria, RequestInfo)}
-     */
     @Test
     void testValidateBillSearchCriteria3() {
         doNothing().when(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
@@ -173,9 +115,6 @@ class BillValidatorTest {
         verify(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillSearchCriteria(BillSearchCriteria, RequestInfo)}
-     */
     @Test
     void testValidateBillSearchCriteria4() {
         doNothing().when(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
@@ -186,9 +125,7 @@ class BillValidatorTest {
         verify(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillSearchCriteria(BillSearchCriteria, RequestInfo)}
-     */
+
     @Test
     void testValidateBillSearchCriteria5() {
         doNothing().when(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
@@ -199,9 +136,7 @@ class BillValidatorTest {
         verify(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillSearchCriteria(BillSearchCriteria, RequestInfo)}
-     */
+
     @Test
     void testValidateBillSearchCriteria6() {
         doNothing().when(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
@@ -212,9 +147,6 @@ class BillValidatorTest {
         verify(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillSearchCriteria(BillSearchCriteria, RequestInfo)}
-     */
     @Test
     void testValidateBillSearchCriteria7() {
         doThrow(new CustomException("EGBS_MANDATORY_FIELDS_ERROR", "An error occurred")).when(this.util)
@@ -225,30 +157,7 @@ class BillValidatorTest {
         verify(this.util).validateTenantIdForUserType((String) any(), (RequestInfo) any());
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillSearchRequest(UpdateBillCriteria)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testValidateBillSearchRequest() {
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.egov.demand.web.validator.BillValidator.validateBillSearchRequest(BillValidator.java:74)
-        //   In order to prevent validateBillSearchRequest(UpdateBillCriteria)
-        //   from throwing NullPointerException, add constructors or factory
-        //   methods that make it easier to construct fully initialized objects used in
-        //   validateBillSearchRequest(UpdateBillCriteria).
-        //   See https://diff.blue/R013 to resolve this issue.
 
-        this.billValidator.validateBillSearchRequest(new UpdateBillCriteria());
-    }
-
-    /**
-     * Method under test: {@link BillValidator#validateBillSearchRequest(UpdateBillCriteria)}
-     */
     @Test
     void testValidateBillSearchRequest2() {
         HashSet<String> consumerCodes = new HashSet<>();
@@ -257,30 +166,7 @@ class BillValidatorTest {
                 consumerCodes, "reasonMessage", additionalDetails, new HashSet<>(), BillV2.BillStatus.ACTIVE)));
     }
 
-    /**
-     * Method under test: {@link BillValidator#validateBillSearchRequest(UpdateBillCriteria)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testValidateBillSearchRequest3() {
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.egov.demand.web.validator.BillValidator.validateBillSearchRequest(BillValidator.java:70)
-        //   In order to prevent validateBillSearchRequest(UpdateBillCriteria)
-        //   from throwing NullPointerException, add constructors or factory
-        //   methods that make it easier to construct fully initialized objects used in
-        //   validateBillSearchRequest(UpdateBillCriteria).
-        //   See https://diff.blue/R013 to resolve this issue.
 
-        this.billValidator.validateBillSearchRequest(null);
-    }
-
-    /**
-     * Method under test: {@link BillValidator#validateBillSearchRequest(UpdateBillCriteria)}
-     */
     @Test
     void testValidateBillSearchRequest4() {
         UpdateBillCriteria updateBillCriteria = mock(UpdateBillCriteria.class);

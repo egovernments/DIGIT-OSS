@@ -25,18 +25,14 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 
 class DemandValidatorTest {
-    /**
-     * Method under test: {@link DemandValidator#supports(Class)}
-     */
+
     @Test
     void testSupports() {
         DemandValidator demandValidator = new DemandValidator();
         assertFalse(demandValidator.supports(Object.class));
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validate(Object, org.springframework.validation.Errors)}
-     */
+
     @Test
     void testValidate() {
         DemandValidator demandValidator = new DemandValidator();
@@ -45,9 +41,7 @@ class DemandValidatorTest {
                 () -> demandValidator.validate(objectList, new BindException(objectList, "java.util.Collection")));
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateForUpdate(Object, org.springframework.validation.Errors)}
-     */
+
     @Test
     void testValidateForUpdate() {
         DemandValidator demandValidator = new DemandValidator();
@@ -55,39 +49,8 @@ class DemandValidatorTest {
                 new BindException(new BindException(new BindException(new BindException(mock(BindingResult.class)))))));
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateForUpdate(Object, org.springframework.validation.Errors)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testValidateForUpdate2() {
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
-        //       at jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
-        //       at jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
-        //       at jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
-        //       at java.util.Objects.checkIndex(Objects.java:372)
-        //       at java.util.ArrayList.get(ArrayList.java:459)
-        //       at org.egov.demand.web.validator.DemandValidator.validateDemandForUpdate(DemandValidator.java:140)
-        //       at org.egov.demand.web.validator.DemandValidator.validateForUpdate(DemandValidator.java:130)
-        //   In order to prevent validateForUpdate(Object, Errors)
-        //   from throwing IndexOutOfBoundsException, add constructors or factory
-        //   methods that make it easier to construct fully initialized objects used in
-        //   validateForUpdate(Object, Errors).
-        //   See https://diff.blue/R013 to resolve this issue.
 
-        DemandValidator demandValidator = new DemandValidator();
-        DemandRequest target = new DemandRequest();
-        demandValidator.validateForUpdate(target,
-                new BindException(new BindException(new BindException(new BindException(mock(BindingResult.class))))));
-    }
 
-    /**
-     * Method under test: {@link DemandValidator#validateForUpdate(Object, org.springframework.validation.Errors)}
-     */
     @Test
     void testValidateForUpdate3() {
         DemandValidator demandValidator = new DemandValidator();
@@ -102,9 +65,7 @@ class DemandValidatorTest {
         verify(bindingResult).addAllErrors((org.springframework.validation.Errors) any());
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
+
     @Test
     void testValidateDemandCriteria() {
         DemandValidator demandValidator = new DemandValidator();
@@ -116,34 +77,7 @@ class DemandValidatorTest {
         verify(bindingResult).rejectValue((String) any(), (String) any(), (String) any());
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testValidateDemandCriteria2() {
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at org.egov.demand.web.validator.DemandValidator.validateDemandCriteria(DemandValidator.java:396)
-        //   In order to prevent validateDemandCriteria(DemandCriteria, Errors)
-        //   from throwing NullPointerException, add constructors or factory
-        //   methods that make it easier to construct fully initialized objects used in
-        //   validateDemandCriteria(DemandCriteria, Errors).
-        //   See https://diff.blue/R013 to resolve this issue.
 
-        DemandValidator demandValidator = new DemandValidator();
-        BindingResult bindingResult = mock(BindingResult.class);
-        doNothing().when(bindingResult).rejectValue((String) any(), (String) any(), (String) any());
-        demandValidator.validateDemandCriteria(null,
-                new BindException(new BindException(new BindException(new BindException(bindingResult)))));
-    }
-
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
     @Test
     void testValidateDemandCriteria3() {
         DemandValidator demandValidator = new DemandValidator();
@@ -177,41 +111,8 @@ class DemandValidatorTest {
         assertEquals(demandTo, demandCriteria.getDemandFrom());
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testValidateDemandCriteria4() {
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   org.springframework.beans.NotReadablePropertyException: Invalid property 'businessService' of bean class [java.lang.String]: Bean property 'businessService' is not readable or has an invalid getter method: Does the return type of the getter match the parameter type of the setter?
-        //       at org.springframework.beans.AbstractNestablePropertyAccessor.getPropertyValue(AbstractNestablePropertyAccessor.java:622)
-        //       at org.springframework.beans.AbstractNestablePropertyAccessor.getPropertyValue(AbstractNestablePropertyAccessor.java:612)
-        //       at org.springframework.validation.AbstractPropertyBindingResult.getActualFieldValue(AbstractPropertyBindingResult.java:104)
-        //       at org.springframework.validation.AbstractBindingResult.rejectValue(AbstractBindingResult.java:117)
-        //       at org.springframework.validation.AbstractErrors.rejectValue(AbstractErrors.java:133)
-        //       at org.springframework.validation.BindException.rejectValue(BindException.java:129)
-        //       at org.springframework.validation.BindException.rejectValue(BindException.java:129)
-        //       at org.springframework.validation.BindException.rejectValue(BindException.java:129)
-        //       at org.egov.demand.web.validator.DemandValidator.validateDemandCriteria(DemandValidator.java:400)
-        //   In order to prevent validateDemandCriteria(DemandCriteria, Errors)
-        //   from throwing NotReadablePropertyException, add constructors or factory
-        //   methods that make it easier to construct fully initialized objects used in
-        //   validateDemandCriteria(DemandCriteria, Errors).
-        //   See https://diff.blue/R013 to resolve this issue.
 
-        DemandValidator demandValidator = new DemandValidator();
-        DemandCriteria demandCriteria = new DemandCriteria();
-        demandValidator.validateDemandCriteria(demandCriteria, new BindException(
-                new BindException(new BindException(new BeanPropertyBindingResult("Target", "businessService")))));
-    }
 
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
     @Test
     void testValidateDemandCriteria5() {
         DemandValidator demandValidator = new DemandValidator();
