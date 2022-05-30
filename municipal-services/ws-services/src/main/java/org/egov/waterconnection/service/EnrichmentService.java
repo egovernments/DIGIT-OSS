@@ -98,8 +98,21 @@ public class EnrichmentService {
 		additionalDetail.put(WCConstants.APP_CREATED_DATE, BigDecimal.valueOf(System.currentTimeMillis()));
 		waterConnectionRequest.getWaterConnection().setAdditionalDetails(additionalDetail);
 	    //Setting ApplicationType
-	  	waterConnectionRequest.getWaterConnection().setApplicationType(
-	  			reqType == WCConstants.MODIFY_CONNECTION ? WCConstants.MODIFY_WATER_CONNECTION :  WCConstants.NEW_WATER_CONNECTION);
+		String applicationType=null;
+		
+		
+		if(reqType==WCConstants.CREATE_APPLICATION) {
+			applicationType=WCConstants.NEW_WATER_CONNECTION;
+		}
+		else if(reqType==WCConstants.DISCONNECT_CONNECTION) {
+			applicationType=WCConstants.DISCONNECT_WATER_CONNECTION;
+		}
+		else {
+			applicationType=WCConstants.MODIFY_WATER_CONNECTION;
+		}
+		
+		waterConnectionRequest.getWaterConnection().setApplicationType(applicationType);
+		
 		setApplicationIdGenIds(waterConnectionRequest);
 		setStatusForCreate(waterConnectionRequest);
 

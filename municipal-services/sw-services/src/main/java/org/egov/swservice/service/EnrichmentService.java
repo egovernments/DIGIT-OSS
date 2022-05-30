@@ -94,8 +94,21 @@ public class EnrichmentService {
 		additionalDetail.put(SWConstants.APP_CREATED_DATE, BigDecimal.valueOf(System.currentTimeMillis()));
 		sewerageConnectionRequest.getSewerageConnection().setAdditionalDetails(additionalDetail);
 		// Setting ApplicationType
-		sewerageConnectionRequest.getSewerageConnection().setApplicationType(
-				reqType == SWConstants.CREATE_APPLICATION ? SWConstants.NEW_SEWERAGE_CONNECTION : SWConstants.MODIFY_SEWERAGE_CONNECTION);
+		String applicationType=null;
+		
+		
+		if(reqType==SWConstants.CREATE_APPLICATION) {
+			applicationType=SWConstants.NEW_SEWERAGE_CONNECTION;
+		}
+		else if(reqType==SWConstants.DISCONNECT_CONNECTION) {
+			applicationType=SWConstants.DISCONNECT_SEWERAGE_CONNECTION;
+		}
+		else {
+			applicationType=SWConstants.MODIFY_SEWERAGE_CONNECTION;
+		}
+		
+		sewerageConnectionRequest.getSewerageConnection().setApplicationType(applicationType);
+		
 		setSewarageApplicationIdgenIds(sewerageConnectionRequest);
 		setStatusForCreate(sewerageConnectionRequest);
 
