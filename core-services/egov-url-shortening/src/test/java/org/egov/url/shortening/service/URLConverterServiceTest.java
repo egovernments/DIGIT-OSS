@@ -90,7 +90,6 @@ public class URLConverterServiceTest {
                when(hashIdConverter.getIdForString(uniqueID)).thenReturn(1L);
                when(urlRepository.getUrl(1L)).thenReturn(longUrl);
 
-          /*    assertEquals(null,uRLConverterService.indexData(longUrl, uniqueID));*/
 
        }
 
