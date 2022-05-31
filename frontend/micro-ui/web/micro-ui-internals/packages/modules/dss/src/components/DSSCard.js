@@ -14,6 +14,7 @@ const nationalScreenURLs = {
   noc: { key: "national-firenoc", stateKey: "noc", label: "NURT_FIRENOC", active: true, nActive: true },
   bnd: {key:"nss-birth-death",stateKey:"birth-death",label:"BIRTH_AND_DEATH",active:true,nActive:true},
   faqs: {key:"national-faqs",stateKey:"national-faqs",label:"DSS_FAQS",active:false,nActive:true},
+  finance: {key:"national-finance",stateKey:"finance",label:"DSS_FINANCE",active:true,nActive:false},
   about: {key:"national-about",stateKey:"national-about",label:"DSS_ABOUT_DASHBOARD",active:false,nActive:true},
 };
 
@@ -32,7 +33,7 @@ const NDSSCard = () => {
   }
 
   let links = Object.values(nationalScreenURLs)
-    .filter((ele) => ele["nActive"] == true)
+    .filter((ele) => ele["nActive"] === true)
     .map((obj) => ({
       label: t(obj?.label),
       link: `/digit-ui/employee/dss/dashboard/${obj?.key}`,
@@ -59,7 +60,7 @@ const DSSCard = () => {
   }
 
   let links = Object.values(nationalScreenURLs)
-    // .filter((ele) => ele["active"] == true)
+    .filter((ele) => ele["active"] === true)
     .map((obj) => ({
       label: t(obj?.label),
       link: obj.active?`/digit-ui/employee/dss/dashboard/${obj?.stateKey}`:`/employee/integration/dss/${obj?.stateKey}`,
