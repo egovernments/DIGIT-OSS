@@ -1,0 +1,291 @@
+{
+    "RequestInfo": {
+        "apiId": "Rainmaker",
+        "ver": ".01",
+        "ts": "",
+        "action": "_create",
+        "did": "1",
+        "key": "",
+        "msgId": "20170310130900|en_IN",
+        "authToken": "{{token}}"
+    },
+    "tenantId": "pg",
+    "messages":[
+    {
+        "code": "BILLAMENDMENT_REQ_DOCS_HEADER",
+        "message": "Required Documents",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_DOCUMENT_NOTE",
+        "message": "Listed below are the documents needed for this case",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_COURTORDER_LABEL",
+        "message": "Court Order",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_ADDRESSPROOF_LABEL",
+        "message": "Address Proof",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_SELFDECLARATION_LABEL",
+        "message": "Self Declaration",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_ARREAR_WRITE_OFF_HEADING",
+        "message": "Arrear Write Off",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_GOVTNOTIFICATION_LABEL",
+        "message": "Government Notification",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_IDENTITYPROOF_LABEL",
+        "message": "Identity Proof",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_DCB_CORRECTION_HEADING",
+        "message": "DCB Coreection",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_OFFICENOTEORDER_LABEL",
+        "message": "Office Note Order",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_ONE_TIME_SETTLEMENT_HEADING",
+        "message": "One Time Settlement",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_PASTBILLS_LABEL",
+        "message": "Past Bills",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_REMISSION_FOR_PROPERTY_TAX_HEADING",
+        "message": "Remission For Property Tax",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_OTHERS_HEADING",
+        "message": "Others",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_SUPPORTINGDOCUMENT_LABEL",
+        "message": "Supporting Document",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_COMMON_BUTTON_PRINT",
+        "message": "Print",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_COMMON_BUTTON_APPLY",
+        "message": "Apply",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLAMENDMENT_COURT_CASE_SETTLEMENT_HEADING",
+        "message": "Court Case Settlement",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_COMMON_INBOX_PT.LEGACY",
+        "message": "Legacy Entry",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "HR_UPDATE_PASSWORD_SUCCESS_MESSAGE",
+        "message": "Employee Password Updated successfully ",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ES_FSM_REJECTION_OPTION_A",
+        "message": "Vehicle under maintenance",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ES_FSM_REJECTION_OPTION_B",
+        "message": "Cannot service within provided service date, multiple request in pipeline",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ES_FSM_SENDBACK_UPDATE_SUCCESS",
+        "message": "Application Sentback Successfully",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_ASSING_DSO_PAY",
+        "message": "Dear Applicant, Amount of Rs.<AMOUNT_TO_BE_PAID>/- is received towards the payment of cleaning septic tank /pit with reference no. <RECEIPT_NO>.You will be notified when an operator is assigned to a request. Please click this link <RECEIPT_LINK> to download the receipt",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_CANCELED_CANCEL",
+        "message": "Dear Applicant, Your request for cleaning the septic tank/pit is cancelled with the reason <FSM_CANCEL_REASON> . Please use this link <NEW_FSM_LINK> to create a new request if needed.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_CITIZEN_FEEDBACK_PENDING_COMPLETED",
+        "message": "Dear Applicant, Your request for cleaning septic tank/pit is completed.Please take some time to rate us using the link <FSM_APPL_LINK>.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_CREATED_CREATE",
+        "message": "Dear Applicant,Your application for cleaning septic tank/pit is created with application reference no.<2>.You will be notified to make an application fee shortly.Request is expected to be completed within <SLA_HOURS>hrs of making the payment.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_DSO_INPROGRESS_DSO_ACCEPT",
+        "message": "Dear Applicant, Vehicle <VEHICLE_REG_NO> will be reaching your location to clean the septic tank/pit on <POSSIBLE_SERVICE_DATE> with reference to your application number <2>. You can contact the operator in +91 <DSO_MOBILE_NUMBER>.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_DSO_REJECTED_DSO_REJECT",
+        "message": "Dear Applicant, Your request for cleaning the septic tank/pit is rejected with the reason <FSM_DSO_REJECT_REASON> . Please use this link <NEW_FSM_LINK> to create a new request if needed.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_PENDING_APPL_FEE_PAYMENT_APPLY",
+        "message": "Dear Applicant, Your application for cleaning septic tank /pit is created with application number <2>.Please click this link <PAY_LINK> to pay the application fee for processing the application.Request is expected to be completed within <SLA_HOURS>hrs of making the payment.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_PENDING_APPL_FEE_PAYMENT_SUBMIT",
+        "message": "Dear Applicant, Please pay the application fee Rs.<AMOUNT_TO_BE_PAID>/- for cleaning the septic tank/pit with request number <2>.Click this link <PAY_LINK> to make the payment.Request is expected to be completed within <SLA_HOURS>hrs of making the payment.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_REJECTED_REJECT",
+        "message": "Dear Applicant, Your request for cleaning the septic tank/pit is rejected with the reason <FSM_DSO_REJECT_REASON> . Please use this link <NEW_FSM_LINK> to create a new request if needed.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "MODULE_FSM_TRIP_CHARGES",
+        "message": "Emptying of Septic tank / Pit",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_FSM_RECEIPT_COMMISSIONER_EO",
+        "message": "Commissioner/EO",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_FSM_RECEIPT_CONSUMER_ID",
+        "message": "Application No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_FSM_RECEIPT_DISCLAIMER_FIRST_LINE",
+        "message": "Payment received by cheque/demand draft shall be subject to realization.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_FSM_RECEIPT_DISCLAIMER_SECOND_LINE",
+        "message": "This document is not a proof of Property Ownership",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_FSM_RECEIPT_PAID_AMOUNT",
+        "message": "Amount Paid Rs.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_FSM_RECEIPT_PAYER_NAME",
+        "message": "Paid By",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_FSM_RECEIPT_PAYMENT_DATE",
+        "message": "Paid On",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_FSM_RECEIPT_PAYMENT_MODE",
+        "message": "Mode of Payment",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_LINK_DSO_DASHBOARD",
+        "message": "DSO Login/ Dashboard",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_LINK_LOGIN_DSO",
+        "message": "DSO Login",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ACTION_TEST_FAECAL_SLUDGE_MANAGEMENT",
+        "message": "Faecal Sludge Management",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_HOME_APPLY_FOR_DESLUDGING",
+        "message": "Apply for Desludging",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_HOME_MY_APPLICATIONS",
+        "message": "My Applications",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    }
+]
+}

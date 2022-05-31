@@ -1,0 +1,244 @@
+{
+    "RequestInfo": {
+        "apiId": "Rainmaker",
+        "ver": ".01",
+        "ts": "",
+        "action": "_create",
+        "did": "1",
+        "key": "",
+        "msgId": "20170310130900|en_IN",
+        "authToken": "{{token}}"
+    },
+    "tenantId": "pg",
+    "messages":
+	[
+    {
+        "code": "ES_PGR_INBOX",
+        "message": "Inbox",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ES_PGR_NEW_COMPLAINT",
+        "message": "New Complaint",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ES_PGR_HEADER_COMPLAINT",
+        "message": "Complaints",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_PGR_LOCALITY",
+        "message": "Locality",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_COMMON_BACK",
+        "message": "Back",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "SERVICEDEFS.OTHERS",
+        "message": "Others",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_UPLOAD_RESTRICTIONS",
+        "message": "**Upload restrictions",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_COMMON_HOME",
+        "message": "Home",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_COMMON_INBOX",
+        "message": "Inbox",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_PGR_CREATE_COMPLAINT",
+        "message": "Create Complaint",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_PGR_COMPLAINT_DETAILS",
+        "message": "Complaint Details",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_PGR_RESPONSE",
+        "message": "Response",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_PGR_COMPLAINT_NUMBER",
+        "message": "Complaint No.",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ES_COMMON_CLEAR_SEARCH",
+        "message": "Clear Search",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ES_COMMON_FILTER",
+        "message": "Filter By",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ES_COMMON_FILTER_BY",
+        "message": "Filter By",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_COMMON_CHOOSE_FILE",
+        "message": "Choose File",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_ACTION_NO_FILEUPLOADED",
+        "message": "No file uploaded",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_PGR_SEND_COMMENT",
+        "message": "Send",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_COMPLAINT_DETAILS_RATE",
+        "message": "RATE",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_COMPLAINT_DETAILS_REOPEN",
+        "message": "REOPEN",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ES_PGR_FILTER_STATUS",
+        "message": "Status",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_ACTION_REOPEN_TEXT",
+        "message": "Complaint Reopened Successfully",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_COMMON_RATE",
+        "message": "RATE",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_COMMON_REOPEN",
+        "message": "REOPEN",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PGR_REJECT_REJECTED_SMS_MESSAGE",
+        "message": "Dear Citizen,\n Your complaint for <complaint_type> with ID <id> submitted on <date> has been rejected. Reason for Rejection: <additional_comments> If you wish to re-open the complaint, you can download the mSeva Punjab mobile app (download here - <download link>) or visit your local municipal website.\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "pgr.sms.notification.reject.citizen",
+        "message": "Dear Citizen, Your complaint for <complaint_type> with ID <id> submitted on <date> has been rejected. Reason for Rejection: <reason>, Additional Comments: <additional_comments> If you wish to re-open the complaint, you can download the mSeva Punjab mobile app (download here - <download_link>) or visit your local municipal website.\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PGR_APPLY_PENDINGFORASSIGNMENT_SMS_MESSAGE",
+        "message": "Dear Citizen,\n Your complaint for <complaint_type> has been submitted with ID <id> on <date>. You can track your complaint status on the mSeva Punjab mobile App (download here - <download link>) or your local municipal web portal.\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "pgr.sms.notification.assign.citizen",
+        "message": "Dear Citizen, Your complaint for <complaint_type> with ID <id> submitted on <date> has been assigned to <emp_name>, <emp_designation>, <emp_department>. You can track your complaint status and connect with our officials on the on the mSeva Punjab mobile App (download here - <download_link>) or your local municipal web portal.\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "pgr.sms.notification.reassign.citizen",
+        "message": "Dear Citizen, Your complaint for <complaint_type> with ID <id> submitted on <date> has been re-assigned to <emp_name>, <emp_designation>, <emp_department>. You can track your complaint status and connect with our officials on the on the mSeva Punjab mobile App (download here - <download_link>) or your local municipal web portal.\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "pgr.sms.notification.resolve.citizen",
+        "message": "Dear Citizen, Your complaint for <complaint_type> with ID <id> submitted on <date> has been resolved by <emp_name>. If you are not satisfied with service you can RE-OPEN complaint through mSeva Punjab mobile App (download here - <download_link>) or your local municipal web portal or by calling our CSR.\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "pgr.sms.notification.reopen.citizen",
+        "message": "Dear Citizen, Your complaint for <complaint_type> with ID <id> submitted on <date> has been RE-OPEN as per your request. You can track your complaint status and connect with our officials on the mSeva Punjab mobile App (download here - <download_link>) or your local municipal web portal.\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "pgr.sms.notification.reopen.employee",
+        "message": "Shri <emp_name>, Complaint for <complaint_type> with ID <id> has been re-opened by the citizen. It is being reviewed by Assigning officer - <ulb>.\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "pgr.sms.notification.close.employee",
+        "message": "Shri <emp_name>, Complaint for <complaint_type> with ID <id> has received <rating>/5 feedback from the citizen. Thank you for your service.\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "pgr.sms.notification.comment",
+        "message": "<emp_name> has commented on your complaint for <complaint_type> with complaint ID <id>. Comment - <comment>.\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "pgr.sms.notification.reassign.employee",
+        "message": "Shri <emp_name>, Complaint for '<complaint_type>' with ID <id> has been re-assigned as per your request. <ao_designation> - <ulb>\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "pgr.sms.notification.assign.employee",
+        "message": "Shri <emp_name>, Complaint for '<complaint_type>' with ID <id> has been assigned to you. Please take appropriate action. <ao_designation> - <ulb>\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    },
+    {
+        "code": "pgr.sms.notification.default",
+        "message": "Your complaint has been <status>. You can track your complaint status on the mSeva app or your local government web portal\n\nEGOVS",
+        "module": "rainmaker-pgr",
+        "locale": "en_IN"
+    }
+]
+}

@@ -1,0 +1,801 @@
+{
+    "RequestInfo": {
+        "apiId": "Rainmaker",
+        "ver": ".01",
+        "ts": "",
+        "action": "_create",
+        "did": "1",
+        "key": "",
+        "msgId": "20170310130900|en_IN",
+        "authToken": "{{token}}"
+    },
+    "tenantId": "pg",
+    "messages": [
+  {
+        "code": "WF_PT.UPDATE_DOCVERIFIED",
+        "message": "Pending for Field Verification",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "WF_PT.UPDATE_FIELDVERIFIED",
+        "message": "Pending for Approval",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "WF_PT.UPDATE_APPROVED",
+        "message": "Approved",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "WF_PT.UPDATE_CORRECTIONPENDING",
+        "message": "Pending for Citizen Action",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_ARREARS_DETAILS",
+        "message": "Arrear Details",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_SHOW_CARD",
+        "message": "View Details",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_HIDE_CARD",
+        "message": "Hide Details",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "COMMON_ARREARS_TOTAL",
+        "message": "Arrears",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_NO_ARREARS",
+        "message": "No Arrears",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_BILL_PERIOD",
+        "message": "Billing Period",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ACTION_TEST_CHALLAN_PAY",
+        "message": "Pay Challan",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ACTION_TEST_CHALLAN_SEARCH",
+        "message": "Challan Search",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ACTION_TEST_UNIVERSAL_COLLECTION(MCOLLECT)",
+        "message": "mCollect",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLINGSERVICE_BUSINESSSERVICE_TEHBAZAARI_FEE",
+        "message": "Tehbazaari Fee",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_GAS_BALLOON_ADVERTISEMENT_PAYMENT_MESSAGE",
+        "message": "Payment has been collected successfully!",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_GAS_BALLOON_ADVERTISEMENT_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding Payment Collection has been sent to the registered Mobile No. of the user/owner.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_GAS_BALLOON_ADVERTISEMENT_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_HOARDINGS_PAYMENT_MESSAGE",
+        "message": "Payment Successful",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_HOARDINGS_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding payment is shared with owner at registered mobile number.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_HOARDINGS_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_LIGHT_WALA_BOARD_PAYMENT_MESSAGE",
+        "message": "Payment has been collected successfully!",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_LIGHT_WALA_BOARD_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding Payment Collection has been sent to the registered Mobile No. of the user/owner.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_LIGHT_WALA_BOARD_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_UNIPOLLS_PAYMENT_MESSAGE",
+        "message": "Payment has been collected successfully!",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_UNIPOLLS_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding Payment Collection has been sent to the registered Mobile No. of the user/owner.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_UNIPOLLS_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_WALL_PAINT_ADVERTISEMENT_PAYMENT_MESSAGE",
+        "message": "Payment has been collected successfully!",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_WALL_PAINT_ADVERTISEMENT_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding Payment Collection has been sent to the registered Mobile No. of the user/owner.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_ADVT_WALL_PAINT_ADVERTISEMENT_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_TX_NO_DUES_CERTIFICATE_PAYMENT_MESSAGE",
+        "message": "Payment Successful",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_TX_NO_DUES_CERTIFICATE_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding payment is shared with owner at registered mobile number.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_TX_NO_DUES_CERTIFICATE_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_TX_TRANSFER_PROPERTY_FEES_PAYMENT_MESSAGE",
+        "message": "Payment has been collected successfully!",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_TX_TRANSFER_PROPERTY_FEES_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding Payment Collection has been sent to the registered Mobile No. of the user/owner.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_TX_TRANSFER_PROPERTY_FEES_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_TX_TS1_COPY_REGISTER_FOR_OLD_SURVEY_PAYMENT_MESSAGE",
+        "message": "Payment has been collected successfully!",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_TX_TS1_COPY_REGISTER_FOR_OLD_SURVEY_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding Payment Collection has been sent to the registered Mobile No. of the user/owner.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CITIZEN_SUCCESS_TX_TS1_COPY_REGISTER_FOR_OLD_SURVEY_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EIPT_LETTER_HEAD",
+        "message": "Receipt",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_GAS_BALLOON_ADVERTISEMENT_PAYMENT_MESSAGE",
+        "message": "Payment has been collected successfully!",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_GAS_BALLOON_ADVERTISEMENT_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding Payment Collection has been sent to the registered Mobile No. of the user/owner.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_GAS_BALLOON_ADVERTISEMENT_PAYMENT_RECEIPT_NO",
+        "message": "Payment Receipt No.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_LIGHT_WALA_BOARD_PAYMENT_MESSAGE",
+        "message": "Challan Generated Successfully",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_LIGHT_WALA_BOARD_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding above challan/bill has been sent to the registered Mobile No.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_LIGHT_WALA_BOARD_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_UNIPOLLS_PAYMENT_MESSAGE",
+        "message": "Challan Generated Successfully",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_UNIPOLLS_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding above challan/bill has been sent to the registered Mobile No.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_UNIPOLLS_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_WALL_PAINT_ADVERTISEMENT_PAYMENT_MESSAGE",
+        "message": "Challan Generated Successfully",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_WALL_PAINT_ADVERTISEMENT_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding above challan/bill has been sent to the registered Mobile No.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_ADVT_WALL_PAINT_ADVERTISEMENT_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_TX_TRANSFER_PROPERTY_FEES_PAYMENT_MESSAGE",
+        "message": "Challan Generated Successfully",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_TX_TRANSFER_PROPERTY_FEES_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding above challan/bill has been sent to the registered Mobile No.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_TX_TRANSFER_PROPERTY_FEES_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_TX_TS1_COPY_REGISTER_FOR_OLD_SURVEY_PAYMENT_MESSAGE",
+        "message": "Payment Successful",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_TX_TS1_COPY_REGISTER_FOR_OLD_SURVEY_PAYMENT_MESSAGE_DETAIL",
+        "message": "A notification regarding above challan/bill has been sent to the registered Mobile No.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "EMPLOYEE_SUCCESS_TX_TS1_COPY_REGISTER_FOR_OLD_SURVEY_PAYMENT_RECEIPT_NO",
+        "message": "Receipt No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PAYMENT_COMMON_CHALLAN_CODE",
+        "message": "Challan No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PAYMENT_UC_CONSUMER_CODE",
+        "message": "Consumer Code",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CHALLAN_DATE",
+        "message": "Challan Date",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CHALLAN_NO",
+        "message": "Challan No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CONSUMER_NAME",
+        "message": "Consumer Name",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_LETTER_FORM_NO",
+        "message": "Form GI No 16",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_LETTER_RULENO",
+        "message": "Rule No 10",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_LETTER_SECTION_NO",
+        "message": "Section No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_CONSOLIDATED_SERVICE_CATEGORY",
+        "message": "Service Category",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PT_COMMON_COL_REMARK",
+        "message": "Remarks",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "SERVICE CATEGORY LIST",
+        "message": "Service Category",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "TX.ELECTRICITY_CHUNGI_CGST",
+        "message": "CGST",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "TX.ELECTRICITY_CHUNGI_FIELD_FEE",
+        "message": "Field Fee",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "TX.ELECTRICITY_CHUNGI_SGST",
+        "message": "SGST",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "TX.ELECTRICITY_CHUNGI_TAX",
+        "message": "Electricity Chungi",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "TX.TRANSFER_PROPERTY_FEES_CGST",
+        "message": "CGST",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "TX.TRANSFER_PROPERTY_FEES_FIELD_FEE",
+        "message": "Field Fee",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "TX.TRANSFER_PROPERTY_FEES_SGST",
+        "message": "SGST",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "TX.TRANSFER_PROPERTY_FEES_TAX",
+        "message": "Transfer Property Fees",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "TX.TS1_COPY_REGISTER_FOR_OLD_SURVEY_CGST",
+        "message": "CGST",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "TX.TS1_COPY_REGISTER_FOR_OLD_SURVEY_FIELD_FEE",
+        "message": "Field Fee",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "TX.TS1_COPY_REGISTER_FOR_OLD_SURVEY_SGST",
+        "message": "SGST",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_CHALLAN_NO_LABEL",
+        "message": "Challan No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_CHALLAN_NO_LABEL_PLACEHOLDER",
+        "message": "Enter Challan No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_DOOR_NO_LABEL",
+        "message": "Door No ",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_BLDG_NAME_LABEL",
+        "message": "Building Name",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_SRT_NAME_LABEL",
+        "message": "Street Name",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_MOHALLA_LABEL",
+        "message": "Mohalla ",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_PINCODE_LABEL",
+        "message": "Pincode",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_DOOR_NO_PLACEHOLDER",
+        "message": "Enter Door No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_BLDG_NAME_PLACEHOLDER",
+        "message": "Enter Building Name",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_SRT_NAME_PLACEHOLDER",
+        "message": "Enter Street Name",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_MOHALLA_PLACEHOLDER",
+        "message": "Choose Mohalla",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_PINCODE_PLACEHOLDER",
+        "message": "Enter Pincode",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_ECHALLAN",
+        "message": "eChallan",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_SEARCHANDPAY_LABEL",
+        "message": "Search And Pay",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "NEW_CHALLAN_BUTTON",
+        "message": "New Challan",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_BILL_NO_LABEL",
+        "message": "Bill No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_BILL_GENERATION_MESSAGE_SUB",
+        "message": "A notification regarding above challan/bill has been sent to the registered Mobile No.",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "BILLNO-TX.Electricity_Chungi",
+        "message": "Bill No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_BILL_GENERATED_SUCCESS_MESSAGE",
+        "message": "Challan Generated Succesfully",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_BUTTON_PAY",
+        "message": "Pay",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "COMMON_TABLE_SEARCH_RESULT",
+        "message": "Search Result",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CHALLAN_DETAILS",
+        "message": "Challan Details",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_UPDATE_CHALLAN",
+        "message": "Updated",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_CANCEL_CHALLAN",
+        "message": "Cancel",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_COMMON_NOT_PAID",
+        "message": "Not Paid",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CANCEL_CHALLAN_HEADER",
+        "message": "Header",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CANCEL_YES",
+        "message": "Yes",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CANCEL_NO",
+        "message": "No",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ACTION_TEST_M_COLLECT",
+        "message": "mCollect",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ACTION_TEST_SEARCH_CHALLAN",
+        "message": "Search Challan",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ACTION_TEST_NEW_CHALLAN",
+        "message": "New Challan",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PT_OWNER_REGISTRATIONPROOF.COURTDECREE",
+        "message": "Court Decree",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_ASSING_DSO_PAY",
+        "message": "Dear Applicant, Amount of Rs.{AMOUNT_TO_BE_PAID}/- is received towards the payment of cleaning septic tank /pit with reference no. {RECEIPT_NO}. You will be notified when an operator is assigned to a request. Please click this link {RECEIPT_LINK} to download the receipt.\n\nEGOVS",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_CANCELED_CANCEL",
+        "message": "Dear Applicant, Your request for cleaning the septic tank/pit is cancelled with the reason {FSM_CANCEL_REASON} . Please use this link {NEW_FSM_LINK} to create a new request if needed.\n\nEGOVS",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_CITIZEN_FEEDBACK_PENDING_COMPLETED",
+        "message": "Dear Applicant, Your request for cleaning septic tank/pit is completed. Please take some time to rate us using the link {FSM_APPL_LINK}.\n\nEGOVS",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_CREATED_CREATE",
+        "message": "Dear Applicant,Your application for cleaning septic tank/pit is created with application reference no. {2}. You will be notified to make an application fee shortly.Request is expected to be completed within {SLA_HOURS} hrs of making the payment.\n\nEGOVS",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_CREATED_CREATE_2",
+        "message": "Dear Applicant,Your application for cleaning septic tank/pit is created with application reference no. {2}. You will be notified to make an application fee shortly.Request is expected to be completed within {SLA_HOURS} hrs of making the payment.\n\nEGOVS",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_DSO_INPROGRESS_DSO_ACCEPT",
+        "message": "Dear Applicant, Vehicle {VEHICLE_REG_NO} will be reaching your location to clean the septic tank/pit on {POSSIBLE_SERVICE_DATE} with reference to your application number {2}. You can contact the operator in +91 {DSO_MOBILE_NUMBER}.\n\nEGOVS",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_DSO_REJECTED_DSO_REJECT",
+        "message": "Dear Applicant, Your request for cleaning the septic tank/pit is rejected with the reason {FSM_DSO_REJECT_REASON} . Please use this link {NEW_FSM_LINK} to create a new request if needed.\n\nEGOVS",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_PENDING_APPL_FEE_PAYMENT_APPLY",
+        "message": "Dear Applicant, Your application for cleaning septic tank /pit is created with application number {2}. Please click this link {PAY_LINK} to pay the application fee for processing the application. Request is expected to be completed within {SLA_HOURS} hrs of making the payment.\n\nEGOVS",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_PENDING_APPL_FEE_PAYMENT_SUBMIT",
+        "message": "Dear Applicant, Please pay the application fee Rs.{AMOUNT_TO_BE_PAID}/- for cleaning the septic tank/pit with request number {2}. Click this link {PAY_LINK} to make the payment. Request is expected to be completed within {SLA_HOURS} hrs of making the payment.\n\nEGOVS",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "FSM_SMS_REJECTED_REJECT",
+        "message": "Dear Applicant, Your request for cleaning the septic tank/pit is rejected with the reason {FSM_DSO_REJECT_REASON} . Please use this link {NEW_FSM_LINK} to create a new request if needed.\n\nEGOVS",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_LETTER_HEAD",
+        "message": "Reciept",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CHALLAN_FORM_NO",
+        "message": "Form GI No 16",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CHALLAN_RULE_NO",
+        "message": "Rule No 10",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_CHALLAN / PDF_STATIC_LABEL_CONSOLIDATED_BILL",
+        "message": "Challan/Bill",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "UC_CHALLAN",
+        "message": "Challan ",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_COMMON_ROWS_PER_PAGE",
+        "message": "Rows per page:",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CS_COMMON_HOME_COMPLAINTS",
+        "message": "Complaints",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ES_COMMON_CLEAR_ALL",
+        "message": "CLEAR ALL",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "CANCEL_COMMENT_LABEL ",
+        "message": "Comment",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    },
+    {
+        "code": "ABG_PAY",
+        "message": "Pay",
+        "module": "rainmaker-common",
+        "locale": "en_IN"
+    }
+    ]
+}
