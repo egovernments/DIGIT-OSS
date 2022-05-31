@@ -73,10 +73,10 @@ export const getQueryStringParams = (query) => {
 };
 
 export const getAddress = (address, t) => {
-  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""}${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${address?.locality?.code ? t(address?.locality?.code) : ""}, ${address?.city?.code ? t(address?.city.code) : ""},${
-    address?.pincode ? `${address.pincode}` : " "
+  }${address?.locality?.code ? `${t(address?.locality?.code)}` : ""}${address?.city?.code || address?.city  ? `,${t(address?.city.code || address?.city)}` : ""}${
+    address?.pincode ? `,${address.pincode}` : " "
   }`;
 };
 

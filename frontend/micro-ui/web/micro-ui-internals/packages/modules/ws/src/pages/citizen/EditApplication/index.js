@@ -28,7 +28,7 @@ const getEditDetails = (waterResult,sewerageresult,t) => {
       mobileNumber : waterResult?.connectionHolders?.[0]?.mobileNumber,
       name : waterResult?.connectionHolders?.[0]?.name,
       relationship : {code:waterResult?.connectionHolders?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${waterResult?.connectionHolders?.[0]?.relationship}`},
-      specialCategoryType : {}
+      specialCategoryType : {code:waterResult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${waterResult?.connectionHolders?.[0]?.ownerType}`}
     } :
     {
       address : waterResult?.property?.owners?.[0]?.correspondenceAddress,
@@ -41,7 +41,7 @@ const getEditDetails = (waterResult,sewerageresult,t) => {
       mobileNumber : waterResult?.property?.owners?.[0]?.mobileNumber,
       name : waterResult?.property?.owners?.[0]?.name,
       relationship : {code:waterResult?.property?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${waterResult?.property?.owners?.[0]?.relationship}`},
-      specialCategoryType : {}
+      specialCategoryType : {code:waterResult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${waterResult?.connectionHolders?.[0]?.ownerType}`}
     }
     waterResult.WaterConnectionResult={WaterConnection:[{...waterResult}]}
     waterResult.cpt = {details:{...waterResult?.property}}
@@ -67,7 +67,7 @@ const getEditDetails = (waterResult,sewerageresult,t) => {
           mobileNumber : sewerageresult?.connectionHolders?.[0]?.mobileNumber,
           name : sewerageresult?.connectionHolders?.[0]?.name,
           relationship : {code:sewerageresult?.connectionHolders?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${sewerageresult?.connectionHolders?.[0]?.relationship}`},
-          specialCategoryType : {}
+          specialCategoryType : {code:sewerageresult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${sewerageresult?.connectionHolders?.[0]?.ownerType}`}
         
       } :
     {
@@ -81,7 +81,7 @@ const getEditDetails = (waterResult,sewerageresult,t) => {
       mobileNumber : sewerageresult?.property?.owners?.[0]?.mobileNumber,
       name : sewerageresult?.property?.owners?.[0]?.name,
       relationship : {code:sewerageresult?.property?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${sewerageresult?.property?.owners?.[0]?.relationship}`},
-      specialCategoryType : {}
+      specialCategoryType : {code:sewerageresult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${sewerageresult?.connectionHolders?.[0]?.ownerType}`}
     }
     sewerageresult.SewerageConnectionResult={SewerageConnections:[{...sewerageresult}]}
     sewerageresult.cpt = {details:{...sewerageresult?.property}}

@@ -36,9 +36,9 @@ const BannerPicker = (props) => {
   return (
     <Banner
       message={GetActionMessage(props)}
-      info={props.isSuccess ? props.t("WS_ACKNO_APP_NO_LABEL") : ""}
+      info={props.isSuccess && props?.Waterdata ? props.t("WS_ACKNO_APP_NO_LABEL") : ""}
       applicationNumber={props?.Waterdata ? props?.Waterdata?.WaterConnection?.[0]?.applicationNo : ""}
-      infoOne={props.isSuccess ? props.t("WS_ACKNO_SEW_APP_NO_LABEL") : ""}
+      infoOne={props.isSuccess && props?.Seweragedata ? props.t("WS_ACKNO_SEW_APP_NO_LABEL") : ""}
       applicationNumberOne={props?.Seweragedata ? props?.Seweragedata?.SewerageConnections?.[0]?.applicationNo : ""}
       successful={props.isSuccess}
     />

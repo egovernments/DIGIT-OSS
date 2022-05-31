@@ -59,6 +59,12 @@ const WSCreate = () => {
     redirectWithHistory(`${getPath(match.path, match.params)}/${nextStep}`);
   }
 
+  if(params && Object.keys(params).length>0 && window.location.href.includes("/citizen/ws/create-application/search-property"))
+    {
+      clearParams();
+      queryClient.invalidateQueries("WS_CREATE");
+    }
+
   const onSuccess = () => {
     queryClient.invalidateQueries("WS_CREATE");
   };
