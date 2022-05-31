@@ -2,6 +2,7 @@ package org.egov.encryption.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import net.minidev.json.JSONArray;
 import org.egov.encryption.models.Attribute;
 import org.egov.encryption.models.SecurityPolicy;
@@ -28,7 +29,9 @@ public class EncryptionPolicyConfiguration {
     @PostConstruct
     void initializeEncryptionPolicyAttributesMapFromMdms() throws JsonProcessingException {
         JSONArray attributesDetailsJSON = mdmsFetcher.getSecurityMdmsForFilter(null);
-        List<SecurityPolicy> securityPolicies = objectMapper.readValue(attributesDetailsJSON.toString(), List.class);
+        ObjectReader reader = objectMapper.readerFor(objectMapper.getTypeFactory().constructCollectionType(List.class,
+                SecurityPolicy.class));
+        List<SecurityPolicy> securityPolicies = reader.readValue(attributesDetailsJSON.toString());
         encryptionPolicyAttributesMap = securityPolicies.stream()
                 .collect(Collectors.toMap(SecurityPolicy::getModel, SecurityPolicy::getAttributes));
     }

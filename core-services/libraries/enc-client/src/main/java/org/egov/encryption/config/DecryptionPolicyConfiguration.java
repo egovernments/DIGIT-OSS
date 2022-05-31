@@ -2,6 +2,7 @@ package org.egov.encryption.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.models.*;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class DecryptionPolicyConfiguration {
 
@@ -82,6 +84,7 @@ public class DecryptionPolicyConfiguration {
                     SecurityPolicy.class));
             securityPolicyList = reader.readValue(securityPolicyJson.toString());
         } catch (IOException e) {
+            log.error("Error while fetching security policy from MDMS", e);
         }
 
         initializeModelAttributeAccessMap(securityPolicyList);
