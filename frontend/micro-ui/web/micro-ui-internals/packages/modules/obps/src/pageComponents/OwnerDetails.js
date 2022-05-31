@@ -268,7 +268,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 const userInfo = Digit.UserService.getUser();
                 const accountId = userInfo?.info?.uuid;
                 payload.tenantId = formData?.address?.city?.code;
-                payload.workflow = { action: "INITIATE" };
+                payload.workflow = { action: "INITIATE", assignes : [userInfo?.info?.uuid] };
                 payload.accountId = accountId;
                 payload.documents = null;
 
