@@ -130,6 +130,7 @@ const FstpOperatorDetails = () => {
       case "DECLINEVEHICLE":
         return setShowModal(true);
       case "DISPOSE":
+      case "READY_FOR_DISPOSAL":
         setSelectedAction(null)
         history.location.pathname.includes("new") ? handleCreate() : handleSubmit()
       default:
@@ -431,7 +432,7 @@ const FstpOperatorDetails = () => {
                   <div>
                     <Dropdown
                       disable
-                      selected={{ "name": `${currentTrip} of ${tripDetails[0]?.noOfTrips}` }}
+                      selected={{ "name": `${currentTrip} of ${tripDetails[0]?.noOfTrips ? tripDetails[0]?.noOfTrips : 1}` }}
                       t={t}
                       optionKey="name"
                       style={{ width: '100%' }} />
