@@ -37,11 +37,16 @@ const SelectPaymentType = (props) => {
   const { t } = useTranslation();
   const history = useHistory();
   const { state, ...location } = useLocation();
-  const { consumerCode, businessService, paymentAmt } = useParams();
+  let { consumerCode, businessService, paymentAmt } = useParams();
   const { workflow: wrkflow, tenantId: _tenantId } = Digit.Hooks.useQueryParams();
   const [bill, setBill] = useState(state?.bill);
   const tenantId = state?.tenantId || _tenantId || Digit.UserService.getUser().info?.tenantId;
-
+  if (state?.consumerCode) {
+    consumerCode = state?.consumerCode;
+  }
+  if (state?.paymentAmount) {
+    paymentAmt = state?.paymentAmount;
+  }
   const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService, consumerCode });
 
   const billDetails = bill?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod)?.[0] || [];
@@ -82,23 +87,23 @@ const SelectPaymentType = (props) => {
   };
 
   const onSubmit = () => {
-    if(wrkflow === "WNS")
-    {
+    console.log(state, "state");
+    if (wrkflow === "WNS") {
       history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS`, {
+        paymentAmount: paymentAmt,
+        tenantId: billDetails.tenantId,
+        consumerCode: consumerCode,
+        name: paymentType?.code !== optionSecound?.code ? bill?.payerName : userInfo ? payersActiveName : payersName,
+        mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber : userInfo ? payersActiveMobileNumber : payersMobileNumber,
+      });
+    } else {
+      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, {
         paymentAmount: paymentAmt,
         tenantId: billDetails.tenantId,
         name: paymentType?.code !== optionSecound?.code ? bill?.payerName : userInfo ? payersActiveName : payersName,
         mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber : userInfo ? payersActiveMobileNumber : payersMobileNumber,
       });
     }
-    else{
-    history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, {
-      paymentAmount: paymentAmt,
-      tenantId: billDetails.tenantId,
-      name: paymentType?.code !== optionSecound?.code ? bill?.payerName : userInfo ? payersActiveName : payersName,
-      mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber : userInfo ? payersActiveMobileNumber : payersMobileNumber,
-    });
-  }
   };
 
   /* if (isLoading || paymentLoading) {

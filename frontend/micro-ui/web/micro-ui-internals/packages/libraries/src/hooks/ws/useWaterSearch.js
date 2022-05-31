@@ -55,7 +55,7 @@ const useWaterSearch = ({tenantId, filters = {}, BusinessService="WS", t}, confi
   , config)
   const billData = useQuery(['BILL_SEARCH', tenantId, consumercodes,BusinessService ], async () => await Digit.PaymentService.fetchBill(tenantId, {
     businessService: BusinessService,
-    consumerCode: consumercodes.substring(0, propertyids.length-1),
+    consumerCode: consumercodes.substring(0, consumercodes.length-1),
   })
   , config)
   return combineResponse(response?.data?.WaterConnection,properties?.data?.Properties,billData?.data?.Bill, t);
