@@ -7,7 +7,7 @@ import NoData from "./NoData";
 import { ArrowDownwardElement } from "./ArrowDownward";
 import { ArrowUpwardElement } from "./ArrowUpward";
 
-const rowNamesToBeLocalised = ["Department", "", "Usage Type", "Ward", "Wards"];
+const rowNamesToBeLocalised = ["Department", "", "Usage Type", "Ward", "Wards", "City Name"];
 
 const InsightView = ({ rowValue, insight, t }) => {
   return (
@@ -73,6 +73,9 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }
       const lyData = lastYearResponse?.responseData?.data?.find((lyRow) => lyRow?.headerName === rows?.headerName);
       return rows?.plots?.reduce((acc, row, currentIndex) => {
         let cellValue = row?.value !== null ? row?.value : row?.label || "";
+        if (row?.strValue && row?.symbol === "string" && !row?.label) {
+          cellValue = row?.strValue;
+        }
         let prevData = lyData?.plots?.[currentIndex]?.value;
         let insight = null;
         if (row?.name === "CapacityUtilization" && chartKey !== "fsmVehicleLogReportByVehicleNo") {
@@ -219,14 +222,10 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }
     const name = t(`DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`);
     return (originalRow, rowIndex, columns) => {
       const cellValue = originalRow?.[name];
-      console.log(plot, "plot");
       if (plot?.symbol === "amount" || plot?.symbol === "number" || plot?.symbol === "percentage") {
         return typeof cellValue === "object"
           ? { value: Digit.Utils.dss.formatter(convertDenomination(cellValue?.value), "number", "Lac", true, t), insight: cellValue?.insight }
           : String(Digit.Utils.dss.formatter(convertDenomination(cellValue), "number", "Lac", true, t));
-      }
-      if (plot?.symbol === "string") {
-        return plot?.strValue;
       }
 
       return originalRow[name];
