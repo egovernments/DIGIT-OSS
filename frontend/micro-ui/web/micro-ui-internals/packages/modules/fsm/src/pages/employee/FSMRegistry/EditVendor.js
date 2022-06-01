@@ -63,7 +63,7 @@ const EditVendor = ({ parentUrl, heading }) => {
         fatherOrHusbandName: dsoDetails?.dsoDetails?.owner?.fatherOrHusbandName,
         relationship: dsoDetails?.dsoDetails?.owner?.relationship,
         selectGender: dsoDetails?.dsoDetails?.owner?.gender,
-        dob: dsoDetails?.dsoDetails?.owner?.dob && Digit.DateUtils.ConvertEpochToDate(dsoDetails?.dsoDetails?.owner?.dob),
+        dob: dsoDetails?.dsoDetails?.owner?.dob && new Date(dsoDetails?.dsoDetails?.owner?.dob),
         emailId: dsoDetails?.dsoDetails?.owner?.emailId,
         correspondenceAddress: dsoDetails?.dsoDetails?.owner?.correspondenceAddress,
         additionalDetails: dsoDetails?.dsoDetails?.additionalDetails?.description
@@ -79,10 +79,8 @@ const EditVendor = ({ parentUrl, heading }) => {
 
   const onFormValueChange = (setValue, formData) => {
     if (
-      formData?.vendorName &&
       formData?.phone &&
-      formData?.address?.locality &&
-      formData?.selectGender
+      formData?.address?.locality
     ) {
       setSubmitValve(true);
     } else {
@@ -110,6 +108,9 @@ const EditVendor = ({ parentUrl, heading }) => {
     const localityName = data?.address?.locality?.name;
     const localityArea = data?.address?.locality?.area;
     const additionalDetails = data?.additionalDetails;
+    const gender = data?.selectGender?.code;
+    const emailId = data?.emailId;
+    const dob = new Date(`${data.dob}`).getTime() || dsoDetails.owner?.dob || new Date(`1/1/1970`).getTime();
     const formData = {
       vendor: {
         ...dsoDetails,
@@ -141,7 +142,11 @@ const EditVendor = ({ parentUrl, heading }) => {
           },
         },
         owner: {
-          ...dsoDetails.owner
+          ...dsoDetails.owner,
+          gender: gender || dsoDetails.owner?.gender || 'OTHER',
+          dob: dob,
+          emailId: emailId || 'abc@egov.com',
+          relationship: dsoDetails?.owner?.relationship || 'OTHER'
         },
         additionalDetails: {
           ...dsoDetails.additionalDetails,

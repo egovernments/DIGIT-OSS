@@ -40,7 +40,14 @@ const RegisryInbox = (props) => {
     const formData = {
       vendor: {
         ...dsoDetails,
-        status: dsoDetails?.status === "ACTIVE" ? "DISABLED" : "ACTIVE"
+        status: dsoDetails?.status === "ACTIVE" ? "DISABLED" : "ACTIVE",
+        owner: {
+          ...dsoDetails.owner,
+          gender: dsoDetails?.owner?.gender || 'OTHER',
+          dob: dsoDetails?.owner?.dob || new Date(`1/1/1970`).getTime(),
+          emailId: dsoDetails?.owner?.emailId || 'abc@egov.com',
+          relationship: dsoDetails?.owner?.relationship || 'OTHER'
+        },
       }
     };
 
@@ -51,9 +58,9 @@ const RegisryInbox = (props) => {
       },
       onSuccess: (data, variables) => {
         setShowToast({ key: "success", action: 'VENDOR' });
-        setTimeout(closeToast, 3000);
         queryClient.invalidateQueries("DSO_SEARCH");
         props.refetchData();
+        setTimeout(closeToast, 3000);
       },
     });
   }
