@@ -24,7 +24,7 @@ const SelectGeolocation = ({ t, config, onSelect, formData = {} }) => {
 
   return (
     <React.Fragment>
-      <Timeline currentStep={2} flow="APPLY" />
+      <Timeline currentStep={1} flow="APPLY" />
       <LocationSearchCard
         header={t("CS_ADDCOMPLAINT_SELECT_GEOLOCATION_HEADER")}
         cardText={t("CS_ADDCOMPLAINT_SELECT_GEOLOCATION_TEXT")}

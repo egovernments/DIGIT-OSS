@@ -18,7 +18,7 @@ const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
 
   return (
     <React.Fragment>
-      <Timeline currentStep={2} flow="APPLY" />
+      <Timeline currentStep={1} flow="APPLY" />
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!slumArea}>
         <RadioOrSelect
           isMandatory={config.isMandatory}
