@@ -1,7 +1,6 @@
 import { Loader, Modal, FormComposer } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
-
 import { configBPAApproverApplication } from "../config";
 import * as predefinedConfig from "../config";
 
@@ -155,12 +154,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     result = result?.concat(newApprovals !== null?newApprovals.filter(ob => ob.label !== "").map(approval => approval?.label):[]);
     return result;
   }
-
-
-  const onSuccess = () => {
-    //clearParams();
-    queryClient.invalidateQueries("PT_CREATE_PROPERTY");
-  };
 
 
   function submit(data) {
