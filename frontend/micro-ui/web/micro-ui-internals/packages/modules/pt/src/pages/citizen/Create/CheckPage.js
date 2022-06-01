@@ -15,7 +15,7 @@ import { useHistory } from "react-router-dom";
 import {
   checkForNA,
   getFixedFilename, isPropertyIndependent, isPropertyselfoccupied,
-  ispropertyunoccupied, isPropertyVacant,
+  ispropertyunoccupied
 } from "../../../utils";
 import Timeline from "../../../components/TLTimeline";
 
@@ -34,10 +34,15 @@ const CheckPage = ({ onSubmit, value = {} }) => {
   const history = useHistory();
 
   const {
+    address,
     isResdential,
+    PropertyType,
     noOfFloors,
     noOofBasements,
-   
+    units = [{}],
+    landarea,
+    landArea,
+    UnOccupiedArea,
     city_complaint,
     locality_complaint,
     street,
@@ -51,22 +56,10 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     propertyArea,
     selfOccupied,
     floordetails,
-    Owners,
+    owners,
     isEditProperty,
     isUpdateProperty,
-    searchResult,
   } = value;
-  
-  const { property } = searchResult;
-  const { 
-    address,
-    propertyType,
-    units = [{}],
-    landarea,
-    landArea,
-    UnOccupiedArea
-   } = property;
-
   const typeOfApplication = !isEditProperty && !isUpdateProperty ? `new-application` : `edit-application`;
   let flatplotsize;
   if (isPropertyselfoccupied(selfOccupied?.i18nKey)) {
@@ -80,7 +73,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       flatplotsize = flatplotsize + parseInt(UnOccupiedArea?.UnOccupiedArea);
     }
   }
-  if (isPropertyIndependent(propertyType)) {
+  if (isPropertyIndependent(PropertyType?.i18nKey)) {
     flatplotsize = parseInt(propertyArea?.builtUpArea) + parseInt(propertyArea?.plotSize);
   }
 
@@ -119,11 +112,11 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           />
         </StatusTable>
         <div>
-          {Owners &&
-            Owners.map &&
-            Owners.map((owner, index) => (
+          {owners &&
+            owners.map &&
+            owners.map((owner, index) => (
               <div key={index}>
-                {Owners.length != 1 && (
+                {owners.length != 1 && (
                   <CardSubHeader>
                     {t("PT_OWNER_SUB_HEADER")} - {index + 1}
                   </CardSubHeader>
@@ -281,22 +274,22 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           /> */}
           <Row
             label={t("PT_ASSESMENT1_PROPERTY_TYPE")}
-            text={`${t(checkForNA(propertyType))}`}
+            text={`${t(checkForNA(PropertyType?.i18nKey))}`}
             actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/property-type`} />}
           />
           <Row
             label={t("PT_ASSESMENT1_PLOT_SIZE")}
-            text={`${landArea}`}
+            text={`${landArea?.floorarea}`}
             actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/landarea`} />}
           />
-          {isPropertyVacant(propertyType) && (
+          {PropertyType?.code === "VACANT" && (
             <Row
               label={t("PT_ASSESMENT1_PLOT_SIZE")}
               text={`${landarea?.floorarea}`}
               actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/PtUnits`} />}
             />
           )}
-          {! isPropertyVacant(propertyType) &&
+          {PropertyType?.code !== "VACANT" &&
             units
               .sort((x, y) => x.floorNo - y.floorNo)
               .map((unit, unitIndex) => {
