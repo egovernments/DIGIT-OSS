@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { FormStep, RadioOrSelect, RadioButtons, LabelFieldPair, Dropdown, CardLabel, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { FormStep, RadioOrSelect, RadioButtons, LabelFieldPair, Dropdown, CardLabel, CardLabelError, CheckBox } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/TLTimeline";
@@ -11,6 +11,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   //let isEditProperty = formData?.isEditProperty || false;
   let isEdit = window.location.href.includes("edit-application")||window.location.href.includes("renew-trade");
   const [ownershipCategory, setOwnershipCategory] = useState(formData?.ownershipCategory);
+  const [isSameAsPropertyOwner, setisSameAsPropertyOwner] = useState(null);
   const { data: dropdownData } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TLOwnerTypeWithSubtypes",{userType});
 
   const { pathname: url } = useLocation();
@@ -23,7 +24,8 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   const onSkip = () => onSelect();
   function goNext() {
     sessionStorage.setItem("ownershipCategory", ownershipCategory?.value);
-    onSelect(config.key, ownershipCategory);
+
+    onSelect(config.key, {...ownershipCategory,isSameAsPropertyOwner});
   }
 
   useEffect(() => {
@@ -47,6 +49,18 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   
     return (
       <React.Fragment>
+        <LabelFieldPair>
+        <div className="field">
+        <CheckBox
+          label={t("TL_COMMON_SAME_AS_PROPERTY_OWNERS")}
+          onChange={setisSameAsPropertyOwner}
+          value={isSameAsPropertyOwner}
+          checked={isSameAsPropertyOwner || false}
+          style={{ marginBottom: "20px" }}
+          //disable={isUpdateProperty || isEditProperty}
+        />
+        </div>
+        </LabelFieldPair>
         <LabelFieldPair>
           <CardLabel className="card-label-smaller" style={editScreen ? { color: "#B1B4B6" } : {}}>
             {`${t("TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL")} * `}

@@ -14,6 +14,8 @@ const NewApplication = () => {
   const history = useHistory();
   // delete
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
+  const isEmpNewApplication = window.location.href.includes("/employee/tl/new-application");
+  const isEmpRenewLicense = window.location.href.includes("/employee/tl/renew-application-details");
 
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_TRADE_NEW_FORM", {});
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
@@ -238,7 +240,10 @@ const NewApplication = () => {
       return "TL_CHECK_ADDRESS";
     } else if (head === "ES_NEW_APPLICATION_OWNERSHIP_DETAILS") {
       return "TL_OWNERSHIP_DETAILS_HEADER";
-    } else {
+    } else if (head === "TL_NEW_APPLICATION_PROPERTY" && (sessionFormData?.tradedetils?.[0]?.structureType?.code === "MOVABLE" && (isEmpNewApplication || isEmpRenewLicense))) {
+      return "";
+    }
+     else {
       return head;
     }
   }
