@@ -120,12 +120,14 @@ const Inbox = ({ parentRoute }) => {
     , [statuses, isInboxLoading, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant])
 
   const onSearchFormSubmit = (data) => {
-    data.hasOwnProperty("") ? delete data?.[""] : null
+    data.hasOwnProperty("") && delete data?.[""];
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateSearchForm", data })
   }
 
   const onFilterFormSubmit = (data) => {
-    data.hasOwnProperty("") ? delete data?.[""] : null
+    data.hasOwnProperty("") && delete data?.[""] ;
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateFilterForm", data })
   }
 

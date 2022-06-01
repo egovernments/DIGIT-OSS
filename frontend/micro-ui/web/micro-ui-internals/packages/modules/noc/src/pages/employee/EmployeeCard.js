@@ -36,7 +36,8 @@ const NOCEmployeeHomeCard = () => {
 
     const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.noc.useInbox({
         tenantId,
-        filters: { ...formInitValue }
+        filters: { ...formInitValue },
+        config : { enabled : formInitValue?.filterForm?.businessServiceArray?.length > 0}
     });
 
     const ComplaintIcon = () => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
