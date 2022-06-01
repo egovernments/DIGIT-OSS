@@ -3,6 +3,10 @@
   "version":"1.5.1",
   "private": true,
   "homepage": "/digit-ui",
+  "workspaces": [
+    "micro-ui-internals/packages/*",
+    "micro-ui-internals/packages/modules/*"
+  ],
   "dependencies": {
     "@egovernments/digit-ui-css": "1.5.3",
     "@egovernments/digit-ui-libraries":"1.5.3",
