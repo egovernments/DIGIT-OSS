@@ -19,12 +19,18 @@ const FsmBreadCrumb = ({ location }) => {
   const isVendorDetails = location?.pathname?.includes("vendor-details");
   const isVendorEdit = location?.pathname?.includes("modify-vendor");
   const [search, setSearch] = useState(false);
+  const [id, setId] = useState(false);
 
   useEffect(() => {
     if (!search) {
       setSearch(isSearch);
     } else if (isInbox && search) {
       setSearch(false);
+    }
+    if (location?.pathname) {
+      let path = location?.pathname.split("/")
+      let id = path[path.length - 1]
+      setId(id)
     }
   }, [location]);
 
@@ -46,7 +52,11 @@ const FsmBreadCrumb = ({ location }) => {
     },
     { content: t("ES_TITLE_APPLICATION_DETAILS"), show: isApplicationDetails },
     { content: t("ES_TITLE_VEHICLE_LOG"), show: isVehicleLog },
-    { content: t("ES_TITLE_VENDOR_DETAILS"), show: isRegistry && (isVendorDetails || isVendorEdit) },
+    {
+      path: "/digit-ui/employee/fsm/registry/vendor-details/" + id,
+      content: t("ES_TITLE_VENDOR_DETAILS"),
+      show: isRegistry && (isVendorDetails || isVendorEdit)
+    },
     { content: t("ES_TITLE_VENDOR_EDIT"), show: isRegistry && isVendorEdit },
   ];
 
