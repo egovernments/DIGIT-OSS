@@ -123,8 +123,9 @@ public class EdcrValidator {
                         value = value.trim();
                         boolean isAllow = Pattern.matches(ALPHANUMERIC_WITH_SPECIAL_CHARS, value);
                         if (!isAllow) {
-                            LOG.info("The Inalid Value is" + value);
-                            error.setErrorCode("EDCR-31");
+                           
+                            LOG.info("EDCR-33 The Inalid Value is" + value + "" + f.getName());
+                            error.setErrorCode("EDCR-33");
                             error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
                             return error;
                         }
@@ -133,6 +134,7 @@ public class EdcrValidator {
                         {
                         	 boolean isAllowName = Pattern.matches(ALPHA_CHARS, value);
                         	  if (!isAllowName) {
+                        		  LOG.info("EDCR-31 The Inalid Value is" + value + "" + f.getName());
                                   LOG.info("The Inalid Value is" + value);
                                   error.setErrorCode("EDCR-31");
                                   error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
