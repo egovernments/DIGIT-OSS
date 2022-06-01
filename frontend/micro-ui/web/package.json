@@ -3,6 +3,10 @@
   "version":"1.5.1",
   "private": true,
   "homepage": "/digit-ui",
+  "workspaces": [
+    "micro-ui-internals/packages/*",
+    "micro-ui-internals/packages/modules/*"
+  ],
   "dependencies": {
     "@egovernments/digit-ui-css": "1.5.3",
     "@egovernments/digit-ui-libraries":"1.5.3",
@@ -11,7 +15,7 @@
     "@egovernments/digit-ui-module-commonpt":"1.5.3",
     "@egovernments/digit-ui-module-engagement":"1.5.3",
     "@egovernments/digit-ui-module-dss":"1.5.3",
-    "@egovernments/digit-ui-module-fsm":"1.5.3",
+    "@egovernments/digit-ui-module-fsm":"1.5.4",
     "@egovernments/digit-ui-module-hrms":"1.5.3",
     "@egovernments/digit-ui-module-mcollect":"1.5.3",
     "@egovernments/digit-ui-module-obps":"1.5.4",
