@@ -17,7 +17,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
             Cell: ({ row }) => {
             return (
                 <div>
-                <Link to={`${parentRoute}/inbox/bpa/${row.original["applicationId"]}`}>
+                <Link to={window.location.href.includes("/citizen") ? `${parentRoute}/bpa/${row.original["applicationId"]}` : `${parentRoute}/inbox/bpa/${row.original["applicationId"]}`}>
                     <span className="link">{row.original["applicationId"]}</span>
                 </Link>
                 </div>

@@ -5,7 +5,7 @@ export const SearchField = ({children, className}) => {
     const isEnabledCommonModules = window.location.href.includes("/obps/") || window.location.href.includes("/noc/");
     const disbaleModules = window.location.href.includes("obps/search") || window.location.href.includes("noc/search")
     if (isEnabledCommonModules && !isMobile && !disbaleModules) {
-        return <div className={`input-fields`}>
+        return <div className={`input-fields`} style={{marginTop: "5px"}}>
             {children}
         </div>
     }

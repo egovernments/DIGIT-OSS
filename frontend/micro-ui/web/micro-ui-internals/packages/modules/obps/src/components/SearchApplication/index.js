@@ -10,6 +10,7 @@ import {
   DetailsCard,
   Loader,
   Toast,
+  Header
 } from "@egovernments/digit-ui-react-components";
 import { convertEpochToDateDMY } from "../../utils";
 import SearchFormFieldsComponent from "./SearchFormFieldsComponent";
@@ -216,7 +217,7 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
             <SearchForm {...props}>
               <MobilePopUpCloseButton />
               <div className="MobilePopupHeadingWrapper">
-                <h2>{t("ES_COMMON_SEARCH")}:</h2>
+                <h2>{t("ES_COMMON_SEARCH_APPLICATION")}:</h2>
               </div>
               <SearchFormFieldsComponent {...searchFormFieldsComponentProps} {...{ closeMobilePopupModal }} />
               {/* <SearchField className="submit">
@@ -243,7 +244,7 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
       <React.Fragment>
         <div className="searchBox">
           <SearchAction
-            text={t("ES_COMMON_SEARCH")}
+            text={t("ES_COMMON_SEARCH_APPLICATION")}
             handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SearchFormComponent" })}
           />
           {/* {isInboxLoading ? <Loader /> : <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"FilterFormComponent"})}/>} */}
@@ -290,6 +291,7 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
 
   return (
     <React.Fragment>
+      <Header>{t("ES_COMMON_SEARCH_APPLICATION")}</Header>
       <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <SearchFormFieldsComponent {...searchFormFieldsComponentProps} />
       </SearchForm>
