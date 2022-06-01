@@ -39,24 +39,25 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
   }
 
   return <>
+    {!window.location.href.includes("/citizen") ? 
     <FilterFormField>
-      <Controller
+    <Controller
+      name="assignee"
+      control={controlFilterForm}
+      render={(props) => {
+      return <RadioButtons
+        onSelect={(e) => {
+          props.onChange(e.code)
+        }}
+        selectedOption={availableOptions.filter((option) => option.code === props.value)[0]}
+        optionsKey="name"
         name="assignee"
-        control={controlFilterForm}
-        render={(props) => {
-        return <RadioButtons
-          onSelect={(e) => {
-            props.onChange(e.code)
-          }}
-          selectedOption={availableOptions.filter((option) => option.code === props.value)[0]}
-          optionsKey="name"
-          name="assignee"
-          options={availableOptions}
-        />
-      }}
+        options={availableOptions}
       />
-    </FilterFormField>
-    <FilterFormField>
+    }}
+    />
+  </FilterFormField>: null}
+  {!window.location.href.includes("/citizen") ? <FilterFormField>
       <Controller
           name="locality"
           control={controlFilterForm}
@@ -91,7 +92,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
           }
         }
         />
-    </FilterFormField>
+    </FilterFormField>: null}
     <FilterFormField>
       <Controller
         name="applicationType"
@@ -150,9 +151,10 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
             return e.businessservice === value
           } )?.map( (status, index) => {
             return <CheckBox
+              style={{marginTop: "10px"}}
               key={index}
-              onChange={(e) => e.target.checked ? changeItemCheckStatus([...props.value, status?.statusid]) : changeItemCheckStatus(props.value?.filter( id => id !== status?.statusid)) }
-              checked={props.value?.includes(status?.statusid)}
+              onChange={(e) => e.target.checked ? changeItemCheckStatus([...props?.value, status?.statusid]) : changeItemCheckStatus(props?.value?.filter( id => id !== status?.statusid)) }
+              checked={props?.value?.includes(status?.statusid)}
               label={`${t(`WF_STATE_${status.businessservice}_${status.applicationstatus}`)}`}
               //Hidden due to RAIN-5010 percieved as wrong count here
               // (${status.count})`}
