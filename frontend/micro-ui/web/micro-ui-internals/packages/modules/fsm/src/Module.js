@@ -37,7 +37,7 @@ import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import Inbox from "./pages/employee/Inbox";
 import { NewApplication } from "./pages/employee/NewApplication";
 import Response from "./pages/Response";
-import FsmBreadCrumb from "./pages/employee";
+import {FsmBreadCrumb} from "./pages/employee";
 
 const FSMModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "FSM";
