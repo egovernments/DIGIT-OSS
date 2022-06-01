@@ -36,7 +36,6 @@ export const configNOCApproverApplication = ({
         body: [
           {
             label: action.isTerminateState || isRejectOrRevocate ? null : t(assigneeLabel || `WF_ROLE_${action.assigneeRoles?.[0]}`),
-            // isMandatory: !action.isTerminateState,
             type: "dropdown",
             populators: action.isTerminateState || isRejectOrRevocate ? null : (
               <Dropdown

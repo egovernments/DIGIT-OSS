@@ -262,8 +262,6 @@ function SelectDocument({
   useEffect(() => {
     if (selectedDocument?.code) {
       setNocDocuments((prev) => {
-        //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
-
         if (uploadedFile?.length === 0 || uploadedFile === null) {
           return prev;
         }
@@ -281,30 +279,6 @@ function SelectDocument({
       });
     }
   }, [uploadedFile, selectedDocument]);
-
-
-  useEffect(() => {
-    (async () => {
-      setError(null);
-      if (file) {
-        if (file.size >= 5242880) {
-          setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
-        } else {
-          try {
-            setUploadedFile(null);
-            const response = await Digit.UploadServices.Filestorage("NOC", file, Digit.ULBService.getStateId());
-            if (response?.data?.files?.length > 0) {
-              setUploadedFile(response?.data?.files[0]?.fileStoreId);
-            } else {
-              setError(t("CS_FILE_UPLOAD_ERROR"));
-            }
-          } catch (err) {
-            setError(t("CS_FILE_UPLOAD_ERROR"));
-          }
-        }
-      }
-    })();
-  }, [file]);
 
   const getData = (state) => {
     let data = Object.fromEntries(state);
