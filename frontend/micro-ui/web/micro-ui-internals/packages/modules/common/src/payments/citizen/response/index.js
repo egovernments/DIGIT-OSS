@@ -350,7 +350,7 @@ export const SuccessfulPayment = (props)=>{
           {t("TL_CERTIFICATE")}
         </div>
       ) : null}
-      {bpaData?.[0]?.businessService === "BPA_OC" && bpaData?.[0]?.status==="APPROVED" ? (
+      {bpaData?.[0]?.businessService === "BPA_OC" && (bpaData?.[0]?.status==="APPROVED" || bpaData?.[0]?.status==="PENDING_SANC_FEE_PAYMENT") ? (
         <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={e => getPermitOccupancyOrderSearch("occupancy-certificate")}>
           <DownloadPrefixIcon />
             {t("BPA_OC_CERTIFICATE")}

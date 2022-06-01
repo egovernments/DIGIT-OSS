@@ -1,6 +1,5 @@
 import { Loader, Modal, FormComposer } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
-
 import { configBPAREGApproverApplication } from "../config";
 import * as predefinedConfig from "../config";
 
@@ -61,7 +60,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           setError(t(`NOT_SUPPORTED_FILE_TYPE`))
         } else {
           try {
-            const response = await Digit.UploadServices.Filestorage("PT", file, tenantId?.split(".")[0]);
+            const response = await Digit.UploadServices.Filestorage("OBPS", file, Digit.ULBService.getStateId() || tenantId?.split(".")[0]);
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {

@@ -2,7 +2,6 @@ import { Loader, Modal, FormComposer } from "@egovernments/digit-ui-react-compon
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { useHistory } from "react-router-dom";
-
 import { configNOCApproverApplication } from "../config";
 import * as predefinedConfig from "../config";
 
@@ -66,7 +65,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           setError(t(`NOT_SUPPORTED_FILE_TYPE`))
         } else {
           try {
-            const response = await Digit.UploadServices.Filestorage("NOC", file, tenantId);
+            const response = await Digit.UploadServices.Filestorage("NOC", file, Digit.ULBService.getStateId() || tenantId?.split(".")[0]);
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {

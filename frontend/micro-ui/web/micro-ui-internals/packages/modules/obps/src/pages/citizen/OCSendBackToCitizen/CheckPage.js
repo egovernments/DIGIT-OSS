@@ -11,7 +11,8 @@ import {
   CardSectionHeader,
   EditIcon,
   PDFSvg,
-  Toast
+  Toast,
+  Loader
 } from "@egovernments/digit-ui-react-components";
 import React, { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -205,6 +206,10 @@ const CheckPage = ({ onSubmit, value }) => {
         setShowModal(true);
     }
   }, [selectedAction]);
+
+  if (pdfLoading || recieptDataLoading) {
+    return <Loader />
+  }
 
   return (
     <React.Fragment>
