@@ -221,6 +221,7 @@ import useWaterPropertySearch from "./ws/useWaterPropertySearch";
 import useGetHowItWorksJSON from "./useHowItWorksJSON";
 import useGetFAQsJSON from "./useGetFAQsJSON";
 import useGetDSSFAQsJSON from "./useGetDSSFAQsJSON"
+import useGetDSSAboutJSON from "./useGetDSSAboutJSON"
 import useStaticData from "./useStaticData";
 
 const pgr = {
@@ -494,6 +495,7 @@ const Hooks = {
   useGetHowItWorksJSON,
   useGetFAQsJSON,
   useGetDSSFAQsJSON,
+  useGetDSSAboutJSON,
   useStaticData,
   useDynamicData,
 };
