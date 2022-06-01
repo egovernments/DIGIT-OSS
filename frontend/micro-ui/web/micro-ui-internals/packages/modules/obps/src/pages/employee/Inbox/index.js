@@ -100,7 +100,12 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const getRedirectionLink = (bService) => {
-    let redirectBS = bService === "BPAREG" ? "search/application/stakeholder" : "search/application/bpa";
+    let redirectBS = "";
+    if (bService === "BPAREG") {
+      redirectBS = "search/application/stakeholder";
+    } else {
+      redirectBS = window.location.href.includes("/citizen") ? "bpa" : "search/application/bpa"
+    }
     return redirectBS;
   };
   const { data: localitiesForEmployeesCurrentTenant, isLoading: loadingLocalitiesForEmployeesCurrentTenant } = Digit.Hooks.useBoundaryLocalities(
@@ -121,7 +126,7 @@ const Inbox = ({ parentRoute }) => {
     links: [
       {
         text: t("BPA_SEARCH_PAGE_TITLE"),
-        link: "/digit-ui/employee/obps/search/application",
+        link: window.location.href.includes("/citizen") ? "/digit-ui/citizen/obps/search/application" : "/digit-ui/employee/obps/search/application",
         businessService: "BPA",
         roles: ["BPAREG_EMPLOYEE", "BPAREG_APPROVER", "BPAREG_DOC_VERIFIER", "BPAREG_DOC_VERIFIER"],
       },
