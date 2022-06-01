@@ -140,11 +140,12 @@ const InboxComposer = ({
                 <SearchForm onSubmit={onSearchFormSubmit} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb form-field-flex-one" >
                     <SearchFormFields registerRef={registerSearchFormField} searchFormState={searchFormState} {...{ controlSearchForm }}
                         searchFieldComponents={
-                            <div>
+                            <div style={window.location.href.includes("/citizen/obps") ? {display : "flex"} : {}}>
                                 <SubmitBar
                                     label={t("ES_COMMON_SEARCH")}
                                     submit form="search-form"
                                     className="submit-bar-search"
+                                    style={{marginRight: "10px"}}
                                 />
                                 <p
                                     onClick={onResetSearchForm}
