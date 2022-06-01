@@ -36,7 +36,7 @@ public class DecryptionPolicyConfiguration {
 
     private Map<String, List<Attribute>> modelAttributeAccessMap;
 
-    private Map<String, List<RoleBasedDecryptionPolicy>> modelRoleBasedDecryptionPolicyMap;
+    private Map<String, Map<String, List<AttributeAccess>>> modelRoleBasedDecryptionPolicyMap;
 
     private Map<String, UniqueIdentifier> uniqueIdentifierMap;
 
@@ -48,9 +48,11 @@ public class DecryptionPolicyConfiguration {
     }
 
     void initializeRoleBasedDecryptionPolicyMap(List<SecurityPolicy> modelRoleAttributeAccessList) {
-        modelRoleBasedDecryptionPolicyMap = modelRoleAttributeAccessList.stream()
-                .collect(Collectors.toMap(SecurityPolicy::getModel,
-                        SecurityPolicy::getRoleBasedDecryptionPolicy));
+        modelRoleBasedDecryptionPolicyMap = new HashMap<>();
+        for (SecurityPolicy securityPolicy : modelRoleAttributeAccessList) {
+            modelRoleBasedDecryptionPolicyMap.put(securityPolicy.getModel(),
+                    makeRoleAttributeAccessMapping(securityPolicy.getRoleBasedDecryptionPolicy()));
+        }
     }
 
     void initializeUniqueIdentifierMap(List<SecurityPolicy> modelRoleAttributeAccessList) {
@@ -100,16 +102,17 @@ public class DecryptionPolicyConfiguration {
         Map<Attribute, Visibility> mapping = new HashMap<>();
         try {
             List<Attribute> attributesList = modelAttributeAccessMap.get(model);
-            List<RoleBasedDecryptionPolicy> roleBasedDecryptionPolicyList = modelRoleBasedDecryptionPolicyMap.get(model);
+            Map<String, List<AttributeAccess>> roleAttributeAccessMap =
+                    modelRoleBasedDecryptionPolicyMap.get(model);
 
             boolean isAttributeListEmpty = CollectionUtils.isEmpty(attributesList);
-            boolean isroleBasedDecryptionPolicyListEmpty = CollectionUtils.isEmpty(roleBasedDecryptionPolicyList);
+            boolean isRoleAttributeAccessMapEmpty = CollectionUtils.isEmpty(roleAttributeAccessMap);
 
             if (isAttributeListEmpty) {
                 throw new CustomException("DECRYPTION_NULL_ERROR", "Attribute list is empty");
             }
 
-            if (!isAttributeListEmpty && isroleBasedDecryptionPolicyListEmpty) {
+            if (!isAttributeListEmpty && isRoleAttributeAccessMapEmpty) {
                 for (Attribute attribute : attributesList) {
                     String defaultVisibility = String.valueOf(attribute.getDefaultVisibility());
                     Visibility visibility = Visibility.valueOf(defaultVisibility);
@@ -122,20 +125,18 @@ public class DecryptionPolicyConfiguration {
                         mapping.put(attribute, visibility);
                     }
                 }
-
             }
 
-            if(!isAttributeListEmpty && !isroleBasedDecryptionPolicyListEmpty) {
-                Map<String, List<AttributeAccess>> roleSecurityPolicyAttributeAccessmap = makeRoleAttributeAccessMapping(roleBasedDecryptionPolicyList);
+            if(!isAttributeListEmpty && !isRoleAttributeAccessMapEmpty) {
                 Map<String, Attribute> attributesMap = makeAttributeMap(attributesList);
 
                 List<String> secondLevelVisibility = new ArrayList<>();
 
                 for (String role : roles) {
-                    if (!roleSecurityPolicyAttributeAccessmap.containsKey(role))
+                    if (!roleAttributeAccessMap.containsKey(role))
                         continue;
 
-                    List<AttributeAccess> attributeList = roleSecurityPolicyAttributeAccessmap.get(role);
+                    List<AttributeAccess> attributeList = roleAttributeAccessMap.get(role);
 
                     for (AttributeAccess attributeAccess : attributeList) {
                         String attributeName = attributeAccess.getAttribute();
@@ -171,8 +172,15 @@ public class DecryptionPolicyConfiguration {
     }
 
     private Map<String, List<AttributeAccess>> makeRoleAttributeAccessMapping(List<RoleBasedDecryptionPolicy> roleBasedDecryptionPolicyList) {
-        return roleBasedDecryptionPolicyList.stream().collect(Collectors.toMap(RoleBasedDecryptionPolicy::getRole,
-                RoleBasedDecryptionPolicy::getAttributeAccessList));
+        Map<String, List<AttributeAccess>> roleAttributeAccessMap = new HashMap<>();
+        for(RoleBasedDecryptionPolicy roleBasedDecryptionPolicy : roleBasedDecryptionPolicyList) {
+            List<String> roles = roleBasedDecryptionPolicy.getRoles();
+            List<AttributeAccess> attributeAccessList = roleBasedDecryptionPolicy.getAttributeAccessList();
+            for(String role : roles) {
+                roleAttributeAccessMap.put(role, attributeAccessList);
+            }
+        }
+        return roleAttributeAccessMap;
     }
 
     private Map<String, Attribute> makeAttributeMap(List<Attribute> attributesList) {
