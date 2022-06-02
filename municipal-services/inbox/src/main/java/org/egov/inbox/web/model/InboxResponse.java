@@ -28,9 +28,6 @@ public class InboxResponse {
     @JsonProperty("totalCount")
     private Integer totalCount =null;
     
-    @JsonProperty("nearingSlaCount")
-    private Integer nearingSlaCount =null;
-    
     @JsonProperty("statusMap")
     private List<HashMap<String,Object>> statusMap = null;
     

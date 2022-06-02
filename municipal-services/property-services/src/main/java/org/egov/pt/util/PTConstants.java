@@ -11,6 +11,8 @@ public class PTConstants {
 
     public static final String PT_TYPE_VACANT = "VACANT";
     
+    public static String SCHEMA_REPLACE_STRING = "{schema}";
+    
     public static final String PT_TYPE_SHAREDPROPERTY = "SHAREDPROPERTY";
     
     public static final String PT_TYPE_BUILTUP = "BUILTUP";
@@ -65,7 +67,7 @@ public class PTConstants {
 
     public static final String NOTIFICATION_PAYMENT_ONLINE = "PT_NOTIFICATION_PAYMENT_ONLINE";
 
-    public static final String NOTIFICATION_PAYMENT_OFFLINE = "PT_NOTIFICATION_PAYMENT_OFFLINE";
+    public static final String NOTIFICATION_PAYMENT_OFFLINE = "PT_NOTIFICATION_PAYMENT_OFFILE";
 
     public static final String NOTIFICATION_PAYMENT_FAIL = "PT_NOTIFICATION_PAYMENT_FAIL";
 
@@ -82,10 +84,8 @@ public class PTConstants {
             NOTIFICATION_PAYMENT_PARTIAL_ONLINE,NOTIFICATION_OLDPROPERTYID_ABSENT));
     
     public static final String ACTION_PAY = "PAY";
-
-    public static final String ACTION_PAID = "PAID";
-
-    public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
+    
+	public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
 	public static final String  USREVENTS_EVENT_NAME = "Property Tax";
 	public static final String  USREVENTS_EVENT_POSTEDBY = "SYSTEM-PT";
 
@@ -164,10 +164,6 @@ public class PTConstants {
     public static final String ACTION_ALTERNATE_MOBILE = "ALTERNATE_MOBILE";
 
     public static final String ACTION_FOR_DUES = "DUE";
-
-    public static final String ACTION_FOR_ASSESSMENT =  "ASSESS";
-
-    public static final String ACTION_FOR_PAYMENT_FAILURE = "FAILURE";
 
     public static final String WF_STATUS_OPEN_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_OPEN";
 	
@@ -346,12 +342,6 @@ public class PTConstants {
 
     public static final String TRACK_APPLICATION_CODE = "TRACK APPLICATION";
 
-    public static final String DOWNLOAD_MUTATION_CERTIFICATE_CODE = "DOWNLOAD MUTATION CERTIFICATE";
-
-    public static final String DOWNLOAD_MUTATION_RECEIPT_CODE = "DOWNLOAD RECEIPT";
-
-    public static final String PAY_PENDING_PAYMENT_CODE = "DOWNLOAD RECEIPT";
-
     public static final String VIEW_PROPERTY = "view";
 
     public static final String TRACK_APPLICATION = "track";
@@ -398,21 +388,8 @@ public class PTConstants {
 
     public static final String PAY_ONLINE_STRING = "Click on the URL to view the details and pay online {PAYMENT_LINK}";
 
+    public static final String TENANTID_MDC_STRING = "TENANTID";
+
     public static final String PT_ONLINE_STRING = "You can pay your Property Tax online here - {PAYMENT_LINK}";
-
-    public static final String MT_TRACK_APPLICATION_STRING ="You can track your application on the link given below - {MTURL} Thank you";
-
-    public static final String MT_PAYLINK_STRING = "You can pay your mutation fee on the below link - {PAYLINK} or visit your ULB to pay your dues. Thank you";
-
-    public static final String MT_CERTIFICATE_STRING = "You can download your mutation certificate on the below link - {MTURL} Thank you";
-
-    public static final String MT_RECEIPT_STRING = "You can download your receipt on the below link - {MTURL} Thank you";
-
-    public static final String PT_TAX_FAIL = "Please try again. Ignore this message if you have completed your payment. You can pay your Property Tax online here - {payLink}";
-
-    public static final String PT_TAX_FULL = "Click on the link to download payment receipt {receipt download link}";
-
-    public static final String PT_TAX_PARTIAL = "You can pay your Property Tax online here - {payLink} Click on the link to download payment receipt {receipt download link}";
-
 }
 

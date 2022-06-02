@@ -1,6 +1,12 @@
 package org.egov.swcalculation.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
@@ -363,43 +369,5 @@ public class CalculatorUtils {
 		url.append("tenantId=").append(tenantId).append("&");
 		url.append("businessIds=").append(businessIds);
 		return url.toString();
-	}
-
-	/**
-	 *
-	 * @param dateInLong
-	 *
-	 * @return year from date object
-	 */
-	public String epochToDate(Long dateInLong){
-		Long timeStamp= dateInLong / 1000L;
-		java.util.Date time=new java.util.Date((Long)timeStamp*1000);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(time);
-		String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-		Integer mon = cal.get(Calendar.MONTH);
-		mon=mon+1;
-		String month = String.valueOf(mon);
-		String year = String.valueOf(cal.get(Calendar.YEAR));
-		StringBuilder date = new StringBuilder(day);
-		date.append("/").append(month).append("/").append(year);
-
-		return year;
-	}
-
-	/**
-	 *
-	 * @param masterMap
-	 *
-	 * @return billingcycle from mastermap
-	 */
-	public String getBillingCycle(Map<String, Object> masterMap)
-	{
-		Map<String, Object> financialYearMaster =  (Map<String, Object>) masterMap
-				.get(SWCalculationConstant.BILLING_PERIOD);
-		Long fromDateLong = (Long) financialYearMaster.get(SWCalculationConstant.STARTING_DATE_APPLICABLES);
-		Long toDateLong = (Long) financialYearMaster.get(SWCalculationConstant.ENDING_DATE_APPLICABLES);
-
-		return epochToDate(fromDateLong) + "-" +epochToDate(toDateLong) ;
 	}
 }

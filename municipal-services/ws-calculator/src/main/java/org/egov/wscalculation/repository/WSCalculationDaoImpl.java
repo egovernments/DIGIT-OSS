@@ -6,16 +6,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.tracer.model.CustomException;
 import org.egov.wscalculation.repository.builder.WSCalculatorQueryBuilder;
 import org.egov.wscalculation.web.models.MeterConnectionRequest;
 import org.egov.wscalculation.web.models.MeterReading;
 import org.egov.wscalculation.web.models.MeterReadingSearchCriteria;
-import org.egov.wscalculation.web.models.WaterConnection;
 import org.egov.wscalculation.producer.WSCalculationProducer;
 import org.egov.wscalculation.repository.rowmapper.DemandSchedulerRowMapper;
 import org.egov.wscalculation.repository.rowmapper.MeterReadingCurrentReadingRowMapper;
 import org.egov.wscalculation.repository.rowmapper.MeterReadingRowMapper;
-import org.egov.wscalculation.repository.rowmapper.WaterRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,9 +45,10 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 	
 	@Autowired
 	private DemandSchedulerRowMapper demandSchedulerRowMapper;
-	
+
 	@Autowired
-	private WaterRowMapper waterRowMapper;
+	private MultiStateInstanceUtil centralInstanceutil;
+	
 
 	@Value("${egov.meterservice.createmeterconnection}")
 	private String createMeterConnection;
@@ -110,6 +112,7 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 		String query = queryBuilder.getTenantIdConnectionQuery();
 		if (query == null)
 			return tenantIds;
+
 		log.debug("Query: " + query);
 		tenantIds = (ArrayList<String>) jdbcTemplate.queryForList(query, String.class);
 		return tenantIds;
@@ -122,6 +125,14 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 		String query = queryBuilder.getConnectionNumberFromWaterServicesQuery(preparedStatement,connectionType, tenantId);
 		if (query == null)
 			return connectionNos;
+
+		try {
+			query = centralInstanceutil.replaceSchemaPlaceholder(query, tenantId);
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("WS_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+
 		log.info("Query: " + query);
 
 		connectionNos = (ArrayList<String>)jdbcTemplate.query(query,preparedStatement.toArray(),demandSchedulerRowMapper);
@@ -129,16 +140,30 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 	}
 	
 	@Override
-	public List<WaterConnection> getConnectionsNoList(String tenantId, String connectionType, Integer batchOffset, Integer batchsize, Long fromDate, Long toDate) {
+	public List<String> getConnectionsNoList(String tenantId, String connectionType) {
 		List<Object> preparedStatement = new ArrayList<>();
-		String query = queryBuilder.getConnectionNumberList(tenantId, connectionType, preparedStatement, batchOffset, batchsize, fromDate, toDate);
+		String query = queryBuilder.getConnectionNumberList(tenantId, connectionType, preparedStatement);
+
+		try {
+			query = centralInstanceutil.replaceSchemaPlaceholder(query, tenantId);
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("WS_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+
 		log.info("water " + connectionType + " connection list : " + query);
-		return jdbcTemplate.query(query, preparedStatement.toArray(), waterRowMapper);
+		return jdbcTemplate.query(query, preparedStatement.toArray(), demandSchedulerRowMapper);
 	}
 
 	@Override
-	public List<String> getTenantId() {
+	public List<String> getTenantId(String tenantId) {
 		String query = queryBuilder.getDistinctTenantIds();
+		try {
+			query = centralInstanceutil.replaceSchemaPlaceholder(query, tenantId);
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("WS_AS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		log.info("Tenant Id's List Query : " + query);
 		return jdbcTemplate.queryForList(query, String.class);
 	}
@@ -149,18 +174,5 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 		String query = queryBuilder.isBillingPeriodExists(connectionNo, billingPeriod, preparedStatement);
 		log.info("Is BillingPeriod Exits Query: " + query);
 		return jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
-	}
-	
-	@Override
-	public long getConnectionCount(String tenantid, Long fromDate, Long toDate){
-		List<Object> preparedStatement = new ArrayList<>();
-		String query = queryBuilder.getCountQuery();
-		preparedStatement.add(tenantid);
-		/*preparedStatement.add(fromDate);
-		preparedStatement.add(toDate);
-		preparedStatement.add(tenantid);*/
-
-		long count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
-		return count;
 	}
 }

@@ -40,15 +40,6 @@ public class TradeLicenseResponse   {
         
         @JsonProperty("Count")
         private int count;
-        
-        @JsonProperty("applicationsIssued")
-        private int applicationsIssued;
-        
-        @JsonProperty("applicationsRenewed")
-        private int applicationsRenewed;
-        
-        @JsonProperty("applicationValidity")
-        private int validity;
 
 
         public TradeLicenseResponse addLicensesItem(TradeLicense licensesItem) {

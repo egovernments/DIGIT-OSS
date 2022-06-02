@@ -53,26 +53,12 @@ public class VendorController {
 		
 	}
 	
-	@PostMapping(value = "/_update")
-	public ResponseEntity<VendorResponse> update(@Valid @RequestBody VendorRequest vendorRequest){
-		vendorUtil.defaultJsonPathConfig();		
-		Vendor vendor =  vendorService.update(vendorRequest);
-		List<Vendor> vendorList = new ArrayList<Vendor>();
-		vendorList.add(vendor);
-		VendorResponse response = VendorResponse.builder().vendor(vendorList)
-				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(vendorRequest.getRequestInfo(), true))
-				.build();
-		
-		return new ResponseEntity<>(response,HttpStatus.OK);
-		
-	}
-	
 	
 	
 	@PostMapping(value = "/_search")
 	public ResponseEntity<VendorResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute VendorSearchCriteria criteria){
-		List<Vendor> vendorList = vendorService.vendorsearch(criteria, requestInfoWrapper.getRequestInfo());
+		List<Vendor> vendorList = vendorService.Vendorsearch(criteria, requestInfoWrapper.getRequestInfo());
 		VendorResponse response = VendorResponse.builder().vendor(vendorList).responseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
 				.build();

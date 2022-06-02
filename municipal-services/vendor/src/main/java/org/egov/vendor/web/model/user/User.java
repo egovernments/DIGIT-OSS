@@ -8,7 +8,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.egov.common.contract.request.Role;
-import org.egov.vendor.web.model.vehicle.Vehicle.StatusEnum;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
@@ -70,6 +69,7 @@ public class User {
     private String mobileNumber;
 
     @Size(max=128)
+    @NotNull
     @SafeHtml
     @JsonProperty("emailId")
     private String emailId;
@@ -122,7 +122,7 @@ public class User {
     @JsonProperty("active")
     private Boolean active;
 
-    
+    @NotNull
     @JsonProperty("dob")
     private Long dob;
 
@@ -151,11 +151,13 @@ public class User {
     @Valid
     private List<Role> roles;
 
+    @NotNull
     @SafeHtml
     @Size(max=100)
     @JsonProperty("fatherOrHusbandName")
     private String fatherOrHusbandName;
 
+    @NotNull
     @JsonProperty("relationship")
     private GuardianRelation relationship;
 
@@ -203,7 +205,4 @@ public class User {
     @SafeHtml
     @JsonProperty("tenantId")
     private String tenantId;
-    
-   	@JsonProperty("vendorDriverStatus")
-	private StatusEnum vendorDriverStatus = null;
 }

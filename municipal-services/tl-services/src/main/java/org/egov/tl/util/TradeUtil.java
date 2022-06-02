@@ -1,7 +1,13 @@
 package org.egov.tl.util;
 
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
@@ -19,10 +25,11 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import com.jayway.jsonpath.JsonPath;
+
+import lombok.extern.slf4j.Slf4j;
 
 import static org.egov.tl.util.TLConstants.*;
-import static org.egov.tl.util.TLConstants.COMMON_MASTERS_MODULE;
 
 @Component
 @Slf4j
@@ -81,22 +88,6 @@ public class TradeUtil {
         return uri;
     }
 
-    /**
-     * Creates url for tl-calculator service
-     * @return url for tl-calculator service
-     */
-    public StringBuilder getEstimationURI(String businessService) {
-        StringBuilder uri = new StringBuilder();
-        uri.append(config.getCalculatorHost());
-        if (businessService == null)
-            businessService = businessService_TL;
-        switch (businessService) {
-            case businessService_TL:
-                uri.append(config.getEstimateEndpointTL());
-                break;
-        }
-        return uri;
-    }
 
     /**
      * Creates search url for pt-services-v2 service
@@ -110,7 +101,7 @@ public class TradeUtil {
         url.append("tenantId=");
         url.append("{1}");
         url.append("&");
-        url.append("propertyIds=");
+        url.append("ids=");
         url.append("{2}");
         return url.toString();
     }
@@ -364,5 +355,6 @@ public class TradeUtil {
 		
 		return tenantIdToReminderPeriod;
 		
+
 	}
 }

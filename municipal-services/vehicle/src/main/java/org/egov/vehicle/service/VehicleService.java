@@ -55,39 +55,22 @@ public class VehicleService {
 		String tenantId = vehicleRequest.getVehicle().getTenantId().split("\\.")[0];
 		Object mdmsData = util.mDMSCall(requestInfo, tenantId);
 		if (vehicleRequest.getVehicle().getTenantId().split("\\.").length == 1) {
-			throw new CustomException(VehicleErrorConstants.INVALID_TENANT, " Vehicle cannot be created at StateLevel");
+			throw new CustomException(VehicleErrorConstants.INVALID_TENANT, " Application cannot be create at StateLevel");
 		}
-		validator.validateCreateOrUpdate(vehicleRequest,mdmsData,false);
+		validator.validateCreate(vehicleRequest,mdmsData);
         enrichmentService.enrichVehicleCreateRequest(vehicleRequest);
         repository.save(vehicleRequest);
         return vehicleRequest.getVehicle();
     }
 
-    
-    public Vehicle update(VehicleRequest vehicleRequest) {
-		
-    	RequestInfo requestInfo = vehicleRequest.getRequestInfo();
-		String tenantId = vehicleRequest.getVehicle().getTenantId().split("\\.")[0];
-		Object mdmsData = util.mDMSCall(requestInfo, tenantId);
-		if (vehicleRequest.getVehicle().getTenantId().split("\\.").length == 1) {
-			throw new CustomException(VehicleErrorConstants.INVALID_TENANT, " Vehicle cannot be updated at StateLevel");
-		}
-		validator.validateCreateOrUpdate(vehicleRequest,mdmsData,true);
-        enrichmentService.enrichVehicleUpdateRequest(vehicleRequest);
-        repository.update(vehicleRequest);
-        return vehicleRequest.getVehicle();
-    }
-    
 	public VehicleResponse search(@Valid VehicleSearchCriteria criteria, RequestInfo requestInfo) {
 		validator.validateSearch(requestInfo, criteria);
 		UserDetailResponse usersRespnse;
 		List<String> uuids = new ArrayList<String>();
 		
-		/*
-		 * if(criteria.tenantIdOnly() ) { throw new
-		 * CustomException(VehicleErrorConstants.INVALID_SEARCH,
-		 * " Atlest one parameter is mandatory!"); }
-		 */
+		if(criteria.tenantIdOnly() ) {
+			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, " Atlest one parameter is mandatory!");
+		}
 		
 		if( criteria.getMobileNumber() !=null) {
 			usersRespnse = userService.getOwner(criteria,requestInfo);

@@ -1,8 +1,9 @@
 package org.egov.fsm.service;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +20,6 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.fsm.config.FSMConfiguration;
 import org.egov.fsm.repository.FSMRepository;
-import org.egov.fsm.service.notification.NotificationService;
 import org.egov.fsm.util.FSMAuditUtil;
 import org.egov.fsm.util.FSMConstants;
 import org.egov.fsm.util.FSMErrorConstants;
@@ -34,7 +34,6 @@ import org.egov.fsm.web.model.FSMSearchCriteria;
 import org.egov.fsm.web.model.PeriodicApplicationRequest;
 import org.egov.fsm.web.model.Workflow;
 import org.egov.fsm.web.model.dso.Vendor;
-import org.egov.fsm.web.model.dso.VendorSearchCriteria;
 import org.egov.fsm.web.model.user.User;
 import org.egov.fsm.web.model.user.UserDetailResponse;
 import org.egov.fsm.web.model.vehicle.Vehicle;
@@ -43,7 +42,9 @@ import org.egov.fsm.workflow.ActionValidator;
 import org.egov.fsm.workflow.WorkflowIntegrator;
 import org.egov.fsm.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
+import org.javers.common.collections.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -106,9 +107,6 @@ public class FSMService {
 	@Autowired
 	private FSMRepository repository;
 
-	@Autowired
-	private NotificationService notificationService;
-	
 	public FSM create(FSMRequest fsmRequest) {
 		RequestInfo requestInfo = fsmRequest.getRequestInfo();
 //		String tenantId = fsmRequest.getFsm().getTenantId().split("\\.")[0];
@@ -121,9 +119,7 @@ public class FSMService {
 
 		wfIntegrator.callWorkFlow(fsmRequest);
 		repository.save(fsmRequest);
-		if (! FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(
-				fsmRequest.getFsm().getPaymentPreference()) && (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE)
-				|| requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.SYSTEM))) {
+		if (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.EMPLOYEE) || requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.SYSTEM)) {
 			calculationService.addCalculation(fsmRequest, FSMConstants.APPLICATION_FEE);
 		}
 
@@ -152,8 +148,6 @@ public class FSMService {
 			throw new CustomException(FSMErrorConstants.UPDATE_ERROR,
 					"Workflow action cannot be null." + String.format("{Workflow:%s}", fsmRequest.getWorkflow()));
 		}
-		
-		boolean isDsoRole = hasDsoOrEditorRole(fsmRequest);
 
 		List<String> ids = new ArrayList<String>();
 		ids.add(fsm.getId());
@@ -161,31 +155,19 @@ public class FSMService {
 		FSMResponse fsmResponse = repository.getFSMData(criteria, null);
 		List<FSM> fsms = fsmResponse.getFsm();
 
-		String businessServiceName=null;
-		if (FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(
-				fsmRequest.getFsm().getPaymentPreference())) 
-			businessServiceName=FSMConstants.FSM_POST_PAY_BusinessService;
-		else
-			businessServiceName=FSMConstants.FSM_BusinessService;
-		
 		BusinessService businessService = workflowService.getBusinessService(fsm, fsmRequest.getRequestInfo(),
-				businessServiceName, null);
+				FSMConstants.FSM_BusinessService, null);
 		actionValidator.validateUpdateRequest(fsmRequest, businessService);
-		
 		FSM oldFSM = fsms.get(0);
 
 		if (fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_REJECT)
 				|| fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_CANCEL)) {
 			handleRejectCancel(fsmRequest, oldFSM);
 		} else {
-			fsmValidator.validateUpdate(fsmRequest, fsms, mdmsData, isDsoRole);
+			fsmValidator.validateUpdate(fsmRequest, fsms, mdmsData);
 		}
 
-		//SAN-843: Payment demand should be generated only for Pay now payment preference on Submit Action
-		if (fsmRequest.getFsm().getPaymentPreference() != null
-				&& !(FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
-						.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference()))
-				&& fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SUBMIT)) {
+		if (fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SUBMIT)) {
 			handleApplicationSubmit(fsmRequest, oldFSM);
 		}
 
@@ -194,14 +176,9 @@ public class FSMService {
 			handleAssignDSO(fsmRequest);
 		}
 
-		if (fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_DSO_ACCEPT)
-				|| fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SCHEDULE)) {
+		if (fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_DSO_ACCEPT)) {
 			handleDSOAccept(fsmRequest, oldFSM);
 		}
-		/*
-		 * if (fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.
-		 * WF_ACTION_SCHEDULE)) { handleDSOAccept(fsmRequest,oldFSM); }
-		 */
 
 		if (fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_DSO_REJECT)) {
 			handleDSOReject(fsmRequest, oldFSM);
@@ -224,13 +201,12 @@ public class FSMService {
 		}
 
 		enrichmentService.enrichFSMUpdateRequest(fsmRequest, mdmsData, oldFSM);
-		wfIntegrator.callWorkFlow(fsmRequest);
-		enrichmentService.postStatusEnrichment(fsmRequest);
-		
-		notificationService.process(fsmRequest,oldFSM);
-		
-		repository.update(fsmRequest, workflowService.isStateUpdatable(fsm.getApplicationStatus(), businessService));
 
+		wfIntegrator.callWorkFlow(fsmRequest);
+
+		enrichmentService.postStatusEnrichment(fsmRequest);
+
+		repository.update(fsmRequest, workflowService.isStateUpdatable(fsm.getApplicationStatus(), businessService));
 		return fsmRequest.getFsm();
 	}
 
@@ -273,71 +249,49 @@ public class FSMService {
 		org.egov.common.contract.request.User dsoUser = fsmRequest.getRequestInfo().getUserInfo();
 		
 		String dsoOwnerId = null;
-	
-		Boolean isDso = util.isRoleAvailale(dsoUser, FSMConstants.ROLE_FSM_DSO,
-				fsmRequest.getRequestInfo().getUserInfo().getTenantId().split("\\.")[0]);
-		if (isDso) {
+		Boolean isDso = util.isRoleAvailale(dsoUser, FSMConstants.ROLE_FSM_DSO, fsmRequest.getRequestInfo().getUserInfo().getTenantId().split("\\.")[0]);
+		if(isDso) {
 			dsoOwnerId = dsoUser.getUuid();
-		} else if (!util.isRoleAvailale(dsoUser, FSMConstants.FSM_EDITOR_EMP,
-				fsmRequest.getRequestInfo().getUserInfo().getTenantId())) {
-			throw new CustomException(FSMErrorConstants.INVALID_VEHICLE_ASSIGN_ACTION,
-					" Only Employee with FSM_EDITOR role and/or assigned DSO can take this action. ");
+		}else if(!util.isRoleAvailale(dsoUser, FSMConstants.FSM_EDITOR_EMP, fsmRequest.getRequestInfo().getUserInfo().getTenantId())){
+			throw new CustomException(FSMErrorConstants.INVALID_VEHICLE_ASSIGN_ACTION," only Employee with FSM_EDITOR role and/or  assigned DSO can take this action. ");
 		}
-		VendorSearchCriteria vendorSearchCriteria=new VendorSearchCriteria();
-		if(null!=oldFSM.getDsoId()) {
-			vendorSearchCriteria.setIds(Arrays.asList(oldFSM.getDsoId()));
-		}
-		if(null!=dsoOwnerId) {
-			vendorSearchCriteria.setOwnerIds(Arrays.asList(dsoOwnerId));
-		}
-		vendorSearchCriteria.setTenantId(fsm.getTenantId());
-		Vendor vendor = dsoService.getVendor(vendorSearchCriteria,fsmRequest.getRequestInfo());
-		
+
+		Vendor vendor = dsoService.getVendor(oldFSM.getDsoId(),fsm.getTenantId(), dsoOwnerId,null,null, fsmRequest.getRequestInfo());
 		if (vendor == null) {
 			throw new CustomException(FSMErrorConstants.INVALID_DSO,
 					" DSO is invalid, cannot take an action, Application is not assigned to current logged in user !");
 		}
 		fsm.setDso(vendor);
+
 		if (!StringUtils.hasLength(fsm.getVehicleId())) {
 			throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE,
 					"Vehicle should be assigned to accept the Request !");
-		 } else {
+
+		} else {
 
 			Vehicle vehicle = vehicleService.validateVehicle(fsmRequest);
 			Map<String, Vehicle> vehilceIdMap = vendor.getVehicles().stream()
 					.collect(Collectors.toMap(Vehicle::getId, Function.identity()));
 			if (!CollectionUtils.isEmpty(vehilceIdMap) && vehilceIdMap.get(fsm.getVehicleId()) == null) {
 				throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE, " Vehicle Does not belong to DSO!");
-			} 
-			else {
+			} else {
 				vehicle = vehilceIdMap.get(fsm.getVehicleId());
 				fsm.setVehicle(vehicle);
+				if (!vehicle.getType().equalsIgnoreCase(fsm.getVehicleType())) {
+					throw new CustomException(FSMErrorConstants.INVALID_DSO_VEHICLE,
+							" Vehilce Type of FSM and vehilceType of the assigned vehicle does not match !");
+				}
 			}
-				
 		}
-		if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_DSO_ACCEPT)) {
-			ArrayList<String> uuids = new ArrayList<String>();
-			uuids.add(fsm.getDso().getOwner().getUuid());
-			fsmRequest.getWorkflow().setAssignes(uuids);
-		}
-		
-		
-		if(fsmRequest.getFsm().getPaymentPreference() != null
-				&& !(FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
-						.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference()))) {
-			vehicleTripService.scheduleVehicleTrip(fsmRequest);
-			
-		} else if (FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference())
-				&& fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SCHEDULE)) {
-			calculationService.addCalculation(fsmRequest, FSMConstants.APPLICATION_FEE);
-			vehicleTripService.scheduleVehicleTrip(fsmRequest);
-		}
-		
+		ArrayList uuids = new ArrayList<String>();
+		uuids.add(fsm.getDso().getOwner().getUuid());
+		fsmRequest.getWorkflow().setAssignes(uuids);
+		vehicleTripService.scheduleVehicleTrip(fsmRequest);
 	}
 
 	private void handleDSOReject(FSMRequest fsmRequest, FSM oldFSM) {
 		FSM fsm = fsmRequest.getFsm();
-		//org.egov.common.contract.request.User dsoUser = fsmRequest.getRequestInfo().getUserInfo();
+		org.egov.common.contract.request.User dsoUser = fsmRequest.getRequestInfo().getUserInfo();
 		fsm.setDsoId(null);
 		fsm.setVehicleId(null);
 		Workflow workflow = fsmRequest.getWorkflow();
@@ -351,7 +305,7 @@ public class FSMService {
 		FSM fsm = fsmRequest.getFsm();
 		Vehicle vehicle = vehicleService.getVehicle(fsm.getVehicleId(), fsm.getTenantId(), fsmRequest.getRequestInfo());
 		if (fsm.getWasteCollected() == null || fsm.getWasteCollected() <= 0 || (vehicle != null
-				&& vehicle.getTankCapacity() != null && fsm.getWasteCollected() > vehicle.getTankCapacity())) {
+				&& vehicle.getTankCapicity() != null && fsm.getWasteCollected() > vehicle.getTankCapicity())) {
 			throw new CustomException(FSMErrorConstants.INVALID_WASTER_COLLECTED,
 					" Wastecollected is invalid to complete the application !.");
 		}
@@ -383,10 +337,10 @@ public class FSMService {
 			throw new CustomException(FSMErrorConstants.COMPLETED_DATE_NOT_NULL, " Completed On Cannot be empty !");
 		}
 
-		ArrayList<String> assignes = new ArrayList<String>();
+		ArrayList assignes = new ArrayList<String>();
 		assignes.add(fsm.getAccountId());
 		FSMSearchCriteria fsmsearch = new FSMSearchCriteria();
-		ArrayList<String> accountIds = new ArrayList<String>();
+		ArrayList accountIds = new ArrayList<String>();
 		accountIds.add(fsm.getAccountId());
 		fsmsearch.setTenantId(fsm.getTenantId());
 		fsmsearch.setOwnerIds(accountIds);
@@ -396,22 +350,12 @@ public class FSMService {
 		userDetailResponse = userService.getUser(fsmsearch, null);
 		fsmRequest.getWorkflow()
 				.setAssignes(userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toList()));
-		
-		if(fsmRequest.getFsm().getPaymentPreference() != null
-				&& !(FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
-						.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference()))) {
-			vehicleTripService.vehicleTripReadyForDisposal(fsmRequest);
-			
-		}else if (fsmRequest.getFsm().getPaymentPreference() != null
-				&& (FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
-						.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference()))) {
-			vehicleTripService.updateVehicleTrip(fsmRequest);
-		}
-		
+		vehicleTripService.vehicleTripReadyForDisposal(fsmRequest);
+
 	}
 
 	private void handleFSMSubmitFeeback(FSMRequest fsmRequest, FSM oldFSM, Object mdmsData) {
-		//FSM fsm = fsmRequest.getFsm();
+		FSM fsm = fsmRequest.getFsm();
 		org.egov.common.contract.request.User citizen = fsmRequest.getRequestInfo().getUserInfo();
 		if (!citizen.getUuid().equalsIgnoreCase(fsmRequest.getRequestInfo().getUserInfo().getUuid())) {
 			throw new CustomException(FSMErrorConstants.INVALID_UPDATE,
@@ -438,6 +382,7 @@ public class FSMService {
 	}
 
 	private void handleRejectCancel(FSMRequest fsmRequest, FSM oldFSM) {
+		FSM fsm = fsmRequest.getFsm();
 		Workflow workflow = fsmRequest.getWorkflow();
 		if (!StringUtils.hasLength(workflow.getComments())) {
 			throw new CustomException(FSMErrorConstants.INVALID_COMMENT_CANCEL_REJECT,
@@ -449,8 +394,6 @@ public class FSMService {
 		FSM fsm = fsmRequest.getFsm();
 		// TODO based on the old application Status DSO or vehicle has to removed
 	}
-	
-	
 
 	/**
 	 * search the fsm applications based on the search criteria
@@ -472,13 +415,8 @@ public class FSMService {
 		if (requestInfo.getUserInfo().getType().equalsIgnoreCase(FSMConstants.CITIZEN)) {
 			List<Role> roles = requestInfo.getUserInfo().getRoles();
 			if (roles.stream().anyMatch(role -> Objects.equals(role.getCode(), FSMConstants.ROLE_FSM_DSO))) {
-				
-				VendorSearchCriteria vendorSearchCriteria=new VendorSearchCriteria();
-				vendorSearchCriteria = VendorSearchCriteria.builder()
-						.mobileNumber(requestInfo.getUserInfo().getMobileNumber())
-						.tenantId(criteria.getTenantId()).build();
-						
-				Vendor dso = dsoService.getVendor(vendorSearchCriteria,requestInfo);
+				Vendor dso = dsoService.getVendor(null, criteria.getTenantId(), null,
+						requestInfo.getUserInfo().getMobileNumber(), null, requestInfo);
 				if (dso != null && org.apache.commons.lang3.StringUtils.isNotEmpty(dso.getId())) {
 					dsoId = dso.getId();
 				}
@@ -513,13 +451,15 @@ public class FSMService {
 	}
 
 	/**
-	 * Handles the application submit, identify the tripAmount and call calculation
+	 * hanles the application submit, identify the tripAmount and call calculation
 	 * service.
 	 * 
 	 * @param fsmRequest
 	 * @param oldFSM
 	 */
 	public void handleApplicationSubmit(FSMRequest fsmRequest, FSM oldFSM) {
+
+		FSM fsm = fsmRequest.getFsm();
 
 		calculationService.addCalculation(fsmRequest, FSMConstants.APPLICATION_FEE);
 	}
@@ -593,10 +533,15 @@ public class FSMService {
 
 	public void scheduleperiodicapplications(RequestInfo requestInfo) {
 
+	
+
 			List<String> tenantIdList = fsmRepository.getTenants();
+
 			for (String tenantId : tenantIdList) {
+
 				Object result = fsmUtil.getMasterData(FSMConstants.PERIODIC_MASTER_NAME, tenantId, requestInfo);
-      			List<Map> periodicData=null;
+               
+				List<Map> periodicData=null;
 				
 				try {
                 	 periodicData = JsonPath.read(result, FSMConstants.PERIODIC_SERVICE_PATH);
@@ -633,12 +578,11 @@ public class FSMService {
 
 		for (String applicationNo : periodicApplicationRequest.getApplicationNoList()) {
 
-			List<String> applicationNoList = fsmRepository.getOldPeriodicApplications(applicationNo,
-					periodicApplicationRequest.getTenantId());
+			List<String> applicationNoList = fsmRepository.getOldPeriodicApplications(applicationNo,periodicApplicationRequest.getTenantId());
 
 			if (applicationNoList.size() == 0 || applicationNoList.get(0) == applicationNo) {
-				String newApplicationNo = createPeriodicapplication(applicationNo,
-						periodicApplicationRequest.getTenantId(), periodicApplicationRequest.getRequestInfo());
+				String newApplicationNo = createPeriodicapplication(applicationNo,periodicApplicationRequest.getTenantId(),
+						periodicApplicationRequest.getRequestInfo());
 				applicationList.add(newApplicationNo);
 
 			}
@@ -651,6 +595,7 @@ public class FSMService {
 	}
 
 	private String createPeriodicapplication(String applicationNo,String tenantId, RequestInfo requestInfo) {
+		// TODO Auto-generated method stub
 		FSMSearchCriteria fsmSearchCreCriteria = new FSMSearchCriteria();
 		List<String> applicationNoList = new ArrayList<String>();
 		applicationNoList.add(applicationNo);
@@ -671,22 +616,6 @@ public class FSMService {
 		FSM fsmData = create(fsmRequest);
 		return fsmData.getApplicationNo();
 
-	}
-	
-	/**
-	 * Check if user has DSO role or not
-	 * @param fsmRequest
-	 * @return
-	 */
-	private boolean hasDsoOrEditorRole(FSMRequest fsmRequest) {
-		org.egov.common.contract.request.User dsoUser = fsmRequest.getRequestInfo().getUserInfo();
-		boolean isDsoOrEditorAccess = util.isRoleAvailale(dsoUser, FSMConstants.ROLE_FSM_DSO,
-				fsmRequest.getRequestInfo().getUserInfo().getTenantId().split("\\.")[0]);
-		if(!isDsoOrEditorAccess) {
-			isDsoOrEditorAccess = util.isRoleAvailale(dsoUser, FSMConstants.FSM_EDITOR_EMP,
-					fsmRequest.getRequestInfo().getUserInfo().getTenantId());
-		}
-		return isDsoOrEditorAccess;
 	}
 
 }

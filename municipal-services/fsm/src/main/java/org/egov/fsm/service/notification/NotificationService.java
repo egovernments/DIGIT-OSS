@@ -1,6 +1,7 @@
 package org.egov.fsm.service.notification;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,11 +14,11 @@ import org.egov.fsm.config.FSMConfiguration;
 import org.egov.fsm.repository.ServiceRequestRepository;
 import org.egov.fsm.service.UserService;
 import org.egov.fsm.util.FSMConstants;
-import org.egov.fsm.util.FSMUtil;
 import org.egov.fsm.util.NotificationUtil;
 import org.egov.fsm.web.model.FSM;
 import org.egov.fsm.web.model.FSMRequest;
 import org.egov.fsm.web.model.FSMSearchCriteria;
+import org.egov.fsm.web.model.notification.ActionItem;
 import org.egov.fsm.web.model.notification.Event;
 import org.egov.fsm.web.model.notification.EventRequest;
 import org.egov.fsm.web.model.notification.Recepient;
@@ -48,9 +49,6 @@ public class NotificationService {
 
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private FSMUtil fsmUtil;
 
 
 	@Autowired
@@ -95,11 +93,17 @@ public class NotificationService {
 	public EventRequest getEvents(FSMRequest fsmRequest) {
 
 		List<Event> events = new ArrayList<>();
+		String tenantId = fsmRequest.getFsm().getTenantId();
+		String localizationMessages = util.getLocalizationMessages(tenantId, fsmRequest.getRequestInfo()); // --need
+																											// localization
+																											// service
+																											// changes.
+		String message = util.getEventsCustomizedMsg(fsmRequest.getRequestInfo(), fsmRequest.getFsm(),
+				localizationMessages); // --need localization service changes.
 		FSM fsmApplication = fsmRequest.getFsm();
-		List<SMSRequest> smsRequests = new LinkedList<>();
+		Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
 
-		enrichSMSRequest(fsmRequest, smsRequests);
-
+		List<SMSRequest> smsRequests = util.createSMSRequest(message, mobileNumberToOwner);
 		Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest::getMobileNumber).collect(Collectors.toSet());
 		Map<String, String> mapOfPhnoAndUUIDs = fetchUserUUIDs(mobileNumbers, fsmRequest.getRequestInfo(),
 				fsmRequest.getFsm().getTenantId());
@@ -114,8 +118,21 @@ public class NotificationService {
 			List<String> toUsers = new ArrayList<>();
 			toUsers.add(mapOfPhnoAndUUIDs.get(mobile));
 			Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
-//			List<String> payTriggerList = Arrays.asList(config.getPayTriggers().split("[,]"));
+			List<String> payTriggerList = Arrays.asList(config.getPayTriggers().split("[,]"));
 			Action action = null;
+			if (payTriggerList.contains(fsmApplication.getStatus())) {
+				List<ActionItem> items = new ArrayList<>();
+				String busineService = null;
+				// TODO define the value of business service 
+			
+				String actionLink = config.getPayLink().replace("$mobile", mobile)
+						.replace("$applicationNo", fsmApplication.getApplicationNo())
+						.replace("$tenantId", fsmApplication.getTenantId()).replace("$businessService", busineService);
+				actionLink = config.getUiAppHost() + actionLink;
+				ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
+				items.add(item);
+//				action = Action.builder().actionUrls(items).build();
+			}
 
 			events.add(Event.builder().tenantId(fsmApplication.getTenantId()).description(mobileNumberToMsg.get(mobile))
 					.eventType(FSMConstants.USREVENTS_EVENT_TYPE).name(FSMConstants.USREVENTS_EVENT_NAME)
@@ -136,7 +153,7 @@ public class NotificationService {
 	/**
 	 * Fetches UUIDs of CITIZENs based on the phone number.
 	 * 
- 	 * @param mobileNumbers
+	 * @param mobileNumbers
 	 * @param requestInfo
 	 * @param tenantId
 	 * @return
@@ -183,56 +200,18 @@ public class NotificationService {
 		String localizationMessages = util.getLocalizationMessages(tenantId, fsmRequest.getRequestInfo());
 		String messageCode =  null;
 		
-		if(!FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(fsm.getPaymentPreference()) &&
-				fsm.getApplicationStatus().equalsIgnoreCase(FSMConstants.WF_STATUS_PENDING_APPL_FEE_PAYMENT) && 
+		if(fsm.getApplicationStatus().equalsIgnoreCase(FSMConstants.WF_STATUS_PENDING_APPL_FEE_PAYMENT) && 
 				fsm.getSource() != null && fsm.getSource().equalsIgnoreCase(FSMConstants.APPLICATION_CHANNEL_TELEPONE)) {
-			String appCreatedMessage=FSMConstants.SMS_NOTIFICATION_PREFIX +FSMConstants.WF_STATUS_CREATED+"_"+FSMConstants.WF_ACTION_CREATE;
-			String message = util.getCustomizedMsg(fsmRequest, localizationMessages,appCreatedMessage);
+			messageCode=FSMConstants.SMS_NOTIFICATION_PREFIX +FSMConstants.WF_STATUS_CREATED+"_"+FSMConstants.WF_ACTION_CREATE;
+			String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
 			Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
+			
 			smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
 		}
-		
-		/*
-		 * if(fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.
-		 * WF_ACTION_COMPLETE)) { String message =
-		 * "Dear citizen, This message is to advise you that your payment was successfully received, and application has been completed."
-		 * ; Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
-		 * smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
-		 * log.info("sms is sent :::  "+message); }
-		 */
-		
-		String localizationMessageKey = FSMConstants.SMS_NOTIFICATION_PREFIX + fsm.getApplicationStatus()
-				+ (fsmRequest.getWorkflow() == null ? "" : "_" + fsmRequest.getWorkflow().getAction());
-		
-		if(FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(fsm.getPaymentPreference())) {
-			
-			if(FSMConstants.FSM_SMS_DSO_INPROGRESS_DSO_ACCEPT.equalsIgnoreCase(localizationMessageKey)) {
-				messageCode=FSMConstants.SMS_NOTIFICATION_POST_PAY_PREFIX + fsm.getApplicationStatus()
-				+ (fsmRequest.getWorkflow() == null ? "" : "_" + fsmRequest.getWorkflow().getAction());
-			}
-			if(FSMConstants.FSM_SMS_CREATED_CREATE.equalsIgnoreCase(localizationMessageKey)) {
-				messageCode=FSMConstants.SMS_NOTIFICATION_POST_PAY_PREFIX + fsm.getApplicationStatus()
-				+ (fsmRequest.getWorkflow() == null ? "" : "_" + fsmRequest.getWorkflow().getAction());
-			}
-			
-						
-		} 
-		
-		log.info("Printing the value of before final messageCode:: "+ messageCode);
-		if(null==messageCode) {
-			messageCode=localizationMessageKey;
-		}
-		log.info("Printing the value of final messageCode:: "+ messageCode);
-		
-		Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
-		log.info("localizationMessageKey ::::  {} "+localizationMessageKey);
-		log.info("messageCode ::::  {} "+messageCode);
-		log.info("mobileNumberToOwner ::: {} "+(null != mobileNumberToOwner ? mobileNumberToOwner.toString() : "null"));
-		
+		messageCode = FSMConstants.SMS_NOTIFICATION_PREFIX +fsm.getApplicationStatus() +(fsmRequest.getWorkflow() ==null ?  "":"_" + fsmRequest.getWorkflow().getAction());
+
 		String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
-		
-		log.info("localizationMessages ::::: {} "+message);
-		
+		Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
 		HashMap<String,String> fsmAddtlDtls = (HashMap<String,String> )fsmRequest.getFsm().getAdditionalDetails();
 		if(fsmAddtlDtls !=null && fsmAddtlDtls.get("payerMobileNumber") !=null  && fsmAddtlDtls.get("payerName") != null && mobileNumberToOwner.get(fsmAddtlDtls.get("payerMobileNumber")) == null) {
 			mobileNumberToOwner.put(fsmAddtlDtls.get("payerMobileNumber"),  fsmAddtlDtls.get("payerName"));
@@ -258,81 +237,12 @@ public class NotificationService {
 		fsSearchCriteria.setTenantId(tenantId);
 		UserDetailResponse userDetailResponse = userService.getUser(fsSearchCriteria, fsmRequest.getRequestInfo());
 		
+
+		
 		mobileNumberToOwner.put(userDetailResponse.getUser().get(0).getMobileNumber(),
 				userDetailResponse.getUser().get(0).getName());
 		
 
 		return mobileNumberToOwner;
-	}
-	
-	/**
-	 * Creates and send the SMS if vehicle capacity has been updated
-	 * @param request
-	 */
-	public void process(FSMRequest fsmRequest,FSM oldFSM) {
-		FSM newFSM=fsmRequest.getFsm();
-		log.info("Old Vehicle Capacity:: " + oldFSM.getVehicleCapacity());
-		log.info("New Vehicle Capacity:: " + newFSM.getVehicleCapacity());
-		log.info("Old No of trips :: " + oldFSM.getNoOfTrips());
-		log.info("New No of trips :: " + newFSM.getNoOfTrips());
-		
-		if(null!=oldFSM.getVehicleCapacity() && null!=newFSM.getVehicleCapacity() 
-				&& ( (!newFSM.getVehicleCapacity().equalsIgnoreCase(oldFSM.getVehicleCapacity())) ||
-						(!newFSM.getNoOfTrips().equals(oldFSM.getNoOfTrips()))
-					)
-		  ) {
-			
-			log.info("Vehicle Capacity or no of trips is updated sending SMS here::");
-			
-			String tenantId = fsmRequest.getFsm().getTenantId();
-			String localizationMessages = util.getLocalizationMessages(tenantId, fsmRequest.getRequestInfo());
-			String messageCode =  FSMConstants.FSM_SMS_CITIZEN_NO_OF_TRIPS_VEHICLE_CAPACITY_CHANGE;
-			
-			List<SMSRequest> smsRequests = new LinkedList<>();
-			String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
-			log.info("SMS message to be sent:: "+ message);
-			Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
-			smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
-			
-			List<Event> events = new ArrayList<>();
-			Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest::getMobileNumber).collect(Collectors.toSet());
-			Map<String, String> mapOfPhnoAndUUIDs = fetchUserUUIDs(mobileNumbers, fsmRequest.getRequestInfo(),
-					fsmRequest.getFsm().getTenantId());
-			Map<String, String> mobileNumberToMsg = smsRequests.stream()
-					.collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
-			
-			for (String mobile : mobileNumbers) {
-				
-				List<String> toUsers = new ArrayList<>();
-				toUsers.add(mapOfPhnoAndUUIDs.get(mobile));
-				Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
-				Action action = null;
-
-				events.add(Event.builder().tenantId(fsmRequest.getFsm().getTenantId()).description(mobileNumberToMsg.get(mobile))
-						.eventType(FSMConstants.USREVENTS_EVENT_TYPE).name(FSMConstants.USREVENTS_EVENT_NAME)
-						.postedBy(FSMConstants.USREVENTS_EVENT_POSTEDBY)
-						.source(Source.WEBAPP)
-						.recepient(recepient)
-						.eventDetails(null).actions(action).build());
-			}
-
-			
-			/* Commenting out the SMS code as only notification is required for SAN-1024
-			 * if (null != config.getIsSMSEnabled()) { if (config.getIsSMSEnabled()) { if
-			 * (!CollectionUtils.isEmpty(smsRequests)) util.sendSMS(smsRequests,
-			 * config.getIsSMSEnabled()); } }
-			 */
-			
-			if (null != config.getIsUserEventsNotificationEnabled()) {
-				if (config.getIsUserEventsNotificationEnabled()) {
-					EventRequest eventRequest = EventRequest.builder().requestInfo(fsmRequest.getRequestInfo()).events(events).build();
-					if (null != eventRequest)
-						util.sendEventNotification(eventRequest);
-				}
-			}
-
-		}else {
-			log.info("Vehicle Capacity or no of trips is is not updated not sending SMS here::");
-		}
 	}
 }

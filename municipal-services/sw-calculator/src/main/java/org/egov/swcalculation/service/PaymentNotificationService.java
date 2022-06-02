@@ -16,6 +16,7 @@ import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.web.models.users.User;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -30,6 +31,7 @@ import net.minidev.json.JSONArray;
 
 import static org.egov.swcalculation.constants.SWCalculationConstant.*;
 import static org.springframework.util.StringUtils.capitalize;
+import static org.egov.swcalculation.constants.SWCalculationConstant.TENANTID_MDC_STRING;
 
 @Slf4j
 @Component
@@ -75,8 +77,13 @@ public class PaymentNotificationService {
 			List<SewerageConnection> sewerageConnectionList = calculatorUtils.getSewerageConnection(requestInfo,
 					mappedRecord.get(consumerCode), mappedRecord.get(tenantId));
 			int size = sewerageConnectionList.size();
-			SewerageConnection sewerageConnection = sewerageConnectionList.get(size - 1);
 
+			SewerageConnection sewerageConnection = sewerageConnectionList.get(size-1);
+			String tenantId = sewerageConnection.getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
+			
 			SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
 					.sewerageConnection(sewerageConnection).requestInfo(requestInfo).build();
 			Property property = sWCalculationUtil.getProperty(sewerageConnectionRequest);
@@ -368,10 +375,8 @@ public class PaymentNotificationService {
 		if (message.contains("{ULB}"))
 			message = message.replace("{ULB}", capitalize(user.getTenantId().split("\\.")[1]));
 		if (message.contains("{billing cycle}"))
-		{
-			String billingCycle = calculatorUtils.getBillingCycle(masterMap);
-			message = message.replace("{billing cycle}",billingCycle);
-		}
+		{String billingCycle = (String) masterMap.get(SWCalculationConstant.Billing_Cycle_String);
+			message = message.replace("{billing cycle}",billingCycle);}
 
 		return message;
 

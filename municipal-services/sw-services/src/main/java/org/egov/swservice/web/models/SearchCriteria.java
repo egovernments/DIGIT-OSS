@@ -38,16 +38,16 @@ public class SearchCriteria {
 	private Set<String> ids;
 
 	@JsonProperty("applicationNumber")
-	private Set<String> applicationNumber;
-	
+	private String applicationNumber;
+
 	@JsonProperty("connectionNumber")
-	private Set<String> connectionNumber;
+	private String connectionNumber;
 
 	@JsonProperty("oldConnectionNumber")
 	private String oldConnectionNumber;
-		
+	
 	@JsonProperty("applicationStatus")
-	private Set<String> applicationStatus;
+	private String applicationStatus;
 
 	@JsonProperty("mobileNumber")
 	private String mobileNumber;
@@ -86,35 +86,20 @@ public class SearchCriteria {
 	@JsonIgnore
 	private List<String> ownerIds;
 
-	@JsonProperty("doorNo")
-	private String doorNo;
-	
-	@JsonProperty("ownerName")
-	private String ownerName;
-	
-	@JsonProperty("assignee")
-	private String assignee;
-
-	@JsonIgnore
-	private Boolean isCountCall = false;
-
 	public boolean isEmpty() {
 		return (StringUtils.isEmpty(this.tenantId) && StringUtils.isEmpty(this.mobileNumber)
 				&& StringUtils.isEmpty(this.propertyId) && CollectionUtils.isEmpty(this.ids)
 				&& StringUtils.isEmpty(this.oldConnectionNumber) && StringUtils.isEmpty(this.connectionNumber)
 				&& StringUtils.isEmpty(this.status) && StringUtils.isEmpty(this.applicationNumber)
 				&& StringUtils.isEmpty(this.applicationStatus) && StringUtils.isEmpty(this.fromDate)
-				&& StringUtils.isEmpty(this.toDate) && StringUtils.isEmpty(this.applicationType)
-				&& StringUtils.isEmpty(this.doorNo) && StringUtils.isEmpty(this.ownerName))
-				&& StringUtils.isEmpty(this.assignee);
+				&& StringUtils.isEmpty(this.toDate) && StringUtils.isEmpty(this.applicationType));
 	}
 
 	public boolean tenantIdOnly() {
 		return (this.tenantId != null && this.status == null && this.ids == null && this.applicationNumber == null
 				&& this.connectionNumber == null && this.oldConnectionNumber == null && this.mobileNumber == null
 				&& this.fromDate == null && this.toDate == null && this.ownerIds == null && this.propertyId == null
-				&& this.applicationType == null && this.doorNo == null && this.ownerName == null
-				&& this.assignee == null);
+				&& this.applicationType == null);
 	}
 
 }

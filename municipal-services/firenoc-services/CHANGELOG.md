@@ -3,17 +3,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.3.2 - 2022-01-13
-
-- Updated to log4j2 version 2.17.1
-
 ## 1.3.2 - 2021-12-15
-
 - Updated search query for citizen search
 - Added validation for system payment
 
 ## 1.3.1 - 2021-07-26
-
 - Added missing state in workflow config of firenoc service
 - Added OTHERS in gender validation 
 

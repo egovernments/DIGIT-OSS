@@ -71,17 +71,26 @@ public class UserService {
 		RequestInfo requestInfo = vendorRequest.getRequestInfo();
 		User owner = vehicle.getOwner();
 
+		
 		UserDetailResponse userDetailResponse = null;
+		
+
 		if (owner.getMobileNumber() != null) {
+
 			userDetailResponse = userExists(owner, requestInfo);
 			if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+
 				//TODO once role is introduced for vehicle owner then verify for the role from the list of users
 				owner = userDetailResponse.getUser().get(0);
+				
+				
+
 			} else {
 				// User with mobile number ifself not found then create new user and consider
 				// the new user as applicant.
 				owner = createVehicleOwner(owner, vendorRequest.getRequestInfo());
 			}
+
 			vehicle.setOwner(owner);
 
 		} else {
@@ -420,18 +429,4 @@ public class UserService {
 		
 		return Boolean.TRUE;
 	}
-	
-	public UserDetailResponse  searchUsersByCriteria(UserSearchRequest userSearchRequest) {
-		
-		StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
-		UserDetailResponse ownerDetailResponse = ownerCall(userSearchRequest, uri);
-		
-		if (ownerDetailResponse != null && ownerDetailResponse.getUser() != null
-				&& ownerDetailResponse.getUser().size() > 0) {
-			return ownerDetailResponse;
-		}else {
-			return null;
-		}
-	}
-
 }

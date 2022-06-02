@@ -36,9 +36,6 @@ public class VendorValidator {
 	private UserService ownerService;
 
 	@Autowired
-	private MDMSValidator mdmsValidator;
-
-	@Autowired
 	private BoundaryService boundaryService;
 	
 	@Autowired
@@ -108,24 +105,27 @@ public class VendorValidator {
 	 * 
 	 * @param vendorRequest
 	 */
-	public void validateCreateOrUpdateRequest(VendorRequest vendorRequest, Object mdmsData,boolean isCreate) {
+	public void validateCreate(VendorRequest vendorRequest) {
 
-		//RequestInfo requestInfo = vendorRequest.getRequestInfo();
-		//Vendor vendor = vendorRequest.getVendor();
-		mdmsValidator.validateMdmsData(mdmsData);
-		mdmsValidator.validateAgencyType(vendorRequest);
-		mdmsValidator.validatePaymentPreference(vendorRequest);
-		boundaryService.getAreaType(vendorRequest, config.getHierarchyTypeCode());
+		RequestInfo requestInfo = vendorRequest.getRequestInfo();
+		Vendor vendor = vendorRequest.getVendor();
 		
+		boundaryService.getAreaType(vendorRequest, config.getHierarchyTypeCode());
 		vehicleService.manageVehicle(vendorRequest);
-		if(isCreate) {
-			ownerService.manageOwner(vendorRequest);
-		}
+		ownerService.manageOwner(vendorRequest);
 		ownerService.manageDrivers(vendorRequest);
 		
 		
 
 	}
 	
+	public void manageVehicles(VendorRequest vendorRequest) {
+		RequestInfo requestInfo = vendorRequest.getRequestInfo();
+		Vendor vendor = vendorRequest.getVendor();
+		List<Vehicle> vehicles = vendor.getVehicles();
 	
+		vehicles.forEach(vehicle->{
+			
+		});
+	}
 }

@@ -6,6 +6,7 @@ import org.egov.tl.service.TradeLicenseService;
 import org.egov.tl.service.notification.TLNotificationService;
 import org.egov.tl.util.TradeUtil;
 import org.egov.tl.web.models.TradeLicenseRequest;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -13,6 +14,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import java.util.HashMap;
 
+import static org.egov.tl.util.TLConstants.TENANTID_MDC_STRING;
 import static org.egov.tl.util.TLConstants.businessService_BPA;
 import static org.egov.tl.util.TLConstants.businessService_TL;
 
@@ -31,7 +33,7 @@ public class TradeLicenseConsumer {
         this.tradeLicenseService = tradeLicenseService;
     }
 
-    @KafkaListener(topics = {"${persister.update.tradelicense.topic}","${persister.save.tradelicense.topic}","${persister.update.tradelicense.workflow.topic}"})
+    @KafkaListener(topicPattern = "${tl.kafka.notification.topic.pattern}")
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         ObjectMapper mapper = new ObjectMapper();
         TradeLicenseRequest tradeLicenseRequest = new TradeLicenseRequest();
@@ -42,6 +44,12 @@ public class TradeLicenseConsumer {
         }
         if (!tradeLicenseRequest.getLicenses().isEmpty()) {
             String businessService = tradeLicenseRequest.getLicenses().get(0).getBusinessService();
+
+            String tenantId = tradeLicenseRequest.getLicenses().get(0).getTenantId();
+
+            // Adding in MDC so that tracer can add it in header
+            MDC.put(TENANTID_MDC_STRING, tenantId);
+
             if (businessService == null)
                 businessService = businessService_TL;
             switch (businessService) {

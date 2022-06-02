@@ -53,69 +53,35 @@ public class VehicleLogEnrichmentService {
 
 
 	public void setInsertData(VehicleTripRequest request) {
-		
-		request.getVehicleTrip().forEach(vehicleTrip->{
-			vehicleTrip.setId(UUID.randomUUID().toString());
-			vehicleTrip.setStatus(VehicleTrip.StatusEnum.ACTIVE);
-			vehicleTrip.setStatus(VehicleTrip.StatusEnum.ACTIVE);
-			AuditDetails auditDetails = vehicleLogUtil.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid(),
-					true,null);
-			vehicleTrip.setAuditDetails(auditDetails);
-			vehicleTrip.getTripDetails().forEach(tripDetail->{
-				tripDetail.setAuditDetails(auditDetails);
-				tripDetail.setId(UUID.randomUUID().toString());
-				tripDetail.setTrip_id(vehicleTrip.getId());
-				tripDetail.setStatus(VehicleTripDetail.StatusEnum.ACTIVE);
-			});
-			if(vehicleTrip.getTripOwner() != null) {
-				vehicleTrip.setTripOwnerId(vehicleTrip.getTripOwner().getUuid());
-			}else {
-				addTripOwner(vehicleTrip, request.getRequestInfo());
-			}
-			if(vehicleTrip.getDriver() != null) {
-				vehicleTrip.setDriverId(vehicleTrip.getDriver().getUuid());
-			}else {
-				addTripDriverr(vehicleTrip,  request.getRequestInfo());
-			}
-			if(vehicleTrip.getVehicle() != null ) {
-
-				vehicleTrip.setVehicleId(vehicleTrip.getVehicle().getId());
-			}else {
-				addVehicle(vehicleTrip);
-			}
-
-		});
+		VehicleTrip vehicleTrip =request.getVehicleTrip();
+		vehicleTrip.setId(UUID.randomUUID().toString());
+		vehicleTrip.setStatus(VehicleTrip.StatusEnum.ACTIVE);
 		setIdgenIds(request);
-		
-	//		VehicleTrip vehicleTrip =request.getVehicleTrip();
-	//		vehicleTrip.setId(UUID.randomUUID().toString());
-	//		vehicleTrip.setStatus(VehicleTrip.StatusEnum.ACTIVE);
-	//		setIdgenIds(request);
-	//		vehicleTrip.setStatus(VehicleTrip.StatusEnum.ACTIVE);
-	//		AuditDetails auditDetails = vehicleLogUtil.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid(),
-	//				true,null);
-	//		vehicleTrip.setAuditDetails(auditDetails);
-	//		vehicleTrip.getTripDetails().forEach(tripDetail->{
-	//			tripDetail.setAuditDetails(auditDetails);
-	//			tripDetail.setId(UUID.randomUUID().toString());
-	//			tripDetail.setStatus(VehicleTripDetail.StatusEnum.ACTIVE);
-	//		});
-	//		if(vehicleTrip.getTripOwner() != null) {
-	//			vehicleTrip.setTripOwnerId(vehicleTrip.getTripOwner().getUuid());
-	//		}else {
-	//			addTripOwner(vehicleTrip, request.getRequestInfo());
-	//		}
-	//		if(vehicleTrip.getDriver() != null) {
-	//			vehicleTrip.setDriverId(vehicleTrip.getDriver().getUuid());
-	//		}else {
-	//			addTripDriverr(vehicleTrip,  request.getRequestInfo());
-	//		}
-	//		if(vehicleTrip.getVehicle() != null ) {
-	//
-	//			vehicleTrip.setVehicleId(vehicleTrip.getVehicle().getId());
-	//		}else {
-	//			addVehicle(vehicleTrip);
-	//		}
+		vehicleTrip.setStatus(VehicleTrip.StatusEnum.ACTIVE);
+		AuditDetails auditDetails = vehicleLogUtil.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid(),
+				true,null);
+		vehicleTrip.setAuditDetails(auditDetails);
+		vehicleTrip.getTripDetails().forEach(tripDetail->{
+			tripDetail.setAuditDetails(auditDetails);
+			tripDetail.setId(UUID.randomUUID().toString());
+			tripDetail.setStatus(VehicleTripDetail.StatusEnum.ACTIVE);
+		});
+		if(vehicleTrip.getTripOwner() != null) {
+			vehicleTrip.setTripOwnerId(vehicleTrip.getTripOwner().getUuid());
+		}else {
+			addTripOwner(vehicleTrip, request.getRequestInfo());
+		}
+		if(vehicleTrip.getDriver() != null) {
+			vehicleTrip.setDriverId(vehicleTrip.getDriver().getUuid());
+		}else {
+			addTripDriverr(vehicleTrip,  request.getRequestInfo());
+		}
+		if(vehicleTrip.getVehicle() != null ) {
+
+			vehicleTrip.setVehicleId(vehicleTrip.getVehicle().getId());
+		}else {
+			addVehicle(vehicleTrip);
+		}
 		
 		if(request.getWorkflow() == null) {
 			request.setWorkflow(Workflow.builder().action(VehicleTripConstants.ACTION_SCHEDULE).build());
@@ -123,22 +89,16 @@ public class VehicleLogEnrichmentService {
 	}
 
 	public void setUpdateData(VehicleTripRequest request) {
+//		request.getVehicleTrip().setApplicationStatus(VehicleTripConstants.VEHICLE_LOG_APPLICATION_UPDATED_STATUS);
+		AuditDetails auditDetails = vehicleLogUtil.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid(),
+				false,request.getVehicleTrip().getAuditDetails());
+		request.getVehicleTrip().setAuditDetails(auditDetails);
 		
-		request.getVehicleTrip().forEach(vehicleTrip->{
-			
-			AuditDetails auditDetails = vehicleLogUtil.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid(),
-					false,vehicleTrip.getAuditDetails());
-			vehicleTrip.setAuditDetails(auditDetails);
-			
-			vehicleTrip.getTripDetails().forEach(tripDetail->{
-			
-				 tripDetail.setAuditDetails(vehicleLogUtil.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid(),
-							false,tripDetail.getAuditDetails()));
-			});
-			
-		});	
+		request.getVehicleTrip().getTripDetails().forEach(tripDetail->{
 		
-		
+			 tripDetail.setAuditDetails(vehicleLogUtil.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid(),
+						false,tripDetail.getAuditDetails()));
+		});
 	}
 
 	public void enrichSearch(List<VehicleTrip> vehicleLogList, RequestInfo requestInfo) {
@@ -182,16 +142,19 @@ public class VehicleLogEnrichmentService {
 	 */
 	private void setIdgenIds(VehicleTripRequest request) {
 		RequestInfo requestInfo = request.getRequestInfo();
-		String tenantId = request.getVehicleTrip().get(0).getTenantId();
-		
-		request.getVehicleTrip().forEach(vehicleTrip->{
+		String tenantId = request.getVehicleTrip().getTenantId();
+		VehicleTrip vehicleLog = request.getVehicleTrip();
+
 		List<String> applicationNumbers = getIdList(requestInfo, tenantId, config.getApplicationNoIdgenName(),
 				config.getApplicationNoIdgenFormat(), 1);
-			ListIterator<String> itr = applicationNumbers.listIterator();
-			String applicationNo=itr.next();
-			vehicleTrip.setApplicationNo(applicationNo);
-		});;
-		
+		ListIterator<String> itr = applicationNumbers.listIterator();
+
+		Map<String, String> errorMap = new HashMap<>();
+
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+
+		vehicleLog.setApplicationNo(itr.next());
 	}
 
 	/**

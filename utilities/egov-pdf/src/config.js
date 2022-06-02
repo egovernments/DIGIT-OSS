@@ -10,15 +10,6 @@ if (!HOST) {
 
 module.exports = {
   auth_token: process.env.AUTH_TOKEN,
-  KAFKA_BROKER_HOST: process.env.KAFKA_BROKER_HOST || "kafka-v2.kafka-cluster:9092",
-  KAFKA_RECEIVE_CREATE_JOB_TOPIC: process.env.KAFKA_RECEIVE_CREATE_JOB_TOPIC || "PDF_GEN_RECEIVE",
-  KAFKA_BULK_PDF_TOPIC: process.env.KAFKA_BULK_PDF_TOPIC || "BULK_PDF_GEN",
-  PDF_BATCH_SIZE: process.env.PDF_BATCH_SIZE || 40,
-  DB_USER: process.env.DB_USER || "postgres",
-  DB_PASSWORD: process.env.DB_PASSWORD || "postgres",
-  DB_HOST: process.env.DB_HOST || "localhost",
-  DB_NAME: process.env.DB_NAME || "postgres",
-  DB_PORT: process.env.DB_PORT || 5432,
   pdf: {
     epass_pdf_template: process.env.EPASS_TEMPLATE || "tlcertificate",
     tlcertificate_pdf_template: process.env.TL_CERTIFICATE || "tlcertificate",
@@ -44,11 +35,10 @@ module.exports = {
     process.env.WNS_ONE_TIME_RECEIPT || "ws-onetime-receipt",
     wns_bill:
     process.env.WNS_BILL || "ws-bill",
-    birth_certificate:
-            process.env.BIRTH_CERTIFICATE || "birth-certificate",
-    death_certificate:
-        process.env.DEATH_CERTIFICATE || "death-certificate"
-        
+    STATE_LEVEL_TENANTID_LENGTH: 
+    process.env.STATE_LEVEL_TENANTID_LENGTH || 2,
+    IS_ENVVIRONMENT_CENTRAL_INSTANCE: 
+    process.env.IS_ENVVIRONMENT_CENTRAL_INSTANCE || true,
   },
   app: {
     port: parseInt(process.env.APP_PORT) || 8080,
@@ -67,7 +57,9 @@ module.exports = {
     workflow: process.env.EGOV_WORKFLOW_HOST || HOST,
     challan: process.env.EGOV_ECHALLAN_HOST || 'http://echallan-services.egov:8080/',
     mcollectBilling: process.env.EGOV_BILLING_HOST || 'http://billing-service.egov:8080/',
-    wns: process.env.EGOV_WNS_HOST || HOST
+    waterHost: process.env.EGOV_WATER_HOST || HOST,
+    sewerageHost: process.env.EGOV_SEWERAGE_HOST || HOST
+
   },
   paths: {
     pdf_create: "/pdf-service/v1/_createnosave",

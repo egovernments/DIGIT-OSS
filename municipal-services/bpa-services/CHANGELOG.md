@@ -1,10 +1,6 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.1.6
-
-- When demand is not applicable then skip the payment stage
-
 ## 1.1.5
 
 - Fixed the scrutiny report is not downloaded on permit order download

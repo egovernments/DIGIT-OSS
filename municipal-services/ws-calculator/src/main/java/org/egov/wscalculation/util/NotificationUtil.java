@@ -1,14 +1,25 @@
 package org.egov.wscalculation.util;
 
+import static com.jayway.jsonpath.Criteria.where;
+import static com.jayway.jsonpath.Filter.filter;
+import static org.egov.wscalculation.constants.WSCalculationConstant.ACTION;
+import static org.egov.wscalculation.constants.WSCalculationConstant.CHANNEL;
+import static org.egov.wscalculation.constants.WSCalculationConstant.CHANNEL_LIST;
+import static org.egov.wscalculation.constants.WSCalculationConstant.DEMAND_FAILURE_MESSAGE_EMAIL;
+import static org.egov.wscalculation.constants.WSCalculationConstant.DEMAND_SUCCESS_MESSAGE_EMAIL;
+import static org.egov.wscalculation.constants.WSCalculationConstant.MODULECONSTANT;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.Filter;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
@@ -17,23 +28,25 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.wscalculation.config.WSCalculationConfiguration;
 import org.egov.wscalculation.constants.WSCalculationConstant;
-import org.egov.wscalculation.web.models.*;
 import org.egov.wscalculation.producer.WSCalculationProducer;
 import org.egov.wscalculation.repository.ServiceRequestRepository;
+import org.egov.wscalculation.web.models.DemandNotificationObj;
+import org.egov.wscalculation.web.models.EmailRequest;
+import org.egov.wscalculation.web.models.EventRequest;
+import org.egov.wscalculation.web.models.NotificationReceiver;
+import org.egov.wscalculation.web.models.SMSRequest;
 import org.egov.wscalculation.web.models.users.User;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.Filter;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.client.RestTemplate;
-
-import static com.jayway.jsonpath.Criteria.where;
-import static com.jayway.jsonpath.Filter.filter;
-import static org.egov.wscalculation.constants.WSCalculationConstant.*;
 
 @Component
 @Slf4j
@@ -159,6 +172,7 @@ public class NotificationUtil {
 	 * @return - Returns the proper message
 	 */
 	public String getAppliedMsg(NotificationReceiver receiver, String message, DemandNotificationObj obj) {
+
 		log.info("receive - "+receiver.toString());
 		message = message.replace("{First Name}", receiver.getFirstName() == null ? "" : receiver.getFirstName());
 		message = message.replace("{Last Name}", receiver.getLastName() == null ? "" : receiver.getLastName());
@@ -180,7 +194,7 @@ public class NotificationUtil {
 				 log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
 				producer.push(config.getSmsNotifTopic(), smsRequest);
-				log.debug("Sending SMS Messages: " + smsRequest.getMessage());
+				log.debug(" Messages: " + smsRequest.getMessage());
 			}
 		}
 	}

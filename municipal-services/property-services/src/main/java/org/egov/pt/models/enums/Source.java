@@ -14,9 +14,7 @@ public enum Source {
     
   WS("WS"),
 	
-  WATER_CHARGES("WATER_CHARGES"),
-
-  TL("TL");
+  WATER_CHARGES("WATER_CHARGES");
 
   private String value;
 

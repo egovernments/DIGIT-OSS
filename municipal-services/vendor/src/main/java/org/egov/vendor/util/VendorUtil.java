@@ -1,13 +1,12 @@
 package org.egov.vendor.util;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
@@ -79,20 +78,11 @@ public class VendorUtil {
 
 	public List<ModuleDetail> getVendorModuleRequest() {
 
-		// filter to only get code field from master data
-		final String activeFilter = "$.[?(@.active==true)]";
-		// master details for Vendor module
-		List<MasterDetail> masterDtls = new ArrayList<>();
-		List<ModuleDetail> moduleDtls = new ArrayList<>();
-			
-		masterDtls = new ArrayList<>();
-		masterDtls.add(MasterDetail.builder().name(VendorConstants.VENDOR_AGENCY_TYPE).filter(activeFilter).build());
-		masterDtls.add(MasterDetail.builder().name(VendorConstants.VENDOR_PAYMENT_PREFERENCE).filter(activeFilter).build());
-		moduleDtls.add(ModuleDetail.builder().masterDetails(masterDtls)
-				.moduleName(VendorConstants.VENDOR_MODULE).build());
-		
-		return moduleDtls;
+		final String filterCode = "$.[?(@.active==true)].code";
 
+		//TODO No MDMS As of now
+
+		return Arrays.asList();
 	}
 	
 	public AuditDetails getAuditDetails(String by, Boolean isCreate) {

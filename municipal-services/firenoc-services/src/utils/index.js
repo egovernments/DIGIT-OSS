@@ -31,27 +31,56 @@ export const requestInfoToResponseInfo = (requestinfo, success) => {
   return ResponseInfo;
 };
 
-export const addIDGenId = async (requestInfo, idRequests) => {
+export const addIDGenId = async (requestInfo, idRequests, header) => {
   let requestBody = {
     RequestInfo: requestInfo,
     idRequests
   };
+
+  let headers;
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
+    header['tenantId']=header.tenantid;
+  }
+  else
+    header['tenantId'] = idRequests[0].tenantId;
+
+  headers = header;
+  
   // console.log(JSON.stringify(requestBody));
   let idGenResponse = await httpRequest({
     hostURL: envVariables.EGOV_IDGEN_HOST,
     endPoint: `${envVariables.EGOV_IDGEN_CONTEXT_PATH}${
       envVariables.EGOV_IDGEN_GENERATE_ENPOINT
     }`,
-    requestBody
+    requestBody,
+    headers
   });
   // console.log("idgenresponse",idGenResponse);
   return get(idGenResponse, "idResponses[0].id");
 };
 
-export const getLocationDetails = async (requestInfo, tenantId) => {
+export const getLocationDetails = async (requestInfo, tenantId, header) => {
   let requestBody = {
     RequestInfo: requestInfo
   };
+
+  let headers;
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
+    header['tenantId']=header.tenantid;
+  }
+  else
+    header['tenantId'] = tenantId;
+
+  headers = header;
+
   // console.log(JSON.stringify(requestBody));
   let locationResponse = await httpRequest({
     hostURL: envVariables.EGOV_LOCATION_HOST,
@@ -62,13 +91,14 @@ export const getLocationDetails = async (requestInfo, tenantId) => {
     }&boundaryType=${
       envVariables.EGOV_LOCATION_BOUNDARY_TYPE_CODE
     }&tenantId=${tenantId}`,
-    requestBody
+    requestBody,
+    headers
   });
   // console.log("idgenresponse",locationResponse);
   return locationResponse;
 };
 
-export const createWorkFlow = async body => {
+export const createWorkFlow = async (body, header) => {
   //wfDocuments and comment should rework after that
   let processInstances = body.FireNOCs.map(fireNOC => {
     return {
@@ -100,11 +130,25 @@ export const createWorkFlow = async body => {
     RequestInfo: body.RequestInfo,
     ProcessInstances: processInstances
   };
+
+  let headers;
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+  if(isCentralInstance){
+    header['tenantId']=header.tenantid;
+  }
+  else
+    header['tenantId'] = body.FireNOCs[0].tenantId;
+
+  headers = header;
   //console.log("Workflow requestBody", JSON.stringify(requestBody));
   let workflowResponse = await httpRequest({
     hostURL: envVariables.EGOV_WORKFLOW_HOST,
     endPoint: envVariables.EGOV_WORKFLOW_TRANSITION_ENDPOINT,
-    requestBody
+    requestBody,
+    headers
   });
   // console.log("workflowResponse", JSON.stringify(workflowResponse));
   return workflowResponse;
@@ -126,4 +170,27 @@ export const addQueryArg = (url, queries = []) => {
   } else {
     return url;
   }
+};
+
+export const getUpdatedTopic = (tenantId, topic) => {
+  let tenants = tenantId.split('.');
+  if(tenants.length > 1)
+    topic = tenants[1] + "-" + topic;
+  console.log("The Kafka topic for the tenantId : " + tenantId + " is : " + topic);
+  return topic;
+};
+
+export const replaceSchemaPlaceholder = (query, tenantId) => {
+  let finalQuery = null;
+  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
+  if(typeof isCentralInstance =="string")
+  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
+
+	if (tenantId.includes('.') && isCentralInstance) {
+		let schemaName = tenantId.split('.')[1];
+		finalQuery = query.replace(/{schema}/g, schemaName);
+	} else {
+			finalQuery = query.replace(/{schema}./g, "");
+	}
+	return finalQuery;
 };

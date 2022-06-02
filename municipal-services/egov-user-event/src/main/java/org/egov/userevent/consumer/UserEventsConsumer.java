@@ -40,9 +40,9 @@ public class UserEventsConsumer {
 	public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			EventRequest eventReq = objectMapper.convertValue(record, EventRequest.class);
-			if(topic.equals(props.getSaveEventsTopic())) {
+			if(topic.contains(props.getSaveEventsTopic())) {
 				service.createEvents(eventReq, false);
-			}else if(topic.equals(props.getUpdateEventsTopic())) {
+			}else if(topic.contains(props.getUpdateEventsTopic())) {
 				service.updateEvents(eventReq);
 			}
 		}catch(Exception e) {

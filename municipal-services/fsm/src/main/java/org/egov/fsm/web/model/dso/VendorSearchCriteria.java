@@ -45,13 +45,6 @@ public class VendorSearchCriteria {
 	@JsonProperty("ids")
 	private List<String> ids;
 
-	@JsonProperty("vehicleType")
-	private String vehicleType;
-	
-	@JsonProperty("vehicleCapacity")
-	private String vehicleCapacity;
-	
-	
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
 		return (this.tenantId == null && this.offset == null && this.limit == null && this.mobileNumber == null

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.swcalculation.service.PaymentNotificationService;
 import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.service.DemandService;
@@ -41,6 +42,7 @@ public class SWCalculationController {
 	
 	@Autowired
 	private SWCalculationServiceImpl sWCalculationServiceImpl;
+
 	
 	@PostMapping("/_calculate")
 	public ResponseEntity<CalculationRes> calculate(@RequestBody @Valid CalculationReq calculationReq) {
@@ -65,17 +67,12 @@ public class SWCalculationController {
 	@PostMapping("/_updateDemand")
 	public ResponseEntity<DemandResponse> updateDemands(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper,
 			@ModelAttribute @Valid GetBillCriteria getBillCriteria) {
-		List<Demand> demands = demandService.updateDemands(getBillCriteria, requestInfoWrapper, false);
-		DemandResponse response = DemandResponse.builder().demands(demands)
-				.responseInfo(
-						responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-				.build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new ResponseEntity<>(demandService.updateDemands(getBillCriteria, requestInfoWrapper), HttpStatus.OK);
 	}
 	
 	@PostMapping("/_jobscheduler")
-	public void jobscheduler(@Valid @RequestBody BulkBillReq bulkBillReq) {
-		sWCalculationService.generateDemandBasedOnTimePeriod(bulkBillReq.getRequestInfo(), bulkBillReq.getBulkBillCriteria());
+	public void jobscheduler(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper) {
+		sWCalculationService.generateDemandBasedOnTimePeriod(requestInfoWrapper.getRequestInfo());
 	}
 
 	@PostMapping("/_applyAdhocTax")
@@ -87,5 +84,4 @@ public class SWCalculationController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}
-
 }

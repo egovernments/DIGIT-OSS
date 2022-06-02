@@ -96,33 +96,4 @@ public class CalculationService {
         return response;
     }
 
-    /**
-     * Call tl-calculator to get the estimation Object for the given license
-     * @param requestInfo The requestInfo of the incoming request
-     * @param licenses The tradeLicense to whom the calculation object has to be added
-     * @return CalculationRes from the tl-calculator
-     */
-    public CalculationRes getEstimation(RequestInfo requestInfo, List<TradeLicense> licenses){
-        StringBuilder uri = utils.getEstimationURI(licenses.get(0).getBusinessService());
-        List<CalulationCriteria> criterias = new LinkedList<>();
-
-        licenses.forEach(license -> {
-            criterias.add(new CalulationCriteria(license,license.getApplicationNumber(),license.getTenantId()));
-        });
-
-        CalculationReq request = CalculationReq.builder().calulationCriteria(criterias)
-                .requestInfo(requestInfo)
-                .build();
-
-        Object result = serviceRequestRepository.fetchResult(uri,request);
-        CalculationRes response = null;
-        try{
-            response = mapper.convertValue(result,CalculationRes.class);
-        }
-        catch (IllegalArgumentException e){
-            throw new CustomException("PARSING ERROR","Failed to parse response of estimate api");
-        }
-        return response;
-    }
-
 }

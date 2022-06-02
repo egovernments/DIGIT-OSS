@@ -290,15 +290,6 @@ public class TradeLicenseService {
     	
     	return licenseCount;
     }
-
-	public Map<String,Integer> countApplications(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
-	
-		criteria.setBusinessService(serviceFromPath);
-		
-		Map<String,Integer> licenseCount = repository.getApplicationsCount(criteria);
-	
-		return licenseCount;
-	}
     
 
     public void checkEndStateAndAddBPARoles(TradeLicenseRequest tradeLicenseRequest) {
@@ -317,7 +308,8 @@ public class TradeLicenseService {
     }
 
     public List<TradeLicense> getLicensesFromMobileNumber(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
-    	
+
+        String tenantId = criteria.getTenantId();
         List<TradeLicense> licenses = new LinkedList<>();
         
         boolean isEmpty = enrichWithUserDetails(criteria,requestInfo);
@@ -327,7 +319,7 @@ public class TradeLicenseService {
         }
         
         //Get all tradeLicenses with ownerInfo enriched from user service
-        licenses = getLicensesWithOwnerInfo(criteria,requestInfo);
+        licenses = getLicensesWithOwnerInfo(tenantId,criteria,requestInfo);
         return licenses;
     }
 
@@ -339,7 +331,21 @@ public class TradeLicenseService {
      * @return List of tradeLicense for the given criteria
      */
     public List<TradeLicense> getLicensesWithOwnerInfo(TradeLicenseSearchCriteria criteria,RequestInfo requestInfo){
-        List<TradeLicense> licenses = repository.getLicenses(criteria);
+        List<TradeLicense> licenses = repository.getLicenses(criteria, criteria.getTenantId());
+        if(licenses.isEmpty())
+            return Collections.emptyList();
+        licenses = enrichmentService.enrichTradeLicenseSearch(licenses,criteria,requestInfo);
+        return licenses;
+    }
+
+    /**
+     * Returns the tradeLicense with enrivhed owners from user servise
+     * @param criteria The object containing the paramters on which to search
+     * @param requestInfo The search request's requestInfo
+     * @return List of tradeLicense for the given criteria
+     */
+    public List<TradeLicense> getLicensesWithOwnerInfo(String stateTenantId,TradeLicenseSearchCriteria criteria,RequestInfo requestInfo){
+        List<TradeLicense> licenses = repository.getLicenses(criteria, stateTenantId);
         if(licenses.isEmpty())
             return Collections.emptyList();
         licenses = enrichmentService.enrichTradeLicenseSearch(licenses,criteria,requestInfo);
@@ -378,7 +384,7 @@ public class TradeLicenseService {
         criteria.setIds(ids);
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
 
-        List<TradeLicense> licenses = repository.getLicenses(criteria);
+        List<TradeLicense> licenses = repository.getLicenses(criteria, request.getLicenses().get(0).getTenantId());
 
         if(licenses.isEmpty())
             return Collections.emptyList();
@@ -456,6 +462,11 @@ public class TradeLicenseService {
             enrichmentService.postStatusEnrichment(tradeLicenseRequest,endStates,mdmsData);
             userService.createUser(tradeLicenseRequest, false);
             calculationService.addCalculation(tradeLicenseRequest);
+            switch (businessServicefromPath) {
+                case businessService_TL:
+                    editNotificationService.sendEditNotification(tradeLicenseRequest, diffMap);
+                    break;
+            }
             repository.update(tradeLicenseRequest, idToIsStateUpdatableMap);
             licenceResponse=  tradeLicenseRequest.getLicenses();
         }
@@ -535,7 +546,7 @@ public class TradeLicenseService {
         	criteria.setTenantId(null);
         }
         
-        licenses = repository.getLicenses(criteria);
+        licenses = repository.getLicenses(criteria, criteria.getTenantId());
 
         if(licenses.size()==0){
         	return true;
@@ -551,13 +562,5 @@ public class TradeLicenseService {
         
         return false;
     }
-
-
-
-
-
-	public int getApplicationValidity() {
-		return Integer.valueOf(config.getApplicationValidity());
-	}
 
 }

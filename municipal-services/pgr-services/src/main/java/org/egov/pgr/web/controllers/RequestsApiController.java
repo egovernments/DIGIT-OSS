@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pgr.service.PGRService;
-import org.egov.pgr.util.PGRConstants;
 import org.egov.pgr.util.ResponseInfoFactory;
 import org.egov.pgr.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +42,7 @@ public class RequestsApiController{
 
     @RequestMapping(value="/request/_create", method = RequestMethod.POST)
     public ResponseEntity<ServiceResponse> requestsCreatePost(@Valid @RequestBody ServiceRequest request) throws IOException {
+
         ServiceRequest enrichedReq = pgrService.create(request);
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(request.getRequestInfo(), true);
         ServiceWrapper serviceWrapper = ServiceWrapper.builder().service(enrichedReq.getService()).workflow(enrichedReq.getWorkflow()).build();
@@ -53,19 +53,10 @@ public class RequestsApiController{
 
     @RequestMapping(value="/request/_search", method = RequestMethod.POST)
     public ResponseEntity<ServiceResponse> requestsSearchPost(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-                                                              @Valid @ModelAttribute RequestSearchCriteria criteria) {
-    	
-    	String tenantId = criteria.getTenantId();
+                                                     @Valid @ModelAttribute RequestSearchCriteria criteria) {
         List<ServiceWrapper> serviceWrappers = pgrService.search(requestInfoWrapper.getRequestInfo(), criteria);
-        Map<String,Integer> dynamicData = pgrService.getDynamicData(tenantId);
-        
-        int complaintsResolved = dynamicData.get(PGRConstants.COMPLAINTS_RESOLVED);
-	    int averageResolutionTime = dynamicData.get(PGRConstants.AVERAGE_RESOLUTION_TIME);
-	    int complaintTypes = pgrService.getComplaintTypes();
-        
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
-        ServiceResponse response = ServiceResponse.builder().responseInfo(responseInfo).serviceWrappers(serviceWrappers).complaintsResolved(complaintsResolved)
-        		.averageResolutionTime(averageResolutionTime).complaintTypes(complaintTypes).build();
+        ServiceResponse response = ServiceResponse.builder().responseInfo(responseInfo).serviceWrappers(serviceWrappers).build();
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
@@ -90,7 +81,7 @@ public class RequestsApiController{
 
     @RequestMapping(value="/request/_count", method = RequestMethod.POST)
     public ResponseEntity<CountResponse> requestsCountPost(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-                                                           @Valid @ModelAttribute RequestSearchCriteria criteria) {
+                                                              @Valid @ModelAttribute RequestSearchCriteria criteria) {
         Integer count = pgrService.count(requestInfoWrapper.getRequestInfo(), criteria);
         ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
         CountResponse response = CountResponse.builder().responseInfo(responseInfo).count(count).build();

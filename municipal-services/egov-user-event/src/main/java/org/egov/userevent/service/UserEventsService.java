@@ -322,7 +322,7 @@ public class UserEventsService {
 		List<Event> eventsTobeUpdated = new ArrayList<>();
 		events.forEach(event -> {
 			Boolean tobeAdded = false;
-			if(null != event.getEventDetails() && !event.getStatus().equals(Status.CANCELLED)) {
+			if(null != event.getEventDetails()) {
 				if(event.getEventType().equals(UserEventsConstants.MEN_MDMS_BROADCAST_CODE)) {				
 					if(null != event.getEventDetails().getFromDate()) {
 						if((event.getEventDetails().getFromDate() <= utils.getTomorrowsEpoch()) && event.getStatus().equals(Status.INACTIVE)) {

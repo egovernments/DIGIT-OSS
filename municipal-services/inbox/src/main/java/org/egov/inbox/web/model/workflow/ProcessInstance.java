@@ -73,8 +73,8 @@ public class ProcessInstance   {
         @JsonProperty("assigner")
         private User assigner;
 
-        @JsonProperty("assignes")
-        private List<User> assignes;
+        @JsonProperty("assignee")
+        private User assignee;
 
         @JsonProperty("nextActions")
         @Valid
@@ -95,7 +95,7 @@ public class ProcessInstance   {
 
         @JsonProperty("auditDetails")
         private AuditDetails auditDetails;
-        
+
 
         public ProcessInstance addDocumentsItem(Document documentsItem) {
             if (this.documents == null) {
@@ -116,3 +116,4 @@ public class ProcessInstance   {
         }
 
 }
+

@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.util.CollectionUtils;
 
 @Repository
 public class DemandRepository {
@@ -42,20 +41,16 @@ public class DemandRepository {
 	        StringBuilder url = new StringBuilder(config.getBillingServiceHost());
 	        url.append(config.getDemandCreateEndPoint());
 	        DemandRequest request = new DemandRequest(requestInfo,demands);
+	        Object result = serviceRequestRepository.fetchResult(url,request);
+	        DemandResponse response;
 	        try{
-				Object result = serviceRequestRepository.fetchResult(url, request);
-				List<Demand>  demandList =  mapper.convertValue(result,DemandResponse.class).getDemands();
-				if(!CollectionUtils.isEmpty(demandList)) {
-					notificationObj.setSuccess(true);
-					swCalculationProducer.push(config.getOnDemandSuccess(), notificationObj);
-				}
-				return demandList;
+	            response = mapper.convertValue(result,DemandResponse.class);
 	        }
 	        catch(IllegalArgumentException e){
-				notificationObj.setSuccess(false);
 				swCalculationProducer.push(config.getOnDemandFailed(), notificationObj);
 				throw new CustomException("EG_SW_PARSING_ERROR","Failed to parse response of create demand");
 	        }
+	        return response.getDemands();
 	    }
 	    
 	    /**

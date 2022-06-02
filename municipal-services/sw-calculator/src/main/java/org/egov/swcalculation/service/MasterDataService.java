@@ -29,7 +29,6 @@ import org.egov.swcalculation.util.CalculatorUtils;
 import org.egov.swcalculation.util.SWCalculationUtil;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -290,14 +289,14 @@ public class MasterDataService {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> enrichBillingPeriod(CalculationCriteria criteria, ArrayList<?> mdmsResponse,
-			Map<String, Object> masterMap, String connectiontype) {
+			Map<String, Object> masterMap) {
 
 		log.info("Billing Frequency Map {}", mdmsResponse.toString());
 
 		Map<String, Object> master = new HashMap<>();
 		for (Object o : mdmsResponse) {
 			if ((((Map<String, Object>) o).get(SWCalculationConstant.ConnectionType).toString())
-					.equalsIgnoreCase(connectiontype)) {
+					.equalsIgnoreCase(criteria.getSewerageConnection().getConnectionType())) {
 				master = (Map<String, Object>) o;
 				break;
 			}
@@ -375,7 +374,6 @@ public class MasterDataService {
 	 * @param tenantId - Tenant Id
 	 * @return all masters that is needed for calculation and demand generation.
 	 */
-	@Cacheable(value = SWCalculationConstant.MDMS_CACHE_KEY , sync = true)
 	public Map<String, Object> loadMasterData(RequestInfo requestInfo, String tenantId) {
 		Map<String, Object> master = getMasterMap(requestInfo, tenantId,SWCalculationConstant.SERVICE_FIELD_VALUE_SW);
 		loadBillingSlabsAndTimeBasedExemptions(requestInfo, tenantId, master);

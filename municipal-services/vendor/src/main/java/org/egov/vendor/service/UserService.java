@@ -149,60 +149,58 @@ public class UserService {
 		List<User> drivers = vendor.getDrivers();
 		List<User> newDrivers = new ArrayList<User>();
 		HashMap<String, String> errorMap = new HashMap<String, String>();
+		drivers.forEach(driver -> {
 
-		if (!CollectionUtils.isEmpty(drivers)) {
-			drivers.forEach(driver -> {
+			UserDetailResponse userDetailResponse = null;
 
-				UserDetailResponse userDetailResponse = null;
+			if (driver.getMobileNumber() != null) {
 
-				if (driver.getMobileNumber() != null) {
+				userDetailResponse = userExists(driver, requestInfo);
+				User foundDriver = null;
+				if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 
-					userDetailResponse = userExists(driver, requestInfo);
-					User foundDriver = null;
-					if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+					for (int i = 0; i < userDetailResponse.getUser().size(); i++) {
 
-						for (int i = 0; i < userDetailResponse.getUser().size(); i++) {
-
-							if (isRoleAvailale(userDetailResponse.getUser().get(i), config.getDsoDriver(),
-									vendor.getTenantId()) == Boolean.TRUE) {
-								foundDriver = userDetailResponse.getUser().get(i);
-							}
+						if (isRoleAvailale(userDetailResponse.getUser().get(i), config.getDsoDriver(),
+								vendor.getTenantId()) == Boolean.TRUE) {
+							foundDriver = userDetailResponse.getUser().get(i);
 						}
-
-						if (foundDriver == null) {
-							foundDriver = userDetailResponse.getUser().get(0);
-							foundDriver.getRoles().add(getRolObj(config.getDsoDriver(), config.getDsoDriverRoleName()));
-							UserRequest userRequest = UserRequest.builder().user(foundDriver).requestInfo(requestInfo)
-									.build();
-							StringBuilder uri = new StringBuilder();
-							uri.append(config.getUserHost()).append(config.getUserContextPath())
-									.append(config.getUserUpdateEndpoint());
-							UserDetailResponse userResponse = ownerCall(userRequest, uri);
-							if (userResponse != null || !CollectionUtils.isEmpty(userResponse.getUser())) {
-								foundDriver = userResponse.getUser().get(0);
-							} else {
-								errorMap.put(VendorErrorConstants.INVALID_DRIVER_ERROR,
-										"Unable to add Driver role to the existing user !");
-							}
-
-						}
-
-					} else {
-						foundDriver = createDriver(driver, requestInfo);
 					}
-					foundDriver.setVendorDriverStatus(driver.getVendorDriverStatus());
-					newDrivers.add(foundDriver);
+
+					if (foundDriver == null) {
+						foundDriver = userDetailResponse.getUser().get(0);
+						foundDriver.getRoles()
+								.add(getRolObj(config.getDsoDriver(), config.getDsoDriverRoleName()));
+						UserRequest userRequest = UserRequest.builder().user(foundDriver).requestInfo(requestInfo)
+								.build();
+						StringBuilder uri = new StringBuilder();
+						uri.append(config.getUserHost()).append(config.getUserContextPath())
+								.append(config.getUserUpdateEndpoint());
+						UserDetailResponse userResponse = ownerCall(userRequest, uri);
+						if (userResponse != null || !CollectionUtils.isEmpty(userResponse.getUser())) {
+							foundDriver = userResponse.getUser().get(0);
+						} else {
+							errorMap.put(VendorErrorConstants.INVALID_DRIVER_ERROR,
+									"Unable to add Driver role to the existing user !");
+						}
+
+					}
 
 				} else {
-					log.debug("MobileNo is not existed in Application.");
-					errorMap.put(VendorErrorConstants.INVALID_DRIVER_ERROR,
-							"MobileNo is mandatory for Driver " + driver.toString());
+					foundDriver = createDriver(driver, requestInfo);
 				}
-			});
-			vendor.setDrivers(newDrivers);
-			if (!errorMap.isEmpty()) {
-				throw new CustomException(errorMap);
+
+				newDrivers.add(foundDriver);
+
+			} else {
+				log.debug("MobileNo is not existed in Application.");
+				errorMap.put(VendorErrorConstants.INVALID_DRIVER_ERROR,
+						"MobileNo is mandatory for Driver " + driver.toString());
 			}
+		});
+		vendor.setDrivers(newDrivers);
+		if (!errorMap.isEmpty()) {
+			throw new CustomException(errorMap);
 		}
 
 	}

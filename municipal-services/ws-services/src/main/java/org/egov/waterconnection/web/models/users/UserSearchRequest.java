@@ -76,7 +76,5 @@ public class UserSearchRequest {
 	@JsonProperty("roleCodes")
 	private List<String> roleCodes;
 
-	@JsonProperty("doorNo")
-	private String doorNo;
 
 }

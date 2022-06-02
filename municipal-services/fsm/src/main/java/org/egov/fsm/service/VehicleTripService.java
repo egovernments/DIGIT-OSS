@@ -22,7 +22,6 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -41,129 +40,55 @@ public class VehicleTripService {
 	private ServiceRequestRepository serviceRequestRepository;
 	
 	public void scheduleVehicleTrip(FSMRequest fsmRequest) {
-
-	//		SAN-1024: Commenting out this code as now a vehicle can have multiple trips assigned from different applications waiting for 
-	//		disposal at the same time	
-	//		if (FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference())
-	//				&& fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SCHEDULE)) {
-	//			List<VehicleTrip> existingVehicleTrips = getVehicleTrips(fsmRequest, "WAITING_FOR_DISPOSAL", false);
-	//			if (existingVehicleTrips != null) {
-	//				throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION,
-	//						"VehicleTrip Waiting for Disposal of Application No: "
-	//								+ existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()
-	//								+ ", Cannot complete this FSM Application No "
-	//								+ fsmRequest.getFsm().getApplicationNo());
-	//			}
-	//
-	//		}
+		
 		FSM fsm = fsmRequest.getFsm();
-		StringBuilder createUri = new StringBuilder(config.getVehicleHost()).append(config.getVehicleTripContextPath())
+		StringBuilder uri  = new StringBuilder(config.getVehicleHost()).append(config.getVehicleTripContextPath())
 				.append(config.getVehicleTripCreateEndpoint());
 		org.egov.common.contract.request.User tripOwner = org.egov.common.contract.request.User.builder().build();
-		BeanUtils.copyProperties(fsm.getDso().getOwner(), tripOwner);
+				BeanUtils.copyProperties(fsm.getDso().getOwner(), tripOwner);
+		VehicleTrip vehicleTrip = VehicleTrip.builder().businessService(FSMConstants.VEHICLETRIP_BUSINESSSERVICE_NAME).tenantId(fsm.getTenantId())
+				.tripOwner(tripOwner).vehicle(fsm.getVehicle()).build();
+		VehicleTripDetail tripDetail = VehicleTripDetail.builder().referenceNo(fsm.getApplicationNo()).referenceStatus(fsm.getApplicationStatus())
+				.tenantId(fsm.getTenantId()).volume(fsm.getWasteCollected()).build();
+		List tripDetails = new ArrayList<VehicleTripDetail>();
+		tripDetails.add(tripDetail);
+		vehicleTrip.setTripDetails(tripDetails);
+		serviceRequestRepository.fetchResult(uri, VehicleTripRequest.builder().vehicleTrip(vehicleTrip).requestInfo(fsmRequest.getRequestInfo()).build());
 
-		List<VehicleTrip> vehicleTripsList = new ArrayList<VehicleTrip>();
-		int numberOfTrips = fsm.getNoOfTrips();
-		while (numberOfTrips > 0) {
-			numberOfTrips--;
-			VehicleTrip vehicleTrip = VehicleTrip.builder()
-					.businessService(FSMConstants.VEHICLETRIP_BUSINESSSERVICE_NAME).tenantId(fsm.getTenantId())
-					.tripOwner(tripOwner).vehicle(fsm.getVehicle()).build();
-			VehicleTripDetail tripDetail = VehicleTripDetail.builder().referenceNo(fsm.getApplicationNo())
-					.referenceStatus(fsm.getApplicationStatus()).tenantId(fsm.getTenantId())
-					.volume(fsm.getWasteCollected()).build();
-			List<VehicleTripDetail> tripDetails = new ArrayList<VehicleTripDetail>();
-			tripDetails.add(tripDetail);
-			vehicleTrip.setTripDetails(tripDetails);
-			vehicleTripsList.add(vehicleTrip);
-		}
-
-		try {
-
-			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(createUri, VehicleTripRequest
-					.builder().vehicleTrip(vehicleTripsList).requestInfo(fsmRequest.getRequestInfo()).build());
-
-			VehicleTripResponse vehicleTripResponse = mapper.convertValue(responseMap, VehicleTripResponse.class);
-
-			if (vehicleTripResponse != null && vehicleTripResponse.getVehicleTrip() != null
-					&& vehicleTripResponse.getVehicleTrip().size() > 0
-					&& FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
-							.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference())
-					&& fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_SCHEDULE)) {
-
-				List<VehicleTrip> scheduledVehicleTripList = new ArrayList<VehicleTrip>();
-				vehicleTripResponse.getVehicleTrip().forEach(scheduledTrip -> {
-					VehicleTripDetail scheduledTripDetail = scheduledTrip.getTripDetails().get(0);
-					scheduledTripDetail.setReferenceStatus(FSMConstants.WF_DISPOSAL_IN_PROGRESS);
-					if(null!=fsmRequest.getFsm().getVehicleCapacity()) {
-						scheduledTripDetail.setVolume(Double.valueOf(fsmRequest.getFsm().getVehicleCapacity()));	
-					}else {
-						scheduledTripDetail.setVolume((double) 1);
-					}
-					
-					scheduledTripDetail.setItemStartTime(Calendar.getInstance().getTimeInMillis());
-					scheduledTripDetail.setItemEndTime(Calendar.getInstance().getTimeInMillis() + 100000);
-					scheduledVehicleTripList.add(scheduledTrip);
-				});
-
-				StringBuilder updateUri = new StringBuilder(config.getVehicleHost())
-						.append(config.getVehicleTripContextPath()).append(config.getVehicleTripUpdateEndpoint());
-				VehicleTripRequest tripRequest = VehicleTripRequest.builder().vehicleTrip(scheduledVehicleTripList)
-						.requestInfo(fsmRequest.getRequestInfo())
-						.workflow(Workflow.builder().action(FSMConstants.TRIP_READY_FOR_DISPOSAL).build()).build();
-
-				serviceRequestRepository.fetchResult(updateUri, tripRequest);
-			}
-
-		} catch (IllegalArgumentException e) {
-			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in userCall");
-		}
 	}
 	
 	public void vehicleTripReadyForDisposal(FSMRequest fsmRequest) {
-	
-	//		SAN-1024: Commenting out this code as now a vehicle can have multiple trips assigned from different applications waiting for 
-	//		disposal at the same time
-	//		List<VehicleTrip> existingVehicleTrips = getVehicleTrips(fsmRequest, "WAITING_FOR_DISPOSAL",false);
-	//		if(existingVehicleTrips != null ) {
-	//			throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION,
-	//					"VehicleTrip Waiting for Disposal of Application No "
-	//							+ existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()
-	//							+ ", Cannot complete this FSM Application No " + fsmRequest.getFsm().getApplicationNo());
-	//		}else {
-			
+		List<VehicleTrip> existingVehicleTrips = getVehicleTrips(fsmRequest, "WAITING_FOR_DISPOSAL",false);
+		VehicleTrip scheduledTrip = null;
+		if(existingVehicleTrips != null ) {
+			throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION, "VehicleTrip Waiting for Disposal of Application No "+existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()+", Cannot complete this FSM Application No "+ fsmRequest.getFsm().getApplicationNo());
+		}else {
 			List<VehicleTrip> scheduledTrips = getVehicleTrips(fsmRequest,"SCHEDULED",true);
 			if(scheduledTrips == null) {
-				throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION,
-						"Trip Not scheduled for this application yet!");
+				throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION, "Trip Not scheduled for this application yet!");
 			}else {
+				scheduledTrip = scheduledTrips.get(0);
+				VehicleTripDetail scheduledTripDetail = scheduledTrip.getTripDetails().get(0);
+				scheduledTripDetail.setReferenceStatus(FSMConstants.WF_ACTION_COMPLETE);
+				scheduledTripDetail.setVolume(fsmRequest.getFsm().getWasteCollected());
+				scheduledTripDetail.setItemStartTime(Calendar.getInstance().getTimeInMillis());
+				scheduledTripDetail.setItemEndTime(Calendar.getInstance().getTimeInMillis()+100000);
+				StringBuilder uri  = new StringBuilder(config.getVehicleHost()).append(config.getVehicleTripContextPath()).append(config.getVehicleTripUpdateEndpoint());
 				
-				List<VehicleTrip> vehicleTripList = new ArrayList<VehicleTrip>();
-				scheduledTrips.forEach(scheduledTrip->{
-					VehicleTripDetail scheduledTripDetail = scheduledTrip.getTripDetails().get(0);
-					scheduledTripDetail.setReferenceStatus(FSMConstants.WF_ACTION_COMPLETE);
-					scheduledTripDetail.setVolume(fsmRequest.getFsm().getWasteCollected());
-					scheduledTripDetail.setItemStartTime(Calendar.getInstance().getTimeInMillis());
-					scheduledTripDetail.setItemEndTime(Calendar.getInstance().getTimeInMillis()+100000);
-					vehicleTripList.add(scheduledTrip);
-				});
-				
-				StringBuilder uri = new StringBuilder(config.getVehicleHost())
-						.append(config.getVehicleTripContextPath()).append(config.getVehicleTripUpdateEndpoint());
-				VehicleTripRequest tripRequest = VehicleTripRequest.builder().vehicleTrip(vehicleTripList)
-						.requestInfo(fsmRequest.getRequestInfo())
-						.workflow(Workflow.builder().action(FSMConstants.TRIP_READY_FOR_DISPOSAL).build()).build();
-				
+				VehicleTripRequest tripRequest = VehicleTripRequest.builder().vehicleTrip(scheduledTrip).requestInfo(fsmRequest.getRequestInfo()).workflow(Workflow.builder().action(FSMConstants.TRIP_READY_FOR_DISPOSAL).build()).build();
+				VehicleTripResponse vehicleTripResponse = null;
 				try {
-						LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, tripRequest);
-						
-					} catch (IllegalArgumentException e) {
-						throw new CustomException("IllegalArgumentException",
-							"ObjectMapper not able to convertValue in userCall");
+					
+					LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, tripRequest);
+					
+					vehicleTripResponse = mapper.convertValue(responseMap, VehicleTripResponse.class);
+					
+					
+				} catch (IllegalArgumentException e) {
+					throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in userCall");
 				}
-			
 			}
-		//}
+		}
 	}
 	/**
 	 * returns the vehicle trips with the appplicationNo of FSM or with the status of VehicleTrip
@@ -193,56 +118,19 @@ public class VehicleTripService {
 			}
 		}
 	
-		try {
 	
-			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri,
-					RequestInfoWrapper.builder().requestInfo(fsmRequest.getRequestInfo()).build());
-
+		
+		try {
+			
+			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, RequestInfoWrapper.builder().requestInfo(fsmRequest.getRequestInfo()).build());
+			
 			VehicleTripResponse vehicleTripResponse = mapper.convertValue(responseMap, VehicleTripResponse.class);
-			if (vehicleTripResponse != null && vehicleTripResponse.getVehicleTrip() != null
-					&& vehicleTripResponse.getVehicleTrip().size() > 0) {
+			if(vehicleTripResponse != null && vehicleTripResponse.getVehicleTrip() != null && vehicleTripResponse.getVehicleTrip().size() >0 ) {
 				return vehicleTripResponse.getVehicleTrip();
 			}
 			return null;
 		} catch (IllegalArgumentException e) {
 			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in userCall");
 		}
-	}
-	
-	public void updateVehicleTrip(FSMRequest fsmRequest) {
-		
-	//	List<VehicleTrip> existingVehicleTrips = getVehicleTrips(fsmRequest, "WAITING_FOR_DISPOSAL",false);
-		
-//		if(existingVehicleTrips != null ) {
-//			throw new CustomException(FSMErrorConstants.FSM_INVALID_ACTION,
-//					"VehicleTrip Waiting for Disposal of Application No "
-//							+ existingVehicleTrips.get(0).getTripDetails().get(0).getReferenceNo()
-//							+ ", Cannot complete this FSM Application No " + fsmRequest.getFsm().getApplicationNo());
-//		}else {
-			List<VehicleTrip> vehicleTripsForApplication = getVehicleTrips(fsmRequest,null,true);
-					
-				if(!CollectionUtils.isEmpty(vehicleTripsForApplication)){
-				List<VehicleTrip> vehicleTripList = new ArrayList<VehicleTrip>();
-				vehicleTripsForApplication.forEach(vehicleTrip->{
-					VehicleTripDetail vehicleTripDetail = vehicleTrip.getTripDetails().get(0);
-					vehicleTripDetail.setReferenceStatus(FSMConstants.WF_ACTION_COMPLETE);
-					vehicleTripDetail.setVolume(fsmRequest.getFsm().getWasteCollected());
-					vehicleTripList.add(vehicleTrip);
-				});
-				
-				StringBuilder uri = new StringBuilder(config.getVehicleHost())
-						.append(config.getVehicleTripContextPath()).append(config.getVehicleTripUpdateEndpoint());
-				VehicleTripRequest tripRequest = VehicleTripRequest.builder().vehicleTrip(vehicleTripList)
-						.requestInfo(fsmRequest.getRequestInfo())
-						.workflow(Workflow.builder().action(FSMConstants.UPDATE_ONLY_VEHICLE_TRIP_RECORD).build()).build();
-				try {
-						LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, tripRequest);
-						
-					} catch (IllegalArgumentException e) {
-						throw new CustomException("IllegalArgumentException",
-							"ObjectMapper not able to convertValue in userCall");
-				}
-			}
-		//}
 	}
 }

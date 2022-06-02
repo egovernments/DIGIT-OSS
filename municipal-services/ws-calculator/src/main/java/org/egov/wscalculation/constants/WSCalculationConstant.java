@@ -48,8 +48,6 @@ public class WSCalculationConstant {
 
 	public static final String CONSUMER_CODE_SEARCH_FIELD_NAME = "consumerCode=";
 
-	public static final String PAYMENT_COMPLETED_SEARCH_FIELD_NAME = "isPaymentCompleted=";
-	
 	public static final String DEMAND_CANCELLED_STATUS = DemandStatus.CANCELLED.toString();
 
 	public static final String MDMS_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear[?(@.code==\"{}\")]";
@@ -259,8 +257,6 @@ public class WSCalculationConstant {
 	
 	public static final String WS_TIME_ADHOC_REBATE = "WS_TIME_ADHOC_REBATE";
 
-	public static final String MDMS_CACHE_KEY = "WSMasterData";
-
 	//Notification
 	public static final String CHANNEL_NAME_SMS = "SMS";
 
@@ -279,37 +275,7 @@ public class WSCalculationConstant {
 	public static final String ACTION_FOR_DEMAND = "DEMAND";
 
 	public static final String ACTION_FOR_BILL = "BILL";
-	
-	
-	public static final String ADHOC_PENALTY_REASON = "adhocPenaltyReason";
 
-	public static final String ADHOC_PENALTY_COMMENT = "adhocPenaltyComment";
-
-	public static final String ADHOC_REBATE_REASON = "adhocRebateReason";
-
-	public static final String ADHOC_REBATE_COMMENT = "adhocRebateComment";
-
-	public static final String INITIAL_METER_READING_CONST = "initialMeterReading";
-
-	public static final String SUBMIT_APPLICATION_CONST = "SUBMIT_APPLICATION";
-
-	public static final String DETAILS_PROVIDED_BY = "detailsProvidedBy";
-
-	public static final String APP_CREATED_DATE = "appCreatedDate";
-
-	public static final String ESTIMATION_FILESTORE_ID = "estimationFileStoreId";
-
-	public static final String SANCTION_LETTER_FILESTORE_ID = "sanctionFileStoreId";
-
-	public static final String ESTIMATION_DATE_CONST = "estimationLetterDate";
-
-	public static final String LOCALITY = "locality";
-
-	public static final String MODIFIED_FINAL_STATE = "APPROVED";
-
-	public static final String STATUS_APPROVED = "CONNECTION_ACTIVATED";
-
-	public static final List<String> FINAL_CONNECTION_STATES = Collections
-			.unmodifiableList(Arrays.asList(MODIFIED_FINAL_STATE, STATUS_APPROVED));
+	public static final String TENANTID_MDC_STRING = "TENANTID";
 
 }

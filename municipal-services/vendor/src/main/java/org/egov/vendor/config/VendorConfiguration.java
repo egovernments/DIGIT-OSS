@@ -23,15 +23,11 @@ public class VendorConfiguration {
 	@Value("${persister.save.vendor.topic}")
 	private String saveTopic;
 
-	// Persister Config
-	@Value("${persister.update.vendor.topic}")
-	private String updateTopic;
-		
 	// MDMS
-	@Value("${egov.mdms.host}")
+	//@Value("${egov.mdms.host}")
 	private String mdmsHost;
 
-	@Value("${egov.mdms.search.endpoint}")
+	//@Value("${egov.mdms.search.endpoint}")
 	private String mdmsEndPoint;
 
 	// User Configuration

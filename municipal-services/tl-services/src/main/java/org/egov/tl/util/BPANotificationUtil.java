@@ -35,7 +35,9 @@ public class BPANotificationUtil {
 
     private Producer producer;
 
+    @Autowired
     private NotificationUtil notificationUtil;
+
 
 
     @Value("${egov.ui.app.host}")
@@ -49,11 +51,10 @@ public class BPANotificationUtil {
 
     @Autowired
     public BPANotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository,
-                               Producer producer, NotificationUtil notificationUtil) {
+                               Producer producer) {
         this.config = config;
         this.serviceRequestRepository = serviceRequestRepository;
         this.producer = producer;
-        this.notificationUtil = notificationUtil;
 
     }
 
@@ -326,7 +327,6 @@ public class BPANotificationUtil {
         List<SMSRequest> smsRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
             String customizedMsg = message.replace("{RECEIPT_DOWNLOAD_LINK}", getRecepitDownloadLink(license,entryset.getKey(),receiptno));
-            customizedMsg = customizedMsg.replace("{1}",entryset.getValue());
             smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
         }
         return smsRequest;
@@ -336,7 +336,7 @@ public class BPANotificationUtil {
 
         String consumerCode;
         consumerCode = license.getApplicationNumber();
-        String link = config.getUiAppHost() + config.getReceiptDownloadLink();
+        String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
         link = link.replace("$consumerCode", consumerCode);
         link = link.replace("$tenantId", license.getTenantId());
         link = link.replace("$businessService", license.getBusinessService());
@@ -347,7 +347,7 @@ public class BPANotificationUtil {
         return link;
     }
 
-    public EventRequest getEventsForBPA(TradeLicenseRequest request, boolean isStatusPaid, String message,String receiptno, String userEventName) {
+    public EventRequest getEventsForBPA(TradeLicenseRequest request, boolean isStatusPaid, String message,String receiptno) {
         if(message == null)
             return null;
 
@@ -383,15 +383,16 @@ public class BPANotificationUtil {
                 String actionLink = config.getPayLink().replace("$mobile", mobile)
                         .replace("$applicationNo", license.getApplicationNumber())
                         .replace("$tenantId", license.getTenantId())
-                        .replace("$businessService", license.getBusinessService());;
-                actionLink = config.getUiAppHost() + actionLink;
+                        .replace("$businessService", license.getBusinessService());
+                String UIHost = notificationUtil.getHost(license.getTenantId());
+                actionLink = UIHost + actionLink;
                 ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
                 items.add(item);
                 action = Action.builder().actionUrls(items).build();
             }
 
             events.add(Event.builder().tenantId(license.getTenantId()).description(mobileNumberToMsg.get(mobile))
-                    .eventType(BPAConstants.USREVENTS_EVENT_TYPE).name(userEventName)
+                    .eventType(BPAConstants.USREVENTS_EVENT_TYPE).name(BPAConstants.USREVENTS_EVENT_NAME)
                     .postedBy(BPAConstants.USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
                     .eventDetails(null).actions(action).build());
             }

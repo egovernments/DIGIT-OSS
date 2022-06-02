@@ -2,9 +2,7 @@
 package org.egov.pt.web.controllers;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -12,9 +10,7 @@ import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
-import org.egov.pt.models.oldProperty.OldPropertyCriteria;
 import org.egov.pt.service.FuzzySearchService;
-import org.egov.pt.service.MigrationService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ResponseInfoFactory;
 import org.egov.pt.validator.PropertyValidator;
@@ -40,9 +36,6 @@ public class PropertyController {
 
     @Autowired
     private ResponseInfoFactory responseInfoFactory;
-
-    @Autowired
-    private MigrationService migrationService;
 
     @Autowired
     private PropertyValidator propertyValidator;
@@ -87,27 +80,10 @@ public class PropertyController {
             propertyValidator.validatePropertyCriteria(propertyCriteria, requestInfoWrapper.getRequestInfo());
         }
         List<Property> properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
-        PropertyResponse response = PropertyResponse.builder().properties(properties).count(properties.size()).responseInfo(
+        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
                 responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-
-    @PostMapping("/_migration")
-    public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-                                               @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
-        long startTime = System.nanoTime();
-        Map<String, String> resultMap = null;
-        Map<String, String> errorMap = new HashMap<>();
-
-        resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap);
-
-        long endtime = System.nanoTime();
-        long elapsetime = endtime - startTime;
-        System.out.println("Elapsed time--->"+elapsetime);
-
-        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)

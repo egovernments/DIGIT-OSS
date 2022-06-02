@@ -9,7 +9,6 @@ import org.egov.pgr.producer.Producer;
 import org.egov.pgr.repository.ServiceRequestRepository;
 import org.egov.pgr.web.models.Notification.EventRequest;
 import org.egov.pgr.web.models.Notification.SMSRequest;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,13 +34,6 @@ public class NotificationUtil {
     @Autowired
     private RestTemplate restTemplate;
 
-    /**
-     *
-     * @param tenantId Tenant ID
-     * @param requestInfo Request Info object
-     * @param module Module name
-     * @return Return Localisation Message
-     */
     public String getLocalizationMessages(String tenantId, RequestInfo requestInfo,String module) {
         @SuppressWarnings("rawtypes")
         LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(getUri(tenantId, requestInfo, module),
@@ -49,17 +41,10 @@ public class NotificationUtil {
         return new JSONObject(responseMap).toString();
     }
 
-    /**
-     *
-     * @param tenantId Tenant ID
-     * @param requestInfo Request Info object
-     * @param module Module name
-     * @return Return uri
-     */
     public StringBuilder getUri(String tenantId, RequestInfo requestInfo, String module) {
 
         if (config.getIsLocalizationStateLevel())
-            tenantId = tenantId.split("\\.")[0];
+            tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 
         String locale = NOTIFICATION_LOCALE;
         if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -72,57 +57,20 @@ public class NotificationUtil {
         return uri;
     }
 
-    /**
-     *
-     * @param action Action
-     * @param applicationStatus Application Status
-     * @param roles CITIZEN or EMPLOYEE
-     * @param localizationMessage Localisation Message
-     * @return Return Customized Message based on localisation code
-     */
-    public String getCustomizedMsg(String action, String applicationStatus, String roles, String localizationMessage) {
+    public String getCustomizedMsg(String action, String applicationStatus, String localizationMessage) {
         StringBuilder notificationCode = new StringBuilder();
-
-        notificationCode.append("PGR_").append(roles.toUpperCase()).append("_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
-
+        notificationCode.append("PGR_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
         String path = "$..messages[?(@.code==\"{}\")].message";
         path = path.replace("{}", notificationCode);
         String message = null;
         try {
-            ArrayList<String> messageObj = JsonPath.parse(localizationMessage).read(path);
+            ArrayList<String> messageObj = (ArrayList<String>) JsonPath.parse(localizationMessage).read(path);
             if(messageObj != null && messageObj.size() > 0) {
                 message = messageObj.get(0);
             }
         } catch (Exception e) {
             log.warn("Fetching from localization failed", e);
         }
-
-        return message;
-    }
-
-    /**
-     *
-     * @param roles EMPLOYEE or CITIZEN
-     * @param localizationMessage Localisation Message
-     * @return Return localisation message based on default code
-     */
-    public String getDefaultMsg(String roles, String localizationMessage) {
-        StringBuilder notificationCode = new StringBuilder();
-
-        notificationCode.append("PGR_").append("DEFAULT_").append(roles.toUpperCase()).append("_SMS_MESSAGE");
-
-        String path = "$..messages[?(@.code==\"{}\")].message";
-        path = path.replace("{}", notificationCode);
-        String message = null;
-        try {
-            ArrayList<String> messageObj = JsonPath.parse(localizationMessage).read(path);
-            if(messageObj != null && messageObj.size() > 0) {
-                message = messageObj.get(0);
-            }
-        } catch (Exception e) {
-            log.warn("Fetching from localization failed", e);
-        }
-
         return message;
     }
 
@@ -130,14 +78,14 @@ public class NotificationUtil {
      * Send the SMSRequest on the SMSNotification kafka topic
      * @param smsRequestList The list of SMSRequest to be sent
      */
-    public void sendSMS(List<SMSRequest> smsRequestList) {
+    public void sendSMS(String tenantId, List<SMSRequest> smsRequestList) {
         if (config.getIsSMSEnabled()) {
             if (CollectionUtils.isEmpty(smsRequestList)) {
                 log.info("Messages from localization couldn't be fetched!");
                 return;
             }
             for (SMSRequest smsRequest : smsRequestList) {
-                producer.push(config.getSmsNotifTopic(), smsRequest);
+                producer.push(tenantId,config.getSmsNotifTopic(), smsRequest);
                 log.info("Messages: " + smsRequest.getMessage());
             }
         }
@@ -148,15 +96,10 @@ public class NotificationUtil {
      *
      * @param request EventRequest Object
      */
-    public void sendEventNotification(EventRequest request) {
-        producer.push(config.getSaveUserEventsTopic(), request);
+    public void sendEventNotification(String tenantId, EventRequest request) {
+        producer.push(tenantId,config.getSaveUserEventsTopic(), request);
     }
 
-    /**
-     *
-     * @param actualURL Actual URL
-     * @return Shortened URL
-     */
     public String getShortnerURL(String actualURL) {
         HashMap<String,String> body = new HashMap<>();
         body.put("url",actualURL);
@@ -171,12 +114,6 @@ public class NotificationUtil {
         else return res;
     }
 
-    /**
-     *
-     * @param localizationMessage Localisation Code
-     * @param notificationCode Notification Code
-     * @return Return Customized Message
-     */
     public String getCustomizedMsgForPlaceholder(String localizationMessage,String notificationCode) {
         String path = "$..messages[?(@.code==\"{}\")].message";
         path = path.replace("{}", notificationCode);

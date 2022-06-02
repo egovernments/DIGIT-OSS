@@ -154,46 +154,4 @@ public class BPALandService {
 		}
 		return uri;
 	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ArrayList<LandInfo> searchLandInfoToBPAForPlaneSearch(RequestInfo requestInfo, LandSearchCriteria landcriteria) {
-
-		log.debug("Searching with the params::" + landcriteria.getIds());
-		StringBuilder url = getLandSerchURLWithParamsForPlaneSearch(requestInfo, landcriteria);
-
-		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
-		LinkedHashMap responseMap = null;
-		responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(url, requestInfoWrapper);
-		ArrayList<LandInfo> landInfo = new ArrayList<LandInfo>();
-		if (responseMap != null && responseMap.get("LandInfo") != null)
-			landInfo = (ArrayList<LandInfo>) responseMap.get("LandInfo");
-		ArrayList<LandInfo> landData = new ArrayList<LandInfo>();
-		if (landInfo.size() > 0) {
-			for (int i = 0; i < landInfo.size(); i++) {
-				landData.add(mapper.convertValue(landInfo.get(i), LandInfo.class));
-			}
-		}
-		return landData;
-	}
-	
-	private StringBuilder getLandSerchURLWithParamsForPlaneSearch(RequestInfo requestInfo, LandSearchCriteria landcriteria) {
-		StringBuilder uri = new StringBuilder(config.getLandInfoHost());
-		uri.append(config.getLandInfoSearch());
-		uri.append("?tenantId=");
-		uri.append(landcriteria.getTenantId());
-		LandSearchCriteria landSearchCriteria = new LandSearchCriteria();
-		LandInfoRequest landRequest = new LandInfoRequest();
-		landRequest.setRequestInfo(requestInfo);
-		if (landcriteria.getIds() != null) {
-			landSearchCriteria.setIds(landcriteria.getIds());
-			uri.append("&").append("ids=");
-			for (int i = 0; i < landcriteria.getIds().size(); i++) {
-				if (i != 0) {
-					uri.append(",");
-				}
-				uri.append(landcriteria.getIds().get(i));
-			}
-		}
-		return uri;
-	}
 }

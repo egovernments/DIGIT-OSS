@@ -83,7 +83,5 @@ public class BPAErrorConstants {
         public static final String INVALID_SERVICE_TYPE = "INVALID SERVICE TYPE";
         
         public static final String INVALID_APPLN_TYPE = "INVALID APPLICATION TYPE";
-        
-        public static final String DUPLICATE_OC = "DUPLICATE OC";
 
 }

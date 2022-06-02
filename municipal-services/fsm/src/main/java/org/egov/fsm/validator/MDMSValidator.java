@@ -29,10 +29,7 @@ public class MDMSValidator {
 	public void validateMdmsData(FSMRequest fsmRequest, Object mdmsData) {
 
 		this.mdmsResMap  = getAttributeValues(mdmsData);
-		String[] masterArray = { FSMConstants.MDMS_PROPERTY_TYPE, FSMConstants.MDMS_APPLICATION_CHANNEL,
-				FSMConstants.MDMS_SANITATION_TYPE, FSMConstants.MDMS_VEHICLE_MAKE_MODEL, FSMConstants.MDMS_PIT_TYPE,
-				FSMConstants.MDMS_CONFIG, FSMConstants.MDMS_SLUM_NAME, FSMConstants.MDMS_APPLICATION_TYPE,
-				FSMConstants.MDMS_PAYMENT_PREFERENCE,FSMConstants.MDMS_RECEIVED_PAYMENT};
+		String[] masterArray = { FSMConstants.MDMS_PROPERTY_TYPE, FSMConstants.MDMS_APPLICATION_CHANNEL, FSMConstants.MDMS_SANITATION_TYPE, FSMConstants.MDMS_VEHICLE_MAKE_MODEL, FSMConstants.MDMS_PIT_TYPE,FSMConstants.MDMS_CONFIG,FSMConstants.MDMS_SLUM_NAME, FSMConstants.MDMS_APPLICATION_TYPE };
 
 		validateIfMasterPresent(masterArray,this.mdmsResMap);
 	
@@ -164,40 +161,6 @@ public class MDMSValidator {
 			}
 		} else {
 			errorMap.put(FSMErrorConstants.INVALID_FSTP_CODE, "Invalid FSTP code");
-		}
-		if (!errorMap.isEmpty())
-			throw new CustomException(errorMap);
-	}
-	
-	public void validatePaymentPreference(String paymentPreference) throws CustomException {
-
-		Map<String, String> errorMap = new HashMap<>();
-
-		if (!((List<String>) this.mdmsResMap.get(FSMConstants.MDMS_PAYMENT_PREFERENCE)).contains(paymentPreference)) {
-			errorMap.put(FSMErrorConstants.INVALID_PAYMENT_PREFERENCE, " Payment preference is invalid");
-		}
-
-		if (!errorMap.isEmpty())
-			throw new CustomException(errorMap);
-	}
-	
-	public void validateReceivedPaymentType(String receivedPaymentType) throws CustomException {
-
-		Map<String, String> errorMap = new HashMap<>();
-		log.info("validateReceivedPaymentType:: "+ receivedPaymentType);
-		log.info("validateReceivedPaymentType mdmsResMap :: "+ mdmsResMap);
-		List<String> receivedPaymentModel =  (List<String>)this.mdmsResMap.get(FSMConstants.MDMS_RECEIVED_PAYMENT);
-		log.info("validateReceivedPaymentType receivedPaymentModel :: "+ receivedPaymentModel);
-		@SuppressWarnings("unchecked")
-		List<Map<String, String>> receivedPaymentmap = (List<Map<String, String>>) JsonPath.parse(receivedPaymentModel)
-				.read("$.[?(@.code=='" + receivedPaymentType + "')]");
-		if (receivedPaymentmap != null && receivedPaymentmap.size() > 0) {
-			Map<String, String> Data = receivedPaymentmap.get(0);
-			if (!(Data.get("code").equals(receivedPaymentType))) {
-				errorMap.put(FSMErrorConstants.INVALID_RECEIVED_PAYMENT_TYPE, " Received payment type is invalid");
-			}
-		} else {
-			errorMap.put(FSMErrorConstants.INVALID_RECEIVED_PAYMENT_TYPE, " Received payment type is invalid");
 		}
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);

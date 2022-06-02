@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.echallan.config.ChallanConfiguration;
 import org.egov.echallan.model.Challan;
 import org.egov.echallan.model.ChallanRequest;
@@ -17,10 +19,12 @@ import org.egov.echallan.producer.Producer;
 import org.egov.echallan.repository.builder.ChallanQueryBuilder;
 import org.egov.echallan.repository.rowmapper.ChallanCountRowMapper;
 import org.egov.echallan.repository.rowmapper.ChallanRowMapper;
+import org.egov.echallan.util.CommonUtils;
 import org.egov.echallan.web.models.collection.Bill;
 import org.egov.echallan.web.models.collection.PaymentDetail;
 import org.egov.echallan.web.models.collection.PaymentRequest;
-import org.egov.echallan.util.ChallanConstants;
+import org.egov.tracer.model.CustomException;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -63,6 +67,9 @@ public class ChallanRepository {
     private ChallanCountRowMapper countRowMapper;
 
     @Autowired
+    private MultiStateInstanceUtil centralInstanceutil;
+
+    @Autowired
     public ChallanRepository(Producer producer, ChallanConfiguration config,ChallanQueryBuilder queryBuilder,
     		JdbcTemplate jdbcTemplate,ChallanRowMapper rowMapper,RestTemplate restTemplate) {
         this.producer = producer;
@@ -78,27 +85,34 @@ public class ChallanRepository {
     /**
      * Pushes the request on save topic
      *
-     * @param ChallanRequest The challan create request
+     * @param challanRequest The challan create request
      */
     public void save(ChallanRequest challanRequest) {
     	
-        producer.push(config.getSaveChallanTopic(), challanRequest);
+        producer.push(challanRequest.getChallan().getTenantId(),config.getSaveChallanTopic(), challanRequest);
     }
     
     /**
      * Pushes the request on update topic
      *
-     * @param ChallanRequest The challan create request
+     * @param challanRequest The challan create request
      */
     public void update(ChallanRequest challanRequest) {
     	
-        producer.push(config.getUpdateChallanTopic(), challanRequest);
+        producer.push(challanRequest.getChallan().getTenantId(),config.getUpdateChallanTopic(), challanRequest);
     }
     
     
     public List<Challan> getChallans(SearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getChallanSearchQuery(criteria, preparedStmtList);
+        try {
+            query = centralInstanceutil.replaceSchemaPlaceholder(query, criteria.getTenantId());
+        } catch (InvalidTenantIdException e) {
+            throw new CustomException("ECHALLAN_AS_TENANTID_ERROR",
+                    "TenantId length is not sufficient to replace query schema in a multi state instance");
+        }
+
         List<Challan> challans =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         return challans;
     }
@@ -114,7 +128,15 @@ public class ChallanRepository {
         	        );
         });
 
-        jdbcTemplate.batchUpdate(FILESTOREID_UPDATE_SQL,rows);
+        String query = FILESTOREID_UPDATE_SQL;
+        try {
+            query = centralInstanceutil.replaceSchemaPlaceholder(query, challans.get(0).getTenantId());
+        } catch (InvalidTenantIdException e) {
+            throw new CustomException("ECHALLAN_AS_TENANTID_ERROR",
+                    "TenantId length is not sufficient to replace query schema in a multi state instance");
+        }
+
+        jdbcTemplate.batchUpdate(query,rows);
 		
 	}
 	
@@ -139,6 +161,10 @@ public class ChallanRepository {
 
 		List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
 		String tenantId = paymentRequest.getPayment().getTenantId();
+
+        // Adding in MDC so that tracer can add it in header
+        MDC.put(TENANTID_MDC_STRING, tenantId);
+
 		List<Object[]> rows = new ArrayList<>();
 		for (PaymentDetail paymentDetail : paymentDetails) {
 			Bill bill = paymentDetail.getBill();
@@ -146,7 +172,14 @@ public class ChallanRepository {
         			bill.getBusinessService()}
         	        );
 		}
-		jdbcTemplate.batchUpdate(CANCEL_RECEIPT_UPDATE_SQL,rows);
+        String query = CANCEL_RECEIPT_UPDATE_SQL;
+        try {
+            query = centralInstanceutil.replaceSchemaPlaceholder(query, tenantId);
+        } catch (InvalidTenantIdException e) {
+            throw new CustomException("ECHALLAN_AS_TENANTID_ERROR",
+                    "TenantId length is not sufficient to replace query schema in a multi state instance");
+        }
+        jdbcTemplate.batchUpdate(query,rows);
 		
 	}
 
@@ -161,7 +194,14 @@ public class ChallanRepository {
         List<Object> preparedStmtList = new ArrayList<>();
 
         String query = queryBuilder.getChallanCountQuery(tenantId, preparedStmtList);
-        
+
+        try {
+            query = centralInstanceutil.replaceSchemaPlaceholder(query, tenantId);
+        } catch (InvalidTenantIdException e) {
+            throw new CustomException("ECHALLAN_AS_TENANTID_ERROR",
+                    "TenantId length is not sufficient to replace query schema in a multi state instance");
+        }
+
         try {
             response=jdbcTemplate.query(query, preparedStmtList.toArray(),countRowMapper);
         }catch(Exception e) {
@@ -170,27 +210,5 @@ public class ChallanRepository {
         }
         return response;
     }
-
-
-
-	public Map<String,Integer> fetchDynamicData(String tenantId) {
-		
-		List<Object> preparedStmtListTotalCollection = new ArrayList<>();
-		String query = queryBuilder.getTotalCollectionQuery(tenantId, preparedStmtListTotalCollection);
-		
-		int totalCollection = jdbcTemplate.queryForObject(query,preparedStmtListTotalCollection.toArray(),Integer.class);
-		
-		List<Object> preparedStmtListTotalServices = new ArrayList<>();
-		query = queryBuilder.getTotalServicesQuery(tenantId, preparedStmtListTotalServices);
-		
-		int totalServices = jdbcTemplate.queryForObject(query,preparedStmtListTotalServices.toArray(),Integer.class);
-		
-		Map<String, Integer> dynamicData = new HashMap<String,Integer>();
-		dynamicData.put(ChallanConstants.TOTAL_COLLECTION, totalCollection);
-		dynamicData.put(ChallanConstants.TOTAL_SERVICES, totalServices);
-		
-		return dynamicData;
-		
-	}
     
 }

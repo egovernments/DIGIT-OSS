@@ -1,8 +1,6 @@
 package org.egov.vendor.web.model.vehicle;
 
 
-import javax.validation.constraints.Size;
-
 import org.egov.vendor.web.model.AuditDetails;
 import org.egov.vendor.web.model.user.User;
 import org.hibernate.validator.constraints.SafeHtml;
@@ -91,11 +89,6 @@ public class Vehicle {
 	@JsonProperty("source")
 	private String source = null;
 
-	@JsonProperty("vendorVehicleStatus")
-	private StatusEnum vendorVehicleStatus = null;
-
-
-	
 	/**
 	 * Inactive records will be consider as soft deleted
 	 */

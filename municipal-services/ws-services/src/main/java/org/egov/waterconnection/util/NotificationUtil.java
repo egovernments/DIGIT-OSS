@@ -6,10 +6,12 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
+import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.producer.WaterConnectionProducer;
@@ -27,6 +29,8 @@ import java.util.*;
 import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
 import static org.egov.waterconnection.constants.WCConstants.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
 
 @Component
 @Slf4j
@@ -49,6 +53,9 @@ public class NotificationUtil {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 	/**
 	 * Returns the uri for the localization call
 	 * 
@@ -59,7 +66,7 @@ public class NotificationUtil {
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
 
 		if (config.getIsLocalizationStateLevel())
-			tenantId = tenantId.split("\\.")[0];
+			tenantId = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
 
 		String locale = WCConstants.NOTIFICATION_LOCALE;
 		if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
@@ -115,15 +122,15 @@ public class NotificationUtil {
 	 * Send the SMSRequest on the SMSNotification kafka topic
 	 * @param smsRequestList The list of SMSRequest to be sent
 	 */
-	public void sendSMS(List<SMSRequest> smsRequestList) {
+	public void sendSMS(List<SMSRequest> smsRequestList, String tenantId) {
 		if (config.getIsSMSEnabled()) {
 			if (CollectionUtils.isEmpty(smsRequestList)) {
 				log.info("Messages from localization couldn't be fetched!");
 				return;
 			}
 			for (SMSRequest smsRequest : smsRequestList) {
-				producer.push(config.getSmsNotifTopic(), smsRequest);
-				log.info("SMS Sent! Messages: " + smsRequest.getMessage());
+				producer.push(tenantId, config.getSmsNotifTopic(), smsRequest);
+				log.info("Messages: " + smsRequest.getMessage());
 			}
 		}
 	}
@@ -195,9 +202,25 @@ public class NotificationUtil {
 	 * 
 	 * @param request EventRequest Object
 	 */
-	public void sendEventNotification(EventRequest request) {
+	public void sendEventNotification(EventRequest request, String tenantId) {
 		log.info("Event: " + request.toString());
-		producer.push(config.getSaveUserEventsTopic(), request);
+		producer.push(tenantId ,config.getSaveUserEventsTopic(), request);
+	}
+
+	public String getHost(String tenantId){
+		log.info("INCOMING TENANTID FOR NOTIF HOST: " + tenantId);
+		Integer tenantLength = tenantId.split("\\.").length;
+		String topLevelTenant = tenantId;
+		if(tenantLength == 3){
+			topLevelTenant = tenantId.split("\\.")[0] + "." + tenantId.split("\\.")[1];
+		}
+		log.info(config.getUiAppHostMap().toString());
+		log.info(topLevelTenant);
+		String host = config.getUiAppHostMap().get(topLevelTenant);
+		if(ObjectUtils.isEmpty(host)){
+			throw new CustomException("EG_NOTIF_HOST_ERR", "No host found for tenantid: " + topLevelTenant);
+		}
+		return host;
 	}
 	public List<EmailRequest> createEmailRequest(WaterConnectionRequest waterConnectionRequest, String message, Map<String, String> mobileNumberToEmailId) {
 
@@ -225,13 +248,13 @@ public class NotificationUtil {
 	 * @param emailRequestList
 	 *            The list of EmailRequest to be sent
 	 */
-	public void sendEmail(List<EmailRequest> emailRequestList) {
+	public void sendEmail(List<EmailRequest> emailRequestList, String tenantId) {
 
 		if (config.getIsEmailNotificationEnabled()) {
 			if (CollectionUtils.isEmpty(emailRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (EmailRequest emailRequest : emailRequestList) {
-				producer.push(config.getEmailNotifTopic(), emailRequest);
+				producer.push(tenantId, config.getEmailNotifTopic(), emailRequest);
 				log.info("Email Request -> "+emailRequest.toString());
 				log.info("EMAIL notification sent!");
 			}
@@ -273,7 +296,8 @@ public class NotificationUtil {
 		uri.append(config.getMdmsHost()).append(config.getMdmsUrl());
 		if(StringUtils.isEmpty(tenantId))
 			return masterData;
-		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
+
+		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo,centralInstanceUtil.getStateLevelTenant(tenantId));
 
 		Filter masterDataFilter = filter(
 				where(MODULECONSTANT).is(moduleName).and(ACTION).is(action)

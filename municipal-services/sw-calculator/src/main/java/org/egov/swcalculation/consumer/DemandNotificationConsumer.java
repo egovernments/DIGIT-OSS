@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.egov.swcalculation.config.SWCalculationConfiguration;
 import org.egov.swcalculation.web.models.DemandNotificationObj;
 import org.egov.swcalculation.service.SewerageDemandNotificationService;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.swcalculation.constants.SWCalculationConstant.TENANTID_MDC_STRING;
 
 @Slf4j
 @Component
@@ -36,6 +39,10 @@ public class DemandNotificationConsumer {
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			DemandNotificationObj demandNotificationObj = mapper.convertValue(record, DemandNotificationObj.class);
+			String tenantId = demandNotificationObj.getTenantId();
+
+			// Adding in MDC so that tracer can add it in header
+			MDC.put(TENANTID_MDC_STRING, tenantId);
 			notificationService.process(demandNotificationObj, topic);
 		} catch (final Exception e) {
 			StringBuilder builder = new StringBuilder();
