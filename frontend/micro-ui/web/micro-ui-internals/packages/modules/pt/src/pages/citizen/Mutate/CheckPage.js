@@ -7,7 +7,8 @@ import {
   LinkButton,
   Row,
   StatusTable,
-  SubmitBar
+  SubmitBar,
+  Header,
 } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,6 +19,7 @@ import {
   ispropertyunoccupied, isPropertyVacant,
 } from "../../../utils";
 import Timeline from "../../../components/TLTimeline";
+import PropertyDocument from "../../../pageComponents/PropertyDocument";
 
 const ActionButton = ({ jumpTo }) => {
   const { t } = useTranslation();
@@ -34,26 +36,16 @@ const CheckPage = ({ onSubmit, value = {} }) => {
   const history = useHistory();
 
   const {
-    isResdential,
-    noOfFloors,
-    noOofBasements,
-    city_complaint,
-    locality_complaint,
-    street,
-    doorNo,
-    landmark,
-    ownerType,
-    Floorno,
     ownershipCategory,
     Constructiondetails,
     IsAnyPartOfThisFloorUnOccupied,
     propertyArea,
     selfOccupied,
-    floordetails,
     Owners,
     isEditProperty,
     isUpdateProperty,
     searchResult,
+    additionalDetails,
   } = value;
   
   const { property } = searchResult;
@@ -87,263 +79,163 @@ const CheckPage = ({ onSubmit, value = {} }) => {
   const setdeclarationhandler = () => {
     setAgree(!agree);
   };
+
+  const getCardSubHeadrStyles = () => {
+    return { fontSize: "24px", fontWeight: "700", lineHeight: "28px", margin: "20px 0px" }
+  }
+
+  let documentDate = t("CS_NA");
+  if (additionalDetails?.documentDate) {
+    const date = new Date(additionalDetails?.documentDate);
+    const month = Digit.Utils.date.monthNames[date.getMonth()];
+    documentDate = `${date.getDate()} ${month} ${date.getFullYear()}`;
+  }
+  
   return (
     <React.Fragment>
-     {window.location.href.includes("/citizen") ? <Timeline currentStep={4}/> : null}
-    <Card>
-      <CardHeader>{t("PT_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={4}/> : null}
+    <Header styles={{fontSize:"32px"}}>{t("WS_COMMON_SUMMARY")}</Header>
+    <Card style={{paddingRight:"16px"}}>
+    <StatusTable>
+        <Row className="border-none" label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
+        <Row className="border-none" label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} textStyle={{ whiteSpace: "pre" }} />
+        <Row className="border-none" label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
+        <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={'billAmount'} textStyle={{ whiteSpace: "pre" }} />
+        <Row className="border-none" label={t("PT_PAYMENT_STATUS")} text={'billStatus'} textStyle={{ whiteSpace: "pre" }} />
+    </StatusTable>
+
+    <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
+    <StatusTable>
+        <Row className="border-none" label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={property?.address?.pincode || t("CS_NA")} />
+        <Row className="border-none" label={t("PT_COMMON_CITY")} text={property?.address?.city || t("CS_NA")} />
+        <Row className="border-none" label={t("PT_COMMON_LOCALITY_OR_MOHALLA")} text=/* {`${t(application?.address?.locality?.name)}` || t("CS_NA")} */{t(`${(property?.address?.locality?.area)}`) || t("CS_NA")} />
+        <Row className="border-none" label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={property?.address?.street || t("CS_NA")} />
+        <Row className="border-none" label={t("PT_DOOR_OR_HOUSE")} text={property?.address?.doorNo || t("CS_NA")} />
+    </StatusTable>
+
+    <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_MUTATION_TRANSFEROR_DETAILS")}</CardSubHeader>
       <div>
-        <CardText>{t("PT_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>
-        <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
-        <StatusTable>
-          <Row
-            label={t("PT_PROPERTY_ADDRESS_SUB_HEADER")}
-            text={`${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
-              address?.landmark ? `${address?.landmark}, ` : ""
-            }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`}
-            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/pincode`} />}
-          />
-          <Row
-            label={t("PT_PROOF_OF_ADDRESS_SUB_HEADER")}
-            text={`${(address?.documents?.ProofOfAddress?.name && getFixedFilename(address.documents.ProofOfAddress.name)) || "na"}`}
-            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/proof`} />}
-          />
-        </StatusTable>
-        <CardSubHeader>{t("PT_OWNERSHIP_DETAILS_SUB_HEADER")}</CardSubHeader>
-        <StatusTable>
-          <Row
-            label={t("PT_FORM3_OWNERSHIP_TYPE")}
-            text={t(checkForNA(`PT_OWNERSHIP_${ownershipCategory?.code}`))}
-            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/owner-ship-details@0`} />}
-          />
-        </StatusTable>
-        <div>
-          {Owners &&
-            Owners.map &&
-            Owners.map((owner, index) => (
-              <div key={index}>
-                {Owners.length != 1 && (
-                  <CardSubHeader>
-                    {t("PT_OWNER_SUB_HEADER")} - {index + 1}
+        {Array.isArray(property?.owners) &&
+          property?.owners.map((owner, index) => (
+            <div key={index}>
+              <CardSubHeader style={getCardSubHeadrStyles()}>
+                {property?.owners.length != 1 && (
+                  <span>
+                    {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
+                  </span>
+                )}
+              </CardSubHeader>
+              <StatusTable>
+                <Row className="border-none" label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
+                <Row className="border-none" label={t("Guardian Name")} text={owner?.fatherOrHusbandName || t("CS_NA")} />   
+                <Row className="border-none" label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={ owner?.ownerType.toLowerCase() || t("CS_NA")} />
+                <Row className="border-none" label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
+              </StatusTable>
+            </div>
+          ))}
+      </div>
+
+      <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_MUTATION_TRANSFEREE_DETAILS")}</CardSubHeader>
+      {
+        ownershipCategory?.code?.includes("INSTITUTIONAL") ? (
+          <div>
+            {Array.isArray(Owners) &&
+              Owners.map((owner, index) => (
+                <div key={index}>
+                  <CardSubHeader style={getCardSubHeadrStyles()}>
+                    {Owners.length != 1 && (
+                      <span>
+                        {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
+                      </span>
+                    )}
                   </CardSubHeader>
-                )}
-                {ownershipCategory?.value == "INSTITUTIONALPRIVATE" || ownershipCategory?.value == "INSTITUTIONALGOVERNMENT" ? (
-                  <div>
-                    <StatusTable>
-                      <Row
-                        label={t("PT_COMMON_INSTITUTION_NAME")}
-                        text={`${t(checkForNA(owner?.inistitutionName))}`}
-                        actionButton={
-                          <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/inistitution-details/`}${index}`} />
-                        }
-                      />
-                      <Row
-                        label={t("PT_TYPE_OF_INSTITUTION")}
-                        text={`${t(checkForNA(owner?.inistitutetype?.code))}`}
-                        actionButton={
-                          <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/inistitution-details/`}${index}`} />
-                        }
-                      />
-                      <Row
-                        label={t("PT_OWNER_NAME")}
-                        text={`${t(checkForNA(owner?.name))}`}
-                        actionButton={
-                          <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/inistitution-details/`}${index}`} />
-                        }
-                      />
-                      <Row
-                        label={`${t("PT_COMMON_AUTHORISED_PERSON_DESIGNATION")}`}
-                        text={`${t(checkForNA(owner?.designation))}`}
-                        actionButton={
-                          <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/inistitution-details/`}${index}`} />
-                        }
-                      />
-                      <Row
-                        label={`${t("PT_FORM3_MOBILE_NUMBER")}`}
-                        text={`${t(checkForNA(owner?.mobileNumber))}`}
-                        actionButton={
-                          <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/inistitution-details/`}${index}`} />
-                        }
-                      />
-                      <Row
-                        label={`${t("PT_OWNERSHIP_INFO_TEL_PHONE_NO")}`}
-                        text={`${t(checkForNA(owner?.altContactNumber))}`}
-                        actionButton={
-                          <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/inistitution-details/`}${index}`} />
-                        }
-                      />
-                      <Row
-                        label={`${t("PT_FORM3_EMAIL_ID")}`}
-                        text={`${t(checkForNA(owner?.emailId))}`}
-                        actionButton={
-                          <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/inistitution-details/`}${index}`} />
-                        }
-                      />
-                      <Row
-                        label={`${t("PT_OWNERSHIP_INFO_CORR_ADDR")}`}
-                        text={`${t(checkForNA(owner?.permanentAddress))}`}
-                        actionButton={
-                          <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/institutional-owner-address/`}${index}`} />
-                        }
-                      />
-                      <Row
-                        label={`${t("PT_COMMON_SAME_AS_PROPERTY_ADDRESS")}`}
-                        text={`${t(checkForNA(owner?.isCorrespondenceAddress))}`}
-                        actionButton={
-                          <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/institutional-owner-address/`}${index}`} />
-                        }
-                      />
-                      <Row
-                        label={t("PT_PROOF_IDENTITY_HEADER")}
-                        text={`${(owner?.documents["proofIdentity"]?.name && getFixedFilename(owner.documents["proofIdentity"].name)) || "na"}`}
-                        actionButton={
-                          <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/institutional-proof-of-identity/`}${index}`} />
-                        }
-                      />
-                    </StatusTable>
-                  </div>
-                ) : (
-                  <div>
-                    <StatusTable>
-                      <Row
-                        label={t("PT_OWNER_NAME")}
-                        text={`${t(checkForNA(owner?.name))}`}
-                        actionButton={<ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/owner-details/`}${index}`} />}
-                      />
-                      <Row
-                        label={t("PT_FORM3_GENDER")}
-                        text={`${t(checkForNA(owner?.gender?.code))}`}
-                        actionButton={<ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/owner-details/`}${index}`} />}
-                      />
-                      <Row
-                        label={`${t("PT_FORM3_MOBILE_NUMBER")}`}
-                        text={`${t(checkForNA(owner?.mobileNumber))}`}
-                        actionButton={<ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/owner-details/`}${index}`} />}
-                      />
-                      <Row
-                        label={t("PT_FORM3_GUARDIAN_NAME")}
-                        text={`${t(checkForNA(owner?.fatherOrHusbandName))}`}
-                        actionButton={<ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/owner-details/`}${index}`} />}
-                      />
-                      <Row
-                        label={t("PT_FORM3_RELATIONSHIP")}
-                        text={`${t(checkForNA(owner?.relationship?.code))}`}
-                        actionButton={<ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/owner-details/`}${index}`} />}
-                      />
-                      <Row
-                        label={t("PT_SPECIAL_OWNER_CATEGORY")}
-                        text={`${t(checkForNA(owner?.ownerType?.code))}`}
-                        actionButton={
-                          <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/special-owner-category/`}${index}`} />
-                        }
-                      />
-                      <Row
-                        label={`${t("PT_OWNERS_ADDRESS")}`}
-                        text={`${t(checkForNA(owner?.permanentAddress))}`}
-                        actionButton={<ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/owner-address/`}${index}`} />}
-                      />
-                      <Row
-                        label={`${t("PT_COMMON_SAME_AS_PROPERTY_ADDRESS")}`}
-                        text={`${t(checkForNA(owner?.isCorrespondenceAddress))}`}
-                        actionButton={<ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/owner-address/`}${index}`} />}
-                      />
-                      {owner?.ownerType?.code !== "NONE" ? (
-                        <Row
-                          label={t("PT_SPECIAL_OWNER_CATEGORY_PROOF_HEADER")}
-                          text={`${
-                            (owner?.documents["specialProofIdentity"]?.name && getFixedFilename(owner.documents["specialProofIdentity"].name)) || "na"
-                          }`}
-                          actionButton={
-                            <ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/special-owner-category-proof/`}${index}`} />
-                          }
-                        />
-                      ) : (
-                        ""
-                      )}
-                      <Row
-                        label={t("PT_PROOF_IDENTITY_HEADER")}
-                        text={`${(owner?.documents["proofIdentity"]?.name && getFixedFilename(owner.documents["proofIdentity"].name)) || "na"}`}
-                        actionButton={<ActionButton jumpTo={`${`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/proof-of-identity/`}${index}`} />}
-                      />
-                    </StatusTable>
-                  </div>
-                )}
-              </div>
+                  <StatusTable>
+                    <Row className="border-none" label={t("PT_INSTITUTION_NAME")} text={transferorInstitution?.name || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_TYPE_OF_INSTITUTION")} text={`${t(transferorInstitution?.type)}` || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_NAME_AUTHORIZED_PERSON")} text={transferorInstitution?.nameOfAuthorizedPerson || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_LANDLINE_NUMBER")} text={owner?.altContactNumber || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_INSTITUTION_DESIGNATION")} text={transferorInstitution?.designation || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
+                  </StatusTable>
+                </div>
+              ))}
+          </div>
+        ) : (
+          <div>
+            {Array.isArray(Owners) &&
+              Owners.map((owner, index) => (
+                <div key={index}>
+                  <CardSubHeader  style={getCardSubHeadrStyles()}>
+                    {Owners.length != 1 && (
+                      <span>
+                        {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
+                      </span>
+                    )}
+                  </CardSubHeader>
+                  <StatusTable>
+                    <Row className="border-none" label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_COMMON_GENDER_LABEL")} text={t(owner?.gender?.i18nKey) || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_FORM3_RELATIONSHIP")} text={t(owner?.relationship?.i18nKey) || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_MUTATION_AUTHORISED_EMAIL")}text={owner?.emailId || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={t(owner?.ownerType?.i18nKey) || t("CS_NA")} />
+                    <Row
+                      className="border-none"
+                      label={t("PT_FORM3_OWNERSHIP_TYPE")}
+                      text={`${property?.ownershipCategoryTemp ? t(`PT_OWNERSHIP_${property?.ownershipCategoryTemp}`) : t("CS_NA")}`}
+                    />
+                  </StatusTable>
+                </div>
             ))}
-        </div>
-        <CardSubHeader>{t("PT_ASSESMENT_INFO_SUB_HEADER")}</CardSubHeader>
-        <StatusTable>
-          <Row
-            label={t("PT_ASSESMENT1_PROPERTY_TYPE")}
-            text={`${t(checkForNA(propertyType))}`}
-            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/property-type`} />}
-          />
-          <Row
-            label={t("PT_ASSESMENT1_PLOT_SIZE")}
-            text={`${landArea}`}
-            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/landarea`} />}
-          />
-          {isPropertyVacant(propertyType) && (
-            <Row
-              label={t("PT_ASSESMENT1_PLOT_SIZE")}
-              text={`${landarea?.floorarea}`}
-              actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/PtUnits`} />}
-            />
-          )}
-          {! isPropertyVacant(propertyType) &&
-            units
-              .sort((x, y) => x.floorNo - y.floorNo)
-              .map((unit, unitIndex) => {
-                return (
-                  <div>
-                    {units.length > 1 && <CardSubHeader>{t(`PT_UNIT`)}-{unitIndex}</CardSubHeader>}
-                    <Row
-                      label={t("PT_BUILT_UP_AREA")}
-                      text={`${unit?.constructionDetail?.builtUpArea}`}
-                      actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/PtUnits`} />}
-                    />
-                    <Row
-                      label={t("PT_ASSESMENT_INFO_OCCUPLANCY")}
-                      text={t(`PROPERTYTAX_OCCUPANCYTYPE_${unit?.occupancyType}`)}
-                      actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/PtUnits`} />}
-                    />
-                    <Row
-                      label={t("PT_FORM2_USAGE_TYPE")}
-                      text={t(
-                        `PROPERTYTAX_BILLING_SLAB_${
-                          unit?.usageCategory?.split(".").length > 2 ? unit?.usageCategory?.split(".")[1] : unit?.usageCategory?.split(".")[0]
-                        }`
-                      )}
-                      actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/PtUnits`} />}
-                    />{" "}
-                    {unit?.unitType && (
-                      <Row
-                        label={t("PT_FORM2_SUB_USAGE_TYPE")}
-                        text={t(`PROPERTYTAX_BILLING_SLAB_${unit?.unitType}`)}
-                        actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/PtUnits`} />}
-                      />
-                    )}
-                    <Row
-                      label={t("PT_FLOOR_NO")}
-                      text={`${unit?.floorNo}`}
-                      actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/PtUnits`} />}
-                    />
-                    {unit?.arv && (
-                      <Row
-                        label={t("PT_PROPERTY_ANNUAL_RENT_LABEL")}
-                        text={`${unit?.arv}`}
-                        actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/property-mutation/${typeOfApplication}/PtUnits`} />}
-                      />
-                    )}
-                  </div>
-                );
-              })}
-        </StatusTable>
-        <CheckBox
-          label={t("PT_FINAL_DECLARATION_MESSAGE")}
-          onChange={setdeclarationhandler}
-          styles={{ height: "auto" }}
+          </div>
+        )
+      }
+
+      <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_MUTATION_DETAILS")}</CardSubHeader>
+      <StatusTable>
+        <Row
+          className="border-none"
+          label={t("PT_MUTATION_PENDING_COURT")}
+          text={additionalDetails?.isMutationInCourt || t("CS_NA")}
         />
+        <Row className="border-none" label={t("PT_DETAILS_COURT_CASE")} text={additionalDetails?.caseDetails || t("CS_NA")} />
+        <Row
+          className="border-none"
+          label={t("PT_PROP_UNDER_GOV_AQUISITION")}
+          text={additionalDetails?.isPropertyUnderGovtPossession || t("CS_NA")}
+        />
+        <Row className="border-none" label={t("PT_DETAILS_GOV_AQUISITION")} text={t("CS_NA")} />
+      </StatusTable>
+
+      <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_REGISTRATION_DETAILS")}</CardSubHeader>
+      <StatusTable>
+        <Row
+          className="border-none"
+          label={t("PT_REASON_PROP_TRANSFER")}
+          text={`${t(additionalDetails?.reasonForTransfer)}` || t("CS_NA")}
+        />
+        <Row className="border-none" label={t("PT_PROP_MARKET_VALUE")} text={additionalDetails?.marketValue || t("CS_NA")} />
+        <Row className="border-none" label={t("PT_REG_NUMBER")} text={additionalDetails?.documentNumber || t("CS_NA")} />
+        <Row className="border-none" label={t("PT_DOC_ISSUE_DATE")} text={documentDate} />
+        <Row className="border-none" label={t("PT_REG_DOC_VALUE")} text={additionalDetails?.documentValue || t("CS_NA")} />
+        <Row className="border-none" label={t("PT_REMARKS")} text={t("CS_NA")} />
+      </StatusTable>
+
+      <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_COMMON_DOCS")}</CardSubHeader>
+      <div>
+        {Array.isArray(property?.documents) ? (
+          property?.documents.length > 0 && <PropertyDocument property={property}></PropertyDocument>
+        ) : ( 
+          <StatusTable>
+            <Row className="border-none" text={t("PT_NO_DOCUMENTS_MSG")} />
+          </StatusTable>
+        )}
       </div>
       <SubmitBar label={t("PT_COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} disabled={!agree} />
     </Card>
