@@ -42,7 +42,11 @@ public class VendorRepository {
 	public void save(VendorRequest vendorRequest) {
 		producer.push(configuration.getSaveTopic(), vendorRequest);
 	}
-
+	
+	public void update(VendorRequest vendorRequest) {
+		producer.push(configuration.getUpdateTopic(), vendorRequest);
+	}
+	
 	public List<Vendor> getVendorData(VendorSearchCriteria vendorSearchCriteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = vendorQueryBuilder.getVendorSearchQuery(vendorSearchCriteria, preparedStmtList);
@@ -51,28 +55,30 @@ public class VendorRepository {
 		return vendorData;
 	}
 
-	public List<String> getDrivers(String id) {
+	public List<String> getDrivers(String id, String status) {
 		List<String> ids = null;
 		List<Object> preparedStmtList = new ArrayList<>();
 		preparedStmtList.add(id);
+		preparedStmtList.add(status);
 		ids = jdbcTemplate.queryForList(vendorQueryBuilder.getDriverSearchQuery(), preparedStmtList.toArray(),
 				String.class);
 		return ids;
 	}
 
-	public List<String> getVehicles(String id) {
+	public List<String> getVehicles(String id, String status) {
 		List<String> ids = null;
 		List<Object> preparedStmtList = new ArrayList<>();
 		preparedStmtList.add(id);
+		preparedStmtList.add(status);
 		ids = jdbcTemplate.queryForList(vendorQueryBuilder.getVehicleSearchQuery(), preparedStmtList.toArray(),
 				String.class);
 		return ids;
 	}
 
-	public List<String> getVendorWithVehicles(List<String> vehicleIds) {
+	public List<String> getVendorWithVehicles(VendorSearchCriteria vendorSearchCriteria) {
 		List<String> vendorIds = null;
 		List<Object> preparedStmtList = new ArrayList<>();
-		vendorIds = jdbcTemplate.queryForList(vendorQueryBuilder.vendorsForVehicles(vehicleIds, preparedStmtList),
+		vendorIds = jdbcTemplate.queryForList(vendorQueryBuilder.vendorsForVehicles(vendorSearchCriteria, preparedStmtList),
 				preparedStmtList.toArray(), String.class);
 		return vendorIds;
 	}

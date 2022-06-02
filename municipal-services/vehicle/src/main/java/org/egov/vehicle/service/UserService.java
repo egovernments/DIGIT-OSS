@@ -71,26 +71,17 @@ public class UserService {
 		RequestInfo requestInfo = vendorRequest.getRequestInfo();
 		User owner = vehicle.getOwner();
 
-		
 		UserDetailResponse userDetailResponse = null;
-		
-
 		if (owner.getMobileNumber() != null) {
-
 			userDetailResponse = userExists(owner, requestInfo);
 			if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
-
 				//TODO once role is introduced for vehicle owner then verify for the role from the list of users
 				owner = userDetailResponse.getUser().get(0);
-				
-				
-
 			} else {
 				// User with mobile number ifself not found then create new user and consider
 				// the new user as applicant.
 				owner = createVehicleOwner(owner, vendorRequest.getRequestInfo());
 			}
-
 			vehicle.setOwner(owner);
 
 		} else {

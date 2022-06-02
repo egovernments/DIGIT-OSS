@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
@@ -130,8 +131,11 @@ public class WorkflowService {
 		} catch (IllegalArgumentException e) {
 			throw new CustomException("PARSING_ERROR", "Failed to parse response of process instance");
 		}
-		Optional<ProcessInstance> processInstance = response.getProcessInstances().stream().findFirst();
-		return processInstance.get();
+		if (!ObjectUtils.isEmpty(response.getProcessInstances())) {
+			Optional<ProcessInstance> processInstance = response.getProcessInstances().stream().findFirst();
+			return processInstance.get();
+		}
+		return null;
 	}
 
 	/**

@@ -213,4 +213,7 @@ public class WSConfiguration {
 
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsUrl;
+	
+	@Value("${egov.disconnect.businessservice}")
+	private String disconnectBusinessServiceName;
 }

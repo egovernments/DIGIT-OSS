@@ -46,7 +46,10 @@ public class VehicleService {
 		RequestInfo requestInfo = vendorRequest.getRequestInfo();
 		List<Vehicle> reqVehicles= vendor.getVehicles();
 		List<Vehicle> newVehicles = new ArrayList<Vehicle>();
-		reqVehicles.forEach(reqVehicle->{
+		
+		if(!CollectionUtils.isEmpty(reqVehicles)) {
+		
+			reqVehicles.forEach(reqVehicle->{
 			
 			if(!StringUtils.hasLength(reqVehicle.getId()) && 
 					StringUtils.hasLength(reqVehicle.getRegistrationNumber())) {
@@ -54,15 +57,19 @@ public class VehicleService {
 				VehicleSearchCriteria vehicleSearchCriteria=new VehicleSearchCriteria();
 				vehicleSearchCriteria = VehicleSearchCriteria.builder()
 						.registrationNumber(Arrays.asList(reqVehicle.getRegistrationNumber()))
-						.tenantId(vendor.getTenantId()).build();
+						.tenantId(vendor.getTenantId())
+						.status(Arrays.asList("ACTIVE")).build();
 				
 				List<Vehicle> vehicles = getVehicles(vehicleSearchCriteria,requestInfo);
 				
 				if( vehicles.size() >0 ) {
+					vehicles.get(0).setVendorVehicleStatus(reqVehicle.getVendorVehicleStatus());
 					newVehicles.add(vehicles.get(0));
 					//TODO comparing search result and request vehicle and callig update is peding
 				}else {
-					newVehicles.add(createVehicle(reqVehicle, requestInfo));
+					Vehicle newVehicle=createVehicle(reqVehicle, requestInfo);
+					newVehicle.setVendorVehicleStatus(reqVehicle.getVendorVehicleStatus());
+					newVehicles.add(newVehicle);
 				}
 			}else {
 				
@@ -74,23 +81,24 @@ public class VehicleService {
 				
 				List<Vehicle> vehicles = getVehicles(vehicleSearchCriteria,requestInfo);
 				
-				/*
-				 * List<Vehicle> vehicles = getVehicles(Arrays.asList(reqVehicle.getId()),
-				 * Arrays.asList(reqVehicle.getRegistrationNumber()), null, null, requestInfo,
-				 * vendor.getTenantId());
-				 */
-				
 				if( vehicles.size() >0 ) {
-					newVehicles.add(vehicles.get(0));
-					//TODO comparing search result and request vehicle and callig update is peding
+					Vehicle newVehicle=updateVehicle(reqVehicle, requestInfo);
+					newVehicle.setVendorVehicleStatus(reqVehicle.getVendorVehicleStatus());
+					newVehicles.add(newVehicle);
+					//newVehicles.add(updateVehicle(reqVehicle, requestInfo));
+					
 				}else {
-					newVehicles.add(createVehicle(reqVehicle, requestInfo));
+					throw new CustomException(VendorConstants.UPDATE_ERROR,
+					 "Vendor vehicle details not found in the System" + vendorRequest.getVendor());
 				}
 			}
 		});
 		
-		vendorRequest.getVendor().getVehicles().clear();
-		vendorRequest.getVendor().getVehicles().addAll(newVehicles);
+			vendorRequest.getVendor().getVehicles().clear();
+			vendorRequest.getVendor().getVehicles().addAll(newVehicles);
+	}
+		
+		
 		
 	}
 	
@@ -104,8 +112,6 @@ public class VehicleService {
 	 * @param tenantId
 	 * @return
 	 */
-	//public List<Vehicle> getVehicles(List<String> vehicleIds, List<String> registrationNumbers, String vehicleType,
-	//		String vehicleCapacity, RequestInfo requestInfo, String tenantId) {
 	public List<Vehicle> getVehicles(VehicleSearchCriteria vehicleSearchCriteria, RequestInfo requestInfo){
 		
 		StringBuilder uri = new StringBuilder();
@@ -125,6 +131,10 @@ public class VehicleService {
 		
 		if(StringUtils.hasLength(vehicleSearchCriteria.getVehicleCapacity())) {
 			uri.append("&tankCapacity="+vehicleSearchCriteria.getVehicleCapacity());
+		}
+		
+		if( !CollectionUtils.isEmpty(vehicleSearchCriteria.getStatus())) {
+			uri.append("&status="+String.join(",",vehicleSearchCriteria.getStatus())); 
 		}
 		
 		RequestInfoWrapper reqwraper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
@@ -151,6 +161,28 @@ public class VehicleService {
 				return vehicleResponse.getVehicle().get(0);
 			}else {
 				throw new CustomException(VendorConstants.COULD_NOT_CREATE_VEHICLE, "Could not create vehicle");
+			}
+			
+		} catch (IllegalArgumentException e) {
+			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in userCall");
+		}
+		
+		
+		
+	}
+	
+	private Vehicle updateVehicle(Vehicle vehicle, RequestInfo requestInfo) {
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getVehicleHost()).append(config.getVehicleContextPath()).append(config.getVehicleUpdateEndpoint());
+		VehicleRequest vehicleRequest = VehicleRequest.builder().RequestInfo(requestInfo).vehicle(vehicle).build();
+		try {
+			
+			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, vehicleRequest);
+			VehicleResponse vehicleResponse = mapper.convertValue(responseMap, VehicleResponse.class);
+			if(vehicleResponse.getVehicle() != null && vehicleResponse.getVehicle().size() >0) {
+				return vehicleResponse.getVehicle().get(0);
+			}else {
+				throw new CustomException(VendorConstants.UPDATE_VEHICLE_ERROR, "Could not Update vehicle");
 			}
 			
 		} catch (IllegalArgumentException e) {
