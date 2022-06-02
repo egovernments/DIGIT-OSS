@@ -199,7 +199,7 @@ import useSearchWS from "./ws/useSearchWS";
 import useMypaymentWS from "./ws/useMypaymentWS";
 import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions";
-import useApplicationActionsBillAmendUpdate from './ws/useApplicationActionsBillAmendUpdate'
+import useApplicationActionsBillAmendUpdate from "./ws/useApplicationActionsBillAmendUpdate";
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
 import useWSMDMS from "./ws/useWSMDMS";
 import useAccessControl from "./useAccessControl";
@@ -215,14 +215,15 @@ import useTenantsBills from "./bills/useTenants";
 import useMeterReadingCreateAPI from "./ws/useMeterConnectionCreateAPI";
 import useGetMeterStatusList from "./ws/useGetMeterStatusList";
 import useGetBillingPeriodValidation from "./ws/useBillingPeriodValidation";
-import  useReportMeta  from "./reports/useReport";
+import useReportMeta from "./reports/useReport";
 import useWaterPropertySearch from "./ws/useWaterPropertySearch";
 
 import useGetHowItWorksJSON from "./useHowItWorksJSON";
 import useGetFAQsJSON from "./useGetFAQsJSON";
-import useGetDSSFAQsJSON from "./useGetDSSFAQsJSON"
-import useGetDSSAboutJSON from "./useGetDSSAboutJSON"
+import useGetDSSFAQsJSON from "./useGetDSSFAQsJSON";
+import useGetDSSAboutJSON from "./useGetDSSAboutJSON";
 import useStaticData from "./useStaticData";
+import useBillAmendmentInbox from "./billAmendment/useInbox";
 
 const pgr = {
   useComplaintDetails,
@@ -336,7 +337,7 @@ const tl = {
   useApplicationActions: useTLApplicationActions,
   useFetchBill: useTLFetchBill,
   useTLApplicationDetails,
-  useTLWorkflowData
+  useTLWorkflowData,
 };
 
 const receipts = {
@@ -440,8 +441,8 @@ const ws = {
 };
 
 const reports = {
-  useReportMeta
-}
+  useReportMeta,
+};
 
 const Hooks = {
   useSessionStorage,
@@ -498,6 +499,7 @@ const Hooks = {
   useGetDSSAboutJSON,
   useStaticData,
   useDynamicData,
+  useBillAmendmentInbox,
 };
 
 export default Hooks;

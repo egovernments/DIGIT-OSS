@@ -108,6 +108,11 @@ const BILLSBreadCrumbs = ({ location }) => {
       show: location.pathname.includes("/edit-application") ? true : false,
       isBack: true,
     },
+    {
+      path: "/digit-ui/employee/sewerage/bill-amendment/inbox",
+      content: t("ES_COMMON_BILLS_SEWERAGE_INBOX_LABEL"),
+      show: location.pathname.includes("/sewerage/bill-amendment/inbox") ? true : false,
+    },
   ];
 
   return <BreadCrumb crumbs={crumbs} spanStyle={{ maxWidth: "min-content" }} />;
@@ -145,7 +150,7 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/ws-response`} component={WSResponse} />
           <PrivateRoute path={`${path}/water/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/sewerage/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
-        
+
           <PrivateRoute path={`${path}/consumption-details`} component={ConsumptionDetails} />
           <PrivateRoute path={`${path}/modify-application`} component={ModifyApplication} />
           <PrivateRoute path={`${path}/modify-application-edit`} component={EditModifyApplication} />
@@ -155,6 +160,9 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/sewerage/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/edit-application-by-config`} component={WSEditApplicationByConfig} />
           <PrivateRoute path={`${path}/disconnection-details`} component={GetDisconnectionDetails} />
+          <PrivateRoute path={`${path}/water/bill-amendment/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/sewerage/bill-amendment/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
+
           {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
           <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
         </div>
