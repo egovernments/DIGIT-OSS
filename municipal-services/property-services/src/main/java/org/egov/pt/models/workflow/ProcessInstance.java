@@ -81,8 +81,8 @@ public class ProcessInstance {
 	private String notificationAction;
 
 	@SafeHtml
-	@JsonProperty("comment")
-	private String comment;
+	@JsonProperty("comments")
+	private String comments;
 
 	@JsonProperty("documents")
 	@Valid
