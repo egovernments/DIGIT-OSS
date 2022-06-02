@@ -112,20 +112,8 @@ public class DecryptionPolicyConfiguration {
                 throw new CustomException("DECRYPTION_NULL_ERROR", "Attribute list is empty");
             }
 
-            if (!isAttributeListEmpty && isRoleAttributeAccessMapEmpty) {
-                for (Attribute attribute : attributesList) {
-                    String defaultVisibility = String.valueOf(attribute.getDefaultVisibility());
-                    Visibility visibility = Visibility.valueOf(defaultVisibility);
-                    if (mapping.containsKey(attribute)) {
-                        if (mapping.get(attribute).ordinal() > visibility.ordinal()) {
-                            mapping.remove(attribute);
-                            mapping.put(attribute, visibility);
-                        }
-                    } else {
-                        mapping.put(attribute, visibility);
-                    }
-                }
-            }
+            /*if (!isAttributeListEmpty && isRoleAttributeAccessMapEmpty)
+                mapping = getDefaultVisibilityMapping(attributesList);*/
 
             if(!isAttributeListEmpty && !isRoleAttributeAccessMapEmpty) {
                 Map<String, Attribute> attributesMap = makeAttributeMap(attributesList);
@@ -165,6 +153,16 @@ public class DecryptionPolicyConfiguration {
                     requestInfo.getPlainRequestAccess().setPlainRequestFields(secondLevelVisibility);
             }
 
+            List<Attribute> mappingAttributesList = new ArrayList<Attribute>(mapping.keySet());
+            List<String> attributesToAvoidlist = new ArrayList<>();
+            for(Attribute attribute: mappingAttributesList)
+                attributesToAvoidlist.add(attribute.getName());
+
+
+            if(!isAttributeListEmpty)
+                getDefaultVisibilityMapping(attributesList, mapping, attributesToAvoidlist);
+
+
             return mapping;
         } catch (Exception e) {
             throw new CustomException("DECRYPTION_NULL_ERROR", "Error in decryption process");
@@ -195,6 +193,24 @@ public class DecryptionPolicyConfiguration {
 
     public UniqueIdentifier getSecurityPolicyUniqueIdentifier(String model) {
         return uniqueIdentifierMap.get(model);
+    }
+
+    private void getDefaultVisibilityMapping(List<Attribute> attributesList, Map<Attribute, Visibility> mapping, List<String> attributesToAvoidlist){
+
+        for (Attribute attribute : attributesList) {
+            String defaultVisibility = String.valueOf(attribute.getDefaultVisibility());
+            Visibility visibility = Visibility.valueOf(defaultVisibility);
+            if(!attributesToAvoidlist.contains(attribute.getName())){
+                if (mapping.containsKey(attribute)) {
+                    if (mapping.get(attribute).ordinal() > visibility.ordinal()) {
+                        mapping.remove(attribute);
+                        mapping.put(attribute, visibility);
+                    }
+                } else {
+                    mapping.put(attribute, visibility);
+                }
+            }
+        }
     }
 
 }
