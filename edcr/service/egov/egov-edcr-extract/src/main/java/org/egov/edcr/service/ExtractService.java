@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.PlanFeature;
 import org.egov.common.entity.edcr.PlanInformation;
@@ -58,7 +59,7 @@ public class ExtractService {
     @Autowired
     private MDMSValidator mdmsValidator;
 
-    private Logger LOG = Logger.getLogger(ExtractService.class);
+    private Logger LOG = LogManager.getLogger(ExtractService.class);
 
     public Plan extract(File dxfFile, Amendment amd, Date scrutinyDate, List<PlanFeature> features) {
 

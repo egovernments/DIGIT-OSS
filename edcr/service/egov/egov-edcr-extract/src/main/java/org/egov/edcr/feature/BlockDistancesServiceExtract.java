@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.BlockDistances;
 import org.egov.edcr.entity.blackbox.PlanDetail;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BlockDistancesServiceExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(BlockDistancesServiceExtract.class);
+    private static final Logger LOG = LogManager.getLogger(BlockDistancesServiceExtract.class);
     public static final String SUBRULE_54_3 = "54-(3)";
     public static final String SUBRULE_55_2 = "55-(2)";
     public static final String SUBRULE_57_4 = "57-(4)";

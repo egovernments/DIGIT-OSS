@@ -2,7 +2,8 @@ package org.egov.edcr.feature;
 
 import java.math.BigDecimal;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
 import org.egov.edcr.utility.Util;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WaterTankCapacityExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(WaterTankCapacityExtract.class);
+    private static final Logger LOG = LogManager.getLogger(WaterTankCapacityExtract.class);
     @Autowired
     private LayerNames layerNames;
 
