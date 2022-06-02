@@ -384,7 +384,7 @@ public class BillService {
 		billNumberFormat = billNumberFormat.replace(appProps.getModuleReplaceStirng(), module);
 
 		if (appProps.getIsTenantLevelBillNumberingEnabled())
-			billNumberFormat = billNumberFormat.replace(appProps.getTenantIdReplaceString(), "_".concat(tenantId.split("\\.")[1]));
+			billNumberFormat = billNumberFormat.replace(appProps.getTenantIdReplaceString(), "_".concat(tenantId.split("\\.")[tenantId.length()-1]));
 		else
 			billNumberFormat = billNumberFormat.replace(appProps.getTenantIdReplaceString(), "");
 

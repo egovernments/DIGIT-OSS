@@ -106,6 +106,7 @@ public class ReceiptServiceV2 {
 				.isReceiptCancellation(isReceiptCancellation)
 				.isBackUpdateSucces(true)
 				.paymentId(paymentId)
+				.tenantId(tenantId)
 				.build();
 		
 		DemandRequest demandRequest = DemandRequest.builder()

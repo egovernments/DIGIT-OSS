@@ -74,13 +74,6 @@ public class TarentoServiceImpl implements ClientService {
 		ObjectNode insightNodes = JsonNodeFactory.instance.objectNode();
 		Boolean continueWithInsight = Boolean.FALSE; 
 
-		//TODO should be remove temporary fix for national dashboard
-		Map<String, Object> filters = request.getFilters();
-		if( filters != null && filters.get("ulb") != null) {
-			filters.put("tenantId", filters.get("ulb"));
-		}
-		
-		
 		// Load Chart API configuration to Object Node for easy retrieval later
 		ObjectNode node = configurationLoader.get(Constants.ConfigurationFiles.CHART_API_CONFIG);
 		ObjectNode chartNode = (ObjectNode) node.get(internalChartId);
@@ -121,7 +114,7 @@ public class TarentoServiceImpl implements ClientService {
 					responseHandler.translate(request, insightAggrObjectNode);
 				}
 				InsightsHandler insightsHandler = insightsHandlerFactory.getInstance(chartType);
-				aggregateDto = insightsHandler.getInsights(aggregateDto, request.getVisualizationCode(), request.getModuleLevel(), insightsConfig,request.getResponseRecorder());
+				aggregateDto = insightsHandler.getInsights(aggregateDto, request.getVisualizationCode(), request.getModuleLevel(), insightsConfig, request.getResponseRecorder());
 			}
 		}
 

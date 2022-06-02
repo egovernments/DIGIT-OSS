@@ -2,13 +2,15 @@ package org.egov.hrms.utils;
 
 import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 
 import org.egov.hrms.web.contract.EmployeeSearchCriteria;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class HRMSUtils {
 	
@@ -61,4 +63,5 @@ public class HRMSUtils {
 		return (! CollectionUtils.isEmpty(criteria.getPositions()) || null != criteria.getAsOnDate()
 				|| !CollectionUtils.isEmpty(criteria.getDepartments()) || !CollectionUtils.isEmpty(criteria.getDesignations()));
 	}
+
 }

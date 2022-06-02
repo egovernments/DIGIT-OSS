@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TaxHeadMasterQueryBuilder {
 	
-	public static final String UPDATE_QUERY = "UPDATE public.egbs_taxheadmaster SET  category = ?, service = ?,"
+	public static final String UPDATE_QUERY = "UPDATE {schema}.egbs_taxheadmaster SET  category = ?, service = ?,"
 			+ " name = ?, code=?, isdebit = ?, isactualdemand = ?, orderno = ?, validfrom = ?, validtill = ?,"
 			+ " lastmodifiedby = ?, lastmodifiedtime = ? WHERE tenantid = ? and id = ?";
 
@@ -27,7 +27,7 @@ public class TaxHeadMasterQueryBuilder {
 			+ " taxhead.lAStmodifiedtime AS taxlAStmodifiedtime,glcode.id AS glCodeId, glcode.tenantid AS glCodeTenantId,glcode.service AS glCodeService,"
 			+ " glcode.createdby AS glcreatedby, glcode.createdtime AS glcreatedtime, glcode.lastmodifiedby AS gllastmodifiedby,"
 			+ " glcode.lastmodifiedtime AS gllastmodifiedtime"
-			+ " FROM egbs_taxheadmaster taxhead LEFT OUTER Join egbs_glcodemaster glcode "
+			+ " FROM {schema}.egbs_taxheadmaster taxhead LEFT OUTER Join egbs_glcodemaster glcode "
 			+ " ON taxhead.code=glcode.taxhead and taxhead.tenantid=glcode.tenantid "
 			+ " WHERE taxhead.tenantId = ? ";
 	

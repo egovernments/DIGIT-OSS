@@ -49,6 +49,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.egov.common.exception.InvalidTenantIdException;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.demand.model.AuditDetails;
 import org.egov.demand.model.Demand;
 import org.egov.demand.model.DemandCriteria;
@@ -58,6 +60,7 @@ import org.egov.demand.repository.querybuilder.DemandQueryBuilder;
 import org.egov.demand.repository.rowmapper.DemandRowMapper;
 import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.DemandRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -82,12 +85,22 @@ public class DemandRepository {
 	private DemandRowMapper demandRowMapper;
 	
 	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
+	
+	@Autowired
 	private Util util;
 	
 	public List<Demand> getDemands(DemandCriteria demandCriteria) {
 
 		List<Object> preparedStatementValues = new ArrayList<>();
 		String searchDemandQuery = demandQueryBuilder.getDemandQuery(demandCriteria, preparedStatementValues);
+		try {
+			searchDemandQuery=centralInstanceUtil.replaceSchemaPlaceholder(searchDemandQuery, demandCriteria.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_BS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+		
 		return jdbcTemplate.query(searchDemandQuery, preparedStatementValues.toArray(), demandRowMapper);
 	}
 	
@@ -103,6 +116,12 @@ public class DemandRepository {
 		List<Object> presparedStmtList = new ArrayList<>();
 		String sql = demandQueryBuilder.getDemandQueryForConsumerCodes(businessConsumercodeMap, presparedStmtList,
 				tenantId);
+		try {
+			sql = centralInstanceUtil.replaceSchemaPlaceholder(sql, tenantId);
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_BS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
 		return jdbcTemplate.query(sql, presparedStmtList.toArray(), demandRowMapper);
 	}
 
@@ -172,8 +191,15 @@ public class DemandRepository {
 	}
 
 	public void insertBatch(List<Demand> newDemands, List<DemandDetail> newDemandDetails) {
-
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_INSERT_QUERY, new BatchPreparedStatementSetter() {
+		
+		String sqlDemand;
+		try {
+		 sqlDemand = centralInstanceUtil.replaceSchemaPlaceholder(DemandQueryBuilder.DEMAND_INSERT_QUERY, newDemandDetails.get(0).getTenantId());
+		} catch (InvalidTenantIdException e) {
+		throw new CustomException("EG_BS_TENANTID_ERROR",
+				"TenantId length is not sufficient to replace query schema in a multi state instance");
+	}
+		jdbcTemplate.batchUpdate(sqlDemand, new BatchPreparedStatementSetter()  {
 			@Override
 			public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
 				
@@ -205,8 +231,15 @@ public class DemandRepository {
 				return newDemands.size();
 			}
 		});
-
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_DETAIL_INSERT_QUERY, new BatchPreparedStatementSetter() {
+		
+		String sqlDemandDetail;
+		try {
+		 sqlDemandDetail = centralInstanceUtil.replaceSchemaPlaceholder(DemandQueryBuilder.DEMAND_DETAIL_INSERT_QUERY, newDemandDetails.get(0).getTenantId());
+	} catch (InvalidTenantIdException e) {
+		throw new CustomException("EG_BS_TENANTID_ERROR",
+				"TenantId length is not sufficient to replace query schema in a multi state instance");
+	}
+		jdbcTemplate.batchUpdate(sqlDemandDetail, new BatchPreparedStatementSetter()  {
 			@Override
 			public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
 				
@@ -233,8 +266,17 @@ public class DemandRepository {
 	}
 	
 	public void updateBatch(List<Demand> oldDemands, List<DemandDetail> oldDemandDetails) {
-
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_UPDATE_QUERY, new BatchPreparedStatementSetter() {
+		
+		String sqlDemandUpdate;
+		try {
+			sqlDemandUpdate = centralInstanceUtil.replaceSchemaPlaceholder(DemandQueryBuilder.DEMAND_UPDATE_QUERY,
+					oldDemandDetails.get(0).getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_BS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+		
+		jdbcTemplate.batchUpdate(sqlDemandUpdate, new BatchPreparedStatementSetter(){
 
 			@Override
 			public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
@@ -266,8 +308,17 @@ public class DemandRepository {
 				return oldDemands.size();
 			}
 		});
-
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_DETAIL_UPDATE_QUERY, new BatchPreparedStatementSetter() {
+		
+		String sqlDemandDetailUpdate;
+		try {
+			sqlDemandDetailUpdate = centralInstanceUtil.replaceSchemaPlaceholder(
+					DemandQueryBuilder.DEMAND_DETAIL_UPDATE_QUERY, oldDemandDetails.get(0).getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_BS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+		
+		jdbcTemplate.batchUpdate(sqlDemandDetailUpdate, new BatchPreparedStatementSetter() {
 
 			@Override
 			public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
@@ -298,8 +349,16 @@ public class DemandRepository {
 	
 	@Transactional
 	public void insertBatchForAudit(List<Demand> demands, List<DemandDetail> demandDetails) {
-
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_AUDIT_INSERT_QUERY, new BatchPreparedStatementSetter() {
+		
+		String sqlDemandAudit;
+		try {
+			sqlDemandAudit = centralInstanceUtil.replaceSchemaPlaceholder(DemandQueryBuilder.DEMAND_AUDIT_INSERT_QUERY,
+					demandDetails.get(0).getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_BS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+		jdbcTemplate.batchUpdate(sqlDemandAudit, new BatchPreparedStatementSetter(){
 			
 			@Override
 			public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
@@ -331,8 +390,16 @@ public class DemandRepository {
 				return demands.size();
 			}
 		});
-
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.DEMAND_DETAIL_AUDIT_INSERT_QUERY,
+		
+		String sqlDemandDetailAudit;
+		try {
+			sqlDemandDetailAudit = centralInstanceUtil.replaceSchemaPlaceholder(
+					DemandQueryBuilder.DEMAND_DETAIL_AUDIT_INSERT_QUERY, demandDetails.get(0).getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_BS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+		jdbcTemplate.batchUpdate(sqlDemandDetailAudit,
 				new BatchPreparedStatementSetter() {
 					@Override
 					public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
@@ -367,8 +434,16 @@ public class DemandRepository {
 	 */
 	public void insertBackUpdateForPayment(PaymentBackUpdateAudit paymentBackUpdateAudit) {
 
-		jdbcTemplate.update(DemandQueryBuilder.PAYMENT_BACKUPDATE_AUDIT_INSERT_QUERY, new PreparedStatementSetter() {
-			
+		String paymentBackUpdateQuery;
+		try {
+			paymentBackUpdateQuery = centralInstanceUtil.replaceSchemaPlaceholder(
+					DemandQueryBuilder.PAYMENT_BACKUPDATE_AUDIT_INSERT_QUERY, paymentBackUpdateAudit.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_BS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+		jdbcTemplate.update(paymentBackUpdateQuery, new PreparedStatementSetter() {
+
 			@Override
 			public void setValues(PreparedStatement ps) throws SQLException {
 
@@ -388,10 +463,17 @@ public class DemandRepository {
 				backUpdateAudit.getPaymentId(),
 				backUpdateAudit.getIsBackUpdateSucces(),
 				backUpdateAudit.getIsReceiptCancellation() };
-
+		
+		String query;
 		try {
-			paymentId = jdbcTemplate.queryForObject(
-					DemandQueryBuilder.PAYMENT_BACKUPDATE_AUDIT_SEARCH_QUERY, preparedStatementValues, 	String.class);
+			query = centralInstanceUtil.replaceSchemaPlaceholder(
+					DemandQueryBuilder.PAYMENT_BACKUPDATE_AUDIT_SEARCH_QUERY, backUpdateAudit.getTenantId());
+		} catch (InvalidTenantIdException e) {
+			throw new CustomException("EG_BS_TENANTID_ERROR",
+					"TenantId length is not sufficient to replace query schema in a multi state instance");
+		}
+		try {
+			paymentId = jdbcTemplate.queryForObject(query, preparedStatementValues, String.class);
 		} catch (DataAccessException e) {
 			log.info("No data found for incoming receipt in backupdate log");
 		}

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.hrms.model.Employee;
 import org.egov.hrms.model.SMSRequest;
 import org.egov.hrms.producer.HRMSProducer;
@@ -16,11 +17,11 @@ import org.egov.hrms.web.contract.RequestInfoWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @Slf4j
@@ -34,6 +35,9 @@ public class NotificationService {
 
 	@Autowired
 	private RestTemplate restTemplate;
+
+	@Autowired
+	private MultiStateInstanceUtil centralInstanceUtil;
 
 	@Value("${kafka.topics.notification.sms}")
     private String smsTopic;
@@ -65,20 +69,26 @@ public class NotificationService {
 	 * @param pwdMap
 	 */
 	public void sendNotification(EmployeeRequest request, Map<String, String> pwdMap) {
+		
 		String message = getMessage(request,HRMSConstants.HRMS_EMP_CREATE_LOCLZN_CODE);
+		String tenantId = request.getEmployees().get(0).getTenantId(); 
+				
 		if(StringUtils.isEmpty(message)) {
 			log.info("SMS content has not been configured for this case");
 			return;
 		}
 		for(Employee employee: request.getEmployees()) {
+			
 			message = buildMessage(employee, message, pwdMap);
 			SMSRequest smsRequest = SMSRequest.builder().mobileNumber(employee.getUser().getMobileNumber()).message(message).build();
-			producer.push(smsTopic, smsRequest);
+			producer.push(tenantId, smsTopic, smsRequest);
 		}
 	}
 
 	public void sendReactivationNotification(EmployeeRequest request){
+		
 		String message = getMessage(request,HRMSConstants.HRMS_EMP_REACTIVATE_LOCLZN_CODE);
+		String tenantId = request.getEmployees().get(0).getTenantId(); 
 		if(StringUtils.isEmpty(message)) {
 			log.info("SMS content has not been configured for this case");
 			return;
@@ -89,13 +99,13 @@ public class NotificationService {
 				String OTP = getOTP(employee,requestInfo);
 				String link = envHost + "employee/user/otp";
 
-				message = message.replace("{Employee Name}",employee.getUser().getName()).replace("{Username}",employee.getCode());
-				message = message.replace("{date}",(employee.getReactivationDetails().get(0).getEffectiveFrom()).toString());
-				message = message.replace("{password}",OTP).replace("{link}",link);
+				message = message.replace("<Employee Name>",employee.getUser().getName()).replace("<Username>",employee.getCode());
+				message = message.replace("<date>",(employee.getReactivationDetails().get(0).getEffectiveFrom()).toString());
+				message = message.replace("<password>",OTP).replace("<link>",link);
 
 				SMSRequest smsRequest = SMSRequest.builder().mobileNumber(employee.getUser().getMobileNumber()).message(message).build();
-				log.info(message );
-				producer.push(smsTopic, smsRequest);
+				log.info(message);
+				producer.push(tenantId, smsTopic, smsRequest);
 			}
 
 		}
@@ -165,12 +175,13 @@ public class NotificationService {
 	 * @return
 	 */
 	public Map<String, Map<String, String>> getLocalisedMessages(RequestInfo requestInfo, String tenantId, String locale, String module) {
+		
 		Map<String, Map<String, String>> localizedMessageMap = new HashMap<>();
 		Map<String, String> mapOfCodesAndMessages = new HashMap<>();
 		StringBuilder uri = new StringBuilder();
 		RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
 		requestInfoWrapper.setRequestInfo(requestInfo);
-		tenantId = tenantId.split("\\.")[0];
+		tenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
 		uri.append(localizationHost).append(localizationSearchEndpoint).append("?tenantId=" + tenantId)
 				.append("&module=" + module).append("&locale=" + locale);
 		List<String> codes = null;

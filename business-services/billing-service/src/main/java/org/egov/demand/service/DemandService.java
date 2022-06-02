@@ -51,7 +51,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.demand.amendment.model.Amendment;
@@ -167,7 +166,7 @@ public class DemandService {
 
 		save(new DemandRequest(requestInfo,demandsToBeCreated));
 		if (!CollectionUtils.isEmpty(amendmentUpdates))
-			amendmentRepository.updateAmendment(amendmentUpdates);
+			amendmentRepository.updateAmendment(amendmentUpdates, demandRequest.getDemands().get(0).getTenantId());
 
 		if(!CollectionUtils.isEmpty(demandToBeUpdated))
 			update(new DemandRequest(requestInfo,demandToBeUpdated), null);
@@ -477,7 +476,7 @@ public class DemandService {
 		 */
 		AmendmentCriteria amendmentCriteria = AmendmentCriteria.builder()
 				.tenantId(demands.get(0).getTenantId())
-				.status(Stream.of(AmendmentStatus.ACTIVE.toString()).collect(Collectors.toSet()))
+				.status(AmendmentStatus.ACTIVE)
 				.consumerCode(consumerCodes)
 				.build();
 		List<Amendment> amendmentsFromSearch = amendmentRepository.getAmendments(amendmentCriteria);

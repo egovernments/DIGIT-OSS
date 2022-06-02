@@ -114,7 +114,7 @@ public class AmendmentValidator {
 		AmendmentCriteria amendmentCriteria = AmendmentCriteria.builder()
 				.consumerCode(Stream.of(amendment.getConsumerCode()).collect(Collectors.toSet()))
 				.tenantId(amendment.getTenantId())
-				.status(Stream.of(AmendmentStatus.INWORKFLOW.toString()).collect(Collectors.toSet()))
+				.status(AmendmentStatus.INWORKFLOW)
 				.build();
 		
 		List<Amendment> amendmentsFromSearch = amendmentRepository.getAmendments(amendmentCriteria);

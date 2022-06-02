@@ -2,23 +2,6 @@
 
 All notable changes to this module will be documented in this file.
 
-
-
-## 1.1.7 - 2022-03-02
-- LineChart ResponseHandler modified to consider the empty value for particular interval 
-- TodaysCollection property added to the Metric chart, when this property is true query response is expected to have todaysDate and lastUdatedTime aggreagations which would be returned as the plots
-- Performance Chart response handler changes to consider only the value of the aggregations which does not have buckets
-- AdvanceTable Response handler changes to consider valueType of the chart when pathTypeDataMapping is not configured
-- preActionTheory property added to metric chart type, which help to run the computeHelper on the aggregation path before applying action of the chart
-	Ex: preActionTheory:{"ActualCollection":"repsonseToDifferenceOfDates"}
-
-
-
-
-## 1.1.6 - 2022-01-13
-- Updated to log4j2 version 2.17.1
-
-
 ## 1.1.5 - 2021-07-23
 - Code changes related to new properties.
 - Here are the properties which are added 

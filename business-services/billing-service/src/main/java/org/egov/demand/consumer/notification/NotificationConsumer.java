@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.demand.model.Bill;
 import org.egov.demand.model.BillDetail;
 import org.egov.demand.model.BillDetailV2;
@@ -32,6 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class NotificationConsumer {
+	
+	@Autowired
+	private MultiStateInstanceUtil centralUtil;
 
 	@Value("${egov.localization.host}")
 	private String localizationHost;
@@ -245,8 +249,9 @@ public class NotificationConsumer {
 			locale = fallBackLocale;
 		
 		StringBuilder uri = new StringBuilder();
+		String stateLevelTenant = centralUtil.getStateLevelTenant(tenantId);
 		uri.append(localizationHost).append(localizationEndpoint);
-		uri.append("?tenantId=").append(tenantId.split("\\.")[0]).append("&locale=").append(locale).append("&module=").append(module);
+		uri.append("?tenantId=").append(stateLevelTenant).append("&locale=").append(locale).append("&module=").append(module);
 		Map<String, Object> request = new HashMap<>();
 		request.put("RequestInfo", requestInfo);
 		try {
