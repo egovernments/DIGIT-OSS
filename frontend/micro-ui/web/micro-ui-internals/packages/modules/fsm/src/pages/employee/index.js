@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation } from "react-router-dom";
 
-const FsmBreadCrumb = ({ location }) => {
+export const FsmBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
   const isApplicationDetails = location?.pathname?.includes("application-details");
@@ -65,12 +65,13 @@ const EmployeeApp = ({ path, url, userType }) => {
   const ApplicationAudit = Digit.ComponentRegistryService.getComponent("FSMApplicationAudit");
   const RateView = Digit.ComponentRegistryService.getComponent("FSMRateView");
   const FSMLinks = Digit.ComponentRegistryService.getComponent("FSMLinks");
+  const BreadCrumbComp = Digit.ComponentRegistryService.getComponent("FsmBreadCrumb");
 
   return (
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-          <FsmBreadCrumb location={location} />
+          <BreadCrumbComp location={location} />
           <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
           <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} isInbox={true} />} />
           <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
