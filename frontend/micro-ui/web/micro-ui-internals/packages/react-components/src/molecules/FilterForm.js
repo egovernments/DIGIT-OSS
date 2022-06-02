@@ -10,12 +10,14 @@ const FilterFormField = ({children, className}) => {
 }
 
 const FilterForm = ({onMobileExclusiveFilterPopupFormClose = () => null , closeButton= () => null, showMobileFilterFormPopup = false, children, id="", onSubmit, handleSubmit, onResetFilterForm=() => null, className="" }) => {
-    const { t } = useTranslation()
+    const { t } = useTranslation();
+	const isMobile = window.Digit.Utils.browser.isMobile();
+    const isEnabledCommonModules = window.location.href.includes("/obps/") || window.location.href.includes("/noc/");
+
     // min-height: calc(100% - 110
 	// 	px
 	// 	);
-  
-	return <div className={`filter-form ${className}`}>
+	return <div className={isEnabledCommonModules && !isMobile ? `filter ${className}` : `filter-form ${className}`}>
 	<div className="filter-card">
 		{closeButton()}
 		<div className="heading" style={{ alignItems: "center", gap:".75rem",marginBottom:"24px" }}>

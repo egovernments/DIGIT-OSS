@@ -85,7 +85,7 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
                 <Link
                   to={getChangePropertyPath()}
                 >
-                  <LinkButton style={{ textAlign: "left" }} label={t("PT_CHANGE_PROPERTY")} />
+                  <LinkButton style={{ textAlign: "left" }} label={t("PT_CHANGE_PROPERTY")} onClick={() => sessionStorage.setItem("changePropertySelected", "yes")} />
                 </Link>
               </div>
             </StatusTable>

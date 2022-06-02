@@ -289,19 +289,10 @@ class SingleApplication extends React.Component {
                                 color: "#fe7a51",
                                 fontSize: 14,
                                 textTransform: "uppercase",
-                                borderBottom: "1px solid"
                               }}
                             />
                           </div>
-                          <Label
-                              labelKey={"BND_DOWNLOAD_NOTE2"}
-                              textTransform={"uppercase"}
-                              style={{
-                                color: "#fe7a51",
-                                fontSize: 12,
-                                padding:2,
-                              }}
-                            />
+                     
                         </div>
                         }
                         { (item.status == "PAID" || item.status == "PAID_DOWNLOAD" || item.status == "PAID_PDF_GENERATED") &&
@@ -317,19 +308,10 @@ class SingleApplication extends React.Component {
                                 color: "#fe7a51",
                                 fontSize: 14,
                                 textTransform: "uppercase",
-                                borderBottom: "1px solid"
                               }}
                             />
                           </div>
-                          <Label
-                              labelKey={"BND_DOWNLOAD_NOTE2"}
-                              textTransform={"uppercase"}
-                              style={{
-                                color: "#fe7a51",
-                                fontSize: 12,
-                                padding:2,
-                              }}
-                            />
+                
                         </div>
                         }
                         { (item.status == "PAID" || item.status == "PAID_DOWNLOAD" || item.status == "PAID_PDF_GENERATED") &&
@@ -343,12 +325,11 @@ class SingleApplication extends React.Component {
                             style={{
                               color: "#ff6f6f",
                               fontSize: 14,
-                              borderBottom: "1px solid #fe7a51"
                             }}
                           />
                         </div>}
                         { (item.status == "PAID" || item.status == "PAID_DOWNLOAD" || item.status == "PAID_PDF_GENERATED" ) && /* <Link to={this.onCardClick(item)}> */
-                        <div style={{ cursor: "pointer" , paddingLeft:"10px !important", padding: "5px", marginLeft: "5px"}} onClick={() => {
+                        <div style={{ cursor: "pointer" , paddingLeft:"10px !important", padding: "2px", marginLeft: "5px"}} onClick={() => {
                           const url = this.onDownloadReceiptClicked(item);
                           // setRoute(url);
                         }}>
@@ -359,7 +340,6 @@ class SingleApplication extends React.Component {
                               color: "#fe7a51",
                               fontSize: 14,
                               textTransform: "uppercase",
-                              borderBottom: "1px solid #fe7a51"
                             }}
                           />
                         </div>}

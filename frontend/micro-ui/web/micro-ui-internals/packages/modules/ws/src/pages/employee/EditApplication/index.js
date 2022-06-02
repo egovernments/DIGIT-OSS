@@ -54,7 +54,7 @@ const EditApplication = () => {
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
     if (details?.applicationData?.id && !IsDetailsExists) {
-      const convertAppData = await convertApplicationData(details, serviceType);
+      const convertAppData = await convertApplicationData(details, serviceType, false, false, t);
       setSessionFormData({ ...sessionFormData, ...convertAppData });
       setAppData({ ...convertAppData })
       sessionStorage.setItem("IsDetailsExists", JSON.stringify(true));

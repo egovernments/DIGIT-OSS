@@ -175,9 +175,8 @@ function SelectDocument({
     const [file, setFile] = useState(null);
     const [uploadedFile, setUploadedFile] = useState(() => ({fileStoreId: nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0]?.fileStoreId,fileName:nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0]?.fileName}) || null);
     const [newArray, setnewArray ] = useState([]);
-
     const handleSelectDocument = (value) => setSelectedDocument(value);
-
+    const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf)$/i;
 
     function selectfile(e, key) {
         e && setSelectedDocument({ documentType: key });
@@ -264,6 +263,9 @@ function SelectDocument({
             getFormState={e => getData(e,/* doc?.documentType?.replaceAll(".", "_") */doc.dropdownData[0].code)}
             setuploadedstate={uploadedFilesPreFill}
             t={t}
+            allowedFileTypesRegex={allowedFileTypes}
+            allowedMaxSizeInMB={5}
+            acceptFiles= "image/*, .pdf, .png, .jpeg, .jpg"
           />}
         {doc?.uploadedDocuments?.length && !pdfLoading && <DocumentsPreview documents={doc?.uploadedDocuments} svgStyles = {{}} isSendBackFlow = {false} isHrLine = {true} titleStyles ={{fontSize: "18px", lineHeight: "24px", "fontWeight": 700, marginBottom: "10px"}}/>}
         </div>

@@ -118,7 +118,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   }
   return (
     <React.Fragment>
-      <Timeline currentStep={2} flow="APPLY" />
+      <Timeline currentStep={1} flow="APPLY" />
       <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
         <CardLabel>{`${t("MYCITY_CODE_LABEL")} *`}</CardLabel>
         <RadioOrSelect

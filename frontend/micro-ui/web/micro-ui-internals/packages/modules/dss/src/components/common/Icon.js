@@ -11,6 +11,7 @@ import { ReactComponent as OBPS } from '../../images/obps.svg'
 import { ReactComponent as Tradelic } from '../../images/tradeLic_nurt.svg'
 import { ReactComponent as BuildingPermission } from '../../images/building_permission.svg'
 import { ReactComponent as BirthDeath } from '../../images/birth_death.svg'
+import { ReactComponent as Finance } from '../../images/finance.svg'
 
 //import SVG from 'react-inlinesvg';
 
@@ -57,6 +58,8 @@ export function Icon(type, iconColor)
         case 'nurt_mcollect':
         case 'dss_mcollect':
             return <div style={{background: iconColor, width: "60 px" , height: "52px"}}><Mcollect></Mcollect></div>
+        case 'dss_finance':
+            return <div style={{background: iconColor, width: "60 px" , height: "52px"}}><Finance></Finance></div>
         case 'nurt_live_active_ulbs':
             return <DashBoardIcon></DashBoardIcon>
         case 'dss_birth_death':

@@ -172,7 +172,7 @@ const WSInbox = ({ parentRoute }) => {
   };
 
   const SearchFormFields = useCallback(
-    ({ registerRef, searchFormState }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState }} />,
+    ({ registerRef, searchFormState }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState }} className="search" />,
     []
   );
 
@@ -197,12 +197,14 @@ const WSInbox = ({ parentRoute }) => {
   );
 
   const onSearchFormSubmit = (data) => {
-    data.hasOwnProperty("") ? delete data?.[""] : null;
+    data.hasOwnProperty("") && delete data?.[""];
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateSearchForm", data });
   };
 
   const onFilterFormSubmit = (data) => {
-    data.hasOwnProperty("") ? delete data?.[""] : null;
+    data.hasOwnProperty("") && delete data?.[""] ;
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateFilterForm", data });
   };
 
@@ -212,6 +214,7 @@ const WSInbox = ({ parentRoute }) => {
     searchFormDefaultValues: formState?.searchForm,
     resetSearchFormDefaultValues: searchFormDefaultValues,
     onSearchFormReset,
+    className: "search-form-wns-inbox",
   };
 
   const propsForFilterForm = {
@@ -247,7 +250,6 @@ const WSInbox = ({ parentRoute }) => {
           propsForInboxMobileCards,
           formState,
         }}
-        className="wns-inbox-composer"
       ></InboxComposer>
     </>
   );

@@ -23,6 +23,9 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     const [isDisable, setIsDisable] = useState(false);
     let Webview = !Digit.Utils.browser.isMobile();
     const ismultiple = ownershipCategory?.code.includes("MULTIPLEOWNERS") ? true : false;
+    formData?.owners?.owners?.forEach(owner => {
+        if(owner.isPrimaryOwner == "false" ) owner.isPrimaryOwner = false
+    })
     const [fields, setFeilds] = useState(
         (formData?.owners && formData?.owners?.owners) || [{ name: "", gender: "", mobileNumber: null, isPrimaryOwner: true }]
     );
@@ -268,7 +271,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 const userInfo = Digit.UserService.getUser();
                 const accountId = userInfo?.info?.uuid;
                 payload.tenantId = formData?.address?.city?.code;
-                payload.workflow = { action: "INITIATE" };
+                payload.workflow = { action: "INITIATE", assignes : [userInfo?.info?.uuid] };
                 payload.accountId = accountId;
                 payload.documents = null;
 

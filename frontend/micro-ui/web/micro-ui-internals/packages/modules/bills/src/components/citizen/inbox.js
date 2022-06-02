@@ -94,10 +94,10 @@ const CitizenInbox = ({ tableConfig, filterComponent, ...props }) => {
             <span className="link">
               <Link
                 to={{
-                  pathname: `/digit-ui/citizen/payment/collect/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}`,
+                  pathname: `/digit-ui/citizen/payment/my-bills/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}?workflow=mcollect`,
                 }}
               >
-                {t(`${"ABG_PAY"}`)}{" "}
+                {t(`${"ABG_PAY"}`)}
               </Link>
             </span>
           </div>
@@ -109,10 +109,10 @@ const CitizenInbox = ({ tableConfig, filterComponent, ...props }) => {
             <span className="link">
               <Link
                 to={{
-                  pathname: `/digit-ui/citizen/payment/collect/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}`,
+                  pathname: `/digit-ui/citizen/payment/my-bills/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}?workflow=mcollect`,
                 }}
               >
-                {t(`${"ABG_GENERATE_NEW_BILL"}`)}{" "}
+                {t(`${"ABG_GENERATE_NEW_BILL"}`)}
               </Link>
             </span>
           </div>

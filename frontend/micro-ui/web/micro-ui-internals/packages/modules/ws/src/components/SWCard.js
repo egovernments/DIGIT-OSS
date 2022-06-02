@@ -84,7 +84,7 @@ const SWCard = () => {
       ...links,
       {
         label: t("WS_SEWERAGE_CONNECTION_SEARCH_LABEL"),
-        link: `/digit-ui/employee/ws/sewerage/search`,
+        link: `/digit-ui/employee/ws/sewerage/search-connection`,
         roles: ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
       },
       {

@@ -1,6 +1,6 @@
 export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   if (searcher == "") return str;
-  while (str.includes(searcher)) {
+  while (str && str.includes(searcher)) {
     str = str.replace(searcher, replaceWith);
   }
   return str;
@@ -73,10 +73,10 @@ export const getQueryStringParams = (query) => {
 };
 
 export const getAddress = (address, t) => {
-  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""}${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${address?.locality?.code ? t(address?.locality?.code) : ""}, ${address?.city?.code ? t(address?.city.code) : ""},${
-    address?.pincode ? `${address.pincode}` : " "
+  }${address?.locality?.code ? `${t(address?.locality?.code)}` : ""}${address?.city?.code || address?.city  ? `,${t(address?.city.code || address?.city)}` : ""}${
+    address?.pincode ? `,${address.pincode}` : " "
   }`;
 };
 
@@ -113,7 +113,7 @@ export const convertEpochToDates = (dateEpoch) => {
 export const getPattern = (type) => {
   switch (type) {
     case "WSOnlyNumbers":
-      return /^[1-9]*$/i;
+      return /^[0-9]*$/i;
     case "Name":
       return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i;
     case "MobileNo":
@@ -704,7 +704,7 @@ export const getBusinessService = (data) => {
   else return "SW.ONE_TIME_FEE";
 };
 
-export const convertApplicationData = (data, serviceType, modify = false, t) => {
+export const convertApplicationData = (data, serviceType, modify = false, editByConfig = false, t) => {
   data?.propertyDetails?.owners?.forEach((owner) => {
     if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress;
   });
@@ -728,55 +728,56 @@ export const convertApplicationData = (data, serviceType, modify = false, t) => 
     },
   ];
 
+
   const ConnectionHolderDetails =
-    data?.applicationData?.connectionHolders?.length > 0
-      ? [
-          {
-            sameAsOwnerDetails: false,
-            name: data?.applicationData?.connectionHolders?.[0]?.name || "",
-            mobileNumber: data?.applicationData?.connectionHolders?.[0]?.mobileNumber || "",
-            guardian: data?.applicationData?.connectionHolders?.[0]?.fatherOrHusbandName || "",
-            address: data?.applicationData?.connectionHolders?.[0]?.correspondenceAddress || "",
-            gender: data?.applicationData?.connectionHolders?.[0]?.gender
-              ? {
-                  code: data?.applicationData?.connectionHolders?.[0]?.gender,
-                  i18nKey: data?.applicationData?.connectionHolders?.[0]?.gender,
-                }
-              : "",
-            relationship: data?.applicationData?.connectionHolders?.[0]?.relationship
-              ? {
-                  code: data?.applicationData?.connectionHolders?.[0]?.relationship,
-                  i18nKey: data?.applicationData?.connectionHolders?.[0]?.relationship,
-                }
-              : "",
-            ownerType: data?.applicationData?.connectionHolders?.[0]?.ownerType
-              ? {
-                  code: data?.applicationData?.connectionHolders?.[0]?.ownerType,
-                  i18nKey: data?.applicationData?.connectionHolders?.[0]?.ownerType,
-                }
-              : "",
+  data?.applicationData?.connectionHolders?.length > 0
+    ? [
+        {
+          sameAsOwnerDetails: false,
+          name: data?.applicationData?.connectionHolders?.[0]?.name || "",
+          mobileNumber: data?.applicationData?.connectionHolders?.[0]?.mobileNumber || "",
+          guardian: data?.applicationData?.connectionHolders?.[0]?.fatherOrHusbandName || "",
+          address: data?.applicationData?.connectionHolders?.[0]?.correspondenceAddress || "",
+          gender: data?.applicationData?.connectionHolders?.[0]?.gender
+            ? {
+                code: data?.applicationData?.connectionHolders?.[0]?.gender,
+                i18nKey: data?.applicationData?.connectionHolders?.[0]?.gender,
+              }
+            : "",
+          relationship: data?.applicationData?.connectionHolders?.[0]?.relationship
+            ? {
+                code: data?.applicationData?.connectionHolders?.[0]?.relationship,
+                i18nKey: data?.applicationData?.connectionHolders?.[0]?.relationship,
+              }
+            : "",
+          ownerType: data?.applicationData?.connectionHolders?.[0]?.ownerType
+            ? {
+                code: data?.applicationData?.connectionHolders?.[0]?.ownerType,
+                i18nKey: data?.applicationData?.connectionHolders?.[0]?.ownerType,
+              }
+            : "",
 
-            documentId: "",
-            documentType: "",
-            file: "",
-          },
-        ]
-      : [
-          {
-            sameAsOwnerDetails: true,
-            name: "",
-            gender: "",
-            mobileNumber: "",
-            guardian: "",
-            relationship: "",
-            address: "",
-            ownerType: "",
-            documentId: "",
-            documentType: "",
-            file: "",
-          },
-        ];
-
+          documentId: "",
+          documentType: "",
+          file: "",
+        },
+      ]
+    : [
+        {
+          sameAsOwnerDetails: true,
+          name: "",
+          gender: "",
+          mobileNumber: "",
+          guardian: "",
+          relationship: "",
+          address: "",
+          ownerType: "",
+          documentId: "",
+          documentType: "",
+          file: "",
+        },
+      ];
+      
   let documents = [];
   if (data?.applicationData?.documents) {
     data.applicationData.documents.forEach((data) => {
@@ -800,6 +801,28 @@ export const convertApplicationData = (data, serviceType, modify = false, t) => 
   cpt["details"] = data?.propertyDetails || {};
 
   let payload = {};
+
+  const sourceSubDataValue = data?.applicationData?.waterSource ? stringReplaceAll(data?.applicationData?.waterSource?.toUpperCase(), " ", "_") : "";
+  const sourceSubDataFilter = sourceSubDataValue ? stringReplaceAll(sourceSubDataValue?.toUpperCase(), ".", "_") : "";
+
+  const connectionDetails = serviceType === "WATER" ? {
+    connectionType: data?.applicationData?.connectionType ? {
+        code: data?.applicationData?.connectionType, i18nKey: t(`WS_CONNECTIONTYPE_${stringReplaceAll(data?.applicationData?.connectionType?.toUpperCase(), " ", "_")}`)
+    } : "",
+    waterSource: data?.applicationData?.waterSource ? {
+        code: data?.applicationData?.waterSource, i18nKey: t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.applicationData?.waterSource?.split('.')[0]?.toUpperCase(), " ", "_")}`)
+    } : "",
+    sourceSubData: data?.applicationData?.waterSource ? {
+        code: data?.applicationData?.waterSource, i18nKey: t(`WS_SERVICES_MASTERS_WATERSOURCE_${sourceSubDataFilter}`)
+    } : "",
+    pipeSize: data?.applicationData?.pipeSize ? {
+        code: data?.applicationData?.pipeSize, i18nKey: data?.applicationData?.pipeSize
+    } : "",
+    noOfTaps: data?.applicationData?.noOfTaps || ""
+} : {
+    noOfWaterClosets: data?.applicationData?.noOfWaterClosets || "",
+    noOfToilets: data?.applicationData?.noOfToilets || ""
+};
 
   if (modify) {
     const activationDetails = [
@@ -881,8 +904,12 @@ export const convertApplicationData = (data, serviceType, modify = false, t) => 
       ConnectionHolderDetails: ConnectionHolderDetails,
       DocumentsRequired: DocumentsRequired,
       cpt: cpt,
-      InfoLabel: "InfoLabel",
-    };
+      InfoLabel: "InfoLabel"
+    }
+
+    if(editByConfig) { 
+      payload.connectionDetails = [connectionDetails];
+    }
   }
 
   sessionStorage.setItem("Digit.PT_CREATE_EMP_WS_NEW_FORM", JSON.stringify(payload));

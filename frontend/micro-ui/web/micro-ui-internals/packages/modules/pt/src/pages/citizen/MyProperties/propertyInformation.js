@@ -175,7 +175,7 @@ const PropertyInformation = () => {
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ASSESSMENT_DETAILS_HEADER")}</CardSubHeader>
           <StatusTable>
-            <Row 
+            {/* <Row 
               className="border-none" 
               label={t("PT_ASSESMENT_INFO_USAGE_TYPE")}
               text={
@@ -184,7 +184,7 @@ const PropertyInformation = () => {
                     (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory)
                 )}` || t("CS_NA")
               }
-            />
+            /> */}
             <Row className="border-none" label={t("PT_COMMON_PROPERTY_TYPE")} text={`${t(getPropertyTypeLocale(property?.propertyType))}` || t("CS_NA")} />
             <Row className="border-none" label={t("PT_ASSESMENT1_PLOT_SIZE")} text={`${property.landArea} sq.ft` || t("CS_NA")} />
             <Row className="border-none" label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${property.noOfFloors || t("CS_NA")}`} />
@@ -208,9 +208,9 @@ const PropertyInformation = () => {
                           label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")}
                           text={
                             `${t(
-                              (property.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                                (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory) +
-                                (property.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
+                              (property.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPUSGTYPE_") +
+                                (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory) 
+                                /* (property.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "") */
                             )}` || t("CS_NA")
                           }
                         />

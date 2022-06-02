@@ -21,18 +21,18 @@ const SearchWater = ({ path }) => {
   };
 
   const onSubmit = useCallback((_data) => {
-    if (Object.keys(_data).filter((k) => _data[k] && typeof _data[k] !== "object").length > 4) {
+    const { connectionNumber, oldConnectionNumber, mobileNumber, propertyId } = _data;
+    if (!connectionNumber && !oldConnectionNumber && !mobileNumber && !propertyId) {
+      setShowToast({ error: true, label: "WS_HOME_SEARCH_CONN_RESULTS_DESC" });
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    } else {
       setPayload(
         Object.keys(_data)
           .filter((k) => _data[k])
           .reduce((acc, key) => ({ ...acc, [key]: typeof _data[key] === "object" ? _data[key].code : _data[key] }), {})
       );
-      setShowToast(null);
-    } else {
-      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
     }
   });
 
@@ -42,14 +42,15 @@ const SearchWater = ({ path }) => {
 
   let result = Digit.Hooks.ws.useSearchWS({ tenantId, filters: payload, config, bussinessService: businessServ, t });
 
-  result = result?.map((item) => {
-    if (item?.connectionNo?.includes("WS")) {
-      item.service = serviceConfig.WATER;
-    } else if (item?.connectionNo?.includes("SW")) {
-      item.service = serviceConfig.SEWERAGE;
-    }
-    return item;
-  });
+  if(!result?.isLoading)
+    result = result?.map((item) => {
+      if (item?.connectionNo?.includes("WS")) {
+        item.service = serviceConfig.WATER;
+      } else if (item?.connectionNo?.includes("SW")) {
+        item.service = serviceConfig.SEWERAGE;
+      }
+      return item;
+    });
 
   return (
     <Fragment>
@@ -59,7 +60,7 @@ const SearchWater = ({ path }) => {
         onSubmit={onSubmit}
         data={result ? result : { display: "ES_COMMON_NO_DATA" }}
         count={result?.TotalCount}
-        resultOk={isBothCallsFinished}
+        resultOk={!result?.isLoading}
         businessService={businessServ}
       />
 

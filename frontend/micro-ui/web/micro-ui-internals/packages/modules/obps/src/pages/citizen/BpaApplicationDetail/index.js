@@ -12,6 +12,7 @@ import InspectionReport from "../../../../../templates/ApplicationDetails/compon
 import { getBusinessServices, getCheckBoxLabelData, getBPAFormData, convertDateToEpoch, printPdf, downloadPdf, getOrderDocuments  } from "../../../utils";
 import cloneDeep from "lodash/cloneDeep";
 import DocumentsPreview from "../../../../../templates/ApplicationDetails/components/DocumentsPreview";
+import ScruntinyDetails from "../../../../../templates/ApplicationDetails/components/ScruntinyDetails";
 
 const BpaApplicationDetail = () => {
   const { id } = useParams();
@@ -25,10 +26,7 @@ const BpaApplicationDetail = () => {
   const [showModal, setShowModal] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
-  const [appDetails, setAppDetails] = useState({});
   const [showOptions, setShowOptions] = useState(false);
-  const [payments, setpayments] = useState([]);
-  const [sanctionFee, setSanctionFee] = useState([]);
   const [checkBoxVisible, setCheckBoxVisible] = useState(false);
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   sessionStorage.removeItem("BPA_SUBMIT_APP");
@@ -92,70 +90,6 @@ const BpaApplicationDetail = () => {
   },[bpaDocs,data])
 
 
-  useEffect(async() => {
-    if(data && data?.applicationData?.businessService  && businessService[1]/*  && data?.applicationData?.status === "PENDING_SANC_FEE_PAYMENT" */){
-    let res = Digit.PaymentService.fetchBill( data?.applicationData?.tenantId, { consumerCode: data?.applicationData?.applicationNo, businessService: businessService[1] }).then((result) => {
-      result?.Bill[0] && result?.Bill[0]?.totalAmount != 0 && !(sanctionFee.filter((val) => val?.id ===result?.Bill[0].id).length>0) && setSanctionFee([...result?.Bill]);
-    })
-  
-    }
-    if(data?.applicationData?.tenantId && data?.applicationData?.applicationNo)
-    businessService.length > 0 && businessService.map((buss,index) => {
-      let res = Digit.PaymentService.recieptSearch(data?.applicationData?.tenantId, buss, {consumerCodes: data?.applicationData?.applicationNo}).then((value) => {
-
-       value?.Payments[0] && !(payments.filter((val) => val?.id ===value?.Payments[0].id).length>0) && setpayments([...payments,...value?.Payments]);  
-      });
-    })
-    
-  },[data, businessService]);
-
-  useEffect(() => {
-    if(data && data?.applicationData?.businessService && sanctionFee == {})
-    {
-      return <Loader />
-    } 
-  },[sanctionFee])
-
-  useEffect(() => {
-    let payval=[]
-    let total = 0;
-    payments.length>0 && payments.map((ob) => {
-      ob?.paymentDetails?.[0]?.bill?.billDetails?.[0]?.billAccountDetails.map((bill,index) => {
-        payval.push({title:`${bill?.taxHeadCode}_DETAILS`, value:" "});
-        payval.push({title:bill?.taxHeadCode, value:`₹${bill?.amount}`});
-        payval.push({title:"BPA_STATUS_LABEL", value:"Paid"});
-        total = total + parseInt(bill?.amount);
-      })
-      if(sanctionFee && sanctionFee.length>0 && !(payval.filter((ob) => ob.title === "BPA_SANC_FEE_LABEL").length>0)){
-          payval.push({title:`BPA_SANC_FEE_DETAILS`, value:" "});
-          payval.push({title:`BPA_SANC_FEE_LABEL`, value:`₹${sanctionFee?.[0]?.billDetails?.[0].amount}`});
-          payval.push({title:"BPA_STATUS_LABEL", value:"Unpaid"});
-      } 
-    })
-   total > 0 && payval.push({title:"BPA_TOT_AMT_PAID", value:`₹${total}`});
-    payments.length > 0 && (!(data?.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL").length>0))&& data.applicationDetails.push({
-        title:"BPA_FEE_DETAILS_LABEL",
-      additionalDetails:{
-        inspectionReport:[],
-        isFeeDetails: true,
-        values:[...payval]
-      }
-    })
-    if(data && data?.applicationData?.businessService && (data?.applicationDetails.filter((ob) => ob.title === "BPA_FEE_DETAILS_LABEL")?.[0]?.additionalDetails?.values.length < payval.length ))
-    {
-      var foundIndex = data?.applicationDetails.findIndex(x => x.title === "BPA_FEE_DETAILS_LABEL");
-      data?.applicationDetails.splice(foundIndex,1);
-      data?.applicationDetails.push({
-        title:"BPA_FEE_DETAILS_LABEL",
-        additionalDetails:{
-          inspectionReport:[],
-          isFeeDetails: true,
-          values:[...payval]
-        }
-      })
-    }
-  },[payments,sanctionFee]);
-
   useEffect(() => {
     if (data?.applicationData?.status == "CITIZEN_APPROVAL_INPROCESS" || data?.applicationData?.status == "INPROGRESS") setCheckBoxVisible(true);
     else setCheckBoxVisible(false);
@@ -170,16 +104,14 @@ const BpaApplicationDetail = () => {
   };
 
 
-  async function getRecieptSearch({tenantId,payments,...params}) {
+  async function getRecieptSearch({tenantId, payments, ...params}) {
     let response = { filestoreIds: [payments?.fileStoreId] };
-    //if (!payments?.fileStoreId) {
-      response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{...payments}] }, "consolidatedreceipt");
-    //}
+    response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{...payments}] }, "consolidatedreceipt");
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
-  async function getPermitOccupancyOrderSearch({tenantId},order, mode="download") {
+  async function getPermitOccupancyOrderSearch({tenantId}, order, mode="download") {
     let currentDate = new Date();
     data.applicationData.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
     let requestData = {...data?.applicationData, edcrDetail:[{...data?.edcrDetails}]}
@@ -196,7 +128,7 @@ const BpaApplicationDetail = () => {
     }
   }
 
-  async function getRevocationPDFSearch({tenantId,...params}) {
+  async function getRevocationPDFSearch({tenantId, ...params}) {
     let requestData = {...data?.applicationData}
     let response = await Digit.PaymentService.generatePdf(tenantId, { Bpa: [requestData] }, "bpa-revocation");
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
@@ -342,8 +274,8 @@ const BpaApplicationDetail = () => {
 
   let dowloadOptions = [];
 
-  if (payments?.length > 0) {
-    const bpaPayments = cloneDeep(payments);
+  if (data?.collectionBillDetails?.length > 0) {
+    const bpaPayments = cloneDeep(data?.collectionBillDetails);
     bpaPayments.forEach(pay => {
       if (pay?.paymentDetails[0]?.businessService === "BPA.NC_OC_APP_FEE") {
         dowloadOptions.push({
@@ -381,14 +313,14 @@ const BpaApplicationDetail = () => {
         dowloadOptions.push({
           order: 2,
           label: t("BPA_SAN_FEE_RECEIPT"),
-          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: payments[1], consumerCodes: data?.applicationData?.applicationNo }),
+          onClick: () => getRecieptSearch({ tenantId: data?.applicationData?.tenantId, payments: pay, consumerCodes: data?.applicationData?.applicationNo }),
         });
       }
     })
   }
 
 
-  if(data && data?.applicationData?.businessService === "BPA_LOW" && payments?.length > 0) {
+  if(data && data?.applicationData?.businessService === "BPA_LOW" && data?.collectionBillDetails?.length > 0) {
     !(data?.applicationData?.status.includes("REVOCATION")) && dowloadOptions.push({
       order: 3,
       label: t("BPA_PERMIT_ORDER"),
@@ -400,7 +332,7 @@ const BpaApplicationDetail = () => {
       onClick: () => getRevocationPDFSearch({tenantId: data?.applicationData?.tenantId}),
     });
     
-  } else if(data && data?.applicationData?.businessService === "BPA" && payments?.length > 0) {
+  } else if(data && data?.applicationData?.businessService === "BPA" && data?.collectionBillDetails?.length > 0) {
     if(data?.applicationData?.status==="APPROVED"){
     dowloadOptions.push({
       order: 3,
@@ -488,7 +420,7 @@ const BpaApplicationDetail = () => {
                   else return <Row className="border-none" label={t(value?.title)} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
                 }) : null}
                 {/* to get additional common values */}
-                {detail?.additionalDetails?.values?.length > 0 ? detail?.additionalDetails?.values?.map((value) => (
+                {!detail?.isFeeDetails && detail?.additionalDetails?.values?.length > 0 ? detail?.additionalDetails?.values?.map((value) => (
                     <div>
                     {!detail?.isTitleRepeat && !value?.isHeader && !value?.isUnit ? <Row className="border-none" label={t(value?.title)} textStyle={value?.value === "Paid"?{color:"darkgreen"}:(value?.value === "Unpaid"?{color:"red"}:{})} text={value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("CS_NA")} /> : null}
                     {!detail?.isTitleRepeat && value?.isUnit ? <Row className="border-none" label={t(value?.title)} text={value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("CS_NA")} /> : null}
@@ -557,11 +489,7 @@ const BpaApplicationDetail = () => {
                 )) : null}
 
                 {/* to get Fee values */}
-                {(detail?.isFeeDetails && detail?.additionalDetails?.values?.length > 0) ? detail?.additionalDetails?.permit?.map((value) => (
-                  <StatusTable>
-                    <Row className="border-none" label={t(value?.title)} textStyle={value?.value === "Paid"?{color:"darkgreen"}:(value?.value === "Unpaid"?{color:"red"}:{})} text={getTranslatedValues(value?.value, value?.isNotTranslated) || t("CS_NA")} />
-                  </StatusTable>
-                )) : null}
+                {detail?.additionalDetails?.inspectionReport && detail?.isFeeDetails && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} paymentsList={[]}/>}
 
               </StatusTable>
               </div>

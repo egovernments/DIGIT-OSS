@@ -53,8 +53,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     (async () => {
       setError(null);
       if (file) {
+        const allowedFileTypesRegex = /(.*?)(jpg|pdf)$/i
         if (file.size >= 5242880) {
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
+          setError(t(`NOT_SUPPORTED_FILE_TYPE`))
         } else {
           try {
             const response = await Digit.UploadServices.Filestorage("WS", file, Digit.ULBService.getCurrentTenantId());
@@ -138,10 +141,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           uploadedFile,
           setUploadedFile,
           businessService,
+          error
         })
       );
     }
-  }, [action, approvers, uploadedFile]);
+  }, [action, approvers, uploadedFile, error]);
 
   return action && config.form ? (
     <Modal

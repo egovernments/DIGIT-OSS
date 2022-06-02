@@ -12,10 +12,11 @@ import {
     const { t } = useTranslation();
     const history = useHistory();
     const match = useRouteMatch();
+    let isMobile = window.Digit.Utils.browser.isMobile();
     const { ConnectionHolderDetails, plumberPreference, serviceName, waterConectionDetails, sewerageConnectionDetails, documents, cpt } = value;
     let routeLink = `/digit-ui/citizen/ws/create-application`;
     if(window.location.href.includes("/edit-application/"))
-    routeLink=`/digit-ui/citizen/ws/edit-application`
+    routeLink=`/digit-ui/citizen/ws/edit-application/${value?.tenantId}`
 
     function routeTo(jumpTo) {
         location.href=jumpTo;
@@ -64,14 +65,16 @@ import {
         </div>
     </Card>
     <Card style={{paddingRight:"16px"}}>
+    <div style={{position:"relative"}}>
     <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER")}</CardHeader>
     <LinkButton
-          label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+          label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px", marginRight: "-10px" }} />}
           style={{ width: "100px", display:"inline" }}
           onClick={() => routeTo(`${routeLink}/connection-holder`)}
         />
+      </div>
         <StatusTable>
-          <Row className="border-none" textStyle={{marginRight:"-10px"}} label={t("WS_OWN_MOBILE_NO")} text={ConnectionHolderDetails?.mobileNumber}/>
+          <Row className="border-none" textStyle={isMobile ? {marginRight:"-10px"} : {}} label={t("WS_OWN_MOBILE_NO")} text={ConnectionHolderDetails?.mobileNumber}/>
           <Row className="border-none" label={t("WS_OWN_DETAIL_NAME")} text={ConnectionHolderDetails?.name}/>
           <Row className="border-none" label={t("WS_OWN_DETAIL_GENDER_LABEL")} text={t(ConnectionHolderDetails?.gender?.i18nKey)}/>
           <Row className="border-none" label={t("WS_FATHERS_HUSBAND_NAME")} text={ConnectionHolderDetails?.guardian || t("CS_NA")}/>
@@ -81,30 +84,38 @@ import {
     </StatusTable>
     </Card>
     <Card style={{paddingRight:"16px"}}>
+    <div style={{position:"relative"}}>
     <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_CONNECTION_DETAIL")}</CardHeader>
     <LinkButton
           label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
           style={{ width: "100px", display:"inline" }}
           onClick={() => routeTo(`${routeLink}/service-name`)}
         />
+      </div>
         <StatusTable>
-          <Row className="border-none" textStyle={{marginRight:"-10px"}} label={t("WS_SERVICE_NAME_LABEL")} text={t(serviceName?.i18nKey)}/>
+          <Row className="border-none" textStyle={isMobile ? {marginRight:"-10px"}:{}} label={t("WS_SERVICE_NAME_LABEL")} text={t(serviceName?.i18nKey)}/>
           <Row className="border-none" label={t("WS_SERV_DETAIL_CONN_TYPE")} text={"NA"}  />
-          <Row className="border-none" label={t("WS_NO_OF_TAPS_PROPOSED")} text={waterConectionDetails?.proposedTaps} />
-          <Row className="border-none" label={t("WS_SERV_DETAIL_PIPE_SIZE")} text={t(waterConectionDetails?.proposedPipeSize?.i18nKey)} />
-          <Row className="border-none" label={t("WS_NO_OF_WATER_CLOSETS")}   text={sewerageConnectionDetails?.proposedWaterClosets} />
-          <Row className="border-none" label={t("WS_SERV_DETAIL_NO_OF_TOILETS")} text={sewerageConnectionDetails?.proposedToilets} />
+          {waterConectionDetails && Object.keys(waterConectionDetails)?.length>0 && <div>
+            <Row className="border-none" label={t("WS_NO_OF_TAPS_PROPOSED")} text={waterConectionDetails?.proposedTaps} />
+            <Row className="border-none" label={t("WS_SERV_DETAIL_PIPE_SIZE")} text={t(waterConectionDetails?.proposedPipeSize?.i18nKey)} />
+          </div>}
+          {sewerageConnectionDetails && Object.keys(sewerageConnectionDetails)?.length>0 &&<div>
+            <Row className="border-none" label={t("WS_NO_OF_WATER_CLOSETS")}   text={sewerageConnectionDetails?.proposedWaterClosets} />
+            <Row className="border-none" label={t("WS_SERV_DETAIL_NO_OF_TOILETS")} text={sewerageConnectionDetails?.proposedToilets} />
+          </div>}
           <Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SOURCE")}  text={"NA"} />
           <Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")} text={"NA"} />
         </StatusTable>
     </Card>
     <Card style={{paddingRight:"16px"}}>
+      <div style={{position:"relative"}}>
         <CardHeader styles={{fontSize:"28px"}}>{t("WS_COMMON_DOCUMENT_DETAILS")}</CardHeader>
           <LinkButton
             label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
             style={{ width: "100px", display: "inline" }}
             onClick={() => routeTo(`${routeLink}/document-details`)}
           />
+        </div>
         {documents && documents?.documents.map((doc, index) => (
           <div key={`doc-${index}`}>
          {<div><CardSectionHeader>{t(doc?.documentType?.split('.').slice(0,2).join('_'))}</CardSectionHeader>

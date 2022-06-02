@@ -126,13 +126,15 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
       {
         Header: t("WS_APPLICATION_TYPE_LABEL"),
         disableSortBy: true,
-        accessor: (row) => GetCell(replaceUnderscore(row.applicationType)),
+        accessor: (row) => {
+          return GetCell(t(`WS_${row.applicationType}`))
+        },
       },
       {
         Header: t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL"),
         disableSortBy: true,
         accessor: (row) => {
-          return GetCell(row?.ownerNames || "-");
+          return GetCell(row?.connectionHolders?.[0]?.name ? row?.connectionHolders?.[0]?.name : row?.ownerNames || "-");
         },
       },
       {
@@ -155,10 +157,10 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
       < Card className={"card-search-heading"}>
         <span style={{ color: "#505A5F" }}>{t("WS_INFO_VALIDATION")}</span>
       </Card>
-      <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-        <SearchFields {...{ register, control, reset, tenantId, t }} />
+      <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} >
+        <SearchFields {...{ register, control, reset, tenantId, t,businessService }} />
       </SearchForm>
-      {data?.display ? (
+      {data?.display && resultOk ? (
         <Card style={{ marginTop: 20 }}>
           {t(data?.display)
             .split("\\n")

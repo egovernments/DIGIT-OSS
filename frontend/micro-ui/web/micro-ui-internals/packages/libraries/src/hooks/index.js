@@ -52,6 +52,7 @@ import useSearch from "./fsm/useSearch";
 import useSearchAll from "./fsm/useSearchAll";
 import useVehicleSearch from "./fsm/useVehicleSearch";
 import useVehicleUpdate from "./fsm/useVehicleUpdate";
+import useVehicleCreate from "./fsm/useVehicleCreate";
 import useFSMInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
@@ -69,6 +70,9 @@ import useConfig from "./fsm/useConfig";
 import useVendorDetail from "./fsm/useVendorDetail";
 import useSlum from "./fsm/useSlum";
 import usePaymentHistory from "./fsm/usePaymentHistory";
+import useVendorCreate from "./fsm/useVendorCreate";
+import useVendorUpdate from "./fsm/useVendorUpdate";
+import useVehicleDetails from "./fsm/useVehicleDetails";
 
 import useEmployeeSearch from "./useEmployeeSearch";
 
@@ -118,6 +122,7 @@ import useTLInbox from "./tl/useInbox";
 import useTradeLicenseBillingslab from "./tl/useTradeLicenseBillingslab";
 import useTLMDMS from "./tl/useMDMS";
 import useTLSearch from "./tl/useSearch";
+import useTLWorkflowData from "./tl/useTLWorkflowData";
 
 import useHRMSSearch from "./hrms/useHRMSsearch";
 import useHrmsMDMS from "./hrms/useHRMSMDMS";
@@ -215,6 +220,8 @@ import useWaterPropertySearch from "./ws/useWaterPropertySearch";
 
 import useGetHowItWorksJSON from "./useHowItWorksJSON";
 import useGetFAQsJSON from "./useGetFAQsJSON";
+import useGetDSSFAQsJSON from "./useGetDSSFAQsJSON"
+import useGetDSSAboutJSON from "./useGetDSSAboutJSON"
 import useStaticData from "./useStaticData";
 
 const pgr = {
@@ -258,6 +265,10 @@ const fsm = {
   useConfig,
   useSlum,
   usePaymentHistory,
+  useVendorCreate,
+  useVendorUpdate,
+  useVehicleDetails,
+  useVehicleCreate,
 };
 
 const pt = {
@@ -325,6 +336,7 @@ const tl = {
   useApplicationActions: useTLApplicationActions,
   useFetchBill: useTLFetchBill,
   useTLApplicationDetails,
+  useTLWorkflowData
 };
 
 const receipts = {
@@ -482,6 +494,8 @@ const Hooks = {
   reports,
   useGetHowItWorksJSON,
   useGetFAQsJSON,
+  useGetDSSFAQsJSON,
+  useGetDSSAboutJSON,
   useStaticData,
   useDynamicData,
 };

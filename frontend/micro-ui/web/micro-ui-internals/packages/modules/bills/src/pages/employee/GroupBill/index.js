@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import DesktopInbox from "../../../components/inbox/BillsDesktopInbox";
 import MobileInbox from "../../../components/inbox/BillsMobileInbox";
 
-const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filterComponent, isInbox ,keys}) => {
+const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filterComponent, isInbox, keys }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [enableSarch, setEnableSearch] = useState(() => (isInbox ? {} : { enabled: false }));
 
@@ -25,7 +25,7 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
 
   const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.useBillSearch({
     tenantId,
-    filters: { ...searchParams, businessService, ...paginationParams, sortParams,billActive:"ACTIVE" },
+    filters: { ...searchParams, businessService, ...paginationParams, sortParams, billActive: "ACTIVE" },
     config: {},
   });
 
@@ -79,31 +79,30 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
     ];
   };
 
-  const downloadAll = data =>{
-    data.map(fs => {
-      window.open(fs.url)
-    })
-  }
+  const downloadAll = (data) => {
+    data.map((fs) => {
+      window.open(fs.url);
+    });
+  };
 
-  
   //pt -> property-bill,ADVT.Hoardings->mcollect-bill,SW/WS->ws-bill(different api call)(egov-pdf/download/WNS/wnsgroupbill)
   //For water and sewerage need to implement with diff api at later stage due to requirement of other functionalities as well
   const downloadBills = async () => {
-    const keyv1 = keys.filter(key => key.code === searchParams.businesService)
+    const keyv1 = keys.filter((key) => key.code === searchParams.businesService);
     const bills = await Digit.PaymentService.generatePdf(tenantId, { Bill: data.Bills }, keyv1[0].billKey);
     const res = await Digit.UploadServices.Filefetch(bills?.filestoreIds, tenantId);
     window.open(res.data[bills.filestoreIds[0]]);
     //logic for downloading all bills anyway(if api is giving multiple filestoreids)
     const fsObj = res.data.fileStoreIds;
-    downloadAll(fsObj)
+    // downloadAll(fsObj)
   };
 
-  const handleMergeAndDownload = e => {
-    downloadBills()
-  }
+  const handleMergeAndDownload = (e) => {
+    downloadBills();
+  };
 
   const GetLogo = () => (
-    <button onClick={handleMergeAndDownload}  style={{"margin":"0 0 0 0","verticalAlign":"middle"}} disabled={!data || data?.Bills?.length===0}>
+    <button onClick={handleMergeAndDownload} style={{ margin: "0 0 0 0", verticalAlign: "middle" }} disabled={!data || data?.Bills?.length === 0}>
       <div className="header">
         <span className="logo">
           <DownloadIcon />

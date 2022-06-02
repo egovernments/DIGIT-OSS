@@ -1,5 +1,5 @@
 import {
-  CardSectionHeader, Header, MultiUploadWrapper, PDFSvg, Row, StatusTable, LabelFieldPair, CardLabel
+  CardSectionHeader, Header, MultiUploadWrapper, PDFSvg, Row, StatusTable, LabelFieldPair, CardLabel, Loader
 } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -188,7 +188,7 @@ const ApplicationOverview = () => {
           </div>
         </Fragment>
       );
-    } else return <div></div>
+    } else return <Loader />
   }
   const getBuldingComponent = (details = []) => details.map(detail => ({
     title: detail.title, belowComponent: () => <Fragment>
@@ -253,6 +253,8 @@ function SelectDocument({
 
   const handleSelectDocument = (value) => setSelectedDocument(value);
 
+  const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf)$/i;
+
   function selectfile(e) {
     e && setFile(e.file);
   }
@@ -260,8 +262,6 @@ function SelectDocument({
   useEffect(() => {
     if (selectedDocument?.code) {
       setNocDocuments((prev) => {
-        //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
-
         if (uploadedFile?.length === 0 || uploadedFile === null) {
           return prev;
         }
@@ -280,30 +280,6 @@ function SelectDocument({
     }
   }, [uploadedFile, selectedDocument]);
 
-
-  useEffect(() => {
-    (async () => {
-      setError(null);
-      if (file) {
-        if (file.size >= 5242880) {
-          setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
-        } else {
-          try {
-            setUploadedFile(null);
-            const response = await Digit.UploadServices.Filestorage("NOC", file, Digit.ULBService.getStateId());
-            if (response?.data?.files?.length > 0) {
-              setUploadedFile(response?.data?.files[0]?.fileStoreId);
-            } else {
-              setError(t("CS_FILE_UPLOAD_ERROR"));
-            }
-          } catch (err) {
-            setError(t("CS_FILE_UPLOAD_ERROR"));
-          }
-        }
-      }
-    })();
-  }, [file]);
-
   const getData = (state) => {
     let data = Object.fromEntries(state);
     let newArr = Object.values(data);
@@ -312,12 +288,6 @@ function SelectDocument({
 
   return (
     <div >
-      {/* <UploadFile
-            onUpload={(e) => onUploadMultipleFiles(e)}
-            removeTargetedFile={(fileDetailsData) => dispatch({type: TARGET_FILE_REMOVAL ,payload: fileDetailsData})} 
-            uploadedFiles={state}
-            multiple={true}
-        /> */}
       <LabelFieldPair>
         <CardLabel className="card-label-smaller" style={{fontWeight: "700", width: "50%"}}>{`${t("NOC_UPLOAD_FILE_LABEL")}`}</CardLabel>
         <div className="field">
@@ -326,6 +296,9 @@ function SelectDocument({
             tenantId={tenantId}
             getFormState={e => getData(e)}
             t={t}
+            allowedFileTypesRegex={allowedFileTypes}
+            allowedMaxSizeInMB={5}
+            acceptFiles= "image/*, .pdf, .png, .jpeg, .jpg"
           />
         </div>
       </LabelFieldPair>

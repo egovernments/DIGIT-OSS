@@ -56,7 +56,7 @@ const CheckPage = ({ onSubmit, value }) => {
 
   return (
     <React.Fragment>
-      <Timeline currentStep={6} flow="APPLY" />
+      <Timeline currentStep={4} flow="APPLY" />
       <Card>
         <CardHeader>{t("CS_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
         <CardText>{t("CS_CHECK_CHECK_YOUR_ANSWERS_TEXT")}</CardText>

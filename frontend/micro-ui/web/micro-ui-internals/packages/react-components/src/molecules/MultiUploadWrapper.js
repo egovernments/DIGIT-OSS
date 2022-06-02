@@ -8,30 +8,30 @@ const displayError = ({ t, error, name }) => (
     </span>
 )
 
-const fileValidationStatus = (file, regex, maxSize) => {
+const fileValidationStatus = (file, regex, maxSize, t) => {
     const status = { valid: true, name: file?.name?.substring(0, 15), error: '' };
     if (!file) return;
 
     if (!regex.test(file.type) && (file.size / 1024 / 1024) > maxSize) {
-        status.valid = false; status.error = `NOT_SUPPORTED_FILE_TYPE_AND_FILE_SIZE_EXCEEDED`;
+        status.valid = false; status.error = t(`NOT_SUPPORTED_FILE_TYPE_AND_FILE_SIZE_EXCEEDED`);
     }
 
     if (!regex.test(file.type)) {
-        status.valid = false; status.error = `NOT_SUPPORTED_FILE_TYPE`
+        status.valid = false; status.error = t(`NOT_SUPPORTED_FILE_TYPE`);
     }
 
     if ((file.size / 1024 / 1024) > maxSize) {
-        status.valid = false; status.error = `FILE_SIZE_EXCEEDED`
+        status.valid = false; status.error = t(`FILE_SIZE_EXCEEDED`);
     }
 
     return status;
 }
-const checkIfAllValidFiles = (files, regex, maxSize) => {
+const checkIfAllValidFiles = (files, regex, maxSize, t) => {
     if (!files.length || !regex || !maxSize) return [{}, false];
     const messages = [];
     let isInValidGroup = false;
     for (let file of files) {
-        const fileStatus = fileValidationStatus(file, regex, maxSize);
+        const fileStatus = fileValidationStatus(file, regex, maxSize, t);
         if (!fileStatus.valid) {
             isInValidGroup = true;
         }
@@ -41,8 +41,7 @@ const checkIfAllValidFiles = (files, regex, maxSize) => {
 }
 
 // can use react hook form to set validations @neeraj-egov
-const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.getStateId(), getFormState, requestSpecifcFileRemoval, extraStyleName="",setuploadedstate = [], showHintBelow, hintText, allowedFileTypesRegex=/(.*?)(jpg|jpeg|webp|aif|png|image|pdf|msword|openxmlformats-officedocument)$/i, allowedMaxSizeInMB=10 }) => {
-
+const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.getStateId(), getFormState, requestSpecifcFileRemoval, extraStyleName="",setuploadedstate = [], showHintBelow, hintText, allowedFileTypesRegex=/(.*?)(jpg|jpeg|webp|aif|png|image|pdf|msword|openxmlformats-officedocument)$/i, allowedMaxSizeInMB=10, acceptFiles = "image/*, .jpg, .jpeg, .webp, .aif, .png, .image, .pdf, .msword, .openxmlformats-officedocument, .dxf" }) => {
     const FILES_UPLOADED = "FILES_UPLOADED"
     const TARGET_FILE_REMOVAL = "TARGET_FILE_REMOVAL"
 
@@ -76,7 +75,7 @@ const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.get
         setFileErrors([])
         const files = Array.from(e.target.files);
         if (!files.length) return;
-        const [validationMsg, error] = checkIfAllValidFiles(files, allowedFileTypesRegex, allowedMaxSizeInMB);
+        const [validationMsg, error] = checkIfAllValidFiles(files, allowedFileTypesRegex, allowedMaxSizeInMB, t);
         if (!error) {
             try {
                 const { data: { files: fileStoreIds } = {} } = await Digit.UploadServices.MultipleFilesStorage(module, e.target.files, tenantId)
@@ -108,6 +107,7 @@ const MultiUploadWrapper = ({ t, module = "PGR", tenantId = Digit.ULBService.get
                 onDelete={() => {
                     setFileErrors([])
                 }}
+                accept={acceptFiles}
             />
             <span style={{ display: 'flex' }}>
                 {fileErrors.length ? fileErrors.map(({ valid, name, type, size, error }) => (

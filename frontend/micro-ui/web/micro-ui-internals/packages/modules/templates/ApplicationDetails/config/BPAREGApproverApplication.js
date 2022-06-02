@@ -12,6 +12,7 @@ export const configBPAREGApproverApplication = ({
     setUploadedFile,
     assigneeLabel,
     businessService,
+    error
 }) => {
     let checkCondtions = true;
     if (action?.action == "SENDBACKTOCITIZEN") checkCondtions = false;
@@ -58,6 +59,8 @@ export const configBPAREGApproverApplication = ({
                                     setUploadedFile(null);
                                 }}
                                 message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+                                accept= "image/*, .pdf, .png, .jpeg, .jpg"
+                                iserror={error}
                             />
                         )
                     },

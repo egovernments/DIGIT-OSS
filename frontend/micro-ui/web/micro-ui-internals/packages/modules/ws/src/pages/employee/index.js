@@ -18,8 +18,10 @@ import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
 import ModifyApplication from "./ModifyApplication";
 import EditModifyApplication from "./EditModifyApplication";
 import WSDisconnectionDocsRequired from "../../pageComponents/WSDisconnectionDocsRequired";
+import WSEditApplicationByConfig from "./EditApplication/WSEditApplicationByConfig";
 import ResponseBillAmend from "./ResponseBillAmend";
 import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
+import GetDisconnectionDetails from "./DisconnectionDetails";
 
 const BILLSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
@@ -53,6 +55,18 @@ const BILLSBreadCrumbs = ({ location }) => {
       path: "/digit-ui/employee/ws/water/search-connection",
       content: fromScreen ? `${t(fromScreen)} / ${t("WS_SEARCH_CONNECTION")}` : t("WS_SEARCH_CONNECTION"),
       show: location.pathname.includes("/water/search-connection") ? true : false,
+      isBack: fromScreen && true,
+    },
+    {
+      path: "/digit-ui/employee/ws/sewerage/search-application",
+      content: fromScreen ? `${t(fromScreen)} / ${t("WS_SEARCH_APPLICATIONS")}` : t("WS_SEARCH_APPLICATIONS"),
+      show: location.pathname.includes("/sewerage/search-application") ? true : false,
+      isBack: fromScreen && true,
+    },
+    {
+      path: "/digit-ui/employee/ws/sewerage/search-connection",
+      content: fromScreen ? `${t(fromScreen)} / ${t("WS_SEARCH_CONNECTION")}` : t("WS_SEARCH_CONNECTION"),
+      show: location.pathname.includes("/sewerage/search-connection") ? true : false,
       isBack: fromScreen && true,
     },
     {
@@ -130,9 +144,8 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/sewerage/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/ws-response`} component={WSResponse} />
           <PrivateRoute path={`${path}/water/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
-          <PrivateRoute path={`${path}/sewerage/search`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
-          {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
-        <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
+          <PrivateRoute path={`${path}/sewerage/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
+        
           <PrivateRoute path={`${path}/consumption-details`} component={ConsumptionDetails} />
           <PrivateRoute path={`${path}/modify-application`} component={ModifyApplication} />
           <PrivateRoute path={`${path}/modify-application-edit`} component={EditModifyApplication} />
@@ -140,8 +153,10 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/bill-amend/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/water/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/sewerage/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/edit-application-by-config`} component={WSEditApplicationByConfig} />
+          <PrivateRoute path={`${path}/disconnection-details`} component={GetDisconnectionDetails} />
           {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
-        <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
+          <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}
         </div>
       </React.Fragment>
     </Switch>

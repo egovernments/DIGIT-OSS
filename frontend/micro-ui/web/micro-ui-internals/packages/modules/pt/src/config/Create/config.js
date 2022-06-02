@@ -500,7 +500,7 @@ export const newConfig =[
                     "isMandatory": true,
                     "component": "SelectProofIdentity",
                     "texts": {
-                        "headerCaption": "PT_OWNERS_DETAILS",
+                        "headerCaption": "PT_DOCUMENT_DETAILS",
                         "header": "PT_PROOF_IDENTITY_HEADER",
                         "cardText": "",
                         "submitBarLabel": "PT_COMMON_NEXT",

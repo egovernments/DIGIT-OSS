@@ -41,7 +41,13 @@ import WSPayments from "./pages/citizen/MyPayment/WSPayments";
 import WSEditConnectionDetails from"./pageComponents/WSEditConnectionDetails";
 import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails";
 import WSDisconnectionDocsRequired from "./pageComponents/WSDisconnectionDocsRequired";
+import WSDisconnectionForm from "./pageComponents/WSDisconnectionForm";
+import WSDisconnectionDocumentsForm from "./pageComponents/WSDisconnectionDocumentsForm";
+import WSDisconnectionCheckPage from "./pages/citizen/WSDisconnection/CheckPage";
+import WSDisconnectAcknowledgement from "./pageComponents/WSDisconnectAcknowledgement";
+
 import WSInbox from "./components/WSInbox";
+import WSEditApplicationByConfig from './pages/employee/EditApplication/WSEditApplicationByConfig';
 
 const WSModule = ({ stateCode, userType, tenants }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -139,7 +145,12 @@ const componentsToRegister = {
   EditApplication,
   WSDisconnectionDocsRequired,
   WSInbox,
-  SWCard
+  WSEditApplicationByConfig,
+  SWCard,
+  WSDisconnectionForm,
+  WSDisconnectionDocumentsForm,
+  WSDisconnectionCheckPage,
+  WSDisconnectAcknowledgement
 };
 
 export const initWSComponents = () => {

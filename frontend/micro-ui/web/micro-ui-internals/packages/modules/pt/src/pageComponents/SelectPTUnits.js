@@ -27,14 +27,14 @@ const formatUnits = (units = [], currentFloor, isFloor) => {
     ];
   }
   return units.map((unit) => {
-    let usageCategory = !(unit?.usageCategory?.includes("NONRESIDENTIAL")) ? "RESIDENTIAL" : getUsageCategory(unit?.usageCategory)?.usageCategoryMinor;
+    let usageCategory = unit?.usageCategory && !(unit?.usageCategory?.includes("NONRESIDENTIAL")) ?  "RESIDENTIAL" : getUsageCategory(unit?.usageCategory)?.usageCategoryMinor;
     return {
       ...unit,
       builtUpArea: unit?.constructionDetail?.builtUpArea,
-      usageCategory: { code: usageCategory, i18nKey: `PROPERTYTAX_BILLING_SLAB_${usageCategory}` },
+      usageCategory: usageCategory ? { code: usageCategory, i18nKey: `PROPERTYTAX_BILLING_SLAB_${usageCategory}` } : {},
       occupancyType: unit?.occupancyType ? { code: unit.occupancyType, i18nKey: `PROPERTYTAX_OCCUPANCYTYPE_${unit?.occupancyType}` } : "",
-      floorNo: { code: unit.floorNo, i18nKey: `PROPERTYTAX_FLOOR_${unit?.floorNo}` },
-      unitType: unit?.unitType ? { code: unit.unitType, i18nKey: `PROPERTYTAX_BILLING_SLAB_${unit?.unitType}` } : "",
+      floorNo: unit?.floorNo ? { code: unit.floorNo, i18nKey: `PROPERTYTAX_FLOOR_${unit?.floorNo}` } : {},
+      unitType: unit?.unitType ? { code: unit.unitType, i18nKey: `PROPERTYTAX_BILLING_SLAB_${unit?.unitType?.code}` } : "",
     };
   });
 };
@@ -214,6 +214,23 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
   if (isLoading) {
     return <Loader />;
   }
+
+  function isAllowedNext (){
+    let valueNotthere=0;
+    fields && fields?.map((ob) => {
+      if((!(ob?.usageCategory) || Object.keys(ob?.usageCategory) == 0) || !(ob?.occupancyType) || !(ob?.builtUpArea) /* || (!(ob?.floorNo)|| Object.keys(ob?.floorNo) == 0 )*/)
+      valueNotthere=1;
+      else if(!(ob?.usageCategory?.code === "RESIDENTIAL") && !(ob?.unitType))
+      valueNotthere=1;
+      else if(ob?.occupancyType?.code === "RENTED" && !(ob?.arv))
+      valueNotthere=1;
+    })
+    if(valueNotthere == 0)
+    return false;
+    else 
+    return true;
+  }
+
   return (
     <React.Fragment>
     {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
@@ -222,7 +239,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
       onSelect={goNext}
       onSkip={onSkip}
       t={t}
-      // isDisabled={!fields[0].tradecategory || !fields[0].tradetype || !fields[0].tradesubtype}
+      isDisabled={isAllowedNext()}
     >
       {fields.map((field, index) => {
         return (
@@ -244,7 +261,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
                 style={{ width: "100px", display: "inline" }}
                 onClick={(e) => handleRemove(index)}
               />
-              <CardLabel>{`${t("PT_FORM2_USAGE_TYPE")}`}</CardLabel>
+              <CardLabel>{`${t("PT_FORM2_USAGE_TYPE")}*`}</CardLabel>
               <Dropdown
                 t={t}
                 optionKey="i18nKey"
@@ -258,7 +275,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
               />
               {field?.usageCategory?.code && field.usageCategory.code.includes("RESIDENTIAL") === false && (
                 <>
-                  <CardLabel>{`${t("PT_FORM2_SUB_USAGE_TYPE")}`}</CardLabel>
+                  <CardLabel>{`${t("PT_FORM2_SUB_USAGE_TYPE")}*`}</CardLabel>
                   <div className={"form-pt-dropdown-only"}>
                     <Dropdown
                       t={t}
@@ -271,7 +288,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
                   </div>
                 </>
               )}
-              <CardLabel>{`${t("PT_FORM2_OCCUPANCY")}`}</CardLabel>
+              <CardLabel>{`${t("PT_FORM2_OCCUPANCY")}*`}</CardLabel>
               <div className={"form-pt-dropdown-only"}>
                 <Dropdown
                   t={t}
@@ -284,7 +301,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
               </div>
               {field?.occupancyType?.code && field.occupancyType.code.includes("RENTED") && (
                 <>
-                  <CardLabel>{`${t("PT_FORM2_TOTAL_ANNUAL_RENT")}`}</CardLabel>
+                  <CardLabel>{`${t("PT_FORM2_TOTAL_ANNUAL_RENT")}*`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
                     t={t}
@@ -303,7 +320,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
                   />
                 </>
               )}
-              <CardLabel>{`${t("PT_FORM2_BUILT_UP_AREA")}`}</CardLabel>
+              <CardLabel>{`${t("PT_FORM2_BUILT_UP_AREA")}*`}</CardLabel>
               <TextInput
                 style={{ background: "#FAFAFA" }}
                 t={t}
@@ -322,7 +339,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
               />
               {!isFloor && (
                 <>
-                  <CardLabel>{`${t("PT_FORM2_SELECT_FLOOR")}`}</CardLabel>
+                  <CardLabel>{`${t("PT_FORM2_SELECT_FLOOR")}*`}</CardLabel>
                   <div className={"form-pt-dropdown-only"}>
                     <Dropdown
                       t={t}

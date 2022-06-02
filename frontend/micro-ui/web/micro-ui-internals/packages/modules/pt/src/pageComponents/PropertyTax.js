@@ -6,6 +6,7 @@ import { cardBodyStyle, stringReplaceAll } from "../utils";
 const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
+  sessionStorage.removeItem("docReqScreenByBack");
 
   const docType = config?.isMutation ? ["MutationDocuments"] : "Documents";
 
