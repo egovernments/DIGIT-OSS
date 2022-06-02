@@ -37,6 +37,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 @Component
 @Slf4j
@@ -146,6 +148,19 @@ public class PropertyUtil extends CommonUtils {
 					wf.setBusinessService(configs.getCreatePTWfName());
 					wf.setModuleName(configs.getPropertyModuleName());
 					wf.setAction("OPEN");
+					if (!StringUtils.isEmpty(request.getProperty().getWorkflow())) {
+						if (!CollectionUtils
+								.isEmpty(request.getProperty().getWorkflow().getAssignes())) {
+							wf.setAssignes(request.getProperty().getWorkflow().getAssignes());
+						}
+						if (!CollectionUtils
+								.isEmpty(request.getProperty().getWorkflow().getDocuments())) {
+							wf.setDocuments(request.getProperty().getWorkflow().getDocuments());
+						}
+						if (!StringUtils.isEmpty(request.getProperty().getWorkflow().getComment())) {
+							wf.setComment(request.getProperty().getWorkflow().getComment());
+						}
+					}
 				}
 				break;
 
