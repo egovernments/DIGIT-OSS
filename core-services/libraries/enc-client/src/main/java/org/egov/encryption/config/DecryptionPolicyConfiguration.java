@@ -65,23 +65,7 @@ public class DecryptionPolicyConfiguration {
     void initializeModelAttributeAccessMapFromMdms() {
         List<SecurityPolicy> securityPolicyList = null;
         try {
-            MasterDetail masterDetail = MasterDetail.builder().name(EncClientConstants.MDMS_SECURITY_POLICY_MASTER_NAME).build();
-            ModuleDetail moduleDetail = ModuleDetail.builder().moduleName(EncClientConstants.MDMS_MODULE_NAME)
-                    .masterDetails(Arrays.asList(masterDetail)) .build();
-
-            MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(encProperties.getStateLevelTenantId())
-                    .moduleDetails(Arrays.asList(moduleDetail)).build();
-
-            MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().requestInfo(RequestInfo.builder().build())
-                    .mdmsCriteria(mdmsCriteria).build();
-
-            ResponseEntity<MdmsResponse> response =
-                    restTemplate.postForEntity(encProperties.getEgovMdmsHost() + encProperties.getEgovMdmsSearchEndpoint(),
-                            mdmsCriteriaReq, MdmsResponse.class);
-
-            JSONArray securityPolicyJson = response.getBody().getMdmsRes().get(EncClientConstants.MDMS_MODULE_NAME)
-                    .get(EncClientConstants.MDMS_SECURITY_POLICY_MASTER_NAME);
-
+            JSONArray securityPolicyJson = mdmsFetcher.getSecurityMdmsForFilter(null);
             ObjectReader reader = objectMapper.readerFor(objectMapper.getTypeFactory().constructCollectionType(List.class,
                     SecurityPolicy.class));
             securityPolicyList = reader.readValue(securityPolicyJson.toString());

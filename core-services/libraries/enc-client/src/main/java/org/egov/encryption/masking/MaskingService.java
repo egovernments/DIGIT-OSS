@@ -5,21 +5,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.encryption.config.EncClientConstants;
 import org.egov.encryption.config.EncProperties;
 import org.egov.encryption.models.Attribute;
 import org.egov.encryption.models.UniqueIdentifier;
 import org.egov.encryption.util.JSONBrowseUtil;
 import org.egov.encryption.util.JacksonUtils;
 import org.egov.encryption.util.JsonPathConverter;
-import org.egov.mdms.model.*;
+import org.egov.encryption.util.MdmsFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class MaskingService {
@@ -30,12 +31,21 @@ public class MaskingService {
     private RestTemplate restTemplate;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private MdmsFetcher mdmsFetcher;
 
     Map<String, String> maskingPatternMap;
 
     @PostConstruct
-    private void init() {
-        maskingPatternMap = getMaskingPatternMap();
+    private void initMaskingPatternMap() {
+        try {
+            JSONArray maskingPatternListJSON = mdmsFetcher.getMaskingMdmsForFilter(null);
+            for (int i = 0; i < maskingPatternListJSON.size(); i++) {
+                Map<String, String> obj = objectMapper.convertValue(maskingPatternListJSON.get(i), Map.class);
+                maskingPatternMap.put(obj.get("patternId"), obj.get("pattern"));
+            }
+        } catch (Exception e) {
+        }
     }
 
     public <T> T maskData(T data, Attribute attribute) {
@@ -91,35 +101,6 @@ public class MaskingService {
         }
         plainNode = JacksonUtils.filterJsonNodeForPaths(plainNode, plainPaths);
         return plainNode;
-    }
-
-    public Map<String, String> getMaskingPatternMap(){
-        Map<String, String> maskingPatternMap = new HashMap<>();
-        try {
-            MasterDetail masterDetail = MasterDetail.builder().name(EncClientConstants.MDMS_MASKING_PATTERN_MASTER_NAME).build();
-            ModuleDetail moduleDetail = ModuleDetail.builder().moduleName(EncClientConstants.MDMS_MODULE_NAME)
-                    .masterDetails(Arrays.asList(masterDetail)) .build();
-
-            MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(encProperties.getStateLevelTenantId())
-                    .moduleDetails(Arrays.asList(moduleDetail)).build();
-
-            MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().requestInfo(RequestInfo.builder().build())
-                    .mdmsCriteria(mdmsCriteria).build();
-
-            ResponseEntity<MdmsResponse> response =
-                    restTemplate.postForEntity(encProperties.getEgovMdmsHost() + encProperties.getEgovMdmsSearchEndpoint(),
-                            mdmsCriteriaReq, MdmsResponse.class);
-
-            JSONArray maskingPatternListJSON = response.getBody().getMdmsRes().get(EncClientConstants.MDMS_MODULE_NAME)
-                    .get(EncClientConstants.MDMS_MASKING_PATTERN_MASTER_NAME);
-
-            for(int i =0 ;i <maskingPatternListJSON.size();i++){
-                Map<String,String> obj = objectMapper.convertValue(maskingPatternListJSON.get(i),Map.class);
-                maskingPatternMap.put(obj.get("patternId"),obj.get("pattern")) ;
-            }
-
-        } catch (Exception e) {}
-        return  maskingPatternMap;
     }
 
 }
