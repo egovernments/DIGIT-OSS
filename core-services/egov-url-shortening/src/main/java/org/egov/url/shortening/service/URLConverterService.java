@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.client.RestTemplate;
+import org.egov.url.shortening.utils.HashIdConverter;
 
 
 @Service
@@ -69,6 +70,9 @@ public class URLConverterService {
     private RestTemplate restTemplate;
 
     private Producer producer;
+
+    @Autowired
+    private HashIdConverter hashIdConverter;
 
     @Autowired
     public URLConverterService(List<URLRepository> urlRepositories, ObjectMapper objectMapper, RestTemplate restTemplate, Producer producer) {

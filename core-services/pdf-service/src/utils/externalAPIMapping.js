@@ -25,7 +25,7 @@ function escapeRegex(string) {
 }
 
 export const externalAPIMapping = async function (
-  key,
+  pdfKey,
   req,
   dataconfig,
   variableTovalueMap,
@@ -64,7 +64,7 @@ export const externalAPIMapping = async function (
     //to convert queryparam and uri into properURI
 
     //for PT module
-    if (key == "pt-receipt") {
+    if (pdfKey == "pt-receipt") {
       for (let j = 0; j < externalAPIArray[i].queryParams.length; j++) {
         if (externalAPIArray[i].queryParams[j] == "$") {
           flag = 1;
@@ -373,9 +373,8 @@ export const externalAPIMapping = async function (
       requestInfo,
       localisationModules,
       localisationCodes,
-      header
+      pdfKey+'-externalMapping'
     );
-  
     resposnseMap.messages.map((item) => {
       localisationMap[item.code + "_" + item.module] = item.message;
     });

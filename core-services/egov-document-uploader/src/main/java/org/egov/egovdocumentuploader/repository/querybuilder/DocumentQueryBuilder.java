@@ -2,11 +2,13 @@ package org.egov.egovdocumentuploader.repository.querybuilder;
 
 import org.egov.egovdocumentuploader.config.ApplicationProperties;
 import org.egov.egovdocumentuploader.web.models.DocumentSearchCriteria;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -51,10 +53,28 @@ public class DocumentQueryBuilder {
             query.append(" uuid = ? ");
             preparedStmtList.add(criteria.getUuid());
         }
+        // Provided date range based documents returning capability
+        if (!ObjectUtils.isEmpty(criteria.getFromDate())) {
+            addClauseIfRequired(query, preparedStmtList);
+
+            // If user does NOT specify toDate, take today's date as the toDate by default
+            if (ObjectUtils.isEmpty(criteria.getToDate()))
+                criteria.setToDate(Instant.now().toEpochMilli());
+
+            query.append("lastmodifiedtime BETWEEN ? AND ?");
+            preparedStmtList.add(criteria.getFromDate());
+            preparedStmtList.add(criteria.getToDate());
+        } else {
+            if(!ObjectUtils.isEmpty(criteria.getToDate()))
+                throw new CustomException("INVALID_SEARCH", "toDate parameter cannot be specified without fromDate");
+        }
         // return documents only if they are active.
         addClauseIfRequired(query, preparedStmtList);
         query.append((" active = ? "));
-        preparedStmtList.add(Boolean.TRUE);
+        if(!ObjectUtils.isEmpty(criteria.getViewDeletedDocuments()) && criteria.getViewDeletedDocuments())
+            preparedStmtList.add(Boolean.FALSE);
+        else
+            preparedStmtList.add(Boolean.TRUE);
 
         // order documents based on their createdtime in latest first manner
         query.append(ORDERBY_CREATEDTIME);

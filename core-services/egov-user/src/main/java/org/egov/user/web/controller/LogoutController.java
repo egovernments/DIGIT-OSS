@@ -25,7 +25,7 @@ public class LogoutController {
     /**
      * End-point to logout the session.
      *
-     * @param accessToken
+     * @param
      * @return
      * @throws Exception
      */

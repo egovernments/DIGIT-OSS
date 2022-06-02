@@ -47,6 +47,9 @@ public class ProcessInstanceSearchCriteria {
 
     @JsonProperty("moduleName")
     private String moduleName;
+    
+    @JsonIgnore
+    private Boolean isNearingSlaCount;
 
     @JsonIgnore
     private List<String> tenantSpecifiStatus;
@@ -65,6 +68,9 @@ public class ProcessInstanceSearchCriteria {
 
     @JsonIgnore
     private List<String> statusesIrrespectiveOfTenant;
+    
+    @JsonIgnore
+    private Long slotPercentageSlaLimit;
 
 
 
