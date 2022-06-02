@@ -292,5 +292,4 @@ public class CollectionServiceConstants {
     
     public static final String EMPLOYEE_TYPE = "EMPLOYEE";
 
-    public static final String SCHEMA_PLACEHOLDER = "{schema}";
 }

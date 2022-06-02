@@ -1,13 +1,15 @@
 package org.egov.swcalculation.repository;
 
-import org.egov.common.contract.request.RequestInfo;
-
 import java.util.List;
+
+import org.egov.swcalculation.web.models.SewerageConnection;
 
 public interface SewerageCalculatorDao {
 
-	List<String> getTenantId(RequestInfo requestInfo);
+	List<String> getTenantId();
 	
-	List<String> getConnectionsNoList(String tenantId, String connectionType);
+	List<SewerageConnection> getConnectionsNoList(String tenantId, String connectionType, Integer batchOffset, Integer batchsize, Long fromDate, Long toDate);
+
+	long getConnectionCount(String tenantid, Long fromDate, Long toDate);
 	
 }

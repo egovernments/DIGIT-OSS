@@ -1,33 +1,15 @@
 import envVariables from "../envVariables";
 import { httpRequest } from "../utils/api";
 
-export const searchUser = async (requestInfo, userSearchReqCriteria, header) => {
+export const searchUser = async (requestInfo, userSearchReqCriteria) => {
   let requestBody = { RequestInfo: requestInfo, ...userSearchReqCriteria };
-  
-  let headers;
-  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
-  if(typeof isCentralInstance =="string")
-  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
-  
-  if(isCentralInstance){
-    header['tenantId']=header.tenantid;
-  }
-  else{
-    header['tenantId'] = userSearchReqCriteria.tenantId;
-  }
-    
-
-  headers = header;
-
-  
 
   var userSearchResponse = await httpRequest({
-    hostURL: `${envVariables.EGOV_USER_HOST}`,
+    hostURL: envVariables.EGOV_HOST_BASE_URL,
     endPoint: `${envVariables.EGOV_USER_CONTEXT_PATH}${
       envVariables.EGOV_USER_SEARCH_ENDPOINT
     }`,
-    requestBody,
-    headers
+    requestBody
   });
   //console.log("User search response: "+JSON.stringify(userSearchResponse));
 
@@ -38,30 +20,15 @@ export const searchUser = async (requestInfo, userSearchReqCriteria, header) => 
   return userSearchResponse;
 };
 
-export const createUser = async (requestInfo, user, header, tenantId) => {
+export const createUser = async (requestInfo, user) => {
   let requestBody = { RequestInfo: requestInfo, user: user };
-
-  let headers;
-  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
-  if(typeof isCentralInstance =="string")
-  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
-
-  if(isCentralInstance){
-    header['tenantId']=header.tenantid;
-  }
-  else
-    header['tenantId']= tenantId;
-
-  headers = header;
-
   user.dob=dobConvetion(user.dob);
   var userCreateResponse = await httpRequest({
     hostURL: envVariables.EGOV_USER_HOST,
     endPoint: `${envVariables.EGOV_USER_CONTEXT_PATH}${
       envVariables.EGOV_USER_CREATE_ENDPOINT
     }`,
-    requestBody,
-    headers
+    requestBody
   });
 
   var dobFormat = "dd/MM/yyyy";
@@ -70,21 +37,8 @@ export const createUser = async (requestInfo, user, header, tenantId) => {
   return userCreateResponse;
 };
 
-export const updateUser = async (requestInfo, user, header, tenantId) => {
+export const updateUser = async (requestInfo, user) => {
   // console.log(user);
-  let headers;
-  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
-  if(typeof isCentralInstance =="string")
-  isCentralInstance = (isCentralInstance.toLowerCase() == "true");
-
-  if(isCentralInstance){
-    header['tenantId']=header.tenantid;
-  }
-  else
-    header['tenantId'] = tenantId;
-
-  headers = header;
-
   user.dob=dobConvetion(user.dob);
   // console.info(user.dob);
   let requestBody = { RequestInfo: requestInfo, user: user };
@@ -93,8 +47,7 @@ export const updateUser = async (requestInfo, user, header, tenantId) => {
     endPoint: `${envVariables.EGOV_USER_CONTEXT_PATH}${
       envVariables.EGOV_USER_UPDATE_ENDPOINT
     }`,
-    requestBody,
-    headers
+    requestBody
   });
 
   var dobFormat = "yyyy-MM-dd";

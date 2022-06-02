@@ -58,7 +58,6 @@ public class EditNotificationService {
 	public void sendEditNotification(SewerageConnectionRequest request) {
 		try {
 			Property property = validateProperty.getOrValidateProperty(request);
-
 			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getSewerageConnection().getTenantId(), SEWERAGE_SERVICE_BUSINESS_ID, request.getSewerageConnection().getProcessInstance().getAction());
 
 			if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
@@ -66,7 +65,7 @@ public class EditNotificationService {
 				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 					EventRequest eventRequest = getEventRequest(request, property);
 					if (eventRequest != null) {
-						notificationUtil.sendEventNotification(eventRequest, property.getTenantId());
+						notificationUtil.sendEventNotification(eventRequest);
 					}
 				}
 			}
@@ -75,7 +74,7 @@ public class EditNotificationService {
 				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 					List<SMSRequest> smsRequests = getSmsRequest(request, property);
 					if (!CollectionUtils.isEmpty(smsRequests)) {
-						notificationUtil.sendSMS(smsRequests, request.getSewerageConnection().getTenantId());
+						notificationUtil.sendSMS(smsRequests);
 					}
 				}
 			}

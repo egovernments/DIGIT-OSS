@@ -6,21 +6,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.egov.collection.model.Instrument;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.producer.CollectionProducer;
 import org.egov.collection.web.contract.Bill;
+import org.egov.collection.web.contract.BillDetail;
 //import org.egov.collection.web.contract.Receipt;
 //import org.egov.collection.web.contract.ReceiptReq;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
@@ -47,9 +49,6 @@ import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
  *
  */
 public class NotificationConsumer {
-	
-	@Autowired
-	private MultiStateInstanceUtil multiStateInstanceUtil;
 
 	@Value("${coll.notification.ui.host}")
 	private String uiHost;
@@ -138,7 +137,7 @@ public class NotificationConsumer {
 						request.put("mobileNumber", phNo);
 						request.put("message", message);
 
-						producer.push(receipt.getTenantId(), smsTopic, request);
+						producer.producer(smsTopic, request);
 					} else {
 						log.error("No message configured! Notification will not be sent.");
 					}
@@ -170,15 +169,15 @@ public class NotificationConsumer {
 			link.append(uiHost + "/citizen").append("/otpLogin?mobileNo=").append(bill.getMobileNumber()).append("&redirectTo=")
 					.append(uiRedirectUrl).append("&params=").append(paymentdetail.getTenantId() + "," + paymentdetail.getReceiptNumber());
 
-			content = content.replaceAll("<rcpt_link>", link.toString());
+			content = content.replaceAll("{rcpt_link}", link.toString());
 			String taxName = fetchContentFromLocalization(requestInfo, paymentdetail.getTenantId(),
 					BUSINESSSERVICE_LOCALIZATION_MODULE, formatCodes(paymentdetail.getBusinessService()));
 			if(StringUtils.isEmpty(taxName))
 				taxName = "Adhoc Tax";
-			content = content.replaceAll("<tax_name>", taxName);
-			content = content.replaceAll("<fin_year>", fetchFinYear(bill.getBillDetails().get(0).getFromPeriod(), bill.getBillDetails().get(0).getToPeriod()));
-			content = content.replaceAll("<rcpt_no>",  paymentdetail.getReceiptNumber());
-			content = content.replaceAll("<amount_paid>", bill.getAmountPaid().toString());
+			content = content.replaceAll("{tax_name}", taxName);
+			content = content.replaceAll("{fin_year}", fetchFinYear(bill.getBillDetails().get(0).getFromPeriod(), bill.getBillDetails().get(0).getToPeriod()));
+			content = content.replaceAll("{rcpt_no}",  paymentdetail.getReceiptNumber());
+			content = content.replaceAll("{amount_paid}", bill.getAmountPaid().toString());
 
 			message = content;
 		}
@@ -204,9 +203,7 @@ public class NotificationConsumer {
 			locale = fallBackLocale;
 		StringBuilder uri = new StringBuilder();
 		uri.append(localizationHost).append(localizationEndpoint);
-		uri.append("?tenantId=").append(multiStateInstanceUtil.getStateLevelTenant(tenantId))
-		.append("&locale=").append(locale).append("&module=").append(module);
-		
+		uri.append("?tenantId=").append(tenantId.split("\\.")[0]).append("&locale=").append(locale).append("&module=").append(module);
 		Map<String, Object> request = new HashMap<>();
 		request.put("RequestInfo", requestInfo);
 		try {
@@ -237,7 +234,7 @@ public class NotificationConsumer {
 		uri.append(mdmsHost).append(mdmsUrl);
 		if(StringUtils.isEmpty(tenantId))
 			return masterData;
-		MdmsCriteriaReq request = getRequestForEvents(requestInfo, multiStateInstanceUtil.getStateLevelTenant(tenantId));
+		MdmsCriteriaReq request = getRequestForEvents(requestInfo, tenantId.split("\\.")[0]);
 		try {
 			Object response = restTemplate.postForObject(uri.toString(), request, Map.class);
 			masterData = JsonPath.read(response, BUSINESSSERVICE_CODES_JSONPATH);

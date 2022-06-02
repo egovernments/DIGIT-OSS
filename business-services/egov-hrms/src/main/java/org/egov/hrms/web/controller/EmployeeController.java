@@ -49,7 +49,6 @@ import org.egov.hrms.web.contract.EmployeeSearchCriteria;
 import org.egov.hrms.web.contract.RequestInfoWrapper;
 import org.egov.hrms.web.validator.EmployeeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -115,10 +114,9 @@ public class EmployeeController {
 	 */
 	@PostMapping(value = "/_search")
 	@ResponseBody
-	public ResponseEntity<?> search(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper, @ModelAttribute @Valid EmployeeSearchCriteria criteria, @RequestHeader Map<String, String> headers) {
+	public ResponseEntity<?> search(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper, @ModelAttribute @Valid EmployeeSearchCriteria criteria) {
 		validator.validateSearchRequest(requestInfoWrapper.getRequestInfo(), criteria);
-		String headerTenantId = headers.get("tenantid");
-		EmployeeResponse employeeResponse = employeeService.search(criteria, requestInfoWrapper.getRequestInfo(), headerTenantId);
+		EmployeeResponse employeeResponse = employeeService.search(criteria, requestInfoWrapper.getRequestInfo());
 		return new ResponseEntity<>(employeeResponse,HttpStatus.OK);
 	}
 

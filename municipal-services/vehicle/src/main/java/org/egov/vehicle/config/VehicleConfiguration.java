@@ -20,6 +20,10 @@ public class VehicleConfiguration {
     // Persister Config
     @Value("${persister.save.vehicle.topic}")
     private String saveTopic;
+    
+    // Persister Config
+    @Value("${persister.update.vehicle.topic}")
+    private String updateTopic;
 
 	@Value("${egov.hrms.host}")
 	private String employeeHost;
@@ -131,6 +135,45 @@ public class VehicleConfiguration {
 
 	    @Value("${egov.fsm.plantmap.search.endpoint}")
 	    private String fsmPlantmapSearchEndpoint;
+	    
+	    // SMS
+	 	@Value("${kafka.topics.notification.sms}")
+	 	private String smsNotifTopic;
 
-	
+ 		@Value("${notification.sms.enabled}")
+ 		private Boolean isSMSEnabled;
+ 		
+ 		@Value("${egov.localization.statelevel}")
+		private Boolean isLocalizationStateLevel;
+ 		
+ 		// Localization
+		@Value("${egov.localization.host}")
+		private String localizationHost;
+
+		@Value("${egov.localization.context.path}")
+		private String localizationContextPath;
+
+		@Value("${egov.localization.search.endpoint}")
+		private String localizationSearchEndpoint;
+		
+		@Value("${user.search.rolecode.params}")
+		private String userRoleCodes;
+		
+		@Value("${egov.localization.search.fsm.module}")
+		private String fsmSearchModule;
+		
+		//URL shortner
+		@Value("${egov.url.shortner.host}")
+		private String urlShortnerHost;
+		
+		@Value("${tl.url.shortner.endpoint}")
+		private String urlShortnerEndpoint;
+		
+		@Value("${egov.ui.app.host}")
+		private String uiAppHost;
+		
+		@Value("${egov.ui.fsm.new.link}")
+		private String newFsmLink;
+		
+			
 }

@@ -49,7 +49,21 @@ public class VehicleController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    
+    @PostMapping(value = "/_update")
+    public ResponseEntity<VehicleResponse> update(@Valid @RequestBody VehicleRequest vehicleRequest) {
 
+        vehicleUtil.defaultJsonPathConfig();
+        Vehicle vehicle = vehicleService.update(vehicleRequest);
+        List<Vehicle> vehicleList = new ArrayList<Vehicle>();
+        vehicleList.add(vehicle);
+        VehicleResponse response = VehicleResponse.builder().vehicle(vehicleList)
+                .responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(vehicleRequest.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    
 	@PostMapping(value = "/_search")
 	public ResponseEntity<VehicleResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute VehicleSearchCriteria criteria) {

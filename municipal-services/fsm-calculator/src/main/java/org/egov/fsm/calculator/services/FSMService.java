@@ -34,6 +34,8 @@ public class FSMService {
 		
 		url.append("&");
 		url.append("applicationNo=");
+		url.append(applicationNo);
+		
 		LinkedHashMap responseMap = null;
 		responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(url, new RequestInfoWrapper(requestInfo));
 

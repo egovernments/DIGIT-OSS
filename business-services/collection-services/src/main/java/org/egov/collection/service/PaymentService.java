@@ -2,12 +2,7 @@ package org.egov.collection.service;
 
 import static java.util.Objects.isNull;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
@@ -120,7 +115,7 @@ public class PaymentService {
             payment.setPayerId(payerId);
         paymentRepository.savePayment(payment);
 
-        producer.push(paymentRequest.getPayment().getTenantId(),applicationProperties.getCreatePaymentTopicName(), paymentRequest);
+        producer.producer(applicationProperties.getCreatePaymentTopicName(), paymentRequest);
 
 
         return payment;
@@ -175,8 +170,7 @@ public class PaymentService {
                 paymentRequest.getRequestInfo());
 
         paymentRepository.updatePayment(validatedPayments);
-		producer.push(paymentRequest.getPayment().getTenantId(), applicationProperties.getUpdatePaymentTopicName(),
-				new PaymentRequest(paymentRequest.getRequestInfo(), paymentRequest.getPayment()));
+        producer.producer(applicationProperties.getUpdatePaymentTopicName(), new PaymentRequest(paymentRequest.getRequestInfo(), paymentRequest.getPayment()));
 
         return validatedPayments;
     }

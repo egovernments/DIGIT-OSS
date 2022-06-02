@@ -5,7 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.egov.vehicle.config.VehicleConfiguration;
-import org.egov.vehicle.trip.web.model.VehicleTripSearchCriteria;
 import org.egov.vehicle.web.model.Vehicle;
 import org.egov.vehicle.web.model.VehicleRequest;
 import org.egov.vehicle.web.model.VehicleSearchCriteria;
@@ -26,7 +25,7 @@ public class QueryBuilder {
 	
 	private final String paginationWrapper = "{} {orderby} {pagination}";
 	private static final String Query = " SELECT count(*) OVER() AS full_count, * FROM eg_vehicle ";
-	private static final String VEH_EXISTS_QUERY=" SELECT COUNT(*) FROM eg_vehicle WHERE tenantid=? AND registrationNumber=?";
+	private static final String VEH_EXISTS_QUERY=" SELECT COUNT(*) FROM eg_vehicle WHERE tenantid=? AND registrationNumber=? AND STATUS= ?";
 	
 	/**
 	 * 
@@ -178,6 +177,12 @@ public class QueryBuilder {
 			builder.append(" suctionType IN (").append(createQuery(suctionTypes)).append(")");
 			addToPreparedStatement(preparedStmtList, suctionTypes);
 		}
+		List<String> vehicleOwners = criteria.getVehicleOwner();
+		if (!CollectionUtils.isEmpty(vehicleOwners)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" vehicleOwner IN (").append(createQuery(vehicleOwners)).append(")");
+			addToPreparedStatement(preparedStmtList, vehicleOwners);
+		}
 		
 		List<String> model = criteria.getModel();
 		if (!CollectionUtils.isEmpty(model)) {
@@ -206,8 +211,13 @@ public class QueryBuilder {
 			builder.append(" id IN (").append(createQuery(ids)).append(")");
 			addToPreparedStatement(preparedStmtList, ids);
 		}
-		
-		
+		//Added search criteria on status 
+		List<String> status=criteria.getStatus();
+		if (!CollectionUtils.isEmpty(status)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" status IN (").append(createQuery(status)).append(")");
+			addToPreparedStatement(preparedStmtList, status);
+		}
 		
 		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 	}

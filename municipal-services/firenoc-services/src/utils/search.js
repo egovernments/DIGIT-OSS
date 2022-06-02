@@ -13,7 +13,7 @@ const intConversion = string => {
   return string ? parseInt(string) : null;
 };
 
-const fireNOCRowMapper = async (row, mapper = {}, header) => {
+const fireNOCRowMapper = async (row, mapper = {}) => {
   let fireNoc = isEmpty(mapper) ? {} : mapper;
   fireNoc.id = row.fid;
   fireNoc.tenantId = row.tenantid;
@@ -29,8 +29,7 @@ const fireNOCRowMapper = async (row, mapper = {}, header) => {
   };
   let owners = await fireNocOwnersRowMapper(
     row,
-    get(fireNoc, "fireNOCDetails.applicantDetails.owners", []),
-    header
+    get(fireNoc, "fireNOCDetails.applicantDetails.owners", [])
   );
   let fireNOCDetails = {
     id: row.firenocdetailsid,
@@ -84,7 +83,7 @@ const fireNOCRowMapper = async (row, mapper = {}, header) => {
   return fireNoc;
 };
 
-const fireNocOwnersRowMapper = async (row, mapper = [], header) => {
+const fireNocOwnersRowMapper = async (row, mapper = []) => {
   let ownerIndex = findIndex(mapper, { useruuid: row.useruuid });
   let ownerObject = {
     id: row.ownerid,
@@ -106,7 +105,7 @@ const fireNocOwnersRowMapper = async (row, mapper = [], header) => {
   } else {
     let user = {};
     if (row.useruuid) {
-      user = await searchUser(requestInfo, row.useruuid, header, envVariables.EGOV_DEFAULT_STATE_ID);
+      user = await searchUser(requestInfo, row.useruuid);
     }
     user = {
       ...ownerObject,
@@ -179,17 +178,17 @@ const fireNocApplicationDocumentsRowMapper = (row, mapper = []) => {
   return mapper;
 };
 
-export const mergeSearchResults = async (response, query = {}, reqInfo, header) => {
+export const mergeSearchResults = async (response, query = {}, reqInfo) => {
   requestInfo = reqInfo;
   let result = [];
   for (var i = 0; i < response.length; i++) {
     let fireNoc = {};
     let index = findIndex(result, { id: response[i].fid });
     if (index != -1) {
-      fireNoc = await fireNOCRowMapper(response[i], result[index], header);
+      fireNoc = await fireNOCRowMapper(response[i], result[index]);
       result[index] = fireNoc;
     } else {
-      fireNoc = await fireNOCRowMapper(response[i], {}, header);
+      fireNoc = await fireNOCRowMapper(response[i]);
       result.push(fireNoc);
     }
   }
@@ -204,30 +203,26 @@ const removeEmpty = obj => {
   });
 };
 
-const searchUser = async (requestInfo, uuid, header, tenantId) => {
+const searchUser = async (requestInfo, uuid) => {
   let userSearchReqCriteria = {};
   let userSearchResponse = {};
   userSearchReqCriteria.uuid = [uuid];
-  userSearchReqCriteria.tenantId = tenantId;
   userSearchResponse = await userService.searchUser(
     requestInfo,
-    userSearchReqCriteria,
-    header
+    userSearchReqCriteria
   );
   let users = get(userSearchResponse, "user", []);
   return users.length ? users[0] : {};
 };
 
-export const searchByMobileNumber = async (mobileNumber, tenantId, header) => {
+export const searchByMobileNumber = async (mobileNumber, tenantId) => {
   var userSearchReqCriteria = {};
   userSearchReqCriteria.userType = "CITIZEN";
   userSearchReqCriteria.tenantId = tenantId;
   userSearchReqCriteria.mobileNumber = mobileNumber;
-
   var userSearchResponse = await userService.searchUser(
     requestInfo,
-    userSearchReqCriteria,
-    header
+    userSearchReqCriteria
   );
   return userSearchResponse;
 };
