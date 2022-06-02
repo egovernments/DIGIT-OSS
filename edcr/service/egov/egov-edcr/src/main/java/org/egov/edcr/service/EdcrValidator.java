@@ -43,6 +43,7 @@ public class EdcrValidator {
 
     public ErrorDetail validate(final EdcrRequest edcr) {
         if (edcr != null) {
+             LOG.info("edcr request " + edcr);
             ErrorDetail error = new ErrorDetail();
             Field[] edcrFields = edcr.getClass().getDeclaredFields();
             ErrorDetail e1 = validateAttributes(edcr, edcrFields, error);
