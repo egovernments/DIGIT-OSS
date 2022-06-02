@@ -1,30 +1,18 @@
 package org.egov.tl.validator;
 
-import static org.egov.tl.util.TLConstants.businessService_BPA;
-import static org.egov.tl.util.TLConstants.businessService_TL;
-
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-
+import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.TLRepository;
+import org.egov.tl.service.TradeLicenseService;
 import org.egov.tl.service.UserService;
+import org.egov.tl.util.BPAConstants;
 import org.egov.tl.util.TLConstants;
 import org.egov.tl.util.TradeUtil;
-import org.egov.tl.web.models.OwnerInfo;
-import org.egov.tl.web.models.TradeLicense;
-import org.egov.tl.web.models.TradeLicenseRequest;
-import org.egov.tl.web.models.TradeLicenseSearchCriteria;
-import org.egov.tl.web.models.TradeUnit;
+import org.egov.tl.web.models.*;
+import org.egov.tl.web.models.user.UserDetailResponse;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,14 +26,13 @@ import static org.egov.tl.util.TLConstants.businessService_BPA;
 import static org.egov.tl.util.TLConstants.businessService_TL;
 import static org.egov.tl.util.TLConstants.APPLICATION_TYPE_RENEWAL;
 
-
 @Component
 public class TLValidator {
 
 
     private TLRepository tlRepository;
 
-    private TLConfiguration configs;
+    private TLConfiguration config;
 
     private PropertyValidator propertyValidator;
 
@@ -65,7 +52,7 @@ public class TLValidator {
     public TLValidator(TLRepository tlRepository, TLConfiguration config, PropertyValidator propertyValidator,
                        MDMSValidator mdmsValidator, TradeUtil tradeUtil,UserService userService) {
         this.tlRepository = tlRepository;
-        this.configs = config;
+        this.config = config;
         this.propertyValidator = propertyValidator;
         this.mdmsValidator = mdmsValidator;
         this.tradeUtil = tradeUtil;
@@ -190,10 +177,10 @@ public class TLValidator {
             }            
             if(license.getLicenseType().toString().equalsIgnoreCase(TradeLicense.LicenseTypeEnum.TEMPORARY.toString())) {
                 Long startOfDay = getStartOfDay();
-                if (!configs.getIsPreviousTLAllowed() && license.getValidFrom() != null
+                if (!config.getIsPreviousTLAllowed() && license.getValidFrom() != null
                         && license.getValidFrom() < startOfDay)
                     throw new CustomException("INVALID FROM DATE", "The validFrom date cannot be less than CurrentDate");
-                if ((license.getValidFrom() != null && license.getValidTo() != null) && (license.getValidTo() - license.getValidFrom()) < configs.getMinPeriod())
+                if ((license.getValidFrom() != null && license.getValidTo() != null) && (license.getValidTo() - license.getValidFrom()) < config.getMinPeriod())
                     throw new CustomException("INVALID PERIOD", "The license should be applied for minimum of 30 days");
             }
         });
@@ -204,7 +191,7 @@ public class TLValidator {
      * @return time in millis
      */
     private Long getStartOfDay(){
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(configs.getEgovAppTimeZone()));
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(config.getEgovAppTimeZone()));
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
@@ -221,12 +208,12 @@ public class TLValidator {
         List<TradeLicense> licenses = request.getLicenses();
         licenses.forEach(license -> {
             if(license.getTradeLicenseDetail().getInstitution()!=null &&
-                    !license.getTradeLicenseDetail().getSubOwnerShipCategory().contains(configs.getInstitutional()))
+                    !license.getTradeLicenseDetail().getSubOwnerShipCategory().contains(config.getInstitutional()))
                 throw new CustomException("INVALID REQUEST","The institution object should be null for ownershipCategory "
                         +license.getTradeLicenseDetail().getSubOwnerShipCategory());
 
             if(license.getTradeLicenseDetail().getInstitution()==null &&
-                    license.getTradeLicenseDetail().getSubOwnerShipCategory().contains(configs.getInstitutional()))
+                    license.getTradeLicenseDetail().getSubOwnerShipCategory().contains(config.getInstitutional()))
                 throw new CustomException("INVALID REQUEST","The institution object cannot be null for ownershipCategory "
                         +license.getTradeLicenseDetail().getSubOwnerShipCategory());
 
@@ -276,7 +263,7 @@ public class TLValidator {
         criteria.setStatus(statuses);
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
         criteria.setLicenseNumbers(licenseNumbers);
-        List<TradeLicense> searchResult = tlRepository.getLicenses(criteria, request.getLicenses().get(0).getTenantId());
+        List<TradeLicense> searchResult = tlRepository.getLicenses(criteria);
 
         Map<String , TradeLicense> licenseMap = new HashMap<>();
         searchResult.forEach(license -> {
@@ -570,12 +557,6 @@ public class TLValidator {
      * @param criteria The TradeLicenseSearch Criteria
      */
     public void validateSearch(RequestInfo requestInfo, TradeLicenseSearchCriteria criteria, String serviceFromPath, boolean isInterServiceCall) {
-    	
-    	if(configs.getIsEnvironmentCentralInstance() && criteria.getTenantId() == null)
-    		throw new CustomException("EG_PT_INVALID_SEARCH"," TenantId is mandatory for search ");
-    	else if(configs.getIsEnvironmentCentralInstance() && criteria.getTenantId().split("\\.").length < configs.getStateLevelTenantIdLength())
-    		throw new CustomException("EG_PT_INVALID_SEARCH"," TenantId should be mandatorily " + configs.getStateLevelTenantIdLength() + " levels for search");
-    	
         String serviceInSearchCriteria = criteria.getBusinessService();
         if ((serviceInSearchCriteria != null) && (!StringUtils.equals(serviceFromPath, serviceInSearchCriteria))) {
             throw new CustomException("INVALID SEARCH", "Business service in Path param and requestbody not matching");
@@ -589,19 +570,20 @@ public class TLValidator {
         if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.isEmpty())
             throw new CustomException("INVALID SEARCH","Search without any paramters is not allowed");
 
-        if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
+        if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search based only on tenantId is not allowed");
 
-        /*if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
-            throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");*/
-
+        if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
+            throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");
 
         String allowedParamStr = null;
 
         if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" ))
-            allowedParamStr = configs.getAllowedCitizenSearchParameters();
+            allowedParamStr = config.getAllowedCitizenSearchParameters();
         else if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE" ))
-            allowedParamStr = configs.getAllowedEmployeeSearchParameters();
+            allowedParamStr = config.getAllowedEmployeeSearchParameters();
+        else if(requestInfo.getUserInfo().getType().equalsIgnoreCase("SYSTEM" ))
+            allowedParamStr = config.getAllowedSystemSearchParameters();
         else throw new CustomException("INVALID SEARCH","The userType: "+requestInfo.getUserInfo().getType()+
                     " does not have any search config");
 
@@ -666,7 +648,7 @@ public class TLValidator {
      * @param request The tradeLcienseRequest
      */
     private void validateDuplicateDocuments(TradeLicenseRequest request){
-        List<String> documentFileStoreIds = new LinkedList<>();
+        List<String> documentFileStoreIds = new LinkedList();
         request.getLicenses().forEach(license -> {
             if(license.getTradeLicenseDetail().getApplicationDocuments()!=null){
                 license.getTradeLicenseDetail().getApplicationDocuments().forEach(
@@ -701,6 +683,12 @@ public class TLValidator {
         if(!errorMap.isEmpty())
             throw new CustomException(errorMap);
     }
+
+
+
+
+
+
 }
 
 

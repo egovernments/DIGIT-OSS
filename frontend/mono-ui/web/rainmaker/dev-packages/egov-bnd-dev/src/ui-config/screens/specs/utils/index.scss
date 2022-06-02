@@ -1,0 +1,23 @@
+.radio-button-group {
+  padding: 0;
+}
+
+.checkbox-root {
+  width: 16px;
+  margin-right: 11px;
+}
+
+.fontSize12 {
+  font-size: 12px;
+}
+
+.city-picker-dialog-style {
+  min-height: 180px;
+  min-width: 365px;
+}
+
+@media only screen and (max-width: 768px) {
+  .city-picker-dialog-style {
+    min-width: 250px;
+  }
+}

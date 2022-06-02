@@ -2,6 +2,7 @@ import { CardLabel, CardLabelDesc, Dropdown, FormStep, UploadFile } from "@egove
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { stringReplaceAll } from "../utils";
+import Timeline from "../components/TLTimeline";
 
 const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   const { pathname: url } = useLocation();
@@ -78,8 +79,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
               setError(t("PT_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
-            // setError(t("PT_FILE_UPLOAD_ERROR"));
+           
           }
         }
       }
@@ -87,7 +87,9 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
   }, [file]);
 
   return (
-    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={!uploadedFile || !dropdownValue || error}>
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={3}/> : null}
+    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={isUpdateProperty || isEditProperty ? false: (!uploadedFile || !dropdownValue || error)}>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
       <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
       <CardLabel>{`${t("PT_CATEGORY_DOCUMENT_TYPE")}`}</CardLabel>
@@ -99,7 +101,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
         optionKey="i18nKey"
         select={setTypeOfDropdownValue}
         placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
-        disable={isUpdateProperty || isEditProperty}
+        //disable={isEditProperty}
       />
       <UploadFile
         id={"pt-doc"}
@@ -115,6 +117,7 @@ const SelectSpecialProofIdentity = ({ t, config, onSelect, userType, formData, o
       {error ? <div style={{ height: "20px", width: "100%", fontSize: "20px", color: "red", marginTop: "5px" }}>{error}</div> : ""}
       <div style={{ disabled: "true", height: "20px", width: "100%" }}></div>
     </FormStep>
+    </React.Fragment>
   );
 };
 

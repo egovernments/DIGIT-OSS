@@ -195,7 +195,6 @@ const getMdmsData = async (state, dispatch) => {
     dispatch(prepareFinalObject("applyScreenMdmsData.applyScreen.Documents", payload.MdmsRes['ws-services-masters'].Documents));
     prepareDocumentsUploadData(state, dispatch);
   } catch (e) {
-    console.log(e);
   }
 };
 

@@ -46,6 +46,5 @@ export const fetchData = async (action, state, dispatch) => {
             );
         }
     } catch (error) {
-        console.log(error);
     };
 }

@@ -21,13 +21,14 @@ const Urls = {
   Authenticate: "/user/oauth/token",
   RegisterUser: "/user/citizen/_create",
   ChangePassword: "/user/password/nologin/_update",
+  ChangePassword1: "/user/password/_update",
   UserProfileUpdate: "/user/profile/_update",
   EmployeeSearch: "/egov-hrms/employees/_search",
 
   InboxSearch: "/inbox/v1/_search",
 
   UserSearch: "/user/_search",
-  UserLogout : "/user/_logout",
+  UserLogout: "/user/_logout",
 
   Shortener: "/egov-url-shortening/shortener",
 
@@ -41,6 +42,9 @@ const Urls = {
     vehicleTripSearch: "/vehicle/trip/v1/_search",
     billingSlabSearch: "/fsm-calculator/v1/billingSlab/_search",
     vehilceUpdate: "/vehicle/trip/v1/_update",
+    createVendor: "/vendor/v1/_create",
+    updateVendor: "/vendor/v1/_update",
+    vehicleCreate: "/vehicle/trip/v1/_create",
   },
 
   payment: {
@@ -54,6 +58,7 @@ const Urls = {
     search_bill: "/billing-service/bill/v2/_search",
     reciept_search: "/collection-services/payments/:buisnessService/_search",
     obps_Reciept_Search: "/collection-services/payments/_search",
+    billAmendmentSearch: "/billing-service/amendment/_search",
   },
 
   pt: {
@@ -65,7 +70,8 @@ const Urls = {
     pt_calculation_estimate: "/pt-calculator-v2/propertytax/v2/_estimate",
     assessment_create: "/property-services/assessment/_create",
     assessment_search: "/property-services/assessment/_search",
-    payment_search: "/collection-services/payments/PT/_search"
+    payment_search: "/collection-services/payments/PT/_search",
+    pt_calculate_mutation: "/pt-calculator-v2/propertytax/mutation/_calculate"
   },
 
   dss: {
@@ -82,6 +88,7 @@ const Urls = {
     update: "/echallan-services/eChallan/v1/_update",
     download_pdf: "/egov-pdf/download/UC/mcollect-challan",
     receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
+    bill_download: "/egov-pdf/download/BILL/consolidatedbill",
     count: "/echallan-services/eChallan/v1/_count",
   },
   hrms: {
@@ -127,13 +134,27 @@ const Urls = {
     search: "/egov-user-event/v1/events/_search",
     update: "/egov-user-event/v1/events/lat/_update",
     updateEvent: "/egov-user-event/v1/events/_update",
+    updateEventCDG: "/egov-user-event/v1/events/lat/_update",
     count: "/egov-user-event/v1/events/notifications/_count",
     create: "/egov-user-event/v1/events/_create",
   },
 
   ws: {
+    water_create: "/ws-services/wc/_create",
+    sewarage_create: "/sw-services/swc/_create",
     water_search: "/ws-services/wc/_search",
-    sewarage_search : "/sw-services/swc/_search",
+    sewarage_search: "/sw-services/swc/_search",
+    water_update: "/ws-services/wc/_update",
+    sewarage_update: "/sw-services/swc/_update",
+    ws_calculation_estimate: "/ws-calculator/waterCalculator/_estimate",
+    sw_calculation_estimate: "/sw-calculator/sewerageCalculator/_estimate",
+    ws_connection_search: "/ws-calculator/meterConnection/_search",
+    sw_payment_search: "/collection-services/payments/SW/_search",
+    ws_payment_search: "/collection-services/payments/WS/_search",
+    billAmendmentCreate: "/billing-service/amendment/_create",
+    billAmendmentUpdate: "/billing-service/amendment/_update",
+    ws_meter_conncetion_create: "/ws-calculator/meterConnection/_create",
+    sw_meter_conncetion_create: "/sw-calculator/meterConnection/_create",
   },
 
   engagement: {
@@ -149,13 +170,18 @@ const Urls = {
       search: "/egov-survey-services/egov-ss/survey/_search",
       delete: "/egov-survey-services/egov-ss/survey/_delete",
       submitResponse: "/egov-survey-services/egov-ss/survey/response/_submit",
-      showResults: "/egov-survey-services/egov-ss/survey/response/_results"
-    }
+      showResults: "/egov-survey-services/egov-ss/survey/response/_results",
+    },
   },
 
   noc: {
-    nocSearch: "/noc-services/v1/noc/_search"
+    nocSearch: "/noc-services/v1/noc/_search",
   },
+  reports:{
+    reportSearch:"/report/"
+  },
+  access_control: "/access/v1/actions/mdms/_get",
+  billgenie: "/egov-searcher",
 };
 
 export default Urls;

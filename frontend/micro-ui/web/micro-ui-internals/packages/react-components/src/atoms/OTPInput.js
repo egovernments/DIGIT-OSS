@@ -27,9 +27,6 @@ const SingleInput = ({ isFocus, onChange, onFocus, value, ...rest }) => {
 
 const OTPInput = (props) => {
   const [activeInput, setActiveInput] = useState(0);
-  if (!props.length) {
-    console.warn("OTPInput Component requires length prop");
-  }
 
   const isInputValueValid = (value) => {
     return typeof value === "string" && value.trim().length === 1;

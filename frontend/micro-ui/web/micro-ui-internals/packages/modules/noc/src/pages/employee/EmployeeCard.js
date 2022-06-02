@@ -8,6 +8,8 @@ const NOCEmployeeHomeCard = () => {
     const { t } = useTranslation();
     const location = useLocation()
     const tenantId = Digit.ULBService.getCurrentTenantId();
+
+    if (!Digit.Utils.NOCAccess()) return null;
        
     const searchFormDefaultValues = {}
   
@@ -34,7 +36,8 @@ const NOCEmployeeHomeCard = () => {
 
     const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.noc.useInbox({
         tenantId,
-        filters: { ...formInitValue }
+        filters: { ...formInitValue },
+        config : { enabled : formInitValue?.filterForm?.businessServiceArray?.length > 0}
     });
 
     const ComplaintIcon = () => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
@@ -69,7 +72,7 @@ const NOCEmployeeHomeCard = () => {
           link: `/digit-ui/employee/noc/inbox`
         },
         {
-          label: t("ES_COMMON_SEARCH"),
+          label: t("ES_COMMON_APPLICATION_SEARCH"),
           link: `/digit-ui/employee/noc/search`
         }
       ]

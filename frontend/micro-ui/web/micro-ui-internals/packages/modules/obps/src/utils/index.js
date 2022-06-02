@@ -89,7 +89,7 @@ export const getBPAFormData = async (data, mdmsData, history, t) => {
       unit.map((un, index) => {
         arr = un?.usageCategory?.split(",");
         subBlocks = [];
-        arr &&
+        arr && arr?.length > 0 && arr != "" &&
           arr.map((ob, ind) => {
             subBlocks.push({
               code: ob,
@@ -109,7 +109,7 @@ export const getBPAFormData = async (data, mdmsData, history, t) => {
   data.data = {
     scrutinyNumber: { edcrNumber: APIScrutinyDetails?.edcrNumber },
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
-    applicationDate: APIScrutinyDetails?.applicationDate,
+    applicationDate: data?.auditDetails?.createdTime,
     applicationType: APIScrutinyDetails?.appliactionType,
     holdingNumber: data?.additionalDetails?.holdingNo,
     occupancyType: APIScrutinyDetails?.planDetail?.planInformation?.occupancy,
@@ -268,6 +268,7 @@ export const getunitforBPA = (units) => {
       unit.push({
         blockIndex: index,
         usageCategory: ob.usageCategory,
+        occupancyType: ob.occupancyType,
         floorNo: ob.floorNo,
         unitType: ob.unitType,
         id: ob.id,
@@ -502,7 +503,7 @@ export const convertEpochToDateDMY = (dateEpoch) => {
   return `${day}/${month}/${year}`;
 };
 
-export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t) => {
+export const getBPAEditDetails = async (data, APIScrutinyDetails, mdmsData, nocdata, t) => {
   const getBlockIds = (unit) => {
     let blocks = {};
     unit &&
@@ -538,7 +539,7 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
   data.address = data?.landInfo?.address;
   data.data = {
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
-    applicationDate: APIScrutinyDetails?.applicationDate,
+    applicationDate: data?.auditDetails?.createdTime,
     applicationType: APIScrutinyDetails?.appliactionType,
     holdingNumber: data?.additionalDetails?.holdingNo,
     occupancyType: APIScrutinyDetails?.planDetail?.planInformation?.occupancy,
@@ -612,6 +613,8 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
     applicationType: data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
     serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
   };
+
+  sessionStorage.setItem("BPA_IS_ALREADY_WENT_OFF_DETAILS", JSON.stringify(true));
   return data;
 };
 
@@ -720,10 +723,11 @@ export const getOrderedDocs = (docs) => {
 };
 
 export const showHidingLinksForStakeholder = (roles = []) => {
-  const userInfo = Digit.UserService.getUser();
+  let userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+  const userInfo = userInfos ? JSON.parse(userInfos) : {};
   let checkedRoles = [];
   const rolearray = roles?.map((role) => {
-    userInfo?.info?.roles?.map((item) => {
+    userInfo?.value?.info?.roles?.map((item) => {
       if (item.code == role.code && item.tenantId === role.tenantId) {
         checkedRoles.push(item);
       }
@@ -759,6 +763,8 @@ export const scrutinyDetailsData = async (edcrNumber, tenantId) => {
   const scrutinyDetails = await Digit.OBPSService.scrutinyDetails(tenantId, {edcrNumber: edcrNumber});
   const bpaDetails = await Digit.OBPSService.BPASearch(tenantId, {edcrNumber: edcrNumber});
   if (bpaDetails?.BPA?.length == 0) {
+    return scrutinyDetails?.edcrDetail?.[0] ? scrutinyDetails?.edcrDetail?.[0] : {type: "ERROR", message: "BPA_NO_RECORD_FOUND"};
+  } else if (bpaDetails?.BPA?.length > 0 && (bpaDetails?.BPA?.[0]?.status == "INITIATED" || bpaDetails?.BPA?.[0]?.status == "REJECTED" || bpaDetails?.BPA?.[0]?.status == "PERMIT REVOCATION")) {
     return scrutinyDetails?.edcrDetail?.[0] ? scrutinyDetails?.edcrDetail?.[0] : {type: "ERROR", message: "BPA_NO_RECORD_FOUND"};
   } else {
     return {type: "ERROR", message: "APPLICATION_NUMBER_ALREADY_EXISTS"}
@@ -801,4 +807,20 @@ export const ocScrutinyDetailsData = async (edcrNumber, tenantId) => {
   } else {
     return {type: "ERROR", message: "BPA_NO_RECORD_FOUND"}
   }
+}
+
+export const getOrderDocuments = (appUploadedDocumnets, isNoc = false) => {
+  let finalDocs = [];
+  if (appUploadedDocumnets?.length > 0) {
+    let uniqueDocmnts = appUploadedDocumnets.filter((elem, index) => appUploadedDocumnets.findIndex((obj) => obj?.documentType?.split(".")?.slice(0, 2)?.join("_") === elem?.documentType?.split(".")?.slice(0, 2)?.join("_")) === index);
+    uniqueDocmnts?.map(uniDoc => {
+      const resultsDocs = appUploadedDocumnets?.filter(appDoc => uniDoc?.documentType?.split(".")?.slice(0, 2)?.join("_") == appDoc?.documentType?.split(".")?.slice(0, 2)?.join("_"));
+      resultsDocs?.forEach(resDoc => resDoc.title = resDoc.documentType);
+      finalDocs.push({
+        title: !isNoc ? resultsDocs?.[0]?.documentType?.split(".")?.slice(0, 2)?.join("_") : "",
+        values: resultsDocs
+      })
+    });
+  }
+  return finalDocs;
 }

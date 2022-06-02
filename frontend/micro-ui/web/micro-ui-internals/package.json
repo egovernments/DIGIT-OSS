@@ -1,6 +1,6 @@
 {
   "name": "egovernments",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "main": "index.js",
   "workspaces": [
     "example",
@@ -19,6 +19,7 @@
     "start:dev": "run-p dev:**",
     "start:script": "./scripts/create.sh",
     "dev:css": "cd packages/css && yarn start",
+    "publish:css": "cd packages/css && yarn publish --access public",
     "dev:libraries": "cd packages/libraries && yarn start",
     "dev:components": "cd packages/react-components && yarn start",
     "dev:common": "cd packages/modules/common && yarn start",
@@ -31,11 +32,13 @@
     "dev:mcollect": "cd packages/modules/mCollect && yarn start",
     "dev:receipts": "cd packages/modules/receipts && yarn start",
     "dev:tl": "cd packages/modules/tl && yarn start",
-    "dev:hrms": "cd packages/modules/hrms && yarn build",
+    "dev:hrms": "cd packages/modules/hrms && yarn start",
     "dev:obps": "cd packages/modules/obps && yarn start",
     "dev:engagement": "cd packages/modules/engagement && yarn start",
     "dev:noc": "cd packages/modules/noc && yarn start",
     "dev:ws": "cd packages/modules/ws && yarn start",
+    "dev:bills": "cd packages/modules/bills && yarn start",
+    "dev:reports": "cd packages/modules/reports && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-p build:**",
     "build:libraries": "cd packages/libraries && yarn build",
@@ -55,12 +58,14 @@
     "build:engagement": "cd packages/modules/engagement && yarn build",
     "build:noc": "cd packages/modules/noc && yarn build",
     "build:ws": "cd packages/modules/ws && yarn build",
+    "build:bills": "cd packages/modules/bills && yarn build",
+    "build:reports": "cd packages/modules/reports && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
   "devDependencies": {
-    "husky": ">=4.3.6",
-    "lint-staged": ">=10.5.3",
-    "npm-run-all": "^4.1.5",
+    "husky": "7.0.4",
+    "lint-staged": "12.3.7",
+    "npm-run-all": "4.1.5",
     "prettier": "2.1.2"
   },
   "husky": {},
@@ -68,7 +73,7 @@
     "*.{js,css,md}": "prettier --write"
   },
   "dependencies": {
-    "lodash": "^4.17.20",
-    "microbundle-crl": "^0.13.11"
+    "lodash": "4.17.21",
+    "microbundle-crl": "0.13.11"
   }
 }

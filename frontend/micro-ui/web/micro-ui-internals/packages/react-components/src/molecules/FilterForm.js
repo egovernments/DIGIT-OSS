@@ -10,15 +10,17 @@ const FilterFormField = ({children, className}) => {
 }
 
 const FilterForm = ({onMobileExclusiveFilterPopupFormClose = () => null , closeButton= () => null, showMobileFilterFormPopup = false, children, id="", onSubmit, handleSubmit, onResetFilterForm=() => null, className="" }) => {
-    const { t } = useTranslation()
+    const { t } = useTranslation();
+	const isMobile = window.Digit.Utils.browser.isMobile();
+    const isEnabledCommonModules = window.location.href.includes("/obps/") || window.location.href.includes("/noc/");
+
     // min-height: calc(100% - 110
 	// 	px
 	// 	);
-  
-	return <div className={`filter-form ${className}`}>
+	return <div className={isEnabledCommonModules && !isMobile ? `filter ${className}` : `filter-form ${className}`}>
 	<div className="filter-card">
 		{closeButton()}
-		<div className="heading" style={{ alignItems: "center", gap:".75rem",marginBottom:"24px",justifyContent:"unset" }}>
+		<div className="heading" style={{ alignItems: "center", gap:".75rem",marginBottom:"24px" }}>
 			<div className="filter-label" style={{ display: "flex", alignItems: "center" }}>
 			<span>
 				<svg width="17" height="17" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,7 +30,7 @@ const FilterForm = ({onMobileExclusiveFilterPopupFormClose = () => null , closeB
 				/>
 				</svg>
 			</span>
-			<span style={{ marginLeft: "8px", fontWeight: "normal" }}>{t("ES_COMMON_FILTER_BY")}:</span>
+			<span style={{ marginLeft: "8px", fontWeight: "normal" }}>{t("FILTERS_FILTER_CARD_CAPTION")}:</span>
 			</div>
 			<div className="clearAll" onClick={onResetFilterForm}>
 			{t("ES_COMMON_CLEAR_ALL")}

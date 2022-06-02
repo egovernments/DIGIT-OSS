@@ -11,53 +11,57 @@ import {
   CardSectionHeader,
   EditIcon,
   PDFSvg,
-  Toast
+  Toast,
+  Loader
 } from "@egovernments/digit-ui-react-components";
 import React, { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import Timeline from "../../../components/Timeline";
-import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import ActionModal from "../BpaApplicationDetail/Modal";
-import { convertToBPAObject, stringReplaceAll, convertEpochToDateDMY } from "../../../utils";
+import { convertToBPAObject, stringReplaceAll, convertEpochToDateDMY, getOrderDocuments } from "../../../utils";
 import cloneDeep from "lodash/cloneDeep";
 import { useQueryClient } from "react-query";
+import DocumentsPreview from "../../../../../templates/ApplicationDetails/components/DocumentsPreview";
+
 
 const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const match = useRouteMatch();
   let user = Digit.UserService.getUser(), BusinessService;
-  const tenantId = user.info.permanentCity;
+  const tenantId = user?.info?.permanentCity;
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
   const datafromAPI = value?.data?.edcrDetails;
   const queryClient = useQueryClient();
   const { data, address, owners, nocDocuments, documents, additionalDetails, subOccupancy,PrevStateDocuments, PrevStateNocDocuments, applicationNo } = value;
-
+    
   let routeLink = `/digit-ui/citizen/obps/sendbacktocitizen/${value.businessService=="BPA_OC" ? "ocbpa" : "bpa"}/${value?.tenantId}/${value?.applicationNo}`;
   if (value?.uiFlow?.flow === "OCBPA") routeLink = `/digit-ui/citizen/obps/sendbacktocitizen/ocbpa/${value?.tenantId}/${value?.applicationNo}`;
   if (value.businessService === "BPA_LOW") BusinessService = "BPA.LOW_RISK_PERMIT_FEE";
   else if (value.businessService === "BPA") BusinessService = "BPA.NC_APP_FEE";
   else BusinessService = "BPA.NC_OC_APP_FEE";
 
-  let isEditApplication = window.location.href.includes("editApplication")|| window.location.href.includes("sendbacktocitizen");
-  let val;
-  var i;
-  let improvedDoc =isEditApplication?PrevStateDocuments && documents ?[...PrevStateDocuments, ...documents.documents]: []: [...documents.documents];
-  improvedDoc.map((ob) => { ob["isNotDuplicate"] = false; })
-  // improvedDoc.map((ob,index) => {
-  //   val = ob.documentType;
-  //   if(ob.isNotDuplicate == true)
-  //   for(i=index+1; i<improvedDoc.length;i++)
-  //   {
-  //     if(val === improvedDoc[i].documentType || val.includes(improvedDoc[i].documentType.split(".")[1]))
-  //     improvedDoc[i].isNotDuplicate=false;
-  //   }
-  // })
-  improvedDoc.filter((ele,ind)=>improvedDoc.findIndex((elee)=>elee.documentType===ele.documentType)===ind).map(obj=>obj.isNotDuplicate=true);
+   // for application documents
+   let improvedDoc = [];
+   PrevStateDocuments?.map(preDoc => { improvedDoc.push({...preDoc, module: "OBPS"}) });
+   documents?.documents?.map(appDoc => { improvedDoc.push({...appDoc, module: "OBPS"}) });
 
+   //for NOC documents 
+   PrevStateNocDocuments?.map(preNocDoc => { improvedDoc.push({...preNocDoc, module: "NOC"}) });
+   nocDocuments?.nocDocuments?.map(nocDoc => { improvedDoc.push({...nocDoc, module: "NOC"}) });
+
+   const { data: pdfDetails, isLoading:pdfLoading, error } = Digit.Hooks.useDocumentSearch( improvedDoc, { enabled: improvedDoc?.length > 0 ? true : false});
+   
+   let applicationDocs = [], nocAppDocs = [];
+   if (pdfDetails?.pdfFiles?.length > 0) {  
+     pdfDetails?.pdfFiles?.map(pdfAppDoc => {
+       if (pdfAppDoc?.module == "OBPS") applicationDocs.push(pdfAppDoc);
+       if (pdfAppDoc?.module == "NOC") nocAppDocs.push(pdfAppDoc);
+     });
+   }
 
   const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
     {
@@ -65,7 +69,7 @@ const CheckPage = ({ onSubmit, value }) => {
       businessService: BusinessService,
       consumerCodes: value?.applicationNo,
     },
-    {}
+    { enabled: value?.applicationNo && BusinessService && value?.tenantId ? true : false }
   );
 
   const mutation = Digit.Hooks.obps.useObpsAPI(value?.tenantId, false);
@@ -75,7 +79,7 @@ const CheckPage = ({ onSubmit, value }) => {
     id: value?.applicationNo,
     moduleCode: "OBPS",
     config: {
-      enabled: !!value
+      enabled: value?.applicationNo && value?.tenantId ? true : false
     }
   });
 
@@ -203,6 +207,10 @@ const CheckPage = ({ onSubmit, value }) => {
     }
   }, [selectedAction]);
 
+  if (pdfLoading || recieptDataLoading) {
+    return <Loader />
+  }
+
   return (
     <React.Fragment>
       <Timeline currentStep={4}  flow= {value?.uiFlow?.flow === "OCBPA" ? "OCBPA" : ""} />
@@ -323,16 +331,7 @@ const CheckPage = ({ onSubmit, value }) => {
           style={{ width: "100px", display: "inline" }}
           onClick={() => routeTo(`${routeLink}/document-details`)}
         />
-         {improvedDoc.map((doc, index) => (
-          <div key={index}>
-            {doc.isNotDuplicate && <div><CardSectionHeader>{`${t(doc?.documentType.split('.').slice(0,2).join('_'))}`}</CardSectionHeader>
-            <StatusTable>
-              <OBPSDocument value={isEditApplication?[...PrevStateDocuments,...documents.documents]:value} Code={doc?.documentType} index={index} />
-              <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
-            </StatusTable>
-          </div>}
-          </div>
-        ))}
+        {<DocumentsPreview documents={getOrderDocuments(applicationDocs)} svgStyles = {{}} isSendBackFlow = {false} isHrLine = {true} titleStyles ={{fontSize: "18px", lineHeight: "24px", "fontWeight": 700, marginBottom: "10px"}}/>}
       </Card>
       <Card style={{paddingRight:"16px"}}>
         <CardHeader>{t("BPA_NOC_DETAILS_SUMMARY")}</CardHeader>
@@ -343,7 +342,7 @@ const CheckPage = ({ onSubmit, value }) => {
               <Row className="border-none" label={t(`BPA_${noc?.nocType}_LABEL`)} text={noc?.applicationNo} />
               <Row className="border-none" label={t(`BPA_NOC_STATUS`)} text={t(`${noc?.applicationStatus}`)} textStyle={noc?.applicationStatus == "APPROVED" || noc?.applicationStatus == "AUTO_APPROVED" ? { color: "#00703C" } : { color: "#D4351C" }} />
               <Row className="border-none" label={t(`BPA_DOCUMENT_DETAILS_LABEL`)} text={""} />
-              <OBPSDocument value={isEditApplication ? [...PrevStateNocDocuments, ...nocDocuments.nocDocuments] : value} Code={noc?.nocType?.split("_")[0]} index={index} isNOC={true} />
+              {<DocumentsPreview documents={getOrderDocuments(nocAppDocs?.filter(data => data?.documentType?.includes(noc?.nocType?.split("_")?.[0])), true)} svgStyles = {{}} isSendBackFlow = {false} isHrLine = {true} titleStyles ={{fontSize: "18px", lineHeight: "24px", "fontWeight": 700, marginBottom: "10px"}}/>}
             </StatusTable>
           </div>
         ))}

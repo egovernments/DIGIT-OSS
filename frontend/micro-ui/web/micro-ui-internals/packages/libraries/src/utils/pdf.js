@@ -62,14 +62,13 @@ function getBase64Image(tenantId) {
     ctx.drawImage(img, 0, 0);
     return canvas.toDataURL("image/png");
   } catch (e) {
-    console.error("asd", e);
     return "";
   }
 }
 
 const defaultLogo =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABBtJREFUWAntV11oVEcUnjN3mzXm111toQ8lWOtLTbIG0YgpMdQ05CEv0iTU1hhR7EMRWYuKSkteVExJBRGkpaUk0ChRSYtpKam4sbE0ia7RSNaS0uIfWtT4E8Xs5u7O8Vy7c3f27t2fh4W+ZF7OmfN9c86Ze2bOvZex/3mAGv/RIU9xJCL2IWIdAS7C/Nyhtbm8l39XeVKfOrLcHZoOHmCA7zJkC6VdSmAQRoYBAHbCXZBzED726xKT0kwgGnyUgpdI0JBEEMD4B+4dV3pU+9Mvyl4NMTZKAV5X7cl0APC5P127BqBNqBwuJ5Gw2G8NbmDIGEcQR+9/u6pAcg0ZYtiRaXCDT75rHnT0bjF0dZgJkLP3VEDVEakcj58ti7MBJOWrPFUHJurUuaGbCVCd5llBdQ4Yw7GnUaM9Fal4JjptJCGGmQA964upnPBXHCYOTSciDMGcp1qnYpzBBXVu6LEEGHxOByViJURJX7m2+W+qmKax3cn4Kk/qdJgnnXOdHXIupZnA/B1jw5TP+wzgngSpLEhX6ahLy/dKm5Su7WODBK4l/I60JZPkJ0DcuvxPLvxr5ZjXUAL45crchxD00A12OR3apTyv/67E7CQerndOztwto9uymPI1N2RwOcMwgBYorigah5qBsN36WVtCCZI9kqqu8Td0DG2mhlJKdb8JGvQOrV86YMevPDZagjpuQoFLqPY3gDtOjawvH7TjZpRAZeelesHwON3jQtUJtej2kdalu1RbZZe/QSB0U6L5ph0AObB9wy0Vn5m2qJI2geWd19yI09eo8SywLjbmdMgaRjZ4+gx9RffV13BGD1BXNV5kCYMzrW641dOvAnGnVgVMHYLUPu2DGxxk4iPJFeFwfbLgL7lcfCi5UqZNgK7WIkm2k4AxHARLyaUSJuBpE6AtBuwCmzaAGM5Tc6neMW7UQdoEcnOdv9Cpv24GjFNAAPCvpalwTuFP1J5vy7kqqRtGOGjfqDZDT5vAQNPbzzTgzQmOAWZotXe4xXNeOj3T9OYTjUMzHU1Le4YQImwdaimndh8/0t4CSV/T83fR1PRUI9W8lALc4jla3x/ryv6UuCqrvh+bp+t6IwL81weQn6abMqFyZnX5BDIugVyQifT52hxD7HyVAFFKb8nreVg46K354bHd2qwn0H6u9i0dI9S2scIMSN8YHHDjnmrfz6YtqmQ1gZ7xxpyJ+5MX6ROYDqplADzPAc2zs/rXv1Qk7TVUyen0iclHDbbBjYWIc3UR3mb1kdUEQGC5NYA6p1dzAp7VBKjulgakhjf+sqwNKoNOGO8i9Uxz8H6KEkzKAvzRimX1Cex+58w/9O2/nT4S4v7/jKDUyo/vrfZ1WxPI6i2Qzvf/VrtKRMJbKewSeiI3aJcn96w++53EVfkCw79XQZYr/EsAAAAASUVORK5CYII=";
-const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
+const jsPdfGenerator = async ({ breakPageLimit = null, tenantId, logo, name, email, phoneNumber, heading, details, t = (text) => text }) => {
   const emailLeftMargin =
     email.length <= 15
       ? 190
@@ -142,7 +141,7 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
         bold: true,
         margin: [-25, 5, 0, 0],
       },
-      ...createContent(details, phoneNumber),
+      ...createContent(details, phoneNumber, breakPageLimit),
       {
         text: t("PDF_SYSTEM_GENERATED_ACKNOWLEDGEMENT"),
         font: "Hind",
@@ -165,7 +164,7 @@ const jsPdfGenerator = async ({ tenantId, logo, name, email, phoneNumber, headin
 
 export default { generate: jsPdfGenerator };
 
-function createContent(details, phoneNumber) {
+function createContent(details, phoneNumber, breakPageLimit = null) {
   const data = [];
 
   details.forEach((detail, index) => {
@@ -173,7 +172,7 @@ function createContent(details, phoneNumber) {
       let column1 = [];
       let column2 = [];
 
-      if ((index + 1) % 7 === 0) {
+      if ( breakPageLimit ?  (index + 1) % breakPageLimit === 0 : (index + 1) % 7 === 0) {
         data.push({
           text: "",
           margin: [-25, 0, 0, 200],
@@ -442,6 +441,21 @@ export const downloadReceipt = async (
   const responseStatus = parseInt(response.status, 10);
   if (responseStatus === 201 || responseStatus === 200) {
     let filename = receiptNumber ? `receiptNumber-${receiptNumber}.pdf` : `consumer-${consumerCode}.pdf`;
+    downloadPdf(new Blob([response.data], { type: "application/pdf" }), filename);
+  }
+};
+/* Download Bills */
+
+export const downloadBill = async (
+  consumerCode,
+  businessService,
+  pdfKey = "consolidatedbill",
+  tenantId = Digit.ULBService.getCurrentTenantId(),
+) => {
+  const response = await Digit.ReceiptsService.bill_download(businessService, consumerCode, tenantId, pdfKey);
+  const responseStatus = parseInt(response.status, 10);
+  if (responseStatus === 201 || responseStatus === 200) {
+    let filename = consumerCode ? `consumerCode-${consumerCode}.pdf` : `consumer-${consumerCode}.pdf`;
     downloadPdf(new Blob([response.data], { type: "application/pdf" }), filename);
   }
 };

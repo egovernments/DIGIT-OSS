@@ -7,7 +7,7 @@ import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from 
 import CreatePropertyForm from '../../pageComponents/createForm';
 import PTAcknowledgement from '../../pageComponents/PTAcknowledgement';
 
-const CreateProperty = ({ parentRoute }) => {
+const CreateProperty = ({ parentRoute, onSelect }) => {
   const queryClient = useQueryClient();
   const match = useRouteMatch();
   const { t } = useTranslation();

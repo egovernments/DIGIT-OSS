@@ -77,15 +77,15 @@ const FSMCard = () => {
   const propsForFSTPO = {
     Icon: <ShippingTruck />,
     moduleName: t("ES_TITLE_VEHICLE_LOG"),
-    kpis: isSuccess ? Object.keys(info).map((key, index) => ({
-                label: t(key),
-                count: t(info[key]),
-                link: "/digit-ui/employee/fsm/fstp-inbox"
-            })): [],
+    // kpis: isSuccess ? Object.keys(info).map((key, index) => ({
+    //             label: t(key),
+    //             count: t(info[key]),
+    //             link: "/digit-ui/employee/fsm/fstp-inbox"
+    //         })): [],
     links: [
       {
-          label: t("ES_COMMON_INBOX"),
-          link: "/digit-ui/employee/fsm/fstp-inbox"
+          label: t("ES_COMMON_HOME"),
+          link: "/digit-ui/employee/fsm/fstp-operations"
       }
     ]
 
@@ -94,6 +94,13 @@ const FSMCard = () => {
   if (isFSTPOperator && isSuccess) {
     return  <EmployeeModuleCard {...propsForFSTPO} />
   }
+
+  const linksForSomeFSMAdmin = FSM_ADMIN ? [
+    {
+      label: t("ES_TITLE_FSM_REGISTRY"),
+      link: `/digit-ui/employee/fsm/registry`
+    }
+  ] : []
 
   const linksForSomeFSMEmployees = !DSO && !COLLECTOR && !FSM_EDITOR ? [
     {
@@ -122,7 +129,8 @@ const FSMCard = () => {
         label: t("ES_COMMON_INBOX"),
         link: `/digit-ui/employee/fsm/inbox`
       },
-      ...linksForSomeFSMEmployees
+      ...linksForSomeFSMEmployees,
+      ...linksForSomeFSMAdmin
     ]
   }
 

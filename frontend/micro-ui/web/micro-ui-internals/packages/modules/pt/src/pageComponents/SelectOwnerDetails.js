@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation, useRouteMatch } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   const { pathname: url } = useLocation();
@@ -109,6 +110,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
               name="mobileNumber"
               value={mobileNumber}
               onChange={setMobileNo}
+              ValidationRequired = {true}
               {...(validation = {
                 isRequired: true,
                 pattern: "[6-9]{1}[0-9]{9}",
@@ -129,6 +131,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
               name="name"
               value={name}
               onChange={setOwnerName}
+              ValidationRequired = {true}
               {...(validation = {
                 isRequired: true,
                 pattern: "^[a-zA-Z-.`' ]*$",
@@ -149,9 +152,9 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
               name="fatherOrHusbandName"
               value={fatherOrHusbandName}
               onChange={setGuardiansName}
+              ValidationRequired = {true}
               {...(validation = {
                 pattern: "^[a-zA-Z-.`' ]*$",
-                type: "tel",
                 title: t("PT_NAME_ERROR_MESSAGE"),
               })}
               disable={editScreen}
@@ -204,6 +207,8 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
   }
 
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep
       config={config}
       onSelect={goNext}
@@ -222,6 +227,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
           value={name}
           onChange={setOwnerName}
           disable={isUpdateProperty || isEditProperty}
+          ValidationRequired = {true}
           {...(validation = {
             isRequired: true,
             pattern: "^[a-zA-Z-.`' ]*$",
@@ -260,6 +266,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
           value={fatherOrHusbandName}
           onChange={setGuardiansName}
           disable={isUpdateProperty || isEditProperty}
+          ValidationRequired = {true}
           {...(validation = {
             isRequired: true,
             pattern: "^[a-zA-Z-.`' ]*$",
@@ -282,6 +289,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
         />
       </div>
     </FormStep>
+    </React.Fragment>
   );
 };
 

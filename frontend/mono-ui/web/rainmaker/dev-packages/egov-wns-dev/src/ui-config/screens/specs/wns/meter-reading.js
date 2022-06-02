@@ -66,7 +66,6 @@ const setAutopopulatedvalues = async (state, dispatch) => {
         consumptionDetails['consumption'] = ''
         consumptionDetails['lastReadingDate'] = lastReadingDate
     }catch (e) { 
-        console.log(e);         
         dispatch(
             toggleSnackbar(
                 true,
@@ -134,7 +133,6 @@ const setAutopopulatedvalues = async (state, dispatch) => {
 }
 
 
-// console.log('123', queryValueAN)
 const showHideCard = (booleanHideOrShow, dispatch) => {
     dispatch(
         handleField(

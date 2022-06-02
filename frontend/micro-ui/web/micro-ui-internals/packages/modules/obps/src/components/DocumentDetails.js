@@ -6,6 +6,10 @@ const DocumentDetails = ({ documents }) => {
   const { t } = useTranslation();
   const [filesArray, setFilesArray] = useState(() => []);
   const [pdfFiles, setPdfFiles] = useState({});
+
+  if (documents?.length == 0) {
+    return <div style={{padding: "10px 0px"}}><p>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</p></div>
+  }
   useEffect(() => {
     let acc = [];
     documents?.forEach((element, index, array) => {

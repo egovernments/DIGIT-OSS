@@ -12,7 +12,6 @@ import ErrorBoundary from "./components/ErrorBoundaries";
 
 const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
   const { isLoading, data: initData } = Digit.Hooks.useInitStore(stateCode, enabledModules);
-
   if (isLoading) {
     return <Loader page={true} />;
   }
@@ -41,8 +40,12 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
     defaultOptions: {
       queries: {
         staleTime: 15 * 60 * 1000,
-        cacheTime: 30 * 60 * 1000,
-        retryDelay: attemptIndex => Math.min(1000 * 3 ** attemptIndex, 60000)
+        cacheTime: 50 * 60 * 1000,
+        retryDelay: attemptIndex => Infinity
+        /*
+          enable this to have auto retry incase of failure
+          retryDelay: attemptIndex => Math.min(1000 * 3 ** attemptIndex, 60000)
+         */
       },
     },
   });

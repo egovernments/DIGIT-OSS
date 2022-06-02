@@ -360,7 +360,6 @@ export const getSearchResults = async queryObject => {
     );
     return response;
   } catch (error) {
-    console.log(error);
     return {};
   }
 };
@@ -375,7 +374,6 @@ export const getBill = async queryObject => {
     );
     return response;
   } catch (error) {
-    console.log(error);
   }
 };
 
@@ -389,7 +387,6 @@ export const getReceipt = async queryObject => {
     );
     return response;
   } catch (error) {
-    console.log(error);
   }
 };
 
@@ -477,7 +474,6 @@ export const getReceiptData = async queryObject => {
     );
     return response;
   } catch (error) {
-    console.log(error);
     return {};
   }
 };
@@ -554,7 +550,6 @@ export const getMdmsData = async queryObject => {
     );
     return response;
   } catch (error) {
-    console.log(error);
     return {};
   }
 };
@@ -647,7 +642,6 @@ export const getDetailsFromProperty = async (state, dispatch) => {
       }
     }
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -810,7 +804,6 @@ export const getUserDataFromUuid = async bodyObject => {
     const response = getUserSearchedResponse();
     return response;
   } catch (error) {
-    console.log(error);
     return {};
   }
 };
@@ -1410,7 +1403,6 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
       );
     }
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -1665,7 +1657,6 @@ export const getRequiredDocData = async (action, state, dispatch) => {
     );
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
-    console.log(e);
   }
 };
 

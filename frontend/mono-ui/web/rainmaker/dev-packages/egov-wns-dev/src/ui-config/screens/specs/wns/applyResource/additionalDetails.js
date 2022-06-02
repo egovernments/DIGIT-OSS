@@ -73,7 +73,6 @@ const waterSourceTypeChange = (reqObj) => {
       }
       triggerUpdateByKey(state, `selectedValues[0]`, formObj , dispatch);
   } catch (e) {
-    console.log(e);
   }
 }
 const waterSubSourceChange = (reqObj) => {
@@ -82,7 +81,6 @@ const waterSubSourceChange = (reqObj) => {
       let rowValue = value.split(".");
       dispatch(prepareFinalObject("WaterConnection[0].waterSubSource", rowValue[1]));
   } catch (e) {
-    console.log(e);
   }
 }
 export const commonRoadCuttingChargeInformation = () => {
@@ -174,8 +172,6 @@ export const additionDetails = getCommonCard({
         gridDefination: { xs: 12, sm: 6 },
         afterFieldChange: async (action, state, dispatch) => {
           let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
-          console.log('connType');
-          console.log(connType);
           if (connType === undefined || connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") {
             showHideFeilds(dispatch, false);
           }

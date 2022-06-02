@@ -15,6 +15,8 @@ import org.egov.vendor.web.model.Vendor;
 import org.egov.vendor.web.model.VendorRequest;
 import org.egov.vendor.web.model.VendorSearchCriteria;
 import org.egov.vendor.web.model.user.UserDetailResponse;
+import org.egov.vendor.web.model.vehicle.Vehicle.StatusEnum;
+import org.egov.vendor.web.model.vehicle.VehicleSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -87,6 +89,43 @@ public class EnrichmentService {
 		
 	}
 	
+	/**
+	 *  enrich the vendor update request with the required data
+	 * @param fsmRequest
+	 * @param mdmsData
+	 */
+	public void enrichUpdate(VendorRequest vendorRequest) {
+		RequestInfo requestInfo = vendorRequest.getRequestInfo();
+		AuditDetails auditDetails = null;
+		if (requestInfo.getUserInfo() != null && requestInfo.getUserInfo().getUuid() != null) {
+			auditDetails = vendorUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), false);
+			auditDetails.setCreatedBy(vendorRequest.getVendor().getAuditDetails().getCreatedBy());
+			auditDetails.setCreatedTime(vendorRequest.getVendor().getAuditDetails().getCreatedTime());
+			vendorRequest.getVendor().setAuditDetails(auditDetails);
+		}
+		
+		if (vendorRequest.getVendor().getAddress() != null) {
+			vendorRequest.getVendor().getAddress().setAuditDetails(auditDetails);
+			if (vendorRequest.getVendor().getAddress().getGeoLocation() != null
+					&& StringUtils.isEmpty(vendorRequest.getVendor().getAddress().getGeoLocation().getId()))
+				vendorRequest.getVendor().getAddress().getGeoLocation().setId(UUID.randomUUID().toString());
+		} else {
+			throw new CustomException(VendorErrorConstants.INVALID_ADDRES, " Address is mandatory");
+		}
+		
+		
+		if(vendorRequest.getVendor().getVehicles() != null && vendorRequest.getVendor().getVehicles().size() >0) {
+			AuditDetails finalAuditDetails = auditDetails;
+			vendorRequest.getVendor().getVehicles().forEach(vehicle->{
+				if(StringUtils.isEmpty(vehicle.getId())) {
+					vehicle.setId(UUID.randomUUID().toString());
+					vehicle.setTenantId(vendorRequest.getVendor().getTenantId());
+					vehicle.setAuditDetails(finalAuditDetails);
+				}
+			});
+		}
+	}
+	
 	public void enrichVendorSearch(List<Vendor> vendorList, RequestInfo requestInfo, String tenantId) {
 		
 		vendorList.forEach(vendor -> {
@@ -107,7 +146,7 @@ public class EnrichmentService {
 	}
 	
 	private void addDrivers(RequestInfo requestInfo, Vendor vendor, String tenantId) {
-		List<String> driverIds = vendorRepository.getDrivers(vendor.getId());
+		List<String> driverIds = vendorRepository.getDrivers(vendor.getId(),"ACTIVE");
 		
 		if(!CollectionUtils.isEmpty(driverIds)) {
 			VendorSearchCriteria vendorDriverSearchCriteria = new VendorSearchCriteria();
@@ -115,15 +154,30 @@ public class EnrichmentService {
 			vendorDriverSearchCriteria.setTenantId(tenantId);
 			UserDetailResponse  userDetailResponse = userService.getUsers(vendorDriverSearchCriteria, requestInfo);
 			vendor.setDrivers(userDetailResponse.getUser());
+			
+			vendor.getDrivers().forEach(driver->{
+				driver.setVendorDriverStatus(StatusEnum.ACTIVE);
+			});
 		}
 		
 	}
 	
 	private void addVehicles(RequestInfo requestInfo, Vendor vendor, String tenantId) {
-		VendorSearchCriteria vendorDriverSearchCriteria = new VendorSearchCriteria();
-		List<String> vehicleIds = vendorRepository.getVehicles(vendor.getId());
+		List<String> vehicleIds = vendorRepository.getVehicles(vendor.getId(), "ACTIVE");
 		if(!CollectionUtils.isEmpty(vehicleIds)) {
-			vendor.setVehicles(vehicleService.getVehicles(vehicleIds, null, null,requestInfo, tenantId));
+			
+			VehicleSearchCriteria vehicleSearchCriteria=new VehicleSearchCriteria();
+			vehicleSearchCriteria = VehicleSearchCriteria.builder()
+					.ids(vehicleIds)
+					.tenantId(tenantId).build();
+			
+			vendor.setVehicles(vehicleService.getVehicles(vehicleSearchCriteria, requestInfo));
+			
+			vendor.getVehicles().forEach(vehicle->{
+				vehicle.setVendorVehicleStatus(StatusEnum.ACTIVE);
+			});
+			
+			//vendor.setVehicles(vehicleService.getVehicles(vehicleIds, null, null, null, requestInfo, tenantId));
 		}
 		
 	}

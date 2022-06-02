@@ -3,15 +3,17 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory ,Link} from "react-router-dom";
 
 const description = {
-  description: "(or)",
+  description: "PT_SEARCH_OR_DESC",
   descriptionStyles: {
     fontWeight: "300",
     color: "#505A5F",
     marginTop: "0px",
     textAlign: "center",
+    marginBottom: "20px",
+    maxWidth: "540px",
   },
 };
 
@@ -21,9 +23,14 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   const { action = 0 } = Digit.Hooks.useQueryParams();
   const [searchData, setSearchData] = useState({});
   const [showToast, setShowToast] = useState(null);
-  const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
+  sessionStorage.setItem("VisitedCommonPTSearch",true);
+  sessionStorage.setItem("VisitedLightCreate",false);
+  let allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
+  // if called from tl module get tenants from tl usetenants
+  allCities = allCities ? allCities : Digit.Hooks.tl.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));  
   const [cityCode, setCityCode] = useState();
   const [formValue, setFormValue] = useState();
+  const [errorShown, seterrorShown] = useState(false);
   const { data: propertyData, isLoading: propertyDataLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId: searchData?.city,
     filters: searchData?.filters,
@@ -32,7 +39,18 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   });
 
   useEffect(() => {
-    showToast && setShowToast(null);
+    if ( !(searchData?.filters?.mobileNumber && Object.values(searchData?.filters)?.filter(ob => ob !== undefined)?.length == 1) && 
+      propertyData?.Properties.length > 0 &&
+      ptSearchConfig.maxResultValidation &&
+      propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
+      !errorShown
+    ) {
+      setShowToast({ error: true, warning: true, label: "ERR_PLEASE_REFINED_UR_SEARCH" });
+    }
+  }, [propertyData]);
+
+  useEffect(() => {
+    showToast && showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH" && setShowToast(null);
   }, [action, propertyDataLoading]);
 
   useLayoutEffect(() => {
@@ -44,6 +62,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         el.style.padding = "8px 0";
         el.style.boxShadow = "none";
         el.style.marginBottom = "16px";
+        el.style.textAlign = "left";
+        el.style.zIndex = "0";
       } else {
         setTimeout(() => {
           getActionBar();
@@ -123,6 +143,12 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           },
         },
         {
+          label: t("PT_PROVIDE_ONE_MORE_PARAM"),
+          isInsideBox: true,
+          placementinbox: 0,
+          isSectionText : true,
+        },
+        {
           label: mobileNumber.label,
           type: mobileNumber.type,
           populators: {
@@ -132,16 +158,20 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           },
           ...description,
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 1
         },
         {
-          label: property.label,
+          label: "",
           labelChildren: (
-            <div className="tooltip">
-              {"  "}
+            <div className="tooltip" /* style={{position:"relative"}} */>
+              <div style={{display: "flex", /* alignItems: "center", */ gap: "0 4px"}}>
+              <h2>{property.label}</h2>
               <InfoBannerIcon fill="#0b0c0c" />
-              <span className="tooltiptext" style={{ whiteSpace: "nowrap" }}>
-                {t(property.description) + "<br />" + ptSearchConfig?.propertyIdFormat}
+              <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
+              {t(property.description) + " " + ptSearchConfig?.propertyIdFormat}
               </span>
+              </div>
             </div>
           ),
           type: property.type,
@@ -152,6 +182,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           },
           ...description,
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 1
         },
         {
           label: oldProperty.label,
@@ -162,6 +194,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             validation: oldProperty?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 2
         },
       ],
       body1: [
@@ -240,13 +274,19 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
                 tenantId={cityCode}
                 boundaryType="revenue"
                 keepNull={false}
-                optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10" }}
+                optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10", maxHeight: "300px" }}
                 selected={formValue?.locality}
                 disable={!cityCode}
                 disableLoader={true}
               />
             ),
           },
+        },
+        {
+          label: t("PT_PROVIDE_ONE_MORE_PARAM"),
+          isInsideBox: true,
+          placementinbox: 0,
+          isSectionText : true,
         },
         {
           label: doorNumber.label,
@@ -257,6 +297,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             validation: doorNumber?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 1,
         },
         {
           label: name.label,
@@ -267,59 +309,75 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             validation: name?.validation,
           },
           isMandatory: false,
+          isInsideBox: true,
+          placementinbox: 2,
         },
       ],
     },
   ];
 
   const onPropertySearch = async (data) => {
-    if (!data?.city?.code) {
-      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+    if (
+      ptSearchConfig.maxResultValidation &&
+      propertyData?.Properties.length > 0 &&
+      propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
+      errorShown
+    ) {
+      seterrorShown(true);
       return;
     }
+    if (!data?.city?.code) {
+      setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+      return;
+    }
+   
     if (action == 0) {
       if (!(data?.mobileNumber || data?.propertyIds || data?.oldPropertyId)) {
-        setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+        setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
         return;
       }
       if (data?.mobileNumber && !data.mobileNumber?.match(mobileNumber?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: mobileNumber?.validation?.pattern?.message });
+        setShowToast({ error: true, label: mobileNumber?.validation?.pattern?.message });
         return;
       }
       if (data?.propertyIds && !data.propertyIds?.match(property?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: property?.validation?.pattern?.message });
+        setShowToast({ error: true, label: property?.validation?.pattern?.message });
         return;
       }
       if (data?.oldPropertyId && !data.oldPropertyId?.match(oldProperty?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: oldProperty?.validation?.pattern?.message });
+        setShowToast({ error: true, label: oldProperty?.validation?.pattern?.message });
         return;
       }
     } else {
       if (!data?.locality?.code) {
-        setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+        setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
         return;
       }
       if (!(data?.doorNumber || data?.name)) {
-        setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+        setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
         return;
       }
 
       if (data?.name && !data.name?.match(name?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: name?.validation?.pattern?.message });
+        setShowToast({ error: true, label: name?.validation?.pattern?.message });
         return;
       }
       if (data?.doorNumber && !data.doorNumber?.match(doorNumber?.validation?.pattern?.value)) {
-        setShowToast({ warning: true, label: doorNumber?.validation?.pattern?.message });
+        setShowToast({ error: true, label: doorNumber?.validation?.pattern?.message });
         return;
       }
     }
 
-    setShowToast(null);
+    if (showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH") setShowToast(null);
+    if (data?.doorNumber && data?.doorNumber !== "" && data?.propertyIds !== "") {
+      data["propertyIds"] = "";
+    }
 
     let tempObject = Object.keys(data)
       .filter((k) => data[k])
       .reduce((acc, key) => ({ ...acc, [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {});
     let city = tempObject.city;
+    tempObject.doorNo = tempObject.doorNumber;
     delete tempObject.addParam;
     delete tempObject.addParam1;
     delete tempObject.city;
@@ -327,11 +385,22 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
 
     return;
   };
-  const onFormValueChange = (setValue, data, formState) => {
+ const onFormValueChange = (setValue, data, formState) => {
     const mobileNumberLength = data?.[mobileNumber.name]?.length;
     const oldPropId = data?.[oldProperty.name];
     const propId = data?.[property.name];
     const city = data?.city;
+
+    // if ((city!=null && Object.keys(city).length !=0) && !(mobileNumberLength > 0 || oldPropId!="" || propId!="")){
+    //   setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
+    // }
+
+    // if (mobileNumberLength > 0 || oldPropId!="" || propId!="") {
+    // setShowToast(null);
+    // }
+    // if (city!=null && Object.keys(city).length !=0 && (mobileNumberLength > 0 || oldPropId!="" || propId!="")){
+    //   setShowToast(null)
+    // }
     const locality = data?.locality;
     if (city?.code !== cityCode) {
       setCityCode(city?.code);
@@ -350,11 +419,13 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
     return <Loader />;
   }
 
-  if (propertyData && !propertyDataLoading && !error) {
+  let validation = ptSearchConfig.maxResultValidation && !(searchData?.filters?.mobileNumber && Object.values(searchData?.filters)?.filter(ob => ob !== undefined)?.length == 1)   ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
+
+  if (propertyData && !propertyDataLoading && !error && validation) {
     let qs = {};
     qs = { ...searchData.filters, city: searchData.city };
 
-    if (
+    if ( !(searchData?.filters?.mobileNumber && Object.values(searchData?.filters)?.filter(ob => ob !== undefined)?.length == 1) && 
       ptSearchConfig?.ptSearchCount &&
       searchData?.filters?.locality &&
       propertyDataLoading &&
@@ -367,11 +438,42 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         queryParams: { ...qs },
       });
     } else {
-      history.push(
-        `/digit-ui/citizen/commonPt/property/search-results?${Object.keys(qs)
-          .map((key) => `${key}=${qs[key]}`)
-          .join("&")}${redirectToUrl ? `&redirectToUrl=${redirectToUrl}` : ''}`
-      );
+      // beacuse of this commit 
+      // https://github.com/egovernments/DIGIT-Dev/commit/2bae1c36dd1f8242bca30366da80c88d46b6aaaa#diff-3c34510e8b422f53eb9633d014f50024496ad79f952849e1b42fd61877562c4cR385
+      // am adding one more condtion for this. 
+      if(redirectToUrl || window.location.href.includes("digit-ui/citizen/commonpt/property/citizen-search")) {
+        history.push(
+          `/digit-ui/citizen/commonPt/property/search-results?${Object.keys(qs)
+            .map((key) => `${key}=${qs[key]}`)
+            .join("&")}${redirectToUrl ? `&redirectToUrl=${redirectToUrl}` : ''}`
+        );
+      } else {
+        let SearchParams = {};
+        if(action == 0)
+        SearchParams = {
+            city : qs?.city,
+            mobileNumber : qs?.mobileNumber || "",
+            propertyIds : qs?.propertyIds || "",
+            oldPropertyIds : qs?.oldPropertyIds || "", 
+            locality : "",
+            doorNo : "",
+            name : "",
+        }
+        else
+        SearchParams = {
+          city : qs?.city,
+          locality : qs?.locality || "",
+          doorNo : qs?.doorNumber || "",
+          name : qs?.name || "",
+          mobileNumber : "",
+          propertyIds : "",
+          oldPropertyIds : "", 
+        }
+        //onSelect('cptSearchQuery',{...SearchParams});
+        onSelect('cptSearchQuery', SearchParams, null, null, null, {
+          queryParams: { ...SearchParams },
+        });
+      }
     }
   }
 
@@ -383,7 +485,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   }
 
   return (
-    <div style={{ marginTop: "16px", marginBottom: "16px" }}>
+    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white", maxWidth:"960px"}}>
       <FormComposer
         onSubmit={onPropertySearch}
         noBoxShadow
@@ -394,9 +496,14 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         text={t(propsConfig.texts.text)}
         headingStyle={{ fontSize: "32px", marginBottom: "16px", fontFamily: "Roboto Condensed,sans-serif" }}
         onFormValueChange={onFormValueChange}
+        cardStyle={{marginBottom:"0",maxWidth:"960px"}}
       ></FormComposer>
+      <span className="link" style={{display:"flex", justifyContent:"left",paddingBottom:"16px", marginLeft: "45px"}}>
+        <Link to={window.location.href.includes("/ws/")?"/digit-ui/citizen/ws/create-application/create-property" : (window.location.href.includes("/tl/tradelicence/") ? "/digit-ui/citizen/tl/tradelicence/new-application/create-property" : "/digit-ui/citizen/commonpt/property/new-application")}>{t("CPT_REG_NEW_PROPERTY")}</Link>
+      </span>
       {showToast && (
         <Toast
+          isDleteBtn={true}
           error={showToast.error}
           warning={showToast.warning}
           label={t(showToast.label)}

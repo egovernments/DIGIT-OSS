@@ -29,7 +29,7 @@ public class NotificationConsumer {
      * @param topic
      */
 
-    @KafkaListener(topicPattern = "${pg.kafka.consumer.topic.pattern}")
+    @KafkaListener(topics = { "${persister.save.pg.txns}" ,"${persister.update.pg.txns}"})
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         try {
             TransactionRequest transactionRequest = mapper.convertValue(record, TransactionRequest.class);

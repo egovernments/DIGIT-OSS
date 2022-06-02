@@ -13,6 +13,7 @@ Filestore provides file upload capability for all the rest of the modules in the
 
 
 ### Swagger API Contract
+- Please refer to the [Swagger API contarct](https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/core-services/docs/filestore-service-contract.yml) for Filestore service to understand the structure of APIs and to have visualization of all internal APIs.
 
 
 

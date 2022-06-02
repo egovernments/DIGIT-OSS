@@ -62,7 +62,6 @@
 
 @screen dt {
   .success-wrap {
-    width: calc(100% + 284px);
     header {
       @apply text-heading-xl-dt;
     }
@@ -75,7 +74,7 @@
   }
 
   .error-wrap {
-    width: calc(100% + 284px);
+    width: 100%;
     header {
       @apply text-heading-xl-dt;
     }
@@ -111,7 +110,7 @@
 .banner {
   @apply flex justify-center items-center;
   height: calc(100vh - 80px);
-  background: linear-gradient(rgba(11,75,102,0.8), rgba(11,75,102,0.8)), var(--banner-url) center center;
+  background: linear-gradient(rgba(11, 75, 102, 0.8), rgba(11, 75, 102, 0.8)), var(--banner-url) center center;
 
   .bannerCard {
     min-width: 400px;
@@ -128,4 +127,10 @@
     @apply flex justify-center items-center;
     margin-bottom: 24px;
   }
+}
+
+.banner-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center !important;
 }

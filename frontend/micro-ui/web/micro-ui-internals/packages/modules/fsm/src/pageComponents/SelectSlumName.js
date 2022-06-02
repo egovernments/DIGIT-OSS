@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CardLabel, LabelFieldPair, Dropdown, FormStep, Loader } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimelineInFSM";
 
 const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -26,25 +27,25 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
     if (userType === "employee" && !slumDataLoading && slumData) {
       const optionalSlumData = slumData[locality]
         ? [
-            {
-              code: null,
-              active: true,
-              name: "Not residing in slum area",
-              i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
-            },
-            ...slumData[locality],
-          ]
+          {
+            code: null,
+            active: true,
+            name: "Not residing in slum area",
+            i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
+          },
+          ...slumData[locality],
+        ]
         : [
-            {
-              code: null,
-              active: true,
-              name: "Not residing in slum area",
-              i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
-            },
-            ...Object.keys(slumData)
-              .map((key) => slumData[key])
-              .reduce((prev, curr) => [...prev, ...curr]),
-          ];
+          {
+            code: null,
+            active: true,
+            name: "Not residing in slum area",
+            i18nKey: "ES_APPLICATION_NOT_SLUM_AREA",
+          },
+          ...Object.keys(slumData)
+            .map((key) => slumData[key])
+            .reduce((prev, curr) => [...prev, ...curr]),
+        ];
       setSlumMenu(optionalSlumData);
 
       if (!formData?.address?.slum) {
@@ -86,9 +87,12 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
       <Dropdown t={t} option={slumMenu} className="form-field" optionKey="i18nKey" id="slum" selected={slum} select={selectSlum} />
     </LabelFieldPair>
   ) : (
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
-      <Dropdown t={t} option={slumMenu} optionKey="i18nKey" id="i18nKey" selected={slum} select={setSlum} />
-    </FormStep>
+    <React.Fragment>
+      <Timeline currentStep={1} flow="APPLY" />
+      <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
+        <Dropdown t={t} option={slumMenu} optionKey="i18nKey" id="i18nKey" selected={slum} select={setSlum} />
+      </FormStep>
+    </React.Fragment>
   );
 };
 

@@ -4,19 +4,18 @@ import get from "lodash/get";
 import envVariables from "../envVariables";
 import { mdmsFiananceYear } from "./mdmsService";
 
-export const generateDemand = async (requestInfo, tenantId, calculations, header) => {
+export const generateDemand = async (requestInfo, tenantId, calculations) => {
   let consumercodeList = calculations.map(calculation => {
     return calculation.applicationNumber;
   });
-  let mdms = await mdmsFiananceYear(requestInfo, tenantId, header);
+  let mdms = await mdmsFiananceYear(requestInfo, tenantId);
 
   let createcalculations = [];
   let updatecalculations = [];
   let demandsSearch = await searchDemand(
     requestInfo,
     tenantId,
-    consumercodeList,
-    header
+    consumercodeList
   );
   let foundConsumerCode = demandsSearch.Demands.map(demand => {
     return demand.consumerCode;
@@ -27,21 +26,20 @@ export const generateDemand = async (requestInfo, tenantId, calculations, header
     else createcalculations.push(calculation);
   });
   if (createcalculations.length > 0) {
-    let cr = await createDemand(requestInfo, createcalculations, mdms, header);
+    let cr = await createDemand(requestInfo, createcalculations, mdms);
   }
   if (updatecalculations.length > 0) {
     let ud = await updateDemand(
       requestInfo,
       updatecalculations,
       demandsSearch,
-      mdms,
-      header
+      mdms
     );
   }
   return "uri";
 };
 
-const createDemand = async (requestInfo, calculations, mdms, header) => {
+const createDemand = async (requestInfo, calculations, mdms) => {
   //  let financeYear = mdms.
   let FinancialYearsData = get(mdms, "MdmsRes.egf-master.FinancialYear");
   let demands = [];
@@ -78,29 +76,14 @@ const createDemand = async (requestInfo, calculations, mdms, header) => {
     RequestInfo: requestInfo,
     Demands: demands
   };
-
-  let headers;
-  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
-  if(typeof isCentralInstance =="string")
-    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
-
-  if(isCentralInstance){
-    header['tenantId']=header.tenantid;
-  }
-  else
-    header['tenantId']=demands[0].tenantId;
-
-  headers = header;
-
   var demandCreateResponse = await httpRequest({
     hostURL: envVariables.EGOV_BILLINGSERVICE_HOST,
     endPoint: envVariables.EGOV_DEMAND_CREATE_ENDPOINT,
-    requestBody: DemandRequest,
-    headers
+    requestBody: DemandRequest
   });
 };
 
-const updateDemand = async (requestInfo, calculations, demandsSearch, mdms, header) => {
+const updateDemand = async (requestInfo, calculations, demandsSearch, mdms) => {
   let FinancialYearsData = get(mdms, "MdmsRes.egf-master.FinancialYear");
 
   let demandMap = {};
@@ -146,85 +129,40 @@ const updateDemand = async (requestInfo, calculations, demandsSearch, mdms, head
     RequestInfo: requestInfo,
     Demands: demands
   };
-
-  let headers;
-  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
-  if(typeof isCentralInstance =="string")
-    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
-
-  if(isCentralInstance){
-    header['tenantId']=header.tenantid;
-  }
-  else
-    header['tenantId']=demands[0].tenantId;
-
-  headers = header;
-
   var demandUpdateResponse = await httpRequest({
     hostURL: envVariables.EGOV_BILLINGSERVICE_HOST,
     endPoint: envVariables.EGOV_DEMAND_UPDATE_ENDPOINT,
-    requestBody: DemandRequest,
-    headers
+    requestBody: DemandRequest
   });
 };
 
-const searchDemand = async (requestInfo, tenantId, consumercodeList, header) => {
+const searchDemand = async (requestInfo, tenantId, consumercodeList) => {
   let uri = generateDemandSearchURL();
   uri = uri.replace("{1}", tenantId);
   uri = uri.replace("{2}", envVariables.BUSINESSSERVICE);
   uri = uri.replace("{3}", consumercodeList.join(","));
   let requestBody = { RequestInfo: requestInfo };
-
-  let headers;
-  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
-  if(typeof isCentralInstance =="string")
-    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
-
-  if(isCentralInstance){
-    header['tenantId']=header.tenantid;
-  }
-  else
-    header['tenantId']=tenantId;
-
-  headers = header;
-
   var demandsSearch = null;
   demandsSearch = await httpRequest({
     hostURL: envVariables.EGOV_BILLINGSERVICE_HOST,
     endPoint: uri,
-    requestBody,
-    headers
+    requestBody
   });
   return demandsSearch;
 };
 
-export const generateBill = async (requestInfo, billCriteria, header) => {
+export const generateBill = async (requestInfo, billCriteria) => {
   const consumerCode = billCriteria.applicationNumber.split(",");
   const tenantId = billCriteria.tenantId;
-  let demandsSearch = await searchDemand(requestInfo, tenantId, consumerCode, header);
+  let demandsSearch = await searchDemand(requestInfo, tenantId, consumerCode);
 
   if (demandsSearch.Demands && demandsSearch.Demands.length > 0) {
     let uri = generateGetBillURL(tenantId, consumerCode);
     let requestBody = { RequestInfo: requestInfo };
-    
-    let headers;
-    var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
-  if(typeof isCentralInstance =="string")
-    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
-
-  if(isCentralInstance){
-    header['tenantId']=header.tenantid;
-  }
-    else
-      header['tenantId']=tenantId;
-
-    headers = header;
-
     var billResponse = await httpRequest({
       hostURL: envVariables.EGOV_BILLINGSERVICE_HOST,
       endPoint: uri,
-      requestBody,
-      headers
+      requestBody
     });
   } else {
     throw "Invalid Consumer Code ";

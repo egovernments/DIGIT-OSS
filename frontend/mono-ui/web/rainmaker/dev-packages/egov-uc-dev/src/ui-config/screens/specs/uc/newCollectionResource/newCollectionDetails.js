@@ -30,7 +30,6 @@ const serviceTypeChange = (reqObj) => {
 
   if (!demandId && value) {
     const taxHeads = setTaxHeadFields(value, state, dispatch);
-    console.log(taxHeads);
   }
 
 }

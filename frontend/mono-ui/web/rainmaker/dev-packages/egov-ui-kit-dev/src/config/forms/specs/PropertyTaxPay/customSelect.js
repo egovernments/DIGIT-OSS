@@ -69,7 +69,6 @@ const formConfig = {
       }
       return action;
     } catch (e) {
-      console.log(e);
     }
   },
   afterInitForm: (action, store, dispatch) => {
@@ -88,7 +87,6 @@ const formConfig = {
       }
       return action;
     } catch (e) {
-      console.log(e);
     }
   },
 };

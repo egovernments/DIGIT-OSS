@@ -23,6 +23,9 @@ const usePropertyMDMS = (tenantId, moduleCode, type, config = {}) => {
   const useRentalDetails = () => {
     return useQuery("PT_RENTAL_DETAILS", () => MdmsService.getRentalDetails(tenantId, moduleCode), config);
   };
+  const useChargeSlabs = () => {
+    return useQuery("PT_RENTAL_DETAILS", () => MdmsService.getChargeSlabs(tenantId, moduleCode), config);
+  };
   const useFloorList = () => {
     return useQuery("PT_FLOOR_LIST", () => MdmsService.getFloorList(tenantId, moduleCode), config);
   };
@@ -53,6 +56,8 @@ const usePropertyMDMS = (tenantId, moduleCode, type, config = {}) => {
       return useFloorList();
     case "MapConfig":
       return useMapConfig();
+    case "ChargeSlabs":
+      return useChargeSlabs();
     default:
       return _default();
   }

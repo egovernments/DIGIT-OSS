@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { LocationSearchCard } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
+import Timeline from "../components/TLTimeline";
 
 const PTSelectGeolocation = ({ t, config, onSelect, formData = {} }) => {
   const [pincode, setPincode] = useState(formData?.address?.pincode || "");
@@ -28,6 +29,8 @@ const PTSelectGeolocation = ({ t, config, onSelect, formData = {} }) => {
   };
 
   return (
+    <React.Fragment>
+     {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
     <LocationSearchCard
       header={t("PT_GEOLOCATON_HEADER")}
       cardText={t("PT_GEOLOCATION_TEXT")}
@@ -44,6 +47,7 @@ const PTSelectGeolocation = ({ t, config, onSelect, formData = {} }) => {
       isPTDefault={true}
       PTdefaultcoord={defaultcoord1}
     />
+    </React.Fragment>
   );
 };
 

@@ -39,7 +39,7 @@ const DocumentDesktopInbox = ({ isLoading, data, t, onSearch, title, iconName, l
     },
     {
       Header: t('CE_TABLE_DOCUMENT_LINK'),
-      accessor: (row) => getDocumentCell(row?.name, row.filestoreId, row.documentLink, t)
+      accessor: (row) => getDocumentCell(row?.name, row.filestoreId, row.documentLink || "", t)
     },
     {
       Header: t('CE_TABLE_DOCUMENT_POSTED_BY'),

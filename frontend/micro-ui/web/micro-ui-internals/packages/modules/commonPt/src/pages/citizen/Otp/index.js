@@ -49,7 +49,6 @@ const CitizenOtp = (props) => {
         }
     } catch (err) {
       setIsOtpValid(false);
-      console.error(err);
     }
   };
   const resendOtp = async () => {

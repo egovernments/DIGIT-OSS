@@ -62,7 +62,7 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
                 </span>
               </div>
             )}
-            <div className="complaint-input-container" style={{textAlign: "start"}}>
+            <div className={"complaint-input-container for-pt " + (!(type === "desktop" && !mobileView ) ? "for-search" : "")} style={{ width: "100%" }}>
               {searchFields
                 ?.filter((e) => true)
                 ?.map((input, index) => (
@@ -89,18 +89,19 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
                   </span>
                   </div>
                 ))}
+                {type === "desktop" && !mobileView && (
+                  <div style={{ gridColumn: "2/3", textAlign: "right", paddingTop: "10px" }} className="input-fields">
+                  <div>{clearAll()}</div>
+                  </div>
+                )}
                 {type === "desktop" && !mobileView &&
-              <div className="search-action-wrapper" style={{width: "100%"}}>
+              <div style={{ maxWidth: "unset", marginLeft: "unset" }} className="search-submit-wrapper">
                 <SubmitBar
                   className="submit-bar-search"
                   label={t("UC_SEARCH_LABEL")}
                   submit
                 />
-                {type === "desktop" && !mobileView && (
-                  <span style={{ paddingTop: "9px" }} className="clear-search">
-                    {clearAll()}
-                  </span>
-                )}
+                {!isInboxPage && <div>{clearAll()}</div>}
               </div>}
             </div>
           </div>

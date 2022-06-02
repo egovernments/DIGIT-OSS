@@ -18,11 +18,11 @@ function todayDate() {
   return yyyy + "-" + mm + "-" + dd;
 }
 
-function getFilteredDsoData(dsoData, vehicle) {
-  return dsoData?.filter((e) => e.vehicles?.find((veh) => veh?.type == vehicle?.code));
+function getFilteredDsoData(dsoData, vehicle, vehicleCapacity) {
+  return dsoData?.filter((e) => e.vehicles?.find((veh) => veh?.capacity == vehicleCapacity));
 }
 
-export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehicle, selectVehicle, action }) => {
+export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehicle, vehicleCapacity, selectVehicle, action }) => {
   return {
     label: {
       heading: `ES_FSM_ACTION_TITLE_${action}`,
@@ -55,16 +55,17 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
             type: "dropdown",
             populators: (
               <React.Fragment>
-                {getFilteredDsoData(dsoData, vehicle) && !getFilteredDsoData(dsoData, vehicle).length ? (
+                {getFilteredDsoData(dsoData, vehicle, vehicleCapacity) && !getFilteredDsoData(dsoData, vehicle, vehicleCapacity).length ? (
                   <CardLabelError>{t("ES_COMMON_NO_DSO_AVAILABLE_WITH_SUCH_VEHICLE")}</CardLabelError>
                 ) : null}
                 <Dropdown
-                  option={getFilteredDsoData(dsoData, vehicle)}
+                  option={getFilteredDsoData(dsoData, vehicle, vehicleCapacity)}
                   autoComplete="off"
                   optionKey="displayName"
                   id="dso"
                   selected={dso}
                   select={selectDSO}
+                  disable={getFilteredDsoData(dsoData, vehicle, vehicleCapacity) && !getFilteredDsoData(dsoData, vehicle, vehicleCapacity).length ? true : false}
                 />
               </React.Fragment>
             ),

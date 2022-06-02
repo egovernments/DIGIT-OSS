@@ -219,7 +219,9 @@ export const getMdmsData = async dispatch => {
     payload.MdmsRes['common-masters'].Institutions = institutions;
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-  } catch (e) { console.log(e); }
+  } catch (e) { 
+    
+   }
 };
 
 const showHideFieldModifyConnection = (action) => {

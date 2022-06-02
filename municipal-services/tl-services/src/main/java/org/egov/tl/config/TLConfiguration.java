@@ -11,7 +11,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Map;
 import java.util.TimeZone;
 
 
@@ -80,16 +79,16 @@ public class TLConfiguration {
     @Value("${egov.idgen.tl.licensenumber.format}")
     private String licenseNumberIdgenFormatTL;
 
-    @Value("${egov.idgen.bpa.applicationNum.name}")
+    @Value("${egov.idgen.bpareg.applicationNum.name}")
     private String applicationNumberIdgenNameBPA;
 
-    @Value("${egov.idgen.bpa.applicationNum.format}")
+    @Value("${egov.idgen.bpareg.applicationNum.format}")
     private String applicationNumberIdgenFormatBPA;
 
-    @Value("${egov.idgen.bpa.licensenumber.name}")
+    @Value("${egov.idgen.bpareg.licensenumber.name}")
     private String licenseNumberIdgenNameBPA;
 
-    @Value("${egov.idgen.bpa.licensenumber.format}")
+    @Value("${egov.idgen.bpareg.licensenumber.format}")
     private String licenseNumberIdgenFormatBPA;
 
     //Persister Config
@@ -136,6 +135,9 @@ public class TLConfiguration {
 
     @Value("${egov.tl.calculator.calculate.endpoint}")
     private String calculateEndpointTL;
+
+    @Value("${egov.tl.calculator.estimate.endpoint}")
+    private String estimateEndpointTL;
 
     @Value("${egov.bpa.calculator.calculate.endpoint}")
     private String calculateEndpointBPA;
@@ -214,6 +216,9 @@ public class TLConfiguration {
 
     @Value("${employee.allowed.search.params}")
     private String allowedEmployeeSearchParameters;
+    
+    @Value("${system.allowed.search.params}")
+    private String allowedSystemSearchParameters;
 
 
 
@@ -245,8 +250,8 @@ public class TLConfiguration {
     private String tlBusinessServices;
 
     //USER EVENTS
-    @Value("#{${egov.ui.app.host.map}}")
-    private Map<String, String> uiAppHostMap;
+	@Value("${egov.ui.app.host}")
+	private String uiAppHost;
     
 	@Value("${egov.usr.events.create.topic}")
 	private String saveUserEventsTopic;
@@ -320,14 +325,6 @@ public class TLConfiguration {
 
     @Value("${id.timezone}")
     private String egovAppTimeZone;
-    
-    // central-instance configs
-    
-    @Value("${state.level.tenantid.length}")
-    private Integer stateLevelTenantIdLength;
-    
-    @Value("${is.environment.central.instance}")
-    private Boolean isEnvironmentCentralInstance;
 
     //receipt
     @Value("${notification.url}")
@@ -335,7 +332,13 @@ public class TLConfiguration {
 
     @Value("${egov.download.receipt.link}")
     private String receiptDownloadLink;
-
+    
+    //Application count
+    @Value("${egov.applicationcount.period}")
+    private String numberOfMonths;
+    
+    @Value("${egov.application.validity}")
+    private String applicationValidity;
 
 
 }

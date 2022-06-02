@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const CitizenHomeCard = ({ header, links, state, Icon, Info, isInfo = false, styles }) => {
+const CitizenHomeCard = ({ header, links = [], state, Icon, Info, isInfo = false, styles }) => {
   return (
     <div className="CitizenHomeCard" style={styles ? styles : {}}>
       <div className="header">
@@ -11,14 +11,14 @@ const CitizenHomeCard = ({ header, links, state, Icon, Info, isInfo = false, sty
 
       <div className="links">
         {links.map((e, i) => (
-          <Link key={i} to={{ pathname: e.link, state: e.state }}>
-            {e.i18nKey}
-          </Link>
+          <div className="linksWrapper">
+            <Link key={i} to={{ pathname: e.link, state: e.state }}>
+              {e.i18nKey}
+            </Link>
+          </div>
         ))}
       </div>
-      <div>
-        {isInfo ? <Info /> : null} 
-      </div>
+      <div>{isInfo ? <Info /> : null}</div>
     </div>
   );
 };

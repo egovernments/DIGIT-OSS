@@ -40,7 +40,7 @@ public class BPACustomIndexMessageListener implements MessageListener<String, St
      * index 5. Core indexing
      */
     public void onMessage(ConsumerRecord<String, String> data) {
-        ObjectMapper mapper = indexerUtils.getObjectMapper();
+        ObjectMapper mapper = indexerUtils.getObjectMapperWithNull();
         try {
             BPARequest bpaRequest = mapper.readValue(data.value(), BPARequest.class);
             EnrichedBPARequest enrichedBPARequest = bpaCustomDecorator.transformData(bpaRequest);

@@ -124,7 +124,7 @@ public class RoleServiceTest {
 
 		User user = new User();
 
-		user.setId(1l);
+		user.setId(1);
 		request.setUserInfo(user);
 
 		return request;

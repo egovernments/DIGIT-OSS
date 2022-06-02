@@ -1,20 +1,13 @@
 package org.egov.filters.pre;
 
-import static org.egov.Utils.Utils.isRequestBodyCompatible;
-import static org.egov.constants.RequestContextConstants.CORRELATION_ID_FIELD_NAME;
-import static org.egov.constants.RequestContextConstants.CORRELATION_ID_HEADER_NAME;
-import static org.egov.constants.RequestContextConstants.CORRELATION_ID_KEY;
-import static org.egov.constants.RequestContextConstants.REQUEST_TENANT_ID_KEY;
-import static org.egov.constants.RequestContextConstants.TENANTID_MDC;
-import static org.egov.constants.RequestContextConstants.USER_INFO_FIELD_NAME;
-import static org.egov.constants.RequestContextConstants.USER_INFO_KEY;
-
-import java.io.IOException;
-import java.util.HashMap;
-
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.zuul.ZuulFilter;
+import com.netflix.zuul.context.RequestContext;
 import org.apache.commons.io.IOUtils;
 import org.egov.Utils.ExceptionUtils;
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.contract.User;
 import org.egov.model.RequestBodyInspector;
 import org.egov.tracer.model.CustomException;
@@ -23,12 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.zuul.ZuulFilter;
-import com.netflix.zuul.context.RequestContext;
+import java.io.IOException;
+import java.util.HashMap;
+
+import static org.egov.Utils.Utils.isRequestBodyCompatible;
+import static org.egov.constants.RequestContextConstants.*;
 
 /**
  *  6th pre filter to get executed.
@@ -36,8 +28,6 @@ import com.netflix.zuul.context.RequestContext;
  */
 @Component
 public class RequestEnrichmentFilter extends ZuulFilter {
-	
-	private MultiStateInstanceUtil centralInstanceUtil;
 
     private static final String FAILED_TO_ENRICH_REQUEST_BODY_MESSAGE = "Failed to enrich request body";
     private static final String USER_SERIALIZATION_MESSAGE = "Failed to serialize user";
@@ -53,9 +43,8 @@ public class RequestEnrichmentFilter extends ZuulFilter {
     private static final String PASS_THROUGH_GATEWAY_HEADER_VALUE = "true";
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public RequestEnrichmentFilter(MultiStateInstanceUtil centralInstanceUtil, ObjectMapper objectMapper) {
-    	this.centralInstanceUtil = centralInstanceUtil;
-        this.objectMapper = objectMapper;
+    public RequestEnrichmentFilter() {
+        this.objectMapper = new ObjectMapper();
         objectMapper.getFactory().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
 
     }
@@ -105,8 +94,6 @@ public class RequestEnrichmentFilter extends ZuulFilter {
 
     private void addCorrelationIdHeader(RequestContext ctx) {
         ctx.addZuulRequestHeader(CORRELATION_ID_HEADER_NAME, getCorrelationId());
-		if (centralInstanceUtil.getIsEnvironmentCentralInstance())
-			ctx.addZuulRequestHeader(REQUEST_TENANT_ID_KEY, getTenantId());
     }
 
     private void addPassThroughGatewayHeader(RequestContext ctx) {
@@ -155,11 +142,6 @@ public class RequestEnrichmentFilter extends ZuulFilter {
     private String getCorrelationId() {
         RequestContext ctx = RequestContext.getCurrentContext();
         return (String) ctx.get(CORRELATION_ID_KEY);
-    }
-    
-    private String getTenantId() {
-        RequestContext ctx = RequestContext.getCurrentContext();
-        return (String) ctx.get(TENANTID_MDC);
     }
 
     private void setUserInfo(HashMap<String, Object> requestInfo) {
