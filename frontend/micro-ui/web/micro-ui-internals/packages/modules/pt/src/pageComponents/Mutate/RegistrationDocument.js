@@ -81,7 +81,7 @@ const RegistrationDocument = (props) => {
         <CardLabel>{t("PT_MUTATION_DOCUMENT_VALUE")}</CardLabel>
         <TextInput type={"number"} min={0} value={documentValue} onChange={(e) => setDocValue(e.target.value)} />
         <CardLabel>{t("PT_MUTATION_DOCUMENT_ISSUE_DATE")}</CardLabel>
-        <DatePicker max={new Date().toLocaleDateString()} date={documentDate} onChange={selectDocDate} />
+        <DatePicker max={new Date().toLocaleDateString()} date={documentDate} onChange={selectDocDate} style={{maxWidth: 540}} />
         {error ? <CardLabelError>{t(error)}</CardLabelError> : null}
       </FormStep>
     </React.Fragment>

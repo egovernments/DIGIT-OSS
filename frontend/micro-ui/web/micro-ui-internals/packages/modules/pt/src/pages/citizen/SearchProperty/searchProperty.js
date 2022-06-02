@@ -440,7 +440,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   }
 
   return (
-    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white", maxWidth:"960px"}}>
+    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white", maxWidth:"960px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
       <FormComposer
         onSubmit={onPropertySearch}
         noBoxShadow
