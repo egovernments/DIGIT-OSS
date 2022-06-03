@@ -6,6 +6,7 @@ import com.tarento.analytics.dto.AggregateDto;
 import com.tarento.analytics.dto.Data;
 import com.tarento.analytics.enums.ChartType;
 import com.tarento.analytics.model.InsightsConfiguration;
+import com.tarento.analytics.utils.ResponseRecorder;
 
 public interface InsightsHandler {
 	
@@ -26,7 +27,7 @@ public interface InsightsHandler {
 	public static final String INSIGHT_NUMBER_DIFFERENCE = "differenceOfNumbers" ; 
 	public static final String INSIGHT_PERCENTAGE_DIFFERENCE = "differenceOfPercentage" ;
 	
-	AggregateDto getInsights(AggregateDto aggregateDto, String visualizationCode, String moduleLevel, InsightsConfiguration insightsConfig);
+	AggregateDto getInsights(AggregateDto aggregateDto, String visualizationCode, String moduleLevel, InsightsConfiguration insightsConfig, ResponseRecorder responseRecorder);
 	
 	default AggregateDto getAggregatedDto(List<Data> dataList, String visualizationCode) {
 		AggregateDto aggregateDto = new AggregateDto();

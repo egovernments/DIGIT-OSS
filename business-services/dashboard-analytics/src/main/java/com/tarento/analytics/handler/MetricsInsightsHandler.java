@@ -15,11 +15,11 @@ import com.tarento.analytics.utils.ResponseRecorder;
 @Component
 public class MetricsInsightsHandler implements InsightsHandler {
 	
-	@Autowired
-	private ResponseRecorder responseRecorder; 
+//	@Autowired
+//	private ResponseRecorder responseRecorder; 
 
 	@Override
-	public AggregateDto getInsights(AggregateDto aggregateDto, String visualizationCode, String moduleLevel, InsightsConfiguration insightsConfig) {
+	public AggregateDto getInsights(AggregateDto aggregateDto, String visualizationCode, String moduleLevel, InsightsConfiguration insightsConfig , ResponseRecorder responseRecorder) {
 		String internalVisualizationCode = visualizationCode.substring(1);  
 		Data currentData = (Data) responseRecorder.get(internalVisualizationCode, moduleLevel);
 		Data pastData = (Data) responseRecorder.get(visualizationCode, moduleLevel);

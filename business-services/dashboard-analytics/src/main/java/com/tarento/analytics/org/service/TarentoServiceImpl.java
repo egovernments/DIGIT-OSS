@@ -34,6 +34,7 @@ import com.tarento.analytics.handler.ResponseHandlerFactory;
 import com.tarento.analytics.model.InsightsConfiguration;
 import com.tarento.analytics.service.QueryService;
 import com.tarento.analytics.service.impl.RestService;
+import com.tarento.analytics.utils.ResponseRecorder;
 
 
 @Component
@@ -94,6 +95,9 @@ public class TarentoServiceImpl implements ClientService {
 
 		executeConfiguredQueries(chartNode, aggrObjectNode, nodes, request, interval);
 		request.setChartNode(chartNode);
+		ResponseRecorder responseRecorder = new ResponseRecorder();
+		request.setResponseRecorder(responseRecorder);
+		
 		IResponseHandler responseHandler = responseHandlerFactory.getInstance(chartType);
 		AggregateDto aggregateDto = new AggregateDto();
 		if(aggrObjectNode.fields().hasNext()){
@@ -117,7 +121,7 @@ public class TarentoServiceImpl implements ClientService {
 					responseHandler.translate(request, insightAggrObjectNode);
 				}
 				InsightsHandler insightsHandler = insightsHandlerFactory.getInstance(chartType);
-				aggregateDto = insightsHandler.getInsights(aggregateDto, request.getVisualizationCode(), request.getModuleLevel(), insightsConfig);
+				aggregateDto = insightsHandler.getInsights(aggregateDto, request.getVisualizationCode(), request.getModuleLevel(), insightsConfig,request.getResponseRecorder());
 			}
 		}
 
