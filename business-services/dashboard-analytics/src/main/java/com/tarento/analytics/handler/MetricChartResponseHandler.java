@@ -43,8 +43,7 @@ public class MetricChartResponseHandler implements IResponseHandler{
     @Autowired 
     ComputeHelperFactory computeHelperFactory; 
     
-    @Autowired
-    ResponseRecorder responseRecorder;
+
 
 
     /**
@@ -189,7 +188,7 @@ public class MetricChartResponseHandler implements IResponseHandler{
         try{
             Data data = new Data(chartName, action.equals(PERCENTAGE) && aggrsPaths.size()==2? percentageValue(percentageList, isRoundOff) : (totalValues==null || totalValues.isEmpty())? 0.0 :totalValues.stream().reduce(0.0, Double::sum), symbol);
             data.setPlots( Arrays.asList(latestDateplot,lastUpdatedTime));
-            responseRecorder.put(visualizationCode, request.getModuleLevel(), data);
+            request.getResponseRecorder().put(visualizationCode, request.getModuleLevel(), data);
             dataList.add(data);
             if(chartNode.get(POST_AGGREGATION_THEORY) != null) { 
             	ComputeHelper computeHelper = computeHelperFactory.getInstance(chartNode.get(POST_AGGREGATION_THEORY).asText());
