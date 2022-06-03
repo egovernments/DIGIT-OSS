@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
 import MobileNumber from "../atoms/MobileNumber";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit, setValue, getValues, watch, control, formState, errors, setError, buttonStyle,clearErrors, unregister } = useForm({
+  const { register, handleSubmit, setValue, getValues, watch, control, formState, errors, setError, clearErrors, unregister } = useForm({
     defaultValues: props.defaultValues,
   });
   const { t } = useTranslation();
@@ -29,7 +29,6 @@ export const FormComposer = (props) => {
   useEffect(() => {
     props.getFormAccessors && props.getFormAccessors({ setValue, getValues });
   }, []);
-
 
   function onSubmit(data) {
     props.onSubmit(data);
@@ -44,7 +43,6 @@ export const FormComposer = (props) => {
   }, [formData]);
 
   const fieldSelector = (type, populators, isMandatory, disable = false, component, config) => {
-
     const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
 
     switch (type) {
@@ -137,68 +135,105 @@ export const FormComposer = (props) => {
               formState={formState}
               control={control}
             />
-          </form>)
+          </form>
+        );
       default:
         return populators?.dependency !== false ? populators : null;
     }
   };
 
   const getCombinedStyle = (placementinBox) => {
-    switch(placementinBox){
+    switch (placementinBox) {
       case 0:
-        return ({border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA",marginBottom:"20px"})
+        return {
+          border: "solid",
+          borderRadius: "5px",
+          padding: "10px",
+          paddingTop: "20px",
+          marginTop: "10px",
+          borderColor: "#f3f3f3",
+          background: "#FAFAFA",
+          marginBottom: "20px",
+        };
       case 1:
-        return ({border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"-30px",borderColor:"#f3f3f3",background:"#FAFAFA",borderTop:"0px",borderBottom:"0px"})
+        return {
+          border: "solid",
+          borderRadius: "5px",
+          padding: "10px",
+          paddingTop: "20px",
+          marginTop: "-30px",
+          borderColor: "#f3f3f3",
+          background: "#FAFAFA",
+          borderTop: "0px",
+          borderBottom: "0px",
+        };
       case 2:
-        return ({border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"-30px",borderColor:"#f3f3f3",background:"#FAFAFA",marginBottom:"20px",borderTop:"0px"})
+        return {
+          border: "solid",
+          borderRadius: "5px",
+          padding: "10px",
+          paddingTop: "20px",
+          marginTop: "-30px",
+          borderColor: "#f3f3f3",
+          background: "#FAFAFA",
+          marginBottom: "20px",
+          borderTop: "0px",
+        };
     }
-  }
+  };
 
   const formFields = useMemo(
     () =>
       props.config?.map((section, index, array) => {
         return (
           <React.Fragment key={index}>
-            {section.head && <CardSectionHeader style={props?.sectionHeadStyle ? props?.sectionHeadStyle:{}} id={section.headId}>{t(section.head)}</CardSectionHeader>}
+            {section.head && (
+              <CardSectionHeader style={props?.sectionHeadStyle ? props?.sectionHeadStyle : {}} id={section.headId}>
+                {t(section.head)}
+              </CardSectionHeader>
+            )}
             {section.body.map((field, index) => {
               if (props.inline)
                 return (
                   <React.Fragment key={index}>
-                    <div style={field.isInsideBox ? getCombinedStyle(field?.placementinbox) : {}} >
-                    {!field.withoutLabel && (
-                      <CardLabel style={{ color:field.isSectionText ? "#505A5F":"",marginBottom: props.inline ? "8px" : "revert" }} className={field?.disable ? "disabled" : ""}>
-                        {t(field.label)}
-                        {field.isMandatory ? " * " : null}
-                        {field.labelChildren&&field.labelChildren}
-                      </CardLabel>
-                    )}
-                    {errors && errors[field.populators?.name] && Object.keys(errors[field.populators?.name]).length ? (
-                      <CardLabelError>{t(field.populators.error||errors[field.populators?.name]?.message)}</CardLabelError>
-                    ) : null}
-                    <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
-                      {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
-                      {field?.description && (
+                    <div style={field.isInsideBox ? getCombinedStyle(field?.placementinbox) : {}}>
+                      {!field.withoutLabel && (
                         <CardLabel
-                          style={{
-                            marginTop: "-24px",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                            color: "#505A5F",
-                            ...field?.descriptionStyles,
-                          }}
+                          style={{ color: field.isSectionText ? "#505A5F" : "", marginBottom: props.inline ? "8px" : "revert" }}
+                          className={field?.disable ? "disabled" : ""}
                         >
-                          {t(field.description)}
+                          {t(field.label)}
+                          {field.isMandatory ? " * " : null}
+                          {field.labelChildren && field.labelChildren}
                         </CardLabel>
                       )}
+                      {errors && errors[field.populators?.name] && Object.keys(errors[field.populators?.name]).length ? (
+                        <CardLabelError>{t(field.populators.error || errors[field.populators?.name]?.message)}</CardLabelError>
+                      ) : null}
+                      <div style={field.withoutLabel ? { width: "100%" } : {}} className="field">
+                        {fieldSelector(field.type, field.populators, field.isMandatory, field?.disable, field?.component, field)}
+                        {field?.description && (
+                          <CardLabel
+                            style={{
+                              marginTop: "-24px",
+                              fontSize: "16px",
+                              fontWeight: "bold",
+                              color: "#505A5F",
+                              ...field?.descriptionStyles,
+                            }}
+                          >
+                            {t(field.description)}
+                          </CardLabel>
+                        )}
+                      </div>
                     </div>
-                  </div>
                   </React.Fragment>
                 );
               return (
                 <Fragment>
                   <LabelFieldPair key={index}>
                     {!field.withoutLabel && (
-                      <CardLabel style={{ color:field.isSectionText ? "#505A5F":"",marginBottom: props.inline ? "8px" : "revert" }}>
+                      <CardLabel style={{ color: field.isSectionText ? "#505A5F" : "", marginBottom: props.inline ? "8px" : "revert" }}>
                         {t(field.label)}
                         {field.isMandatory ? " * " : null}
                       </CardLabel>
@@ -230,7 +265,12 @@ export const FormComposer = (props) => {
   };
 
   const isDisabled = props.isDisabled || false;
-  const checkKeyDown = (e) => { const keyCode = e.keyCode ? e.keyCode : e.key ? e.key : e.which; if (keyCode === 13) { e.preventDefault() }; };
+  const checkKeyDown = (e) => {
+    const keyCode = e.keyCode ? e.keyCode : e.key ? e.key : e.which;
+    if (keyCode === 13) {
+      e.preventDefault();
+    }
+  };
   return (
     <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => checkKeyDown(e)} id={props.formId} className={props.className}>
       <Card style={getCardStyles()} className={props?.className}>
@@ -240,7 +280,9 @@ export const FormComposer = (props) => {
         {props.text && <CardText>{props.text}</CardText>}
         {formFields}
         {props.childrenAtTheBottom && props.children}
-        {props.submitInForm && <SubmitBar label={t(props.label)} style={{...buttonStyle}} submit="submit" disabled={isDisabled} className="w-full" />}
+        {props.submitInForm && (
+          <SubmitBar label={t(props.label)} style={{ ...props?.buttonStyle }} submit="submit" disabled={isDisabled} className="w-full" />
+        )}
         {props.secondaryActionLabel && (
           <div className="primary-label-btn" style={{ margin: "20px auto 0 auto" }} onClick={onSecondayActionClick}>
             {props.secondaryActionLabel}
@@ -249,12 +291,9 @@ export const FormComposer = (props) => {
         {!props.submitInForm && props.label && (
           <ActionBar>
             <SubmitBar label={t(props.label)} submit="submit" disabled={isDisabled} />
-            {props.onSkip && props.showSkip && (
-              <LinkButton style={props?.skipStyle} label={t(`CS_SKIP_CONTINUE`)} onClick={props.onSkip} />
-            )}
-        </ActionBar>
+            {props.onSkip && props.showSkip && <LinkButton style={props?.skipStyle} label={t(`CS_SKIP_CONTINUE`)} onClick={props.onSkip} />}
+          </ActionBar>
         )}
-        
       </Card>
     </form>
   );

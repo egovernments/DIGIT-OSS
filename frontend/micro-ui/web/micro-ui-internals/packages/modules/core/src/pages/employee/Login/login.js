@@ -145,7 +145,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
 
       <FormComposer
         onSubmit={onLogin}
-        isDisabled={isDisabled}
+        isDisabled={isDisabled || disable}
         noBoxShadow
         inline
         submitInForm
@@ -157,7 +157,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
         headingStyle={{ textAlign: "center" }}
         cardStyle={{ margin: "auto", minWidth: "408px" }}
         className="loginFormStyleEmployee"
-        buttonStyle={{ maxWidth: "100%" }}
+        buttonStyle={{ maxWidth: "100%", width: "100%" }}
       >
         <Header />
       </FormComposer>
