@@ -10,7 +10,7 @@ import {
   SubmitBar,
   Header,
 } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import {
@@ -34,6 +34,10 @@ const ActionButton = ({ jumpTo }) => {
 const CheckPage = ({ onSubmit, value = {} }) => {
   const { t } = useTranslation();
   const history = useHistory();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+
+  const [billAmount, setBillAmount] = useState(null);
+  const [billStatus, setBillStatus] = useState(null);
 
   const {
     ownershipCategory,
@@ -58,6 +62,18 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     UnOccupiedArea
    } = property;
 
+   useEffect(async ()=>{
+      const res = await Digit.PaymentService.searchBill(tenantId, {Service: "PT.MUTATION", consumerCode: property?.acknowldgementNumber});
+      if(! res.Bill.length) {
+        const res1 = await Digit.PTService.ptCalculateMutation({Property: { ...property, additionalDetails: { ...property?.additionalDetails, ...additionalDetails, documentDate: new Date(additionalDetails?.documentDate).getTime() } }}, tenantId);
+        setBillAmount(res1?.[property?.acknowldgementNumber]?.totalAmount || t("CS_NA"))
+        setBillStatus(t(`PT_MUT_BILL_ACTIVE`))
+      } else {
+        setBillAmount(res?.Bill[0]?.totalAmount || t("CS_NA"))
+        setBillStatus(t(`PT_MUT_BILL_${res?.Bill[0]?.status?.toUpperCase()}`))
+      }
+  },[])
+
   const typeOfApplication = !isEditProperty && !isUpdateProperty ? `new-application` : `edit-application`;
   let flatplotsize;
   if (isPropertyselfoccupied(selfOccupied?.i18nKey)) {
@@ -74,11 +90,6 @@ const CheckPage = ({ onSubmit, value = {} }) => {
   if (isPropertyIndependent(propertyType)) {
     flatplotsize = parseInt(propertyArea?.builtUpArea) + parseInt(propertyArea?.plotSize);
   }
-
-  const [agree, setAgree] = useState(false);
-  const setdeclarationhandler = () => {
-    setAgree(!agree);
-  };
 
   const getCardSubHeadrStyles = () => {
     return { fontSize: "24px", fontWeight: "700", lineHeight: "28px", margin: "20px 0px" }
@@ -100,8 +111,8 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         <Row className="border-none" label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
         <Row className="border-none" label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} textStyle={{ whiteSpace: "pre" }} />
         <Row className="border-none" label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
-        <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={'billAmount'} textStyle={{ whiteSpace: "pre" }} />
-        <Row className="border-none" label={t("PT_PAYMENT_STATUS")} text={'billStatus'} textStyle={{ whiteSpace: "pre" }} />
+        <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={billAmount} textStyle={{ whiteSpace: "pre" }} />
+        <Row className="border-none" label={t("PT_PAYMENT_STATUS")} text={billStatus} textStyle={{ whiteSpace: "pre" }} />
     </StatusTable>
 
     <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
@@ -202,15 +213,15 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         <Row
           className="border-none"
           label={t("PT_MUTATION_PENDING_COURT")}
-          text={additionalDetails?.isMutationInCourt || t("CS_NA")}
+          text={t(additionalDetails?.isMutationInCourt?.code) || t("CS_NA")}
         />
         <Row className="border-none" label={t("PT_DETAILS_COURT_CASE")} text={additionalDetails?.caseDetails || t("CS_NA")} />
         <Row
           className="border-none"
           label={t("PT_PROP_UNDER_GOV_AQUISITION")}
-          text={additionalDetails?.isPropertyUnderGovtPossession || t("CS_NA")}
+          text={t(additionalDetails?.isPropertyUnderGovtPossession?.code) || t("CS_NA")}
         />
-        <Row className="border-none" label={t("PT_DETAILS_GOV_AQUISITION")} text={t("CS_NA")} />
+        <Row className="border-none" label={t("PT_DETAILS_GOV_AQUISITION")} text={additionalDetails?.govtAcquisitionDetails || t("CS_NA")} />
       </StatusTable>
 
       <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_REGISTRATION_DETAILS")}</CardSubHeader>
@@ -218,13 +229,13 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         <Row
           className="border-none"
           label={t("PT_REASON_PROP_TRANSFER")}
-          text={`${t(additionalDetails?.reasonForTransfer)}` || t("CS_NA")}
+          text={`${t(additionalDetails?.reasonForTransfer?.i18nKey)}` || t("CS_NA")}
         />
         <Row className="border-none" label={t("PT_PROP_MARKET_VALUE")} text={additionalDetails?.marketValue || t("CS_NA")} />
         <Row className="border-none" label={t("PT_REG_NUMBER")} text={additionalDetails?.documentNumber || t("CS_NA")} />
         <Row className="border-none" label={t("PT_DOC_ISSUE_DATE")} text={documentDate} />
         <Row className="border-none" label={t("PT_REG_DOC_VALUE")} text={additionalDetails?.documentValue || t("CS_NA")} />
-        <Row className="border-none" label={t("PT_REMARKS")} text={t("CS_NA")} />
+        <Row className="border-none" label={t("PT_REMARKS")} text={additionalDetails?.remarks || t("CS_NA")} />
       </StatusTable>
 
       <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_COMMON_DOCS")}</CardSubHeader>
@@ -237,7 +248,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           </StatusTable>
         )}
       </div>
-      <SubmitBar label={t("PT_COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} disabled={!agree} />
+      <SubmitBar label={t("PT_COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} />
     </Card>
    </React.Fragment>
   );
