@@ -62,7 +62,7 @@ export const WSMyApplications = () => {
       <Header>{`${t("CS_HOME_MY_APPLICATIONS")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
       <div>
         {applicationsList?.length > 0 &&
-          applicationsList.map((application, index) => (
+          applicationsList.sort((a, b) => b.auditDetails?.lastModifiedTime - a.auditDetails?.lastModifiedTime ).map((application, index) => (
             <div key={index}>
               <WSApplication application={application} />
             </div>

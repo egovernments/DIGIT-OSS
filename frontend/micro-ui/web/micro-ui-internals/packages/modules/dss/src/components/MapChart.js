@@ -95,7 +95,7 @@ const MapChart = ({
     title: "home",
   };
 
-  const { data: topoJSON, isLoadingNAT } = Digit.Hooks.dss.useMDMS(Digit.ULBService.getStateId(), "dss-dashboard", ["dashboard-config"], {
+  const { data: topoJSON, isLoading: isLoadingNAT } = Digit.Hooks.dss.useMDMS(Digit.ULBService.getStateId(), "dss-dashboard", ["dashboard-config"], {
     select: (data) => {
       const topoJson = data?.["dss-dashboard"]?.["dashboard-config"]?.[0]?.["MAP_CONFIG"]?.[0] || {};
       return topoJson;
@@ -143,8 +143,8 @@ const MapChart = ({
 
   return (
     <ResponsiveContainer
-      width="50%"
-      height={240}
+      width="40%"
+      height={220}
       margin={{
         top: 5,
         right: 5,

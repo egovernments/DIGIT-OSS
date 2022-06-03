@@ -354,7 +354,7 @@ const WSApplicationDetails = () => {
               <Row
                 className="border-none"
                 label={t("WS_SERV_DETAIL_NO_OF_TOILETS")}
-                text={data?.SewerageConnections?.[0]?.proposedPipeSize || t("CS_NA")}
+                text={data?.SewerageConnections?.[0]?.proposedToilets || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
               />
               <Link to={`/digit-ui/citizen/ws/connection/additional/${data?.SewerageConnections?.[0]?.applicationNo}`}>

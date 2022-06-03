@@ -280,7 +280,7 @@ const ConnectionDetails = () => {
             <Row
               className="border-none"
               label={t("WS_OWN_DETAIL_CROSADD")}
-              text={state?.property?.owners?.[0]?.correspondenceAddress || t("CS_NA")}
+              text={state?.property?.owners?.[0]?.permanentAddress || t("CS_NA")}
               textStyle={{ whiteSpace: "pre" }}
             />
             <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${state?.propertyId}&tenantId=${state?.tenantId}`}>
