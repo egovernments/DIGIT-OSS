@@ -23,6 +23,12 @@ const GetConnectionDetails = () => {
   const stateCode = Digit.ULBService.getStateId();
   const actionConfig = ["MODIFY_CONNECTION_BUTTON", "BILL_AMENDMENT_BUTTON", "DISCONNECTION_BUTTON"];
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useConnectionDetail(t, tenantId, applicationNumber, serviceType);
+
+  const { isLoading: isLoadingDemand, data: demandData } = Digit.Hooks.useDemandSearch(
+    { consumerCode: applicationDetails?.applicationData?.connectionNo, businessService: serviceType === "WATER" ? "WS" : "SW", tenantId }, { enabled: !!(applicationDetails?.applicationData?.applicationNo) }
+  );
+
+
   const [showModal, setshowModal] = useState(false);
   const [billData, setBilldata] = useState([]);
   const [showActionToast, setshowActionToast] = useState(null);
@@ -105,20 +111,47 @@ const GetConnectionDetails = () => {
   const checkApplicationStatus = applicationDetails?.applicationData?.status === "Active" ? true : false;
 
   const getModifyConnectionButton = () => {
-    let pathname = `/digit-ui/employee/ws/modify-application?applicationNumber=${applicationDetails?.applicationData?.applicationNo}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+    if (checkApplicationStatus) {
+      setshowActionToast({
+        type: "error",
+        label: "CONN_NOT_ACTIVE",
+      });
+      return;
+    }
+
+    
+    let pathname = `/digit-ui/employee/ws/modify-application?applicationNumber=${applicationDetails?.applicationData?.connectionNo}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+
 
     history.push(`${pathname}`, { data: applicationDetails });
   };
 
   const getBillAmendmentButton = () => {
     //redirect to documents required screen here instead of this screen
-    if (billData[0]?.status === "INWORKFLOW") {
+    
+    let isBillAmendNotApplicable = false
+    billData?.map(bill => {
+      if (bill?.status === "INWORKFLOW") {
+        isBillAmendNotApplicable = true
+        return
+      }
+    })
+
+    if (demandData?.Demands?.length === 0) {
+      setshowActionToast({
+        type: "error",
+        label: "No_Bills_Found",
+      });
+      return;
+    }
+    else if (isBillAmendNotApplicable) {
       setshowActionToast({
         type: "error",
         label: "WORKFLOW_IN_PROGRESS",
       });
       return;
-    } else billData?.length === 0;
+    }
+    
     history.push(`/digit-ui/employee/ws/required-documents?connectionNumber=${applicationDetails?.applicationData?.connectionNo}&tenantId=${getTenantId}&service=${serviceType}`, { data: applicationDetails });
   };
 
@@ -140,7 +173,9 @@ const GetConnectionDetails = () => {
     }
   }
 
-  const showAction = due !== "0" ? actionConfig : actionConfig.filter((item) => item !== "BILL_AMENDMENT_BUTTON");
+  //all options needs to be shown
+  //const showAction = due !== "0" ? actionConfig : actionConfig.filter((item) => item !== "BILL_AMENDMENT_BUTTON");
+  const showAction= actionConfig
 
   async function getRecieptSearch(payments) {
     if (applicationDetails?.colletionOfData?.length > 0) {
