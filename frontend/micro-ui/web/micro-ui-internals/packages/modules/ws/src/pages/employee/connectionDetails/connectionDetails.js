@@ -111,8 +111,7 @@ const GetConnectionDetails = () => {
   };
 
   const getBillAmendmentButton = () => {
-    let pathname = `/digit-ui/employee/ws/bill-amendment?connectionNumber=${applicationDetails?.applicationData?.applicationNo}&tenantId=${getTenantId}&service=${serviceType}`;
-
+    //redirect to documents required screen here instead of this screen
     if (billData[0]?.status === "INWORKFLOW") {
       setshowActionToast({
         type: "error",
@@ -120,7 +119,7 @@ const GetConnectionDetails = () => {
       });
       return;
     } else billData?.length === 0;
-    history.push(`${pathname}`, { data: applicationDetails });
+    history.push(`/digit-ui/employee/ws/required-documents?connectionNumber=${applicationDetails?.applicationData?.connectionNo}&tenantId=${getTenantId}&service=${serviceType}`, { data: applicationDetails });
   };
 
   const getDisconnectionButton = () => {

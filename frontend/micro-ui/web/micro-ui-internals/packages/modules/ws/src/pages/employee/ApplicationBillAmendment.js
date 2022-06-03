@@ -34,6 +34,7 @@ const ApplicationBillAmendment = () => {
   const { isLoading: BillAmendmentMDMSLoading, data: BillAmendmentMDMS } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSMDMSBillAmendment({
     tenantId: stateId,
   });
+
   const servicev1 = connectionNumber.includes("WS") ? "WS" : "SW";
   const billSearchFilters = { tenantId, consumerCode: connectionNumber, service: servicev1 };
   const { data: preBillSearchData, isLoading: isBillSearchLoading } = Digit.Hooks.usePaymentSearch(tenantId, billSearchFilters);
@@ -374,7 +375,7 @@ const ApplicationBillAmendment = () => {
                       style={{ width: "640px" }}
                       option={BillAmendmentMDMS}
                       selected={props?.value}
-                      optionKey={"i18nKey"}
+                      optionKey={"code"}
                       t={t}
                       select={props?.onChange}
                     />
@@ -391,7 +392,7 @@ const ApplicationBillAmendment = () => {
               {errors?.reasonDocumentNumber ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </LabelFieldPair>
             <LabelFieldPair>
-              <CardLabel style={{ fontWeight: "500" }}>{t("WS_GOVERNMENT_NOTIFICATION_NUMBER")}</CardLabel>
+              <CardLabel style={{ fontWeight: "500" }}>{t("WS_BILL_AMEND_EFFECTIVE_FROM")}</CardLabel>
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveFrom"
@@ -401,7 +402,7 @@ const ApplicationBillAmendment = () => {
               {errors?.effectiveFrom ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </LabelFieldPair>
             <LabelFieldPair>
-              <CardLabel style={{ fontWeight: "500" }}>{t("WS_GOVERNMENT_NOTIFICATION_NUMBER")}</CardLabel>
+                <CardLabel style={{ fontWeight: "500" }}>{t("WS_BILL_AMEND_EFFECTIVE_TILL")}</CardLabel>
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveTill"
@@ -416,7 +417,7 @@ const ApplicationBillAmendment = () => {
         {requiredDocuments?.map((e) => (
           <LabelFieldPair>
             <CardLabel style={{ fontWeight: "500" }}>
-              {t(`WS_${e?.documentType}`)}
+              {t(`${e?.documentType}`)}
               {e?.required ? `*` : null}
             </CardLabel>
             <div className="field">

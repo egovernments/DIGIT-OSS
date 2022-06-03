@@ -6,6 +6,23 @@ export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   return str;
 };
 
+export const mdmsData = async (tenantId,t) => {
+  
+  const result =  await Digit.MDMSService.getMultipleTypes(tenantId, "tenant", ["tenants", "citymodule"]);
+  
+  const filteredResult = result?.tenant.tenants.filter(e => e.code === tenantId)
+  
+  const headerLocale = Digit.Utils.locale.getTransformedLocale(tenantId)
+  const ulbGrade = filteredResult?.[0]?.city?.ulbGrade.replaceAll(" ","_")
+  
+  const obj =  {
+    header: t(`TENANT_TENANTS_${headerLocale}`)+ ` ` + t(`ULBGRADE_${ulbGrade}`),
+    subHeader:filteredResult?.[0].address,
+    description:`${filteredResult?.[0]?.contactNumber} | ${filteredResult?.[0]?.domainUrl} | ${filteredResult?.[0]?.emailId}`,
+  }
+  return obj
+  }
+
 export const convertEpochToDateDMY = (dateEpoch) => {
   if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
     return "NA";

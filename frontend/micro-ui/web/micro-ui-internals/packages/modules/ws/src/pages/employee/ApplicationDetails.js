@@ -20,6 +20,7 @@ import orderBy from "lodash/orderBy";
 import cloneDeep from "lodash/cloneDeep";
 import * as func from "../../utils";
 import getPDFData from "../../utils/getWSAcknowledgementData";
+import getModifyPDFData from "../../utils/getWsAckDataForModifyPdfs"
 import { getFiles, getBusinessService } from "../../utils";
 import _ from "lodash";
 import { ifUserRoleExists } from "../../utils";
@@ -98,7 +99,7 @@ const ApplicationDetails = () => {
     const pairs = Object.entries(o).filter(([k, v]) => currentValue?.[k] !== v);
     return pairs?.length ? Object.fromEntries(pairs) : [];
   });
-
+  
   const {
     isLoading: updatingApplication,
     isError: updateApplicationError,
@@ -224,11 +225,19 @@ const ApplicationDetails = () => {
     }
   });
 
+  const oldApplication = serviceType === "WATER" ? oldData?.WaterConnection?.[oldData?.WaterConnection?.length - 1] : oldData?.SewerageConnections?.[oldData?.SewerageConnections?.length - 1]
+
   const handleDownloadPdf = async () => {
     const tenantInfo = applicationDetails?.applicationData?.tenantId;
-    let res = applicationDetails?.applicationData;
-    const PDFdata = getPDFData({ ...res }, { ...applicationDetails?.propertyDetails }, tenantInfo, t);
-    PDFdata.then((ress) => Digit.Utils.pdf.generate(ress));
+    let result = applicationDetails?.applicationData;
+  
+    if (applicationDetails?.applicationData?.applicationType?.includes("MODIFY_")){
+      const PDFdata = getModifyPDFData({ ...result }, { ...applicationDetails?.propertyDetails }, tenantInfo, t, oldApplication)
+      PDFdata.then((ress) => Digit.Utils.pdf.generateModifyPdf(ress))
+      return
+    }
+    const PDFdata = getPDFData({ ...result }, { ...applicationDetails?.propertyDetails }, tenantInfo, t);
+    PDFdata.then((ress) => Digit.Utils.pdf.generatev1(ress));
   };
 
   async function getRecieptSearch(tenantId, payments, consumerCodes, receiptKey) {

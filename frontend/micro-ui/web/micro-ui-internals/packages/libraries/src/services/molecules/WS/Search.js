@@ -441,8 +441,8 @@ export const WSSearch = {
       asSectionHeader: true,
       values: [
         { title: "PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL", value: wsDataDetails?.applicationNo || t("NA") },
-        { title: "WS_MOBILE_NUMBER", value: propertyDataDetails?.owners?.[0]?.mobileNumber|| t("NA") },
-        { title: "WS_CONSUMER_ID", value: wsDataDetails?.connectionNo || t("NA") },
+        { title: "WS_OWN_MOBILE_NO", value: propertyDataDetails?.owners?.[0]?.mobileNumber|| t("NA") },
+        { title: "WS_ACKNO_CONNECTION_NO_LABEL", value: wsDataDetails?.connectionNo || t("NA") },
         { title: "WS_APPLICANT_NAME", value: propertyDataDetails?.owners?.[0]?.name || t("NA") },
         { title: "WS_APPLICANT_ADDRESS", value: propertyDataDetails?.owners?.[0]?.name || t("NA") },
         { title: "WS_NOTE_TYPE", value: t("NA") },
@@ -492,13 +492,13 @@ export const WSSearch = {
     }
 
     const connectionHolderDetails = {
-      title: "WS_DEMAND_REVISION_BASIS",
+      title: "WS_DEMAND_REVISION_BASIS_DETAILS",
       asSectionHeader: true,
       values: [
-        { title: "WS_DEMAND_REVISION_REASON", value: billAmendmentSearch?.Amendments?.[0]?.amendmentReason },
-        { title: "WS_DEMAND_REASON_DOCUMENT", value: billAmendmentSearch?.Amendments?.[0]?.reasonDocumentNumber },
-        { title: "WS_DATE_EFFECT_FROM", value: Digit.DateUtils.ConvertTimestampToDate(billAmendmentSearch?.Amendments?.[0]?.effectiveFrom) },
-        { title: "WS_DATE_EFFECT_TO", value: Digit.DateUtils.ConvertTimestampToDate(billAmendmentSearch?.Amendments?.[0]?.effectiveTill) },
+        { title: "WS_DEMAND_REVISION_BASIS", value: billAmendmentSearch?.Amendments?.[0]?.amendmentReason },
+        { title: "WS_DOCUMENT_NO", value: billAmendmentSearch?.Amendments?.[0]?.reasonDocumentNumber },
+        { title: "WS_COMMON_FROM_DATE_LABEL", value: Digit.DateUtils.ConvertTimestampToDate(billAmendmentSearch?.Amendments?.[0]?.effectiveFrom) },
+        { title: "WS_COMMON_TO_DATE_LABEL", value: Digit.DateUtils.ConvertTimestampToDate(billAmendmentSearch?.Amendments?.[0]?.effectiveTill) },
       ]
     };
     const documentDetails = {
