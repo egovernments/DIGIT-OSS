@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Switch, useLocation } from "react-router-dom";
 import GroupBillInbox from "./GroupBill";
+import SearchApp from "./SearchApp";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -46,6 +47,10 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute
             path={`${path}/group-bill`}
             component={() => <GroupBillInbox parentRoute={path} filterComponent="BILLS_GROUP_FILTER" initialStates={{}} isInbox={true} keys={generateServiceType?.["common-masters"]?.uiCommonPay} />}
+          />
+          <PrivateRoute
+            path={`${path}/search-bill`}
+            component={() => <SearchApp parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
           />
         </div>
       </React.Fragment>
