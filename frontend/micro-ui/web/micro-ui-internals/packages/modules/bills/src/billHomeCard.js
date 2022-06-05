@@ -16,7 +16,11 @@ const BillsCard = () => {
       {
         label: t("ACTION_TEST_GROUP_BILLS"),
         link: `/digit-ui/employee/bills/group-bill`,
+      }, {
+        label: t("ABG_SEARCH_BILL_COMMON_HEADER"),
+        link: `/digit-ui/employee/bills/search-bill`,
       },
+      
     ],
   };
   return <EmployeeModuleCard {...propsForModuleCard} />;
