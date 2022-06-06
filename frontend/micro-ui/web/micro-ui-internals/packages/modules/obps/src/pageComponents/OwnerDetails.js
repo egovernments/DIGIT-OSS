@@ -276,7 +276,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 payload.documents = null;
 
                 // Additonal details
-                payload.additionalDetails = {};
+                payload.additionalDetails = {GISPlaceName:formData?.address?.placeName};
                 if (formData?.data?.holdingNumber) payload.additionalDetails.holdingNo = formData?.data?.holdingNumber;
                 if (formData?.data?.registrationDetails) payload.additionalDetails.registrationDetails = formData?.data?.registrationDetails;
                 if (formData?.data?.applicationType) payload.additionalDetails.applicationType = formData?.data?.applicationType;
