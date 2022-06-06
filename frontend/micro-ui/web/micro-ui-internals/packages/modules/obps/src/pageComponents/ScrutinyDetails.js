@@ -60,7 +60,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
         mdmsData?.BPA?.SubOccupancyType?.map((ob) => {
         suboccoption.push({ code: ob.code, name: ob.name, i18nKey: `BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(ob?.code?.toUpperCase(), "-", "_")}` });
       });
-    return suboccoption;
+    return Digit.Utils.locale.sortDropdownNames(suboccoption,'i18nKey',t);
   }
 
   const ActionButton = ({ label, jumpTo }) => {
