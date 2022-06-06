@@ -283,6 +283,13 @@ function SelectDocument({
   const getData = (state) => {
     let data = Object.fromEntries(state);
     let newArr = Object.values(data);
+    let nocNewDocs = newArr && newArr?.map((fileObject) => {return({
+      documentType: selectedDocument?.code,
+      fileStoreId: fileObject?.fileStoreId?.fileStoreId,
+      documentUid: fileObject?.fileStoreId?.fileStoreId,
+      fileName: fileObject?.file?.name || "",
+    })})
+    sessionStorage.setItem("NewNOCDocs", JSON.stringify(nocNewDocs));
     selectfile(newArr[newArr.length - 1]);
   }
 
