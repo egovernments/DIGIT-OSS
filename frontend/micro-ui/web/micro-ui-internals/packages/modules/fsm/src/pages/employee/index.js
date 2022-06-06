@@ -6,7 +6,7 @@ import FstpAddVehicle from "./FstpAddVehicle";
 import FstpOperations from "./FstpOperations";
 import FstpServiceRequest from "./FstpServiceRequest";
 
-const FsmBreadCrumb = ({ location }) => {
+export const FsmBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
   const FSTPO = Digit.UserService.hasAccess(["FSM_EMP_FSTPO"]);
@@ -94,12 +94,13 @@ const EmployeeApp = ({ path, url, userType }) => {
   const EditVendor = Digit.ComponentRegistryService.getComponent("EditVendor");
   const VehicleDetails = Digit.ComponentRegistryService.getComponent("VehicleDetails");
   const AddVehicle = Digit.ComponentRegistryService.getComponent("AddVehicle");
+  const BreadCrumbComp = Digit.ComponentRegistryService.getComponent("FsmBreadCrumb");
 
   return (
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-          {FSTPO ? <BackButton isCommonPTPropertyScreen={location.pathname.includes("new") ? true : false} getBackPageNumber={location.pathname.includes("new") ? () => -2 : null}>{t("CS_COMMON_BACK")}</BackButton> : <FsmBreadCrumb location={location} />}
+          {FSTPO ? <BackButton isCommonPTPropertyScreen={location.pathname.includes("new") ? true : false} getBackPageNumber={location.pathname.includes("new") ? () => -2 : null}>{t("CS_COMMON_BACK")}</BackButton> : <BreadCrumbComp location={location} />}
           <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
           <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} isInbox={true} />} />
           <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
