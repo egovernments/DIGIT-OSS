@@ -432,10 +432,10 @@ public class InboxService {
             }
             
             List<ProcessInstance> processInstances = processInstanceResponse.getProcessInstances();
-            Map<String, ProcessInstance> processInstanceMap = processInstances.stream()
-                    .collect(Collectors.toMap(ProcessInstance::getBusinessId, Function.identity()));
-            
+          
             if (businessObjects.length() > 0 && processInstances.size() > 0) {
+            	 Map<String, ProcessInstance> processInstanceMap = processInstances.stream()
+                        .collect(Collectors.toMap(ProcessInstance::getBusinessId, Function.identity()));
                 if (CollectionUtils.isEmpty(businessKeys)) {
                     businessMap.keySet().forEach(busiessKey -> {
                         Inbox inbox = new Inbox();
