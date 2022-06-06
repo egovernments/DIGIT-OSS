@@ -10,7 +10,7 @@ const MetricData = ({ t, data }) => {
   const insight = data?.insight?.value?.replace(/[+-]/g, "")?.split("%");
   return (
     <div>
-      <p className="heading-m" style={{ textAlign: "right", paddingTop: "0px", whiteSpace: "nowrap", marginLeft: "0px" }}>
+      <p className="heading-m" style={{ paddingTop: "0px", whiteSpace: "nowrap", marginLeft: "0px" }}>
         {`${Digit.Utils.dss.formatter(data?.headerValue, data?.headerSymbol, value?.denomination, true, t)}`}
       </p>
       {data?.insight && (
