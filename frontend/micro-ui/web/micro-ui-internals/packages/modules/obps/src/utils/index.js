@@ -106,6 +106,7 @@ export const getBPAFormData = async (data, mdmsData, history, t) => {
   data.BlockIds = getBlockIds(data?.landInfo?.unit);
   data.address = data?.landInfo?.address;
   data.address.locality["i18nkey"] = `${t(`${stringReplaceAll(data?.landInfo?.address?.tenantId,".","_").toUpperCase()}_REVENUE_${data?.landInfo?.address?.locality?.code}`)}`;
+  data.placeName = data?.additionalDetails?.GISPlaceName || "";
   data.data = {
     scrutinyNumber: { edcrNumber: APIScrutinyDetails?.edcrNumber },
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
@@ -396,6 +397,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
       auditDetails: data?.auditDetails,
       additionalDetails: {
         ...data?.additionalDetails,
+        GISPlaceName : data?.address?.placeName,
         holdingNo: data?.data?.holdingNumber ? data?.data?.holdingNumber : data?.additionalDetails?.holdingNo,
         registrationDetails: data?.data?.registrationDetails ? data?.data?.registrationDetails : data?.additionalDetails?.registrationDetails,
       },
