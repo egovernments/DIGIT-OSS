@@ -26,7 +26,7 @@ const FaqComponent = props => {
         {t(answer)}
         </span>
       </div>
-      {!lastIndex ? <div className="box-border"/> : null}
+      {!lastIndex ? <div className="cs-box-border"/> : null}
         </div>
   );
 };
