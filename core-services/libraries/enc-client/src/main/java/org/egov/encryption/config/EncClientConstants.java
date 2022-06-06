@@ -10,7 +10,7 @@ public class EncClientConstants {
 
     public static final String MDMS_SECURITY_POLICY_MASTER_NAME = "SecurityPolicy";
 
-    public static final String MDMS_MASKING_PATTERN_MASTER_NAME = "PatternData";
+    public static final String MDMS_MASKING_PATTERN_MASTER_NAME = "MaskingPatterns";
 
     public static final String STRING_FOR_NONE_ACCESS = "Confidential Information";
 
