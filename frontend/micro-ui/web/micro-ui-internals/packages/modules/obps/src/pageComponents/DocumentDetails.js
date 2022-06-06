@@ -263,7 +263,7 @@ const SelectDocument = React.memo(function MyComponent({
             <Dropdown
                 t={t}
                 isMandatory={false}
-                option={doc?.dropdownData}
+                option={Digit.Utils.locale.sortDropdownNames(doc?.dropdownData,'i18nKey',t)}
                 selected={selectedDocument}
                 optionKey="i18nKey"
                 select={handleSelectDocument}
