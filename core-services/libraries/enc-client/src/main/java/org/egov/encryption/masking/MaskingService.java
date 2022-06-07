@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class MaskingService {
@@ -34,7 +31,7 @@ public class MaskingService {
     @Autowired
     private MdmsFetcher mdmsFetcher;
 
-    Map<String, String> maskingPatternMap;
+    Map<String, String> maskingPatternMap = new HashMap<>();
 
     @PostConstruct
     private void initMaskingPatternMap() {
