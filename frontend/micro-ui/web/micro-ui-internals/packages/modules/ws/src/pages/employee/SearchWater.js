@@ -41,9 +41,9 @@ const SearchWater = ({ path }) => {
   };
 
   let result = Digit.Hooks.ws.useSearchWS({ tenantId, filters: payload, config, bussinessService: businessServ, t });
-
+  
   if(!result?.isLoading)
-    result = result?.map((item) => {
+    result.data = result?.data?.map((item) => {
       if (item?.connectionNo?.includes("WS")) {
         item.service = serviceConfig.WATER;
       } else if (item?.connectionNo?.includes("SW")) {
@@ -58,8 +58,8 @@ const SearchWater = ({ path }) => {
         t={t}
         tenantId={tenantId}
         onSubmit={onSubmit}
-        data={result ? result : { display: "ES_COMMON_NO_DATA" }}
-        count={result?.TotalCount}
+        data={result?.data ? result?.data : { display: "ES_COMMON_NO_DATA" }}
+        count={result?.count}
         resultOk={!result?.isLoading}
         businessService={businessServ}
       />
