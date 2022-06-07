@@ -1,0 +1,127 @@
+{
+  "Receipt": [
+    {
+      "Bill": [
+        {
+          "id": "17",
+          "payeeName": "R Krishna Reddy",
+          "payeeAddress": null,
+          "payeeEmail": null,
+          "isActive": true,
+          "isCancelled": false,
+          "billDetails": [
+            {
+              "id": "17",
+              "tenantId": "default",
+              "bill": "17",
+              "businessService": "WC",
+              "billNumber": "17",
+              "billDate": 1502365191113,
+              "consumerCode": "1016000001",
+              "consumerType": "PRIVATE",
+              "billDescription": "Property Tax Consumer Code: 1016000001",
+              "displayMessage": "Property Tax Consumer Code: 1016000001",
+              "minimumAmount": 1,
+              "totalAmount": 1948,
+              "collectionModesNotAllowed": [
+                ""
+              ],
+              "callBackForApportioning": true,
+              "partPaymentAllowed": true,
+              "billAccountDetails": [
+                {
+                  "id": "48",
+                  "tenantId": "default",
+                  "billDetail": "17",
+                  "glcode": "3503002",
+                  "order": 1,
+                  "accountDescription": "EDU_CESS-1490985000000-1506796199000",
+                  "crAmountToBePaid": 418,
+                  "creditAmount": null,
+                  "debitAmount": null,
+                  "isActualDemand": true,
+                  "purpose": "CURRENT_AMOUNT"
+                },
+                {
+                  "id": "49",
+                  "tenantId": "default",
+                  "billDetail": "17",
+                  "glcode": "1100101",
+                  "order": 0,
+                  "accountDescription": "PT_TAX-1490985000000-1506796199000",
+                  "crAmountToBePaid": 1500,
+                  "creditAmount": null,
+                  "debitAmount": null,
+                  "isActualDemand": true,
+                  "purpose": "CURRENT_AMOUNT"
+                },
+                {
+                  "id": "50",
+                  "tenantId": "default",
+                  "billDetail": "17",
+                  "glcode": "3503002",
+                  "order": 1,
+                  "accountDescription": "LIB_CESS-1490985000000-1506796199000",
+                  "crAmountToBePaid": 30,
+                  "creditAmount": null,
+                  "debitAmount": null,
+                  "isActualDemand": true,
+                  "purpose": "CURRENT_AMOUNT"
+                }
+              ],
+              "amountPaid": "1000"
+            }
+          ],
+          "tenantId": "default",
+          "auditDetail": null,
+          "paidBy": "murali"
+        }
+      ],
+      "tenantId": "default",
+      "instrument": {
+        "transactionNumber": "1232356543",
+        "transactionDate":"2017-06-08T22:03:59.947",
+        "amount": 100,
+        "instrumentType": {
+          "name": "Cash",
+          "tenantId": "default"
+        },
+        "branchName":"Bangalore",
+        "bank": {
+          "id": "1",
+          "tenantId": "default"
+        }
+      },
+      "onlinePayment" : {
+        "id" : "",
+        "receiptHeader" : "",
+        "paymentGatewayName" : "",
+        "transactionDate" : "1502365223899",
+        "transactionAmount" : 100,
+        "transactionNumber" : "Test1234561",
+        "authorisationStatusCode" : "",
+        "status" : "Approved",
+        "remarks" : "Online Payment Integration Testing",
+        "callBackUrl" : "",
+        "tenantId" : "",
+        "auditDetails" : {
+        }
+      }
+    }
+  ],
+  "RequestInfo": {
+    "apiId": "org.egov.pt",
+    "ver": "1.0",
+    "ts": 1502365223899,
+    "action": "asd",
+    "did": "4354648646",
+    "key": "xyz",
+    "msgId": "654654",
+    "requesterId": "61",
+    "authToken": "019e4e9b-0605-43a3-8527-e3ff8181cb63",
+    "userInfo":{
+    	"id":1,
+        "roles" : []
+    }
+  }
+}
