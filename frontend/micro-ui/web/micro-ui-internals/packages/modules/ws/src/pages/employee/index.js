@@ -123,14 +123,15 @@ const App = ({ path }) => {
   const WSDocsRequired = Digit?.ComponentRegistryService?.getComponent("WSDocsRequired");
   const WSInbox = Digit?.ComponentRegistryService?.getComponent("WSInbox");
 
-  const locationCheck =
-    window.location.href.includes("/employee/ws/new-application") || window.location.href.includes("/employee/ws/create-application");
+  const locationCheck = window.location.href.includes("/employee/ws/new-application") 
+
+  const locationCheckReqDocs = window.location.href.includes("/employee/ws/create-application");
 
   return (
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-          <div style={locationCheck ? { marginLeft: "12px" } : { marginLeft: "-4px" }}>
+          <div style={locationCheck ? { marginLeft: "12px" } : (locationCheckReqDocs?{marginLeft:"25px"}:{ marginLeft: "-4px" })}>
             <BILLSBreadCrumbs location={location} />
           </div>
 
