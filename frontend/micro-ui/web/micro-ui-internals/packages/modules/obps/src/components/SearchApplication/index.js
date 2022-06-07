@@ -51,12 +51,12 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
         applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
         code: "NEW_CONSTRUCTION",
         i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",
-      } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 ? {
+      } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 ? /* {
         code: "BPA_STAKEHOLDER_REGISTRATION",
         applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
         roles: ["BPAREG_APPROVER","BPAREG_DOC_VERIFIER"],
         i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION"
-      } : {
+      } */ "": {
         applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
         code: "NEW_CONSTRUCTION",
         i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",
@@ -99,12 +99,12 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
           applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
           code: "NEW_CONSTRUCTION",
           i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",
-        } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 ? {
+        } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 ? /* {
           code: "BPA_STAKEHOLDER_REGISTRATION",
           applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
           roles: ["BPAREG_APPROVER","BPAREG_DOC_VERIFIER"],
           i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION"
-        } : {
+        } */ "" : {
           applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
           code: "NEW_CONSTRUCTION",
           i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",

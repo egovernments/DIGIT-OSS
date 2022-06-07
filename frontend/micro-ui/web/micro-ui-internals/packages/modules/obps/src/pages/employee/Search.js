@@ -56,7 +56,11 @@ const Search = ({ path }) => {
         payload.applicationNo = "";
       }
       if (payload && payload["applicationType"]) delete payload["applicationType"];
-      if (payload && payload["serviceType"]) delete payload["serviceType"];
+      if(payload && payload["serviceType"])
+      {
+        payload["tradeType"] = payload["serviceType"]
+        delete payload["serviceType"];
+      }
       params = { ...payload, tenantId: Digit.ULBService.getStateId() };
     }
   } else {
