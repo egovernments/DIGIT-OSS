@@ -91,7 +91,7 @@ public class AmendmentValidatorTest {
 
         amendmentValidator.enrichAmendmentForCreate(amendmentRequest);
 
-/*        assertNotNull(null,amendment.getDemandDetails().get(0).getId());*/
+
     }
 
     @Test

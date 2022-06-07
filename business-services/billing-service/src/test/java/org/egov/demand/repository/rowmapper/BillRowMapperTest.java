@@ -64,19 +64,6 @@ class BillRowMapperTest {
     }
 
 
- /*   @Test
 
-    void testExtractData3() throws SQLException {
-
-        ResultSet resultSet = mock(ResultSet.class);
-        when(resultSet.getInt((String) any())).thenReturn(1);
-        when(resultSet.getBoolean((String) any())).thenReturn(true);
-        when(resultSet.getObject((String) any())).thenReturn(1L);
-        when(resultSet.getString((String) any())).thenReturn(null);
-        when(resultSet.getBigDecimal((String) any())).thenReturn(BigDecimal.valueOf(42L));
-        when(resultSet.getLong((String) any())).thenReturn(1L);
-        when(resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
-        this.billRowMapper.extractData(resultSet);
-    }*/
 }
 

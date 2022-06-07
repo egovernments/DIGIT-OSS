@@ -48,7 +48,7 @@ public class BillingServiceConsumerTest {
         DemandRequest demandRequest = DemandRequest.builder().build();
         when(objectMapper.convertValue(consumerRecord, DemandRequest.class)).thenReturn(demandRequest);
         billingServiceConsumer.processMessage(consumerRecord, "updateDemand");
-       /* verify(demandService).update(demandRequest, null);*/
+
     }
 
     @Test
@@ -59,26 +59,9 @@ public class BillingServiceConsumerTest {
         DemandRequest demandRequest = DemandRequest.builder().build();
         when(objectMapper.convertValue(consumerRecord, DemandRequest.class)).thenReturn(demandRequest);
         billingServiceConsumer.processMessage(consumerRecord, "createDemand");
-        /*verify(demandService).save(demandRequest);*/
+
     }
 
-   /* *//**
-     * Method under test: {@link BillingServiceConsumer#processMessage(java.util.Map, String)}
-     *//*
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testProcessMessage() {
-        // TODO: Complete this test.
-        //   Reason: R026 Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: Failed to load ApplicationContext
-        //   org.mockito.exceptions.base.MockitoException:
-        //   Cannot mock/spy class java.lang.Boolean
-        //   Mockito cannot mock/spy because :
-        //    - final class
-        //   See https://diff.blue/R026 to resolve this issue.
 
-        this.billingServiceConsumer.processMessage(new HashMap<>(), "Topic");
-    }*/
 }
 

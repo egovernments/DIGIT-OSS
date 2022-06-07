@@ -42,7 +42,7 @@ class NotificationConsumerTest {
 
 
     @Test
-    void testListen() throws IllegalArgumentException {
+    void testListenVonvertValue() throws IllegalArgumentException {
         when(this.objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn("Convert Value");
         this.notificationConsumer.listen(new HashMap<>(), "Topic");
         verify(this.objectMapper).convertValue((Object) any(), (Class<Object>) any());
@@ -50,14 +50,14 @@ class NotificationConsumerTest {
 
 
     @Test
-    void testListen2() throws IllegalArgumentException {
+    void testListenBillRequest() throws IllegalArgumentException {
         when(this.objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn(new BillRequest());
         this.notificationConsumer.listen(new HashMap<>(), "Topic");
         verify(this.objectMapper).convertValue((Object) any(), (Class<Object>) any());
     }
 
     @Test
-    void testListen3() throws IllegalArgumentException {
+    void testListenWithNull() throws IllegalArgumentException {
         when(this.objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn(null);
         this.notificationConsumer.listen(new HashMap<>(), "Topic");
         verify(this.objectMapper).convertValue((Object) any(), (Class<Object>) any());
@@ -65,14 +65,14 @@ class NotificationConsumerTest {
 
 
     @Test
-    void testListen4() throws IllegalArgumentException {
+    void testListenwithcanclebillWithValue() throws IllegalArgumentException {
         when(this.objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn("Convert Value");
         this.notificationConsumer.listen(new HashMap<>(), "${kafka.topics.cancel.bill.topic.name}");
         verify(this.objectMapper).convertValue((Object) any(), (Class<Object>) any());
     }
 
     @Test
-    void testListen5() throws IllegalArgumentException {
+    void testListenCancleBillwithNull() throws IllegalArgumentException {
         when(this.objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn(null);
         this.notificationConsumer.listen(new HashMap<>(), "${kafka.topics.cancel.bill.topic.name}");
         verify(this.objectMapper).convertValue((Object) any(), (Class<Object>) any());
@@ -80,7 +80,7 @@ class NotificationConsumerTest {
 
 
     @Test
-    void testListen6() throws IllegalArgumentException {
+    void testListenBillWithRequest() throws IllegalArgumentException {
         when(this.objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn(new BillRequestV2());
         this.notificationConsumer.listen(new HashMap<>(), "${kafka.topics.cancel.bill.topic.name}");
         verify(this.objectMapper).convertValue((Object) any(), (Class<Object>) any());
@@ -88,7 +88,7 @@ class NotificationConsumerTest {
 
 
     @Test
-    void testListen7() throws IllegalArgumentException {
+    void testListen() throws IllegalArgumentException {
         ArrayList<Bill> billList = new ArrayList<>();
         billList.add(new Bill());
         BillRequest billRequest = new BillRequest(new RequestInfo(), billList);

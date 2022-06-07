@@ -38,19 +38,12 @@ class ResponseFactoryTest {
 
     @Test
     void testGetResponseInfo2() {
-        // TODO: Complete this test.
-        //   Reason: R004 No meaningful assertions found.
-        //   Diffblue Cover was unable to create an assertion.
-        //   Make sure that fields modified by getResponseInfo(RequestInfo, HttpStatus)
-        //   have package-private, protected, or public getters.
-        //   See https://diff.blue/R004 to resolve this issue.
+
 
         (new ResponseFactory()).getResponseInfo(null, HttpStatus.CONTINUE);
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo3() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -93,9 +86,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo6() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -116,9 +107,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo7() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -139,9 +128,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo8() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -162,9 +149,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo9() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -185,9 +170,6 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
     @Test
     void testGetResponseInfo10() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -208,9 +190,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo11() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -232,9 +212,6 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
     @Test
     void testGetResponseInfo12() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -255,9 +232,6 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
     @Test
     void testGetResponseInfo13() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -278,9 +252,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo14() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -301,9 +273,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo15() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -324,9 +294,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo16() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -347,9 +315,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo17() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -370,9 +336,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo18() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -393,9 +357,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo19() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -416,9 +378,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
+
     @Test
     void testGetResponseInfo20() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -439,9 +399,6 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
     @Test
     void testGetResponseInfo21() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -462,9 +419,6 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getResponseInfo(RequestInfo, HttpStatus)}
-     */
     @Test
     void testGetResponseInfo22() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -485,9 +439,7 @@ class ResponseFactoryTest {
         verify(requestInfo).getVer();
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getErrorResponse(RequestInfo)}
-     */
+
     @Test
     void testGetErrorResponse() {
         ResponseFactory responseFactory = new ResponseFactory();
@@ -504,9 +456,7 @@ class ResponseFactoryTest {
         assertEquals(400, error.getCode());
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getErrorResponse(RequestInfo)}
-     */
+
     @Test
     void testGetErrorResponse2() {
         Error error = (new ResponseFactory()).getErrorResponse(null).getError();
@@ -515,9 +465,6 @@ class ResponseFactoryTest {
         assertEquals(400, error.getCode());
     }
 
-    /**
-     * Method under test: {@link ResponseFactory#getErrorResponse(RequestInfo)}
-     */
     @Test
     void testGetErrorResponse3() {
         ResponseFactory responseFactory = new ResponseFactory();

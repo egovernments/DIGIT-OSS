@@ -67,7 +67,7 @@ class BillRepositoryV2Test {
 
 
     @Test
-    void testSaveBillDetails6() throws DataAccessException {
+    void testSaveBillDetailsbillv2() throws DataAccessException {
         when(this.jdbcTemplate.batchUpdate((String) any(),
                 (org.springframework.jdbc.core.BatchPreparedStatementSetter) any())).thenReturn(new int[]{1, 1, 1, 1});
 
@@ -102,16 +102,9 @@ class BillRepositoryV2Test {
     }
 
 
- /*   @Test
-
-    void testUpdateBillStatus2() {
-
-        this.billRepositoryV2.updateBillStatus(null);
-    }
-*/
 
     @Test
-    void testUpdateBillStatus3() {
+    void testUpdateBillStatusgetcodes() {
         UpdateBillCriteria updateBillCriteria = mock(UpdateBillCriteria.class);
         when(updateBillCriteria.getConsumerCodes()).thenReturn(new HashSet<>());
         assertEquals(0, this.billRepositoryV2.updateBillStatus(updateBillCriteria).intValue());
@@ -119,7 +112,7 @@ class BillRepositoryV2Test {
     }
 
     @Test
-    void testUpdateBillStatus4() throws DataAccessException {
+    void testUpdateBillStatusTenantId() throws DataAccessException {
         when(this.jdbcTemplate.query((String) any(), (Object[]) any(),
                 (org.springframework.jdbc.core.ResultSetExtractor<Object>) any())).thenReturn(new ArrayList<>());
         when(this.billQueryBuilder.getBillQuery((org.egov.demand.model.BillSearchCriteria) any(),

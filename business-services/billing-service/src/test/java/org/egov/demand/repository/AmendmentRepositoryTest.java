@@ -59,7 +59,7 @@ class AmendmentRepositoryTest {
 
 
     @Test
-    void testSaveAmendment5() throws DataAccessException {
+    void testSaveAmendment() throws DataAccessException {
         when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
         when(this.namedParameterJdbcTemplate.update((String) any(),
                 (org.springframework.jdbc.core.namedparam.SqlParameterSource) any())).thenReturn(1);
@@ -103,7 +103,7 @@ class AmendmentRepositoryTest {
 
 
     @Test
-    void testSaveAmendment6() throws DataAccessException {
+    void testSaveAmendmentWithCOURT_CASE_SETTLEMENT() throws DataAccessException {
         when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
         when(this.namedParameterJdbcTemplate.update((String) any(),
                 (org.springframework.jdbc.core.namedparam.SqlParameterSource) any())).thenReturn(1);
@@ -149,7 +149,7 @@ class AmendmentRepositoryTest {
 
 
     @Test
-    void testSaveAmendment7() throws DataAccessException {
+    void testSaveAmendmentAmendmentStatusACTIVE() throws DataAccessException {
         when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
         when(this.namedParameterJdbcTemplate.update((String) any(),
                 (org.springframework.jdbc.core.namedparam.SqlParameterSource) any())).thenReturn(1);
@@ -195,7 +195,7 @@ class AmendmentRepositoryTest {
 
 
     @Test
-    void testSaveAmendment9() throws DataAccessException {
+    void testSaveAmendmentwithdateandtime() throws DataAccessException {
         when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
         when(this.namedParameterJdbcTemplate.update((String) any(),
                 (org.springframework.jdbc.core.namedparam.SqlParameterSource) any())).thenReturn(1);
@@ -275,8 +275,6 @@ class AmendmentRepositoryTest {
     }
 
 
-
-
     @Test
     void testUpdateAmendment4() {
         when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
@@ -298,7 +296,7 @@ class AmendmentRepositoryTest {
 
 
     @Test
-    void testUpdateAmendment5() {
+    void testUpdateAmendmentWithTimeanddate() {
         when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
         when(this.namedParameterJdbcTemplate.batchUpdate((String) any(),
                 (org.springframework.jdbc.core.namedparam.SqlParameterSource[]) any())).thenReturn(new int[]{1, 1, 1, 1});
@@ -324,7 +322,7 @@ class AmendmentRepositoryTest {
 
 
     @Test
-    void testGetAmendmentSqlParameter5() {
+    void testGetAmendmentSqlParameter() {
         when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
 
         Amendment amendment = new Amendment();
@@ -348,7 +346,7 @@ class AmendmentRepositoryTest {
 
 
     @Test
-    void testGetAmendmentSqlParameter7() {
+    void testGetAmendmentSqlParameterWIthDate() {
         when(this.util.getPGObject((Object) any())).thenReturn(new PGobject());
 
         Amendment amendment = new Amendment();

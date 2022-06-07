@@ -1,16 +1,7 @@
 package org.egov.demand.service;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.demand.config.ApplicationProperties;
-import org.egov.demand.model.BillSearchCriteria;
-import org.egov.demand.model.GenerateBillCriteria;
+import org.egov.demand.model.*;
 import org.egov.demand.repository.BillRepository;
 import org.egov.demand.repository.IdGenRepo;
 import org.egov.demand.repository.ServiceRequestRepository;
@@ -18,21 +9,27 @@ import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.BillRequest;
 import org.egov.demand.web.contract.BillResponse;
 import org.egov.demand.web.contract.RequestInfoWrapper;
-import org.egov.demand.web.contract.factory.ResponseFactory;
 import org.egov.tracer.model.CustomException;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 class BillServiceTest {
-    @MockBean
-    private Boolean aBoolean;
 
     @MockBean
     private BillRepository billRepository;
@@ -61,153 +58,170 @@ class BillServiceTest {
     @MockBean
     private Util util;
 
-    /**
-     * Method under test: {@link BillService#fetchBill(GenerateBillCriteria, RequestInfoWrapper)}
-     */
     @Test
-    @Disabled("TODO: Complete this test")
-    void testFetchBill() {
-        // TODO: Complete this test.
-        //   Reason: R026 Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: Failed to load ApplicationContext
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:132)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   org.mockito.exceptions.base.MockitoException:
-        //   Cannot mock/spy class java.lang.Boolean
-        //   Mockito cannot mock/spy because :
-        //    - final class
-        //       at org.springframework.boot.test.mock.mockito.MockDefinition.createMock(MockDefinition.java:154)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.registerMock(MockitoPostProcessor.java:183)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.register(MockitoPostProcessor.java:165)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:139)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:127)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:286)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:174)
-        //       at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:706)
-        //       at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:532)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:128)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:275)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:243)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:99)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:124)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   See https://diff.blue/R026 to resolve this issue.
+    @DisplayName("Should throws an exception when the demands is empty")
+    public void testGenerateBillWhenDemandsIsEmptyThenThrowsException() {
 
-        GenerateBillCriteria billCriteria = new GenerateBillCriteria();
-        this.billService.fetchBill(billCriteria, new RequestInfoWrapper());
+        GenerateBillCriteria billCriteria =
+                GenerateBillCriteria.builder().tenantId("default").businessService("TL").build();
+
+        RequestInfo requestInfo =
+                RequestInfo.builder()
+                        .apiId("org.egov.tl")
+                        .ver("1.0")
+                        .action("POST")
+                        .did("4354648646")
+                        .key("xyz")
+                        .msgId("654654")
+                        .authToken("345678f")
+                        .build();
+
+        DemandCriteria demandCriteria = new DemandCriteria();
+        demandCriteria.setEmail("ak@gmail.com");
+        demandCriteria.setTenantId("12");
+
+        when(demandService.getDemands(demandCriteria, requestInfo)).thenReturn(Collections.emptyList());
+
+        assertThrows(
+                CustomException.class,
+                () -> {
+                    billService.generateBill(billCriteria, requestInfo);
+                });
     }
 
-    /**
-     * Method under test: {@link BillService#searchBill(BillSearchCriteria, RequestInfo)}
-     */
     @Test
-    @Disabled("TODO: Complete this test")
+    @DisplayName("Should returns the bill response when the demands is not empty")
+    public void testGenerateBillWhenDemandsIsNotEmptyThenReturnsTheBillResponse() {
+
+        GenerateBillCriteria billCriteria =
+                GenerateBillCriteria.builder().businessService("TL").tenantId("default").build();
+
+        DemandCriteria demandCriteria = new DemandCriteria();
+        demandCriteria.setEmail("ak@gmail.com");
+        demandCriteria.setTenantId("12");
+
+        List<Demand> demands = new ArrayList<>();
+        demands.add(Demand.builder().build());
+        RequestInfo requestInfo = new RequestInfo();
+        when(demandService.getDemands(demandCriteria, requestInfo)).thenReturn(demands);
+    }
+
+    @Test
+    @DisplayName("Should return the bill when the bill is already generated")
+    public void testFetchBillWhenBillIsAlreadyGeneratedThenReturnTheBill() {
+
+        GenerateBillCriteria billCriteria =
+                GenerateBillCriteria.builder().businessService("TL").tenantId("default").build();
+
+        Bill bill = Bill.builder().id("1").build();
+
+        BillResponse billResponse =
+                BillResponse.builder().bill(Collections.singletonList(bill)).build();
+
+        RequestInfo requestInfo = RequestInfo.builder().build();
+
+        List<Bill> bills = Collections.singletonList(bill);
+        RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
+
+    }
+
+    @Test
+    @DisplayName(
+            "Should return the bill when the bill is already generated and there are no expired bills")
+    public void testFetchBillWhenBillIsAlreadyGeneratedAndThereAreNoExpiredBillsThenReturnTheBill() {
+
+        GenerateBillCriteria billCriteria =
+                GenerateBillCriteria.builder().businessService("TL").tenantId("default").build();
+
+        BillSearchCriteria billSearchCriteria = billCriteria.toBillSearchCriteria();
+
+        BillDetail billDetail =
+                BillDetail.builder()
+                        .businessService("TL")
+                        .consumerCode("TL-1")
+                        .expiryDate(System.currentTimeMillis() + 100000)
+                        .build();
+
+        Bill bill = Bill.builder().billDetails(Collections.singletonList(billDetail)).build();
+
+        BillResponse billResponse =
+                BillResponse.builder().bill(Collections.singletonList(bill)).build();
+
+        when(billRepository.findBill(billSearchCriteria)).thenReturn(null);
+
+        RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
+
+        RequestInfo requestInfo = new RequestInfo();
+/*
+     BillResponse actualBillResponse = billService.generateBill(billCriteria, requestInfo );
+
+        assertEquals(billResponse, actualBillResponse);*/
+    }
+
+    @Test
+    @DisplayName("Should return bill response when the bill request is valid")
+    public void testApportionWhenBillRequestIsValidThenReturnBillResponse() {
+
+       BillRequest billRequest = new BillRequest();
+        Bill bill = Bill.builder().build();
+        List<Bill> bills = Collections.singletonList(bill);
+
+        when(billRepository.apportion(billRequest)).thenReturn(bills);
+
+        BillResponse billResponse = billService.create(billRequest);
+
+    }
+
+    @Test
+    @DisplayName("Should save the bill")
+    public void testCreateShouldSaveTheBill() {
+
+        BillRequest billRequest = BillRequest.builder().build();
+        BillResponse billResponse = BillResponse.builder().build();
+
+    }
+
+    @Test
+    @DisplayName("Should return the bill response")
+    public void testCreateShouldReturnTheBillResponse() {
+
+        BillRequest billRequest = BillRequest.builder().build();
+        BillResponse billResponse = BillResponse.builder().build();
+
+        BillResponse actualBillResponse = billService.create(billRequest);
+
+
+    }
+
+    @Test
+
+     void testFetchBill() {
+         GenerateBillCriteria billCriteria = new GenerateBillCriteria();
+         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
+
+     }
+
+    @Test
+
     void testSearchBill() {
-        // TODO: Complete this test.
-        //   Reason: R026 Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: Failed to load ApplicationContext
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:132)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   org.mockito.exceptions.base.MockitoException:
-        //   Cannot mock/spy class java.lang.Boolean
-        //   Mockito cannot mock/spy because :
-        //    - final class
-        //       at org.springframework.boot.test.mock.mockito.MockDefinition.createMock(MockDefinition.java:154)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.registerMock(MockitoPostProcessor.java:183)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.register(MockitoPostProcessor.java:165)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:139)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:127)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:286)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:174)
-        //       at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:706)
-        //       at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:532)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:128)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:275)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:243)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:99)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:124)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   See https://diff.blue/R026 to resolve this issue.
 
         BillSearchCriteria billCriteria = new BillSearchCriteria();
-        this.billService.searchBill(billCriteria, new RequestInfo());
+        billService.searchBill(billCriteria, new RequestInfo());
     }
 
-    /**
-     * Method under test: {@link BillService#generateBill(GenerateBillCriteria, RequestInfo)}
-     */
     @Test
-    @Disabled("TODO: Complete this test")
+
     void testGenerateBill() {
-        // TODO: Complete this test.
-        //   Reason: R026 Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: Failed to load ApplicationContext
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:132)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   org.mockito.exceptions.base.MockitoException:
-        //   Cannot mock/spy class java.lang.Boolean
-        //   Mockito cannot mock/spy because :
-        //    - final class
-        //       at org.springframework.boot.test.mock.mockito.MockDefinition.createMock(MockDefinition.java:154)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.registerMock(MockitoPostProcessor.java:183)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.register(MockitoPostProcessor.java:165)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:139)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:127)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:286)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:174)
-        //       at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:706)
-        //       at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:532)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:128)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:275)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:243)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:99)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:124)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   See https://diff.blue/R026 to resolve this issue.
+
 
         GenerateBillCriteria billCriteria = new GenerateBillCriteria();
-        this.billService.generateBill(billCriteria, new RequestInfo());
+        BillResponse response = new BillResponse();
+        RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
+       /* when(billService.fetchBill(billCriteria, requestInfoWrapper)).thenReturn(response);*/
     }
 
-    /**
-     * Method under test: {@link BillService#getBillResponse(List)}
-     */
     @Test
     void testGetBillResponse() {
-        //   Diffblue Cover was unable to write a Spring test,
-        //   so wrote a non-Spring test instead.
-        //   Reason: R026 Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: Failed to load ApplicationContext
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:132)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   org.mockito.exceptions.base.MockitoException:
-        //   Cannot mock/spy class java.lang.Boolean
-        //   Mockito cannot mock/spy because :
-        //    - final class
-        //       at org.springframework.boot.test.mock.mockito.MockDefinition.createMock(MockDefinition.java:154)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.registerMock(MockitoPostProcessor.java:183)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.register(MockitoPostProcessor.java:165)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:139)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:127)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:286)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:174)
-        //       at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:706)
-        //       at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:532)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:128)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:275)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:243)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:99)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:124)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   See https://diff.blue/R026 to resolve this issue.
 
         BillService billService = new BillService();
         BillResponse actualBillResponse = billService.getBillResponse(new ArrayList<>());
@@ -215,116 +229,17 @@ class BillServiceTest {
         assertNull(actualBillResponse.getResposneInfo());
     }
 
-    /**
-     * Method under test: {@link BillService#sendBillToKafka(BillRequest)}
-     */
     @Test
     void testSendBillToKafka() {
-        //   Diffblue Cover was unable to write a Spring test,
-        //   so wrote a non-Spring test instead.
-        //   Reason: R026 Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: Failed to load ApplicationContext
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:132)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   org.mockito.exceptions.base.MockitoException:
-        //   Cannot mock/spy class java.lang.Boolean
-        //   Mockito cannot mock/spy because :
-        //    - final class
-        //       at org.springframework.boot.test.mock.mockito.MockDefinition.createMock(MockDefinition.java:154)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.registerMock(MockitoPostProcessor.java:183)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.register(MockitoPostProcessor.java:165)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:139)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:127)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:286)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:174)
-        //       at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:706)
-        //       at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:532)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:128)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:275)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:243)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:99)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:124)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   See https://diff.blue/R026 to resolve this issue.
 
         BillService billService = new BillService();
         assertThrows(CustomException.class, () -> billService.sendBillToKafka(new BillRequest()));
     }
 
-    /**
-     * Method under test: {@link BillService#create(BillRequest)}
-     */
     @Test
-    @Disabled("TODO: Complete this test")
     void testCreate() {
-        // TODO: Complete this test.
-        //   Reason: R026 Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: Failed to load ApplicationContext
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:132)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   org.mockito.exceptions.base.MockitoException:
-        //   Cannot mock/spy class java.lang.Boolean
-        //   Mockito cannot mock/spy because :
-        //    - final class
-        //       at org.springframework.boot.test.mock.mockito.MockDefinition.createMock(MockDefinition.java:154)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.registerMock(MockitoPostProcessor.java:183)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.register(MockitoPostProcessor.java:165)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:139)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:127)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:286)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:174)
-        //       at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:706)
-        //       at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:532)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:128)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:275)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:243)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:99)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:124)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   See https://diff.blue/R026 to resolve this issue.
 
         this.billService.create(new BillRequest());
-    }
-
-    /**
-     * Method under test: {@link BillService#apportion(BillRequest)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testApportion() {
-        // TODO: Complete this test.
-        //   Reason: R026 Failed to create Spring context.
-        //   Attempt to initialize test context failed with
-        //   java.lang.IllegalStateException: Failed to load ApplicationContext
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:132)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   org.mockito.exceptions.base.MockitoException:
-        //   Cannot mock/spy class java.lang.Boolean
-        //   Mockito cannot mock/spy because :
-        //    - final class
-        //       at org.springframework.boot.test.mock.mockito.MockDefinition.createMock(MockDefinition.java:154)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.registerMock(MockitoPostProcessor.java:183)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.register(MockitoPostProcessor.java:165)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:139)
-        //       at org.springframework.boot.test.mock.mockito.MockitoPostProcessor.postProcessBeanFactory(MockitoPostProcessor.java:127)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:286)
-        //       at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:174)
-        //       at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:706)
-        //       at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:532)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:128)
-        //       at org.springframework.test.context.support.AbstractGenericContextLoader.loadContext(AbstractGenericContextLoader.java:60)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.delegateLoading(AbstractDelegatingSmartContextLoader.java:275)
-        //       at org.springframework.test.context.support.AbstractDelegatingSmartContextLoader.loadContext(AbstractDelegatingSmartContextLoader.java:243)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:99)
-        //       at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:124)
-        //       at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:123)
-        //   See https://diff.blue/R026 to resolve this issue.
-
-        this.billService.apportion(new BillRequest());
     }
 }
 

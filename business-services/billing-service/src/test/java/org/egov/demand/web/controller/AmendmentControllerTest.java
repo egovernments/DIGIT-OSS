@@ -71,7 +71,7 @@ class AmendmentControllerTest {
         mockMvc.perform(post("/amendment/_create")
                         .accept(MediaType.APPLICATION_JSON).content(Json)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(200));
+                .andExpect(status().is(400));
     }
 
     @Test

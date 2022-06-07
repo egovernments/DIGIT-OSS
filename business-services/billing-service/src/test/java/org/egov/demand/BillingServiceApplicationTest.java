@@ -18,9 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 class BillingServiceApplicationTest {
-    /**
-     * Method under test: {@link BillingServiceApplication#getObjectMapper()}
-     */
+
     @Test
     void testGetObjectMapper() {
         ObjectMapper actualObjectMapper = (new BillingServiceApplication()).getObjectMapper();
@@ -58,9 +56,7 @@ class BillingServiceApplicationTest {
         assertSame(polymorphicTypeValidator, deserializationConfig.getPolymorphicTypeValidator());
     }
 
-    /**
-     * Method under test: {@link BillingServiceApplication#jacksonConverter()}
-     */
+
     @Test
     void testJacksonConverter() {
         MappingJackson2HttpMessageConverter actualJacksonConverterResult = (new BillingServiceApplication())

@@ -60,15 +60,7 @@ class DemandEnrichmentUtilTest {
     }
 
 
- /*   @Test
-    @Disabled("TODO: Complete this test")
-    void testEnrichPayer4() {
 
-
-        ArrayList<Demand> demandList = new ArrayList<>();
-        demandList.add(null);
-        this.demandEnrichmentUtil.enrichPayer(demandList, new ArrayList<>());
-    }*/
 
 
     @Test
@@ -100,22 +92,6 @@ class DemandEnrichmentUtilTest {
     }
 
 
-   /* @Test
-    @Disabled("TODO: Complete this test")
-    void testEnrichPayer7() {
 
-
-        Demand demand = mock(Demand.class);
-        doNothing().when(demand).setPayer((User) any());
-        when(demand.getPayer()).thenReturn(new User());
-
-        ArrayList<Demand> demandList = new ArrayList<>();
-        demandList.add(demand);
-
-        ArrayList<User> userList = new ArrayList<>();
-        userList.add(new User());
-        userList.add(new User());
-        this.demandEnrichmentUtil.enrichPayer(demandList, userList);
-    }*/
 }
 

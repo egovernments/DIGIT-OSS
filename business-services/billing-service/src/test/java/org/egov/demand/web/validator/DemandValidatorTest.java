@@ -127,9 +127,6 @@ class DemandValidatorTest {
         assertTrue(demandCriteria.getDemandId().isEmpty());
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
     @Test
     void testValidateDemandCriteria6() {
         DemandValidator demandValidator = new DemandValidator();
@@ -144,9 +141,7 @@ class DemandValidatorTest {
         assertTrue(demandCriteria.getConsumerCode().isEmpty());
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
+
     @Test
     void testValidateDemandCriteria7() {
         DemandValidator demandValidator = new DemandValidator();
@@ -161,9 +156,7 @@ class DemandValidatorTest {
         assertFalse(demandCriteria.getReceiptRequired());
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
+
     @Test
     void testValidateDemandCriteria8() {
         DemandValidator demandValidator = new DemandValidator();
@@ -179,9 +172,7 @@ class DemandValidatorTest {
         assertSame(valueOfResult, demandCriteria.getDemandFrom());
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
+
     @Test
     void testValidateDemandCriteria9() {
         DemandValidator demandValidator = new DemandValidator();
@@ -197,9 +188,7 @@ class DemandValidatorTest {
         assertSame(valueOfResult, demandCriteria.getDemandTo());
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
+
     @Test
     void testValidateDemandCriteria10() {
         DemandValidator demandValidator = new DemandValidator();
@@ -214,9 +203,7 @@ class DemandValidatorTest {
         assertFalse(demandCriteria.getReceiptRequired());
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
+
     @Test
     void testValidateDemandCriteria11() {
         DemandValidator demandValidator = new DemandValidator();
@@ -231,9 +218,7 @@ class DemandValidatorTest {
         assertEquals("42", demandCriteria.getMobileNumber());
     }
 
-    /**
-     * Method under test: {@link DemandValidator#validateDemandCriteria(DemandCriteria, org.springframework.validation.Errors)}
-     */
+
     @Test
     void testValidateDemandCriteria12() {
         DemandValidator demandValidator = new DemandValidator();

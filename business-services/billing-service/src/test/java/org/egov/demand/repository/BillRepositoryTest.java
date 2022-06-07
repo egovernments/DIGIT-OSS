@@ -95,7 +95,7 @@ class BillRepositoryTest {
     }
 
     @Test
-    void testSaveBill6() throws DataAccessException {
+    void testSaveBillSuccess() throws DataAccessException {
         when(this.jdbcTemplate.batchUpdate((String) any(),
                 (org.springframework.jdbc.core.BatchPreparedStatementSetter) any())).thenReturn(new int[]{1, 1, 1, 1});
 
@@ -120,7 +120,7 @@ class BillRepositoryTest {
 
 
     @Test
-    void testSaveBillDetails4() throws DataAccessException {
+    void testSaveBillDetails() throws DataAccessException {
         when(this.jdbcTemplate.batchUpdate((String) any(),
                 (org.springframework.jdbc.core.BatchPreparedStatementSetter) any())).thenReturn(new int[]{1, 1, 1, 1});
 
@@ -138,7 +138,7 @@ class BillRepositoryTest {
 
 
     @Test
-    void testSaveBillDetails6() throws DataAccessException {
+    void testSaveBillDetailswithbilllist() throws DataAccessException {
         when(this.jdbcTemplate.batchUpdate((String) any(),
                 (org.springframework.jdbc.core.BatchPreparedStatementSetter) any())).thenReturn(new int[]{1, 1, 1, 1});
 
@@ -172,7 +172,7 @@ class BillRepositoryTest {
 
 
     @Test
-    void testApportion4() {
+    void testApportiongetbill() {
         when(this.businessServiceDetailRepository.getBussinessServiceDetail((RequestInfo) any(),
                 (org.egov.demand.web.contract.BusinessServiceDetailCriteria) any())).thenReturn(new ArrayList<>());
 
@@ -192,7 +192,7 @@ class BillRepositoryTest {
 
 
     @Test
-    void testApportion7() {
+    void testApportionRequest() {
         when(this.businessServiceDetailRepository.getBussinessServiceDetail((RequestInfo) any(),
                 (org.egov.demand.web.contract.BusinessServiceDetailCriteria) any())).thenReturn(new ArrayList<>());
 
@@ -215,7 +215,7 @@ class BillRepositoryTest {
 
 
     @Test
-    void testApportion8() throws RestClientException {
+    void testApportionwithBusinessDetails() throws RestClientException {
         when(this.restTemplate.postForObject((String) any(), (Object) any(), (Class<Object>) any(), (Object[]) any()))
                 .thenReturn(new BillResponse());
 

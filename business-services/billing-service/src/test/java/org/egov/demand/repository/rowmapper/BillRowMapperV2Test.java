@@ -70,34 +70,5 @@ class BillRowMapperV2Test {
     }
 
 
- /*   @Test
-
-    void testExtractData3() throws SQLException {
-
-        when(this.util.getJsonValue((org.postgresql.util.PGobject) any())).thenReturn(MissingNode.getInstance());
-        ResultSet resultSet = mock(ResultSet.class);
-        when(resultSet.getInt((String) any())).thenReturn(1);
-        when(resultSet.getObject((String) any())).thenReturn(null);
-        when(resultSet.getString((String) any())).thenReturn(null);
-        when(resultSet.getBigDecimal((String) any())).thenReturn(BigDecimal.valueOf(42L));
-        when(resultSet.getLong((String) any())).thenReturn(1L);
-        when(resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
-        this.billRowMapperV2.extractData(resultSet);
-    }
-
-    @Test
-
-    void testExtractData4() throws SQLException {
-
-        when(this.util.getJsonValue((org.postgresql.util.PGobject) any())).thenReturn(MissingNode.getInstance());
-        ResultSet resultSet = mock(ResultSet.class);
-        when(resultSet.getInt((String) any())).thenReturn(1);
-        when(resultSet.getObject((String) any())).thenReturn(null);
-        when(resultSet.getString((String) any())).thenReturn("String");
-        when(resultSet.getBigDecimal((String) any())).thenReturn(null);
-        when(resultSet.getLong((String) any())).thenReturn(1L);
-        when(resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
-        this.billRowMapperV2.extractData(resultSet);
-    }*/
 }
 
