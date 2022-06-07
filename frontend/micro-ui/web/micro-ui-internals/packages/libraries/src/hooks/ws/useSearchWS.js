@@ -3,11 +3,9 @@ import { useQuery } from "react-query";
 import { WSService } from "../../services/elements/WS";
 import { PTService } from "../../services/elements/PT";
 
-const getAddress = (address, t) => {
-  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
-    address?.landmark ? `${address?.landmark}, ` : ""
-  }${t(address?.locality?.code)}, ${t(address?.city)},${t(address?.pincode) ? `${address?.pincode}` : " "}`;
-};
+const getAddress = (address,t) => {
+  return `${address?.doorNo ? address?.doorNo + ", " : ""}${address?.street ? address?.street + ", " : ""}${address?.landMark ? address?.landMark + ", " : ""}${address?.locality?.code ? t(address?.locality?.code) + ", " : ""}${address?.city ? address?.city : ""}${address?.pinCode ? ", " + address?.pinCode : ""}`
+}
 
 const getOwnerNames = (propertyData) => {
   const getActiveOwners = propertyData?.owners?.filter(owner => owner?.active);
