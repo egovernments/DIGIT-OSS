@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
-public class PlainRequestAccess {
+public class PlainAccessRequest {
     private String recordId;
 
     private List<String> plainRequestFields;

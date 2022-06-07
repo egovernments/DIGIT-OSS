@@ -2,7 +2,7 @@ package org.egov.encryption.models;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
-import org.egov.common.contract.request.PlainRequestAccess;
+import org.egov.common.contract.request.PlainAccessRequest;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class AuditObject {
 
     private List<String> entityIds;
 
-    private PlainRequestAccess plainRequestAccess;
+    private PlainAccessRequest plainAccessRequest;
 
     private JsonNode additionalInfo;
 

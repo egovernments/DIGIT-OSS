@@ -7,10 +7,8 @@ import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.models.*;
 import org.egov.encryption.util.MdmsFetcher;
-import org.egov.mdms.model.*;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
@@ -113,8 +111,8 @@ public class DecryptionPolicyConfiguration {
                     for (AttributeAccess attributeAccess : attributeList) {
                         String attributeName = attributeAccess.getAttribute();
                         Attribute attribute = attributesMap.get(attributeName);
-                        if (requestInfo.getPlainRequestAccess() != null && !CollectionUtils.isEmpty(requestInfo.getPlainRequestAccess().getPlainRequestFields())
-                                && requestInfo.getPlainRequestAccess().getPlainRequestFields().contains(attributeName)
+                        if (requestInfo.getPlainAccessRequest() != null && !CollectionUtils.isEmpty(requestInfo.getPlainAccessRequest().getPlainRequestFields())
+                                && requestInfo.getPlainAccessRequest().getPlainRequestFields().contains(attributeName)
                                 && attributeAccess.getSecondLevelVisibility() != null) {
                             secondLevelVisibility.add(attributeName);
                         }
@@ -133,8 +131,8 @@ public class DecryptionPolicyConfiguration {
                     }
                 }
 
-                if (requestInfo.getPlainRequestAccess() != null)
-                    requestInfo.getPlainRequestAccess().setPlainRequestFields(secondLevelVisibility);
+                if (requestInfo.getPlainAccessRequest() != null)
+                    requestInfo.getPlainAccessRequest().setPlainRequestFields(secondLevelVisibility);
             }
 
             List<Attribute> mappingAttributesList = new ArrayList<Attribute>(mapping.keySet());

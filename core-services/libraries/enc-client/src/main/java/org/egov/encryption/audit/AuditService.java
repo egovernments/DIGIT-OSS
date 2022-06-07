@@ -2,9 +2,6 @@ package org.egov.encryption.audit;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.LongNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.encryption.config.DecryptionPolicyConfiguration;
@@ -41,8 +38,8 @@ public class AuditService {
         auditObject.setModel(model);
         auditObject.setPurpose(purpose);
 
-        if(requestInfo.getPlainRequestAccess() != null) {
-            auditObject.setPlainRequestAccess(requestInfo.getPlainRequestAccess());
+        if(requestInfo.getPlainAccessRequest() != null) {
+            auditObject.setPlainAccessRequest(requestInfo.getPlainAccessRequest());
         }
 
         UniqueIdentifier uniqueIdentifier =

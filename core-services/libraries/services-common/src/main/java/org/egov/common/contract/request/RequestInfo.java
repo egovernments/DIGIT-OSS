@@ -36,7 +36,7 @@ public class RequestInfo {
 
     private String correlationId;
 
-    private PlainRequestAccess plainRequestAccess;
+    private PlainAccessRequest plainAccessRequest;
 
     private User userInfo;
 }

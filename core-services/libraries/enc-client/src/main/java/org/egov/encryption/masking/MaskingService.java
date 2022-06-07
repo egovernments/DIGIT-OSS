@@ -65,7 +65,7 @@ public class MaskingService {
             jsonNode = JSONBrowseUtil.mapValues(jsonNode, value -> maskData(value, attribute));
             maskedNode = JacksonUtils.merge(jsonNode, maskedNode);
         }
-        if (requestInfo.getPlainRequestAccess() != null && requestInfo.getPlainRequestAccess().getRecordId() != null) {
+        if (requestInfo.getPlainAccessRequest() != null && requestInfo.getPlainAccessRequest().getRecordId() != null) {
             maskedNode = addPlainRequestAccessValues((ArrayNode) maskedNode, (ArrayNode) decryptedNode, attributes, uniqueIdentifier, requestInfo);
         }
         return maskedNode;
@@ -75,8 +75,8 @@ public class MaskingService {
                                                  List<Attribute> attributes,
                                                  UniqueIdentifier uniqueIdentifier,
                                                  RequestInfo requestInfo) {
-        String recordId = requestInfo.getPlainRequestAccess().getRecordId();
-        List<String> plainRequestFields = requestInfo.getPlainRequestAccess().getPlainRequestFields();
+        String recordId = requestInfo.getPlainAccessRequest().getRecordId();
+        List<String> plainRequestFields = requestInfo.getPlainAccessRequest().getPlainRequestFields();
         for(int i = 0; i < maskedArray.size(); i++) {
             JsonNode maskedNode = maskedArray.get(i);
             JsonNode decryptedNode = decryptedArray.get(i);
