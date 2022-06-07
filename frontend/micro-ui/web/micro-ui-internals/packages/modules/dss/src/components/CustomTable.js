@@ -6,6 +6,7 @@ import FilterContext from "./FilterContext";
 import NoData from "./NoData";
 import { ArrowDownwardElement } from "./ArrowDownward";
 import { ArrowUpwardElement } from "./ArrowUpward";
+import ReactTooltip from "react-tooltip";
 
 const rowNamesToBeLocalised = ["Department", "", "Usage Type", "Ward", "Wards", "City Name"];
 
@@ -260,11 +261,15 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }
     const columns = response?.responseData?.data?.find((row) => !!row);
     return columns?.plots
       ?.filter((plot) => plot?.name !== "TankCapacity")
-      .map((plot) => ({
+      .map((plot, index) => ({
         Header: (
-          <span className="tooltip">
+          <span className="tooltip" data-tip="React-tooltip" data-for={`jk-table-${index}`}>
             {renderHeader(plot)}
-            <span
+
+            <ReactTooltip textColor="#fff" backgroundColor="#555" place="bottom" type="info" effect="solid" id={`jk-table-${index}`}>
+              {t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)}
+            </ReactTooltip>
+            {/* <span
               className="tooltiptext"
               style={{
                 fontSize: "14px",
@@ -281,7 +286,7 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }
               <div style={getTooltipStyles(t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`))}>
                 {t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)}
               </div>
-            </span>
+            </span> **/}
           </span>
         ),
         accessor: accessData(plot),
