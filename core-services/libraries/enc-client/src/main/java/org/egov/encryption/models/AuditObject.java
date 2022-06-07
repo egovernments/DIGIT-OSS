@@ -29,6 +29,4 @@ public class AuditObject {
 
     private JsonNode additionalInfo;
 
-    private JsonNode data;
-
 }
