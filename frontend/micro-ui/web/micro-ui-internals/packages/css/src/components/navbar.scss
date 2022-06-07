@@ -240,6 +240,11 @@
             color: rgb(117, 117, 117);
             fill: rgb(117, 117, 117);
           }
+          .actions {
+            .tooltip {
+              margin-left: 16px;
+            }
+          }
         }
         .actions {
           display: flex;
