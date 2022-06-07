@@ -44,6 +44,8 @@ public class BPALandService {
 		StringBuilder uri = new StringBuilder(config.getLandInfoHost());
 		uri.append(config.getLandInfoCreate());
 
+		log.info("LOG 1 land Request -> "+bpaRequest.getBPA().getLandInfo().toString());
+
 		LandInfoRequest landRequest = new LandInfoRequest();
 		landRequest.setRequestInfo(bpaRequest.getRequestInfo());
 		landRequest.setLandInfo(bpaRequest.getBPA().getLandInfo());

@@ -52,6 +52,7 @@ public class LandUserService {
 		LandInfo landInfo = landRequest.getLandInfo();
 		 @Valid RequestInfo requestInfo = landRequest.getRequestInfo();
 
+		 log.info("LOG 3 land Request -> "+landInfo.toString());
 		landInfo.getOwners().forEach(owner -> {
 			UserDetailResponse userDetailResponse = null;
 			if (owner.getMobileNumber() != null) {

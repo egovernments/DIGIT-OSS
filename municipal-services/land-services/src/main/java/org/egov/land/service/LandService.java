@@ -52,7 +52,7 @@ public class LandService {
 		
 		landValidator.validateLandInfo(landRequest,mdmsData);
 		userService.manageUser(landRequest);
-		
+		log.info("LOG 2 land Request -> "+landRequest.getLandInfo().toString());
 		enrichmentService.enrichLandInfoRequest(landRequest, false);		
 		repository.save(landRequest);
 		return landRequest.getLandInfo();

@@ -128,6 +128,7 @@ public class BPAService {
 		String applicationType = values.get(BPAConstants.APPLICATIONTYPE);
 		this.validateCreateOC(applicationType, values, requestInfo, bpaRequest);
 		bpaValidator.validateCreate(bpaRequest, mdmsData, values);
+		log.info("LOG 0 land Request -> "+bpaRequest.getBPA().getLandInfo().toString());
 		if (!applicationType.equalsIgnoreCase(BPAConstants.BUILDING_PLAN_OC)) {
 			landService.addLandInfoToBPA(bpaRequest);
 		}
