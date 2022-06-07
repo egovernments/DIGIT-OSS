@@ -57,6 +57,7 @@ const ApplicationBillAmendment = () => {
     ...methods
   } = useForm();
   
+  const fromDateVal = watch("effectivefrom");
   const amendmentReason = watch("amendmentReason");
   const WS_REDUCED_AMOUNT = watch("WS_REDUCED_AMOUNT");
   const WS_ADDITIONAL_AMOUNT = watch("WS_ADDITIONAL_AMOUNT");
@@ -194,6 +195,16 @@ const ApplicationBillAmendment = () => {
     };
     history.push("/digit-ui/employee/ws/response", data);
   };
+
+ 
+  const isValidToDate = (enteredValue) => {
+    const enteredTs = new Date(enteredValue).getTime()
+    const fromDate = fromDateVal ? new Date(fromDateVal).getTime() : new Date().getTime()
+    // return ( toDate > enteredTs && enteredTs >= currentTs ) ? true : false 
+    return (enteredTs>fromDate) ? true : "Invalid format"
+
+  };
+
   
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
@@ -406,10 +417,12 @@ const ApplicationBillAmendment = () => {
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveTill"
-                rules={{ required: true }}
+                rules={{ required: true,validate:{isValidToDate}}}
                 control={control}
               />
-              {errors?.effectiveTill ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
+              {errors?.effectiveTill?.type==="required" && <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError>}
+              {errors?.effectiveTill?.message === "Invalid format" && <CardLabelError>{t("ERR_DEFAULT_INPUT_FIELD_MSG")}</CardLabelError>}
+
             </LabelFieldPair>
           </>
         )}
@@ -440,7 +453,7 @@ const ApplicationBillAmendment = () => {
                   />
                 )}
               />
-              {errors?.[e?.documentType] ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
+              {errors?.["DOCUMENTS"]?.[e?.documentType] ? <CardLabelError>{t("WS_NO_FILE_SELECTED")}</CardLabelError> : null}
             </div>
           </LabelFieldPair>
         ))}
