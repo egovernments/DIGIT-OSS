@@ -338,6 +338,7 @@ export const getBPAOwners = (data, isOCBPA) => {
     bpaownerarray?.forEach((newOwner) => {
       if (newOwner?.gender?.code) newOwner.gender = newOwner.gender?.code;
       if (!newOwner?.fatherOrHusbandName) newOwner.fatherOrHusbandName = "NAME";
+      newOwner.active = true;
     });
 
   data?.landInfo?.owners?.map((oldowner) => {
