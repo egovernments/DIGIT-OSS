@@ -39,11 +39,12 @@ const App = ({ path }) => {
   const OCSendToArchitect = Digit?.ComponentRegistryService?.getComponent('ObpsOCSendToArchitect');
   const BPASendBackToCitizen = Digit?.ComponentRegistryService?.getComponent('ObpsBPASendBackToCitizen');
   const OCSendBackToCitizen = Digit?.ComponentRegistryService?.getComponent('ObpsOCSendBackToCitizen');
+  const isDocScreenAfterEdcr = sessionStorage.getItem("clickOnBPAApplyAfterEDCR") === "true" ? true : false
 
 
   return (
     <React.Fragment>
-       {!location.pathname.includes("response") && !location.pathname.includes("openlink/stakeholder") && !location.pathname.includes("/acknowledgement") && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
+       {!location.pathname.includes("response") && !location.pathname.includes("openlink/stakeholder") && !location.pathname.includes("/acknowledgement") && !isDocScreenAfterEdcr && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
       <Switch>
         <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
         <PrivateRoute path={`${path}/search/application`} component={(props) => <Search {...props} parentRoute={path} />} />
