@@ -18,6 +18,7 @@ const DocsRequired = ({ onSelect, onSkip, config }) => {
   const queryObject = { 0: { tenantId: stateCode }, 1: { id: userInfo?.info?.id } };
   const { data: LicenseData, isLoading:LicenseDataLoading } = Digit.Hooks.obps.useBPAREGSearch(tenantId, queryObject);
   const checkingUrl = window.location.href.includes("ocbpa");
+  sessionStorage.removeItem("clickOnBPAApplyAfterEDCR");
 
   const { data:homePageUrlLinks , isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(stateCode, "BPA", ["homePageUrlLinks"]);
 
