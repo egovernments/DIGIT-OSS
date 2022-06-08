@@ -29,7 +29,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
   gotoHome: {
     componentPath: "Button",
     props: {
-      variant: "contained",
+      variant: "outlined",
       color: "primary",
       style: {
        // minWidth: "200px",
@@ -41,7 +41,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
       //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
         labelName: "GO TO HOME",
-        labelKey: "BPA_HOME_BUTTON"
+        labelKey: "NOC_COMMON_BUTTON_HOME"
       })
     },
     // Check this onClickDefinition later again
@@ -60,18 +60,10 @@ export const applicationSuccessFooter = (
   tenant
 ) => {
   let status = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].status") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.status"));
-  let businessService = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].businessService") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.businessService"));
-  let billbService
-  if(businessService === "BPA_LOW") {
-    billbService = "BPA.LOW_RISK_PERMIT_FEE"
-  } else if(businessService === "BPA"){
-    billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
-  } else if(businessService === "BPA_OC"){
-    billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_OC_APP_FEE":"BPA.NC_OC_SAN_FEE");
-  }
+  let billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
   let purpose = getQueryArg(window.location.href, "purpose");
   let isTrue = false;
-  if(purpose == "apply") {
+  if(purpose == "APPLY") {
     isTrue = true;
   }
   return getCommonApplyFooter({
@@ -90,7 +82,7 @@ export const applicationSuccessFooter = (
         //downloadReceiptButtonLabel: getLabel
         goToHomeButtonLabel: getLabel({
           labelName: "GO TO HOME",
-          labelKey: "BPA_HOME_BUTTON"
+          labelKey: "NOC_COMMON_BUTTON_HOME"
         })
       },
       // Check this onClickDefinition later again
@@ -98,7 +90,7 @@ export const applicationSuccessFooter = (
         action: "page_change",
         path: `${getRedirectionURL()}`
       },
-     
+
     },
     downloadFormButton: {
       componentPath: "Button",
@@ -114,7 +106,7 @@ export const applicationSuccessFooter = (
       children: {
         downloadFormButtonLabel: getLabel({
           labelName: "DOWNLOAD CONFIRMATION FORM",
-          labelKey: "BPA_APPLICATION_BUTTON_DOWN_CONF"
+          labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
         })
       },
       onClickDefination: {
@@ -139,7 +131,7 @@ export const applicationSuccessFooter = (
       children: {
         printFormButtonLabel: getLabel({
           labelName: "PRINT CONFIRMATION FORM",
-          labelKey: "BPA_APPLICATION_BUTTON_PRINT_CONF"
+          labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
         })
       },
       onClickDefination: {
@@ -164,7 +156,7 @@ export const applicationSuccessFooter = (
       children: {
         proceedToPaymentButtonLabel: getLabel({
           labelName: "Proceed to payment",
-          labelKey: "BPA_PROCEED_PAYMENT"
+          labelKey: "NOC_PROCEED_PAYMENT"
         })
       },
       //Add onClickDefination and RoleDefination later
@@ -191,13 +183,13 @@ export const applicationSuccessFooter = (
         style: {
           minWidth: "180px",
           height: "48px",
-        
+
         }
       },
       children: {
         submitButtonLabel: getLabel({
           labelName: "MAKE PAYMENT",
-          labelKey: "BPA_CITIZEN_MAKE_PAYMENT"
+          labelKey: "TL_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
         })
       },
       onClickDefination: {
@@ -223,7 +215,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
   gotoHome: {
     componentPath: "Button",
     props: {
-      variant: "contained",
+      variant: "outlined",
       color: "primary",
       style: {
        // minWidth: "200px",
@@ -235,7 +227,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
         labelName: "GO TO HOME",
-        labelKey: "BPA_HOME_BUTTON"
+        labelKey: "TL_COMMON_BUTTON_HOME"
       })
     },
     // Check this onClickDefinition later again
@@ -349,8 +341,7 @@ export const paymentSuccessFooter = () => {
         callBack: (state, dispatch) => {
           generatePdf(state, dispatch, "receipt_download");
         }
-      },
-      visible: false            
+      }
     },
     printReceiptButton: {
       componentPath: "Button",
@@ -374,8 +365,7 @@ export const paymentSuccessFooter = () => {
         callBack: (state, dispatch) => {
           generatePdf(state, dispatch, "receipt_print");
         }
-      },
-      visible: false      
+      }
     },
     gotoHome: {
       componentPath: "Button",
@@ -401,7 +391,7 @@ export const paymentSuccessFooter = () => {
             ? `/egov-ui-framework/BPA/search`
             : `/`
       },
-       visible: true
+       visible: false
     }
   });
 };

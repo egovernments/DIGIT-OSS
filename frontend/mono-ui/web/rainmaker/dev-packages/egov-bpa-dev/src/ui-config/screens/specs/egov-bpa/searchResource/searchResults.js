@@ -39,17 +39,17 @@ export const textToLocalMapping = {
   ),
   "Owner Name": getLocaleLabels(
     "Owner Name",
-    "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL",
+    "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   "Application Date": getLocaleLabels(
     "Application Date",
-    "BPA_COMMON_TABLE_COL_APP_DATE_LABEL",
+    "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   Status: getLocaleLabels(
     "Status",
-    "BPA_COMMON_TABLE_COL_STATUS_LABEL",
+    "NOC_COMMON_TABLE_COL_STATUS_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   INITIATED: getLocaleLabels(
@@ -111,54 +111,38 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
+      getBpaTextToLocalMapping("Application No"),
+      getBpaTextToLocalMapping("Owner Name"),
+      getBpaTextToLocalMapping("Application Date"),
       {
-        name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
-      },
-      {
-        name: "Owner Name", labelKey: "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"
-      },
-      {
-        name: "Application Date", labelKey: "BPA_COMMON_TABLE_COL_APP_DATE_LABEL"
-      },
-      {
-        name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL",
+        name: getBpaTextToLocalMapping("Status"),
         options: {
           filter: false,
           customBodyRender: value => (
             <span
               style={
-                value === "Approved" ? { color: "green" } : { color: "red" }
+                value === "APPROVED" ? { color: "green" } : { color: "red" }
               }
             >
-              {value}
+              {getBpaTextToLocalMapping(value)}
             </span>
           )
         }
       },
       {
-        name: "Tenant Id",
-        labelKey: "TENANT_ID",
-        options: {
-          display: false
-        }
-      },
-      {
-        name: "serviceType",
-        labelKey: "SERVICE_TYPE",
+        name: "tenantId",
         options: {
           display: false
         }
       }
     ],
-    title: { labelKey: "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName: "Search Results for BPA Applications"},
-    rows: "",
+    title: getBpaTextToLocalMapping("Search Results for BPA Applications"),
     options: {
       filter: false,
       download: false,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      viewColumns: false,
       rowsPerPageOptions: [10, 15, 20],
       onRowClick: (row, index) => {
         onRowClick(row);
@@ -186,29 +170,12 @@ const onRowClick = rowData => {
   const state = rowData[3];
   const applicationNumber = rowData[0];
   const tenantId = rowData[4];
-  if(rowData[5] == "BPA_OC") {
-    const environment = process.env.NODE_ENV === "production" ? "employee" : "";
-    const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
-    switch (state) {
-      case "INITIATED":
-        window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
-        break;
-      default:
-        window.location.assign(`${origin}${environment}/oc-bpa/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
-        break;
-    }
-  } else {
-    let type = "HIGH";
-    if(rowData[5] == "BPA_LOW") {
-      type = "LOW"
-    }
-    switch (state) {
-      case "INITIATED":
-        window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;
-        break;
-      default:
-        window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;
-        break;
-    }
+  switch (state) {
+    case "INITIATED":
+      window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+      break;
+    default:
+      window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+      break;
   }
 };

@@ -4,7 +4,7 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 const header = getCommonHeader(
   {
     labelName: "My Applications",
-    labelKey: "BPA_MY_APPLICATIONS"
+    labelKey: "TL_MY_APPLICATIONS"
   },
   {
     classes: {
@@ -17,7 +17,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "my-applications",
   beforeInitScreen: (action, state, dispatch) => {
-    fetchData(action, state, dispatch, true, false);
+    fetchData(action, state, dispatch, true);
     return action;
   },
   components: {
@@ -35,7 +35,7 @@ const screenConfig = {
               {
                 label: "BPA_COMMON_APP_NO",
                 jsonPath: "applicationNumber"
-              }, 
+              },
               {
                 label: "TL_COMMON_TABLE_COL_OWN_NAME",
                 jsonPath: "ownername"

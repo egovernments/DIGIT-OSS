@@ -36,17 +36,12 @@ export const dropdown = {
       labelName: "Select City",
       labelKey: "EDCR_SCRUTINY_CITY_PLACEHOLDER"
     },
-    localePrefix: {
-      moduleName: "TENANT",
-      masterName: "TENANTS"
-    },
     sourceJsonPath: "applyScreenMdmsData.tenantData",
     labelsFromLocalisation: true,
     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     suggestions: [],
     fullwidth: true,
     required: true,
-    isClearable: true,
     inputLabelProps: {
       shrink: true
     }

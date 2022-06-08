@@ -76,11 +76,11 @@ class MapLocator extends Component {
       `${add.lat}, ${add.lng}`
     );
     this.props.prepareFinalObject(
-      "BPA.landInfo.address.geoLocation.latitude",
+      "BPA.address.geoLocation.latitude",
       add.lat
     );
     this.props.prepareFinalObject(
-      "BPA.landInfo.address.geoLocation.longitude",
+      "BPA.address.geoLocation.longitude",
       add.lng
     );
 
@@ -183,7 +183,7 @@ class MapLocator extends Component {
             children={
               <LabelContainer
                 labelName={"Close"}
-                labelKey={"BPA_MAP_CLOSE_LABEL"}
+                labelKey={"TL_MAP_CLOSE_LABEL"}
               />
             }
             style={{
@@ -202,7 +202,7 @@ class MapLocator extends Component {
             children={
               <LabelContainer
                 labelName={"Pick"}
-                labelKey={"BPA_MAP_PICK_LABEL"}
+                labelKey={"TL_MAP_PICK_LABEL"}
               />
             }
             style={{

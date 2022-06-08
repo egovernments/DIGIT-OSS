@@ -2,7 +2,7 @@ import {
   getCommonHeader,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { applicationSuccessFooter, DownloadAndPrint } from "./acknowledgementResource/applicationSuccessFooter";
+import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
 import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
 import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
@@ -10,82 +10,8 @@ import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFo
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import {
-  downloadApp,
-  getSearchResultsForSewerage,
-  getSearchResults,
-  findAndReplace,
-  prepareDocumentsUploadRedux,
-  prepareDocumentsUploadData,
-  prepareDocUploadRedux,
-  downloadAndPrintForNonApply,
-  serviceConst,
-  isModifyMode
-} from "../../../../ui-utils/commons";
-import { generateWSAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateWSAcknowledgement";
-import set from "lodash/set";
 import get from "lodash/get";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getMdmsData } from './apply';
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-let headerLabel = "WS_APPLICATION_NEW_CONNECTION_HEADER";
-const applicationNo = getQueryArg(window.location.href, "applicationNumber");
-if(isModifyMode()){
-  if(applicationNo.includes("WS")){
-  headerLabel = "WS_APPLICATION_MODIFY_CONNECTION_HEADER";
-  }else{
-  headerLabel = "SW_APPLICATION_MODIFY_CONNECTION_HEADER";
-  }
-}
-
-const headerrow = getCommonContainer({
-  header: getCommonHeader({
-    labelKey: headerLabel,
-  }),
-});
-
-const commonHeader = (state,
-  dispatch,
-  applicationNumber,
-  tenant) => {
-  return getCommonContainer({
-    headerDiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Container",
-      children: {
-        header1: {
-          gridDefination: {
-            xs: 12,
-            sm: 8
-          },
-          ...headerrow
-        },
-        helpSection: {
-          uiFramework: "custom-atoms",
-          componentPath: "Container",
-          props: {
-            color: "primary",
-            style: { justifyContent: "flex-end" } //, dsplay: "block"
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 4,
-            align: "right"
-          },
-          children: {
-            DownloadAndPrint: DownloadAndPrint(
-              state,
-              dispatch,
-              applicationNumber,
-              tenant
-            ),
-          }
-
-        }
-      }
-    },
-  })
-}
+import set from "lodash/set";
 
 const getAcknowledgementCard = (
   state,
@@ -96,15 +22,13 @@ const getAcknowledgementCard = (
   applicationNumberWater,
   applicationNumberSewerage,
   secondNumber,
-  tenant,
-  consumerNo
+  tenant
 ) => {
   if (purpose === "apply" && status === "success" && applicationNumberWater && applicationNumberSewerage) {
     return {
-      commonHeader: commonHeader(state,
-        dispatch,
-        applicationNumber,
-        tenant),
+      header: getCommonHeader({
+        labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER",
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -133,7 +57,7 @@ const getAcknowledgementCard = (
             },
             number: applicationNumberWater,
             tailTextOne: {
-              labelName: "Sewerage Application No.",
+              labelName: "Water Application No.",
               labelKey: "WS_ACKNO_SEW_APP_NO_LABEL"
             },
             newNumber: applicationNumberSewerage,
@@ -153,10 +77,9 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "apply" && status === "success") {
     return {
-      commonHeader: commonHeader(state,
-        dispatch,
-        applicationNumber,
-        tenant),
+      header: getCommonHeader({
+        labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER",
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -180,8 +103,8 @@ const getAcknowledgementCard = (
               labelKey: "WS_APPLICATION_SUCCESS_ACKO_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Application Number.",
-              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+              labelName: "Water Application No.",
+              labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -251,10 +174,21 @@ const getAcknowledgementCard = (
   } else if (purpose === "approve" && status === "success") {
     loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      commonHeader: commonHeader(state,
-        dispatch,
-        applicationNumber,
-        tenant),
+      header: getCommonContainer({
+        header: getCommonHeader({
+          labelName: `Trade License Application ${financialYearText}`,
+          labelKey: "WS_TRADE_APPLICATION",
+          dynamicArray: [financialYearText]
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-wns",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number: applicationNumber
+          }
+        }
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -268,45 +202,37 @@ const getAcknowledgementCard = (
             },
             body: {
               labelName:
-                "A notification regarding Approval connection has been sent to registered Mobile No.",
+                "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
               labelKey: "WS_APPROVAL_CHECKLIST_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Application Number.",
-              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+              labelName: "Trade License No.",
+              labelKey: "WS_HOME_SEARCH_RESULTS_WS_NO_LABEL"
             },
-            number: applicationNumber
+            number: secondNumber
           })
         }
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
+      approvalSuccessFooter
     };
   } else if (purpose === "sendback" && status === "success") {
     loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      commonHeader: commonHeader(state,
-        dispatch,
-        applicationNumber,
-        tenant),
-      // header: getCommonContainer({
-      //   header: getCommonHeader({
-      //     labelName: `Application for New Water and Sewerage Connection`,
-      //     labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER"
-      //   }),
-      //   applicationNumber: {
-      //     uiFramework: "custom-atoms-local",
-      //     moduleName: "egov-wns",
-      //     componentPath: "ApplicationNoContainer",
-      //     props: {
-      //       number: applicationNumber
-      //     }
-      //   }
-      // }),
+      header: getCommonContainer({
+        header: getCommonHeader({
+          labelName: `Trade License Application ${financialYearText}`,
+          labelKey: "WS_TRADE_APPLICATION",
+          dynamicArray: [financialYearText]
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-wns",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number: applicationNumber
+          }
+        }
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -318,32 +244,38 @@ const getAcknowledgementCard = (
               labelName: "Application is sent back Successfully",
               labelKey: "WS_SENDBACK_CHECKLIST_MESSAGE_HEAD"
             },
-            body: {
-              labelName:
-                "A notification regarding above application status has been sent to registered Mobile No.",
-              labelKey: "WS_SENDBACK_CHECKLIST_MESSAGE_SUB"
-            },
+            // body: {
+            //   labelName:
+            //     "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+            //   labelKey: "WS_SENDBACK_CHECKLIST_MESSAGE_SUB"
+            // },
             tailText: {
-              labelName: "Application Number.",
-              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+              labelName: "Trade License No.",
+              labelKey: "WS_HOME_SEARCH_RESULTS_WS_NO_LABEL"
             },
-            number: applicationNumber
+            number: secondNumber
           })
         }
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
+      approvalSuccessFooter
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
-      commonHeader: commonHeader(state,
-        dispatch,
-        applicationNumber,
-        tenant),
+      header: getCommonContainer({
+        header: getCommonHeader({
+          labelName: `Trade License Application ${financialYearText}`,
+          labelKey: "WS_TRADE_APPLICATION",
+          dynamicArray: [financialYearText]
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-wns",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number: applicationNumber
+          }
+        }
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -352,30 +284,25 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Application Rejected",
+              labelName: "Trade License Application Rejected",
               labelKey: "WS_APPROVAL_REJ_MESSAGE_HEAD"
             },
             body: {
               labelName:
-                "A notification regarding Application Rejection has been sent to registered Mobile No.",
+                "A notification regarding Trade License Rejection has been sent to trade owner at registered Mobile No.",
               labelKey: "WS_APPROVAL_REJ_MESSAGE_SUBHEAD"
             }
           })
         }
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
+      gotoHomeFooter
     };
   } else if (purpose === "application" && status === "cancelled") {
     return {
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
+          labelKey: "WS_TRADE_APPLICATION",
           dynamicArray: [financialYearText]
         }),
         applicationNumber: {
@@ -401,16 +328,17 @@ const getAcknowledgementCard = (
             body: {
               labelName:
                 "A notification regarding Trade License cancellation has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_TL_CANCELLED_MESSAGE_SUBHEAD"
+              labelKey: "WS_WS_CANCELLED_MESSAGE_SUBHEAD"
             },
             tailText: {
               labelName: "Trade License No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+              labelKey: "WS_HOME_SEARCH_RESULTS_WS_NO_LABEL"
             },
             number: secondNumber
           })
         }
       },
+      gotoHomeFooter
     };
   } else if (purpose === "pay" && status === "failure") {
     return {
@@ -418,7 +346,7 @@ const getAcknowledgementCard = (
         header: getCommonHeader({
           labelName: `Trade License Application ${financialYearText}`,
           dynamicArray: [financialYearText],
-          labelKey: "TL_TRADE_APPLICATION"
+          labelKey: "WS_TRADE_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -438,12 +366,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#E54D42",
             header: {
               labelName: "Payment has failed!",
-              labelKey: "TL_PAYMENT_FAILED"
+              labelKey: "WS_PAYMENT_FAILED"
             },
             body: {
               labelName:
                 "A notification regarding payment failure has been sent to the trade owner and applicant.",
-              labelKey: "TL_PAYMENT_NOTIFICATION"
+              labelKey: "WS_PAYMENT_NOTIFICATION"
             }
           })
         }
@@ -480,13 +408,15 @@ const getAcknowledgementCard = (
           })
         }
       },
+      gotoHomeFooter
     };
   } else if (purpose === "forward" && status === "success") {
     return {
-      commonHeader: commonHeader(state,
-        dispatch,
-        applicationNumber,
-        tenant),
+      header: getCommonHeader({
+        labelName: `Application for Trade License ${financialYearText}`,
+        labelKey: "WS_APPLICATION_TRADE_LICENSE",
+        dynamicArray: [financialYearText]
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -500,67 +430,18 @@ const getAcknowledgementCard = (
             },
             body: {
               labelName:
-                "A notification regarding above application status has been sent to registered Mobile No.",
-              labelKey: "WS_APPLICATION_FORWARD_SUCCESS_SUBHEAD"
+                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+              labelKey: "WS_APPLICATION_FORWARD_SUCCESS"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+              labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
         }
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
-    };
-  } else if (purpose === "activate" && status === "success") {
-
-    return {
-      commonHeader: commonHeader(state,
-        dispatch,
-        applicationNumber,
-        tenant,
-        consumerNo),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Connection Activated Successfully ",
-              labelKey: "WS_ACTIVATE_SUCCESS_MESSAGE_MAIN"
-            },
-            body: {
-              labelName:
-                "A notification regarding above application status has been sent to registered Mobile No.",
-              labelKey: "WS_CONNECTION_ACTIVATE_SUCCESS_SUBHEAD"
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
-            },
-            number: applicationNumber,
-            tailTextOne: {
-              labelName: "Consumer No",
-              labelKey: "WS_COMMON_CONSUMER_NO_LABEL"
-            },
-            newNumber: consumerNo,
-          })
-        }
-      },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
+      gotoHomeFooter
     };
   }
 };
@@ -569,112 +450,101 @@ export const downloadPrintContainer = (
   action,
   state,
   dispatch,
-  appStatus,
+  status,
   applicationNumber,
   tenantId
 ) => {
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
-  let wsEstimateDownloadObject = {
-    label: { labelKey: "WS_ESTIMATION_NOTICE" },
+  let tlCertificateDownloadObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      downloadApp(WaterConnection, 'estimateNotice',"download",dispatch);
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
   };
-  let wsEstimatePrintObject = {
-    label: { labelKey: "WS_ESTIMATION_NOTICE" },
+  let tlCertificatePrintObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      downloadApp(WaterConnection, 'estimateNotice', 'print',dispatch);
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses, 'print');
     },
     leftIcon: "book"
   };
-  let sanctionDownloadObject = {
-    label: { labelKey: "WS_SANCTION_LETTER" },
+  let receiptDownloadObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "To Citizen" : "Department Use";
-      WaterConnection[0].appUserType = appUserType;
-      WaterConnection[0].commissionerName = "S.Ravindra Babu";
-      downloadApp(WaterConnection, 'sanctionLetter',"download",dispatch);
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString);
     },
     leftIcon: "receipt"
   };
-  let sanctionPrintObject = {
-    label: { labelKey: "WS_SANCTION_LETTER" },
+  let receiptPrintObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "Department Use" : "To Citizen";
-      WaterConnection[0].appUserType = appUserType;
-      WaterConnection[0].commissionerName = "S.Ravindra Babu";
-      downloadApp(WaterConnection, 'sanctionLetter', 'print',dispatch);
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString, "print");
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelKey: "WS_APPLICATION" },
+    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      let conneType=WaterConnection[0].connectionType;
-      if(applicationNumber.includes("WS")){
-        let connType=conneType===null?"Metered":conneType;
-        generateWSAcknowledgement(get(
-          state,
-          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"WATER",connType);
-      }else{
-        generateWSAcknowledgement(get(
-          state,
-          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"SEWERAGE",conneType);
-      }
+      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents = LicensesTemp[0].reviewDocData;
+      set(Licenses[0], "additionalDetails.documents", documents)
+      downloadAcknowledgementForm(Licenses);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "WS_APPLICATION" },
+    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      let conneType=WaterConnection[0].connectionType;
-      if(applicationNumber.includes("WS")){
-        let connType=conneType===null?"Metered":conneType;
-        generateWSAcknowledgement(get(
-          state,
-          "screenConfiguration.preparedFinalObject", {}), "print","WATER",connType);
-      }else{
-        generateWSAcknowledgement(get(
-          state,
-          "screenConfiguration.preparedFinalObject", {}), "print","SEWERAGE",conneType);
-      }
+      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents = LicensesTemp[0].reviewDocData;
+      set(Licenses[0], "additionalDetails.documents", documents)
+      downloadAcknowledgementForm(Licenses, 'print');
     },
-    //   downloadApp(WaterConnection, 'application', 'print');
-    // },
     leftIcon: "assignment"
   };
-  switch (appStatus) {
-    case "PENDING_FOR_DOCUMENT_VERIFICATION":
-    case "PENDING_FOR_CITIZEN_ACTION":
-    case "PENDING_FOR_FIELD_INSPECTION":
+  switch (status) {
+    case "APPROVED":
+      downloadMenu = [
+        tlCertificateDownloadObject,
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        tlCertificatePrintObject,
+        receiptPrintObject,
+        applicationPrintObject
+      ];
+      break;
+    case "APPLIED":
+    case "CITIZENACTIONREQUIRED":
+    case "FIELDINSPECTION":
+    case "PENDINGAPPROVAL":
+    case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
       break;
-    case "PENDING_APPROVAL_FOR_CONNECTION":
-    case "PENDING_FOR_PAYMENT":
-      downloadMenu = [applicationDownloadObject, wsEstimateDownloadObject];
-      printMenu = [applicationPrintObject, wsEstimatePrintObject];
-      break;
-    case "PENDING_FOR_CONNECTION_ACTIVATION":
-    case "CONNECTION_ACTIVATED":
-      downloadMenu = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject];
-      printMenu = [sanctionPrintObject, wsEstimatePrintObject, applicationPrintObject];
+    case "CANCELLED":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
       break;
     case "REJECTED":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
       break;
-    default: downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+    default:
       break;
   }
   /** END */
@@ -693,10 +563,10 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "DOWNLOAD", labelKey: "WS_COMMON_BUTTON_DOWNLOAD" },
+              label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", maxWidth: "95%", marginRight: "-15px" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
@@ -707,10 +577,10 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "PRINT", labelKey: "WS_COMMON_BUTTON_PRINT" },
+              label: { labelName: "PRINT", labelKey: "TL_PRINT" },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", maxWidth: "85%" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
               menu: printMenu
             }
           }
@@ -725,52 +595,6 @@ export const downloadPrintContainer = (
   }
 };
 
-const fetchData = async (dispatch) => {
-  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-  const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
-  const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
-  const tenantId = getQueryArg(window.location.href, "tenantId");
-  if (applicationNumberSewerage && applicationNumberWater) {
-    await getWaterData(dispatch, applicationNumberWater, tenantId);
-    await getSewerageData(dispatch, applicationNumberSewerage, tenantId);
-  } else if (applicationNumber) {
-    if (applicationNumber.includes("WS")) {
-      await getWaterData(dispatch, applicationNumber, tenantId);
-    } else if (applicationNumber.includes("SW")) {
-      await getSewerageData(dispatch, applicationNumber, tenantId);
-    }
-  }
-}
-
-const getWaterData = async (dispatch, applicationNumber, tenantId) => {
-  let waterResponse = [];
-  let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
-  try { waterResponse = await getSearchResults(queryObject); } catch (error) { console.log(error); waterResponse = [] };
-  if (waterResponse && waterResponse.WaterConnection !== undefined && waterResponse.WaterConnection.length > 0) {
-    waterResponse.WaterConnection[0].service = serviceConst.WATER;
-    dispatch(prepareFinalObject("WaterConnection", findAndReplace(waterResponse.WaterConnection, "NA", null)));
-  } else { dispatch(prepareFinalObject("WaterConnection", [])); }
-}
-
-const getSewerageData = async (dispatch, applicationNumber, tenantId) => {
-  let sewerResponse = [];
-  let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
-  try { sewerResponse = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.log(error); sewerResponse = [] };
-  if (sewerResponse && sewerResponse.SewerageConnections !== undefined && sewerResponse.SewerageConnections.length > 0) {
-    sewerResponse.SewerageConnections[0].service = serviceConst.SEWERAGE;
-    dispatch(prepareFinalObject("SewerageConnection", findAndReplace(sewerResponse.SewerageConnections, "NA", null)));
-  } else { dispatch(prepareFinalObject("SewerageConnection", [])); }
-}
-
-const pageReset = (dispatch) => {
-  dispatch(prepareFinalObject("WaterConnection", []));
-  dispatch(prepareFinalObject("SewerageConnection", []));
-  dispatch(prepareFinalObject("applyScreen", {}));
-  dispatch(prepareFinalObject("searchScreen", {}));
-  dispatch(prepareFinalObject("waterSubSourceForSelectedWaterSource", {}));
-  dispatch(prepareFinalObject("UploadedDocs", []));
-}
-
 const screenConfig = {
   uiFramework: "material-ui",
   name: "acknowledgement",
@@ -784,50 +608,29 @@ const screenConfig = {
     }
   },
   beforeInitScreen: (action, state, dispatch) => {
-    pageReset(dispatch);
-    fetchData(dispatch)
-    .then(() => {
-        const purpose = getQueryArg(window.location.href, "purpose");
-        const status = getQueryArg(window.location.href, "status");
-        // const service = getQueryArg(window.location.href, "service");
-        const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-        const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
-        const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
-        const secondNumber = getQueryArg(window.location.href, "secondNumber");
-        const tenant = getQueryArg(window.location.href, "tenantId");
-        let consumerNo = ""
-        if (applicationNumber && applicationNumber.includes("WS")) {
-          consumerNo = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].connectionNo");
-        } else if (applicationNumber && applicationNumber.includes("SW")) {
-          consumerNo = get(state,"screenConfiguration.preparedFinalObject.SewerageConnection[0].connectionNo");
-        }
-        if (applicationNumberSewerage && applicationNumberWater) {
-          const cardOne = getAcknowledgementCard(state, dispatch, purpose, status, applicationNumber, applicationNumberWater, applicationNumberSewerage, secondNumber, tenant);
-          set(action, "screenConfig.components.div.children", cardOne);
-        } else {
-          const data = getAcknowledgementCard(
-            state,
-            dispatch,
-            purpose,
-            status,
-            applicationNumber,
-            applicationNumberWater, 
-            applicationNumberSewerage,
-            secondNumber,
-            // financialYear,
-            tenant,
-            consumerNo
-          );
-          set(action, "screenConfig.components.div.children", data);
-        }
-      })
-      .then(() => getMdmsData(dispatch))
-      .then(() => prepareDocumentsUploadData(state, dispatch))
-      .then(() => prepareDocUploadRedux(state, dispatch))
-      .then(() => prepareDocumentsUploadRedux(state, dispatch))
-      .then(() => downloadAndPrintForNonApply(state, dispatch))
-      
-      .catch(error => console.log(error))    
+    const purpose = getQueryArg(window.location.href, "purpose");
+    const status = getQueryArg(window.location.href, "status");
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
+    const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
+    const secondNumber = getQueryArg(window.location.href, "secondNumber");
+    const tenant = getQueryArg(window.location.href, "tenantId");
+    if (applicationNumberSewerage && applicationNumberWater) {
+      const cardOne = getAcknowledgementCard(state, dispatch, purpose, status, applicationNumber, applicationNumberWater, applicationNumberSewerage, secondNumber, tenant);
+      set(action, "screenConfig.components.div.children", cardOne);
+    } else {
+      const data = getAcknowledgementCard(
+        state,
+        dispatch,
+        purpose,
+        status,
+        applicationNumber,
+        secondNumber,
+        // financialYear,
+        tenant
+      );
+      set(action, "screenConfig.components.div.children", data);
+    }
     return action;
   }
 };

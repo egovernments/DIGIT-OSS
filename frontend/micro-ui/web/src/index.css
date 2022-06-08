@@ -1,0 +1,35 @@
+.employee .topbar img.state{
+    height: auto;
+    max-height: 35px;
+}
+.citizen-home-footer {
+  position: initial !important;
+}
+
+.CitizenHomeCard .links
+{
+  display: block;
+}
+
+@media (min-width: 780px){
+  .result{
+    overflow-x: scroll;
+    width: calc(100vw - 424px);
+  }
+  .download_tl{
+    position: absolute;
+    top: -56px;
+    right: 0px;
+  }
+}
+
+
+@media (min-width: 100px) and (max-width: 480px){
+  .search-form-wrapper .form-field{
+    width: calc(100% - 16px);
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+

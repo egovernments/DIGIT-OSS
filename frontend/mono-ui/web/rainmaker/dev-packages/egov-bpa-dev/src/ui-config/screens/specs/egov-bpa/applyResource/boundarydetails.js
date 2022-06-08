@@ -74,7 +74,12 @@ export const detailsofplot = getCommonCard({
                     labelName: "Enter Holding No.",
                     labelKey: "BPA_BOUNDARY_HOLDING_NO_PLACEHOLDER"
                 },
-                jsonPath: "BPA.additionalDetails.holdingNo",
+                props: {
+                    className: "textfield-enterable-selection",
+                  },
+                // required: true,
+                // // pattern: getPattern("Name") || null,
+                jsonPath: "BPA.holdingNo",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -111,16 +116,16 @@ export const detailsofplot = getCommonCard({
                 visible : false,
                 label: {
                   labelName: "City",
-                  labelKey: "BPA_CITY_LABEL"
+                  labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
                 },
                 localePrefix: {
                   moduleName: "TENANT",
                   masterName: "TENANTS"
                 },
                 optionLabel: "name",
-                placeholder: { labelName: "Select City", labelKey: "BPA_SELECT_CITY" },
+                placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
                 sourceJsonPath: "citiesByModule.TL.tenants",
-                jsonPath: "BPA.landInfo.address.city",
+                jsonPath: "BPA.address.city",
                 required: true,
                 props: {
                   required: true,
@@ -147,6 +152,7 @@ export const detailsofplot = getCommonCard({
                 },
                 jsonPath: "BPA.govtOrQuasi",
                 props: {
+                    className: "textfield-enterable-selection",
                     data: [
                         {
                             value: "Governments",
@@ -182,10 +188,11 @@ export const detailsofplot = getCommonCard({
                     labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_PLACEHOLDER"
                 },
                 props: {
+                    className: "textfield-enterable-selection",
                     multiline: true,
                     rows: "4"
                   },
-                jsonPath: "BPA.additionalDetails.registrationDetails",
+                jsonPath: "BPA.registrationDetails",
                 gridDefination: {
                     xs: 12,
                     sm: 12,

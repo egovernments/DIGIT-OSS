@@ -11,6 +11,7 @@ import { getBpaMapLocator } from "../../utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { showHideBpaMapPopup, geBpatDetailsFromProperty } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
@@ -32,16 +33,16 @@ export const bpaLocationDetails = getCommonCard(
         ...getSelectField({
           label: {
             labelName: "City",
-            labelKey: "BPA_CITY_LABEL"
+            labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
           },
           localePrefix: {
             moduleName: "TENANT",
             masterName: "TENANTS"
           },
           optionLabel: "name",
-          placeholder: { labelName: "Select City", labelKey: "BPA_SELECT_CITY" },
+          placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
           sourceJsonPath: "citiesByModule.TL.tenants",
-          jsonPath: "BPA.landInfo.address.city",
+          jsonPath: "BPA.address.city",
           required: true,
           props: {
             required: true,
@@ -52,7 +53,7 @@ export const bpaLocationDetails = getCommonCard(
         beforeFieldChange: async (action, state, dispatch) => {
           dispatch(
             prepareFinalObject(
-              "BPA.landInfo.address.city",
+              "BPA.address.city",
               action.value
             )
           );
@@ -109,62 +110,98 @@ export const bpaLocationDetails = getCommonCard(
                 mohallaLocalePrefix
               )
             );
+            dispatch(
+              fetchLocalizationLabel(getLocale(), action.value, action.value)
+            );
           } catch (e) {
             console.log(e);
           }
         }
       },
+      // tradeLocPropertyID: getTextField({
+      //   label: {
+      //     labelName: "Property ID",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Property ID",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_PLACEHOLDER"
+      //   },
+      //   props: {
+      //     className: "textfield-enterable-selection",
+      //     hide: true
+      //   },
+      //   iconObj: {
+      //     iconName: "search",
+      //     position: "end",
+      //     color: "#FE7A51",
+      //     onClickDefination: {
+      //       action: "condition",
+      //       callBack: (state, dispatch) => {
+      //         geBpatDetailsFromProperty(state, dispatch);
+      //       }
+      //     }
+      //   },
+      //   title: {
+      //     value:
+      //       "If you have already assessed your property, then please search your property by your PAID",
+      //     key: "TL_PROPERTY_ID_TOOLTIP_MESSAGE"
+      //   },
+      //   infoIcon: "info_circle",
+      //   jsonPath: "BPA.propertyId"
+      // }),
+
       tradeLocDoorHouseNo: getTextField({
         visible : false,
         label: {
           labelName: "Door/House No.",
-          labelKey: "BPA_DETAILS_DOOR_NO_LABEL"
+          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
         },
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "BPA_DETAILS_DOOR_NO_PLACEHOLDER"
+          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
-        jsonPath: "BPA.landInfo.address.doorNo"
+        jsonPath: "BPA.address.doorNo"
       }),
       tradeLocBuilidingName: getTextField({
         label: {
           labelName: "Building/Colony Name",
-          labelKey: "BPA_DETAILS_BLDG_NAME_LABEL"
+          labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
         },
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Building/Colony Name",
-          labelKey: "BPA_DETAILS_BLDG_NAME_PLACEHOLDER"
+          labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_PLACEHOLDER"
         },
         pattern: getPattern("BuildingStreet"),
-        jsonPath: "BPA.landInfo.address.buildingName"
+        jsonPath: "BPA.address.buildingName"
       }),
       tradeLocStreetName: getTextField({
         label: {
           labelName: "Street Name",
-          labelKey: "BPA_DETAILS_SRT_NAME_LABEL"
+          labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
         },
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Street Name",
-          labelKey: "BPA_DETAILS_SRT_NAME_PLACEHOLDER"
+          labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
         },
         pattern: getPattern("BuildingStreet"),
-        jsonPath: "BPA.landInfo.address.street"
+        jsonPath: "BPA.address.street"
       }),
       tradeLocMohalla: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-tradelicence",
         componentPath: "AutosuggestContainer",
-        jsonPath: "BPA.landInfo.address.locality.code",
+        jsonPath: "BPA.address.locality.code",
         required: true,
         props: {
           style: {
@@ -173,19 +210,18 @@ export const bpaLocationDetails = getCommonCard(
           },
           label: {
             labelName: "Mohalla",
-            labelKey: "BPA_DETAILS_MOHALLA_LABEL"
+            labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
           },
           placeholder: {
             labelName: "Select Mohalla",
-            labelKey: "BPA_DETAILS_MOHALLA_PLACEHOLDER"
+            labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_PLACEHOLDER"
           },
-          jsonPath: "BPA.landInfo.address.locality.code",
+          jsonPath: "BPA.address.locality.code",
           sourceJsonPath: "mohalla.tenant.localities",
           labelsFromLocalisation: true,
           suggestions: [],
           fullwidth: true,
           required: true,
-          isClearable: true,
           inputLabelProps: {
             shrink: true
           }
@@ -198,29 +234,29 @@ export const bpaLocationDetails = getCommonCard(
       tradeLocPincode: getTextField({
         label: {
           labelName: "Pincode",
-          labelKey: "BPA_DETAILS_PIN_LABEL"
+          labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
         },
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error textfield-enterable-selection"
         },
         placeholder: {
           labelName: "Enter Pincode",
-          labelKey: "BPA_DETAILS_PIN_PLACEHOLDER"
+          labelKey: "TL_NEW_TRADE_DETAILS_PIN_PLACEHOLDER"
         },
         pattern: getPattern("Pincode"),
-        jsonPath: "BPA.landInfo.address.pincode"
+        jsonPath: "BPA.address.pincode"
       }),
       tradeLocGISCoord: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
         props: {
-          className: "gis-div-css",
+          className: "gis-div-css textfield-enterable-selection",
           style: {
             width: "100%",
             cursor: "pointer"
           }
         },
-        jsonPath: "BPA.landInfo.address.geoLocation.latitude",
+        jsonPath: "BPA.address.geoLocation.latitude",
         onClickDefination: {
           action: "condition",
           callBack: showHideBpaMapPopup
@@ -234,13 +270,13 @@ export const bpaLocationDetails = getCommonCard(
             ...getTextField({
               label: {
                 labelName: "GIS Coordinates",
-                labelKey: "BPA_DETAILS_GIS_CORD_LABEL"
+                labelKey: "TL_NEW_TRADE_DETAILS_GIS_CORD_LABEL"
               },
               placeholder: {
                 labelName: "Select your trade location on map",
-                labelKey: "BPA_DETAILS_GIS_CORD_PLACEHOLDER"
+                labelKey: "TL_NEW_TRADE_DETAILS_GIS_CORD_PLACEHOLDER"
               },
-              jsonPath: "BPA.landInfo.address.geoLocation.latitude",
+              jsonPath: "BPA.address.geoLocation.latitude",
               iconObj: {
                 iconName: "gps_fixed",
                 position: "end"
@@ -258,7 +294,21 @@ export const bpaLocationDetails = getCommonCard(
           }
         }
       },
-
+      // tradeLocElectricity: getTextField({
+      //   label: {
+      //     labelName: "Electricity Connection No.",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Electricity Connection No. of Trade Loaction",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_PLACEHOLDER"
+      //   },
+      //   props: {
+      //     className: "textfield-enterable-selection"
+      //   },
+      //   jsonPath:
+      //     "BPA.additionalDetail.electricityConnectionNo"
+      // })
     }),
     mapsDialog: {
       componentPath: "Dialog",

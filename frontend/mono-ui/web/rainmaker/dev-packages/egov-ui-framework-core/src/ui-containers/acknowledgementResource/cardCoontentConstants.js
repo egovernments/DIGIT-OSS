@@ -55,16 +55,6 @@ export const construtCardCongtentObj = (moduleName, purpose, status) => {
 					`A notification regarding ${moduleName} Rejection has been sent to building owner at registered Mobile No.`,
 				labelKey: getTransformedLocale(`${moduleName}_APPROVAL_REJ_MESSAGE_SUBHEAD`)
 			}
-		},"application-rejected": {
-			header: {
-				labelName: `${moduleName} Application Rejected`,
-				labelKey: getTransformedLocale(`${moduleName}_APPROVAL_REJ_MESSAGE_HEAD`)
-			},
-			body: {
-				labelName:
-					`A notification regarding ${moduleName} Rejection has been sent to building owner at registered Mobile No.`,
-				labelKey: getTransformedLocale(`${moduleName}_APPROVAL_REJ_MESSAGE_SUBHEAD`)
-			}
 		},
 		"application-cancelled": {
 			header: {
@@ -142,20 +132,6 @@ export const construtCardCongtentObj = (moduleName, purpose, status) => {
 			body: {
 				labelName: "Application has been referred successfully",
 				labelKey: getTransformedLocale(`${moduleName}_APPLICATION_REFER_SUCCESS`)
-			},
-			tailText: {
-				labelName: "Application No.",
-				labelKey: getTransformedLocale(`${moduleName}_HOME_SEARCH_RESULTS_APP_NO_LABEL`)
-			},
-		},
-		"sendbacktocitizen-success": {
-			header: {
-				labelName: "Application sent back Successfully",
-				labelKey: getTransformedLocale(`${moduleName}_SENDBACKTOCITIZEN_SUCCESS_MESSAGE_MAIN`)
-			},
-			body: {
-				labelName: "Application has been sent back successfully",
-				labelKey: getTransformedLocale(`${moduleName}_APPLICATION_SENDBACKTOCITIZEN_SUCCESS`)
 			},
 			tailText: {
 				labelName: "Application No.",

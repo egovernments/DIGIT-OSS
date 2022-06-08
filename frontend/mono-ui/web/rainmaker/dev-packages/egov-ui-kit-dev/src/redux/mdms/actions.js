@@ -81,8 +81,6 @@ const transformRawTypeToFormat = (rawType) => {
       return "checkbox";
     case "singleValueList":
       return "singleValueList";
-    case "AutocompleteDropdown":
-      return "AutocompleteDropdown";
     default:
       return "textfield";
   }
@@ -146,7 +144,7 @@ const transform = (rawSpecs, moduleName, tenantId) => {
             disabled: current.isDisabled,
             //To make API call and initialise field, if Reqd.
             dataFetchConfig:
-              (current.type === "singleValueList" || current.type === "AutocompleteDropdown")
+              current.type === "singleValueList"
                 ? {
                     url: MDMS.GET.URL,
                     action: MDMS.GET.ACTION,
@@ -215,7 +213,7 @@ export const fetchSpecs = (queryObject, moduleName, masterName, tenantId, reques
 export const fetchDocuments = (tenantId) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: "uk",
       moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }],
     },
   };

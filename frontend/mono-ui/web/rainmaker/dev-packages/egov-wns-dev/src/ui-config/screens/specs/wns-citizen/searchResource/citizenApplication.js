@@ -55,40 +55,31 @@ const resetFields = (state, dispatch) => {
 };
 export const citizenApplication = getCommonCard({
     subHeader: getCommonTitle({
-        labelKey: "WS_SEARCH_CONNECTION_SUB_HEADER"
+        labelKey: "WS_SEARCH_CONNECTION_HEADER"
     }),
     subParagraph: getCommonParagraph({
-        labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
+        labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
     }),
     cityPropertyAndMobNumContainer: getCommonContainer({
-        city: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-wns",
-            componentPath: "AutosuggestContainer",
-            jsonPath: "searchScreen.tenantId",
-            props: {
-              className: "hr-generic-selectfield autocomplete-dropdown",
-              label: {
-                labelKey: "WS_PROP_DETAIL_CITY",
-                labelName: "City"
-              },
-              placeholder: {
-                labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER",
-                labelName: "Select City"
-              },
-              localePrefix: {
+        city: getSelectField({
+            label: {
+                labelKey: "WS_PROP_DETAIL_CITY"
+            },
+            placeholder: {
+                labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
+            },
+            labelPrefix: {
                 moduleName: "TENANT",
                 masterName: "TENANTS"
-              },
-              required: true,
-              isClearable: true,
-              labelsFromLocalisation: true,
-              jsonPath: "searchScreen.tenantId",
-              sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
             },
+            sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+            jsonPath: "searchScreen.tenantId",//db sake
             required: true,
-            gridDefination: { xs: 12, sm: 4 },
-          },
+            gridDefination: {
+                xs: 12,
+                sm: 4
+            },
+        }),
         propertyid: getTextField({
             label: {
                 labelKey: "WS_PROPERTY_ID_LABEL"
@@ -156,22 +147,39 @@ export const citizenApplication = getCommonCard({
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
             jsonPath: "searchScreen.oldConnectionNumber"
-        }),        
+        }),
+        //   applicationNo: getTextField({
+        //     label: {
+        //       labelKey: "WS_MYCONNECTIONS_APPLICATION_NO"
+        //     },
+        //     placeholder: {
+        //       labelKey: "WS_SEARCH_CONNECTIONS_APPLICATION_NO_PLACEHOLDER"
+        //     },
+        //     gridDefination: {
+        //       xs: 12,
+        //       sm: 4
+        //     },
+        //     required: false,
+        //     pattern: /^[a-zA-Z0-9-]*$/i,
+        //     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        //     jsonPath: "searchScreen.fireNOCNumber"
+        //   }),
     }),
     button: getCommonContainer({
         buttonContainer: getCommonContainer({
             resetButton: {
                 componentPath: "Button",
                 gridDefination: {
-                    xs: 12,
+                    xs: 6,
                     sm: 6
+                    // align: "center"
                 },
                 props: {
                     variant: "outlined",
                     style: {
                         color: "rgba(0, 0, 0, 0.6000000238418579)",
                         borderColor: "rgba(0, 0, 0, 0.6000000238418579)",
-                        width: "220px",
+                        width: "70%",
                         height: "48px",
                         margin: "8px",
                         float: "right"
@@ -190,8 +198,9 @@ export const citizenApplication = getCommonCard({
             searchButton: {
                 componentPath: "Button",
                 gridDefination: {
-                    xs: 12,
+                    xs: 6,
                     sm: 6,
+                    // align: "center"
                 },
                 props: {
                     variant: "contained",
@@ -200,7 +209,7 @@ export const citizenApplication = getCommonCard({
                         margin: "8px",
                         backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
                         borderRadius: "2px",
-                        width: "220px",
+                        width: "70%",
                         height: "48px"
                     }
                 },

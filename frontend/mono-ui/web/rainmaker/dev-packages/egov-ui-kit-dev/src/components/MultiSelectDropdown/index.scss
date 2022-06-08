@@ -11,10 +11,11 @@
 //   }
 // }
   div#menu- > { div[role="document"]{
-     
+
     overflow-y: scroll;
     max-height: 40% !important;
-    
+    width: 200px !important;
+
     ul{
       li{
         white-space: normal !important;

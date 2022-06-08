@@ -15,7 +15,7 @@ class App extends React.Component {
     if (nextRoute && currentRoute !== nextRoute) {
       history.push(nextRoute);
       setRoute("");
-      // window.parent.postMessage(`/hrms${nextRoute}`, "*");
+      window.parent.postMessage(`/hrms${nextRoute}`, "*");
     }
   }
 

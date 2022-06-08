@@ -12,17 +12,11 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
+      getTextToLocalMapping("Application No"),
+      getTextToLocalMapping("Applicant Name"),
+      getTextToLocalMapping("Licensee Type"),
       {
-        name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
-      },
-      {
-        name: "Applicant Name", labelKey: "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"
-      },
-      {
-        name: "Licensee Type", labelKey: "BPA_COMMON_TABLE_COL_LICENSEE_TYPE"
-      },
-      {
-        name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL",
+        name: getTextToLocalMapping("Status"),
         options: {
           filter: false,
           customBodyRender: value => (
@@ -36,19 +30,18 @@ export const searchResults = {
           )
         }
       },
+      getTextToLocalMapping("Owner Name"),
+
       {
-        name: "Assigned To", labelKey: "BPA_COMMON_TABLE_COL_ASSIGN_TO"
-      },
-      {
-        name: "Tenant Id",
-        labelKey: "TENANT_ID",
+        name: "tenantId",
         options: {
           display: false
         }
       }
     ],
-    title: { labelKey: "BPA_HOME_SEARCH_RESULTS_HEADING", labelName: "Search Results for Trade License Applications"},
-    rows: "",
+    title: getTextToLocalMapping(
+      "Search Results for Trade License Applications"
+    ),
     options: {
       filter: false,
       download: false,

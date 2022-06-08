@@ -69,35 +69,6 @@ const MenuListCompositionForBpa = Loadable({
   loading: () => <Loading />
 });
 
-const PermitListCondition = Loadable({
-  loader: () => import("./PermitListCondition"),
-  loading: () => <Loading />
-});
-
-const NoteAtom = Loadable({
-  loader: () => import("./NoteAtom"),
-  loading: () => <Loading />
-});
-const UploadedDocument = Loadable({
-  loader: () => import("./UploadedDocument"),
-  loading: () => <Loading />
-});
-
-const ocPermitNumber = Loadable({
-  loader: () => import("./ocPermitNumber"),
-  loading: () => <Loading />
-});
-
-const LinkAtom = Loadable({
-  loader: () => import("./LinkAtom"),
-  loading: () => <Loading />
-});
-
-const NocNumber = Loadable({
-  loader: () => import("./NocNumber"),
-  loading: () => <Loading />
-});
-
 export {
   TestAtoms,
   AutoSuggest,
@@ -111,11 +82,5 @@ export {
   MenuButton,
   TradeLicenseIcon,
   PermitNumber,
-  MenuListCompositionForBpa,
-  PermitListCondition,
-  NoteAtom,
-  UploadedDocument,
-  ocPermitNumber,
-  LinkAtom,
-  NocNumber
+  MenuListCompositionForBpa
 };

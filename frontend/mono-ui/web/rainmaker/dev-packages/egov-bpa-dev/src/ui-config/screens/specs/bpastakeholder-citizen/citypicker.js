@@ -8,7 +8,7 @@ import { showCityPicker, applyForm } from "../utils";
 export const cityPicker = getCommonContainer({
   header: getCommonHeader({
     labelName: "Pick your city.",
-    labelKey: "BPA_PICK_YOUR_CITY_CITIZEN"
+    labelKey: "TL_PICK_YOUR_CITY_CITIZEN"
   }),
   cityPicker: getCommonContainer({
     cityDropdown: {
@@ -33,16 +33,15 @@ export const cityPicker = getCommonContainer({
         className: "citizen-city-picker",
         label: {
           labelName: "City",
-          labelKey: "BPA_CITY_LABEL"
+          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
         },
-        placeholder: { labelName: "Select City", labelKey: "BPA_SELECT_CITY" },
+        placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
         jsonPath: "citiesByModule.citizenTenantId",
         sourceJsonPath:
           "applyScreenMdmsData.common-masters.citiesByModule.TL.tenants",
         labelsFromLocalisation: true,
         fullwidth: true,
         required: true,
-        isClearable: true,
         inputLabelProps: {
           shrink: true
         }
@@ -67,7 +66,7 @@ export const cityPicker = getCommonContainer({
           children: {
             previousButtonLabel: getLabel({
               labelName: "SELECT",
-              labelKey: "BPA_CITIZEN_SELECT_BUTTON"
+              labelKey: "TL_CITIZEN_SELECT"
             })
           },
           onClickDefination: {
@@ -90,7 +89,7 @@ export const cityPicker = getCommonContainer({
           children: {
             previousButtonLabel: getLabel({
               labelName: "CANCEL",
-              labelKey: "BPA_CITIZEN_CANCEL_BUTTON"
+              labelKey: "TL_ADD_HOC_CHARGES_POPUP_BUTTON_CANCEL"
             })
           },
           onClickDefination: {

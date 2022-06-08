@@ -1,13 +1,19 @@
 import {
-  getCommonCard, getCommonContainer, getCommonHeader,
-  getDateField, getPattern, getSelectField, getTextField, getTimeField
+  getCommonCard,
+  getTextField,
+  getCommonHeader,
+  getDateField,
+  getSelectField,
+  getCommonContainer,
+  getPattern,
+  getTimeField,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
-import { footer, getDeleteButton, getMapLocator, getMdmsData, getSingleMessage, showHideMapPopup } from "../utils";
+import { footer, getSingleMessage, getMdmsData, getMapLocator, showHideMapPopup, getDeleteButton } from "../utils";
 
 const header = getCommonHeader({
   labelName: getQueryArg(window.location.href, "uuid") ? "Edit Event" : "Add New Event",
@@ -61,7 +67,7 @@ export const createForm = getCommonCard({
         labelKey: "EVENTS_NAME_PLACEHOLDER",
       },
       required: true,
-      pattern: getPattern("Name"),
+      pattern: getPattern("eventName"),
       jsonPath: "events[0].name",
       gridDefination: {
         xs: 12,
@@ -123,7 +129,7 @@ export const createForm = getCommonCard({
         labelName: "Description (Max Char Limit : 500)",
         labelKey: "EVENTS_DESCRIPTION_LIMIT_PLACEHOLDER",
       },
-      pattern: getPattern("Address"),
+      pattern: getPattern("eventDescription"),
       required: true,
       jsonPath: "events[0].description",
       props: {
@@ -171,8 +177,8 @@ export const createForm = getCommonCard({
           //   min: getTodaysDateInYMD(),
           //   max: getFinancialYearDates("yyyy-mm-dd").endDate,
           // },
-          // iconObj: { position: "end", iconName: "calendar_today" },
-          // style: { marginBottom: 10 },
+          iconObj: { position: "end", iconName: "calendar_today" },
+          style: { marginBottom: 10 },
         },
       }),
     },
@@ -196,9 +202,9 @@ export const createForm = getCommonCard({
           //   min: getTodaysDateInYMD(),
           //   max: getFinancialYearDates("yyyy-mm-dd").endDate,
           // },
-          // iconObj: { position: "end", iconName: " access_time" },
+          iconObj: { position: "end", iconName: " access_time" },
           defaultValue: "00:00",
-          style: { paddingRight: 80 },
+          style: { marginBottom: 10, paddingRight: 80 },
         },
       }),
     },
@@ -229,8 +235,8 @@ export const createForm = getCommonCard({
           //     min: getNextMonthDateInYMD(),
           //     max: getFinancialYearDates("yyyy-mm-dd").endDate,
           //   },
-          // iconObj: { position: "end", iconName: "calendar_today" },
-          // style: { marginBottom: 10 },
+          iconObj: { position: "end", iconName: "calendar_today" },
+          style: { marginBottom: 10 },
         },
       }),
     },
@@ -254,8 +260,8 @@ export const createForm = getCommonCard({
           //   max: getFinancialYearDates("yyyy-mm-dd").endDate,
           // },
           defaultValue: "00:00",
-          // iconObj: { position: "end", iconName: " access_time" },
-          style: { paddingRight: 80 },
+          iconObj: { position: "end", iconName: " access_time" },
+          style: { marginBottom: 10, paddingRight: 80 },
         },
       }),
     },
@@ -430,7 +436,6 @@ const screenConfig = {
       "components.div.children.createCard.children.createForm.children.cardContent.children.createContainer.children.ulb.props",
       props
     );
-    dispatch(handleField("search", "components.div.children.searchResults", "visible", false));
     dispatch(prepareFinalObject("events[0].tenantId", tenantId));
     if (uuid) {
       getSingleMessage(state, dispatch, messageTenant, uuid);

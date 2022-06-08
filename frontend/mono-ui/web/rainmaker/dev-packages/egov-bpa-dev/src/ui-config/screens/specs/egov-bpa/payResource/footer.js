@@ -11,7 +11,7 @@ import { convertDateToEpoch, getBill, validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const callPGService = async (state, dispatch) => {
- 
+
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const applicationNumber = getQueryArg(
     window.location.href,
@@ -156,7 +156,7 @@ const updatePayAction = async (
         key: "tenantId",
         value: tenantId
       },
-      { key: "applicationNo", value: applicationNo }
+      { key: "applicationNos", value: applicationNo }
     ]);
     set(response, "BPA.action", "PAY");
     response = await httpRequest(
@@ -375,7 +375,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "BPA_COMMON_BUTTON_SUBMIT"
+        labelKey: "NOC_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",

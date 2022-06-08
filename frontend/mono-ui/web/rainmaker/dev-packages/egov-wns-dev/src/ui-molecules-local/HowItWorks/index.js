@@ -7,9 +7,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardRightIcon from "@material-ui/icons/KeyboardArrowRight";
-import { getDomainLink } from "../../ui-utils/commons";
-import store from "ui-redux/store";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+
 const styles = theme => ({
   root: {
     margin: "2px 8px",
@@ -18,15 +16,10 @@ const styles = theme => ({
 });
 
 class HowItWorks extends React.Component {
-
-  clickHandler = () => {
-    store.dispatch(setRoute("howItWorks"))
-  }
-
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.root} onClick={this.clickHandler}>
+      <div className={classes.root}>
         <List component="nav">
           <ListItem button>
             <ListItemText

@@ -19,8 +19,7 @@ const underlineStyle = {
 };
 
 const dividerStyle = {
-  borderBottom: "1px solid rgba(5, 5, 5, 0.12)",
-  width: "100%"
+  borderBottom: "1px solid rgba(5, 5, 5, 0.12)"
 };
 
 class DividerWithLabel extends Component {

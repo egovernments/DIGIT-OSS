@@ -1,23 +1,35 @@
 import {
   getCommonCard,
-  getCommonContainer, getCommonSubHeader, getCommonTitle,
+  getCommonGrayCard,
+  getCommonTitle,
+  getCommonSubHeader,
+  getTextField,
+  getSelectField,
+  getCommonContainer,
   getDateField,
-  getPattern, getTextField
+  getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 import {
-  getEighteenYearOldDateForDOB, getHundredYearOldDateForDOB, getTodaysDateInYMD
+  getDetailsForOwner,
+  getTodaysDateInYMD,
+  getHundredYearOldDateForDOB,
+  getEighteenYearOldDateForDOB,
+  getRadioGroupWithLabel
 } from "../../utils";
 
-
+import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getRadioButton } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 export const getOwnerMobNoField = getTextField({
   label: {
     labelName: "Mobile No.",
-    labelKey: "BPA_APPLICANT_MOBILE_NO_LABEL"
+    labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
   },
   placeholder: {
     labelName: "Enter Mobile No.",
-    labelKey: "BPA_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER"
+    labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_PLACEHOLDER"
   },
   iconObj: {
     label: "+91 |",
@@ -66,7 +78,7 @@ export const getGenderRadioButton = {
       {
         label: "Transgender",
         labelKey: "COMMON_GENDER_TRANSGENDER",
-        value: "TRANSGENDER"
+        value: "OTHERS"
       }
     ],
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
@@ -77,10 +89,10 @@ export const getGenderRadioButton = {
 };
 
 export const getOwnerDOBField = getDateField({
-  label: { labelName: "Date of Birth", labelKey: "BPA_APPLICANT_DOB_LABEL" },
+  label: { labelName: "Date of Birth", labelKey: "TL_EMP_APPLICATION_DOB" },
   placeholder: {
     labelName: "Enter Date of Birth",
-    labelKey: "BPA_NEW_OWNER_DETAILS_DOB_PLACEHOLDER"
+    labelKey: "TL_NEW_OWNER_DETAILS_DOB_PLACEHOLDER"
   },
   required: true,
   pattern: getPattern("Date"),
@@ -95,11 +107,11 @@ export const getOwnerDOBField = getDateField({
 export const getOwnerEmailField = getTextField({
   label: {
     labelName: "Email",
-    labelKey: "BPA_APPLICANT_EMAIL_LABEL"
+    labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
   },
   placeholder: {
     labelName: "Enter Email",
-    labelKey: "BPA_ENTER_APPLICANT_EMAIL_PLACEHOLDER"
+    labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_PLACEHOLDER"
   },
   pattern: getPattern("Email"),
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId",
@@ -148,8 +160,8 @@ export const OwnerInfoCard = getCommonCard({
         isDOB: true,
         errorMessage: "TL_DOB_ERROR_MESSAGE",
         jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
-        minValue: getHundredYearOldDateForDOB(),
-        maxValue: getEighteenYearOldDateForDOB(),
+        minValue : getHundredYearOldDateForDOB(),
+        maxValue : getEighteenYearOldDateForDOB(),
         props: {
           inputProps: {
             max: getTodaysDateInYMD()
@@ -162,11 +174,11 @@ export const OwnerInfoCard = getCommonCard({
     ownerPAN: getTextField({
       label: {
         labelName: "PAN No.",
-        labelKey: "BPA_APPLICANT_PAN_LABEL"
+        labelKey: "TL_NEW_OWNER_DETAILS_PAN_LABEL"
       },
       placeholder: {
         labelName: "Enter Owner's PAN No.",
-        labelKey: "BPA_ENTER_APPLICANT_PAN_PLACEHOLDER"
+        labelKey: "TL_NEW_OWNER_DETAILS_PAN_PLACEHOLDER"
       },
       pattern: getPattern("PAN"),
       jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
@@ -178,7 +190,7 @@ export const tradeOwnerDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Trade Owner Details",
-      labelKey: "BPA_NEW_OWNER_DETAILS_HEADER"
+      labelKey: "TL_NEW_OWNER_DETAILS_HEADER"
     },
     {
       style: {

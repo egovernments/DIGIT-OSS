@@ -30,18 +30,25 @@ const styles = {
 const documentTitle = {
   color: "rgba(0, 0, 0, 0.87)",
   fontFamily: "Roboto",
-  fontSize: "16px",
+  fontSize: "14px",
   fontWeight: 400,
   letterSpacing: "0.67px",
   lineHeight: "19px"
 };
+const documentMainTitle = {
+  color: "rgba(0, 0, 0, 0.87)",
+  fontFamily: "Roboto",
+  fontSize: "16px",
+  fontWeight: 400,
+  letterSpacing: "0.67px",
+  lineHeight: "19px"
+}
 
 function MultiCardDownloadGrid(props) {
   const { classes, data, ...rest } = props;
   return (
     <Grid container {...rest}>
       {data && data.length && data.map((item, key) => {
-         let linkText=`CS_${item.linkText&&item.linkText.toUpperCase()||'NA'}`;
         return (
           <Grid
             item
@@ -54,24 +61,27 @@ function MultiCardDownloadGrid(props) {
                 : classes.whiteCard
             }
           >
+           {item.mainTitle && <Grid xs={12}>
+              <LabelContainer
+                  labelName={item.mainTitle}
+                  labelKey={item.mainTitle}
+                  style={documentMainTitle}
+                />
+            </Grid>}
             <Grid xs={12}>
               <LabelContainer
-                labelName={item.title}
-                labelKey={item.title}
-                style={documentTitle}
-              />
+                  labelName={item.title}
+                  labelKey={item.title}
+                  style={documentTitle}
+                />
             </Grid>
             <Grid container>
               <Grid xs={6} className={classes.subtext}>
                 <Typography className={classes.body2}>{item.name}</Typography>
               </Grid>
               <Grid xs={6} align="right">
-                <Button target="_blank" href={item.link} color="primary" rel="noopener noreferrer">
-                 
-                  <LabelContainer
-                labelName={linkText}
-                labelKey={linkText}
-              />
+                <Button target="_blank" href={item.link} color="primary">
+                  {item.linkText}
                 </Button>
               </Grid>
             </Grid>

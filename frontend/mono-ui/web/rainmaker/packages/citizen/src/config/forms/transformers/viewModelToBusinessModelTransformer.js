@@ -17,7 +17,8 @@ const updateComplaintStatus = (state, form) => {
 
 const filterObjByKey = (obj, predicate) => {
   return Object.keys(obj)
-    .filter((key) => predicate(key)).reduce((res, key) => ((res[key] = obj[key]), res), {});
+    .filter((key) => predicate(key))
+    .reduce((res, key) => ((res[key] = obj[key]), res), {});
 };
 
 const transformer = (formKey, form = {}, state = {}) => {
@@ -145,14 +146,13 @@ const transformer = (formKey, form = {}, state = {}) => {
     complaint: async () => {
       const formData = prepareFormData(form);
       const userInfo = getUserInfo();
-      const isNative = JSON.parse(localStorageGet("isNative"));
+      const isNative = localStorageGet("isNative");
       let userPhone = null;
+      let userRole = null;
       try {
         userPhone = JSON.parse(userInfo).mobileNumber;
-        const index = JSON.parse(userInfo).roles.findIndex((role) => {
-          return role.code === "CITIZEN";
-        });
-        formData.services[0].source = index > -1 ? isNative ? "mobileapp" : "web" : "";
+        userRole = JSON.parse(userInfo).roles[0].code;
+        formData.services[0].source = userRole === "CITIZEN" ? (isNative ? "mobileapp" : "web") : "";
         formData.services[0].phone = userPhone;
       } catch (error) {}
 

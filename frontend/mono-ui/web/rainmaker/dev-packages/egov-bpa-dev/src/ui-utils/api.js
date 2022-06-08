@@ -20,13 +20,13 @@ const instance = axios.create({
 });
 
 const edcrInstance = axios.create({
-  baseURL: window.location.origin,
+  baseURL: "https://egov-dcr-galaxy.egovernments.org",
   headers: {
     "Content-Type": "application/json"
   }
 })
 
-export const wrapRequestBody = (requestBody, action, customRequestInfo) => {
+const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();
   let RequestInfo = {
     apiId: "Rainmaker",
@@ -35,7 +35,7 @@ export const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     action: action,
     did: "1",
     key: "",
-    msgId: `20170310130900|${getLocale()}`,
+    msgId: "20170310130900|en_IN",
     requesterId: "",
     authToken
   };
@@ -60,7 +60,6 @@ const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
   };
 
   let Ids = process.env.REACT_APP_NAME === "Citizen" && action != "search" ? userInfos : null;
-  let usrInfo = (action == "search") ? null: Ids;
   let RequestInfo = {
     "apiId": "1",
     "ver": "1",
@@ -71,7 +70,7 @@ const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
     "msgId": "gfcfc",
     "correlationId": "wefiuweiuff897",
     authToken,
-    "userInfo": usrInfo
+    "userInfo": Ids
   };
 
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
@@ -153,8 +152,7 @@ export const edcrHttpRequest = async (
 ) => {
   store.dispatch(toggleSpinner());
   let apiError = "No Record Found";
-  // const authToken = getAccessToken();
-  // headers = { "Content-Type": "application/json", "auth-token": authToken }
+
   if (headers)
     edcrInstance.defaults = Object.assign(edcrInstance.defaults, {
       headers
@@ -169,7 +167,7 @@ export const edcrHttpRequest = async (
       );
     const responseStatus = parseInt(response.status, 10);
     store.dispatch(toggleSpinner());
-    if (responseStatus === 200 || responseStatus === 201) {      
+    if (responseStatus === 200 || responseStatus === 201) {
       return response.data;
     }
   } catch (error) {

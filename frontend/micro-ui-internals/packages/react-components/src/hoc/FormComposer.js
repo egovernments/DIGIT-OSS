@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, Fragment } from "react";
+import React, { useEffect, useMemo, useState, Fragment, forwardRef, useImperativeHandle } from "react";
 import { useForm, Controller } from "react-hook-form";
 import BreakLine from "../atoms/BreakLine";
 import Card from "../atoms/Card";
@@ -18,12 +18,14 @@ import LabelFieldPair from "../atoms/LabelFieldPair";
 import { useTranslation } from "react-i18next";
 import MobileNumber from "../atoms/MobileNumber";
 
-export const FormComposer = (props) => {
+export const FormComposer = forwardRef((props, ref) => {
   const { register, handleSubmit, setValue, getValues, watch, control, formState, errors, setError, clearErrors, unregister } = useForm({
     defaultValues: props.defaultValues,
   });
   const { t } = useTranslation();
   const formData = watch();
+
+  useImperativeHandle(ref, () => ({ setValue, getValues }));
 
   useEffect(() => {
     props.getFormAccessors && props.getFormAccessors({ setValue, getValues });
@@ -215,4 +217,4 @@ export const FormComposer = (props) => {
       </Card>
     </form>
   );
-};
+});

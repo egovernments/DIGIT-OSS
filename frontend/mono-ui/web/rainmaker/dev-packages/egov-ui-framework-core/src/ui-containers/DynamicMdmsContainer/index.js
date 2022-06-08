@@ -4,10 +4,7 @@ import { getMdmsJson, getObjectKeys, getObjectValues, getQueryArg } from "egov-u
 import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import cloneDeep from "lodash/cloneDeep";
 import { getSelectField } from "../../ui-config/screens/specs/utils";
-import { getLocale, getLocalization} from "egov-ui-kit/utils/localStorageUtils";
-
 class DynamicMdmsContainer extends Component {
   componentDidMount = () => {
     let { state, moduleName, rootBlockSub } = this.props;
@@ -31,7 +28,7 @@ class DynamicMdmsContainer extends Component {
       dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, true));
       await getMdmsJson(state, dispatch, reqObj);
       this.triggerCallback(null, null, null);
-      if (getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL" || getQueryArg(window.location.href, "applicationNumber") != null || get(state, `screenConfiguration.preparedFinalObject.DYNAMIC_MDMS_Trigger`,false)) {
+      if (getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL") {
         callBackEdit(state, dispatch);
       } else {
         dropdownFields && dropdownFields.forEach((entry, i) => {
@@ -69,11 +66,6 @@ class DynamicMdmsContainer extends Component {
       this.triggerCallback(componentJsonpath, value, isIndex);
     }
   }
-  getLocalTextFromCode = (localCode) => {
-    return JSON.parse(getLocalization(`localization_${getLocale()}`)).find(
-      item => item.code === localCode
-    );
-  } 
   getValueByKey = (key) => {
     let { state, rootBlockSub, moduleName } = this.props;
     if (key) {
@@ -148,12 +140,6 @@ class DynamicMdmsContainer extends Component {
       let { key, fieldType, isDisabled, className, isRequired = false, requiredValue = false } = entry;
       isRequired = isRequired ? this.checkValueExists(`DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`) : false;
       requiredValue = requiredValue == false ? isRequired : requiredValue;
-      let helperMsg ="Required";
-      if(getLocale()=="hi_IN"){
-        helperMsg="आवश्यक प्रविष्टि";
-      }
-        
-    
       allObj[key] = (fieldType == "autosuggest") ?
         {
           uiFramework: "custom-containers",
@@ -161,7 +147,7 @@ class DynamicMdmsContainer extends Component {
           jsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`,
           componentJsonpath: `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`,
           required: isRequired,
-          helperText: isRequired ? helperMsg : '',
+          helperText: isRequired ? "Required" : "",
           gridDefination: {
             xs: 12,
             sm: gridSm
@@ -191,8 +177,7 @@ class DynamicMdmsContainer extends Component {
             isClearable: true,
             required: isRequired,
             required: requiredValue,
-            disabled: isDisabled ? isDisabled : false,
-            helperText: isRequired ? helperMsg : '',
+            helperText: isRequired ? "Required" : '',
             inputLabelProps: {
               shrink: true
             }
@@ -248,19 +233,8 @@ class DynamicMdmsContainer extends Component {
 const mapStateToProps = (state, ownprops) => {
   const { screenConfiguration } = state;
   const { preparedFinalObject } = screenConfiguration;
-  const { DynamicMdms ={}} = preparedFinalObject;
-
-  let { dropdownFields, moduleName,  rootBlockSub, index = 0 } = ownprops;
-  const newFields=dropdownFields && dropdownFields.map((entry, i) => {
-    let { key } = entry;
-   const moduleName1 = DynamicMdms[moduleName]||{};
-   const rootBlockSub1 = moduleName1[rootBlockSub]||{};
-   const key1 = rootBlockSub1[`${key}Transformed`]||{};
-
-   const allDropdown1 = key1['allDropdown']||[];
-   return {moduleName1,rootBlockSub1,key1,allDropdown1}
- })
-  return { state, DynamicMdms ,newFields};
+  const { DynamicMdms } = preparedFinalObject;
+  return { state, DynamicMdms };
 };
 
 export default connect(

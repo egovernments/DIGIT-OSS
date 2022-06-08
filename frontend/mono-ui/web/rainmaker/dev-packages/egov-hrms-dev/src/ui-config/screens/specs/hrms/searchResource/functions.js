@@ -1,13 +1,13 @@
+import get from "lodash/get";
+import find from "lodash/find";
 import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import find from "lodash/find";
-import get from "lodash/get";
 import { getSearchResults } from "../../../../..//ui-utils/commons";
+import { getTextToLocalMapping } from "./searchResults";
 import { validateFields } from "../../utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const getDeptName = (state, codes) => {
   let deptMdmsData = get(
@@ -37,7 +37,7 @@ export const searchApiCall = async (state, dispatch) => {
   let { localisationLabels } = state.app || {};
   showHideTable(false, dispatch);
   const tenantId =
-    get(state.screenConfiguration.preparedFinalObject, "hrmsSearchScreen.ulb") ||
+    get(state.screenConfiguration.preparedFinalObject, "searchScreen.ulb") ||
     getTenantId();
   let queryObject = [
     {
@@ -47,7 +47,7 @@ export const searchApiCall = async (state, dispatch) => {
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "hrmsSearchScreen",
+    "searchScreen",
     {}
   );
   const isSearchFormValid = validateFields(
@@ -92,7 +92,7 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getSearchResults(queryObject.filter(query => query.key != 'ulb'), dispatch);
+    let response = await getSearchResults(queryObject, dispatch);
     try {
       let data = response.Employees.map(item => {
         // GET ALL CURRENT DESIGNATIONS OF EMPLOYEE
@@ -101,7 +101,7 @@ export const searchApiCall = async (state, dispatch) => {
             return assignment.isCurrentAssignment;
           })
           .map(assignment => {
-            return getLocaleLabels("NA", `COMMON_MASTERS_DESIGNATION_${assignment.designation}`);
+            return assignment.designation;
           });
 
         // GET ALL CURRENT DEPARTMENTS OF EMPLOYEE
@@ -110,25 +110,24 @@ export const searchApiCall = async (state, dispatch) => {
             return assignment.isCurrentAssignment;
           })
           .map(assignment => {
-            return getLocaleLabels("NA", `COMMON_MASTERS_DEPARTMENT_${assignment.department}`);
+            return assignment.department;
           });
-        let role = get(item, "user.roles", []).map(role => {
 
-
-          return ` ${getLocaleLabels("NA", `ACCESSCONTROL_ROLES_ROLES_${getTransformedLocale(role.code)}`)}`;
-        }).join();
         return {
-          ["HR_COMMON_TABLE_COL_EMP_ID"]: get(item, "code", "-") || "-",
-          ["HR_COMMON_TABLE_COL_NAME"]: get(item, "user.name", "-") || "-",
-          ["HR_COMMON_TABLE_COL_ROLE"]:
-            get(item, "user.roles", false) ? role && role.length < 50 ? role : `${role.slice(0, 50)}...` : "-",
-          ["HR_COMMON_TABLE_COL_DESG"]:
-            currentDesignations && currentDesignations.length && currentDesignations.join && currentDesignations.join(',') || "-",
-          ["HR_COMMON_TABLE_COL_DEPT"]:
-            currentDepartments && currentDepartments.length && currentDepartments.join && currentDepartments.join(',') || "-",
-          ["HR_COMMON_TABLE_COL_STATUS"]:
-            get(item, "isActive", false) ? "ACTIVE" : "INACTIVE" || "-",
-          ["HR_COMMON_TABLE_COL_TENANT_ID"]: get(item, "tenantId", "-")
+          [getTextToLocalMapping("Employee ID")]: get(item, "code", "-") || "-",
+          [getTextToLocalMapping("Name")]: get(item, "user.name", "-") || "-",
+          [getTextToLocalMapping("Role")]:
+            get(item, "user.roles", [])
+              .map(role => {
+                return ` ${role.name}`;
+              })
+              .join() || "-",
+          [getTextToLocalMapping("Designation")]:
+            getDesigName(state, currentDesignations) || "-",
+          [getTextToLocalMapping("Department")]:
+            getDeptName(state, currentDepartments) || "-",
+          [getTextToLocalMapping("Tenant ID")]: get(item, "tenantId", "-")
+
         };
       });
 

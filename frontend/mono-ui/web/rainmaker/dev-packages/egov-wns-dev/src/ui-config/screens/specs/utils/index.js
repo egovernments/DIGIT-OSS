@@ -1,29 +1,213 @@
-import commonConfig from "config/common.js";
 import {
-  getCommonCaption, getCommonCard, getLabel
+  getLabel,
+  getTextField,
+  getCommonSubHeader,
+  getCommonCard,
+  getCommonCaption,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import "./index.css";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
-import { getUserSearchedResponse } from "egov-ui-kit/utils/commons";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import set from "lodash/set";
+import filter from "lodash/filter";
+import { httpRequest } from "../../../../ui-utils/api";
+import {
+  prepareFinalObject,
+  initScreen
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import isUndefined from "lodash/isUndefined";
+import isEmpty from "lodash/isEmpty";
 import {
   getTenantId,
-  getUserInfo
+  getUserInfo,
+  localStorageGet
 } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
-import isUndefined from "lodash/isUndefined";
-import set from "lodash/set";
-import { httpRequest } from "../../../../ui-utils/api";
-import "./index.css";
-
-export const getCommonApplyFooter = (position, children) => {
+import commonConfig from "config/common.js";
+import {
+  getLocaleLabels,
+  getTransformedLocalStorgaeLabels
+} from "egov-ui-framework/ui-utils/commons";
+export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: (position === 'BOTTOM') ? "apply-wizard-footer" : ""
+      className: "apply-wizard-footer"
     },
     children
+  };
+};
+
+export const getAsteric = () => {
+  return {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "Asteric"
+  };
+};
+
+export const getTooltip = (children, toolTipProps) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    children: {
+      label: children,
+      toolTip: {
+        componentPath: "Tooltip",
+        props: { ...toolTipProps },
+        children: {
+          uiFramework: "custom-atoms",
+          componentPath: "Icon",
+          props: {
+            iconName: "info"
+          }
+        }
+      }
+    }
+  };
+};
+
+export const getCheckbox = (content, jsonPath, props = {}) => {
+  return {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-wns",
+    componentPath: "CheckboxContainer",
+    props: {
+      content,
+      jsonPath,
+      ...props
+    }
+  };
+};
+
+export const getUploadFile = {
+  uiFramework: "custom-molecules",
+  componentPath: "DocumentList",
+  props: {
+    documents: [
+      {
+        name: "Upload Document"
+      }
+    ]
+  }
+};
+
+export const getUploadFilesMultiple = jsonPath => {
+  return {
+    uiFramework: "custom-molecules",
+    componentPath: "UploadMultipleFiles",
+    props: {
+      maxFiles: 4,
+      jsonPath: jsonPath,
+      inputProps: {
+        accept: "image/*, .pdf, .png, .jpeg"
+      },
+      buttonLabel: "UPLOAD FILES",
+      maxFileSize: 5000,
+      moduleName: "TL"
+    }
+  };
+};
+
+export const getRadioButton = (buttons, jsonPath, defaultValue) => {
+  return {
+    uiFramework: "custom-containers",
+    componentPath: "RadioGroupContainer",
+    props: {
+      buttons,
+      jsonPath,
+      defaultValue
+    }
+  };
+};
+
+export const getRadioGroupWithLabel = (
+  label,
+  labelKey,
+  buttons,
+  jsonPath,
+  defaultValue
+) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      alignItems: "center"
+    },
+
+    children: {
+      div1: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        },
+        children: {
+          div: getLabel({
+            labelName: label,
+            labelKey,
+
+            style: {
+              fontSize: "14px"
+            }
+          }),
+          asteric: getAsteric()
+        }
+      },
+      div2: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 8
+        },
+        children: {
+          div: getRadioButtonGroup(buttons, jsonPath, defaultValue)
+        }
+      }
+    }
+  };
+};
+
+export const getApplicationNoContainer = number => {
+  return {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "ApplicationNoContainer",
+    props: {
+      number
+    }
+  };
+};
+
+export const getConsumerNoContainer = number => {
+  return {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "ConsumerNoContainer",
+    props: {
+      number
+    }
+  };
+};
+
+export const getContainerWithElement = ({
+  children,
+  props = {},
+  gridDefination = {}
+}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    children,
+    gridDefination,
+    props: {
+      ...props
+    }
   };
 };
 
@@ -52,6 +236,126 @@ export const getTranslatedLabel = (labelKey, localizationLabels) => {
       translatedLabel = translatedLabel.message;
   }
   return translatedLabel || labelKey;
+};
+
+export const getApprovalTextField = queryValue => {
+  if (queryValue === "reject") {
+    return getTextField({
+      label: {
+        labelName: "Comments",
+        labelKey: "TL_APPROVAL_CHECKLIST_COMMENTS_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Rejection Comments",
+        labelKey: "TL_REJECTION_CHECKLIST_COMMENTS_PLACEHOLDER"
+      },
+      required: false,
+      pattern: "",
+      jsonPath:
+        "Licenses[0].tradeLicenseDetail.additionalDetail.rejectDetail.comments",
+      props: {
+        style: {
+          paddingBottom: 5
+        }
+      }
+    });
+  } else if (queryValue === "cancel") {
+    return getTextField({
+      label: {
+        labelName: "Comments",
+        labelKey: "TL_APPROVAL_CHECKLIST_COMMENTS_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Cancellation Comments",
+        labelKey: "TL_CANCEL_CHECKLIST_COMMENTS_PLACEHOLDER"
+      },
+      required: false,
+      pattern: "",
+      jsonPath:
+        "Licenses[0].tradeLicenseDetail.additionalDetail.cancelDetail.comments",
+      props: {
+        style: {
+          paddingBottom: 5
+        }
+      }
+    });
+  } else {
+    return getTextField({
+      label: {
+        labelName: "Comments",
+        labelKey: "TL_APPROVAL_CHECKLIST_COMMENTS_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Approval Comments",
+        labelKey: "TL_APPROVAL_CHECKLIST_COMMENTS_PLACEHOLDER_APPR"
+      },
+      required: false,
+      pattern: "",
+      jsonPath:
+        "Licenses[0].tradeLicenseDetail.additionalDetail.approveDetail.comments",
+      props: {
+        style: {
+          paddingBottom: 5
+        }
+      }
+    });
+  }
+};
+
+export const getCheckBoxJsonpath = queryValue => {
+  if (queryValue === "reject") {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.rejectDetail.check";
+  } else if (queryValue === "cancel") {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.cancelDetail.check";
+  } else {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.approveDetail.check";
+  }
+};
+
+export const getSafetyNormsJson = queryValue => {
+  if (queryValue === "reject") {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.rejectDetail.checklist.safetyNorms";
+  } else if (queryValue === "cancel") {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.cancelDetail.checklist.safetyNorms";
+  } else {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.approveDetail.checklist.safetyNorms";
+  }
+};
+
+export const getHygeneLevelJson = queryValue => {
+  if (queryValue === "reject") {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.rejectDetail.checklist.hygieneLevels";
+  } else if (queryValue === "cancel") {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.cancelDetail.checklist.hygieneLevels";
+  } else {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.approveDetail.checklist.hygieneLevels";
+  }
+};
+
+export const getLocalityHarmedJson = queryValue => {
+  if (queryValue === "reject") {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.rejectDetail.checklist.localityHarmed";
+  } else if (queryValue === "cancel") {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.cancelDetail.checklist.localityHarmed";
+  } else {
+    return "Licenses[0].tradeLicenseDetail.additionalDetail.approveDetail.checklist.localityHarmed";
+  }
+};
+
+export const getSubHeaderLabel = queryValue => {
+  if (queryValue === "reject") {
+    return getCommonSubHeader({
+      labelName: "Rejection CheckList",
+      labelKey: "TL_REJECTION_CHECKLIST_REJ_CHECKLIST"
+    });
+  } else if (queryValue === "cancel") {
+    return {};
+  } else {
+    return getCommonSubHeader({
+      labelName: "Approve Checklist",
+      labelKey: "TL_APPROVAL_CHECKLIST_BUTTON_APPRV_CHECKLIST"
+    });
+  }
 };
 
 export const getFooterButtons = queryValue => {
@@ -128,184 +432,17 @@ const style = {
   }
 };
 
-export const getFeesEstimateOverviewCard = props => {
-  const { sourceJsonPath, ...rest } = props;
-  return {
-    uiFramework: "custom-containers-local",
-    moduleName: "egov-wns",
-    componentPath: "EstimateOverviewCardContainer",
-    props: {
-      sourceJsonPath,
-      ...rest
-    }
-  };
-};
-
 export const getIconStyle = key => {
   return style[key];
 };
 
-export const showHideAdhocPopup = (state, dispatch, screenKey, value = true, adhocDetails = {}) => {
+export const showHideAdhocPopup = (state, dispatch) => {
   let toggle = get(
-    state.screenConfiguration.screenConfig[screenKey],
+    state.screenConfiguration.screenConfig["pay"],
     "components.adhocDialog.props.open",
     false
   );
-
-  if (screenKey == "viewBill") {
-    dispatch(
-      handleField(
-        "viewBill",
-        "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyAmount",
-        "props.value",
-        null
-      )
-    );
-    dispatch(
-      handleField(
-        "viewBill",
-        "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyReason",
-        "props.value",
-        null
-      )
-    );
-    dispatch(
-      handleField(
-        "viewBill",
-        "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.commentsField",
-        "props.value",
-        null
-      )
-    );
-    dispatch(
-      handleField(
-        "viewBill",
-        "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateAmount",
-        "props.value",
-        null
-      )
-    );
-    dispatch(
-      handleField(
-        "viewBill",
-        "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateReason",
-        "props.value",
-        null
-      )
-    );
-    dispatch(
-      handleField(
-        "viewBill",
-        "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateCommentsField",
-        "props.value",
-        null
-      )
-    );
-  }
-
-  if (screenKey == "search-preview") {
-    if (value) {
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.commentsField",
-          "props.value",
-          null
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyAmount",
-          "props.value",
-          null
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyReason",
-          "props.value",
-          null
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateAmount",
-          "props.value",
-          null
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateCommentsField",
-          "props.value",
-          null
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateReason",
-          "props.value",
-          null
-        )
-      );
-    } else {
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.commentsField",
-          "props.value",
-          get(adhocDetails, "adhocPenaltyComment", null)
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyAmount",
-          "props.value",
-          get(adhocDetails, "adhocPenalty", null)
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyReason",
-          "props.value",
-          get(adhocDetails, "adhocPenaltyReason", null)
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateAmount",
-          "props.value",
-          get(adhocDetails, "adhocRebate", null)
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateCommentsField",
-          "props.value",
-          get(adhocDetails, "adhocRebateComment", null)
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateReason",
-          "props.value",
-          get(adhocDetails, "adhocRebateReason", null)
-        )
-      );
-    }
-  }
-
-  dispatch(handleField(screenKey, "components.adhocDialog", "props.open", !toggle));
+  dispatch(handleField("pay", "components.adhocDialog", "props.open", !toggle));
 };
 
 export const getButtonVisibility = (status, button) => {
@@ -315,6 +452,36 @@ export const getButtonVisibility = (status, button) => {
   if (status === "pending_approval" && button === "REJECT") return true;
   if (status === "approved" && button === "CANCEL TRADE LICENSE") return true;
   return false;
+};
+
+export const commonTransform = (object, path) => {
+  let data = get(object, path);
+  let transformedData = {};
+  data.map(a => {
+    const splitList = a.code.split(".");
+    let ipath = "";
+    for (let i = 0; i < splitList.length; i += 1) {
+      if (i != splitList.length - 1) {
+        if (
+          !(
+            splitList[i] in
+            (ipath === "" ? transformedData : get(transformedData, ipath))
+          )
+        ) {
+          set(
+            transformedData,
+            ipath === "" ? splitList[i] : ipath + "." + splitList[i],
+            i < splitList.length - 2 ? {} : []
+          );
+        }
+      } else {
+        get(transformedData, ipath).push(a);
+      }
+      ipath = splitList.slice(0, i + 1).join(".");
+    }
+  });
+  set(object, path, transformedData);
+  return object;
 };
 
 export const objectToDropdown = object => {
@@ -370,39 +537,6 @@ export const getReceipt = async queryObject => {
     console.log(error);
   }
 };
-
-export const convertEpochToDateAndHandleNA = dateEpoch => {
-  if (
-    dateEpoch !== undefined &&
-    dateEpoch !== null &&
-    dateEpoch !== "" &&
-    dateEpoch !== "NA" &&
-    dateEpoch !== 0
-  ) {
-    let convertedToDate = convertEpochToDate(dateEpoch);
-    return convertedToDate;
-  } else { return "NA"; }
-}
-
-export const handlePropertySubUsageType = params => {
-  params = handleNA(params);
-  if (params !== "NA" && params.split(".").length > 1) {
-    return params;
-  } else {
-    return "NA";
-  }
-}
-
-export const handleNA = params => {
-  if (params !== undefined && params !== null && params !== "" && params !== 0) {
-    return params;
-  } else { return "NA"; }
-}
-
-export const handleRoadType = params => {
-  return handleNA(params) == "NA" ? "NA" : 'WS_ROADTYPE_' + params;
-}
-
 
 export const convertEpochToDate = dateEpoch => {
   const dateFromApi = new Date(dateEpoch);
@@ -777,15 +911,13 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
 // Get user data from uuid API call
 export const getUserDataFromUuid = async bodyObject => {
   try {
-    // const response = await httpRequest(
-    //   "post",
-    //   "/user/_search",
-    //   "",
-    //   [],
-    //   bodyObject
-    // );
-
-    const response = getUserSearchedResponse();
+    const response = await httpRequest(
+      "post",
+      "/user/_search",
+      "",
+      [],
+      bodyObject
+    );
     return response;
   } catch (error) {
     console.log(error);
@@ -843,6 +975,203 @@ const getToolTipInfo = (taxHead, LicenseData) => {
     default:
       return "";
   }
+};
+
+const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
+  if (Bill && Bill.length) {
+    const extraData = ["TL_COMMON_REBATE", "TL_COMMON_PEN"].map(item => {
+      return {
+        name: {
+          labelName: item,
+          labelKey: item
+        },
+        value: null,
+        info: getToolTipInfo(item, LicenseData) && {
+          value: getToolTipInfo(item, LicenseData),
+          key: getToolTipInfo(item, LicenseData)
+        }
+      };
+    });
+    const { billAccountDetails } = Bill[0].billDetails[0];
+    const transformedData = billAccountDetails.reduce((result, item) => {
+      if (getFromReceipt) {
+        item.accountDescription &&
+          result.push({
+            name: {
+              labelName: item.accountDescription.split("-")[0],
+              labelKey: item.accountDescription.split("-")[0]
+            },
+            value: getTaxValue(item),
+            info: getToolTipInfo(
+              item.accountDescription.split("-")[0],
+              LicenseData
+            ) && {
+                value: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                ),
+                key: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                )
+              }
+          });
+      } else {
+        item.taxHeadCode &&
+          result.push({
+            name: {
+              labelName: item.taxHeadCode,
+              labelKey: item.taxHeadCode
+            },
+            value: getTaxValue(item),
+            info: getToolTipInfo(item.taxHeadCode, LicenseData) && {
+              value: getToolTipInfo(item.taxHeadCode, LicenseData),
+              key: getToolTipInfo(item.taxHeadCode, LicenseData)
+            }
+          });
+      }
+      return result;
+    }, []);
+    return [
+      ...transformedData.filter(item => item.name.labelKey === "TL_TAX"),
+      ...transformedData.filter(item => item.name.labelKey !== "TL_TAX"),
+      ...extraData
+    ];
+  }
+};
+
+const getBillingSlabData = async (
+  dispatch,
+  billingSlabIds,
+  tenantId,
+  accessories
+) => {
+  const { accesssoryBillingSlabIds, tradeTypeBillingSlabIds } =
+    billingSlabIds || {};
+  if (accesssoryBillingSlabIds || tradeTypeBillingSlabIds) {
+    const accessoryUnit =
+      accesssoryBillingSlabIds &&
+      accesssoryBillingSlabIds.reduce((result, item) => {
+        result.push(item.split("|")[0]);
+        return result;
+      }, []);
+
+    const tradeUnit =
+      tradeTypeBillingSlabIds &&
+      tradeTypeBillingSlabIds.reduce((result, item) => {
+        result.push(item.split("|")[0]);
+        return result;
+      }, []);
+
+    let billingData = tradeUnit && [...tradeUnit];
+    accessoryUnit && (billingData = [...billingData, ...accessoryUnit]);
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "ids", value: billingData && billingData.join(",") }
+    ];
+    try {
+      const response = await httpRequest(
+        "post",
+        "/tl-calculator/billingslab/_search",
+        "",
+        queryObject
+      );
+
+      let tradeTotal = 0;
+      let accessoriesTotal = 0;
+      const finalData =
+        response &&
+        response.billingSlab.reduce(
+          (result, item) => {
+            if (item.tradeType) {
+              tradeTotal = tradeTotal + item.rate;
+              result.tradeUnitData.push({
+                rate: item.rate,
+                category: item.tradeType,
+                type: "trade"
+              });
+            } else {
+              const count = accessories.find(
+                accessory =>
+                  item.accessoryCategory === accessory.accessoryCategory
+              ).count;
+              accessoriesTotal = accessoriesTotal + item.rate * count;
+              result.accessoryData.push({
+                rate: item.rate,
+                total: item.rate * count,
+                category: item.accessoryCategory,
+                type: "accessories"
+              });
+            }
+            return result;
+          },
+          { tradeUnitData: [], accessoryData: [] }
+        );
+      const { accessoryData, tradeUnitData } = finalData;
+      dispatch(
+        prepareFinalObject(
+          "LicensesTemp[0].billingSlabData.tradeUnitData",
+          tradeUnitData
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "LicensesTemp[0].billingSlabData.tradeTotal",
+          tradeTotal
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "LicensesTemp[0].billingSlabData.accessoriesUnitData",
+          accessoryData
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "LicensesTemp[0].billingSlabData.accessoriesTotal",
+          accessoriesTotal
+        )
+      );
+    } catch (e) {
+      dispatch(
+        toggleSnackbar(
+          open,
+          {
+            lableName: "Billing Slab error!",
+            labelKey: "ERR_BILLING_SLAB_ERROR"
+          },
+          "error"
+        )
+      );
+    }
+  }
+};
+
+const isApplicationPaid = currentStatus => {
+  let isPAID = false;
+
+  if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
+    const buisnessSeviceStates = JSON.parse(
+      localStorageGet("businessServiceData")
+    )[0].states;
+    for (var i = 0; i < buisnessSeviceStates.length; i++) {
+      if (buisnessSeviceStates[i].state === currentStatus) {
+        break;
+      }
+      if (
+        buisnessSeviceStates[i].actions &&
+        buisnessSeviceStates[i].actions.filter(item => item.action === "PAY")
+          .length > 0
+      ) {
+        isPAID = true;
+        break;
+      }
+    }
+  } else {
+    isPAID = false;
+  }
+
+  return isPAID;
 };
 
 export const createEstimateData = async (
@@ -1206,6 +1535,127 @@ export const getTransformedStatus = status => {
   }
 };
 
+export const updateDropDowns = async (
+  payload,
+  action,
+  state,
+  dispatch,
+  queryValue
+) => {
+  const structType = get(
+    payload,
+    "Licenses[0].tradeLicenseDetail.structureType"
+  );
+  if (structType) {
+    set(
+      payload,
+      "LicensesTemp[0].tradeLicenseDetail.structureType",
+      structType.split(".")[0]
+    );
+    try {
+      dispatch(
+        prepareFinalObject(
+          "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
+          get(
+            state.screenConfiguration.preparedFinalObject.applyScreenMdmsData[
+            "common-masters"
+            ],
+            `StructureType.${structType.split(".")[0]}`,
+            []
+          )
+        )
+      );
+
+      payload &&
+        dispatch(
+          prepareFinalObject(
+            "LicensesTemp[0].tradeLicenseDetail.structureType",
+            payload.LicensesTemp[0].tradeLicenseDetail.structureType
+          )
+        );
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  // const tradeTypes = get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   "applyScreenMdmsData.TradeLicense.TradeType",
+  //   []
+  // );
+  // // debugger;
+  // const tradeTypeDropdownData =
+  //   tradeTypes &&
+  //   Object.keys(tradeTypes).map(item => {
+  //     return { code: item, active: true };
+  //   });
+  // tradeTypeDropdownData &&
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+  //       tradeTypeDropdownData
+  //     )
+  //   );
+  const tradeSubTypes = get(
+    payload,
+    "Licenses[0].tradeLicenseDetail.tradeUnits",
+    []
+  );
+
+  if (tradeSubTypes.length > 0) {
+    try {
+      tradeSubTypes.forEach((tradeSubType, i) => {
+        const tradeCat = tradeSubType.tradeType.split(".")[0];
+        const tradeType = tradeSubType.tradeType.split(".")[1];
+        set(payload, `LicensesTemp.tradeUnits[${i}].tradeType`, tradeCat);
+        set(payload, `LicensesTemp.tradeUnits[${i}].tradeSubType`, tradeType);
+
+        dispatch(
+          prepareFinalObject(
+            "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
+            objectToDropdown(
+              get(
+                state.screenConfiguration.preparedFinalObject,
+                `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCat}`,
+                []
+              )
+            )
+          )
+        );
+
+        dispatch(
+          prepareFinalObject(
+            "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
+            get(
+              state.screenConfiguration.preparedFinalObject,
+              `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCat}.${tradeType}`,
+              []
+            )
+          )
+        );
+        payload &&
+          dispatch(
+            prepareFinalObject(
+              `LicensesTemp.tradeUnits[${i}].tradeType`,
+              tradeCat
+            )
+          );
+
+        payload &&
+          dispatch(
+            prepareFinalObject(
+              `LicensesTemp.tradeUnits[${i}].tradeSubType`,
+              tradeType
+            )
+          );
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  setOwnerShipDropDownFieldChange(state, dispatch, payload);
+};
+
 export const getDocList = (state, dispatch) => {
   const documentList = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.ws-services-masters.Documents");
   function onlyUnique(value, index, self) {
@@ -1436,6 +1886,89 @@ const getAllBillingSlabs = async tenantId => {
   return payload;
 };
 
+export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
+  const payload = await getAllBillingSlabs(tenantId);
+  const processedData =
+    payload.billingSlab &&
+    payload.billingSlab.reduce(
+      (acc, item) => {
+        let accessory = { active: true };
+        let tradeType = { active: true };
+        if (item.accessoryCategory && item.tradeType === null) {
+          accessory.code = item.accessoryCategory;
+          accessory.uom = item.uom;
+          accessory.rate = item.rate;
+          item.rate && item.rate > 0 && acc.accessories.push(accessory);
+        } else if (item.accessoryCategory === null && item.tradeType) {
+          tradeType.code = item.tradeType;
+          tradeType.uom = item.uom;
+          tradeType.structureType = item.structureType;
+          tradeType.licenseType = item.licenseType;
+          tradeType.rate = item.rate;
+          !isUndefined(item.rate) &&
+            item.rate !== null &&
+            acc.tradeTypeData.push(tradeType);
+        }
+        return acc;
+      },
+      { accessories: [], tradeTypeData: [] }
+    );
+
+  const accessories = getUniqueItemsFromArray(
+    processedData.accessories,
+    "code"
+  );
+  let structureTypes = getUniqueItemsFromArray(
+    processedData.tradeTypeData,
+    "structureType"
+  );
+  structureTypes = commonTransform(
+    {
+      StructureType: structureTypes.map(item => {
+        return { code: item.structureType, active: true };
+      })
+    },
+    "StructureType"
+  );
+  let licenseTypes = getUniqueItemsFromArray(
+    processedData.tradeTypeData,
+    "licenseType"
+  );
+  licenseTypes = licenseTypes.map(item => {
+    return { code: item.licenseType, active: true };
+  });
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.common-masters.StructureType",
+      structureTypes.StructureType
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
+      accessories
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.TradeLicense.licenseType",
+      licenseTypes
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.common-masters.StructureTypeTransformed",
+      objectToDropdown(structureTypes.StructureType)
+    )
+  );
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.TradeLicense.TradeType",
+      processedData.tradeTypeData
+    )
+  );
+};
+
 export const getUniqueItemsFromArray = (data, identifier) => {
   const uniqueArray = [];
   const map = new Map();
@@ -1446,6 +1979,113 @@ export const getUniqueItemsFromArray = (data, identifier) => {
     }
   }
   return uniqueArray;
+};
+
+export const setFilteredTradeTypes = (
+  state,
+  dispatch,
+  licenseType,
+  structureSubtype
+) => {
+  const tradeTypeBSlab = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.TradeLicense.TradeType",
+    []
+  );
+  const mdmsTradeTypes = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.TradeLicense.MdmsTradeType",
+    []
+  );
+  try {
+    if (tradeTypeBSlab.length > 0 && mdmsTradeTypes.length > 0) {
+      const mdmsTTTransformed = mdmsTradeTypes.reduce((acc, item) => {
+        item.code && (acc[item.code] = item);
+        return acc;
+      }, {});
+      let tradeTypeList = [];
+      tradeTypeBSlab.length > 0 &&
+        tradeTypeBSlab.forEach(item => {
+          if (
+            item.code &&
+            mdmsTTTransformed[item.code] &&
+            mdmsTTTransformed[item.code].applicationDocument
+          ) {
+            tradeTypeList.push({
+              ...item,
+              applicationDocument:
+                mdmsTTTransformed[item.code].applicationDocument
+            });
+          }
+        });
+      if (tradeTypeList && tradeTypeList.length > 0) {
+        let filteredList =
+          tradeTypeList &&
+          tradeTypeList.length > 0 &&
+          tradeTypeList.filter(item => {
+            if (
+              item.licenseType === licenseType &&
+              item.structureType === structureSubtype
+            )
+              return true;
+          });
+        let tradeTypeTransformed = commonTransform(
+          { TradeType: [...filteredList] },
+          "TradeType"
+        );
+        dispatch(
+          prepareFinalObject(
+            "applyScreenMdmsData.TradeLicense.filteredTradeTypeTree",
+            tradeTypeTransformed.TradeType
+          )
+        );
+        // tradeTypeTransformed.TradeType &&
+        //   dispatch(
+        //     prepareFinalObject(
+        //       "applyScreenMdmsData.TradeLicense.TradeType",
+        //       tradeTypeTransformed.TradeType
+        //     )
+        //   );
+        return tradeTypeTransformed;
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const showCityPicker = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["home"],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("home", "components.cityPickerDialog", "props.open", !toggle)
+  );
+};
+
+export const applyForm = (state, dispatch) => {
+  const tenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "citiesByModule.citizenTenantId"
+  );
+
+  const isTradeDetailsValid = validateFields(
+    "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
+    state,
+    dispatch,
+    "home"
+  );
+
+  if (isTradeDetailsValid) {
+    window.location.href =
+      process.env.NODE_ENV === "production"
+        ? `/citizen/tradelicense-citizen/apply?tenantId=${tenantId}`
+        : process.env.REACT_APP_SELF_RUNNING === true
+          ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
+          : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
+  }
 };
 
 export const sortByEpoch = (data, order) => {
@@ -1465,11 +2105,30 @@ export const getEpochForDate = date => {
   return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
 };
 
-export const resetFieldsForApplication = (state, dispatch) => {
+export const getTradeTypeDropdownData = tradeTypes => {
+  return (
+    tradeTypes &&
+    tradeTypes.TradeType &&
+    Object.keys(tradeTypes.TradeType).map(item => {
+      return { code: item, active: true };
+    })
+  );
+};
+
+export const fillOldLicenseData = async (state, dispatch) => {
+  dispatch(
+    initScreen(
+      "apply",
+      get(state.screenConfiguration, "screenConfig.apply", {})
+    )
+  );
+};
+
+export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.consumerNo",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.NOCNo",
       "props.value",
       ""
     )
@@ -1477,7 +2136,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationNo",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.applicationNo",
       "props.value",
       ""
     )
@@ -1485,7 +2144,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.ownerMobNo",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.ownerMobNo",
       "props.value",
       ""
     )
@@ -1493,7 +2152,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationstatus",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.applicationNo",
       "props.value",
       ""
     )
@@ -1501,7 +2160,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.fromDate",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.fromDate",
       "props.value",
       ""
     )
@@ -1509,66 +2168,12 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.toDate",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationType",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.toDate",
       "props.value",
       ""
     )
   );
 };
-
-export const resetFieldsForConnection = (state, dispatch) => {
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.consumerid",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
-      "props.value",
-      ""
-    )
-  );
-
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.oldConsumerid",
-      "props.value",
-      ""
-    )
-  );
-
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.ownerMobNo",
-      "props.value",
-      ""
-    )
-  );
-
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
-      "props.value",
-      ""
-    )
-  );
-}
 
 export const getCommonGrayCard = children => {
   return {
@@ -1620,7 +2225,8 @@ export const getLabelOnlyValue = (value, props = {}) => {
 };
 
 export const getRequiredDocData = async (action, state, dispatch) => {
-  let tenantId = process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
+  let tenantId =
+    process.env.REACT_APP_NAME === "Citizen" ? "pb.amritsar" : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -1784,97 +2390,4 @@ export const getTextToLocalMapping = label => {
     //     localisationLabels
     //   );
   }
-};
-const setVisible = (key, status, action) => {
-  set(
-    action,
-    `screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.${key}.visible`,
-    status
-  );
-}
-export const triggerModificationsDisplay = (action, isModeEnable) => {
-  setVisible('modificationsEffectiveFrom', isModeEnable, action);
-  setVisible('plumberDetailsContainer', !isModeEnable, action);
-  setVisible('roadCuttingChargeContainer', !isModeEnable, action);
-}
-
-export const getDemand = async (queryObject, dispatch) => {
-  try {
-    const response = await httpRequest(
-      "post",
-      "/billing-service/demand/_search",
-      "",
-      queryObject
-    );
-    return response;
-  } catch (error) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: error.message, labelKey: error.message },
-        "warning"
-      )
-    );
-  }
-};
-
-export const validateFieldOfWNS = (
-  objectJsonPath,
-  state,
-  dispatch,
-  screen = "apply"
-) => {
-  const fields = get(
-    state.screenConfiguration.screenConfig[screen],
-    objectJsonPath,
-    {}
-  );
-  let isFormValid = true;
-  for (var variable in fields) {
-    if (fields.hasOwnProperty(variable)) {
-      if (
-        fields[variable] && fields[variable].componentPath != "DynamicMdmsContainer" &&
-        fields[variable].props && fields[variable].jsonPath &&
-        (fields[variable].props.disabled === undefined ||
-          !fields[variable].props.disabled) &&
-        !validate(
-          screen,
-          {
-            ...fields[variable],
-            value: get(
-              state.screenConfiguration.preparedFinalObject,
-              fields[variable].jsonPath
-            )
-          },
-          dispatch,
-          true
-        )
-      ) {
-        isFormValid = false;
-      } else if (fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props && fields[variable].visible != false) {
-        let { masterName, moduleName, rootBlockSub, dropdownFields } = fields[variable].props;
-        let isIndex = fields[variable].index || 0;
-        dropdownFields.forEach((item, i) => {
-          let isValid = get(
-            state.screenConfiguration.preparedFinalObject,
-            `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${isIndex}].${item.key}`,
-            ''
-          );
-          if (isValid == '' || isValid == 'none' || isValid == null || isValid.includes("null")) {
-            isFormValid = false;
-            dispatch(
-              handleField(
-                "apply",
-                `${fields[variable].componentJsonpath}.props.dropdownFields[${i}]`,
-                "isRequired",
-                true
-              )
-            );
-          }
-        });
-
-      }
-    }
-  }
-  return isFormValid;
 };

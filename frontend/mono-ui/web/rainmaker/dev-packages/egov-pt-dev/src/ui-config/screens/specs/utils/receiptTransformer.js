@@ -68,7 +68,7 @@ export const loadUlbLogo = tenantid => {
     );
     canvas = null;
   };
-  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+  img.src = `/ukd-assets/${tenantid}/logo.png`;
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
@@ -283,7 +283,7 @@ export const loadReceiptData = async (consumerCode, tenant) => {
       value: tenant
     },
     {
-      key: "consumerCode",
+      key: "consumerCodes",
       value: consumerCode
     }
   ];
@@ -427,4 +427,6 @@ export const loadPdfGenerationData = (applicationNumber, tenant) => {
   /** Logo loaded and stored in local storage in base64 */
   loadUlbLogo(tenant);
   loadApplicationData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
+  loadReceiptData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
+  loadMdmsData(tenant);
 };

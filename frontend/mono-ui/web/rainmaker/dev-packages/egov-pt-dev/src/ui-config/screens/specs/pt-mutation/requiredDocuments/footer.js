@@ -19,13 +19,13 @@ const printDiv = () => {
 };
 
 export const startApplyFlow = (state, dispatch) => {
-  dispatch(prepareFinalObject("ptmDocumentsUploadRedux", {}));
+  dispatch(prepareFinalObject("documentsUploadRedux", {}));
   const applyUrl = `/property-tax/assessment-form`;
   dispatch(setRoute(applyUrl));
 };
 
 export const startMutationApplyFlow = (state, dispatch) => {
-  dispatch(prepareFinalObject("ptmDocumentsUploadRedux", {}));
+  dispatch(prepareFinalObject("documentsUploadRedux", {}));
   dispatch(prepareFinalObject("Property", {}));
   const consumerCode = getQueryArg(
     window.location.href,

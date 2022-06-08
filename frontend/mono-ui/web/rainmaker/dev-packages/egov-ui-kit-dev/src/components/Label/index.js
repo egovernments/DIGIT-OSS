@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./index.css";
 
-const labelText = (label, labelStyle, labelClassName, required, secondaryText, isConcat, dynamicValue, dynamicArray,indexNumber) => {
+const labelText = (label, labelStyle, labelClassName, required, secondaryText, isConcat, dynamicValue, dynamicArray) => {
   //   return isConcat ? (
   //     label && dynamicValue ? (
   //       <div data-localization={`${label}${dynamicValue}`} className="rainmaker-displayInline">
@@ -44,7 +44,7 @@ const labelText = (label, labelStyle, labelClassName, required, secondaryText, i
     } else {
       return (
         <div data-localization={label} className={`label-text ${labelClassName}`} style={labelStyle}>
-          {indexNumber&& <span>{indexNumber}.</span>} {label} {secondaryText} 
+          {label} {secondaryText}
           {required && <span style={{ color: "red" }}> *</span>}
         </div>
       );
@@ -71,7 +71,6 @@ const Label = ({
   dynamicValue,
   dynamicArray,
   isConcat,
-  indexNumber,
   secondaryText = "",
 }) => {
   let additionalStyles = {};
@@ -101,7 +100,7 @@ const Label = ({
 
   return (
     <div id={id} style={containerStyle} className={buttonLabel ? `button-label-container ${className}` : `label-container ${className}`}>
-      {labelText(label, labelStyle, labelClassName, required, secondaryText, isConcat, dynamicValue, dynamicArray,indexNumber)}
+      {labelText(label, labelStyle, labelClassName, required, secondaryText, isConcat, dynamicValue, dynamicArray)}
     </div>
   );
 };
@@ -115,7 +114,6 @@ Label.propTypes = {
   containerStyle: PropTypes.object,
   labelStyle: PropTypes.object,
   labelClassName: PropTypes.string,
-  indexNumber:PropTypes.number
 };
 
 export default Label;

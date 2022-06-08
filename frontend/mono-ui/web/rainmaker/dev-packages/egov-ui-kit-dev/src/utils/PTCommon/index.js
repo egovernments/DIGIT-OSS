@@ -119,6 +119,15 @@ export const getFormattedDate = (date) => {
   }
 }
 
+export const convertEpochToDate = dateEpoch => {
+  const dateFromApi = new Date(dateEpoch);
+  let month = dateFromApi.getMonth() + 1;
+  let day = dateFromApi.getDate();
+  let year = dateFromApi.getFullYear();
+  month = (month > 9 ? "" : "0") + month;
+  day = (day > 9 ? "" : "0") + day;
+  return `${day}-${month}-${year}`;
+};
 
 export const getLatestPropertyDetails = (propertyDetailsArray) => {
   if (propertyDetailsArray) {
@@ -340,11 +349,12 @@ export const getEstimateFromBill = (bill) => {
 };
 
 export const transformPropertyDataToAssessInfo = (data) => {
+
   const propertyType = data["Properties"][0]["propertyDetails"][0]["propertyType"];
   const propertySubType = data["Properties"][0]["propertyDetails"][0]["propertySubType"];
   const usageCategoryMajor = data["Properties"][0]["propertyDetails"][0]["usageCategoryMajor"];
   const usageCategoryMinor = data["Properties"][0]["propertyDetails"][0]["usageCategoryMinor"];
-  const propType = propertySubType === null ? propertyType : propertySubType;
+  const propType = propertyType;
   const propUsageType = usageCategoryMinor == null ? usageCategoryMajor : usageCategoryMinor;
   const formConfigPath = getPlotAndFloorFormConfigPath(propUsageType, propType);
   const path = formConfigPath["path"];
@@ -359,16 +369,16 @@ export const transformPropertyDataToAssessInfo = (data) => {
   basicInfoConfig = cloneDeep(basicInfoConfig);
   set(basicInfoConfig, "fields.typeOfUsage.value", propUsageType);
   set(basicInfoConfig, "fields.typeOfBuilding.value", propType);
-  if (propType === "SHAREDPROPERTY") {
+  if (propType === "BUILTUP.SHAREDPROPERTY") {
     configPlot = { fields: { floorCount: { value: 1 } } };
   }
-
+  
   if (formConfigPath["hasPlot"]) {
     configPlot = require(`egov-ui-kit/config/forms/specs/${path}/plotDetails.js`).default;
     configPlot = cloneDeep(configPlot);
     Object.keys(configPlot["fields"]).map((item) => {
       let jsonPath = configPlot["fields"][item]["jsonPath"];
-      if (item === "plotSize" && (propType === "VACANT" || propType === "INDEPENDENTPROPERTY")) {
+      if (item === "plotSize" && (propType === "VACANT" || propType === "BUILTUP.INDEPENDENTPROPERTY")) {
         let value = get(data, modifyEndOfJsonPath(jsonPath, "landArea"));
         configPlot["fields"][item]["value"] = value;
       } else {
@@ -388,17 +398,33 @@ export const transformPropertyDataToAssessInfo = (data) => {
       const floorNo = units[unitIndex]["floorNo"];
       const floorIndex = floorIndexObj[floorNo];
       let formKey =
-        propUsageType !== "RESIDENTIAL" && propType === "SHAREDPROPERTY"
+        propUsageType !== "RESIDENTIAL" && propType === "BUILTUP.SHAREDPROPERTY"
           ? `floorDetails_0_unit_${unitIndex}`
           : `floorDetails_${floorIndex}_unit_${unitIndex}`;
       configFloor = cloneDeep(configFloor);
       Object.keys(configFloor["fields"]).forEach((item) => {
         let jsonPath = configFloor["fields"][item]["jsonPath"];
-        jsonPath = jsonPath.replace(/units\[[0-9]\]/g, "units[" + unitIndex + "]");
+        jsonPath =  jsonPath && jsonPath.replace(/units\[[0-9]\]/g, "units[" + unitIndex + "]");
         configFloor["fields"][item].jsonPath = jsonPath;
         let valueInJSON = get(data, jsonPath);
+        var addDetail = jsonPath.split("additionalDetails") && jsonPath.split("additionalDetails")[0]
+        if(addDetail && get(data, `${addDetail}additionalDetails.innerDimensionsKnown`) === "false" && (jsonPath.includes("roomsArea")
+        || jsonPath.includes("commonArea") || 
+        jsonPath.includes("bathroomArea") || jsonPath.includes("garageArea"))){
+          configFloor["fields"][item].hideField = true
+        }
+        var categoryValue = jsonPath.split(".").pop();
+        if (categoryValue === "usageCategoryMinor") {
+         
+          valueInJSON = get(data, modifyEndOfJsonPath(jsonPath, "usageCategoryMajor"));
+          }
+         if (categoryValue === "usageCategoryDetail"){
+
+              valueInJSON = get(data, modifyEndOfJsonPath(jsonPath, "usageCategory"));
+              valueInJSON=valueInJSON.split(".")[1];
+          }
         if (valueInJSON === null) {
-          let categoryValue = jsonPath.split(".").pop();
+
           if (categoryValue === "usageCategoryMinor") {
             valueInJSON = get(data, modifyEndOfJsonPath(jsonPath, "usageCategoryMajor"));
           } else if (categoryValue === "usageCategoryDetail") {
@@ -458,9 +484,8 @@ const modifyEndOfJsonPath = (jsonpath, toReplaceWith) => {
 
 export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
   let target = document.querySelector(divIdName);
-  
+
   html2canvas(target, {
-    scale: 0.8,
     onclone: function (clonedDoc) {
       if (clonedDoc.getElementById("pdf-header")) {
         clonedDoc.getElementById("pdf-header").style.display = "block";
@@ -474,22 +499,17 @@ export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
       if (clonedDoc.getElementById("pt-flex-child-button")) {
         clonedDoc.getElementById("pt-flex-child-button").style.display = "none";
       }
-      if (clonedDoc.getElementById("pt-header-due-amount")) {
-        clonedDoc.getElementById("pt-header-due-amount").style.display = "none";
-      }
 
     }
   }).then(canvas => {
-   
-    var data = canvas.toDataURL("image/png", 1);
+    var data = canvas.toDataURL();
     var imgWidth = 200;
     var pageHeight = 295;
-    var imgHeight = (canvas.height * imgWidth) / canvas.width;
-    var heightLeft = imgHeight;
+    var imgHeight = pageHeight - 80;
     var doc = new jsPDF("p", "mm");
     var position = 0;
-    doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+
+    doc.addImage(data, "PNG", 5, 10 + position, imgWidth, imgHeight);
 
     if (action === "download") {
       doc.save(`preview-${applicationNumber}.pdf`);

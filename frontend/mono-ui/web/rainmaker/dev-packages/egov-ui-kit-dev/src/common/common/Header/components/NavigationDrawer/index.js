@@ -12,7 +12,7 @@ import LanguageSelection from "./LanguageSelection";
 // import menuItems from "./menuItems";
 import { ActionMenu } from "modules/common";
 import logoMseva from "egov-ui-kit/assets/images/logo_black.png";
-import logo from "egov-ui-kit/assets/images/logo_black.png";
+import logo from "egov-ui-kit/assets/images/uttarakhandlogo.png";
 
 const styles = {
   // listInnerDivStyle: {
@@ -53,7 +53,6 @@ const NavigationDrawer = ({
   containerStyle,
   isCSR,
   isADMIN,
-  isUserSetting,
 }) => {
   let sourceUrl=`${window.location.origin}/employee`;
   return (
@@ -65,7 +64,7 @@ const NavigationDrawer = ({
       open={toggleMenu}
       onRequestChange={(open) => onUpdateMenuStatus(open)}
     >
-      {isUserSetting && <UserProfile role={role} cities={cities} userInfo={userInfo} />}
+      <UserProfile role={role} cities={cities} userInfo={userInfo} />
       <div className="col-sm-1 drawer-list-poweredBy-wrapper">
         {/* <List
           onItemClick={handleItemClick}
@@ -84,10 +83,10 @@ const NavigationDrawer = ({
           listContainerStyle={{ background: "#ffffff" }}
           listItemStyle={{ borderBottom: "1px solid #e0e0e0" }}
         /> */}
-        {window && window.outerWidth <= 768 && isUserSetting && <ActionMenu role={role} />}
+        {window && window.outerWidth <= 768 && <ActionMenu role={role} />}
         {/* <Divider light /> */}
         <LanguageSelection fetchLocalizationLabel={fetchLocalizationLabel} />
-        {isUserSetting && CommonMenuItems.map((item) => {
+        {CommonMenuItems.map((item) => {
           return (
             <div className="sideMenuItem">
               <MenuItem
@@ -117,5 +116,6 @@ const NavigationDrawer = ({
     </Drawer>
   );
 };
+
 
 export default NavigationDrawer;

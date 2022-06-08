@@ -5,46 +5,55 @@
   line-height: 17px;
 }
 .search-bar{
-  padding-left:10%;
+  //padding-left:10%;
+  margin-top: 15px!important;
 }
-.whiteBackground {
-  height: 36px !important;
-  top: 26px;
-  input{
-    margin-top: 2px !important;
-    left: 0px;
-  }}
 .search-bar div div svg{
-top:46px;
+  top:50!important;
 }
-// @media only screen and (max-width: 768px)and (min-width: 720px) {
-//   .whiteBackground{
-//       input{
-//         left: 0px!important;
-//       }
-//   }
-// }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 551px) {
   .search-bar div div svg{
-    top:15px !important;
+
+  display: inline-block !important;
+  color: rgb(150, 150, 150)!important;
+  fill: currentcolor !important;
+  height: 24px !important;
+  width: 24px !important;
+  user-select: none !important;
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms !important;
+  position: absolute !important;
+  z-index: 2 !important;
+  bottom: 0px !important;
+  top: 14px !important;
+  margin: auto !important;
+  cursor: pointer !important;
+  left: 10px !important;
   }
+}
+
+.backgroundWhite{
+  background-color: white !important;
+}
+@media only screen and (max-width: 768px) {
   .backgroundWhite{
     background-color: white;
     margin-left: 5px !important;
     margin-top: 15px !important;
   }
-  .abcd .selected{ 
+  .abcd .selected{
     color:green !important;
     background-color:rgb(31, 8, 241) !important;
   }
   .whiteBackground{
     background-color: white !important;
     height: 36px !important;
-    top: 6px!important;
+
+    // width:90%!important;
+    top: 6px;
       input{
-        width:100%!important;
+        // padding: 0px 0px 2px !important;
         margin-top: 5px !important;
-        left: 0px;
+        left: 30px;
       }
   }
   .sort-icon{
@@ -76,16 +85,39 @@ top:46px;
   }
   .whiteBackground {
     height: 36px !important;
-    top: 26px;
+    top: 22px;
     // width:80%!important;
-    
+
     input{
       // padding: 0px 0px 2px !important;
       margin-top: 2px !important;
-      left: 0px;
+      left: 27px;
     }}
   }
 
-.search-bar div div svg{
-  top:46px;
+@media only screen and (min-width: 331px) {
+  .backgroundWhite{
+    background-color: white;
+    margin-left: 5px !important;
+    margin-top: 15px !important;
+  }
+ 
+}
+
+@media only screen and (min-width: 411px) {
+  .backgroundWhite{
+    background-color: white;
+    margin-left: 5px !important;
+    margin-top: 15px !important;
+  }
+ 
+}
+
+@media only screen and (min-width: 320px) {
+  .backgroundWhite{
+    background-color: white;
+    margin-left: 5px !important;
+    margin-top: 15px !important;
+  }
+ 
 }

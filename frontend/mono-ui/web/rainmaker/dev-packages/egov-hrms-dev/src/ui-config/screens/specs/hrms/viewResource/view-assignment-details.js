@@ -6,9 +6,7 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { checkValueForNA } from "../../utils";
-import { changeStep } from "../createResource/footer";
-
+import { convertEpochToDate } from "../../utils";
 
 const gotoCreatePage = (state, dispatch) => {
   const createUrl =
@@ -30,21 +28,25 @@ const assignmentCard = {
             labelName: "Assigned From Date",
             labelKey: "HR_ASMT_FROM_DATE_LABEL"
           },
-          { jsonPath: "Employee[0].assignments[0].fromDate", callBack: checkValueForNA }
+          { jsonPath: "Employee[0].assignments[0].fromDate",
+            callBack: convertEpochToDate
+          }
         ),
         reviewAssignedTo: getLabelWithValue(
           {
             labelName: "Assigned To Date",
             labelKey: "HR_ASMT_TO_DATE_LABEL"
           },
-          { jsonPath: "Employee[0].assignments[0].toDate", callBack: checkValueForNA }
+          { jsonPath: "Employee[0].assignments[0].toDate",
+            callBack: convertEpochToDate
+        }
         ),
         reviewCurrentAssigned: getLabelWithValue(
           {
             labelName: "Currently Assigned Here",
             labelKey: "HR_CURR_ASSIGN_LABEL"
           },
-          { jsonPath: "Employee[0].assignments[0].isCurrentAssignment", callBack: checkValueForNA }
+          { jsonPath: "Employee[0].assignments[0].isCurrentAssignment" }
         ),
         reviewDepartment: getLabelWithValue(
           { labelName: "Department", labelKey: "HR_DEPT_LABEL" },
@@ -53,7 +55,7 @@ const assignmentCard = {
             localePrefix: {
               moduleName: "common-masters",
               masterName: "Department"
-            }, callBack: checkValueForNA
+            }
           }
         ),
         reviewDesignation: getLabelWithValue(
@@ -63,21 +65,20 @@ const assignmentCard = {
             localePrefix: {
               moduleName: "common-masters",
               masterName: "Designation"
-            }, callBack: checkValueForNA
+            }
           }
         ),
         reviewReportTo: getLabelWithValue(
           { labelName: "Reporting To", labelKey: "HR_REP_TO_LABEL" },
           {
             jsonPath: "Employee[0].assignments[0].reportingTo"
-            , callBack: checkValueForNA
           }
         ),
         reviewHOD: getLabelWithValue(
           { labelName: "Head of Department", labelKey: "HR_HOD_LABEL" },
           {
             jsonPath: "Employee[0].assignments[0].isHOD"
-            , callBack: checkValueForNA
+            // callBack: convertEpochToDate
           }
         )
       })
@@ -139,9 +140,7 @@ export const getAssignmentDetailsView = (isReview = true) => {
           },
           onClickDefination: {
             action: "condition",
-            callBack: (state, dispatch) => {
-              changeStep(state, dispatch, "", 1);
-            }
+            callBack: gotoCreatePage
           }
         }
       }

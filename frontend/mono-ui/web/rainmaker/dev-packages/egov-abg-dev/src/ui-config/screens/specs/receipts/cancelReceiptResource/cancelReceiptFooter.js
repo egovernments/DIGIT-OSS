@@ -7,7 +7,7 @@ import { PAYMENTSEARCH } from "egov-ui-kit/utils/endPoints";
 import { set } from "lodash";
 import get from "lodash/get";
 import { ifUserRoleExists, validateFields } from "../../utils";
-
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/uc/pay" : "/inbox";
@@ -123,8 +123,15 @@ export const viewReceiptFooter = getCommonApplyFooter({
       action: "condition",
       callBack: (state, dispatch) => {
         // processDemand(state, dispatch);
-        dispatch(setRoute(`/receipts/cancelReceipt?receiptNumbers=${getQueryArg(window.location.href, "receiptNumbers")}&tenantId=${getQueryArg(window.location.href, "tenantId")}&businessService=${getQueryArg(window.location.href, "businessService")}`));
-
+        let propertyId=state.screenConfiguration.preparedFinalObject.PaymentReceipt.paymentDetails[0].bill.consumerCode
+        let propertyData=state.properties.propertiesById[propertyId]
+        if(propertyData.status === "INWORKFLOW"){
+          dispatch(toggleSnackbarAndSetText(true, {labelName:  "In Workflow" , labelKey: "Cannot Cancel property in workflow" }, "error"))
+          // dispatch(setRoute('/receipts/search'))
+        }else{
+          dispatch(setRoute(`/receipts/cancelReceipt?receiptNumbers=${getQueryArg(window.location.href, "receiptNumbers")}&tenantId=${getQueryArg(window.location.href, "tenantId")}&businessService=${getQueryArg(window.location.href, "businessService")}`));
+        }
+        
       }
     }
   }
@@ -149,7 +156,7 @@ const cancelReceipt = async (state, dispatch) => {
       set(paymentWorkflows[0], 'paymentId', get(state.screenConfiguration.preparedFinalObject, 'PaymentReceipt.id', ''));
       let payload = await httpRequest(
         "post",
-        `${PAYMENTSEARCH.GET.URL}${getQueryArg(window.location.href, "businessService")}/_workflow`,
+        `${PAYMENTSEARCH.GET.URL}_workflow`,
         "_search",
         [],
         { paymentWorkflows: paymentWorkflows }

@@ -9,6 +9,19 @@ const ScreenInterface = Loadable({
 
 const routes = [
   {
+    path: "withoutAuth/:path/:screenKey",
+    component: ScreenInterface,
+    needsAuthentication: false,
+    options: {
+      title: "",
+      hideFooter: true,
+      hideTitle: true,
+      hideBackButton: true,
+      isHomeScreen: true,
+    },
+  },
+
+  {
     path: ":path/:screenKey",
     component: ScreenInterface,
     needsAuthentication: true,
@@ -27,18 +40,6 @@ const routes = [
       hideFooter: true,
       hideTitle: true,
       helpButton: window.location.pathname === "/tradelicense-citizen/home" ? true : false,
-    },
-  },
-  {
-    path: "withoutAuth/:path/:screenKey",
-    component: ScreenInterface,
-    needsAuthentication: false,
-    options: {
-      title: "",
-      hideFooter: true,
-      hideTitle: true,
-      hideBackButton: true,
-      isHomeScreen: true,
     },
   },
 ];

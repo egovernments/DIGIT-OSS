@@ -36,17 +36,10 @@ class VerticalLinearStepper extends React.Component {
                         item.businessService
                           ? `WF_${item.businessService.toUpperCase()}_${
                               item.state.applicationStatus
-                            }` 
+                            }`
                           : ""
                       }
                     />
-                    { item.isExclamationMark ?
-                        <span style={{padding: "4px 0 0 4px"}}>
-                          <i class="material-icons" style={{color: "rgb(244, 67, 54)"}}>error</i>
-                        </span> 
-                       : ""   
-                    }
-                    
                   </StepLabel>
                   <StepContent>
                     <TaskStatusComponents currentObj={item} index={index} />

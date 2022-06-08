@@ -1,10 +1,17 @@
 import {
-  getCommonCard, getCommonContainer, getCommonTitle, getPattern, getSelectField, getTextField
+  getCommonCard,
+  getCommonTitle,
+  getTextField,
+  getSelectField,
+  getCommonContainer,
+  getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { getDetailsFromProperty, getMapLocator, showHideMapPopup } from "../../utils";
+import { getMapLocator } from "../../utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { showHideMapPopup, getDetailsFromProperty } from "../../utils";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 
 export const tradeLocationDetails = getCommonCard(
@@ -72,8 +79,8 @@ export const tradeLocationDetails = getCommonCard(
                       /[.]/g,
                       "_"
                     )}_REVENUE_${item.code
-                      .toUpperCase()
-                      .replace(/[._:-\s\/]/g, "_")}`
+                    .toUpperCase()
+                    .replace(/[._:-\s\/]/g, "_")}`
                 });
                 return result;
               }, []);
@@ -117,7 +124,7 @@ export const tradeLocationDetails = getCommonCard(
         placeholder: {
           labelName: "Enter Property ID",
           labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_PLACEHOLDER"
-        },
+        },              
         iconObj: {
           iconName: "search",
           position: "end",
@@ -142,8 +149,8 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Door/House No.",
           labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
         },
-        props: {
-          className: "applicant-details-error"
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
@@ -157,8 +164,8 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Building/Colony Name",
           labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
         },
-        props: {
-          className: "applicant-details-error"
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Building/Colony Name",
@@ -172,8 +179,8 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Street Name",
           labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
         },
-        props: {
-          className: "applicant-details-error"
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Street Name",
@@ -201,25 +208,25 @@ export const tradeLocationDetails = getCommonCard(
             labelName: "Select Mohalla",
             labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_PLACEHOLDER"
           },
+         // className:"mohalla-details",
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
           jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
           sourceJsonPath: "applyScreenMdmsData.tenant.localities",
           labelsFromLocalisation: true,
           suggestions: [],
           fullwidth: true,
-          isClearable: true,
           required: true,
           inputLabelProps: {
             shrink: true
           }
-          // className: "tradelicense-mohalla-apply"
         },
         beforeFieldChange: async (action, state, dispatch) => {
-          // dispatch(
-          //   prepareFinalObject(
-          //     "Licenses[0].tradeLicenseDetail.address.locality.name",
-          //     action.value && action.value.label
-          //   )
-          // );
+          dispatch(
+            prepareFinalObject(
+              "Licenses[0].tradeLicenseDetail.address.locality.name",
+              action.value && action.value.label
+            )
+          );
         },
         gridDefination: {
           xs: 12,
@@ -231,8 +238,8 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Pincode",
           labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
         },
-        props: {
-          className: "applicant-details-error"
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Pincode",
@@ -301,11 +308,7 @@ export const tradeLocationDetails = getCommonCard(
         jsonPath:
           "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo"
       })
-    },
-      {
-        style: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL"? { "pointer-events": "none" } : {}
-      }
-    ),
+    }),
     mapsDialog: {
       componentPath: "Dialog",
       props: {
@@ -322,6 +325,7 @@ export const tradeLocationDetails = getCommonCard(
     }
   },
   {
-    style: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? { "cursor": "not-allowed", overflow: "visible" } : { overflow: "visible" }
+    /* style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none",overflow:"visible"}:{overflow: "visible"}
+ */
   }
 );

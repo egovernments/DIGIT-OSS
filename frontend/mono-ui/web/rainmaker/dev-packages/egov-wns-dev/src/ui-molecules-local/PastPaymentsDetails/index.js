@@ -123,7 +123,7 @@ class PastPayments extends Component {
                 bold={false}
               />
               <div style={{ height: "auto" }}>
-                {getItemStatus(element.totalDue, element.totalAmountPaid, element.paymentDetails[0].bill.tenantId, element.paymentDetails[0].bill.consumerCode,'',element.paymentDetails[0].businessService)}
+                {getItemStatus(element.totalDue, element.totalAmountPaid, element.paymentDetails[0].bill.tenantId, element.paymentDetails[0].bill.consumerCode)}
               </div>
             </div>
           </Grid>
@@ -132,7 +132,7 @@ class PastPayments extends Component {
     );
     return (
       <div class="screen screen-with-bredcrumb">
-        <BreadCrumbs url={urls} history="" label="WS_COMMON_PAST_PAYMENTS"/>
+        <BreadCrumbs url={urls} history="" />
         <div className="form-without-button-cont-generic">
           <div className="rainmaker-card clearfix property-tax-card">
             <div className="list-main-card">

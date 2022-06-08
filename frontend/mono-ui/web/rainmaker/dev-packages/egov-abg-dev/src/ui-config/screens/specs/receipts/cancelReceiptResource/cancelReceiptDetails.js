@@ -73,92 +73,94 @@ export const receiptSummaryDetails = {
 export const receiptPaymentDetails = {
   serviceType: getLabelWithValue(
     {
-
       labelName: "Market Value",
-      labelKey: "CR_RECEIPT_SERVICE_TYPE"
+      labelKey: "CR_RECEIPT_SERVICE_TYPE",
     },
     {
-      jsonPath:
-        "PaymentReceipt.paymentDetails[0].businessService",
-      callBack: checkValueForNA
+      jsonPath: "PaymentReceipt.paymentDetails[0].businessService",
+      callBack: checkValueForNA,
     }
   ),
   billPeriod: getLabelWithValue(
     {
       labelName: "Document No.",
-      labelKey: "CR_RECEIPT_BILL_PERIOD"
+      labelKey: "CR_RECEIPT_BILL_PERIOD",
     },
     {
       jsonPath:
         "PaymentReceipt.paymentDetails[0].bill.billDetails[0].fromPeriod",
-      callBack: value => {
+      callBack: (value) => {
         return convertEpochToDate(value);
-      }
-    }
-  ), receiptAmount: getLabelWithValue(
-    {
-      labelName: "Document No.",
-      labelKey: "CR_RECEIPT_AMOUNT"
-    },
-    {
-      jsonPath:
-        "PaymentReceipt.totalAmountPaid",
-      callBack: checkValueForNA
-    }
-  ), pendingAmount: getLabelWithValue(
-    {
-      labelName: "Document No.",
-      labelKey: "CR_RECEIPT_PENDING_AMOUNT"
-    },
-    {
-      jsonPath:
-        "PaymentReceipt.totalDue",
-      callBack: checkValueForNA
-    }
-  ), paymentMode: getLabelWithValue(
-    {
-      labelName: "Document No.",
-      labelKey: "CR_RECEIPT_PAYMENT_MODE"
-    },
-    {
-      jsonPath:
-        "PaymentReceipt.paymentMode",
-      callBack: checkValueForNA
-    }
-  ), txnId: getLabelWithValue(
-    {
-      labelName: "Document No.",
-      labelKey: "CR_RECEIPT_TXN_ID"
-    },
-    {
-      jsonPath:
-        "PaymentReceipt.transactionNumber",
-      callBack: checkValueForNA
-    }
-  ), g8ReceiptNo: getLabelWithValue(
-    {
-      labelName: "Document No.",
-      labelKey: "CR_RECEIPT_G8_RECEIPT_NO"
-    },
-    {
-      jsonPath:
-        "PaymentReceipt.paymentDetails[0].manualReceiptNumber",
-      callBack: checkValueForNA
-    }
-  ), g8ReceiptDate: getLabelWithValue(
-    {
-      labelName: "Document No.",
-      labelKey: "CR_RECEIPT_G8_RECEIPT_DATE"
-    },
-    {
-      jsonPath:
-        "PaymentReceipt.paymentDetails[0].manualReceiptDate",
-      callBack: value => {
-        return convertEpochToDate(value);
-      }
+      },
     }
   ),
-}
+  receiptAmount: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_AMOUNT",
+    },
+    {
+      jsonPath: "PaymentReceipt.totalAmountPaid",
+      callBack: checkValueForNA,
+    }
+  ),
+  pendingAmount: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_PENDING_AMOUNT",
+    },
+    {
+      jsonPath: "PaymentReceipt.totalAmountPaid1",
+      callBack: checkValueForNA,
+    }
+  ),
+  paymentMode: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_PAYMENT_MODE",
+    },
+    {
+      jsonPath: "PaymentReceipt.paymentMode",
+      callBack: checkValueForNA,
+    }
+  ),
+  txnId: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_TXN_ID",
+    },
+    {
+      jsonPath: "PaymentReceipt.transactionNumber",
+      callBack: (value) => {
+        value = value.replaceAll("_", "");
+        checkValueForNA;
+        return value;
+      },
+    }
+  ),
+  g8ReceiptNo: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_G8_RECEIPT_NO",
+    },
+    {
+      jsonPath: "PaymentReceipt.paymentDetails[0].manualReceiptNumber",
+      callBack: checkValueForNA,
+    }
+  ),
+  g8ReceiptDate: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_G8_RECEIPT_DATE",
+    },
+    {
+      jsonPath: "PaymentReceipt.paymentDetails[0].manualReceiptDate",
+      callBack: (value) => {
+        return convertEpochToDate(value);
+      },
+    }
+  ),
+};
 const receiptDetails = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
@@ -257,25 +259,6 @@ export const cancelReceiptDetailsCard = getCommonCard(
           pattern: getPattern("Address"),
           errorMessage: "Invalid Details.",
           jsonPath: "paymentWorkflows[0].additionalDetails"
-        }),
-
-        addtionalPenalty: getTextField({
-          label: {
-            labelName: "Comments",
-            labelKey: "CR_ADDITIONAL_PENALTY"
-          },
-          placeholder: {
-            labelName: "Enter Comment ",
-            labelKey: "CR_ADDITIONAL_PENALTY_PLACEHOLDER"
-          },
-          required: false,
-          gridDefination: {
-            xs: 12,
-            sm: 8
-          },
-          pattern: getPattern("Amount"),
-          jsonPath: "paymentWorkflows[0].additionalPenalty",
-          disabled: true
         })
       }
     )

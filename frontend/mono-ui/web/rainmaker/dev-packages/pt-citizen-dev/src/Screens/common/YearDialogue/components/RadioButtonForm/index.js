@@ -4,7 +4,7 @@ import "./index.css";
 import Label from "egov-ui-kit/utils/translationNode";
 
 const labelContainerStyle = {
-  marginTop: window.screen.width>768?"-2px":"3px"
+  marginTop: "-2px"
 }
 
 const RadioButtonForm = ({ label, form, handleFieldChange, selectedYear, handleRadioButton, history, resetFormWizard, urlToAppend }) => {

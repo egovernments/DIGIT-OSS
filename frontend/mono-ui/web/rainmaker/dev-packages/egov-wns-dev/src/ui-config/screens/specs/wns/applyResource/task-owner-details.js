@@ -3,7 +3,7 @@ import {
     getCommonContainer,
     getLabelWithValue,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDateAndHandleNA } from "../../utils";
+import { convertEpochToDate } from "../../utils";
 
 const getHeader = label => {
     return {
@@ -69,7 +69,7 @@ export const dateOfBirth = getLabelWithValue(
     },
     {
         jsonPath: "WaterConnection[0].property.owners[0].dob",
-        callBack: convertEpochToDateAndHandleNA
+        callBack: convertEpochToDate
     }
 )
 
@@ -99,7 +99,8 @@ export const specialApplicantCategory = getLabelWithValue(
         labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
     },
     {
-        jsonPath:"WaterConnection[0].property.owners[0].name"
+        jsonPath:
+            "WaterConnection[0].property.owners."
     }
 )
 
@@ -118,15 +119,6 @@ export const propertyOwnerDetails = () => {
             componentPath: "MultiItem",
             props: {
                 scheama: getCommonContainer({
-                    reviewOwnerAddr: getLabelWithValue(
-                        {
-                            labelName: "Corrospondence Address",
-                            labelKey: "WS_OWN_DETAIL_CROSADD"
-                        },
-                        {
-                            jsonPath: "WaterConnection[0].property.owners[0].name",
-                        }
-                    ),
                     mobileNumber,
                     name,
                     gender,
@@ -140,7 +132,7 @@ export const propertyOwnerDetails = () => {
                 items: [],
                 hasAddItem: false,
                 sourceJsonPath: "WaterConnection[0].property.owners",
-                prefixSourceJsonPath: "children.cardContent.children.scheama.children",
+                prefixSourceJsonPath: "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
                 afterPrefixJsonPath: "children.value.children.key"
             },
             type: "array"

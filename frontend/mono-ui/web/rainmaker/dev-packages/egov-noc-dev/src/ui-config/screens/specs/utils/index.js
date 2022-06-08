@@ -1,425 +1,797 @@
-
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-    getQueryArg,
-    getTransformedLocale,
-    getFileUrl,
-    getFileUrlFromAPI,
-    getTransformedLocalStorgaeLabels,
-    getLocaleLabels
+  getQueryArg,
+  getTransformedLocalStorgaeLabels,
+  getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
-import jp from "jsonpath";
-import _ from "lodash";
-import groupBy from "lodash/groupBy";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils/api";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import isUndefined from "lodash/isUndefined";
+import {
+  getCommonCard,
+  getCommonValue,
+  getCommonCaption,
+  getPattern
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
 
-const getDocumentCodes = (documentType) => {
-    var code = getTransformedLocale(documentType);
-    code = code.substring(0, code.lastIndexOf("_"));
-    return code;
-}
-
-/**
- * This method will be called to get the current role of logged-in user
- * @param {String} wfState 
- * @returns {String} currentRole
- */
-export const getLoggedinUserRole = (wfState) => {
-    let userInfo = JSON.parse(getUserInfo()),
-        roles = get(userInfo, "roles"),
-        currentRole,
-        isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-
-    if (roles && roles.length == 1) {
-        currentRole = roles[0].name;
-
-    } else if (roles && roles.length > 1) {
-        if (isEmployee) {
-            if (wfState) {
-                wfState = wfState.state;
-                if (wfState === "SEND_TO_CITIZEN") {
-                    currentRole = "BPA Architect"
-                }
-                else if (wfState === "DOC_VERIFICATION_PENDING") {
-                    currentRole = "BPA Document Verifier"
-                }
-                else if (wfState === "FIELDINSPECTION_PENDING") {
-                    currentRole = "BPA Field Inspector"
-                }
-                else if (wfState === "NOC_VERIFICATION_PENDING") {
-                    currentRole = "BPA Noc Verifier"
-                }
-                else {
-                    currentRole = "NOC Approver"
-                }
-            }
-
-        } else {
-            currentRole = roles.find((code) => code == "BPA_ARCHITECT")
-            if (!currentRole) {
-                currentRole = roles[0].name;
-            } else {
-                currentRole = currentRole.name;
-            }
-        }
-    }
-
-    return currentRole;
+export const getCommonApplyFooter = children => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      className: "apply-wizard-footer"
+    },
+    children
+  };
 };
 
-export const requiredDocumentsData = async (state, dispatch, action) => {
-    try {
-        let mdmsData = get(
-            state.screenConfiguration.preparedFinalObject,
-            "applyScreenMdmsData"
-        );
-        const applicationNumber = getQueryArg(
-            window.location.href,
-            "applicationNumber"
-        );
-        const tenantId = getQueryArg(window.location.href, "tenantId");
-        const queryObject = [
-            { key: "businessIds", value: applicationNumber },
-            { key: "tenantId", value: tenantId }
-        ];
-        const wfPayload = await httpRequest(
-            "post",
-            "egov-workflow-v2/egov-wf/process/_search",
-            "",
-            queryObject
-        );
-        const wfState = get(wfPayload, "ProcessInstances[0]");
-        let appState;
-        dispatch(prepareFinalObject("applicationProcessInstances", get(wfPayload, "ProcessInstances[0]")));
+export const transformById = (payload, id) => {
+  return (
+    payload &&
+    payload.reduce((result, item) => {
+      result[item[id]] = {
+        ...item
+      };
 
-        if (mdmsData && mdmsData.BPA && wfState) {
-            let documents = mdmsData.BPA.DocTypeMapping;
-            documents.forEach(doc => {
-                if (doc.WFState === wfState.state.state) {
-                    appState = wfState.state.state;
-                }
-            });
-        };
-        let proInstance = wfPayload.ProcessInstances[0];
-        let nextActions = get(proInstance, "nextActions");
-        let isVisibleTrue = false;
-        if (nextActions && nextActions.length > 0) isVisibleTrue = true;
-        prepareDocumentsView(state, dispatch, action, appState, isVisibleTrue);
-    } catch (e) {
-        console.log(e);
-    }
-}
-const prepareDocumentsView = async (state, dispatch, action, appState, isVisibleTrue) => {
-    let documentsPreview = [];
-
-    // Get all documents from response
-    let Noc = get(
-        state,
-        "screenConfiguration.preparedFinalObject.Noc",
-        {}
-    );
-
-    let applicantDocuments = jp.query(
-        Noc,
-        "$.documents.*"
-    );
-
-    let uploadedAppDocuments = [];
-
-    let allDocuments = [
-        ...applicantDocuments
-    ];
-
-    let fileStoreIds = jp.query(allDocuments, "$.*.fileStoreId");
-    let fileUrls =
-        fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-    allDocuments.map((doc, index) => {
-        uploadedAppDocuments.push(doc);
-        let obj = {};
-        obj.title = getTransformedLocale(doc.documentType);
-        obj.fileStoreId = doc.fileStoreId;
-        obj.linkText = "View";
-        obj.wfState = doc.wfState;
-        if (doc.auditDetails) {
-            obj["createdTime"] = doc.auditDetails.createdTime;
-        }
-
-        obj["link"] =
-            (fileUrls &&
-                fileUrls[doc.fileStoreId] &&
-                getFileUrl(fileUrls[doc.fileStoreId])) ||
-            "";
-        obj["name"] =
-            (fileUrls[doc.fileStoreId] &&
-                decodeURIComponent(
-                    getFileUrl(fileUrls[doc.fileStoreId])
-                        .split("?")[0]
-                        .split("/")
-                        .pop()
-                        .slice(13)
-                )) ||
-            `Document - ${index + 1}`;
-        obj.createdBy = getLoggedinUserRole(doc.wfState);
-        obj.additionalDetails = doc.additionalDetails;
-        obj['auditDetails'] = doc.auditDetails;
-        documentsPreview.push(obj);
-        return obj;
-    });
-    dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
-    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if ((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
-        prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview);
-    } else {
-        prepareFinalCards(state, dispatch, documentsPreview, [], isVisibleTrue)
-    }
+      return result;
+    }, {})
+  );
 };
 
-const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMdms, isVisibleTrue) => {
-    let cards = [];
-    documentsPreview.forEach((item) => {
-        item.documentCode = getDocumentCodes(item.title)
-    }
+export const getTranslatedLabel = (labelKey, localizationLabels) => {
+  let translatedLabel = null;
+  if (localizationLabels && localizationLabels.hasOwnProperty(labelKey)) {
+    translatedLabel = localizationLabels[labelKey];
+    if (
+      translatedLabel &&
+      typeof translatedLabel === "object" &&
+      translatedLabel.hasOwnProperty("message")
     )
-    let documentCards = groupBy(documentsPreview, 'documentCode');
-    let cardReadOnly = false;
-    let readOnly = false;
-    if (isVisibleTrue === false) {
-        cardReadOnly = true;
-        readOnly = true;
-    }
-
-    documentCards && Object.keys(documentCards).map((doc) => {
-        let card = {
-            documentCode: doc,
-            documents: documentCards[doc],
-            wfState: documentCards[doc].wfState,
-            readOnly: readOnly
-        }
-        cards.push(card);
-    });
-    if (requiredDocsFromMdms.length > 0) {
-        const allCards = [].concat(...requiredDocsFromMdms.map(({ cards }) => cards || []));
-
-        allCards && allCards.map((mdmsCard) => {
-            let found = false;
-            mdmsCard.documentCode = getTransformedLocale(mdmsCard.code);
-            for (var i = 0; i < cards.length; i++) {
-                if (mdmsCard.documentCode == cards[i].documentCode) {
-                    cards[i].readOnly = cardReadOnly;
-                    let mergedCard = { ...cards[i], ...mdmsCard };
-                    cards[i] = { ...mergedCard };
-                    found = true;
-                }
-            }
-
-            if (!found) {
-                mdmsCard.readOnly = cardReadOnly;
-                cards.push(mdmsCard)
-            }
-        });
-    }
-    /**
-     * @Todo should be handled at component level
-     */
-    cards.map(card => {
-        if (card.documents) {
-            card.documents.map(item => {
-                if (!item.fileName) {
-                    item.fileName = item.name;
-                }
-            })
-        }
-    });
-    dispatch(prepareFinalObject("finalCardsforPreview", cards));
-
-}
-
-export const prepareDocsInEmployee = (state, dispatch, action, appState, uploadedAppDocuments, documentsPreview) => {
-    let applicationDocuments = get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.NOC.DocumentTypeMapping",
-        []
-    );
-    let documentsDropDownValues = get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
-        []
-    );
-
-    let documents = [];
-    let nocType = get(state.screenConfiguration.preparedFinalObject, "Noc.nocType", "");
-
-    applicationDocuments.forEach(doc => {
-        if (doc.applicationType === "NEW" && doc.nocType === nocType) {
-            documents.push(doc.docTypes)
-        }
-    });
-
-    let documentsList = [];
-    if (documents[0] && documents[0].length > 0) {
-        documents[0].forEach(doc => {
-            let code = doc.documentType;
-            doc.dropDownValues = [];
-            documentsDropDownValues.forEach(value => {
-                let values = value.code.slice(0, code.length);
-                if (code === values) {
-                    doc.hasDropdown = true;
-                    doc.dropDownValues.push(value);
-                }
-            });
-            documentsList.push(doc);
-        });
-    }
-    const bpaDocuments = documentsList;
-    let documentsContract = [];
-    let tempDoc = {};
-
-    if (bpaDocuments && bpaDocuments.length > 0) {
-        bpaDocuments.forEach(doc => {
-            let card = {};
-            card["code"] = doc.documentType.split(".")[0];
-            card["title"] = doc.documentType.split(".")[0];
-            card["cards"] = [];
-            tempDoc[doc.documentType.split(".")[0]] = card;
-        });
-        bpaDocuments.forEach(doc => {
-            let card = {};
-            card["name"] = doc.documentType;
-            card["code"] = doc.documentType;
-            card["required"] = doc.required ? true : false;
-            if (doc.hasDropdown && doc.dropDownValues) {
-                let dropDownValues = {};
-                dropDownValues.label = "Select Documents";
-                dropDownValues.required = doc.required;
-                dropDownValues.menu = doc.dropDownValues.filter(item => {
-                    return true;
-                });
-                dropDownValues.menu = dropDownValues.menu.map(item => {
-                    return { code: item.code, label: item.code };
-                });
-                card["dropDownValues"] = dropDownValues;
-            }
-            tempDoc[doc.documentType.split(".")[0]].cards.push(card);
-        });
-    }
-
-    if (tempDoc) {
-        Object.keys(tempDoc).forEach(key => {
-            documentsContract.push(tempDoc[key]);
-        });
-    }
-    let finalDocuments = [];
-    if (documentsContract && documentsContract.length > 0) {
-
-        let documentsCodes = [];
-
-        documentsContract.forEach(documents => {
-            documents.cards.forEach(cardDoc => {
-                documentsCodes.push(cardDoc.code);
-            });
-        });
-
-        let documentsDocTypes = [];
-        uploadedAppDocuments.forEach(appDoc => {
-            if (appDoc && appDoc.documentType) {
-                let code = (appDoc.documentType).split('.')[0] + '.' + (appDoc.documentType).split('.')[1]
-                documentsDocTypes.push(code);
-            }
-        });
-
-        let result;
-        if (documentsDocTypes && documentsDocTypes.length > 0) {
-            documentsCodes.map(docs => {
-                documentsDocTypes.map(doc => {
-                    if (docs === doc) {
-                        documentsContract[0].cards.map(items => {
-                            if (items && items.code === doc) return items.required = false;
-                        })
-                    }
-                })
-                return docs;
-            })
-            result = documentsCodes;
-        } else {
-            result = documentsCodes;
-        }
-
-        let finalDocs = [];
-
-        documentsContract.forEach(doc => {
-            let cards = [];
-            for (let i = 0; i < result.length > 0; i++) {
-                let codes = result[i];
-                doc.cards.forEach(docCards => {
-                    if (docCards.code === codes) {
-                        cards.push(docCards);
-                    }
-                })
-            }
-            finalDocs.push({
-                cards: cards,
-                code: doc.code,
-                title: doc.code
-            });
-        });
-
-
-        if (finalDocs && finalDocs.length > 0) {
-            finalDocs.forEach(fDoc => {
-                if (fDoc && fDoc.cards && fDoc.cards.length > 0) {
-                    finalDocuments.push(fDoc);
-                }
-            })
-        };
-
-        if (finalDocuments && finalDocuments.length > 0) {
-            dispatch(prepareFinalObject("documentsContract", finalDocuments));
-        }
-    }
-    prepareFinalCards(state, dispatch, documentsPreview, finalDocuments);
+      translatedLabel = translatedLabel.message;
+  }
+  return translatedLabel || labelKey;
 };
 
-export const checkValueForNA = value => {
-    return value ? value : "NA";
-};
-
-export const getNocSearchResults = async (queryObject, dispatch) => {
-    try {
-        const response = await httpRequest(
-            "post",
-            "/noc-services/v1/noc/_search",
-            "",
-            queryObject
-        );
-        return response;
-    } catch (error) {
-        store.dispatch(
-            toggleSnackbar(
-                true,
-                { labelName: error.message, labelKey: error.message },
-                "error"
+export const validateFields = (
+  objectJsonPath,
+  state,
+  dispatch,
+  screen = "apply"
+) => {
+  const fields = get(
+    state.screenConfiguration.screenConfig[screen],
+    objectJsonPath,
+    {}
+  );
+  let isFormValid = true;
+  for (var variable in fields) {
+    if (fields.hasOwnProperty(variable)) {
+      if (
+        fields[variable] &&
+        fields[variable].props &&
+        (fields[variable].props.disabled === undefined ||
+          !fields[variable].props.disabled) &&
+        !validate(
+          screen,
+          {
+            ...fields[variable],
+            value: get(
+              state.screenConfiguration.preparedFinalObject,
+              fields[variable].jsonPath
             )
-        );
-        throw error;
+          },
+          dispatch,
+          true
+        )
+      ) {
+        isFormValid = false;
+      }
     }
+  }
+  return isFormValid;
+};
+
+export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
+  //example input format : "2018-10-02"
+  try {
+    const parts = dateString.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+    const DateObj = new Date(Date.UTC(parts[1], parts[2] - 1, parts[3]));
+    DateObj.setMinutes(DateObj.getMinutes() + DateObj.getTimezoneOffset());
+    if (dayStartOrEnd === "dayend") {
+      DateObj.setHours(DateObj.getHours() + 24);
+      DateObj.setSeconds(DateObj.getSeconds() - 1);
+    }
+    return DateObj.getTime();
+  } catch (e) {
+    return dateString;
+  }
+};
+
+export const getEpochForDate = date => {
+  const dateSplit = date.split("/");
+  return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
+};
+
+export const sortByEpoch = (data, order) => {
+  if (order) {
+    return data.sort((a, b) => {
+      return a[a.length - 1] - b[b.length - 1];
+    });
+  } else {
+    return data.sort((a, b) => {
+      return b[b.length - 1] - a[a.length - 1];
+    });
+  }
+};
+
+export const ifUserRoleExists = role => {
+  let userInfo = JSON.parse(getUserInfo());
+  const roles = get(userInfo, "roles");
+  const roleCodes = roles ? roles.map(role => role.code) : [];
+  if (roleCodes.indexOf(role) > -1) {
+    return true;
+  } else return false;
 };
 
 export const convertEpochToDate = dateEpoch => {
-    const dateFromApi = new Date(dateEpoch);
-    let month = dateFromApi.getMonth() + 1;
-    let day = dateFromApi.getDate();
-    let year = dateFromApi.getFullYear();
-    month = (month > 9 ? "" : "0") + month;
-    day = (day > 9 ? "" : "0") + day;
-    return `${day}/${month}/${year}`;
+  const dateFromApi = new Date(dateEpoch);
+  let month = dateFromApi.getMonth() + 1;
+  let day = dateFromApi.getDate();
+  let year = dateFromApi.getFullYear();
+  month = (month > 9 ? "" : "0") + month;
+  day = (day > 9 ? "" : "0") + day;
+  return `${day}/${month}/${year}`;
+};
+
+export const getCurrentFinancialYear = () => {
+  var today = new Date();
+  var curMonth = today.getMonth();
+  var fiscalYr = "";
+  if (curMonth > 3) {
+    var nextYr1 = (today.getFullYear() + 1).toString();
+    fiscalYr = today.getFullYear().toString() + "-" + nextYr1;
+  } else {
+    var nextYr2 = today.getFullYear().toString();
+    fiscalYr = (today.getFullYear() - 1).toString() + "-" + nextYr2;
+  }
+  return fiscalYr;
+};
+
+export const getFinancialYearDates = (format, et) => {
+  /** Return the starting date and ending date (1st April to 31st March)
+   *  of the financial year of the given date in ET. If no ET given then
+   *  return the dates for the current financial year */
+  var date = !et ? new Date() : new Date(et);
+  var curMonth = date.getMonth();
+  var financialDates = { startDate: "NA", endDate: "NA" };
+  if (curMonth > 3) {
+    switch (format) {
+      case "dd/mm/yyyy":
+        financialDates.startDate = `01/04/${date.getFullYear().toString()}`;
+        financialDates.endDate = `31/03/${(date.getFullYear() + 1).toString()}`;
+        break;
+      case "yyyy-mm-dd":
+        financialDates.startDate = `${date.getFullYear().toString()}-04-01`;
+        financialDates.endDate = `${(date.getFullYear() + 1).toString()}-03-31`;
+        break;
+    }
+  } else {
+    switch (format) {
+      case "dd/mm/yyyy":
+        financialDates.startDate = `01/04/${(
+          date.getFullYear() - 1
+        ).toString()}`;
+        financialDates.endDate = `31/03/${date.getFullYear().toString()}`;
+        break;
+      case "yyyy-mm-dd":
+        financialDates.startDate = `${(
+          date.getFullYear() - 1
+        ).toString()}-04-01`;
+        financialDates.endDate = `${date.getFullYear().toString()}-03-31`;
+        break;
+    }
+  }
+  return financialDates;
+};
+
+export const gotoApplyWithStep = (state, dispatch, step) => {
+  const applicationNumber = getQueryArg(
+    window.location.href,
+    "applicationNumber"
+  );
+  const applicationNumberQueryString = applicationNumber
+    ? `&applicationNumber=${applicationNumber}`
+    : ``;
+  const applyUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true"
+      ? `/egov-ui-framework/fire-noc/apply?step=${step}${applicationNumberQueryString}`
+      : `/fire-noc/apply?step=${step}${applicationNumberQueryString}`;
+  dispatch(setRoute(applyUrl));
+};
+
+export const showHideAdhocPopup = (state, dispatch, screenKey) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.adhocDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
+  );
+};
+
+export const getCommonGrayCard = children => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    children: {
+      body: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          ch1: getCommonCard(children, {
+            style: {
+              backgroundColor: "rgb(242, 242, 242)",
+              boxShadow: "none",
+              borderRadius: 0,
+              overflow: "visible"
+            }
+          })
+        },
+        gridDefination: {
+          xs: 12
+        }
+      }
+    },
+    gridDefination: {
+      xs: 12
+    }
+  };
+};
+
+export const getLabelOnlyValue = (value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 6,
+      sm: 4
+    },
+    props: {
+      style: {
+        marginBottom: "16px"
+      },
+      ...props
+    },
+    children: {
+      value: getCommonCaption(value)
+    }
+  };
+};
+
+export const convertDateTimeToEpoch = dateTimeString => {
+  //example input format : "26-07-2018 17:43:21"
+  try {
+    const parts = dateTimeString.match(
+      /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})/
+    );
+    return Date.UTC(+parts[3], parts[2] - 1, +parts[1], +parts[4], +parts[5]);
+  } catch (e) {
+    return dateTimeString;
+  }
+};
+
+export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
+  try {
+    const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
+    const ownerNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      `FireNOCs[0].fireNOCDetails.applicantDetails.owners[${cardIndex}].mobileNumber`,
+      ""
+    );
+    if (!ownerNo.match(getPattern("MobileNo"))) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Incorrect Number!",
+            labelKey: "ERR_MOBILE_NUMBER_INCORRECT"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+    const owners = get(
+      state.screenConfiguration.preparedFinalObject,
+      `FireNOCs[0].fireNOCDetails.applicantDetails.owners`,
+      []
+    );
+    //owners from search call before modification.
+    const oldOwnersArr = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+      []
+    );
+    //Same no search on Same index
+    if (ownerNo === owners[cardIndex].userName) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Owner has been added already!",
+            labelKey: "ERR_OWNER_ALREADY_ADDED_TOGGLE_MSG"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+
+    //Same no search in whole array
+    const matchingOwnerIndex = owners.findIndex(
+      item => item.userName === ownerNo
+    );
+    if (matchingOwnerIndex > -1) {
+      if (
+        !isUndefined(owners[matchingOwnerIndex].userActive) &&
+        owners[matchingOwnerIndex].userActive === false
+      ) {
+        //rearrange
+        dispatch(
+          prepareFinalObject(
+            `FireNOCs[0].fireNOCDetails.applicantDetails.owners[${matchingOwnerIndex}].userActive`,
+            true
+          )
+        );
+        dispatch(
+          prepareFinalObject(
+            `FireNOCs[0].fireNOCDetails.applicantDetails.owners[${cardIndex}].userActive`,
+            false
+          )
+        );
+        //Delete if current card was not part of oldOwners array - no need to save.
+        if (
+          oldOwnersArr.findIndex(
+            item => owners[cardIndex].userName === item.userName
+          ) == -1
+        ) {
+          owners.splice(cardIndex, 1);
+          dispatch(
+            prepareFinalObject(
+              `FireNOCs[0].fireNOCDetails.applicantDetails.owners`,
+              owners
+            )
+          );
+        }
+      } else {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Owner already added!",
+              labelKey: "ERR_OWNER_ALREADY_ADDED_1"
+            },
+            "error"
+          )
+        );
+      }
+      return;
+    } else {
+      //New number search only
+      let payload = await httpRequest(
+        "post",
+        "/user/_search?tenantId=pb",
+        "_search",
+        [],
+        {
+          tenantId: "pb",
+          userName: `${ownerNo}`
+        }
+      );
+      if (payload && payload.user && payload.user.hasOwnProperty("length")) {
+        if (payload.user.length === 0) {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "This mobile number is not registered!",
+                labelKey: "ERR_MOBILE_NUMBER_NOT_REGISTERED"
+              },
+              "info"
+            )
+          );
+        } else {
+          const userInfo =
+            payload.user &&
+            payload.user[0] &&
+            JSON.parse(JSON.stringify(payload.user[0]));
+          if (userInfo && userInfo.createdDate) {
+            userInfo.createdDate = convertDateTimeToEpoch(userInfo.createdDate);
+            userInfo.lastModifiedDate = convertDateTimeToEpoch(
+              userInfo.lastModifiedDate
+            );
+            userInfo.pwdExpiryDate = convertDateTimeToEpoch(
+              userInfo.pwdExpiryDate
+            );
+          }
+          let currOwnersArr = get(
+            state.screenConfiguration.preparedFinalObject,
+            "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+            []
+          );
+
+          currOwnersArr[cardIndex] = userInfo;
+          // if (oldOwnersArr.length > 0) {
+          //   currOwnersArr.push({
+          //     ...oldOwnersArr[cardIndex],
+          //     userActive: false
+          //   });
+          // }
+          dispatch(
+            prepareFinalObject(
+              `FireNOCs[0].fireNOCDetails.applicantDetails.owners`,
+              currOwnersArr
+            )
+          );
+        }
+      }
+    }
+  } catch (e) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "info"
+      )
+    );
+  }
+};
+
+export const getReceiptData = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "collection-services/payments/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+export const getMdmsData = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "egov-mdms-service/v1/_get",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+export const getBill = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/firenoc-calculator/v1/_getbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const searchBill = async (dispatch, applicationNumber, tenantId) => {
+  try {
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key: "consumerCodes",
+        value: applicationNumber
+      }
+    ];
+
+    // Get Receipt
+    let payload = await httpRequest(
+      "post",
+      "/collection-services/payments/_search",
+      "",
+      queryObject
+    );
+
+    // Get Bill
+    const response = await getBill([
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key: "applicationNumber",
+        value: applicationNumber
+      }
+    ]);
+
+    // If pending payment then get bill else get receipt
+    let billData = get(payload, "Receipt[0].Bill") || get(response, "Bill");
+
+    if (billData) {
+      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", billData));
+      const estimateData = createEstimateData(billData[0]);
+      estimateData &&
+        estimateData.length &&
+        dispatch(
+          prepareFinalObject(
+            "applyScreenMdmsData.estimateCardData",
+            estimateData
+          )
+        );
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const createEstimateData = billObject => {
+  const billDetails = billObject && billObject.billDetails;
+  let fees =
+    billDetails &&
+    billDetails[0].billAccountDetails &&
+    billDetails[0].billAccountDetails.map(item => {
+      return {
+        name: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode },
+        value: item.amount,
+        info: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode }
+      };
+    });
+  return fees;
+};
+
+
+export const createBill = async (queryObject,dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error,'fetxh');
+  }
+};
+
+export const generateBill = async (dispatch, applicationNumber, tenantId) => {
+  try {
+    if (applicationNumber && tenantId) {
+      const queryObj = [
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        {
+          key: "consumerCode",
+          value: applicationNumber
+        },
+        { key: "services", value: "FIRENOC" }
+      ];
+      const payload = await createBill(queryObj,dispatch);
+      // let payload = sampleGetBill();
+      if (payload && payload.Bill[0]) {
+        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+        const estimateData = createEstimateData(payload.Bill[0]);
+        estimateData &&
+          estimateData.length &&
+          dispatch(
+            prepareFinalObject(
+              "applyScreenMdmsData.estimateCardData",
+              estimateData
+            )
+          );
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const resetFields = (state, dispatch) => {
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.NOCNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.ownerMobNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.fromDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.toDate",
+      "props.value",
+      ""
+    )
+  );
+};
+
+export const getRequiredDocData = async (action, state, dispatch) => {
+  let tenantId =
+    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "FireNoc",
+          masterDetails: [{ name: "Documents" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const getTextToLocalMapping = label => {
-    const localisationLabels = getTransformedLocalStorgaeLabels();
-    switch (label) {
-        default:
-            return getLocaleLabels(label, label, localisationLabels);
-    }
+  const localisationLabels = getTransformedLocalStorgaeLabels();
+  switch (label) {
+    case "Application No":
+      return getLocaleLabels(
+        "Application No",
+        "TL_COMMON_TABLE_COL_APP_NO",
+        localisationLabels
+      );
+
+    case "NOC No":
+      return getLocaleLabels(
+        "NOC No",
+        "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
+        localisationLabels
+      );
+
+    case "NOC Type":
+      return getLocaleLabels("NOC Type", "NOC_TYPE_LABEL", localisationLabels);
+    case "Owner Name":
+      return getLocaleLabels(
+        "Owner Name",
+        "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+        localisationLabels
+      );
+
+    case "Application Date":
+      return getLocaleLabels(
+        "Application Date",
+        "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
+        localisationLabels
+      );
+
+    case "Status":
+      return getLocaleLabels(
+        "Status",
+        "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+        localisationLabels
+      );
+
+    case "INITIATED":
+      return getLocaleLabels("Initiated,", "NOC_INITIATED", localisationLabels);
+    case "APPLIED":
+      getLocaleLabels("Applied", "NOC_APPLIED", localisationLabels);
+    case "PAID":
+      getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
+
+    case "APPROVED":
+      return getLocaleLabels("Approved", "NOC_APPROVED", localisationLabels);
+    case "REJECTED":
+      return getLocaleLabels("Rejected", "NOC_REJECTED", localisationLabels);
+    case "CANCELLED":
+      return getLocaleLabels("Cancelled", "NOC_CANCELLED", localisationLabels);
+    case "PENDINGAPPROVAL ":
+      return getLocaleLabels(
+        "Pending for Approval",
+        "WF_FIRENOC_PENDINGAPPROVAL",
+        localisationLabels
+      );
+    case "PENDINGPAYMENT":
+      return getLocaleLabels(
+        "Pending payment",
+        "WF_FIRENOC_PENDINGPAYMENT",
+        localisationLabels
+      );
+    case "DOCUMENTVERIFY":
+      return getLocaleLabels(
+        "Pending for Document Verification",
+        "WF_FIRENOC_DOCUMENTVERIFY",
+        localisationLabels
+      );
+    case "FIELDINSPECTION":
+      return getLocaleLabels(
+        "Pending for Field Inspection",
+        "WF_FIRENOC_FIELDINSPECTION",
+        localisationLabels
+      );
+
+    case "Search Results for Fire-NOC Applications":
+      return getLocaleLabels(
+        "Search Results for Fire-NOC Applications",
+        "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        localisationLabels
+      );
+
+    case "MY_APPLICATIONS":
+      return getLocaleLabels(
+        "My Applications",
+        "TL_MY_APPLICATIONS",
+        localisationLabels
+      );
+  }
 };

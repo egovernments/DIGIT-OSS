@@ -2,12 +2,11 @@ import {
   getCommonCard,
   getCommonGrayCard,
   getCommonTitle,
-  getCommonContainer,
-  getSelectField
+  getSelectField,
+  getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const arrayCrawler = (arr, n) => {
   if (n == 1) {
@@ -34,18 +33,18 @@ const jurisdictionDetailsCard = {
                 labelName: "Select Hierarchy",
                 labelKey: "HR_HIERARCHY_PLACEHOLDER"
               },
-              localePrefix: {
-                moduleName: "EGOV_LOCATION",
-                masterName: "TENANTBOUNDARY"
-              },
               required: true,
-              gridDefination: {
-                xs: 12,
-                sm: 12,
-                md: 6
-              },
               jsonPath: "Employee[0].jurisdictions[0].hierarchy",
               sourceJsonPath: "createScreenMdmsData.hierarchyList",
+              localePrefix :{
+                moduleName : "EGOV_LOCATION",
+                masterName : "TENANTBOUNDARY"
+              },
+              props: {
+                className: "hr-generic-selectfield",
+                optionValue: "code",
+                optionLabel: "name"
+              }
             }),
             beforeFieldChange: (action, state, dispatch) => {
               let tenantBoundary = get(
@@ -74,12 +73,11 @@ const jurisdictionDetailsCard = {
               let crawlBoundaryData = selectedBoundaryData;
               while (crawlBoundaryData != null) {
                 boundaryList.push({
-                  code: crawlBoundaryData.label,
-                  name: crawlBoundaryData.label
+                  value: crawlBoundaryData.label,
+                  label: crawlBoundaryData.label
                 });
                 crawlBoundaryData = get(crawlBoundaryData, "children[0]", null);
               }
-               
               dispatch(
                 handleField(
                   "create",
@@ -88,7 +86,7 @@ const jurisdictionDetailsCard = {
                     ".boundaryType"
                   ),
                   "props.data",
-                  [boundaryList[0]]
+                  boundaryList
                 )
               );
             }
@@ -103,17 +101,17 @@ const jurisdictionDetailsCard = {
                 labelName: "Select Boundary Type",
                 labelKey: "HR_BOUNDARY_TYPE_PLACEHOLDER"
               },
-              localePrefix: {
-                moduleName: "EGOV_LOCATION",
-                masterName: "BOUNDARYTYPE"
-              },
               required: true,
-              gridDefination: {
-                xs: 12,
-                sm: 12,
-                md: 6
+              jsonPath: "Employee[0].jurisdictions[0].boundaryType",
+              localePrefix :{
+                moduleName : "EGOV_LOCATION",
+                masterName : "BOUNDARYTYPE"
               },
-              jsonPath: "Employee[0].jurisdictions[0].boundaryType"
+              props: {
+                className: "hr-generic-selectfield",
+                optionValue: "value",
+                optionLabel: "label",
+              }
             }),
             beforeFieldChange: (action, state, dispatch) => {
               // GET COMPLETE EGOV-LOCATION DATA FROM PFO
@@ -170,17 +168,17 @@ const jurisdictionDetailsCard = {
                 )
                   .flat(boundaryIndex)
                   .map(item => {
-                    return { code: item.code, name: item.name };
+                    return { value: item.code, label: item.name };
                   });
               } else {
                 processedBoundaryData = [
                   {
-                    code: get(
+                    value: get(
                       tenantBoundary[hierarchyIndex],
                       "boundary.code",
                       ""
                     ),
-                    name: get(
+                    label: get(
                       tenantBoundary[hierarchyIndex],
                       "boundary.name",
                       ""
@@ -188,12 +186,6 @@ const jurisdictionDetailsCard = {
                   }
                 ];
               }
-
-              let multiTenant =  get(
-                state.screenConfiguration.preparedFinalObject,
-                `createScreenMdmsData.tenant.tenants`,
-                []
-              );
               dispatch(
                 handleField(
                   "create",
@@ -202,77 +194,31 @@ const jurisdictionDetailsCard = {
                     ".boundary"
                   ),
                   "props.data",
-                  multiTenant
-                  // processedBoundaryData
+                  processedBoundaryData
                 )
               );
             }
           },
           boundary: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-hrms",
-            componentPath: "AutosuggestContainer",
-            jsonPath: "Employee[0].jurisdictions[0].boundary",
-            props: {
-              className: "hr-generic-selectfield autocomplete-dropdown",
-              optionValue: "value",
-              optionLabel: "label",
+            ...getSelectField({
               label: { labelName: "Boundary", labelKey: "HR_BOUNDARY_LABEL" },
               placeholder: {
                 labelName: "Select Boundary",
                 labelKey: "HR_BOUNDARY_PLACEHOLDER"
               },
-              localePrefix: {
-                moduleName: "TENANT",
-                masterName: "TENANTS"
-              },
               required: true,
-              required: true,
-              isClearable: true,
-              labelsFromLocalisation: true,
               jsonPath: "Employee[0].jurisdictions[0].boundary",
-            },
-            required: true,
-            // sourceJsonPath: "createScreenMdmsData.hierarchyList",
-            gridDefination: {
-              xs: 12,
-              sm: 12,
-              md: 6
-            },
-          },
-          role: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-hrms",
-        componentPath: "AutosuggestContainer",
-        jsonPath: "Employee[0].jurisdictions[0].roles",
-        required: true,
-        props: {
-          className:"autocomplete-dropdown hrms-role-dropdown",
-          label: { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
-          placeholder: {
-            labelName: "Select Role",
-            labelKey: "HR_ROLE_PLACEHOLDER"
-          },
-          jsonPath: "Employee[0].jurisdictions[0].roles",
-          sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
-          labelsFromLocalisation: true,
-          suggestions: [],
-          fullwidth: true,
-          required: true,
-          inputLabelProps: {
-            shrink: true
-          },
-          localePrefix: {
-            moduleName: "ACCESSCONTROL_ROLES",
-            masterName: "ROLES"
-          },
-          isMulti: true,
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        }
-      }
+              localePrefix:{
+                moduleName:"TENANT",
+                masterName:"TENANTS"
+              },
+              props: {
+                className: "hr-generic-selectfield",
+                optionValue: "value",
+                optionLabel: "label"
+              }
+            })
+          }
         },
         {
           style: {
@@ -309,8 +255,4 @@ export const jurisdictionDetails = getCommonCard({
     }
   ),
   jurisdictionDetailsCard
-}, {
-  style: {
-    overflow: "visible"
-  }
 });

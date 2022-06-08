@@ -7,8 +7,6 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import "./index.css";
-import { sortDropdownLabels, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
-
 
 const getSuggestions = suggestions => {
   return (
@@ -17,7 +15,7 @@ const getSuggestions = suggestions => {
     suggestions.map(suggestion => ({
       value: suggestion.code,
       label: suggestion.name
-    })).sort(sortDropdownLabels)
+    }))
   );
 };
 
@@ -197,7 +195,6 @@ class IntegrationReactSelect extends React.Component {
       fullwidth = true,
       required = true,
       value,
-      disabled = false,
       className,
       inputLabelProps = {
         shrink: true
@@ -227,7 +224,6 @@ class IntegrationReactSelect extends React.Component {
           menuProps={{
             className: className
           }}
-          isDisabled={disabled}
           options={getSuggestions(suggestions) || []}
           components={components}
           value={value ? value : this.state.single}

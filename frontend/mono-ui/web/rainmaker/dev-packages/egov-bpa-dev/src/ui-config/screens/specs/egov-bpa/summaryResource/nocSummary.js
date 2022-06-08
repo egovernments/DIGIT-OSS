@@ -4,23 +4,6 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
-import { statusOfNocDetails } from "../applyResource/updateNocDetails";
-
-
-const getHeader = label => {
-  return {
-    uiFramework: "custom-molecules-local",
-    moduleName: "egov-bpa",
-    componentPath: "DividerWithLabel",
-    props: {
-      className: "hr-generic-divider-label",
-      labelProps: {},
-      dividerProps: {},
-      label
-    },
-    type: "array"
-  };
-};
 
 export const nocSummary = getCommonGrayCard({
   header: {
@@ -36,7 +19,7 @@ export const nocSummary = getCommonGrayCard({
         },
         ...getCommonSubHeader({
           labelName: "NOC Details",
-          labelKey: "BPA_NOC_DETAILS"
+          labelKey: "NOC Details"
         })
       },
       editSection: {
@@ -62,7 +45,7 @@ export const nocSummary = getCommonGrayCard({
           },
           buttonLabel: getLabel({
             labelName: "Edit",
-            labelKey: "BPA_SUMMARY_EDIT"
+            labelKey: "NOC_SUMMARY_EDIT"
           })
         },
         onClickDefination: {
@@ -74,48 +57,13 @@ export const nocSummary = getCommonGrayCard({
       }
     }
   },
-  nocDocumentDetailsCard:{
-    uiFramework: "custom-containers",
-    componentPath: "MultiItem",
+  body: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "DownloadFileContainer",
     props: {
-        className: "applicant-summary",
-        scheama: getCommonGrayCard({
-          body: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-bpa",
-            componentPath: "DownloadFileContainer",
-            props: {
-              sourceJsonPath: "nocDocumentsPreview",
-              className: "noc-review-documents"
-            }
-          },
-        }),
-        items: [],
-        hasAddItem: false,
-        isReviewPage: true,
-        // sourceJsonPath: "",
-        prefixSourceJsonPath:
-            "children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
-        afterPrefixJsonPath: "children.value.children.key"
-    },
-    type: "array"
-  },
-  uploadedNocDocumentDetailsCard:{
-    uiFramework: "custom-containers",
-    componentPath: "MultiItem",
-    props: {
-        className: "applicant-summary",
-        scheama: getCommonGrayCard({
-          statusOfNocDetails : statusOfNocDetails
-        }),
-        items: [],
-        hasAddItem: false,
-        isReviewPage: true,
-        sourceJsonPath: "scrutinyDetails.planDetail.blocks[0].building",
-        prefixSourceJsonPath:
-            "children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
-        afterPrefixJsonPath: "children.value.children.key"
-    },
-    type: "array"
-  },
+      sourceJsonPath: "nocDocumentsPreview",
+      className: "noc-review-documents"
+    }
+  }
 });

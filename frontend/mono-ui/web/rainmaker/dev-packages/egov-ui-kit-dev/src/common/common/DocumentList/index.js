@@ -1,8 +1,7 @@
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import { withStyles } from "@material-ui/core/styles";
-import { AutosuggestContainer, LabelContainer } from "egov-ui-framework/ui-containers";
-import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
+import { LabelContainer, TextFieldContainer, AutosuggestContainer } from "egov-ui-framework/ui-containers";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrlFromAPI, getTransformedLocale, handleFileUpload } from "egov-ui-framework/ui-utils/commons";
 import Label from "egov-ui-kit/utils/translationNode";
@@ -131,9 +130,7 @@ const requiredIcon = (
 
 class DocumentList extends Component {
   state = {
-    uploadedDocIndex: 0,
-    docUploaded: false,
-    fileUploadingStatus: null
+    uploadedDocIndex: 0
   };
   initDocumentData() {
     const {
@@ -198,56 +195,30 @@ class DocumentList extends Component {
               }
             }
             if (card.dropdown && card.dropdown.value) {
-              docsUploaded[index] = docsUploaded[index] ? docsUploaded[index] : {};
-              docsUploaded[index]['dropdown'] = docsUploaded[index]['dropdown'] ? docsUploaded[index]['dropdown'] : {};
+              docsUploaded[index]=docsUploaded[index]?docsUploaded[index]:{};
+              docsUploaded[index]['dropdown'] = docsUploaded[index]['dropdown']?docsUploaded[index]['dropdown']:{};
               docsUploaded[index]['dropdown']['value'] = card.dropdown.value;
-              docsUploaded[index]['documentType'] = docType.code;
-              docsUploaded[index]['documentCode'] = card.name;
-              docsUploaded[index]['isDocumentRequired'] = card.required;
-              docsUploaded[index]['isDocumentTypeRequired'] = card.dropdown
-                ? card.dropdown.required
-                : false
             }
             index++;
           }
         });
     });
     if (documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
-      if (!this.state.docUploaded) {
-        prepareFinalObject("documentsUploadRedux", this.getDocumentsUploaded(documentsUploadRedux, docsUploaded));
-        this.setState({ docUploaded: true });
-      }
-
+      Object.keys(docsUploaded).map((key, index) => {
+        Object.keys(docsUploaded[key]).map((item, index) => {
+          if (docsUploaded[key] && documentsUploadRedux[key]) {
+            documentsUploadRedux[key][item] = docsUploaded[key][item];
+          }else if(docsUploaded[key] && !documentsUploadRedux[key]){
+            documentsUploadRedux[key]={}
+            documentsUploadRedux[key][item] = docsUploaded[key][item];
+          }
+        });
+      });
+      prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
     } else {
       prepareFinalObject("documentsUploadRedux", docsUploaded);
     }
   }
-
-
-  showLoading = () => {
-    this.setState({ fileUploadingStatus: "uploading" });
-  }
-  hideLoading = () => {
-    this.setState({ fileUploadingStatus: null });
-  }
-
-  getDocumentsUploaded = (documentsUploadRedux, docsUploaded) => {
-    let docObj = {};
-    docObj = { ...documentsUploadRedux, ...docsUploaded };
-    if (Object.keys(docsUploaded).length > 0) {
-      Object.keys(docObj).map(key => {
-        Object.keys(documentsUploadRedux).map(docKey => {
-          if (docObj[key] && docObj[key].documentCode && documentsUploadRedux[docKey] && documentsUploadRedux[docKey].dropdown && documentsUploadRedux[docKey].dropdown.value && documentsUploadRedux[docKey].dropdown.value.indexOf(docObj[key].documentCode) > -1) {
-            docObj[key].documents = documentsUploadRedux[docKey].documents;
-            docObj[key].dropdown = documentsUploadRedux[docKey].dropdown;
-          }
-        })
-      })
-      return docObj;
-    }
-    return docObj;
-  }
-
   componentDidMount = () => {
     this.initDocumentData()
   };
@@ -279,7 +250,6 @@ class DocumentList extends Component {
         ]
       }
     });
-    this.hideLoading();
   };
 
   removeDocument = remDocIndex => {
@@ -315,10 +285,10 @@ class DocumentList extends Component {
               </Icon>
             </div>
           ) : (
-            <div className={classes.documentIcon}>
-              <span>{key + 1}</span>
-            </div>
-          )}
+              <div className={classes.documentIcon}>
+                <span>{key + 1}</span>
+              </div>
+            )}
         </Grid>
         <Grid
           item={true}
@@ -336,7 +306,7 @@ class DocumentList extends Component {
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
           {card.dropdown && (
-            <AutosuggestContainer
+            <TextFieldContainer
               select={true}
               label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
@@ -344,11 +314,11 @@ class DocumentList extends Component {
               disabled={card.dropdown.disabled && documentsUploadRedux[key] && documentsUploadRedux[key].documents ? true : false}
               optionValue="code"
               optionLabel="label"
-              required={card.required}
+              required={true}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
-              className="autocomplete-dropdown"
-              labelsFromLocalisation={true}
+             // className= "autocomplete-dropdown"
+              labelsFromLocalisation= {true}
             />
           )}
         </Grid>
@@ -360,10 +330,9 @@ class DocumentList extends Component {
           className={classes.fileUploadDiv}
         >
           <UploadSingleFile
-            id={`jk-document-id-${key}`}
             classes={this.props.classes}
             handleFileUpload={e =>
-              handleFileUpload(e, this.handleDocument, this.props, this.showLoading)
+              handleFileUpload(e, this.handleDocument, this.props)
             }
             uploaded={
               documentsUploadRedux[key] && documentsUploadRedux[key].documents
@@ -387,12 +356,8 @@ class DocumentList extends Component {
   render() {
     const { classes, ptDocumentsList } = this.props;
     let index = 0;
-    const { fileUploadingStatus } = this.state;
     return (
       <div>
-        {fileUploadingStatus == "uploading" &&
-          <div><LoadingIndicator></LoadingIndicator>
-          </div>}
         {ptDocumentsList &&
           ptDocumentsList.map(container => {
             return (
@@ -448,11 +413,11 @@ const mapStateToProps = state => {
     "documentsUploadRedux",
     {}
   );
-  Object.keys(documentsUploadRedux).map(key => {
-    let documentCode = documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value || '';
-    let codes = documentCode && documentCode.split('.');
-    if (codes && codes.length == 1 && codes[0].length > 0) {
-      documentsUploadRedux[key].dropdown.value = "OWNER.REGISTRATIONPROOF." + documentCode;
+  Object.keys(documentsUploadRedux).map(key=>{
+    let documentCode = documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value||'';
+    let codes=documentCode&&documentCode.split('.');
+    if(codes&&codes.length==1&&codes[0].length>0){
+      documentsUploadRedux[key].dropdown.value="OWNER.REGISTRATIONPROOF."+documentCode;
     }
   })
   return { documentsUploadRedux, moduleName };

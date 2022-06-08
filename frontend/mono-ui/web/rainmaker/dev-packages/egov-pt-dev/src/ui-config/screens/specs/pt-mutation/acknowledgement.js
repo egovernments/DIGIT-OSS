@@ -5,10 +5,10 @@ import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import { generatePTMAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generatePTMAcknowledgement";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults,generatePdfFromDiv } from "../../../../ui-utils/commons";
 import { downloadCertificateForm, prepareDocumentsView } from "../utils/index";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
-import { applicationSuccessFooter, gotoHomeFooter } from "./acknowledgementResource/footers";
+import { applicationSuccessFooter, gotoHomeFooter,gotoAssessment } from "./acknowledgementResource/footers";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
 import './index.css';
 import { documentsSummary } from "./summaryResource/documentsSummary";
@@ -16,6 +16,60 @@ import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
 import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResource/transfereeSummary";
 import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "../../../../ui-utils";
+
+
+export const getBill = async (state, queryObject,dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+
+    const demandamount = response && get(response, "Bill[0].totalAmount");
+    if(demandamount)
+    {
+    if(demandamount>0)
+    {    
+      dispatch(
+        handleField(
+          "acknowledgement",
+          "components.div.children.applicationSuccessFooter.children.PayMutation",
+          "visible",
+          true
+        )
+      );      
+    }
+    else
+    {
+      dispatch(
+        handleField(
+          "acknowledgement",
+          "components.div.children.applicationSuccessFooter.children.PayMutation",
+          "visible",
+          false
+        )
+      );    
+    }
+   }
+
+
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error,'error');
+  }
+};
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -185,14 +239,7 @@ const getHeader = (applicationNumber, moduleName) => {
         labelKey: "PT_CREATE_APPLICATION_HEADER"
       }),
     })
-  }  if (moduleName == 'PT.UPDATE') {
-    return getCommonContainer({
-      header: getCommonHeader({
-        labelName: `Application for Transfer of Ownership`,
-        labelKey: "PT_UPDATE_APPLICATION_HEADER"
-      }),
-    })
-  }else if (moduleName == 'ASMT') {
+  } else if (moduleName == 'ASMT') {
     return getCommonContainer({
       header: getCommonHeader({
         labelName: `Application for Transfer of Ownership`,
@@ -366,7 +413,8 @@ const getAcknowledgementCard = (
           // ...getDocumentDetailsCard()
         }
       },
-      gotoHomeFooter
+      // gotoHomeFooter,
+      gotoAssessment:gotoAssessment(moduleName)
     };
   }
   else if (purpose === "verified" && status === "failure") {
@@ -521,7 +569,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header:getHeader(applicationNumber,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -917,6 +965,7 @@ const screenConfig = {
     }
   },
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
     const applicationNumber = getQueryArg(
@@ -927,6 +976,23 @@ const screenConfig = {
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
     loadUlbLogo(tenant);
+    const queryObj = [
+      {
+        key: "tenantId",
+        value: tenant
+      },
+      {
+        key: "consumerCode",
+        value: applicationNumber
+      }
+    ];
+    if(moduleName){
+      queryObj.push({
+        key: "businessService",
+        value: moduleName
+      });
+    }
+    getBill(state, queryObj,dispatch);
     setData(state, dispatch, applicationNumber, tenant);
     setApplicationData(state, dispatch, applicationNumber, tenant);
     const data = getAcknowledgementCard(

@@ -134,6 +134,7 @@ input[type="date"]:valid::before {
 @media only screen and (max-width: 768px) {
     #custom-atoms-applicationSuccessFooter,
     #custom-atoms-paymentSuccessFooter {
+         width: 100% !important;
         display: block;
         text-align: center;
     }
@@ -180,6 +181,11 @@ input[type="date"]:valid::before {
 }
 
 @media only screen and (min-width: 768px) {
+     #custom-atoms-applicationSuccessFooter,
+    #custom-atoms-paymentSuccessFooter {
+         width: 100% !important;
+      
+    }
     .common-div-css {
         margin: 30px 16px 88px 16px;
     }

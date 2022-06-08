@@ -1,6 +1,9 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
+
+const businessService = getQueryArg(window.location.href, "businessService");
 const getCommonApplyFooter = children => {
     return {
         uiFramework: "custom-atoms",
@@ -12,7 +15,7 @@ const getCommonApplyFooter = children => {
     };
 };
 
-export const paymentFailureFooter = (consumerCode, tenant, businessService) => {
+export const paymentFailureFooter = (consumerCode, tenant) => {
     const redirectionURL = isPublicSearch() ? "/withoutAuth/egov-common/pay" : "/egov-common/pay";
     let path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}&businessService=${businessService}`
     const redirectNumber=localStorage.getItem('pay-redirectNumber');

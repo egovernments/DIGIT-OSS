@@ -10,9 +10,8 @@ import {
   getLocaleLabels,
   appendModulePrefix
 } from "../../ui-utils/commons";
-import { sortDropdownLabels } from "egov-ui-framework/ui-utils/commons";
 
-class TextFieldContainer extends React.PureComponent{
+class TextFieldContainer extends React.Component {
   componentDidMount() {
     const { hasDependant, onChange, value } = this.props;
     if (hasDependant && value) {
@@ -43,10 +42,6 @@ class TextFieldContainer extends React.PureComponent{
       title,
       errorMessage,
       error,
-      defaultSort=true,
-      disabled=false,
-      multiline=false,
-      rows="1",
       ...rest
     } = this.props;
     if (!isEmpty(iconObj) && iconObj.onClickDefination) {
@@ -83,11 +78,10 @@ class TextFieldContainer extends React.PureComponent{
         )
       : "";
     if (dropdownData.length > 0) {
-      dropdownData=defaultSort?dropdownData&&Array.isArray(dropdownData)&&dropdownData.sort(sortDropdownLabels):dropdownData||[];
+      
       return (
         <TextfieldWithIcon
           label={translatedLabel}
-          disabled={disabled}
           placeholder={translatedPlaceholder}
           iconObj={iconObj}
           value={value ? value : translatedPlaceholder}
@@ -128,9 +122,6 @@ class TextFieldContainer extends React.PureComponent{
             iconObj={iconObj}
             value={value ? value : translatedPlaceholder}
             {...rest}
-            disabled={disabled}
-            multiline={multiline}
-            rows={rows}
             error={error}
             helperText={errorMessage}
           >
@@ -156,9 +147,6 @@ class TextFieldContainer extends React.PureComponent{
                 : value
             }
             {...rest}
-            disabled={disabled}
-            multiline={multiline}
-            rows={rows}
             error={error}
             helperText={errorMessage}
           />
@@ -218,13 +206,8 @@ const mapStateToProps = (state, ownprops) => {
       dropdownData = constructDropdown(get(state, cityDropdown, []));
     }
   }
-  let disabled=ownprops.disabled;
-if(ownprops.checkFieldDisable){
-  let dependantJsonPath=ownprops.jsonPath;
-  dependantJsonPath=dependantJsonPath.replace(ownprops.jsonPathRemoveKey,ownprops.dependantField)
-  disabled= get(preparedFinalObject, dependantJsonPath, false)
-}
-  return { value: fieldValue, dropdownData, state, localizationLabels ,disabled};
+
+  return { value: fieldValue, dropdownData, state, localizationLabels };
 };
 
 export default connect(mapStateToProps)(TextFieldContainer);

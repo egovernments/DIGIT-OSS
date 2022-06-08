@@ -1,17 +1,22 @@
-import { Icon } from "components";
-import commonConfig from "config/common.js";
-import { getCompletedTransformedItems } from "egov-ui-kit/common/propertyTax/TransformedAssessments";
-import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
-import { fetchProperties, getSingleAssesmentandStatus } from "egov-ui-kit/redux/properties/actions";
-import { getCommaSeperatedAddress } from "egov-ui-kit/utils/commons";
-import Label from "egov-ui-kit/utils/translationNode";
-import get from "lodash/get";
-import isEqual from "lodash/isEqual";
-import orderby from "lodash/orderBy";
-import { AssessmentList, Screen, YearDialogue } from "modules/common";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import Label from "egov-ui-kit/utils/translationNode";
+import { getCommaSeperatedAddress } from "egov-ui-kit/utils/commons";
+import { AssessmentList, YearDialogue } from "modules/common";
+import { Screen } from "modules/common";
+import { Icon } from "components";
+import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
+import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
+import {
+  fetchProperties,
+  getSingleAssesmentandStatus
+} from "egov-ui-kit/redux/properties/actions";
 import PropertyInformation from "./components/PropertyInformation";
+import { getCompletedTransformedItems } from "egov-ui-kit/common/propertyTax/TransformedAssessments";
+import isEqual from "lodash/isEqual";
+import orderby from "lodash/orderBy";
+import get from "lodash/get";
+import commonConfig from "config/common.js";
 
 const innerDivStyle = {
   padding: "20px 56px 20px 50px",
@@ -87,6 +92,24 @@ class Property extends Component {
               },
               {
                 name: "SubOwnerShipCategory"
+              },
+              {
+                name: "ConstructionType",
+              },
+              {
+                name: "Rebate",
+              },
+              {
+                name: "Interest",
+              },
+              {
+                name: "FireCess",
+              },
+              {
+                name: "RoadType",
+              },
+              {
+                name: "Thana",
               }
             ]
           }
@@ -103,8 +126,22 @@ class Property extends Component {
       "PropertySubType",
       "OwnerType",
       "UsageCategoryDetail",
-      "SubOwnerShipCategory"
+      "SubOwnerShipCategory",
+      "ConstructionType",
+      "Rebate",
+      "Penalty",
+      "Interest",
+      "FireCess",
+      "RoadType",
+      "Thana"
     ]);
+    fetchGeneralMDMSData(
+      null,
+      "BillingService",
+      ["TaxPeriod", "TaxHeadMaster"],
+      "",
+      commonConfig.tenantId
+    );
     fetchProperties([
       { key: "propertyIds", value: this.props.match.params.propertyId },
       { key: "tenantId", value: this.props.match.params.tenantId }
@@ -127,7 +164,7 @@ class Property extends Component {
     // localStorage.removeItem("draftId");
     this.setState({
       dialogueOpen: true,
-      urlToAppend: `${getPropertyLink(propertyId, tenantId, "assess", -1, assessmentNo)}&uuid=${uuid}`
+      urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isAssesment=true&isReassesment=true&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`
     });
   };
   getAssessmentListItems = props => {
@@ -304,8 +341,8 @@ const transform = (floor, key, generalMDMSDataById) => {
       if (floor[dataKey] === "NONRESIDENTIAL") {
         return generalMDMSDataById["UsageCategoryMinor"]
           ? generalMDMSDataById["UsageCategoryMinor"][
-            floor["usageCategoryMinor"]
-          ].name
+              floor["usageCategoryMinor"]
+            ].name
           : "NA";
       } else {
         return generalMDMSDataById[masterName]
@@ -317,8 +354,8 @@ const transform = (floor, key, generalMDMSDataById) => {
         return generalMDMSDataById["usageCategoryDetail"]
           ? generalMDMSDataById["usageCategoryDetail"][floor[dataKey]].name
           : generalMDMSDataById["usageCategorySubMinor"]
-            ? generalMDMSDataById["usageCategorySubMinor"][floor[dataKey]].name
-            : "NA";
+          ? generalMDMSDataById["usageCategorySubMinor"][floor[dataKey]].name
+          : "NA";
       }
       return "NA";
     }
@@ -346,35 +383,35 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
             ? propertyDetails.propertySubType
               ? generalMDMSDataById["PropertySubType"]
                 ? generalMDMSDataById["PropertySubType"][
-                  propertyDetails.propertySubType
-                ].name
+                    propertyDetails.propertySubType
+                  ].name
                 : "NA"
               : generalMDMSDataById["PropertyType"]
-                ? generalMDMSDataById["PropertyType"][
+              ? generalMDMSDataById["PropertyType"][
                   propertyDetails.propertyType
                 ].name
-                : "NA"
+              : "NA"
             : "NA"
         }
       ],
       items: {
         header: units
           ? [
-            "Floor",
-            "Usage Type",
-            "Sub Usage Type",
-            "Occupancy",
-            "Built Area/Total Annual Rent"
-          ]
+              "Floor",
+              "Usage Type",
+              "Sub Usage Type",
+              "Occupancy",
+              "Built Area/Total Annual Rent"
+            ]
           : [],
         values: units
           ? units.map(floor => {
-            return {
-              value: keys.map(key => {
-                return transform(floor, key, generalMDMSDataById);
-              })
-            };
-          })
+              return {
+                value: keys.map(key => {
+                  return transform(floor, key, generalMDMSDataById);
+                })
+              };
+            })
           : []
       }
     }
@@ -382,9 +419,9 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
 };
 
 const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
-  const isInstitution =
-    latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" ||
-    latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
+  const isInstitution =latestPropertyDetails.ownershipCategory!="INDIVIDUAL";
+    // latestPropertyDetails.ownershipCategory != "INSTITUTIONALPRIVATE" ||
+    // latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
   const { institution, owners: ownerDetails } = latestPropertyDetails || {};
   return (
     ownerDetails && [
@@ -398,73 +435,73 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             items: [
               isInstitution
                 ? {
-                  key: "Name of Institution",
-                  value: institution.name || "NA"
-                }
+                    key: "Name of Institution",
+                    value: institution.name || "NA"
+                  }
                 : {
-                  key: "Name",
-                  value: owner.name || "NA"
-                },
+                    key: "Name",
+                    value: owner.name || "NA"
+                  },
               isInstitution
                 ? {
-                  key: "Type of Institution",
-                  value:
-                    (institution &&
-                      institution.type &&
-                      generalMDMSDataById &&
-                      generalMDMSDataById["SubOwnerShipCategory"] &&
-                      generalMDMSDataById["SubOwnerShipCategory"][
-                        institution.type
-                      ].name) ||
-                    "NA"
-                }
+                    key: "Type of Institution",
+                    value:
+                      (institution &&
+                        institution.type &&
+                        generalMDMSDataById &&
+                        generalMDMSDataById["SubOwnerShipCategory"] &&
+                        generalMDMSDataById["SubOwnerShipCategory"][
+                          institution.type
+                        ].name) ||
+                      "NA"
+                  }
                 : {
-                  key: "Gender:",
-                  value: owner.gender || "NA"
-                },
+                    key: "Gender:",
+                    value: owner.gender || "NA"
+                  },
               isInstitution
                 ? {
-                  key: "Name of Authorised Person",
-                  value: owner.name || "NA"
-                }
+                    key: "Name of Authorised Person",
+                    value: owner.name || "NA"
+                  }
                 : {
-                  key: "Mobile No:",
-                  value: owner.mobileNumber || "NA"
-                },
+                    key: "Mobile No:",
+                    value: owner.mobileNumber || "NA"
+                  },
               isInstitution
                 ? {
-                  key: "Designation:",
-                  value: institution.designation || "NA"
-                }
+                    key: "Designation:",
+                    value: institution.designation || "NA"
+                  }
                 : {
-                  key: "Father's/Husband's Name:",
-                  value: owner.fatherOrHusbandName || "NA"
-                },
+                    key: "Father's/Husband's Name:",
+                    value: owner.fatherOrHusbandName || "NA"
+                  },
               isInstitution
                 ? {
-                  key: "Mobile Number:",
-                  value: owner.mobileNumber || "NA"
-                }
+                    key: "Mobile Number:",
+                    value: owner.mobileNumber || "NA"
+                  }
                 : {
-                  key: "User Category:",
-                  value:
-                    (owner &&
-                      owner.ownerType &&
-                      generalMDMSDataById &&
-                      generalMDMSDataById["OwnerType"] &&
-                      generalMDMSDataById["OwnerType"][owner.ownerType]
-                        .name) ||
-                    "NA"
-                },
+                    key: "User Category:",
+                    value:
+                      (owner &&
+                        owner.ownerType &&
+                        generalMDMSDataById &&
+                        generalMDMSDataById["OwnerType"] &&
+                        generalMDMSDataById["OwnerType"][owner.ownerType]
+                          .name) ||
+                      "NA"
+                  },
               isInstitution
                 ? {
-                  key: "Telephone Number:",
-                  value: owner.altContactNumber || "NA"
-                }
+                    key: "Telephone Number:",
+                    value: owner.altContactNumber || "NA"
+                  }
                 : {
-                  key: "Email ID:",
-                  value: owner.emailId || "NA"
-                },
+                    key: "Email ID:",
+                    value: owner.emailId || "NA"
+                  },
               {
                 key: "Correspondence Address:",
                 value: owner.permanentAddress || "NA"
@@ -526,10 +563,10 @@ const mapStateToProps = (state, ownProps) => {
   const assessmentInfo = generalMDMSDataById
     ? latestPropertyDetails
       ? getAssessmentInfo(
-        latestPropertyDetails,
-        assessmentInfoKeys,
-        generalMDMSDataById
-      )
+          latestPropertyDetails,
+          assessmentInfoKeys,
+          generalMDMSDataById
+        )
       : []
     : [];
   const ownerInfo =
@@ -565,8 +602,16 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
   return {
     // addBreadCrumbs: (url) => dispatch(addBreadCrumbs(url)),
-    fetchGeneralMDMSData: (requestBody, moduleName, masterName) =>
-      dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
+    fetchGeneralMDMSData: (
+      requestBody,
+      moduleName,
+      masterName,
+      key,
+      tenantId
+    ) =>
+      dispatch(
+        fetchGeneralMDMSData(requestBody, moduleName, masterName, key, tenantId)
+      ),
     fetchProperties: queryObjectProperty =>
       dispatch(fetchProperties(queryObjectProperty)),
     getSingleAssesmentandStatus: queryObj =>

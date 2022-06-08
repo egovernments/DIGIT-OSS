@@ -63,7 +63,7 @@ class PaymentRedirect extends Component {
       let consumerCode = get(pgUpdateResponse, "Transaction[0].consumerCode");
       let tenantId = get(pgUpdateResponse, "Transaction[0].tenantId");
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
-        const url = `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${get(pgUpdateResponse, "Transaction[0].module", localStorage.getItem('pay-businessService'))}`;
+        const url = `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}`;
         const ackFailureUrl = isPublicSearch ? `/withoutAuth${url}` : url;
         this.props.setRoute(ackFailureUrl);
       } else {
@@ -87,7 +87,7 @@ class PaymentRedirect extends Component {
           if (index > -1) {
             prepareFinalObject("commonPayInfo", commonPayDetails[index]);
           } else {
-            const details = commonPayDetails.filter(item => item.code === "DEFAULT");
+            const details = commonPayDetails &&  commonPayDetails.filter(item => item.code === "DEFAULT");
             prepareFinalObject("commonPayInfo", details);
           }
           let moduleName = "egov-common";

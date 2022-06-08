@@ -37,23 +37,14 @@ const propertyDetails = getCommonContainer({
     },
     {
       jsonPath:
-      "WaterConnection[0].property.propertyType",
-      localePrefix: {
-        moduleName: "WS",
-        masterName: "PROPTYPE"
-      }
+      "WaterConnection[0].property.propertyTypeData"
     }
   ),
   propertyUsageType: getLabelWithValue(
     {
       labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
     },
-    { jsonPath: "WaterConnection[0].property.usageCategory",
-    localePrefix: {
-      moduleName: "WS",
-      masterName: "PROPUSGTYPE"
-    }
- }
+    { jsonPath: "WaterConnection[0].property.usageCategory" }
   ),
   plotSize: getLabelWithValue(
     {

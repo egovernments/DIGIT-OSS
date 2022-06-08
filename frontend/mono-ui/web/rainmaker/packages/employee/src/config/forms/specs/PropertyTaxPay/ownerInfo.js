@@ -1,6 +1,7 @@
 import { MDMS } from "egov-ui-kit/utils/endPoints";
 import { setDependentFields } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/enableDependentFields";
 import get from "lodash/get";
+import set from "lodash/set";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import commonConfig from '../../../common'
 
@@ -41,6 +42,15 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       disabled: true,
     },
+    // ownerAadhar: {
+    //   id: "ownerAadhar",
+    //   jsonPath: "Properties[0].propertyDetails[0].owners[0].aadhaarNumber",
+    //   type: "textfield",
+    //   floatingLabelText: "Aadhar ID",
+    //   hintText: "Enter aadhar card no.",
+    //   errorMessage: "Enter valid aadhar number",
+    //   pattern: /^[0-9]{12}$/i,
+    // },
     ownerEmail: {
       id: "ownerEmail",
       jsonPath: "Properties[0].propertyDetails[0].owners[0].emailId",
@@ -58,12 +68,11 @@ const formConfig = {
       floatingLabelText: "PT_FORM3_CORRESPONDENCE_ADDRESS",
       hintText: "PT_FORM3_CORRESPONDENCE_ADDRESS_PLACEHOLDER",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      pattern: /^[<>()\-+_\|\[\]\\.,;:\s$*@'"\/#%& 0-9A-Za-z]{1,500}$/,
+      // pattern: /^[<>()\-+_\|\[\]\\.,;:\s$*@'"\/#%& 0-9A-Za-z]{1,500}$/,
       errorMessage: "PT_ADDRESS_ERROR_MESSAGE",
     },
     ownerRelationship: {
       id: "ownerRelationship",
-      required: true,
       jsonPath: "Properties[0].propertyDetails[0].owners[0].relationship",
       type: "singleValueList",
       floatingLabelText: "PT_FORM3_RELATIONSHIP",

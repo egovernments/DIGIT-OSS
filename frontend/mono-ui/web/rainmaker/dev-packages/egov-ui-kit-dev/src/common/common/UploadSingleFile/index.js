@@ -1,6 +1,6 @@
-import { UploadedDocument, UploadFile } from "egov-ui-framework/ui-atoms";
 import React from "react";
-import "./index.css";
+import { UploadFile, UploadedDocument } from "egov-ui-framework/ui-atoms";
+import "./index.css"; 
 
 const UploadSingleFile = ({
   uploaded,
@@ -11,8 +11,7 @@ const UploadSingleFile = ({
   onButtonClick,
   inputProps,
   buttonLabel,
-  id,
-  disabled = false
+  id
 }) => {
   return (
     <div>
@@ -40,7 +39,6 @@ const UploadSingleFile = ({
                     <UploadedDocument
                       document={document}
                       removeDocument={removeDocument}
-                      disabled={disabled}
                     />
                   )}
                 </div>

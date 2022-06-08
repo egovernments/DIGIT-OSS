@@ -4,19 +4,16 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping,setProposedBuildingData, generateBillForBPA, residentialType } from "../../utils";
+import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping, generateBillForBPA } from "../../utils";
 import "./index.css";
 import { getQueryArg, getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdateBpaApplication,
   prepareDocumentsUploadData,
-  prepareNOCUploadData,
   submitBpaApplication,
-  updateBpaApplication,
-  getNocSearchResults  
+  updateBpaApplication
 } from "../../../../../ui-utils/commons";
-import { prepareNocFinalCards, compare } from "../../../specs/utils/index";
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
@@ -28,7 +25,7 @@ const getMdmsData = async (state, dispatch) => {
   );
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId(),
+      tenantId: 'pb',
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -109,24 +106,6 @@ const getFloorDetail = (index) => {
   }
 };
 
-export const showApplyLicencePicker = (state, dispatch) => {
-  let toggle = get(
-    state.screenConfiguration.screenConfig["apply"],
-    "components.cityPickerDialog.props.open",
-    false
-  );
-  dispatch(
-    handleField("apply", "components.cityPickerDialog", "props.open", !toggle)
-  );
-  dispatch(
-    handleField(
-      "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.div.children.selectButton",
-      "visible",
-      false
-    )
-  )
-};
-
 const prepareDocumentsDetailsView = async (state, dispatch) => {
   let documentsPreview = [];
   let reduxDocuments = get(
@@ -135,30 +114,13 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
     {}
   );
   jp.query(reduxDocuments, "$.*").forEach(doc => {
-    if (doc.documents && doc.documents.length > 0 && doc.dropDownValues) {
-      doc.documents.forEach(docDetail =>{
-        let obj = {};
-        obj.title = getTransformedLocale(doc.documentCode);
-        obj.name = docDetail.fileName;
-        obj.fileStoreId = docDetail.fileStoreId;
-        obj.linkText = "View";
-        obj.link = docDetail.fileUrl && docDetail.fileUrl.split(",")[0];
-        if (docDetail.wfState === "SEND_TO_CITIZEN") {
-          obj.createdBy = "BPA_ARCHITECT"
-        }
-        else if(docDetail.wfState === "DOC_VERIFICATION_PENDING") {
-          obj.createdBy = "BPA_DOC_VERIFIER"
-        }
-        else if (docDetail.wfState === "FIELDINSPECTION_PENDING") {
-          obj.createdBy = "BPA_FIELD_INSPECTOR"   
-        }
-        else if (docDetail.wfState === "NOC_VERIFICATION_PENDING") {
-          obj.createdBy = "BPA_NOC_VERIFIER"    
-        } else {
-          obj.createdBy = "BPA_ARCHITECT"
-        }
-        
-        documentsPreview.push(obj);
+    if (doc.documents && doc.documents.length > 0) {
+      documentsPreview.push({
+        title: getTransformedLocale(doc.documentCode),
+        name: doc.documents[0].fileName,
+        fileStoreId: doc.documents[0].fileStoreId,
+        linkText: "View",
+        link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.split(",")[0]
       });
     }
   });
@@ -168,22 +130,16 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
 const getSummaryRequiredDetails = async (state, dispatch) => {
   const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  const riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.businessService");
-  let businessService = "BPA.NC_APP_FEE"
-  if(riskType === "BPA_LOW") {
-    businessService = "BPA.LOW_RISK_PERMIT_FEE"
-  }
-  generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
+  generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
   prepareDocumentsDetailsView(state, dispatch);
-  await residentialType(state, dispatch);
-  // dispatch(
-  //   handleField(
-  //     "apply",
-  //     "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.applyDocSummary.children.cardContent.children.uploadedDocumentDetailsCard",            
-  //     "visible",
-  //     false
-  //   )
-  // )
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard",
+      "visible",
+      false
+    )
+  )
 }
 
 const callBackForNext = async (state, dispatch) => {
@@ -193,7 +149,6 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
-  
   let isFormValid = true;
   let hasFieldToaster = false;
 
@@ -209,7 +164,7 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
     let isDetailsofplotCardValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.detailsofplot.children.cardContent.children.detailsOfPlotContainer.children",
+      "components.div.children.formwizardFourthStep.children.detailsofplot.children.cardContent.children.detailsOfPlotContainer.children",
       state,
       dispatch
     );
@@ -222,53 +177,61 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-    setProposedBuildingData(state,dispatch);
-    await residentialType(state, dispatch);
+    const response = get(
+      state,
+      "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
+      []
+  );
+    let tableData = response.map((item, index) => (
+      {
+      [getBpaTextToLocalMapping("Floor Description")]: getFloorDetail((item.number).toString()) || '-',
+      [getBpaTextToLocalMapping("Level")]:item.number,
+      [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+      [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+      [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+      [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
+    }));
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.proposedBuildingDetailsContainer",
+        "props.data",
+        tableData
+      )
+    );
   }
 
   if (activeStep === 1) {
-    
     let isBuildingPlanScrutinyDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.buildingPlanScrutinyDetails.children.cardContent.children.buildingPlanScrutinyDetailsContainer.children",
       state,
       dispatch
     );
-   /*  let isBlockWiseOccupancyAndUsageDetailsCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.blockWiseOccupancyAndUsageDetails.children.cardContent.children.blockWiseOccupancyAndUsageDetailscontainer.children.cardContent.children.applicantTypeSelection.children",
-      state, 
+    let isBlockWiseOccupancyAndUsageDetailsCardValid = validateFields(
+      "components.div.children.formwizardSecondStep.children.blockWiseOccupancyAndUsageDetails.children.cardContent.children.blockWiseOccupancyAndUsageDetailscontainer.children.cardContent.children.blockWiseContainer.children",
+      state,
       dispatch
-    ); */
-   
+    )
+    let isDemolitiondetailsCardValid = validateFields(
+      "components.div.children.formwizardSecondStep.children.demolitiondetails.children.cardContent.children.demolitionDetailsContainer.children",
+      state,
+      dispatch
+    );
     let isProposedBuildingDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
       state,
       dispatch
     );
 
-    let isDemolitiondetailsCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.demolitiondetails.children.cardContent.children.demolitionDetailsContainer.children",
-      state,
-      dispatch
-    );
-
-    // let isabstractProposedBuildingDetailsCardValid = validateFields(
-    //   "components.div.children.formwizardSecondStep.children.abstractProposedBuildingDetails.children.cardContent.children.proposedContainer.children.totalBuildUpAreaDetailsContainer.children",
-    //   state,
-    //   dispatch
-    // );
-
-    // if (
-    //   !isBuildingPlanScrutinyDetailsCardValid || 
-    //   //!isBlockWiseOccupancyAndUsageDetailsCardValid ||
-    //   !isProposedBuildingDetailsCardValid ||
-    //   !isDemolitiondetailsCardValid  
-    //   // !isabstractProposedBuildingDetailsCardValid
-    // ) {
-    //   isFormValid = false;
-    //   hasFieldToaster = true;
-    // }
-
-
+    if (
+      // !isBuildingPlanScrutinyDetailsCardValid
+      !isBlockWiseOccupancyAndUsageDetailsCardValid ||
+      !isDemolitiondetailsCardValid ||
+      !isProposedBuildingDetailsCardValid
+    ) {
+      isFormValid = false;
+      hasFieldToaster = true;
+    }
   }
 
   if (activeStep === 2) {
@@ -314,7 +277,7 @@ const callBackForNext = async (state, dispatch) => {
 
     let selectedApplicantType = get(
       state,
-      "screenConfiguration.preparedFinalObject.BPA.landInfo.ownershipCategory",
+      "screenConfiguration.preparedFinalObject.BPA.ownershipCategory",
       "SINGLE"
     );
     if (selectedApplicantType.includes("INSTITUTIONAL")) {
@@ -353,7 +316,7 @@ const callBackForNext = async (state, dispatch) => {
           documentsFormat[i],
           "isDocumentTypeRequired"
         );
-  
+
         let documents = get(documentsFormat[i], "documents");
         if (isDocumentRequired) {
           if (documents && documents.length > 0) {
@@ -408,22 +371,17 @@ const callBackForNext = async (state, dispatch) => {
         // dispatch(prepareFinalObject("BPA.owners[0].ownerType", "NONE"));
       }
       if (activeStep === 3) {
-        let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
-        if(nocData && nocData.length > 0) { 
-          nocData.map(items => {
-            if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
-          })
-          dispatch(prepareFinalObject("nocForPreview", nocData));
-        }
+        // getMdmsData(state, dispatch);
+        // prepareDocumentsUploadData(state, dispatch);
       }
       if (activeStep === 2) {
         let checkingOwner = get(
           state.screenConfiguration.preparedFinalObject,
-          "BPA.landInfo.ownershipCategory"
+          "BPA.ownershipCategory"
         );
         let ownerDetails = get(
           state.screenConfiguration.preparedFinalObject,
-          "BPA.landInfo.owners"
+          "BPA.owners"
         );
         let bpaStatus = get(
           state.screenConfiguration.preparedFinalObject,
@@ -433,7 +391,7 @@ const callBackForNext = async (state, dispatch) => {
         if (checkingOwner && checkingOwner === "INDIVIDUAL.SINGLEOWNER") {
           let primaryOwner = get(
             state.screenConfiguration.preparedFinalObject,
-            "BPA.landInfo.owners[0].isPrimaryOwner"
+            "BPA.owners[0].isPrimaryOwner"
           );
           if (primaryOwner && primaryOwner === true) {
             if (bpaStatus) {
@@ -460,7 +418,7 @@ const callBackForNext = async (state, dispatch) => {
           ownerDetails.forEach((owner, index) => {
             let primaryOwner = get(
               state.screenConfiguration.preparedFinalObject,
-              `BPA.landInfo.owners[${index}].isPrimaryOwner`
+              `BPA.owners[${index}].isPrimaryOwner`
             );
             if (primaryOwner && primaryOwner === true) {
               ownerPrimaryArray.push(primaryOwner)
@@ -495,30 +453,11 @@ const callBackForNext = async (state, dispatch) => {
             dispatch(toggleSnackbar(true, errorMessage, "warning"));
           }
         }
-        let applicationNumber = get(
-          state.screenConfiguration.preparedFinalObject,
-          "BPA.applicationNo"
-        );
-        let tenantId = get(
-          state.screenConfiguration.preparedFinalObject,
-          "BPA.tenantId"
-        );
-        const payload = await getNocSearchResults([
-          {
-            key: "tenantId",
-            value: tenantId
-          },
-          { key: "sourceRefId", value: applicationNumber }
-        ], state);
-        payload.Noc.sort(compare);
-        dispatch(prepareFinalObject("Noc", payload.Noc)); 
-        await prepareNOCUploadData(state, dispatch);
-        prepareNocFinalCards(state, dispatch);   
       } else {
         if(activeStep === 0){
           const occupancytypeValid = get(
             state,
-            "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.occupancies[0].typeHelper.type.code",
+            "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.planInformation.occupancy",
             []
           );
           if(occupancytypeValid.length === 0){
@@ -526,22 +465,9 @@ const callBackForNext = async (state, dispatch) => {
               labelName: "Please search scrutiny details linked to the scrutiny number",
               labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
             };
-            dispatch(toggleSnackbar(true, errorMessage, "warning")); 
+            dispatch(toggleSnackbar(true, errorMessage, "warning"));
           }else{
             responseStatus === "success" && changeStep(state, dispatch);
-            /*let licenceType = get(
-              state.screenConfiguration.preparedFinalObject , 
-              "applyScreenMdmsData.licenceTypes", []
-              );
-            let bpaStatus = get(
-              state.screenConfiguration.preparedFinalObject,
-              "BPA.status", ""
-            )
-            if(licenceType && licenceType.length > 1 && !bpaStatus) {
-              showApplyLicencePicker(state, dispatch, activeStep);
-            } else {
-              responseStatus === "success" && changeStep(state, dispatch);
-            }*/
           }
         }else{
           responseStatus === "success" && changeStep(state, dispatch);
@@ -731,20 +657,6 @@ export const getActionDefinationForStepper = path => {
 };
 
 export const callBackForPrevious = (state, dispatch) => {
-  let activeStep = get(
-    state.screenConfiguration.screenConfig["apply"],
-    "components.div.children.stepper.props.activeStep",
-    0
-  );
-  if (activeStep === 4) {
-    let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
-    if(nocData && nocData.length > 0) { 
-      nocData.map(items => {
-        if(items.readOnly) items.readOnly = items.readOnly ? false : true;
-      })
-      dispatch(prepareFinalObject("nocForPreview", nocData));
-    }
-  }
   changeStep(state, dispatch, "previous");
 };
 
@@ -770,7 +682,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "BPA_COMMON_BUTTON_PREV_STEP"
+        labelKey: "TL_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
@@ -793,7 +705,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "BPA_COMMON_BUTTON_NXT_STEP"
+        labelKey: "TL_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -870,10 +782,10 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: updateBpaApplication
     },
-    // roleDefination: {
-    //   rolePath: "user-info.roles",
-    //   action : "SEND_TO_CITIZEN"
-    // },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action : "SEND_TO_CITIZEN"
+    },
     visible: false
   }
 });

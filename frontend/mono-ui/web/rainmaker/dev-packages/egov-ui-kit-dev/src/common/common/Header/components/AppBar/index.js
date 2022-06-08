@@ -5,7 +5,7 @@ import UserSettings from "../UserSettings";
 import Toolbar from "material-ui/Toolbar";
 import Badge from "@material-ui/core/Badge";
 import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
-import pbLogo from "egov-ui-kit/assets/images/pblogo.png";
+import defaultLogo from "egov-ui-kit/assets/images/pblogo.png";
 import IconButton from "material-ui/IconButton";
 import { onNotificationClick } from "egov-ui-kit/utils/commons";
 import "./index.css";
@@ -43,7 +43,7 @@ const EgovAppBar = ({
   handleItemClick,
   hasLocalisation,
   notificationsCount,
-  isUserSetting,
+  hideDigitLogo,
   ...rest
 }) => {
   return (
@@ -54,7 +54,7 @@ const EgovAppBar = ({
         title={
           <div className="citizen-header-logo-label">
             <div className="citizen-header-logo">
-              <img src={ulbLogo ? ulbLogo : pbLogo} onError={(event) => event.target.setAttribute("src", pbLogo)} />
+              <img src={ulbLogo ? ulbLogo : defaultLogo} onError={(event) => event.target.setAttribute("src", defaultLogo)} />
             </div>
             <Label containerStyle={{ marginLeft: "0px" }} className="screenHeaderLabelStyle appbar-title-label" label={title} />
             {titleAddon && (
@@ -64,14 +64,14 @@ const EgovAppBar = ({
                 label={titleAddon}
               />
             )}
-            {isUserSetting && <div className="rainmaker-displayInline">
+            <div className="rainmaker-displayInline">
               <Label
                 containerStyle={{ marginLeft: "10px" }}
                 className="screenHeaderLabelStyle appbar-municipal-label"
                 label={ulbName && `TENANT_TENANTS_${ulbName.toUpperCase().replace(/[.]/g, "_")}`}
               />
               <Label containerStyle={{ marginLeft: "4px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={defaultTitle} />
-            </div>}
+            </div>
           </div>
         }
         titleStyle={styles.titleStyle}
@@ -84,23 +84,8 @@ const EgovAppBar = ({
             onIconClick={onToolBarIconClick}
             userInfo={userInfo}
             handleItemClick={handleItemClick}
-            isUserSetting={isUserSetting}
           />
         </Toolbar>
-        {notificationButton && role === "citizen" && (
-          <div className="notification-icon-web notification-icon" onClick={(e) => onNotificationClick(history)}>
-            {notificationsCount ? (
-              <IconButton aria-label="4 pending messages">
-                <Badge badgeContent={notificationsCount} color="primary">
-                  <Icon action="social" name="notifications-none" color="#000000" fill="#000000" />
-                </Badge>
-              </IconButton>
-            ) : (
-              <Icon action="social" name="notifications-none" color="#000000" fill="#000000" />
-            )}
-          </div>
-        )}
-
         <div className="appbar-right-logo">
           <img src={digitLogo} />
         </div>

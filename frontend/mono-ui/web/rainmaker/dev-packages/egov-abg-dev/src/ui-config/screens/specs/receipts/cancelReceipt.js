@@ -31,7 +31,7 @@ const getData = async (action, state, dispatch) => {
 
   let requestBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: "uk",
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -73,7 +73,6 @@ const cancelReceipt = {
   beforeInitScreen: (action, state, dispatch) => {
     getData(action, state, dispatch);
     set(action.screenConfig, "components.div.children.cancelReceiptDetailsCard.children.cardContent.children.searchContainer.children.reason.props.value", get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows[0].reason', ''))
-    set(action.screenConfig, "components.div.children.cancelReceiptDetailsCard.children.cardContent.children.searchContainer.children.addtionalPenalty.props.value", get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows[0].additionalPenalty', ''))
     const additionalDetailsJson = "components.div.children.cancelReceiptDetailsCard.children.cardContent.children.searchContainer.children.addtionalDetails";
     if (get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows[0].reason', '') == "OTHER") {
       set(action.screenConfig, `${additionalDetailsJson}.required`, true)

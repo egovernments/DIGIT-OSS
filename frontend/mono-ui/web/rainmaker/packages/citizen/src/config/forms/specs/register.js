@@ -41,6 +41,11 @@ const formConfig = {
       jsonPath: "otp.type",
       value: "register",
     },
+    userType: {
+      id: "user-type",
+      jsonPath: "otp.userType",
+      value: 'CITIZEN',
+    },
   },
   submit: {
     label: "CORE_COMMON_CONTINUE",

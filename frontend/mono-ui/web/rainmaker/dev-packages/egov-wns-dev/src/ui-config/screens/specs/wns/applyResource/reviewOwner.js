@@ -4,10 +4,9 @@ import {
   getCommonContainer,
   getLabelWithValue,
   getLabel,
-  getDivider,
-  getLabelWithValueForModifiedLabel
+  getDivider
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDateAndHandleNA, handleNA, handleRoadType } from '../../utils';
+import { convertEpochToDate } from '../../utils';
 import { changeStep } from "./footer";
 
 const getHeader = label => {
@@ -41,316 +40,163 @@ const activationDetailsHeader = getHeader({
   labelKey: "WS_ACTIVATION_DETAILS"
 });
 
-export const reviewConnectionType = getLabelWithValueForModifiedLabel(
+export const reviewConnectionType = getLabelWithValue(
   {
     labelName: "Connection Type",
     labelKey: "WS_SERV_DETAIL_CONN_TYPE"
   },
   {
     jsonPath: "applyScreen.connectionType",
-    localePrefix: {
-      moduleName: "WS_SERVICES_MASTERS",
-      masterName: "WATERSOURCE"
-    },
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.connectionType",
-    localePrefix: {
-      moduleName: "WS_SERVICES_MASTERS",
-      masterName: "WATERSOURCE"
-    },
-    callBack: handleNA
+    // callBack: value => {
+    //   return value.split(".")[0];
+    // }
   }
 );
-export const reviewNumberOfTaps = getLabelWithValueForModifiedLabel(
+export const reviewNumberOfTaps = getLabelWithValue(
   {
     labelName: "No. of Taps",
     labelKey: "WS_SERV_DETAIL_NO_OF_TAPS"
   },
   {
     jsonPath: "applyScreen.noOfTaps",
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.noOfTaps",
-    callBack: handleNA
   }
 );
-export const reviewWaterSource = getLabelWithValueForModifiedLabel(
+export const reviewWaterSource = getLabelWithValue(
   {
     labelName: "Water Source",
     labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
   },
   {
-    jsonPath: "WaterConnection[0].waterSource",
-    localePrefix: {
-      moduleName: "WS_SERVICES_MASTERS",
-      masterName: "WATERSOURCE"
-    },
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.waterSource",
-    callBack: handleNA
+    jsonPath: "applyScreen.waterSource"
   }
 );
-export const reviewWaterSubSource = getLabelWithValueForModifiedLabel(
+export const reviewWaterSubSource = getLabelWithValue(
   {
     labelName: "Water Sub Source",
     labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE"
   },
   {
-    jsonPath: "WaterConnection[0].waterSubSource",
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.waterSubSource",
-    callBack: handleNA
+    jsonPath: "applyScreen.waterSubSource",
   }
 );
-export const reviewPipeSize = getLabelWithValueForModifiedLabel(
+export const reviewPipeSize = getLabelWithValue(
   {
     labelName: "Pipe Size (in inches)",
     labelKey: "WS_SERV_DETAIL_PIPE_SIZE"
   },
   {
     jsonPath: "applyScreen.pipeSize",
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.pipeSize",
-    callBack: handleNA
   }
 );
 
-export const reviewWaterClosets = getLabelWithValueForModifiedLabel(
+export const reviewWaterClosets = getLabelWithValue(
   {
     labelName: "No. of Water Closets",
     labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS"
   },
   {
-    jsonPath: "applyScreen.noOfWaterClosets",
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.noOfWaterClosets",
-    callBack: handleNA
+    jsonPath: "applyScreen.waterClosets",
   }
 );
 
-export const reviewNumberOfToilets = getLabelWithValueForModifiedLabel(
+export const reviewNumberOfToilets = getLabelWithValue(
   {
     labelName: "No. of Water Closets",
     labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS"
   },
   {
     jsonPath: "applyScreen.noOfToilets",
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.noOfToilets",
-    callBack: handleNA
   }
 );
 
-export const reviewPlumberProvidedBy = getLabelWithValueForModifiedLabel(
+export const reviewPlumberProvidedBy = getLabelWithValue(
   {
     labelName: "Plumber Provided By",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY"
   },
   {
-    jsonPath: "applyScreen.additionalDetails.detailsProvidedBy",
-    callBack: value => {
-      return value ? `WS_PLUMBER_${value.toUpperCase()}` : handleNA;
-    }
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.additionalDetails.detailsProvidedBy",
-    callBack: value => {
-      return value ? `WS_PLUMBER_${value.toUpperCase()}` : handleNA;
-    }
+    jsonPath: "applyScreen.plumberInfo[0].detailsProvidedBy"
   }
 );
-export const reviewPlumberLicenseNo = getLabelWithValueForModifiedLabel(
+export const reviewPlumberLicenseNo = getLabelWithValue(
   {
     labelName: "Plumber License No.",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"
   },
   {
-    jsonPath: "applyScreen.plumberInfo[0].licenseNo",
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.plumberInfo[0].licenseNo",
-    callBack: handleNA
+    jsonPath: "applyScreen.plumberInfo[0].licenseNo"
   }
 );
-export const reviewPlumberName = getLabelWithValueForModifiedLabel(
+export const reviewPlumberName = getLabelWithValue(
   {
     labelName: "Plumber Name",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"
   },
-  { jsonPath: "applyScreen.plumberInfo[0].name",
-    callBack: handleNA },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.plumberInfo[0].name",
-    callBack: handleNA
-  }
+  { jsonPath: "applyScreen.plumberInfo[0].name" }
 );
 
-export const reviewPlumberMobileNo = getLabelWithValueForModifiedLabel(
+export const reviewPlumberMobileNo = getLabelWithValue(
   {
     labelName: "Plumber Mobile No.",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"
   },
   {
-    jsonPath: "applyScreen.plumberInfo[0].mobileNumber",
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.plumberInfo[0].mobileNumber",
-    callBack: handleNA
+    jsonPath: "applyScreen.plumberInfo[0].mobileNumber"
   }
 );
 
-export const reviewRoadType = getLabelWithValueForModifiedLabel(
+export const reviewRoadType = getLabelWithValue(
   {
     labelName: "Road Type",
     labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
   },
   {
     jsonPath: "applyScreen.roadType",
-    // localePrefix: {
-    //   moduleName: "WS",
-    //   masterName: "ROADTYPE"
-    // },
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.roadType",
-    callBack: handleNA
+    // callBack: convertEpochToDate
   }
 );
 
-export const reviewArea = getLabelWithValueForModifiedLabel(
+export const reviewArea = getLabelWithValue(
   {
     labelName: "Area (in sq ft)",
     labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
   },
   {
-    jsonPath: "applyScreen.roadCuttingArea",
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.roadCuttingArea",
-    callBack: handleNA
+    jsonPath: "applyScreen.roadCuttingArea"
   }
 );
-export const reviewConnectionExecutionDate = getLabelWithValueForModifiedLabel(
+export const reviewConnectionExecutionDate = getLabelWithValue(
   {
     labelName: "Connection Execution Date",
     labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE"
   },
   {
     jsonPath: "applyScreen.connectionExecutionDate",
-    callBack: convertEpochToDateAndHandleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.connectionExecutionDate",
-    callBack: convertEpochToDateAndHandleNA
+    callBack: convertEpochToDate
   }
 );
-export const reviewMeterId = getLabelWithValueForModifiedLabel(
+export const reviewMeterId = getLabelWithValue(
   {
     labelName: "Meter ID",
     labelKey: "WS_SERV_DETAIL_METER_ID"
   },
-  { jsonPath: "applyScreen.meterId",
-    callBack: handleNA },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.meterId",
-    callBack: handleNA
-  }
+  { jsonPath: "applyScreen.meterId" }
 );
 
-export const reviewMeterInstallationDate = getLabelWithValueForModifiedLabel(
+export const reviewMeterInstallationDate = getLabelWithValue(
   {
     labelName: "Meter Installation Date",
     labelKey: "WS_ADDN_DETAIL_METER_INSTALL_DATE"
   },
-  {
-    jsonPath: "applyScreen.meterInstallationDate",
-    callBack: convertEpochToDateAndHandleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.meterInstallationDate",
-    callBack: convertEpochToDateAndHandleNA
-  }
+  { jsonPath: "applyScreen.meterInstallationDate" }
 );
 
-export const reviewInitialMeterReading = getLabelWithValueForModifiedLabel(
+export const reviewInitialMeterReading = getLabelWithValue(
   {
     labelName: "Initial Meter Reading",
     labelKey: "WS_ADDN_DETAILS_INITIAL_METER_READING"
   },
-  { jsonPath: "applyScreen.additionalDetails.initialMeterReading",
-    callBack: handleNA },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.additionalDetails.initialMeterReading",
-    callBack: handleNA
-  }
+  { jsonPath: "applyScreen.initialMeterReading" }
 );
 
 export const reviewOwner = (isEditable = true) => {
@@ -369,7 +215,7 @@ export const reviewOwner = (isEditable = true) => {
           },
           ...getCommonSubHeader({
             labelName: "Additional Details ( To be filled by Municipal Employee)",
-            labelKey: "WS_COMMON_ADDN_DETAILS_HEADER"
+            labelKey: "WS_COMMON_ADDN_DETAILS"
           })
         },
         editSection: {
@@ -436,43 +282,10 @@ const connectionChargeDetails = getCommonContainer({
   reviewPlumberMobileNo
 });
 
-const roadCuttingCharges = {
-  uiFramework: "custom-containers",
-  componentPath: "MultiItem",
-  props: {
-    className: "applicant-summary",
-    scheama: getCommonContainer({
-        reviewRoadType : getLabelWithValue(
-          {
-            labelName: "Road Type",
-            labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
-          },
-          {
-            jsonPath: "applyScreen.roadCuttingInfo[0].roadType",
-            callBack: handleRoadType
-          }
-        ),
-        reviewArea : getLabelWithValue(
-          {
-            labelName: "Area (in sq ft)",
-            labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
-          },
-          {
-            jsonPath: "applyScreen.roadCuttingInfo[0].roadCuttingArea",
-            callBack: handleNA
-          }
-        )
-        
-    }),
-    items: [],
-    hasAddItem: false,
-    isReviewPage: true,
-    sourceJsonPath: "applyScreen.roadCuttingInfo",
-    prefixSourceJsonPath: "children",
-    afterPrefixJsonPath: "children.value.children.key"
-  },
-  type: "array"
-}
+const roadCuttingCharges = getCommonContainer({
+  reviewRoadType,
+  reviewArea
+});
 
 const activationDetails = getCommonContainer({
   reviewConnectionExecutionDate,

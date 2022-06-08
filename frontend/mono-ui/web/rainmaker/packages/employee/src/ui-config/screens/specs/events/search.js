@@ -1,12 +1,12 @@
-import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader, getLabel, getBreak } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { searchResults, searchApiCall } from "./searchResults";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { ulbFilter } from "../utils";
-import { searchApiCall, searchResults } from "./searchResults";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -31,11 +31,6 @@ const eventsSearchAndResult = {
     props.value = tenantId;
     props.disabled = true;
     set(action.screenConfig, "components.div.children.cityFilter.children.cardContent.children.container.children.ulb.props", props);
-    set(
-      action.screenConfig,
-      "components.div.children.searchResults.visible",
-      false
-    );
     return action;
   },
   components: {
@@ -50,6 +45,7 @@ const eventsSearchAndResult = {
         headerDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Container",
+
           children: {
             header: {
               gridDefination: {

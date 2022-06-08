@@ -27,7 +27,7 @@ class AcknowledgementContainer extends React.Component {
 								key={`act-footer-${index}`}
 								onClickFooter={this.onclickFooter}
 								labelName={config.labelName}
-								labelKey={config.labelKey}
+								labeKey={config.labeKey}
 								style={config.style}
 								path={config.url}
 							/>

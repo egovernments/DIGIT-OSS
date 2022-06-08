@@ -1,15 +1,14 @@
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import Label from "../../ui-containers-local/LabelContainer";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
-import { withStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import get from "lodash/get";
-import React from "react";
 import { connect } from "react-redux";
-import store from "ui-redux/store";
-import Label from "../../ui-containers-local/LabelContainer";
-import "./index.css";
+import get from "lodash/get";
+import "./index.css"
 
 const styles = {
   card: {
@@ -22,28 +21,8 @@ const styles = {
 class Applications extends React.Component {
   getTaskDetails = data => {
     data.service = data.service.toUpperCase();
-    // store.dispatch(setRoute(`/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}&service=${data.service}`))
-    let connectionNo = data.connectionNo || 'NA';
-    let applicationType = data.applicationType;
-    if (connectionNo && connectionNo !== 'NA' && applicationType.includes('MODIFY')) {
-      store.dispatch(
-        setRoute(`/wns/search-preview?applicationNumber=${data.applicationNo}&tenantId=${data.property.tenantId}&history=true&service=${data.service}&mode=MODIFY`)
-      )
-    } else {
-      store.dispatch(
-        setRoute(`/wns/search-preview?applicationNumber=${data.applicationNo}&tenantId=${data.property.tenantId}&history=true&service=${data.service}`)
-      )
-    }
+    window.location.href = `/citizen/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}&service=${data.service}`
   }
-
-  titleCasingStatus = (status) => {
-    let splitStr = status.toLowerCase().split('_');
-    for (let i = 0; i < splitStr.length; i++) {
-      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-    }
-    return splitStr.join(' ');
-  }
-
   render() {
     const { myApplicationResults, classes } = this.props;
     return (
@@ -97,7 +76,7 @@ class Applications extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <LabelContainer
-                            labelName={item.property && item.property.owners.map(owner => owner.name).join(",")}
+                            labelName={item.property.owners.map(owner => owner.name)}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
@@ -129,7 +108,7 @@ class Applications extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <Label
-                            labelName={this.titleCasingStatus(item.applicationStatus)}
+                            labelName={item.applicationStatus}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />

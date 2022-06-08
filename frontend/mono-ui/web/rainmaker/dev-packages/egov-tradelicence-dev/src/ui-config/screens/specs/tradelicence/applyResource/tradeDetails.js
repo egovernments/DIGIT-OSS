@@ -1,150 +1,45 @@
 import {
-  getCommonCard, getCommonContainer, getCommonGrayCard, getCommonSubHeader, getCommonTitle, getDateField, getPattern, getSelectField, getTextField
+  getCommonCard,
+  getCommonGrayCard,
+  getCommonTitle,
+  getCommonSubHeader,
+  getTextField,
+  getDateField,
+  getSelectField,
+  getCommonContainer,
+  getLabelWithValue,
+  getLabelWithValueForModifiedLabel,
+  getPattern,
+  tradeValueNote
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg, getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
-import filter from "lodash/filter";
-import get from "lodash/get";
 import {
-  getFinancialYearDates, getIconStyle, getNextMonthDateInYMD, updateMdmsDropDowns,
-  updateStructureTypes
+  getIconStyle,
+  objectToDropdown,
+  getTodaysDateInYMD,
+  getFinancialYearDates,
+  getNextMonthDateInYMD,
+  setFilteredTradeTypes,
+  getUniqueItemsFromArray,
+  fillOldLicenseData,
+  getTradeTypeDropdownData
 } from "../../utils";
-import "./index.css";
-
-
-const tradeCategoryChange = (reqObj) => {
-  try {
-    let { dispatch, index } = reqObj;
-    dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, ''));
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-const tradeTypeChange = (reqObj) => {
-  try {
-    let { dispatch, index } = reqObj;
-    dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, ''));
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-const tradeSubTypeChange = (reqObj) => {
-  try {
-    let { moduleName, rootBlockSub, keyValue, value, state, dispatch, index } = reqObj;
-    let keyValueRow = keyValue.replace(`.${value}`, ``);
-    let tradeSubTypes = get(
-      state.screenConfiguration.preparedFinalObject,
-      `DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}${keyValueRow}`,
-      []
-    );
-    let currentObject = filter(tradeSubTypes, {
-      code: value
-    });
-    if (currentObject[0] && currentObject[0].uom !== null) {
-      dispatch(
-        handleField(
-          "apply",
-          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
-          "props.value",
-          currentObject[0].uom
-        )
-      );
-      dispatch(
-        handleField(
-          "apply",
-          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
-          "props.required",
-          true
-        )
-      );
-      dispatch(
-        handleField(
-          "apply",
-          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
-          "props.disabled",
-          false
-        )
-      );
-    } else {
-      dispatch(
-        handleField(
-          "apply",
-          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
-          "props.required",
-          false
-        )
-      );
-
-      dispatch(
-        handleField(
-          "apply",
-          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
-          "props.disabled",
-          true
-        )
-      );
-
-      dispatch(
-        handleField(
-          "apply",
-          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM`,
-          "props.value",
-          ""
-        )
-      );
-      dispatch(
-        handleField(
-          "apply",
-          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
-          "props.value",
-          ""
-        )
-      );
-
-      dispatch(
-        pFO(
-          `Licenses[0].tradeLicenseDetail.tradeUnits[${index}].uom`,
-          null
-        )
-      );
-      dispatch(
-        pFO(
-          `Licenses[0].tradeLicenseDetail.tradeUnits[${index}].uomValue`,
-          null
-        )
-      );
-      dispatch(
-        handleField(
-          "apply",
-          `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue`,
-          "props.error",
-          false
-        )
-      );
-    }
-    dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, value));
-  } catch (e) {
-    console.log(e);
-  }
-}
-const structureSubTypeChange = (reqObj) => {
-  try {
-    let { keyValue, value, dispatch } = reqObj;
-    let keyValueRow = keyValue.replace(`.${value}`, ``);
-    dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", value));
-    dispatch(pFO("LicensesTemp[0].tradeLicenseDetail.structureType", keyValueRow));
-  } catch (e) {
-    console.log(e);
-  }
-}
+import {
+  prepareFinalObject as pFO,
+  toggleSnackbar
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import filter from "lodash/filter";
+import { convertEpochToDate,getAllDataFromBillingSlab } from "../../utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {httpRequest} from "../../../../../ui-utils"
+import { getUserInfo } from "egov-ui-framework/ui-utils/localStorageUtils";
 
 const tradeUnitCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
   props: {
-
     scheama: getCommonGrayCard({
       header: getCommonSubHeader(
         {
@@ -159,42 +54,449 @@ const tradeUnitCard = {
       ),
       tradeUnitCardContainer: getCommonContainer(
         {
-          dynamicMdms: {
-            uiFramework: "custom-containers",
-            componentPath: "DynamicMdmsContainer",
-            props: {
-              dropdownFields: [
-                {
-                  key: 'tradeCategory',
-                  fieldType: "autosuggest",
-                  className: "applicant-details-error autocomplete-dropdown",
-                  callBack: tradeCategoryChange,
-                  isRequired: false,
-                  requiredValue: true
-                },
-                {
-                  key: 'tradeType',
-                  fieldType: "autosuggest",
-                  className: "applicant-details-error autocomplete-dropdown",
-                  callBack: tradeTypeChange,
-                  isRequired: false,
-                  requiredValue: true
-                },
-                {
-                  key: 'tradeSubType',
-                  callBack: tradeSubTypeChange,
-                  className: "applicant-details-error autocomplete-dropdown",
-                  fieldType: "autosuggest",
-                  isRequired: false,
-                  requiredValue: true
+          tradeCategory: {
+            ...getSelectField({
+              label: {
+                labelName: "Trade Category",
+                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL"
+              },
+              placeholder: {
+                labelName: "Select Trade Category",
+                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_PLACEHOLDER"
+              },
+              required: true,
+              jsonPath: "LicensesTemp.tradeUnits[0].tradeType",
+              localePrefix: {
+                moduleName: "TRADELICENSE",
+                masterName: "TRADETYPE"
+              },
+              props: {
+                jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
+                setDataInField: true,
+                disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,               },
+               sourceJsonPath:
+                "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+              gridDefination: {
+                xs: 12,
+                sm: 4
+              }
+            }),
+            beforeFieldChange: (action, state, dispatch) => {
+              try {
+                dispatch(
+                  pFO(
+                    "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
+                    objectToDropdown(
+                      get(
+                        state.screenConfiguration.preparedFinalObject,
+                        `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${action.value}`,
+                        []
+                      )
+                    )
+                  )
+                );
+                let componentPath = action.componentJsonpath.split(".");
+
+                let index = action.componentJsonpath
+                  .split("[")[1]
+                  .split("]")[0];
+                componentPath.pop();
+                componentPath.push("tradeType");
+                componentPath = componentPath.join(".");
+                dispatch(
+                  handleField(
+                    "apply",
+                    componentPath,
+                    "props.data",
+                    objectToDropdown(
+                      get(
+                        state.screenConfiguration.preparedFinalObject,
+                        `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${action.value}`,
+                        []
+                      )
+                    )
+                  )
+                );
+                let tradeCat = get(
+                  state.screenConfiguration.preparedFinalObject,
+                  `LicensesTemp.tradeUnits[${parseInt(index)}].tradeType`
+                );
+                if (tradeCat != action.value) {
+                  dispatch(
+                    pFO(
+                      `LicensesTemp.tradeUnits[${parseInt(
+                        index
+                      )}].tradeSubType`,
+                      ""
+                    )
+                  );
+                  dispatch(
+                    pFO(
+                      `Licenses[0].tradeLicenseDetail.tradeUnits[${parseInt(
+                        index
+                      )}].tradeType`,
+                      ""
+                    )
+                  );
                 }
-              ],
-              moduleName: "TradeLicense",
-              masterName: "TradeType",
-              rootBlockSub: 'tradeUnits',
-              filter: "[?(@.type=='TL')]",
-              callBackEdit: updateMdmsDropDowns,
-              isDependency: "DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType"
+              } catch (e) {
+                console.log(e);
+              }
+            }
+          },
+          tradeType: {
+            ...getSelectField({
+              label: {
+                labelName: "Trade Type",
+                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL"
+              },
+              placeholder: {
+                labelName: "Select Trade Type",
+                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_PLACEHOLDER"
+              },
+              required: true,
+              localePrefix: {
+                moduleName: "TRADELICENSE",
+                masterName: "TRADETYPE"
+              },
+              jsonPath: "LicensesTemp.tradeUnits[0].tradeSubType",
+              props: {
+                jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
+                disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,             
+              },
+              sourceJsonPath:
+                "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
+              gridDefination: {
+                xs: 12,
+                sm: 4
+              }
+            }),
+            beforeFieldChange: (action, state, dispatch) => {
+              try {
+                let cardIndex = action.componentJsonpath
+                  .split("items[")[1]
+                  .split("]")[0];
+                let tradeCategory = get(
+                  state.screenConfiguration.preparedFinalObject,
+                  `LicensesTemp.tradeUnits[${cardIndex}].tradeType`,
+                  ""
+                );
+                dispatch(
+                  pFO(
+                    "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
+                    get(
+                      state.screenConfiguration.preparedFinalObject,
+                      `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCategory}.${action.value}`,
+                      []
+                    )
+                  )
+                );
+                let componentPath = action.componentJsonpath.split(".");
+                componentPath.pop();
+                componentPath.push("tradeSubType");
+                componentPath = componentPath.join(".");
+                dispatch(
+                  handleField(
+                    "apply",
+                    componentPath,
+                    "props.data",
+                    get(
+                      state.screenConfiguration.preparedFinalObject,
+                      `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCategory}.${action.value}`,
+                      []
+                    )
+                  )
+                );
+              } catch (e) {
+                console.log(e);
+              }
+            }
+          },
+          tradeSubType: {
+           /*  uiFramework: "custom-containers-local",
+            moduleName: "egov-tradelicence",
+            componentPath: "AutosuggestContainer",
+            jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+            required: true,
+            gridDefination: {
+              xs: 12,
+              sm: 4
+            },
+            props: {
+              style: {
+                width: "100%",
+                cursor: "pointer"
+              },
+              label: {
+                labelName: "Trade Sub-Type",
+                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
+              },
+              placeholder: {
+                labelName: "Select Trade Sub-Type",
+                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_PLACEHOLDER"
+              },
+              jsonPath:
+                "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+              sourceJsonPath:
+                "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
+              setDataInField: true,
+              labelsFromLocalisation: true,
+              localePrefix: {
+                moduleName: "TRADELICENSE",
+                masterName: "TRADETYPE"
+              },
+              fullwidth: true,
+              required: true,
+              inputLabelProps: {
+                shrink: true
+              }
+            }, */
+            ...getSelectField({
+              label: {
+                labelName: "Trade Sub-Type",
+                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
+              },
+              placeholder: {
+                labelName: "Select Trade Sub-Type",
+                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_PLACEHOLDER"
+              },
+              localePrefix: {
+                moduleName: "TRADELICENSE",
+                masterName: "TRADETYPE"
+              },         
+              sourceJsonPath: "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
+              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+              required: true,
+              setDataInField: true,
+              labelsFromLocalisation: true,
+              props: {
+                disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,             
+              },
+              gridDefination: {
+                xs: 12,
+                sm: 4
+              }
+            }),
+            beforeFieldChange: (action, state, dispatch) => {
+              try {
+                let cardIndex = action.componentJsonpath
+                  .split("items[")[1]
+                  .split("]")[0];
+                const tradeSubTypes = get(
+                  state.screenConfiguration,
+                  "preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits",
+                  []
+                );
+                const alreadySelected =
+                  tradeSubTypes &&
+                  tradeSubTypes.find((item, i) => {
+                    if (item.tradeType === action.value && cardIndex != i)
+                      return true;
+                  });
+                if (alreadySelected) {
+                  dispatch(
+                    toggleSnackbar(
+                      true,
+                      {
+                        labelName:
+                          "This trade type is already selected, Please select another",
+                        labelKey: "TL_TRADE_TYPE_ALREADY_SELECTED"
+                      },
+                      "warning"
+                    )
+                  );
+
+                  action.value = null;
+                } else {
+                  let tradeType = get(
+                    state.screenConfiguration.preparedFinalObject,
+                    `LicensesTemp.tradeUnits[${cardIndex}].tradeType`,
+                    ""
+                  );
+                  let tradeCategory = get(
+                    state.screenConfiguration.preparedFinalObject,
+                    `LicensesTemp.tradeUnits[${cardIndex}].tradeSubType`,
+                    ""
+                  );
+                  let tradeSubCategories = get(
+                    state.screenConfiguration.preparedFinalObject,
+                    `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeType}.${tradeCategory}`,
+                    []
+                  );
+                  tradeSubCategories = getUniqueItemsFromArray(
+                    tradeSubCategories,
+                    "code"
+                  );
+                  let currentObject = filter(tradeSubCategories, {
+                    code: action.value
+                  });
+                  if (currentObject[0].uom !== null) {
+                    dispatch(
+                      handleField(
+                        "apply",
+                        action.componentJsonpath.replace(
+                          "tradeSubType",
+                          "tradeUOM"
+                        ),
+                        "props.value",
+                        currentObject[0].uom
+                      )
+                    );
+                    dispatch(
+                      handleField(
+                        "apply",
+                        action.componentJsonpath.replace(
+                          "tradeSubType",
+                          "tradeUOMValue"
+                        ),
+                        "props.required",
+                        true
+                      )
+                    );
+                    dispatch(
+                      handleField(
+                        "apply",
+                        action.componentJsonpath.replace(
+                          "tradeSubType",
+                          "tradeUOMValue"
+                        ),
+                        "props.disabled",
+                        false
+                      )
+                    );
+                  } else {
+                    dispatch(
+                      handleField(
+                        "apply",
+                        action.componentJsonpath.replace(
+                          "tradeSubType",
+                          "tradeUOMValue"
+                        ),
+                        "props.required",
+                        false
+                      )
+                    );
+
+                    dispatch(
+                      handleField(
+                        "apply",
+                        action.componentJsonpath.replace(
+                          "tradeSubType",
+                          "tradeUOMValue"
+                        ),
+                        "props.disabled",
+                        true
+                      )
+                    );
+
+                    dispatch(
+                      handleField(
+                        "apply",
+                        action.componentJsonpath.replace(
+                          "tradeSubType",
+                          "tradeUOM"
+                        ),
+                        "props.value",
+                        ""
+                      )
+                    );
+                    dispatch(
+                      handleField(
+                        "apply",
+                        action.componentJsonpath.replace(
+                          "tradeSubType",
+                          "tradeUOMValue"
+                        ),
+                        "props.value",
+                        ""
+                      )
+                    );
+
+                    dispatch(
+                      pFO(
+                        `Licenses[0].tradeLicenseDetail.tradeUnits[${cardIndex}].uom`,
+                        null
+                      )
+                    );
+                    dispatch(
+                      pFO(
+                        `Licenses[0].tradeLicenseDetail.tradeUnits[${cardIndex}].uomValue`,
+                        null
+                      )
+                    );
+                    dispatch(
+                      handleField(
+                        "apply",
+                        action.componentJsonpath.replace(
+                          "tradeSubType",
+                          "tradeUOMValue"
+                        ),
+                        "props.error",
+                        false
+                      )
+                    );
+                  }
+                }
+              } catch (e) {
+                console.log(e);
+              }
+            },afterFieldChange: async (action, state, dispatch)=>{
+              let cardIndex = action.componentJsonpath
+                  .split("items[")[1]
+                  .split("]")[0];
+                let tradeLicenceData = get(
+                  state.screenConfiguration.preparedFinalObject,
+                  `Licenses`,
+                  ""
+                );
+                if(tradeLicenceData && tradeLicenceData[0]){
+
+                  let apType = tradeLicenceData[0].applicationType.split(".")[1];
+                  const queryObj = [
+                    {
+                      key: "applicationType",
+                      value: apType
+                    },
+                    {
+                      key: "structureType",
+                      value: tradeLicenceData[0].tradeLicenseDetail.structureType
+                    },
+                    {
+                      key: "tradeType",
+                      value: tradeLicenceData[0].tradeLicenseDetail.tradeUnits[cardIndex].tradeType
+                    }
+                  ];
+                let payload = await httpRequest(
+                  "post",
+                  `/tl-calculator/billingslab/_search?tenantId=${getTenantId()}`,
+                  "_search",
+                  queryObj,
+                  {}
+                );
+                let rate = payload && payload.billingSlab && payload.billingSlab.length>0 && payload.billingSlab[0].rate;
+                dispatch(
+                  pFO(
+                    `Licenses[0].tradeLicenseDetail.tradeUnits[${cardIndex}].rate`,
+                    rate
+                  )
+                );
+                  dispatch(	
+                    handleField(	
+                      "apply",	
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeValue.props",	
+                       "visible",	
+                       true
+                    )	
+                  );
+                  dispatch(	
+                    handleField(	
+                      "apply",	
+                      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeValue",	
+                       "visible",	
+                       true
+                    )	
+                  );
+                }
             }
           },
           tradeUOM: getTextField({
@@ -300,11 +602,7 @@ const accessoriesCard = {
       },
       accessoriesCardContainer: getCommonContainer({
         accessoriesName: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "AutosuggestContainer",
-          props: {
-            className: "accesories-name-dropdown",
+          ...getSelectField({
             label: {
               labelName: "Accessories",
               labelKey: "TL_NEW_TRADE_DETAILS_ACC_LABEL"
@@ -317,25 +615,15 @@ const accessoriesCard = {
               moduleName: "TRADELICENSE",
               masterName: "ACCESSORIESCATEGORY"
             },
-            labelsFromLocalisation: true,
-            required: false,
-            isClearable: true,
-            inputLabelProps: {
-              shrink: true
-            },
             jsonPath:
               "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
             sourceJsonPath:
               "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
-          },
-          jsonPath:
-            "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
-          sourceJsonPath:
-            "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
-          gridDefination: {
-            xs: 12,
-            sm: 4
-          },
+            gridDefination: {
+              xs: 12,
+              sm: 4
+            }
+          }),
           beforeFieldChange: (action, state, dispatch) => {
             try {
               let accessories = get(
@@ -475,7 +763,6 @@ const accessoriesCard = {
             },
             pattern: getPattern("UOMValue"),
             props: {
-              className: "applicant-details-error",
               disabled: true,
               jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue"
             },
@@ -499,7 +786,6 @@ const accessoriesCard = {
             },
             pattern: getPattern("NoOfEmp"),
             props: {
-              className: "applicant-details-error",
               setDataInField: true,
               jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].count",
               disabled: true
@@ -545,307 +831,509 @@ export const tradeDetails = getCommonCard({
       }
     }
   ),
-  tradeDetailsConatiner: getCommonContainer({
-    financialYear: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
-      componentPath: "AutosuggestContainer",
-      jsonPath: "Licenses[0].financialYear",
-      sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
-      props: {
-        className: "autocomplete-dropdown",
-        suggestions: [],
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? true : false,
-        label: {
-          labelName: "Financial Year",
-          labelKey: "TL_FINANCIAL_YEAR_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Financial Year",
-          labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
-        },
-        required: true,
-        isClearable: true,
-        jsonPath: "Licenses[0].financialYear",
-        sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
-        inputLabelProps: {
-          shrink: true
-        }
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
-      required: true
-    },
-    // oldLicenseNo: getTextField({
-    //   label: {
-    //     labelName: "Old License No",
-    //     labelKey: "TL_OLD_LICENSE_NO"
-    //   },
-    //   placeholder: {
-    //     labelName: "Enter Old License No",
-    //     labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
-    //   },
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 6
-    //   },
-    //   props:{
-    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
-    //   },
-    //   iconObj: {
-    //     iconName: "search",
-    //     position: "end",
-    //     color: "#FE7A51",
-    //     onClickDefination: {
-    //       action: "condition",
-    //       callBack: (state, dispatch) => {
-    //         fillOldLicenseData(state, dispatch);
-    //       }
-    //     }
-    //   },
-    //   title: {
-    //     value: "Fill the form by searching your old approved trade license",
-    //     key: "TL_OLD_TL_NO"
-    //   },
-    //   infoIcon: "info_circle",
-    //   jsonPath: "Licenses[0].oldLicenseNumber"
-    // }),
-    dummyDiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
-      visible: true,
-      props: {
-        disabled: true
-      }
-    },
-    tradeLicenseType: {
-      ...getSelectField({
-        label: {
-          labelName: "License Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select License Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_PLACEHOLDER"
-        },
-        required: true,
-        jsonPath: "Licenses[0].licenseType",
-        localePrefix: {
-          moduleName: "TRADELICENSE",
-          masterName: "LICENSETYPE"
-        },
-        props: {
-          disabled: true,
-          value: "PERMANENT",
-          className: "tl-trade-type"
-        },
-        sourceJsonPath: "applyScreenMdmsData.TradeLicense.licenseType"
-      }),
-      beforeFieldChange: (action, state, dispatch) => {
-        if (action.value === "TEMPORARY") {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
-              "visible",
-              true
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeFromDate",
-              "visible",
-              true
-            )
-          );
-        } else {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
-              "visible",
-              false
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeFromDate",
-              "visible",
-              false
-            )
-          );
-          // dispatch(pFO("Licenses[0].validFrom", null));
-          // dispatch(pFO("Licenses[0].validTo", null));
-        }
-      }
-    },
-    tradeName: getTextField({
-      label: {
-        labelName: "Name of Trade",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_LABEL"
-      },
-      props: {
-        className: "applicant-details-error",
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? true : false,
-      },
-      placeholder: {
-        labelName: "Example Diljit Da Dhaba",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_PLACEHOLDER"
-      },
-      required: true,
-      pattern: getPattern("TradeName"),
-      jsonPath: "Licenses[0].tradeName"
-    }),
-    tradeFromDate: {
-      ...getDateField({
-        label: {
-          labelName: "From Date",
-          labelKey: "TL_COMMON_FROM_DATE_LABEL"
-        },
-        placeholder: {
-          labelName: "Trade License From Date",
-          labelName: "TL_TRADE_LICENCE_FROM_DATE"
-        },
-        required: true,
-        pattern: getPattern("Date"),
-        jsonPath: "Licenses[0].validFrom",
-        props: {
-          disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? true : false,
-          className: "applicant-details-error",
-          inputProps: {
-            min: getTodaysDateInYMD(),
-            max: getFinancialYearDates("yyyy-mm-dd").endDate
-          }
-        }
-      }),
-      visible: false
-    },
-    tradeToDate: {
-      ...getDateField({
-        label: { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
-        placeholder: {
-          labelName: "Trade License From Date",
-          labelKey: "TL_TRADE_LICENCE_TO_DATE"
-        },
-        required: true,
-        pattern: getPattern("Date"),
-        jsonPath: "Licenses[0].validTo",
-        props: {
-          disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? true : false,
-          inputProps: {
-            min: getNextMonthDateInYMD(),
-            max: getFinancialYearDates("yyyy-mm-dd").endDate
-          }
-        }
-      }),
-      visible: false
-    },
-    dynamicMdmsStructureType: {
-      uiFramework: "custom-containers",
-      componentPath: "DynamicMdmsContainer",
-      props: {
-        dropdownFields: [
-          {
-            key: 'structureType',
-            isDisabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? true : false,
-            fieldType: "autosuggest",
-            className: "applicant-details-error autocomplete-dropdown",
-            isRequired: false,
-            requiredValue: true
+  tradeDetailsConatiner: getCommonContainer(
+    {
+      financialYear: {
+        ...getSelectField({
+          label: {
+            labelName: "Financial Year",
+            labelKey: "TL_FINANCIAL_YEAR_LABEL"
           },
-          {
-            key: 'structureSubType',
-            callBack: structureSubTypeChange,
-            fieldType: "autosuggest",
-            className: "applicant-details-error autocomplete-dropdown",
-            isRequired: false,
-            requiredValue: true
+          placeholder: {
+            labelName: "Select Financial Year",
+            labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
+          },
+          props:{
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          },
+          required: true,
+          jsonPath: "Licenses[0].financialYear",
+          sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
+          // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          // props: {
+          //   disabled: true
+          // }
+        })
+      },
+      applicationType: {
+        ...getSelectField({
+          label: {
+            labelName: "Application Type",
+            labelKey: "TL_APPLICATION_TYPE_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Application Type",
+            labelKey: "TL_APPLICATION_TYPE_PLACEHOLDER"
+          },
+          required: true,
+          localePrefix: {
+            moduleName: "TradeLicense",
+            masterName: "ApplicationType"
+          },
+          props:{
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit"  ? true:false,
+          },
+          jsonPath:
+            "Licenses[0].applicationType",
+          sourceJsonPath: "applyScreenMdmsData.TradeLicense.ApplicationType",
+          gridDefination: {
+            xs: 12,
+            sm: 6
           }
-        ],
-        moduleName: "common-masters",
-        masterName: "StructureType",
-        rootBlockSub: 'structureTypes',
-        callBackEdit: updateStructureTypes
-      }
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          getAllDataFromBillingSlab(
+            process.env.REACT_APP_NAME === "Citizen"
+              ? getQueryArg(window.location.href, "tenantId")
+              : getTenantId(),
+            dispatch,
+            [
+              {
+                key: "applicationType",
+                value: action.value.split(".")[1]
+              }
+            ]
+          );
+          if (action.value.split(".")[1] === "RENEWAL") {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
+                "props.required",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
+                "required",
+                true
+              )
+            );
+          } else {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
+                "props.required",
+                false
+              )
+            );
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
+                "required",
+                false
+              )
+            );
+          }
+        }
+      },
+      oldLicenseNo: getTextField({
+        label: {
+          labelName: "Old License No",
+          labelKey: "TL_OLD_LICENSE_NO"
+        },
+        placeholder: {
+          labelName: "Enter Old License No",
+          labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        // iconObj: {
+        //   iconName: "search",
+        //   position: "end",
+        //   color: "#FE7A51",
+        //   onClickDefination: {
+        //     action: "condition",
+        //     callBack: (state, dispatch) => {
+        //       fillOldLicenseData(state, dispatch);
+        //     }
+        //   }
+        // },
+        title: {
+          value: "Fill the form by searching your old approved trade license",
+          key: "TL_OLD_TL_NO"
+        },
+        props:{
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
+        infoIcon: "info_circle",
+        jsonPath: "Licenses[0].oldLicenseNumber"
+      }),
+      tradeLicenseType: {
+        ...getSelectField({
+          label: {
+            labelName: "License Type",
+            labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL"
+          },
+          placeholder: {
+            labelName: "Select License Type",
+            labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_PLACEHOLDER"
+          },
+          required: true,
+          jsonPath: "Licenses[0].licenseType",
+          localePrefix: {
+            moduleName: "TRADELICENSE",
+            masterName: "LICENSETYPE"
+          },
+          props: {
+            disabled: true,
+            value: "PERMANENT",
+            className: "tl-trade-type"
+          },
+          sourceJsonPath: "applyScreenMdmsData.TradeLicense.licenseType"
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          if (action.value === "TEMPORARY") {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+                "visible",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeFromDate",
+                "visible",
+                true
+              )
+            );
+          } else {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+                "visible",
+                false
+              )
+            );
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeFromDate",
+                "visible",
+                false
+              )
+            );
+            // dispatch(pFO("Licenses[0].validFrom", null));
+            // dispatch(pFO("Licenses[0].validTo", null));
+          }
+        }
+      },
+      tradeName: getTextField({
+        label: {
+          labelName: "Name of Trade",
+          labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_LABEL"
+        },
+        placeholder: {
+          labelName: "Example Diljit Da Dhaba",
+          labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_PLACEHOLDER"
+        },
+        props:{
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
+        required: true,
+        pattern: getPattern("TradeName"),
+        jsonPath: "Licenses[0].tradeName"
+      }),
+      tradeFromDate: {
+        ...getDateField({
+          label: {
+            labelName: "From Date",
+            labelKey: "TL_COMMON_FROM_DATE_LABEL"
+          },
+          placeholder: {
+            labelName: "Trade License From Date",
+            labelName: "TL_TRADE_LICENCE_FROM_DATE"
+          },
+          required: true,
+          pattern: getPattern("Date"),
+          jsonPath: "Licenses[0].validFrom",
+          props: {
+            inputProps: {
+              min: getTodaysDateInYMD(),
+              max: getFinancialYearDates("yyyy-mm-dd").endDate
+            }
+          }
+        }),
+        visible: false
+      },
+      tradeToDate: {
+        ...getDateField({
+          label: { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
+          placeholder: {
+            labelName: "Trade License From Date",
+            labelKey: "TL_TRADE_LICENCE_TO_DATE"
+          },
+          required: true,
+          pattern: getPattern("Date"),
+          jsonPath: "Licenses[0].validTo",
+          props: {
+            inputProps: {
+              min: getNextMonthDateInYMD(),
+              max: getFinancialYearDates("yyyy-mm-dd").endDate
+            }
+          }
+        }),
+        visible: false
+      },
+      tradeStructureType: {
+        ...getSelectField({
+          label: {
+            labelName: "Structure Type",
+            labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Structure Type",
+            labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_PLACEHOLDER"
+          },
+          localePrefix: {
+            moduleName: "common-masters",
+            masterName: "STRUCTURETYPE"
+          },
+          props:{
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          },
+          required: true,
+          jsonPath: "LicensesTemp[0].tradeLicenseDetail.structureType",
+          sourceJsonPath:
+            "applyScreenMdmsData.common-masters.StructureTypeTransformed"
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          try {
+            dispatch(
+              pFO(
+                "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
+                get(
+                  state.screenConfiguration.preparedFinalObject
+                    .applyScreenMdmsData["common-masters"],
+                  `StructureType.${action.value}`,
+                  []
+                )
+              )
+            );
+            // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      },
+      tradeStructureSubType: {
+        ...getSelectField({
+          label: {
+            labelName: "Structure Sub Type",
+            labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Structure Sub Type",
+            labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_PLACEHOLDER"
+          },
+          props:{
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          },
+          required: true,
+          localePrefix: {
+            moduleName: "common-masters",
+            masterName: "STRUCTURETYPE"
+          },
+          jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
+          sourceJsonPath:
+            "applyScreenMdmsData.common-masters.StructureSubTypeTransformed"
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          const tradeTypes = setFilteredTradeTypes(
+            state,
+            dispatch,
+            get(
+              state.screenConfiguration.preparedFinalObject,
+              "Licenses[0].licenseType",
+              "PERMANENT"
+            ),
+            action.value
+          );
+          const tradeTypeDropdownData = getTradeTypeDropdownData(tradeTypes);
+          tradeTypeDropdownData &&
+            dispatch(
+              pFO(
+                "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+                tradeTypeDropdownData
+              )
+            );
+        }
+      },
+      tradeCommencementDate: getDateField({
+        label: {
+          labelName: "Trade Commencement Date",
+          labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Trade Commencement Date",
+          labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_PLACEHOLDER"
+        },
+        props:{
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
+        required: true,
+        pattern: getPattern("Date"),
+        jsonPath: "Licenses[0].commencementDate",
+        callBack: convertEpochToDate
+      }),
+      tradeGSTNo: getTextField({
+        label: {
+          labelName: "Trade GST No.",
+          labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Trade GST No.",
+          labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_PLACEHOLDER"
+        },
+        props:{
+         // disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
+        pattern: getPattern("GSTNo"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
+      }),
+      tradeOperationalArea: getTextField({
+        label: {
+          labelName: "Operatonal Area (Sq.ft)",
+          labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Operatonal Area in Sq.ft",
+          labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
+        },
+        props:{
+          //disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
+        pattern: getPattern("OperationalArea"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
+      }),
+      tradeNoOfEmployee: getTextField({
+        label: {
+          labelName: "No. Of Employee",
+          labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter No. Of Employee",
+          labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
+        },
+        props:{
+          //disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
+        pattern: getPattern("NoOfEmp"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
+      }),
+      occupancyType: {
+        ...getSelectField({
+          label: {
+            labelName: "Occupancy Type",
+            labelKey: "TL_OCCUPANCY_TYPE_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Occupancy Type",
+            labelKey: "TL_OCCUPANCY_TYPE_PLACEHOLDER"
+          },
+          localePrefix: {
+            moduleName: "TradeLicense",
+            masterName: "OccupancyType"
+          },
+          props:{
+           // disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          },
+          required: true,
+          jsonPath:
+            "Licenses[0].tradeLicenseDetail.additionalDetail.occupancyType",
+          sourceJsonPath: "applyScreenMdmsData.TradeLicense.OccupancyType",
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          }
+        })
+      },
+      tradeNoOfEmployee: getTextField({
+        label: {
+          labelName: "No. Of Employee",
+          labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
+        },
+        props: {
+          className: "applicant-details-error"
+         },
+        placeholder: {
+          labelName: "Enter No. Of Employee",
+          labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
+        },
+        pattern: getPattern("NoOfEmp"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
+      })
+      // MarketType: {
+      //   ...getSelectField({
+      //     label: {
+      //       labelName: "Market Type",
+      //       labelKey: "TL_MARKET_TYPE_LABEL"
+      //     },
+      //     placeholder: {
+      //       labelName: "Select Market Type",
+      //       labelKey: "TL_MARKET_TYPE_PLACEHOLDER"
+      //     },
+      //     localePrefix: {
+      //       moduleName: "TradeLicense",
+      //       masterName: "MarketType"
+      //     },
+      //     // required: true,
+      //     jsonPath:
+      //       "Licenses[0].tradeLicenseDetail.additionalDetail.marketType",
+      //     sourceJsonPath: "applyScreenMdmsData.TradeLicense.MarketType",
+      //     gridDefination: {
+      //       xs: 12,
+      //       sm: 6
+      //     }
+      //   })
+      // },
+      // OrganizationName: getTextField({
+      //   label: {
+      //     labelName: "Organization Name",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ORGANISATION_NAME_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Organization Name",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ORG_NAME_PLACEHOLDER"
+      //   },
+      //   // required: true,
+      //   // pattern: getPattern("OrganizationName"),
+      //   jsonPath:
+      //       "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"
+      // }),
     },
-    tradeCommencementDate: getDateField({
-      label: {
-        labelName: "Trade Commencement Date",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
-      },
-      props: {
-        className: "applicant-details-error",
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? true : false
-      },
-      placeholder: {
-        labelName: "Enter Trade Commencement Date",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_PLACEHOLDER"
-      },
-      required: true,
-      pattern: getPattern("Date"),
-      jsonPath: "Licenses[0].commencementDate"
-    }),
-    tradeGSTNo: getTextField({
-      label: {
-        labelName: "Trade GST No.",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
-      },
-      props: {
-        className: "applicant-details-error",
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? true : false,
-      },
-      placeholder: {
-        labelName: "Enter Trade GST No.",
-        labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_PLACEHOLDER"
-      },
-      pattern: getPattern("GSTNo"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
-    }),
-    tradeOperationalArea: getTextField({
-      label: {
-        labelName: "Operatonal Area (Sq Ft)",
-        labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
-      },
-      props: {
-        className: "applicant-details-error",
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? true : false,
-      },
-      placeholder: {
-        labelName: "Enter Operatonal Area in Sq Ft",
-        labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
-      },
-      pattern: getPattern("OperationalArea"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
-    }),
-    tradeNoOfEmployee: getTextField({
-      label: {
-        labelName: "No. Of Employee",
-        labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
-      },
-      props: {
-        className: "applicant-details-error",
-        disabled: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? true : false,
-      },
-      placeholder: {
-        labelName: "Enter No. Of Employee",
-        labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
-      },
-      pattern: getPattern("NoOfEmp"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
-    })
-  },
-    { style: getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "workflowService") === "EDITRENEWAL" ? { "cursor": "not-allowed" } : {} },
+    {
+      /* style:
+        getQueryArg(window.location.href, "action") === "EDITRENEWAL"
+          ? { "pointer-events": "none" }
+          : {} */
+    }
   ),
   tradeUnitCard,
-  accessoriesCard
+  tradeValue: tradeValueNote(
+            {
+              labelKey: "TL_NEW_TRADE_DETAILS_TRADE_UNIT_AMOUNT",
+              labelName: "Trade unit amount",
+            },
+            {
+              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].rate",
+            }
+          ),
+  // accessoriesCard
 });
 
 const setFieldsOnAddItem = (state, multiItemContent) => {
@@ -860,9 +1348,9 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
     if (multiItemContent[variable].props.setDataInField && value) {
       if (
         multiItemContent[variable].props.jsonPath.split(".")[0] ===
-        "LicensesTemp" &&
+          "LicensesTemp" &&
         multiItemContent[variable].props.jsonPath.split(".").pop() ===
-        "tradeType"
+          "tradeType"
       ) {
         const tradeTypeData = get(
           preparedFinalObject,
@@ -888,7 +1376,8 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
       ) {
         const data = get(
           preparedFinalObject,
-          `applyScreenMdmsData.TradeLicense.TradeType.${value.split(".")[0]}.${value.split(".")[1]
+          `applyScreenMdmsData.TradeLicense.TradeType.${value.split(".")[0]}.${
+            value.split(".")[1]
           }`
         );
         if (data) {
@@ -896,7 +1385,7 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
         }
       } else if (
         multiItemContent[variable].props.jsonPath.split(".").pop() ===
-        "uomValue" &&
+          "uomValue" &&
         value > 0
       ) {
         multiItemContent[variable].props.disabled = false;

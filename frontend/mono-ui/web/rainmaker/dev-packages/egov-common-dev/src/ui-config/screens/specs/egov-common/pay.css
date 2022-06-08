@@ -1,2 +1,5 @@
 .pay-amount-text-field p {
   font-size: 12px; }
+
+.apply-wizard-footer {
+  width: 100% !important; }

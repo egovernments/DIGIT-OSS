@@ -16,10 +16,9 @@ import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 // const transfomedKeys = transformById(localizationLabels, "code");
 class AutoSuggestor extends Component {
   onSelect = value => {
-    const { onChange,jsonPath, approveCheck } = this.props;
+    const { onChange } = this.props;
     //Storing multiSelect values not handled yet
-    onChange({ target: { value: value } });
-    // approveCheck(jsonPath, value);
+    onChange({ target: { value: value.value } });
   };
 
   render() {
@@ -31,7 +30,6 @@ class AutoSuggestor extends Component {
       suggestions,
       className,
       localizationLabels,
-      jsonPath,
       ...rest
     } = this.props;
     let translatedLabel = getLocaleLabels(
@@ -113,21 +111,6 @@ const mapStateToProps = (state, ownprops) => {
   if (selectedItem && selectedItem.name) {
     value = { label: selectedItem.name, value: selectedItem.code };
   }
-
-  if(jsonPath.includes("edcr.blockDetail")) {
-    if(value && Array.isArray(value)){
-      let valuesArray = [];
-      value.forEach(echValue => {
-        let translatedLabel = getLocaleLabels(
-          `BPA_SUBOCCUPANCYTYPE_${echValue.value}`,
-          `BPA_SUBOCCUPANCYTYPE_${echValue.value}`, 
-          localizationLabels
-        );
-        valuesArray.push({value : echValue.value, label: translatedLabel })
-      });
-      value = valuesArray;
-    }
-  }
   // console.log(value, suggestions);
   return { value, jsonPath, suggestions, localizationLabels };
 };
@@ -136,9 +119,6 @@ const mapDispatchToProps = dispatch => {
   return {
     prepareFinalObject: (path, value) =>
       dispatch(prepareFinalObject(path, value))
-    // approveCheck: (jsonPath, value) => {
-    //   dispatch(prepareFinalObject(jsonPath, value));
-    // }
   };
 };
 

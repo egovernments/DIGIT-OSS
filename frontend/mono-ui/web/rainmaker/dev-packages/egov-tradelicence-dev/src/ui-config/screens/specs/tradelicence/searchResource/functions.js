@@ -6,13 +6,64 @@ import {
   convertDateToEpoch,
   getTextToLocalMapping
 } from "../../utils/index";
-import {
- enableFieldAndHideSpinner,disableFieldAndShowSpinner
-} from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { validateFields } from "../../utils";
+import { validateFields, resetFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-//import { LabelContainer } from "egov-ui-framework/ui-containers";
+import {
+  enableFieldAndHideSpinner,disableFieldAndShowSpinner
+ } from "egov-ui-framework/ui-utils/commons";
+
+
+export const resetAllFields = (state, dispatch) => {
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.applicationTypeAndToFromDateContainer.children.applicationType",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.applicationTypeAndToFromDateContainer.children.fromDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.applicationTypeAndToFromDateContainer.children.toDate",
+      "props.value",
+      ""
+    )
+  );
+  resetFields(
+    "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
+    state,
+    dispatch,
+    "search"
+  );
+
+  resetFields(
+    "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
+    state,
+    dispatch,
+    "search"
+  );
+}
+
+
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
@@ -101,10 +152,9 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
+
     disableFieldAndShowSpinner('search',"components.div.children.tradeLicenseApplication.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);   
     const response = await getSearchResults(queryObject);
-    
-    
     try {
       
       let data = response.Licenses.map(item => ({

@@ -24,7 +24,7 @@ const getHeader = label => {
     type: "array"
   };
 };
-  
+
 export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
     header: {
         uiFramework: "custom-atoms",
@@ -168,7 +168,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
             hasAddItem: false,
             isReviewPage: true,
             sourceJsonPath: "scrutinyDetails.planDetail",
-            prefixSourceJsonPath: 
+            prefixSourceJsonPath:
                 "children.cardContent.children.applicantContainer.children",
             afterPrefixJsonPath: "children.value.children.key"
         },

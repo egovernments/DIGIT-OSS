@@ -1,18 +1,27 @@
-import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { addWflowFileUrl, getMultiUnits, getQueryArg, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
-import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
-import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import find from "lodash/find";
-import get from "lodash/get";
-import orderBy from "lodash/orderBy";
-import set from "lodash/set";
 import React from "react";
 import { connect } from "react-redux";
-import { Footer } from "../../ui-molecules-local";
 import TaskStatusContainer from "../TaskStatusContainer";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { Footer } from "../../ui-molecules-local";
+import {
+  getQueryArg,
+  addWflowFileUrl,
+  orderWfProcessInstances,
+  getMultiUnits
+} from "egov-ui-framework/ui-utils/commons";
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import get from "lodash/get";
+import set from "lodash/set";
+import find from "lodash/find";
+import {
+  localStorageGet,
+  getUserInfo
+} from "egov-ui-kit/utils/localStorageUtils";
+import orderBy from "lodash/orderBy";
 
 const tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -75,6 +84,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   getPurposeString = action => {
+
     switch (action) {
       case "APPLY":
         return "purpose=apply&status=success";
@@ -99,28 +109,6 @@ class WorkFlowContainer extends React.Component {
         return "purpose=sendbacktocitizen&status=success";
       case "SUBMIT_APPLICATION":
         return "purpose=apply&status=success";
-      case "RESUBMIT_APPLICATION":
-        return "purpose=forward&status=success";
-      case "SEND_BACK_TO_CITIZEN":
-        return "purpose=sendback&status=success";
-      case "VERIFY_AND_FORWARD":
-        return "purpose=forward&status=success";
-      case "SEND_BACK_FOR_DOCUMENT_VERIFICATION":
-      case "SEND_BACK":
-      case "SEND_BACK_FOR_FIELD_INSPECTION":
-        return "purpose=sendback&status=success";
-      case "APPROVE_FOR_CONNECTION":
-        return "purpose=approve&status=success";
-      case "APPROVE_CONNECTION":
-        return "purpose=approve&status=success";
-      case "ACTIVATE_CONNECTION":
-        return "purpose=activate&status=success";
-      case "REVOCATE":
-        return "purpose=application&status=revocated"
-      case "VOID":
-        return "purpose=application&status=voided"
-      case "REOPEN":
-        return "purpose=reopen&status=success";
     }
   };
 
@@ -131,7 +119,6 @@ class WorkFlowContainer extends React.Component {
       dataPath,
       moduleName,
       updateUrl,
-      redirectQueryString,
       beforeSubmitHook
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
@@ -173,105 +160,82 @@ class WorkFlowContainer extends React.Component {
       }
     }
     if (dataPath === "BPA") {
-      data.workflow.assignes = [];
-      if (data.workflow.assignee) {
-        data.workflow.assignes = data.workflow.assignee
+      data.assignees = [];
+      if (data.assignee) {
+        data.assignee.forEach(assigne => {
+          data.assignees.push({
+            uuid: assigne
+          });
+        });
       }
-      if (data.workflow && data.workflow.varificationDocuments) {
-        for (let i = 0; i < data.workflow.varificationDocuments.length; i++) {
-          data.workflow.varificationDocuments[i].fileStore = data.workflow.varificationDocuments[i].fileStoreId
+      if (data.wfDocuments) {
+        for (let i = 0; i < data.wfDocuments.length; i++) {
+          data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
         }
       }
-      if (get(data, "workflow.comment")) {
-        data.workflow.comments = get(data, "workflow.comment");
-      }
-    }
-    if (dataPath == 'Property') {
-      if (data.workflow && data.workflow.wfDocuments) {
-        data.workflow.documents = data.workflow.wfDocuments;
-      }
-    }
-    if (moduleName === "Amendment") {
-      data.workflow = {};
-      data.workflow.documents = get(data[0], "wfDocuments", []);
-      data.workflow.comment = get(data[0], "comment", "");
-      data.workflow.assignee = get(data[0], "assignee", []);
-      data.workflow.action = get(data[0], "action", "");
-      data.workflow.businessId = get(data, "amendmentId", "");
-      data.workflow.tenantId = get(data, "tenantId", "");
-      data.workflow.businessService = "BS.AMENDMENT";
-      data.workflow.moduleName = "BS";
     }
 
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
-    this.props.showSpinner();
-    try {
-      if (beforeSubmitHook) {
-        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_LOW") {
-          data = await beforeSubmitHook(data);
-        } else {
-          data = beforeSubmitHook(data);
-        }
-      }
 
-      if (window.location.href.includes("wns/search-preview")) {
-          if(data.roadCuttingInfo && data.roadCuttingInfo.length > 0) {
-            data.roadCuttingInfo = [];
-            data.roadCuttingInfo = data.roadCuttingInfos || [];
-            data.roadCuttingInfos = [];
-          }
+    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+      data = data[0];
+    }
+
+    if (moduleName === "NewSW1") {
+      dataPath = "SewerageConnection";
+    }
+
+    try {
+      if(beforeSubmitHook){
+        data=beforeSubmitHook(data);
       }
-      if(get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.action") === "SENDBACKTOCITIZEN") {
-        set(data[0], 'fireNOCDetails.status', "CITIZENACTIONREQUIRED");
-        set(data[0],'fireNOCDetails.additionalDetail.assignee' ,[get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].uuid", "")]);
+      if(data.additionalDetails){
+        data.additionalDetails.applicationFee = data.additionalDetails.applicationFee ? parseInt(data.additionalDetails.applicationFee) : 0;
+        data.additionalDetails.lateFee = data.additionalDetails.lateFee ? parseInt(data.additionalDetails.lateFee) : 0;
+        data.additionalDetails.processingFee = data.additionalDetails.processingFee ? parseInt(data.additionalDetails.processingFee) : 0;
+        data.additionalDetails.publicationFee = data.additionalDetails.publicationFee ? parseInt(data.additionalDetails.publicationFee) : 0;
+        data.additionalDetails.mutationFee = data.additionalDetails.mutationFee ? parseInt(data.additionalDetails.mutationFee) : 0;
       }
-      
-      let payload = await httpRequest("post", updateUrl, "", [], {
+      const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
 
       this.setState({
         open: false
       });
-      payload = payload == '' ? true : payload;
+
       if (payload) {
         let path = "";
-        this.props.hideSpinner();
-        if (moduleName == "PT.CREATE" ||moduleName == "PT.UPDATE" || moduleName == "PT.LEGACY") {
+        if (moduleName == "PT.CREATE" || moduleName == "ASMT") {
           this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
             label
-          )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
+          )}&propertyId=${get(payload, 'Properties[0].propertyId', "")}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
           return;
         }
-        if (moduleName == "ASMT") {
-          this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
-            label
-          )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Assessments[0].assessmentNumber', "")}&tenantId=${get(payload, 'Assessments[0].tenantId', "")}`);
-          return;
-        }
-        if (moduleName == 'Amendment') {
-          this.props.setRoute(`acknowledgement?${this.getPurposeString(
-            label
-          )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=${get(payload, 'Amendments[0].businessService', "")}`);
-          return;
-        }
+        moduleName = moduleName === "NewTL" ? get(payload, "Licenses[0].workflowCode", "") : moduleName;
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
-        if (redirectQueryString) {
-          this.props.setRoute(`acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`);
-        } else {
-          this.props.setRoute(`acknowledgement?${this.getPurposeString(
-            label
-          )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`);
+        const nextFinancialYear = get(payload, "Licenses[0].financialYear", "");
+        window.location.href = `acknowledgement?${this.getPurposeString(
+          label
+        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
+
+        if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+          window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
+        }
+        if(moduleName === "EDITRENEWAL"){
+          window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenant}&action=${moduleName}`;
+        }
+        if(moduleName === "DIRECTRENEWAL"){
+          window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenant}&action=${moduleName}`;
         }
       }
     } catch (e) {
-      this.props.hideSpinner();
       if (moduleName === "BPA") {
         toggleSnackbar(
           true,
@@ -285,8 +249,8 @@ class WorkFlowContainer extends React.Component {
         toggleSnackbar(
           true,
           {
-            labelName: "Please fill all the mandatory fields!",
-            labelKey: e.message
+            labelName: "Workflow update error!",
+            labelKey: "ERR_WF_UPDATE_ERROR"
           },
           "error"
         );
@@ -298,7 +262,7 @@ class WorkFlowContainer extends React.Component {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = {};
 
-    if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property" || dataPath === "Noc") {
+    if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property") {
 
       data = get(preparedFinalObject, dataPath, {})
     } else {
@@ -309,7 +273,7 @@ class WorkFlowContainer extends React.Component {
     let appendToPath = ""
     if (dataPath === "FireNOCs") {
       appendToPath = "fireNOCDetails."
-    } else if (dataPath === "Assessment" || dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
+    } else if (dataPath === "Assessment" || dataPath === "Property") {
       appendToPath = "workflow."
     } else {
       appendToPath = ""
@@ -319,10 +283,7 @@ class WorkFlowContainer extends React.Component {
     set(data, `${appendToPath}action`, label);
 
     if (isDocRequired) {
-      let documents = get(data, "wfDocuments");
-      if (dataPath === "BPA") {
-        documents = get(data, "workflow.varificationDocuments");
-      }
+      const documents = get(data, "wfDocuments");
       if (documents && documents.length > 0) {
         this.wfUpdate(label);
       } else {
@@ -338,49 +299,50 @@ class WorkFlowContainer extends React.Component {
   };
 
   getRedirectUrl = (action, businessId, moduleName) => {
+    console.log("modulenamewater", moduleName);
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    const { ProcessInstances, baseUrlTemp, bserviceTemp, preparedFinalObject } = this.props;
-    const { PTApplication = {} } = preparedFinalObject;
-    const { propertyId } = PTApplication;
+    const { ProcessInstances, preparedFinalObject } = this.props;
     let applicationStatus;
+    const licenseNumber = get(preparedFinalObject, "Licenses[0].licenseNumber");
+    const workflowCode = get(preparedFinalObject, "Licenses[0].workflowCode");
     if (ProcessInstances && ProcessInstances.length > 0) {
       applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
     }
-    // needs to remove this initialization if all other module integrated this changes.
-    let baseUrl = (baseUrlTemp) ? baseUrlTemp : ""
-    let bservice = (bserviceTemp) ? bserviceTemp : ""
-
+    let baseUrl = "";
+    let bservice = "";
     if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
-      bservice = "FIRENOC";
-    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC") {
+    } else if (moduleName === "BPA") {
       baseUrl = "egov-bpa";
-      if (moduleName === "BPA") {
-        bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
-      } else if (moduleName === "BPA_OC") {
-        bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_OC_APP_FEE" : "BPA.NC_OC_SAN_FEE");
-      } else {
-        bservice = "BPA.LOW_RISK_PERMIT_FEE"
-      }
-    } else if (moduleName === "PT") {
-      bservice = "PT"
-    } else if (moduleName === "PT.CREATE" || moduleName === "PT.UPDATE" || moduleName === "PT.LEGACY") {
-      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
+      bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
+    } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+      baseUrl = "wns"
     } else if (moduleName === "PT.MUTATION") {
       bservice = "PT.MUTATION";
       baseUrl = "pt-mutation";
-    } else if (!baseUrl && !bservice) {
+    } 
+    else if(moduleName ==="NewTL"){
+      bservice = "TL";
+      baseUrl =process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
+    }
+    else if(moduleName ==="EDITRENEWAL" || moduleName ==="DIRECTRENEWAL"){
+      bservice = "TL";
+      baseUrl =process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
+    }
+    else {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
-      bservice = "TL"
     }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
     switch (action) {
       case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
-      case "EDIT": return isAlreadyEdited
-        ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true&workflowService=${moduleName}`
-        : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&workflowService=${moduleName}`;
-    }
+      case "EDIT": return isAlreadyEdited ? licenseNumber && workflowCode === "EDITRENEWAL" 
+        ? `/${baseUrl}/apply?applicationNumber=${businessId}&licenseNumber=${licenseNumber}&tenantId=${tenant}&action=EDITRENEWAL&edited=true`
+        : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true` 
+        : licenseNumber && workflowCode === "EDITRENEWAL"
+        ? `/${baseUrl}/apply?applicationNumber=${businessId}&licenseNumber=${licenseNumber}&tenantId=${tenant}&action=EDITRENEWAL`
+        : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+    }    
   };
 
 
@@ -423,9 +385,9 @@ class WorkFlowContainer extends React.Component {
       localStorageGet("businessServiceData")
     );
     const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName }) : [];
-    const nextState = data && data.states && data.states.length > 0 && find(data.states, { uuid: nextStateUUID });
+    // const nextState = data && data.length > 0 find(data.states, { uuid: nextStateUUID });
 
-    const isLastState = data ? nextState && nextState.isTerminateState : false;
+    const isLastState = data ? find(data.states, { uuid: nextStateUUID }).isTerminateState : false;
     return isLastState;
   };
 
@@ -435,15 +397,15 @@ class WorkFlowContainer extends React.Component {
     );
     const data = find(businessServiceData, { businessService: moduleName });
     const nextState = find(data.states, { uuid: nextStateUUID });
-    return nextState && nextState.docUploadRequired;
+    return nextState.docUploadRequired;
   };
 
-  getActionIfEditable = (status, businessId, moduleName, applicationState) => {
+  getActionIfEditable = (status, businessId, moduleName) => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
     const data = find(businessServiceData, { businessService: moduleName });
-    const state = applicationState ? find(data.states, { applicationStatus: status, state: applicationState }) : find(data.states, { applicationStatus: status });
+    const state = find(data.states, { applicationStatus: status });
     let actions = [];
     state.actions &&
       state.actions.forEach(item => {
@@ -455,14 +417,13 @@ class WorkFlowContainer extends React.Component {
     });
 
     let editAction = {};
-    // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {
         buttonLabel: "EDIT",
         moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName)
+        buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName)
       };
     }
     return editAction;
@@ -479,7 +440,6 @@ class WorkFlowContainer extends React.Component {
     } = this;
     let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
     let businessId = get(data[data.length - 1], "businessId");
-    let applicationState = get(data[data.length - 1], "state.state");
     let filteredActions = [];
 
     filteredActions = get(data[data.length - 1], "nextActions", []).filter(
@@ -498,7 +458,7 @@ class WorkFlowContainer extends React.Component {
         isLast: item.action === "PAY" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: (businessService === "NewWS1" || businessService === "ModifyWSConnection" || businessService === "ModifySWConnection" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !== "APPROVE_FOR_CONNECTION" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+        showEmployeeList: !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
         isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };
@@ -507,8 +467,7 @@ class WorkFlowContainer extends React.Component {
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,
-      businessService,
-      applicationState
+      businessService
     );
     editAction.buttonLabel && actions.push(editAction);
     return actions;
@@ -534,24 +493,25 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances,
       prepareFinalObject,
       dataPath,
-      moduleName
+      moduleName      
     } = this.props;
     const workflowContract =
       ProcessInstances &&
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
-    let showFooter = true;
-    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
-      showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    }
-    if ((moduleName === 'Noc') && window.location.href.includes("isFromBPA=true")) {
-      showFooter = false
-    }
-
+     let showFooter;
+     if(moduleName==='NewWS1'||moduleName==='NewSW1' || moduleName==='PT.MUTATION'){
+         showFooter=true;
+      }
+      else if(moduleName==='NewTL'||moduleName==='EDITRENEWAL'|| moduleName==='DIRECTRENEWAL'){
+        showFooter=true;
+      }else{
+         showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
+      }
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
-          <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName} />
+          <TaskStatusContainer ProcessInstances={ProcessInstances} />
         )}
         {showFooter &&
           <Footer
@@ -582,11 +542,7 @@ const mapDispacthToProps = dispatch => {
       dispatch(prepareFinalObject(path, value)),
     toggleSnackbar: (open, message, variant) =>
       dispatch(toggleSnackbar(open, message, variant)),
-    setRoute: route => dispatch(setRoute(route)),
-    showSpinner: () =>
-      dispatch(showSpinner()),
-    hideSpinner: () =>
-      dispatch(hideSpinner())
+    setRoute: route => dispatch(setRoute(route))
   };
 };
 

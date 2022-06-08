@@ -39,7 +39,7 @@ class MultiItem extends React.Component {
       if (!items.length && !editItems.length) {
         this.addItem();
       } else {
-        if (items.length < editItems.length) {
+        if (items.length !== editItems.length ) {
           for (var i = 0; i < editItems.length; i++) {
             if (checkActiveItem(editItems[i])) {
               if (i) {
@@ -57,10 +57,6 @@ class MultiItem extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!isEqual(nextProps, this.props)) {
-      this.initMultiItem(nextProps);
-    }else if(!isEqual(get(nextProps,`preparedFinalObject.${nextProps.sourceJsonPath}`,[]), get(this.props,`preparedFinalObject.${this.props.sourceJsonPath}`,[]))) {
-      this.initMultiItem(nextProps);
-    }else if(get(nextProps,`preparedFinalObject.${nextProps.sourceJsonPath}`,[]) && get(this.props,`items`,[]) && get(nextProps,`preparedFinalObject.${nextProps.sourceJsonPath}`,[]).length!==get(this.props,`items`,[]).length) {
       this.initMultiItem(nextProps);
     }
   }

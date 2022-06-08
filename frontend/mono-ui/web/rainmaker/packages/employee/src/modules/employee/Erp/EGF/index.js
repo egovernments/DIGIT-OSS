@@ -5,7 +5,6 @@ class EGFFinance extends Component {
   constructor(props) {
     super(props);
     this.onFrameLoad = this.onFrameLoad.bind(this);
-    this.resetIframe = this.resetIframe.bind(this);
   }
   onFrameLoad() {
     console.log("iframe got loaded");
@@ -14,23 +13,30 @@ class EGFFinance extends Component {
 
   render() {
     let auth_token = getAccessToken(),
-    locale = localStorage.getItem("locale"),
-    menuUrl = this.props.location.pathname,
-    loc = window.location,
-    subdomainurl,
-    domainurl,
-    finEnv,
-    hostname = loc.hostname,
-    winheight = window.innerHeight - 100,
-    erp_url,
-    tenantId = getTenantId();
-    //Reading domain name from the request url
-    domainurl = hostname.substring(hostname.indexOf(".") + 1);
-    // Reading environment name (ex: dev, qa, uat, fin-uat etc) from the globalconfigs if exists else reading from the .env file
-    finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
-    // Preparing finance subdomain url using the above environment name and the domain url
-    subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
-    erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + menuUrl;
+      menuUrl = this.props.location.pathname,
+      loc = window.location,
+      subdomainurl,
+      hostname = loc.hostname,
+      winheight = window.innerHeight - 100,
+      erp_url,
+      tenantId = getTenantId();
+
+    if (hostname.search("dev") != -1) {
+      subdomainurl = hostname.substring(hostname.search("dev"), hostname.length);
+      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
+    } else if (hostname.search("qa") != -1) {
+      subdomainurl = hostname.substring(hostname.search("qa"), hostname.length);
+      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
+    } else if (hostname.search("uat") != -1) {
+      // subdomainurl = hostname.substring(hostname.search('uat'),hostname.length);
+      subdomainurl = "uat.egovernments.org";
+      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
+    } else {
+      subdomainurl = hostname.substring(hostname.indexOf(".") + 1);
+      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "." + subdomainurl + menuUrl;
+    }
+
+    // let erp_url='http://jalandhar.test.egov.com:8080'+menuUrl;
     console.log("ERP URL : " + erp_url);
 
     return (
@@ -39,41 +45,25 @@ class EGFFinance extends Component {
         <form action={erp_url} id="erp_form" method="post" target="erp_iframe">
           <input readOnly hidden="true" name="auth_token" value={auth_token} />
           <input readOnly hidden="true" name="tenantId" value={tenantId} />
-          <input readOnly hidden="true" name="locale" value={locale} />
-	  <input readOnly hidden="true" name="formPage" value="true" />
         </form>
       </div>
     );
   }
   componentDidMount() {
+    console.log("EGFFinance component mounted");
+
     window.addEventListener("message", this.onMessage, false);
-    window.addEventListener("loacaleChangeEvent", this.resetIframe, false);
     document.getElementById("erp_iframe").addEventListener("load", this.onFrameLoad);
   }
   componentDidUpdate() {
-    let isSecure = window.location.protocol === "https";
-    let localeCookie = "locale=" + localStorage.getItem("locale") + ";path=/;domain=." + this.getSubdomain();
-    if (isSecure) {
-      localeCookie += ";secure";
-    }
-    window.document.cookie = localeCookie;
+    console.log("componentDidUpdate method called");
     document.forms["erp_form"].submit();
   }
-  onMessage = (event) => {
+  onMessage=(event)=> {
     if (event.data != "close") return;
     console.log("event recieved from iframe client");
     // document.getElementById('erp_iframe').style.display='none';
     this.props.history.push("/inbox");
-  };
-  resetIframe() {
-    this.forceUpdate();
-  }
-  getSubdomain() {
-    let hostname = window.location.hostname;
-    return hostname.substring(hostname.indexOf(".") + 1);
-  }
-  globalConfigExists() {
-    return typeof window.globalConfigs !== "undefined" && typeof window.globalConfigs.getConfig === "function";
   }
 }
 

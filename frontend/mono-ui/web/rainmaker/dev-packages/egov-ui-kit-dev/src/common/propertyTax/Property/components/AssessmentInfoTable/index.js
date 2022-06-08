@@ -2,7 +2,6 @@ import React from "react";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
 import { Receipt } from "egov-ui-kit/components";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const AssessmentInfoTable = ({ items, tableHeaderItems }) => {
   return (
@@ -53,7 +52,7 @@ const AssessmentInfoTable = ({ items, tableHeaderItems }) => {
                             <div style={{ marginLeft: "13px" }}>
                               <Label
                                 labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                                label={nestedValue ? `${getLocaleLabels('PT_UNIT','PT_UNIT')} -1`: "NA"}
+                                label={nestedValue ? 'Unit - 1' : "NA"}
                                 fontSize="14px"
                               />
                             </div>

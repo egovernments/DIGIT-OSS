@@ -31,6 +31,14 @@ const FormWizard = Loadable({
   loader: () => import("../Screens/FormWizard"),
   loading: Loading
 });
+const FormWizardDataEntry = Loadable({
+  loader: () => import("../Screens/FormWizardDataEntry"),
+  loading: Loading
+});
+const DCB = Loadable({
+  loader: () => import("../Screens/DCB"),
+  loading: Loading
+});
 const PaymentSuccess = Loadable({
   loader: () => import("../Screens/PaymentSuccess"),
   loading: Loading
@@ -43,6 +51,10 @@ const PropertyInformationForm = Loadable({
   loader: () => import("../Screens/PropertyEditForm"),
   loading: Loading
 });
+// const ptAcknowledgment = Loadable({
+//   loader: () => import("egov-ui-kit/common/propertyTax/PTAcknowledgementNew"),
+//   loading: Loading
+// });
 
 const ptAcknowledgment = Loadable({
   loader: () => import("egov-ui-kit/common/propertyTax/PTAcknowledgement"),
@@ -107,6 +119,28 @@ const routes = [
       hideTitle:true
       // hideBackButton: true,
     }
+  },
+  {
+    path: "property-tax/assessment-form-dataentry",
+    component:FormWizardDataEntry,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideTitle:true
+      // hideBackButton: true,
+    }
+
+  },
+  {
+    path: "property-tax/demand-and-collection",
+    component:DCB,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideTitle:true
+      // hideBackButton: true,
+    }
+
   },
   {
     path:

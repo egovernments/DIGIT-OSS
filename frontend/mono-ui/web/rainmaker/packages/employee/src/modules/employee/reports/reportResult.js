@@ -16,7 +16,7 @@ import "datatables.net-responsive-dt";
 import JSZip from "jszip/dist/jszip";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfFonts from "./vfs_fonts";
 import "datatables.net-buttons/js/buttons.html5.js"; // HTML 5 file export
 import "datatables.net-buttons/js/buttons.flash.js"; // Flash file export
 import "datatables.net-buttons/js/buttons.colVis.min.js";
@@ -24,26 +24,16 @@ import { getResultUrl } from "./commons/url";
 import Label from "egov-ui-kit/utils/translationNode";
 import commonConfig from "config/common.js";
 import { getTenantId, setReturnUrl, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
-import { getLocaleLabels ,getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+
+
 window.JSZip = JSZip;
 
 var sumColumn = [];
 var footerexist = false;
 let rTable;
-
-const formatLocaleKeys=(key="")=>{
-if(typeof key!='string'){
-  return key;
-}
-key=key.trim&&key.trim()||key;
-key=key.toUpperCase&&key.toUpperCase()||key;
-key=key.replace(/[.:-\s\/]/g, "_")||key;
-return key;
-}
-
 class ShowField extends Component {
   constructor(props) {
     super(props);
@@ -59,7 +49,7 @@ class ShowField extends Component {
       .DataTable()
       .destroy(true);
   }
-
+ 
   componentWillUpdate() {
     let { flag } = this.props;
     if (flag == 1) {
@@ -77,7 +67,7 @@ class ShowField extends Component {
       moduleName: _this.props.match.params.moduleName,
     });
     _this.subHeader(_this.props.match.params.moduleName);
-  }
+   }
 
   componentWillReceiveProps(nextprops) {
     this.setState({
@@ -91,47 +81,69 @@ class ShowField extends Component {
 
   getExportOptions = () => {
     let _this = this;
+    let flag = false;
 
     for (let key in _this.state.ck) {
       if (_this.state.ck[key]) {
+        flag = true;
         break;
       }
     }
 
-    const { tabLabel, metaData } = _this.props;
+    const { reportResult, searchForm, tabLabel, metaData } = _this.props;
+    const { reportName } = _this.state;
     const reportDetails = metaData.hasOwnProperty("reportDetails") ? metaData.reportDetails : {};
-    const additionalConfig = reportDetails.hasOwnProperty("additionalConfig") && reportDetails.additionalConfig ? reportDetails.additionalConfig : {};
+    const additionalConfig = reportDetails.hasOwnProperty("additionalConfig") && reportDetails.additionalConfig ? reportDetails.additionalConfig: {};
     const reportHeader = reportDetails.hasOwnProperty("reportHeader") ? reportDetails.reportHeader : [];
-    const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize) ? additionalConfig.print.pdfPageSize : "LEGAL"
+    const columns = ":visible";
+    const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize)? additionalConfig.print.pdfPageSize: "LEGAL"
+    const exportOptions = flag ? { rows: ".selected", columns } : { columns };
     let reportTitle = this.getReportTitle();
-    let xlsTitle = this.getXlsReportTitle();
     let orientation = reportHeader.length > 6 ? "landscape" : "portrait";
 
+    function processDoc(doc) {
+      //
+      // https://pdfmake.github.io/docs/fonts/custom-fonts-client-side/
+      //
+      // Update pdfmake's global font list, using the fonts available in
+      // the customized vfs_fonts.js file 
+      pdfMake.fonts = {
+        Hind:{
+          normal: 'Hind-Regular.ttf',
+          bold: 'Hind-Regular.ttf',
+          italics: 'Hind-Regular.ttf',
+          bolditalics: 'Hind-Regular.ttf',
+        }
+      };
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;                
+      doc.defaultStyle.font = "Hind";
+    }
     const buttons = [
       {
-        text: `<span>${getLocaleLabels("RT_DOWNLOAD_AS","RT_DOWNLOAD_AS")}</span>`,
+        text: "<span>Download as : </span>",
         className: "report-download-button-text",
       },
       {
         extend: "pdf",
         filename: _this.state.reportName,
         messageTop: tabLabel,
-        text: getLocaleLabels("RT_DOWNLOAD_PDF","RT_DOWNLOAD_PDF"),
+        text: "PDF",
         orientation: orientation,
         pageSize: pageSize,
         footer: true,
-        customize: function (doc) {
+        customize: function(doc) {        
           doc.content[0].text = [];
-          doc.content[0].text.push({ text: "mSeva System Reports\n\n", bold: true, fontSize: 20 });
+          doc.content[0].text.push({ text: "NagarSewa System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
-        },
+          processDoc(doc);
+        },       
         className: "report-pdf-button",
       },
       {
         extend: "excel",
-        text: getLocaleLabels("RT_DOWNLOAD_XLS","RT_DOWNLOAD_XLS"),
+        text: "XLS",
         filename: _this.state.reportName,
-        title: xlsTitle,
+        title: reportTitle,
         messageTop: tabLabel,
         footer: true,
         className: "report-excel-button",
@@ -142,7 +154,7 @@ class ShowField extends Component {
   };
 
   componentDidUpdate() {
-    let { tabLabel, metaData } = this.props;
+    let { reportResult, tabLabel, metaData } = this.props;
     let { reportDetails = {} } = metaData;
     let tableConfig;
     if (get(reportDetails, "additionalConfig.tableConfig")) {
@@ -174,12 +186,12 @@ class ShowField extends Component {
       scrollY: 400,
       aLengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
       scrollX: true,
-      fnInitComplete: function () {
+      fnInitComplete: function() {
         this.css("visibility", "visible");
 
         $(".dataTables_scrollBody thead tr").css({ visibility: "collapse" });
       },
-      drawCallback: function (settings) {
+      drawCallback: function(settings) {
         $(".dataTables_scrollBody thead tr").css({ visibility: "collapse" });
       },
       ...tableConfig,
@@ -193,9 +205,11 @@ class ShowField extends Component {
       searchForm,
       setReportResult,
       setFlag,
+      toggleSnackbarAndSetText,
       searchParams,
       setRoute,
       match,
+      metaData,
       pushReportHistory,
     } = this.props;
     let object = reportResult.reportHeader[i2];
@@ -227,7 +241,7 @@ class ShowField extends Component {
 
       var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
 
-      commonApiPost(
+      let response = commonApiPost(
         "/report/" + "pgr" + "/_get",
         {},
         {
@@ -236,7 +250,7 @@ class ShowField extends Component {
           searchParams,
         }
       ).then(
-        function (response) {
+        function(response) {
           if (response.viewPath && response.reportData && response.reportData[0]) {
             localStorage.reportData = JSON.stringify(response.reportData);
             setReturnUrl(window.location.hash.split("#/")[1]);
@@ -261,7 +275,7 @@ class ShowField extends Component {
             setFlag(1);
           }
         },
-        function (err) {
+        function(err) {
           console.log(err);
         }
       );
@@ -317,31 +331,8 @@ class ShowField extends Component {
         (reportResult.reportHeader[i].type == "currency" || reportResult.reportHeader[i].total)
       ) {
         return this.addCommas(Number(val) % 1 === 0 ? Number(val) : Number(val).toFixed(2));
-      }
-      else if (val && reportResult &&
-        reportResult.reportHeader &&
-        reportResult.reportHeader.length &&
-        reportResult.reportHeader[i] &&
-        reportResult.reportHeader[i].isLocalisationRequired && reportResult.reportHeader[i].localisationPrefix) {
-
-          if(reportResult.reportHeader[i].localisationPrefix=='ACCESSCONTROL_ROLES_ROLES_'){
-            let list=val&&val.split(',');
-            return list.map(v1=>(<Label
-            className="report-header-row-label"
-            labelStyle={{ wordWrap: "unset", wordBreak: "unset" }}
-            label={`${reportResult.reportHeader[i].localisationPrefix}${formatLocaleKeys(v1)||v1}`}
-          />))           
-            
-          }
-        return <Label
-          className="report-header-row-label"
-          labelStyle={{ wordWrap: "unset", wordBreak: "unset" }}
-          label={`${reportResult.reportHeader[i].localisationPrefix}${formatLocaleKeys(val)}`}
-        />;
-      }
-      else {
+      } else {
         return val;
-
       }
     }
   };
@@ -379,11 +370,7 @@ class ShowField extends Component {
       <thead>
         <tr className="report-table-header">
           <th key={"S. No."} className="report-header-cell">
-            <Label
-                      className="report-header-row-label"
-                      labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }}
-                      label={'RT_SNO'}
-                    />
+            S. No
           </th>
           {metaData && metaData.reportDetails && metaData.reportDetails.selectiveDownload && (
             <th key={"testKey"}>
@@ -421,7 +408,7 @@ class ShowField extends Component {
 
   printSelectedDetails() {
     let rows = { ...this.state.rows };
-    let { reportResult, searchParams, setRoute, match } = this.props;
+    let { reportResult, searchForm, setReportResult, setFlag, toggleSnackbarAndSetText, searchParams, setRoute, match, metaData } = this.props;
     let header = this.props.reportResult.reportHeader;
     let defaultValue = "";
     for (let key in header) {
@@ -461,7 +448,8 @@ class ShowField extends Component {
       let resulturl = getResultUrl(match.params.moduleName);
 
       var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
-      resulturl &&
+      let response =
+        resulturl &&
         commonApiPost(
           resulturl,
           {},
@@ -471,14 +459,14 @@ class ShowField extends Component {
             searchParams,
           }
         ).then(
-          function (response) {
+          function(response) {
             if (response.viewPath && response.reportData) {
               localStorage.reportData = JSON.stringify(response.reportData);
               setReturnUrl(window.location.hash.split("#/")[1]);
               setRoute("/print/report/" + response.viewPath);
             }
           },
-          function (err) {
+          function(err) {
             console.log(err);
           }
         );
@@ -492,7 +480,7 @@ class ShowField extends Component {
       reportResult.reportHeader &&
       reportResult.reportHeader.length &&
       reportResult.reportHeader[i] &&
-      (reportResult.reportHeader[i].type == "currency" || reportResult.reportHeader[i].total)
+      (reportResult.reportHeader[i].type == "currency" ||reportResult.reportHeader[i].total)
     ) {
       return { textAlign: "right" };
     } else {
@@ -541,9 +529,11 @@ class ShowField extends Component {
                   </td>
                 )}
                 {dataItem.map((item, itemIndex) => {
+                  var columnObj = {};
                   //array for particular row
                   var respHeader = reportHeaderObj[itemIndex];
                   if (respHeader.showColumn) {
+                    columnObj = {};
                     return (
                       <td
                         key={itemIndex}
@@ -600,7 +590,7 @@ class ShowField extends Component {
       sumColumn.unshift(firstColObj);
     }
 
-    var intVal = function (i) {
+    var intVal = function(i) {
       if (typeof i === "string") {
         let a = i.replace(/,/g, "");
         a = a.replace(/[^-+0-9. ]/g, " ").split(" ")[0];
@@ -643,7 +633,7 @@ class ShowField extends Component {
               return (
                 <th style={index !== 0 ? { textAlign: "right" } : {}} key={index}>
                   {index === 0
-                    ? getLocaleLabels('RT_TOTAL',"RT_TOTAL")
+                    ? "Total"
                     : this.addCommas(Number(total[index - 1]) % 1 === 0 ? total[index - 1] : Number(total[index - 1]).toFixed(2))}
                 </th>
               );
@@ -655,7 +645,8 @@ class ShowField extends Component {
   };
 
   subHeader = (moduleName) => {
-    let { metaData } = this.props;
+    let { metaData, searchParams } = this.props;
+    let paramsLength = searchParams.length;
     if (_.isEmpty(metaData)) {
       return;
     }
@@ -682,34 +673,15 @@ class ShowField extends Component {
     return reportTitle;
   };
 
-  getXlsReportTitle = (rptName) => {
-    let reportName = rptName || this.state.reportName;
-    let reportTitleArr = reportName && reportName.split(/(?=[A-Z])/);
-    let reportTitle = "";
-    let reportHeaderName = "";
-    if (reportTitleArr) {
-      reportTitle = reportTitleArr.map((char) => {
-        if (char.length == 1) {
-          reportTitle = char + "";
-          reportHeaderName += char;
-        } else if (typeof char === "object") {
-          reportTitle = char.text + "";
-        } else {
-          reportTitle = " " + char;
-          reportHeaderName = reportHeaderName + " " + char
-        }
-        return reportTitle;
-      });
-    }
-    // return reportTitle;
-    return [reportHeaderName];
-  };
-
-
   render() {
-    let { isTableShow, metaData, reportResult } = this.props;
+    let { drillDown, checkIfDate } = this;
+    let { isTableShow, metaData, reportResult, tabLabel } = this.props;
     let self = this;
+    let { reportName } = this.state;
+    
     const viewTabel = () => {
+      let { searchForm } = this.props;
+
       return (
         <div>
           <table

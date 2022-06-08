@@ -40,7 +40,6 @@ export const cityPicker = getCommonContainer({
         sourceJsonPath:
           "applyScreenMdmsData.common-masters.citiesByModule.TL.tenants",
         labelsFromLocalisation: true,
-        isClearable: true,
         fullwidth: true,
         required: true,
         inputLabelProps: {
@@ -58,10 +57,11 @@ export const cityPicker = getCommonContainer({
             variant: "contained",
             color: "primary",
             style: {
-              width: "40px",
+              width: "85px",
               height: "20px",
               marginRight: "4px",
-              marginTop: "16px"
+              marginTop: "16px",
+              fontWeight: 'bold'
             }
           },
           children: {
@@ -81,10 +81,11 @@ export const cityPicker = getCommonContainer({
             variant: "outlined",
             color: "primary",
             style: {
-              width: "40px",
+              width: "85px",
               height: "20px",
               marginRight: "4px",
-              marginTop: "16px"
+              marginTop: "16px",
+              fontWeight: 'bold'
             }
           },
           children: {

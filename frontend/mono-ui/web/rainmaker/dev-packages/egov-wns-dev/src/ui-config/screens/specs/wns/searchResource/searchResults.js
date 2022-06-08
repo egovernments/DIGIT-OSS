@@ -1,10 +1,8 @@
-import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import React from "react";
-import store from "ui-redux/store";
-import { getEpochForDate, sortByEpoch } from "../../utils";
-import './index.css';
+import { sortByEpoch, getEpochForDate, getTextToLocalMapping } from "../../utils";
+import './index.css'
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
+
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -14,25 +12,18 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name: "Service",
-        labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL",
+        name: getTextToLocalMapping("Service"),
         options: {
           filter: false,
           customBodyRender: value => (
             <span style={{ color: '#000000' }}>
-              <LabelContainer
-                labelKey={getTransformedLocale(`WS_${value}`)}
-                style={{
-                  fontSize: 14,
-                }}
-              />
+              {value}
             </span>
           )
         }
       },
       {
-        name: "Consumer No",
-        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
+        name: getTextToLocalMapping("Consumer No"),
         options: {
           filter: false,
           customBodyRender: (value, index) => (
@@ -42,50 +33,21 @@ export const searchResults = {
           )
         }
       },
-      { name: "Owner Name", labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
+      getTextToLocalMapping("Owner Name"),
+      getTextToLocalMapping("Status"),
+      getTextToLocalMapping("Due"),
+      getTextToLocalMapping("Address"),
+      getTextToLocalMapping("Due Date"),
       {
-        name: "Status", labelKey: "WS_COMMON_TABLE_COL_STATUS_LABEL", options: {
-          filter: false,
-          customBodyRender: value => (
-            <span style={{ color: '#000000' }}>
-              <LabelContainer
-                labelKey={getTransformedLocale(`WS_${value}`)}
-                style={{
-                  fontSize: 14,
-                }}
-              />
-            </span>
-          )
-        }
-      },
-      {
-        name: "Due", labelKey: "WS_COMMON_TABLE_COL_DUE_LABEL", options: {
-          filter: false,
-          customBodyRender: value => (
-            <span style={{ color: '#000000' }}>
-              <LabelContainer
-                labelKey={getTransformedLocale(value)}
-                style={{
-                  fontSize: 14,
-                }}
-              />
-            </span>
-          )
-        }
-      },
-      { name: "Address", labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
-      { name: "Due Date", labelKey: "WS_COMMON_TABLE_COL_DUE_DATE_LABEL" },
-      {
-        name: "Action",
-        labelKey: "WS_COMMON_TABLE_COL_ACTION_LABEL",
+        name: getTextToLocalMapping("Action"),
         options: {
           filter: false,
           customBodyRender: (value, data) => {
-            if (data.rowData[4] !== undefined && typeof parseFloat(data.rowData[4]) === 'number' && parseFloat(data.rowData[4]) > 0) {
+            if (data.rowData[4] > 0 && data.rowData[4] !== 0) {
               return (
                 <div className="linkStyle" onClick={() => getViewBillDetails(data)} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
                   <LabelContainer
-                    labelKey="WS_COMMON_COLLECT_LABEL"
+                    labelKey="CS_COMMON_PAY"
                     style={{
                       color: "#fe7a51",
                       fontSize: 14,
@@ -93,29 +55,35 @@ export const searchResults = {
                   />
                 </div>
               )
+            } else if (data.rowData[4] === 0) {
+              return (
+                <div style={{ textTransform: 'uppercase' }}>
+                  Paid
+                </div>
+              )
             }
             else {
-              return (getLocaleLabels("NA", "NA"))
+              return ("NA")
             }
           }
         }
       },
       {
         name: "tenantId",
-        labelKey: "WS_COMMON_TABLE_COL_TENANTID_LABEL",
         options: {
           display: false
         }
       },
       {
         name: "connectionType",
-        labelKey: "WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL",
         options: {
           display: false
         }
       }
     ],
-    title: { labelKey: "WS_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName: "Search Results for Water & Sewerage Connections" },
+    title: getTextToLocalMapping(
+      "Search Results for Water & Sewerage Connections"
+    ),
     options: {
       filter: false,
       download: false,
@@ -143,13 +111,9 @@ export const searchResults = {
 };
 
 const getConnectionDetails = data => {
-  store.dispatch(
-    setRoute(`connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}&due=${data.rowData[4]}`)
-  )
+  window.location.href = `connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
 }
 
 const getViewBillDetails = data => {
-  store.dispatch(
-    setRoute(`viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`)
-  )
+  window.location.href = `viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
 }

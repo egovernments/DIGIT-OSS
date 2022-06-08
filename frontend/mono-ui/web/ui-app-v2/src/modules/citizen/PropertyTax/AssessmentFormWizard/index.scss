@@ -1,0 +1,26 @@
+.flexbox-container {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  width: 100vw;
+  position: fixed;
+  bottom: 0;
+}
+
+.flex-item {
+  width: 50vw;
+}
+.card-triangle {
+  border-bottom: 8px solid #ffffff;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: -20px;
+}
+
+.pt-form-card-header-cont {
+  display: flex;
+  align-items: center;
+}

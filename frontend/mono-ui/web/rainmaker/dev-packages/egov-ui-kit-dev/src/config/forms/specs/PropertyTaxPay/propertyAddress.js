@@ -1,13 +1,18 @@
-import { mohalla } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { fetchGeneralMDMSData, prepareFormData } from "egov-ui-kit/redux/common/actions";
-import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
-import { fetchDropdownData, generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName, getTranslatedLabel } from "egov-ui-kit/utils/commons";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import filter from "lodash/filter";
 import get from "lodash/get";
+import filter from "lodash/filter";
+import { CITY } from "egov-ui-kit/utils/endPoints";
+import { pincode, mohalla, street, colony, houseNumber, dummy } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import { prepareFormData, fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
+import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import sortBy from "lodash/sortBy";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import {getPattern} from "egov-ui-framework/ui-config/screens/specs/utils";
+
+
+var constructiontype =[{value : "road1" , label :"rd1" }]
 
 const formConfig = {
   name: "propertyAddress",
@@ -17,17 +22,12 @@ const formConfig = {
       jsonPath: "PropertiesTemp[0].address.city",
       required: true,
       localePrefix: { moduleName: "tenant", masterName: "tenants" },
-      labelsFromLocalisation: true,
-      type: "AutocompleteDropdown",
+      type: "singleValueList",
       floatingLabelText: "CORE_COMMON_CITY",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       fullWidth: true,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       numcols: 6,
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
       dataFetchConfig: {
         dependants: [
           {
@@ -48,11 +48,100 @@ const formConfig = {
         dispatch(setFieldProperty("propertyAddress", "mohalla", "value", ""));
         const moduleValue = field.value;
         dispatch(fetchLocalizationLabel(getLocale(), moduleValue, moduleValue));
-        let requestBody = generalMDMSDataRequestObj(field.value);
+        let requestBody = {
+          MdmsCriteria: {
+            tenantId: field.value,
+            moduleDetails: [
+              {
+                moduleName: "PropertyTax",
+                masterDetails: [
+                  {
+                    name: "Floor",
+                  },
+                  {
+                    name: "OccupancyType",
+                  },
+                  {
+                    name: "OwnerShipCategory",
+                  },
+                  {
+                    name: "OwnerType",
+                  },
+                  {
+                    name: "PropertySubType",
+                  },
+                  {
+                    name: "PropertyType",
+                  },
+                  {
+                    name: "SubOwnerShipCategory",
+                  },
+                  {
+                    name: "UsageCategoryDetail",
+                  },
+                  {
+                    name: "UsageCategoryMajor",
+                  },
+                  {
+                    name: "UsageCategoryMinor",
+                  },
+                  {
+                    name: "UsageCategorySubMinor",
+                  },
+                  {
+                    name: "ConstructionType",
+                  },
+                  {
+                    name: "Rebate",
+                  },
+                  {
+                    name: "Interest",
+                  },
+                  {
+                    name: "FireCess",
+                  },
+                  {
+                    name: "RoadType",
+                  },
+                  {
+                    name: "Thana",
+                  }
+                ],
+              },
+            ],
+          },
+        };
 
         dispatch(
-          fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName())
+          fetchGeneralMDMSData(requestBody, "PropertyTax", [
+            "Floor",
+            "OccupancyType",
+            "OwnerShipCategory",
+            "OwnerType",
+            "PropertySubType",
+            "PropertyType",
+            "SubOwnerShipCategory",
+            "UsageCategoryDetail",
+            "UsageCategoryMajor",
+            "UsageCategoryMinor",
+            "UsageCategorySubMinor",
+            "ConstructionType",
+            "Rebate",
+            "Penalty",
+            "Interest",
+            "FireCess",
+            "RoadType",
+            "Thana"
+          ])
         );
+
+        dispatch(fetchGeneralMDMSData(
+          null,
+          "BillingService",
+          ["TaxPeriod", "TaxHeadMaster"],
+          "",
+          field.value
+        ));
       },
     },
     dummy: {
@@ -78,6 +167,7 @@ const formConfig = {
       floatingLabelText: "PT_PROPERTY_DETAILS_BUILDING_COLONY_NAME",
       hintText: "PT_PROPERTY_DETAILS_BUILDING_COLONY_NAME_PLACEHOLDER",
       numcols: 6,
+      pattern:getPattern("DoorHouseNo"),
       errorMessage: "PT_PROPERTY_DETAILS_COLONY_NAME_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
@@ -108,10 +198,10 @@ const formConfig = {
     },
     oldPID: {
       id: "oldpid",
-      type: "textFieldIcon",
+      type: "textfield",
       className: "pt-old-pid-text-field",
       text: "PT_SEARCH_BUTTON",
-      iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
       jsonPath: "Properties[0].oldPropertyId",
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
@@ -123,12 +213,62 @@ const formConfig = {
       toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
       maxLength: 64,
     },
+    roadType: {
+      id: "roadType",
+      jsonPath: "Properties[0].propertyDetails[0].additionalDetails.roadType",
+      localePrefix: { moduleName: "PropertyTax", masterName: "RoadType" },
+      type: "singleValueList",
+      floatingLabelText: "PT_PROPERTY_ADDRESS_ROAD_TYPE",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      fullWidth: true,
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      numcols: 6,
+      menuHeight:"65px"
+    },
+    thanaType: {
+      id: "Thana",
+      jsonPath: "Properties[0].propertyDetails[0].additionalDetails.thana",
+      localePrefix: { moduleName: "PropertyTax", masterName: "Thana" },
+      type: "singleValueList",
+      floatingLabelText: "PT_PROPERTY_ADDRESS_THANA",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      fullWidth: true,
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      numcols: 6,
+    },
   },
   afterInitForm: (action, store, dispatch) => {
     try {
       let state = store.getState();
+      let tenentId = state.form.propertyAddress.fields.city.value;
       const { localizationLabels } = state.app;
-      const { cities, citiesByModule } = state.common;
+      const { cities, citiesByModule, loadMdmsData } = state.common;
+      const roadTypeData =
+        get(loadMdmsData, "PropertyTax.RoadType") &&
+        Object.values(get(loadMdmsData, "PropertyTax.RoadType")).map((item, index) => {
+          return { value: item.code, label: getTranslatedLabel(`PROPERTYTAX_ROADTYPE_${item.code}`,localizationLabels)};
+        });
+
+      dispatch(setFieldProperty("propertyAddress", "roadType", "dropDownData", roadTypeData));
+
+     const thanaData =
+      get(loadMdmsData, "PropertyTax.Thana") &&
+      Object.values(get(loadMdmsData, "PropertyTax.Thana")).map((item, index) => {
+      return { value: item.code, label: getTranslatedLabel('PROPERTYTAX_THANA_' + tenentId.replace(".","_").toUpperCase() + "_" + item.code.toUpperCase(),localizationLabels) };
+      });
+     
+      let isRequired = true;
+
+      if(window.location.href.includes('dataentry'))
+      {
+        isRequired=false;
+      }
+      dispatch(setFieldProperty("propertyAddress", "thanaType", "dropDownData", thanaData));
+      dispatch(setFieldProperty("propertyAddress", "thanaType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.thana','')));
+      dispatch(setFieldProperty("propertyAddress", "roadType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.roadType','')));
+      dispatch(setFieldProperty("propertyAddress", "roadType", "required", isRequired));
+      dispatch(setFieldProperty("propertyAddress", "thanaType", "required", isRequired));
+      dispatch(setFieldProperty("propertyAddress","houseNumber" ,"required",isRequired));
       const PT = citiesByModule && citiesByModule.PT;
       if (PT) {
         const tenants = PT.tenants;
@@ -142,23 +282,15 @@ const formConfig = {
         }, []);
         dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(dd, ["label"])));
       }
-      const tenant = get(state, 'form.propertyAddress.fields.city.value', null);
-      const mohallaDropDownData = get(state, 'form.propertyAddress.fields.mohalla.dropDownData', []);
-
-      if (process.env.REACT_APP_NAME === "Citizen" && tenant && mohallaDropDownData.length == 0) {
-        const dataFetchConfig = {
-          url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-          action: "",
-          queryParams: [{
-            key: "tenantId",
-            value: tenant
-          }],
-          requestBody: {},
-          isDependent: true,
-          hierarchyType: "REVENUE"
-        }
-        fetchDropdownData(dispatch, dataFetchConfig, 'propertyAddress', 'mohalla', state, true);
-      }
+       const locale = getLocale() || "en_IN";
+       const localizationLabelsData = initLocalizationLabels(locale);
+       const mohalla = state.form.propertyAddress.fields.mohalla &&
+              state.form.propertyAddress.fields.mohalla.dropDownData && 
+                  state.form.propertyAddress.fields.mohalla.dropDownData.map((item, index) => {
+              return { value: item.label,
+                    label: getTranslatedLabel(item.label, localizationLabelsData)};
+                    });
+                 dispatch(setFieldProperty("propertyAddress", "mohalla", "dropDownData", mohalla));
       return action;
     } catch (e) {
       console.log(e);

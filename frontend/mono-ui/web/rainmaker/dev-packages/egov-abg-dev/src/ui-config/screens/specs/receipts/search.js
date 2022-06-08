@@ -24,7 +24,7 @@ const getData = async (action, state, dispatch) => {
 const getMDMSData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: 'uk',
       moduleDetails: [
         {
           moduleName: "BillingService",
@@ -68,7 +68,6 @@ const ucSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
-    dispatch(prepareFinalObject("receiptCancelSearch", {}))
     getData(action, state, dispatch);
     resetFields(state,dispatch);
     return action;

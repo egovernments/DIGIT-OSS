@@ -133,6 +133,16 @@ const routes = [
     }
   },
   {
+    path: "property-tax/property/:propertyId/:tenantId",
+    component: Property,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideTitle:true,
+      // hideBackButton: true,
+    }
+  },
+  {
     path: "property-tax/application-preview",
     component: ApplicationPreview,
     needsAuthentication: true,

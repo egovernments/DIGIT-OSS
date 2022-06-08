@@ -30,7 +30,7 @@ class PaymentSuccess extends Component {
     this.setState({
       yearDialogue: {
         dialogueOpen: !this.state.yearDialogue.dialogueOpen,
-        urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentId}&purpose=assess&propertyId=${this.props.match.params.propertyId}&tenantId=${this.props.match.params.tenantId}`
+        urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentId}&isReassesment=true&isAssesment=true&propertyId=${this.props.match.params.propertyId}&tenantId=${this.props.match.params.tenantId}`
       }
     })
   }
@@ -156,7 +156,7 @@ class PaymentSuccess extends Component {
   };
 
   createImageUrl = tenantId => {
-    return `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
+    return `https://s3.ap-south-1.amazonaws.com/ukd-assets/${tenantId}/logo.png`;
   };
 
   render() {

@@ -146,12 +146,7 @@ body.employee-user-profile {
 .menu-search-container >div >svg{
   color: rgba(0, 0, 0, 0.87) !important; 
 }
-@media only screen and (max-width: 768px) {
-  .screenHeaderLabelStyle .label-text {
-    line-height: 20px !important;
-    font-size: 18px !important;
-  }
-}
+
 @media only screen and (min-width: 768px) {
   .screenHeaderLabelStyle .label-text {
     color: #484848 !important;
@@ -170,6 +165,10 @@ body.employee-user-profile {
 
 .menu-search-container >div >svg{
   color:#fff !important; 
+}
+.menu-search-container > div > div:nth-child(1) > svg{
+  top:0!important;
+  color: #fff!important;
 }
 
   .menu-search-container{

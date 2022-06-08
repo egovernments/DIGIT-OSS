@@ -1,4 +1,3 @@
-
 import { getCommonCard, getCommonContainer, getCommonHeader, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -14,14 +13,14 @@ import { mutationDetails } from "./applyResourceMutation/mutationDetails";
 import { documentDetails } from "./applyResourceMutation/mutationDocuments";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
 import { registrationDetails } from "./applyResourceMutation/registrationDetails";
-import { onChangeTypeOfOwnership, transfereeDetails } from './applyResourceMutation/transfereeDetails';
-import "./index.css";
+import { transfereeDetails } from './applyResourceMutation/transfereeDetails';
 import { declarationSummary } from "./summaryResource/declarationSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { registrationSummary } from "./summaryResource/registrationSummary";
 import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResource/transfereeSummary";
 import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
 import { transferorInstitutionSummary as ti1, transferorSummary as ts1 } from "./summaryResource/transferorSummary1";
+import "./index.css";
 
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
@@ -32,6 +31,12 @@ export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
+const showComponent = (dispatch, componentJsonPath, display, oldStyle = {}) => {
+  let displayProps = display ? { ...oldStyle, display: 'block' } : { ...oldStyle, display: "none" };
+  dispatch(
+    handleField("apply", componentJsonPath, "props.style", displayProps)
+  );
+};
 
 const applicationNumberContainer = () => {
   const applicationNumber = getQueryArg(
@@ -119,8 +124,8 @@ export const formwizardThirdStep = {
     summary: getCommonCard({
       transferorSummary: { ...transferorSummary },
       transferorInstitutionSummary: { ...transferorInstitutionSummary },
-      transfereeSummary: { ...transfereeSummary },
-      transfereeInstitutionSummary: { ...transfereeInstitutionSummary },
+      transfereeSummary: transfereeSummary,
+      transfereeInstitutionSummary: transfereeInstitutionSummary,
       mutationSummary: mutationSummary,
       registrationSummary: registrationSummary,
       documentsSummary: documentsSummary,
@@ -175,11 +180,43 @@ const getPropertyData = async (action, state, dispatch) => {
     const previousPropertyUuid = payload.Properties[0].additionalDetails && payload.Properties[0].additionalDetails.previousPropertyUuid;
     payload.Properties[0].additionalDetails = { previousPropertyUuid };
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
-
+  
     setCardVisibility(state, action, dispatch);
 
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
-    dispatch(prepareFinalObject("PropertyOld", {}));
+    dispatch(prepareFinalObject("PropertyOld",{}));
+    let oldmob=payload.Properties[0].owners[0].mobileNumber
+    
+    dispatch(prepareFinalObject("PropertyOldNumber",oldmob));
+
+
+    if(payload){
+
+      let oldMobileNumber = get(state, "screenConfiguration.preparedFinalObject.PropertyOldNumber");
+      console.log("oldmob",oldMobileNumber)
+      let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
+      let phoneno = /^[6-9][0-9]{9}$/; 
+      let flag=false
+    //  console.log("flag before",flag)
+      //if any owner is having wrong number flag will become true and the input feild will show
+      owners.map(owner => {
+        if(!owner.mobileNumber.match(phoneno) && owner.status=='ACTIVE')
+        {
+          flag=true
+        }
+
+      })
+      let oldMobileNumberCardpath ="components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard"
+     //  console.log("flag after",flag)
+        if(!flag)
+        {
+          showComponent(dispatch, oldMobileNumberCardpath, false);
+          
+        }
+    }
+    
+
+
   } catch (e) {
     console.log(e);
   }
@@ -220,6 +257,7 @@ const getApplicationData = async (action, state, dispatch) => {
       ]);
       let inActiveOwners = [];
       let activeOwners = [];
+
       payload.Properties[0].owners.map(owner => {
         owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
         owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
@@ -230,7 +268,8 @@ const getApplicationData = async (action, state, dispatch) => {
           inActiveOwners.push({ ...owner, status: "ACTIVE" });
         }
       });
-
+  let owners =  get(state, "screenConfiguration.preparedFinalObject.Property.owners");
+   
       payload.Properties[0].owners = inActiveOwners;
       payload.Properties[0].ownersInit = inActiveOwners;
       payload.Properties[0].ownersTemp = activeOwners;
@@ -240,9 +279,7 @@ const getApplicationData = async (action, state, dispatch) => {
       payload.Properties[0].institutionTemp = payload.Properties[0].institution;
       payload.Properties[0].institutionInit = null;
       payload.Properties[0].institution = null;
-      if (!payload.Properties[0].ownershipCategoryTemp.includes("SINGLEOWNER")) {
-        onChangeTypeOfOwnership({ value: payload.Properties[0].ownershipCategoryTemp }, state, dispatch, false);
-      }
+
       if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
         const propertiesAudit = get(auditResponse, "Properties", []);
 
@@ -274,33 +311,34 @@ const getApplicationData = async (action, state, dispatch) => {
     set(payload, 'Properties[0].documents', documents)
     dispatch(prepareFinalObject("DocumentsPrefill", documents && Array.isArray(documents) && documents.length > 0 ? true : false));
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
-    dispatch(prepareFinalObject("PropertyOld", cloneDeep(payload.Properties[0])));
+    dispatch(prepareFinalObject("PropertyOld",cloneDeep(payload.Properties[0])));
     setCardVisibility(state, action, dispatch);
-    dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
+    dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)))
+    ;
     // Prefilling radio buttons
     set(
       action.screenConfig,
-      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.genderRadioGroup.props.value",
-      payload.Properties[0].ownersTemp[0].gender
-    )
-
-    set(
-      action.screenConfig,
-      "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationPendingRadioButton.props.value",
-      payload.Properties[0].additionalDetails.isMutationInCourt
-    )
-
-    set(
-      action.screenConfig,
-      "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationStateAcquisitionRadioButton.props.value",
-      payload.Properties[0].additionalDetails.isPropertyUnderGovtPossession
-    )
-    set(
-      action.screenConfig,
-      "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children.transferReason.props.value",
-      payload.Properties[0].additionalDetails.reasonForTransfer
-    )
-
+        "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.genderRadioGroup.props.value",
+        payload.Properties[0].ownersTemp[0].gender
+      )
+    
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationPendingRadioButton.props.value",
+        payload.Properties[0].additionalDetails.isMutationInCourt
+      )
+    
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationStateAcquisitionRadioButton.props.value",
+        payload.Properties[0].additionalDetails.isPropertyUnderGovtPossession
+      )
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children.transferReason.props.value",
+        payload.Properties[0].additionalDetails.reasonForTransfer
+      )
+    
 
   } catch (error) {
     console.log("mutation edit flow error ", error);
@@ -308,7 +346,7 @@ const getApplicationData = async (action, state, dispatch) => {
 
 }
 
-const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
+export const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
   let tenantId = getCommonTenant();
   let mdmsBody = {
     MdmsCriteria: {
@@ -434,6 +472,21 @@ const getMdmsTransferReasonData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+    
+    if(process.env.REACT_APP_NAME === "Citizen"){
+      if(payload &&payload.MdmsRes && payload.MdmsRes.PropertyTax && payload.MdmsRes.PropertyTax.ReasonForTransfer){
+   let reasonForTransfer1=[];
+    payload.MdmsRes.PropertyTax.ReasonForTransfer.forEach(item=> {
+     if(item.code!="NAMECORRECTIONCLERICAL")
+     {
+      reasonForTransfer1.push(item);
+     }
+     
+  }
+  );
+
+  payload.MdmsRes.PropertyTax.ReasonForTransfer=reasonForTransfer1
+}}
     dispatch(prepareFinalObject("ReasonForTransfer", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -522,8 +575,8 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
-    // dispatch(unMountScreen("propertySearch"));
-    // dispatch(unMountScreen("search-preview"));
+    dispatch(unMountScreen("propertySearch"));
+    dispatch(unMountScreen("search-preview"));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -531,18 +584,6 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
     const isEdit = getQueryArg(window.location.href, "action") === "edit";
-    dispatch(
-      prepareFinalObject(
-        "Property",
-        {}
-      )
-    );
-    dispatch(
-      prepareFinalObject(
-        "ptmDocumentsUploadRedux",
-        {}
-      )
-    );
     dispatch(
       prepareFinalObject(
         "Property.additionalDetails",
@@ -572,7 +613,8 @@ const screenConfig = {
     );
 
     isEdit ? getApplicationData(action, state, dispatch) : getPropertyData(action, state, dispatch);
-
+    let owners =  get(state, "screenConfiguration.preparedFinalObject.Property.owners");
+  
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "pt-mutation");
 
@@ -584,6 +626,11 @@ const screenConfig = {
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
         []
       );
+    
+
+
+
+    
       buildingUsageTypeData = getFirstListFromDotSeparated(
         buildingUsageTypeData
       );
@@ -607,11 +654,11 @@ const screenConfig = {
 
       // Set Documents Data (TEMP)
       prepareDocumentsUploadData(state, dispatch);
+      getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch);
     });
 
     getMdmsTransferReasonData(action, state, dispatch);
 
-    getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch);
     // Search in cprepareDocumentsUploadDataase of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
@@ -705,6 +752,9 @@ const screenConfig = {
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
+
+   
+   
 
     return action;
   },

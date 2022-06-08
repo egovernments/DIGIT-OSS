@@ -53,7 +53,7 @@ const searchApiCall = async (state, dispatch) => {
   }  else if (
     (searchScreenObject["propertyIds"] === undefined || searchScreenObject["propertyIds"] === "") &&
     (searchScreenObject["mobileNumber"] === undefined || searchScreenObject["mobileNumber"] === "") &&
-    (searchScreenObject["oldpropertyids"] === undefined || searchScreenObject["oldpropertyids"] === "")
+    (searchScreenObject["oldPropertyId"] === undefined || searchScreenObject["oldPropertyId"] === "")
   ) {
     dispatch(toggleSnackbar(true, { labelName:"In addition to City, please provide any one of the other parameters to search for property.",labelKey: "ERR_PT_COMMON_FILL_VALID_FIELDS" }, "warning"));
   }else{
@@ -70,7 +70,7 @@ const searchApiCall = async (state, dispatch) => {
       let propertyData = response.Properties.map(item => ({
         ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners.filter(owner => owner.status == "ACTIVE").map(owner=>owner.name).join(",") || "-",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners.map(owner=>owner.name).join(",") || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: (item.status === 'ACTIVE')?"SELECT":item.status,

@@ -8,7 +8,7 @@ const DatePicker = (props) => {
 
   function defaultFormatFunc(date) {
     if (date) {
-      const operationDate = typeof date === "string" ? new Date(date) : date;
+      const operationDate =new Date(date);
       const years = operationDate?.getFullYear();
       const month = operationDate?.getMonth() + 1;
       const _date = operationDate?.getDate();

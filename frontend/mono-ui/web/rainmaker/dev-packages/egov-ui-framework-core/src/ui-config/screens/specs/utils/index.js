@@ -1,4 +1,3 @@
-import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "../../../../ui-redux/screen-configuration/actions";
 import { getTranslatedLabel } from "../../../../ui-utils/commons";
 
@@ -115,7 +114,7 @@ export const getCommonCard = (children, cardProps = {}, cardContentProps = {}) =
   return {
     componentPath: "Card",
     props: {
-      ...cardProps
+      ...cardProps  
     },
     children: {
       cardContent: {
@@ -276,9 +275,6 @@ export const getTextField = textScheama => {
     maxValue,
     infoIcon,
     title = {},
-    multiline = false,
-    rows = "1",
-    disabled = false,
     errorMessage = "",
     requiredMessage = "",
     ...rest
@@ -303,9 +299,6 @@ export const getTextField = textScheama => {
       jsonPath,
       iconObj,
       title,
-      disabled,
-      multiline,
-      rows,
       infoIcon,
       errorMessage,
       ...props
@@ -458,7 +451,7 @@ export const getLabelWithValue = (label, value, props = {}) => {
     props: {
       style: {
         marginBottom: "16px",
-        wordBreak: "break-word"
+        wordBreak : "break-word"
       },
       ...props
     },
@@ -469,7 +462,7 @@ export const getLabelWithValue = (label, value, props = {}) => {
   };
 };
 
-export const getLabelWithValueForModifiedLabel = (label, value, label2, value2, props = {}) => {
+export const getLabelWithValueForModifiedLabel = (label, value, label2, value2,  props = {}) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
@@ -494,7 +487,7 @@ export const getLabelWithValueForModifiedLabel = (label, value, label2, value2, 
 
 export const convertEpochToDate = dateEpoch => {
   // Returning null in else case because new Date(null) returns initial date from calender
-  if (dateEpoch) {
+  if(dateEpoch){
     const dateFromApi = new Date(dateEpoch);
     let month = dateFromApi.getMonth() + 1;
     let day = dateFromApi.getDate();
@@ -550,35 +543,33 @@ export const getTab = (label, props = {}) => {
 export const getPattern = type => {
   switch (type) {
     case "Name":
-      return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i;
+      return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;
+    case "UCName":
+        return /^[a-zA-z\u0900-\u097F0-9\s\*()#$~`&@#!%\/\-]{1,50}$/i;  
     case "SearchOwnerName":
-      return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{3,50}$/i;
+        return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{3,50}$/i;
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
+    case "NewPropertyID":
+      return /^[0-9]{6}$/i;
     case "Amount":
       return /^[0-9]{0,8}$/i;
-    case "NonZeroAmount":
-      return /^[1-9][0-9]{0,7}$/i;
-    case "DecimalNumber":
-      return /^\d{0,8}(\.\d{1,2})?$/i;
-    //return /(([0-9]+)((\.\d{1,2})?))$/i;
     case "Email":
       return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
     case "Address":
-      return /^[^\$\"<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,500}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
     case "PAN":
       return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
     case "TradeName":
-      return /^[-@.\/#&+\w\s]*$/
-    //return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,100}$/i;
+      return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,100}$/i;
     case "Date":
       return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i;
     case "UOMValue":
-      return /^(0)*[1-9][0-9]{0,5}$/i;
+      return /^(0)*[1-9][0-9]{0,3}$/i;
     case "OperationalArea":
       return /^(0)*[1-9][0-9]{0,6}$/i;
     case "NoOfEmp":
-      return /^(0)*[1-9][0-9]{0,6}$/i;
+      return /^(0)*[1-9][0-9]{0,2}$/i;
     case "GSTNo":
       return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
     case "DoorHouseNo":
@@ -588,33 +579,23 @@ export const getPattern = type => {
     case "Pincode":
       return /^[1-9][0-9]{5}$/i;
     case "Landline":
-      return /^[0-9]{11}$/i;
+        return /^[0-9]{11}$/i;
     case "PropertyID":
       return /^[a-zA-z0-9\s\\/\-]$/i;
     case "ElectricityConnNo":
-      return /^.{1,15}$/i;
+      return /^[0-9]{15}$/i;
     case "DocumentNo":
-      return /^[0-9]{1,15}$/i;
+      return /^[0-9]{1,15}$/i; 
+    case "RegNo":
+      return /^[a-zA-Z0-9-_<>.^*@()%!-]*$/i;
     case "eventName":
-      return /^[^\$\"<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”]{1,65}$/i;
+      return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,65}$/i;
     case "eventDescription":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
-    case "cancelChallan":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
     case "FireNOCNo":
       return /^[a-zA-Z0-9-]*$/i;
     case "consumerNo":
       return /^[a-zA-Z0-9/-]*$/i;
-    case "AadharNo":
-      //return /^\d{4}\s\d{4}\s\d{4}$/;
-      return /^([0-9]){12}$/;
-    case "ChequeNo":
-      return /^(?!0{6})[0-9]{6}$/;
-    case "Comments":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
-    case "OldLicenceNo":
-      return /^[a-zA-Z0-9-/]{0,64}$/;
-
   }
 };
 
@@ -622,11 +603,124 @@ export const checkValueForNA = value => {
   return value && value !== "null" ? value : "NA";
 };
 
-export const downloadHelpFile = async (state) => {
-  console.info("download the help file");
-  const helpurl = get(state.screenConfiguration.preparedFinalObject,
-    "helpFileUrl",
-    ""
-  );
-  window.open(helpurl, "_blank");
+export const tradeValueNote = (label, value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      style: {
+        marginBottom: "16px",
+        wordBreak : "break-word",
+        display:"flex",
+        flexWrap:"wrap"
+      },
+      ...props
+    },
+    children: {
+      label: getCommonCaption(label,{style:{fontSize:"15px"}}),
+      value: getCommonValue(value,{style:{fontSize:"15px",lineHeight:"unset",marginLeft:"5px"}})
+    }
+  };
 };
+
+export const getCommonContainerNew = (children, props = {}) => {
+  return {
+    componentPath: "Grid",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
+    props: {
+      container: true,
+      style:{
+        display:"flex",
+        flexDirection:"column",
+      },
+      ...props
+    },
+    children
+  };
+};
+export const ptFeeLabelWithValue = (label, value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      style: {
+        marginBottom: "16px",
+        display:"flex",
+        justifyContent:"space-between",
+        minWidth:"180px"
+      },
+      ...props
+    },
+    children: {
+      label: getCommonCaption(label,{style:{fontSize:"15px"}}),
+      value: getCommonValue(value,{style:{fontSize:"15px",lineHeight:"unset",marginLeft:"5px"}})
+    }
+  };
+};
+export const ptButtons = () => {
+  return {
+    buttonContainer: getCommonContainer({
+      goToHomeButton: {
+        componentPath: "Button",
+        props: {
+          variant: "outlined",
+          color: "primary",
+          style: {
+            minWidth: "200px",
+            height: "48px",
+            marginRight: "16px"
+          }
+        },
+        children: {
+          downloadReceiptButtonLabel: getLabel({
+            labelName: "Go To Home",
+            labelKey: "ABG_GO_TO_HOME_BUTTON"
+          })
+        },
+        onClickDefination: {
+          action: "page_change",
+          // path: `${getRedirectionURL()}`
+        }
+      },
+    
+      viewReceiptButton: {
+        componentPath: "Button",
+        props: {
+          variant: "contained",
+          color: "primary",
+          style: {
+            minWidth: "200px",
+            height: "48px",
+            marginRight: "16px"
+          }
+        },
+        children: {
+          downloadReceiptButtonLabel: getLabel({
+            labelName: "VIEW RECEIPT",
+            labelKey: "ABG_VIEW_RECEIPT_BUTTON"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            // viewReceipt(state, dispatch);
+          }
+        }
+      }
+    })
+  };
+};
+export const convertDateTimeToEpoch = dateTimeString => {
+  //example input format : "26-07-2018 17:43:21"
+  try {
+    const parts = dateTimeString.match(
+      /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})/
+    );
+    return Date.UTC(+parts[3], parts[2] - 1, +parts[1], +parts[4], +parts[5]);
+  } catch (e) {
+    return dateTimeString;
+  }
+}

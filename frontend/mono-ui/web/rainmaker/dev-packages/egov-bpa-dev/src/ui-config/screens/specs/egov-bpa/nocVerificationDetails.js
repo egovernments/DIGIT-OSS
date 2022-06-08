@@ -47,7 +47,7 @@ import {
         inputProps: {
           accept: "image/*, .pdf, .png, .jpeg"
         },
-        maxFileSize: 5000
+        maxFileSize: 6000
       },
       type: "array"
     }

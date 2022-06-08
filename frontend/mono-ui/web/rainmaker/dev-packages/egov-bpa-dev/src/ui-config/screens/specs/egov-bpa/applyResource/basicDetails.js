@@ -41,6 +41,9 @@ export const basicDetails = getCommonCard({
       pattern: "^[a-zA-Z0-9]*$",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "BPA.edcrNumber",
+      props:{
+        className:"textfield-enterable-selection"
+      },
       iconObj: {
         iconName: "search",
         position: "end",
@@ -58,47 +61,23 @@ export const basicDetails = getCommonCard({
         md: 6
       }
     }),
-    occupancy: getSelectField({
+    occupancy: getTextField({
       label: {
         labelName: "Occupancy",
         labelKey: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL"
       },
-      localePrefix: {
-        moduleName: "BPA",
-        masterName: "OCCUPANCYTYPE"
-      },
-      props: {
-        disabled: true,
-        className : "tl-trade-type",
-        optionValue: "code",
-        optionLabel: "code",
-      },
-      jsonPath: "scrutinyDetails.planDetail.planInformation.occupancies",
-      sourceJsonPath: "BPA.OccupanciesList",
       required: true,
+      jsonPath: 'scrutinyDetails.planDetail.planInformation.occupancy',
       gridDefination: {
         xs: 12,
         sm: 12,
         md: 6
+      },
+      props: {
+        disabled: true,
+        className : "tl-trade-type"
       }
     }),
-    // occupancy: getTextField({
-    //   label: {
-    //     labelName: "Occupancy",
-    //     labelKey: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL"
-    //   },
-    //   required: true,
-    //   jsonPath: 'scrutinyDetails.planDetail.planInformation.occupancy',
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 12,
-    //     md: 6
-    //   },
-    //   props: {
-    //     disabled: true,
-    //     className : "tl-trade-type"
-    //   }
-    // }),
     applicationType: getSelectField({
       label: {
         labelName: "Application Type",
@@ -125,7 +104,7 @@ export const basicDetails = getCommonCard({
         md: 6
       }
     }),
-    riskType: getSelectField({
+    riskType: getTextField({
       label: {
         labelName: "Risk Type",
         labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
@@ -134,55 +113,18 @@ export const basicDetails = getCommonCard({
         moduleName: "WF",
         masterName: "BPA"
       },
-      props: {
-        disabled: true,
-        className : "tl-trade-type",
-        optionValue: "code",
-        optionLabel: "code",
-      },
       jsonPath: "BPA.riskType",
-      data: [
-        {
-          code: "LOW",
-          label: "WF_BPA_LOW"
-        },
-        {
-          code: "MEDIUM",
-          label: "WF_BPA_MEDIUM"
-        },
-        {
-          code: "HIGH",
-          label: "WF_BPA_HIGH"
-        }
-      ],
       required: true,
       gridDefination: {
         xs: 12,
         sm: 12,
         md: 6
+      },
+      props: {
+        disabled: true,
+        className : "tl-trade-type"
       }
     }),
-    // riskType: getTextField({
-    //   label: {
-    //     labelName: "Risk Type",
-    //     labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
-    //   },
-    //   localePrefix: {
-    //     moduleName: "WF",
-    //     masterName: "BPA"
-    //   },
-    //   jsonPath: "BPA.riskType",
-    //   required: true,
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 12,
-    //     md: 6
-    //   },
-    //   props: {
-    //     disabled: true,
-    //     className : "tl-trade-type"
-    //   }
-    // }),
     servicetype: getSelectField({
       label: {
         labelName: "Service type",
@@ -197,8 +139,7 @@ export const basicDetails = getCommonCard({
         masterName: "BPA"
       },
       props:{
-        // disabled: true,
-        className : "tl-trade-type"
+        className:"textfield-enterable-selection"
       },
       required: true,
       jsonPath: "BPA.serviceType",
@@ -251,8 +192,9 @@ export const basicDetails = getCommonCard({
         labelName: "Enter Remarks Here",
         labelKey: "BPA_BASIC_DETAILS_REMARKS_PLACEHOLDER"
       },
-      jsonPath: "BPA.additionalDetails.remarks",
+      jsonPath: "BPA.remarks",
       props:{
+        className:"textfield-enterable-selection",
         multiline: true,
         rows: "4"
       },

@@ -203,7 +203,6 @@ export const tradeLocationDetails = getCommonCard(
           suggestions: [],
           fullwidth: true,
           required: true,
-          isClearable: true,
           inputLabelProps: {
             shrink: true
           }

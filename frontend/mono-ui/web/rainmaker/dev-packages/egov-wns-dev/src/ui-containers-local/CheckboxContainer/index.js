@@ -40,18 +40,19 @@ const styles = {
 };
 
 class CheckboxLabels extends React.Component {
-  state = { checkedSewerage: false, checkedWater: false, interChange: false }
+  state = { checkedSewerage: false, checkedWater: true }
 
   componentWillMount() {
-    const { preparedFinalObject } = this.props;
-    let checkedWater = (preparedFinalObject && preparedFinalObject.applyScreen.water) ? preparedFinalObject.applyScreen.water : false;
-    let checkedSewerage = (preparedFinalObject && preparedFinalObject.applyScreen.sewerage) ? preparedFinalObject.applyScreen.sewerage : false;
-    this.setState({ checkedSewerage: checkedSewerage, checkedWater: checkedWater })
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+      if (applicationNumber.substring(0, 2) === "SW") { this.setState({ checkedSewerage: true, checkedWater: false }) }
+      else { this.setState({ checkedSewerage: false, checkedWater: true }) }
+    } else { this.setState({ checkedWater: true, checkedSewerage: false }); }
   }
 
   handleWater = name => event => {
     const { jsonPathWater, approveCheck, onFieldChange } = this.props;
-    this.setState({ [name]: event.target.checked, interChange: true }, () => {
+    this.setState({ [name]: event.target.checked }, () => {
       if (this.state.checkedWater) {
         toggleWater(onFieldChange, true);
         if (this.state.checkedSewerage) { toggleSewerage(onFieldChange, true); }
@@ -63,7 +64,7 @@ class CheckboxLabels extends React.Component {
 
   handleSewerage = name => event => {
     const { jsonPathSewerage, approveCheck, onFieldChange } = this.props;
-    this.setState({ [name]: event.target.checked, interChange: true }, () => {
+    this.setState({ [name]: event.target.checked }, () => {
       if (this.state.checkedSewerage) {
         toggleSewerage(onFieldChange, true);
         if (this.state.checkedWater) { toggleWater(onFieldChange, true); }
@@ -74,15 +75,7 @@ class CheckboxLabels extends React.Component {
   }
 
   render() {
-    const { classes, required, preparedFinalObject, disabled = false } = this.props;
-    let checkedWater, checkedSewerage;
-    if (this.state.interChange) {
-      checkedWater = this.state.checkedWater;
-      checkedSewerage = this.state.checkedSewerage;
-    } else {
-      checkedWater = (preparedFinalObject && preparedFinalObject.applyScreen.water) ? preparedFinalObject.applyScreen.water : false;
-      checkedSewerage = (preparedFinalObject && preparedFinalObject.applyScreen.sewerage) ? preparedFinalObject.applyScreen.sewerage : false;
-    }
+    const { classes, required } = this.props;
 
     return (
       <div className={classes.root}>
@@ -95,11 +88,10 @@ class CheckboxLabels extends React.Component {
               classes={{ label: "checkbox-button-label" }}
               control={
                 <Checkbox
-                  checked={checkedWater}
+                  checked={this.state.checkedWater}
                   onChange={this.handleWater("checkedWater")}
                   classes={{ root: classes.radioRoot, checked: classes.checked }}
                   color="primary"
-                  disabled={disabled}
                 />}
               label={<LabelContainer labelKey="WS_APPLY_WATER" />}
             />
@@ -107,11 +99,10 @@ class CheckboxLabels extends React.Component {
               classes={{ label: "checkbox-button-label" }}
               control={
                 <Checkbox
-                  checked={checkedSewerage}
+                  checked={this.state.checkedSewerage}
                   onChange={this.handleSewerage("checkedSewerage")}
                   classes={{ root: classes.radioRoot, checked: classes.checked }}
                   color="primary"
-                  disabled={disabled}
                 />}
               label={<LabelContainer labelKey="WS_APPLY_SEWERAGE" />}
             />

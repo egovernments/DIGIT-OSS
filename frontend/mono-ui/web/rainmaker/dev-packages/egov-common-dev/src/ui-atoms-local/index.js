@@ -7,10 +7,6 @@ const TestAtoms = Loadable({
   loader: () => import("./TestAtoms"),
   loading: () => <Loading />
 });
-const ArrearTable = Loadable({
-  loader: () => import("./ArrearTable"),
-  loading: () => <Loading />
-});
 
 const AutoSuggest = Loadable({
   loader: () => import("./AutoSuggest"),
@@ -20,20 +16,9 @@ const ApplicationNoContainer = Loadable({
   loader: () => import("./ApplicationNo"),
   loading: () => <Loading />
 });
-const OthersContainer = Loadable({
-  loader: () => import("./OthersContainer"),
-  loading: () => <Loading />
-});
-const DisabledComponent = Loadable({
-  loader: () => import("./DisabledComponent"),
-  loading: () => <Loading />
-});
 
 export {
   TestAtoms,
-  ArrearTable,
   AutoSuggest,
-  ApplicationNoContainer,
-  DisabledComponent,
-  OthersContainer
+  ApplicationNoContainer
 };

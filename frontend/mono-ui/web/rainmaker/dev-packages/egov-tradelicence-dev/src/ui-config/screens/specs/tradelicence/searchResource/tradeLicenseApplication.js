@@ -9,7 +9,7 @@ import {
   getDateField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { searchApiCall } from "./functions";
+import { searchApiCall, resetAllFields } from "./functions";
 
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
@@ -83,9 +83,19 @@ export const tradeLicenseApplication = getCommonCard({
   }),
   applicationTypeAndToFromDateContainer: getCommonContainer({
     applicationType: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-tradelicence",
-        componentPath: "AutosuggestContainer",
+      ...getSelectField({
+        label: {
+          labelName: "Application Type",
+          labelKey: "TL_APPLICATION_TYPE_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Application Type",
+          labelKey: "TL_APPLICATION_TYPE_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "TradeLicense",
+          masterName: "ApplicationType"
+        },
         jsonPath:
           "searchScreen.applicationType",
         sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
@@ -94,31 +104,9 @@ export const tradeLicenseApplication = getCommonCard({
           sm: 4
         },
         props: {
-          className: "applicant-details-error autocomplete-dropdown",
-          labelsFromLocalisation: true,
-          suggestions: [],
-          jsonPath:
-          "searchScreen.applicationType",
-          sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
-          label: {
-            labelName: "Application Type",
-            labelKey: "TL_APPLICATION_TYPE_LABEL"
-          },
-          placeholder: {
-            labelName: "Select Application Type",
-            labelKey: "TL_APPLICATION_TYPE_PLACEHOLDER"
-          },
-          localePrefix: {
-            moduleName: "TradeLicense",
-            masterName: "ApplicationType"
-          },
-          fullwidth: true,
-          required: false,
-          isClearable:true,
-          inputLabelProps: {
-            shrink: true
-          }
+          className: "applicant-details-error"
         }
+      })
     },
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
@@ -153,66 +141,53 @@ export const tradeLicenseApplication = getCommonCard({
     })
   }),
   appStatusContainer: getCommonContainer({
-    applicationNo: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
-      componentPath: "AutosuggestContainer",
-      props: {
-        label: {
-          labelName: "Application status",
-          labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Application Status",
-          labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
-        },
-        required: false,
-        localePrefix: {
-          moduleName: "WF",
-          masterName: "NEWTL"
-        },
-        className: "autocomplete-dropdown",
-        labelsFromLocalisation: true,
-        isClearable:true,
-        data:[
-          {
-            code : "INITIATED"
-          },
-          {
-            code : "APPLIED"
-          },
-          {
-            code : "FIELDINSPECTION"
-          },
-          {
-            code : "PENDINGAPPROVAL"
-          },
-          {
-            code : "PENDINGPAYMENT"
-          },
-          {
-            code : "APPROVED"
-          },
-          {
-            code : "CITIZENACTIONREQUIRED"
-          },     
-          {
-            code : "EXPIRED"
-          },
-          {
-            code : "CANCELLED"
-          },
-          {
-            code : "REJECTED"
-          }
-        ],
+    applicationNo: getSelectField({
+      label: {
+        labelName: "Application status",
+        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Application Status",
+        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
+      },
+      required: false,
+      localePrefix: {
+        moduleName: "WF",
+        masterName: "NEWTL"
       },
       jsonPath: "searchScreen.status",
+      data:[
+        {
+          code : "INITIATED"
+        },
+        {
+          code : "APPLIED"
+        },
+        {
+          code : "APPROVED"
+        },
+        {
+          code : "CANCELLED"
+        },
+        {
+          code : "REJECTED"
+        },
+        {
+          code : "CITIZENACTIONREQUIRED"
+        },
+        {
+          code : "PENDINGPAYMENT"
+        },
+        {
+          code : "PENDINGAPPROVAL"
+        }
+      ],
+      // sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
       gridDefination: {
         xs: 12,
         sm: 4
       }
-    },
+    }),
 
   }),
   
@@ -221,19 +196,48 @@ export const tradeLicenseApplication = getCommonCard({
     // firstCont: {
 
     buttonContainer: getCommonContainer({
-      firstCont: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
+      /* firstCont: {
+         uiFramework: "custom-atoms",
+         componentPath: "Div",
+         gridDefination: {
+           xs: 12,
+           sm: 4
+         }
+       }, */
+      resetButton: {
+        componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 6
+        },
+        props: {
+          variant: "contained",
+          style: {
+            color: "black",
+
+            backgroundColor: "white",
+            borderRadius: "2px",
+            width: "80%",
+            height: "48px",
+            marginBottom:"5px"
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "Reset",
+            labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_RESET"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: resetAllFields
         }
       },
       searchButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 6
         },
         props: {
           variant: "contained",
@@ -242,7 +246,7 @@ export const tradeLicenseApplication = getCommonCard({
 
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "80%",
+            width: "60%",
             height: "48px"
           }
         },
@@ -257,19 +261,14 @@ export const tradeLicenseApplication = getCommonCard({
           callBack: searchApiCall
         }
       },
-      lastCont: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }
-      }
+      /*   lastCont: {
+           uiFramework: "custom-atoms",
+           componentPath: "Div",
+           gridDefination: {
+             xs: 12,
+             sm: 4
+           }
+         } */
     })
-  }),
-},
-{
-  style: {
-    overflow: "visible"
-  },
+  })
 });

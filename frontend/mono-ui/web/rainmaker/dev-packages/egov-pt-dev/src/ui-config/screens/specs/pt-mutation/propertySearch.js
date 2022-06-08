@@ -1,14 +1,51 @@
-import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg, getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import commonConfig from "config/common.js";
+import {
+  getBreak,
+  getCommonHeader,
+  getLabel
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  getQueryArg,
+  getRequiredDocData
+} from "egov-ui-framework/ui-utils/commons";
+import {
+  getTenantId,
+  getLocale
+} from "egov-ui-kit/utils/localStorageUtils";
+import "./index.css";
+import {
+  resetFields
+} from "./imutation-methods";
+import propertySearchTabs from "./propertySearch-tabs";
+import iCitizenSearchTabs from "./iCitizenSearchTabs";
+import {
+  searchApplicationTable,
+  searchPropertyTable
+} from "./implementationSearchResources/searchResults";
+import {
+  showHideAdhocPopup
+} from "../utils";
+import {
+  httpRequest
+} from "../../../../ui-utils";
+import {
+  fetchLocalizationLabel
+} from "egov-ui-kit/redux/app/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import set from "lodash/set";
-import "./index.css";
-import { cityChange, resetFields } from "./mutation-methods";
-import propertySearchTabs from "./property-search-tabs";
-import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
+import {
+  searchPropertyDetails
+} from "./imutation-methods";
+
+
 const hasButton = getQueryArg(window.location.href, "hasButton");
+const citizenSearch = getQueryArg(window.location.href, "citizenSearch");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 const tenant = getTenantId();
@@ -17,90 +54,171 @@ const tenant = getTenantId();
 
 const getMDMSData = async (action, dispatch) => {
   const moduleDetails = [
-    {
-      moduleName: "PropertyTax",
-      masterDetails: [
-        { name: "Documents" }
-      ]
-    },
+
     {
       moduleName: "tenant",
-      masterDetails: [
-        {
-          name: "tenants"
-        }, { name: "citymodule" }
-      ]
+      masterDetails: [{
+        name: "tenants"
+      }, {
+        name: "citymodule"
+      },
+       {
+        name:"tenants"
+       }]
     }
   ]
 
+  const documentModuleDetails = [{
+    moduleName: "PropertyTax",
+    masterDetails: [{
+      name: "Documents"
+    }]
+  }, ]
+
+  getRequiredDocData(action, dispatch, documentModuleDetails);
+
+  let tenantId =
+    process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId : getTenantId();
+
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: "uk",
+      moduleDetails: moduleDetails
+    }
+  };
   try {
-    getRequiredDocData(action, dispatch, moduleDetails).then((payload) => {
-      if (process.env.REACT_APP_NAME != "Citizen") {
-        dispatch(
-          prepareFinalObject(
-            "ptSearchScreen.tenantId",
-            tenant
-          )
-        );
-        set(action.screenConfig,
-          "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity.props.isDisabled",
-          true
-        );
-        set(action.screenConfig,
-          "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity.isDisabled",
-          true
-        );
-        cityChange(dispatch, tenant)
-      }
-      const tenants = get(payload, 'payload.MdmsRes.tenant.tenants', []).sort((t1, t2) => t1.code.localeCompare(t2.code))
-      dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", tenants));
-    })
-    // const payload = await httpRequest(
-    //   "post",
-    //   "/egov-mdms-service/v1/_search",
-    //   "_search",
-    //   [],
-    //   mdmsBody
-    // );
-    // payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    if(payload && payload.MdmsRes && payload.MdmsRes.tenant && payload.MdmsRes.tenant.tenants && process.env.REACT_APP_NAME === "Employee" )
+    {
+      let tenants = payload.MdmsRes.tenant.tenants;
+
+  
+      let filterTenant = tenants && tenants.filter(m => m.code === getTenantId());
+  
+  
+      let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
+  
+      tenantUniqueId = "PT-" + tenantUniqueId + "-";
+  
+  
+      dispatch(
+        handleField(
+          "propertySearch",
+          "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+          "label",
+          tenantUniqueId
+        )
+      );
+
+    }
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+  if (process.env.REACT_APP_NAME != "Citizen") {
+    dispatch(
+      prepareFinalObject(
+        "propertySearchScreen.tenantId",
+        tenant
+      )
+    );
+  }
+  if (process.env.REACT_APP_NAME != "Citizen") {
+    let mohallaPayload = await httpRequest(
+      "post",
+      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      "_search",
+      [{
+        key: "tenantId",
+        value: tenant
+      }], {}
+    );
 
 
-    // let documents = get(
-    //   payload.MdmsRes,
-    //   "PropertyTax.Documents",
-    //   []
-    // );
+    if (mohallaPayload &&
+      mohallaPayload.TenantBoundary[0] &&
+      mohallaPayload.TenantBoundary[0].boundary) {
 
-    // let documentUi = getRequiredDocuments(documents);
-    // set(documentUi, 'children.header.children.header.children.key.props.labelKey', 'PT_REQ_DOCS_HEADER')
-    // set(documentUi, 'children.footer.children.footer.children.applyButton.children.applyButtonLabel.props.labelKey', 'PT_COMMON_BUTTON_APPLY')
-    // set(documentUi, 'children.footer.children.footer.children.applyButton.onClickDefination', {
-    //   action: "condition",
-    //   callBack: startApplyFlow
-    // })
-    // set(
-    //   action,
-    //   "screenConfig.components.adhocDialog.children.popup",
-    //   documentUi
-    // );
+      const mohallaData =
+        mohallaPayload.TenantBoundary[0].boundary.reduce((result, item) => {
+          result.push({
+            ...item,
+            code: item.code
+          });
+          return result;
+        }, []);
+      const mohallaLocalePrefix = {
+        moduleName: tenant,
+        masterName: "REVENUE"
+      };
+      dispatch(
+        handleField(
+          "propertySearch",
+          "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
+          "props.localePrefix",
+          mohallaLocalePrefix
+        )
+      );
+      dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
+    }
+  }
 
+  
+};
 
-
-    // console.log("payload--", payload)
-    // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    //   if (process.env.REACT_APP_NAME != "Citizen") {
-    //     dispatch(
-    //       prepareFinalObject(
-    //         "ptSearchScreen.tenantId",
-    //         tenant
-    //       )
-    //     );
-    //   }
-    // }
+const getPayButtonData = async (action, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: "uk",
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "paybuttonconfig"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    if (
+      payload &&
+      payload.MdmsRes &&
+      payload.MdmsRes.tenant &&
+      payload.MdmsRes.tenant.paybuttonconfig
+    ) {
+      let isOpenLink = window.location.pathname.includes("openlink") || window.location.pathname.includes("withoutAuth");
+      let envs=(process.env.REACT_APP_NAME !== "Citizen" ) ? "employee":"citizen"
+      let disablePayButton= payload.MdmsRes.tenant.paybuttonconfig[0][isOpenLink?"open":envs]
+      dispatch(
+        prepareFinalObject(
+          "paybuttonconfig",
+          disablePayButton
+        )
+      );
+    }
   } catch (e) {
     console.log(e);
   }
 };
+
 
 const header = getCommonHeader({
   labelName: "Property Tax",
@@ -112,8 +230,76 @@ const screenConfig = {
 
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch);
-    dispatch(unMountScreen("search-preview"));
+    dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     getMDMSData(action, dispatch);
+    getPayButtonData(action, dispatch);
+
+    set(
+      action.screenConfig,
+      "components.div.children.searchPropertyDetails.children.cardContent.children.selectionContainer.children.genderRadioGroup.props.value",
+      "OptionPID"
+    )
+
+    /*  if(citizenSearch) 
+      {
+           set(
+           action.screenConfig,
+             "components.div.children.propertySearchTabs",
+             {}
+           )
+      }  
+       else       
+       {
+         set(
+           action.screenConfig,
+               "components.div.children.iCitizenSearchTabs",
+               {})
+       } */
+
+
+    const tenantRequestBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [{
+          moduleName: "tenant",
+          masterDetails: [{
+            name: "citywiseconfig",
+            filter: "[?(@.config=='assessmentEnabledCities')]"
+          }]
+        }]
+      },
+    };
+    let citywiseconfig = httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      tenantRequestBody
+    ).then(res => {
+      // debugger
+      citywiseconfig: res.MdmsRes.tenant.citywiseconfig
+      let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
+      enableButton && dispatch(
+        handleField(
+          "propertySearch",
+          "components.div.children.headerDiv.children.newApplicationButton",
+          "visible",
+          enabledCities ? enabledCities.includes(tenant) : false
+        )
+      );
+    });
+    // showing fileds based on selection option
+
+    /*  dispatch(
+         handleField(
+             "propertySearch",
+             "components.div.children.headerDiv.children.newApplicationButton",
+             "visible",
+             enabledCities ? enabledCities.includes(tenant) : false
+         )
+     ) */
+
+
     return action;
   },
 
@@ -189,10 +375,11 @@ const screenConfig = {
             }
           }
         },
-        propertySearchTabs,
+        // iCitizenSearchTabs,
+        searchPropertyDetails,
         breakAfterSearch: getBreak(),
         searchPropertyTable,
-        searchApplicationTable
+        //searchApplicationTable
 
       }
     },
@@ -212,4 +399,3 @@ const screenConfig = {
 };
 
 export default screenConfig;
-

@@ -125,16 +125,6 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     dispatch,
     {}
   );
-  let validTo = false;
-  if(get(payload, "Licenses[0].validTo")) {
-    validTo = true;
-  }
-  set(
-    action.screenConfig,
-    "components.div.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewValidityPeriod.visible",
-    validTo
-  );
-
   //Fetch Bill and populate estimate card
   // const code = get(
   //   payload,
@@ -462,7 +452,7 @@ const rightdiv = {
       componentPath: "MenuButton",
       props: {
         data: {
-          label: {labelName : "DOWNLOAD" , labelKey :"BPA_DOWNLOAD"},
+          label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
            leftIcon: "cloud_download",
           rightIcon: "arrow_drop_down",
           props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
@@ -476,7 +466,7 @@ const rightdiv = {
       componentPath: "MenuButton",
       props: {
         data: {
-          label: {labelName : "PRINT" , labelKey :"BPA_PRINT"},
+          label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
           leftIcon: "print",
           rightIcon: "arrow_drop_down",
           props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
