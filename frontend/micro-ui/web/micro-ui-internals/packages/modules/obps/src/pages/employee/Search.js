@@ -19,7 +19,22 @@ const Search = ({ path }) => {
 
   const Search = Digit.ComponentRegistryService.getComponent("OBPSSearchApplication");
 
+  const checkData = (data) => {
+    if (data?.applicationNo === "" && data?.fromDate === "" && data?.mobileNumber === "" && data?.serviceType === "" && data?.status === "" && data?.toDate === "") return false
+
+    return true
+
+  }
+
+  const [paramerror,setparamerror] = useState("")
+
   function onSubmit(_data) {
+    if (_data?.applicationType?.code === "BPA_STAKEHOLDER_REGISTRATION"){
+      const isSearchAllowed = checkData(_data)
+      if(!isSearchAllowed){
+        setparamerror("BPA_ADD_MORE_PARAM_STAKEHOLDER")
+      }
+    }
     setSearchData(_data);
     var fromDate = new Date(_data?.fromDate);
     fromDate?.setSeconds(fromDate?.getSeconds() - 19800);
@@ -41,14 +56,14 @@ const Search = ({ path }) => {
 
   let params = {};
   let filters = {};
-  let paramerror = "";
+  
 
+  
   if (
     (selectedType && selectedType.includes("STAKEHOLDER")) ||
     (Object.keys(payload).length > 0 && payload?.applicationType && payload?.applicationType.includes("STAKEHOLDER"))
   ) {
     if (Object.entries(payload).length <= 2 && Object.keys(payload).filter((ob) => ob === "applicationType").length == 0) {
-      paramerror = "BPA_ADD_MORE_PARAM_STAKEHOLDER";
     } else {
       let filters = payload;
       if (payload.applicationNo) {
@@ -82,7 +97,8 @@ const Search = ({ path }) => {
     payload,
     tenantId,
     filters,
-    params
+    params,
+    {enabled:paramerror===""}
   );
   return (
     <Search
@@ -94,6 +110,7 @@ const Search = ({ path }) => {
       Count={bpaData?.[0]?.Count}
       error={paramerror}
       data={!isBpaSearchLoading && isBpaSuccess && bpaData?.length > 0 ? bpaData : [{ display: "ES_COMMON_NO_DATA" }]}
+      setparamerror={setparamerror}
     />
   );
 };
