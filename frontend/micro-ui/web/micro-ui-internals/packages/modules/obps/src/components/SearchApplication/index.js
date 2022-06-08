@@ -16,7 +16,7 @@ import { convertEpochToDateDMY } from "../../utils";
 import SearchFormFieldsComponent from "./SearchFormFieldsComponent";
 import useSearchApplicationTableConfig from "./useTableConfig";
 
-const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData, isLoading, Count }) => {
+const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData, isLoading, Count, setparamerror }) => {
   const [showToast, setShowToast] = useState(null);
   // const currentUserPhoneNumber = Digit.UserService.getUser().info.mobileNumber;
   // const userInformation = Digit.UserService.getUser()?.info;
@@ -120,6 +120,7 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
 
   useEffect(() => {
     if (error !== "") {
+      setparamerror("")
       setShowToast({ key: true, label: error });
     }
   }, [error]);
