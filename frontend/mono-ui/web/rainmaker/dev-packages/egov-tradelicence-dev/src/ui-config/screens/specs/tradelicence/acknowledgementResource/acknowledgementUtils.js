@@ -57,12 +57,12 @@ const acknowledgementCard = ({
               {
                 labelName: number
               },
-              { style: style.tailNumber }
+              { style: style.tailNumber, className:"tailNumber", }
             )
           },
           props: {
             style: style.tailBox,
-            className: "ack-tail"
+            className:"tailBox",
           }
         }
       : {};
@@ -76,7 +76,8 @@ const acknowledgementCard = ({
             style: {
               width: "72px",
               height: "72px",
-              backgroundColor: backgroundColor
+              backgroundColor: backgroundColor,
+              margin: "auto",
             }
           },
           children: {
@@ -113,7 +114,9 @@ const acknowledgementCard = ({
         tail: tail
       },
       {
-        style: style.container
+        style: style.container,
+        className:"container",
+
       }
     )
   });

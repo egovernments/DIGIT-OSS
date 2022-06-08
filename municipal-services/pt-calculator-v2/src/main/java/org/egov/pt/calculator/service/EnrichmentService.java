@@ -23,9 +23,8 @@ public class EnrichmentService {
      * @return
      */
     public void enrichDemandPeriod(CalculationCriteria calculationCriteria,String assessmentYear, Map<String, Object> masterMap) {
-
+        
         Map<String, Map<String, Object>> financialYearMaster = (Map<String, Map<String, Object>>) masterMap.get(FINANCIALYEAR_MASTER_KEY);
-
         Map<String, Object> finYearMap = financialYearMaster.get(assessmentYear);
         Long fromDate = (Long) finYearMap.get(FINANCIAL_YEAR_STARTING_DATE);
         Long toDate = (Long) finYearMap.get(FINANCIAL_YEAR_ENDING_DATE);

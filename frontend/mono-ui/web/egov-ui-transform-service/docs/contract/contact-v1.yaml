@@ -1,0 +1,138 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Contact service
+  description: >-
+    APIs available to create cotact list for users.
+  contact:
+    name: Murali M
+schemes:
+  - https
+basePath: '/egov-ui-transform-service/contact/v1/[API endpoint]'
+paths:
+  /_create:
+    post:
+      summary: Create contact list.
+      description: Create a contact for the user.
+      parameters:
+        - name: Contacts
+          in: body
+          description: Details of the sahredata that is to be shared to user.
+          required: true
+          schema:
+            $ref: '#/definitions/ContactCreateRequest'
+      tags:
+        - Contact
+      responses:
+        '201':
+          description: Content shared and recorded sucessfully.
+          schema:
+            $ref: '#/definitions/ContactCreateResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+  /_search:
+    post:
+      summary: Search contact list.
+      description: Search contact list for the user.
+      parameters:
+        - name: Contacts
+          in: body
+          description: Details of the sahredata that is to be shared to user.
+          required: true
+          schema:
+            $ref: '#/definitions/ContactSearchRequest'
+        - in: query
+          name: filterBy
+          required: true
+          schema:
+            type: string
+            enum:
+              - PHONE
+              - EMAIL
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: searchText
+          schema:
+            type: string
+          description: The numbers of items to return
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+      tags:
+        - Contact
+      responses:
+        '201':
+          description: Content shared and recorded sucessfully.
+          schema:
+            $ref: '#/definitions/ContactSearchResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+definitions:
+  ContactCreateRequest:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+      ShareMetaData:
+        $ref: '#/definitions/Contacts'
+  ContactCreateResponse:
+    type: object
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      Data:
+        type: object
+        description: content written on the file
+  ContactSearchRequest:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+  ContactSearchResponse:
+    type: object
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      Contacts:
+        $ref: '#/definitions/Contacts'
+  Contacts:
+    type: object
+    properties:
+      id:
+        description: Unique id for a contact.
+        type: string
+      tenantId:
+        description: Unique id for for a tenant.
+        type: string
+        minLength: 1
+        maxLength: 100
+        default: default
+      userId:
+        description: Unique id for a user.
+        type: string
+      name:
+        description: Name of the contact person.
+        type: string
+      phone:
+        description: Phone number of the contact person.
+        type: string
+      email:
+        description: Email number of the contact person.
+        type: string

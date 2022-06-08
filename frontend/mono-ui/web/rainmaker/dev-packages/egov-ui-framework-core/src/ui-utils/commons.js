@@ -3,7 +3,6 @@ import { getRequiredDocuments } from "egov-ui-framework/ui-containers/RequiredDo
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, showSpinner, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserSearchedResponse } from "egov-ui-kit/utils/commons";
 import { getLocale, getLocalization, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
@@ -11,6 +10,15 @@ import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
 import { httpRequest, uploadFile } from "./api.js";
+import { getOwnerPhoto } from "egov-tradelicence/ui-config/screens/specs/utils/receiptTransformer";
+
+export const hasTokenExpired = (status, data) => {
+  if (status === 401) {
+    if (data && data.Errors && Array.isArray(data.Errors) && data.Errors.length > 0 && data.Errors[0].code === "InvalidAccessTokenException")
+      return true;
+  }
+  return false;
+};
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -270,6 +278,9 @@ export const setDocuments = async (
   const reviewDocData =
     uploadedDocData &&
     uploadedDocData.map((item, index) => {
+      if(item.documentType == "OWNERPHOTO"){
+        getOwnerPhoto(fileUrlPayload[item.fileStoreId].split(",")[0])
+      }
       return {
         title: `${businessService}_${item.documentType}` || "",
         link:
@@ -384,7 +395,7 @@ export const acceptedFiles = acceptedExt => {
   return acceptedFileTypes;
 };
 
-export const handleFileUpload = (event, handleDocument, props,afterFileSelected) => {
+export const handleFileUpload = (event, handleDocument, props) => {
   const S3_BUCKET = {
     endPoint: "filestore/v1/files"
   };
@@ -406,7 +417,6 @@ export const handleFileUpload = (event, handleDocument, props,afterFileSelected)
         uploadDocument = false;
       }
       if (uploadDocument) {
-        afterFileSelected&&typeof afterFileSelected=='function'&&afterFileSelected()
         if (file.type.match(/^image\//)) {
           const fileStoreId = await uploadFile(
             S3_BUCKET.endPoint,
@@ -431,7 +441,6 @@ export const handleFileUpload = (event, handleDocument, props,afterFileSelected)
 
 //localizations
 export const getTransformedLocale = label => {
-  if(typeof label === "number") return label;
   return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
 
@@ -586,15 +595,14 @@ export const validateFields = (
 };
 
 export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
-
-  if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
-    // we are running under webview
-    receiptPDF.getBase64(data => {
-      window.mSewaApp.downloadBase64File(data, filename);
-    });
-  } else {
+  if (typeof mSewaApp === "undefined") {
     // we are running in browser
     receiptPDF.download(filename);
+  } else {
+    // we are running under webview
+    receiptPDF.getBase64(data => {
+      mSewaApp.downloadBase64File(data, filename);
+    });
   }
 };
 
@@ -604,15 +612,13 @@ if (window) {
 // Get user data from uuid API call
 export const getUserDataFromUuid = async bodyObject => {
   try {
-    // const response = await httpRequest(
-    //   "post",
-    //   "/user/_search",
-    //   "",
-    //   [],
-    //   bodyObject
-    // );
-
-    const response = getUserSearchedResponse();
+    const response = await httpRequest(
+      "post",
+      "/user/_search",
+      "",
+      [],
+      bodyObject
+    );
     return response;
   } catch (error) {
     console.log(error);
@@ -701,10 +707,10 @@ export const getStatusKey = (status) => {
 
 export const getRequiredDocData = async (action, dispatch, moduleDetails, closePopUp) => {
   let tenantId =
-    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity || commonConfig.tenantId : getTenantId();
+    process.env.REACT_APP_NAME === "Citizen" ? commonConfig.tenantId : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: moduleDetails[0].moduleName === "ws-services-masters" || moduleDetails[0].moduleName ===  "PropertyTax" ? commonConfig.tenantId : tenantId,
+      tenantId:"uk",
       moduleDetails: moduleDetails
     }
   };
@@ -724,9 +730,9 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
       []
     );
 
-    if (moduleName === "PropertyTax") {
-      payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
-    }
+    // if (moduleName === "PropertyTax") {
+    //   payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
+    // }
     const reqDocuments = getRequiredDocuments(documents, moduleName, footerCallBackForRequiredDataModal(moduleName, closePopUp));
     set(
       action,
@@ -881,7 +887,6 @@ export const disableFieldAndShowSpinner = (screenKey, jsonPath = 'components', d
   dispatch(showSpinner());
   disableField(screenKey, jsonPath, dispatch);
 }
-
 
 export const sortDropdownNames = (e1, e2) => {
   if (e1 && e1.name && typeof e1.name == 'string') {

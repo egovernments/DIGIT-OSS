@@ -6,13 +6,14 @@ import {
 import { citizenApplication } from "./searchResource/citizenApplication";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+// import { progressStatus } from "./searchResource/progressStatus";
 import { searchResults } from "./searchResource/searchResults";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import commonConfig from "config/common.js";
 import { httpRequest } from "../../../../ui-utils";
-import "./index.css"
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = hasButton && hasButton === "false" ? false : true;
@@ -27,7 +28,7 @@ const waterAndSewerageSearchAndResult = {
         const businessServiceData = JSON.parse(
             localStorageGet("businessServiceData")
         );
-        dispatch(prepareFinalObject("searchScreen",{}));
+
         const data = find(businessServiceData, { businessService: "NewTL" });
         const { states } = data || [];
         getData(action, state, dispatch).then(responseAction => {
@@ -57,6 +58,7 @@ const waterAndSewerageSearchAndResult = {
                         }
                     },
                 },
+                pendingApprovals,
                 citizenApplication,
                 breakAfterSearch: getBreak(),
                 searchResults
@@ -79,9 +81,6 @@ export const getMdmsData = async (action, state, dispatch) => {
                     masterDetails: [
                         {
                             name: "tenants"
-                        },
-                        { 
-                          name: "citymodule" 
                         }
                     ]
                 },
@@ -99,8 +98,7 @@ export const getMdmsData = async (action, state, dispatch) => {
         );
 
         dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-        payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
-        dispatch(prepareFinalObject("applyScreenMdmsData.tenant", payload.MdmsRes.tenant));
+
     } catch (e) {
         console.log(e);
     }

@@ -50,7 +50,7 @@ public class PropertyQueryBuilder {
 
 	private static String ownerDocSelectValues = " owndoc.id as owndocid, owndoc.tenantid as owndoctenantid, owndoc.entityid as owndocentityId, owndoc.documenttype as owndoctype, owndoc.filestoreid as owndocfilestore, owndoc.documentuid as owndocuid, owndoc.status as owndocstatus, ";
 	
-	private static String UnitSelectValues = "unit.id as unitid, unit.tenantid as unittenantid, unit.propertyid as unitpid, floorno, unittype, unit.usagecategory as unitusagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, unit.superbuiltuparea as unitspba, arv, constructiontype, constructiondate, dimensions, unit.active as isunitactive, unit.createdby as unitcreatedby, unit.createdtime as unitcreatedtime, unit.lastmodifiedby as unitlastmodifiedby, unit.lastmodifiedtime as unitlastmodifiedtime ";
+	private static String UnitSelectValues = "unit.id as unitid, unit.tenantid as unittenantid, unit.propertyid as unitpid, floorno, unittype, unit.usagecategory as unitusagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, unit.superbuiltuparea as unitspba, arv, constructiontype, constructiondate, dimensions, unit.active as isunitactive, unit.createdby as unitcreatedby, unit.createdtime as unitcreatedtime, unit.lastmodifiedby as unitlastmodifiedby, unit.lastmodifiedtime as unitlastmodifiedtime, unit.additionaldetails as unitadditionaldetails ";
 
 	private static final String QUERY = SELECT 
 			
@@ -80,25 +80,24 @@ public class PropertyQueryBuilder {
 			
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
-
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit               ON property.id =  unit.propertyid and unit.active = 't'"
+			;
+	
 	private static final String ID_QUERY = SELECT
+	
+			+   " distinct property.id FROM EG_PT_PROPERTY property "
 
-			+   " property.id FROM EG_PT_PROPERTY property "
-
-			+   INNER_JOIN +  " EG_PT_ADDRESS address         ON property.id = address.propertyid "
+			+   INNER_JOIN + " EG_PT_ADDRESS address         ON property.id = address.propertyid "
 
 			+   LEFT_JOIN  +  " EG_PT_INSTITUTION institution ON property.id = institution.propertyid "
 
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT pdoc           ON property.id = pdoc.entityid "
 
-			+   INNER_JOIN +  " EG_PT_OWNER owner             ON property.id = owner.propertyid "
+			+   INNER_JOIN +  " EG_PT_OWNER owner             ON property.id = owner.propertyid and owner.status='ACTIVE' "
 
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 
-			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
-	
-
+			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid and unit.active = 't' ";
 
 	private final String paginationWrapper = "SELECT * FROM "
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY plastmodifiedtime DESC, pid) offset_ FROM " + "({})" + " result) result_offset "
@@ -140,9 +139,11 @@ public class PropertyQueryBuilder {
 					&& CollectionUtils.isEmpty(criteria.getUuids())
 					&& null == criteria.getMobileNumber()
 					&& null == criteria.getName()
-					&& null == criteria.getDoorNo()
 					&& null == criteria.getOldPropertyId()
-					&& CollectionUtils.isEmpty(criteria.getCreationReason());
+					&& CollectionUtils.isEmpty(criteria.getCreationReason())
+					&& null == criteria.getLocality()
+					&& null == criteria.getDoorNo()
+					&& null == criteria.getOldPropertyId();
 		
 		if(isEmpty)
 			throw new CustomException("EG_PT_SEARCH_ERROR"," No criteria given for the property search");
@@ -213,8 +214,15 @@ public class PropertyQueryBuilder {
 			addToPreparedStatement(preparedStmtList, creationReasonsList);
 		}
 		
-		if (null != criteria.getLocality()) {
+		if (null != criteria.getLocality() && null != criteria.getDoorNo()) {
 
+			addClauseIfRequired(preparedStmtList,builder);
+			builder.append("address.locality = ?");
+			builder.append(AND_QUERY);
+			builder.append("address.doorno = ?");
+			preparedStmtList.add(criteria.getLocality());
+			preparedStmtList.add(criteria.getDoorNo());
+		}else if(null != criteria.getLocality()){
 			addClauseIfRequired(preparedStmtList,builder);
 			builder.append("address.locality = ?");
 			preparedStmtList.add(criteria.getLocality());

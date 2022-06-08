@@ -6,13 +6,13 @@ import {
   getDateField,
   getLabel,
   getPattern,
-
+  getSelectField,
   getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchApiCall } from "./functions";
 
-export const resetFields = (state, dispatch) => {
+const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
@@ -54,17 +54,17 @@ export const BPAApplication = getCommonCard({
   }),
   subParagraph: getCommonParagraph({
     labelName: "Provide at least one parameter to search for an application",
-    labelKey: "BPA_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "NOC_HOME_SEARCH_RESULTS_DESC"
   }),
   appBPAHomeSearchResultsContainer: getCommonContainer({
     bpaNo: getTextField({
       label: {
         labelName: "Application number",
-        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+        labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Application number",
-        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+        labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -73,16 +73,16 @@ export const BPAApplication = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.applicationNo"
+      jsonPath: "searchScreen.applicationNos"
     }),
     ownerMobNo: getTextField({
       label: {
         labelName: "Mobile Number",
-        labelKey: "BPA_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
+        labelKey: "NOC_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
       },
       placeholder: {
         labelName: "Enter your mobile No.",
-        labelKey: "BPA_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
+        labelKey: "NOC_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -98,10 +98,10 @@ export const BPAApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
     }),
     fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "BPA_FROM_DATE_LABEL" },
+      label: { labelName: "From Date", labelKey: "NOC_FROM_DATE_LABEL" },
       placeholder: {
         labelName: "From Date",
-        labelKey: "BPA_FROM_DATE_PLACEHOLDER"
+        labelKey: "NOC_FROM_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.fromDate",
       gridDefination: {
@@ -113,10 +113,10 @@ export const BPAApplication = getCommonCard({
       required: false
     }),
     toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "BPA_TO_DATE_LABEL" },
+      label: { labelName: "To Date", labelKey: "NOC_TO_DATE_LABEL" },
       placeholder: {
         labelName: "To Date",
-        labelKey: "BPA_TO_DATE_PLACEHOLDER"
+        labelKey: "NOC_TO_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.toDate",
       gridDefination: {
@@ -150,7 +150,7 @@ export const BPAApplication = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Reset",
-            labelKey: "BPA_HOME_SEARCH_RESET_BUTTON"
+            labelKey: "NOC_HOME_SEARCH_RESET_BUTTON"
           })
         },
         onClickDefination: {
@@ -178,7 +178,7 @@ export const BPAApplication = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Search",
-            labelKey: "BPA_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+            labelKey: "NOC_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
           })
         },
         onClickDefination: {

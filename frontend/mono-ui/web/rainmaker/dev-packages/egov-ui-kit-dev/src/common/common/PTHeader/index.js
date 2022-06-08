@@ -70,7 +70,7 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
         />}
       </div>
       {downloadPrintButton && <div className="header-buttons" style={{ float: "right", display: "flex", marginRight: 20 }} >
-        <DownloadPrintButton
+      {/*   <DownloadPrintButton
           data={{
             label: {
               llabelName: "DOWNLOAD",
@@ -93,7 +93,7 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
             props: { variant: "outlined", style: { height: 65, marginLeft: 10, color: "#FE7A51" } },
             menu: printButton.menu,
           }}
-        />
+        /> */}
       </div>}
     </div>
 

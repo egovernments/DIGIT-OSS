@@ -1,10 +1,8 @@
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
-  handleScreenConfigurationFieldChange as handleField, prepareFinalObject,
+  prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import {
@@ -18,6 +16,8 @@ import {
   showHideAdhocPopup,
   validateFields
 } from "../../utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 // SET ALL SIMPLE DATES IN YMD FORMAT
 const setDateInYmdFormat = (obj, values) => {
@@ -83,43 +83,20 @@ const returnEmptyArrayIfNull = value => {
 };
 
 export const setRolesList = (state, dispatch) => {
-
-
-
-  let jurisdictions = get(
+  let rolesList = get(
     state.screenConfiguration.preparedFinalObject,
-    `Employee[0].jurisdictions`,
+    `Employee[0].user.roles`,
     []
   );
-
-
-  jurisdictions.map((judis, ind) => {
-    let furnishedRolesList = judis && judis.roles && Array.isArray(judis.roles) && judis.roles.map(role => {
-      return ` ${getLocaleLabels("NA", `ACCESSCONTROL_ROLES_ROLES_${getTransformedLocale(role.code)}`)}`;
-    }) || [];
-    dispatch(
-      prepareFinalObject(
-        `Employee[0].jurisdictions[${ind}].furnishedRolesList`,
-        furnishedRolesList.join()
-      )
-    );
-  })
-
-
-  // let rolesList = get(
-  //   state.screenConfiguration.preparedFinalObject,
-  //   `Employee[0].user.roles`,
-  //   []
-  // );
-  // let furnishedRolesList = rolesList.map(item => {
-  //   return " " + item.label;
-  // });
-  // dispatch(
-  //   prepareFinalObject(
-  //     "Employee[0].jurisdictions[0].furnishedRolesList",
-  //     furnishedRolesList.join()
-  //   )
-  // );
+  let furnishedRolesList = rolesList.map(item => {
+    return " " + item.label;
+  });
+  dispatch(
+    prepareFinalObject(
+      "hrms.reviewScreen.furnishedRolesList",
+      furnishedRolesList.join()
+    )
+  );
 };
 
 const setDeactivationDocuments = (state, dispatch) => {
@@ -148,33 +125,6 @@ const setDeactivationDocuments = (state, dispatch) => {
   // SAVE THE DOCUMENTS BACK TO EMPLOYEE
   dispatch(prepareFinalObject("Employee[0].documents", documents));
 };
-const setActivationDocuments = (state, dispatch) => {
-  // GET THE DEACTIVATION DOCUMENTS FROM UPLOAD FILE COMPONENT
-  let activationDocuments = get(
-    state.screenConfiguration.preparedFinalObject,
-    `ActivationDocuments`,
-    []
-  );
-  // FORMAT THE NEW DOCUMENTS ARRAY ACCORDING TO THE REQUIRED STRUCTURE
-  let addedDocuments = activationDocuments.map(document => {
-    return {
-      documentName: get(document, "fileName", ""),
-      documentId: get(document, "fileStoreId", ""),
-      referenceType: "ACTIVATION"
-    };
-  });
-  // GET THE PREVIOUS DOCUMENTS FROM EMPLOYEE OBJECT
-  let documents = get(
-    state.screenConfiguration.preparedFinalObject,
-    `Employee[0].documents`,
-    []
-  );
-  // ADD THE NEW DOCUMENTS TO PREVIOUS DOCUMENTS
-  documents = [...documents, ...addedDocuments];
-  // SAVE THE DOCUMENTS BACK TO EMPLOYEE
-  dispatch(prepareFinalObject("Employee[0].documents", documents));
-};
-
 
 // Remove objects from Arrays not having the specified key (eg. "id")
 // and add the key-value isActive:false in those objects having the key
@@ -249,40 +199,9 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
   handleDeletedCards(employeeObject[0], "serviceHistory", "id");
   handleDeletedCards(employeeObject[0], "education", "id");
   handleDeletedCards(employeeObject[0], "tests", "id");
-  let deletedJurisdiction = get(
-    state.screenConfiguration.preparedFinalObject,
-    "deletedJurisdiction",
-    []
-  );
-  let employeeJurisdictions = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Employee[0].jurisdictions",
-    []
-  );
-  deletedJurisdiction.map(jurisdiction => jurisdiction.isActive = false);
 
   // DEACTIVATE EMPLOYEE VALIDATIONS
   if (action === "DEACTIVATE") {
-    const isDeactivateEmployeeDetailsValid = validateFields(
-      `components.adhocDialog.children.popup.children.body.children`,
-      state,
-      dispatch,
-      "view"
-    );
-    if (!isDeactivateEmployeeDetailsValid) {
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Please fill mandatory Fields!",
-            labelKey: "ERR_FILL_MANDATORY_FIELDS"
-          },
-          "warning"
-        )
-      );
-      return;
-    }
-  } else if (action === "ACTIVATE") {
     const isDeactivateEmployeeDetailsValid = validateFields(
       "components.adhocDialog.children.popup.children.body.children",
       state,
@@ -302,7 +221,6 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
       );
       return;
     }
-
   }
 
   // SET TENANT IDS IF THEY DO NOT ALREADY EXIST
@@ -424,8 +342,7 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
   let processedRoles = roles.map(item => {
     return {
       code: item.value,
-      name: item.label,
-      tenantId: item.tenantId
+      name: item.label
     };
   });
   set(employeeObject[0], "user.roles", processedRoles);
@@ -448,23 +365,12 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
     }
   } else if (action === "UPDATE") {
     try {
-
-      // const fileStoreid=await convertToFilestoreid(get(employeeObject[0],'user.photo'));
-
-      // set(employeeObject[0],'user.photo',fileStoreid);
-      if (get(employeeObject[0], 'user.photo', null)) {
-        set(employeeObject[0], 'user.photo', get(employeeObject[0], 'user.identificationMark', null));
-      }
-      let employee = {};
-      employee = { ...employeeObject[0] }
-      set(employee, 'jurisdictions', [...employeeJurisdictions, ...deletedJurisdiction])
       let response = await updateEmployee(
         queryObject,
-        [employee],
+        employeeObject,
         dispatch
       );
       let employeeId = response && get(response, "Employees[0].code");
-
       const acknowledgementUrl =
         process.env.REACT_APP_SELF_RUNNING === "true"
           ? `/egov-ui-framework/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`
@@ -475,9 +381,6 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
     }
   } else if (action === "DEACTIVATE") {
     try {
-      if (get(employeeObject[0], 'user.photo', null)) {
-        set(employeeObject[0], 'user.photo', get(employeeObject[0], 'user.identificationMark', null));
-      }
       set(employeeObject[0], "isActive", false);
       set(
         employeeObject[0],
@@ -503,37 +406,6 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
     } catch (error) {
       furnishEmployeeData(state, dispatch);
     }
-  } else if (action === "ACTIVATE") {
-    try {
-      if (get(employeeObject[0], 'user.photo', null)) {
-        set(employeeObject[0], 'user.photo', get(employeeObject[0], 'user.identificationMark', null));
-      }
-      set(employeeObject[0], "reActivateEmployee", true);
-      set(employeeObject[0], "isActive", true);
-      set(
-        employeeObject[0],
-        `reactivationDetails[0].effectiveFrom`,
-        convertDateToEpoch(
-          get(employeeObject[0], `reactivationDetails[0].effectiveFrom`),
-          "dayStart"
-        )
-      );
-      setActivationDocuments(state, dispatch);
-      let response = await updateEmployee(
-        queryObject,
-        employeeObject,
-        dispatch
-      );
-      let employeeId = response && get(response, "Employees[0].code");
-      showHideAdhocPopup(state, dispatch);
-      const acknowledgementUrl =
-        process.env.REACT_APP_SELF_RUNNING === "true"
-          ? `/egov-ui-framework/hrms/acknowledgement?purpose=activate&status=success&applicationNumber=${employeeId}`
-          : `/hrms/acknowledgement?purpose=activate&status=success&applicationNumber=${employeeId}`;
-      dispatch(setRoute(acknowledgementUrl));
-    } catch (error) {
-      furnishEmployeeData(state, dispatch);
-    }
   }
 };
 
@@ -555,7 +427,6 @@ export const getEmployeeData = async (
   ];
   let response = await getSearchResults(queryObject, dispatch);
   dispatch(prepareFinalObject("Employee", get(response, "Employees")));
-  dispatch(prepareFinalObject("empPhoneNumber", get(response, "Employees[0].user.mobileNumber", '')));
   dispatch(
     handleField(
       "create",
@@ -567,201 +438,5 @@ export const getEmployeeData = async (
       }
     )
   );
-  dispatch(
-    handleField(
-      "create",
-      "components.div.children.formwizardFirstStep.children.professionalDetails.children.cardContent.children.employeeDetailsContainer.children.employeeId",
-      "props.disabled",
-      true
-    )
-  );
-
-  const judis = get(response, 'Employees[0].jurisdictions', []);
-  const roles = get(response, 'Employees[0].user.roles', [])
-  judis.map(judis => {
-    if (judis.boundary) {
-      judis.roles = roles.filter(role => role.tenantId == judis.boundary).map(role => {
-        return { ...role, value: role.code, label: role.name }
-      });
-    }
-  })
-  dispatch(prepareFinalObject("Employee", get(response, "Employees")));
-
-  if (get(response, "Employees[0].isActive", false)) {
-    dispatch(
-      handleField(
-        "view",
-        "components.div.children.footer.children.activateEmployee",
-        "visible",
-        false
-      )
-    );
-    dispatch(
-      handleField(
-        "view",
-        "components.div.children.footer.children.deactivateEmployee",
-        "visible",
-        true
-      )
-    );
-    dispatch(prepareFinalObject("employeeStatus", 'DEACTIVATE'))
-    showActivateDetails(dispatch, false)
-  } else {
-    dispatch(
-      handleField(
-        "view",
-        "components.div.children.footer.children.activateEmployee",
-        "visible",
-        true
-      )
-    );
-    dispatch(
-      handleField(
-        "view",
-        "components.div.children.footer.children.deactivateEmployee",
-        "visible",
-        false
-      )
-    );
-    dispatch(prepareFinalObject("employeeStatus", 'ACTIVATE'))
-    showActivateDetails(dispatch, true)
-  }
   furnishEmployeeData(state, dispatch);
 };
-
-
-
-const showActivateDetails = (dispatch, activate = true) => {
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.body.children.deactivationReason",
-      "jsonPath",
-      activate ? "Employee[0].reactivationDetails[0].reasonForReactivation" : "Employee[0].deactivationDetails[0].reasonForDeactivation"
-    )
-  );
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.body.children.deactivationReason",
-      "props.jsonPath",
-      activate ? "Employee[0].reactivationDetails[0].reasonForReactivation" : "Employee[0].deactivationDetails[0].reasonForDeactivation"
-    )
-  );
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.body.children.deactivationReason",
-      "props.placeholder.labelKey",
-      activate ? "HR_ACTIVATION_REASON_SELECT" : "HR_DEACTIVATION_REASON_SELECT"
-    )
-  );
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.body.children.deactivationReason",
-      "props.label.labelKey",
-      activate ? "HR_ACTIVATION_REASON" : "HR_DEACTIVATION_REASON"
-    )
-  );
-
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.body.children.effectiveDate",
-      "jsonPath",
-      activate ? "Employee[0].reactivationDetails[0].effectiveFrom" : "Employee[0].deactivationDetails[0].effectiveFrom"
-    )
-  );
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.body.children.effectiveDate",
-      "props.jsonPath",
-      activate ? "Employee[0].reactivationDetails[0].effectiveFrom" : "Employee[0].deactivationDetails[0].effectiveFrom"
-    )
-  );
-
-
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.orderNo",
-      "jsonPath",
-      activate ? "Employee[0].reactivationDetails[0].orderNo" : "Employee[0].deactivationDetails[0].orderNo"
-    )
-  );
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.orderNo",
-      "props.jsonPath",
-      activate ? "Employee[0].reactivationDetails[0].orderNo" : "Employee[0].deactivationDetails[0].orderNo"
-    )
-  );
-
-
-
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.remarks",
-      "jsonPath",
-      activate ? "Employee[0].reactivationDetails[0].remarks" : "Employee[0].deactivationDetails[0].remarks"
-    )
-  );
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.remarks",
-      "props.jsonPath",
-      activate ? "Employee[0].reactivationDetails[0].remarks" : "Employee[0].deactivationDetails[0].remarks"
-    )
-  );
-
-
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.upload",
-      "jsonPath",
-      activate ? "ActivationDocuments" : "deactivationDocuments"
-    )
-  );
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.upload.children.uploadButton",
-      "props.jsonPath",
-      activate ? "ActivationDocuments" : "deactivationDocuments"
-    )
-  );
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.upload",
-      "props.jsonPath",
-      activate ? "ActivationDocuments" : "deactivationDocuments"
-    )
-  );
-
-
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.buttonDiv.children.deactivateButton.children.previousButtonLabel",
-      "props.labelKey",
-      activate ? "HR_ACTIVATE_EMPLOYEE_LABEL" : "HR_DEACTIVATE_EMPLOYEE_LABEL"
-    )
-  );
-  dispatch(
-    handleField(
-      "view",
-      "components.adhocDialog.children.popup.children.header.children.div1.children.div.children.key",
-      "props.labelKey",
-      activate ? "HR_ACTIVATE_EMPLOYEE_HEAD" : "HR_DEACTIVATE_EMPLOYEE_HEAD"
-    )
-  );
-
-
-}

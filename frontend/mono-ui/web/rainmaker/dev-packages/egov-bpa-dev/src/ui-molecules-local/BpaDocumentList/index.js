@@ -1,18 +1,23 @@
+import Grid from "@material-ui/core/Grid";
+import Icon from "@material-ui/core/Icon";
 import { withStyles } from "@material-ui/core/styles";
-import { LabelContainer } from "egov-ui-framework/ui-containers";
+import {
+  LabelContainer,
+  TextFieldContainer
+} from "egov-ui-framework/ui-containers";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getFileUrlFromAPI,
-
+  handleFileUpload,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
-import UploadCard from "../UploadCard";
-import "./index.css";
+import { UploadSingleFile } from "../../ui-molecules-local";
+import Typography from "@material-ui/core/Typography";
+
 const themeStyles = theme => ({
   documentContainer: {
     backgroundColor: "#F2F2F2",
@@ -113,8 +118,7 @@ const styles = {
 };
 
 const requiredIcon = (
-  //<sup style={{ color: "#E54D42", paddingLeft: "5px" }}>*</sup>
-  <sup style={{ color: "#5b5b5b", fontSize: "12px", paddingLeft: "5px" }}>*</sup>
+  <sup style={{ color: "#E54D42", paddingLeft: "5px" }}>*</sup>
 );
 
 class BpaDocumentList extends Component {
@@ -123,6 +127,7 @@ class BpaDocumentList extends Component {
   };
 
   componentDidMount = () => {
+    console.log(this.props)
     const {
       documentsList,
       documentDetailsUploadRedux = {},
@@ -185,7 +190,7 @@ class BpaDocumentList extends Component {
     prepareFinalObject("documentDetailsUploadRedux", documentDetailsUploadRedux);
   };
 
-  prepareDocumentsInEmployee = async (appDocumentList, bpaDetails, wfState) => {
+  prepareDocumentsInEmployee = async (appDocumentList, bpaDetails) => {
     let documnts = [];
     if (appDocumentList) {
       Object.keys(appDocumentList).forEach(function (key) {
@@ -196,46 +201,37 @@ class BpaDocumentList extends Component {
     }
 
     prepareFinalObject("documentDetailsUploadRedux", {});
-    let requiredDocuments = [], uploadingDocuments = [];
+    let requiredDocuments = [];
     if (documnts && documnts.length > 0) {
       documnts.forEach(documents => {
         if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
-          documents.documents.map(docs => {
-            let doc = {};
-            doc.documentType = documents.dropDownValues.value;
-            doc.fileStoreId = docs.fileStoreId;
-            doc.fileStore = docs.fileStoreId;
-            doc.fileName = docs.fileName;
-            doc.fileUrl = docs.fileUrl;
-            doc.isClickable = true;
-            doc.additionalDetails = {
-              uploadedBy: getLoggedinUserRole(wfState),
-              uploadedTime: new Date().getTime()
-            }
-            if (doc.id) {
-              doc.id = docs.id;
-            }
-            uploadingDocuments.push(doc);
-          })
+          let doc = {};
+          doc.documentType = documents.dropDownValues.value;
+          doc.fileStoreId = documents.documents[0].fileStoreId;
+          doc.fileStore = documents.documents[0].fileStoreId;
+          doc.fileName = documents.documents[0].fileName;
+          doc.fileUrl = documents.documents[0].fileUrl;
+          if (doc.id) {
+            doc.id = documents.documents[0].id;
+          }
+          if (bpaDetails.documents) {
+            bpaDetails.documents.push(doc);
+          } else {
+            bpaDetails.documents = [doc];
+          }
         }
       });
 
-      let diffDocs = [];
-      bpaDetails.documents.forEach(bpaDocs => {
-        if (bpaDocs && bpaDocs.id) {
-          diffDocs.push(bpaDocs);
+      if(bpaDetails.documents && bpaDetails.documents.length > 0) {
+        var resArr = [];
+      bpaDetails.documents.forEach(function (item) {
+        var i = resArr.findIndex(x => x.documentType == item.documentType);
+        if (i <= -1) {
+          resArr.push(item);
         }
       });
-
-      if (uploadingDocuments && uploadingDocuments.length > 0) {
-        uploadingDocuments.forEach(tDoc => {
-          diffDocs.push(tDoc);
-        })
-      };
-
-      if (bpaDetails.documents && bpaDetails.documents.length > 0) {
-        bpaDetails.documents = diffDocs;
-        prepareFinalObject("BPA", bpaDetails.documents);
+      bpaDetails.documents = resArr;
+      prepareFinalObject("BPA",  bpaDetails.documents);
       }
     }
   }
@@ -246,71 +242,43 @@ class BpaDocumentList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails, bpaSendBackAcionStatus, wfState } = this.props;
+    const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
-    let appDocumentList = {};
-    let fileObj = {
-      fileName: file.name,
-      fileStoreId,
-      fileUrl: Object.values(fileUrl)[0],
-      isClickable: true,
-      additionalDetails: {
-        uploadedBy: getLoggedinUserRole(wfState),
-        uploadedTime: new Date().getTime()
-      }
-    };
-    if (documentDetailsUploadRedux[uploadedDocIndex] &&
-      documentDetailsUploadRedux[uploadedDocIndex].documents) {
 
-      documentDetailsUploadRedux[uploadedDocIndex].documents.push(fileObj);
-      appDocumentList = {
-        ...documentDetailsUploadRedux
-      };
-
-    } else {
-      appDocumentList = {
-        ...documentDetailsUploadRedux,
-        [uploadedDocIndex]: {
-          ...documentDetailsUploadRedux[uploadedDocIndex],
-          documents: [
-            fileObj
-          ]
-        }
+    let appDocumentList = {
+      ...documentDetailsUploadRedux,
+      [uploadedDocIndex]: {
+        ...documentDetailsUploadRedux[uploadedDocIndex],
+        documents: [
+          {
+            fileName: file.name,
+            fileStoreId,
+            fileUrl: Object.values(fileUrl)[0]
+          }
+        ]
       }
     }
 
-    prepareFinalObject("documentDetailsUploadRedux", appDocumentList);
+    prepareFinalObject("documentDetailsUploadRedux", appDocumentList );
 
-    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if (isEmployee || bpaSendBackAcionStatus) {
-      this.prepareDocumentsInEmployee(appDocumentList, bpaDetails, wfState);
-    }
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+
+    if(isEmployee) {
+      this.prepareDocumentsInEmployee(appDocumentList, bpaDetails);
+      }
   };
 
-  removeDocument = (remDocIndex, docIndex) => {
-    const {
-      documentDetailsUploadRedux,
-      prepareFinalObject,
-      bpaDetails,
-      documentDetailsPreview,
-      bpaSendBackAcionStatus
-    } = this.props;
-
-    for (let key in documentDetailsUploadRedux) {
-      if (key === `${remDocIndex}`) {
-        documentDetailsUploadRedux[key].documents.splice(docIndex, 1);
-      }
-    }
-    prepareFinalObject("documentDetailsUploadRedux", documentDetailsUploadRedux);
+  removeDocument = remDocIndex => {
+    const { prepareFinalObject } = this.props;
+    prepareFinalObject(
+      `documentDetailsUploadRedux.${remDocIndex}.documents`,
+      undefined
+    );
     this.forceUpdate();
-    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if (isEmployee || bpaSendBackAcionStatus) {
-      this.prepareDocumentsInEmployee(documentDetailsUploadRedux, bpaDetails, documentDetailsPreview, prepareFinalObject);
-    }
   };
 
   handleChange = (key, event) => {
-    const { documentDetailsUploadRedux, prepareFinalObject, bpaDetails, bpaSendBackAcionStatus } = this.props;
+    const { documentDetailsUploadRedux, prepareFinalObject, bpaDetails } = this.props;
     let appDocumentList = {
       ...documentDetailsUploadRedux,
       [key]: {
@@ -320,90 +288,96 @@ class BpaDocumentList extends Component {
     }
     prepareFinalObject(`documentDetailsUploadRedux`, appDocumentList);
 
-    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if (isEmployee || bpaSendBackAcionStatus) {
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+
+    if(isEmployee) {
       this.prepareDocumentsInEmployee(appDocumentList, bpaDetails);
     }
   };
 
   getUploadCard = (card, key) => {
-    const {
-      classes,
-      documentDetailsUploadRedux,
-      documentDetailsPreview,
-      bpaDetails,
-      verifierDocDetailsUpload,
-      applyScreenMdmsData,
-      bpaSendBackAcionStatus,
-      ...rest
-    } = this.props;
+    const { classes, documentDetailsUploadRedux } = this.props;
     let jsonPath = `documentDetailsUploadRedux[${key}].dropDownValues.value`;
-    let documents;
-    let data = [];
-    let verifierData = [];
-    {
-      documentDetailsUploadRedux[key] && documentDetailsUploadRedux && documentDetailsUploadRedux[key].previewdocuments && (
-        documentDetailsUploadRedux[key].previewdocuments.map((docs, documentIndex) => {
-          bpaDetails.documents.map(doc => {
-            if (doc && docs && doc.fileStoreId === docs.fileStoreId) {
-              if (doc.wfState === "SEND_TO_CITIZEN") {
-                docs.createdBy = "BPA_ARCHITECT"
-              }
-              else if (doc.wfState === "DOC_VERIFICATION_PENDING") {
-                docs.createdBy = "BPA_DOC_VERIFIER"
-              }
-              else if (doc.wfState === "FIELDINSPECTION_PENDING") {
-                docs.createdBy = "BPA_FIELD_INSPECTOR"
-              }
-              else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
-                docs.createdBy = "BPA_NOC_VERIFIER"
-              } else {
-                docs.createdBy = "BPA_ARCHITECT"
-              }
-              data.push(docs);
-            }
-          })
-        })
-      );
-    }
-    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if (isEmployee || bpaSendBackAcionStatus) {
-      let code;
-      card.dropDownValues.menu.map(cards => {
-        code = getTransformedLocale(cards.code);
-        documentDetailsPreview.map(docs => {
-          if (code === docs.title) {
-            verifierData.push(docs)
-          }
-        })
-      })
-    }
-
-    if (documentDetailsUploadRedux[key]) {
-      card.documents = documentDetailsUploadRedux[key].documents;
-      let mergedDropDownValue = { ...card.dropDownValues, ...documentDetailsUploadRedux[key].dropDownValues }
-      card.dropDownValues = mergedDropDownValue;
-    }
     return (
-      <React.Fragment>
-        <UploadCard
-          docItem={card}
-          docIndex={key}
-          key={key.toString()}
-          handleDocument={this.handleDocument}
-          removeDocument={this.removeDocument}
-          onUploadClick={this.onUploadClick}
-          handleFileUpload={this.handleFileUpload}
-          handleChange={this.handleChange}
-          uploadedDocIndex={this.state.uploadedDocIndex}
-          toggleEditClick={this.toggleEditClick}
-          jsonPath={`documentDetailsUploadRedux`}
-          specificStyles="bpa_doc_upload_btn"
-          {...rest}
-        />
-      </React.Fragment>
+      <Grid container={true}>
+        <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
+          {documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents ? (
+            <div className={classes.documentSuccess}>
+              <Icon>
+                <i class="material-icons">done</i>
+              </Icon>
+            </div>
+          ) : (
+            <div className={classes.documentIcon}>
+              <span>{key + 1}</span>
+            </div>
+          )}
+        </Grid>
+        <Grid
+          item={true}
+          xs={10}
+          sm={5}
+          md={4}
+          align="left"
+          className={classes.descriptionDiv}
+        >
+          <LabelContainer
+            labelKey={getTransformedLocale(card.name)}
+            style={styles.documentName}
+          />
+          {card.required && requiredIcon}
+          <Typography variant="caption">
+            <LabelContainer
+              labelKey={getTransformedLocale("TL_UPLOAD_RESTRICTIONS")}
+            />
+          </Typography>
+        </Grid>
+        <Grid item={true} xs={12} sm={6} md={4}>
+          {card.dropDownValues && (
+            <TextFieldContainer
+              select={true}
+              label={{ labelKey: getTransformedLocale(card.dropDownValues.label) }}
+              placeholder={{ labelKey: card.dropDownValues.label }}
+              data={card.dropDownValues.menu}
+              optionValue="code"
+              optionLabel="label"
+              required={true}
+              onChange={event => this.handleChange(key, event)}
+              jsonPath={jsonPath}
+            />
+          )}
+        </Grid>
+        <Grid
+          item={true}
+          xs={12}
+          sm={12}
+          md={3}
+          className={classes.fileUploadDiv}
+        >
+          <UploadSingleFile
+            classes={this.props.classes}
+            handleFileUpload={e =>
+              handleFileUpload(e, this.handleDocument, this.props)
+            }
+            uploaded={
+              documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents
+                ? true
+                : false
+            }
+            removeDocument={() => this.removeDocument(key)}
+            documents={
+              documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents
+            }
+            onButtonClick={() => this.onUploadClick(key)}
+            inputProps={this.props.inputProps}
+            buttonLabel={this.props.buttonLabel}
+            id={`doc-${key+1}`}
+          />
+        </Grid>
+      </Grid>
     );
   };
+
   render() {
     const { classes, documentsList } = this.props;
     let index = 0;
@@ -460,22 +434,12 @@ const mapStateToProps = state => {
     "documentDetailsUploadRedux",
     {}
   );
-  const documentDetailsPreview = get(
-    screenConfiguration.preparedFinalObject,
-    "documentDetailsPreview",
-    []
-  );
   const bpaDetails = get(
     screenConfiguration.preparedFinalObject,
     "BPA",
     {}
-  );
-  const wfState = get(
-    screenConfiguration.preparedFinalObject.applicationProcessInstances,
-    "state"
-  );
-  let bpaSendBackAcionStatus = get(bpaDetails, "status") && get(bpaDetails, "status").includes("CITIZEN_ACTION_PENDING");
-  return { documentDetailsUploadRedux, documentDetailsPreview, moduleName, bpaDetails, bpaSendBackAcionStatus, wfState };
+  )
+  return { documentDetailsUploadRedux, moduleName, bpaDetails };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -1,0 +1,60 @@
+.gm-style-mtc {
+  display: none;
+}
+
+.gm-style > button {
+  background: transparent !important;
+}
+
+.gmnoprint {
+  z-index: -1;
+}
+
+.gm-fullscreen-control {
+  display: none;
+}
+
+.map-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0px !important;
+  height: 100vh;
+}
+
+.myLoc {
+  position: absolute;
+  bottom: 70px;
+  right: 16px;
+}
+.myLoc svg {
+  height: 55px !important;
+  width: 55px !important;
+}
+
+.search-icon {
+  position: absolute !important;
+  background: transparent;
+  margin-left: 15px;
+  top: 60px;
+  margin-left: 34px;
+}
+
+.dragInfoBox {
+  top: 230px;
+  margin-left: 32px;
+  width: 82%;
+  height: 40px;
+  background-color: #f89a3f;
+  position: absolute;
+  font-family: Roboto;
+  font-size: 14px;
+  letter-spacing: 0.6px;
+  text-align: center;
+  padding-top: 12px;
+}
+.dragInfoBox span {
+  color: #ffffff;
+}

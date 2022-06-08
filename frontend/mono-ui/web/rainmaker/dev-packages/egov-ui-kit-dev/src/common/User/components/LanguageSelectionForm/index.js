@@ -1,6 +1,5 @@
 import React from "react";
-import { ButtonGroup, Card, Image } from "components";
-import { Button} from "egov-ui-framework/ui-atoms";
+import { ButtonGroup, Button, Card, Image } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
@@ -32,22 +31,14 @@ const defaultLabelStyle = {
   padding: 0,
 };
 
-const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick }) => {
+const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick, logoUrl }) => {
   return (
     <Card
       className="col-sm-offset-4 col-sm-4 user-screens-card language-selection-card"
       textChildren={
         <div>
-           <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
-            <div style={{ marginBottom: "24px" }}>
-              <Image className="mseva-logo" source={`${logo}`} />
-            </div >
-          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
-          <Label bold={true}  fontSize= "23px" label="|" />
-          </div>
-           <div style={{marginLeft:"7px" }}>
-              <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
-           </div>
+          <div className="web-user-logo" style={{ marginBottom: "24px" }}>
+            <Image className="mseva-logo employee-login-logo" source={logoUrl ? logoUrl : `${logo}`} />
           </div>
         <form>
             <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
@@ -74,26 +65,13 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick }) => {
               />
             </div>
             <div className="button-container">
-            <Button
-            id="continue-action"
-            className="lang-continue-button"
-            style={{
-              height: "48px",     
-              width:"100%"        
-            }}
-            variant={"contained"}
-            color={"primary"}
-            onClick={onLanguageSelect}
-          >
-            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
-          </Button>
-              {/* <Button
+              <Button
                 id="continue-action"
-                className="lang-continue-button"
-              
-                label={}
+                onClick={onLanguageSelect}
+                primary={true}
+                label={<Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />}
                 fullWidth={true}
-              /> */}
+              />
             </div>
           </form>
         </div>

@@ -1,7 +1,11 @@
 package org.egov.boundary;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+
+import org.cache2k.extra.spring.SpringCache2kCacheManager;
 import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -14,9 +18,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.cache2k.extra.spring.SpringCache2kCacheManager;
+import org.springframework.cache.CacheManager;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Profile;
 
-import javax.annotation.PostConstruct;
-import java.util.TimeZone;
 
 @SpringBootApplication
 @Import({TracerConfiguration.class})
@@ -24,6 +31,9 @@ public class BoundaryApplication extends SpringBootServletInitializer {
 
 	@Value("${app.timezone}")
 	private String timeZone;
+	
+	@Value("${cache.expiry.boundary.minutes:5}")
+	private long boundaryCacheExpiry;
 
 	@PostConstruct
 	public void initialize() {
@@ -68,5 +78,14 @@ public class BoundaryApplication extends SpringBootServletInitializer {
 		converter.setObjectMapper(mapper);
 		return converter;
 	}
+	
+	@Bean
+	@Profile("!test")
+	public CacheManager cacheManager() {
+		return new SpringCache2kCacheManager()
+				.addCaches(b->b.name("cBoundariesByTenantAndHierarchyType").expireAfterWrite(boundaryCacheExpiry, TimeUnit.MINUTES).entryCapacity(250))
+				.addCaches(b->b.name("cBoundariesByIdsAndTypeAndNumberAndCodeAndTenant").expireAfterWrite(boundaryCacheExpiry, TimeUnit.MINUTES).entryCapacity(250));
+	}
+
 
 }

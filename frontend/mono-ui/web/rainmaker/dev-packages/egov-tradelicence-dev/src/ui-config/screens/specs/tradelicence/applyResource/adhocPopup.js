@@ -4,7 +4,8 @@ import {
   getSelectField,
   getCommonContainer,
   getCommonSubHeader,
-  getLabel
+  getLabel,
+  getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { showHideAdhocPopup } from "../../utils";
 import get from "lodash/get";
@@ -40,83 +41,178 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   );
 
   //get deep copy of bill in redux - merge new bill after adhoc
-  const billInRedux = cloneDeep(
-    get(state.screenConfiguration.preparedFinalObject, "ReceiptTemp[0].Bill[0]")
-  );
-  const mergedBillObj = { ...billInRedux, ...billPayload.billResponse.Bill[0] };
+  // const billInRedux = cloneDeep(
+  //   get(state.screenConfiguration.preparedFinalObject, "ReceiptTemp[0].Bill[0]")
+  // );
+  // const mergedBillObj = { ...billInRedux, ...billPayload.billResponse.Bill[0] };
 
   //merge bill in Receipt obj
-  billPayload &&
-    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0]", mergedBillObj));
+  // billPayload &&
+  //   dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0]", mergedBillObj));
 
   //set amount paid as total amount from bill
-  billPayload &&
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].Bill[0].billDetails[0].amountPaid",
-        billPayload.billResponse.Bill[0].billDetails[0].totalAmount
-      )
-    );
+  // billPayload &&
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "ReceiptTemp[0].Bill[0].billDetails[0].amountPaid",
+  //       billPayload.billResponse.Bill[0].billDetails[0].totalAmount
+  //     )
+  //   );
 
   //set total amount in instrument
-  billPayload &&
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].instrument.amount",
-        billPayload.billResponse.Bill[0].billDetails[0].totalAmount
-      )
-    );
+  // billPayload &&
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "ReceiptTemp[0].instrument.amount",
+  //       billPayload.billResponse.Bill[0].billDetails[0].totalAmount
+  //     )
+  //   );
 
   //Collection Type Added in CS v1.1
-  const totalAmount = get(
-    billPayload,
-    "billResponse.Bill[0].billDetails[0].totalAmount"
-  );
-  dispatch(
-    prepareFinalObject(
-      "ReceiptTemp[0].Bill[0].billDetails[0].collectionType",
-      "COUNTER"
-    )
-  );
-  if (totalAmount) {
-    //set amount paid as total amount from bill - destination changed in CS v1.1
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid",
-        totalAmount
-      )
-    );
-  }
+  // const totalAmount = get(
+  //   billPayload,
+  //   "billResponse.Bill[0].billDetails[0].totalAmount"
+  // );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "ReceiptTemp[0].Bill[0].billDetails[0].collectionType",
+  //     "COUNTER"
+  //   )
+  // );
+  // if (totalAmount) {
+  //   //set amount paid as total amount from bill - destination changed in CS v1.1
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid",
+  //       totalAmount
+  //     )
+  //   );
+  // }
 
   showHideAdhocPopup(state, dispatch);
 };
 
+let totalAmount = (estimateCardData) => {
+  let tlTax=0;
+  let commonRebate=0;
+  let commonPenalty=0;
+  let adhocPenalty=0;
+  estimateCardData.forEach(data => {
+   
+    if(data.name.labelKey === 'TL_TAX' || data.name.labelKey === 'TL_RENEWAL_TAX'){
+      tlTax = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_COMMON_REBATE'|| data.name.labelKey === 'TL_RENEWAL_REBATE'){
+      commonRebate = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_COMMON_PEN' || data.name.labelKey === 'TL_RENEWAL_PENALTY'){
+      commonPenalty = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_ADHOC_PENALTY'){
+      adhocPenalty= data.value ? data.value : 0;
+    }
+  });
+    
+  return tlTax+adhocPenalty+commonPenalty-Math.abs(commonRebate);
+}
+
 const updateAdhoc = (state, dispatch) => {
-  const adhocAmount = get(
+  const adhocAmount = parseFloat(get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.adhocPenalty"
-  );
-  const rebateAmount = get(
+    "Licenses[0].tradeLicenseDetail.adhocPenalty", 
+  ) ? get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.adhocExemption"
-  );
+    "Licenses[0].tradeLicenseDetail.adhocPenalty", 
+  ) : 0 );
+  const rebateAmount = parseFloat(get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.adhocExemption", 
+  ) ? get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.adhocExemption", 
+  ) : 0);
+  
   if (adhocAmount || rebateAmount) {
-    const totalAmount = get(
-      state.screenConfiguration.preparedFinalObject,
-      "ReceiptTemp[0].Bill[0].billDetails[0].totalAmount"
-    );
-    if (rebateAmount && rebateAmount > totalAmount) {
+    let flag = true;
+    const totalAmt = totalAmount(get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].estimateCardData"));
+    if (rebateAmount && rebateAmount >= totalAmt) {
+      flag=false;
       dispatch(
         toggleSnackbar(
           true,
           {
-            labelName: "Rebate should be less than or equal to total amount!",
+            labelName: "Rebate should be greater than or equal to total amount!",
             labelKey: "ERR_REBATE_GREATER_THAN_AMOUNT"
           },
           "warning"
         )
       );
-    } else {
+    }    
+    if (adhocAmount < 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Penalty amount should not be a negative value.",
+            labelKey: "ERR_PENALTY_NOT_NEGATIVE"
+          },
+          "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+    }
+    if (rebateAmount < 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Rebate amount should not be a negative value.",
+            labelKey: "ERR_REBATE_NOT_NEGATIVE"
+          },
+          "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocExemption", null));
+    }
+    if (adhocAmount % 1 != 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Penalty amount should not be a decimal value.",
+            labelKey: "ERR_PENALTY_NOT_DECIMAL"
+          },
+          "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+    }
+    if (rebateAmount % 1 != 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Rebate amount should not be a decimal value.",
+            labelKey: "ERR_REBATE_NOT_DECIMAL"
+          },
+          "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocExemption", null));
+    }
+    if(flag) {
+      if (rebateAmount && rebateAmount > 0) {
+        dispatch(prepareFinalObject(
+          "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount));
+      }
       getEstimateDataAfterAdhoc(state, dispatch);
     }
   } else {
@@ -244,6 +340,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
+          pattern: getPattern("Amount"),
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenalty"
         }),
         penaltyReason: getSelectField({
@@ -304,94 +401,95 @@ export const adhocPopup = getCommonContainer({
       }
     }
   ),
-  adhocRebateCard: getCommonContainer(
-    {
-      subHeader: getCommonSubHeader(
-        {
-          labelName: "Adhoc Rebate",
-          labelKey: "TL_ADD_HOC_CHARGES_POPUP_SUB_SEC"
-        },
-        {
-          style: {
-            fontSize: "16px"
-          }
-        }
-      ),
-      rebateAmountAndReasonContainer: getCommonContainer({
-        rebateAmount: getTextField({
-          label: {
-            labelName: "Adhoc Rebate Amount",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_LABEL"
-          },
-          placeholder: {
-            labelName: "Enter Adhoc Rebate Amount",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_PLACEHOLDER"
-          },
-          props: {
-            style: {
-              width: "90%"
-            }
-          },
-          jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemption"
-        }),
-        rebateReason: getSelectField({
-          label: {
-            labelName: "Reason for Adhoc Rebate",
-            labelKey: "TL_PAYMENT_REBATE_REASON"
-          },
-          placeholder: {
-            labelName: "Select Reason for Adhoc Rebate",
-            labelKey: "TL_PAYMENT_REBATE_REASON_SELECT"
-          },
-          props: {
-            style: {
-              width: "90%"
-            }
-          },
-          data: [
-            {
-              code: "TL_REBATE_ADVANCED_PAID"
-            },
-            {
-              code: "TL_REBATE_BY_COMMISSIONER"
-            },
-            {
-              code: "TL_REBATE_ADDITIONAL_AMOUNT_CAHNGED"
-            },
-            {
-              code: "TL_ADHOC_OTHER"
-            }
-          ],
-          jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemptionReason"
-        }),
-        rebateCommentsField: getTextField({
-          label: {
-            labelName: "Enter Comments",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
-          },
-          placeholder: {
-            labelName: "Enter Comments",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 12
-          },
-          props: {
-            style: {
-              width: "90%"
-            }
-          },
-          jsonPath: "Licenses[0].tradeLicenseDetail.rebateComments"
-        })
-      })
-    },
-    {
-      style: {
-        marginTop: "24px"
-      }
-    }
-  ),
+   adhocRebateCard: getCommonContainer(
+     {
+       subHeader: getCommonSubHeader(
+         {
+           labelName: "Adhoc Rebate",
+           labelKey: "TL_ADD_HOC_CHARGES_POPUP_SUB_SEC"
+         },
+         {
+           style: {
+             fontSize: "16px"
+           }
+         }
+       ),
+       rebateAmountAndReasonContainer: getCommonContainer({
+         rebateAmount: getTextField({
+           label: {
+             labelName: "Adhoc Rebate Amount",
+             labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_LABEL"
+           },
+           placeholder: {
+             labelName: "Enter Adhoc Rebate Amount",
+             labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_PLACEHOLDER"
+           },
+           props: {
+             style: {
+               width: "90%"
+             }
+           },
+           pattern: getPattern("Amount"),
+           jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemption"
+         }),
+         rebateReason: getSelectField({
+           label: {
+             labelName: "Reason for Adhoc Rebate",
+             labelKey: "TL_PAYMENT_REBATE_REASON"
+           },
+           placeholder: {
+             labelName: "Select Reason for Adhoc Rebate",
+             labelKey: "TL_PAYMENT_REBATE_REASON_SELECT"
+           },
+           props: {
+             style: {
+               width: "90%"
+             }
+           },
+           data: [
+             {
+               code: "TL_REBATE_ADVANCED_PAID"
+             },
+             {
+               code: "TL_REBATE_BY_COMMISSIONER"
+             },
+             {
+               code: "TL_REBATE_ADDITIONAL_AMOUNT_CAHNGED"
+             },
+             {
+               code: "TL_ADHOC_OTHER"
+             }
+           ],
+           jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemptionReason"
+         }),
+         rebateCommentsField: getTextField({
+           label: {
+             labelName: "Enter Comments",
+             labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+           },
+           placeholder: {
+             labelName: "Enter Comments",
+             labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+           },
+           gridDefination: {
+             xs: 12,
+             sm: 12
+           },
+           props: {
+             style: {
+               width: "90%"
+             }
+           },
+           jsonPath: "Licenses[0].tradeLicenseDetail.rebateComments"
+         })
+       })
+     },
+     {
+       style: {
+         marginTop: "24px"
+       }
+     }
+   ),
   div: {
     uiFramework: "custom-atoms",
     componentPath: "Div",

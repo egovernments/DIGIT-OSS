@@ -8,7 +8,7 @@ const AckFooter = (props) => {
 	} = props;
 	return (
 		<Button className="apply-wizard-footer1" variant="outlined" color="primary" style={style} onClick={() => onClickFooter(path)}>
-			<LabelContainer labelKey={labelKey} labelName={labelKey}/>
+			<LabelContainer labelKey={labelKey} labelName={labelName}/>
       	</Button>
 	);
 }

@@ -1,17 +1,21 @@
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
-import { getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { httpRequest } from "egov-ui-kit/utils/api";
-import { transformById ,getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
-import { BOUNDARY, DOWNLOADRECEIPT, DRAFT, FETCHASSESSMENTS, FETCHBILL, FETCHRECEIPT, PGService, PROPERTY, RECEIPT } from "egov-ui-kit/utils/endPoints";
-import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
-import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
-import cloneDeep from "lodash/cloneDeep";
-import get from "lodash/get";
-import orderby from "lodash/orderBy";
-import { downloadConReceipt } from "egov-common/ui-utils/commons";
 import * as actionTypes from "./actionTypes";
+import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL, FETCHRECEIPT,FETCHASSESSMENTS, DOWNLOADRECEIPT } from "egov-ui-kit/utils/endPoints";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { transformById } from "egov-ui-kit/utils/commons";
+import orderby from "lodash/orderBy";
+import get from "lodash/get";
+import set from "lodash/set";
+import FileSaver from 'file-saver';
+import cloneDeep from "lodash/cloneDeep";
+import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import {  getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import commonConfig from "config/common.js";
+import axios from "axios";
 
+const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
   return {
     type: actionTypes.RESET_PROPERTY_STATE,
@@ -106,7 +110,6 @@ const downloadReceiptError = (error) => {
     error,
   };
 };
-
 
 const draftFetchPending = () => {
   return {
@@ -275,21 +278,21 @@ const setMohallaInRedux = (dispatch, state, draftResponse) => {
     }, {});
   const queryObj = Object.keys(mohallaCodes).map((item) => {
     return [{
-      key: "tenantId",
-      value: item,
-    },
-    {
-      key: "hierarchyTypeCode",
-      value: "REVENUE"
-    },
-    {
-      key: "boundaryType",
-      value: "Locality"
-    },
-    {
-      key: "codes",
-      value: mohallaCodes[item].join(",")
-    },
+        key: "tenantId",
+        value: item,
+      },
+      {
+        key: "hierarchyTypeCode",
+        value: "REVENUE"
+      },
+      {
+        key: "boundaryType",
+        value: "Locality"
+      },
+      {
+        key: "codes",
+        value: mohallaCodes[item].join(",")
+      },
     ];
   });
   dispatch(fetchMohalla(queryObj));
@@ -311,22 +314,21 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
     if (queryObjectproperty) {
       dispatch(propertyFetchPending());
       try {
-        let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION, queryObjectproperty, {}, [], {}, true);
-        if (queryObjectDraft !== "citizen_search") {
-          if (payloadProperty && payloadProperty.Properties && payloadProperty.Properties.length > 0) {
-            let convertedProperties = payloadProperty.Properties.map(property => {
-              // property.owners.reverse(); // Owner is coming in reverse order from the API
-              let properties = getCreatePropertyResponse({ Properties: [property] });
-              return properties && properties.Properties && properties.Properties.length > 0 && properties.Properties[0];
+          let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty,{},[],{},true);
+        if(queryObjectDraft !== "citizen_search") {
+          if(payloadProperty&&payloadProperty.Properties&&payloadProperty.Properties.length>0){
+            let convertedProperties=payloadProperty.Properties.map(property=>{
+              let properties=getCreatePropertyResponse({Properties:[property]});
+             return properties&&properties.Properties&&properties.Properties.length>0&&properties.Properties[0];
             });
-            payloadProperty.Properties = convertedProperties;
-          }
-          if (payloadProperty.Properties && payloadProperty.Properties[0] && payloadProperty.Properties[0].documents && queryObjectproperty != []) {
+            payloadProperty.Properties=convertedProperties;
+          }      
+          if(payloadProperty.Properties && payloadProperty.Properties[0] &&payloadProperty.Properties[0].documents&&queryObjectproperty!=[]){
             payloadProperty.Properties[0].documentsUploaded = await setPTDocuments(
               payloadProperty,
               "Properties[0].documents",
               "documentsUploaded",
-              dispatch,
+              dispatch, 
               'PT'
             );
             dispatch(propertyFetchComplete(payloadProperty));
@@ -335,7 +337,7 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
           }
         } else {
           dispatch(propertyFetchComplete(payloadProperty));
-        }
+        }        
       } catch (error) {
         dispatch(propertyFetchError(error.message));
       }
@@ -395,7 +397,16 @@ const getFinancialYear = (fromDate, toDate) => {
   let financialYear = '';
   financialYear = (new Date(fromDate).getFullYear()) + '-' + String(new Date(toDate).getFullYear()).slice(2);
   return financialYear;
-}
+};
+export const getFinancialYearFromEPOCH = (epochTime) => {
+  let financialYear = "";
+  let date = new Date(epochTime);
+  if(date.getMonth()>=3)
+  financialYear = date.getFullYear() + "-" + String(date.getFullYear() + 1).slice(2);
+  else
+  financialYear = date.getFullYear()-1 + "-" + String(date.getFullYear()).slice(2);
+  return financialYear;
+};
 const getYearlyAssessments = (propertiesArray = []) => {
   let yearlyAssessments = [];
   propertiesArray && propertiesArray.map((property) => {
@@ -500,8 +511,8 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
         [{ key: "consumerCode", value: commaSeperatedCC.split(':')[0] }],
         {},
         [], {
-        ts: 0,
-      },
+          ts: 0,
+        },
         true
       );
       const receiptbyId = transformById(payloadReceipts["Receipt"], "transactionId");
@@ -625,7 +636,7 @@ export const fetchTotalBillAmount = (fetchBillQueryObject) => {
         dispatch(toggleSnackbarAndSetText(
           true,
           { labelName: error.message, labelKey: error.message },
-          error.message&& error.message.includes&& error.message.includes("No Demands Found") ? "warning" : "error"
+          "error"
         ))
         dispatch(fetchBillError(error.message));
       }
@@ -637,15 +648,7 @@ export const fetchReceipt = (fetchReceiptQueryObject) => {
     if (fetchReceiptQueryObject) {
       dispatch(fetchReceiptPending());
       try {
-        let businessService = '';
-        fetchReceiptQueryObject && Array.isArray(fetchReceiptQueryObject) && fetchReceiptQueryObject.map(query => {
-          if (query.key == "businessService") {
-            businessService = query.value;
-          }
-        })
-        fetchReceiptQueryObject = fetchReceiptQueryObject && Array.isArray(fetchReceiptQueryObject) && fetchReceiptQueryObject.filter(query => query.key != "businessService")
-       
-        const payloadProperty = await httpRequest(getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, fetchReceiptQueryObject);
+        const payloadProperty = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, fetchReceiptQueryObject);
         dispatch(fetchReceiptComplete(payloadProperty));
       } catch (error) {
         dispatch(fetchReceiptError(error.message));
@@ -666,9 +669,9 @@ export const fetchAssessments = (fetchAssessmentsQueryObject) => {
     }
   }
 }
-export const getFileUrlFromAPI = async fileStoreId => {
+export const getFileUrlFromAPI = async (fileStoreId,tenantId) => {
   const queryObject = [
-    { key: "tenantId", value: getCommonTenant() },
+    { key: "tenantId", value: tenantId || commonConfig.tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
@@ -685,73 +688,248 @@ export const getFileUrlFromAPI = async fileStoreId => {
   }
 };
 
-/* Download Receipt using PDF service */
-/* export const downloadReceipt = (receiptQueryString) => {
-  return async (dispatch) => {
-    if (receiptQueryString) {
-      // dispatch(downloadReceiptPending());
-      try {
-        let businessService = '';
-        receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
-          if (query.key == "businessService") {
-            businessService = query.value;
-          }
-        })
-        receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
-       
-        const payloadReceiptDetails = await httpRequest(getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
-  
-        const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
-        const paymentStatus = get(payloadReceiptDetails.Payments[0], "paymentStatus")
-        if (oldFileStoreId && paymentStatus!="CANCELLED") {
-          downloadReceiptFromFilestoreID(oldFileStoreId, "download")
-        }
-        else if(oldFileStoreId && paymentStatus=="CANCELLED"){
-          getFileUrlFromAPI(oldFileStoreId).then((fileRes) => {
-            if(fileRes&&fileRes[oldFileStoreId]){
-            var win = window.open(fileRes[oldFileStoreId], '_blank');
-            win.focus();}
-            else{
-              download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
-            }
-          });
-        }
-        else {
-          download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
-        }
-      } catch (error) {
-        dispatch(downloadReceiptError(error.message));
+export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
+  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
+    if (mode === 'download') {
+      var win = window.open(fileRes[fileStoreId], '_blank');
+      if(win){
+        win.focus();
       }
     }
-  }
-} */
+    else {
+     // printJS(fileRes[fileStoreId])
+      var response =await axios.get(fileRes[fileStoreId], {
+        //responseType: "blob",
+        responseType: "arraybuffer",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/pdf"
+        }
+      });
+      console.log("responseData---",response);
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      var myWindow = window.open(fileURL);
+      if (myWindow != undefined) {
+        myWindow.addEventListener("load", event => {
+          myWindow.focus();
+          myWindow.print();
+        });
+      }
 
-/* Download Receipt using EGOV-PDF service */
-export const downloadReceipt = (receiptQueryString) => {
-  return async (dispatch) => {
-    if (receiptQueryString) {
-      // dispatch(downloadReceiptPending());
-      try {
-        downloadConReceipt(receiptQueryString,'consolidatedreceipt',"PAYMENT",`PTRECEIPT-consolidated.pdf` )
-      } catch (error) {
-        dispatch(downloadReceiptError(error.message));
-      }
     }
-  }
+  });
 }
 
+let getModifiedPayment = (payments) =>{
+  if(payments[0].paymentDetails[0].businessService === 'PT'){
+  let tax=0;
+  let arrear=0;
+  let penalty=0;
+  let interest=0
+  let rebate=0;
+  let roundOff=0;
+  let swatchatha=0;
+  //let currentDate=convertDateToEpoch(new Date());
+  let currentDate = payments[0].transactionDate;
 
-const download =(Payments,tenant)=>{
-  const queryStr = [
-    { key: "key", value: "consolidatedreceipt" },
-    { key: "tenantId", value:tenant }
-  ]
-  httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-            .then(res => {
-              getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-                var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-                win.focus();
-              });
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            tax = Math.round((tax+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }else if(!(billdetail.fromPeriod > currentDate && billdetail.toPeriod > currentDate)){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }
+  })
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
+}
+else if(payments[0].paymentDetails[0].businessService === 'TL'){
+  let tax=0;
+  let adhocPenalty=0;
+  let penalty=0;
+  let adhocRebate=0
+  let rebate=0;
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "TL_TAX":
+            tax = Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_TAX":
+            tax =
+              Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          default:
+            break;
+        }
+      })
+    })
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocRebate`, adhocPenalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocPenalty`, adhocPenalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
+}
 
-            });
+set(payments, `[0].paymentDetails[0].bill.additionalDetails.financialYear`, getFinancialYearFromEPOCH(payments[0].transactionDate));
+return payments;
+}
+
+const getBankname = async(payment) =>{
+  const ifscCode = payment[0].ifscCode;
+  let payload;
+  if (ifscCode) {
+    try{
+    payload = await axios.get(`https://ifsc.razorpay.com/${ifscCode}`,{ crossdomain: true });
+    if (payload.data === "Not Found") {
+      set(payment, `[0].bankName`, "");
+      set(payment, `[0].branchName`, "");
+    } else {
+      const bankName = get(payload.data, "BANK");
+      const bankBranch = get(payload.data, "BRANCH");
+      set(payment, `[0].bankName`, bankName);
+      set(payment, `[0].branchName`, bankBranch);
+    }
+  }
+  catch (e) {
+    console.log(e);
+    }
+  }
+  return payment;
+}
+
+export const downloadReceipt = (receiptQueryString, mode = "download") => {
+  return async (dispatch) => {
+    if (receiptQueryString) {
+      dispatch(downloadReceiptPending());
+      try {
+        const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
+        let queryStr = {};
+        payloadReceiptDetails.Payments = await getBankname(payloadReceiptDetails.Payments);
+        payloadReceiptDetails.Payments = getModifiedPayment(payloadReceiptDetails.Payments);
+        if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === "PT") {
+          queryStr = [{ key: "key", value: "consolidatedreceipt" }, { key: "tenantId", value: receiptQueryString[1].value.split(".")[0] }];
+        }
+        else if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'TL') {
+          queryStr = [
+            { key: "key", value: "tl-receipt" },
+            { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+          ]
+        }
+        else {
+          queryStr = [
+            { key: "key", value: "misc-receipt" },
+            { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+          ]
+        }
+
+        httpRequest(
+          DOWNLOADRECEIPT.GET.URL,
+          DOWNLOADRECEIPT.GET.ACTION,
+          queryStr,
+          { Payments: payloadReceiptDetails.Payments },
+          { Accept: "application/json" },
+          { responseType: "arraybuffer" }
+        ).then(res => {
+          res.filestoreIds[0]
+          if(res&&res.filestoreIds&&res.filestoreIds.length>0){
+            res.filestoreIds.map(fileStoreId=>{
+              downloadReceiptFromFilestoreID(fileStoreId,mode)
+            })
+          }
+          });
+      } catch (error) {
+        dispatch(downloadReceiptError(error.message));
+      }
+    }
+  }
 }

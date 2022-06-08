@@ -1,10 +1,6 @@
 import {
   getCommonCard,
-
   getCommonContainer,
-
-
-
   getCommonHeader,
   getCommonSubHeader, getLabel, getPattern, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
@@ -52,7 +48,7 @@ export const UCSearchCard = getCommonCard({
       moduleName: "egov-uc",
       componentPath: "AutosuggestContainer",
       props: {
-        className: "autocomplete-dropdown",
+       
         label: {
           labelName: "Service Category",
           labelKey: "CR_SERVICE_CATEGORY_LABEL"
@@ -65,14 +61,19 @@ export const UCSearchCard = getCommonCard({
           masterName: "BusinessService",
           moduleName: "BillingService"
         },
+        fullwidth: true,
         required: true,
         isClearable: true,
         labelsFromLocalisation: true,
         sourceJsonPath: "applyScreenMdmsData.businessServices",
-        jsonPath: "receiptCancelSearch.businessService",
+        jsonPath: "searchScreen.businessService",
       },
       required: true,
-      jsonPath: "receiptCancelSearch.businessService",
+      jsonPath: "searchScreen.businessService",
+      style: {
+        width: "100%",
+        cursor: "pointer"
+      },
       gridDefination: {
         xs: 12,
         sm: 4
@@ -91,7 +92,7 @@ export const UCSearchCard = getCommonCard({
       //     selectedCategory.child.length > 0) ?
       //     selectedCategory.child.map(item => item.code) : selectedCategory.code);
       //   dispatch(
-      //     prepareFinalObject("receiptCancelSearch.businessServices", serviceTypes)
+      //     prepareFinalObject("searchScreen.businessServices", serviceTypes)
       //   );
       //   return action;
       // }
@@ -107,7 +108,7 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "receiptCancelSearch.consumerCodes",
+      jsonPath: "searchScreen.consumerCodes",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -124,11 +125,12 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "receiptCancelSearch.receiptNumbers",
+      jsonPath: "searchScreen.receiptNumbers",
       gridDefination: {
         xs: 12,
         sm: 4
       }
+     
     }),
 
     mobileNumber: getTextField({
@@ -151,7 +153,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "receiptCancelSearch.mobileNumber"
+      jsonPath: "searchScreen.mobileNumber"
     })
   }),
 

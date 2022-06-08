@@ -3,7 +3,6 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
-import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -12,39 +11,14 @@ export const searchResults = {
   props: {
     data: [],
     columns: [
+      getTextToLocalMapping("Application No"),
+      getTextToLocalMapping("License No"),
+      getTextToLocalMapping("Trade Name"),
+      getTextToLocalMapping("Owner Name"),
+      getTextToLocalMapping("Application Date"),
+      getTextToLocalMapping("Status"),
       {
-        labelName: "Application No",
-        labelKey: "TL_COMMON_TABLE_COL_APP_NO",
-        options: {
-          filter: false,
-          customBodyRender: (value, tableMeta) => (
-              <a href="javascript:void(0)" onClick={() => onRowClick(tableMeta.rowData)}>{value}</a>
-          )
-        }
-      },
-      {
-        labelName: "License No",
-        labelKey: "TL_COMMON_TABLE_COL_LIC_NO"
-      },
-      {
-        labelName: "Trade Name",
-        labelKey: "TL_COMMON_TABLE_COL_TRD_NAME"
-      },
-      {
-        labelName: "Owner Name",
-        labelKey: "TL_COMMON_TABLE_COL_OWN_NAME"
-      },
-      {
-        labelName: "Application Date",
-        labelKey: "TL_COMMON_TABLE_COL_APP_DATE"
-      },
-      {
-        labelName: "Status",
-        labelKey: "TL_COMMON_TABLE_COL_STATUS"
-      },
-      {
-        labelName: "Tenant Id",
-        labelKey: "TENANT_ID",
+        name: "tenantId",
         options: {
           display: false
         }
@@ -87,17 +61,17 @@ export const searchResults = {
     //     }
     //   }
     // },
-    title: {
-      labelName: "MY_APPLICATIONS",
-      labelKey: "TL_MY_APPLICATIONS"
-    },
+    title: getTextToLocalMapping("MY_APPLICATIONS"),
     options: {
       filter: false,
       download: false,
       responsive: "scroll",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20]
+      rowsPerPageOptions: [10, 15, 20],
+      onRowClick: (row, index) => {
+        onRowClick(row);
+      }
     },
     customSortColumn: {
       column: "Application Date",
@@ -120,14 +94,14 @@ export const searchResults = {
 const onRowClick = rowData => {
   switch (rowData[5]) {
     case "INITIATED":
-      routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${
+      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
-      }`);
+      }`;
       break;
     default:
-      routeTo(`search-preview?applicationNumber=${
+      window.location.href = `search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[6]}`);
+      }&tenantId=${rowData[6]}`;
       break;
   }
 };

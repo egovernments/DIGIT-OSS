@@ -16,9 +16,6 @@ const styles = theme => ({
   },
   container: {
     paddingBottom: 10
-  },
-  rightAlign: {
-    textAlign: "right"
   }
 });
 
@@ -31,56 +28,32 @@ const closebuttonStyle = {
 const closeIcon = "close";
 
 const getMultiItem = (billingslabData, classes, style) => {
+  let labelCategory = "";
   return billingslabData.map((item, index) => {
+    if (item.type === "trade") labelCategory = "TRADETYPE";
+    else if ((item.type = "accessories")) labelCategory = "ACCESSORIESCATEGORY";
     return (
       <Grid sm={12} className={classes.container} container={true}>
-        <Grid sm={9}>
+        <Grid sm={10}>
           <LabelContainer
-            labelKey={item.taxHeadCode}
+            labelKey={`TRADELICENSE_${labelCategory}_${item.category
+              .toUpperCase()
+              .replace(/[.:-\s\/]/g, "_")}`}
             style={{
               color: "rgba(0, 0, 0, 0.6000000238418579)",
-              fontSize: "14px",
-              fontWeigt: 400,
-              lineSpacing: "17px",
-              marginRight: "10px"
-            }}
-          />
-        </Grid>
-        <Grid sm={3} className={classes.rightAlign}>
-          <Label
-            label={`Rs ${item.estimateAmount}`}
-            style={{
-              color: "rgba(0, 0, 0, 0.8700000047683716)",
               fontSize: "14px",
               fontWeigt: 400,
               lineSpacing: "17px"
             }}
           />
         </Grid>
-      </Grid>
-    );
-  });
-};
-
-const getMultiItemForTax = (billingslabData, classes, style) => {
-  return billingslabData.map((item, index) => {
-    return (
-      <Grid sm={12} className={classes.container} container={true}>
-        <Grid sm={9}>
-          <LabelContainer
-            labelKey={item.taxHeadCode}
-            style={{
-              color: "rgba(0, 0, 0, 0.8700000047683716)",
-              fontSize: "16px",
-              fontWeigt: 400,
-              lineSpacing: "19px",
-              marginRight: "10px"
-            }}
-          />
-        </Grid>
-        <Grid sm={3} className={classes.rightAlign}>
+        <Grid sm={2}>
           <Label
-            label={`Rs ${item.estimateAmount}`}
+            label={
+              labelCategory === "TRADETYPE"
+                ? `Rs ${item.rate}`
+                : `Rs ${item.total}`
+            }
             style={{
               color: "rgba(0, 0, 0, 0.8700000047683716)",
               fontSize: "14px",
@@ -101,16 +74,14 @@ class ViewBreakupContainer extends React.Component {
       fontSize: "20px",
       fontWeigt: 500,
       lineSpacing: "28px",
-      marginTop: 25,
-      marginRight: 5
+      marginTop: 25
     }
   };
 
   getGridItem = (total, classes, style) => {
-
     return (
       <Grid sm={12} className={classes.container} container={true}>
-        <Grid sm={9}>
+        <Grid sm={10}>
           <LabelContainer
             labelName={"Total"}
             labelKey={"PT_FORM4_TOTAL"}
@@ -118,27 +89,26 @@ class ViewBreakupContainer extends React.Component {
               style
                 ? style
                 : {
-                  color: "rgba(0, 0, 0, 0.8700000047683716)",
-                  fontSize: "14px",
-                  fontWeigt: 400,
-                  lineSpacing: "17px",
-                  marginRight:"10px"
-                }
+                    color: "rgba(0, 0, 0, 0.8700000047683716)",
+                    fontSize: "14px",
+                    fontWeigt: 400,
+                    lineSpacing: "17px"
+                  }
             }
           />
         </Grid>
-        <Grid sm={3} className={classes.rightAlign}>
+        <Grid sm={2}>
           <LabelContainer
             labelName={`Rs ${total}`}
             style={
               style
                 ? style
                 : {
-                  color: "rgba(0, 0, 0, 0.8700000047683716)",
-                  fontSize: "14px",
-                  fontWeigt: 400,
-                  lineSpacing: "17px"
-                }
+                    color: "rgba(0, 0, 0, 0.8700000047683716)",
+                    fontSize: "14px",
+                    fontWeigt: 400,
+                    lineSpacing: "17px"
+                  }
             }
           />
         </Grid>
@@ -159,26 +129,23 @@ class ViewBreakupContainer extends React.Component {
   render() {
     const {
       open,
-      appUnitData,
-      serviceUnitData,
-      appTotal,
-      serviceTotal,
-      totalAmount,
-      taxUnitData,
-      taxTotal,
+      tradeUnitData,
+      accessoriesUnitData,
+      tradeTotal,
+      accessoriesTotal,
       classes
     } = this.props;
     const { style } = this.state;
     const { getGridItem, handleClose } = this;
-
+    const totalBill = tradeTotal + accessoriesTotal;
     return (
       <Dialog
         open={open}
         onClose={handleClose}
         fullWidth={true}
         children={[
-          serviceTotal > 0 || appTotal > 0 ? (
-            <div style={{ padding: "26px" }}>
+          accessoriesTotal > 0 || tradeTotal > 0 ? (
+            <div style={{ padding: "16px" }}>
               <div
                 onClick={handleClose}
                 style={{ float: "right", cursor: "pointer" }}
@@ -191,7 +158,7 @@ class ViewBreakupContainer extends React.Component {
               <div style={{ paddingBottom: "16px", paddingTop: "8px" }}>
                 <LabelContainer
                   labelName="Calculation Breakup"
-                  labelKey="WS_CALCULATION_BREAKUP"
+                  labelKey="TL_CALCULATION_BREAKUP"
                   style={{
                     color: "rgba(0, 0, 0, 0.8700000047683716)",
                     fontSize: "20px",
@@ -200,10 +167,11 @@ class ViewBreakupContainer extends React.Component {
                   }}
                 />
               </div>
-              {appUnitData && appUnitData.length > 0 && (
+              {tradeUnitData && tradeUnitData.length > 0 && (
                 <div style={{ paddingBottom: "12px" }}>
                   <LabelContainer
-                    labelKey="WS_APPLICATION_FEE_HEADER"
+                    labelName={"Trade Unit"}
+                    labelKey={"TL_NEW_TRADE_DETAILS_TRADE_UNIT_HEADER"}
                     style={{
                       color: "rgba(0, 0, 0, 0.8700000047683716)",
                       fontSize: "16px",
@@ -213,17 +181,18 @@ class ViewBreakupContainer extends React.Component {
                   />
                 </div>
               )}
-              {appUnitData &&
-                appUnitData.length > 0 &&
-                getMultiItem(appUnitData, classes)}
+              {tradeUnitData &&
+                tradeUnitData.length > 0 &&
+                getMultiItem(tradeUnitData, classes)}
               <Divider className={classes.root} />
-              {appUnitData &&
-                appUnitData.length > 0 &&
-                getGridItem(appTotal, classes)}
-              {serviceUnitData && serviceUnitData.length > 0 && (
+              {tradeUnitData &&
+                tradeUnitData.length > 0 &&
+                getGridItem(tradeTotal, classes)}
+              {accessoriesUnitData && accessoriesUnitData.length > 0 && (
                 <div style={{ paddingBottom: "12px", marginTop: 20 }}>
                   <LabelContainer
-                    labelKey="WS_SERVICE_FEE_HEADER"
+                    labelName="Accessory Unit"
+                    labelKey="TL_ACCESSORY_UNIT"
                     style={{
                       color: "rgba(0, 0, 0, 0.8700000047683716)",
                       fontSize: "16px",
@@ -233,79 +202,60 @@ class ViewBreakupContainer extends React.Component {
                   />
                 </div>
               )}
-              {serviceUnitData &&
-                serviceUnitData.length > 0 &&
-                getMultiItem(serviceUnitData, classes)}
+              {accessoriesUnitData &&
+                accessoriesUnitData.length > 0 &&
+                getMultiItem(accessoriesUnitData, classes)}
               <Divider className={classes.root} />
-              {serviceUnitData &&
-                serviceUnitData.length > 0 &&
-                getGridItem(serviceTotal, classes)}
-
-              {taxUnitData && taxUnitData.length > 0 && (
-                getMultiItemForTax(taxUnitData, classes)
-              )}
-              <Divider className={classes.root} />
-              {/* {taxUnitData &&
-                taxUnitData.length > 0 &&
-                getGridItem(taxTotal, classes)} */}
-
-              {/* {serviceUnitData &&
-                serviceUnitData.length > 0 && */}
-              {getGridItem(totalAmount, classes, style)}
+              {accessoriesUnitData &&
+                accessoriesUnitData.length > 0 &&
+                getGridItem(accessoriesTotal, classes)}
+              {accessoriesUnitData &&
+                accessoriesUnitData.length > 0 &&
+                getGridItem(totalBill, classes, style)}
             </div>
           ) : (
-              <div style={{ padding: "16px", width: "500px" }}>
-                <div style={{ paddingBottom: "16px" }}>
-                  <LabelContainer
-                    labelKey="WS_CALCULATION_BREAKUP"
-                    style={{
-                      color: "rgba(0, 0, 0, 0.8700000047683716)",
-                      fontSize: "20px",
-                      fontWeigt: 500,
-                      lineSpacing: "28px"
-                    }}
-                  />
-                </div>
-                {getGridItem(totalAmount, classes, style)}
+            <div style={{ padding: "16px", width: "500px" }}>
+              <div style={{ paddingBottom: "16px" }}>
+                <LabelContainer
+                  labelName="Calculation Breakup"
+                  labelKey="TL_CALCULATION_BREAKUP"
+                  style={{
+                    color: "rgba(0, 0, 0, 0.8700000047683716)",
+                    fontSize: "20px",
+                    fontWeigt: 500,
+                    lineSpacing: "28px"
+                  }}
+                />
               </div>
-            )
+              {getGridItem(totalBill, classes, style)}
+            </div>
+          )
         ]}
       />
     );
   }
 }
 
-const mapStateToProps = (state, ownProps, dispatch) => {
+const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
   const { screenKey } = ownProps;
   const { screenConfig, preparedFinalObject } = screenConfiguration;
-  const serviceUnitData = get(
+  const accessoriesUnitData = get(
     preparedFinalObject,
-    "dataCalculation.billSlabData.CHARGES"
+    "LicensesTemp[0].billingSlabData.accessoriesUnitData"
   );
-  const appUnitData = get(
+  const tradeUnitData = get(
     preparedFinalObject,
-    "dataCalculation.billSlabData.FEE"
+    "LicensesTemp[0].billingSlabData.tradeUnitData"
   );
-  const taxUnitData = get(
+  const tradeTotal = get(
     preparedFinalObject,
-    "dataCalculation.billSlabData.TAX"
+    "LicensesTemp[0].billingSlabData.tradeTotal"
   );
-
-  const appTotal = get(
+  const accessoriesTotal = get(
     preparedFinalObject,
-    "dataCalculation.fee"
+    "LicensesTemp[0].billingSlabData.accessoriesTotal"
   );
-  const serviceTotal = get(
-    preparedFinalObject,
-    "dataCalculation.charge"
-  );
-
-  const totalAmount = get(preparedFinalObject,
-    "dataCalculation.totalAmount"
-  );
-
-  const taxTotal = get(preparedFinalObject, "dataCalculation.taxAmount");
 
   const open = get(
     screenConfig,
@@ -314,13 +264,10 @@ const mapStateToProps = (state, ownProps, dispatch) => {
 
   return {
     open,
-    appUnitData,
-    serviceUnitData,
-    appTotal,
-    serviceTotal,
-    taxUnitData,
-    taxTotal,
-    totalAmount,
+    tradeUnitData,
+    accessoriesUnitData,
+    tradeTotal,
+    accessoriesTotal,
     screenKey,
     screenConfig
   };

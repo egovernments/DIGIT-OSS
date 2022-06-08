@@ -94,7 +94,7 @@ public class TradeUtil {
         url.append("tenantId=");
         url.append("{1}");
         url.append("&");
-        url.append("ids=");
+        url.append("propertyIds=");
         url.append("{2}");
         return url.toString();
     }

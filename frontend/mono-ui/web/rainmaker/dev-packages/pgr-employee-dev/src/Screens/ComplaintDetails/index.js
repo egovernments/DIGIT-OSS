@@ -14,7 +14,6 @@ import get from "lodash/get";
 import isEqual from "lodash/isEqual";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { fetchComplaintCategories } from "egov-ui-kit/redux/complaints/actions";
 
 import {
   getDateFromEpoch,
@@ -45,11 +44,9 @@ class ComplaintDetails extends Component {
       match,
       resetFiles,
       transformedComplaint,
-      prepareFormData,
-      fetchComplaintCategories
+      prepareFormData
     } = this.props;
     prepareFormData("complaints", transformedComplaint);
-    fetchComplaintCategories();
     fetchComplaints([
       { key: "serviceRequestId", value: match.params.serviceRequestId }
     ]);
@@ -621,7 +618,6 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchComplaintCategories: () => dispatch(fetchComplaintCategories()),
     fetchComplaints: criteria => dispatch(fetchComplaints(criteria)),
     resetFiles: formKey => dispatch(resetFiles(formKey)),
     sendMessage: message => dispatch(sendMessage(message)),

@@ -168,9 +168,9 @@ class ReactStars extends Component {
     const { config, uniqueness } = this.state;
     return (
       <style
-        // dangerouslySetInnerHTML={{
-        //   __html: getHalfStarStyles(config.color2, uniqueness),
-        // }}
+        dangerouslySetInnerHTML={{
+          __html: getHalfStarStyles(config.color2, uniqueness),
+        }}
       />
     );
   }

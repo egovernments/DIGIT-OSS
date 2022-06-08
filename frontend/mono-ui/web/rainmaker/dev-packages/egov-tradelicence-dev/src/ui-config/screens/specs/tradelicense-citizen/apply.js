@@ -46,38 +46,72 @@ const updateSearchResults = async (
   tenantId
 ) => {
   await getData(action, state, dispatch, tenantId);
-  await updatePFOforSearchResults(
+  updatePFOforSearchResults(
     action,
     state,
     dispatch,
     queryValue,
+    "",
     tenantId
-  );
-  const queryValueFromUrl = getQueryArg(
-    window.location.href,
-    "applicationNumber"
-  );
-  if (!queryValueFromUrl) {
-    dispatch(
-      prepareFinalObject(
-        "Licenses[0].oldLicenseNumber",
-        get(
-          state.screenConfiguration.preparedFinalObject,
-          "Licenses[0].applicationNumber",
-          ""
+  ).then((response)=>{
+
+    const queryValueFromUrl = getQueryArg(
+      window.location.href,
+      "applicationNumber"
+    );
+    const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
+
+    if (queryValueFromUrl && isEditRenewal) {
+      dispatch(
+        prepareFinalObject(
+          "Licenses[0].oldLicenseNumber",
+          get(
+            state.screenConfiguration.preparedFinalObject,
+            "Licenses[0].applicationNumber",
+            ""
+          )
         )
-      )
-    );
-    dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.headerDiv.children.header.children.applicationNumber",
-        "visible",
-        false
-      )
-    );
-  }
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
+          "props.value",
+          "APPLICATIONTYPE.RENEWAL"
+        )
+      );
+      dispatch(prepareFinalObject("Licenses[0].applicationType", "RENEWAL"));
+
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemption", null));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenaltyReason", null));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemptionReason", null));
+
+      dispatch(prepareFinalObject("Licenses[0].workflowCode", "EDITRENEWAL"));
+      dispatch(prepareFinalObject("Licenses[0].action", "INITIATE"));
+     // dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.headerDiv.children.header.children.applicationNumber",
+          "visible",
+          false
+        )
+      );
+    }
+    else {
+      const applicationType = get(
+        response,
+        "Licenses[0].applicationType",
+        null
+      );
+      getAllDataFromBillingSlab(tenantId, dispatch,[{
+        key:"applicationType",value:applicationType
+      }]);
+    }
+  });
+
+
 };
 const screenConfig = {
   uiFramework: "material-ui",

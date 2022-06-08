@@ -11,7 +11,7 @@ import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { withStyles } from "@material-ui/core/styles";
 //import Icon from "@material-ui/core/Icon";
 import Icon from "egov-ui-framework/ui-atoms/Icon";
-
+import "./index.css"
 const styles = theme => ({
   root: {
     display: "flex"

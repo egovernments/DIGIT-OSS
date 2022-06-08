@@ -1,17 +1,26 @@
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Banner } from "modules/common";
+import { LanguageSelectionForm } from "modules/common";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { Banner, LanguageSelectionForm } from "modules/common";
-import React, { Component } from "react";
-import { connect } from "react-redux";
 
 class LanguageSelection extends Component {
   state = {
-    value: getLocale() || 'en_IN',
+    value: this.props.defaultLanguage,
   };
 
-  componentDidMount = () => {
-    this.props.fetchLocalizationLabel(this.state.value);
+  componentWillReceiveProps(nextProps) {
+
+    if (nextProps.defaultLanguage !== this.props.defaultLanguage) {
+      this.props.fetchLocalizationLabel(nextProps.defaultLanguage);
+      this.setState({ value: nextProps.defaultLanguage });
+    }
+  }
+
+  componentDidMount() {
+    this.props.fetchLocalizationLabel(this.props.defaultLanguage);
   }
 
   onClick = (value) => {
@@ -20,16 +29,16 @@ class LanguageSelection extends Component {
   };
 
   onLanguageSelect = () => {
-    this.props.history.push("/user/register");
+    this.props.history.push("/user/login");
   };
 
   render() {
     const { value } = this.state;
     const { onLanguageSelect, onClick } = this;
-    const { bannerUrl, logoUrl, languages } = this.props;
+    const { bannerUrl, logoUrl, languages, defaultLanguage } = this.props;
     return (
       <Banner className="language-selection" bannerUrl={bannerUrl} logoUrl={logoUrl}>
-        <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} />
+        <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} logoUrl={logoUrl} />
       </Banner>
     );
   }
@@ -40,7 +49,8 @@ const mapStateToProps = ({ common }) => {
   let bannerUrl = get(stateInfoById, "0.bannerUrl");
   let logoUrl = get(stateInfoById, "0.logoUrl");
   let languages = get(stateInfoById, "0.languages", []);
-  return { bannerUrl, logoUrl, languages };
+  let defaultLanguage = get(stateInfoById, "0.defaultLanguage", getLocale());
+  return { bannerUrl, logoUrl, languages, defaultLanguage };
 };
 
 const mapDispatchToProps = (dispatch) => {

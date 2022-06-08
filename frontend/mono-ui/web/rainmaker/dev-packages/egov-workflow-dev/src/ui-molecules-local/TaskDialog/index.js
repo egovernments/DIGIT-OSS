@@ -30,15 +30,20 @@ const TaskDialog = props => {
       onClose={onClose}
       maxWidth={false}
       style={{zIndex:2000}}
-      className="task-dialog"
     >
       <DialogContent
         children={
           <Container
             children={
-              <Grid container="true" sm="12" spacing={16} marginTop={16}>
+              <Grid container="true" sm="12" spacing={16} marginTop={16}
+              className = "tcontainer"
+              >
                 <Grid
-                  style={{ alignItems: "center", display: "flex" }}
+                  style={{ 
+                    alignItems: "center", 
+                  display: "flex"
+                   
+                }}
                   item
                   sm={10}
                 >

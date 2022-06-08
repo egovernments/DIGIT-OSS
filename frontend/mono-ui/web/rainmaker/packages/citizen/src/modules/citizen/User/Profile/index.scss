@@ -49,7 +49,15 @@
     background-color: #ffffff;
   }
   .profile-profilesection .profileSection {
-    height: 300px !important;
+    height: 304px !important;
+    width: 100% !important;   
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin: 0px auto !important;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+    background-color: rgb(224, 224, 224) !important;
   }
   .profile-profilesection .img-Profile {
     height: 170px !important;

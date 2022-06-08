@@ -53,6 +53,11 @@ const screenConfig = {
                 jsonPath: "licenseNumber"
               },
               {
+                label: "TL_COMMON_TABLE_COL_ULB_CODE",
+                jsonPath: "tradeLicenseDetail.address.city",
+                prefix: "TENANT_TENANTS_"
+              },
+              {
                 label: "TL_COMMON_TABLE_COL_STATUS",
                 jsonPath: "status",
                 prefix: "WF_NEWTL_"

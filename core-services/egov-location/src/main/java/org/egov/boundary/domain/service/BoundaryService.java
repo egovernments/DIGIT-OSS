@@ -69,6 +69,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -336,6 +337,7 @@ public class BoundaryService {
 		return boundaryRepository.getAllBoundariesByIdsAndTypeAndNumberAndCodeAndTenant(boundarySearchRequest);
 	}
 	
+	@Cacheable(value = "cBoundariesByTenantAndHierarchyType", key = "{#boundarySearchRequest.toString()}", sync = true)
 	public List<MdmsTenantBoundary> getBoundariesByTenantAndHierarchyType(BoundarySearchRequest boundarySearchRequest,RequestInfo requestInfo){
 		Long startTime = null;
 		Long endTime = null;

@@ -21,19 +21,19 @@ class UploadMultipleFiles extends Component {
   };
   componentDidMount = () => {
     const { documents } = this.props;
-    documents  && Array.isArray(documents) && this.setState({ documents });
+    documents && this.setState({ documents });
   };
 
   componentWillReceiveProps = nextProps => {
     const { documents } = nextProps || [];
-    documents  && Array.isArray(documents) && this.setState({ documents });
+    documents && this.setState({ documents });
   };
 
   handleDocument = (file, fileStoreId) => {
     let { documents } = this.state;
     const { maxFiles, prepareFinalObject, jsonPath } = this.props;
 
-    if (documents && Array.isArray(documents) && documents.length + 1 > maxFiles) {
+    if (documents && documents.length + 1 > maxFiles) {
       alert(`Can only upload ${maxFiles} files`);
     } else {
       documents.push({
@@ -59,7 +59,7 @@ class UploadMultipleFiles extends Component {
     const { documents } = this.state;
     return (
       <div>
-        {documents  && Array.isArray(documents) && 
+        {documents &&
           documents.map((document, index) => {
             return (
               <div style={{ marginTop: 10 }} key={index}>

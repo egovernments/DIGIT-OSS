@@ -1,7 +1,8 @@
-import { city, colony, dummy, houseNumber, pincode, street } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import { pincode, mohalla, street, colony, houseNumber, dummy, city } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import { prepareFormData } from "egov-ui-kit/redux/common/actions";
+import set from "lodash/set";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import set from "lodash/set";
 
 const formConfig = {
   name: "propertyInformation",
@@ -42,6 +43,7 @@ const formConfig = {
     },
   },
   beforeInitForm: (action, store) => {
+    let state = store.getState();
     set(action, "form.fields.city.required", false);
     set(action, "form.fields.pincode.disabled", true);
     return action;

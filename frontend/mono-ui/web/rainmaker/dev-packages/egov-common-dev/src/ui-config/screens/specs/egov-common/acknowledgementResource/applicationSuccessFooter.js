@@ -1,7 +1,11 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
-import {download} from  "../../../../../ui-utils/commons";
+import {download} from  "../../../../../ui-utils/commons"
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import set from "lodash/set";
 import get from "lodash/get";
+
+const businessService = getQueryArg(window.location.href, "businessService");
 
 
 const getCommonApplyFooter = children => {
@@ -9,7 +13,11 @@ const getCommonApplyFooter = children => {
         uiFramework: "custom-atoms",
         componentPath: "Div",
         props: {
-            className: "apply-wizard-footer footer-com-style"
+            className: "apply-wizard-footer footer-com-style",
+            style: {
+                width: "100%",
+                
+            },
         },
         children
     };
@@ -24,21 +32,51 @@ export const applicationSuccessFooter = (
 ) => {
     const roleExists = ifUserRoleExists("CITIZEN");
     const redirectionURL = roleExists ? "/" : "/inbox";
-    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
-    const receiptKey = get(uiCommonPayConfig, "receiptKey")
+    let path ="/";
+    let applicationRedirectionURL ;
+
+    if( businessService && businessService==="PT.MUTATION")
+    {
+         applicationRedirectionURL = "/pt-mutation/search-preview";
+         path = `${applicationRedirectionURL}?applicationNumber=${consumerCode}&tenantId=${tenant}`    
+     }        
+
     return getCommonApplyFooter({
 
-        downloadFormButton: {
+        goToApplication: {
             componentPath: "Button",
             props: {
                 variant: "outlined",
                 color: "primary",
-                className: "common-footer",
                 style: {
                     minWidth: "180px",
                     height: "48px",
                     marginRight: "16px"
                 },
+                className: "DCButton",
+            },
+            children: {
+                downloadFormButtonLabel: getLabel({
+                    labelName: "GOTO APPLICATION",
+                    labelKey: "GO_TO_APPLICATION"
+                })
+            },           
+            onClickDefination: {
+                action: "page_change",
+                path
+            }
+        },
+        downloadFormButton: {
+            componentPath: "Button",
+            props: {
+                variant: "outlined",
+                color: "primary",
+                style: {
+                    minWidth: "180px",
+                    height: "48px",
+                    marginRight: "16px"
+                },
+                className: "DCButton"
             },
             children: {
                 downloadFormButtonLabel: getLabel({
@@ -53,7 +91,7 @@ export const applicationSuccessFooter = (
                         { key: "receiptNumbers", value: applicationNumber },
                         { key: "tenantId", value: tenant }
                     ]
-                    download(receiptQueryString , "download" , receiptKey);
+                    download(receiptQueryString);
                 }
             }
         },
@@ -63,7 +101,7 @@ export const applicationSuccessFooter = (
                 variant: "contained",
                 color: "primary",
                 // className: "apply-wizard-footer-right-button",
-                className: "common-footer",
+                className: "PrintButton",
                 style: {
                     minWidth: "180px",
                     height: "48px",
@@ -84,7 +122,7 @@ export const applicationSuccessFooter = (
                         { key: "receiptNumbers", value: applicationNumber },
                         { key: "tenantId", value: tenant }
                     ]
-                    download(receiptQueryString,"print",receiptKey);
+                    download(receiptQueryString,"print");
                 }
             }
         }

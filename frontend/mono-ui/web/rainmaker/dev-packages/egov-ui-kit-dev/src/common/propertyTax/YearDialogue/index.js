@@ -1,17 +1,20 @@
-import { Button, Dialog } from "components";
-import commonConfig from "config/common.js";
+import React, { Component } from "react";
+import { Dialog } from "components";
+import { Button } from "components";
+import RadioButtonForm from "./components/RadioButtonForm";
+import Label from "egov-ui-kit/utils/translationNode";
 import formHoc from "egov-ui-kit/hocs/form";
-import { fetchGeneralMDMSData, prepareFormData, toggleSpinner } from "egov-ui-kit/redux/common/actions";
+import { connect } from "react-redux";
+import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
+import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
+import commonConfig from "config/common.js";
+import { prepareFormData,loadMDMSData } from "egov-ui-kit/redux/common/actions";
 import { reset_property_reset } from "egov-ui-kit/redux/properties/actions";
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
-import Label from "egov-ui-kit/utils/translationNode";
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import RadioButtonForm from "./components/RadioButtonForm";
+
+
 import "./index.css";
-
-
 
 // const getYearList = () => {
 //   let today = new Date();
@@ -46,7 +49,7 @@ class YearDialog extends Component {
     })
   }
   componentDidMount = () => {
-    const { fetchGeneralMDMSData, toggleSpinner } = this.props;
+    const { fetchGeneralMDMSData, toggleSpinner,loadMDMSData } = this.props;
     const requestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -60,11 +63,26 @@ class YearDialog extends Component {
               },
             ],
           },
+          {
+            moduleName: "PropertyTax",
+            masterDetails: [
+              {
+                name: "RoadType"
+              },
+              {
+                name: "ConstructionType"
+              },
+              {
+                name:"Thana"
+              },
+            ]
+          }
         ],
       },
     };
     toggleSpinner();
     fetchGeneralMDMSData(requestBody, "egf-master", ["FinancialYear"]);
+    loadMDMSData(requestBody);
     toggleSpinner();
   };
 
@@ -110,7 +128,7 @@ class YearDialog extends Component {
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={() => {
                   if (this.state.selectedYear !== '') {
                     this.resetForm()
-                    history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
+                    history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form?FY=${this.state.selectedYear}&type=new`);
                   }
                   else {
                     alert('Please Select a Financial Year!');
@@ -131,7 +149,7 @@ class YearDialog extends Component {
 
 const mapStateToProps = (state) => {
   const { common, form } = state;
-  const { generalMDMSDataById } = common;
+  const { generalMDMSDataById ,loadMdmsData} = common;
   const FinancialYear = generalMDMSDataById && generalMDMSDataById.FinancialYear;
   const getYearList = FinancialYear && Object.keys(FinancialYear);
   return { getYearList, form };
@@ -143,7 +161,9 @@ const mapDispatchToProps = (dispatch) => {
     removeForm: (formkey) => dispatch(removeForm(formkey)),
     toggleSpinner: () => dispatch(toggleSpinner()),
     prepareFormData: (path, value) => dispatch(prepareFormData(path, value)),
-    reset_property_reset: () => dispatch(reset_property_reset())
+    loadMDMSData: (requestBody, moduleName, masterName) =>
+      dispatch(loadMDMSData(requestBody, moduleName, masterName)),
+    reset_property_reset:()=>dispatch(reset_property_reset())
   };
 };
 

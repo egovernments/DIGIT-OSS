@@ -1,14 +1,21 @@
-import { download, downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import {
-  getCommonCaption, getCommonCard, getLabelWithValue, getPattern
+  getCommonCaption, getCommonCard,
+
+
+
+  getLabelWithValue, getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import {
-  getFileUrl, getFileUrlFromAPI, getLocaleLabels, getQueryArg, getTransformedLocale, getTransformedLocalStorgaeLabels
+  getFileUrl, getFileUrlFromAPI, getLocaleLabels, getQueryArg,
+
+
+  getTransformedLocale, getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
-import { getPaymentSearchAPI, getUserSearchedResponse } from "egov-ui-kit/utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
@@ -473,7 +480,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/receipts/_search",
+      "collection-services/payments/_search",
       "",
       queryObject
     );
@@ -502,15 +509,13 @@ export const getMdmsData = async queryObject => {
 // Get user data from uuid API call
 export const getUserDataFromUuid = async bodyObject => {
   try {
-    // const response = await httpRequest(
-    //   "post",
-    //   "/user/_search",
-    //   "",
-    //   [],
-    //   bodyObject
-    // );
-
-    const response = getUserSearchedResponse();
+    const response = await httpRequest(
+      "post",
+      "/user/_search",
+      "",
+      [],
+      bodyObject
+    );
     return response;
   } catch (error) {
     console.log(error);
@@ -522,7 +527,7 @@ export const getBill = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/firenoc-calculator/v1/_getbill",
+      "/billing-service/bill/v2/_fetchbill",
       "",
       queryObject
     );
@@ -540,7 +545,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
         value: tenantId
       },
       {
-        key: "consumerCode",
+        key: "consumerCodes",
         value: applicationNumber
       }
     ];
@@ -548,7 +553,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     // Get Receipt
     let payload = await httpRequest(
       "post",
-      "/collection-services/receipts/_search",
+      "/collection-services/payments/_search",
       "",
       queryObject
     );
@@ -560,8 +565,12 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
         value: tenantId
       },
       {
-        key: "applicationNumber",
+        key: "consumerCode",
         value: applicationNumber
+      },
+      {
+        key: "businessService",
+        value: "PT.MUTATION"
       }
     ]);
 
@@ -892,18 +901,10 @@ export const fetchBill = async queryObject => {
   }
 };
 export const getpayments = async queryObject => {
-
-  let businessService = '';
-  queryObject && Array.isArray(queryObject) && queryObject.map(query => {
-    if (query.key == "businessService") {
-      businessService = query.value;
-    }
-  })
-
   try {
     const response = await httpRequest(
       "post",
-      getPaymentSearchAPI(businessService),
+      "/collection-services/payments/_search",
       "",
       queryObject
     );
@@ -957,8 +958,17 @@ export const downloadCertificateForm = async (oldProperties, pdfcode, tenantId, 
   }
 }
 
-export const downloadReceitForm = async (tenantId, applicationNumber, mode = 'download') => {
-
+export const downloadReceitForm = async (Payments, pdfcode, tenantId, applicationNumber, mode = 'download') => {
+  const queryStr = [
+    { key: "key", value: pdfcode },
+    { key: "tenantId", value: tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
   let queryObj = [
     {
       key: "tenantId",
@@ -967,15 +977,31 @@ export const downloadReceitForm = async (tenantId, applicationNumber, mode = 'do
     {
       key: "consumerCodes",
       value: applicationNumber
-    },
-    {
-      key: "businessService",
-      value: 'PT.MUTATION'
-    },
-
+    }
   ];
 
-  download(queryObj, mode, "consolidatedreceipt",'PAYMENT')
+  const responsePayments = await getpayments(queryObj)
+  const oldFileStoreId = get(responsePayments.Payments[0], "fileStoreId")
+  if (oldFileStoreId) {
+    downloadReceiptFromFilestoreID(oldFileStoreId, mode, tenantId)
+  }
+  else {
+    try {
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          res.filestoreIds[0]
+          if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+            res.filestoreIds.map(fileStoreId => {
+              downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId)
+            })
+          } else {
+            console.log("Error In Acknowledgement form Download");
+          }
+        });
+    } catch (exception) {
+      alert('Some Error Occured while downloading Acknowledgement form!');
+    }
+  }
 }
 export const getLabelIfNotNull = (label, value, props) => {
   const labelObj = getLabelWithValue(label, value, props);

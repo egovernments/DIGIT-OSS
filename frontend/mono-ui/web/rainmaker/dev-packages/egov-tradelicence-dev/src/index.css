@@ -107,13 +107,13 @@ span[class^="MuiFormLabel-asterisk"] {
 }
 
 .select-field-placeholder {
-  color: rgba(162, 162, 162, 0.77);
+  color: rgba(162, 162, 162, 0.77)!important;
 }
 
 input[type="date"]::before {
   content: attr(placeholder);
   width: 100%;
-  color: rgba(162, 162, 162, 0.77);
+  color: rgba(162, 162, 162, 0.77)!important;
 }
 
 input[type="date"]:focus::before,

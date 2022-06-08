@@ -1,4 +1,4 @@
-import { getWSMyResults, getSWMyResults } from "../../../../../ui-utils/commons";
+import { getMyConnectionResults, getSWMyConnectionResults } from "../../../../../ui-utils/commons";
 import {
     handleScreenConfigurationFieldChange as handleField,
     prepareFinalObject
@@ -11,19 +11,15 @@ export const fetchData = async (action, state, dispatch) => {
         {
             key: "mobileNumber",
             value: JSON.parse(getUserInfo()).mobileNumber
-        }   ,
-        {
-            key: "searchType",
-            value: 'CONNECTION'
-        },
-        {
-            key: "tenantId",
-            value: JSON.parse(getUserInfo()).permanentCity ? JSON.parse(getUserInfo()).permanentCity : JSON.parse(getUserInfo()).roles[0].tenantId
         }
-    ];
+        // {
+        //     key: "tenantId",
+        //     value: JSON.parse(getUserInfo()).tenantId
+        // }
+    ]
 
-    const response = await getWSMyResults(queryObject, "CONNECTION", dispatch);
-    const swResponse = await getSWMyResults(queryObject, "CONNECTION", dispatch);
+    const response = await getMyConnectionResults(queryObject, dispatch);
+    const swResponse = await getSWMyConnectionResults(queryObject, dispatch);
 
     if ((response && response.WaterConnection && response.WaterConnection.length > 0) && (swResponse && swResponse.SewerageConnections && swResponse.SewerageConnections.length > 0)) {
         finalResponse = [...response.WaterConnection, ...swResponse.SewerageConnections];
@@ -37,16 +33,15 @@ export const fetchData = async (action, state, dispatch) => {
     try {
         /*Mseva 2.0 */
         if (finalResponse && finalResponse.length > 0) {
-            const myConnectionResults=finalResponse.filter(item => item.connectionNo !== "NA" && item.connectionNo !== null);
-            dispatch(prepareFinalObject("myConnectionResults", myConnectionResults));
-            dispatch(prepareFinalObject("myConnectionsCount", myConnectionResults.length));
-            
+            dispatch(prepareFinalObject("myConnectionResults", finalResponse));
+            dispatch(prepareFinalObject("myApplicationsCount", finalResponse.length));
+            const myApplicationsCount = finalResponse.length;
             dispatch(
                 handleField(
                     "my-connections",
                     "components.div.children.header.children.key",
                     "props.dynamicArray",
-                    myConnectionResults.length ? [myConnectionResults.length] : [0]
+                    myApplicationsCount ? [myApplicationsCount] : [0]
                 )
             );
         }

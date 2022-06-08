@@ -191,6 +191,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
         }
 
         let newArray = [];
+        while (flatArray.length > 0) newArray.push(flatArray.splice(0, noOfColumns));
         return isInstitution
           ? [
               [

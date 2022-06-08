@@ -48,7 +48,7 @@ export const getOrganizationDetails = (isEditable = true) => {
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "BPA_SUMMARY_EDIT"
+              labelKey: "TL_SUMMARY_EDIT"
             })
           },
           onClickDefination: {

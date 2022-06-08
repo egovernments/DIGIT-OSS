@@ -1,15 +1,15 @@
 
-import { httpRequest } from "egov-ui-kit/utils/api";
-import { getUserInfo, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
-import { getPropertyLink } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
-import Label from "egov-ui-kit/utils/translationNode";
-import get from "lodash/get";
-import MenuItem from "material-ui/MenuItem";
-import SelectField from "material-ui/SelectField";
-import React, { Component } from "react";
 import { connect } from "react-redux";
+import SelectField from "material-ui/SelectField";
+import MenuItem from "material-ui/MenuItem";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { createReceiptDetails } from "../../../PaymentStatus/Components/createReceipt";
 import generateReceipt from "../../../PaymentStatus/Components/receipt";
+import React, { Component } from "react";
+import get from "lodash/get";
+import Label from "egov-ui-kit/utils/translationNode";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const styles = {
   customWidth: {
@@ -58,7 +58,14 @@ class DropDown extends Component {
   };
 
   createImageUrl = (tenantId) => {
-    return `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
+    const {cities}=this.props;
+    let logUrl;
+    cities.forEach((city)=>{
+      if (city.key===tenantId) {
+        logUrl=city.logoId
+      }
+    })
+    return logUrl;
   };
 
   onSelectFieldChange = (event, key, payload, imageUrl) => {
@@ -71,7 +78,10 @@ class DropDown extends Component {
     switch (payload) {
       case "Re-Assess":
         history &&
-          history.push(getPropertyLink(item.propertyId, item.tenantId, "reassess", item.financialYear, item.latestAssessmentNumber)
+          history.push(
+            `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.latestAssessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
+            item.propertyId
+            }&tenantId=${item.tenantId}`
           );
         break;
       case "Download Receipt":
@@ -90,7 +100,10 @@ class DropDown extends Component {
         break;
       case "Complete Payment":
         history &&
-          history.push(getPropertyLink(item.propertyId, item.tenantId, "assess", item.financialYear, item.assessmentNo, true)
+          history.push(
+            `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${
+            item.assessmentNo
+            }&isAssesment=true&isReassesment=true&proceedToPayment=true&isCompletePayment=true&propertyId=${item.propertyId}&tenantId=${item.tenantId}`
           );
         break;
     }
@@ -175,13 +188,14 @@ class DropDown extends Component {
 
 
 const mapStateToProps = (state, ownProps) => {
-  const { properties } = state;
+  const { properties ,common} = state;
 
   const { singleAssessmentByStatus = [] } = properties || {};
-
+  const cities=get(common,"cities",[])
 
   return {
-    singleAssessmentByStatus
+    singleAssessmentByStatus,
+    cities
   };
 };
 

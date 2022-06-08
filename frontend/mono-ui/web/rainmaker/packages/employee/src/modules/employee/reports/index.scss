@@ -1,5 +1,6 @@
 .report-excel-button,
 .report-pdf-button {
+  z-index:1;
   color: #fe7a51 !important;
   border: none !important;
 }
@@ -110,12 +111,4 @@
   #reportTable_wrapper {
     overflow: scroll;
   }
-}
-
-
-.dt-button-collection{
-  margin-top: 2% !important;
-    display: flex!important;
-    flex-direction: row-reverse!important;
-    width: 100%!important;
 }

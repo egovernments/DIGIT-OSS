@@ -399,6 +399,27 @@ app.post(
 
       var valid = validateRequest(req, res, key, tenantId, requestInfo);
 
+     
+
+      let challanData = get(req.body, "Challan");
+      if(challanData){
+        let billnumber = challanData.billNo;
+        let code = billnumber.replace(".", "_")
+        const myArray = code.split("-");
+        let word = myArray[1];
+        word = word.toLocaleUpperCase();
+        word = `BILLINGSERVICE_BUSINESSSERVICE_${word}`;
+        let resposnseMap = await findLocalisation(
+          requestInfo,
+          ["rainmaker-uc"],
+          [word]
+        );
+        if(resposnseMap.messages[0]){
+          let locale = resposnseMap.messages[0].message;
+          billnumber = myArray[0] + "-" + locale + "-" + myArray[2];
+          set(req.body, "Challan.billNo", billnumber);}
+      }
+
       if (valid) {
         let [
           formatConfigByFile,

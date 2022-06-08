@@ -4,6 +4,7 @@ import {
   getCommonTitle,
   getTextField,
   getDateField,
+  getSelectField,
   getCommonContainer,
   getPattern,
   getCommonSubHeader
@@ -18,25 +19,7 @@ const serviceDetailsCard = {
       serviceDetailsCardContainer: getCommonContainer(
         {
           status: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-hrms",
-            componentPath: "AutosuggestContainer",
-            jsonPath: "Employee[0].serviceHistory[0].serviceStatus",
-            gridDefination: {
-              xs: 12,
-              sm: 4
-            },
-            required:false,
-            props: {
-              className: "hr-generic-selectfield autocomplete-dropdown",
-              jsonPath: "Employee[0].serviceHistory[0].serviceStatus",
-              sourceJsonPath: "createScreenMdmsData.egov-hrms.EmployeeStatus",
-              optionValue: "code",
-              optionLabel: "status",
-              localePrefix: {
-                moduleName: "egov-hrms",
-                masterName: "EmployeeStatus"
-              },
+            ...getSelectField({
               label: {
                 labelName: "Status",
                 labelKey: "HR_STATUS_LABEL"
@@ -45,10 +28,34 @@ const serviceDetailsCard = {
                 labelName: "Select Status",
                 labelKey: "HR_STATUS_PLACEHOLDER"
               },
-              labelsFromLocalisation: true,
-              isClearable:true,
-              required:false,
-            },
+              jsonPath: "Employee[0].serviceHistory[0].serviceStatus",
+              sourceJsonPath: "createScreenMdmsData.egov-hrms.EmployeeStatus",
+              gridDefination: {
+                xs: 12,
+                sm: 4
+              },
+              props: {
+                className: "hr-generic-selectfield",
+                jsonPath: "Employee[0].serviceHistory[0].serviceStatus",
+                // data: [
+                //   {
+                //     value: "Value 1",
+                //     label: "Value 1"
+                //   },
+                //   {
+                //     value: "Value 2",
+                //     label: "Value 2"
+                //   }
+                // ],
+                optionValue: "code",
+                optionLabel: "status"
+                // hasLocalization: false
+              },
+              localePrefix: {
+                moduleName: "egov-hrms",
+                masterName: "EmployeeStatus"
+              }
+            })
           },
           serviceFromDate: {
             ...getDateField({
@@ -92,10 +99,7 @@ const serviceDetailsCard = {
                 sm: 4
               },
               props: {
-                jsonPath: "Employee[0].serviceHistory[0].serviceTo",
-                checkFieldDisable: true,
-                dependantField:'isCurrentPosition',
-                jsonPathRemoveKey:"serviceTo"
+                jsonPath: "Employee[0].serviceHistory[0].serviceTo"
                 // inputProps: {
                 //   min: getTodaysDateInYMD(),
                 //   max: getFinancialYearDates("yyyy-mm-dd").endDate
@@ -249,8 +253,4 @@ export const serviceDetails = getCommonCard({
   }),
 
   serviceDetailsCard
-},{
-  style: {
-    overflow: "visible"
-  }
 });

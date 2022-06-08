@@ -1,0 +1,15 @@
+{
+  "short_name": "Main",
+  "name": "Main App",
+  "icons": [
+    {
+      "src": "logo@2x",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

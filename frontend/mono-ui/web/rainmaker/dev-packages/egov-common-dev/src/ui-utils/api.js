@@ -8,8 +8,10 @@ import store from "ui-redux/store";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getAccessToken,
-  getTenantId
+  getTenantId,
+  localStorageGet,
 } from "egov-ui-kit/utils/localStorageUtils";
+import { locale } from "core-js";
 
 const instance = axios.create({
   baseURL: window.location.origin,

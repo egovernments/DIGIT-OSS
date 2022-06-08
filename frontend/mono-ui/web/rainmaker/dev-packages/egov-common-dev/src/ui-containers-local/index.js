@@ -25,10 +25,6 @@ const EstimateCardContainer = Loadable({
   loader: () => import("./EstimateCardContainer"),
   loading: () => <Loading />
 });
-const ArrearsCardContainer = Loadable({
-  loader: () => import("./ArrearsCardContainer"),
-  loading: () => <Loading />
-});
 const AutosuggestContainer = Loadable({
   loader: () => import("./AutosuggestContainer"),
   loading: () => <Loading />
@@ -56,7 +52,6 @@ const TestContainer = Loadable({
 export {
   CustomTabContainer,
   LabelContainer,
-  ArrearsCardContainer,
   CheckboxContainer,
   DownloadFileContainer,
   EstimateCardContainer,

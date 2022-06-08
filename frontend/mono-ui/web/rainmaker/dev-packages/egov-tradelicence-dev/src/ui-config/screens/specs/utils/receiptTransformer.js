@@ -5,7 +5,9 @@ import {
   getMdmsData,
   getReceiptData,
   getSearchResults,
-  getFinancialYearDates
+  getUserDataFromUuid,
+  getFinancialYearDates,
+  getEmployeeDataFromUuid
 } from "../utils";
 import {
   getLocalization,
@@ -16,7 +18,6 @@ import {
   getTranslatedLabel,
   transformById,
   getTransformedLocale,
-  getUserDataFromUuid
 } from "egov-ui-framework/ui-utils/commons";
 
 const ifNotNull = value => {
@@ -41,7 +42,7 @@ const epochToDate = et => {
   if (!et) return null;
   var date = new Date(Math.round(Number(et)));
   var formattedDate =
-    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+    (date.getDate()<10? "0"+date.getDate() : date.getDate()) + "/" + ((date.getMonth() + 1)<10? "0"+(date.getMonth() + 1) : (date.getMonth() + 1)) + "/" + date.getFullYear();
   return formattedDate;
 };
 
@@ -54,7 +55,16 @@ export const getMessageFromLocalization = code => {
   return messageObject ? messageObject.code : code;
 };
 
-export const loadUlbLogo = tenantid => {
+const getMessageFromLocalizationNonTLCodes = code => {
+  let messageObject = JSON.parse(getLocalization(`localization_${getLocale()}`)).find(
+    item => {
+      return item.code == code.toUpperCase().replace(/[.]/g, "_");
+    }
+  );
+  return messageObject ? messageObject.message : code;
+};
+
+export const loadUlbLogo = logoUrl => {
   var img = new Image();
   img.crossOrigin = "Anonymous";
   img.onload = function() {
@@ -66,9 +76,23 @@ export const loadUlbLogo = tenantid => {
     store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
     canvas = null;
   };
-  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+  img.src = logoUrl;
 };
 
+export const getOwnerPhoto = ownerPhotoURL => {
+  var img = new Image();
+  img.crossOrigin = "Anonymous";
+  img.onload = function() {
+    var canvas = document.createElement("CANVAS");
+    var ctx = canvas.getContext("2d");
+    canvas.height = this.height;
+    canvas.width = this.width;
+    ctx.drawImage(this, 0, 0);
+    store.dispatch(prepareFinalObject("applicationDataForReceipt.ownerPhoto", canvas.toDataURL()));
+    canvas = null;
+  };
+  img.src = ownerPhotoURL;
+}
 export const loadApplicationData = async (applicationNumber, tenant) => {
   let data = {};
   let queryObject = [
@@ -88,16 +112,29 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       nullToNa(
         get(
           response,
-          "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+          "Licenses[0].applicationType",
           "NA"
         )
       )
     );
+    data.occupancyType = getMessageFromLocalizationNonTLCodes(
+      `TRADELICENSE_OCCUPANCYTYPE_${nullToNa(
+        get(
+          response,
+          "Licenses[0].tradeLicenseDetail.additionalDetail.occupancyType",
+          "NA"
+        ).replace(".","_")
+      )}`
+    );
+
     data.licenseNumber = nullToNa(
       get(response, "Licenses[0].licenseNumber", "NA")
     );
     data.financialYear = nullToNa(
       get(response, "Licenses[0].financialYear", "NA")
+    );
+    data.workflowcode = nullToNa(
+      get(response, "Licenses[0].workflowCode", "NA")
     );
     data.tradeName = nullToNa(get(response, "Licenses[0].tradeName", "NA"));
     data.doorNo = nullToNa(
@@ -147,7 +184,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       "Licenses[0].tradeLicenseDetail.tradeUnits",
       null
     );
-
+    
     const transformedTradeData = tradeUnitsFromResponse.reduce(
       (res, curr) => {
         let tradeCategory = "NA";
@@ -172,20 +209,18 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         res.tradeCategory.push(getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory));
 
         res.tradeTypeReceipt.push(
-          getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeType) +
-            " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
-        );
-        res.tradeTypeCertificate.push(
-          getMessageFromLocalization(
-            "TRADELICENSE_TRADETYPE_" + tradeCategory
+          getMessageFromLocalizationNonTLCodes(
+            `TRADELICENSE_TRADETYPE_${tradeType}`
           ) +
             " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_" + tradeType) +
-            " / " +
-            getMessageFromLocalization(
-              "TRADELICENSE_TRADETYPE_" + getTransformedLocale(tradeSubType)
+            getMessageFromLocalizationNonTLCodes(
+              `TRADELICENSE_TRADETYPE_${tradeSubType}`
             )
+        );
+        res.tradeTypeCertificate.push(
+          getMessageFromLocalizationNonTLCodes(
+            `TRADELICENSE_TRADETYPE_${tradeCode.replace(".","_")}`
+          )
         );
         return res;
       },
@@ -195,7 +230,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         tradeTypeCertificate: []
       }
     );
-
+     
     data.tradeCategory = transformedTradeData.tradeCategory.join(", ");
     data.tradeTypeReceipt = transformedTradeData.tradeTypeReceipt.join(", ");
     data.tradeTypeCertificate = transformedTradeData.tradeTypeCertificate.join(
@@ -231,6 +266,10 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       data.accessoriesList = "";
     }
     loadUserNameData(response.Licenses[0].auditDetails.lastModifiedBy);
+    // loadEmployeeData(
+    //   response.Licenses[0].auditDetails.lastModifiedBy,
+    //   licenseIssueDate
+    // );
   }
 
   store.dispatch(prepareFinalObject("applicationDataForReceipt", data));
@@ -261,7 +300,7 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     );
     data.totalAmount = get(
       response,
-      "Payments[0].paymentDetails[0].totalDue",
+      "Payments[0].paymentDetails[0].bill.totalAmount",
       0
     );
     data.amountDue = data.totalAmount - data.amountPaid;
@@ -362,6 +401,7 @@ export const loadMdmsData = async tenantid => {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
       return item.code == tenantid;
     });
+    loadUlbLogo(get(ulbData, "logoId", "NA"));
     /** START Corporation name generation logic */
     const ulbGrade = get(ulbData, "city.ulbGrade", "NA")
       ? getUlbGradeLabel(get(ulbData, "city.ulbGrade", "NA"))
@@ -371,13 +411,13 @@ export const loadMdmsData = async tenantid => {
       .toUpperCase()
       .replace(/[.]/g, "_")}`;
 
-    data.corporationName = `${getTranslatedLabel(ulbGrade, localizationLabels)} ${getTranslatedLabel(cityKey,localizationLabels).toUpperCase()}`;
+    data.corporationName = `${getTranslatedLabel(cityKey,localizationLabels).toUpperCase()} ${getTranslatedLabel(ulbGrade, localizationLabels)}`;
 
     /** END */
     data.corporationAddress = get(ulbData, "address", "NA");
     data.corporationContact = get(ulbData, "contactNumber", "NA");
     data.corporationWebsite = get(ulbData, "domainUrl", "NA");
-    data.corporationEmail = get(ulbData, "emailId", "NA");
+    data.corporationEmail = get(ulbData, "emailId", "NA"); 
   }
   store.dispatch(prepareFinalObject("mdmsDataForReceipt", data));
 };
@@ -392,14 +432,50 @@ export const loadUserNameData = async uuid => {
   if (response && response.user && response.user.length > 0) {
     data.auditorName = get(response, "user[0].name", "NA");
   }
+
   data.Disclaimer = getMessageFromLocalization("TL_RECEIPT_FOOTER_1");
+  data.signature = getMessageFromLocalization("TL_RECEIPT_FOOTER_2");
+  store.dispatch(prepareFinalObject("userDataForReceipt", data));
+};
+
+export const loadEmployeeData = async (uuid, licenseIssueDate) => {
+  let data = {};
+  let queryObject = [
+    {
+      key: "uuids",
+      value: [uuid]
+    }
+  ];
+  let res = await getEmployeeDataFromUuid(queryObject);
+
+  data.auditorName = get(res, "Employees[0].user.name", "NA");
+  const assignments = get(res, "Employees[0].assignments", []);
+  // Return employee assignment as per licenseissueDate
+  const assignmentWhileIssue = assignments.filter(assignment => {
+    return (
+      assignment.fromDate <= licenseIssueDate &&
+      (!assignment.toDate ||
+        (assignment.toDate && assignment.toDate >= licenseIssueDate))
+    );
+  });
+  if (
+    assignmentWhileIssue &&
+    assignmentWhileIssue.length > 0 &&
+    assignmentWhileIssue[0].designation
+  )
+    data.designation = getMessageFromLocalizationNonTLCodes(
+      `COMMON_MASTERS_DESIGNATION_${assignmentWhileIssue[0].designation}`
+    );
+
+  data.Disclaimer = getMessageFromLocalizationNonTLCodes("TL_RECEIPT_FOOTER_1");
+  data.signature = getMessageFromLocalizationNonTLCodes("TL_RECEIPT_FOOTER_2");
   store.dispatch(prepareFinalObject("userDataForReceipt", data));
 };
 
 /** Data used for creation of receipt is generated and stored in local storage here */
 export const loadReceiptGenerationData = (applicationNumber, tenant) => {
   /** Logo loaded and stored in local storage in base64 */
-  loadUlbLogo(tenant);
+  
   loadApplicationData(applicationNumber, tenant); //PB-TL-2018-09-27-000004
   loadReceiptData(applicationNumber, tenant); //PT-107-001330:AS-2018-08-29-001426     //PT consumerCode
   loadMdmsData(tenant);

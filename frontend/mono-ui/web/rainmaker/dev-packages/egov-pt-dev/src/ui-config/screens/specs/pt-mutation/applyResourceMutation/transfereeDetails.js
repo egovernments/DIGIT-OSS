@@ -1,11 +1,11 @@
-import { getBreak, getCommonCard, getCommonContainer, getCommonGrayCard, getCommonTitle, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getBreak,getTitle, getCommonCard, getCommonContainer, getCommonGrayCard, getCommonTitle, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { addComponentJsonpath } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import "./index.css";
-
+import { getSpecialCategoryDocumentTypeMDMSData } from "../apply.js";
 const showComponent = (dispatch, componentJsonPath, display, oldStyle = {}) => {
   let displayProps = display ? { ...oldStyle, display: 'block' } : { ...oldStyle, display: "none" };
   dispatch(
@@ -75,9 +75,10 @@ const commonApplicantInformation = () => {
               labelKey: "PT_MUTATION_TRANSFEREE_GENDER_TRANSGENDER_RADIOBUTTON",
               value: "TRANSGENDER"
             }
-          ],
-          jsonPath:
-          "Property.ownersTemp[0].gender",
+         ],
+         jsonPath:
+              "Property.ownersTemp[0].gender",          
+
           required: true,
           errorMessage: "Required",
         },
@@ -116,6 +117,7 @@ const commonApplicantInformation = () => {
           md: 6
         }
       }),
+     
       // dummyDiv: {
       //   uiFramework: "custom-atoms",
       //   componentPath: "Div",
@@ -151,79 +153,40 @@ const commonApplicantInformation = () => {
           className: "applicant-details-error"
         }
       }),
-      relationshipWithGuardian: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-pt",
-        componentPath: "AutosuggestContainer",
-        props: {
-          label: {
-            labelName: "Relationship with Guardian",
-            labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL"
-          },
-          placeholder: {
-            labelName: "Select Relationship with Guardian",
-            labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL_PLACEHOLDER"
-          },
-          required: true,
-          localePrefix: {
-            moduleName: "common-masters",
-            masterName: "OwnerType"
-          },
-          isClearable: true,
-          labelsFromLocalisation: true,
-          className: "autocomplete-dropdown",
-          jsonPath:
-          "Property.ownersTemp[0].relationship",
-          data: [
-            {
-              code: "FATHER"
-            },
-            {
-              code: "HUSBAND"
-            }
-          ],
-          // sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+      relationshipWithGuardian: getSelectField({
+        label: {
+          labelName: "Relationship with Guardian",
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Relationship with Guardian",
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL_PLACEHOLDER"
         },
         required: true,
         jsonPath:
-        "Property.ownersTemp[0].relationship",
-        // sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+          "Property.ownersTemp[0].relationship",
+        data: [
+          {
+            code: "FATHER"
+          },
+          { 
+            code: "MOTHER" 
+          },
+          {
+            code: "HUSBAND"
+          }
+        ],
+        localePrefix: {
+          moduleName: "common-masters",
+          masterName: "OwnerType"
+        },
+        //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         }
-      },
-      //   label: {
-      //     labelName: "Relationship with Guardian",
-      //     labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL"
-      //   },
-      //   placeholder: {
-      //     labelName: "Select Relationship with Guardian",
-      //     labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL_PLACEHOLDER"
-      //   },
-      //   required: true,
-      //   jsonPath:
-      //     "Property.ownersTemp[0].relationship",
-      //   data: [
-      //     {
-      //       code: "FATHER"
-      //     },
-      //     {
-      //       code: "HUSBAND"
-      //     }
-      //   ],
-      //   localePrefix: {
-      //     moduleName: "common-masters",
-      //     masterName: "OwnerType"
-      //   },
-      //   //sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-      //   gridDefination: {
-      //     xs: 12,
-      //     sm: 12,
-      //     md: 6
-      //   }
-      // }),
+      }),
       applicantEmail: getTextField({
         label: {
           labelName: "Email",
@@ -314,17 +277,21 @@ const commonApplicantInformation = () => {
 
 
           } else {
-            let documentType = get(
-              state,
-              "screenConfiguration.preparedFinalObject.applyScreenMdmsData.OwnerTypeDocument",
-              []
-            );
-            documentType = documentType.filter(document => {
-              return action.value === document.ownerTypeCode
-            })
-            if (documentType.length == 1) {
-              dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", documentType[0].code));
-            }
+            getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch).then(()=>{            
+              let documentType = get(
+                state,
+                "screenConfiguration.preparedFinalObject.applyScreenMdmsData.OwnerTypeDocument",
+                []
+              );
+              documentType = documentType.filter(document => {
+                return action.value === document.ownerTypeCode
+              })
+              if (documentType.length == 1) {
+                dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", documentType[0].code));
+                dispatch(prepareFinalObject("applyScreenMdmsData.OwnerTypeDocument", documentType));
+              }
+             }
+            )
             showComponent(dispatch, categoryDocumentJsonPath, true);
             showDocumentType(dispatch, specialCategoryDocumentTypeJsonPath, true);
 
@@ -359,29 +326,40 @@ const commonApplicantInformation = () => {
           className: "applicant-details-error"
         }
       }),
-      specialCategoryDocumentType: getSelectField({
-        label: {
-          labelName: "Document Type",
-          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_LABEL"
+      specialCategoryDocumentType: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
+        props: {
+          label: {
+            labelName: "Document Type",
+            labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_LABEL"
+          },
+          placeholder: {
+            labelName: "Enter Document Type.",
+            labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_PLACEHOLDER"
+          },
+          localePrefix: {
+            moduleName: "PropertyTax",
+            masterName: "ReasonForTransfer"
+          },
+          className: "applicant-details-error autocomplete-dropdown",
+          required: true,
+          isClearable: true,
+          labelsFromLocalisation: true,
+          jsonPath: "Property.ownersTemp[0].documentType",
+          sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
         },
-        placeholder: {
-          labelName: "Enter Document Type.",
-          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_PLACEHOLDER"
-        },
-        localePrefix: {
-          moduleName: "PropertyTax",
-          masterName: "ReasonForTransfer"
-        },
-        jsonPath: "Property.ownersTemp[0].documentType",
-        sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
         required: true,
         visible: false,
+        jsonPath: "Property.ownersTemp[0].documentType",
+        sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         }
-      }),
+      },
       specialCategoryDocument: getTextField({
         label: {
           labelName: "Document Id No.",
@@ -592,7 +570,7 @@ const institutionInformation = () => {
     })
 };
 
-export const onChangeTypeOfOwnership = (action, state, dispatch,addItemMultiOwner=true) => {
+export const onChangeTypeOfOwnership = (action, state, dispatch) => {
   let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails";
 
 
@@ -655,16 +633,70 @@ export const onChangeTypeOfOwnership = (action, state, dispatch,addItemMultiOwne
     //   dispatch(handleField("apply", "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[1]", "item1", owner1.item0))
 
     // }
-    if(addItemMultiOwner){
-      addItemInMultiselect(state, dispatch);
-    }
-    
+
+    addItemInMultiselect(state, dispatch);
 
   }
 }
 
 
 export const transfereeDetails = getCommonCard({
+  oldMobileNumberCard:getCommonGrayCard(
+    {
+      header: getCommonTitle(
+        {
+          labelName: "Mobile Number of Previous Owner",
+          labelKey: "PT_MUTATION_MOBILE_NO_OF_OLD_OWNER_HEADER"
+        },
+        {
+          style: {
+            marginBottom: 18
+          }
+        }
+      ),
+      break: getBreak(),
+        oldMobileNumberContainer: getCommonContainer({
+
+        oldMobileNumber: getTextField({
+            label: {
+              labelName: "Mobile No.",
+              labelKey: "PT_MUTATION_MOBILE_NO_OF_OLD_OWNER_LABEL"
+            },
+            placeholder: {
+              labelName: "Enter Mobile No. of old",
+              labelKey: "PT_MUTATION_APPLICANT_MOBILE_NO_OF_OLD_OWNER_PLACEHOLDER"
+            },
+            required:true ,
+            props: {
+              className: "applicant-details-error"
+            },
+            title: {
+              value: "Please search profile linked to the mobile no.",
+              key: "PT_MUTATION_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
+            },
+            pattern: getPattern("MobileNo"),
+            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+            jsonPath:
+              "Property.oldmobileNumber",
+            // props: {
+            //   style: {
+            //     maxWidth: "450px"
+            //   }
+            // },
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            }, 
+              style: {
+                marginBottom: 18
+              }
+            
+            
+          }),
+      }),
+    }),
+    
   header: getCommonTitle(
     {
       labelName: "Transferee Details",
@@ -672,11 +704,13 @@ export const transfereeDetails = getCommonCard({
     },
     {
       style: {
-        marginBottom: 18
+        marginBottom: 18,
+        marginTop:20
       }
     }
   ),
   break: getBreak(),
+  
   applicantTypeContainer: getCommonContainer({
     applicantTypeSelection: getCommonContainer({
       applicantType: {
@@ -699,21 +733,67 @@ export const transfereeDetails = getCommonCard({
           required: true,
           isClearable: true,
           labelsFromLocalisation: true,
-          className: "applicant-details-error autocomplete-dropdown",
           jsonPath: "Property.ownershipCategoryTemp",
           sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
         },
-        required: true,
-        jsonPath: "Property.ownershipCategoryTemp",
-        sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
+          required: true,
+          jsonPath: "Property.ownershipCategoryTemp",
+          sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",        
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          },
         beforeFieldChange: (action, state, dispatch) => {
-          onChangeTypeOfOwnership(action, state, dispatch)
+        
+          let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails";
 
+          let applicantType = get(
+            state,
+            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.Institutions",
+            []
+          );
+          let applicantSubType = applicantType.filter(item => {
+            return item.active && item.parent.startsWith(action.value);
+          });
+          dispatch(handleField("apply", path, "props.data", applicantSubType));
+
+          let singleApplicantContainerJsonPath =
+            "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer";
+          let multipleApplicantContainerJsonPath =
+            "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer"
+          let institutionContainerJsonPath =
+            "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
+          let institutionTypeContainerJsonPath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
+          let singleMultipleOwnerPath = "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary";
+          let institutionPath = "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary";
+
+          if (action.value.includes("SINGLEOWNER")) {
+            showComponent(dispatch, singleApplicantContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${singleApplicantContainerJsonPath}.props.style`));
+            showComponent(dispatch, multipleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${multipleApplicantContainerJsonPath}.props.style`));
+            showComponent(dispatch, institutionContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionContainerJsonPath}.props.style`));
+            showComponent(dispatch, institutionTypeContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionTypeContainerJsonPath}.props.style`));
+            showComponent(dispatch, singleMultipleOwnerPath, true, get(state, `screenConfiguration.screenConfig.apply.${singleMultipleOwnerPath}.props.style`));
+            showComponent(dispatch, institutionPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionPath}.props.style`));
+
+          } else if (action.value.includes("INSTITUTIONAL")) {
+            showComponent(dispatch, singleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${singleApplicantContainerJsonPath}.props.style`));
+            showComponent(dispatch, multipleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${multipleApplicantContainerJsonPath}.props.style`));
+            showComponent(dispatch, institutionContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${institutionContainerJsonPath}.props.style`));
+            showComponent(dispatch, institutionTypeContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${institutionTypeContainerJsonPath}.props.style`));
+            showComponent(dispatch, singleMultipleOwnerPath, false, get(state, `screenConfiguration.screenConfig.apply.${singleMultipleOwnerPath}.props.style`));
+            showComponent(dispatch, institutionPath, true, get(state, `screenConfiguration.screenConfig.apply.${institutionPath}.props.style`));
+
+          }
+          else if (action.value.includes("MULTIPLEOWNERS")) {
+            showComponent(dispatch, singleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${singleApplicantContainerJsonPath}.props.style`));
+            showComponent(dispatch, multipleApplicantContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${multipleApplicantContainerJsonPath}.props.style`));
+            showComponent(dispatch, institutionContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionContainerJsonPath}.props.style`));
+            showComponent(dispatch, institutionTypeContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionTypeContainerJsonPath}.props.style`));
+            showComponent(dispatch, singleMultipleOwnerPath, true, get(state, `screenConfiguration.screenConfig.apply.${singleMultipleOwnerPath}.props.style`));
+            showComponent(dispatch, institutionPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionPath}.props.style`));
+            addItemInMultiselect(state, dispatch);
+          }
         },
       },
     }),

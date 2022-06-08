@@ -128,8 +128,8 @@ export const searchApiCall = async (state, dispatch) => {
         ['ABG_COMMON_TABLE_COL_STATUS']: item.status || "-",
         ['ABG_COMMON_TABLE_COL_ACTION']: item.action || "-",
         ["BUSINESS_SERVICE"]: searchScreenObject.businesService,
-        ["RECEIPT_KEY"]: get(configObject[0], "receiptKey","consolidatedreceipt")||"consolidatedreceipt",
-        ["BILL_KEY"]: get(configObject[0], "billKey","consolidatedbill")||"consolidatedbill",
+        ["RECEIPT_KEY"]: get(configObject[0], "receiptKey"),
+        ["BILL_KEY"]: get(configObject[0], "billKey"),
         ["TENANT_ID"]: item.tenantId,
         ["BILL_ID"]: item.billId,
         ["BILL_SEARCH_URL"]: searchScreenObject.url,
@@ -181,10 +181,10 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
 
 const getActionItem = (status) => {
   switch (status) {
-    case "ACTIVE": return "ABG_PAY";
+    case "ACTIVE": return "PAY";
     case "CANCELLED":
-    case "EXPIRED": return "ABG_GENERATE_NEW_BILL"
-    case "PAID": return "ABG_DOWNLOAD_RECEIPT"
-    case "PARTIALLY_PAID": return "ABG_PARTIALLY_PAID"
+    case "EXPIRED": return "GENERATE NEW BILL"
+    case "PAID": return "DOWNLOAD RECEIPT"
+    case "PARTIALLY_PAID": return "PARTIALLY PAID"
   }
 }

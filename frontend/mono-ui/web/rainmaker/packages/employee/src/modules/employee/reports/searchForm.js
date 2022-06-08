@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Row } from "react-bootstrap";
+import { Row, Col, Table } from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
-import { Card } from "components";
+import { Card, Button } from "components";
+import { CardHeader, CardText } from "material-ui/Card";
+import { brown500, red500, white, orange800 } from "material-ui/styles/colors";
 import RaisedButton from "material-ui/RaisedButton";
 import { commonApiPost } from "egov-ui-kit/utils/api";
 import ShowField from "./showField";
 import get from "lodash/get";
+//import { translate } from "../../common/common";
+import { translate } from "./commons/common";
 import Label from "egov-ui-kit/utils/translationNode";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
@@ -15,8 +19,8 @@ import { getResultUrl } from "./commons/url";
 import commonConfig from "config/common.js";
 import { getTenantId, setReturnUrl, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+
+import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
 
 class ShowForm extends Component {
   state = {
@@ -61,7 +65,8 @@ class ShowForm extends Component {
   };
 
   checkForDependentSource = async (fieldIndex, field, selectedValue) => {
-    const { pattern: fieldPattern, type: fieldType, name: targetProperty, isMandatory, displayOnly } = field;
+    
+    const { pattern: fieldPattern, mapping, type: fieldType, name: targetProperty, isMandatory, displayOnly } = field;
     const { metaData, setMetaData, handleChange } = this.props;
     let splitArray = fieldPattern.split("?");
     let url = splitArray[0];
@@ -81,9 +86,13 @@ class ShowForm extends Component {
     }
 
     try {
+     
+    
       const response = await commonApiPost(url, queryJSON);
+     
       let keys = jp.query(response, splitArray[1].split("|")[1]);
       let values = jp.query(response, splitArray[1].split("|")[2]);
+
       let defaultValue = {};
       for (var k = 0; k < keys.length; k++) {
         defaultValue[keys[k]] = values[k];
@@ -132,7 +141,7 @@ class ShowForm extends Component {
     }
   };
   handleChange = (e, property, isRequired, pattern) => {
-    const { metaData, setMetaData, handleChange } = this.props;
+    const { metaData, setMetaData, handleChange, searchForm } = this.props;
     const selectedValue = e.target.value;
     if (property === "fromDate" || property === "toDate") {
       this.handleDateSelect(metaData, e, property);
@@ -153,6 +162,7 @@ class ShowForm extends Component {
         for (var i = 0; i < metaData.reportDetails.searchParams.length; i++) {
           const field = metaData.reportDetails.searchParams[i];
           const defaultValue = field.defaultValue;
+          const fieldType = field.type;
           const dependantProperty = field.name;
 
           if (dependantProperty === property) {
@@ -274,6 +284,8 @@ class ShowForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     let { changeButtonText, clearReportHistory, needDefaultSearch } = this.props;
+    const { showSpinner, hideSpinner } = this.props;
+    let { dateError } = this.state;
 
     if (!_.isEqual(this.props.searchForm, nextProps.searchForm)) {
       if (this.state.getResults) {
@@ -286,6 +298,8 @@ class ShowForm extends Component {
       this.setState({
         reportName: nextProps.metaData.reportDetails.reportName,
       });
+      let { reportName } = this.state;
+
       this.setState({ moduleName: this.props.match.params.moduleName });
 
       let { setForm } = this.props;
@@ -295,6 +309,17 @@ class ShowForm extends Component {
         if (searchParams[i].name !== "tenantId" && searchParams[i].isMandatory) {
           required.push(searchParams[i].name);
         }
+
+        if (searchParams[i].name==='ulb')
+        {
+
+        if (searchParams[i].defaultValue["bh.testing"] === "Testing") 
+         {
+         delete searchParams[i].defaultValue["bh.testing"];
+         }
+
+        }
+        
         if (searchParams[i].initialValue) {
           if (searchParams[i].type === "epoch") {
             this.handleChange(
@@ -315,6 +340,7 @@ class ShowForm extends Component {
       }
       setForm(required);
       clearReportHistory();
+    
       if (!_.isEmpty(JSON.parse(localStorageGet("searchCriteria")))) {
         this.search(null, true, nextProps.metaData.reportDetails.reportName);
       } else if (needDefaultSearch) {
@@ -359,9 +385,15 @@ class ShowForm extends Component {
       showTable,
       changeButtonText,
       setReportResult,
+      searchForm,
+      metaData, 
       setFlag,
+      setSearchParams,
+      reportHistory,
+      reportIndex,
       pushReportHistory,
-      clearReportHistory
+      clearReportHistory,
+      decreaseReportIndex,
     } = this.props;
     let today = new Date();
     let date = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
@@ -371,27 +403,36 @@ class ShowForm extends Component {
     var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
     let self = this;
     if (!isDrilldown) {
+      const displayOnlyFields = this.getDisplayOnlyFields(metaData);
+
       let searchParams = [];
+
       clearReportHistory();
       let resulturl = getResultUrl(moduleName,rptName);
+     
+      let response =
         resulturl &&
-        commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: rptName || this.state.reportName, searchParams }).then(
+        commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: rptName || this.state.reportName, searchParams}).then(
           function(response) {
             pushReportHistory({ tenantId: tenantId, reportName: self.state.reportName, searchParams });
             setReportResult(response);
+            
             showTable(true);
             setFlag(1);
           },
           function(err) {
+           
             showTable(false);
             alert("Something went wrong or try again later");
           }
         );
+       
     }
 
     changeButtonText(<LabelContainer labelName="APPLY" labelKey="REPORTS_SEARCH_APPLY_LABEL" />);
   };
   search = (e = null, isDrilldown = false, searchForm) => {
+
     if (e) {
       e.preventDefault();
     }
@@ -402,6 +443,8 @@ class ShowForm extends Component {
       setReportResult,
       metaData,
       setFlag,
+      showSpinner,
+      hideSpinner,
       setSearchParams,
       reportHistory,
       reportIndex,
@@ -414,13 +457,14 @@ class ShowForm extends Component {
     var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
     let self = this;
     let mandatoryfields=[]
+   
     metaData.reportDetails.searchParams.forEach(param=>{
       if(param.isMandatory){
         mandatoryfields.push(param.name);
       }
     });
     let filledMandatoryFieldsCount=searchForm ? Object.keys(searchForm)
-    .filter(param => searchForm[param]&&mandatoryfields.includes(param)).length:0;
+    .filter(param => mandatoryfields.includes(param)).length:0;
     if(filledMandatoryFieldsCount!=mandatoryfields.length)
     { 
       toggleSnackbarAndSetText(true,{labelKey:"COMMON_MANDATORY_MISSING_ERROR",labelName:"Please fill all mandatory fields to search"},
@@ -442,7 +486,7 @@ class ShowForm extends Component {
       for (var variable in searchForm) {
         let input;
         
-        if (this.state.moduleName == "oldPGR") {
+        if (this.state.moduleName == "pgr") {
           if (variable == "fromDate") {
             input =
               searchForm[variable].getFullYear() +
@@ -491,43 +535,59 @@ class ShowForm extends Component {
       setSearchParams(searchParams);
 
       clearReportHistory();
+      showSpinner()
+    //  console.log("hereeeeee111333")
       let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
+      let response =
         resulturl &&
-        commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams }).then(
+        commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams,hideSpinner }).then(
           function(response) {
             pushReportHistory({ tenantId: tenantId, reportName: self.state.reportName, searchParams });
             setReportResult(response);
+            hideSpinner()
             showTable(true);
+           
             setFlag(1);
+            
           },
           function(err) {
+            hideSpinner()
             showTable(false);
             alert("Something went wrong or try again later");
           }
         );
+       
     } else {
       if (_.isEmpty(JSON.parse(localStorageGet("searchCriteria")))) {
         let reportData = reportHistory[reportIndex - 1 - 1];
         let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
+       
+        let response =
           resulturl &&
           commonApiPost(resulturl, {}, { ...reportData }).then(
             function(response) {
               decreaseReportIndex();
               setReportResult(response);
-
+             
               showTable(true);
               setFlag(1);
             },
             function(err) {
+              
               showTable(false);
               alert("Something went wrong or try again later");
             }
           );
+          
       } else {
         var reportData = JSON.parse(localStorageGet("searchCriteria"));
         let resulturl = getResultUrl(localStorageGet("moduleName"));
+       
+       
+        let response =
           resulturl &&
-          commonApiPost(resulturl, {}, { ...reportData }).then(
+
+          commonApiPost(resulturl, {}, { ...reportData}).then(
             function(response) {
               setReturnUrl("");
               localStorageSet("searchCriteria", JSON.stringify({}));
@@ -537,15 +597,18 @@ class ShowForm extends Component {
               }
               setSearchParams(reportData.searchParams);
               setReportResult(response);
-
+             
               showTable(true);
               setFlag(1);
+             
             },
             function(err) {
+             
               showTable(false);
               alert("Something went wrong or try again later");
             }
           );
+         
       }
     }
 
@@ -602,8 +665,7 @@ class ShowForm extends Component {
         return reportTitle;
       });
     }
-    return reportTitle&&typeof reportTitle =='string'&&getLocaleLabels(getTransformedLocale(reportTitle))||reportTitle;
-    
+    return reportTitle;
   };
 
   getReportTitlefromTwoOptions = (metaData) => {
@@ -617,9 +679,7 @@ class ShowForm extends Component {
       );
     } else {
       return (
-        get(metaData, "reportDetails.reportName") && <div className="report-title">
-          {getLocaleLabels(getTransformedLocale(metaData.reportDetails.reportName),getTransformedLocale(metaData.reportDetails.reportName))}
-          </div>
+        get(metaData, "reportDetails.reportName") && <div className="report-title">{this.getReportTitle(metaData.reportDetails.reportName)}</div>
       );
     }
   };
@@ -651,6 +711,7 @@ class ShowForm extends Component {
                         primary={true}
                         label={buttonText}
                       />
+
                       <RaisedButton
                         style={{ marginLeft: "8px" }}
                         type="button"
@@ -680,6 +741,7 @@ class ShowForm extends Component {
             <RaisedButton
               type="button"
               onClick={(e) => {
+               
                 search(e, true);
               }}
               primary={true}
@@ -710,7 +772,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
+  showSpinner: () => dispatch(showSpinner()),
+  hideSpinner: () => dispatch(hideSpinner()),
   setForm: (required = [], pattern = []) => {
+
     dispatch({
       type: "SET_FORM",
       formtemp: {},
@@ -729,14 +794,17 @@ const mapDispatchToProps = (dispatch) => ({
     });
   },
   handleChange: (e, property, isRequired, pattern) => {
+    
     dispatch({
       type: "HANDLE_CHANGE",
       property,
+      
       value: e.target.value,
       isRequired,
       pattern,
     });
   },
+ 
   resetForm: () => {
     dispatch({ type: "RESET_FORM" });
   },
@@ -753,11 +821,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch({ type: "SET_FLAG", flag });
   },
   toggleSnackbarAndSetText:(open,message,type)=>{
+    
    dispatch(toggleSnackbarAndSetText(
     open,message,type
   )) 
   },
   setMetaData: (metaData) => {
+  
     dispatch({ type: "SET_META_DATA", metaData });
   },
   setSearchParams: (searchParams) => {

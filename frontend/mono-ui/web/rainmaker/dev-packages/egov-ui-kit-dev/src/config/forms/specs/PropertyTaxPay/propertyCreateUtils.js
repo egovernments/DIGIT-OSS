@@ -1,20 +1,25 @@
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getFileUrl, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
-import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
-import get from "lodash/get";
-import uniqBy from "lodash/uniqBy";
-import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { httpRequest } from "egov-ui-kit/utils/api";
 
-export const createPropertyPayload = (properties, documentsUploadRedux) => {
-  let oldUnits=properties&&properties[0]&&properties[0].units||[];
+
+import get from "lodash/get";
+import { getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+//import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
+
+export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {
   properties[0] = {
     ...properties[0],
     ...properties[0].propertyDetails[0],
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
-  };
+  }; 
+
+  if(window.location.href.includes('dataentry'))
+  {
+    properties[0].source = "LEGACY_RECORD"
+    properties[0].status = "ACTIVE"
+
+  }
   if (properties[0].owners && properties[0].owners.length) {
     properties[0].owners.map((obj) => {
       if (obj.documents && Array.isArray(obj.documents) && obj.documents.length) {
@@ -30,14 +35,16 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
       obj.ownerType = obj.ownerType || "NONE";
     });
   }
-  let floorArray = {};
-  properties[0].units.map((unit) => {
-    floorArray[unit.floorNo] = unit.floorNo;
+ /*  if (newProperties && newProperties.length > 0) {
+    properties[0].owners = newProperties[0].owners;
+  } */
+  properties[0].units && properties[0].units.map((unit) => {
     unit.constructionDetail = {
       builtUpArea: unit.unitArea,
+     constructionType:unit.ConstructionType
     };
     unit.tenantId = properties[0].tenantId;
-    unit.usageCategory =
+     unit.usageCategory =
       unit.usageCategoryMajor +
       (unit.usageCategoryMinor ? "." + unit.usageCategoryMinor : "") +
       (unit.usageCategorySubMinor ? "." + unit.usageCategorySubMinor : "") +
@@ -52,46 +59,32 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
     delete unit.usageCategorySubMinor;
     delete unit.unitArea;
   });
-  
-  if(getQueryArg(window.location.href,  "mode") == 'WORKFLOWEDIT'){
-    let oldUnit={};
-    oldUnits&&oldUnits.map(unit=>{
-      oldUnit[unit.id]=unit;
-    })
-    let newUnit={};
-    properties[0].units&&properties[0].units.map(unit=>{
-      newUnit[unit.id]=unit;
-    })
-    let newUnitKeys=Object.keys(newUnit);
-    Object.keys(oldUnit).map(unitId=>{
-       if(!newUnitKeys.includes(unitId)){
-        properties[0].units.push({...oldUnit[unitId],active:false});
-       }
-    })
-  }
+
   if (documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
     properties[0].documents = [];
     Object.keys(documentsUploadRedux).map((key) => {
-      if(documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value && documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileStoreId) {
-        properties[0].documents.push({
-          documentType: documentsUploadRedux[key].dropdown.value,
-          fileStoreId: documentsUploadRedux[key].documents[0].fileStoreId,
-          documentUid: documentsUploadRedux[key].documents[0].fileStoreId,
-        });
-      }
+      if(documentsUploadRedux[key].documents)
+      {
+      properties[0].documents.push({
+        documentType:documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value,
+        fileStoreId: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileStoreId,
+        documentUid: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileStoreId,
+      });
+    }
     });
   }
 
- if (properties[0].institution) {
+  if (properties[0].institution) {
     properties[0].institution.nameOfAuthorizedPerson = properties[0].owners[0].name;
     properties[0].institution.tenantId = properties[0].tenantId;
   }
-  properties[0].superBuiltUpArea = properties[0].buildUpArea && Number(properties[0].buildUpArea);
-  properties[0].superBuiltUpArea = properties[0].superBuiltUpArea && Number(properties[0].superBuiltUpArea.toFixed(2));
+  properties[0].creationReason = "NEWPROPERTY";
+  properties[0].superBuiltUpArea = properties[0].buildUpArea;
+  //properties[0].superBuiltUpArea = properties[0].superBuiltUpArea && Number(properties[0].superBuiltUpArea.toFixed(2));
 
   properties[0].propertyType =
-    properties[0].propertySubType === "SHAREDPROPERTY" || properties[0].propertySubType === "INDEPENDENTPROPERTY"
-      ? properties[0].propertyType + "." + properties[0].propertySubType
+  properties[0].propertySubType === "BUILTUP.SHAREDPROPERTY" || properties[0].propertySubType === "BUILTUP.INDEPENDENTPROPERTY"
+  ? properties[0].propertyType + "." + properties[0].propertySubType
       : properties[0].propertyType;
   // Changing usageCategoryMajor to usageCategory
   properties[0].usageCategory = properties[0].usageCategoryMajor + (properties[0].usageCategoryMinor ? "." + properties[0].usageCategoryMinor : "");
@@ -100,11 +93,6 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
   // Deleting object keys from request payload which are not required now
   //   delete properties[0].usageCategoryMajor;
   //   delete properties[0].usageCategoryMinor;
-
-  if (properties[0].propertyType.includes("SHAREDPROPERTY")) {
-    properties[0].noOfFloors = Object.keys(floorArray).length;
-    properties[0].landArea = properties[0].superBuiltUpArea;
-  }
   delete properties[0].citizenInfo;
   delete properties[0].propertyDetails;
   delete properties[0].subOwnershipCategory;
@@ -144,19 +132,17 @@ export const convertToArray = (documentsUploadRedux) => {
       let documentsData = [];
       Object.keys(documentsUploadRedux).map((key) => {
         const dropdownValue = documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value || '';
-        let docTitleArray = dropdownValue && dropdownValue.split(".");
-        // if (dropdownValue == '' && docTitleArray.length == 1) {
-        //   return;
-        // }
-        if(documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileUrl && documentsUploadRedux[key].documents[0].fileName) {
-          documentsData.push({
-            title: docTitleArray && docTitleArray.length > 0 && docTitleArray[docTitleArray.length - 1],
-            link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
-            linkText: "View",
-            name: documentsUploadRedux[key].documents[0].fileName,
-          });
+        let docTitleArray = dropdownValue.split(".");
+        if (dropdownValue == '' && docTitleArray.length == 1) {
+          return;
         }
-        return documentsData;
+        return documentsData.push({
+          title: docTitleArray[docTitleArray.length - 1],
+          mainTitle: documentsUploadRedux[key].documentCode,
+          link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
+          linkText: "View",
+          name: documentsUploadRedux[key].documents[0].fileName,
+        });
       });
       return documentsData;
     }
@@ -164,8 +150,7 @@ export const convertToArray = (documentsUploadRedux) => {
 };
 
 export const setPTDocuments = async (payload, sourceJsonPath, destJsonPath, dispatch, businessService) => {
-  let uploadedDocData = get(payload, sourceJsonPath);
-  uploadedDocData = uniqBy(uploadedDocData, 'fileStoreId');
+  const uploadedDocData = get(payload, sourceJsonPath);
   const fileStoreIds =
     uploadedDocData &&
     uploadedDocData
@@ -229,26 +214,3 @@ export const prefillPTDocuments = async (payload, sourceJsonPath, destJsonPath, 
   }
   dispatch(prepareFinalObject(destJsonPath, docs));
 };
-
-export const setOldPropertyData = async (search, prepareFinalObject) => {
-  const propertyId = getQueryValue(search, "propertyId");
-  const tenantId = getQueryValue(search, "tenantId");
-  let searchPropertyResponse = await httpRequest(
-    "property-services/property/_search",
-    "_search",
-    [
-      {
-        key: "tenantId",
-        value: tenantId
-      },
-      {
-        key: "propertyIds",
-        value: propertyId //"PT-107-001278",
-      }
-    ]
-  );
-  // searchPropertyResponse.Properties[0].owners.reverse(); // Owners are coming in reverse order
-  const Property = convertToOldPTObject(searchPropertyResponse);
-  const oldProperty = Object.create(Property);
-  prepareFinalObject("OldProperty", oldProperty[0], null);
-} 

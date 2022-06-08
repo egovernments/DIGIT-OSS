@@ -6,7 +6,7 @@ import "./index.css";
 
 const style = { marginLeft: 10, marginTop: 2, cursor: "pointer", marginRight: 10 };
 
-const BreadCrumbs = ({ url, history, label }) => {
+const BreadCrumbs = ({ url, history }) => {
   return (
     <div className="rainmaker-displayInline" style={{ paddingLeft: 15 }}>
       <Link to="home">
@@ -15,7 +15,7 @@ const BreadCrumbs = ({ url, history, label }) => {
       <div className="rainmaker-displayInline">
         <div style={style}> ❯ </div>
         <div>
-          <Label labelClassName="breadcrum-label-style" label={label ? label : ""} />
+          <Label labelClassName="breadcrum-label-style" label="WS_COMMON_PAST_PAYMENTS" />
         </div>
       </div>
     </div>

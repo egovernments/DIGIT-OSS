@@ -1,0 +1,64 @@
+.pt-review-form-field {
+  div:last-child {
+    display: none;
+  }
+}
+.pt-rf-edit-icon {
+  float: right;
+}
+.pt-rf-icon {
+  position: relative;
+  top: 4px;
+}
+// .rebate-box-labels {
+// }
+.add-rebate-box {
+  padding: 10px;
+  padding-bottom: 36px;
+}
+.pt-rebate-exemption-box {
+  padding: 12px;
+}
+.pt-emp-penalty-charges,
+.pt-emp-rebate-charges {
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+.pt-rebate-box-btn {
+  background: none !important;
+  text-align: center;
+  .add-rebate-action-button {
+    width: 230px;
+    height: 48px;
+  }
+}
+.responsive-action-button {
+  height: 48px;
+  line-height: 48px;
+  width: 100%;
+  border-radius: 2px;
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  background-color: rgb(254, 122, 81);
+  text-align: center;
+  border: 10px;
+  box-sizing: border-box;
+  display: inline-block;
+  font-family: Roboto;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  text-decoration: none;
+  margin: 0px;
+  padding: 0px;
+  outline: none;
+}
+
+@media only screen and (max-width:768px){
+  .claculation-details-content{
+    width: 75% !important;
+  }
+  .rebate-modal-content{
+    width: 75% !important;
+  }
+  .review-title-icon{
+    margin-left: 16px !important;
+  }
+}

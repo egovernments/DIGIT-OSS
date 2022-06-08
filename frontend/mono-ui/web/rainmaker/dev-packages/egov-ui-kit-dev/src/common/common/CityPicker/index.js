@@ -6,7 +6,6 @@ import DownArrow from "material-ui/svg-icons/navigation/arrow-drop-down";
 import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
 import { getTranslatedLabel } from "../../../utils/commons";
-import { sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
 
 class CityPickerDialog extends Component {
   state = { results: [], searchTerm: "", open: false };
@@ -27,21 +26,19 @@ class CityPickerDialog extends Component {
   };
 
   prepareResultsForDisplay = (results = []) => {
-    results= results.map((result, index) => {
+    return results.map((result, index) => {
       const mappedResult = {};
       mappedResult.key = result.key;
-      mappedResult.primaryText = this.getLocalizedLabel(`TENANT_TENANTS_${result.key.toUpperCase().replace(/[.:-\s\/]/g, "_")}`);
+      if(result.key)
+      {
+         mappedResult.primaryText = this.getLocalizedLabel(`TENANT_TENANTS_${result.key.toUpperCase().replace(/[.:-\s\/]/g, "_")}`);
+      }      
+      else
+      {
+        mappedResult.primaryText = this.getLocalizedLabel('TENANT_TENANTS_CITY_NOT_FOUND');
+      }
       mappedResult.id = result.key;
       return mappedResult;
-    })
-    return results.sort((e1, e2) => {
-      if (e1 && e1.primaryText && typeof e1.primaryText == 'string') {
-        return e1 && e1.primaryText && e1.primaryText.localeCompare && e1.primaryText.localeCompare(e2 && e2.primaryText && e2.primaryText || '');
-      } else if (e1 && e1.key && typeof e1.key == 'string') {
-        return e1 && e1.key && e1.key.localeCompare && e1.key.localeCompare(e2 && e2.key && e2.key || '');
-      } else {
-        return 1;
-      }
     });
   };
 
@@ -65,17 +62,11 @@ class CityPickerDialog extends Component {
     }
   };
 
-  autoSuggestCallback = (results = [] ,searchTerm) => {
-    const {cities} = this.props;
-    if(searchTerm){
-      const filteredCities = cities && cities.filter(item => {
-        return item.key.includes(searchTerm.toLowerCase())
-      });
-      if (results.length === 0) {
-        results.push({ key: "", text: "No City Found" });
-      }
-    this.setState({ results : filteredCities, searchTerm });
+  autoSuggestCallback = (results = [], searchTerm) => {
+    if (results.length === 0) {
+      results.push({ key: "", text: "No City Found" });
     }
+    this.setState({ results, searchTerm });
   };
 
   render() {
@@ -89,7 +80,8 @@ class CityPickerDialog extends Component {
           <TextFieldIcon
             {...field}
             errorStyle={{ bottom: "0px" }}
-            value={getCityNameByCode((field || {}).value, localizationLabels)}
+            // hemanth please do the proper fix for this, we should not module specific code.
+            value={getCityNameByCode((field || {}).value != 'uk' ? (field || {}).value : "", localizationLabels)}
             id="person-city"
             iconPosition="after"
             Icon={DownArrow}
@@ -129,7 +121,7 @@ class CityPickerDialog extends Component {
             dataSource={cities}
             searchInputText={<Label label="ACTION_TEST_SEARCH"  color="#727272" labelStyle={{ display:"flex", justifyContent:"left" }}/>}
             searchKey="text"
-            autoFocus={true}
+            autoFocus={false}
             callback={autoSuggestCallback}
           />
           <List
@@ -137,8 +129,8 @@ class CityPickerDialog extends Component {
             innerDivStyle={{ paddingLeft: "50px",color:"#484848"  }}
             listItemStyle={{ borderBottom: "1px solid #eee",color:"#484848"}}
             items={displayInitialList ? prepareResultsForDisplay(cities) : prepareResultsForDisplay(results)}
-            
-            
+
+
           />
         </Dialog>
       </div>

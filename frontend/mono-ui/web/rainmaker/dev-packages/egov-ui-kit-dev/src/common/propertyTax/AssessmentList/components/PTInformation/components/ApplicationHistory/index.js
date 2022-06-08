@@ -7,9 +7,7 @@ import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/ut
 import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFullRow } from "../AssessmentHistory";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
-import { navigateToApplication,getApplicationType } from "egov-ui-kit/utils/commons";
+import { getApplicationType, getDateFromEpoch, navigateToApplication } from "egov-ui-kit/utils/commons";
 
 const labelStyle = {
     letterSpacing: 1.2,
@@ -52,19 +50,18 @@ class ApplicationHistory extends Component {
       }
 
     getPropertyResponse = async (propertyId, tenantId, dialogName) => {    
-        const {prepareFinalObject}=this.props;
         const queryObject = [
           { key: "propertyIds", value: propertyId },
           { key: "tenantId", value: tenantId },
           { key: "audit", value: true }
         ];
+        let ownershipInfo = {};
         try {
           const payload = await httpRequest(
             "property-services/property/_search",
             "_search",
             queryObject
           );
-          prepareFinalObject("propertiesAudit", payload.Properties);
           if (payload && payload.Properties.length > 0) {
             payload.Properties=this.getUniqueList(payload.Properties.sort((y,x)=>x.auditDetails.lastModifiedTime-y.auditDetails.lastModifiedTime));
             return payload.Properties;
@@ -75,10 +72,10 @@ class ApplicationHistory extends Component {
     }
 
     navigateToApplication = async (acknowldgementNumber, tenantId, creationReason,history,propertyId) => {
-         const businessService= await getApplicationType(acknowldgementNumber, tenantId, creationReason);
-         navigateToApplication(businessService, history, acknowldgementNumber, tenantId, propertyId);
-     }
-
+        const businessService= await getApplicationType(acknowldgementNumber, tenantId, creationReason);
+        navigateToApplication(businessService, history, acknowldgementNumber, tenantId, propertyId);
+    }
+    
     componentDidMount = async() => {
         const { propertyId, tenantId, history } = this.props;
         if (propertyId) {
@@ -88,7 +85,7 @@ class ApplicationHistory extends Component {
                     let applicationHistoryItem = [];
                     applicationHistoryItem = response.map(item=>{
                         return (
-                            <div>
+                            <div  style={{  borderTop: "1px solid #474343", height: "183px" }}>
                             {getFullRow("PT_PROPERTY_APPLICATION_NO", item.acknowldgementNumber ? item.acknowldgementNumber : "NA", 12)}
                             {getFullRow("PT_PROPERTY_ID_NO", item.propertyId ? item.propertyId : "NA", 12)}
                             {getFullRow("PT_MUTATION_APPLICATION_TYPE", item.creationReason  ? item.creationReason : "NA", 12)}
@@ -98,9 +95,9 @@ class ApplicationHistory extends Component {
                                 <div className="application-history" style={{ float: "left",marginLeft: "15px" }}>
                                     <a
                                         onClick={() => {
-                                             this.navigateToApplication(item.acknowldgementNumber, item.tenantId, item.creationReason,history,item.propertyId)
+                                            this.navigateToApplication(item.acknowldgementNumber, item.tenantId, item.creationReason,history,item.propertyId)
                                             
-                                        }}
+                                                        }}
                                     >
                                         <Label buttonLabel={true} label='PT_VIEW_DETAILS' color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />
                                     </a>
@@ -131,37 +128,20 @@ class ApplicationHistory extends Component {
     }
 }
 
-const getIdFromUrl = (ownProps) => {
-    let idFromUrl = {};
-    const {location} = ownProps;
-    const {search} = location;
-    idFromUrl.propertyId = getQueryValue(search, "propertyId");
-    idFromUrl.tenantId = getQueryValue(search, "tenantId");
-    return idFromUrl;
-}
-
 const mapStateToProps = (state, ownProps) => {
     // const { Bill = [], Payments = [] } = state.properties || {};
-    let propertyId = decodeURIComponent(ownProps.match.params.propertyId);
-    let tenantId = decodeURIComponent(ownProps.match.params.tenantId);
-    propertyId = (!propertyId || propertyId === "undefined") ? getIdFromUrl(ownProps).propertyId : propertyId;
-    tenantId = (!tenantId || tenantId === "undefined") ? getIdFromUrl(ownProps).tenantId : tenantId;
+    const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
+    const tenantId = decodeURIComponent(ownProps.match.params.tenantId);
     return {
         propertyId,
         tenantId
     };
 };
-const mapDispatchToProps = dispatch => {
-    return {
-      prepareFinalObject: (jsonPath, value) =>
-        dispatch(prepareFinalObject(jsonPath, value))
-    };
-  };
 
 export default compose(
     withRouter,
     connect(
         mapStateToProps,
-        mapDispatchToProps
+        null
     )
 )(ApplicationHistory);

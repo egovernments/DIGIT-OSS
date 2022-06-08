@@ -4,17 +4,16 @@
   overflow-y: "scroll"; }
 
 .autocomplete-dropdown {
-  min-width: 100%;
+  min-width: 70%;
   position: absolute;
   z-index: 1900;
   max-height: 150px;
-  overflow: auto; }
+  max-width: 75%;
+  overflow: hidden; }
 
 .autocomplete-dropdown div {
-  min-width: 100%;
+  min-width: 70%;
   height: auto;
   overflow: auto;
+  max-width: 100%;
   white-space: pre-line; }
-
-p[class^="MuiFormHelperText-root"] {
-  font-size: 14px !important; }

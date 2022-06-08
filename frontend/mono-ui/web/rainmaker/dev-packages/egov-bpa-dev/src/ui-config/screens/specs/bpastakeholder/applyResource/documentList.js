@@ -9,12 +9,12 @@ export const documentList = {
     },
     description: {
       labelName: "Only .jpg and .pdf files. 6MB max file size.",
-      labelKey: "BPA_UPLOAD_FILE_RESTRICTIONS"
+      labelKey: "BPA_UPLOAD_RESTRICTIONS"
     },
     inputProps: {
       accept: "image/*, .pdf, .png, .jpeg"
     },
     documentTypePrefix: "BPA_",
-    maxFileSize: 5000
+    maxFileSize: 6000
   }
 };

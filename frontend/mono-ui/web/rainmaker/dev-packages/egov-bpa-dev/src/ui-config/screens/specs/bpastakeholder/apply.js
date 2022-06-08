@@ -36,6 +36,7 @@ import { documentList } from "./applyResource/documentList";
 import { httpRequest } from "../../../../ui-utils";
 import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
 
 export const stepsData = [
@@ -120,7 +121,7 @@ export const tradeDocumentDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Required Documents",
-      labelKey: "BPA_DOCUMENT_DETAILS_HEADER"
+      labelKey: "TL_NEW-UPLOAD-DOCS_HEADER"
     },
     {
       style: {
@@ -131,7 +132,7 @@ export const tradeDocumentDetails = getCommonCard({
   paragraph: getCommonParagraph({
     labelName:
       "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "BPA_DOCUMENT_DETAILS_SUBTEXT"
+    labelKey: "TL_NEW-UPLOAD-DOCS_SUBHEADER"
   }),
   documentList
 });
@@ -169,12 +170,6 @@ export const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "egf-master",
           masterDetails: [{ name: "FinancialYear" }]
-        },
-        {
-          moduleName: "StakeholderRegistraition",
-          masterDetails: [
-            { name: "TradeTypetoRoleMapping" }
-          ]
         }
       ]
     }

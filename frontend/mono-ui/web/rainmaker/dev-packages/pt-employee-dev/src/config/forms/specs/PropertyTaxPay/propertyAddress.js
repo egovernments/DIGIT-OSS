@@ -1,10 +1,26 @@
-import commonConfig from "config/common.js";
-import { colony, dummy, houseNumber, mohalla, pincode, street } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
-import { fetchGeneralMDMSData, prepareFormData } from "egov-ui-kit/redux/common/actions";
-import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
+import {
+  pincode,
+  mohalla,
+  street,
+  colony,
+  roadType,
+  houseNumber,
+  constructionType,
+  thana,
+  dummy
+} from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import {
+  handleFieldChange,
+  setFieldProperty
+} from "egov-ui-kit/redux/form/actions";
 import { CITY } from "egov-ui-kit/utils/endPoints";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  prepareFormData,
+  fetchGeneralMDMSData
+} from "egov-ui-kit/redux/common/actions";
 import set from "lodash/set";
+import commonConfig from "config/common.js";
+import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 // const Search = <Icon action="action" name="home" color="#30588c" />;
 
 const formConfig = {
@@ -90,6 +106,24 @@ const formConfig = {
                   },
                   {
                     name: "UsageCategorySubMinor"
+                  },
+                  {
+                    name: "ConstructionType",
+                  },
+                  {
+                    name: "Rebate",
+                  },
+                  {
+                    name: "Interest",
+                  },
+                  {
+                    name: "FireCess",
+                  },
+                  {
+                    name: "RoadType",
+                  },
+                  {
+                    name: "Thana",
                   }
                 ]
               }
@@ -109,23 +143,40 @@ const formConfig = {
             "UsageCategoryDetail",
             "UsageCategoryMajor",
             "UsageCategoryMinor",
-            "UsageCategorySubMinor"
+            "UsageCategorySubMinor",
+            "ConstructionType",
+            "Rebate",
+            "Penalty",
+            "Interest",
+            "FireCess",
+            "RoadType",
+            "Thana"
           ])
         );
+        dispatch(fetchGeneralMDMSData(
+          null,
+          "BillingService",
+          ["TaxPeriod", "TaxHeadMaster"],
+          "",
+          field.value
+        ));
       }
     },
     ...dummy,
+    ...roadType,
     ...houseNumber,
     ...colony,
     ...street,
     ...mohalla,
     ...pincode,
+    ...constructionType,
+    ...thana,
     oldPID: {
       id: "oldpid",
-      type: "textFieldIcon",
+      type: "textfield",
       className: "pt-old-pid-text-field",
       text: "PT_SEARCH_BUTTON",
-      iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
       jsonPath: "Properties[0].oldPropertyId",
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",

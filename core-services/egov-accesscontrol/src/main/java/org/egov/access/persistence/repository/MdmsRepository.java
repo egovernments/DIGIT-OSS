@@ -109,6 +109,79 @@ public class MdmsRepository {
 //        return map;
 
     }
+    
+    @Cacheable(value = "roleActionsMapping", sync = true)
+    public  Map<String, Map<Boolean, List<Action>>> fetchRoleActionMapping(String tenantId) {
+        Map<String, Map<String, List>> response = getMDMSActionData(tenantId, null);
+
+        return transformMdmsResponseForActions(response);
+    }
+
+    private Map<String, Map<Boolean, List<Action>>> transformMdmsResponseForActions(Map<String, Map<String, List>> rawResponse) {
+
+        RoleAction[] roleActions = objectMapper.convertValue(rawResponse.get(roleActionModule).get(
+                roleActionMaster), RoleAction[].class);
+        Action[] actions = objectMapper.convertValue(rawResponse.get(actionModule).get(
+                actionMaster), Action[].class);
+
+
+        Map<Long,List<Action>> actionMap =
+                Arrays.stream(actions).collect(Collectors.groupingBy(Action::getId) );
+
+        Map<String, Map<Boolean, List<Action>>> finalMap = new HashMap<>();
+
+        for(RoleAction roleAction : roleActions){
+            if(actionMap.containsKey(roleAction.getActionId())){
+                if(!finalMap.containsKey(roleAction.getRoleCode())) {
+                    Map<Boolean, List<Action>> map = new HashMap<>();
+                    map.put(true, new LinkedList<>());
+                    map.put(false, new LinkedList<>());
+                    finalMap.put(roleAction.getRoleCode(), map);
+                }
+
+                Map<Boolean, List<Action>> container = finalMap.get(roleAction.getRoleCode());
+                Action currentAction = actionMap.get(roleAction.getActionId()).get(0);
+
+                boolean isEnabled = currentAction.isEnabled() || false;
+                container.get(isEnabled).add(currentAction);
+            }
+        }
+        return finalMap;
+    }
+    
+    private Map<String, Map<String, List>> getMDMSActionData(String tenantId, String actionFilter) {
+        List<ModuleDetail> moduleDetail = new ArrayList<ModuleDetail>();
+        RequestInfo requestInfo = new RequestInfo();
+
+        MasterDetail actionsMasterDetail =
+                MasterDetail.builder().name(actionMaster).filter(actionFilter).build();
+        moduleDetail.add(ModuleDetail.builder().moduleName(actionModule).masterDetails(Collections.singletonList(
+                actionsMasterDetail)).build());
+
+        MasterDetail roleActionsMasterDetail = MasterDetail.builder().name(roleActionMaster).build();
+        moduleDetail.add(ModuleDetail.builder().moduleName(roleActionModule).masterDetails(Collections.singletonList(
+                roleActionsMasterDetail)).build());
+
+
+        MdmsCriteria mc = new MdmsCriteria();
+        mc.setTenantId(tenantId);
+        mc.setModuleDetails(moduleDetail);
+
+        MdmsCriteriaReq mcq = new MdmsCriteriaReq();
+        mcq.setRequestInfo(requestInfo);
+        mcq.setMdmsCriteria(mc);
+
+        @SuppressWarnings("unchecked")
+        Map<String, Map<String, List>> response = (Map<String, Map<String, List>>) restTemplate.postForObject(url, mcq,
+                Map.class).get("MdmsRes");
+
+        if(isNull(response.get(roleActionModule)) || isNull(response.get(roleActionModule).get(roleActionMaster))
+                || isNull(response.get(actionModule)) || isNull(response.get(actionModule).get(actionMaster)))
+            throw new CustomException("DATA_NOT_AVAILABLE", "Data not available for this tenant");
+
+
+        return response;
+    }
 
     private Map<String, ActionContainer> transformMdmsResponse(Map<String, Map<String, List>> rawResponse){
         RoleAction[] roleActions = objectMapper.convertValue(rawResponse.get(roleActionModule).get(

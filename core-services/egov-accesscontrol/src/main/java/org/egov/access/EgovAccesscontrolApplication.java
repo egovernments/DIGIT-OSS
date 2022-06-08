@@ -79,6 +79,9 @@ public class EgovAccesscontrolApplication {
     @Profile("!test")
 	public CacheManager cacheManager() {
 		return new SpringCache2kCacheManager()
-				.addCaches(b->b.name("roleActions").expireAfterWrite(roleActionExpiry, TimeUnit.MINUTES).entryCapacity(10));
+ 				.addCaches(b->b.name("roleActions").expireAfterWrite(roleActionExpiry, TimeUnit.MINUTES).entryCapacity(10))
+	        	.addCaches(b->b.name("roleActionsMapping").expireAfterWrite(roleActionExpiry, TimeUnit.MINUTES).entryCapacity(10));
+
+		
 	}
 }

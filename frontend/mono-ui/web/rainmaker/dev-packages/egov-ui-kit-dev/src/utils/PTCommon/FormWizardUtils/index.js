@@ -1,14 +1,36 @@
-import { get, isEmpty, set } from "lodash";
 import React from "react";
-import { Icon } from "../../../components";
-import { getPlotAndFloorFormConfigPath } from "../../../config/forms/specs/PropertyTaxPay/utils/assessInfoFormManager";
 import formHoc from "../../../hocs/form";
+import { httpRequest } from "../../api";
+import { getQueryValue, getFinancialYearFromQuery, convertUnitsToSqFt, findCorrectDateObj, findCorrectDateObjPenaltyIntrest } from "../../PTCommon";
+import { Icon } from "../../../components";
+import Label from "../../../utils/translationNode";
+import { getPlotAndFloorFormConfigPath } from "../../../config/forms/specs/PropertyTaxPay/utils/assessInfoFormManager";
+import { get, set, isEmpty } from "lodash";
 import { trimObj } from "../../../utils/commons";
 import { MDMS } from "../../../utils/endPoints";
-import Label from "../../../utils/translationNode";
-import { httpRequest } from "../../api";
-import { convertUnitsToSqFt, findCorrectDateObj, findCorrectDateObjPenaltyIntrest, getFinancialYearFromQuery, getQueryValue } from "../../PTCommon";
+import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
+import store from "ui-redux/store";
 
+const extractFromString = (str, index) => {
+  if (!str) {
+    return "";
+  }
+  // if (index==null) {
+  //   return str;
+  // }
+  let arrayOfValues = str.split(".");
+  if (arrayOfValues && arrayOfValues.length == 0) {
+    return arrayOfValues[0];
+  }
+  if (index > arrayOfValues.length) {
+    return null;
+  }
+  if (index <= arrayOfValues.length) {
+    return arrayOfValues[index];
+  }
+  return null;
+};
 
 export const updateDraftinLocalStorage = async (draftInfo, assessmentNumber, self) => {
   // localStorageSet("draftId", draftInfo.id);
@@ -46,30 +68,241 @@ export const updateDraftinLocalStorage = async (draftInfo, assessmentNumber, sel
   );
 };
 export const getBusinessServiceNextAction = (businessServiceName, currentAction) => {
-  const businessServiceData = JSON.parse(window.localStorage.getItem("businessServiceData")) || JSON.parse(window.localStorage.getItem("Employee.businessServiceData"))
-
-  const data = businessServiceData && businessServiceData.filter(businessService => businessService.businessService == "PT.CREATE");
-  let { states } = data && data.length > 0 && data[0] || [];
+  const businessServiceData = JSON.parse(
+    localStorageGet("businessServiceData")
+  );
+  
+  const data =businessServiceData&&businessServiceData.filter(businessService=>businessService.businessService=="PT.CREATE");
+  let { states } = data&&data.length>0&&data[0] || [];
 
   if (states && states.length > 0) {
     states = states.filter((item, index) => {
-      if (item.state == currentAction && item.actions && item.actions.length > 0) {
+      if (item.state == null && item.actions && item.actions.length > 0) {
         return item.actions;
       }
     });
     const actions = states && states.length > 0 && states[0].actions;
-    let returnAction=''
-    actions && actions.length > 0 && actions.map(action=>{
-      if(action.action=="REOPEN"){
-        returnAction=action.action;
-      }
-    })
-    if(returnAction=="REOPEN"){
-      return returnAction;
-    }
-    return actions && actions.length > 0 && actions[0] && actions[0].action;
+    return actions && actions.length > 0 && actions[0].action;
   }
 }
+
+export const convertToOldPTObject = (newObject) => {
+  let Properties = [
+    {
+      propertyId: "",
+      tenantId: "",
+      acknowldgementNumber: "",
+      oldPropertyId: null,
+      status: "",
+      address: {},
+      auditDetails: {},
+      creationReason: null,
+      occupancyDate: 0,
+      propertyDetails: [
+        {
+          institution: null,
+          tenantId: "",
+          citizenInfo: {},
+          source: null,
+          status: "",
+          usage: null,
+          noOfFloors: 0,
+          landArea: 0,
+          buildUpArea: null,
+          units: null,
+          documents: null,
+          additionalDetails: {
+            inflammable: false,
+            heightAbove36Feet: false,
+          },
+          financialYear: "",
+          propertyType: "",
+          propertySubType: null,
+          assessmentNumber: "",
+          assessmentDate: 0,
+          usageCategoryMajor: "",
+          usageCategoryMinor: "",
+          ownershipCategory: "",
+          subOwnershipCategory: "",
+          adhocExemption: null,
+          adhocPenalty: null,
+          adhocExemptionReason: null,
+          adhocPenaltyReason: null,
+          owners: [
+            {
+              persisterRefId: null,
+              id: null,
+              uuid: "",
+              userName: "",
+              password: null,
+              salutation: null,
+              name: "",
+              gender: "",
+              mobileNumber: "",
+              emailId: null,
+              altContactNumber: null,
+              pan: null,
+              aadhaarNumber: null,
+              permanentAddress: null,
+              permanentCity: null,
+              permanentPinCode: null,
+              correspondenceCity: null,
+              correspondencePinCode: null,
+              correspondenceAddress: null,
+              active: true,
+              dob: null,
+              pwdExpiryDate: 0,
+              locale: null,
+              type: "",
+              signature: null,
+              accountLocked: false,
+              roles: [],
+              fatherOrHusbandName: "",
+              bloodGroup: null,
+              identificationMark: null,
+              photo: null,
+              createdBy: "",
+              createdDate: 0,
+              lastModifiedBy: "",
+              lastModifiedDate: 0,
+              otpReference: null,
+              tenantId: "",
+              isPrimaryOwner: null,
+              ownerShipPercentage: null,
+              ownerType: "",
+              institutionId: null,
+              documents: [],
+              relationship: "",
+              additionalDetails: null,
+            },
+          ],
+          auditDetails: {},
+          calculation: null,
+          channel: null,
+        },
+      ],
+      additionalDetails: null,
+    },
+  ];
+  let newProperty = newObject.Properties[0];
+  let property = {};
+  let propertyDetails = {};
+
+  property.propertyId = newProperty.propertyId;
+  property.tenantId = newProperty.tenantId;
+  property.acknowldgementNumber = newProperty.acknowldgementNumber;
+  property.oldPropertyId = newProperty.oldPropertyId;
+  property.status = newProperty.status;
+  property.address = newProperty.address;
+  property.auditDetails = newProperty.auditDetails;
+  property.creationReason = newProperty.creationReason;
+  property.occupancyDate = newProperty.units && newProperty.units.length && newProperty.units[0].occupancyDate;
+  property.additionalDetails = newProperty.additionalDetails;
+
+  propertyDetails.institution = newProperty.institution;
+  propertyDetails.tenantId = newProperty.tenantId;
+  propertyDetails.citizenInfo = newProperty.owners[0];
+  propertyDetails.source = newProperty.source;
+  propertyDetails.status = newProperty.status;
+  propertyDetails.usage = null;
+  propertyDetails.noOfFloors = newProperty.noOfFloors;
+  propertyDetails.landArea = newProperty.landArea;
+  propertyDetails.buildUpArea = newProperty.superBuiltUpArea;
+  propertyDetails.units = newProperty.units&&newProperty.units.map(unit=>{
+    unit.floorNo = unit.floorNo || unit.floorNo === 0 ? unit.floorNo.toString() : unit.floorNo
+    return {...unit}
+  });
+
+
+
+  propertyDetails.documents = newProperty.documents;
+  propertyDetails.additionalDetails = newProperty.additionalDetails;
+  propertyDetails.financialYear = null;
+  propertyDetails.propertyType = newProperty.propertyType;
+  //propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
+  //propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
+  propertyDetails.assessmentNumber = 0;
+  propertyDetails.assessmentDate = null;
+  propertyDetails.usageCategoryMajor = extractFromString(newProperty.usageCategory, 0);
+  propertyDetails.usageCategoryMinor = extractFromString(newProperty.usageCategory, 1);
+  propertyDetails.ownershipCategory = extractFromString(newProperty.ownershipCategory, 0);
+  propertyDetails.subOwnershipCategory = extractFromString(newProperty.ownershipCategory, 2);
+  propertyDetails.adhocExemption = null;
+  propertyDetails.adhocPenalty = null;
+  propertyDetails.adhocExemptionReason = null;
+  propertyDetails.adhocPenaltyReason = null;
+  propertyDetails.owners = newProperty.owners;
+  propertyDetails.owners=propertyDetails.owners.filter((owner)=>owner.status=='ACTIVE')
+
+  // propertyDetails.owners[0].persisterRefId = null;
+  // propertyDetails.owners[0].id = newProperty.id;
+  // propertyDetails.owners[0].uuid = newProperty.owners[0].uuid;
+  // propertyDetails.owners[0].userName = newProperty.owners[0].userName;
+  // propertyDetails.owners[0].password = newProperty.owners[0].password;
+  // propertyDetails.owners[0].salutation = newProperty.owners[0].salutation;
+  // propertyDetails.owners[0].name = newProperty.owners[0].name;
+  // propertyDetails.owners[0].gender = newProperty.owners[0].gender;
+  // propertyDetails.owners[0].mobileNumber = newProperty.owners[0].mobileNumber;
+  // propertyDetails.owners[0].emailId = newProperty.owners[0].emailId;
+  // propertyDetails.owners[0].altContactNumber = newProperty.owners[0].altContactNumber;
+  // propertyDetails.owners[0].pan = newProperty.owners[0].pan;
+  // propertyDetails.owners[0].aadhaarNumber = newProperty.owners[0].aadhaarNumber;
+  // propertyDetails.owners[0].permanentAddress = newProperty.owners[0].permanentAddress;
+  // propertyDetails.owners[0].permanentCity = newProperty.owners[0].permanentCity;
+  // propertyDetails.owners[0].permanentPinCode = newProperty.owners[0].permanentPinCode;
+  // propertyDetails.owners[0].correspondenceCity = newProperty.owners[0].correspondenceCity;
+  // propertyDetails.owners[0].correspondencePinCode = newProperty.owners[0].correspondencePinCode;
+  // propertyDetails.owners[0].correspondenceAddress = newProperty.owners[0].correspondenceAddress;
+  // propertyDetails.owners[0].active = newProperty.owners[0].active;
+  // propertyDetails.owners[0].dob = newProperty.owners[0].dob;
+  // propertyDetails.owners[0].pwdExpiryDate = newProperty.owners[0].pwdExpiryDate;
+  // propertyDetails.owners[0].locale = newProperty.owners[0].locale;
+  // propertyDetails.owners[0].type = newProperty.owners[0].type;
+  // propertyDetails.owners[0].signature = newProperty.owners[0].signature;
+  // propertyDetails.owners[0].accountLocked = newProperty.owners[0].accountLocked;
+  // propertyDetails.owners[0].roles = newProperty.owners[0].roles;
+  // propertyDetails.owners[0].fatherOrHusbandName = newProperty.owners[0].fatherOrHusbandName;
+  // propertyDetails.owners[0].bloodGroup = newProperty.owners[0].bloodGroup;
+  // propertyDetails.owners[0].identificationMark = newProperty.owners[0].identificationMark;
+  // propertyDetails.owners[0].photo = newProperty.owners[0].photo;
+  // propertyDetails.owners[0].createdBy = newProperty.owners[0].createdBy;
+  // propertyDetails.owners[0].createdDate = newProperty.owners[0].createdDate;
+  // propertyDetails.owners[0].lastModifiedBy = newProperty.owners[0].lastModifiedBy;
+  // propertyDetails.owners[0].lastModifiedDate = newProperty.owners[0].lastModifiedDate;
+  // propertyDetails.owners[0].otpReference = null;
+  // propertyDetails.owners[0].tenantId = newProperty.owners[0].tenantId;
+  // propertyDetails.owners[0].isPrimaryOwner = newProperty.owners[0].isPrimaryOwner;
+  // propertyDetails.owners[0].ownerShipPercentage = newProperty.owners[0].ownerShipPercentage;
+  // propertyDetails.owners[0].ownerType = newProperty.owners[0].ownerType;
+  // propertyDetails.owners[0].institutionId = newProperty.owners[0].institutionId;
+  // propertyDetails.owners[0].documents = newProperty.owners[0].documents;
+  // propertyDetails.owners[0].relationship = newProperty.owners[0].relationship;
+  // propertyDetails.owners[0].additionalDetails = newProperty.additionalDetails;
+  propertyDetails.auditDetails = newProperty.auditDetails;
+  propertyDetails.calculation = null;
+  propertyDetails.channel = newProperty.channel;
+  propertyDetails.units = propertyDetails.units && propertyDetails.units.map(unit => {
+    // unit.usageCategory;
+    // propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
+    // propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
+    unit.usageCategoryMajor = extractFromString(unit.usageCategory, 0)
+    unit.usageCategoryMinor = extractFromString(unit.usageCategory, 1)
+    unit.usageCategorySubMinor = extractFromString(unit.usageCategory, 2)
+    unit.usageCategoryDetail = extractFromString(unit.usageCategory, 3)
+    // unit.constructionDetail = {
+    //   builtUpArea: unit.unitArea,
+    // };
+    unit.unitArea = unit.constructionDetail.builtUpArea;
+    unit.ConstructionType = unit.constructionDetail.constructionType;
+
+    return { ...unit }
+  })
+  property["propertyDetails"] = [propertyDetails];
+  Properties[0] = { ...newProperty, ...property };
+
+
+  return Properties;
+};
 
 export const callDraft = async (self, formArray = [], assessmentNumber = "") => {
   let { draftRequest, selected } = self.state;
@@ -88,7 +321,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
     if (financialYearFromQuery) {
       set(prepareFormData, "Properties[0].propertyDetails[0].financialYear", financialYearFromQuery);
     }
-    if (selectedownerShipCategoryType === "SINGLEOWNER") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.SINGLEOWNER") {
       set(prepareFormData, "Properties[0].propertyDetails[0].owners", getSingleOwnerInfo(self));
       set(
         prepareFormData,
@@ -96,7 +329,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
         get(common, `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`, "INDIVIDUAL")
       );
       set(prepareFormData, "Properties[0].propertyDetails[0].subOwnershipCategory", selectedownerShipCategoryType);
-    } else if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+    } else if (selectedownerShipCategoryType === "INDIVIDUAL.MULTIPLEOWNERS") {
       set(prepareFormData, "Properties[0].propertyDetails[0].owners", getMultipleOwnerInfo(self));
       set(
         prepareFormData,
@@ -114,57 +347,58 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
   } catch (e) {
     alert(e);
   }
-  if (process.env.REACT_APP_NAME === "Citizen") {
-    /*  
-    Draft Removed from PT2.2
-    
-    if (!draftRequest.draft.id) {
-          draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
-          draftRequest.draft.draftRecord = {
-            selectedTabIndex: selected + 1,
-            prepareFormData,
-          };
-          try {
-            let draftResponse = await httpRequest("pt-services-v2/drafts/_create", "_cretae", [], draftRequest);
-            const draftInfo = draftResponse.drafts[0];  
-            updateDraftinLocalStorage(draftInfo, assessmentNumber, self);
-          } catch (e) {
-            alert(e);
-          }
-        } else {
-          const assessmentNo = assessmentNumber || draftRequest.draft.assessmentNumber;
-          draftRequest.draft = {
-            ...draftRequest.draft,
+  if(process.env.REACT_APP_NAME === "Citizen")
+  {
+  /*  
+  Draft Removed from PT2.2
+  
+  if (!draftRequest.draft.id) {
+        draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
+        draftRequest.draft.draftRecord = {
+          selectedTabIndex: selected + 1,
+          prepareFormData,
+        };
+        try {
+          let draftResponse = await httpRequest("pt-services-v2/drafts/_create", "_cretae", [], draftRequest);
+          const draftInfo = draftResponse.drafts[0];  
+          updateDraftinLocalStorage(draftInfo, assessmentNumber, self);
+        } catch (e) {
+          alert(e);
+        }
+      } else {
+        const assessmentNo = assessmentNumber || draftRequest.draft.assessmentNumber;
+        draftRequest.draft = {
+          ...draftRequest.draft,
+          assessmentNumber: assessmentNo,
+          tenantId: getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId,
+          draftRecord: {
+            ...draftRequest.draft.draftRecord,
+            selectedTabIndex: assessmentNumber ? selected : selected + 1,
             assessmentNumber: assessmentNo,
-            tenantId: getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId,
-            draftRecord: {
-              ...draftRequest.draft.draftRecord,
-              selectedTabIndex: assessmentNumber ? selected : selected + 1,
-              assessmentNumber: assessmentNo,
-              prepareFormData,
-            },
             prepareFormData,
-          };
-          try {
-            if (selected === 3) {
-              draftRequest = {
-                ...draftRequest,
-                draft: {
-                  ...draftRequest.draft,
-                  isActive: false,
-                },
-              };
-            }
-            let draftResponse = await httpRequest("pt-services-v2/drafts/_update", "_update", [], draftRequest);
-            const draftInfo = draftResponse.drafts[0];  
-            updateDraftinLocalStorage(draftInfo, "", self);
-          } catch (e) {
-            alert(e);
+          },
+          prepareFormData,
+        };
+        try {
+          if (selected === 3) {
+            draftRequest = {
+              ...draftRequest,
+              draft: {
+                ...draftRequest.draft,
+                isActive: false,
+              },
+            };
           }
-        } */
-  }
+          let draftResponse = await httpRequest("pt-services-v2/drafts/_update", "_update", [], draftRequest);
+          const draftInfo = draftResponse.drafts[0];  
+          updateDraftinLocalStorage(draftInfo, "", self);
+        } catch (e) {
+          alert(e);
+        }
+      } */
+  } 
 
-
+  
 };
 
 export const updateTotalAmount = (value, isFullPayment, errorText) => {
@@ -220,20 +454,26 @@ const convertBuiltUpAreaToSqFt = (builtUpArea) => {
 };
 
 export const getTargetPropertiesDetails = (propertyDetails, self) => {
+  
+
   const { search } = self.props.location;
   const assessmentNumber = getQueryValue(search, "assessmentId");
   const selectedPropertyDetails = propertyDetails;
   // return the latest proeprty details of the selected year
   const lastIndex = 0;
-  if (selectedPropertyDetails[lastIndex].propertySubType === "SHAREDPROPERTY") {
+  if (selectedPropertyDetails[lastIndex].propertySubType === "BUILTUP.SHAREDPROPERTY") {
     selectedPropertyDetails[lastIndex].buildUpArea =
       selectedPropertyDetails[lastIndex] &&
       selectedPropertyDetails[lastIndex].buildUpArea &&
-      convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
+      //convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
+      selectedPropertyDetails[lastIndex].buildUpArea;
+
   }
   selectedPropertyDetails[lastIndex].units =
-    selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && convertUnitsToSqFt(selectedPropertyDetails[lastIndex].units);
-  return [selectedPropertyDetails[lastIndex]];
+    //selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && convertUnitsToSqFt(selectedPropertyDetails[lastIndex].units);
+   selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && selectedPropertyDetails[lastIndex].units;
+
+    return [selectedPropertyDetails[lastIndex]];
 };
 
 export const getImportantDates = async (self) => {
@@ -387,9 +627,10 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
   const filteredUnitsArray = unitsArray && unitsArray.filter((item) => item !== null);
   const mapIdWithIndex = billingSlabs.reduce(
     (res, curr) => {
+      let i =0;
       const obj = {
         id: curr.split("|")[0],
-        index: curr.split("|")[1],
+        index: curr.split("|")[1]? curr.split("|")[1] :i++,
       };
       res["mappedIds"].push(obj);
       res["idsArray"].push(curr.split("|")[0]);
@@ -409,7 +650,18 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
 
   let finalData = mapIdWithIndex.mappedIds.reduce(
     (res, curr) => {
-      const { floorNo } = filteredUnitsArray[curr.index];
+      const PropertyType = get(prepareFormData, "Properties[0].propertyDetails[0].propertyType"); 
+
+      let floorNo = 0;
+
+      if(PropertyType === "VACANT" )
+      {
+      floorNo = 0;
+      }
+      else
+      {
+        const { floorNo } =  filteredUnitsArray && filteredUnitsArray[curr.index];
+      }    
       if (res.floorObj.hasOwnProperty(floorNo)) {
         res.floorObj[floorNo]++;
       } else {
@@ -437,7 +689,7 @@ export const getHeaderLabel = (selected, role) => {
           containerStyle={{ marginTop: 12 }}
           fontSize="16px"
           color="#484848"
-          label={role === "citizen" ? "PT_FORM1_HEADER_MESSAGE" : "PT_EMP_FORM1_HEADER_MESSAGE"}
+          //label={role === "citizen" ? "PT_FORM1_HEADER_MESSAGE" : "PT_EMP_FORM1_HEADER_MESSAGE"}
         />
       );
     case 1:
@@ -494,22 +746,30 @@ export const normalizePropertyDetails = (properties, self) => {
   const { propertyDetails } = property;
   const isReassesment = !!getQueryValue(search, "isReassesment");
   const propertyId = getQueryValue(search, "propertyId");
-  const units =
+  /* const units =
     propertyDetails[0] && propertyDetails[0].units
       ? propertyDetails[0].units.filter((item, ind) => {
         return item !== null;
       })
-      : [];
+      : []; */
+   const units =
+      propertyDetails[0] && propertyDetails[0].propertyType === "VACANT"
+        ? null
+        : propertyDetails[0].units
+        ? propertyDetails[0].units.filter((item, ind) => {
+            return item !== null;
+          })
+        : [];        
   if (isReassesment && propertyId) {
     property.propertyId = propertyId;
   }
   var sumOfUnitArea = 0;
-  units.forEach((unit) => {
-    let unitAreaInSqYd = parseFloat(unit.unitArea) / 9;
-    unit.unitArea = Math.round(unitAreaInSqYd * 100) / 100;
+  units &&  units.forEach((unit) => {
+    //let unitAreaInSqYd = parseFloat(unit.unitArea) / 9;
+   // unit.unitArea = Math.round(unitAreaInSqYd * 100) / 100;
     sumOfUnitArea += unit.unitArea;
   });
-  if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
+  if (propertyDetails[0].propertySubType === "BUILTUP.SHAREDPROPERTY") {
     propertyDetails[0].buildUpArea = sumOfUnitArea;
   }
   propertyDetails[0].units = units;
@@ -538,7 +798,7 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
         }
         return unitTotal;
       }, 0);
-      const plotSizeInFt = parseFloat(plotDetails.fields.plotSize.value) * 9;
+      const plotSizeInFt = parseFloat(plotDetails.fields.plotSize.value) ;
       if (unitTotal > plotSizeInFt) {
         alert(`Total area of floor ${floorNo} has exceeded the plot size`);
         isValid = false;
@@ -548,13 +808,50 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
   return isValid;
 };
 
-export const renderPlotAndFloorDetails = (fromReviewPage, PlotComp, FloorComp, self) => {
+/* export const renderPlotAndFloorDetails = (fromReviewPage, PlotComp, FloorComp, self) => {
   let { basicInformation, plotDetails, floorDetails_0 } = self.props.form;
   if (plotDetails && floorDetails_0 && floorDetails_0.fields.builtArea) {
     let uom = plotDetails.fields && plotDetails.fields.measuringUnit && plotDetails.fields.measuringUnit.value;
     floorDetails_0.fields.builtArea.floatingLabelText = `Built Area(${uom})`;
   }
-
+  if (basicInformation && basicInformation.fields.typeOfUsage.value && basicInformation.fields.typeOfBuilding.value) {
+    let pathFormKeyObject = getPlotAndFloorFormConfigPath(basicInformation.fields.typeOfUsage.value, basicInformation.fields.typeOfBuilding.value);
+    return !isEmpty(pathFormKeyObject) ? (
+      <div>
+        {pathFormKeyObject.hasPlot && <PlotComp component={pathFormKeyObject.plotForm} disabled={fromReviewPage} />}
+        {pathFormKeyObject.hasFloor && <FloorComp componentDetails={pathFormKeyObject.floorObject} disabled={fromReviewPage} />}
+      </div>
+    ) : null;
+  } else {
+    return null;
+  }
+};  */ 
+ export const renderPlotAndFloorDetails = (fromReviewPage, PlotComp, FloorComp, self) => {
+  let { basicInformation, plotDetails, floorDetails_0, prepareFormData = {} } = self.props.form;
+  if (plotDetails && floorDetails_0 && floorDetails_0.fields.builtArea) {
+    let uom = plotDetails.fields && plotDetails.fields.measuringUnit && plotDetails.fields.measuringUnit.value;
+    floorDetails_0.fields.builtArea.floatingLabelText = `Built Area(${uom})`;
+  }
+  if (basicInformation && !basicInformation.fields.datePicker.value) {
+    if (
+      prepareFormData.Properties &&
+      prepareFormData.Properties.length > 0 &&
+      get(prepareFormData, "Properties[0].propertyDetails[0].additionalDetails.constructionYear", null)
+    ) {
+      basicInformation.fields.datePicker.value = new Date(prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear);
+      }
+  }
+  if (plotDetails) {
+    for (let i = 0; i < get(plotDetails, "fields.floorCount.value", 0); i++) {
+      for (let j = 0; j < get(self.props.prepareFormData, `Properties[0].propertyDetails[0].units.length`, 0); j++) {
+        let floorDetails_0_unit_0 = get(self.props, `form.floorDetails_${i}_unit_${j}.fields.constructionType`, null);
+        if (floorDetails_0_unit_0 && !floorDetails_0_unit_0.value) {
+          let val = get(self.props.prepareFormData, `Properties[0].propertyDetails[0].units[${j}].constructionType`, "");
+          set(self.props.form, `floorDetails_${i}_unit_${j}.fields.constructionType.value`, val);
+        }
+      }
+    }
+  } 
   if (basicInformation && basicInformation.fields.typeOfUsage.value && basicInformation.fields.typeOfBuilding.value) {
     let pathFormKeyObject = getPlotAndFloorFormConfigPath(basicInformation.fields.typeOfUsage.value, basicInformation.fields.typeOfBuilding.value);
     return !isEmpty(pathFormKeyObject) ? (
@@ -575,22 +872,17 @@ export const removeAdhocIfDifferentFY = (property, fY) => {
   set(property, "Properties[0].propertyDetails[0].adhocPenaltyReason", null);
   return property;
 };
+export const routeToAcknowledgement = (purpose, status, propertyId, tenantId, secondNumber, FY) => {
 
-export const getSortedTaxSlab = (estimateResponse) => {
-  if (estimateResponse && estimateResponse.Calculation && estimateResponse.Calculation.length > 0) {
-    if (estimateResponse.Calculation[0].taxHeadEstimates && estimateResponse.Calculation[0].taxHeadEstimates.length > 0) {
-      const taxHeadKeys = ["PT_TAX", "PT_CANCER_CESS", "PT_TIME_REBATE", "PT_TIME_PENALTY", "PT_TIME_INTEREST", "PT_OWNER_EXEMPTION", "PT_ROUNDOFF", "PT_UNIT_USAGE_EXEMPTION", "PT_FIRE_CESS"];
-      const tempArray = estimateResponse.Calculation[0].taxHeadEstimates;
-      if (tempArray && tempArray.length > 0) {
-        let tempArray1 = [];
-        taxHeadKeys.map((key) => {
-          let itemKeys = {};
-          itemKeys = tempArray[tempArray.findIndex(item => item.taxHeadCode.indexOf(key) !== -1)];
-          if (itemKeys) tempArray1.push(itemKeys);
-        });
-        estimateResponse.Calculation[0].taxHeadEstimates = tempArray1;
-      }
-    }
-  }
-  return estimateResponse;
+  let routeLink = `/property-tax/pt-acknowledgment?purpose=${purpose}&status=${status}`;
+  routeLink = propertyId ? `${routeLink}&propertyId=${propertyId}` : `${routeLink}`;
+  routeLink = tenantId ? `${routeLink}&tenantId=${tenantId}` : `${routeLink}`;
+  routeLink = secondNumber ? `${routeLink}&secondNumber=${secondNumber}` : `${routeLink}`;
+  routeLink = FY ? `${routeLink}&FY=${FY}` : `${routeLink}`;
+
+  store.dispatch(
+    setRoute(
+      routeLink
+    )
+  );
 }

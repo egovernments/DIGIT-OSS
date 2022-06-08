@@ -4,13 +4,11 @@ import lombok.*;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-
 @Getter
+@Setter
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-@Setter
 public class Sms {
 
     private String mobileNumber;

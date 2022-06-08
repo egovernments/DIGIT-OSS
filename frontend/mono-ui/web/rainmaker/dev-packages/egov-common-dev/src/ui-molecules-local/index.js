@@ -8,11 +8,6 @@ const TestMolecules = Loadable({
   loader: () => import("./TestMolecules"),
   loading: () => <Loading />
 });
-const ArrearsMolecule = Loadable({
-  loader: () => import("./ArrearsMolecule"),
-  loading: () => <Loading />
-});
-
 const RadioButtonsGroup = Loadable({
   loader: () => import("./RadioGroup"),
   loading: () => <Loading />
@@ -53,7 +48,6 @@ export {
   TestMolecules,
   RadioButtonsGroup,
   Tooltip,
-  ArrearsMolecule,
   CustomTab,
   UploadSingleFile,
   FeesEstimateCard,

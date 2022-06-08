@@ -10,8 +10,7 @@ const UploadSingleFile = ({
   onButtonClick,
   inputProps,
   buttonLabel,
-  id,
-  disabled = false
+  id
 }) => {
   return (
     <div>
@@ -20,12 +19,11 @@ const UploadSingleFile = ({
           buttonProps={{
             variant: "outlined",
             color: "primary",
-            onClick: onButtonClick,
-            disabled: disabled
+            onClick: onButtonClick
           }}
           id={id}
           handleFileUpload={handleFileUpload}
-          inputProps={{ multiple: false, disabled: disabled, ...inputProps }}
+          inputProps={{ multiple: false, ...inputProps }}
           classes={classes}
           buttonLabel={buttonLabel}
         />
@@ -40,7 +38,6 @@ const UploadSingleFile = ({
                     <UploadedDocument
                       document={document}
                       removeDocument={removeDocument}
-                      disabled={disabled}
                     />
                   )}
                 </div>

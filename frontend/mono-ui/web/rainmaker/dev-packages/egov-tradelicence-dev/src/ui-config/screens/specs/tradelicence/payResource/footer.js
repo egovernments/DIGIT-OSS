@@ -65,7 +65,7 @@ export const callPGService = async (state, dispatch) => {
             "billResponse.Bill[0].billDetails[0].consumerCode"
           ),
           productInfo: "Trade License Payment",
-          gateway: "AXIS",
+          gateway: "EASYPAY",
           callbackUrl
         }
       };
@@ -298,7 +298,7 @@ export const footer = getCommonApplyFooter({
       //roles: ["TL_CEMP"]
       action: "PAY"
     },
-    visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+     visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
   },
   // downloadConfirmationform: {
   //   componentPath: "Button",

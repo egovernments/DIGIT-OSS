@@ -12,6 +12,7 @@ import org.egov.tl.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -29,8 +30,14 @@ public class TLRenewalNotificationUtil {
     private ServiceRequestRepository serviceRequestRepository;
 
     private Producer producer;
-
+    
     private NotificationUtil notificationUtil;
+    
+    @Autowired
+	private ShortUrlUtil shortUrlUtil;
+	
+	@Value("${egov.tl.citizen.search}")
+	private String tlCitizenSearchUrl;
 
     @Autowired
     public TLRenewalNotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, NotificationUtil notificationUtil) {
@@ -70,15 +77,19 @@ public class TLRenewalNotificationUtil {
                 message = getAppliedMsg(license, messageTemplate);
                 break;
 
-            case ACTION_STATUS_FIELDINSPECTION:
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_FIELD_INSPECTION, localizationMessage);
-                message = getFieldInspectionMsg(license, messageTemplate);
-                break;
+		/*
+		 * case ACTION_STATUS_FIELDINSPECTION: messageTemplate =
+		 * getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_FIELD_INSPECTION,
+		 * localizationMessage); message = getFieldInspectionMsg(license,
+		 * messageTemplate); break;
+		 */
 
-            case ACTION_STATUS_PENDINGAPPROVAL:
-                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_PENDINGAPPROVAL, localizationMessage);
-                message = getPendingApprovalMsg(license, messageTemplate);
-                break;
+		/*
+		 * case ACTION_STATUS_PENDINGAPPROVAL: messageTemplate =
+		 * getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_PENDINGAPPROVAL,
+		 * localizationMessage); message = getPendingApprovalMsg(license,
+		 * messageTemplate); break;
+		 */
 
             case ACTION_STATUS_REJECTED:
                 messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_REJECTED, localizationMessage);
@@ -117,6 +128,16 @@ public class TLRenewalNotificationUtil {
                 messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED, localizationMessage);
                 message = getCancelledMsg(license, messageTemplate);
                 break;
+                
+            case ACTION_STATUS_SENDBACK:
+    			messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_SENDBACK_TO_INSPECTION, localizationMessage);
+    			message = getSendBackToInspcetionMsg(license, messageTemplate);
+    			break; 
+
+            case ACTION_STATUS_FORWARD_APPLIED:
+                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_STATUS_FORWARD_APPLIED, localizationMessage);
+    			message = getResubmitAppMsg(license, messageTemplate);
+    			break; 
         }
 
         return message;
@@ -157,8 +178,8 @@ public class TLRenewalNotificationUtil {
             tenantId = tenantId.split("\\.")[0];
 
         String locale = NOTIFICATION_LOCALE;
-        if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
-            locale = requestInfo.getMsgId().split("\\|")[1];
+        // if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
+        //     locale = requestInfo.getMsgId().split("\\|")[1];
 
         StringBuilder uri = new StringBuilder();
         uri.append(config.getLocalizationHost()).append(config.getLocalizationContextPath())
@@ -388,7 +409,14 @@ public class TLRenewalNotificationUtil {
     public String getOwnerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
         String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_OWNER, localizationMessages);
         messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-        messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
+        messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
+        messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		String applicationNumber = license.getApplicationNumber();
+		messageTemplate= messageTemplate.replace("<applicationNumber>", applicationNumber);
+        String shortUrl = shortUrlUtil.getShortUrl(tlCitizenSearchUrl, applicationNumber,
+				license.getTenantId());
+
+		messageTemplate = messageTemplate.replace("<5>", shortUrl);
         return messageTemplate;
     }
 
@@ -401,12 +429,21 @@ public class TLRenewalNotificationUtil {
      *            Message from localization
      * @return message for completed payment for payer
      */
-    public String getPayerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
-        String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_PAYER, localizationMessages);
-        messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-        messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
-        return messageTemplate;
-    }
+	public String getPayerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
+		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_PAYER,
+				localizationMessages);
+		messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
+		messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
+		messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		String applicationNumber = license.getApplicationNumber();
+		messageTemplate= messageTemplate.replace("<applicationNumber>", applicationNumber);
+		String shortUrl = shortUrlUtil.getShortUrl(tlCitizenSearchUrl, applicationNumber,
+				license.getTenantId());
+
+		messageTemplate = messageTemplate.replace("<5>", shortUrl);
+
+		return messageTemplate;
+	}
 
     /**
      * Send the SMSRequest on the SMSNotification kafka topic
@@ -547,5 +584,19 @@ public class TLRenewalNotificationUtil {
     public void sendEventNotification(EventRequest request) {
         producer.push(config.getSaveUserEventsTopic(), request);
     }
+    
+    private String getSendBackToInspcetionMsg(TradeLicense license, String message) {
+		message = message.replace("<2>", license.getTradeName());
+		message = message.replace("<3>", license.getApplicationNumber());
+
+		return message;
+	}
+    
+    private String getResubmitAppMsg(TradeLicense license, String message) {
+		message = message.replace("<2>", license.getTradeName());
+		message = message.replace("<3>", license.getApplicationNumber());
+
+		return message;
+	}
 
 }

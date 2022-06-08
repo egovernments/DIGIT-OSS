@@ -1,7 +1,7 @@
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTransformedLocale, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import html2canvas from "html2canvas";
 import jp from "jsonpath";
@@ -46,18 +46,19 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
   }
 };
 
-export const getSearchResults = async (queryObject, requestBody,searchURL="/property-services/property/_search") => {
+export const getSearchResults = async (queryObject, requestBody) => {
   try {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      searchURL,
+      "/property-services/property/_search",
       "",
       queryObject,
       requestBody
     );
+    let newProperties=[]
     response && response.Properties && response.Properties.map(property => {
-    
+      if (property && property.status) {
         let newOwnerList = [];
         let oldOwnerList = [];
         property.owners.map(owner => {
@@ -67,14 +68,12 @@ export const getSearchResults = async (queryObject, requestBody,searchURL="/prop
             oldOwnerList.push(owner);
           }
         })
-      if (property.status == "INWORKFLOW") {
         oldOwnerList.push(...newOwnerList);
         property.owners = oldOwnerList;
-      }else{
-        newOwnerList.push(...oldOwnerList);
-        property.owners = newOwnerList;
+        newProperties.push(property);
       }
     })
+    response["Properties"]=newProperties;
     store.dispatch(toggleSpinner());
     return response;
   } catch (error) {
@@ -625,7 +624,7 @@ export const getSearchBillResult = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/billing-service/bill/v2/_fetchbill",
+      "/billing-service/bill/v2/_search",
       "",
       queryObject
     );
@@ -649,12 +648,3 @@ export const getDomainLink = () =>{
     }
     return link
 };
-
-
-export const downloadMutationCertificate =(queryObj,fileName)=>{
-  searchAndDownloadPdf(`/egov-pdf/download/PT/ptmutationcertificate`,queryObj,fileName)
-}
-
-export const printMutationCertificate =(queryObj)=>{
-  searchAndPrintPdf(`/egov-pdf/download/PT/ptmutationcertificate`,queryObj)
-}

@@ -1,10 +1,13 @@
+import React from "react";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { matchPath } from "react-router";
+import get from "lodash/get";
+import forEach from "lodash/forEach";
+import isEmpty from "lodash/isEmpty";
 import CommonShare from "egov-ui-kit/components/CommonShare";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
-import isEmpty from "lodash/isEmpty";
-import React from "react";
-import { connect } from "react-redux";
-import { matchPath, withRouter } from "react-router";
 
 class CommonShareContainer extends React.Component {
   visible = false;
@@ -14,8 +17,8 @@ class CommonShareContainer extends React.Component {
   shareCallBack = () => {
     const { actionComponentMapping, componentId, complaints } = this.props;
 
-    const { matchedURL, currentRole, indexMenu } = this;
-    if (currentRole !== null && indexMenu !== -1 && matchedURL) {
+    const { visible, matchedURL, currentRole, indexMenu } = this;
+    if (currentRole != null && indexMenu != -1 && matchedURL) {
       const metaData = actionComponentMapping[componentId][matchedURL][currentRole]["metaData"];
       let { jsonPaths } = metaData;
       let { template } = metaData;
@@ -36,7 +39,7 @@ class CommonShareContainer extends React.Component {
   };
 
   render() {
-    const { location, menu, actionComponentMapping, componentId, complaints } = this.props;
+    const { match, location, history, menu, actionComponentMapping, componentId, complaints } = this.props;
     this.visible = false;
     this.matchedURL = null;
     this.indexMenu = menu && menu.findIndex((elem) => elem.name === componentId);
@@ -65,7 +68,7 @@ class CommonShareContainer extends React.Component {
       });
     let urlRoles; //Roles for given url
 
-    if (isPathMatched !== undefined && isPathMatched !== -1) {
+    if (isPathMatched != undefined && isPathMatched != -1) {
       this.matchedURL = actionURLs[isPathMatched];
       urlRoles = Object.keys(get(actionData, this.matchedURL));
       for (let i = 0; i < roleCodes.length; i++) {
@@ -76,14 +79,21 @@ class CommonShareContainer extends React.Component {
       }
     }
 
-    if (this.currentRole !== null && this.indexMenu !== -1 && this.matchedURL && !isEmpty(complaints)) {
+    if (this.currentRole != null && this.indexMenu != -1 && this.matchedURL && !isEmpty(complaints)) {
       this.visible = true;
     }
+    // console.log("visible", this.visible);
+    // console.log("path", location.pathname, this.visible, this.currentRole, this.indexMenu, this.matchedURL);
+
     return (
       <div className="share-btn">{navigator.share && <CommonShare variant="fab" visible={this.visible} shareCallback={this.shareCallBack} />}</div>
     );
   }
 }
+
+CommonShareContainer.propTypes = {
+  // classes: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = (state) => {
   const menu = state.app.menu || [];

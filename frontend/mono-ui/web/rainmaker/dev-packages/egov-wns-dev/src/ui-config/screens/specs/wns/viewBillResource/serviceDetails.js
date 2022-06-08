@@ -5,7 +5,7 @@ import {
     getLabelWithValue,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { serviceConst } from "../../../../../ui-utils/commons";
+
 const service = getQueryArg(window.location.href, "service")
 const connectionType = getQueryArg(window.location.href, "connectionType")
 
@@ -23,7 +23,7 @@ export const propertyUsage = getLabelWithValue(
         labelKey: "WS_SERV_DETAIL_PROP_USE_TYPE"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
     },
     {
-        jsonPath: "WaterConnection[0].property.usageCategory"
+        jsonPath: "WaterConnection[0].property.propertyUsageType"
     }
 );
 
@@ -32,11 +32,7 @@ export const connType = getLabelWithValue(
         labelKey: "WS_SERV_DETAIL_CONN_TYPE"
     },
     {
-        jsonPath: "WaterConnection[0].connectionType",
-        localePrefix: {
-            moduleName: "WS_SERVICES_MASTERS",
-            masterName: "WATERSOURCE"
-          },
+        jsonPath: "WaterConnection[0].connectionType"
     }
 );
 
@@ -72,13 +68,7 @@ export const consumption = getLabelWithValue(
         labelKey: "WS_SERV_DETAIL_CONSUMP"
     },
     {
-        jsonPath: "WaterConnection[0].consumption",
-        callBack: (params) => {
-            if (params !== undefined && params !== null && params > 0) {
-                return parseFloat(params).toFixed(2)
-            } else if (params === 0) { return 0; }
-            else return "NA"
-        }
+        jsonPath: "WaterConnection[0].consumption"
     }
 );
 
@@ -127,31 +117,18 @@ export const getService = () => {
                 }
             },
         },
-        // serviceCardContainer: renderService()
-        waterDetails:  waterDetailsCard(),
-        sewerDetails: sewerDetailsCard(),
+        serviceCardContainer: renderService()
     });
 };
 
-// export const renderService = () => {
-//     if (service === serviceConst.WATER) {
-//         if (connectionType === "Metered") {
-//             return getCommonContainer({ serviceType, propertyUsage, connType, meterId, meterStatus, meterReadingDate, consumption, currentMeterReading, lastMeterReading });
-//         } else {
-//             return getCommonContainer({ serviceType, propertyUsage, connType });
-//         }
-//     } else if (service === serviceConst.SEWERAGE) {
-//         return getCommonContainer({ serviceType, propertyUsage })
-//     }
-// }
-
-export const waterDetailsCard = () => {
-    if (connectionType === "Metered") {
-        return getCommonContainer({ serviceType, propertyUsage, connType, meterId, meterStatus, meterReadingDate, consumption, currentMeterReading, lastMeterReading });
-    } else {
-        return getCommonContainer({ serviceType, propertyUsage, connType });
+export const renderService = () => {
+    if (service === "WATER") {
+        if (connectionType === "Metered") {
+            return getCommonContainer({ serviceType, propertyUsage, connType, meterId, meterStatus, meterReadingDate, consumption, currentMeterReading, lastMeterReading });
+        } else {
+            return getCommonContainer({ serviceType, propertyUsage, connType });
+        }
+    } else if (service === "SEWERAGE") {
+        return getCommonContainer({ serviceType, propertyUsage })
     }
-}
-export const sewerDetailsCard = () => {
-    return getCommonContainer({ serviceType, propertyUsage });
 }

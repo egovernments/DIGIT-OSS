@@ -13,6 +13,10 @@ const LabelContainer = Loadable({
   loading: () => <Loading />
 });
 
+const RadioGroupContainer = Loadable({
+  loader: () => import("./RadioGroupContainer"),
+  loading: () => <Loading />
+});
 
 const CheckboxContainer = Loadable({
   loader: () => import("./CheckboxContainer"),
@@ -65,5 +69,5 @@ const SuccessPTPopupContainer = Loadable({
 });
 
 
-export { CustomTabContainer, LabelContainer, CheckboxContainer, DownloadFileContainer, EstimateCardContainer, AutosuggestContainer, DocumentListContainer, PaymentRedirectPage, ViewBreakupContainer, DialogContainer, HeaderContainer, CheckboxContainerPTCommon, SuccessPTPopupContainer };
+export { CustomTabContainer, RadioGroupContainer,LabelContainer, CheckboxContainer, DownloadFileContainer, EstimateCardContainer, AutosuggestContainer, DocumentListContainer, PaymentRedirectPage, ViewBreakupContainer, DialogContainer, HeaderContainer, CheckboxContainerPTCommon, SuccessPTPopupContainer };
 

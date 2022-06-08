@@ -7,9 +7,11 @@ import Profile from "modules/citizen/User/Profile";
 
 // common screens
 
-//import LandingPage from "modules/citizen/LandingPage";
-import CitizenDashboard from "modules/citizen/CitizenDashboard";
-import HowItWorks from "modules/citizen/HowItWorks";
+import LandingPage from "modules/citizen/LandingPage";
+//import CitizenDashboard from "modules/citizen/CitizenDashboard";
+//mport HowItWorks from "modules/citizen/HowItWorks";
+import HowItWorks from "../../ui-views/HowItWorks";
+
 import ContactUs from "modules/citizen/ContactUs";
 import MyNotifications from "modules/citizen/MyNotifications";
 import WhatsNew from "modules/citizen/WhatsNew";
@@ -23,7 +25,6 @@ import { ImageModalDisplay } from "modules/common";
 import { TrackLocation } from "modules/common";
 import frameworkScreens from "./frameworkScreens";
 import { PrivacyPolicy } from "modules/common";
-import TLHowItWorks from "../../ui-views/HowItWorks";
 import pgrRoutes from "pgr-citizen/Routes/pgr-routes";
 import ptRoutes from "pt-citizen/Routes/pt-routes";
 
@@ -77,7 +78,7 @@ const routes = [
   // },
   {
     path: "/",
-    component: CitizenDashboard,
+    component: LandingPage,
     needsAuthentication: true,
     options: {
       isHomeScreen: true,
@@ -121,7 +122,7 @@ const routes = [
   },
   {
     path: "trade-license/how-it-works",
-    component: TLHowItWorks,
+    component: HowItWorks,
     needsAuthentication: true,
     options: {
       hideFooter: true,

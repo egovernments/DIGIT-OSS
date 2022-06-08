@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/assessment")
 public class AssessmentController {
 	
+	private static final String LEGACY_RECORD="LEGACY_RECORD";
+	
 	@Autowired
 	private AssessmentService assessmentService;
 
@@ -35,8 +37,15 @@ public class AssessmentController {
 	@PostMapping("/_create")
 	public ResponseEntity<AssessmentResponse> create(@Valid @RequestBody AssessmentRequest assessmentRequest) {
 
-		Assessment assessment = assessmentService.createAssessment(assessmentRequest);
-		ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(assessmentRequest.getRequestInfo(), true);
+		Assessment assessment = null;
+		if (LEGACY_RECORD.equalsIgnoreCase(assessmentRequest.getAssessment().getSource().toString())) {
+			assessment = assessmentService.createLegacyAssessments(assessmentRequest);
+
+		} else {
+			assessment = assessmentService.createAssessment(assessmentRequest);
+		}
+		ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(assessmentRequest.getRequestInfo(),
+				true);
 		AssessmentResponse response = AssessmentResponse.builder()
 				.assessments(Arrays.asList(assessment))
 				.responseInfo(resInfo)
@@ -47,8 +56,13 @@ public class AssessmentController {
 	
 	@PostMapping("/_update")
 	public ResponseEntity<AssessmentResponse> update(@Valid @RequestBody AssessmentRequest assessmentRequest) {
-		
-		Assessment assessment = assessmentService.updateAssessment(assessmentRequest);
+		Assessment assessment = null;
+		if (LEGACY_RECORD.equalsIgnoreCase(assessmentRequest.getAssessment().getSource().toString())) {
+			assessment = assessmentService.updateLegacyAssessments(assessmentRequest);
+
+		} else {
+			assessment = assessmentService.updateAssessment(assessmentRequest);
+		}
 		ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(assessmentRequest.getRequestInfo(), true);
 		AssessmentResponse response = AssessmentResponse.builder()
 				.assessments(Arrays.asList(assessment))

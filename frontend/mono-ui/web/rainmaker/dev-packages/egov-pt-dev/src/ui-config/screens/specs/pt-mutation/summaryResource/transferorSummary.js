@@ -29,7 +29,7 @@ export const transferorSummary = getCommonGrayCard({
           labelName: "Transferor Details",
           labelKey: "PT_MUTATION_TRANSFEROR_DETAILS"
         })
-      }
+      },
       // editSection: {
       //   componentPath: "Button",
       //   props: {
@@ -199,6 +199,7 @@ export const transferorSummary = getCommonGrayCard({
     },
     type: "array"
   }
+  
 });
 
 export const transferorInstitutionSummary = getCommonGrayCard({

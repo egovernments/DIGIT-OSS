@@ -77,7 +77,8 @@ const acknowledgementCard = ({
               width: "72px",
               height: "72px",
               backgroundColor: backgroundColor
-            }
+            },
+            className: "avatar",
           },
           children: {
             Icon: {

@@ -62,7 +62,7 @@ export const resetFields = (state, dispatch) => {
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.oldpropertyids",
+    "searchScreen.oldPropertyId",
     ''
   ))
 
@@ -80,44 +80,32 @@ export const searchPropertyDetails = getCommonCard({
     labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_DESC"
   }),
   ulbCityContainer: getCommonContainer({
-    ulbCity: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-pt",
-      componentPath: "AutosuggestContainer",
+    ulbCity: getSelectField({
+      label: {
+        labelName: "City",
+        labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY"
+      },
+      placeholder: {
+        labelName: "Select City",
+        labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY_PLACEHOLDER"
+      },
+
+      localePrefix: {
+        moduleName: "TENANT",
+        masterName: "TENANTS"
+      },
       jsonPath: "searchScreen.tenantId",
+      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       required: true,
       props: {
-        style: {
-          width: "100%",
-          cursor: "pointer"
-        },
-        label: {
-          labelName: "City",
-          labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY"
-        },
-        placeholder: {
-          labelName: "Select City",
-          labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY_PLACEHOLDER"
-        },
         required: true,
-        jsonPath: "searchScreen.tenantId",
-        sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
-        localePrefix: {
-          moduleName: "TENANT",
-          masterName: "TENANTS"
-        },
-        labelsFromLocalisation: true,
-        suggestions: [],
-        fullwidth: true,
-        isClearable: true,
-        inputLabelProps: {
-          shrink: true
-        },
-        isDisabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
       },
-      isDisabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-      gridDefination: { xs: 12, sm: 4 }
-    },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
     ownerMobNo: getTextField({
       label: {
         labelName: "Owner Mobile No.",
@@ -159,7 +147,7 @@ export const searchPropertyDetails = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.oldpropertyids"
+      jsonPath: "searchScreen.oldPropertyId"
     }),
     propertyTaxUniqueId: getTextField({
       label: {

@@ -2,7 +2,6 @@ import React from "react";
 import { LoadingIndicator } from "components";
 import { connect } from "react-redux";
 import { handleFieldChange, initForm, submitForm, deleteForm } from "egov-ui-kit/redux/form/actions";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const form = ({ formKey, path, copyName, rowData, isCoreConfiguration, edit = false, ...rest }) => (Form) => {
   class FormWrapper extends React.Component {
@@ -58,9 +57,8 @@ const form = ({ formKey, path, copyName, rowData, isCoreConfiguration, edit = fa
       this.props.submitForm(formKey, saveUrl);
     };
 
-    handleFieldChange = (fieldKey, value, jsonPath) => {
+    handleFieldChange = (fieldKey, value) => {
       this.props.handleFieldChange(formKey, fieldKey, value);
-      this.props.prepareFinalObject(jsonPath, value);
     };
 
     render() {
@@ -96,8 +94,6 @@ const form = ({ formKey, path, copyName, rowData, isCoreConfiguration, edit = fa
       submitForm: (formKey, saveUrl) => dispatch(submitForm(formKey, saveUrl)),
       initForm: (form) => dispatch(initForm(form)),
       deleteForm: () => dispatch(deleteForm(formKey)),
-      prepareFinalObject: (jsonPath, value) =>
-      dispatch(prepareFinalObject(jsonPath, value))
     };
   };
 

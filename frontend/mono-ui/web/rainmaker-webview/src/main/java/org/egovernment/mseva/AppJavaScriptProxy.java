@@ -124,16 +124,11 @@ public class AppJavaScriptProxy  {
 		final File dwldsPath = new File(Environment.getExternalStoragePublicDirectory(
 			Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
 		byte[] pdfAsBytes = Base64.decode(base64Data.replaceFirst("^data:[^;]+;base64,", ""), 0);
-		FileOutputStream os=null;
-		try{
-			os = new FileOutputStream(dwldsPath, false);
-			os.write(pdfAsBytes);
-		}catch (Exception e){
-			Log.v("Error while creating temp report.");
-		}finally {
-			os.flush();
-			os.close();
-		}
+		FileOutputStream os;
+		os = new FileOutputStream(dwldsPath, false);
+		os.write(pdfAsBytes);
+		os.flush();
+
 		createFileDownloadedNotification(dwldsPath, contentType);
 	}
 

@@ -11,8 +11,7 @@ import { fetchLocalizationLabel, setLocalizationLabels } from "egov-ui-kit/redux
 import { DropDown, AppBar } from "components";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import Toolbar from "material-ui/Toolbar";
-import msevaLogo from "egov-ui-kit/assets/images/mseva-punjab.png";
-import { getModuleName } from "../utils/commons";
+import msevaLogo from "egov-ui-kit/assets/images/logo.png";
 
 const getUlbGradeLabel = (ulbGrade) => {
   if (ulbGrade) {
@@ -77,9 +76,6 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
           this.props.history.push(redirectionUrl);
         }
       }
-      if(isPublicSearch()){
-        this.onLanguageChange(getQueryArg(window.location.href, "locale")||'en_IN');
-      }
     }
 
     onLanguageChange = (event, index, value) => {
@@ -93,15 +89,8 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
         tenantId = userInfo && userInfo.permanentCity;
         tenantId = tenantInfo ? tenantInfo : tenantId;
       }
-      var resetList=[];
-      var newList =JSON.stringify(resetList);
-      setStoredModulesList(newList);
-      let locale= getLocale();
-      let resultArray=[];
-      setLocalizationLabels(locale, resultArray);
       this.props.fetchLocalizationLabel(value, tenantId, tenantId);
     };
-
 
     checkForPublicSeach = () => {
       return isPublicSearch();
@@ -124,7 +113,9 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
                   title={
                     <div className="citizen-header-logo-label">
                       <div className={logoClassName}>
-                        <img src={ulbLogo ? ulbLogo : pbLogo} onError={(event) => event.target.setAttribute("src", pbLogo)} />
+                        <a href="/">
+                        <img src={ulbLogo ? ulbLogo : pbLogo}  style={{height:"49px"}} onError={(event) => event.target.setAttribute("src", pbLogo)} />
+                         </a>
                       </div>
                       {!isPublicSearch && <div className="rainmaker-displayInline">
                         <Label
@@ -143,6 +134,9 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
                   titleStyle={style.titleStyle}
                   {...rest}
                 >
+                  <div id="citizenLogin">
+                    <a href="/citizen/user/login" style={{color:"#f47738"}}>Citizen Login </a> 
+                    </div>              
                   <Toolbar className="app-toolbar" style={{ padding: "0px", height: "64px", background: "#ffffff" }}>
                     {hasLocalisation && (
                       <div className="userSettingsContainer">
@@ -170,7 +164,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
           ) : (
             <Component {...this.props} />
           )}
-          
+
         </div>
       );
     }

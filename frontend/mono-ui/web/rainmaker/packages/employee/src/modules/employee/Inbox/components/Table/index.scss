@@ -67,6 +67,9 @@
   line-height: 17px;
   padding-bottom: 5px;
   cursor: pointer;
+  a{
+    color: rgb(254, 122, 81)!important;
+  }
 }
 
 .inbox-cell-subtext {
@@ -111,7 +114,7 @@
 .inbox-worklist-card:hover{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,   0.19);
   cursor : pointer;
-  
+
 }
 .inbox-worklist-card-hover-0:hover{
   border-top: 5px solid #6b98ca;
@@ -125,6 +128,26 @@
   border-top: 5px solid  #F44336;
 }
 
+
+.inbox-worklist-card:hover{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,   0.19);
+  cursor : pointer;
+}
+.inbox-data-table-bodycell.inbox-data-table-bodycell-0
+{
+  width:230px!important;
+}
+.inbox-data-table-headcell.inbox-data-table-headcell-4
+{
+  width:230px!important;
+}
+.inbox-data-table-headcell.inbox-data-table-headcell-2{
+  width:150px!important;
+}
+#menu- > div.jss165.jss228.jss175.jss166.jss229{
+  height: 250px!important;
+  width: 420px!important;
+}
 .inbox-worklist-card {
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
@@ -136,7 +159,7 @@
   /* .rainmaker-card {
       -webkit-box-shadow: none !important;
       box-shadow: none !important;
-    
+
   } */
 }
 .inbox-module-card {
@@ -209,6 +232,10 @@
     display: block !important;
     width: 100% !important;
   }
+  // .inbox-data-table-bodycell-0,
+  // .inbox-data-table-bodycell-4{
+  //   width: 230px!important;
+  // }
   .inbox-card-top {
     height: 148px;
   }
@@ -229,12 +256,12 @@
    .sort-btn-mob{
        //margin-left: 90%;
        flex-direction: row;
-      
+
    }
    .sort-icon{
     //margin-left: 70%;
     flex-direction: row;
-    
+
    }
    .sort-icon-flex{
      display: flex;
@@ -274,16 +301,4 @@
 .card-sladiv-style {
   display: inline-block;
   width: 40%;
-}
-
-
-
-.inbox-table-pagination-sm td div{
-  margin: 0px!important;
-}
-.inbox-table-pagination-sm td div button{
-  width: 30px!important;
-}
-.inbox-table-pagination-sm td div div div{
-  margin: 0px!important;
 }

@@ -15,8 +15,6 @@ import {getRowData} from "egov-ui-kit/utils/PTCommon";
 import {
   getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
-import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
-
 
 const innerDivStyle = {
   paddingTop: "16px",
@@ -89,16 +87,22 @@ class MyProperties extends Component {
   onNewPropertyButtonClick = () => {
 
     let link = `/property-tax/assessment-form`;
-    routeTo(link);
+    let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+    window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
+    // const { history } = this.props;
+    // history.push('/property-tax/assessment-form');
+    // this.setState({
+    //   dialogueOpen: true
+    // });
   };
 
   onListItemClick = item => {
     const { route: propertyId, tenantId } = item;
-    this.props.history.push(
-      `/property-tax/my-properties/property/${encodeURIComponent(
-        propertyId
-      )}/${tenantId}`
-    );
+    let link = `/property-tax/my-properties/property/${encodeURIComponent(
+      propertyId
+    )}/${tenantId}`;
+    let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+    window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
   };
 
   render() {

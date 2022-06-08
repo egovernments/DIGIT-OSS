@@ -31,16 +31,16 @@ class Header extends Component {
     updateActiveRoute(menupath, menuName);
   };
 
-  componentWillReceiveProps = (nextProps) => {
-    const { role, userInfo } = this.props;
-    const permanentCity = get(nextProps, "userInfo.permanentCity");
-    if (get(userInfo ,"permanentCity") !== get(nextProps, "userInfo.permanentCity")) {
-      const tenantId = role.toLowerCase() === "citizen" ? permanentCity : getTenantId();
-      const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
-      this.setState({ ulbLogo });
-    }
-   
-  }
+  // componentWillReceiveProps = (nextProps) => {
+  //   const { role, userInfo } = this.props;
+  //   const permanentCity = get(nextProps, "userInfo.permanentCity");
+  //   if (get(userInfo ,"permanentCity") !== get(nextProps, "userInfo.permanentCity")) {
+  //     const tenantId = role.toLowerCase() === "citizen" ? permanentCity : getTenantId();
+  //     const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
+  //     this.setState({ ulbLogo });
+  //   }
+  //
+  // }
 
   _handleToggleMenu = () => {
     const { toggleMenu } = this.state;
@@ -59,11 +59,6 @@ class Header extends Component {
   _handleBackNavigation = () => {
     this.props.history.goBack();
   };
-
-  _handleBackToHome= () => {
-    this.props.history.push('/');
-  };
-
 
   _logout = () => {
     this._closeLogoutDialog();
@@ -109,10 +104,9 @@ class Header extends Component {
       </div>
     );
 
-    let  onLeftIconButtonClick = isHomeScreen ? this._handleToggleMenu : hideBackButton ? null : this._handleBackNavigation;
+    const onLeftIconButtonClick = isHomeScreen ? this._handleToggleMenu : hideBackButton ? null : this._handleBackNavigation;
     const onToolBarIconClick = this._handleToggleMenu;
-    let pathname=window.location.pathname;
-    onLeftIconButtonClick= pathname&&(pathname.includes('/property-tax')||pathname.includes('/home'))?this._handleBackToHome:onLeftIconButtonClick;
+
     return { style, iconElementLeft, onLeftIconButtonClick, onToolBarIconClick, isHomeScreen };
   };
 
@@ -163,17 +157,15 @@ class Header extends Component {
       notificationButton,
       activeRoutePath,
       hasLocalisation,
-      notificationsCount,
-      isUserSetting = true,
-      msevaLogo,
-      headerStyle
+      hideDigitLogo,
     } = this.props;
     const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
     const currentCity = cities.filter((item) => item.code === tenantId);
     const ulbLogo =
-      currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
+      currentCity.length > 0 ? get(currentCity[0], "logoId") : "";
+      // "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
     return (
-      <div style={headerStyle}>
+      <div>
         <AppBar
           className={className}
           title={title ? title : headerTitle}
@@ -181,7 +173,7 @@ class Header extends Component {
           defaultTitle={defaultTitle}
           titleAddon={titleAddon}
           role={role}
-          ulbLogo={isUserSetting === false ? msevaLogo : ulbLogo}
+          ulbLogo={ulbLogo}
           {...appBarProps}
           fetchLocalizationLabel={fetchLocalizationLabel}
           userInfo={userInfo}
@@ -195,8 +187,7 @@ class Header extends Component {
           handleItemClick={_handleItemClick}
           activeRoutePath={activeRoutePath}
           hasLocalisation={hasLocalisation}
-          notificationsCount={notificationsCount}
-          isUserSetting={isUserSetting}
+          hideDigitLogo={hideDigitLogo}
         />
         <NavigationDrawer
           handleItemClick={_handleItemClick}
@@ -212,7 +203,6 @@ class Header extends Component {
           openSecondary={window.innerWidth >= 768 ? true : false}
           width={300}
           containerStyle={{ zIndex: 1999 }}
-          isUserSetting={isUserSetting}
         />
         <LogoutDialog
           logoutPopupOpen={logoutPopupOpen}
@@ -241,16 +231,14 @@ const getUlbGradeLabel = (ulbGrade) => {
 
 const mapStateToProps = (state, ownProps) => {
   const cities = state.common.cities || [];
-  const notificationsCount = get(state.app, "notificationsCount");
+  const { hideDigitLogo } = (state.common.stateInfoById && state.common.stateInfoById.length > 0 && state.common.stateInfoById[0]) || false;
   const { role } = ownProps;
   const tenantId = role && role.toLowerCase() === "citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
   const userTenant = cities.filter((item) => item.code === tenantId);
   const ulbGrade = userTenant && get(userTenant[0], "city.ulbGrade");
   const name = userTenant && get(userTenant[0], "code");
   const defaultTitle = ulbGrade && getUlbGradeLabel(ulbGrade);
-  const screenKey = window.location.pathname.split("/").pop();
-  const headerTitle = get(state.screenConfiguration.screenConfig, `${screenKey}.components.div.children.header.children.key.props.labelKey`);
-  return { cities, defaultTitle, name, headerTitle, notificationsCount };
+  return { cities, defaultTitle, name, hideDigitLogo };
 };
 
 const mapDispatchToProps = (dispatch) => {

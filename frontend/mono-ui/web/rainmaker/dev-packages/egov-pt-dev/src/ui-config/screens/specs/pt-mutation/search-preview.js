@@ -7,7 +7,7 @@ import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/form
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults,generatePdfFromDiv } from "../../../../ui-utils/commons";
 import { downloadCertificateForm, downloadReceitForm, getpayments, prepareDocumentsView, searchBill, showHideMutationDetailsCard } from "../utils/index";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
@@ -17,7 +17,11 @@ import { transferorInstitutionSummary, transferorSummary } from "./searchPreview
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getTenantId,getLocale,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { FeeSummary } from "./summaryResource/feeSummary";
 import "./index.css";
+import { any } from "prop-types";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -64,14 +68,14 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
-      downloadReceitForm( tenantId, applicationNumber,"download");
+      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "pt-mutation-reciept", tenantId, applicationNumber);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
-      downloadReceitForm( tenantId, applicationNumber, 'print');
+      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "pt-mutation-reciept", tenantId, applicationNumber, 'print');
     },
     leftIcon: "receipt"
   };
@@ -88,10 +92,10 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePTMAcknowledgement(get(
-        state,
-        "screenConfiguration.preparedFinalObject", {}), 'print');
-      // generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
+      // generatePTMAcknowledgement(get(
+      //   state,
+      //   "screenConfiguration.preparedFinalObject", {}), 'print');
+      generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
@@ -195,6 +199,9 @@ const setSearchResponse = async (
     });
 
     property.ownersInit = owners;
+    ownersTemp = ownersTemp.sort(function(a,b){
+        return ownersTemp.indexOf(b)-ownersTemp.indexOf(a)
+      })
     property.ownersTemp = ownersTemp;
   }
   property.ownershipCategoryTemp = property.ownershipCategory;
@@ -293,13 +300,11 @@ const setSearchResponse = async (
   if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
     const propertiesAudit = get(auditResponse, "Properties", []);
 
-    const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
-    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
+
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
 
 
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
-    property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
-
     if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
       property.institutionInit = previousActiveProperty.institution;
 
@@ -351,10 +356,6 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
     {
       key: "consumerCodes",
       value: applicationNumber
-    },
-    {
-      key: "businessService",
-      value: 'PT.MUTATION'
     }
   ];
   const responsePayments = await getpayments(queryObj)
@@ -389,24 +390,95 @@ const getPropertyConfigurationMDMSData = async (action, state, dispatch) => {
     console.log(e);
   }
 };
+const getMutationAdditionalData = async (action, state, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: "uk",
+      moduleDetails: [
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [{ name: "MutationAdditionalFees" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    let mutationAdditionalFeeData = get(payload, "MdmsRes.PropertyTax.MutationAdditionalFees")
+    let userInfo = getUserInfo();
+    userInfo = JSON.parse(userInfo);
+    let isRoleValid = !!userInfo.roles.find(item => {
+     return item.code === 'PTAPPROVER' || item.code === "PTFEMP"
+    }); 
+
+    if(isRoleValid){
+      set(
+        action,
+        `screenConfig.components.div.children.body.children.cardContent.children.FeeSummary.visible`,
+        isRoleValid
+      )
+    }
+    else
+    {
+      set(
+        action,
+        `screenConfig.components.div.children.body.children.cardContent.children.FeeSummary`,
+        {}
+      )  
+    }
+
+    if (process.env.REACT_APP_NAME == "Citizen") {
+
+      set(
+        action,
+        `screenConfig.components.div.children.body.children.cardContent.children.FeeSummary`,
+        {}
+      )    
+    }
+    let mutaDetails = get(action,"screenConfig.components.div.children.body.children.cardContent.children.FeeSummary.children.cardContent.children.cardOne.children.cardContent.children.feedetailsContainer.children");
+    dispatch(prepareFinalObject("MutationAdditionalFees", mutationAdditionalFeeData));
+      for(var mutKey in mutaDetails){
+        
+        var visible =mutationAdditionalFeeData[0][mutKey] ? 
+            (mutationAdditionalFeeData[0][mutKey].enabledCities && 
+                mutationAdditionalFeeData[0][mutKey].enabledCities.includes(getTenantId()))
+                :false
+        set(
+          action,
+          `screenConfig.components.div.children.body.children.cardContent.children.FeeSummary.children.cardContent.children.cardOne.children.cardContent.children.feedetailsContainer.children.${mutKey}.visible`,
+          visible
+        )
+      }
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    // dispatch(unMountScreen("propertySearch"));
-    // dispatch(unMountScreen("apply"));
+    dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
+    dispatch(unMountScreen("propertySearch"));
+    dispatch(unMountScreen("apply"));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    dispatch(prepareFinalObject("Property", {}));
+
+    searchBill(dispatch, applicationNumber, tenantId);
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
     loadUlbLogo(tenantId);
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "PT.MUTATION" }
     ];
    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     // Hide edit buttons
@@ -466,7 +538,8 @@ const screenConfig = {
       "screenConfig.components.div.children.headerDiv.children.helpSection.children",
       printCont
     );
-    getPropertyConfigurationMDMSData(action, state, dispatch);
+    getPropertyConfigurationMDMSData(action, state, dispatch); 
+    getMutationAdditionalData(action,state,dispatch);
     return action;
   },
   components: {
@@ -519,6 +592,7 @@ const screenConfig = {
             moduleName: "egov-pt",
             componentPath: "pdfHeader"
           },
+          FeeSummary:FeeSummary,
           propertySummary: propertySummary,
           transferorSummary: transferorSummary,
           transferorInstitutionSummary: transferorInstitutionSummary,

@@ -31,7 +31,7 @@ export const paymentFailureFooter = (applicationNumber, tenant) => {
       children: {
         downloadReceiptButtonLabel: getLabel({
           labelName: "RETRY",
-          labelKey: "BPA_RETRY"
+          labelKey: "TL_RETRY"
         })
       },
       onClickDefination: {

@@ -86,10 +86,6 @@ span[class^="MuiFormLabel-asterisk"] {
     display: none;
 }
 
-div[class^="MuiTooltip-tooltip"] {
-    font-size: 14px;
-}
-
 
 /* div[class^="MuiGrid-item"]   {
     padding-right: 80px
@@ -114,7 +110,7 @@ div[class^="MuiTooltip-tooltip"] {
   position: fixed !important;
   bottom: 0;
   right: 0;
-  width: 100%;
+  width: 83.33vw;
   text-align: right;
 }
 
@@ -149,6 +145,7 @@ div[class^="MuiTooltip-tooltip"] {
     width: 100%;
     overflow: inherit !important;
   }
+
   .button-wizard-footer {
     min-width: 50%;
     height: 48px;
@@ -187,6 +184,7 @@ div[class^="MuiTooltip-tooltip"] {
     width:100%;
     text-align: right;
 }
+
   .apply-wizard-footer {
     background-color: #ffffff;
     box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
@@ -194,7 +192,7 @@ div[class^="MuiTooltip-tooltip"] {
     position: fixed !important;
     bottom: 0;
     right: 0;
-    width: 100%;
+    width: 100vw;
     text-align: right;
 }
 }
@@ -220,7 +218,7 @@ div[class^="MuiTooltip-tooltip"] {
         overflow: inherit !important;
     }
     .apply-wizard-footer { button {
-       // min-width: 360px !important;
+    // min-width: 360px !important;
         margin-left: 0 !important;
         margin-right: 0 !important;
      }}
@@ -259,7 +257,7 @@ div[class^="MuiTooltip-tooltip"] {
         bottom: 0;
         right: 0;
         z-index: 1;
-        width: 100%;
+        width: 100vw;
         text-align: right;
         overflow: inherit !important;
     }
@@ -285,11 +283,4 @@ div[class^="MuiTooltip-tooltip"] {
         height: 100vh;
         margin: 32px 0 0 0;
     }
- }
-
- a:focus, a:active {
-    outline-style: solid;
-    outline-width: 3px;
-    outline-offset: 4px;
-    text-decoration: none;
  }

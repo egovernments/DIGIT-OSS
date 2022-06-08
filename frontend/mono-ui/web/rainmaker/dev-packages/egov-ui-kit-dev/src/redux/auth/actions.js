@@ -2,7 +2,7 @@ import * as authType from "./actionTypes";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest, loginRequest } from "egov-ui-kit/utils/api";
 import { AUTH, USER, OTP } from "egov-ui-kit/utils/endPoints";
-import { prepareFormData ,getUserSearchedResponse} from "egov-ui-kit/utils/commons";
+import { prepareFormData } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";
 import {
   setTenantId,
@@ -30,7 +30,6 @@ const fixUserDob = (user = {}) => {
 export const userProfileUpdated = (payload = {}) => {
   const user = fixUserDob(payload.user[0]);
   setUserInfo(JSON.stringify(user));
-  localStorage.setItem("citizen.userRequestObject",JSON.stringify(user));
   return { type: authType.USER_PROFILE_UPDATED, user };
 };
 
@@ -89,10 +88,9 @@ export const searchUser = () => {
     const state = getState();
     const { userName, tenantId } = state.auth.userInfo || {};
     try {
-      // const user = await httpRequest(USER.SEARCH.URL, USER.SEARCH.ACTION, [], { userName, tenantId });
-      // delete user.responseInfo;
-      const response=getUserSearchedResponse();
-      dispatch(searchUserSuccess(response));
+      const user = await httpRequest(USER.SEARCH.URL, USER.SEARCH.ACTION, [], { userName, tenantId });
+      delete user.responseInfo;
+      dispatch(searchUserSuccess(user));
     } catch (error) {
       dispatch(searchUserError(error.message));
     }
@@ -127,7 +125,7 @@ export const sendOTP = (intent) => {
       const formResponse = await httpRequest(OTP.RESEND.URL, OTP.RESEND.ACTION, [], formData);
     } catch (error) {}
     dispatch(sendOtpCompleted());
-    dispatch(toggleSnackbarAndSetText(true, { labelName: "OTP has been Resent", labelKey: "ERR_OTP_RESENT" },"success"));
+    dispatch(toggleSnackbarAndSetText(true, { labelName: "OTP has been Resent", labelKey: "ERR_OTP_RESENT" },"info"));
   };
 };
 
@@ -136,7 +134,7 @@ export const logout = () => {
     try {
       const authToken = getAccessToken();
       if (authToken) {
-        const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [], { "access_token" : authToken });
+        const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [{ key: "access_token", value: authToken }]);
       } else {
         clearUserDetails();
         process.env.REACT_APP_NAME === "Citizen"

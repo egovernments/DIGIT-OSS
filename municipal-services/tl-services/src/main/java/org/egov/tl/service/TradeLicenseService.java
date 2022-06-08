@@ -30,6 +30,8 @@ import static org.egov.tracer.http.HttpUtils.isInterServiceCall;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
 @Slf4j
 public class TradeLicenseService {
@@ -263,7 +265,8 @@ public class TradeLicenseService {
         List<TradeLicense> licenceResponse = null;
         if(applicationType != null && (applicationType).toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL ) &&
                 licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE) && licence.getStatus().equals(TLConstants.STATUS_APPROVED)){
-            List<TradeLicense> createResponse = create(tradeLicenseRequest, businessServicefromPath);
+            validateForNullUsers(licence);
+        	List<TradeLicense> createResponse = create(tradeLicenseRequest, businessServicefromPath);
             licenceResponse =  createResponse;
         }
         else{
@@ -305,7 +308,10 @@ public class TradeLicenseService {
             switch (businessServicefromPath) {
                 case businessService_TL:
                     if (config.getIsExternalWorkFlowEnabled()) {
+					if (tradeLicenseRequest.getLicenses().get(0).getAction() != null && !tradeLicenseRequest
+							.getLicenses().get(0).getAction().equalsIgnoreCase(TL_ACTION_INITIATE)) {
                         wfIntegrator.callWorkFlow(tradeLicenseRequest);
+					}
                     } else {
                         TLWorkflowService.updateStatus(tradeLicenseRequest);
                     }
@@ -319,11 +325,11 @@ public class TradeLicenseService {
             enrichmentService.postStatusEnrichment(tradeLicenseRequest,endStates,mdmsData);
             userService.createUser(tradeLicenseRequest, false);
             calculationService.addCalculation(tradeLicenseRequest);
-            switch (businessServicefromPath) {
+            /*switch (businessServicefromPath) {
                 case businessService_TL:
                     editNotificationService.sendEditNotification(tradeLicenseRequest, diffMap);
                     break;
-            }
+            }*/
             repository.update(tradeLicenseRequest, idToIsStateUpdatableMap);
             licenceResponse=  tradeLicenseRequest.getLicenses();
         }
@@ -331,7 +337,21 @@ public class TradeLicenseService {
         
     }
 
-    public List<TradeLicense> plainSearch(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
+    private void validateForNullUsers(TradeLicense licence) {
+		List<OwnerInfo> owners = licence.getTradeLicenseDetail().getOwners();
+		List<OwnerInfo> modOwners = new ArrayList<OwnerInfo>();
+		for(OwnerInfo owner : owners){
+			if(owner.getId() != null && owner.getName() != null && owner.getMobileNumber() != null)
+				modOwners.add(owner);
+		}
+		licence.getTradeLicenseDetail().setOwners(modOwners);
+	}
+
+
+
+
+
+	public List<TradeLicense> plainSearch(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
         List<TradeLicense> licenses;
         List<String> ids = repository.fetchTradeLicenseIds(criteria);
         if(ids.isEmpty())

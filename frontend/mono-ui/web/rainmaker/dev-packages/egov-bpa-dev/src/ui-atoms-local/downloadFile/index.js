@@ -1,10 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-// import "./index.css";
+//import "./index.css";
 import get from "lodash/get";
 import { withStyles } from "@material-ui/core/styles";
-import { getLocaleLabels, getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const styles = {
   root: {
@@ -14,53 +12,24 @@ const styles = {
     lineHeight: '1.375em',
   },
   linkDetails : {
-    color: 'rgb(245, 117, 66)',
+    // color: 'rgba(0, 0, 0, 0.87)',
     fontSize: '16px',
     fontWeight: 400,
     fontFamily: 'Roboto',
     lineHeight: '19px',
     letterSpacing: '0.67px',
-    textDecoration : 'none',
-    '&:hover':{
-      color: 'rgb(245, 117, 66)',
-    },
-    '&:active':{
-      color: 'rgb(245, 117, 66)',
-    },
-    '&:visited':{
-      color: 'rgb(245, 117, 66)',
-    },
-    '&:link':{
-      color: 'rgb(245, 117, 66)',
-    }
-
-  },
+    textDecoration : 'none'
+  }
 };
 
 class downloadFile extends React.Component {
   render() {
-    const { label = {}, linkDetail= {}, classes, localizationLabels  } = this.props;
-    let { value } = this.props;
-    let translatedLabel = getLocaleLabels(
-      label.labelName,
-      label.labelKey,
-      localizationLabels
-    );
-    let translatedLabelLink = getLocaleLabels(
-      linkDetail.labelName,
-      linkDetail.labelKey,
-      localizationLabels
-    );
-    let downloadLink;
-    if(value && !value.includes("https") && window.location.href.includes("https")) {
-      downloadLink = value.replace(/http/g, "https")
-    }
-    value = downloadLink ? downloadLink : value;
+    const { label, linkDetail, value, classes } = this.props;
     return (
       <div>
-        <div className={classes.root}>{translatedLabel}</div>
-        <a className={classes.linkDetails} href={value} target="_blank"  rel="noopener noreferrer">
-          {translatedLabelLink}
+        <div className={classes.root}>{label}</div>
+        <a className={classes.linkDetails} href={value} target="_blank">
+          {linkDetail}
         </a>
       </div>
     );
@@ -68,13 +37,12 @@ class downloadFile extends React.Component {
 }
 
 const mapStateToProps = (state, ownprops) => {
-  let { jsonPath, value } = ownprops;
-  const { screenConfiguration, app } = state;
-  const { localizationLabels } = app;
+  const { jsonPath, value } = ownprops;
+  const { screenConfiguration } = state;
   const { preparedFinalObject } = screenConfiguration;
   let fieldValue =
     value === undefined ? get(preparedFinalObject, jsonPath) : value;
-  return { value: fieldValue, localizationLabels };
+  return { value: fieldValue };
 };
 
 export default withStyles(styles)(connect(mapStateToProps)(downloadFile));

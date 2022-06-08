@@ -54,25 +54,21 @@ const styles = {
 };
 
 const date = (from, to) => {
-    if (from !== undefined && to !== 'NA') { return convertEpochToDate(from) + " to " + convertEpochToDate(to); }
+    if (from !== undefined && to !== 'NA') { return convertEpochToDate(from) + " - " + convertEpochToDate(to); }
     else { return "NA" }
 }
 
 function FeesEstimateCard(props) {
-    const { classes, estimate } = props;
-    let sortedArray = [], totalAmount, arrears = 0, arrearsDescription, fromPeriod, toPeriod, dueDate;
+    const { classes, estimate, isCardrequired } = props;
+    let sortedArray = [], totalAmount, dueDate;
     const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
     if (estimate !== null && estimate !== undefined && estimate.fees !== undefined && estimate.fees !== null && estimate.fees.length > 0) {
         if (estimate.fees[0].data !== null && estimate.fees[0].data !== undefined && estimate.fees[0].data.length > 0) {
             totalAmount = estimate.fees[0].data[0].total;
             dueDate = convertEpochToDate(estimate.fees[0].data[0].expiryDate);
         }
-        if (estimate.fees[0].description !== undefined && estimate.fees[0].description !== null) {
-            sortedArray = estimate.fees[0].description.bill;
-            arrearsDescription = estimate.fees[0].arrearsDescription;
-            fromPeriod = estimate.fees[0].description.fromPeriod;
-            toPeriod = estimate.fees[0].description.toPeriod;
-            arrears = estimate.fees[0].arrears;
+        if (estimate.fees[0].description !== null && estimate.fees[0].description !== undefined && estimate.fees[0].description.length > 0) {
+            sortedArray = estimate.fees[0].description;
         }
     }
 
@@ -89,69 +85,58 @@ function FeesEstimateCard(props) {
             </Grid>
             <Grid xs={12} sm={7}>
                 <div style={{ maxWidth: 600 }}>
-                    <Grid container>
-                        <Grid item xs={6}>
-                            <Typography variant="body2" >
-                                <LabelContainer labelKey="WS_VIEW_BILL_BILLING_PERIOD_LABEL" />
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6}
-                            align="right"
-                            style={styles.taxStyles}
-                            className="tl-application-table-total-value" >
-                            <Typography variant="body2">
-                                {date(fromPeriod, toPeriod)}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    {sortedArray.length > 0 && sortedArray.map(fee =>
-                        <div>
-                            <Grid container>
-                                <Grid item xs={4}>
-                                    <Typography variant="body2" >
-                                        <LabelContainer labelKey={fee.key} />
-                                    </Typography>
+                    {
+                        sortedArray.length > 0 && sortedArray.map(fee =>
+                            <div>
+                                {!isCardrequired && <Grid container>
+                                    <Grid item xs={6}>
+                                        <Typography variant="body2" >
+                                            <LabelContainer labelKey="WS_VIEW_BILL_BILLING_PERIOD_LABEL" />
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={6}
+                                        align="right"
+                                        style={styles.taxStyles}
+                                        className="tl-application-table-total-value" >
+                                        <Typography variant="body2">
+                                            {date(fee.fromPeriod, fee.toPeriod)}
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={2}>
-                                    <Tooltip title={fee.value}>
-                                        <Icon className={styles.toolTipIcon}>
-                                            <i class="material-icons" style={{ fontSize: 18 }}>info_circle</i>
-                                        </Icon>
-                                    </Tooltip>
+                                }
+                                <Grid container> {
+                                    fee.bill.map(element => {
+                                        if (element !== undefined && element.key !== undefined) {
+                                            return (
+                                                <Grid container>
+                                                    <Grid item xs={4}>
+                                                        <Typography variant="body2" >
+                                                            <LabelContainer labelKey={element.key} />
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={2}>
+                                                        <Tooltip title={element.value}>
+                                                            <Icon className={styles.toolTipIcon}>
+                                                                <i class="material-icons" style={{ fontSize: 18 }}>info_circle</i>
+                                                            </Icon>
+                                                        </Tooltip>
+                                                    </Grid>
+                                                    <Grid item xs={6}
+                                                        align="right"
+                                                        style={styles.taxStyles}
+                                                        className="tl-application-table-total-value" >
+                                                        <Typography variant="body2">
+                                                            Rs {element.amount}
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                            )
+                                        }
+                                    })
+                                }
                                 </Grid>
-                                <Grid item xs={6}
-                                    align="right"
-                                    style={styles.taxStyles}
-                                    className="tl-application-table-total-value" >
-                                    <Typography variant="body2">
-                                        Rs {fee.amount}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </div>
-                    )}
-                    <Grid container >
-                        <Grid item xs={4}>
-                            <Typography variant="body2" >
-                                <LabelContainer labelKey="COMMON_ARREARS" />
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <Tooltip title={arrearsDescription}>
-                                <Icon className={styles.toolTipIcon}>
-                                    <i class="material-icons" style={{ fontSize: 18 }}>info_circle</i>
-                                </Icon>
-                            </Tooltip>
-                        </Grid>
-                        <Grid item xs={6}
-                            align="right"
-                            style={{ paddingRight: 0 }}
-                            className="tl-application-table-total-value" >
-                            <Typography variant="body2">
-                                Rs {arrears}
-                            </Typography>
-                        </Grid>
-                    </Grid>
+                            </div>
+                        )}
                     < Divider />
                     <Grid container >
                         <Grid item xs={6}>
@@ -174,7 +159,7 @@ function FeesEstimateCard(props) {
                 sm={1} >
             </Grid>
             <Grid xs={12} sm={4}>
-                <Card className={classes.whiteCard}
+                {!isCardrequired && <Card className={classes.whiteCard}
                     style={{ backgroundColor: '#fff', boxShadow: "none" }} >
                     <Grid container >
                         <Grid xs={12}
@@ -191,6 +176,7 @@ function FeesEstimateCard(props) {
                         </Grid>
                     </Grid>
                 </Card >
+                }
                 {/* // ) : null} */}
             </Grid>
         </Grid >

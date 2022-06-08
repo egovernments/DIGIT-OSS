@@ -21,7 +21,7 @@ const routes = [
       hideBackButton: true,
       isHomeScreen: true,
     }
-  }
+  },
 ];
 
 export default routes;

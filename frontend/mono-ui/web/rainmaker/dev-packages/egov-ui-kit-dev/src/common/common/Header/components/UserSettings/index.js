@@ -1,7 +1,7 @@
 import { DropDown, Icon, Image, List } from "components";
 import { getTransformedLocale, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import emptyFace from "egov-ui-kit/assets/images/download.png";
-import { getLocale, getTenantId, setTenantId, getUserInfo, setStoredModulesList, setModule } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getTenantId, setTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import React, { Component } from "react";
 import LogoutDialog from "../LogoutDialog";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
@@ -9,7 +9,7 @@ import { CommonMenuItems } from "../NavigationDrawer/commonMenuItems";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { connect } from "react-redux";
 import get from "lodash/get";
-import { setRoute, setLocalizationLabels } from "egov-ui-kit/redux/app/actions";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
 
 import "./index.css";
 
@@ -53,7 +53,7 @@ class UserSettings extends Component {
       background: "#ffffff",
       height: "65px",
       marginRight: "30px",
-      width: "102px",
+      width: "120px",
       marginBottom: "24px",
     },
   };
@@ -94,12 +94,6 @@ class UserSettings extends Component {
       tenantId = userInfo && userInfo.permanentCity;
       tenantId = tenantInfo?tenantInfo:tenantId;
     }
-    var resetList=[];
-    var newList =JSON.stringify(resetList);
-    setStoredModulesList(newList);
-    let locale= getLocale();
-    let resultArray=[];
-    setLocalizationLabels(locale, resultArray);
     this.props.fetchLocalizationLabel(value, tenantId, tenantId);
   };
 
@@ -126,7 +120,7 @@ class UserSettings extends Component {
   render() {
     const { languageSelected, displayAccInfo, tenantSelected, open } = this.state;
     const { style } = this;
-    const { onIconClick, userInfo, handleItemClick, hasLocalisation, languages, fetchLocalizationLabel, isUserSetting } = this.props;
+    const { onIconClick, userInfo, handleItemClick, hasLocalisation, languages, fetchLocalizationLabel } = this.props;
 
     /**
      * Get All tenant id's from (user info -> roles) to populate dropdown
@@ -141,7 +135,7 @@ class UserSettings extends Component {
 
     return (
       <div className="userSettingsContainer">
-        {isUserSetting && <LogoutDialog
+        <LogoutDialog
           logoutPopupOpen={open}
           closeLogoutDialog={this.handleClose}
           logout={this.handleTenantChange}
@@ -149,8 +143,9 @@ class UserSettings extends Component {
           canceltext={"CORE_CHANGE_TENANT_CANCEL"}
           title={"CORE_CHANGE_TENANT"}
           body={"CORE_CHANGE_TENANT_DESCRIPTION"}
-        />}
-        {process.env.REACT_APP_NAME === "Employee" && isUserSetting && (
+        />
+        { /* Commenting for 10 dec release
+        process.env.REACT_APP_NAME === "Employee" && (
           <DropDown
             onChange={this.onTenantChange}
             listStyle={style.listStyle}
@@ -160,7 +155,8 @@ class UserSettings extends Component {
             value={tenantSelected}
             underlineStyle={{ borderBottom: "none" }}
           />
-        )}
+        )
+        */}
         {hasLocalisation && (
           <DropDown
             onChange={this.onLanguageChange}
@@ -189,7 +185,7 @@ class UserSettings extends Component {
 
         {/* <Icon action="social" name="notifications" color="#767676" style={style.iconStyle} /> */}
         <ClickAwayListener onClickAway={this.handleClose}>
-          {isUserSetting && <div
+          <div
             onClick={() => {
               this.toggleAccInfo();
             }}
@@ -215,18 +211,17 @@ class UserSettings extends Component {
                   ""
                 )}
             </div>
-          </div>}
+          </div>
         </ClickAwayListener>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ app,common }) => {
-  const {locale}=app;
+const mapStateToProps = ({ common }) => {
   const { stateInfoById } = common;
   let languages = get(stateInfoById, "0.languages", []);
-  return { languages ,locale};
+  return { languages };
 };
 
 const mapDispatchToProps = (dispatch) => {

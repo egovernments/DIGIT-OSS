@@ -20,9 +20,9 @@ const styles = theme => ({
     paddingBottom: 0
   },
   group: {
+    display: "inline-block",
     margin: 0,
-    display: "flex",
-    flexFlow: 'wrap'
+    height: '3em'
   },
   radioRoot: {
     marginBottom: 12

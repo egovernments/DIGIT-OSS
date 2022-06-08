@@ -33,8 +33,8 @@ public class MutationCalculationCriteria {
     private String tenantId;
     
     @NotNull
-    @JsonProperty("applicationNumber")
-    private String applicationNumber;
+    @JsonProperty("mutationApplicationNo")
+    private String mutationApplicationNo;
     
     @JsonProperty("usageType")
     private String usageType;

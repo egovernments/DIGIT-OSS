@@ -1,9 +1,10 @@
-import {floorCount,plotSize,measuringUnit} from "../utils/reusableFields";
+import {floorCount,plotSize,constructionYear,measuringUnit} from "../utils/reusableFields";
 const formConfig = {
   name: "plotDetails",
   fields: {
     ...plotSize,
     ...measuringUnit,
+    ...constructionYear,
     ...floorCount
   },
   isFormValid: false,

@@ -1,8 +1,16 @@
 import axios from "axios";
-import commonConfig from "egov-ui-kit/config/common.js";
-import { getAccessToken, getLocale, getTenantId, localStorageGet, localStorageSet, setLocale, setTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { prepareForm, fetchFromLocalStorage, addQueryArg, hasTokenExpired } from "./commons";
 import some from "lodash/some";
-import { addQueryArg, hasTokenExpired, prepareForm } from "./commons";
+import commonConfig from "egov-ui-kit/config/common.js";
+import {
+  getTenantId,
+  getAccessToken,
+  setTenantId,
+  getLocale,
+  setLocale,
+  localStorageSet,
+  localStorageGet,
+} from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
 import { hideSpinner,showSpinner } from "egov-ui-kit/redux/common/actions";
 
@@ -50,51 +58,6 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   );
 };
 
-export const multiHttpRequest = async (
-  endPoint = [],
-  action,
-  queryObject = [],
-  requestBody = [],
-  headers = [],
-  customRequestInfo = {},
-) => {
-  let apiError = "Api Error";
-
-  if (headers)
-    instance.defaults = Object.assign(instance.defaults, {
-      headers,
-    });
-
-  try {
-
-    const response = await axios.all(requestBody.map((requestB, index) => {
-      if (queryObject && queryObject[index] && queryObject[index].length) {
-        endPoint[index] = addQueryArg(endPoint[index], queryObject[index]);
-      }
-      return instance.post(endPoint[index], wrapRequestBody(requestB, action, customRequestInfo))
-    }))
-    const responseStatus = parseInt(response && Array.isArray(response)&&response.length>0&&response[0] && response[0].status, 10);
-    if (responseStatus === 200 || responseStatus === 201) {
-      return response && response.map(resp => resp.data);
-    }
-
-  } catch (error) {
-    const { data, status } = error.response[0];
-    if (hasTokenExpired(status, data)) {
-      apiError = "INVALID_TOKEN";
-    } else {
-      apiError =
-        (data.hasOwnProperty("Errors") && data.Errors && data.Errors.length && data.Errors[0].message) ||
-        (data.hasOwnProperty("error") && data.error.fields && data.error.fields.length && data.error.fields[0].message) ||
-        (data.hasOwnProperty("error_description") && data.error_description) ||
-        apiError;
-    }
-  }
-  // unhandled error
-  throw new Error(apiError);
-};
-
-
 export const httpRequest = async (
   endPoint,
   action,
@@ -103,7 +66,7 @@ export const httpRequest = async (
   headers = [],
   customRequestInfo = {},
   ignoreTenantId = false,
-  isGetMethod = false
+  isGetMethod=false
 ) => {
   const tenantId = getTenantId() || commonConfig.tenantId;
   let apiError = "Api Error";
@@ -123,22 +86,22 @@ export const httpRequest = async (
   if (queryObject && queryObject.length) {
     endPoint = addQueryArg(endPoint, queryObject);
   }
-
+  
   try {
-    if (isGetMethod) {
-      const getResponse = await instance.get(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
-      const getResponseStatus = parseInt(getResponse.status, 10);
-      if (getResponseStatus === 200 || getResponseStatus === 201) {
-        return getResponse.data;
-      }
-    } else {
-      const response = await instance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
-      const responseStatus = parseInt(response.status, 10);
-      if (responseStatus === 200 || responseStatus === 201) {
-        return response.data;
-      }
-    }
-
+if(isGetMethod){
+  const getResponse = await instance.get(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
+  const getResponseStatus = parseInt(getResponse.status, 10);
+  if (getResponseStatus === 200 || getResponseStatus === 201) {    
+    return getResponse.data;
+  }
+}else{
+  const response = await instance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
+  const responseStatus = parseInt(response.status, 10);
+  if (responseStatus === 200 || responseStatus === 201) {    
+    return response.data;
+  }
+}
+   
   } catch (error) {
     const { data, status } = error.response;
     if (hasTokenExpired(status, data)) {
@@ -212,7 +175,6 @@ export const loginRequest = async (username = null, password = null, refreshToke
     const response = await loginInstance.post("/user/oauth/token", params);
     const responseStatus = parseInt(response.status, 10);
     if (responseStatus === 200 || responseStatus === 201) {
-      localStorage.setItem("citizen.userRequestObject",JSON.stringify(response.data.UserRequest));
       return response.data;
     }
   } catch (error) {
@@ -299,10 +261,10 @@ export const commonApiPost = (
 
   return instance
     .post(url, body)
-    .then(function (response) {
+    .then(function(response) {
       return response.data;
     })
-    .catch(function (response) {
+    .catch(function(response) {
       try {
         if (response && response.response && response.response.data && response.response.data[0] && response.response.data[0].error) {
           var _err = response.response.data[0].error.message || "";
@@ -350,7 +312,6 @@ export const commonApiPost = (
             var _tntId = getTenantId() || "default";
             var lang_response = localStorageGet("lang_response");
             localStorage.clear();
-            sessionStorage.clear();
             setLocale(locale);
             setTenantId(_tntId);
             localStorageSet("lang_response", lang_response);
@@ -371,7 +332,6 @@ export const commonApiPost = (
     });
 };
 
-
 const downloadPdf = (blob, fileName) => {
   const link = document.createElement('a');
   // create a blobURI pointing to our Blob
@@ -385,60 +345,48 @@ const downloadPdf = (blob, fileName) => {
   setTimeout(() => URL.revokeObjectURL(link.href), 7000);
 };
 
-
-const printPdf=(blob)=>{
-  const fileURL = URL.createObjectURL(blob);
-  var myWindow = window.open(fileURL);
-  if (myWindow != undefined) {
-    myWindow.addEventListener("load", event => {
-      myWindow.focus();
-      myWindow.print();
-    });
-  }
-}
-
 export const downloadPdfFile = async  ( endPoint,
-action,
-queryObject = [],
-requestBody = {},
-customRequestInfo = {},
-ignoreTenantId = false,
-fileName='download.pdf',
-onSuccess
-) => {
-const tenantId = getTenantId() || commonConfig.tenantId;
-  const downloadInstance = axios.create({
-    baseURL: window.location.origin,
-    responseType: "arraybuffer",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/pdf"
-    },
-  });
-
-  if (!some(queryObject, ["key", "tenantId"]) && !ignoreTenantId) {
-    queryObject &&
-      queryObject.push({
-        key: "tenantId",
-        value: tenantId,
-      });
-  }
-  if (queryObject && queryObject.length) {
-    endPoint = addQueryArg(endPoint, queryObject);
-  }
-  try {
-    store.dispatch(showSpinner());
-    const response = await downloadInstance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
-    const responseStatus = parseInt(response.status, 10);
- 
-    if (responseStatus === 201 || responseStatus === 200) {
-     
-      fileName=='print'?printPdf(new Blob([response.data], { type: "application/pdf" })):downloadPdf(new Blob([response.data], { type: "application/pdf" }), fileName);
-      onSuccess?onSuccess():{};
-      store.dispatch(hideSpinner());
+  action,
+  queryObject = [],
+  requestBody = {},
+  customRequestInfo = {},
+  ignoreTenantId = false,
+  fileName='download.pdf',
+  onSuccess
+  ) => {
+  const tenantId = getTenantId() || commonConfig.tenantId;
+    const downloadInstance = axios.create({
+      baseURL: window.location.origin,
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/pdf"
+      },
+    });
+  
+    if (!some(queryObject, ["key", "tenantId"]) && !ignoreTenantId) {
+      queryObject &&
+        queryObject.push({
+          key: "tenantId",
+          value: tenantId,
+        });
     }
-  } catch (error) {
-    store.dispatch(hideSpinner());
-    throw new Error(error);
-  }
-};
+    if (queryObject && queryObject.length) {
+      endPoint = addQueryArg(endPoint, queryObject);
+    }
+    try {
+      store.dispatch(showSpinner());
+      const response = await downloadInstance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
+      const responseStatus = parseInt(response.status, 10);
+   
+      if (responseStatus === 201 || responseStatus === 200) {
+       
+        fileName=='print'?printPdf(new Blob([response.data], { type: "application/pdf" })):downloadPdf(new Blob([response.data], { type: "application/pdf" }), fileName);
+        onSuccess?onSuccess():{};
+        store.dispatch(hideSpinner());
+      }
+    } catch (error) {
+      store.dispatch(hideSpinner());
+      throw new Error(error);
+    }
+  };

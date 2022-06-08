@@ -15,7 +15,7 @@ class App extends React.Component {
     if (nextRoute && currentRoute !== nextRoute) {
       history.push(nextRoute);
       setRoute("");
-      // window.parent.postMessage(`/employee-tradelicence${nextRoute}`, "*");
+      window.parent.postMessage(`/employee-tradelicence${nextRoute}`, "*");
     }
   }
 

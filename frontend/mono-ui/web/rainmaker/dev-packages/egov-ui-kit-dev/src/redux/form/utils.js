@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const validateField = (field) => {
   const { required, pattern, minLength, maxLength, minValue, maxValue,hideField } = field;
 
@@ -26,8 +28,18 @@ export const validateField = (field) => {
     isFieldValid = false;
   }
   if (isFieldValid && minValue && maxValue && !(value >= minValue && value <= maxValue)) {
-    isFieldValid = false;
+        isFieldValid = false;    
   }
+  const todayDate = new Date();
+  const formatDate =  moment(todayDate).format('DD-MM-YYYY')
+ 
+  if (isFieldValid )
+  {
+    if(value>todayDate)
+    {
+    isFieldValid = false;
+    }
+  }  
 
   errorText = !isFieldValid ? (errorText.length ? errorText : field.errorMessage) : "";
 

@@ -30,14 +30,18 @@ body {
   position: fixed !important;
   bottom: 0;
   right: 0;
-  width: 100%;
+  width: 83.33vw;
   text-align: right;
 }
 .common-div-css {
   margin: 80px 16px 88px 16px;
 }
+// .common-header-cont {
+//   display: none;
+// }
 .common-header-cont {
-  display: none;
+  display: block;
+  padding: 44px 0px 0px 8px;
 }
 .common-card-css {
   background-color: #ffffff;
@@ -88,12 +92,10 @@ span[class^="MuiFormLabel-asterisk"] {
   display: none;
 }
 
-.common-header-cont {
-  display: none;
-}
-div[class^="MuiTooltip-tooltip"] {
-  font-size: 14px;
-}
+// .common-header-cont {
+//   display: none;
+// }
+
 /* div[class^="MuiGrid-item"]   {
     padding-right: 80px
 } */
@@ -129,34 +131,40 @@ div[class^="MuiTooltip-tooltip"] {
     /* left: 35px; */
     width: 100%;
     overflow: inherit !important;
-    left: 0 !important;
   }
   .apply-wizard-footer { button {
      /* min-width: 360px !important; */
      margin-left: 0 !important;
      margin-right: 0 !important;
   }}
-  .pt-apply-wizard-footer {
-    position: fixed;
-    bottom: 0;
-    z-index: 1;
-    /* left: 35px; */
-    width: 100%;
-    overflow: inherit !important;
-  }
-  .pt-apply-wizard-footer { button {
-     /* min-width: 360px !important; */
-     margin-left: 0 !important;
-     margin-right: 0 !important;
-  }}
+  .pt-apply-wizard-footer {	
+    position: fixed;	
+    bottom: 0;	
+    z-index: 1;	
+    /* left: 35px; */	
+    width: 100%;	
+    overflow: inherit !important;	
+}	
+.pt-apply-wizard-footer { button {	
+   // min-width: 360px !important;	
+    margin-left: 0 !important;	
+    margin-right: 0 !important;	
+ }}
+
 }
+@media only screen and (max-width: 768px) {
+  .common-header-cont {
+    display: block;
+    padding: 70px 0px 0px 8px;
+  }
+  .landing-page-main-grid{
+    padding-top: 0px!important;
+  }
+}
+
 @media only screen and (min-width: 768px) {
   .common-div-css {
     margin: 30px 16px 88px 16px;
-  }
-  .common-header-cont {
-    display: inherit;
-    padding: 44px 0px 0px 8px;
   }
   .apply-wizard-footer {
     background-color: #ffffff;
@@ -166,7 +174,7 @@ div[class^="MuiTooltip-tooltip"] {
     bottom: 0;
     right: 0;
     z-index: 1;
-    width:100%;
+    width: 83.33vw;
     text-align: right;
     overflow: inherit !important;
   }
@@ -177,11 +185,9 @@ div[class^="MuiTooltip-tooltip"] {
     position: fixed !important;
     bottom: 0;
     right: 0;
-    z-index: 1;
-    width: 100%;
+    width:100%;
     text-align: right;
-    overflow: inherit !important;
-  }
+}
   .framework-responsive-button {
     min-width: 200px;
     height: 48px;
@@ -205,9 +211,3 @@ div[class^="MuiTooltip-tooltip"] {
       margin: 32px 0 0 0;
   }
 }
-
-a:focus, a:active {
-  outline-style: solid;
-  outline-width: 3px;
-  outline-offset: 4px;
-  text-decoration: none; }

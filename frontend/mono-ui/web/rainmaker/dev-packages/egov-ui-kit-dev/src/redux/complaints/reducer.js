@@ -61,7 +61,7 @@ const complaintsReducer = (state = intialState, action) => {
         errorMessage: action.error,
       };
     case actionTypes.COMPLAINTS_CATEGORIES_FETCH_SUCCESS:
-      let categoriesById = transformById(action.payload.MdmsRes["RAINMAKER-PGR"].ServiceDefs, "serviceCode");
+      let categoriesById = !isEmpty(action.payload.MdmsRes) && transformById(action.payload.MdmsRes["RAINMAKER-PGR"].ServiceDefs, "serviceCode");
       return {
         ...state,
         loading: false,

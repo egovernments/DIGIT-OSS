@@ -2,7 +2,6 @@ import React from "react";
 import Loadable from "react-loadable";
 // user routes
 import Register from "../Screens/User/Register";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import Login from "../Screens/User/Login";
 import OTP from "../Screens/User/OTP";
 import {
@@ -66,13 +65,13 @@ const routes = [
     path: "my-complaints",
     component: MyComplaints,
     needsAuthentication: true,
-    options: { title: "CS_HOME_MY_COMPLAINTS", hideBackButton:(getQueryArg(window.location.href,"smsLink") === "true"||getQueryArg(window.location.href,"source") === "whatsapp")? true:false }
+    options: { title: "CS_HOME_MY_COMPLAINTS" }
   },
   {
     path: "complaint-details/:serviceRequestId?",
     component: ComplaintDetails,
     needsAuthentication: true,
-    options: { hideFooter: true, title: "CS_HEADER_COMPLAINT_SUMMARY",hideBackButton:(getQueryArg(window.location.href,"smsLink") === "true"||getQueryArg(window.location.href,"source") === "whatsapp")? true:false }
+    options: { hideFooter: true, title: "CS_HEADER_COMPLAINT_SUMMARY" }
   },
   {
     path: "complaint-submitted",

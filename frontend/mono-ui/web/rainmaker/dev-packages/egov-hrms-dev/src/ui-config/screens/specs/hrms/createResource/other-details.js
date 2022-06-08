@@ -4,6 +4,7 @@ import {
   getCommonTitle,
   getCommonSubHeader,
   getTextField,
+  getSelectField,
   getCommonContainer,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
@@ -42,20 +43,7 @@ export const otherDetails = getCommonCard({
         eduDetailsCardContainer: getCommonContainer(
           {
             degree: {
-              uiFramework: "custom-containers-local",
-              moduleName: "egov-hrms",
-              componentPath: "AutosuggestContainer",
-              jsonPath: "Employee[0].education[0].qualification",
-              gridDefination: {
-                xs: 12,
-                sm: 4
-              },
-              props: {
-                jsonPath: "Employee[0].education[0].qualification",
-                sourceJsonPath: "createScreenMdmsData.egov-hrms.Degree",
-                className: "autocomplete-dropdown",
-                optionLabel: "status",
-                optionValue: "code",
+              ...getSelectField({
                 label: {
                   labelName: "Degree",
                   labelKey: "HR_DEGREE_LABEL"
@@ -64,29 +52,26 @@ export const otherDetails = getCommonCard({
                   labelName: "Select Degree",
                   labelKey: "HR_DEGREE_PLACEHOLDER"
                 },
+                jsonPath: "Employee[0].education[0].qualification",
+                gridDefination: {
+                  xs: 12,
+                  sm: 4
+                },
+                sourceJsonPath: "createScreenMdmsData.egov-hrms.Degree",
+                props: {
+                  jsonPath: "Employee[0].education[0].qualification",
+                  optionLabel: "status",
+                  optionValue: "code"
+                  // hasLocalization: false
+                },
                 localePrefix: {
                   moduleName: "egov-hrms",
                   masterName: "Degree"
-                },
-                labelsFromLocalisation: true,
-                isClearable:true,
-              },
-                
+                }
+              })
             },
             year: {
-              uiFramework: "custom-containers-local",
-              moduleName: "egov-hrms",
-              componentPath: "AutosuggestContainer",
-              jsonPath: "Employee[0].education[0].yearOfPassing",
-              gridDefination: {
-                xs: 12,
-                sm: 4
-              },
-              props: {
-                className: "hr-generic-selectfield autocomplete-dropdown",
-                optionValue: "value",
-                optionLabel: "label",
-                sourceJsonPath: "yearsList",
+              ...getSelectField({
                 label: {
                   labelName: "Year",
                   labelKey: "HR_YEAR_LABEL"
@@ -95,10 +80,28 @@ export const otherDetails = getCommonCard({
                   labelName: "Select Year",
                   labelKey: "HR_YEAR_PLACEHOLDER"
                 },
-                labelsFromLocalisation: true,
-                isClearable:true,
-                jsonPath: "Employee[0].education[0].yearOfPassing"
-              }
+                jsonPath: "Employee[0].education[0].yearOfPassing",
+                sourceJsonPath: "yearsList",
+                gridDefination: {
+                  xs: 12,
+                  sm: 4
+                },
+                props: {
+                  className: "hr-generic-selectfield",
+                  // data: [
+                  //   {
+                  //     value: "Male",
+                  //     label: "Male"
+                  //   },
+                  //   {
+                  //     value: "Female",
+                  //     label: "Female"
+                  //   }
+                  // ],
+                  optionValue: "value",
+                  optionLabel: "label"
+                }
+              })
             },
             university: {
               ...getTextField({
@@ -118,21 +121,7 @@ export const otherDetails = getCommonCard({
               })
             },
             stream: {
-              uiFramework: "custom-containers-local",
-              moduleName: "egov-hrms",
-              componentPath: "AutosuggestContainer",
-              jsonPath: "Employee[0].education[0].stream",
-              gridDefination: {
-                xs: 12,
-                sm: 4
-              },
-              props: {
-                className: "hr-generic-selectfield autocomplete-dropdown",
-                localePrefix: {
-                  moduleName: "egov-hrms",
-                  masterName: "Specalization"
-                },
-                sourceJsonPath: "createScreenMdmsData.egov-hrms.Specalization",
+              ...getSelectField({
                 label: {
                   labelName: "Stream",
                   labelKey: "HR_STREAM_LABEL"
@@ -141,10 +130,32 @@ export const otherDetails = getCommonCard({
                   labelName: "Select Stream",
                   labelKey: "HR_STREAM_PLACEHOLDER"
                 },
-                labelsFromLocalisation: true,
-                isClearable:true,
-                jsonPath: "Employee[0].education[0].stream"
-              },
+                jsonPath: "Employee[0].education[0].stream",
+                gridDefination: {
+                  xs: 12,
+                  sm: 4
+                },
+                sourceJsonPath: "createScreenMdmsData.egov-hrms.Specalization",
+                props: {
+                  className: "hr-generic-selectfield"
+                  // data: [
+                  //   {
+                  //     value: "Arts",
+                  //     label: "Arts"
+                  //   },
+                  //   {
+                  //     value: "Science",
+                  //     label: "Science"
+                  //   }
+                  // ],
+                  // optionValue: "code",
+                  // optionLabel: "label"
+                },
+                localePrefix: {
+                  moduleName: "egov-hrms",
+                  masterName: "Specalization"
+                }
+              })
             },
             remarks: {
               ...getTextField({
@@ -205,16 +216,7 @@ export const otherDetails = getCommonCard({
         testsDetailsCardContainer: getCommonContainer(
           {
             testName: {
-              uiFramework: "custom-containers-local",
-              moduleName: "egov-hrms",
-              componentPath: "AutosuggestContainer",
-              jsonPath: "Employee[0].tests[0].test",
-              gridDefination: {
-                xs: 12,
-                sm: 4
-              },
-              props: {
-                className: "hr-generic-selectfield autocomplete-dropdown",
+              ...getSelectField({
                 label: {
                   labelName: "Test Name",
                   labelKey: "HR_TEST_NAME_LABEL"
@@ -223,30 +225,35 @@ export const otherDetails = getCommonCard({
                   labelName: "Select Test Name",
                   labelKey: "HR_TEST_NAME_PLACEHOLDER"
                 },
+                jsonPath: "Employee[0].tests[0].test",
+                gridDefination: {
+                  xs: 12,
+                  sm: 4
+                },
+                sourceJsonPath: "createScreenMdmsData.egov-hrms.EmploymentTest",
+                props: {
+                  className: "hr-generic-selectfield"
+                  // data: [
+                  //   {
+                  //     value: "Arts",
+                  //     label: "Arts"
+                  //   },
+                  //   {
+                  //     value: "Science",
+                  //     label: "Science"
+                  //   }
+                  // ],
+                  // optionValue: "code",
+                  // optionLabel: "label"
+                },
                 localePrefix: {
                   moduleName: "egov-hrms",
                   masterName: "EmploymentTest"
-                },
-                jsonPath: "Employee[0].tests[0].test",
-                sourceJsonPath: "createScreenMdmsData.egov-hrms.EmploymentTest",
-                labelsFromLocalisation: true,
-                isClearable:true,
-              },
-                
+                }
+              })
             },
             year: {
-              uiFramework: "custom-containers-local",
-              moduleName: "egov-hrms",
-              componentPath: "AutosuggestContainer",
-              jsonPath: "Employee[0].tests[0].yearOfPassing",
-              gridDefination: {
-                xs: 12,
-                sm: 4
-              },
-              props: {
-                className: "hr-generic-selectfield autocomplete-dropdown",
-                optionValue: "value",
-                optionLabel: "label",
+              ...getSelectField({
                 label: {
                   labelName: "Year",
                   labelKey: "HR_YEAR_LABEL"
@@ -257,9 +264,26 @@ export const otherDetails = getCommonCard({
                 },
                 jsonPath: "Employee[0].tests[0].yearOfPassing",
                 sourceJsonPath: "yearsList",
-                labelsFromLocalisation: true,
-                isClearable:true,
-              }
+                gridDefination: {
+                  xs: 12,
+                  sm: 4
+                },
+                props: {
+                  className: "hr-generic-selectfield",
+                  // data: [
+                  //   {
+                  //     value: "Male",
+                  //     label: "Male"
+                  //   },
+                  //   {
+                  //     value: "Female",
+                  //     label: "Female"
+                  //   }
+                  // ],
+                  optionValue: "value",
+                  optionLabel: "label"
+                }
+              })
             },
             remarks: {
               ...getTextField({
@@ -300,10 +324,6 @@ export const otherDetails = getCommonCard({
         "children.cardContent.children.testsDetailsCardContainer.children"
     },
     type: "array"
-  }
-},{
-  style:{
-    overflow: "visible"
   }
 });
 

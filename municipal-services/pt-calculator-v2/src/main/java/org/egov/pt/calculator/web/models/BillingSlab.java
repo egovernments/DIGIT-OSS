@@ -1,10 +1,12 @@
 package org.egov.pt.calculator.web.models;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotNull;
 
-import org.egov.pt.calculator.web.models.property.AuditDetails;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import org.egov.pt.calculator.web.models.property.AuditDetails;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,90 +26,49 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-@EqualsAndHashCode(exclude={"unitRate","arvPercent","unBuiltUnitRate","id","auditDetails" /*, "fromPlotSize", "toPlotSize", "fromFloor", "toFloor"*/})
-public class BillingSlab   {
-	
-		@NotNull
-        @JsonProperty("tenantId")
-        private String tenantId;
+@EqualsAndHashCode(exclude = { "unitRate", "propertyType", "roadType", "mohalla", "constructionType", "id",
+        "auditDetails" })
+public class BillingSlab {
 
-        @JsonProperty("id")
-        private String id;
+    @NotNull
+    @JsonProperty("tenantId")
+    private String tenantId;
 
-        @NotNull
-        @JsonProperty("propertyType")
-        private String propertyType;
+    @JsonProperty("id")
+    private String id;
 
-        @NotNull
-        @JsonProperty("propertySubType")
-        private String propertySubType;
+    @NotNull
+    @JsonProperty("propertyType")
+    private String propertyType;
 
-        @NotNull
-        @JsonProperty("usageCategoryMajor")
-        private String usageCategoryMajor;
+    @NotNull
+    @JsonProperty("roadType")
+    private String roadType;
 
-        @NotNull
-        @JsonProperty("usageCategoryMinor")
-        private String usageCategoryMinor;
+    @NotNull
+    @JsonProperty("constructionType")
+    private String constructionType;
 
-        @NotNull
-        @JsonProperty("usageCategorySubMinor")
-        private String usageCategorySubMinor;
+    @NotNull
+    @JsonProperty("ward")
+    private String ward;
 
-        @NotNull
-        @JsonProperty("usageCategoryDetail")
-        private String usageCategoryDetail;
+    @NotNull
+    @JsonProperty("mohalla")
+    private String mohalla;
 
-        @NotNull
-        @JsonProperty("ownerShipCategory")
-        private String ownerShipCategory;
+    @NotNull
+    @JsonProperty("unitRate")
+    private Double unitRate;
 
-        @NotNull
-        @JsonProperty("subOwnerShipCategory")
-        private String subOwnerShipCategory;
+    @NotNull
+    @JsonProperty("fromDate")
+    private Date fromDate;
 
-        @NotNull
-        @JsonProperty("areaType")
-        private String areaType;
+    @NotNull
+    @JsonProperty("toDate")
+    private Date toDate;
 
-        @NotNull
-        @JsonProperty("fromPlotSize")
-        private Double fromPlotSize;
-
-        @NotNull
-        @JsonProperty("toPlotSize")
-        private Double toPlotSize;
-        
-        @NotNull
-        @JsonProperty("occupancyType")
-        private String occupancyType;
-        
-        @NotNull
-        @JsonProperty("fromFloor")
-        private Double fromFloor;
-
-        @NotNull
-        @JsonProperty("toFloor")
-        private Double toFloor;
-
-        @JsonProperty("unitRate")
-        private Double unitRate;
-        
-        @NotNull
-        @JsonProperty("isPropertyMultiFloored")
-        private Boolean isPropertyMultiFloored;
-        
-        @JsonProperty("unBuiltUnitRate")
-        private Double unBuiltUnitRate;
-        
-        @JsonProperty("arvPercent")
-        private Double arvPercent;
-        
-/*        @NotNull
-        @JsonProperty("fromDate")
-        private Long fromDate;*/
-        
-        @JsonProperty("auditDetails")
-        private AuditDetails auditDetails;
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails;
 }
-

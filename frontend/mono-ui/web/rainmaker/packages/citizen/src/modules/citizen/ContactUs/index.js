@@ -90,7 +90,7 @@ class ContactUs extends Component {
       {
         leftIcon: <Icon style={iconStyle} action="communication" name="call" />,
         primaryText: (
-          <a className="pgr-call-icon phoneNumberStyle" href={`tel:+91${contactNumber}`} style={{ textDecoration: "none" }} rel="noopener noreferrer">
+          <a className="pgr-call-icon phoneNumberStyle" href={`tel:+91${contactNumber}`} style={{ textDecoration: "none" }}>
             {contactNumber ? contactNumber : defaultLoader}
           </a>
         ),
@@ -132,8 +132,7 @@ class ContactUs extends Component {
           <a
             className="phoneNumberStyle"
             target="_blank"
-            rel="noopener noreferrer"
-            href={domainUrl && domainUrl.includes("http") ? domainUrl : `http://${domainUrl}` }
+            href={domainUrl && domainUrl.includes("http") ? domainUrl : `http://${domainUrl}`}
             style={{ textDecoration: "none" }}
           >
             {domainUrl || defaultLoader}
@@ -167,7 +166,7 @@ class ContactUs extends Component {
                 </div>
                 <div style={{ textAlign: "center", paddingBottom: "8px" }}>
                   {twitterUrl && (
-                    <a href={twitterUrl} target="_blank" rel="noopener noreferrer">
+                    <a href={twitterUrl} target="_blank">
                       {
                         <Icon
                           id="contactus-twitter"
@@ -181,7 +180,7 @@ class ContactUs extends Component {
                     </a>
                   )}
                   {facebookUrl && (
-                    <a href={facebookUrl} target="_blank" rel="noopener noreferrer">
+                    <a href={facebookUrl} target="_blank">
                       {
                         <Icon
                           id="contactus-facebook"

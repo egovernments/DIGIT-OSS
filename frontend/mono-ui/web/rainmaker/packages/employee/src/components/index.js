@@ -40,7 +40,9 @@ import ToolTipUi from "egov-ui-kit/components/Tooltip";
 import Receipt from "egov-ui-kit/components/Receipt";
 import ShareButton from "egov-ui-kit/components/ShareButton";
 import CommonShareContainer from "./CommonShareContainer";
+import UpdateMobile from "egov-ui-kit/common/propertyTax/UpdateMobile/updateMobile";
 export {
+  UpdateMobile,
   Label,
   Image,
   TextField,

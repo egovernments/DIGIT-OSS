@@ -1,26 +1,26 @@
-import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../..//ui-utils/commons";
-import { validateFields } from "../../utils";
 import {
-  convertDateToEpoch, convertEpochToDate,
-
+  convertEpochToDate,
+  convertDateToEpoch,
   getTextToLocalMapping
 } from "../../utils/index";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { validateFields } from "../../utils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
 const convertMillisecondsToDays = (milliseconds) => {
-  return Math.round(milliseconds / (1000 * 60 * 60 * 24));
+  return  Math.round(milliseconds / (1000 * 60 * 60 * 24));
 }
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
-
   let queryObject = [
     {
       key: "tenantId",
-      value: (getTenantId().lastIndexOf(".") > 0 ? getTenantId().substr(0, getTenantId().lastIndexOf(".")) : getTenantId())
+      value: process.env.REACT_APP_DEFAULT_TENANT_ID
     },
     { key: "offset", value: "0" },
     { key: "limit", value: "100" }
@@ -108,15 +108,24 @@ export const searchApiCall = async (state, dispatch) => {
     try {
       response.Licenses.sort((item1, item2) => item1.applicationDate > item2.applicationDate ? -1 : 1)
       let data = response.Licenses.map(item => ({
-        ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNumber || "-",
-        ["BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.tradeLicenseDetail.owners[0].name || "-",
-        ["BPA_COMMON_TABLE_COL_LICENSEE_TYPE"]: getTextToLocalMapping(
-          `TRADELICENSE_TRADETYPE_${item.tradeLicenseDetail.tradeUnits[0].tradeType.split('.')[0].toUpperCase()}`
-        ) || "-",
-        ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
-        ["BPA_COMMON_TABLE_COL_ASSIGN_TO"]: get(businessIdToOwnerMapping[item.applicationNumber], "assignee") || "-",
-        ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]: convertEpochToDate(item.applicationDate) || "-",
-        ["TENANT_ID"]: item.tenantId
+        [getTextToLocalMapping("Application No")]:
+          item.applicationNumber || "-",
+        [getTextToLocalMapping("Applicant Name")]:
+          item.tradeLicenseDetail.owners[0].name || "-",
+        [getTextToLocalMapping("Licensee Type")]:
+          getTextToLocalMapping(
+            `TRADELICENSE_TRADETYPE_${item.tradeLicenseDetail.tradeUnits[0].tradeType
+              .toUpperCase()
+              .replace(/[._:-\s\/]/g, "_")}_VIEW`
+          ) || "-",
+        [getTextToLocalMapping("Status")]: item.status || "-",
+        [getTextToLocalMapping("Owner Name")]:
+          get(businessIdToOwnerMapping[item.applicationNumber], "assignee") ||
+          "-",
+        [getTextToLocalMapping("Application Date")]:
+          convertEpochToDate(item.applicationDate) || "-",
+        [getTextToLocalMapping("Status")]: item.status || "-",
+        ["tenantId"]: item.tenantId
       }));
 
       dispatch(
@@ -131,8 +140,10 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResults",
-          "props.rows",
-          response.Licenses.length
+          "props.title",
+          `${getTextToLocalMapping(
+            "Search Results for Stakeholder Registration Applications"
+          )} (${response.Licenses.length})`
         )
       );
       showHideTable(true, dispatch);
@@ -161,7 +172,7 @@ export const getWorkFlowData = async Licenses => {
   const queryObject = [
     {
       key: "tenantId",
-      value: (getTenantId().lastIndexOf(".") > 0 ? getTenantId().substr(0, getTenantId().lastIndexOf(".")) : getTenantId())
+      value: process.env.REACT_APP_DEFAULT_TENANT_ID
     },
     {
       key: "businessIds",
@@ -180,7 +191,7 @@ export const getWorkFlowData = async Licenses => {
       record => record.moduleName === "BPAREG"
     ).forEach(item => {
       businessIdToOwnerMapping[item.businessId] = {
-        assignee: get(item, "assignes[0].name"),
+        assignee: get(item,"assignes[0].name"),
         sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla)
       };
     });
@@ -193,53 +204,38 @@ export const getWorkFlowData = async Licenses => {
 
 export const getWorkFlowDataForBPA = async Licenses => {
   var businessIds = [];
-  let tenantMap = {};
-  let processInstanceArray = [];
-  var appNumbers = [];
   Licenses.forEach(item => {
-    var appNums = tenantMap[item.tenantId] || [];
-    appNumbers = appNums;
-    appNums.push(item.applicationNo);
-    tenantMap[item.tenantId] = appNums;
+    businessIds.push(item.applicationNo);
   });
-
-  for (var key in tenantMap) {
-    for (let i = 0; i < appNumbers.length / 100; i++) {
-      let queryObject = [
-        {
-          key: "tenantId",
-          value: key
-        },
-        {
-          key: "businessIds",
-          value: tenantMap[key].slice(i * 100, (i * 100) + 100)
-        }
-      ];
-      try {
-        let payload = await httpRequest(
-          "post",
-          "egov-workflow-v2/egov-wf/process/_search",
-          "",
-          queryObject
-        );
-        processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
-
-      } catch (error) {
-        console.log(error);
-        return [];
-      }
+  const queryObject = [
+    {
+      key: "tenantId",
+      value: process.env.REACT_APP_DEFAULT_TENANT_ID
+    },
+    {
+      key: "businessIds",
+      value: businessIds
     }
-
+  ];
+  try {
+    const payload = await httpRequest(
+      "post",
+      "egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObject
+    );
     var businessIdToOwnerMapping = {};
-    processInstanceArray.filter(
-      record => record.moduleName.includes("bpa-services")
+    payload.ProcessInstances.filter(
+      record => record.moduleName.includes("BPA.")
     ).forEach(item => {
       businessIdToOwnerMapping[item.businessId] = {
-        assignee: get(item, "assignes[0].name"),
-        sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla),
-        state: item.state.state
+        assignee: item.assignes && item.assignes.name,
+        sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla)
       };
     });
     return businessIdToOwnerMapping;
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 };

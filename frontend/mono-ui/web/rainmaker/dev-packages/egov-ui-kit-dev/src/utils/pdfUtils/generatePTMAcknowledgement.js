@@ -2,7 +2,7 @@ import { mutationSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutat
 import { transfereeInstitutionSummaryDetails, transfereeSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/searchPreviewResource/transfereeSummary";
 import { transferorInstitutionSummaryDetails, transferorSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/searchPreviewResource/transferorSummary";
 import { registrationSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/summaryResource/registrationSummary";
-import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
+import get from "lodash/get";
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
@@ -14,13 +14,13 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     transferorInstitutionSummaryDetails.institutionType.localiseValue=true;
     const mutationDetails = generateKeyValue(preparedFinalObject, mutationSummaryDetails);
     const registrationDetails = generateKeyValue(preparedFinalObject, registrationSummaryDetails);
-    let UlbLogoForPdf = getFromObject(preparedFinalObject, 'UlbLogoForPdf', '');
-    let property = getFromObject(preparedFinalObject, 'Property', {});
-    let transfereeOwners = getFromObject(
+    let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
+    let property = get(preparedFinalObject, 'Property', {});
+    let transfereeOwners = get(
         property,
         "ownersTemp", []
     );
-    let transferorOwners = getFromObject(
+    let transferorOwners = get(
         property,
         "ownersInit", []
     );
@@ -47,37 +47,42 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     }
     let transferorDetails = []
     let transferorDetailsInfo = []
-    if (getFromObject(property, "ownershipCategoryInit", "").startsWith("INSTITUTION")) {
+    if (get(property, "ownershipCategoryInit", "").startsWith("INSTITUTION")) {
         transferorDetails = generateKeyValue(preparedFinalObject, transferorInstitutionSummaryDetails)
-    } else if (getFromObject(property, "ownershipCategoryInit", "").includes("SINGLEOWNER")) {
+    } else if (get(property, "ownershipCategoryInit", "").includes("SINGLEOWNER")) {
         transferorDetails = generateKeyValue(preparedFinalObject, transferorSummaryDetails)
     } else {
-        transferorDetailsInfo = getMultiItems(preparedFinalObject, transferorSummaryDetails, 'Property.ownersTemp[0]')
+        transferorDetailsInfo = getMultiItems(preparedFinalObject, transferorSummaryDetails, 'Property.ownersInit')
         transferorDetails = getMultipleItemCard(transferorDetailsInfo, 'PT_OWNER')
     }
     let transfereeDetails = []
     let transfereeDetailsInfo = []
-    if (getFromObject(property, "ownershipCategoryTemp", "").startsWith("INSTITUTION")) {
+    if (get(property, "ownershipCategoryTemp", "").startsWith("INSTITUTION")) {
         transfereeDetails = generateKeyValue(preparedFinalObject, transfereeInstitutionSummaryDetails)
-    } else if (getFromObject(property, "ownershipCategoryTemp", "").includes("SINGLEOWNER")) {
+    } else if (get(property, "ownershipCategoryTemp", "").includes("SINGLEOWNER")) {
         transfereeDetails = generateKeyValue(preparedFinalObject, transfereeSummaryDetails)
     } else {
-        transfereeDetailsInfo = getMultiItems(preparedFinalObject, transfereeSummaryDetails, 'Property.ownersInit[0]')
-        transfereeDetails = getMultipleItemCard(transferorDetailsInfo, 'PT_OWNER')
+        transfereeDetailsInfo = getMultiItems(preparedFinalObject, transfereeSummaryDetails, 'Property.ownersTemp')
+        if(!window.location.href.includes("search-preview")){
+            transfereeDetailsInfo = transfereeDetailsInfo.sort(function(a,b){
+                  return transfereeDetailsInfo.indexOf(b)-transfereeDetailsInfo.indexOf(a)
+                })
+        }
+        transfereeDetails = getMultipleItemCard(transfereeDetailsInfo, 'PT_OWNER')
     }
 
-    const addressCard = getAddressItems(getFromObject(preparedFinalObject, 'Property', {}));
-    const documentsUploadRedux = getFromObject(preparedFinalObject, 'documentsUploadRedux', []);
+    const addressCard = getAddressItems(get(preparedFinalObject, 'Property', {}));
+    const documentsUploadRedux = get(preparedFinalObject, 'documentsUploadRedux', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
     let pdfData = {
         header: "PTM_ACKNOWLEDGEMENT", tenantId: property.tenantId,
-        applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
-        additionalHeader: "PT_APPLICATION_NO", additionalHeaderValue: property.acknowldgementNumber,
+        applicationNoHeader: 'PT_PROPERTY_PTUID', applicationNoValue: property.propertyId,
+        additionalHeader: "PT_APPLICATION_NO_LABEL", additionalHeaderValue: property.acknowldgementNumber,
         cards: [
             { header: "PT_PROPERTY_ADDRESS_SUB_HEADER", items: addressCard },
             { header: 'PT_MUTATION_TRANSFEROR_DETAILS', items: transferorDetails, type: transferorDetailsInfo.length > 1 ? 'multiItem' : 'singleItem' },
             { header: 'PT_MUTATION_TRANSFEREE_DETAILS', items: transfereeDetails, type: transfereeDetailsInfo.length > 1 ? 'multiItem' : 'singleItem' },
-            { header: "PT_MUTATION_DETAILS", items: mutationDetails, hide: !getFromObject(preparedFinalObject, 'PropertyConfiguration[0].Mutation.MutationDetails', false) },
+            { header: "PT_MUTATION_DETAILS", items: mutationDetails, hide: !get(preparedFinalObject, 'PropertyConfiguration[0].Mutation.MutationDetails', false) },
             { header: "PT_MUTATION_REGISTRATION_DETAILS", items: registrationDetails },
             { header: 'PT_SUMMARY_DOCUMENTS_HEADER', items: documentCard }]
     }

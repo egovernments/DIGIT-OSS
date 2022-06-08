@@ -5,13 +5,13 @@ import {
   subUsageType,
   occupancy,
   builtArea,
-  annualRent,
   beforeInitForm,
   mergeMaster,
   prepareDropDownData,
   getPresentMasterObj,
   getAbsentMasterObj,
-  floorName,
+  floorName,annualRent,
+  constructionType
 } from "../utils/reusableFields";
 import filter from "lodash/filter";
 import get from "lodash/get";
@@ -31,7 +31,6 @@ const formConfig = {
       required: true,
       numcols: 4,
       dropDownData: [],
-      formName: "plotDetails",
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
         if (!isEmpty(minorObject)) {
@@ -62,9 +61,10 @@ const formConfig = {
     },
     ...subUsageType,
     ...occupancy,
+    ...constructionType,
     ...builtArea,
     ...floorName,
-    ...annualRent,
+    ...annualRent
   },
   isFormValid: false,
   ...beforeInitForm,

@@ -1,45 +1,53 @@
 import {
+  getCommonHeader,
   getCommonCard,
-
-
-  getCommonContainer, getCommonGrayCard, getCommonHeader,
-
-  getCommonTitle
+  getCommonTitle,
+  getCommonGrayCard,
+  getCommonContainer,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
-  unMountScreen
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getQueryArg,
-  setBusinessServiceDataToLocalStorage, setDocuments
-} from "egov-ui-framework/ui-utils/commons";
-import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import generateReceipt from "../utils/receiptPdf";
 import get from "lodash/get";
 import set from "lodash/set";
-import store from "ui-redux/store";
-import { httpRequest } from "../../../../ui-utils";
-import { checkValidOwners, getSearchResults } from "../../../../ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField ,prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  getQueryArg,
+  setBusinessServiceDataToLocalStorage,
+  getFileUrlFromAPI,setDocuments
+} from "egov-ui-framework/ui-utils/commons";
+import { getSearchResults } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
-
-
-  getDialogButton, getFeesEstimateCard,
-  getHeaderSideText,
-  getTransformedStatus, setMultiOwnerForSV,
-  setValidToFromVisibilityForSV
+  setMultiOwnerForSV,
+  setValidToFromVisibilityForSV,
+  getDialogButton,
+  showHideAdhocPopup,
+  getEpochForDate,
+  convertEpochToDateForEndDateYMD,
+  convertDateToEpoch,
+  convertDateTimeToEpoch
 } from "../utils";
-import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import { downloadPrintContainer, footerReviewTop } from "./applyResource/footer";
-import { getReviewDocuments } from "./applyResource/review-documents";
-import { getReviewOwner } from "./applyResource/review-owner";
+
+
+import { footerReview, downloadPrintContainer,footerReviewTop  } from "./applyResource/footer";
+import {
+  getFeesEstimateCard,
+  getHeaderSideText,
+  getTransformedStatus
+} from "../utils";
 import { getReviewTrade } from "./applyResource/review-trade";
+import { getReviewOwner } from "./applyResource/review-owner";
+import { getReviewDocuments } from "./applyResource/review-documents";
+import { getDeclaration }from "./applyResource/declaration";
+import { loadReceiptGenerationData } from "../utils/receiptTransformer";
+import { adhocPopup } from "./applyResource/adhocPopup";
+
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let headerSideText = { word1: "", word2: "" };
-
 
 const getTradeTypeSubtypeDetails = payload => {
   const tradeUnitsFromApi = get(
@@ -72,31 +80,57 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     get(payload, "Licenses[0].licenseNumber")
   );
   set(payload, "Licenses[0].headerSideText", headerSideText);
+
+  let rebateAmount = get(payload, "Licenses[0].tradeLicenseDetail.adhocExemption");
   set(payload, "Licenses[0].assignee", []);
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
+  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+    "."
+  )[0] === "INDIVIDUAL"
     ? setMultiOwnerForSV(action, true)
     : setMultiOwnerForSV(action, false);
 
-  if (get(payload, "Licenses[0].licenseType")) {
-    setValidToFromVisibilityForSV(
-      action,
-      get(payload, "Licenses[0].licenseType")
-    );
+  if(rebateAmount && rebateAmount < 0){
+    set(payload, "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
   }
+  // set(payload, "Licenses[0].assignee", []);
+  // get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
+  //   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+  //     "."
+  //   )[0] === "INDIVIDUAL"
+  //   ? setMultiOwnerForSV(action, true)
+  //   : setMultiOwnerForSV(action, false);
+  //
+  // if (get(payload, "Licenses[0].licenseType")) {
+  //   setValidToFromVisibilityForSV(
+  //     action,
+  //     get(payload, "Licenses[0].licenseType")
+  //   );
+  // }
+
+  // get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
+  // get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+  //   "."
+  // )[0] === "INDIVIDUAL"
+  //   ? setMultiOwnerForSV(action, true)
+  //   : setMultiOwnerForSV(action, false);
+
+  // if (get(payload, "Licenses[0].licenseType")) {
+  //   setValidToFromVisibilityForSV(
+  //     action,
+  //     get(payload, "Licenses[0].licenseType")
+  //   );
+  // }
 
   await setDocuments(
     payload,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
     "LicensesTemp[0].reviewDocData",
-    dispatch, 'TL'
+    dispatch,'TL'
   );
 
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
-  payload && dispatch(prepareFinalObject("LicensesTemp[0].oldOwners", [...payload.Licenses[0].tradeLicenseDetail.owners]));
 
   //set business service data
 
@@ -137,17 +171,13 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   );
 };
 
-const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
-  dispatch(unMountScreen("search"));
-  dispatch(unMountScreen("apply"));
-  loadUlbLogo(tenantId);
-
+export const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   //Search details for given application Number
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
       (await searchResults(action, state, dispatch, applicationNumber));
 
-    //check for renewal flow
+   //check for renewal flow
     const licenseNumber = get(
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].licenseNumber`
@@ -158,88 +188,193 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         value: tenantId
       },
       { key: "offset", value: "0" },
-      { key: "licenseNumbers", value: licenseNumber }
+      { key: "licenseNumbers", value: licenseNumber}
     ];
     const payload = await getSearchResults(queryObjectSearch);
-    dispatch(prepareFinalObject("AllLicences", get(payload, `Licenses`, [])));
-    const length = payload && payload.Licenses.length > 0 ? get(payload, `Licenses`, []).length : 0;
-    dispatch(prepareFinalObject("licenseCount", length));
-    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-      get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+    const length = payload && payload.Licenses.length > 0 ? get(payload,`Licenses`,[]).length : 0;
+    dispatch(prepareFinalObject("licenseCount" ,length));
+    const status = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Licenses[0].status"
+    );    
+    const applicationType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].applicationType"
+    );
+
+    const payloadStatus = get(payload,`Licenses[0].status`,null);
+    const payloadType = get(payload,`Licenses[0].applicationType`,null);
+    const LicensevalidToDate = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].validTo"
+    );
+
+   let LicenseExpiryDate = LicensevalidToDate-1000;
+
+
+   let date = new Date();
+
+   //let date = new Date().toISOString().slice(0,10);
+
+   let currentDate = date.getFullYear()+'-'+date.getMonth()+'-'+date.getDay();
+       
+   let limitEpochDate = convertDateTimeToEpoch("01-01-"+date.getFullYear()+" 00:00:00");
+
+   let currentDatetoEpoch = convertDateToEpoch(currentDate);
+
+   const financialYear = get(
+     state,
+     "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
+   );
+  //set(action, "screenConfig.components.footer", {})
+  if(process.env.REACT_APP_NAME === "Citizen" )
+  {
+  //   const footer = footerReview(
+  //     action,
+  //     state,
+  //     dispatch,
+  //     status,
+  //     applicationNumber,
+  //     tenantId,
+  //     financialYear
+  //   );
+
+  // set(action, "screenConfig.components.footer", footer)
+
+   //if(status ==="APPROVED" && applicationType ==="NEW" && licene_expiry_date>=limit_date)
+    if(payloadStatus ==="APPROVED" && (payloadType ==="NEW" || payloadType === "RENEWAL") && ((currentDatetoEpoch<LicenseExpiryDate && currentDatetoEpoch>=limitEpochDate )||(currentDatetoEpoch>LicenseExpiryDate)))
+
+    {
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
+        "visible",
+        true
+      ));      
+    }
+    else if (payloadStatus ==="EXPIRED")
+    {
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
+        "visible",
+        true
+      ));
+
+    }
+    // else if(payloadType ==="RENEWAL")
+    // {
+    //   dispatch(handleField(
+    //     "search-preview",
+    //     "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
+    //     "visible",
+    //     true
+    //   ))
+    //   set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.submitButton.props.visible", true)
+    //   // dispatch(
+    //   //   handleField(
+    //   //     "search-preview",
+    //   //     "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+    //   //     "props.visible",
+    //   //     false
+    //   //   )
+    //   // );
+    //   set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.editButton.props.visible", true)
+
+    //   // dispatch(
+    //   //   handleField(
+    //   //     "search-preview",
+    //   //     "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+    //   //     "props.visible",
+    //   //     false
+    //   //   )
+    //   // );
+
+    // }
+    else    {
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
+        "visible",
+        false
+      ));
+     //set(action, "screenConfig.components.footer", {})
+
+         set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.submitButton", {})
+         set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.editButton", {})
+
+    //  set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
+
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+      //     "props.visible",
+      //     false
+      //   )
+      // );
+     // set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton.props.visible", false)
+
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+      //     "props.visible",
+      //     false
+      //   )
+      // );
+
+    }
+  }
+
+
+  if (status === "REJECTED"|| status ==="PENDINGPAYMENT" || status ==="APPROVED") {
+      console.log("=====status=123======" + status + "============");
+      // set(
+      //   action.screenConfgig,
+      //   "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton.visible",
+      //   false
+      // );
+
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton",
+          "visible",
+          false
+        )
+      );
+    }
+
+    // const financialYear = get(
+    //   state,
+    //   "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
+    // );
+
+    let data = get(state, "screenConfiguration.preparedFinalObject");
+
+    get(data, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
+      get(data, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
         "."
       )[0] === "INDIVIDUAL"
       ? setMultiOwnerForSV(action, true)
       : setMultiOwnerForSV(action, false);
-    const status = get(
-      state,
-      "screenConfiguration.preparedFinalObject.Licenses[0].status"
-    );
 
-    const financialYear = get(
-      state,
-      "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
-    );
-
-    let data = get(state, "screenConfiguration.preparedFinalObject");
-
-    const obj = setStatusBasedValue(status);
-    let appDocuments=get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]);
-    if (appDocuments) {
-      let applicationDocs = [];
-      appDocuments.forEach(doc => {
-        if(doc.length !== 0) {
-          applicationDocs.push(doc);
-        }
-      })
-      applicationDocs=applicationDocs.filter(document=>document);
-      
-      let removedDocs=get(data, "LicensesTemp[0].removedDocs",[]);
-      if(removedDocs.length>0){
-          removedDocs.map(removedDoc=>{
-            applicationDocs=applicationDocs.filter(appDocument=>!(appDocument.documentType===removedDoc.documentType&&appDocument.fileStoreId===removedDoc.fileStoreId))
-          })             
-      }
-      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments",applicationDocs));
-      await setDocuments(
-        get(state, "screenConfiguration.preparedFinalObject"),
-        "Licenses[0].tradeLicenseDetail.applicationDocuments",
-        "LicensesTemp[0].reviewDocData",
-        dispatch, 'TL'
+    if (get(data, "Licenses[0].licenseType")) {
+      setValidToFromVisibilityForSV(
+        action,
+        get(data, "Licenses[0].licenseType")
       );
     }
 
-    const businessService = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].businessService`
-    );
-    let mdmsBody = {
-      MdmsCriteria: {
-        tenantId: tenantId,
-        moduleDetails: [
-          {
-            moduleName: "common-masters",
-            masterDetails: [{ name: "uiCommonPay", filter: `[?(@.code=="${businessService}")]` }]
-          },
-          {
-            moduleName: "TradeLicense",
-            masterDetails: [{ name: "TradeRenewal" }]
-          }
-        ]
-      }
-    };
-    try {
-      let payload = null;
-      payload = await httpRequest(
-        "post",
-        "/egov-mdms-service/v1/_search",
-        "_search",
-        [],
-        mdmsBody
+    const obj = setStatusBasedValue(status);
+    if (get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments")) {
+      await setDocuments(
+        data,
+        "Licenses[0].tradeLicenseDetail.applicationDocuments",
+        "LicensesTemp[0].reviewDocData",
+        dispatch,'TL'
       );
-      dispatch(prepareFinalObject("renewalPeriod", get(payload.MdmsRes, "TradeLicense.TradeRenewal[0].renewalPeriod")));
-      dispatch(prepareFinalObject("uiCommonConfig", get(payload.MdmsRes, "common-masters.uiCommonPay[0]")));
-    } catch (e) {
-      console.log(e);
     }
 
     const statusCont = {
@@ -281,7 +416,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       applicationNumber,
       tenantId
     );
-    const CitizenprintCont = footerReviewTop(
+    const CitizenprintCont=footerReviewTop(
       action,
       state,
       dispatch,
@@ -291,19 +426,25 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       financialYear
     );
 
-    if (status !== "INITIATED") {
-      process.env.REACT_APP_NAME === "Citizen"
-        ? set(
+    process.env.REACT_APP_NAME === "Citizen"
+      ? set(
           action,
           "screenConfig.components.div.children.headerDiv.children.helpSection.children",
           CitizenprintCont
         )
-        : set(
+      : set(
           action,
           "screenConfig.components.div.children.headerDiv.children.helpSection.children",
           printCont
         );
-    }
+
+        let dvalue =  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.declaration")
+
+        if(dvalue === undefined )
+        {
+         dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.additionalDetail.declaration",false));
+        }
+
 
     // Get approval details based on status and set it in screenconfig
 
@@ -323,7 +464,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           data,
           "Licenses[0].tradeLicenseDetail.verificationDocuments",
           "LicensesTemp[0].verifyDocData",
-          dispatch, 'TL'
+          dispatch,'TL'
         );
       } else {
         dispatch(
@@ -343,35 +484,32 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }
 
-    const applicationType = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].applicationType"
-    );
+
 
     const headerrow = getCommonContainer({
       header: getCommonHeader({
         labelName: "Trade License Application (2018-2019)",
-        labelKey: applicationType === "RENEWAL" ? "TL_TRADE_RENEW_APPLICATION" : "TL_TRADE_APPLICATION"
+        labelKey: applicationType === "RENEWAL"? "TL_TRADE_RENEW_APPLICATION":"TL_TRADE_APPLICATION"
       }),
-      applicationLicence: getCommonContainer({
-        applicationNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "ApplicationNoContainer",
-          props: {
-            number: applicationNumber
-          }
-        },
-        licenceNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "licenceNoContainer",
-          visible: licenseNumber ? true : false,
-          props: {
-            number: licenseNumber,
-          }
+    applicationLicence:getCommonContainer({
+      applicationNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "ApplicationNoContainer",
+        props: {
+          number: applicationNumber
         }
-      })
+      },
+      licenceNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "licenceNoContainer",
+        visible: licenseNumber? true : false,
+        props: {
+          number: licenseNumber,
+        }
+      }
+    })
     });
     set(
       action.screenConfig,
@@ -379,15 +517,108 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       headerrow
     );
 
+
+
+
     if (status === "cancelled")
       set(
         action,
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
       );
-    setActionItems(action, obj);
-    loadReceiptGenerationData(applicationNumber, tenantId);
+      setActionItems(action, obj);
+    // loadReceiptGenerationData(applicationNumber, tenantId);
+      set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.editButton.props.disabled", false)
+
+      //
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+      //     "props.disabled",
+      //     false
+      //   )
+      // );
+      set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.submitButton.props.disabled", false)
+
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+      //     "props.disabled",
+      //     false
+      //   )
+      // );
+
   }
+
+  //let declaration_value =  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.declaration")
+
+ /*  set(
+    action,
+    "screenConfig.search-preview.components.div.children.footer.children.container.children.rightdiv.children.editButton.visible",
+    false
+  ); */
+
+
+ /*  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+      "visible",
+      false
+    )
+  );  */
+
+/*  if (declaration_value) {
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+      "visible",
+      false
+    )
+  );
+}
+else
+{
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+      "visible",
+      false
+    )
+  );
+}    */
+/* const licenseCount = get(
+  state,
+  "screenConfiguration.preparedFinalObject.licenseCount"
+);
+console.log("Before Filed in licenseCount", licenseCount);
+if(licenseCount>0)
+{
+dispatch(
+  handleField(
+    "search-preview",
+    "components.div.children.declaration",
+    "visible",
+    true
+  )
+);
+}
+else
+{
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.declaration",
+      "visible",
+      true
+    )
+  );
+} */
+
 };
 
 let titleText = "";
@@ -457,9 +688,30 @@ const estimate = getCommonGrayCard({
 
 const reviewTradeDetails = getReviewTrade(false);
 
+const getULBCard = () => {
+  return getCommonContainer(
+    {
+      headerDiv: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "ULBSummaryCard",
+        props: {
+          style: { marginBottom: "10px" },
+          sourceJsonPath: "mdmsDataForReceipt",
+          logopath: "base64UlbLogo"
+        }
+      }
+    },
+    { style: { justifyContent: "center", display: "none" } }
+  );
+};
+
+const ulbCard = getULBCard();
+
 const reviewOwnerDetails = getReviewOwner(false);
 
 const reviewDocumentDetails = getReviewDocuments(false, false);
+const reviewDeclaration = getDeclaration(false);
 
 // let approvalDetails = getApprovalDetails(status);
 let title = getCommonTitle({ labelName: titleText });
@@ -488,40 +740,69 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
+  // viewBreakupButton: getDialogButton(
+  //   "VIEW BREAKUP",
+  //   "TL_PAYMENT_VIEW_BREAKUP",
+  //   "search-preview"
+  // ),
+  addPenaltyRebateButton: {
+    componentPath: "Button",
+    props: {
+      color: "primary",
+      style: {}
+    },
+    children: {
+      previousButtonLabel: getLabel({
+        labelName: "ADD REBATE/PENALTY",
+        labelKey: "TL_PAYMENT_ADD_RBT_PEN"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: showHideAdhocPopup
+    },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      roles: ["TL_APPROVER","TL_DOC_VERIFIER"]
+    }
+  },
   reviewTradeDetails,
   reviewOwnerDetails,
-  reviewDocumentDetails
+  reviewDocumentDetails,
+
 });
 
-export const beforeSubmitHook =  (Licenses=[{}]) => {
-  let state = store.getState();
-  let oldOwners =  JSON.parse(
-    JSON.stringify(get(state, "screenConfiguration.preparedFinalObject.LicensesTemp[0].oldOwners", {}))
-  );
-  Licenses&&Array.isArray(Licenses)&&Licenses.length>0&& set(Licenses[0] ,"tradeLicenseDetail.owners", checkValidOwners(get(Licenses[0], "tradeLicenseDetail.owners",[]),oldOwners));
-  
-return Licenses;
-
-}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
+    const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+
     //To set the application no. at the  top
     set(
       action.screenConfig,
       "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
       applicationNumber
     );
+    if (status !== "pending_payment") {
+      set(
+        action.screenConfgig,
+        "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
+        false
+      );
+    }
+
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: "NewTL" }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);
+    loadReceiptGenerationData(applicationNumber, tenantId);
     return action;
   },
 
@@ -533,6 +814,7 @@ const screenConfig = {
         className: "common-div-css search-preview"
       },
       children: {
+        ulbheader: ulbCard,
         headerDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Container",
@@ -543,7 +825,7 @@ const screenConfig = {
                 sm: 8
               },
 
-              ...headerrow
+             ...headerrow
 
             },
             helpSection: {
@@ -570,34 +852,67 @@ const screenConfig = {
             dataPath: "Licenses",
             moduleName: "NewTL",
             updateUrl: "/tl-services/v1/_update",
-            beforeSubmitHook:beforeSubmitHook
+            beforeSubmitHook:
+              (data) =>{
+                 let rebateAmount = data[0].tradeLicenseDetail.adhocExemption;
+                 if(rebateAmount && rebateAmount > 0){
+                   data = set(data, "[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
+                 }
+                 return data;
+              }
+
           }
         },
-        // actionDialog: {
-        //   uiFramework: "custom-containers-local",
-        //   componentPath: "ResubmitActionContainer",
-        //   moduleName: "egov-tradelicence",
-        //   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
-        //   props: {
-        //     open: true,
-        //     dataPath: "Licenses",
-        //     moduleName: "NewTL",
-        //     updateUrl: "/tl-services/v1/_update",
-        //     data: {
-        //       buttonLabel: "RESUBMIT",
-        //       moduleName: "NewTL",
-        //       isLast: false,
-        //       dialogHeader: {
-        //         labelName: "RESUBMIT Application",
-        //         labelKey: "WF_RESUBMIT_APPLICATION"
-        //       },
-        //       showEmployeeList: false,
-        //       roles: "CITIZEN",
-        //       isDocRequired: false
-        //     }
-        //   }
-        // },
-        tradeReviewDetails
+        actionDialog: {
+          uiFramework: "custom-containers-local",
+          componentPath: "ResubmitActionContainer",
+          moduleName: "egov-tradelicence",
+          visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+          props: {
+            open: true,
+            dataPath: "Licenses",
+            moduleName: "NewTL",
+            updateUrl: "/tl-services/v1/_update",
+            data: {
+              buttonLabel: "RESUBMIT",
+              moduleName: "NewTL",
+              isLast: false,
+              dialogHeader: {
+                labelName: "RESUBMIT Application",
+                labelKey: "WF_RESUBMIT_APPLICATION"
+              },
+              showEmployeeList: false,
+              roles: "CITIZEN",
+              isDocRequired: false
+            }
+          }
+        },
+        actionDialog: {
+          uiFramework: "custom-containers-local",
+          componentPath: "ResubmitActionContainer",
+          moduleName: "egov-tradelicence",
+          visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+          props: {
+            open: true,
+            dataPath: "Licenses",
+            moduleName: "NewTL",
+            updateUrl: "/tl-services/v1/_update",
+            data: {
+              buttonLabel: "RESUBMIT",
+              moduleName: "NewTL",
+              isLast: false,
+              dialogHeader: {
+                labelName: "RESUBMIT Application",
+                labelKey: "WF_RESUBMIT_APPLICATION"
+              },
+              showEmployeeList: false,
+              roles: "CITIZEN",
+              isDocRequired: false
+            }
+          }
+        },
+        tradeReviewDetails,
+        reviewDeclaration
       }
     },
     breakUpDialog: {
@@ -608,6 +923,19 @@ const screenConfig = {
         open: false,
         maxWidth: "md",
         screenKey: "search-preview"
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        screenKey: "search-preview"
+      },
+      children: {
+        popup: adhocPopup
       }
     }
   }

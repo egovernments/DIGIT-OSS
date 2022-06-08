@@ -3,30 +3,64 @@ import Loadable from "react-loadable";
 import LinearProgress from "egov-ui-framework/ui-atoms/LinearSpinner";
 
 const Loading = () => <LinearProgress />;
-
 const TestMolecules = Loadable({
   loader: () => import("./TestMolecules"),
   loading: () => <Loading />
 });
-
-const MultiDocDetailCard = Loadable({
-  loader: () => import("./MultiDocDetailCard"),
+const RadioButtonsGroup = Loadable({
+  loader: () => import("./RadioGroup"),
   loading: () => <Loading />
- });
+});
 
- const UploadCard = Loadable({
-  loader: () => import("./UploadCard"),
+const Tooltip = Loadable({
+  loader: () => import("./Tooltip"),
   loading: () => <Loading />
- });
+});
 
- const UploadMultipleFile = Loadable({
-  loader: () => import("./UploadMultipleFile"),
+const CustomTab = Loadable({
+  loader: () => import("./CustomTab"),
+  loading: () => <Loading />
+});
+
+const UploadSingleFile = Loadable({
+  loader: () => import("./UploadSingleFile"),
+  loading: () => <Loading />
+});
+
+const DocumentList = Loadable({
+  loader: () => import("./DocumentList"),
+  loading: () => <Loading />
+});
+
+const DividerWithLabel = Loadable({
+  loader: () => import("./DividerWithLabel"),
+  loading: () => <Loading />
+});
+
+const MapLocator = Loadable({
+  loader: () => import("./MapLocator"),
+  loading: () => <Loading />
+});
+
+const FeesEstimateCard = Loadable({
+  loader: () => import("./FeesEstimateCard"),
+  loading: () => <Loading />
+});
+
+const HowItWorks = Loadable({
+  loader: () => import("./HowItWorks"),
   loading: () => <Loading />
 });
 
 export {
   TestMolecules,
-  MultiDocDetailCard,
-  UploadCard,
-  UploadMultipleFile
+  RadioButtonsGroup,
+  Tooltip,
+  CustomTab,
+  UploadSingleFile,
+  DocumentList,
+  MapLocator,
+  FeesEstimateCard,
+  DividerWithLabel,
+  HowItWorks
 };

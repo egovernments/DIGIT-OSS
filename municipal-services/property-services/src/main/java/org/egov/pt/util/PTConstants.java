@@ -45,6 +45,8 @@ public class PTConstants {
 
     public static final String MDMS_PT_USAGESUBMINOR = "UsageCategorySubMinor";
 
+    public static final String PT_OWNER_NAME = "{ownername}";
+
     public static final String MDMS_PT_OWNERTYPE = "OwnerType";
 
     public static final String MDMS_PT_EGF_MASTER = "egf-master";
@@ -74,6 +76,9 @@ public class PTConstants {
     public static final String NOTIFICATION_PAYMENT_PARTIAL_ONLINE = "PT_NOTIFICATION_PAYMENT_PARTIAL_ONLINE";
 
     public static final String NOTIFICATION_OLDPROPERTYID_ABSENT = "pt.oldpropertyid.absent";
+    public static final String PT_OLD_MOBILENUMBER = "{oldmobilenumber}";
+
+    public static final String PT_NEW_MOBILENUMBER = "{newmobilenumber}";
 
     public static final List<String> ASSESSSMENT_NOTIFICATION_CODES = Collections.unmodifiableList(Arrays.asList(NOTIFICATION_PAYMENT_ONLINE,
             NOTIFICATION_PAYMENT_OFFLINE, NOTIFICATION_PAYMENT_FAIL,NOTIFICATION_PAYMENT_PARTIAL_OFFLINE,
@@ -192,6 +197,7 @@ public class PTConstants {
 	
 	public static final String CREATE_NOTIF_CODE = "PT_NOTIF_CREATE";
 	
+    public static final String WF_ACTION_APPROVE = "APPROVE";
 	
 	/* ASSESSMENT CONSTANTS */
 	
@@ -312,6 +318,13 @@ public class PTConstants {
 
     public static final String VIEW_APPLICATION_CODE = "View Application";
 
+    public static final String ACTION_SKIP_PAY = "SKIP_PAYMENT";
+    
+	public static final String BILL_AMOUNT = "$.Demands[0].demandDetails[0].taxAmount";
+
+	public static final String STATE_INITIAL_SKIP_PAYMENT = "INITIAL_SKIP_PAYMENT";
+	
+    public static final String ACTION_FINAL_SKIP_PAY = "FINAL_SKIP_PAYMENT";
 
     // Fuzzy Search
     public static final String ES_DATA_PATH = "$..Data";

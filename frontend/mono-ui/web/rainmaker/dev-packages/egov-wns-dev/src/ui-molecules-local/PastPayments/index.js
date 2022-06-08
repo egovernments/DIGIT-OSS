@@ -8,8 +8,6 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import { Link } from "react-router-dom";
-import store from "ui-redux/store";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const styles = theme => ({
   root: {
@@ -21,7 +19,7 @@ const styles = theme => ({
 class PastPayments extends React.Component {
 
   clickHandler = () => {
-    store.dispatch(setRoute("pastPayments"))
+    window.location.href = "pastPayments"
   }
 
   render() {

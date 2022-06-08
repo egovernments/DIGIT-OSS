@@ -11,7 +11,6 @@ const formConfig = {
       errorMessage: "CORE_COMMON_USERNAME_INVALIDMSG",
       hintText: "CORE_LOGIN_USERNAME_PLACEHOLDER",
       pattern: "^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$",
-      value: "",
     },
     type: {
       id: "otp-type",
@@ -21,7 +20,7 @@ const formConfig = {
     tenantId: {
       id: "employee-forgot-password-tenantId",
       jsonPath: "otp.tenantId",
-      value:""
+      value: commonConfig.forgotPasswordTenant,
     },
   },
   submit: {

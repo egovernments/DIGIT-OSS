@@ -1,6 +1,6 @@
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { getLocaleLabels, getStatusKey } from "egov-ui-framework/ui-utils/commons";
-import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
+// import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 import React from "react";
 import { getEpochForDate, sortByEpoch } from "../../utils";
 
@@ -118,20 +118,15 @@ export const searchResults = {
 const onRowClick = rowData => {
   switch (rowData[7]) {
     case "INITIATED":
-      if(rowData[6]=="TL_TYPE_RENEWAL"){
-        routeTo(`apply?applicationNumber=${rowData[0]}&licenseNumber=${rowData[1]}&action=EDITRENEWAL&tenantId=${
-          rowData[8]
-          }`);
-      }else{
-        routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${
-          rowData[8]
-          }`);
-      }
+      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
+        rowData[8]
+      }`;
+      // }&action=edit`;
       break;
     default:
-      routeTo(`search-preview?applicationNumber=${
+      window.location.href = `search-preview?applicationNumber=${
         rowData[0]
-        }&tenantId=${rowData[8]}`);
+      }&tenantId=${rowData[8]}`;
       break;
   }
 };

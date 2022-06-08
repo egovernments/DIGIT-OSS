@@ -1,4 +1,4 @@
-import { getCommonCard, getPattern, getCommonSubHeader, getTextField, getSelectField, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getCommonSubHeader, getTextField, getSelectField, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 // export const getGenderRadioButton = {
 //   uiFramework: "custom-containers",
@@ -25,8 +25,7 @@ export const getCheckboxContainer = {
   props: {
     jsonPathSewerage: "applyScreen.sewerage",
     jsonPathWater: "applyScreen.water",
-    required: true,
-    disabled: false
+    required: true
   },
   type: "array",
 };
@@ -46,45 +45,26 @@ export const OwnerInfoCard = getCommonCard({
       placeholder: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
       required: true,
-      jsonPath: "applyScreen.proposedTaps",
-      pattern: /^[0-9]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      sourceJsonPath: "applyScreen.proposedTaps",
+      jsonPath: "applyScreen.proposedTaps"
     }),
-    pipeSize: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-wns",
-      componentPath: "AutosuggestContainer",
-      jsonPath: "applyScreen.proposedPipeSize",
-      props: {
-        className:"applicant-details-error autocomplete-dropdown",
-        label: { labelKey: "WS_CONN_DETAIL_PIPE_SIZE", labelName: "Pipe Size" },
-        placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER", labelName: "Select Pipe Size" },
-        required: true,
-        isClearable: true,
-        labelsFromLocalisation: true,
-        jsonPath: "applyScreen.proposedPipeSize",
-        sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
-        inputLabelProps: {
-          shrink: true
-        },
-        suggestions: [],
-        fullwidth: true,
-      },
+
+    pipeSize: getSelectField({
+      label: { labelKey: "WS_CONN_DETAIL_PIPE_SIZE" },
+      sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
+      placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
       required: true,
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6
-      },
-    },
+      gridDefination: { xs: 12, sm: 6 },
+      jsonPath: "applyScreen.proposedPipeSize"
+    }),
+
     numberOfWaterClosets: getTextField({
       label: { labelKey: "WS_CONN_DETAIL_NO_OF_WATER_CLOSETS" },
       placeholder: { labelKey: "WS_CONN_DETAIL_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
       required: true,
-      jsonPath: "applyScreen.proposedWaterClosets",
-      pattern: /^[0-9]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      sourceJsonPath: "applyScreen.proposedWaterClosets",
+      jsonPath: "applyScreen.proposedWaterClosets"
     }),
 
     numberOfToilets: getTextField({
@@ -92,9 +72,8 @@ export const OwnerInfoCard = getCommonCard({
       placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS_PLACEHOLDER" },
       required: true,
       gridDefination: { xs: 12, sm: 6 },
-      jsonPath: "applyScreen.proposedToilets",
-      pattern: /^[0-9]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      sourceJsonPath: "applyScreen.proposedToilets",
+      jsonPath: "applyScreen.proposedToilets"
     })
   })
 });

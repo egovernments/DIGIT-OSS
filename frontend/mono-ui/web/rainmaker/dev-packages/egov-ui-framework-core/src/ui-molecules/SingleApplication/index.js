@@ -60,13 +60,7 @@ class SingleApplication extends React.Component {
       this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
       switch (item.status) {
         case "INITIATED":
-          
-          if(item.applicationType=="RENEWAL"){
-            setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&licenseNumber=${item.licenseNumber}&action=EDITRENEWAL&tenantId=${item.tenantId}`);
-          }else{
-            setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
-          }
-          break;
+          setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         default:
           setRoute(`/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
       }
@@ -122,10 +116,6 @@ class SingleApplication extends React.Component {
             setRoute("/pt-mutation/search-preview?applicationNumber=" + item.acknowldgementNumber + "&propertyId=" + item.propertyId + "&tenantId=" + item.tenantId);
           } else if (businessService == 'PT.CREATE') {
             setRoute("/property-tax/application-preview?propertyId=" + item.propertyId + "&applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId + "&type=property");
-          }else if (businessService == 'PT.UPDATE') {
-            setRoute("/property-tax/application-preview?propertyId=" + item.propertyId + "&applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId + "&type=updateProperty");
-          }else if (businessService == 'PT.LEGACY') {
-            setRoute("/property-tax/application-preview?propertyId=" + item.propertyId + "&applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId + "&type=legacy");
           } else {
             console.log('Navigation Error');
           }

@@ -18,7 +18,6 @@ import {
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import commonConfig from "config/common.js";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -69,7 +68,7 @@ export const loadUlbLogo = tenantid => {
     );
     canvas = null;
   };
-  img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
+  img.src = `/ukd-assets/${tenantid}/logo.png`;
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
@@ -284,35 +283,35 @@ export const loadReceiptData = async (consumerCode, tenant) => {
       value: tenant
     },
     {
-      key: "consumerCodes",
+      key: "consumerCode",
       value: consumerCode
     }
   ];
   let response = await getReceiptData(queryObject);
 
-  if (response && response.Payments && response.Payments.length > 0) {
+  if (response && response.Receipt && response.Receipt.length > 0) {
     data.receiptNumber = nullToNa(
-      get(response, "Payments[0].paymentDetails[0].receiptNumber", "NA")
+      get(response, "Receipt[0].Bill[0].billDetails[0].receiptNumber", "NA")
     );
     data.amountPaid = get(
       response,
-      "Payments[0].paymentDetails[0].totalAmountPaid",
+      "Receipt[0].Bill[0].billDetails[0].amountPaid",
       0
     );
     data.totalAmount = get(
       response,
-      "Payments[0].paymentDetails[0].totalDue",
+      "Receipt[0].Bill[0].billDetails[0].totalAmount",
       0
     );
     data.amountDue = data.totalAmount - data.amountPaid;
     data.paymentMode = nullToNa(
-      get(response, "Payments[0].paymentMode", "NA")
+      get(response, "Receipt[0].instrument.instrumentType.name", "NA")
     );
     data.transactionNumber = nullToNa(
-      get(response, "Payments[0].transactionNumber", "NA")
+      get(response, "Receipt[0].instrument.transactionNumber", "NA")
     );
-    data.bankName = get(response, "Payments[0].bankName", "NA");
-    data.branchName = get(response, "Payments[0].branchName", null);
+    data.bankName = get(response, "Receipt[0].instrument.bank.name", "NA");
+    data.branchName = get(response, "Receipt[0].instrument.branchName", null);
     data.bankAndBranch = nullToNa(
       data.bankName && data.branchName
         ? data.bankName + ", " + data.branchName
@@ -320,30 +319,25 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     );
     data.paymentDate = nullToNa(
       epochToDate(
-        get(response, "Payments[0].transactionDate", 0)
+        get(response, "Receipt[0].Bill[0].billDetails[0].receiptDate", 0)
       )
     );
     data.g8ReceiptNo = nullToNa(
       get(
         response,
-        "Payments[0].paymentDetails[0].manualReceiptNumber",
+        "Receipt[0].Bill[0].billDetails[0].manualReceiptNumber",
         "NA"
       )
     );
     data.g8ReceiptDate = nullToNa(
       epochToDate(
-        get(response, "Payments[0].paymentDetails[0].manualReceiptDate", 0)
+        get(response, "Receipt[0].Bill[0].billDetails[0].manualReceiptDate", 0)
       )
     );
     /** START NOC Fee, Adhoc Penalty/Rebate Calculation */
     let nocAdhocPenalty = 0,
       nocAdhocRebate = 0;
-      response.Payments[0]&& 
-      response.Payments[0].paymentDetails[0]&&
-      response.Payments[0].paymentDetails[0].bill&&
-      response.Payments[0].paymentDetails[0].bill.billDetails[0]&&
-      response.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails&&
-      response.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(item => {
+    response.Receipt[0].Bill[0].billDetails[0].billAccountDetails.map(item => {
       let desc = item.taxHeadCode ? item.taxHeadCode : "";
       if (desc === "FIRENOC_FEES") {
         data.nocFee = item.amount;
@@ -361,6 +355,7 @@ export const loadReceiptData = async (consumerCode, tenant) => {
   }
   store.dispatch(prepareFinalObject("receiptDataForPdf", data));
 };
+
 export const loadMdmsData = async tenantid => {
   let localStorageLabels = JSON.parse(
     window.localStorage.getItem(`localization_${getLocale()}`)

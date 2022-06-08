@@ -100,7 +100,7 @@ public class EnrichmentService {
                 });
             }
             
-            if(tradeLicense.getApplicationType() !=null && tradeLicense.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+            if(tradeLicense.getApplicationType() !=null && tradeLicense.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL) && tradeLicense.getLicenseNumber() != null){
                 if(tradeLicense.getAction().equalsIgnoreCase(ACTION_APPLY) || tradeLicense.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE)){
                     tradeLicense.getTradeLicenseDetail().getApplicationDocuments().forEach(document -> {
                         document.setId(UUID.randomUUID().toString());
@@ -443,7 +443,7 @@ public class EnrichmentService {
         int count=0;
         
         
-        if (licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)) {
+        if (licenses.get(0).getApplicationType() != null && licenses.get(0).getLicenseNumber() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)) {
             for(int i=0;i<licenses.size();i++){
                 TradeLicense license = licenses.get(i);
                 Long time = System.currentTimeMillis();
@@ -498,10 +498,11 @@ public class EnrichmentService {
 
                     }
                 }
+                }
+
             }
 
         }
-    }
 
 
     /**

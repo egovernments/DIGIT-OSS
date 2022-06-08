@@ -5,6 +5,7 @@ import get from "lodash/get";
 import { getPaymentSearchResults } from "../../../../ui-utils/commons";
 import { viewReceiptDetailsCard } from "./cancelReceiptResource/cancelReceiptDetails";
 import { viewReceiptFooter } from "./cancelReceiptResource/cancelReceiptFooter";
+import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 
 const header = getCommonContainer({
   header: getCommonHeader({
@@ -45,7 +46,11 @@ const setSearchResponse = async (
       },
       { key: "receiptNumbers", value: consumerNumber }
     ], dispatch);
-
+    const bill =get(response, 'Payments[0].paymentDetails[0].bill', {})
+    dispatch(fetchProperties([
+      { key: "propertyIds", value: bill.consumerCode },
+      { key: "tenantId", value: bill.tenantId },
+    ]));
     dispatch(prepareFinalObject("PaymentReceipt", get(response, 'Payments[0]', {})));
   }
   catch (error) {

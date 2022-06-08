@@ -14,7 +14,6 @@ const formConfig = {
       floatingLabelText: "PT_FORM2_SELECT_FLOOR",
       hintText: "PT_FORM2_SELECT_FLOOR",
       numcols: 12,
-      defaultSort:false,
       errorMessage: "",
       required: true,
       className: "pt-floor-name",
@@ -59,7 +58,7 @@ const formConfig = {
       let state = store.getState();
       if (
         get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor") !== "RESIDENTIAL" &&
-        get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType") === "SHAREDPROPERTY"
+        get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType") === "BUILTUP.SHAREDPROPERTY"
       ) {
         dispatch(setFieldProperty(action.form.name, "floorName", "hideField", true));
       } else {
@@ -78,7 +77,7 @@ const formConfig = {
       if (action.form.name === "customSelect_0") {
         if (
           get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor") !== "RESIDENTIAL" &&
-          get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType") === "SHAREDPROPERTY"
+          get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType") === "BUILTUP.SHAREDPROPERTY"
         ) {
           //Do nothing
         } else {

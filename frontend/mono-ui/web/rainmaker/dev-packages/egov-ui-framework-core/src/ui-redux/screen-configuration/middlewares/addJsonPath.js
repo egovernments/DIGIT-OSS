@@ -5,7 +5,7 @@ import set from "lodash/set";
 const addJsonPath = store => next => action => {
   const { type } = action;
   if (type === screenActionTypes.INIT_SCREEN) {
-    addComponentJsonpath({...action.screenConfig.components});
+    addComponentJsonpath(action.screenConfig.components);
     next(action);
   } else {
     next(action);

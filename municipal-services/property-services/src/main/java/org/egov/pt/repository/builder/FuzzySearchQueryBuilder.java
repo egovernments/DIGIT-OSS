@@ -1,22 +1,20 @@
 package org.egov.pt.repository.builder;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.Property;
-import org.egov.pt.models.PropertyCriteria;
-import org.egov.pt.web.contracts.FuzzySearchCriteria;
-import org.egov.tracer.model.CustomException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.PropertyCriteria;
+import org.egov.tracer.model.CustomException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -40,7 +38,7 @@ public class FuzzySearchQueryBuilder {
             "  \"from\": {{OFFSET}},\n" +
             "  \"size\": {{LIMIT}},\n" +
             "  \"sort\": {\n" +
-            "    \"_score\": {\n" +
+            "    \"Data.propertyId.keyword\": {\n" +
             "      \"order\": \"desc\"\n" +
             "    }\n" +
             "  },\n" +
@@ -64,6 +62,13 @@ public class FuzzySearchQueryBuilder {
             "          }\n" +
             "        }";
 
+    private static final String queryTemplate = "{\n" +
+            "          \"query_string\": {\n" +
+            "            \"default_field\": \"{{VAR}}\",\n" +
+            "            \"query\": \"{{PARAM}}\"\n" +
+            "          }\n" +
+            "        }";
+
     private static final String filterTemplate   = "\"filter\": { " +
             "      }";
 
@@ -72,7 +77,7 @@ public class FuzzySearchQueryBuilder {
      * @param criteria
      * @return
      */
-    public String getFuzzySearchQuery(PropertyCriteria criteria, List<String> ids){
+    public String getFuzzySearchQuery(PropertyCriteria criteria){
 
         String finalQuery;
 
@@ -81,34 +86,65 @@ public class FuzzySearchQueryBuilder {
             JsonNode node = mapper.readTree(baseQuery);
             ObjectNode insideMatch = (ObjectNode)node.get("query");
             List<JsonNode> fuzzyClauses = new LinkedList<>();
+            List<JsonNode> innerFuzzyClauses = new LinkedList<>();
+            List<JsonNode> innerList = new LinkedList<>();
+            JsonNode mustNode = null;
+            JsonNode tenantClauseNode = null;
+            JsonNode localityClauseNode = null;
+            if(criteria.getTenantId() != null){
+                tenantClauseNode = getInnerNode(criteria.getTenantId(),"Data.tenantId.keyword","",false);
+            }
 
             if(criteria.getName() != null){
-                fuzzyClauses.add(getInnerNode(criteria.getName(),"Data.ownerNames",config.getNameFuziness()));
+                fuzzyClauses.add(getInnerNode(criteria.getName(),"Data.ownerNames",config.getNameFuziness(),true));
+                innerFuzzyClauses.add(getInnerNode(criteria.getName(),"Data.ownerNames",config.getNameFuziness(),true));
+
             }
 
             if(criteria.getDoorNo() != null){
-                fuzzyClauses.add(getInnerNode(criteria.getDoorNo(),"Data.doorNo.keyword",config.getDoorNoFuziness()));
+                fuzzyClauses.add(getInnerNode(criteria.getDoorNo(),"Data.doorNo.keyword",config.getDoorNoFuziness(),true));
+                innerFuzzyClauses.add(getInnerNode(criteria.getDoorNo(),"Data.doorNo.keyword",config.getDoorNoFuziness(),true));
             }
 
             if(criteria.getOldPropertyId() != null){
-                fuzzyClauses.add(getInnerNode(criteria.getOldPropertyId(),"Data.oldPropertyId.keyword",config.getOldPropertyIdFuziness()));
+                fuzzyClauses.add(getInnerNode(criteria.getOldPropertyId(),"Data.oldPropertyId.keyword",config.getOldPropertyIdFuziness(),true));
+                innerFuzzyClauses.add(getInnerNode(criteria.getOldPropertyId(),"Data.oldPropertyId.keyword",config.getOldPropertyIdFuziness(),true));
             }
 
-            JsonNode mustNode = mapper.convertValue(new HashMap<String, List<JsonNode>>(){{put("must",fuzzyClauses);}}, JsonNode.class);
+            if(criteria.getLocality() != null){
+                localityClauseNode = getInnerNode(criteria.getLocality(),"Data.locality.keyword","",false);
+            }
+            if((criteria.getLocality() != null && criteria.getDoorNo() != null && criteria.getName() != null) || (criteria.getDoorNo() != null && criteria.getName() != null)){
+                 JsonNode innerShouldNode = mapper.convertValue(new HashMap<String, List<JsonNode>>(){{put("should",innerFuzzyClauses);}}, JsonNode.class);
+            	 JsonNode innerNode = mapper.convertValue(new HashMap<String, JsonNode>(){{put("bool",innerShouldNode);}}, JsonNode.class);
+             	 innerList.add(innerNode);
+            	 mustNode = mapper.convertValue(new HashMap<String, List<JsonNode>>(){{put("must",innerList);}}, JsonNode.class);
 
+            }
+            else{
+            	mustNode = mapper.convertValue(new HashMap<String, List<JsonNode>>(){{put("must",fuzzyClauses);}}, JsonNode.class);
+            }
+            List<JsonNode> outerMustArray = mapper.convertValue(mustNode.get("must"), LinkedList.class);
+            JsonNode tenantObject = mapper.convertValue(tenantClauseNode, JsonNode.class);
+            outerMustArray.add(tenantObject);
+            if(localityClauseNode != null){
+                JsonNode localityObject = mapper.convertValue(localityClauseNode, JsonNode.class);
+                outerMustArray.add(localityObject);
+            }
+            mustNode = mapper.convertValue(new HashMap<String, List<JsonNode>>(){{put("must",outerMustArray);}}, JsonNode.class);
             insideMatch.put("bool",mustNode);
             ObjectNode boolNode = (ObjectNode)insideMatch.get("bool");
 
-
-            if(!CollectionUtils.isEmpty(ids)){
-                JsonNode jsonNode = mapper.convertValue(new HashMap<String, List<String>>(){{put("Data.id.keyword",ids);}}, JsonNode.class);
-                ObjectNode parentNode = mapper.createObjectNode();
-                parentNode.put("terms",jsonNode);
-                boolNode.put("filter", parentNode);
-            }
+            log.info(boolNode.toString());
+//            if(!CollectionUtils.isEmpty(ids)){
+//                JsonNode jsonNode = mapper.convertValue(new HashMap<String, List<String>>(){{put("Data.id.keyword",ids);}}, JsonNode.class);
+//                ObjectNode parentNode = mapper.createObjectNode();
+//                parentNode.put("terms",jsonNode);
+//                boolNode.put("filter", parentNode);
+//            }
 
             finalQuery = mapper.writeValueAsString(node);
-
+            log.info(finalQuery);
         }
         catch (Exception e){
             log.error("ES_ERROR",e);
@@ -128,13 +164,13 @@ public class FuzzySearchQueryBuilder {
      * @return
      * @throws JsonProcessingException
      */
-    private JsonNode getInnerNode(String param, String var, String fuziness) throws JsonProcessingException {
+    private JsonNode getInnerNode(String param, String var, String fuziness, boolean isWildCard) throws JsonProcessingException {
 
         String template;
-        if(config.getIsSearchWildcardBased())
+        if(isWildCard)
             template = wildCardQueryTemplate;
         else
-            template = fuzzyQueryTemplate;
+            template = queryTemplate;
         String innerQuery = template.replace("{{PARAM}}",getEscapedString(param));
         innerQuery = innerQuery.replace("{{VAR}}",var);
 
@@ -173,7 +209,7 @@ public class FuzzySearchQueryBuilder {
      * @return
      */
     private String getEscapedString(String inputString){
-        final String[] metaCharacters = {"\\","/","^","$","{","}","[","]","(",")",".","*","+","?","|","<",">","-","&","%"};
+        final String[] metaCharacters = {"\\","/","^","$","{","}","[","]","(",")","*","+","?","|","<",">","-","&","%"};
         for (int i = 0 ; i < metaCharacters.length ; i++) {
             if (inputString.contains(metaCharacters[i])) {
                 inputString = inputString.replace(metaCharacters[i], "\\\\" + metaCharacters[i]);

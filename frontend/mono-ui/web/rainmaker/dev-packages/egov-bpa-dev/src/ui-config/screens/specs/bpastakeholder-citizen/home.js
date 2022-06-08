@@ -6,7 +6,6 @@ import { ifUserRoleMatches } from "../utils";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import BPAStakeholderRegIcon from "../../../../ui-atoms-local/Icons/BPAStakeholderRegIcon";
 import BPANewPermitIcon from "../../../../ui-atoms-local/Icons/BPANewPermitIcon";
-import { getStakeHolderRoles } from "../../../../ui-utils/commons";
 import "../utils/index.css";
 const header = getCommonHeader(
   {
@@ -20,15 +19,14 @@ const header = getCommonHeader(
   }
 );
 
-const stakeHolderRoles = getStakeHolderRoles();
-
 const hideBPACard = () => {
-  return ifUserRoleMatches(stakeHolderRoles);
+  return ifUserRoleMatches([
+    "BPA_ARCHITECT",
+    "BPA_ENGINEER",
+    "BPA_BUILDER",
+    "BPA_STRUCTURALENGINEER"
+  ]);
 };
-
-const displayView = () => {
-  return hideBPACard() ? "my-applications" : "my-applications-stakeholder";
-}
 
 const cardItems = [
   {
@@ -48,29 +46,16 @@ const cardItems = [
     icon: <BPANewPermitIcon />,
     route: {
       screenKey: "home",
-      jsonPath: "components.cityPickerDialog",
-      value: "apply"
+      jsonPath: "components.cityPickerDialog"
     }
   },
   {
     label: {
-      labelKey: "BPA_OC_COMMON_APPL_NEW_CONSTRUCTION",
-      labelName: "Occupancy Certificate New Building Construction"
-    },
-    hide: hideBPACard(),
-    icon: <BPANewPermitIcon />,
-    route: {
-      screenKey: "home",
-      jsonPath: "components.cityPickerDialogForOC"
-    }
-  },
-  {
-    label: {
-      labelKey: "BPA_MY_APPLICATIONS",
+      labelKey: "TL_MY_APPLICATIONS",
       labelName: "My Applications"
     },
     icon: <FormIcon />,
-    route: displayView()
+    route: "my-applications"
   }
 ];
 
@@ -194,26 +179,6 @@ const tradeLicenseSearchAndResult = {
               root: "city-picker-dialog-style"
             }
             // style: { minHeight: "180px", minWidth: "365px" }
-          },
-          children: {
-            popup: cityPicker
-          }
-        }
-      }
-    },
-    cityPickerDialogForOC: {
-      componentPath: "Dialog",
-      props: {
-        open: false,
-        maxWidth: "md"
-      },
-      children: {
-        dialogContent: {
-          componentPath: "DialogContent",
-          props: {
-            classes: {
-              root: "city-picker-dialog-style"
-            }
           },
           children: {
             popup: cityPicker

@@ -1,9 +1,6 @@
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import React from "react";
-import store from "ui-redux/store";
-import { getEpochForDate, sortByEpoch } from "../../utils";
-import './index.css';
+import { sortByEpoch, getEpochForDate, getTextToLocalMapping } from "../../utils";
+import './index.css'
 
 export const searchApplicationResults = {
   uiFramework: "custom-molecules",
@@ -13,92 +10,57 @@ export const searchApplicationResults = {
   props: {
     columns: [
       {
-        name: "Consumer No",
-        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
+        name: getTextToLocalMapping("Consumer No"),
         options: {
           filter: false,
-          customBodyRender: (value, data) => {
-            if (data.rowData[0] !== "NA" && data.rowData[0] !== null) {
-              return (
-                <div className="linkStyle" onClick={() => getConnectionDetails(data)}>
-                  <a>{value}</a>
-                </div>
-              )
-            } else {
-              return (
-                <p>{value}</p>
-              )
-            }
-          }
+          customBodyRender: (value, index) => (
+            <div className="linkStyle" onClick={() => getConnectionDetails(index)}>
+              <a>{value}</a>
+            </div>
+          )
         }
       },
       {
-        name: "Application No",
-        labelKey: "WS_COMMON_TABLE_COL_APP_NO_LABEL",
+        name: getTextToLocalMapping("Application No"),
         options: {
           filter: false,
-          customBodyRender: (value, data) => {
-            if (data.rowData[1] !== "NA" && data.rowData[1] !== null) {
-              return (
-                <div className="linkStyle" onClick={() => getApplicationDetails(data)}>
-                  <a>{value}</a>
-                </div>
-              )
-            } else {
-              return (
-                <p>{value}</p>
-              )
-            }
-          }
+          customBodyRender: (value, index) => (
+            <div className="linkStyle" onClick={() => getApplicationDetails(index)}>
+              <a>{value}</a>
+            </div>
+          )
         }
       },
       {
-        name: "Application Type",
-        labelKey: "WS_COMMON_TABLE_COL_APP_TYPE_LABEL",
+        name: getTextToLocalMapping("Application Type"),
         options: {
           filter: false,
           customBodyRender: value => (
             <span style={{ color: '#000000' }}>
-              {getLocaleLabels("NA", getTransformedLocale(`WS_${value}`))}
+              {value}
             </span>
           )
         }
       },
-      { name: "Owner Name", labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
-      {
-        name: "Application Status", labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL", options: {
-          filter: false,
-          customBodyRender: value => (
-            <span style={{ color: '#000000' }}>
-              {getLocaleLabels("NA", getTransformedLocale(`CS_${value}`))}
-            </span>
-          )
-        }
-      },
-      { name: "Address", labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
+      getTextToLocalMapping("Owner Name"),
+      getTextToLocalMapping("Application Status"),
+      getTextToLocalMapping("Address"),
       {
         name: "tenantId",
-        labelKey: "WS_COMMON_TABLE_COL_TENANTID_LABEL",
         options: {
           display: false
         }
       },
       {
         name: "service",
-        labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL",
-        options: {
-          display: false
-        }
-      },
-      {
-        name: "connectionType",
-        labelKey: "WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL",
         options: {
           display: false
         }
       }
     ],
-    title: { labelKey: "WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING", labelName: "Search Results for Water & Sewerage Application" },
+    title: getTextToLocalMapping(
+      "Search Results for Water & Sewerage Connections"
+    ),
     options: {
       filter: false,
       download: false,
@@ -126,20 +88,9 @@ export const searchApplicationResults = {
 };
 
 const getApplicationDetails = data => {
-  let connectionNo = `${data.rowData[0]}`;
-  if (connectionNo && connectionNo !== 'NA' && data.rowData[2].includes('MODIFY')) {
-    store.dispatch(
-      setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&mode=MODIFY`)
-    )
-  } else {
-    store.dispatch(
-      setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}`)
-    )
-  }
+  window.location.href = `search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}`
 }
 
 const getConnectionDetails = data => {
-  store.dispatch(
-    setRoute(`connection-details?connectionNumber=${data.rowData[0]}&tenantId=${data.rowData[6]}&service=${data.rowData[7]}&connectionType=${data.rowData[8]}`)
-  )
+  window.location.href = `connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
 }

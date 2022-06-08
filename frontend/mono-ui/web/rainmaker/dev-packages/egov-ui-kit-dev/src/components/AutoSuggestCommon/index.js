@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import SearchIcon from "material-ui/svg-icons/action/search";
 import TextFieldIcon from "../TextFieldIcon";
 import get from "lodash/get";
-import { sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
 
 export default class AutoSuggest extends Component {
   static propTypes = { callback: PropTypes.func, dataSource: PropTypes.array, searchKey: PropTypes.string };
@@ -30,7 +29,7 @@ export default class AutoSuggest extends Component {
     inputValue = inputValue.replace(/\s+/g, "").toLowerCase();
     if (inputValue.length > 0) {
       const { searchKey, dataSource } = this.props;
-      return dataSource.filter((result) => this.filterSuggestion(result, inputValue, searchKey)).sort(sortDropdownNames);
+      return dataSource.filter((result) => this.filterSuggestion(result, inputValue, searchKey));
     }
   };
 

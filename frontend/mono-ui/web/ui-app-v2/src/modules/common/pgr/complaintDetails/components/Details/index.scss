@@ -1,0 +1,88 @@
+.complaint-detail-detail-section {
+  margin-top: 19px;
+  margin-left: -57px !important;
+  margin-bottom: -25px;
+}
+
+.complaint-detail-detail-section-status {
+  margin-top: 8px;
+  width: 100%;
+}
+
+/* .complaint-detail-detail-section-expanded-status-negative-margin {
+  padding-left: 35px !important;
+} */
+
+/* .complaint-detail-detail-section-expanded {
+  margin-left: -19px !important;
+  margin-top: -14px;
+} */
+
+.complaint-map-btn {
+  margin-left: 23px;
+  padding: 10px 15px 4px 6px !important;
+}
+
+.status-result-color {
+  color: #484848 !important;
+}
+
+.status-color {
+  color: #969696;
+}
+
+.complaint-detail-detail-section-details {
+  margin-top: 20px;
+  /* color: #464646; */
+}
+
+.complaint-detail-detail-section-padding-zero {
+  padding-left: 0 !important;
+  margin-right: 8 !important;
+}
+
+/* .complaint-detail-detail-section-location-section {
+  margin-top: 17px;
+  margin-bottom: -25px;
+  display: inline-flex;
+} */
+
+.complaint-detail-full-width {
+  padding-left: 3px;
+  padding-right: 3px;
+  margin-top: 24px;
+  width: 100% !important;
+}
+
+.complaint-detail-detail-section-collapse-status-padding {
+  padding-left: 15px !important;
+}
+
+.textWrap > div {
+  white-space: nowrap;
+}
+
+@media screen and (min-width: 768px) {
+  .complaint-detail-detail-section-expanded-status-negative-margin {
+    padding-left: 131px !important;
+  }
+}
+
+body[class^="employee-complaint-details"] .map-container .searchBoxStyles,
+body[class^="employee-complaint-details"] .map-container .search-icon,
+body[class^="employee-complaint-details"] .map-container .myLoc {
+  display: none;
+}
+
+body[class^="employee-complaint-details"] .map-container {
+  z-index: 1101;
+}
+
+body[class^="employee-complaint-details"] .back-btn {
+  z-index: 1102;
+}
+
+.employee-complaint-summary-mapBtn {
+  margin-left: 22px;
+  margin-top: 8px;
+}

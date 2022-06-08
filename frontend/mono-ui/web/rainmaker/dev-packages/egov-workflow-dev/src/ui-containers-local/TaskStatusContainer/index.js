@@ -40,7 +40,7 @@ class TastStatusContainer extends React.Component {
   };
 
   render() {
-    const { classes, ProcessInstances, moduleName} = this.props;
+    const { classes, ProcessInstances } = this.props;
     let currentObj =
       ProcessInstances && ProcessInstances[ProcessInstances.length - 1];
       if(currentObj && currentObj.businessService && currentObj.businessService === "BPA"){
@@ -53,14 +53,6 @@ class TastStatusContainer extends React.Component {
             currentObj.assignee.name = assigness.join(',');
           }
       }
-    let taskLabel = "Task Status";
-    let taskKey   = "TL_TASK_STATUS";
-    if(moduleName === 'NewWS1' || moduleName === 'NewSW1'){
-       if(process.env.REACT_APP_NAME === "Citizen"){
-        taskLabel =  "Application Summary";
-        taskKey   =  "WS_COMMON_APPLICATION_SUMMARY_LABEL";
-       }
-     }
     return (
       <div>
         <Card className="">
@@ -77,8 +69,8 @@ class TastStatusContainer extends React.Component {
                     >
                       <Typography component="h2" variant="subheading">
                         <LabelContainer
-                          labelName={taskLabel}
-                          labelKey={taskKey}
+                          labelName="Task Status"
+                          labelKey="TL_TASK_STATUS"
                         />
                       </Typography>
                     </Grid>
