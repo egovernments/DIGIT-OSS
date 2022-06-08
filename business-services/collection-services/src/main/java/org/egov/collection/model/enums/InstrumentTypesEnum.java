@@ -6,6 +6,7 @@ public enum InstrumentTypesEnum {
     OFFLINE_RTGS,
     ONLINE_NEFT,
     ONLINE_RTGS,
+    POS,
     POSTAL_ORDER;
 
     public static boolean contains(String test) {

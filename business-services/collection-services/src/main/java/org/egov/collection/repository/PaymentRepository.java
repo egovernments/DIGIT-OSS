@@ -98,21 +98,26 @@ public class PaymentRepository {
         log.info("Query: " + query);
         log.info("preparedStatementValues: " + preparedStatementValues);
         List<Payment> payments = namedParameterJdbcTemplate.query(query, preparedStatementValues, paymentRowMapper);
+	List<Payment> newPayment = new LinkedList<>();
+	    log.info("payments:: " + payments);
         if (!CollectionUtils.isEmpty(payments)) {
             Set<String> billIds = new HashSet<>();
             for (Payment payment : payments) {
                 billIds.addAll(payment.getPaymentDetails().stream().map(detail -> detail.getBillId()).collect(Collectors.toSet()));
             }
             Map<String, Bill> billMap = getBills(billIds);
+            log.info("billMap:: " + billMap);
             for (Payment payment : payments) {
                 payment.getPaymentDetails().forEach(detail -> {
                     detail.setBill(billMap.get(detail.getBillId()));
                 });
+		newPayment.add(payment);
             }
+            log.info("payments after adding bill:: " + payments);
             payments.sort(reverseOrder(Comparator.comparingLong(Payment::getTransactionDate)));
         }
-
-        return payments;
+	log.info("paymnets at return:: "+newPayment);
+        return newPayment;
     }
     
     public Long getPaymentsCount (String tenantId, String businessService) {
