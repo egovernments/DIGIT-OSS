@@ -3,9 +3,7 @@ package org.egov.pt.service;
 import java.util.HashMap;
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.contract.request.Role;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
@@ -26,6 +24,8 @@ import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -90,7 +90,7 @@ public class PaymentUpdateService {
 	 * @param paymentDetail
 	 */
 	private void updateWorkflowForMutationPayment(RequestInfo requestInfo, String tenantId, PaymentDetail paymentDetail) {
-		
+		log.info("~~~~~~~~~~~ updateWorkflowForMutationPayment ~~~~~~~~~~");
 		Bill bill  = paymentDetail.getBill();
 		
 		PropertyCriteria criteria = PropertyCriteria.builder()
@@ -104,8 +104,8 @@ public class PaymentUpdateService {
 			throw new CustomException("INVALID RECEIPT",
 					"No Properties found for the comsumerCode " + criteria.getPropertyIds());
 
-		Role role = Role.builder().code("SYSTEM_PAYMENT").build();
-		requestInfo.getUserInfo().getRoles().add(role);
+//		Role role = Role.builder().code("SYSTEM_PAYMENT").build();
+//		requestInfo.getUserInfo().getRoles().add(role);
 		
 		properties.forEach( property -> {
 			
@@ -114,7 +114,11 @@ public class PaymentUpdateService {
 			
 			ProcessInstanceRequest wfRequest = util.getProcessInstanceForMutationPayment(updateRequest);
 			
+			if(wfRequest.getProcessInstances()!=null && wfRequest.getProcessInstances().get(0)!=null && wfRequest.getProcessInstances().get(0).getAction()!=null)
+				log.info("~~~~~~~~~~~ payment workflow request = "+wfRequest.getProcessInstances().get(0).getAction());
+			
 			State state = wfIntegrator.callWorkFlow(wfRequest);
+			log.info("~~~~~~~~~~~ updateWorkflowForMutationPayment ~~~~~~~~~~");
 			property.setWorkflow(wfRequest.getProcessInstances().get(0));
 			property.getWorkflow().setState(state);
 			updateRequest.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));

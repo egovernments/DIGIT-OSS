@@ -26,9 +26,13 @@ import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import com.google.common.collect.Sets;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.util.ObjectUtils;
 
 @Repository
+@Slf4j
 public class PropertyRepository {
 
 	@Autowired
@@ -63,6 +67,8 @@ public class PropertyRepository {
 
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList, isPlainSearch, false);
+		log.info("Query " + query);
+		log.info("Prepared Statement List" + preparedStmtList);
 		if (isApiOpen)
 			return jdbcTemplate.query(query, preparedStmtList.toArray(), openRowMapper);
 		else
@@ -73,6 +79,7 @@ public class PropertyRepository {
 
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList, false, true);
+		log.info(query);
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>());
 	}
 

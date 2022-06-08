@@ -1,6 +1,9 @@
 package org.egov.pt.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.repository.builder.FuzzySearchQueryBuilder;
@@ -17,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Component
+@Slf4j
 public class ElasticSearchRepository {
 
 
@@ -48,11 +52,12 @@ public class ElasticSearchRepository {
 
         String url = getESURL();
 
-        String searchQuery = queryBuilder.getFuzzySearchQuery(criteria, uuids);
+        String searchQuery = queryBuilder.getFuzzySearchQuery(criteria);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> requestEntity = new HttpEntity<>(searchQuery, headers);
+        log.info("Url"+url+"reuest"+requestEntity);
         ResponseEntity response = null;
         try {
              response = restTemplate.postForEntity(url, requestEntity, Object.class);
@@ -67,6 +72,30 @@ public class ElasticSearchRepository {
     }
 
 
+    public Object fuzzySearchForProperties(PropertyCriteria criteria) {
+
+
+        String url = getESURL();
+
+        String searchQuery = queryBuilder.getFuzzySearchQuery(criteria);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> requestEntity = new HttpEntity<>(searchQuery, headers);
+        log.info("Url"+url+"reuest"+requestEntity);
+        ResponseEntity response = null;
+        try {
+             response = restTemplate.postForEntity(url, requestEntity, Object.class);
+
+        } catch (Exception e) {
+
+            throw new CustomException("ES_ERROR","Failed to fetch data from ES");
+        }
+
+        return response.getBody();
+
+    }
+
     /**
      * Generates elasticsearch search url from application properties
      *
@@ -80,7 +109,6 @@ public class ElasticSearchRepository {
 
         return builder.toString();
     }
-
 
 
 }

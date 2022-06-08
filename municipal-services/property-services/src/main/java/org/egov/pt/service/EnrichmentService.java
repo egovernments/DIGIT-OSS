@@ -13,6 +13,7 @@ import org.egov.pt.models.Institution;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.user.User;
 import org.egov.pt.util.PTConstants;
@@ -61,6 +62,7 @@ public class EnrichmentService {
 		AuditDetails propertyAuditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
 		
 		property.setId(UUID.randomUUID().toString());
+		property.setCreationReason(CreationReason.CREATE);
 		
 		if (!CollectionUtils.isEmpty(property.getDocuments()))
 			property.getDocuments().forEach(doc -> {
@@ -113,7 +115,7 @@ public class EnrichmentService {
 		Boolean isWfEnabled = config.getIsWorkflowEnabled();
 		Boolean iswfStarting = propertyFromDb.getStatus().equals(Status.ACTIVE);
 
-		if (!isWfEnabled) {
+		if (!isWfEnabled || "LEGACY_RECORD".equals(request.getProperty().getSource().toString())) {
 
 			property.setStatus(Status.ACTIVE);
 			property.getAddress().setId(propertyFromDb.getAddress().getId());
@@ -131,8 +133,16 @@ public class EnrichmentService {
 					doc.setStatus(Status.ACTIVE);
 				}
 			});
+		
 				
-	    	if (!CollectionUtils.isEmpty(property.getUnits()))
+		if (property.getPropertyType().equalsIgnoreCase("VACANT")) {
+
+			if (!CollectionUtils.isEmpty(propertyFromDb.getUnits()))
+				propertyFromDb.getUnits().forEach(unit -> {
+					unit.setActive(false);
+				});
+			property.setUnits(propertyFromDb.getUnits());
+		} else if (!CollectionUtils.isEmpty(property.getUnits()))
 			property.getUnits().forEach(unit -> {
 
 				if (unit.getId() == null) {
@@ -314,7 +324,7 @@ public class EnrichmentService {
      */
     public void enrichAssignes(Property property){
 
-            if(property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.CITIZEN_SENDBACK_ACTION)){
+            if(null != property.getWorkflow() && property.getWorkflow().getAction().equalsIgnoreCase(PTConstants.CITIZEN_SENDBACK_ACTION)){
 
                     List<User> assignes = new LinkedList<>();
 
