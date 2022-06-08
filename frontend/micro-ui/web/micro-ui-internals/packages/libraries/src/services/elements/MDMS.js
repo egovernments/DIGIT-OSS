@@ -940,6 +940,30 @@ const getFAQsJSON = (tenantId) => ({
   },
 ],
 });
+const getDSSFAQsJSON = (tenantId) => ({
+  moduleDetails: [
+  {
+    moduleName: "dss-dashboard",
+    masterDetails: [
+      {
+        name: "FAQs",
+      },
+    ],
+  },
+],
+});
+const getDSSAboutJSON = (tenantId) => ({
+  moduleDetails: [
+  {
+    moduleName: "dss-dashboard",
+    masterDetails: [
+      {
+        name: "About",
+      },
+    ],
+  },
+],
+});
 
 const getStaticData = () => ({
   moduleDetails: [
@@ -1682,6 +1706,13 @@ export const MdmsService = {
   },
   getFAQsJSONData: (tenantId) => {
     return MdmsService.call(tenantId, getFAQsJSON(tenantId));
+  },
+  getDSSFAQsJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getDSSFAQsJSON(tenantId));
+  },
+  
+  getDSSAboutJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getDSSAboutJSON(tenantId));
   },
   getStaticDataJSON: (tenantId) => {
     return MdmsService.call(tenantId, getStaticData());

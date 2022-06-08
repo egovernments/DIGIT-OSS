@@ -87,8 +87,15 @@ public class WaterServiceImpl implements WaterService {
 	 */
 	@Override
 	public List<WaterConnection> createWaterConnection(WaterConnectionRequest waterConnectionRequest) {
+		
 		int reqType = WCConstants.CREATE_APPLICATION;
-		if (wsUtil.isModifyConnectionRequest(waterConnectionRequest)) {
+		
+		if (waterConnectionRequest.isDisconnectRequest()) {
+			reqType = WCConstants.DISCONNECT_CONNECTION;
+			validateDisconnectionRequest(waterConnectionRequest);
+		}
+		
+		else if (wsUtil.isModifyConnectionRequest(waterConnectionRequest)) {
 			List<WaterConnection> previousConnectionsList = getAllWaterApplications(waterConnectionRequest);
 
 			// Validate any process Instance exists with WF
@@ -110,6 +117,23 @@ public class WaterServiceImpl implements WaterService {
 		enrichmentService.postStatusEnrichment(waterConnectionRequest);
 		waterDao.saveWaterConnection(waterConnectionRequest);
 		return Arrays.asList(waterConnectionRequest.getWaterConnection());
+	}
+
+	private void validateDisconnectionRequest(WaterConnectionRequest waterConnectionRequest) {
+		if (!waterConnectionRequest.getWaterConnection().getStatus().toString().equalsIgnoreCase(WCConstants.ACTIVE)) {
+			throw new CustomException("INVALID_REQUEST",
+					"Water connection must be active for disconnection request");
+		}
+		
+		List<WaterConnection> previousConnectionsList = getAllWaterApplications(waterConnectionRequest);
+		
+		for(WaterConnection connection : previousConnectionsList) {
+			if(!(connection.getApplicationStatus().equalsIgnoreCase(WCConstants.STATUS_APPROVED) || connection.getApplicationStatus().equalsIgnoreCase(WCConstants.MODIFIED_FINAL_STATE))) {
+				throw new CustomException("INVALID_REQUEST",
+						"No application should be in progress while applying for disconnection");
+			}
+		}
+		
 	}
 
 	/**
@@ -186,6 +210,9 @@ public class WaterServiceImpl implements WaterService {
 	 */
 	@Override
 	public List<WaterConnection> updateWaterConnection(WaterConnectionRequest waterConnectionRequest) {
+		if(waterConnectionRequest.isDisconnectRequest()) {
+			return updateWaterConnectionForDisconnectFlow(waterConnectionRequest);
+		}
 		SearchCriteria criteria = new SearchCriteria();
 		if(wsUtil.isModifyConnectionRequest(waterConnectionRequest)) {
 			// Received request to update the connection for modifyConnection WF
@@ -219,6 +246,41 @@ public class WaterServiceImpl implements WaterService {
 		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
 		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.UPDATE_APPLICATION);
+		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getTenantId()))
+			criteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
+		enrichmentService.enrichProcessInstance(Arrays.asList(waterConnectionRequest.getWaterConnection()), criteria, waterConnectionRequest.getRequestInfo());
+		return Arrays.asList(waterConnectionRequest.getWaterConnection());
+	}
+
+	public List<WaterConnection> updateWaterConnectionForDisconnectFlow(WaterConnectionRequest waterConnectionRequest) {
+		
+		SearchCriteria criteria = new SearchCriteria();
+		waterConnectionValidator.validateWaterConnection(waterConnectionRequest, WCConstants.DISCONNECT_CONNECTION);
+		mDMSValidator.validateMasterData(waterConnectionRequest,WCConstants.DISCONNECT_CONNECTION );
+		Property property = validateProperty.getOrValidateProperty(waterConnectionRequest);
+		validateProperty.validatePropertyFields(property,waterConnectionRequest.getRequestInfo());
+		BusinessService businessService = workflowService.getBusinessService(waterConnectionRequest.getWaterConnection().getTenantId(), 
+				waterConnectionRequest.getRequestInfo(), config.getDisconnectBusinessServiceName());
+		WaterConnection searchResult = getConnectionForUpdateRequest(waterConnectionRequest.getWaterConnection().getId(), waterConnectionRequest.getRequestInfo());
+		String previousApplicationStatus = workflowService.getApplicationStatus(waterConnectionRequest.getRequestInfo(),
+				waterConnectionRequest.getWaterConnection().getApplicationNo(),
+				waterConnectionRequest.getWaterConnection().getTenantId(),
+				config.getDisconnectBusinessServiceName());
+		enrichmentService.enrichUpdateWaterConnection(waterConnectionRequest);
+		actionValidator.validateUpdateRequest(waterConnectionRequest, businessService, previousApplicationStatus);
+		waterConnectionValidator.validateUpdate(waterConnectionRequest, searchResult, WCConstants.DISCONNECT_CONNECTION);
+		userService.updateUser(waterConnectionRequest, searchResult);
+		//Call workflow
+		wfIntegrator.callWorkFlow(waterConnectionRequest, property);
+		
+		
+		//Enrich file store Id After payment
+		enrichmentService.enrichFileStoreIds(waterConnectionRequest);
+		userService.createUser(waterConnectionRequest);
+		enrichmentService.postStatusEnrichment(waterConnectionRequest);
+		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
+		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
+		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.DISCONNECT_CONNECTION);
 		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getTenantId()))
 			criteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
 		enrichmentService.enrichProcessInstance(Arrays.asList(waterConnectionRequest.getWaterConnection()), criteria, waterConnectionRequest.getRequestInfo());

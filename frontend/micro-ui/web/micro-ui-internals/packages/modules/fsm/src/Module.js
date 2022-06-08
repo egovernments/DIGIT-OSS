@@ -44,6 +44,7 @@ import AddVendor from "./pages/employee/FSMRegistry/AddVendor";
 import EditVendor from "./pages/employee/FSMRegistry/EditVendor";
 import VehicleDetails from "./pages/employee/FSMRegistry/VehicleDetails";
 import AddVehicle from "./pages/employee/FSMRegistry/AddVehicle";
+import {FsmBreadCrumb} from "./pages/employee";
 
 const FSMModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "FSM";
@@ -177,13 +178,13 @@ const componentsToRegister = {
   FSMCitizenApplicationDetails: ApplicationDetails,
   FSMSelectRating: SelectRating,
   FSMDsoDashboard: DsoDashboard,
-  SelectPaymentPreference,
   FSMRegistry,
   VendorDetails,
   AddVendor,
   EditVendor,
   VehicleDetails,
-  AddVehicle
+  AddVehicle,
+  FsmBreadCrumb
 };
 
 export const initFSMComponents = () => {

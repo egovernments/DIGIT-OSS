@@ -74,7 +74,7 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register,
   const onSkip = () => onSelect();
   return (
     <React.Fragment>
-      <Timeline currentStep={2} flow="APPLY" />
+      <Timeline currentStep={1} flow="APPLY" />
       <FormStep
         t={t}
         config={{ ...config, inputs }}

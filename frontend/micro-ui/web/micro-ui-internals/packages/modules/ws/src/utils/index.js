@@ -1,10 +1,27 @@
 export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   if (searcher == "") return str;
-  while (str.includes(searcher)) {
+  while (str && str.includes(searcher)) {
     str = str.replace(searcher, replaceWith);
   }
   return str;
 };
+
+export const mdmsData = async (tenantId,t) => {
+  
+  const result =  await Digit.MDMSService.getMultipleTypes(tenantId, "tenant", ["tenants", "citymodule"]);
+  
+  const filteredResult = result?.tenant.tenants.filter(e => e.code === tenantId)
+  
+  const headerLocale = Digit.Utils.locale.getTransformedLocale(tenantId)
+  const ulbGrade = filteredResult?.[0]?.city?.ulbGrade.replaceAll(" ","_")
+  
+  const obj =  {
+    header: t(`TENANT_TENANTS_${headerLocale}`)+ ` ` + t(`ULBGRADE_${ulbGrade}`),
+    subHeader:filteredResult?.[0].address,
+    description:`${filteredResult?.[0]?.contactNumber} | ${filteredResult?.[0]?.domainUrl} | ${filteredResult?.[0]?.emailId}`,
+  }
+  return obj
+  }
 
 export const convertEpochToDateDMY = (dateEpoch) => {
   if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
@@ -73,10 +90,10 @@ export const getQueryStringParams = (query) => {
 };
 
 export const getAddress = (address, t) => {
-  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""}${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${address?.locality?.code ? t(address?.locality?.code) : ""}, ${address?.city?.code ? t(address?.city.code) : ""},${
-    address?.pincode ? `${address.pincode}` : " "
+  }${address?.locality?.code ? `${t(address?.locality?.code)}` : ""}${address?.city?.code || address?.city  ? `,${t(address?.city.code || address?.city)}` : ""}${
+    address?.pincode ? `,${address.pincode}` : " "
   }`;
 };
 

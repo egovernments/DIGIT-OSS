@@ -33,7 +33,7 @@ const SelectPitType = ({ t, formData, config, onSelect, userType }) => {
   }
   return (
     <React.Fragment>
-      <Timeline currentStep={3} flow="APPLY" />
+      <Timeline currentStep={1} flow="APPLY" />
       <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!pitType} t={t}>
         <CardLabel>{t("CS_FILE_APPLICATION_PIT_TYPE_LABEL")}</CardLabel>
         <RadioOrSelect

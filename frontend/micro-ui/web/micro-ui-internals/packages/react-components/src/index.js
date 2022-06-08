@@ -161,7 +161,10 @@ import {
   TimerIcon,
   RupeeSymbol,
   ValidityTimeIcon,
-  AddIcon
+  AddIcon,
+  AddNewIcon,
+  InboxIcon,
+  ViewReportIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -427,5 +430,8 @@ export {
   TimerIcon,
   RupeeSymbol,
   ValidityTimeIcon,
-  AddIcon
+  AddIcon,
+  AddNewIcon,
+  ViewReportIcon,
+  InboxIcon,
 };

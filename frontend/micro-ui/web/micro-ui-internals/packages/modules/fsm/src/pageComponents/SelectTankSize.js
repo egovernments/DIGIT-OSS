@@ -59,7 +59,7 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
 
   return (
     <React.Fragment>
-      <Timeline currentStep={3} flow="APPLY" />
+      <Timeline currentStep={1} flow="APPLY" />
       <FormStep config={config} onSkip={onSkip} onSelect={handleSubmit} isDisabled={disable} t={t}>
         <ImageUploadHandler
           tenantId={tenantId}

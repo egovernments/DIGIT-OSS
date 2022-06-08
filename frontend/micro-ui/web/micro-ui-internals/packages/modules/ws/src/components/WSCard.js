@@ -37,9 +37,27 @@ const WSCard = () => {
     tableForm: tableOrderFormDefaultValues,
   };
 
+  const filterFormDefaultBillAmendmentValues = {
+    applicationStatus: [],
+    businessService: ["BS.AMENDMENT"],
+    moduleName: "bsWs-service",
+    locality: [],
+    assignee: "ASSIGNED_TO_ALL",
+  };
+  const formInitBilAmendmentValue = {
+    filterForm: filterFormDefaultBillAmendmentValues,
+    searchForm: searchFormDefaultValues,
+    tableForm: tableOrderFormDefaultValues,
+  };
+
   const { isLoading: isWSInboxLoading, data: wsData } = Digit.Hooks.ws.useInbox({
     tenantId,
     filters: { ...formInitValue },
+  });
+
+  const { isLoading: isLoading, data } = Digit.Hooks.useBillAmendmentInbox({
+    tenantId,
+    filters: { ...formInitBilAmendmentValue },
   });
 
   useEffect(() => {
@@ -87,6 +105,12 @@ const WSCard = () => {
         count: isWSInboxLoading ? "-" : wsData?.totalCount,
         label: t("WS_WATER_INBOX"),
         link: `/digit-ui/employee/ws/water/inbox`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
+      },
+      {
+        count: isLoading ? "-" : data?.totalCount,
+        label: t("ACTION_TEST_BILLAMENDMENT"),
+        link: `/digit-ui/employee/ws/water/bill-amendment/inbox`,
         roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
       ...links,

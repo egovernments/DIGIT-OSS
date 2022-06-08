@@ -8,7 +8,7 @@ import { convertToPropertyLightWeight, convertToUpdatePropertyLightWeight } from
 const GetActionMessage = (props) => {
   const { t } = useTranslation();
   if (props.isSuccess) {
-    return !window.location.href.includes("edit-application") ? t("CS_PROPERTY_APPLICATION_SUCCESS") : t("CS_PROPERTY_UPDATE_APPLICATION_SUCCESS");
+    return !window.location.href.includes("edit-application") ? (window.location.href.includes("employee") ?  t("CS_NEW_PROPERTY_APPLICATION_CREATED_SUCCESS") : t("CS_NEW_PROPERTY_APPLICATION_SUBMITTED_SUCCESS")) : t("CS_PROPERTY_UPDATE_APPLICATION_SUCCESS");
   } else if (props.isLoading) {
     return !window.location.href.includes("edit-application") ? t("CS_PROPERTY_APPLICATION_PENDING") : t("CS_PROPERTY_UPDATE_APPLICATION_PENDING");
   } else if (!props.isSuccess) {
@@ -158,7 +158,7 @@ const PTAcknowledgement = ({ onSuccess, onSelect, formData, redirectUrl, userTyp
   ) : (
     <Card>
       <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
-      {mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_RESPONSE")}</CardText>}
+      {mutation.isSuccess && <CardText>{window.location.href.includes("employee") ? t("CS_CREATE_PROPERTY_SUCCESS_EMP_RESPONSE") : t("CS_CREATE_PROPERTY_SUCCESS_CITIZEN_RESPONSE")}</CardText>}
       {!mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
 
       <StatusTable>

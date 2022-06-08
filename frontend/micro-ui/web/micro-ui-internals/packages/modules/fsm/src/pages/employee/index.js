@@ -1,9 +1,12 @@
-import { BreadCrumb, PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { BreadCrumb, ShippingTruck, EmployeeModuleCard, PrivateRoute, BackButton } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation } from "react-router-dom";
+import FstpAddVehicle from "./FstpAddVehicle";
+import FstpOperations from "./FstpOperations";
+import FstpServiceRequest from "./FstpServiceRequest";
 
-const FsmBreadCrumb = ({ location }) => {
+export const FsmBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
   const FSTPO = Digit.UserService.hasAccess(["FSM_EMP_FSTPO"]);
@@ -14,13 +17,20 @@ const FsmBreadCrumb = ({ location }) => {
   const isSearch = location?.pathname?.includes("search");
   const isRegistry = location?.pathname?.includes("registry");
   const isVendorDetails = location?.pathname?.includes("vendor-details");
+  const isVendorEdit = location?.pathname?.includes("modify-vendor");
   const [search, setSearch] = useState(false);
+  const [id, setId] = useState(false);
 
   useEffect(() => {
     if (!search) {
       setSearch(isSearch);
     } else if (isInbox && search) {
       setSearch(false);
+    }
+    if (location?.pathname) {
+      let path = location?.pathname.split("/")
+      let id = path[path.length - 1]
+      setId(id)
     }
   }, [location]);
 
@@ -42,13 +52,19 @@ const FsmBreadCrumb = ({ location }) => {
     },
     { content: t("ES_TITLE_APPLICATION_DETAILS"), show: isApplicationDetails },
     { content: t("ES_TITLE_VEHICLE_LOG"), show: isVehicleLog },
-    { content: t("ES_TITLE_VENDOR_DETAILS"), show: isRegistry && isVendorDetails },
+    {
+      path: "/digit-ui/employee/fsm/registry/vendor-details/" + id,
+      content: t("ES_TITLE_VENDOR_DETAILS"),
+      show: isRegistry && (isVendorDetails || isVendorEdit)
+    },
+    { content: t("ES_TITLE_VENDOR_EDIT"), show: isRegistry && isVendorEdit },
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
 };
 
 const EmployeeApp = ({ path, url, userType }) => {
+  const { t } = useTranslation();
   const location = useLocation();
 
   useEffect(() => {
@@ -71,18 +87,20 @@ const EmployeeApp = ({ path, url, userType }) => {
   const ApplicationAudit = Digit.ComponentRegistryService.getComponent("FSMApplicationAudit");
   const RateView = Digit.ComponentRegistryService.getComponent("FSMRateView");
   const FSMLinks = Digit.ComponentRegistryService.getComponent("FSMLinks");
+  const FSTPO = Digit.UserService.hasAccess(["FSM_EMP_FSTPO"]);
   const FSMRegistry = Digit.ComponentRegistryService.getComponent("FSMRegistry");
   const VendorDetails = Digit.ComponentRegistryService.getComponent("VendorDetails");
   const AddVendor = Digit.ComponentRegistryService.getComponent("AddVendor");
   const EditVendor = Digit.ComponentRegistryService.getComponent("EditVendor");
   const VehicleDetails = Digit.ComponentRegistryService.getComponent("VehicleDetails");
   const AddVehicle = Digit.ComponentRegistryService.getComponent("AddVehicle");
+  const BreadCrumbComp = Digit.ComponentRegistryService.getComponent("FsmBreadCrumb");
 
   return (
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-          <FsmBreadCrumb location={location} />
+          {FSTPO ? <BackButton isCommonPTPropertyScreen={location.pathname.includes("new") ? true : false} getBackPageNumber={location.pathname.includes("new") ? () => -2 : null}>{t("CS_COMMON_BACK")}</BackButton> : <BreadCrumbComp location={location} />}
           <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
           <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} isInbox={true} />} />
           <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
@@ -101,6 +119,10 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/registry/modify-vendor/:id`} component={() => <EditVendor parentRoute={path} />} />
           <PrivateRoute path={`${path}/registry/vehicle-details/:id`} component={() => <VehicleDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/registry/new-vehicle`} component={() => <AddVehicle parentRoute={path} />} />
+          <PrivateRoute exact path={`${path}/fstp-operations`} component={() => <FstpOperations />} />
+          <PrivateRoute exact path={`${path}/fstp-add-vehicle`} component={() => <FstpAddVehicle />} />
+          <PrivateRoute exact path={`${path}/fstp-fsm-request/:id`} component={() => <FstpServiceRequest />} />
+          <PrivateRoute path={`${path}/fstp/new-vehicle-entry`} component={FstpOperatorDetails} />
         </div>
       </React.Fragment>
     </Switch>

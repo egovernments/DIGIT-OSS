@@ -137,7 +137,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerInd
   );
   return (
     <React.Fragment>
-      {window.location.href.includes("/citizen") ? checkMutatePT : null}
+     {window.location.href.includes("/citizen") ? checkMutatePT : null}
       <FormStep
         t={t}
         config={config}

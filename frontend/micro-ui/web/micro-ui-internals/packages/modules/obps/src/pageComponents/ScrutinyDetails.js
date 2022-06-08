@@ -60,7 +60,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
         mdmsData?.BPA?.SubOccupancyType?.map((ob) => {
         suboccoption.push({ code: ob.code, name: ob.name, i18nKey: `BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(ob?.code?.toUpperCase(), "-", "_")}` });
       });
-    return suboccoption;
+    return Digit.Utils.locale.sortDropdownNames(suboccoption,'i18nKey',t);
   }
 
   const ActionButton = ({ label, jumpTo }) => {
@@ -155,7 +155,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
         const userInfo = Digit.UserService.getUser();
         const accountId = userInfo?.info?.uuid;
         payload.tenantId = formData?.data?.bpaData?.bpaApprovalResponse?.[0]?.landInfo?.tenantId;
-        payload.workflow = { action: "INITIATE" };
+        payload.workflow = { action: "INITIATE", assignes : [userInfo?.info?.uuid] };
         payload.accountId = accountId;
         payload.documents = null;
 

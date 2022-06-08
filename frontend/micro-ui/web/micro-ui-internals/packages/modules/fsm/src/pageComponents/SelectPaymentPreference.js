@@ -41,7 +41,7 @@ const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) =>
   }
   return (
     <React.Fragment>
-      <Timeline currentStep={5} flow="APPLY" />
+      <Timeline currentStep={3} flow="APPLY" />
       <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!paymentType} t={t}>
         <RadioOrSelect
           options={PaymentTypeData}

@@ -5,37 +5,64 @@ import { useTranslation } from "react-i18next";
 
 const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData }) => {
   const { t } = useTranslation();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
 
   const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
-  const GetStatusCell = (value) =>
-    value === "Active" || value > 0 ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span>;
 
+  const GetStatusCell = (value) => {
+    if (value === "Approved") {
+      return <span style={{ color: "#00703C" }}>{value}</span>;
+    }
+    if (value === "Rejected") {
+      return <span style={{ color: "#0B0C0C" }}>{value}</span>;
+    }
+    if (value === "Inworkflow") {
+      return <span style={{ color: "#E50000" }}>{value}</span>;
+    }
+  };
   const tableColumnConfig = useMemo(() => {
     return [
       {
         Header: t("WS_COMMON_TABLE_COL_SERVICE_LABEL"),
         disableSortBy: true,
+        Cell: ({ row }) => {
+          return GetCell(t(`ACTION_TEST_${row?.original?.service}`));
+        },
       },
       {
-        Header: t("WS_COMMON_TABLE_COL_APP_NO_LABEL"),
+        Header: t("WS_MYCONNECTIONS_APPLICATION_NO"),
         disableSortBy: true,
+        Cell: ({ row }) => {
+          return (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <Link to={`/digit-ui/employee/ws/application-details-bill-amendment?applicationNumber=${row.original["applicationNo"]}`}>
+                <span className="link">{row.original["applicationNo"]}</span>
+              </Link>
+              {GetCell(t(`BILLAMENDMENT_${row?.original?.amendmentReason}_HEADING`))}
+            </div>
+          );
+        },
       },
       ,
       {
         Header: t("CORE_COMMON_NAME"),
         disableSortBy: true,
+        accessor: "owner",
       },
       {
         Header: t("WS_COMMON_TABLE_COL_ADDRESS"),
         disableSortBy: true,
+        accessor: (row) => GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.address, tenantId))),
       },
       {
         Header: t("WS_COMMON_TABLE_COL_APPLICATION_STATUS"),
         disableSortBy: true,
+        accessor: (row) => GetStatusCell(t(row?.status)),
       },
       {
         Header: t("WS_COMMON_TABLE_COL_TASK_OWNER"),
         disableSortBy: true,
+        accessor: "taskOwner",
       },
     ];
   });

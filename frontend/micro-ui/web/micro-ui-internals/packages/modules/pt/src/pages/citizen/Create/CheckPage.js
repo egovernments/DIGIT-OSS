@@ -41,6 +41,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     noOofBasements,
     units = [{}],
     landarea,
+    landArea,
     UnOccupiedArea,
     city_complaint,
     locality_complaint,
@@ -276,6 +277,11 @@ const CheckPage = ({ onSubmit, value = {} }) => {
             text={`${t(checkForNA(PropertyType?.i18nKey))}`}
             actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/property-type`} />}
           />
+          <Row
+            label={t("PT_ASSESMENT1_PLOT_SIZE")}
+            text={`${landArea?.floorarea}`}
+            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/landarea`} />}
+          />
           {PropertyType?.code === "VACANT" && (
             <Row
               label={t("PT_ASSESMENT1_PLOT_SIZE")}
@@ -289,9 +295,9 @@ const CheckPage = ({ onSubmit, value = {} }) => {
               .map((unit, unitIndex) => {
                 return (
                   <div>
-                    {units.length > 1 && <CardSubHeader>{t(`PT_UNIT-${unitIndex}`)}</CardSubHeader>}
+                    {units.length > 1 && <CardSubHeader>{t(`PT_UNIT`)}-{unitIndex}</CardSubHeader>}
                     <Row
-                      label={t("PT_ASSESMENT1_PLOT_SIZE")}
+                      label={t("PT_BUILT_UP_AREA")}
                       text={`${unit?.constructionDetail?.builtUpArea}`}
                       actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/PtUnits`} />}
                     />

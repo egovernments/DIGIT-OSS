@@ -13,6 +13,10 @@ const WSWFApplicationTimeline = (props) => {
     moduleCode: businessService,
   });
 
+  function OpenImage(imageSource, index, thumbnailsToShow) {
+    window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
+  }
+
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "OPEN") {
       const caption = {
@@ -40,11 +44,15 @@ const WSWFApplicationTimeline = (props) => {
     // }
     else {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.lastModified),
-        name: checkpoint?.assigner?.name,
+        source: props.application?.channel || "",
+        date: checkpoint?.auditDetails?.lastModified,
+        name: checkpoint?.assignes?.[0]?.name,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
+        wfComment: checkpoint.wfComment,
+        thumbnailsToShow: checkpoint?.thumbnailsToShow,
       };
-      return <WSWFCaption data={caption} />;
+      return <WSWFCaption data={caption} OpenImage={OpenImage} />;
     }
   };
 
@@ -58,7 +66,7 @@ const WSWFApplicationTimeline = (props) => {
     }
     switch (nextAction?.action) {
       case "PAY":
-        return (
+      { if(props?.paymentbuttonenabled !== false)  return (
           <div style={{ marginTop: "1em", bottom: "0px", width: "100%", marginBottom: "1.2em" }}>
             <Link
               to={{ pathname: `/digit-ui/citizen/payment/collect/${businessService}/${props.id}`, state: { tenantId: props.application.tenantId } }}
@@ -66,7 +74,9 @@ const WSWFApplicationTimeline = (props) => {
               <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
             </Link>
           </div>
-        );
+        ); 
+        break;
+      }
       case "EDIT":
         return (
           <div style={{ marginTop: "1em", bottom: "0px", width: "100%", marginBottom: "1.2em" }}>

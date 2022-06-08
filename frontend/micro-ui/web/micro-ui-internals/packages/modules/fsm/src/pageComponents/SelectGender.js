@@ -55,7 +55,7 @@ const SelectGender = ({ config, onSelect, t, userType, formData }) => {
   }
   return (
     <React.Fragment>
-      <Timeline currentStep={4} flow="APPLY" />
+      <Timeline currentStep={2} flow="APPLY" />
       <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!genderType} t={t}>
         <RadioOrSelect
           options={GenderData}

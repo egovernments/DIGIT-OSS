@@ -6,16 +6,20 @@ const SearchFormFieldsComponents = ({registerRef, searchFormState, searchFieldCo
     const { t } = useTranslation()
     const isMobile = window.Digit.Utils.browser.isMobile();
 
+    const gridStyles = () => {
+        return { gridTemplateColumns: "33.33% 67.33%", textAlign: "start" }
+    }
+
     if (!isMobile) {
         return <React.Fragment>
             <div className="search-container" style={{ width: "auto", marginLeft: "24px" }}>
                 <div className="search-complaint-container">
-                    <div className="complaint-input-container" style={{ textAlign: "start" }}>
+                    <div className="complaint-input-container" style={window.location.href.includes("/citizen") ? gridStyles() : { textAlign: "start" }}>
                         <SearchField>
                             <label>{t("BPA_APPLICATION_NUMBER_LABEL")}</label>
                             <TextInput name="applicationNo" inputRef={registerRef({})} />
                         </SearchField>
-                        <SearchField>
+                        {!window.location.href.includes("/citizen") ? <SearchField>
                             <label>{t("CORE_COMMON_MOBILE_NUMBER")}</label>
                             <MobileNumber name="mobileNumber" type="number" inputRef={registerRef({
                                 minLength: {
@@ -34,7 +38,7 @@ const SearchFormFieldsComponents = ({registerRef, searchFormState, searchFieldCo
                             {searchFormState?.errors?.["mobileNumber"]?.message ? <CardLabelError>
                                 {searchFormState?.errors?.["mobileNumber"]?.message}
                             </CardLabelError> : null}
-                        </SearchField>
+                        </SearchField> : null}
                         <div className="search-action-wrapper" style={{ width: "100%" }}>
                             {searchFieldComponents}
                         </div>
@@ -48,7 +52,7 @@ const SearchFormFieldsComponents = ({registerRef, searchFormState, searchFieldCo
             <label>{t("BPA_APPLICATION_NUMBER_LABEL")}</label>
             <TextInput name="applicationNo" inputRef={registerRef({})} />
         </SearchField>
-        <SearchField>
+        {!window.location.href.includes("/citizen") ? <SearchField>
             <label>{t("CORE_COMMON_MOBILE_NUMBER")}</label>
             <MobileNumber name="mobileNumber" type="number" inputRef={registerRef({
                 minLength: {
@@ -67,7 +71,7 @@ const SearchFormFieldsComponents = ({registerRef, searchFormState, searchFieldCo
             {searchFormState?.errors?.["mobileNumber"]?.message ? <CardLabelError>
                 {searchFormState?.errors?.["mobileNumber"]?.message}
             </CardLabelError> : null}
-        </SearchField>
+        </SearchField> : null}   
     </>
 }
 

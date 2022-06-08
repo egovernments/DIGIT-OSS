@@ -15,7 +15,6 @@
 
 .faqs{
   cursor: pointer;
-  border-bottom: 1px solid lightgray;
   .faq-question{
     font-weight: 400;
     margin: 16px;
@@ -42,12 +41,21 @@
       margin: 0px 12px 5px
     }
   }
+  .cs-box-border {
+    height: 1px;
+    position: relative;
+    border-bottom: 1px solid lightgray;;
+    background: lightgray;
+    margin-left: 16px;
+    margin-right: 16px;
+  }
 }
 
 .faq-list{
   background: #fff;
   margin: 5px 0;
-  padding: 1rem;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
   
 .rotate {

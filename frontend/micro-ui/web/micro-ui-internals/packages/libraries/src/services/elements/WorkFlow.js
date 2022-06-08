@@ -3,7 +3,7 @@ import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
 const getThumbnails = async (ids, tenantId, documents = []) => {
-  tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : tenantId;
+  tenantId = window.location.href.includes("/obps/") || window.location.href.includes("/pt/") ? Digit.ULBService.getStateId() : tenantId;
   
   if (window.location.href.includes("/obps/")) {
     if (documents?.length > 0) {

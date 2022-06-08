@@ -2,7 +2,7 @@ import { Header, MultiLink, Toast } from "@egovernments/digit-ui-react-component
 import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
-import  getPDFData  from "../../utils/getWSAcknowledgementData";
+import  getPDFData  from "../../utils/getWsAckDataForBillAmendPdf";
 
 const ApplicationDetailsBillAmendment = () => {
   const { applicationNumber } = Digit.Hooks.useQueryParams();
@@ -52,9 +52,9 @@ const ApplicationDetailsBillAmendment = () => {
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
-  const getAckPdf = async (tenantId,wsData,propertyDataDetails) => {
-    const PDFdata = getPDFData({ ...wsData }, { ...propertyDataDetails }, tenantId, t);
-    PDFdata.then((ress) => Digit.Utils.pdf.generate(ress));
+  const getAckPdf = async (amendment,tenantId,t,tableData,app) => {
+    const PDFdata = getPDFData(amendment,tenantId,t,tableData,app);
+    PDFdata.then((ress) => Digit.Utils.pdf.generateBillAmendPDF(ress));
   };
   const dowloadOptions =
     applicationDetails?.amendment?.status === "CONSUMED"
@@ -67,14 +67,14 @@ const ApplicationDetailsBillAmendment = () => {
           {
           order: 1,
           label: t("WS_ACK_PDF"),
-          onClick: () => getAckPdf(tenantId,applicationDetails.applicationData,applicationDetails.propertyDetails),
+            onClick: () => getAckPdf(applicationDetails?.amendment, tenantId, t, applicationDetails?.applicationDetails,applicationDetails),
           },
         ]
       : [
         {
           order: 1,
           label: t("WS_ACK_PDF"),
-          onClick: () => getAckPdf({ tenantId, data: applicationData }),
+          onClick: () => getAckPdf(applicationDetails?.amendment, tenantId, t, applicationDetails?.applicationDetails,applicationDetails ),
         },
       ];
 

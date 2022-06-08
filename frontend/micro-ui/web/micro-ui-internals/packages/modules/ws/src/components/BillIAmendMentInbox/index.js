@@ -10,6 +10,7 @@ const Inbox = ({ parentRoute }) => {
   const { t } = useTranslation();
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const checkPathName = window.location.href.includes("/ws/water/bill-amendment/inbox");
 
   const searchFormDefaultValues = {
     mobileNumber: "",
@@ -18,15 +19,19 @@ const Inbox = ({ parentRoute }) => {
 
   const filterFormDefaultValues = {
     applicationStatus: [],
+    businessService: checkPathName ? ["BS.AMENDMENT"] : ["BS.AMENDMENT"],
+    moduleName: checkPathName ? "bsWs-service" : "bsSw-service",
     locality: [],
     assignee: "ASSIGNED_TO_ALL",
   };
   const tableOrderFormDefaultValues = {
-    sortBy: "",
+    sortBy: "createdTime",
     limit: window.Digit.Utils.browser.isMobile() ? 50 : 10,
     offset: 0,
-    sortOrder: "DESC",
+    sortOrder: "ASC",
   };
+
+  sessionStorage.removeItem("Digit.BILL.AMENDMENT.INBOX");
 
   function formReducer(state, payload) {
     switch (payload.action) {
@@ -52,10 +57,10 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const onFilterFormReset = (setFilterFormValue) => {
-    setFilterFormValue("applicationStatus", "");
+    setFilterFormValue("moduleName", checkPathName ? "bsWs-service" : "bsSw-service");
     setFilterFormValue("locality", []);
     setFilterFormValue("assignee", "ASSIGNED_TO_ALL");
-    setFilterFormValue("applicationType", []);
+    setFilterFormValue("applicationStatus", []);
     dispatch({ action: "mutateFilterForm", data: filterFormDefaultValues });
   };
 
@@ -104,7 +109,7 @@ const Inbox = ({ parentRoute }) => {
     {},
     t
   );
-  const { isLoading: isInboxLoading, data: { table, statuses, totalCount } = {} } = Digit.Hooks.tl.useInbox({
+  const { isLoading: isInboxLoading, data: { table, statuses, totalCount } = {} } = Digit.Hooks.useBillAmendmentInbox({
     tenantId,
     filters: { ...formState },
   });
@@ -129,7 +134,9 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const SearchFormFields = useCallback(
-    ({ registerRef, searchFormState }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState }} />,
+    ({ registerRef, searchFormState, searchFieldComponents }) => (
+      <SearchFormFieldsComponents {...{ registerRef, searchFormState, searchFieldComponents }} />
+    ),
     []
   );
 
@@ -153,12 +160,14 @@ const Inbox = ({ parentRoute }) => {
   );
 
   const onSearchFormSubmit = (data) => {
-    data.hasOwnProperty("") ? delete data?.[""] : null;
+    data.hasOwnProperty("") && delete data?.[""];
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateSearchForm", data });
   };
 
   const onFilterFormSubmit = (data) => {
-    data.hasOwnProperty("") ? delete data?.[""] : null;
+    data.hasOwnProperty("") && delete data?.[""];
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateFilterForm", data });
   };
 
@@ -186,7 +195,10 @@ const Inbox = ({ parentRoute }) => {
 
   return (
     <>
-      <Header>{t("ES_COMMON_INBOX")}</Header>
+      <Header>
+        {t("ES_COMMON_INBOX")}
+        {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
+      </Header>
       <InboxComposer
         {...{
           isInboxLoading,

@@ -1,7 +1,8 @@
 import {
   stringReplaceAll,
   getTransaltedLocality,
-  convertEpochToDateDMY
+  convertEpochToDateDMY,
+  mdmsData
 } from "./index";
 
 const capitalize = (text) => text.substr(0, 1).toUpperCase() + text.substr(1);
@@ -40,6 +41,17 @@ const getOwnerDetails = (application, t) => {
     };
   }
 };
+const getPropertyAddress = (property) => {
+  const doorNo = property?.doorNo;
+  const street = property?.street;
+  const landMark = property?.landmark;
+  const locality = property?.locality?.name;
+  const city = property?.city;
+  const pinCode = property?.pincode;
+  const formattedAddress = `${doorNo ? doorNo + ", " : ""}${street ? street + ", " : ""}${landMark ? landMark + ", " : ""}${locality ? locality + ", " : ""}${city ? city : ""}${pinCode ? ", " + pinCode : ""}`
+  return formattedAddress;
+}
+
 const getPropertyDetails = (application, t) => {
   const owners = application?.owners?.filter((owner) => owner.active == true) || [];
   const names = owners?.map(owner => owner.name)?.join(",");
@@ -48,12 +60,7 @@ const getPropertyDetails = (application, t) => {
     values: [
       { title: t("WS_PROPERTY_ID_LABEL"), value: t(`${application?.acknowldgementNumber}`) || t("CS_NA") },
       { title: t("WS_OWN_DETAIL_NAME"), value: names || t("CS_NA") },
-      { title: t("WS_PROPERTY_ADDRESS_LABEL"), value: application?.address?.locality?.name || t("CS_NA") },
-      // { title: t("WS_PROPERTY_TYPE_LABEL"), value: application?.propertyType ? t(`WS_PROPTYPE_${stringReplaceAll(application?.propertyType, ".", "_")}`) : t("CS_NA") },
-      // { title: t("WS_SERV_DETAIL_PROP_USE_TYPE"), value: application?.usageCategory || t("CS_NA") },
-      // { title: t("WS_PROPERTY_SUB_USAGE_TYPE_LABEL"), value: application?.usageCategory.split(".")[1] ? t(`COMMON_MASTERS_STRUCTURETYPE_${application?.usageCategory.split(".")[1]}`) : t("CS_NA") },
-      // { title: t("WS_PROP_DETAIL_PLOT_SIZE_LABEL"), value: application?.landArea || t("CS_NA") },
-      // { title: t("WS_PROPERTY_NO_OF_FLOOR_LABEL"), value: application?.noOfFloors || t("CS_NA") },
+      { title: t("WS_PROPERTY_ADDRESS_LABEL"), value: getPropertyAddress(application?.address) || t("CS_NA") }
     ],
   };
 };
@@ -76,7 +83,7 @@ const getAddressDetails = (application, t) => {
 
 const getConnectionDetails = (application, t) => {
   return {
-    title: "WS_COMMON_CONNECTION_DETAILS",
+    title: t("WS_COMMON_CONNECTION_DETAILS"),
     values: application?.applicationType == "NEW_WATER_CONNECTION" ? [
       { title: t("WS_APPLY_FOR"), value: t(application?.applicationType) || t("CS_NA") },
       { title: t("WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"), value: application?.proposedTaps || t("CS_NA") },
@@ -93,13 +100,13 @@ const getConnectionHolderDetails = (owner, t) => {
   return {
     title: t("WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER"),
     values: owner?.connectionHolders?.length > 0 ? [
-      { title: t("WS_OWN_DETAIL_NAME"), value: owner?.connectionHolders?.name || t("CS_NA") },
-      { title: t("WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL"), value: owner?.connectionHolders?.gender || t("CS_NA") },
-      { title: t("CORE_COMMON_MOBILE_NUMBER"), value: owner?.connectionHolders?.mobileNumber || t("CS_NA") },
-      { title: t("WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME"), value: owner?.connectionHolders?.fatherOrHusbandName || t("CS_NA") },
-      { title: t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"), value: t(owner?.connectionHolders?.relationship) || t("CS_NA") },
-      { title: t("WS_OWNER_SPECIAL_CATEGORY"), value: owner?.connectionHolders?.ownerType ? t(`COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}`) : t("CS_NA") },
-      { title: t("WS_CORRESPONDANCE_ADDRESS_LABEL"), value: owner?.connectionHolders?.permanentAddress || t("CS_NA") },
+      { title: t("WS_OWN_DETAIL_NAME"), value: owner?.connectionHolders?.[0]?.name || t("CS_NA") },
+      //{ title: t("WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL"), value: owner?.connectionHolders?.[0]?.gender || t("CS_NA") },
+      { title: t("CORE_COMMON_MOBILE_NUMBER"), value: owner?.connectionHolders?.[0]?.mobileNumber || t("CS_NA") },
+      { title: t("WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME"), value: owner?.connectionHolders?.[0]?.fatherOrHusbandName || t("CS_NA") },
+      //{ title: t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"), value: t(owner?.connectionHolders?.[0]?.relationship) || t("CS_NA") },
+      //{ title: t("WS_OWNER_SPECIAL_CATEGORY"), value: owner?.connectionHolders?.[0]?.ownerType ? t(`COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}`) : t("CS_NA") },
+      { title: t("WS_CORRESPONDANCE_ADDRESS_LABEL"), value: owner?.connectionHolders?.[0]?.permanentAddress || t("CS_NA") },
     ] : [
       { title: t("WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS"), value: t("SCORE_YES") || t("CS_NA") }
     ],
@@ -177,29 +184,63 @@ const getAdditionalActivationDetails = (application, t) => {
   };
 }
 
+const getHeaderDetails = async (application, t,tenantId) => {
+  
+  const dynamicHeaderData = await mdmsData(tenantId,t)
+  
+  let values = [];
+  if (application?.applicationNo) values.push({ title: `${t("PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL")}:`, value: application?.applicationNo });
+  if (application?.connectionNo) values.push({ title: `${t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")}:`, value: application?.connectionNo });
+
+  return {
+    title: "",
+    isHeader: true,
+    typeOfApplication: application?.applicationNo?.includes("SW") ? t("WS_NEW_SEWERAGE_CONNECTION"): t("WS_COMMON_INBOX_NEWWS1"),
+    date: Digit.DateUtils.ConvertEpochToDate(application?.auditDetails?.createdTime) || "NA",
+    values: values,
+    ...dynamicHeaderData
+  }
+}
+
+
+const getDocumentDetails = (application, t) => {
+  const documents = application?.documents
+  return {
+    title: t("WS_COMMON_DOCUMENTS_DETAILS"),
+    isAttachments:true,
+    values: documents?.map(doc => t(doc?.documentType))
+  };
+};
+
+
 const getWSAcknowledgementData = async (application, property, tenantInfo, t) => {
   const filesArray = application?.tradeLicenseDetail?.applicationDocuments?.map((value) => value?.fileStoreId);
   let res;
   if (filesArray) {
     res = await Digit.UploadServices.Filefetch(filesArray, Digit.ULBService.getStateId());
   }
+  const header = await getHeaderDetails(application, t, tenantInfo)
   return {
     t: t,
-    tenantId: tenantInfo?.code,
+    tenantId: tenantInfo,
     title: `PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER`,
     name: `${t("PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER")}`,
     email: "",
     phoneNumber: "",
+    headerDetails: [
+      header
+    ],
     details: [
       getPropertyDetails(property, t),
       // getAddressDetails(property, t),
       // getOwnerDetails(property, t),
-      getConnectionDetails(application, t),
       getConnectionHolderDetails(application, t),
-      getAdditionalConnectionDetails(application, t),
-      getAdditionalPlumberDetails(application, t),
-      getAdditionalRoadCuttingDetails(application, t),
-      getAdditionalActivationDetails(application, t)
+      getConnectionDetails(application, t),
+      //getAdditionalConnectionDetails(application, t),
+      //getAdditionalPlumberDetails(application, t),
+      //getAdditionalRoadCuttingDetails(application, t),
+      //getAdditionalActivationDetails(application, t),
+      getDocumentDetails(application,t)
     ],
   };
 };

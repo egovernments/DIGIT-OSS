@@ -88,7 +88,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
     </LabelFieldPair>
   ) : (
     <React.Fragment>
-      <Timeline currentStep={2} flow="APPLY" />
+      <Timeline currentStep={1} flow="APPLY" />
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
         <Dropdown t={t} option={slumMenu} optionKey="i18nKey" id="i18nKey" selected={slum} select={setSlum} />
       </FormStep>

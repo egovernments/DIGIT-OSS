@@ -37,7 +37,23 @@ const SWCard = () => {
     searchForm: searchFormDefaultValues,
     tableForm: tableOrderFormDefaultValues,
   };
+  const filterFormDefaultBillAmendmentValues = {
+    applicationStatus: [],
+    businessService: ["BS.AMENDMENT"],
+    moduleName: "bsSw-service",
+    locality: [],
+    assignee: "ASSIGNED_TO_ALL",
+  };
+  const formInitBilAmendmentValue = {
+    filterForm: filterFormDefaultBillAmendmentValues,
+    searchForm: searchFormDefaultValues,
+    tableForm: tableOrderFormDefaultValues,
+  };
 
+  const { isLoading: isLoading, data } = Digit.Hooks.useBillAmendmentInbox({
+    tenantId,
+    filters: { ...formInitBilAmendmentValue },
+  });
   const { isLoading: isSWInboxLoading, data: swData } = Digit.Hooks.ws.useInbox({
     tenantId,
     filters: { ...formInitValue },
@@ -80,6 +96,12 @@ const SWCard = () => {
         label: t("WS_SEWERAGE_INBOX"),
         link: `/digit-ui/employee/ws/sewerage/inbox`,
         roles: ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER", "SW_CLERK"],
+      },
+      {
+        count: isLoading ? "-" : data?.totalCount,
+        label: t("ACTION_TEST_BILLAMENDMENT"),
+        link: `/digit-ui/employee/ws/sewerage/bill-amendment/inbox`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
       ...links,
       {

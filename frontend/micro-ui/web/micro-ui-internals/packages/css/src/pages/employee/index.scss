@@ -15,8 +15,8 @@
     display: inline-block;
     margin: 8px auto;
   }
-  .home-action-cards{
-    height: auto  !important;
+  .home-action-cards {
+    height: auto !important;
     min-height: 263px;
   }
   .topbar {
@@ -72,7 +72,6 @@
 
   .react-time-picker {
     width: 100%;
-    max-width: 200px;
   }
 
   .react-time-picker__wrapper {
@@ -119,7 +118,6 @@
     z-index: 10;
     transition: 0.3s ease all;
     white-space: nowrap;
-    overflow-y: hidden;
     height: calc(100vh - 36px);
     padding-bottom: 5rem;
 
@@ -127,7 +125,9 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      padding: 0 20px;
+      .tooltip {
+        margin-left: 16px;
+      }
     }
 
     svg {
@@ -160,10 +160,13 @@
         margin-left: 13px;
       }
       .custom-link {
-        margin-left: 13px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        .tooltip {
+          margin-left: 16px;
+          span {
+            margin-left: unset !important;
+            left: unset !important;
+          }
+        }
       }
 
       svg {
@@ -181,15 +184,31 @@
           fill: #f47738 !important;
         }
       }
+      .search-icon-wrapper {
+        svg {
+          fill: #ffffff !important;
+          width: 21px;
+          height: 21px;
+          path {
+            fill: #ffffff !important;
+          }
+        }
+      }
     }
     .dropdown-link {
       height: 40px;
       display: flex;
-      margin-left: 2em;
+      margin-left: 40px;
       align-items: center;
       text-decoration: none;
       color: #ffffff;
       font-size: 14px;
+      .actions {
+        .tooltiptext {
+          left: unset;
+          right: 1%;
+        }
+      }
       svg {
         width: 20px;
         height: 20px;
@@ -214,6 +233,9 @@
     }
     span {
       margin-left: 16px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
   }
 

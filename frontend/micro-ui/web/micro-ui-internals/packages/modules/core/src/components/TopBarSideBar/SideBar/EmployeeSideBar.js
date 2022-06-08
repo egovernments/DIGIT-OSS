@@ -106,8 +106,8 @@ const EmployeeSideBar = () => {
     return (
       <div className="submenu-container">
         <div className="sidebar-link">
-          <div className="actions">
-            <SearchIcon className="icon" />
+          <div className="actions search-icon-wrapper">
+            <SearchIcon className="search-icon" />
             <input
               className="employee-search-input"
               type="text"

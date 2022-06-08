@@ -26,6 +26,10 @@ const combineResponse = (applications, workflowData) => {
 }
 
 const useBPASearch = (tenantId, filters = {}, config = {}) => {
+  if (window.location.href.includes("search/application")) {
+    if (!filters?.limit) filters.limit = 10;
+    if (!filters?.offset) filters.offset = 0;
+  }
   const client = useQueryClient();
   return {...useQuery(['BPA_SEARCH', tenantId, filters], async () => {
     const response = await OBPSService.BPASearch(tenantId, { ...filters });
